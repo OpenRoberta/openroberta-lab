@@ -1,0 +1,33 @@
+@charset "UTF-8";
+
+.input {
+	color: blue;
+	background-color: #eeeeff;
+	width: 5cm;
+	margin-right: 10pt;
+	text-align: right;
+}
+.submit {
+	background-color: red;
+	color: white;
+	width: 2cm;
+}
+.blatt {
+	width : 100%;
+	border-width: 1px;
+	border-color: green;
+	border-style: solid;
+}
+.log {
+	width : 90%;
+	height : 10cm;
+	font-size: small;
+	background-color: #f0f0f0;
+	overflow: auto;
+}
+.log0 {
+	background-color: #FFFFDD;
+}
+.log1 {
+	background-color: #DDFFFF;
+}

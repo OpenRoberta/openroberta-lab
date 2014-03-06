@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<script type="text/javascript" src="/common/jquery/jquery-2.0.3.js" charset="utf-8"></script>
+<script type="text/javascript" src="/common/ui/jquery-ui.js" charset="utf-8"></script>
+<script type="text/javascript" src="/common/basics.js" charset="utf-8"></script>
+
+<script type="text/javascript" src="/blockly/blockly_compressed.js"></script>
+<script type="text/javascript" src="/blockly/blocks_compressed.js"></script>
+<script type="text/javascript" src="/blockly/msg/js/en.js"></script>
+
+<script type="text/javascript" src="/roberta.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/common/themes/base/jquery.ui.theme.css"></link>
+<link rel="stylesheet" type="text/css" href="/common/themes/base/jquery.ui.tabs.css"></link>
+<link rel="stylesheet" type="text/css" href="/roberta.css"></link>
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title class="header">Testfeld f&uuml;r BlOcKlY</title>
+</head>
+
+<body>
+  <div id="tabs">
+    <ul>
+      <li><a href="#blockly">Blockly</a></li>
+      <li><a href="#logging">Logging</a></li>
+      <li><a href="#readme">README</a></li>
+    </ul>
+    <div id="blockly">
+      <div id="blocklyDiv" style="height: 700px; width: 1000px;"></div>
+      <br>
+      <input id="saveBlocks" class='submit' type="submit" value="save the blocks" />
+      <xml id="toolbox" style="display: none">
+        <block type="controls_if"></block>
+        <block type="controls_repeat_ext"></block>
+        <block type="logic_compare"></block>
+        <block type="math_number"></block>
+        <block type="math_arithmetic"></block>
+        <block type="text"></block>
+        <block type="text_print"></block>
+      </xml>
+      <script type="text/javascript">
+        Blockly.inject(document.getElementById('blocklyDiv'),
+            {path: '/blockly', toolbox: document.getElementById('toolbox')});
+      </script>
+    </div>
+    <div id="logging">
+      <br />
+      <div>
+        <input id="toggle" class="button" type="submit" value="log ein/aus" /><br></br>
+        <hr />
+        <br></br>
+        <ol id="log" class="log">
+        </ol>
+        <div class="counter">Count:</div>
+        <div class="counter" id="counter">0</div>
+      </div>
+    </div>
+    <div id="readme">
+      <br />
+      <div>blo ckl y blo ckl y blo ckl y blo ckl y blo ckl y </div>
+    </div>
+  </div>
+</body>
+</html>
