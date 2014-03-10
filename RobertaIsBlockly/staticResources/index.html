@@ -31,20 +31,13 @@
     <div id="blockly">
       <div id="blocklyDiv" style="height: 700px; width: 1000px;"></div>
       <br>
-      <input id="saveBlocks" class='submit' type="submit" value="save the blocks" />
-      <xml id="toolbox" style="display: none">
-        <block type="controls_if"></block>
-        <block type="controls_repeat_ext"></block>
-        <block type="logic_compare"></block>
-        <block type="math_number"></block>
-        <block type="math_arithmetic"></block>
-        <block type="text"></block>
-        <block type="text_print"></block>
-      </xml>
-      <script type="text/javascript">
-        Blockly.inject(document.getElementById('blocklyDiv'),
-            {path: '/blockly', toolbox: document.getElementById('toolbox')});
-      </script>
+      <input id="save" class='submit' type="submit" value="save" />
+      <input id="load" class='submit' type="submit" value="load" />
+      <input id="add" class='submit' type="submit" value="add" />
+      <input id="name" class='input' type="text" value="" />
+      <br>
+      <input id="toolbox1" class='button' type="submit" value="toolbox 1" />
+      <input id="toolbox2" class='button' type="submit" value="toolbox 2" />
     </div>
     <div id="logging">
       <br />

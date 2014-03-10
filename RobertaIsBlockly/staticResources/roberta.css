@@ -2,10 +2,10 @@
 
 .input {
 	color: red;
-	background-color: #eeeeff;
+	background-color: #aaeeaa;
 	width: 5cm;
 	border: thick;
-	text-align: right;
+	text-align: center;
 }
 
 .blockly {
