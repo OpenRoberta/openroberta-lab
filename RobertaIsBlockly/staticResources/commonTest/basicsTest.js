@@ -99,26 +99,6 @@ var test8 = function(e) {
     COMM.get("/hello/json2", {}, successFn);
 };
 
-var test9 = function(e) {
-    var successFn = function(response) {
-        var expected = Number($('#i1').val());
-        var r1 = response['Felix'] === 1999;
-        var r2 = response['Laura'] === 1998;
-        var r3 = response['remark'] === 'this is a copy';
-        var r4 = response['logged'] === expected;
-        if (r1 && r2 && r3 && r4) {
-            setResultOk();
-        } else {
-            setResultError();
-        }
-        setReady('ready');
-    };
-    COMM.json("/copy", {
-        'Felix' : 1999,
-        'Laura' : 1998,
-    }, successFn);
-};
-
 var testSucc = function(json) {
     DBC.log('I got:        ' + JSON.stringify(json, undefined, 3));
     DBC.log('I got value:  ' + json['value']);
@@ -142,7 +122,6 @@ var init = function() {
     wrapOn('#t6', test6);
     wrapOn('#t7', test7);
     wrapOn('#t8', test8);
-    wrapOn('#t9', test9);
 };
 
 $(document).ready(init);
