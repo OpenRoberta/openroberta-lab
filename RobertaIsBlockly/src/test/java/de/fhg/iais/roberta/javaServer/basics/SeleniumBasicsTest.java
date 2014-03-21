@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import org.eclipse.jetty.server.Server;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -35,6 +36,7 @@ public class SeleniumBasicsTest {
         this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
 
+    @Ignore
     @Test
     public void testBasics() throws Exception {
         this.driver.get(this.baseUrl);
