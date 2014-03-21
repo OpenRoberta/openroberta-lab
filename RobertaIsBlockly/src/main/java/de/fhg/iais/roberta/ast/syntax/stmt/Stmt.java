@@ -12,8 +12,20 @@ public abstract class Stmt extends Phrase {
 
     abstract public Kind getKind();
 
+    abstract public void toStringBuilder(StringBuilder sb, int indentation);
+
+    protected final void appendNewLine(StringBuilder sb, int indentation, String text) {
+        sb.append("\n");
+        for ( int i = 0; i < indentation; i++ ) {
+            sb.append(" ");
+        }
+        if ( text != null ) {
+            sb.append(text);
+        }
+    }
+
     public static enum Kind {
-        If( IfStmt.class ), Repeat( RepeatStmt.class );
+        If( IfStmt.class ), Repeat( RepeatStmt.class ), Expr( ExprStmt.class ), StmtList( StmtList.class );
 
         private final Class<?> clazz;
 

@@ -36,6 +36,11 @@ public class Binary extends Expr {
         return Expr.Kind.Binary;
     }
 
+    @Override
+    public String toString() {
+        return "Binary[" + this.op + ", " + this.left + ", " + this.right + "]";
+    }
+
     public static enum Op {
         Mult, Div, Add, Sub;
     }

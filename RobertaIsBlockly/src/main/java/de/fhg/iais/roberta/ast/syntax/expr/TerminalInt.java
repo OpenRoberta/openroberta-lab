@@ -20,4 +20,9 @@ public class TerminalInt extends Expr {
     public Kind getKind() {
         return Expr.Kind.TerminalInt;
     }
+
+    @Override
+    public String toString() {
+        return "Int[" + this.value + "]";
+    }
 }

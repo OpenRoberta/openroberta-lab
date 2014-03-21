@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.TerminalInt;
+import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
@@ -20,8 +21,11 @@ public class StmtTest {
     public void test() {
         Expr expr = TerminalInt.make(1);
         StmtList l1 = StmtList.make();
+        l1.addStmt(ExprStmt.make(expr));
         l1.setReadOnly();
         StmtList l2 = StmtList.make();
+        l2.addStmt(ExprStmt.make(expr));
+        l2.addStmt(ExprStmt.make(expr));
         l2.setReadOnly();
         Stmt stmt = IfStmt.make(expr, l1, l2);
         IfStmt ifStmt = stmt.getAs(IfStmt.class); // the user is responsible for the match IfStmt <--> IfStmt.class

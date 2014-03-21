@@ -36,4 +36,23 @@ public class IfStmt extends Stmt {
     public Kind getKind() {
         return Kind.If;
     }
+
+    @Override
+    public void toStringBuilder(StringBuilder sb, int indentation) {
+        int next = indentation + 3;
+        appendNewLine(sb, indentation, null);
+        sb.append("(if ").append(this.expr);
+        appendNewLine(sb, indentation, ",then");
+        this.thenList.toStringBuilder(sb, next);
+        appendNewLine(sb, indentation, ",else");
+        this.elseList.toStringBuilder(sb, next);
+        appendNewLine(sb, indentation, ")");
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        toStringBuilder(sb, 0);
+        return sb.toString();
+    }
 }

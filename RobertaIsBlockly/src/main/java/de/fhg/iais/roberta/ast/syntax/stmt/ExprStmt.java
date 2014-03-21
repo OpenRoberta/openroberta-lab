@@ -3,41 +3,33 @@ package de.fhg.iais.roberta.ast.syntax.stmt;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.dbc.Assert;
 
-public class RepeatStmt extends Stmt {
+public class ExprStmt extends Stmt {
     private final Expr expr;
-    private final StmtList list;
 
-    private RepeatStmt(Expr expr, StmtList list) {
-        Assert.isTrue(expr.isReadOnly() && list.isReadOnly());
+    private ExprStmt(Expr expr) {
+        Assert.isTrue(expr.isReadOnly());
         this.expr = expr;
-        this.list = list;
+
         setReadOnly();
     }
 
-    public static RepeatStmt make(Expr expr, StmtList list) {
-        return new RepeatStmt(expr, list);
+    public static ExprStmt make(Expr expr) {
+        return new ExprStmt(expr);
     }
 
     public final Expr getExpr() {
         return this.expr;
     }
 
-    public final StmtList getlist() {
-        return this.list;
-    }
-
     @Override
     public Kind getKind() {
-        return Kind.Repeat;
+        return Kind.Expr;
     }
 
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
-        int next = indentation + 3;
         appendNewLine(sb, indentation, null);
-        sb.append("(repeat ").append(this.expr);
-        this.list.toStringBuilder(sb, next);
-        appendNewLine(sb, indentation, ")");
+        sb.append("expr ").append(this.expr);
     }
 
     @Override
