@@ -4,6 +4,7 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 
 public abstract class Stmt extends Phrase {
+
     @SuppressWarnings("unchecked")
     public final <T> T getAs(Class<T> clazz) {
         Assert.isTrue(clazz.equals(getKind().getStmtClass()));

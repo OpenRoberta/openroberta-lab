@@ -53,7 +53,6 @@ var COMM = {};
      * @memberof COMM
      */
     COMM.xml = function(url, xml, successFn, message) {
-    	var log = LOG.reportToComm();
     	$.ajax({
     		url : url,
     		type : 'POST',
@@ -274,8 +273,6 @@ var DBC = {};
 
 var WRAP = {};
 (function($) {
-    // marker for logging timing
-    var markerTIMER = '[[TIME]] ';
 
     /**
      * wrap a function with up to 3 parameters (!) to catch and display errors. An not undefined 2nd parameter is a messages that activates time measuring
@@ -284,6 +281,7 @@ var WRAP = {};
      */
     WRAP.fn3 = function(fnToBeWrapped, message) {
         var wrap = function(p0, p1, p2) {
+        	var markerTIMER = '[[TIME]] ';
             var start = new Date();
             try {
                 fnToBeWrapped(p0, p1, p2);

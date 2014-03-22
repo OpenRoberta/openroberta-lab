@@ -29,8 +29,9 @@ public class StmtTest {
         l2.setReadOnly();
         Stmt stmt = IfStmt.make(expr, l1, l2);
         IfStmt ifStmt = stmt.getAs(IfStmt.class); // the user is responsible for the match IfStmt <--> IfStmt.class
+        System.out.println(ifStmt);
         try {
-            RepeatStmt repeatStmt = stmt.getAs(RepeatStmt.class);
+            stmt.getAs(RepeatStmt.class);
             Assert.fail();
         } catch ( Exception e ) {
             System.out.println("expected");
@@ -38,9 +39,11 @@ public class StmtTest {
         switch ( stmt.getKind() ) {
             case If:
                 IfStmt t1 = stmt.getAs(IfStmt.class);
+                System.out.println(t1.getExpr());
                 break;
             case Repeat:
                 RepeatStmt t2 = stmt.getAs(RepeatStmt.class);
+                System.out.println(t2.getExpr());
                 break;
 
             default:
