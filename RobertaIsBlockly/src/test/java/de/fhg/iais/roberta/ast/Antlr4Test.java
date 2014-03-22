@@ -10,10 +10,12 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.text.generated.TextlyLexer;
 import de.fhg.iais.roberta.text.generated.TextlyParser;
 import de.fhg.iais.roberta.text.generated.TextlyParser.ExprContext;
 import de.fhg.iais.roberta.text.generated.TextlyParser.StmtContext;
+import de.fhg.iais.roberta.transformer.ParseTreeToAst;
 
 public class Antlr4Test {
     private static final boolean DO_ASSERT = true;
@@ -60,15 +62,22 @@ public class Antlr4Test {
     public void testStmt1() throws Exception {
         String p = stmt2String("if (1+2*3==7 || 1*2+3==5 && !1+2==4) { a:=5*6;b:=!!1==2; };");
         String r =
-            "(stmt (ifBase if ( (expr "
-                + "(expr (expr (expr 1) + (expr (expr 2) * (expr 3))) == (expr 7)) || "
+            ""
+                + "(stmt (ifThenR if ( (expr "
+                + "(expr (expr (expr 1) + (expr (expr 2) * (expr 3))) == (expr 7)) "
+                + "|| "
                 + "(expr (expr (expr (expr (expr 1) * (expr 2)) + (expr 3)) == (expr 5)) && (expr ! (expr (expr (expr 1) + (expr 2)) == (expr 4))))"
                 + ") ) "
                 + "(stmtl { "
-                + "(stmt (assign a := (expr (expr 5) * (expr 6))) ;) "
-                + "(stmt (assign b := (expr ! (expr ! (expr (expr 1) == (expr 2))))) ;) "
-                + "})) ;)";
+                + "(stmt a := (expr (expr 5) * (expr 6)) ;) "
+                + "(stmt b := (expr ! (expr ! (expr (expr 1) == (expr 2)))) ;) })) ;)";
         assertEquals(r, p);
+    }
+
+    @Test
+    public void testparseTree2Ast1() throws Exception {
+        Phrase astTree = ParseTreeToAst.startWalkForVisiting("if (1+2*3==7 || 1*2+3==5 && !1+2==4) { a:=5*6;b:=!!1==2; };");
+        System.out.println(astTree);
     }
 
     private String stmt2String(String expr) throws Exception {

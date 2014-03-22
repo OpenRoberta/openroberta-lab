@@ -20,6 +20,19 @@ public class IfStmt extends Stmt {
         return new IfStmt(expr, thenList, elseList);
     }
 
+    public static IfStmt make(Expr expr, StmtList thenList) {
+        StmtList elseList = StmtList.make();
+        elseList.setReadOnly();
+        return new IfStmt(expr, thenList, elseList);
+    }
+
+    public static IfStmt make(Expr expr, StmtList thenList, IfStmt elseIf) {
+        StmtList elseList = StmtList.make();
+        elseList.addStmt(elseIf);
+        elseList.setReadOnly();
+        return new IfStmt(expr, thenList, elseList);
+    }
+
     public final Expr getExpr() {
         return this.expr;
     }

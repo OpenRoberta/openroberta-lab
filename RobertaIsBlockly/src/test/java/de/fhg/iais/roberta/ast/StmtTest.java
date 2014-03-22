@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
-import de.fhg.iais.roberta.ast.syntax.expr.TerminalInt;
+import de.fhg.iais.roberta.ast.syntax.expr.IntConst;
 import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
@@ -19,7 +19,7 @@ public class StmtTest {
 
     @Test
     public void test() {
-        Expr expr = TerminalInt.make(1);
+        Expr expr = IntConst.make(1);
         StmtList l1 = StmtList.make();
         l1.addStmt(ExprStmt.make(expr));
         l1.setReadOnly();
