@@ -7,7 +7,7 @@ import java.util.List;
 import de.fhg.iais.roberta.dbc.Assert;
 
 public class StmtList extends Stmt {
-    private List<Stmt> sl = new ArrayList<Stmt>();
+    private final List<Stmt> sl = new ArrayList<Stmt>();
 
     public static StmtList make() {
         return new StmtList();
@@ -21,12 +21,6 @@ public class StmtList extends Stmt {
     public final List<Stmt> get() {
         Assert.isTrue(isReadOnly());
         return Collections.unmodifiableList(this.sl);
-    }
-
-    @Override
-    protected final void freeze() {
-        Assert.isTrue(isReadOnly());
-        this.sl = Collections.unmodifiableList(this.sl); // check whether the wrapper is called twice???
     }
 
     @Override
