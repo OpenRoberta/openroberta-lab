@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
 import de.fhg.iais.roberta.dbc.Assert;
+import de.fhg.iais.roberta.dbc.DbcException;
 
 public class Binary extends Expr {
     private final Op op;
@@ -42,7 +43,27 @@ public class Binary extends Expr {
     }
 
     public static enum Op {
-        Mult, Div, Add, Sub;
+        Mult, Div, Add, Sub, Equal, And, Or;
+
+        public static Op get(String s) {
+            if ( "*".equals(s) ) {
+                return Mult;
+            } else if ( "/".equals(s) ) {
+                return Div;
+            } else if ( "+".equals(s) ) {
+                return Add;
+            } else if ( "-".equals(s) ) {
+                return Sub;
+            } else if ( "==".equals(s) ) {
+                return Equal;
+            } else if ( "&&".equals(s) ) {
+                return And;
+            } else if ( "||".equals(s) ) {
+                return Or;
+            } else {
+                throw new DbcException("invalid binary operator: " + s);
+            }
+        }
     }
 
 }

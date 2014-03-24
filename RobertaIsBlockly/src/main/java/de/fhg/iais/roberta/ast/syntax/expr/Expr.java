@@ -13,7 +13,7 @@ public abstract class Expr extends Phrase {
     abstract public Kind getKind();
 
     public static enum Kind {
-        TerminalInt( TerminalInt.class ), Binary( Binary.class );
+        IntConst( IntConst.class ), Var( Var.class ), Unary( Unary.class ), Binary( Binary.class );
 
         private final Class<?> clazz;
 

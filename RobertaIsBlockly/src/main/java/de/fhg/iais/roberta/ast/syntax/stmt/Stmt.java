@@ -26,7 +26,7 @@ public abstract class Stmt extends Phrase {
     }
 
     public static enum Kind {
-        If( IfStmt.class ), Repeat( RepeatStmt.class ), Expr( ExprStmt.class ), StmtList( StmtList.class );
+        If( IfStmt.class ), Repeat( RepeatStmt.class ), Expr( ExprStmt.class ), StmtList( StmtList.class ), Assign( AssignStmt.class );
 
         private final Class<?> clazz;
 

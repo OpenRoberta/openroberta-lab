@@ -4,31 +4,25 @@ stmtl   :   '{' stmt* '}'                                # StmtList
         ;
         
 stmt    :   expr SEMI                                    # ExprStmt
-        |   ifBase SEMI                                  # IfStmt
-        |   repeat SEMI                                  # RepeatStmt
-        |   assign SEMI                                  # AssignStmt
+        |   ifThenR SEMI                                 # IfStmt
+        |   'repeat' expr 'times' stmtl SEMI             # RepeatStmt
+        |   VAR ASSIGN expr SEMI                         # AssignStmt
         ;
         
-ifBase  :   'if' '(' expr ')' stmtl ifElse?
+ifThenR :   'if' '(' expr ')' stmtl ifElseR?             # IfThen
+        ;
+
+ifElseR :   'else' stmtl                                 # IfElse
+        |   'else' ifThenR                               # IfElseIf
         ;
         
-ifElse  :   'else' stmtl
-        |   'else' ifBase
-        ;
-        
-repeat  :   'repeat' expr 'times' stmtl
-        ;
-        
-assign  :   VAR ASSIGN expr
-        ;
-        
-expr	:	(ADD | SUB) expr                             # UnaryAddSub
-        |   expr (MUL | DIV ) expr                       # MulDiv
-        |   expr (ADD | SUB) expr                        # AddSub
-        |   expr EQUAL expr                              # Equal
-        |   NOT expr                                     # UnaryNot
-        |   expr AND expr                                # And
-        |   expr OR expr                                 # Or
+expr	:	(ADD | SUB) expr                             # Unary
+        |   expr (MUL | DIV ) expr                       # Binary
+        |   expr (ADD | SUB) expr                        # Binary
+        |   expr EQUAL expr                              # Binary
+        |   NOT expr                                     # Unary
+        |   expr AND expr                                # Binary
+        |   expr OR expr                                 # Binary
         |   VAR                                          # VarName
         |   INT                                          # IntConst
         |   '(' expr ')'                                 # Parentheses
