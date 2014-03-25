@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="dbusjava" basedir="." default="copy">
+    <property file="local.properties" />
+    <property name="source.dir"     value="src"/>
+    <property name="class.dir"      value="build"/>
+    <property name="jar.dir"        value="."/>
+    <property name="lejos.home"     value="/home/root/lejos"/>
+    <property name="ev3.host"       value="10.116.55.10"/>
+    <property name="jna.dir"        value="../ev3classes/lib"/>
+    <property name="src.zip"        value="${ant.project.name}-src.zip"/>
+
+    <path id="libraries.path">    
+        <fileset dir="${jna.dir}">
+            <include name="jna-3.2.7.jar"/>
+        </fileset>
+    </path>
+
+    <target name="clean" description="delete old files">
+        <delete dir="${class.dir}"/>
+    </target>
+
+    <target name="compile" description="build class files" depends="clean">
+        <mkdir dir="${class.dir}"/>
+        <javac srcdir="${source.dir}" destdir="${class.dir}">
+            <classpath refid="libraries.path"/>
+        </javac>
+    </target>
+
+    <target name="jar" depends="compile">
+        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${class.dir}">
+        </jar>  
+    </target>
+
+    <target name="copy" depends="jar">
+    	<scp todir="root:@${ev3.host}:/home/root/lejos/lib/" trust="true">
+    	    <fileset file="${jar.dir}/${ant.project.name}.jar"/>
+    	</scp>
+    </target>
+    
+    <target name="src.zip" description="generate zip of sources">
+		<zip destfile="${src.zip}">
+			<fileset dir="${source.dir}" />
+		</zip>
+	</target>
+	
+    	<target name="pc.files" description="Generate the pc files but do not copy to EV3" depends="jar,src.zip"/>
+</project>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="HelloWorld" basedir="." default="copy">
+    <property file="local.properties" />
+    <property name="source.dir"     value="src"/>
+    <property name="lib.dir"        value="../ev3classes"/>
+    <property name="class.dir"      value="build"/>
+    <property name="jar.dir"        value="dist"/>
+    <property name="main-class"     value="EV3HelloWorld"/>
+    <property name="lejos.home"     value="/home/root/lejos"/>
+    <property name="ev3.host"       value="10.0.1.1"/>
+
+    <path id="libraries.path">    
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="clean" description="delete old files">
+        <delete dir="${class.dir}"/>
+        <delete dir="${jar.dir}"/>
+    </target>
+
+    <target name="compile" description="build class files" depends="clean">
+        <mkdir dir="${class.dir}"/>
+        <javac srcdir="${source.dir}" destdir="${class.dir}">
+            <classpath refid="libraries.path"/>
+        </javac>
+    </target>
+
+  <target name="jar" depends="compile">
+      <mkdir dir="${jar.dir}"/>
+      <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${class.dir}">
+          <manifest>
+              <attribute name="Main-Class" value="${main-class}"/>
+              <attribute name="Class-Path" value="/home/root/lejos/lib/ev3classes.jar /home/root/lejos/libjna/usr/share/java/jna.jar"/>
+          </manifest>
+      </jar>  
+  </target>
+
+  <target name="copy" depends="jar">
+  	<scp todir="root:@${ev3.host}:/home/lejos/programs/" trust="true">
+  	    <fileset file="${jar.dir}/${ant.project.name}.jar"/>
+  	</scp>
+  </target>
+</project>
