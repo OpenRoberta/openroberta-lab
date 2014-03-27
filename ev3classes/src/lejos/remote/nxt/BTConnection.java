@@ -85,7 +85,7 @@ public class BTConnection extends NXTConnection {
 			int errno = e.getErrorCode();
 			System.out.println("Error code is " + errno);
 			
-			if (errno == -104) {
+			if (errno == 104) {
 				eof = true;
 				return -1;
 			}

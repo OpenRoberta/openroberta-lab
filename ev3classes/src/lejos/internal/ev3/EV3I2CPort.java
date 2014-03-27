@@ -1,6 +1,8 @@
 package lejos.internal.ev3;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.List;
 
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
@@ -48,6 +50,12 @@ public class EV3I2CPort extends EV3IOPort implements I2CPort
       public byte[] WrData = new byte[IIC_DATA_LENGTH];
       public byte RdLng;
       public byte[] RdData = new byte[IIC_DATA_LENGTH];
+    @Override
+    protected List getFieldOrder()
+    {
+        // TODO Auto-generated method stub
+        return Arrays.asList(new String[] {"Result", "Port", "Repeat", "Time", "WrLng", "WrData", "RdLng", "RdData"});
+    }
     };
     protected IICDATA iicdata = new IICDATA();
     

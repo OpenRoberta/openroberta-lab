@@ -112,7 +112,7 @@ public class NXTUltrasonicSensor extends I2CSensor  {
 	 * @return
 	 */
 	public SampleProvider getPingMode() {
-    return getMode(0);
+    return getMode(1);
 	}
 	
 	public void enable() {

@@ -16,25 +16,15 @@ public class EV3LCD implements CommonLCD
     public static final int SCREEN_HEIGHT = 128;
     public static final int DEFAULT_REFRESH_PERIOD = 250;
     
-    protected static byte[] displayBuf = new byte[(SCREEN_HEIGHT)*(SCREEN_WIDTH+7)/8];
     private static boolean autoRefresh = true;
 
-    protected final static int LCD_MEM_WIDTH = 60; // width of HW Buffer in bytes
-    protected final static int LCD_BUFFER_LENGTH = LCD_MEM_WIDTH*SCREEN_HEIGHT;
+    protected final static int HW_MEM_WIDTH = ((SCREEN_WIDTH + 31)/32)*4; // width of HW Buffer in bytes
+    protected final static int SCREEN_MEM_WIDTH = (SCREEN_WIDTH +7)/8; // width of leJOS screen buffer in bytes
+    protected final static int LCD_BUFFER_LENGTH = HW_MEM_WIDTH*SCREEN_HEIGHT;
+    protected static byte[] displayBuf = new byte[LCD_BUFFER_LENGTH];
     protected NativeDevice dev = new NativeDevice("/dev/fb0");
     protected Pointer lcd = dev.mmap(LCD_BUFFER_LENGTH);
-    
-    protected final static byte[] convert = new byte[] {
-            (byte)0x00, // 000 00000000
-            (byte)0xE0, // 001 11100000
-            (byte)0x1C, // 010 00011100
-            (byte)0xFC, // 011 11111100
-            (byte)0x03, // 100 00000011
-            (byte)0xE3, // 101 11100011
-            (byte)0x1F, // 110 00011111
-            (byte)0xFF  // 111 11111111
-    };
-    
+        
     protected byte [] hwBuffer = new byte[LCD_BUFFER_LENGTH];
     private static LCDUpdate updateThread;
 
@@ -171,8 +161,9 @@ public class EV3LCD implements CommonLCD
      */
     public int getPixel(int x, int y) {
         if (x < 0 || x >= SCREEN_WIDTH || y < 0 || y >= SCREEN_HEIGHT) return 0; 
-        int bit = (y & 0x7);
-        int index = (y/8)*SCREEN_WIDTH + x;
+        int bit = (x & 0x7);
+        //int index = (y)*SCREEN_WIDTH + x;
+        int index = (y)*HW_MEM_WIDTH + x;
         return ((displayBuf[index] >> bit) & 1);
     }
 
@@ -254,6 +245,10 @@ public class EV3LCD implements CommonLCD
             src = dst;
         int swb = (sw+7)/8;
         int dwb = (dw+7)/8;
+        if (src == displayBuf)
+            swb = HW_MEM_WIDTH;
+        if (dst == displayBuf)
+            dwb = HW_MEM_WIDTH;
         int inStart = sy*swb;
         int outStart = dy*dwb;
         byte inStartBit = (byte)(1 << (sx & 0x7));
@@ -298,8 +293,8 @@ public class EV3LCD implements CommonLCD
           w &= 0x7;
           if (w == 0) 
           {
-              if (dst == displayBuf)
-                  update(displayBuf);
+              //if (dst == displayBuf)
+                  //update(displayBuf);
               return;
           }
           //inStart = sy*swb;
@@ -367,6 +362,8 @@ public class EV3LCD implements CommonLCD
           inStart += swb;
           outStart += dwb;
         }
+        //if (dst == displayBuf)
+            //update(displayBuf);
       }        
 
     /**
@@ -387,89 +384,21 @@ public class EV3LCD implements CommonLCD
      */
     protected synchronized void update(byte [] buffer)
     {
-        int inOffset = 0;
-        int outOffset = 0;
-        for(int row = 0; row < SCREEN_HEIGHT; row++)
-        {
-            int pixels;
-            for(int i = 0; i < 7; i++)
-            {
-                pixels = buffer[inOffset++] & 0xff;
-                pixels |= (buffer[inOffset++] & 0xff) << 8;
-                pixels |= (buffer[inOffset++] & 0xff) << 16;
-                
-                hwBuffer[outOffset++] = convert[pixels & 0x7];
-                pixels >>= 3;
-                hwBuffer[outOffset++] = convert[pixels & 0x7];
-                pixels >>= 3;
-                hwBuffer[outOffset++] = convert[pixels & 0x7];
-                pixels >>= 3;
-                hwBuffer[outOffset++] = convert[pixels & 0x7];
-                pixels >>= 3;
-                hwBuffer[outOffset++] = convert[pixels & 0x7];
-                pixels >>= 3;
-                hwBuffer[outOffset++] = convert[pixels & 0x7];
-                pixels >>= 3;
-                hwBuffer[outOffset++] = convert[pixels & 0x7];
-                pixels >>= 3;
-                hwBuffer[outOffset++] = convert[pixels & 0x7];
-            }
-            pixels = buffer[inOffset++] & 0xff;
-            pixels |= (buffer[inOffset++] & 0xff) << 8;
-            hwBuffer[outOffset++] = convert[pixels & 0x7];
-            pixels >>= 3;
-            hwBuffer[outOffset++] = convert[pixels & 0x7];
-            pixels >>= 3;
-            hwBuffer[outOffset++] = convert[pixels & 0x7];
-            pixels >>= 3;
-            hwBuffer[outOffset++] = convert[pixels & 0x7];
-        }
-        //lcd.put(hwBuffer);
-        lcd.write(0, hwBuffer, 0, hwBuffer.length);
+        lcd.write(0, buffer, 0, buffer.length);
+
     }
     
     public byte[] getHWDisplay() {
-    	byte[] buffer = new byte[(SCREEN_HEIGHT)*(SCREEN_WIDTH+7)/8];
+    	byte[] buffer = new byte[SCREEN_HEIGHT*SCREEN_MEM_WIDTH];
     	byte [] hwBuffer = new byte[LCD_BUFFER_LENGTH];
     	
     	lcd.read(0, hwBuffer, 0, LCD_BUFFER_LENGTH);
     	
         for(int row = 0; row < SCREEN_HEIGHT; row++)
         {
-            for(int i = 0; i < 7; i++)
-            {
-            	int pixels = 0;
-            	for(int j = 0;j<8;j++) 
-            	{
-	        		int b = convertBack(hwBuffer[row*LCD_MEM_WIDTH + 8*i + j]);
-	        		pixels |= (b << j*3);
-            	}
-            	for(int j=0;j<3;j++) 
-            	{
-            		buffer[row*((SCREEN_WIDTH+7)/8)+3*i+j] = (byte) (pixels >> j*8);
-            	}                     
-            }
-            int pixels = 0;
-            for(int j=0;j<4;j++) {
-            	byte b = convertBack(hwBuffer[row*LCD_MEM_WIDTH +  56 + j]);
-            	pixels |= (b << j*3);
-            }
-            buffer[row*((SCREEN_WIDTH+7)/8)+21] = (byte) (pixels);
-            buffer[row*((SCREEN_WIDTH+7)/8)+22] = (byte) (pixels >> 8);
+            System.arraycopy(hwBuffer, row*HW_MEM_WIDTH, buffer, row*SCREEN_MEM_WIDTH, SCREEN_MEM_WIDTH);
         }
     	return buffer;
-    }
-    
-    byte convertBack(byte b) {
-        if (b == (byte)0x00) return 0;
-        else if (b == (byte)0xE0) return 1;
-        else if (b == (byte)0x1C) return 2;
-        else if (b == (byte)0xFC) return 3;
-        else if (b == (byte)0x03) return 4;
-        else if (b == (byte)0xE3) return 5;
-        else if (b == (byte)0x1F) return 6;
-        else if (b == (byte)0xFF) return 7;
-        return -1;
     }
     
     class LCDUpdate extends Thread {

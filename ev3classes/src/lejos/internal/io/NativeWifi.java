@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.Arrays;
+import java.util.List;
 
 import com.sun.jna.LastErrorException;
 import com.sun.jna.Native;
@@ -52,23 +54,53 @@ public class NativeWifi {
 	public static class SockAddr extends Structure {
 		public short family;
         public byte[] bd_addr = new byte[14];
+        @Override
+        protected List getFieldOrder()
+        {
+            // TODO Auto-generated method stub
+            return Arrays.asList(new String[] {"family",
+            "bd_addr"});
+        }
 	}
 	
 	public static class Point extends Structure {
 		public Pointer p;
         public short length;
         public short flags;
+        @Override
+        protected List getFieldOrder()
+        {
+            // TODO Auto-generated method stub
+            return Arrays.asList(new String[] {"p",
+            "length",
+            "flags"});
+        }
 	}
 	
 	public static class WReqSocket extends Structure implements Structure.ByReference  {  
         public byte[] ifname = new byte[16];
-        public SockAddr sockaddr = new SockAddr();       
+        public SockAddr sockaddr = new SockAddr();
+        @Override
+        protected List getFieldOrder()
+        {
+            // TODO Auto-generated method stub
+            return Arrays.asList(new String[] {"ifname",
+            "sockaddr"});
+        }       
 	}
 	
 	public static class WReqPoint extends Structure implements Structure.ByReference  {  
         public byte[] ifname = new byte[16];
         public Point point = new Point();  
         public byte[] padding = new byte[8];
+        @Override
+        protected List getFieldOrder()
+        {
+            // TODO Auto-generated method stub
+            return Arrays.asList(new String[] {"ifname",
+            "point",  
+            "padding"});
+        }
 	}
 	
     static class Linux_C_lib_DirectMapping {

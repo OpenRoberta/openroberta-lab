@@ -9,7 +9,7 @@
     <property name="src.zip"        value="${ant.project.name}-src.zip"/>
     <property name="docs.exclude"   value="**/internal/**"/>
     <property name="lejos.home"     value="/home/root/lejos"/>
-    <property name="ev3.host"       value="10.116.55.10"/>
+    <property name="ev3.host"       value="10.0.1.1"/>
     <property name="jna.dir"        value="lib"/>
     <property name="libdbus.dir"    value="../DBusJava/"/>
     

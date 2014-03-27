@@ -9,6 +9,7 @@ import lejos.utility.Delay;
 public class EV3Key implements Key {	
 	private static final int WAITFOR_RELEASE_SHIFT = 8;
 	private static final int DEBOUNCE_TIME = 10;
+	private static final int KEY_PRESS_TIME = 100;
 	
 	private int iCode;
 	private EV3Keys keys;
@@ -73,7 +74,7 @@ public class EV3Key implements Key {
 		else if (event == Key.KEY_RELEASED) keys.setSimultedState(simulatedState &= ~iCode); // unset bit
 		else if (event == Key.KEY_PRESSED_AND_RELEASED) {
 			keys.setSimultedState(simulatedState |= iCode);
-			Delay.msDelay(DEBOUNCE_TIME * 4);
+			Delay.msDelay(KEY_PRESS_TIME);
 			keys.setSimultedState(simulatedState &= ~iCode);
 		}
 	}

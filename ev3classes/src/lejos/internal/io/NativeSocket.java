@@ -2,6 +2,8 @@ package lejos.internal.io;
 
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.List;
 
 import com.sun.jna.LastErrorException;
 import com.sun.jna.Native;
@@ -15,7 +17,15 @@ public class NativeSocket {
 	public static class SockAddr extends Structure implements Structure.ByReference  {  
         public short family = AF_BLUETOOTH;
         public byte[] bd_addr = new byte[6];
-        public byte channel = 1;       
+        public byte channel = 1;
+        @Override
+        protected List getFieldOrder()
+        {
+            // TODO Auto-generated method stub
+            return Arrays.asList(new String[] {"family",
+            "bd_addr",
+            "channel"});
+        }       
 	}
 	
     static class Linux_C_lib_DirectMapping {     

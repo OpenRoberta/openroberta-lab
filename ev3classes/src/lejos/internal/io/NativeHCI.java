@@ -3,7 +3,9 @@ package lejos.internal.io;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import lejos.hardware.RemoteBTDevice;
 
@@ -35,6 +37,25 @@ public class NativeHCI {
         public short sco_mtu;
         public short sco_pkts;
         public int[] stat = new int[10];
+        @Override
+        protected List getFieldOrder()
+        {
+            // TODO Auto-generated method stub
+            return Arrays.asList(new String[] {"dev_id",
+            "name",
+            "bdaddr",
+            "flags",
+            "type",
+            "features",
+            "pkt_type",
+            "link_policy",
+            "link_mode",
+            "acl_mtu",
+            "acl_pkts",
+            "sco_mtu",
+            "sco_pkts",
+            "stat"});
+        }
 	}
 	
     static class LibBlue {

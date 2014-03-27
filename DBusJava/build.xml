@@ -5,7 +5,7 @@
     <property name="class.dir"      value="build"/>
     <property name="jar.dir"        value="."/>
     <property name="lejos.home"     value="/home/root/lejos"/>
-    <property name="ev3.host"       value="10.116.55.10"/>
+    <property name="ev3.host"       value="10.0.1.1"/>
     <property name="jna.dir"        value="../ev3classes/lib"/>
     <property name="src.zip"        value="${ant.project.name}-src.zip"/>
 
