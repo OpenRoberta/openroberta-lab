@@ -765,11 +765,11 @@ public class GraphicStartup implements Menu {
             RobertaLogo, RobertaLogo, RobertaLogo
         };
         // sampleProgram and code predefined for testing as well as serverURL! 
-        String sampleProgram = "HelloWorld.jar";
+        String sampleProgram = "HelloWorld2.jar";
         String webServiceCode = "zxcv";
         URL serverURL = null;
         try {
-            serverURL = new URL("http://10.0.1.10:1999/hello/txt");
+            serverURL = new URL("http://10.0.1.10:1999/download");
         } catch ( MalformedURLException e ) {
             e.printStackTrace();
         }

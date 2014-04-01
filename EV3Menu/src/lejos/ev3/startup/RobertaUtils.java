@@ -26,7 +26,7 @@ public class RobertaUtils {
         HttpURLConnection httpURLConnection = null;
         httpURLConnection = (HttpURLConnection) url.openConnection();
         httpURLConnection.setDoOutput(true);
-        httpURLConnection.setRequestMethod("GET");
+        httpURLConnection.setRequestMethod("POST");
         return httpURLConnection;
     }
 
