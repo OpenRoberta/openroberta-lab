@@ -31,6 +31,7 @@ goog.provide('Blockly.Workspace');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Trashcan');
 goog.require('Blockly.Xml');
+goog.require('Blockly.Xml.Roberta');
 
 
 /**
