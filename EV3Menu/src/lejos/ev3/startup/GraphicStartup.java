@@ -112,11 +112,10 @@ public class GraphicStartup implements Menu {
     static final String ICNo =
         "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00f0\u0000\u0000\u000f\u00f0\u0000\u0000\u000f\u00fc\u0003\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00c0\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u0003\u0000\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u0000\u00c0\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u0003\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u0003\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00f0\u0000\u0000\u000f\u00f0\u0000\u0000\u000f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
 
-    /**
-     * Roberta Logo (maybe not best quality possible, done with ev3image tool from lejos)
-     */
+    // Roberta Logo (maybe not best quality possible, done with ev3image tool from lejos)
     static final String RobertaLogo =
         "\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0001\u0000\u0000\u0080\u0003\u0020\u0002\u008e\u0003\u00b8\u0001\u0080\u0001\u00b8\u005e\u00c4\u0001\u0038\u0021\u00f8\u0000\u00f8\u0000\u0031\u0000\u00f0\u0010\u0033\u0000\u00e0\u0038\u0008\u0000\u00e0\u0000\u0004\u0000\u0000\u00e1\u0003\u0000\u0000\u007e\u0000\u0000\u0000\u0070\u0000\u0000\u0000\u0030\u0000\u0000\u0000\u0038\u0000\u0000\u0000\u0038\u0080\u0003\u0000\u0038\u00f0\u0007\u0000\u00f8\u00ff\u0007\u0000\u00f8\u00ff\u0007\u0000\u00f8\u00ff\u001f\u0000\u00f8\u00ff\u003f\u0000\u00f8\u00ff\u003f\u0000\u00f8\u00ff\u007f\u0000\u00ff\u00ff\u007f\u0080\u00ff\u00ff\u0067\u00c0\u00ff\u00ff\u0077\u00c0\u00ff\u009f\u0077\u00c0\u00ff\u00df\u003f\u0080\u00ff\u00ff\u003f\u0000\u008f\u00fc\u001f\u0000\u0000\u0010\u000f";
+    private static String webServiceCode;
 
     static final String PROGRAMS_DIRECTORY = "/home/lejos/programs";
     static final String SAMPLES_DIRECTORY = "/home/root/lejos/samples";
@@ -276,8 +275,8 @@ public class GraphicStartup implements Menu {
     /**
      * Display the main system menu.
      * Allow the user to select File, Bluetooth, Sound, System operations.
-     * Roberta entry addet
      */
+    // Roberta menu icon + case entry added
     private void mainMenu() {
         GraphicMenu menu = new GraphicMenu(new String[] {
             "Run Default", "Roberta", "Files", "Samples", "Bluetooth", "Wifi", "Sound", "System", "Version"
@@ -755,7 +754,9 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Roberta menu
+     * Roberta submenu implementation
+     * uses new RobertaUtils helper class for downloading and saving file
+     * uses new RobertaKeyboard with less symbols for token input
      */
     private void robertaMenu() {
         String[] menuData = {
@@ -766,10 +767,9 @@ public class GraphicStartup implements Menu {
         };
         // sampleProgram and code predefined for testing as well as serverURL! 
         String sampleProgram = "HelloWorld2.jar";
-        String webServiceCode = "zxcv";
         URL serverURL = null;
         try {
-            serverURL = new URL("http://10.0.1.10:1999/download");
+            serverURL = new URL("http://10.0.1.11:1999/download"); // type "ipconfig /all" in console to see which ip adress your pc got from the brick dhcp
         } catch ( MalformedURLException e ) {
             e.printStackTrace();
         }
@@ -777,17 +777,18 @@ public class GraphicStartup implements Menu {
         int selection = 0;
         do {
             newScreen("Roberta");
-            lcd.drawString("P.-name: " + sampleProgram, 0, 1);
-            lcd.drawString("Code: " + webServiceCode, 0, 2);
+            lcd.drawString("P.-name:", 0, 1);
+            lcd.drawString(sampleProgram, 0, 2);
+            lcd.drawString("Code: " + webServiceCode, 0, 3);
             menu.setItems(menuData, iconData);
             selection = getSelection(menu, selection);
             switch ( selection ) {
                 case 0:
-                    webServiceCode = new Keyboard().getString();
+                    webServiceCode = new RobertaKeyboard().getString();
                     break;
                 case 1:
                     RobertaUtils robertaUtils = new RobertaUtils();
-                    robertaUtils.getProgram(serverURL, PROGRAMS_DIRECTORY, sampleProgram);
+                    robertaUtils.getProgram(serverURL, PROGRAMS_DIRECTORY, sampleProgram, webServiceCode);
                     break;
                 case 2:
                     this.ind.suspend();
