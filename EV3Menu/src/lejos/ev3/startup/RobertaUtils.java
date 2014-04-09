@@ -11,64 +11,50 @@ import java.net.URL;
 
 public class RobertaUtils {
 
+    // taken from GraphicStartup.java
+    private static final String PROGRAMS_DIRECTORY = "/home/lejos/programs";
+
     public RobertaUtils() {
         //
     }
 
-    public void getProgram(URL serverURL, String programDir, String programName, String code) {
+    public String getProgram(URL serverURL, String token) {
         try {
-            //saveProgram(requestToServer(openConnection(serverURL)), programDir, programName);
-            requestToServer(openConnection(serverURL), programDir, programName, code);
-        } catch ( ClassNotFoundException | IOException e ) {
+            return downloadProgramFromServer(openConnection(serverURL), token);
+        } catch ( IOException e ) {
             e.printStackTrace();
         }
+        return null;
     }
 
     private HttpURLConnection openConnection(URL url) throws IOException {
-        HttpURLConnection httpURLConnection = null;
-        httpURLConnection = (HttpURLConnection) url.openConnection();
+        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
         httpURLConnection.setDoInput(true);
         httpURLConnection.setDoOutput(true);
         httpURLConnection.setRequestMethod("POST");
         return httpURLConnection;
     }
 
-    private void requestToServer(HttpURLConnection httpURLConnection, String programDir, String programName, String code)
-        throws IOException,
-        ClassNotFoundException {
-
+    private String downloadProgramFromServer(HttpURLConnection httpURLConnection, String code) throws IOException {
+        // send code (example zxcv)
         DataOutputStream dos = new DataOutputStream(httpURLConnection.getOutputStream());
         dos.writeBytes(code);
         dos.flush();
         dos.close();
 
+        // read fileName from http header
         String fileName = httpURLConnection.getHeaderField("fileName");
-        System.out.println(fileName);
+        System.out.println("http header fileName: " + fileName);
 
+        // download bytearray and save to file
         InputStream is = httpURLConnection.getInputStream();
         byte[] buffer = new byte[4096];
         int n;
-        OutputStream output = new FileOutputStream(new File(programDir, programName));
+        OutputStream output = new FileOutputStream(new File(PROGRAMS_DIRECTORY, fileName));
         while ( (n = is.read(buffer)) != -1 ) {
             output.write(buffer, 0, n);
         }
         output.close();
-
-        /*InputStream is = httpURLConnection.getInputStream();
-        ObjectInputStream ois = new ObjectInputStream(is);
-        byte[] ServletAnswer = (byte[]) ois.readObject();
-        ois.close();
-        is.close();
-        return ServletAnswer;*/
+        return fileName;
     }
-
-    /*private void saveProgram(byte[] program, String programDir, String programName) throws IOException {
-        File userProgram = new File(programDir, programName);
-        FileOutputStream fis = new FileOutputStream(userProgram);
-        try {
-            fis.write(program);
-        } finally {
-            fis.close();
-        }
-    }*/
 }
