@@ -85,10 +85,10 @@ Blockly.Blocks['robControls_ifElse'] = {
 		this.appendValueInput('VALUE').appendField(Blockly.Msg.CONTROLS_IF_MSG_IF)
 				.appendField(dropdownSensor, 'SENSOR').appendField(
 				new Blockly.FieldDropdown(OPERATORS), 'OP').setCheck('Number');
-		this.appendStatementInput('DO').appendField(
+		this.appendStatementInput('DO0').appendField(
 				Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
 		this.appendDummyInput().appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSE);
-		this.appendStatementInput('DO').appendField(
+		this.appendStatementInput('DO1').appendField(
 				Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
 		//this.setInputsInline(true);
 		this.setPreviousStatement(true);
