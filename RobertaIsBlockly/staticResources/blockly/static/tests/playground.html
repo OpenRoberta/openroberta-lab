@@ -32,6 +32,7 @@
 <script type="text/javascript" src="../generators/dart/variables.js"></script>
 <script type="text/javascript" src="../generators/dart/procedures.js"></script>
 <script type="text/javascript" src="../msg/messages.js"></script>
+<script type="text/javascript" src="../msg/js/de.js"></script>
 <script type="text/javascript" src="../blocks/logic.js"></script>
 <script type="text/javascript" src="../blocks/loops.js"></script>
 <script type="text/javascript" src="../blocks/math.js"></script>
@@ -40,6 +41,9 @@
 <script type="text/javascript" src="../blocks/colour.js"></script>
 <script type="text/javascript" src="../blocks/variables.js"></script>
 <script type="text/javascript" src="../blocks/procedures.js"></script>
+<script type="text/javascript" src="../blocks/robActions.js"></script>
+<script type="text/javascript" src="../blocks/robControls.js"></script>
+<script type="text/javascript" src="../blocks/robSensors.js"></script>
 
 <!-- Load the Google Drive SDK Realtime libraries. -->
 <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
@@ -295,7 +299,112 @@ h1 {
       
     </category>
     <category name="Variables" custom="VARIABLE"></category>
-    <category name="Functions" custom="PROCEDURE"></category>  
+    <category name="Functions" custom="PROCEDURE"></category> 
+                  <category name='Aktion'> 
+                <block type='robActions_motorDiff_on'> 
+                  <value name='POWER'> 
+                    <block type='math_number'> 
+                      <field name='NUM'>30</field> 
+                    </block> 
+                  </value> 
+                </block> 
+                <block type='robActions_motorDiff_on_for'> 
+                  <value name='POWER'> 
+                    <block type='math_number'> 
+                      <field name='NUM'>30</field> 
+                    </block> 
+                  </value> 
+                  <value name='DISTANCE'> 
+                    <block type='math_number'> 
+                      <field name='NUM'>10</field> 
+                    </block> 
+                  </value> 
+                </block> 
+                <block type='robActions_motorDiff_stop'> 
+                </block> 
+                <block type='robActions_motorDiff_turn'> 
+                  <value name='POWER'> 
+                    <block type='math_number'> 
+                      <field name='NUM'>30</field> 
+                    </block> 
+                  </value> 
+                </block> 
+                <block type='robActions_motorDiff_turn_for'> 
+                  <value name='POWER'> 
+                    <block type='math_number'> 
+                      <field name='NUM'>30</field> 
+                    </block> 
+                  </value> 
+                  <value name='DISTANCE'> 
+                    <block type='math_number'> 
+                      <field name='NUM'>10</field> 
+                    </block> 
+                  </value> 
+                </block> 
+                <block type='robActions_display'> 
+                  <value name='OUT'> 
+                    <block type='text'> 
+                      <field name='TEXT'>Hallo</field> 
+                    </block> 
+                  </value> 
+                  <value name='COL'> 
+                    <block type='math_number'> 
+                      <field name='NUM'>0</field> 
+                    </block> 
+                  </value> 
+                  <value name='ROW'> 
+                    <block type='math_number'> 
+                      <field name='NUM'>0</field> 
+                    </block> 
+                  </value> 
+                </block> 
+                <block type='robActions_playTone'> 
+                  <value name='FREQUENZ'> 
+                    <block type='math_number'> 
+                      <field name='NUM'>300</field> 
+                    </block> 
+                  </value> 
+                  <value name='DURATION'> 
+                    <block type='math_number'> 
+                      <field name='NUM'>100</field> 
+                    </block> 
+                  </value> 
+                </block> 
+                <block type='robActions_brickLight'></block> 
+              </category> 
+              <category name='Kontrolle'> 
+                <block type='robControls_wait'> 
+                  <value name='VALUE'> 
+                    <block type='math_number'> 
+                      <field name='NUM'>25</field> 
+                    </block> 
+                  </value> 
+                </block> 
+                <block type='robControls_loopUntil'> 
+                  <value name='VALUE'> 
+                    <block type='math_number'> 
+                      <field name='NUM'>30</field> 
+                    </block> 
+                  </value> 
+                </block> 
+                <block type='robControls_loopForever'> 
+                </block> 
+                <block type='robControls_ifElse'> 
+                  <value name='VALUE'> 
+                    <block type='math_number'> 
+                      <field name='NUM'>25</field> 
+                    </block> 
+                  </value> 
+                </block> 
+              </category> 
+              <category name='Sensoren'> 
+                <block type='robSensors_ultrasonic'> 
+                </block> 
+                <block type='robSensors_touch'> 
+                </block> 
+                <block type='robSensors_colour'> 
+                </block> 
+              </category>  
   </xml>
 
   <h1>Blockly Playground</h1>
