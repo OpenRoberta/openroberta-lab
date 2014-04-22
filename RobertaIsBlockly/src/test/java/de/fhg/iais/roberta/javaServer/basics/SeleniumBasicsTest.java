@@ -3,17 +3,13 @@ package de.fhg.iais.roberta.javaServer.basics;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jetty.server.Server;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
@@ -36,197 +32,66 @@ public class SeleniumBasicsTest {
         this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
 
-    @Ignore
     @Test
     public void testBasics() throws Exception {
         this.driver.get(this.baseUrl);
         assertEquals("Status", this.driver.findElement(By.id("ready")).getText());
         assertEquals("Ergebnisse", this.driver.findElement(By.id("result")).getText());
-        this.driver.findElement(By.id("t2")).click();
-        for ( int second = 0;; second++ ) {
-            if ( second >= 60 ) {
-                fail("timeout");
-            }
-            try {
-                if ( "ready".equals(this.driver.findElement(By.id("ready")).getText()) ) {
-                    break;
-                }
-            } catch ( Exception e ) {
-            }
-            Thread.sleep(1000);
-        }
 
+        this.driver.findElement(By.id("t2")).click();
+        awaitTextReadyInElementReady();
         assertEquals("asExpected", this.driver.findElement(By.id("result")).getText());
+
         this.driver.findElement(By.id("t1")).click();
         this.driver.findElement(By.id("t3")).click();
-        for ( int second = 0;; second++ ) {
-            if ( second >= 60 ) {
-                fail("timeout");
-            }
-            try {
-                if ( "ready".equals(this.driver.findElement(By.id("ready")).getText()) ) {
-                    break;
-                }
-            } catch ( Exception e ) {
-            }
-            Thread.sleep(1000);
-        }
-
+        awaitTextReadyInElementReady();
         assertEquals("asExpected", this.driver.findElement(By.id("result")).getText());
+
         this.driver.findElement(By.id("t2")).click();
-        for ( int second = 0;; second++ ) {
-            if ( second >= 60 ) {
-                fail("timeout");
-            }
-            try {
-                if ( "ready".equals(this.driver.findElement(By.id("ready")).getText()) ) {
-                    break;
-                }
-            } catch ( Exception e ) {
-            }
-            Thread.sleep(1000);
-        }
-
+        awaitTextReadyInElementReady();
         assertEquals("asExpected", this.driver.findElement(By.id("result")).getText());
+
         this.driver.findElement(By.id("t3")).click();
-        for ( int second = 0;; second++ ) {
-            if ( second >= 60 ) {
-                fail("timeout");
-            }
-            try {
-                if ( "ready".equals(this.driver.findElement(By.id("ready")).getText()) ) {
-                    break;
-                }
-            } catch ( Exception e ) {
-            }
-            Thread.sleep(1000);
-        }
-
+        awaitTextReadyInElementReady();
         assertEquals("error", this.driver.findElement(By.id("result")).getText());
+
         this.driver.findElement(By.id("t1")).click();
         this.driver.findElement(By.id("t1")).click();
         this.driver.findElement(By.id("t2")).click();
-        for ( int second = 0;; second++ ) {
-            if ( second >= 60 ) {
-                fail("timeout");
-            }
-            try {
-                if ( "ready".equals(this.driver.findElement(By.id("ready")).getText()) ) {
-                    break;
-                }
-            } catch ( Exception e ) {
-            }
-            Thread.sleep(1000);
-        }
-
+        awaitTextReadyInElementReady();
         assertEquals("error", this.driver.findElement(By.id("result")).getText());
+
         this.driver.findElement(By.id("t1")).click();
         this.driver.findElement(By.id("t1")).click();
         this.driver.findElement(By.id("t3")).click();
-        for ( int second = 0;; second++ ) {
-            if ( second >= 60 ) {
-                fail("timeout");
-            }
-            try {
-                if ( "ready".equals(this.driver.findElement(By.id("ready")).getText()) ) {
-                    break;
-                }
-            } catch ( Exception e ) {
-            }
-            Thread.sleep(1000);
-        }
-
+        awaitTextReadyInElementReady();
         assertEquals("error", this.driver.findElement(By.id("result")).getText());
-        this.driver.findElement(By.id("t2")).click();
-        for ( int second = 0;; second++ ) {
-            if ( second >= 60 ) {
-                fail("timeout");
-            }
-            try {
-                if ( "ready".equals(this.driver.findElement(By.id("ready")).getText()) ) {
-                    break;
-                }
-            } catch ( Exception e ) {
-            }
-            Thread.sleep(1000);
-        }
 
+        this.driver.findElement(By.id("t2")).click();
+        awaitTextReadyInElementReady();
         assertEquals("asExpected", this.driver.findElement(By.id("result")).getText());
+
         this.driver.findElement(By.id("t4")).click();
         this.driver.findElement(By.id("t2")).click();
-        for ( int second = 0;; second++ ) {
-            if ( second >= 60 ) {
-                fail("timeout");
-            }
-            try {
-                if ( "ready".equals(this.driver.findElement(By.id("ready")).getText()) ) {
-                    break;
-                }
-            } catch ( Exception e ) {
-            }
-            Thread.sleep(1000);
-        }
-
+        awaitTextReadyInElementReady();
         assertEquals("asExpected", this.driver.findElement(By.id("result")).getText());
-        for ( int second = 0;; second++ ) {
-            if ( second >= 60 ) {
-                fail("timeout");
-            }
-            try {
-                if ( "ready".equals(this.driver.findElement(By.id("ready")).getText()) ) {
-                    break;
-                }
-            } catch ( Exception e ) {
-            }
-            Thread.sleep(1000);
-        }
 
         this.driver.findElement(By.id("t5")).click();
         this.driver.findElement(By.id("t6")).click();
-        for ( int second = 0;; second++ ) {
-            if ( second >= 60 ) {
-                fail("timeout");
-            }
-            try {
-                if ( "ready".equals(this.driver.findElement(By.id("ready")).getText()) ) {
-                    break;
-                }
-            } catch ( Exception e ) {
-            }
-            Thread.sleep(1000);
-        }
-
+        awaitTextReadyInElementReady();
         assertEquals("asExpected", this.driver.findElement(By.id("result")).getText());
+
         this.driver.findElement(By.id("t7")).click();
-        for ( int second = 0;; second++ ) {
-            if ( second >= 60 ) {
-                fail("timeout");
-            }
-            try {
-                if ( "ready".equals(this.driver.findElement(By.id("ready")).getText()) ) {
-                    break;
-                }
-            } catch ( Exception e ) {
-            }
-            Thread.sleep(1000);
-        }
-
         this.driver.findElement(By.id("t8")).click();
-        for ( int second = 0;; second++ ) {
-            if ( second >= 60 ) {
-                fail("timeout");
-            }
-            try {
-                if ( "ready".equals(this.driver.findElement(By.id("ready")).getText()) ) {
-                    break;
-                }
-            } catch ( Exception e ) {
-            }
-            Thread.sleep(1000);
-        }
-
+        awaitTextReadyInElementReady();
         assertEquals("asExpected", this.driver.findElement(By.id("result")).getText());
+
         this.driver.findElement(By.id("t2")).click();
+        awaitTextReadyInElementReady();
+        assertEquals("error", this.driver.findElement(By.id("result")).getText());
+    }
+
+    private void awaitTextReadyInElementReady() {
         for ( int second = 0;; second++ ) {
             if ( second >= 60 ) {
                 fail("timeout");
@@ -237,10 +102,12 @@ public class SeleniumBasicsTest {
                 }
             } catch ( Exception e ) {
             }
-            Thread.sleep(1000);
+            try {
+                Thread.sleep(1000);
+            } catch ( InterruptedException e ) {
+                // OK
+            }
         }
-
-        assertEquals("error", this.driver.findElement(By.id("result")).getText());
     }
 
     @After
@@ -251,41 +118,5 @@ public class SeleniumBasicsTest {
             fail(verificationErrorString);
         }
         this.server.stop();
-    }
-
-    @SuppressWarnings("unused")
-    private boolean isElementPresent(By by) {
-        try {
-            this.driver.findElement(by);
-            return true;
-        } catch ( NoSuchElementException e ) {
-            return false;
-        }
-    }
-
-    @SuppressWarnings("unused")
-    private boolean isAlertPresent() {
-        try {
-            this.driver.switchTo().alert();
-            return true;
-        } catch ( NoAlertPresentException e ) {
-            return false;
-        }
-    }
-
-    @SuppressWarnings("unused")
-    private String closeAlertAndGetItsText() {
-        try {
-            Alert alert = this.driver.switchTo().alert();
-            String alertText = alert.getText();
-            if ( this.acceptNextAlert ) {
-                alert.accept();
-            } else {
-                alert.dismiss();
-            }
-            return alertText;
-        } finally {
-            this.acceptNextAlert = true;
-        }
     }
 }
