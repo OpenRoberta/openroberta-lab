@@ -1,0 +1,67 @@
+<project xmlns="http://www.w3.org/1999/xhtml">
+  <instance x="109" y="110">
+    <block type="controls_if" id="45" inline="false">
+      <value name="IF0">
+        <block type="robSensors_ultrasonic" id="62">
+          <field name="MEASURE">DISTANCE</field>
+        </block>
+      </value>
+      <statement name="DO0">
+        <block type="controls_repeat_ext" id="73" inline="true">
+          <value name="TIMES">
+            <block type="math_number" id="134">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+          <statement name="DO">
+            <block type="robControls_loopUntil" id="81" inline="false">
+              <field name="PROPERTY">ULTRASONIC</field>
+              <field name="OP">EQ</field>
+              <value name="VALUE">
+                <block type="math_number" id="82">
+                  <field name="NUM">30</field>
+                </block>
+              </value>
+              <statement name="DO">
+                <block type="robActions_motorDiff_on_for" id="102" inline="false">
+                  <field name="DIRECTION">FOREWARD</field>
+                  <value name="POWER">
+                    <block type="math_number" id="103">
+                      <field name="NUM">30</field>
+                    </block>
+                  </value>
+                  <value name="DISTANCE">
+                    <block type="math_number" id="104">
+                      <field name="NUM">10</field>
+                    </block>
+                  </value>
+                </block>
+              </statement>
+            </block>
+            <block type="robControls_wait" id="112" inline="false">
+              <field name="SENSOR">ULTRASONIC</field>
+              <field name="OP">EQ</field>
+              <value name="VALUE">
+                <block type="math_number" id="113">
+                  <field name="NUM">25</field>
+                </block>
+              </value>
+            </block>
+          </statement>
+        </block>
+      </statement>
+    </block>
+    <block type="text_print" id="58" inline="false">
+      <value name="TEXT">
+        <block type="text" id="140">
+          <field name="TEXT"></field>
+        </block>
+      </value>
+    </block>
+  </instance>
+  <instance x="288" y="171">
+    <block type="logic_compare" id="128" inline="true">
+      <field name="OP">EQ</field>
+    </block>
+  </instance>
+</project>

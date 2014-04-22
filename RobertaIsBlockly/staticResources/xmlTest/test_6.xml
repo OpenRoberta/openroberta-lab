@@ -1,0 +1,125 @@
+<project xmlns="http://www.w3.org/1999/xhtml">
+  <instance x="51" y="7">
+    <block type="robActions_motorDiff_on" id="760" inline="false">
+      <field name="DIRECTION">FOREWARD</field>
+      <value name="POWER">
+        <block type="math_number" id="761">
+          <field name="NUM">30</field>
+        </block>
+      </value>
+    </block>
+    <block type="robControls_loopForever" id="396">
+      <statement name="DO">
+        <block type="robActions_motorDiff_on" id="466" inline="false">
+          <field name="DIRECTION">BACKWARD</field>
+          <value name="POWER">
+            <block type="math_number" id="467">
+              <field name="NUM">30</field>
+            </block>
+          </value>
+        </block>
+        <block type="controls_if" id="505" inline="false">
+          <mutation elseif="1" else="1"></mutation>
+          <repetitions>
+            <value name="IF0">
+              <block type="robSensors_colour" id="576">
+                <field name="MEASURE">COLOUR</field>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="robControls_wait" id="544" inline="false">
+                <field name="SENSOR">ULTRASONIC</field>
+                <field name="OP">EQ</field>
+                <value name="VALUE">
+                  <block type="math_number" id="545">
+                    <field name="NUM">25</field>
+                  </block>
+                </value>
+              </block>
+            </statement>
+            <value name="IF1">
+              <block type="robSensors_touch" id="592"></block>
+            </value>
+            <statement name="DO1">
+              <block type="robActions_motorDiff_turn_for" id="565" inline="false">
+                <field name="DIRECTION">RIGHT</field>
+                <value name="POWER">
+                  <block type="math_number" id="566">
+                    <field name="NUM">30</field>
+                  </block>
+                </value>
+                <value name="DISTANCE">
+                  <block type="math_number" id="567">
+                    <field name="NUM">10</field>
+                  </block>
+                </value>
+              </block>
+            </statement>
+            <statement name="ELSE">
+              <block type="robActions_motorDiff_on_for" id="616" inline="false">
+                <field name="DIRECTION">FOREWARD</field>
+                <value name="POWER">
+                  <block type="math_number" id="617">
+                    <field name="NUM">30</field>
+                  </block>
+                </value>
+                <value name="DISTANCE">
+                  <block type="math_number" id="618">
+                    <field name="NUM">10</field>
+                  </block>
+                </value>
+              </block>
+              <block type="controls_repeat_ext" id="670" inline="true">
+                <statement name="DO">
+                  <block type="robActions_motorDiff_on" id="690" inline="false">
+                    <field name="DIRECTION">FOREWARD</field>
+                    <value name="POWER">
+                      <block type="math_number" id="691">
+                        <field name="NUM">30</field>
+                      </block>
+                    </value>
+                  </block>
+                  <block type="robActions_motorDiff_on_for" id="711" inline="false">
+                    <field name="DIRECTION">FOREWARD</field>
+                    <value name="POWER">
+                      <block type="math_number" id="712">
+                        <field name="NUM">30</field>
+                      </block>
+                    </value>
+                    <value name="DISTANCE">
+                      <block type="math_number" id="713">
+                        <field name="NUM">10</field>
+                      </block>
+                    </value>
+                  </block>
+                </statement>
+              </block>
+            </statement>
+          </repetitions>
+        </block>
+        <block type="robActions_motorDiff_on_for" id="638" inline="false">
+          <field name="DIRECTION">FOREWARD</field>
+          <value name="POWER">
+            <block type="math_number" id="639">
+              <field name="NUM">30</field>
+            </block>
+          </value>
+          <value name="DISTANCE">
+            <block type="math_number" id="640">
+              <field name="NUM">10</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+    <block type="robControls_wait" id="739" inline="false">
+      <field name="SENSOR">ULTRASONIC</field>
+      <field name="OP">EQ</field>
+      <value name="VALUE">
+        <block type="math_number" id="740">
+          <field name="NUM">25</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</project>

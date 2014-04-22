@@ -1,0 +1,115 @@
+<project xmlns="http://www.w3.org/1999/xhtml">
+  <instance x="0" y="-21">
+    <block type="robControls_ifElse" id="79" inline="false">
+      <field name="SENSOR">ULTRASONIC</field>
+      <field name="OP">EQ</field>
+      <value name="VALUE">
+        <block type="math_number" id="80">
+          <field name="NUM">25</field>
+        </block>
+      </value>
+      <statement name="DO0">
+        <block type="robActions_motorDiff_stop" id="81"></block>
+        <block type="robActions_motorDiff_stop" id="82"></block>
+        <block type="robControls_wait" id="139" inline="false">
+          <field name="SENSOR">ULTRASONIC</field>
+          <field name="OP">EQ</field>
+          <value name="VALUE">
+            <block type="math_number" id="140">
+              <field name="NUM">25</field>
+            </block>
+          </value>
+        </block>
+        <block type="controls_repeat_ext" id="223" inline="true">
+          <value name="TIMES">
+            <block type="robSensors_touch" id="263"></block>
+          </value>
+          <statement name="DO">
+            <block type="robActions_motorDiff_turn_for" id="293" inline="false">
+              <field name="DIRECTION">RIGHT</field>
+              <value name="POWER">
+                <block type="math_number" id="294">
+                  <field name="NUM">30</field>
+                </block>
+              </value>
+              <value name="DISTANCE">
+                <block type="math_number" id="295">
+                  <field name="NUM">10</field>
+                </block>
+              </value>
+            </block>
+          </statement>
+        </block>
+      </statement>
+      <statement name="DO1">
+        <block type="robControls_loopUntil" id="92" inline="false">
+          <field name="PROPERTY">ULTRASONIC</field>
+          <field name="OP">EQ</field>
+          <value name="VALUE">
+            <block type="math_number" id="93">
+              <field name="NUM">30</field>
+            </block>
+          </value>
+          <statement name="DO">
+            <block type="robActions_motorDiff_stop" id="83"></block>
+            <block type="robActions_motorDiff_stop" id="84"></block>
+            <block type="robActions_motorDiff_on_for" id="160" inline="false">
+              <field name="DIRECTION">FOREWARD</field>
+              <value name="POWER">
+                <block type="math_number" id="161">
+                  <field name="NUM">30</field>
+                </block>
+              </value>
+              <value name="DISTANCE">
+                <block type="math_number" id="162">
+                  <field name="NUM">10</field>
+                </block>
+              </value>
+            </block>
+          </statement>
+        </block>
+        <block type="robActions_display" id="128" inline="false">
+          <value name="OUT">
+            <block type="text" id="129">
+              <field name="TEXT">Hallo</field>
+            </block>
+          </value>
+          <value name="COL">
+            <block type="math_number" id="130">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+          <value name="ROW">
+            <block type="math_number" id="131">
+              <field name="NUM">0</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+    <block type="robControls_loopUntil" id="313" inline="false">
+      <field name="PROPERTY">ULTRASONIC</field>
+      <field name="OP">EQ</field>
+      <value name="VALUE">
+        <block type="math_number" id="314">
+          <field name="NUM">30</field>
+        </block>
+      </value>
+      <statement name="DO">
+        <block type="robActions_motorDiff_turn_for" id="337" inline="false">
+          <field name="DIRECTION">RIGHT</field>
+          <value name="POWER">
+            <block type="math_number" id="338">
+              <field name="NUM">30</field>
+            </block>
+          </value>
+          <value name="DISTANCE">
+            <block type="math_number" id="339">
+              <field name="NUM">10</field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+  </instance>
+</project>

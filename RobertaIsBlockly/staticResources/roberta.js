@@ -10,7 +10,7 @@ function response(result) {
 };
 
 function saveToServer() {
-	var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+	var xml = Blockly.Xml.Roberta.workspaceToDom(Blockly.mainWorkspace);
 //	var xml_text = Blockly.Xml.domToPrettyText (xml);
 	var xml_text = Blockly.Xml.domToText (xml);
 	var $name = $('#name');
@@ -20,11 +20,11 @@ function saveToServer() {
 function showProgram(result, load) {
 	response(result);
 	if (result.rc === 'ok') {
-		var xml = Blockly.Xml.textToDom(result.data);
+		var xml = Blockly.Xml.Roberta.textToDom(result.data);
 		if (load) {
 			Blockly.mainWorkspace.clear();
 		}
-		Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);		
+		Blockly.Xml.Roberta.domToWorkspace(Blockly.mainWorkspace, xml);		
 	}
 };
 
