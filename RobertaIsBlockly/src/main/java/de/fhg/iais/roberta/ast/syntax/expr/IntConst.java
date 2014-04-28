@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
+
 public class IntConst extends Expr {
     private final int value;
 
