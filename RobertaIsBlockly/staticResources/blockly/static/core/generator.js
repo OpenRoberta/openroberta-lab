@@ -125,8 +125,7 @@ Blockly.Generator.prototype.blockToCode = function(block) {
   }
   if (block.disabled) {
     // Skip past this block if it is disabled.
-    var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-    return this.blockToCode(nextBlock);
+    return this.blockToCode(block.getNextBlock());
   }
 
   var func = this[block.type];
@@ -211,10 +210,16 @@ Blockly.Generator.prototype.statementToCode = function(block, name) {
     throw 'Expecting code from statement block "' + targetBlock.type + '".';
   }
   if (code) {
-    code = this.prefixLines(/** @type {string} */ (code), '  ');
+    code = this.prefixLines(/** @type {string} */ (code), this.INDENT);
   }
   return code;
 };
+
+/**
+ * The method of indenting.  Defaults to two spaces, but language generators
+ * may override this to increase indent or change to tabs.
+ */
+Blockly.Generator.prototype.INDENT = '  ';
 
 /**
  * Add one or more words to the list of reserved words for this language.
@@ -247,7 +252,7 @@ Blockly.Generator.prototype.FUNCTION_NAME_PLACEHOLDER_REGEXP_ =
  * The code gets output when Blockly.Generator.finish() is called.
  *
  * @param {string} desiredName The desired name of the function (e.g., isPrime).
- * @param {string} code A list of Python statements.
+ * @param {!Array.<string>} code A list of Python statements.
  * @return {string} The actual name of the new function.  This may differ
  *     from desiredName if the former has already been taken by the user.
  * @private

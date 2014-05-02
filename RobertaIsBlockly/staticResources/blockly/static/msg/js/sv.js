@@ -7,7 +7,7 @@ goog.provide('Blockly.Msg.sv');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Lägg till kommentar";
-Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
+Blockly.Msg.AUTH = "Var god godkänn denna app för att aktivera att ditt arbete sparas och för att låta den delas av dig.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Ändra värde:";
 Blockly.Msg.CHAT = "Chatta med din medarbetare genom att skriva i detta fält.";
 Blockly.Msg.COLLAPSE_ALL = "Fäll ihop block";
@@ -256,6 +256,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Ger tillbaka arcus tangens (arctan) av ett
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Ger tillbaka cosinus för en grad (inte radian).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Ger tillbaka sinus för en grad (inte radian).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Ger tillbaka tangens för en grad (inte radian).";
+Blockly.Msg.ME = "Jag";
 Blockly.Msg.NEW_VARIABLE = "Ny variabel...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Nytt variabelnamn:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
@@ -279,7 +280,9 @@ Blockly.Msg.PROCEDURES_HIGHLIGHT_DEF = "Markera funktionsdefinition";
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = "Om ett värde är sant returneras ett andra värde.";
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = "Varning: Detta block får användas endast i en funktionsdefinition.";
 Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "inmatningsnamn:";
+Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Lägg till en inmatning till funktionen.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "inmatningar";
+Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Lägg till, ta bort och ändra ordningen för inmatningar till denna funktion.";
 Blockly.Msg.REMOVE_COMMENT = "Radera kommentar";
 Blockly.Msg.RENAME_VARIABLE = "Byt namn på variabel...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Byt namn på alla variablerna '%1' till:";

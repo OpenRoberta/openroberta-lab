@@ -88,6 +88,8 @@ Blockly.Msg.HELP = 'Help';
 Blockly.Msg.CHAT = 'Chat with your collaborator by typing in this box!';
 /// authorization instruction - Ask the user to authorize this app so it can be saved and shared by them.
 Blockly.Msg.AUTH = 'Please authorize this app to enable your work to be saved and to allow it to be shared by you.';
+/// First person singular - objective case
+Blockly.Msg.ME = 'Me';
 
 // Variable renaming.
 /// prompt - This message is only seen in the Opera browser.  With most browsers, users can edit numeric values in blocks by just clicking and typing.  Opera does not allows this, so we have to open a new window and prompt users with this message to chanage a value.
@@ -238,15 +240,15 @@ Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = 'Add a final, catch-all condition to the 
 Blockly.Msg.LOGIC_COMPARE_HELPURL = 'https://en.wikipedia.org/wiki/Inequality_(mathematics)';
 /// tooltip - Describes the equals (=) block.
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = 'Return true if both inputs equal each other.';
-/// tooltip - Describes the equals (\u0026ne;) block.
+/// tooltip - Describes the not equals (≠) block.
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_NEQ = 'Return true if both inputs are not equal to each other.';
-/// tooltip - Describes the equals (\u0026lt;) block.
+/// tooltip - Describes the less than (<) block.
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LT = 'Return true if the first input is smaller than the second input.';
-/// tooltip - Describes the equals (\u0026le;) block.
+/// tooltip - Describes the less than or equals (≤) block.
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LTE = 'Return true if the first input is smaller than or equal to the second input.';
-/// tooltip - Describes the equals (\u0026gt;) block.
+/// tooltip - Describes the greater than (>) block.
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = 'Return true if the first input is greater than the second input.';
-/// tooltip - Describes the equals (\u0026ge;) block.
+/// tooltip - Describes the greater than or equals (≥) block.
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE = 'Return true if the first input is greater than or equal to the second input.';
 
 /// url - Information about the Boolean conjunction ("and") and disjunction ("or") operators.  Consider using the translation of [https://en.wikipedia.org/wiki/Boolean_logic https://en.wikipedia.org/wiki/Boolean_logic], if it exists in your language.
@@ -385,7 +387,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ACOS = 'Return the arccosine of a number.';
 /// tooltip - The [https://en.wikipedia.org/wiki/Inverse_trigonometric_functions inverse] of the [https://en.wikipedia.org/wiki/Cosine#Sine.2C_cosine_and_tangent tangent] function, using [https://en.wikipedia.org/wiki/Degree_(angle) degrees], not radians.
 Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = 'Return the arctangent of a number.';
 
-/// url - Information about the mathematical constants \u0026pi;, e, the golden ratio (\u0026phi;), \u0026radic; 2, \u0026radic; 1/2, and infinity (\u0026infin;).
+/// url - Information about the mathematical constants Pi (π), e, the golden ratio (φ), √ 2, √ 1/2, and infinity (∞).
 Blockly.Msg.MATH_CONSTANT_HELPURL = 'https://en.wikipedia.org/wiki/Mathematical_constant';
 /// tooltip - Provides the specified [https://en.wikipedia.org/wiki/Mathematical_constant mathematical constant].
 Blockly.Msg.MATH_CONSTANT_TOOLTIP = 'Return one of the common constants: π (3.141…), e (2.718…), φ (1.618…), sqrt(2) (1.414…), sqrt(½) (0.707…), or ∞ (infinity).';
@@ -393,7 +395,7 @@ Blockly.Msg.MATH_CONSTANT_TOOLTIP = 'Return one of the common constants: π (3.1
 Blockly.Msg.MATH_IS_EVEN = 'is even';
 /// dropdown - A number is '''odd''' if it is not a multiple of 2.  For example, 3 is odd (yielding true), but 4 is not (false).  The opposite of "odd" is "even".
 Blockly.Msg.MATH_IS_ODD = 'is odd';
-/// dropdown - A number is [https://en.wikipedia.org/wiki/Prime prime] if it cannot be evenly divided by any positive integers except for 1 and itself.  For example, 5 is prime, but 6 is not because 2 \u0026times; 3 = 6.
+/// dropdown - A number is [https://en.wikipedia.org/wiki/Prime prime] if it cannot be evenly divided by any positive integers except for 1 and itself.  For example, 5 is prime, but 6 is not because 2 × 3 = 6.
 Blockly.Msg.MATH_IS_PRIME = 'is prime';
 /// dropdown - A number is '''whole''' if it is an [https://en.wikipedia.org/wiki/Integer integer].  For example, 5 is whole, but 5.1 is not.
 Blockly.Msg.MATH_IS_WHOLE = 'is whole';
@@ -1068,11 +1070,15 @@ Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = 'Run the user-defined function "%1" 
 /// (referred to by the simpler term "inputs") to the function.  See
 /// [[Translating:Blockly#function_definitions]].
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = 'inputs';
+/// tooltip
+Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = 'Add, remove, or reorder inputs to this function.';
 /// block text - This text appears on a block in a window that appears when the user clicks
 /// on the plus sign or star on a function definition block].  It appears on the block for
 /// adding an individual parameter (referred to by the simpler term "inputs") to the function.
 /// See [[Translating:Blockly#function_definitions]].
 Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = 'input name:';
+/// tooltip
+Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = 'Add an input to the function.';
 
 /// context menu - This appears on the context menu for function calls.  Selecting
 /// it causes the corresponding function definition to be highlighted (as shown at

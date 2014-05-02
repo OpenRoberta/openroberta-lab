@@ -7,7 +7,7 @@ goog.provide('Blockly.Msg.it');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Aggiungi commento";
-Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
+Blockly.Msg.AUTH = "Autorizza questa applicazione per consentire di salvare il tuo lavoro e per essere condiviso.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Modifica valore:";
 Blockly.Msg.CHAT = "Chatta con il tuo collaboratore scrivendo in questo box!";
 Blockly.Msg.COLLAPSE_ALL = "Comprimi blocchi";
@@ -256,6 +256,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Restituisce l'arco-tangente di un numero."
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Restituisce il coseno di un angolo espresso in gradi (non radianti).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Restituisce il seno di un angolo espresso in gradi (non radianti).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Restituisce la tangente di un angolo espresso in gradi (non radianti).";
+Blockly.Msg.ME = "Me";
 Blockly.Msg.NEW_VARIABLE = "Nuova variabile...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Nome della nuova variabile:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
@@ -279,7 +280,9 @@ Blockly.Msg.PROCEDURES_HIGHLIGHT_DEF = "Evidenzia definizione di funzione";
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = "Se un valore è vero allora restituisce un secondo valore.";
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = "Attenzioneː Questo blocco può essere usato solo all'interno di una definizione di funzione.";
 Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "nome inputː";
+Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Aggiungi un input alla funzione.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "input";
+Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Aggiungi, rimuovi o riordina input alla funzione.";
 Blockly.Msg.REMOVE_COMMENT = "Rimuovi commento";
 Blockly.Msg.RENAME_VARIABLE = "Rinomina variabile...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Rinomina tutte le variabili '%1' in:";

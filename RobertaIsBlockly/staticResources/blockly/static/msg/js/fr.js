@@ -7,7 +7,7 @@ goog.provide('Blockly.Msg.fr');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Ajouter un commentaire";
-Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
+Blockly.Msg.AUTH = "Veuillez autoriser cette application à permettre la sauvegarde de votre travail et à l’autoriser de le partager avec vous.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Modifier la valeur :";
 Blockly.Msg.CHAT = "Discuter avec votre collaborateur en tapant dans cette zone !";
 Blockly.Msg.COLLAPSE_ALL = "Réduire les blocs";
@@ -256,6 +256,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Renvoie l’arctangente d’un nombre.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Renvoie le cosinus d’un angle en degrés (pas en radians).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Renvoie le sinus d’un angle en degrés (pas en radians).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Renvoie la tangente d’un angle en degrés (pas en radians).";
+Blockly.Msg.ME = "Moi";
 Blockly.Msg.NEW_VARIABLE = "Nouvelle variable…";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Nom de la nouvelle variable :";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
@@ -279,7 +280,9 @@ Blockly.Msg.PROCEDURES_HIGHLIGHT_DEF = "Surligner la définition de la fonction"
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = "Si une valeur est vraie, alors renvoyer une seconde valeur.";
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = "Attention : Ce bloc pourrait n’être utilisé que dans une définition de fonction.";
 Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "nom de l’entrée :";
+Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Ajouter une entrée à la fonction.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "entrées";
+Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Ajouter, supprimer, ou réarranger les entrées de cette fonction.";
 Blockly.Msg.REMOVE_COMMENT = "Supprimer un commentaire";
 Blockly.Msg.RENAME_VARIABLE = "Renommer la variable…";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Renommer toutes les variables '%1' en :";

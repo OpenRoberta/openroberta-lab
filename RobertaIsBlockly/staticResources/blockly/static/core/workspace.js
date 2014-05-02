@@ -31,7 +31,6 @@ goog.provide('Blockly.Workspace');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Trashcan');
 goog.require('Blockly.Xml');
-goog.require('Blockly.Xml.Roberta');
 
 
 /**
@@ -232,7 +231,7 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
 Blockly.Workspace.prototype.getAllBlocks = function() {
   var blocks = this.getTopBlocks(false);
   for (var x = 0; x < blocks.length; x++) {
-    blocks = blocks.concat(blocks[x].getChildren());
+    blocks.push.apply(blocks, blocks[x].getChildren());
   }
   return blocks;
 };
@@ -296,6 +295,11 @@ Blockly.Workspace.prototype.traceOn = function(armed) {
  * @param {?string} id ID of block to find.
  */
 Blockly.Workspace.prototype.highlightBlock = function(id) {
+  if (this.traceOn_ && Blockly.Block.dragMode_ != 0) {
+    // The blocklySelectChange event normally prevents this, but sometimes
+    // there is a race condition on fast-executing apps.
+    this.traceOn(false);
+  }
   if (!this.traceOn_) {
     return;
   }
@@ -315,8 +319,9 @@ Blockly.Workspace.prototype.highlightBlock = function(id) {
   } else if (Blockly.selected) {
     Blockly.selected.unselect();
   }
-  // Restore the monitor for user activity.
-  this.traceOn(true);
+  // Restore the monitor for user activity after the selection event has fired.
+  var thisWorkspace = this;
+  setTimeout(function() {thisWorkspace.traceOn(true);}, 1);
 };
 
 /**

@@ -191,7 +191,7 @@ Blockly.DRAG_RADIUS = 5;
  * Maximum misalignment between connections for them to snap together.
  * @const
  */
-Blockly.SNAP_RADIUS = 15;
+Blockly.SNAP_RADIUS = 20;
 
 /**
  * Delay in ms between trigger and bumping unconnected block out of alignment.
@@ -228,8 +228,8 @@ Blockly.svgSize = function() {
 };
 
 /**
- * Size the SVG image to completely fill its container.  Record both
- * the height/width and the absolute position of the SVG image.
+ * Size the SVG image to completely fill its container.
+ * Record the height/width of the SVG image.
  */
 Blockly.svgResize = function() {
   var svg = Blockly.svg;
@@ -265,11 +265,9 @@ Blockly.onMouseDown_ = function(e) {
     // Clicking on the document clears the selection.
     Blockly.selected.unselect();
   }
-  if (Blockly.isRightButton(e)) {
+  if (e.target == Blockly.svg && Blockly.isRightButton(e)) {
     // Right-click.
-    if (Blockly.ContextMenu) {
-      Blockly.showContextMenu_(Blockly.mouseToSvg(e));
-    }
+    Blockly.showContextMenu_(e);
   } else if ((Blockly.readOnly || isTargetSvg) &&
              Blockly.mainWorkspace.scrollbar) {
     // If the workspace is editable, only allow dragging when gripping empty
@@ -286,7 +284,7 @@ Blockly.onMouseDown_ = function(e) {
 };
 
 /**
- * Handle a mouse-up on SVG drawing surface.
+ * Handle a mouse-up anywhere on the page.
  * @param {!Event} e Mouse up event.
  * @private
  */
@@ -396,24 +394,30 @@ Blockly.copy_ = function(block) {
 
 /**
  * Show the context menu for the workspace.
- * @param {!Object} xy Coordinates of mouse click, contains x and y properties.
+ * @param {!Event} e Mouse event.
  * @private
  */
-Blockly.showContextMenu_ = function(xy) {
+Blockly.showContextMenu_ = function(e) {
   if (Blockly.readOnly) {
     return;
   }
   var options = [];
+  // Add a little animation to collapsing and expanding.
+  var COLLAPSE_DELAY = 10;
 
   if (Blockly.collapse) {
     var hasCollapsedBlocks = false;
     var hasExpandedBlocks = false;
     var topBlocks = Blockly.mainWorkspace.getTopBlocks(false);
     for (var i = 0; i < topBlocks.length; i++) {
-      if (topBlocks[i].isCollapsed()) {
-        hasCollapsedBlocks = true;
-      } else {
-        hasExpandedBlocks = true;
+      var block = topBlocks[i];
+      while (block) {
+        if (block.isCollapsed()) {
+          hasCollapsedBlocks = true;
+        } else {
+          hasExpandedBlocks = true;
+        }
+        block = block.getNextBlock();
       }
     }
 
@@ -421,8 +425,14 @@ Blockly.showContextMenu_ = function(xy) {
     var collapseOption = {enabled: hasExpandedBlocks};
     collapseOption.text = Blockly.Msg.COLLAPSE_ALL;
     collapseOption.callback = function() {
+      var ms = 0;
       for (var i = 0; i < topBlocks.length; i++) {
-        topBlocks[i].setCollapsed(true);
+        var block = topBlocks[i];
+        while (block) {
+          setTimeout(block.setCollapsed.bind(block, true), ms);
+          block = block.getNextBlock();
+          ms += COLLAPSE_DELAY;
+        }
       }
     };
     options.push(collapseOption);
@@ -431,20 +441,20 @@ Blockly.showContextMenu_ = function(xy) {
     var expandOption = {enabled: hasCollapsedBlocks};
     expandOption.text = Blockly.Msg.EXPAND_ALL;
     expandOption.callback = function() {
+      var ms = 0;
       for (var i = 0; i < topBlocks.length; i++) {
-        topBlocks[i].setCollapsed(false);
+        var block = topBlocks[i];
+        while (block) {
+          setTimeout(block.setCollapsed.bind(block, false), ms);
+          block = block.getNextBlock();
+          ms += COLLAPSE_DELAY;
+        }
       }
     };
     options.push(expandOption);
   }
 
-  // Option to get help.
-  var helpOption = {enabled: false};
-  helpOption.text = Blockly.Msg.HELP;
-  helpOption.callback = function() {};
-  options.push(helpOption);
-
-  Blockly.ContextMenu.show(xy, options);
+  Blockly.ContextMenu.show(e, options);
 };
 
 /**
@@ -453,7 +463,7 @@ Blockly.showContextMenu_ = function(xy) {
  * @private
  */
 Blockly.onContextMenu_ = function(e) {
-  if (!Blockly.isTargetInput_(e) && Blockly.ContextMenu) {
+  if (!Blockly.isTargetInput_(e)) {
     // When focused on an HTML text input widget, don't cancel the context menu.
     e.preventDefault();
   }
@@ -464,9 +474,7 @@ Blockly.onContextMenu_ = function(e) {
  * @param {boolean=} opt_allowToolbox If true, don't close the toolbox.
  */
 Blockly.hideChaff = function(opt_allowToolbox) {
-  Blockly.Tooltip && Blockly.Tooltip.hide();
-  Blockly.ContextMenu && Blockly.ContextMenu.hide();
-  Blockly.FieldDropdown && Blockly.FieldDropdown.hide();
+  Blockly.Tooltip.hide();
   Blockly.WidgetDiv.hide();
   if (!opt_allowToolbox &&
       Blockly.Toolbox.flyout_ && Blockly.Toolbox.flyout_.autoClose) {
@@ -485,7 +493,11 @@ Blockly.removeAllRanges = function() {
     if (sel && sel.removeAllRanges) {
       sel.removeAllRanges();
       window.setTimeout(function() {
-          window.getSelection().removeAllRanges();
+          try {
+            window.getSelection().removeAllRanges();
+          } catch (e) {
+            // MSIE throws 'error 800a025e' here.
+          }
         }, 0);
     }
   }
@@ -525,11 +537,21 @@ Blockly.loadAudio_ = function(filenames, name) {
       break;
     }
   }
-  // To force the browser to load the sound, play it, but at nearly zero volume.
   if (sound && sound.play) {
-    sound.volume = 0.01;
-    sound.play();
     Blockly.SOUNDS_[name] = sound;
+  }
+};
+
+/**
+ * Preload all the audio files so that they play quickly when asked for.
+ * @private
+ */
+Blockly.preloadAudio_ = function() {
+  for (var name in Blockly.SOUNDS_) {
+    var sound = Blockly.SOUNDS_[name];
+    sound.volume = .01;
+    sound.play();
+    sound.pause();
   }
 };
 

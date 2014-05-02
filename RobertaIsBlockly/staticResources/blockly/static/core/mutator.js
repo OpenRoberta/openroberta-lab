@@ -112,10 +112,9 @@ Blockly.Mutator.prototype.createEditor_ = function() {
   this.svgDialog_ = Blockly.createSvgElement('svg',
       {'x': Blockly.Bubble.BORDER_WIDTH, 'y': Blockly.Bubble.BORDER_WIDTH},
       null);
-  this.svgBackground_ = Blockly.createSvgElement('rect',
+  Blockly.createSvgElement('rect',
       {'class': 'blocklyMutatorBackground',
        'height': '100%', 'width': '100%'}, this.svgDialog_);
-
   var mutator = this;
   this.workspace_ = new Blockly.Workspace(
       function() {return mutator.getFlyoutMetrics_();}, null);
@@ -191,7 +190,7 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
   if (visible) {
     // Create the bubble.
     this.bubble_ = new Blockly.Bubble(this.block_.workspace,
-        this.createEditor_(), this.block_.svg_.svgGroup_,
+        this.createEditor_(), this.block_.svg_.svgPath_,
         this.iconX_, this.iconY_, null, null);
     var thisObj = this;
     this.flyout_.init(this.workspace_, false);
@@ -227,7 +226,6 @@ Blockly.Mutator.prototype.setVisible = function(visible) {
   } else {
     // Dispose of the bubble.
     this.svgDialog_ = null;
-    this.svgBackground_ = null;
     this.flyout_.dispose();
     this.flyout_ = null;
     this.workspace_.dispose();

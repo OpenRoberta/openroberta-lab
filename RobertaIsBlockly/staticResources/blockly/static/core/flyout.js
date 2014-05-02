@@ -35,11 +35,11 @@ goog.require('Blockly.Comment');
  * @constructor
  */
 Blockly.Flyout = function() {
+  var flyout = this;
   /**
    * @type {!Blockly.Workspace}
    * @private
    */
-  var flyout = this;
   this.workspace_ = new Blockly.Workspace(
       function() {return flyout.getMetrics_();},
       function(ratio) {return flyout.setMetrics_(ratio);});
@@ -360,7 +360,7 @@ Blockly.Flyout.prototype.show = function(xmlList) {
       // There is no good way to handle comment bubbles inside the flyout.
       // Blocks shouldn't come with predefined comments, but someone will
       // try this, I'm sure.  Kill the comment.
-      Blockly.Comment && child.setCommentText(null);
+      child.setCommentText(null);
     }
     block.render();
     var root = block.getSvgRoot();
@@ -395,13 +395,25 @@ Blockly.Flyout.prototype.show = function(xmlList) {
     this.listeners_.push(Blockly.bindEvent_(rect, 'mouseout', block.svg_,
         block.svg_.removeSelect));
   }
+
+  // IE 11 is an incompetant browser that fails to fire mouseout events.
+  // When the mouse is over the background, deselect all blocks.
+  var deselectAll = function(e) {
+    var blocks = this.workspace_.getTopBlocks(false);
+    for (var i = 0, block; block = blocks[i]; i++) {
+      block.svg_.removeSelect();
+    }
+  };
+  this.listeners_.push(Blockly.bindEvent_(this.svgBackground_, 'mouseover',
+      this, deselectAll));
+
   this.width_ = 0;
   this.reflow();
 
   this.filterForCapacity_();
 
   // Fire a resize event to update the flyout's scrollbar.
-  Blockly.fireUiEvent(window, 'resize');
+  Blockly.fireUiEventNow(window, 'resize');
   this.reflowWrapper_ = Blockly.bindEvent_(this.workspace_.getCanvas(),
       'blocklyWorkspaceChange', this, this.reflow);
   this.workspace_.fireChangeEvent();
@@ -449,8 +461,8 @@ Blockly.Flyout.prototype.reflow = function() {
 
 /**
  * Move a block to a specific location on the drawing surface.
- * @param {number} dx Horizontal location.
- * @param {number} dy Vertical location.
+ * @param {number} x Horizontal location.
+ * @param {number} y Vertical location.
  */
 Blockly.Block.prototype.moveTo = function(x, y) {
   var oldXY = this.getRelativeToSurfaceXY();
@@ -461,7 +473,7 @@ Blockly.Block.prototype.moveTo = function(x, y) {
 
 /**
  * Handle a mouse-down on an SVG block in a non-closing flyout.
- * @param {!Blockly.Block} originBlock The flyout block to copy.
+ * @param {!Blockly.Block} block The flyout block to copy.
  * @return {!Function} Function to call when block is clicked.
  * @private
  */
@@ -472,9 +484,7 @@ Blockly.Flyout.prototype.blockMouseDown_ = function(block) {
     Blockly.hideChaff();
     if (Blockly.isRightButton(e)) {
       // Right-click.
-      if (Blockly.ContextMenu) {
-        block.showContextMenu_(Blockly.mouseToSvg(e));
-      }
+      block.showContextMenu_(e);
     } else {
       // Left-click (or middle click)
       Blockly.removeAllRanges();

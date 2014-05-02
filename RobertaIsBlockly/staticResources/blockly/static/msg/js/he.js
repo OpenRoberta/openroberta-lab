@@ -7,7 +7,7 @@ goog.provide('Blockly.Msg.he');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "הוסף תגובה";
-Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
+Blockly.Msg.AUTH = "בבקשה נא לאשר את היישום הזה כדי לאפשר לעבודה שלך להישמר וכדי לאפשר את השיתוף על ידיך.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "שנה ערך:";
 Blockly.Msg.CHAT = "שוחח עם משתף פעולה שלך על-ידי הקלדה בתיבה זו!";
 Blockly.Msg.COLLAPSE_ALL = "צמצם קטעי קוד";
@@ -256,6 +256,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Return the arctangent of a number.";
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Return the cosine of a degree (not radian).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Return the sine of a degree (not radian).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Return the tangent of a degree (not radian).";
+Blockly.Msg.ME = "Me";  // untranslated
 Blockly.Msg.NEW_VARIABLE = "משתנה חדש...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "שם המשתנה החדש:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
@@ -279,7 +280,9 @@ Blockly.Msg.PROCEDURES_HIGHLIGHT_DEF = "Highlight function definition";
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = "If a value is true, then return a second value.";
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = "Warning: This block may be used only within a function definition.";
 Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "שם הקלט:";
+Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "הוסף קלט לפונקציה";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "מקורות קלט";
+Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "הוסף, הסר או סדר מחדש קלטים לפונקציה זו";
 Blockly.Msg.REMOVE_COMMENT = "הסר הערה";
 Blockly.Msg.RENAME_VARIABLE = "שנה את שם המשתנה...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "שנה את שם כל '%1' המשתנים ל:";

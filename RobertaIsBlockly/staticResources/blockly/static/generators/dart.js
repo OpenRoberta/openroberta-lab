@@ -111,8 +111,9 @@ Blockly.Dart.init = function() {
  */
 Blockly.Dart.finish = function(code) {
   // Indent every line.
-  code = '  ' + code.replace(/\n/g, '\n  ');
-  code = code.replace(/\n\s+$/, '\n');
+  if (code) {
+    code = this.prefixLines(code, Blockly.Dart.INDENT);
+  }
   code = 'main() {\n' + code + '}';
 
   // Convert the definitions dictionary into a list.
@@ -162,7 +163,6 @@ Blockly.Dart.quote_ = function(string) {
  * @param {!Blockly.Block} block The current block.
  * @param {string} code The Dart code created for this block.
  * @return {string} Dart code with comments and subsequent blocks added.
- * @this {Blockly.CodeGenerator}
  * @private
  */
 Blockly.Dart.scrub_ = function(block, code) {

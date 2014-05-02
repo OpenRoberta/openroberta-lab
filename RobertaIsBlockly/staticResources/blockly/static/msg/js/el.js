@@ -7,7 +7,7 @@ goog.provide('Blockly.Msg.el');
 goog.require('Blockly.Msg');
 
 Blockly.Msg.ADD_COMMENT = "Πρόσθεσε Σχόλιο";
-Blockly.Msg.AUTH = "Please authorize this app to enable your work to be saved and to allow it to be shared by you.";  // untranslated
+Blockly.Msg.AUTH = "Παρακαλώ κάνε έγκριση της εφαρμογής για να επιτρέπεται  η αποθήκευση και κοινοποίηση της εργασίας σου.";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Άλλαξε την τιμή:";
 Blockly.Msg.CHAT = "Μπορείς να μιλήσεις με τον συνεργάτη σου πληκτρολογώντας σ'αυτό το πλαίσιο!";
 Blockly.Msg.COLLAPSE_ALL = "Σύμπτυξτε Όλα Τα Μπλοκ";
@@ -256,6 +256,7 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = "Επιστρέφει το τόξο εφα�
 Blockly.Msg.MATH_TRIG_TOOLTIP_COS = "Επιστρέφει το συνημίτονο ενός βαθμού (όχι ακτινίου).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = "Επιστρέφει το ημίτονο ενός βαθμού (όχι ακτινίου).";
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = "Επιστρέφει την εφαπτομένη ενός βαθμού (όχι ακτινίου).";
+Blockly.Msg.ME = "Εγώ";
 Blockly.Msg.NEW_VARIABLE = "Νέα μεταβλητή...";
 Blockly.Msg.NEW_VARIABLE_TITLE = "Νέο όνομα μεταβλητής:";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";  // untranslated
@@ -272,14 +273,16 @@ Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = "κάνε κάτι";
 Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE = "στο";
 Blockly.Msg.PROCEDURES_DEFNORETURN_TOOLTIP = "Δημιουργεί μια συνάρτηση χωρίς έξοδο.";
 Blockly.Msg.PROCEDURES_DEFRETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
-Blockly.Msg.PROCEDURES_DEFRETURN_RETURN = "επιστροφή";
+Blockly.Msg.PROCEDURES_DEFRETURN_RETURN = "επέστρεψε";
 Blockly.Msg.PROCEDURES_DEFRETURN_TOOLTIP = "Δημιουργεί μια συνάρτηση με μια έξοδο.";
 Blockly.Msg.PROCEDURES_DEF_DUPLICATE_WARNING = "Προειδοποίηση: Αυτή η συνάρτηση έχει διπλότυπες παραμέτρους.";
 Blockly.Msg.PROCEDURES_HIGHLIGHT_DEF = "Επισημάνετε τον ορισμό συνάρτησης";
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = "Αν μια τιμή είναι αληθής, τότε επιστρέφει τη δεύτερη τιμή.";
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = "Προειδοποίηση: Αυτό το μπλοκ μπορεί να χρησιμοποιηθεί μόνο στον ορισμό μιας συνάρτησης.";
 Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "όνομα εισόδου:";
+Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Πρόσθεσε μια είσοδος στη συνάρτηση";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "είσοδοι";
+Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Προσθέτει, αφαιρεί ή αναδιατάσσει εισόδους σε αυτήν τη λειτουργία";
 Blockly.Msg.REMOVE_COMMENT = "Αφαίρεσε Το Σχόλιο";
 Blockly.Msg.RENAME_VARIABLE = "Μετονόμασε τη μεταβλητή...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Μετονόμασε όλες τις μεταβλητές «%1» σε:";
