@@ -9,7 +9,6 @@ public class ExprStmt extends Stmt {
     private ExprStmt(Expr expr) {
         Assert.isTrue(expr.isReadOnly());
         this.expr = expr;
-
         setReadOnly();
     }
 

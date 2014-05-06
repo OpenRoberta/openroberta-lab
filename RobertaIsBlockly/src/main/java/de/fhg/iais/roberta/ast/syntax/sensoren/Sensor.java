@@ -1,17 +1,17 @@
-package de.fhg.iais.roberta.ast.syntax.stmt;
+package de.fhg.iais.roberta.ast.syntax.sensoren;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
- * the top class of all statements. There are two ways for a client to find out which kind of statement an {@link #Stmt}-object is:<br>
+ * the top class of all sensor blocks. There are two ways for a client to find out which kind of aktion an {@link #Aktion}-object is:<br>
  * - {@link #getKind()}<br>
  * - {@link #getAs(Class)}<br>
  */
-public abstract class Stmt extends Phrase {
+public abstract class Sensor extends Phrase {
     /**
-     * returns the statement if and only if it is an object of the class given as parameter. Otherwise an exception is thrown. The type of the returned
-     * statement is
+     * returns the sensor if and only if it is an object of the class given as parameter. Otherwise an exception is thrown. The type of the returned
+     * sensor is
      * the type of the requested class.<br>
      * <i>Is this complexity really needed? Isn't brute-force casting at the client side sufficient?</i>
      * 
@@ -20,17 +20,17 @@ public abstract class Stmt extends Phrase {
      */
     @SuppressWarnings("unchecked")
     public final <T> T getAs(Class<T> clazz) {
-        Assert.isTrue(clazz.equals(getKind().getStmtClass()));
+        Assert.isTrue(clazz.equals(getKind().getAktionClass()));
         return (T) this;
     }
 
     /**
-     * @return the kind of the statement. See enum {@link Kind} for all kinds possible<br>
+     * @return the kind of the sensor. See enum {@link Kind} for all kinds possible<br>
      */
     abstract public Kind getKind();
 
     /**
-     * append a nice, dense and human-readable representation of a statement for <b>debugging and testing purposes</b>
+     * append a nice, dense and human-readable representation of an sensor for <b>debugging and testing purposes</b>
      * 
      * @param sb the string builder, to which has to be appended
      * @param indentation number defining the level of indentation
@@ -56,12 +56,11 @@ public abstract class Stmt extends Phrase {
     }
 
     /**
-     * define the different kinds of statements. If a new subclass of {@link #Stmt} is created, this enum has to be extended. The new enum value has be
-     * the return value of the method {@link statement#getKind()} of the new class.
+     * define the different kinds of Sensor. If a new subclass of {@link #Sensor} is created, this enum has to be extended. The new enum value has be
+     * the return value of the method {@link Sensor#getKind()} of the new class.
      */
     public static enum Kind {
-        If( IfStmt.class ), Repeat( RepeatStmt.class ), Expr( ExprStmt.class ), StmtList( StmtList.class ), Assign( AssignStmt.class ), AktionStmt(
-            AktionStmt.class );
+        ColorSensor( ColorSensor.class ), TouchSensor( TouchSensor.class ), UltraSSensor( UltraSSensor.class );
 
         private final Class<?> clazz;
 
@@ -69,7 +68,7 @@ public abstract class Stmt extends Phrase {
             this.clazz = clazz;
         }
 
-        public Class<?> getStmtClass() {
+        public Class<?> getAktionClass() {
             return this.clazz;
         }
     }

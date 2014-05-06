@@ -34,7 +34,7 @@ public abstract class Expr extends Phrase {
      * the return value of the method {@link Expr#getKind()} of the new class.
      */
     public static enum Kind {
-        IntConst( IntConst.class ), Var( Var.class ), Unary( Unary.class ), Binary( Binary.class );
+        IntConst( IntConst.class ), Var( Var.class ), Unary( Unary.class ), Binary( Binary.class ), SensorExpr( SensorExpr.class );
 
         private final Class<?> clazz;
 

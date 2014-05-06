@@ -43,7 +43,7 @@ public class Binary extends Expr {
     }
 
     public static enum Op {
-        Mult, Div, Add, Sub, Equal, And, Or;
+        Mult, Div, Add, Sub, Equal, And, Or, Less, LessEqual, Bigger, BiggerEqual, NotEqual;
 
         public static Op get(String s) {
             if ( "*".equals(s) ) {
@@ -60,6 +60,16 @@ public class Binary extends Expr {
                 return And;
             } else if ( "||".equals(s) ) {
                 return Or;
+            } else if ( "<=".equals(s) ) {
+                return LessEqual;
+            } else if ( "=>".equals(s) ) {
+                return BiggerEqual;
+            } else if ( "<".equals(s) ) {
+                return Less;
+            } else if ( ">".equals(s) ) {
+                return Bigger;
+            } else if ( "!=".equals(s) ) {
+                return NotEqual;
             } else {
                 throw new DbcException("invalid binary operator: " + s);
             }
