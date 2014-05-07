@@ -768,7 +768,7 @@ public class GraphicStartup implements Menu {
         };
         URL serverURL = null;
         try {
-            serverURL = new URL("http://10.0.1.11:1999/download"); // type "ipconfig /all" in console to see which ip adress your pc got from the brick dhcp
+            serverURL = new URL("http://10.0.1.17:1999/download"); // type "ipconfig /all" in console to see which ip adress your pc got from the brick dhcp
         } catch ( MalformedURLException e ) {
             e.printStackTrace();
         }

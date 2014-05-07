@@ -12,19 +12,13 @@ public class RobertaKeyboard {
     
     int x = 0, y = 5;
     
-    String[] lower = {"0123456789        ", 
-                      "qwertyuiop        ", 
-                      "asdfghjkl         ", 
-                      "zxcvbnm           ", 
-                      "U l x D           "};
-    
     String[] upper = {"0123456789        ", 
                       "QWERTYUIOP        ", 
                       "ASDFGHJKL         ", 
                       "ZXCVBNM           ", 
-                      "U l x D           "};
+                      "x D           "};
     
-    String[] lines = lower;
+    String[] lines = upper;
     
     void display() {
         //LCD.drawString("Keyboard", 4, 0);
@@ -55,21 +49,13 @@ public class RobertaKeyboard {
             } else if (b == Button.ID_UP) {
                 if (--y < 1) y = 5;
             } else if (b == Button.ID_LEFT) {
-                if (--x < 0) x = 10;
+                if (--x < 0) x = 9;
             } else if (b == Button.ID_RIGHT) {
-                if (++x > 10) x = 0;
+                if (++x > 9) x = 0;
             } else if (b == Button.ID_ENTER) {
                 if (y < 5) sb.append(lines[y-1].charAt(x));
                 else {
                     switch (lines[4].charAt(x)) {
-                    case 'U': 
-                        lines = upper;
-                        display();
-                        break;
-                    case 'l':
-                        lines = lower;
-                        display();
-                        break;
                     case 'x':
                         if (sb.length() > 0) {
                             sb.deleteCharAt(sb.length()-1);
