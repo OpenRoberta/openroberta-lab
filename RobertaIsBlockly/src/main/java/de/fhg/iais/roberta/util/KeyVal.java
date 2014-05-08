@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.javaServer.util;
+package de.fhg.iais.roberta.util;
 
 public class KeyVal
 {

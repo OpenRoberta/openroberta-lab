@@ -18,7 +18,7 @@ import de.fhg.iais.roberta.persistence.connector.SessionWrapper;
  */
 public class ProgramDao extends AbstractDao<Program> {
     /**
-     * create a new DAO for ingests. This creation is cheap.
+     * create a new DAO for programs. This creation is cheap.
      * 
      * @param session the session used to access the database.
      */
@@ -47,16 +47,16 @@ public class ProgramDao extends AbstractDao<Program> {
     }
 
     /**
-     * load an Ingest-object from the database, identified by the name of its provider and its name (both make up the "business" key of an ingest)
+     * load an program from the database, identified by its project and its name (both make up the "business" key of an program)
      * 
-     * @param providerName the name of the provider, never null
-     * @param name the name of the ingest, never null
-     * @return the ingest object, never null
+     * @param project the project, never null
+     * @param programName the name of the program, never null
+     * @return the program, null if the program is not found
      */
-    public Program load(Project project, String name) {
+    public Program load(Project project, String programName) {
         Query hql = this.session.createQuery("from Program where project=:project and name=:name");
         hql.setEntity("project", project);
-        hql.setString("name", name);
+        hql.setString("name", programName);
         @SuppressWarnings("unchecked")
         List<Program> il = hql.list();
         Assert.isTrue(il.size() <= 1);
@@ -64,9 +64,9 @@ public class ProgramDao extends AbstractDao<Program> {
     }
 
     /**
-     * load all ingest-objects persisted in the database
+     * load all programss persisted in the database
      * 
-     * @return the list of all ingest objects, may be an empty list, but never null
+     * @return the list of all programs, may be an empty list, but never null
      */
     public List<Program> loadAll() {
         Query hql = this.session.createQuery("from Program");

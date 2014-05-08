@@ -6,15 +6,15 @@ import javax.xml.bind.Unmarshaller;
 
 /**
  * Extension of the extension interface {@link ContextResolver}. Provides a unmarshaller to resource classes. Uses the singleton class
- * {@link AscJAXBProviderFactory} to create this context.
+ * {@link JAXBProviderFactory} to create this context.
  * 
  * @author rbudde
  */
 @Provider
-public class AscJAXBUnmarshallerProvider implements ContextResolver<Unmarshaller>
+public class JAXBUnmarshallerProvider implements ContextResolver<Unmarshaller>
 {
     @Override
     public Unmarshaller getContext(Class<?> type) {
-        return AscJAXBProviderFactory.getInstance().getUnmarshaller(type);
+        return JAXBProviderFactory.getInstance().getUnmarshaller(type);
     }
 }

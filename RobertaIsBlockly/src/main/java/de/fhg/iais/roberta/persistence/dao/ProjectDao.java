@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.persistence.connector.SessionWrapper;
  */
 public class ProjectDao extends AbstractDao<Project> {
     /**
-     * create a new DAO for providers. This creation is cheap.
+     * create a new DAO for projectss. This creation is cheap.
      * 
      * @param session the session used to access the database.
      */
@@ -41,24 +41,24 @@ public class ProjectDao extends AbstractDao<Project> {
     }
 
     /**
-     * load an Provider-object persisted in the database, identified by its name (the "business" key of a provider)
+     * load an project persisted in the database, identified by its name (the "business" key of a project)
      * 
-     * @param name the name of the provider, never null
-     * @return the Provider-object, never null
+     * @param name the name of the project, never null
+     * @return the project, null if the program is not found
      */
-    public Project load(String name) {
+    public Project load(String projectName) {
         Query hql = this.session.createQuery("from Project where name=:name");
-        hql.setString("name", name);
+        hql.setString("name", projectName);
         @SuppressWarnings("unchecked")
         List<Project> il = hql.list();
-        Assert.isTrue(1 == il.size());
-        return il.get(0);
+        Assert.isTrue(il.size() <= 1);
+        return il.size() == 0 ? null : il.get(0);
     }
 
     /**
-     * load all provider objects persisted in the database
+     * load all projects persisted in the database
      * 
-     * @return the list of Provider-objects, may be an empty list, but never null
+     * @return the list of projects, may be an empty list, but never null
      */
     public List<Project> loadAll() {
         Query hql = this.session.createQuery("from Project");

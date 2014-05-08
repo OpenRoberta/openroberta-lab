@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.transformer;
+package de.fhg.iais.roberta.ast.transformer;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

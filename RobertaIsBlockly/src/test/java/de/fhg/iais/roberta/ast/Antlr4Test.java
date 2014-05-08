@@ -11,11 +11,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.ast.transformer.ParseTreeToAst;
 import de.fhg.iais.roberta.text.generated.TextlyLexer;
 import de.fhg.iais.roberta.text.generated.TextlyParser;
 import de.fhg.iais.roberta.text.generated.TextlyParser.ExprContext;
 import de.fhg.iais.roberta.text.generated.TextlyParser.StmtContext;
-import de.fhg.iais.roberta.transformer.ParseTreeToAst;
 
 public class Antlr4Test {
     private static final boolean DO_ASSERT = true;

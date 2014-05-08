@@ -6,15 +6,15 @@ import javax.xml.bind.JAXBContext;
 
 /**
  * Extension of the extension interface {@link ContextResolver}. Provides a JAXB context to resource classes. This object can be used to create marshaller,
- * unmarshaller and namespace mappers. Uses the singleton class {@link AscJAXBProviderFactory} to create this context.
+ * unmarshaller and namespace mappers. Uses the singleton class {@link JAXBProviderFactory} to create this context.
  * 
  * @author rbudde
  */
 @Provider
-public class AscJAXBContextProvider implements ContextResolver<JAXBContext>
+public class JAXBContextProvider implements ContextResolver<JAXBContext>
 {
     @Override
     public JAXBContext getContext(Class<?> type) {
-        return AscJAXBProviderFactory.getInstance().getJAXBContext(type);
+        return JAXBProviderFactory.getInstance().getJAXBContext(type);
     }
 }

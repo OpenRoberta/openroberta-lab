@@ -6,15 +6,15 @@ import javax.xml.bind.Marshaller;
 
 /**
  * Extension of the extension interface {@link ContextResolver}. Provides a marshaller to resource classes. Uses the singleton class
- * {@link AscJAXBProviderFactory} to create this context.
+ * {@link JAXBProviderFactory} to create this context.
  * 
  * @author rbudde
  */
 @Provider
-public class AscJAXBMarshallerProvider implements ContextResolver<Marshaller>
+public class JAXBMarshallerProvider implements ContextResolver<Marshaller>
 {
     @Override
     public Marshaller getContext(Class<?> type) {
-        return AscJAXBProviderFactory.getInstance().getMarshaller(type);
+        return JAXBProviderFactory.getInstance().getMarshaller(type);
     }
 }

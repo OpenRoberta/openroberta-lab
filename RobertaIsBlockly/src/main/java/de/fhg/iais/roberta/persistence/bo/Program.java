@@ -11,8 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import de.fhg.iais.roberta.javaServer.util.State;
-
 @Entity
 @Table(name = "PROGRAM")
 public class Program implements WithSurrogateId {
@@ -34,27 +32,28 @@ public class Program implements WithSurrogateId {
     @Column(name = "PROGRAM_TEXT")
     private String programText;
 
-    @Column(name = "STATE")
+    @Column(name = "ACCESS")
     @Enumerated(EnumType.STRING)
-    private State state;
+    private Access access;
 
     protected Program() {
         // Hibernate
     }
 
     /**
-     * create a new ingest object
+     * create a new program
      * 
-     * @param name the name, not null
-     * @param project the provider of this ingest, not null
-     * @param metadataFormat the format of the metadata (e.g. DC, LIDO, EDM, MARC, ...)
+     * @param name the name of the program, not null
+     * @param project the project this program belongs to, not null
+     * @param text describing the program literally
+     * @param programText the xml representation of the program
      */
     public Program(String name, Project project, String text, String programText) {
         this.name = name;
         this.project = project;
         this.text = text;
         this.programText = programText;
-        this.state = State.ReadyForTransform;
+        this.access = Access.Private;
     }
 
     @Override
@@ -86,12 +85,12 @@ public class Program implements WithSurrogateId {
         this.programText = programText;
     }
 
-    public State getState() {
-        return this.state;
+    public Access getAccess() {
+        return this.access;
     }
 
-    public void setState(State state) {
-        this.state = state;
+    public void setAccess(Access access) {
+        this.access = access;
     }
 
 }

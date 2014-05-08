@@ -18,13 +18,12 @@ import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
  * 
  * @author rbudde
  */
-public class AscNamespaceMapper extends NamespacePrefixMapper
-{
+public class RobertaNamespaceMapper extends NamespacePrefixMapper {
 
     private static final Map<String, String> allNs;
     static {
         Map<String, String> t = new HashMap<String, String>();
-        t.put("http://www.budde.de/asc/1.0/", "asc");
+        t.put("http://de.fhg.iais.roberta.blockly", "b");
         t.put("http://www.w3.org/2001/XMLSchema-instance", "xsi");
         t.put("http://www.w3.org/XML/1998/namespace", "ns");
         allNs = Collections.unmodifiableMap(t);
@@ -35,7 +34,7 @@ public class AscNamespaceMapper extends NamespacePrefixMapper
     public String getPreferredPrefix(String namespaceUri, String suggestion, boolean requirePrefix) {
         String prefix = allNs.get(namespaceUri);
         if ( prefix != null ) {
-            usedNs.add(namespaceUri);
+            this.usedNs.add(namespaceUri);
             return prefix;
         } else {
             throw new RuntimeException("Invalid namespaceUri encountered: " + namespaceUri);
@@ -46,6 +45,6 @@ public class AscNamespaceMapper extends NamespacePrefixMapper
     public String[] getPreDeclaredNamespaceUris() {
         // It is expected that this method is called late in the marshalling process, i.e. after all elements have been generated. It returns only
         // URIs that have been used during THIS marshalling process. If this rises errors, change this method and return ALL URIs.
-        return usedNs.toArray(new String[usedNs.size()]);
+        return this.usedNs.toArray(new String[this.usedNs.size()]);
     }
 }

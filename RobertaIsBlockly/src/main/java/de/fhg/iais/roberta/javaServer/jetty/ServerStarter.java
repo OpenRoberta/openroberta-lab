@@ -17,14 +17,38 @@ import de.fhg.iais.roberta.persistence.connector.SessionFactoryWrapper;
 import de.fhg.iais.roberta.persistence.connector.SessionWrapper;
 import de.fhg.iais.roberta.persistence.dao.ProjectDao;
 
+/**
+ * the main class of the application.<br>
+ * <br>
+ * - starts an embedded jetty (see {@link ServletContainer}<br>
+ * - configures jersey and the package with the resources<br>
+ * - configures jaxb and the package with the providers<br>
+ * - configures a resource holder for static content<br>
+ * - configures hibernate and tests the connection to the database. Hibernate uses Sqlite as underlying database<br>
+ * 
+ * @author rbudde
+ */
 public class ServerStarter {
     private static final Logger LOG = LoggerFactory.getLogger(ServerStarter.class);
+    private static final int PORT = 1999;
 
+    /**
+     * startup and shutdown. See {@link ServerStarter}
+     * 
+     * @param args unused
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
-        Server server = new ServerStarter().start(1999);
+        Server server = new ServerStarter().start(PORT);
         server.join();
     }
 
+    /**
+     * startup. See {@link ServerStarter}
+     * 
+     * @param port the port jetty should listen to
+     * @throws Exception
+     */
     public Server start(int port) throws IOException {
 
         Server server = new Server(port);

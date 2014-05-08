@@ -19,14 +19,14 @@ public class Phrase {
     }
 
     /**
-     * @return true, if the object is read-only/immutable. This is true, if {@link #setReadOnly()} has nbeen called for this object
+     * @return true, if the object is read-only/immutable. This is true, if {@link #setReadOnly()} has been called for this object
      */
     public final boolean isReadOnly() {
         return this.readOnly;
     }
 
     /**
-     * make this {@link #Phrase}-object read-only/immutable. Should be called if the construction phase has finished
+     * make this {@link Phrase}-object read-only/immutable. Should be called if the construction phase has finished
      */
     public final void setReadOnly() {
         this.readOnly = true;

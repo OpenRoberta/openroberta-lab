@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.javaServer.util;
+package de.fhg.iais.roberta.util;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;

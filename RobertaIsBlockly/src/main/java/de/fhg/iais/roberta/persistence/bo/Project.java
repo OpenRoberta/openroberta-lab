@@ -34,10 +34,10 @@ public class Project implements WithSurrogateId {
     /**
      * create a new project
      * 
-     * @param name the name, not null
-     * @param ddbId the MD5-hash defining the unique id of this provider w.r.t. the DDB, may be null
-     * @param url the url of this provider, may be null
-     * @param email the email of this provider, may be null
+     * @param name the name of the project, not null
+     * @param email an email of this project, may be null
+     * @param url the url of this project, may be null
+     * @param text describing the project literally, may be null
      */
     public Project(String name, String email, String url, String text) {
         this.name = name;

@@ -10,24 +10,24 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.Project;
 
-public class AscJAXBProviderFactory {
-    private static final Logger LOG = LoggerFactory.getLogger(AscJAXBProviderFactory.class);
+public class JAXBProviderFactory {
+    private static final Logger LOG = LoggerFactory.getLogger(JAXBProviderFactory.class);
 
-    private static final AscJAXBProviderFactory instance = new AscJAXBProviderFactory();
+    private static final JAXBProviderFactory instance = new JAXBProviderFactory();
 
     private JAXBContext context = null;
-    private AscNamespaceMapper nsMapper = null;
+    private RobertaNamespaceMapper nsMapper = null;
 
-    private AscJAXBProviderFactory() {
+    private JAXBProviderFactory() {
         try {
-            this.context = JAXBContext.newInstance("de.budde.generated.xml.asc:");
-            this.nsMapper = new AscNamespaceMapper();
+            this.context = JAXBContext.newInstance("de.fhg.iais.roberta.blockly.generated:");
+            this.nsMapper = new RobertaNamespaceMapper();
         } catch ( JAXBException e ) {
             LOG.error("JAXBContext could not be build ...", e);
         }
     }
 
-    public static AscJAXBProviderFactory getInstance() {
+    public static JAXBProviderFactory getInstance() {
         return instance;
     }
 

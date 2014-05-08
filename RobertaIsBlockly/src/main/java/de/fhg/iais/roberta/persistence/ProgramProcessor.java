@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.business;
+package de.fhg.iais.roberta.persistence;
 
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.persistence.bo.Program;
