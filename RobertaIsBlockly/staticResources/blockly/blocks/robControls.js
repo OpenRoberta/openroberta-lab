@@ -4,6 +4,16 @@ goog.provide('Blockly.Blocks.robControls');
 
 goog.require('Blockly.Blocks');
 
+Blockly.Blocks['robControls_start'] = {
+		init : function() {
+			this.setColour(300);
+			this.appendDummyInput().appendField('Start');
+			this.setInputsInline(true);
+			this.setPreviousStatement(false);
+			this.setNextStatement(true);
+		}
+	};
+
 Blockly.Blocks['robControls_wait'] = {
 	// Else condition.
 	init : function() {
