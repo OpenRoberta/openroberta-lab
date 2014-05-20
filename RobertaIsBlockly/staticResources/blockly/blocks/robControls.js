@@ -4,15 +4,51 @@ goog.provide('Blockly.Blocks.robControls');
 
 goog.require('Blockly.Blocks');
 
+/**
+ * Block for main activity. Not available in a toolbox, but static in a workspace.
+ * @this Blockly.Block
+ */
 Blockly.Blocks['robControls_start'] = {
 		init : function() {
 			this.setColour(300);
-			this.appendDummyInput().appendField('Start');
+			this.appendDummyInput().appendField('Task').appendField('Hauptprogramm');
 			this.setInputsInline(true);
 			this.setPreviousStatement(false);
 			this.setNextStatement(true);
 		}
 	};
+
+/**
+ * Block for additional activity 
+ * @this Blockly.Block
+ */
+Blockly.Blocks['robControls_activity'] = {
+		init : function() {
+			this.setColour(300);
+			this.appendValueInput('ACTIVITY')
+		    .appendField('Task')
+		        .setCheck('String');
+			this.setInputsInline(true);
+			this.setPreviousStatement(false);
+			this.setNextStatement(true);
+		}
+	};
+
+Blockly.Blocks['robControls_start_activity'] = {
+		  /**
+		   * Block for starting additional activity.
+		   * @this Blockly.Block
+		   */
+		  init: function() {
+		    this.setColour(300);
+		    this.appendValueInput('ACTIVITY')
+		    .appendField('starte Task')
+		        .setCheck('String');
+		    this.setInputsInline(true);
+		    this.setPreviousStatement(true);
+		    this.setNextStatement(true);
+		  }
+		};
 
 Blockly.Blocks['robControls_wait'] = {
 	// Else condition.
@@ -25,10 +61,10 @@ Blockly.Blocks['robControls_wait'] = {
 				[ '<', 'LT' ], [ '\u2264', 'LTE' ], [ '>', 'GT' ],
 				[ '\u2265', 'GTE' ] ];
 		var dropdownSensor = new Blockly.FieldDropdown([
-				[ Blockly.Msg.WAIT_SENSOR_ULTRASONIC, 'ULTRASONIC' ],
-				[ Blockly.Msg.WAIT_SENSOR_TOUCH, 'TOUCH' ],
-				[ Blockly.Msg.WAIT_SENSOR_COLOR, 'COLOR' ],
-				[ Blockly.Msg.WAIT_SENSOR_TIME, 'TIME' ] ]);
+				[ Blockly.Msg.SENSOR_ULTRASONIC, 'ULTRASONIC' ],
+				[ Blockly.Msg.SENSOR_TOUCH, 'TOUCH' ],
+				[ Blockly.Msg.SENSOR_COLOUR, 'COLOUR' ],
+				[ Blockly.Msg.SENSOR_TIME, 'TIME' ] ]);
 		this.appendValueInput('VALUE').appendField(Blockly.Msg.WAIT_TITLE)
 				.appendField(dropdownSensor, 'SENSOR').setCheck('Number')
 				.appendField(new Blockly.FieldDropdown(OPERATORS), 'OP');
@@ -42,7 +78,7 @@ Blockly.Blocks['robControls_loopUntil'] = {
 		var dropdownSensor = [
 				[ Blockly.Msg.LOOP_SENSOR_ULTRASONIC, 'ULTRASONIC' ],
 				[ Blockly.Msg.LOOP_SENSOR_TOUCH, 'TOUCH' ],
-				[ Blockly.Msg.LOOP_SENSOR_COLOR, 'COLOR' ],
+				[ Blockly.Msg.LOOP_SENSOR_COLOUR, 'COLOUR' ],
 				[ Blockly.Msg.LOOP_SENSOR_TIME, 'TIME' ],
 				[ Blockly.Msg.LOOP_COUNT, 'COUNT' ] ];
 		var OPERATORS = Blockly.RTL ? [ [ '=', 'EQ' ], [ '\u2260', 'NEQ' ],
@@ -89,7 +125,7 @@ Blockly.Blocks['robControls_ifElse'] = {
 		var dropdownSensor = new Blockly.FieldDropdown([
 				[ Blockly.Msg.LOOP_SENSOR_ULTRASONIC, 'ULTRASONIC' ],
 				[ Blockly.Msg.LOOP_SENSOR_TOUCH, 'TOUCH' ],
-				[ Blockly.Msg.LOOP_SENSOR_COLOR, 'COLOR' ],
+				[ Blockly.Msg.LOOP_SENSOR_COLOUR, 'COLOUR' ],
 				[ Blockly.Msg.LOOP_SENSOR_TIME, 'TIME' ] ]);
 		this.setColour(300);
 		this.appendValueInput('VALUE').appendField(Blockly.Msg.CONTROLS_IF_MSG_IF)
