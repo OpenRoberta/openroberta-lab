@@ -112,10 +112,10 @@ public class GraphicStartup implements Menu {
     static final String ICNo =
         "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00f0\u0000\u0000\u000f\u00f0\u0000\u0000\u000f\u00fc\u0003\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00c0\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u0003\u0000\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u0000\u00c0\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u0003\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u0003\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00f0\u0000\u0000\u000f\u00f0\u0000\u0000\u000f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
 
-    // Roberta Logo (maybe not best quality possible, done with ev3image tool from lejos)
+    // Roberta Logo (maybe not the best quality possible, done with ev3image tool from lejos). Black/white roberta image required for best result?!
     static final String RobertaLogo =
         "\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0001\u0000\u0000\u0080\u0003\u0020\u0002\u008e\u0003\u00b8\u0001\u0080\u0001\u00b8\u005e\u00c4\u0001\u0038\u0021\u00f8\u0000\u00f8\u0000\u0031\u0000\u00f0\u0010\u0033\u0000\u00e0\u0038\u0008\u0000\u00e0\u0000\u0004\u0000\u0000\u00e1\u0003\u0000\u0000\u007e\u0000\u0000\u0000\u0070\u0000\u0000\u0000\u0030\u0000\u0000\u0000\u0038\u0000\u0000\u0000\u0038\u0080\u0003\u0000\u0038\u00f0\u0007\u0000\u00f8\u00ff\u0007\u0000\u00f8\u00ff\u0007\u0000\u00f8\u00ff\u001f\u0000\u00f8\u00ff\u003f\u0000\u00f8\u00ff\u003f\u0000\u00f8\u00ff\u007f\u0000\u00ff\u00ff\u007f\u0080\u00ff\u00ff\u0067\u00c0\u00ff\u00ff\u0077\u00c0\u00ff\u009f\u0077\u00c0\u00ff\u00df\u003f\u0080\u00ff\u00ff\u003f\u0000\u008f\u00fc\u001f\u0000\u0000\u0010\u000f";
-    private static String webServiceCode;
+    private static String token;
     private static String robertaFileName;
 
     static final String PROGRAMS_DIRECTORY = "/home/lejos/programs";
@@ -277,7 +277,7 @@ public class GraphicStartup implements Menu {
      * Display the main system menu.
      * Allow the user to select File, Bluetooth, Sound, System operations.
      */
-    // Roberta menu icon + case entry added
+    // Roberta menu icon + description + case entry added
     private void mainMenu() {
         GraphicMenu menu = new GraphicMenu(new String[] {
             "Run Default", "Roberta", "Files", "Samples", "Bluetooth", "Wifi", "Sound", "System", "Version"
@@ -755,9 +755,10 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Roberta submenu implementation
-     * uses new RobertaUtils helper class for downloading and saving file
-     * uses new RobertaKeyboard with less symbols for token input
+     * Roberta submenu implementation.<br>
+     * Uses new RobertaUtils helper-class for downloading and saving file.<br>
+     * uses new RobertaKeyboard with less symbols for token input.<br>
+     * TODO handling malformed URL exception (should never be thrown later)
      */
     private void robertaMenu() {
         String[] menuData = {
@@ -778,16 +779,17 @@ public class GraphicStartup implements Menu {
             newScreen("Roberta");
             lcd.drawString("RobertaFileName:", 0, 1);
             lcd.drawString("" + robertaFileName, 0, 2);
-            lcd.drawString("Code: " + webServiceCode, 0, 3);
+            lcd.drawString("Token: " + token, 0, 3);
             menu.setItems(menuData, iconData);
             selection = getSelection(menu, selection);
             switch ( selection ) {
                 case 0:
-                    webServiceCode = new RobertaKeyboard().getString();
+                    token = new RobertaKeyboard().getString();
                     break;
                 case 1:
                     RobertaUtils robertaUtils = new RobertaUtils();
-                    robertaFileName = robertaUtils.getProgram(serverURL, webServiceCode);
+                    robertaUtils.getProgram(serverURL, token);
+                    robertaFileName = robertaUtils.getFileName();
                     break;
                 case 2:
                     this.ind.suspend();

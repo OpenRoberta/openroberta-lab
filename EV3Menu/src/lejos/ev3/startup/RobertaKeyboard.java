@@ -6,9 +6,15 @@ import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.TextLCD;
 
 // @formatter:off
+/**
+ * Keyboard based on {@link Keyboard} , lejos class for wifi password input.
+ * Robertakeyboard for token input, only capslock characters and numbers.
+ * 
+ * @author dpyka
+ */
 public class RobertaKeyboard {
     
-    private TextLCD lcd = LocalEV3.get().getTextLCD();
+    private final TextLCD lcd = LocalEV3.get().getTextLCD();
     
     int x = 0, y = 5;
     
@@ -18,25 +24,29 @@ public class RobertaKeyboard {
                       "ZXCVBNM           ", 
                       "x D           "};
     
-    String[] lines = upper;
+    String[] lines = this.upper;
     
     void display() {
         //LCD.drawString("Keyboard", 4, 0);
-        lcd.clear();
-        for(int i=0;i<lines.length;i++) {
-            lcd.drawString(lines[i], 0, i+1);
+        this.lcd.clear();
+        for(int i=0;i<this.lines.length;i++) {
+            this.lcd.drawString(this.lines[i], 0, i+1);
         }
         displayCursor(true);
     }
     
     void displayCursor(boolean inverted) {
-        lcd.drawString(lines[y-1].substring(x,x+1), x, y, inverted);
+        this.lcd.drawString(this.lines[this.y-1].substring(this.x,this.x+1), this.x, this.y, inverted);
     }
     
+    /**
+     * Returns the token that was created via RobertaKeyboard.
+     * @return token as String
+     */
     String getString() {
         StringBuilder sb = new StringBuilder();
-        x = 0;
-        y = 5;
+        this.x = 0;
+        this.y = 5;
         display();
         
         while (true) {
@@ -45,22 +55,33 @@ public class RobertaKeyboard {
             displayCursor(false);
             
             if (b == Button.ID_DOWN) {
-                if (++y > 5) y = 1;
+                if (++this.y > 5) {
+                    this.y = 1;
+                }
             } else if (b == Button.ID_UP) {
-                if (--y < 1) y = 5;
+                if (--this.y < 1) {
+                    this.y = 5;
+                }
             } else if (b == Button.ID_LEFT) {
-                if (--x < 0) x = 9;
+                if (--this.x < 0) {
+                    this.x = 9;
+                }
             } else if (b == Button.ID_RIGHT) {
-                if (++x > 9) x = 0;
+                if (++this.x > 9) {
+                    this.x = 0;
+                }
             } else if (b == Button.ID_ENTER) {
-                if (y < 5) sb.append(lines[y-1].charAt(x));
-                else {
-                    switch (lines[4].charAt(x)) {
+                if (this.y < 5) {
+                    sb.append(this.lines[this.y-1].charAt(this.x));
+                } else {
+                    switch (this.lines[4].charAt(this.x)) {
                     case 'x':
                         if (sb.length() > 0) {
                             sb.deleteCharAt(sb.length()-1);
-                            lcd.drawString(" ", sb.length(), 7);
-                        } else Sound.buzz();
+                            this.lcd.drawString(" ", sb.length(), 7);
+                        } else {
+                            Sound.buzz();
+                        }
                         break;
                     case 'D':
                         return sb.toString();
@@ -72,8 +93,10 @@ public class RobertaKeyboard {
             
             displayCursor(true);
             String s = sb.toString();
-            if (s.length() > 18) s = s.substring(s.length() - 18, s.length());
-            lcd.drawString(s, 0, 7);
+            if (s.length() > 18) {
+                s = s.substring(s.length() - 18, s.length());
+            }
+            this.lcd.drawString(s, 0, 7);
         }
     }
     

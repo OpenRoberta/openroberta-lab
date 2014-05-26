@@ -19,6 +19,12 @@ import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.hardware.sensor.SensorModes;
 import lejos.robotics.RegulatedMotor;
 
+/**
+ * Class that contains methods that will be executed at the beginning and at the end of each "Roberta program".<br>
+ * Contains properties of which device is connected to which port. This need to be set somewhere on server side.
+ * 
+ * @author dpyka
+ */
 public class RobertaFunctions {
 
     private final TextLCD lcd = LocalEV3.get().getTextLCD();
@@ -40,10 +46,19 @@ public class RobertaFunctions {
         this.devices = devices;
     }
 
+    /**
+     * Clears the display.<br>
+     * TBC.
+     */
     public void startup() {
         LCD.clear();
     }
 
+    /**
+     * Closes motor devices if available.<br>
+     * Turn off button LEDs.<br>
+     * Clear and refresh display.<br>
+     */
     public void shutdown() {
         if ( this.devices.containsKey("rightMotor") ) {
             this.rightMotor.stop();
@@ -62,8 +77,12 @@ public class RobertaFunctions {
         LCD.refresh();
     }
 
-    // this method always has to come first
-    // exception handling!!
+    /**
+     * Test if devices are present and connected correctly.<br>
+     * Send error report to server (empty string if no error).
+     * Incorrect motor connection can not be detected...
+     * TODO exception handling malformed url (should never be thrown later)
+     */
     public void validateDevices() {
         URL errorMessageServletURL = null;
 
@@ -76,6 +95,12 @@ public class RobertaFunctions {
         }
     }
 
+    /**
+     * Initialisation of motors and sensors as available and described in Properties "devices".<br>
+     * Display errors on brick screen.<br>
+     * 
+     * @return error report
+     */
     private String initialiseDevices() {
         String errorMessage = "";
         int i = 0;
@@ -154,6 +179,13 @@ public class RobertaFunctions {
         return errorMessage;
     }
 
+    /**
+     * Opens http connection to server. "POST" as request method. Input, output set to "true".
+     * 
+     * @param url the robertalab server url or ip+port
+     * @return httpURLConnection http connection object to the server
+     * @throws IOException opening a connection failed
+     */
     private HttpURLConnection openConnection(URL url) throws IOException {
         HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
         httpURLConnection.setDoInput(true);
@@ -162,6 +194,13 @@ public class RobertaFunctions {
         return httpURLConnection;
     }
 
+    /**
+     * Send the error report (String) to the server
+     * 
+     * @param httpURLConnection http connection to the server
+     * @param errorMessage error report
+     * @throws IOException output or input fails
+     */
     private void sendErrorMessageToServer(HttpURLConnection httpURLConnection, String errorMessage) throws IOException {
         DataOutputStream dos = new DataOutputStream(httpURLConnection.getOutputStream());
         dos.writeBytes(errorMessage);

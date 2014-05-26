@@ -5,13 +5,14 @@ public class EV3HelloWorld {
     private static Properties devices = new Properties();
 
     public static void main(String[] args) {
+        //Some Helloworld program
         /*LCD.clear();
         LCD.drawString("Hallo Welt", 0, 3);
         Button.waitForAnyPress();
         LCD.clear();
         LCD.refresh();*/
 
-        // init from block configuration, example: "roberta car"
+        // init from configuration
         devices.setProperty("rightMotor", "A");
         devices.setProperty("leftMotor", "D");
         devices.setProperty("ultraSonicSensor", "S1");
