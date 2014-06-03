@@ -1,29 +1,27 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
-public class Var extends Expr {
-    private final String name;
+public class NullConst extends Expr {
 
-    private Var(String value) {
-        this.name = value;
+    private NullConst() {
         setReadOnly();
     }
 
-    public static Var make(String value) {
-        return new Var(value);
+    public static NullConst make() {
+        return new NullConst();
     }
 
-    public String getValue() {
-        return this.name;
+    public Object getValue() {
+        return null;
     }
 
     @Override
     public Kind getKind() {
-        return Expr.Kind.Var;
+        return Expr.Kind.NullConst;
     }
 
     @Override
     public String toString() {
-        return "Var[" + this.name + "]";
+        return "NullConst [null]";
     }
 
     @Override
@@ -31,4 +29,5 @@ public class Var extends Expr {
         // TODO Auto-generated method stub
 
     }
+
 }

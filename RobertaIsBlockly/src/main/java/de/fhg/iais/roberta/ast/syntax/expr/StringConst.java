@@ -1,29 +1,29 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
-public class Var extends Expr {
-    private final String name;
+public class StringConst extends Expr {
+    private final String value;
 
-    private Var(String value) {
-        this.name = value;
+    private StringConst(String value) {
+        this.value = value;
         setReadOnly();
     }
 
-    public static Var make(String value) {
-        return new Var(value);
+    public static StringConst make(String value) {
+        return new StringConst(value);
     }
 
     public String getValue() {
-        return this.name;
+        return this.value;
     }
 
     @Override
     public Kind getKind() {
-        return Expr.Kind.Var;
+        return Expr.Kind.StringConst;
     }
 
     @Override
     public String toString() {
-        return "Var[" + this.name + "]";
+        return "String[" + this.value + "]";
     }
 
     @Override

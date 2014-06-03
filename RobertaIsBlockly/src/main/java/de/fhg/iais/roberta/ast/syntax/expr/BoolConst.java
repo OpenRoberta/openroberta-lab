@@ -1,29 +1,29 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
-public class IntConst extends Expr {
-    private final int value;
+public class BoolConst extends Expr {
+    private final boolean value;
 
-    private IntConst(int value) {
+    private BoolConst(boolean value) {
         this.value = value;
         setReadOnly();
     }
 
-    public static IntConst make(int value) {
-        return new IntConst(value);
+    public static BoolConst make(boolean value) {
+        return new BoolConst(value);
     }
 
-    public int getValue() {
+    public boolean isValue() {
         return this.value;
     }
 
     @Override
     public Kind getKind() {
-        return Expr.Kind.IntConst;
+        return Expr.Kind.BoolConst;
     }
 
     @Override
     public String toString() {
-        return "Int[" + this.value + "]";
+        return "BoolConst [" + this.value + "]";
     }
 
     @Override
@@ -31,4 +31,5 @@ public class IntConst extends Expr {
         // TODO Auto-generated method stub
 
     }
+
 }

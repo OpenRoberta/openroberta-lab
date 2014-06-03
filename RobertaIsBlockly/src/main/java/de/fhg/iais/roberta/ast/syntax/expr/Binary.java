@@ -43,37 +43,99 @@ public class Binary extends Expr {
     }
 
     public static enum Op {
-        Mult, Div, Add, Sub, Equal, And, Or, Less, LessEqual, Bigger, BiggerEqual, NotEqual;
+        MULTIPLY,
+        DIVIDE,
+        ADD,
+        MINUS,
+        EQ,
+        AND,
+        OR,
+        LT,
+        LTE,
+        GT,
+        GTE,
+        NEQ,
+        POWER,
+        DIVISIBLE_BY,
+        MATH_CHANGE,
+        MOD,
+        MAX,
+        MIN,
+        RANDOM_INTEGER,
+        TEXT_APPEND,
+        FIRST,
+        LAST,
+        FROM_START,
+        FROM_END,
+        RANDOM,
+        LISTS_REPEAT,
+        ASSIGNMENT;
 
         public static Op get(String s) {
             if ( "*".equals(s) ) {
-                return Mult;
+                return MULTIPLY;
             } else if ( "/".equals(s) ) {
-                return Div;
+                return DIVIDE;
             } else if ( "+".equals(s) ) {
-                return Add;
+                return ADD;
             } else if ( "-".equals(s) ) {
-                return Sub;
+                return MINUS;
             } else if ( "==".equals(s) ) {
-                return Equal;
+                return EQ;
             } else if ( "&&".equals(s) ) {
-                return And;
+                return AND;
             } else if ( "||".equals(s) ) {
-                return Or;
+                return OR;
             } else if ( "<=".equals(s) ) {
-                return LessEqual;
+                return LTE;
             } else if ( "=>".equals(s) ) {
-                return BiggerEqual;
+                return GTE;
             } else if ( "<".equals(s) ) {
-                return Less;
+                return LT;
             } else if ( ">".equals(s) ) {
-                return Bigger;
+                return GT;
             } else if ( "!=".equals(s) ) {
-                return NotEqual;
+                return NEQ;
+            } else if ( "^".equals(s) ) {
+                return POWER;
+            } else if ( "divisible_by".equals(s) ) {
+                return DIVISIBLE_BY;
+            } else if ( "math_change".equals(s) ) {
+                return MATH_CHANGE;
+            } else if ( "mod".equals(s) ) {
+                return MOD;
+            } else if ( "max".equals(s) ) {
+                return MAX;
+            } else if ( "min".equals(s) ) {
+                return MIN;
+            } else if ( "randomInteger".equals(s) ) {
+                return RANDOM_INTEGER;
+            } else if ( "textAppend".equals(s) ) {
+                return TEXT_APPEND;
+            } else if ( "first".equals(s) ) {
+                return FIRST;
+            } else if ( "last".equals(s) ) {
+                return LAST;
+            } else if ( "fromStart".equals(s) ) {
+                return FROM_START;
+            } else if ( "fromEnd".equals(s) ) {
+                return FROM_END;
+            } else if ( "random".equals(s) ) {
+                return RANDOM;
+            } else if ( "lists_repeat".equals(s) ) {
+                return LISTS_REPEAT;
+            } else if ( "=".equals(s) ) {
+                return ASSIGNMENT;
             } else {
                 throw new DbcException("invalid binary operator: " + s);
             }
         }
+    }
+
+    @Override
+    public void toStringBuilder(StringBuilder sb, int indentation) {
+        // TODO Auto-generated method stub
+
     }
 
 }
