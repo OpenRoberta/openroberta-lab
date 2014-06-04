@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
@@ -175,14 +176,11 @@ public class BlockAST {
                 return blockToUnaryExpr(block, "TEXT", "MODE");
 
             case "text_prompt":
-                fields = block.getField();
-                Assert.isTrue(fields.size() == 2, "Number of fields is not equal to 2!");
-                Field type = fields.get(0);
-                Field text = fields.get(1);
-                Assert.isTrue(type.getName().equals("TYPE"));
-                Assert.isTrue(text.getName().equals("TEXT"));
-                StringConst txtExpr = StringConst.make(text.getValue());
-                return Unary.make(Unary.Op.valueOf(type.getValue()), txtExpr);
+                fields = extractFields(block, (short) 2);
+                String type = extractField(fields, "TYPE", (short) 0);
+                String text = extractField(fields, "TEXT", (short) 1);
+                StringConst txtExpr = StringConst.make(text);
+                return Unary.make(Unary.Op.valueOf(type), txtExpr);
 
                 //LISTEN
             case "lists_create_empty":
@@ -223,19 +221,32 @@ public class BlockAST {
             case "controls_if":
                 mutation = block.getMutation();
                 values = block.getValue();
+                statements = block.getStatement();
                 if ( mutation == null ) {
-                    Assert.isTrue(values.size() <= 1, "Number of values is not less or equal to 1!");
-                    getValue(values, "IF0", (short) 0);
+                    Assert.isTrue(values.size() <= 1, "Number of fields is not less or equal to 1!");
+                    if ( values.size() == 1 ) {
+                        expr = getValue(block.getValue(), "IF0", (short) 0);
+                    } else {
+                        expr = BoolConst.make(false);
+                    }
+                    Assert.isTrue(statements.size() <= 1, "Number of statements is not equal or less to 1!");
+
+                    if ( statements.size() == 1 ) {
+                        stmtList = stmtToAST(statements);
+                        IfStmt ifStmt = IfStmt.make((Expr) expr, stmtList);
+                        return ifStmt;
+                    } else {
+                        stmtList = StmtList.make();
+                        IfStmt ifStmt = IfStmt.make((Expr) expr, stmtList);
+                        return ifStmt;
+                    }
                 } else {
 
                 }
 
             case "controls_whileUntil":
-                fields = block.getField();
-                Assert.isTrue(fields.size() == 1, "Number of fields is not  equal to 1!");
-                field = fields.get(0);
-                Assert.isTrue(field.getName().equals("MODE"), "Name of the field is not equal to MODE!");
-                String mode = field.getValue();
+                fields = extractFields(block, (short) 1);
+                String mode = extractField(fields, "MODE", (short) 0);
 
                 values = block.getValue();
 
@@ -348,6 +359,19 @@ public class BlockAST {
             default:
                 throw new RuntimeException("Invalid Block: " + block.getType());
         }
+    }
+
+    private List<Field> extractFields(Block block, short numOfFields) {
+        List<Field> fields;
+        fields = block.getField();
+        Assert.isTrue(fields.size() == numOfFields, "Number of fields is not equal to " + numOfFields + "!");
+        return fields;
+    }
+
+    private String extractField(List<Field> fields, String name, short fieldLocation) {
+        Field field = fields.get(fieldLocation);
+        Assert.isTrue(field.getName().equals(name), "Field name is not equal to " + name + "!");
+        return field.getName();
     }
 
     private StmtList stmtToAST(List<Statement> statements) {
