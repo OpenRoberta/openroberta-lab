@@ -57,4 +57,8 @@ public abstract class SampleBuffer extends AbstractFilter {
     }
   }
 
+  protected int getActualSize() {
+    return actualSize;
+  }
+
 }

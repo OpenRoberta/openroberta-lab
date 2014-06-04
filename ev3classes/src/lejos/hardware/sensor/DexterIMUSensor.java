@@ -42,11 +42,11 @@ public class DexterIMUSensor extends BaseSensor implements SensorModes {
   }
 
   /**
-   * Gives a SampleProvider thst returns rate (degree/s) samples.
+   * Gives a SampleProvider that returns rate (degree/s) samples.
    * 
    * @return a SampleProvider
    */
-  public SampleProvider getGyroMode() {
+  public SampleProvider getRateMode() {
     return getMode(0);
   }
 
@@ -90,7 +90,7 @@ public class DexterIMUSensor extends BaseSensor implements SensorModes {
     private float[]          MULTIPLIERS = { 8.75f, 17.5f, 70f };
 
     private int              range       = 2;
-    private int              rate        = 2;
+    private int              rate        = 0;
     private float            toSI        = 1f/MULTIPLIERS[range] ;
 
     private byte[]           buf         = new byte[7];
@@ -109,7 +109,7 @@ public class DexterIMUSensor extends BaseSensor implements SensorModes {
      * This method configures the sensor
      */
     private void init() {
-      setModes(new SensorMode[] { new GyroMode(), new TemperatureMode() });
+      setModes(new SensorMode[] { new RateMode(), new TemperatureMode() });
       int reg;
       // put in sleep mode;
       sendData(CTRL_REG1, (byte) 0x08);
@@ -131,8 +131,8 @@ public class DexterIMUSensor extends BaseSensor implements SensorModes {
       float[] dummy = new float[3];
       SampleProvider gyro = getGyroMode();
       for (int s = 1; s <= 15; s++) {
-        while (!isNewDataAvailable())
-          Thread.yield();
+//        while (!isNewDataAvailable())
+//          Thread.yield();
         gyro.fetchSample(dummy, 0);
       }
     }
@@ -140,6 +140,7 @@ public class DexterIMUSensor extends BaseSensor implements SensorModes {
     /**
      * Returns true if new data is available from the sensor
      */
+    @SuppressWarnings("unused")
     private boolean isNewDataAvailable() {
       getData(REG_STATUS, buf, 1);
       if ((buf[0] & 0x08) == 0x08)
@@ -201,7 +202,7 @@ public class DexterIMUSensor extends BaseSensor implements SensorModes {
      * @author Aswin
      * 
      */
-    private class GyroMode implements SampleProvider, SensorMode {
+    private class RateMode implements SampleProvider, SensorMode {
       private static final int DATA_REG = 0x27 | 0x80;
 
       @Override
@@ -209,31 +210,19 @@ public class DexterIMUSensor extends BaseSensor implements SensorModes {
         return 3;
       }
 
+
+
       @Override
       public void fetchSample(float[] sample, int offset) {
         buf[0] = 0;
-        int attempts = 0;
-        // loop while no new data available or data overrun occured, break out
-        // after 20 attempts
-        while (((buf[0] & 0x80) == 0x80 || (buf[0] & 0x08) != 0x08) && attempts++ <= 20) {
-          getData(DATA_REG, buf, 7);
-          if ((buf[0] & 0x08) != 0x08)
-            Thread.yield();
-        }
-        if (attempts == 20) {
-          // No succesfull read, return NaN
-          for (int i = 0; i < 3; i++) {
-            sample[i + offset] = Float.NaN;
-          }
-        }
-        else {
+        getData(DATA_REG, buf, 7);
           // a correction for misalignment of the gyro sensor is made here
           sample[offset] = EndianTools.decodeShortLE(buf, 3) * toSI;
           sample[1 + offset] = EndianTools.decodeShortLE(buf, 1) * toSI;
           sample[2 + offset] = EndianTools.decodeShortLE(buf, 5) * toSI;
-        }
       }
 
+      
       @Override
       public String getName() {
         return "Rate";
@@ -267,24 +256,16 @@ public class DexterIMUSensor extends BaseSensor implements SensorModes {
       return 3;
     }
 
-    @SuppressWarnings("unused")
-    // 10 bit data seems not to be working correctly for the Y-axis. 
-    // modified new way (see below seems to work).
     private void fetchSample10(float[] sample, int offset) {
       getData(DATA_10BIT_REG, buf, 6);
       for (int i = 0; i < 3; i++) {
-        // old way
-        //int x = ((buf[i + 1]) << 8) | (buf[i] & 0xFF) & 0x03ff;
-        //if (x > 512)
-          //x -= 1024;
-        //sample[i + offset] = x * TOSI;
-        // new way
          buf[i*2+1] = (byte)((byte)(buf[i*2+1] << 6) >> 6);
          sample[i + offset] = EndianTools.decodeShortLE(buf, i*2);
          sample[i + offset] *= TOSI;
       }
     }
 
+    @SuppressWarnings("unused")
     private void fetchSample8(float[] sample, int offset) {
       getData(DATA_8BIT_REG, buf, 3);
       for (int i = 0; i < 3; i++) {

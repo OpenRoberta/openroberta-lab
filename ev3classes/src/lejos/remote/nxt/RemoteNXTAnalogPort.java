@@ -34,7 +34,7 @@ public class RemoteNXTAnalogPort extends RemoteNXTIOPort implements AnalogPort
 	 * Set the sensor type and mode
 	 * @param type the sensor type
 	 * @param mode the sensor mode
-	 * @return 
+	 * @return  true if success
 	 */
 	public boolean setTypeAndMode(int type, int mode) {
 		this.type = type;
@@ -50,7 +50,7 @@ public class RemoteNXTAnalogPort extends RemoteNXTIOPort implements AnalogPort
 	/**
 	 * Set the sensor type
 	 * @param type the sensor type
-	 * @return 
+	 * @return true if success
 	 */
 	public boolean setType(int type) {
 		this.type = type;
@@ -61,7 +61,7 @@ public class RemoteNXTAnalogPort extends RemoteNXTIOPort implements AnalogPort
 	/**
 	 * Set the sensor mode
 	 * @param mode the sensor mode
-	 * @return 
+	 * @return true if success
 	 */
 	public boolean setMode(int mode) {
 		this.mode = mode;
@@ -73,7 +73,7 @@ public class RemoteNXTAnalogPort extends RemoteNXTIOPort implements AnalogPort
     /**
      * get the type of the port
      * @param port
-     * @return
+     * @return true if sucesss
      */
     public static int getPortType(int port)
     {
@@ -95,7 +95,7 @@ public class RemoteNXTAnalogPort extends RemoteNXTIOPort implements AnalogPort
     /**
      * Get the type of analog sensor (if any) attached to the port
      * @param port
-     * @return
+     * @return the type of analog sensor
      */
     public static int getAnalogSensorType(int port)
     {

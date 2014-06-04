@@ -1,10 +1,12 @@
 package lejos.ev3.startup;
 
 import lejos.hardware.ev3.LocalEV3;
+import lejos.hardware.lcd.GraphicsLCD;
+import lejos.hardware.lcd.Image;
 import lejos.hardware.lcd.TextLCD;
 
 /**
- * Draws a battery and the name of the NXT.
+ * Draws a battery and the name of the EV3.
  */
 public class BatteryIndicator
 {
@@ -18,6 +20,14 @@ public class BatteryIndicator
     
 	private static final int HISTORY_SIZE = 2000 / Config.ANIM_DELAY;
 	private static final int WINDOW_TOLERANCE = 10;
+	
+    private static final String ICIWifi = "\u0000\u0000\u0000\u0000\u00e0\u0007\u00f8\u001f\u001e\u0078\u0007\u00e0\u0003\u00c0\u00f0\u000f\u0078\u001e\u0018\u0018\u0000\u0000\u0080\u0001\u0080\u0001\u0000\u0000\u0000\u0000\u0000\u0000";
+    private static final String ICIUSB  = "\u0000\u0000\u0080\u0001\u0000\u0000\u0000\u0004\u0000\u0004\u0020\u0004\u0020\u0004\u0020\u0000\u0020\u0001\u0000\u0000\u00c0\u0000\u0080\u0000\u0000\u0000\u0080\u0001\u0080\u0001\u0080\u0001";
+    
+    private static final Image wifiImage = new Image(16,16,Utils.stringToBytes8(ICIWifi));
+    private static final Image usbImage = new Image(16,16,Utils.stringToBytes8(ICIUSB));
+    
+    private static final int ICON_X = 160;
     
     private int levelMin;
     private int levelOk;
@@ -34,8 +44,11 @@ public class BatteryIndicator
 	private String titleString;
 	
 	private boolean rechargeable = false;
+	private boolean wifi = false;
+	private boolean usb = false;
 	
 	private TextLCD lcd = LocalEV3.get().getTextLCD();
+	private GraphicsLCD g = LocalEV3.get().getGraphicsLCD();
 	
     public BatteryIndicator()
     {
@@ -57,6 +70,14 @@ public class BatteryIndicator
 		historysum = val * HISTORY_SIZE;
 		for (int i = 0; i < HISTORY_SIZE; i++)
 			history[i] = val;
+    }
+    
+    public void setWifi(boolean wifi) {
+    	this.wifi = wifi;
+    }
+    
+    public void setUsb(boolean usb) {
+    	this.usb = usb;
     }
     
     public synchronized void setDefaultTitle(String title)
@@ -119,7 +140,8 @@ public class BatteryIndicator
             lcd.drawInt((level - level % 1000) / 1000, 0, 0);
             lcd.drawString(".", 1, 0);
             lcd.drawInt((level % 1000) / 100, 2, 0);
-
         }
+        
+        if (wifi) g.drawRegion(wifiImage, 0, 0, 16, 16, 0, ICON_X, 0, 0);
     }
 }

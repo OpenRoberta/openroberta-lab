@@ -20,13 +20,28 @@ public class LCDOutputStream extends OutputStream {
 	private int col = 0;
 	private int line = 0;
 	
-	private TextLCD lcd = BrickFinder.getDefault().getTextLCD();
+	private TextLCD lcd;
+	
+	public LCDOutputStream(TextLCD lcd)
+	{
+	    this.lcd = lcd;
+	}
+	
+	public LCDOutputStream()
+	{
+	    this(BrickFinder.getDefault().getTextLCD());
+	}
 	
 	@Override
 	public void write(int c) {
 		char x = (char)(c & 0xFF);
 		switch (x)
 		{
+			case '\f':
+				lcd.clear();
+				line = 0;
+				col = 0;
+				break;
 			case '\t':
 				col = col + 8 - col % 8; 
 				break;
@@ -47,10 +62,10 @@ public class LCDOutputStream extends OutputStream {
 	}
 
 	private void incLine() {
-		LCD.refresh();
+		lcd.refresh();
 		if (line < lcd.getTextHeight() - 1)
 			line++;
 		else
-			LCD.scroll();
+			lcd.scroll();
 	}
 }

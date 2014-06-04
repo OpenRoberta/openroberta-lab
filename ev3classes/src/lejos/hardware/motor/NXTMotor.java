@@ -37,7 +37,7 @@ public class NXTMotor extends BasicMotor implements EncoderMotor {
     /**
      * Create an instance of a NXTMotor using the specified motor port and
      * PWM operating mode.
-     * @param port The motor port that the motor will be attached to.
+     * @param mport The motor port that the motor will be attached to.
      * @param PWMMode see {@link lejos.hardware.port.BasicMotorPort#PWM_FLOAT} and see {@link lejos.hardware.port.BasicMotorPort#PWM_BRAKE}
      */
     public NXTMotor(TachoMotorPort mport, int PWMMode)

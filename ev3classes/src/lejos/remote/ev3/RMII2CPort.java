@@ -13,8 +13,6 @@ public interface RMII2CPort extends Remote {
      * @param writeBuf The buffer containing data to be written to the device.
      * @param writeOffset The offset of the data within the write buffer
      * @param writeLen The number of bytes to write.
-     * @param readBuf The buffer to use for the transaction results
-     * @param readOffset Location to write the results to
      * @param readLen The length of the read
      * @return < 0 error otherwise the number of bytes read
      */

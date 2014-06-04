@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
+import java.lang.reflect.Constructor;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.NetworkInterface;
@@ -24,8 +25,11 @@ import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.jar.JarFile;
 
+import lejos.hardware.Battery;
 import lejos.hardware.Bluetooth;
+import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
 import lejos.hardware.LocalBTDevice;
 import lejos.hardware.LocalWifiDevice;
@@ -33,99 +37,127 @@ import lejos.hardware.RemoteBTDevice;
 import lejos.hardware.Sound;
 import lejos.hardware.Wifi;
 import lejos.hardware.ev3.LocalEV3;
+import lejos.hardware.lcd.Font;
+import lejos.hardware.lcd.GraphicsLCD;
+import lejos.hardware.lcd.Image;
+import lejos.hardware.lcd.LCD;
 import lejos.hardware.lcd.LCDOutputStream;
 import lejos.hardware.lcd.TextLCD;
+import lejos.hardware.motor.EV3LargeRegulatedMotor;
+import lejos.hardware.motor.EV3MediumRegulatedMotor;
+import lejos.hardware.motor.MindsensorsGlideWheelMRegulatedMotor;
+import lejos.hardware.motor.NXTRegulatedMotor;
+import lejos.hardware.port.AnalogPort;
 import lejos.hardware.port.BasicMotorPort;
+import lejos.hardware.port.I2CPort;
+import lejos.hardware.port.IOPort;
+import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.Port;
+import lejos.hardware.port.PortException;
+import lejos.hardware.port.SensorPort;
 import lejos.hardware.port.TachoMotorPort;
+import lejos.hardware.port.UARTPort;
+import lejos.hardware.sensor.BaseSensor;
 import lejos.internal.io.Settings;
 import lejos.internal.io.SystemSettings;
+import lejos.remote.ev3.EV3Reply;
+import lejos.remote.ev3.EV3Request;
 import lejos.remote.ev3.Menu;
 import lejos.remote.ev3.MenuReply;
 import lejos.remote.ev3.MenuRequest;
 import lejos.remote.ev3.RMIRemoteEV3;
+import lejos.robotics.RegulatedMotor;
+import lejos.robotics.SampleProvider;
+import lejos.robotics.filter.PublishFilter;
+import lejos.robotics.navigation.DifferentialPilot;
 import lejos.utility.Delay;
 
 public class GraphicStartup implements Menu {
+    private static final int REMOTE_MENU_PORT = 8002;
 
-    static final int REMOTE_MENU_PORT = 8002;
+    private static final String JAVA_RUN_CP = "jrun -cp ";
+    private static final String JAVA_DEBUG_CP = "jrun -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=y -cp ";
 
-    static final String JAVA_RUN_JAR = "jrun -jar ";
-    static final String JAVA_DEBUG_JAR = "jrun -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=y -jar ";
+    private static final int TYPE_PROGRAM = 0;
+    private static final int TYPE_SAMPLE = 1;
+    private static final int TYPE_TOOL = 2;
 
-    static final String defaultProgramProperty = "lejos.default_program";
-    static final String defaultProgramAutoRunProperty = "lejos.default_autoRun";
-    static final String sleepTimeProperty = "lejos.sleep_time";
-    static final String pinProperty = "lejos.bluetooth_pin";
-    static final String ntpProperty = "lejos.ntp_host";
+    private static final String defaultProgramProperty = "lejos.default_program";
+    private static final String defaultProgramAutoRunProperty = "lejos.default_autoRun";
+    private static final String sleepTimeProperty = "lejos.sleep_time";
+    private static final String pinProperty = "lejos.bluetooth_pin";
+    private static final String ntpProperty = "lejos.ntp_host";
 
-    static final String ICMProgram =
+    private static final String ICMProgram =
         "\u00fc\u00ff\u00ff\u003f\u00fc\u00ff\u00ff\u003f\u0003\u0000\u0000\u00c0\u0003\u0000\u0000\u00c0\u0003\u0000\u0003\u00c0\u0003\u0000\u0003\u00c0\u0003\u00c0\u0000\u00c0\u0003\u00c0\u0000\u00c0\u0003\u00c0\u000c\u00c0\u0003\u00c0\u000c\u00c0\u0003\u0030\u000c\u00c0\u0003\u0030\u000c\u00c0\u0003\u0030\u0003\u00c0\u0003\u0030\u0003\u00c0\u0003\u00c0\u0000\u00c0\u0003\u00c0\u0000\u00c0\u0003\u00ff\u00cf\u00c3\u0003\u00ff\u00cf\u00c3\u0003\u0000\u0000\u00c3\u0003\u0000\u0000\u00c3\u0003\u00fc\u00f3\u00c0\u0003\u00fc\u00f3\u00c0\u0003\u0000\u0000\u00c0\u0003\u0000\u0000\u00c0\u00c3\u00ff\u003f\u00c0\u00c3\u00ff\u003f\u00c0\u0003\u0000\u0000\u00c0\u0003\u0000\u0000\u00c0\u0003\u0000\u0000\u00c0\u0003\u0000\u0000\u00c0\u00fc\u00ff\u00ff\u003f\u00fc\u00ff\u00ff\u003f";
-    static final String ICMSound =
+    private static final String ICMSound =
         "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00c0\u0000\u0003\u0000\u00c0\u0000\u0003\u0000\u00f0\u0030\u000c\u0000\u00f0\u0030\u000c\u0000\u00cc\u00c0\u0030\u0000\u00cc\u00c0\u0030\u0000\u00c3\u000c\u0033\u0000\u00c3\u000c\u0033\u00fc\u00c3\u0030\u0033\u00fc\u00c3\u0030\u0033\u000c\u00c3\u0030\u0033\u000c\u00c3\u0030\u0033\u000c\u00c3\u0030\u0033\u000c\u00c3\u0030\u0033\u003c\u00c3\u0030\u0033\u003c\u00c3\u0030\u0033\u00cc\u00cf\u0030\u0033\u00cc\u00cf\u0030\u0033\u00fc\u00f3\u0030\u0033\u00fc\u00f3\u0030\u0033\u0000\u00cf\u000c\u0033\u0000\u00cf\u000c\u0033\u0000\u00fc\u00c0\u0030\u0000\u00fc\u00c0\u0030\u0000\u00f0\u0030\u000c\u0000\u00f0\u0030\u000c\u0000\u00c0\u0000\u0003\u0000\u00c0\u0000\u0003\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
-    static final String ICMFile =
+    private static final String ICMFile =
         "\u0000\u00c0\u0000\u0000\u0000\u00c0\u0000\u0000\u0000\u0030\u00ff\u000f\u0000\u0030\u00ff\u000f\u0000\u000c\u000c\u0030\u0000\u000c\u000c\u0030\u00fc\u0003\u0030\u00cc\u00fc\u0003\u0030\u00cc\u00c3\u0000\u00c0\u00f0\u00c3\u0000\u00c0\u00f0\u003f\u0000\u0000\u00c3\u003f\u0000\u0000\u00c3\u00ff\u003f\u0000\u00fc\u00ff\u003f\u0000\u00fc\u0003\u00c0\u0000\u00f0\u0003\u00c0\u0000\u00f0\u0003\u0000\u00ff\u00ff\u0003\u0000\u00ff\u00ff\u0003\u0000\u0000\u00f3\u0003\u0000\u0000\u00f3\u0003\u0000\u00c0\u00cc\u0003\u0000\u00c0\u00cc\u0003\u0000\u0000\u00f3\u0003\u0000\u0000\u00f3\u0003\u0000\u0000\u00cc\u0003\u0000\u0000\u00cc\u0003\u0000\u0000\u00f3\u0003\u0000\u0000\u00f3\u0003\u0000\u00c0\u00cc\u0003\u0000\u00c0\u00cc\u00fc\u00ff\u00ff\u003f\u00fc\u00ff\u00ff\u003f";
 
-    static final String ICDefault =
+    private static final String ICDefault =
         "\u00fc\u00ff\u00ff\u003f\u00fc\u00ff\u00ff\u003f\u0003\u0000\u0000\u00c0\u0003\u0000\u0000\u00c0\u0003\u0000\u0003\u00c0\u0003\u0000\u0003\u00c0\u0003\u00c0\u0000\u00c0\u0003\u00c0\u0000\u00c0\u0003\u00c0\u000c\u00c0\u0003\u00c0\u000c\u00c0\u0003\u0030\u000c\u00c0\u0003\u0030\u000c\u00c0\u0003\u0030\u0003\u00c0\u0003\u0030\u0003\u00c0\u0003\u00c0\u0000\u00c0\u0003\u00c0\u0000\u00c0\u00f3\u00cf\u00cf\u00c3\u00f3\u00cf\u00cf\u00c3\u00c3\u000f\u0000\u00c3\u00c3\u000f\u0000\u00c3\u00f3\u00cf\u00f3\u00c0\u00f3\u00cf\u00f3\u00c0\u00f3\u000c\u0000\u00c0\u00f3\u000c\u0000\u00c0\u00f3\u00c3\u003f\u00c0\u00f3\u00c3\u003f\u00c0\u00c3\u0003\u0000\u00c0\u00c3\u0003\u0000\u00c0\u0003\u0000\u0000\u00c0\u0003\u0000\u0000\u00c0\u00fc\u00ff\u00ff\u003f\u00fc\u00ff\u00ff\u003f";
-    static final String ICProgram =
+    private static final String ICProgram =
         "\u00fc\u00ff\u00ff\u003f\u00fc\u00ff\u00ff\u003f\u0003\u0000\u0000\u00c0\u0003\u0000\u0000\u00c0\u0003\u0000\u0003\u00c0\u0003\u0000\u0003\u00c0\u0003\u00c0\u0000\u00c0\u0003\u00c0\u0000\u00c0\u0003\u00c0\u000c\u00c0\u0003\u00c0\u000c\u00c0\u0003\u0030\u000c\u00c0\u0003\u0030\u000c\u00c0\u0003\u0030\u0003\u00c0\u0003\u0030\u0003\u00c0\u0003\u00c0\u0000\u00c0\u0003\u00c0\u0000\u00c0\u0003\u00ff\u00cf\u00c3\u0003\u00ff\u00cf\u00c3\u0003\u0000\u0000\u00c3\u0003\u0000\u0000\u00c3\u0003\u00fc\u00f3\u00c0\u0003\u00fc\u00f3\u00c0\u0003\u0000\u0000\u00c0\u0003\u0000\u0000\u00c0\u00c3\u00ff\u003f\u00c0\u00c3\u00ff\u003f\u00c0\u0003\u0000\u0000\u00c0\u0003\u0000\u0000\u00c0\u0003\u0000\u0000\u00c0\u0003\u0000\u0000\u00c0\u00fc\u00ff\u00ff\u003f\u00fc\u00ff\u00ff\u003f";
-    static final String ICFiles =
+    private static final String ICFiles =
         "\u0000\u00c0\u0000\u0000\u0000\u00c0\u0000\u0000\u0000\u0030\u00ff\u000f\u0000\u0030\u00ff\u000f\u0000\u000c\u000c\u0030\u0000\u000c\u000c\u0030\u00fc\u0003\u0030\u00cc\u00fc\u0003\u0030\u00cc\u00c3\u0000\u00c0\u00f0\u00c3\u0000\u00c0\u00f0\u003f\u0000\u0000\u00c3\u003f\u0000\u0000\u00c3\u00ff\u003f\u0000\u00fc\u00ff\u003f\u0000\u00fc\u0003\u00c0\u0000\u00f0\u0003\u00c0\u0000\u00f0\u0003\u0000\u00ff\u00ff\u0003\u0000\u00ff\u00ff\u0083\u0007\u0000\u00f3\u0083\u0008\u0000\u00f3\u0083\u0008\u00c0\u00cc\u0083\u0008\u00c0\u00cc\u0083\u0007\u0000\u00f3\u0083\u0000\u0000\u00f3\u0083\u0000\u0000\u00cc\u0083\u0000\u0000\u00cc\u0083\u0000\u0000\u00f3\u0083\u0000\u0000\u00f3\u0003\u0000\u00c0\u00cc\u0003\u0000\u00c0\u00cc\u00fc\u00ff\u00ff\u003f\u00fc\u00ff\u00ff\u003f";
-    static final String ICSamples =
+    private static final String ICSamples =
         "\u0000\u00c0\u0000\u0000\u0000\u00c0\u0000\u0000\u0000\u0030\u00ff\u000f\u0000\u0030\u00ff\u000f\u0000\u000c\u000c\u0030\u0000\u000c\u000c\u0030\u00fc\u0003\u0030\u00cc\u00fc\u0003\u0030\u00cc\u00c3\u0000\u00c0\u00f0\u00c3\u0000\u00c0\u00f0\u003f\u0000\u0000\u00c3\u003f\u0000\u0000\u00c3\u00ff\u003f\u0000\u00fc\u00ff\u003f\u0000\u00fc\u0003\u00c0\u0000\u00f0\u0003\u00c0\u0000\u00f0\u0003\u0000\u00ff\u00ff\u0003\u001e\u00ff\u00ff\u0003\u0001\u0000\u00f3\u0003\u0001\u0000\u00f3\u0003\u0001\u00c0\u00cc\u0003\u001e\u00c0\u00cc\u0003\u0010\u0000\u00f3\u0003\u0010\u0000\u00f3\u0003\u0010\u0000\u00cc\u0003\u000f\u0000\u00cc\u0003\u0000\u0000\u00f3\u0003\u0000\u0000\u00f3\u0003\u0000\u00c0\u00cc\u0003\u0000\u00c0\u00cc\u00fc\u00ff\u00ff\u003f\u00fc\u00ff\u00ff\u003f";
-    static final String ICBlue =
+    private static final String ICTools =
+        "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00f0\u000f\u0000\u0000\u00f8\u001f\u0000\u0000\u001c\u0038\u0000\u0000\u000c\u0030\u0000\u0000\u000c\u0030\u0000\u0000\u0000\u0000\u0000\u00f0\u00ff\u00ff\u000f\u00fc\u00ff\u00ff\u003f\u00fe\u00ff\u00ff\u007f\u00fe\u00ff\u00ff\u007f\u007e\u00f8\u001f\u007e\u0000\u0000\u0000\u0000\u007e\u00f8\u001f\u007e\u007e\u00f8\u001f\u007e\u00fe\u00ff\u00ff\u007f\u00fe\u00ff\u00ff\u007f\u00fe\u00ff\u00ff\u007f\u00fe\u00ff\u00ff\u007f\u00fe\u00ff\u00ff\u007f\u00fe\u00ff\u00ff\u007f\u00fe\u00ff\u00ff\u007f\u00fe\u00ff\u00ff\u007f\u00fc\u00ff\u00ff\u003f\u00f0\u00ff\u00ff\u000f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
+    private static final String ICBlue =
         "\u0000\u00f0\u000f\u0000\u0000\u00f0\u000f\u0000\u0000\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u0000\u00c0\u003f\u00ff\u0003\u00c0\u003f\u00ff\u0003\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00fc\u0003\u00f0\u003c\u00f0\u000f\u00f0\u003c\u00f0\u000f\u00f0\u0030\u00c3\u000f\u00f0\u0030\u00c3\u000f\u00f0\u0003\u00c3\u000f\u00f0\u0003\u00c3\u000f\u00f0\u000f\u00f0\u000f\u00f0\u000f\u00f0\u000f\u00f0\u000f\u00f0\u000f\u00f0\u000f\u00f0\u000f\u00f0\u0003\u00c3\u000f\u00f0\u0003\u00c3\u000f\u00f0\u0030\u00c3\u000f\u00f0\u0030\u00c3\u000f\u00f0\u003c\u00f0\u000f\u00f0\u003c\u00f0\u000f\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00ff\u0003\u00c0\u003f\u00ff\u0003\u0000\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u0000\u0000\u00f0\u000f\u0000\u0000\u00f0\u000f\u0000";
-    static final String ICWifi =
+    private static final String ICWifi =
         "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00f8\u001f\u0000\u0000\u00ff\u00ff\u0000\u00c0\u00ff\u00ff\u0003\u00f0\u00ff\u00ff\u000f\u00f8\u003f\u00fc\u001f\u00fe\u0003\u00c0\u007f\u00ff\u0000\u0000\u00ff\u003f\u0000\u0000\u00fc\u001f\u0000\u0000\u00f8\u000e\u00f8\u001f\u0070\u0000\u00fe\u007f\u0000\u0000\u00ff\u00ff\u0000\u0080\u00ff\u00ff\u0001\u00c0\u003f\u00fc\u0003\u00c0\u0007\u00e0\u0003\u00c0\u0003\u00c0\u0001\u0000\u0000\u0000\u0000\u0000\u00c0\u0003\u0000\u0000\u00e0\u0007\u0000\u0000\u00e0\u0007\u0000\u0000\u00e0\u0007\u0000\u0000\u00e0\u0007\u0000\u0000\u00c0\u0003\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
 
-    static final String ICSound =
+    private static final String ICSound =
         "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00c0\u0000\u0003\u0000\u00c0\u0000\u0003\u0000\u00f0\u0030\u000c\u0000\u00f0\u0030\u000c\u0000\u00cc\u00c0\u0030\u0000\u00cc\u00c0\u0030\u0000\u00c3\u000c\u0033\u0000\u00c3\u000c\u0033\u00fc\u00c3\u0030\u0033\u00fc\u00c3\u0030\u0033\u000c\u00c3\u0030\u0033\u000c\u00c3\u0030\u0033\u000c\u00c3\u0030\u0033\u000c\u00c3\u0030\u0033\u003c\u00c3\u0030\u0033\u003c\u00c3\u0030\u0033\u00cc\u00cf\u0030\u0033\u00cc\u00cf\u0030\u0033\u00fc\u00f3\u0030\u0033\u00fc\u00f3\u0030\u0033\u0000\u00cf\u000c\u0033\u0000\u00cf\u000c\u0033\u0000\u00fc\u00c0\u0030\u0000\u00fc\u00c0\u0030\u0000\u00f0\u0030\u000c\u0000\u00f0\u0030\u000c\u0000\u00c0\u0000\u0003\u0000\u00c0\u0000\u0003\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
 
-    static final String ICEV3 =
+    private static final String ICEV3 =
         "\u00c0\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u0003\u00f0\u00ff\u00ff\u000f\u00f0\u00ff\u00ff\u000f\u0030\u0000\u0000\u000c\u0030\u0000\u0000\u000c\u0030\u00ff\u00ff\u000c\u0030\u00ff\u00ff\u000c\u0030\u0003\u00c0\u000c\u0030\u0003\u00c0\u000c\u0030\u000f\u00c0\u000c\u0030\u000f\u00c0\u000c\u0030\u0033\u00c0\u000c\u0030\u0033\u00c0\u000c\u0030\u00cf\u00cc\u000c\u0030\u00cf\u00cc\u000c\u0030\u00ff\u00ff\u000c\u0030\u00ff\u00ff\u000c\u0030\u0000\u0000\u000c\u0030\u0000\u0000\u000c\u0030\u00cf\u00f3\u000c\u0030\u00cf\u00f3\u000c\u0030\u00cc\u0033\u000c\u0030\u00cc\u0033\u000c\u00f0\u00c0\u0003\u000c\u00f0\u00c0\u0003\u000c\u0030\u0033\u0000\u000c\u0030\u0033\u0000\u000c\u00f0\u00ff\u00ff\u000f\u00f0\u00ff\u00ff\u000f\u00c0\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u0003";
-    static final String ICDebug =
+    private static final String ICDebug =
         "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00e0\u0001\u0080\u0007\u00e0\u00e1\u00c7\u0007\u0000\u00f3\u00ee\u0000\u0000\u00ff\u007f\u0000\u0000\u00de\u003f\u0000\u0000\u00fa\u0077\u0000\u0000\u007f\u00ff\u0000\u0000\u00ff\u00ff\u0000\u0008\u00ef\u00fd\u0010\u001c\u00ff\u00df\u0038\u003c\u007e\u007f\u001c\u0078\u00fc\u003f\u001e\u00f0\u00f8\u001f\u000f\u00e0\u00e1\u0087\u0007\u00e0\u0003\u00c0\u0007\u00f0\u000f\u00f0\u000f\u00fc\u00ff\u00ff\u007f\u00ff\u00ff\u00ff\u00ff\u00ff\u00fd\u00bf\u00ff\u00fe\u00f8\u001f\u007f\u00f2\u00f8\u001f\u002f\u00e0\u00fd\u00bf\u0007\u00e0\u007f\u00ff\u0007\u00f0\u003f\u00fe\u000f\u00f8\u003f\u00fe\u001f\u00fc\u007f\u00ff\u003f\u003c\u00ff\u00ff\u003c\u0018\u00fe\u007f\u0018\u0000\u007c\u003e\u0000\u0000\u0060\u0006\u0000";
-    static final String ICLeJOS =
+    private static final String ICLeJOS =
         "\u0000\u0000\u00fc\u000f\u0000\u0000\u00fc\u000f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00c0\u003f\u0000\u0000\u00c0\u003f\u0000\u0000\u00c0\u003f\u0000\u0000\u00c0\u003f\u0000\u00c0\u00cc\u003f\u0000\u00c0\u00cc\u003f\u0000\u0030\u00c3\u003f\u0000\u0030\u00c3\u003f\u0000\u00c0\u00cc\u003f\u0000\u00c0\u00cc\u003f\u00fc\u0033\u00c3\u003f\u00fc\u0033\u00c3\u003f\u00fc\u0003\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00fc\u00ff\u00ff\u003f\u00fc\u00ff\u00ff\u003f\u00fc\u00ff\u00ff\u003f\u00fc\u00ff\u00ff\u003f\u00f0\u00ff\u00ff\u000f\u00f0\u00ff\u00ff\u000f\u0000\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u0000";
 
-    static final String ICPower =
+    private static final String ICPower =
         "\u0000\u00c0\u0003\u0000\u0000\u00c0\u0003\u0000\u00c0\u00cf\u00f3\u0003\u00c0\u00cf\u00f3\u0003\u00f0\u00cf\u00f3\u000f\u00f0\u00cf\u00f3\u000f\u00fc\u00c3\u00c3\u003f\u00fc\u00c3\u00c3\u003f\u00fc\u00c0\u0003\u003f\u00fc\u00c0\u0003\u003f\u00ff\u00c0\u0003\u00ff\u00ff\u00c0\u0003\u00ff\u003f\u00c0\u0003\u00fc\u003f\u00c0\u0003\u00fc\u003f\u00c0\u0003\u00fc\u003f\u00c0\u0003\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u00ff\u0000\u0000\u00ff\u00ff\u0000\u0000\u00ff\u00fc\u0000\u0000\u003f\u00fc\u0000\u0000\u003f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00f0\u00ff\u00ff\u000f\u00f0\u00ff\u00ff\u000f\u00c0\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u0003\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000";
-    static final String ICVisibility =
+    private static final String ICVisibility =
         "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u00c0\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u0003\u00f0\u0003\u00c0\u000f\u00f0\u0003\u00c0\u000f\u00fc\u00c0\u0003\u003f\u00fc\u00c0\u0003\u003f\u003f\u00f0\u000f\u00fc\u003f\u00f0\u000f\u00fc\u003f\u00f0\u000f\u00fc\u003f\u00f0\u000f\u00fc\u00fc\u00c0\u0003\u003f\u00fc\u00c0\u0003\u003f\u00f0\u0003\u00c0\u000f\u00f0\u0003\u00c0\u000f\u00c0\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u0003\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
-    static final String ICSearch =
+    private static final String ICSearch =
         "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00fc\u0003\u0000\u0000\u00fc\u0003\u0000\u00c0\u0003\u003c\u0000\u00c0\u0003\u003c\u0000\u00c0\u003c\u0030\u0000\u00c0\u003c\u0030\u0000\u0030\u000f\u00c0\u0000\u0030\u000f\u00c0\u0000\u0030\u0003\u00c0\u0000\u0030\u0003\u00c0\u0000\u0030\u0003\u00c0\u0000\u0030\u0003\u00c0\u0000\u0030\u0000\u00c0\u0000\u0030\u0000\u00c0\u0000\u00c0\u0000\u0030\u0000\u00c0\u0000\u0030\u0000\u00c0\u0003\u00fc\u0000\u00c0\u0003\u00fc\u0000\u0000\u00fc\u0033\u0003\u0000\u00fc\u0033\u0003\u0000\u0000\u00c0\u000c\u0000\u0000\u00c0\u000c\u0000\u0000\u0000\u0033\u0000\u0000\u0000\u0033\u0000\u0000\u0000\u003c\u0000\u0000\u0000\u003c\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
-    static final String ICPIN =
+    private static final String ICPIN =
         "\u0000\u0000\u00ff\u0003\u0000\u0000\u00ff\u0003\u0000\u00c0\u0000\u000c\u0000\u00c0\u0000\u000c\u0000\u0030\u0000\u0030\u0000\u0030\u0000\u0030\u0000\u000c\u00f0\u00c3\u0000\u000c\u00f0\u00c3\u0000\u000c\u0030\u00c3\u0000\u000c\u0030\u00c3\u0000\u000c\u00f0\u00c3\u0000\u000c\u00f0\u00c3\u0000\u000c\u0000\u00f0\u0000\u000c\u0000\u00f0\u0000\u000c\u0000\u00cc\u0000\u000c\u0000\u00cc\u0000\u0033\u0030\u0033\u0000\u0033\u0030\u0033\u00c0\u000c\u00cc\u000c\u00c0\u000c\u00cc\u000c\u0030\u00c3\u00ff\u0003\u0030\u00c3\u00ff\u0003\u00cc\u00c0\u0000\u0000\u00cc\u00c0\u0000\u0000\u0033\u00fc\u0000\u0000\u0033\u00fc\u0000\u0000\u000f\u000c\u0000\u0000\u000f\u000c\u0000\u0000\u0003\u000f\u0000\u0000\u0003\u000f\u0000\u0000\u00ff\u0000\u0000\u0000\u00ff\u0000\u0000\u0000";
 
-    static final String ICDelete =
+    private static final String ICDelete =
         "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00c0\u000f\u0000\u0000\u00c0\u000f\u0000\u00c0\u00ff\u00ff\u000f\u00c0\u00ff\u00ff\u000f\u0030\u0000\u0000\u0030\u0030\u0000\u0000\u0030\u00c0\u00ff\u00ff\u000f\u00c0\u00ff\u00ff\u000f\u00c0\u0000\u0000\u000c\u00c0\u0000\u0000\u000c\u00c0\u00cc\u00cc\u000c\u00c0\u00cc\u00cc\u000c\u00c0\u00cc\u00cc\u000c\u00c0\u00cc\u00cc\u000c\u00c0\u00cc\u00cc\u000c\u00c0\u00cc\u00cc\u000c\u00c0\u00cc\u00cc\u000c\u00c0\u00cc\u00cc\u000c\u00c0\u00cc\u000c\u000f\u00c0\u00cc\u000c\u000f\u00c0\u00cc\u00cc\u000c\u00c0\u00cc\u00cc\u000c\u00c0\u000c\u0030\u000f\u00c0\u000c\u0030\u000f\u00c0\u00c0\u00cc\u000c\u00c0\u00c0\u00cc\u000c\u0000\u00ff\u00ff\u0003\u0000\u00ff\u00ff\u0003\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
-    static final String ICFormat =
+    private static final String ICFormat =
         "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u0003\u00c0\u0000\u0000\u0003\u00c0\u0000\u0000\u00f3\u00cf\u0000\u0000\u00f3\u00cf\u0000\u00c0\u000c\u0030\u0003\u00c0\u000c\u0030\u0003\u00c0\u0000\u0000\u0003\u00c0\u0000\u0000\u0003\u0030\u0003\u00c0\u000c\u0030\u0003\u00c0\u000c\u0030\u00fc\u003f\u000c\u0030\u00fc\u003f\u000c\u00f0\u00ff\u00ff\u000f\u00f0\u00ff\u00ff\u000f\u000c\u0000\u00cc\u0030\u000c\u0000\u00cc\u0030\u00cc\u00ff\u0000\u0030\u00cc\u00ff\u0000\u0030\u00f0\u00ff\u00ff\u000f\u00f0\u00ff\u00ff\u000f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
-    static final String ICSleep =
+    private static final String ICSleep =
         "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00fc\u0003\u0000\u0000\u00fc\u0003\u0000\u0000\u00c0\u00f0\u000f\u0000\u00c0\u00f0\u000f\u0000\u0030\u0000\u0033\u0000\u0030\u0000\u0033\u0000\u00fc\u00cf\u00c0\u0003\u00fc\u00cf\u00c0\u0003\u0000\u00f3\u000f\u000c\u0000\u00f3\u000f\u000c\u0000\u0003\u0000\u000c\u0000\u0003\u0000\u000c\u00c0\u000c\u000f\u0033\u00c0\u000c\u000f\u0033\u00c0\u00f0\u00f0\u0030\u00c0\u00f0\u00f0\u0030\u00c0\u0000\u0000\u0030\u00c0\u0000\u0000\u0030\u00c0\u0000\u0000\u0030\u00c0\u0000\u0000\u0030\u0000\u0003\u000f\u000c\u0000\u0003\u000f\u000c\u0000\u0003\u000f\u000c\u0000\u0003\u000f\u000c\u0000\u003c\u00c0\u0003\u0000\u003c\u00c0\u0003\u0000\u00c0\u003f\u0000\u0000\u00c0\u003f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
-    static final String ICAutoRun =
+    private static final String ICAutoRun =
         "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00ff\u00f0\u00ff\u00ff\u00ff\u00f0\u00ff\u00ff\u0000\u000c\u0000\u00c0\u0000\u000c\u0000\u00c0\u003f\u000c\u00c0\u00cc\u003f\u000c\u00c0\u00cc\u0000\u00ff\u00ff\u003f\u0000\u00ff\u00ff\u003f\u000f\u0003\u0000\u0030\u000f\u0003\u0000\u0030\u00c0\u0000\u0000\u000c\u00c0\u0000\u0000\u000c\u00c3\u0000\u0000\u000f\u00c3\u0000\u0000\u000f\u0030\u0000\u00cc\u0003\u0030\u0000\u00cc\u0003\u0033\u0030\u0033\u0003\u0033\u0030\u0033\u0003\u00f0\u00ff\u00ff\u0000\u00f0\u00ff\u00ff\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
 
-    static final String ICYes =
+    private static final String ICYes =
         "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u000f\u0000\u0000\u0000\u000f\u0000\u0000\u00c0\u003f\u0000\u0000\u00c0\u003f\u0000\u0000\u00f0\u00ff\u0000\u0000\u00f0\u00ff\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0030\u0000\u00ff\u000f\u0030\u0000\u00ff\u000f\u00fc\u00c0\u00ff\u0003\u00fc\u00c0\u00ff\u0003\u00ff\u00f3\u00ff\u0000\u00ff\u00f3\u00ff\u0000\u00ff\u00ff\u003f\u0000\u00ff\u00ff\u003f\u0000\u00fc\u00ff\u000f\u0000\u00fc\u00ff\u000f\u0000\u00f0\u00ff\u0003\u0000\u00f0\u00ff\u0003\u0000\u00c0\u00ff\u0000\u0000\u00c0\u00ff\u0000\u0000\u0000\u003f\u0000\u0000\u0000\u003f\u0000\u0000\u0000\u000c\u0000\u0000\u0000\u000c\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
-    static final String ICNo =
+    private static final String ICNo =
         "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00f0\u0000\u0000\u000f\u00f0\u0000\u0000\u000f\u00fc\u0003\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00c0\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u0003\u0000\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u0000\u00c0\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u0003\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u0003\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00f0\u0000\u0000\u000f\u00f0\u0000\u0000\u000f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
 
     // Roberta Logo (maybe not the best quality possible, done with ev3image tool from lejos). Black/white roberta image required for best result?!
     static final String RobertaLogo =
         "\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0001\u0000\u0000\u0080\u0003\u0020\u0002\u008e\u0003\u00b8\u0001\u0080\u0001\u00b8\u005e\u00c4\u0001\u0038\u0021\u00f8\u0000\u00f8\u0000\u0031\u0000\u00f0\u0010\u0033\u0000\u00e0\u0038\u0008\u0000\u00e0\u0000\u0004\u0000\u0000\u00e1\u0003\u0000\u0000\u007e\u0000\u0000\u0000\u0070\u0000\u0000\u0000\u0030\u0000\u0000\u0000\u0038\u0000\u0000\u0000\u0038\u0080\u0003\u0000\u0038\u00f0\u0007\u0000\u00f8\u00ff\u0007\u0000\u00f8\u00ff\u0007\u0000\u00f8\u00ff\u001f\u0000\u00f8\u00ff\u003f\u0000\u00f8\u00ff\u003f\u0000\u00f8\u00ff\u007f\u0000\u00ff\u00ff\u007f\u0080\u00ff\u00ff\u0067\u00c0\u00ff\u00ff\u0077\u00c0\u00ff\u009f\u0077\u00c0\u00ff\u00df\u003f\u0080\u00ff\u00ff\u003f\u0000\u008f\u00fc\u001f\u0000\u0000\u0010\u000f";
-    private static String token;
-    private static String robertaFileName;
+    private static String token = "";
+    private static String robertaLabFile = "";
 
-    static final String PROGRAMS_DIRECTORY = "/home/lejos/programs";
-    static final String SAMPLES_DIRECTORY = "/home/root/lejos/samples";
-    static final String MENU_DIRECTORY = "/home/root/lejos/bin/utils";
-    static final String START_BLUETOOTH = "/home/root/lejos/bin/startbt";
-    static final String START_WLAN = "/home/root/lejos/bin/startwlan";
+    private static final String PROGRAMS_DIRECTORY = "/home/lejos/programs";
+    private static final String SAMPLES_DIRECTORY = "/home/root/lejos/samples";
+    private static final String TOOLS_DIRECTORY = "/home/root/lejos/tools";
+    private static final String MENU_DIRECTORY = "/home/root/lejos/bin/utils";
+    private static final String START_BLUETOOTH = "/home/root/lejos/bin/startbt";
+    private static final String START_WLAN = "/home/root/lejos/bin/startwlan";
 
-    static final int defaultSleepTime = 2;
-    static final int maxSleepTime = 10;
+    private static final int defaultSleepTime = 2;
+    private static final int maxSleepTime = 10;
 
     // Threads
     private final IndicatorThread ind = new IndicatorThread();
@@ -150,14 +182,15 @@ public class GraphicStartup implements Menu {
     private static String programName; // The name of the running program
 
     private static boolean suspend = false;
-    static EchoThread echoIn, echoErr;
+    private static EchoThread echoIn, echoErr;
 
-    static GraphicMenu curMenu;
+    private static GraphicMenu curMenu;
 
     /**
      * Main method
      */
     public static void main(String[] args) throws Exception {
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
         System.out.println("Menu started");
 
         if ( args.length > 0 ) {
@@ -172,12 +205,19 @@ public class GraphicStartup implements Menu {
         System.out.println("Version: " + version);
 
         // Check for autorun
-        File f = getDefaultProgram();
-        if ( f != null ) {
+        File file = getDefaultProgram();
+        if ( file != null ) {
             String auto = Settings.getProperty(defaultProgramAutoRunProperty, "");
             if ( auto.equals("ON") && !Button.LEFT.isDown() ) {
-                System.out.println("Auto executing default program " + f.getPath());
-                exec(JAVA_RUN_JAR + f.getPath(), PROGRAMS_DIRECTORY);
+                System.out.println("Auto executing default program " + file.getPath());
+                try {
+                    JarFile jar = new JarFile(file);
+                    String mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
+                    jar.close();
+                    exec(file, JAVA_RUN_CP + file.getPath() + " lejos.internal.ev3.EV3Wrapper " + mainClass, PROGRAMS_DIRECTORY);
+                } catch ( IOException e ) {
+                    System.err.println("Exception running program");
+                }
             }
         }
 
@@ -214,8 +254,12 @@ public class GraphicStartup implements Menu {
         @Override
         public void run() {
             // Create the Bluetooth local device and connect to DBus
-            System.out.println("Creating bluetooth local device");
-            bt = Bluetooth.getLocalDevice();
+            try {
+                System.out.println("Creating bluetooth local device");
+                bt = Bluetooth.getLocalDevice();
+            } catch ( Exception e ) {
+                // Ignore
+            }
 
             // Start the RMI server
             System.out.println("Starting RMI");
@@ -277,12 +321,11 @@ public class GraphicStartup implements Menu {
      * Display the main system menu.
      * Allow the user to select File, Bluetooth, Sound, System operations.
      */
-    // Roberta menu icon + description + case entry added
     private void mainMenu() {
         GraphicMenu menu = new GraphicMenu(new String[] {
-            "Run Default", "Roberta", "Files", "Samples", "Bluetooth", "Wifi", "Sound", "System", "Version"
+            "Run Default", "Robertalab", "Programs", "Samples", "Tools", "Bluetooth", "Wifi", "Sound", "System", "Version"
         }, new String[] {
-            ICDefault, RobertaLogo, ICFiles, ICSamples, ICBlue, ICWifi, ICSound, ICEV3, ICLeJOS
+            ICDefault, RobertaLogo, ICFiles, ICSamples, ICTools, ICBlue, ICWifi, ICSound, ICEV3, ICLeJOS
         }, 3);
         int selection = 0;
         do {
@@ -306,18 +349,21 @@ public class GraphicStartup implements Menu {
                     samplesMenu();
                     break;
                 case 4:
-                    bluetoothMenu();
+                    toolsMenu();
                     break;
                 case 5:
-                    wifiMenu();
+                    bluetoothMenu();
                     break;
                 case 6:
-                    soundMenu();
+                    wifiMenu();
                     break;
                 case 7:
-                    systemMenu();
+                    soundMenu();
                     break;
                 case 8:
+                    systemMenu();
+                    break;
+                case 9:
                     displayVersion();
                     break;
             }
@@ -349,6 +395,18 @@ public class GraphicStartup implements Menu {
                 return;
             }
 
+            Port[] ports = new Port[] {
+                SensorPort.S1, SensorPort.S2, SensorPort.S3, SensorPort.S4, MotorPort.A, MotorPort.B, MotorPort.C, MotorPort.D
+            };
+            IOPort[] ioPorts = new IOPort[8];
+            GraphicsLCD g = LocalEV3.get().getGraphicsLCD();
+            SampleProvider[] providers = new SampleProvider[4];
+            BaseSensor[] sensors = new BaseSensor[4];
+            DifferentialPilot pilot = null;
+            int pilotLeftMotor = 0, pilotRightMotor = 0;
+
+            RegulatedMotor[] motors = new RegulatedMotor[4];
+
             while ( true ) {
                 try {
                     System.out.println("Waiting for a remote menu connection");
@@ -360,83 +418,737 @@ public class GraphicStartup implements Menu {
 
                     try {
                         while ( true ) {
-                            MenuRequest request = (MenuRequest) is.readObject();
-                            MenuReply reply = new MenuReply();
+                            os.reset();
+                            Object obj = is.readObject();
 
-                            switch ( request.request ) {
-                                case RUN_PROGRAM:
-                                    runProgram(request.name);
-                                    break;
-                                case DEBUG_PROGRAM:
-                                    debugProgram(request.name);
-                                    break;
-                                case DELETE_ALL_PROGRAMS:
-                                    deleteAllPrograms();
-                                    break;
-                                case DELETE_FILE:
-                                    reply.result = deleteFile(request.name);
-                                    os.writeObject(reply);
-                                    break;
-                                case FETCH_FILE:
-                                    reply.contents = fetchFile(request.name);
-                                    os.writeObject(reply);
-                                    break;
-                                case GET_FILE_SIZE:
-                                    reply.reply = (int) getFileSize(request.name);
-                                    os.writeObject(reply);
-                                    break;
-                                case GET_MENU_VERSION:
-                                    reply.value = getMenuVersion();
-                                    os.writeObject(reply);
-                                    break;
-                                case GET_NAME:
-                                    reply.value = menu.getName();
-                                    os.writeObject(reply);
-                                    break;
-                                case GET_PROGRAM_NAMES:
-                                    reply.names = getProgramNames();
-                                    os.writeObject(reply);
-                                    break;
-                                case GET_SAMPLE_NAMES:
-                                    reply.names = getSampleNames();
-                                    os.writeObject(reply);
-                                    break;
-                                case GET_SETTING:
-                                    reply.value = getSetting(request.name);
-                                    os.writeObject(reply);
-                                    break;
-                                case GET_VERSION:
-                                    reply.value = getVersion();
-                                    os.writeObject(reply);
-                                    break;
-                                case RUN_SAMPLE:
-                                    runSample(request.name);
-                                    break;
-                                case SET_NAME:
-                                    setName(request.name);
-                                    break;
-                                case SET_SETTING:
-                                    setSetting(request.name, request.value);
-                                    break;
-                                case UPLOAD_FILE:
-                                    reply.result = uploadFile(request.name, request.contents);
-                                    os.writeObject(reply);
-                                    break;
-                                case STOP_PROGRAM:
-                                    stopProgram();
-                                    break;
-                                case SHUT_DOWN:
-                                    shutdown();
-                                    break;
-                                case GET_EXECUTING_PROGRAM_NAME:
-                                    reply.value = programName;
-                                    os.writeObject(reply);
-                                    break;
+                            if ( obj instanceof MenuRequest ) {
+                                MenuRequest request = (MenuRequest) obj;
+                                MenuReply reply = new MenuReply();
+
+                                switch ( request.request ) {
+                                    case RUN_PROGRAM:
+                                        runProgram(request.name);
+                                        break;
+                                    case DEBUG_PROGRAM:
+                                        debugProgram(request.name);
+                                        break;
+                                    case DELETE_ALL_PROGRAMS:
+                                        deleteAllPrograms();
+                                        break;
+                                    case DELETE_FILE:
+                                        reply.result = deleteFile(request.name);
+                                        os.writeObject(reply);
+                                        break;
+                                    case FETCH_FILE:
+                                        reply.contents = fetchFile(request.name);
+                                        os.writeObject(reply);
+                                        break;
+                                    case GET_FILE_SIZE:
+                                        reply.reply = (int) getFileSize(request.name);
+                                        os.writeObject(reply);
+                                        break;
+                                    case GET_MENU_VERSION:
+                                        reply.value = getMenuVersion();
+                                        os.writeObject(reply);
+                                        break;
+                                    case GET_NAME:
+                                        reply.value = menu.getName();
+                                        os.writeObject(reply);
+                                        break;
+                                    case GET_PROGRAM_NAMES:
+                                        reply.names = getProgramNames();
+                                        os.writeObject(reply);
+                                        break;
+                                    case GET_SAMPLE_NAMES:
+                                        reply.names = getSampleNames();
+                                        os.writeObject(reply);
+                                        break;
+                                    case GET_SETTING:
+                                        reply.value = getSetting(request.name);
+                                        os.writeObject(reply);
+                                        break;
+                                    case GET_VERSION:
+                                        reply.value = getVersion();
+                                        os.writeObject(reply);
+                                        break;
+                                    case RUN_SAMPLE:
+                                        runSample(request.name);
+                                        break;
+                                    case SET_NAME:
+                                        setName(request.name);
+                                        break;
+                                    case SET_SETTING:
+                                        setSetting(request.name, request.value);
+                                        break;
+                                    case UPLOAD_FILE:
+                                        reply.result = uploadFile(request.name, request.contents);
+                                        os.writeObject(reply);
+                                        break;
+                                    case STOP_PROGRAM:
+                                        stopProgram();
+                                        break;
+                                    case SHUT_DOWN:
+                                        shutdown();
+                                        break;
+                                    case GET_EXECUTING_PROGRAM_NAME:
+                                        reply.value = programName;
+                                        os.writeObject(reply);
+                                        break;
+                                    case SUSPEND:
+                                        GraphicStartup.this.suspend();
+                                        break;
+                                    case RESUME:
+                                        GraphicStartup.this.resume();
+                                }
+                            } else if ( obj instanceof EV3Request ) {
+                                EV3Request request = (EV3Request) obj;
+                                EV3Reply reply = new EV3Reply();
+                                //System.out.println("Request: " + request.request);
+                                try {
+                                    switch ( request.request ) {
+                                        case GET_VOLTAGE_MILLIVOLTS:
+                                            reply.reply = Battery.getVoltageMilliVolt();
+                                            os.writeObject(reply);
+                                            break;
+                                        case GET_VOLTAGE:
+                                            reply.floatReply = Battery.getVoltage();
+                                            os.writeObject(reply);
+                                            break;
+                                        case GET_BATTERY_CURRENT:
+                                            reply.floatReply = Battery.getBatteryCurrent();
+                                            os.writeObject(reply);
+                                            break;
+                                        case GET_MOTOR_CURRENT:
+                                            reply.floatReply = Battery.getMotorCurrent();
+                                            os.writeObject(reply);
+                                            break;
+                                        case SYSTEM_SOUND:
+                                            Sound.systemSound(false, request.intValue);
+                                            break;
+                                        case GET_NAME:
+                                            reply.value = menu.getName();
+                                            os.writeObject(reply);
+                                            break;
+                                        case LED_PATTERN:
+                                            LocalEV3.get().getLED().setPattern(request.intValue);
+                                            break;
+                                        case WAIT_FOR_ANY_EVENT:
+                                            reply.reply = Button.waitForAnyEvent(request.intValue);
+                                            os.writeObject(reply);
+                                            break;
+                                        case WAIT_FOR_ANY_PRESS:
+                                            reply.reply = Button.waitForAnyPress(request.intValue);
+                                            os.writeObject(reply);
+                                            break;
+                                        case GET_BUTTONS:
+                                            reply.reply = Button.getButtons();
+                                            os.writeObject(reply);
+                                            break;
+                                        case READ_BUTTONS:
+                                            reply.reply = Button.readButtons();
+                                            os.writeObject(reply);
+                                            break;
+                                        case LCD_REFRESH:
+                                            LCD.refresh();
+                                            break;
+                                        case LCD_CLEAR:
+                                            LCD.clear();
+                                            break;
+                                        case LCD_GET_WIDTH:
+                                            reply.reply = LCD.SCREEN_WIDTH;
+                                            break;
+                                        case LCD_GET_HEIGHT:
+                                            reply.reply = LCD.SCREEN_HEIGHT;
+                                            break;
+                                        case LCD_GET_HW_DISPLAY:
+                                            break;
+                                        case LCD_BITBLT_1:
+                                            break;
+                                        case LCD_BITBLT_2:
+                                            break;
+                                        case LCD_SET_AUTO_REFRESH:
+                                            LCD.setAutoRefresh(request.flag);
+                                            break;
+                                        case LCD_SET_AUTO_REFRESH_PERIOD:
+                                            LCD.setAutoRefreshPeriod(request.intValue);
+                                            break;
+                                        case LCD_DRAW_CHAR:
+                                            LCD.drawChar(request.ch, request.intValue, request.intValue2);
+                                            break;
+                                        case LCD_DRAW_STRING_INVERTED:
+                                            LCD.drawString(request.str, request.intValue, request.intValue2, request.flag);
+                                            break;
+                                        case LCD_DRAW_STRING:
+                                            LCD.drawString(request.str, request.intValue, request.intValue2);
+                                            break;
+                                        case LCD_DRAW_INT:
+                                            LCD.drawInt(request.intValue, request.intValue2, request.intValue3);
+                                            break;
+                                        case LCD_DRAW_INT_PLACES:
+                                            LCD.drawInt(request.intValue, request.intValue2, request.intValue3, request.intValue4);
+                                            break;
+                                        case LCD_CLEAR_LINES:
+                                            LCD.clear(request.intValue, request.intValue2, request.intValue3);
+                                            break;
+                                        case LCD_CLEAR_LINE:
+                                            LCD.clear(request.intValue);
+                                            break;
+                                        case LCD_SCROLL:
+                                            LCD.scroll();
+                                            break;
+                                        case LCD_GET_FONT:
+                                            break;
+                                        case LCD_GET_TEXT_WIDTH:
+                                            reply.reply = LCD.DISPLAY_CHAR_WIDTH;
+                                            os.writeObject(reply);
+                                            break;
+                                        case LCD_GET_TEXT_HEIGHT:
+                                            reply.reply = LCD.DISPLAY_CHAR_DEPTH;
+                                            os.writeObject(reply);
+                                            break;
+                                        case OPEN_MOTOR_PORT:
+                                            ioPorts[4 + request.intValue] = ports[4 + request.intValue].open(TachoMotorPort.class);
+                                            break;
+                                        case CLOSE_MOTOR_PORT:
+                                            ioPorts[4 + request.intValue].close();
+                                            break;
+                                        case CONTROL_MOTOR:
+                                            ((TachoMotorPort) ioPorts[4 + request.intValue]).controlMotor(request.intValue2, request.intValue3);
+                                            break;
+                                        case GET_TACHO_COUNT:
+                                            reply.reply = ((TachoMotorPort) ioPorts[4 + request.intValue]).getTachoCount();
+                                            os.writeObject(reply);
+                                            break;
+                                        case RESET_TACHO_COUNT:
+                                            ((TachoMotorPort) ioPorts[4 + request.intValue]).resetTachoCount();
+                                            break;
+                                        case KEY_IS_DOWN:
+                                            reply.result = LocalEV3.get().getKey(request.str).isDown();
+                                            os.writeObject(reply);
+                                            break;
+                                        case KEY_WAIT_FOR_PRESS:
+                                            LocalEV3.get().getKey(request.str).waitForPress();
+                                            os.writeObject(reply);
+                                            break;
+                                        case KEY_WAIT_FOR_PRESS_AND_RELEASE:
+                                            LocalEV3.get().getKey(request.str).waitForPress();
+                                            os.writeObject(reply);
+                                            break;
+                                        case KEY_SIMULATE_EVENT:
+                                            LocalEV3.get().getKey(request.str).simulateEvent(request.intValue);
+                                            break;
+                                        case OPEN_ANALOG_PORT:
+                                            ioPorts[request.intValue] = ports[request.intValue].open(AnalogPort.class);
+                                            os.writeObject(reply);
+                                            break;
+                                        case OPEN_I2C_PORT:
+                                            ioPorts[request.intValue] = ports[request.intValue].open(I2CPort.class);
+                                            os.writeObject(reply);
+                                            break;
+                                        case OPEN_UART_PORT:
+                                            ioPorts[request.intValue] = ports[request.intValue].open(UARTPort.class);
+                                            os.writeObject(reply);
+                                            break;
+                                        case CLOSE_SENSOR_PORT:
+                                            ioPorts[request.intValue].close();
+                                            break;
+                                        case GET_PIN_6:
+                                            if ( ioPorts[request.intValue] == null ) {
+                                                throw new PortException("Port not open");
+                                            }
+                                            reply.floatReply = ((AnalogPort) ioPorts[request.intValue]).getPin6();
+                                            os.writeObject(reply);
+                                            break;
+                                        case GET_PIN_1:
+                                            if ( ioPorts[request.intValue] == null ) {
+                                                throw new PortException("Port not open");
+                                            }
+                                            reply.floatReply = ((AnalogPort) ioPorts[request.intValue]).getPin1();
+                                            os.writeObject(reply);
+                                            break;
+                                        case SET_PIN_MODE:
+                                            if ( ioPorts[request.intValue] == null ) {
+                                                throw new PortException("Port not open");
+                                            }
+                                            ((AnalogPort) ioPorts[request.intValue]).setMode(request.intValue);
+                                            break;
+                                        case GET_FLOATS:
+                                            if ( ioPorts[request.intValue] == null ) {
+                                                throw new PortException("Port not open");
+                                            }
+                                            reply.floats = new float[request.intValue2];
+                                            ((AnalogPort) ioPorts[request.intValue]).getFloats(reply.floats, 0, request.intValue2);
+                                            os.writeObject(reply);
+                                            break;
+                                        case LCD_G_SET_PIXEL:
+                                            g.setPixel(request.intValue, request.intValue2, request.intValue3);
+                                            break;
+                                        case LCD_G_GET_PIXEL:
+                                            break;
+                                        case LCD_G_DRAW_STRING:
+                                            g.drawString(request.str, request.intValue, request.intValue2, request.intValue3);
+                                            break;
+                                        case LCD_G_DRAW_STRING_INVERTED:
+                                            g.drawString(request.str, request.intValue, request.intValue2, request.intValue3, request.flag);
+                                            break;
+                                        case LCD_G_DRAW_CHAR:
+                                            g.drawChar(request.ch, request.intValue, request.intValue2, request.intValue3);
+                                            break;
+                                        case LCD_G_DRAW_SUBSTRING:
+                                            g.drawSubstring(
+                                                request.str,
+                                                request.intValue,
+                                                request.intValue2,
+                                                request.intValue3,
+                                                request.intValue4,
+                                                request.intValue5);
+                                            break;
+                                        case LCD_G_DRAW_CHARS:
+                                            g.drawChars(
+                                                request.chars,
+                                                request.intValue,
+                                                request.intValue2,
+                                                request.intValue3,
+                                                request.intValue4,
+                                                request.intValue5);
+                                            break;
+                                        case LCD_G_GET_STROKE_STYLE:
+                                            break;
+                                        case LCD_G_SET_STROKE_STYLE:
+                                            g.setStrokeStyle(request.intValue);
+                                            break;
+                                        case LCD_G_DRAW_REGION_ROP:
+                                            g.drawRegionRop(
+                                                request.image,
+                                                request.intValue,
+                                                request.intValue2,
+                                                request.intValue3,
+                                                request.intValue4,
+                                                request.intValue5,
+                                                request.intValue6,
+                                                request.intValue7,
+                                                request.intValue8);
+                                            break;
+                                        case LCD_G_DRAW_REGION_ROP_TRANSFORM:
+                                            g.drawRegionRop(
+                                                request.image,
+                                                request.intValue,
+                                                request.intValue2,
+                                                request.intValue3,
+                                                request.intValue4,
+                                                request.intValue5,
+                                                request.intValue6,
+                                                request.intValue7,
+                                                request.intValue8,
+                                                request.intValue9);
+                                            break;
+                                        case LCD_G_DRAW_REGION:
+                                            g.drawRegion(
+                                                request.image,
+                                                request.intValue,
+                                                request.intValue2,
+                                                request.intValue3,
+                                                request.intValue4,
+                                                request.intValue5,
+                                                request.intValue6,
+                                                request.intValue7,
+                                                request.intValue8);
+                                            break;
+                                        case LCD_G_DRAW_IMAGE:
+                                            g.drawImage(request.image, request.intValue, request.intValue2, request.intValue3);
+                                            break;
+                                        case LCD_G_DRAW_LINE:
+                                            g.drawLine(request.intValue, request.intValue2, request.intValue3, request.intValue4);
+                                            break;
+                                        case LCD_G_DRAW_ARC:
+                                            g.drawArc(
+                                                request.intValue,
+                                                request.intValue2,
+                                                request.intValue3,
+                                                request.intValue4,
+                                                request.intValue5,
+                                                request.intValue6);
+                                            break;
+                                        case LCD_G_FILL_ARC:
+                                            g.fillArc(
+                                                request.intValue,
+                                                request.intValue2,
+                                                request.intValue3,
+                                                request.intValue4,
+                                                request.intValue5,
+                                                request.intValue6);
+                                            break;
+                                        case LCD_G_DRAW_ROUND_RECT:
+                                            g.drawRoundRect(
+                                                request.intValue,
+                                                request.intValue2,
+                                                request.intValue3,
+                                                request.intValue4,
+                                                request.intValue5,
+                                                request.intValue6);
+                                            break;
+                                        case LCD_G_DRAW_RECT:
+                                            g.drawRect(request.intValue, request.intValue2, request.intValue3, request.intValue4);
+                                            break;
+                                        case LCD_G_FILL_RECT:
+                                            g.fillRect(request.intValue, request.intValue2, request.intValue3, request.intValue4);
+                                            break;
+                                        case LCD_G_TRANSLATE:
+                                            g.translate(request.intValue, request.intValue2);
+                                            break;
+                                        case LCD_G_GET_TRANSLATE_X:
+                                            break;
+                                        case LCD_G_GET_TRANSLATE_Y:
+                                            break;
+                                        case I2C_TRANSACTION:
+                                            if ( ioPorts[request.intValue] == null ) {
+                                                throw new PortException("Port not open");
+                                            }
+                                            reply.contents = new byte[request.intValue6];
+                                            ((I2CPort) ioPorts[request.intValue]).i2cTransaction(
+                                                request.intValue2,
+                                                request.byteData,
+                                                request.intValue3,
+                                                request.intValue5,
+                                                reply.contents,
+                                                0,
+                                                request.intValue7);
+                                            os.writeObject(reply);
+                                            break;
+                                        case UART_GET_BYTE:
+                                            if ( ioPorts[request.intValue] == null ) {
+                                                throw new PortException("Port not open");
+                                            }
+                                            reply.reply = ((UARTPort) ioPorts[request.intValue]).getByte();
+                                            os.writeObject(reply);
+                                            break;
+                                        case UART_GET_BYTES:
+                                            if ( ioPorts[request.intValue] == null ) {
+                                                throw new PortException("Port not open");
+                                            }
+                                            reply.contents = new byte[request.intValue2];
+                                            ((UARTPort) ioPorts[request.intValue]).getBytes(reply.contents, 0, request.intValue2);
+                                            os.writeObject(reply);
+                                            break;
+                                        case UART_GET_SHORT:
+                                            if ( ioPorts[request.intValue] == null ) {
+                                                throw new PortException("Port not open");
+                                            }
+                                            reply.reply = ((UARTPort) ioPorts[request.intValue]).getShort();
+                                            os.writeObject(reply);
+                                            break;
+                                        case UART_GET_SHORTS:
+                                            if ( ioPorts[request.intValue] == null ) {
+                                                throw new PortException("Port not open");
+                                            }
+                                            reply.shorts = new short[request.intValue2];
+                                            ((UARTPort) ioPorts[request.intValue]).getShorts(reply.shorts, 0, request.intValue2);
+                                            os.writeObject(reply);
+                                            break;
+                                        case UART_INITIALISE_SENSOR:
+                                            if ( ioPorts[request.intValue] == null ) {
+                                                throw new PortException("Port not open");
+                                            }
+                                            reply.result = ((UARTPort) ioPorts[request.intValue]).initialiseSensor(request.intValue2);
+                                            os.writeObject(reply);
+                                            break;
+                                        case UART_RESET_SENSOR:
+                                            if ( ioPorts[request.intValue] == null ) {
+                                                throw new PortException("Port not open");
+                                            }
+                                            ((UARTPort) ioPorts[request.intValue]).resetSensor();
+                                            break;
+                                        case UART_SET_MODE:
+                                            if ( ioPorts[request.intValue] == null ) {
+                                                throw new PortException("Port not open");
+                                            }
+                                            reply.result = ((UARTPort) ioPorts[request.intValue]).setMode(request.intValue2);
+                                            os.writeObject(reply);
+                                            break;
+                                        case CREATE_REGULATED_MOTOR:
+                                            System.out.println("Creating motor on port " + request.str);
+                                            Port p = LocalEV3.get().getPort(request.str); // port name
+                                            RegulatedMotor motor = null;
+                                            switch ( request.ch ) {
+                                                case 'N':
+                                                    motor = new NXTRegulatedMotor(p);
+                                                    break;
+                                                case 'L':
+                                                    motor = new EV3LargeRegulatedMotor(p);
+                                                    break;
+                                                case 'M':
+                                                    motor = new EV3MediumRegulatedMotor(p);
+                                                    break;
+                                                case 'G':
+                                                    motor = new MindsensorsGlideWheelMRegulatedMotor(p);
+                                            }
+                                            motors[request.str.charAt(0) - 'A'] = motor;
+                                            break;
+                                        case MOTOR_FORWARD:
+                                            motors[request.intValue].forward();
+                                            break;
+                                        case MOTOR_BACKWARD:
+                                            motors[request.intValue].backward();
+                                            break;
+                                        case MOTOR_STOP:
+                                            motors[request.intValue].stop();
+                                            os.writeObject(reply);
+                                            break;
+                                        case MOTOR_FLT:
+                                            motors[request.intValue].flt();
+                                            os.writeObject(reply);
+                                            break;
+                                        case MOTOR_IS_MOVING:
+                                            reply.result = motors[request.intValue].isMoving();
+                                            os.writeObject(reply);
+                                            break;
+                                        case MOTOR_GET_ROTATION_SPEED:
+                                            reply.reply = motors[request.intValue].getRotationSpeed();
+                                            os.writeObject(reply);
+                                            break;
+                                        case MOTOR_GET_TACHO_COUNT:
+                                            reply.reply = motors[request.intValue].getTachoCount();
+                                            os.writeObject(reply);
+                                            break;
+                                        case MOTOR_RESET_TACHO_COUNT:
+                                            motors[request.intValue].resetTachoCount();
+                                            break;
+                                        case MOTOR_STOP_IMMEDIATE:
+                                            motors[request.intValue].stop(request.flag);
+                                            os.writeObject(reply);
+                                            break;
+                                        case MOTOR_FLT_IMMEDIATE:
+                                            motors[request.intValue].flt(request.flag);
+                                            os.writeObject(reply);
+                                            break;
+                                        case MOTOR_WAIT_COMPLETE:
+                                            motors[request.intValue].waitComplete();
+                                            os.writeObject(reply);
+                                            break;
+                                        case MOTOR_ROTATE:
+                                            System.out.println("Rotating port " + request.intValue + " by " + request.intValue2);
+                                            motors[request.intValue].rotate(request.intValue2);
+                                            os.writeObject(reply);
+                                            break;
+                                        case MOTOR_ROTATE_IMMEDIATE:
+                                            motors[request.intValue].rotate(request.intValue2, request.flag);
+                                            if ( !request.flag ) {
+                                                os.writeObject(reply);
+                                            }
+                                            break;
+                                        case MOTOR_ROTATE_TO:
+                                            motors[request.intValue].rotateTo(request.intValue2);
+                                            os.writeObject(reply);
+                                            break;
+                                        case MOTOR_ROTATE_TO_IMMEDIATE:
+                                            motors[request.intValue].rotateTo(request.intValue2, request.flag);
+                                            if ( !request.flag ) {
+                                                os.writeObject(reply);
+                                            }
+                                            break;
+                                        case MOTOR_GET_LIMIT_ANGLE:
+                                            reply.reply = motors[request.intValue].getLimitAngle();
+                                            os.writeObject(reply);
+                                            break;
+                                        case MOTOR_GET_SPEED:
+                                            reply.reply = motors[request.intValue].getSpeed();
+                                            os.writeObject(reply);
+                                            break;
+                                        case MOTOR_SET_SPEED:
+                                            motors[request.intValue].setSpeed(request.intValue2);
+                                            break;
+                                        case MOTOR_GET_MAX_SPEED:
+                                            reply.floatReply = motors[request.intValue].getMaxSpeed();
+                                            os.writeObject(reply);
+                                            break;
+                                        case MOTOR_IS_STALLED:
+                                            reply.result = motors[request.intValue].isStalled();
+                                            os.writeObject(reply);
+                                            break;
+                                        case MOTOR_SET_STALL_THRESHOLD:
+                                            motors[request.intValue].setStallThreshold(request.intValue, request.intValue2);
+                                            break;
+                                        case MOTOR_SET_ACCELERATION:
+                                            motors[request.intValue].setAcceleration(request.intValue2);
+                                            break;
+                                        case MOTOR_CLOSE:
+                                            motors[request.intValue].close();
+                                            os.writeObject(reply);
+                                            break;
+                                        case CREATE_SAMPLE_PROVIDER_PUBLISH:
+                                        case CREATE_SAMPLE_PROVIDER:
+                                            float frequency = (request.request == EV3Request.Request.CREATE_SAMPLE_PROVIDER_PUBLISH ? request.floatValue : 0f);
+                                            System.out.println("Creating " + request.str + " on " + request.str2 + " with mode " + request.str3);
+                                            Class<?> c = Class.forName(request.str); // sensor class
+                                            Class<?>[] params = new Class<?>[1];
+                                            params[0] = Port.class;
+                                            Constructor<?> con = c.getConstructor(params);
+                                            Object[] args = new Object[1];
+                                            args[0] = LocalEV3.get().getPort(request.str2); // port name
+                                            BaseSensor sensor = (BaseSensor) con.newInstance(args);
+                                            SampleProvider provider;
+                                            if ( request.str3 == null ) {
+                                                provider = (SampleProvider) sensor;
+                                            } else {
+                                                provider = sensor.getMode(request.str3);
+                                            }
+                                            int pn = request.str2.charAt(1) - '1';
+                                            if ( frequency > 0 ) {
+                                                providers[pn] = new PublishFilter(provider, request.str4, frequency);
+                                            } else {
+                                                providers[pn] = provider;
+                                            }
+                                            sensors[pn] = sensor;
+                                            os.writeObject(reply);
+                                            break;
+                                        case SAMPLE_SIZE:
+                                            if ( providers[request.intValue] == null ) {
+                                                throw new PortException("Port not open");
+                                            }
+                                            reply.reply = providers[request.intValue].sampleSize();
+                                            os.writeObject(reply);
+                                            break;
+                                        case FETCH_SAMPLE:
+                                            if ( providers[request.intValue] == null ) {
+                                                throw new PortException("Port not open");
+                                            }
+                                            reply.floats = new float[providers[request.intValue].sampleSize()];
+                                            providers[request.intValue].fetchSample(reply.floats, 0);
+                                            os.writeObject(reply);
+                                            break;
+                                        case CLOSE_SENSOR:
+                                            if ( sensors[request.intValue] == null ) {
+                                                throw new PortException("Port not open");
+                                            }
+                                            sensors[request.intValue].close();
+                                            break;
+                                        case CREATE_PILOT:
+                                            pilotLeftMotor = request.str.charAt(0) - 'A';
+                                            pilotRightMotor = request.str2.charAt(0) - 'A';
+                                            pilot =
+                                                new DifferentialPilot(
+                                                    request.doubleValue,
+                                                    request.doubleValue2,
+                                                    motors[pilotLeftMotor],
+                                                    motors[pilotRightMotor],
+                                                    false);
+                                            os.writeObject(reply);
+                                            break;
+                                        case CLOSE_PILOT:
+                                            if ( motors[pilotLeftMotor] != null ) {
+                                                motors[pilotLeftMotor].close();
+                                            }
+                                            if ( motors[pilotRightMotor] != null ) {
+                                                motors[pilotRightMotor].close();
+                                            }
+                                            os.writeObject(reply);
+                                            break;
+                                        case PILOT_GET_MIN_RADIUS:
+                                            reply.doubleReply = pilot.getMinRadius();
+                                            os.writeObject(reply);
+                                            break;
+                                        case PILOT_SET_MIN_RADIUS:
+                                            pilot.setMinRadius(request.doubleValue);
+                                            break;
+                                        case PILOT_ARC_FORWARD:
+                                            pilot.arcForward(request.doubleValue);
+                                            break;
+                                        case PILOT_ARC_BACKWARD:
+                                            pilot.arcBackward(request.doubleValue);
+                                            break;
+                                        case PILOT_ARC:
+                                            pilot.arc(request.doubleValue, request.doubleValue2);
+                                            os.writeObject(reply);
+                                            break;
+                                        case PILOT_ARC_IMMEDIATE:
+                                            pilot.arc(request.doubleValue, request.doubleValue2, request.flag);
+                                            if ( !request.flag ) {
+                                                os.writeObject(reply);
+                                            }
+                                            break;
+                                        case PILOT_TRAVEL_ARC:
+                                            pilot.travelArc(request.doubleValue, request.doubleValue2);
+                                            os.writeObject(reply);
+                                            break;
+                                        case PILOT_TRAVEL_ARC_IMMEDIATE:
+                                            pilot.travelArc(request.doubleValue, request.doubleValue2, request.flag);
+                                            if ( !request.flag ) {
+                                                os.writeObject(reply);
+                                            }
+                                            break;
+                                        case PILOT_FORWARD:
+                                            pilot.forward();
+                                            break;
+                                        case PILOT_BACKWARD:
+                                            pilot.backward();
+                                            break;
+                                        case PILOT_STOP:
+                                            pilot.stop();
+                                            break;
+                                        case PILOT_IS_MOVING:
+                                            reply.result = pilot.isMoving();
+                                            os.writeObject(reply);
+                                            break;
+                                        case PILOT_TRAVEL:
+                                            pilot.travel(request.doubleValue);
+                                            os.writeObject(reply);
+                                            break;
+                                        case PILOT_TRAVEL_IMMEDIATE:
+                                            pilot.travel(request.doubleValue, request.flag);
+                                            if ( !request.flag ) {
+                                                os.writeObject(reply);
+                                            }
+                                            break;
+                                        case PILOT_SET_TRAVEL_SPEED:
+                                            pilot.setTravelSpeed(request.doubleValue);
+                                            break;
+                                        case PILOT_GET_TRAVEL_SPEED:
+                                            reply.doubleReply = pilot.getTravelSpeed();
+                                            os.writeObject(reply);
+                                            break;
+                                        case PILOT_GET_MAX_TRAVEL_SPEED:
+                                            reply.doubleReply = pilot.getTravelSpeed();
+                                            os.writeObject(reply);
+                                            break;
+                                        case PILOT_GET_MOVEMENT:
+                                            break;
+                                        case PILOT_ROTATE:
+                                            pilot.rotate(request.doubleValue);
+                                            os.writeObject(reply);
+                                            break;
+                                        case PILOT_ROTATE_IMMEDIATE:
+                                            pilot.rotate(request.doubleValue, request.flag);
+                                            if ( !request.flag ) {
+                                                os.writeObject(reply);
+                                            }
+                                            break;
+                                        case PILOT_GET_ROTATE_SPEED:
+                                            reply.doubleReply = pilot.getRotateSpeed();
+                                            os.writeObject(reply);
+                                            break;
+                                        case PILOT_SET_ROTATE_SPEED:
+                                            pilot.setRotateSpeed(request.doubleValue);
+                                            break;
+                                        case PILOT_GET_MAX_ROTATE_SPEED:
+                                            reply.doubleReply = pilot.getRotateMaxSpeed();
+                                            os.writeObject(reply);
+                                            break;
+                                        case PILOT_STEER:
+                                            pilot.steer(request.doubleValue);
+                                            break;
+                                    }
+                                } catch ( Exception e ) {
+                                    e.printStackTrace();
+                                    if ( request.replyRequired ) {
+                                        reply.e = e;
+                                        os.writeObject(reply);
+                                    }
+                                }
                             }
                         }
 
-                    } catch ( Exception e ) {
-                        System.err.println("Error reading from connection " + e);
+                    } catch ( SocketException e ) {
+                        System.out.println("Error reading from remote request socket: " + e);
                         try {
                             conn.close();
                         } catch ( IOException e1 ) {
@@ -446,14 +1158,7 @@ public class GraphicStartup implements Menu {
 
                 } catch ( Exception e ) {
                     System.err.println("Error accepting connection " + e);
-                    break;
                 }
-            }
-
-            try {
-                ss.close();
-            } catch ( IOException e ) {
-                e.printStackTrace();
             }
         }
     }
@@ -743,13 +1448,20 @@ public class GraphicStartup implements Menu {
      * Run the default program (if set).
      */
     private void mainRunDefault() {
-        File f = getDefaultProgram();
-        if ( f == null ) {
+        File file = getDefaultProgram();
+        if ( file == null ) {
             msg("No default set");
         } else {
-            System.out.println("Executing default program " + f.getPath());
+            System.out.println("Executing default program " + file.getPath());
             this.ind.suspend();
-            exec(JAVA_RUN_JAR + f.getPath(), PROGRAMS_DIRECTORY);
+            try {
+                JarFile jar = new JarFile(file);
+                String mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
+                jar.close();
+                exec(file, JAVA_RUN_CP + file.getPath() + " lejos.internal.ev3.EV3Wrapper " + mainClass, PROGRAMS_DIRECTORY);
+            } catch ( IOException e ) {
+                System.err.println("Exception running program");
+            }
             this.ind.resume();
         }
     }
@@ -758,9 +1470,13 @@ public class GraphicStartup implements Menu {
      * Roberta submenu implementation.<br>
      * Uses new RobertaUtils helper-class for downloading and saving file.<br>
      * uses new RobertaKeyboard with less symbols for token input.<br>
-     * TODO handling malformed URL exception (should never be thrown later)
+     * TODO handling of exceptions (should never be thrown later)
+     * TODO lots of system.out for debugging
      */
     private void robertaMenu() {
+        File file = null;
+        String mainClass = null;
+
         String[] menuData = {
             "Enter Code", "Download File", "Run Program"
         };
@@ -769,16 +1485,17 @@ public class GraphicStartup implements Menu {
         };
         URL serverURL = null;
         try {
-            serverURL = new URL("http://10.0.1.17:1999/download"); // type "ipconfig /all" in console to see which ip adress your pc got from the brick dhcp
+            serverURL = new URL("http://10.0.1.10:1999/download"); // type "ipconfig /all" in console to see which ip adress your pc got from the brick dhcp
         } catch ( MalformedURLException e ) {
+            // should never occure
             e.printStackTrace();
         }
         GraphicMenu menu = new GraphicMenu(menuData, iconData, 4);
         int selection = 0;
         do {
-            newScreen("Roberta");
-            lcd.drawString("RobertaFileName:", 0, 1);
-            lcd.drawString("" + robertaFileName, 0, 2);
+            newScreen("Robertalab");
+            lcd.drawString("RobertaLabFile:", 0, 1);
+            lcd.drawString("" + robertaLabFile, 0, 2);
             lcd.drawString("Token: " + token, 0, 3);
             menu.setItems(menuData, iconData);
             selection = getSelection(menu, selection);
@@ -789,12 +1506,29 @@ public class GraphicStartup implements Menu {
                 case 1:
                     RobertaUtils robertaUtils = new RobertaUtils();
                     robertaUtils.getProgram(serverURL, token);
-                    robertaFileName = robertaUtils.getFileName();
+                    robertaLabFile = robertaUtils.getFileName();
+                    System.out.println("robertaFileName is: " + robertaLabFile);
+                    // get parameters for new exec method
+                    try {
+                        file = new File(PROGRAMS_DIRECTORY, robertaLabFile);
+                        JarFile jar = new JarFile(file);
+                        mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
+                        jar.close();
+                    } catch ( IOException e ) {
+                        System.out.println("most likely something wrong with jar file");
+                    }
                     break;
                 case 2:
-                    this.ind.suspend();
-                    exec(JAVA_RUN_JAR + robertaFileName, PROGRAMS_DIRECTORY);
-                    this.ind.resume();
+                    try {
+                        this.ind.suspend();
+                        // new exec from 0.8.1-beta
+                        exec(file, JAVA_RUN_CP + file.getPath() + " lejos.internal.ev3.EV3Wrapper " + mainClass, PROGRAMS_DIRECTORY);
+                        // old exec from 0.8.0-alpha
+                        //exec(JAVA_RUN_JAR + robertaFileName, PROGRAMS_DIRECTORY);
+                        this.ind.resume();
+                    } catch ( NullPointerException e ) {
+                        System.out.println("first download file, then try to run it...");
+                    }
                     break;
             }
         } while ( selection >= 0 );
@@ -935,7 +1669,7 @@ public class GraphicStartup implements Menu {
             "No", "Yes"
         }, new String[] {
             ICNo, ICYes
-        }, 5, prompt, 4);
+        }, 4, prompt, 3);
         return getSelection(menu, yes ? 1 : 0);
     }
 
@@ -1073,7 +1807,7 @@ public class GraphicStartup implements Menu {
      * 
      * @param file
      */
-    private void fileMenu(File file, boolean sample) {
+    private void fileMenu(File file, int type) {
         String fileName = file.getName();
         String ext = Utils.getExtension(fileName);
         int selectionAdd;
@@ -1082,10 +1816,10 @@ public class GraphicStartup implements Menu {
         if ( ext.equals("jar") ) {
             selectionAdd = 0;
             items = new String[] {
-                "Execute program", "LCD Debug", "Debug program", "Set as Default", "Delete file"
+                "Execute program", "Debug program", "Set as Default", "Delete file"
             };
             icons = new String[] {
-                ICProgram, ICEV3, ICDebug, ICDefault, ICDelete
+                ICProgram, ICDebug, ICDefault, ICDelete
             };
         } else if ( ext.equals("wav") ) {
             selectionAdd = 10;
@@ -1098,10 +1832,10 @@ public class GraphicStartup implements Menu {
         } else {
             selectionAdd = 20;
             items = new String[] {
-                "Delete file"
+                "Delete file", "View File"
             };
             icons = new String[] {
-                ICDelete
+                ICDelete, ICEV3
             };
         }
         newScreen();
@@ -1110,70 +1844,119 @@ public class GraphicStartup implements Menu {
         GraphicMenu menu = new GraphicMenu(items, icons, 3, fileName, 1);
         int selection = getSelection(menu, 0);
         if ( selection >= 0 ) {
-            String directory = (sample ? SAMPLES_DIRECTORY : PROGRAMS_DIRECTORY);
+            String directory = null;
+
+            switch ( type ) {
+                case TYPE_PROGRAM:
+                    directory = PROGRAMS_DIRECTORY;
+                    break;
+                case TYPE_SAMPLE:
+                    directory = SAMPLES_DIRECTORY;
+                    break;
+                case TYPE_TOOL:
+                    directory = TOOLS_DIRECTORY;
+                    break;
+            }
             switch ( selection + selectionAdd ) {
                 case 0:
                     System.out.println("Running program: " + file.getPath());
                     this.ind.suspend();
-                    exec(JAVA_RUN_JAR + file.getPath(), directory);
-                    this.ind.resume();
+                    if ( type == TYPE_TOOL ) {
+                        execInThisJVM(file);
+                        this.ind.resume();
+                    } else {
+                        JarFile jar = null;
+                        try {
+                            jar = new JarFile(file);
+                            String mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
+                            jar.close();
+                            this.ind.suspend();
+                            exec(file, JAVA_RUN_CP + file.getPath() + " lejos.internal.ev3.EV3Wrapper " + mainClass, directory);
+                            this.ind.resume();
+                        } catch ( IOException e ) {
+                            System.err.println("Exception running program");
+                        }
+                    }
+
                     break;
                 case 1:
-                    System.out.println("Running with System output to LCD: " + file.getPath());
-                    PrintStream origOut = System.out,
-                    origErr = System.err;
-                    PrintStream lcdOut = new PrintStream(new LCDOutputStream());
-                    this.ind.suspend();
-                    System.setOut(lcdOut);
-                    System.setErr(lcdOut);
-                    exec(JAVA_RUN_JAR + file.getPath(), directory);
-                    System.setOut(origOut);
-                    System.setOut(origErr);
-                    this.ind.resume();
+                    System.out.println("Debugging program: " + file.getPath());
+                    JarFile jar = null;
+                    try {
+                        jar = new JarFile(file);
+                        String mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
+                        jar.close();
+                        this.ind.suspend();
+                        exec(file, JAVA_DEBUG_CP + file.getPath() + " lejos.internal.ev3.EV3Wrapper " + mainClass, directory);
+                        this.ind.resume();
+                    } catch ( IOException e ) {
+                        System.err.println("Exception running program");
+                    }
                     break;
                 case 2:
-                    System.out.println("Debugging program: " + file.getPath());
-                    this.ind.suspend();
-                    exec(JAVA_DEBUG_JAR + file.getPath(), directory);
-                    this.ind.resume();
-                    break;
-                case 3:
                     Settings.setProperty(defaultProgramProperty, file.getPath());
                     break;
                 case 10:
                     System.out.println("Playing " + file.getPath());
                     Sound.playSample(file);
                     break;
-                case 4:
+                case 3:
                 case 11:
                 case 20:
                     file.delete();
+                    break;
+                case 21:
+                    try {
+                        Viewer.view(file.getPath());
+                    } catch ( IOException e ) {
+                        System.err.println("Exception viewing file");
+                    }
                     break;
             }
         }
     }
 
     /**
+     * Present the menu for a menu tool.
+     * 
+     * @param file
+     */
+    private void toolMenu(File file) {
+        String fileName = file.getName();
+        String ext = Utils.getExtension(fileName);
+        if ( ext.equals("jar") ) {
+            this.ind.suspend();
+            execInThisJVM(file);
+            this.ind.resume();
+        }
+    }
+
+    /**
      * Execute a program and display its output to System.out and error stream to System.err
      */
-    private static void exec(String programName, String directory) {
+    private static void exec(File jar, String command, String directory) {
         try {
-            GraphicStartup.programName = programName;
+            if ( jar != null ) {
+                String jarName = jar.getName();
+                programName = jarName.substring(0, jarName.length() - 4); // Remove .jar
+            }
             lcd.clear();
             lcd.refresh();
             lcd.setAutoRefresh(false);
 
-            program = new ProcessBuilder(programName.split(" ")).directory(new File(directory)).start();
+            drawLaunchScreen();
+
+            program = new ProcessBuilder(command.split(" ")).directory(new File(directory)).start();
             BufferedReader input = new BufferedReader(new InputStreamReader(program.getInputStream()));
             BufferedReader err = new BufferedReader(new InputStreamReader(program.getErrorStream()));
 
-            echoIn = new EchoThread(input, System.out);
-            echoErr = new EchoThread(err, System.err);
+            echoIn = new EchoThread(jar.getPath().replace(".jar", ".out"), input, System.out);
+            echoErr = new EchoThread(jar.getPath().replace(".jar", ".err"), err, System.err);
 
             echoIn.start();
             echoErr.start();
 
-            System.out.println("Executing " + programName + " in " + directory);
+            System.out.println("Executing " + command + " in " + directory);
 
             while ( true ) {
                 int b = Button.getButtons();
@@ -1207,35 +1990,38 @@ public class GraphicStartup implements Menu {
     /**
      * Execute a program and display its output to System.out and error stream to System.err
      */
-    private static void startProgram(String programName) {
+    private static void startProgram(String command, File jar) {
         try {
             if ( program != null ) {
                 return;
             }
-            GraphicStartup.programName = programName;
             lcd.clear();
             lcd.refresh();
             lcd.setAutoRefresh(false);
 
-            String[] args = programName.split(" ");
-            File f = new File(args[args.length - 1]);
-            File directory = f.getParentFile();
+            drawLaunchScreen();
+
+            String[] args = command.split(" ");
+            File directory = jar.getParentFile();
+
+            programName = jar.getName().replace(".jar", "");
 
             program = new ProcessBuilder(args).directory(directory).start();
 
             BufferedReader input = new BufferedReader(new InputStreamReader(program.getInputStream()));
             BufferedReader err = new BufferedReader(new InputStreamReader(program.getErrorStream()));
 
-            echoIn = new EchoThread(input, System.out);
-            echoErr = new EchoThread(err, System.err);
+            echoIn = new EchoThread(jar.getPath().replace(".jar", ".out"), input, System.out);
+            echoErr = new EchoThread(jar.getPath().replace(".jar", ".err"), err, System.err);
 
             echoIn.start();
             echoErr.start();
 
-            System.out.println("Executing " + programName + " in " + directory);
+            System.out.println("Executing " + command + " in " + directory);
 
             suspend = true;
             curMenu.quit(); // Quit the current menu and go into the suspend loop
+
         } catch ( Exception e ) {
             System.err.println("Failed to start program: " + e);
         }
@@ -1303,9 +2089,67 @@ public class GraphicStartup implements Menu {
             menu.setItems(fileNames, icons);
             selection = getSelection(menu, selection);
             if ( selection >= 0 ) {
-                fileMenu(files[selection], false);
+                fileMenu(files[selection], TYPE_PROGRAM);
             }
         } while ( selection >= 0 );
+    }
+
+    /**
+     * Display the tools from the tools directory.
+     * Allow the user to choose a file for further operations.
+     */
+    private void toolsMenu() {
+        GraphicListMenu menu = new GraphicListMenu(null, null);
+        //System.out.println("Finding files ...");
+        int selection = 0;
+        do {
+            File[] files = new File(TOOLS_DIRECTORY).listFiles();
+            int len = 0;
+            for ( int i = 0; i < files.length && files[i] != null; i++ ) {
+                len++;
+            }
+            if ( len == 0 ) {
+                msg("No tools found");
+                return;
+            }
+            newScreen("Tools");
+            String fileNames[] = new String[len];
+            String[] icons = new String[len];
+            for ( int i = 0; i < len; i++ ) {
+                fileNames[i] = formatFileName(files[i].getName());
+                String ext = Utils.getExtension(files[i].getName());
+                if ( ext.equals("jar") ) {
+                    icons[i] = ICMProgram;
+                }
+            }
+
+            menu.setItems(fileNames, icons);
+            selection = getSelection(menu, selection);
+            if ( selection >= 0 ) {
+                toolMenu(files[selection]);
+            }
+        } while ( selection >= 0 );
+    }
+
+    /**
+     * Method to add spaces before capital letters and remove .jar extension.
+     * 
+     * @param fileName
+     * @return
+     */
+    static private String formatFileName(String fileName) {
+        StringBuffer formattedName = new StringBuffer("" + fileName.charAt(0));
+        for ( int i = 1; i < fileName.length(); i++ ) { //Skip the first letter-can't put space before first word
+            if ( fileName.charAt(i) == '.' ) {
+                break;
+            }
+            if ( Character.isUpperCase(fileName.charAt(i)) ) {
+                formattedName.append(' ');
+            }
+            formattedName.append(fileName.charAt(i));
+
+        }
+        return formattedName.toString();
     }
 
     /**
@@ -1343,7 +2187,7 @@ public class GraphicStartup implements Menu {
             menu.setItems(fileNames, icons);
             selection = getSelection(menu, selection);
             if ( selection >= 0 ) {
-                fileMenu(files[selection], true);
+                fileMenu(files[selection], TYPE_SAMPLE);
             }
         } while ( selection >= 0 );
     }
@@ -1405,15 +2249,17 @@ public class GraphicStartup implements Menu {
         do {
             selection = menu.select(cur, this.timeout * 60000);
 
-            while ( suspend && program != null ) {
-                if ( !echoIn.isAlive() && !echoErr.isAlive() ) {
+            while ( suspend ) {
+                if ( program != null && !echoIn.isAlive() && !echoErr.isAlive() ) {
                     stopProgram();
                     this.ind.resume();
                     break;
                 }
                 int b = Button.getButtons();
                 if ( b == 6 ) {
-                    stopProgram();
+                    if ( program != null ) {
+                        stopProgram();
+                    }
                     this.ind.resume();
                     break;
                 }
@@ -1467,14 +2313,10 @@ public class GraphicStartup implements Menu {
                         System.out.println("Read from fifo: " + c + " " + ((char) c));
 
                         if ( c == 's' ) {
-                            GraphicStartup.this.ind.suspend();
-                            lcd.clear();
-                            lcd.refresh();
-                            lcd.setAutoRefresh(false);
+                            GraphicStartup.this.suspend();
                             System.out.println("Menu suspended");
                         } else if ( c == 'r' ) {
-                            lcd.setAutoRefresh(true);
-                            GraphicStartup.this.ind.resume();
+                            GraphicStartup.this.resume();
                             System.out.println("Menu resumed");
                         }
                     }
@@ -1521,6 +2363,7 @@ public class GraphicStartup implements Menu {
                     for ( int i = 0; i < lcd.getWidth(); i++ ) {
                         buf[i] = 0;
                     }
+                    GraphicStartup.this.indiBA.setWifi(ips.size() > 1);
                     GraphicStartup.this.indiBA.draw(time, buf);
                     lcd.refresh();
 
@@ -1574,10 +2417,31 @@ public class GraphicStartup implements Menu {
         return result;
     }
 
+    public static void drawLaunchScreen() {
+        GraphicsLCD g = LocalEV3.get().getGraphicsLCD();
+        g.setFont(Font.getDefaultFont());
+        g.drawRegion(duke, 0, 0, duke.getWidth(), duke.getHeight(), GraphicsLCD.TRANS_NONE, 50, 65, GraphicsLCD.HCENTER | GraphicsLCD.VCENTER);
+        int x = LCD.SCREEN_WIDTH / 2;
+        g.drawString("Wait", x, 30, 0);
+        g.drawString("a", x, 45, 0);
+        g.drawString("second...", x, 60, 0);
+        g.refresh(); // TODO: Needed?
+    }
+
     @Override
     public void runProgram(String programName) {
-        this.ind.suspend();
-        startProgram(JAVA_RUN_JAR + PROGRAMS_DIRECTORY + "/" + programName + ".jar");
+        JarFile jar = null;
+        String fullName = PROGRAMS_DIRECTORY + "/" + programName + ".jar";
+        try {
+            File jarFile = new File(fullName);
+            jar = new JarFile(jarFile);
+            String mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
+            jar.close();
+            this.ind.suspend();
+            startProgram(JAVA_RUN_CP + fullName + " lejos.internal.ev3.EV3Wrapper " + mainClass, jarFile);
+        } catch ( IOException e ) {
+            System.err.println("Failed to run program");
+        }
     }
 
     @Override
@@ -1598,14 +2462,34 @@ public class GraphicStartup implements Menu {
 
     @Override
     public void runSample(String programName) {
-        this.ind.suspend();
-        startProgram(JAVA_RUN_JAR + SAMPLES_DIRECTORY + "/" + programName + ".jar");
+        JarFile jar = null;
+        String fullName = SAMPLES_DIRECTORY + "/" + programName + ".jar";
+        try {
+            File jarFile = new File(fullName);
+            jar = new JarFile(jarFile);
+            String mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
+            jar.close();
+            this.ind.suspend();
+            startProgram(JAVA_RUN_CP + fullName + " lejos.internal.ev3.EV3Wrapper " + mainClass, jarFile);
+        } catch ( IOException e ) {
+            System.err.println("Failed to run program");
+        }
     }
 
     @Override
     public void debugProgram(String programName) {
-        this.ind.suspend();
-        startProgram(JAVA_DEBUG_JAR + PROGRAMS_DIRECTORY + "/" + programName + ".jar");
+        JarFile jar = null;
+        String fullName = PROGRAMS_DIRECTORY + "/" + programName + ".jar";
+        try {
+            File jarFile = new File(fullName);
+            jar = new JarFile(jarFile);
+            String mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
+            jar.close();
+            this.ind.suspend();
+            startProgram(JAVA_DEBUG_CP + fullName + " lejos.internal.ev3.EV3Wrapper " + mainClass, jarFile);
+        } catch ( IOException e ) {
+            System.err.println("Failed to run program");
+        }
     }
 
     @Override
@@ -1773,8 +2657,8 @@ public class GraphicStartup implements Menu {
             BufferedReader err = new BufferedReader(new InputStreamReader(p.getErrorStream()));
             PrintStream lcdStream = new PrintStream(new LCDOutputStream());
 
-            EchoThread echoIn = new EchoThread(input, lcdStream);
-            EchoThread echoErr = new EchoThread(err, lcdStream);
+            EchoThread echoIn = new EchoThread(null, input, lcdStream);
+            EchoThread echoErr = new EchoThread(null, err, lcdStream);
 
             this.ind.suspend();
             lcd.clear();
@@ -1808,4 +2692,909 @@ public class GraphicStartup implements Menu {
             System.err.println("Failed to execute startwlan: " + e);
         }
     }
+
+    private void execInThisJVM(File jar) {
+        try {
+            LCD.clearDisplay();
+            new JarMain(jar);
+        } catch ( Exception e ) {
+            toolException(e);
+            System.err.println("Exception in execution of tool: " + e);
+            e.printStackTrace();
+        }
+    }
+
+    private void toolException(Throwable t) {
+        Sound.buzz();
+        TextLCD lcd = BrickFinder.getDefault().getTextLCD(Font.getSmallFont());
+        int offset = 0;
+        // Get rid of invocation exception
+        if ( t.getCause() != null ) {
+            t = t.getCause();
+        }
+        while ( true ) {
+            lcd.clear();
+            lcd.drawString("Tool exception:", offset, 1);
+            lcd.drawString(t.getClass().getName(), offset, 3);
+            if ( t.getMessage() != null ) {
+                lcd.drawString(t.getMessage(), offset, 4);
+            }
+
+            if ( t.getCause() != null ) {
+                lcd.drawString("Caused by:", offset, 5);
+                lcd.drawString(t.getCause().toString(), offset, 6);
+            }
+
+            StackTraceElement[] trace = t.getStackTrace();
+            for ( int i = 0; i < 7 && i < trace.length; i++ ) {
+                lcd.drawString(trace[i].toString(), offset, 8 + i);
+            }
+
+            lcd.refresh();
+            int id = Button.waitForAnyEvent();
+            if ( id == Button.ID_ESCAPE ) {
+                break;
+            }
+            if ( id == Button.ID_LEFT ) {
+                offset += 5;
+            }
+            if ( id == Button.ID_RIGHT ) {
+                offset -= 5;
+            }
+            if ( offset > 0 ) {
+                offset = 0;
+            }
+        }
+        lcd.clear();
+    }
+
+    @Override
+    public void suspend() {
+        this.ind.suspend();
+        LCD.clearDisplay();
+        suspend = true;
+        curMenu.quit();
+    }
+
+    @Override
+    public void resume() {
+        suspend = false;
+        this.ind.resume();
+    }
+
+    static final Image duke = new Image(100, 64, new byte[] {
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x1c,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x1e,
+        (byte) 0x04,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x1e,
+        (byte) 0x0f,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x60,
+        (byte) 0x3e,
+        (byte) 0x0f,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xf0,
+        (byte) 0xbe,
+        (byte) 0x0f,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xf0,
+        (byte) 0xbe,
+        (byte) 0x07,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xf0,
+        (byte) 0xfd,
+        (byte) 0x07,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x01,
+        (byte) 0xe0,
+        (byte) 0xff,
+        (byte) 0x07,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x03,
+        (byte) 0xe0,
+        (byte) 0xff,
+        (byte) 0x07,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x0f,
+        (byte) 0xc0,
+        (byte) 0xff,
+        (byte) 0x07,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x1f,
+        (byte) 0xc0,
+        (byte) 0xff,
+        (byte) 0x07,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x3f,
+        (byte) 0x80,
+        (byte) 0xff,
+        (byte) 0x07,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x7f,
+        (byte) 0x00,
+        (byte) 0xff,
+        (byte) 0x07,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xff,
+        (byte) 0x00,
+        (byte) 0xff,
+        (byte) 0x0f,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xff,
+        (byte) 0xe1,
+        (byte) 0xff,
+        (byte) 0x07,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xff,
+        (byte) 0xf3,
+        (byte) 0xff,
+        (byte) 0x07,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xff,
+        (byte) 0xf7,
+        (byte) 0xff,
+        (byte) 0x03,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xff,
+        (byte) 0xef,
+        (byte) 0xfe,
+        (byte) 0x01,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xff,
+        (byte) 0x0f,
+        (byte) 0xf8,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xff,
+        (byte) 0x1f,
+        (byte) 0xe0,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xff,
+        (byte) 0x3f,
+        (byte) 0xc0,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xff,
+        (byte) 0x7f,
+        (byte) 0xc0,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xff,
+        (byte) 0x7f,
+        (byte) 0xc0,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xc0,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xc1,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xc0,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xff,
+        (byte) 0xfd,
+        (byte) 0xc3,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x3f,
+        (byte) 0xea,
+        (byte) 0x7f,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x5f,
+        (byte) 0x55,
+        (byte) 0x7f,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x80,
+        (byte) 0x8f,
+        (byte) 0xf8,
+        (byte) 0x3c,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x80,
+        (byte) 0x57,
+        (byte) 0x55,
+        (byte) 0x3c,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x80,
+        (byte) 0xaf,
+        (byte) 0xea,
+        (byte) 0x38,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x80,
+        (byte) 0x55,
+        (byte) 0x55,
+        (byte) 0x38,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xc0,
+        (byte) 0xad,
+        (byte) 0x7a,
+        (byte) 0x30,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xc0,
+        (byte) 0x5d,
+        (byte) 0x15,
+        (byte) 0x30,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xc0,
+        (byte) 0xb9,
+        (byte) 0x1e,
+        (byte) 0x60,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xe0,
+        (byte) 0xf0,
+        (byte) 0x07,
+        (byte) 0x60,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xf0,
+        (byte) 0x80,
+        (byte) 0x00,
+        (byte) 0xe0,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xf8,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xc0,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xf8,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xc0,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xcc,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x80,
+        (byte) 0x01,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x6c,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x80,
+        (byte) 0x01,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x6c,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x80,
+        (byte) 0x01,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x6c,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x80,
+        (byte) 0x01,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x6c,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x03,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x78,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x03,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x38,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x03,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x38,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x03,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x38,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x03,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x38,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x06,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x3c,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x06,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x3c,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x06,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x1e,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x06,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x1f,
+        (byte) 0x00,
+        (byte) 0x0c,
+        (byte) 0x00,
+        (byte) 0x06,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x1f,
+        (byte) 0x80,
+        (byte) 0x7f,
+        (byte) 0x00,
+        (byte) 0x06,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x1f,
+        (byte) 0xe0,
+        (byte) 0xff,
+        (byte) 0x00,
+        (byte) 0x06,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x18,
+        (byte) 0xf0,
+        (byte) 0x80,
+        (byte) 0x01,
+        (byte) 0x06,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x18,
+        (byte) 0x38,
+        (byte) 0x00,
+        (byte) 0x03,
+        (byte) 0x06,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x18,
+        (byte) 0x1c,
+        (byte) 0x00,
+        (byte) 0x06,
+        (byte) 0x07,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x18,
+        (byte) 0x07,
+        (byte) 0x00,
+        (byte) 0x0e,
+        (byte) 0x03,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x98,
+        (byte) 0x03,
+        (byte) 0x00,
+        (byte) 0x0c,
+        (byte) 0x03,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xf8,
+        (byte) 0x01,
+        (byte) 0x00,
+        (byte) 0x18,
+        (byte) 0x03,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x70,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xf0,
+        (byte) 0x01,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xe0,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+    });
+
 }

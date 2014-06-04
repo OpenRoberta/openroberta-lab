@@ -39,4 +39,8 @@ public interface Menu {
 	public String getExecutingProgramName();
 	
 	public void shutdown();
+	
+	public void suspend();
+	
+	public void resume();
 }

@@ -80,7 +80,7 @@ public abstract class RemoteNXTIOPort implements IOPort, BasicSensorPort, EV3Sen
      * @param typ The type of port motor/sensor
      * @param port the port number
      * @param ref the Port ref for this port
-     * @return
+     * @return true if success
      */
     public boolean open(int typ, int port, RemoteNXTPort ref)
     {

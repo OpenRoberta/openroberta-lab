@@ -58,14 +58,14 @@ public class VTGSentence extends NMEASentence{
 	/**
 	 * Get Speed in Kilometers
 	 * 
-	 * @return
+	 * @return the speed
 	 */
 	public float getSpeed(){
 		return speed;  
 	}
 
 	/**
-	 * Parase a RMC Sentence
+	 * Parse a RMC Sentence
 	 * 
 	 * $GPVTG,054.7,T,034.4,M,005.5,N,010.2,K,A*53
 	 */

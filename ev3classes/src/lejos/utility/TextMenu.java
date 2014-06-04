@@ -48,11 +48,6 @@ public class TextMenu
 	protected static final char SEL_CHAR = '>';
 	
 	/**
-	 * a blank line
-	 */
-	public static final String BLANK = "                ";
-	
-	/**
 	 * boolean to cause select to quit 
 	 */
 	protected boolean _quit = false;
@@ -202,7 +197,7 @@ public class TextMenu
 				return selectedIndex;
 			if(button == Button.ID_ESCAPE)
 				return -1; //Escape
-			if(button == Button.ID_RIGHT)//scroll forward
+			if(button == Button.ID_DOWN)//scroll forward
 			{
 				selectedIndex++;
 				// check for index out of bounds
@@ -216,7 +211,7 @@ public class TextMenu
 					_topIndex = selectedIndex - _height + 1;
 				}
 			}
-			if(button == Button.ID_LEFT)//scroll backward
+			if(button == Button.ID_UP)//scroll backward
 			{
 				selectedIndex --;
 				// check for index out of bounds
@@ -253,7 +248,7 @@ public class TextMenu
 		int max = _topRow + _height;
 		for (int i = _topRow; i < max; i++)
 		{
-			lcd.drawString(BLANK, 0, i);
+			lcd.clear(i);
 			int idx = i - _topRow + topIndex;
 			if (idx >= 0 && idx < _length)
 			{

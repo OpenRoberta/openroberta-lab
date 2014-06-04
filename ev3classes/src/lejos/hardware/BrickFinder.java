@@ -1,5 +1,6 @@
 package lejos.hardware;
 
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.Collection;
@@ -13,6 +14,8 @@ import lejos.remote.ev3.RemoteEV3;
 public class BrickFinder {
 	private static final int DISCOVERY_PORT = 3016;
 	private static Brick defaultBrick, localBrick;
+	private static final int MAX_DISCOVERY_TIME = 2000;
+	private static final int MAX_PACKET_SIZE = 32;
 	
 	public static Brick getLocal() {
 		if (localBrick != null) return localBrick;
@@ -45,32 +48,37 @@ public class BrickFinder {
 	/**
 	 * Search for available EV3s and populate table with results.
 	 */
-	public static BrickInfo[] discover() throws Exception {	
+	public static BrickInfo[] discover() throws IOException {	
+		DatagramSocket socket = null;
 		
-		Map<String,BrickInfo> ev3s = new HashMap<String,BrickInfo>();
-		DatagramSocket socket = new DatagramSocket(DISCOVERY_PORT);
-		socket.setSoTimeout(2000);
-        DatagramPacket packet = new DatagramPacket (new byte[100], 100);
+		try {
+			Map<String,BrickInfo> ev3s = new HashMap<String,BrickInfo>();
 
-        long start = System.currentTimeMillis();
-        
-        while ((System.currentTimeMillis() - start) < 2000) {
-            socket.receive (packet);
-            String message = new String(packet.getData(), "UTF-8");
-            String ip = packet.getAddress().getHostAddress();
-            ev3s.put(ip, new BrickInfo(message.trim(),ip,"EV3"));
-        }
-        
-        if (socket != null) socket.close();
-        
-        BrickInfo[] devices = new BrickInfo[ev3s.size()];
-        int i = 0;
-        for(String ev3: ev3s.keySet()) {
-        	BrickInfo info = ev3s.get(ev3);
-        	devices[i++] = info;
-        }
-        
-        return devices;
+			socket = new DatagramSocket(DISCOVERY_PORT);
+			socket.setSoTimeout(MAX_DISCOVERY_TIME);
+	        DatagramPacket packet = new DatagramPacket (new byte[MAX_PACKET_SIZE], MAX_PACKET_SIZE);
+	
+	        long start = System.currentTimeMillis();
+	        
+	        while ((System.currentTimeMillis() - start) < MAX_DISCOVERY_TIME) {
+	            socket.receive (packet);
+	            String message = new String(packet.getData(), "UTF-8");
+	            String ip = packet.getAddress().getHostAddress();
+	            ev3s.put(ip, new BrickInfo(message.trim(),ip,"EV3"));
+	        }
+	        
+	        BrickInfo[] devices = new BrickInfo[ev3s.size()];
+	        int i = 0;
+	        
+	        for(String ev3: ev3s.keySet()) {
+	        	devices[i++] = ev3s.get(ev3);
+	        }
+	        
+	        return devices;
+	        
+		} finally {
+			if (socket != null) socket.close();
+		}     
 	}
 	
 	public static BrickInfo[] discoverNXT() {

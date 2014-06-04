@@ -109,7 +109,7 @@ public class NXTUltrasonicSensor extends I2CSensor  {
 	 * The sensor reports the distance, expressed in meters, to the eight nearest objects in sight. The theoretical range of the sensor is 0,04 to 2.54 meter.
 	 * If there are less then eight objects within the sensors range the sensor will reports Float.POSITIVE_INFINITY. 
 	 * Fetching a sample in ping mode takes about 70 ms. 
-	 * @return
+	 * @return the sample provider
 	 */
 	public SampleProvider getPingMode() {
     return getMode(1);

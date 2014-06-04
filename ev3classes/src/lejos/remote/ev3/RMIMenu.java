@@ -44,5 +44,9 @@ public interface RMIMenu extends Remote {
 	public String getExecutingProgramName() throws RemoteException;
 	
 	public void shutdown() throws RemoteException;
+	
+	public void suspend() throws RemoteException;
+	
+	public void resume() throws RemoteException;
 
 }

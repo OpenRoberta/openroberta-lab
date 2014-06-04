@@ -282,4 +282,26 @@ public class RemoteRequestMenu implements Menu, Serializable {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public void suspend() {
+		MenuRequest req = new MenuRequest();
+		req.request = MenuRequest.Request.SUSPEND;
+		try {
+			os.writeObject(req);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void resume() {
+		MenuRequest req = new MenuRequest();
+		req.request = MenuRequest.Request.RESUME;
+		try {
+			os.writeObject(req);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
+	}
 }

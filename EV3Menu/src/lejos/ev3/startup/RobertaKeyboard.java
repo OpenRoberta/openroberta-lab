@@ -6,6 +6,7 @@ import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.TextLCD;
 
 // @formatter:off
+// formatter would change keyboard layout
 /**
  * Keyboard based on {@link Keyboard} , lejos class for wifi password input.
  * Robertakeyboard for token input, only capslock characters and numbers.

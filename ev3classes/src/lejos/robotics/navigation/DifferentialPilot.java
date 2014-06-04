@@ -1102,7 +1102,7 @@ public class DifferentialPilot implements RegulatedMotorListener,
 	/**
 	 * Get the turn rate for arc and steer commands
 	 * 
-	 * @return
+	 * @return the turn rate
 	 */
 	public double getTurnRate()
 	{

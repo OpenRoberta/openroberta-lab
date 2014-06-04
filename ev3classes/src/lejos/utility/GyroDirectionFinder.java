@@ -5,11 +5,10 @@ import lejos.robotics.Gyroscope;
 
 /**
  * Implementation of the <code>DirectionFinder</code> interface that integrates repeated rate-of-turn readings from a 
- * <code>{@link GyroSensor}</code>
- * into a continuously updated heading. This class is very similar to <code>{@link CompassMindSensor}</code>, 
+ * gyro sensor
+ * into a continuously updated heading. This class is very similar to  the compass sensors, 
  * except that the direction returned does not convey true heading (north, south, etc) but rather
- * relative heading change since the last time <code>setDegrees()</code> or <code>resetCartesianZero()</code> was called.
- * @see GyroSensor
+ * relative heading change since the last time setDegrees() or resetCartesianZero() was called.
  * @author Brent Gardner
  * @author Kirk P. Thompson
  */
@@ -23,8 +22,7 @@ public class GyroDirectionFinder implements DirectionFinder
     private Gyroscope gyro;
 
     /** Creates and initializes a new <code>GyroDirectionFinder</code> using passed <code>GyroSensor</code> 
-     * @param gyro A <code>{@link GyroSensor}</code> instance
-     * @see GyroSensor
+     * @param gyro a gyro sensor instance
      */
     public GyroDirectionFinder(Gyroscope gyro) {
         this(gyro, false);
@@ -32,9 +30,7 @@ public class GyroDirectionFinder implements DirectionFinder
 
     /** Creates and initializes a new <code>GyroDirectionFinder</code> using passed <code>GyroSensor</code> and does
      * the <code>GyroSensor.recalibrateOffset()</code> method.
-     * @param gyro A <code>{@link GyroSensor}</code> instance
-     * @see GyroSensor#recalibrateOffset()
-     * @see #startCalibration
+     * @param gyro A gyro sensor instance
      */
     public GyroDirectionFinder(Gyroscope gyro, boolean calibrate) {
         this.gyro = gyro;
@@ -67,7 +63,6 @@ public class GyroDirectionFinder implements DirectionFinder
     /**
      * Returns the current rate-of-turn in degrees/second, as read by the <code>GyroSensor</code> instance passed in the constructor.
      * @return Angular velocity in degrees.
-     * @see GyroSensor
      */
     public float getAngularVelocity() {
         return gyro.getAngularVelocity();
@@ -106,8 +101,6 @@ public class GyroDirectionFinder implements DirectionFinder
     /**
      * Find offset/bias of gyro while at rest (<u>ensure it is at rest</u>). This is done by calling the <code>recalibrateOffset()</code> method of 
      * the <code>GyroSensor</code> instance passed in the constructor. This takes 3 seconds.
-     * 
-     * @see GyroSensor#recalibrateOffset()
      */
     public void startCalibration() {
         calibrating = true;
@@ -123,7 +116,7 @@ public class GyroDirectionFinder implements DirectionFinder
     }
 
     /**
-     * This is the private thread class that is used to continously integrate successive readings from the gyro
+     * This is the private thread class that is used to continuously integrate successive readings from the gyro
      */
     private class Regulator extends Thread {
         protected Regulator() {

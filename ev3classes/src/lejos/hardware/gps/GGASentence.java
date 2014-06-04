@@ -78,7 +78,7 @@ public class GGASentence extends NMEASentence{
 	/**
 	 * Get Latitude Direction
 	 * 
-	 * @return
+	 * @return the latitude direction
 	 */
 	public char getLatitudeDirection(){
 		return latitudeDirection;
@@ -94,7 +94,7 @@ public class GGASentence extends NMEASentence{
 
 	/**
 	 * Get Longitude Direction
-	 * @return
+	 * @return the longitude direction
 	 */
 	public char getLongitudeDirection(){
 		return longitudeDirection;
@@ -103,7 +103,7 @@ public class GGASentence extends NMEASentence{
 	/**
 	 * Get Altitude
 	 * 
-	 * @return
+	 * @return the altitude
 	 */
 	public float getAltitude(){
 		return altitude;

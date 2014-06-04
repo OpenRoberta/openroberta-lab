@@ -19,10 +19,11 @@ import java.net.URL;
  */
 public class RobertaUtils {
 
-    // fileName of program that was downloaded
+    // fileName of program that was downloaded from RobertaLab
     private String fileName;
 
     // taken from GraphicStartup.java
+    // location where user programs are saved to
     private static final String PROGRAMS_DIRECTORY = "/home/lejos/programs";
 
     /**
@@ -89,7 +90,7 @@ public class RobertaUtils {
      * @throws IOException sending token or downloading file failed
      */
     private void downloadProgramFromServer(HttpURLConnection httpURLConnection, String token) throws IOException {
-        // send code (example ZXCV)
+        // send code to RobertaLab (example ZXCV)
         DataOutputStream dos = new DataOutputStream(httpURLConnection.getOutputStream());
         dos.writeBytes(token);
         dos.flush();

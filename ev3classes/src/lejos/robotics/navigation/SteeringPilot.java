@@ -105,7 +105,6 @@ public class SteeringPilot implements ArcMoveController, RegulatedMotorListener 
 	 * <p>When you run the method, if you notice the wheels turn left first, then right, it means you need
 	 * to set the reverse parameter to true for proper calibration. NOTE: The next time you run the calibrate
 	 * method it will still turn left first, but...  </p>
-	 * @param reverse Reverses the direction of the steering motor.
 	 */
 	public void calibrateSteering() {
 		

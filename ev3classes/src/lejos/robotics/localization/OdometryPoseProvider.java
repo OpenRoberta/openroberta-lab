@@ -1,5 +1,6 @@
 package lejos.robotics.localization;
 
+import lejos.robotics.SampleProvider;
 import lejos.robotics.geometry.Point;
 import lejos.robotics.navigation.Move;
 import lejos.robotics.navigation.MoveListener;
@@ -14,7 +15,7 @@ import lejos.robotics.navigation.Pose;
  * as listener with its MoveProvider,
  */
 
-public class OdometryPoseProvider implements PoseProvider, MoveListener
+public class OdometryPoseProvider implements PoseProvider, MoveListener, SampleProvider
 {
 
   private float x = 0, y = 0, heading = 0;
@@ -128,4 +129,20 @@ public class OdometryPoseProvider implements PoseProvider, MoveListener
     this.heading = heading;
     current = true;
   }
+
+	@Override
+	public int sampleSize() {
+		return 3;
+	}
+	
+	@Override
+	public void fetchSample(float[] sample, int offset) {
+	    if (!current )
+	    {
+	      updatePose(mp.getMovement());
+	    }
+	    sample[offset+0] = x;
+	    sample[offset+1] = y;
+	    sample[offset+2] = heading;
+	}
 }

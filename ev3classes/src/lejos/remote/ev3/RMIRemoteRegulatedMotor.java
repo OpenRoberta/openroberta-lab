@@ -142,5 +142,10 @@ public class RMIRemoteRegulatedMotor extends UnicastRemoteObject implements RMIR
 	public int getTachoCount() throws RemoteException {
 		return motor.getTachoCount();
 	}
+
+	@Override
+	public boolean isMoving() throws RemoteException {
+		return motor.isMoving();
+	}
 }
 

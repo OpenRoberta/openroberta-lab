@@ -33,7 +33,7 @@ public class LowPassFilter extends AbstractFilter {
   /**
    * Fetches a sample from the source and low-passes it
    * 
-   * @see http://en.wikipedia.org/wiki/Low-pass_filter
+   * See http://en.wikipedia.org/wiki/Low-pass_filter
    */
   public void fetchSample(float[] dst, int off) {
     super.fetchSample(dst, off);

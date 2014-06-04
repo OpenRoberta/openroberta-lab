@@ -55,7 +55,7 @@ public interface RMIRegulatedMotor extends Remote {
 	   * @param  angle through which the motor will rotate
 	   * @param immediateReturn iff true, method returns immediately, thus allowing monitoring of sensors in the calling thread. 
 	   * 
-	   *  @see RegulatedMotor#rotate(int, boolean)
+	   *  @see lejos.robotics.RegulatedMotor#rotate(int, boolean)
 	   */
 	  void rotate(int angle, boolean immediateReturn) throws RemoteException;
 
@@ -147,6 +147,8 @@ public interface RMIRegulatedMotor extends Remote {
 	   void resetTachoCount() throws RemoteException;
 	   
 	   int getTachoCount() throws RemoteException;
+	   
+	   boolean isMoving() throws RemoteException;
 
 }
 

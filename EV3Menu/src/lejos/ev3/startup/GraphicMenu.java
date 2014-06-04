@@ -222,7 +222,7 @@ public class GraphicMenu extends TextMenu {
 		if (length > 3)
 			drawIconAtTick(_iconImages[((index[4]>=length)?index[4]-length:index[4])],4,4+animateDirection,tick);
 		// Draw Label
-		lcd.drawString(BLANK, 0, labelLine);
+		lcd.clear(labelLine);
 		if (_items[index[2]].length()>16)
 			lcd.drawString(_items[index[2]],0, labelLine);
 		else

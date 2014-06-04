@@ -27,7 +27,7 @@ public class RCXRotationSensor extends AnalogSensor implements Tachometer, Senso
     
     /**
      * Create an RCX rotation sensor object attached to the specified port.
-     * @param port port, e.g. Port.S1
+     * @param p port, e.g. Port.S1
      */
     public RCXRotationSensor(Port p)
     {

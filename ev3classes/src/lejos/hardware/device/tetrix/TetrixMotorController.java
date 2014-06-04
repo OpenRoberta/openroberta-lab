@@ -12,9 +12,9 @@ import lejos.utility.EndianTools;
  * <p>
  * Use <code>{@link TetrixControllerFactory#newMotorController}</code> to retrieve a <code>TetrixMotorController</code> instance.
  * 
- * @see lejos.nxt.addon.tetrix.TetrixControllerFactory
- * @see lejos.nxt.addon.tetrix.TetrixMotor
- * @see lejos.nxt.addon.tetrix.TetrixEncoderMotor
+ * @see lejos.hardware.device.tetrix.TetrixControllerFactory
+ * @see lejos.hardware.device.tetrix.TetrixMotor
+ * @see lejos.hardware.device.tetrix.TetrixEncoderMotor
  * @author Kirk P. Thompson
  */
 public class TetrixMotorController extends I2CSensor {
@@ -111,7 +111,6 @@ public class TetrixMotorController extends I2CSensor {
      * @see TetrixControllerFactory#DAISY_CHAIN_POSITION_2
      * @see TetrixControllerFactory#DAISY_CHAIN_POSITION_3
      * @see TetrixControllerFactory#DAISY_CHAIN_POSITION_4
-     * @see lejos.nxt.SensorPort
      * @throws IllegalStateException if a Motor Controller was not found with given <code>port</code> and <code>daisyChainPosition</code>
      */
     public TetrixMotorController(I2CPort port, int daisyChainPosition) {
@@ -125,7 +124,7 @@ public class TetrixMotorController extends I2CSensor {
         
         // This thread will keep the controller active. Without I2C activity within 2.5 seconds, it times out.
         // We could use the NTO bit of mode (MODEBIT_NTO) to keep the controller from timing
-        // out but the motors would still run if the NXT faulted, was shutdown, etc. which could be unsafe with big,
+        // out but the motors would still run if the EV3 faulted, was shutdown, etc. which could be unsafe with big,
         // metal robots with sharp slicing attachments. 
         Thread t1 = new Thread(new Runnable(){
             public void run() {
@@ -262,7 +261,7 @@ public class TetrixMotorController extends I2CSensor {
      * @throws IllegalArgumentException if invalid <code>motorID</code>
      * @throws UnsupportedOperationException if <code>motorID</code> has already been used for a Tetrix motor instance
      * other than <code>TetrixMotor</code>.
-     * @see lejos.nxt.addon.tetrix.TetrixMotor
+     * @see lejos.hardware.device.tetrix.TetrixMotor
      * @see #getEncoderMotor
      * @see #getRegulatedMotor
      */
@@ -281,7 +280,7 @@ public class TetrixMotorController extends I2CSensor {
      * @throws IllegalArgumentException if invalid <code>motorID</code>
      * @throws UnsupportedOperationException if <code>motorID</code> has already been used for a Tetrix motor instance
      * other than <code>TetrixEncoderMotor</code>.
-     * @see lejos.nxt.addon.tetrix.TetrixEncoderMotor
+     * @see lejos.hardware.device.tetrix.TetrixEncoderMotor
      * @see #getBasicMotor
      * @see #getRegulatedMotor
      */

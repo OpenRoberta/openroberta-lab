@@ -79,7 +79,7 @@ public class GSVSentence extends NMEASentence{
 	 * Return a NMEA Satellite object
 	 * 
 	 * @param index
-	 * @return
+	 * @return a NMEA satellite object
 	 */
 	public Satellite getSatellite(int index){
 		Satellite ns = new Satellite();

@@ -3,8 +3,6 @@ package lejos.robotics;
 /**
  * This interface defines the methods of a generic ColorDetector object.
  * 
- * @see lejos.hardware.sensor.ColorSensor
- * @see lejos.hardware.sensor.ColorHTSensor
  */
 public interface ColorDetector extends ColorIdentifier {
 
