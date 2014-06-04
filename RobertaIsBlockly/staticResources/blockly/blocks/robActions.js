@@ -4,6 +4,156 @@ goog.provide('Blockly.Blocks.robActions');
 
 goog.require('Blockly.Blocks');
 
+Blockly.Blocks['robActions_motorMiddle_on'] = {
+	init : function() {
+		this.setColour(200);
+		// this.setInputsInline(true);
+		var motorPort = new Blockly.FieldDropdown([ [ 'Port A', 'A' ],
+				[ 'Port B', 'B' ], [ 'Port C', 'C' ], [ 'Port D', 'D' ] ]);
+		this.appendValueInput('POWER').appendField('mittlerer Motor')
+				.appendField(motorPort, 'MOTORPORT').appendField('an')
+				.appendField('Tempo').setCheck('Number');
+		this.setPreviousStatement(true);
+		this.setNextStatement(true);
+	}
+};
+
+Blockly.Blocks['robActions_motorMiddle_on_for'] = {
+	init : function() {
+		this.setColour(200);
+		// this.setInputsInline(true);
+		var motorPort = new Blockly.FieldDropdown([ [ 'Port A', 'A' ],
+				[ 'Port B', 'B' ], [ 'Port C', 'C' ], [ 'Port D', 'D' ] ]);
+		var motorRotation = new Blockly.FieldDropdown([
+				[ 'Umdrehungen', 'ROTATIONS' ], [ 'Grad', 'DEGREE' ] ]);
+		this.appendValueInput('POWER').appendField('mittlerer Motor')
+				.appendField(motorPort, 'MOTORPORT').appendField('an')
+				.appendField('Tempo').setCheck('Number');
+		this.appendValueInput('VALUE').setAlign(Blockly.ALIGN_RIGHT)
+				.appendField('für').appendField(motorRotation, 'MOTORROTATION')
+				.setCheck('Number');
+		this.setPreviousStatement(true);
+		this.setNextStatement(true);
+	}
+};
+
+Blockly.Blocks['robActions_motorMiddle_getPower'] = {
+	init : function() {
+		this.setColour(180);
+		// this.setInputsInline(true);
+		var motorPort = new Blockly.FieldDropdown([ [ 'Port A', 'A' ],
+				[ 'Port B', 'B' ], [ 'Port C', 'C' ], [ 'Port D', 'D' ] ]);
+		this.appendDummyInput().appendField('gib Tempo').appendField(
+				'mittlerer Motor').appendField(motorPort, 'MOTORPORT');
+		this.setOutput(true, 'Number');
+	}
+};
+
+Blockly.Blocks['robActions_motorMiddle_setPower'] = {
+	init : function() {
+		this.setColour(180);
+		// this.setInputsInline(true);
+		var motorPort = new Blockly.FieldDropdown([ [ 'Port A', 'A' ],
+				[ 'Port B', 'B' ], [ 'Port C', 'C' ], [ 'Port D', 'D' ] ]);
+		this.appendValueInput('POWER').appendField('setze').appendField(
+				'mittlerer Motor').appendField(motorPort, 'MOTORPORT')
+				.appendField('Tempo');
+		this.setPreviousStatement(true);
+		this.setNextStatement(true);
+	}
+};
+
+Blockly.Blocks['robActions_motorMiddle_stop'] = {
+	init : function() {
+		this.setColour(180);
+		// this.setInputsInline(true);
+		var motorPort = new Blockly.FieldDropdown([ [ 'Port A', 'A' ],
+				[ 'Port B', 'B' ], [ 'Port C', 'C' ], [ 'Port D', 'D' ] ]);
+		var mode = new Blockly.FieldDropdown([ [ 'auslaufen', 'FLOAT' ],
+				[ 'bremsen', 'NONFLOAT' ] ]);
+		this.appendDummyInput().appendField('mittlerer Motor').appendField(
+				motorPort, 'MOTORPORT').appendField('stop').appendField(mode,
+				'MODE');
+		this.setPreviousStatement(true);
+		this.setNextStatement(true);
+	}
+};
+
+Blockly.Blocks['robActions_motorBig_on'] = {
+	init : function() {
+		this.setColour(200);
+		// this.setInputsInline(true);
+		var motorPort = new Blockly.FieldDropdown([ [ 'Port A', 'A' ],
+				[ 'Port B', 'B' ], [ 'Port C', 'C' ], [ 'Port D', 'D' ] ]);
+		this.appendValueInput('POWER').appendField('großer Motor').appendField(
+				motorPort, 'MOTORPORT').appendField('an').appendField('Tempo')
+				.setCheck('Number');
+		this.setPreviousStatement(true);
+		this.setNextStatement(true);
+	}
+};
+
+Blockly.Blocks['robActions_motorBig_on_for'] = {
+	init : function() {
+		this.setColour(200);
+		// this.setInputsInline(true);
+		var motorPort = new Blockly.FieldDropdown([ [ 'Port A', 'A' ],
+				[ 'Port B', 'B' ], [ 'Port C', 'C' ], [ 'Port D', 'D' ] ]);
+		var motorRotation = new Blockly.FieldDropdown([
+				[ 'Umdrehungen', 'ROTATIONS' ], [ 'Grad', 'DEGREE' ] ]);
+		this.appendValueInput('POWER').appendField('großer Motor').appendField(
+				motorPort, 'MOTORPORT').appendField('an').appendField('Tempo')
+				.setCheck('Number');
+		this.appendValueInput('VALUE').setAlign(Blockly.ALIGN_RIGHT)
+				.appendField('für').appendField(motorRotation, 'MOTORROTATION')
+				.setCheck('Number');
+		this.setPreviousStatement(true);
+		this.setNextStatement(true);
+	}
+};
+
+Blockly.Blocks['robActions_motorBig_getPower'] = {
+	init : function() {
+		this.setColour(180);
+		// this.setInputsInline(true);
+		var motorPort = new Blockly.FieldDropdown([ [ 'Port A', 'A' ],
+				[ 'Port B', 'B' ], [ 'Port C', 'C' ], [ 'Port D', 'D' ] ]);
+		this.appendDummyInput().appendField('gib Tempo').appendField(
+				'großer Motor').appendField(motorPort, 'MOTORPORT');
+		this.setOutput(true, 'Number');
+	}
+};
+
+Blockly.Blocks['robActions_motorBig_setPower'] = {
+	init : function() {
+		this.setColour(180);
+		// this.setInputsInline(true);
+		var motorPort = new Blockly.FieldDropdown([ [ 'Port A', 'A' ],
+				[ 'Port B', 'B' ], [ 'Port C', 'C' ], [ 'Port D', 'D' ] ]);
+		this.appendValueInput('POWER').appendField('setze').appendField(
+				'großer Motor').appendField(motorPort, 'MOTORPORT')
+				.appendField('Tempo');
+		this.setPreviousStatement(true);
+		this.setNextStatement(true);
+	}
+};
+
+Blockly.Blocks['robActions_motorBig_stop'] = {
+	init : function() {
+		this.setColour(180);
+		// this.setInputsInline(true);
+		var motorPort = new Blockly.FieldDropdown([ [ 'Port A', 'A' ],
+				[ 'Port B', 'B' ], [ 'Port C', 'C' ], [ 'Port D', 'D' ] ]);
+		var mode = new Blockly.FieldDropdown([ [ 'auslaufen', 'FLOAT' ],
+				[ 'bremsen', 'NONFLOAT' ] ]);
+		this.appendDummyInput().appendField('großer Motor').appendField(
+				motorPort, 'MOTORPORT').appendField('stop').appendField(mode,
+				'MODE');
+		this.setPreviousStatement(true);
+		this.setNextStatement(true);
+	}
+};
+
 Blockly.Blocks['robActions_motorDiff_on'] = {
 	// Else condition.
 	init : function() {

@@ -319,3 +319,30 @@ Blockly.Blocks['robSensors_gyro_getSample'] = {
 		this.setOutput(true, 'Number');
 	}
 };
+
+Blockly.Blocks['robSensors_timer_reset'] = {
+	init : function() {
+		this.setColour(192);
+		// this.setInputsInline(true);
+		var sensorNum = new Blockly.FieldDropdown([ [ 'Zeitgeber 1', '1' ],
+				[ 'Zeitgeber 2', '2' ], [ 'Zeitgeber 3', '3' ],
+				[ 'Zeitgeber 4', '4' ] ]);
+		this.appendDummyInput().appendField(Blockly.Msg.SENSOR_RESET)
+				.appendField(sensorNum, 'SENSORNUM').appendField(
+						Blockly.Msg.SENSOR_RESET_II);
+		this.setPreviousStatement(true);
+		this.setNextStatement(true);
+	}
+};
+
+Blockly.Blocks['robSensors_timer_getSample'] = {
+	init : function() {
+		this.setColour(180);
+		var sensorNum = new Blockly.FieldDropdown([ [ 'Zeitgeber 1', '1' ],
+				[ 'Zeitgeber 2', '2' ], [ 'Zeitgeber 3', '3' ],
+				[ 'Zeitgeber 4', '4' ] ]);
+		this.appendDummyInput().appendField(Blockly.Msg.SENSOR_GET_SAMPLE)
+				.appendField(sensorNum, 'SENSORNUM');
+		this.setOutput(true, 'Number');
+	}
+};
