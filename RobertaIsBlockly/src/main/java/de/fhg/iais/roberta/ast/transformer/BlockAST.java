@@ -12,13 +12,17 @@ import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
+import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.ast.transformer.BlockASTType.Types;
 import de.fhg.iais.roberta.blockly.generated.Arg;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
+import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.dbc.Assert;
 
@@ -43,7 +47,12 @@ public class BlockAST {
 
         Phrase left;
         Phrase right;
+        Phrase expr;
 
+        List<Statement> statements;
+        StmtList stmtList;
+
+        Phrase var;
         switch ( block.getType() ) {
         //Logik
             case "logic_compare":
@@ -90,7 +99,7 @@ public class BlockAST {
 
             case "math_change":
                 left = getVar(block);
-                right = getExp(block.getValue(), "DELTA", (short) 0);
+                right = getValue(block.getValue(), "DELTA", (short) 0);
                 return Binary.make(Binary.Op.MATH_CHANGE, (Expr) left, (Expr) right);
 
             case "math_round":
@@ -105,10 +114,10 @@ public class BlockAST {
             case "math_constrain":
                 values = block.getValue();
                 Assert.isTrue(values.size() == 3, "Values size is not equal to 3");
-                Phrase valueExpr = getExp(values, "VALUE", (short) 0);
-                Phrase lowExpr = getExp(values, "LOW", (short) 1);
+                Phrase valueExpr = getValue(values, "VALUE", (short) 0);
+                Phrase lowExpr = getValue(values, "LOW", (short) 1);
                 Phrase maxExpr = Binary.make(Binary.Op.MAX, (Expr) lowExpr, (Expr) valueExpr);
-                Phrase highExpr = getExp(values, "HIGH", (short) 2);
+                Phrase highExpr = getValue(values, "HIGH", (short) 2);
                 return Binary.make(Binary.Op.MIN, (Expr) maxExpr, (Expr) highExpr);
 
             case "math_random_integer":
@@ -123,14 +132,14 @@ public class BlockAST {
 
             case "text_append":
                 left = getVar(block);
-                right = getExp(block.getValue(), "TEXT", (short) 0);
+                right = getValue(block.getValue(), "TEXT", (short) 0);
                 return Binary.make(Binary.Op.TEXT_APPEND, (Expr) left, (Expr) right);
 
             case "text_length":
                 return blockToUnaryExpr(block, "VALUE", "TEXT_LENGTH");
 
             case "text_isEmpty":
-                return blockToUnaryExpr(block, "VALZE", "IS_EMPTY");
+                return blockToUnaryExpr(block, "VALUE", "IS_EMPTY");
 
             case "text_indexOf":
                 return blockToBinaryExpr(block, "VALUE", "FIND", "END");
@@ -154,9 +163,9 @@ public class BlockAST {
                 values = block.getValue();
                 if ( atArg1.equals("true") && atArg2.equals("true") ) {
                     Assert.isTrue(values.size() == 3);
-                    getExp(values, "STRING", (short) 0);
-                    getExp(values, "AT1", (short) 1);
-                    getExp(values, "AT2", (short) 2);
+                    getValue(values, "STRING", (short) 0);
+                    getValue(values, "AT1", (short) 1);
+                    getValue(values, "AT2", (short) 2);
                 }
 
             case "text_change":
@@ -167,7 +176,7 @@ public class BlockAST {
 
             case "text_prompt":
                 fields = block.getField();
-                Assert.isTrue(fields.size() == 2, "Number of fields is not equal to 2");
+                Assert.isTrue(fields.size() == 2, "Number of fields is not equal to 2!");
                 Field type = fields.get(0);
                 Field text = fields.get(1);
                 Assert.isTrue(type.getName().equals("TYPE"));
@@ -205,17 +214,149 @@ public class BlockAST {
 
                 //VARIABLEN
             case "variables_set":
-                return Binary.make(Binary.Op.ASSIGNMENT, (Expr) getVar(block), (Expr) getExp(block.getValue(), "VALUE", (short) 0));
+                return Binary.make(Binary.Op.ASSIGNMENT, (Expr) getVar(block), (Expr) getValue(block.getValue(), "VALUE", (short) 0));
 
             case "variables_get":
                 return getVar(block);
 
                 //KONTROLLE
             case "controls_if":
+                mutation = block.getMutation();
+                values = block.getValue();
+                if ( mutation == null ) {
+                    Assert.isTrue(values.size() <= 1, "Number of values is not less or equal to 1!");
+                    getValue(values, "IF0", (short) 0);
+                } else {
 
+                }
+
+            case "controls_whileUntil":
+                fields = block.getField();
+                Assert.isTrue(fields.size() == 1, "Number of fields is not  equal to 1!");
+                field = fields.get(0);
+                Assert.isTrue(field.getName().equals("MODE"), "Name of the field is not equal to MODE!");
+                String mode = field.getValue();
+
+                values = block.getValue();
+
+                Assert.isTrue(values.size() <= 1, "Number of fields is not less or equal to 1!");
+                if ( values.size() == 1 ) {
+                    expr = getValue(block.getValue(), "BOOL", (short) 0);
+                } else {
+                    expr = BoolConst.make(false);
+                }
+
+                statements = block.getStatement();
+                Assert.isTrue(statements.size() <= 1, "Number of statements is not equal or less to 1!");
+
+                if ( statements.size() == 1 ) {
+                    stmtList = stmtToAST(statements);
+                    RepeatStmt repeatStmt = RepeatStmt.make(RepeatStmt.Mode.valueOf(mode), (Expr) expr, stmtList);
+                    return repeatStmt;
+                } else {
+                    stmtList = StmtList.make();
+                    RepeatStmt repeatStmt = RepeatStmt.make(RepeatStmt.Mode.valueOf(mode), (Expr) expr, stmtList);
+                    return repeatStmt;
+                }
+
+            case "controls_for":
+                var = getVar(block);
+
+                values = block.getValue();
+                Assert.isTrue(values.size() == 3, "Number of values is not equal to 3!");
+
+                ExprList exprList = ExprList.make();
+
+                Phrase from = getValue(values, "FROM", (short) 0);
+                Phrase to = getValue(values, "TO", (short) 1);
+                Phrase by = getValue(values, "BY", (short) 2);
+
+                Binary exprAssig = Binary.make(Binary.Op.ASSIGNMENT, (Expr) var, (Expr) from);
+                Binary exprCondition = Binary.make(Binary.Op.LTE, (Expr) var, (Expr) to);
+                exprList.addExpr(exprAssig);
+
+                exprList.addExpr(exprCondition);
+                exprList.addExpr((Expr) by);
+
+                statements = block.getStatement();
+                Assert.isTrue(statements.size() <= 1, "Number of statements is not equal or less to 1!");
+
+                if ( statements.size() == 1 ) {
+                    stmtList = stmtToAST(statements);
+                    RepeatStmt repeatStmt = RepeatStmt.make(RepeatStmt.Mode.FOR, exprList, stmtList);
+                    return repeatStmt;
+                } else {
+                    stmtList = StmtList.make();
+                    RepeatStmt repeatStmt = RepeatStmt.make(RepeatStmt.Mode.FOR, exprList, stmtList);
+                    return repeatStmt;
+                }
+
+            case "controls_forEach":
+                var = getVar(block);
+
+                values = block.getValue();
+
+                Assert.isTrue(values.size() <= 1, "Number of fields is not less or equal to 1!");
+                if ( values.size() == 1 ) {
+                    expr = getValue(values, "LIST", (short) 0);
+                } else {
+                    expr = ExprList.make();
+                }
+
+                Binary exprBinary = Binary.make(Binary.Op.IN, (Expr) var, (Expr) expr);
+
+                statements = block.getStatement();
+                Assert.isTrue(statements.size() <= 1, "Number of statements is not equal or less to 1!");
+
+                if ( statements.size() == 1 ) {
+                    stmtList = stmtToAST(statements);
+                    RepeatStmt repeatStmt = RepeatStmt.make(RepeatStmt.Mode.FOR_EACH, exprBinary, stmtList);
+                    return repeatStmt;
+                } else {
+                    stmtList = StmtList.make();
+                    RepeatStmt repeatStmt = RepeatStmt.make(RepeatStmt.Mode.FOR_EACH, exprBinary, stmtList);
+                    return repeatStmt;
+                }
+
+            case "controls_flow_statements":
+                fields = block.getField();
+                Assert.isTrue(fields.size() == 1, "Number of fields is not equal to 1!");
+
+                field = fields.get(0);
+                Assert.isTrue(field.getName().equals("FLOW"));
+
+                return StmtFlowCon.make(Flow.valueOf(field.getValue()));
+
+            case "controls_repeat_ext":
+                values = block.getValue();
+                Assert.isTrue(values.size() == 1);
+                value = values.get(0);
+                Assert.isTrue(value.getName().equals("TIMES"));
+                Block expBlock = value.getBlock();
+                expr = bToA(expBlock);
+                statements = block.getStatement();
+                Assert.isTrue(statements.size() <= 1);
+                if ( statements.size() == 1 ) {
+                    stmtList = stmtToAST(statements);
+                    RepeatStmt repeatStmt = RepeatStmt.make(RepeatStmt.Mode.TIMES, (Expr) expr, stmtList);
+                    return repeatStmt;
+                } else {
+                    stmtList = StmtList.make();
+                    RepeatStmt repeatStmt = RepeatStmt.make(RepeatStmt.Mode.TIMES, (Expr) expr, stmtList);
+                    return repeatStmt;
+                }
             default:
                 throw new RuntimeException("Invalid Block: " + block.getType());
         }
+    }
+
+    private StmtList stmtToAST(List<Statement> statements) {
+        Statement statement;
+        statement = statements.get(0);
+        Assert.isTrue(statement.getName().equals("DO"));
+        List<Block> statementBolcks = statement.getBlock();
+        StmtList stmtList = blocksToStmtList(statementBolcks);
+        return stmtList;
     }
 
     private Phrase getVar(Block block) {
@@ -232,9 +373,13 @@ public class BlockAST {
         Arg items = args.get(0);
         List<Value> values = block.getValue();
         Assert.isTrue(values.size() == Integer.parseInt(items.getName()), "Number of values is not equal to number of items in mutation!");
+        return valuesToExprList(values);
+    }
+
+    private ExprList valuesToExprList(List<Value> values) {
         ExprList exprList = ExprList.make();
         for ( int i = 0; i < values.size(); i++ ) {
-            exprList.addExpr((Expr) getExp(values, "ADD" + i, (short) i));
+            exprList.addExpr((Expr) getValue(values, "ADD" + i, (short) i));
         }
         return exprList;
     }
@@ -243,7 +388,7 @@ public class BlockAST {
         String op = checkOperationType(block, operationType);
         List<Value> values = block.getValue();
         Assert.isTrue(values.size() == 1, "Values size is not equal to 1!");
-        Phrase expr = getExp(values, valueType, (short) 0);
+        Phrase expr = getValue(values, valueType, (short) 0);
         return Unary.make(Unary.Op.valueOf(op), (Expr) expr);
     }
 
@@ -271,8 +416,8 @@ public class BlockAST {
         String op = checkOperationType(block, operationType);
         List<Value> values = block.getValue();
         Assert.isTrue(values.size() == 2, "Values size is not equal to 2");
-        Phrase left = getExp(values, leftExpName, (short) 0);
-        Phrase right = getExp(values, rightExprName, (short) 1);
+        Phrase left = getValue(values, leftExpName, (short) 0);
+        Phrase right = getValue(values, rightExprName, (short) 1);
         return Binary.make(Binary.Op.valueOf(op), (Expr) left, (Expr) right);
     }
 
@@ -284,7 +429,7 @@ public class BlockAST {
         return op;
     }
 
-    private Phrase getExp(List<Value> values, String name, short exprNum) {
+    private Phrase getValue(List<Value> values, String name, short exprNum) {
         Value value = values.get(exprNum);
         Assert.isTrue(value.getName().equals(name), "Value name is not equal to " + name + "!");
         return bToA(value.getBlock());
@@ -305,28 +450,6 @@ public class BlockAST {
         }
         return stmtList;
     }
-
-    //            case "controls_repeat_ext":
-    //                values = block.getValue();
-    //                Assert.isTrue(values.size() == 1);
-    //                value = values.get(0);
-    //                Assert.isTrue(value.getName().equals("TIMES"));
-    //                Block expBlock = value.getBlock();
-    //                Phrase expr = bToA(expBlock);
-    //                List<Statement> statements = block.getStatement();
-    //                Assert.isTrue(statements.size() <= 1);
-    //                if ( statements.size() == 1 ) {
-    //                    Statement statement = statements.get(0);
-    //                    Assert.isTrue(statement.getName().equals("DO"));
-    //                    List<Block> statementBolcks = statement.getBlock();
-    //                    StmtList stmtList = blocksToStmtList(statementBolcks);
-    //                    RepeatStmt repeatStmt = RepeatStmt.make((Expr) expr, stmtList);
-    //                    return repeatStmt;
-    //                } else {
-    //                    StmtList stmtList = StmtList.make();
-    //                    RepeatStmt repeatStmt = RepeatStmt.make((Expr) expr, stmtList);
-    //                    return repeatStmt;
-    //                }
 
     public void blockToAST() {
         //        return this.type.blockToAST(blockAST, block)ToAST(this);

@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.dbc.DbcException;
@@ -142,7 +143,7 @@ public class ParseTreeToAst extends TextlyBaseVisitor<Phrase> {
     public Phrase visitRepeatStmt(RepeatStmtContext ctx) {
         Phrase expr = visit(ctx.expr());
         Phrase stmtl = visit(ctx.stmtl());
-        return RepeatStmt.make((Expr) expr, (StmtList) stmtl);
+        return RepeatStmt.make(Mode.FOR, (Expr) expr, (StmtList) stmtl);
     }
 
     @Override

@@ -69,7 +69,8 @@ public class Binary extends Expr {
         FROM_END,
         RANDOM,
         LISTS_REPEAT,
-        ASSIGNMENT;
+        ASSIGNMENT,
+        IN;
 
         public static Op get(String s) {
             if ( "*".equals(s) ) {
@@ -126,6 +127,8 @@ public class Binary extends Expr {
                 return LISTS_REPEAT;
             } else if ( "=".equals(s) ) {
                 return ASSIGNMENT;
+            } else if ( ":".equals(s) ) {
+                return IN;
             } else {
                 throw new DbcException("invalid binary operator: " + s);
             }

@@ -61,7 +61,7 @@ public abstract class Stmt extends Phrase {
      */
     public static enum Kind {
         If( IfStmt.class ), Repeat( RepeatStmt.class ), Expr( ExprStmt.class ), StmtList( StmtList.class ), Assign( AssignStmt.class ), AktionStmt(
-            AktionStmt.class );
+            AktionStmt.class ), StmtFlowCon( StmtFlowCon.class );
 
         private final Class<?> clazz;
 

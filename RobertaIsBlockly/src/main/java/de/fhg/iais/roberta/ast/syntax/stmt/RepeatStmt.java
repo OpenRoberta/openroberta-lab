@@ -4,18 +4,24 @@ import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.dbc.Assert;
 
 public class RepeatStmt extends Stmt {
+    private final Mode mode;
     private final Expr expr;
     private final StmtList list;
 
-    private RepeatStmt(Expr expr, StmtList list) {
+    private RepeatStmt(Mode mode, Expr expr, StmtList list) {
         Assert.isTrue(expr.isReadOnly() && list.isReadOnly());
         this.expr = expr;
         this.list = list;
+        this.mode = mode;
         setReadOnly();
     }
 
-    public static RepeatStmt make(Expr expr, StmtList list) {
-        return new RepeatStmt(expr, list);
+    public static RepeatStmt make(Mode mode, Expr expr, StmtList list) {
+        return new RepeatStmt(mode, expr, list);
+    }
+
+    public Mode getMode() {
+        return this.mode;
     }
 
     public final Expr getExpr() {
@@ -45,6 +51,10 @@ public class RepeatStmt extends Stmt {
         StringBuilder sb = new StringBuilder();
         toStringBuilder(sb, 0);
         return sb.toString();
+    }
+
+    public static enum Mode {
+        WHILE, UNTIL, TIMES, FOR, FOR_EACH;
     }
 
 }
