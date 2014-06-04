@@ -30,16 +30,16 @@ public class ProgramDao extends AbstractDao<Program> {
      * make an program object and persist it (if the program, identified by project&name, does not exist) or update it (if the program exists)
      * 
      * @param project the project the program belongs to, never null
-     * @param name the name of the program, never null
+     * @param programName the name of the program, never null
      * @param programText the program text, maybe null
      * @return the persisted program object
      */
-    public Program persistProgramText(Project project, String name, String programText) {
+    public Program persistProgramText(Project project, String programName, String programText) {
         Assert.notNull(project);
-        Assert.notNull(name);
-        Program program = load(project, name);
+        Assert.notNull(programName);
+        Program program = load(project, programName);
         if ( program == null ) {
-            program = new Program(name, project, "-", programText);
+            program = new Program(programName, project, "-", programText);
             this.session.save(program);
         }
         program.setProgramText(programText);
@@ -54,6 +54,8 @@ public class ProgramDao extends AbstractDao<Program> {
      * @return the program, null if the program is not found
      */
     public Program load(Project project, String programName) {
+        Assert.notNull(project);
+        Assert.notNull(programName);
         Query hql = this.session.createQuery("from Program where project=:project and name=:name");
         hql.setEntity("project", project);
         hql.setString("name", programName);
