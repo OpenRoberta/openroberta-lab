@@ -6,13 +6,14 @@ import java.util.List;
 import org.hibernate.Query;
 
 import de.fhg.iais.roberta.dbc.Assert;
+import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.persistence.bo.Program;
 import de.fhg.iais.roberta.persistence.bo.Project;
 import de.fhg.iais.roberta.persistence.connector.SessionWrapper;
 
 /**
- * DAO class to load and store programs objects.A DAO object is always bound to a session. This session defines the transactional context, in which the database
- * access takes place.
+ * DAO class to load and store programs objects. A DAO object is always bound to a session. This session defines the transactional context, in which the
+ * database access takes place.
  * 
  * @author rbudde
  */
@@ -49,15 +50,15 @@ public class ProgramDao extends AbstractDao<Program> {
     /**
      * load an program from the database, identified by its project and its name (both make up the "business" key of an program)
      * 
-     * @param project the project, never null
+     * @param projectName the project, never null
      * @param programName the name of the program, never null
      * @return the program, null if the program is not found
      */
-    public Program load(Project project, String programName) {
-        Assert.notNull(project);
+    public Program load(Project projectName, String programName) {
+        Assert.notNull(projectName);
         Assert.notNull(programName);
         Query hql = this.session.createQuery("from Program where project=:project and name=:name");
-        hql.setEntity("project", project);
+        hql.setEntity("project", projectName);
         hql.setString("name", programName);
         @SuppressWarnings("unchecked")
         List<Program> il = hql.list();
@@ -65,8 +66,27 @@ public class ProgramDao extends AbstractDao<Program> {
         return il.size() == 0 ? null : il.get(0);
     }
 
+    public int deleteByName(String projectName, String programName) {
+        Assert.notNull(projectName);
+        Assert.notNull(programName);
+        Query hql = this.session.createQuery("from Program where project.name=:projectName and name=:programName");
+        hql.setString("projectName", projectName);
+        hql.setString("programName", programName);
+        @SuppressWarnings("unchecked")
+        List<Program> il = hql.list();
+        if ( il.size() == 0 ) {
+            return 0;
+        } else if ( il.size() == 1 ) {
+            Program toBeDeleted = il.get(0);
+            this.session.delete(toBeDeleted);
+            return 1;
+        } else {
+            throw new DbcException("DB is inconsistent");
+        }
+    }
+
     /**
-     * load all programss persisted in the database
+     * load all programs persisted in the database
      * 
      * @return the list of all programs, may be an empty list, but never null
      */

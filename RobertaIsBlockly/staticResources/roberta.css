@@ -26,6 +26,22 @@
 	width: 1cm;
 }
 
+.programs {
+	color: green;
+	text-align: left;
+}
+
+.rightGray {
+    float: right;
+    width: 2.0cm;
+    text-align: center;
+    color: gray;
+}
+
+.selected {
+    background-color: yellow;
+}
+
 .counter {
 	color: #bbbbbb;
 	background-color: #eeeeee;

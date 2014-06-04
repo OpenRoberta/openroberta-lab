@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="common/jquery/|common/ui/|blockly/" kind="src" path="staticResources"/>
+	<classpathentry excluding="blockly/|closure-library-read-only/**|common/jquery.*.js|common/jquery/|common/ui/" kind="src" path="staticResources"/>
 	<classpathentry kind="con" path="org.eclipse.wst.jsdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.wst.jsdt.launching.WebProject">
 		<attributes>

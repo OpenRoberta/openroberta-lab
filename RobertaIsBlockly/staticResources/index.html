@@ -5,6 +5,7 @@
 <script type="text/javascript" src="/common/jquery/jquery-2.0.3.js" charset="utf-8"></script>
 <script type="text/javascript" src="/common/ui/jquery-ui.js" charset="utf-8"></script>
 <script type="text/javascript" src="/common/basics.js" charset="utf-8"></script>
+<script type="text/javascript" src="/common/jquery.dataTables.min.js" charset="utf-8"></script>
 
 <script type="text/javascript" src="/blockly/blockly_compressed.js"></script>
 <script type="text/javascript" src="/blockly/blocks_compressed.js"></script>
@@ -15,6 +16,7 @@
 <link rel="stylesheet" type="text/css" href="/common/themes/base/jquery.ui.theme.css"></link>
 <link rel="stylesheet" type="text/css" href="/common/themes/base/jquery.ui.tabs.css"></link>
 <link rel="stylesheet" type="text/css" href="/roberta.css"></link>
+<link rel="stylesheet" type="text/css" href="/common/jquery.dataTables.min.css"></link>
 
 
 <head>
@@ -25,7 +27,8 @@
 <body>
   <div id="tabs">
     <ul>
-      <li><a href="#blockly">Blockly</a></li>
+      <li><a href="#blockly">Nepo :-)</a></li>
+      <li><a href="#listing">Listing</a></li>
       <li><a href="#logging">Logging</a></li>
       <li><a href="#readme">README</a></li>
     </ul>
@@ -35,10 +38,22 @@
       <input id="save" class='submit' type="submit" value="save" />
       <input id="load" class='submit' type="submit" value="load" />
       <input id="add" class='submit' type="submit" value="add" />
+      <input id="del" class='submit' type="submit" value="delete" />
       <input id="name" class='input' type="text" value="" />
       <br>
       <input id="toolbox1" class='button' type="submit" value="toolbox 1" />
       <input id="toolbox2" class='button' type="submit" value="toolbox 2" />
+    </div>
+    <div id="listing">
+      <table id="programNameTable" class="tableSize">
+        <thead></thead>
+        <tbody></tbody>
+        <tfoot>
+        </tfoot>
+      </table>
+      <br>
+      <input id="loadFromListing" class='submit' type="submit" value="load" />
+      <div id="redrawCounter" class="rightGray">0</div></br>
     </div>
     <div id="logging">
       <br />

@@ -73,6 +73,32 @@ function loadFromServer(load) {
 	});
 }
 
+function deleteOnServer() {
+	var $name = $('#name');
+	COMM.json("/blocks", {
+		"cmd" : "deletePN",
+		"name" : $name.val()
+	}, function(result) {
+	});
+}
+
+function loadFromListing() {
+	var $programRow = $('#programNameTable .selected');
+	if ($programRow.length <= 0) {
+		return;
+	}
+	var programName = $programRow[0].textContent;
+	COMM.json("/blocks", {
+			"cmd" : "loadP",
+			"name" : programName
+		},
+		function(result) {
+			$("#tabs").tabs( "option", "active", 0 );
+			$('#name').val(programName);
+			showProgram(result, true);
+	    });
+}
+
 var toolboxDone = false;
 
 function showToolbox(result) {
@@ -80,7 +106,7 @@ function showToolbox(result) {
 	if (result.rc === 'ok') {
 		Blockly.updateToolbox(result.data);
 	}
-};
+}
 
 function loadToolbox(number) {
 	COMM.json("/blocks", {
@@ -89,18 +115,84 @@ function loadToolbox(number) {
 	}, showToolbox);
 }
 
+function showPrograms(result) {
+	response(result);
+	if (result.rc === 'ok') {
+		var programNames = result.programNames;
+		var namesArrayArray = [];
+		for (var i = 0; i < programNames.length; i++) {
+			namesArrayArray.push([programNames[i]]);
+		}
+		var $table = $('#programNameTable').dataTable();
+        $table.fnClearTable();
+        $table.fnAddData(namesArrayArray);
+	}
+}
+
+function selectionFn() {
+	$('#programNameTable .selected').removeClass('selected');
+    $(this).toggleClass('selected');
+}
+
+function beforeActivateTab( event, ui ) {
+	$('#tabs').tabs( "refresh" );
+	if (ui.newPanel.selector !== '#listing') {
+		return;
+	}
+	COMM.json("/blocks", {
+		"cmd" : "loadPN",
+	}, showPrograms);
+}
+
+function initProgramNameTable() {
+    var columns = [ { "sName" : "program name", "sClass" : "programs" }
+    ];
+	var $programs = $('#programNameTable');
+		$programs.dataTable({
+		"sDom" : '<lip>t<r>',
+		"aaData" : [],
+		"aoColumns" : columns,
+		"oLanguage" : {
+		"sSearch" : "Search all columns:"
+		},
+		"bJQueryUI" : true,
+		"sPaginationType" : "full_numbers",
+		"bPaginate" : true,
+		"iDisplayLength" : 20,
+		"oLanguage" : {
+		"sLengthMenu" : 'Show <select>' +
+		              '<option value="10">10</option><option value="20">20</option><option value="25">25</option>' +
+		              '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>' +
+		              '</select> programs/revisions'
+		},
+		"fnDrawCallback": function() {
+			var counter = +$('#redrawCounter').text();
+			$('#redrawCounter').text(counter + 1);
+		}
+	});
+	$('#programNameTable tbody').on('click', 'tr', selectionFn);
+}
+
 function init() {
 	$('#tabs').tabs({
 		heightStyle : 'content',
-		active : 0
+		active : 0,
+		beforeActivate: beforeActivateTab
 	});
+	initProgramNameTable();
 	$('#toggle').onWrap('click', LOG.toggleVisibility, 'toggle LOG visibility');
 	$('#save').onWrap('click', saveToServer, 'save the blocks');
 	$('#load').onWrap('click', function() {
 		loadFromServer(true);
 	}, 'load the blocks');
+	$('#loadFromListing').onWrap('click', function() {
+		loadFromListing();
+	}, 'load blocks from program list');
 	$('#add').onWrap('click', function() {
 		loadFromServer(false);
+	}, 'add the blocks');
+	$('#del').onWrap('click', function() {
+		deleteOnServer();
 	}, 'add the blocks');
 	$('#toolbox1').onWrap('click', function() {
 		loadToolbox('1');

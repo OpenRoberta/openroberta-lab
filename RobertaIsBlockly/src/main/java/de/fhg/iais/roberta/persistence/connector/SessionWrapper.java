@@ -85,4 +85,9 @@ public class SessionWrapper {
     public Serializable save(Object toBePersisted) {
         return this.session.save(toBePersisted);
     }
+
+    public void delete(Object object) {
+        this.session.delete(object);
+        this.session.flush();
+    }
 }
