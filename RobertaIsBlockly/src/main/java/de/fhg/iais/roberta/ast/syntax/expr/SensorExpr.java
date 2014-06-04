@@ -30,4 +30,10 @@ public class SensorExpr extends Expr {
         return "SensorExpr [" + this.sens + "]";
     }
 
+    @Override
+    public void toStringBuilder(StringBuilder sb, int indentation) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

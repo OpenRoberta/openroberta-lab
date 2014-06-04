@@ -43,10 +43,10 @@ abstract public class NMEASentence {
 	 * Longitude values has the range: -180 <-> 180
 	 * 
 	 * @param DD_MM
-	 * @param CoordenateType
-	 * @return
+	 * @param CoordinateType
+	 * @return the degrees
 	 */
-	protected float degreesMinToDegrees(String DD_MM,int CoordenateType) {//throws NumberFormatException
+	protected float degreesMinToDegrees(String DD_MM,int CoordinateType) {//throws NumberFormatException
 		// This methods accept all strings of the format
 		// DDDMM.MMMM
 		// DDDMM

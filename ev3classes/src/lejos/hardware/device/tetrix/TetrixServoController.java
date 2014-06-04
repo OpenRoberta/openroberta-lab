@@ -48,7 +48,7 @@ import lejos.utility.Delay;
  *  <p>
  * Use <code>{@link TetrixControllerFactory#newServoController}</code> to retrieve a <code>TetrixServoController</code> instance.
  * 
- * @see lejos.nxt.addon.tetrix.TetrixControllerFactory
+ * @see lejos.hardware.device.tetrix.TetrixControllerFactory
  * @author Kirk P. Thompson
  */
 public class TetrixServoController extends I2CSensor {
@@ -119,7 +119,6 @@ public class TetrixServoController extends I2CSensor {
      * @see TetrixControllerFactory#DAISY_CHAIN_POSITION_2
      * @see TetrixControllerFactory#DAISY_CHAIN_POSITION_3
      * @see TetrixControllerFactory#DAISY_CHAIN_POSITION_4
-     * @see lejos.nxt.SensorPort
      * @throws IllegalStateException if a Servo Controller was not found with given <code>port</code> and <code>daisyChainPosition</code>
      */
     public TetrixServoController(I2CPort port, int daisyChainPosition) {
@@ -132,7 +131,7 @@ public class TetrixServoController extends I2CSensor {
         initController();
         // This thread will keep the controller active. Without I2C activity within 10 seconds, it times out.
         // We could use the PWM Enable value 0xAA in REG_PWM_ENABLE to keep the controller from timing
-        // out but the servos would still be powered if the NXT faulted, was shutdown, etc. 
+        // out but the servos would still be powered if the EV3 faulted, was shutdown, etc. 
         Thread t1 = new Thread(new Runnable(){
             public void run() {
                 byte[] buf = new byte[1];

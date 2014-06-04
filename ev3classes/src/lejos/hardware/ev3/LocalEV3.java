@@ -24,6 +24,7 @@ import lejos.internal.ev3.EV3DeviceManager;
 import lejos.internal.ev3.EV3GraphicsLCD;
 import lejos.internal.ev3.EV3Key;
 import lejos.internal.ev3.EV3Keys;
+import lejos.internal.ev3.EV3LCDManager;
 import lejos.internal.ev3.EV3LED;
 import lejos.internal.ev3.EV3Port;
 import lejos.internal.ev3.EV3Battery;
@@ -51,6 +52,7 @@ public class LocalEV3 implements EV3
     public static final int ID_ESCAPE = 0x20;
     
     public static final LocalEV3 ev3 = new LocalEV3();
+    protected EV3LCDManager lcdManager;
     protected final Power battery = new EV3Battery();
     protected final Audio audio = EV3Audio.getAudio();
     protected ArrayList<EV3Port> ports = new ArrayList<EV3Port>();
@@ -104,25 +106,45 @@ public class LocalEV3 implements EV3
     {
         return battery;
     }
+    
+    protected void initLCD()
+    {
+        if (lcdManager == null)
+        {
+            lcdManager = EV3LCDManager.getLocalLCDManager();
+            lcdManager.newLayer("LCD");
+        }
+    }
 
 	@Override
 	public TextLCD getTextLCD() 
 	{
-		if (textLCD == null) textLCD = new EV3TextLCD();
+        initLCD();
+		if (textLCD == null)
+		{
+		    initLCD();
+		    textLCD = new EV3TextLCD("LCD");
+		}
 		return textLCD;
 	}
 
 	@Override
 	public GraphicsLCD getGraphicsLCD() 
 	{
-		if (graphicsLCD == null) graphicsLCD = new EV3GraphicsLCD(); 
+            initLCD();
+		if (graphicsLCD == null) 
+		{
+		    initLCD();
+		    graphicsLCD = new EV3GraphicsLCD("LCD"); 
+		}
 		return graphicsLCD;
 	}
 
 	@Override
 	public TextLCD getTextLCD(Font f) 
 	{
-		return new EV3TextLCD(f);
+        initLCD();
+		return new EV3TextLCD("LCD", f);
 	}
 	
     /** {@inheritDoc}

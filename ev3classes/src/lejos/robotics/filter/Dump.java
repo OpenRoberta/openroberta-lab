@@ -22,11 +22,11 @@ public class Dump extends AbstractFilter {
   LCD.clear();
   for (int i=0;i<Math.min(sampleSize,LCD.DISPLAY_CHAR_DEPTH);i++) { 
     f=String.format(format,sample[i+offset]);
-    System.out.print(f);
-    System.out.print(' ');
+//    System.out.print(f);
+//    System.out.print(' ');
     LCD.drawString(f, 0, i);
   }
-  System.out.println();
+//  System.out.println();
   LCD.refresh();
 
   }

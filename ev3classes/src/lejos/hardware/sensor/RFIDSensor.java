@@ -203,7 +203,6 @@ public class RFIDSensor extends I2CSensor
     /**
      * Send a stop command to the device.
      * Places the device into sleep mode.
-     * @return < 0 i2c error code >= 0 no error
      */
     public void stop()
     {

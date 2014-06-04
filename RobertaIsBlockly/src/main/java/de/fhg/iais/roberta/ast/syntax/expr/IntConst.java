@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
-
 public class IntConst extends Expr {
     private final int value;
 
@@ -25,5 +24,11 @@ public class IntConst extends Expr {
     @Override
     public String toString() {
         return "Int[" + this.value + "]";
+    }
+
+    @Override
+    public void toStringBuilder(StringBuilder sb, int indentation) {
+        // TODO Auto-generated method stub
+
     }
 }

@@ -128,8 +128,6 @@ public class Image implements Serializable
      * @param h height of the source region
      * @param transform Transform to be applied
      * @return New image
-     * @see EV3GraphicsLCD#drawRegion(javax.microedition.lcdui.Image, int, int, int, int, int, int, int, int)
-     * #see game.Sprite
      */
     public static Image createImage(Image image, int x, int y, int w, int h, int transform)
     {

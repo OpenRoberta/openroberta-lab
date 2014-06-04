@@ -5,9 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Queue;
 
 import lejos.hardware.Bluetooth;
 import lejos.hardware.sensor.SensorMode;
@@ -29,10 +27,6 @@ public class MindsensorsBTSense {
 	private int packets = 0;
 	private boolean debug = true;
 	
-	// Map from character mode indicator to queue for the sensor mode
-	private Map<Character, Queue<Float[]>> queues = new HashMap<Character,Queue<Float[]>>();
-	private Map<Character, Float[]> latest = new HashMap<Character,Float[]>();
-	
 	/**
 	 * A - Accelerometer
 	 * G - Gravity
@@ -50,9 +44,8 @@ public class MindsensorsBTSense {
 	 * U - Temperature
 	 * W - Network location
 	 * O - GPS Location
-	 * 
 	 */
-	private char[] sensorTypes = {'A','R','N','L','M','C','P','S','T','D','G','E','H','U','W','O'};
+	private Map<Character, BTSenseMode> modes = new HashMap<Character, BTSenseMode>();
 	
 	/**
 	 * Connection to the BTSense application and identify device as EV3
@@ -61,41 +54,37 @@ public class MindsensorsBTSense {
 	public MindsensorsBTSense() throws IOException {
 		NXTCommConnector connector = Bluetooth.getNXTCommConnector();
 		
-		System.out.println("Waiting for connection ...");
+		if (debug) System.out.println("Waiting for connection ...");
 		NXTConnection con = connector.waitForConnection(0, NXTConnection.RAW);
 		System.out.println("Connected");
 		
         is = con.openInputStream();
         os = con.openOutputStream();
         
-        System.out.println("Sending Identify command");
-        
+        if (debug) System.out.println("Sending Identify command");
         sendCmd("@:xIE");
-        
-        // Create queues of sensor data for each potential sensor
-        for (char c: sensorTypes) {
-        	queues.put(c, new LinkedList<Float[]>());
-        }
-         
-        // Start a background thread to read data from phone anbd put it in the relevant queue
+ 
+        // Start a background thread to read data from phone and put it in the relevant sensor mode
         new DataReader().start();
 	}
 	
 	/**
 	 * Get a SensorMode object for a specific sensor mode and request data from phone
 	 * 
-	 * @param sensorType the sihngle character sensor mode identifier
+	 * @param sensorType the single character sensor mode identifier
 	 * @return the SensorMode implementation
 	 * @throws IOException
+	 * @throws InterruptedException 
 	 */
-	public SensorMode getSensorMode(char sensorType) throws IOException {
-		Queue<Float[]> queue = new LinkedList<Float[]>();
-		
-		queues.put(sensorType, queue);
-		
-		sendCmd("+:t" + sensorType + "1");
-		
-		return new BTSenseMode(sensorType, queue, latest);	
+	public SensorMode getSensorMode(char sensorType) throws IOException, InterruptedException {
+		BTSenseMode mode = modes.get(sensorType);
+	
+		if (mode == null) {
+			sendCmd("+:t" + sensorType + "1"); // Currently everything is priority 1
+			return new BTSenseMode(sensorType, modes);
+		} else {
+			return mode;
+		}
 	}
 	
 	/**
@@ -130,7 +119,7 @@ public class MindsensorsBTSense {
 		while(true) {
 			if (currLen == 0) { 
 				len = getReply(0);
-				System.out.println("Received " + len + " bytes ");
+				if (debug) System.out.println("Received " + len + " bytes ");
 				if (len <= 0) return;
 				currLen = len;
 			}
@@ -140,7 +129,7 @@ public class MindsensorsBTSense {
 			
 			if (packetLength > currLen - 1) {
 				len = getReply(currLen);
-				System.out.println("Received extra " + len + " bytes ");
+				if (debug) System.out.println("Received extra " + len + " bytes ");
 				if (len <= 0) return;
 				currLen += len;
 			}
@@ -407,8 +396,16 @@ public class MindsensorsBTSense {
 		}
 		
 		if (data != null) {
-			queues.get(sensorType).add(data);
-			latest.put(sensorType, data);
+			BTSenseMode mode = modes.get(sensorType);
+			if (mode == null) {
+				if (debug) System.out.println("No sensor mode for incoming data");
+				return;
+			}
+			mode.setLatest(data);
+			
+			synchronized(mode) {
+				mode.notify();
+			}
 		}
 	}
 	
@@ -446,8 +443,7 @@ public class MindsensorsBTSense {
 	static class BTSenseMode implements SensorMode {
 		private char sensorType;
 		private int sampleSize;
-		private Queue<Float[]> queue;
-		private Map<Character, Float[]> latest;
+		private float[] latest;
 		
 		private static Map<Character, Integer> sampleSizes = new HashMap<Character, Integer>();
 		
@@ -471,11 +467,14 @@ public class MindsensorsBTSense {
 			sampleSizes.put('O', 6);
 		}
 		
-		BTSenseMode(char sensorType, Queue<Float[]> queue, Map<Character, Float[]> latest) {
+		BTSenseMode(char sensorType, Map<Character, BTSenseMode> modes) throws InterruptedException {
 			this.sensorType = sensorType;
 			sampleSize = sampleSizes.get(sensorType);
-			this.queue = queue;
-			this.latest = latest;
+			latest = new float[sampleSize];
+			modes.put(sensorType, this);
+			synchronized(this) {
+				wait();
+			}
 		}
 
 		@Override
@@ -485,9 +484,8 @@ public class MindsensorsBTSense {
 
 		@Override
 		public void fetchSample(float[] sample, int offset) {
-			Float[] data = (queue.isEmpty() ? latest.get(sensorType) : queue.remove());
 			for(int i=0;i<sampleSize;i++) {
-				sample[offset+i] = (data == null ? Float.NaN : data[i]);
+				sample[offset+i] = latest[i];
 			}
 		}
 
@@ -495,5 +493,9 @@ public class MindsensorsBTSense {
 		public String getName() {
 			return new String(new char[] {sensorType});
 		}	
+		
+		public void setLatest(Float[] data) {
+			for(int i=0;i<data.length;i++) latest[i] = data[i];
+		}
 	}
 }

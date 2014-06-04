@@ -19,7 +19,7 @@ public class MeanFilter extends SumFilter {
   public void fetchSample(float[] sample, int off) {
     super.fetchSample(sample, off);
     for (int i = 0; i < sampleSize; i++)
-      sample[i + off] /= actualSize;
+      sample[i + off] /= getActualSize();
   }
 
 }

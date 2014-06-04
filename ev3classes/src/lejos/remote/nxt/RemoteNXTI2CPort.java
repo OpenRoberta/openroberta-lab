@@ -111,7 +111,7 @@ public class RemoteNXTI2CPort extends RemoteNXTIOPort implements I2CPort
      * Set the sensor type and mode
      * @param type the sensor type
      * @param mode the sensor mode
-     * @return 
+     * @return true if success 
      */
     public boolean setTypeAndMode(int type, int mode) {
         this.type = type;
@@ -127,7 +127,7 @@ public class RemoteNXTI2CPort extends RemoteNXTIOPort implements I2CPort
     /**
      * Set the sensor type
      * @param type the sensor type
-     * @return 
+     * @return true if success
      */
     public boolean setType(int type) {
         this.type = type;
@@ -138,7 +138,7 @@ public class RemoteNXTI2CPort extends RemoteNXTIOPort implements I2CPort
     /**
      * Set the sensor mode
      * @param mode the sensor mode
-     * @return 
+     * @return true if success
      */
     public boolean setMode(int mode) {
         this.mode = mode;

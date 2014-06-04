@@ -150,8 +150,7 @@ public class EV3NavigationModel extends NavigationModel implements MoveListener,
 	 * Set parameters for a random move
 	 * 
 	 * @param maxDistance the maximum distance of the move
-	 * @param projection the projection of the robot forward from its mid point
-	 * @param border the border around the wall that the robot should not move into
+	 * @param clearance the clearance distance around the robot
 	 */
 	public void setRandomMoveParameters(float maxDistance, float clearance) {
 		this.maxDistance = maxDistance;

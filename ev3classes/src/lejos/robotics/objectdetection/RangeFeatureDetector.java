@@ -49,7 +49,6 @@ public class RangeFeatureDetector extends FeatureDetectorAdapter {
 	 * @param rf The range finder sensor. e.g. UltrasonicSensor
 	 * @param maxDistance The upper limit of distance it will report. e.g. 40 cm.
 	 * @param delay The interval range finder checks for objects. e.g. 250 ms.
-	 * @see lejos.hardware.sensor.UltrasonicSensor
 	 */
 	public RangeFeatureDetector(RangeFinder rf, float maxDistance, int delay) {
 		this(rf, maxDistance, delay, 0);
@@ -63,7 +62,6 @@ public class RangeFeatureDetector extends FeatureDetectorAdapter {
 	 * @param maxDistance The upper limit of distance it will report. e.g. 40 cm.
 	 * @param delay The interval range finder checks for objects. e.g. 250 ms.
 	 * @param angle The angle, in degrees, the range sensor is pointed. (0 = forward, +ve = left, -ve = right)
-	 * @see lejos.hardware.sensor.UltrasonicSensor
 	 */
 	public RangeFeatureDetector(RangeFinder rf, float maxDistance, int delay, double angle) {
 		super(delay);

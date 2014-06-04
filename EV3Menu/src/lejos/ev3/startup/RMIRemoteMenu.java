@@ -116,4 +116,14 @@ public class RMIRemoteMenu extends UnicastRemoteObject implements RMIMenu {
 	public void shutdown() throws RemoteException {
 		menu.shutdown();
 	}
+
+	@Override
+	public void suspend() throws RemoteException {
+		menu.suspend();		
+	}
+
+	@Override
+	public void resume() throws RemoteException {
+		menu.resume();	
+	}
 }

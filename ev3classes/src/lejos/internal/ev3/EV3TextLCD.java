@@ -6,13 +6,13 @@ import lejos.hardware.lcd.TextLCD;
 public class EV3TextLCD extends EV3LCD implements TextLCD {
 	private Font font;
 	
-	public EV3TextLCD(Font font) {
-		super();
+	public EV3TextLCD(String layerName, Font font) {
+		super(layerName);
 		this.font = font;
 	}
 	
-	public EV3TextLCD() {
-		this(Font.getDefaultFont());
+	public EV3TextLCD(String layerName) {
+		this(layerName, Font.getDefaultFont());
 	}
 
     /**

@@ -30,11 +30,27 @@ public abstract class Expr extends Phrase {
     abstract public Kind getKind();
 
     /**
+     * append a nice, dense and human-readable representation of a expression for <b>debugging and testing purposes</b>
+     * 
+     * @param sb the string builder, to which has to be appended
+     * @param indentation number defining the level of indentation
+     */
+    abstract public void toStringBuilder(StringBuilder sb, int indentation);
+
+    /**
      * define the different kinds of expressions. If a new subclass of {@link #Expr} is created, this enum has to be extended. The new enum value has be
      * the return value of the method {@link Expr#getKind()} of the new class.
      */
     public static enum Kind {
-        IntConst( IntConst.class ), Var( Var.class ), Unary( Unary.class ), Binary( Binary.class ), SensorExpr( SensorExpr.class );
+        ExprList( ExprList.class ),
+        StringConst( StringConst.class ),
+        NullConst( NullConst.class ),
+        BoolConst( BoolConst.class ),
+        IntConst( IntConst.class ),
+        Var( Var.class ),
+        Unary( Unary.class ),
+        Binary( Binary.class ),
+        SensorExpr( SensorExpr.class );
 
         private final Class<?> clazz;
 

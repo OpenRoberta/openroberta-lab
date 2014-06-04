@@ -12,6 +12,11 @@ public interface MoveController extends MoveProvider {
 	public static final double WHEEL_SIZE_NXT2 = 4.32;
 
 	/**
+	 * EV3 kit wheel diameter, in centimeters
+	 */
+	public static final double WHEEL_SIZE_EV3 = WHEEL_SIZE_NXT2;
+	
+	/**
 	 * White RCX "motorcycle" wheel diameter, in centimeters
 	 */
 	public static final double WHEEL_SIZE_RCX  = 8.16;

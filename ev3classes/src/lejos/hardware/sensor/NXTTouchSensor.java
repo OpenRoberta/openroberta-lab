@@ -15,7 +15,7 @@ public class NXTTouchSensor extends AnalogSensor implements SensorConstants, Sen
 	 * Create a touch sensor object attached to the specified open port. Note this
 	 * port will not be configured. Any configuration od the sensor port must take
 	 * place externally.
-	 * @param open an open Analog port
+	 * @param port an open Analog port
 	 */
 	public NXTTouchSensor(AnalogPort port)
 	{

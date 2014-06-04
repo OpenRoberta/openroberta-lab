@@ -33,8 +33,9 @@ public class EV3GraphicsLCD extends EV3LCD implements GraphicsLCD
      * Default constructor returns a context that can be used to access the NXT
      * LCD display.
      */
-    public EV3GraphicsLCD()
+    public EV3GraphicsLCD(String layerName)
     {
+        super(layerName);
         imageBuf = getDisplay();
         width = SCREEN_WIDTH;
         height = SCREEN_HEIGHT;
@@ -47,6 +48,7 @@ public class EV3GraphicsLCD extends EV3LCD implements GraphicsLCD
      * @param width width of the buffer
      * @param height height of the buffer
      */
+
     public EV3GraphicsLCD(byte[] data, int width, int height)
     {
         imageBuf = data;

@@ -24,7 +24,9 @@ public class MenuRequest implements Serializable {
 		SET_NAME,
 		STOP_PROGRAM,
 		GET_EXECUTING_PROGRAM_NAME,
-		SHUT_DOWN
+		SHUT_DOWN,
+		SUSPEND,
+		RESUME
 	}
 	
 	public Request request;

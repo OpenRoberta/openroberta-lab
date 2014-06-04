@@ -66,8 +66,13 @@ public class EV3Keys implements Keys {
 				Thread.sleep(POLL_TIME);
 				int newDown = curButtonsE = readButtons();
 				if (newDown != oldDown)
+				{
+	                Thread.sleep(POLL_TIME);
+	                newDown |= readButtons();
+	                curButtonsE = newDown;
 					return ((oldDown & (~newDown)) << WAITFOR_RELEASE_SHIFT)
 							| (newDown & (~oldDown));
+				}
 			}
 		} catch (InterruptedException e) {
 			// TODO: Need to decide how to handle this properly

@@ -79,7 +79,7 @@ public class DexterLaserSensor extends AnalogSensor implements SensorConstants, 
   /**
    * Get a sample provider that returns samples with the laser turned off.
    * 
-   * @return
+   * @return the sensor mode
    */
   public SensorMode getAmbientMode() {
     return this;
@@ -88,7 +88,7 @@ public class DexterLaserSensor extends AnalogSensor implements SensorConstants, 
   /**
    * Get a sample provider that returns samples with the laser turned on.
    * 
-   * @return
+   * @return the sensor mode
    */
   public SensorMode getLaserMode() {
     return getMode(1);

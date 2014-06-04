@@ -16,24 +16,23 @@ public class EV3LCD implements CommonLCD
     public static final int SCREEN_HEIGHT = 128;
     public static final int DEFAULT_REFRESH_PERIOD = 250;
     
-    private static boolean autoRefresh = true;
-
-    protected final static int HW_MEM_WIDTH = ((SCREEN_WIDTH + 31)/32)*4; // width of HW Buffer in bytes
     protected final static int SCREEN_MEM_WIDTH = (SCREEN_WIDTH +7)/8; // width of leJOS screen buffer in bytes
-    protected final static int LCD_BUFFER_LENGTH = HW_MEM_WIDTH*SCREEN_HEIGHT;
-    protected static byte[] displayBuf = new byte[LCD_BUFFER_LENGTH];
-    protected NativeDevice dev = new NativeDevice("/dev/fb0");
-    protected Pointer lcd = dev.mmap(LCD_BUFFER_LENGTH);
-        
-    protected byte [] hwBuffer = new byte[LCD_BUFFER_LENGTH];
-    private static LCDUpdate updateThread;
+    protected final static int LCD_BUFFER_LENGTH = SCREEN_MEM_WIDTH*SCREEN_HEIGHT;
+    protected byte[] displayBuf;
+    protected EV3LCDManager.LCDLayer layer;
+    static EV3LCDManager lcdMan = EV3LCDManager.getLocalLCDManager();
 
-    public EV3LCD() {
-    	if (updateThread == null) {
-    		updateThread = new LCDUpdate();
-            updateThread.setDaemon(true);
-            updateThread.start();
-    	}
+    public EV3LCD(String layerName) 
+    {
+        layer = lcdMan.getLayer(layerName);
+        layer.open();
+        displayBuf = layer.getDisplay();
+    }
+    
+    public EV3LCD() 
+    {
+        layer = null;
+        displayBuf = null;
     }
 
     /**
@@ -67,7 +66,7 @@ public class EV3LCD implements CommonLCD
      */
     public void asyncRefresh()
     {
-        update(displayBuf);
+        layer.refresh();
     }
 
     /**
@@ -97,9 +96,7 @@ public class EV3LCD implements CommonLCD
      */
     public void refresh()
     {
-        asyncRefresh();
-        if (!autoRefresh)
-            asyncRefreshWait();
+        layer.refresh();
     }
 
     /**
@@ -138,8 +135,7 @@ public class EV3LCD implements CommonLCD
      */
     public void setAutoRefresh(boolean on)
     {
-        setAutoRefreshPeriod((on ? DEFAULT_REFRESH_PERIOD : 0));
-        autoRefresh = on;
+        layer.setAutoRefresh(on);
     }
     
     /**
@@ -163,7 +159,7 @@ public class EV3LCD implements CommonLCD
         if (x < 0 || x >= SCREEN_WIDTH || y < 0 || y >= SCREEN_HEIGHT) return 0; 
         int bit = (x & 0x7);
         //int index = (y)*SCREEN_WIDTH + x;
-        int index = (y)*HW_MEM_WIDTH + x;
+        int index = (y)*SCREEN_MEM_WIDTH + x;
         return ((displayBuf[index] >> bit) & 1);
     }
 
@@ -245,10 +241,10 @@ public class EV3LCD implements CommonLCD
             src = dst;
         int swb = (sw+7)/8;
         int dwb = (dw+7)/8;
-        if (src == displayBuf)
-            swb = HW_MEM_WIDTH;
-        if (dst == displayBuf)
-            dwb = HW_MEM_WIDTH;
+        //if (src == displayBuf)
+            //swb = HW_MEM_WIDTH;
+        //if (dst == displayBuf)
+            //dwb = HW_MEM_WIDTH;
         int inStart = sy*swb;
         int outStart = dy*dwb;
         byte inStartBit = (byte)(1 << (sx & 0x7));
@@ -375,47 +371,10 @@ public class EV3LCD implements CommonLCD
        // Not implemented 
     }
 
-    /**
-     * Update the hardware display contents from the internal display bitmap. We 
-     * need to convert the data from the simple packed format used by the internal
-     * display to that used by the actual LCD controller. See the datasheet for the
-     * ST7586S LCD controller for details.
-     * @param buffer internal format buffer to display
-     */
-    protected synchronized void update(byte [] buffer)
-    {
-        lcd.write(0, buffer, 0, buffer.length);
-
-    }
-    
     public byte[] getHWDisplay() {
-    	byte[] buffer = new byte[SCREEN_HEIGHT*SCREEN_MEM_WIDTH];
-    	byte [] hwBuffer = new byte[LCD_BUFFER_LENGTH];
-    	
-    	lcd.read(0, hwBuffer, 0, LCD_BUFFER_LENGTH);
-    	
-        for(int row = 0; row < SCREEN_HEIGHT; row++)
-        {
-            System.arraycopy(hwBuffer, row*HW_MEM_WIDTH, buffer, row*SCREEN_MEM_WIDTH, SCREEN_MEM_WIDTH);
-        }
-    	return buffer;
+    	return lcdMan.getHWDisplay();
     }
     
-    class LCDUpdate extends Thread {
-	    /**
-	     * Background thread which provides automatic screen updates
-	     */
-	    public void run()
-	    {
-	        for(;;)
-	        {
-	            Delay.msDelay(DEFAULT_REFRESH_PERIOD);
-	            if (autoRefresh)
-	                update(displayBuf);
-	        }
-	    }
-    }
-
 	@Override
 	public int getWidth() {
 		return SCREEN_WIDTH;

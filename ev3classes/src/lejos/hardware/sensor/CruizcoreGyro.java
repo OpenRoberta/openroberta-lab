@@ -104,7 +104,6 @@ public class CruizcoreGyro extends I2CSensor implements SensorMode {
 	/**
 	 * Resets the accumulated angle (heading).
 	 *
-	 * @return true, if successful
 	 */
 	public void reset() {
 		sendData(RESET, (byte)0);

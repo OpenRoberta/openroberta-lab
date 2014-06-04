@@ -188,10 +188,10 @@ public class LinearCalibrationFilter extends AbstractCalibrationFilter {
   }
 
   /**
-   * Returns an array with the offset correction paramaters that are currently
+   * Returns an array with the offset correction parameters that are currently
    * in use
    * 
-   * @return
+   * @return the offset correction array
    */
   public float[] getOffsetCorrection() {
     float[] ret = new float[sampleSize];
@@ -203,7 +203,7 @@ public class LinearCalibrationFilter extends AbstractCalibrationFilter {
    * Returns an array with the scale correction paramaters that are currently in
    * use
    * 
-   * @return
+   * @return the scale correction array
    */
   public float[] getScaleCorrection() {
     float[] ret = new float[sampleSize];
@@ -237,7 +237,7 @@ public class LinearCalibrationFilter extends AbstractCalibrationFilter {
    * settings, to a filterProperties file. Stored parameters can later be used
    * by the CalibrationFilter.
    * 
-   * @param name
+   * @param filename
    *          A name to use for storing calibration parameters
    */
   public void save(String filename) {

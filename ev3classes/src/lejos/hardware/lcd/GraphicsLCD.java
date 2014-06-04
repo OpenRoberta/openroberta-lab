@@ -353,7 +353,6 @@ public interface GraphicsLCD extends CommonLCD {
      * @param blue the blue
      * @throws IllegalArgumentException if any of the color components
      * are outside of range <code>0-255</code>
-     * @see #getColor
      */
     public void setColor(int red, int green, int blue);
 

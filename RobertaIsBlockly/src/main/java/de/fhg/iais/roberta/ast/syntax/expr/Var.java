@@ -25,4 +25,10 @@ public class Var extends Expr {
     public String toString() {
         return "Var[" + this.name + "]";
     }
+
+    @Override
+    public void toStringBuilder(StringBuilder sb, int indentation) {
+        // TODO Auto-generated method stub
+
+    }
 }
