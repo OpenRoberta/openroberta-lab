@@ -24,8 +24,7 @@ public class NullConst extends Expr {
 
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
-        // TODO Auto-generated method stub
-
+        sb.append("null");
     }
 
 }

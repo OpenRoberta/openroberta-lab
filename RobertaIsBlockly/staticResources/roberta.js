@@ -148,7 +148,7 @@ function initProgramNameTable() {
     var columns = [ { "sName" : "program name", "sClass" : "programs" }
     ];
 	var $programs = $('#programNameTable');
-		$programs.dataTable({
+	$programs.dataTable({
 		"sDom" : '<lip>t<r>',
 		"aaData" : [],
 		"aoColumns" : columns,

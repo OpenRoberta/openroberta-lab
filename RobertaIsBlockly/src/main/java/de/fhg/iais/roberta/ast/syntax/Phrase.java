@@ -37,7 +37,11 @@ import de.fhg.iais.roberta.dbc.Assert;
  * {@link #setReadOnly()} is called.
  * This cannot be undone later. It is expected that all subclasses of {@link #Phrase} do the following:<br>
  * - if in construction phase, they should use {@link #mayChange()} to assert that.<br>
- * - if the construction has finished and {@link #setReadOnly()} has been called, they should use {@link #isReadOnly()} to assert their immutability.
+ * - if the construction has finished and {@link #setReadOnly()} has been called, they should use {@link #isReadOnly()} to assert their immutability.<br>
+ * <br>
+ * There are two ways for a client to find out which kind a {@link #Phrase}-object is:<br>
+ * - {@link #getKind()}<br>
+ * - {@link #getAs(Class)}<br>
  */
 abstract public class Phrase {
     private boolean readOnly = false;
