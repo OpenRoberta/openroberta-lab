@@ -1,9 +1,12 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
+import de.fhg.iais.roberta.ast.syntax.Phrase;
+
 public class BoolConst extends Expr {
     private final boolean value;
 
     private BoolConst(boolean value) {
+        super(Phrase.Kind.BoolConst);
         this.value = value;
         setReadOnly();
     }
@@ -14,11 +17,6 @@ public class BoolConst extends Expr {
 
     public boolean isValue() {
         return this.value;
-    }
-
-    @Override
-    public Kind getKind() {
-        return Expr.Kind.BoolConst;
     }
 
     @Override

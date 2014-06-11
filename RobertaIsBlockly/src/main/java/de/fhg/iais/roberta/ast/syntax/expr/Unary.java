@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
@@ -8,6 +9,7 @@ public class Unary extends Expr {
     private final Expr expr;
 
     private Unary(Op op, Expr expr) {
+        super(Phrase.Kind.Unary);
         Assert.isTrue(op != null && expr != null && expr.isReadOnly());
         this.op = op;
         this.expr = expr;
@@ -24,11 +26,6 @@ public class Unary extends Expr {
 
     public Expr getExpr() {
         return this.expr;
-    }
-
-    @Override
-    public Kind getKind() {
-        return Expr.Kind.Unary;
     }
 
     @Override

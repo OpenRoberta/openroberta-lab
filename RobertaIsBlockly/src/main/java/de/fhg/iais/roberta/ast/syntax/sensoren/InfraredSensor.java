@@ -3,20 +3,20 @@ package de.fhg.iais.roberta.ast.syntax.sensoren;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 
-public class UltraSSensor extends Sensor {
+public class InfraredSensor extends Sensor {
     private final Mode mode;
     private final int port;
 
-    private UltraSSensor(Mode mode, int port) {
-        super(Phrase.Kind.UltraSSensor);
+    private InfraredSensor(Mode mode, int port) {
+        super(Phrase.Kind.InfraredSensor);
         Assert.isTrue(mode != null);
         this.mode = mode;
         this.port = port;
         setReadOnly();
     }
 
-    public static UltraSSensor make(Mode mode, int port) {
-        return new UltraSSensor(mode, port);
+    public static InfraredSensor make(Mode mode, int port) {
+        return new InfraredSensor(mode, port);
     }
 
     public Mode getMode() {
@@ -35,11 +35,11 @@ public class UltraSSensor extends Sensor {
 
     @Override
     public String toString() {
-        return "UltraSSensor [mode=" + this.mode + ", port=" + this.port + "]";
+        return "InfraredSensor [mode=" + this.mode + ", port=" + this.port + "]";
     }
 
     public static enum Mode {
-        DISTANCE, PRESENCE, GET_MODE, GET_SAMPLE;
+        DISTANCE, SEEK, GET_MODE, GET_SAMPLE;
     }
 
 }

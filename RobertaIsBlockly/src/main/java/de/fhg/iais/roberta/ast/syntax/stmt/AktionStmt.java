@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax.stmt;
 
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.aktion.Aktion;
 import de.fhg.iais.roberta.dbc.Assert;
 
@@ -7,6 +8,7 @@ public class AktionStmt extends Stmt {
     private final Aktion akt;
 
     private AktionStmt(Aktion akt) {
+        super(Phrase.Kind.AKTION_STMT);
         Assert.isTrue(akt.isReadOnly());
         this.akt = akt;
         setReadOnly();
@@ -18,11 +20,6 @@ public class AktionStmt extends Stmt {
 
     public Aktion getAkt() {
         return this.akt;
-    }
-
-    @Override
-    public Kind getKind() {
-        return Kind.AktionStmt;
     }
 
     @Override

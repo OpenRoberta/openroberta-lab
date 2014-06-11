@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax.aktion;
 
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 
 public class ToneAktion extends Aktion {
@@ -7,6 +8,7 @@ public class ToneAktion extends Aktion {
     private final int duration;
 
     private ToneAktion(int frequency, int duration) {
+        super(Phrase.Kind.ToneAktion);
         Assert.isTrue(frequency > 0 && duration > 0);
         this.frequency = frequency;
         this.duration = duration;
@@ -23,11 +25,6 @@ public class ToneAktion extends Aktion {
 
     public int getDuration() {
         return this.duration;
-    }
-
-    @Override
-    public Kind getKind() {
-        return Kind.ToneAktion;
     }
 
     @Override

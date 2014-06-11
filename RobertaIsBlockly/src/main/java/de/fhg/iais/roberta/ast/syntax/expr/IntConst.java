@@ -1,9 +1,12 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
+import de.fhg.iais.roberta.ast.syntax.Phrase;
+
 public class IntConst extends Expr {
     private final int value;
 
     private IntConst(int value) {
+        super(Phrase.Kind.IntConst);
         this.value = value;
         setReadOnly();
     }
@@ -14,11 +17,6 @@ public class IntConst extends Expr {
 
     public int getValue() {
         return this.value;
-    }
-
-    @Override
-    public Kind getKind() {
-        return Expr.Kind.IntConst;
     }
 
     @Override

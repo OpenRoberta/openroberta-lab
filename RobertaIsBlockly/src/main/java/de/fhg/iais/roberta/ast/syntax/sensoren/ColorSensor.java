@@ -1,41 +1,43 @@
 package de.fhg.iais.roberta.ast.syntax.sensoren;
 
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 
 public class ColorSensor extends Sensor {
-    private final CoType measureType;
+    private final Mode mode;
+    private final int port;
 
-    private ColorSensor(CoType measureType) {
-        Assert.isTrue(measureType != null);
-        this.measureType = measureType;
+    private ColorSensor(Mode mode, int port) {
+        super(Phrase.Kind.ColorSensor);
+        Assert.isTrue(mode != null);
+        this.mode = mode;
+        this.port = port;
         setReadOnly();
     }
 
-    public static ColorSensor make(CoType measureType) {
-        return new ColorSensor(measureType);
+    public static ColorSensor make(Mode mode, int port) {
+        return new ColorSensor(mode, port);
     }
 
-    public CoType getCoType() {
-        return this.measureType;
+    public Mode getMode() {
+        return this.mode;
     }
 
-    @Override
-    public Kind getKind() {
-        return Kind.ColorSensor;
+    public int getPort() {
+        return this.port;
     }
 
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public String toString() {
-        return "ColorSensor [" + this.measureType + "]";
+        return "ColorSensor [mode=" + this.mode + ", port=" + this.port + "]";
     }
 
-    public static enum CoType {
-        color, light, ambientLight;
+    public static enum Mode {
+        COLOUR, LIGHT, AMBIENTLIGHT, GET_MODE, GET_SAMPLE;
     }
 }

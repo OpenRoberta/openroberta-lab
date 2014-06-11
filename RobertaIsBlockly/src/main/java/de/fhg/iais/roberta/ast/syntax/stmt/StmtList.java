@@ -4,10 +4,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 
 public class StmtList extends Stmt {
     private final List<Stmt> sl = new ArrayList<Stmt>();
+
+    private StmtList() {
+        super(Phrase.Kind.STMT_LIST);
+    }
 
     public static StmtList make() {
         return new StmtList();
@@ -21,11 +26,6 @@ public class StmtList extends Stmt {
     public final List<Stmt> get() {
         Assert.isTrue(isReadOnly());
         return Collections.unmodifiableList(this.sl);
-    }
-
-    @Override
-    public Kind getKind() {
-        return Kind.StmtList;
     }
 
     @Override

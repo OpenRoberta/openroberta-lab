@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax.stmt;
 
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.dbc.Assert;
 
@@ -9,6 +10,7 @@ public class RepeatStmt extends Stmt {
     private final StmtList list;
 
     private RepeatStmt(Mode mode, Expr expr, StmtList list) {
+        super(Phrase.Kind.REPEAT);
         Assert.isTrue(expr.isReadOnly() && list.isReadOnly());
         this.expr = expr;
         this.list = list;
@@ -30,11 +32,6 @@ public class RepeatStmt extends Stmt {
 
     public final StmtList getlist() {
         return this.list;
-    }
-
-    @Override
-    public Kind getKind() {
-        return Kind.Repeat;
     }
 
     @Override

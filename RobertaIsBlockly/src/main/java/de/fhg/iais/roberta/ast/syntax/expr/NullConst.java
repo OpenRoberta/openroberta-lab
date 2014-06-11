@@ -1,8 +1,11 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
+import de.fhg.iais.roberta.ast.syntax.Phrase;
+
 public class NullConst extends Expr {
 
     private NullConst() {
+        super(Phrase.Kind.NullConst);
         setReadOnly();
     }
 
@@ -12,11 +15,6 @@ public class NullConst extends Expr {
 
     public Object getValue() {
         return null;
-    }
-
-    @Override
-    public Kind getKind() {
-        return Expr.Kind.NullConst;
     }
 
     @Override

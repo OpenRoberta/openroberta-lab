@@ -1,9 +1,12 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
+import de.fhg.iais.roberta.ast.syntax.Phrase;
+
 public class StringConst extends Expr {
     private final String value;
 
     private StringConst(String value) {
+        super(Phrase.Kind.StringConst);
         this.value = value;
         setReadOnly();
     }
@@ -14,11 +17,6 @@ public class StringConst extends Expr {
 
     public String getValue() {
         return this.value;
-    }
-
-    @Override
-    public Kind getKind() {
-        return Expr.Kind.StringConst;
     }
 
     @Override

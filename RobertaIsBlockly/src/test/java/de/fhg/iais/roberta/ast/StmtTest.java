@@ -37,11 +37,11 @@ public class StmtTest {
             System.out.println("expected");
         }
         switch ( stmt.getKind() ) {
-            case If:
+            case IF:
                 IfStmt t1 = stmt.getAs(IfStmt.class);
                 System.out.println(t1.getExpr());
                 break;
-            case Repeat:
+            case REPEAT:
                 RepeatStmt t2 = stmt.getAs(RepeatStmt.class);
                 System.out.println(t2.getExpr());
                 break;

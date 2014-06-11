@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax.stmt;
 
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.dbc.Assert;
 
@@ -9,6 +10,7 @@ public class IfStmt extends Stmt {
     private final StmtList elseList;
 
     private IfStmt(Expr expr, StmtList thenList, StmtList elseList) {
+        super(Phrase.Kind.IF);
         Assert.isTrue(expr.isReadOnly() && thenList.isReadOnly() && elseList.isReadOnly());
         this.expr = expr;
         this.thenList = thenList;
@@ -43,11 +45,6 @@ public class IfStmt extends Stmt {
 
     public final StmtList getElseList() {
         return this.elseList;
-    }
-
-    @Override
-    public Kind getKind() {
-        return Kind.If;
     }
 
     @Override

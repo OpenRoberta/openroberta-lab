@@ -4,10 +4,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 
 public class ExprList extends Expr {
     private final List<Expr> el = new ArrayList<Expr>();
+
+    private ExprList() {
+        super(Phrase.Kind.ExprList);
+    }
 
     public static ExprList make() {
         return new ExprList();
@@ -21,12 +26,6 @@ public class ExprList extends Expr {
     public final List<Expr> get() {
         Assert.isTrue(isReadOnly());
         return Collections.unmodifiableList(this.el);
-    }
-
-    @Override
-    public Kind getKind() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override

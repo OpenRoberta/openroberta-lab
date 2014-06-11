@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax.aktion;
 
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 
 public class TurnAktion extends Aktion {
@@ -7,6 +8,7 @@ public class TurnAktion extends Aktion {
     private final MotionParam param;
 
     private TurnAktion(Di direction, MotionParam param) {
+        super(Phrase.Kind.TurnAktion);
         Assert.isTrue(direction != null && param != null);
         this.direction = direction;
         this.param = param;
@@ -23,11 +25,6 @@ public class TurnAktion extends Aktion {
 
     public MotionParam getParam() {
         return this.param;
-    }
-
-    @Override
-    public Kind getKind() {
-        return Kind.TurnAktion;
     }
 
     @Override

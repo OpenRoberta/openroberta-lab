@@ -3,28 +3,28 @@ package de.fhg.iais.roberta.ast.syntax.sensoren;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 
-public class UltraSSensor extends Sensor {
+public class DrehSensor extends Sensor {
     private final Mode mode;
-    private final int port;
+    private final String motor;
 
-    private UltraSSensor(Mode mode, int port) {
-        super(Phrase.Kind.UltraSSensor);
+    private DrehSensor(Mode mode, String motor) {
+        super(Phrase.Kind.DrehSensor);
         Assert.isTrue(mode != null);
         this.mode = mode;
-        this.port = port;
+        this.motor = motor;
         setReadOnly();
     }
 
-    public static UltraSSensor make(Mode mode, int port) {
-        return new UltraSSensor(mode, port);
+    public static DrehSensor make(Mode mode, String motor) {
+        return new DrehSensor(mode, motor);
     }
 
     public Mode getMode() {
         return this.mode;
     }
 
-    public int getPort() {
-        return this.port;
+    public String getMotor() {
+        return this.motor;
     }
 
     @Override
@@ -35,11 +35,11 @@ public class UltraSSensor extends Sensor {
 
     @Override
     public String toString() {
-        return "UltraSSensor [mode=" + this.mode + ", port=" + this.port + "]";
+        return "DrehSensor [mode=" + this.mode + ", motor=" + this.motor + "]";
     }
 
     public static enum Mode {
-        DISTANCE, PRESENCE, GET_MODE, GET_SAMPLE;
+        ROTATION, DEGREE, GET_MODE, GET_SAMPLE, RESET;
     }
 
 }

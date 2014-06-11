@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.sensoren.Sensor;
 import de.fhg.iais.roberta.dbc.Assert;
 
@@ -7,6 +8,7 @@ public class SensorExpr extends Expr {
     private final Sensor sens;
 
     private SensorExpr(Sensor sens) {
+        super(Phrase.Kind.SensorExpr);
         Assert.isTrue(sens.isReadOnly());
         this.sens = sens;
         setReadOnly();
@@ -18,11 +20,6 @@ public class SensorExpr extends Expr {
 
     public Sensor getSens() {
         return this.sens;
-    }
-
-    @Override
-    public Kind getKind() {
-        return Kind.SensorExpr;
     }
 
     @Override

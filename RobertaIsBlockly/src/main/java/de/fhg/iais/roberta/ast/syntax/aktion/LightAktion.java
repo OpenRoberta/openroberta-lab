@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax.aktion;
 
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 
 public class LightAktion extends Aktion {
@@ -8,6 +9,7 @@ public class LightAktion extends Aktion {
     private final boolean blink;
 
     private LightAktion(boolean turnOn, Co color, boolean blink) {
+        super(Phrase.Kind.LightAktion);
         Assert.isTrue(color != null);
         this.turnOn = turnOn;
         this.color = color;
@@ -29,11 +31,6 @@ public class LightAktion extends Aktion {
 
     public boolean isBlink() {
         return this.blink;
-    }
-
-    @Override
-    public Kind getKind() {
-        return Kind.LightAktion;
     }
 
     @Override

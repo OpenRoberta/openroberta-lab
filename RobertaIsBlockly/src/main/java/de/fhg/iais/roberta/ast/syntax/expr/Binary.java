@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
@@ -9,6 +10,7 @@ public class Binary extends Expr {
     private final Expr right;
 
     private Binary(Op op, Expr left, Expr right) {
+        super(Phrase.Kind.Binary);
         Assert.isTrue(op != null && left != null && right != null && left.isReadOnly() && right.isReadOnly());
         this.op = op;
         this.left = left;
@@ -30,11 +32,6 @@ public class Binary extends Expr {
 
     public Expr getRight() {
         return this.right;
-    }
-
-    @Override
-    public Kind getKind() {
-        return Expr.Kind.Binary;
     }
 
     @Override

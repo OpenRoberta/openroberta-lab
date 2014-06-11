@@ -1,11 +1,13 @@
 package de.fhg.iais.roberta.ast.syntax.stmt;
 
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 public class StmtFlowCon extends Stmt {
     private final Flow flow;
 
     private StmtFlowCon(Flow flow) {
+        super(Phrase.Kind.STMT_FLOW_CON);
         this.flow = flow;
         setReadOnly();
     }
@@ -16,11 +18,6 @@ public class StmtFlowCon extends Stmt {
 
     public Flow getFlow() {
         return this.flow;
-    }
-
-    @Override
-    public Kind getKind() {
-        return Kind.StmtFlowCon;
     }
 
     @Override

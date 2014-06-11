@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax.aktion;
 
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 
 public class ShowAktion extends Aktion {
@@ -8,6 +9,7 @@ public class ShowAktion extends Aktion {
     private final int row;
 
     private ShowAktion(String msg, int column, int row) {
+        super(Phrase.Kind.ShowAktion);
         Assert.isTrue(msg != null && column > 0 && row > 0);
         this.msg = msg;
         this.column = column;
@@ -29,11 +31,6 @@ public class ShowAktion extends Aktion {
 
     public int getRow() {
         return this.row;
-    }
-
-    @Override
-    public Kind getKind() {
-        return Kind.ShowAktion;
     }
 
     @Override

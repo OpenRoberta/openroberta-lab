@@ -1,25 +1,22 @@
 package de.fhg.iais.roberta.ast.syntax.sensoren;
 
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 
 public class TouchSensor extends Sensor {
-    private final boolean state;
+    private final int port;
 
-    private TouchSensor(boolean state) {
-        this.state = state;
+    private TouchSensor(int port) {
+        super(Phrase.Kind.TouchSensor);
+        this.port = port;
         setReadOnly();
     }
 
-    public static TouchSensor make(boolean state) {
-        return new TouchSensor(state);
+    public static TouchSensor make(int port) {
+        return new TouchSensor(port);
     }
 
-    public boolean getState() {
-        return this.state;
-    }
-
-    @Override
-    public Kind getKind() {
-        return Kind.TouchSensor;
+    public int getPort() {
+        return this.port;
     }
 
     @Override
@@ -30,7 +27,7 @@ public class TouchSensor extends Sensor {
 
     @Override
     public String toString() {
-        return "TouchSensor [" + this.state + "]";
+        return "TouchSensor [ port=" + this.port + "]";
     }
 
 }

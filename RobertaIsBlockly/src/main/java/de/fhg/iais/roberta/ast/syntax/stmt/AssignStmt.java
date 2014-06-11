@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax.stmt;
 
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.dbc.Assert;
@@ -9,6 +10,7 @@ public class AssignStmt extends Stmt {
     private final Expr expr;
 
     private AssignStmt(Var name, Expr expr) {
+        super(Phrase.Kind.ASSIGN);
         Assert.isTrue(name.isReadOnly() && expr.isReadOnly());
         this.name = name;
         this.expr = expr;
@@ -25,11 +27,6 @@ public class AssignStmt extends Stmt {
 
     public final Expr getExpr() {
         return this.expr;
-    }
-
-    @Override
-    public Kind getKind() {
-        return Kind.Assign;
     }
 
     @Override
