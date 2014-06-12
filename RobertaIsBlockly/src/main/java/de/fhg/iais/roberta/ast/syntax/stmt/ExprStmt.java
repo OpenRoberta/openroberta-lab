@@ -19,13 +19,13 @@ public class ExprStmt extends Stmt {
     }
 
     public final Expr getExpr() {
-        return this.expr;
+        return expr;
     }
 
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
         appendNewLine(sb, indentation, null);
-        sb.append("expr ").append(this.expr);
+        sb.append("exprStmt ").append(expr);
     }
 
     @Override

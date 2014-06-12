@@ -14,23 +14,21 @@ public class AktionStmt extends Stmt {
         setReadOnly();
     }
 
-    public AktionStmt make(Aktion akt) {
+    public static AktionStmt make(Aktion akt) {
         return new AktionStmt(akt);
     }
 
     public Aktion getAkt() {
-        return this.akt;
+        return akt;
     }
 
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public String toString() {
-        return "AktionStmt [" + this.akt + "]";
+        return "AktionStmt [" + akt + "]";
     }
 
 }

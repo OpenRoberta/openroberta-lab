@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
 import de.fhg.iais.roberta.ast.syntax.expr.IntConst;
+import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
 import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
@@ -55,21 +56,21 @@ abstract public class Phrase {
      * @return true, if the object is writable/mutable. This is true, if {@link #setReadOnly()} has not yet been called for this object
      */
     public final boolean mayChange() {
-        return !this.readOnly;
+        return !readOnly;
     }
 
     /**
      * @return true, if the object is read-only/immutable. This is true, if {@link #setReadOnly()} has been called for this object
      */
     public final boolean isReadOnly() {
-        return this.readOnly;
+        return readOnly;
     }
 
     /**
      * make this {@link Phrase}-object read-only/immutable. Should be called if the construction phase has finished
      */
     public final void setReadOnly() {
-        this.readOnly = true;
+        readOnly = true;
     }
 
     /**
@@ -91,7 +92,7 @@ abstract public class Phrase {
      * @return the kind of the expression. See enum {@link Kind} for all kinds possible<br>
      */
     public final Kind getKind() {
-        return this.kind;
+        return kind;
     }
 
     /**
@@ -133,6 +134,7 @@ abstract public class Phrase {
         NullConst( NullConst.class, Category.EXPR ),
         BoolConst( BoolConst.class, Category.EXPR ),
         IntConst( IntConst.class, Category.EXPR ),
+        MathConst( MathConst.class, Category.EXPR ),
         Var( Var.class, Category.EXPR ),
         Unary( Unary.class, Category.EXPR ),
         Binary( Binary.class, Category.EXPR ),
@@ -160,15 +162,15 @@ abstract public class Phrase {
         }
 
         public final Class<?> getPhraseClass() {
-            return this.clazz;
+            return clazz;
         }
 
         public final Category getCategory() {
-            return this.category;
+            return category;
         }
     }
 
-    private static enum Category {
+    public static enum Category {
         EXPR, SENSOR, AKTOR, STMT;
     }
 }
