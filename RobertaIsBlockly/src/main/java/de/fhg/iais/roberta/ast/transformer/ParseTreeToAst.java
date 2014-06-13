@@ -9,17 +9,15 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
-import de.fhg.iais.roberta.ast.syntax.expr.IntConst;
+import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
-import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
-import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.text.generated.TextlyBaseVisitor;
 import de.fhg.iais.roberta.text.generated.TextlyLexer;
 import de.fhg.iais.roberta.text.generated.TextlyParser;
@@ -28,7 +26,6 @@ import de.fhg.iais.roberta.text.generated.TextlyParser.BinaryContext;
 import de.fhg.iais.roberta.text.generated.TextlyParser.ExprStmtContext;
 import de.fhg.iais.roberta.text.generated.TextlyParser.IfElseContext;
 import de.fhg.iais.roberta.text.generated.TextlyParser.IfElseIfContext;
-import de.fhg.iais.roberta.text.generated.TextlyParser.IfElseRContext;
 import de.fhg.iais.roberta.text.generated.TextlyParser.IfStmtContext;
 import de.fhg.iais.roberta.text.generated.TextlyParser.IfThenContext;
 import de.fhg.iais.roberta.text.generated.TextlyParser.IntConstContext;
@@ -93,7 +90,7 @@ public class ParseTreeToAst extends TextlyBaseVisitor<Phrase> {
 
     @Override
     public Phrase visitIntConst(IntConstContext ctx) {
-        return IntConst.make(Integer.parseInt(ctx.INT().getText()));
+        return NumConst.make(ctx.INT().getText());
     }
 
     @Override
@@ -110,23 +107,24 @@ public class ParseTreeToAst extends TextlyBaseVisitor<Phrase> {
 
     @Override
     public Phrase visitIfThen(IfThenContext ctx) {
-        Phrase expr = visit(ctx.expr());
-        Phrase thenList = visit(ctx.stmtl());
-        IfElseRContext ifElse = ctx.ifElseR();
-        if ( ifElse == null ) {
-            return IfStmt.make((Expr) expr, (StmtList) thenList);
-        } else {
-            Phrase elseList = visit(ifElse);
-            if ( elseList instanceof IfStmt ) {
-                IfStmt elseIf = (IfStmt) elseList;
-                return IfStmt.make((Expr) expr, (StmtList) thenList, elseIf);
-            } else if ( elseList instanceof StmtList ) {
-                StmtList elsel = (StmtList) elseList;
-                return IfStmt.make((Expr) expr, (StmtList) thenList, elsel);
-            } else {
-                throw new DbcException("invalid pharses in if then elsif else: " + ctx.getText());
-            }
-        }
+        return null;
+        //        Phrase expr = visit(ctx.expr());
+        //        Phrase thenList = visit(ctx.stmtl());
+        //        IfElseRContext ifElse = ctx.ifElseR();
+        //        if ( ifElse == null ) {
+        //            return IfStmt.make((Expr) expr, (StmtList) thenList);
+        //        } else {
+        //            Phrase elseList = visit(ifElse);
+        //            if ( elseList instanceof IfStmt ) {
+        //                IfStmt elseIf = (IfStmt) elseList;
+        //                return IfStmt.make((Expr) expr, (StmtList) thenList, elseIf);
+        //            } else if ( elseList instanceof StmtList ) {
+        //                StmtList elsel = (StmtList) elseList;
+        //                return IfStmt.make((Expr) expr, (StmtList) thenList, elsel);
+        //            } else {
+        //                throw new DbcException("invalid pharses in if then elsif else: " + ctx.getText());
+        //            }
+        //        }
     }
 
     @Override

@@ -149,47 +149,126 @@ h1 {
 
   <div id="blocklyDiv"></div>
 
-   <xml id="toolbox" style="display: none"> 
-	<category name="Aktion"> 
-		<category name="Bewegung"> 
-		</category> 
-		<category name="Anzeige"> 
-		</category> 
-		<category name="Klang"> 
-		</category> 
-		<category name="Statusleuchte"> 
-		</category> 
-	</category> 
-	<category name="Sensoren"> 
-		<category name="Berührungssensor"> 
+   <xml id="toolbox" style="display: none">
+	<category name="Aktion">
+		<category name="Bewegung">
+			<block type="robActions_motorBig_on">
+				<field name="MOTORPORT">B</field>
+				<value name="POWER">
+					<block type="math_number">
+						<field name="NUM">30</field>
+					</block>
+				</value>
+			</block>
+			<block type="robActions_motorBig_on_for">
+				<field name="MOTORPORT">B</field>
+				<value name="POWER">
+					<block type="math_number">
+						<field name="NUM">30</field>
+					</block>
+				</value>
+				<value name="VALUE">
+					<block type="math_number">
+						<field name="NUM">1</field>
+					</block>
+				</value>
+			</block>
+			<block type="robActions_motorBig_getPower">
+				<field name="MOTORPORT">B</field>
+			</block>
+			<block type="robActions_motorBig_setPower">
+				<field name="MOTORPORT">B</field>
+				<value name="POWER">
+					<block type="math_number">
+						<field name="NUM">30</field>
+					</block>
+				</value>
+			</block>
+			<block type="robActions_motorBig_stop">
+				<field name="MOTORPORT">A</field>
+			</block>
+			<block type="robActions_motorMiddle_on">
+				<field name="MOTORPORT">A</field>
+				<value name="POWER">
+					<block type="math_number">
+						<field name="NUM">30</field>
+					</block>
+				</value>
+			</block>
+			<block type="robActions_motorMiddle_on_for">
+				<field name="MOTORPORT">A</field>
+				<value name="POWER">
+					<block type="math_number">
+						<field name="NUM">30</field>
+					</block>
+				</value>
+				<value name="VALUE">
+					<block type="math_number">
+						<field name="NUM">1</field>
+					</block>
+				</value>
+			</block>
+			<block type="robActions_motorMiddle_getPower">
+				<field name="MOTORPORT">A</field>
+			</block>
+			<block type="robActions_motorMiddle_setPower">
+				<field name="MOTORPORT">A</field>
+				<value name="POWER">
+					<block type="math_number">
+						<field name="NUM">30</field>
+					</block>
+				</value>
+			</block>
+			<block type="robActions_motorMiddle_stop">
+				<field name="MOTORPORT">A</field>
+			</block>
+		</category>
+		<category name="Anzeige">
+		</category>
+		<category name="Klang">
+		</category>
+		<category name="Statusleuchte">
+		</category>
+	</category>
+	<category name="Sensoren">
+		<category name="Berührungssensor">
 			<block type="robSensors_touch_isPressed">
 			</block>
-		</category> 
-		<category name="Ultraschallsensor"> 
+		</category>
+		<category name="Ultraschallsensor">
 			<block type="robSensors_ultrasonic_setMode">
+				<field name="SENSORPORT">4</field>
 			</block>
 			<block type="robSensors_ultrasonic_getMode">
+				<field name="SENSORPORT">4</field>
 			</block>
 			<block type="robSensors_ultrasonic_getSample">
+				<field name="SENSORPORT">4</field>
 			</block>
-		</category> 
-		<category name="Farbsensor"> 
+		</category>
+		<category name="Farbsensor">
 			<block type="robSensors_colour_setMode">
+				<field name="SENSORPORT">3</field>
 			</block>
 			<block type="robSensors_colour_getMode">
+				<field name="SENSORPORT">3</field>
 			</block>
 			<block type="robSensors_colour_getSample">
+				<field name="SENSORPORT">3</field>
 			</block>
-		</category> 
-		<category name="Infrarotsensor"> 
+		</category>
+		<category name="Infrarotsensor">
 			<block type="robSensors_infrared_setMode">
+				<field name="SENSORPORT">4</field>
 			</block>
 			<block type="robSensors_infrared_getMode">
+				<field name="SENSORPORT">4</field>
 			</block>
 			<block type="robSensors_infrared_getSample">
+				<field name="SENSORPORT">4</field>
 			</block>
-		</category> 
-		<category name="Drehsensor"> 
+		</category>
+		<category name="Drehsensor">
 			<block type="robSensors_encoder_setMode">
 			</block>
 			<block type="robSensors_encoder_getMode">
@@ -198,206 +277,217 @@ h1 {
 			</block>
 			<block type="robSensors_encoder_getSample">
 			</block>
-		</category> 
-		<category name="Steintasten"> 
+		</category>
+		<category name="Steintasten">
 			<block type="robSensors_key_isPressed">
 			</block>
 			<block type="robSensors_key_waitForPress">
 			</block>
 			<block type="robSensors_key_waitForPressAndRelease">
 			</block>
-		</category> 
-		<category name="Kreiselsensor"> 
+		</category>
+		<category name="Kreiselsensor">
 			<block type="robSensors_gyro_setMode">
+				<field name="SENSORPORT">2</field>
 			</block>
 			<block type="robSensors_gyro_getMode">
+				<field name="SENSORPORT">2</field>
 			</block>
 			<block type="robSensors_gyro_reset">
+				<field name="SENSORPORT">2</field>
 			</block>
 			<block type="robSensors_gyro_getSample">
+				<field name="SENSORPORT">2</field>
 			</block>
-		</category> 
-	</category> 
-	<category name="Kontrolle"> 
-		<category name="Entscheidung"> 
-			<block type="controls_if"></block> 
-		</category> 
-		<category name="Schleifen"> 
-			<block type="controls_repeat_ext"> 
-				<value name="TIMES"> 
-					<block type="math_number"> 
-						<field name="NUM">10</field> 
-					</block> 
-				</value> 
-			</block> 
-			<block type="controls_whileUntil"></block> 
-			<block type="controls_for"> 
-				<value name="FROM"> 
-					<block type="math_number"> 
-						<field name="NUM">1</field> 
-					</block> 
-				</value> 
-				<value name="TO"> 
-					<block type="math_number"> 
-						<field name="NUM">10</field> 
-					</block> 
-				</value> 
-				<value name="BY"> 
-					<block type="math_number"> 
-						<field name="NUM">1</field> 
-					</block> 
-				</value> 
-			</block> 
-			<block type="controls_forEach"></block> 
-			<block type="controls_flow_statements"></block> 
-		</category> 
-		<category name="Tasks"> 
-			<block type="robControls_activity"> 
-				<value name="ACTIVITY"> 
-					<block type="variables_get"> 
-						<field name="VAR">zwei</field> 
-					</block> 
-				</value> 
-			</block> 
-			<block type="robControls_start_activity"> 
-				<value name="ACTIVITY"> 
-					<block type="variables_get"> 
-						<field name="VAR">zwei</field> 
-					</block> 
-				</value> 
-			</block> 
-		</category> 
-	</category> 
-	<category name="Logik"> 
-		<block type="logic_compare"></block> 
-		<block type="logic_operation"></block> 
-		<block type="logic_negate"></block> 
-		<block type="logic_boolean"></block> 
-		<block type="logic_null"></block> 
-		<block type="logic_ternary"></block> 
-	</category> 
-	<category name="Mathematik"> 
-		<block type="math_number"></block> 
-		<block type="math_arithmetic"></block> 
-		<block type="math_single"></block> 
-		<block type="math_trig"></block> 
-		<block type="math_constant"></block> 
-		<block type="math_number_property"></block> 
-		<block type="math_change"> 
-			<value name="DELTA"> 
-				<block type="math_number"> 
-					<field name="NUM">1</field> 
-				</block> 
-			</value> 
-		</block> 
-		<block type="math_round"></block> 
-		<block type="math_on_list"></block> 
-		<block type="math_modulo"></block> 
-		<block type="math_constrain"> 
-			<value name="LOW"> 
-				<block type="math_number"> 
-					<field name="NUM">1</field> 
-				</block> 
-			</value> 
-			<value name="HIGH"> 
-				<block type="math_number"> 
-					<field name="NUM">100</field> 
-				</block> 
-			</value> 
-		</block> 
-		<block type="math_random_int"> 
-			<value name="FROM"> 
-				<block type="math_number"> 
-					<field name="NUM">1</field> 
-				</block> 
-			</value> 
-			<value name="TO"> 
-				<block type="math_number"> 
-					<field name="NUM">100</field> 
-				</block> 
-			</value> 
-		</block> 
-		<block type="math_random_float"></block> 
-	</category> 
-	<category name="Text"> 
-		<block type="text"></block> 
-		<block type="text_join"></block> 
-		<block type="text_append"> 
-			<value name="TEXT"> 
-				<block type="text"></block> 
-			</value> 
-		</block> 
-		<block type="text_length"></block> 
-		<block type="text_isEmpty"></block> 
-		<block type="text_indexOf"> 
-			<value name="VALUE"> 
-				<block type="variables_get"> 
-					<field name="VAR">text</field> 
-				</block> 
-			</value> 
-		</block> 
-		<block type="text_charAt"> 
-			<value name="VALUE"> 
-				<block type="variables_get"> 
-					<field name="VAR">text</field> 
-				</block> 
-			</value> 
-		</block> 
-		<block type="text_getSubstring"> 
-			<value name="STRING"> 
-				<block type="variables_get"> 
-					<field name="VAR">text</field> 
-				</block> 
-			</value> 
-		</block> 
-		<block type="text_changeCase"></block> 
-		<block type="text_trim"></block> 
+		</category>
+		<category name="Zeitgeber">
 
-		<block type="text_prompt"></block> 
-	</category> 
-	<category name="Listen"> 
-		<block type="lists_create_empty"></block> 
-		<block type="lists_create_with"></block> 
-		<block type="lists_repeat"> 
-			<value name="NUM"> 
-				<block type="math_number"> 
-					<field name="NUM">5</field> 
-				</block> 
-			</value> 
-		</block> 
-		<block type="lists_length"></block> 
-		<block type="lists_isEmpty"></block> 
-		<block type="lists_indexOf"> 
-			<value name="VALUE"> 
-				<block type="variables_get"> 
-					<field name="VAR">liste</field> 
-				</block> 
-			</value> 
-		</block> 
-		<block type="lists_getIndex"> 
-			<value name="VALUE"> 
-				<block type="variables_get"> 
-					<field name="VAR">liste</field> 
-				</block> 
-			</value> 
-		</block> 
-		<block type="lists_setIndex"> 
-			<value name="LIST"> 
-				<block type="variables_get"> 
-					<field name="VAR">liste</field> 
-				</block> 
-			</value> 
-		</block> 
-		<block type="lists_getSublist"> 
-			<value name="LIST"> 
-				<block type="variables_get"> 
-					<field name="VAR">liste</field> 
-				</block> 
-			</value> 
-		</block> 
-	</category> 
-	<category name="Variablen" custom="VARIABLE"></category> 
-	<category name="Funktionen" custom="PROCEDURE"></category> 
+			<block type="robSensors_timer_getSample">
+			</block>
+			<block type="robSensors_timer_reset">
+			</block>
+		</category>
+	</category>
+	<category name="Kontrolle">
+		<category name="Entscheidung">
+			<block type="controls_if"></block>
+		</category>
+		<category name="Schleifen">
+			<block type="controls_repeat_ext">
+				<value name="TIMES">
+					<block type="math_number">
+						<field name="NUM">10</field>
+					</block>
+				</value>
+			</block>
+			<block type="controls_whileUntil"></block>
+			<block type="controls_for">
+				<value name="FROM">
+					<block type="math_number">
+						<field name="NUM">1</field>
+					</block>
+				</value>
+				<value name="TO">
+					<block type="math_number">
+						<field name="NUM">10</field>
+					</block>
+				</value>
+				<value name="BY">
+					<block type="math_number">
+						<field name="NUM">1</field>
+					</block>
+				</value>
+			</block>
+			<block type="controls_forEach"></block>
+			<block type="controls_flow_statements"></block>
+		</category>
+		<category name="Tasks">
+			<block type="robControls_activity">
+				<value name="ACTIVITY">
+					<block type="variables_get">
+						<field name="VAR">zwei</field>
+					</block>
+				</value>
+			</block>
+			<block type="robControls_start_activity">
+				<value name="ACTIVITY">
+					<block type="variables_get">
+						<field name="VAR">zwei</field>
+					</block>
+				</value>
+			</block>
+		</category>
+	</category>
+	<category name="Logik">
+		<block type="logic_compare"></block>
+		<block type="logic_operation"></block>
+		<block type="logic_negate"></block>
+		<block type="logic_boolean"></block>
+		<block type="logic_null"></block>
+		<block type="logic_ternary"></block>
+	</category>
+	<category name="Mathematik">
+		<block type="math_number"></block>
+		<block type="math_arithmetic"></block>
+		<block type="math_single"></block>
+		<block type="math_trig"></block>
+		<block type="math_constant"></block>
+		<block type="math_number_property"></block>
+		<block type="math_change">
+			<value name="DELTA">
+				<block type="math_number">
+					<field name="NUM">1</field>
+				</block>
+			</value>
+		</block>
+		<block type="math_round"></block>
+		<block type="math_on_list"></block>
+		<block type="math_modulo"></block>
+		<block type="math_constrain">
+			<value name="LOW">
+				<block type="math_number">
+					<field name="NUM">1</field>
+				</block>
+			</value>
+			<value name="HIGH">
+				<block type="math_number">
+					<field name="NUM">100</field>
+				</block>
+			</value>
+		</block>
+		<block type="math_random_int">
+			<value name="FROM">
+				<block type="math_number">
+					<field name="NUM">1</field>
+				</block>
+			</value>
+			<value name="TO">
+				<block type="math_number">
+					<field name="NUM">100</field>
+				</block>
+			</value>
+		</block>
+		<block type="math_random_float"></block>
+	</category>
+	<category name="Text">
+		<block type="text"></block>
+		<block type="text_join"></block>
+		<block type="text_append">
+			<value name="TEXT">
+				<block type="text"></block>
+			</value>
+		</block>
+		<block type="text_length"></block>
+		<block type="text_isEmpty"></block>
+		<block type="text_indexOf">
+			<value name="VALUE">
+				<block type="variables_get">
+					<field name="VAR">text</field>
+				</block>
+			</value>
+		</block>
+		<block type="text_charAt">
+			<value name="VALUE">
+				<block type="variables_get">
+					<field name="VAR">text</field>
+				</block>
+			</value>
+		</block>
+		<block type="text_getSubstring">
+			<value name="STRING">
+				<block type="variables_get">
+					<field name="VAR">text</field>
+				</block>
+			</value>
+		</block>
+		<block type="text_changeCase"></block>
+		<block type="text_trim"></block>
+
+		<block type="text_prompt"></block>
+	</category>
+	<category name="Listen">
+		<block type="lists_create_empty"></block>
+		<block type="lists_create_with"></block>
+		<block type="lists_repeat">
+			<value name="NUM">
+				<block type="math_number">
+					<field name="NUM">5</field>
+				</block>
+			</value>
+		</block>
+		<block type="lists_length"></block>
+		<block type="lists_isEmpty"></block>
+		<block type="lists_indexOf">
+			<value name="VALUE">
+				<block type="variables_get">
+					<field name="VAR">liste</field>
+				</block>
+			</value>
+		</block>
+		<block type="lists_getIndex">
+			<value name="VALUE">
+				<block type="variables_get">
+					<field name="VAR">liste</field>
+				</block>
+			</value>
+		</block>
+		<block type="lists_setIndex">
+			<value name="LIST">
+				<block type="variables_get">
+					<field name="VAR">liste</field>
+				</block>
+			</value>
+		</block>
+		<block type="lists_getSublist">
+			<value name="LIST">
+				<block type="variables_get">
+					<field name="VAR">liste</field>
+				</block>
+			</value>
+		</block>
+	</category>
+	<category name="Variablen" custom="VARIABLE"></category>
+	<category name="Funktionen" custom="PROCEDURE"></category>
 </xml>
  <!--  <xml id="toolbox" style="display: none">
     <category name="Logic">

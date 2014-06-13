@@ -1,45 +1,46 @@
 package de.fhg.iais.roberta.ast.syntax.stmt;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
-import de.fhg.iais.roberta.dbc.Assert;
 
 public class IfStmt extends Stmt {
-    private final Expr expr;
-    private final StmtList thenList;
+    private final List<Expr> expr;
+    private final List<StmtList> thenList;
     private final StmtList elseList;
 
-    private IfStmt(Expr expr, StmtList thenList, StmtList elseList) {
-        super(Phrase.Kind.IF);
-        Assert.isTrue(expr.isReadOnly() && thenList.isReadOnly() && elseList.isReadOnly());
+    private IfStmt(List<Expr> expr, List<StmtList> thenList, StmtList elseList) {
+        super(Phrase.Kind.IfStmt);
+        // Assert.isTrue(expr.isReadOnly() && thenList.isReadOnly() && elseList.isReadOnly());
         this.expr = expr;
         this.thenList = thenList;
         this.elseList = elseList;
         setReadOnly();
     }
 
-    public static IfStmt make(Expr expr, StmtList thenList, StmtList elseList) {
+    public static IfStmt make(List<Expr> expr, List<StmtList> thenList, StmtList elseList) {
         return new IfStmt(expr, thenList, elseList);
     }
 
-    public static IfStmt make(Expr expr, StmtList thenList) {
+    public static IfStmt make(List<Expr> expr, List<StmtList> thenList) {
         StmtList elseList = StmtList.make();
         elseList.setReadOnly();
         return new IfStmt(expr, thenList, elseList);
     }
 
-    public static IfStmt make(Expr expr, StmtList thenList, IfStmt elseIf) {
+    public static IfStmt make(List<Expr> expr, List<StmtList> thenList, IfStmt elseIf) {
         StmtList elseList = StmtList.make();
         elseList.addStmt(elseIf);
         elseList.setReadOnly();
         return new IfStmt(expr, thenList, elseList);
     }
 
-    public final Expr getExpr() {
+    public final List<Expr> getExpr() {
         return this.expr;
     }
 
-    public final StmtList getThenList() {
+    public final List<StmtList> getThenList() {
         return this.thenList;
     }
 
@@ -51,11 +52,18 @@ public class IfStmt extends Stmt {
     public void toStringBuilder(StringBuilder sb, int indentation) {
         int next = indentation + 3;
         appendNewLine(sb, indentation, null);
-        sb.append("(if ").append(this.expr);
-        appendNewLine(sb, indentation, ",then");
-        this.thenList.toStringBuilder(sb, next);
-        appendNewLine(sb, indentation, ",else");
-        this.elseList.toStringBuilder(sb, next);
+        for ( int i = 0; i < this.expr.size(); i++ ) {
+            sb.append("(if ").append(this.expr.get(i));
+            appendNewLine(sb, indentation, ",then");
+            this.thenList.get(i).toStringBuilder(sb, next);
+            if ( i + 1 < this.expr.size() ) {
+                appendNewLine(sb, indentation, " else ");
+            }
+            //            if ( this.elseList.get().size() != 0 ) {
+            //                appendNewLine(sb, indentation, ",else");
+            //                this.elseList.toStringBuilder(sb, next);
+            //            }
+        }
         appendNewLine(sb, indentation, ")");
     }
 

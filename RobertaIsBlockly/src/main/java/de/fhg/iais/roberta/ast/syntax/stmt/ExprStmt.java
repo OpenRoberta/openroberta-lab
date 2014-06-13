@@ -8,7 +8,7 @@ public class ExprStmt extends Stmt {
     private final Expr expr;
 
     private ExprStmt(Expr expr) {
-        super(Phrase.Kind.EXPR_STMT);
+        super(Phrase.Kind.ExprStmt);
         Assert.isTrue(expr.isReadOnly());
         this.expr = expr;
         setReadOnly();
@@ -19,13 +19,13 @@ public class ExprStmt extends Stmt {
     }
 
     public final Expr getExpr() {
-        return expr;
+        return this.expr;
     }
 
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
         appendNewLine(sb, indentation, null);
-        sb.append("exprStmt ").append(expr);
+        sb.append("exprStmt ").append(this.expr);
     }
 
     @Override

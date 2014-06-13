@@ -10,7 +10,7 @@ public class RepeatStmt extends Stmt {
     private final StmtList list;
 
     private RepeatStmt(Mode mode, Expr expr, StmtList list) {
-        super(Phrase.Kind.REPEAT);
+        super(Phrase.Kind.RepeatStmt);
         Assert.isTrue(expr.isReadOnly() && list.isReadOnly());
         this.expr = expr;
         this.list = list;

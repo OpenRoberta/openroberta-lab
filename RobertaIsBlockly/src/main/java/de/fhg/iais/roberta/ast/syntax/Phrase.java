@@ -9,9 +9,9 @@ import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
-import de.fhg.iais.roberta.ast.syntax.expr.IntConst;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
+import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
@@ -28,6 +28,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.dbc.Assert;
@@ -56,21 +57,21 @@ abstract public class Phrase {
      * @return true, if the object is writable/mutable. This is true, if {@link #setReadOnly()} has not yet been called for this object
      */
     public final boolean mayChange() {
-        return !readOnly;
+        return !this.readOnly;
     }
 
     /**
      * @return true, if the object is read-only/immutable. This is true, if {@link #setReadOnly()} has been called for this object
      */
     public final boolean isReadOnly() {
-        return readOnly;
+        return this.readOnly;
     }
 
     /**
      * make this {@link Phrase}-object read-only/immutable. Should be called if the construction phase has finished
      */
     public final void setReadOnly() {
-        readOnly = true;
+        this.readOnly = true;
     }
 
     /**
@@ -92,7 +93,7 @@ abstract public class Phrase {
      * @return the kind of the expression. See enum {@link Kind} for all kinds possible<br>
      */
     public final Kind getKind() {
-        return kind;
+        return this.kind;
     }
 
     /**
@@ -133,20 +134,21 @@ abstract public class Phrase {
         StringConst( StringConst.class, Category.EXPR ),
         NullConst( NullConst.class, Category.EXPR ),
         BoolConst( BoolConst.class, Category.EXPR ),
-        IntConst( IntConst.class, Category.EXPR ),
+        NumConst( NumConst.class, Category.EXPR ),
         MathConst( MathConst.class, Category.EXPR ),
         Var( Var.class, Category.EXPR ),
         Unary( Unary.class, Category.EXPR ),
         Binary( Binary.class, Category.EXPR ),
         SensorExpr( SensorExpr.class, Category.EXPR ),
         EmptyExpr( EmptyExpr.class, Category.EXPR ),
-        IF( IfStmt.class, Category.STMT ),
-        REPEAT( RepeatStmt.class, Category.STMT ),
-        EXPR_STMT( ExprStmt.class, Category.STMT ),
-        STMT_LIST( StmtList.class, Category.STMT ),
-        ASSIGN( AssignStmt.class, Category.STMT ),
-        AKTION_STMT( AktionStmt.class, Category.STMT ),
-        STMT_FLOW_CON( StmtFlowCon.class, Category.STMT ),
+        IfStmt( IfStmt.class, Category.STMT ),
+        RepeatStmt( RepeatStmt.class, Category.STMT ),
+        ExprStmt( ExprStmt.class, Category.STMT ),
+        StmtList( StmtList.class, Category.STMT ),
+        AssignStmt( AssignStmt.class, Category.STMT ),
+        AktionStmt( AktionStmt.class, Category.STMT ),
+        SensorStmt( SensorStmt.class, Category.STMT ),
+        StmtFlowCon( StmtFlowCon.class, Category.STMT ),
         TurnAktion( TurnAktion.class, Category.AKTOR ),
         DriveAktion( DriveAktion.class, Category.AKTOR ),
         ShowAktion( ShowAktion.class, Category.AKTOR ),
@@ -162,11 +164,11 @@ abstract public class Phrase {
         }
 
         public final Class<?> getPhraseClass() {
-            return clazz;
+            return this.clazz;
         }
 
         public final Category getCategory() {
-            return category;
+            return this.category;
         }
     }
 

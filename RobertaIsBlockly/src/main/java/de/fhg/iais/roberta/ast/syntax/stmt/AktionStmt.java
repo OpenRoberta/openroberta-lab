@@ -8,7 +8,7 @@ public class AktionStmt extends Stmt {
     private final Aktion akt;
 
     private AktionStmt(Aktion akt) {
-        super(Phrase.Kind.AKTION_STMT);
+        super(Phrase.Kind.AktionStmt);
         Assert.isTrue(akt.isReadOnly());
         this.akt = akt;
         setReadOnly();
@@ -19,7 +19,7 @@ public class AktionStmt extends Stmt {
     }
 
     public Aktion getAkt() {
-        return akt;
+        return this.akt;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class AktionStmt extends Stmt {
 
     @Override
     public String toString() {
-        return "AktionStmt [" + akt + "]";
+        return "AktionStmt [" + this.akt + "]";
     }
 
 }

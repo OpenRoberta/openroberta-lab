@@ -13,9 +13,9 @@ import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
-import de.fhg.iais.roberta.ast.syntax.expr.IntConst;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
+import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
@@ -23,6 +23,7 @@ import de.fhg.iais.roberta.ast.syntax.sensoren.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensoren.DrehSensor;
 import de.fhg.iais.roberta.ast.syntax.sensoren.GyroSensor;
 import de.fhg.iais.roberta.ast.syntax.sensoren.InfraredSensor;
+import de.fhg.iais.roberta.ast.syntax.sensoren.Sensor;
 import de.fhg.iais.roberta.ast.syntax.sensoren.SteinSensor;
 import de.fhg.iais.roberta.ast.syntax.sensoren.TouchSensor;
 import de.fhg.iais.roberta.ast.syntax.sensoren.UltraSSensor;
@@ -31,6 +32,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon.Flow;
@@ -51,7 +53,7 @@ public class BlockAST {
     public void projectToAST(Project pr) {
         List<Instance> instances = pr.getInstance();
         for ( Instance instance : instances ) {
-            project.add(instanceToAST(instance));
+            this.project.add(instanceToAST(instance));
         }
     }
 
@@ -208,12 +210,13 @@ public class BlockAST {
                 return NullConst.make();
 
             case "logic_ternary":
-                values = block.getValue();
-                Assert.isTrue(values.size() <= 3, "Number of values is not less or equal to 3!");
-                Phrase ifExpr = extractValue(values, new ExprParam("IF", Boolean.class));
-                Phrase thenExpr = extractValue(values, new ExprParam("THEN", Stmt.class));
-                Phrase elseExpr = extractValue(values, new ExprParam("ELSE", Stmt.class));
-                return IfStmt.make((Expr) ifExpr, (StmtList) thenExpr, (StmtList) elseExpr);
+                //TODO need to be modified
+                //                values = block.getValue();
+                //                Assert.isTrue(values.size() <= 3, "Number of values is not less or equal to 3!");
+                //                Phrase ifExpr = extractValue(values, new ExprParam("IF", Boolean.class));
+                //                Phrase thenExpr = extractValue(values, new ExprParam("THEN", Stmt.class));
+                //                Phrase elseExpr = extractValue(values, new ExprParam("ELSE", Stmt.class));
+                //                return IfStmt.make((Expr) ifExpr, (StmtList) thenExpr, (StmtList) elseExpr);
 
                 //Mathematik
             case "math_number":
@@ -368,21 +371,32 @@ public class BlockAST {
 
                 //KONTROLLE
             case "controls_if":
+                List<Expr> exprsList = new ArrayList<Expr>();
+                List<StmtList> stmtLists = new ArrayList<StmtList>();
+
                 //TODO not finished 
                 if ( block.getMutation() == null ) {
                     values = extractValues(block, (short) 1);
-                    expr = extractValue(values, new ExprParam("IF0", Boolean.class));
+                    exprsList.add((Expr) extractValue(values, new ExprParam("IF0", Boolean.class)));
                     statements = extractStatements(block, (short) 1);
-                    stmtList = extractStatement(statements, "DO0");
-                    return IfStmt.make((Expr) expr, stmtList);
+                    stmtLists.add(extractStatement(statements, "DO0"));
+                    return IfStmt.make(exprsList, stmtLists);
                 } else {
-                    int _elseIf = block.getMutation().getElseif().intValue();
-                    ExprList iflist = ExprList.make();
-                    List<Object> valAndStmt = block.getRepetitions().getValueAndStatement();
-                    values = extractValues(block, (short) (_elseIf + 1));
-                    for ( int i = 0; i < _elseIf; i++ ) {
-                        iflist.addExpr((Expr) extractValue(values, new ExprParam("IF" + i, Boolean.class)));
+                    Mutation mutation = block.getMutation();
+                    if ( mutation.getElseif() != null ) {
+                        int _elseIf = mutation.getElseif().intValue();
+                        List<Object> valAndStmt = block.getRepetitions().getValueAndStatement();
+                        Assert.isTrue(valAndStmt.size() <= 2 * _elseIf + 2);
+                        values = new ArrayList<Value>();
+                        statements = new ArrayList<Statement>();
+                        convertStmtValList(values, statements, valAndStmt);
 
+                        for ( int i = 0; i < values.size(); i++ ) {
+                            exprsList.add((Expr) extractValue(values, new ExprParam("IF" + i, Boolean.class)));
+                            stmtLists.add(extractStatement(statements, "DO" + i));
+                        }
+
+                        return IfStmt.make(exprsList, stmtLists);
                     }
                 }
 
@@ -430,6 +444,17 @@ public class BlockAST {
         }
     }
 
+    private void convertStmtValList(List<Value> values, List<Statement> statements, List<Object> valAndStmt) {
+        for ( int i = 0; i < valAndStmt.size(); i++ ) {
+            Object ob = valAndStmt.get(i);
+            if ( ob.getClass() == Value.class ) {
+                values.add((Value) ob);
+            } else {
+                statements.add((Statement) ob);
+            }
+        }
+    }
+
     private Phrase blockToUnaryExpr(Block block, ExprParam exprParam, String operationType) {
         String op = getOperation(block, operationType);
         List<Value> values = extractValues(block, (short) 1);
@@ -442,7 +467,7 @@ public class BlockAST {
         List<Value> values = extractValues(block, (short) 2);
         Phrase left = extractValue(values, leftExpr);
         Phrase right = extractValue(values, leftExpr);
-        return Binary.make(Binary.Op.valueOf(op), (Expr) left, (Expr) right);
+        return Binary.make(Binary.Op.get(op), (Expr) left, (Expr) right);
     }
 
     private ExprList blockToExprList(Block block, Class<?> defVal) {
@@ -461,7 +486,7 @@ public class BlockAST {
             case "BOOL":
                 return BoolConst.make(Boolean.parseBoolean(field.toLowerCase()));
             case "NUM":
-                return IntConst.make(Integer.parseInt(field));
+                return NumConst.make(field);
             case "TEXT":
                 return StringConst.make(field);
             case "CONSTANT":
@@ -474,26 +499,25 @@ public class BlockAST {
     private StmtList blocksToStmtList(List<Block> statementBolcks) {
         StmtList stmtList = StmtList.make();
         for ( Block sb : statementBolcks ) {
-            convertToStmt(stmtList, sb);
+            convertPhraseToStmt(stmtList, sb);
         }
         stmtList.setReadOnly();
         return stmtList;
     }
 
-    private void convertToStmt(StmtList stmtList, Block sb) {
+    private void convertPhraseToStmt(StmtList stmtList, Block sb) {
         Phrase p = bToA(sb);
         Stmt stmt;
         if ( p.getKind().getCategory() == Category.EXPR ) {
             stmt = ExprStmt.make((Expr) p);
-            stmtList.addStmt(stmt);
         } else if ( p.getKind().getCategory() == Category.AKTOR ) {
             stmt = AktionStmt.make((Aktion) p);
-            stmtList.addStmt(stmt);
         } else if ( p.getKind().getCategory() == Category.SENSOR ) {
-            //TODO
+            stmt = SensorStmt.make((Sensor) p);
         } else {
-            stmtList.addStmt((Stmt) p);
+            stmt = (Stmt) p;
         }
+        stmtList.addStmt(stmt);
     }
 
     private ExprList valuesToExprList(List<Value> values, Class<?> defVal) {
@@ -586,6 +610,6 @@ public class BlockAST {
 
     @Override
     public String toString() {
-        return "BlockAST [project=" + project + "]";
+        return "BlockAST [project=" + this.project + "]";
     }
 }

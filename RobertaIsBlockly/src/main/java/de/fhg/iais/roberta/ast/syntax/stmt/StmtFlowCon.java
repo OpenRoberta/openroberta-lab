@@ -7,7 +7,7 @@ public class StmtFlowCon extends Stmt {
     private final Flow flow;
 
     private StmtFlowCon(Flow flow) {
-        super(Phrase.Kind.STMT_FLOW_CON);
+        super(Phrase.Kind.StmtFlowCon);
         this.flow = flow;
         setReadOnly();
     }

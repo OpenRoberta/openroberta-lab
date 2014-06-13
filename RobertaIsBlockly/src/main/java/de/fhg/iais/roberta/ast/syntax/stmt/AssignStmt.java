@@ -10,7 +10,7 @@ public class AssignStmt extends Stmt {
     private final Expr expr;
 
     private AssignStmt(Var name, Expr expr) {
-        super(Phrase.Kind.ASSIGN);
+        super(Phrase.Kind.AssignStmt);
         Assert.isTrue(name.isReadOnly() && expr.isReadOnly());
         this.name = name;
         this.expr = expr;

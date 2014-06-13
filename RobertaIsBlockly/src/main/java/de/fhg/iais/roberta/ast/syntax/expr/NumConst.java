@@ -2,20 +2,20 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 
-public class IntConst extends Expr {
-    private final int value;
+public class NumConst extends Expr {
+    private final String value;
 
-    private IntConst(int value) {
-        super(Phrase.Kind.IntConst);
+    private NumConst(String value) {
+        super(Phrase.Kind.NumConst);
         this.value = value;
         setReadOnly();
     }
 
-    public static IntConst make(int value) {
-        return new IntConst(value);
+    public static NumConst make(String value) {
+        return new NumConst(value);
     }
 
-    public int getValue() {
+    public String getValue() {
         return this.value;
     }
 
