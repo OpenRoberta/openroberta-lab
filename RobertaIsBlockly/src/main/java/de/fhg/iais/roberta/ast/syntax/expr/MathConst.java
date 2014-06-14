@@ -21,7 +21,7 @@ public class MathConst extends Phrase {
 
     @Override
     public String toString() {
-        return "MathConst [mathConst=" + mathConst + "]";
+        return "MathConst [" + mathConst + "]";
     }
 
     @Override

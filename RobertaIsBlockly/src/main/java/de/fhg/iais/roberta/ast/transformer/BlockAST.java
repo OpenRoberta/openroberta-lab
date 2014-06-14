@@ -53,7 +53,7 @@ public class BlockAST {
     public void projectToAST(Project pr) {
         List<Instance> instances = pr.getInstance();
         for ( Instance instance : instances ) {
-            this.project.add(instanceToAST(instance));
+            project.add(instanceToAST(instance));
         }
     }
 
@@ -466,7 +466,7 @@ public class BlockAST {
         String op = getOperation(block, operationType);
         List<Value> values = extractValues(block, (short) 2);
         Phrase left = extractValue(values, leftExpr);
-        Phrase right = extractValue(values, leftExpr);
+        Phrase right = extractValue(values, rightExpr);
         return Binary.make(Binary.Op.get(op), (Expr) left, (Expr) right);
     }
 
@@ -610,6 +610,6 @@ public class BlockAST {
 
     @Override
     public String toString() {
-        return "BlockAST [project=" + this.project + "]";
+        return "BlockAST [project=" + project + "]";
     }
 }

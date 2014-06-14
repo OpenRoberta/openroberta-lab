@@ -16,16 +16,16 @@ public class NumConst extends Expr {
     }
 
     public String getValue() {
-        return this.value;
+        return value;
     }
 
     @Override
     public String toString() {
-        return "Int[" + this.value + "]";
+        return "NumConst [" + value + "]";
     }
 
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
-        sb.append(this.value);
+        sb.append(value);
     }
 }
