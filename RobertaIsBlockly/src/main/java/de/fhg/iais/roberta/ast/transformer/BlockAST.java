@@ -3,8 +3,6 @@ package de.fhg.iais.roberta.ast.transformer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.ObjectUtils.Null;
-
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.Phrase.Category;
 import de.fhg.iais.roberta.ast.syntax.aktion.Aktion;
@@ -337,10 +335,10 @@ public class BlockAST {
                 return ExprList.make();
 
             case "lists_create_with":
-                return blockToExprList(block, Null.class);
+                return blockToExprList(block, ArrayList.class);
 
             case "lists_repeat":
-                return blockToBinaryExpr(block, new ExprParam("ITEM", Null.class), new ExprParam("NUM", Integer.class), "LISTS_REPEAT");
+                return blockToBinaryExpr(block, new ExprParam("ITEM", ArrayList.class), new ExprParam("NUM", Integer.class), "LISTS_REPEAT");
 
             case "lists_length":
                 return blockToUnaryExpr(block, new ExprParam("VALUE", ArrayList.class), "LISTS_LENGTH");
@@ -349,7 +347,7 @@ public class BlockAST {
                 return blockToUnaryExpr(block, new ExprParam("VALUE", ArrayList.class), "IS_EMPTY");
 
             case "lists_indexOf":
-                return blockToBinaryExpr(block, new ExprParam("VALUE", ArrayList.class), new ExprParam("FIND", Null.class), "END");
+                return blockToBinaryExpr(block, new ExprParam("VALUE", ArrayList.class), new ExprParam("FIND", ArrayList.class), "END");
 
             case "lists_getIndex":
                 //TODO not implemented
@@ -363,7 +361,7 @@ public class BlockAST {
                 //VARIABLEN
             case "variables_set":
                 values = extractValues(block, (short) 1);
-                expr = extractValue(values, new ExprParam("VALUE", Null.class));
+                expr = extractValue(values, new ExprParam("VALUE", EmptyExpr.class));
                 return AssignStmt.make((Var) extractVar(block), (Expr) expr);
 
             case "variables_get":
