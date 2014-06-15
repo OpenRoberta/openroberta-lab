@@ -24,8 +24,8 @@ public class SensorStmt extends Stmt {
 
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
-        sb.append(this.sensor);
-
+        appendNewLine(sb, indentation, null);
+        sb.append("SensorStmt ").append(this.sensor);
     }
 
     @Override

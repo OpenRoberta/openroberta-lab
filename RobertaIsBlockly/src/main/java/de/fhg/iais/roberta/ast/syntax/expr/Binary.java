@@ -17,7 +17,7 @@ public class Binary extends Expr {
         this.op = op;
         this.left = left;
         this.right = right;
-        setReadOnly();
+        this.setReadOnly();
     }
 
     public static Binary make(Op op, Expr left, Expr right) {
@@ -25,20 +25,20 @@ public class Binary extends Expr {
     }
 
     public Op getOp() {
-        return op;
+        return this.op;
     }
 
     public Expr getLeft() {
-        return left;
+        return this.left;
     }
 
     public Expr getRight() {
-        return right;
+        return this.right;
     }
 
     @Override
     public String toString() {
-        return "Binary [" + op + ", " + left + ", " + right + "]";
+        return "Binary [" + this.op + ", " + this.left + ", " + this.right + "]";
     }
 
     public static enum Op {
@@ -99,9 +99,9 @@ public class Binary extends Expr {
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
         sb.append("(");
-        left.toStringBuilder(sb, indentation);
-        sb.append(" ").append(op).append(" ");
-        right.toStringBuilder(sb, indentation);
+        this.left.toStringBuilder(sb, indentation);
+        sb.append(" ").append(this.op).append(" ");
+        this.right.toStringBuilder(sb, indentation);
         sb.append(")");
     }
 

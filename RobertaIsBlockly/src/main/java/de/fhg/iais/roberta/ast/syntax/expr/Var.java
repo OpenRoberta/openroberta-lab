@@ -21,12 +21,11 @@ public class Var extends Expr {
 
     @Override
     public String toString() {
-        return "Var[" + this.name + "]";
+        return "Var [" + this.name + "]";
     }
 
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
-        // TODO Auto-generated method stub
-
+        sb.append(this.name);
     }
 }

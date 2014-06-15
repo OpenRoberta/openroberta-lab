@@ -38,7 +38,7 @@ public class RepeatStmt extends Stmt {
     public void toStringBuilder(StringBuilder sb, int indentation) {
         int next = indentation + 3;
         appendNewLine(sb, indentation, null);
-        sb.append("(repeat ").append(this.expr);
+        sb.append("(repeat [" + this.mode + ", ").append(this.expr).append("]");
         this.list.toStringBuilder(sb, next);
         appendNewLine(sb, indentation, ")");
     }

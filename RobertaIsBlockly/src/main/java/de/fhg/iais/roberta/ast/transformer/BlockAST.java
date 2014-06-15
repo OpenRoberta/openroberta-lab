@@ -6,6 +6,7 @@ import java.util.List;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.Phrase.Category;
 import de.fhg.iais.roberta.ast.syntax.aktion.Aktion;
+import de.fhg.iais.roberta.ast.syntax.aktion.SensorPort;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
@@ -51,7 +52,7 @@ public class BlockAST {
     public void projectToAST(Project pr) {
         List<Instance> instances = pr.getInstance();
         for ( Instance instance : instances ) {
-            project.add(instanceToAST(instance));
+            this.project.add(instanceToAST(instance));
         }
     }
 
@@ -68,9 +69,6 @@ public class BlockAST {
         List<Arg> args;
         List<Value> values;
         List<Field> fields;
-        List<Statement> statements;
-
-        StmtList stmtList;
 
         Phrase left;
         Phrase right;
@@ -79,61 +77,62 @@ public class BlockAST {
 
         String mode;
         String port;
+        ExprList exprList;
 
         switch ( block.getType() ) {
         //Sensoren
             case "robSensors_touch_isPressed":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return TouchSensor.make(Integer.valueOf(port));
+                return TouchSensor.make(SensorPort.valueOf(port));
 
             case "robSensors_ultrasonic_setMode":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, "SENSORPORT", (short) 0);
                 mode = extractField(fields, "MODE", (short) 1);
-                return UltraSSensor.make(UltraSSensor.Mode.valueOf(mode), Integer.valueOf(port));
+                return UltraSSensor.make(UltraSSensor.Mode.valueOf(mode), SensorPort.valueOf(port));
 
             case "robSensors_ultrasonic_getMode":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return UltraSSensor.make(UltraSSensor.Mode.GET_MODE, Integer.valueOf(port));
+                return UltraSSensor.make(UltraSSensor.Mode.GET_MODE, SensorPort.valueOf(port));
 
             case "robSensors_ultrasonic_getSample":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return UltraSSensor.make(UltraSSensor.Mode.GET_SAMPLE, Integer.valueOf(port));
+                return UltraSSensor.make(UltraSSensor.Mode.GET_SAMPLE, SensorPort.valueOf(port));
 
             case "robSensors_colour_setMode":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, "SENSORPORT", (short) 0);
                 mode = extractField(fields, "MODE", (short) 1);
-                return ColorSensor.make(ColorSensor.Mode.valueOf(mode), Integer.valueOf(port));
+                return ColorSensor.make(ColorSensor.Mode.valueOf(mode), SensorPort.valueOf(port));
 
             case "robSensors_colour_getMode":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return ColorSensor.make(ColorSensor.Mode.GET_MODE, Integer.valueOf(port));
+                return ColorSensor.make(ColorSensor.Mode.GET_MODE, SensorPort.valueOf(port));
 
             case "robSensors_colour_getSample":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return ColorSensor.make(ColorSensor.Mode.GET_SAMPLE, Integer.valueOf(port));
+                return ColorSensor.make(ColorSensor.Mode.GET_SAMPLE, SensorPort.valueOf(port));
 
             case "robSensors_infrared_setMode":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, "SENSORPORT", (short) 0);
                 mode = extractField(fields, "MODE", (short) 1);
-                return InfraredSensor.make(InfraredSensor.Mode.valueOf(mode), Integer.valueOf(port));
+                return InfraredSensor.make(InfraredSensor.Mode.valueOf(mode), SensorPort.valueOf(port));
 
             case "robSensors_infrared_getMode":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return InfraredSensor.make(InfraredSensor.Mode.GET_MODE, Integer.valueOf(port));
+                return InfraredSensor.make(InfraredSensor.Mode.GET_MODE, SensorPort.valueOf(port));
 
             case "robSensors_infrared_getSample":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return InfraredSensor.make(InfraredSensor.Mode.GET_SAMPLE, Integer.valueOf(port));
+                return InfraredSensor.make(InfraredSensor.Mode.GET_SAMPLE, SensorPort.valueOf(port));
 
             case "robSensors_encoder_setMode":
                 fields = extractFields(block, (short) 2);
@@ -175,22 +174,22 @@ public class BlockAST {
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, "SENSORPORT", (short) 0);
                 mode = extractField(fields, "MODE", (short) 1);
-                return GyroSensor.make(GyroSensor.Mode.valueOf(mode), Integer.valueOf(port));
+                return GyroSensor.make(GyroSensor.Mode.valueOf(mode), SensorPort.valueOf(port));
 
             case "robSensors_gyro_getMode":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return GyroSensor.make(GyroSensor.Mode.GET_MODE, Integer.valueOf(port));
+                return GyroSensor.make(GyroSensor.Mode.GET_MODE, SensorPort.valueOf(port));
 
             case "robSensors_gyro_getSample":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return GyroSensor.make(GyroSensor.Mode.GET_SAMPLE, Integer.valueOf(port));
+                return GyroSensor.make(GyroSensor.Mode.GET_SAMPLE, SensorPort.valueOf(port));
 
             case "robSensors_gyro_reset":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "MOTORPORT", (short) 0);
-                return GyroSensor.make(GyroSensor.Mode.RESET, Integer.valueOf(port));
+                return GyroSensor.make(GyroSensor.Mode.RESET, SensorPort.valueOf(port));
                 //Logik
             case "logic_compare":
                 return blockToBinaryExpr(block, new ExprParam("A", Integer.class), new ExprParam("B", Integer.class), "OP");
@@ -208,13 +207,12 @@ public class BlockAST {
                 return NullConst.make();
 
             case "logic_ternary":
-                //TODO need to be modified
-                //                values = block.getValue();
-                //                Assert.isTrue(values.size() <= 3, "Number of values is not less or equal to 3!");
-                //                Phrase ifExpr = extractValue(values, new ExprParam("IF", Boolean.class));
-                //                Phrase thenExpr = extractValue(values, new ExprParam("THEN", Stmt.class));
-                //                Phrase elseExpr = extractValue(values, new ExprParam("ELSE", Stmt.class));
-                //                return IfStmt.make((Expr) ifExpr, (StmtList) thenExpr, (StmtList) elseExpr);
+                values = block.getValue();
+                Assert.isTrue(values.size() <= 3, "Number of values is not less or equal to 3!");
+                Phrase ifExpr = extractValue(values, new ExprParam("IF", Boolean.class));
+                Phrase thenExpr = extractValue(values, new ExprParam("THEN", Stmt.class));
+                Phrase elseExpr = extractValue(values, new ExprParam("ELSE", Stmt.class));
+                return IfStmt.make((Expr) ifExpr, (StmtList) thenExpr, (StmtList) elseExpr);
 
                 //Mathematik
             case "math_number":
@@ -233,15 +231,14 @@ public class BlockAST {
                 return blockToConst(block, "CONSTANT");
 
             case "math_number_property":
-                args = extractArguments(block.getMutation(), (short) 1);
-                Arg divisorInput = args.get(0);
+                boolean divisorInput = block.getMutation().isDivisorInput();
                 String op = extractOperation(block, "PROPERTY");
                 if ( op.equals("DIVISIBLE_BY") ) {
-                    Assert.isTrue(divisorInput.getName().equals("true"), "Divisor input is not equal to true!");
-                    return blockToBinaryExpr(block, new ExprParam("NUMBER_TO_CHECK", Integer.class), new ExprParam("DIVISOR", Integer.class), op);
+                    Assert.isTrue(divisorInput, "Divisor input is not equal to true!");
+                    return blockToBinaryExpr(block, new ExprParam("NUMBER_TO_CHECK", Integer.class), new ExprParam("DIVISOR", Integer.class), "PROPERTY");
                 } else {
-                    Assert.isTrue(divisorInput.getName().equals("false"), "Divisor input is not equal to false!");
-                    return blockToUnaryExpr(block, new ExprParam("NUMBER_TO_CHECK", Integer.class), op);
+                    Assert.isTrue(!divisorInput, "Divisor input is not equal to false!");
+                    return blockToUnaryExpr(block, new ExprParam("NUMBER_TO_CHECK", Integer.class), "PROPERTY");
                 }
 
             case "math_change":
@@ -332,7 +329,7 @@ public class BlockAST {
 
                 //LISTEN
             case "lists_create_empty":
-                return ExprList.make();
+                return EmptyExpr.make(ArrayList.class);
 
             case "lists_create_with":
                 return blockToExprList(block, ArrayList.class);
@@ -369,33 +366,20 @@ public class BlockAST {
 
                 //KONTROLLE
             case "controls_if":
-                List<Expr> exprsList = new ArrayList<Expr>();
-                List<StmtList> stmtLists = new ArrayList<StmtList>();
-
-                //TODO not finished 
+                int _else = 0;
+                int _elseIf = 0;
                 if ( block.getMutation() == null ) {
-                    values = extractValues(block, (short) 1);
-                    exprsList.add((Expr) extractValue(values, new ExprParam("IF0", Boolean.class)));
-                    statements = extractStatements(block, (short) 1);
-                    stmtLists.add(extractStatement(statements, "DO0"));
-                    return IfStmt.make(exprsList, stmtLists);
+                    return blocksToIfStmt(block, _else, _elseIf);
                 } else {
                     Mutation mutation = block.getMutation();
-                    if ( mutation.getElseif() != null ) {
-                        int _elseIf = mutation.getElseif().intValue();
-                        List<Object> valAndStmt = block.getRepetitions().getValueAndStatement();
-                        Assert.isTrue(valAndStmt.size() <= 2 * _elseIf + 2);
-                        values = new ArrayList<Value>();
-                        statements = new ArrayList<Statement>();
-                        convertStmtValList(values, statements, valAndStmt);
-
-                        for ( int i = 0; i < values.size(); i++ ) {
-                            exprsList.add((Expr) extractValue(values, new ExprParam("IF" + i, Boolean.class)));
-                            stmtLists.add(extractStatement(statements, "DO" + i));
-                        }
-
-                        return IfStmt.make(exprsList, stmtLists);
+                    if ( mutation.getElse() != null ) {
+                        _else = mutation.getElse().intValue();
                     }
+                    if ( mutation.getElseif() != null ) {
+                        _elseIf = mutation.getElseif().intValue();
+                        return blocksToIfStmt(block, _else, _elseIf);
+                    }
+                    return blocksToIfStmt(block, _else, _elseIf);
                 }
 
             case "controls_whileUntil":
@@ -408,16 +392,18 @@ public class BlockAST {
             case "controls_for":
                 var = extractVar(block);
                 values = extractValues(block, (short) 3);
-                ExprList exprList = ExprList.make();
+                exprList = ExprList.make();
 
                 Phrase from = extractValue(values, new ExprParam("FROM", Integer.class));
                 Phrase to = extractValue(values, new ExprParam("TO", Integer.class));
                 Phrase by = extractValue(values, new ExprParam("BY", Integer.class));
                 Binary exprAssig = Binary.make(Binary.Op.ASSIGNMENT, (Expr) var, (Expr) from);
                 Binary exprCondition = Binary.make(Binary.Op.LTE, (Expr) var, (Expr) to);
+                Binary exprBy = Binary.make(Binary.Op.ADD, (Expr) var, (Expr) by);
                 exprList.addExpr(exprAssig);
                 exprList.addExpr(exprCondition);
-                exprList.addExpr((Expr) by);
+                exprList.addExpr(exprBy);
+                exprList.setReadOnly();
                 return extractRepeatStatement(block, exprList, "FOR");
 
             case "controls_forEach":
@@ -442,17 +428,6 @@ public class BlockAST {
         }
     }
 
-    private void convertStmtValList(List<Value> values, List<Statement> statements, List<Object> valAndStmt) {
-        for ( int i = 0; i < valAndStmt.size(); i++ ) {
-            Object ob = valAndStmt.get(i);
-            if ( ob.getClass() == Value.class ) {
-                values.add((Value) ob);
-            } else {
-                statements.add((Statement) ob);
-            }
-        }
-    }
-
     private Phrase blockToUnaryExpr(Block block, ExprParam exprParam, String operationType) {
         String op = getOperation(block, operationType);
         List<Value> values = extractValues(block, (short) 1);
@@ -468,6 +443,50 @@ public class BlockAST {
         return Binary.make(Binary.Op.get(op), (Expr) left, (Expr) right);
     }
 
+    private Phrase blocksToIfStmt(Block block, int _else, int _elseIf) {
+        List<Expr> exprsList = new ArrayList<Expr>();
+        List<StmtList> thenList = new ArrayList<StmtList>();
+        StmtList elseList = null;
+
+        List<Value> values = new ArrayList<Value>();
+        List<Statement> statements = new ArrayList<Statement>();
+
+        if ( _else + _elseIf != 0 ) {
+            List<Object> valAndStmt = block.getRepetitions().getValueAndStatement();
+            Assert.isTrue(valAndStmt.size() <= 2 * _elseIf + 2 + _else);
+            convertStmtValList(values, statements, valAndStmt);
+        } else {
+            values = extractValues(block, (short) 1);
+            statements = extractStatements(block, (short) 1);
+        }
+
+        for ( int i = 0; i < statements.size(); i++ ) {
+            if ( _else != 0 && i == statements.size() - 1 ) {
+                elseList = extractStatement(statements, "ELSE");
+            } else {
+                exprsList.add((Expr) extractValue(values, new ExprParam("IF" + i, Boolean.class)));
+                thenList.add(extractStatement(statements, "DO" + i));
+            }
+        }
+
+        if ( _else != 0 ) {
+            return IfStmt.make(exprsList, thenList, elseList);
+        } else {
+            return IfStmt.make(exprsList, thenList);
+        }
+    }
+
+    private void convertStmtValList(List<Value> values, List<Statement> statements, List<Object> valAndStmt) {
+        for ( int i = 0; i < valAndStmt.size(); i++ ) {
+            Object ob = valAndStmt.get(i);
+            if ( ob.getClass() == Value.class ) {
+                values.add((Value) ob);
+            } else {
+                statements.add((Statement) ob);
+            }
+        }
+    }
+
     private ExprList blockToExprList(Block block, Class<?> defVal) {
         List<Arg> args = block.getMutation().getArg();
         Assert.isTrue(args.size() == 1, "Number of arguments in mutation is not equal 1!");
@@ -478,6 +497,7 @@ public class BlockAST {
     }
 
     private Phrase blockToConst(Block block, String type) {
+        //what about template class?
         List<Field> fields = extractFields(block, (short) 1);
         String field = extractField(fields, type, (short) 0);
         switch ( type ) {
@@ -608,6 +628,6 @@ public class BlockAST {
 
     @Override
     public String toString() {
-        return "BlockAST [project=" + project + "]";
+        return "BlockAST [project=" + this.project + "]";
     }
 }

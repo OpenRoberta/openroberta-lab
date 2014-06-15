@@ -81,7 +81,7 @@ function toXml() {
 function fromXml() {
   var input = document.getElementById('importExport');
   var xml = Blockly.Xml.Roberta.textToDom(input.value);
-  Blockly.Xml.Roberta.domToWorkspace(Blockly.mainWorkspace, xml);
+  Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
 }
 
 function toCode(lang) {

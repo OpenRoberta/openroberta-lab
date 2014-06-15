@@ -29,8 +29,7 @@ public class SensorExpr extends Expr {
 
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
-        // TODO Auto-generated method stub
+        sb.append(this.sens);
 
     }
-
 }

@@ -29,8 +29,7 @@ public class DrehSensor extends Sensor {
 
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
-        // TODO Auto-generated method stub
-
+        sb.append("(" + this.mode + ", " + this.motor + ")");
     }
 
     @Override

@@ -24,6 +24,8 @@ public class AktionStmt extends Stmt {
 
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
+        appendNewLine(sb, indentation, null);
+        sb.append("SensorStmt ").append(this.akt);
     }
 
     @Override

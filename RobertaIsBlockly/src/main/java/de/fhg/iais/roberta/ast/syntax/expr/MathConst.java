@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 
-public class MathConst extends Phrase {
+public class MathConst extends Expr {
     private final Const mathConst;
 
     private MathConst(Const mathConst) {
@@ -16,17 +16,17 @@ public class MathConst extends Phrase {
     }
 
     public Const getMathConst() {
-        return mathConst;
+        return this.mathConst;
     }
 
     @Override
     public String toString() {
-        return "MathConst [" + mathConst + "]";
+        return "MathConst [" + this.mathConst + "]";
     }
 
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
-        sb.append(mathConst);
+        sb.append(this.mathConst);
     }
 
     public static enum Const {

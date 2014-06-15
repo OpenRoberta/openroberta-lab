@@ -30,7 +30,7 @@ public class Unary extends Expr {
 
     @Override
     public String toString() {
-        return "Unary[" + this.op + ", " + this.expr + "]";
+        return "Unary [" + this.op + ", " + this.expr + "]";
     }
 
     public static enum Op {
@@ -176,7 +176,10 @@ public class Unary extends Expr {
 
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
-        // TODO Auto-generated method stub
+        sb.append("(");
+        sb.append(this.op).append(" ");
+        this.expr.toStringBuilder(sb, indentation);
+        sb.append(")");
 
     }
 

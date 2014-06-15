@@ -21,12 +21,11 @@ public class StringConst extends Expr {
 
     @Override
     public String toString() {
-        return "String[" + this.value + "]";
+        return "String [" + this.value + "]";
     }
 
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
-        // TODO Auto-generated method stub
-
+        sb.append(this.value);
     }
 }

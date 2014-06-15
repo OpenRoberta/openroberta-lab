@@ -1,13 +1,14 @@
 package de.fhg.iais.roberta.ast.syntax.sensoren;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.ast.syntax.aktion.SensorPort;
 import de.fhg.iais.roberta.dbc.Assert;
 
 public class GyroSensor extends Sensor {
     private final Mode mode;
-    private final int port;
+    private final SensorPort port;
 
-    private GyroSensor(Mode mode, int port) {
+    private GyroSensor(Mode mode, SensorPort port) {
         super(Phrase.Kind.GyroSensor);
         Assert.isTrue(mode != null);
         this.mode = mode;
@@ -15,7 +16,7 @@ public class GyroSensor extends Sensor {
         setReadOnly();
     }
 
-    public static GyroSensor make(Mode mode, int port) {
+    public static GyroSensor make(Mode mode, SensorPort port) {
         return new GyroSensor(mode, port);
     }
 
@@ -23,14 +24,13 @@ public class GyroSensor extends Sensor {
         return this.mode;
     }
 
-    public int getPort() {
+    public SensorPort getPort() {
         return this.port;
     }
 
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
-        // TODO Auto-generated method stub
-
+        sb.append("(" + this.mode + ", " + this.port + ")");
     }
 
     @Override

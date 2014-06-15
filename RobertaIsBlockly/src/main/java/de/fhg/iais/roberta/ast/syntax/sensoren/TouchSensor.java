@@ -1,27 +1,28 @@
 package de.fhg.iais.roberta.ast.syntax.sensoren;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.ast.syntax.aktion.SensorPort;
 
 public class TouchSensor extends Sensor {
-    private final int port;
+    private final SensorPort port;
 
-    private TouchSensor(int port) {
+    private TouchSensor(SensorPort port) {
         super(Phrase.Kind.TouchSensor);
         this.port = port;
         setReadOnly();
     }
 
-    public static TouchSensor make(int port) {
+    public static TouchSensor make(SensorPort port) {
         return new TouchSensor(port);
     }
 
-    public int getPort() {
+    public SensorPort getPort() {
         return this.port;
     }
 
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
-        // TODO Auto-generated method stub
+        sb.append("(" + this.port + ")");
 
     }
 
