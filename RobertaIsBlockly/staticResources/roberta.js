@@ -1,3 +1,5 @@
+var token = '1A2B3C4D';
+
 /**
  * Inject Blockly with initial toolbox
  * 
@@ -49,6 +51,14 @@ function saveToServer() {
 		"cmd" : "saveP",
 		"name" : $name.val(),
 		"program" : xml_text
+	}, response);
+}
+
+function runOnBrick() {
+	var $name = $('#name');
+	COMM.json("/blocks", {
+		"cmd" : "runP",
+		"name" : $name.val()
 	}, response);
 }
 
@@ -191,9 +201,11 @@ function init() {
 	$('#add').onWrap('click', function() {
 		loadFromServer(false);
 	}, 'add the blocks');
-	$('#del').onWrap('click', function() {
-		deleteOnServer();
-	}, 'add the blocks');
+	$('#del').onWrap('click', deleteOnServer, 'add the blocks');
+	$('#run').onWrap('click', function() {
+		saveToServer();
+		runOnBrick();
+	}, 'save+run the program');
 	$('#toolbox1').onWrap('click', function() {
 		loadToolbox('1');
 	}, 'load toolbox 1');

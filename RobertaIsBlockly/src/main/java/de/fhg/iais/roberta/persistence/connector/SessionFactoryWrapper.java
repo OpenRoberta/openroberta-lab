@@ -7,39 +7,42 @@ import org.hibernate.service.ServiceRegistryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Singleton;
+
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
- * class defining a singleton, that wraps the session factory of hibernate. Creating the session factory of hibernate is expensive. The session factory needs a
- * configuration file, that defines the sql dialect to be used. The session factory hides almost complete the underlying database.<br>
+ * class, that wraps the session factory of hibernate. Creating the session factory of hibernate is expensive. The session factory hides almost complete the
+ * underlying database.<br>
  * - Retrieving sessions from the factory is thread-safe and cheap.<br>
- * - The generated sessions are not thread-safe.
+ * - The generated sessions are not thread-safe.<br>
+ * <br>
+ * The class <b>should</b> be used as a singleton. Use <b>GUICE</b> to enforce that.
  * 
  * @author rbudde
  */
+@Singleton
 public final class SessionFactoryWrapper {
     private static final Logger LOG = LoggerFactory.getLogger(SessionFactoryWrapper.class);
     private static final String CFG_XML = "sqlite-cfg.xml";
-    private static SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
 
-    static {
+    public SessionFactoryWrapper() {
         try {
             Configuration configuration = new Configuration();
             configuration.configure(CFG_XML);
             ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder().applySettings(configuration.getProperties());
-            sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder.buildServiceRegistry());
+            this.sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder.buildServiceRegistry());
+            LOG.info("created");
         } catch ( Throwable ex ) {
             System.err.println("Initial SessionFactory creation failed." + ex);
             throw new ExceptionInInitializerError(ex);
         }
     }
 
-    /**
-     * @return a hibernate session wrapped inside a session-wrapper object. See {@link SessionWrapper} for details.
-     */
-    public static synchronized final SessionWrapper getSession() {
-        Assert.notNull(sessionFactory, "initialization of session factory failed");
-        Session session = sessionFactory.openSession();
+    public final SessionWrapper getSession() {
+        Assert.notNull(this.sessionFactory, "initialization of session factory failed");
+        Session session = this.sessionFactory.openSession();
         return new SessionWrapper(session);
     }
 }
