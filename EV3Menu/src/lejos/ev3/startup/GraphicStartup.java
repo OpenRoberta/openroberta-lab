@@ -1507,16 +1507,16 @@ public class GraphicStartup implements Menu {
                     RobertaUtils robertaUtils = new RobertaUtils();
                     robertaUtils.getProgram(serverURL, token);
                     robertaLabFile = robertaUtils.getFileName();
-                    System.out.println("robertaFileName is: " + robertaLabFile);
+                    //System.out.println("robertaFileName is: " + robertaLabFile);
                     // get parameters for new exec method
-                    try {
+                    /*try {
                         file = new File(PROGRAMS_DIRECTORY, robertaLabFile);
                         JarFile jar = new JarFile(file);
                         mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
                         jar.close();
                     } catch ( IOException e ) {
                         System.out.println("most likely something wrong with jar file");
-                    }
+                    }*/
                     break;
                 case 2:
                     try {
