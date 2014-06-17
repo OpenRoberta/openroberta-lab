@@ -24,7 +24,7 @@ public class EmptyExpr extends Expr {
 
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
-        sb.append("[[Nothing supplied from the user for this place]]");
+        sb.append("EmptyExpr [defVal=" + this.defVal + "]");
     }
 
     @Override

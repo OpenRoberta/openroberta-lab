@@ -30,9 +30,13 @@ public class ExprList extends Expr {
 
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
+        sb.append("[");
         for ( Expr expr : this.el ) {
             expr.toStringBuilder(sb, indentation);
+            sb.append(", ");
         }
+        sb.delete(sb.length() - 2, sb.length());
+        sb.append("]");
     }
 
     @Override

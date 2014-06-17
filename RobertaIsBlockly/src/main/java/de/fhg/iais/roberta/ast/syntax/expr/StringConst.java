@@ -21,7 +21,7 @@ public class StringConst extends Expr {
 
     @Override
     public String toString() {
-        return "String [" + this.value + "]";
+        return "StringConst [" + this.value + "]";
     }
 
     @Override

@@ -111,8 +111,8 @@ public class ControlTest {
         String a =
             "BlockAST [project=[[\n"
                 + "(repeat [TIMES, NumConst [10]]\n"
-                + "   exprStmt Binary [TEXT_APPEND, Var [item], String [Proba]]\n"
-                + "   exprStmt Binary [TEXT_APPEND, Var [item], String [Proba1]]\n"
+                + "   exprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba]]\n"
+                + "   exprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba1]]\n"
                 + "   (repeat [TIMES, NumConst [10]]\n"
                 + "   )\n"
                 + ")]]]";
@@ -133,8 +133,29 @@ public class ControlTest {
         String a =
             "BlockAST [project=[[\n"
                 + "(repeat [WHILE, BoolConst [true]]\n"
-                + "   exprStmt Binary [TEXT_APPEND, Var [item], String [sd]]\n"
+                + "   exprStmt Binary [TEXT_APPEND, Var [item], StringConst [sd]]\n"
                 + "   exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
+                + ")]]]";
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
+    public void repeatStmtWhileUntil1() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/repeat_stmt_whileUntil1.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        BlockAST transformer = new BlockAST();
+        transformer.projectToAST(project);
+
+        String a =
+            "BlockAST [project=[[\n"
+                + "(repeat [WHILE, BoolConst [true]]\n"
+                + "   exprStmt Binary [TEXT_APPEND, Var [item], StringConst [sd]]\n"
+                + "   exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
+                + "   StmtFlowCon [BREAK]\n"
                 + ")]]]";
         Assert.assertEquals(a, transformer.toString());
     }
@@ -152,8 +173,8 @@ public class ControlTest {
 
         String a =
             "BlockAST [project=[[\n"
-                + "(repeat [FOR, (i ASSIGNMENT 1)(i LTE 10)(i ADD 1)]\n"
-                + "   exprStmt Binary [TEXT_APPEND, Var [item], String [kllk]]\n"
+                + "(repeat [FOR, [(i ASSIGNMENT 1), (i LTE 10), (i ADD 1)]]\n"
+                + "   exprStmt Binary [TEXT_APPEND, Var [item], StringConst [kllk]]\n"
                 + ")]]]";
         Assert.assertEquals(a, transformer.toString());
     }
@@ -172,7 +193,7 @@ public class ControlTest {
         String a =
             "BlockAST [project=[[\n"
                 + "(repeat [FOR_EACH, Binary [IN, Var [j], EmptyExpr [defVal=class java.util.ArrayList]]]\n"
-                + "   exprStmt Binary [TEXT_APPEND, Var [item], String [gg]]\n"
+                + "   exprStmt Binary [TEXT_APPEND, Var [item], StringConst [gg]]\n"
                 + ")]]]";
         Assert.assertEquals(a, transformer.toString());
     }

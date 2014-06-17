@@ -488,12 +488,13 @@ public class BlockAST {
     }
 
     private ExprList blockToExprList(Block block, Class<?> defVal) {
-        List<Arg> args = block.getMutation().getArg();
-        Assert.isTrue(args.size() == 1, "Number of arguments in mutation is not equal 1!");
-        Arg items = args.get(0);
+        int items = 0;
+        if ( block.getMutation().getItems() != null ) {
+            items = block.getMutation().getItems().intValue();
+        }
         List<Value> values = block.getValue();
-        Assert.isTrue(values.size() <= Integer.parseInt(items.getName()), "Number of values is not less or equal to number of items in mutation!");
-        return valuesToExprList(values, defVal);
+        Assert.isTrue(values.size() <= items, "Number of values is not less or equal to number of items in mutation!");
+        return valuesToExprList(values, defVal, items);
     }
 
     private Phrase blockToConst(Block block, String type) {
@@ -538,9 +539,9 @@ public class BlockAST {
         stmtList.addStmt(stmt);
     }
 
-    private ExprList valuesToExprList(List<Value> values, Class<?> defVal) {
+    private ExprList valuesToExprList(List<Value> values, Class<?> defVal, int nItems) {
         ExprList exprList = ExprList.make();
-        for ( int i = 0; i < values.size(); i++ ) {
+        for ( int i = 0; i < nItems; i++ ) {
             exprList.addExpr((Expr) extractValue(values, new ExprParam("ADD" + i, defVal)));
         }
         exprList.setReadOnly();

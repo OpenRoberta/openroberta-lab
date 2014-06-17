@@ -22,8 +22,12 @@ public class StmtFlowCon extends Stmt {
 
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
-        // TODO Auto-generated method stub
+        appendNewLine(sb, indentation, toString());
+    }
 
+    @Override
+    public String toString() {
+        return "StmtFlowCon [" + this.flow + "]";
     }
 
     public static enum Flow {
