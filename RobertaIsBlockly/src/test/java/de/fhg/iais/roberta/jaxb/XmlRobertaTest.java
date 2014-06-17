@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.eclipse.jetty.server.Server;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -15,6 +16,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 import de.fhg.iais.roberta.javaServer.jetty.ServerStarter;
 
+@Ignore
 public class XmlRobertaTest {
     private static final int port = 1997;
 

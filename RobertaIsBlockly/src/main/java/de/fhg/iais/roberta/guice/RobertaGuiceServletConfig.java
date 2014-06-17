@@ -6,8 +6,6 @@ import com.google.inject.servlet.GuiceServletContextListener;
 import com.sun.jersey.guice.JerseyServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 
-import de.fhg.iais.roberta.javaServer.resources.Blocks;
-
 public class RobertaGuiceServletConfig extends GuiceServletContextListener {
     Injector injector;
 
@@ -16,9 +14,8 @@ public class RobertaGuiceServletConfig extends GuiceServletContextListener {
         JerseyServletModule jerseyServletModule = new JerseyServletModule() {
             @Override
             protected void configureServlets() {
-                install(new RobertaGuiceModule());
                 // configure at least one JAX-RS resource or the server won't start.
-                bind(Blocks.class);
+                install(new RobertaGuiceModule());
                 serve("/*").with(GuiceContainer.class);
 
             }

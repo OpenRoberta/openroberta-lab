@@ -2,13 +2,14 @@ package de.fhg.iais.roberta.guice;
 
 import com.google.inject.AbstractModule;
 
-import de.fhg.iais.roberta.brick.BrickCommunicator;
-import de.fhg.iais.roberta.persistence.connector.SessionFactoryWrapper;
+import de.fhg.iais.roberta.javaServer.resources.Blocks;
+import de.fhg.iais.roberta.javaServer.resources.DownloadleJOSJar;
 
 public class RobertaGuiceModule extends AbstractModule {
     @Override
     protected void configure() {
-        bind(BrickCommunicator.class);
-        bind(SessionFactoryWrapper.class);
+        // configure at least one JAX-RS resource or the server won't start.
+        bind(Blocks.class);
+        bind(DownloadleJOSJar.class);
     }
 }
