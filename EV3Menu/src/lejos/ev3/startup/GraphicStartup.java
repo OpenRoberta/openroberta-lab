@@ -25,6 +25,9 @@ import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.jar.JarFile;
 
 import lejos.hardware.Battery;
@@ -143,11 +146,20 @@ public class GraphicStartup implements Menu {
     private static final String ICNo =
         "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00f0\u0000\u0000\u000f\u00f0\u0000\u0000\u000f\u00fc\u0003\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00c0\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u0003\u0000\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u0000\u00c0\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u0003\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u0003\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00f0\u0000\u0000\u000f\u00f0\u0000\u0000\u000f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
 
-    // Roberta Logo (maybe not the best quality possible, done with ev3image tool from lejos). Black/white roberta image required for best result?!
-    static final String RobertaLogo =
+    // Roberta Icon (maybe not the best quality possible, done with ev3image tool
+    // from lejos). Black/white roberta image required for best result?!
+    static final String RobertaIcon =
         "\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0001\u0000\u0000\u0080\u0003\u0020\u0002\u008e\u0003\u00b8\u0001\u0080\u0001\u00b8\u005e\u00c4\u0001\u0038\u0021\u00f8\u0000\u00f8\u0000\u0031\u0000\u00f0\u0010\u0033\u0000\u00e0\u0038\u0008\u0000\u00e0\u0000\u0004\u0000\u0000\u00e1\u0003\u0000\u0000\u007e\u0000\u0000\u0000\u0070\u0000\u0000\u0000\u0030\u0000\u0000\u0000\u0038\u0000\u0000\u0000\u0038\u0080\u0003\u0000\u0038\u00f0\u0007\u0000\u00f8\u00ff\u0007\u0000\u00f8\u00ff\u0007\u0000\u00f8\u00ff\u001f\u0000\u00f8\u00ff\u003f\u0000\u00f8\u00ff\u003f\u0000\u00f8\u00ff\u007f\u0000\u00ff\u00ff\u007f\u0080\u00ff\u00ff\u0067\u00c0\u00ff\u00ff\u0077\u00c0\u00ff\u009f\u0077\u00c0\u00ff\u00df\u003f\u0080\u00ff\u00ff\u003f\u0000\u008f\u00fc\u001f\u0000\u0000\u0010\u000f";
+    // Open Roberta Lab Logo for roberta submenu
+    static final String OpenRobertaLabLogo =
+        "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u003c\u0000\u0000\u0000\u0000\u0000\u00e0\u003f\u0000\u0000\u0000\u0000\u0000\u0080\u000f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u003e\u0000\u0000\u0000\u0000\u0000\u00f0\u00ff\u0003\u0000\u0000\u0000\u0000\u00f0\u001f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0080\u003f\u0000\u0000\u0000\u0000\u0000\u00f0\u00ff\u0007\u0000\u0000\u0000\u0000\u00f8\u001f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00c0\u001f\u0000\u0000\u0000\u0000\u0000\u0000\u00ff\u001f\u0000\u0000\u0000\u0000\u00fc\u001f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00e0\u001f\u0000\u0000\u0000\u0000\u0000\u0000\u007f\u007e\u0000\u0000\u0000\u0000\u00e8\u000f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00e0\u001f\u0000\u0000\u0000\u0000\u0000\u0000\u007f\u00f8\u0000\u0000\u0007\u0000\u00e0\u000f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00fe\u001f\u0000\u0000\u0000\u0000\u0000\u0000\u007f\u00e0\u0001\u00c0\u00c7\u0000\u00e0\u000f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00fe\u001f\u0000\u0000\u0000\u001c\u0000\u0000\u007f\u00c0\u0001\u00d0\u00ef\u0003\u00e0\u000f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00ff\u00ff\u0081\u00ff\u0001\u0063\u0000\u0080\u007f\u0080\u0003\u00dc\u00ff\u0003\u00e0\u000f\u0000\u0000\u0000\u0000\u00f8\u000f\u0078\u00f0\u00ff\u00e3\u00ff\u0003\u005d\u0000\u0080\u003f\u0080\u0003\u00fe\u00ff\u0003\u00e0\u000f\u0000\u0000\u0078\u0000\u00fe\u000f\u00fe\u00f0\u00ff\u00f1\u00ff\u0087\u00d4\u0000\u0080\u003f\u0080\u0003\u00ff\u00ff\u0019\u00f0\u000f\u0000\u0000\u00ff\u0003\u00fe\u008f\u00ff\u00f0\u000f\u0078\u00f0\u008f\u009c\u0000\u0080\u003f\u0080\u0001\u00fe\u00ff\u003f\u00f0\u000f\u0000\u00c0\u00ef\u0007\u00e0\u00cf\u00c7\u00f0\u000f\u001e\u00e0\u009f\u00d4\u0000\u0080\u003f\u0080\u0001\u00fc\u00ff\u007f\u00f0\u000f\u0000\u00f0\u0007\u000f\u00e0\u00ff\u00c0\u00f8\u000f\u000e\u00e0\u001f\u0055\u0000\u0080\u003f\u00e0\u0081\u00ff\u00ff\u007f\u00f0\u00ff\u000f\u00f0\u0003\u000e\u00e0\u007f\u00c0\u00f8\u0007\u000f\u00c0\u001f\u0023\u0000\u0080\u00ff\u00ff\u00c1\u007f\u00c0\u003f\u00f0\u00ff\u001f\u00f8\u0003\u001c\u00e0\u003f\u0000\u00f8\u0007\u0007\u00c0\u001f\u001c\u0000\u0080\u00ff\u007f\u00c0\u003f\u0080\u001f\u00f0\u001f\u003c\u00f8\u0003\u0018\u00e0\u001f\u0000\u00f8\u0007\u0007\u00c0\u001f\u0000\u0000\u00c0\u00ff\u001f\u00e0\u003f\u0000\u001f\u00f0\u000f\u0038\u00fc\u0003\u0038\u00e0\u000f\u0000\u00f8\u0007\u0003\u00e0\u001f\u0000\u0000\u00c0\u003f\u0007\u00e0\u001f\u0000\u00ff\u00f0\u000f\u0070\u00fc\u0003\u0038\u00e0\u000f\u0000\u00fc\u0007\u0000\u00fe\u001f\u0000\u0000\u00c0\u001f\u0006\u0080\u001f\u0000\u00ff\u00f0\u000f\u0070\u00fc\u00e3\u003f\u00e0\u000f\u0000\u00fc\u0007\u0080\u00ff\u001f\u0000\u0000\u00c0\u001f\u000e\u0000\u001f\u0000\u00ff\u00f0\u000f\u0070\u00fc\u00ff\u007f\u00e0\u000f\u0000\u00fc\u0003\u00e0\u00e3\u001f\u0000\u0000\u00c0\u001f\u000e\u00c0\u001f\u0000\u00ff\u00f0\u000f\u0070\u00fc\u00ff\u0001\u00e0\u000f\u0000\u00fc\u0003\u0078\u00e0\u001f\u0000\u0000\u00c0\u001f\u000e\u00e0\u003f\u0000\u007f\u00f0\u000f\u0070\u00fc\u0003\u0000\u00e0\u000f\u0000\u00fc\u0003\u003c\u00e0\u001f\u0000\u0000\u00c0\u001f\u001c\u00e0\u003f\u0080\u001f\u00f0\u000f\u0038\u00fc\u0003\u0000\u00f0\u000f\u0000\u00fc\u0003\u001c\u00e0\u001f\u0000\u0000\u00c0\u001f\u001c\u00c0\u007f\u0080\u003f\u00f0\u000f\u0038\u00fc\u0003\u0040\u00f0\u000f\u0000\u00fe\u0001\u000e\u00e0\u001f\u0000\u0000\u00e0\u001f\u001c\u00ce\u00ff\u00e0\u007f\u00f0\u000f\u001c\u00f8\u0003\u0060\u00f0\u000f\u0000\u00fe\u0001\u000e\u00e0\u001f\u0000\u0000\u00e0\u001f\u00d8\u000f\u00fe\u00ff\u007f\u00f0\u000f\u000e\u00f8\u0007\u0070\u00f0\u000f\u0000\u00fc\u0001\u0006\u00e0\u001f\u0000\u0000\u00e0\u000f\u00f8\u0007\u00fe\u00ff\u003f\u00f8\u000f\u0007\u00f0\u0007\u0070\u00f0\u0007\u0000\u00fc\u0001\u000e\u00e0\u003f\u0000\u0000\u00e0\u000f\u00f8\u0000\u00ff\u00ff\u003b\u00ff\u00cf\u0003\u00f0\u0007\u0038\u00f0\u0007\u0000\u00fc\u0001\u000e\u00e0\u00ff\u0003\u0000\u00e0\u000f\u007c\u0000\u00ff\u00ff\u0003\u00fe\u00ff\u0001\u00e0\u0007\u001e\u00fe\u001f\u0000\u00f8\u0010\u007e\u00fc\u00ff\u0003\u0000\u00fe\u001f\u001e\u0000\u00de\u00ff\u0003\u00fc\u00ff\u0000\u0080\u00ff\u000f\u00fe\u003f\u0000\u00f0\u001f\u00f8\u00ff\u00c1\u0001\u0000\u00fe\u003f\u000e\u0000\u00c8\u00ef\u0003\u00f0\u003f\u0000\u0000\u00fe\u0003\u00fe\u003f\u0000\u00e0\u001f\u00f0\u001f\u0000\u0000\u0000\u00be\u003f\u0000\u0000\u00c0\u00e7\u0003\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0010\u0000\u0000\u0080\u0007\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
+    static final byte[] OpenRobertaLabLogoBytes = Utils.stringToBytes8(OpenRobertaLabLogo);
+    static final Image image = new Image(178, 128, OpenRobertaLabLogoBytes);
+
     private static String token = "";
-    private static String robertaLabFile = "";
+    private static String robertaLabFile = null;
+    private static File file = null;
+    private static String mainClass = null;
 
     private static final String PROGRAMS_DIRECTORY = "/home/lejos/programs";
     private static final String SAMPLES_DIRECTORY = "/home/root/lejos/samples";
@@ -167,7 +179,7 @@ public class GraphicStartup implements Menu {
     private final BroadcastThread broadcast = new BroadcastThread();
     private final RemoteMenuThread remoteMenuThread = new RemoteMenuThread();
 
-    //private GraphicMenu curMenu;
+    // private GraphicMenu curMenu;
     private int timeout = 0;
     private boolean btVisibility;
     private static String version = "Unknown";
@@ -227,7 +239,7 @@ public class GraphicStartup implements Menu {
         System.out.println("Getting IP addresses");
         ips = getIPAddresses();
 
-        // Start the RMI registry 
+        // Start the RMI registry
         InitThread initThread = new InitThread();
         initThread.start();
 
@@ -246,10 +258,8 @@ public class GraphicStartup implements Menu {
      */
     static class InitThread extends Thread {
         /**
-         * Create the Bluetooth local device and connect to DBus
-         * Start the RMI server
-         * Broadcast device availability
-         * Get the time from a name server
+         * Create the Bluetooth local device and connect to DBus Start the RMI
+         * server Broadcast device availability Get the time from a name server
          */
         @Override
         public void run() {
@@ -273,11 +283,11 @@ public class GraphicStartup implements Menu {
             System.out.println("Setting java.rmi.server.hostname to " + lastIp);
             System.setProperty("java.rmi.server.hostname", lastIp);
 
-            try { //special exception handler for registry creation
+            try { // special exception handler for registry creation
                 LocateRegistry.createRegistry(1099);
                 System.out.println("java RMI registry created.");
             } catch ( RemoteException e ) {
-                //do nothing, error means registry already exists
+                // do nothing, error means registry already exists
                 System.out.println("java RMI registry already exists.");
             }
 
@@ -318,14 +328,14 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Display the main system menu.
-     * Allow the user to select File, Bluetooth, Sound, System operations.
+     * Display the main system menu. Allow the user to select File, Bluetooth,
+     * Sound, System operations.
      */
     private void mainMenu() {
         GraphicMenu menu = new GraphicMenu(new String[] {
             "Run Default", "Robertalab", "Programs", "Samples", "Tools", "Bluetooth", "Wifi", "Sound", "System", "Version"
         }, new String[] {
-            ICDefault, RobertaLogo, ICFiles, ICSamples, ICTools, ICBlue, ICWifi, ICSound, ICEV3, ICLeJOS
+            ICDefault, RobertaIcon, ICFiles, ICSamples, ICTools, ICBlue, ICWifi, ICSound, ICEV3, ICLeJOS
         }, 3);
         int selection = 0;
         do {
@@ -411,7 +421,7 @@ public class GraphicStartup implements Menu {
                 try {
                     System.out.println("Waiting for a remote menu connection");
                     conn = ss.accept();
-                    //conn.setSoTimeout(2000);
+                    // conn.setSoTimeout(2000);
 
                     ObjectOutputStream os = new ObjectOutputStream(conn.getOutputStream());
                     ObjectInputStream is = new ObjectInputStream(conn.getInputStream());
@@ -503,7 +513,7 @@ public class GraphicStartup implements Menu {
                             } else if ( obj instanceof EV3Request ) {
                                 EV3Request request = (EV3Request) obj;
                                 EV3Reply reply = new EV3Reply();
-                                //System.out.println("Request: " + request.request);
+                                // System.out.println("Request: " + request.request);
                                 try {
                                     switch ( request.request ) {
                                         case GET_VOLTAGE_MILLIVOLTS:
@@ -1205,7 +1215,7 @@ public class GraphicStartup implements Menu {
                     } catch ( IOException e ) {
                         System.err.println("Failed to set visibility: " + e);
                     }
-                    //updateBTIcon();
+                    // updateBTIcon();
                     this.ind.updateNow();
                     break;
                 case 3:
@@ -1216,13 +1226,16 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Clears the screen, displays a number and allows user to change
-     * the digits of the number individually using the NXT buttons.
-     * Note the array of bytes represent ASCII characters, not actual numbers.
+     * Clears the screen, displays a number and allows user to change the digits
+     * of the number individually using the NXT buttons. Note the array of bytes
+     * represent ASCII characters, not actual numbers.
      * 
-     * @param digits Number of digits in the PIN.
-     * @param title The text to display above the numbers.
-     * @param number Start with a default PIN. Array of bytes up to 8 length.
+     * @param digits
+     *        Number of digits in the PIN.
+     * @param title
+     *        The text to display above the numbers.
+     * @param number
+     *        Start with a default PIN. Array of bytes up to 8 length.
      * @return
      */
     private boolean enterNumber(String title, byte[] number, int digits) {
@@ -1316,15 +1329,13 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Perform the Bluetooth search operation
-     * Search for Bluetooth devices
-     * Present those that are found
-     * Allow pairing
+     * Perform the Bluetooth search operation Search for Bluetooth devices Present
+     * those that are found Allow pairing
      */
     private void bluetoothSearch() {
         newScreen("Searching");
         ArrayList<RemoteBTDevice> devList;
-        //indiBT.incCount();
+        // indiBT.incCount();
         devList = null;
         try {
             // 0 means "search for all"
@@ -1345,7 +1356,7 @@ public class GraphicStartup implements Menu {
         for ( int i = 0; i < devList.size(); i++ ) {
             RemoteBTDevice btrd = devList.get(i);
             names[i] = btrd.getName();
-            //icons[i] = getDeviceIcon(btrd.getDeviceClass());
+            // icons[i] = getDeviceIcon(btrd.getDeviceClass());
         }
         GraphicListMenu searchMenu = new GraphicListMenu(names, icons);
         GraphicMenu subMenu = new GraphicMenu(new String[] {
@@ -1360,15 +1371,15 @@ public class GraphicStartup implements Menu {
             if ( selected >= 0 ) {
                 RemoteBTDevice btrd = devList.get(selected);
                 newScreen();
-                //LCD.bitBlt(
-                //	Utils.stringToBytes8(getDeviceIcon(btrd.getDeviceClass()))
-                //	, 7, 7, 0, 0, 2, 16, 7, 7, LCD.ROP_COPY);
+                // LCD.bitBlt(
+                // Utils.stringToBytes8(getDeviceIcon(btrd.getDeviceClass()))
+                // , 7, 7, 0, 0, 2, 16, 7, 7, LCD.ROP_COPY);
                 lcd.drawString(names[selected], 2, 2);
                 lcd.drawString(btrd.getAddress(), 0, 3);
                 int subSelection = getSelection(subMenu, 0);
                 if ( subSelection == 0 ) {
                     newScreen("Pairing");
-                    //Bluetooth.addDevice(btrd);
+                    // Bluetooth.addDevice(btrd);
                     // !! Assuming 4 length
                     byte[] pin = {
                         '0', '0', '0', '0'
@@ -1384,7 +1395,7 @@ public class GraphicStartup implements Menu {
                     } catch ( Exception e ) {
                         System.err.println("Failed to pair:" + e);
                         lcd.drawString("UNSUCCESSFUL  ", 0, 6);
-                        //Bluetooth.removeDevice(btrd);
+                        // Bluetooth.removeDevice(btrd);
                     }
                     lcd.drawString("Press any key", 0, 7);
                     getButtonPress();
@@ -1437,7 +1448,7 @@ public class GraphicStartup implements Menu {
                 // LCD.drawString("0x"+Integer.toHexString(devclass), 0, 4);
                 int subSelection = getSelection(subMenu, 0);
                 if ( subSelection == 0 ) {
-                    //Bluetooth.removeDevice(btrd);
+                    // Bluetooth.removeDevice(btrd);
                     break;
                 }
             }
@@ -1468,67 +1479,86 @@ public class GraphicStartup implements Menu {
 
     /**
      * Roberta submenu implementation.<br>
-     * Uses new RobertaUtils helper-class for downloading and saving file.<br>
+     * Uses new RobertaDownloadThread helper-class for downloading and saving
+     * file.<br>
      * uses new RobertaKeyboard with less symbols for token input.<br>
-     * TODO handling of exceptions (should never be thrown later)
-     * TODO lots of system.out for debugging
+     * TODO handling of exceptions (should never be thrown later) TODO lots of
+     * system.out for debugging
      */
     private void robertaMenu() {
-        File file = null;
-        String mainClass = null;
+        GraphicsLCD glcd = LocalEV3.get().getGraphicsLCD();
 
         String[] menuData = {
-            "Enter Code", "Download File", "Run Program"
+            "New token", "Download", "Run"
         };
         String[] iconData = {
-            RobertaLogo, RobertaLogo, RobertaLogo
+            RobertaIcon, RobertaIcon, RobertaIcon
         };
         URL serverURL = null;
         try {
-            serverURL = new URL("http://10.0.1.10:1999/download"); // type "ipconfig /all" in console to see which ip adress your pc got from the brick dhcp
+            serverURL = new URL("http://10.0.1.10:1999/download");
+            // do not change, brick dhcp gives || (10) to your pc
         } catch ( MalformedURLException e ) {
-            // should never occure
-            e.printStackTrace();
+            // never occurs
         }
         GraphicMenu menu = new GraphicMenu(menuData, iconData, 4);
-        int selection = 0;
+        int selection = 1;
+        //start at "download" icon
+
+        // first enter token (from website)
+        // do not allow bypassing this by
+        // no empty string, at least 5 chars
+        while ( token.equals("") || token.length() < 5 ) {
+            newScreen(" Robertalab");
+            token = new RobertaKeyboard().getString();
+        }
+
+        glcd.drawImage(image, 0, 0, 0);
+        // 1/60s download requests
+        RobertaDownloadThread rdt = new RobertaDownloadThread(serverURL, token);
+        ScheduledExecutorService stp = Executors.newScheduledThreadPool(1);
+        stp.scheduleAtFixedRate(rdt, 0, 60, TimeUnit.SECONDS);
+
         do {
-            newScreen("Robertalab");
-            lcd.drawString("RobertaLabFile:", 0, 1);
-            lcd.drawString("" + robertaLabFile, 0, 2);
-            lcd.drawString("Token: " + token, 0, 3);
+            newScreen(" Robertalab");
+            glcd.drawImage(image, 0, 0, 0);
             menu.setItems(menuData, iconData);
             selection = getSelection(menu, selection);
             switch ( selection ) {
                 case 0:
                     token = new RobertaKeyboard().getString();
+                    rdt.updateToken(token);
                     break;
                 case 1:
-                    RobertaUtils robertaUtils = new RobertaUtils();
-                    robertaUtils.getProgram(serverURL, token);
-                    robertaLabFile = robertaUtils.getFileName();
-                    //System.out.println("robertaFileName is: " + robertaLabFile);
-                    // get parameters for new exec method
-                    /*try {
+                    // press download on the brick
+                    rdt.run();
+                    try {
+                        // wait until program is downloaded
+                        rdt.wait();
+                        robertaLabFile = rdt.getFileName();
+                        System.out.println("robertaFileName is: " + robertaLabFile);
+                        // get parameters for new exec method
                         file = new File(PROGRAMS_DIRECTORY, robertaLabFile);
                         JarFile jar = new JarFile(file);
                         mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
                         jar.close();
+                    } catch ( InterruptedException e ) {
+                        e.printStackTrace();
+                        System.out.println("error while waiting for download thread");
                     } catch ( IOException e ) {
-                        System.out.println("most likely something wrong with jar file");
-                    }*/
+                        e.printStackTrace();
+                        System.out.println("error while retrieving jar information");
+                    }
                     break;
                 case 2:
-                    try {
-                        this.ind.suspend();
-                        // new exec from 0.8.1-beta
-                        exec(file, JAVA_RUN_CP + file.getPath() + " lejos.internal.ev3.EV3Wrapper " + mainClass, PROGRAMS_DIRECTORY);
-                        // old exec from 0.8.0-alpha
-                        //exec(JAVA_RUN_JAR + robertaFileName, PROGRAMS_DIRECTORY);
-                        this.ind.resume();
-                    } catch ( NullPointerException e ) {
-                        System.out.println("first download file, then try to run it...");
-                    }
+                    stp.shutdownNow();
+                    this.ind.suspend();
+                    // new exec from 0.8.1-beta
+                    exec(file, JAVA_RUN_CP + file.getPath() + " lejos.internal.ev3.EV3Wrapper " + mainClass, PROGRAMS_DIRECTORY);
+                    // old exec from 0.8.0-alpha
+                    // exec(JAVA_RUN_JAR + robertaFileName, PROGRAMS_DIRECTORY);
+                    this.ind.resume();
+                    stp.scheduleAtFixedRate(rdt, 0, 60, TimeUnit.SECONDS);
                     break;
             }
         } while ( selection >= 0 );
@@ -1536,9 +1566,8 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Present the system menu.
-     * Allow the user to format the filesystem. Change timeouts and control
-     * the default program usage.
+     * Present the system menu. Allow the user to format the filesystem. Change
+     * timeouts and control the default program usage.
      */
     private void systemMenu() {
         String[] menuData = {
@@ -1584,7 +1613,7 @@ public class GraphicStartup implements Menu {
                 case 1:
                     System.out.println("Timeout = " + this.timeout);
                     System.out.println("Max sleep time = " + maxSleepTime);
-                    //timeout++;
+                    // timeout++;
                     if ( this.timeout > maxSleepTime ) {
                         this.timeout = 0;
                     }
@@ -1636,8 +1665,8 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Present details of the default program
-     * Allow the user to specify run on system start etc.
+     * Present details of the default program Allow the user to specify run on
+     * system start etc.
      */
     private void systemAutoRun() {
         File f = getDefaultProgram();
@@ -1660,11 +1689,12 @@ public class GraphicStartup implements Menu {
     /**
      * Ask the user for confirmation of an action.
      * 
-     * @param prompt A description of the action about to be performed
+     * @param prompt
+     *        A description of the action about to be performed
      * @return 1=yes 0=no < 0 escape
      */
     private int getYesNo(String prompt, boolean yes) {
-        //    	lcd.bitBlt(null, 178, 64, 0, 0, 0, 64, 178, 64, CommonLCD.ROP_CLEAR);
+        // lcd.bitBlt(null, 178, 64, 0, 0, 0, 64, 178, 64, CommonLCD.ROP_CLEAR);
         GraphicMenu menu = new GraphicMenu(new String[] {
             "No", "Yes"
         }, new String[] {
@@ -1691,8 +1721,8 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Display the sound menu.
-     * Allow the user to change volume and key click volume.
+     * Display the sound menu. Allow the user to change volume and key click
+     * volume.
      */
     private void soundMenu() {
         String[] soundMenuData = new String[] {
@@ -1763,7 +1793,8 @@ public class GraphicStartup implements Menu {
     /**
      * Format a string for use when displaying the volume.
      * 
-     * @param vol Volume setting 0-10
+     * @param vol
+     *        Volume setting 0-10
      * @return String version.
      */
     private static String formatVol(int vol) {
@@ -1789,8 +1820,7 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Read a button press.
-     * If the read timesout then exit the system.
+     * Read a button press. If the read timesout then exit the system.
      * 
      * @return The bitcode of the button.
      */
@@ -1932,7 +1962,8 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Execute a program and display its output to System.out and error stream to System.err
+     * Execute a program and display its output to System.out and error stream to
+     * System.err
      */
     private static void exec(File jar, String command, String directory) {
         try {
@@ -1988,7 +2019,8 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Execute a program and display its output to System.out and error stream to System.err
+     * Execute a program and display its output to System.out and error stream to
+     * System.err
      */
     private static void startProgram(String command, File jar) {
         try {
@@ -2055,8 +2087,8 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Display the files in the file system.
-     * Allow the user to choose a file for further operations.
+     * Display the files in the file system. Allow the user to choose a file for
+     * further operations.
      */
     private void filesMenu() {
         GraphicListMenu menu = new GraphicListMenu(null, null);
@@ -2095,12 +2127,12 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Display the tools from the tools directory.
-     * Allow the user to choose a file for further operations.
+     * Display the tools from the tools directory. Allow the user to choose a file
+     * for further operations.
      */
     private void toolsMenu() {
         GraphicListMenu menu = new GraphicListMenu(null, null);
-        //System.out.println("Finding files ...");
+        // System.out.println("Finding files ...");
         int selection = 0;
         do {
             File[] files = new File(TOOLS_DIRECTORY).listFiles();
@@ -2139,7 +2171,7 @@ public class GraphicStartup implements Menu {
      */
     static private String formatFileName(String fileName) {
         StringBuffer formattedName = new StringBuffer("" + fileName.charAt(0));
-        for ( int i = 1; i < fileName.length(); i++ ) { //Skip the first letter-can't put space before first word
+        for ( int i = 1; i < fileName.length(); i++ ) { // Skip the first letter-can't put space before first word
             if ( fileName.charAt(i) == '.' ) {
                 break;
             }
@@ -2153,12 +2185,12 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Display the samples in the file system.
-     * Allow the user to choose a file for further operations.
+     * Display the samples in the file system. Allow the user to choose a file for
+     * further operations.
      */
     private void samplesMenu() {
         GraphicListMenu menu = new GraphicListMenu(null, null);
-        //System.out.println("Finding files ...");
+        // System.out.println("Finding files ...");
         int selection = 0;
         do {
             File[] files = (new File(SAMPLES_DIRECTORY)).listFiles();
@@ -2201,8 +2233,7 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Start a new screen display.
-     * Clear the screen and set the screen title.
+     * Start a new screen display. Clear the screen and set the screen title.
      * 
      * @param title
      */
@@ -2231,13 +2262,14 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Obtain a menu item selection
-     * Allow the user to make a selection from the specified menu item. If a
-     * power off timeout has been specified and no choice is made within this
-     * time power off the NXT.
+     * Obtain a menu item selection Allow the user to make a selection from the
+     * specified menu item. If a power off timeout has been specified and no
+     * choice is made within this time power off the NXT.
      * 
-     * @param menu Menu to display.
-     * @param cur Initial item to select.
+     * @param menu
+     *        Menu to display.
+     * @param cur
+     *        Initial item to select.
      * @return Selected item or < 0 for escape etc.
      */
     private int getSelection(GraphicMenu menu, int cur) {
@@ -2341,9 +2373,8 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Manage the top line of the display.
-     * The top line of the display shows battery state, menu titles, and I/O
-     * activity.
+     * Manage the top line of the display. The top line of the display shows
+     * battery state, menu titles, and I/O activity.
      */
     class IndicatorThread extends Thread {
         public IndicatorThread() {
@@ -2372,7 +2403,7 @@ public class GraphicStartup implements Menu {
                     this.wait(Config.ANIM_DELAY - (time % Config.ANIM_DELAY));
                 }
             } catch ( InterruptedException e ) {
-                //just terminate
+                // just terminate
             }
         }
 
@@ -2559,8 +2590,7 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Reset all motors to zero power and float state
-     * and reset tacho counts
+     * Reset all motors to zero power and float state and reset tacho counts
      */
     public static void resetMotors() {
         for ( String portName : new String[] {

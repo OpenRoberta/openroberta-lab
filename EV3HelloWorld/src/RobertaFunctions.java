@@ -6,44 +6,51 @@ import java.net.URL;
 import java.util.Properties;
 
 import lejos.hardware.Button;
-import lejos.hardware.DeviceException;
 import lejos.hardware.ev3.LocalEV3;
-import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.lcd.LCD;
-import lejos.hardware.lcd.TextLCD;
-import lejos.hardware.motor.EV3LargeRegulatedMotor;
-import lejos.hardware.sensor.EV3ColorSensor;
-import lejos.hardware.sensor.EV3GyroSensor;
-import lejos.hardware.sensor.EV3TouchSensor;
-import lejos.hardware.sensor.EV3UltrasonicSensor;
-import lejos.hardware.sensor.SensorModes;
-import lejos.robotics.RegulatedMotor;
+import lejos.hardware.port.AnalogPort;
+import lejos.hardware.port.Port;
+import lejos.hardware.port.UARTPort;
 
 /**
- * Class that contains methods that will be executed at the beginning and at the end of each "Roberta program".<br>
- * Contains properties of which device is connected to which port. This need to be set somewhere on server side.
+ * Class that contains methods that will be executed at the beginning and at the
+ * end of each "Roberta program".<br>
+ * Contains properties of which device is connected to which port. This need to
+ * be set somewhere on server side.
  * 
  * @author dpyka
  */
 public class RobertaFunctions {
 
-    private final TextLCD lcd = LocalEV3.get().getTextLCD();
-    private final GraphicsLCD glcd = LocalEV3.get().getGraphicsLCD();
+    //    private final TextLCD lcd = LocalEV3.get().getTextLCD();
+    //    private final GraphicsLCD glcd = LocalEV3.get().getGraphicsLCD();
 
-    private RegulatedMotor rightMotor;
-    private RegulatedMotor leftMotor;
-    private RegulatedMotor mediumMotor;
+    //TODO define every mode of every sensor -> better solution??
+    private enum sensorMode {
 
-    private SensorModes ultraSonic;
-    private SensorModes colorSensor;
-    private SensorModes gyroSensor;
-    private SensorModes rightTouchSensor;
-    private SensorModes leftTouchSensor;
+        // @formatter:off
+        TOUCH( "EV3TochSensor" ),
+        US_DIST_CM( "EV3UltraSonicSensor" ),
+        COL_REFLECT( "EV3ColorSensor" ),
+        NO( "No Sensor" ),
+        I2C( "Some I2C Sensor" ),
+        GYRO_ANG( "EV3GyroSensor" ),
+        ;
+        // @formatter:on
 
-    private final Properties devices;
+        private String sensor;
 
-    public RobertaFunctions(Properties devices) {
-        this.devices = devices;
+        private sensorMode(String name) {
+            this.sensor = name;
+        }
+
+        String getSensor() {
+            return this.sensor;
+        }
+    }
+
+    public RobertaFunctions() {
+        //
     }
 
     /**
@@ -54,137 +61,139 @@ public class RobertaFunctions {
         LCD.clear();
     }
 
+    /*public void test(Properties motorConfig) {
+        for ( String key : motorConfig.stringPropertyNames() ) {
+            String motorType = motorConfig.getProperty(key);
+            if ( !motorType.equals("") ) {
+                try {
+                    RegulatedMotor motor = (RegulatedMotor) Class.forName(motorType).newInstance();
+                } catch ( InstantiationException e ) {
+                    e.printStackTrace();
+                } catch ( IllegalAccessException e ) {
+                    e.printStackTrace();
+                } catch ( ClassNotFoundException e ) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }*/
+
     /**
      * Closes motor devices if available.<br>
      * Turn off button LEDs.<br>
      * Clear and refresh display.<br>
      */
     public void shutdown() {
-        if ( this.devices.containsKey("rightMotor") ) {
-            this.rightMotor.stop();
-            this.rightMotor.close();
-        }
-        if ( this.devices.containsKey("leftMotor") ) {
-            this.leftMotor.stop();
-            this.leftMotor.close();
-        }
-        if ( this.devices.containsKey("mediumMotor") ) {
-            this.mediumMotor.stop();
-            this.mediumMotor.close();
-        }
         Button.LEDPattern(0);
-        LCD.clear();
-        LCD.refresh();
     }
 
     /**
      * Test if devices are present and connected correctly.<br>
-     * Send error report to server (empty string if no error).
-     * Incorrect motor connection can not be detected...
-     * TODO exception handling malformed url (should never be thrown later)
+     * Send error report to server (empty string if no error). Incorrect motor
+     * connection can not be detected... TODO exception handling malformed url
+     * (should never be thrown later)
      */
-    public void validateDevices() {
+    public void checkSensorConfig(Properties expectedSensorConfig) {
         URL errorMessageServletURL = null;
-
-        String errorMessage = initialiseDevices();
+        String errorMessage = compareSensorConfig(getActualSensorConfig(), expectedSensorConfig);
+        System.out.println(errorMessage);
         try {
-            errorMessageServletURL = new URL("http://10.0.1.18:1999/error");
-            sendErrorMessageToServer(openConnection(errorMessageServletURL), errorMessage);
+            errorMessageServletURL = new URL("http://10.0.1.10:1999/error");
+            sendErrorMessage(openConnection(errorMessageServletURL), errorMessage);
         } catch ( IOException e ) {
             e.printStackTrace();
         }
     }
 
     /**
-     * Initialisation of motors and sensors as available and described in Properties "devices".<br>
-     * Display errors on brick screen.<br>
+     * Initialise sensor ports and retrieve their modename.<br>
      * 
-     * @return error report
+     * @return sensorname per port in an array
      */
-    private String initialiseDevices() {
+    private String[] getActualSensorConfig() {
+        int sensorCount = 4;
+        String[] actualSensorConfig = new String[sensorCount];
+        Port[] p = new Port[sensorCount];
+        p[0] = LocalEV3.get().getPort("S1");
+        p[1] = LocalEV3.get().getPort("S2");
+        p[2] = LocalEV3.get().getPort("S3");
+        p[3] = LocalEV3.get().getPort("S4");
+        for ( int i = 0; i < actualSensorConfig.length; i++ ) {
+            actualSensorConfig[i] = getSensorName(p[i]);
+            // java does not allow '-' character in variable names
+            // replace '-' with '_' in sensor modes
+            // will be used to map sensormode to sensor device
+            actualSensorConfig[i] = actualSensorConfig[i].replaceAll("-", "_");
+            // TODO map the sensor mode names to sensor class names!
+            actualSensorConfig[i] = sensorMode.valueOf(actualSensorConfig[i]).getSensor();
+        }
+        return actualSensorConfig;
+    }
+
+    /**
+     * Read the port to receive the sensor modename
+     * 
+     * @param port Sensorport of the EV3 brick
+     * @return String name of the sensor that is connected on this port
+     */
+    private String getSensorName(Port port) {
+        try {
+            AnalogPort aP = port.open(AnalogPort.class);
+            float v1 = aP.getPin1();
+            aP.close();
+            if ( v1 > 4.5 ) {
+                return "NO";
+            } else if ( v1 > 0.3 && v1 < 0.5 ) {
+                return "TOUCH";
+            } else {
+                // TODO: test Pin6 for NXT sensors
+            }
+        } catch ( Exception e ) {
+            // TODO: nothing
+        }
+        try {
+            UARTPort uP = port.open(UARTPort.class);
+            uP.resetSensor();
+            uP.initialiseSensor(0);
+            String name = uP.getModeName(0);
+            uP.close();
+            return name;
+        } catch ( Exception e ) {
+            return "I2C?";
+            // TODO: test I2c port for NXT Sensors
+        }
+    }
+
+    /**
+     * Check if the current sensor configuration matches with the expected configuration of the program from the website
+     * 
+     * @param sensorName the names of the sensors of the current configuration
+     * @param sensorConfig the sensor configuration for which the web application program is made for
+     * @return String error message about missmatched sensors
+     */
+    private String compareSensorConfig(String[] sensorName, Properties expectedSensorConfig) {
         String errorMessage = "";
-        int i = 0;
-        if ( this.devices.containsKey("rightMotor") ) {
-            this.rightMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort((String) this.devices.get("rightMotor")));
-        }
-
-        if ( this.devices.containsKey("leftMotor") ) {
-            this.leftMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort((String) this.devices.get("leftMotor")));
-        }
-
-        if ( this.devices.containsKey("mediumMotor") ) {
-            this.mediumMotor = new EV3LargeRegulatedMotor(LocalEV3.get().getPort((String) this.devices.get("mediumMotor")));
-        }
-
-        if ( this.devices.containsKey("ultraSonicSensor") ) {
-            try {
-                this.ultraSonic = new EV3UltrasonicSensor(LocalEV3.get().getPort((String) this.devices.get("ultraSonicSensor")));
-            } catch ( DeviceException e ) {
-                errorMessage = errorMessage + "No ultrasonic sensor connected on port " + this.devices.getProperty("ultraSonicSensor") + "!\n";
-                this.lcd.drawString("No ultra on " + this.devices.getProperty("ultraSonicSensor"), 0, i);
-                i++;
+        // take care of index i
+        // for loop 0-3 (array), sensorports S1-S4 in properties
+        for ( int i = 0; i < sensorName.length; i++ ) {
+            if ( !sensorName[i].equals(expectedSensorConfig.getProperty("S" + (i + 1))) ) {
+                errorMessage = errorMessage + "Falscher Sensor an Port S" + (i + 1) + " angeschlossen!\n";
+                errorMessage = errorMessage + "Gefunden: " + sensorName[i] + "\n";
+                errorMessage = errorMessage + "Erwartet: " + expectedSensorConfig.getProperty("S" + (i + 1)) + "\n\n";
             }
         }
-
-        if ( this.devices.containsKey("rightTouchSensor") ) {
-            try {
-                int sensorType = LocalEV3.get().getPort((String) this.devices.get("rightTouchSensor")).getSensorType();
-                // x = 126 if no sensor connected, 125 if any sensor connected
-                if ( sensorType == 126 ) {
-                    throw new DeviceException();
-                }
-                this.rightTouchSensor = new EV3TouchSensor(LocalEV3.get().getPort((String) this.devices.get("rightTouchSensor")));
-            } catch ( DeviceException e ) {
-                errorMessage = errorMessage + "No touch sensor connected on port " + this.devices.getProperty("rightTouchSensor") + "!\n";
-                this.lcd.drawString("No touch on " + this.devices.getProperty("rightTouchSensor"), 0, i);
-                i++;
-            }
-        }
-
-        if ( this.devices.containsKey("leftTouchSensor") ) {
-            try {
-                int sensorType = LocalEV3.get().getPort((String) this.devices.get("leftTouchSensor")).getSensorType();
-                if ( sensorType == 126 ) {
-                    throw new DeviceException();
-                }
-                this.leftTouchSensor = new EV3TouchSensor(LocalEV3.get().getPort((String) this.devices.get("leftTouchSensor")));
-            } catch ( DeviceException e ) {
-                errorMessage = errorMessage + "No touch sensor connected on port " + this.devices.getProperty("leftTouchSensor") + "!\n";
-                this.lcd.drawString("No touch on " + this.devices.getProperty("leftTouchSensor"), 0, i);
-                i++;
-            }
-        }
-
-        if ( this.devices.containsKey("gyroSensor") ) {
-            try {
-                this.gyroSensor = new EV3GyroSensor(LocalEV3.get().getPort((String) this.devices.get("gyroSensor")));
-            } catch ( DeviceException e ) {
-                errorMessage = errorMessage + "No gyro sensor connected on port " + this.devices.getProperty("gyroSensor") + "!\n";
-                this.lcd.drawString("No gyro on " + this.devices.getProperty("gyroSensor"), 0, i);
-                i++;
-            }
-        }
-
-        if ( this.devices.containsKey("colorSensor") ) {
-            try {
-                this.colorSensor = new EV3ColorSensor(LocalEV3.get().getPort((String) this.devices.get("colorSensor")));
-            } catch ( DeviceException e ) {
-                errorMessage = errorMessage + "No color sensor connected on port " + this.devices.getProperty("colorSensor") + "!\n";
-                this.lcd.drawString("No color on " + this.devices.getProperty("colorSensor"), 0, i);
-                i++;
-            }
-        }
-        // display lines of error Message for 2 sec on brick screen
-        //Delay.msDelay(2000);
         return errorMessage;
     }
 
     /**
-     * Opens http connection to server. "POST" as request method. Input, output set to "true".
+     * Opens http connection to server. "POST" as request method. Input, output
+     * set to "true".
      * 
-     * @param url the robertalab server url or ip+port
+     * @param url
+     *        the robertalab server url or ip+port
      * @return httpURLConnection http connection object to the server
-     * @throws IOException opening a connection failed
+     * @throws IOException
+     *         opening a connection failed
      */
     private HttpURLConnection openConnection(URL url) throws IOException {
         HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -195,13 +204,16 @@ public class RobertaFunctions {
     }
 
     /**
-     * Send the error report (String) to the server
+     * Send the error report to the server
      * 
-     * @param httpURLConnection http connection to the server
-     * @param errorMessage error report
-     * @throws IOException output or input fails
+     * @param httpURLConnection
+     *        http connection to the server
+     * @param errorMessage
+     *        error report
+     * @throws IOException
+     *         output or input fails
      */
-    private void sendErrorMessageToServer(HttpURLConnection httpURLConnection, String errorMessage) throws IOException {
+    private void sendErrorMessage(HttpURLConnection httpURLConnection, String errorMessage) throws IOException {
         DataOutputStream dos = new DataOutputStream(httpURLConnection.getOutputStream());
         dos.writeBytes(errorMessage);
         dos.flush();
