@@ -177,9 +177,9 @@ public class Unary extends Expr {
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
         sb.append("(");
-        sb.append(this.op).append(" ");
+        sb.append(this.op).append(" (");
         this.expr.toStringBuilder(sb, indentation);
-        sb.append(")");
+        sb.append("))");
 
     }
 

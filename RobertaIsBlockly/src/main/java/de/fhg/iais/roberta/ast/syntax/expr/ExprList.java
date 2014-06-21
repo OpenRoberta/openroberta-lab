@@ -29,20 +29,22 @@ public class ExprList extends Expr {
     }
 
     @Override
-    public void toStringBuilder(StringBuilder sb, int indentation) {
-        sb.append("[");
-        for ( Expr expr : this.el ) {
-            expr.toStringBuilder(sb, indentation);
-            sb.append(", ");
-        }
-        sb.delete(sb.length() - 2, sb.length());
-        sb.append("]");
-    }
-
-    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         toStringBuilder(sb, 0);
         return sb.toString();
+    }
+
+    @Override
+    public void toStringBuilder(StringBuilder sb, int indentation) {
+        boolean first = true;
+        for ( Expr expr : this.el ) {
+            if ( first ) {
+                first = false;
+            } else {
+                sb.append(", ");
+            }
+            expr.toStringBuilder(sb, indentation);
+        }
     }
 }

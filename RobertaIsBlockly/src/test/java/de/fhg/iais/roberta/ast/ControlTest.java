@@ -173,7 +173,7 @@ public class ControlTest {
 
         String a =
             "BlockAST [project=[[\n"
-                + "(repeat [FOR, [(i ASSIGNMENT 1), (i LTE 10), (i ADD 1)]]\n"
+                + "(repeat [FOR, ((i) ASSIGNMENT (1)), ((i) LTE (10)), ((i) ADD (1))]\n"
                 + "   exprStmt Binary [TEXT_APPEND, Var [item], StringConst [kllk]]\n"
                 + ")]]]";
         Assert.assertEquals(a, transformer.toString());

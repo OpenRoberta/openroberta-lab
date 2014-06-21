@@ -98,11 +98,11 @@ public class Binary extends Expr {
 
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
-        sb.append("(");
+        sb.append("((");
         this.left.toStringBuilder(sb, indentation);
-        sb.append(" ").append(this.op).append(" ");
+        sb.append(") ").append(this.op).append(" (");
         this.right.toStringBuilder(sb, indentation);
-        sb.append(")");
+        sb.append("))");
     }
 
 }

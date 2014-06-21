@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 
 public class StringConst extends Expr {
@@ -26,6 +28,6 @@ public class StringConst extends Expr {
 
     @Override
     public void toStringBuilder(StringBuilder sb, int indentation) {
-        sb.append(this.value);
+        sb.append("\"").append(StringEscapeUtils.escapeJava(this.value)).append("\"");
     }
 }
