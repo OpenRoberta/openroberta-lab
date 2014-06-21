@@ -77,17 +77,22 @@ public class SessionWrapper {
     }
 
     /**
-     * persist a business object in the underlying database.
+     * persist an entity in the underlying database.
      * 
-     * @param toBePersisted the business object to be persisted
-     * @return the persisted object
+     * @param toBePersisted the entity to be persisted
+     * @return the key of the persisted object
      */
     public Serializable save(Object toBePersisted) {
         return this.session.save(toBePersisted);
     }
 
-    public void delete(Object object) {
-        this.session.delete(object);
+    /**
+     * delete an entity in the underlying database. The session is flushed.
+     * 
+     * @param toBeDeleted the entity to be deleted
+     */
+    public void delete(Object toBeDeleted) {
+        this.session.delete(toBeDeleted);
         this.session.flush();
     }
 }

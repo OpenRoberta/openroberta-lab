@@ -27,6 +27,9 @@ public final class SessionFactoryWrapper {
     private static final String CFG_XML = "sqlite-cfg.xml";
     private SessionFactory sessionFactory;
 
+    /**
+     * configure the session factory
+     */
     public SessionFactoryWrapper() {
         try {
             Configuration configuration = new Configuration();
@@ -34,15 +37,21 @@ public final class SessionFactoryWrapper {
             ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder().applySettings(configuration.getProperties());
             this.sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder.buildServiceRegistry());
             LOG.info("created");
-        } catch ( Throwable ex ) {
-            System.err.println("Initial SessionFactory creation failed." + ex);
-            throw new ExceptionInInitializerError(ex);
+        } catch ( Exception e ) {
+            LOG.error("Initial SessionFactory creation failed." + e.getMessage(), e);
+            throw new ExceptionInInitializerError(e);
         }
     }
 
-    public final SessionWrapper getSession() {
-        Assert.notNull(this.sessionFactory, "initialization of session factory failed");
+    /**
+     * get a new session-wrapper from the session factory. The session-wrapper and the session contained are <b>not</b> thread-safe.
+     * 
+     * @return the session-wrapper, never null
+     */
+    public SessionWrapper getSession() {
+        Assert.notNull(this.sessionFactory, "previous attempt to initialize the session factory failed");
         Session session = this.sessionFactory.openSession();
+        Assert.notNull(session, "creation of session failed");
         return new SessionWrapper(session);
     }
 }
