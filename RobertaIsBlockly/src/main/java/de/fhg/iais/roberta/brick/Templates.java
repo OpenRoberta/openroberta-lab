@@ -14,112 +14,12 @@ public class Templates {
     private final Map<String, String> templates = new ConcurrentHashMap<>();
 
     public Templates() {
-        String eins = "" //
-            + "<xml id='toolbox' style='display: none'>" //
-            + "  <category name='Aktion'>" //
-            + "    <block type='robActions_motorDiff_on'>" //
-            + "      <value name='POWER'>" //
-            + "        <block type='math_number'>" //
-            + "          <field name='NUM'>30</field>" //
-            + "        </block>" //
-            + "      </value>" //
-            + "    </block>" //
-            + "    <block type='robActions_motorDiff_on_for'>" //
-            + "      <value name='POWER'>" //
-            + "        <block type='math_number'>" //
-            + "          <field name='NUM'>30</field>" //
-            + "        </block>" //
-            + "      </value>" //
-            + "      <value name='DISTANCE'>" //
-            + "        <block type='math_number'>" //
-            + "          <field name='NUM'>10</field>" //
-            + "        </block>" //
-            + "      </value>" //
-            + "    </block>" //
-            + "    <block type='robActions_motorDiff_stop'>" //
-            + "    </block>" //
-            + "    <block type='robActions_motorDiff_turn'>" //
-            + "      <value name='POWER'>" //
-            + "        <block type='math_number'>" //
-            + "          <field name='NUM'>30</field>" //
-            + "        </block>" //
-            + "      </value>" //
-            + "    </block>" //
-            + "    <block type='robActions_motorDiff_turn_for'>" //
-            + "      <value name='POWER'>" //
-            + "        <block type='math_number'>" //
-            + "          <field name='NUM'>30</field>" //
-            + "        </block>" //
-            + "      </value>" //
-            + "      <value name='DISTANCE'>" //
-            + "        <block type='math_number'>" //
-            + "          <field name='NUM'>10</field>" //
-            + "        </block>" //
-            + "      </value>" //
-            + "    </block>" //
-            + "    <block type='robActions_display'>" //
-            + "      <value name='OUT'>" //
-            + "        <block type='text'>" //
-            + "          <field name='TEXT'>Hallo</field>" //
-            + "        </block>" //
-            + "      </value>" //
-            + "      <value name='COL'>" //
-            + "        <block type='math_number'>" //
-            + "          <field name='NUM'>0</field>" //
-            + "        </block>" //
-            + "      </value>" //
-            + "      <value name='ROW'>" //
-            + "        <block type='math_number'>" //
-            + "          <field name='NUM'>0</field>" //
-            + "        </block>" //
-            + "      </value>" //
-            + "    </block>" //
-            + "    <block type='robActions_playTone'>" //
-            + "      <value name='FREQUENZ'>" //
-            + "        <block type='math_number'>" //
-            + "          <field name='NUM'>300</field>" //
-            + "        </block>" //
-            + "      </value>" //
-            + "      <value name='DURATION'>" //
-            + "        <block type='math_number'>" //
-            + "          <field name='NUM'>100</field>" //
-            + "        </block>" //
-            + "      </value>" //
-            + "    </block>" //
-            + "    <block type='robActions_brickLight'></block>" //
-            + "  </category>" //
-            + "  <category name='Kontrolle'>" //
-            + "    <block type='robControls_wait'>" //
-            + "      <value name='VALUE'>" //
-            + "        <block type='math_number'>" //
-            + "          <field name='NUM'>25</field>" //
-            + "        </block>" //
-            + "      </value>" //
-            + "    </block>" //
-            + "    <block type='robControls_loopUntil'>" //
-            + "      <value name='VALUE'>" //
-            + "        <block type='math_number'>" //
-            + "          <field name='NUM'>30</field>" //
-            + "        </block>" //
-            + "      </value>" //
-            + "    </block>" //
-            + "    <block type='robControls_loopForever'>" //
-            + "    </block>" //
-            + "    <block type='robControls_ifElse'>" //
-            + "      <value name='VALUE'>" //
-            + "        <block type='math_number'>" //
-            + "          <field name='NUM'>25</field>" //
-            + "        </block>" //
-            + "      </value>" //
-            + "    </block>" //
-            + "  </category>" //
-            + "</xml>";
         String zwei =
             ""
                 + " <xml id='toolbox' style='display: none'> "
                 + "  <category name='Aktion'> "
                 + "  <category name='Bewegung'> "
-                + "    <block type='robActions_motorBig_on'>" //
+                + "    <block type='robActions_motor_on'>" //
                 + "        <field name='MOTORPORT'>B</field> "
                 + "      <value name='POWER'>" //
                 + "        <block type='math_number'>" //
@@ -127,7 +27,7 @@ public class Templates {
                 + "        </block>" //
                 + "      </value>" //
                 + "    </block>" //
-                + "    <block type='robActions_motorBig_on_for'>" //
+                + "    <block type='robActions_motor_on_for'>" //
                 + "        <field name='MOTORPORT'>B</field> "
                 + "      <value name='POWER'>" //
                 + "        <block type='math_number'>" //
@@ -140,61 +40,83 @@ public class Templates {
                 + "        </block>" //
                 + "      </value>" //
                 + "    </block>" //
-                + "    <block type='robActions_motorBig_getPower'>" //
+                + "    <block type='robActions_motor_getPower'>" //
                 + "        <field name='MOTORPORT'>B</field> "
                 + "    </block>" //
-                + "    <block type='robActions_motorBig_setPower'>" //
-                + "        <field name='MOTORPORT'>B</field> "
-                + "      <value name='POWER'>" //
-                + "        <block type='math_number'>" //
-                + "          <field name='NUM'>30</field>" //
-                + "        </block>" //
-                + "      </value>" //
-                + "    </block>" //
-                + "    <block type='robActions_motorBig_stop'>" //
-                + "        <field name='MOTORPORT'>A</field> "
-                + "    </block>" //
-                + "    <block type='robActions_motorMiddle_on'>" //
-                + "        <field name='MOTORPORT'>A</field> "
-                + "      <value name='POWER'>" //
-                + "        <block type='math_number'>" //
-                + "          <field name='NUM'>30</field>" //
-                + "        </block>" //
-                + "      </value>" //
-                + "    </block>" //
-                + "    <block type='robActions_motorMiddle_on_for'>" //
-                + "        <field name='MOTORPORT'>A</field> "
-                + "      <value name='POWER'>" //
-                + "        <block type='math_number'>" //
-                + "          <field name='NUM'>30</field>" //
-                + "        </block>" //
-                + "      </value>" //
-                + "      <value name='VALUE'>" //
-                + "        <block type='math_number'>" //
-                + "          <field name='NUM'>1</field>" //
-                + "        </block>" //
-                + "      </value>" //
-                + "    </block>" //
-                + "    <block type='robActions_motorMiddle_getPower'>" //
-                + "        <field name='MOTORPORT'>A</field> "
-                + "    </block>" //
-                + "    <block type='robActions_motorMiddle_setPower'>" //
-                + "        <field name='MOTORPORT'>A</field> "
-                + "      <value name='POWER'>" //
-                + "        <block type='math_number'>" //
-                + "          <field name='NUM'>30</field>" //
-                + "        </block>" //
-                + "      </value>" //
-                + "    </block>" //
-                + "    <block type='robActions_motorMiddle_stop'>" //
+                //                + "    <block type='robActions_motor_setPower'>" //
+                //                + "        <field name='MOTORPORT'>B</field> "
+                //                + "      <value name='POWER'>" //
+                //                + "        <block type='math_number'>" //
+                //                + "          <field name='NUM'>30</field>" //
+                //                + "        </block>" //
+                //                + "      </value>" //
+                //                + "    </block>" //
+                + "    <block type='robActions_motor_stop'>" //
                 + "        <field name='MOTORPORT'>A</field> "
                 + "    </block>" //
                 + "  </category> "
                 + "  <category name='Anzeige'> "
+                + "    <block type='robActions_display_text'>" //
+                + "      <value name='OUT'>" //
+                + "        <block type='text'>" //
+                + "          <field name='TEXT'>Hallo</field>" //
+                + "        </block>" //
+                + "      </value>" //
+                + "      <value name='COL'>" //
+                + "        <block type='math_number'>" //
+                + "          <field name='NUM'>0</field>" //
+                + "        </block>" //
+                + "      </value>" //
+                + "      <value name='ROW'>" //
+                + "        <block type='math_number'>" //
+                + "          <field name='NUM'>0</field>" //
+                + "        </block>" //
+                + "      </value>" //
+                + "    </block>" //
+                + "    <block type='robActions_display_picture'>" //
+                + "      <value name='X'>" //
+                + "        <block type='math_number'>" //
+                + "          <field name='NUM'>0</field>" //
+                + "        </block>" //
+                + "      </value>" //
+                + "      <value name='Y'>" //
+                + "        <block type='math_number'>" //
+                + "          <field name='NUM'>0</field>" //
+                + "        </block>" //
+                + "      </value>" //
+                + "    </block>" //
+                + "    <block type='robActions_display_clear'>" //
+                + "    </block>" //
                 + "  </category> "
                 + "  <category name='Klang'> "
+                + "    <block type='robActions_play_tone'>" //
+                + "      <value name='FREQUENCE'>" //
+                + "        <block type='math_number'>" //
+                + "          <field name='NUM'>300</field>" //
+                + "        </block>" //
+                + "      </value>" //
+                + "      <value name='DURATION'>" //
+                + "        <block type='math_number'>" //
+                + "          <field name='NUM'>100</field>" //
+                + "        </block>" //
+                + "      </value>" //
+                + "    </block>" //
+                + "    <block type='robActions_play_file'>" //
+                + "    </block>" //
+                + "    <block type='robActions_play_setVolume'>" //
+                + "      <value name='VOLUME'>" //
+                + "        <block type='math_number'>" //
+                + "          <field name='NUM'>50</field>" //
+                + "        </block>" //
+                + "      </value>" //
+                + "    </block>" //
+                + "    <block type='robActions_play_getVolume'>" //
+                + "    </block>" //
                 + "  </category> "
                 + "  <category name='Statusleuchte'> "
+                + "    <block type='robActions_brickLight_on'></block>" //
+                + "    <block type='robActions_brickLight_off'></block>" //
+                + "    <block type='robActions_brickLight_reset'></block>" //
                 + "  </category> "
                 + "  </category> "
                 + "  <category name='Sensoren'> "
@@ -248,9 +170,7 @@ public class Templates {
                 + "    <category name='Steintasten'> "
                 + "      <block type='robSensors_key_isPressed'>"
                 + "      </block>"
-                + "      <block type='robSensors_key_waitForPress'>"
-                + "      </block>"
-                + "      <block type='robSensors_key_waitForPressAndRelease'>"
+                + "      <block type='robSensors_key_isPressedAndReleased'>"
                 + "      </block>"
                 + "    </category> "
                 + "    <category name='Kreiselsensor'> "
@@ -268,7 +188,6 @@ public class Templates {
                 + "      </block>"
                 + "    </category> "
                 + "    <category name='Zeitgeber'> "
-
                 + "      <block type='robSensors_timer_getSample'>"
                 + "      </block>"
                 + "      <block type='robSensors_timer_reset'>"
@@ -453,9 +372,14 @@ public class Templates {
                 + "      </value> "
                 + "    </block> "
                 + "  </category> "
+                + "  <category name='Farben'> "
+                + "    <block type='robColour_picker'> "
+                + "    </block> "
+                + "  </category> "
                 + "  <category name='Variablen' custom='VARIABLE'/> "
                 + "  <category name='Funktionen' custom='PROCEDURE'/> "
                 + "</xml> ";
+        String eins = zwei;
         this.templates.put("1", eins);
         this.templates.put("2", zwei);
         LOG.info("created");

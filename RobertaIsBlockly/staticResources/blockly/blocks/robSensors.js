@@ -1,10 +1,32 @@
+/**
+ * @fileoverview Sensor blocks for EV3.
+ * @requires Blockly.Blocks
+ * @author Beate
+ */
+
 'use strict';
 
 goog.provide('Blockly.Blocks.robSensors');
 
 goog.require('Blockly.Blocks');
 
+/**
+ * @lends Block
+ */
+
 Blockly.Blocks['robSensors_touch_isPressed'] = {
+	/**
+	 * Is the touch sensor pressed?
+	 * 
+	 * @constructs robSensors_touch_isPressed
+	 * @this.Blockly.Block
+	 * @param {String/dropdown}
+	 *            SENSORPORT - 1, 2, 3 or 4
+	 * @returns immediately
+	 * @returns {Boolean}
+	 * @memberof Block
+	 */
+
 	init : function() {
 		this.setColour(180);
 		// this.setInputsInline(true);
@@ -18,6 +40,18 @@ Blockly.Blocks['robSensors_touch_isPressed'] = {
 };
 
 Blockly.Blocks['robSensors_key_isPressed'] = {
+	/**
+	 * Is the specific key (button of the brick) pressed?
+	 * 
+	 * @constructs robSensors_key_isPressed
+	 * @this.Blockly.Block
+	 * @param {String/dropdown}
+	 *            KEY - Enter, Up, Down, Left, Right, Escape or Any
+	 * @returns immediately
+	 * @returns {Boolean}
+	 * @memberof Block
+	 */
+
 	init : function() {
 		this.setColour(180);
 		// this.setInputsInline(true);
@@ -36,29 +70,21 @@ Blockly.Blocks['robSensors_key_isPressed'] = {
 	}
 };
 
-Blockly.Blocks['robSensors_key_waitForPress'] = {
-	init : function() {
-		this.setColour(192);
-		// this.setInputsInline(true);
-		var key = new Blockly.FieldDropdown([
-				[ Blockly.Msg.SENSOR_KEY_ENTER, 'ENTER' ],
-				[ Blockly.Msg.SENSOR_KEY_UP, 'UP' ],
-				[ Blockly.Msg.SENSOR_KEY_DOWN, 'DOWN' ],
-				[ Blockly.Msg.SENSOR_KEY_LEFT, 'LEFT' ],
-				[ Blockly.Msg.SENSOR_KEY_RIGHT, 'RIGHT' ],
-				[ Blockly.Msg.SENSOR_KEY_ESCAPE, 'ESCAPE' ],
-				[ Blockly.Msg.SENSOR_KEY_ANY, 'ANY' ] ]);
-		this.appendDummyInput().appendField(Blockly.Msg.SENSOR_WAIT)
-				.appendField(Blockly.Msg.SENSOR_KEY).appendField(key, 'KEY')
-				.appendField(Blockly.Msg.SENSOR_WAIT_PRESSED);
-		this.setPreviousStatement(true);
-		this.setNextStatement(true);
-	}
-};
+Blockly.Blocks['robSensors_key_isPressedAndReleased'] = {
+	/**
+	 * Is the specific key (button of the brick) pressed and released?
+	 * 
+	 * @constructs robSensors_key_isPressedAndReleased
+	 * @this.Blockly.Block
+	 * @param {String/dropdown}
+	 *            KEY - Enter, Up, Down, Left, Right, Escape or Any
+	 * @returns immediately
+	 * @returns {Boolean}
+	 * @memberof Block
+	 */
 
-Blockly.Blocks['robSensors_key_waitForPressAndRelease'] = {
 	init : function() {
-		this.setColour(192);
+		this.setColour(180);
 		// this.setInputsInline(true);
 		var key = new Blockly.FieldDropdown([
 				[ Blockly.Msg.SENSOR_KEY_ENTER, 'ENTER' ],
@@ -68,15 +94,26 @@ Blockly.Blocks['robSensors_key_waitForPressAndRelease'] = {
 				[ Blockly.Msg.SENSOR_KEY_RIGHT, 'RIGHT' ],
 				[ Blockly.Msg.SENSOR_KEY_ESCAPE, 'ESCAPE' ],
 				[ Blockly.Msg.SENSOR_KEY_ANY, 'ANY' ] ]);
-		this.appendDummyInput().appendField(Blockly.Msg.SENSOR_WAIT)
-				.appendField(Blockly.Msg.SENSOR_KEY).appendField(key, 'KEY')
-				.appendField(Blockly.Msg.SENSOR_WAIT_PRESSED_RELEASED);
-		this.setPreviousStatement(true);
-		this.setNextStatement(true);
+		this.appendDummyInput().appendField(Blockly.Msg.SENSOR_KEY)
+				.appendField(key, 'KEY').appendField("geklickt?");
+		this.setOutput(true, 'Boolean');
 	}
 };
 
 Blockly.Blocks['robSensors_ultrasonic_setMode'] = {
+	/**
+	 * Set the mode of the ultrasonic sensor.
+	 * 
+	 * @constructs robSensors_ultrasonic_setMode
+	 * @this.Blockly.Block
+	 * @param {String/dropdown}
+	 *            SENSORPORT - 1, 2, 3 or 4
+	 * @param {String/dropdown}
+	 *            MODE - Distance or Presence
+	 * @returns immediately
+	 * @memberof Block
+	 */
+
 	init : function() {
 		this.setColour(192);
 		// this.setInputsInline(true);
@@ -94,6 +131,21 @@ Blockly.Blocks['robSensors_ultrasonic_setMode'] = {
 };
 
 Blockly.Blocks['robSensors_ultrasonic_getMode'] = {
+	/**
+	 * Get the mode of the ultrasonic sensor.
+	 * 
+	 * @constructs robSensors_ultrasonic_getMode
+	 * @this.Blockly.Block
+	 * @param {String/dropdown}
+	 *            SENSORPORT - 1, 2, 3 or 4
+	 * @returns immediately
+	 * @returns {Number} Possible modes are: <br>
+	 *          0 - distance mode in cm <br>
+	 *          2 - listen mode
+	 * 
+	 * @memberof Block
+	 */
+	/** @todo check mode outputs */
 	init : function() {
 		this.setColour(180);
 		// this.setInputsInline(true);
@@ -107,6 +159,17 @@ Blockly.Blocks['robSensors_ultrasonic_getMode'] = {
 };
 
 Blockly.Blocks['robSensors_ultrasonic_getSample'] = {
+	/**
+	 * Get the current reading from the ultrasonic sensor.
+	 * 
+	 * @constructs robSensors_ultrasonic_getSample
+	 * @this.Blockly.Block
+	 * @param {String/dropdown}
+	 *            SENSORPORT - 1, 2, 3 or 4
+	 * @returns immediately
+	 * @returns {Number}
+	 * @memberof Block
+	 */
 	init : function() {
 		this.setColour(180);
 		// this.setInputsInline(true);
@@ -120,6 +183,18 @@ Blockly.Blocks['robSensors_ultrasonic_getSample'] = {
 };
 
 Blockly.Blocks['robSensors_colour_setMode'] = {
+	/**
+	 * Set the mode of the colour sensor.
+	 * 
+	 * @constructs robSensors_colour_setMode
+	 * @this.Blockly.Block
+	 * @param {String/dropdown}
+	 *            SENSORPORT - 1, 2, 3 or 4
+	 * @param {String/dropdown}
+	 *            MODE - Colour, Light or Ambient light
+	 * @returns immediately
+	 * @memberof Block
+	 */
 	init : function() {
 		this.setColour(192);
 		// this.setInputsInline(true);
@@ -138,6 +213,22 @@ Blockly.Blocks['robSensors_colour_setMode'] = {
 };
 
 Blockly.Blocks['robSensors_colour_getMode'] = {
+	/**
+	 * Get the mode of the colour sensor.
+	 * 
+	 * @constructs robSensors_colour_getMode
+	 * @this.Blockly.Block
+	 * @param {String/dropdown}
+	 *            SENSORPORT - 1, 2, 3 or 4
+	 * @returns immediately
+	 * @returns {Number} Possible modes are: <br>
+	 *          0 - colour mode <br>
+	 *          1 - light mode <br>
+	 *          2 - ambient light mode
+	 * 
+	 * @memberof Block
+	 */
+
 	init : function() {
 		this.setColour(180);
 		// this.setInputsInline(true);
@@ -151,6 +242,20 @@ Blockly.Blocks['robSensors_colour_getMode'] = {
 };
 
 Blockly.Blocks['robSensors_colour_getSample'] = {
+	/**
+	 * Get the current reading from the colour sensor.
+	 * 
+	 * @constructs robSensors_colour_getSample
+	 * @this.Blockly.Block
+	 * @param {String/dropdown}
+	 *            SENSORPORT - 1, 2, 3 or 4
+	 * @returns immediately
+	 * @returns {Number|Colour} Depending on the mode <br>
+	 *          Possible colours are: undefined(grey),black, blue, green, red,
+	 *          white, yellow, brown
+	 * @memberof Block
+	 */
+
 	init : function() {
 		this.setColour(180);
 		// this.setInputsInline(true);
@@ -159,11 +264,24 @@ Blockly.Blocks['robSensors_colour_getSample'] = {
 		this.appendDummyInput().appendField(Blockly.Msg.SENSOR_GET_SAMPLE)
 				.appendField(Blockly.Msg.SENSOR_COLOUR).appendField(sensorPort,
 						'SENSORPORT');
-		this.setOutput(true, 'Number');
+		this.setOutput(true, [ 'Number', 'Colour' ]);
 	}
 };
 
 Blockly.Blocks['robSensors_infrared_setMode'] = {
+	/**
+	 * Set the mode of the infrared sensor.
+	 * 
+	 * @constructs robSensors_infrared_setMode
+	 * @this.Blockly.Block
+	 * @param {String/dropdown}
+	 *            SENSORPORT - 1, 2, 3 or 4
+	 * @param {String/dropdown}
+	 *            MODE - Distance or Seek
+	 * @returns immediately
+	 * @memberof Block
+	 */
+
 	init : function() {
 		this.setColour(192);
 		// this.setInputsInline(true);
@@ -181,6 +299,20 @@ Blockly.Blocks['robSensors_infrared_setMode'] = {
 };
 
 Blockly.Blocks['robSensors_infrared_getMode'] = {
+	/**
+	 * Get the mode of the infrared sensor.
+	 * 
+	 * @constructs robSensors_infrared_getMode
+	 * @this.Blockly.Block
+	 * @param {String/dropdown}
+	 *            SENSORPORT - 1, 2, 3 or 4
+	 * @returns immediately
+	 * @returns {Number} Possible modes are: <br>
+	 *          0 - distance relative <br>
+	 *          1 - seek mode
+	 * @memberof Block
+	 */
+
 	init : function() {
 		this.setColour(180);
 		// this.setInputsInline(true);
@@ -194,6 +326,18 @@ Blockly.Blocks['robSensors_infrared_getMode'] = {
 };
 
 Blockly.Blocks['robSensors_infrared_getSample'] = {
+	/**
+	 * Get the current reading from the infrared sensor.
+	 * 
+	 * @constructs robSensors_infrared_getSample
+	 * @this.Blockly.Block
+	 * @param {String/dropdown}
+	 *            SENSORPORT - 1, 2, 3 or 4
+	 * @returns immediately
+	 * @returns {Number}
+	 * @memberof Block
+	 */
+
 	init : function() {
 		this.setColour(180);
 		// this.setInputsInline(true);
@@ -207,6 +351,19 @@ Blockly.Blocks['robSensors_infrared_getSample'] = {
 };
 
 Blockly.Blocks['robSensors_encoder_setMode'] = {
+	/**
+	 * Set the mode of the motor encoder.
+	 * 
+	 * @constructs robSensors_encoder_setMode
+	 * @this.Blockly.Block
+	 * @param {String/dropdown}
+	 *            MOTORPORT - A, B, C or D
+	 * @param {String/dropdown}
+	 *            MODE - Rotation or Degree
+	 * @returns immediately
+	 * @memberof Block
+	 */
+
 	init : function() {
 		this.setColour(192);
 		// this.setInputsInline(true);
@@ -224,6 +381,21 @@ Blockly.Blocks['robSensors_encoder_setMode'] = {
 };
 
 Blockly.Blocks['robSensors_encoder_getMode'] = {
+	/**
+	 * Get the mode of the motor encoder.
+	 * 
+	 * @constructs robSensors_encoder_getMode
+	 * @this.Blockly.Block
+	 * @param {String/dropdown}
+	 *            MOTORPORT - A, B, C or D
+	 * @returns immediately
+	 * @returns {Number} Possible modes are: <br>
+	 *          0 - rotation <br>
+	 *          1 - degree
+	 * 
+	 * @memberof Block
+	 */
+
 	init : function() {
 		this.setColour(180);
 		var motorport = new Blockly.FieldDropdown([ [ 'A', 'A' ], [ 'B', 'B' ],
@@ -237,6 +409,17 @@ Blockly.Blocks['robSensors_encoder_getMode'] = {
 };
 
 Blockly.Blocks['robSensors_encoder_reset'] = {
+	/**
+	 * Reset the motor encoder.
+	 * 
+	 * @constructs robSensors_encoder_reset
+	 * @this.Blockly.Block
+	 * @param {String/dropdown}
+	 *            MOTORPORT - A, B, C or D
+	 * @returns immediately
+	 * @memberof Block
+	 */
+
 	init : function() {
 		this.setColour(192);
 		var motorport = new Blockly.FieldDropdown([ [ 'A', 'A' ], [ 'B', 'B' ],
@@ -251,6 +434,18 @@ Blockly.Blocks['robSensors_encoder_reset'] = {
 };
 
 Blockly.Blocks['robSensors_encoder_getSample'] = {
+	/**
+	 * Get the current reading from the motor encoder.
+	 * 
+	 * @constructs robSensors_encoder_getSample
+	 * @this.Blockly.Block
+	 * @param {String/dropdown}
+	 *            MOTORPORT - A, B, C or D
+	 * @returns immediately
+	 * @returns {Number}
+	 * @memberof Block
+	 */
+
 	init : function() {
 		this.setColour(180);
 		var motorport = new Blockly.FieldDropdown([ [ 'A', 'A' ], [ 'B', 'B' ],
@@ -264,6 +459,19 @@ Blockly.Blocks['robSensors_encoder_getSample'] = {
 };
 
 Blockly.Blocks['robSensors_gyro_setMode'] = {
+	/**
+	 * Set the mode of the gyro sensor.
+	 * 
+	 * @constructs robSensors_gyro_setMode
+	 * @this.Blockly.Block
+	 * @param {String/dropdown}
+	 *            SENSORPORT - 1, 2, 3 or 4
+	 * @param {String/dropdown}
+	 *            MODE - Angle or Rate
+	 * @returns immediately
+	 * @memberof Block
+	 */
+
 	init : function() {
 		this.setColour(192);
 		// this.setInputsInline(true);
@@ -281,6 +489,20 @@ Blockly.Blocks['robSensors_gyro_setMode'] = {
 };
 
 Blockly.Blocks['robSensors_gyro_getMode'] = {
+	/**
+	 * Get the mode of the gyro sensor.
+	 * 
+	 * @constructs robSensors_gyro_getMode
+	 * @this.Blockly.Block
+	 * @param {String/dropdown}
+	 *            SENSORPORT - 1, 2, 3 or 4
+	 * @returns immediately
+	 * @returns {Number} Possible modes are: <br>
+	 *          0 - degree <br>
+	 *          1 - rate deg/sec
+	 * @memberof Block
+	 */
+
 	init : function() {
 		this.setColour(180);
 		// this.setInputsInline(true);
@@ -294,6 +516,17 @@ Blockly.Blocks['robSensors_gyro_getMode'] = {
 };
 
 Blockly.Blocks['robSensors_gyro_reset'] = {
+	/**
+	 * Reset the gyro sensor.
+	 * 
+	 * @constructs robSensors_gyro_reset
+	 * @this.Blockly.Block
+	 * @param {String/dropdown}
+	 *            SENSORPORT - 1, 2, 3 or 4
+	 * @returns immediately
+	 * @memberof Block
+	 */
+
 	init : function() {
 		this.setColour(192);
 		// this.setInputsInline(true);
@@ -308,6 +541,18 @@ Blockly.Blocks['robSensors_gyro_reset'] = {
 };
 
 Blockly.Blocks['robSensors_gyro_getSample'] = {
+	/**
+	 * Get the current reading from the gyro sensor.
+	 * 
+	 * @constructs robSensors_gyro_getSample
+	 * @this.Blockly.Block
+	 * @param {String/dropdown}
+	 *            SENSORPORT - 1, 2, 3 or 4
+	 * @returns immediately
+	 * @returns {Number}
+	 * @memberof Block
+	 */
+
 	init : function() {
 		this.setColour(180);
 		var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ],
@@ -321,12 +566,25 @@ Blockly.Blocks['robSensors_gyro_getSample'] = {
 };
 
 Blockly.Blocks['robSensors_timer_reset'] = {
+	/**
+	 * Reset the timer.
+	 * 
+	 * @constructs robSensors_timer_reset
+	 * @this.Blockly.Block
+	 * @param {String/dropdown}
+	 *            TIMER - 1-10
+	 * @returns immediately
+	 * @memberof Block
+	 */
 	init : function() {
 		this.setColour(192);
 		// this.setInputsInline(true);
 		var sensorNum = new Blockly.FieldDropdown([ [ 'Zeitgeber 1', '1' ],
 				[ 'Zeitgeber 2', '2' ], [ 'Zeitgeber 3', '3' ],
-				[ 'Zeitgeber 4', '4' ] ]);
+				[ 'Zeitgeber 4', '4' ], [ 'Zeitgeber 5', '5' ],
+				[ 'Zeitgeber 6', '6' ], [ 'Zeitgeber 7', '7' ],
+				[ 'Zeitgeber 8', '8' ], [ 'Zeitgeber 9', '9' ],
+				[ 'Zeitgeber 10', '10' ] ]);
 		this.appendDummyInput().appendField(Blockly.Msg.SENSOR_RESET)
 				.appendField(sensorNum, 'SENSORNUM').appendField(
 						Blockly.Msg.SENSOR_RESET_II);
@@ -336,11 +594,26 @@ Blockly.Blocks['robSensors_timer_reset'] = {
 };
 
 Blockly.Blocks['robSensors_timer_getSample'] = {
+	/**
+	 * Get the current reading from the timer.
+	 * 
+	 * @constructs robSensors_timer_getSample
+	 * @this.Blockly.Block
+	 * @param {String/dropdown}
+	 *            TIMER - 1-10
+	 * @returns immediately
+	 * @returns {Number}
+	 * @memberof Block
+	 */
+
 	init : function() {
 		this.setColour(180);
 		var sensorNum = new Blockly.FieldDropdown([ [ 'Zeitgeber 1', '1' ],
 				[ 'Zeitgeber 2', '2' ], [ 'Zeitgeber 3', '3' ],
-				[ 'Zeitgeber 4', '4' ] ]);
+				[ 'Zeitgeber 4', '4' ], [ 'Zeitgeber 5', '5' ],
+				[ 'Zeitgeber 6', '6' ], [ 'Zeitgeber 7', '7' ],
+				[ 'Zeitgeber 8', '8' ], [ 'Zeitgeber 9', '9' ],
+				[ 'Zeitgeber 10', '10' ] ]);
 		this.appendDummyInput().appendField(Blockly.Msg.SENSOR_GET_SAMPLE)
 				.appendField(sensorNum, 'SENSORNUM');
 		this.setOutput(true, 'Number');

@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Controle blocks for EV3.
+ * @requires Blockly.Blocks
+ * @author Beate
+ */
+
 'use strict';
 
 goog.provide('Blockly.Blocks.robControls');
@@ -5,53 +11,77 @@ goog.provide('Blockly.Blocks.robControls');
 goog.require('Blockly.Blocks');
 
 /**
- * Block for main activity. Not available in a toolbox, but static in a workspace.
- * @this Blockly.Block
+ * @lends Block
  */
-Blockly.Blocks['robControls_start'] = {
-		init : function() {
-			this.setColour(300);
-			this.appendDummyInput().appendField('Task').appendField('Hauptprogramm');
-			this.setInputsInline(true);
-			this.setPreviousStatement(false);
-			this.setNextStatement(true);
-		}
-	};
 
-/**
- * Block for additional activity 
- * @this Blockly.Block
- */
+Blockly.Blocks['robControls_start'] = {
+	/**
+	 * The starting point for the main program. This block is not deletable and it
+	 * should not be available in any toolbox. For new task see {@link Block.robControls_activity}.
+	 * 
+	 * @constructs robControls_start
+	 * @this.Blockly.Block
+	 * @returns immediately
+	 * @see {@link robControls_activity}
+	 * @memberof Block
+	 */
+
+	init : function() {
+		this.setColour(300);
+		this.appendDummyInput().appendField('Task')
+				.appendField('Hauptprogramm');
+		this.setInputsInline(true);
+		this.setPreviousStatement(false);
+		this.setNextStatement(true);
+	}
+};
+
 Blockly.Blocks['robControls_activity'] = {
-		init : function() {
-			this.setColour(300);
-			this.appendValueInput('ACTIVITY')
-		    .appendField('Task')
-		        .setCheck('String');
-			this.setInputsInline(true);
-			this.setPreviousStatement(false);
-			this.setNextStatement(true);
-		}
-	};
+	/**
+	 * Marker for a new task. The main program will start this task when it 
+	 * executes {@link robControls_start_activity}.
+	 * 
+	 * @constructs robControls_activity
+	 * @this.Blockly.Block
+	 * @param {String} - ACTIVITY's name. 
+	 * @returns immediately
+	 * @see {@link robControls_start_activity}
+	 * @memberof Block
+	 */
+
+	init : function() {
+		this.setColour(300);
+		this.appendValueInput('ACTIVITY').appendField('Task')
+				.setCheck('String');
+		this.setInputsInline(true);
+		this.setPreviousStatement(false);
+		this.setNextStatement(true);
+	}
+};
 
 Blockly.Blocks['robControls_start_activity'] = {
-		  /**
-		   * Block for starting additional activity.
-		   * @this Blockly.Block
-		   */
-		  init: function() {
-		    this.setColour(300);
-		    this.appendValueInput('ACTIVITY')
-		    .appendField('starte Task')
-		        .setCheck('String');
-		    this.setInputsInline(true);
-		    this.setPreviousStatement(true);
-		    this.setNextStatement(true);
-		  }
-		};
+	/**
+	 *  Block starting additional activity. 
+	 *  
+	 * @constructs robControls_start_activity
+	 * @param {String} - ACTIVITY's name. 
+	 * @returns immediately
+	 * @see {@link robControls_activity}
+	 * @memberof Block
+	 */
+
+	init : function() {
+		this.setColour(300);
+		this.appendValueInput('ACTIVITY').appendField('starte Task').setCheck(
+				'String');
+		this.setInputsInline(true);
+		this.setPreviousStatement(true);
+		this.setNextStatement(true);
+	}
+};
 
 Blockly.Blocks['robControls_wait'] = {
-	// Else condition.
+		
 	init : function() {
 		this.setColour(300);
 		// this.setInputsInline(true);
@@ -90,13 +120,14 @@ Blockly.Blocks['robControls_loopUntil'] = {
 		});
 		this.setColour(300);
 		var dropdown = new Blockly.FieldDropdown(dropdownSensor, function(
-				option) {});
+				option) {
+		});
 		var title = new Blockly.FieldLabel(Blockly.Msg.LOOP_TITLE);
 		this.appendValueInput('VALUE').appendField(title, 'TITLE').appendField(
 				dropdown, 'PROPERTY').appendField(ops, 'OP').setCheck('Number');
 		this.appendStatementInput('DO').appendField(
 				Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
-		//this.setInputsInline(true);
+		// this.setInputsInline(true);
 		this.setPreviousStatement(true);
 		this.setNextStatement(true);
 	}
@@ -109,13 +140,14 @@ Blockly.Blocks['robControls_loopForever'] = {
 		this.appendDummyInput().appendField(title, 'TITLE_FOREVER');
 		this.appendStatementInput('DO').appendField(
 				Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
-		//this.setInputsInline(true);
+		// this.setInputsInline(true);
 		this.setPreviousStatement(true);
 		this.setNextStatement(true);
 	}
 };
 
 Blockly.Blocks['robControls_ifElse'] = {
+	
 	init : function() {
 		var OPERATORS = Blockly.RTL ? [ [ '=', 'EQ' ], [ '\u2260', 'NEQ' ],
 				[ '>', 'LT' ], [ '\u2265', 'LTE' ], [ '<', 'GT' ],
@@ -128,15 +160,16 @@ Blockly.Blocks['robControls_ifElse'] = {
 				[ Blockly.Msg.LOOP_SENSOR_COLOUR, 'COLOUR' ],
 				[ Blockly.Msg.LOOP_SENSOR_TIME, 'TIME' ] ]);
 		this.setColour(300);
-		this.appendValueInput('VALUE').appendField(Blockly.Msg.CONTROLS_IF_MSG_IF)
-				.appendField(dropdownSensor, 'SENSOR').appendField(
-				new Blockly.FieldDropdown(OPERATORS), 'OP').setCheck('Number');
+		this.appendValueInput('VALUE').appendField(
+				Blockly.Msg.CONTROLS_IF_MSG_IF).appendField(dropdownSensor,
+				'SENSOR').appendField(new Blockly.FieldDropdown(OPERATORS),
+				'OP').setCheck('Number');
 		this.appendStatementInput('DO0').appendField(
 				Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
 		this.appendDummyInput().appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSE);
 		this.appendStatementInput('DO1').appendField(
 				Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
-		//this.setInputsInline(true);
+		// this.setInputsInline(true);
 		this.setPreviousStatement(true);
 		this.setNextStatement(true);
 
