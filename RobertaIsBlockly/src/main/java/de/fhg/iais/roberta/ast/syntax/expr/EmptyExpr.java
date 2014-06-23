@@ -23,13 +23,13 @@ public class EmptyExpr extends Expr {
     }
 
     @Override
-    public void toStringBuilder(StringBuilder sb, int indentation) {
-        sb.append("EmptyExpr [defVal=" + this.defVal + "]");
+    public String toString() {
+        return "EmptyExpr [defVal=" + this.defVal + "]";
     }
 
     @Override
-    public String toString() {
-        return "EmptyExpr [defVal=" + this.defVal + "]";
+    public void toStringBuilder(StringBuilder sb, int indentation) {
+        sb.append("[[EmptyExpr [defVal=" + this.defVal + "]]]");
     }
 
 }

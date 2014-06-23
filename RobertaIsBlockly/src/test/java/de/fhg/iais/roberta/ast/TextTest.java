@@ -23,7 +23,7 @@ public class TextTest {
         BlockAST transformer = new BlockAST();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Unary [TEXT_JOIN, [text1, EmptyExpr [defVal=class java.lang.String], text2]]]]]";
+        String a = "BlockAST [project=[[Unary [TEXT_JOIN, \"text1\", [[EmptyExpr [defVal=class java.lang.String]]], \"text2\"]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }

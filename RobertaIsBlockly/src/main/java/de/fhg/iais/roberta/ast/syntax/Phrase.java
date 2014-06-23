@@ -1,36 +1,5 @@
 package de.fhg.iais.roberta.ast.syntax;
 
-import de.fhg.iais.roberta.ast.syntax.aktion.DriveAktion;
-import de.fhg.iais.roberta.ast.syntax.aktion.LightAktion;
-import de.fhg.iais.roberta.ast.syntax.aktion.ShowAktion;
-import de.fhg.iais.roberta.ast.syntax.aktion.ToneAktion;
-import de.fhg.iais.roberta.ast.syntax.aktion.TurnAktion;
-import de.fhg.iais.roberta.ast.syntax.expr.Binary;
-import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
-import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
-import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
-import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
-import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
-import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
-import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
-import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
-import de.fhg.iais.roberta.ast.syntax.expr.Unary;
-import de.fhg.iais.roberta.ast.syntax.expr.Var;
-import de.fhg.iais.roberta.ast.syntax.sensoren.ColorSensor;
-import de.fhg.iais.roberta.ast.syntax.sensoren.DrehSensor;
-import de.fhg.iais.roberta.ast.syntax.sensoren.GyroSensor;
-import de.fhg.iais.roberta.ast.syntax.sensoren.InfraredSensor;
-import de.fhg.iais.roberta.ast.syntax.sensoren.SteinSensor;
-import de.fhg.iais.roberta.ast.syntax.sensoren.TouchSensor;
-import de.fhg.iais.roberta.ast.syntax.sensoren.UltraSSensor;
-import de.fhg.iais.roberta.ast.syntax.stmt.AktionStmt;
-import de.fhg.iais.roberta.ast.syntax.stmt.AssignStmt;
-import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
-import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
-import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
-import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
-import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
-import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -85,7 +54,7 @@ abstract public class Phrase {
      */
     @SuppressWarnings("unchecked")
     public final <T> T getAs(Class<T> clazz) {
-        Assert.isTrue(clazz.equals(getKind().getPhraseClass()));
+        Assert.isTrue(clazz.equals(this.getClass()));
         return (T) this;
     }
 
@@ -123,48 +92,42 @@ abstract public class Phrase {
     abstract public void toStringBuilder(StringBuilder sb, int indentation);
 
     public static enum Kind {
-        ColorSensor( ColorSensor.class, Category.SENSOR ),
-        TouchSensor( TouchSensor.class, Category.SENSOR ),
-        UltraSSensor( UltraSSensor.class, Category.SENSOR ),
-        InfraredSensor( InfraredSensor.class, Category.SENSOR ),
-        DrehSensor( DrehSensor.class, Category.SENSOR ),
-        SteinSensor( SteinSensor.class, Category.SENSOR ),
-        GyroSensor( GyroSensor.class, Category.SENSOR ),
-        ExprList( ExprList.class, Category.EXPR ),
-        StringConst( StringConst.class, Category.EXPR ),
-        NullConst( NullConst.class, Category.EXPR ),
-        BoolConst( BoolConst.class, Category.EXPR ),
-        NumConst( NumConst.class, Category.EXPR ),
-        MathConst( MathConst.class, Category.EXPR ),
-        Var( Var.class, Category.EXPR ),
-        Unary( Unary.class, Category.EXPR ),
-        Binary( Binary.class, Category.EXPR ),
-        SensorExpr( SensorExpr.class, Category.EXPR ),
-        EmptyExpr( EmptyExpr.class, Category.EXPR ),
-        IfStmt( IfStmt.class, Category.STMT ),
-        RepeatStmt( RepeatStmt.class, Category.STMT ),
-        ExprStmt( ExprStmt.class, Category.STMT ),
-        StmtList( StmtList.class, Category.STMT ),
-        AssignStmt( AssignStmt.class, Category.STMT ),
-        AktionStmt( AktionStmt.class, Category.STMT ),
-        SensorStmt( SensorStmt.class, Category.STMT ),
-        StmtFlowCon( StmtFlowCon.class, Category.STMT ),
-        TurnAktion( TurnAktion.class, Category.AKTOR ),
-        DriveAktion( DriveAktion.class, Category.AKTOR ),
-        ShowAktion( ShowAktion.class, Category.AKTOR ),
-        ToneAktion( ToneAktion.class, Category.AKTOR ),
-        LightAktion( LightAktion.class, Category.AKTOR );
+        ColorSensor( Category.SENSOR ),
+        TouchSensor( Category.SENSOR ),
+        UltraSSensor( Category.SENSOR ),
+        InfraredSensor( Category.SENSOR ),
+        DrehSensor( Category.SENSOR ),
+        SteinSensor( Category.SENSOR ),
+        GyroSensor( Category.SENSOR ),
+        ExprList( Category.EXPR ),
+        StringConst( Category.EXPR ),
+        NullConst( Category.EXPR ),
+        BoolConst( Category.EXPR ),
+        NumConst( Category.EXPR ),
+        MathConst( Category.EXPR ),
+        Var( Category.EXPR ),
+        Unary( Category.EXPR ),
+        Binary( Category.EXPR ),
+        SensorExpr( Category.EXPR ),
+        EmptyExpr( Category.EXPR ),
+        IfStmt( Category.STMT ),
+        RepeatStmt( Category.STMT ),
+        ExprStmt( Category.STMT ),
+        StmtList( Category.STMT ),
+        AssignStmt( Category.STMT ),
+        AktionStmt( Category.STMT ),
+        SensorStmt( Category.STMT ),
+        StmtFlowCon( Category.STMT ),
+        TurnAktion( Category.AKTOR ),
+        DriveAktion( Category.AKTOR ),
+        ShowAktion( Category.AKTOR ),
+        ToneAktion( Category.AKTOR ),
+        LightAktion( Category.AKTOR );
 
-        private final Class<?> clazz;
         private final Category category;
 
-        private Kind(Class<?> clazz, Category category) {
-            this.clazz = clazz;
+        private Kind(Category category) {
             this.category = category;
-        }
-
-        public final Class<?> getPhraseClass() {
-            return this.clazz;
         }
 
         public final Category getCategory() {
