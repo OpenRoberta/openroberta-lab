@@ -9,6 +9,13 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * class that handles file downloading <br>
+ * holds addition information about the downloaded file <br>
+ * no singleton pattern but use only one instance of the class
+ * 
+ * @author dpyka
+ */
 public class RobertaDownloadThread implements Runnable {
 
     // fileName of program that was downloaded from RobertaLab
@@ -18,7 +25,8 @@ public class RobertaDownloadThread implements Runnable {
     private final String PROGRAMS_DIRECTORY = "/home/lejos/programs";
 
     private final URL serverURL;
-    private String token;
+    private final String token;
+    private boolean downloaded = false;
 
     public RobertaDownloadThread(URL serverURL, String token) {
         this.serverURL = serverURL;
@@ -30,12 +38,32 @@ public class RobertaDownloadThread implements Runnable {
      */
     @Override
     public void run() {
+        setHasDownloaded(false);
         try {
             downloadProgramFromServer(openConnection(this.serverURL), this.token);
+            setHasDownloaded(true);
         } catch ( IOException e ) {
             e.printStackTrace();
-            System.out.println("something went wrong");
+            System.out.println("something went wrong, nothing downloaded");
         }
+    }
+
+    /**
+     * status: downloaded/ not downloaded
+     * 
+     * @return boolean
+     */
+    public boolean getHasDownloaded() {
+        return this.downloaded;
+    }
+
+    /**
+     * change download status
+     * 
+     * @param status
+     */
+    public void setHasDownloaded(boolean status) {
+        this.downloaded = status;
     }
 
     /**
@@ -58,13 +86,10 @@ public class RobertaDownloadThread implements Runnable {
         this.fileName = fileName;
     }
 
-    public void updateToken(String token) {
-        this.token = token;
-    }
-
     /**
      * Opens http connection to server. "POST" as request method. Input, output
      * set to "true".
+     * no readTimeOut, connection will be held forever or until data was send
      * 
      * @param url
      *        the robertalab server url or ip+port
@@ -77,9 +102,7 @@ public class RobertaDownloadThread implements Runnable {
         httpURLConnection.setDoInput(true);
         httpURLConnection.setDoOutput(true);
         httpURLConnection.setRequestMethod("POST");
-        // httpURLConnection.setConnectTimeout(5000); //establish tcp handshake
-        httpURLConnection.setReadTimeout(60000);
-        // brick try to receive the program from server for 60sec
+        httpURLConnection.setReadTimeout(0); // hold connection
         return httpURLConnection;
     }
 

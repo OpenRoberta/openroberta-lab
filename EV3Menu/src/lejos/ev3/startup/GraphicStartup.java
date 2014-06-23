@@ -25,9 +25,8 @@ import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.jar.JarFile;
 
 import lejos.hardware.Battery;
@@ -1482,87 +1481,66 @@ public class GraphicStartup implements Menu {
      * Uses new RobertaDownloadThread helper-class for downloading and saving
      * file.<br>
      * uses new RobertaKeyboard with less symbols for token input.<br>
-     * TODO handling of exceptions (should never be thrown later) TODO lots of
-     * system.out for debugging
+     * sends download request 1/60sec, launch user program after download<br>
+     * download requests are paused during execution time of the user program<br>
+     * TODO handling of URL exceptions (should never be thrown later)
      */
     private void robertaMenu() {
         GraphicsLCD glcd = LocalEV3.get().getGraphicsLCD();
-
-        String[] menuData = {
-            "New token", "Download", "Run"
-        };
-        String[] iconData = {
-            RobertaIcon, RobertaIcon, RobertaIcon
-        };
         URL serverURL = null;
         try {
             serverURL = new URL("http://10.0.1.10:1999/download");
             // do not change, brick dhcp gives || (10) to your pc
         } catch ( MalformedURLException e ) {
-            // never occurs
+            // never occurs, hardcoded correct URL later
         }
-        GraphicMenu menu = new GraphicMenu(menuData, iconData, 4);
-        int selection = 1;
-        //start at "download" icon
-
+        newScreen(" Robertalab");
         // first enter token (from website)
-        // do not allow bypassing this by
-        // no empty string, at least 5 chars
-        while ( token.equals("") || token.length() < 5 ) {
-            newScreen(" Robertalab");
+        // no empty string, must be 8 chars code
+
+        while ( token.equals("") || token.length() != 8 ) {
             token = new RobertaKeyboard().getString();
         }
-
         glcd.drawImage(image, 0, 0, 0);
-        // 1/60s download requests
+
         RobertaDownloadThread rdt = new RobertaDownloadThread(serverURL, token);
-        ScheduledExecutorService stp = Executors.newScheduledThreadPool(1);
-        stp.scheduleAtFixedRate(rdt, 0, 60, TimeUnit.SECONDS);
+        /*(Scheduled)*/ExecutorService executerService = Executors.newSingleThreadScheduledExecutor();
+        executerService.execute(rdt);
 
-        do {
-            newScreen(" Robertalab");
+        // 1/60s download requests
+        //ScheduledFuture<?> scheduledFuture = stp.scheduleAtFixedRate(rdt, 0, 60, TimeUnit.SECONDS);
+
+        while ( Button.ESCAPE.isUp() ) {
             glcd.drawImage(image, 0, 0, 0);
-            menu.setItems(menuData, iconData);
-            selection = getSelection(menu, selection);
-            switch ( selection ) {
-                case 0:
-                    token = new RobertaKeyboard().getString();
-                    rdt.updateToken(token);
-                    break;
-                case 1:
-                    // press download on the brick
-                    rdt.run();
-                    try {
-                        // wait until program is downloaded
-                        rdt.wait();
-                        robertaLabFile = rdt.getFileName();
-                        System.out.println("robertaFileName is: " + robertaLabFile);
-                        // get parameters for new exec method
-                        file = new File(PROGRAMS_DIRECTORY, robertaLabFile);
-                        JarFile jar = new JarFile(file);
-                        mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
-                        jar.close();
-                    } catch ( InterruptedException e ) {
-                        e.printStackTrace();
-                        System.out.println("error while waiting for download thread");
-                    } catch ( IOException e ) {
-                        e.printStackTrace();
-                        System.out.println("error while retrieving jar information");
-                    }
-                    break;
-                case 2:
-                    stp.shutdownNow();
-                    this.ind.suspend();
-                    // new exec from 0.8.1-beta
-                    exec(file, JAVA_RUN_CP + file.getPath() + " lejos.internal.ev3.EV3Wrapper " + mainClass, PROGRAMS_DIRECTORY);
-                    // old exec from 0.8.0-alpha
-                    // exec(JAVA_RUN_JAR + robertaFileName, PROGRAMS_DIRECTORY);
-                    this.ind.resume();
-                    stp.scheduleAtFixedRate(rdt, 0, 60, TimeUnit.SECONDS);
-                    break;
-            }
-        } while ( selection >= 0 );
+            // check if thread is terminated and file was downloaded successfully
+            if ( rdt.getHasDownloaded() ) {
+                robertaLabFile = rdt.getFileName();
+                // get parameters for exec method
+                file = new File(PROGRAMS_DIRECTORY, robertaLabFile);
+                JarFile jar;
+                try {
+                    jar = new JarFile(file);
+                    mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
+                    jar.close();
+                } catch ( IOException e ) {
+                    e.printStackTrace();
+                }
+                // no more download requests while running the user program
+                //scheduledFuture.cancel(true);
+                // run user program
+                this.ind.suspend();
+                exec(file, JAVA_RUN_CP + file.getPath() + " lejos.internal.ev3.EV3Wrapper " + mainClass, PROGRAMS_DIRECTORY);
+                this.ind.resume();
+                rdt.setHasDownloaded(false);
 
+                // restart download requests again
+                //scheduledFuture = stp.scheduleAtFixedRate(rdt, 0, 60, TimeUnit.SECONDS);
+                executerService.execute(rdt);
+            }
+            Delay.msDelay(500);
+        }
+        executerService.shutdownNow();
+        //stp.shutdownNow();
     }
 
     /**

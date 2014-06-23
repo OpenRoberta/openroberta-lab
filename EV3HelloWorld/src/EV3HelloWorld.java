@@ -13,7 +13,7 @@ public class EV3HelloWorld {
          */
 
         // init from configuration
-        sensorConfig.setProperty("S1", "EV3UltrasonicSensor");
+        sensorConfig.setProperty("S1", "EV3UltraSonicSensor");
         sensorConfig.setProperty("S2", "EV3TouchSensor");
         sensorConfig.setProperty("S3", "EV3GyroSensor");
         sensorConfig.setProperty("S4", "EV3ColorSensor");

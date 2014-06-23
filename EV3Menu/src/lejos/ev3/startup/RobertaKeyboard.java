@@ -123,7 +123,7 @@ public class RobertaKeyboard
 			}
 			else if (b == Button.ID_ESCAPE)
 			{
-				return null;
+				return "";
 			}
 
 			displayCursor(true);

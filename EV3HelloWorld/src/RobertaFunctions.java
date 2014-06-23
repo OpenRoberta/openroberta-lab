@@ -25,32 +25,16 @@ public class RobertaFunctions {
     //    private final TextLCD lcd = LocalEV3.get().getTextLCD();
     //    private final GraphicsLCD glcd = LocalEV3.get().getGraphicsLCD();
 
-    //TODO define every mode of every sensor -> better solution??
-    private enum sensorMode {
-
-        // @formatter:off
-        TOUCH( "EV3TochSensor" ),
-        US_DIST_CM( "EV3UltraSonicSensor" ),
-        COL_REFLECT( "EV3ColorSensor" ),
-        NO( "No Sensor" ),
-        I2C( "Some I2C Sensor" ),
-        GYRO_ANG( "EV3GyroSensor" ),
-        ;
-        // @formatter:on
-
-        private String sensor;
-
-        private sensorMode(String name) {
-            this.sensor = name;
-        }
-
-        String getSensor() {
-            return this.sensor;
-        }
-    }
+    //TODO need better solution: multi key -> one value data structure
+    final Properties sensorModes = new Properties();
 
     public RobertaFunctions() {
-        //
+        this.sensorModes.put("TOUCH", "EV3TouchSensor");
+        this.sensorModes.put("US-DIST-CM", "EV3UltraSonicSensor");
+        this.sensorModes.put("COL-REFLECT", "EV3ColorSensor");
+        this.sensorModes.put("GYRO-ANG", "EV3GyroSensor");
+        this.sensorModes.put("NO", "");
+        this.sensorModes.put("I2C", "Some I2C Sensor");
     }
 
     /**
@@ -119,13 +103,9 @@ public class RobertaFunctions {
         p[2] = LocalEV3.get().getPort("S3");
         p[3] = LocalEV3.get().getPort("S4");
         for ( int i = 0; i < actualSensorConfig.length; i++ ) {
-            actualSensorConfig[i] = getSensorName(p[i]);
-            // java does not allow '-' character in variable names
-            // replace '-' with '_' in sensor modes
-            // will be used to map sensormode to sensor device
-            actualSensorConfig[i] = actualSensorConfig[i].replaceAll("-", "_");
-            // TODO map the sensor mode names to sensor class names!
-            actualSensorConfig[i] = sensorMode.valueOf(actualSensorConfig[i]).getSensor();
+            actualSensorConfig[i] = getSensorName(p[i]).trim(); // remove spaces
+            // map the sensor mode names to lejos sensor class names!
+            actualSensorConfig[i] = this.sensorModes.getProperty(actualSensorConfig[i]);
         }
         return actualSensorConfig;
     }
@@ -159,7 +139,7 @@ public class RobertaFunctions {
             uP.close();
             return name;
         } catch ( Exception e ) {
-            return "I2C?";
+            return "I2C";
             // TODO: test I2c port for NXT Sensors
         }
     }
