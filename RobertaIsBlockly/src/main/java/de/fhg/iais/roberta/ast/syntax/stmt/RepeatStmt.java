@@ -1,8 +1,11 @@
 package de.fhg.iais.roberta.ast.syntax.stmt;
 
+import java.util.Locale;
+
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.dbc.Assert;
+import de.fhg.iais.roberta.dbc.DbcException;
 
 public class RepeatStmt extends Stmt {
     private final Mode mode;
@@ -51,7 +54,31 @@ public class RepeatStmt extends Stmt {
     }
 
     public static enum Mode {
-        WHILE, UNTIL, TIMES, FOR, FOR_EACH;
+        WHILE(), UNTIL(), TIMES(), FOR(), FOR_EACH();
+
+        private final String[] values;
+
+        private Mode(String... values) {
+            this.values = values;
+        }
+
+        public static Mode get(String s) {
+            if ( s == null || s.isEmpty() ) {
+                throw new DbcException("Invalid binary operator symbol: " + s);
+            }
+            String sUpper = s.trim().toUpperCase(Locale.GERMAN);
+            for ( Mode mo : Mode.values() ) {
+                if ( mo.toString().equals(sUpper) ) {
+                    return mo;
+                }
+                for ( String value : mo.values ) {
+                    if ( sUpper.equals(value) ) {
+                        return mo;
+                    }
+                }
+            }
+            throw new DbcException("Invalid binary operator symbol: " + s);
+        }
     }
 
 }

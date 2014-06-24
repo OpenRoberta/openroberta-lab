@@ -5,8 +5,8 @@ import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.Phrase.Category;
+import de.fhg.iais.roberta.ast.syntax.aktion.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.aktion.Aktion;
-import de.fhg.iais.roberta.ast.syntax.aktion.SensorPort;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
@@ -15,15 +15,18 @@ import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
+import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.sensoren.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensoren.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensoren.DrehSensor;
 import de.fhg.iais.roberta.ast.syntax.sensoren.GyroSensor;
 import de.fhg.iais.roberta.ast.syntax.sensoren.InfraredSensor;
 import de.fhg.iais.roberta.ast.syntax.sensoren.Sensor;
-import de.fhg.iais.roberta.ast.syntax.sensoren.SteinSensor;
+import de.fhg.iais.roberta.ast.syntax.sensoren.SensorPort;
+import de.fhg.iais.roberta.ast.syntax.sensoren.TimerSensor;
 import de.fhg.iais.roberta.ast.syntax.sensoren.TouchSensor;
 import de.fhg.iais.roberta.ast.syntax.sensoren.UltraSSensor;
 import de.fhg.iais.roberta.ast.syntax.stmt.AktionStmt;
@@ -84,112 +87,123 @@ public class BlockAST {
             case "robSensors_touch_isPressed":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return TouchSensor.make(SensorPort.valueOf(port));
+                return TouchSensor.make(SensorPort.get(port));
 
             case "robSensors_ultrasonic_setMode":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, "SENSORPORT", (short) 0);
                 mode = extractField(fields, "MODE", (short) 1);
-                return UltraSSensor.make(UltraSSensor.Mode.valueOf(mode), SensorPort.valueOf(port));
+                return UltraSSensor.make(UltraSSensor.Mode.get(mode), SensorPort.get(port));
 
             case "robSensors_ultrasonic_getMode":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return UltraSSensor.make(UltraSSensor.Mode.GET_MODE, SensorPort.valueOf(port));
+                return UltraSSensor.make(UltraSSensor.Mode.GET_MODE, SensorPort.get(port));
 
             case "robSensors_ultrasonic_getSample":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return UltraSSensor.make(UltraSSensor.Mode.GET_SAMPLE, SensorPort.valueOf(port));
+                return UltraSSensor.make(UltraSSensor.Mode.GET_SAMPLE, SensorPort.get(port));
 
             case "robSensors_colour_setMode":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, "SENSORPORT", (short) 0);
                 mode = extractField(fields, "MODE", (short) 1);
-                return ColorSensor.make(ColorSensor.Mode.valueOf(mode), SensorPort.valueOf(port));
+                return ColorSensor.make(ColorSensor.Mode.get(mode), SensorPort.get(port));
 
             case "robSensors_colour_getMode":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return ColorSensor.make(ColorSensor.Mode.GET_MODE, SensorPort.valueOf(port));
+                return ColorSensor.make(ColorSensor.Mode.GET_MODE, SensorPort.get(port));
 
             case "robSensors_colour_getSample":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return ColorSensor.make(ColorSensor.Mode.GET_SAMPLE, SensorPort.valueOf(port));
+                return ColorSensor.make(ColorSensor.Mode.GET_SAMPLE, SensorPort.get(port));
 
             case "robSensors_infrared_setMode":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, "SENSORPORT", (short) 0);
                 mode = extractField(fields, "MODE", (short) 1);
-                return InfraredSensor.make(InfraredSensor.Mode.valueOf(mode), SensorPort.valueOf(port));
+                return InfraredSensor.make(InfraredSensor.Mode.get(mode), SensorPort.get(port));
 
             case "robSensors_infrared_getMode":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return InfraredSensor.make(InfraredSensor.Mode.GET_MODE, SensorPort.valueOf(port));
+                return InfraredSensor.make(InfraredSensor.Mode.GET_MODE, SensorPort.get(port));
 
             case "robSensors_infrared_getSample":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return InfraredSensor.make(InfraredSensor.Mode.GET_SAMPLE, SensorPort.valueOf(port));
+                return InfraredSensor.make(InfraredSensor.Mode.GET_SAMPLE, SensorPort.get(port));
 
             case "robSensors_encoder_setMode":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, "MOTORPORT", (short) 0);
                 mode = extractField(fields, "MODE", (short) 1);
-                return DrehSensor.make(DrehSensor.Mode.valueOf(mode), port);
+                return DrehSensor.make(DrehSensor.Mode.get(mode), ActorPort.get(port));
 
             case "robSensors_encoder_getMode":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "MOTORPORT", (short) 0);
-                return DrehSensor.make(DrehSensor.Mode.GET_MODE, port);
+                return DrehSensor.make(DrehSensor.Mode.GET_MODE, ActorPort.get(port));
 
             case "robSensors_encoder_getSample":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "MOTORPORT", (short) 0);
-                return DrehSensor.make(DrehSensor.Mode.GET_SAMPLE, port);
+                return DrehSensor.make(DrehSensor.Mode.GET_SAMPLE, ActorPort.get(port));
 
             case "robSensors_encoder_reset":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "MOTORPORT", (short) 0);
-                return DrehSensor.make(DrehSensor.Mode.RESET, port);
+                return DrehSensor.make(DrehSensor.Mode.RESET, ActorPort.get(port));
 
             case "robSensors_key_isPressed":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "KEY", (short) 0);
-                return SteinSensor.make(SteinSensor.Mode.IS_PRESSED, port);
+                return BrickSensor.make(BrickSensor.Mode.IS_PRESSED, port);
 
             case "robSensors_key_waitForPress":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "KEY", (short) 0);
-                return SteinSensor.make(SteinSensor.Mode.WAIT_FOR_PRESS, port);
+                return BrickSensor.make(BrickSensor.Mode.WAIT_FOR_PRESS, port);
 
-            case "robSensors_key_waitForPressAndRelease":
+            case "robSensors_key_isPressedAndReleased":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "KEY", (short) 0);
-                return SteinSensor.make(SteinSensor.Mode.WAIT_FOR_PRESS_AND_RELEASE, port);
+                return BrickSensor.make(BrickSensor.Mode.WAIT_FOR_PRESS_AND_RELEASE, port);
 
             case "robSensors_gyro_setMode":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, "SENSORPORT", (short) 0);
                 mode = extractField(fields, "MODE", (short) 1);
-                return GyroSensor.make(GyroSensor.Mode.valueOf(mode), SensorPort.valueOf(port));
+                return GyroSensor.make(GyroSensor.Mode.get(mode), SensorPort.get(port));
 
             case "robSensors_gyro_getMode":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return GyroSensor.make(GyroSensor.Mode.GET_MODE, SensorPort.valueOf(port));
+                return GyroSensor.make(GyroSensor.Mode.GET_MODE, SensorPort.get(port));
 
             case "robSensors_gyro_getSample":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return GyroSensor.make(GyroSensor.Mode.GET_SAMPLE, SensorPort.valueOf(port));
+                return GyroSensor.make(GyroSensor.Mode.GET_SAMPLE, SensorPort.get(port));
 
             case "robSensors_gyro_reset":
                 fields = extractFields(block, (short) 1);
-                port = extractField(fields, "MOTORPORT", (short) 0);
-                return GyroSensor.make(GyroSensor.Mode.RESET, SensorPort.valueOf(port));
+                port = extractField(fields, "SENSORPORT", (short) 0);
+                return GyroSensor.make(GyroSensor.Mode.RESET, SensorPort.get(port));
+
+            case "robSensors_timer_getSample":
+                fields = extractFields(block, (short) 1);
+                port = extractField(fields, "SENSORNUM", (short) 0);
+                return TimerSensor.make(TimerSensor.Mode.GET_SAMPLE, Integer.valueOf(port));
+
+            case "robSensors_timer_reset":
+                fields = extractFields(block, (short) 1);
+                port = extractField(fields, "SENSORNUM", (short) 0);
+                return TimerSensor.make(TimerSensor.Mode.RESET, Integer.valueOf(port));
+
                 //Logik
             case "logic_compare":
                 return blockToBinaryExpr(block, new ExprParam("A", Integer.class), new ExprParam("B", Integer.class), "OP");
@@ -293,9 +307,8 @@ public class BlockAST {
                 return blockToBinaryExpr(block, new ExprParam("VALUE", String.class), new ExprParam("FIND", String.class), "END");
 
             case "text_charAt":
-                args = extractArguments(block.getMutation(), (short) 1);
-                Arg atArg = args.get(0);
-                if ( atArg.getName().equals("true") ) {
+                boolean atArg = block.getMutation().isAt();
+                if ( atArg == true ) {
                     return blockToBinaryExpr(block, new ExprParam("VALUE", String.class), new ExprParam("AT", Integer.class), "WHERE");
                 } else {
                     return blockToUnaryExpr(block, new ExprParam("VALUE", String.class), "WHERE");
@@ -314,7 +327,7 @@ public class BlockAST {
                     //                    extractValue(values, "AT2", (short) 2);
                 }
 
-            case "text_change":
+            case "text_changeCase":
                 return blockToUnaryExpr(block, new ExprParam("TEXT", String.class), "CASE");
 
             case "text_trim":
@@ -325,7 +338,7 @@ public class BlockAST {
                 String type = extractField(fields, "TYPE", (short) 0);
                 String text = extractField(fields, "TEXT", (short) 1);
                 StringConst txtExpr = StringConst.make(text);
-                return Unary.make(Unary.Op.valueOf(type), txtExpr);
+                return Unary.make(Unary.Op.get(type), txtExpr);
 
                 //LISTEN
             case "lists_create_empty":
@@ -358,7 +371,8 @@ public class BlockAST {
                 //VARIABLEN
             case "variables_set":
                 values = extractValues(block, (short) 1);
-                expr = extractValue(values, new ExprParam("VALUE", EmptyExpr.class));
+                Phrase p = extractValue(values, new ExprParam("VALUE", EmptyExpr.class));
+                expr = convertPhraseToExpr(p);
                 return AssignStmt.make((Var) extractVar(block), (Expr) expr);
 
             case "variables_get":
@@ -416,7 +430,7 @@ public class BlockAST {
             case "controls_flow_statements":
                 fields = extractFields(block, (short) 1);
                 mode = extractField(fields, "FLOW", (short) 0);
-                return StmtFlowCon.make(Flow.valueOf(mode));
+                return StmtFlowCon.make(Flow.get(mode));
 
             case "controls_repeat_ext":
                 values = extractValues(block, (short) 1);
@@ -432,7 +446,7 @@ public class BlockAST {
         String op = getOperation(block, operationType);
         List<Value> values = extractValues(block, (short) 1);
         Phrase expr = extractValue(values, exprParam);
-        return Unary.make(Unary.Op.valueOf(op), (Expr) expr);
+        return Unary.make(Unary.Op.get(op), (Expr) expr);
     }
 
     private Binary blockToBinaryExpr(Block block, ExprParam leftExpr, ExprParam rightExpr, String operationType) {
@@ -464,7 +478,9 @@ public class BlockAST {
             if ( _else != 0 && i == statements.size() - 1 ) {
                 elseList = extractStatement(statements, "ELSE");
             } else {
-                exprsList.add((Expr) extractValue(values, new ExprParam("IF" + i, Boolean.class)));
+                Phrase p = extractValue(values, new ExprParam("IF" + i, Boolean.class));
+
+                exprsList.add(convertPhraseToExpr(p));
                 thenList.add(extractStatement(statements, "DO" + i));
             }
         }
@@ -509,7 +525,7 @@ public class BlockAST {
             case "TEXT":
                 return StringConst.make(field);
             case "CONSTANT":
-                return MathConst.make(MathConst.Const.valueOf(field));
+                return MathConst.make(MathConst.Const.get(field));
             default:
                 throw new RuntimeException("Invalid type constant!");
         }
@@ -539,6 +555,16 @@ public class BlockAST {
         stmtList.addStmt(stmt);
     }
 
+    private Expr convertPhraseToExpr(Phrase p) {
+        Expr expr;
+        if ( p.getKind().getCategory() == Category.SENSOR ) {
+            expr = SensorExpr.make((Sensor) p);
+        } else {
+            expr = (Expr) p;
+        }
+        return expr;
+    }
+
     private ExprList valuesToExprList(List<Value> values, Class<?> defVal, int nItems) {
         ExprList exprList = ExprList.make();
         for ( int i = 0; i < nItems; i++ ) {
@@ -559,7 +585,7 @@ public class BlockAST {
     private Phrase extractRepeatStatement(Block block, Phrase expr, String mode) {
         List<Statement> statements = extractStatements(block, (short) 1);
         StmtList stmtList = extractStatement(statements, "DO");
-        return RepeatStmt.make(RepeatStmt.Mode.valueOf(mode), (Expr) expr, stmtList);
+        return RepeatStmt.make(RepeatStmt.Mode.get(mode), (Expr) expr, stmtList);
     }
 
     private Phrase extractVar(Block block) {

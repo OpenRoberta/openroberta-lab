@@ -43,4 +43,148 @@ public class TextTest {
 
         Assert.assertEquals(a, transformer.toString());
     }
+
+    @Test
+    public void textAppend() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/text/text_append.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        BlockAST transformer = new BlockAST();
+        transformer.projectToAST(project);
+
+        String a = "BlockAST [project=[[Binary [TEXT_APPEND, Var [item], StringConst [text]]]]]";
+
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
+    public void textLength() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/text/text_length.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        BlockAST transformer = new BlockAST();
+        transformer.projectToAST(project);
+
+        String a = "BlockAST [project=[[Unary [TEXT_LENGTH, StringConst [Test]]]]]";
+
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
+    public void textIsEmpty() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/text/text_isEmpty.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        BlockAST transformer = new BlockAST();
+        transformer.projectToAST(project);
+
+        String a = "BlockAST [project=[[Unary [IS_EMPTY, StringConst [Test]]]]]";
+
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
+    public void textIndexOf() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/text/text_indexOf.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        BlockAST transformer = new BlockAST();
+        transformer.projectToAST(project);
+
+        String a = "BlockAST [project=[[Binary [FIRST, Var [text], StringConst [Test]]]]]";
+
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
+    public void textCharAt() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/text/text_charAt.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        BlockAST transformer = new BlockAST();
+        transformer.projectToAST(project);
+
+        String a = "BlockAST [project=[[Binary [FROM_START, Var [text], NumConst [0]]]]]";
+
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
+    public void textCharAt1() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/text/text_charAt1.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        BlockAST transformer = new BlockAST();
+        transformer.projectToAST(project);
+
+        String a = "BlockAST [project=[[Unary [RANDOM, Var [text]]]]]";
+
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
+    public void textChangeCase() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/text/text_changeCase.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        BlockAST transformer = new BlockAST();
+        transformer.projectToAST(project);
+
+        String a = "BlockAST [project=[[Unary [UPPERCASE, Var [text]]]]]";
+
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
+    public void textTrim() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/text/text_trim.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        BlockAST transformer = new BlockAST();
+        transformer.projectToAST(project);
+
+        String a = "BlockAST [project=[[Unary [LEFT, Var [text]]]]]";
+
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
+    public void textPrompt() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/text/text_prompt.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        BlockAST transformer = new BlockAST();
+        transformer.projectToAST(project);
+
+        String a = "BlockAST [project=[[Unary [TEXT, StringConst [TEST]]]]]";
+
+        Assert.assertEquals(a, transformer.toString());
+    }
 }

@@ -1,30 +1,30 @@
-package de.fhg.iais.roberta.ast.syntax.aktion;
+package de.fhg.iais.roberta.ast.syntax.sensoren;
 
 import java.util.Locale;
 
 import de.fhg.iais.roberta.dbc.DbcException;
 
-public enum ActorPort {
-    A(), B(), C(), D();
+public enum SensorPort {
+    _1( "1" ), _2( "2" ), _3( "3" ), _4( "4" );
 
     private final String[] values;
 
-    private ActorPort(String... values) {
+    private SensorPort(String... values) {
         this.values = values;
     }
 
-    public static ActorPort get(String s) {
+    public static SensorPort get(String s) {
         if ( s == null || s.isEmpty() ) {
             throw new DbcException("Invalid binary operator symbol: " + s);
         }
         String sUpper = s.trim().toUpperCase(Locale.GERMAN);
-        for ( ActorPort ap : ActorPort.values() ) {
-            if ( ap.toString().equals(sUpper) ) {
-                return ap;
+        for ( SensorPort sp : SensorPort.values() ) {
+            if ( sp.toString().equals(sUpper) ) {
+                return sp;
             }
-            for ( String value : ap.values ) {
+            for ( String value : sp.values ) {
                 if ( sUpper.equals(value) ) {
-                    return ap;
+                    return sp;
                 }
             }
         }

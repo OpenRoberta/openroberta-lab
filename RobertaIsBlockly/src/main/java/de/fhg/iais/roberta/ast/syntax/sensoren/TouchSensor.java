@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax.sensoren;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
-import de.fhg.iais.roberta.ast.syntax.aktion.SensorPort;
 
 public class TouchSensor extends Sensor {
     private final SensorPort port;
@@ -28,7 +27,7 @@ public class TouchSensor extends Sensor {
 
     @Override
     public String toString() {
-        return "TouchSensor [ port=" + this.port + "]";
+        return "TouchSensor [port=" + this.port + "]";
     }
 
 }

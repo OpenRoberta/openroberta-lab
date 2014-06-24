@@ -14,7 +14,7 @@ public class SensorExpr extends Expr {
         setReadOnly();
     }
 
-    public SensorExpr make(Sensor sens) {
+    public static SensorExpr make(Sensor sens) {
         return new SensorExpr(sens);
     }
 

@@ -34,9 +34,9 @@ public class StmtFlowCon extends Stmt {
         CONTINUE, BREAK;
 
         public static Flow get(String s) {
-            if ( "continue".equals(s) ) {
+            if ( "CONTINUE".equals(s) ) {
                 return CONTINUE;
-            } else if ( "break".equals(s) ) {
+            } else if ( "BREAK".equals(s) ) {
                 return BREAK;
             } else {
                 throw new DbcException("invalid binary operator: " + s);
