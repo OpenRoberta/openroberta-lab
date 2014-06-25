@@ -24,5 +24,3 @@ This repository contains
 
 When the client side running in a browser accesses the server using JSON, logging data assembled in the browser since the last server contact is sent to the server
 automatically.
-
-The repository is a simple demonstartor for connecting blockly and a jetty REST server.
