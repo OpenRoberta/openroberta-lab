@@ -264,6 +264,17 @@
 			</roles>
 			<timezone>+1</timezone>
 		</developer>
+        <developer>
+            <id>kcvejoski</id>
+            <name>Kostadin Cvejoski</name>
+            <email>kostadin.cvejoski@iais.fraunhofer.de</email>
+            <organization>Fraunhofer IAIS</organization>
+            <organizationUrl>http://www.iais.fraunhofer.de/</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
 	</developers>
 	<contributors>
 		<contributor>
