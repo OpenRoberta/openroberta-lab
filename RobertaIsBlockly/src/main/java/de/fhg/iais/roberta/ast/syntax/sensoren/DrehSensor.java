@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.syntax.sensoren;
 import java.util.Locale;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
-import de.fhg.iais.roberta.ast.syntax.aktion.ActorPort;
+import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 

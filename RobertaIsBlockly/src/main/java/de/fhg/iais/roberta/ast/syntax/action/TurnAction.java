@@ -1,22 +1,22 @@
-package de.fhg.iais.roberta.ast.syntax.aktion;
+package de.fhg.iais.roberta.ast.syntax.action;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 
-public class DriveAktion extends Aktion {
+public class TurnAction extends Action {
     private final Di direction;
     private final MotionParam param;
 
-    private DriveAktion(Di direction, MotionParam param) {
-        super(Phrase.Kind.DriveAktion);
+    private TurnAction(Di direction, MotionParam param) {
+        super(Phrase.Kind.TurnAktion);
         Assert.isTrue(direction != null && param != null);
         this.direction = direction;
         this.param = param;
         setReadOnly();
     }
 
-    public static DriveAktion make(Di direction, MotionParam param) {
-        return new DriveAktion(direction, param);
+    public static TurnAction make(Di direction, MotionParam param) {
+        return new TurnAction(direction, param);
     }
 
     public Di getDirection() {
@@ -35,10 +35,10 @@ public class DriveAktion extends Aktion {
 
     @Override
     public String toString() {
-        return "DriveAktion [" + this.direction + ", dist: " + this.param.getDistance() + ", speed: " + this.param.getSpeed() + "]";
+        return "TurnAktion [" + this.direction + ", dist: " + this.param.getDuration() + ", speed: " + this.param.getSpeed() + "]";
     }
 
     public static enum Di {
-        foreward, backward;
+        right, left;
     }
 }

@@ -1,8 +1,8 @@
 package de.fhg.iais.roberta.util;
 
-import de.fhg.iais.roberta.ast.syntax.aktion.ActorPort;
-import de.fhg.iais.roberta.ast.syntax.aktion.MotorDuration;
-import de.fhg.iais.roberta.ast.syntax.aktion.MotorMode;
+import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
+import de.fhg.iais.roberta.ast.syntax.action.MotorDuration;
+import de.fhg.iais.roberta.ast.syntax.action.MotorMode;
 import de.fhg.iais.roberta.ast.syntax.sensoren.SensorPort;
 
 public class LejosInterface {

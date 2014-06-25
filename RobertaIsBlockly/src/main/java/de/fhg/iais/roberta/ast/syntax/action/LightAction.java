@@ -1,14 +1,14 @@
-package de.fhg.iais.roberta.ast.syntax.aktion;
+package de.fhg.iais.roberta.ast.syntax.action;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 
-public class LightAktion extends Aktion {
+public class LightAction extends Action {
     private final boolean turnOn;
     private final Co color;
     private final boolean blink;
 
-    private LightAktion(boolean turnOn, Co color, boolean blink) {
+    private LightAction(boolean turnOn, Co color, boolean blink) {
         super(Phrase.Kind.LightAktion);
         Assert.isTrue(color != null);
         this.turnOn = turnOn;
@@ -17,8 +17,8 @@ public class LightAktion extends Aktion {
         setReadOnly();
     }
 
-    public LightAktion make(boolean turnOn, Co color, boolean blink) {
-        return new LightAktion(turnOn, color, blink);
+    public LightAction make(boolean turnOn, Co color, boolean blink) {
+        return new LightAction(turnOn, color, blink);
     }
 
     public boolean isTurnOn() {

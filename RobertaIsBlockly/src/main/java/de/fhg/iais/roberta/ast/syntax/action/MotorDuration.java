@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.ast.syntax.aktion;
+package de.fhg.iais.roberta.ast.syntax.action;
 
 public class MotorDuration {
     private Type type;
@@ -27,6 +27,6 @@ public class MotorDuration {
     }
 
     public static enum Type {
-        ROTATION, DEGREE;
+        ROTATION, DEGREE, DISTANCE;
     }
 }

@@ -122,7 +122,8 @@ abstract public class Phrase {
         DriveAktion( Category.AKTOR ),
         ShowAktion( Category.AKTOR ),
         ToneAktion( Category.AKTOR ),
-        LightAktion( Category.AKTOR );
+        LightAktion( Category.AKTOR ),
+        MotorOnAction( Category.AKTOR );
 
         private final Category category;
 

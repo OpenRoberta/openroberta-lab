@@ -1,24 +1,24 @@
 package de.fhg.iais.roberta.ast.syntax.stmt;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
-import de.fhg.iais.roberta.ast.syntax.aktion.Aktion;
+import de.fhg.iais.roberta.ast.syntax.action.Action;
 import de.fhg.iais.roberta.dbc.Assert;
 
-public class AktionStmt extends Stmt {
-    private final Aktion akt;
+public class ActionStmt extends Stmt {
+    private final Action akt;
 
-    private AktionStmt(Aktion akt) {
+    private ActionStmt(Action akt) {
         super(Phrase.Kind.AktionStmt);
         Assert.isTrue(akt.isReadOnly());
         this.akt = akt;
         setReadOnly();
     }
 
-    public static AktionStmt make(Aktion akt) {
-        return new AktionStmt(akt);
+    public static ActionStmt make(Action akt) {
+        return new ActionStmt(akt);
     }
 
-    public Aktion getAkt() {
+    public Action getAkt() {
         return this.akt;
     }
 

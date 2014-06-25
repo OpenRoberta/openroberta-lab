@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.ast.syntax.aktion;
+package de.fhg.iais.roberta.ast.syntax.action;
 
 import java.util.Locale;
 

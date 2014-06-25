@@ -5,8 +5,10 @@ import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.Phrase.Category;
-import de.fhg.iais.roberta.ast.syntax.aktion.ActorPort;
-import de.fhg.iais.roberta.ast.syntax.aktion.Aktion;
+import de.fhg.iais.roberta.ast.syntax.action.Action;
+import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
+import de.fhg.iais.roberta.ast.syntax.action.MotionParam;
+import de.fhg.iais.roberta.ast.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
@@ -29,7 +31,7 @@ import de.fhg.iais.roberta.ast.syntax.sensoren.SensorPort;
 import de.fhg.iais.roberta.ast.syntax.sensoren.TimerSensor;
 import de.fhg.iais.roberta.ast.syntax.sensoren.TouchSensor;
 import de.fhg.iais.roberta.ast.syntax.sensoren.UltraSSensor;
-import de.fhg.iais.roberta.ast.syntax.stmt.AktionStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
@@ -73,6 +75,8 @@ public class BlockAST {
         List<Value> values;
         List<Field> fields;
 
+        ExprList exprList;
+
         Phrase left;
         Phrase right;
         Phrase expr;
@@ -80,10 +84,29 @@ public class BlockAST {
 
         String mode;
         String port;
-        ExprList exprList;
+
+        MotionParam mp;
 
         switch ( block.getType() ) {
-        //Sensoren
+        //ACTION
+            case "robActions_motor_on":
+                fields = extractFields(block, (short) 1);
+                port = extractField(fields, "MOTORPORT", (short) 0);
+                values = extractValues(block, (short) 1);
+                expr = extractValue(values, new ExprParam("POWER", Integer.class));
+                mp = new MotionParam.Builder().speed((Expr) expr).build();
+                return MotorOnAction.make(ActorPort.get(port), mp);
+
+            case "robActions_motor_on_for":
+                fields = extractFields(block, (short) 2);
+                port = extractField(fields, "MOTORPORT", (short) 0);
+                mode = extractField(fields, "MOTORROTATION", (short) 1);
+                values = extractValues(block, (short) 2);
+                expr = extractValue(values, new ExprParam("POWER", Integer.class));
+                mp = new MotionParam.Builder().speed((Expr) expr).build();
+                return MotorOnAction.make(ActorPort.get(port), mp);
+
+                //Sensoren
             case "robSensors_touch_isPressed":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
@@ -546,7 +569,7 @@ public class BlockAST {
         if ( p.getKind().getCategory() == Category.EXPR ) {
             stmt = ExprStmt.make((Expr) p);
         } else if ( p.getKind().getCategory() == Category.AKTOR ) {
-            stmt = AktionStmt.make((Aktion) p);
+            stmt = ActionStmt.make((Action) p);
         } else if ( p.getKind().getCategory() == Category.SENSOR ) {
             stmt = SensorStmt.make((Sensor) p);
         } else {

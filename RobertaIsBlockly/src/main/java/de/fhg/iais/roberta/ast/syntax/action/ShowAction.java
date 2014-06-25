@@ -1,14 +1,14 @@
-package de.fhg.iais.roberta.ast.syntax.aktion;
+package de.fhg.iais.roberta.ast.syntax.action;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 
-public class ShowAktion extends Aktion {
+public class ShowAction extends Action {
     private final String msg;
     private final int column;
     private final int row;
 
-    private ShowAktion(String msg, int column, int row) {
+    private ShowAction(String msg, int column, int row) {
         super(Phrase.Kind.ShowAktion);
         Assert.isTrue(msg != null && column > 0 && row > 0);
         this.msg = msg;
@@ -17,8 +17,8 @@ public class ShowAktion extends Aktion {
         setReadOnly();
     }
 
-    public ShowAktion make(String msg, int column, int row) {
-        return new ShowAktion(msg, column, row);
+    public ShowAction make(String msg, int column, int row) {
+        return new ShowAction(msg, column, row);
     }
 
     public String getMsg() {

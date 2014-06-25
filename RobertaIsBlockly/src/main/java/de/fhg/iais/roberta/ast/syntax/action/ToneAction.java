@@ -1,13 +1,13 @@
-package de.fhg.iais.roberta.ast.syntax.aktion;
+package de.fhg.iais.roberta.ast.syntax.action;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 
-public class ToneAktion extends Aktion {
+public class ToneAction extends Action {
     private final int frequency;
     private final int duration;
 
-    private ToneAktion(int frequency, int duration) {
+    private ToneAction(int frequency, int duration) {
         super(Phrase.Kind.ToneAktion);
         Assert.isTrue(frequency > 0 && duration > 0);
         this.frequency = frequency;
@@ -15,8 +15,8 @@ public class ToneAktion extends Aktion {
         setReadOnly();
     }
 
-    public ToneAktion make(int frequency, int duration) {
-        return new ToneAktion(frequency, duration);
+    public ToneAction make(int frequency, int duration) {
+        return new ToneAction(frequency, duration);
     }
 
     public int getFrequency() {
