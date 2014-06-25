@@ -34,6 +34,7 @@ goog.require('Blockly.ContextMenu');
 goog.require('Blockly.Input');
 goog.require('Blockly.Msg');
 goog.require('Blockly.Mutator');
+goog.require('Blockly.MutatorPlus');
 goog.require('Blockly.Warning');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');
