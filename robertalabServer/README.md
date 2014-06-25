@@ -24,3 +24,16 @@ This repository contains
 
 When the client side running in a browser accesses the server using JSON, logging data assembled in the browser since the last server contact is sent to the server
 automatically.
+
+
+Compile and run (command line):
+
+$ mvn install
+$ java -jar target/RobertaLabServer-0.1.jar
+
+Start your browser at:
+http://localhost:1999
+
+
+Please file any bugs to:
+http://mp-devel.iais.fraunhofer.de:8080
