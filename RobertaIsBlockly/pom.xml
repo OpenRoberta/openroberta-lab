@@ -254,6 +254,17 @@
 			<timezone>+1</timezone>
 		</developer>
 		<developer>
+			<id>rbudde</id>
+			<name>Reinhard Budde</name>
+			<email>reinhard.budde@iais.fraunhofer.de</email>
+			<organization>Fraunhofer IAIS</organization>
+			<organizationUrl>http://www.iais.fraunhofer.de/</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+		<developer>
 			<id>mketterl</id>
 			<name>Markus Ketterl</name>
 			<email>mketterl@uni-osnabrueck.de</email>
