@@ -299,6 +299,17 @@
 			</roles>
 			<timezone>+1</timezone>
 		</contributor>
+		<contributor>
+			<name>Achim Kapusta</name>
+			<email>achim.kapusta@iais.fraunhofer.de</email>
+			<url>http://iais.fraunhofer.de</url>
+			<organization>Fraunhofer IAIS</organization>
+			<organizationUrl>http://iais.fraunhofer.de</organizationUrl>
+			<roles>
+				<role>designer</role>
+			</roles>
+			<timezone>+1</timezone>
+		</contributor>
 	</contributors>
 	<!-- Currently using what i know best MKetterl ToDO-->
 	<licenses>
