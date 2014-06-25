@@ -275,6 +275,17 @@
             </roles>
             <timezone>+1</timezone>
         </developer>
+		<developer>
+            <id>dpyka</id>
+            <name>Daniel Pyka</name>
+            <email>daniel.pyka@iais.fraunhofer.de</email>
+            <organization>Fraunhofer IAIS</organization>
+            <organizationUrl>http://www.iais.fraunhofer.de/</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
 	</developers>
 	<contributors>
 		<contributor>
