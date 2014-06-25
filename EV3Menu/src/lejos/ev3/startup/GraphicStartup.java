@@ -1492,14 +1492,18 @@ public class GraphicStartup implements Menu {
             serverURL = new URL("http://10.0.1.10:1999/download");
             // do not change, brick dhcp gives || (10) to your pc
         } catch ( MalformedURLException e ) {
-            // never occurs, hardcoded correct URL later
+            return;
         }
         newScreen(" Robertalab");
         // first enter token (from website)
         // no empty string, must be 8 chars code
 
-        while ( token.equals("") || token.length() != 8 ) {
+        while ( token.length() != 8 ) {
             token = new RobertaKeyboard().getString();
+            // is empty string if Button.ESCAPE is pressed @RobertaKeyboard
+            if ( token.equals("") ) {
+                return;
+            }
         }
         glcd.drawImage(image, 0, 0, 0);
 
@@ -1510,7 +1514,11 @@ public class GraphicStartup implements Menu {
         // 1/60s download requests
         //ScheduledFuture<?> scheduledFuture = stp.scheduleAtFixedRate(rdt, 0, 60, TimeUnit.SECONDS);
 
-        while ( Button.ESCAPE.isUp() ) {
+        while ( true ) {
+            if ( Button.ESCAPE.isDown() ) {
+                executerService.shutdownNow();
+                return;
+            }
             glcd.drawImage(image, 0, 0, 0);
             // check if thread is terminated and file was downloaded successfully
             if ( rdt.getHasDownloaded() ) {
@@ -1523,7 +1531,7 @@ public class GraphicStartup implements Menu {
                     mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
                     jar.close();
                 } catch ( IOException e ) {
-                    e.printStackTrace();
+                    return;
                 }
                 // no more download requests while running the user program
                 //scheduledFuture.cancel(true);
@@ -1537,10 +1545,8 @@ public class GraphicStartup implements Menu {
                 //scheduledFuture = stp.scheduleAtFixedRate(rdt, 0, 60, TimeUnit.SECONDS);
                 executerService.execute(rdt);
             }
-            Delay.msDelay(500);
+            Delay.msDelay(200);
         }
-        executerService.shutdownNow();
-        //stp.shutdownNow();
     }
 
     /**
