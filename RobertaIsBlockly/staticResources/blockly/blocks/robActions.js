@@ -15,7 +15,7 @@ goog.require('Blockly.Blocks');
 
 Blockly.Blocks['robActions_motor_on'] = {
 	/**
-	 * Turn motor on with 
+	 * Turn motor on with specific power.
 	 * 
 	 * @constructs robActions_motor_on
 	 * @this.Blockly.Block
