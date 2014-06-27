@@ -28,6 +28,8 @@ public class RobertaDownloadThread implements Runnable {
     private final String token;
     private boolean downloaded = false;
 
+    private HttpURLConnection httpURLConnection;
+
     public RobertaDownloadThread(URL serverURL, String token) {
         this.serverURL = serverURL;
         this.token = token;
@@ -38,14 +40,40 @@ public class RobertaDownloadThread implements Runnable {
      */
     @Override
     public void run() {
+        /*setHasDownloaded(false);
+        // http request already hanging
+        if ( isConnected() ) {
+            try {
+                downloadProgramFromServer(this.httpURLConnection, this.token);
+                setHasDownloaded(true);
+            } catch ( IOException e ) {
+                e.printStackTrace();
+                System.out.println("error @existing http request");
+            }
+            return;
+        } // new http request
+        else {*/
         setHasDownloaded(false);
         try {
             downloadProgramFromServer(openConnection(this.serverURL), this.token);
             setHasDownloaded(true);
         } catch ( IOException e ) {
             e.printStackTrace();
-            System.out.println("something went wrong, nothing downloaded");
+            System.out.println("error @new http request");
         }
+        //}
+    }
+
+    private boolean isConnected() {
+        try {
+            if ( this.httpURLConnection.getResponseCode() == 200 ) {
+                System.out.println(this.httpURLConnection.getResponseCode() == 200);
+                return true;
+            }
+        } catch ( IOException e ) {
+            return false;
+        }
+        return false;
     }
 
     /**
@@ -98,12 +126,12 @@ public class RobertaDownloadThread implements Runnable {
      *         opening a connection failed
      */
     private HttpURLConnection openConnection(URL url) throws IOException {
-        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-        httpURLConnection.setDoInput(true);
-        httpURLConnection.setDoOutput(true);
-        httpURLConnection.setRequestMethod("POST");
-        httpURLConnection.setReadTimeout(0); // hold connection
-        return httpURLConnection;
+        this.httpURLConnection = (HttpURLConnection) url.openConnection();
+        this.httpURLConnection.setDoInput(true);
+        this.httpURLConnection.setDoOutput(true);
+        this.httpURLConnection.setRequestMethod("POST");
+        this.httpURLConnection.setReadTimeout(0); // hold connection
+        return this.httpURLConnection;
     }
 
     /**

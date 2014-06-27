@@ -26,9 +26,9 @@ public class RobertaKeyboard
 	int x = 0, y = 5;
 
 	String[] upper = { "0123456789        ",
-	                   "QWERTYUIOP        ",
+	                   "QWERTZUIOP        ",
 	                   "ASDFGHJKL         ",
-	                   "ZXCVBNM           ",
+	                   "YXCVBNM           ",
 			           "x D           " };
 
 	String[] lines = this.upper;
