@@ -67,7 +67,7 @@ abstract public class Phrase {
 
     /**
      * append a newline, then append spaces up to an indentation level, then append an (optional) text<br>
-     * helper for constructing readable {@link #toString()}- and {@link #toStringBuilder(StringBuilder, int)}-methods for statement trees
+     * helper for constructing readable {@link #toString()}- and {@link #generateJava(StringBuilder, int)}-methods for statement trees
      * 
      * @param sb the string builder, to which has to be appended
      * @param indentation number defining the level of indentation
@@ -84,12 +84,12 @@ abstract public class Phrase {
     }
 
     /**
-     * append a nice, dense and human-readable representation of a expression for <b>debugging and testing purposes</b>
+     * append a human-readable Java representation of a phrase to a StringBuilder. <b>This representation MUST be correct Java code.</b>
      * 
-     * @param sb the string builder, to which has to be appended
-     * @param indentation number defining the level of indentation
+     * @param sb the string builder, to which the Java representation has to be appended
+     * @param indentation number defining the level of indentation, if needed for nested statement lists, e.g.
      */
-    abstract public void toStringBuilder(StringBuilder sb, int indentation);
+    abstract public void generateJava(StringBuilder sb, int indentation);
 
     public static enum Kind {
         ColorSensor( Category.SENSOR ),

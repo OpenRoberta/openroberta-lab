@@ -49,7 +49,7 @@ public class ColorSensor extends Sensor {
     }
 
     @Override
-    public void toStringBuilder(StringBuilder sb, int indentation) {
+    public void generateJava(StringBuilder sb, int indentation) {
         sb.append("(" + this.mode + ", " + this.port + ")");
     }
 

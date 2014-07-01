@@ -60,8 +60,36 @@ public class Binary extends Expr {
     }
 
     @Override
+    public int getPrecedence() {
+        return this.op.getPrecedence();
+    }
+
+    @Override
+    public Assoc getAssoc() {
+        return this.op.getAssoc();
+    }
+
+    @Override
     public String toString() {
         return "Binary [" + this.op + ", " + this.left + ", " + this.right + "]";
+    }
+
+    @Override
+    public void generateJava(StringBuilder sb, int indentation) {
+        generateSubExpr(sb, false, this.left);
+        sb.append(this.op.getOpSymbol());
+        generateSubExpr(sb, this.op == Op.MINUS, this.right);
+    }
+
+    private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr expr) {
+        if ( expr.getPrecedence() >= this.getPrecedence() && !minusAdaption ) {
+            // parentheses are omitted
+            expr.generateJava(sb, 0);
+        } else {
+            sb.append("(");
+            expr.generateJava(sb, 0);
+            sb.append(")");
+        }
     }
 
     /**
@@ -70,39 +98,59 @@ public class Binary extends Expr {
      * @author kcvejoski
      */
     public static enum Op {
-        MULTIPLY( "*" ),
-        DIVIDE( "/" ),
-        ADD( "+" ),
-        MINUS( "-" ),
-        EQ( "==" ),
-        AND( "&&" ),
-        OR( "||" ),
-        LT( "<" ),
-        LTE( "<=" ),
-        GT( ">" ),
-        GTE( ">=" ),
-        NEQ( "!=", "<>" ),
-        POWER( "^" ),
-        DIVISIBLE_BY(),
-        MATH_CHANGE(),
-        MOD(),
-        MAX(),
-        MIN(),
-        RANDOM_INTEGER( "RANDOMINTEGER" ),
-        TEXT_APPEND( "TEXTAPPEND" ),
-        FIRST(),
-        LAST(),
-        FROM_START( "FROMSTART" ),
-        FROM_END( "FROMEND" ),
-        RANDOM(),
-        LISTS_REPEAT(),
-        ASSIGNMENT( "=" ),
-        IN( ":" );
+        ADD( 100, Assoc.LEFT, "+" ),
+        MINUS( 100, Assoc.LEFT, "-" ),
+        MULTIPLY( 200, Assoc.LEFT, "*" ),
+        DIVIDE( 200, Assoc.LEFT, "/" ),
+        EQ( 80, Assoc.LEFT, "==" ),
+        NEQ( 80, Assoc.LEFT, "!=", "<>" ),
+        LT( 80, Assoc.LEFT, "<" ),
+        LTE( 80, Assoc.LEFT, "<=" ),
+        GT( 80, Assoc.LEFT, ">" ),
+        GTE( 80, Assoc.LEFT, ">=" ),
+        AND( 60, Assoc.LEFT, "&&" ),
+        OR( 60, Assoc.LEFT, "||" ),
+        POWER( 300, Assoc.LEFT, "^" ),
+        DIVISIBLE_BY( 80, Assoc.NONE ),
+        MATH_CHANGE( 80, Assoc.NONE ),
+        MOD( 80, Assoc.NONE ),
+        MAX( 80, Assoc.NONE ),
+        MIN( 80, Assoc.NONE ),
+        TEXT_APPEND( 1, Assoc.LEFT, "TEXTAPPEND" ),
+        FIRST( 1, Assoc.LEFT ),
+        LAST( 1, Assoc.LEFT ),
+        FROM_START( 1, Assoc.LEFT, "FROMSTART" ),
+        FROM_END( 1, Assoc.LEFT, "FROMEND" ),
+        LISTS_REPEAT( 1, Assoc.LEFT ),
+        ASSIGNMENT( 1, Assoc.LEFT, "=" ),
+        IN( 1, Assoc.LEFT, ":" ),
+        RANDOM_INTEGER( 1, Assoc.LEFT, "RANDOMINTEGER" ),
+        RANDOM( 1, Assoc.LEFT );
 
         private final String[] values;
+        private final int precedence;
+        private final Assoc assoc;
 
-        private Op(String... values) {
+        private Op(int precedence, Assoc assoc, String... values) {
+            this.precedence = precedence;
+            this.assoc = assoc;
             this.values = values;
+        }
+
+        public String getOpSymbol() {
+            if ( this.values.length == 0 ) {
+                return this.toString();
+            } else {
+                return this.values[0];
+            }
+        }
+
+        public int getPrecedence() {
+            return this.precedence;
+        }
+
+        public Assoc getAssoc() {
+            return this.assoc;
         }
 
         /**
@@ -129,15 +177,6 @@ public class Binary extends Expr {
             }
             throw new DbcException("Invalid binary operator symbol: " + s);
         }
-    }
-
-    @Override
-    public void toStringBuilder(StringBuilder sb, int indentation) {
-        sb.append("((");
-        this.left.toStringBuilder(sb, indentation);
-        sb.append(") ").append(this.op).append(" (");
-        this.right.toStringBuilder(sb, indentation);
-        sb.append("))");
     }
 
 }

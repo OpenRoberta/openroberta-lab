@@ -34,7 +34,7 @@ public class TouchSensor extends Sensor {
     }
 
     @Override
-    public void toStringBuilder(StringBuilder sb, int indentation) {
+    public void generateJava(StringBuilder sb, int indentation) {
         sb.append("(" + this.port + ")");
 
     }

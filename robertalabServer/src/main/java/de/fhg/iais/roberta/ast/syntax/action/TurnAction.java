@@ -28,7 +28,7 @@ public class TurnAction extends Action {
     }
 
     @Override
-    public void toStringBuilder(StringBuilder sb, int indentation) {
+    public void generateJava(StringBuilder sb, int indentation) {
         // TODO Auto-generated method stub
 
     }

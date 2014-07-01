@@ -20,14 +20,20 @@ public class ExprTest {
         Binary add = Binary.make(Op.ADD, n1, n2);
         Binary mult1 = Binary.make(Op.MULTIPLY, add, n3);
         Binary mult2 = Binary.make(Op.MULTIPLY, add, add);
+        Binary addMult = Binary.make(Op.ADD, mult1, mult2);
+        Binary minusCplx = Binary.make(Op.MINUS, add, add);
+        Binary addCplx = Binary.make(Op.ADD, add, add);
         generate(add);
         generate(mult1);
         generate(mult2);
+        generate(addMult);
+        generate(addCplx);
+        generate(minusCplx);
     }
 
     private void generate(Phrase p) {
         StringBuilder sb = new StringBuilder();
-        p.toStringBuilder(sb, 0);
+        p.generateJava(sb, 0);
         System.out.println(sb.toString());
     }
 

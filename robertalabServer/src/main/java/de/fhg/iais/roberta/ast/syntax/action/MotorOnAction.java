@@ -33,7 +33,7 @@ public class MotorOnAction extends Action {
     }
 
     @Override
-    public void toStringBuilder(StringBuilder sb, int indentation) {
+    public void generateJava(StringBuilder sb, int indentation) {
         sb.append("(" + this.param + ", " + this.port + ")");
     }
 

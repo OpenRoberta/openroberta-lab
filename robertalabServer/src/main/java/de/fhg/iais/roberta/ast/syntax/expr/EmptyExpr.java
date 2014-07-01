@@ -38,12 +38,22 @@ public class EmptyExpr extends Expr {
     }
 
     @Override
+    public int getPrecedence() {
+        return 999;
+    }
+
+    @Override
+    public Assoc getAssoc() {
+        return Assoc.NONE;
+    }
+
+    @Override
     public String toString() {
         return "EmptyExpr [defVal=" + this.defVal + "]";
     }
 
     @Override
-    public void toStringBuilder(StringBuilder sb, int indentation) {
+    public void generateJava(StringBuilder sb, int indentation) {
         sb.append("[[EmptyExpr [defVal=" + this.defVal + "]]]");
     }
 

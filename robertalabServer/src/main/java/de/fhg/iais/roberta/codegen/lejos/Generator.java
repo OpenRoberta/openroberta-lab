@@ -6,6 +6,6 @@ public class Generator {
     StringBuilder sb = new StringBuilder();
 
     public void generate(Phrase phrase) {
-        phrase.toStringBuilder(this.sb, 0);
+        phrase.generateJava(this.sb, 0);
     }
 }

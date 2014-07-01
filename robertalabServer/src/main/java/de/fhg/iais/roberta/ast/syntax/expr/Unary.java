@@ -50,8 +50,27 @@ public class Unary extends Expr {
     }
 
     @Override
+    public int getPrecedence() {
+        return this.op.getPrecedence();
+    }
+
+    @Override
+    public Assoc getAssoc() {
+        return this.op.getAssoc();
+    }
+
+    @Override
     public String toString() {
         return "Unary [" + this.op + ", " + this.expr + "]";
+    }
+
+    @Override
+    public void generateJava(StringBuilder sb, int indentation) {
+        sb.append("(");
+        sb.append(this.op.getOpSymbol()).append(" (");
+        this.expr.generateJava(sb, indentation);
+        sb.append("))");
+
     }
 
     /**
@@ -60,55 +79,75 @@ public class Unary extends Expr {
      * @author kcvejoski
      */
     public static enum Op {
-        PLUS( "+" ),
-        NEG( "-" ),
-        NOT( "!" ),
-        ROOT( "SQRT" ),
-        ABS(),
-        LN(),
-        LOG10(),
-        EXP(),
-        POW10(),
-        SIN(),
-        COS(),
-        TAN(),
-        ASIN(),
-        ACOS(),
-        ATAN(),
-        EVEN(),
-        ODD(),
-        PRIME(),
-        WHOLE(),
-        POSITIVE(),
-        NEGATIVE(),
-        ROUND(),
-        ROUNDUP( "CEIL" ),
-        ROUNDDOWN( "FLOOR" ),
-        SUM(),
-        MIN(),
-        MAX(),
-        AVERAGE(),
-        MEDIAN(),
-        MODE(),
-        STD_DEV(),
-        RANDOM(),
-        TEXT_JOIN(),
-        TEXT_LENGTH(),
-        IS_EMPTY(),
-        UPPERCASE(),
-        LOWERCASE(),
-        TITLECASE(),
-        LEFT(),
-        RIGHT(),
-        BOTH(),
-        TEXT(),
-        NUMBER(),
-        LISTS_LENGTH();
+        PLUS( 10, Assoc.LEFT, "+" ),
+        NEG( 10, Assoc.LEFT, "-" ),
+        NOT( 10, Assoc.LEFT, "!" ),
+        ROOT( 10, Assoc.LEFT, "SQRT" ),
+        ABS( 10, Assoc.LEFT ),
+        LN( 10, Assoc.LEFT ),
+        LOG10( 10, Assoc.LEFT ),
+        EXP( 10, Assoc.LEFT ),
+        POW10( 10, Assoc.LEFT ),
+        SIN( 10, Assoc.LEFT ),
+        COS( 10, Assoc.LEFT ),
+        TAN( 10, Assoc.LEFT ),
+        ASIN( 10, Assoc.LEFT ),
+        ACOS( 10, Assoc.LEFT ),
+        ATAN( 10, Assoc.LEFT ),
+        EVEN( 10, Assoc.LEFT ),
+        ODD( 10, Assoc.LEFT ),
+        PRIME( 10, Assoc.LEFT ),
+        WHOLE( 10, Assoc.LEFT ),
+        POSITIVE( 10, Assoc.LEFT ),
+        NEGATIVE( 10, Assoc.LEFT ),
+        ROUND( 10, Assoc.LEFT ),
+        ROUNDUP( 10, Assoc.LEFT, "CEIL" ),
+        ROUNDDOWN( 10, Assoc.LEFT, "FLOOR" ),
+        SUM( 10, Assoc.LEFT ),
+        MIN( 10, Assoc.LEFT ),
+        MAX( 10, Assoc.LEFT ),
+        AVERAGE( 10, Assoc.LEFT ),
+        MEDIAN( 10, Assoc.LEFT ),
+        MODE( 10, Assoc.LEFT ),
+        STD_DEV( 10, Assoc.LEFT ),
+        RANDOM( 10, Assoc.LEFT ),
+        TEXT_JOIN( 10, Assoc.LEFT ),
+        TEXT_LENGTH( 10, Assoc.LEFT ),
+        IS_EMPTY( 10, Assoc.LEFT ),
+        UPPERCASE( 10, Assoc.LEFT ),
+        LOWERCASE( 10, Assoc.LEFT ),
+        TITLECASE( 10, Assoc.LEFT ),
+        LEFT( 10, Assoc.LEFT ),
+        RIGHT( 10, Assoc.LEFT ),
+        BOTH( 10, Assoc.LEFT ),
+        TEXT( 10, Assoc.LEFT ),
+        NUMBER( 10, Assoc.LEFT ),
+        LISTS_LENGTH( 10, Assoc.LEFT );
 
         private final String[] values;
+        private final int precedence;
+        private final Assoc assoc;
 
-        private Op(String... values) {
+        private Op(int precedence, Assoc assoc, String... values) {
+            this.precedence = precedence;
+            this.assoc = assoc;
             this.values = values;
+        }
+
+        public String getOpSymbol() {
+            if ( this.values.length == 0 ) {
+                return this.toString();
+            } else {
+                return this.values[0];
+            }
+        }
+
+        public int getPrecedence() {
+            return this.precedence;
+        }
+
+        public Assoc getAssoc() {
+            return this.assoc;
         }
 
         /**
@@ -116,7 +155,7 @@ public class Unary extends Expr {
          * Throws exception if the operator does not exists.
          * 
          * @param name of the operator
-         * @return operator from the enum {@link Op}
+         * @return operator from the enum {@link Op}, never null
          */
         public static Op get(String s) {
             if ( s == null || s.isEmpty() ) {
@@ -135,15 +174,6 @@ public class Unary extends Expr {
             }
             throw new DbcException("Invalid unary operator symbol: " + s);
         }
-    }
-
-    @Override
-    public void toStringBuilder(StringBuilder sb, int indentation) {
-        sb.append("(");
-        sb.append(this.op).append(" (");
-        this.expr.toStringBuilder(sb, indentation);
-        sb.append("))");
-
     }
 
 }

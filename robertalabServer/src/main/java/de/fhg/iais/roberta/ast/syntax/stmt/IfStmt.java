@@ -87,20 +87,20 @@ public class IfStmt extends Stmt {
     }
 
     @Override
-    public void toStringBuilder(StringBuilder sb, int indentation) {
+    public void generateJava(StringBuilder sb, int indentation) {
         int next = indentation + 3;
         appendNewLine(sb, indentation, null);
         for ( int i = 0; i < this.expr.size(); i++ ) {
             sb.append("if ").append(this.expr.get(i));
             appendNewLine(sb, indentation, ",then");
-            this.thenList.get(i).toStringBuilder(sb, next);
+            this.thenList.get(i).generateJava(sb, next);
             if ( i + 1 < this.expr.size() ) {
                 appendNewLine(sb, indentation, ",else ");
             }
         }
         if ( this.elseList.get().size() != 0 ) {
             appendNewLine(sb, indentation, ",else");
-            this.elseList.toStringBuilder(sb, next);
+            this.elseList.generateJava(sb, next);
         }
         appendNewLine(sb, indentation, "");
     }
@@ -108,7 +108,7 @@ public class IfStmt extends Stmt {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        toStringBuilder(sb, 0);
+        generateJava(sb, 0);
         return sb.toString();
     }
 }

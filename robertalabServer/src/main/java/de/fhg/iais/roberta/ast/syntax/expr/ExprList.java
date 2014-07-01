@@ -6,6 +6,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
+import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
  * this class allows to create list of {@link Expr} elements.
@@ -46,14 +47,24 @@ public class ExprList extends Expr {
     }
 
     @Override
+    public int getPrecedence() {
+        throw new DbcException("not supported");
+    }
+
+    @Override
+    public Assoc getAssoc() {
+        throw new DbcException("not supported");
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        toStringBuilder(sb, 0);
+        generateJava(sb, 0);
         return sb.toString();
     }
 
     @Override
-    public void toStringBuilder(StringBuilder sb, int indentation) {
+    public void generateJava(StringBuilder sb, int indentation) {
         boolean first = true;
         for ( Expr expr : this.el ) {
             if ( first ) {
@@ -61,7 +72,7 @@ public class ExprList extends Expr {
             } else {
                 sb.append(", ");
             }
-            expr.toStringBuilder(sb, indentation);
+            expr.generateJava(sb, indentation);
         }
     }
 }

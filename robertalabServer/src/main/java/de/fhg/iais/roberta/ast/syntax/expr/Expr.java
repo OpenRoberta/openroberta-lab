@@ -9,8 +9,27 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
  */
 public abstract class Expr extends Phrase {
 
+    /**
+     * create a mutable expression of the given {@link Kind}
+     * 
+     * @param kind the kind of the expression
+     */
     public Expr(Kind kind) {
         super(kind);
     }
+
+    /**
+     * get the precedence of the expression
+     * 
+     * @return the precedence
+     */
+    abstract public int getPrecedence();
+
+    /**
+     * get the association of the expression
+     * 
+     * @return the association
+     */
+    abstract public Assoc getAssoc();
 
 }

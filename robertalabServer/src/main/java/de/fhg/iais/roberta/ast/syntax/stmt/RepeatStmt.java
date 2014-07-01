@@ -60,18 +60,18 @@ public class RepeatStmt extends Stmt {
     }
 
     @Override
-    public void toStringBuilder(StringBuilder sb, int indentation) {
+    public void generateJava(StringBuilder sb, int indentation) {
         int next = indentation + 3;
         appendNewLine(sb, indentation, null);
         sb.append("(repeat [" + this.mode + ", ").append(this.expr).append("]");
-        this.list.toStringBuilder(sb, next);
+        this.list.generateJava(sb, next);
         appendNewLine(sb, indentation, ")");
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        toStringBuilder(sb, 0);
+        generateJava(sb, 0);
         return sb.toString();
     }
 
