@@ -6,7 +6,6 @@ import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
-import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.slf4j.Logger;
@@ -64,9 +63,7 @@ public class ServerStarter {
         servletHolder.setInitParameter(
             "com.sun.jersey.config.property.packages",
             "de.fhg.iais.roberta.javaServer.resources,de.fhg.iais.roberta.javaServer.provider");
-        servletHolder.setInitParameter("com.sun.jersey.api.json.POJOMappingFeature", "true");
         context.addServlet(servletHolder, "/*");
-        context.addServlet(DefaultServlet.class, "/");
 
         ResourceHandler resourceHandler = new ResourceHandler();
         resourceHandler.setDirectoriesListed(true);

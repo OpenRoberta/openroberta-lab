@@ -1,5 +1,8 @@
 package de.fhg.iais.roberta.guice;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
@@ -16,8 +19,10 @@ public class RobertaGuiceServletConfig extends GuiceServletContextListener {
             protected void configureServlets() {
                 // configure at least one JAX-RS resource or the server won't start.
                 install(new RobertaGuiceModule());
-                serve("/*").with(GuiceContainer.class);
-
+                Map<String, String> initParams = new HashMap<String, String>();
+                // initParams.put("com.sun.jersey.config.feature.Trace", "true");
+                initParams.put("com.sun.jersey.api.json.POJOMappingFeature", "true");
+                serve("/*").with(GuiceContainer.class, initParams);
             }
         };
         this.injector = Guice.createInjector(jerseyServletModule);

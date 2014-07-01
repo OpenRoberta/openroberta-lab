@@ -114,14 +114,14 @@ var wrapOn = function(id, callback) {
 };
 
 var init = function() {
-    wrapOn('#t1', test1);
-    wrapOn('#t2', test2);
-    wrapOn('#t3', test3);
-    wrapOn('#t4', test4);
-    wrapOn('#t5', test5);
-    wrapOn('#t6', test6);
-    wrapOn('#t7', test7);
-    wrapOn('#t8', test8);
+    wrapOn('#B1', test1);
+    wrapOn('#B2', test2);
+    wrapOn('#B3', test3);
+    wrapOn('#B4', test4);
+    wrapOn('#B5', test5);
+    wrapOn('#B6', test6);
+    wrapOn('#B7', test7);
+    wrapOn('#B8', test8);
 };
 
 $(document).ready(init);
