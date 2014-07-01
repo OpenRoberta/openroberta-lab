@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 
-import de.fhg.iais.roberta.ast.transformer.BlockAST;
+import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.blockly.generated.Project;
 
 public class ActionTest {
@@ -20,7 +20,7 @@ public class ActionTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_motorOn.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[MotorOnAction [B, MotionParam [speed=NumConst [30], duration=null]]]]]";

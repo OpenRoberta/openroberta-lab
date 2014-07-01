@@ -4,6 +4,11 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.Action;
 import de.fhg.iais.roberta.dbc.Assert;
 
+/**
+ * Wraps subclasses of the class {@link Action} so they can be used as {@link Stmt} in statements.
+ * 
+ * @author kcvejoski
+ */
 public class ActionStmt extends Stmt {
     private final Action akt;
 
@@ -14,10 +19,19 @@ public class ActionStmt extends Stmt {
         setReadOnly();
     }
 
+    /**
+     * Create object of the class {@link AssignStmt}.
+     * 
+     * @param action that we want to wrap
+     * @return statement with wrapped action inside
+     */
     public static ActionStmt make(Action akt) {
         return new ActionStmt(akt);
     }
 
+    /**
+     * @return action that is wrapped in the statement
+     */
     public Action getAkt() {
         return this.akt;
     }

@@ -4,6 +4,11 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.sensoren.Sensor;
 import de.fhg.iais.roberta.dbc.Assert;
 
+/**
+ * Wraps subclasses of the class {@link Sensor} so they can be used as {@link Stmt} in statements.
+ * 
+ * @author kcvejoski
+ */
 public class SensorStmt extends Stmt {
     private final Sensor sensor;
 
@@ -14,10 +19,19 @@ public class SensorStmt extends Stmt {
         setReadOnly();
     }
 
+    /**
+     * Create object of the class {@link SensorStmt}.
+     * 
+     * @param sensor that we want to wrap
+     * @return statement with wrapped sensor inside
+     */
     public static SensorStmt make(Sensor sensor) {
         return new SensorStmt(sensor);
     }
 
+    /**
+     * @return sensor that is wrapped in the statement
+     */
     public Sensor getSensor() {
         return this.sensor;
     }

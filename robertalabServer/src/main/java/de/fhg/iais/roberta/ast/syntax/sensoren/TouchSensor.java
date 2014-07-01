@@ -2,6 +2,11 @@ package de.fhg.iais.roberta.ast.syntax.sensoren;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 
+/**
+ * Touch sensor, client has to provide the correct port of the sensor.
+ * 
+ * @author kcvejoski
+ */
 public class TouchSensor extends Sensor {
     private final SensorPort port;
 
@@ -11,10 +16,19 @@ public class TouchSensor extends Sensor {
         setReadOnly();
     }
 
+    /**
+     * Create object of the class {@link TouchSensor}.
+     * 
+     * @param port on which the sensor is connected. See enum {@link SensorPort} for all possible ports that the sensor can be connected.
+     * @return
+     */
     public static TouchSensor make(SensorPort port) {
         return new TouchSensor(port);
     }
 
+    /**
+     * @return port on which
+     */
     public SensorPort getPort() {
         return this.port;
     }

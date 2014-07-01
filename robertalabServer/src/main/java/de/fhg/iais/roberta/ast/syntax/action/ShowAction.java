@@ -3,6 +3,9 @@ package de.fhg.iais.roberta.ast.syntax.action;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 
+/**
+ * @author kcvejoski
+ */
 public class ShowAction extends Action {
     private final String msg;
     private final int column;

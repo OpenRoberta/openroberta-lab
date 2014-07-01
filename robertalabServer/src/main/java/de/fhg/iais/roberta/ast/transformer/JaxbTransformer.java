@@ -21,6 +21,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.sensoren.BrickKey;
 import de.fhg.iais.roberta.ast.syntax.sensoren.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensoren.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensoren.DrehSensor;
@@ -51,9 +52,19 @@ import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.dbc.Assert;
 
-public class BlockAST {
+/**
+ * JAXB to AST transformer. Client should provide tree of jaxb objects.
+ * 
+ * @author kcvejoski
+ */
+public class JaxbTransformer {
     private final ArrayList<ArrayList<Phrase>> project = new ArrayList<ArrayList<Phrase>>();
 
+    /**
+     * Converts object of type {@link Project} to AST tree.
+     * 
+     * @param pr
+     */
     public void projectToAST(Project pr) {
         List<Instance> instances = pr.getInstance();
         for ( Instance instance : instances ) {
@@ -184,17 +195,17 @@ public class BlockAST {
             case "robSensors_key_isPressed":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "KEY", (short) 0);
-                return BrickSensor.make(BrickSensor.Mode.IS_PRESSED, port);
+                return BrickSensor.make(BrickSensor.Mode.IS_PRESSED, BrickKey.get(port));
 
             case "robSensors_key_waitForPress":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "KEY", (short) 0);
-                return BrickSensor.make(BrickSensor.Mode.WAIT_FOR_PRESS, port);
+                return BrickSensor.make(BrickSensor.Mode.WAIT_FOR_PRESS, BrickKey.get(port));
 
             case "robSensors_key_isPressedAndReleased":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "KEY", (short) 0);
-                return BrickSensor.make(BrickSensor.Mode.WAIT_FOR_PRESS_AND_RELEASE, port);
+                return BrickSensor.make(BrickSensor.Mode.WAIT_FOR_PRESS_AND_RELEASE, BrickKey.get(port));
 
             case "robSensors_gyro_setMode":
                 fields = extractFields(block, (short) 2);

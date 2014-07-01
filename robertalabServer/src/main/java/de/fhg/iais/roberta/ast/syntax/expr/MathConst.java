@@ -5,6 +5,13 @@ import java.util.Locale;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.DbcException;
 
+/**
+ * math constants which can be used in expressions. This class extends {@link Expr}.<br>
+ * There are predefined constants in this class that can be used.
+ * See enum {@link Const} for all defined constants.
+ * 
+ * @author kcvejoski
+ */
 public class MathConst extends Expr {
     private final Const mathConst;
 
@@ -14,10 +21,19 @@ public class MathConst extends Expr {
         setReadOnly();
     }
 
+    /**
+     * creates instance of {@link BoolConst}. This instance is read only and can not be modified.
+     * 
+     * @param mathConst, see enum {@link Const} for all defined constants
+     * @return wanted math constant.
+     */
     public static MathConst make(Const mathConst) {
         return new MathConst(mathConst);
     }
 
+    /**
+     * @return math constant.
+     */
     public Const getMathConst() {
         return this.mathConst;
     }
@@ -32,6 +48,11 @@ public class MathConst extends Expr {
         sb.append(this.mathConst);
     }
 
+    /**
+     * This enum defines all possible math constant.
+     * 
+     * @author kcvejoski
+     */
     public static enum Const {
         GOLDEN_RATIO(), PI(), E(), SQRT2(), SQRT1_2(), INFINITY();
 
@@ -41,6 +62,13 @@ public class MathConst extends Expr {
             this.values = values;
         }
 
+        /**
+         * get constant from {@link Const} from string parameter. It is possible for one constant to have multiple string mappings.
+         * Throws exception if the constant does not exists.
+         * 
+         * @param name of the contant
+         * @return constant from the enum {@link Const}
+         */
         public static Const get(String s) {
             if ( s == null || s.isEmpty() ) {
                 throw new DbcException("Invalid binary operator symbol: " + s);
@@ -56,7 +84,7 @@ public class MathConst extends Expr {
                     }
                 }
             }
-            throw new DbcException("Invalid binary operator symbol: " + s);
+            throw new DbcException("Invalid binary constant symbol: " + s);
         }
     }
 }

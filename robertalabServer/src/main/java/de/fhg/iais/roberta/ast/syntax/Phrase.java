@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.syntax;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
- * the top class of all class used to represent the AST (abstract syntax tree) of a program. After construction an AST should be immmutable. The logic to acieve
+ * the top class of all class used to represent the AST (abstract syntax tree) of a program. After construction an AST should be immutable. The logic to achieve
  * that is in this class. An object of a subclass of {@link Phrase} is initially writable, after the construction of the object has finished,
  * {@link #setReadOnly()} is called.
  * This cannot be undone later. It is expected that all subclasses of {@link #Phrase} do the following:<br>

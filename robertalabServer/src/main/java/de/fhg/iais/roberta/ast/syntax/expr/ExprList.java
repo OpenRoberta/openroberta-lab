@@ -7,6 +7,12 @@ import java.util.List;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 
+/**
+ * this class allows to create list of {@link Expr} elements.
+ * Initially object from this class is writable. After adding all the elements to the list call {@link #setReadOnly()}.
+ * 
+ * @author kcvejoski
+ */
 public class ExprList extends Expr {
     private final List<Expr> el = new ArrayList<Expr>();
 
@@ -14,15 +20,26 @@ public class ExprList extends Expr {
         super(Phrase.Kind.ExprList);
     }
 
+    /**
+     * @return writable object of type {@link ExprList}.
+     */
     public static ExprList make() {
         return new ExprList();
     }
 
+    /**
+     * Add new element to the list.
+     * 
+     * @param expr
+     */
     public final void addExpr(Expr expr) {
         Assert.isTrue(mayChange() && expr != null && expr.isReadOnly());
         this.el.add(expr);
     }
 
+    /**
+     * @return list with elements of type {@link Expr}.
+     */
     public final List<Expr> get() {
         Assert.isTrue(isReadOnly());
         return Collections.unmodifiableList(this.el);

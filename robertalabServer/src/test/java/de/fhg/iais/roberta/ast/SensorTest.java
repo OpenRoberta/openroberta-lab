@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 
-import de.fhg.iais.roberta.ast.transformer.BlockAST;
+import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.blockly.generated.Project;
 
 public class SensorTest {
@@ -20,7 +20,7 @@ public class SensorTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/sensors/sensor_set.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a =
@@ -45,7 +45,7 @@ public class SensorTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/sensors/sensor_reset.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a =
@@ -68,7 +68,7 @@ public class SensorTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/sensors/sensor_getMode.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a =
@@ -93,7 +93,7 @@ public class SensorTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/sensors/sensor_getSample.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a =
@@ -119,7 +119,7 @@ public class SensorTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/sensors/sensor_brick.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a =

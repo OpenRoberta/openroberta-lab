@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 
-import de.fhg.iais.roberta.ast.transformer.BlockAST;
+import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.blockly.generated.Project;
 
 public class TextTest {
@@ -20,7 +20,7 @@ public class TextTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/text/text1.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Unary [TEXT_JOIN, \"text1\", [[EmptyExpr [defVal=class java.lang.String]]], \"text2\"]]]]";
@@ -36,7 +36,7 @@ public class TextTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/text/text2.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Binary [FIRST, Var [text], StringConst [test]]]]]";
@@ -52,7 +52,7 @@ public class TextTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/text/text_append.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Binary [TEXT_APPEND, Var [item], StringConst [text]]]]]";
@@ -68,7 +68,7 @@ public class TextTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/text/text_length.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Unary [TEXT_LENGTH, StringConst [Test]]]]]";
@@ -84,7 +84,7 @@ public class TextTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/text/text_isEmpty.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Unary [IS_EMPTY, StringConst [Test]]]]]";
@@ -100,7 +100,7 @@ public class TextTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/text/text_indexOf.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Binary [FIRST, Var [text], StringConst [Test]]]]]";
@@ -116,7 +116,7 @@ public class TextTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/text/text_charAt.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Binary [FROM_START, Var [text], NumConst [0]]]]]";
@@ -132,7 +132,7 @@ public class TextTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/text/text_charAt1.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Unary [RANDOM, Var [text]]]]]";
@@ -148,7 +148,7 @@ public class TextTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/text/text_changeCase.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Unary [UPPERCASE, Var [text]]]]]";
@@ -164,7 +164,7 @@ public class TextTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/text/text_trim.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Unary [LEFT, Var [text]]]]]";
@@ -180,7 +180,7 @@ public class TextTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/text/text_prompt.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Unary [TEXT, StringConst [TEST]]]]]";

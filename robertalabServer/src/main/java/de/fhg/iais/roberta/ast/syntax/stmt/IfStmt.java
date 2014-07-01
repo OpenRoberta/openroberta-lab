@@ -7,6 +7,9 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.dbc.Assert;
 
+/**
+ * @author kcvejoski
+ */
 public class IfStmt extends Stmt {
     private final List<Expr> expr;
     private final List<StmtList> thenList;
@@ -21,10 +24,26 @@ public class IfStmt extends Stmt {
         setReadOnly();
     }
 
+    /**
+     * create <b>if-then-else</b> statement where we have one or more the one <b>if</b> and <b>then</b>.
+     * 
+     * @param expr list of all expressions that should be evaluated in the <b>if</b> parts
+     * @param thenList all statements that are in the <b>then</b> parts
+     * @param elseList all statements that are in the <b>else</b> parts
+     * @return read only object of class {@link IfStmt}
+     */
     public static IfStmt make(List<Expr> expr, List<StmtList> thenList, StmtList elseList) {
         return new IfStmt(expr, thenList, elseList);
     }
 
+    /**
+     * create ternary operator
+     * 
+     * @param expr expression that should be evaluated in the <b>if</b> part
+     * @param thenList statement that is in the <b>then</b> part
+     * @param elseList all statement that is in the <b>else</b> part
+     * @return read only object of class {@link IfStmt}
+     */
     public static IfStmt make(Expr expr, StmtList thenList, StmtList elseList) {
         List<Expr> exprsList = new ArrayList<Expr>();
         List<StmtList> thensList = new ArrayList<StmtList>();
@@ -33,20 +52,36 @@ public class IfStmt extends Stmt {
         return new IfStmt(exprsList, thensList, elseList);
     }
 
+    /**
+     * create <b>if-then</b> statement where we have one or more the one <b>if</b> and <b>then</b>.
+     * 
+     * @param expr list of all expressions that should be evaluated in the <b>if</b> parts
+     * @param thenList all statements that are in the <b>then</b> parts
+     * @return read only object of class {@link IfStmt}
+     */
     public static IfStmt make(List<Expr> expr, List<StmtList> thenList) {
         StmtList elseList = StmtList.make();
         elseList.setReadOnly();
         return new IfStmt(expr, thenList, elseList);
     }
 
+    /**
+     * @return list with all expressions that should be evaluated in the <b>if</b> part.
+     */
     public final List<Expr> getExpr() {
         return this.expr;
     }
 
+    /**
+     * @return list with all statements that are in <b>then</b> part.
+     */
     public final List<StmtList> getThenList() {
         return this.thenList;
     }
 
+    /**
+     * @return list with all statements that are in <b>else</b> part.
+     */
     public final StmtList getElseList() {
         return this.elseList;
     }

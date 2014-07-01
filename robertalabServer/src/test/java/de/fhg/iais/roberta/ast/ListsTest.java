@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 
-import de.fhg.iais.roberta.ast.transformer.BlockAST;
+import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.blockly.generated.Project;
 
 public class ListsTest {
@@ -20,7 +20,7 @@ public class ListsTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/lists/list_empty.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[EmptyExpr [defVal=class java.util.ArrayList]]]]";
@@ -36,7 +36,7 @@ public class ListsTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/lists/list_repeat.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Binary [LISTS_REPEAT, NumConst [4], NumConst [5]]]]]";
@@ -52,7 +52,7 @@ public class ListsTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/lists/list_length.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Unary [LISTS_LENGTH, Var [item]]]]]";
@@ -68,7 +68,7 @@ public class ListsTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/lists/list_isEmpty.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Unary [IS_EMPTY, Var [item]]]]]";
@@ -84,7 +84,7 @@ public class ListsTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/lists/list_indexOf.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Binary [FIRST, Var [liste], StringConst [T1]]]]]";

@@ -4,6 +4,11 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.dbc.Assert;
 
+/**
+ * Wraps subclasses of the class {@link Expr} so they can be used as {@link Stmt}.
+ * 
+ * @author kcvejoski
+ */
 public class ExprStmt extends Stmt {
     private final Expr expr;
 
@@ -14,10 +19,19 @@ public class ExprStmt extends Stmt {
         setReadOnly();
     }
 
+    /**
+     * Create object of the class {@link ExprStmt}.
+     * 
+     * @param expr that we want to wrap
+     * @return statement with wrapped expression inside
+     */
     public static ExprStmt make(Expr expr) {
         return new ExprStmt(expr);
     }
 
+    /**
+     * @return expression that is wrapped in the statement
+     */
     public final Expr getExpr() {
         return this.expr;
     }

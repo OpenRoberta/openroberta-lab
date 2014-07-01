@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 
-import de.fhg.iais.roberta.ast.transformer.BlockAST;
+import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.blockly.generated.Project;
 
 public class MathTest {
@@ -20,7 +20,7 @@ public class MathTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_arithmetic.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Binary [ADD, NumConst [1], Binary [POWER, NumConst [5], NumConst [8]]]]]]";
@@ -36,7 +36,7 @@ public class MathTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_single.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Unary [LN, Binary [POWER, NumConst [5], NumConst [8]]]]]]";
@@ -52,7 +52,7 @@ public class MathTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_trig.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Unary [ATAN, Unary [LN, Binary [POWER, NumConst [5], NumConst [8]]]]]]]";
@@ -68,7 +68,7 @@ public class MathTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_constant.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Unary [COS, MathConst [E]]]]]";
@@ -84,7 +84,7 @@ public class MathTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_number_property.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Unary [PRIME, NumConst [0]]]]]";
@@ -100,7 +100,7 @@ public class MathTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_number_property1.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Binary [DIVISIBLE_BY, NumConst [8], NumConst [5]]]]]";
@@ -116,7 +116,7 @@ public class MathTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_change.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Binary [MATH_CHANGE, Var [item], NumConst [1]]]]]";
@@ -132,7 +132,7 @@ public class MathTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_round.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Unary [ROUNDUP, NumConst [0]]]]]";
@@ -148,7 +148,7 @@ public class MathTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_on_list.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Unary [AVERAGE, EmptyExpr [defVal=class java.util.ArrayList]]]]]";
@@ -164,7 +164,7 @@ public class MathTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_constrain.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[Binary [MIN, Binary [MAX, NumConst [1], NumConst [8]], NumConst [100]]]]]";

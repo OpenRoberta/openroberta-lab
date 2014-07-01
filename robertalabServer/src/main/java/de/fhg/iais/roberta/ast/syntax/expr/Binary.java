@@ -6,6 +6,12 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
+/**
+ * class for implementing all binary operations. To create an instance from this class use the method {@link #make(Op, Expr, Expr)}.<br>
+ * The enumeration {@link Op} contains all allowed binary operations.
+ * 
+ * @author kcvejoski
+ */
 public class Binary extends Expr {
     private final Op op;
     private final Expr left;
@@ -20,18 +26,35 @@ public class Binary extends Expr {
         this.setReadOnly();
     }
 
+    /**
+     * creates instance of {@link Binary}. This instance is read only and can not be modified.
+     * 
+     * @param op operator
+     * @param left expression on the left hand side,
+     * @param right expression on the right hand side
+     * @return Binary expression
+     */
     public static Binary make(Op op, Expr left, Expr right) {
         return new Binary(op, left, right);
     }
 
+    /**
+     * @return the operation in the binary expression. See enum {@link Op} for all possible operations.
+     */
     public Op getOp() {
         return this.op;
     }
 
+    /**
+     * @return the expression on the left hand side. Returns subclass of {@link Expr}.
+     */
     public Expr getLeft() {
         return this.left;
     }
 
+    /**
+     * @return the expression on the right hand side. Returns subclass of {@link Expr}.
+     */
     public Expr getRight() {
         return this.right;
     }
@@ -41,6 +64,11 @@ public class Binary extends Expr {
         return "Binary [" + this.op + ", " + this.left + ", " + this.right + "]";
     }
 
+    /**
+     * Operators for the binary expression.
+     * 
+     * @author kcvejoski
+     */
     public static enum Op {
         MULTIPLY( "*" ),
         DIVIDE( "/" ),
@@ -77,6 +105,13 @@ public class Binary extends Expr {
             this.values = values;
         }
 
+        /**
+         * get operator from {@link Op} from string parameter. It is possible for one operator to have multiple string mappings.
+         * Throws exception if the operator does not exists.
+         * 
+         * @param name of the operator
+         * @return operator from the enum {@link Op}
+         */
         public static Op get(String s) {
             if ( s == null || s.isEmpty() ) {
                 throw new DbcException("Invalid binary operator symbol: " + s);

@@ -5,6 +5,11 @@ import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.dbc.Assert;
 
+/**
+ * Create class that represents assignment statement.
+ * 
+ * @author kcvejoski
+ */
 public class AssignStmt extends Stmt {
     private final Var name;
     private final Expr expr;
@@ -17,14 +22,27 @@ public class AssignStmt extends Stmt {
         setReadOnly();
     }
 
+    /**
+     * Create object of the class {@link AssignStmt}.
+     * 
+     * @param name of the variable
+     * @param expr that we want to assign to the {@link #name}
+     * @return
+     */
     public static AssignStmt make(Var name, Expr expr) {
         return new AssignStmt(name, expr);
     }
 
+    /**
+     * @return name of the variable.
+     */
     public final Var getName() {
         return this.name;
     }
 
+    /**
+     * @return expression that will be assigned to the variable.
+     */
     public final Expr getExpr() {
         return this.expr;
     }

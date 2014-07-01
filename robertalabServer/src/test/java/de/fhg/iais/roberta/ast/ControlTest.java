@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 
-import de.fhg.iais.roberta.ast.transformer.BlockAST;
+import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.blockly.generated.Project;
 
 public class ControlTest {
@@ -19,7 +19,7 @@ public class ControlTest {
         InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/if_stmt.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
         String a =
             "BlockAST [project=[[\n"
@@ -38,7 +38,7 @@ public class ControlTest {
         InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/if_stmt1.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
         String a =
             "BlockAST [project=[[\n"
@@ -59,7 +59,7 @@ public class ControlTest {
         InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/if_stmt2.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
         String a =
             "BlockAST [project=[[\n"
@@ -81,7 +81,7 @@ public class ControlTest {
         InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/if_stmt3.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
         String a =
             "BlockAST [project=[[\n"
@@ -105,7 +105,7 @@ public class ControlTest {
         InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/repeat_stmt.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a =
@@ -127,7 +127,7 @@ public class ControlTest {
         InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/repeat_stmt_whileUntil.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a =
@@ -147,7 +147,7 @@ public class ControlTest {
         InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/repeat_stmt_whileUntil1.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a =
@@ -168,7 +168,7 @@ public class ControlTest {
         InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/repeat_stmt_for.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a =
@@ -187,7 +187,7 @@ public class ControlTest {
         InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/repeat_stmt_for_each.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        BlockAST transformer = new BlockAST();
+        JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
         String a =
