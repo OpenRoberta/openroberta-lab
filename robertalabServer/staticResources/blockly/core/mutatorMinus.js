@@ -1,19 +1,19 @@
 'use strict';
 
-goog.provide('Blockly.MutatorPlus');
+goog.provide('Blockly.MutatorMinus');
 
 goog.require('Blockly.Mutator');
 goog.require('Blockly.Bubble');
 goog.require('Blockly.Icon');
 
-Blockly.MutatorPlus = function(quarkNames) {
+Blockly.MutatorMinus = function(quarkNames) {
 	Blockly.MutatorPlus.superClass_.constructor.call(this, this, null);
 };
-goog.inherits(Blockly.MutatorPlus, Blockly.Mutator);
+goog.inherits(Blockly.MutatorMinus, Blockly.Mutator);
 
-Blockly.MutatorPlus.prototype.clicked_ = false;
+Blockly.MutatorMinus.prototype.clicked_ = false;
 
-Blockly.MutatorPlus.prototype.createIcon = function() {
+Blockly.MutatorMinus.prototype.createIcon = function() {
 	Blockly.Icon.prototype.createIcon_.call(this);
 	/* Here's the markup that will be generated:
 	<rect class="blocklyIconShield" width="16" height="16" rx="4" ry="4"/>
@@ -32,11 +32,12 @@ Blockly.MutatorPlus.prototype.createIcon = function() {
 		'x' : Blockly.Icon.RADIUS,
 		'y' : 2 * Blockly.Icon.RADIUS - 4
 	}, this.iconGroup_);
-	this.iconMark_.appendChild(document.createTextNode('\u002B'));
+	this.iconMark_.appendChild(document.createTextNode('\u2212'));
+	
 };
 
-Blockly.MutatorPlus.prototype.iconClick_ = function(e) {
+Blockly.MutatorMinus.prototype.iconClick_ = function(e) {
 	if (this.block_.isEditable()) {
-		this.block_.updateShape_(1);
+		this.block_.updateShape_(-1);
 	}
 };

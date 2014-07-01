@@ -14,6 +14,214 @@ goog.require('Blockly.Blocks');
  * @lends Block
  */
 
+Blockly.Blocks['robSensors_getSample'] = {
+	/**
+	 * Get the current reading from choosen sensor.
+	 * 
+	 * @constructs robSensors_getSample
+	 * @this.Blockly.Block
+	 * @param {String/dropdown}
+	 *            SENSORPORT - 1, 2, 3 or 4
+	 * @returns immediately
+	 * @returns {Number}
+	 * @memberof Block
+	 */
+	init : function() {
+		this.setColour(180);
+		// this.setInputsInline(true);
+		var sensorType = new Blockly.FieldDropdown([
+				[ Blockly.Msg.SENSOR_TOUCH + ' (gedrückt)', 'TOUCH' ],
+				[ Blockly.Msg.SENSOR_ULTRASONIC, 'ULTRASONIC' ],
+				[ Blockly.Msg.SENSOR_COLOUR, 'COLOUR' ],
+				[ Blockly.Msg.SENSOR_INFRARED, 'INFRARED' ],
+				[ Blockly.Msg.SENSOR_ENCODER, 'ENCODER' ],
+				[ Blockly.Msg.SENSOR_KEY + ' (gedrückt)', 'KEYS_PRESSED' ],
+				[ Blockly.Msg.SENSOR_KEY + ' (geklickt)',
+						'KEYS_PRESSED_RELEASED' ],
+				[ Blockly.Msg.SENSOR_GYRO, 'GYRO' ],
+				[ Blockly.Msg.SENSOR_TIME, 'TIME' ] ], function(option) {
+			this.sourceBlock_.updateValue_(option);
+		});
+		var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ],
+				[ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
+		this.appendDummyInput('DROPDOWN').appendField(
+				Blockly.Msg.SENSOR_GET_SAMPLE).appendField(sensorType,
+				'SENSORTYPE').appendField(sensorPort, 'SENSORPORT');
+		this.oldSensorType = 'TOUCH';
+		this.newSensorType = null;
+		this.update = false;
+		this.setOutput(true, [ 'Number', 'Boolean', 'Colour' ]);
+	},
+
+	mutationToDom : function() {
+		var container = document.createElement('mutation');
+		container.setAttribute('option', this.newSensorType);
+		return container;
+	},
+
+	domToMutation : function(xmlElement) {
+		this.newSensorType = xmlElement.getAttribute('option');
+		this.updateShape_();
+	},
+	/**
+	 * Called whenever anything on the workspace changes.
+	 * 
+	 * @this Blockly.Block
+	 */
+	onchange : function() {
+		if (!this.workspace) {
+			// Block has been deleted.
+			return;
+		} else if (this.update)
+			this.updateShape_();
+	},
+	/**
+	 * Called from dropdown menu sensortype, if sensortype was clicked.
+	 * 
+	 * @this Blockly.Block
+	 */
+	updateValue_ : function(option) {
+		this.oldSensorType = this.newSensorType;
+		this.newSensorType = option;
+		if (option != this.oldSensorType) {
+			this.update = true;
+		}
+	},
+
+	/**
+	 * Called whenever the shape has to change.
+	 * 
+	 * @this Blockly.Block
+	 */
+	updateShape_ : function() {
+		this.update = false;
+		var sensorType = new Blockly.FieldDropdown([
+				[ Blockly.Msg.SENSOR_TOUCH + ' (gedrückt)', 'TOUCH' ],
+				[ Blockly.Msg.SENSOR_ULTRASONIC, 'ULTRASONIC' ],
+				[ Blockly.Msg.SENSOR_COLOUR, 'COLOUR' ],
+				[ Blockly.Msg.SENSOR_INFRARED, 'INFRARED' ],
+				[ Blockly.Msg.SENSOR_ENCODER, 'ENCODER' ],
+				[ Blockly.Msg.SENSOR_KEY + ' (gedrückt)', 'KEYS_PRESSED' ],
+				[ Blockly.Msg.SENSOR_KEY + ' (geklickt)',
+						'KEYS_PRESSED_RELEASED' ],
+				[ Blockly.Msg.SENSOR_GYRO, 'GYRO' ],
+				[ Blockly.Msg.SENSOR_TIME, 'TIME' ] ], function(option) {
+			this.sourceBlock_.updateValue_(option);
+		});
+		var key = new Blockly.FieldDropdown([
+				[ Blockly.Msg.SENSOR_KEY_ENTER, 'ENTER' ],
+				[ Blockly.Msg.SENSOR_KEY_UP, 'UP' ],
+				[ Blockly.Msg.SENSOR_KEY_DOWN, 'DOWN' ],
+				[ Blockly.Msg.SENSOR_KEY_LEFT, 'LEFT' ],
+				[ Blockly.Msg.SENSOR_KEY_RIGHT, 'RIGHT' ],
+				[ Blockly.Msg.SENSOR_KEY_ESCAPE, 'ESCAPE' ],
+				[ Blockly.Msg.SENSOR_KEY_ANY, 'ANY' ] ]);
+		var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ],
+				[ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
+		var motorPort = new Blockly.FieldDropdown([ [ 'Motor Port A', 'A' ],
+				[ 'Motor Port B', 'B' ], [ 'Motor Port C', 'C' ],
+				[ 'Motor Port D', 'D' ] ]);
+		var sensorNum = new Blockly.FieldDropdown([ [ 'Zeitgeber 1', '1' ],
+				[ 'Zeitgeber 2', '2' ], [ 'Zeitgeber 3', '3' ],
+				[ 'Zeitgeber 4', '4' ], [ 'Zeitgeber 5', '5' ],
+				[ 'Zeitgeber 6', '6' ], [ 'Zeitgeber 7', '7' ],
+				[ 'Zeitgeber 8', '8' ], [ 'Zeitgeber 9', '9' ],
+				[ 'Zeitgeber 10', '10' ] ]);
+
+		if (this.newSensorType == 'TOUCH') {
+			this.removeInput('DROPDOWN');
+			this.appendDummyInput('DROPDOWN').appendField(
+					Blockly.Msg.SENSOR_GET_SAMPLE).appendField(sensorType,
+					'SENSORTYPE').appendField(sensorPort, 'SENSORPORT');
+			this.appendValue_('BOOL');
+			sensorType.setValue(Blockly.Msg.SENSOR_TOUCH + ' (gedrückt)');
+		} else if (this.newSensorType == 'ENCODER') {
+			this.removeInput('DROPDOWN');
+			this.appendDummyInput('DROPDOWN').appendField(
+					Blockly.Msg.SENSOR_GET_SAMPLE).appendField(sensorType,
+					'SENSORTYPE').appendField(motorPort, 'MOTORPORT');
+			this.appendValue_('NUM');
+			sensorType.setValue(Blockly.Msg.SENSOR_ENCODER);
+		} else if (this.newSensorType == 'KEYS_PRESSED') {
+			this.removeInput('DROPDOWN');
+			this.appendDummyInput('DROPDOWN').appendField(
+					Blockly.Msg.SENSOR_GET_SAMPLE).appendField(sensorType,
+					'SENSORTYPE').appendField(key, 'KEY');
+			this.appendValue_('BOOL');
+			sensorType.setValue(Blockly.Msg.SENSOR_KEY + ' (gedrückt)');
+		} else if (this.newSensorType == 'KEYS_PRESSED_RELEASED') {
+			this.removeInput('DROPDOWN');
+			this.appendDummyInput('DROPDOWN').appendField(
+					Blockly.Msg.SENSOR_GET_SAMPLE).appendField(sensorType,
+					'SENSORTYPE').appendField(key, 'KEY');
+			this.appendValue_('BOOL');
+			sensorType.setValue(Blockly.Msg.SENSOR_KEY + ' (geklickt)');
+		} else if (this.newSensorType == 'TIME') {
+			this.removeInput('DROPDOWN');
+			this.appendDummyInput('DROPDOWN').appendField(
+					Blockly.Msg.SENSOR_GET_SAMPLE).appendField(sensorType,
+					'SENSORTYPE').appendField(sensorNum, 'SENSORNUM');
+			this.appendValue_('NUM', 500);
+			sensorType.setValue(Blockly.Msg.SENSOR_TIME);
+		} else {
+			this.removeInput('DROPDOWN');
+			this.appendDummyInput('DROPDOWN').appendField(
+					Blockly.Msg.SENSOR_GET_SAMPLE).appendField(sensorType,
+					'SENSORTYPE').appendField(sensorPort, 'SENSORPORT');
+			if (this.newSensorType == 'GYRO') {
+				this.appendValue_('NUM', 90);
+				sensorPort.setValue('2');
+				sensorType.setValue(Blockly.Msg.SENSOR_GYRO);
+			} else if (this.newSensorType == 'ULTRASONIC') {
+				this.appendValue_('NUM');
+				sensorPort.setValue('4');
+				sensorType.setValue(Blockly.Msg.SENSOR_ULTRASONIC);
+			} else if (this.newSensorType == 'COLOUR') {
+				this.appendValue_('COLOUR');
+				sensorPort.setValue('3');
+				sensorType.setValue(Blockly.Msg.SENSOR_COLOUR);
+			} else if (this.newSensorType == 'INFRARED') {
+				this.appendValue_('NUM');
+				sensorPort.setValue('4');
+				sensorType.setValue(Blockly.Msg.SENSOR_INFRARED);
+			}
+		}
+	},
+
+	/**
+	 * Called whenever the blocks shape has changed.
+	 * 
+	 * @this Blockly.Block
+	 */
+	appendValue_ : function(type, value) {
+		if (!value)
+			var value = 30;
+		var logComp = this.getParent();
+		if (logComp && logComp.type != 'logic_compare')
+			logComp = null;
+		if (logComp) {
+			var valueB = logComp.getInput('B');
+			valueB.connection.targetConnection.sourceBlock_.dispose();
+			var block = null;
+			if (type == 'NUM') {
+				block = Blockly.Block.obtain(Blockly.mainWorkspace,
+						'math_number');
+				block.setFieldValue(value.toString(), 'NUM');
+			} else if (type == 'BOOL') {
+				block = Blockly.Block.obtain(Blockly.mainWorkspace,
+						'logic_boolean');
+			} else {
+				block = Blockly.Block.obtain(Blockly.mainWorkspace,
+						'robColour_picker');
+				block.setFieldValue('#b30006', 'COLOUR')
+			}
+			block.initSvg();
+			block.render();
+			valueB.connection.connect(block.outputConnection);
+		}
+	}
+};
+
 Blockly.Blocks['robSensors_touch_isPressed'] = {
 	/**
 	 * Is the touch sensor pressed?

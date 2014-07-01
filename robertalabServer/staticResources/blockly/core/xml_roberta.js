@@ -45,7 +45,7 @@ Blockly.Xml.Roberta.blockToDom_ = function (block, statement_list) {
 		var mutation = block.mutationToDom();
 		if (mutation) {
 			element.appendChild(mutation);
-			if (mutation !== undefined && mutation != null && block.type == 'controls_if') {
+			if (mutation !== undefined && mutation != null && (block.type == 'controls_if'|| block.type == 'controls_if')) {
 				element.appendChild(repetitions);
 				repe = true;
 			}

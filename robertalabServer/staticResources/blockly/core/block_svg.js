@@ -79,6 +79,12 @@ Blockly.BlockSvg.prototype.init = function() {
   if (block.mutator) {
     block.mutator.createIcon();
   }
+  if (block.mutatorPlus) {
+	    block.mutatorPlus.createIcon();
+	  }
+  if (block.mutatorMinus) {
+	    block.mutatorMinus.createIcon();
+	  }
 };
 
 /**

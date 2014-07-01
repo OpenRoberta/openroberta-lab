@@ -42,8 +42,14 @@
 <script type="text/javascript" src="../blocks/procedures.js"></script>
 <script type="text/javascript" src="../blocks/robActions.js"></script>
 <script type="text/javascript" src="../blocks/robControls.js"></script>
+<script type="text/javascript" src="../blocks/robColour.js"></script>
 <script type="text/javascript" src="../blocks/robSensors.js"></script>
-<script type="text/javascript" src="../core/xmlRoberta.js"></script>
+<script type="text/javascript" src="../core/mutatorPlus.js"></script>
+<script type="text/javascript" src="../core/mutatorMinus.js"></script>
+<script type="text/javascript" src="../core/field_robColour.js"></script>
+<script type="text/javascript" src="../core/blocks.js"></script>
+<script type="text/javascript" src="../core/block_svg.js"></script>
+<script type="text/javascript" src="../core/xml_roberta.js"></script>
 <!-- Load the Google Drive SDK Realtime libraries. -->
 <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
 <script type="text/javascript">
@@ -321,6 +327,8 @@ h1 {
                   <category name="Kontrolle">
                     <category name="Entscheidung">
                       <block type="controls_if"></block>
+                      <block type="robControls_if"></block>
+                      <block type="robControls_ifElse"></block>
                     </category>
                     <category name="Schleifen">
                       <block type="controls_repeat_ext">
@@ -351,6 +359,24 @@ h1 {
                       <block type="controls_forEach"></block>
                       <block type="controls_flow_statements"></block>
                     </category>
+                    <category name="Wait">
+                      <block type='robControls_wait'>  
+				      </block> 
+                      <block type='robControls_wait_for'>  
+				        <value name='VALUE0'>  
+				          <block type='logic_compare'>  
+				            <value name='A'>  
+				              <block type='robSensors_getSample'>  
+				              </block> 
+				            </value>  
+				            <value name='B'>  
+				              <block type='logic_boolean'>  
+				              </block>  
+				            </value>  
+				          </block>  
+				        </value>  
+				      </block> 
+				    </category> 
                     <category name="Tasks">
                       <block type="robControls_activity">
                         <value name="ACTIVITY">
