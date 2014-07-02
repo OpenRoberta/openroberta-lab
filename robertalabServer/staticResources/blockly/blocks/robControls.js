@@ -312,10 +312,8 @@ Blockly.Blocks['robControls_ifElse'] = {
 				Blockly.Msg.CONTROLS_IF_MSG_IF).setCheck('Boolean');
 		this.appendStatementInput('DO0').appendField(
 				Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
-		this.appendValueInput('ELSE').appendField(
-				Blockly.Msg.CONTROLS_IF_MSG_ELSE).setCheck('Boolean');
-		this.appendStatementInput('DO1').appendField(
-				Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
+		this.appendStatementInput('ELSE').appendField(
+				Blockly.Msg.CONTROLS_IF_MSG_ELSE);
 		this.setPreviousStatement(true);
 		this.setNextStatement(true);
 		this.setMutatorPlus(new Blockly.MutatorPlus(this));
@@ -341,7 +339,6 @@ Blockly.Blocks['robControls_ifElse'] = {
 	 */
 	domToMutation : function(xmlElement) {
 		this.elseIfCount_ = parseInt(xmlElement.getAttribute('elseif'), 10);
-		this.removeInput('DO1');
 		this.removeInput('ELSE');
 		for (var x = 1; x <= this.elseIfCount_; x++) {
 			this.appendValueInput('VALUE' + x).appendField(
@@ -349,10 +346,8 @@ Blockly.Blocks['robControls_ifElse'] = {
 			this.appendStatementInput('DO' + x).appendField(
 					Blockly.Msg.CONTROLS_IF_MSG_THEN);
 		}
-		this.appendValueInput('ELSE').appendField(
-				Blockly.Msg.CONTROLS_IF_MSG_ELSE).setCheck('Boolean');
-		this.appendStatementInput('DO' + (this.elseIfCount_ + 1)).appendField(
-				Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
+		this.appendStatementInput('ELSE').appendField(
+				Blockly.Msg.CONTROLS_IF_MSG_ELSE);
 		if (this.elseIfCount_ >= 1) {
 			this.setMutatorMinus(new Blockly.MutatorMinus(this));
 		}
@@ -367,25 +362,19 @@ Blockly.Blocks['robControls_ifElse'] = {
 	updateShape_ : function(num) {
 		if (num == 1) {
 			this.elseIfCount_++;
-			this.removeInput('DO' + this.elseIfCount_);
 			this.removeInput('ELSE');
 			this.appendValueInput('VALUE' + this.elseIfCount_).appendField(
 					Blockly.Msg.CONTROLS_IF_MSG_ELSEIF).setCheck('Boolean');
 			this.appendStatementInput('DO' + this.elseIfCount_).appendField(
 					Blockly.Msg.CONTROLS_IF_MSG_THEN);
-			this.appendValueInput('ELSE').appendField(
-					Blockly.Msg.CONTROLS_IF_MSG_ELSE).setCheck('Boolean');
-			this.appendStatementInput('DO' + (this.elseIfCount_ + 1))
-					.appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
+			this.appendStatementInput('ELSE').appendField(
+					Blockly.Msg.CONTROLS_IF_MSG_ELSE);
 		} else if (num == -1) {
-			this.removeInput('DO' + (this.elseIfCount_ + 1));
 			this.removeInput('ELSE');
 			this.removeInput('DO' + this.elseIfCount_);
 			this.removeInput('VALUE' + this.elseIfCount_);
-			this.appendValueInput('ELSE').appendField(
-					Blockly.Msg.CONTROLS_IF_MSG_ELSE).setCheck('Boolean');
-			this.appendStatementInput('DO' + (this.elseIfCount_)).appendField(
-					Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
+			this.appendStatementInput('ELSE').appendField(
+					Blockly.Msg.CONTROLS_IF_MSG_ELSE);
 			this.elseIfCount_--;
 		}
 		if (this.elseIfCount_ >= 1) {
