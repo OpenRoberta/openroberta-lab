@@ -75,54 +75,9 @@ public class Unary extends Expr {
 
     /**
      * Operators for the unary expression.
-     * 
-     * @author kcvejoski
      */
     public static enum Op {
-        PLUS( 10, Assoc.LEFT, "+" ),
-        NEG( 10, Assoc.LEFT, "-" ),
-        NOT( 10, Assoc.LEFT, "!" ),
-        ROOT( 10, Assoc.LEFT, "SQRT" ),
-        ABS( 10, Assoc.LEFT ),
-        LN( 10, Assoc.LEFT ),
-        LOG10( 10, Assoc.LEFT ),
-        EXP( 10, Assoc.LEFT ),
-        POW10( 10, Assoc.LEFT ),
-        SIN( 10, Assoc.LEFT ),
-        COS( 10, Assoc.LEFT ),
-        TAN( 10, Assoc.LEFT ),
-        ASIN( 10, Assoc.LEFT ),
-        ACOS( 10, Assoc.LEFT ),
-        ATAN( 10, Assoc.LEFT ),
-        EVEN( 10, Assoc.LEFT ),
-        ODD( 10, Assoc.LEFT ),
-        PRIME( 10, Assoc.LEFT ),
-        WHOLE( 10, Assoc.LEFT ),
-        POSITIVE( 10, Assoc.LEFT ),
-        NEGATIVE( 10, Assoc.LEFT ),
-        ROUND( 10, Assoc.LEFT ),
-        ROUNDUP( 10, Assoc.LEFT, "CEIL" ),
-        ROUNDDOWN( 10, Assoc.LEFT, "FLOOR" ),
-        SUM( 10, Assoc.LEFT ),
-        MIN( 10, Assoc.LEFT ),
-        MAX( 10, Assoc.LEFT ),
-        AVERAGE( 10, Assoc.LEFT ),
-        MEDIAN( 10, Assoc.LEFT ),
-        MODE( 10, Assoc.LEFT ),
-        STD_DEV( 10, Assoc.LEFT ),
-        RANDOM( 10, Assoc.LEFT ),
-        TEXT_JOIN( 10, Assoc.LEFT ),
-        TEXT_LENGTH( 10, Assoc.LEFT ),
-        IS_EMPTY( 10, Assoc.LEFT ),
-        UPPERCASE( 10, Assoc.LEFT ),
-        LOWERCASE( 10, Assoc.LEFT ),
-        TITLECASE( 10, Assoc.LEFT ),
-        LEFT( 10, Assoc.LEFT ),
-        RIGHT( 10, Assoc.LEFT ),
-        BOTH( 10, Assoc.LEFT ),
-        TEXT( 10, Assoc.LEFT ),
-        NUMBER( 10, Assoc.LEFT ),
-        LISTS_LENGTH( 10, Assoc.LEFT );
+        PLUS( 10, Assoc.LEFT, "+" ), NEG( 10, Assoc.LEFT, "-" ), NOT( 300, Assoc.RIGHT, "!" );
 
         private final String[] values;
         private final int precedence;

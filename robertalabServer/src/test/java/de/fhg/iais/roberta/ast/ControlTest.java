@@ -172,7 +172,7 @@ public class ControlTest {
         transformer.projectToAST(project);
 
         String a =
-            "BlockAST [project=[[\n" + "(repeat [FOR, i=1, i<=10, i+1]\n" + "   exprStmt Binary [TEXT_APPEND, Var [item], StringConst [kllk]]\n" + ")]]]";
+            "BlockAST [project=[[\n" + "(repeat [FOR, i = 1, i <= 10, i + 1]\n" + "   exprStmt Binary [TEXT_APPEND, Var [item], StringConst [kllk]]\n" + ")]]]";
         Assert.assertEquals(a, transformer.toString());
     }
 

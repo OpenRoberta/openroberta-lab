@@ -39,7 +39,7 @@ public class ListsTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Binary [LISTS_REPEAT, NumConst [4], NumConst [5]]]]]";
+        String a = "BlockAST [project=[[Funct [LISTS_REPEAT, [NumConst [4], NumConst [5]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
@@ -55,7 +55,7 @@ public class ListsTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Unary [LISTS_LENGTH, Var [item]]]]]";
+        String a = "BlockAST [project=[[Funct [LISTS_LENGTH, [Var [item]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
@@ -71,7 +71,7 @@ public class ListsTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Unary [IS_EMPTY, Var [item]]]]]";
+        String a = "BlockAST [project=[[Funct [IS_EMPTY, [Var [item]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
@@ -87,7 +87,7 @@ public class ListsTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Binary [FIRST, Var [liste], StringConst [T1]]]]]";
+        String a = "BlockAST [project=[[Funct [FIRST, [Var [liste], StringConst [T1]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }

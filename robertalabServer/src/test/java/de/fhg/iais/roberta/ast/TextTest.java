@@ -4,6 +4,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 
@@ -23,7 +24,7 @@ public class TextTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Unary [TEXT_JOIN, \"text1\", [[EmptyExpr [defVal=class java.lang.String]]], \"text2\"]]]]";
+        String a = "BlockAST [project=[[Funct [TEXT_JOIN, [\"text1\", [[EmptyExpr [defVal=class java.lang.String]]], \"text2\"]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
@@ -39,7 +40,7 @@ public class TextTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Binary [FIRST, Var [text], StringConst [test]]]]]";
+        String a = "BlockAST [project=[[Funct [FIRST, [Var [text], StringConst [test]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
@@ -71,7 +72,7 @@ public class TextTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Unary [TEXT_LENGTH, StringConst [Test]]]]]";
+        String a = "BlockAST [project=[[Funct [TEXT_LENGTH, [StringConst [Test]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
@@ -87,7 +88,7 @@ public class TextTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Unary [IS_EMPTY, StringConst [Test]]]]]";
+        String a = "BlockAST [project=[[Funct [IS_EMPTY, [StringConst [Test]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
@@ -103,7 +104,7 @@ public class TextTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Binary [FIRST, Var [text], StringConst [Test]]]]]";
+        String a = "BlockAST [project=[[Funct [FIRST, [Var [text], StringConst [Test]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
@@ -119,7 +120,7 @@ public class TextTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Binary [FROM_START, Var [text], NumConst [0]]]]]";
+        String a = "BlockAST [project=[[Funct [FROM_START, [Var [text], NumConst [0]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
@@ -135,7 +136,23 @@ public class TextTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Unary [RANDOM, Var [text]]]]]";
+        String a = "BlockAST [project=[[Funct [RANDOM, [Var [text]]]]]]";
+
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Ignore
+    public void textGetSubString() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/text/text_getSubstring.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+
+        String a = "BlockAST [project=[[Funct [RANDOM, [Var [text]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
@@ -151,7 +168,7 @@ public class TextTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Unary [UPPERCASE, Var [text]]]]]";
+        String a = "BlockAST [project=[[Funct [UPPERCASE, [Var [text]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
@@ -167,7 +184,7 @@ public class TextTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Unary [LEFT, Var [text]]]]]";
+        String a = "BlockAST [project=[[Funct [LEFT, [Var [text]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
@@ -183,7 +200,7 @@ public class TextTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Unary [TEXT, StringConst [TEST]]]]]";
+        String a = "BlockAST [project=[[Funct [TEXT_PROMPT, [StringConst [TEST]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }

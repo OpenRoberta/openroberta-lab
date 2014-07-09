@@ -77,7 +77,7 @@ public class Binary extends Expr {
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
         generateSubExpr(sb, false, this.left);
-        sb.append(this.op.getOpSymbol());
+        sb.append(" " + this.op.getOpSymbol() + " ");
         generateSubExpr(sb, this.op == Op.MINUS, this.right);
     }
 
@@ -86,9 +86,9 @@ public class Binary extends Expr {
             // parentheses are omitted
             expr.generateJava(sb, 0);
         } else {
-            sb.append("(");
+            sb.append("( ");
             expr.generateJava(sb, 0);
-            sb.append(")");
+            sb.append(" )");
         }
     }
 
@@ -102,30 +102,24 @@ public class Binary extends Expr {
         MINUS( 100, Assoc.LEFT, "-" ),
         MULTIPLY( 200, Assoc.LEFT, "*" ),
         DIVIDE( 200, Assoc.LEFT, "/" ),
+        MOD( 200, Assoc.NONE, "%" ),
         EQ( 80, Assoc.LEFT, "==" ),
         NEQ( 80, Assoc.LEFT, "!=", "<>" ),
-        LT( 80, Assoc.LEFT, "<" ),
-        LTE( 80, Assoc.LEFT, "<=" ),
-        GT( 80, Assoc.LEFT, ">" ),
-        GTE( 80, Assoc.LEFT, ">=" ),
-        AND( 60, Assoc.LEFT, "&&" ),
+        LT( 90, Assoc.LEFT, "<" ),
+        LTE( 90, Assoc.LEFT, "<=" ),
+        GT( 90, Assoc.LEFT, ">" ),
+        GTE( 90, Assoc.LEFT, ">=" ),
+        AND( 70, Assoc.LEFT, "&&" ),
         OR( 60, Assoc.LEFT, "||" ),
-        POWER( 300, Assoc.LEFT, "^" ),
-        DIVISIBLE_BY( 80, Assoc.NONE ),
         MATH_CHANGE( 80, Assoc.NONE ),
-        MOD( 80, Assoc.NONE ),
-        MAX( 80, Assoc.NONE ),
-        MIN( 80, Assoc.NONE ),
         TEXT_APPEND( 1, Assoc.LEFT, "TEXTAPPEND" ),
-        FIRST( 1, Assoc.LEFT ),
-        LAST( 1, Assoc.LEFT ),
-        FROM_START( 1, Assoc.LEFT, "FROMSTART" ),
-        FROM_END( 1, Assoc.LEFT, "FROMEND" ),
-        LISTS_REPEAT( 1, Assoc.LEFT ),
-        ASSIGNMENT( 1, Assoc.LEFT, "=" ),
         IN( 1, Assoc.LEFT, ":" ),
-        RANDOM_INTEGER( 1, Assoc.LEFT, "RANDOMINTEGER" ),
-        RANDOM( 1, Assoc.LEFT );
+        ASSIGNMENT( 1, Assoc.RIGHT, "=" ),
+        ADD_ASSIGNMENT( 1, Assoc.RIGHT, "+=" ),
+        MINUS_ASSIGNMENT( 1, Assoc.RIGHT, "-=" ),
+        MULTIPLY_ASSIGNMENT( 1, Assoc.RIGHT, "*=" ),
+        DIVIDE_ASSIGNMENT( 1, Assoc.RIGHT, "/=" ),
+        MOD_ASSIGNMENT( 1, Assoc.RIGHT, "%=" );
 
         private final String[] values;
         private final int precedence;

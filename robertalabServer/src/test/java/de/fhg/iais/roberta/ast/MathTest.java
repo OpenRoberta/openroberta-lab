@@ -23,7 +23,7 @@ public class MathTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Binary [ADD, NumConst [1], Binary [POWER, NumConst [5], NumConst [8]]]]]]";
+        String a = "BlockAST [project=[[Binary [ADD, NumConst [1], Funct [POWER, [NumConst [5], NumConst [8]]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
@@ -39,7 +39,7 @@ public class MathTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Unary [LN, Binary [POWER, NumConst [5], NumConst [8]]]]]]";
+        String a = "BlockAST [project=[[Funct [LN, [Funct [POWER, [NumConst [5], NumConst [8]]]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
@@ -55,7 +55,7 @@ public class MathTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Unary [ATAN, Unary [LN, Binary [POWER, NumConst [5], NumConst [8]]]]]]]";
+        String a = "BlockAST [project=[[Funct [ATAN, [Funct [LN, [Funct [POWER, [NumConst [5], NumConst [8]]]]]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
@@ -71,7 +71,7 @@ public class MathTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Unary [COS, MathConst [E]]]]]";
+        String a = "BlockAST [project=[[Funct [COS, [MathConst [E]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
@@ -87,7 +87,7 @@ public class MathTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Unary [PRIME, NumConst [0]]]]]";
+        String a = "BlockAST [project=[[Funct [PRIME, [NumConst [0]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
@@ -103,7 +103,7 @@ public class MathTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Binary [DIVISIBLE_BY, NumConst [8], NumConst [5]]]]]";
+        String a = "BlockAST [project=[[Funct [DIVISIBLE_BY, [NumConst [8], NumConst [5]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
@@ -135,7 +135,7 @@ public class MathTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Unary [ROUNDUP, NumConst [0]]]]]";
+        String a = "BlockAST [project=[[Funct [ROUNDUP, [NumConst [0]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
@@ -151,7 +151,7 @@ public class MathTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Unary [AVERAGE, EmptyExpr [defVal=class java.util.ArrayList]]]]]";
+        String a = "BlockAST [project=[[Funct [AVERAGE, [EmptyExpr [defVal=class java.util.ArrayList]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
@@ -167,7 +167,23 @@ public class MathTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Binary [MIN, Binary [MAX, NumConst [1], NumConst [8]], NumConst [100]]]]]";
+        String a = "BlockAST [project=[[Funct [CONSTRAIN, [NumConst [8], NumConst [1], NumConst [100]]]]]]";
+
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
+    public void math_random_float() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_random_float.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+
+        String a = "BlockAST [project=[[\nVar [item] := Funct [RANDOM, []]\n]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }

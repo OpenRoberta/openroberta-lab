@@ -11,9 +11,12 @@ import de.fhg.iais.roberta.ast.syntax.action.MotionParam;
 import de.fhg.iais.roberta.ast.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
+import de.fhg.iais.roberta.ast.syntax.expr.ColourConst;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
+import de.fhg.iais.roberta.ast.syntax.expr.Funct;
+import de.fhg.iais.roberta.ast.syntax.expr.Funct.Function;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
@@ -42,7 +45,6 @@ import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
-import de.fhg.iais.roberta.blockly.generated.Arg;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Instance;
@@ -81,10 +83,15 @@ public class JaxbTransformer {
         return phrases;
     }
 
+    public ArrayList<ArrayList<Phrase>> getProject() {
+        return this.project;
+    }
+
     private Phrase bToA(Block block) {
-        List<Arg> args;
+
         List<Value> values;
         List<Field> fields;
+        List<ExprParam> exprParams;
 
         ExprList exprList;
 
@@ -267,13 +274,28 @@ public class JaxbTransformer {
                 return blockToConst(block, "NUM");
 
             case "math_arithmetic":
-                return blockToBinaryExpr(block, new ExprParam("A", Integer.class), new ExprParam("B", Integer.class), "OP");
+                if ( getOperation(block, "OP").equals("POWER") ) {
+                    exprParams = new ArrayList<ExprParam>();
+                    exprParams.add(new ExprParam("A", Integer.class));
+                    exprParams.add(new ExprParam("B", Integer.class));
+                    return blockToFunction(block, exprParams, "OP");
+                } else {
+                    return blockToBinaryExpr(block, new ExprParam("A", Integer.class), new ExprParam("B", Integer.class), "OP");
+                }
 
             case "math_single":
-                return blockToUnaryExpr(block, new ExprParam("NUM", Integer.class), "OP");
+                if ( getOperation(block, "OP").equals("NEG") ) {
+                    return blockToUnaryExpr(block, new ExprParam("NUM", Integer.class), "OP");
+                } else {
+                    exprParams = new ArrayList<ExprParam>();
+                    exprParams.add(new ExprParam("NUM", Integer.class));
+                    return blockToFunction(block, exprParams, "OP");
+                }
 
             case "math_trig":
-                return blockToUnaryExpr(block, new ExprParam("NUM", Integer.class), "OP");
+                exprParams = new ArrayList<ExprParam>();
+                exprParams.add(new ExprParam("NUM", Integer.class));
+                return blockToFunction(block, exprParams, "OP");
 
             case "math_constant":
                 return blockToConst(block, "CONSTANT");
@@ -283,10 +305,15 @@ public class JaxbTransformer {
                 String op = extractOperation(block, "PROPERTY");
                 if ( op.equals("DIVISIBLE_BY") ) {
                     Assert.isTrue(divisorInput, "Divisor input is not equal to true!");
-                    return blockToBinaryExpr(block, new ExprParam("NUMBER_TO_CHECK", Integer.class), new ExprParam("DIVISOR", Integer.class), "PROPERTY");
+                    exprParams = new ArrayList<ExprParam>();
+                    exprParams.add(new ExprParam("NUMBER_TO_CHECK", Integer.class));
+                    exprParams.add(new ExprParam("DIVISOR", Integer.class));
+                    return blockToFunction(block, exprParams, "PROPERTY");
                 } else {
                     Assert.isTrue(!divisorInput, "Divisor input is not equal to false!");
-                    return blockToUnaryExpr(block, new ExprParam("NUMBER_TO_CHECK", Integer.class), "PROPERTY");
+                    exprParams = new ArrayList<ExprParam>();
+                    exprParams.add(new ExprParam("NUMBER_TO_CHECK", Integer.class));
+                    return blockToFunction(block, exprParams, "PROPERTY");
                 }
 
             case "math_change":
@@ -296,34 +323,44 @@ public class JaxbTransformer {
                 return Binary.make(Binary.Op.MATH_CHANGE, (Expr) left, (Expr) right);
 
             case "math_round":
-                return blockToUnaryExpr(block, new ExprParam("NUM", Integer.class), "OP");
+                exprParams = new ArrayList<ExprParam>();
+                exprParams.add(new ExprParam("NUM", Integer.class));
+                return blockToFunction(block, exprParams, "OP");
 
             case "math_on_list":
-                return blockToUnaryExpr(block, new ExprParam("LIST", ArrayList.class), "OP");
+                exprParams = new ArrayList<ExprParam>();
+                exprParams.add(new ExprParam("LIST", ArrayList.class));
+                return blockToFunction(block, exprParams, "OP");
 
             case "math_modulo":
                 return blockToBinaryExpr(block, new ExprParam("DIVIDEND", Integer.class), new ExprParam("DIVISOR", Integer.class), "MOD");
 
             case "math_constrain":
-                values = extractValues(block, (short) 3);
-                Phrase valueExpr = extractValue(values, new ExprParam("VALUE", Integer.class));
-                Phrase lowExpr = extractValue(values, new ExprParam("LOW", Integer.class));
-                Phrase maxExpr = Binary.make(Binary.Op.MAX, (Expr) lowExpr, (Expr) valueExpr);
-                Phrase highExpr = extractValue(values, new ExprParam("HIGH", Integer.class));
-                return Binary.make(Binary.Op.MIN, (Expr) maxExpr, (Expr) highExpr);
+                exprParams = new ArrayList<ExprParam>();
+                exprParams.add(new ExprParam("VALUE", Integer.class));
+                exprParams.add(new ExprParam("LOW", Integer.class));
+                exprParams.add(new ExprParam("HIGH", Integer.class));
+                return blockToFunction(block, exprParams, "CONSTRAIN");
 
             case "math_random_integer":
-                return blockToBinaryExpr(block, new ExprParam("FROM", Integer.class), new ExprParam("TO", Integer.class), "RANDOM_INTEGER");
+                exprParams = new ArrayList<ExprParam>();
+                exprParams.add(new ExprParam("FROM", Integer.class));
+                exprParams.add(new ExprParam("TO", Integer.class));
+                return blockToFunction(block, exprParams, "RANDOM_INTEGER");
 
             case "math_random_float":
-                //TODO math_random_float
+                exprParams = new ArrayList<ExprParam>();
+                return blockToFunction(block, exprParams, "RANDOM");
 
                 //TEXT
             case "text":
                 return blockToConst(block, "TEXT");
 
             case "text_join":
-                return Unary.make(Unary.Op.TEXT_JOIN, blockToExprList(block, String.class));
+                exprList = blockToExprList(block, String.class);
+                List<Expr> textList = new ArrayList<Expr>();
+                textList.add(exprList);
+                return Funct.make(Function.TEXT_JOIN, textList);
 
             case "text_append":
                 values = extractValues(block, (short) 1);
@@ -332,47 +369,65 @@ public class JaxbTransformer {
                 return Binary.make(Binary.Op.TEXT_APPEND, (Expr) left, (Expr) right);
 
             case "text_length":
-                return blockToUnaryExpr(block, new ExprParam("VALUE", String.class), "TEXT_LENGTH");
+                exprParams = new ArrayList<ExprParam>();
+                exprParams.add(new ExprParam("VALUE", String.class));
+                return blockToFunction(block, exprParams, "TEXT_LENGTH");
 
             case "text_isEmpty":
-                return blockToUnaryExpr(block, new ExprParam("VALUE", String.class), "IS_EMPTY");
+                exprParams = new ArrayList<ExprParam>();
+                exprParams.add(new ExprParam("VALUE", String.class));
+                return blockToFunction(block, exprParams, "IS_EMPTY");
 
             case "text_indexOf":
-                return blockToBinaryExpr(block, new ExprParam("VALUE", String.class), new ExprParam("FIND", String.class), "END");
+                exprParams = new ArrayList<ExprParam>();
+                exprParams.add(new ExprParam("VALUE", String.class));
+                exprParams.add(new ExprParam("FIND", String.class));
+                return blockToFunction(block, exprParams, "END");
 
             case "text_charAt":
                 boolean atArg = block.getMutation().isAt();
+                exprParams = new ArrayList<ExprParam>();
+                exprParams.add(new ExprParam("VALUE", String.class));
                 if ( atArg == true ) {
-                    return blockToBinaryExpr(block, new ExprParam("VALUE", String.class), new ExprParam("AT", Integer.class), "WHERE");
-                } else {
-                    return blockToUnaryExpr(block, new ExprParam("VALUE", String.class), "WHERE");
+                    exprParams.add(new ExprParam("AT", Integer.class));
                 }
+                return blockToFunction(block, exprParams, "WHERE");
 
             case "text_getSubstring":
                 //TODO Not finished yet
-                args = extractArguments(block.getMutation(), (short) 2);
-                String atArg1 = args.get(0).getName();
-                String atArg2 = args.get(1).getName();
-                values = block.getValue();
-                if ( atArg1.equals("true") && atArg2.equals("true") ) {
-                    Assert.isTrue(values.size() == 3);
-                    //                    extractValue(values, "STRING", (short) 0);
-                    //                    extractValue(values, "AT1", (short) 1);
-                    //                    extractValue(values, "AT2", (short) 2);
+                boolean atArg1 = block.getMutation().isAt1();
+                boolean atArg2 = block.getMutation().isAt2();
+                fields = extractFields(block, (short) 2);
+                //                String where1 = extractField(fields, "WHERE1", (short) 0);
+                //                String where2 = extractField(fields, "WHERE2", (short) 1);
+                exprParams = new ArrayList<ExprParam>();
+                exprParams.add(new ExprParam("STRING", String.class));
+                if ( atArg1 == true ) {
+                    exprParams.add(new ExprParam("AT", Integer.class));
                 }
+                if ( atArg2 == true ) {
+                    exprParams.add(new ExprParam("AT", Integer.class));
+                }
+                return blockToFunction(block, exprParams, "SUBSTRING");
 
             case "text_changeCase":
-                return blockToUnaryExpr(block, new ExprParam("TEXT", String.class), "CASE");
+                exprParams = new ArrayList<ExprParam>();
+                exprParams.add(new ExprParam("TEXT", String.class));
+                return blockToFunction(block, exprParams, "CASE");
 
             case "text_trim":
-                return blockToUnaryExpr(block, new ExprParam("TEXT", String.class), "MODE");
+                exprParams = new ArrayList<ExprParam>();
+                exprParams.add(new ExprParam("TEXT", String.class));
+                return blockToFunction(block, exprParams, "MODE");
 
             case "text_prompt":
+                List<Expr> lstExpr = new ArrayList<Expr>();
                 fields = extractFields(block, (short) 2);
                 String type = extractField(fields, "TYPE", (short) 0);
                 String text = extractField(fields, "TEXT", (short) 1);
                 StringConst txtExpr = StringConst.make(text);
-                return Unary.make(Unary.Op.get(type), txtExpr);
+                lstExpr.add(txtExpr);
+                return Funct.make(Function.get(type), lstExpr);
 
                 //LISTEN
             case "lists_create_empty":
@@ -382,16 +437,26 @@ public class JaxbTransformer {
                 return blockToExprList(block, ArrayList.class);
 
             case "lists_repeat":
-                return blockToBinaryExpr(block, new ExprParam("ITEM", ArrayList.class), new ExprParam("NUM", Integer.class), "LISTS_REPEAT");
+                exprParams = new ArrayList<ExprParam>();
+                exprParams.add(new ExprParam("ITEM", ArrayList.class));
+                exprParams.add(new ExprParam("NUM", Integer.class));
+                return blockToFunction(block, exprParams, "LISTS_REPEAT");
 
             case "lists_length":
-                return blockToUnaryExpr(block, new ExprParam("VALUE", ArrayList.class), "LISTS_LENGTH");
+                exprParams = new ArrayList<ExprParam>();
+                exprParams.add(new ExprParam("VALUE", ArrayList.class));
+                return blockToFunction(block, exprParams, "LISTS_LENGTH");
 
             case "lists_isEmpty":
-                return blockToUnaryExpr(block, new ExprParam("VALUE", ArrayList.class), "IS_EMPTY");
+                exprParams = new ArrayList<ExprParam>();
+                exprParams.add(new ExprParam("VALUE", ArrayList.class));
+                return blockToFunction(block, exprParams, "IS_EMPTY");
 
             case "lists_indexOf":
-                return blockToBinaryExpr(block, new ExprParam("VALUE", ArrayList.class), new ExprParam("FIND", ArrayList.class), "END");
+                exprParams = new ArrayList<ExprParam>();
+                exprParams.add(new ExprParam("VALUE", ArrayList.class));
+                exprParams.add(new ExprParam("FIND", ArrayList.class));
+                return blockToFunction(block, exprParams, "END");
 
             case "lists_getIndex":
                 //TODO not implemented
@@ -401,6 +466,9 @@ public class JaxbTransformer {
 
             case "lists_getSublist":
                 //TODO not implemented
+
+            case "robColour_picker":
+                return blockToConst(block, "COLOUR");
 
                 //VARIABLEN
             case "variables_set":
@@ -458,6 +526,7 @@ public class JaxbTransformer {
                 var = extractVar(block);
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam("LIST", ArrayList.class));
+
                 Binary exprBinary = Binary.make(Binary.Op.IN, (Expr) var, (Expr) expr);
                 return extractRepeatStatement(block, exprBinary, "FOR_EACH");
 
@@ -491,6 +560,16 @@ public class JaxbTransformer {
         return Binary.make(Binary.Op.get(op), (Expr) left, (Expr) right);
     }
 
+    private Funct blockToFunction(Block block, List<ExprParam> exprParams, String operationType) {
+        String op = getOperation(block, operationType);
+        List<Expr> params = new ArrayList<Expr>();
+        List<Value> values = extractValues(block, (short) exprParams.size());
+        for ( ExprParam exprParam : exprParams ) {
+            params.add((Expr) extractValue(values, exprParam));
+        }
+        return Funct.make(Funct.Function.get(op), params);
+    }
+
     private Phrase blocksToIfStmt(Block block, int _else, int _elseIf) {
         List<Expr> exprsList = new ArrayList<Expr>();
         List<StmtList> thenList = new ArrayList<StmtList>();
@@ -508,8 +587,8 @@ public class JaxbTransformer {
             statements = extractStatements(block, (short) 1);
         }
 
-        for ( int i = 0; i < statements.size(); i++ ) {
-            if ( _else != 0 && i == statements.size() - 1 ) {
+        for ( int i = 0; i < _elseIf + _else + 1; i++ ) {
+            if ( _else != 0 && i == _elseIf + _else ) {
                 elseList = extractStatement(statements, "ELSE");
             } else {
                 Phrase p = extractValue(values, new ExprParam("IF" + i, Boolean.class));
@@ -560,6 +639,8 @@ public class JaxbTransformer {
                 return StringConst.make(field);
             case "CONSTANT":
                 return MathConst.make(MathConst.Const.get(field));
+            case "COLOUR":
+                return ColourConst.make(field);
             default:
                 throw new RuntimeException("Invalid type constant!");
         }
@@ -673,12 +754,6 @@ public class JaxbTransformer {
         Field field = fields.get(fieldLocation);
         Assert.isTrue(field.getName().equals(name), "Field name is not equal to " + name + "!");
         return field.getValue();
-    }
-
-    private List<Arg> extractArguments(Mutation mutation, short numOfArgs) {
-        List<Arg> args = mutation.getArg();
-        Assert.isTrue(args.size() == numOfArgs, "Number of fields is not equal to " + numOfArgs + "!");
-        return args;
     }
 
     private String extractOperation(Block block, String name) {
