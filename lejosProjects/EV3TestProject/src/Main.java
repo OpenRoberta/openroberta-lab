@@ -1,5 +1,8 @@
 import java.util.Properties;
 
+import lejos.hardware.ev3.LocalEV3;
+import lejos.hardware.sensor.EV3TouchSensor;
+
 public class Main {
 
     private static Properties sensorConfig = new Properties();
@@ -29,6 +32,11 @@ public class Main {
         RobertaFunctions roberta = new RobertaFunctions();
         roberta.checkSensorConfig(sensorConfig);
         roberta.startup();
+
+        float[] sample = new float[distance.sampleSize()];
+        new EV3TouchSensor(LocalEV3.get().getPort("S1")).fetchSample(sample, 0);
+
+        distance.fetchSample(sample, 0);
 
         // <"main" program from blocks>
 
