@@ -133,7 +133,7 @@ abstract public class Phrase {
             this.category = category;
         }
 
-        public final Category getCategory() {
+        public Category getCategory() {
             return this.category;
         }
     }

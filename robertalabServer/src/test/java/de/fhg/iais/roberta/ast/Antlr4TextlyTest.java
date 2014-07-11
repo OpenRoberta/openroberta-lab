@@ -11,13 +11,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
-import de.fhg.iais.roberta.ast.transformer.ParseTreeToAst;
-import de.fhg.iais.roberta.text.generated.TextlyLexer;
-import de.fhg.iais.roberta.text.generated.TextlyParser;
-import de.fhg.iais.roberta.text.generated.TextlyParser.ExprContext;
-import de.fhg.iais.roberta.text.generated.TextlyParser.StmtContext;
+import de.fhg.iais.roberta.ast.transformer.TextlyTreeToAst;
+import de.fhg.iais.roberta.textly.generated.TextlyLexer;
+import de.fhg.iais.roberta.textly.generated.TextlyParser;
+import de.fhg.iais.roberta.textly.generated.TextlyParser.ExprContext;
+import de.fhg.iais.roberta.textly.generated.TextlyParser.StmtContext;
 
-public class Antlr4Test {
+public class Antlr4TextlyTest {
     private static final boolean DO_ASSERT = true;
     private static final boolean DO_PRINT = true;
 
@@ -76,7 +76,7 @@ public class Antlr4Test {
 
     @Test
     public void testparseTree2Ast1() throws Exception {
-        Phrase astTree = ParseTreeToAst.startWalkForVisiting("if (1+2*3==7 || 1*2+3==5 && !1+2==4) { a:=5*6;b:=!!1==2; };");
+        Phrase astTree = TextlyTreeToAst.startWalkForVisiting("if (1+2*3==7 || 1*2+3==5 && !1+2==4) { a:=5*6;b:=!!1==2; };");
         System.out.println(astTree);
     }
 

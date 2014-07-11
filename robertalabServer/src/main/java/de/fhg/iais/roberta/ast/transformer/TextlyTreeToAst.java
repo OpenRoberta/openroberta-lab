@@ -18,25 +18,25 @@ import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
-import de.fhg.iais.roberta.text.generated.TextlyBaseVisitor;
-import de.fhg.iais.roberta.text.generated.TextlyLexer;
-import de.fhg.iais.roberta.text.generated.TextlyParser;
-import de.fhg.iais.roberta.text.generated.TextlyParser.AssignStmtContext;
-import de.fhg.iais.roberta.text.generated.TextlyParser.BinaryContext;
-import de.fhg.iais.roberta.text.generated.TextlyParser.ExprStmtContext;
-import de.fhg.iais.roberta.text.generated.TextlyParser.IfElseContext;
-import de.fhg.iais.roberta.text.generated.TextlyParser.IfElseIfContext;
-import de.fhg.iais.roberta.text.generated.TextlyParser.IfStmtContext;
-import de.fhg.iais.roberta.text.generated.TextlyParser.IfThenContext;
-import de.fhg.iais.roberta.text.generated.TextlyParser.IntConstContext;
-import de.fhg.iais.roberta.text.generated.TextlyParser.ParenthesesContext;
-import de.fhg.iais.roberta.text.generated.TextlyParser.RepeatStmtContext;
-import de.fhg.iais.roberta.text.generated.TextlyParser.StmtContext;
-import de.fhg.iais.roberta.text.generated.TextlyParser.StmtListContext;
-import de.fhg.iais.roberta.text.generated.TextlyParser.UnaryContext;
-import de.fhg.iais.roberta.text.generated.TextlyParser.VarNameContext;
+import de.fhg.iais.roberta.textly.generated.TextlyBaseVisitor;
+import de.fhg.iais.roberta.textly.generated.TextlyLexer;
+import de.fhg.iais.roberta.textly.generated.TextlyParser;
+import de.fhg.iais.roberta.textly.generated.TextlyParser.AssignStmtContext;
+import de.fhg.iais.roberta.textly.generated.TextlyParser.BinaryContext;
+import de.fhg.iais.roberta.textly.generated.TextlyParser.ExprStmtContext;
+import de.fhg.iais.roberta.textly.generated.TextlyParser.IfElseContext;
+import de.fhg.iais.roberta.textly.generated.TextlyParser.IfElseIfContext;
+import de.fhg.iais.roberta.textly.generated.TextlyParser.IfStmtContext;
+import de.fhg.iais.roberta.textly.generated.TextlyParser.IfThenContext;
+import de.fhg.iais.roberta.textly.generated.TextlyParser.IntConstContext;
+import de.fhg.iais.roberta.textly.generated.TextlyParser.ParenthesesContext;
+import de.fhg.iais.roberta.textly.generated.TextlyParser.RepeatStmtContext;
+import de.fhg.iais.roberta.textly.generated.TextlyParser.StmtContext;
+import de.fhg.iais.roberta.textly.generated.TextlyParser.StmtListContext;
+import de.fhg.iais.roberta.textly.generated.TextlyParser.UnaryContext;
+import de.fhg.iais.roberta.textly.generated.TextlyParser.VarNameContext;
 
-public class ParseTreeToAst extends TextlyBaseVisitor<Phrase> {
+public class TextlyTreeToAst extends TextlyBaseVisitor<Phrase> {
 
     /**
      * take a textly program as String, parse it, create a visitor as an instance of this class and visit the parse tree to create an AST.<br>
@@ -49,8 +49,8 @@ public class ParseTreeToAst extends TextlyBaseVisitor<Phrase> {
         CommonTokenStream tokens = new CommonTokenStream(lex);
         TextlyParser parser = new TextlyParser(tokens);
         StmtContext tree = parser.stmt();
-        new ParseTreeToAst().visit(tree);
-        ParseTreeToAst visitor = new ParseTreeToAst();
+        new TextlyTreeToAst().visit(tree);
+        TextlyTreeToAst visitor = new TextlyTreeToAst();
         return visitor.visit(tree);
     }
 
