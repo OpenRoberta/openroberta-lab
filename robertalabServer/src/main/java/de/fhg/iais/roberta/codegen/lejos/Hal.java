@@ -1,10 +1,7 @@
 //package de.fhg.iais.roberta.codegen.lejos;
 //
-//import java.util.HashMap;
-//import java.util.Map;
-//
 //import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
-//import de.fhg.iais.roberta.ast.syntax.sensoren.SensorPort;
+//import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 //import de.fhg.iais.roberta.conf.transformer.BrickConfiguration;
 //
 ///**
@@ -19,9 +16,6 @@
 //public class Hal {
 //
 //    private final BrickConfiguration brickConfiguration;
-//
-//    private final Map<ActorPort, Object> lejosActorBindings = new HashMap<>();
-//    private final Map<SensorPort, Object> lejosSensorBindings = new HashMap<>();
 //
 //    public Hal(BrickConfiguration brickConfiguration) {
 //        this.brickConfiguration = brickConfiguration;
@@ -48,7 +42,7 @@
 //     * @return motor object from BrickConfiguration
 //     */
 //    private Object getMotorObject(ActorPort port) {
-//        Object motor = this.lejosActorBindings.get(port);
+//        RegulatedMotor motor = this.brickConfiguration.getActorA().get(port);
 //        if ( motor == null ) {
 //            // brickConfiguration lesen und objekt erzeugen
 //            motor = ""; // TODO create motor object
@@ -78,6 +72,8 @@
 //     * @param speedPercent
 //     */
 //    public void setMotorSpeed(ActorPort port, int speedPercent) {
+//        new BrickConfiguration.Builder().visiting(attributes);
+//        String motorType = this.brickConfiguration.getActorOnPort(port);
 //        getMotorObject(port).setSpeed(toDegPerSec(speedPercent));
 //    }
 //

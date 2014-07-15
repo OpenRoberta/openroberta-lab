@@ -50,6 +50,6 @@ public enum HardwareComponent {
                 return hardwareComponent;
             }
         }
-        throw new DbcException("No hardwarecomponent matches attributes " + Arrays.toString(attributes));
+        throw new DbcException("No hardware component matches attributes " + Arrays.toString(attributes));
     }
 }

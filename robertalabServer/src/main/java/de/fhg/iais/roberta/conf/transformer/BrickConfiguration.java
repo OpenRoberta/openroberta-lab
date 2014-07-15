@@ -5,8 +5,9 @@ import java.util.TreeMap;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase.Category;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
-import de.fhg.iais.roberta.ast.syntax.sensoren.SensorPort;
+import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.dbc.Assert;
+import de.fhg.iais.roberta.dbc.DbcException;
 
 public class BrickConfiguration {
     private final HardwareComponent sensor1;
@@ -71,6 +72,36 @@ public class BrickConfiguration {
         return this.actorD;
     }
 
+    public String getActorOnPort(ActorPort port) {
+        switch ( port ) {
+            case A:
+                return this.actorA.toString();
+            case B:
+                return this.actorB.toString();
+            case C:
+                return this.actorC.toString();
+            case D:
+                return this.actorD.toString();
+            default:
+                throw new DbcException("Invalid Actor Port!");
+        }
+    }
+
+    public String getSensorOnPort(SensorPort port) {
+        switch ( port ) {
+            case S1:
+                return this.sensor1.toString();
+            case S2:
+                return this.sensor2.toString();
+            case S3:
+                return this.sensor3.toString();
+            case S4:
+                return this.sensor4.toString();
+            default:
+                throw new DbcException("Invalid Sensor Port!");
+        }
+    }
+
     public static class Builder {
         private final Map<ActorPort, HardwareComponent> actorMapping = new TreeMap<>();
         private final Map<SensorPort, HardwareComponent> sensorMapping = new TreeMap<>();
@@ -96,10 +127,10 @@ public class BrickConfiguration {
 
         public BrickConfiguration build() {
             return new BrickConfiguration(
-                this.sensorMapping.get(SensorPort._1),
-                this.sensorMapping.get(SensorPort._2),
-                this.sensorMapping.get(SensorPort._3),
-                this.sensorMapping.get(SensorPort._4),
+                this.sensorMapping.get(SensorPort.S1),
+                this.sensorMapping.get(SensorPort.S2),
+                this.sensorMapping.get(SensorPort.S3),
+                this.sensorMapping.get(SensorPort.S4),
                 this.actorMapping.get(ActorPort.A),
                 this.actorMapping.get(ActorPort.B),
                 this.actorMapping.get(ActorPort.C),

@@ -52,6 +52,7 @@ public class LejosInterface {
      * @return
      */
     public boolean isTouchSensorPressed(SensorPort port) {
+
         return false;
     }
 

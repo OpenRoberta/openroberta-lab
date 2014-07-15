@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * @author kcvejoski
  */
 public enum SensorPort {
-    _1( "1" ), _2( "2" ), _3( "3" ), _4( "4" );
+    S1( "1" ), S2( "2" ), S3( "3" ), S4( "4" );
 
     private final String[] values;
 
