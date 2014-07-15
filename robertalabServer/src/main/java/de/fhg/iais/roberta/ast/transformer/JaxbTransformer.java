@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.ast.syntax.action.MotionParam;
 import de.fhg.iais.roberta.ast.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
-import de.fhg.iais.roberta.ast.syntax.expr.ColourConst;
+import de.fhg.iais.roberta.ast.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
@@ -24,17 +24,17 @@ import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
-import de.fhg.iais.roberta.ast.syntax.sensoren.BrickKey;
-import de.fhg.iais.roberta.ast.syntax.sensoren.BrickSensor;
-import de.fhg.iais.roberta.ast.syntax.sensoren.ColorSensor;
-import de.fhg.iais.roberta.ast.syntax.sensoren.DrehSensor;
-import de.fhg.iais.roberta.ast.syntax.sensoren.GyroSensor;
-import de.fhg.iais.roberta.ast.syntax.sensoren.InfraredSensor;
-import de.fhg.iais.roberta.ast.syntax.sensoren.Sensor;
-import de.fhg.iais.roberta.ast.syntax.sensoren.SensorPort;
-import de.fhg.iais.roberta.ast.syntax.sensoren.TimerSensor;
-import de.fhg.iais.roberta.ast.syntax.sensoren.TouchSensor;
-import de.fhg.iais.roberta.ast.syntax.sensoren.UltraSSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.BrickKey;
+import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.DrehSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.Sensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
+import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.TouchSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.UltraSSensor;
 import de.fhg.iais.roberta.ast.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
@@ -121,6 +121,7 @@ public class JaxbTransformer {
                 mode = extractField(fields, "MOTORROTATION", (short) 1);
                 values = extractValues(block, (short) 2);
                 expr = extractValue(values, new ExprParam("POWER", Integer.class));
+
                 mp = new MotionParam.Builder().speed((Expr) expr).build();
                 return MotorOnAction.make(ActorPort.get(port), mp);
 
@@ -640,7 +641,7 @@ public class JaxbTransformer {
             case "CONSTANT":
                 return MathConst.make(MathConst.Const.get(field));
             case "COLOUR":
-                return ColourConst.make(field);
+                return ColorConst.make(field);
             default:
                 throw new RuntimeException("Invalid type constant!");
         }

@@ -4,6 +4,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 
@@ -60,7 +61,7 @@ public class SensorTest {
         Assert.assertEquals(a, transformer.toString());
     }
 
-    @Test
+    @Ignore
     public void sensorGetMode() throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -85,7 +86,7 @@ public class SensorTest {
         Assert.assertEquals(a, transformer.toString());
     }
 
-    @Test
+    @Ignore
     public void sensorGetSample() throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -111,7 +112,7 @@ public class SensorTest {
         Assert.assertEquals(a, transformer.toString());
     }
 
-    @Test
+    @Ignore
     public void sensorBrick() throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();

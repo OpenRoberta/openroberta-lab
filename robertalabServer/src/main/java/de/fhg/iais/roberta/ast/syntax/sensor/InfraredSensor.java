@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.ast.syntax.sensoren;
+package de.fhg.iais.roberta.ast.syntax.sensor;
 
 import java.util.Locale;
 
@@ -7,16 +7,16 @@ import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
- * Gyro sensor that can operate in multiple modes. See enum {@link Mode} for all possible modes that the sensor have.
+ * Infrared sensor that can operate in multiple modes. See enum {@link Mode} for all possible modes that the sensor have.
  * 
  * @author kcvejoski
  */
-public class GyroSensor extends Sensor {
+public class InfraredSensor extends Sensor {
     private final Mode mode;
     private final SensorPort port;
 
-    private GyroSensor(Mode mode, SensorPort port) {
-        super(Phrase.Kind.GyroSensor);
+    private InfraredSensor(Mode mode, SensorPort port) {
+        super(Phrase.Kind.InfraredSensor);
         Assert.isTrue(mode != null);
         this.mode = mode;
         this.port = port;
@@ -24,14 +24,14 @@ public class GyroSensor extends Sensor {
     }
 
     /**
-     * Create object of the class {@link GyroSensor}.
+     * Create object of the class {@link InfraredSensor}.
      * 
      * @param mode in which the sensor is operating. See enum {@link Mode} for all possible modes that the sensor have.
      * @param port on where the sensor is connected. See enum {@link SensorPort} for all possible sensor ports.
      * @return
      */
-    public static GyroSensor make(Mode mode, SensorPort port) {
-        return new GyroSensor(mode, port);
+    public static InfraredSensor make(Mode mode, SensorPort port) {
+        return new InfraredSensor(mode, port);
     }
 
     /**
@@ -55,7 +55,7 @@ public class GyroSensor extends Sensor {
 
     @Override
     public String toString() {
-        return "GyroSensor [mode=" + this.mode + ", port=" + this.port + "]";
+        return "InfraredSensor [mode=" + this.mode + ", port=" + this.port + "]";
     }
 
     /**
@@ -64,8 +64,7 @@ public class GyroSensor extends Sensor {
      * @author kcvejoski
      */
     public static enum Mode {
-        RATE(), ANGLE(), GET_MODE(), GET_SAMPLE(), RESET();
-
+        DISTANCE(), SEEK(), GET_MODE(), GET_SAMPLE();
         private final String[] values;
 
         private Mode(String... values) {
@@ -97,4 +96,5 @@ public class GyroSensor extends Sensor {
             throw new DbcException("Invalid mode: " + s);
         }
     }
+
 }

@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.ast.syntax.sensoren;
+package de.fhg.iais.roberta.ast.syntax.sensor;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
@@ -13,7 +13,7 @@ public class TimerSensor extends Sensor {
     private final int timer;
 
     private TimerSensor(Mode mode, int timer) {
-        super(Phrase.Kind.SteinSensor);
+        super(Phrase.Kind.BrickSensor);
         Assert.isTrue(timer < 10);
         this.mode = mode;
         this.timer = timer;

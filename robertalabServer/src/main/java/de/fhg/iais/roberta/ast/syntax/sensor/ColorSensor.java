@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.ast.syntax.sensoren;
+package de.fhg.iais.roberta.ast.syntax.sensor;
 
 import java.util.Locale;
 
@@ -7,16 +7,16 @@ import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
- * Ultrasonic sensor that can operate in multiple modes. See enum {@link Mode} for all possible modes that the sensor have.
+ * Color sensor that can operate in multiple modes. See enum {@link Mode} for all possible modes that the sensor have.
  * 
  * @author kcvejoski
  */
-public class UltraSSensor extends Sensor {
+public class ColorSensor extends Sensor {
     private final Mode mode;
     private final SensorPort port;
 
-    private UltraSSensor(Mode mode, SensorPort port) {
-        super(Phrase.Kind.UltraSSensor);
+    private ColorSensor(Mode mode, SensorPort port) {
+        super(Phrase.Kind.ColorSensor);
         Assert.isTrue(mode != null);
         this.mode = mode;
         this.port = port;
@@ -24,14 +24,14 @@ public class UltraSSensor extends Sensor {
     }
 
     /**
-     * Create object of the class {@link UltraSSensor}.
+     * Create object of the class {@link ColorSensor}.
      * 
      * @param mode in which the sensor is operating. See enum {@link Mode} for all possible modes that the sensor have.
      * @param port on where the sensor is connected. See enum {@link SensorPort} for all possible sensor ports.
      * @return
      */
-    public static UltraSSensor make(Mode mode, SensorPort port) {
-        return new UltraSSensor(mode, port);
+    public static ColorSensor make(Mode mode, SensorPort port) {
+        return new ColorSensor(mode, port);
     }
 
     /**
@@ -55,7 +55,7 @@ public class UltraSSensor extends Sensor {
 
     @Override
     public String toString() {
-        return "UltraSSensor [mode=" + this.mode + ", port=" + this.port + "]";
+        return "ColorSensor [mode=" + this.mode + ", port=" + this.port + "]";
     }
 
     /**
@@ -64,7 +64,7 @@ public class UltraSSensor extends Sensor {
      * @author kcvejoski
      */
     public static enum Mode {
-        DISTANCE(), PRESENCE(), GET_MODE(), GET_SAMPLE();
+        COLOUR(), LIGHT(), AMBIENTLIGHT(), GET_MODE(), GET_SAMPLE();
 
         private final String[] values;
 

@@ -9,23 +9,23 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
  * 
  * @author kcvejoski
  */
-public class ColourConst extends Expr {
+public class ColorConst extends Expr {
     private final String value;
 
-    private ColourConst(String value) {
-        super(Phrase.Kind.ColourConst);
+    private ColorConst(String value) {
+        super(Phrase.Kind.ColorConst);
         this.value = value;
         setReadOnly();
     }
 
     /**
-     * creates instance of {@link ColourConst}. This instance is read only and can not be modified.
+     * creates instance of {@link ColorConst}. This instance is read only and can not be modified.
      * 
      * @param value that the color constant will have
-     * @return {@link ColourConst}
+     * @return {@link ColorConst}
      */
-    public static ColourConst make(String value) {
-        return new ColourConst(value);
+    public static ColorConst make(String value) {
+        return new ColorConst(value);
     }
 
     /**

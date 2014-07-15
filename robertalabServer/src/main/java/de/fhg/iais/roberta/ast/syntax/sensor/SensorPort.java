@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.ast.syntax.sensoren;
+package de.fhg.iais.roberta.ast.syntax.sensor;
 
 import java.util.Locale;
 

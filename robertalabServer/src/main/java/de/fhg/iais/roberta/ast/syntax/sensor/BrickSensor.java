@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.ast.syntax.sensoren;
+package de.fhg.iais.roberta.ast.syntax.sensor;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
@@ -13,7 +13,7 @@ public class BrickSensor extends Sensor {
     private final Mode mode;
 
     private BrickSensor(Mode mode, BrickKey key) {
-        super(Phrase.Kind.SteinSensor);
+        super(Phrase.Kind.BrickSensor);
         Assert.isTrue(mode != null && !key.equals(""));
         this.mode = mode;
         this.key = key;

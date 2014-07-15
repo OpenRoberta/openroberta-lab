@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.ast.syntax.sensoren;
+package de.fhg.iais.roberta.ast.syntax.sensor;
 
 import java.util.Locale;
 
@@ -17,7 +17,7 @@ public class DrehSensor extends Sensor {
     private final ActorPort motor;
 
     private DrehSensor(Mode mode, ActorPort motor) {
-        super(Phrase.Kind.DrehSensor);
+        super(Phrase.Kind.RotationSensor);
         Assert.isTrue(mode != null);
         this.mode = mode;
         this.motor = motor;

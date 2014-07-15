@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.ast.syntax.sensoren;
+package de.fhg.iais.roberta.ast.syntax.sensor;
 
 import java.util.Locale;
 
@@ -7,16 +7,16 @@ import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
- * Infrared sensor that can operate in multiple modes. See enum {@link Mode} for all possible modes that the sensor have.
+ * Ultrasonic sensor that can operate in multiple modes. See enum {@link Mode} for all possible modes that the sensor have.
  * 
  * @author kcvejoski
  */
-public class InfraredSensor extends Sensor {
+public class UltraSSensor extends Sensor {
     private final Mode mode;
     private final SensorPort port;
 
-    private InfraredSensor(Mode mode, SensorPort port) {
-        super(Phrase.Kind.InfraredSensor);
+    private UltraSSensor(Mode mode, SensorPort port) {
+        super(Phrase.Kind.UltraSSensor);
         Assert.isTrue(mode != null);
         this.mode = mode;
         this.port = port;
@@ -24,14 +24,14 @@ public class InfraredSensor extends Sensor {
     }
 
     /**
-     * Create object of the class {@link InfraredSensor}.
+     * Create object of the class {@link UltraSSensor}.
      * 
      * @param mode in which the sensor is operating. See enum {@link Mode} for all possible modes that the sensor have.
      * @param port on where the sensor is connected. See enum {@link SensorPort} for all possible sensor ports.
      * @return
      */
-    public static InfraredSensor make(Mode mode, SensorPort port) {
-        return new InfraredSensor(mode, port);
+    public static UltraSSensor make(Mode mode, SensorPort port) {
+        return new UltraSSensor(mode, port);
     }
 
     /**
@@ -55,7 +55,7 @@ public class InfraredSensor extends Sensor {
 
     @Override
     public String toString() {
-        return "InfraredSensor [mode=" + this.mode + ", port=" + this.port + "]";
+        return "UltraSSensor [mode=" + this.mode + ", port=" + this.port + "]";
     }
 
     /**
@@ -64,7 +64,8 @@ public class InfraredSensor extends Sensor {
      * @author kcvejoski
      */
     public static enum Mode {
-        DISTANCE(), SEEK(), GET_MODE(), GET_SAMPLE();
+        DISTANCE(), PRESENCE(), GET_MODE(), GET_SAMPLE();
+
         private final String[] values;
 
         private Mode(String... values) {
@@ -96,5 +97,4 @@ public class InfraredSensor extends Sensor {
             throw new DbcException("Invalid mode: " + s);
         }
     }
-
 }
