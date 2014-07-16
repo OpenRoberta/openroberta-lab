@@ -1,0 +1,218 @@
+html, body {
+    margin: 0px !important;
+    padding: 0px !important;
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    background-color: #e6e6e6;
+}
+
+#wrapper {
+    height: 100%;
+    width: 100%;
+}
+
+#head-section {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 60px;
+    background-color: #ffffff;
+    box-shadow: 0px 3px 5px #aeaeaf;
+    -webkit-box-shadow: 0px 3px 5px #aeaeaf;
+    z-index: 100;
+}
+
+ul#head-navigation {
+    float: left;
+    list-style-type: none;
+    padding: 0px;
+    margin: 5px 0px 0px 20px;
+}
+
+ul#head-navigation li {
+    float: left;
+    margin-right: 20px;
+}
+
+ul#head-navigation a {
+    text-decoration: none;
+    color: #c7c7c7;
+    text-align: center;
+    display: block;
+    float: left;
+}
+
+ul#head-navigation a:hover {
+    text-decoration: none;
+    color: #333333;
+}
+
+.head-navi-icons {
+    height: 32px;
+    background-repeat: no-repeat;
+    display: block;
+    margin: 0 auto;
+}
+
+.head-navi-icons.help {
+    background-image: url(img/head-navi-icons/help.png);
+    width: 23px;
+}
+
+ul#head-navigation a:hover .head-navi-icons.help {
+    background-image: url(img/head-navi-icons/help_active.png);
+}
+
+.head-navi-icons.settings {
+    background-image: url(img/head-navi-icons/settings.png);
+    width: 24px;
+}
+
+ul#head-navigation a:hover .head-navi-icons.settings {
+    background-image: url(img/head-navi-icons/settings_active.png);
+}
+
+.head-navi-icons.community {
+    background-image: url(img/head-navi-icons/community.png);
+    width: 34px;
+}
+
+ul#head-navigation a:hover .head-navi-icons.community{
+    background-image: url(img/head-navi-icons/community_active.png);
+}
+
+.head-navi-text {
+    font-family: 'Roboto', sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#logo {
+    width: 222px;
+    height: 60px;
+    background-image: url(img/logo.png);
+    background-repeat: no-repeat;
+    float: right;
+}
+
+#logo a {
+    display: block;
+    width: 222px;
+    height: 60px;
+    text-indent: -9999px;
+}
+
+#main-section {
+    height: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin-top: 60px;
+    z-index: 99;
+}
+
+#welcome-screen {
+    position: relative;
+    height: 100%;
+    widows: 100%;
+}
+
+#bricks-shell {
+    width: 600px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 600px;
+    margin: -300px;
+}
+
+.bricks {
+    position: absolute;
+}
+
+.bricks {
+    display: block;
+    height: 100%;
+    width: 100%;
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.bricks span {
+    position: absolute;
+}
+
+.bricks#welcome-brick1 span {
+    bottom: 5px;
+    right: 40px;
+}
+
+.bricks#welcome-brick2 span {
+    bottom: 35px;
+    left: 10px;
+}
+
+.bricks#welcome-brick3 span {
+    top: 35px;
+    right: 10px;
+}
+
+.bricks#welcome-brick4 span {
+    top: 5px;
+    left: 40px;
+}
+
+#welcome-brick1 {
+    width: 321px;
+    height: 293px;
+    background-image: url(img/welcome-screen/brick1.png);
+    top: 0;
+    left: 0;
+}
+#welcome-brick1:hover {
+    background-image: url(img/welcome-screen/brick1_active.png);
+}
+
+#welcome-brick2 {
+    width: 293px;
+    height: 321px;
+    background-image: url(img/welcome-screen/brick2.png);
+    right: 0;
+    top: 0;
+}
+#welcome-brick2:hover {
+    background-image: url(img/welcome-screen/brick2_active.png);
+}
+
+#welcome-brick3 {
+    width: 293px;
+    height: 321px;
+    background-image: url(img/welcome-screen/brick3.png);
+    bottom: 0;
+    left: 0;
+}
+#welcome-brick3:hover {
+    background-image: url(img/welcome-screen/brick3_active.png);
+}
+
+#welcome-brick4 {
+    width: 321px;
+    height: 293px;
+    background-image: url(img/welcome-screen/brick4.png);
+    bottom: 0;
+    right: 0;
+}
+#welcome-brick4:hover {
+    background-image: url(img/welcome-screen/brick4_active.png);
+}
