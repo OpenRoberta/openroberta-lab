@@ -1,76 +1,51 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-
-<script type="text/javascript" src="/common/jquery/jquery-2.0.3.js" charset="utf-8"></script>
-<script type="text/javascript" src="/common/ui/jquery-ui.js" charset="utf-8"></script>
-<script type="text/javascript" src="/common/basics.js" charset="utf-8"></script>
-<script type="text/javascript" src="/common/jquery.dataTables.min.js" charset="utf-8"></script>
-
-<script type="text/javascript" src="/blockly/blockly_compressed.js"></script>
-<script type="text/javascript" src="/blockly/blocks_compressed.js"></script>
-<script type="text/javascript" src="/blockly/msg/js/de.js"></script>
-
-<script type="text/javascript" src="/roberta.js"></script>
-
-<link rel="stylesheet" type="text/css" href="/common/themes/base/jquery.ui.theme.css"></link>
-<link rel="stylesheet" type="text/css" href="/common/themes/base/jquery.ui.tabs.css"></link>
-<link rel="stylesheet" type="text/css" href="/roberta.css"></link>
-<link rel="stylesheet" type="text/css" href="/common/jquery.dataTables.min.css"></link>
+<!DOCTYPE html>
+<html>
 
 <head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-<title class="header">Testfeld f&uuml;r BlOcKlY</title>
+    <meta charset="UTF-8">
+    <title>OPEN Roberta Lab</title>
+
+    <link href="css/styles.css" type="text/css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
 </head>
 
 <body>
-  <div id="tabs">
-    <ul>
-      <li><a href="#blockly">Test Nepo :-)</a></li>
-      <li><a href="#listing">Listing</a></li>
-      <li><a href="#logging">Logging</a></li>
-      <li><a href="#readme">README</a></li>
-    </ul>
-    <div id="blockly">
-      <div id="blocklyDiv" style="height: 450px; width: 1000px;"></div>
-      <br>
-      <input id="save" class='submit' type="submit" value="save" />
-      <input id="load" class='submit' type="submit" value="load" />
-      <input id="add" class='submit' type="submit" value="add" />
-      <input id="del" class='submit' type="submit" value="delete" />
-      <input id="run" class='submit' type="submit" value="run" />
-      <input id="name" class='input' type="text" value="" />
-      <br>
-      <input id="toolbox1" class='button' type="submit" value="toolbox 1" />
-      <input id="toolbox2" class='button' type="submit" value="toolbox 2" />
+    <div id="wrapper">
+        <div id="head-section">
+            <ul id="head-navigation">
+                <li>
+                    <a href="#">
+                        <span class="head-navi-icons help"></span>
+                        <span class="head-navi-text">Hilfe</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="head-navi-icons settings"></span>
+                        <span class="head-navi-text">Einstellungen</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="head-navi-icons community"></span>
+                        <span class="head-navi-text">Community</span>
+                    </a>
+                </li>
+            </ul>
+            <div id="logo">
+                <a href="#">Logo</a>
+            </div>
+        </div>
+        <div id="main-section">
+            <div id="welcome-screen">
+                <div id="bricks-shell">
+                    <a href="#" class="bricks" id="welcome-brick1"><span>Hilfe</span></a>
+                    <a href="#" class="bricks" id="welcome-brick2"><span>Einstellungen</span></a>
+                    <a href="#" class="bricks" id="welcome-brick3"><span>Community</span></a>
+                    <a href="workplace.html" class="bricks" id="welcome-brick4"><span>Starten</span></a>
+                </div>
+            </div>
+        </div>
     </div>
-    <div id="listing">
-      <table id="programNameTable" class="tableSize">
-        <thead></thead>
-        <tbody></tbody>
-        <tfoot>
-        </tfoot>
-      </table>
-      <br>
-      <input id="loadFromListing" class='submit' type="submit" value="load" />
-      <div id="redrawCounter" class="rightGray">0</div></br>
-    </div>
-    <div id="logging">
-      <br />
-      <div>
-        <input id="toggle" class="button" type="submit" value="log ein/aus" /><br></br>
-        <hr />
-        <br></br>
-        <ol id="log" class="log">
-        </ol>
-        <div class="counter">Count:</div>
-        <div class="counter" id="counter">0</div>
-      </div>
-    </div>
-    <div id="readme">
-      <br />
-      <div>blo ckl y blo ckl y blo ckl y blo ckl y blo ckl y </div>
-    </div>
-  </div>
 </body>
 </html>
