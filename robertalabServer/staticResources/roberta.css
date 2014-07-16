@@ -62,6 +62,7 @@
 	background-color: #ffffff;
 }
 
+
 .ui-tabs .ui-tabs-nav {
 	padding: 0 0;
 }
@@ -73,10 +74,10 @@
 .ui-widget-content {
 	display: block;
 	float: left;
-	margin-top: 0px;
+	margin-top: 5px;
 	padding-top: 10px;
 	padding-left: 10px;
-	border-width: 1px;
+	border-width: 2px;
 	border-color: green;
 	border-style: solid;
 	width: 90%;
