@@ -344,8 +344,8 @@ ul#head-navigation a:hover .head-navi-icons.community{
     background-color: none;
     background-image: url(img/grid-pattern-background.png);
     background-repeat: repeat;
-    height: 100%;
-    min-height: 100%;
+    height: 60%;
+    min-height: 60%;
 }
 
 .blocklySvg {
