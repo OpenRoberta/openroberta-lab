@@ -13,11 +13,11 @@ public enum ActorPort {
         this.values = values;
     }
 
-    public static ActorPort get(String s) {
-        if ( s == null || s.isEmpty() ) {
-            throw new DbcException("Invalid binary operator symbol: " + s);
+    public static ActorPort get(String port) {
+        if ( port == null || port.isEmpty() ) {
+            throw new DbcException("Invalid binary operator symbol: " + port);
         }
-        String sUpper = s.trim().toUpperCase(Locale.GERMAN);
+        String sUpper = port.trim().toUpperCase(Locale.GERMAN);
         for ( ActorPort ap : ActorPort.values() ) {
             if ( ap.toString().equals(sUpper) ) {
                 return ap;
@@ -28,6 +28,6 @@ public enum ActorPort {
                 }
             }
         }
-        throw new DbcException("Invalid binary operator symbol: " + s);
+        throw new DbcException("Invalid binary operator symbol: " + port);
     }
 }

@@ -44,7 +44,7 @@ public class SensorStmt extends Stmt {
 
     @Override
     public String toString() {
-        return "SensorStmt [sensor=" + this.sensor + "]";
+        return "\nSensorStmt " + this.sensor;
     }
 
 }

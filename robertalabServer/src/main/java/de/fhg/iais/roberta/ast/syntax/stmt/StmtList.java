@@ -55,7 +55,9 @@ public class StmtList extends Stmt {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        generateJava(sb, 0);
+        for ( Stmt stmt : this.sl ) {
+            sb.append(stmt.toString());
+        }
         return sb.toString();
     }
 }

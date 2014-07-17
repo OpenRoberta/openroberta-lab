@@ -108,7 +108,7 @@ public class BrickConfiguration {
         private HardwareComponent lastVisited = null;
 
         public void visitingActorPort(String visiting) {
-            Assert.isTrue(this.lastVisited.getCategory() == Category.AKTOR);
+            Assert.isTrue(this.lastVisited.getCategory() == Category.ACTOR);
             ActorPort port = ActorPort.get(visiting);
             this.actorMapping.put(port, this.lastVisited);
             this.lastVisited = null;

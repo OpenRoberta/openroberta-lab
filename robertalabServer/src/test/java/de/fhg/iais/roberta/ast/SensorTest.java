@@ -4,7 +4,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 
@@ -26,13 +25,13 @@ public class SensorTest {
 
         String a =
             "BlockAST [project=[[\n"
-                + "if SensorExpr [TouchSensor [port=_1]]\n"
+                + "if SensorExpr [TouchSensor [port=S1]]\n"
                 + ",then\n"
-                + "   SensorStmt UltraSSensor [mode=DISTANCE, port=_4]\n"
-                + "   SensorStmt ColorSensor [mode=COLOUR, port=_3]\n"
-                + "   SensorStmt InfraredSensor [mode=DISTANCE, port=_4]\n"
-                + "   SensorStmt DrehSensor [mode=ROTATION, motor=A]\n"
-                + "   SensorStmt GyroSensor [mode=ANGLE, port=_2]\n"
+                + "SensorStmt UltraSSensor [mode=DISTANCE, port=S4]\n"
+                + "SensorStmt ColorSensor [mode=COLOUR, port=S3]\n"
+                + "SensorStmt InfraredSensor [mode=DISTANCE, port=S4]\n"
+                + "SensorStmt DrehSensor [mode=ROTATION, motor=A]\n"
+                + "SensorStmt GyroSensor [mode=ANGLE, port=S2]\n"
                 + "]]]";
 
         Assert.assertEquals(a, transformer.toString());
@@ -51,17 +50,17 @@ public class SensorTest {
 
         String a =
             "BlockAST [project=[[\n"
-                + "if SensorExpr [TouchSensor [port=_1]]\n"
+                + "if SensorExpr [TouchSensor [port=S1]]\n"
                 + ",then\n"
-                + "   SensorStmt DrehSensor [mode=RESET, motor=A]\n"
-                + "   SensorStmt GyroSensor [mode=RESET, port=_2]\n"
-                + "   SensorStmt TimerSensor [mode=RESET, timer=1]\n"
+                + "SensorStmt DrehSensor [mode=RESET, motor=A]\n"
+                + "SensorStmt GyroSensor [mode=RESET, port=S2]\n"
+                + "SensorStmt TimerSensor [mode=RESET, timer=1]\n"
                 + "]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
 
-    @Ignore
+    @Test
     public void sensorGetMode() throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -74,19 +73,19 @@ public class SensorTest {
 
         String a =
             "BlockAST [project=[[\n"
-                + "if SensorExpr [TouchSensor [port=_1]]\n"
+                + "if SensorExpr [TouchSensor [port=S1]]\n"
                 + ",then\n"
-                + "   Var [item] := SensorExpr [UltraSSensor [mode=GET_MODE, port=_4]]\n\n"
-                + "   Var [item] := SensorExpr [ColorSensor [mode=GET_MODE, port=_3]]\n\n"
-                + "   Var [item] := SensorExpr [InfraredSensor [mode=GET_MODE, port=_4]]\n\n"
-                + "   Var [item] := SensorExpr [DrehSensor [mode=GET_MODE, motor=A]]\n\n"
-                + "   Var [item] := SensorExpr [GyroSensor [mode=GET_MODE, port=_2]]\n\n"
+                + "Var [item] := SensorExpr [UltraSSensor [mode=GET_MODE, port=S4]]\n\n"
+                + "Var [item] := SensorExpr [ColorSensor [mode=GET_MODE, port=S3]]\n\n"
+                + "Var [item] := SensorExpr [InfraredSensor [mode=GET_MODE, port=S4]]\n\n"
+                + "Var [item] := SensorExpr [DrehSensor [mode=GET_MODE, motor=A]]\n\n"
+                + "Var [item] := SensorExpr [GyroSensor [mode=GET_MODE, port=S2]]\n\n"
                 + "]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
 
-    @Ignore
+    @Test
     public void sensorGetSample() throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -99,20 +98,20 @@ public class SensorTest {
 
         String a =
             "BlockAST [project=[[\n"
-                + "if SensorExpr [TouchSensor [port=_1]]\n"
+                + "if SensorExpr [TouchSensor [port=S1]]\n"
                 + ",then\n"
-                + "   Var [item] := SensorExpr [UltraSSensor [mode=GET_SAMPLE, port=_4]]\n\n"
-                + "   Var [item] := SensorExpr [ColorSensor [mode=GET_SAMPLE, port=_3]]\n\n"
-                + "   Var [item] := SensorExpr [InfraredSensor [mode=GET_SAMPLE, port=_4]]\n\n"
-                + "   Var [item] := SensorExpr [DrehSensor [mode=GET_SAMPLE, motor=A]]\n\n"
-                + "   Var [item] := SensorExpr [GyroSensor [mode=GET_SAMPLE, port=_2]]\n\n"
-                + "   Var [item] := SensorExpr [TimerSensor [mode=GET_SAMPLE, timer=1]]\n\n"
+                + "Var [item] := SensorExpr [UltraSSensor [mode=GET_SAMPLE, port=S4]]\n\n"
+                + "Var [item] := SensorExpr [ColorSensor [mode=GET_SAMPLE, port=S3]]\n\n"
+                + "Var [item] := SensorExpr [InfraredSensor [mode=GET_SAMPLE, port=S4]]\n\n"
+                + "Var [item] := SensorExpr [DrehSensor [mode=GET_SAMPLE, motor=A]]\n\n"
+                + "Var [item] := SensorExpr [GyroSensor [mode=GET_SAMPLE, port=S2]]\n\n"
+                + "Var [item] := SensorExpr [TimerSensor [mode=GET_SAMPLE, timer=1]]\n\n"
                 + "]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
 
-    @Ignore
+    @Test
     public void sensorBrick() throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -125,10 +124,10 @@ public class SensorTest {
 
         String a =
             "BlockAST [project=[[\n"
-                + "if SensorExpr [TouchSensor [port=_1]]\n"
+                + "if SensorExpr [TouchSensor [port=S1]]\n"
                 + ",then\n"
-                + "   Var [item] := SensorExpr [BrickSensor [key=ENTER, mode=IS_PRESSED]]\n\n"
-                + "   Var [item] := SensorExpr [BrickSensor [key=LEFT, mode=WAIT_FOR_PRESS_AND_RELEASE]]\n\n"
+                + "Var [item] := SensorExpr [BrickSensor [key=ENTER, mode=IS_PRESSED]]\n\n"
+                + "Var [item] := SensorExpr [BrickSensor [key=LEFT, mode=WAIT_FOR_PRESS_AND_RELEASE]]\n\n"
                 + "]]]";
 
         Assert.assertEquals(a, transformer.toString());

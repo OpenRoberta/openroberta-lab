@@ -110,6 +110,7 @@ abstract public class Phrase {
         Unary( Category.EXPR ),
         Binary( Category.EXPR ),
         SensorExpr( Category.EXPR ),
+        ActionExpr( Category.EXPR ),
         EmptyExpr( Category.EXPR ),
         Funct( Category.EXPR ),
         IfStmt( Category.STMT ),
@@ -120,12 +121,20 @@ abstract public class Phrase {
         AktionStmt( Category.STMT ),
         SensorStmt( Category.STMT ),
         StmtFlowCon( Category.STMT ),
-        TurnAktion( Category.AKTOR ),
-        DriveAktion( Category.AKTOR ),
-        ShowAktion( Category.AKTOR ),
-        ToneAktion( Category.AKTOR ),
-        LightAktion( Category.AKTOR ),
-        MotorOnAction( Category.AKTOR );
+        TurnAction( Category.ACTOR ),
+        DriveAction( Category.ACTOR ),
+        ShowTextAction( Category.ACTOR ),
+        ShowPictureAction( Category.ACTOR ),
+        ToneAction( Category.ACTOR ),
+        LightAction( Category.ACTOR ),
+        ClearDisplayAction( Category.ACTOR ),
+        MotorOnAction( Category.ACTOR ),
+        MotorGetPowerAction( Category.ACTOR ),
+        MotorStopAction( Category.ACTOR ),
+        PlayFileAction( Category.ACTOR ),
+        VolumeAction( Category.ACTOR ),
+        LightStatusAction( Category.ACTOR ),
+        StopAction( Category.ACTOR );
 
         private final Category category;
 
@@ -139,6 +148,6 @@ abstract public class Phrase {
     }
 
     public static enum Category {
-        EXPR, SENSOR, AKTOR, STMT;
+        EXPR, SENSOR, ACTOR, STMT;
     }
 }

@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.util;
 
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.MotorDuration;
-import de.fhg.iais.roberta.ast.syntax.action.MotorMode;
+import de.fhg.iais.roberta.ast.syntax.action.MotorStopMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 
 public class LejosInterface {
@@ -24,14 +24,14 @@ public class LejosInterface {
 
     /**
      * Stop the motor connected to port {@link port} if {@link activate} is true.
-     * This call set the motor mode (see {@link MotorMode}) and stops the motor if {@link activate} is true.
+     * This call set the motor mode (see {@link MotorStopMode}) and stops the motor if {@link activate} is true.
      * 
      * @param port
      * @param mMode
      * @param activate
      * @return
      */
-    public boolean setMotorStop(ActorPort port, MotorMode mMode, boolean activate) {
+    public boolean setMotorStop(ActorPort port, MotorStopMode mMode, boolean activate) {
         return true;
     }
 
@@ -52,7 +52,6 @@ public class LejosInterface {
      * @return
      */
     public boolean isTouchSensorPressed(SensorPort port) {
-
         return false;
     }
 

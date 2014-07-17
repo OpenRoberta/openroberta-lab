@@ -1,29 +1,30 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.dbc.Assert;
 
 public class ToneAction extends Action {
-    private final int frequency;
-    private final int duration;
+    private final Expr frequency;
+    private final Expr duration;
 
-    private ToneAction(int frequency, int duration) {
-        super(Phrase.Kind.ToneAktion);
-        Assert.isTrue(frequency > 0 && duration > 0);
+    private ToneAction(Expr frequency, Expr duration) {
+        super(Phrase.Kind.ToneAction);
+        Assert.isTrue(frequency.isReadOnly() && duration.isReadOnly() && frequency != null && duration != null);
         this.frequency = frequency;
         this.duration = duration;
         setReadOnly();
     }
 
-    public ToneAction make(int frequency, int duration) {
+    public static ToneAction make(Expr frequency, Expr duration) {
         return new ToneAction(frequency, duration);
     }
 
-    public int getFrequency() {
+    public Expr getFrequency() {
         return this.frequency;
     }
 
-    public int getDuration() {
+    public Expr getDuration() {
         return this.duration;
     }
 
@@ -35,6 +36,6 @@ public class ToneAction extends Action {
 
     @Override
     public String toString() {
-        return "ToneAktion [" + this.frequency + ", " + this.duration + "]";
+        return "ToneAction [" + this.frequency + ", " + this.duration + "]";
     }
 }

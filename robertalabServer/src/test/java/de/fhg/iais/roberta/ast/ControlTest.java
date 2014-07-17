@@ -25,7 +25,7 @@ public class ControlTest {
             "BlockAST [project=[[\n"
                 + "if Binary [EQ, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]]\n"
                 + ",then\n"
-                + "   exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
+                + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
                 + "]]]";
         Assert.assertEquals(a, transformer.toString());
     }
@@ -44,9 +44,9 @@ public class ControlTest {
             "BlockAST [project=[[\n"
                 + "if Binary [EQ, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]]\n"
                 + ",then\n"
-                + "   exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
+                + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
                 + ",else\n"
-                + "   SensorStmt DrehSensor [mode=RESET, motor=A]\n"
+                + "SensorStmt DrehSensor [mode=RESET, motor=A]\n"
                 + "]]]";
         Assert.assertEquals(a, transformer.toString());
     }
@@ -65,10 +65,10 @@ public class ControlTest {
             "BlockAST [project=[[\n"
                 + "if Binary [EQ, NumConst [1], NumConst [1]]\n"
                 + ",then\n"
-                + "   exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
+                + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
                 + ",else if Binary [EQ, NumConst [1], NumConst [1]]\n"
                 + ",then\n"
-                + "   SensorStmt DrehSensor [mode=RESET, motor=A]\n"
+                + "SensorStmt DrehSensor [mode=RESET, motor=A]\n"
                 + "]]]";
         Assert.assertEquals(a, transformer.toString());
     }
@@ -87,12 +87,79 @@ public class ControlTest {
             "BlockAST [project=[[\n"
                 + "if Binary [EQ, NumConst [1], NumConst [1]]\n"
                 + ",then\n"
-                + "   exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
+                + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
                 + ",else if Binary [EQ, NumConst [1], NumConst [1]]\n"
                 + ",then\n"
-                + "   SensorStmt DrehSensor [mode=RESET, motor=A]\n"
+                + "SensorStmt DrehSensor [mode=RESET, motor=A]\n"
                 + ",else\n"
-                + "   SensorStmt DrehSensor [mode=RESET, motor=A]\n"
+                + "SensorStmt DrehSensor [mode=RESET, motor=A]\n"
+                + "]]]";
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
+    public void ifStmt4() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/if_stmt4.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+        String a =
+            "BlockAST [project=[[\n"
+                + "if Binary [EQ, NumConst [1], NumConst [1]]\n"
+                + ",then\n"
+                + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
+                + ",else if Binary [EQ, NumConst [1], NumConst [1]]\n"
+                + ",then\n"
+                + "SensorStmt DrehSensor [mode=RESET, motor=A]\n"
+                + ",else\n"
+                + "SensorStmt DrehSensor [mode=RESET, motor=A]\n"
+                + "]]]";
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
+    public void ifStmt5() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/if_stmt5.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+        String a =
+            "BlockAST [project=[[\n"
+                + "if Binary [EQ, NumConst [1], NumConst [1]]\n"
+                + ",then\n"
+                + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
+                + ",else if Binary [EQ, NumConst [1], NumConst [1]]\n"
+                + ",then\n"
+                + "SensorStmt DrehSensor [mode=RESET, motor=A]\n"
+                + "]]]";
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
+    public void ifStmt6() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/if_stmt6.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+        String a =
+            "BlockAST [project=[[\n"
+                + "if Binary [EQ, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]]\n"
+                + ",then\n"
+                + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
+                + ",else\n"
+                + "SensorStmt DrehSensor [mode=RESET, motor=A]\n"
                 + "]]]";
         Assert.assertEquals(a, transformer.toString());
     }
@@ -189,7 +256,7 @@ public class ControlTest {
 
         String a =
             "BlockAST [project=[[\n"
-                + "(repeat [FOR_EACH, Binary [IN, Var [j], EmptyExpr [defVal=class java.util.ArrayList]]]\n"
+                + "(repeat [FOR_EACH, Binary [IN, Var [j], EmptyExpr [defVal=interface java.util.List]]]\n"
                 + "   exprStmt Binary [TEXT_APPEND, Var [item], StringConst [gg]]\n"
                 + ")]]]";
         Assert.assertEquals(a, transformer.toString());

@@ -151,7 +151,7 @@ public class MathTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Funct [AVERAGE, [EmptyExpr [defVal=class java.util.ArrayList]]]]]]";
+        String a = "BlockAST [project=[[Funct [AVERAGE, [EmptyExpr [defVal=interface java.util.List]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }

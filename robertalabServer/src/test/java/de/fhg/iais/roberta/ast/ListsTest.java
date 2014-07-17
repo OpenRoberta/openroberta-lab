@@ -23,7 +23,7 @@ public class ListsTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[EmptyExpr [defVal=class java.util.ArrayList]]]]";
+        String a = "BlockAST [project=[[EmptyExpr [defVal=interface java.util.List]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }

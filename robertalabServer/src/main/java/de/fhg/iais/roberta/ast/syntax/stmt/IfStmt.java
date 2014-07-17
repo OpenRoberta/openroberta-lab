@@ -115,16 +115,17 @@ public class IfStmt extends Stmt {
         for ( int i = 0; i < this.expr.size(); i++ ) {
             sb.append("if ").append(this.expr.get(i));
             appendNewLine(sb, indentation, ",then");
-            this.thenList.get(i).generateJava(sb, next);
+            sb.append(this.thenList.get(i).toString());
             if ( i + 1 < this.expr.size() ) {
                 appendNewLine(sb, indentation, ",else ");
             }
         }
         if ( this.elseList.get().size() != 0 ) {
             appendNewLine(sb, indentation, ",else");
-            this.elseList.generateJava(sb, next);
+            sb.append(this.elseList.toString());
         }
         appendNewLine(sb, indentation, "");
         return sb.toString();
     }
+
 }

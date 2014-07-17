@@ -13,10 +13,10 @@ public enum HardwareComponent {
     RotationSensor( Category.SENSOR, "rotation", "Drehung" ),
     BrickSensor( Category.SENSOR, "?" ),
     GyroSensor( Category.SENSOR, "gyro" ),
-    RegulatedMiddleMotor( Category.AKTOR, "regulated", "middle" ),
-    RegulatedLargeMotor( Category.AKTOR, "regulated", "large" ),
-    UnRegulatedMiddleMotor( Category.AKTOR, "unregulated", "middle" ),
-    UnRegulatedLargeMotor( Category.AKTOR, "unregulated", "large" );
+    RegulatedMiddleMotor( Category.ACTOR, "regulated", "middle" ),
+    RegulatedLargeMotor( Category.ACTOR, "regulated", "large" ),
+    UnRegulatedMiddleMotor( Category.ACTOR, "unregulated", "middle" ),
+    UnRegulatedLargeMotor( Category.ACTOR, "unregulated", "large" );
 
     private final Category category;
     private final String[] attributes;

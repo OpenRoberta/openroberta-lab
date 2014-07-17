@@ -7,8 +7,24 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.Phrase.Category;
 import de.fhg.iais.roberta.ast.syntax.action.Action;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
+import de.fhg.iais.roberta.ast.syntax.action.ClearDisplayAction;
+import de.fhg.iais.roberta.ast.syntax.action.DriveAction;
+import de.fhg.iais.roberta.ast.syntax.action.LightAction;
+import de.fhg.iais.roberta.ast.syntax.action.LightStatusAction;
 import de.fhg.iais.roberta.ast.syntax.action.MotionParam;
+import de.fhg.iais.roberta.ast.syntax.action.MotorDuration;
+import de.fhg.iais.roberta.ast.syntax.action.MotorGetPowerAction;
 import de.fhg.iais.roberta.ast.syntax.action.MotorOnAction;
+import de.fhg.iais.roberta.ast.syntax.action.MotorStopAction;
+import de.fhg.iais.roberta.ast.syntax.action.MotorStopMode;
+import de.fhg.iais.roberta.ast.syntax.action.PlayFileAction;
+import de.fhg.iais.roberta.ast.syntax.action.ShowPictureAction;
+import de.fhg.iais.roberta.ast.syntax.action.ShowTextAction;
+import de.fhg.iais.roberta.ast.syntax.action.StopAction;
+import de.fhg.iais.roberta.ast.syntax.action.ToneAction;
+import de.fhg.iais.roberta.ast.syntax.action.TurnAction;
+import de.fhg.iais.roberta.ast.syntax.action.VolumeAction;
+import de.fhg.iais.roberta.ast.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.ast.syntax.expr.ColorConst;
@@ -60,7 +76,7 @@ import de.fhg.iais.roberta.dbc.Assert;
  * @author kcvejoski
  */
 public class JaxbTransformer {
-    private final ArrayList<ArrayList<Phrase>> project = new ArrayList<ArrayList<Phrase>>();
+    private final List<ArrayList<Phrase>> project = new ArrayList<ArrayList<Phrase>>();
 
     /**
      * Converts object of type {@link Project} to AST tree.
@@ -83,7 +99,7 @@ public class JaxbTransformer {
         return phrases;
     }
 
-    public ArrayList<ArrayList<Phrase>> getProject() {
+    public List<ArrayList<Phrase>> getProject() {
         return this.project;
     }
 
@@ -104,6 +120,7 @@ public class JaxbTransformer {
         String port;
 
         MotionParam mp;
+        MotorDuration md;
 
         switch ( block.getType() ) {
         //ACTION
@@ -120,10 +137,111 @@ public class JaxbTransformer {
                 port = extractField(fields, "MOTORPORT", (short) 0);
                 mode = extractField(fields, "MOTORROTATION", (short) 1);
                 values = extractValues(block, (short) 2);
-                expr = extractValue(values, new ExprParam("POWER", Integer.class));
-
-                mp = new MotionParam.Builder().speed((Expr) expr).build();
+                left = extractValue(values, new ExprParam("POWER", Integer.class));
+                right = extractValue(values, new ExprParam("VALUE", Integer.class));
+                md = new MotorDuration(MotorDuration.Mode.get(mode), (Expr) right);
+                mp = new MotionParam.Builder().speed((Expr) left).duration(md).build();
                 return MotorOnAction.make(ActorPort.get(port), mp);
+
+            case "robActions_motorDiff_on":
+                fields = extractFields(block, (short) 1);
+                mode = extractField(fields, "DIRECTION", (short) 0);
+                values = extractValues(block, (short) 1);
+                expr = extractValue(values, new ExprParam("POWER", Integer.class));
+                mp = new MotionParam.Builder().speed((Expr) expr).build();
+                return DriveAction.make(DriveAction.Direction.get(mode), mp);
+
+            case "robActions_motorDiff_on_for":
+                fields = extractFields(block, (short) 1);
+                mode = extractField(fields, "DIRECTION", (short) 0);
+                values = extractValues(block, (short) 2);
+                left = extractValue(values, new ExprParam("POWER", Integer.class));
+                right = extractValue(values, new ExprParam("DISTANCE", Integer.class));
+                md = new MotorDuration(MotorDuration.Mode.DISTANCE, (Expr) right);
+                mp = new MotionParam.Builder().speed((Expr) left).duration(md).build();
+                return DriveAction.make(DriveAction.Direction.get(mode), mp);
+
+            case "robActions_motorDiff_turn":
+                fields = extractFields(block, (short) 1);
+                mode = extractField(fields, "DIRECTION", (short) 0);
+                values = extractValues(block, (short) 1);
+                expr = extractValue(values, new ExprParam("POWER", Integer.class));
+                mp = new MotionParam.Builder().speed((Expr) expr).build();
+                return TurnAction.make(TurnAction.Direction.get(mode), mp);
+
+            case "robActions_motorDiff_turn_for":
+                fields = extractFields(block, (short) 1);
+                mode = extractField(fields, "DIRECTION", (short) 0);
+                values = extractValues(block, (short) 2);
+                left = extractValue(values, new ExprParam("POWER", Integer.class));
+                right = extractValue(values, new ExprParam("DISTANCE", Integer.class));
+                md = new MotorDuration(MotorDuration.Mode.DISTANCE, (Expr) right);
+                mp = new MotionParam.Builder().speed((Expr) left).duration(md).build();
+                return TurnAction.make(TurnAction.Direction.get(mode), mp);
+
+            case "robActions_motorDiff_stop":
+                return StopAction.make();
+
+            case "robActions_motor_getPower":
+                fields = extractFields(block, (short) 1);
+                port = extractField(fields, "MOTORPORT", (short) 0);
+                return MotorGetPowerAction.make(ActorPort.get(port));
+
+            case "robActions_motor_stop":
+                fields = extractFields(block, (short) 2);
+                port = extractField(fields, "MOTORPORT", (short) 0);
+                mode = extractField(fields, "MODE", (short) 1);
+                return MotorStopAction.make(ActorPort.get(port), MotorStopMode.get(mode));
+
+            case "robActions_display_text":
+                values = extractValues(block, (short) 3);
+                Phrase msg = extractValue(values, new ExprParam("OUT", String.class));
+                Phrase col = extractValue(values, new ExprParam("COL", Integer.class));
+                Phrase row = extractValue(values, new ExprParam("ROW", Integer.class));
+                return ShowTextAction.make((Expr) msg, (Expr) col, (Expr) row);
+
+            case "robActions_display_picture":
+                fields = extractFields(block, (short) 1);
+                values = extractValues(block, (short) 2);
+                String pic = extractField(fields, "PICTURE", (short) 0);
+                Phrase x = extractValue(values, new ExprParam("X", Integer.class));
+                Phrase y = extractValue(values, new ExprParam("Y", Integer.class));
+                return ShowPictureAction.make(pic, (Expr) x, (Expr) y);
+
+            case "robActions_display_clear":
+                return ClearDisplayAction.make();
+
+            case "robActions_play_tone":
+                values = extractValues(block, (short) 2);
+                left = extractValue(values, new ExprParam("FREQUENCE", Integer.class));
+                right = extractValue(values, new ExprParam("DURATION", Integer.class));
+                return ToneAction.make((Expr) left, (Expr) right);
+
+            case "robActions_play_file":
+                fields = extractFields(block, (short) 1);
+                String filename = extractField(fields, "FILE", (short) 0);
+                return PlayFileAction.make(filename);
+
+            case "robActions_play_setVolume":
+                values = extractValues(block, (short) 1);
+                expr = extractValue(values, new ExprParam("VOLUME", Integer.class));
+                return VolumeAction.make(VolumeAction.Mode.SET, (Expr) expr);
+
+            case "robActions_play_getVolume":
+                expr = NullConst.make();
+                return VolumeAction.make(VolumeAction.Mode.GET, (Expr) expr);
+
+            case "robActions_brickLight_on":
+                fields = extractFields(block, (short) 2);
+                String color = extractField(fields, "SWITCH_COLOR", (short) 0);
+                String blink = extractField(fields, "SWITCH_BLINK", (short) 1);
+                return LightAction.make(LightAction.Color.get(color), Boolean.valueOf(blink));
+
+            case "robActions_brickLight_off":
+                return LightStatusAction.make(LightStatusAction.Status.OFF);
+
+            case "robActions_brickLight_reset":
+                return LightStatusAction.make(LightStatusAction.Status.RESET);
 
                 //Sensoren
             case "robSensors_touch_isPressed":
@@ -432,20 +550,20 @@ public class JaxbTransformer {
 
                 //LISTEN
             case "lists_create_empty":
-                return EmptyExpr.make(ArrayList.class);
+                return EmptyExpr.make(List.class);
 
             case "lists_create_with":
                 return blockToExprList(block, ArrayList.class);
 
             case "lists_repeat":
                 exprParams = new ArrayList<ExprParam>();
-                exprParams.add(new ExprParam("ITEM", ArrayList.class));
+                exprParams.add(new ExprParam("ITEM", List.class));
                 exprParams.add(new ExprParam("NUM", Integer.class));
                 return blockToFunction(block, exprParams, "LISTS_REPEAT");
 
             case "lists_length":
                 exprParams = new ArrayList<ExprParam>();
-                exprParams.add(new ExprParam("VALUE", ArrayList.class));
+                exprParams.add(new ExprParam("VALUE", List.class));
                 return blockToFunction(block, exprParams, "LISTS_LENGTH");
 
             case "lists_isEmpty":
@@ -455,8 +573,8 @@ public class JaxbTransformer {
 
             case "lists_indexOf":
                 exprParams = new ArrayList<ExprParam>();
-                exprParams.add(new ExprParam("VALUE", ArrayList.class));
-                exprParams.add(new ExprParam("FIND", ArrayList.class));
+                exprParams.add(new ExprParam("VALUE", List.class));
+                exprParams.add(new ExprParam("FIND", List.class));
                 return blockToFunction(block, exprParams, "END");
 
             case "lists_getIndex":
@@ -483,6 +601,8 @@ public class JaxbTransformer {
 
                 //KONTROLLE
             case "controls_if":
+            case "robControls_if":
+            case "robControls_ifElse":
                 int _else = 0;
                 int _elseIf = 0;
                 if ( block.getMutation() == null ) {
@@ -498,6 +618,12 @@ public class JaxbTransformer {
                     }
                     return blocksToIfStmt(block, _else, _elseIf);
                 }
+
+            case "robControls_wait":
+                //TODO
+
+            case "robControls_wait_for":
+                //TODO
 
             case "controls_whileUntil":
                 fields = extractFields(block, (short) 1);
@@ -526,7 +652,7 @@ public class JaxbTransformer {
             case "controls_forEach":
                 var = extractVar(block);
                 values = extractValues(block, (short) 1);
-                expr = extractValue(values, new ExprParam("LIST", ArrayList.class));
+                expr = extractValue(values, new ExprParam("LIST", List.class));
 
                 Binary exprBinary = Binary.make(Binary.Op.IN, (Expr) var, (Expr) expr);
                 return extractRepeatStatement(block, exprBinary, "FOR_EACH");
@@ -661,7 +787,7 @@ public class JaxbTransformer {
         Stmt stmt;
         if ( p.getKind().getCategory() == Category.EXPR ) {
             stmt = ExprStmt.make((Expr) p);
-        } else if ( p.getKind().getCategory() == Category.AKTOR ) {
+        } else if ( p.getKind().getCategory() == Category.ACTOR ) {
             stmt = ActionStmt.make((Action) p);
         } else if ( p.getKind().getCategory() == Category.SENSOR ) {
             stmt = SensorStmt.make((Sensor) p);
@@ -675,6 +801,8 @@ public class JaxbTransformer {
         Expr expr;
         if ( p.getKind().getCategory() == Category.SENSOR ) {
             expr = SensorExpr.make((Sensor) p);
+        } else if ( p.getKind().getCategory() == Category.ACTOR ) {
+            expr = ActionExpr.make((Action) p);
         } else {
             expr = (Expr) p;
         }
