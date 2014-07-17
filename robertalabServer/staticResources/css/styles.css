@@ -116,7 +116,20 @@ ul#head-navigation a:hover .head-navi-icons.community{
     bottom: 0;
     margin-top: 60px;
     z-index: 99;
+    background: #ffffff; /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover,  #ffffff 0%, #e6e6e6 100%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#ffffff), color-stop(100%,#e6e6e6)); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover,  #ffffff 0%,#e6e6e6 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover,  #ffffff 0%,#e6e6e6 100%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover,  #ffffff 0%,#e6e6e6 100%); /* IE10+ */
+    background: radial-gradient(ellipse at center,  #ffffff 0%,#e6e6e6 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e6e6e6',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    
+    /* CANT HANDLE THE OVERFLOW, SO ITS SET TO HIDDEN TEMPORARY */
+    overflow: hidden;
 }
+
+/* ### WELCOME-SCREEN ############################################################ */
 
 #welcome-screen {
     position: relative;
@@ -215,4 +228,168 @@ ul#head-navigation a:hover .head-navi-icons.community{
 }
 #welcome-brick4:hover {
     background-image: url(img/welcome-screen/brick4_active.png);
+}
+
+/* ### TUTORIALS ############################################################ */
+
+#tutorials {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-image: url(img/overlay-50percent.png);
+    background-repeat: repeat;
+    z-index: 100000;
+}
+
+#popup-tutorial {
+    width: 390px;
+    height: 240px;
+    padding: 30px;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 15px #9f9e9e;
+    border-radius: 3px;
+    border: 2px solid #999999;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 20px;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+#popup-tutorial h2 {
+    font-size: 25px;
+    font-weight: 600;
+    margin-top: 0px;
+    text-transform: uppercase;
+}
+
+#close-tutorials {
+    display: block;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    margin-right: -16px;
+    margin-top: -16px;
+    width: 32px;
+    height: 32px;
+    background-image: url(img/close-icon.png);
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+#close-tutorials:hover {
+    background-image: url(img/close-icon_hover.png);    
+}
+
+#next-tutorial {
+    position: absolute;
+    margin-top: 225px;
+    background-image: url(img/button_next.png);
+    width: 178px;
+    height: 50px;
+    padding-top: 7px;
+    padding-left: 15px;
+    cursor: pointer;
+    font-family: 'Open Sans', sans-serif;
+    text-transform: uppercase;
+    font-size: 30px;
+    color: #ffffff;
+}
+
+#next-tutorial:hover {
+    background-image: url(img/button_next_hover.png);  
+}
+
+#roberta-tutorial {
+    width: 135px;
+    height: 154px;
+    display: block;
+    position: absolute;
+    background-image: url(img/roberta-tutorial.png);
+    margin-left: 310px;
+    margin-top: 130px;
+}
+
+#action-menu {
+    position: absolute;
+    bottom: 0;
+    left: 150px;
+    opacity: 0.5;
+}
+
+#action-menu:hover {
+    opacity: 1;
+}
+
+#action-menu input {
+    font-size: 12px !important;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* ### OVERWRITE OLD STYLES ############################################################ */
+
+.ui-widget-content {
+    background: transparent;
+    border: none;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100%;
+    height: 100%;
+}
+
+#blocklyDiv {
+    background-color: none;
+    background-image: url(img/grid-pattern-background.png);
+    background-repeat: repeat;
+    height: 100%;
+    min-height: 100%;
+}
+
+.blocklySvg {
+    background-color: none !important;
+    background: none !important;
+    border: none !important;
+    height: 100% !important;
+    min-height: 100% !important;
+}
+
+.blocklyToolboxDiv {
+    background-color: none! important;
+    background: none !important;
+}
+
+.ui-tabs .ui-tabs-nav {
+    opacity: 0.5;
+    position: absolute;
+    margin-left: 350px;
+    margin-top: 5px;
+    font-size: 12px !important;
+    z-index: 99999;
+}
+
+.ui-tabs .ui-tabs-nav:hover {
+    opacity: 1 !important;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-active {
+    background-color: #82cded;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    background: #d5f0fc;
+}
+
+.blocklyTreeRoot {
+    background-image: url(img/overlay-50percent.png) !important;;
+    background-repeat: repeat; 
+}
+
+.blocklyTreeLabel {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: bold; 
 }

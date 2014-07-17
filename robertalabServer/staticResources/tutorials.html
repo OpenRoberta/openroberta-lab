@@ -18,6 +18,7 @@
 <link rel="stylesheet" type="text/css" href="/roberta.css"></link>
 <link rel="stylesheet" type="text/css" href="/common/jquery.dataTables.min.css"></link>
 <link href="css/styles.css" type="text/css" rel="stylesheet">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
 
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
@@ -48,9 +49,19 @@
                 </li>
             </ul>
             <div id="logo">
-                <a href="index.html">Logo</a>
+                <a href="#">Logo</a>
             </div>
         </div>
+  <div id="tutorials">
+      <div id="popup-tutorial">
+        <span id="close-tutorials"></span>
+        <span id="roberta-tutorial"></span>
+        <span id="next-tutorial">weiter</span>
+        <h2>Einleitung</h2>
+          Deget dolor aenean massa. Cum sociis natoque penatibus et magnis dis partu rient montes, nascetur sit et
+          ridiculus mus. Donec quam.
+      </div>
+  </div>
 <div id="main-section">
   <div id="tabs" >
     <ul>
@@ -60,17 +71,19 @@
       <li><a href="#readme">README</a></li>
     </ul>
     <div id="blockly">
-      <div id="blocklyDiv" style="height: 450px; width: 1000px;"></div>
+      <div id="blocklyDiv"></div>
       <br>
-      <input id="save" class='submit' type="submit" value="save" />
-      <input id="load" class='submit' type="submit" value="load" />
-      <input id="add" class='submit' type="submit" value="add" />
-      <input id="del" class='submit' type="submit" value="delete" />
-      <input id="run" class='submit' type="submit" value="run" />
-      <input id="name" class='input' type="text" value="" />
-      <br>
-      <input id="toolbox1" class='button' type="submit" value="toolbox 1" />
-      <input id="toolbox2" class='button' type="submit" value="toolbox 2" />
+      <div id="action-menu">
+          <input id="save" class='submit' type="submit" value="save" />
+          <input id="load" class='submit' type="submit" value="load" />
+          <input id="add" class='submit' type="submit" value="add" />
+          <input id="del" class='submit' type="submit" value="delete" />
+          <input id="run" class='submit' type="submit" value="run" />
+          <input id="name" class='input' type="text" value="" />
+          <br>
+          <input id="toolbox1" class='button' type="submit" value="toolbox 1" />
+          <input id="toolbox2" class='button' type="submit" value="toolbox 2" />
+     </div>
     </div>
     <div id="listing">
       <table id="programNameTable" class="tableSize">
@@ -102,5 +115,11 @@
   </div>
  </div> 
  
+<script type="text/javascript">
+   $("#close-tutorials").click(function() {
+       $( "#tutorials" ).fadeOut(700);
+   });
+</script>
+
 </body>
 </html>
