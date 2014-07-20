@@ -28,7 +28,7 @@ Blockly.Blocks['robControls_start'] = {
 	 */
 
 	init : function() {
-		this.setColour(300);
+		this.setColourRGB(226, 0, 26);
 		this.appendDummyInput().appendField('Task')
 				.appendField('Hauptprogramm');
 		this.setInputsInline(true);
@@ -52,7 +52,7 @@ Blockly.Blocks['robControls_activity'] = {
 	 */
 
 	init : function() {
-		this.setColour(300);
+		this.setColourRGB(226, 0, 26);
 		this.appendValueInput('ACTIVITY').appendField('Task')
 				.setCheck('String');
 		this.setInputsInline(true);
@@ -74,7 +74,7 @@ Blockly.Blocks['robControls_start_activity'] = {
 	 */
 
 	init : function() {
-		this.setColour(300);
+		this.setColourRGB(226, 0, 26);
 		this.appendValueInput('ACTIVITY').appendField('starte Task').setCheck(
 				'String');
 		this.setInputsInline(true);
@@ -96,7 +96,7 @@ Blockly.Blocks['robControls_start_activity'] = {
 Blockly.Blocks['robControls_wait'] = {
 
 	init : function() {
-		this.setColour(300);
+		this.setColourRGB(235, 106, 10);
 		// this.setInputsInline(true);
 		this.appendValueInput('WAIT0').appendField(Blockly.Msg.WAIT_TITLE)
 				.setCheck('Boolean');
@@ -190,7 +190,7 @@ Blockly.Blocks['robControls_wait'] = {
 Blockly.Blocks['robControls_wait_for'] = {
 
 	init : function() {
-		this.setColour(300);
+		this.setColourRGB(235, 106, 10);
 		// this.setInputsInline(true);
 		this.appendValueInput('VALUE0').appendField(Blockly.Msg.WAIT_TITLE)
 				.setCheck('Boolean');
@@ -293,7 +293,7 @@ Blockly.Blocks['robControls_wait_for'] = {
 
 Blockly.Blocks['robControls_loopForever'] = {
 	init : function() {
-		this.setColour(300);
+		this.setColourRGB(235, 106, 10);
 		var title = new Blockly.FieldLabel(Blockly.Msg.LOOP_TITLE_FOREVER);
 		this.appendDummyInput().appendField(title, 'TITLE_FOREVER');
 		this.appendStatementInput('DO').appendField(
@@ -307,7 +307,7 @@ Blockly.Blocks['robControls_loopForever'] = {
 Blockly.Blocks['robControls_ifElse'] = {
 
 	init : function() {
-		this.setColour(300);
+		this.setColourRGB(235, 106, 10);
 		this.appendValueInput('IF0').appendField(
 				Blockly.Msg.CONTROLS_IF_MSG_IF).setCheck('Boolean');
 		this.appendStatementInput('DO0').appendField(
@@ -392,7 +392,7 @@ Blockly.Blocks['robControls_ifElse'] = {
 Blockly.Blocks['robControls_if'] = {
 
 	init : function() {
-		this.setColour(300);
+		this.setColourRGB(235, 106, 10);
 		this.appendValueInput('IF0').appendField(
 				Blockly.Msg.CONTROLS_IF_MSG_IF).setCheck('Boolean');
 		this.appendStatementInput('DO0').appendField(

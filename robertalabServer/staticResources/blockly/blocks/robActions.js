@@ -27,7 +27,7 @@ Blockly.Blocks['robActions_motor_on'] = {
 	 */
 
 	init : function() {
-		this.setColour(200);
+		this.setColourRGB(242, 148, 0);
 		// this.setInputsInline(true);
 		var motorPort = new Blockly.FieldDropdown([ [ 'Motor Port A', 'A' ],
 				[ 'Motor Port B', 'B' ], [ 'Motor Port C', 'C' ],
@@ -55,7 +55,7 @@ Blockly.Blocks['robActions_motor_on_for'] = {
 	 * @memberof Block
 	 */
 	init : function() {
-		this.setColour(200);
+		this.setColourRGB(242, 148, 0);
 		// this.setInputsInline(true);
 		var motorPort = new Blockly.FieldDropdown([ [ 'Motor Port A', 'A' ],
 				[ 'Motor Port B', 'B' ], [ 'Motor Port C', 'C' ],
@@ -85,7 +85,7 @@ Blockly.Blocks['robActions_motor_getPower'] = {
 	 * @memberof Block
 	 */
 	init : function() {
-		this.setColour(180);
+		this.setColourRGB(242, 148, 0);
 		// this.setInputsInline(true);
 		var motorPort = new Blockly.FieldDropdown([ [ 'Motor Port A', 'A' ],
 				[ 'Motor Port B', 'B' ], [ 'Motor Port C', 'C' ],
@@ -109,7 +109,7 @@ Blockly.Blocks['robActions_motor_setPower'] = {
 	 * @memberof Block
 	 */
 	init : function() {
-		this.setColour(180);
+		this.setColourRGB(242, 148, 0);
 		// this.setInputsInline(true);
 		var motorPort = new Blockly.FieldDropdown([ [ 'Motor Port A', 'A' ],
 				[ 'Motor Port B', 'B' ], [ 'Motor Port C', 'C' ],
@@ -135,7 +135,7 @@ Blockly.Blocks['robActions_motor_stop'] = {
 	 * @memberof Block
 	 */
 	init : function() {
-		this.setColour(180);
+		this.setColourRGB(242, 148, 0);
 		// this.setInputsInline(true);
 		var motorPort = new Blockly.FieldDropdown([ [ 'Motor Port A', 'A' ],
 				[ 'Motor Port B', 'B' ], [ 'Motor Port C', 'C' ],
@@ -152,7 +152,7 @@ Blockly.Blocks['robActions_motor_stop'] = {
 Blockly.Blocks['robActions_motorDiff_on'] = {
 	// Else condition.
 	init : function() {
-		this.setColour(200);
+		this.setColourRGB(242, 148, 0);
 		// this.setInputsInline(true);
 		var dropdown = new Blockly.FieldDropdown([
 				[ Blockly.Msg.MOTOR_FOREWARD, 'FOREWARD' ],
@@ -169,7 +169,7 @@ Blockly.Blocks['robActions_motorDiff_on'] = {
 Blockly.Blocks['robActions_motorDiff_on_for'] = {
 	// Else condition.
 	init : function() {
-		this.setColour(200);
+		this.setColourRGB(242, 148, 0);
 		// this.setInputsInline(true);
 		var dropdown = new Blockly.FieldDropdown([
 				[ Blockly.Msg.MOTOR_FOREWARD, 'FOREWARD' ],
@@ -188,7 +188,7 @@ Blockly.Blocks['robActions_motorDiff_on_for'] = {
 Blockly.Blocks['robActions_motorDiff_stop'] = {
 	// Else condition.
 	init : function() {
-		this.setColour(200);
+		this.setColourRGB(242, 148, 0);
 		this.setInputsInline(true);
 		this.appendDummyInput().appendField('Stop');
 		this.setPreviousStatement(true);
@@ -199,7 +199,7 @@ Blockly.Blocks['robActions_motorDiff_stop'] = {
 Blockly.Blocks['robActions_motorDiff_turn'] = {
 	// Else condition.
 	init : function() {
-		this.setColour(200);
+		this.setColourRGB(242, 148, 0);
 		// this.setInputsInline(true);
 		var dropdown = new Blockly.FieldDropdown([
 				[ Blockly.Msg.MOTOR_RIGHT, 'RIGHT' ],
@@ -216,7 +216,7 @@ Blockly.Blocks['robActions_motorDiff_turn'] = {
 Blockly.Blocks['robActions_motorDiff_turn_for'] = {
 	// Else condition.
 	init : function() {
-		this.setColour(200);
+		this.setColourRGB(242, 148, 0);
 		// this.setInputsInline(true);
 		var dropdown = new Blockly.FieldDropdown([
 				[ Blockly.Msg.MOTOR_RIGHT, 'RIGHT' ],
@@ -247,7 +247,7 @@ Blockly.Blocks['robActions_display_picture'] = {
 	 */
 
 	init : function() {
-		this.setColour(200);
+		this.setColourRGB(242, 148, 0);
 		// this.setInputsInline(true);
 		var picture = new Blockly.FieldDropdown([ [ 'Smiley1', 'SMILEY1' ],
 				[ 'Smiley2', 'SMILEY2' ], [ 'Smiley3', 'SMILEY3' ],
@@ -277,7 +277,7 @@ Blockly.Blocks['robActions_display_text'] = {
 	 * @memberof Block
 	 */
 	init : function() {
-		this.setColour(200);
+		this.setColourRGB(242, 148, 0);
 		// this.setInputsInline(true);
 		this.appendValueInput('OUT').appendField("Zeige Text").setCheck('Text');
 		this.appendValueInput('COL').setCheck('Number').setAlign(
@@ -299,7 +299,7 @@ Blockly.Blocks['robActions_display_clear'] = {
 	 * @memberof Block
 	 */
 	init : function() {
-		this.setColour(200);
+		this.setColourRGB(242, 148, 0);
 		// this.setInputsInline(true);
 		this.appendDummyInput().appendField('lösche Bildschirm');
 		this.setPreviousStatement(true);
@@ -319,7 +319,7 @@ Blockly.Blocks['robActions_play_tone'] = {
 	 * @memberof Block
 	 */
 	init : function() {
-		this.setColour(200);
+		this.setColourRGB(242, 148, 0);
 		// this.setInputsInline(true);
 		this.appendValueInput('FREQUENCE').appendField(
 				Blockly.Msg.PLAYTONE_TITLE).appendField(
@@ -345,7 +345,7 @@ Blockly.Blocks['robActions_play_file'] = {
 	 */
 
 	init : function() {
-		this.setColour(200);
+		this.setColourRGB(242, 148, 0);
 		// this.setInputsInline(true);
 		var file = new Blockly.FieldDropdown([ [ 'Soundfile1', 'SOUNDFILE1' ],
 				[ 'Soundfile2', 'SOUNDFILE2' ], [ 'Soundfile3', 'SOUNDFILE3' ],
@@ -368,7 +368,7 @@ Blockly.Blocks['robActions_play_setVolume'] = {
 	 * @memberof Block
 	 */
 	init : function() {
-		this.setColour(200);
+		this.setColourRGB(242, 148, 0);
 		// this.setInputsInline(true);
 		this.appendValueInput('VOLUME').appendField("setze Lautstärke")
 				.setCheck('Number');
@@ -389,7 +389,7 @@ Blockly.Blocks['robActions_play_getVolume'] = {
 	 * @see {@link robActions_play_setVolume}
 	 */
 	init : function() {
-		this.setColour(200);
+		this.setColourRGB(242, 148, 0);
 		// this.setInputsInline(true);
 		this.appendDummyInput().appendField("gib Lautstärke");
 		this.setOutput(true, 'Number');
@@ -410,7 +410,7 @@ Blockly.Blocks['robActions_brickLight_on'] = {
 	 * @memberof Block
 	 */
 	init : function() {
-		this.setColour(200);
+		this.setColourRGB(242, 148, 0);
 		// this.setInputsInline(true);
 		this.appendDummyInput().appendField(Blockly.Msg.BRICKLIGHT_TITLE)
 				.appendField(Blockly.Msg.BRICKLIGHT_ON);
@@ -442,7 +442,7 @@ Blockly.Blocks['robActions_brickLight_off'] = {
 	 * @memberof Block
 	 */
 	init : function() {
-		this.setColour(200);
+		this.setColourRGB(242, 148, 0);
 		// this.setInputsInline(true);
 		this.appendDummyInput().appendField(Blockly.Msg.BRICKLIGHT_TITLE)
 				.appendField(Blockly.Msg.BRICKLIGHT_OFF);
@@ -460,7 +460,7 @@ Blockly.Blocks['robActions_brickLight_reset'] = {
 	 * @memberof Block
 	 */
 	init : function() {
-		this.setColour(200);
+		this.setColourRGB(242, 148, 0);
 		this.appendDummyInput().appendField(Blockly.Msg.SENSOR_RESET)
 				.appendField(Blockly.Msg.BRICKLIGHT_TITLE).appendField(
 						Blockly.Msg.SENSOR_RESET_II);

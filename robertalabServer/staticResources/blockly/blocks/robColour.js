@@ -31,7 +31,7 @@ Blockly.Blocks['robColour_picker'] = {
 
 	init : function() {
 		this.setHelpUrl(Blockly.Msg.COLOUR_PICKER_HELPURL);
-		this.setColour(200);
+		this.setColourRGB(109, 191, 169);
 		this.appendDummyInput().appendField(
 				new Blockly.FieldRobColour('#585858'), 'COLOUR');
 		this.setOutput(true, 'Colour');

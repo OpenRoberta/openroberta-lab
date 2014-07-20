@@ -36,7 +36,7 @@ Blockly.Blocks['lists_create_empty'] = {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL);
-    this.setColour(260);
+    this.setColourRGB(31,130, 192); 
     this.setOutput(true, 'Array');
     this.appendDummyInput()
         .appendField(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE);
@@ -50,7 +50,7 @@ Blockly.Blocks['lists_create_with'] = {
    * @this Blockly.Block
    */
   init: function() {
-    this.setColour(260);
+    this.setColourRGB(31,130, 192); 
     this.appendValueInput('ADD0')
         .appendField(Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH);
     this.appendValueInput('ADD1');
@@ -169,7 +169,7 @@ Blockly.Blocks['lists_create_with_container'] = {
    * @this Blockly.Block
    */
   init: function() {
-    this.setColour(260);
+    this.setColourRGB(31,130, 192); 
     this.appendDummyInput()
         .appendField(Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TITLE_ADD);
     this.appendStatementInput('STACK');
@@ -184,7 +184,7 @@ Blockly.Blocks['lists_create_with_item'] = {
    * @this Blockly.Block
    */
   init: function() {
-    this.setColour(260);
+    this.setColourRGB(31,130, 192); 
     this.appendDummyInput()
         .appendField(Blockly.Msg.LISTS_CREATE_WITH_ITEM_TITLE);
     this.setPreviousStatement(true);
@@ -201,7 +201,7 @@ Blockly.Blocks['lists_repeat'] = {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.LISTS_REPEAT_HELPURL);
-    this.setColour(260);
+    this.setColourRGB(31,130, 192); 
     this.setOutput(true, 'Array');
     this.interpolateMsg(Blockly.Msg.LISTS_REPEAT_TITLE,
                         ['ITEM', null, Blockly.ALIGN_RIGHT],
@@ -218,7 +218,7 @@ Blockly.Blocks['lists_length'] = {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.LISTS_LENGTH_HELPURL);
-    this.setColour(260);
+    this.setColourRGB(31,130, 192); 
     this.interpolateMsg(Blockly.Msg.LISTS_LENGTH_TITLE,
                         ['VALUE', ['Array', 'String'], Blockly.ALIGN_RIGHT],
                         Blockly.ALIGN_RIGHT);
@@ -234,7 +234,7 @@ Blockly.Blocks['lists_isEmpty'] = {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.LISTS_IS_EMPTY_HELPURL);
-    this.setColour(260);
+    this.setColourRGB(31,130, 192); 
     this.interpolateMsg(Blockly.Msg.LISTS_IS_EMPTY_TITLE,
                         ['VALUE', ['Array', 'String'], Blockly.ALIGN_RIGHT],
                         Blockly.ALIGN_RIGHT)
@@ -254,7 +254,7 @@ Blockly.Blocks['lists_indexOf'] = {
         [[Blockly.Msg.LISTS_INDEX_OF_FIRST, 'FIRST'],
          [Blockly.Msg.LISTS_INDEX_OF_LAST, 'LAST']];
     this.setHelpUrl(Blockly.Msg.LISTS_INDEX_OF_HELPURL);
-    this.setColour(260);
+    this.setColourRGB(31,130, 192); 
     this.setOutput(true, 'Number');
     this.appendValueInput('VALUE')
         .setCheck('Array')
@@ -283,7 +283,7 @@ Blockly.Blocks['lists_getIndex'] = {
          [Blockly.Msg.LISTS_GET_INDEX_LAST, 'LAST'],
          [Blockly.Msg.LISTS_GET_INDEX_RANDOM, 'RANDOM']];
     this.setHelpUrl(Blockly.Msg.LISTS_GET_INDEX_HELPURL);
-    this.setColour(260);
+    this.setColourRGB(31,130, 192); 
     var modeMenu = new Blockly.FieldDropdown(MODE, function(value) {
       var isStatement = (value == 'REMOVE');
       this.sourceBlock_.updateStatement_(isStatement);
@@ -414,7 +414,7 @@ Blockly.Blocks['lists_setIndex'] = {
          [Blockly.Msg.LISTS_GET_INDEX_LAST, 'LAST'],
          [Blockly.Msg.LISTS_GET_INDEX_RANDOM, 'RANDOM']];
     this.setHelpUrl(Blockly.Msg.LISTS_SET_INDEX_HELPURL);
-    this.setColour(260);
+    this.setColourRGB(31,130, 192); 
     this.appendValueInput('LIST')
         .setCheck('Array')
         .appendField(Blockly.Msg.LISTS_SET_INDEX_INPUT_IN_LIST);
@@ -515,7 +515,7 @@ Blockly.Blocks['lists_getSublist'] = {
          [Blockly.Msg.LISTS_GET_SUBLIST_END_FROM_END, 'FROM_END'],
          [Blockly.Msg.LISTS_GET_SUBLIST_END_LAST, 'LAST']];
     this.setHelpUrl(Blockly.Msg.LISTS_GET_SUBLIST_HELPURL);
-    this.setColour(260);
+    this.setColourRGB(31,130, 192); 
     this.appendValueInput('LIST')
         .setCheck('Array')
         .appendField(Blockly.Msg.LISTS_GET_SUBLIST_INPUT_IN_LIST);
