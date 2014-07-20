@@ -86,7 +86,7 @@ Blockly.Css.CONTENT = [
 
   '.blocklyHighlightedConnectionPath {',
   '  stroke-width: 4px;',
-  '  stroke: #fc3;',
+  '  stroke: #FFDC00;',
   '  fill: none;',
   '}',
 
@@ -98,7 +98,7 @@ Blockly.Css.CONTENT = [
 
   '.blocklySelected>.blocklyPath {',
   '  stroke-width: 3px;',
-  '  stroke: #fc3;',
+  '  stroke: #FFDC00;',
   '}',
 
   '.blocklySelected>.blocklyPathLight {',
@@ -195,13 +195,13 @@ Blockly.Css.CONTENT = [
 
   '.blocklyIconShield {',
   '  cursor: default;',
-  '  fill: #00c;',
+  '  fill: #006E92;',
   '  stroke-width: 1px;',
   '  stroke: #ccc;',
   '}',
 
   '.blocklyIconGroup:hover>.blocklyIconShield {',
-  '  fill: #00f;',
+  '  fill: #007da6;',
   '  stroke: #fff;',
   '}',
 
