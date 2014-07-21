@@ -17,7 +17,7 @@ public class ActionTest {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_motorOn.xml"));
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_MotorOn.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer transformer = new JaxbTransformer();
@@ -33,7 +33,7 @@ public class ActionTest {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_motorOnFor.xml"));
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_MotorOnFor.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer transformer = new JaxbTransformer();
@@ -49,7 +49,7 @@ public class ActionTest {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_motorGetPower.xml"));
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_MotorGetPower.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer transformer = new JaxbTransformer();
@@ -65,7 +65,7 @@ public class ActionTest {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_motorStop.xml"));
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_MotorStop.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer transformer = new JaxbTransformer();
@@ -81,7 +81,7 @@ public class ActionTest {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_showText.xml"));
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_ShowText.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer transformer = new JaxbTransformer();
@@ -97,7 +97,7 @@ public class ActionTest {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_showPicture.xml"));
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_ShowPicture.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer transformer = new JaxbTransformer();
@@ -113,7 +113,7 @@ public class ActionTest {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_clearDisplay.xml"));
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_ClearDisplay.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer transformer = new JaxbTransformer();
