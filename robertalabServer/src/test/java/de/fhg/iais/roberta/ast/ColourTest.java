@@ -17,7 +17,7 @@ public class ColourTest {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/Colour/colour_const.xml"));
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/colour/colour_const.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer transformer = new JaxbTransformer();
