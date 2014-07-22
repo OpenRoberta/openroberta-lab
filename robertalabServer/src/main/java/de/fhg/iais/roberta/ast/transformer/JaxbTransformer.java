@@ -787,6 +787,8 @@ public class JaxbTransformer {
                 return MathConst.make(MathConst.Const.get(field));
             case "COLOUR":
                 return ColorConst.make(field);
+            case "TTT":
+                return ColorConst.make(field);
             default:
                 throw new RuntimeException("Invalid type constant!");
         }
