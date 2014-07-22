@@ -1,7 +1,16 @@
 //package de.fhg.iais.roberta.codegen.lejos;
 //
+//import java.lang.reflect.InvocationTargetException;
+//import java.lang.reflect.Method;
+//import java.util.Map;
+//import java.util.TreeMap;
+//
 //import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
+//import de.fhg.iais.roberta.ast.syntax.action.DriveAction;
+//import de.fhg.iais.roberta.ast.syntax.action.LightAction;
+//import de.fhg.iais.roberta.ast.syntax.action.TurnAction;
 //import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
+//import de.fhg.iais.roberta.ast.syntax.sensor.UltraSSensor;
 //import de.fhg.iais.roberta.conf.transformer.BrickConfiguration;
 //
 ///**
@@ -16,6 +25,10 @@
 //public class Hal {
 //
 //    private final BrickConfiguration brickConfiguration;
+//    // TODO HashMap or TreeMap?
+//    private final Map<ActorPort, Object> lejosActorBindings = new TreeMap<>();
+//    private final Map<SensorPort, BaseSensor> lejosSensorBindings = new TreeMap<>();
+//    private final Map<SensorPort, String> lejosSensorModeBindings = new TreeMap<>();
 //
 //    public Hal(BrickConfiguration brickConfiguration) {
 //        this.brickConfiguration = brickConfiguration;
@@ -42,27 +55,49 @@
 //     * @return motor object from BrickConfiguration
 //     */
 //    private Object getMotorObject(ActorPort port) {
-//        RegulatedMotor motor = this.brickConfiguration.getActorA().get(port);
-//        if ( motor == null ) {
-//            // brickConfiguration lesen und objekt erzeugen
-//            motor = ""; // TODO create motor object
-//            this.lejosActorBindings.put(port, motor);
+//        String motorType = this.brickConfiguration.getActorOnPort(port);
+//        if ( !this.lejosActorBindings.containsValue(port) ) {
+//            try {
+//                Object motor = Class.forName(motorType).newInstance();
+//                this.lejosActorBindings.put(port, motor);
+//            } catch ( InstantiationException | IllegalAccessException | ClassNotFoundException e ) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
 //        }
-//        return motor;
+//        return this.lejosActorBindings.get(port);
 //    }
 //
 //    /**
 //     * @param port
 //     * @return sensor object from BrickConfiguration
 //     */
-//    private Object getSensorObject(SensorPort port) {
-//        Object sensor = this.lejosSensorBindings.get(port);
-//        if ( sensor == null ) {
-//            // brickConfiguration lesen und objekt erzeugen
-//            sensor = ""; // TODO create sensor object
-//            this.lejosSensorBindings.put(port, sensor);
+//    private BaseSensor getSensorObject(SensorPort port) {
+//        String sensorType = this.brickConfiguration.getSensorOnPort(port);
+//        String sensorModeName = this.brickConfiguration.getSensorModeName(port);
+//        if ( !this.lejosSensorBindings.containsValue(port) ) {
+//            try {
+//                BaseSensor sensor = Class.forName(sensorType).newInstance();
+//                this.lejosSensorBindings.put(port, sensor);
+//                saveSensorModeName(sensor, sensorModeName);
+//            } catch ( InstantiationException | IllegalAccessException | ClassNotFoundException e ) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
 //        }
-//        return sensor;
+//        return this.lejosSensorBindings.get(port);
+//    }
+//
+//    private void saveSensorModeName(SensorPort port, String sensorModeName) {
+//        this.lejosSensorModeBindings.put(port, sensorModeName);
+//    }
+//
+//    private String getSensorModeName(SensorPort port) {
+//        return this.lejosSensorModeBindings.get(port);
+//    }
+//
+//    private SampleProvider configureSensorMode(SensorPort port, String sensorMode) {
+//        return getSensorObject(port).getMode(sensorMode);
 //    }
 //
 //    // --- Aktion Bewegung ---
@@ -72,9 +107,14 @@
 //     * @param speedPercent
 //     */
 //    public void setMotorSpeed(ActorPort port, int speedPercent) {
-//        new BrickConfiguration.Builder().visiting(attributes);
-//        String motorType = this.brickConfiguration.getActorOnPort(port);
-//        getMotorObject(port).setSpeed(toDegPerSec(speedPercent));
+//        try {
+//            Method m = getMotorObject(port).getClass().getDeclaredMethod("setSpeed");
+//            m.invoke(getMotorObject(port), toDegPerSec(speedPercent));
+//        } catch ( NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e ) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//
 //    }
 //
 //    /**
@@ -113,15 +153,16 @@
 //     * @param direction
 //     * @param speedPercent
 //     */
-//    public void drive(ActorPort port1, ActorPort port2, boolean direction, int speedPercent) {
-//        Object motor = getMotorObject(port);
+//    public void drive(ActorPort port1, ActorPort port2, DriveAction.Di direction, int speedPercent) {
+//        Object motor1 = getMotorObject(port1);
 //        Object motor2 = getMotorObject(port2);
-//        if ( direction ) {
-//            motor.forward();
-//            motor2.forward();
-//        } else {
-//            motor.backward();
-//            motor2.backward();
+//        DifferentialPilot dPilot =
+//            new DifferentialPilot(this.brickConfiguration.getWheelDiameter(), this.brickConfiguration.getTrackWidth(), motor1, motor2, false);
+//        dPilot.setRotateSpeed(toDegPerSec(speedPercent));
+//        if ( direction == DriveAction.Di.foreward ) {
+//            dPilot.forward();
+//        } else if ( direction == DriveAction.Di.backward ) {
+//            dPilot.backward();
 //        }
 //    }
 //
@@ -132,14 +173,16 @@
 //     * @param speedPercent
 //     * @param rotations
 //     */
-//    public void driveDistance(ActorPort port1, ActorPort port2, boolean direction, int speedPercent, int distance) {
-//        Object motor = getMotorObject(port);
+//    public void driveDistance(ActorPort port1, ActorPort port2, DriveAction.Di direction, int speedPercent, int distance) {
+//        Object motor1 = getMotorObject(port1);
 //        Object motor2 = getMotorObject(port2);
-//        // convert rotations to distance (cm)
-//        if ( direction ) {
-//            // drive distance forward
-//        } else {
-//            // drive distance backward
+//        DifferentialPilot dPilot =
+//            new DifferentialPilot(this.brickConfiguration.getWheelDiameter(), this.brickConfiguration.getTrackWidth(), motor1, motor2, false);
+//        dPilot.setRotateSpeed(toDegPerSec(speedPercent));
+//        if ( direction == DriveAction.Di.foreward ) {
+//            dPilot.travel(distance);
+//        } else if ( direction == DriveAction.Di.backward ) {
+//            dPilot.travel(-distance);
 //        }
 //    }
 //
@@ -150,10 +193,11 @@
 //     * @param port2
 //     */
 //    public void stop(ActorPort port1, ActorPort port2) {
-//        Object motor = getMotorObject(port);
+//        Object motor = getMotorObject(port1);
 //        Object motor2 = getMotorObject(port2);
-//        motor.stop();
-//        motor2.stop();
+//        DifferentialPilot dPilot =
+//            new DifferentialPilot(this.brickConfiguration.getWheelDiameter(), this.brickConfiguration.getTrackWidth(), motor1, motor2, false);
+//        dPilot.stop();
 //    }
 //
 //    /**
@@ -162,22 +206,22 @@
 //     * @param direction
 //     * @param speedPercent
 //     */
-//    public void rotateDirection(ActorPort port1, ActorPort port2, boolean direction, int speedPercent) {
-//        Object motor = getMotorObject(port);
+//    public void rotateDirection(ActorPort port1, ActorPort port2, TurnAction.Di direction, int speedPercent) {
+//        Object motor1 = getMotorObject(port1);
 //        Object motor2 = getMotorObject(port2);
-//        motor.setSpeed(speedPercent);
-//        motor2.setSpeed(speedPercent);
-//        if ( direction ) { // rechts drehen
-//            motor.backward(); // "rechts"
-//            motor2.forward(); // "links"
-//        } else { // links drehen
-//            motor.forward(); // "rechts"
-//            motor2.backward(); // "links"
+//        DifferentialPilot dPilot =
+//            new DifferentialPilot(this.brickConfiguration.getWheelDiameter(), this.brickConfiguration.getTrackWidth(), motor1, motor2, false);
+//        dPilot.setRotateSpeed(toDegPerSec(speedPercent));
+//        if ( direction == TurnAction.Di.right ) { // rechts drehen
+//            pilot.rotateRight();
+//        } else if ( direction == TurnAction.Di.left ) { // links drehen
+//            pilot.rotateLeft();
 //        }
 //    }
 //
 //    /**
-//     * TODO rotate distance (cm) instead of degrees???
+//     * TODO conversion
+//     * TODO return immediately or not?
 //     * 
 //     * @param port1
 //     * @param port2
@@ -185,15 +229,20 @@
 //     * @param speedPercent
 //     * @param distance
 //     */
-//    public void rotateDirectionDistance(ActorPort port1, ActorPort port2, boolean direction, int speedPercent, int distance) {
-//        Object motor = getMotorObject(port);
+//    public void rotateDirectionDistance(ActorPort port1, ActorPort port2, TurnAction.Di direction, int speedPercent, int distance) {
+//        Object motor1 = getMotorObject(port1);
 //        Object motor2 = getMotorObject(port2);
-//        if ( direction ) { // rechts drehen
-//            motor.rotate(/* -formula */); // "rechts"
-//            motor2.rotate(/* +formula */); // "links"
-//        } else { // links drehen
-//            motor.rotate(/* +formula */); // "rechts"
-//            motor2.rotate(/* -formula */); // "links"
+//        DifferentialPilot dPilot =
+//            new DifferentialPilot(this.brickConfiguration.getWheelDiameter(), this.brickConfiguration.getTrackWidth(), motor1, motor2, false);
+//        dPilot.setRotateSpeed(toDegPerSec(speedPercent));
+//        // check if conversion is correct!!!
+//        int angle = (int) Math.round(Math.tan(distance / (this.brickConfiguration.getTrackWidth() / 2)));
+//        if ( direction == TurnAction.Di.right ) {
+//            // negative turnRate(speedPercent) ^= turn right
+//            speedPercent = speedPercent * -1;
+//            dPilot.steer(speedPercent, angle, false);
+//        } else if ( direction == TurnAction.Di.left ) {
+//            dPilot.steer(speedPercent, angle, false);
 //        }
 //    }
 //
@@ -292,34 +341,34 @@
 //    // --- Aktion Statusleuchte ---
 //
 //    /**
-//     * TODO correct pattern numbers
+//     * TODO enum for blink 3colors x3 modes
 //     * 
 //     * @param color
 //     * @param blink
 //     */
-//    public void ledOn(String color, boolean blink) {
+//    public void ledOn(LightAction.Co color, boolean blink) {
 //        LED led = LocalEV3.get().getLED();
 //        // since java 7
 //        switch ( color ) {
-//            case "gruen":
+//            case green:
 //                if ( blink ) {
-//                    led.setPattern(0);
+//                    led.setPattern(4);
 //                } else {
-//                    led.setPattern(0);
+//                    led.setPattern(1);
 //                }
 //                break;
-//            case "orange":
+//            case orange:
 //                if ( blink ) {
-//                    led.setPattern(0);
+//                    led.setPattern(6);
 //                } else {
-//                    led.setPattern(0);
+//                    led.setPattern(3);
 //                }
 //                break;
-//            case "rot":
+//            case red:
 //                if ( blink ) {
-//                    led.setPattern(0);
+//                    led.setPattern(5);
 //                } else {
-//                    led.setPattern(0);
+//                    led.setPattern(2);
 //                }
 //                break;
 //        }
@@ -352,10 +401,10 @@
 //     * @return
 //     */
 //    public boolean isPressed(SensorPort port) {
-//        float[] sample = {
-//            0
-//        };
-//        Object sensor = getSensorObject(port).fetchSample(sample, 0);
+//        SampleProvider sp = configureSensorMode(port, getSensorModeName(port));
+//        // always 1 cell for touch sensor
+//        float[] sample = new float[sp.sampleSize()];
+//        sp.fetchSample(sample, 0);
 //        if ( sample[0] == 1.0 ) {
 //            return true;
 //        } else {
@@ -372,11 +421,11 @@
 //     * @param port
 //     * @param mode
 //     */
-//    public void setUltraSonicMode(SensorPort port, String mode) {
-//        if ( mode.equals("Abstand") ) {
-//            getSensorObject(port).getMode("Distance");
-//        } else if ( mode.equals("Anwesenheit") ) {
-//            getSensorObject(port).getMode("Presence"); // mode name?
+//    public void setUltrasonicSensorMode(SensorPort port, UltraSSensor.Mode mode) {
+//        if ( mode == UltraSSensor.Mode.DISTANCE ) {
+//            configureSensorMode(port, "Distance");
+//        } else if ( mode == UltraSSensor.Mode.PRESENCE ) {
+//            configureSensorMode(port, "Listen");
 //        }
 //    }
 //
@@ -385,7 +434,7 @@
 //     * @return
 //     */
 //    public String getUltraSonicModeName(SensorPort port) {
-//        return getSensorObject(port).getName();
+//        return getSensorModeName(port);
 //    }
 //
 //    /**
@@ -395,12 +444,15 @@
 //     * @return
 //     */
 //    public int getUltraSonicValue(SensorPort port) {
-//        float[] sample = {
-//            0
-//        };
-//        getSensorObject(port).fetchSample(sample, 0);
-//        return Math.round(sample[0]);
+//        SampleProvider sp = configureSensorMode(port, getSensorModeName(port));
+//        // always 1 cell (distance and listen mode)
+//        float[] sample = new float[sp.sampleSize()];
+//        sp.fetchSample(sample, 0);
+//        if ( getSensorModeName(port).equals("Distance") ) {
+//            return Math.round(sample[0]) * 100; // distance in cm
+//        } else if ( getSensorModeName(port).equals("Listen") ) {
+//            return Math.round(sample[0]);
+//        }
 //    }
-//
 //    // END Sensoren Ultraschallsensor ---
 //}

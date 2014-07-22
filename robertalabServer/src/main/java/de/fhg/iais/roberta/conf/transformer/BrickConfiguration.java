@@ -20,6 +20,10 @@ public class BrickConfiguration {
     private final HardwareComponent actorC;
     private final HardwareComponent actorD;
 
+    // needed for differential drive pilot
+    private final double wheelDiameter;
+    private final double trackWidth;
+
     public BrickConfiguration(
         HardwareComponent sensor1,
         HardwareComponent sensor2,
@@ -28,7 +32,9 @@ public class BrickConfiguration {
         HardwareComponent actorA,
         HardwareComponent actorB,
         HardwareComponent actorC,
-        HardwareComponent actorD) {
+        HardwareComponent actorD,
+        double wheelDiameter,
+        double trackWidth) {
         super();
         this.sensor1 = sensor1;
         this.sensor2 = sensor2;
@@ -38,6 +44,8 @@ public class BrickConfiguration {
         this.actorB = actorB;
         this.actorC = actorC;
         this.actorD = actorD;
+        this.wheelDiameter = wheelDiameter;
+        this.trackWidth = trackWidth;
     }
 
     public HardwareComponent getSensor1() {
@@ -72,6 +80,14 @@ public class BrickConfiguration {
         return this.actorD;
     }
 
+    public double getWheelDiameter() {
+        return this.wheelDiameter;
+    }
+
+    public double getTrackWidth() {
+        return this.trackWidth;
+    }
+
     public String getActorOnPort(ActorPort port) {
         switch ( port ) {
             case A:
@@ -102,13 +118,29 @@ public class BrickConfiguration {
         }
     }
 
+    /**
+     * TODO save sensorModeName as String somewhere in Configuration
+     * TODO implement this get Method
+     * - Daniel
+     * 
+     * @param port
+     * @return
+     */
+    public String getSensorModeName(SensorPort port) {
+        return "";
+    }
+
     public static class Builder {
         private final Map<ActorPort, HardwareComponent> actorMapping = new TreeMap<>();
         private final Map<SensorPort, HardwareComponent> sensorMapping = new TreeMap<>();
         private HardwareComponent lastVisited = null;
 
+        // TODO taken from lejos, where do we set these??
+        private final double wheelDiameter = 2.1f;
+        private final double trackWidth = 4.4f;
+
         public void visitingActorPort(String visiting) {
-            Assert.isTrue(this.lastVisited.getCategory() == Category.ACTOR);
+            Assert.isTrue(this.lastVisited.getCategory() == Category.AKTOR);
             ActorPort port = ActorPort.get(visiting);
             this.actorMapping.put(port, this.lastVisited);
             this.lastVisited = null;
@@ -134,7 +166,9 @@ public class BrickConfiguration {
                 this.actorMapping.get(ActorPort.A),
                 this.actorMapping.get(ActorPort.B),
                 this.actorMapping.get(ActorPort.C),
-                this.actorMapping.get(ActorPort.D));
+                this.actorMapping.get(ActorPort.D),
+                this.wheelDiameter,
+                this.trackWidth);
         }
 
         @Override

@@ -6,17 +6,19 @@ import de.fhg.iais.roberta.ast.syntax.Phrase.Category;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 public enum HardwareComponent {
-    ColorSensor( Category.SENSOR, "color", "colour", "Farbe" ), //
-    TouchSensor( Category.SENSOR, "touch", "Berührung" ),
-    UltraSSensor( Category.SENSOR, "ultrasonic", "Ultraschall" ),
-    InfraredSensor( Category.SENSOR, "infrared", "Infrarot" ),
-    RotationSensor( Category.SENSOR, "rotation", "Drehung" ),
+    EV3ColorSensor( Category.SENSOR, "color", "colour", "Farbe" ), //
+    EV3TouchSensor( Category.SENSOR, "touch", "Berührung" ),
+    EV3UltrasonicSensor( Category.SENSOR, "ultrasonic", "Ultraschall" ),
+    EV3IRSensor( Category.SENSOR, "infrared", "Infrarot" ),
+    RotationSensor( Category.SENSOR, "rotation", "Drehung" ), // => motor rotations -> Category.AKTOR???
     BrickSensor( Category.SENSOR, "?" ),
-    GyroSensor( Category.SENSOR, "gyro" ),
-    RegulatedMiddleMotor( Category.ACTOR, "regulated", "middle" ),
-    RegulatedLargeMotor( Category.ACTOR, "regulated", "large" ),
-    UnRegulatedMiddleMotor( Category.ACTOR, "unregulated", "middle" ),
-    UnRegulatedLargeMotor( Category.ACTOR, "unregulated", "large" );
+    EV3GyroSensor( Category.SENSOR, "gyro" ),
+    EV3MediumRegulatedMotor( Category.AKTOR, "regulated", "middle" ),
+    EV3LargeRegulatedMotor( Category.AKTOR, "regulated", "large" ),
+    //UnRegulatedMiddleMotor( Category.AKTOR, "unregulated", "middle" ),
+    BasicMotor( Category.AKTOR, "unregulated", "large" ),
+    NXTMotor( Category.AKTOR, "PH" ),
+    NXTRegulatedMotor( Category.AKTOR, "PH" );
 
     private final Category category;
     private final String[] attributes;
