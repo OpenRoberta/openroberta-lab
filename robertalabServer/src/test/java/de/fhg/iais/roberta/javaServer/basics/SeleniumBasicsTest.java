@@ -33,8 +33,8 @@ public class SeleniumBasicsTest {
 
         // see the Javascript test fixture to understand what the clicks effect and why success/error are expected as stated here.
 
-        sh.click(Button.B2);
-        sh.expectSuccess();
+        //sh.click(Button.B2);
+        //sh.expectSuccess();
 
         sh.click(Button.B1);
         sh.click(Button.B3);
@@ -72,6 +72,6 @@ public class SeleniumBasicsTest {
         sh.expectSuccess();
 
         sh.click(Button.B2);
-        sh.expectError();
+        sh.expectSuccess();
     }
 }
