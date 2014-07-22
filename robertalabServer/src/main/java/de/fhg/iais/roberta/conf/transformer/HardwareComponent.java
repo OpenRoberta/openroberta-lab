@@ -13,12 +13,12 @@ public enum HardwareComponent {
     RotationSensor( Category.SENSOR, "rotation", "Drehung" ), // => motor rotations -> Category.AKTOR???
     BrickSensor( Category.SENSOR, "?" ),
     EV3GyroSensor( Category.SENSOR, "gyro" ),
-    EV3MediumRegulatedMotor( Category.AKTOR, "regulated", "middle" ),
-    EV3LargeRegulatedMotor( Category.AKTOR, "regulated", "large" ),
+    EV3MediumRegulatedMotor( Category.ACTOR, "regulated", "middle" ),
+    EV3LargeRegulatedMotor( Category.ACTOR, "regulated", "large" ),
     //UnRegulatedMiddleMotor( Category.AKTOR, "unregulated", "middle" ),
-    BasicMotor( Category.AKTOR, "unregulated", "large" ),
-    NXTMotor( Category.AKTOR, "PH" ),
-    NXTRegulatedMotor( Category.AKTOR, "PH" );
+    BasicMotor( Category.ACTOR, "unregulated", "large" ),
+    NXTMotor( Category.ACTOR, "PH" ),
+    NXTRegulatedMotor( Category.ACTOR, "PH" );
 
     private final Category category;
     private final String[] attributes;

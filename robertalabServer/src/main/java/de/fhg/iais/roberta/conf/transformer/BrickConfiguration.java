@@ -140,7 +140,7 @@ public class BrickConfiguration {
         private final double trackWidth = 4.4f;
 
         public void visitingActorPort(String visiting) {
-            Assert.isTrue(this.lastVisited.getCategory() == Category.AKTOR);
+            Assert.isTrue(this.lastVisited.getCategory() == Category.ACTOR);
             ActorPort port = ActorPort.get(visiting);
             this.actorMapping.put(port, this.lastVisited);
             this.lastVisited = null;
