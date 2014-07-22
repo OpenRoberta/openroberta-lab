@@ -185,6 +185,48 @@ public class ControlTest {
     }
 
     @Test
+    public void ifStmt8() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/if_stmt8.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+        String a = "BlockAST [project=[[\n" + "if EmptyExpr [defVal=class java.lang.Boolean]\n" + ",then\n]]]";
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
+    public void ifStmt9() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/if_stmt9.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+        String a = "BlockAST [project=[[\n" + "if EmptyExpr [defVal=class java.lang.Boolean]\n" + ",then\n]]]";
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
+    public void ifStmt10() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/if_stmt10.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+        String a = "BlockAST [project=[[\n" + "if EmptyExpr [defVal=class java.lang.Boolean]\n" + ",then\n]]]";
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
     public void repeatStmt() throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -203,6 +245,21 @@ public class ControlTest {
                 + "   (repeat [TIMES, NumConst [10]]\n"
                 + "   )\n"
                 + ")]]]";
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
+    public void repeatStmt1() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/repeat_stmt1.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+
+        String a = "BlockAST [project=[[\n" + "(repeat [TIMES, NumConst [10]]\n)]]]";
         Assert.assertEquals(a, transformer.toString());
     }
 
@@ -248,6 +305,21 @@ public class ControlTest {
     }
 
     @Test
+    public void repeatStmtWhileUntil2() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/repeat_stmt_whileUntil2.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+
+        String a = "BlockAST [project=[[\n" + "(repeat [WHILE, EmptyExpr [defVal=class java.lang.Boolean]]\n)]]]";
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
     public void repeatStmtFor() throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -260,6 +332,21 @@ public class ControlTest {
 
         String a =
             "BlockAST [project=[[\n" + "(repeat [FOR, i = 1, i <= 10, i + 1]\n" + "   exprStmt Binary [TEXT_APPEND, Var [item], StringConst [kllk]]\n" + ")]]]";
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
+    public void repeatStmtFor1() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/repeat_stmt_for1.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+
+        String a = "BlockAST [project=[[\n" + "(repeat [FOR, i = 1, i <= 10, i + 1]\n)]]]";
         Assert.assertEquals(a, transformer.toString());
     }
 
@@ -279,6 +366,21 @@ public class ControlTest {
                 + "(repeat [FOR_EACH, Binary [IN, Var [j], EmptyExpr [defVal=interface java.util.List]]]\n"
                 + "   exprStmt Binary [TEXT_APPEND, Var [item], StringConst [gg]]\n"
                 + ")]]]";
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
+    public void repeatStmtForEach1() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/repeat_stmt_for_each1.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+
+        String a = "BlockAST [project=[[\n" + "(repeat [FOR_EACH, Binary [IN, Var [i], EmptyExpr [defVal=interface java.util.List]]]\n)]]]";
         Assert.assertEquals(a, transformer.toString());
     }
 

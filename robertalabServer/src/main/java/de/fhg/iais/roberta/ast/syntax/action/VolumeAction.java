@@ -24,7 +24,7 @@ public class VolumeAction extends Action {
 
     /**
      * Creates instance of {@link VolumeAction}. This instance is read only and can not be modified.
-     * 
+     *
      * @param mode of the action {@link Mode},
      * @param volume value
      * @return read only object of class {@link VolumeAction}.
@@ -50,7 +50,6 @@ public class VolumeAction extends Action {
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
         // TODO Auto-generated method stub
-
     }
 
     @Override

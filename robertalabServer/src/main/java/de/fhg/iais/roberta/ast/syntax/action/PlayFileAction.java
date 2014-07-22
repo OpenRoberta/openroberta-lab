@@ -14,14 +14,14 @@ public class PlayFileAction extends Action {
 
     private PlayFileAction(String filename) {
         super(Phrase.Kind.PlayFileAction);
-        Assert.isTrue(filename != "");
+        Assert.isTrue(!filename.equals(""));
         this.filename = filename;
         setReadOnly();
     }
 
     /**
      * Creates instance of {@link PlayFileAction}. This instance is read only and can not be modified.
-     * 
+     *
      * @param filename of the sound,
      * @return read only object of class {@link PlayFileAction}.
      */

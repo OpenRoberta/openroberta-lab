@@ -55,7 +55,7 @@ public class ActionTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[\nVar [item] := ActionExpr [MotorGetPower [port=B]]\n]]]";
+        String a = "BlockAST [project=[[MotorGetPower [port=B]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
