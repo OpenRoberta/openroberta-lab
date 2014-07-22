@@ -126,12 +126,7 @@ public class JaxbTransformer {
         switch ( block.getType() ) {
         //ACTION
             case "robActions_motor_on":
-                fields = extractFields(block, (short) 1);
-                port = extractField(fields, "MOTORPORT", (short) 0);
-                values = extractValues(block, (short) 1);
-                expr = extractValue(values, new ExprParam("POWER", Integer.class));
-                mp = new MotionParam.Builder().speed((Expr) expr).build();
-                return MotorOnAction.make(ActorPort.get(port), mp);
+                return null;
 
             default:
                 throw new DbcException("Invalid Block: " + block.getType());
