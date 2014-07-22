@@ -104,6 +104,40 @@ public class JaxbTransformer {
         return this.project;
     }
 
+    private Phrase bToAC(Block block) {
+
+        List<Value> values;
+        List<Field> fields;
+        List<ExprParam> exprParams;
+
+        ExprList exprList;
+
+        Phrase left;
+        Phrase right;
+        Phrase expr;
+        Phrase var;
+
+        String mode;
+        String port;
+
+        MotionParam mp;
+        MotorDuration md;
+
+        switch ( block.getType() ) {
+        //ACTION
+            case "robActions_motor_on":
+                fields = extractFields(block, (short) 1);
+                port = extractField(fields, "MOTORPORT", (short) 0);
+                values = extractValues(block, (short) 1);
+                expr = extractValue(values, new ExprParam("POWER", Integer.class));
+                mp = new MotionParam.Builder().speed((Expr) expr).build();
+                return MotorOnAction.make(ActorPort.get(port), mp);
+
+            default:
+                throw new DbcException("Invalid Block: " + block.getType());
+        }
+    }
+
     private Phrase bToA(Block block) {
 
         List<Value> values;
