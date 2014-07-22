@@ -127,9 +127,6 @@ public class JaxbTransformer {
         //ACTION
             case "robActions_motor_on":
                 return null;
-
-            default:
-                throw new DbcException("Invalid Block: " + block.getType());
         }
     }
 
