@@ -104,7 +104,7 @@ public class JaxbTransformer {
         return this.project;
     }
 
-    private Phrase bToAC(Block block) {
+    private void bToAC(Block block) {
 
         List<Value> values;
         List<Field> fields;
@@ -126,7 +126,7 @@ public class JaxbTransformer {
         switch ( "" ) {
         //ACTION
             case "robActions_motor_on":
-                return null;
+
         }
     }
 
