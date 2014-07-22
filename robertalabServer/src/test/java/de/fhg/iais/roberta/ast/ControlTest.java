@@ -165,6 +165,26 @@ public class ControlTest {
     }
 
     @Test
+    public void ifStmt7() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/if_stmt7.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+        String a =
+            "BlockAST [project=[[\n"
+                + "if NullConst [null]\n"
+                + ",then\n"
+                + "AktionStmt [DriveAction [FOREWARD, MotionParam [speed=NumConst [50], duration=null]]]\n"
+                + "AktionStmt [MotorOnAction [B, MotionParam [speed=NumConst [30], duration=MotorDuration [type=ROTATIONS, value=NumConst [1]]]]]\n"
+                + "]]]";
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
     public void repeatStmt() throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();

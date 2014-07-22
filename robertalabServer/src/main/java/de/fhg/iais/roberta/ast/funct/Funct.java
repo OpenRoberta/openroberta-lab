@@ -5,10 +5,18 @@ import java.util.Locale;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
+import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
+/**
+ * This class represents all functions from Blockly into the AST (abstract syntax tree).<br>
+ * <br>
+ * The user must provide name of the function and list of parameters. <br>
+ * To create an instance from this class use the method {@link #make(Function, List)}.<br>
+ * The enumeration {@link Function} contains all allowed functions.
+ */
 public class Funct extends Expr {
     private final Function functName;
     private final List<Expr> param;
@@ -22,14 +30,27 @@ public class Funct extends Expr {
         setReadOnly();
     }
 
+    /**
+     * Creates instance of {@link Binary}. This instance is read only and can not be modified.
+     * 
+     * @param name of the function
+     * @param param list of parameters for the function,
+     * @return read only object of class {@link Funct}
+     */
     public static Funct make(Function name, List<Expr> param) {
         return new Funct(name, param);
     }
 
+    /**
+     * @return name of the function
+     */
     public Function getFunctName() {
         return this.functName;
     }
 
+    /**
+     * @return list of parameters for the function
+     */
     public List<Expr> getParam() {
         return this.param;
     }
@@ -125,6 +146,9 @@ public class Funct extends Expr {
             this.values = values;
         }
 
+        /**
+         * @return symbol of the function if it exists otherwise the name of the function.
+         */
         public String getOpSymbol() {
             if ( this.values.length == 0 ) {
                 return this.toString();
@@ -133,10 +157,16 @@ public class Funct extends Expr {
             }
         }
 
+        /**
+         * @return precedence of the operator
+         */
         public int getPrecedence() {
             return this.precedence;
         }
 
+        /**
+         * @return association of the operator
+         */
         public Assoc getAssoc() {
             return this.assoc;
         }

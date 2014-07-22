@@ -9,6 +9,11 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
  */
 public abstract class Sensor extends Phrase {
 
+    /**
+     * This constructor set the kind of the senor object used in the AST (abstract syntax tree). All possible kinds can be found in {@link Kind}.
+     * 
+     * @param kind of the the sensor object used in AST
+     */
     public Sensor(Kind kind) {
         super(kind);
     }

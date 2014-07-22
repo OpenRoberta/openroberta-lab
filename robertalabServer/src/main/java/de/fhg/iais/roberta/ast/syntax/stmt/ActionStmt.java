@@ -42,7 +42,8 @@ public class ActionStmt extends Stmt {
 
     @Override
     public String toString() {
-        return "AktionStmt [" + this.akt + "]";
+        StringBuilder sb = new StringBuilder();
+        sb.append("\nAktionStmt [" + this.akt + "]");
+        return sb.toString();
     }
-
 }
