@@ -113,6 +113,7 @@ abstract public class Phrase {
         ActionExpr( Category.EXPR ),
         EmptyExpr( Category.EXPR ),
         Funct( Category.EXPR ),
+        ListFunct( Category.EXPR ),
         IfStmt( Category.STMT ),
         RepeatStmt( Category.STMT ),
         ExprStmt( Category.STMT ),

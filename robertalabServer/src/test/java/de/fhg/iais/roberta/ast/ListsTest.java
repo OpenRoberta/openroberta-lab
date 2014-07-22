@@ -92,4 +92,20 @@ public class ListsTest {
         Assert.assertEquals(a, transformer.toString());
     }
 
+    @Test
+    public void listCreateWith() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/lists/list_createWith.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+
+        String a = "BlockAST [project=[[Funct [LISTS_REPEAT, [NumConst [10], NumConst [5]]]]]]";
+
+        Assert.assertEquals(a, transformer.toString());
+    }
+
 }

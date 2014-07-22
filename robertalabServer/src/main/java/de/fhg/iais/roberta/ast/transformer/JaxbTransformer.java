@@ -3,6 +3,8 @@ package de.fhg.iais.roberta.ast.transformer;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.fhg.iais.roberta.ast.funct.Funct;
+import de.fhg.iais.roberta.ast.funct.Funct.Function;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.Phrase.Category;
 import de.fhg.iais.roberta.ast.syntax.action.Action;
@@ -31,8 +33,6 @@ import de.fhg.iais.roberta.ast.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
-import de.fhg.iais.roberta.ast.syntax.expr.Funct;
-import de.fhg.iais.roberta.ast.syntax.expr.Funct.Function;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
@@ -384,9 +384,15 @@ public class JaxbTransformer {
                 values = block.getValue();
                 Assert.isTrue(values.size() <= 3, "Number of values is not less or equal to 3!");
                 Phrase ifExpr = extractValue(values, new ExprParam("IF", Boolean.class));
-                Phrase thenExpr = extractValue(values, new ExprParam("THEN", Stmt.class));
-                Phrase elseExpr = extractValue(values, new ExprParam("ELSE", Stmt.class));
-                return IfStmt.make((Expr) ifExpr, (StmtList) thenExpr, (StmtList) elseExpr);
+                Phrase thenStmt = extractValue(values, new ExprParam("THEN", Stmt.class));
+                Phrase elseStmt = extractValue(values, new ExprParam("ELSE", Stmt.class));
+                StmtList thenList = StmtList.make();
+                thenList.addStmt(ExprStmt.make((Expr) thenStmt));
+                thenList.setReadOnly();
+                StmtList elseList = StmtList.make();
+                elseList.addStmt(ExprStmt.make((Expr) elseStmt));
+                elseList.setReadOnly();
+                return IfStmt.make((Expr) ifExpr, thenList, elseList);
 
                 //Mathematik
             case "math_number":
@@ -461,7 +467,7 @@ public class JaxbTransformer {
                 exprParams.add(new ExprParam("HIGH", Integer.class));
                 return blockToFunction(block, exprParams, "CONSTRAIN");
 
-            case "math_random_integer":
+            case "math_random_int":
                 exprParams = new ArrayList<ExprParam>();
                 exprParams.add(new ExprParam("FROM", Integer.class));
                 exprParams.add(new ExprParam("TO", Integer.class));
@@ -548,6 +554,11 @@ public class JaxbTransformer {
                 lstExpr.add(txtExpr);
                 return Funct.make(Function.get(type), lstExpr);
 
+            case "text_print":
+                exprParams = new ArrayList<ExprParam>();
+                exprParams.add(new ExprParam("TEXT", String.class));
+                return blockToFunction(block, exprParams, "PRINT");
+
                 //LISTEN
             case "lists_create_empty":
                 return EmptyExpr.make(List.class);
@@ -620,7 +631,14 @@ public class JaxbTransformer {
                 }
 
             case "robControls_wait":
-                //TODO
+                StmtList list = StmtList.make();
+                int mutation = block.getMutation().getWait().intValue();
+                values = extractValues(block, (short) (mutation + 1));
+                for ( int i = 0; i <= mutation; i++ ) {
+                    expr = extractValue(values, new ExprParam("WAIT" + i, Boolean.class));
+                    list.addStmt((Stmt) extractRepeatStatement(block, expr, "WHILE", "DO" + i, mutation + 1));
+                }
+                return list;
 
             case "robControls_wait_for":
                 //TODO
@@ -827,8 +845,12 @@ public class JaxbTransformer {
     }
 
     private Phrase extractRepeatStatement(Block block, Phrase expr, String mode) {
-        List<Statement> statements = extractStatements(block, (short) 1);
-        StmtList stmtList = extractStatement(statements, "DO");
+        return extractRepeatStatement(block, expr, mode, "DO", 1);
+    }
+
+    private Phrase extractRepeatStatement(Block block, Phrase expr, String mode, String location, int mutation) {
+        List<Statement> statements = extractStatements(block, (short) mutation);
+        StmtList stmtList = extractStatement(statements, location);
         return RepeatStmt.make(RepeatStmt.Mode.get(mode), (Expr) expr, stmtList);
     }
 

@@ -155,4 +155,25 @@ public class LogicTest {
 
         Assert.assertEquals(a, transformer.toString());
     }
+
+    @Test
+    public void logic_ternary() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(LogicTest.class.getResourceAsStream("/ast/logic/logic_ternary.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+
+        String a =
+            "BlockAST [project=[[\nif Binary [EQ, NumConst [0], NumConst [0]]\n"
+                + ",then\n"
+                + "exprStmt StringConst [2]\n"
+                + ",else\n"
+                + "exprStmt StringConst [3]\n]]]";
+
+        Assert.assertEquals(a, transformer.toString());
+    }
 }

@@ -1,9 +1,11 @@
-package de.fhg.iais.roberta.ast.syntax.expr;
+package de.fhg.iais.roberta.ast.funct;
 
 import java.util.List;
 import java.util.Locale;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
+import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
@@ -16,6 +18,7 @@ public class Funct extends Expr {
         Assert.isTrue(name != null && param != null);
         this.functName = name;
         this.param = param;
+
         setReadOnly();
     }
 
@@ -109,7 +112,8 @@ public class Funct extends Expr {
         TEXT_PROMPT( 10, Assoc.LEFT, "TEXT" ),
         NUMBER_PROMPT( 10, Assoc.LEFT, "NUMBER" ),
         LISTS_LENGTH( 10, Assoc.LEFT ),
-        SUBSTRING( 10, Assoc.LEFT );
+        SUBSTRING( 10, Assoc.LEFT ),
+        PRINT( 10, Assoc.LEFT );
 
         private final String[] values;
         private final int precedence;

@@ -45,6 +45,22 @@ public class MathTest {
     }
 
     @Test
+    public void mathSingle1() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_single1.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+
+        String a = "BlockAST [project=[[Unary [NEG, NumConst [10]]]]]";
+
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
     public void mathTrig() throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
@@ -184,6 +200,38 @@ public class MathTest {
         transformer.projectToAST(project);
 
         String a = "BlockAST [project=[[\nVar [item] := Funct [RANDOM, []]\n]]]";
+
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
+    public void math_modulo() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_modulo.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+
+        String a = "BlockAST [project=[[Binary [MOD, NumConst [10], NumConst [2]]]]]";
+
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
+    public void math_random_integer() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_random_integer.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+
+        String a = "BlockAST [project=[[Funct [RANDOM_INTEGER, [NumConst [1], NumConst [100]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
