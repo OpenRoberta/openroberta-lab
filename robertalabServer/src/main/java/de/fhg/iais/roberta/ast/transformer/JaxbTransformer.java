@@ -123,7 +123,7 @@ public class JaxbTransformer {
         MotionParam mp;
         MotorDuration md;
 
-        switch ( block.getType() ) {
+        switch ( "" ) {
         //ACTION
             case "robActions_motor_on":
                 return null;
