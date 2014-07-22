@@ -72,6 +72,6 @@ public class SeleniumBasicsTest {
         sh.expectSuccess();
 
         sh.click(Button.B2);
-        sh.expectSuccess();
+        sh.expectError();
     }
 }
