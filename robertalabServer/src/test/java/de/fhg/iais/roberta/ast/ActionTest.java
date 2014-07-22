@@ -317,4 +317,21 @@ public class ActionTest {
 
         Assert.assertEquals(a, transformer.toString());
     }
+
+    @Test
+    public void blockException() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_Exception.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        try {
+            transformer.projectToAST(project);
+            Assert.fail();
+        } catch ( Exception e ) {
+            Assert.assertEquals("Invalid Block: robActions_brickLight_on1", e.getMessage());
+        }
+    }
 }

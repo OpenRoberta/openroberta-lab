@@ -23,7 +23,7 @@ public class ColourTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[\nVar [item] := StringConst [#585858]\n]]]";
+        String a = "BlockAST [project=[[\nVar [item] := ColorConst [#585858]\n]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }

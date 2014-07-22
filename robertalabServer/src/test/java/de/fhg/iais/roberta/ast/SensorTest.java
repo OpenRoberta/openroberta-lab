@@ -112,6 +112,22 @@ public class SensorTest {
     }
 
     @Test
+    public void sensorGetSampleInfrared() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/sensors/sensor_getSampleInfrared.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+
+        String a = "BlockAST [project=[[InfraredSensor [mode=GET_SAMPLE, port=S4]]]]";
+
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
     public void sensorBrick() throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();

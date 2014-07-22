@@ -23,7 +23,7 @@ public class ColorConst extends Expr {
 
     /**
      * creates instance of {@link ColorConst}. This instance is read only and can not be modified.
-     * 
+     *
      * @param value that the color constant will have
      * @return read only object of class {@link ColorConst}.
      */
@@ -50,7 +50,7 @@ public class ColorConst extends Expr {
 
     @Override
     public String toString() {
-        return "StringConst [" + this.value + "]";
+        return "ColorConst [" + this.value + "]";
     }
 
     @Override

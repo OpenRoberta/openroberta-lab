@@ -69,10 +69,11 @@ import de.fhg.iais.roberta.blockly.generated.Project;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.dbc.Assert;
+import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
  * JAXB to AST transformer. Client should provide tree of jaxb objects.
- * 
+ *
  * @author kcvejoski
  */
 public class JaxbTransformer {
@@ -80,7 +81,7 @@ public class JaxbTransformer {
 
     /**
      * Converts object of type {@link Project} to AST tree.
-     * 
+     *
      * @param pr
      */
     public void projectToAST(Project pr) {
@@ -686,7 +687,7 @@ public class JaxbTransformer {
                 return extractRepeatStatement(block, expr, "TIMES");
 
             default:
-                throw new RuntimeException("Invalid Block: " + block.getType());
+                throw new DbcException("Invalid Block: " + block.getType());
         }
     }
 
