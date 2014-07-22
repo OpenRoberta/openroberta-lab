@@ -6,9 +6,14 @@ import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
- * Create class that represents assignment statement.
- * 
- * @author kcvejoski
+ * This class represents the <b>variables_set</b> block from Blockly into
+ * the AST (abstract syntax
+ * tree).
+ * Object from this class will generate code for assignment a value to a variable.<br/>
+ * <br>
+ * The client must provide the name of the variable and value.<br>
+ * <br>
+ * To create an instance from this class use the method {@link #make(Var, Expr)}.<br>
  */
 public class AssignStmt extends Stmt {
     private final Var name;
@@ -27,7 +32,7 @@ public class AssignStmt extends Stmt {
      * 
      * @param name of the variable
      * @param expr that we want to assign to the {@link #name}
-     * @return
+     * @return instance of {@link AssignStmt}
      */
     public static AssignStmt make(Var name, Expr expr) {
         return new AssignStmt(name, expr);

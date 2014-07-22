@@ -8,7 +8,9 @@ import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
- * @author kcvejoski
+ * This class represents the <b>if-else-elseif</b> blocks from Blockly into the AST (abstract syntax
+ * tree).
+ * Object from this class will generate if statement.<br/>
  */
 public class IfStmt extends Stmt {
     private final List<Expr> expr;

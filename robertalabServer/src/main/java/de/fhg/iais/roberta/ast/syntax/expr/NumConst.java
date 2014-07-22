@@ -3,9 +3,10 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 
 /**
- * numerical constant which can be used in expressions. This class extends {@link Expr}.
- * 
- * @author kcvejoski
+ * This class represents the <b>math_number</b> block from Blockly into the AST (abstract syntax tree).
+ * Object from this class will generate code numerical value.<br/>
+ * <br>
+ * To create an instance from this class use the method {@link #make(String)}.<br>
  */
 public class NumConst extends Expr {
     private final String value;
@@ -20,7 +21,7 @@ public class NumConst extends Expr {
      * creates instance of {@link NumConst}. This instance is read only and can not be modified.
      * 
      * @param value of the numerical constant
-     * @return {@link NumConst}
+     * @return read only object of class {@link NumConst}.
      */
     public static NumConst make(String value) {
         return new NumConst(value);

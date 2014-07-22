@@ -9,10 +9,8 @@ import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
- * this class allows to create list of {@link Expr} elements.
+ * This class allows to create list of {@link Expr} elements.
  * Initially object from this class is writable. After adding all the elements to the list call {@link #setReadOnly()}.
- * 
- * @author kcvejoski
  */
 public class ExprList extends Expr {
     private final List<Expr> el = new ArrayList<Expr>();

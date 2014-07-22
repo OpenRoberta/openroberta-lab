@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
- * object that can control the flow in the statement. See enum {@link Flow} for all the possible kind of flow controls.
+ * Class that can control the flow in the statement. See enum {@link Flow} for all the possible kind of flow controls.
  * 
  * @author kcvejoski
  */

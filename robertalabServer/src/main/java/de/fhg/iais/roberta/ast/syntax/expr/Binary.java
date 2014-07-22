@@ -7,10 +7,10 @@ import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
- * class for implementing all binary operations. To create an instance from this class use the method {@link #make(Op, Expr, Expr)}.<br>
+ * This class represents all binary operations from Blockly into the AST (abstract syntax tree).<br>
+ * <br>
+ * To create an instance from this class use the method {@link #make(Op, Expr, Expr)}.<br>
  * The enumeration {@link Op} contains all allowed binary operations.
- * 
- * @author kcvejoski
  */
 public class Binary extends Expr {
     private final Op op;
@@ -27,7 +27,7 @@ public class Binary extends Expr {
     }
 
     /**
-     * creates instance of {@link Binary}. This instance is read only and can not be modified.
+     * Creates instance of {@link Binary}. This instance is read only and can not be modified.
      * 
      * @param op operator
      * @param left expression on the left hand side,
@@ -131,6 +131,9 @@ public class Binary extends Expr {
             this.values = values;
         }
 
+        /**
+         * @return mathematical symbol of the operation.
+         */
         public String getOpSymbol() {
             if ( this.values.length == 0 ) {
                 return this.toString();
@@ -139,10 +142,16 @@ public class Binary extends Expr {
             }
         }
 
+        /**
+         * @return precedence of the operator.
+         */
         public int getPrecedence() {
             return this.precedence;
         }
 
+        /**
+         * @return association of the operator
+         */
         public Assoc getAssoc() {
             return this.assoc;
         }

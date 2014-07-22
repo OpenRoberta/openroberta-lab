@@ -3,9 +3,10 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 
 /**
- * null value which can be used in expressions. This class extends {@link Expr}.
- * 
- * @author kcvejoski
+ * This class represents the <b>logic_null</b> block from Blockly into the AST (abstract syntax tree).
+ * Object from this class will generate code for creating <b>null</b>.<br/>
+ * <br>
+ * To create an instance from this class use the method {@link #make()}.<br>
  */
 public class NullConst extends Expr {
 
@@ -17,7 +18,7 @@ public class NullConst extends Expr {
     /**
      * creates instance of {@link NullConst}. This instance is read only and can not be modified.
      * 
-     * @return {@link NullConst}
+     * @return read only object of class {@link NullConst}.
      */
     public static NullConst make() {
         return new NullConst();

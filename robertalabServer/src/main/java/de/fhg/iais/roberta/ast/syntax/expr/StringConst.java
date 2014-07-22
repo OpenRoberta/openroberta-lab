@@ -5,9 +5,10 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 
 /**
- * string constant which can be used in expressions. This class extends {@link Expr}.
- * 
- * @author kcvejoski
+ * This class represents the <b>text</b> block from Blockly into the AST (abstract syntax tree).
+ * Object from this class will generate code for string constant.<br/>
+ * <br>
+ * To create an instance from this class use the method {@link #make(String)}.<br>
  */
 public class StringConst extends Expr {
     private final String value;
@@ -22,7 +23,7 @@ public class StringConst extends Expr {
      * creates instance of {@link StringConst}. This instance is read only and can not be modified.
      * 
      * @param value that the boolean constant will have
-     * @return {@link StringConst}
+     * @return read only object of class {@link StringConst}.
      */
     public static StringConst make(String value) {
         return new StringConst(value);

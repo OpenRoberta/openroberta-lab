@@ -6,8 +6,6 @@ import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
  * All keys that the brick have.
- * 
- * @author kcvejoski
  */
 public enum BrickKey {
     ENTER(), UP(), DOWN(), LEFT(), RIGHT(), ESCAPE(), ANY();

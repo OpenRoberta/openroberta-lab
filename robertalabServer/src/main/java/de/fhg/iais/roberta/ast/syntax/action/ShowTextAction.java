@@ -5,36 +5,58 @@ import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
- * @author kcvejoski
+ * This class represents the <b>robActions_display_text</b> block from Blockly into the AST (abstract syntax tree).
+ * Object from this class will generate code showing a text message on the screen of the brick.<br>
+ * <br>
+ * To create an instance from this class use the method {@link #make(Expr, Expr, Expr)}.<br>
+ * <br>
+ * The client must provide the message and x and y coordinates.
  */
 public class ShowTextAction extends Action {
     private final Expr msg;
-    private final Expr column;
-    private final Expr row;
+    private final Expr x;
+    private final Expr y;
 
     private ShowTextAction(Expr msg, Expr column, Expr row) {
         super(Phrase.Kind.ShowTextAction);
         Assert.isTrue(msg != null && column != null && row != null);
         this.msg = msg;
-        this.column = column;
-        this.row = row;
+        this.x = column;
+        this.y = row;
         setReadOnly();
     }
 
-    public static ShowTextAction make(Expr msg, Expr column, Expr row) {
-        return new ShowTextAction(msg, column, row);
+    /**
+     * Creates instance of {@link ShowTextAction}. This instance is read only and can not be modified.
+     * 
+     * @param msg that will be printed on the display of the brick,
+     * @param x position where the message will start
+     * @param y postition where the message will start
+     * @return read only object of class {@link ShowTextAction}.
+     */
+    public static ShowTextAction make(Expr msg, Expr x, Expr y) {
+        return new ShowTextAction(msg, x, y);
     }
 
+    /**
+     * @return the message.
+     */
     public Expr getMsg() {
         return this.msg;
     }
 
-    public Expr getColumn() {
-        return this.column;
+    /**
+     * @return position x of the picture on the display.
+     */
+    public Expr getX() {
+        return this.x;
     }
 
-    public Expr getRow() {
-        return this.row;
+    /**
+     * @return position y of the picture on the display.
+     */
+    public Expr getY() {
+        return this.y;
     }
 
     @Override
@@ -44,7 +66,7 @@ public class ShowTextAction extends Action {
 
     @Override
     public String toString() {
-        return "ShowTextAction [" + this.msg + ", " + this.column + ", " + this.row + "]";
+        return "ShowTextAction [" + this.msg + ", " + this.x + ", " + this.y + "]";
     }
 
 }

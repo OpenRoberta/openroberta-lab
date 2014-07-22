@@ -7,10 +7,10 @@ import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
- * class for implementing all unary operations. To create an instance from this class use the method {@link #make(Op, Expr)}.<br>
+ * This class represents all unary operations from Blockly into the AST (abstract syntax tree).<br>
+ * <br>
+ * To create an instance from this class use the method {@link #make(Op, Expr)}.<br>
  * The enumeration {@link Op} contains all allowed unary operations.
- * 
- * @author kcvejoski
  */
 public class Unary extends Expr {
     private final Op op;
@@ -29,7 +29,7 @@ public class Unary extends Expr {
      * 
      * @param op operator
      * @param expr expression over which the operation is performed
-     * @return Unary expression
+     * @return read only object of class {@link Unary}
      */
     public static Unary make(Op op, Expr expr) {
         return new Unary(op, expr);
@@ -89,6 +89,9 @@ public class Unary extends Expr {
             this.values = values;
         }
 
+        /**
+         * @return mathematical symbol of the operation.
+         */
         public String getOpSymbol() {
             if ( this.values.length == 0 ) {
                 return this.toString();
@@ -97,10 +100,16 @@ public class Unary extends Expr {
             }
         }
 
+        /**
+         * @return precedence of the operator.
+         */
         public int getPrecedence() {
             return this.precedence;
         }
 
+        /**
+         * @return association of the operator
+         */
         public Assoc getAssoc() {
             return this.assoc;
         }

@@ -8,10 +8,8 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
- * this class allows to create list of {@link Stmt} elements.
+ * This class allows to create list of {@link Stmt} elements.
  * Initially object from this class is writable. After adding all the elements to the list call {@link #setReadOnly()}.
- * 
- * @author kcvejoski
  */
 public class StmtList extends Stmt {
     private final List<Stmt> sl = new ArrayList<Stmt>();

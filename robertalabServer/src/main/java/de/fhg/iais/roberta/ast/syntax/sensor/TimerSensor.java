@@ -4,9 +4,14 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
- * Time sensor that can operate in multiple modes. See enum {@link Mode} for all possible modes that the sensor have.
- * 
- * @author kcvejoski
+ * This class represents the <b>robSensors_timer_reset</b> and <b>robSensors_timer_getSample</b> blocks from Blockly into
+ * the AST (abstract syntax
+ * tree).
+ * Object from this class will generate code for reset the sensor or getting a sample from the sensor.<br/>
+ * <br>
+ * The client must provide the {@link SensorPort} and {@link Mode}. See enum {@link Mode} for all possible modes of the sensor.<br>
+ * <br>
+ * To create an instance from this class use the method {@link #make(Mode, SensorPort)}.<br>
  */
 public class TimerSensor extends Sensor {
     private final Mode mode;
@@ -25,7 +30,7 @@ public class TimerSensor extends Sensor {
      * 
      * @param mode in which the sensor is operating. See enum {@link Mode} for all possible modes that the sensor have.
      * @param timer integer value
-     * @return
+     * @return read only object of {@link TimerSensor}
      */
     public static TimerSensor make(Mode mode, int timer) {
         return new TimerSensor(mode, timer);
@@ -57,8 +62,6 @@ public class TimerSensor extends Sensor {
 
     /**
      * Mode of the time sensor.
-     * 
-     * @author kcvejoski
      */
     public static enum Mode {
         RESET, GET_SAMPLE;

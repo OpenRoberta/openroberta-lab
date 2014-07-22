@@ -6,8 +6,6 @@ import de.fhg.iais.roberta.dbc.Assert;
 
 /**
  * Wraps subclasses of the class {@link Action} so they can be used as {@link Stmt} in statements.
- * 
- * @author kcvejoski
  */
 public class ActionStmt extends Stmt {
     private final Action akt;

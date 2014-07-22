@@ -18,6 +18,11 @@ abstract public class Phrase {
     private boolean readOnly = false;
     private final Kind kind;
 
+    /**
+     * This constructor set the kind of the object used in the AST (abstract syntax tree). All possible kinds can be found in {@link Kind}.
+     * 
+     * @param kind of the the object used in AST
+     */
     public Phrase(Kind kind) {
         this.kind = kind;
     }
@@ -91,6 +96,10 @@ abstract public class Phrase {
      */
     abstract public void generateJava(StringBuilder sb, int indentation);
 
+    /**
+     * This enumeration gives all possible kind of objects that we can have to represent the AST (abstract syntax tree). All kind's are separated in four main
+     * {@link Category}.
+     */
     public static enum Kind {
         ColorSensor( Category.SENSOR ),
         TouchSensor( Category.SENSOR ),
@@ -143,11 +152,17 @@ abstract public class Phrase {
             this.category = category;
         }
 
+        /**
+         * @return category in which {@link Kind} belongs.
+         */
         public Category getCategory() {
             return this.category;
         }
     }
 
+    /**
+     * All {@link Kind} of objects that we have in the AST (abstract syntax tree) are separated in these {@link Category}.
+     */
     public static enum Category {
         EXPR, SENSOR, ACTOR, STMT;
     }

@@ -5,9 +5,7 @@ import java.util.Locale;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
- * Mode in which the motor can operate
- * 
- * @author kcvejoski
+ * Mode in which the motor can stop.
  */
 public enum MotorStopMode {
     NONFLOAT(), FLOAT();
@@ -17,6 +15,13 @@ public enum MotorStopMode {
         this.values = values;
     }
 
+    /**
+     * Get stopping mode from {@link MotorStopMode} from string parameter. It is possible for one stopping mode to have multiple string mappings.
+     * Throws exception if the stopping mode does not exists.
+     * 
+     * @param name of the stopping mode
+     * @return name of the stopping mode from the enum {@link MotorStopMode}
+     */
     public static MotorStopMode get(String mode) {
         if ( mode == null || mode.isEmpty() ) {
             throw new DbcException("Invalid stopping mode: " + mode);

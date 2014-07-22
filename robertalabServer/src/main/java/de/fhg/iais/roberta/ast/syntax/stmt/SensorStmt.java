@@ -6,8 +6,6 @@ import de.fhg.iais.roberta.dbc.Assert;
 
 /**
  * Wraps subclasses of the class {@link Sensor} so they can be used as {@link Stmt} in statements.
- * 
- * @author kcvejoski
  */
 public class SensorStmt extends Stmt {
     private final Sensor sensor;

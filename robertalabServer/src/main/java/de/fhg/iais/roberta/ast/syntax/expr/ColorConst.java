@@ -5,9 +5,12 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 
 /**
- * string constant which can be used in expressions. This class extends {@link Expr}.
- * 
- * @author kcvejoski
+ * This class represents the <b>robColour_picker</b> block from Blockly into the AST (abstract syntax tree).
+ * Object from this class will generate color constant.<br/>
+ * <br>
+ * The client must provide the value of the color. <br>
+ * <br>
+ * To create an instance from this class use the method {@link #make(String)}.<br>
  */
 public class ColorConst extends Expr {
     private final String value;
@@ -22,7 +25,7 @@ public class ColorConst extends Expr {
      * creates instance of {@link ColorConst}. This instance is read only and can not be modified.
      * 
      * @param value that the color constant will have
-     * @return {@link ColorConst}
+     * @return read only object of class {@link ColorConst}.
      */
     public static ColorConst make(String value) {
         return new ColorConst(value);

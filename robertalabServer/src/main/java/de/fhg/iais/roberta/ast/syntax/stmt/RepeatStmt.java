@@ -8,9 +8,11 @@ import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
- * class that allow creating repeat statements. Use {@link #getMode()} to find out the kind of the repeat statement.
- * 
- * @author kcvejoski
+ * This class represents the <b>repeat statement</b> blocks from Blockly into the AST (abstract syntax
+ * tree).
+ * Object from this class will generate repeatn statement statement.<br/>
+ * <br>
+ * See {@link #getMode()} for the kind of the repeat statements.
  */
 public class RepeatStmt extends Stmt {
     private final Mode mode;

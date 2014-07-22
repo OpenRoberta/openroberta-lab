@@ -6,11 +6,10 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
- * math constants which can be used in expressions. This class extends {@link Expr}.<br>
- * There are predefined constants in this class that can be used.
- * See enum {@link Const} for all defined constants.
- * 
- * @author kcvejoski
+ * This class represents the <b>math_constant</b> block from Blockly into the AST (abstract syntax tree).
+ * Object from this class will generate mathematical constant. See enum {@link Const} for all defined constants.<br/>
+ * <br>
+ * To create an instance from this class use the method {@link #make(Const)}.<br>
  */
 public class MathConst extends Expr {
     private final Const mathConst;
@@ -25,7 +24,7 @@ public class MathConst extends Expr {
      * creates instance of {@link BoolConst}. This instance is read only and can not be modified.
      * 
      * @param mathConst, see enum {@link Const} for all defined constants
-     * @return wanted math constant.
+     * @return read only object of class {@link MathConst}.
      */
     public static MathConst make(Const mathConst) {
         return new MathConst(mathConst);
@@ -60,8 +59,6 @@ public class MathConst extends Expr {
 
     /**
      * This enum defines all possible math constant.
-     * 
-     * @author kcvejoski
      */
     public static enum Const {
         GOLDEN_RATIO(), PI(), E(), SQRT2(), SQRT1_2(), INFINITY();

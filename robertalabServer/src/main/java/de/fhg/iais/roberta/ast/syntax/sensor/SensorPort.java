@@ -6,8 +6,6 @@ import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
  * All sensor ports that a brick can have.
- * 
- * @author kcvejoski
  */
 public enum SensorPort {
     S1( "1" ), S2( "2" ), S3( "3" ), S4( "4" );

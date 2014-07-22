@@ -4,9 +4,13 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
- * Sensor that checks if a button on the brick is pressed.
- * 
- * @author kcvejoski
+ * This class represents the <b>robSensors_key_isPressed</b> and <b>robSensors_key_isPressedAndReleased</b> blocks from Blockly into the AST (abstract syntax
+ * tree).
+ * Object from this class will generate code for checking if a button on the brick is pressed.<br/>
+ * <br>
+ * The client must provide the {@link BrickKey} and {@link Mode}. <br>
+ * <br>
+ * To create an instance from this class use the method {@link #make(Mode, BrickKey)}.<br>
  */
 public class BrickSensor extends Sensor {
     private final BrickKey key;
@@ -21,11 +25,11 @@ public class BrickSensor extends Sensor {
     }
 
     /**
-     * Create object of the class {@link BrickSensor}.
+     * Creates instance of {@link BrickSensor}. This instance is read only and can not be modified.
      * 
      * @param mode in which the sensor is operating. See enum {@link Mode} for all possible modes that the sensor have.
      * @param key on the brick. See enum {@link BrickKey} for all possible keys.
-     * @return
+     * @return read only object of class {@link BrickSensor}
      */
     public static BrickSensor make(Mode mode, BrickKey key) {
         return new BrickSensor(mode, key);
@@ -57,8 +61,6 @@ public class BrickSensor extends Sensor {
 
     /**
      * Modes in which the sensor can operate.
-     * 
-     * @author kcvejoski
      */
     public static enum Mode {
         IS_PRESSED, WAIT_FOR_PRESS, WAIT_FOR_PRESS_AND_RELEASE;
