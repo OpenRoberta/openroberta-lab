@@ -1,3 +1,4 @@
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import lejos.hardware.ev3.LocalEV3;
@@ -13,7 +14,13 @@ public class Main {
     //    private static Properties sensorConfig = new Properties();
     //    private static Properties motorConfig = new Properties();
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+        throws InstantiationException,
+        IllegalAccessException,
+        IllegalArgumentException,
+        InvocationTargetException,
+        NoSuchMethodException,
+        SecurityException {
         // A Helloworld program
         /*
          * LCD.clear();
@@ -42,7 +49,7 @@ public class Main {
         //
         //        roberta.shutdown();
 
-        // get all sensor modes of a sensor
+        // get all sensor modes of a sensor + poly test
         BaseSensor sonic = new EV3UltrasonicSensor(LocalEV3.get().getPort("S1"));
         List<String> list = sonic.getAvailableModes();
         for ( String tmp : list ) {
@@ -105,6 +112,7 @@ public class Main {
         //        pilot.rotateLeft();
         //        pilot.steer(turnRate, angle, false);
         //        pilot.stop();
+        //        pilot.rotate(angle, immediateReturn);
         //        LocalEV3.get().getLED().setPattern(0);
         //        Delay.msDelay(3000);
         //        LocalEV3.get().getLED().setPattern(1);
@@ -123,9 +131,10 @@ public class Main {
         //        Delay.msDelay(3000);
         //        LocalEV3.get().getLED().setPattern(8);
         //        Delay.msDelay(3000);
-        //        LocalEV3.get().getLED().setPattern(10);
-        //        Delay.msDelay(3000);
         //        LocalEV3.get().getLED().setPattern(0);
         //        Delay.msDelay(3000);
+        //        Port port = LocalEV3.get().getPort("S2");
+        //        BaseSensor sensor = null;
+        //        sensor = new EV3ColorSensor(port);
     }
 }

@@ -7,7 +7,6 @@ import de.fhg.iais.roberta.ast.syntax.Phrase.Category;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.dbc.Assert;
-import de.fhg.iais.roberta.dbc.DbcException;
 
 public class BrickConfiguration {
     private final HardwareComponent sensor1;
@@ -86,36 +85,6 @@ public class BrickConfiguration {
 
     public double getTrackWidth() {
         return this.trackWidth;
-    }
-
-    public String getActorOnPort(ActorPort port) {
-        switch ( port ) {
-            case A:
-                return this.actorA.toString();
-            case B:
-                return this.actorB.toString();
-            case C:
-                return this.actorC.toString();
-            case D:
-                return this.actorD.toString();
-            default:
-                throw new DbcException("Invalid Actor Port!");
-        }
-    }
-
-    public String getSensorOnPort(SensorPort port) {
-        switch ( port ) {
-            case S1:
-                return this.sensor1.toString();
-            case S2:
-                return this.sensor2.toString();
-            case S3:
-                return this.sensor3.toString();
-            case S4:
-                return this.sensor4.toString();
-            default:
-                throw new DbcException("Invalid Sensor Port!");
-        }
     }
 
     /**

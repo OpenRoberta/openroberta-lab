@@ -5,6 +5,24 @@
 //import java.util.Map;
 //import java.util.TreeMap;
 //
+//import lejos.hardware.Audio;
+//import lejos.hardware.LED;
+//import lejos.hardware.ev3.LocalEV3;
+//import lejos.hardware.lcd.GraphicsLCD;
+//import lejos.hardware.lcd.TextLCD;
+//import lejos.hardware.motor.EV3LargeRegulatedMotor;
+//import lejos.hardware.motor.EV3MediumRegulatedMotor;
+//import lejos.hardware.motor.NXTMotor;
+//import lejos.hardware.motor.NXTRegulatedMotor;
+//import lejos.hardware.port.Port;
+//import lejos.hardware.sensor.BaseSensor;
+//import lejos.hardware.sensor.EV3ColorSensor;
+//import lejos.hardware.sensor.EV3GyroSensor;
+//import lejos.hardware.sensor.EV3IRSensor;
+//import lejos.hardware.sensor.EV3TouchSensor;
+//import lejos.hardware.sensor.EV3UltrasonicSensor;
+//import lejos.robotics.SampleProvider;
+//import lejos.robotics.navigation.DifferentialPilot;
 //import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 //import de.fhg.iais.roberta.ast.syntax.action.DriveAction;
 //import de.fhg.iais.roberta.ast.syntax.action.LightAction;
@@ -12,6 +30,8 @@
 //import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 //import de.fhg.iais.roberta.ast.syntax.sensor.UltraSSensor;
 //import de.fhg.iais.roberta.conf.transformer.BrickConfiguration;
+//import de.fhg.iais.roberta.conf.transformer.HardwareComponent;
+//import de.fhg.iais.roberta.dbc.DbcException;
 //
 ///**
 // * Connection class between generated code and leJOS methods
@@ -26,12 +46,51 @@
 //
 //    private final BrickConfiguration brickConfiguration;
 //    // TODO HashMap or TreeMap?
-//    private final Map<ActorPort, Object> lejosActorBindings = new TreeMap<>();
+//    private final Map<ActorPort, EV3LargeRegulatedMotor> lejosEV3LargeMotors = new TreeMap<>();
+//    private final Map<ActorPort, EV3MediumRegulatedMotor> lejosEV3MediumMotors = new TreeMap<>();
+//    private final Map<ActorPort, NXTMotor> lejosNXTMotors = new TreeMap<>();
+//    private final Map<ActorPort, NXTRegulatedMotor> lejosNXTRegulatedMotors = new TreeMap<>();
+//
+//    // TODO test nested map
+//    private final Map<ActorPort, Map<ActorPort, TreeMap<ActorPort, ?>>> referenceMap = new TreeMap<>();
+//
 //    private final Map<SensorPort, BaseSensor> lejosSensorBindings = new TreeMap<>();
-//    private final Map<SensorPort, String> lejosSensorModeBindings = new TreeMap<>();
+//    private final Map<SensorPort, String> lejosSensorModeNames = new TreeMap<>();
+//    private final Map<SensorPort, SampleProvider> lejosSampleProvider = new TreeMap<>();
 //
 //    public Hal(BrickConfiguration brickConfiguration) {
 //        this.brickConfiguration = brickConfiguration;
+//    }
+//
+//    /**
+//     * instantiate all lejos objects for devices that are needed
+//     * 
+//     * @param actorPort1
+//     * @param actorPort2
+//     * @param actorPort3
+//     * @param actorPort4
+//     * @param sensorPort1
+//     * @param sensorPort2
+//     * @param sensorPort3
+//     * @param sensorPort4
+//     */
+//    public void createDeviceObjectsFromConfiguration(
+//        ActorPort actorPort1,
+//        ActorPort actorPort2,
+//        ActorPort actorPort3,
+//        ActorPort actorPort4,
+//        SensorPort sensorPort1,
+//        SensorPort sensorPort2,
+//        SensorPort sensorPort3,
+//        SensorPort sensorPort4) {
+//        createMotorObject(actorPort1);
+//        createMotorObject(actorPort2);
+//        createMotorObject(actorPort3);
+//        createMotorObject(actorPort4);
+//        createSampleProvider(sensorPort1);
+//        createSampleProvider(sensorPort2);
+//        createSampleProvider(sensorPort3);
+//        createSampleProvider(sensorPort4);
 //    }
 //
 //    /**
@@ -54,50 +113,113 @@
 //     * @param port
 //     * @return motor object from BrickConfiguration
 //     */
-//    private Object getMotorObject(ActorPort port) {
-//        String motorType = this.brickConfiguration.getActorOnPort(port);
-//        if ( !this.lejosActorBindings.containsValue(port) ) {
-//            try {
-//                Object motor = Class.forName(motorType).newInstance();
-//                this.lejosActorBindings.put(port, motor);
-//            } catch ( InstantiationException | IllegalAccessException | ClassNotFoundException e ) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
+//    private void createMotorObject(ActorPort actorPort) {
+//        HardwareComponent actorType = null;
+//        Port hardwarePort = LocalEV3.get().getPort(actorPort.toString());
+//        switch ( actorPort ) {
+//            case A:
+//                actorType = this.brickConfiguration.getActorA();
+//                break;
+//            case B:
+//                actorType = this.brickConfiguration.getActorB();
+//                break;
+//            case C:
+//                actorType = this.brickConfiguration.getActorC();
+//                break;
+//            case D:
+//                actorType = this.brickConfiguration.getActorD();
+//                break;
+//            default:
+//                throw new DbcException("Invalid Actor Port!");
+//        }
+//
+//        if ( actorType != null ) {
+//            switch ( actorType ) {
+//                case EV3LargeRegulatedMotor:
+//                    EV3LargeRegulatedMotor ev3LargeRegulatedMotor = new EV3LargeRegulatedMotor(hardwarePort);
+//                    this.lejosEV3LargeMotors.put(actorPort, ev3LargeRegulatedMotor);
+//                    //this.referenceMap.put(actorPort, this.lejosEV3LargeMotors);
+//                    break;
+//                case EV3MediumRegulatedMotor:
+//                    EV3MediumRegulatedMotor ev3MediumRegulatedMotor = new EV3MediumRegulatedMotor(hardwarePort);
+//                    this.lejosEV3MediumMotors.put(actorPort, ev3MediumRegulatedMotor);
+//                    break;
+//                case NXTMotor:
+//                    NXTMotor nxtMotor = new NXTMotor(hardwarePort);
+//                    this.lejosNXTMotors.put(actorPort, nxtMotor);
+//                    break;
+//                case NXTRegulatedMotor:
+//                    NXTRegulatedMotor nxtRegulatedMotor = new NXTRegulatedMotor(hardwarePort);
+//                    this.lejosNXTRegulatedMotors.put(actorPort, nxtRegulatedMotor);
+//                    break;
+//                default:
+//                    throw new DbcException("Invalid/unsupported Actor name!");
 //            }
 //        }
-//        return this.lejosActorBindings.get(port);
 //    }
 //
-//    /**
-//     * @param port
-//     * @return sensor object from BrickConfiguration
-//     */
-//    private BaseSensor getSensorObject(SensorPort port) {
-//        String sensorType = this.brickConfiguration.getSensorOnPort(port);
-//        String sensorModeName = this.brickConfiguration.getSensorModeName(port);
-//        if ( !this.lejosSensorBindings.containsValue(port) ) {
-//            try {
-//                BaseSensor sensor = Class.forName(sensorType).newInstance();
-//                this.lejosSensorBindings.put(port, sensor);
-//                saveSensorModeName(sensor, sensorModeName);
-//            } catch ( InstantiationException | IllegalAccessException | ClassNotFoundException e ) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
+//    private void createSampleProvider(SensorPort sensorPort) {
+//        HardwareComponent sensorType = null;
+//        Port hardwarePort = LocalEV3.get().getPort(sensorPort.toString());
+//        switch ( sensorPort ) {
+//            case S1:
+//                sensorType = this.brickConfiguration.getSensor1();
+//                break;
+//            case S2:
+//                sensorType = this.brickConfiguration.getSensor2();
+//                break;
+//            case S3:
+//                sensorType = this.brickConfiguration.getSensor3();
+//                break;
+//            case S4:
+//                sensorType = this.brickConfiguration.getSensor4();
+//                break;
+//            default:
+//                throw new DbcException("Invalid Sensor Port!");
+//        }
+//
+//        if ( !this.lejosSensorBindings.containsKey(sensorPort) ) {
+//            // instantiate specific lejos sensor object
+//            BaseSensor sensor = null;
+//            if ( sensorType != null ) {
+//                switch ( sensorType ) {
+//                    case EV3ColorSensor:
+//                        sensor = new EV3ColorSensor(hardwarePort);
+//                        break;
+//                    case EV3IRSensor:
+//                        sensor = new EV3IRSensor(hardwarePort);
+//                        break;
+//                    case EV3GyroSensor:
+//                        sensor = new EV3GyroSensor(hardwarePort);
+//                        break;
+//                    case EV3TouchSensor:
+//                        sensor = new EV3TouchSensor(hardwarePort);
+//                        break;
+//                    case EV3UltrasonicSensor:
+//                        sensor = new EV3UltrasonicSensor(hardwarePort);
+//                        break;
+//                    default:
+//                        throw new DbcException("Invalid/unsupported Sensor name!");
+//                }
+//                this.lejosSensorBindings.put(sensorPort, sensor);
+//
+//                String initialSensorModeName = this.brickConfiguration.getSensorModeName(sensorPort);
+//                setNewSensorMode(sensorPort, sensor, initialSensorModeName);
 //            }
 //        }
-//        return this.lejosSensorBindings.get(port);
+//        //return this.lejosSampleProvider.get(sensorPort);
 //    }
 //
-//    private void saveSensorModeName(SensorPort port, String sensorModeName) {
-//        this.lejosSensorModeBindings.put(port, sensorModeName);
+//    private void setNewSensorMode(SensorPort sensorPort, BaseSensor sensor, String sensorMode) {
+//        // save the sensorModeName (only used for return sensorModeName block!, keep synchronized with sampleprovider hashmap)
+//        this.lejosSensorModeNames.put(sensorPort, sensorMode);
+//        // set & save the sampleprovider of a sensor
+//        SampleProvider sp = sensor.getMode(sensorMode);
+//        this.lejosSampleProvider.put(sensorPort, sp);
 //    }
 //
-//    private String getSensorModeName(SensorPort port) {
-//        return this.lejosSensorModeBindings.get(port);
-//    }
-//
-//    private SampleProvider configureSensorMode(SensorPort port, String sensorMode) {
-//        return getSensorObject(port).getMode(sensorMode);
+//    private String getSensorModeName(SensorPort sensorPort) {
+//        return this.lejosSensorModeNames.get(sensorPort);
 //    }
 //
 //    // --- Aktion Bewegung ---
@@ -153,16 +275,19 @@
 //     * @param direction
 //     * @param speedPercent
 //     */
-//    public void drive(ActorPort port1, ActorPort port2, DriveAction.Di direction, int speedPercent) {
+//    public void drive(ActorPort port1, ActorPort port2, DriveAction.Direction direction, int speedPercent) {
 //        Object motor1 = getMotorObject(port1);
 //        Object motor2 = getMotorObject(port2);
 //        DifferentialPilot dPilot =
 //            new DifferentialPilot(this.brickConfiguration.getWheelDiameter(), this.brickConfiguration.getTrackWidth(), motor1, motor2, false);
 //        dPilot.setRotateSpeed(toDegPerSec(speedPercent));
-//        if ( direction == DriveAction.Di.foreward ) {
-//            dPilot.forward();
-//        } else if ( direction == DriveAction.Di.backward ) {
-//            dPilot.backward();
+//        switch ( direction ) {
+//            case FOREWARD:
+//                dPilot.forward();
+//                break;
+//            case BACKWARD:
+//                dPilot.backward();
+//                break;
 //        }
 //    }
 //
@@ -173,16 +298,22 @@
 //     * @param speedPercent
 //     * @param rotations
 //     */
-//    public void driveDistance(ActorPort port1, ActorPort port2, DriveAction.Di direction, int speedPercent, int distance) {
+//    public void driveDistance(ActorPort port1, ActorPort port2, DriveAction.Direction direction, int speedPercent, int distance) {
 //        Object motor1 = getMotorObject(port1);
 //        Object motor2 = getMotorObject(port2);
 //        DifferentialPilot dPilot =
 //            new DifferentialPilot(this.brickConfiguration.getWheelDiameter(), this.brickConfiguration.getTrackWidth(), motor1, motor2, false);
 //        dPilot.setRotateSpeed(toDegPerSec(speedPercent));
-//        if ( direction == DriveAction.Di.foreward ) {
-//            dPilot.travel(distance);
-//        } else if ( direction == DriveAction.Di.backward ) {
-//            dPilot.travel(-distance);
+//        switch ( direction ) {
+//            case FOREWARD:
+//                dPilot.travel(distance);
+//                break;
+//            case BACKWARD:
+//                dPilot.travel(-distance);
+//                break;
+//
+//            default:
+//                break;
 //        }
 //    }
 //
@@ -193,7 +324,7 @@
 //     * @param port2
 //     */
 //    public void stop(ActorPort port1, ActorPort port2) {
-//        Object motor = getMotorObject(port1);
+//        Object motor1 = getMotorObject(port1);
 //        Object motor2 = getMotorObject(port2);
 //        DifferentialPilot dPilot =
 //            new DifferentialPilot(this.brickConfiguration.getWheelDiameter(), this.brickConfiguration.getTrackWidth(), motor1, motor2, false);
@@ -206,21 +337,24 @@
 //     * @param direction
 //     * @param speedPercent
 //     */
-//    public void rotateDirection(ActorPort port1, ActorPort port2, TurnAction.Di direction, int speedPercent) {
+//    public void rotateDirection(ActorPort port1, ActorPort port2, TurnAction.Direction direction, int speedPercent) {
 //        Object motor1 = getMotorObject(port1);
 //        Object motor2 = getMotorObject(port2);
 //        DifferentialPilot dPilot =
 //            new DifferentialPilot(this.brickConfiguration.getWheelDiameter(), this.brickConfiguration.getTrackWidth(), motor1, motor2, false);
 //        dPilot.setRotateSpeed(toDegPerSec(speedPercent));
-//        if ( direction == TurnAction.Di.right ) { // rechts drehen
-//            pilot.rotateRight();
-//        } else if ( direction == TurnAction.Di.left ) { // links drehen
-//            pilot.rotateLeft();
+//        switch ( direction ) {
+//            case RIGHT:
+//                dPilot.rotateRight();
+//                break;
+//            case LEFT:
+//                dPilot.rotateLeft();
+//                break;
 //        }
 //    }
 //
 //    /**
-//     * TODO conversion
+//     * TODO speedPercent
 //     * TODO return immediately or not?
 //     * 
 //     * @param port1
@@ -229,7 +363,7 @@
 //     * @param speedPercent
 //     * @param distance
 //     */
-//    public void rotateDirectionDistance(ActorPort port1, ActorPort port2, TurnAction.Di direction, int speedPercent, int distance) {
+//    public void rotateDirectionDistance(ActorPort port1, ActorPort port2, TurnAction.Direction direction, int speedPercent, int distance) {
 //        Object motor1 = getMotorObject(port1);
 //        Object motor2 = getMotorObject(port2);
 //        DifferentialPilot dPilot =
@@ -237,12 +371,14 @@
 //        dPilot.setRotateSpeed(toDegPerSec(speedPercent));
 //        // check if conversion is correct!!!
 //        int angle = (int) Math.round(Math.tan(distance / (this.brickConfiguration.getTrackWidth() / 2)));
-//        if ( direction == TurnAction.Di.right ) {
-//            // negative turnRate(speedPercent) ^= turn right
-//            speedPercent = speedPercent * -1;
-//            dPilot.steer(speedPercent, angle, false);
-//        } else if ( direction == TurnAction.Di.left ) {
-//            dPilot.steer(speedPercent, angle, false);
+//        switch ( direction ) {
+//            case RIGHT:
+//                dPilot.rotate(angle, false);
+//                break;
+//            case LEFT:
+//                angle = angle * -1;
+//                dPilot.rotate(angle, false);
+//                break;
 //        }
 //    }
 //
@@ -346,25 +482,25 @@
 //     * @param color
 //     * @param blink
 //     */
-//    public void ledOn(LightAction.Co color, boolean blink) {
+//    public void ledOn(LightAction.Color color, boolean blink) {
 //        LED led = LocalEV3.get().getLED();
 //        // since java 7
 //        switch ( color ) {
-//            case green:
+//            case GREEN:
 //                if ( blink ) {
 //                    led.setPattern(4);
 //                } else {
 //                    led.setPattern(1);
 //                }
 //                break;
-//            case orange:
+//            case ORANGE:
 //                if ( blink ) {
 //                    led.setPattern(6);
 //                } else {
 //                    led.setPattern(3);
 //                }
 //                break;
-//            case red:
+//            case RED:
 //                if ( blink ) {
 //                    led.setPattern(5);
 //                } else {
@@ -401,7 +537,7 @@
 //     * @return
 //     */
 //    public boolean isPressed(SensorPort port) {
-//        SampleProvider sp = configureSensorMode(port, getSensorModeName(port));
+//        SampleProvider sp = getSampleProvider(sensorPort);
 //        // always 1 cell for touch sensor
 //        float[] sample = new float[sp.sampleSize()];
 //        sp.fetchSample(sample, 0);
