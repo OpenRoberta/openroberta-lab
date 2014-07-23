@@ -6,9 +6,10 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
- * Class that can control the flow in the statement. See enum {@link Flow} for all the possible kind of flow controls.
- * 
- * @author kcvejoski
+ * This class represents the <b>controls_flow_statements</b> blocks from Blockly into the AST (abstract syntax
+ * tree).
+ * Object from this class will generate code for flow control of a statement. <br>
+ * See enum {@link Flow} for all possible flows.
  */
 public class StmtFlowCon extends Stmt {
     private final Flow flow;
@@ -20,10 +21,10 @@ public class StmtFlowCon extends Stmt {
     }
 
     /**
-     * create read only object of {@link StmtFlowCon}.
+     * Create read only object of {@link StmtFlowCon}.
      * 
      * @param flow, see enum {@link Flow} for all the possible kind of flow controls
-     * @return
+     * @return read only object of class {@link StmtFlowCon}.
      */
     public static StmtFlowCon make(Flow flow) {
         return new StmtFlowCon(flow);
@@ -38,18 +39,18 @@ public class StmtFlowCon extends Stmt {
 
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
-        appendNewLine(sb, indentation, toString());
+        appendNewLine(sb, indentation, this.flow.toString().toLowerCase() + ";");
     }
 
     @Override
     public String toString() {
-        return "StmtFlowCon [" + this.flow + "]";
+        StringBuilder sb = new StringBuilder();
+        appendNewLine(sb, 0, "StmtFlowCon [" + this.flow + "]");
+        return sb.toString();
     }
 
     /**
      * Flow controls that statement can have.
-     * 
-     * @author kcvejoski
      */
     public static enum Flow {
         CONTINUE(), BREAK();

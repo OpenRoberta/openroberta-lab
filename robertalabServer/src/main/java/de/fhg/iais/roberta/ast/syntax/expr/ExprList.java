@@ -57,7 +57,15 @@ public class ExprList extends Expr {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        generateJava(sb, 0);
+        boolean first = true;
+        for ( Expr expr : this.el ) {
+            if ( first ) {
+                first = false;
+            } else {
+                sb.append(", ");
+            }
+            sb.append(expr.toString());
+        }
         return sb.toString();
     }
 
@@ -68,7 +76,11 @@ public class ExprList extends Expr {
             if ( first ) {
                 first = false;
             } else {
-                sb.append(", ");
+                if ( expr.getKind() == Kind.Binary ) {
+                    sb.append("; ");
+                } else {
+                    sb.append(", ");
+                }
             }
             expr.generateJava(sb, indentation);
         }

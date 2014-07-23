@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
 /**
  * This class represents the <b>repeat statement</b> blocks from Blockly into the AST (abstract syntax
  * tree).
- * Object from this class will generate repeatn statement statement.<br/>
+ * Object from this class will generate repeat statement statement.<br/>
  * <br>
  * See {@link #getMode()} for the kind of the repeat statements.
  */
@@ -29,7 +29,7 @@ public class RepeatStmt extends Stmt {
     }
 
     /**
-     * create read only object of {@link RepeatStmt}.
+     * Create read only object of {@link RepeatStmt}.
      * 
      * @param mode of the repeat statement. See enum {@link Mode} for all possible modes.
      * @param expr that should be evaluated
@@ -65,15 +65,40 @@ public class RepeatStmt extends Stmt {
     public void generateJava(StringBuilder sb, int indentation) {
         int next = indentation + 3;
         appendNewLine(sb, indentation, null);
-        sb.append("(repeat [" + this.mode + ", ").append(this.expr).append("]");
+        switch ( this.mode ) {
+            case UNTIL:
+            case WHILE:
+                sb.append("while ( ");
+                this.expr.generateJava(sb, 0);
+                sb.append(" ) {");
+                break;
+            case FOR:
+                sb.append("for (");
+                this.expr.generateJava(sb, indentation);
+                sb.append(" ) {");
+                break;
+            case FOR_EACH:
+                break;
+            case TIMES:
+                sb.append("for ( int i = 0; ");
+                this.expr.generateJava(sb.append("i < "), 0);
+                sb.append("; i++ ) {");
+                break;
+            default:
+                break;
+        }
+        //        sb.append("(repeat [" + this.mode + ", ").append(this.expr).append("]");
         this.list.generateJava(sb, next);
-        appendNewLine(sb, indentation, ")");
+        appendNewLine(sb, indentation, "}");
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        generateJava(sb, 0);
+        appendNewLine(sb, 0, null);
+        sb.append("(repeat [" + this.mode + ", ").append(this.expr).append("]");
+        sb.append(this.list.toString());
+        appendNewLine(sb, 0, ")");
         return sb.toString();
     }
 

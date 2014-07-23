@@ -194,7 +194,7 @@ public class ControlTest {
 
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
-        String a = "BlockAST [project=[[\n" + "if EmptyExpr [defVal=class java.lang.Boolean]\n" + ",then\n]]]";
+        String a = "BlockAST [project=[[\nif EmptyExpr [defVal=class java.lang.Boolean]\n,then\n]]]";
         Assert.assertEquals(a, transformer.toString());
     }
 
@@ -208,7 +208,7 @@ public class ControlTest {
 
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
-        String a = "BlockAST [project=[[\n" + "if EmptyExpr [defVal=class java.lang.Boolean]\n" + ",then\n]]]";
+        String a = "BlockAST [project=[[\nif EmptyExpr [defVal=class java.lang.Boolean]\n,then\n]]]";
         Assert.assertEquals(a, transformer.toString());
     }
 
@@ -222,7 +222,7 @@ public class ControlTest {
 
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
-        String a = "BlockAST [project=[[\n" + "if EmptyExpr [defVal=class java.lang.Boolean]\n" + ",then\n]]]";
+        String a = "BlockAST [project=[[\nif EmptyExpr [defVal=class java.lang.Boolean]\n,then\n]]]";
         Assert.assertEquals(a, transformer.toString());
     }
 
@@ -240,10 +240,10 @@ public class ControlTest {
         String a =
             "BlockAST [project=[[\n"
                 + "(repeat [TIMES, NumConst [10]]\n"
-                + "   exprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba]]\n"
-                + "   exprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba1]]\n"
-                + "   (repeat [TIMES, NumConst [10]]\n"
-                + "   )\n"
+                + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba]]\n"
+                + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba1]]\n"
+                + "(repeat [TIMES, NumConst [10]]\n"
+                + ")\n"
                 + ")]]]";
         Assert.assertEquals(a, transformer.toString());
     }
@@ -277,8 +277,8 @@ public class ControlTest {
         String a =
             "BlockAST [project=[[\n"
                 + "(repeat [WHILE, BoolConst [true]]\n"
-                + "   exprStmt Binary [TEXT_APPEND, Var [item], StringConst [sd]]\n"
-                + "   exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
+                + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [sd]]\n"
+                + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
                 + ")]]]";
         Assert.assertEquals(a, transformer.toString());
     }
@@ -297,9 +297,9 @@ public class ControlTest {
         String a =
             "BlockAST [project=[[\n"
                 + "(repeat [WHILE, BoolConst [true]]\n"
-                + "   exprStmt Binary [TEXT_APPEND, Var [item], StringConst [sd]]\n"
-                + "   exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
-                + "   StmtFlowCon [BREAK]\n"
+                + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [sd]]\n"
+                + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
+                + "StmtFlowCon [BREAK]\n"
                 + ")]]]";
         Assert.assertEquals(a, transformer.toString());
     }
@@ -331,7 +331,10 @@ public class ControlTest {
         transformer.projectToAST(project);
 
         String a =
-            "BlockAST [project=[[\n" + "(repeat [FOR, i = 1, i <= 10, i + 1]\n" + "   exprStmt Binary [TEXT_APPEND, Var [item], StringConst [kllk]]\n" + ")]]]";
+            "BlockAST [project=[[\n"
+                + "(repeat [FOR, Binary [ASSIGNMENT, Var [i], NumConst [1]], Binary [LTE, Var [i], NumConst [10]], Binary [ADD_ASSIGNMENT, Var [i], NumConst [1]]]\n"
+                + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [kllk]]\n"
+                + ")]]]";
         Assert.assertEquals(a, transformer.toString());
     }
 
@@ -346,7 +349,9 @@ public class ControlTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[\n" + "(repeat [FOR, i = 1, i <= 10, i + 1]\n)]]]";
+        String a =
+            "BlockAST [project=[[\n"
+                + "(repeat [FOR, Binary [ASSIGNMENT, Var [i], NumConst [1]], Binary [LTE, Var [i], NumConst [10]], Binary [ADD_ASSIGNMENT, Var [i], NumConst [1]]]\n)]]]";
         Assert.assertEquals(a, transformer.toString());
     }
 
@@ -364,7 +369,7 @@ public class ControlTest {
         String a =
             "BlockAST [project=[[\n"
                 + "(repeat [FOR_EACH, Binary [IN, Var [j], EmptyExpr [defVal=interface java.util.List]]]\n"
-                + "   exprStmt Binary [TEXT_APPEND, Var [item], StringConst [gg]]\n"
+                + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [gg]]\n"
                 + ")]]]";
         Assert.assertEquals(a, transformer.toString());
     }
@@ -398,9 +403,9 @@ public class ControlTest {
         String a =
             "BlockAST [project=[[\n"
                 + "(repeat [WHILE, Binary [EQ, NumConst [0], NumConst [0]]]\n"
-                + "   exprStmt Funct [PRINT, [StringConst [1]]]\n"
+                + "exprStmt Funct [PRINT, [StringConst [1]]]\n"
                 + ")\n(repeat [WHILE, Binary [EQ, NumConst [0], NumConst [0]]]\n"
-                + "   exprStmt Funct [PRINT, [StringConst [2]]]\n"
+                + "exprStmt Funct [PRINT, [StringConst [2]]]\n"
                 + ")]]]";
         Assert.assertEquals(a, transformer.toString());
     }

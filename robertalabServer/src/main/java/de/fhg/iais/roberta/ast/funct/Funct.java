@@ -7,6 +7,7 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
+import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
@@ -72,11 +73,35 @@ public class Funct extends Expr {
 
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
-        sb.append("Math.pow(");
-        this.param.get(0).generateJava(sb, 0);
-        sb.append(", ");
-        this.param.get(1).generateJava(sb, 0);
-        sb.append(")");
+        boolean first = true;
+        switch ( this.functName ) {
+            case POWER:
+                sb.append("Math.pow(");
+                this.param.get(0).generateJava(sb, 0);
+                sb.append(", ");
+                this.param.get(1).generateJava(sb, 0);
+                sb.append(")");
+                break;
+            case TEXT_JOIN:
+                first = true;
+                for ( Expr parametar : ((ExprList) this.param.get(0)).get() ) {
+                    if ( first ) {
+                        first = false;
+                    } else {
+                        sb.append(" + ");
+                    }
+                    if ( parametar.getKind() != Kind.StringConst ) {
+                        sb.append("String.valueOf(");
+                        parametar.generateJava(sb, indentation);
+                        sb.append(")");
+                    } else {
+                        parametar.generateJava(sb, indentation);
+                    }
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     /**

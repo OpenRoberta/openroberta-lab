@@ -61,6 +61,22 @@ public class ActionTest {
     }
 
     @Test
+    public void motorSetPower() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_MotorSetPower.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+
+        String a = "BlockAST [project=[[MotorSetPowerAction [port=B, power=NumConst [30]]]]]";
+
+        Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
     public void motorStop() throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();

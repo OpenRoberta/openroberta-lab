@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.ast.syntax.action.MotionParam;
 import de.fhg.iais.roberta.ast.syntax.action.MotorDuration;
 import de.fhg.iais.roberta.ast.syntax.action.MotorGetPowerAction;
 import de.fhg.iais.roberta.ast.syntax.action.MotorOnAction;
+import de.fhg.iais.roberta.ast.syntax.action.MotorSetPowerAction;
 import de.fhg.iais.roberta.ast.syntax.action.MotorStopAction;
 import de.fhg.iais.roberta.ast.syntax.action.MotorStopMode;
 import de.fhg.iais.roberta.ast.syntax.action.PlayFileAction;
@@ -39,6 +40,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
+import de.fhg.iais.roberta.ast.syntax.expr.Unary.Op;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickKey;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
@@ -73,7 +75,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
  * JAXB to AST transformer. Client should provide tree of jaxb objects.
- *
+ * 
  * @author kcvejoski
  */
 public class JaxbTransformer {
@@ -81,7 +83,7 @@ public class JaxbTransformer {
 
     /**
      * Converts object of type {@link Project} to AST tree.
-     *
+     * 
      * @param pr
      */
     public void projectToAST(Project pr) {
@@ -102,32 +104,6 @@ public class JaxbTransformer {
 
     public List<ArrayList<Phrase>> getProject() {
         return this.project;
-    }
-
-    private void bToAC(Block block) {
-
-        List<Value> values;
-        List<Field> fields;
-        List<ExprParam> exprParams;
-
-        ExprList exprList;
-
-        Phrase left;
-        Phrase right;
-        Phrase expr;
-        Phrase var;
-
-        String mode;
-        String port;
-
-        MotionParam mp;
-        MotorDuration md;
-
-        switch ( "" ) {
-        //ACTION
-            case "robActions_motor_on":
-
-        }
     }
 
     private Phrase bToA(Block block) {
@@ -213,6 +189,13 @@ public class JaxbTransformer {
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "MOTORPORT", (short) 0);
                 return MotorGetPowerAction.make(ActorPort.get(port));
+
+            case "robActions_motor_setPower":
+                fields = extractFields(block, (short) 1);
+                values = extractValues(block, (short) 1);
+                port = extractField(fields, "MOTORPORT", (short) 0);
+                left = extractValue(values, new ExprParam("POWER", Integer.class));
+                return MotorSetPowerAction.make(ActorPort.get(port), (Expr) left);
 
             case "robActions_motor_stop":
                 fields = extractFields(block, (short) 2);
@@ -590,7 +573,7 @@ public class JaxbTransformer {
             case "lists_create_empty":
                 return EmptyExpr.make(List.class);
 
-            case "lists_create_with":
+            case "robLists_create_with":
                 return blockToExprList(block, ArrayList.class);
 
             case "lists_repeat":
@@ -674,7 +657,11 @@ public class JaxbTransformer {
                 fields = extractFields(block, (short) 1);
                 mode = extractField(fields, "MODE", (short) 0);
                 values = extractValues(block, (short) 1);
-                expr = extractValue(values, new ExprParam("BOOL", Boolean.class));
+                if ( RepeatStmt.Mode.UNTIL == RepeatStmt.Mode.get(mode) ) {
+                    expr = Unary.make(Op.NOT, (Expr) extractValue(values, new ExprParam("BOOL", Boolean.class)));
+                } else {
+                    expr = extractValue(values, new ExprParam("BOOL", Boolean.class));
+                }
                 return extractRepeatStatement(block, expr, mode);
 
             case "controls_for":
@@ -687,7 +674,7 @@ public class JaxbTransformer {
                 Phrase by = extractValue(values, new ExprParam("BY", Integer.class));
                 Binary exprAssig = Binary.make(Binary.Op.ASSIGNMENT, (Expr) var, (Expr) from);
                 Binary exprCondition = Binary.make(Binary.Op.LTE, (Expr) var, (Expr) to);
-                Binary exprBy = Binary.make(Binary.Op.ADD, (Expr) var, (Expr) by);
+                Binary exprBy = Binary.make(Binary.Op.ADD_ASSIGNMENT, (Expr) var, (Expr) by);
                 exprList.addExpr(exprAssig);
                 exprList.addExpr(exprCondition);
                 exprList.addExpr(exprBy);

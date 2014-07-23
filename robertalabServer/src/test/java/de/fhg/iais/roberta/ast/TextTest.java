@@ -24,7 +24,7 @@ public class TextTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Funct [TEXT_JOIN, [\"text1\", [[EmptyExpr [defVal=class java.lang.String]]], \"text2\"]]]]]";
+        String a = "BlockAST [project=[[Funct [TEXT_JOIN, [StringConst [text1], EmptyExpr [defVal=class java.lang.String], StringConst [text2]]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
