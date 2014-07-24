@@ -14,6 +14,185 @@ public class Templates {
     private final Map<String, String> templates = new ConcurrentHashMap<>();
 
     public Templates() {
+        String eins = "" + " <xml id='toolbox' style='display: none'> " + "  <category name='Aktion'> " + "    <block type='robActions_motorDiff_on'>" //
+            + "      <value name='POWER'>" //
+            + "        <block type='math_number'>" //
+            + "          <field name='NUM'>50</field>" //
+            + "        </block>" //
+            + "      </value>" //
+            + "    </block>" //
+            + "    <block type='robActions_motorDiff_on_for'>" //
+            + "      <value name='POWER'>" //
+            + "        <block type='math_number'>" //
+            + "          <field name='NUM'>50</field>" //
+            + "        </block>" //
+            + "      </value>" //
+            + "      <value name='DISTANCE'>" //
+            + "        <block type='math_number'>" //
+            + "          <field name='NUM'>20</field>" //
+            + "        </block>" //
+            + "      </value>" //
+            + "    </block>" //
+            + "    <block type='robActions_motorDiff_stop'>" //
+            + "    </block>" //
+            + "    <block type='robActions_motorDiff_turn'>" //
+            + "      <value name='POWER'>" //
+            + "        <block type='math_number'>" //
+            + "          <field name='NUM'>50</field>" //
+            + "        </block>" //
+            + "      </value>" //
+            + "    </block>" //
+            + "    <block type='robActions_motorDiff_turn_for'>" //
+            + "      <value name='POWER'>" //
+            + "        <block type='math_number'>" //
+            + "          <field name='NUM'>50</field>" //
+            + "        </block>" //
+            + "      </value>" //
+            + "      <value name='DISTANCE'>" //
+            + "        <block type='math_number'>" //
+            + "          <field name='NUM'>20</field>" //
+            + "        </block>" //
+            + "      </value>" //
+            + "    </block>" //
+            + "    <block type='robActions_display_text'>" //
+            + "      <value name='OUT'>" //
+            + "        <block type='text'>" //
+            + "          <field name='TEXT'>Hallo</field>" //
+            + "        </block>" //
+            + "      </value>" //
+            + "      <value name='COL'>" //
+            + "        <block type='math_number'>" //
+            + "          <field name='NUM'>0</field>" //
+            + "        </block>" //
+            + "      </value>" //
+            + "      <value name='ROW'>" //
+            + "        <block type='math_number'>" //
+            + "          <field name='NUM'>0</field>" //
+            + "        </block>" //
+            + "      </value>" //
+            + "    </block>" //
+            + "    <block type='robActions_display_clear'>" //
+            + "    </block>" //
+            + "    <block type='robActions_play_tone'>" //
+            + "      <value name='FREQUENCE'>" //
+            + "        <block type='math_number'>" //
+            + "          <field name='NUM'>300</field>" //
+            + "        </block>" //
+            + "      </value>" //
+            + "      <value name='DURATION'>" //
+            + "        <block type='math_number'>" //
+            + "          <field name='NUM'>100</field>" //
+            + "        </block>" //
+            + "      </value>" //
+            + "    </block>" //
+            + "    <block type='robActions_play_setVolume'>" //
+            + "      <value name='VOLUME'>" //
+            + "        <block type='math_number'>" //
+            + "          <field name='NUM'>50</field>" //
+            + "        </block>" //
+            + "      </value>" //
+            + "    </block>" //
+            + "    <block type='robActions_brickLight_on'></block>" //
+            + "    <block type='robActions_brickLight_off'></block>" //
+            + "    <block type='robActions_brickLight_reset'></block>" //
+            + "  </category> "
+            + "  <category name='Sensoren'> "
+            + "      <block type='robSensors_touch_isPressed'>"
+            + "      </block>"
+            + "      <block type='robSensors_ultrasonic_getSample'>"
+            + "        <field name='SENSORPORT'>4</field> "
+            + "      </block>"
+            + "      <block type='robSensors_colour_getSample'>"
+            + "        <field name='SENSORPORT'>3</field> "
+            + "      </block>"
+            + "      <block type='robSensors_infrared_getSample'>"
+            + "        <field name='SENSORPORT'>4</field> "
+            + "      </block>"
+            + "      <block type='robSensors_encoder_reset'>"
+            + "      </block>"
+            + "      <block type='robSensors_encoder_getSample'>"
+            + "      </block>"
+            + "      <block type='robSensors_key_isPressed'>"
+            + "      </block>"
+            + "      <block type='robSensors_key_isPressedAndReleased'>"
+            + "      </block>"
+            + "      <block type='robSensors_gyro_reset'>"
+            + "        <field name='SENSORPORT'>2</field> "
+            + "      </block>"
+            + "      <block type='robSensors_gyro_getSample'>"
+            + "        <field name='SENSORPORT'>2</field> "
+            + "      </block>"
+            + "      <block type='robSensors_timer_getSample'>"
+            + "      </block>"
+            + "      <block type='robSensors_timer_reset'>"
+            + "      </block>"
+            + "  </category> "
+            + "  <category name='Kontrolle'> "
+            + "      <block type='robControls_if'/> "
+            + "      <block type='robControls_ifElse'/> "
+            + "      <block type='robControls_loopForever'/> "
+            + "      <block type='controls_repeat_ext'> "
+            + "        <value name='TIMES'> "
+            + "          <block type='math_number'> "
+            + "            <field name='NUM'>10</field> "
+            + "          </block> "
+            + "        </value> "
+            + "      </block> "
+            + "      <block type='robControls_wait_for'> "
+            + "        <value name='VALUE0'> "
+            + "          <block type='logic_compare'> "
+            + "            <value name='A'> "
+            + "              <block type='robSensors_getSample'> "
+            + "              </block> "
+            + "            </value> "
+            + "            <value name='B'> "
+            + "              <block type='logic_boolean'> "
+            + "              </block> "
+            + "            </value> "
+            + "          </block> "
+            + "        </value> "
+            + "      </block> "
+            + "  </category> "
+            + "  <category name='Logik'> "
+            + "    <block type='logic_compare'/> "
+            + "    <block type='logic_operation'/> "
+            + "    <block type='logic_boolean'/> "
+            + "  </category> "
+            + "  <category name='Mathematik'> "
+            + "    <block type='math_number'/> "
+            + "    <block type='math_arithmetic'/> "
+            + "  </category> "
+            + "  <category name='Text'> "
+            + "    <block type='text'/> "
+            + "  </category> "
+            + "  <category name='Farben'> "
+            + "    <block type='robColour_picker'> "
+            + "      <field name='COLOUR'>#585858</field> "
+            + "    </block> "
+            + "    <block type='robColour_picker'> "
+            + "      <field name='COLOUR'>#000000</field> "
+            + "    </block> "
+            + "    <block type='robColour_picker'> "
+            + "      <field name='COLOUR'>#0057a6</field> "
+            + "    </block> "
+            + "    <block type='robColour_picker'> "
+            + "      <field name='COLOUR'>#00642e</field> "
+            + "    </block> "
+            + "    <block type='robColour_picker'> "
+            + "      <field name='COLOUR'>#f7d117</field> "
+            + "    </block> "
+            + "    <block type='robColour_picker'> "
+            + "      <field name='COLOUR'>#b30006</field> "
+            + "    </block> "
+            + "    <block type='robColour_picker'> "
+            + "      <field name='COLOUR'>#FFFFFF</field> "
+            + "    <block type='robColour_picker'> "
+            + "      <field name='COLOUR'>#532115</field> "
+            + "    </block> "
+            + "  </category> "
+            + "  <category name='Variablen' custom='VARIABLE'/> "
+            + "  <category name='Funktionen' custom='PROCEDURE'/> "
+            + "</xml> ";
         String zwei =
             ""
                 + " <xml id='toolbox' style='display: none'> "
@@ -442,7 +621,6 @@ public class Templates {
                 + "  <category name='Variablen' custom='VARIABLE'/> "
                 + "  <category name='Funktionen' custom='PROCEDURE'/> "
                 + "</xml> ";
-        String eins = zwei;
         templates.put("1", eins);
         templates.put("2", zwei);
         LOG.info("created");
