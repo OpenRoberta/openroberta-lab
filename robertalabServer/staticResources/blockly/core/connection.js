@@ -342,14 +342,13 @@ Blockly.Connection.prototype.highlight = function() {
   if (this.type == Blockly.INPUT_VALUE || this.type == Blockly.OUTPUT_VALUE) {
     var tabWidth = Blockly.RTL ? -Blockly.BlockSvg.TAB_WIDTH :
                                  Blockly.BlockSvg.TAB_WIDTH;
-    steps = 'm 0,0 v 5 c 0,10 ' + -tabWidth + ',-8 ' + -tabWidth + ',7.5 s ' +
-            tabWidth + ',-2.5 ' + tabWidth + ',7.5 v 5';
+    steps = 'm 0,8.6 l-7.9 -0.4l-0.6 1.8c-1.1 3.7 -1 6.3 0.3 8c1 1.3 2.3 2 8.1 2';
   } else {
-    if (Blockly.RTL) {
-      steps = 'm 20,0 h -5 l -6,4 -3,0 -6,-4 h -5';
-    } else {
-      steps = 'm -20,0 h 5 l 6,4 3,0 6,-4 h 5';
-    }
+	if (Blockly.RTL) {
+	    steps = 'm 20,0 h -5 l -6,4 -3,0 -6,-4 h -5'; //we do not use this, so no adoption
+	  } else {
+	    steps = 'm -14,0 h 1 l 5.4,5.4 5.4,-5.4 h 1'; //change from Beate
+	  }
   }
   var xy = this.sourceBlock_.getRelativeToSurfaceXY();
   var x = this.x_ - xy.x;
