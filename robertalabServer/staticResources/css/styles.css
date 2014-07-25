@@ -85,6 +85,24 @@ ul#head-navigation a:hover .head-navi-icons.community{
     background-image: url(img/head-navi-icons/community_active.png);
 }
 
+.head-navi-icons.project {
+    background-image: url(img/head-navi-icons/project.png);
+    width: 22px;
+}
+
+ul#head-navigation a:hover .head-navi-icons.project, ul#head-navigation li:hover .head-navi-icons.project {
+    background-image: url(img/head-navi-icons/project_active.png);
+}
+
+.head-navi-icons.developer {
+    background-image: url(img/head-navi-icons/developer.png);
+    width: 22px;
+}
+
+ul#head-navigation a:hover .head-navi-icons.developer, ul#head-navigation li:hover .head-navi-icons.developer {
+    background-image: url(img/head-navi-icons/developer_active.png);
+}
+
 .head-navi-text {
     font-family: 'Roboto', sans-serif;
     font-size: 10px;
