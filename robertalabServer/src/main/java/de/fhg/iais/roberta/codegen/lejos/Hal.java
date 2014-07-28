@@ -32,7 +32,10 @@
 //import de.fhg.iais.roberta.ast.syntax.action.DriveAction;
 //import de.fhg.iais.roberta.ast.syntax.action.LightAction;
 //import de.fhg.iais.roberta.ast.syntax.action.TurnAction;
+//import de.fhg.iais.roberta.ast.syntax.sensor.BrickKey;
 //import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
+//import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
+//import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensor;
 //import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 //import de.fhg.iais.roberta.ast.syntax.sensor.UltraSSensor;
 //import de.fhg.iais.roberta.conf.transformer.BrickConfiguration;
@@ -60,7 +63,8 @@
 //	private final Map<ActorPort, EncoderMotor> lejosUnregulatedMotorBindings = new TreeMap<>();
 //
 //	private final Map<SensorPort, BaseSensor> lejosSensorBindings = new TreeMap<>();
-//	private final Map<SensorPort, String> lejosSensorModeNames = new TreeMap<>();
+//	@SuppressWarnings("rawtypes")
+//	private final Map<SensorPort, Enum> lejosSensorModeNames = new TreeMap<>();
 //	private final Map<SensorPort, SampleProvider> lejosSampleProvider = new TreeMap<>();
 //
 //	/**
@@ -238,7 +242,7 @@
 //		}
 //		this.lejosSensorBindings.put(sensorPort, sensor);
 //
-//		setSensorMode(sensorPort, sensor, this.brickConfiguration.getSensorModeName(sensorPort));
+//		setSensorMode(sensorPort, this.brickConfiguration.getSensorModeName(sensorPort));
 //	}
 //
 //	/**
@@ -248,10 +252,10 @@
 //	 * @param sensor
 //	 * @param sensorMode
 //	 */
-//	private void setSensorMode(SensorPort sensorPort, BaseSensor sensor, String sensorMode)
+//	private void setSensorMode(SensorPort sensorPort, Enum sensorMode)
 //	{
 //		// set & save the sampleprovider (^= the mode) of a sensor
-//		SampleProvider sp = sensor.getMode(sensorMode.toString());
+//		SampleProvider sp = getSensor(sensorPort).getMode(sensorMode.toString());
 //		this.lejosSampleProvider.put(sensorPort, sp);
 //		// save the sensorModeName (only used for return sensorModeName block!, keep
 //		// synchronized with sampleprovider treemap)
@@ -264,9 +268,9 @@
 //	 * @param sensorPort
 //	 * @return
 //	 */
-//	private String getSensorModeName(SensorPort sensorPort)
+//	private Enum getSensorModeName(SensorPort sensorPort)
 //	{
-//		return this.lejosSensorModeNames.get(sensorPort).toString();
+//		return this.lejosSensorModeNames.get(sensorPort);
 //	}
 //
 //	/**
@@ -560,6 +564,7 @@
 //	public void rotateDirectionDistance(ActorPort actorPort1, ActorPort actorPort2, TurnAction.Direction direction,
 //			int speedPercent, int distance)
 //	{
+//		// TODO
 //		int angle = distance * 0;
 //		switch (direction)
 //		{
@@ -612,7 +617,7 @@
 //	 */
 //	public void drawText(String text, int x, int y)
 //	{
-//		lcd.drawString(text, x, y);
+//		this.lcd.drawString(text, x, y);
 //	}
 //
 //	/**
@@ -641,12 +646,12 @@
 //			// number to image
 //			break;
 //		}
-//		glcd.drawImage(image, x, y, 0);
+//		this.glcd.drawImage(image, x, y, 0);
 //	}
 //
 //	public void clearDisplay()
 //	{
-//		lcd.clear();
+//		this.lcd.clear();
 //	}
 //
 //	// --- END Aktion Anzeige ---
@@ -658,7 +663,7 @@
 //	 */
 //	public void playTone(int frequency, int duration)
 //	{
-//		audio.playTone(frequency, duration);
+//		this.audio.playTone(frequency, duration);
 //	}
 //
 //	/**
@@ -672,16 +677,16 @@
 //		switch (fileNumber)
 //		{
 //		case 1:
-//			audio.playSample(new File(""));
+//			this.audio.playSample(new File(""));
 //			break;
 //		case 2:
-//			audio.playSample(new File(""));
+//			this.audio.playSample(new File(""));
 //			break;
 //		case 3:
-//			audio.playSample(new File(""));
+//			this.audio.playSample(new File(""));
 //			break;
 //		case 4:
-//			audio.playSample(new File(""));
+//			this.audio.playSample(new File(""));
 //			break;
 //		default:
 //			throw new DbcException("wrong file number");
@@ -695,7 +700,7 @@
 //	 */
 //	public void setVolume(int volume)
 //	{
-//		audio.setVolume(volume);
+//		this.audio.setVolume(volume);
 //	}
 //
 //	/**
@@ -703,7 +708,7 @@
 //	 */
 //	public int getVolume()
 //	{
-//		return audio.getVolume();
+//		return this.audio.getVolume();
 //	}
 //
 //	// -- END Aktion Klang ---
@@ -722,31 +727,31 @@
 //		case GREEN:
 //			if (blink)
 //			{
-//				led.setPattern(4);
+//				this.led.setPattern(4);
 //			}
 //			else
 //			{
-//				led.setPattern(1);
+//				this.led.setPattern(1);
 //			}
 //			break;
 //		case RED:
 //			if (blink)
 //			{
-//				led.setPattern(5);
+//				this.led.setPattern(5);
 //			}
 //			else
 //			{
-//				led.setPattern(2);
+//				this.led.setPattern(2);
 //			}
 //			break;
 //		case ORANGE:
 //			if (blink)
 //			{
-//				led.setPattern(6);
+//				this.led.setPattern(6);
 //			}
 //			else
 //			{
-//				led.setPattern(3);
+//				this.led.setPattern(3);
 //			}
 //			break;
 //		}
@@ -757,7 +762,7 @@
 //	 */
 //	public void ledOff()
 //	{
-//		led.setPattern(0);
+//		this.led.setPattern(0);
 //	}
 //
 //	/**
@@ -765,7 +770,7 @@
 //	 */
 //	public void resetLED()
 //	{
-//		led.setPattern(0);
+//		this.led.setPattern(0);
 //	}
 //
 //	// --- END Aktion Statusleuchte ---
@@ -802,14 +807,14 @@
 //	 */
 //	public void setUltrasonicSensorMode(SensorPort sensorPort, UltraSSensor.Mode mode)
 //	{
-//		setSensorMode(sensorPort, getSensor(sensorPort), mode.toString());
+//		setSensorMode(sensorPort, mode);
 //	}
 //
 //	/**
 //	 * @param sensorPort
 //	 * @return
 //	 */
-//	public String getUltraSonicModeName(SensorPort sensorPort)
+//	public Enum<UltraSSensor.Mode> getUltraSonicSensorModeName(SensorPort sensorPort)
 //	{
 //		return getSensorModeName(sensorPort);
 //	}
@@ -822,18 +827,18 @@
 //	 * @param sensorPort
 //	 * @return
 //	 */
-//	public int getUltraSonicValue(SensorPort sensorPort)
+//	public int getUltraSonicSensorValue(SensorPort sensorPort)
 //	{
 //		float[] sample = new float[getSampleProvider(sensorPort).sampleSize()];
 //		getSampleProvider(sensorPort).fetchSample(sample, 0);
-//		if (getSensorModeName(sensorPort).equals(UltraSSensor.Mode.PRESENCE))
+//		switch ((UltraSSensor.Mode) getSensorModeName(sensorPort))
 //		{
-//			return Math.round(sample[0]);
-//		}
-//		else
-//		// UltraSSensor.Mode.Distance or "default" ^= distance
-//		{
+//		case PRESENCE:
+//			return Math.round(sample[0]); // whatever :-D
+//		case DISTANCE:
 //			return Math.round(sample[0]) * 100; // ^= distance in cm
+//		default:
+//			throw new DbcException("sensor type or sensor mode missmatch");
 //		}
 //	}
 //
@@ -841,48 +846,117 @@
 //	// --- Sensoren Farbsensor ---
 //
 //	/**
-//	 * TODO interpretation/conversion before return
+//	 * 
+//	 * @param sensorPort
+//	 * @param mode
+//	 */
+//	public void setColorSensorMode(SensorPort sensorPort, ColorSensor.Mode mode)
+//	{
+//		setSensorMode(sensorPort, mode);
+//	}
+//
+//	/**
+//	 * @param sensorPort
+//	 * @return
+//	 */
+//	public Enum<ColorSensor.Mode> getColorSensorModeName(SensorPort sensorPort)
+//	{
+//		return getSensorModeName(sensorPort);
+//	}
+//
+//	/**
+//	 * TODO interpretation/conversion before return (rgb!)
 //	 * 
 //	 * @param sensorPort
 //	 * @return
 //	 */
-//	public int getColorValue(SensorPort sensorPort)
+//	public int getColorSensorValue(SensorPort sensorPort)
 //	{
 //		float[] sample = new float[getSampleProvider(sensorPort).sampleSize()];
 //		getSampleProvider(sensorPort).fetchSample(sample, 0);
-//		if (getSensorModeName(sensorPort).equals(ColorSensor.Mode.AMBIENTLIGHT))
+//		switch ((ColorSensor.Mode) getSensorModeName(sensorPort))
 //		{
+//		case AMBIENTLIGHT:
 //			return Math.round(sample[0]);
-//		}
-//		else if (getSensorModeName(sensorPort).equals(ColorSensor.Mode.COLOUR))
-//		{
+//		case COLOUR:
+//			return Math.round(sample[0]/* 3 values */);
+//		case LIGHT:
 //			return Math.round(sample[0]);
-//		}
-//		else if (getSensorModeName(sensorPort).equals(ColorSensor.Mode.LIGHT))
-//		{
-//			return Math.round(sample[0]);
-//		}
-//		else
-//		{
-//			throw new DbcException("invalid colorsensor mode");
+//		default:
+//			throw new DbcException("sensor type or sensor mode missmatch");
 //		}
 //	}
 //
 //	// END Sensoren Farbsensor ---
 //	// --- Sensoren IRSensor ---
+//
 //	/**
-//	 * TODO
+//	 * 
+//	 * @param sensorPort
+//	 * @param mode
+//	 */
+//	public void setInfraredSensorMode(SensorPort sensorPort, InfraredSensor.Mode mode)
+//	{
+//		setSensorMode(sensorPort, mode);
+//	}
+//
+//	/**
 //	 * 
 //	 * @param sensorPort
 //	 * @return
 //	 */
-//	public int getIRValue(SensorPort sensorPort)
+//	public Enum<InfraredSensor.Mode> getInfraredSensorModeName(SensorPort sensorPort)
 //	{
-//		return 0;
+//		return getSensorModeName(sensorPort);
+//	}
+//
+//	/**
+//	 * TODO interpretation/ conversion before return
+//	 * 
+//	 * @param sensorPort
+//	 * @return
+//	 */
+//	public int getInfraredSensorValue(SensorPort sensorPort)
+//	{
+//		float[] sample = new float[getSampleProvider(sensorPort).sampleSize()];
+//		getSampleProvider(sensorPort).fetchSample(sample, 0);
+//		switch ((InfraredSensor.Mode) getSensorModeName(sensorPort))
+//		{
+//		case DISTANCE:
+//			return Math.round(sample[0]);
+//		case SEEK:
+//			return Math.round(sample[0]);
+//		default:
+//			throw new DbcException("sensor type or sensor mode missmatch");
+//		}
 //	}
 //
 //	// END Sensoren IRSensor ---
 //	// --- Aktorsensor Drehsensor ---
+//
+//	/**
+//	 * TODO motor tacho does not work the same way as sensors and sample provider<br>
+//	 * block needs to be changed
+//	 * 
+//	 * @param actorPort
+//	 */
+//	public void setMotorTachoMode(ActorPort actorPort, Enum mode)
+//	{
+//
+//	}
+//
+//	/**
+//	 * TODO see setMotorTachoMode method
+//	 * 
+//	 * @param actorPort
+//	 * @return
+//	 */
+//	public Enum getMotorTachoMode(ActorPort actorPort)
+//	{
+//		Enum Enum = null;
+//		return Enum;
+//	}
+//
 //	/**
 //	 * TODO
 //	 * 
@@ -890,7 +964,14 @@
 //	 */
 //	public void resetMotorTacho(ActorPort actorPort)
 //	{
-//		//
+//		if (isRegulated(actorPort))
+//		{
+//			getRegulatedMotor(actorPort).resetTachoCount();
+//		}
+//		else
+//		{
+//			getUnregulatedMotor(actorPort).resetTachoCount();
+//		}
 //	}
 //
 //	/**
@@ -901,29 +982,149 @@
 //	 */
 //	public int getMotorTachoValue(ActorPort actorPort)
 //	{
-//		return 0;
+//		if (isRegulated(actorPort))
+//		{
+//			return getRegulatedMotor(actorPort).getTachoCount();
+//		}
+//		else
+//		{
+//			return getUnregulatedMotor(actorPort).getTachoCount();
+//		}
 //	}
 //
 //	// END Aktorsensor Drehsensor ---
+//	// --- Sensoren Steintasten ---
+//	/**
+//	 * TODO implementation probably wrong - test if it works
+//	 * 
+//	 * @param key
+//	 * @return
+//	 */
+//	public boolean isPressed(BrickKey key)
+//	{
+//		switch (key)
+//		{
+//		case ANY:
+//			// TODO
+//		case DOWN:
+//			return this.brick.getKey(BrickKey.DOWN.toString()).isDown();
+//		case ENTER:
+//			return this.brick.getKey(BrickKey.ENTER.toString()).isDown();
+//		case ESCAPE:
+//			return this.brick.getKey(BrickKey.ESCAPE.toString()).isDown();
+//		case LEFT:
+//			return this.brick.getKey(BrickKey.LEFT.toString()).isDown();
+//		case RIGHT:
+//			return this.brick.getKey(BrickKey.RIGHT.toString()).isDown();
+//		case UP:
+//			return this.brick.getKey(BrickKey.UP.toString()).isDown();
+//		default:
+//			throw new DbcException("wrong button name??");
+//		}
+//	}
+//
+//	/**
+//	 * TODO even possible to implement?<br>
+//	 * TODO read buttons -> number -> know which button was pressed<br>
+//	 * TODO wait<br>
+//	 * TODO read buttons again -> if number == 0 -> released -> return<br>
+//	 * 
+//	 * @param key
+//	 * @return
+//	 */
+//	public boolean isPressedAndReleased(BrickKey key)
+//	{
+//		switch (key)
+//		{
+//		case ANY:
+//			//
+//		case DOWN:
+//			//
+//		case ENTER:
+//			//
+//		case ESCAPE:
+//			//
+//		case LEFT:
+//			//
+//		case RIGHT:
+//			//
+//		case UP:
+//			//
+//		default:
+//			throw new DbcException("wrong button name??");
+//		}
+//	}
+//
+//	// END Sensoren Steintasten ---
 //	// --- Sensor Gyrosensor ---
 //	/**
-//	 * TODO
+//	 * 
+//	 * @param sensorPort
+//	 * @param mode
+//	 */
+//	public void setGyroSensorMode(SensorPort sensorPort, GyroSensor.Mode mode)
+//	{
+//		setSensorMode(sensorPort, mode);
+//	}
+//
+//	public Enum<GyroSensor.Mode> getGyroSensorModeName(SensorPort sensorPort)
+//	{
+//		return getSensorModeName(sensorPort);
+//	}
+//
+//	/**
+//	 * TODO interpretation and conversion before return
 //	 * 
 //	 * @param sensorPort
 //	 * @return
 //	 */
-//	public int getGyroValue(SensorPort sensorPort)
+//	public int getGyroSensorValue(SensorPort sensorPort)
+//	{
+//		float[] sample = new float[getSampleProvider(sensorPort).sampleSize()];
+//		getSampleProvider(sensorPort).fetchSample(sample, 0);
+//		switch ((GyroSensor.Mode) getSensorModeName(sensorPort))
+//		{
+//		case ANGLE:
+//			return Math.round(sample[0]);
+//		case RATE:
+//			return Math.round(sample[0]);
+//		default:
+//			throw new DbcException("sensor type or sensor mode missmatch");
+//		}
+//	}
+//
+//	/**
+//	 * TODO BaseSensor polymorphism does not support "reset" method for gyrosensor
+//	 * 
+//	 * @param sensorPort
+//	 */
+//	public void resetGyroSensor(SensorPort sensorPort)
+//	{
+//		//
+//	}
+//
+//	// END Sensoren Gyrosensor ---
+//	// --- Sensoren Zeitgeber ---
+//	/**
+//	 * TODO
+//	 * 
+//	 * @param timer
+//	 * @return
+//	 */
+//	public int getTimerValue(int timer)
 //	{
 //		return 0;
 //	}
 //
 //	/**
+//	 * TODO
 //	 * 
-//	 * @param sensorPort
+//	 * @param timer
 //	 */
-//	public void resetGyro(SensorPort sensorPort)
+//	public void resetTimer(/* TODO */)
 //	{
 //		//
 //	}
-//	// END Sensor Gyrosensor
+//
+//	// END Sensoren Zeitgeber ---
 // }

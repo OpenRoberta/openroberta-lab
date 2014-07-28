@@ -101,9 +101,11 @@ public class BrickConfiguration
 	 * @param port
 	 * @return
 	 */
-	public String getSensorModeName(SensorPort port)
+	@SuppressWarnings("rawtypes")
+	public Enum getSensorModeName(SensorPort port)
 	{
-		return "";
+		Enum Enum = null;
+		return Enum;
 	}
 
 	public static class Builder
