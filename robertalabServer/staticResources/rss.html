@@ -1,11 +1,24 @@
-<!DOCTYPE html>
-<html>
-   <head>
-      <meta charset="UTF-8">
-      <title>OPEN Roberta Lab - SeleniumVersion</title>
-      <link href="css/styles.css" type="text/css" rel="stylesheet">
-      <link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
-   </head>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+		<title>OPEN Roberta Lab - SeleniumVersion</title>
+
+		<link href="css/styles.css" type="text/css" rel="stylesheet">
+      
+	  	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	  	<script type="text/javascript" src="/common/plugins/zrssfeed-120/jquery.zrssfeed.min.js" charset="utf-8"></script>
+
+	  	<script type="text/javascript">
+			$(document).ready(function () {
+  				$('#rss').rssfeed('http://roberta-home.de/de/rss-events-xml', {
+    			limit: 6
+  				});
+			});
+		</script>
+</head>
+ 
    <body>
       <div id="wrapper">
          <div id="head-section">
@@ -35,7 +48,7 @@
          </div>
          <div id="main-section">
             <div id="welcome-screen">
-               RSS Test
+               <div id="rss"></div>
             </div>
          </div>
       </div>
