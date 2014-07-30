@@ -1,107 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <artifactId>robertaParent</artifactId>
+    <groupId>de.fhg.iais.openroberta</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+    <relativePath>../robertaParent/pom.xml</relativePath>
+  </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>de.budde</groupId>
   <artifactId>RobertaLabServer</artifactId>
   <name>RobertaLabServer</name>
-  <version>0.1</version>
   <description>the server of the RobertaLab application including the static resources delivered to the browser</description>
-  <url>http://www.openroberta.de</url>
-  <issueManagement>
-    <system>jira</system>
-    <url>https://mp-devel.iais.fraunhofer.de:8080</url>
-  </issueManagement>
-  <developers>
-    <developer>
-      <id>bjost</id>
-      <name>Beate Jost</name>
-      <email>beate.jost@iais.fraunhofer.de</email>
-      <organization>Fraunhofer IAIS</organization>
-      <organizationUrl>http://www.iais.fraunhofer.de/</organizationUrl>
-      <roles>
-        <role>developer</role>
-      </roles>
-      <timezone>+1</timezone>
-    </developer>
-    <developer>
-      <id>rbudde</id>
-      <name>Reinhard Budde</name>
-      <email>reinhard.budde@iais.fraunhofer.de</email>
-      <organization>Fraunhofer IAIS</organization>
-      <organizationUrl>http://www.iais.fraunhofer.de/</organizationUrl>
-      <roles>
-        <role>developer</role>
-      </roles>
-      <timezone>+1</timezone>
-    </developer>
-    <developer>
-      <id>mketterl</id>
-      <name>Markus Ketterl</name>
-      <email>mketterl@uni-osnabrueck.de</email>
-      <organization>Fraunhofer IAIS</organization>
-      <organizationUrl>http://www.iais.fraunhofer.de/</organizationUrl>
-      <roles>
-        <role>developer</role>
-      </roles>
-      <timezone>+1</timezone>
-    </developer>
-    <developer>
-      <id>kcvejoski</id>
-      <name>Kostadin Cvejoski</name>
-      <email>kostadin.cvejoski@iais.fraunhofer.de</email>
-      <organization>Fraunhofer IAIS</organization>
-      <organizationUrl>http://www.iais.fraunhofer.de/</organizationUrl>
-      <roles>
-        <role>developer</role>
-      </roles>
-      <timezone>+1</timezone>
-    </developer>
-    <developer>
-      <id>dpyka</id>
-      <name>Daniel Pyka</name>
-      <email>daniel.pyka@iais.fraunhofer.de</email>
-      <organization>Fraunhofer IAIS</organization>
-      <organizationUrl>http://www.iais.fraunhofer.de/</organizationUrl>
-      <roles>
-        <role>developer</role>
-      </roles>
-      <timezone>+1</timezone>
-    </developer>
-  </developers>
-  <contributors>
-    <contributor>
-      <name>Thorsten Leimbach</name>
-      <email>thorsten.leimbach@iais.fraunhofer.de</email>
-      <url>http://iais.fraunhofer.de</url>
-      <organization>Fraunhofer IAIS</organization>
-      <organizationUrl>http://iais.fraunhofer.de</organizationUrl>
-      <roles>
-        <role>PM</role>
-      </roles>
-      <timezone>+1</timezone>
-    </contributor>
-    <contributor>
-      <name>Achim Kapusta</name>
-      <email>achim.kapusta@iais.fraunhofer.de</email>
-      <url>http://iais.fraunhofer.de</url>
-      <organization>Fraunhofer IAIS</organization>
-      <organizationUrl>http://iais.fraunhofer.de</organizationUrl>
-      <roles>
-        <role>designer</role>
-      </roles>
-      <timezone>+1</timezone>
-    </contributor>
-  </contributors>
-  <licenses>
-    <license>
-      <name>Educational Community License, Version 2.0</name>
-      <url>http://www.osedu.org/licenses/ECL-2.0/ecl2.txt</url>
-    </license>
-  </licenses>
-  <organization>
-    <name>Open Roberta</name>
-    <url>http://www.openroberta.de</url>
-  </organization>
   <build>
     <plugins>
       <plugin>
@@ -114,6 +22,9 @@
             <configuration>
               <sources>
                 <source>target/generated-sources/jaxb/blockly</source>
+              </sources>
+              <sources>
+                <source>target/generated-sources/antlr4</source>
               </sources>
             </configuration>
           </execution>
@@ -242,99 +153,5 @@
       </exclusions>
     </dependency>
   </dependencies>
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>1.7.5</version>
-      </dependency>
-      <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-classic</artifactId>
-        <version>1.0.13</version>
-      </dependency>
-      <dependency>
-        <groupId>com.google.inject</groupId>
-        <artifactId>guice</artifactId>
-        <version>${guice.verion}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-servlet</artifactId>
-        <version>${jetty.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>javax.servlet</groupId>
-        <artifactId>servlet-api</artifactId>
-        <version>2.5</version>
-      </dependency>
-      <dependency>
-        <groupId>com.sun.jersey</groupId>
-        <artifactId>jersey-servlet</artifactId>
-        <version>${jersey.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.sun.jersey</groupId>
-        <artifactId>jersey-json</artifactId>
-        <version>${jersey.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.sun.jersey</groupId>
-        <artifactId>jersey-server</artifactId>
-        <version>${jersey.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.sun.jersey.contribs</groupId>
-        <artifactId>jersey-guice</artifactId>
-        <version>${jersey.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.hibernate</groupId>
-        <artifactId>hibernate-core</artifactId>
-        <version>4.2.7.Final</version>
-      </dependency>
-      <dependency>
-        <groupId>org.xerial</groupId>
-        <artifactId>sqlite-jdbc</artifactId>
-        <version>3.7.2</version>
-      </dependency>
-      <dependency>
-        <groupId>org.antlr</groupId>
-        <artifactId>antlr4</artifactId>
-        <version>4.2</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>commons-lang3</artifactId>
-        <version>3.1</version>
-      </dependency>
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.10</version>
-      </dependency>
-      <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-all</artifactId>
-        <version>1.9.5</version>
-      </dependency>
-      <dependency>
-        <groupId>org.seleniumhq.selenium</groupId>
-        <artifactId>selenium-java</artifactId>
-        <version>2.41.0</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-  <properties>
-    <jersey.version>1.18.1</jersey.version>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <jetty.version>9.2.1.v20140609</jetty.version>
-    <guice.verion>3.0</guice.verion>
-    <source.level>1.7</source.level>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.target>1.7</maven.compiler.target>
-  </properties>
 </project>
 

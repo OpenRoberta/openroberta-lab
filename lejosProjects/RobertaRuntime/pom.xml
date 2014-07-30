@@ -1,18 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>de.fhg.iais.roberta</groupId>
+    <parent>
+        <groupId>de.fhg.iais.openroberta</groupId>
+        <artifactId>robertaParent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../../robertaParent</relativePath>
+    </parent>
+    
     <artifactId>RobertaRuntime</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <source.level>1.7</source.level>
-        <maven.compiler.target>1.7</maven.compiler.target>
-        <maven.compiler.source>1.7</maven.compiler.source>
-    </properties>
+    <name>RobertaRuntime</name>
+    <description>the runtime of the RobertaLab to be used on the brick by the generated code</description>
+
     <dependencies>
         <dependency>
-            <groupId>de.fhg.iais.roberta</groupId>
+            <groupId>de.fhg.iais.openroberta</groupId>
             <artifactId>shared</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
