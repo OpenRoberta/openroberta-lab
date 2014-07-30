@@ -7,6 +7,7 @@
     <name>RobertaLabServer</name>
     <description>the server of the RobertaLab application including the static resources delivered to the browser</description>
     <url>http://www.openroberta.de</url>
+    <inceptionYear>2014</inceptionYear>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -267,6 +268,19 @@
             </plugin>
         </plugins>
     </build>
+    <!-- NEXUS repository -->
+	<distributionManagement>
+		<repository>
+			<id>ORA-releases</id>
+			<name>Open Roberta releases repository</name>
+			<url>http://mp-devel.iais.fraunhofer.de:8081/nexus/content/repositories/ORA-releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>ORA-snapshots</id>
+			<name>Open Roberta snapshots repository</name>
+			<url>http://http://mp-devel.iais.fraunhofer.de:8081/nexus/content/repositories/ORA-snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 	<!-- All non-build related project data below here -->
     <organization>
         <name>Open Roberta</name>
