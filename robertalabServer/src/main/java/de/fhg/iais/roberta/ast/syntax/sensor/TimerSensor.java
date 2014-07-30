@@ -9,15 +9,15 @@ import de.fhg.iais.roberta.dbc.Assert;
  * tree).
  * Object from this class will generate code for reset the sensor or getting a sample from the sensor.<br/>
  * <br>
- * The client must provide the {@link SensorPort} and {@link Mode}. See enum {@link Mode} for all possible modes of the sensor.<br>
+ * The client must provide the {@link SensorPort} and {@link TimerSensorMode}. See enum {@link TimerSensorMode} for all possible modes of the sensor.<br>
  * <br>
- * To create an instance from this class use the method {@link #make(Mode, SensorPort)}.<br>
+ * To create an instance from this class use the method {@link #make(TimerSensorMode, SensorPort)}.<br>
  */
 public class TimerSensor extends Sensor {
-    private final Mode mode;
+    private final TimerSensorMode mode;
     private final int timer;
 
-    private TimerSensor(Mode mode, int timer) {
+    private TimerSensor(TimerSensorMode mode, int timer) {
         super(Phrase.Kind.BrickSensor);
         Assert.isTrue(timer < 10);
         this.mode = mode;
@@ -28,18 +28,18 @@ public class TimerSensor extends Sensor {
     /**
      * Create object of the class {@link TimerSensor}.
      * 
-     * @param mode in which the sensor is operating. See enum {@link Mode} for all possible modes that the sensor have.
+     * @param mode in which the sensor is operating. See enum {@link TimerSensorMode} for all possible modes that the sensor have.
      * @param timer integer value
      * @return read only object of {@link TimerSensor}
      */
-    public static TimerSensor make(Mode mode, int timer) {
+    public static TimerSensor make(TimerSensorMode mode, int timer) {
         return new TimerSensor(mode, timer);
     }
 
     /**
-     * @return get the mode of sensor. See enum {@link Mode} for all possible modes that the sensor have.
+     * @return get the mode of sensor. See enum {@link TimerSensorMode} for all possible modes that the sensor have.
      */
-    public Mode getMode() {
+    public TimerSensorMode getMode() {
         return this.mode;
     }
 
@@ -58,12 +58,5 @@ public class TimerSensor extends Sensor {
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
         sb.append("(" + this.mode + ", " + this.timer + ")");
-    }
-
-    /**
-     * Mode of the time sensor.
-     */
-    public static enum Mode {
-        RESET, GET_SAMPLE;
     }
 }

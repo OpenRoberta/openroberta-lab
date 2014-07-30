@@ -1,10 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.sensor;
 
-import java.util.Locale;
-
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
-import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
  * This class represents the <b>robSensors_colour_getMode</b>, <b>robSensors_colour_getSample</b> and <b>robSensors_colour_setMode</b> blocks from Blockly into
@@ -12,15 +9,15 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * tree).
  * Object from this class will generate code for setting the mode of the sensor or getting a sample from the sensor.<br/>
  * <br>
- * The client must provide the {@link SensorPort} and {@link Mode}. See enum {@link Mode} for all possible modes of the sensor.<br>
+ * The client must provide the {@link SensorPort} and {@link ColorSensorMode}. See enum {@link ColorSensorMode} for all possible modes of the sensor.<br>
  * <br>
- * To create an instance from this class use the method {@link #make(Mode, SensorPort)}.<br>
+ * To create an instance from this class use the method {@link #make(ColorSensorMode, SensorPort)}.<br>
  */
 public class ColorSensor extends Sensor {
-    private final Mode mode;
+    private final ColorSensorMode mode;
     private final SensorPort port;
 
-    private ColorSensor(Mode mode, SensorPort port) {
+    private ColorSensor(ColorSensorMode mode, SensorPort port) {
         super(Phrase.Kind.ColorSensor);
         Assert.isTrue(mode != null);
         this.mode = mode;
@@ -31,18 +28,18 @@ public class ColorSensor extends Sensor {
     /**
      * Create object of the class {@link ColorSensor}.
      * 
-     * @param mode in which the sensor is operating. See enum {@link Mode} for all possible modes that the sensor have.
+     * @param mode in which the sensor is operating. See enum {@link ColorSensorMode} for all possible modes that the sensor have.
      * @param port on where the sensor is connected. See enum {@link SensorPort} for all possible sensor ports.
      * @return read only object of class {@link ColorSensor}
      */
-    public static ColorSensor make(Mode mode, SensorPort port) {
+    public static ColorSensor make(ColorSensorMode mode, SensorPort port) {
         return new ColorSensor(mode, port);
     }
 
     /**
-     * @return get the mode of sensor. See enum {@link Mode} for all possible modes that the sensor have.
+     * @return get the mode of sensor. See enum {@link ColorSensorMode} for all possible modes that the sensor have.
      */
-    public Mode getMode() {
+    public ColorSensorMode getMode() {
         return this.mode;
     }
 
@@ -61,43 +58,5 @@ public class ColorSensor extends Sensor {
     @Override
     public String toString() {
         return "ColorSensor [mode=" + this.mode + ", port=" + this.port + "]";
-    }
-
-    /**
-     * Modes in which the sensor can operate.
-     */
-    public static enum Mode {
-        COLOUR(), LIGHT(), AMBIENTLIGHT(), GET_MODE(), GET_SAMPLE();
-
-        private final String[] values;
-
-        private Mode(String... values) {
-            this.values = values;
-        }
-
-        /**
-         * get mode from {@link Mode} from string parameter. It is possible for one mode to have multiple string mappings.
-         * Throws exception if the mode does not exists.
-         * 
-         * @param name of the mode
-         * @return mode from the enum {@link Mode}
-         */
-        public static Mode get(String s) {
-            if ( s == null || s.isEmpty() ) {
-                throw new DbcException("Invalid mode: " + s);
-            }
-            String sUpper = s.trim().toUpperCase(Locale.GERMAN);
-            for ( Mode mo : Mode.values() ) {
-                if ( mo.toString().equals(sUpper) ) {
-                    return mo;
-                }
-                for ( String value : mo.values ) {
-                    if ( sUpper.equals(value) ) {
-                        return mo;
-                    }
-                }
-            }
-            throw new DbcException("Invalid mode: " + s);
-        }
     }
 }

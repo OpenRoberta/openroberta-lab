@@ -1,8 +1,7 @@
-package de.fhg.iais.roberta.conf.transformer;
+package de.fhg.iais.roberta.ast.syntax;
 
 import java.util.Arrays;
 
-import de.fhg.iais.roberta.ast.syntax.Phrase.Category;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 public enum HardwareComponent {

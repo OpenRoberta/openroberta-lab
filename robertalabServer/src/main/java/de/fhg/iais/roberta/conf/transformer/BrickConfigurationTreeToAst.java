@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationBaseVisitor;
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationLexer;
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationParser;

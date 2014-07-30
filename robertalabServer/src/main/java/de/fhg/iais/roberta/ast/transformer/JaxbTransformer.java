@@ -5,12 +5,14 @@ import java.util.List;
 
 import de.fhg.iais.roberta.ast.funct.Funct;
 import de.fhg.iais.roberta.ast.funct.Funct.Function;
+import de.fhg.iais.roberta.ast.syntax.Category;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
-import de.fhg.iais.roberta.ast.syntax.Phrase.Category;
 import de.fhg.iais.roberta.ast.syntax.action.Action;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.ClearDisplayAction;
+import de.fhg.iais.roberta.ast.syntax.action.Color;
 import de.fhg.iais.roberta.ast.syntax.action.DriveAction;
+import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
 import de.fhg.iais.roberta.ast.syntax.action.LightAction;
 import de.fhg.iais.roberta.ast.syntax.action.LightStatusAction;
 import de.fhg.iais.roberta.ast.syntax.action.MotionParam;
@@ -26,6 +28,7 @@ import de.fhg.iais.roberta.ast.syntax.action.ShowTextAction;
 import de.fhg.iais.roberta.ast.syntax.action.StopAction;
 import de.fhg.iais.roberta.ast.syntax.action.ToneAction;
 import de.fhg.iais.roberta.ast.syntax.action.TurnAction;
+import de.fhg.iais.roberta.ast.syntax.action.TurnDirection;
 import de.fhg.iais.roberta.ast.syntax.action.VolumeAction;
 import de.fhg.iais.roberta.ast.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
@@ -45,14 +48,20 @@ import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickKey;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.DrehSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensorMode;
+import de.fhg.iais.roberta.ast.syntax.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.TouchSensor;
-import de.fhg.iais.roberta.ast.syntax.sensor.UltraSSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.ast.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
@@ -152,7 +161,7 @@ public class JaxbTransformer {
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam("POWER", Integer.class));
                 mp = new MotionParam.Builder().speed((Expr) expr).build();
-                return DriveAction.make(DriveAction.Direction.get(mode), mp);
+                return DriveAction.make(DriveDirection.get(mode), mp);
 
             case "robActions_motorDiff_on_for":
                 fields = extractFields(block, (short) 1);
@@ -162,7 +171,7 @@ public class JaxbTransformer {
                 right = extractValue(values, new ExprParam("DISTANCE", Integer.class));
                 md = new MotorDuration(MotorDuration.Mode.DISTANCE, (Expr) right);
                 mp = new MotionParam.Builder().speed((Expr) left).duration(md).build();
-                return DriveAction.make(DriveAction.Direction.get(mode), mp);
+                return DriveAction.make(DriveDirection.get(mode), mp);
 
             case "robActions_motorDiff_turn":
                 fields = extractFields(block, (short) 1);
@@ -170,7 +179,7 @@ public class JaxbTransformer {
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam("POWER", Integer.class));
                 mp = new MotionParam.Builder().speed((Expr) expr).build();
-                return TurnAction.make(TurnAction.Direction.get(mode), mp);
+                return TurnAction.make(TurnDirection.get(mode), mp);
 
             case "robActions_motorDiff_turn_for":
                 fields = extractFields(block, (short) 1);
@@ -180,7 +189,7 @@ public class JaxbTransformer {
                 right = extractValue(values, new ExprParam("DISTANCE", Integer.class));
                 md = new MotorDuration(MotorDuration.Mode.DISTANCE, (Expr) right);
                 mp = new MotionParam.Builder().speed((Expr) left).duration(md).build();
-                return TurnAction.make(TurnAction.Direction.get(mode), mp);
+                return TurnAction.make(TurnDirection.get(mode), mp);
 
             case "robActions_motorDiff_stop":
                 return StopAction.make();
@@ -245,7 +254,7 @@ public class JaxbTransformer {
                 fields = extractFields(block, (short) 2);
                 String color = extractField(fields, "SWITCH_COLOR", (short) 0);
                 String blink = extractField(fields, "SWITCH_BLINK", (short) 1);
-                return LightAction.make(LightAction.Color.get(color), Boolean.valueOf(blink));
+                return LightAction.make(Color.get(color), Boolean.valueOf(blink));
 
             case "robActions_brickLight_off":
                 return LightStatusAction.make(LightStatusAction.Status.OFF);
@@ -263,70 +272,70 @@ public class JaxbTransformer {
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, "SENSORPORT", (short) 0);
                 mode = extractField(fields, "MODE", (short) 1);
-                return UltraSSensor.make(UltraSSensor.Mode.get(mode), SensorPort.get(port));
+                return UltrasonicSensor.make(UltrasonicSensorMode.get(mode), SensorPort.get(port));
 
             case "robSensors_ultrasonic_getMode":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return UltraSSensor.make(UltraSSensor.Mode.GET_MODE, SensorPort.get(port));
+                return UltrasonicSensor.make(UltrasonicSensorMode.GET_MODE, SensorPort.get(port));
 
             case "robSensors_ultrasonic_getSample":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return UltraSSensor.make(UltraSSensor.Mode.GET_SAMPLE, SensorPort.get(port));
+                return UltrasonicSensor.make(UltrasonicSensorMode.GET_SAMPLE, SensorPort.get(port));
 
             case "robSensors_colour_setMode":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, "SENSORPORT", (short) 0);
                 mode = extractField(fields, "MODE", (short) 1);
-                return ColorSensor.make(ColorSensor.Mode.get(mode), SensorPort.get(port));
+                return ColorSensor.make(ColorSensorMode.get(mode), SensorPort.get(port));
 
             case "robSensors_colour_getMode":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return ColorSensor.make(ColorSensor.Mode.GET_MODE, SensorPort.get(port));
+                return ColorSensor.make(ColorSensorMode.GET_MODE, SensorPort.get(port));
 
             case "robSensors_colour_getSample":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return ColorSensor.make(ColorSensor.Mode.GET_SAMPLE, SensorPort.get(port));
+                return ColorSensor.make(ColorSensorMode.GET_SAMPLE, SensorPort.get(port));
 
             case "robSensors_infrared_setMode":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, "SENSORPORT", (short) 0);
                 mode = extractField(fields, "MODE", (short) 1);
-                return InfraredSensor.make(InfraredSensor.Mode.get(mode), SensorPort.get(port));
+                return InfraredSensor.make(InfraredSensorMode.get(mode), SensorPort.get(port));
 
             case "robSensors_infrared_getMode":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return InfraredSensor.make(InfraredSensor.Mode.GET_MODE, SensorPort.get(port));
+                return InfraredSensor.make(InfraredSensorMode.GET_MODE, SensorPort.get(port));
 
             case "robSensors_infrared_getSample":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return InfraredSensor.make(InfraredSensor.Mode.GET_SAMPLE, SensorPort.get(port));
+                return InfraredSensor.make(InfraredSensorMode.GET_SAMPLE, SensorPort.get(port));
 
             case "robSensors_encoder_setMode":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, "MOTORPORT", (short) 0);
                 mode = extractField(fields, "MODE", (short) 1);
-                return DrehSensor.make(DrehSensor.Mode.get(mode), ActorPort.get(port));
+                return DrehSensor.make(MotorTachoMode.get(mode), ActorPort.get(port));
 
             case "robSensors_encoder_getMode":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "MOTORPORT", (short) 0);
-                return DrehSensor.make(DrehSensor.Mode.GET_MODE, ActorPort.get(port));
+                return DrehSensor.make(MotorTachoMode.GET_MODE, ActorPort.get(port));
 
             case "robSensors_encoder_getSample":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "MOTORPORT", (short) 0);
-                return DrehSensor.make(DrehSensor.Mode.GET_SAMPLE, ActorPort.get(port));
+                return DrehSensor.make(MotorTachoMode.GET_SAMPLE, ActorPort.get(port));
 
             case "robSensors_encoder_reset":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "MOTORPORT", (short) 0);
-                return DrehSensor.make(DrehSensor.Mode.RESET, ActorPort.get(port));
+                return DrehSensor.make(MotorTachoMode.RESET, ActorPort.get(port));
 
             case "robSensors_key_isPressed":
                 fields = extractFields(block, (short) 1);
@@ -347,32 +356,32 @@ public class JaxbTransformer {
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, "SENSORPORT", (short) 0);
                 mode = extractField(fields, "MODE", (short) 1);
-                return GyroSensor.make(GyroSensor.Mode.get(mode), SensorPort.get(port));
+                return GyroSensor.make(GyroSensorMode.get(mode), SensorPort.get(port));
 
             case "robSensors_gyro_getMode":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return GyroSensor.make(GyroSensor.Mode.GET_MODE, SensorPort.get(port));
+                return GyroSensor.make(GyroSensorMode.GET_MODE, SensorPort.get(port));
 
             case "robSensors_gyro_getSample":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return GyroSensor.make(GyroSensor.Mode.GET_SAMPLE, SensorPort.get(port));
+                return GyroSensor.make(GyroSensorMode.GET_SAMPLE, SensorPort.get(port));
 
             case "robSensors_gyro_reset":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return GyroSensor.make(GyroSensor.Mode.RESET, SensorPort.get(port));
+                return GyroSensor.make(GyroSensorMode.RESET, SensorPort.get(port));
 
             case "robSensors_timer_getSample":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORNUM", (short) 0);
-                return TimerSensor.make(TimerSensor.Mode.GET_SAMPLE, Integer.valueOf(port));
+                return TimerSensor.make(TimerSensorMode.GET_SAMPLE, Integer.valueOf(port));
 
             case "robSensors_timer_reset":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORNUM", (short) 0);
-                return TimerSensor.make(TimerSensor.Mode.RESET, Integer.valueOf(port));
+                return TimerSensor.make(TimerSensorMode.RESET, Integer.valueOf(port));
 
                 //Logik
             case "logic_compare":

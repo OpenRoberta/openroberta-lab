@@ -159,11 +159,4 @@ abstract public class Phrase {
             return this.category;
         }
     }
-
-    /**
-     * All {@link Kind} of objects that we have in the AST (abstract syntax tree) are separated in these {@link Category}.
-     */
-    public static enum Category {
-        EXPR, SENSOR, ACTOR, STMT;
-    }
 }

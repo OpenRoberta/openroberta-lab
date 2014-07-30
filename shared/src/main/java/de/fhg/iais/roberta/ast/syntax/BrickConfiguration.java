@@ -1,9 +1,8 @@
-package de.fhg.iais.roberta.conf.transformer;
+package de.fhg.iais.roberta.ast.syntax;
 
 import java.util.Map;
 import java.util.TreeMap;
 
-import de.fhg.iais.roberta.ast.syntax.Phrase.Category;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.dbc.Assert;
