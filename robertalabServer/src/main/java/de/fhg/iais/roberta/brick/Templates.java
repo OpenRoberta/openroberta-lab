@@ -186,6 +186,7 @@ public class Templates {
             + "    </block> "
             + "    <block type='robColour_picker'> "
             + "      <field name='COLOUR'>#FFFFFF</field> "
+            + "    </block> "		
             + "    <block type='robColour_picker'> "
             + "      <field name='COLOUR'>#532115</field> "
             + "    </block> "
