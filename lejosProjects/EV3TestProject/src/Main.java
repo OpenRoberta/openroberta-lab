@@ -102,39 +102,5 @@ public class Main {
         }
         touch.close();
 
-        //differential drive forward
-        //        EV3LargeRegulatedMotor motor1 = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("A"));
-        //        EV3LargeRegulatedMotor motor2 = new EV3LargeRegulatedMotor(LocalEV3.get().getPort("B"));
-        //        DifferentialPilot pilot = new DifferentialPilot(2.1f, 4.4f, motor1, motor2, false);
-        //        pilot.setRotateSpeed(rotateSpeed);
-        //        pilot.forward();
-        //        pilot.rotateRight();
-        //        pilot.rotateLeft();
-        //        pilot.steer(turnRate, angle, false);
-        //        pilot.stop();
-        //        pilot.rotate(angle, immediateReturn);
-        //        LocalEV3.get().getLED().setPattern(0);
-        //        Delay.msDelay(3000);
-        //        LocalEV3.get().getLED().setPattern(1);
-        //        Delay.msDelay(3000);
-        //        LocalEV3.get().getLED().setPattern(2);
-        //        Delay.msDelay(3000);
-        //        LocalEV3.get().getLED().setPattern(3);
-        //        Delay.msDelay(3000);
-        //        LocalEV3.get().getLED().setPattern(4);
-        //        Delay.msDelay(3000);
-        //        LocalEV3.get().getLED().setPattern(5);
-        //        Delay.msDelay(3000);
-        //        LocalEV3.get().getLED().setPattern(6);
-        //        Delay.msDelay(3000);
-        //        LocalEV3.get().getLED().setPattern(7);
-        //        Delay.msDelay(3000);
-        //        LocalEV3.get().getLED().setPattern(8);
-        //        Delay.msDelay(3000);
-        //        LocalEV3.get().getLED().setPattern(0);
-        //        Delay.msDelay(3000);
-        //        Port port = LocalEV3.get().getPort("S2");
-        //        BaseSensor sensor = null;
-        //        sensor = new EV3ColorSensor(port);
     }
 }
