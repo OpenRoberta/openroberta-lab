@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.sensor;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
+import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
  * This class represents the <b>robSensors_timer_reset</b> and <b>robSensors_timer_getSample</b> blocks from Blockly into
@@ -18,7 +19,7 @@ public class TimerSensor extends Sensor {
     private final int timer;
 
     private TimerSensor(TimerSensorMode mode, int timer) {
-        super(Phrase.Kind.BrickSensor);
+        super(Phrase.Kind.TIMER_SENSING);
         Assert.isTrue(timer < 10);
         this.mode = mode;
         this.timer = timer;
@@ -57,6 +58,16 @@ public class TimerSensor extends Sensor {
 
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
-        sb.append("(" + this.mode + ", " + this.timer + ")");
+        switch ( this.mode ) {
+
+            case GET_SAMPLE:
+                sb.append("hal.getTimerValue(" + this.timer + ")");
+                break;
+            case RESET:
+                sb.append("hal.resetTimer(" + this.timer + ");");
+                break;
+            default:
+                throw new DbcException("Invalid Time Mode!");
+        }
     }
 }

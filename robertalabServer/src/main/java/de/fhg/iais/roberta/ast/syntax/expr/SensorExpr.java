@@ -13,7 +13,7 @@ public class SensorExpr extends Expr {
     private final Sensor sensor;
 
     private SensorExpr(Sensor sens) {
-        super(Phrase.Kind.SensorExpr);
+        super(Phrase.Kind.SENSOR_EXPR);
         Assert.isTrue(sens.isReadOnly());
         this.sensor = sens;
         setReadOnly();

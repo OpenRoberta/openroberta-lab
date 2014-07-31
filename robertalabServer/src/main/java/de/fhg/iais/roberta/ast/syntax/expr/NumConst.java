@@ -12,7 +12,7 @@ public class NumConst extends Expr {
     private final String value;
 
     private NumConst(String value) {
-        super(Phrase.Kind.NumConst);
+        super(Phrase.Kind.NUM_CONST);
         this.value = value;
         setReadOnly();
     }

@@ -13,7 +13,7 @@ public class MotorGetPowerAction extends Action {
     private final ActorPort port;
 
     private MotorGetPowerAction(ActorPort port) {
-        super(Phrase.Kind.MotorGetPowerAction);
+        super(Phrase.Kind.MOTOR_GET_POWER_ACTION);
         Assert.isTrue(port != null);
         this.port = port;
         setReadOnly();
@@ -43,7 +43,6 @@ public class MotorGetPowerAction extends Action {
 
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
-        // TODO Auto-generated method stub
-
+        sb.append("hal.getSpeed(" + this.port.toString() + ")");
     }
 }

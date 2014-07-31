@@ -16,7 +16,7 @@ public class ExprList extends Expr {
     private final List<Expr> el = new ArrayList<Expr>();
 
     private ExprList() {
-        super(Phrase.Kind.ExprList);
+        super(Phrase.Kind.EXPR_LIST);
     }
 
     /**
@@ -76,7 +76,7 @@ public class ExprList extends Expr {
             if ( first ) {
                 first = false;
             } else {
-                if ( expr.getKind() == Kind.Binary ) {
+                if ( expr.getKind() == Kind.BINARY ) {
                     sb.append("; ");
                 } else {
                     sb.append(", ");

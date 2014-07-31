@@ -15,7 +15,7 @@ public class MotorSetPowerAction extends Action {
     private final Expr power;
 
     private MotorSetPowerAction(ActorPort port, Expr power) {
-        super(Phrase.Kind.MotorGetPowerAction);
+        super(Phrase.Kind.MOTOR_GET_POWER_ACTION);
         Assert.isTrue(port != null && power.isReadOnly());
         this.port = port;
         this.power = power;

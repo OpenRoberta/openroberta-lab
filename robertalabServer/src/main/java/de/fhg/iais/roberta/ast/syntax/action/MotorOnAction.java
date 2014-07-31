@@ -14,7 +14,7 @@ public class MotorOnAction extends Action {
     MotionParam param;
 
     private MotorOnAction(ActorPort port, MotionParam param) {
-        super(Phrase.Kind.MotorOnAction);
+        super(Phrase.Kind.MOTOR_ON_ACTION);
         Assert.isTrue(param != null);
         this.param = param;
         this.port = port;
@@ -53,7 +53,10 @@ public class MotorOnAction extends Action {
 
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
-        sb.append("(" + this.param + ", " + this.port + ")");
+        sb.append("hal.setMotorSpeed(" + this.port.toString() + ", ");
+        this.param.getSpeed().generateJava(sb, indentation);
+        sb.append(")");
+        //sb.append("(" + this.param + ", " + this.port + ")");
     }
 
 }

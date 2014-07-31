@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.ast.syntax.action;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.dbc.Assert;
+import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
  * This class represents the <b>robActions_play_setVolume</b> block from Blockly into the AST (abstract syntax tree).
@@ -15,7 +16,7 @@ public class VolumeAction extends Action {
     private final Expr volume;
 
     private VolumeAction(Mode mode, Expr volume) {
-        super(Phrase.Kind.VolumeAction);
+        super(Phrase.Kind.VOLUME_ACTION);
         Assert.isTrue(volume != null && volume.isReadOnly() && mode != null);
         this.volume = volume;
         this.mode = mode;
@@ -24,7 +25,7 @@ public class VolumeAction extends Action {
 
     /**
      * Creates instance of {@link VolumeAction}. This instance is read only and can not be modified.
-     *
+     * 
      * @param mode of the action {@link Mode},
      * @param volume value
      * @return read only object of class {@link VolumeAction}.
@@ -49,7 +50,19 @@ public class VolumeAction extends Action {
 
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
-        // TODO Auto-generated method stub
+        switch ( this.mode ) {
+            case SET:
+                sb.append("hal.setVolume(");
+                this.volume.generateJava(sb, 0);
+                sb.append(");");
+                break;
+            case GET:
+                sb.append("hal.getVolume()");
+                break;
+            default:
+                throw new DbcException("Invalid volume action mode!");
+        }
+
     }
 
     @Override

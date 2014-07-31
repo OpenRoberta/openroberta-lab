@@ -15,7 +15,7 @@ public class MathConst extends Expr {
     private final Const mathConst;
 
     private MathConst(Const mathConst) {
-        super(Phrase.Kind.MathConst);
+        super(Phrase.Kind.MATH_CONST);
         this.mathConst = mathConst;
         setReadOnly();
     }

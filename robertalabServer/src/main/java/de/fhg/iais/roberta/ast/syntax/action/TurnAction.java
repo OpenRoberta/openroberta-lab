@@ -14,7 +14,7 @@ public class TurnAction extends Action {
     private final MotionParam param;
 
     private TurnAction(TurnDirection direction, MotionParam param) {
-        super(Phrase.Kind.TurnAction);
+        super(Phrase.Kind.TURN_ACTION);
         Assert.isTrue(direction != null && param != null);
         this.direction = direction;
         this.param = param;

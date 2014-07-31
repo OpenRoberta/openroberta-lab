@@ -12,7 +12,7 @@ public class Var extends Expr {
     private final String name;
 
     private Var(String value) {
-        super(Phrase.Kind.Var);
+        super(Phrase.Kind.VAR);
         this.name = value;
         setReadOnly();
     }

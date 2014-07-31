@@ -15,7 +15,7 @@ public class ToneAction extends Action {
     private final Expr duration;
 
     private ToneAction(Expr frequency, Expr duration) {
-        super(Phrase.Kind.ToneAction);
+        super(Phrase.Kind.TONE_ACTION);
         Assert.isTrue(frequency.isReadOnly() && duration.isReadOnly() && frequency != null && duration != null);
         this.frequency = frequency;
         this.duration = duration;
@@ -49,8 +49,11 @@ public class ToneAction extends Action {
 
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
-        // TODO Auto-generated method stub
-
+        sb.append("hal.playTone(");
+        this.frequency.generateJava(sb, indentation);
+        sb.append(", ");
+        this.duration.generateJava(sb, indentation);
+        sb.append(");");
     }
 
     @Override

@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.action;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
+import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
  * This class represents the <b>robActions_brickLight_off</b> and <b>robActions_brickLight_reset</b> blocks from Blockly into the AST (abstract syntax tree).
@@ -13,7 +14,7 @@ public class LightStatusAction extends Action {
     private final Status status;
 
     private LightStatusAction(Status status) {
-        super(Phrase.Kind.LightStatusAction);
+        super(Phrase.Kind.LIGHT_STATUS_ACTION);
         Assert.isTrue(status != null);
         this.status = status;
         setReadOnly();
@@ -36,21 +37,29 @@ public class LightStatusAction extends Action {
         return this.status;
     }
 
-    /**
-     * Status in which user can set the lights.
-     */
-    public static enum Status {
-        OFF, RESET;
-    }
-
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
-        // TODO Auto-generated method stub
-
+        switch ( this.status ) {
+            case OFF:
+                sb.append("hal.ledOff();");
+                break;
+            case RESET:
+                sb.append("hal.resetLED();");
+                break;
+            default:
+                throw new DbcException("Invalid LED status mode!");
+        }
     }
 
     @Override
     public String toString() {
         return "LightStatusAction [" + this.status + "]";
+    }
+
+    /**
+     * Status in which user can set the lights.
+     */
+    public static enum Status {
+        OFF, RESET;
     }
 }

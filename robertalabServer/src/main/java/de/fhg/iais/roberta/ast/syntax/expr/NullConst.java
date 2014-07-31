@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 public class NullConst extends Expr {
 
     private NullConst() {
-        super(Phrase.Kind.NullConst);
+        super(Phrase.Kind.NULL_CONST);
         setReadOnly();
     }
 

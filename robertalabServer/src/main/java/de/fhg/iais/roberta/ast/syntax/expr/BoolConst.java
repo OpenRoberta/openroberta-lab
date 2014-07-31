@@ -14,7 +14,7 @@ public class BoolConst extends Expr {
     private final boolean value;
 
     private BoolConst(boolean value) {
-        super(Phrase.Kind.BoolConst);
+        super(Phrase.Kind.BOOL_CONST);
         this.value = value;
         setReadOnly();
     }

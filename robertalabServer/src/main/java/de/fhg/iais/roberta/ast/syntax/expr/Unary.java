@@ -17,7 +17,7 @@ public class Unary extends Expr {
     private final Expr expr;
 
     private Unary(Op op, Expr expr) {
-        super(Phrase.Kind.Unary);
+        super(Phrase.Kind.UNARY);
         Assert.isTrue(op != null && expr != null && expr.isReadOnly());
         this.op = op;
         this.expr = expr;

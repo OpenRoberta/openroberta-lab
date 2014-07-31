@@ -16,7 +16,7 @@ public class TouchSensor extends Sensor {
     private final SensorPort port;
 
     private TouchSensor(SensorPort port) {
-        super(Phrase.Kind.TouchSensor);
+        super(Phrase.Kind.TOUCH_SENSING);
         this.port = port;
         setReadOnly();
     }
@@ -40,7 +40,7 @@ public class TouchSensor extends Sensor {
 
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
-        sb.append("(" + this.port + ")");
+        sb.append("hal.isPressed(" + this.port + ")");
 
     }
 

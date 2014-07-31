@@ -18,7 +18,7 @@ public class ShowTextAction extends Action {
     private final Expr y;
 
     private ShowTextAction(Expr msg, Expr column, Expr row) {
-        super(Phrase.Kind.ShowTextAction);
+        super(Phrase.Kind.SHOW_TEXT_ACTION);
         Assert.isTrue(msg != null && column != null && row != null);
         this.msg = msg;
         this.x = column;
@@ -61,7 +61,13 @@ public class ShowTextAction extends Action {
 
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
-
+        sb.append("hal.drawText(");
+        this.msg.generateJava(sb, 0);
+        sb.append(", ");
+        this.x.generateJava(sb, 0);
+        sb.append(", ");
+        this.y.generateJava(sb, 0);
+        sb.append(");");
     }
 
     @Override

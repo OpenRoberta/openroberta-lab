@@ -16,7 +16,7 @@ public class DriveAction extends Action {
     private final MotionParam param;
 
     private DriveAction(DriveDirection direction, MotionParam param) {
-        super(Phrase.Kind.DriveAction);
+        super(Phrase.Kind.DRIVE_ACTION);
         Assert.isTrue(direction != null && param != null);
         this.direction = direction;
         this.param = param;

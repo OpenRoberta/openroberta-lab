@@ -12,7 +12,7 @@ public class EmptyExpr extends Expr {
     private final Class<?> defVal;
 
     private EmptyExpr(Class<?> defVal) {
-        super(Phrase.Kind.EmptyExpr);
+        super(Phrase.Kind.EMPTY_EXPR);
         Assert.isTrue(defVal != null);
         this.defVal = defVal;
         setReadOnly();

@@ -11,7 +11,7 @@ public class SensorStmt extends Stmt {
     private final Sensor sensor;
 
     private SensorStmt(Sensor sensor) {
-        super(Phrase.Kind.SensorStmt);
+        super(Phrase.Kind.SENSOR_STMT);
         Assert.isTrue(sensor != null && sensor.isReadOnly());
         this.sensor = sensor;
         setReadOnly();

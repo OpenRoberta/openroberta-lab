@@ -14,7 +14,7 @@ public class MotorStopAction extends Action {
     private final MotorStopMode mode;
 
     private MotorStopAction(ActorPort port, MotorStopMode mode) {
-        super(Phrase.Kind.MotorStopAction);
+        super(Phrase.Kind.MOTOR_STOP_ACTION);
         Assert.isTrue(port != null && mode != null);
         this.port = port;
         this.mode = mode;
@@ -53,8 +53,7 @@ public class MotorStopAction extends Action {
 
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
-        // TODO Auto-generated method stub
-
+        sb.append("hal.stopMotor(" + this.port.toString() + ", " + this.mode.toString() + ");");
     }
 
 }

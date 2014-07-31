@@ -14,7 +14,7 @@ public class StringConst extends Expr {
     private final String value;
 
     private StringConst(String value) {
-        super(Phrase.Kind.StringConst);
+        super(Phrase.Kind.STRING_CONST);
         this.value = value;
         setReadOnly();
     }

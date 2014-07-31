@@ -11,7 +11,7 @@ public class ActionStmt extends Stmt {
     private final Action akt;
 
     private ActionStmt(Action akt) {
-        super(Phrase.Kind.AktionStmt);
+        super(Phrase.Kind.AKTION_STMT);
         Assert.isTrue(akt.isReadOnly());
         this.akt = akt;
         setReadOnly();

@@ -18,7 +18,7 @@ public class Binary extends Expr {
     private final Expr right;
 
     private Binary(Op op, Expr left, Expr right) {
-        super(Phrase.Kind.Binary);
+        super(Phrase.Kind.BINARY);
         Assert.isTrue(op != null && left != null && right != null && left.isReadOnly() && right.isReadOnly());
         this.op = op;
         this.left = left;

@@ -14,7 +14,7 @@ public class LightAction extends Action {
     private final boolean blink;
 
     private LightAction(Color color, boolean blink) {
-        super(Phrase.Kind.LightAction);
+        super(Phrase.Kind.LIGHT_ACTION);
         Assert.isTrue(color != null);
         this.color = color;
         this.blink = blink;
@@ -48,8 +48,7 @@ public class LightAction extends Action {
 
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
-        // TODO Auto-generated method stub
-
+        sb.append("hal.ledOn(" + this.color.toString() + ", " + this.blink + ");");
     }
 
     @Override

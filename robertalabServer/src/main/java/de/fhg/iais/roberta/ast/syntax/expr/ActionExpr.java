@@ -11,7 +11,7 @@ public class ActionExpr extends Expr {
     private final Action action;
 
     private ActionExpr(Action action) {
-        super(Phrase.Kind.ActionExpr);
+        super(Phrase.Kind.ACTION_EXPR);
         Assert.isTrue(action.isReadOnly());
         this.action = action;
         setReadOnly();

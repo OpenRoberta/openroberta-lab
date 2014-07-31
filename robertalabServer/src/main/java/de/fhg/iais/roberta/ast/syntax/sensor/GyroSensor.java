@@ -18,7 +18,7 @@ public class GyroSensor extends Sensor {
     private final SensorPort port;
 
     private GyroSensor(GyroSensorMode mode, SensorPort port) {
-        super(Phrase.Kind.GyroSensor);
+        super(Phrase.Kind.GYRO_SENSIG);
         Assert.isTrue(mode != null);
         this.mode = mode;
         this.port = port;
@@ -52,7 +52,20 @@ public class GyroSensor extends Sensor {
 
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
-        sb.append("(" + this.mode + ", " + this.port + ")");
+        switch ( this.mode ) {
+            case GET_MODE:
+                sb.append("hal.getGyroSensorModeName(" + this.port.toString() + ")");
+                break;
+            case GET_SAMPLE:
+                sb.append("hal.getGyroSensorValue(" + this.port.toString() + ")");
+                break;
+            case RESET:
+                sb.append("hal.resetGyroSensor(" + this.port.toString() + ");");
+                break;
+            default:
+                sb.append("hal.setGyroSensorMode(" + this.port.toString() + ", " + this.mode.toString() + ");");
+                break;
+        }
     }
 
     @Override

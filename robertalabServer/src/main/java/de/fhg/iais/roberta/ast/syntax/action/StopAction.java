@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 public class StopAction extends Action {
 
     private StopAction() {
-        super(Phrase.Kind.StopAction);
+        super(Phrase.Kind.STOP_ACTION);
         setReadOnly();
     }
 

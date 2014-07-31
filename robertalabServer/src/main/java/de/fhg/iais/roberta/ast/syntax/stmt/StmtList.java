@@ -15,7 +15,7 @@ public class StmtList extends Stmt {
     private final List<Stmt> sl = new ArrayList<Stmt>();
 
     private StmtList() {
-        super(Phrase.Kind.StmtList);
+        super(Phrase.Kind.STMT_LIST);
     }
 
     /**

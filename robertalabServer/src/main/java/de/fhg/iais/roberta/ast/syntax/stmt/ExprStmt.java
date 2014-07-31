@@ -13,7 +13,7 @@ public class ExprStmt extends Stmt {
     private final Expr expr;
 
     private ExprStmt(Expr expr) {
-        super(Phrase.Kind.ExprStmt);
+        super(Phrase.Kind.EXPR_STMT);
         Assert.isTrue(expr.isReadOnly());
         this.expr = expr;
         setReadOnly();

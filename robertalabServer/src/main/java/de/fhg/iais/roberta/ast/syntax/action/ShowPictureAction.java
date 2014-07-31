@@ -16,7 +16,7 @@ public class ShowPictureAction extends Action {
     private final Expr y;
 
     private ShowPictureAction(String pic, Expr x, Expr y) {
-        super(Phrase.Kind.ShowPictureAction);
+        super(Phrase.Kind.SHOW_PICTURE_ACTION);
         Assert.isTrue(pic != null && x != null && y != null);
         this.pic = pic;
         this.x = x;
@@ -59,7 +59,11 @@ public class ShowPictureAction extends Action {
 
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
-
+        sb.append("hal.drawPicture(\"" + this.pic + "\", ");
+        this.x.generateJava(sb, 0);
+        sb.append(", ");
+        this.y.generateJava(sb, 0);
+        sb.append(");");
     }
 
     @Override

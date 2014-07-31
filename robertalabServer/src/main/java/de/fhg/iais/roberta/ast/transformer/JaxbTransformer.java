@@ -3,8 +3,6 @@ package de.fhg.iais.roberta.ast.transformer;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.fhg.iais.roberta.ast.funct.Funct;
-import de.fhg.iais.roberta.ast.funct.Funct.Function;
 import de.fhg.iais.roberta.ast.syntax.Category;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.Action;
@@ -45,11 +43,13 @@ import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary.Op;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.functions.Funct;
+import de.fhg.iais.roberta.ast.syntax.functions.Funct.Function;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickKey;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.ast.syntax.sensor.DrehSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.TachoSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensor;
@@ -320,22 +320,22 @@ public class JaxbTransformer {
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, "MOTORPORT", (short) 0);
                 mode = extractField(fields, "MODE", (short) 1);
-                return DrehSensor.make(MotorTachoMode.get(mode), ActorPort.get(port));
+                return TachoSensor.make(MotorTachoMode.get(mode), ActorPort.get(port));
 
             case "robSensors_encoder_getMode":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "MOTORPORT", (short) 0);
-                return DrehSensor.make(MotorTachoMode.GET_MODE, ActorPort.get(port));
+                return TachoSensor.make(MotorTachoMode.GET_MODE, ActorPort.get(port));
 
             case "robSensors_encoder_getSample":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "MOTORPORT", (short) 0);
-                return DrehSensor.make(MotorTachoMode.GET_SAMPLE, ActorPort.get(port));
+                return TachoSensor.make(MotorTachoMode.GET_SAMPLE, ActorPort.get(port));
 
             case "robSensors_encoder_reset":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "MOTORPORT", (short) 0);
-                return DrehSensor.make(MotorTachoMode.RESET, ActorPort.get(port));
+                return TachoSensor.make(MotorTachoMode.RESET, ActorPort.get(port));
 
             case "robSensors_key_isPressed":
                 fields = extractFields(block, (short) 1);

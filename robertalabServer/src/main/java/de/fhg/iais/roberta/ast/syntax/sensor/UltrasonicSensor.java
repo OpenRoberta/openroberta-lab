@@ -19,7 +19,7 @@ public class UltrasonicSensor extends Sensor {
     private final SensorPort port;
 
     private UltrasonicSensor(UltrasonicSensorMode mode, SensorPort port) {
-        super(Phrase.Kind.UltraSSensor);
+        super(Phrase.Kind.ULTRASONIC_SENSING);
         Assert.isTrue(mode != null);
         this.mode = mode;
         this.port = port;
@@ -53,7 +53,17 @@ public class UltrasonicSensor extends Sensor {
 
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
-        sb.append("(" + this.mode + ", " + this.port + ")");
+        switch ( this.mode ) {
+            case GET_MODE:
+                sb.append("hal.getUltraSonicSensorModeName(" + this.port.toString() + ")");
+                break;
+            case GET_SAMPLE:
+                sb.append("hal.getUltraSonicSensorValue(" + this.port.toString() + ")");
+                break;
+            default:
+                sb.append("hal.setUltrasonicSensorMode(" + this.port.toString() + ", " + this.mode.toString() + ");");
+                break;
+        }
     }
 
     @Override

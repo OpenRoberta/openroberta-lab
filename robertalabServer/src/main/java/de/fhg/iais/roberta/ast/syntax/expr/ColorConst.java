@@ -16,7 +16,7 @@ public class ColorConst extends Expr {
     private final String value;
 
     private ColorConst(String value) {
-        super(Phrase.Kind.ColorConst);
+        super(Phrase.Kind.COLOR_CONST);
         this.value = value;
         setReadOnly();
     }

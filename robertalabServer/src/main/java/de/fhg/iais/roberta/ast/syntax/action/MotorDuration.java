@@ -5,6 +5,9 @@ import java.util.Locale;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.dbc.DbcException;
 
+/**
+ * This class is parameter class used to set the type of the motor duration mode {@link Mode} and value for the duration.
+ */
 public class MotorDuration {
     private Mode type;
     private Expr value;
@@ -15,18 +18,36 @@ public class MotorDuration {
         this.value = value;
     }
 
+    /**
+     * Returns the value of the duration set by the client.
+     * 
+     * @return value of the duration as {@link Expr}
+     */
     public Expr getValue() {
         return this.value;
     }
 
+    /**
+     * Set the value of the motor duration.
+     * 
+     * @param value
+     */
     public void setValue(Expr value) {
         this.value = value;
     }
 
+    /**
+     * Get the mode of the motor duration. See enum {@link Mode} for all possible modes.
+     * 
+     * @return mode of the motor duration.
+     */
     public Mode getType() {
         return this.type;
     }
 
+    /**
+     * Set the mode of the motor duration. See enum {@link Mode} for all possible modes.
+     */
     public void setType(Mode type) {
         this.type = type;
     }
@@ -36,6 +57,9 @@ public class MotorDuration {
         return "MotorDuration [type=" + this.type + ", value=" + this.value + "]";
     }
 
+    /**
+     * @author kcvejoski
+     */
     public static enum Mode {
         ROTATIONS(), DEGREE(), DISTANCE();
 

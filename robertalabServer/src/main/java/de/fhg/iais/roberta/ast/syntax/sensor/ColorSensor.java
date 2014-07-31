@@ -18,7 +18,7 @@ public class ColorSensor extends Sensor {
     private final SensorPort port;
 
     private ColorSensor(ColorSensorMode mode, SensorPort port) {
-        super(Phrase.Kind.ColorSensor);
+        super(Phrase.Kind.COLOR_SENSING);
         Assert.isTrue(mode != null);
         this.mode = mode;
         this.port = port;
@@ -52,7 +52,17 @@ public class ColorSensor extends Sensor {
 
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
-        sb.append("(" + this.mode + ", " + this.port + ")");
+        switch ( this.mode ) {
+            case GET_MODE:
+                sb.append("hal.getColorSensorModeName(" + this.port.toString() + ")");
+                break;
+            case GET_SAMPLE:
+                sb.append("hal.getColorSensorValue(" + this.port.toString() + ")");
+                break;
+            default:
+                sb.append("hal.setColorSensorMode(" + this.port.toString() + ", " + this.mode.toString() + ");");
+                break;
+        }
     }
 
     @Override

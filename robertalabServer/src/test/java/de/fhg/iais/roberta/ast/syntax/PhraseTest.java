@@ -16,7 +16,7 @@ public class PhraseTest {
         Phrase phrase = StringConst.make("testString");
         StringConst stringConst = phrase.getAs(StringConst.class);
         assertEquals("testString", stringConst.getValue());
-        assertEquals(Kind.StringConst, phrase.getKind());
+        assertEquals(Kind.STRING_CONST, phrase.getKind());
         try {
             phrase.getAs(NumConst.class);
             fail();

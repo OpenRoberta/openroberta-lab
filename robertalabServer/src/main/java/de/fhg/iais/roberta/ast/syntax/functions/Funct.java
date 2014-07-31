@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.ast.funct;
+package de.fhg.iais.roberta.ast.syntax.functions;
 
 import java.util.List;
 import java.util.Locale;
@@ -23,7 +23,7 @@ public class Funct extends Expr {
     private final List<Expr> param;
 
     private Funct(Function name, List<Expr> param) {
-        super(Phrase.Kind.Funct);
+        super(Phrase.Kind.FUNCTIONS);
         Assert.isTrue(name != null && param != null);
         this.functName = name;
         this.param = param;
@@ -90,7 +90,7 @@ public class Funct extends Expr {
                     } else {
                         sb.append(" + ");
                     }
-                    if ( parametar.getKind() != Kind.StringConst ) {
+                    if ( parametar.getKind() != Kind.STRING_CONST ) {
                         sb.append("String.valueOf(");
                         parametar.generateJava(sb, indentation);
                         sb.append(")");

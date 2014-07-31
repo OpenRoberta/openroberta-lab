@@ -13,7 +13,7 @@ public class PlayFileAction extends Action {
     private final String filename;
 
     private PlayFileAction(String filename) {
-        super(Phrase.Kind.PlayFileAction);
+        super(Phrase.Kind.PLAY_FILE_ACTION);
         Assert.isTrue(!filename.equals(""));
         this.filename = filename;
         setReadOnly();
@@ -21,7 +21,7 @@ public class PlayFileAction extends Action {
 
     /**
      * Creates instance of {@link PlayFileAction}. This instance is read only and can not be modified.
-     *
+     * 
      * @param filename of the sound,
      * @return read only object of class {@link PlayFileAction}.
      */
@@ -38,8 +38,7 @@ public class PlayFileAction extends Action {
 
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
-        // TODO Auto-generated method stub
-
+        sb.append("hal.playFile(\"" + this.filename + "\");");
     }
 
     @Override

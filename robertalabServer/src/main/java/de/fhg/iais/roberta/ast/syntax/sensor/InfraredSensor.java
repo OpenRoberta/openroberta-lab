@@ -19,7 +19,7 @@ public class InfraredSensor extends Sensor {
     private final SensorPort port;
 
     private InfraredSensor(InfraredSensorMode mode, SensorPort port) {
-        super(Phrase.Kind.InfraredSensor);
+        super(Phrase.Kind.INFRARED_SENSING);
         Assert.isTrue(mode != null);
         this.mode = mode;
         this.port = port;
@@ -53,7 +53,17 @@ public class InfraredSensor extends Sensor {
 
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
-        sb.append("(" + this.mode + ", " + this.port + ")");
+        switch ( this.mode ) {
+            case GET_MODE:
+                sb.append("hal.getInfraredSensorModeName(" + this.port.toString() + ")");
+                break;
+            case GET_SAMPLE:
+                sb.append("hal.getInfraredSensorValue(" + this.port.toString() + ")");
+                break;
+            default:
+                sb.append("hal.setInfraredSensorMode(" + this.port.toString() + ", " + this.mode.toString() + ");");
+                break;
+        }
     }
 
     @Override

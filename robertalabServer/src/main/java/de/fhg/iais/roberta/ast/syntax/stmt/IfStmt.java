@@ -18,7 +18,7 @@ public class IfStmt extends Stmt {
     private final StmtList elseList;
 
     private IfStmt(List<Expr> expr, List<StmtList> thenList, StmtList elseList) {
-        super(Phrase.Kind.IfStmt);
+        super(Phrase.Kind.IF_STMT);
         Assert.isTrue(expr.size() == thenList.size() && elseList.isReadOnly());
         this.expr = expr;
         this.thenList = thenList;
