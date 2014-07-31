@@ -49,7 +49,6 @@ import de.fhg.iais.roberta.ast.syntax.sensor.BrickKey;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.ast.syntax.sensor.TachoSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensor;
@@ -57,6 +56,7 @@ import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
+import de.fhg.iais.roberta.ast.syntax.sensor.TachoSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.TouchSensor;
@@ -84,7 +84,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
  * JAXB to AST transformer. Client should provide tree of jaxb objects.
- * 
+ *
  * @author kcvejoski
  */
 public class JaxbTransformer {
@@ -92,7 +92,7 @@ public class JaxbTransformer {
 
     /**
      * Converts object of type {@link Project} to AST tree.
-     * 
+     *
      * @param pr
      */
     public void projectToAST(Project pr) {
@@ -537,22 +537,22 @@ public class JaxbTransformer {
                 }
                 return blockToFunction(block, exprParams, "WHERE");
 
-            case "text_getSubstring":
+                //            case "text_getSubstring":
                 //TODO Not finished yet
-                boolean atArg1 = block.getMutation().isAt1();
-                boolean atArg2 = block.getMutation().isAt2();
-                fields = extractFields(block, (short) 2);
-                //                String where1 = extractField(fields, "WHERE1", (short) 0);
-                //                String where2 = extractField(fields, "WHERE2", (short) 1);
-                exprParams = new ArrayList<ExprParam>();
-                exprParams.add(new ExprParam("STRING", String.class));
-                if ( atArg1 == true ) {
-                    exprParams.add(new ExprParam("AT", Integer.class));
-                }
-                if ( atArg2 == true ) {
-                    exprParams.add(new ExprParam("AT", Integer.class));
-                }
-                return blockToFunction(block, exprParams, "SUBSTRING");
+                //                boolean atArg1 = block.getMutation().isAt1();
+                //                boolean atArg2 = block.getMutation().isAt2();
+                //                fields = extractFields(block, (short) 2);
+                //                //                String where1 = extractField(fields, "WHERE1", (short) 0);
+                //                //                String where2 = extractField(fields, "WHERE2", (short) 1);
+                //                exprParams = new ArrayList<ExprParam>();
+                //                exprParams.add(new ExprParam("STRING", String.class));
+                //                if ( atArg1 == true ) {
+                //                    exprParams.add(new ExprParam("AT", Integer.class));
+                //                }
+                //                if ( atArg2 == true ) {
+                //                    exprParams.add(new ExprParam("AT", Integer.class));
+                //                }
+                //                return blockToFunction(block, exprParams, "SUBSTRING");
 
             case "text_changeCase":
                 exprParams = new ArrayList<ExprParam>();
@@ -607,13 +607,13 @@ public class JaxbTransformer {
                 exprParams.add(new ExprParam("FIND", List.class));
                 return blockToFunction(block, exprParams, "END");
 
-            case "lists_getIndex":
+                //case "lists_getIndex":
                 //TODO not implemented
 
-            case "lists_setIndex":
+                //case "lists_setIndex":
                 //TODO not implemented
 
-            case "lists_getSublist":
+                //case "lists_getSublist":
                 //TODO not implemented
 
             case "robColour_picker":
@@ -659,7 +659,7 @@ public class JaxbTransformer {
                 }
                 return list;
 
-            case "robControls_wait_for":
+                // case "robControls_wait_for":
                 //TODO
 
             case "controls_whileUntil":
@@ -809,10 +809,8 @@ public class JaxbTransformer {
                 return MathConst.make(MathConst.Const.get(field));
             case "COLOUR":
                 return ColorConst.make(field);
-            case "TTT":
-                return ColorConst.make(field);
             default:
-                throw new RuntimeException("Invalid type constant!");
+                throw new DbcException("Invalid type constant!");
         }
     }
 
