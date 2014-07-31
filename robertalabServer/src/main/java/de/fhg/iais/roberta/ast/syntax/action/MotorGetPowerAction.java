@@ -21,7 +21,7 @@ public class MotorGetPowerAction extends Action {
 
     /**
      * Creates instance of {@link MotorGetPowerAction}. This instance is read only and can not be modified.
-     * 
+     *
      * @param port on which the motor is connected that we want to check,
      * @return read only object of class {@link MotorGetPowerAction}.
      */
@@ -43,6 +43,6 @@ public class MotorGetPowerAction extends Action {
 
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
-        sb.append("hal.getSpeed(" + this.port.toString() + ")");
+        sb.append("hal.getSpeed(" + this.getPort().toString() + ")");
     }
 }

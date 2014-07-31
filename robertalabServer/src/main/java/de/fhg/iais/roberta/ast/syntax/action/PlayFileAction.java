@@ -10,18 +10,18 @@ import de.fhg.iais.roberta.dbc.Assert;
  * The client must provide the name of the file.
  */
 public class PlayFileAction extends Action {
-    private final String filename;
+    private final String fileName;
 
-    private PlayFileAction(String filename) {
+    private PlayFileAction(String fileName) {
         super(Phrase.Kind.PLAY_FILE_ACTION);
-        Assert.isTrue(!filename.equals(""));
-        this.filename = filename;
+        Assert.isTrue(!fileName.equals(""));
+        this.fileName = fileName;
         setReadOnly();
     }
 
     /**
      * Creates instance of {@link PlayFileAction}. This instance is read only and can not be modified.
-     * 
+     *
      * @param filename of the sound,
      * @return read only object of class {@link PlayFileAction}.
      */
@@ -32,18 +32,18 @@ public class PlayFileAction extends Action {
     /**
      * @return the name of the file that will be played
      */
-    public String getFilename() {
-        return this.filename;
+    public String getFileName() {
+        return this.fileName;
     }
 
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
-        sb.append("hal.playFile(\"" + this.filename + "\");");
+        sb.append("hal.playFile(\"" + getFileName() + "\");");
     }
 
     @Override
     public String toString() {
-        return "PlayFileAction [" + this.filename + "]";
+        return "PlayFileAction [" + this.fileName + "]";
     }
 
 }

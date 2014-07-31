@@ -23,7 +23,7 @@ public class MotorOnAction extends Action {
 
     /**
      * Creates instance of {@link MotorOnAction}. This instance is read only and can not be modified.
-     * 
+     *
      * @param port {@link ActorPort} on which the motor is connected,
      * @param param {@link MotionParam} that set up the parameters for the movement of the robot (number of rotations or degrees and speed),
      * @return read only object of class {@link MotorOnAction}.
@@ -56,7 +56,6 @@ public class MotorOnAction extends Action {
         sb.append("hal.setMotorSpeed(" + this.port.toString() + ", ");
         this.param.getSpeed().generateJava(sb, indentation);
         sb.append(")");
-        //sb.append("(" + this.param + ", " + this.port + ")");
     }
 
 }

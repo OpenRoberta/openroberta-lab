@@ -28,7 +28,7 @@ public class TimerSensor extends Sensor {
 
     /**
      * Create object of the class {@link TimerSensor}.
-     * 
+     *
      * @param mode in which the sensor is operating. See enum {@link TimerSensorMode} for all possible modes that the sensor have.
      * @param timer integer value
      * @return read only object of {@link TimerSensor}
@@ -59,7 +59,6 @@ public class TimerSensor extends Sensor {
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
         switch ( this.mode ) {
-
             case GET_SAMPLE:
                 sb.append("hal.getTimerValue(" + this.timer + ")");
                 break;
