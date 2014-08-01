@@ -33,6 +33,7 @@ import de.fhg.iais.roberta.ast.syntax.HardwareComponent;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.Color;
 import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
+import de.fhg.iais.roberta.ast.syntax.action.MotorStopMode;
 import de.fhg.iais.roberta.ast.syntax.action.TurnDirection;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickKey;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
@@ -368,18 +369,26 @@ public class Hal {
      * @param actorPort
      * @param floating
      */
-    public void stopMotor(ActorPort actorPort, boolean floating) {
+    public void stopMotor(ActorPort actorPort, MotorStopMode floating) {
         if ( isRegulated(actorPort) ) {
-            if ( floating ) {
-                getRegulatedMotor(actorPort).flt();
-            } else {
-                getRegulatedMotor(actorPort).stop();
+            switch ( floating ) {
+                case FLOAT:
+                    getRegulatedMotor(actorPort).flt();
+                    getRegulatedMotor(actorPort).stop();
+                case NONFLOAT:
+                    getRegulatedMotor(actorPort).stop();
+                default:
+                    throw new DbcException("Wrong MotorStopMode");
             }
         } else {
-            if ( floating ) {
-                getUnregulatedMotor(actorPort).flt();
-            } else {
-                getUnregulatedMotor(actorPort).stop();
+            switch ( floating ) {
+                case FLOAT:
+                    getUnregulatedMotor(actorPort).flt();
+                    getUnregulatedMotor(actorPort).stop();
+                case NONFLOAT:
+                    getUnregulatedMotor(actorPort).stop();
+                default:
+                    throw new DbcException("Wrong MotorStopMode");
             }
         }
     }
@@ -635,23 +644,8 @@ public class Hal {
      * 
      * @param fileNumber
      */
-    public void playFile(int fileNumber) {
-        switch ( fileNumber ) {
-            case 1:
-                this.audio.playSample(new File(""));
-                break;
-            case 2:
-                this.audio.playSample(new File(""));
-                break;
-            case 3:
-                this.audio.playSample(new File(""));
-                break;
-            case 4:
-                this.audio.playSample(new File(""));
-                break;
-            default:
-                throw new DbcException("wrong file number");
-        }
+    public void playFile(String file) {
+        this.audio.playSample(new File("/home/roberta/soundfiles/" + file + ".wav"));
     }
 
     /**

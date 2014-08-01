@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.ast.syntax.action.LightStatusAction;
 import de.fhg.iais.roberta.ast.syntax.action.MotionParam;
 import de.fhg.iais.roberta.ast.syntax.action.MotorDuration;
 import de.fhg.iais.roberta.ast.syntax.action.MotorGetPowerAction;
+import de.fhg.iais.roberta.ast.syntax.action.MotorMoveMode;
 import de.fhg.iais.roberta.ast.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.ast.syntax.action.MotorSetPowerAction;
 import de.fhg.iais.roberta.ast.syntax.action.MotorStopAction;
@@ -84,7 +85,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
  * JAXB to AST transformer. Client should provide tree of jaxb objects.
- *
+ * 
  * @author kcvejoski
  */
 public class JaxbTransformer {
@@ -92,7 +93,7 @@ public class JaxbTransformer {
 
     /**
      * Converts object of type {@link Project} to AST tree.
-     *
+     * 
      * @param pr
      */
     public void projectToAST(Project pr) {
@@ -151,7 +152,7 @@ public class JaxbTransformer {
                 values = extractValues(block, (short) 2);
                 left = extractValue(values, new ExprParam("POWER", Integer.class));
                 right = extractValue(values, new ExprParam("VALUE", Integer.class));
-                md = new MotorDuration(MotorDuration.Mode.get(mode), (Expr) right);
+                md = new MotorDuration(MotorMoveMode.get(mode), (Expr) right);
                 mp = new MotionParam.Builder().speed((Expr) left).duration(md).build();
                 return MotorOnAction.make(ActorPort.get(port), mp);
 
@@ -169,7 +170,7 @@ public class JaxbTransformer {
                 values = extractValues(block, (short) 2);
                 left = extractValue(values, new ExprParam("POWER", Integer.class));
                 right = extractValue(values, new ExprParam("DISTANCE", Integer.class));
-                md = new MotorDuration(MotorDuration.Mode.DISTANCE, (Expr) right);
+                md = new MotorDuration(MotorMoveMode.DISTANCE, (Expr) right);
                 mp = new MotionParam.Builder().speed((Expr) left).duration(md).build();
                 return DriveAction.make(DriveDirection.get(mode), mp);
 
@@ -187,7 +188,7 @@ public class JaxbTransformer {
                 values = extractValues(block, (short) 2);
                 left = extractValue(values, new ExprParam("POWER", Integer.class));
                 right = extractValue(values, new ExprParam("DISTANCE", Integer.class));
-                md = new MotorDuration(MotorDuration.Mode.DISTANCE, (Expr) right);
+                md = new MotorDuration(MotorMoveMode.DISTANCE, (Expr) right);
                 mp = new MotionParam.Builder().speed((Expr) left).duration(md).build();
                 return TurnAction.make(TurnDirection.get(mode), mp);
 

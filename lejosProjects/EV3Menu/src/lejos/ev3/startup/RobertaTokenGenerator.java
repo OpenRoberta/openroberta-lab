@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.util;
+package lejos.ev3.startup;
 
 import java.util.Random;
 
@@ -9,17 +9,17 @@ import java.util.Random;
  * 
  * @author dpyka
  */
-public class TokenGenerator {
+public class RobertaTokenGenerator {
 
     private final String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private final int n = this.alphabet.length();
 
     public static void main(String[] args) {
-        TokenGenerator tokenGenerator = new TokenGenerator();
+        RobertaTokenGenerator tokenGenerator = new RobertaTokenGenerator();
         System.out.println(tokenGenerator.generateToken());
     }
 
-    public TokenGenerator() {
+    public RobertaTokenGenerator() {
         //
     }
 
