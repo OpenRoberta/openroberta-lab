@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.ast;
+package de.fhg.iais.roberta.ast.stmt;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -7,10 +7,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 
+import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.blockly.generated.Project;
 
-public class ControlTest {
+public class IfStmtTest {
+
     @Test
     public void ifStmt() throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
@@ -49,6 +51,57 @@ public class ControlTest {
                 + "SensorStmt DrehSensor [mode=RESET, motor=A]\n"
                 + "]]]";
         Assert.assertEquals(a, transformer.toString());
+    }
+
+    @Test
+    public void getExpr() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/if_stmt1.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+
+        IfStmt ifStmt = (IfStmt) transformer.getProject().get(0).get(0);
+
+        String a = "[Binary [EQ, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]]]";
+        Assert.assertEquals(a, ifStmt.getExpr().toString());
+    }
+
+    @Test
+    public void getThen() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/if_stmt1.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+
+        IfStmt ifStmt = (IfStmt) transformer.getProject().get(0).get(0);
+
+        String a = "[\nexprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]]";
+        Assert.assertEquals(a, ifStmt.getThenList().toString());
+    }
+
+    @Test
+    public void getElse() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/if_stmt1.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+
+        IfStmt ifStmt = (IfStmt) transformer.getProject().get(0).get(0);
+
+        String a = "\nSensorStmt DrehSensor [mode=RESET, motor=A]";
+        Assert.assertEquals(a, ifStmt.getElseList().toString());
     }
 
     @Test
@@ -226,187 +279,4 @@ public class ControlTest {
         Assert.assertEquals(a, transformer.toString());
     }
 
-    @Test
-    public void repeatStmt() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/repeat_stmt.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
-        String a =
-            "BlockAST [project=[[\n"
-                + "(repeat [TIMES, NumConst [10]]\n"
-                + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba]]\n"
-                + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba1]]\n"
-                + "(repeat [TIMES, NumConst [10]]\n"
-                + ")\n"
-                + ")]]]";
-        Assert.assertEquals(a, transformer.toString());
-    }
-
-    @Test
-    public void repeatStmt1() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/repeat_stmt1.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
-        String a = "BlockAST [project=[[\n" + "(repeat [TIMES, NumConst [10]]\n)]]]";
-        Assert.assertEquals(a, transformer.toString());
-    }
-
-    @Test
-    public void repeatStmtWhileUntil() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/repeat_stmt_whileUntil.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
-        String a =
-            "BlockAST [project=[[\n"
-                + "(repeat [WHILE, BoolConst [true]]\n"
-                + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [sd]]\n"
-                + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
-                + ")]]]";
-        Assert.assertEquals(a, transformer.toString());
-    }
-
-    @Test
-    public void repeatStmtWhileUntil1() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/repeat_stmt_whileUntil1.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
-        String a =
-            "BlockAST [project=[[\n"
-                + "(repeat [WHILE, BoolConst [true]]\n"
-                + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [sd]]\n"
-                + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
-                + "StmtFlowCon [BREAK]\n"
-                + ")]]]";
-        Assert.assertEquals(a, transformer.toString());
-    }
-
-    @Test
-    public void repeatStmtWhileUntil2() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/repeat_stmt_whileUntil2.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
-        String a = "BlockAST [project=[[\n" + "(repeat [WHILE, EmptyExpr [defVal=class java.lang.Boolean]]\n)]]]";
-        Assert.assertEquals(a, transformer.toString());
-    }
-
-    @Test
-    public void repeatStmtFor() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/repeat_stmt_for.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
-        String a =
-            "BlockAST [project=[[\n"
-                + "(repeat [FOR, Binary [ASSIGNMENT, Var [i], NumConst [1]], Binary [LTE, Var [i], NumConst [10]], Binary [ADD_ASSIGNMENT, Var [i], NumConst [1]]]\n"
-                + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [kllk]]\n"
-                + ")]]]";
-        Assert.assertEquals(a, transformer.toString());
-    }
-
-    @Test
-    public void repeatStmtFor1() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/repeat_stmt_for1.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
-        String a =
-            "BlockAST [project=[[\n"
-                + "(repeat [FOR, Binary [ASSIGNMENT, Var [i], NumConst [1]], Binary [LTE, Var [i], NumConst [10]], Binary [ADD_ASSIGNMENT, Var [i], NumConst [1]]]\n)]]]";
-        Assert.assertEquals(a, transformer.toString());
-    }
-
-    @Test
-    public void repeatStmtForEach() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/repeat_stmt_for_each.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
-        String a =
-            "BlockAST [project=[[\n"
-                + "(repeat [FOR_EACH, Binary [IN, Var [j], EmptyExpr [defVal=interface java.util.List]]]\n"
-                + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [gg]]\n"
-                + ")]]]";
-        Assert.assertEquals(a, transformer.toString());
-    }
-
-    @Test
-    public void repeatStmtForEach1() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/repeat_stmt_for_each1.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
-        String a = "BlockAST [project=[[\n" + "(repeat [FOR_EACH, Binary [IN, Var [i], EmptyExpr [defVal=interface java.util.List]]]\n)]]]";
-        Assert.assertEquals(a, transformer.toString());
-    }
-
-    @Test
-    public void robWait() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/wait_stmt.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
-        String a =
-            "BlockAST [project=[[\n"
-                + "(repeat [WHILE, Binary [EQ, NumConst [0], NumConst [0]]]\n"
-                + "exprStmt Funct [PRINT, [StringConst [1]]]\n"
-                + ")\n(repeat [WHILE, Binary [EQ, NumConst [0], NumConst [0]]]\n"
-                + "exprStmt Funct [PRINT, [StringConst [2]]]\n"
-                + ")]]]";
-        Assert.assertEquals(a, transformer.toString());
-    }
 }

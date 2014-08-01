@@ -52,6 +52,5 @@ public class ActionExpr extends Expr {
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
         sb.append(this.action);
-
     }
 }

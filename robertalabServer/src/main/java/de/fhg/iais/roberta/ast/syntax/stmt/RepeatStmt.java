@@ -57,7 +57,7 @@ public class RepeatStmt extends Stmt {
     /**
      * @return list of statements.
      */
-    public final StmtList getlist() {
+    public final StmtList getList() {
         return this.list;
     }
 

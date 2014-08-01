@@ -15,12 +15,12 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br>
  * To create an instance from this class use the method {@link #make(MotorTachoMode, ActorPort)}.<br>
  */
-public class TachoSensor extends Sensor {
+public class EncoderSensor extends Sensor {
     private final MotorTachoMode mode;
     private final ActorPort motor;
 
-    private TachoSensor(MotorTachoMode mode, ActorPort motor) {
-        super(Phrase.Kind.TACHO_SENSING);
+    private EncoderSensor(MotorTachoMode mode, ActorPort motor) {
+        super(Phrase.Kind.ENCODER_SENSING);
         Assert.isTrue(mode != null);
         this.mode = mode;
         this.motor = motor;
@@ -28,14 +28,14 @@ public class TachoSensor extends Sensor {
     }
 
     /**
-     * Create object of the class {@link TachoSensor}.
+     * Create object of the class {@link EncoderSensor}.
      * 
      * @param mode in which the sensor is operating. See enum {@link MotorTachoMode} for all possible modes that the sensor have.
      * @param port on where the sensor is connected. See enum {@link SensorPort} for all possible sensor ports.
-     * @return read only object of {@link TachoSensor}
+     * @return read only object of {@link EncoderSensor}
      */
-    public static TachoSensor make(MotorTachoMode mode, ActorPort motor) {
-        return new TachoSensor(mode, motor);
+    public static EncoderSensor make(MotorTachoMode mode, ActorPort motor) {
+        return new EncoderSensor(mode, motor);
     }
 
     /**

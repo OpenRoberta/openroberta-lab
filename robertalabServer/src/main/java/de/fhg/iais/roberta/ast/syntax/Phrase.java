@@ -105,7 +105,7 @@ abstract public class Phrase {
         TOUCH_SENSING( Category.SENSOR ),
         ULTRASONIC_SENSING( Category.SENSOR ),
         INFRARED_SENSING( Category.SENSOR ),
-        TACHO_SENSING( Category.SENSOR ),
+        ENCODER_SENSING( Category.SENSOR ),
         BRICK_SENSIG( Category.SENSOR ),
         GYRO_SENSIG( Category.SENSOR ),
         TIMER_SENSING( Category.SENSOR ),

@@ -9,11 +9,11 @@ import org.xml.sax.InputSource;
 
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.sensor.MotorTachoMode;
-import de.fhg.iais.roberta.ast.syntax.sensor.TachoSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.blockly.generated.Project;
 
-public class TachoSensorTest {
+public class EncoderSensorTest {
 
     @Test
     public void sensorSetEncoder() throws Exception {
@@ -42,7 +42,7 @@ public class TachoSensorTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        TachoSensor cs = (TachoSensor) transformer.getProject().get(0).get(0);
+        EncoderSensor cs = (EncoderSensor) transformer.getProject().get(0).get(0);
 
         Assert.assertEquals(MotorTachoMode.ROTATION, cs.getMode());
     }
@@ -58,7 +58,7 @@ public class TachoSensorTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        TachoSensor cs = (TachoSensor) transformer.getProject().get(0).get(0);
+        EncoderSensor cs = (EncoderSensor) transformer.getProject().get(0).get(0);
 
         Assert.assertEquals(ActorPort.A, cs.getMotor());
     }

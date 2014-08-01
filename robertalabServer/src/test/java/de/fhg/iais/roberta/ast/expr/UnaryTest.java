@@ -8,24 +8,24 @@ import org.junit.Test;
 import org.xml.sax.InputSource;
 
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
-import de.fhg.iais.roberta.ast.syntax.expr.Binary;
+import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.blockly.generated.Project;
 
-public class BinaryTest {
+public class UnaryTest {
 
     @Test
     public void make() throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_arithmetic.xml"));
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_single1.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[Binary [ADD, NumConst [1], Funct [POWER, [NumConst [5], NumConst [8]]]]]]]";
+        String a = "BlockAST [project=[[Unary [NEG, NumConst [10]]]]]";
 
         Assert.assertEquals(a, transformer.toString());
     }
@@ -35,47 +35,31 @@ public class BinaryTest {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_arithmetic.xml"));
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_single1.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        Binary binary = (Binary) transformer.getProject().get(0).get(0);
+        Unary unary = (Unary) transformer.getProject().get(0).get(0);
 
-        Assert.assertEquals(Binary.Op.ADD, binary.getOp());
+        Assert.assertEquals(Unary.Op.NEG, unary.getOp());
     }
 
     @Test
-    public void getLeft() throws Exception {
+    public void getExpr() throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_arithmetic.xml"));
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_single1.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        Binary binary = (Binary) transformer.getProject().get(0).get(0);
+        Unary unary = (Unary) transformer.getProject().get(0).get(0);
 
-        Assert.assertEquals("NumConst [1]", binary.getLeft().toString());
-    }
-
-    @Test
-    public void getRight() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_arithmetic.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
-        Binary binary = (Binary) transformer.getProject().get(0).get(0);
-
-        Assert.assertEquals("Funct [POWER, [NumConst [5], NumConst [8]]]", binary.getRight().toString());
+        Assert.assertEquals("NumConst [10]", unary.getExpr().toString());
     }
 
     @Test
@@ -83,15 +67,15 @@ public class BinaryTest {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_arithmetic.xml"));
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_single1.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        Binary binary = (Binary) transformer.getProject().get(0).get(0);
+        Unary unary = (Unary) transformer.getProject().get(0).get(0);
 
-        Assert.assertEquals(100, binary.getPrecedence());
+        Assert.assertEquals(10, unary.getPrecedence());
     }
 
     @Test
@@ -99,15 +83,15 @@ public class BinaryTest {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_arithmetic.xml"));
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_single1.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        Binary binary = (Binary) transformer.getProject().get(0).get(0);
+        Unary unary = (Unary) transformer.getProject().get(0).get(0);
 
-        Assert.assertEquals(Assoc.LEFT, binary.getAssoc());
+        Assert.assertEquals(Assoc.LEFT, unary.getAssoc());
     }
 
     @Test
@@ -115,14 +99,15 @@ public class BinaryTest {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_arithmetic.xml"));
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/math/math_single1.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        Binary binary = (Binary) transformer.getProject().get(0).get(0);
+        Unary unary = (Unary) transformer.getProject().get(0).get(0);
 
-        Assert.assertEquals("+", binary.getOp().getOpSymbol());
+        Assert.assertEquals("-", unary.getOp().getOpSymbol());
     }
+
 }
