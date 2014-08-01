@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>de.fhg.iais.openroberta</groupId>
+		<artifactId>OpenRobertaParent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../OpenRobertaParent</relativePath>
+	</parent>
+    
+	<artifactId>OpenRobertaRuntime</artifactId>
+	<name>OpenRobertaRuntime</name>
+	<description>the runtime resources of the OpenRoberta application to be used on the brick by the generated code</description>
+    
+	<dependencies>
+		<dependency>
+			<groupId>de.fhg.iais.openroberta</groupId>
+			<artifactId>OpenRobertaShared</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.fhg.iais.roberta</groupId>
+			<artifactId>ev3classes</artifactId>
+		</dependency>
+	</dependencies>
+</project>
