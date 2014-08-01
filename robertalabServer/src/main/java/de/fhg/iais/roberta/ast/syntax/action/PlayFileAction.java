@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -21,7 +22,7 @@ public class PlayFileAction extends Action {
 
     /**
      * Creates instance of {@link PlayFileAction}. This instance is read only and can not be modified.
-     *
+     * 
      * @param filename of the sound,
      * @return read only object of class {@link PlayFileAction}.
      */
@@ -46,4 +47,8 @@ public class PlayFileAction extends Action {
         return "PlayFileAction [" + this.fileName + "]";
     }
 
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
 }

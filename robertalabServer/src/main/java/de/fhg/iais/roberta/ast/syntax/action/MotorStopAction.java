@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -54,6 +55,11 @@ public class MotorStopAction extends Action {
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
         sb.append("hal.stopMotor(" + this.port.toString() + ", " + this.mode.toString() + ");");
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 
 }

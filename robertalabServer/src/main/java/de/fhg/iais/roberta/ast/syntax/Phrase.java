@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax;
 
+import de.fhg.iais.roberta.codegen.lejos.Visitable;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -14,7 +15,7 @@ import de.fhg.iais.roberta.dbc.Assert;
  * - {@link #getKind()}<br>
  * - {@link #getAs(Class)}<br>
  */
-abstract public class Phrase {
+abstract public class Phrase implements Visitable {
     private boolean readOnly = false;
     private final Kind kind;
 

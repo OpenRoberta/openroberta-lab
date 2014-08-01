@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 import java.util.Locale;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
@@ -93,5 +94,10 @@ public class MathConst extends Expr {
             }
             throw new DbcException("Invalid binary constant symbol: " + s);
         }
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

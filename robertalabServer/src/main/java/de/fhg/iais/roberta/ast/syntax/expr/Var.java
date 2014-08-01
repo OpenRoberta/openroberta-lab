@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 
 /**
  * This class represents the <b>variables_set</b> and <b>variables_get</b> blocks from Blockly into the AST (abstract syntax tree).
@@ -52,5 +53,10 @@ public class Var extends Expr {
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
         sb.append(this.name);
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

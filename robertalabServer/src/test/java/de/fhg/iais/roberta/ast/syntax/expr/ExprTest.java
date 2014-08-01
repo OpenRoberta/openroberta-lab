@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary.Op;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.blockly.generated.Project;
+import de.fhg.iais.roberta.codegen.lejos.JavaGenerator;
 
 /**
  * tests absence of exceptions only :-)
@@ -56,18 +57,21 @@ public class ExprTest {
         Binary addMult = Binary.make(Op.ADD, mult1, mult2);
         Binary minusCplx = Binary.make(Op.MINUS, add, add);
         Binary addCplx = Binary.make(Op.ADD, add, add);
+
+        generate(add);
         generate(add);
         generate(mult1);
         generate(mult2);
         generate(addMult);
         generate(addCplx);
         generate(minusCplx);
+
     }
 
     private void generate(Phrase p) {
-        StringBuilder sb = new StringBuilder();
-        p.generateJava(sb, 0);
-        System.out.println(sb.toString());
+        JavaGenerator generator = new JavaGenerator();
+        generator.generate(p);
+        System.out.println(generator.getSb());
     }
 
 }

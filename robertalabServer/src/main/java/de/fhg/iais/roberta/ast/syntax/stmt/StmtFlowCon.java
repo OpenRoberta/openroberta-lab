@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.ast.syntax.stmt;
 import java.util.Locale;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
@@ -85,6 +86,11 @@ public class StmtFlowCon extends Stmt {
             }
             throw new DbcException("Invalid flow kind: " + s);
         }
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 
 }

@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.stmt;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.Action;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -45,5 +46,10 @@ public class ActionStmt extends Stmt {
         StringBuilder sb = new StringBuilder();
         sb.append("\nAktionStmt [" + this.action + "]");
         return sb.toString();
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 
 /**
  * This class represents the <b>robColour_picker</b> block from Blockly into the AST (abstract syntax tree).
@@ -23,7 +24,7 @@ public class ColorConst extends Expr {
 
     /**
      * creates instance of {@link ColorConst}. This instance is read only and can not be modified.
-     *
+     * 
      * @param value that the color constant will have
      * @return read only object of class {@link ColorConst}.
      */
@@ -56,5 +57,10 @@ public class ColorConst extends Expr {
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
         sb.append("\"").append(StringEscapeUtils.escapeJava(this.value)).append("\"");
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

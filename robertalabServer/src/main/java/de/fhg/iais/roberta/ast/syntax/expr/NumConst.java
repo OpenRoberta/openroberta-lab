@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 
 /**
  * This class represents the <b>math_number</b> block from Blockly into the AST (abstract syntax tree).
@@ -52,5 +53,10 @@ public class NumConst extends Expr {
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
         sb.append(this.value);
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

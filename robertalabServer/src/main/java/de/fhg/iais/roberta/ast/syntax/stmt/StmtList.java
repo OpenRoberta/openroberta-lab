@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -57,5 +58,10 @@ public class StmtList extends Stmt {
             sb.append(stmt.toString());
         }
         return sb.toString();
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.sensor;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 
 /**
  * This class represents the <b>robSensors_touch_isPressed</b> blocks from Blockly into
@@ -47,6 +48,11 @@ public class TouchSensor extends Sensor {
     @Override
     public String toString() {
         return "TouchSensor [port=" + this.port + "]";
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 
 }

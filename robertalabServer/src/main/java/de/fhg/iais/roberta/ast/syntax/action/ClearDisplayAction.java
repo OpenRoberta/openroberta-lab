@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
+
 /**
  * This class represents the <b>robActions_display_clear</b> block from Blockly into the AST (abstract syntax tree).
  */
@@ -27,5 +29,10 @@ public class ClearDisplayAction extends Action {
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
         sb.append("hal.clearDisplay();");
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

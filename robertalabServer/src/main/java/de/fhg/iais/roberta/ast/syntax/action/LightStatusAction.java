@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
@@ -54,6 +55,11 @@ public class LightStatusAction extends Action {
     @Override
     public String toString() {
         return "LightStatusAction [" + this.status + "]";
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 
     /**

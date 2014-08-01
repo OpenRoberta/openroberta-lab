@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -21,7 +22,7 @@ public class MotorGetPowerAction extends Action {
 
     /**
      * Creates instance of {@link MotorGetPowerAction}. This instance is read only and can not be modified.
-     *
+     * 
      * @param port on which the motor is connected that we want to check,
      * @return read only object of class {@link MotorGetPowerAction}.
      */
@@ -44,5 +45,10 @@ public class MotorGetPowerAction extends Action {
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
         sb.append("hal.getSpeed(" + this.getPort().toString() + ")");
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

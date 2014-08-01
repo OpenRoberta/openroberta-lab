@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 import java.util.Locale;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
@@ -11,6 +12,8 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * <br>
  * To create an instance from this class use the method {@link #make(Op, Expr, Expr)}.<br>
  * The enumeration {@link Op} contains all allowed binary operations.
+ * 
+ * @author kcvejoski
  */
 public class Binary extends Expr {
     private final Op op;
@@ -90,6 +93,11 @@ public class Binary extends Expr {
             expr.generateJava(sb, 0);
             sb.append(" )");
         }
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 
     /**

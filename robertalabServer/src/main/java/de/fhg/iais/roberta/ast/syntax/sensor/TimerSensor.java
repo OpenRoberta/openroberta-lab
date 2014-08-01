@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.sensor;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
@@ -28,7 +29,7 @@ public class TimerSensor extends Sensor {
 
     /**
      * Create object of the class {@link TimerSensor}.
-     *
+     * 
      * @param mode in which the sensor is operating. See enum {@link TimerSensorMode} for all possible modes that the sensor have.
      * @param timer integer value
      * @return read only object of {@link TimerSensor}
@@ -68,5 +69,10 @@ public class TimerSensor extends Sensor {
             default:
                 throw new DbcException("Invalid Time Mode!");
         }
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

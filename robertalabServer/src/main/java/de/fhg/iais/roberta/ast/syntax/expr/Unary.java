@@ -3,13 +3,17 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 import java.util.Locale;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
  * This class represents all unary operations from Blockly into the AST (abstract syntax tree).<br>
  * <br>
+ * Client must provide operation and expression over which operation is executed. <br>
+ * <br>
  * To create an instance from this class use the method {@link #make(Op, Expr)}.<br>
+ * <br>
  * The enumeration {@link Op} contains all allowed unary operations.
  */
 public class Unary extends Expr {
@@ -145,6 +149,11 @@ public class Unary extends Expr {
             }
             throw new DbcException("Invalid unary operator symbol: " + s);
         }
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 
 }

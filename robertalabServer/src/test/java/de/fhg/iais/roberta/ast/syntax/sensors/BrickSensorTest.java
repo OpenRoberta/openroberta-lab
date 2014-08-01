@@ -10,6 +10,7 @@ import org.xml.sax.InputSource;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.blockly.generated.Project;
+import de.fhg.iais.roberta.codegen.lejos.JavaGenerator;
 
 public class BrickSensorTest {
     @Test
@@ -46,9 +47,10 @@ public class BrickSensorTest {
     }
 
     private String generate(Phrase p) {
-        StringBuilder sb = new StringBuilder();
-        p.generateJava(sb, 0);
-        System.out.println(sb.toString());
-        return sb.toString();
+        JavaGenerator generator = new JavaGenerator();
+        generator.generate(p);
+        System.out.println(generator.getSb());
+        return generator.getSb().toString();
     }
+
 }

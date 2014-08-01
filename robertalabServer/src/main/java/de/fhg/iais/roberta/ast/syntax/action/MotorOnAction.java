@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -23,7 +24,7 @@ public class MotorOnAction extends Action {
 
     /**
      * Creates instance of {@link MotorOnAction}. This instance is read only and can not be modified.
-     *
+     * 
      * @param port {@link ActorPort} on which the motor is connected,
      * @param param {@link MotionParam} that set up the parameters for the movement of the robot (number of rotations or degrees and speed),
      * @return read only object of class {@link MotorOnAction}.
@@ -53,9 +54,12 @@ public class MotorOnAction extends Action {
 
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
-        sb.append("hal.setMotorSpeed(" + this.port.toString() + ", ");
-        this.param.getSpeed().generateJava(sb, indentation);
-        sb.append(")");
+        //TODO 
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 
 }

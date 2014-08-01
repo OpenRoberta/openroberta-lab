@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
@@ -84,5 +85,10 @@ public class ExprList extends Expr {
             }
             expr.generateJava(sb, indentation);
         }
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.stmt;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -47,6 +48,11 @@ public class ExprStmt extends Stmt {
         StringBuilder sb = new StringBuilder();
         generateJava(sb, 0);
         return sb.toString();
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 
 }

@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.stmt;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.sensor.Sensor;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -43,6 +44,11 @@ public class SensorStmt extends Stmt {
     @Override
     public String toString() {
         return "\nSensorStmt " + this.sensor;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 
 }

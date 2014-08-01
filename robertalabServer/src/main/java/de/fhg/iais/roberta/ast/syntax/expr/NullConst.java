@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 
 /**
  * This class represents the <b>logic_null</b> block from Blockly into the AST (abstract syntax tree).
@@ -49,6 +50,11 @@ public class NullConst extends Expr {
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
         sb.append("null");
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 
 }

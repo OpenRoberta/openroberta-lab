@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
@@ -102,6 +103,11 @@ public class Funct extends Expr {
             default:
                 break;
         }
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 
     /**
@@ -221,5 +227,4 @@ public class Funct extends Expr {
             throw new DbcException("Invalid function name: " + s);
         }
     }
-
 }

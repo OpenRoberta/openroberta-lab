@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -53,6 +54,11 @@ public class EmptyExpr extends Expr {
     @Override
     public void generateJava(StringBuilder sb, int indentation) {
         sb.append("[[EmptyExpr [defVal=" + this.defVal + "]]]");
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 
 }

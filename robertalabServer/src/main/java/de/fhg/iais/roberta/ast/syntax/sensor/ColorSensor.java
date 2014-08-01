@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.sensor;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -68,5 +69,10 @@ public class ColorSensor extends Sensor {
     @Override
     public String toString() {
         return "ColorSensor [mode=" + this.mode + ", port=" + this.port + "]";
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }
