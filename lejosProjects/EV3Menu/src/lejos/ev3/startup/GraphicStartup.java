@@ -11,7 +11,6 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -26,8 +25,6 @@ import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.jar.JarFile;
 
 import lejos.hardware.Battery;
@@ -1480,90 +1477,139 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Roberta submenu implementation.<br>
-     * Uses new RobertaDownloadThread helper-class for downloading and saving
-     * file.<br>
-     * uses new RobertaKeyboard with less symbols for token input.<br>
-     * sends download request 1/60sec, launch user program after download<br>
-     * download requests are paused during execution time of the user program<br>
-     * TODO handling of URL exceptions (should never be thrown later)
+     * Roberta submenu implementation.
      */
     private void robertaMenu() {
         GraphicsLCD glcd = LocalEV3.get().getGraphicsLCD();
+        final String token = new RobertaTokenGenerator().generateToken(8);
+        final RobertaHttpCalls httpRoberta = new RobertaHttpCalls();
 
-        //--- Server address ---
-        newScreen(" Enter IP");
-        while ( serverIP.equals("") ) {
-            // is empty string if Button.ESCAPE is pressed @IpAddressKeyboard
-            serverIP = new IpAddressKeyboard().getString();
-            try {
-                File file = new File("/home/lejos/programs/serverIP.txt");
-                if ( file.exists() ) {
-                    file.delete();
-                }
-                PrintWriter pw = new PrintWriter("/home/lejos/programs/serverIP.txt");
-                pw.println(serverIP);
-                pw.close();
-            } catch ( FileNotFoundException e ) {
-                return;
-            }
-        }
+        // --- enter server address ---
+        //        newScreen(" Enter IP");
+        //        while ( serverIP.equals("") ) {
+        //            // is empty string if Button.ESCAPE is pressed @IpAddressKeyboard
+        //            serverIP = new IpAddressKeyboard().getString();
+        //            try {
+        //                File file = new File("/home/lejos/programs/serverIP.txt");
+        //                if ( file.exists() ) {
+        //                    file.delete();
+        //                }
+        //                PrintWriter pw = new PrintWriter("/home/lejos/programs/serverIP.txt");
+        //                pw.println(serverIP);
+        //                pw.close();
+        //            } catch ( FileNotFoundException e ) {
+        //                return;
+        //            }
+        //        }
+        serverIP = "10.0.1.15:1999";
 
         try {
-            serverURL = new URL("http://" + serverIP + "/download");
+            serverURL = new URL("http://" + serverIP + "/token");
         } catch ( MalformedURLException e ) {
             return;
         }
 
-        //--- Token input ---
-        newScreen(" Token (PH)");
-        // no empty string, must be 8 chars code
-        while ( token.length() != 8 ) {
-            token = new RobertaKeyboard().getString();
-            // is empty string if Button.ESCAPE is pressed @RobertaKeyboard
-            if ( token.equals("") ) {
-                return;
-            }
-        }
-
-        //--- Hanging http request and program start ---
         newScreen(" Robertalab");
-        glcd.drawImage(image, 0, 0, 0);
 
-        RobertaDownloadThread rdt = new RobertaDownloadThread(serverURL, token);
-        ExecutorService executerService = Executors.newSingleThreadScheduledExecutor();
-        executerService.execute(rdt);
-
-        while ( true ) {
-            if ( Button.ESCAPE.isDown() ) {
-                executerService.shutdownNow();
-                return;
-            }
-            glcd.drawImage(image, 0, 0, 0);
-            // check if thread is terminated and file was downloaded successfully
-            if ( rdt.getHasDownloaded() ) {
-                robertaLabFile = rdt.getFileName();
-                // get parameters for exec method
-                file = new File(PROGRAMS_DIRECTORY, robertaLabFile);
-                JarFile jar;
+        Thread tokenRegister = new Thread(new Runnable() {
+            @Override
+            public void run() {
                 try {
-                    jar = new JarFile(file);
-                    mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
-                    jar.close();
+                    httpRoberta.sendTokenToServer(serverURL, token);
                 } catch ( IOException e ) {
+                    e.printStackTrace();
                     return;
                 }
-                // run user program
-                this.ind.suspend();
-                exec(file, JAVA_RUN_CP + file.getPath() + " lejos.internal.ev3.EV3Wrapper " + mainClass, PROGRAMS_DIRECTORY);
-                this.ind.resume();
-                rdt.setHasDownloaded(false);
-
-                // next download requests "hanging"
-                executerService.execute(rdt);
             }
-            Delay.msDelay(200);
+        });
+        tokenRegister.start();
+        try {
+            tokenRegister.wait();
+        } catch ( InterruptedException e ) {
+            e.printStackTrace();
+            return;
         }
+
+        if ( httpRoberta.getRegistered() ) {
+            //
+        }
+
+        // TODO include json library
+        // TODO wrap token into JsonObject
+
+        //        //--- Server address ---
+        //        newScreen(" Enter IP");
+        //        while ( serverIP.equals("") ) {
+        //            // is empty string if Button.ESCAPE is pressed @IpAddressKeyboard
+        //            serverIP = new IpAddressKeyboard().getString();
+        //            try {
+        //                File file = new File("/home/lejos/programs/serverIP.txt");
+        //                if ( file.exists() ) {
+        //                    file.delete();
+        //                }
+        //                PrintWriter pw = new PrintWriter("/home/lejos/programs/serverIP.txt");
+        //                pw.println(serverIP);
+        //                pw.close();
+        //            } catch ( FileNotFoundException e ) {
+        //                return;
+        //            }
+        //        }
+        //
+        //        try {
+        //            serverURL = new URL("http://" + serverIP + "/download");
+        //        } catch ( MalformedURLException e ) {
+        //            return;
+        //        }
+        //
+        //        //--- Token input ---
+        //        newScreen(" Token (PH)");
+        //        // no empty string, must be 8 chars code
+        //        while ( token.length() != 8 ) {
+        //            token = new RobertaKeyboard().getString();
+        //            // is empty string if Button.ESCAPE is pressed @RobertaKeyboard
+        //            if ( token.equals("") ) {
+        //                return;
+        //            }
+        //        }
+        //
+        //        //--- Hanging http request and program start ---
+        //        newScreen(" Robertalab");
+        //        glcd.drawImage(image, 0, 0, 0);
+        //
+        //        RobertaHttpCalls rdt = new RobertaHttpCalls(serverURL, token);
+        //        ExecutorService executerService = Executors.newSingleThreadScheduledExecutor();
+        //        executerService.execute(rdt);
+        //
+        //        while ( true ) {
+        //            if ( Button.ESCAPE.isDown() ) {
+        //                executerService.shutdownNow();
+        //                return;
+        //            }
+        //            glcd.drawImage(image, 0, 0, 0);
+        //            // check if thread is terminated and file was downloaded successfully
+        //            if ( rdt.getHasDownloaded() ) {
+        //                robertaLabFile = rdt.getFileName();
+        //                // get parameters for exec method
+        //                file = new File(PROGRAMS_DIRECTORY, robertaLabFile);
+        //                JarFile jar;
+        //                try {
+        //                    jar = new JarFile(file);
+        //                    mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
+        //                    jar.close();
+        //                } catch ( IOException e ) {
+        //                    return;
+        //                }
+        //                // run user program
+        //                this.ind.suspend();
+        //                exec(file, JAVA_RUN_CP + file.getPath() + " lejos.internal.ev3.EV3Wrapper " + mainClass, PROGRAMS_DIRECTORY);
+        //                this.ind.resume();
+        //                rdt.setHasDownloaded(false);
+        //
+        //                // next download requests "hanging"
+        //                executerService.execute(rdt);
+        //            }
+        //            Delay.msDelay(200);
+        //        }
     }
 
     /**

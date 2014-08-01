@@ -14,20 +14,14 @@ public class RobertaTokenGenerator {
     private final String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private final int n = this.alphabet.length();
 
-    public static void main(String[] args) {
-        RobertaTokenGenerator tokenGenerator = new RobertaTokenGenerator();
-        System.out.println(tokenGenerator.generateToken());
-    }
-
     public RobertaTokenGenerator() {
         //
     }
 
-    public String generateToken() {
+    public String generateToken(int tokenlength) {
         String token = "";
         Random random = new Random();
-        // how many characters?!
-        for ( int i = 0; i < 8; i++ ) {
+        for ( int i = 0; i < tokenlength; i++ ) {
             token = token + this.alphabet.charAt(random.nextInt(this.n));
         }
         return token;

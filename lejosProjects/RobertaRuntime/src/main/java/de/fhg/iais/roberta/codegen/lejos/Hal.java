@@ -40,7 +40,6 @@ import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
-import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.dbc.DbcException;
 
@@ -914,19 +913,23 @@ public class Hal {
     public boolean isPressed(BrickKey key) {
         switch ( key ) {
             case ANY:
-                // TODO
+                if ( this.keys.readButtons() != 0 ) {
+                    return true;
+                } else {
+                    return false;
+                }
             case DOWN:
-                return this.brick.getKey(BrickKey.DOWN.toString()).isDown();
+                return this.brick.getKey("Down").isDown();
             case ENTER:
-                return this.brick.getKey(BrickKey.ENTER.toString()).isDown();
+                return this.brick.getKey("Enter").isDown();
             case ESCAPE:
-                return this.brick.getKey(BrickKey.ESCAPE.toString()).isDown();
+                return this.brick.getKey("Escape").isDown();
             case LEFT:
-                return this.brick.getKey(BrickKey.LEFT.toString()).isDown();
+                return this.brick.getKey("Left").isDown();
             case RIGHT:
-                return this.brick.getKey(BrickKey.RIGHT.toString()).isDown();
+                return this.brick.getKey("Right").isDown();
             case UP:
-                return this.brick.getKey(BrickKey.UP.toString()).isDown();
+                return this.brick.getKey("Up").isDown();
             default:
                 throw new DbcException("wrong button name??");
         }
@@ -1012,7 +1015,7 @@ public class Hal {
      * @param timer
      * @return
      */
-    public int getTimerValue(TimerSensorMode timer) {
+    public int getTimerValue(int timer) {
         return 0;
     }
 
@@ -1021,7 +1024,7 @@ public class Hal {
      * 
      * @param timer
      */
-    public void resetTimer(/* TODO */) {
+    public void resetTimer(int timer) {
         //
     }
 

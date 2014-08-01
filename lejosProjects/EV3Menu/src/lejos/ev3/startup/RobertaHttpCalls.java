@@ -1,10 +1,12 @@
 package lejos.ev3.startup;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -16,82 +18,26 @@ import java.net.URL;
  * 
  * @author dpyka
  */
-public class RobertaDownloadThread implements Runnable {
+public class RobertaHttpCalls {
 
     // fileName of program that was downloaded from RobertaLab
     private String fileName;
+    private boolean registered = false;
+
     // taken from GraphicStartup.java
     // location where user programs are saved to
     private final String PROGRAMS_DIRECTORY = "/home/lejos/programs";
 
-    private final URL serverURL;
-    private final String token;
-    private boolean downloaded = false;
-
-    private HttpURLConnection httpURLConnection;
-
-    public RobertaDownloadThread(URL serverURL, String token) {
-        this.serverURL = serverURL;
-        this.token = token;
+    public RobertaHttpCalls() {
+        //
     }
 
-    /**
-     * executes a download attempt
-     */
-    @Override
-    public void run() {
-        /*setHasDownloaded(false);
-        // http request already hanging
-        if ( isConnected() ) {
-            try {
-                downloadProgramFromServer(this.httpURLConnection, this.token);
-                setHasDownloaded(true);
-            } catch ( IOException e ) {
-                e.printStackTrace();
-                System.out.println("error @existing http request");
-            }
-            return;
-        } // new http request
-        else {*/
-        setHasDownloaded(false);
-        try {
-            downloadProgramFromServer(openConnection(this.serverURL), this.token);
-            setHasDownloaded(true);
-        } catch ( IOException e ) {
-            e.printStackTrace();
-            System.out.println("error @new http request");
-        }
-        //}
+    private void setRegistered(boolean bool) {
+        this.registered = bool;
     }
 
-    private boolean isConnected() {
-        try {
-            if ( this.httpURLConnection.getResponseCode() == 200 ) {
-                System.out.println(this.httpURLConnection.getResponseCode() == 200);
-                return true;
-            }
-        } catch ( IOException e ) {
-            return false;
-        }
-        return false;
-    }
-
-    /**
-     * status: downloaded/ not downloaded
-     * 
-     * @return boolean
-     */
-    public boolean getHasDownloaded() {
-        return this.downloaded;
-    }
-
-    /**
-     * change download status
-     * 
-     * @param status
-     */
-    public void setHasDownloaded(boolean status) {
-        this.downloaded = status;
+    public boolean getRegistered() {
+        return this.registered;
     }
 
     /**
@@ -126,12 +72,41 @@ public class RobertaDownloadThread implements Runnable {
      *         opening a connection failed
      */
     private HttpURLConnection openConnection(URL url) throws IOException {
-        this.httpURLConnection = (HttpURLConnection) url.openConnection();
-        this.httpURLConnection.setDoInput(true);
-        this.httpURLConnection.setDoOutput(true);
-        this.httpURLConnection.setRequestMethod("POST");
-        this.httpURLConnection.setReadTimeout(0); // hold connection
-        return this.httpURLConnection;
+        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+        httpURLConnection.setDoInput(true);
+        httpURLConnection.setDoOutput(true);
+        httpURLConnection.setRequestMethod("POST");
+        httpURLConnection.setReadTimeout(0); // hold connection
+        return httpURLConnection;
+    }
+
+    /**
+     * send token to server, get response code if registered
+     * TODO refactor with json library instead of string
+     * 
+     * @param serverURL
+     * @param token
+     * @throws IOException
+     */
+    public void sendTokenToServer(URL serverURL, String token) throws IOException {
+        HttpURLConnection httpURLConnection = openConnection(serverURL);
+
+        DataOutputStream dos = new DataOutputStream(httpURLConnection.getOutputStream());
+        dos.writeBytes(token);
+        dos.flush();
+        dos.close();
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+        String serverResponse;
+        while ( (serverResponse = in.readLine()) != null ) {
+            System.out.println(serverResponse);
+        }
+        in.close();
+        if ( serverResponse.equals("OK") ) {
+            setRegistered(true);
+        } else {
+            setRegistered(false);
+        }
     }
 
     /**
@@ -146,7 +121,7 @@ public class RobertaDownloadThread implements Runnable {
      * @throws IOException
      *         sending token or downloading file failed
      */
-    private void downloadProgramFromServer(HttpURLConnection httpURLConnection, String token) throws IOException {
+    public void downloadProgramFromServer(HttpURLConnection httpURLConnection, String token) throws IOException {
         // send code to RobertaLab (example ZXCV)
         DataOutputStream dos = new DataOutputStream(httpURLConnection.getOutputStream());
         dos.writeBytes(token);
@@ -168,4 +143,5 @@ public class RobertaDownloadThread implements Runnable {
         output.close();
         is.close();
     }
+    // downloadProgramFromServer(openConnection(this.serverURL), this.token);
 }
