@@ -1,0 +1,68 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>de.fhg.iais.openroberta</groupId>
+    <artifactId>EV3Menu</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <source.level>1.7</source.level>
+        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.7</maven.compiler.source>
+    </properties>
+    
+    <repositories>
+        <repository>
+            <id>ORA-releases</id>
+            <name>Open Roberta releases repository</name>
+            <url>http://mp-devel.iais.fraunhofer.de:8081/nexus/content/repositories/ORA-releases/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.lejos</groupId>
+            <artifactId>jna</artifactId>
+            <version>3.2.7</version>
+        </dependency>
+        <dependency>
+            <groupId>de.fhg.iais.roberta</groupId>
+            <artifactId>ev3classes</artifactId>
+            <version>0.8.1-beta</version>
+        </dependency>
+        <dependency>
+            <groupId>de.fhg.iais.roberta</groupId>
+            <artifactId>dbusjava</artifactId>
+            <version>0.8.1-beta</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>src</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>src</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

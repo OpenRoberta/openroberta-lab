@@ -1,6 +1,7 @@
-Getting startet with Open Roberta:
+Getting startet with OpenRoberta:
 
-The main project is located in the 'robertalabServer' folder.
+To work with OpenRoberta, you have to start the OpenRobertaServer.
+The server project is located in the 'OpenRobertaServer' folder.
 Please follow the instructions in the project Readme file and check
 the wiki page.
 

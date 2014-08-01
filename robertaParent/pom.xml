@@ -22,7 +22,7 @@
 	<modules>
 		<module>../shared</module>
 		<module>../robertalabServer</module>
-		<module>../lejosProjects/RobertaRuntime</module>
+		<module>../RobertaRuntime</module>
 	</modules>
 	<repositories>
 		<repository>
