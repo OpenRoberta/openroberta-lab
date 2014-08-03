@@ -9,7 +9,7 @@
     <description>the parent project of the OpenRoberta application</description>
     <url>http://www.openroberta.de</url>
     <inceptionYear>2014</inceptionYear>
-    
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -20,6 +20,7 @@
         <jersey.version>1.18.1</jersey.version>
         <jetty.version>9.2.1.v20140609</jetty.version>
     </properties>
+
     <modules>
         <module>../OpenRobertaShared</module>
         <module>../OpenRobertaServer</module>
@@ -68,14 +69,14 @@
                 <version>${guice.verion}</version>
             </dependency>
             <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-servlet</artifactId>
-                <version>${jetty.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>servlet-api</artifactId>
                 <version>2.5</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-servlet</artifactId>
+                <version>${jetty.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.sun.jersey</groupId>
