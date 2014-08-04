@@ -40,12 +40,6 @@ public class TouchSensor extends Sensor {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        sb.append("hal.isPressed(" + this.port + ")");
-
-    }
-
-    @Override
     public String toString() {
         return "TouchSensor [port=" + this.port + "]";
     }

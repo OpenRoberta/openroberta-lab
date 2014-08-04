@@ -7,12 +7,11 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 
-import de.fhg.iais.roberta.ast.syntax.Phrase;
-import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.blockly.generated.Project;
 import de.fhg.iais.roberta.codegen.lejos.JavaGenerator;
 
 public class ColorSensorTest {
+
     @Test
     public void setColor() throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
@@ -21,13 +20,9 @@ public class ColorSensorTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/sensors/sensor_setColor.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
         String a = "hal.setColorSensorMode(S3, COLOUR);";
 
-        Assert.assertEquals(a, generate(transformer.getProject().get(0).get(0)));
-
+        Assert.assertEquals(a, generate(project));
     }
 
     @Test
@@ -38,12 +33,9 @@ public class ColorSensorTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/sensors/sensor_getModeColor.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
         String a = "hal.getColorSensorModeName(S3)";
 
-        Assert.assertEquals(a, generate(transformer.getProject().get(0).get(0)));
+        Assert.assertEquals(a, generate(project));
     }
 
     @Test
@@ -54,15 +46,12 @@ public class ColorSensorTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/sensors/sensor_getSampleColor.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
         String a = "hal.getColorSensorValue(S3)";
 
-        Assert.assertEquals(a, generate(transformer.getProject().get(0).get(0)));
+        Assert.assertEquals(a, generate(project));
     }
 
-    private String generate(Phrase p) {
+    private String generate(Project p) {
         JavaGenerator generator = new JavaGenerator();
         generator.generate(p);
         System.out.println(generator.getSb());

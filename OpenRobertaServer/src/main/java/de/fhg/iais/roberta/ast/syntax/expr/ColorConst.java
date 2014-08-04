@@ -1,7 +1,5 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.codegen.lejos.Visitor;
 
@@ -52,11 +50,6 @@ public class ColorConst extends Expr {
     @Override
     public String toString() {
         return "ColorConst [" + this.value + "]";
-    }
-
-    @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        sb.append("\"").append(StringEscapeUtils.escapeJava(this.value)).append("\"");
     }
 
     @Override

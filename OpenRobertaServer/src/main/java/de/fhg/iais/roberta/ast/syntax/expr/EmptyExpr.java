@@ -52,11 +52,6 @@ public class EmptyExpr extends Expr {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        sb.append("[[EmptyExpr [defVal=" + this.defVal + "]]]");
-    }
-
-    @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
     }

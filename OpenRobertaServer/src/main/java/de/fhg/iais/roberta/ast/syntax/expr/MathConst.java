@@ -53,11 +53,6 @@ public class MathConst extends Expr {
         return "MathConst [" + this.mathConst + "]";
     }
 
-    @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        sb.append(this.mathConst);
-    }
-
     /**
      * This enum defines all possible math constant.
      */

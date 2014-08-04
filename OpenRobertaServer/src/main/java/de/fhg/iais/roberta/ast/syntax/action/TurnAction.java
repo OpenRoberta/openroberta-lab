@@ -48,12 +48,6 @@ public class TurnAction extends Action {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public String toString() {
         return "TurnAction [direction=" + this.direction + ", param=" + this.param + "]";
     }

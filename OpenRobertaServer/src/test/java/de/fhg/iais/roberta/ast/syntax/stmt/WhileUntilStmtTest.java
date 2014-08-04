@@ -1,8 +1,9 @@
-package de.fhg.iais.roberta.ast.syntax.expr;
+package de.fhg.iais.roberta.ast.syntax.stmt;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 
@@ -10,29 +11,36 @@ import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.blockly.generated.Project;
 import de.fhg.iais.roberta.codegen.lejos.JavaGenerator;
 
-/**
- * tests absence of exceptions only :-)
- * 
- * @author rbudde
- */
-public class ExprTest {
+public class WhileUntilStmtTest {
 
     @Test
-    public void test1() throws Exception {
+    public void whileUntilStmt() throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/syntax/expr/expr1.xml"));
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/syntax/stmt/whileUntil_stmt.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        generate(project);
+        String a =
+            "while ( true ) {\n"
+                + "}\n"
+                + "while ( !(0 == 0) ) {\n"
+                + "}\n"
+                + "while ( !true ) {\n"
+                + "}\n"
+                + "while ( !(15 == 20) ) {\n"
+                + "    item MATH_CHANGE 1;\n"
+                + "}\n"
+                + "while ( !true ) {\n"
+                + "    while ( !(15 == 20) ) {\n"
+                + "        item MATH_CHANGE 1;\n"
+                + "    }\n"
+                + "}";
 
-        String a = "BlockAST [project=[[Funct [UPPERCASE, [Var [text]]]]]]";
-
-        // Assert.assertEquals(a, transformer.toString());
+        Assert.assertEquals(a, generate(project));
     }
 
     private String generate(Project p) {
@@ -41,4 +49,5 @@ public class ExprTest {
         System.out.println(generator.getSb());
         return generator.getSb().toString();
     }
+
 }

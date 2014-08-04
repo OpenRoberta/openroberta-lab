@@ -48,11 +48,6 @@ public class NullConst extends Expr {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        sb.append("null");
-    }
-
-    @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
     }

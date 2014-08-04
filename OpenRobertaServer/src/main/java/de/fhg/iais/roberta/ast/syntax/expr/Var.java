@@ -51,11 +51,6 @@ public class Var extends Expr {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        sb.append(this.name);
-    }
-
-    @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
     }

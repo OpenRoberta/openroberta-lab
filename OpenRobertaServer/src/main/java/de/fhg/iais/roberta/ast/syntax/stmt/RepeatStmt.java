@@ -63,37 +63,6 @@ public class RepeatStmt extends Stmt {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        int next = indentation + 3;
-        appendNewLine(sb, indentation, null);
-        switch ( this.mode ) {
-            case UNTIL:
-            case WHILE:
-                sb.append("while ( ");
-                this.expr.generateJava(sb, 0);
-                sb.append(" ) {");
-                break;
-            case FOR:
-                sb.append("for (");
-                this.expr.generateJava(sb, indentation);
-                sb.append(" ) {");
-                break;
-            case FOR_EACH:
-                break;
-            case TIMES:
-                sb.append("for ( int i = 0; ");
-                this.expr.generateJava(sb.append("i < "), 0);
-                sb.append("; i++ ) {");
-                break;
-            default:
-                break;
-        }
-        //        sb.append("(repeat [" + this.mode + ", ").append(this.expr).append("]");
-        this.list.generateJava(sb, next);
-        appendNewLine(sb, indentation, "}");
-    }
-
-    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         appendNewLine(sb, 0, null);

@@ -54,24 +54,6 @@ public class EncoderSensor extends Sensor {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        switch ( this.mode ) {
-            case GET_MODE:
-                sb.append("hal.getMotorTachoMode(" + this.motor.toString() + ")");
-                break;
-            case GET_SAMPLE:
-                sb.append("hal.getMotorTachoValue(" + this.motor.toString() + ")");
-                break;
-            case RESET:
-                sb.append("hal.resetMotorTacho(" + this.motor.toString() + ");");
-                break;
-            default:
-                sb.append("hal.setMotorTachoMode(" + this.motor.toString() + ", " + this.mode.toString() + ");");
-                break;
-        }
-    }
-
-    @Override
     public String toString() {
         return "DrehSensor [mode=" + this.mode + ", motor=" + this.motor + "]";
     }

@@ -27,11 +27,6 @@ public class ClearDisplayAction extends Action {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        sb.append("hal.clearDisplay();");
-    }
-
-    @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
     }

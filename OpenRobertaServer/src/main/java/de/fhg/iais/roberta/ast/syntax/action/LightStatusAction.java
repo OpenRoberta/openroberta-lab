@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.ast.syntax.action;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.codegen.lejos.Visitor;
 import de.fhg.iais.roberta.dbc.Assert;
-import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
  * This class represents the <b>robActions_brickLight_off</b> and <b>robActions_brickLight_reset</b> blocks from Blockly into the AST (abstract syntax tree).
@@ -36,20 +35,6 @@ public class LightStatusAction extends Action {
      */
     public Status getStatus() {
         return this.status;
-    }
-
-    @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        switch ( this.status ) {
-            case OFF:
-                sb.append("hal.ledOff();");
-                break;
-            case RESET:
-                sb.append("hal.resetLED();");
-                break;
-            default:
-                throw new DbcException("Invalid LED status mode!");
-        }
     }
 
     @Override

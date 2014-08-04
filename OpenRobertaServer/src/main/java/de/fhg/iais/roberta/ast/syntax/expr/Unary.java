@@ -68,22 +68,6 @@ public class Unary extends Expr {
         return "Unary [" + this.op + ", " + this.expr + "]";
     }
 
-    @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        sb.append(this.op.getOpSymbol());
-        generateExprCode(sb, indentation);
-    }
-
-    private void generateExprCode(StringBuilder sb, int indentation) {
-        if ( this.expr.getPrecedence() < this.getPrecedence() ) {
-            sb.append("(");
-            this.expr.generateJava(sb, indentation);
-            sb.append(")");
-        } else {
-            this.expr.generateJava(sb, indentation);
-        }
-    }
-
     /**
      * Operators for the unary expression.
      */

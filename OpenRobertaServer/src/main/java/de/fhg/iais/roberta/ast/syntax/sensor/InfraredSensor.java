@@ -53,21 +53,6 @@ public class InfraredSensor extends Sensor {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        switch ( this.mode ) {
-            case GET_MODE:
-                sb.append("hal.getInfraredSensorModeName(" + this.port.toString() + ")");
-                break;
-            case GET_SAMPLE:
-                sb.append("hal.getInfraredSensorValue(" + this.port.toString() + ")");
-                break;
-            default:
-                sb.append("hal.setInfraredSensorMode(" + this.port.toString() + ", " + this.mode.toString() + ");");
-                break;
-        }
-    }
-
-    @Override
     public String toString() {
         return "InfraredSensor [mode=" + this.mode + ", port=" + this.port + "]";
     }

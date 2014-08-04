@@ -38,15 +38,10 @@ public class ExprStmt extends Stmt {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        appendNewLine(sb, indentation, null);
-        sb.append("exprStmt ").append(this.expr);
-    }
-
-    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        generateJava(sb, 0);
+        appendNewLine(sb, 0, null);
+        sb.append("exprStmt ").append(this.expr);
         return sb.toString();
     }
 

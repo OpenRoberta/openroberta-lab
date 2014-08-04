@@ -48,11 +48,6 @@ public class LightAction extends Action {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        sb.append("hal.ledOn(" + this.color.toString() + ", " + this.blink + ");");
-    }
-
-    @Override
     public String toString() {
         return "LightAction [" + this.color + ", " + this.blink + "]";
     }

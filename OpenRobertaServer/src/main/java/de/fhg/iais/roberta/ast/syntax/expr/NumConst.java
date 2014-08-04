@@ -51,11 +51,6 @@ public class NumConst extends Expr {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        sb.append(this.value);
-    }
-
-    @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
     }

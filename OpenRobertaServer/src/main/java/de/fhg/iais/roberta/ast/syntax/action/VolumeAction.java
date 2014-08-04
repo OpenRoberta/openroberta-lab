@@ -4,7 +4,6 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.codegen.lejos.Visitor;
 import de.fhg.iais.roberta.dbc.Assert;
-import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
  * This class represents the <b>robActions_play_setVolume</b> block from Blockly into the AST (abstract syntax tree).
@@ -47,23 +46,6 @@ public class VolumeAction extends Action {
      */
     public Mode getMode() {
         return this.mode;
-    }
-
-    @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        switch ( this.mode ) {
-            case SET:
-                sb.append("hal.setVolume(");
-                this.volume.generateJava(sb, 0);
-                sb.append(");");
-                break;
-            case GET:
-                sb.append("hal.getVolume()");
-                break;
-            default:
-                throw new DbcException("Invalid volume action mode!");
-        }
-
     }
 
     @Override

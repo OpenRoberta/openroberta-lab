@@ -78,24 +78,6 @@ public class Binary extends Expr {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        generateSubExpr(sb, false, this.left);
-        sb.append(" " + this.op.getOpSymbol() + " ");
-        generateSubExpr(sb, this.op == Op.MINUS, this.right);
-    }
-
-    private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr expr) {
-        if ( expr.getPrecedence() >= this.getPrecedence() && !minusAdaption ) {
-            // parentheses are omitted
-            expr.generateJava(sb, 0);
-        } else {
-            sb.append("( ");
-            expr.generateJava(sb, 0);
-            sb.append(" )");
-        }
-    }
-
-    @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
     }

@@ -50,13 +50,6 @@ public class MotorSetPowerAction extends Action {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        sb.append("hal.setMotorSpeed(" + this.port.name() + ", ");
-        this.power.generateJava(sb, indentation);
-        sb.append(");");
-    }
-
-    @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
     }

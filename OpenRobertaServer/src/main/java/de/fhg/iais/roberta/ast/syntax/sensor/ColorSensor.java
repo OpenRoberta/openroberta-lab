@@ -52,21 +52,6 @@ public class ColorSensor extends Sensor {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        switch ( this.mode ) {
-            case GET_MODE:
-                sb.append("hal.getColorSensorModeName(" + this.port.toString() + ")");
-                break;
-            case GET_SAMPLE:
-                sb.append("hal.getColorSensorValue(" + this.port.toString() + ")");
-                break;
-            default:
-                sb.append("hal.setColorSensorMode(" + this.port.toString() + ", " + this.mode.toString() + ");");
-                break;
-        }
-    }
-
-    @Override
     public String toString() {
         return "ColorSensor [mode=" + this.mode + ", port=" + this.port + "]";
     }

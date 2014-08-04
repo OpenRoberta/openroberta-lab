@@ -1,8 +1,9 @@
-package de.fhg.iais.roberta.ast.syntax.expr;
+package de.fhg.iais.roberta.ast.syntax.stmt;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 
@@ -10,29 +11,34 @@ import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.blockly.generated.Project;
 import de.fhg.iais.roberta.codegen.lejos.JavaGenerator;
 
-/**
- * tests absence of exceptions only :-)
- * 
- * @author rbudde
- */
-public class ExprTest {
+public class ForStmtTest {
 
     @Test
-    public void test1() throws Exception {
+    public void forStmt() throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/syntax/expr/expr1.xml"));
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/syntax/stmt/for_stmt.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        generate(project);
+        String a =
+            "for ( int i = 0; i < 10; i++ ) {\n"
+                + "}\n"
+                + "for ( int i = 0; i < 10; i++ ) {\n"
+                + "    System.out.println(\"15\");\n"
+                + "    System.out.println(\"15\");\n"
+                + "}\n"
+                + "for ( int i = 0; i < 10; i++ ) {\n"
+                + "    for ( int i = 0; i < 10; i++ ) {\n"
+                + "        System.out.println(\"15\");\n"
+                + "        System.out.println(\"15\");\n"
+                + "    }\n"
+                + "}";
 
-        String a = "BlockAST [project=[[Funct [UPPERCASE, [Var [text]]]]]]";
-
-        // Assert.assertEquals(a, transformer.toString());
+        Assert.assertEquals(a, generate(project));
     }
 
     private String generate(Project p) {
@@ -41,4 +47,5 @@ public class ExprTest {
         System.out.println(generator.getSb());
         return generator.getSb().toString();
     }
+
 }

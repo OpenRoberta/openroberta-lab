@@ -54,15 +54,6 @@ public class AssignStmt extends Stmt {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        appendNewLine(sb, indentation, null);
-        this.name.generateJava(sb, indentation);
-        sb.append(" = ");
-        this.expr.generateJava(sb, indentation);
-        sb.append(";");
-    }
-
-    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         appendNewLine(sb, 0, null);

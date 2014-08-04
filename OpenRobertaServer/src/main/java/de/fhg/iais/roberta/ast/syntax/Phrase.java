@@ -90,14 +90,6 @@ abstract public class Phrase implements Visitable {
     }
 
     /**
-     * append a human-readable Java representation of a phrase to a StringBuilder. <b>This representation MUST be correct Java code.</b>
-     * 
-     * @param sb the string builder, to which the Java representation has to be appended
-     * @param indentation number defining the level of indentation, if needed for nested statement lists, e.g.
-     */
-    abstract public void generateJava(StringBuilder sb, int indentation);
-
-    /**
      * This enumeration gives all possible kind of objects that we can have to represent the AST (abstract syntax tree). All kind's are separated in four main
      * {@link Category}.
      */

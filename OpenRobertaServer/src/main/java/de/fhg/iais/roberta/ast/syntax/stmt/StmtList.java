@@ -45,13 +45,6 @@ public class StmtList extends Stmt {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        for ( Stmt stmt : this.sl ) {
-            stmt.generateJava(sb, indentation);
-        }
-    }
-
-    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for ( Stmt stmt : this.sl ) {

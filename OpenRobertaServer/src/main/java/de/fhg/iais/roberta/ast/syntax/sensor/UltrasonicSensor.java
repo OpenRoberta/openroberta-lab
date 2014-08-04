@@ -53,21 +53,6 @@ public class UltrasonicSensor extends Sensor {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        switch ( this.mode ) {
-            case GET_MODE:
-                sb.append("hal.getUltraSonicSensorModeName(" + this.port.toString() + ")");
-                break;
-            case GET_SAMPLE:
-                sb.append("hal.getUltraSonicSensorValue(" + this.port.toString() + ")");
-                break;
-            default:
-                sb.append("hal.setUltrasonicSensorMode(" + this.port.toString() + ", " + this.mode.toString() + ");");
-                break;
-        }
-    }
-
-    @Override
     public String toString() {
         return "UltraSSensor [mode=" + this.mode + ", port=" + this.port + "]";
     }

@@ -49,15 +49,6 @@ public class ToneAction extends Action {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        sb.append("hal.playTone(");
-        this.frequency.generateJava(sb, indentation);
-        sb.append(", ");
-        this.duration.generateJava(sb, indentation);
-        sb.append(");");
-    }
-
-    @Override
     public String toString() {
         return "ToneAction [" + this.frequency + ", " + this.duration + "]";
     }

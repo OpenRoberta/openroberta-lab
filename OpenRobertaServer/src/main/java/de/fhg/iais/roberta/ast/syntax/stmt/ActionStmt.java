@@ -36,12 +36,6 @@ public class ActionStmt extends Stmt {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        appendNewLine(sb, indentation, null);
-        sb.append("SensorStmt ").append(this.action);
-    }
-
-    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("\nAktionStmt [" + this.action + "]");

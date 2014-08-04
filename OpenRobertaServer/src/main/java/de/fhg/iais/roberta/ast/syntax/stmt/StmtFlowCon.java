@@ -39,11 +39,6 @@ public class StmtFlowCon extends Stmt {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        appendNewLine(sb, indentation, this.flow.toString().toLowerCase() + ";");
-    }
-
-    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         appendNewLine(sb, 0, "StmtFlowCon [" + this.flow + "]");

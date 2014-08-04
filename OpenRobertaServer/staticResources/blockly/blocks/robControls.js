@@ -316,16 +316,21 @@ Blockly.Blocks['robControls_ifElse'] = {
 				Blockly.Msg.CONTROLS_IF_MSG_ELSE);
 		this.setPreviousStatement(true);
 		this.setNextStatement(true);
-		this.setMutatorPlus(new Blockly.MutatorPlus(this));
+		this.setMutatorPlus(new Blockly.MutatorPlus(this));		
 		this.elseIfCount_ = 0;
+		this.elseCount_ = 1;
+		//this.updateShape_(0);			
 	},
-	mutationToDom : function() {
-		if (!this.elseIfCount_) {
+	mutationToDom : function() {	
+		if (!this.elseIfCount_ && !this.elseCount_) {
 			return null;
 		}
 		var container = document.createElement('mutation');
-		if (this.elseIfCount_) {
+		if (this.elseIfCount_ ) {
 			container.setAttribute('elseIf', this.elseIfCount_);
+		}
+		if (this.elseCount_ ) {
+			container.setAttribute('else', 1);
 		}
 		return container;
 	},
@@ -338,7 +343,9 @@ Blockly.Blocks['robControls_ifElse'] = {
 	 * @this Blockly.Block
 	 */
 	domToMutation : function(xmlElement) {
-		this.elseIfCount_ = parseInt(xmlElement.getAttribute('elseif'), 10);
+		if (xmlElement.hasAttribute('elseif')) {
+			this.elseIfCount_ = parseInt(xmlElement.getAttribute('elseif'), 10);
+		}
 		this.removeInput('ELSE');
 		for (var x = 1; x <= this.elseIfCount_; x++) {
 			this.appendValueInput('IF' + x).appendField(
@@ -369,14 +376,17 @@ Blockly.Blocks['robControls_ifElse'] = {
 					Blockly.Msg.CONTROLS_IF_MSG_THEN);
 			this.appendStatementInput('ELSE').appendField(
 					Blockly.Msg.CONTROLS_IF_MSG_ELSE);
-		} else if (num == -1) {
+		} else if (num == 0) {
+			this.elseIfCount_ = 0;
+		} 
+		else if (num == -1) {		
 			this.removeInput('ELSE');
 			this.removeInput('DO' + this.elseIfCount_);
 			this.removeInput('IF' + this.elseIfCount_);
 			this.appendStatementInput('ELSE').appendField(
 					Blockly.Msg.CONTROLS_IF_MSG_ELSE);
 			this.elseIfCount_--;
-		}
+		} 	
 		if (this.elseIfCount_ >= 1) {
 			if (this.elseIfCount_ == 1) {
 				this.setMutatorMinus(new Blockly.MutatorMinus(this));

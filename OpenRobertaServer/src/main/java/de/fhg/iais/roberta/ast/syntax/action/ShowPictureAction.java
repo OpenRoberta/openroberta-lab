@@ -59,15 +59,6 @@ public class ShowPictureAction extends Action {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        sb.append("hal.drawPicture(\"" + this.pic + "\", ");
-        this.x.generateJava(sb, 0);
-        sb.append(", ");
-        this.y.generateJava(sb, 0);
-        sb.append(");");
-    }
-
-    @Override
     public String toString() {
         return "ShowPictureAction [" + this.pic + ", " + this.x + ", " + this.y + "]";
     }

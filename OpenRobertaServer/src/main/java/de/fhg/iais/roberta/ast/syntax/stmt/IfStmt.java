@@ -90,26 +90,6 @@ public class IfStmt extends Stmt {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        int next = indentation + 3;
-        appendNewLine(sb, indentation, null);
-        for ( int i = 0; i < this.expr.size(); i++ ) {
-            sb.append("if ( ");
-            this.expr.get(i).generateJava(sb, indentation);
-            sb.append(" ) {");
-            this.thenList.get(i).generateJava(sb, next);
-            if ( i + 1 < this.expr.size() ) {
-                appendNewLine(sb, indentation, "} else ");
-            }
-        }
-        if ( this.elseList.get().size() != 0 ) {
-            appendNewLine(sb, indentation, "} else {");
-            this.elseList.generateJava(sb, next);
-        }
-        appendNewLine(sb, indentation, "}");
-    }
-
-    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         appendNewLine(sb, 0, null);

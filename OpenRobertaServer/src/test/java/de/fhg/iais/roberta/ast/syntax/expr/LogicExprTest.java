@@ -6,9 +6,8 @@ import javax.xml.bind.Unmarshaller;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 
-import de.fhg.iais.roberta.ast.syntax.Phrase;
-import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.blockly.generated.Project;
+import de.fhg.iais.roberta.codegen.lejos.JavaGenerator;
 
 /**
  * tests absence of exceptions only :-)
@@ -25,27 +24,17 @@ public class LogicExprTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/syntax/expr/logic_expr.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
+        generate(project);
 
-        generate(transformer.getProject().get(0).get(0));
-        generate(transformer.getProject().get(1).get(0));
-        generate(transformer.getProject().get(2).get(0));
-        generate(transformer.getProject().get(3).get(0));
-        generate(transformer.getProject().get(4).get(0));
-        generate(transformer.getProject().get(5).get(0));
-        generate(transformer.getProject().get(6).get(0));
-        generate(transformer.getProject().get(7).get(0));
-        generate(transformer.getProject().get(8).get(0));
         String a = "BlockAST [project=[[Funct [UPPERCASE, [Var [text]]]]]]";
 
         // Assert.assertEquals(a, transformer.toString());
     }
 
-    private void generate(Phrase p) {
-        StringBuilder sb = new StringBuilder();
-        p.generateJava(sb, 0);
-        System.out.println(sb.toString());
+    private String generate(Project p) {
+        JavaGenerator generator = new JavaGenerator();
+        generator.generate(p);
+        System.out.println(generator.getSb());
+        return generator.getSb().toString();
     }
-
 }

@@ -53,11 +53,6 @@ public class MotorOnAction extends Action {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        //TODO 
-    }
-
-    @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
     }

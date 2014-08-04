@@ -36,12 +36,6 @@ public class SensorStmt extends Stmt {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        appendNewLine(sb, indentation, null);
-        sb.append("SensorStmt ").append(this.sensor);
-    }
-
-    @Override
     public String toString() {
         return "\nSensorStmt " + this.sensor;
     }

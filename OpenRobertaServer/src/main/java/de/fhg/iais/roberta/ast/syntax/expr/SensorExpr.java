@@ -53,11 +53,6 @@ public class SensorExpr extends Expr {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        sb.append(this.sensor);
-    }
-
-    @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
     }

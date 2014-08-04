@@ -43,11 +43,6 @@ public class MotorGetPowerAction extends Action {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        sb.append("hal.getSpeed(" + this.getPort().toString() + ")");
-    }
-
-    @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
     }

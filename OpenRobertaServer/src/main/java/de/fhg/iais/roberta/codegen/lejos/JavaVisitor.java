@@ -54,6 +54,15 @@ import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 public class JavaVisitor implements Visitor {
+
+    int indentationSize = 4;
+    int tabSize = 4;
+    int whiteSpaceSize = 1;
+    boolean newLineAfterOpenBracket = true;
+    boolean newLineBeforeOpenBracket = false;
+    boolean newLineAfterCloseBracket = false;
+    boolean newLineBeforeCloseBracket = true;
+
     private StringBuilder sb;
     int indentation;
 
@@ -185,7 +194,16 @@ public class JavaVisitor implements Visitor {
 
     @Override
     public void visit(Funct funct) {
-        // TODO Auto-generated method stub
+        switch ( funct.getFunctName() ) {
+            case PRINT:
+                JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation);
+                this.sb.append("System.out.println(");
+                funct.getParam().get(0).accept(visitor);
+                this.sb.append(")");
+                break;
+            default:
+                break;
+        }
 
     }
 
@@ -305,14 +323,14 @@ public class JavaVisitor implements Visitor {
 
     @Override
     public void visit(ActionStmt actionStmt) {
-        appendNewLine(this.sb, this.indentation, null);
+        appendCustomString(this.sb, this.indentation, true, null);
         this.sb.append("SensorStmt ").append(actionStmt.getAction());
     }
 
     @Override
     public void visit(AssignStmt assignStmt) {
         JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation);
-        appendNewLine(this.sb, this.indentation, null);
+        //  appendCustomString(this.sb, this.indentation, true, null);
         assignStmt.getName().accept(visitor);
         this.sb.append(" = ");
         assignStmt.getExpr().accept(visitor);
@@ -321,37 +339,57 @@ public class JavaVisitor implements Visitor {
 
     @Override
     public void visit(ExprStmt exprStmt) {
-        appendNewLine(this.sb, this.indentation, null);
-        this.sb.append("exprStmt ").append(exprStmt.getExpr());
+        JavaVisitor visitor = new JavaVisitor(this.sb, 0);
+        exprStmt.getExpr().accept(visitor);
+        this.sb.append(";");
     }
 
     @Override
     public void visit(IfStmt ifStmt) {
-        int next = this.indentation + 3;
+        int next = this.indentation + this.indentationSize;
         JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation);
-        appendNewLine(this.sb, this.indentation, null);
+        generateCodeFromIfElse(ifStmt, next, visitor);
+        generateCodeFromElse(ifStmt, visitor);
+    }
+
+    private void generateCodeFromIfElse(IfStmt ifStmt, int next, JavaVisitor visitor) {
         for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
-            this.sb.append("if ( ");
-            ifStmt.getExpr().get(i).accept(visitor);
-            this.sb.append(" ) {");
+            generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i), visitor);
             visitor.setIndentation(next);
             ifStmt.getThenList().get(i).accept(visitor);
             if ( i + 1 < ifStmt.getExpr().size() ) {
-                appendNewLine(this.sb, this.indentation, "} else ");
+                appendCustomString(
+                    this.sb,
+                    this.indentation,
+                    this.newLineBeforeCloseBracket,
+                    "}" + generateString(this.whiteSpaceSize, this.newLineAfterCloseBracket, "else" + generateString(this.whiteSpaceSize, false, null)));
             }
         }
+    }
+
+    private void generateCodeFromElse(IfStmt ifStmt, JavaVisitor visitor) {
         if ( ifStmt.getElseList().get().size() != 0 ) {
-            appendNewLine(this.sb, this.indentation, "} else {");
+            appendCustomString(
+                this.sb,
+                this.indentation,
+                this.newLineBeforeCloseBracket,
+                "}" + generateString(this.whiteSpaceSize, this.newLineAfterCloseBracket, "else"));
+            this.sb.append(generateString(this.whiteSpaceSize, this.newLineBeforeOpenBracket, "{"));
             ifStmt.getElseList().accept(visitor);
         }
-        appendNewLine(this.sb, this.indentation, "}");
+        appendCustomString(this.sb, this.indentation, this.newLineBeforeCloseBracket, "}");
+    }
+
+    private void generateCodeFromStmtCondition(String stmtType, Expr expr, JavaVisitor visitor) {
+        this.sb.append(stmtType + generateString(this.whiteSpaceSize, false, "(") + generateString(this.whiteSpaceSize, false, null));
+        expr.accept(visitor);
+        this.sb.append(generateString(this.whiteSpaceSize, false, ")") + generateString(this.whiteSpaceSize, this.newLineBeforeOpenBracket, "{"));
     }
 
     @Override
     public void visit(RepeatStmt repeatStmt) {
-        int next = this.indentation + 3;
+        int next = this.indentation + this.indentationSize;
         JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation);
-        appendNewLine(this.sb, this.indentation, null);
         switch ( repeatStmt.getMode() ) {
             case UNTIL:
             case WHILE:
@@ -361,9 +399,7 @@ public class JavaVisitor implements Visitor {
                 this.sb.append(" ) {");
                 break;
             case FOR:
-                this.sb.append("for (");
-                repeatStmt.getExpr().accept(visitor);
-                this.sb.append(" ) {");
+                generateCodeFromStmtCondition("for", repeatStmt.getExpr(), visitor);
                 break;
             case FOR_EACH:
                 break;
@@ -377,27 +413,33 @@ public class JavaVisitor implements Visitor {
             default:
                 break;
         }
-        //        sb.append("(repeat [" + this.mode + ", ").append(this.expr).append("]");
         visitor.setIndentation(next);
         repeatStmt.getList().accept(visitor);
-        appendNewLine(this.sb, this.indentation, "}");
+        appendCustomString(this.sb, this.indentation, this.newLineBeforeCloseBracket, "}");
     }
 
     @Override
     public void visit(SensorStmt sensorStmt) {
-        appendNewLine(this.sb, this.indentation, null);
+        appendCustomString(this.sb, this.indentation, true, null);
         this.sb.append("SensorStmt ").append(sensorStmt.getSensor());
     }
 
     @Override
     public void visit(StmtFlowCon stmtFlowCon) {
-        appendNewLine(this.sb, this.indentation, stmtFlowCon.getFlow().toString().toLowerCase() + ";");
+        appendCustomString(this.sb, this.indentation, true, stmtFlowCon.getFlow().toString().toLowerCase() + ";");
     }
 
     @Override
     public void visit(StmtList stmtList) {
+        boolean first = true;
         JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation);
         for ( Stmt stmt : stmtList.get() ) {
+            if ( first ) {
+                first = false;
+                appendCustomString(this.sb, this.indentation, this.newLineAfterOpenBracket, null);
+            } else {
+                appendCustomString(this.sb, this.indentation, true, null);
+            }
             stmt.accept(visitor);
         }
     }
@@ -522,13 +564,21 @@ public class JavaVisitor implements Visitor {
 
     }
 
-    protected final void appendNewLine(StringBuilder sb, int indentation, String text) {
-        sb.append("\n");
+    private final void appendCustomString(StringBuilder sb, int indentation, boolean newLine, String text) {
+        if ( newLine ) {
+            sb.append("\n");
+        }
         for ( int i = 0; i < indentation; i++ ) {
             sb.append(" ");
         }
         if ( text != null ) {
             sb.append(text);
         }
+    }
+
+    private final String generateString(int indentation, boolean newLine, String text) {
+        StringBuilder sb = new StringBuilder();
+        appendCustomString(sb, indentation, newLine, text);
+        return sb.toString();
     }
 }

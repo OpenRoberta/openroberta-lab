@@ -38,11 +38,6 @@ public class PlayFileAction extends Action {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        sb.append("hal.playFile(\"" + getFileName() + "\");");
-    }
-
-    @Override
     public String toString() {
         return "PlayFileAction [" + this.fileName + "]";
     }

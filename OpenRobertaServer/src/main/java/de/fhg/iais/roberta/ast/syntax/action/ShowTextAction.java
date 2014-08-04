@@ -61,17 +61,6 @@ public class ShowTextAction extends Action {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        sb.append("hal.drawText(");
-        this.msg.generateJava(sb, 0);
-        sb.append(", ");
-        this.x.generateJava(sb, 0);
-        sb.append(", ");
-        this.y.generateJava(sb, 0);
-        sb.append(");");
-    }
-
-    @Override
     public String toString() {
         return "ShowTextAction [" + this.msg + ", " + this.x + ", " + this.y + "]";
     }

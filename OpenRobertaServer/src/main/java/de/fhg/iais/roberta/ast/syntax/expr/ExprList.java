@@ -71,23 +71,6 @@ public class ExprList extends Expr {
     }
 
     @Override
-    public void generateJava(StringBuilder sb, int indentation) {
-        boolean first = true;
-        for ( Expr expr : this.el ) {
-            if ( first ) {
-                first = false;
-            } else {
-                if ( expr.getKind() == Kind.BINARY ) {
-                    sb.append("; ");
-                } else {
-                    sb.append(", ");
-                }
-            }
-            expr.generateJava(sb, indentation);
-        }
-    }
-
-    @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
     }
