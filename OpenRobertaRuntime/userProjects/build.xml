@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="${program.name}" basedir="." default="jar">
+
+    <path id="libraries.path">    
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="clean" description="delete old files">
+        <delete dir="${output.dir}"/>
+    </target>
+
+    <target name="compile" description="build class files" depends="clean">
+        <mkdir dir="${output.dir}"/>
+        <javac srcdir="${input.dir}" destdir="${output.dir}" fork="yes" debug="true" debuglevel="lines,vars,source">
+            <classpath refid="libraries.path"/>
+        </javac>
+    </target>
+
+    <target name="jar" depends="compile">
+        <jar destfile="${program.jar}" basedir="${output.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main.name}"/>
+                <attribute name="Class-Path" value="${lejos.home}/lib/ev3classes.jar ${lejos.home}/lib/dbusjava.jar ${lejos.home}/libjna/usr/share/java/jna.jar"/>
+            </manifest>
+        </jar>  
+    </target>
+</project>
