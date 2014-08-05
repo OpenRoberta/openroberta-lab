@@ -30,15 +30,15 @@ public class BrickCommunicator {
         return singleState.brickDownloadRequest();
     }
 
-    public String theRunButtonWasPressed(String token, String programName) {
+    public String theRunButtonWasPressed(String token, String programName, String configurationName) {
         BrickCommunicationData singleState = getSingleState(token);
-        return singleState.runButtonPressed(programName);
+        return singleState.runButtonPressed(programName, configurationName);
     }
 
     private BrickCommunicationData getSingleState(String token) {
         BrickCommunicationData singleState = this.allStates.get(token);
         if ( singleState == null ) {
-            singleState = new BrickCommunicationData();
+            singleState = new BrickCommunicationData(token);
             this.allStates.put(token, singleState);
         }
         return singleState;

@@ -24,7 +24,7 @@ public class BrickConfiguration {
     private final double wheelDiameter;
     private final double trackWidth;
 
-    public BrickConfiguration(
+    private BrickConfiguration(
         HardwareComponent sensor1,
         HardwareComponent sensor2,
         HardwareComponent sensor3,
@@ -46,6 +46,29 @@ public class BrickConfiguration {
         this.actorD = actorD;
         this.wheelDiameter = wheelDiameter;
         this.trackWidth = trackWidth;
+    }
+
+    public String generateRegenerate() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("private BrickConfiguration brickConfiguration = new BrickConfiguration.Builder()\n");
+        appendOptional(sb, "Actor", "A", this.actorA);
+        appendOptional(sb, "Actor", "B", this.actorB);
+        appendOptional(sb, "Actor", "C", this.actorC);
+        appendOptional(sb, "Actor", "D", this.actorD);
+        appendOptional(sb, "Sensor", "S1", this.sensor1);
+        appendOptional(sb, "Sensor", "S2", this.sensor2);
+        appendOptional(sb, "Sensor", "S3", this.sensor3);
+        appendOptional(sb, "Sensor", "S4", this.sensor4);
+        sb.append("    .build();");
+        return sb.toString();
+    }
+
+    private static void appendOptional(StringBuilder sb, String sensorOrActor, String port, HardwareComponent hc) {
+        if ( hc != null ) {
+            sb.append("    .add").append(sensorOrActor).append("(");
+            sb.append(sensorOrActor).append("Port.").append(port).append(", ");
+            sb.append("HardwareComponent.").append(hc.name()).append(")\n");
+        }
     }
 
     public HardwareComponent getSensor1() {
@@ -96,7 +119,6 @@ public class BrickConfiguration {
      * @param port
      * @return
      */
-    @SuppressWarnings("rawtypes")
     public Enum getSensorModeName(SensorPort port) {
         Enum Enum = null;
         return Enum;
@@ -110,6 +132,16 @@ public class BrickConfiguration {
         // TODO taken from lejos, converted to cm, implement method to set these
         private final double wheelDiameter = 5.6f;
         private final double trackWidth = 11.2f;
+
+        public Builder addActor(ActorPort port, HardwareComponent component) {
+            this.actorMapping.put(port, component);
+            return this;
+        }
+
+        public Builder addSensor(SensorPort port, HardwareComponent component) {
+            this.sensorMapping.put(port, component);
+            return this;
+        }
 
         public void visitingActorPort(String visiting) {
             Assert.isTrue(this.lastVisited.getCategory() == Category.ACTOR);
