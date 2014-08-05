@@ -1,37 +1,39 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="${program.name}" basedir="." default="jar">
+<project name="compileLejos" basedir=".." default="jar">
 
-    <path id="ev3.classes">    
-        <fileset dir="${ev3classes.lib}">
-            <include name="*.jar"/>
-        </fileset>
-    </path>
-	
-    <!--path id="hal">    
-        <fileset dir="${hal.lib}">
-            <include name="*.jar"/>
-        </fileset>
-    </path-->
+	<property name="lib.lejos" value="${basedir}/lib" />
 
+	<property name="input.dir" value="${basedir}/userProjects/01234567/src" />
+	<property name="output.dir" value="${basedir}/userProjects/01234567/target" />
 
-    <target name="clean" description="delete old files">
-        <delete dir="${output.dir}"/>
-    </target>
+	<property name="main.name" value="Main" />
+	<property name="program.jar" value="main.jar" />
 
-    <target name="compile" description="build class files" depends="clean">
-        <mkdir dir="${output.dir}"/>
-        <javac srcdir="${input.dir}" destdir="${output.dir}" fork="yes" debug="true" debuglevel="lines,vars,source">
-            <classpath refid="ev3.classes"/>
-        	<!--classpath refid="hal"/-->
-        </javac>
-    </target>
+	<path id="lejos">
+		<fileset dir="${lib.lejos}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
 
-    <target name="jar" depends="compile">
-        <jar destfile="${program.jar}" basedir="${output.dir}">
-            <manifest>
-                <attribute name="Main-Class" value="${main.name}"/>
-                <attribute name="Class-Path" value="${lejos.home}/lib/ev3classes.jar ${lejos.home}/lib/dbusjava.jar ${lejos.home}/libjna/usr/share/java/jna.jar /home/roberta/hal.jar"/>
-            </manifest>
-        </jar>  
-    </target>
+	<target name="clean" description="delete old files">
+		<delete dir="${output.dir}" includes="*"/>
+	</target>
+
+	<target name="compile" description="build class files" depends="clean">
+		<javac srcdir="${input.dir}" destdir="${output.dir}" includeantruntime="false" fork="yes" debug="true" debuglevel="lines,vars,source">
+			<classpath refid="lejos"/>
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile">
+		<jar destfile="${output.dir}/${program.jar}">
+			<manifest>
+				<attribute name="Main-Class" value="${main.name}"/>
+				<attribute name="Class-Path" value="${lib.lejos}/ev3classes.jar ${lib.lejos}/dbusjava.jar ${lib.lejos}/jna.jar"/>
+			</manifest>
+			<fileset dir="${output.dir}">
+				<include name="*.class"/>
+			</fileset>
+		</jar>
+	</target>
 </project>

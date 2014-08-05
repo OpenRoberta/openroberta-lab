@@ -54,6 +54,17 @@
                 <version>0.8.1-beta</version>
             </dependency>
             <dependency>
+                <groupId>de.fhg.iais.roberta</groupId>
+                <artifactId>dbusjava</artifactId>
+                <version>0.8.1-beta</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.lejos</groupId>
+                <artifactId>jna</artifactId>
+                <version>3.2.7</version>
+            </dependency>
+            <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>1.7.5</version>
