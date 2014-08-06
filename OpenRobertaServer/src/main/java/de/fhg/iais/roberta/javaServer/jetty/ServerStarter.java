@@ -83,8 +83,8 @@ public class ServerStarter {
 
         SessionWrapper session = robertaGuiceServletConfig.getCreatedInjector().getInstance(SessionFactoryWrapper.class).getSession();
         ProgramDao projectDao = new ProgramDao(session);
-        int numberOfPrograms = projectDao.loadAll().size();
-        LOG.info("There are " + numberOfPrograms + " programs stored in the database");
+       // int numberOfPrograms = projectDao.loadAll().size();
+        //LOG.info("There are " + numberOfPrograms + " programs stored in the database");
         session.close();
 
         return server;

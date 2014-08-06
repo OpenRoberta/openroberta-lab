@@ -1,0 +1,73 @@
+/** Views **/
+
+#simulatorDiv{
+	height: 85%;
+	width: 100%;
+	display: none;
+	z-index: 2;
+	position: absolute;
+	background-color: #fefefe;
+	background-image:url('./img/simulator/pattern_bg.png');
+	background-repeat: repeat-both;
+}
+
+#positionData{
+	width: 320px;
+	height: 30px;
+	background-color: #f1c48f;
+	float: right;
+	margin: 20px 20px 0px 0px;
+	padding: 10px 0px 0px 10px;
+	border: 1px solid #f3901c;
+	color: #ffffff;
+	z-index: 10;
+}
+
+/** Objects **/
+
+.dummy{
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 230px;
+	width: 200px;
+	height: 200px;
+	z-index: 10;
+}
+
+#dummyDown{
+	background-image:url('./img/simulator/dummy_down.png');
+	background-repeat: no-repeat;
+	display: none;
+		
+}
+
+#dummyUp{
+	background-image:url('./img/simulator/dummy_up.png');
+	background-repeat: no-repeat;	
+	display: none;
+	
+}
+
+#dummyLeft{
+	background-image:url('./img/simulator/dummy_left.png');
+	background-repeat: no-repeat;
+	display: none;
+		
+}
+
+#dummyRight{
+	background-image:url('./img/simulator/dummy_right.png');
+	background-repeat: no-repeat;
+	display: none;
+}
+/** Buttons **/
+
+#closeBtn{
+	background-color: #ef9393;
+    border:none;
+	color: #ffffff;
+	text-decoration: bold;
+	margin: 20px 0px 0px 20px;
+	float: left;
+	z-index: 10;
+}

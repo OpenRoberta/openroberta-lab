@@ -19,6 +19,9 @@
 <link rel="stylesheet" type="text/css" href="/common/jquery.dataTables.min.css"></link>
 <link href="css/styles.css" type="text/css" rel="stylesheet">
 
+<link rel="stylesheet" type="text/css" href="/css/simulator.css"></link>
+<script type="text/javascript" src="simulator.js" charset="utf-8"></script>
+
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title class="header">Testfeld f&uuml;r BlOcKlY</title>
@@ -46,18 +49,6 @@
                         <span class="head-navi-text">Community</span>
                     </a>
                 </li>
-                <li>
-                    <a href="#">
-                        <span class="head-navi-icons project"></span>
-                        <span class="head-navi-text">Programm</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="head-navi-icons developer"></span>
-                        <span class="head-navi-text">Entwickler</span>
-                    </a>
-                </li>
             </ul>
             <div id="logo">
                 <a href="index.html">Logo</a>
@@ -71,8 +62,26 @@
       <li><a href="#logging">Logging</a></li>
       <li><a href="#readme">README</a></li>
     </ul>
+    
+    
+    <script type="text/javascript">
+    
+    		
+
+    </script>
+    
+    <div id="simulatorDiv"> 
+    	<button id="closeBtn" class="button" onclick="viewSimulator(false);">Beenden</button>	
+    	<button id="closeBtn" class="button" onclick="movteStop();">Stop</button>			
+		<div id="positionData"></div>
+		<div id="dummyDown" class="dummy"></div>
+		<div id="dummyUp" class="dummy"></div>	
+		<div id="dummyLeft" class="dummy"></div>	
+		<div id="dummyRight" class="dummy"></div>		
+    </div>
+    
     <div id="blockly">
-      <div id="blocklyDiv" style="height: 450px; width: 1000px;"></div>
+      <div id="blocklyDiv" style="height: 85%; width: 100%; z-index: 1;"></div>
       <br>
       <input id="save" class='submit' type="submit" value="save" />
       <input id="load" class='submit' type="submit" value="load" />
@@ -81,8 +90,9 @@
       <input id="run" class='submit' type="submit" value="run" />
       <input id="name" class='input' type="text" value="" />
       <br>
-      <input id="toolbox1" class='button' type="submit" value="Anf&auml;nger:" />
-      <input id="toolbox2" class='button' type="submit" value="Experte:" />
+      <input id="toolbox1" class='button' type="submit" value="toolbox 1" />
+      <input id="toolbox2" class='button' type="submit" value="toolbox 2" />
+      <input class='button' onclick="viewSimulator(true);" type="submit" value="Simulator Test" />
     </div>
     <div id="listing">
       <table id="programNameTable" class="tableSize">
