@@ -2,6 +2,8 @@
 <project name="compileLejos" basedir=".." default="jar">
 
 	<property name="lib.lejos" value="${basedir}/lib" />
+	
+	<property name="brick.runtime" value="/home/root/lejos" />
 
 	<property name="input.dir" value="${basedir}/userProjects/01234567/src" />
 	<property name="output.dir" value="${basedir}/userProjects/01234567/target" />
@@ -20,7 +22,7 @@
 	</target>
 
 	<target name="compile" description="build class files" depends="clean">
-		<javac srcdir="${input.dir}" destdir="${output.dir}" includeantruntime="false" fork="yes" debug="true" debuglevel="lines,vars,source">
+		<javac srcdir="${input.dir}" destdir="${output.dir}" includeantruntime="false" fork="yes" debug="true" verbose="true" debuglevel="lines,vars,source">
 			<classpath refid="lejos"/>
 		</javac>
 	</target>
@@ -29,7 +31,7 @@
 		<jar destfile="${output.dir}/${program.jar}">
 			<manifest>
 				<attribute name="Main-Class" value="${main.name}"/>
-				<attribute name="Class-Path" value="${lib.lejos}/ev3classes.jar ${lib.lejos}/dbusjava.jar ${lib.lejos}/jna.jar"/>
+				<attribute name="Class-Path" value="${brick.runtime}/lib/ev3classes.jar ${brick.runtime}/lib/dbusjava.jar ${brick.runtime}/libjna/usr/share/java/jna.jar /home/roberta/lib/OpenRobertaRuntime-0.0.1-SNAPSHOT.jar"/>
 			</manifest>
 			<fileset dir="${output.dir}">
 				<include name="*.class"/>

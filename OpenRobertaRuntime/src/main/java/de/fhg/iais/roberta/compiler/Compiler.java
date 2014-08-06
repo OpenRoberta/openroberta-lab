@@ -12,11 +12,9 @@ public class Compiler {
     }
 
     /**
-     * three parameters to retrieve the correct directory structure for saved projects<br>
-     * ant tasks:<br>
-     * clean build directory<br>
-     * compile .java file to .class<br>
-     * create runnable .jar file with META-INF project informations<br>
+     * clean target directory<br>
+     * compile Main.java<br>
+     * make jar of Main.class with META-INF informations<br>
      * 
      * @param directory
      * @param token
@@ -28,14 +26,8 @@ public class Compiler {
         Project project = new Project();
 
         //project.setProperty("custom", "true");
-        project.setProperty("token", token);
-        project.setProperty("main.name", programName);
-        project.setProperty("input.dir", token);
-        project.setProperty("output.dir", project.getProperty("input.dir") + "\\build");
-        project.setProperty("lejos.home", "/home/root/lejos");
-        project.setProperty("program.jar", project.getProperty("output.dir") + "\\" + programName + ".jar");
-        project.setProperty("ev3classes.lib", "c:\\installations\\.m2\\repository\\de\\fhg\\iais\\roberta\\ev3classes\\0.8.1-beta");
-        project.setProperty("hal.lib", /* hal reference*/"");
+        //project.setProperty("token", token);
+        //project.setProperty("hal.lib", /* hal reference*/"");
         project.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.7.0_51");
 
         project.init();

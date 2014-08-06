@@ -40,6 +40,32 @@ public class JavaGeneratorTest {
         // Assert.assertEquals(a, generate(project));
     }
 
+    @Test
+    public void test1() throws Exception {
+
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/syntax/java_code_generator1.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        String a =
+            "\nwhile ( 0 == 0 ) {\n"
+                + "    System.out.println(\"123\");\n"
+                + "    System.out.println(\"123\");\n"
+                + "    while ( !(0 == 0) ) {\n"
+                + "        System.out.println(\"123\");\n"
+                + "        System.out.println(\"123\");\n"
+                + "        break;\n"
+                + "    }\n"
+                + "    break;\n"
+                + "}";
+
+        generate(project);
+
+        // Assert.assertEquals(a, generate(project));
+    }
+
     private String generate(Project project) {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
