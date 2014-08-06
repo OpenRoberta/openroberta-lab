@@ -31,7 +31,7 @@ Compile and run (command line):
 Please check your .jar files in the /target folder.
 
 $ mvn install
-$ java -jar target/RobertaLabServer-0.0.1-SNAPSHOT.jar
+$ java -jar target/OpenRobertaServer-0.0.1-SNAPSHOT.jar
 
 Start your browser at:
 http://localhost:1999

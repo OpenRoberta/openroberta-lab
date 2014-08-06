@@ -1,11 +1,16 @@
 Getting startet with OpenRoberta:
 
-To work with OpenRoberta, you have to start the OpenRobertaServer.
-The server project is located in the 'OpenRobertaServer' folder.
-Please follow the instructions in the project Readme file and check
-the wiki page.
+Project base is: /OpenRobertaParent
+This folder inlcudes the main parent pom.xml file which is required by all other 
+submodules. 
 
-Wiki:
+To start working with your own OpenRoberta instance, simply start the OpenRobertaServer.
+The server project is located in the 'OpenRobertaServer' folder.
+
+Please follow the instructions in the project Readme file and check
+the wiki manual page.
+
+Project wiki:
 https://publicwiki-01.fraunhofer.de/Open_Roberta/index.php/Open_Roberta
 
 Issue tracker:
