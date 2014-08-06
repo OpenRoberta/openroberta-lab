@@ -1,8 +1,6 @@
 package de.fhg.iais.roberta.codegen.lejos;
 
 import java.io.File;
-import java.util.Map;
-import java.util.TreeMap;
 
 import lejos.hardware.Audio;
 import lejos.hardware.Keys;
@@ -12,24 +10,8 @@ import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.lcd.Image;
 import lejos.hardware.lcd.TextLCD;
-import lejos.hardware.motor.EV3LargeRegulatedMotor;
-import lejos.hardware.motor.EV3MediumRegulatedMotor;
-import lejos.hardware.motor.NXTMotor;
-import lejos.hardware.motor.NXTRegulatedMotor;
-import lejos.hardware.port.MotorPort;
-import lejos.hardware.port.Port;
-import lejos.hardware.sensor.BaseSensor;
-import lejos.hardware.sensor.EV3ColorSensor;
-import lejos.hardware.sensor.EV3GyroSensor;
-import lejos.hardware.sensor.EV3IRSensor;
-import lejos.hardware.sensor.EV3TouchSensor;
-import lejos.hardware.sensor.EV3UltrasonicSensor;
-import lejos.robotics.EncoderMotor;
-import lejos.robotics.RegulatedMotor;
-import lejos.robotics.SampleProvider;
 import lejos.robotics.navigation.DifferentialPilot;
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
-import de.fhg.iais.roberta.ast.syntax.HardwareComponent;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.Color;
 import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
@@ -50,7 +32,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
  */
 public class Hal {
 
-    private final BrickConfiguration brickConfiguration;
+    private final DeviceHandler deviceHandler;
 
     private final EV3 brick;
     private final TextLCD lcd;
@@ -59,19 +41,18 @@ public class Hal {
     private final Keys keys;
     private final Audio audio;
 
-    private final Map<ActorPort, RegulatedMotor> lejosRegulatedMotorBindings = new TreeMap<>();
-    private final Map<ActorPort, EncoderMotor> lejosUnregulatedMotorBindings = new TreeMap<>();
-
-    private final Map<SensorPort, BaseSensor> lejosSensorBindings = new TreeMap<>();
-    @SuppressWarnings("rawtypes")
-    private final Map<SensorPort, Enum> lejosSensorModeNames = new TreeMap<>();
-    private final Map<SensorPort, SampleProvider> lejosSampleProvider = new TreeMap<>();
+    private final double wheelDiameter;
+    private final double trackWidth;
 
     /**
      * @param brickConfiguration
      */
     public Hal(BrickConfiguration brickConfiguration) {
-        this.brickConfiguration = brickConfiguration;
+        this.deviceHandler = new DeviceHandler(brickConfiguration);
+
+        this.wheelDiameter = brickConfiguration.getWheelDiameter();
+        this.trackWidth = brickConfiguration.getTrackWidth();
+
         this.brick = LocalEV3.get();
         // TODO test if needed for Motor/ Sensorport enums from lejos??
         this.brick.setDefault();
@@ -94,7 +75,7 @@ public class Hal {
      * @param sensorPort3
      * @param sensorPort4
      */
-    public void createDeviceObjectsFromConfiguration(
+    public void createDevicesFromConfiguration(
         ActorPort actorPort1,
         ActorPort actorPort2,
         ActorPort actorPort3,
@@ -103,14 +84,14 @@ public class Hal {
         SensorPort sensorPort2,
         SensorPort sensorPort3,
         SensorPort sensorPort4) {
-        createMotorObject(actorPort1);
-        createMotorObject(actorPort2);
-        createMotorObject(actorPort3);
-        createMotorObject(actorPort4);
-        createSampleProvider(sensorPort1);
-        createSampleProvider(sensorPort2);
-        createSampleProvider(sensorPort3);
-        createSampleProvider(sensorPort4);
+        this.deviceHandler.createMotorObject(actorPort1);
+        this.deviceHandler.createMotorObject(actorPort2);
+        this.deviceHandler.createMotorObject(actorPort3);
+        this.deviceHandler.createMotorObject(actorPort4);
+        this.deviceHandler.createSampleProvider(sensorPort1);
+        this.deviceHandler.createSampleProvider(sensorPort2);
+        this.deviceHandler.createSampleProvider(sensorPort3);
+        this.deviceHandler.createSampleProvider(sensorPort4);
     }
 
     /**
@@ -131,7 +112,7 @@ public class Hal {
 
     /**
      * convert rotations count to motor rotation angle<br>
-     * used for unregulated motors
+     * maybe used for unregulated motors?
      * 
      * @param rotations
      * @return
@@ -140,277 +121,63 @@ public class Hal {
         return rotations * 360;
     }
 
-    /**
-     * @param actorPort
-     */
-    private void createMotorObject(ActorPort actorPort) {
-        HardwareComponent actorType = null;
-        Port hardwarePort = null;
-        switch ( actorPort ) {
-            case A:
-                actorType = this.brickConfiguration.getActorA();
-                hardwarePort = MotorPort.A;
-                break;
-            case B:
-                actorType = this.brickConfiguration.getActorB();
-                hardwarePort = MotorPort.B;
-                break;
-            case C:
-                actorType = this.brickConfiguration.getActorC();
-                hardwarePort = MotorPort.C;
-                break;
-            case D:
-                actorType = this.brickConfiguration.getActorD();
-                hardwarePort = MotorPort.D;
-                break;
-            default:
-                throw new DbcException("Invalid actor port!");
-        }
-
-        switch ( actorType ) {
-            case EV3LargeRegulatedMotor:
-                RegulatedMotor ev3LargeRegulatedMotor = new EV3LargeRegulatedMotor(hardwarePort);
-                this.lejosRegulatedMotorBindings.put(actorPort, ev3LargeRegulatedMotor);
-                break;
-            case EV3MediumRegulatedMotor:
-                RegulatedMotor ev3MediumRegulatedMotor = new EV3MediumRegulatedMotor(hardwarePort);
-                this.lejosRegulatedMotorBindings.put(actorPort, ev3MediumRegulatedMotor);
-                break;
-            case NXTRegulatedMotor:
-                RegulatedMotor nxtRegulatedMotor = new NXTRegulatedMotor(hardwarePort);
-                this.lejosRegulatedMotorBindings.put(actorPort, nxtRegulatedMotor);
-                break;
-            case NXTMotor:
-                // EV3Motor can be accessed by NXTMotor as unregulated motor too!!!
-                EncoderMotor nxtMotor = new NXTMotor(hardwarePort);
-                this.lejosUnregulatedMotorBindings.put(actorPort, nxtMotor);
-                break;
-            default:
-                throw new DbcException("Invalid/unsupported actor name!");
-        }
-    }
-
-    /**
-     * @param sensorPort
-     */
-    private void createSampleProvider(SensorPort sensorPort) {
-        HardwareComponent sensorType = null;
-        Port hardwarePort = null;
-        BaseSensor sensor = null;
-
-        switch ( sensorPort ) {
-            case S1:
-                sensorType = this.brickConfiguration.getSensor1();
-                hardwarePort = lejos.hardware.port.SensorPort.S1;
-                break;
-            case S2:
-                sensorType = this.brickConfiguration.getSensor2();
-                hardwarePort = lejos.hardware.port.SensorPort.S2;
-                break;
-            case S3:
-                sensorType = this.brickConfiguration.getSensor3();
-                hardwarePort = lejos.hardware.port.SensorPort.S3;
-                break;
-            case S4:
-                sensorType = this.brickConfiguration.getSensor4();
-                hardwarePort = lejos.hardware.port.SensorPort.S4;
-                break;
-            default:
-                throw new DbcException("Invalid sensor port!");
-        }
-
-        switch ( sensorType ) {
-            case EV3ColorSensor:
-                sensor = new EV3ColorSensor(hardwarePort);
-                break;
-            case EV3IRSensor:
-                sensor = new EV3IRSensor(hardwarePort);
-                break;
-            case EV3GyroSensor:
-                sensor = new EV3GyroSensor(hardwarePort);
-                break;
-            case EV3TouchSensor:
-                sensor = new EV3TouchSensor(hardwarePort);
-                break;
-            case EV3UltrasonicSensor:
-                sensor = new EV3UltrasonicSensor(hardwarePort);
-                break;
-            default:
-                throw new DbcException("Invalid/unsupported sensor name!");
-        }
-        this.lejosSensorBindings.put(sensorPort, sensor);
-
-        setSensorMode(sensorPort, this.brickConfiguration.getSensorModeName(sensorPort));
-    }
-
-    /**
-     * Set the mode of a sensor, save name to lejosSensorModeNames treemap
-     * 
-     * @param sensorPort
-     * @param sensor
-     * @param sensorMode
-     */
-    private void setSensorMode(SensorPort sensorPort, Enum sensorMode) {
-        // set & save the sampleprovider (^= the mode) of a sensor
-        SampleProvider sp = getSensor(sensorPort).getMode(sensorMode.toString());
-        this.lejosSampleProvider.put(sensorPort, sp);
-        // save the sensorModeName (only used for return sensorModeName block!, keep
-        // synchronized with sampleprovider treemap)
-        this.lejosSensorModeNames.put(sensorPort, sensorMode);
-    }
-
-    /**
-     * TODO change to enum instead of string??
-     * 
-     * @param sensorPort
-     * @return
-     */
-    private Enum getSensorModeName(SensorPort sensorPort) {
-        return this.lejosSensorModeNames.get(sensorPort);
-    }
-
-    /**
-     * @param sensorPort
-     * @return
-     */
-    private BaseSensor getSensor(SensorPort sensorPort) {
-        return this.lejosSensorBindings.get(sensorPort);
-    }
-
-    /**
-     * @param sensorPort
-     * @return
-     */
-    private SampleProvider getSampleProvider(SensorPort sensorPort) {
-        return this.lejosSampleProvider.get(sensorPort);
-    }
-
-    /**
-     * @param actorPort
-     * @return
-     */
-    private boolean isRegulated(ActorPort actorPort) {
-        if ( this.lejosRegulatedMotorBindings.containsKey(actorPort) ) {
-            return true;
-        } else if ( this.lejosUnregulatedMotorBindings.containsKey(actorPort) ) {
-            return false;
-        } else {
-            throw new DbcException("Invalid Actor Port!");
-        }
-    }
-
-    /**
-     * @param actorPort
-     * @return
-     */
-    private RegulatedMotor getRegulatedMotor(ActorPort actorPort) {
-        return this.lejosRegulatedMotorBindings.get(actorPort);
-    }
-
-    /**
-     * @param actorPort
-     * @return
-     */
-    private EncoderMotor getUnregulatedMotor(ActorPort actorPort) {
-        return this.lejosUnregulatedMotorBindings.get(actorPort);
-    }
-
     // --- Aktion Bewegung ---
 
-    /**
-     * @param actorPort
-     * @param speedPercent
-     */
-    public void setMotorSpeed(ActorPort actorPort, int speedPercent) {
-        if ( isRegulated(actorPort) ) {
-            getRegulatedMotor(actorPort).setSpeed(toDegPerSec(speedPercent));
-        } else {
-            getUnregulatedMotor(actorPort).setPower(speedPercent);
-        }
-
+    public void setRegulatedMotorSpeed(ActorPort actorPort, int speedPercent) {
+        this.deviceHandler.getRegulatedMotor(actorPort).setSpeed(toDegPerSec(speedPercent));
     }
 
-    /**
-     * Method does not return until finished!!!<br>
-     * TODO test unregulated part
-     * 
-     * @param actorPort
-     * @param speedPercent
-     * @param rotations
-     */
+    public void setUnregulatedMotorSpeed(ActorPort actorPort, int speedPercent) {
+        this.deviceHandler.getUnregulatedMotor(actorPort).setPower(speedPercent);
+    }
+
     public void rotateMotor(ActorPort actorPort, int speedPercent, int rotations) {
-        if ( isRegulated(actorPort) ) {
-            getRegulatedMotor(actorPort).setSpeed(toDegPerSec(speedPercent));
-            getRegulatedMotor(actorPort).rotate(rotations);
-        } else {
-            getUnregulatedMotor(actorPort).setPower(speedPercent);
-            getUnregulatedMotor(actorPort).forward();
-            while ( getUnregulatedMotor(actorPort).getTachoCount() < rotationsToAngle(rotations) ) {
-                // do nothing
-            }
-            getUnregulatedMotor(actorPort).stop();
+        this.deviceHandler.getRegulatedMotor(actorPort).setSpeed(toDegPerSec(speedPercent));
+        this.deviceHandler.getRegulatedMotor(actorPort).rotate(rotations);
+    }
+
+    public int getRegulatedMotorSpeed(ActorPort actorPort) {
+        return toPercent(this.deviceHandler.getRegulatedMotor(actorPort).getSpeed());
+    }
+
+    public int getUnregulatedMotorSpeed(ActorPort actorPort) {
+        return this.deviceHandler.getUnregulatedMotor(actorPort).getPower();
+    }
+
+    public void stopRegulatedMotor(ActorPort actorPort, MotorStopMode floating) {
+        switch ( floating ) {
+            case FLOAT:
+                this.deviceHandler.getRegulatedMotor(actorPort).flt();
+                this.deviceHandler.getRegulatedMotor(actorPort).stop();
+            case NONFLOAT:
+                this.deviceHandler.getRegulatedMotor(actorPort).stop();
+            default:
+                throw new DbcException("Wrong MotorStopMode");
         }
     }
 
-    /**
-     * @param actorPort
-     * @return
-     */
-    public int getSpeed(ActorPort actorPort) {
-        if ( isRegulated(actorPort) ) {
-            return toPercent(getRegulatedMotor(actorPort).getSpeed());
-        } else {
-            return getUnregulatedMotor(actorPort).getPower();
-        }
-    }
-
-    /**
-     * @param actorPort
-     * @param floating
-     */
-    public void stopMotor(ActorPort actorPort, MotorStopMode floating) {
-        if ( isRegulated(actorPort) ) {
-            switch ( floating ) {
-                case FLOAT:
-                    getRegulatedMotor(actorPort).flt();
-                    getRegulatedMotor(actorPort).stop();
-                case NONFLOAT:
-                    getRegulatedMotor(actorPort).stop();
-                default:
-                    throw new DbcException("Wrong MotorStopMode");
-            }
-        } else {
-            switch ( floating ) {
-                case FLOAT:
-                    getUnregulatedMotor(actorPort).flt();
-                    getUnregulatedMotor(actorPort).stop();
-                case NONFLOAT:
-                    getUnregulatedMotor(actorPort).stop();
-                default:
-                    throw new DbcException("Wrong MotorStopMode");
-            }
+    public void stopUnregulatedMotor(ActorPort actorPort, MotorStopMode floating) {
+        switch ( floating ) {
+            case FLOAT:
+                this.deviceHandler.getUnregulatedMotor(actorPort).flt();
+                this.deviceHandler.getUnregulatedMotor(actorPort).stop();
+            case NONFLOAT:
+                this.deviceHandler.getUnregulatedMotor(actorPort).stop();
+            default:
+                throw new DbcException("Wrong MotorStopMode");
         }
     }
 
     // --- END Aktion Bewegung ---
     // --- Aktion Fahren ---
 
-    /**
-     * @param actorPort1
-     *        left motor
-     * @param actorPort2
-     *        right motor
-     * @param direction
-     *        forward or backward
-     * @param speedPercent
-     */
-    public void drive(ActorPort actorPort1, ActorPort actorPort2, DriveDirection direction, int speedPercent) {
+    public void regulatedDrive(ActorPort left, ActorPort right, DriveDirection direction, int speedPercent) {
         DifferentialPilot dPilot =
             new DifferentialPilot(
-                this.brickConfiguration.getWheelDiameter(),
-                this.brickConfiguration.getTrackWidth(),
-                getRegulatedMotor(actorPort1),
-                getRegulatedMotor(actorPort2),
+                this.wheelDiameter,
+                this.trackWidth,
+                this.deviceHandler.getRegulatedMotor(left),
+                this.deviceHandler.getRegulatedMotor(right),
                 false);
         dPilot.setRotateSpeed(toDegPerSec(speedPercent));
         switch ( direction ) {
@@ -425,26 +192,28 @@ public class Hal {
         }
     }
 
-    /**
-     * TODO also implementation for unregulated motors??
-     * 
-     * @param actorPort1
-     *        left motor
-     * @param actorPort2
-     *        right motor
-     * @param direction
-     *        forward or backward
-     * @param speedPercent
-     * @param distance
-     *        in cm
-     */
-    public void driveDistance(ActorPort actorPort1, ActorPort actorPort2, DriveDirection direction, int speedPercent, int distance) {
+    public void unregulatedDrive(ActorPort left, ActorPort right, DriveDirection direction, int speedPercent) {
+        switch ( direction ) {
+            case FOREWARD:
+                this.deviceHandler.getUnregulatedMotor(left).forward();
+                this.deviceHandler.getUnregulatedMotor(right).forward();
+                break;
+            case BACKWARD:
+                this.deviceHandler.getUnregulatedMotor(left).backward();
+                this.deviceHandler.getUnregulatedMotor(right).backward();
+                break;
+            default:
+                throw new DbcException("wrong DriveAction.Direction");
+        }
+    }
+
+    public void driveDistance(ActorPort left, ActorPort right, DriveDirection direction, int speedPercent, int distance) {
         DifferentialPilot dPilot =
             new DifferentialPilot(
-                this.brickConfiguration.getWheelDiameter(),
-                this.brickConfiguration.getTrackWidth(),
-                getRegulatedMotor(actorPort1),
-                getRegulatedMotor(actorPort2),
+                this.wheelDiameter,
+                this.trackWidth,
+                this.deviceHandler.getRegulatedMotor(left),
+                this.deviceHandler.getRegulatedMotor(right),
                 false);
         dPilot.setRotateSpeed(toDegPerSec(speedPercent));
         switch ( direction ) {
@@ -459,70 +228,69 @@ public class Hal {
         }
     }
 
-    /**
-     * @param actorPort1
-     * @param actorPort2
-     */
-    public void stop(ActorPort actorPort1, ActorPort actorPort2) {
-        if ( isRegulated(actorPort1) && isRegulated(actorPort2) ) {
-            getRegulatedMotor(actorPort1).stop();
-            getRegulatedMotor(actorPort2).stop();
-        } else {
-            getUnregulatedMotor(actorPort1).stop();
-            getUnregulatedMotor(actorPort2).stop();
-        }
+    public void stopRegulatedDrive(ActorPort left, ActorPort right) {
+        this.deviceHandler.getRegulatedMotor(left).stop();
+        this.deviceHandler.getRegulatedMotor(right).stop();
+    }
+
+    public void stopUnregulatedDrive(ActorPort left, ActorPort right) {
+        this.deviceHandler.getUnregulatedMotor(left).stop();
+        this.deviceHandler.getUnregulatedMotor(right).stop();
     }
 
     /**
-     * @param actorPort1
-     *        left motor
-     * @param actorPort2
-     *        right motor
+     * @param left
+     * @param right
      * @param direction
-     *        right or left
      * @param speedPercent
      */
-    public void rotateDirection(ActorPort actorPort1, ActorPort actorPort2, TurnDirection direction, int speedPercent) {
-        if ( isRegulated(actorPort1) && isRegulated(actorPort2) ) {
-            DifferentialPilot dPilot =
-                new DifferentialPilot(
-                    this.brickConfiguration.getWheelDiameter(),
-                    this.brickConfiguration.getTrackWidth(),
-                    getRegulatedMotor(actorPort1),
-                    getRegulatedMotor(actorPort2),
-                    false);
-            dPilot.setRotateSpeed(toDegPerSec(speedPercent));
-            switch ( direction ) {
-                case RIGHT:
-                    dPilot.rotateRight();
-                    break;
-                case LEFT:
-                    dPilot.rotateLeft();
-                    break;
-                default:
-                    throw new DbcException("wrong TurnAction.Direction");
-            }
-        } else {
-            getUnregulatedMotor(actorPort1).setPower(speedPercent);
-            getUnregulatedMotor(actorPort2).setPower(speedPercent);
-            switch ( direction ) {
-                case RIGHT:
-                    getUnregulatedMotor(actorPort1).forward();
-                    getUnregulatedMotor(actorPort2).backward();
-                    break;
-                case LEFT:
-                    getUnregulatedMotor(actorPort1).backward();
-                    getUnregulatedMotor(actorPort2).forward();
-                    break;
-                default:
-                    throw new DbcException("wrong TurnAction.Direction");
-            }
+    public void rotateDirectionRegulated(ActorPort left, ActorPort right, TurnDirection direction, int speedPercent) {
+        DifferentialPilot dPilot =
+            new DifferentialPilot(
+                this.wheelDiameter,
+                this.trackWidth,
+                this.deviceHandler.getRegulatedMotor(left),
+                this.deviceHandler.getRegulatedMotor(right),
+                false);
+        dPilot.setRotateSpeed(toDegPerSec(speedPercent));
+        switch ( direction ) {
+            case RIGHT:
+                dPilot.rotateRight();
+                break;
+            case LEFT:
+                dPilot.rotateLeft();
+                break;
+            default:
+                throw new DbcException("wrong TurnAction.Direction");
+        }
+
+    }
+
+    /**
+     * @param left
+     * @param right
+     * @param direction
+     * @param speedPercent
+     */
+    public void rotateDirectionUnregulated(ActorPort left, ActorPort right, TurnDirection direction, int speedPercent) {
+        this.deviceHandler.getUnregulatedMotor(left).setPower(speedPercent);
+        this.deviceHandler.getUnregulatedMotor(right).setPower(speedPercent);
+        switch ( direction ) {
+            case RIGHT:
+                this.deviceHandler.getUnregulatedMotor(left).forward();
+                this.deviceHandler.getUnregulatedMotor(right).backward();
+                break;
+            case LEFT:
+                this.deviceHandler.getUnregulatedMotor(left).backward();
+                this.deviceHandler.getUnregulatedMotor(right).forward();
+                break;
+            default:
+                throw new DbcException("wrong TurnAction.Direction");
         }
     }
 
     /**
      * TODO conversion from distance to motor rotation in angle<br>
-     * TODO implementation for unregulated motor too?<br>
      * no regulation necessary for this block (->beate)
      * 
      * @param actorPort1
@@ -534,17 +302,16 @@ public class Hal {
      * @param speedPercent
      * @param distance
      */
-    public void rotateDirectionDistance(ActorPort actorPort1, ActorPort actorPort2, TurnDirection direction, int speedPercent, int distance) {
-        // TODO
+    public void rotateDirectionDistanceRegulated(ActorPort left, ActorPort right, TurnDirection direction, int speedPercent, int distance) {
         int angle = distance * 0;
         switch ( direction ) {
             case RIGHT:
-                getRegulatedMotor(actorPort1).rotate(angle);
-                getRegulatedMotor(actorPort2).rotate(-angle);
+                this.deviceHandler.getRegulatedMotor(left).rotate(angle);
+                this.deviceHandler.getRegulatedMotor(right).rotate(-angle);
                 break;
             case LEFT:
-                getRegulatedMotor(actorPort1).rotate(-angle);
-                getRegulatedMotor(actorPort2).rotate(angle);
+                this.deviceHandler.getRegulatedMotor(left).rotate(-angle);
+                this.deviceHandler.getRegulatedMotor(right).rotate(angle);
                 break;
             default:
                 throw new DbcException("wrong TurnAction.Direction");
@@ -552,22 +319,21 @@ public class Hal {
     }
 
     /**
-     * Placeholder!!!<br>
      * TODO no block for this method so far<br>
      * 
-     * @param actorPort1
-     * @param actorPort2
+     * @param left
+     * @param right
      * @param direction
      * @param speedPercent
      * @param angle
      */
-    public void rotateDirectionAngle(ActorPort actorPort1, ActorPort actorPort2, TurnDirection direction, int speedPercent, int angle) {
+    public void rotateDirectionAngle(ActorPort left, ActorPort right, TurnDirection direction, int speedPercent, int angle) {
         DifferentialPilot dPilot =
             new DifferentialPilot(
-                this.brickConfiguration.getWheelDiameter(),
-                this.brickConfiguration.getTrackWidth(),
-                getRegulatedMotor(actorPort1),
-                getRegulatedMotor(actorPort2),
+                this.wheelDiameter,
+                this.trackWidth,
+                this.deviceHandler.getRegulatedMotor(left),
+                this.deviceHandler.getRegulatedMotor(right),
                 false);
         dPilot.setRotateSpeed(toDegPerSec(speedPercent));
         switch ( direction ) {
@@ -721,8 +487,8 @@ public class Hal {
      */
     public boolean isPressed(SensorPort sensorPort) {
         // always 1 cell for touch sensor
-        float[] sample = new float[getSampleProvider(sensorPort).sampleSize()];
-        getSampleProvider(sensorPort).fetchSample(sample, 0);
+        float[] sample = new float[this.deviceHandler.getSampleProvider(sensorPort).sampleSize()];
+        this.deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
         if ( sample[0] == 1.0 ) {
             return true;
         } else {
@@ -734,22 +500,19 @@ public class Hal {
     // --- Sensoren Ultraschallsensor ---
 
     /**
-     * TODO change String to enum<br>
-     * set ultrasonic mode to distance or presence
-     * 
      * @param sensorPort
-     * @param mode
+     * @param sensorMode
      */
-    public void setUltrasonicSensorMode(SensorPort sensorPort, UltrasonicSensorMode mode) {
-        setSensorMode(sensorPort, mode);
+    public void setUltrasonicSensorMode(SensorPort sensorPort, UltrasonicSensorMode sensorMode) {
+        this.deviceHandler.setUltrasonicSensorMode(sensorPort, sensorMode);
     }
 
     /**
      * @param sensorPort
      * @return
      */
-    public Enum<UltrasonicSensorMode> getUltraSonicSensorModeName(SensorPort sensorPort) {
-        return getSensorModeName(sensorPort);
+    public UltrasonicSensorMode getUltraSonicSensorModeName(SensorPort sensorPort) {
+        return this.deviceHandler.getUltrasonicSensorModeName(sensorPort);
     }
 
     /**
@@ -761,9 +524,9 @@ public class Hal {
      * @return
      */
     public int getUltraSonicSensorValue(SensorPort sensorPort) {
-        float[] sample = new float[getSampleProvider(sensorPort).sampleSize()];
-        getSampleProvider(sensorPort).fetchSample(sample, 0);
-        switch ( (UltrasonicSensorMode) getSensorModeName(sensorPort) ) {
+        float[] sample = new float[this.deviceHandler.getSampleProvider(sensorPort).sampleSize()];
+        this.deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
+        switch ( this.deviceHandler.getUltrasonicSensorModeName(sensorPort) ) {
             case PRESENCE:
                 return Math.round(sample[0]); // whatever :-D
             case DISTANCE:
@@ -778,18 +541,18 @@ public class Hal {
 
     /**
      * @param sensorPort
-     * @param mode
+     * @param sensorMode
      */
-    public void setColorSensorMode(SensorPort sensorPort, ColorSensorMode mode) {
-        setSensorMode(sensorPort, mode);
+    public void setColorSensorMode(SensorPort sensorPort, ColorSensorMode sensorMode) {
+        this.deviceHandler.setColorSensorMode(sensorPort, sensorMode);
     }
 
     /**
      * @param sensorPort
      * @return
      */
-    public Enum<ColorSensorMode> getColorSensorModeName(SensorPort sensorPort) {
-        return getSensorModeName(sensorPort);
+    public ColorSensorMode getColorSensorModeName(SensorPort sensorPort) {
+        return this.deviceHandler.getColorSensorModeName(sensorPort);
     }
 
     /**
@@ -799,9 +562,9 @@ public class Hal {
      * @return
      */
     public int getColorSensorValue(SensorPort sensorPort) {
-        float[] sample = new float[getSampleProvider(sensorPort).sampleSize()];
-        getSampleProvider(sensorPort).fetchSample(sample, 0);
-        switch ( (ColorSensorMode) getSensorModeName(sensorPort) ) {
+        float[] sample = new float[this.deviceHandler.getSampleProvider(sensorPort).sampleSize()];
+        this.deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
+        switch ( this.deviceHandler.getColorSensorModeName(sensorPort) ) {
             case AMBIENTLIGHT:
                 return Math.round(sample[0]);
             case COLOUR:
@@ -818,18 +581,18 @@ public class Hal {
 
     /**
      * @param sensorPort
-     * @param mode
+     * @param sensorMode
      */
-    public void setInfraredSensorMode(SensorPort sensorPort, InfraredSensorMode mode) {
-        setSensorMode(sensorPort, mode);
+    public void setInfraredSensorMode(SensorPort sensorPort, InfraredSensorMode sensorMode) {
+        this.deviceHandler.setInfraredMode(sensorPort, sensorMode);
     }
 
     /**
      * @param sensorPort
      * @return
      */
-    public Enum<InfraredSensorMode> getInfraredSensorModeName(SensorPort sensorPort) {
-        return getSensorModeName(sensorPort);
+    public InfraredSensorMode getInfraredSensorModeName(SensorPort sensorPort) {
+        return this.deviceHandler.getInfraredSensorModeName(sensorPort);
     }
 
     /**
@@ -839,9 +602,9 @@ public class Hal {
      * @return
      */
     public int getInfraredSensorValue(SensorPort sensorPort) {
-        float[] sample = new float[getSampleProvider(sensorPort).sampleSize()];
-        getSampleProvider(sensorPort).fetchSample(sample, 0);
-        switch ( (InfraredSensorMode) getSensorModeName(sensorPort) ) {
+        float[] sample = new float[this.deviceHandler.getSampleProvider(sensorPort).sampleSize()];
+        this.deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
+        switch ( this.deviceHandler.getInfraredSensorModeName(sensorPort) ) {
             case DISTANCE:
                 return Math.round(sample[0]);
             case SEEK:
@@ -854,62 +617,39 @@ public class Hal {
     // END Sensoren IRSensor ---
     // --- Aktorsensor Drehsensor ---
 
-    /**
-     * TODO motor tacho does not work the same way as sensors and sample provider<br>
-     * block needs to be changed
-     * 
-     * @param actorPort
-     */
-    public void setMotorTachoMode(ActorPort actorPort, Enum mode) {
-        //
+    //    /**
+    //     * TODO motor tacho does not work the same way as sensors and sample provider<br>
+    //     * block needs to be changed, no mode can be stored in motors
+    //     * 
+    //     * @param actorPort
+    //     */
+    //    public void setMotorTachoMode(ActorPort actorPort, Enum mode) {
+    //        //
+    //    }
+
+    //    public PH getMotorTachoMode(ActorPort actorPort) {
+    //        return PH;
+    //    }
+
+    public void resetRegulatedMotorTacho(ActorPort actorPort) {
+        this.deviceHandler.getRegulatedMotor(actorPort).resetTachoCount();
     }
 
-    /**
-     * TODO see setMotorTachoMode method
-     * 
-     * @param actorPort
-     * @return
-     */
-    public Enum getMotorTachoMode(ActorPort actorPort) {
-        Enum Enum = null;
-        return Enum;
+    public void resetUnregulatedMotorTacho(ActorPort actorPort) {
+        this.deviceHandler.getUnregulatedMotor(actorPort).resetTachoCount();
     }
 
-    /**
-     * TODO
-     * 
-     * @param actorPort
-     */
-    public void resetMotorTacho(ActorPort actorPort) {
-        if ( isRegulated(actorPort) ) {
-            getRegulatedMotor(actorPort).resetTachoCount();
-        } else {
-            getUnregulatedMotor(actorPort).resetTachoCount();
-        }
+    public int getRegulatedMotorTachoValue(ActorPort actorPort) {
+        return this.deviceHandler.getRegulatedMotor(actorPort).getTachoCount();
     }
 
-    /**
-     * TODO
-     * 
-     * @param actorPort
-     * @return
-     */
-    public int getMotorTachoValue(ActorPort actorPort) {
-        if ( isRegulated(actorPort) ) {
-            return getRegulatedMotor(actorPort).getTachoCount();
-        } else {
-            return getUnregulatedMotor(actorPort).getTachoCount();
-        }
+    public int getUnregulatedMotorTachoValue(ActorPort actorPort) {
+        return this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount();
     }
 
     // END Aktorsensor Drehsensor ---
     // --- Sensoren Steintasten ---
-    /**
-     * TODO implementation probably wrong - test if it works
-     * 
-     * @param key
-     * @return
-     */
+
     public boolean isPressed(BrickKey key) {
         switch ( key ) {
             case ANY:
@@ -937,9 +677,9 @@ public class Hal {
 
     /**
      * TODO even possible to implement?<br>
-     * TODO read buttons -> number -> know which button was pressed<br>
-     * TODO wait<br>
-     * TODO read buttons again -> if number == 0 -> released -> return<br>
+     * read buttons -> number -> know which button was pressed<br>
+     * wait<br>
+     * read buttons again -> if number == 0 -> released -> return<br>
      * 
      * @param key
      * @return
@@ -969,14 +709,14 @@ public class Hal {
     // --- Sensor Gyrosensor ---
     /**
      * @param sensorPort
-     * @param mode
+     * @param sensorMode
      */
-    public void setGyroSensorMode(SensorPort sensorPort, GyroSensorMode mode) {
-        setSensorMode(sensorPort, mode);
+    public void setGyroSensorMode(SensorPort sensorPort, GyroSensorMode sensorMode) {
+        this.deviceHandler.setGyroSensorMode(sensorPort, sensorMode);
     }
 
-    public Enum<GyroSensorMode> getGyroSensorModeName(SensorPort sensorPort) {
-        return getSensorModeName(sensorPort);
+    public GyroSensorMode getGyroSensorModeName(SensorPort sensorPort) {
+        return this.deviceHandler.getGyroSensorModeName(sensorPort);
     }
 
     /**
@@ -986,9 +726,9 @@ public class Hal {
      * @return
      */
     public int getGyroSensorValue(SensorPort sensorPort) {
-        float[] sample = new float[getSampleProvider(sensorPort).sampleSize()];
-        getSampleProvider(sensorPort).fetchSample(sample, 0);
-        switch ( (GyroSensorMode) getSensorModeName(sensorPort) ) {
+        float[] sample = new float[this.deviceHandler.getSampleProvider(sensorPort).sampleSize()];
+        this.deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
+        switch ( this.deviceHandler.getGyroSensorModeName(sensorPort) ) {
             case ANGLE:
                 return Math.round(sample[0]);
             case RATE:
@@ -999,12 +739,10 @@ public class Hal {
     }
 
     /**
-     * TODO BaseSensor polymorphism does not support "reset" method for gyrosensor
-     * 
      * @param sensorPort
      */
     public void resetGyroSensor(SensorPort sensorPort) {
-        //
+        this.deviceHandler.getGyroSensor(sensorPort).reset();
     }
 
     // END Sensoren Gyrosensor ---
