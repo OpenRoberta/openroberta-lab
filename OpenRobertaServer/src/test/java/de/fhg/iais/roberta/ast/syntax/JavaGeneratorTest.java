@@ -6,6 +6,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
 import org.junit.Test;
+import org.junit.Ignore;
 import org.xml.sax.InputSource;
 
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
@@ -40,7 +41,7 @@ public class JavaGeneratorTest {
         // Assert.assertEquals(a, generate(project));
     }
 
-    @Test
+    @Ignore
     public void test1() throws Exception {
 
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
