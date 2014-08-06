@@ -4,7 +4,11 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
+import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
+import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;
+import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
+import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.dbc.Assert;
 
 public class BrickConfiguration {
@@ -111,17 +115,24 @@ public class BrickConfiguration {
         return this.trackWidth;
     }
 
-    /**
-     * TODO save sensorModeName as enum somewhere in Configuration<br>
-     * TODO abstraction of modes from all sensors would be nice<br>
-     * TODO implement method<br>
-     * 
-     * @param port
-     * @return
-     */
-    public Enum getSensorModeName(SensorPort port) {
-        Enum Enum = null;
-        return Enum;
+    // TODO
+    public ColorSensorMode getPreSetColorSensorMode(SensorPort sensorPort) {
+        return null;
+    }
+
+    // TODO
+    public UltrasonicSensorMode getPreSetUltrasonicSensorMode(SensorPort sensorPort) {
+        return null;
+    }
+
+    // TODO
+    public InfraredSensorMode getPreSetInfraredSensorMode(SensorPort sensorPort) {
+        return null;
+    }
+
+    // TODO
+    public GyroSensorMode getPreSetGyroSensorMode(SensorPort sensorPort) {
+        return null;
     }
 
     public static class Builder {
