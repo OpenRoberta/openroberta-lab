@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
 /**
  * Modes in which the sensor can operate.
  */
-public enum InfraredSensorMode {
+public enum InfraredSensorMode implements SensorsMode {
     DISTANCE(), SEEK(), GET_MODE(), GET_SAMPLE();
     private final String[] values;
 

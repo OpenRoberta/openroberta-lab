@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
 /**
  * Modes in which the sensor can operate.
  */
-public enum ColorSensorMode {
+public enum ColorSensorMode implements SensorsMode {
     COLOUR(), LIGHT(), AMBIENTLIGHT(), GET_MODE(), GET_SAMPLE();
 
     private final String[] values;

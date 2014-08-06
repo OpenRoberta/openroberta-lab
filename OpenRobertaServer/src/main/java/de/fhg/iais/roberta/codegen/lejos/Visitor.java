@@ -46,6 +46,12 @@ import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 
+/**
+ * Main interface used to implement visitor pattern to traverse AST and generate code.
+ * All classes implementing {@link Visitor} interface should implement all methods
+ * 
+ * @author kcvejoski
+ */
 public interface Visitor {
 
     public void visit(NumConst numConst);

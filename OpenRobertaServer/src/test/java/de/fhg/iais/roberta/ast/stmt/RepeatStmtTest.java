@@ -27,10 +27,10 @@ public class RepeatStmtTest {
 
         String a =
             "BlockAST [project=[[\n"
-                + "(repeat [TIMES, NumConst [10]]\n"
+                + "(repeat [TIMES, Binary [ASSIGNMENT, Var [i], NumConst [0]], Binary [LT, Var [i], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i]]]\n"
                 + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba]]\n"
                 + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba1]]\n"
-                + "(repeat [TIMES, NumConst [10]]\n"
+                + "(repeat [TIMES, Binary [ASSIGNMENT, Var [i], NumConst [0]], Binary [LT, Var [i], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i]]]\n"
                 + ")\n"
                 + ")]]]";
         Assert.assertEquals(a, transformer.toString());
@@ -65,7 +65,9 @@ public class RepeatStmtTest {
 
         RepeatStmt repeatStmt = (RepeatStmt) transformer.getProject().get(0).get(0);
 
-        Assert.assertEquals("NumConst [10]", repeatStmt.getExpr().toString());
+        Assert.assertEquals("Binary [ASSIGNMENT, Var [i], NumConst [0]], Binary [LT, Var [i], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i]]", repeatStmt
+            .getExpr()
+            .toString());
     }
 
     @Test
@@ -84,7 +86,7 @@ public class RepeatStmtTest {
         String a =
             "\nexprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba]]\n"
                 + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba1]]\n"
-                + "(repeat [TIMES, NumConst [10]]\n"
+                + "(repeat [TIMES, Binary [ASSIGNMENT, Var [i], NumConst [0]], Binary [LT, Var [i], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i]]]\n"
                 + ")";
 
         Assert.assertEquals(a, repeatStmt.getList().toString());
@@ -101,7 +103,9 @@ public class RepeatStmtTest {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
 
-        String a = "BlockAST [project=[[\n" + "(repeat [TIMES, NumConst [10]]\n)]]]";
+        String a =
+            "BlockAST [project=[[\n"
+                + "(repeat [TIMES, Binary [ASSIGNMENT, Var [i], NumConst [0]], Binary [LT, Var [i], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i]]]\n)]]]";
         Assert.assertEquals(a, transformer.toString());
     }
 
@@ -231,4 +235,20 @@ public class RepeatStmtTest {
         Assert.assertEquals(a, transformer.toString());
     }
 
+    @Test
+    public void loopForever() throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(RepeatStmtTest.class.getResourceAsStream("/ast/control/repeat_stmt_loopForever.xml"));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+
+        String a =
+            "BlockAST [project=[[\n"
+                + "(repeat [WHILE, BoolConst [true]]\nexprStmt Funct [PRINT, [ColorConst [#585858]]]\n), \n(repeat [WHILE, BoolConst [true]]\nexprStmt Funct [PRINT, [EmptyExpr [defVal=class java.lang.String]]]\n)]]]";
+        Assert.assertEquals(a, transformer.toString());
+    }
 }

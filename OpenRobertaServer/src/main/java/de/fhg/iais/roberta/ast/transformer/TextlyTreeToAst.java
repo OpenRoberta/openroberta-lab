@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.expr.Var.TypeVar;
 import de.fhg.iais.roberta.ast.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
@@ -85,7 +86,7 @@ public class TextlyTreeToAst extends TextlyBaseVisitor<Phrase> {
 
     @Override
     public Phrase visitVarName(VarNameContext ctx) {
-        return Var.make(ctx.VAR().getText());
+        return Var.make(ctx.VAR().getText(), TypeVar.INTEGER);
     }
 
     @Override
@@ -146,7 +147,7 @@ public class TextlyTreeToAst extends TextlyBaseVisitor<Phrase> {
 
     @Override
     public Phrase visitAssignStmt(AssignStmtContext ctx) {
-        Phrase name = Var.make(ctx.VAR().getText());
+        Phrase name = Var.make(ctx.VAR().getText(), TypeVar.INTEGER);
         Phrase expr = visit(ctx.expr());
         return AssignStmt.make((Var) name, (Expr) expr);
     }

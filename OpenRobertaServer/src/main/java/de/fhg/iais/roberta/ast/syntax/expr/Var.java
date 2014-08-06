@@ -7,14 +7,17 @@ import de.fhg.iais.roberta.codegen.lejos.Visitor;
  * This class represents the <b>variables_set</b> and <b>variables_get</b> blocks from Blockly into the AST (abstract syntax tree).
  * Object from this class will generate code for creating a variable.<br/>
  * <br>
- * To create an instance from this class use the method {@link #make(String)}.<br>
+ * User must provide name of the variable and type of the variable, if the variable is created before in the code TypeVar should be <b>NONE</b>.
+ * To create an instance from this class use the method {@link #make(String, TypeVar)}.<br>
  */
 public class Var extends Expr {
+    private final TypeVar typeVar;
     private final String name;
 
-    private Var(String value) {
+    private Var(String value, TypeVar typeVar) {
         super(Phrase.Kind.VAR);
         this.name = value;
+        this.typeVar = typeVar;
         setReadOnly();
     }
 
@@ -22,10 +25,18 @@ public class Var extends Expr {
      * creates instance of {@link Var}. This instance is read only and can not be modified.
      * 
      * @param value name of the variable,
+     * @param typeVar type of the variable,
      * @return read only object of class {@link Var}
      */
-    public static Var make(String value) {
-        return new Var(value);
+    public static Var make(String value, TypeVar typeVar) {
+        return new Var(value, typeVar);
+    }
+
+    /**
+     * @return type of the variable
+     */
+    public TypeVar getTypeVar() {
+        return this.typeVar;
     }
 
     /**
@@ -53,5 +64,14 @@ public class Var extends Expr {
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
+    }
+
+    /**
+     * Type of variables. Use NONE if the variable is defined already.
+     * 
+     * @author kcvejoski
+     */
+    public static enum TypeVar {
+        DOUBLE, INTEGER, STRING, NONE;
     }
 }

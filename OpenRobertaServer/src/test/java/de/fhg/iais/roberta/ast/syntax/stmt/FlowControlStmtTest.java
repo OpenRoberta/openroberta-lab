@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.ast.syntax.actors;
+package de.fhg.iais.roberta.ast.syntax.stmt;
 
 import java.util.ArrayList;
 
@@ -15,16 +15,27 @@ import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.blockly.generated.Project;
 import de.fhg.iais.roberta.codegen.lejos.JavaGenerator;
 
-public class GetPowerActionTest {
+public class FlowControlStmtTest {
+
     @Test
-    public void getSpeed() throws Exception {
+    public void flowControlStmt() throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_MotorGetPower.xml"));
+        InputSource src = new InputSource(Math.class.getResourceAsStream("/syntax/stmt/flowControl_stmt.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        String a = "\nhal.getSpeed(B)";
+        String a =
+            "\nwhile ( 0 == 0 ) {\n"
+                + "    System.out.println(\"123\");\n"
+                + "    System.out.println(\"123\");\n"
+                + "    while ( !(0 == 0) ) {\n"
+                + "        System.out.println(\"123\");\n"
+                + "        System.out.println(\"123\");\n"
+                + "        break;\n"
+                + "    }\n"
+                + "    break;\n"
+                + "}";
 
         Assert.assertEquals(a, generate(project));
     }

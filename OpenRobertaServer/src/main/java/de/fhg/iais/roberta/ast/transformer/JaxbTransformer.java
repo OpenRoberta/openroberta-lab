@@ -44,6 +44,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary.Op;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.expr.Var.TypeVar;
 import de.fhg.iais.roberta.ast.syntax.functions.Funct;
 import de.fhg.iais.roberta.ast.syntax.functions.Funct.Function;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickKey;
@@ -663,6 +664,10 @@ public class JaxbTransformer {
                 // case "robControls_wait_for":
                 //TODO
 
+            case "robControls_loopForever":
+                expr = BoolConst.make(true);
+                return extractRepeatStatement(block, expr, RepeatStmt.Mode.WHILE.toString());
+
             case "controls_whileUntil":
                 fields = extractFields(block, (short) 1);
                 mode = extractField(fields, "MODE", (short) 0);
@@ -678,11 +683,12 @@ public class JaxbTransformer {
                 var = extractVar(block);
                 values = extractValues(block, (short) 3);
                 exprList = ExprList.make();
+                Var var1 = Var.make(((Var) var).getValue(), TypeVar.INTEGER);
 
                 Phrase from = extractValue(values, new ExprParam("FROM", Integer.class));
                 Phrase to = extractValue(values, new ExprParam("TO", Integer.class));
                 Phrase by = extractValue(values, new ExprParam("BY", Integer.class));
-                Binary exprAssig = Binary.make(Binary.Op.ASSIGNMENT, (Expr) var, (Expr) from);
+                Binary exprAssig = Binary.make(Binary.Op.ASSIGNMENT, (Expr) var1, (Expr) from);
                 Binary exprCondition = Binary.make(Binary.Op.LTE, (Expr) var, (Expr) to);
                 Binary exprBy = Binary.make(Binary.Op.ADD_ASSIGNMENT, (Expr) var, (Expr) by);
                 exprList.addExpr(exprAssig);
@@ -706,8 +712,21 @@ public class JaxbTransformer {
 
             case "controls_repeat_ext":
                 values = extractValues(block, (short) 1);
-                expr = extractValue(values, new ExprParam("TIMES", Integer.class));
-                return extractRepeatStatement(block, expr, "TIMES");
+                var = Var.make("i", TypeVar.INTEGER);
+                exprList = ExprList.make();
+
+                from = NumConst.make("0");
+                to = extractValue(values, new ExprParam("TIMES", Integer.class));
+                by = NumConst.make("1");
+                exprAssig = Binary.make(Binary.Op.ASSIGNMENT, (Expr) var, (Expr) from);
+                var = Var.make("i", TypeVar.NONE);
+                exprCondition = Binary.make(Binary.Op.LT, (Expr) var, (Expr) to);
+                Unary increment = Unary.make(Unary.Op.POSTFIX_INCREMENTS, (Expr) var);
+                exprList.addExpr(exprAssig);
+                exprList.addExpr(exprCondition);
+                exprList.addExpr(increment);
+                exprList.setReadOnly();
+                return extractRepeatStatement(block, exprList, "TIMES");
 
             default:
                 throw new DbcException("Invalid Block: " + block.getType());
@@ -881,7 +900,7 @@ public class JaxbTransformer {
     private Phrase extractVar(Block block) {
         List<Field> fields = extractFields(block, (short) 1);
         String field = extractField(fields, "VAR", (short) 0);
-        return Var.make(field);
+        return Var.make(field, TypeVar.NONE);
     }
 
     private List<Value> extractValues(Block block, short numOfValues) {

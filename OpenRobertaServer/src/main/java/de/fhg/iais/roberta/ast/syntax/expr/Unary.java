@@ -72,7 +72,10 @@ public class Unary extends Expr {
      * Operators for the unary expression.
      */
     public static enum Op {
-        PLUS( 10, Assoc.LEFT, "+" ), NEG( 10, Assoc.LEFT, "-" ), NOT( 300, Assoc.RIGHT, "!" );
+        PLUS( 10, Assoc.LEFT, "+" ), NEG( 10, Assoc.LEFT, "-" ), NOT( 300, Assoc.RIGHT, "!" ), POSTFIX_INCREMENTS( 1, Assoc.LEFT, "++" ), REFIX_INCREMENTS(
+            1,
+            Assoc.RIGHT,
+            "++" );
 
         private final String[] values;
         private final int precedence;

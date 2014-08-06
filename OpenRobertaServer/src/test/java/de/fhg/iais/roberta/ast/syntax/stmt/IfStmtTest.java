@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.stmt;
 
+import java.util.ArrayList;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
@@ -7,6 +9,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 
+import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
+import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.blockly.generated.Project;
 import de.fhg.iais.roberta.codegen.lejos.JavaGenerator;
 
@@ -21,7 +26,7 @@ public class IfStmtTest {
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
         String a =
-            "if ( true ) {\n"
+            "\nif ( true ) {\n"
                 + "}\n"
                 + "if ( false ) {\n"
                 + "}\n"
@@ -61,7 +66,7 @@ public class IfStmtTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/syntax/stmt/if_stmt1.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        String a = "if ( 5 + 7 == 5 + 7 >= 5 + 7 == 5 + 7 && 5 + 7 <= 5 + 7 ) {\n}";
+        String a = "\nif ( ( 5 + 7 == 5 + 7 ) >= ( 5 + 7 == 5 + 7 && 5 + 7 <= 5 + 7 ) ) {\n}";
 
         Assert.assertEquals(a, generate(project));
     }
@@ -75,7 +80,7 @@ public class IfStmtTest {
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
         String a =
-            "if ( true ) {\n"
+            "\nif ( true ) {\n"
                 + "    System.out.println(\"1\");\n"
                 + "    System.out.println(\"8\");\n"
                 + "} else if ( false ) {\n"
@@ -102,7 +107,7 @@ public class IfStmtTest {
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
         String a =
-            "if ( true ) {\n"
+            "\nif ( true ) {\n"
                 + "    if ( false ) {\n"
                 + "    }\n"
                 + "}\n"
@@ -116,11 +121,15 @@ public class IfStmtTest {
         Assert.assertEquals(a, generate(project));
     }
 
-    private String generate(Project p) {
-        JavaGenerator generator = new JavaGenerator();
-        generator.generate(p);
+    private String generate(Project project) {
+        JaxbTransformer transformer = new JaxbTransformer();
+        transformer.projectToAST(project);
+        BrickConfiguration brickConfiguration = new BrickConfiguration.Builder().build();
+        JavaGenerator generator = new JavaGenerator("", brickConfiguration);
+        for ( ArrayList<Phrase> instance : transformer.getProject() ) {
+            generator.generateCodeFromPhrases(instance);
+        }
         System.out.println(generator.getSb());
         return generator.getSb().toString();
     }
-
 }

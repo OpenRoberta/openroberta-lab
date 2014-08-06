@@ -2,49 +2,40 @@ package de.fhg.iais.roberta.codegen.lejos;
 
 import java.util.ArrayList;
 
+import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
-import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
-import de.fhg.iais.roberta.blockly.generated.Project;
 
 public class JavaGenerator {
-    StringBuilder sb = new StringBuilder();
+    private final StringBuilder sb = new StringBuilder();
+    private final String className;
+    private final BrickConfiguration brickConfiguration;
 
-    public void generate(Project project) {
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-        generateCodeFrmoAST(transformer);
+    public JavaGenerator(String className, BrickConfiguration brickConfiguration) {
+        this.className = className;
+        this.brickConfiguration = brickConfiguration;
     }
 
-    private void generateCodeFrmoAST(JaxbTransformer transformer) {
-        boolean firstT = true;
-        for ( ArrayList<Phrase> instance : transformer.getProject() ) {
-            if ( firstT ) {
-                firstT = false;
-            } else {
-                this.sb.append("\n");
-            }
-            generateCodeFromInstance(instance);
-        }
+    public void generate(ArrayList<Phrase> phrases) {
+        generateCodeFromPhrases(phrases);
     }
 
-    private void generateCodeFromInstance(ArrayList<Phrase> instance) {
-        boolean first = true;
-        for ( Phrase phrase : instance ) {
-            if ( first ) {
-                first = false;
-            } else {
-                this.sb.append("\n");
-            }
+    public void generateCodeFromPhrases(ArrayList<Phrase> phrases) {
+        for ( Phrase phrase : phrases ) {
+            this.sb.append("\n");
             JavaVisitor astVisitor = new JavaVisitor(this.sb, 0);
             phrase.accept(astVisitor);
         }
     }
 
-    public StringBuilder getSb() {
-        return this.sb;
+    public String getClassName() {
+        return this.className;
     }
 
-    public void setSb(StringBuilder sb) {
-        this.sb = sb;
+    public BrickConfiguration getBrickConfiguration() {
+        return this.brickConfiguration;
+    }
+
+    public StringBuilder getSb() {
+        return this.sb;
     }
 }

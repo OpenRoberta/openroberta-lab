@@ -17,13 +17,15 @@ public class IfStmt extends Stmt {
     private final List<Expr> expr;
     private final List<StmtList> thenList;
     private final StmtList elseList;
+    private final boolean ternary;
 
-    private IfStmt(List<Expr> expr, List<StmtList> thenList, StmtList elseList) {
+    private IfStmt(List<Expr> expr, List<StmtList> thenList, StmtList elseList, boolean ternary) {
         super(Phrase.Kind.IF_STMT);
         Assert.isTrue(expr.size() == thenList.size() && elseList.isReadOnly());
         this.expr = expr;
         this.thenList = thenList;
         this.elseList = elseList;
+        this.ternary = ternary;
         setReadOnly();
     }
 
@@ -36,7 +38,7 @@ public class IfStmt extends Stmt {
      * @return read only object of class {@link IfStmt}
      */
     public static IfStmt make(List<Expr> expr, List<StmtList> thenList, StmtList elseList) {
-        return new IfStmt(expr, thenList, elseList);
+        return new IfStmt(expr, thenList, elseList, false);
     }
 
     /**
@@ -52,7 +54,7 @@ public class IfStmt extends Stmt {
         List<StmtList> thensList = new ArrayList<StmtList>();
         exprsList.add(expr);
         thensList.add(thenList);
-        return new IfStmt(exprsList, thensList, elseList);
+        return new IfStmt(exprsList, thensList, elseList, true);
     }
 
     /**
@@ -65,7 +67,11 @@ public class IfStmt extends Stmt {
     public static IfStmt make(List<Expr> expr, List<StmtList> thenList) {
         StmtList elseList = StmtList.make();
         elseList.setReadOnly();
-        return new IfStmt(expr, thenList, elseList);
+        return new IfStmt(expr, thenList, elseList, false);
+    }
+
+    public boolean isTernary() {
+        return this.ternary;
     }
 
     /**

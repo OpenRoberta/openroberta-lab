@@ -99,20 +99,24 @@ public class JavaVisitor implements Visitor {
 
     @Override
     public void visit(Binary binary) {
-        generateSubExpr(this.sb, false, binary.getLeft());
-        this.sb.append(" " + binary.getOp().getOpSymbol() + " ");
-        generateSubExpr(this.sb, binary.getOp() == Op.MINUS, binary.getRight());
+        generateSubExpr(this.sb, false, binary.getLeft(), binary);
+        this.sb.append(generateString(this.whiteSpaceSize, false, null) + binary.getOp().getOpSymbol() + generateString(this.whiteSpaceSize, false, null));
+        generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
     }
 
-    private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr expr) {
+    private boolean parenthesesCheck(Binary binary) {
+        return binary.getOp() == Op.MINUS && binary.getRight().getKind() == Kind.BINARY && binary.getRight().getPrecedence() <= binary.getPrecedence();
+    }
+
+    private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr expr, Binary binary) {
         JavaVisitor visitor = new JavaVisitor(sb, 0);
-        if ( expr.getPrecedence() >= expr.getPrecedence() && !minusAdaption ) {
+        if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption ) {
             // parentheses are omitted
             expr.accept(visitor);
         } else {
-            sb.append("( ");
+            sb.append("(" + generateString(this.whiteSpaceSize, false, null));
             expr.accept(visitor);
-            sb.append(" )");
+            sb.append(generateString(this.whiteSpaceSize, false, ")"));
         }
     }
 
@@ -128,7 +132,15 @@ public class JavaVisitor implements Visitor {
 
     @Override
     public void visit(EmptyExpr emptyExpr) {
-        this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
+        switch ( emptyExpr.getDefVal().getName() ) {
+            case "java.lang.String":
+                this.sb.append("\"\"");
+                break;
+
+            default:
+                this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
+                break;
+        }
     }
 
     @Override
@@ -139,7 +151,7 @@ public class JavaVisitor implements Visitor {
             if ( first ) {
                 first = false;
             } else {
-                if ( expr.getKind() == Kind.BINARY ) {
+                if ( expr.getKind() == Kind.BINARY || expr.getKind() == Kind.UNARY ) {
                     this.sb.append("; ");
                 } else {
                     this.sb.append(", ");
@@ -171,8 +183,13 @@ public class JavaVisitor implements Visitor {
 
     @Override
     public void visit(Unary unary) {
-        this.sb.append(unary.getOp().getOpSymbol());
-        generateExprCode(unary, this.sb, this.indentation);
+        if ( unary.getOp() == Unary.Op.POSTFIX_INCREMENTS ) {
+            generateExprCode(unary, this.sb, this.indentation);
+            this.sb.append(unary.getOp().getOpSymbol());
+        } else {
+            this.sb.append(unary.getOp().getOpSymbol());
+            generateExprCode(unary, this.sb, this.indentation);
+        }
     }
 
     private void generateExprCode(Unary unary, StringBuilder sb, int indentation) {
@@ -188,8 +205,14 @@ public class JavaVisitor implements Visitor {
 
     @Override
     public void visit(Var var) {
-        this.sb.append(var.getValue());
-
+        switch ( var.getTypeVar() ) {
+            case INTEGER:
+                this.sb.append(generateString(this.indentation, false, "int ") + var.getValue());
+                break;
+            default:
+                this.sb.append(var.getValue());
+                break;
+        }
     }
 
     @Override
@@ -330,7 +353,6 @@ public class JavaVisitor implements Visitor {
     @Override
     public void visit(AssignStmt assignStmt) {
         JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation);
-        //  appendCustomString(this.sb, this.indentation, true, null);
         assignStmt.getName().accept(visitor);
         this.sb.append(" = ");
         assignStmt.getExpr().accept(visitor);
@@ -348,8 +370,23 @@ public class JavaVisitor implements Visitor {
     public void visit(IfStmt ifStmt) {
         int next = this.indentation + this.indentationSize;
         JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation);
-        generateCodeFromIfElse(ifStmt, next, visitor);
-        generateCodeFromElse(ifStmt, visitor);
+        if ( ifStmt.isTernary() ) {
+            generateCodeFromTernary(ifStmt, visitor);
+        } else {
+            generateCodeFromIfElse(ifStmt, next, visitor);
+            generateCodeFromElse(ifStmt, visitor);
+        }
+    }
+
+    private void generateCodeFromTernary(IfStmt ifStmt, JavaVisitor visitor) {
+        this.sb.append("(" + generateString(this.whiteSpaceSize, false, null));
+        ifStmt.getExpr().get(0).accept(visitor);
+        this.sb.append(generateString(this.whiteSpaceSize, false, ")")
+            + generateString(this.whiteSpaceSize, false, "?")
+            + generateString(this.whiteSpaceSize, false, null));
+        ((ExprStmt) ifStmt.getThenList().get(0).get().get(0)).getExpr().accept(visitor);
+        appendCustomString(this.sb, this.whiteSpaceSize, false, ":" + generateString(this.whiteSpaceSize, false, null));
+        ((ExprStmt) ifStmt.getElseList().get().get(0)).getExpr().accept(visitor);
     }
 
     private void generateCodeFromIfElse(IfStmt ifStmt, int next, JavaVisitor visitor) {
@@ -393,23 +430,15 @@ public class JavaVisitor implements Visitor {
         switch ( repeatStmt.getMode() ) {
             case UNTIL:
             case WHILE:
-                this.sb.append("while ( ");
-                visitor.setIndentation(0);
-                repeatStmt.getExpr().accept(visitor);
-                this.sb.append(" ) {");
+                generateCodeFromStmtCondition("while", repeatStmt.getExpr(), visitor);
                 break;
+            case TIMES:
             case FOR:
                 generateCodeFromStmtCondition("for", repeatStmt.getExpr(), visitor);
                 break;
             case FOR_EACH:
                 break;
-            case TIMES:
-                this.sb.append("for ( int i = 0; ");
-                visitor.setIndentation(0);
-                this.sb.append("i < ");
-                repeatStmt.getExpr().accept(visitor);
-                this.sb.append("; i++ ) {");
-                break;
+
             default:
                 break;
         }
@@ -426,7 +455,7 @@ public class JavaVisitor implements Visitor {
 
     @Override
     public void visit(StmtFlowCon stmtFlowCon) {
-        appendCustomString(this.sb, this.indentation, true, stmtFlowCon.getFlow().toString().toLowerCase() + ";");
+        appendCustomString(this.sb, 0, false, stmtFlowCon.getFlow().toString().toLowerCase() + ";");
     }
 
     @Override

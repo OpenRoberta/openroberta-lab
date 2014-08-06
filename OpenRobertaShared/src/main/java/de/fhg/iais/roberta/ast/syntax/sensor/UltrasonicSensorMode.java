@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * 
  * @author kcvejoski
  */
-public enum UltrasonicSensorMode {
+public enum UltrasonicSensorMode implements SensorsMode {
     DISTANCE(), PRESENCE(), GET_MODE(), GET_SAMPLE();
 
     private final String[] values;
