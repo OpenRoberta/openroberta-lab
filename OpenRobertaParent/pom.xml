@@ -182,7 +182,7 @@
         <snapshotRepository>
             <id>ORA-snapshots</id>
             <name>Open Roberta snapshots repository</name>
-            <url>http://http://mp-devel.iais.fraunhofer.de:8081/nexus/content/repositories/ORA-snapshots/</url>
+            <url>http://mp-devel.iais.fraunhofer.de:8081/nexus/content/repositories/ORA-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
     <issueManagement>
