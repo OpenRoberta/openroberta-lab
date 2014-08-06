@@ -231,6 +231,7 @@ function displayDummy(up, down, left, right){
 
 //----------------------------------------------------------------
 //Functions for displaying information about the current activity.
+
 //----------------------------------------------------------------
 
 function displayActivity(intel){
