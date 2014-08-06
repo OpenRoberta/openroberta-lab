@@ -16,5 +16,17 @@ https://publicwiki-01.fraunhofer.de/Open_Roberta/index.php/Open_Roberta
 Issue tracker:
 http://mp-devel.iais.fraunhofer.de:8080
 
+A successfull build looks like:
+
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary:
+[INFO] 
+[INFO] RobertaParent ..................................... SUCCESS
+[INFO] OpenRobertaShared ................................. SUCCESS
+[INFO] OpenRobertaServer ................................. SUCCESS
+[INFO] OpenRobertaRuntime ................................ SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
 
 
