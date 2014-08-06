@@ -18,13 +18,13 @@ public class JavaGenerator {
 
     public void generate(ArrayList<Phrase> phrases) {
         this.sb.append("import de.fhg.iais.roberta.codegen.lejos;\n\n");
+        this.sb.append("import de.fhg.iais.roberta.ast.syntax;\n\n");
         StringManipulation.appendCustomString(this.sb, 0, false, "public class " + this.className + " {");
-
+        StringManipulation.appendCustomString(this.sb, 2 * this.indentation, true, this.brickConfiguration.generateRegenerate());
         StringManipulation.appendCustomString(this.sb, this.indentation, true, "public static void main(String[] args) {");
         StringManipulation.appendCustomString(this.sb, 2 * this.indentation, true, this.className + ".run();");
         StringManipulation.appendCustomString(this.sb, this.indentation, true, "}\n");
         StringManipulation.appendCustomString(this.sb, this.indentation, true, "public static void run() {");
-        StringManipulation.appendCustomString(this.sb, 2 * this.indentation, true, this.brickConfiguration.generateRegenerate());
         StringManipulation.appendCustomString(this.sb, 2 * this.indentation, true, "Hal hal = new Hal(brickConfiguration);");
         generateCodeFromPhrases(phrases);
         StringManipulation.appendCustomString(this.sb, this.indentation, true, "}");

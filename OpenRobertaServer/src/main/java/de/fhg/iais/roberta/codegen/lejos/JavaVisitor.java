@@ -228,7 +228,6 @@ public class JavaVisitor implements Visitor {
             default:
                 break;
         }
-
     }
 
     @Override
