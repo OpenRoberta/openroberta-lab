@@ -1,6 +1,7 @@
 
 var DUMMY;
 var activityString = "Aktivität:";
+var viewDirection;
 
 // -------------------------------------
 // Dummy Controll TEST Input
@@ -50,7 +51,8 @@ function viewSimulator(status){
 	}
 	
 	else{
-		$( "#simulatorDiv" ).css( "display", "none" );	
+		$( "#simulatorDiv" ).css( "display", "none" );
+		resetParams(); // Reset Simulator		
 	}
 }
 
@@ -192,34 +194,38 @@ var scroll = new BackgroundScroll();
 function moveRight(){
 	scroll.initStop(false);
 	scroll.initLeft(true);
+	viewPosition = "right";
 	displayActivity("Bewebgung Richtung Osten");
 }
 
 function moveLeft(){
 	scroll.initStop(false);
 	scroll.initRight(true);
+	viewPosition = "left";
 	displayActivity("Bewebgung Richtung Westen");
 }
 
 function moveUp(){
 	scroll.initStop(false);
 	scroll.initDown(true);
+	viewPosition = "up";
 	displayActivity("Bewebgung Richtung Norden");
 }	 
 
 function moveDown(){
 	scroll.initStop(false);
 	scroll.initUp(true);
+	viewPosition = "down";
 	displayActivity("Bewebgung Richtung Süden");
 }
 
-function movteStop(){
+function moveStop(){
 	scroll.initStop(false);
 	displayActivity("Stop");
 }
 
 //----------------------------------------------------------
-//Function for displaying the four different robot graphics.
+// Function for displaying the four different robot graphics.
 //----------------------------------------------------------
 
 function displayDummy(up, down, left, right){
@@ -231,9 +237,17 @@ function displayDummy(up, down, left, right){
 
 //----------------------------------------------------------------
 //Functions for displaying information about the current activity.
-
 //----------------------------------------------------------------
 
 function displayActivity(intel){
-	$( "#positionData" ).text( activityString + " " + intel );
+	$( "#positionData" ).text( activityString + " " + intel);
+}
+
+//----------------------------------------------------------
+//Function for resetting the simulator parameters
+//----------------------------------------------------------
+
+function resetParams(){
+	displayDummy("none", "none" ,"none", "block");
+	moveStop();
 }
