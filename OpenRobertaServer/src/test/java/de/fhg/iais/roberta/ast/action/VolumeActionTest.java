@@ -1,62 +1,35 @@
 package de.fhg.iais.roberta.ast.action;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
-
 import org.junit.Assert;
 import org.junit.Test;
-import org.xml.sax.InputSource;
 
 import de.fhg.iais.roberta.ast.syntax.action.VolumeAction;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
-import de.fhg.iais.roberta.blockly.generated.Project;
+import de.fhg.iais.roberta.helper.Helper;
 
 public class VolumeActionTest {
 
     @Test
     public void make() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_SetVolume.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
         String a = "BlockAST [project=[[VolumeAction [SET, NumConst [50]]]]]";
 
-        Assert.assertEquals(a, transformer.toString());
+        Assert.assertEquals(a, Helper.generateASTString("/ast/actions/action_SetVolume.xml"));
     }
 
     @Test
     public void getVolume() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+        JaxbTransformer transformer = Helper.generateAST("/ast/actions/action_SetVolume.xml");
 
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_SetVolume.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
-        VolumeAction va = (VolumeAction) transformer.getProject().get(0).get(0);
+        VolumeAction va = (VolumeAction) transformer.getTree().get(0);
 
         Assert.assertEquals("NumConst [50]", va.getVolume().toString());
     }
 
     @Test
     public void getMode() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+        JaxbTransformer transformer = Helper.generateAST("/ast/actions/action_SetVolume.xml");
 
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_SetVolume.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
-        VolumeAction va = (VolumeAction) transformer.getProject().get(0).get(0);
+        VolumeAction va = (VolumeAction) transformer.getTree().get(0);
 
         Assert.assertEquals(VolumeAction.Mode.SET, va.getMode());
     }
@@ -74,17 +47,8 @@ public class VolumeActionTest {
 
     @Test
     public void getVolumeAction() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_GetVolume.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
         String a = "BlockAST [project=[[VolumeAction [GET, NullConst [null]]]]]";
 
-        Assert.assertEquals(a, transformer.toString());
+        Assert.assertEquals(a, Helper.generateASTString("/ast/actions/action_GetVolume.xml"));
     }
 }

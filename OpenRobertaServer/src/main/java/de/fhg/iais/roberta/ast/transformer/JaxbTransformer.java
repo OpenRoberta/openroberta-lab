@@ -90,34 +90,32 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * @author kcvejoski
  */
 public class JaxbTransformer {
-    private final List<ArrayList<Phrase>> project = new ArrayList<ArrayList<Phrase>>();
+    private final ArrayList<Phrase> tree = new ArrayList<Phrase>();
 
     /**
      * Converts object of type {@link Project} to AST tree.
      * 
-     * @param pr
+     * @param program
      */
-    public void projectToAST(Project pr) {
-        List<Instance> instances = pr.getInstance();
+    public void projectToAST(Project program) {
+        List<Instance> instances = program.getInstance();
         for ( Instance instance : instances ) {
-            this.project.add(instanceToAST(instance));
+            instanceToAST(instance);
         }
     }
 
-    private ArrayList<Phrase> instanceToAST(Instance instance) {
+    private void instanceToAST(Instance instance) {
         List<Block> blocks = instance.getBlock();
-        ArrayList<Phrase> phrases = new ArrayList<Phrase>();
         for ( Block block : blocks ) {
-            phrases.add(bToA(block));
+            this.tree.add(blockToAST(block));
         }
-        return phrases;
     }
 
-    public List<ArrayList<Phrase>> getProject() {
-        return this.project;
+    public ArrayList<Phrase> getTree() {
+        return this.tree;
     }
 
-    private Phrase bToA(Block block) {
+    private Phrase blockToAST(Block block) {
 
         List<Value> values;
         List<Field> fields;
@@ -673,7 +671,7 @@ public class JaxbTransformer {
                 mode = extractField(fields, "MODE", (short) 0);
                 values = extractValues(block, (short) 1);
                 if ( RepeatStmt.Mode.UNTIL == RepeatStmt.Mode.get(mode) ) {
-                    expr = Unary.make(Op.NOT, (Expr) extractValue(values, new ExprParam("BOOL", Boolean.class)));
+                    expr = Unary.make(Op.NOT, convertPhraseToExpr(extractValue(values, new ExprParam("BOOL", Boolean.class))));
                 } else {
                     expr = extractValue(values, new ExprParam("BOOL", Boolean.class));
                 }
@@ -745,7 +743,7 @@ public class JaxbTransformer {
         List<Value> values = extractValues(block, (short) 2);
         Phrase left = extractValue(values, leftExpr);
         Phrase right = extractValue(values, rightExpr);
-        return Binary.make(Binary.Op.get(op), (Expr) left, (Expr) right);
+        return Binary.make(Binary.Op.get(op), convertPhraseToExpr(left), convertPhraseToExpr(right));
     }
 
     private Funct blockToFunction(Block block, List<ExprParam> exprParams, String operationType) {
@@ -844,7 +842,7 @@ public class JaxbTransformer {
     }
 
     private void convertPhraseToStmt(StmtList stmtList, Block sb) {
-        Phrase p = bToA(sb);
+        Phrase p = blockToAST(sb);
         Stmt stmt;
         if ( p.getKind().getCategory() == Category.EXPR ) {
             stmt = ExprStmt.make((Expr) p);
@@ -913,7 +911,7 @@ public class JaxbTransformer {
     private Phrase extractValue(List<Value> values, ExprParam param) {
         for ( Value value : values ) {
             if ( value.getName().equals(param.getName()) ) {
-                return bToA(value.getBlock());
+                return blockToAST(value.getBlock());
             }
         }
         return EmptyExpr.make(param.getDefaultValue());
@@ -958,6 +956,6 @@ public class JaxbTransformer {
 
     @Override
     public String toString() {
-        return "BlockAST [project=" + this.project + "]";
+        return "BlockAST [project=[" + this.tree + "]]";
     }
 }

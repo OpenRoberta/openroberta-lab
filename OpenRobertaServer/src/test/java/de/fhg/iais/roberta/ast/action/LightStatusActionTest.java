@@ -1,46 +1,27 @@
 package de.fhg.iais.roberta.ast.action;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
-
 import org.junit.Assert;
 import org.junit.Test;
-import org.xml.sax.InputSource;
 
 import de.fhg.iais.roberta.ast.syntax.action.LightStatusAction;
 import de.fhg.iais.roberta.ast.syntax.action.LightStatusAction.Status;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
-import de.fhg.iais.roberta.blockly.generated.Project;
+import de.fhg.iais.roberta.helper.Helper;
 
 public class LightStatusActionTest {
 
     @Test
     public void make() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_BrickLightStatus.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
         String a = "BlockAST [project=[[LightStatusAction [OFF]]]]";
 
-        Assert.assertEquals(a, transformer.toString());
+        Assert.assertEquals(a, Helper.generateASTString("/ast/actions/action_BrickLightStatus.xml"));
     }
 
     @Test
     public void getStatus() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+        JaxbTransformer transformer = Helper.generateAST("/ast/actions/action_BrickLightStatus.xml");
 
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_BrickLightStatus.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-        LightStatusAction lsa = (LightStatusAction) transformer.getProject().get(0).get(0);
+        LightStatusAction lsa = (LightStatusAction) transformer.getTree().get(0);
 
         Assert.assertEquals(LightStatusAction.Status.OFF, lsa.getStatus());
     }
@@ -58,14 +39,7 @@ public class LightStatusActionTest {
 
     @Test
     public void brickLightStatus1() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_BrickLightStatus1.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
+        JaxbTransformer transformer = Helper.generateAST("/ast/actions/action_BrickLightStatus1.xml");
 
         String a = "BlockAST [project=[[LightStatusAction [RESET]]]]";
 

@@ -9,39 +9,22 @@ import org.xml.sax.InputSource;
 
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.blockly.generated.Project;
+import de.fhg.iais.roberta.helper.Helper;
 
 public class ActionTest {
 
     @Test
     public void clearDisplay() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_ClearDisplay.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
         String a = "BlockAST [project=[[ClearDisplayAction []]]]";
 
-        Assert.assertEquals(a, transformer.toString());
+        Assert.assertEquals(a, Helper.generateASTString("/ast/actions/action_ClearDisplay.xml"));
     }
 
     @Test
     public void stop() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_Stop.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
         String a = "BlockAST [project=[[StopAction []]]]";
 
-        Assert.assertEquals(a, transformer.toString());
+        Assert.assertEquals(a, Helper.generateASTString("/ast/actions/action_Stop.xml"));
     }
 
     @Test

@@ -1,79 +1,45 @@
 package de.fhg.iais.roberta.ast.expr;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
-
 import org.junit.Assert;
 import org.junit.Test;
-import org.xml.sax.InputSource;
 
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
-import de.fhg.iais.roberta.blockly.generated.Project;
+import de.fhg.iais.roberta.helper.Helper;
 
 public class ColorConstTest {
 
     @Test
     public void make() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/colour/colour_const1.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
         String a = "BlockAST [project=[[ColorConst [#585858]]]]";
 
-        Assert.assertEquals(a, transformer.toString());
+        Assert.assertEquals(a, Helper.generateASTString("/ast/colour/colour_const1.xml"));
     }
 
     @Test
     public void isValue() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+        JaxbTransformer transformer = Helper.generateAST("/ast/colour/colour_const1.xml");
 
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/colour/colour_const1.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
-        ColorConst colorConst = (ColorConst) transformer.getProject().get(0).get(0);
+        ColorConst colorConst = (ColorConst) transformer.getTree().get(0);
 
         Assert.assertEquals("#585858", colorConst.getValue());
     }
 
     @Test
     public void getPresedance() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+        JaxbTransformer transformer = Helper.generateAST("/ast/colour/colour_const1.xml");
 
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/colour/colour_const1.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
-        ColorConst colorConst = (ColorConst) transformer.getProject().get(0).get(0);
+        ColorConst colorConst = (ColorConst) transformer.getTree().get(0);
 
         Assert.assertEquals(999, colorConst.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+        JaxbTransformer transformer = Helper.generateAST("/ast/colour/colour_const1.xml");
 
-        InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/colour/colour_const1.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-
-        ColorConst colorConst = (ColorConst) transformer.getProject().get(0).get(0);
+        ColorConst colorConst = (ColorConst) transformer.getTree().get(0);
 
         Assert.assertEquals(Assoc.NONE, colorConst.getAssoc());
     }
