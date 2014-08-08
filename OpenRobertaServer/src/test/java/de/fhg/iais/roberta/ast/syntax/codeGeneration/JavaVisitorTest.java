@@ -4,12 +4,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
-import de.fhg.iais.roberta.ast.syntax.action.VolumeAction;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst.Const;
 import de.fhg.iais.roberta.codegen.lejos.JavaVisitor;
-import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.helper.Helper;
 
 public class JavaVisitorTest {
@@ -50,18 +48,6 @@ public class JavaVisitorTest {
         BrickConfiguration brickConfiguration = new BrickConfiguration.Builder().build();
         JavaVisitor visitor = new JavaVisitor(sb, 0, brickConfiguration);
         emptyExpr.accept(visitor);
-
-        Assert.assertEquals("[[EmptyExpr [defVal=class java.lang.Double]]]", visitor.getSb().toString());
-    }
-
-    @Test(expected = DbcException.class)
-    public void invalidVolumeActionMode() throws Exception {
-        MathConst mathConst = MathConst.make(Const.E);
-        VolumeAction volumeAction = VolumeAction.make(VolumeAction.Mode.valueOf(""), mathConst);
-        StringBuilder sb = new StringBuilder();
-        BrickConfiguration brickConfiguration = new BrickConfiguration.Builder().build();
-        JavaVisitor visitor = new JavaVisitor(sb, 0, brickConfiguration);
-        volumeAction.accept(visitor);
 
         Assert.assertEquals("[[EmptyExpr [defVal=class java.lang.Double]]]", visitor.getSb().toString());
     }

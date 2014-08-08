@@ -30,5 +30,4 @@ public class MotorTachoModeTest {
         MotorTachoMode mode = MotorTachoMode.get(null);
 
     }
-
 }
