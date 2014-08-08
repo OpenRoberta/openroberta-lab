@@ -11,6 +11,6 @@ public class MotorDriveStopActionTest {
     public void stop() throws Exception {
         String a = "\nhal.stopRegulatedDrive(A, B);";
 
-        Assert.assertEquals(a, Helper.generateSyntax("/ast/actions/action_stop.xml"));
+        Assert.assertEquals(a, Helper.generateSyntax("/ast/actions/action_Stop.xml"));
     }
 }
