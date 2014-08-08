@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
 import de.fhg.iais.roberta.ast.syntax.action.LightAction;
 import de.fhg.iais.roberta.ast.syntax.action.LightStatusAction;
 import de.fhg.iais.roberta.ast.syntax.action.MotionParam;
+import de.fhg.iais.roberta.ast.syntax.action.MotorDriveStopAction;
 import de.fhg.iais.roberta.ast.syntax.action.MotorDuration;
 import de.fhg.iais.roberta.ast.syntax.action.MotorGetPowerAction;
 import de.fhg.iais.roberta.ast.syntax.action.MotorMoveMode;
@@ -24,7 +25,6 @@ import de.fhg.iais.roberta.ast.syntax.action.MotorStopMode;
 import de.fhg.iais.roberta.ast.syntax.action.PlayFileAction;
 import de.fhg.iais.roberta.ast.syntax.action.ShowPictureAction;
 import de.fhg.iais.roberta.ast.syntax.action.ShowTextAction;
-import de.fhg.iais.roberta.ast.syntax.action.MotorDriveStopAction;
 import de.fhg.iais.roberta.ast.syntax.action.ToneAction;
 import de.fhg.iais.roberta.ast.syntax.action.TurnAction;
 import de.fhg.iais.roberta.ast.syntax.action.TurnDirection;
@@ -111,6 +111,9 @@ public class JaxbTransformer {
         }
     }
 
+    /**
+     * @return abstract syntax tree generated from JAXB objects.
+     */
     public ArrayList<Phrase> getTree() {
         return this.tree;
     }

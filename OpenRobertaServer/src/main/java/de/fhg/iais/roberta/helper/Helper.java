@@ -15,7 +15,19 @@ import de.fhg.iais.roberta.codegen.lejos.JavaWrappCode;
 import de.fhg.iais.roberta.codegen.lejos.ProgramToCode;
 import de.fhg.iais.roberta.codegen.lejos.WrappCode;
 
+/**
+ * This class is used to store helper methods for operation with JAXB objects and generation code from them.
+ * 
+ * @author kcvejoski
+ */
 public class Helper {
+    /**
+     * Generate java code from a given program.
+     * 
+     * @param programName
+     * @return
+     * @throws Exception
+     */
     public static String generateSyntax(String programName) throws Exception {
         Project project = createJAXBTree(programName);
 
@@ -30,17 +42,38 @@ public class Helper {
         return generator.getSb().toString();
     }
 
+    /**
+     * Generates string from AST for a given program.
+     * 
+     * @param programName
+     * @return
+     * @throws Exception
+     */
     public static String generateASTString(String programName) throws Exception {
         Project project = createJAXBTree(programName);
         JaxbTransformer transformer = jaxbToAst(project);
         return transformer.toString();
     }
 
+    /**
+     * Generates AST for a given program.
+     * 
+     * @param programName
+     * @return
+     * @throws Exception
+     */
     public static JaxbTransformer generateAST(String programName) throws Exception {
         Project project = createJAXBTree(programName);
         return jaxbToAst(project);
     }
 
+    /**
+     * Generates java program from XML representation. Client must provide the location of the XML program.
+     * 
+     * @param programLocation
+     * @return
+     * @throws Exception
+     */
     public static String generateProgram(String programLocation) throws Exception {
         BrickConfiguration brickConfiguration = new BrickConfiguration.Builder().build();
         WrappCode wrappCode = new JavaWrappCode("Test", brickConfiguration);

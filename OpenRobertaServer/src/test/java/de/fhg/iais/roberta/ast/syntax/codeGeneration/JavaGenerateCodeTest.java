@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.ast.syntax;
+package de.fhg.iais.roberta.ast.syntax.codeGeneration;
 
 import org.junit.Assert;
 import org.junit.Test;

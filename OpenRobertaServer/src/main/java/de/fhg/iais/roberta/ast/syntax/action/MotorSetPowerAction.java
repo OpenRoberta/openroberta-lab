@@ -40,6 +40,9 @@ public class MotorSetPowerAction extends Action {
         return this.port;
     }
 
+    /**
+     * @return value of the power of the motor.
+     */
     public Expr getPower() {
         return this.power;
     }

@@ -70,6 +70,9 @@ public class IfStmt extends Stmt {
         return new IfStmt(expr, thenList, elseList, false);
     }
 
+    /**
+     * @return <b>true</b> if the statement is ternary.
+     */
     public boolean isTernary() {
         return this.ternary;
     }

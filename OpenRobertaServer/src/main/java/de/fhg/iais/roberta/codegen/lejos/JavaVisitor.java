@@ -446,7 +446,8 @@ public class JavaVisitor implements Visitor {
     @Override
     public void visit(TurnAction turnAction) {
         StringBuilder tmpSB = new StringBuilder();
-        JavaVisitor visitor = new JavaVisitor(tmpSB, this.indentation, this.brickConfiguration);
+        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
+        JavaVisitor visitor1 = new JavaVisitor(tmpSB, this.indentation, this.brickConfiguration);
         boolean isRegulated = true;
         String methodName = "hal.rotateDirectionRegulated(";
         if ( !isRegulated ) {
@@ -456,7 +457,7 @@ public class JavaVisitor implements Visitor {
         if ( turnAction.getParam().getDuration() != null ) {
             methodName = "hal.rotateDirectionDistanceRegulated(";
             tmpSB.append(", ");
-            turnAction.getParam().getDuration().getValue().accept(visitor);
+            turnAction.getParam().getDuration().getValue().accept(visitor1);
         }
         StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName);
         //Set the left motor to motor port A, this will be changed when brick configuration provides information on which port the left motor is set. 
@@ -472,7 +473,8 @@ public class JavaVisitor implements Visitor {
     @Override
     public void visit(DriveAction driveAction) {
         StringBuilder tmpSB = new StringBuilder();
-        JavaVisitor visitor = new JavaVisitor(tmpSB, this.indentation, this.brickConfiguration);
+        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
+        JavaVisitor visitor1 = new JavaVisitor(tmpSB, this.indentation, this.brickConfiguration);
         boolean isRegulated = true;
         String methodName = "hal.regulatedDrive(";
         if ( !isRegulated ) {
@@ -482,7 +484,7 @@ public class JavaVisitor implements Visitor {
         if ( driveAction.getParam().getDuration() != null ) {
             methodName = "hal.driveDistance(";
             tmpSB.append(", ");
-            driveAction.getParam().getDuration().getValue().accept(visitor);
+            driveAction.getParam().getDuration().getValue().accept(visitor1);
         }
 
         StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName);
