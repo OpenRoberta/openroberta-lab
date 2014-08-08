@@ -10,9 +10,9 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br/>
  * The client must provide the {@link ActorPort} and {@link MotionParam} (number of rotations or degrees and speed).
  */
-public class MotorOnAction extends Action {
-    ActorPort port;
-    MotionParam param;
+public final class MotorOnAction extends Action {
+    private final ActorPort port;
+    private final MotionParam param;
 
     private MotorOnAction(ActorPort port, MotionParam param) {
         super(Phrase.Kind.MOTOR_ON_ACTION);

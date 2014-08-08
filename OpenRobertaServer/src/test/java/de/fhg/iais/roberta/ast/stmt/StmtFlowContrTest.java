@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon.Flow;
+import de.fhg.iais.roberta.dbc.DbcException;
 
 public class StmtFlowContrTest {
 
@@ -34,5 +35,20 @@ public class StmtFlowContrTest {
     public void getFlowE1() throws Exception {
         Assert.assertEquals(Flow.CONTINUE, Flow.get("continue"));
 
+    }
+
+    @Test(expected = DbcException.class)
+    public void invalid() {
+        StmtFlowCon.Flow op = StmtFlowCon.Flow.get("");
+    }
+
+    @Test(expected = DbcException.class)
+    public void invalid1() {
+        StmtFlowCon.Flow op = StmtFlowCon.Flow.get(null);
+    }
+
+    @Test(expected = DbcException.class)
+    public void invalid2() {
+        StmtFlowCon.Flow op = StmtFlowCon.Flow.get("asdf");
     }
 }

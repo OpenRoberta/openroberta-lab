@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * 
  * @author kcvejoski
  */
-public class Binary extends Expr {
+public final class Binary extends Expr {
     private final Op op;
     private final Expr left;
     private final Expr right;

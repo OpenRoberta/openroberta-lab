@@ -7,7 +7,8 @@ package de.fhg.iais.roberta.helper;
  */
 public class StringManipulation {
     /**
-     * Appends custom string to string builder.
+     * append a newline, then append spaces up to an indentation level, then append an (optional) text and new line<br>
+     * helper for constructing readable {@link #toString()}- and {@link #GenerateCode.visit()}-methods for statement trees
      * 
      * @param sb on which the generated string will be appended,
      * @param indentation,

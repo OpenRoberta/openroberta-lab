@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.dbc.Assert;
 /**
  * Wraps subclasses of the class {@link Action} so they can be used as {@link Expr} in expressions.
  */
-public class ActionExpr extends Expr {
+public final class ActionExpr extends Expr {
     private final Action action;
 
     private ActionExpr(Action action) {

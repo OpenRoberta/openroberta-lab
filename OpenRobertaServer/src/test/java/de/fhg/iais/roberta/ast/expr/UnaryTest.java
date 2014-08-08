@@ -6,6 +6,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
+import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.helper.Helper;
 
 public class UnaryTest {
@@ -62,4 +63,18 @@ public class UnaryTest {
         Assert.assertEquals("-", unary.getOp().getOpSymbol());
     }
 
+    @Test(expected = DbcException.class)
+    public void invalid() {
+        Unary.Op op = Unary.Op.get("");
+    }
+
+    @Test(expected = DbcException.class)
+    public void invalid1() {
+        Unary.Op op = Unary.Op.get(null);
+    }
+
+    @Test(expected = DbcException.class)
+    public void invalid2() {
+        Unary.Op op = Unary.Op.get("asdf");
+    }
 }

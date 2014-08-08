@@ -6,6 +6,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
+import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.helper.Helper;
 
 public class BinaryTest {
@@ -69,5 +70,20 @@ public class BinaryTest {
         Binary binary = (Binary) transformer.getTree().get(0);
 
         Assert.assertEquals("+", binary.getOp().getOpSymbol());
+    }
+
+    @Test(expected = DbcException.class)
+    public void invalid() {
+        Binary.Op op = Binary.Op.get("");
+    }
+
+    @Test(expected = DbcException.class)
+    public void invalid1() {
+        Binary.Op op = Binary.Op.get(null);
+    }
+
+    @Test(expected = DbcException.class)
+    public void invalid2() {
+        Binary.Op op = Binary.Op.get("asdf");
     }
 }

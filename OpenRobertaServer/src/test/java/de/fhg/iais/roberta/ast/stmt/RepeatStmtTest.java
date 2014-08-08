@@ -6,6 +6,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
+import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.helper.Helper;
 
 public class RepeatStmtTest {
@@ -146,4 +147,20 @@ public class RepeatStmtTest {
 
         Assert.assertEquals(a, Helper.generateASTString("/ast/control/repeat_stmt_loopForever.xml"));
     }
+
+    @Test(expected = DbcException.class)
+    public void invalid() {
+        RepeatStmt.Mode op = RepeatStmt.Mode.get("");
+    }
+
+    @Test(expected = DbcException.class)
+    public void invalid1() {
+        RepeatStmt.Mode op = RepeatStmt.Mode.get(null);
+    }
+
+    @Test(expected = DbcException.class)
+    public void invalid2() {
+        RepeatStmt.Mode op = RepeatStmt.Mode.get("asdf");
+    }
+
 }

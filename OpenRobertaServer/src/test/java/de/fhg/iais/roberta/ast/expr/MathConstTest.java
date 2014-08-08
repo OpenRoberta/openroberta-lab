@@ -7,6 +7,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst.Const;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
+import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.helper.Helper;
 
 public class MathConstTest {
@@ -43,5 +44,20 @@ public class MathConstTest {
         MathConst mathConst = (MathConst) transformer.getTree().get(0);
 
         Assert.assertEquals(Assoc.NONE, mathConst.getAssoc());
+    }
+
+    @Test(expected = DbcException.class)
+    public void invalid() {
+        MathConst.Const op = MathConst.Const.get("");
+    }
+
+    @Test(expected = DbcException.class)
+    public void invalid1() {
+        MathConst.Const op = MathConst.Const.get(null);
+    }
+
+    @Test(expected = DbcException.class)
+    public void invalid2() {
+        MathConst.Const op = MathConst.Const.get("asdf");
     }
 }
