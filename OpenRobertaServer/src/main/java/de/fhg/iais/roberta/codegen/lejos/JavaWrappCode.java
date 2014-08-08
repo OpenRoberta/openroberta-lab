@@ -3,8 +3,22 @@ package de.fhg.iais.roberta.codegen.lejos;
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
 import de.fhg.iais.roberta.helper.StringManipulation;
 
+/**
+ * This class is used to generate valid JAVA code for wrapping generated code from {@link GenerateCode} object.<br>
+ * <br>
+ * To create object of this class use {@link #JavaWrappCode(String, BrickConfiguration)} constructor.
+ * 
+ * @author kcvejoski
+ */
 public class JavaWrappCode extends WrappCode {
-
+    /**
+     * This constructor creates valid object of the class {@link JavaWrappCode}.<br>
+     * <br>
+     * Client must provide name of the program (<i>this is used as a class name</i>) and valid brick configuration {@link BrickConfiguration}.
+     * 
+     * @param programName
+     * @param brickConfiguration
+     */
     public JavaWrappCode(String programName, BrickConfiguration brickConfiguration) {
         super(programName, brickConfiguration);
     }

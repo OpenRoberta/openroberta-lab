@@ -24,7 +24,7 @@ import de.fhg.iais.roberta.ast.syntax.action.MotorStopMode;
 import de.fhg.iais.roberta.ast.syntax.action.PlayFileAction;
 import de.fhg.iais.roberta.ast.syntax.action.ShowPictureAction;
 import de.fhg.iais.roberta.ast.syntax.action.ShowTextAction;
-import de.fhg.iais.roberta.ast.syntax.action.StopAction;
+import de.fhg.iais.roberta.ast.syntax.action.MotorDriveStopAction;
 import de.fhg.iais.roberta.ast.syntax.action.ToneAction;
 import de.fhg.iais.roberta.ast.syntax.action.TurnAction;
 import de.fhg.iais.roberta.ast.syntax.action.TurnDirection;
@@ -192,7 +192,7 @@ public class JaxbTransformer {
                 return TurnAction.make(TurnDirection.get(mode), mp);
 
             case "robActions_motorDiff_stop":
-                return StopAction.make();
+                return MotorDriveStopAction.make();
 
             case "robActions_motor_getPower":
                 fields = extractFields(block, (short) 1);

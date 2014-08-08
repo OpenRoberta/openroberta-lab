@@ -4,10 +4,12 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.Phrase.Kind;
+import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.ClearDisplayAction;
 import de.fhg.iais.roberta.ast.syntax.action.DriveAction;
 import de.fhg.iais.roberta.ast.syntax.action.LightAction;
 import de.fhg.iais.roberta.ast.syntax.action.LightStatusAction;
+import de.fhg.iais.roberta.ast.syntax.action.MotorDriveStopAction;
 import de.fhg.iais.roberta.ast.syntax.action.MotorGetPowerAction;
 import de.fhg.iais.roberta.ast.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.ast.syntax.action.MotorSetPowerAction;
@@ -15,7 +17,6 @@ import de.fhg.iais.roberta.ast.syntax.action.MotorStopAction;
 import de.fhg.iais.roberta.ast.syntax.action.PlayFileAction;
 import de.fhg.iais.roberta.ast.syntax.action.ShowPictureAction;
 import de.fhg.iais.roberta.ast.syntax.action.ShowTextAction;
-import de.fhg.iais.roberta.ast.syntax.action.StopAction;
 import de.fhg.iais.roberta.ast.syntax.action.ToneAction;
 import de.fhg.iais.roberta.ast.syntax.action.TurnAction;
 import de.fhg.iais.roberta.ast.syntax.action.VolumeAction;
@@ -55,31 +56,60 @@ import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.helper.StringManipulation;
 
+/**
+ * This class is implementing {@link Visitor}. All methods are implemented and they
+ * append a human-readable JAVA code representation of a phrase to a StringBuilder. <b>This representation is correct JAVA code.</b> <br>
+ * <br>
+ * To create object of this class use {@link #JavaVisitor(StringBuilder, int, BrickConfiguration)} constructor.
+ * 
+ * @author kcvejoski
+ */
 public class JavaVisitor implements Visitor {
-    private StringBuilder sb;
+    private final StringBuilder sb;
     private int indentation;
     private final BrickConfiguration brickConfiguration;
 
+    /**
+     * This constructor create valid object of the class {@link JavaVisitor}. <br>
+     * <br>
+     * Client must provide empty or non-empty {@link StringBuilder} object on which
+     * generated JAVA code will be appended, value for the indentation and valid {@link BrickConfiguration} object.
+     * 
+     * @param sb on which code will be appended,
+     * @param indentation value,
+     * @param brickConfiguration object with valid configuration.
+     */
     public JavaVisitor(StringBuilder sb, int indentation, BrickConfiguration brickConfiguration) {
         this.sb = sb;
         this.indentation = indentation;
         this.brickConfiguration = brickConfiguration;
     }
 
+    /**
+     * Get the current indentation of the visitor
+     * 
+     * @return indentation value of the visitor.
+     */
     public int getIndentation() {
         return this.indentation;
     }
 
+    /**
+     * Set the indentation of the visitor.
+     * 
+     * @param indentation value.
+     */
     public void setIndentation(int indentation) {
         this.indentation = indentation;
     }
 
+    /**
+     * Get the string builder of the visitor.
+     * 
+     * @return current state of the string builder
+     */
     public StringBuilder getSb() {
         return this.sb;
-    }
-
-    public void setSb(StringBuilder sb) {
-        this.sb = sb;
     }
 
     @Override
@@ -88,8 +118,51 @@ public class JavaVisitor implements Visitor {
     }
 
     @Override
-    public void visit(ActionExpr actionExpr) {
-        this.sb.append(actionExpr.getAction());
+    public void visit(BoolConst boolConst) {
+        this.sb.append(boolConst.isValue());
+    }
+
+    @Override
+    public void visit(MathConst mathConst) {
+        this.sb.append(mathConst.getMathConst());
+    }
+
+    @Override
+    public void visit(ColorConst colorConst) {
+        this.sb.append("\"").append(StringEscapeUtils.escapeJava(colorConst.getValue())).append("\"");
+    }
+
+    @Override
+    public void visit(StringConst stringConst) {
+        this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.getValue())).append("\"");
+    }
+
+    @Override
+    public void visit(NullConst nullConst) {
+        this.sb.append("null");
+    }
+
+    @Override
+    public void visit(Var var) {
+        switch ( var.getTypeVar() ) {
+            case INTEGER:
+                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "int " + var.getValue());
+                break;
+            default:
+                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, var.getValue());
+                break;
+        }
+    }
+
+    @Override
+    public void visit(Unary unary) {
+        if ( unary.getOp() == Unary.Op.POSTFIX_INCREMENTS ) {
+            generateExprCode(unary, this.sb, this.indentation);
+            this.sb.append(unary.getOp().getOpSymbol());
+        } else {
+            this.sb.append(unary.getOp().getOpSymbol());
+            generateExprCode(unary, this.sb, this.indentation);
+        }
     }
 
     @Override
@@ -101,30 +174,15 @@ public class JavaVisitor implements Visitor {
         generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
     }
 
-    private boolean parenthesesCheck(Binary binary) {
-        return binary.getOp() == Op.MINUS && binary.getRight().getKind() == Kind.BINARY && binary.getRight().getPrecedence() <= binary.getPrecedence();
-    }
-
-    private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr expr, Binary binary) {
-        JavaVisitor visitor = new JavaVisitor(sb, this.indentation, this.brickConfiguration);
-        if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption ) {
-            // parentheses are omitted
-            expr.accept(visitor);
-        } else {
-            sb.append("(" + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, null));
-            expr.accept(visitor);
-            sb.append(StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, ")"));
-        }
+    @Override
+    public void visit(ActionExpr actionExpr) {
+        this.sb.append(actionExpr.getAction());
     }
 
     @Override
-    public void visit(BoolConst boolConst) {
-        this.sb.append(boolConst.isValue());
-    }
-
-    @Override
-    public void visit(ColorConst colorConst) {
-        this.sb.append("\"").append(StringEscapeUtils.escapeJava(colorConst.getValue())).append("\"");
+    public void visit(SensorExpr sensorExpr) {
+        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
+        sensorExpr.getSens().accept(visitor);
     }
 
     @Override
@@ -155,61 +213,6 @@ public class JavaVisitor implements Visitor {
                 }
             }
             expr.accept(visitor);
-        }
-    }
-
-    @Override
-    public void visit(MathConst mathConst) {
-        this.sb.append(mathConst.getMathConst());
-    }
-
-    @Override
-    public void visit(NullConst nullConst) {
-        this.sb.append("null");
-    }
-
-    @Override
-    public void visit(SensorExpr sensorExpr) {
-        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
-        sensorExpr.getSens().accept(visitor);
-    }
-
-    @Override
-    public void visit(StringConst stringConst) {
-        this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.getValue())).append("\"");
-    }
-
-    @Override
-    public void visit(Unary unary) {
-        if ( unary.getOp() == Unary.Op.POSTFIX_INCREMENTS ) {
-            generateExprCode(unary, this.sb, this.indentation);
-            this.sb.append(unary.getOp().getOpSymbol());
-        } else {
-            this.sb.append(unary.getOp().getOpSymbol());
-            generateExprCode(unary, this.sb, this.indentation);
-        }
-    }
-
-    private void generateExprCode(Unary unary, StringBuilder sb, int indentation) {
-        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
-        if ( unary.getExpr().getPrecedence() < unary.getPrecedence() ) {
-            sb.append("(");
-            unary.getExpr().accept(visitor);
-            sb.append(")");
-        } else {
-            unary.getExpr().accept(visitor);
-        }
-    }
-
-    @Override
-    public void visit(Var var) {
-        switch ( var.getTypeVar() ) {
-            case INTEGER:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "int " + var.getValue());
-                break;
-            default:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, var.getValue());
-                break;
         }
     }
 
@@ -259,67 +262,6 @@ public class JavaVisitor implements Visitor {
             generateCodeFromIfElse(ifStmt, next, visitor);
             generateCodeFromElse(ifStmt, next, visitor);
         }
-    }
-
-    private void generateCodeFromTernary(IfStmt ifStmt, JavaVisitor visitor) {
-        this.sb.append("(" + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, null));
-        ifStmt.getExpr().get(0).accept(visitor);
-        this.sb.append(StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, ")")
-            + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, "?")
-            + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, null));
-        ((ExprStmt) ifStmt.getThenList().get(0).get().get(0)).getExpr().accept(visitor);
-        StringManipulation.appendCustomString(
-            this.sb,
-            PreattyPrintSettings.whiteSpaceSize,
-            false,
-            false,
-            ":" + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, null));
-        ((ExprStmt) ifStmt.getElseList().get().get(0)).getExpr().accept(visitor);
-    }
-
-    private void generateCodeFromIfElse(IfStmt ifStmt, int next, JavaVisitor visitor) {
-        for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
-            if ( i == 0 ) {
-                generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i), visitor, this.indentation);
-            } else {
-                generateCodeFromStmtCondition("else if", ifStmt.getExpr().get(i), visitor, PreattyPrintSettings.whiteSpaceSize);
-            }
-            visitor.setIndentation(next);
-            ifStmt.getThenList().get(i).accept(visitor);
-            if ( i + 1 < ifStmt.getExpr().size() ) {
-                StringManipulation.appendCustomString(this.sb, this.indentation, PreattyPrintSettings.newLineBeforeCloseBracket, false, "}");
-            }
-        }
-    }
-
-    private void generateCodeFromElse(IfStmt ifStmt, int next, JavaVisitor visitor) {
-        visitor.setIndentation(next);
-        if ( ifStmt.getElseList().get().size() != 0 ) {
-            StringManipulation.appendCustomString(
-                this.sb,
-                this.indentation,
-                PreattyPrintSettings.newLineBeforeCloseBracket,
-                false,
-                "}" + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, PreattyPrintSettings.newLineAfterCloseBracket, false, "else"));
-            this.sb.append(StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, PreattyPrintSettings.newLineBeforeOpenBracket, false, "{"));
-            ifStmt.getElseList().accept(visitor);
-        }
-        StringManipulation.appendCustomString(this.sb, this.indentation, PreattyPrintSettings.newLineBeforeCloseBracket, false, "}");
-    }
-
-    private void generateCodeFromStmtCondition(String stmtType, Expr expr, JavaVisitor visitor, int indentitation) {
-        StringManipulation.appendCustomString(
-            this.sb,
-            indentitation,
-            false,
-            false,
-            stmtType
-                + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, "(")
-                + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, null));
-        visitor.setIndentation(0);
-        expr.accept(visitor);
-        this.sb.append(StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, ")")
-            + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, PreattyPrintSettings.newLineBeforeOpenBracket, false, "{"));
     }
 
     @Override
@@ -373,6 +315,11 @@ public class JavaVisitor implements Visitor {
     }
 
     @Override
+    public void visit(ClearDisplayAction clearDisplayAction) {
+        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.clearDisplay();");
+    }
+
+    @Override
     public void visit(VolumeAction volumeAction) {
         JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
         switch ( volumeAction.getMode() ) {
@@ -387,11 +334,6 @@ public class JavaVisitor implements Visitor {
             default:
                 throw new DbcException("Invalid volume action mode!");
         }
-    }
-
-    @Override
-    public void visit(ClearDisplayAction clearDisplayAction) {
-        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.clearDisplay();");
     }
 
     @Override
@@ -456,10 +398,28 @@ public class JavaVisitor implements Visitor {
     }
 
     @Override
+    public void visit(MotorSetPowerAction motorSetPowerAction) {
+        // it is just temporary variable just to be able to write the code. This will be replaced by the brick configuration method.
+        boolean isRegulated = true;
+        String methodName = "hal.setRegulatedMotorSpeed(";
+        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
+        if ( !isRegulated ) {
+            methodName = "hal.setUnregulatedMotorSpeed(";
+        }
+        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName + motorSetPowerAction.getPort().name() + ", ");
+        motorSetPowerAction.getPower().accept(visitor);
+        this.sb.append(");");
+    }
+
+    @Override
     public void visit(MotorGetPowerAction motorGetPowerAction) {
-        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.getRegulatedMotorSpeed("
-            + motorGetPowerAction.getPort().toString()
-            + ")");
+        // it is just temporary variable just to be able to write the code. This will be replaced by the brick configuration method.
+        boolean isRegulated = true;
+        String methodName = "hal.getRegulatedMotorSpeed(";
+        if ( !isRegulated ) {
+            methodName = "hal.getUnregulatedMotorSpeed(";
+        }
+        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName + motorGetPowerAction.getPort().toString() + ")");
     }
 
     @Override
@@ -469,18 +429,14 @@ public class JavaVisitor implements Visitor {
     }
 
     @Override
-    public void visit(MotorSetPowerAction motorSetPowerAction) {
-        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
-        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.setRegulatedMotorSpeed("
-            + motorSetPowerAction.getPort().name()
-            + ", ");
-        motorSetPowerAction.getPower().accept(visitor);
-        this.sb.append(");");
-    }
-
-    @Override
     public void visit(MotorStopAction motorStopAction) {
-        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.stopRegulatedMotor("
+        // it is just temporary variable just to be able to write the code. This will be replaced by the brick configuration method.
+        boolean isRegulated = true;
+        String methodName = "hal.stopRegulatedMotor(";
+        if ( !isRegulated ) {
+            methodName = "hal.stopUnregulatedMotor(";
+        }
+        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName
             + motorStopAction.getPort().toString()
             + ", "
             + motorStopAction.getMode().toString()
@@ -489,18 +445,69 @@ public class JavaVisitor implements Visitor {
 
     @Override
     public void visit(TurnAction turnAction) {
-        // TODO Auto-generated method stub
-
+        StringBuilder tmpSB = new StringBuilder();
+        JavaVisitor visitor = new JavaVisitor(tmpSB, this.indentation, this.brickConfiguration);
+        boolean isRegulated = true;
+        String methodName = "hal.rotateDirectionRegulated(";
+        if ( !isRegulated ) {
+            methodName = "hal.rotateDirectionUnregulated(";
+        }
+        //check for distance parameter
+        if ( turnAction.getParam().getDuration() != null ) {
+            methodName = "hal.rotateDirectionDistanceRegulated(";
+            tmpSB.append(", ");
+            turnAction.getParam().getDuration().getValue().accept(visitor);
+        }
+        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName);
+        //Set the left motor to motor port A, this will be changed when brick configuration provides information on which port the left motor is set. 
+        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.A.toString() + ", ");
+        //Set the right motor to motor port B, this will be changed when brick configuration provides information on which port the right motor is set. 
+        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.B.toString() + ", ");
+        StringManipulation.appendCustomString(this.sb, 0, false, false, turnAction.getDirection().toString() + ", ");
+        turnAction.getParam().getSpeed().accept(visitor);
+        this.sb.append(tmpSB);
+        StringManipulation.appendCustomString(this.sb, 0, false, false, ");");
     }
 
     @Override
     public void visit(DriveAction driveAction) {
+        StringBuilder tmpSB = new StringBuilder();
+        JavaVisitor visitor = new JavaVisitor(tmpSB, this.indentation, this.brickConfiguration);
+        boolean isRegulated = true;
+        String methodName = "hal.regulatedDrive(";
+        if ( !isRegulated ) {
+            methodName = "hal.unregulatedDrive(";
+        }
+        //check for distance parameter
+        if ( driveAction.getParam().getDuration() != null ) {
+            methodName = "hal.driveDistance(";
+            tmpSB.append(", ");
+            driveAction.getParam().getDuration().getValue().accept(visitor);
+        }
+
+        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName);
+        //Set the left motor to motor port A, this will be changed when brick configuration provides information on which port the left motor is set. 
+        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.A.toString() + ", ");
+        //Set the right motor to motor port B, this will be changed when brick configuration provides information on which port the right motor is set. 
+        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.B.toString() + ", ");
+        StringManipulation.appendCustomString(this.sb, 0, false, false, driveAction.getDirection().toString() + ", ");
+        driveAction.getParam().getSpeed().accept(visitor);
+        this.sb.append(tmpSB);
+        StringManipulation.appendCustomString(this.sb, 0, false, false, ");");
     }
 
     @Override
-    public void visit(StopAction stopAction) {
-        // TODO Auto-generated method stub
-
+    public void visit(MotorDriveStopAction stopAction) {
+        boolean isRegulated = true;
+        String methodName = "hal.stopRegulatedDrive(";
+        if ( !isRegulated ) {
+            methodName = "hal.stopUnregulatedDrive(";
+        }
+        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName);
+        //Set the left motor to motor port A, this will be changed when brick configuration provides information on which port the left motor is set. 
+        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.A.toString() + ", ");
+        //Set the right motor to motor port B, this will be changed when brick configuration provides information on which port the right motor is set. 
+        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.B.toString() + ");");
     }
 
     @Override
@@ -659,6 +666,94 @@ public class JavaVisitor implements Visitor {
                     + ");");
                 break;
         }
+    }
+
+    private boolean parenthesesCheck(Binary binary) {
+        return binary.getOp() == Op.MINUS && binary.getRight().getKind() == Kind.BINARY && binary.getRight().getPrecedence() <= binary.getPrecedence();
+    }
+
+    private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr expr, Binary binary) {
+        JavaVisitor visitor = new JavaVisitor(sb, this.indentation, this.brickConfiguration);
+        if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption ) {
+            // parentheses are omitted
+            expr.accept(visitor);
+        } else {
+            sb.append("(" + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, null));
+            expr.accept(visitor);
+            sb.append(StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, ")"));
+        }
+    }
+
+    private void generateExprCode(Unary unary, StringBuilder sb, int indentation) {
+        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
+        if ( unary.getExpr().getPrecedence() < unary.getPrecedence() ) {
+            sb.append("(");
+            unary.getExpr().accept(visitor);
+            sb.append(")");
+        } else {
+            unary.getExpr().accept(visitor);
+        }
+    }
+
+    private void generateCodeFromTernary(IfStmt ifStmt, JavaVisitor visitor) {
+        this.sb.append("(" + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, null));
+        ifStmt.getExpr().get(0).accept(visitor);
+        this.sb.append(StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, ")")
+            + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, "?")
+            + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, null));
+        ((ExprStmt) ifStmt.getThenList().get(0).get().get(0)).getExpr().accept(visitor);
+        StringManipulation.appendCustomString(
+            this.sb,
+            PreattyPrintSettings.whiteSpaceSize,
+            false,
+            false,
+            ":" + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, null));
+        ((ExprStmt) ifStmt.getElseList().get().get(0)).getExpr().accept(visitor);
+    }
+
+    private void generateCodeFromIfElse(IfStmt ifStmt, int next, JavaVisitor visitor) {
+        for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
+            if ( i == 0 ) {
+                generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i), visitor, this.indentation);
+            } else {
+                generateCodeFromStmtCondition("else if", ifStmt.getExpr().get(i), visitor, PreattyPrintSettings.whiteSpaceSize);
+            }
+            visitor.setIndentation(next);
+            ifStmt.getThenList().get(i).accept(visitor);
+            if ( i + 1 < ifStmt.getExpr().size() ) {
+                StringManipulation.appendCustomString(this.sb, this.indentation, PreattyPrintSettings.newLineBeforeCloseBracket, false, "}");
+            }
+        }
+    }
+
+    private void generateCodeFromElse(IfStmt ifStmt, int next, JavaVisitor visitor) {
+        visitor.setIndentation(next);
+        if ( ifStmt.getElseList().get().size() != 0 ) {
+            StringManipulation.appendCustomString(
+                this.sb,
+                this.indentation,
+                PreattyPrintSettings.newLineBeforeCloseBracket,
+                false,
+                "}" + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, PreattyPrintSettings.newLineAfterCloseBracket, false, "else"));
+            this.sb.append(StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, PreattyPrintSettings.newLineBeforeOpenBracket, false, "{"));
+            ifStmt.getElseList().accept(visitor);
+        }
+        StringManipulation.appendCustomString(this.sb, this.indentation, PreattyPrintSettings.newLineBeforeCloseBracket, false, "}");
+    }
+
+    private void generateCodeFromStmtCondition(String stmtType, Expr expr, JavaVisitor visitor, int indentitation) {
+        StringManipulation.appendCustomString(
+            this.sb,
+            indentitation,
+            false,
+            false,
+            stmtType
+                + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, "(")
+                + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, null));
+        visitor.setIndentation(0);
+        expr.accept(visitor);
+        this.sb.append(StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, ")")
+            + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, PreattyPrintSettings.newLineBeforeOpenBracket, false, "{"));
     }
 
 }

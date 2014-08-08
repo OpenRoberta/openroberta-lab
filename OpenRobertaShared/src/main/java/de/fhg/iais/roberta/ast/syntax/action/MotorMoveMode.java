@@ -5,6 +5,8 @@ import java.util.Locale;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
+ * This enum provides all possible motor types of movements.
+ * 
  * @author kcvejoski
  */
 public enum MotorMoveMode {

@@ -9,6 +9,15 @@ public class MotorDuration {
     private MotorMoveMode type;
     private Expr value;
 
+    /**
+     * This constructor creates correct object of the class {@link MotorDuration}.<br>
+     * <br>
+     * Client must provide type of the motor movement (<i>see enum {@link MotorMoveMode} for all possible motor movements</i>) and value for the movement e.g.
+     * distance(cm), number of rotations...
+     * 
+     * @param type of the motor movement
+     * @param value for the movement
+     */
     public MotorDuration(MotorMoveMode type, Expr value) {
         super();
         this.setType(type);
