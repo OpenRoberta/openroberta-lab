@@ -224,6 +224,8 @@ Blockly.Css.CONTENT = [
   '.blocklyMinimalBody {',
   '  margin: 0;',
   '  padding: 0;',
+  '  background-color: rgb(255, 255, 255);', // fallback
+  '  background-color: rgba(255, 255, 255, 0.5); ',
   '}',
 
   '.blocklyCommentTextarea {',
@@ -231,7 +233,8 @@ Blockly.Css.CONTENT = [
   '  padding: 2px;',
   '  border: 0;',
   '  resize: none;',
-  '  background-color: #ffc;',
+  '  background-color: rgb(255, 255, 255);', // fallback
+  '  background-color: rgba(255, 255, 255, 0.5); ',
   '}',
 
   '.blocklyHtmlInput {',
@@ -421,35 +424,35 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.goog-palette-table {',
-  '  border: 1px solid #666;',
+  '  border: 3px solid #6DBFA9;',
   '  border-collapse: collapse;',
   '}',
 
   '.goog-palette-cell {',
-  '  height: 13px;',
-  '  width: 15px;',
+  '  height: 20px;',
+  '  width: 20px;',
   '  margin: 0;',
   '  border: 0;',
   '  text-align: center;',
   '  vertical-align: middle;',
-  '  border-right: 1px solid #666;',
+  '  border-right: 3px solid #6DBFA9;',
   '  font-size: 1px;',
   '}',
 
   '.goog-palette-colorswatch {',
   '  position: relative;',
-  '  height: 13px;',
-  '  width: 15px;',
-  '  border: 1px solid #666;',
+  '  height: 20px;',
+  '  width: 20px;',
+  '  border: 2px solid #6DBFA9;',
   '}',
 
   '.goog-palette-cell-hover .goog-palette-colorswatch {',
-  '  border: 1px solid #FFF;',
+  '  border: 2px solid #FFF;',
   '}',
 
   '.goog-palette-cell-selected .goog-palette-colorswatch {',
-  '  border: 1px solid #000;',
-  '  color: #fff;',
+  '  border: 2px solid #FFDC00;',
+ //  color: #FFDC00;',
   '}',
 
   /* Copied from: goog/css/menu.css */

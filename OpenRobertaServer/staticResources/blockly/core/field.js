@@ -44,8 +44,8 @@ Blockly.Field = function(text) {
   // Build the DOM.
   this.fieldGroup_ = Blockly.createSvgElement('g', {}, null);
   this.borderRect_ = Blockly.createSvgElement('rect',
-      {'rx': 4,
-       'ry': 4,
+      {'rx': Blockly.BlockSvg.CORNER_RADIUS,
+       'ry': Blockly.BlockSvg.CORNER_RADIUS,
        'x': -Blockly.BlockSvg.SEP_SPACE_X / 2,
        'y': -12,
        'height': 16}, this.fieldGroup_);

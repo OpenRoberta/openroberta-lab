@@ -27,7 +27,7 @@ Blockly.Blocks['robSensors_getSample'] = {
 	 * @memberof Block
 	 */
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
 		// this.setInputsInline(true);
 		var sensorType = new Blockly.FieldDropdown([
 				[ Blockly.Msg.SENSOR_TOUCH + ' (gedrückt)', 'TOUCH' ],
@@ -236,7 +236,7 @@ Blockly.Blocks['robSensors_touch_isPressed'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
 		// this.setInputsInline(true);
 		var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ],
 				[ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
@@ -261,7 +261,7 @@ Blockly.Blocks['robSensors_key_isPressed'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
 		// this.setInputsInline(true);
 		var key = new Blockly.FieldDropdown([
 				[ Blockly.Msg.SENSOR_KEY_ENTER, 'ENTER' ],
@@ -292,7 +292,7 @@ Blockly.Blocks['robSensors_key_isPressedAndReleased'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
 		// this.setInputsInline(true);
 		var key = new Blockly.FieldDropdown([
 				[ Blockly.Msg.SENSOR_KEY_ENTER, 'ENTER' ],
@@ -323,7 +323,7 @@ Blockly.Blocks['robSensors_ultrasonic_setMode'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
 		// this.setInputsInline(true);
 		var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ],
 				[ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
@@ -355,7 +355,7 @@ Blockly.Blocks['robSensors_ultrasonic_getMode'] = {
 	 */
 	/** @todo check mode outputs */
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
 		// this.setInputsInline(true);
 		var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ],
 				[ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
@@ -379,7 +379,7 @@ Blockly.Blocks['robSensors_ultrasonic_getSample'] = {
 	 * @memberof Block
 	 */
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
 		// this.setInputsInline(true);
 		var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ],
 				[ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
@@ -404,7 +404,7 @@ Blockly.Blocks['robSensors_colour_setMode'] = {
 	 * @memberof Block
 	 */
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
 		// this.setInputsInline(true);
 		var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ],
 				[ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
@@ -438,7 +438,7 @@ Blockly.Blocks['robSensors_colour_getMode'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
 		// this.setInputsInline(true);
 		var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ],
 				[ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
@@ -465,7 +465,7 @@ Blockly.Blocks['robSensors_colour_getSample'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
 		// this.setInputsInline(true);
 		var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ],
 				[ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
@@ -491,7 +491,7 @@ Blockly.Blocks['robSensors_infrared_setMode'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
 		// this.setInputsInline(true);
 		var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ],
 				[ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
@@ -522,7 +522,7 @@ Blockly.Blocks['robSensors_infrared_getMode'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
 		// this.setInputsInline(true);
 		var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ],
 				[ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
@@ -547,7 +547,7 @@ Blockly.Blocks['robSensors_infrared_getSample'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
 		// this.setInputsInline(true);
 		var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ],
 				[ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
@@ -573,7 +573,7 @@ Blockly.Blocks['robSensors_encoder_setMode'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
 		// this.setInputsInline(true);
 		var motorport = new Blockly.FieldDropdown([ [ 'A', 'A' ], [ 'B', 'B' ],
 				[ 'C', 'C' ], [ 'D', 'D' ] ]);
@@ -605,7 +605,7 @@ Blockly.Blocks['robSensors_encoder_getMode'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
 		var motorport = new Blockly.FieldDropdown([ [ 'A', 'A' ], [ 'B', 'B' ],
 				[ 'C', 'C' ], [ 'D', 'D' ] ]);
 		// this.setInputsInline(true);
@@ -629,7 +629,7 @@ Blockly.Blocks['robSensors_encoder_reset'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
 		var motorport = new Blockly.FieldDropdown([ [ 'A', 'A' ], [ 'B', 'B' ],
 				[ 'C', 'C' ], [ 'D', 'D' ] ]);
 		// this.setInputsInline(true);
@@ -655,7 +655,7 @@ Blockly.Blocks['robSensors_encoder_getSample'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
 		var motorport = new Blockly.FieldDropdown([ [ 'A', 'A' ], [ 'B', 'B' ],
 				[ 'C', 'C' ], [ 'D', 'D' ] ]);
 		// this.setInputsInline(true);
@@ -681,7 +681,7 @@ Blockly.Blocks['robSensors_gyro_setMode'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
 		// this.setInputsInline(true);
 		var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ],
 				[ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
@@ -712,7 +712,7 @@ Blockly.Blocks['robSensors_gyro_getMode'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
 		// this.setInputsInline(true);
 		var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ],
 				[ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
@@ -736,7 +736,7 @@ Blockly.Blocks['robSensors_gyro_reset'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
 		// this.setInputsInline(true);
 		var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ],
 				[ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
@@ -762,7 +762,7 @@ Blockly.Blocks['robSensors_gyro_getSample'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
 		var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ],
 				[ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
 		// this.setInputsInline(true);
@@ -785,7 +785,7 @@ Blockly.Blocks['robSensors_timer_reset'] = {
 	 * @memberof Block
 	 */
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
 		// this.setInputsInline(true);
 		var sensorNum = new Blockly.FieldDropdown([ [ 'Zeitgeber 1', '1' ],
 				[ 'Zeitgeber 2', '2' ], [ 'Zeitgeber 3', '3' ],
@@ -815,7 +815,7 @@ Blockly.Blocks['robSensors_timer_getSample'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
 		var sensorNum = new Blockly.FieldDropdown([ [ 'Zeitgeber 1', '1' ],
 				[ 'Zeitgeber 2', '2' ], [ 'Zeitgeber 3', '3' ],
 				[ 'Zeitgeber 4', '4' ], [ 'Zeitgeber 5', '5' ],

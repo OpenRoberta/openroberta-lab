@@ -36,7 +36,7 @@ Blockly.Blocks['variables_get'] = {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.VARIABLES_GET_HELPURL);
-    this.setColourRGB(144, 133, 186);  
+    this.setColourRGB(Blockly.CAT_VARIABLES_RGB);  
     this.appendDummyInput()
         .appendField(Blockly.Msg.VARIABLES_GET_TITLE)
         .appendField(new Blockly.FieldVariable(
@@ -92,7 +92,7 @@ Blockly.Blocks['variables_set'] = {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.VARIABLES_SET_HELPURL);
-    this.setColourRGB(144, 133, 186);  
+    this.setColourRGB(Blockly.CAT_VARIABLES_RGB);  
     this.interpolateMsg(
         // TODO: Combine these messages instead of using concatenation.
         Blockly.Msg.VARIABLES_SET_TITLE + ' %1 ' +

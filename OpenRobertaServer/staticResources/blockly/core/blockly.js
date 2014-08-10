@@ -97,6 +97,55 @@ Blockly.makeColour = function(hue) {
 };
 
 /**
+ * The rgb value for block colours in logic category.
+ */
+Blockly.CAT_LOGIC_RGB = [51, 184, 202];
+/**
+ * The rgb value for block colours in colour category.
+ */
+Blockly.CAT_COLOUR_RGB = [109, 191, 169];
+/**
+ * The rgb value for block colours in lists category.
+ */
+Blockly.CAT_LISTS_RGB = [31, 130, 192];
+/**
+ * The rgb value for block colours in loops category.
+ */
+Blockly.CAT_LOOPS_RGB = [235, 106, 10];
+/**
+ * The rgb value for block colours in math category.
+ */
+Blockly.CAT_MATH_RGB = [0, 90, 148];
+/**
+ * The rgb value for block colours in procedures category.
+ */
+Blockly.CAT_PROCEDURES_RGB = [57, 55, 139];
+/**
+ * The rgb value for block colours in actions category.
+ */
+Blockly.CAT_ROBACTIONS_RGB = [242, 148, 9];
+/**
+ * The rgb value for block colours in activity category.
+ */
+Blockly.CAT_ROBACTIVITY_RGB = [226, 0, 26];
+/**
+ * The rgb value for block colours in controls category.
+ */
+Blockly.CAT_ROBCONTROLS_RGB = [235, 106, 10];
+/**
+ * The rgb value for block colours in sensors category.
+ */
+Blockly.CAT_ROBSENSORS_RGB = [143, 164, 2];
+/**
+ * The rgb value for block colours in text category.
+ */
+Blockly.CAT_TEXT_RGB = [177, 200, 0];
+/**
+ * The rgb value for block colours in variables category.
+ */
+Blockly.CAT_VARIABLES_RGB = [144, 133, 186];
+
+/**
  * ENUM for a right-facing value input.  E.g. 'test' or 'return'.
  * @const
  */

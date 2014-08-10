@@ -1207,29 +1207,30 @@ Blockly.Block.prototype.setHelpUrl = function(url) {
 
 /**
  * Get the colour of a block.
- * @return {number} HSV hue value.
+ * 
+ * @return {string} hex hex value.
  */
 Blockly.Block.prototype.getColour = function() {
-	return this.colourHue_;
+    return this.colourHex_;
 };
-
 /**
- * Get the colour of a block.
- * @return {number} HSV hue value.
- */
-Blockly.Block.prototype.getColour = function() {
-	return this.colourHue_;
-};
-
-/**
- * Change the colour of a block.
+ * Change the colour of a block (HSV).
+ * 
  * @param {number} colourHue HSV hue value.
+ * @param {number} colourSaturation HSV saturation value.
+ * @param {number} colourValue HSV value value.
  */
-Blockly.Block.prototype.setColour = function(colourHue, colourSaturation, colourValue)
-{
-	this.colourHue_ = colourHue;
-	this.colourSaturation_ = colourSaturation || Blockly.HSV_SATURATION;
-	this.colourValue_ = colourValue || (Blockly.HSV_VALUE * 256);
+Blockly.Block.prototype.setColour = function(colourHue, colourSaturation, colourValue) {
+
+
+    this.colourHue_ = colourHue;
+    this.colourSaturation_ = colourSaturation || Blockly.HSV_SATURATION;
+    this.colourValue_ = colourValue || (Blockly.HSV_VALUE * 256);
+    this.colourHex_ = goog.color.hsvToHex(this.colourHue_, this.colourSaturation_, this.colourValue_);
+    this.updateColour();
+};
+
+Blockly.Block.prototype.updateColour = function() {
 	if (this.svg_) {
 		this.svg_.updateColour();
 	}
@@ -1250,16 +1251,12 @@ Blockly.Block.prototype.setColour = function(colourHue, colourSaturation, colour
 
 /**
  * Change the colour of a block.
- * @param {number} red RGB red value.
- * @param {number} green RGB red value.
- * @param {number} blue RGB red value.
+ * 
+ * @param {goog.color.Rgb} rgb rgb representation of the color.
  */
-Blockly.Block.prototype.setColourRGB = function(red, green, blue) {
-	var hsv = goog.color.rgbToHsv(red, green, blue);
-	var colourHue = hsv[0];
-	var colourSaturation = hsv[1];
-	var colourValue = hsv[2];
-	this.setColour(colourHue, colourSaturation, colourValue);
+Blockly.Block.prototype.setColourRGB = function(rgb) {
+    this.colourHex_ = goog.color.rgbArrayToHex(rgb);
+    this.updateColour();
 };
 
 /**

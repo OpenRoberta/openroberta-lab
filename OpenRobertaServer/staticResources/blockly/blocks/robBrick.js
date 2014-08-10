@@ -26,7 +26,7 @@ Blockly.Blocks['robBrick_EV3-Brick'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(255, 255, 255);
+		this.setColourRGB([220, 220, 220]);
 		// this.setInputsInline(true);
 		var wheelDiameter = new Blockly.FieldTextInput('5.6');
 		var trackWidth = new Blockly.FieldTextInput('17');
@@ -66,7 +66,7 @@ Blockly.Blocks['robBrick_ultrasonic'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB([143, 164, 2]);
 		// this.setInputsInline(true);
 		var mode = new Blockly.FieldDropdown([
 				[ Blockly.Msg.MODE_DISTANCE, 'DISTANCE' ],
@@ -89,7 +89,7 @@ Blockly.Blocks['robBrick_colour'] = {
 	 * @memberof Block
 	 */
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB([143, 164, 2]);
 		// this.setInputsInline(true);
 		var mode = new Blockly.FieldDropdown([
 				[ Blockly.Msg.MODE_COLOUR, 'COLOUR' ],
@@ -114,7 +114,7 @@ Blockly.Blocks['robBrick_infrared'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB([143, 164, 2]);
 		// this.setInputsInline(true);
 		var mode = new Blockly.FieldDropdown([
 				[ Blockly.Msg.MODE_DISTANCE, 'DISTANCE' ],
@@ -137,7 +137,7 @@ Blockly.Blocks['robBrick_touch'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB([143, 164, 2]);
 		// this.setInputsInline(true);
 		this.appendDummyInput().appendField(Blockly.Msg.SENSOR_TOUCH);
 		this.setOutput(true, 'Number');
@@ -157,7 +157,7 @@ Blockly.Blocks['robBrick_gyro'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(143, 164, 2);
+		this.setColourRGB([143, 164, 2]);
 		// this.setInputsInline(true);
 		var mode = new Blockly.FieldDropdown([
 				[ Blockly.Msg.MODE_ANGLE, 'ANGLE' ],
@@ -181,7 +181,7 @@ Blockly.Blocks['robBrick_motor_big'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(242, 148, 0);
+		this.setColourRGB([242, 148, 0]);
 		// this.setInputsInline(true);
 		var motorRegulation = new Blockly.FieldDropdown([
 				[ 'geregelt ja', 'ON' ], [ 'geregelt nein', 'OFF' ] ]);
@@ -204,7 +204,7 @@ Blockly.Blocks['robBrick_motor_middle'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(242, 148, 0);
+		this.setColourRGB([242, 148, 0]);
 		// this.setInputsInline(true);
 		var motorRegulation = new Blockly.FieldDropdown([
 				[ 'geregelt ja', 'ON' ], [ 'geregelt nein', 'OFF' ] ]);
@@ -225,7 +225,7 @@ Blockly.Blocks['robBrick_actor'] = {
 	 */
 
 	init : function() {
-		this.setColourRGB(242, 148, 0);
+		this.setColourRGB([242, 148, 0]);
 		// this.setInputsInline(true);
 		this.appendDummyInput('ACTOR').appendField('anderer Stromverbraucher');
 		this.setOutput(true, 'String');

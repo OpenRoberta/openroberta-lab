@@ -206,13 +206,13 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
   </g>
   */
   this.bubbleGroup_ = Blockly.createSvgElement('g', {}, null);
-  var bubbleEmboss = Blockly.createSvgElement('g',
-      {'filter': 'url(#blocklyEmboss)'}, this.bubbleGroup_);
-  this.bubbleArrow_ = Blockly.createSvgElement('path', {}, bubbleEmboss);
+  //var bubbleEmboss = Blockly.createSvgElement('g',
+    //  {'filter': 'url(#blocklyEmboss)'}, this.bubbleGroup_);
+  this.bubbleArrow_ = Blockly.createSvgElement('path', {}, this.bubbleGroup_);
   this.bubbleBack_ = Blockly.createSvgElement('rect',
       {'class': 'blocklyDraggable', 'x': 0, 'y': 0,
       'rx': Blockly.Bubble.BORDER_WIDTH, 'ry': Blockly.Bubble.BORDER_WIDTH},
-      bubbleEmboss);
+      this.bubbleGroup_);
   if (hasResize) {
     this.resizeGroup_ = Blockly.createSvgElement('g',
         {'class': Blockly.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE'},

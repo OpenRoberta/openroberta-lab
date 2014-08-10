@@ -320,14 +320,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
     // Disabled blocks don't have colour.
     return;
   }
-  // var hexColour = Blockly.makeColour(this.block_.getColour());
-  var hexColour = goog.color.hsvToHex(this.block_.colourHue_, this.block_.colourSaturation_, this.block_.colourValue_);
-  var rgb = goog.color.hexToRgb(hexColour);
-  var rgbLight = goog.color.lighten(rgb, 0.3);
-  var rgbDark = goog.color.darken(rgb, 0.4);
-  //this.svgPathLight_.setAttribute('stroke', goog.color.rgbArrayToHex(rgbLight));
-  //this.svgPathDark_.setAttribute('fill', goog.color.rgbArrayToHex(rgbDark));
-  this.svgPath_.setAttribute('fill', hexColour);
+  this.svgPath_.setAttribute('fill', this.block_.getColour());
 };
 
 /**
