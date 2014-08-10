@@ -865,7 +865,6 @@ Blockly.BlockSvg.prototype.renderDrawLeft_ = function(steps, connectionsXY, curs
     steps.push('V', Blockly.BlockSvg.TAB_HEIGHT);
     steps.push('v -1 c-6.2 0.1 -7.5 -0.5 -8.3 -1.6c-1.1 -1.5 -1.2 -3.8 -0.2 -7.1 l 0.3 -1.1 l 8.1 0.4 v -9.2');
     this.width += Blockly.BlockSvg.TAB_WIDTH;
-  } else if (!Blockly.RTL) {
-  }
+  } 
   steps.push('z');
 };
