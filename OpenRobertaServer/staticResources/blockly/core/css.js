@@ -87,13 +87,16 @@ Blockly.Css.CONTENT = [
   '.blocklyHighlightedConnectionPath {',
   '  stroke-width: 4px;',
   '  stroke: #FFDC00;',
-  '  fill: none;',
+  '  fill: #FFDC00;',
   '}',
 
-  '.blocklyPathLight {',
-  '  fill: none;',
-  '  stroke-width: 2;',
-  '  stroke-linecap: round;',
+  //'.blocklyPathBorder {',
+  //'  fill: none;',
+  //'  stroke-width: 2;',
+  //'}',
+  
+  '.blocklyPathBorder {',
+  '  display: none;',
   '}',
 
   '.blocklySelected>.blocklyPath {',
@@ -101,7 +104,7 @@ Blockly.Css.CONTENT = [
   '  stroke: #FFDC00;',
   '}',
 
-  '.blocklySelected>.blocklyPathLight {',
+  '.blocklySelected>.blocklyPathBorder {',
   '  display: none;',
   '}',
 
@@ -196,13 +199,13 @@ Blockly.Css.CONTENT = [
   '.blocklyIconShield {',
   '  cursor: default;',
   '  fill: #006E92;',
-  '  stroke-width: 1px;',
-  '  stroke: #ccc;',
+  //'  stroke-width: 1px;',
+  //'  stroke: #ccc;',
   '}',
 
   '.blocklyIconGroup:hover>.blocklyIconShield {',
   '  fill: #007da6;',
-  '  stroke: #fff;',
+  //'  stroke: #fff;',
   '}',
 
   '.blocklyIconGroup:hover>.blocklyIconMark {',
@@ -224,8 +227,6 @@ Blockly.Css.CONTENT = [
   '.blocklyMinimalBody {',
   '  margin: 0;',
   '  padding: 0;',
-  '  background-color: rgb(255, 255, 255);', // fallback
-  '  background-color: rgba(255, 255, 255, 0.5); ',
   '}',
 
   '.blocklyCommentTextarea {',
@@ -233,8 +234,7 @@ Blockly.Css.CONTENT = [
   '  padding: 2px;',
   '  border: 0;',
   '  resize: none;',
-  '  background-color: rgb(255, 255, 255);', // fallback
-  '  background-color: rgba(255, 255, 255, 0.5); ',
+  //'  background-color: #ffc;',
   '}',
 
   '.blocklyHtmlInput {',
@@ -424,35 +424,35 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.goog-palette-table {',
-  '  border: 3px solid #6DBFA9;',
+  '  border: 1px solid #666;',
   '  border-collapse: collapse;',
   '}',
 
   '.goog-palette-cell {',
-  '  height: 20px;',
-  '  width: 20px;',
+  '  height: 13px;',
+  '  width: 15px;',
   '  margin: 0;',
   '  border: 0;',
   '  text-align: center;',
   '  vertical-align: middle;',
-  '  border-right: 3px solid #6DBFA9;',
+  '  border-right: 1px solid #666;',
   '  font-size: 1px;',
   '}',
 
   '.goog-palette-colorswatch {',
   '  position: relative;',
-  '  height: 20px;',
-  '  width: 20px;',
-  '  border: 2px solid #6DBFA9;',
+  '  height: 13px;',
+  '  width: 15px;',
+  '  border: 1px solid #666;',
   '}',
 
   '.goog-palette-cell-hover .goog-palette-colorswatch {',
-  '  border: 2px solid #FFF;',
+  '  border: 1px solid #FFF;',
   '}',
 
   '.goog-palette-cell-selected .goog-palette-colorswatch {',
-  '  border: 2px solid #FFDC00;',
- //  color: #FFDC00;',
+  '  border: 1px solid #000;',
+  '  color: #fff;',
   '}',
 
   /* Copied from: goog/css/menu.css */
