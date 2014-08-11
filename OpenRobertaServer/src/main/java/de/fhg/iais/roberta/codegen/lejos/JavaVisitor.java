@@ -176,7 +176,8 @@ public class JavaVisitor implements Visitor {
 
     @Override
     public void visit(ActionExpr actionExpr) {
-        this.sb.append(actionExpr.getAction());
+        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
+        actionExpr.getAction().accept(visitor);
     }
 
     @Override
@@ -279,13 +280,17 @@ public class JavaVisitor implements Visitor {
                 break;
             case FOR_EACH:
                 break;
-
             default:
                 break;
         }
         visitor.setIndentation(next);
         repeatStmt.getList().accept(visitor);
-        StringManipulation.appendCustomString(this.sb, this.indentation, PreattyPrintSettings.newLineBeforeCloseBracket, false, "}");
+        StringManipulation.appendCustomString(
+            this.sb,
+            this.indentation,
+            PreattyPrintSettings.newLineBeforeCloseBracket,
+            PreattyPrintSettings.newLineAfterCloseBracket,
+            "}");
     }
 
     @Override
@@ -425,7 +430,6 @@ public class JavaVisitor implements Visitor {
     @Override
     public void visit(MotorOnAction motorOnAction) {
         // TODO Auto-generated method stub
-
     }
 
     @Override

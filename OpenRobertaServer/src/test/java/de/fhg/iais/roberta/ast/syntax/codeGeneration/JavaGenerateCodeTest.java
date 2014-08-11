@@ -122,4 +122,41 @@ public class JavaGenerateCodeTest {
 
         Assert.assertEquals(a, Helper.generateProgram("/syntax/code_generator/java_code_generator3.xml"));
     }
+
+    @Test
+    public void test4() throws Exception {
+
+        String a =
+            "import de.fhg.iais.roberta.codegen.lejos;\n"
+                + "import de.fhg.iais.roberta.ast.syntax;\n\n"
+
+                + "public class Test {\n"
+                + "    private BrickConfiguration brickConfiguration = new BrickConfiguration.Builder()\n"
+                + "    .build();\n\n"
+
+                + "    public static void main(String[] args) {\n"
+                + "        Test.run();\n"
+                + "    }\n\n"
+
+                + "    public static void run() {\n"
+                + "        Hal hal = new Hal(brickConfiguration);\n"
+                + "        if ( 5 < hal.getRegulatedMotorSpeed(B) ) {\n\n\n"
+                + "            hal.rotateDirectionRegulated(A, B, RIGHT, 50);\n"
+                + "        }\n"
+                + "        if ( hal.getMotorTachoValue(A) + hal.getInfraredSensorValue(S4) == hal.getUltraSonicSensorValue(S4) ) {\n"
+                + "            hal.setInfraredSensorMode(S4, SEEK);\n"
+                + "            hal.ledOff();\n"
+                + "        } else {\n"
+                + "            hal.resetGyroSensor(S2);\n"
+                + "            while ( hal.isPressed(S1) ) {\n"
+                + "                hal.drawPicture(\"SMILEY1\", 0, 0);\n"
+                + "                hal.clearDisplay();\n"
+                + "            }\n"
+                + "            hal.ledOn(GREEN, true);\n"
+                + "        }\n"
+                + "    }\n"
+                + "}";
+
+        Assert.assertEquals(a, Helper.generateProgram("/syntax/code_generator/java_code_generator4.xml"));
+    }
 }

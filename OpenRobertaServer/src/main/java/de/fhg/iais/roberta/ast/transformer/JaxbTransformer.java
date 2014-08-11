@@ -895,7 +895,7 @@ public class JaxbTransformer {
     private Phrase extractRepeatStatement(Block block, Phrase expr, String mode, String location, int mutation) {
         List<Statement> statements = extractStatements(block, (short) mutation);
         StmtList stmtList = extractStatement(statements, location);
-        return RepeatStmt.make(RepeatStmt.Mode.get(mode), (Expr) expr, stmtList);
+        return RepeatStmt.make(RepeatStmt.Mode.get(mode), convertPhraseToExpr(expr), stmtList);
     }
 
     private Phrase extractVar(Block block) {
