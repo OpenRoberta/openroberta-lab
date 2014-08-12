@@ -4,8 +4,7 @@ import java.util.Random;
 
 /**
  * Class for generating tokens<br>
- * TODO not used at the moment<br>
- * TODO how many characters should token have??
+ * TODO not used at the moment @ server<br>
  * 
  * @author dpyka
  */
