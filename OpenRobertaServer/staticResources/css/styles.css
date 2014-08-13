@@ -147,6 +147,32 @@ ul#head-navigation a:hover .head-navi-icons.developer, ul#head-navigation li:hov
     overflow: hidden;
 }
 
+#control-panel {
+    position: absolute;
+    bottom: 30px;
+    left: 20px;
+    font-size: 13px;
+    z-index: 3;
+}
+
+.submit#run {
+    display: block;
+    position: fixed;
+    bottom: 30px;
+    right: 95px;
+    background-image: url(img/button_start.png);
+    width: 87px;
+    height: 28px;
+    border-style: none;
+    background-color: transparent;
+    text-indent: 480px;
+    cursor: pointer;
+}
+
+.submit#run:hover {
+    background-image: url(img/button_start_hover.png);    
+}
+
 /* ### WELCOME-SCREEN ############################################################ */
 
 #welcome-screen {

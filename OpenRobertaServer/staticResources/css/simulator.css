@@ -1,7 +1,7 @@
 /** Views **/
 
 #simulatorDiv{
-	height: 85%;
+	height: 100%;
 	width: 100%;
 	display: none;
 	z-index: 2;
