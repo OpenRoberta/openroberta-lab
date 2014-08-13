@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE EV3Menu></!DOCTYPE>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="EV3Menu" basedir="." default="copy">
     <property file="local.properties" />
     <property file="build.properties" />

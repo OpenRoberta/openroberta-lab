@@ -11,10 +11,12 @@ import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.lcd.Image;
 import lejos.hardware.lcd.TextLCD;
 import lejos.robotics.navigation.DifferentialPilot;
+import lejos.utility.Stopwatch;
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.Color;
 import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
+import de.fhg.iais.roberta.ast.syntax.action.MotorMoveMode;
 import de.fhg.iais.roberta.ast.syntax.action.MotorStopMode;
 import de.fhg.iais.roberta.ast.syntax.action.TurnDirection;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickKey;
@@ -40,6 +42,8 @@ public class Hal {
     private final LED led;
     private final Keys keys;
     private final Audio audio;
+
+    private final Stopwatch[] timers = new Stopwatch[5];
 
     private final double wheelDiameter;
     private final double trackWidth;
@@ -123,17 +127,77 @@ public class Hal {
 
     // --- Aktion Bewegung ---
 
+    /**
+     * @param actorPort
+     * @param speedPercent
+     */
     public void setRegulatedMotorSpeed(ActorPort actorPort, int speedPercent) {
         this.deviceHandler.getRegulatedMotor(actorPort).setSpeed(toDegPerSec(speedPercent));
     }
 
+    /**
+     * @param actorPort
+     * @param speedPercent
+     */
     public void setUnregulatedMotorSpeed(ActorPort actorPort, int speedPercent) {
         this.deviceHandler.getUnregulatedMotor(actorPort).setPower(speedPercent);
     }
 
-    public void rotateMotor(ActorPort actorPort, int speedPercent, int rotations) {
+    /**
+     * @param actorPort
+     * @param speedPercent
+     * @param rotations
+     */
+    public void rotateRegulatedMotor(ActorPort actorPort, int speedPercent, int rotations) {
         this.deviceHandler.getRegulatedMotor(actorPort).setSpeed(toDegPerSec(speedPercent));
         this.deviceHandler.getRegulatedMotor(actorPort).rotate(rotations);
+    }
+
+    /**
+     * @param actorPort
+     * @param speedPercent
+     * @param mode
+     * @param value
+     */
+    public void rotateUnregulatedMotor(ActorPort actorPort, int speedPercent, MotorMoveMode mode, int value) {
+        this.deviceHandler.getUnregulatedMotor(actorPort).setPower(speedPercent);
+
+        if ( value >= 0 ) {
+            this.deviceHandler.getUnregulatedMotor(actorPort).forward();
+            switch ( mode ) {
+                case DEGREE:
+                    while ( this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() < value ) {
+                        // do nothing
+                    }
+                    break;
+                case ROTATIONS:
+                    while ( this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() < rotationsToAngle(value) ) {
+                        // do nothing
+                    }
+                    break;
+                default:
+                    throw new DbcException("Wrong MotorMoveMode");
+            }
+
+        } else {
+            // rotations < 0 -> backward
+            this.deviceHandler.getUnregulatedMotor(actorPort).backward();
+            switch ( mode ) {
+                case DEGREE:
+                    while ( this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() > value ) {
+                        // do nothing
+                    }
+                    break;
+                case ROTATIONS:
+                    while ( this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() > rotationsToAngle(value) ) {
+                        // do nothing
+                    }
+                    break;
+                default:
+                    throw new DbcException("Wrong MotorMoveMode");
+            }
+        }
+        this.deviceHandler.getUnregulatedMotor(actorPort).stop();
     }
 
     public int getRegulatedMotorSpeed(ActorPort actorPort) {
@@ -192,20 +256,21 @@ public class Hal {
         }
     }
 
-    public void unregulatedDrive(ActorPort left, ActorPort right, DriveDirection direction, int speedPercent) {
-        switch ( direction ) {
-            case FOREWARD:
-                this.deviceHandler.getUnregulatedMotor(left).forward();
-                this.deviceHandler.getUnregulatedMotor(right).forward();
-                break;
-            case BACKWARD:
-                this.deviceHandler.getUnregulatedMotor(left).backward();
-                this.deviceHandler.getUnregulatedMotor(right).backward();
-                break;
-            default:
-                throw new DbcException("wrong DriveAction.Direction");
-        }
-    }
+    // not needed at the moment
+    //    public void unregulatedDrive(ActorPort left, ActorPort right, DriveDirection direction, int speedPercent) {
+    //        switch ( direction ) {
+    //            case FOREWARD:
+    //                this.deviceHandler.getUnregulatedMotor(left).forward();
+    //                this.deviceHandler.getUnregulatedMotor(right).forward();
+    //                break;
+    //            case BACKWARD:
+    //                this.deviceHandler.getUnregulatedMotor(left).backward();
+    //                this.deviceHandler.getUnregulatedMotor(right).backward();
+    //                break;
+    //            default:
+    //                throw new DbcException("wrong DriveAction.Direction");
+    //        }
+    //    }
 
     public void driveDistance(ActorPort left, ActorPort right, DriveDirection direction, int speedPercent, int distance) {
         DifferentialPilot dPilot =
@@ -233,10 +298,11 @@ public class Hal {
         this.deviceHandler.getRegulatedMotor(right).stop();
     }
 
-    public void stopUnregulatedDrive(ActorPort left, ActorPort right) {
-        this.deviceHandler.getUnregulatedMotor(left).stop();
-        this.deviceHandler.getUnregulatedMotor(right).stop();
-    }
+    // not needed at the moment
+    //    public void stopUnregulatedDrive(ActorPort left, ActorPort right) {
+    //        this.deviceHandler.getUnregulatedMotor(left).stop();
+    //        this.deviceHandler.getUnregulatedMotor(right).stop();
+    //    }
 
     /**
      * @param left
@@ -263,7 +329,6 @@ public class Hal {
             default:
                 throw new DbcException("wrong TurnAction.Direction");
         }
-
     }
 
     /**
@@ -273,54 +338,44 @@ public class Hal {
      * @param speedPercent
      */
     public void rotateDirectionUnregulated(ActorPort left, ActorPort right, TurnDirection direction, int speedPercent) {
-        this.deviceHandler.getUnregulatedMotor(left).setPower(speedPercent);
-        this.deviceHandler.getUnregulatedMotor(right).setPower(speedPercent);
+        DifferentialPilot dPilot =
+            new DifferentialPilot(
+                this.wheelDiameter,
+                this.trackWidth,
+                this.deviceHandler.getRegulatedMotor(left),
+                this.deviceHandler.getRegulatedMotor(right),
+                false);
+        dPilot.setRotateSpeed(toDegPerSec(speedPercent));
         switch ( direction ) {
             case RIGHT:
-                this.deviceHandler.getUnregulatedMotor(left).forward();
-                this.deviceHandler.getUnregulatedMotor(right).backward();
+                dPilot.rotateRight();
                 break;
             case LEFT:
-                this.deviceHandler.getUnregulatedMotor(left).backward();
-                this.deviceHandler.getUnregulatedMotor(right).forward();
+                dPilot.rotateLeft();
                 break;
             default:
                 throw new DbcException("wrong TurnAction.Direction");
         }
     }
 
-    /**
-     * TODO conversion from distance to motor rotation in angle<br>
-     * no regulation necessary for this block (->beate)
-     * 
-     * @param actorPort1
-     *        left motor
-     * @param actorPort2
-     *        right motor
-     * @param direction
-     *        right or left
-     * @param speedPercent
-     * @param distance
-     */
-    public void rotateDirectionDistanceRegulated(ActorPort left, ActorPort right, TurnDirection direction, int speedPercent, int distance) {
-        int angle = distance * 0;
-        switch ( direction ) {
-            case RIGHT:
-                this.deviceHandler.getRegulatedMotor(left).rotate(angle);
-                this.deviceHandler.getRegulatedMotor(right).rotate(-angle);
-                break;
-            case LEFT:
-                this.deviceHandler.getRegulatedMotor(left).rotate(-angle);
-                this.deviceHandler.getRegulatedMotor(right).rotate(angle);
-                break;
-            default:
-                throw new DbcException("wrong TurnAction.Direction");
-        }
-    }
+    // not needed at the moment
+    //    public void rotateDirectionDistanceRegulated(ActorPort left, ActorPort right, TurnDirection direction, int speedPercent, int distance) {
+    //        int angle = distance * 0;
+    //        switch ( direction ) {
+    //            case RIGHT:
+    //                this.deviceHandler.getRegulatedMotor(left).rotate(angle);
+    //                this.deviceHandler.getRegulatedMotor(right).rotate(-angle);
+    //                break;
+    //            case LEFT:
+    //                this.deviceHandler.getRegulatedMotor(left).rotate(-angle);
+    //                this.deviceHandler.getRegulatedMotor(right).rotate(angle);
+    //                break;
+    //            default:
+    //                throw new DbcException("wrong TurnAction.Direction");
+    //        }
+    //    }
 
     /**
-     * TODO no block for this method so far<br>
-     * 
      * @param left
      * @param right
      * @param direction
@@ -472,7 +527,8 @@ public class Hal {
     }
 
     /**
-     * TODO @beate function of the block???
+     * needed as soon as we decide to have a led pattern while running a roberta program<br>
+     * change to this pattern then
      */
     public void resetLED() {
         this.led.setPattern(0);
@@ -486,7 +542,6 @@ public class Hal {
      * @return
      */
     public boolean isPressed(SensorPort sensorPort) {
-        // always 1 cell for touch sensor
         float[] sample = new float[this.deviceHandler.getSampleProvider(sensorPort).sampleSize()];
         this.deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
         if ( sample[0] == 1.0 ) {
@@ -650,6 +705,12 @@ public class Hal {
     // END Aktorsensor Drehsensor ---
     // --- Sensoren Steintasten ---
 
+    /**
+     * test if works
+     * 
+     * @param key
+     * @return
+     */
     public boolean isPressed(BrickKey key) {
         switch ( key ) {
             case ANY:
@@ -675,35 +736,26 @@ public class Hal {
         }
     }
 
-    /**
-     * TODO even possible to implement?<br>
-     * read buttons -> number -> know which button was pressed<br>
-     * wait<br>
-     * read buttons again -> if number == 0 -> released -> return<br>
-     * 
-     * @param key
-     * @return
-     */
-    public boolean isPressedAndReleased(BrickKey key) {
-        switch ( key ) {
-            case ANY:
-                //
-            case DOWN:
-                //
-            case ENTER:
-                //
-            case ESCAPE:
-                //
-            case LEFT:
-                //
-            case RIGHT:
-                //
-            case UP:
-                //
-            default:
-                throw new DbcException("wrong button name??");
-        }
-    }
+    //    public boolean isPressedAndReleased(BrickKey key) {
+    //        switch ( key ) {
+    //            case ANY:
+    //                //
+    //            case DOWN:
+    //                //
+    //            case ENTER:
+    //                //
+    //            case ESCAPE:
+    //                //
+    //            case LEFT:
+    //                //
+    //            case RIGHT:
+    //                //
+    //            case UP:
+    //                //
+    //            default:
+    //                throw new DbcException("wrong button name??");
+    //        }
+    //    }
 
     // END Sensoren Steintasten ---
     // --- Sensor Gyrosensor ---
@@ -753,8 +805,8 @@ public class Hal {
      * @param timer
      * @return
      */
-    public int getTimerValue(int timer) {
-        return 0;
+    public int getTimerValue(int timerNumber) {
+        return this.timers[timerNumber].elapsed();
     }
 
     /**
@@ -762,8 +814,8 @@ public class Hal {
      * 
      * @param timer
      */
-    public void resetTimer(int timer) {
-        //
+    public void resetTimer(int timerNumber) {
+        this.timers[timerNumber].reset();
     }
 
     // END Sensoren Zeitgeber ---

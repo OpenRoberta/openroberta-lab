@@ -23,6 +23,7 @@ import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensorMode;
+import de.fhg.iais.roberta.ast.syntax.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.dbc.DbcException;
@@ -33,6 +34,7 @@ public class DeviceHandler {
 
     private final Map<ActorPort, RegulatedMotor> lejosRegulatedMotors = new TreeMap<>();
     private final Map<ActorPort, EncoderMotor> lejosUnregulatedMotors = new TreeMap<>();
+    private final Map<ActorPort, MotorTachoMode> tachoModes = new TreeMap<>();
 
     private final Map<SensorPort, EV3ColorSensor> lejosColorSensors = new TreeMap<>();
     private final Map<SensorPort, EV3TouchSensor> lejosTouchSensors = new TreeMap<>();

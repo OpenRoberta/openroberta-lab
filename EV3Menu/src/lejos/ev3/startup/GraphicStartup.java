@@ -158,7 +158,8 @@ public class GraphicStartup implements Menu {
     private static boolean isRegistered = false;
     private static String token;
     private static String serverURLString;
-    private static URL serverURL;
+    private static URL serverTokenRessource;
+    private static URL serverDownloadRessource;
 
     // vars for run .jar userfile
     private static String robertaLabFileName;
@@ -1509,14 +1510,16 @@ public class GraphicStartup implements Menu {
         serverURLString = "10.0.1.15:1999";
 
         try {
-            serverURL = new URL("http://" + serverURLString + "/token");
-            System.out.println(serverURL);
+            serverTokenRessource = new URL("http://" + serverURLString + "/token");
+            serverDownloadRessource = new URL("http://" + serverURLString + "/token");
+            System.out.println(serverTokenRessource);
+            System.out.println(serverDownloadRessource);
         } catch ( MalformedURLException e ) {
             return;
         }
 
-        RobertaTokenRegister robertaTokenRegister = new RobertaTokenRegister(serverURL);
-        RobertaDownloader robertaDownloader = new RobertaDownloader(serverURL);
+        RobertaTokenRegister robertaTokenRegister = new RobertaTokenRegister(serverTokenRessource);
+        RobertaDownloader robertaDownloader = new RobertaDownloader(serverDownloadRessource);
 
         if ( GraphicStartup.isRegistered == false ) {
             token = new RobertaTokenGenerator().generateToken(8);
@@ -1572,7 +1575,7 @@ public class GraphicStartup implements Menu {
                     isRegistered = false;
                     token = null;
                     serverURLString = null;
-                    serverURL = null;
+                    serverTokenRessource = null;
                     break;
             }
         } while ( selected >= 0 );
