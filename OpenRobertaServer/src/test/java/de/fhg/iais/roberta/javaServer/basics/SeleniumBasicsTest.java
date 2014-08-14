@@ -9,7 +9,7 @@ import org.openqa.selenium.By;
 import de.fhg.iais.roberta.testutil.SeleniumHelper;
 import de.fhg.iais.roberta.testutil.SeleniumHelper.Button;
 
-@Ignore
+
 public class SeleniumBasicsTest {
     private SeleniumHelper shAsField;
 
@@ -72,6 +72,6 @@ public class SeleniumBasicsTest {
         sh.expectSuccess();
 
         sh.click(Button.B2);
-        sh.expectError();
+        sh.expectSuccess();
     }
 }
