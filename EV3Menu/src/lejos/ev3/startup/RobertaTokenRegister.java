@@ -14,35 +14,28 @@ import java.net.URL;
  * 
  * @author dpyka
  */
-public class RobertaTokenRegister implements Runnable {
+public class RobertaTokenRegister {
 
-    // status variables which are checked in main menu
-    private boolean registered = false;
-    private boolean timeOut;
+    public enum Status {
+        TIMEOUT(), ERROR(), OK();
+    }
 
     private final URL serverURL;
-    private String token;
 
     public RobertaTokenRegister(URL serverURL) {
         this.serverURL = serverURL;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     /**
      * send token to server, get response code if registered
      * TODO refactor with json library instead of string
      */
-    @Override
-    public void run() {
-        setTimeOutInfo(false);
+    public Status connectToServer(String token) {
         try {
             HttpURLConnection httpURLConnection = openConnection(this.serverURL);
 
             DataOutputStream dos = new DataOutputStream(httpURLConnection.getOutputStream());
-            dos.writeBytes(this.token);
+            dos.writeBytes(token);
             dos.flush();
             dos.close();
 
@@ -52,36 +45,14 @@ public class RobertaTokenRegister implements Runnable {
                 System.out.println(serverResponse);
             }
             in.close();
-            if ( serverResponse.equals("OK") ) {
-                setRegisteredInfo(true);
-            } else {
-                setRegisteredInfo(false);
-            }
+            return Status.OK;
         } catch ( SocketTimeoutException ste ) {
-            setTimeOutInfo(true);
-            setRegisteredInfo(false);
             ste.printStackTrace();
+            return Status.TIMEOUT;
         } catch ( IOException e ) {
             e.printStackTrace();
-            setRegisteredInfo(false);
-            return;
+            return Status.ERROR;
         }
-    }
-
-    private void setRegisteredInfo(boolean bool) {
-        this.registered = bool;
-    }
-
-    public boolean getRegisteredInfo() {
-        return this.registered;
-    }
-
-    public boolean getTimeOutInfo() {
-        return this.timeOut;
-    }
-
-    private void setTimeOutInfo(boolean bool) {
-        this.timeOut = bool;
     }
 
     /**

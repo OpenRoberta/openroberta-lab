@@ -1,3 +1,5 @@
+package de.fhg.iais.roberta.compiler;
+
 import lejos.utility.Delay;
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
 import de.fhg.iais.roberta.codegen.lejos.Hal;
