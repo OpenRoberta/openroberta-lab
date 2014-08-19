@@ -1524,6 +1524,7 @@ public class GraphicStartup implements Menu {
         if ( GraphicStartup.isRegistered == false ) {
             token = new RobertaTokenGenerator().generateToken(8);
             robertaTokenRegister.setToken(token);
+            robertaDownloader.setToken(token);
             executerService.execute(robertaTokenRegister);
             newScreen(" Robertalab");
             //glcd.drawImage(image, 0, 0, 0);
