@@ -38,9 +38,9 @@ public class QAServerChromeUITest {
   @Test
   public void testORQAServerUI() throws Exception {
     driver.get(baseUrl + "/");
-    driver.findElement(By.id("welcome-brick1")).click();
-    driver.findElement(By.id("close-tutorials")).click();
-    driver.findElement(By.linkText("Logo")).click();
+    //driver.findElement(By.id("welcome-brick1")).click();
+    //driver.findElement(By.id("close-tutorials")).click();
+    //driver.findElement(By.linkText("Logo")).click();
     driver.findElement(By.id("welcome-brick4")).click();
     driver.findElement(By.id("toolbox1")).click();
     driver.findElement(By.id("toolbox2")).click();
