@@ -190,22 +190,78 @@ function init() {
 		beforeActivate: beforeActivateTab
 	});
 	initProgramNameTable();
-	$('#toggle').onWrap('click', LOG.toggleVisibility, 'toggle LOG visibility');
-	$('#save').onWrap('click', saveToServer, 'save the blocks');
+	
+	//Register and signing in changes 
+	$('#saveUser').onWrap('click', saveUserToServer, 'save the user data');
+	$('#deleteUser').onWrap('click',deleteUserOnServer,'delete user data');
+	$('#signIn').onWrap('click', signIn, 'signing in ');
+	$('#loadFromListing').onWrap('click',myLoadFromListing, 'load blocks from program list');
+	
+	
+	$('#save').onWrap('click', function(){
+		if(userId == "none"){
+			alert("No user id, saving in the general table");
+			saveToServer();
+		}
+		else{
+			alert("Saving in the user account");
+			saveUPToServer();
+		}
+	}, 'save the blocks');
+	
 	$('#load').onWrap('click', function() {
-		loadFromServer(true);
+		if(userId == "none"){
+			alert("No user id, using the general table");
+			loadFromServer(true);
+		}else{
+			alert("We use the user account");
+			loadUPFromServer(true);
+		}
+
 	}, 'load the blocks');
+
+	$('#add').onWrap('click', function() {
+		
+		if(userId == "none"){
+			alert("No user id, you need to sign in");
+			loadFromServer(false);
+		}else{
+			alert("We use the user program table");
+			loadUPFromServer(false);
+		}
+
+	}, 'add the blocks');
+
+	$('#del').onWrap('click',function(){
+		if(userId == "none"){
+			alert("No user id, you need to sign in");
+			deleteOnServer();
+		}else{
+			alert("We use the user program table");
+			deleteUPOnServer();
+		}
+	} , 'add the blocks');
+	
+	$('#run').onWrap('click', function() {
+		
+		if(userId=="none"){
+			alert("No user id, you need to sign in");
+			saveToServer();
+			runOnBrick();
+		}else{
+			alert("We use the user program table");
+			//saveUPToServer();
+			//runOnBrick();
+		}
+
+	}, 'save+run the program');
+	//=============================================================================
+	
+	$('#toggle').onWrap('click', LOG.toggleVisibility, 'toggle LOG visibility');	
 	$('#loadFromListing').onWrap('click', function() {
 		loadFromListing();
 	}, 'load blocks from program list');
-	$('#add').onWrap('click', function() {
-		loadFromServer(false);
-	}, 'add the blocks');
-	$('#del').onWrap('click', deleteOnServer, 'add the blocks');
-	$('#run').onWrap('click', function() {
-		saveToServer();
-		runOnBrick();
-	}, 'save+run the program');
+	
 	$('#toolbox1').onWrap('click', function() {
 		loadToolbox('1');
 	}, 'load toolbox 1');
