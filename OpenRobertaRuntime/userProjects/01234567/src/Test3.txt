@@ -1,0 +1,18 @@
+import de.fhg.iais.roberta.codegen.lejos;
+import de.fhg.iais.roberta.ast.syntax;
+
+public class Test {
+    private BrickConfiguration brickConfiguration = new BrickConfiguration.Builder()
+    .build();
+
+    public static void main(String[] args) {
+        Test.run();
+    }
+
+    public static void run() {
+        Hal hal = new Hal(brickConfiguration);
+        for ( int i = 0; i < 10; i++ ) {
+            hal.drawText("Hallo", 0, 3);
+        }
+    }
+}

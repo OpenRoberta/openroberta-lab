@@ -40,7 +40,7 @@ public class RobertaDownloader implements Runnable {
         return this.downloadRequestHanging;
     }
 
-    private void setHangingRequestInfo(boolean bool) {
+    public void setHangingRequestInfo(boolean bool) {
         this.downloadRequestHanging = bool;
     }
 
@@ -48,7 +48,7 @@ public class RobertaDownloader implements Runnable {
         return this.hasDownloaded;
     }
 
-    private void setDownloadCompleteInfo(boolean bool) {
+    public void setDownloadCompleteInfo(boolean bool) {
         this.hasDownloaded = bool;
     }
 
@@ -67,10 +67,8 @@ public class RobertaDownloader implements Runnable {
      */
     @Override
     public void run() {
-        setDownloadCompleteInfo(false);
         try {
             HttpURLConnection httpURLConnection = openConnection(this.serverURL);
-            setHangingRequestInfo(true);
 
             DataOutputStream dos = new DataOutputStream(httpURLConnection.getOutputStream());
             dos.writeBytes(this.token);
@@ -92,6 +90,7 @@ public class RobertaDownloader implements Runnable {
             setDownloadCompleteInfo(true);
         } catch ( IOException e ) {
             setHangingRequestInfo(false);
+            setDownloadCompleteInfo(true);
             e.printStackTrace();
         }
         setHangingRequestInfo(false);

@@ -25,10 +25,7 @@ public class Compiler {
         File buildFile = new File(directory + "\\build.xml");
         Project project = new Project();
 
-        //project.setProperty("custom", "true");
         //project.setProperty("token", token);
-        //project.setProperty("hal.lib", /* hal reference*/"");
-        project.setProperty("java.home", "C:\\Program Files\\Java\\jdk1.7.0_51");
 
         project.init();
         ProjectHelper projectHelper = ProjectHelper.getProjectHelper();

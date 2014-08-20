@@ -4,6 +4,7 @@
 	<property name="lib.lejos" value="${basedir}/lib" />
 	
 	<property name="brick.runtime" value="/home/root/lejos" />
+	<property name="brick.roberta" value="/home/roberta/lib" />
 
 	<property name="input.dir" value="${basedir}/userProjects/01234567/src" />
 	<property name="output.dir" value="${basedir}/userProjects/01234567/target" />
@@ -31,7 +32,7 @@
 		<jar destfile="${output.dir}/${program.jar}">
 			<manifest>
 				<attribute name="Main-Class" value="${main.name}"/>
-				<attribute name="Class-Path" value="${brick.runtime}/lib/ev3classes.jar ${brick.runtime}/lib/dbusjava.jar ${brick.runtime}/libjna/usr/share/java/jna.jar /home/roberta/lib/OpenRobertaRuntime-0.0.1-SNAPSHOT.jar"/>
+				<attribute name="Class-Path" value="${brick.runtime}/lib/ev3classes.jar ${brick.runtime}/lib/dbusjava.jar ${brick.runtime}/libjna/usr/share/java/jna.jar ${brick.roberta}/OpenRobertaRuntime-0.0.1-SNAPSHOT.jar ${brick.roberta}/OpenRobertaShared-0.0.1-SNAPSHOT.jar"/>
 			</manifest>
 			<fileset dir="${output.dir}">
 				<include name="*.class"/>
