@@ -14,28 +14,45 @@ import java.net.URL;
  * 
  * @author dpyka
  */
-public class RobertaTokenRegister {
-
-    public enum Status {
-        TIMEOUT(), ERROR(), OK();
-    }
+public class RobertaTokenRegister implements Runnable {
 
     private final URL serverURL;
+    private final String token;
+    private boolean isTimeOut = false;
+    private boolean isRegistered = false;
 
-    public RobertaTokenRegister(URL serverURL) {
+    public RobertaTokenRegister(URL serverURL, String token) {
         this.serverURL = serverURL;
+        this.token = token;
+    }
+
+    public void setTimeOutInfo(boolean bool) {
+        this.isTimeOut = bool;
+    }
+
+    public void setRegisteredInfo(boolean bool) {
+        this.isRegistered = bool;
+    }
+
+    public boolean getTimeOutInfo() {
+        return this.isTimeOut;
+    }
+
+    public boolean getRegisteredInfo() {
+        return this.isRegistered;
     }
 
     /**
      * send token to server, get response code if registered
      * TODO refactor with json library instead of string
      */
-    public Status connectToServer(String token) {
+    @Override
+    public void run() {
         try {
             HttpURLConnection httpURLConnection = openConnection(this.serverURL);
 
             DataOutputStream dos = new DataOutputStream(httpURLConnection.getOutputStream());
-            dos.writeBytes(token);
+            dos.writeBytes(this.token);
             dos.flush();
             dos.close();
 
@@ -45,13 +62,10 @@ public class RobertaTokenRegister {
                 System.out.println(serverResponse);
             }
             in.close();
-            return Status.OK;
         } catch ( SocketTimeoutException ste ) {
             ste.printStackTrace();
-            return Status.TIMEOUT;
         } catch ( IOException e ) {
             e.printStackTrace();
-            return Status.ERROR;
         }
     }
 

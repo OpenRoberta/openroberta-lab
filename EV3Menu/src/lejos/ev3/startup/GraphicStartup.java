@@ -33,6 +33,7 @@ import lejos.hardware.Battery;
 import lejos.hardware.Bluetooth;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
+import lejos.hardware.Key;
 import lejos.hardware.LocalBTDevice;
 import lejos.hardware.LocalWifiDevice;
 import lejos.hardware.RemoteBTDevice;
@@ -1476,10 +1477,9 @@ public class GraphicStartup implements Menu {
      * Roberta submenu implementation.
      */
     private void robertaMenu() {
-        GraphicsLCD glcd = LocalEV3.get().getGraphicsLCD();
         TextLCD lcd = LocalEV3.get().getTextLCD();
         ExecutorService executerService = Executors.newSingleThreadScheduledExecutor();
-        RobertaRunner runner = new RobertaRunner(this.ind, echoIn, echoErr);
+        //RobertaRunner runner = new RobertaRunner(this.ind, echoIn, echoErr);
 
         //--- enter server address (for noobs only :-)) ---
         //        newScreen(" Enter IP");
@@ -1502,71 +1502,73 @@ public class GraphicStartup implements Menu {
 
         try {
             serverTokenRessource = new URL("http://" + serverURLString + "/token");
-            serverDownloadRessource = new URL("http://" + serverURLString + "/token");
+            serverDownloadRessource = new URL("http://" + serverURLString + "/download");
         } catch ( MalformedURLException e ) {
             return;
         }
 
-        RobertaTokenRegister robertaTokenRegister = new RobertaTokenRegister(serverTokenRessource);
-        RobertaDownloader robertaDownloader = new RobertaDownloader(serverDownloadRessource);
+        newScreen(" Robertalab");
 
         if ( GraphicStartup.isRegistered == false ) {
             token = new RobertaTokenGenerator().generateToken(8);
+            BackgroundTasks backgroundTasks = new BackgroundTasks(serverTokenRessource, token);
+            Key escapeKey = LocalEV3.get().getKey("Escape");
+            escapeKey.addKeyListener(backgroundTasks);
+            backgroundTasks.register();
+
             newScreen(" Robertalab");
             lcd.drawString("waiting for", 0, 1);
             lcd.drawString("registration...", 0, 2);
 
-            RobertaTokenRegister.Status response = robertaTokenRegister.connectToServer(token);
-            switch ( response ) {
-                case TIMEOUT:
-                    lcd.drawString("Time Out", 0, 1);
-                    Sound.buzz();
-                    Delay.msDelay(5000);
+            /*while ( robertaTokenRegister.getRegisteredInfo() == false ) {
+                if ( robertaTokenRegister.getTimeOutInfo() == true ) {
+                    newScreen(" Robertalab");
+                    lcd.drawString("Time out!", 0, 2);
+                    Button.waitForAnyPress();
                     return;
-                case ERROR:
-                    lcd.drawString("Error", 0, 1);
-                    Sound.buzz();
-                    Delay.msDelay(5000);
-                    return;
-                case OK:
-                    robertaDownloader.setToken(token);
-                    isRegistered = true;
-                    break;
+                } else {
+                    Delay.msDelay(500);
+                }
             }
+            isRegistered = true;
+            newScreen(" Robertalab");
+            lcd.drawString("Success!", 0, 1);
+            Delay.msDelay(3000);*/
+        } else {
+            GraphicMenu menu = new GraphicMenu(new String[] {
+                "New session"
+            }, new String[] {
+                RobertaIcon
+            }, 3);
+            int selected = 0;
+            do {
+                selected = getSelection(menu, selected);
+                switch ( selected ) {
+                    case 0:
+                        if ( getYesNo("  Reset Session?", false) == 1 ) {
+                            isRegistered = false;
+                            token = null;
+                            serverURLString = null;
+                            serverTokenRessource = null;
+                            serverDownloadRessource = null;
+                            return;
+                        }
+                }
+            } while ( selected >= 0 );
         }
 
-        newScreen(" Robertalab");
-        GraphicMenu menu = new GraphicMenu(new String[] {
-            "New session"
-        }, new String[] {
-            RobertaIcon
-        }, 3);
-        int selected = 0;
+        // refactor 2
+        /*if ( robertaDownloader.getHangingRequestInfo() == false && runner.getFinishedInfo() == true ) {
+            executerService.execute(robertaDownloader);
+            robertaDownloader.setHangingRequestInfo(true);
+            robertaDownloader.setDownloadCompleteInfo(false);
+        }
+        if ( robertaDownloader.getDownloadCompleteInfo() == true && runner.getRunningInfo() == false ) {
+            runner.setFileName(robertaDownloader.getFileName());
+            executerService.execute(runner);
+            runner.setRunningInfo(true);
+        }*/
 
-        //TODO make class with key listener for return
-        do {
-            if ( robertaDownloader.getHangingRequestInfo() == false && runner.getFinishedInfo() == true ) {
-                executerService.execute(robertaDownloader);
-                robertaDownloader.setHangingRequestInfo(true);
-                robertaDownloader.setDownloadCompleteInfo(false);
-            }
-            if ( robertaDownloader.getDownloadCompleteInfo() == true && runner.getRunningInfo() == false ) {
-                runner.setFileName(robertaDownloader.getFileName());
-                executerService.execute(runner);
-                runner.setRunningInfo(true);
-            }
-
-            selected = getSelection(menu, selected);
-            switch ( selected ) {
-                case 0:
-                    isRegistered = false;
-                    token = null;
-                    serverURLString = null;
-                    serverTokenRessource = null;
-                    serverDownloadRessource = null;
-                    break;
-            }
-        } while ( selected >= 0 );
     }
 
     /**
