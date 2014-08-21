@@ -140,6 +140,35 @@
 			</plugin>
 		</plugins>
 	</build>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>gr.abiss.mvn.plugins</groupId>
+				<artifactId>maven-jstools-plugin</artifactId>
+				<version>0.6</version>
+				<inherited>false</inherited>
+				<configuration>
+					<jsDir>${basedir}/staticResources</jsDir>
+					<!-- this is actually the default -->
+					<includes>**/*.js</includes>
+					<!-- maybe you need to exclude compressed JS files -->
+					<excludes>**/*_compressed.js</excludes>
+					<!-- this is actually the default -->
+					<caseSensitive>true</caseSensitive>
+					<outputBaseDirectory>${project.build.directory}/site/</outputBaseDirectory>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<!-- include the desired reports -->
+							<!--<report>jslint</report>-->
+							<report>jsdoc</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
 	<!-- Profile section -->
 	<profiles>
 		<!-- CI - build:  Copy static resources and test db to /target folder. -->
