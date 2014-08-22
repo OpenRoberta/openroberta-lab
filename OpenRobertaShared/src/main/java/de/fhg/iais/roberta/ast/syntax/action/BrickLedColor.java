@@ -7,28 +7,32 @@ import de.fhg.iais.roberta.dbc.DbcException;
 /**
  * All possible colors of the lights that the brick have.
  */
-public enum Color {
+public enum BrickLedColor {
     GREEN(), ORANGE(), RED();
 
     private final String[] values;
 
-    private Color(String... values) {
+    private BrickLedColor(String... values) {
         this.values = values;
     }
 
+    public String getJavaCode() {
+        return this.getClass().getSimpleName() + "." + this;
+    }
+
     /**
-     * get color from {@link Color} from string parameter. It is possible for one color to have multiple string mappings.
+     * get color from {@link BrickLedColor} from string parameter. It is possible for one color to have multiple string mappings.
      * Throws exception if the color does not exists.
      * 
      * @param name of the color
-     * @return color from the enum {@link Color}
+     * @return color from the enum {@link BrickLedColor}
      */
-    public static Color get(String s) {
+    public static BrickLedColor get(String s) {
         if ( s == null || s.isEmpty() ) {
             throw new DbcException("Invalid color: " + s);
         }
         String sUpper = s.trim().toUpperCase(Locale.GERMAN);
-        for ( Color co : Color.values() ) {
+        for ( BrickLedColor co : BrickLedColor.values() ) {
             if ( co.toString().equals(sUpper) ) {
                 return co;
             }

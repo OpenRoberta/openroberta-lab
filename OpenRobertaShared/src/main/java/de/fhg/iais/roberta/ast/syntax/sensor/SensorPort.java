@@ -16,6 +16,10 @@ public enum SensorPort {
         this.values = values;
     }
 
+    public String getJavaCode() {
+        return this.getClass().getSimpleName() + "." + this;
+    }
+
     /**
      * get sensor port from {@link SensorPort} from string parameter. It is possible for one sensor port to have multiple string mappings.
      * Throws exception if the operator does not exists.
@@ -25,7 +29,7 @@ public enum SensorPort {
      */
     public static SensorPort get(String s) {
         if ( s == null || s.isEmpty() ) {
-            throw new DbcException("Invalid sensor port: " + s);
+            throw new DbcException("Sensor port missing");
         }
         String sUpper = s.trim().toUpperCase(Locale.GERMAN);
         for ( SensorPort sp : SensorPort.values() ) {

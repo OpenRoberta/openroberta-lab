@@ -85,10 +85,10 @@ public class JavaGenerateCodeTest {
             + MAIN_METHOD
             + "    public void run() {\n"
             + "        Hal hal = new Hal(brickConfiguration);\n"
-            + "        if ( hal.isPressed(S1) ) {\n"
-            + "            hal.setUltrasonicSensorMode(S4, DISTANCE);\n"
-            + "            hal.ledOn(GREEN, true);\n"
-            + "        } else if ( \"#585858\" == hal.getColorSensorValue(S3) ) {\n"
+            + "        if ( hal.isPressed(SensorPort.S1) ) {\n"
+            + "            hal.setUltrasonicSensorMode(SensorPort.S4, UltrasonicSensorMode.DISTANCE);\n"
+            + "            hal.ledOn(BrickLedColor.GREEN, true);\n"
+            + "        } else if ( PickColor.RED == hal.getColorSensorValue(SensorPort.S3) ) {\n"
             + "            while ( true ) {\n"
             + "                hal.drawPicture(\"SMILEY1\", 0, 0);\n\n"
             + "            }\n"
@@ -113,16 +113,16 @@ public class JavaGenerateCodeTest {
             + MAIN_METHOD
             + "    public void run() {\n"
             + "        Hal hal = new Hal(brickConfiguration);\n"
-            + "        if ( hal.isPressed(S1) ) {\n"
-            + "            hal.ledOn(GREEN, true);\n"
+            + "        if ( hal.isPressed(SensorPort.S1) ) {\n"
+            + "            hal.ledOn(BrickLedColor.GREEN, true);\n"
             + "        } else {\n"
-            + "            if ( hal.isPressed(S1) ) {\n"
-            + "                hal.ledOn(GREEN, true);\n"
-            + "            } else if ( 0 == hal.getUltraSonicSensorValue(S4) ) {\n"
+            + "            if ( hal.isPressed(SensorPort.S1) ) {\n"
+            + "                hal.ledOn(BrickLedColor.GREEN, true);\n"
+            + "            } else if ( 0 == hal.getUltraSonicSensorValue(SensorPort.S4) ) {\n"
             + "                hal.drawPicture(\"SMILEY3\", 15, 15);\n"
             + "            } else {\n"
-            + "                hal.setUltrasonicSensorMode(S4, DISTANCE);\n"
-            + "                while ( !hal.isPressedAndReleased(UP) ) {\n\n"
+            + "                hal.setUltrasonicSensorMode(SensorPort.S4, UltrasonicSensorMode.DISTANCE);\n"
+            + "                while ( !hal.isPressedAndReleased(BrickKey.UP) ) {\n\n"
             + "                }\n"
             + "            }\n"
             + "        }\n"
@@ -135,29 +135,30 @@ public class JavaGenerateCodeTest {
     @Test
     public void test4() throws Exception {
 
-        String a = "" //
-            + IMPORTS
-            + MAIN_CLASS
-            + BRICK_CONFIGURATION
-            + MAIN_METHOD
-            + "    public void run() {\n"
-            + "        Hal hal = new Hal(brickConfiguration);\n"
-            + "        if ( 5 < hal.getRegulatedMotorSpeed(B) ) {\n\n\n"
-            + "            hal.rotateDirectionRegulated(A, B, RIGHT, 50);\n"
-            + "        }\n"
-            + "        if ( hal.getMotorTachoValue(A) + hal.getInfraredSensorValue(S4) == hal.getUltraSonicSensorValue(S4) ) {\n"
-            + "            hal.setInfraredSensorMode(S4, SEEK);\n"
-            + "            hal.ledOff();\n"
-            + "        } else {\n"
-            + "            hal.resetGyroSensor(S2);\n"
-            + "            while ( hal.isPressed(S1) ) {\n"
-            + "                hal.drawPicture(\"SMILEY1\", 0, 0);\n"
-            + "                hal.clearDisplay();\n"
-            + "            }\n"
-            + "            hal.ledOn(GREEN, true);\n"
-            + "        }\n"
-            + "    }\n"
-            + "}\n";
+        String a =
+            "" //
+                + IMPORTS
+                + MAIN_CLASS
+                + BRICK_CONFIGURATION
+                + MAIN_METHOD
+                + "    public void run() {\n"
+                + "        Hal hal = new Hal(brickConfiguration);\n"
+                + "        if ( 5 < hal.getRegulatedMotorSpeed(ActorPort.B) ) {\n\n\n"
+                + "            hal.rotateDirectionRegulated(ActorPort.A, ActorPort.B, TurnDirection.RIGHT, 50);\n"
+                + "        }\n"
+                + "        if ( hal.getRegulatedMotorTachoValue(ActorPort.A) + hal.getInfraredSensorValue(SensorPort.S4) == hal.getUltraSonicSensorValue(SensorPort.S4) ) {\n"
+                + "            hal.setInfraredSensorMode(SensorPort.S4, InfraredSensorMode.SEEK);\n"
+                + "            hal.ledOff();\n"
+                + "        } else {\n"
+                + "            hal.resetGyroSensor(SensorPort.S2);\n"
+                + "            while ( hal.isPressed(SensorPort.S1) ) {\n"
+                + "                hal.drawPicture(\"SMILEY1\", 0, 0);\n"
+                + "                hal.clearDisplay();\n"
+                + "            }\n"
+                + "            hal.ledOn(BrickLedColor.GREEN, true);\n"
+                + "        }\n"
+                + "    }\n"
+                + "}\n";
 
         Assert.assertEquals(a, Helper.generateString("/syntax/code_generator/java_code_generator4.xml", brickConfiguration));
     }

@@ -9,7 +9,7 @@ public class MotorDriveStopActionTest {
 
     @Test
     public void stop() throws Exception {
-        String a = "\nhal.stopRegulatedDrive(A, B);";
+        String a = "\nhal.stopRegulatedDrive(ActorPort.A, ActorPort.B);";
 
         Assert.assertEquals(a, Helper.generateStringWithoutWrapping("/ast/actions/action_Stop.xml"));
     }

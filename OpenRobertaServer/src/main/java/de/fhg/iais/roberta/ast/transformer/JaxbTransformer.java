@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.Action;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.ClearDisplayAction;
-import de.fhg.iais.roberta.ast.syntax.action.Color;
+import de.fhg.iais.roberta.ast.syntax.action.BrickLedColor;
 import de.fhg.iais.roberta.ast.syntax.action.DriveAction;
 import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
 import de.fhg.iais.roberta.ast.syntax.action.LightAction;
@@ -257,7 +257,7 @@ public class JaxbTransformer {
                 fields = extractFields(block, (short) 2);
                 String color = extractField(fields, "SWITCH_COLOR", (short) 0);
                 String blink = extractField(fields, "SWITCH_BLINK", (short) 1);
-                return LightAction.make(Color.get(color), Boolean.valueOf(blink));
+                return LightAction.make(BrickLedColor.get(color), Boolean.valueOf(blink));
 
             case "robActions_brickLight_off":
                 return LightStatusAction.make(LightStatusAction.Status.OFF);

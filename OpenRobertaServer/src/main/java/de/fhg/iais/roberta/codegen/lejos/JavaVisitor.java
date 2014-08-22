@@ -129,7 +129,7 @@ public class JavaVisitor implements Visitor {
 
     @Override
     public void visit(ColorConst colorConst) {
-        this.sb.append("\"").append(StringEscapeUtils.escapeJava(colorConst.getValue())).append("\"");
+        this.sb.append(colorConst.getValue().getJavaCode());
     }
 
     @Override
@@ -348,7 +348,7 @@ public class JavaVisitor implements Visitor {
             this.indentation,
             false,
             false,
-            "hal.ledOn(" + lightAction.getColor().toString() + ", " + lightAction.isBlink() + ");");
+            "hal.ledOn(" + lightAction.getColor().getJavaCode() + ", " + lightAction.isBlink() + ");");
     }
 
     @Override
@@ -406,12 +406,9 @@ public class JavaVisitor implements Visitor {
     public void visit(MotorSetPowerAction motorSetPowerAction) {
         // it is just temporary variable just to be able to write the code. This will be replaced by the brick configuration method.
         boolean isRegulated = true;
-        String methodName = "hal.setRegulatedMotorSpeed(";
+        String methodName = isRegulated ? "hal.setRegulatedMotorSpeed(" : "hal.setUnregulatedMotorSpeed(";
         JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
-        if ( !isRegulated ) {
-            methodName = "hal.setUnregulatedMotorSpeed(";
-        }
-        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName + motorSetPowerAction.getPort().name() + ", ");
+        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName + motorSetPowerAction.getPort().getJavaCode() + ", ");
         motorSetPowerAction.getPower().accept(visitor);
         this.sb.append(");");
     }
@@ -420,11 +417,8 @@ public class JavaVisitor implements Visitor {
     public void visit(MotorGetPowerAction motorGetPowerAction) {
         // it is just temporary variable just to be able to write the code. This will be replaced by the brick configuration method.
         boolean isRegulated = true;
-        String methodName = "hal.getRegulatedMotorSpeed(";
-        if ( !isRegulated ) {
-            methodName = "hal.getUnregulatedMotorSpeed(";
-        }
-        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName + motorGetPowerAction.getPort().toString() + ")");
+        String methodName = isRegulated ? "hal.getRegulatedMotorSpeed(" : "hal.getUnregulatedMotorSpeed(";
+        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName + motorGetPowerAction.getPort().getJavaCode() + ")");
     }
 
     @Override
@@ -436,14 +430,11 @@ public class JavaVisitor implements Visitor {
     public void visit(MotorStopAction motorStopAction) {
         // it is just temporary variable just to be able to write the code. This will be replaced by the brick configuration method.
         boolean isRegulated = true;
-        String methodName = "hal.stopRegulatedMotor(";
-        if ( !isRegulated ) {
-            methodName = "hal.stopUnregulatedMotor(";
-        }
+        String methodName = isRegulated ? "hal.stopRegulatedMotor(" : "hal.stopUnregulatedMotor(";
         StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName
-            + motorStopAction.getPort().toString()
+            + motorStopAction.getPort().getJavaCode()
             + ", "
-            + motorStopAction.getMode().toString()
+            + motorStopAction.getMode().getJavaCode()
             + ");");
     }
 
@@ -453,10 +444,7 @@ public class JavaVisitor implements Visitor {
         JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
         JavaVisitor visitor1 = new JavaVisitor(tmpSB, this.indentation, this.brickConfiguration);
         boolean isRegulated = true;
-        String methodName = "hal.rotateDirectionRegulated(";
-        if ( !isRegulated ) {
-            methodName = "hal.rotateDirectionUnregulated(";
-        }
+        String methodName = isRegulated ? "hal.rotateDirectionRegulated(" : "hal.rotateDirectionUnregulated(";
         //check for distance parameter
         if ( turnAction.getParam().getDuration() != null ) {
             methodName = "hal.rotateDirectionDistanceRegulated(";
@@ -465,10 +453,10 @@ public class JavaVisitor implements Visitor {
         }
         StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName);
         //Set the left motor to motor port A, this will be changed when brick configuration provides information on which port the left motor is set. 
-        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.A.toString() + ", ");
+        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.A.getJavaCode() + ", ");
         //Set the right motor to motor port B, this will be changed when brick configuration provides information on which port the right motor is set. 
-        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.B.toString() + ", ");
-        StringManipulation.appendCustomString(this.sb, 0, false, false, turnAction.getDirection().toString() + ", ");
+        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.B.getJavaCode() + ", ");
+        StringManipulation.appendCustomString(this.sb, 0, false, false, turnAction.getDirection().getJavaCode() + ", ");
         turnAction.getParam().getSpeed().accept(visitor);
         this.sb.append(tmpSB);
         StringManipulation.appendCustomString(this.sb, 0, false, false, ");");
@@ -480,10 +468,8 @@ public class JavaVisitor implements Visitor {
         JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
         JavaVisitor visitor1 = new JavaVisitor(tmpSB, this.indentation, this.brickConfiguration);
         boolean isRegulated = true;
-        String methodName = "hal.regulatedDrive(";
-        if ( !isRegulated ) {
-            methodName = "hal.unregulatedDrive(";
-        }
+        String methodName = isRegulated ? "hal.regulatedDrive(" : "hal.unregulatedDrive(";
+
         //check for distance parameter
         if ( driveAction.getParam().getDuration() != null ) {
             methodName = "hal.driveDistance(";
@@ -493,10 +479,10 @@ public class JavaVisitor implements Visitor {
 
         StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName);
         //Set the left motor to motor port A, this will be changed when brick configuration provides information on which port the left motor is set. 
-        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.A.toString() + ", ");
+        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.A.getJavaCode() + ", ");
         //Set the right motor to motor port B, this will be changed when brick configuration provides information on which port the right motor is set. 
-        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.B.toString() + ", ");
-        StringManipulation.appendCustomString(this.sb, 0, false, false, driveAction.getDirection().toString() + ", ");
+        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.B.getJavaCode() + ", ");
+        StringManipulation.appendCustomString(this.sb, 0, false, false, driveAction.getDirection().getJavaCode() + ", ");
         driveAction.getParam().getSpeed().accept(visitor);
         this.sb.append(tmpSB);
         StringManipulation.appendCustomString(this.sb, 0, false, false, ");");
@@ -505,26 +491,23 @@ public class JavaVisitor implements Visitor {
     @Override
     public void visit(MotorDriveStopAction stopAction) {
         boolean isRegulated = true;
-        String methodName = "hal.stopRegulatedDrive(";
-        if ( !isRegulated ) {
-            methodName = "hal.stopUnregulatedDrive(";
-        }
+        String methodName = isRegulated ? "hal.stopRegulatedDrive(" : "hal.stopUnregulatedDrive(";
         StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName);
         //Set the left motor to motor port A, this will be changed when brick configuration provides information on which port the left motor is set. 
-        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.A.toString() + ", ");
+        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.A.getJavaCode() + ", ");
         //Set the right motor to motor port B, this will be changed when brick configuration provides information on which port the right motor is set. 
-        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.B.toString() + ");");
+        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.B.getJavaCode() + ");");
     }
 
     @Override
     public void visit(BrickSensor brickSensor) {
         switch ( brickSensor.getMode() ) {
             case IS_PRESSED:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.isPressed(" + brickSensor.getKey().toString() + ")");
+                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.isPressed(" + brickSensor.getKey().getJavaCode() + ")");
                 break;
             case WAIT_FOR_PRESS_AND_RELEASE:
                 StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.isPressedAndReleased("
-                    + brickSensor.getKey().toString()
+                    + brickSensor.getKey().getJavaCode()
                     + ")");
                 break;
             default:
@@ -537,19 +520,19 @@ public class JavaVisitor implements Visitor {
         switch ( colorSensor.getMode() ) {
             case GET_MODE:
                 StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.getColorSensorModeName("
-                    + colorSensor.getPort().toString()
+                    + colorSensor.getPort().getJavaCode()
                     + ")");
                 break;
             case GET_SAMPLE:
                 StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.getColorSensorValue("
-                    + colorSensor.getPort().toString()
+                    + colorSensor.getPort().getJavaCode()
                     + ")");
                 break;
             default:
                 StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.setColorSensorMode("
-                    + colorSensor.getPort().toString()
+                    + colorSensor.getPort().getJavaCode()
                     + ", "
-                    + colorSensor.getMode().toString()
+                    + colorSensor.getMode().getJavaCode()
                     + ");");
                 break;
         }
@@ -560,24 +543,24 @@ public class JavaVisitor implements Visitor {
         switch ( encoderSensor.getMode() ) {
             case GET_MODE:
                 StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.getMotorTachoMode("
-                    + encoderSensor.getMotor().toString()
+                    + encoderSensor.getMotor().getJavaCode()
                     + ")");
                 break;
             case GET_SAMPLE:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.getMotorTachoValue("
-                    + encoderSensor.getMotor().toString()
-                    + ")");
+                boolean isRegulated = true;
+                String methodName = isRegulated ? "hal.getRegulatedMotorTachoValue(" : "hal.getUnregulatedMotorTachoValuestop(";
+                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName + encoderSensor.getMotor().getJavaCode() + ")");
                 break;
             case RESET:
                 StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.resetMotorTacho("
-                    + encoderSensor.getMotor().toString()
+                    + encoderSensor.getMotor().getJavaCode()
                     + ");");
                 break;
             default:
                 StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.setMotorTachoMode("
-                    + encoderSensor.getMotor().toString()
+                    + encoderSensor.getMotor().getJavaCode()
                     + ", "
-                    + encoderSensor.getMode().toString()
+                    + encoderSensor.getMode().getJavaCode()
                     + ");");
                 break;
         }
@@ -588,22 +571,24 @@ public class JavaVisitor implements Visitor {
         switch ( gyroSensor.getMode() ) {
             case GET_MODE:
                 StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.getGyroSensorModeName("
-                    + gyroSensor.getPort().toString()
+                    + gyroSensor.getPort().getJavaCode()
                     + ")");
                 break;
             case GET_SAMPLE:
                 StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.getGyroSensorValue("
-                    + gyroSensor.getPort().toString()
+                    + gyroSensor.getPort().getJavaCode()
                     + ")");
                 break;
             case RESET:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.resetGyroSensor(" + gyroSensor.getPort().toString() + ");");
+                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.resetGyroSensor("
+                    + gyroSensor.getPort().getJavaCode()
+                    + ");");
                 break;
             default:
                 StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.setGyroSensorMode("
-                    + gyroSensor.getPort().toString()
+                    + gyroSensor.getPort().getJavaCode()
                     + ", "
-                    + gyroSensor.getMode().toString()
+                    + gyroSensor.getMode().getJavaCode()
                     + ");");
                 break;
         }
@@ -614,19 +599,19 @@ public class JavaVisitor implements Visitor {
         switch ( infraredSensor.getMode() ) {
             case GET_MODE:
                 StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.getInfraredSensorModeName("
-                    + infraredSensor.getPort().toString()
+                    + infraredSensor.getPort().getJavaCode()
                     + ")");
                 break;
             case GET_SAMPLE:
                 StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.getInfraredSensorValue("
-                    + infraredSensor.getPort().toString()
+                    + infraredSensor.getPort().getJavaCode()
                     + ")");
                 break;
             default:
                 StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.setInfraredSensorMode("
-                    + infraredSensor.getPort().toString()
+                    + infraredSensor.getPort().getJavaCode()
                     + ", "
-                    + infraredSensor.getMode().toString()
+                    + infraredSensor.getMode().getJavaCode()
                     + ");");
                 break;
         }
@@ -648,7 +633,7 @@ public class JavaVisitor implements Visitor {
 
     @Override
     public void visit(TouchSensor touchSensor) {
-        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.isPressed(" + touchSensor.getPort() + ")");
+        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.isPressed(" + touchSensor.getPort().getJavaCode() + ")");
     }
 
     @Override
@@ -656,19 +641,19 @@ public class JavaVisitor implements Visitor {
         switch ( ultrasonicSensor.getMode() ) {
             case GET_MODE:
                 StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.getUltraSonicSensorModeName("
-                    + ultrasonicSensor.getPort().toString()
+                    + ultrasonicSensor.getPort().getJavaCode()
                     + ")");
                 break;
             case GET_SAMPLE:
                 StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.getUltraSonicSensorValue("
-                    + ultrasonicSensor.getPort().toString()
+                    + ultrasonicSensor.getPort().getJavaCode()
                     + ")");
                 break;
             default:
                 StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.setUltrasonicSensorMode("
-                    + ultrasonicSensor.getPort().toString()
+                    + ultrasonicSensor.getPort().getJavaCode()
                     + ", "
-                    + ultrasonicSensor.getMode().toString()
+                    + ultrasonicSensor.getMode().getJavaCode()
                     + ");");
                 break;
         }

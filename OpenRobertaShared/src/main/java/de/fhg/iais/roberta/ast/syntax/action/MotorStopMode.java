@@ -15,6 +15,10 @@ public enum MotorStopMode {
         this.values = values;
     }
 
+    public String getJavaCode() {
+        return this.getClass().getSimpleName() + "." + this;
+    }
+
     /**
      * Get stopping mode from {@link MotorStopMode} from string parameter. It is possible for one stopping mode to have multiple string mappings.
      * Throws exception if the stopping mode does not exists.

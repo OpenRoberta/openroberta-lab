@@ -14,7 +14,7 @@ import lejos.robotics.navigation.DifferentialPilot;
 import lejos.utility.Stopwatch;
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
-import de.fhg.iais.roberta.ast.syntax.action.Color;
+import de.fhg.iais.roberta.ast.syntax.action.BrickLedColor;
 import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
 import de.fhg.iais.roberta.ast.syntax.action.MotorMoveMode;
 import de.fhg.iais.roberta.ast.syntax.action.MotorStopMode;
@@ -424,22 +424,17 @@ public class Hal {
      * @param x
      * @param y
      */
-    public void drawPicture(int smiley, int x, int y) {
+    public void drawPicture(String smiley, int x, int y) {
         Image image = null;
         switch ( smiley ) {
-            case 1:
-                // number to image
+            case "smiley1":
+                // name to image
                 break;
-            case 2:
-                // number to image
-                break;
-            case 3:
-                // number to image
-                break;
-            case 4:
-                // number to image
+            case "smiley2":
+                // name to image
                 break;
         }
+        image = image == null ? null /* default image */: image;
         this.glcd.drawImage(image, x, y, 0);
     }
 
@@ -493,7 +488,7 @@ public class Hal {
      * @param color
      * @param blink
      */
-    public void ledOn(Color color, boolean blink) {
+    public void ledOn(BrickLedColor color, boolean blink) {
         switch ( color ) {
             case GREEN:
                 if ( blink ) {

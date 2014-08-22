@@ -143,7 +143,7 @@ public class RepeatStmtTest {
     public void loopForever() throws Exception {
         String a =
             "BlockAST [project=[[\n"
-                + "(repeat [WHILE, BoolConst [true]]\nexprStmt Funct [PRINT, [ColorConst [#585858]]]\n), \n(repeat [WHILE, BoolConst [true]]\nexprStmt Funct [PRINT, [EmptyExpr [defVal=class java.lang.String]]]\n)]]]";
+                + "(repeat [WHILE, BoolConst [true]]\nexprStmt Funct [PRINT, [ColorConst [GREEN]]]\n), \n(repeat [WHILE, BoolConst [true]]\nexprStmt Funct [PRINT, [EmptyExpr [defVal=class java.lang.String]]]\n)]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/repeat_stmt_loopForever.xml"));
     }

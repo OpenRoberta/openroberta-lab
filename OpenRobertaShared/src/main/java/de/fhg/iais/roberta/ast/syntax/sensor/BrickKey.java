@@ -16,6 +16,10 @@ public enum BrickKey {
         this.values = values;
     }
 
+    public String getJavaCode() {
+        return this.getClass().getSimpleName() + "." + this;
+    }
+
     /**
      * get key from {@link BrickKey} from string parameter. It is possible for one key to have multiple string mappings.
      * Throws exception if the operator does not exists.

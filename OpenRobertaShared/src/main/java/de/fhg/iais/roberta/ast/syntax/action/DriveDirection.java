@@ -16,6 +16,10 @@ public enum DriveDirection {
         this.values = values;
     }
 
+    public String getJavaCode() {
+        return this.getClass().getSimpleName() + "." + this;
+    }
+
     /**
      * Get direction from {@link DriveDirection} from string parameter. It is possible for one direction to have multiple string mappings.
      * Throws exception if the direction does not exists.

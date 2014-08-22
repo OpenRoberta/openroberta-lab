@@ -16,6 +16,10 @@ public enum ActorPort {
         this.values = values;
     }
 
+    public String getJavaCode() {
+        return this.getClass().getSimpleName() + "." + this;
+    }
+
     /**
      * get actor port from {@link ActorPort} from string parameter. It is possible for actor port to have multiple string mappings.
      * Throws exception if the actor port does not exists.

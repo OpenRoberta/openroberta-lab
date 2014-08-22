@@ -16,6 +16,10 @@ public enum MotorTachoMode {
         this.values = values;
     }
 
+    public String getJavaCode() {
+        return this.getClass().getSimpleName() + "." + this;
+    }
+
     /**
      * get mode from {@link MotorTachoMode} from string parameter. It is possible for one mode to have multiple string mappings.
      * Throws exception if the mode does not exists.

@@ -9,25 +9,25 @@ public class ColorTest {
 
     @Test
     public void testBuilder() {
-        Color mode = Color.get("Green");
-        Assert.assertEquals(Color.GREEN, mode);
+        BrickLedColor mode = BrickLedColor.get("Green");
+        Assert.assertEquals(BrickLedColor.GREEN, mode);
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode() {
-        Color mode = Color.get("ad");
+        BrickLedColor mode = BrickLedColor.get("ad");
 
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode1() {
-        Color mode = Color.get("");
+        BrickLedColor mode = BrickLedColor.get("");
 
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode2() {
-        Color mode = Color.get(null);
+        BrickLedColor mode = BrickLedColor.get(null);
 
     }
 }

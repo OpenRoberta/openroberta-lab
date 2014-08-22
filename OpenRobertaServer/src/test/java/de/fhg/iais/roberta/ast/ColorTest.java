@@ -5,11 +5,11 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 
-public class ColourTest {
+public class ColorTest {
 
     @Test
     public void test1() throws Exception {
-        String a = "BlockAST [project=[[\nVar [item] := ColorConst [#585858]\n]]]";
+        String a = "BlockAST [project=[[\nVar [item] := ColorConst [RED]\n]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/colour/colour_const.xml"));
     }

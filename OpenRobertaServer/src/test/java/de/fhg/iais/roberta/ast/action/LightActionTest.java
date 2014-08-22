@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.action;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.ast.syntax.action.Color;
+import de.fhg.iais.roberta.ast.syntax.action.BrickLedColor;
 import de.fhg.iais.roberta.ast.syntax.action.LightAction;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 
@@ -20,7 +20,7 @@ public class LightActionTest {
     public void getColor() throws Exception {
         LightAction la = (LightAction) Helper.generateAST("/ast/actions/action_BrickLight.xml");
 
-        Assert.assertEquals(Color.GREEN, la.getColor());
+        Assert.assertEquals(BrickLedColor.GREEN, la.getColor());
     }
 
     @Test

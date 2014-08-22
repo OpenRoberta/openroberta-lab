@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.ast.expr;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.ast.syntax.PickColor;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.ColorConst;
@@ -12,7 +13,7 @@ public class ColorConstTest {
 
     @Test
     public void make() throws Exception {
-        String a = "BlockAST [project=[[ColorConst [#585858]]]]";
+        String a = "BlockAST [project=[[ColorConst [RED]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/colour/colour_const1.xml"));
     }
@@ -23,7 +24,7 @@ public class ColorConstTest {
 
         ColorConst colorConst = (ColorConst) transformer.getTree().get(0);
 
-        Assert.assertEquals("#585858", colorConst.getValue());
+        Assert.assertEquals(PickColor.RED, colorConst.getValue());
     }
 
     @Test

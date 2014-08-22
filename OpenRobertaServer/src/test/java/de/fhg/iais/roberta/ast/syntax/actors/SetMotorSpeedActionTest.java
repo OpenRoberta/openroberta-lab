@@ -9,7 +9,7 @@ public class SetMotorSpeedActionTest {
 
     @Test
     public void setMotorSpeed() throws Exception {
-        String a = "\nhal.setRegulatedMotorSpeed(B, 30);";
+        String a = "\nhal.setRegulatedMotorSpeed(ActorPort.B, 30);";
 
         Assert.assertEquals(a, Helper.generateStringWithoutWrapping("/ast/actions/action_MotorSetPower.xml"));
     }

@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.codegen.lejos.Hal;
 
-public class Test {
+public class Test1 {
     private BrickConfiguration brickConfiguration = new BrickConfiguration.Builder()
         .addActor(ActorPort.A, HardwareComponent.EV3MediumRegulatedMotor)
         .addActor(ActorPort.D, HardwareComponent.EV3LargeRegulatedMotor)
@@ -15,7 +15,7 @@ public class Test {
         .build();
 
     public static void main(String[] args) {
-        new Test().run();
+        new Test1().run();
     }
 
     public void run() {

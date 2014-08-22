@@ -104,7 +104,7 @@ abstract public class Phrase implements Visitable {
         TIMER_SENSING( Category.SENSOR ),
         EXPR_LIST( Category.EXPR ),
         STRING_CONST( Category.EXPR ),
-        COLOR_CONST( Category.EXPR ),
+        PICK_COLOR_CONST( Category.EXPR ),
         NULL_CONST( Category.EXPR ),
         BOOL_CONST( Category.EXPR ),
         NUM_CONST( Category.EXPR ),

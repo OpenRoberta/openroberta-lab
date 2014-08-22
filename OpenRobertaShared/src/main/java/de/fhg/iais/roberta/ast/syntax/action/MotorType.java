@@ -7,4 +7,8 @@ package de.fhg.iais.roberta.ast.syntax.action;
  */
 public enum MotorType {
     MIDDLE, BIG, OTHER;
+
+    public String getJavaCode() {
+        return this.getClass().getSimpleName() + "." + this;
+    }
 }

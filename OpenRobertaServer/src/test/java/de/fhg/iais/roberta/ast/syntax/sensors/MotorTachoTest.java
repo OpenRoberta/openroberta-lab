@@ -9,28 +9,28 @@ public class MotorTachoTest {
 
     @Test
     public void setMotorTacho() throws Exception {
-        String a = "\nhal.setMotorTachoMode(A, ROTATION);";
+        String a = "\nhal.setMotorTachoMode(ActorPort.A, MotorTachoMode.ROTATION);";
 
         Assert.assertEquals(a, Helper.generateStringWithoutWrapping("/ast/sensors/sensor_setEncoder.xml"));
     }
 
     @Test
     public void getMotorTachoMode() throws Exception {
-        String a = "\nhal.getMotorTachoMode(A)";
+        String a = "\nhal.getMotorTachoMode(ActorPort.A)";
 
         Assert.assertEquals(a, Helper.generateStringWithoutWrapping("/ast/sensors/sensor_getModeEncoder.xml"));
     }
 
     @Test
     public void getSampleMotorTacho() throws Exception {
-        String a = "\nhal.getMotorTachoValue(A)";
+        String a = "\nhal.getRegulatedMotorTachoValue(ActorPort.A)";
 
         Assert.assertEquals(a, Helper.generateStringWithoutWrapping("/ast/sensors/sensor_getSampleEncoder.xml"));
     }
 
     @Test
     public void resetMotorTacho() throws Exception {
-        String a = "\nhal.resetMotorTacho(A);";
+        String a = "\nhal.resetMotorTacho(ActorPort.A);";
 
         Assert.assertEquals(a, Helper.generateStringWithoutWrapping("/ast/sensors/sensor_resetEncoder.xml"));
     }
