@@ -148,9 +148,9 @@ public class GraphicStartup implements Menu {
 
     // Roberta Icon (maybe not the best quality possible, done with ev3image tool
     // from lejos). Black/white roberta image required for best result?!
-    private static final String RobertaIcon =
-        "\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0001\u0000\u0000\u0080\u0003\u0020\u0002\u008e\u0003\u00b8\u0001\u0080\u0001\u00b8\u005e\u00c4\u0001\u0038\u0021\u00f8\u0000\u00f8\u0000\u0031\u0000\u00f0\u0010\u0033\u0000\u00e0\u0038\u0008\u0000\u00e0\u0000\u0004\u0000\u0000\u00e1\u0003\u0000\u0000\u007e\u0000\u0000\u0000\u0070\u0000\u0000\u0000\u0030\u0000\u0000\u0000\u0038\u0000\u0000\u0000\u0038\u0080\u0003\u0000\u0038\u00f0\u0007\u0000\u00f8\u00ff\u0007\u0000\u00f8\u00ff\u0007\u0000\u00f8\u00ff\u001f\u0000\u00f8\u00ff\u003f\u0000\u00f8\u00ff\u003f\u0000\u00f8\u00ff\u007f\u0000\u00ff\u00ff\u007f\u0080\u00ff\u00ff\u0067\u00c0\u00ff\u00ff\u0077\u00c0\u00ff\u009f\u0077\u00c0\u00ff\u00df\u003f\u0080\u00ff\u00ff\u003f\u0000\u008f\u00fc\u001f\u0000\u0000\u0010\u000f";
-
+    private static final String ICRoberta = "\u0000\u0000\u0080\u0000\u0000\u0000\u0080\u0000\u0000\u00c0\u00c3\u0001\u0010\u0001\u00c0\u0001\u00dc\u00c0\u00c1\u0000\u0058\u002f\u00fe\u0000\u009c\u0010\u007c\u0000\u007c\u0080\u001c\u0000\u0078\u0084\u001d\u0000\u0070\u000c\u0004\u0000\u0070\u0000\u0002\u0000\u0080\u00f0\u0001\u0000\u0000\u003f\u0000\u0000\u0000\u0038\u0000\u0000\u0000\u0018\u0000\u0000\u0000\u001c\u0000\u0000\u0000\u001c\u00c0\u0001\u0000\u001c\u00f8\u0003\u0000\u00dc\u00ff\u0003\u0000\u00dc\u00ff\u0003\u0000\u00bc\u00ff\r\u0000\u00f8\u00ff\u001e\u0000\u00f4\u007f\u001f\u0080\u00cf\u00c7\u003f\u00c0\u00ff\u00bb\u003f\u00e0\u00fb\u00fd\u0033\u00e0\u0007\u00ff\u003b\u00e0\u00ff\u00cf\u003b\u00e0\u00ff\u00ef\u001f\u00c0\u00ff\u00ff\u001f\u0080\u00f7\u00fe\u000f\u0000\u0000\u00b8\u0007";
+    
+    
     private static boolean isRegistered = false;
     private static String token;
     private static String serverURLString;
@@ -329,9 +329,9 @@ public class GraphicStartup implements Menu {
      */
     private void mainMenu() {
         GraphicMenu menu = new GraphicMenu(new String[] {
-            "Run Default", "Robertalab", "Programs", "Samples", "Tools", "Bluetooth", "Wifi", "Sound", "System", "Version"
+            "Run Default", " Open Roberta lab", "Programs", "Samples", "Tools", "Bluetooth", "Wifi", "Sound", "System", "Version"
         }, new String[] {
-            ICDefault, RobertaIcon, ICFiles, ICSamples, ICTools, ICBlue, ICWifi, ICSound, ICEV3, ICLeJOS
+            ICDefault, ICRoberta, ICFiles, ICSamples, ICTools, ICBlue, ICWifi, ICSound, ICEV3, ICLeJOS
         }, 3);
         int selection = 0;
         do {
@@ -1538,7 +1538,7 @@ public class GraphicStartup implements Menu {
             GraphicMenu menu = new GraphicMenu(new String[] {
                 "New session"
             }, new String[] {
-                RobertaIcon
+                ICRoberta
             }, 3);
             int selected = 0;
             do {
