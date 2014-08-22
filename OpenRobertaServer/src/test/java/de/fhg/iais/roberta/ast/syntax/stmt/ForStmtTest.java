@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.syntax.stmt;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.helper.Helper;
+import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 
 public class ForStmtTest {
 
@@ -23,6 +23,6 @@ public class ForStmtTest {
                 + "    }\n"
                 + "}";
 
-        Assert.assertEquals(a, Helper.generateSyntax("/syntax/stmt/for_stmt.xml"));
+        Assert.assertEquals(a, Helper.generateStringWithoutWrapping("/syntax/stmt/for_stmt.xml"));
     }
 }

@@ -168,9 +168,9 @@ public class JavaVisitor implements Visitor {
     @Override
     public void visit(Binary binary) {
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
-        this.sb.append(StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, null)
+        this.sb.append(StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, null)
             + binary.getOp().getOpSymbol()
-            + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, null));
+            + StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, null));
         generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
     }
 
@@ -255,7 +255,7 @@ public class JavaVisitor implements Visitor {
 
     @Override
     public void visit(IfStmt ifStmt) {
-        int next = this.indentation + PreattyPrintSettings.indentationSize;
+        int next = this.indentation + PrettyPrintSettings.indentationSize;
         JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
         if ( ifStmt.isTernary() ) {
             generateCodeFromTernary(ifStmt, visitor);
@@ -267,7 +267,7 @@ public class JavaVisitor implements Visitor {
 
     @Override
     public void visit(RepeatStmt repeatStmt) {
-        int next = this.indentation + PreattyPrintSettings.indentationSize;
+        int next = this.indentation + PrettyPrintSettings.indentationSize;
         JavaVisitor visitor = new JavaVisitor(this.sb, 0, this.brickConfiguration);
         switch ( repeatStmt.getMode() ) {
             case UNTIL:
@@ -288,8 +288,8 @@ public class JavaVisitor implements Visitor {
         StringManipulation.appendCustomString(
             this.sb,
             this.indentation,
-            PreattyPrintSettings.newLineBeforeCloseBracket,
-            PreattyPrintSettings.newLineAfterCloseBracket,
+            PrettyPrintSettings.newLineBeforeCloseBracket,
+            PrettyPrintSettings.newLineAfterCloseBracket,
             "}");
     }
 
@@ -311,7 +311,7 @@ public class JavaVisitor implements Visitor {
         for ( Stmt stmt : stmtList.get() ) {
             if ( first ) {
                 first = false;
-                StringManipulation.appendCustomString(this.sb, 0, PreattyPrintSettings.newLineAfterOpenBracket, false, null);
+                StringManipulation.appendCustomString(this.sb, 0, PrettyPrintSettings.newLineAfterOpenBracket, false, null);
             } else {
                 StringManipulation.appendCustomString(this.sb, 0, true, false, null);
             }
@@ -684,9 +684,9 @@ public class JavaVisitor implements Visitor {
             // parentheses are omitted
             expr.accept(visitor);
         } else {
-            sb.append("(" + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, null));
+            sb.append("(" + StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, null));
             expr.accept(visitor);
-            sb.append(StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, ")"));
+            sb.append(StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, ")"));
         }
     }
 
@@ -702,18 +702,18 @@ public class JavaVisitor implements Visitor {
     }
 
     private void generateCodeFromTernary(IfStmt ifStmt, JavaVisitor visitor) {
-        this.sb.append("(" + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, null));
+        this.sb.append("(" + StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, null));
         ifStmt.getExpr().get(0).accept(visitor);
-        this.sb.append(StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, ")")
-            + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, "?")
-            + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, null));
+        this.sb.append(StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, ")")
+            + StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, "?")
+            + StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, null));
         ((ExprStmt) ifStmt.getThenList().get(0).get().get(0)).getExpr().accept(visitor);
         StringManipulation.appendCustomString(
             this.sb,
-            PreattyPrintSettings.whiteSpaceSize,
+            PrettyPrintSettings.whiteSpaceSize,
             false,
             false,
-            ":" + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, null));
+            ":" + StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, null));
         ((ExprStmt) ifStmt.getElseList().get().get(0)).getExpr().accept(visitor);
     }
 
@@ -722,12 +722,12 @@ public class JavaVisitor implements Visitor {
             if ( i == 0 ) {
                 generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i), visitor, this.indentation);
             } else {
-                generateCodeFromStmtCondition("else if", ifStmt.getExpr().get(i), visitor, PreattyPrintSettings.whiteSpaceSize);
+                generateCodeFromStmtCondition("else if", ifStmt.getExpr().get(i), visitor, PrettyPrintSettings.whiteSpaceSize);
             }
             visitor.setIndentation(next);
             ifStmt.getThenList().get(i).accept(visitor);
             if ( i + 1 < ifStmt.getExpr().size() ) {
-                StringManipulation.appendCustomString(this.sb, this.indentation, PreattyPrintSettings.newLineBeforeCloseBracket, false, "}");
+                StringManipulation.appendCustomString(this.sb, this.indentation, PrettyPrintSettings.newLineBeforeCloseBracket, false, "}");
             }
         }
     }
@@ -738,13 +738,13 @@ public class JavaVisitor implements Visitor {
             StringManipulation.appendCustomString(
                 this.sb,
                 this.indentation,
-                PreattyPrintSettings.newLineBeforeCloseBracket,
+                PrettyPrintSettings.newLineBeforeCloseBracket,
                 false,
-                "}" + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, PreattyPrintSettings.newLineAfterCloseBracket, false, "else"));
-            this.sb.append(StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, PreattyPrintSettings.newLineBeforeOpenBracket, false, "{"));
+                "}" + StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, PrettyPrintSettings.newLineAfterCloseBracket, false, "else"));
+            this.sb.append(StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, PrettyPrintSettings.newLineBeforeOpenBracket, false, "{"));
             ifStmt.getElseList().accept(visitor);
         }
-        StringManipulation.appendCustomString(this.sb, this.indentation, PreattyPrintSettings.newLineBeforeCloseBracket, false, "}");
+        StringManipulation.appendCustomString(this.sb, this.indentation, PrettyPrintSettings.newLineBeforeCloseBracket, false, "}");
     }
 
     private void generateCodeFromStmtCondition(String stmtType, Expr expr, JavaVisitor visitor, int indentitation) {
@@ -754,12 +754,12 @@ public class JavaVisitor implements Visitor {
             false,
             false,
             stmtType
-                + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, "(")
-                + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, null));
+                + StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, "(")
+                + StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, null));
         visitor.setIndentation(0);
         expr.accept(visitor);
-        this.sb.append(StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, false, false, ")")
-            + StringManipulation.generateString(PreattyPrintSettings.whiteSpaceSize, PreattyPrintSettings.newLineBeforeOpenBracket, false, "{"));
+        this.sb.append(StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, ")")
+            + StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, PrettyPrintSettings.newLineBeforeOpenBracket, false, "{"));
     }
 
 }

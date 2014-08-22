@@ -4,8 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.action.ShowTextAction;
+import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
-import de.fhg.iais.roberta.helper.Helper;
 
 public class ShowTextActionTest {
 
@@ -13,12 +13,12 @@ public class ShowTextActionTest {
     public void make() throws Exception {
         String a = "BlockAST [project=[[ShowTextAction [StringConst [Hallo], NumConst [0], NumConst [0]]]]]";
 
-        Assert.assertEquals(a, Helper.generateASTString("/ast/actions/action_ShowText.xml"));
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_ShowText.xml"));
     }
 
     @Test
     public void getMsg() throws Exception {
-        JaxbTransformer transformer = Helper.generateAST("/ast/actions/action_ShowText.xml");
+        JaxbTransformer transformer = Helper.generateTransformer("/ast/actions/action_ShowText.xml");
 
         ShowTextAction spa = (ShowTextAction) transformer.getTree().get(0);
 
@@ -27,7 +27,7 @@ public class ShowTextActionTest {
 
     @Test
     public void getX() throws Exception {
-        JaxbTransformer transformer = Helper.generateAST("/ast/actions/action_ShowText.xml");
+        JaxbTransformer transformer = Helper.generateTransformer("/ast/actions/action_ShowText.xml");
 
         ShowTextAction spa = (ShowTextAction) transformer.getTree().get(0);
 
@@ -36,7 +36,7 @@ public class ShowTextActionTest {
 
     @Test
     public void getY() throws Exception {
-        JaxbTransformer transformer = Helper.generateAST("/ast/actions/action_ShowText.xml");
+        JaxbTransformer transformer = Helper.generateTransformer("/ast/actions/action_ShowText.xml");
 
         ShowTextAction spa = (ShowTextAction) transformer.getTree().get(0);
 

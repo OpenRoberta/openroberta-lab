@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.codegen.lejos;
 /**
  * @author kcvejoski
  */
-public class PreattyPrintSettings {
+public class PrettyPrintSettings {
     /**
      * 
      */

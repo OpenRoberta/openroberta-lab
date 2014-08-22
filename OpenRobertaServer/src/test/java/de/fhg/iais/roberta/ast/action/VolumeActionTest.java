@@ -4,8 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.action.VolumeAction;
+import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
-import de.fhg.iais.roberta.helper.Helper;
 
 public class VolumeActionTest {
 
@@ -13,12 +13,12 @@ public class VolumeActionTest {
     public void make() throws Exception {
         String a = "BlockAST [project=[[VolumeAction [SET, NumConst [50]]]]]";
 
-        Assert.assertEquals(a, Helper.generateASTString("/ast/actions/action_SetVolume.xml"));
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_SetVolume.xml"));
     }
 
     @Test
     public void getVolume() throws Exception {
-        JaxbTransformer transformer = Helper.generateAST("/ast/actions/action_SetVolume.xml");
+        JaxbTransformer transformer = Helper.generateTransformer("/ast/actions/action_SetVolume.xml");
 
         VolumeAction va = (VolumeAction) transformer.getTree().get(0);
 
@@ -27,7 +27,7 @@ public class VolumeActionTest {
 
     @Test
     public void getMode() throws Exception {
-        JaxbTransformer transformer = Helper.generateAST("/ast/actions/action_SetVolume.xml");
+        JaxbTransformer transformer = Helper.generateTransformer("/ast/actions/action_SetVolume.xml");
 
         VolumeAction va = (VolumeAction) transformer.getTree().get(0);
 
@@ -49,6 +49,6 @@ public class VolumeActionTest {
     public void getVolumeAction() throws Exception {
         String a = "BlockAST [project=[[VolumeAction [GET, NullConst [null]]]]]";
 
-        Assert.assertEquals(a, Helper.generateASTString("/ast/actions/action_GetVolume.xml"));
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_GetVolume.xml"));
     }
 }

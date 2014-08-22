@@ -3,10 +3,10 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickKey;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
-import de.fhg.iais.roberta.helper.Helper;
 
 public class BrickSensorTest {
 
@@ -14,12 +14,12 @@ public class BrickSensorTest {
     public void main() throws Exception {
         String a = "BlockAST [project=[[BrickSensor [key=ENTER, mode=IS_PRESSED]]]]";
 
-        Assert.assertEquals(a, Helper.generateASTString("/ast/sensors/sensor_brick1.xml"));
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_brick1.xml"));
     }
 
     @Test
     public void getKey() throws Exception {
-        JaxbTransformer transformer = Helper.generateAST("/ast/sensors/sensor_brick1.xml");
+        JaxbTransformer transformer = Helper.generateTransformer("/ast/sensors/sensor_brick1.xml");
 
         BrickSensor bs = (BrickSensor) transformer.getTree().get(0);
 
@@ -28,7 +28,7 @@ public class BrickSensorTest {
 
     @Test
     public void getMode() throws Exception {
-        JaxbTransformer transformer = Helper.generateAST("/ast/sensors/sensor_brick1.xml");
+        JaxbTransformer transformer = Helper.generateTransformer("/ast/sensors/sensor_brick1.xml");
 
         BrickSensor bs = (BrickSensor) transformer.getTree().get(0);
 
@@ -57,14 +57,14 @@ public class BrickSensorTest {
                 + "Var [item] := SensorExpr [BrickSensor [key=LEFT, mode=WAIT_FOR_PRESS_AND_RELEASE]]\n\n"
                 + "]]]";
 
-        Assert.assertEquals(a, Helper.generateASTString("/ast/sensors/sensor_brick.xml"));
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_brick.xml"));
     }
 
     @Test
     public void sensorBrick2() throws Exception {
         String a = "BlockAST [project=[[BrickSensor [key=ENTER, mode=WAIT_FOR_PRESS_AND_RELEASE]]]]";
 
-        Assert.assertEquals(a, Helper.generateASTString("/ast/sensors/sensor_brick2.xml"));
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_brick2.xml"));
     }
 
 }

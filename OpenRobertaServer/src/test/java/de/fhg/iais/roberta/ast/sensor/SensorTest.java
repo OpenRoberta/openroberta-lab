@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.helper.Helper;
+import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 
 public class SensorTest {
 
@@ -20,7 +20,7 @@ public class SensorTest {
                 + "SensorStmt GyroSensor [mode=ANGLE, port=S2]\n"
                 + "]]]";
 
-        Assert.assertEquals(a, Helper.generateASTString("/ast/sensors/sensor_set.xml"));
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_set.xml"));
     }
 
     @Test
@@ -34,7 +34,7 @@ public class SensorTest {
                 + "SensorStmt TimerSensor [mode=RESET, timer=1]\n"
                 + "]]]";
 
-        Assert.assertEquals(a, Helper.generateASTString("/ast/sensors/sensor_reset.xml"));
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_reset.xml"));
     }
 
     @Test
@@ -50,7 +50,7 @@ public class SensorTest {
                 + "Var [item] := SensorExpr [GyroSensor [mode=GET_MODE, port=S2]]\n\n"
                 + "]]]";
 
-        Assert.assertEquals(a, Helper.generateASTString("/ast/sensors/sensor_getMode.xml"));
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getMode.xml"));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class SensorTest {
                 + "Var [item] := SensorExpr [TimerSensor [mode=GET_SAMPLE, timer=1]]\n\n"
                 + "]]]";
 
-        Assert.assertEquals(a, Helper.generateASTString("/ast/sensors/sensor_getSample.xml"));
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getSample.xml"));
     }
 
 }

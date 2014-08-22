@@ -3,11 +3,11 @@ package de.fhg.iais.roberta.ast.expr;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.dbc.DbcException;
-import de.fhg.iais.roberta.helper.Helper;
 
 public class BinaryTest {
 
@@ -15,12 +15,12 @@ public class BinaryTest {
     public void make() throws Exception {
         String a = "BlockAST [project=[[Binary [ADD, NumConst [1], Funct [POWER, [NumConst [5], NumConst [8]]]]]]]";
 
-        Assert.assertEquals(a, Helper.generateASTString("/ast/math/math_arithmetic.xml"));
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_arithmetic.xml"));
     }
 
     @Test
     public void getOp() throws Exception {
-        JaxbTransformer transformer = Helper.generateAST("/ast/math/math_arithmetic.xml");
+        JaxbTransformer transformer = Helper.generateTransformer("/ast/math/math_arithmetic.xml");
 
         Binary binary = (Binary) transformer.getTree().get(0);
 
@@ -29,7 +29,7 @@ public class BinaryTest {
 
     @Test
     public void getLeft() throws Exception {
-        JaxbTransformer transformer = Helper.generateAST("/ast/math/math_arithmetic.xml");
+        JaxbTransformer transformer = Helper.generateTransformer("/ast/math/math_arithmetic.xml");
 
         Binary binary = (Binary) transformer.getTree().get(0);
 
@@ -38,7 +38,7 @@ public class BinaryTest {
 
     @Test
     public void getRight() throws Exception {
-        JaxbTransformer transformer = Helper.generateAST("/ast/math/math_arithmetic.xml");
+        JaxbTransformer transformer = Helper.generateTransformer("/ast/math/math_arithmetic.xml");
 
         Binary binary = (Binary) transformer.getTree().get(0);
 
@@ -47,7 +47,7 @@ public class BinaryTest {
 
     @Test
     public void getPresedance() throws Exception {
-        JaxbTransformer transformer = Helper.generateAST("/ast/math/math_arithmetic.xml");
+        JaxbTransformer transformer = Helper.generateTransformer("/ast/math/math_arithmetic.xml");
 
         Binary binary = (Binary) transformer.getTree().get(0);
 
@@ -56,7 +56,7 @@ public class BinaryTest {
 
     @Test
     public void getAssoc() throws Exception {
-        JaxbTransformer transformer = Helper.generateAST("/ast/math/math_arithmetic.xml");
+        JaxbTransformer transformer = Helper.generateTransformer("/ast/math/math_arithmetic.xml");
 
         Binary binary = (Binary) transformer.getTree().get(0);
 
@@ -65,7 +65,7 @@ public class BinaryTest {
 
     @Test
     public void getOpSymbol() throws Exception {
-        JaxbTransformer transformer = Helper.generateAST("/ast/math/math_arithmetic.xml");
+        JaxbTransformer transformer = Helper.generateTransformer("/ast/math/math_arithmetic.xml");
 
         Binary binary = (Binary) transformer.getTree().get(0);
 

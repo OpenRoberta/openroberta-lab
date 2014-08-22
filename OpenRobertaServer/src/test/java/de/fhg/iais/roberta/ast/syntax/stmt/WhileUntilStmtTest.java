@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.syntax.stmt;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.helper.Helper;
+import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 
 public class WhileUntilStmtTest {
 
@@ -25,13 +25,13 @@ public class WhileUntilStmtTest {
                 + "    }\n"
                 + "}";
 
-        Assert.assertEquals(a, Helper.generateSyntax("/syntax/stmt/whileUntil_stmt.xml"));
+        Assert.assertEquals(a, Helper.generateStringWithoutWrapping("/syntax/stmt/whileUntil_stmt.xml"));
     }
 
     @Test
     public void loopForever() throws Exception {
         String a = "\nwhile ( true ) {\n" + "    System.out.println(\"#585858\");\n" + "}\n" + "while ( true ) {\n" + "    System.out.println(\"\");\n" + "}";
 
-        Assert.assertEquals(a, Helper.generateSyntax("/ast/control/repeat_stmt_loopForever.xml"));
+        Assert.assertEquals(a, Helper.generateStringWithoutWrapping("/ast/control/repeat_stmt_loopForever.xml"));
     }
 }

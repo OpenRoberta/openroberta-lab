@@ -5,8 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.action.Color;
 import de.fhg.iais.roberta.ast.syntax.action.LightAction;
-import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
-import de.fhg.iais.roberta.helper.Helper;
+import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 
 public class LightActionTest {
 
@@ -14,23 +13,19 @@ public class LightActionTest {
     public void make() throws Exception {
         String a = "BlockAST [project=[[LightAction [GREEN, true]]]]";
 
-        Assert.assertEquals(a, Helper.generateASTString("/ast/actions/action_BrickLight.xml"));
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_BrickLight.xml"));
     }
 
     @Test
     public void getColor() throws Exception {
-        JaxbTransformer transformer = Helper.generateAST("/ast/actions/action_BrickLight.xml");
-
-        LightAction la = (LightAction) transformer.getTree().get(0);
+        LightAction la = (LightAction) Helper.generateAST("/ast/actions/action_BrickLight.xml");
 
         Assert.assertEquals(Color.GREEN, la.getColor());
     }
 
     @Test
     public void isBlink() throws Exception {
-        JaxbTransformer transformer = Helper.generateAST("/ast/actions/action_BrickLight.xml");
-
-        LightAction la = (LightAction) transformer.getTree().get(0);
+        LightAction la = (LightAction) Helper.generateAST("/ast/actions/action_BrickLight.xml");
 
         Assert.assertEquals(true, la.isBlink());
     }

@@ -7,9 +7,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 
+import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.blockly.generated.Project;
-import de.fhg.iais.roberta.helper.Helper;
 
 public class ActionTest {
 
@@ -17,14 +17,14 @@ public class ActionTest {
     public void clearDisplay() throws Exception {
         String a = "BlockAST [project=[[ClearDisplayAction []]]]";
 
-        Assert.assertEquals(a, Helper.generateASTString("/ast/actions/action_ClearDisplay.xml"));
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_ClearDisplay.xml"));
     }
 
     @Test
     public void stop() throws Exception {
         String a = "BlockAST [project=[[StopAction []]]]";
 
-        Assert.assertEquals(a, Helper.generateASTString("/ast/actions/action_Stop.xml"));
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_Stop.xml"));
     }
 
     @Test

@@ -3,16 +3,16 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
-import de.fhg.iais.roberta.helper.Helper;
 
 public class TimerSensorTest {
 
     @Test
     public void getMode() throws Exception {
-        JaxbTransformer transformer = Helper.generateAST("/ast/sensors/sensor_resetTimer.xml");
+        JaxbTransformer transformer = Helper.generateTransformer("/ast/sensors/sensor_resetTimer.xml");
 
         TimerSensor cs = (TimerSensor) transformer.getTree().get(0);
 
@@ -21,7 +21,7 @@ public class TimerSensorTest {
 
     @Test
     public void getTimer() throws Exception {
-        JaxbTransformer transformer = Helper.generateAST("/ast/sensors/sensor_resetTimer.xml");
+        JaxbTransformer transformer = Helper.generateTransformer("/ast/sensors/sensor_resetTimer.xml");
 
         TimerSensor cs = (TimerSensor) transformer.getTree().get(0);
 
@@ -32,13 +32,13 @@ public class TimerSensorTest {
     public void sensorResetTimer() throws Exception {
         String a = "BlockAST [project=[[TimerSensor [mode=RESET, timer=1]]]]";
 
-        Assert.assertEquals(a, Helper.generateASTString("/ast/sensors/sensor_resetTimer.xml"));
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_resetTimer.xml"));
     }
 
     @Test
     public void sensorGetSampleTimer() throws Exception {
         String a = "BlockAST [project=[[TimerSensor [mode=GET_SAMPLE, timer=1]]]]";
 
-        Assert.assertEquals(a, Helper.generateASTString("/ast/sensors/sensor_getSampleTimer.xml"));
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getSampleTimer.xml"));
     }
 }

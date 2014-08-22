@@ -6,12 +6,12 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.functions.Funct.Function;
 import de.fhg.iais.roberta.dbc.DbcException;
-import de.fhg.iais.roberta.helper.Helper;
 
 public class TextFunctions {
 
@@ -59,7 +59,7 @@ public class TextFunctions {
 
     @Test
     public void concatination() throws Exception {
-        Helper.generateSyntax("/syntax/functions/text_concat.xml");
+        Helper.generateTransformerString("/syntax/functions/text_concat.xml");
 
         String a = "BlockAST [project=[[Funct [UPPERCASE, [Var [text]]]]]]";
         // Assert.assertEquals(a, transformer.toString());

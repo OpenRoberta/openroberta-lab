@@ -6,8 +6,8 @@ import org.junit.Test;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.MotorStopAction;
 import de.fhg.iais.roberta.ast.syntax.action.MotorStopMode;
+import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
-import de.fhg.iais.roberta.helper.Helper;
 
 public class MotorStopActionTest {
 
@@ -15,12 +15,12 @@ public class MotorStopActionTest {
     public void make() throws Exception {
         String a = "BlockAST [project=[[MotorStop [port=A, mode=FLOAT]]]]";
 
-        Assert.assertEquals(a, Helper.generateASTString("/ast/actions/action_MotorStop.xml"));
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_MotorStop.xml"));
     }
 
     @Test
     public void getPort() throws Exception {
-        JaxbTransformer transformer = Helper.generateAST("/ast/actions/action_MotorStop.xml");
+        JaxbTransformer transformer = Helper.generateTransformer("/ast/actions/action_MotorStop.xml");
 
         MotorStopAction mgp = (MotorStopAction) transformer.getTree().get(0);
 
@@ -29,7 +29,7 @@ public class MotorStopActionTest {
 
     @Test
     public void getMode() throws Exception {
-        JaxbTransformer transformer = Helper.generateAST("/ast/actions/action_MotorStop.xml");
+        JaxbTransformer transformer = Helper.generateTransformer("/ast/actions/action_MotorStop.xml");
 
         MotorStopAction mgp = (MotorStopAction) transformer.getTree().get(0);
 

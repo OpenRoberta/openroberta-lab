@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.stmt;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.helper.Helper;
+import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 
 public class ControlTest {
 
@@ -16,6 +16,6 @@ public class ControlTest {
                 + ")\n(repeat [WHILE, Binary [EQ, NumConst [0], NumConst [0]]]\n"
                 + "exprStmt Funct [PRINT, [StringConst [2]]]\n"
                 + ")]]]";
-        Assert.assertEquals(a, Helper.generateASTString("/ast/control/wait_stmt.xml"));
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/wait_stmt.xml"));
     }
 }

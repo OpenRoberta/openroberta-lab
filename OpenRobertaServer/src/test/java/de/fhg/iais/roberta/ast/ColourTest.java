@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.helper.Helper;
+import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 
 public class ColourTest {
 
@@ -11,6 +11,6 @@ public class ColourTest {
     public void test1() throws Exception {
         String a = "BlockAST [project=[[\nVar [item] := ColorConst [#585858]\n]]]";
 
-        Assert.assertEquals(a, Helper.generateASTString("/ast/colour/colour_const.xml"));
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/colour/colour_const.xml"));
     }
 }
