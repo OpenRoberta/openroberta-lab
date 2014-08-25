@@ -58,6 +58,6 @@ public class ColorSensor extends Sensor {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitColorSensor(this);
     }
 }

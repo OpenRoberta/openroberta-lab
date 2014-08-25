@@ -35,7 +35,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
-import de.fhg.iais.roberta.ast.syntax.functions.Funct;
+import de.fhg.iais.roberta.ast.syntax.functions.Func;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
@@ -54,7 +54,6 @@ import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.dbc.DbcException;
-import de.fhg.iais.roberta.helper.StringManipulation;
 
 /**
  * This class is implementing {@link Visitor}. All methods are implemented and they
@@ -64,7 +63,7 @@ import de.fhg.iais.roberta.helper.StringManipulation;
  * 
  * @author kcvejoski
  */
-public class JavaVisitor implements Visitor {
+public class JavaVisitor implements Visitor<JavaVisitor> {
     private final StringBuilder sb;
     private int indentation;
     private final BrickConfiguration brickConfiguration;
@@ -86,7 +85,7 @@ public class JavaVisitor implements Visitor {
     }
 
     /**
-     * Get the current indentation of the visitor
+     * Get the current indentation of the visitor. Meaningful for tests only.
      * 
      * @return indentation value of the visitor.
      */
@@ -95,113 +94,110 @@ public class JavaVisitor implements Visitor {
     }
 
     /**
-     * Set the indentation of the visitor.
+     * Get the string builder of the visitor. Meaningful for tests only.
      * 
-     * @param indentation value.
-     */
-    public void setIndentation(int indentation) {
-        this.indentation = indentation;
-    }
-
-    /**
-     * Get the string builder of the visitor.
-     * 
-     * @return current state of the string builder
+     * @return (current state of) the string builder
      */
     public StringBuilder getSb() {
         return this.sb;
     }
 
     @Override
-    public void visit(NumConst numConst) {
+    public JavaVisitor visitNumConst(NumConst numConst) {
         this.sb.append(numConst.getValue());
+        return this;
     }
 
     @Override
-    public void visit(BoolConst boolConst) {
+    public JavaVisitor visitBoolConst(BoolConst boolConst) {
         this.sb.append(boolConst.isValue());
-    }
+        return this;
+    };
 
     @Override
-    public void visit(MathConst mathConst) {
+    public JavaVisitor visitMathConst(MathConst mathConst) {
         this.sb.append(mathConst.getMathConst());
+        return this;
     }
 
     @Override
-    public void visit(ColorConst colorConst) {
+    public JavaVisitor visitColorConst(ColorConst colorConst) {
         this.sb.append(colorConst.getValue().getJavaCode());
+        return this;
     }
 
     @Override
-    public void visit(StringConst stringConst) {
+    public JavaVisitor visitStringConst(StringConst stringConst) {
         this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.getValue())).append("\"");
+        return this;
     }
 
     @Override
-    public void visit(NullConst nullConst) {
+    public JavaVisitor visitNullConst(NullConst nullConst) {
         this.sb.append("null");
+        return this;
     }
 
     @Override
-    public void visit(Var var) {
+    public JavaVisitor visitVar(Var var) {
         switch ( var.getTypeVar() ) {
             case INTEGER:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "int " + var.getValue());
+                this.sb.append("int " + var.getValue());
                 break;
             default:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, var.getValue());
+                this.sb.append(var.getValue());
                 break;
         }
+        return this;
     }
 
     @Override
-    public void visit(Unary unary) {
+    public JavaVisitor visitUnary(Unary unary) {
         if ( unary.getOp() == Unary.Op.POSTFIX_INCREMENTS ) {
-            generateExprCode(unary, this.sb, this.indentation);
+            generateExprCode(unary, this.sb);
             this.sb.append(unary.getOp().getOpSymbol());
         } else {
             this.sb.append(unary.getOp().getOpSymbol());
-            generateExprCode(unary, this.sb, this.indentation);
+            generateExprCode(unary, this.sb);
         }
+        return this;
     }
 
     @Override
-    public void visit(Binary binary) {
+    public JavaVisitor visitBinary(Binary binary) {
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
-        this.sb.append(StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, null)
-            + binary.getOp().getOpSymbol()
-            + StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, null));
+        this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
         generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+        return this;
     }
 
     @Override
-    public void visit(ActionExpr actionExpr) {
-        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
-        actionExpr.getAction().accept(visitor);
+    public JavaVisitor visitActionExpr(ActionExpr actionExpr) {
+        actionExpr.getAction().accept(this);
+        return this;
     }
 
     @Override
-    public void visit(SensorExpr sensorExpr) {
-        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
-        sensorExpr.getSens().accept(visitor);
+    public JavaVisitor visitSensorExpr(SensorExpr sensorExpr) {
+        sensorExpr.getSens().accept(this);
+        return this;
     }
 
     @Override
-    public void visit(EmptyExpr emptyExpr) {
+    public JavaVisitor visitEmptyExpr(EmptyExpr emptyExpr) {
         switch ( emptyExpr.getDefVal().getName() ) {
             case "java.lang.String":
                 this.sb.append("\"\"");
                 break;
-
             default:
                 this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
                 break;
         }
+        return this;
     }
 
     @Override
-    public void visit(ExprList exprList) {
-        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
+    public JavaVisitor visitExprList(ExprList exprList) {
         boolean first = true;
         for ( Expr expr : exprList.get() ) {
             if ( first ) {
@@ -213,450 +209,426 @@ public class JavaVisitor implements Visitor {
                     this.sb.append(", ");
                 }
             }
-            expr.accept(visitor);
+            expr.accept(this);
         }
+        return this;
     }
 
     @Override
-    public void visit(Funct funct) {
+    public JavaVisitor visitFunc(Func funct) {
         switch ( funct.getFunctName() ) {
             case PRINT:
-                JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "System.out.println(");
-                funct.getParam().get(0).accept(visitor);
+                this.sb.append("System.out.println(");
+                funct.getParam().get(0).accept(this);
                 this.sb.append(")");
                 break;
             default:
                 break;
         }
+        return this;
     }
 
     @Override
-    public void visit(ActionStmt actionStmt) {
-        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
-        actionStmt.getAction().accept(visitor);
+    public JavaVisitor visitActionStmt(ActionStmt actionStmt) {
+        actionStmt.getAction().accept(this);
+        return this;
     }
 
     @Override
-    public void visit(AssignStmt assignStmt) {
-        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
-        assignStmt.getName().accept(visitor);
+    public JavaVisitor visitAssignStmt(AssignStmt assignStmt) {
+        assignStmt.getName().accept(this);
         this.sb.append(" = ");
-        assignStmt.getExpr().accept(visitor);
+        assignStmt.getExpr().accept(this);
         this.sb.append(";");
+        return this;
     }
 
     @Override
-    public void visit(ExprStmt exprStmt) {
-        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
-        exprStmt.getExpr().accept(visitor);
+    public JavaVisitor visitExprStmt(ExprStmt exprStmt) {
+        exprStmt.getExpr().accept(this);
         this.sb.append(";");
+        return this;
     }
 
     @Override
-    public void visit(IfStmt ifStmt) {
-        int next = this.indentation + PrettyPrintSettings.indentationSize;
-        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
+    public JavaVisitor visitIfStmt(IfStmt ifStmt) {
         if ( ifStmt.isTernary() ) {
-            generateCodeFromTernary(ifStmt, visitor);
+            generateCodeFromTernary(ifStmt);
         } else {
-            generateCodeFromIfElse(ifStmt, next, visitor);
-            generateCodeFromElse(ifStmt, next, visitor);
+            generateCodeFromIfElse(ifStmt);
+            generateCodeFromElse(ifStmt);
         }
+        return this;
     }
 
     @Override
-    public void visit(RepeatStmt repeatStmt) {
-        int next = this.indentation + PrettyPrintSettings.indentationSize;
-        JavaVisitor visitor = new JavaVisitor(this.sb, 0, this.brickConfiguration);
+    public JavaVisitor visitRepeatStmt(RepeatStmt repeatStmt) {
         switch ( repeatStmt.getMode() ) {
             case UNTIL:
             case WHILE:
-                generateCodeFromStmtCondition("while", repeatStmt.getExpr(), visitor, this.indentation);
+                generateCodeFromStmtCondition("while", repeatStmt.getExpr());
                 break;
             case TIMES:
             case FOR:
-                generateCodeFromStmtCondition("for", repeatStmt.getExpr(), visitor, this.indentation);
+                generateCodeFromStmtCondition("for", repeatStmt.getExpr());
                 break;
             case FOR_EACH:
                 break;
             default:
                 break;
         }
-        visitor.setIndentation(next);
-        repeatStmt.getList().accept(visitor);
-        StringManipulation.appendCustomString(
-            this.sb,
-            this.indentation,
-            PrettyPrintSettings.newLineBeforeCloseBracket,
-            PrettyPrintSettings.newLineAfterCloseBracket,
-            "}");
+        incrIndentation();
+        repeatStmt.getList().accept(this);
+        decrIndentation();
+        nlIndent();
+        this.sb.append("}");
+        return this;
     }
 
     @Override
-    public void visit(SensorStmt sensorStmt) {
-        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
-        sensorStmt.getSensor().accept(visitor);
+    public JavaVisitor visitSensorStmt(SensorStmt sensorStmt) {
+        sensorStmt.getSensor().accept(this);
+        return this;
     }
 
     @Override
-    public void visit(StmtFlowCon stmtFlowCon) {
-        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, stmtFlowCon.getFlow().toString().toLowerCase() + ";");
+    public JavaVisitor visitStmtFlowCon(StmtFlowCon stmtFlowCon) {
+        this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase() + ";");
+        return this;
     }
 
     @Override
-    public void visit(StmtList stmtList) {
-        boolean first = true;
-        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
+    public JavaVisitor visitStmtList(StmtList stmtList) {
         for ( Stmt stmt : stmtList.get() ) {
-            if ( first ) {
-                first = false;
-                StringManipulation.appendCustomString(this.sb, 0, PrettyPrintSettings.newLineAfterOpenBracket, false, null);
-            } else {
-                StringManipulation.appendCustomString(this.sb, 0, true, false, null);
-            }
-            stmt.accept(visitor);
+            nlIndent();
+            stmt.accept(this);
         }
+        return this;
     }
 
     @Override
-    public void visit(ClearDisplayAction clearDisplayAction) {
-        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.clearDisplay();");
+    public JavaVisitor visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
+        this.sb.append("hal.clearDisplay();");
+        return this;
     }
 
     @Override
-    public void visit(VolumeAction volumeAction) {
-        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
+    public JavaVisitor visitVolumeAction(VolumeAction volumeAction) {
         switch ( volumeAction.getMode() ) {
             case SET:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.setVolume(");
-                volumeAction.getVolume().accept(visitor);
+                this.sb.append("hal.setVolume(");
+                volumeAction.getVolume().accept(this);
                 this.sb.append(");");
                 break;
             case GET:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.getVolume()");
+                this.sb.append("hal.getVolume()");
                 break;
             default:
                 throw new DbcException("Invalid volume action mode!");
         }
+        return this;
     }
 
     @Override
-    public void visit(LightAction lightAction) {
-        StringManipulation.appendCustomString(
-            this.sb,
-            this.indentation,
-            false,
-            false,
-            "hal.ledOn(" + lightAction.getColor().getJavaCode() + ", " + lightAction.isBlink() + ");");
+    public JavaVisitor visitLightAction(LightAction lightAction) {
+        this.sb.append("hal.ledOn(" + lightAction.getColor().getJavaCode() + ", " + lightAction.isBlink() + ");");
+        return this;
     }
 
     @Override
-    public void visit(LightStatusAction lightStatusAction) {
+    public JavaVisitor visitLightStatusAction(LightStatusAction lightStatusAction) {
         switch ( lightStatusAction.getStatus() ) {
             case OFF:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.ledOff();");
+                this.sb.append("hal.ledOff();");
                 break;
             case RESET:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.resetLED();");
+                this.sb.append("hal.resetLED();");
                 break;
             default:
                 throw new DbcException("Invalid LED status mode!");
         }
+        return this;
     }
 
     @Override
-    public void visit(PlayFileAction playFileAction) {
-        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.playFile(\"" + playFileAction.getFileName() + "\");");
+    public JavaVisitor visitPlayFileAction(PlayFileAction playFileAction) {
+        this.sb.append("hal.playFile(\"" + playFileAction.getFileName() + "\");");
+        return this;
     }
 
     @Override
-    public void visit(ShowPictureAction showPictureAction) {
-        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
-        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.drawPicture(\"" + showPictureAction.getPicture() + "\", ");
-        showPictureAction.getX().accept(visitor);
+    public JavaVisitor visitShowPictureAction(ShowPictureAction showPictureAction) {
+        this.sb.append("hal.drawPicture(\"" + showPictureAction.getPicture() + "\", ");
+        showPictureAction.getX().accept(this);
         this.sb.append(", ");
-        showPictureAction.getY().accept(visitor);
+        showPictureAction.getY().accept(this);
         this.sb.append(");");
+        return this;
     }
 
     @Override
-    public void visit(ShowTextAction showTextAction) {
-        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
-        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.drawText(");
-        showTextAction.getMsg().accept(visitor);
+    public JavaVisitor visitShowTextAction(ShowTextAction showTextAction) {
+        this.sb.append("hal.drawText(");
+        showTextAction.getMsg().accept(this);
         this.sb.append(", ");
-        showTextAction.getX().accept(visitor);
+        showTextAction.getX().accept(this);
         this.sb.append(", ");
-        showTextAction.getY().accept(visitor);
+        showTextAction.getY().accept(this);
         this.sb.append(");");
+        return this;
     }
 
     @Override
-    public void visit(ToneAction toneAction) {
-        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
-        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.playTone(");
-        toneAction.getFrequency().accept(visitor);
+    public JavaVisitor visitToneAction(ToneAction toneAction) {
+        this.sb.append("hal.playTone(");
+        toneAction.getFrequency().accept(this);
         this.sb.append(", ");
-        toneAction.getDuration().accept(visitor);
+        toneAction.getDuration().accept(this);
         this.sb.append(");");
+        return this;
     }
 
     @Override
-    public void visit(MotorSetPowerAction motorSetPowerAction) {
+    public JavaVisitor visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction) {
         // it is just temporary variable just to be able to write the code. This will be replaced by the brick configuration method.
         boolean isRegulated = true;
         String methodName = isRegulated ? "hal.setRegulatedMotorSpeed(" : "hal.setUnregulatedMotorSpeed(";
-        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
-        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName + motorSetPowerAction.getPort().getJavaCode() + ", ");
-        motorSetPowerAction.getPower().accept(visitor);
+        this.sb.append(methodName + motorSetPowerAction.getPort().getJavaCode() + ", ");
+        motorSetPowerAction.getPower().accept(this);
         this.sb.append(");");
+        return this;
     }
 
     @Override
-    public void visit(MotorGetPowerAction motorGetPowerAction) {
+    public JavaVisitor visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction) {
         // it is just temporary variable just to be able to write the code. This will be replaced by the brick configuration method.
         boolean isRegulated = true;
         String methodName = isRegulated ? "hal.getRegulatedMotorSpeed(" : "hal.getUnregulatedMotorSpeed(";
-        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName + motorGetPowerAction.getPort().getJavaCode() + ")");
+        this.sb.append(methodName + motorGetPowerAction.getPort().getJavaCode() + ")");
+        return this;
     }
 
     @Override
-    public void visit(MotorOnAction motorOnAction) {
+    public JavaVisitor visitMotorOnAction(MotorOnAction motorOnAction) {
         // TODO Auto-generated method stub
+        return this;
     }
 
     @Override
-    public void visit(MotorStopAction motorStopAction) {
+    public JavaVisitor visitMotorStopAction(MotorStopAction motorStopAction) {
         // it is just temporary variable just to be able to write the code. This will be replaced by the brick configuration method.
         boolean isRegulated = true;
         String methodName = isRegulated ? "hal.stopRegulatedMotor(" : "hal.stopUnregulatedMotor(";
-        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName
-            + motorStopAction.getPort().getJavaCode()
-            + ", "
-            + motorStopAction.getMode().getJavaCode()
-            + ");");
+        this.sb.append(methodName + motorStopAction.getPort().getJavaCode() + ", " + motorStopAction.getMode().getJavaCode() + ");");
+        return this;
     }
 
     @Override
-    public void visit(TurnAction turnAction) {
-        StringBuilder tmpSB = new StringBuilder();
-        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
-        JavaVisitor visitor1 = new JavaVisitor(tmpSB, this.indentation, this.brickConfiguration);
+    public JavaVisitor visitTurnAction(TurnAction turnAction) {
+        boolean isDuration = turnAction.getParam().getDuration() != null;
         boolean isRegulated = true;
-        String methodName = isRegulated ? "hal.rotateDirectionRegulated(" : "hal.rotateDirectionUnregulated(";
-        //check for distance parameter
-        if ( turnAction.getParam().getDuration() != null ) {
-            methodName = "hal.rotateDirectionDistanceRegulated(";
-            tmpSB.append(", ");
-            turnAction.getParam().getDuration().getValue().accept(visitor1);
-        }
-        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName);
+        String methodName = "hal.rotateDirection" + (isDuration ? "DistanceRegulated" : isRegulated ? "Regulated" : "Unregulated") + "(";
+        this.sb.append(methodName);
         //Set the left motor to motor port A, this will be changed when brick configuration provides information on which port the left motor is set. 
-        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.A.getJavaCode() + ", ");
+        this.sb.append(ActorPort.A.getJavaCode() + ", ");
         //Set the right motor to motor port B, this will be changed when brick configuration provides information on which port the right motor is set. 
-        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.B.getJavaCode() + ", ");
-        StringManipulation.appendCustomString(this.sb, 0, false, false, turnAction.getDirection().getJavaCode() + ", ");
-        turnAction.getParam().getSpeed().accept(visitor);
-        this.sb.append(tmpSB);
-        StringManipulation.appendCustomString(this.sb, 0, false, false, ");");
+        this.sb.append(ActorPort.B.getJavaCode() + ", ");
+        this.sb.append(turnAction.getDirection().getJavaCode() + ", ");
+        turnAction.getParam().getSpeed().accept(this);
+        if ( isDuration ) {
+            this.sb.append(", ");
+            turnAction.getParam().getDuration().getValue().accept(this);
+        }
+        this.sb.append(");");
+        return this;
     }
 
     @Override
-    public void visit(DriveAction driveAction) {
-        StringBuilder tmpSB = new StringBuilder();
-        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
-        JavaVisitor visitor1 = new JavaVisitor(tmpSB, this.indentation, this.brickConfiguration);
+    public JavaVisitor visitDriveAction(DriveAction driveAction) {
+        boolean isDuration = driveAction.getParam().getDuration() != null;
         boolean isRegulated = true;
-        String methodName = isRegulated ? "hal.regulatedDrive(" : "hal.unregulatedDrive(";
+        String methodName = isDuration ? "hal.driveDistance(" : isRegulated ? "hal.regulatedDrive(" : "hal.unregulatedDrive(";
 
-        //check for distance parameter
-        if ( driveAction.getParam().getDuration() != null ) {
-            methodName = "hal.driveDistance(";
-            tmpSB.append(", ");
-            driveAction.getParam().getDuration().getValue().accept(visitor1);
-        }
-
-        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName);
+        this.sb.append(methodName);
         //Set the left motor to motor port A, this will be changed when brick configuration provides information on which port the left motor is set. 
-        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.A.getJavaCode() + ", ");
+        this.sb.append(ActorPort.A.getJavaCode() + ", ");
         //Set the right motor to motor port B, this will be changed when brick configuration provides information on which port the right motor is set. 
-        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.B.getJavaCode() + ", ");
-        StringManipulation.appendCustomString(this.sb, 0, false, false, driveAction.getDirection().getJavaCode() + ", ");
-        driveAction.getParam().getSpeed().accept(visitor);
-        this.sb.append(tmpSB);
-        StringManipulation.appendCustomString(this.sb, 0, false, false, ");");
+        this.sb.append(ActorPort.B.getJavaCode() + ", ");
+        this.sb.append(driveAction.getDirection().getJavaCode() + ", ");
+        driveAction.getParam().getSpeed().accept(this);
+        if ( isDuration ) {
+            this.sb.append(", ");
+            driveAction.getParam().getDuration().getValue().accept(this);
+        }
+        this.sb.append(");");
+        return this;
     }
 
     @Override
-    public void visit(MotorDriveStopAction stopAction) {
+    public JavaVisitor visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
         boolean isRegulated = true;
         String methodName = isRegulated ? "hal.stopRegulatedDrive(" : "hal.stopUnregulatedDrive(";
-        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName);
+        this.sb.append(methodName);
         //Set the left motor to motor port A, this will be changed when brick configuration provides information on which port the left motor is set. 
-        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.A.getJavaCode() + ", ");
+        this.sb.append(ActorPort.A.getJavaCode() + ", ");
         //Set the right motor to motor port B, this will be changed when brick configuration provides information on which port the right motor is set. 
-        StringManipulation.appendCustomString(this.sb, 0, false, false, ActorPort.B.getJavaCode() + ");");
+        this.sb.append(ActorPort.B.getJavaCode() + ");");
+        return this;
     }
 
     @Override
-    public void visit(BrickSensor brickSensor) {
+    public JavaVisitor visitBrickSensor(BrickSensor brickSensor) {
         switch ( brickSensor.getMode() ) {
             case IS_PRESSED:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.isPressed(" + brickSensor.getKey().getJavaCode() + ")");
+                this.sb.append("hal.isPressed(" + brickSensor.getKey().getJavaCode() + ")");
                 break;
             case WAIT_FOR_PRESS_AND_RELEASE:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.isPressedAndReleased("
-                    + brickSensor.getKey().getJavaCode()
-                    + ")");
+                this.sb.append("hal.isPressedAndReleased(" + brickSensor.getKey().getJavaCode() + ")");
                 break;
             default:
                 throw new DbcException("Invalide mode for BrickSensor!");
         }
+        return this;
     }
 
     @Override
-    public void visit(ColorSensor colorSensor) {
+    public JavaVisitor visitColorSensor(ColorSensor colorSensor) {
         switch ( colorSensor.getMode() ) {
             case GET_MODE:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.getColorSensorModeName("
-                    + colorSensor.getPort().getJavaCode()
-                    + ")");
+                this.sb.append("hal.getColorSensorModeName(" + colorSensor.getPort().getJavaCode() + ")");
                 break;
             case GET_SAMPLE:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.getColorSensorValue("
-                    + colorSensor.getPort().getJavaCode()
-                    + ")");
+                this.sb.append("hal.getColorSensorValue(" + colorSensor.getPort().getJavaCode() + ")");
                 break;
             default:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.setColorSensorMode("
-                    + colorSensor.getPort().getJavaCode()
-                    + ", "
-                    + colorSensor.getMode().getJavaCode()
-                    + ");");
+                this.sb.append("hal.setColorSensorMode(" + colorSensor.getPort().getJavaCode() + ", " + colorSensor.getMode().getJavaCode() + ");");
                 break;
         }
+        return this;
     }
 
     @Override
-    public void visit(EncoderSensor encoderSensor) {
+    public JavaVisitor visitEncoderSensor(EncoderSensor encoderSensor) {
         switch ( encoderSensor.getMode() ) {
             case GET_MODE:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.getMotorTachoMode("
-                    + encoderSensor.getMotor().getJavaCode()
-                    + ")");
+                this.sb.append("hal.getMotorTachoMode(" + encoderSensor.getMotor().getJavaCode() + ")");
                 break;
             case GET_SAMPLE:
                 boolean isRegulated = true;
                 String methodName = isRegulated ? "hal.getRegulatedMotorTachoValue(" : "hal.getUnregulatedMotorTachoValuestop(";
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, methodName + encoderSensor.getMotor().getJavaCode() + ")");
+                this.sb.append(methodName + encoderSensor.getMotor().getJavaCode() + ")");
                 break;
             case RESET:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.resetMotorTacho("
-                    + encoderSensor.getMotor().getJavaCode()
-                    + ");");
+                this.sb.append("hal.resetMotorTacho(" + encoderSensor.getMotor().getJavaCode() + ");");
                 break;
             default:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.setMotorTachoMode("
-                    + encoderSensor.getMotor().getJavaCode()
-                    + ", "
-                    + encoderSensor.getMode().getJavaCode()
-                    + ");");
+                this.sb.append("hal.setMotorTachoMode(" + encoderSensor.getMotor().getJavaCode() + ", " + encoderSensor.getMode().getJavaCode() + ");");
                 break;
         }
+        return this;
     }
 
     @Override
-    public void visit(GyroSensor gyroSensor) {
+    public JavaVisitor visitGyroSensor(GyroSensor gyroSensor) {
         switch ( gyroSensor.getMode() ) {
             case GET_MODE:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.getGyroSensorModeName("
-                    + gyroSensor.getPort().getJavaCode()
-                    + ")");
+                this.sb.append("hal.getGyroSensorModeName(" + gyroSensor.getPort().getJavaCode() + ")");
                 break;
             case GET_SAMPLE:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.getGyroSensorValue("
-                    + gyroSensor.getPort().getJavaCode()
-                    + ")");
+                this.sb.append("hal.getGyroSensorValue(" + gyroSensor.getPort().getJavaCode() + ")");
                 break;
             case RESET:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.resetGyroSensor("
-                    + gyroSensor.getPort().getJavaCode()
-                    + ");");
+                this.sb.append("hal.resetGyroSensor(" + gyroSensor.getPort().getJavaCode() + ");");
                 break;
             default:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.setGyroSensorMode("
-                    + gyroSensor.getPort().getJavaCode()
-                    + ", "
-                    + gyroSensor.getMode().getJavaCode()
-                    + ");");
+                this.sb.append("hal.setGyroSensorMode(" + gyroSensor.getPort().getJavaCode() + ", " + gyroSensor.getMode().getJavaCode() + ");");
                 break;
         }
+        return this;
     }
 
     @Override
-    public void visit(InfraredSensor infraredSensor) {
+    public JavaVisitor visitInfraredSensor(InfraredSensor infraredSensor) {
         switch ( infraredSensor.getMode() ) {
             case GET_MODE:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.getInfraredSensorModeName("
-                    + infraredSensor.getPort().getJavaCode()
-                    + ")");
+                this.sb.append("hal.getInfraredSensorModeName(" + infraredSensor.getPort().getJavaCode() + ")");
                 break;
             case GET_SAMPLE:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.getInfraredSensorValue("
-                    + infraredSensor.getPort().getJavaCode()
-                    + ")");
+                this.sb.append("hal.getInfraredSensorValue(" + infraredSensor.getPort().getJavaCode() + ")");
                 break;
             default:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.setInfraredSensorMode("
-                    + infraredSensor.getPort().getJavaCode()
-                    + ", "
-                    + infraredSensor.getMode().getJavaCode()
-                    + ");");
+                this.sb.append("hal.setInfraredSensorMode(" + infraredSensor.getPort().getJavaCode() + ", " + infraredSensor.getMode().getJavaCode() + ");");
                 break;
         }
+        return this;
     }
 
     @Override
-    public void visit(TimerSensor timerSensor) {
+    public JavaVisitor visitTimerSensor(TimerSensor timerSensor) {
         switch ( timerSensor.getMode() ) {
             case GET_SAMPLE:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.getTimerValue(" + timerSensor.getTimer() + ")");
+                this.sb.append("hal.getTimerValue(" + timerSensor.getTimer() + ")");
                 break;
             case RESET:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.resetTimer(" + timerSensor.getTimer() + ");");
+                this.sb.append("hal.resetTimer(" + timerSensor.getTimer() + ");");
                 break;
             default:
                 throw new DbcException("Invalid Time Mode!");
         }
+        return this;
     }
 
     @Override
-    public void visit(TouchSensor touchSensor) {
-        StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.isPressed(" + touchSensor.getPort().getJavaCode() + ")");
+    public JavaVisitor visitTouchSensor(TouchSensor touchSensor) {
+        this.sb.append("hal.isPressed(" + touchSensor.getPort().getJavaCode() + ")");
+        return this;
     }
 
     @Override
-    public void visit(UltrasonicSensor ultrasonicSensor) {
+    public JavaVisitor visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         switch ( ultrasonicSensor.getMode() ) {
             case GET_MODE:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.getUltraSonicSensorModeName("
-                    + ultrasonicSensor.getPort().getJavaCode()
-                    + ")");
+                this.sb.append("hal.getUltraSonicSensorModeName(" + ultrasonicSensor.getPort().getJavaCode() + ")");
                 break;
             case GET_SAMPLE:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.getUltraSonicSensorValue("
-                    + ultrasonicSensor.getPort().getJavaCode()
-                    + ")");
+                this.sb.append("hal.getUltraSonicSensorValue(" + ultrasonicSensor.getPort().getJavaCode() + ")");
                 break;
             default:
-                StringManipulation.appendCustomString(this.sb, this.indentation, false, false, "hal.setUltrasonicSensorMode("
+                this.sb.append("hal.setUltrasonicSensorMode("
                     + ultrasonicSensor.getPort().getJavaCode()
                     + ", "
                     + ultrasonicSensor.getMode().getJavaCode()
                     + ");");
                 break;
         }
+        return this;
+    }
+
+    private void incrIndentation() {
+        this.indentation += 1;
+    }
+
+    private void decrIndentation() {
+        this.indentation -= 1;
+    }
+
+    private void indent() {
+        if ( this.indentation <= 0 ) {
+            return;
+        } else {
+            for ( int i = 0; i < this.indentation; i++ ) {
+                this.sb.append(JavaGenerateCode.INDENT);
+            }
+        }
+    }
+
+    private void nlIndent() {
+        this.sb.append("\n");
+        indent();
+    }
+
+    private String whitespace() {
+        return " ";
     }
 
     private boolean parenthesesCheck(Binary binary) {
@@ -664,87 +636,68 @@ public class JavaVisitor implements Visitor {
     }
 
     private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr expr, Binary binary) {
-        JavaVisitor visitor = new JavaVisitor(sb, this.indentation, this.brickConfiguration);
         if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption ) {
             // parentheses are omitted
-            expr.accept(visitor);
+            expr.accept(this);
         } else {
-            sb.append("(" + StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, null));
-            expr.accept(visitor);
-            sb.append(StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, ")"));
+            sb.append("(" + whitespace());
+            expr.accept(this);
+            sb.append(whitespace() + ")");
         }
     }
 
-    private void generateExprCode(Unary unary, StringBuilder sb, int indentation) {
-        JavaVisitor visitor = new JavaVisitor(this.sb, this.indentation, this.brickConfiguration);
+    private void generateExprCode(Unary unary, StringBuilder sb) {
         if ( unary.getExpr().getPrecedence() < unary.getPrecedence() ) {
             sb.append("(");
-            unary.getExpr().accept(visitor);
+            unary.getExpr().accept(this);
             sb.append(")");
         } else {
-            unary.getExpr().accept(visitor);
+            unary.getExpr().accept(this);
         }
     }
 
-    private void generateCodeFromTernary(IfStmt ifStmt, JavaVisitor visitor) {
-        this.sb.append("(" + StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, null));
-        ifStmt.getExpr().get(0).accept(visitor);
-        this.sb.append(StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, ")")
-            + StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, "?")
-            + StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, null));
-        ((ExprStmt) ifStmt.getThenList().get(0).get().get(0)).getExpr().accept(visitor);
-        StringManipulation.appendCustomString(
-            this.sb,
-            PrettyPrintSettings.whiteSpaceSize,
-            false,
-            false,
-            ":" + StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, null));
-        ((ExprStmt) ifStmt.getElseList().get().get(0)).getExpr().accept(visitor);
+    private void generateCodeFromTernary(IfStmt ifStmt) {
+        this.sb.append("(" + whitespace());
+        ifStmt.getExpr().get(0).accept(this);
+        this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace());
+        ((ExprStmt) ifStmt.getThenList().get(0).get().get(0)).getExpr().accept(this);
+        this.sb.append(whitespace() + ":" + whitespace());
+        ((ExprStmt) ifStmt.getElseList().get().get(0)).getExpr().accept(this);
     }
 
-    private void generateCodeFromIfElse(IfStmt ifStmt, int next, JavaVisitor visitor) {
+    private void generateCodeFromIfElse(IfStmt ifStmt) {
         for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
             if ( i == 0 ) {
-                generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i), visitor, this.indentation);
+                generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i));
             } else {
-                generateCodeFromStmtCondition("else if", ifStmt.getExpr().get(i), visitor, PrettyPrintSettings.whiteSpaceSize);
+                generateCodeFromStmtCondition("else if", ifStmt.getExpr().get(i));
             }
-            visitor.setIndentation(next);
-            ifStmt.getThenList().get(i).accept(visitor);
+            incrIndentation();
+            ifStmt.getThenList().get(i).accept(this);
+            decrIndentation();
             if ( i + 1 < ifStmt.getExpr().size() ) {
-                StringManipulation.appendCustomString(this.sb, this.indentation, PrettyPrintSettings.newLineBeforeCloseBracket, false, "}");
+                nlIndent();
+                this.sb.append("}").append(whitespace());
             }
         }
     }
 
-    private void generateCodeFromElse(IfStmt ifStmt, int next, JavaVisitor visitor) {
-        visitor.setIndentation(next);
+    private void generateCodeFromElse(IfStmt ifStmt) {
         if ( ifStmt.getElseList().get().size() != 0 ) {
-            StringManipulation.appendCustomString(
-                this.sb,
-                this.indentation,
-                PrettyPrintSettings.newLineBeforeCloseBracket,
-                false,
-                "}" + StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, PrettyPrintSettings.newLineAfterCloseBracket, false, "else"));
-            this.sb.append(StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, PrettyPrintSettings.newLineBeforeOpenBracket, false, "{"));
-            ifStmt.getElseList().accept(visitor);
+            nlIndent();
+            this.sb.append("}").append(whitespace()).append("else").append(whitespace() + "{");
+            incrIndentation();
+            ifStmt.getElseList().accept(this);
+            decrIndentation();
         }
-        StringManipulation.appendCustomString(this.sb, this.indentation, PrettyPrintSettings.newLineBeforeCloseBracket, false, "}");
+        nlIndent();
+        this.sb.append("}");
     }
 
-    private void generateCodeFromStmtCondition(String stmtType, Expr expr, JavaVisitor visitor, int indentitation) {
-        StringManipulation.appendCustomString(
-            this.sb,
-            indentitation,
-            false,
-            false,
-            stmtType
-                + StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, "(")
-                + StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, null));
-        visitor.setIndentation(0);
-        expr.accept(visitor);
-        this.sb.append(StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, false, false, ")")
-            + StringManipulation.generateString(PrettyPrintSettings.whiteSpaceSize, PrettyPrintSettings.newLineBeforeOpenBracket, false, "{"));
+    private void generateCodeFromStmtCondition(String stmtType, Expr expr) {
+        this.sb.append(stmtType + whitespace() + "(" + whitespace());
+        expr.accept(this);
+        this.sb.append(whitespace() + ")" + whitespace() + "{");
     }
 
 }

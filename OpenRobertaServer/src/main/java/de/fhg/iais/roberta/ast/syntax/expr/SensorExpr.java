@@ -54,6 +54,6 @@ public class SensorExpr extends Expr {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitSensorExpr(this);
     }
 }

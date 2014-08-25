@@ -47,7 +47,7 @@ public class ExprStmt extends Stmt {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitExprStmt(this);
     }
 
 }

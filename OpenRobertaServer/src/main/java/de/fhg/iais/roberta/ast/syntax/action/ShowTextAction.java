@@ -67,7 +67,7 @@ public class ShowTextAction extends Action {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitShowTextAction(this);
     }
 
 }

@@ -28,7 +28,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
-import de.fhg.iais.roberta.ast.syntax.functions.Funct;
+import de.fhg.iais.roberta.ast.syntax.functions.Func;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
@@ -47,418 +47,325 @@ import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 
 /**
- * Main interface used to implement visitor pattern to traverse AST and generate code.
- * Class which implements this interface should implement all methods to generate correct code in the desired programming language.
- * 
- * @author kcvejoski
+ * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
-public interface Visitor {
+public interface Visitor<T> {
 
     /**
-     * append a human-readable code representation of a {@link NumConst} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link NumConst}.
+     * visit a {@link NumConst}.
      * 
-     * @param numConst phrase from which there will be generated code
+     * @param numConst phrase to be visited
      */
-    public void visit(NumConst numConst);
+    public T visitNumConst(NumConst numConst);
 
     /**
-     * append a human-readable code representation of a {@link MathConst} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link MathConst}.
+     * visit a {@link MathConst}.
      * 
-     * @param mathConst phrase from which there will be generated code
+     * @param mathConst to be visited
      */
-    public void visit(MathConst mathConst);
+    public T visitMathConst(MathConst mathConst);
 
     /**
-     * append a human-readable code representation of a {@link BoolConst} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link BoolConst}.
+     * visit a {@link BoolConst}.
      * 
-     * @param boolConst phrase from which there will be generated code
+     * @param boolConst to be visited
      */
-    public void visit(BoolConst boolConst);
+    public T visitBoolConst(BoolConst boolConst);
 
     /**
-     * append a human-readable code representation of a {@link StringConst} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link StringConst}.
+     * visit a {@link StringConst}.
      * 
-     * @param stringConst phrase from which there will be generated code
+     * @param stringConst to be visited
      */
-    public void visit(StringConst stringConst);
+    public T visitStringConst(StringConst stringConst);
 
     /**
-     * append a human-readable code representation of a {@link NullConst} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link NullConst}.
+     * visit a {@link NullConst}.
      * 
-     * @param nullConst phrase from which there will be generated code
+     * @param nullConst to be visited
      */
-    public void visit(NullConst nullConst);
+    public T visitNullConst(NullConst nullConst);
 
     /**
-     * append a human-readable code representation of a {@link ColorConst} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link ColorConst}.
+     * visit a {@link ColorConst}.
      * 
-     * @param colorConst phrase from which there will be generated code
+     * @param colorConst to be visited
      */
-    public void visit(ColorConst colorConst);
+    public T visitColorConst(ColorConst colorConst);
 
     /**
-     * append a human-readable code representation of a {@link Var} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link Var}.
+     * visit a {@link Var}.
      * 
-     * @param var phrase from which there will be generated code
+     * @param var to be visited
      */
-    public void visit(Var var);
+    public T visitVar(Var var);
 
     /**
-     * append a human-readable code representation of a {@link Unary} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link Unary}.
+     * visit a {@link Unary}.
      * 
-     * @param unary phrase from which there will be generated code
+     * @param unary to be visited
      */
-    public void visit(Unary unary);
+    public T visitUnary(Unary unary);
 
     /**
-     * append a human-readable code representation of a {@link Binary} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link Binary}.
+     * visit a {@link Binary}.
      * 
-     * @param binary phrase from which there will be generated code
+     * @param binary to be visited
      */
 
-    public void visit(Binary binary);
+    public T visitBinary(Binary binary);
 
     /**
-     * append a human-readable code representation of a {@link Funct} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link Funct}.
+     * visit a {@link Func}.
      * 
-     * @param funct phrase from which there will be generated code
+     * @param funct to be visited
      */
-    public void visit(Funct funct);
+    public T visitFunc(Func func);
 
     /**
-     * append a human-readable code representation of a {@link ActionExpr} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link ActionExpr}.
+     * visit a {@link ActionExpr}.
      * 
-     * @param actionExpr phrase from which there will be generated code
+     * @param actionExpr to be visited
      */
-    public void visit(ActionExpr actionExpr);
+    public T visitActionExpr(ActionExpr actionExpr);
 
     /**
-     * append a human-readable code representation of a {@link SensorExpr} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link SensorExpr}.
+     * visit a {@link SensorExpr}.
      * 
-     * @param sensorExpr phrase from which there will be generated code
+     * @param sensorExpr to be visited
      */
-    public void visit(SensorExpr sensorExpr);
+    public T visitSensorExpr(SensorExpr sensorExpr);
 
     /**
-     * append a human-readable code representation of a {@link EmptyExpr} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link EmptyExpr}.
+     * visit a {@link EmptyExpr}.
      * 
-     * @param emptyExpr phrase from which there will be generated code
+     * @param emptyExpr to be visited
      */
-    public void visit(EmptyExpr emptyExpr);
+    public T visitEmptyExpr(EmptyExpr emptyExpr);
 
     /**
-     * append a human-readable code representation of a {@link ExprList} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link ExprList}.
+     * visit a {@link ExprList}.
      * 
-     * @param exprList phrase from which there will be generated code
+     * @param exprList to be visited
      */
-    public void visit(ExprList exprList);
+    public T visitExprList(ExprList exprList);
 
     /**
-     * append a human-readable code representation of a {@link ActionStmt} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link ActionStmt}.
+     * visit a {@link ActionStmt}.
      * 
-     * @param actionStmt phrase from which there will be generated code
+     * @param actionStmt to be visited
      */
-    public void visit(ActionStmt actionStmt);
+    public T visitActionStmt(ActionStmt actionStmt);
 
     /**
-     * append a human-readable code representation of a {@link AssignStmt} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link AssignStmt}.
+     * visit a {@link AssignStmt}.
      * 
-     * @param assignStmt phrase from which there will be generated code
+     * @param assignStmt to be visited
      */
-    public void visit(AssignStmt assignStmt);
+    public T visitAssignStmt(AssignStmt assignStmt);
 
     /**
-     * append a human-readable code representation of a {@link ExprStmt} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link ExprStmt}.
+     * visit a {@link ExprStmt}.
      * 
-     * @param exprStmt phrase from which there will be generated code
+     * @param exprStmt to be visited
      */
-    public void visit(ExprStmt exprStmt);
+    public T visitExprStmt(ExprStmt exprStmt);
 
     /**
-     * append a human-readable code representation of a {@link IfStmt} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link IfStmt}.
+     * visit a {@link IfStmt}.
      * 
-     * @param ifStmt phrase from which there will be generated code
+     * @param ifStmt to be visited
      */
-    public void visit(IfStmt ifStmt);
+    public T visitIfStmt(IfStmt ifStmt);
 
     /**
-     * append a human-readable code representation of a {@link RepeatStmt} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link RepeatStmt}.
+     * visit a {@link RepeatStmt}.
      * 
-     * @param repeatStmt phrase from which there will be generated code
+     * @param repeatStmt to be visited
      */
-    public void visit(RepeatStmt repeatStmt);
+    public T visitRepeatStmt(RepeatStmt repeatStmt);
 
     /**
-     * append a human-readable code representation of a {@link SensorStmt} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link SensorStmt}.
+     * visit a {@link SensorStmt}.
      * 
-     * @param sensorStmt phrase from which there will be generated code
+     * @param sensorStmt to be visited
      */
-    public void visit(SensorStmt sensorStmt);
+    public T visitSensorStmt(SensorStmt sensorStmt);
 
     /**
-     * append a human-readable code representation of a {@link StmtFlowCon} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link StmtFlowCon}.
+     * visit a {@link StmtFlowCon}.
      * 
-     * @param stmtFlowCon phrase from which there will be generated code
+     * @param stmtFlowCon to be visited
      */
-    public void visit(StmtFlowCon stmtFlowCon);
+    public T visitStmtFlowCon(StmtFlowCon stmtFlowCon);
 
     /**
-     * append a human-readable code representation of a {@link StmtList} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link StmtList}.
+     * visit a {@link StmtList}.
      * 
-     * @param stmtList phrase from which there will be generated code
+     * @param stmtList to be visited
      */
 
-    public void visit(StmtList stmtList);
+    public T visitStmtList(StmtList stmtList);
 
     /**
-     * append a human-readable code representation of a {@link DriveAction} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link DriveAction}.
+     * visit a {@link DriveAction}.
      * 
-     * @param driveAction phrase from which there will be generated code
+     * @param driveAction to be visited
      */
-    public void visit(DriveAction driveAction);
+    public T visitDriveAction(DriveAction driveAction);
 
     /**
-     * append a human-readable code representation of a {@link TurnAction} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link TurnAction}.
+     * visit a {@link TurnAction}.
      * 
-     * @param turnAction phrase from which there will be generated code
+     * @param turnAction to be visited
      */
-    public void visit(TurnAction turnAction);
+    public T visitTurnAction(TurnAction turnAction);
 
     /**
-     * append a human-readable code representation of a {@link LightAction} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link LightAction}.
+     * visit a {@link LightAction}.
      * 
-     * @param lightAction phrase from which there will be generated code
+     * @param lightAction to be visited
      */
-    public void visit(LightAction lightAction);
+    public T visitLightAction(LightAction lightAction);
 
     /**
-     * append a human-readable code representation of a {@link LightStatusAction} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link LightStatusAction}.
+     * visit a {@link LightStatusAction}.
      * 
-     * @param lightStatusAction phrase from which there will be generated code
+     * @param lightStatusAction to be visited
      */
-    public void visit(LightStatusAction lightStatusAction);
+    public T visitLightStatusAction(LightStatusAction lightStatusAction);
 
     /**
-     * append a human-readable code representation of a {@link MotorGetPowerAction} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link MotorGetPowerAction}.
+     * visit a {@link MotorGetPowerAction}.
      * 
-     * @param motorGetPowerAction phrase from which there will be generated code
+     * @param motorGetPowerAction to be visited
      */
-    public void visit(MotorGetPowerAction motorGetPowerAction);
+    public T visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction);
 
     /**
-     * append a human-readable code representation of a {@link MotorOnAction} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link MotorOnAction}.
+     * visit a {@link MotorOnAction}.
      * 
      * @param motorOnAction
      */
-    public void visit(MotorOnAction motorOnAction);
+    public T visitMotorOnAction(MotorOnAction motorOnAction);
 
     /**
-     * append a human-readable code representation of a {@link MotorSetPowerAction} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link MotorSetPowerAction}.
+     * visit a {@link MotorSetPowerAction}.
      * 
      * @param motorSetPowerAction
      */
-    public void visit(MotorSetPowerAction motorSetPowerAction);
+    public T visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction);
 
     /**
-     * append a human-readable code representation of a {@link MotorStopAction} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link MotorStopAction}.
+     * visit a {@link MotorStopAction}.
      * 
      * @param motorStopAction
      */
-    public void visit(MotorStopAction motorStopAction);
+    public T visitMotorStopAction(MotorStopAction motorStopAction);
 
     /**
-     * append a human-readable code representation of a {@link ClearDisplayAction} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link ClearDisplayAction}.
+     * visit a {@link ClearDisplayAction}.
      * 
-     * @param clearDisplayAction phrase from which there will be generated code
+     * @param clearDisplayAction to be visited
      */
-    public void visit(ClearDisplayAction clearDisplayAction);
+    public T visitClearDisplayAction(ClearDisplayAction clearDisplayAction);
 
     /**
-     * append a human-readable code representation of a {@link VolumeAction} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link VolumeAction}.
+     * visit a {@link VolumeAction}.
      * 
-     * @param volumeAction phrase from which there will be generated code
+     * @param volumeAction to be visited
      */
-    public void visit(VolumeAction volumeAction);
+    public T visitVolumeAction(VolumeAction volumeAction);
 
     /**
-     * append a human-readable code representation of a {@link PlayFileAction} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link PlayFileAction}.
+     * visit a {@link PlayFileAction}.
      * 
      * @param playFileAction
      */
-    public void visit(PlayFileAction playFileAction);
+    public T visitPlayFileAction(PlayFileAction playFileAction);
 
     /**
-     * append a human-readable code representation of a {@link ShowPictureAction} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link ShowPictureAction}.
+     * visit a {@link ShowPictureAction}.
      * 
      * @param showPictureAction
      */
-    public void visit(ShowPictureAction showPictureAction);
+    public T visitShowPictureAction(ShowPictureAction showPictureAction);
 
     /**
-     * append a human-readable code representation of a {@link ShowTextAction} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link ShowTextAction}.
+     * visit a {@link ShowTextAction}.
      * 
      * @param showTextAction
      */
-    public void visit(ShowTextAction showTextAction);
+    public T visitShowTextAction(ShowTextAction showTextAction);
 
     /**
-     * append a human-readable code representation of a {@link MotorDriveStopAction} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link MotorDriveStopAction}.
+     * visit a {@link MotorDriveStopAction}.
      * 
      * @param stopAction
      */
-    public void visit(MotorDriveStopAction stopAction);
+    public T visitMotorDriveStopAction(MotorDriveStopAction stopAction);
 
     /**
-     * append a human-readable code representation of a {@link ToneAction} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link ToneAction}.
+     * visit a {@link ToneAction}.
      * 
-     * @param toneAction phrase from which there will be generated code
+     * @param toneAction to be visited
      */
-    public void visit(ToneAction toneAction);
+    public T visitToneAction(ToneAction toneAction);
 
     /**
-     * append a human-readable code representation of a {@link BrickSensor} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link BrickSensor}.
+     * visit a {@link BrickSensor}.
      * 
-     * @param brickSensor phrase from which there will be generated code
+     * @param brickSensor to be visited
      */
-    public void visit(BrickSensor brickSensor);
+    public T visitBrickSensor(BrickSensor brickSensor);
 
     /**
-     * append a human-readable code representation of a {@link ColorSensor} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link ColorSensor}.
+     * visit a {@link ColorSensor}.
      * 
-     * @param colorSensor phrase from which there will be generated code
+     * @param colorSensor to be visited
      */
-    public void visit(ColorSensor colorSensor);
+    public T visitColorSensor(ColorSensor colorSensor);
 
     /**
-     * append a human-readable code representation of a {@link EncoderSensor} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link EncoderSensor}.
+     * visit a {@link EncoderSensor}.
      * 
-     * @param encoderSensor phrase from which there will be generated code
+     * @param encoderSensor to be visited
      */
-    public void visit(EncoderSensor encoderSensor);
+    public T visitEncoderSensor(EncoderSensor encoderSensor);
 
     /**
-     * append a human-readable code representation of a {@link GyroSensor} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link GyroSensor}.
+     * visit a {@link GyroSensor}.
      * 
-     * @param gyroSensor phrase from which there will be generated code
+     * @param gyroSensor to be visited
      */
-    public void visit(GyroSensor gyroSensor);
+    public T visitGyroSensor(GyroSensor gyroSensor);
 
     /**
-     * append a human-readable code representation of a {@link InfraredSensor} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link InfraredSensor}.
+     * visit a {@link InfraredSensor}.
      * 
-     * @param infraredSensor phrase from which there will be generated code
+     * @param infraredSensor to be visited
      */
-    public void visit(InfraredSensor infraredSensor);
+    public T visitInfraredSensor(InfraredSensor infraredSensor);
 
     /**
-     * append a human-readable code representation of a {@link TimerSensor} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link TimerSensor}.
+     * visit a {@link TimerSensor}.
      * 
-     * @param timerSensor phrase from which there will be generated code
+     * @param timerSensor to be visited
      */
-    public void visit(TimerSensor timerSensor);
+    public T visitTimerSensor(TimerSensor timerSensor);
 
     /**
-     * append a human-readable code representation of a {@link TouchSensor} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link TouchSensor}.
+     * visit a {@link TouchSensor}.
      * 
-     * @param touchSensor phrase from which there will be generated code
+     * @param touchSensor to be visited
      */
-    public void visit(TouchSensor touchSensor);
+    public T visitTouchSensor(TouchSensor touchSensor);
 
     /**
-     * append a human-readable code representation of a {@link UltrasonicSensor} phrase to a StringBuilder. <b>This representation MUST be correct code.</b> <br>
-     * <br>
-     * Client must provide valid object of the class {@link UltrasonicSensor}.
+     * visit a {@link UltrasonicSensor}.
      * 
-     * @param ultrasonicSensor phrase from which there will be generated code
+     * @param ultrasonicSensor to be visited
      */
-    public void visit(UltrasonicSensor ultrasonicSensor);
+    public T visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor);
 
 }

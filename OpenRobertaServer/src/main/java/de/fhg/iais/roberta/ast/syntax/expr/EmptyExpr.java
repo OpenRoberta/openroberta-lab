@@ -53,7 +53,7 @@ public class EmptyExpr extends Expr {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitEmptyExpr(this);
     }
 
 }

@@ -54,7 +54,7 @@ public class BoolConst extends Expr {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitBoolConst(this);
     }
 
 }

@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
-import de.fhg.iais.roberta.ast.syntax.functions.Funct.Function;
+import de.fhg.iais.roberta.ast.syntax.functions.Func.Function;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 public class TextFunctions {
@@ -20,7 +20,7 @@ public class TextFunctions {
         ArrayList<Expr> param = new ArrayList<Expr>();
         StringConst stringConst = StringConst.make("AS");
         param.add(stringConst);
-        Funct funct = Funct.make(Function.ABS, param);
+        Func funct = Func.make(Function.ABS, param);
         Assert.assertEquals(10, funct.getPrecedence());
     }
 
@@ -29,7 +29,7 @@ public class TextFunctions {
         ArrayList<Expr> param = new ArrayList<Expr>();
         StringConst stringConst = StringConst.make("AS");
         param.add(stringConst);
-        Funct funct = Funct.make(Function.ABS, param);
+        Func funct = Func.make(Function.ABS, param);
         Assert.assertEquals(Assoc.LEFT, funct.getAssoc());
     }
 
@@ -38,23 +38,23 @@ public class TextFunctions {
         ArrayList<Expr> param = new ArrayList<Expr>();
         StringConst stringConst = StringConst.make("AS");
         param.add(stringConst);
-        Funct funct = Funct.make(Function.POWER, param);
+        Func funct = Func.make(Function.POWER, param);
         Assert.assertEquals("^", funct.getFunctName().getOpSymbol());
     }
 
     @Test(expected = DbcException.class)
     public void invalid() {
-        Funct.Function funct = Function.get("");
+        Func.Function funct = Function.get("");
     }
 
     @Test(expected = DbcException.class)
     public void invalid1() {
-        Funct.Function funct = Function.get(null);
+        Func.Function funct = Function.get(null);
     }
 
     @Test(expected = DbcException.class)
     public void invalid2() {
-        Funct.Function funct = Function.get("asdf");
+        Func.Function funct = Function.get("asdf");
     }
 
     @Test

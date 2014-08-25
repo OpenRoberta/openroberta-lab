@@ -64,6 +64,6 @@ public class BrickSensor extends Sensor {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitBrickSensor(this);
     }
 }

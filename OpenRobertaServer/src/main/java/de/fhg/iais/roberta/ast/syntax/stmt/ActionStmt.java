@@ -44,6 +44,6 @@ public class ActionStmt extends Stmt {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitActionStmt(this);
     }
 }

@@ -58,6 +58,6 @@ public class TimerSensor extends Sensor {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitTimerSensor(this);
     }
 }

@@ -79,7 +79,7 @@ public final class Binary extends Expr {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitBinary(this);
     }
 
     /**

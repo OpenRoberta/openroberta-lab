@@ -53,7 +53,7 @@ public class JavaGenerateCodeTest {
             + "    }\n"
             + "}\n";
 
-        Assert.assertEquals(a, Helper.generateString("/syntax/code_generator/java_code_generator.xml", brickConfiguration));
+        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator.xml");
     }
 
     @Test
@@ -72,7 +72,7 @@ public class JavaGenerateCodeTest {
             + "    }\n"
             + "}\n";
 
-        Assert.assertEquals(a, Helper.generateString("/syntax/code_generator/java_code_generator1.xml", brickConfiguration));
+        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator1.xml");
     }
 
     @Test
@@ -100,7 +100,7 @@ public class JavaGenerateCodeTest {
             + "    }\n"
             + "}\n";
 
-        Assert.assertEquals(a, Helper.generateString("/syntax/code_generator/java_code_generator2.xml", brickConfiguration));
+        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator2.xml");
     }
 
     @Test
@@ -129,7 +129,7 @@ public class JavaGenerateCodeTest {
             + "    }\n"
             + "}\n";
 
-        Assert.assertEquals(a, Helper.generateString("/syntax/code_generator/java_code_generator3.xml", brickConfiguration));
+        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator3.xml");
     }
 
     @Test
@@ -160,6 +160,11 @@ public class JavaGenerateCodeTest {
                 + "    }\n"
                 + "}\n";
 
-        Assert.assertEquals(a, Helper.generateString("/syntax/code_generator/java_code_generator4.xml", brickConfiguration));
+        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator4.xml");
+    }
+
+    private void assertCodeIsOk(String a, String fileName) throws Exception {
+        // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
+        Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
     }
 }

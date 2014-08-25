@@ -55,6 +55,6 @@ public class ToneAction extends Action {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitToneAction(this);
     }
 }

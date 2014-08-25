@@ -54,7 +54,7 @@ public class LightAction extends Action {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitLightAction(this);
 
     }
 }

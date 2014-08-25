@@ -59,6 +59,6 @@ public class UltrasonicSensor extends Sensor {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitUltrasonicSensor(this);
     }
 }

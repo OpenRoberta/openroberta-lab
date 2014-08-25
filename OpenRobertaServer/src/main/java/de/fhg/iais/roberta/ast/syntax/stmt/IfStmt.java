@@ -120,7 +120,7 @@ public class IfStmt extends Stmt {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitIfStmt(this);
     }
 
 }

@@ -55,6 +55,6 @@ public class StmtList extends Stmt {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitStmtList(this);
     }
 }

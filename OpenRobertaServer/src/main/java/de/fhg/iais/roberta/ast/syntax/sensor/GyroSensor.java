@@ -58,6 +58,6 @@ public class GyroSensor extends Sensor {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitGyroSensor(this);
     }
 }

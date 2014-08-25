@@ -45,8 +45,8 @@ import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary.Op;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.syntax.expr.Var.TypeVar;
-import de.fhg.iais.roberta.ast.syntax.functions.Funct;
-import de.fhg.iais.roberta.ast.syntax.functions.Funct.Function;
+import de.fhg.iais.roberta.ast.syntax.functions.Func;
+import de.fhg.iais.roberta.ast.syntax.functions.Func.Function;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickKey;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
@@ -507,7 +507,7 @@ public class JaxbTransformer {
                 exprList = blockToExprList(block, String.class);
                 List<Expr> textList = new ArrayList<Expr>();
                 textList.add(exprList);
-                return Funct.make(Function.TEXT_JOIN, textList);
+                return Func.make(Function.TEXT_JOIN, textList);
 
             case "text_append":
                 values = extractValues(block, (short) 1);
@@ -574,7 +574,7 @@ public class JaxbTransformer {
                 String text = extractField(fields, "TEXT", (short) 1);
                 StringConst txtExpr = StringConst.make(text);
                 lstExpr.add(txtExpr);
-                return Funct.make(Function.get(type), lstExpr);
+                return Func.make(Function.get(type), lstExpr);
 
             case "text_print":
                 exprParams = new ArrayList<ExprParam>();
@@ -749,14 +749,14 @@ public class JaxbTransformer {
         return Binary.make(Binary.Op.get(op), convertPhraseToExpr(left), convertPhraseToExpr(right));
     }
 
-    private Funct blockToFunction(Block block, List<ExprParam> exprParams, String operationType) {
+    private Func blockToFunction(Block block, List<ExprParam> exprParams, String operationType) {
         String op = getOperation(block, operationType);
         List<Expr> params = new ArrayList<Expr>();
         List<Value> values = extractValues(block, (short) exprParams.size());
         for ( ExprParam exprParam : exprParams ) {
             params.add((Expr) extractValue(values, exprParam));
         }
-        return Funct.make(Funct.Function.get(op), params);
+        return Func.make(Func.Function.get(op), params);
     }
 
     private Phrase blocksToIfStmt(Block block, int _else, int _elseIf) {

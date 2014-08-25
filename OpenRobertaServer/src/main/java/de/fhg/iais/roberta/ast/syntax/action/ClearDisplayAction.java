@@ -28,6 +28,6 @@ public final class ClearDisplayAction extends Action {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitClearDisplayAction(this);
     }
 }

@@ -18,11 +18,11 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * To create an instance from this class use the method {@link #make(Function, List)}.<br>
  * The enumeration {@link Function} contains all allowed functions.
  */
-public class Funct extends Expr {
+public class Func extends Expr {
     private final Function functName;
     private final List<Expr> param;
 
-    private Funct(Function name, List<Expr> param) {
+    private Func(Function name, List<Expr> param) {
         super(Phrase.Kind.FUNCTIONS);
         Assert.isTrue(name != null && param != null);
         this.functName = name;
@@ -36,10 +36,10 @@ public class Funct extends Expr {
      * 
      * @param name of the function
      * @param param list of parameters for the function,
-     * @return read only object of class {@link Funct}
+     * @return read only object of class {@link Func}
      */
-    public static Funct make(Function name, List<Expr> param) {
-        return new Funct(name, param);
+    public static Func make(Function name, List<Expr> param) {
+        return new Func(name, param);
     }
 
     /**
@@ -73,7 +73,7 @@ public class Funct extends Expr {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitFunc(this);
     }
 
     /**

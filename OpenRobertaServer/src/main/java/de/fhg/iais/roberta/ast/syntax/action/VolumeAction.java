@@ -55,7 +55,7 @@ public class VolumeAction extends Action {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitVolumeAction(this);
     }
 
     /**

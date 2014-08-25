@@ -52,6 +52,6 @@ public class NumConst extends Expr {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitNumConst(this);
     }
 }

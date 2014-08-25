@@ -30,6 +30,6 @@ public class MotorDriveStopAction extends Action {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitMotorDriveStopAction(this);
     }
 }

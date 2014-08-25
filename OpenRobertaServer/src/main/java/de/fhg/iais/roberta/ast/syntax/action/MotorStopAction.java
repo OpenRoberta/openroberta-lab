@@ -54,7 +54,7 @@ public class MotorStopAction extends Action {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitMotorStopAction(this);
     }
 
 }

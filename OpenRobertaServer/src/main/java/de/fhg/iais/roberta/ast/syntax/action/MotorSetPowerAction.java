@@ -54,6 +54,6 @@ public class MotorSetPowerAction extends Action {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitMotorSetPowerAction(this);
     }
 }

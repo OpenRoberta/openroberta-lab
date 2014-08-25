@@ -63,7 +63,7 @@ public class AssignStmt extends Stmt {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitAssignStmt(this);
     }
 
 }

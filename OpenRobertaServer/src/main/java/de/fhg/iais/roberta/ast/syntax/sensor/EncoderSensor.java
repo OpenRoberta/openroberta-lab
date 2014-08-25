@@ -60,6 +60,6 @@ public class EncoderSensor extends Sensor {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitEncoderSensor(this);
     }
 }

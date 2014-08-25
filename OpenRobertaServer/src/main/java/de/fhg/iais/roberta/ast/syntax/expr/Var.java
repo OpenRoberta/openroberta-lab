@@ -63,7 +63,7 @@ public class Var extends Expr {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitVar(this);
     }
 
     /**

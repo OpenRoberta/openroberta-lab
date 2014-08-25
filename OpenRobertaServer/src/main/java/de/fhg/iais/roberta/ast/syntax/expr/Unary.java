@@ -140,7 +140,7 @@ public class Unary extends Expr {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitUnary(this);
     }
 
 }

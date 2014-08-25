@@ -46,7 +46,7 @@ public class TouchSensor extends Sensor {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitTouchSensor(this);
     }
 
 }

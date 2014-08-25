@@ -93,6 +93,6 @@ public class MathConst extends Expr {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitMathConst(this);
     }
 }

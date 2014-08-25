@@ -65,6 +65,6 @@ public class ShowPictureAction extends Action {
 
     @Override
     public void accept(Visitor visitor) {
-        visitor.visit(this);
+        visitor.visitShowPictureAction(this);
     }
 }
