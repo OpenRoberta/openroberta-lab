@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
-import de.fhg.iais.roberta.codegen.lejos.Visitor;
+import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
@@ -72,7 +72,7 @@ public class Func<V> extends Expr<V> {
     }
 
     @Override
-    protected V accept(Visitor<V> visitor) {
+    protected V accept(AstVisitor<V> visitor) {
         return visitor.visitFunc(this);
     }
 

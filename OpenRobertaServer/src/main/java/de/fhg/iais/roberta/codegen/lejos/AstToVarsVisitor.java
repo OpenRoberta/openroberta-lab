@@ -5,17 +5,17 @@ import java.util.List;
 import java.util.Set;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
-import de.fhg.iais.roberta.ast.syntax.action.MotorOnAction;
-import de.fhg.iais.roberta.ast.syntax.action.TurnAction;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.visitor.AstDefaultVisitorInspecting;
+import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
- * This class is implementing {@link Visitor}.<br>
- * A list of all vars used in a program are generated
+ * This class is implementing the {@link AstVisitor} interface.<br>
+ * A list of all vars and numerical constants used in an AST are generated
  */
-public class AstToVarsVisitor extends AstDefaultVisitor<Set<String>> {
+public class AstToVarsVisitor extends AstDefaultVisitorInspecting {
     private final Set<String> allVars = new HashSet<>();
 
     /**
@@ -35,63 +35,27 @@ public class AstToVarsVisitor extends AstDefaultVisitor<Set<String>> {
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public static Set<String> generate(List<Phrase<Set<String>>> phrases) //
+    public static Set<String> generate(List<Phrase<Void>> phrases) //
     {
         Assert.isTrue(phrases.size() >= 1);
         AstToVarsVisitor astVisitor = new AstToVarsVisitor();
-        for ( Phrase<Set<String>> phrase : phrases ) {
+        for ( Phrase<Void> phrase : phrases ) {
             phrase.visit(astVisitor);
         }
         return astVisitor.allVars;
     }
 
     @Override
-    public Set<String> defaultResult() {
-        return this.allVars;
-    }
-
-    @Override
-    public Set<String> visitVar(Var<Set<String>> var) {
+    public Void visitVar(Var<Void> var) {
         String varName = var.getValue();
         this.allVars.add(varName);
-        return this.allVars;
+        return null;
     }
 
     @Override
-    public Set<String> visitNumConst(NumConst<Set<String>> numConst) {
+    public Void visitNumConst(NumConst<Void> numConst) {
         String numName = numConst.getValue();
         this.allVars.add(numName);
-        return this.allVars;
-    }
-
-    @Override
-    public Set<String> visitMotorOnAction(MotorOnAction<Set<String>> motorOnAction) {
-        return defaultResult();
-    }
-
-    @Override
-    public Set<String> visitTurnAction(TurnAction<Set<String>> turnAction) {
-        return defaultResult();
-    }
-
-    @Override
-    public Set<String> combine(List<Set<String>> vs) {
-        for ( Set<String> list : vs ) {
-            this.allVars.addAll(list);
-        }
-        return this.allVars;
-    }
-
-    @Override
-    public Set<String> combine(Set<String> v1, Set<String> v2) {
-        this.allVars.addAll(v1);
-        this.allVars.addAll(v2);
-        return this.allVars;
-    }
-
-    @Override
-    public Set<String> combine(Set<String> v1, Set<String> v2, Set<String> v3) {
-        // TODO Auto-generated method stub
         return null;
     }
 }

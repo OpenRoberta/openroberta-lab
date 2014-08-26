@@ -10,32 +10,26 @@ public class EmptyExprTest {
 
     @Test
     public void make() throws Exception {
-        EmptyExpr emptyExpr = EmptyExpr.make(Integer.class);
-
+        EmptyExpr<Void> emptyExpr = EmptyExpr.make(Integer.class);
         String a = "EmptyExpr [defVal=class java.lang.Integer]";
-
         Assert.assertEquals(a, emptyExpr.toString());
     }
 
     @Test
     public void getDefVal() throws Exception {
-        EmptyExpr emptyExpr = EmptyExpr.make(Integer.class);
-
+        EmptyExpr<Void> emptyExpr = EmptyExpr.make(Integer.class);
         Assert.assertEquals(Integer.class, emptyExpr.getDefVal());
     }
 
     @Test
     public void getPrecedence() throws Exception {
-        EmptyExpr emptyExpr = EmptyExpr.make(Integer.class);
-
+        EmptyExpr<Void> emptyExpr = EmptyExpr.make(Integer.class);
         Assert.assertEquals(999, emptyExpr.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
-        EmptyExpr emptyExpr = EmptyExpr.make(Integer.class);
-
+        EmptyExpr<Void> emptyExpr = EmptyExpr.make(Integer.class);
         Assert.assertEquals(Assoc.NONE, emptyExpr.getAssoc());
     }
-
 }

@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.PickColor;
-import de.fhg.iais.roberta.codegen.lejos.Visitor;
+import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 
 /**
  * This class represents the <b>robColour_picker</b> block from Blockly into the AST (abstract syntax tree).
@@ -54,7 +54,7 @@ public class ColorConst<V> extends Expr<V> {
     }
 
     @Override
-    protected V accept(Visitor<V> visitor) {
+    protected V accept(AstVisitor<V> visitor) {
         return visitor.visitColorConst(this);
     }
 }

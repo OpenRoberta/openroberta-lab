@@ -10,8 +10,8 @@ public class ExprListTest {
 
     @Test
     public void make() throws Exception {
-        NumConst numConst = NumConst.make("0");
-        ExprList exprList = ExprList.make();
+        NumConst<Void> numConst = NumConst.make("0");
+        ExprList<Void> exprList = ExprList.make();
         exprList.addExpr(numConst);
 
         String a = "NumConst [0]";
@@ -21,8 +21,8 @@ public class ExprListTest {
 
     @Test
     public void get() throws Exception {
-        NumConst numConst = NumConst.make("0");
-        ExprList exprList = ExprList.make();
+        NumConst<Void> numConst = NumConst.make("0");
+        ExprList<Void> exprList = ExprList.make();
         exprList.addExpr(numConst);
         exprList.setReadOnly();
         String a = "[NumConst [0]]";
@@ -32,8 +32,8 @@ public class ExprListTest {
 
     @Test
     public void getPresedance() throws Exception {
-        NumConst numConst = NumConst.make("0");
-        ExprList exprList = ExprList.make();
+        NumConst<Void> numConst = NumConst.make("0");
+        ExprList<Void> exprList = ExprList.make();
         exprList.addExpr(numConst);
         exprList.setReadOnly();
         try {
@@ -46,8 +46,8 @@ public class ExprListTest {
 
     @Test
     public void getAssoc() throws Exception {
-        NumConst numConst = NumConst.make("0");
-        ExprList exprList = ExprList.make();
+        NumConst<Void> numConst = NumConst.make("0");
+        ExprList<Void> exprList = ExprList.make();
         exprList.addExpr(numConst);
         exprList.setReadOnly();
         try {

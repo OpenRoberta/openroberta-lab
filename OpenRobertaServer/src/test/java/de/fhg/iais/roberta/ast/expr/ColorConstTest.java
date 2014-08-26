@@ -20,28 +20,22 @@ public class ColorConstTest {
 
     @Test
     public void isValue() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/colour/colour_const1.xml");
-
-        ColorConst colorConst = (ColorConst) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/colour/colour_const1.xml");
+        ColorConst<Void> colorConst = (ColorConst<Void>) transformer.getTree().get(0);
         Assert.assertEquals(PickColor.RED, colorConst.getValue());
     }
 
     @Test
     public void getPresedance() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/colour/colour_const1.xml");
-
-        ColorConst colorConst = (ColorConst) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/colour/colour_const1.xml");
+        ColorConst<Void> colorConst = (ColorConst<Void>) transformer.getTree().get(0);
         Assert.assertEquals(999, colorConst.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/colour/colour_const1.xml");
-
-        ColorConst colorConst = (ColorConst) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/colour/colour_const1.xml");
+        ColorConst<Void> colorConst = (ColorConst<Void>) transformer.getTree().get(0);
         Assert.assertEquals(Assoc.NONE, colorConst.getAssoc());
     }
 }

@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
-import de.fhg.iais.roberta.codegen.lejos.Visitor;
+import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 
 /**
  * This class represents the <b>robActions_display_clear</b> block from Blockly into the AST (abstract syntax tree).
@@ -27,7 +27,7 @@ public final class ClearDisplayAction<V> extends Action<V> {
     }
 
     @Override
-    protected V accept(Visitor<V> visitor) {
+    protected V accept(AstVisitor<V> visitor) {
         return visitor.visitClearDisplayAction(this);
     }
 }

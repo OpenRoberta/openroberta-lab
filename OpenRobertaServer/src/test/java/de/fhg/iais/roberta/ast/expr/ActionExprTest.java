@@ -11,8 +11,8 @@ public class ActionExprTest {
 
     @Test
     public void make() throws Exception {
-        MotorDriveStopAction sa = MotorDriveStopAction.make();
-        ActionExpr ae = ActionExpr.make(sa);
+        MotorDriveStopAction<Void> sa = MotorDriveStopAction.make();
+        ActionExpr<Void> ae = ActionExpr.make(sa);
 
         String a = "ActionExpr [StopAction []]";
 
@@ -21,24 +21,24 @@ public class ActionExprTest {
 
     @Test
     public void getAction() throws Exception {
-        MotorDriveStopAction sa = MotorDriveStopAction.make();
-        ActionExpr ae = ActionExpr.make(sa);
+        MotorDriveStopAction<Void> sa = MotorDriveStopAction.make();
+        ActionExpr<Void> ae = ActionExpr.make(sa);
 
         Assert.assertEquals(sa.toString(), ae.getAction().toString());
     }
 
     @Test
     public void getPrecedence() throws Exception {
-        MotorDriveStopAction sa = MotorDriveStopAction.make();
-        ActionExpr ae = ActionExpr.make(sa);
+        MotorDriveStopAction<Void> sa = MotorDriveStopAction.make();
+        ActionExpr<Void> ae = ActionExpr.make(sa);
 
         Assert.assertEquals(999, ae.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
-        MotorDriveStopAction sa = MotorDriveStopAction.make();
-        ActionExpr ae = ActionExpr.make(sa);
+        MotorDriveStopAction<Void> sa = MotorDriveStopAction.make();
+        ActionExpr<Void> ae = ActionExpr.make(sa);
 
         Assert.assertEquals(Assoc.NONE, ae.getAssoc());
     }

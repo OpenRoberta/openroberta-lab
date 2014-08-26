@@ -35,7 +35,7 @@ public class ActionTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/actions/action_Exception.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        JaxbTransformer transformer = new JaxbTransformer();
+        JaxbTransformer<?> transformer = new JaxbTransformer<>();
         try {
             transformer.projectToAST(project);
             Assert.fail();

@@ -19,28 +19,22 @@ public class BoolConstTest {
 
     @Test
     public void isValue() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/logic/logic_boolConst.xml");
-
-        BoolConst boolConst = (BoolConst) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/logic/logic_boolConst.xml");
+        BoolConst<Void> boolConst = (BoolConst<Void>) transformer.getTree().get(0);
         Assert.assertEquals(true, boolConst.isValue());
     }
 
     @Test
     public void getPresedance() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/logic/logic_boolConst.xml");
-
-        BoolConst boolConst = (BoolConst) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/logic/logic_boolConst.xml");
+        BoolConst<Void> boolConst = (BoolConst<Void>) transformer.getTree().get(0);
         Assert.assertEquals(999, boolConst.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/logic/logic_boolConst.xml");
-
-        BoolConst boolConst = (BoolConst) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/logic/logic_boolConst.xml");
+        BoolConst<Void> boolConst = (BoolConst<Void>) transformer.getTree().get(0);
         Assert.assertEquals(Assoc.NONE, boolConst.getAssoc());
     }
 }

@@ -50,11 +50,12 @@ import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
+import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 
 /**
- * This class is THE default implementation of {@link Visitor}. All methods are implemented empty ... and may be overwritten in subclasses
+ * This class is THE default implementation of {@link AstVisitor}. All methods are implemented empty ... and may be overwritten in subclasses
  */
-public abstract class AstDefaultVisitor<V> implements Visitor<V> {
+public abstract class AstDefaultVisitorCombining<V> implements AstVisitor<V> {
     /**
      * initialize the Java code generator visitor.
      * 
@@ -62,7 +63,7 @@ public abstract class AstDefaultVisitor<V> implements Visitor<V> {
      * @param brickConfiguration hardware configuration of the brick
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    AstDefaultVisitor() {
+    AstDefaultVisitorCombining() {
     }
 
     /**

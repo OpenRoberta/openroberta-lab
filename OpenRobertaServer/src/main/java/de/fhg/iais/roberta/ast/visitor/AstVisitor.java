@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.codegen.lejos;
+package de.fhg.iais.roberta.ast.visitor;
 
 import de.fhg.iais.roberta.ast.syntax.action.ClearDisplayAction;
 import de.fhg.iais.roberta.ast.syntax.action.DriveAction;
@@ -49,7 +49,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
-public interface Visitor<V> {
+public interface AstVisitor<V> {
 
     /**
      * visit a {@link NumConst}.

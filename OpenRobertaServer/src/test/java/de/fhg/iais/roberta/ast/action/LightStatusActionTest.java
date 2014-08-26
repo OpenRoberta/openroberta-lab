@@ -19,10 +19,8 @@ public class LightStatusActionTest {
 
     @Test
     public void getStatus() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/actions/action_BrickLightStatus.xml");
-
-        LightStatusAction lsa = (LightStatusAction) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_BrickLightStatus.xml");
+        LightStatusAction<Void> lsa = (LightStatusAction<Void>) transformer.getTree().get(0);
         Assert.assertEquals(LightStatusAction.Status.OFF, lsa.getStatus());
     }
 
@@ -30,7 +28,7 @@ public class LightStatusActionTest {
     public void invalidStatus() throws Exception {
         try {
             @SuppressWarnings("unused")
-            LightStatusAction lsa = LightStatusAction.make(Status.valueOf("invalid"));
+            LightStatusAction<Void> lsa = LightStatusAction.make(Status.valueOf("invalid"));
             Assert.fail();
         } catch ( Exception e ) {
             Assert.assertEquals("No enum constant de.fhg.iais.roberta.ast.syntax.action.LightStatusAction.Status.invalid", e.getMessage());

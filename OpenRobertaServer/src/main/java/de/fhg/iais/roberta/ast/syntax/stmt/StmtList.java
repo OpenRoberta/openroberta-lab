@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
-import de.fhg.iais.roberta.codegen.lejos.Visitor;
+import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -54,7 +54,7 @@ public class StmtList<V> extends Stmt<V> {
     }
 
     @Override
-    protected V accept(Visitor<V> visitor) {
+    protected V accept(AstVisitor<V> visitor) {
         return visitor.visitStmtList(this);
     }
 }

@@ -20,61 +20,51 @@ public class UnaryTest {
 
     @Test
     public void getOp() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
-
-        Unary unary = (Unary) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
+        Unary<Void> unary = (Unary<Void>) transformer.getTree().get(0);
         Assert.assertEquals(Unary.Op.NEG, unary.getOp());
     }
 
     @Test
     public void getExpr() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
-
-        Unary unary = (Unary) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
+        Unary<Void> unary = (Unary<Void>) transformer.getTree().get(0);
         Assert.assertEquals("NumConst [10]", unary.getExpr().toString());
     }
 
     @Test
     public void getPresedance() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
-
-        Unary unary = (Unary) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
+        Unary<Void> unary = (Unary<Void>) transformer.getTree().get(0);
         Assert.assertEquals(10, unary.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
-
-        Unary unary = (Unary) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
+        Unary<Void> unary = (Unary<Void>) transformer.getTree().get(0);
         Assert.assertEquals(Assoc.LEFT, unary.getAssoc());
     }
 
     @Test
     public void getOpSymbol() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
-
-        Unary unary = (Unary) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
+        Unary<Void> unary = (Unary<Void>) transformer.getTree().get(0);
         Assert.assertEquals("-", unary.getOp().getOpSymbol());
     }
 
     @Test(expected = DbcException.class)
     public void invalid() {
-        Unary.Op op = Unary.Op.get("");
+        Unary.Op.get("");
     }
 
     @Test(expected = DbcException.class)
     public void invalid1() {
-        Unary.Op op = Unary.Op.get(null);
+        Unary.Op.get(null);
     }
 
     @Test(expected = DbcException.class)
     public void invalid2() {
-        Unary.Op op = Unary.Op.get("asdf");
+        Unary.Op.get("asdf");
     }
 }

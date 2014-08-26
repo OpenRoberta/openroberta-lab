@@ -72,7 +72,7 @@ public class IfStmtTest {
         InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/if_stmt2.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        JaxbTransformer transformer = new JaxbTransformer();
+        JaxbTransformer<?> transformer = new JaxbTransformer<>();
         transformer.projectToAST(project);
         String a =
             "BlockAST [project=[[\n"

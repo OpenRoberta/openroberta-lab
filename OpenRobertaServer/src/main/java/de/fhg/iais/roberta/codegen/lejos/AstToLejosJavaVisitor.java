@@ -56,14 +56,15 @@ import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
+import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
- * This class is implementing {@link Visitor}. All methods are implemented and they
+ * This class is implementing {@link AstVisitor}. All methods are implemented and they
  * append a human-readable JAVA code representation of a phrase to a StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
-public class AstToLejosJavaVisitor implements Visitor<Void> {
+public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     public static final String INDENT = "    ";
 
     private final BrickConfiguration brickConfiguration;
@@ -323,7 +324,7 @@ public class AstToLejosJavaVisitor implements Visitor<Void> {
 
     @Override
     public Void visitStmtList(StmtList<Void> stmtList) {
-        for ( Stmt stmt : stmtList.get() ) {
+        for ( Stmt<Void> stmt : stmtList.get() ) {
             nlIndent();
             stmt.visit(this);
         }
@@ -684,9 +685,9 @@ public class AstToLejosJavaVisitor implements Visitor<Void> {
         this.sb.append("(" + whitespace());
         ifStmt.getExpr().get(0).visit(this);
         this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace());
-        ((ExprStmt) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
+        ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
         this.sb.append(whitespace() + ":" + whitespace());
-        ((ExprStmt) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
+        ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
     }
 
     private void generateCodeFromIfElse(IfStmt<Void> ifStmt) {

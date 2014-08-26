@@ -18,14 +18,14 @@ public class LightActionTest {
 
     @Test
     public void getColor() throws Exception {
-        LightAction la = (LightAction) Helper.generateAST("/ast/actions/action_BrickLight.xml");
+        LightAction<?> la = (LightAction<?>) Helper.generateAST("/ast/actions/action_BrickLight.xml");
 
         Assert.assertEquals(BrickLedColor.GREEN, la.getColor());
     }
 
     @Test
     public void isBlink() throws Exception {
-        LightAction la = (LightAction) Helper.generateAST("/ast/actions/action_BrickLight.xml");
+        LightAction<?> la = (LightAction<?>) Helper.generateAST("/ast/actions/action_BrickLight.xml");
 
         Assert.assertEquals(true, la.isBlink());
     }

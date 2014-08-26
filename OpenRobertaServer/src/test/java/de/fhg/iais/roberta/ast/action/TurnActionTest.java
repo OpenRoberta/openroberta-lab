@@ -14,32 +14,26 @@ public class TurnActionTest {
     public void make() throws Exception {
         String a =
             "BlockAST [project=[[TurnAction [direction=RIGHT, param=MotionParam [speed=NumConst [50], duration=MotorDuration [type=DISTANCE, value=NumConst [20]]]]]]]";
-
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_MotorDiffTurnFor.xml"));
     }
 
     @Test
     public void getDirection() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/actions/action_MotorDiffTurnFor.xml");
-
-        TurnAction ta = (TurnAction) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_MotorDiffTurnFor.xml");
+        TurnAction<Void> ta = (TurnAction<Void>) transformer.getTree().get(0);
         Assert.assertEquals(TurnDirection.RIGHT, ta.getDirection());
     }
 
     @Test
     public void getParam() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/actions/action_MotorDiffTurnFor.xml");
-
-        TurnAction ta = (TurnAction) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_MotorDiffTurnFor.xml");
+        TurnAction<Void> ta = (TurnAction<Void>) transformer.getTree().get(0);
         Assert.assertEquals("MotionParam [speed=NumConst [50], duration=MotorDuration [type=DISTANCE, value=NumConst [20]]]", ta.getParam().toString());
     }
 
     @Test
     public void motorDiffTurn() throws Exception {
         String a = "BlockAST [project=[[TurnAction [direction=RIGHT, param=MotionParam [speed=NumConst [50], duration=null]]]]]";
-
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_MotorDiffTurn.xml"));
     }
 }

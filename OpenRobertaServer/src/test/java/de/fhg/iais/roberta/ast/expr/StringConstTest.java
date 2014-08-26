@@ -13,34 +13,27 @@ public class StringConstTest {
     @Test
     public void make() throws Exception {
         String a = "BlockAST [project=[[StringConst [text2]]]]";
-
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/text/text_string_const.xml"));
     }
 
     @Test
     public void getValue() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/text/text_string_const.xml");
-
-        StringConst stringConst = (StringConst) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/text/text_string_const.xml");
+        StringConst<Void> stringConst = (StringConst<Void>) transformer.getTree().get(0);
         Assert.assertEquals("text2", stringConst.getValue());
     }
 
     @Test
     public void getPresedance() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/text/text_string_const.xml");
-
-        StringConst stringConst = (StringConst) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/text/text_string_const.xml");
+        StringConst<Void> stringConst = (StringConst<Void>) transformer.getTree().get(0);
         Assert.assertEquals(999, stringConst.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/text/text_string_const.xml");
-
-        StringConst stringConst = (StringConst) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/text/text_string_const.xml");
+        StringConst<Void> stringConst = (StringConst<Void>) transformer.getTree().get(0);
         Assert.assertEquals(Assoc.NONE, stringConst.getAssoc());
     }
 }

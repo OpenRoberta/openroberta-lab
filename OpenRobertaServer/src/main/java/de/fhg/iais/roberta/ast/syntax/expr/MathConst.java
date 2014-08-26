@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 import java.util.Locale;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
-import de.fhg.iais.roberta.codegen.lejos.Visitor;
+import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
@@ -92,7 +92,7 @@ public class MathConst<V> extends Expr<V> {
     }
 
     @Override
-    protected V accept(Visitor<V> visitor) {
+    protected V accept(AstVisitor<V> visitor) {
         return visitor.visitMathConst(this);
     }
 }

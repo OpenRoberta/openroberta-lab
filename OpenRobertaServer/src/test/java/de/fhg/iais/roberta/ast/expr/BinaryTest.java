@@ -14,76 +14,63 @@ public class BinaryTest {
     @Test
     public void make() throws Exception {
         String a = "BlockAST [project=[[Binary [ADD, NumConst [1], Funct [POWER, [NumConst [5], NumConst [8]]]]]]]";
-
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_arithmetic.xml"));
     }
 
     @Test
     public void getOp() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/math/math_arithmetic.xml");
-
-        Binary binary = (Binary) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_arithmetic.xml");
+        Binary<Void> binary = (Binary<Void>) transformer.getTree().get(0);
         Assert.assertEquals(Binary.Op.ADD, binary.getOp());
     }
 
     @Test
     public void getLeft() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/math/math_arithmetic.xml");
-
-        Binary binary = (Binary) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_arithmetic.xml");
+        Binary<Void> binary = (Binary<Void>) transformer.getTree().get(0);
         Assert.assertEquals("NumConst [1]", binary.getLeft().toString());
     }
 
     @Test
     public void getRight() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/math/math_arithmetic.xml");
-
-        Binary binary = (Binary) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_arithmetic.xml");
+        Binary<Void> binary = (Binary<Void>) transformer.getTree().get(0);
         Assert.assertEquals("Funct [POWER, [NumConst [5], NumConst [8]]]", binary.getRight().toString());
     }
 
     @Test
     public void getPresedance() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/math/math_arithmetic.xml");
-
-        Binary binary = (Binary) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_arithmetic.xml");
+        Binary<Void> binary = (Binary<Void>) transformer.getTree().get(0);
         Assert.assertEquals(100, binary.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/math/math_arithmetic.xml");
-
-        Binary binary = (Binary) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_arithmetic.xml");
+        Binary<Void> binary = (Binary<Void>) transformer.getTree().get(0);
         Assert.assertEquals(Assoc.LEFT, binary.getAssoc());
     }
 
     @Test
     public void getOpSymbol() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/math/math_arithmetic.xml");
-
-        Binary binary = (Binary) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_arithmetic.xml");
+        Binary<Void> binary = (Binary<Void>) transformer.getTree().get(0);
         Assert.assertEquals("+", binary.getOp().getOpSymbol());
     }
 
     @Test(expected = DbcException.class)
     public void invalid() {
-        Binary.Op op = Binary.Op.get("");
+        Binary.Op.get("");
     }
 
     @Test(expected = DbcException.class)
     public void invalid1() {
-        Binary.Op op = Binary.Op.get(null);
+        Binary.Op.get(null);
     }
 
     @Test(expected = DbcException.class)
     public void invalid2() {
-        Binary.Op op = Binary.Op.get("asdf");
+        Binary.Op.get("asdf");
     }
 }

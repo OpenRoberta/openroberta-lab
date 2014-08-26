@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax.codeGeneration;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -12,7 +12,6 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.blockly.generated.Project;
 import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
-import de.fhg.iais.roberta.dbc.Assert;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
@@ -28,7 +27,7 @@ public class Helper {
      * @throws Exception
      */
     public static String generateStringWithoutWrapping(String pathToProgramXml) throws Exception {
-        JaxbTransformer transformer = generateTransformer(pathToProgramXml);
+        JaxbTransformer<Void> transformer = generateTransformer(pathToProgramXml);
         BrickConfiguration brickConfiguration = new BrickConfiguration.Builder().build();
         String code = AstToLejosJavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), false);
         System.out.println(code);
@@ -43,31 +42,10 @@ public class Helper {
      * @throws Exception
      */
     public static String generateString(String pathToProgramXml, BrickConfiguration brickConfiguration) throws Exception {
-        JaxbTransformer transformer = generateTransformer(pathToProgramXml);
+        JaxbTransformer<Void> transformer = generateTransformer(pathToProgramXml);
         String code = AstToLejosJavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), true);
         System.out.println(code);
         return code;
-    }
-
-    /**
-     * return the first and only one phrase from a given program fragment.
-     * 
-     * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
-     * @return the first and only one phrase
-     * @throws Exception
-     */
-    public static Phrase generateAST(String pathToProgramXml) throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(Helper.class.getResourceAsStream(pathToProgramXml));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbTransformer transformer = new JaxbTransformer();
-        transformer.projectToAST(project);
-        ArrayList<Phrase> tree = transformer.getTree();
-        Assert.isTrue(tree.size() >= 1);
-        return tree.get(0);
     }
 
     /**
@@ -77,14 +55,14 @@ public class Helper {
      * @return jaxb transformer
      * @throws Exception
      */
-    public static JaxbTransformer generateTransformer(String pathToProgramXml) throws Exception {
+    public static JaxbTransformer<Void> generateTransformer(String pathToProgramXml) throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
         InputSource src = new InputSource(Helper.class.getResourceAsStream(pathToProgramXml));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        JaxbTransformer transformer = new JaxbTransformer();
+        JaxbTransformer<Void> transformer = new JaxbTransformer<>();
         transformer.projectToAST(project);
         return transformer;
     }
@@ -98,5 +76,30 @@ public class Helper {
      */
     public static String generateTransformerString(String pathToProgramXml) throws Exception {
         return generateTransformer(pathToProgramXml).toString();
+    }
+
+    /**
+     * return the first and only one phrase from a given program fragment.
+     * 
+     * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
+     * @return the first and only one phrase
+     * @throws Exception
+     */
+    public static <V> List<Phrase<V>> generateASTs(String pathToProgramXml) throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+        InputSource src = new InputSource(Helper.class.getResourceAsStream(pathToProgramXml));
+        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+
+        JaxbTransformer<V> transformer = new JaxbTransformer<V>();
+        transformer.projectToAST(project);
+        List<Phrase<V>> tree = transformer.getTree();
+        return tree;
+    }
+
+    public static <V> Phrase<V> generateAST(String pathToProgramXml) throws Exception {
+        List<Phrase<V>> tree = generateASTs(pathToProgramXml);
+        return tree.get(0);
     }
 }

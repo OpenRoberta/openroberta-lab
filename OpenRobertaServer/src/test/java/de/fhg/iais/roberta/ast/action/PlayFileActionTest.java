@@ -12,16 +12,13 @@ public class PlayFileActionTest {
     @Test
     public void make() throws Exception {
         String a = "BlockAST [project=[[PlayFileAction [SOUNDFILE2]]]]";
-
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_PlayFile.xml"));
     }
 
     @Test
     public void getFileName() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/actions/action_PlayFile.xml");
-
-        PlayFileAction pfa = (PlayFileAction) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_PlayFile.xml");
+        PlayFileAction<Void> pfa = (PlayFileAction<Void>) transformer.getTree().get(0);
         Assert.assertEquals("SOUNDFILE2", pfa.getFileName());
     }
 }

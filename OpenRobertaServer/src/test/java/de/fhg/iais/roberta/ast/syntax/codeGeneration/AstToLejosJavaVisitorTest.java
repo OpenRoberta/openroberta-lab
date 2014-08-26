@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.ast.syntax.HardwareComponent;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 
-public class JavaGenerateCodeTest {
+public class AstToLejosJavaVisitorTest {
     private static final String MAIN_CLASS = "" //
         + "public class Test {\n";
     private static final String IMPORTS = "" //

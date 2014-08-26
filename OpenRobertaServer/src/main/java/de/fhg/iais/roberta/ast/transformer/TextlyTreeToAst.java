@@ -37,13 +37,12 @@ import de.fhg.iais.roberta.textly.generated.TextlyParser.StmtListContext;
 import de.fhg.iais.roberta.textly.generated.TextlyParser.UnaryContext;
 import de.fhg.iais.roberta.textly.generated.TextlyParser.VarNameContext;
 
-public class TextlyTreeToAst extends TextlyBaseVisitor<Phrase> {
-
+public class TextlyTreeToAst extends TextlyBaseVisitor<Phrase<Void>> {
     /**
      * take a textly program as String, parse it, create a visitor as an instance of this class and visit the parse tree to create an AST.<br>
      * Factory method
      */
-    public static Phrase startWalkForVisiting(String stmt) throws Exception {
+    public static Phrase<Void> startWalkForVisiting(String stmt) throws Exception {
         InputStream inputStream = new ByteArrayInputStream(stmt.getBytes("UTF-8"));
         ANTLRInputStream input = new ANTLRInputStream(inputStream);
         TextlyLexer lex = new TextlyLexer(input);
@@ -56,66 +55,66 @@ public class TextlyTreeToAst extends TextlyBaseVisitor<Phrase> {
     }
 
     @Override
-    public Phrase visitExprStmt(ExprStmtContext ctx) {
-        Phrase expr = visit(ctx.expr());
-        return ExprStmt.make((Expr) expr);
+    public Phrase<Void> visitExprStmt(ExprStmtContext ctx) {
+        Phrase<Void> expr = visit(ctx.expr());
+        return ExprStmt.make((Expr<Void>) expr);
     }
 
     @Override
-    public Phrase visitBinary(BinaryContext ctx) {
+    public Phrase<Void> visitBinary(BinaryContext ctx) {
         String op = ctx.getChild(1).getText();
-        Phrase left = visit(ctx.getChild(0));
-        Phrase right = visit(ctx.getChild(2));
-        return Binary.make(Binary.Op.get(op), (Expr) left, (Expr) right);
+        Phrase<Void> left = visit(ctx.getChild(0));
+        Phrase<Void> right = visit(ctx.getChild(2));
+        return Binary.make(Binary.Op.get(op), (Expr<Void>) left, (Expr<Void>) right);
     }
 
     @Override
-    public Phrase visitStmtList(StmtListContext ctx) {
-        StmtList sl = StmtList.make();
+    public Phrase<Void> visitStmtList(StmtListContext ctx) {
+        StmtList<Void> sl = StmtList.make();
         for ( StmtContext stmt : ctx.stmt() ) {
-            sl.addStmt((Stmt) visit(stmt));
+            sl.addStmt((Stmt<Void>) visit(stmt));
         }
         sl.setReadOnly();
         return sl;
     }
 
     @Override
-    public Phrase visitParentheses(ParenthesesContext ctx) {
+    public Phrase<Void> visitParentheses(ParenthesesContext ctx) {
         return visit(ctx.expr());
     }
 
     @Override
-    public Phrase visitVarName(VarNameContext ctx) {
+    public Phrase<Void> visitVarName(VarNameContext ctx) {
         return Var.make(ctx.VAR().getText(), TypeVar.INTEGER);
     }
 
     @Override
-    public Phrase visitIntConst(IntConstContext ctx) {
+    public Phrase<Void> visitIntConst(IntConstContext ctx) {
         return NumConst.make(ctx.INT().getText());
     }
 
     @Override
-    public Phrase visitUnary(UnaryContext ctx) {
+    public Phrase<Void> visitUnary(UnaryContext ctx) {
         String op = ctx.getChild(0).getText(); // strange name for the operand. Obviously from the last rule!
-        Phrase expr = visit(ctx.getChild(1));
-        return Unary.make(Unary.Op.get(op), (Expr) expr);
+        Phrase<Void> expr = visit(ctx.getChild(1));
+        return Unary.make(Unary.Op.get(op), (Expr<Void>) expr);
     }
 
     @Override
-    public Phrase visitIfStmt(IfStmtContext ctx) {
+    public Phrase<Void> visitIfStmt(IfStmtContext ctx) {
         return visit(ctx.ifThenR());
     }
 
     @Override
-    public Phrase visitIfThen(IfThenContext ctx) {
+    public Phrase<Void> visitIfThen(IfThenContext ctx) {
         return null;
-        //        Phrase expr = visit(ctx.expr());
-        //        Phrase thenList = visit(ctx.stmtl());
+        //        Phrase<Void> expr = visit(ctx.expr());
+        //        Phrase<Void> thenList = visit(ctx.stmtl());
         //        IfElseRContext ifElse = ctx.ifElseR();
         //        if ( ifElse == null ) {
         //            return IfStmt.make((Expr) expr, (StmtList) thenList);
         //        } else {
-        //            Phrase elseList = visit(ifElse);
+        //            Phrase<Void> elseList = visit(ifElse);
         //            if ( elseList instanceof IfStmt ) {
         //                IfStmt elseIf = (IfStmt) elseList;
         //                return IfStmt.make((Expr) expr, (StmtList) thenList, elseIf);
@@ -129,26 +128,26 @@ public class TextlyTreeToAst extends TextlyBaseVisitor<Phrase> {
     }
 
     @Override
-    public Phrase visitIfElseIf(IfElseIfContext ctx) {
+    public Phrase<Void> visitIfElseIf(IfElseIfContext ctx) {
         return visit(ctx.ifThenR());
     }
 
     @Override
-    public Phrase visitIfElse(IfElseContext ctx) {
+    public Phrase<Void> visitIfElse(IfElseContext ctx) {
         return visit(ctx.stmtl());
     }
 
     @Override
-    public Phrase visitRepeatStmt(RepeatStmtContext ctx) {
-        Phrase expr = visit(ctx.expr());
-        Phrase stmtl = visit(ctx.stmtl());
-        return RepeatStmt.make(Mode.FOR, (Expr) expr, (StmtList) stmtl);
+    public Phrase<Void> visitRepeatStmt(RepeatStmtContext ctx) {
+        Phrase<Void> expr = visit(ctx.expr());
+        Phrase<Void> stmtl = visit(ctx.stmtl());
+        return RepeatStmt.make(Mode.FOR, (Expr<Void>) expr, (StmtList<Void>) stmtl);
     }
 
     @Override
-    public Phrase visitAssignStmt(AssignStmtContext ctx) {
-        Phrase name = Var.make(ctx.VAR().getText(), TypeVar.INTEGER);
-        Phrase expr = visit(ctx.expr());
-        return AssignStmt.make((Var) name, (Expr) expr);
+    public Phrase<Void> visitAssignStmt(AssignStmtContext ctx) {
+        Phrase<Void> name = Var.make(ctx.VAR().getText(), TypeVar.INTEGER);
+        Phrase<Void> expr = visit(ctx.expr());
+        return AssignStmt.make((Var<Void>) name, (Expr<Void>) expr);
     }
 }

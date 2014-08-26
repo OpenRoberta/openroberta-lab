@@ -1,7 +1,9 @@
 package de.fhg.iais.roberta.ast.syntax;
 
-import de.fhg.iais.roberta.codegen.lejos.Visitor;
-import de.fhg.iais.roberta.dbc.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 
 /**
  * the top class of all class used to represent the AST (abstract syntax tree) of a program. After construction an AST should be immutable. The logic to achieve
@@ -16,6 +18,9 @@ import de.fhg.iais.roberta.dbc.Assert;
  * - {@link #getAs(Class)}<br>
  */
 abstract public class Phrase<V> {
+    @SuppressWarnings("unused")
+    private static final Logger LOG = LoggerFactory.getLogger(Phrase.class);
+
     private boolean readOnly = false;
     private final Kind kind;
 
@@ -50,21 +55,6 @@ abstract public class Phrase<V> {
     }
 
     /**
-     * returns the expression if and only if it is an object of the class given as parameter. Otherwise an exception is thrown. The type of the returned
-     * expression is
-     * the type of the requested class.<br>
-     * <i>Is this complexity really needed? Isn't brute-force casting at the client side sufficient?</i>
-     * 
-     * @param clazz the class the object must be an instance of to return without exception
-     * @return the object casted to the type requested
-     */
-    @SuppressWarnings("unchecked")
-    public final <T> T getAs(Class<T> clazz) {
-        Assert.isTrue(clazz.equals(this.getClass()));
-        return (T) this;
-    }
-
-    /**
      * @return the kind of the expression. See enum {@link Kind} for all kinds possible<br>
      */
     public final Kind getKind() {
@@ -72,18 +62,20 @@ abstract public class Phrase<V> {
     }
 
     /**
-     * visit this phrase
+     * visit this phrase. Inside this method is a LOG statement, usually commented out. If it is commented in, it will generate a nice trace of the phrases
+     * of the AST when they are visited.
      * 
      * @param visitor to be used
      */
-    public final V visit(Visitor<V> visitor) {
+    public final V visit(AstVisitor<V> visitor) {
+        // LOG.info("{}", this);
         return this.accept(visitor);
     }
 
     /**
      * accept an visitor
      */
-    protected abstract V accept(Visitor<V> visitor);
+    protected abstract V accept(AstVisitor<V> visitor);
 
     /**
      * append a newline, then append spaces up to an indentation level, then append an (optional) text<br>

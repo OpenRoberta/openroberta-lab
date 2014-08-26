@@ -21,43 +21,37 @@ public class MathConstTest {
 
     @Test
     public void getMathConst() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/math/math_constant1.xml");
-
-        MathConst mathConst = (MathConst) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_constant1.xml");
+        MathConst<Void> mathConst = (MathConst<Void>) transformer.getTree().get(0);
         Assert.assertEquals(Const.E, mathConst.getMathConst());
     }
 
     @Test
     public void getPresedance() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/math/math_constant1.xml");
-
-        MathConst mathConst = (MathConst) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_constant1.xml");
+        MathConst<Void> mathConst = (MathConst<Void>) transformer.getTree().get(0);
         Assert.assertEquals(999, mathConst.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/math/math_constant1.xml");
-
-        MathConst mathConst = (MathConst) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_constant1.xml");
+        MathConst<Void> mathConst = (MathConst<Void>) transformer.getTree().get(0);
         Assert.assertEquals(Assoc.NONE, mathConst.getAssoc());
     }
 
     @Test(expected = DbcException.class)
     public void invalid() {
-        MathConst.Const op = MathConst.Const.get("");
+        MathConst.Const.get("");
     }
 
     @Test(expected = DbcException.class)
     public void invalid1() {
-        MathConst.Const op = MathConst.Const.get(null);
+        MathConst.Const.get(null);
     }
 
     @Test(expected = DbcException.class)
     public void invalid2() {
-        MathConst.Const op = MathConst.Const.get("asdf");
+        MathConst.Const.get("asdf");
     }
 }

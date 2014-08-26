@@ -76,7 +76,7 @@ public class Antlr4TextlyTest {
 
     @Test
     public void testparseTree2Ast1() throws Exception {
-        Phrase astTree = TextlyTreeToAst.startWalkForVisiting("if (1+2*3==7 || 1*2+3==5 && !1+2==4) { a:=5*6;b:=!!1==2; };");
+        Phrase<?> astTree = TextlyTreeToAst.startWalkForVisiting("if (1+2*3==7 || 1*2+3==5 && !1+2==4) { a:=5*6;b:=!!1==2; };");
         System.out.println(astTree);
     }
 

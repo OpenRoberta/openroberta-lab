@@ -13,17 +13,13 @@ public class MotorGetPowerActionTest {
     @Test
     public void make() throws Exception {
         String a = "BlockAST [project=[[MotorGetPower [port=B]]]]";
-
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_MotorGetPower.xml"));
     }
 
     @Test
     public void getPort() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/actions/action_MotorGetPower.xml");
-
-        MotorGetPowerAction mgp = (MotorGetPowerAction) transformer.getTree().get(0);
-
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_MotorGetPower.xml");
+        MotorGetPowerAction<Void> mgp = (MotorGetPowerAction<Void>) transformer.getTree().get(0);
         Assert.assertEquals(ActorPort.B, mgp.getPort());
     }
-
 }

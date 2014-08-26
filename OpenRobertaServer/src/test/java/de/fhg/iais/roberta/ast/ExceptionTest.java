@@ -20,7 +20,7 @@ public class ExceptionTest {
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/exceptions/value_exception.xml"));
         Project project = (Project) jaxbUnmarshaller.unmarshal(src);
 
-        JaxbTransformer transformer = new JaxbTransformer();
+        JaxbTransformer<?> transformer = new JaxbTransformer<>();
 
         try {
             transformer.projectToAST(project);
