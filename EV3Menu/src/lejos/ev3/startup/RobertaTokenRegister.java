@@ -20,6 +20,9 @@ public class RobertaTokenRegister implements Runnable {
     private final String token;
     private boolean isTimeOut = false;
     private boolean isRegistered = false;
+    private boolean hasError = false;
+
+    private boolean regInterruptRequest = false;
 
     public RobertaTokenRegister(URL serverURL, String token) {
         this.serverURL = serverURL;
@@ -30,24 +33,43 @@ public class RobertaTokenRegister implements Runnable {
         this.isTimeOut = bool;
     }
 
-    public void setRegisteredInfo(boolean bool) {
-        this.isRegistered = bool;
-    }
-
     public boolean getTimeOutInfo() {
         return this.isTimeOut;
+    }
+
+    public void setRegisteredInfo(boolean bool) {
+        this.isRegistered = bool;
     }
 
     public boolean getRegisteredInfo() {
         return this.isRegistered;
     }
 
+    public void setErrorInfo(boolean bool) {
+        this.hasError = bool;
+    }
+
+    public boolean getErrorInfo() {
+        return this.hasError;
+    }
+
+    public boolean getRegInterruptInfo() {
+        return this.regInterruptRequest;
+    }
+
+    public void setRegInterruptInfo(boolean bool) {
+        this.regInterruptRequest = bool;
+    }
+
     /**
-     * send token to server, get response code if registered
+     * send token to server, get OK response if registered successfully
      * TODO refactor with json library instead of string
      */
     @Override
     public void run() {
+        setRegisteredInfo(false);
+        setTimeOutInfo(false);
+        setErrorInfo(false);
         try {
             HttpURLConnection httpURLConnection = openConnection(this.serverURL);
 
@@ -62,9 +84,12 @@ public class RobertaTokenRegister implements Runnable {
                 System.out.println(serverResponse);
             }
             in.close();
+            setRegisteredInfo(true);
         } catch ( SocketTimeoutException ste ) {
+            setTimeOutInfo(true);
             ste.printStackTrace();
         } catch ( IOException e ) {
+            setErrorInfo(true);
             e.printStackTrace();
         }
     }

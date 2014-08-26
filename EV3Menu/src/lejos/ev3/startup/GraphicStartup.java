@@ -25,8 +25,6 @@ import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.jar.JarFile;
 
 import lejos.hardware.Battery;
@@ -148,9 +146,11 @@ public class GraphicStartup implements Menu {
 
     // Roberta Icon (maybe not the best quality possible, done with ev3image tool
     // from lejos). Black/white roberta image required for best result?!
-    private static final String ICRoberta = "\u0000\u0000\u0080\u0000\u0000\u0000\u0080\u0000\u0000\u00c0\u00c3\u0001\u0010\u0001\u00c0\u0001\u00dc\u00c0\u00c1\u0000\u0058\u002f\u00fe\u0000\u009c\u0010\u007c\u0000\u007c\u0080\u001c\u0000\u0078\u0084\u001d\u0000\u0070\u000c\u0004\u0000\u0070\u0000\u0002\u0000\u0080\u00f0\u0001\u0000\u0000\u003f\u0000\u0000\u0000\u0038\u0000\u0000\u0000\u0018\u0000\u0000\u0000\u001c\u0000\u0000\u0000\u001c\u00c0\u0001\u0000\u001c\u00f8\u0003\u0000\u00dc\u00ff\u0003\u0000\u00dc\u00ff\u0003\u0000\u00bc\u00ff\r\u0000\u00f8\u00ff\u001e\u0000\u00f4\u007f\u001f\u0080\u00cf\u00c7\u003f\u00c0\u00ff\u00bb\u003f\u00e0\u00fb\u00fd\u0033\u00e0\u0007\u00ff\u003b\u00e0\u00ff\u00cf\u003b\u00e0\u00ff\u00ef\u001f\u00c0\u00ff\u00ff\u001f\u0080\u00f7\u00fe\u000f\u0000\u0000\u00b8\u0007";
-    
-    
+    private static final String ICRoberta =
+        "\u0000\u0000\u0080\u0000\u0000\u0000\u0080\u0000\u0000\u00c0\u00c3\u0001\u0010\u0001\u00c0\u0001\u00dc\u00c0\u00c1\u0000\u0058\u002f\u00fe\u0000\u009c\u0010\u007c\u0000\u007c\u0080\u001c\u0000\u0078\u0084\u001d\u0000\u0070\u000c\u0004\u0000\u0070\u0000\u0002\u0000\u0080\u00f0\u0001\u0000\u0000\u003f\u0000\u0000\u0000\u0038\u0000\u0000\u0000\u0018\u0000\u0000\u0000\u001c\u0000\u0000\u0000\u001c\u00c0\u0001\u0000\u001c\u00f8\u0003\u0000\u00dc\u00ff\u0003\u0000\u00dc\u00ff\u0003\u0000\u00bc\u00ff\r\u0000\u00f8\u00ff\u001e\u0000\u00f4\u007f\u001f\u0080\u00cf\u00c7\u003f\u00c0\u00ff\u00bb\u003f\u00e0\u00fb\u00fd\u0033\u00e0\u0007\u00ff\u003b\u00e0\u00ff\u00cf\u003b\u00e0\u00ff\u00ef\u001f\u00c0\u00ff\u00ff\u001f\u0080\u00f7\u00fe\u000f\u0000\u0000\u00b8\u0007";
+
+    private BackgroundTasks backgroundTasks;
+
     private static boolean isRegistered = false;
     private static String token;
     private static String serverURLString;
@@ -1478,7 +1478,6 @@ public class GraphicStartup implements Menu {
      */
     private void robertaMenu() {
         TextLCD lcd = LocalEV3.get().getTextLCD();
-        ExecutorService executerService = Executors.newSingleThreadScheduledExecutor();
         //RobertaRunner runner = new RobertaRunner(this.ind, echoIn, echoErr);
 
         //--- enter server address (for noobs only :-)) ---
@@ -1498,7 +1497,7 @@ public class GraphicStartup implements Menu {
         //                return;
         //            }
         //        }
-        serverURLString = "10.0.1.18:1999";
+        serverURLString = "10.0.1.19:1999";
 
         try {
             serverTokenRessource = new URL("http://" + serverURLString + "/token");
@@ -1511,29 +1510,40 @@ public class GraphicStartup implements Menu {
 
         if ( GraphicStartup.isRegistered == false ) {
             token = new RobertaTokenGenerator().generateToken(8);
-            BackgroundTasks backgroundTasks = new BackgroundTasks(serverTokenRessource, token);
+            this.backgroundTasks = new BackgroundTasks(serverTokenRessource, serverDownloadRessource, token);
             Key escapeKey = LocalEV3.get().getKey("Escape");
-            escapeKey.addKeyListener(backgroundTasks);
-            backgroundTasks.register();
+            escapeKey.addKeyListener(this.backgroundTasks);
+            this.backgroundTasks.register();
 
             newScreen(" Robertalab");
-            lcd.drawString("waiting for", 0, 1);
-            lcd.drawString("registration...", 0, 2);
+            lcd.drawString("waiting for", 0, 2);
+            lcd.drawString("registration...", 0, 3);
 
-            /*while ( robertaTokenRegister.getRegisteredInfo() == false ) {
-                if ( robertaTokenRegister.getTimeOutInfo() == true ) {
+            while ( this.backgroundTasks.getRegisteredInfo() == false ) {
+                if ( this.backgroundTasks.getRegInterruptInfo() == true ) {
+                    return;
+                } else if ( this.backgroundTasks.getTimeOutInfo() == true ) {
                     newScreen(" Robertalab");
-                    lcd.drawString("Time out!", 0, 2);
+                    lcd.drawString("Time out!", 0, 3);
+                    Button.waitForAnyPress();
+                    return;
+                } else if ( this.backgroundTasks.getErrorInfo() == true ) {
+                    newScreen(" Robertalab");
+                    lcd.drawString("Error!", 0, 3);
                     Button.waitForAnyPress();
                     return;
                 } else {
                     Delay.msDelay(500);
                 }
             }
+
             isRegistered = true;
+            this.indiBA.setRobertalab(true);
             newScreen(" Robertalab");
-            lcd.drawString("Success!", 0, 1);
-            Delay.msDelay(3000);*/
+            lcd.drawString("Success!", 0, 3);
+            Delay.msDelay(2000);
+            this.backgroundTasks.download();
+
         } else {
             GraphicMenu menu = new GraphicMenu(new String[] {
                 "New session"
@@ -1545,12 +1555,14 @@ public class GraphicStartup implements Menu {
                 selected = getSelection(menu, selected);
                 switch ( selected ) {
                     case 0:
-                        if ( getYesNo("  Reset Session?", false) == 1 ) {
+                        newScreen(" Robertalab");
+                        if ( getYesNo("     Confirm", false) == 1 ) {
                             isRegistered = false;
                             token = null;
                             serverURLString = null;
                             serverTokenRessource = null;
                             serverDownloadRessource = null;
+                            this.indiBA.setRobertalab(false);
                             return;
                         }
                 }

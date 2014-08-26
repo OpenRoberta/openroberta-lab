@@ -4,28 +4,40 @@ import java.net.URL;
 
 import lejos.hardware.Key;
 import lejos.hardware.KeyListener;
-import lejos.hardware.ev3.LocalEV3;
-import lejos.hardware.lcd.TextLCD;
 
 public class BackgroundTasks implements KeyListener {
 
-    private final TextLCD lcd = LocalEV3.get().getTextLCD();
-
     private final RobertaTokenRegister rtr;
-    private final Thread tokenThread;
+    private final RobertaDownloader rd;
 
-    public BackgroundTasks(URL serverTokenRessource, String token) {
+    private Thread tokenThread;
+    private Thread downloadThread;
+
+    public BackgroundTasks(URL serverTokenRessource, URL serverDownloadRessource, String token) {
         this.rtr = new RobertaTokenRegister(serverTokenRessource, token);
-        this.tokenThread = new Thread(this.rtr);
+        this.rd = new RobertaDownloader(serverDownloadRessource, token);
     }
 
     public void register() {
+        this.rtr.setErrorInfo(false);
+        this.rtr.setRegisteredInfo(false);
+        this.rtr.setTimeOutInfo(false);
+        this.tokenThread = new Thread(this.rtr);
         this.tokenThread.start();
+    }
+
+    public void download() {
+        this.downloadThread = new Thread(this.rd);
+        this.downloadThread.start();
+    }
+
+    public void stopDownload() {
+        setDLInterruptInfo(true);
     }
 
     @Override
     public void keyPressed(Key arg0) {
-        this.tokenThread.interrupt();
+        setRegInterruptInfo(true);
     }
 
     @Override
@@ -33,4 +45,27 @@ public class BackgroundTasks implements KeyListener {
         //
     }
 
+    public boolean getTimeOutInfo() {
+        return this.rtr.getTimeOutInfo();
+    }
+
+    public boolean getRegisteredInfo() {
+        return this.rtr.getRegisteredInfo();
+    }
+
+    public boolean getErrorInfo() {
+        return this.rtr.getErrorInfo();
+    }
+
+    public boolean getRegInterruptInfo() {
+        return this.rtr.getRegInterruptInfo();
+    }
+
+    public void setRegInterruptInfo(boolean bool) {
+        this.rtr.setRegInterruptInfo(bool);
+    }
+
+    public void setDLInterruptInfo(boolean bool) {
+        this.rd.setDLInterruptInfo(bool);
+    }
 }

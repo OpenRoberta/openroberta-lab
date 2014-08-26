@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -22,17 +21,16 @@ public class RobertaDownloader implements Runnable {
     private boolean downloadRequestHanging = false;
     private boolean hasDownloaded = false;
 
+    private boolean dlInterruptRequest = false;
+
     private final URL serverURL;
-    private String token;
+    private final String token;
 
     private String fileName;
     private final String PROGRAMS_DIRECTORY = "/home/lejos/programs";
 
-    public RobertaDownloader(URL serverURL) {
+    public RobertaDownloader(URL serverURL, String token) {
         this.serverURL = serverURL;
-    }
-
-    public void setToken(String token) {
         this.token = token;
     }
 
@@ -60,6 +58,10 @@ public class RobertaDownloader implements Runnable {
         this.fileName = fileName;
     }
 
+    public void setDLInterruptInfo(boolean bool) {
+        this.dlInterruptRequest = bool;
+    }
+
     /**
      * Method that sends the token via http connection (server servlet) and
      * download the corresponding program as bytearray.<br>
@@ -75,19 +77,25 @@ public class RobertaDownloader implements Runnable {
             dos.flush();
             dos.close();
 
+            System.out.println("before download");
+
             setFileName(httpURLConnection.getHeaderField("fileName"));
             System.out.println("http header fileName: " + getFileName());
 
             InputStream is = httpURLConnection.getInputStream();
             byte[] buffer = new byte[4096];
             int n;
-            OutputStream output = new FileOutputStream(new File(this.PROGRAMS_DIRECTORY, getFileName()));
+            FileOutputStream output = new FileOutputStream(new File(this.PROGRAMS_DIRECTORY, getFileName()));
+
             while ( (n = is.read(buffer)) != -1 ) {
                 output.write(buffer, 0, n);
             }
             output.close();
             is.close();
             setDownloadCompleteInfo(true);
+
+            System.out.println("after download");
+
         } catch ( IOException e ) {
             setHangingRequestInfo(false);
             setDownloadCompleteInfo(true);
