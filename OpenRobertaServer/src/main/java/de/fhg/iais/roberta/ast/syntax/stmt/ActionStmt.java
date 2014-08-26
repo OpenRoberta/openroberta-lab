@@ -8,10 +8,10 @@ import de.fhg.iais.roberta.dbc.Assert;
 /**
  * Wraps subclasses of the class {@link Action} so they can be used as {@link Stmt} in statements.
  */
-public class ActionStmt extends Stmt {
-    private final Action action;
+public class ActionStmt<V> extends Stmt<V> {
+    private final Action<V> action;
 
-    private ActionStmt(Action action) {
+    private ActionStmt(Action<V> action) {
         super(Phrase.Kind.AKTION_STMT);
         Assert.isTrue(action.isReadOnly());
         this.action = action;
@@ -24,14 +24,14 @@ public class ActionStmt extends Stmt {
      * @param action that we want to wrap
      * @return statement with wrapped action inside
      */
-    public static ActionStmt make(Action action) {
-        return new ActionStmt(action);
+    public static <V> ActionStmt<V> make(Action<V> action) {
+        return new ActionStmt<V>(action);
     }
 
     /**
      * @return action that is wrapped in the statement
      */
-    public Action getAction() {
+    public Action<V> getAction() {
         return this.action;
     }
 
@@ -43,7 +43,7 @@ public class ActionStmt extends Stmt {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitActionStmt(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitActionStmt(this);
     }
 }

@@ -10,10 +10,10 @@ import de.fhg.iais.roberta.dbc.Assert;
  * 
  * @author kcvejoski
  */
-public class SensorExpr extends Expr {
-    private final Sensor sensor;
+public class SensorExpr<V> extends Expr<V> {
+    private final Sensor<V> sensor;
 
-    private SensorExpr(Sensor sens) {
+    private SensorExpr(Sensor<V> sens) {
         super(Phrase.Kind.SENSOR_EXPR);
         Assert.isTrue(sens.isReadOnly());
         this.sensor = sens;
@@ -26,14 +26,14 @@ public class SensorExpr extends Expr {
      * @param sensor that we want to wrap
      * @return expression with wrapped sensor inside
      */
-    public static SensorExpr make(Sensor sens) {
-        return new SensorExpr(sens);
+    public static <V> SensorExpr<V> make(Sensor<V> sens) {
+        return new SensorExpr<V>(sens);
     }
 
     /**
      * @return sensor that is wrapped in the expression
      */
-    public Sensor getSens() {
+    public Sensor<V> getSens() {
         return this.sensor;
     }
 
@@ -53,7 +53,7 @@ public class SensorExpr extends Expr {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitSensorExpr(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitSensorExpr(this);
     }
 }

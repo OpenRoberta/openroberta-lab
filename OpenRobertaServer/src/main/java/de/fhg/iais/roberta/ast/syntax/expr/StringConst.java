@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.codegen.lejos.Visitor;
  * <br>
  * To create an instance from this class use the method {@link #make(String)}.<br>
  */
-public class StringConst extends Expr {
+public class StringConst<V> extends Expr<V> {
     private final String value;
 
     private StringConst(String value) {
@@ -24,8 +24,8 @@ public class StringConst extends Expr {
      * @param value that the boolean constant will have
      * @return read only object of class {@link StringConst}.
      */
-    public static StringConst make(String value) {
-        return new StringConst(value);
+    public static <V> StringConst<V> make(String value) {
+        return new StringConst<V>(value);
     }
 
     /**
@@ -51,7 +51,7 @@ public class StringConst extends Expr {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitStringConst(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitStringConst(this);
     }
 }

@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * <br>
  * To create an instance from this class use the method {@link #make(Const)}.<br>
  */
-public class MathConst extends Expr {
+public class MathConst<V> extends Expr<V> {
     private final Const mathConst;
 
     private MathConst(Const mathConst) {
@@ -27,8 +27,8 @@ public class MathConst extends Expr {
      * @param mathConst, see enum {@link Const} for all defined constants
      * @return read only object of class {@link MathConst}.
      */
-    public static MathConst make(Const mathConst) {
-        return new MathConst(mathConst);
+    public static <V> MathConst<V> make(Const mathConst) {
+        return new MathConst<V>(mathConst);
     }
 
     /**
@@ -92,7 +92,7 @@ public class MathConst extends Expr {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitMathConst(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitMathConst(this);
     }
 }

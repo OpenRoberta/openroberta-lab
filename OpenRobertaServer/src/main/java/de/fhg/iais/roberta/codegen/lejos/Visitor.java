@@ -49,63 +49,63 @@ import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
  */
-public interface Visitor<T> {
+public interface Visitor<V> {
 
     /**
      * visit a {@link NumConst}.
      * 
      * @param numConst phrase to be visited
      */
-    public T visitNumConst(NumConst numConst);
+    public V visitNumConst(NumConst<V> numConst);
 
     /**
      * visit a {@link MathConst}.
      * 
      * @param mathConst to be visited
      */
-    public T visitMathConst(MathConst mathConst);
+    public V visitMathConst(MathConst<V> mathConst);
 
     /**
      * visit a {@link BoolConst}.
      * 
      * @param boolConst to be visited
      */
-    public T visitBoolConst(BoolConst boolConst);
+    public V visitBoolConst(BoolConst<V> boolConst);
 
     /**
      * visit a {@link StringConst}.
      * 
      * @param stringConst to be visited
      */
-    public T visitStringConst(StringConst stringConst);
+    public V visitStringConst(StringConst<V> stringConst);
 
     /**
      * visit a {@link NullConst}.
      * 
      * @param nullConst to be visited
      */
-    public T visitNullConst(NullConst nullConst);
+    public V visitNullConst(NullConst<V> nullConst);
 
     /**
      * visit a {@link ColorConst}.
      * 
      * @param colorConst to be visited
      */
-    public T visitColorConst(ColorConst colorConst);
+    public V visitColorConst(ColorConst<V> colorConst);
 
     /**
      * visit a {@link Var}.
      * 
      * @param var to be visited
      */
-    public T visitVar(Var var);
+    public V visitVar(Var<V> var);
 
     /**
      * visit a {@link Unary}.
      * 
      * @param unary to be visited
      */
-    public T visitUnary(Unary unary);
+    public V visitUnary(Unary<V> unary);
 
     /**
      * visit a {@link Binary}.
@@ -113,91 +113,91 @@ public interface Visitor<T> {
      * @param binary to be visited
      */
 
-    public T visitBinary(Binary binary);
+    public V visitBinary(Binary<V> binary);
 
     /**
      * visit a {@link Func}.
      * 
      * @param funct to be visited
      */
-    public T visitFunc(Func func);
+    public V visitFunc(Func<V> func);
 
     /**
      * visit a {@link ActionExpr}.
      * 
      * @param actionExpr to be visited
      */
-    public T visitActionExpr(ActionExpr actionExpr);
+    public V visitActionExpr(ActionExpr<V> actionExpr);
 
     /**
      * visit a {@link SensorExpr}.
      * 
      * @param sensorExpr to be visited
      */
-    public T visitSensorExpr(SensorExpr sensorExpr);
+    public V visitSensorExpr(SensorExpr<V> sensorExpr);
 
     /**
      * visit a {@link EmptyExpr}.
      * 
      * @param emptyExpr to be visited
      */
-    public T visitEmptyExpr(EmptyExpr emptyExpr);
+    public V visitEmptyExpr(EmptyExpr<V> emptyExpr);
 
     /**
      * visit a {@link ExprList}.
      * 
      * @param exprList to be visited
      */
-    public T visitExprList(ExprList exprList);
+    public V visitExprList(ExprList<V> exprList);
 
     /**
      * visit a {@link ActionStmt}.
      * 
      * @param actionStmt to be visited
      */
-    public T visitActionStmt(ActionStmt actionStmt);
+    public V visitActionStmt(ActionStmt<V> actionStmt);
 
     /**
      * visit a {@link AssignStmt}.
      * 
      * @param assignStmt to be visited
      */
-    public T visitAssignStmt(AssignStmt assignStmt);
+    public V visitAssignStmt(AssignStmt<V> assignStmt);
 
     /**
      * visit a {@link ExprStmt}.
      * 
      * @param exprStmt to be visited
      */
-    public T visitExprStmt(ExprStmt exprStmt);
+    public V visitExprStmt(ExprStmt<V> exprStmt);
 
     /**
      * visit a {@link IfStmt}.
      * 
      * @param ifStmt to be visited
      */
-    public T visitIfStmt(IfStmt ifStmt);
+    public V visitIfStmt(IfStmt<V> ifStmt);
 
     /**
      * visit a {@link RepeatStmt}.
      * 
      * @param repeatStmt to be visited
      */
-    public T visitRepeatStmt(RepeatStmt repeatStmt);
+    public V visitRepeatStmt(RepeatStmt<V> repeatStmt);
 
     /**
      * visit a {@link SensorStmt}.
      * 
      * @param sensorStmt to be visited
      */
-    public T visitSensorStmt(SensorStmt sensorStmt);
+    public V visitSensorStmt(SensorStmt<V> sensorStmt);
 
     /**
      * visit a {@link StmtFlowCon}.
      * 
      * @param stmtFlowCon to be visited
      */
-    public T visitStmtFlowCon(StmtFlowCon stmtFlowCon);
+    public V visitStmtFlowCon(StmtFlowCon<V> stmtFlowCon);
 
     /**
      * visit a {@link StmtList}.
@@ -205,167 +205,167 @@ public interface Visitor<T> {
      * @param stmtList to be visited
      */
 
-    public T visitStmtList(StmtList stmtList);
+    public V visitStmtList(StmtList<V> stmtList);
 
     /**
      * visit a {@link DriveAction}.
      * 
      * @param driveAction to be visited
      */
-    public T visitDriveAction(DriveAction driveAction);
+    public V visitDriveAction(DriveAction<V> driveAction);
 
     /**
      * visit a {@link TurnAction}.
      * 
      * @param turnAction to be visited
      */
-    public T visitTurnAction(TurnAction turnAction);
+    public V visitTurnAction(TurnAction<V> turnAction);
 
     /**
      * visit a {@link LightAction}.
      * 
      * @param lightAction to be visited
      */
-    public T visitLightAction(LightAction lightAction);
+    public V visitLightAction(LightAction<V> lightAction);
 
     /**
      * visit a {@link LightStatusAction}.
      * 
      * @param lightStatusAction to be visited
      */
-    public T visitLightStatusAction(LightStatusAction lightStatusAction);
+    public V visitLightStatusAction(LightStatusAction<V> lightStatusAction);
 
     /**
      * visit a {@link MotorGetPowerAction}.
      * 
      * @param motorGetPowerAction to be visited
      */
-    public T visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction);
+    public V visitMotorGetPowerAction(MotorGetPowerAction<V> motorGetPowerAction);
 
     /**
      * visit a {@link MotorOnAction}.
      * 
      * @param motorOnAction
      */
-    public T visitMotorOnAction(MotorOnAction motorOnAction);
+    public V visitMotorOnAction(MotorOnAction<V> motorOnAction);
 
     /**
      * visit a {@link MotorSetPowerAction}.
      * 
      * @param motorSetPowerAction
      */
-    public T visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction);
+    public V visitMotorSetPowerAction(MotorSetPowerAction<V> motorSetPowerAction);
 
     /**
      * visit a {@link MotorStopAction}.
      * 
      * @param motorStopAction
      */
-    public T visitMotorStopAction(MotorStopAction motorStopAction);
+    public V visitMotorStopAction(MotorStopAction<V> motorStopAction);
 
     /**
      * visit a {@link ClearDisplayAction}.
      * 
      * @param clearDisplayAction to be visited
      */
-    public T visitClearDisplayAction(ClearDisplayAction clearDisplayAction);
+    public V visitClearDisplayAction(ClearDisplayAction<V> clearDisplayAction);
 
     /**
      * visit a {@link VolumeAction}.
      * 
      * @param volumeAction to be visited
      */
-    public T visitVolumeAction(VolumeAction volumeAction);
+    public V visitVolumeAction(VolumeAction<V> volumeAction);
 
     /**
      * visit a {@link PlayFileAction}.
      * 
      * @param playFileAction
      */
-    public T visitPlayFileAction(PlayFileAction playFileAction);
+    public V visitPlayFileAction(PlayFileAction<V> playFileAction);
 
     /**
      * visit a {@link ShowPictureAction}.
      * 
      * @param showPictureAction
      */
-    public T visitShowPictureAction(ShowPictureAction showPictureAction);
+    public V visitShowPictureAction(ShowPictureAction<V> showPictureAction);
 
     /**
      * visit a {@link ShowTextAction}.
      * 
      * @param showTextAction
      */
-    public T visitShowTextAction(ShowTextAction showTextAction);
+    public V visitShowTextAction(ShowTextAction<V> showTextAction);
 
     /**
      * visit a {@link MotorDriveStopAction}.
      * 
      * @param stopAction
      */
-    public T visitMotorDriveStopAction(MotorDriveStopAction stopAction);
+    public V visitMotorDriveStopAction(MotorDriveStopAction<V> stopAction);
 
     /**
      * visit a {@link ToneAction}.
      * 
      * @param toneAction to be visited
      */
-    public T visitToneAction(ToneAction toneAction);
+    public V visitToneAction(ToneAction<V> toneAction);
 
     /**
      * visit a {@link BrickSensor}.
      * 
      * @param brickSensor to be visited
      */
-    public T visitBrickSensor(BrickSensor brickSensor);
+    public V visitBrickSensor(BrickSensor<V> brickSensor);
 
     /**
      * visit a {@link ColorSensor}.
      * 
      * @param colorSensor to be visited
      */
-    public T visitColorSensor(ColorSensor colorSensor);
+    public V visitColorSensor(ColorSensor<V> colorSensor);
 
     /**
      * visit a {@link EncoderSensor}.
      * 
      * @param encoderSensor to be visited
      */
-    public T visitEncoderSensor(EncoderSensor encoderSensor);
+    public V visitEncoderSensor(EncoderSensor<V> encoderSensor);
 
     /**
      * visit a {@link GyroSensor}.
      * 
      * @param gyroSensor to be visited
      */
-    public T visitGyroSensor(GyroSensor gyroSensor);
+    public V visitGyroSensor(GyroSensor<V> gyroSensor);
 
     /**
      * visit a {@link InfraredSensor}.
      * 
      * @param infraredSensor to be visited
      */
-    public T visitInfraredSensor(InfraredSensor infraredSensor);
+    public V visitInfraredSensor(InfraredSensor<V> infraredSensor);
 
     /**
      * visit a {@link TimerSensor}.
      * 
      * @param timerSensor to be visited
      */
-    public T visitTimerSensor(TimerSensor timerSensor);
+    public V visitTimerSensor(TimerSensor<V> timerSensor);
 
     /**
      * visit a {@link TouchSensor}.
      * 
      * @param touchSensor to be visited
      */
-    public T visitTouchSensor(TouchSensor touchSensor);
+    public V visitTouchSensor(TouchSensor<V> touchSensor);
 
     /**
      * visit a {@link UltrasonicSensor}.
      * 
      * @param ultrasonicSensor to be visited
      */
-    public T visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor);
+    public V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor);
 
 }

@@ -12,8 +12,8 @@ import de.fhg.iais.roberta.dbc.Assert;
  * This class allows to create list of {@link Stmt} elements.
  * Initially object from this class is writable. After adding all the elements to the list call {@link #setReadOnly()}.
  */
-public class StmtList extends Stmt {
-    private final List<Stmt> sl = new ArrayList<Stmt>();
+public class StmtList<V> extends Stmt<V> {
+    private final List<Stmt<V>> sl = new ArrayList<Stmt<V>>();
 
     private StmtList() {
         super(Phrase.Kind.STMT_LIST);
@@ -22,8 +22,8 @@ public class StmtList extends Stmt {
     /**
      * @return writable object of type {@link StmtList}.
      */
-    public static StmtList make() {
-        return new StmtList();
+    public static <V> StmtList<V> make() {
+        return new StmtList<V>();
     }
 
     /**
@@ -31,7 +31,7 @@ public class StmtList extends Stmt {
      * 
      * @param stmt
      */
-    public final void addStmt(Stmt stmt) {
+    public final void addStmt(Stmt<V> stmt) {
         Assert.isTrue(mayChange() && stmt != null && stmt.isReadOnly());
         this.sl.add(stmt);
     }
@@ -39,7 +39,7 @@ public class StmtList extends Stmt {
     /**
      * @return list with elements of type {@link Stmt}.
      */
-    public final List<Stmt> get() {
+    public final List<Stmt<V>> get() {
         Assert.isTrue(isReadOnly());
         return Collections.unmodifiableList(this.sl);
     }
@@ -47,14 +47,14 @@ public class StmtList extends Stmt {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for ( Stmt stmt : this.sl ) {
+        for ( Stmt<V> stmt : this.sl ) {
             sb.append(stmt.toString());
         }
         return sb.toString();
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitStmtList(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitStmtList(this);
     }
 }

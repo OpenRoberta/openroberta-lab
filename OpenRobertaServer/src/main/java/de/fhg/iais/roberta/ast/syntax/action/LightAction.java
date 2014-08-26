@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br/>
  * The client must provide the {@link BrickLedColor} of the lights and the mode of blinking.
  */
-public class LightAction extends Action {
+public class LightAction<V> extends Action<V> {
     private final BrickLedColor color;
     private final boolean blink;
 
@@ -29,8 +29,8 @@ public class LightAction extends Action {
      * @param blink type of the blinking,
      * @return read only object of class {@link LightAction}.
      */
-    public static LightAction make(BrickLedColor color, boolean blink) {
-        return new LightAction(color, blink);
+    public static <V> LightAction<V> make(BrickLedColor color, boolean blink) {
+        return new LightAction<V>(color, blink);
     }
 
     /**
@@ -53,8 +53,7 @@ public class LightAction extends Action {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitLightAction(this);
-
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitLightAction(this);
     }
 }

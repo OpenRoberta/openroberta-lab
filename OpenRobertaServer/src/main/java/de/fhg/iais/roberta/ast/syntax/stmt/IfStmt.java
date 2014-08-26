@@ -13,13 +13,13 @@ import de.fhg.iais.roberta.dbc.Assert;
  * tree).
  * Object from this class will generate if statement.<br/>
  */
-public class IfStmt extends Stmt {
-    private final List<Expr> expr;
-    private final List<StmtList> thenList;
-    private final StmtList elseList;
+public class IfStmt<V> extends Stmt<V> {
+    private final List<Expr<V>> expr;
+    private final List<StmtList<V>> thenList;
+    private final StmtList<V> elseList;
     private final boolean ternary;
 
-    private IfStmt(List<Expr> expr, List<StmtList> thenList, StmtList elseList, boolean ternary) {
+    private IfStmt(List<Expr<V>> expr, List<StmtList<V>> thenList, StmtList<V> elseList, boolean ternary) {
         super(Phrase.Kind.IF_STMT);
         Assert.isTrue(expr.size() == thenList.size() && elseList.isReadOnly());
         this.expr = expr;
@@ -37,8 +37,8 @@ public class IfStmt extends Stmt {
      * @param elseList all statements that are in the <b>else</b> parts
      * @return read only object of class {@link IfStmt}
      */
-    public static IfStmt make(List<Expr> expr, List<StmtList> thenList, StmtList elseList) {
-        return new IfStmt(expr, thenList, elseList, false);
+    public static <V> IfStmt<V> make(List<Expr<V>> expr, List<StmtList<V>> thenList, StmtList<V> elseList) {
+        return new IfStmt<V>(expr, thenList, elseList, false);
     }
 
     /**
@@ -49,12 +49,12 @@ public class IfStmt extends Stmt {
      * @param elseList all statement that is in the <b>else</b> part
      * @return read only object of class {@link IfStmt}
      */
-    public static IfStmt make(Expr expr, StmtList thenList, StmtList elseList) {
-        List<Expr> exprsList = new ArrayList<Expr>();
-        List<StmtList> thensList = new ArrayList<StmtList>();
+    public static <V> IfStmt<V> make(Expr<V> expr, StmtList<V> thenList, StmtList<V> elseList) {
+        List<Expr<V>> exprsList = new ArrayList<Expr<V>>();
+        List<StmtList<V>> thensList = new ArrayList<StmtList<V>>();
         exprsList.add(expr);
         thensList.add(thenList);
-        return new IfStmt(exprsList, thensList, elseList, true);
+        return new IfStmt<V>(exprsList, thensList, elseList, true);
     }
 
     /**
@@ -64,10 +64,10 @@ public class IfStmt extends Stmt {
      * @param thenList all statements that are in the <b>then</b> parts
      * @return read only object of class {@link IfStmt}
      */
-    public static IfStmt make(List<Expr> expr, List<StmtList> thenList) {
-        StmtList elseList = StmtList.make();
+    public static <V> IfStmt<V> make(List<Expr<V>> expr, List<StmtList<V>> thenList) {
+        StmtList<V> elseList = StmtList.make();
         elseList.setReadOnly();
-        return new IfStmt(expr, thenList, elseList, false);
+        return new IfStmt<V>(expr, thenList, elseList, false);
     }
 
     /**
@@ -80,21 +80,21 @@ public class IfStmt extends Stmt {
     /**
      * @return list with all expressions that should be evaluated in the <b>if</b> part.
      */
-    public final List<Expr> getExpr() {
+    public final List<Expr<V>> getExpr() {
         return this.expr;
     }
 
     /**
      * @return list with all statements that are in <b>then</b> part.
      */
-    public final List<StmtList> getThenList() {
+    public final List<StmtList<V>> getThenList() {
         return this.thenList;
     }
 
     /**
      * @return list with all statements that are in <b>else</b> part.
      */
-    public final StmtList getElseList() {
+    public final StmtList<V> getElseList() {
         return this.elseList;
     }
 
@@ -119,8 +119,8 @@ public class IfStmt extends Stmt {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitIfStmt(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitIfStmt(this);
     }
 
 }

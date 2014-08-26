@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
  * - {@link #getKind()}<br>
  * - {@link #getAs(Class)}<br>
  */
-public abstract class Expr extends Phrase {
+public abstract class Expr<V> extends Phrase<V> {
 
     /**
      * create a mutable expression of the given {@link Kind}

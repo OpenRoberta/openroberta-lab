@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br>
  * To create an instance from this class use the method {@link #make(TimerSensorMode, SensorPort)}.<br>
  */
-public class TimerSensor extends Sensor {
+public class TimerSensor<V> extends Sensor<V> {
     private final TimerSensorMode mode;
     private final int timer;
 
@@ -33,8 +33,8 @@ public class TimerSensor extends Sensor {
      * @param timer integer value
      * @return read only object of {@link TimerSensor}
      */
-    public static TimerSensor make(TimerSensorMode mode, int timer) {
-        return new TimerSensor(mode, timer);
+    public static <V> TimerSensor<V> make(TimerSensorMode mode, int timer) {
+        return new TimerSensor<V>(mode, timer);
     }
 
     /**
@@ -57,7 +57,7 @@ public class TimerSensor extends Sensor {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitTimerSensor(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitTimerSensor(this);
     }
 }

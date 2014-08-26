@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br/>
  * The client must provide the {@link ActorPort} and {@link MotorStopMode} (is the motor breaking or not).
  */
-public class MotorStopAction extends Action {
+public class MotorStopAction<V> extends Action<V> {
     private final ActorPort port;
     private final MotorStopMode mode;
 
@@ -29,8 +29,8 @@ public class MotorStopAction extends Action {
      * @param mode of stopping {@link MotorStopMode},
      * @return read only object of class {@link MotorStopAction}.
      */
-    public static MotorStopAction make(ActorPort port, MotorStopMode mode) {
-        return new MotorStopAction(port, mode);
+    public static <V> MotorStopAction<V> make(ActorPort port, MotorStopMode mode) {
+        return new MotorStopAction<V>(port, mode);
     }
 
     /**
@@ -53,8 +53,8 @@ public class MotorStopAction extends Action {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitMotorStopAction(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitMotorStopAction(this);
     }
 
 }

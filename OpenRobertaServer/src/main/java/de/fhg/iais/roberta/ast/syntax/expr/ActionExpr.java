@@ -8,10 +8,10 @@ import de.fhg.iais.roberta.dbc.Assert;
 /**
  * Wraps subclasses of the class {@link Action} so they can be used as {@link Expr} in expressions.
  */
-public final class ActionExpr extends Expr {
-    private final Action action;
+public final class ActionExpr<V> extends Expr<V> {
+    private final Action<V> action;
 
-    private ActionExpr(Action action) {
+    private ActionExpr(Action<V> action) {
         super(Phrase.Kind.ACTION_EXPR);
         Assert.isTrue(action.isReadOnly());
         this.action = action;
@@ -24,14 +24,14 @@ public final class ActionExpr extends Expr {
      * @param action that we want to wrap
      * @return expression with wrapped action inside
      */
-    public static ActionExpr make(Action action) {
-        return new ActionExpr(action);
+    public static <V> ActionExpr<V> make(Action<V> action) {
+        return new ActionExpr<V>(action);
     }
 
     /**
      * @return action that is wrapped in the expression
      */
-    public Action getAction() {
+    public Action<V> getAction() {
         return this.action;
     }
 
@@ -51,8 +51,7 @@ public final class ActionExpr extends Expr {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitActionExpr(this);
-
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitActionExpr(this);
     }
 }

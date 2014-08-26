@@ -11,11 +11,11 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br/>
  * The client must provide the {@link Mode} and value of the volume.
  */
-public class VolumeAction extends Action {
+public class VolumeAction<V> extends Action<V> {
     private final Mode mode;
-    private final Expr volume;
+    private final Expr<V> volume;
 
-    private VolumeAction(Mode mode, Expr volume) {
+    private VolumeAction(Mode mode, Expr<V> volume) {
         super(Phrase.Kind.VOLUME_ACTION);
         Assert.isTrue(volume != null && volume.isReadOnly() && mode != null);
         this.volume = volume;
@@ -30,14 +30,14 @@ public class VolumeAction extends Action {
      * @param volume value
      * @return read only object of class {@link VolumeAction}.
      */
-    public static VolumeAction make(Mode mode, Expr volume) {
-        return new VolumeAction(mode, volume);
+    public static <V> VolumeAction<V> make(Mode mode, Expr<V> volume) {
+        return new VolumeAction<V>(mode, volume);
     }
 
     /**
      * @return value of the volume
      */
-    public Expr getVolume() {
+    public Expr<V> getVolume() {
         return this.volume;
     }
 
@@ -54,8 +54,8 @@ public class VolumeAction extends Action {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitVolumeAction(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitVolumeAction(this);
     }
 
     /**

@@ -16,11 +16,11 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br>
  * To create an instance from this class use the method {@link #make(Var, Expr)}.<br>
  */
-public class AssignStmt extends Stmt {
-    private final Var name;
-    private final Expr expr;
+public class AssignStmt<V> extends Stmt<V> {
+    private final Var<V> name;
+    private final Expr<V> expr;
 
-    private AssignStmt(Var name, Expr expr) {
+    private AssignStmt(Var<V> name, Expr<V> expr) {
         super(Phrase.Kind.ASSIGN_STMT);
         Assert.isTrue(name.isReadOnly() && expr.isReadOnly());
         this.name = name;
@@ -35,21 +35,21 @@ public class AssignStmt extends Stmt {
      * @param expr that we want to assign to the {@link #name}
      * @return instance of {@link AssignStmt}
      */
-    public static AssignStmt make(Var name, Expr expr) {
-        return new AssignStmt(name, expr);
+    public static <V> AssignStmt<V> make(Var<V> name, Expr<V> expr) {
+        return new AssignStmt<V>(name, expr);
     }
 
     /**
      * @return name of the variable.
      */
-    public final Var getName() {
+    public final Var<V> getName() {
         return this.name;
     }
 
     /**
      * @return expression that will be assigned to the variable.
      */
-    public final Expr getExpr() {
+    public final Expr<V> getExpr() {
         return this.expr;
     }
 
@@ -62,8 +62,8 @@ public class AssignStmt extends Stmt {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitAssignStmt(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitAssignStmt(this);
     }
 
 }

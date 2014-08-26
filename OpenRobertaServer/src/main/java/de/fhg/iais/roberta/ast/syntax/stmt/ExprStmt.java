@@ -7,13 +7,11 @@ import de.fhg.iais.roberta.dbc.Assert;
 
 /**
  * Wraps subclasses of the class {@link Expr} so they can be used as {@link Stmt}.
- * 
- * @author kcvejoski
  */
-public class ExprStmt extends Stmt {
-    private final Expr expr;
+public class ExprStmt<V> extends Stmt<V> {
+    private final Expr<V> expr;
 
-    private ExprStmt(Expr expr) {
+    private ExprStmt(Expr<V> expr) {
         super(Phrase.Kind.EXPR_STMT);
         Assert.isTrue(expr.isReadOnly());
         this.expr = expr;
@@ -26,14 +24,14 @@ public class ExprStmt extends Stmt {
      * @param expr that we want to wrap
      * @return statement with wrapped expression inside
      */
-    public static ExprStmt make(Expr expr) {
-        return new ExprStmt(expr);
+    public static <V> ExprStmt<V> make(Expr<V> expr) {
+        return new ExprStmt<V>(expr);
     }
 
     /**
      * @return expression that is wrapped in the statement
      */
-    public final Expr getExpr() {
+    public final Expr<V> getExpr() {
         return this.expr;
     }
 
@@ -46,8 +44,8 @@ public class ExprStmt extends Stmt {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitExprStmt(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitExprStmt(this);
     }
 
 }

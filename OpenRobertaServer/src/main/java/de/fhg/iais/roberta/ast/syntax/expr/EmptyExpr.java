@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.dbc.Assert;
  * {@link EmptyExpr} is used when in binary or unary expressions, expression is missing.
  * When create instance from this class we pass as parameter the type of the value should have the missing expression.
  */
-public class EmptyExpr extends Expr {
+public class EmptyExpr<V> extends Expr<V> {
 
     private final Class<?> defVal;
 
@@ -25,8 +25,8 @@ public class EmptyExpr extends Expr {
      * @param defVal type of the value that the missing expression should have.
      * @return read only object of class {@link EmptyExpr}.
      */
-    public static EmptyExpr make(Class<?> defVal) {
-        return new EmptyExpr(defVal);
+    public static <V> EmptyExpr<V> make(Class<?> defVal) {
+        return new EmptyExpr<V>(defVal);
     }
 
     /**
@@ -52,8 +52,8 @@ public class EmptyExpr extends Expr {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitEmptyExpr(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitEmptyExpr(this);
     }
 
 }

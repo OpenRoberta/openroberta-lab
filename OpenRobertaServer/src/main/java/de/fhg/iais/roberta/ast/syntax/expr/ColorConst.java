@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.codegen.lejos.Visitor;
  * <br>
  * To create an instance from this class use the method {@link #make(String)}.<br>
  */
-public class ColorConst extends Expr {
+public class ColorConst<V> extends Expr<V> {
     private final PickColor value;
 
     private ColorConst(String value) {
@@ -27,8 +27,8 @@ public class ColorConst extends Expr {
      * @param value that the color constant will have
      * @return read only object of class {@link ColorConst}.
      */
-    public static ColorConst make(String value) {
-        return new ColorConst(value);
+    public static <V> ColorConst<V> make(String value) {
+        return new ColorConst<V>(value);
     }
 
     /**
@@ -54,7 +54,7 @@ public class ColorConst extends Expr {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitColorConst(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitColorConst(this);
     }
 }

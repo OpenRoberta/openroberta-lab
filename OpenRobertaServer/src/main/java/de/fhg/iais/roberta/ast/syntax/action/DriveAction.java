@@ -12,11 +12,11 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br>
  * To create an instance from this class use the method {@link #make(DriveDirection, MotionParam)}.<br>
  */
-public class DriveAction extends Action {
+public class DriveAction<V> extends Action<V> {
     private final DriveDirection direction;
-    private final MotionParam param;
+    private final MotionParam<V> param;
 
-    private DriveAction(DriveDirection direction, MotionParam param) {
+    private DriveAction(DriveDirection direction, MotionParam<V> param) {
         super(Phrase.Kind.DRIVE_ACTION);
         Assert.isTrue(direction != null && param != null);
         this.direction = direction;
@@ -31,8 +31,8 @@ public class DriveAction extends Action {
      * @param param {@link MotionParam} that set up the parameters for the movement of the robot (distance the robot should cover and speed),
      * @return read only object of class {@link DriveAction}
      */
-    public static DriveAction make(DriveDirection direction, MotionParam param) {
-        return new DriveAction(direction, param);
+    public static <V> DriveAction<V> make(DriveDirection direction, MotionParam<V> param) {
+        return new DriveAction<V>(direction, param);
     }
 
     /**
@@ -45,7 +45,7 @@ public class DriveAction extends Action {
     /**
      * @return {@link MotionParam} for the motor (speed and distance in which the motors are set).
      */
-    public MotionParam getParam() {
+    public MotionParam<V> getParam() {
         return this.param;
     }
 
@@ -55,8 +55,8 @@ public class DriveAction extends Action {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitDriveAction(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitDriveAction(this);
     }
 
 }

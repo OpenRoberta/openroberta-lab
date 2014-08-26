@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br/>
  * The client must provide the {@link ActorPort} on which the motor is connected.
  */
-public class MotorGetPowerAction extends Action {
+public class MotorGetPowerAction<V> extends Action<V> {
     private final ActorPort port;
 
     private MotorGetPowerAction(ActorPort port) {
@@ -26,8 +26,8 @@ public class MotorGetPowerAction extends Action {
      * @param port on which the motor is connected that we want to check,
      * @return read only object of class {@link MotorGetPowerAction}.
      */
-    public static MotorGetPowerAction make(ActorPort port) {
-        return new MotorGetPowerAction(port);
+    public static <V> MotorGetPowerAction<V> make(ActorPort port) {
+        return new MotorGetPowerAction<V>(port);
     }
 
     /**
@@ -43,7 +43,7 @@ public class MotorGetPowerAction extends Action {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitMotorGetPowerAction(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitMotorGetPowerAction(this);
     }
 }

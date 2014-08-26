@@ -10,11 +10,11 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br/>
  * The client must provide the {@link TurnDirection} and {@link MotionParam} (distance the robot should cover and speed).
  */
-public class TurnAction extends Action {
+public class TurnAction<V> extends Action<V> {
     private final TurnDirection direction;
-    private final MotionParam param;
+    private final MotionParam<V> param;
 
-    private TurnAction(TurnDirection direction, MotionParam param) {
+    private TurnAction(TurnDirection direction, MotionParam<V> param) {
         super(Phrase.Kind.TURN_ACTION);
         Assert.isTrue(direction != null && param != null);
         this.direction = direction;
@@ -29,8 +29,8 @@ public class TurnAction extends Action {
      * @param param {@link MotionParam} that set up the parameters for the movement of the robot (distance the robot should cover and speed),
      * @return read only object of class {@link TurnAction}.
      */
-    public static TurnAction make(TurnDirection direction, MotionParam param) {
-        return new TurnAction(direction, param);
+    public static <V> TurnAction<V> make(TurnDirection direction, MotionParam<V> param) {
+        return new TurnAction<V>(direction, param);
     }
 
     /**
@@ -43,7 +43,7 @@ public class TurnAction extends Action {
     /**
      * @return {@link MotionParam} for the motor (speed and distance in which the motors are set).
      */
-    public MotionParam getParam() {
+    public MotionParam<V> getParam() {
         return this.param;
     }
 
@@ -53,7 +53,7 @@ public class TurnAction extends Action {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitTurnAction(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitTurnAction(this);
     }
 }

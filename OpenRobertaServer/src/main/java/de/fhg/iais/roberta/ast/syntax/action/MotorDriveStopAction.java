@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.codegen.lejos.Visitor;
  * This class represents the <b>robActions_motorDiff_stop</b> block from Blockly into the AST (abstract syntax tree).
  * Object from this class will generate code to stop the work of the motors.<br/>
  */
-public class MotorDriveStopAction extends Action {
+public class MotorDriveStopAction<V> extends Action<V> {
 
     private MotorDriveStopAction() {
         super(Phrase.Kind.STOP_ACTION);
@@ -19,8 +19,8 @@ public class MotorDriveStopAction extends Action {
      * 
      * @return read only object of class {@link MotorDriveStopAction}.
      */
-    public static MotorDriveStopAction make() {
-        return new MotorDriveStopAction();
+    public static <V> MotorDriveStopAction<V> make() {
+        return new MotorDriveStopAction<V>();
     }
 
     @Override
@@ -29,7 +29,7 @@ public class MotorDriveStopAction extends Action {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitMotorDriveStopAction(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitMotorDriveStopAction(this);
     }
 }

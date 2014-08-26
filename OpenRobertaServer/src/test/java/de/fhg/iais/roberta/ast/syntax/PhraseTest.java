@@ -13,7 +13,7 @@ public class PhraseTest {
 
     @Test
     public void test() {
-        Phrase phrase = StringConst.make("testString");
+        Phrase<?> phrase = StringConst.make("testString");
         StringConst stringConst = phrase.getAs(StringConst.class);
         assertEquals("testString", stringConst.getValue());
         assertEquals(Kind.STRING_CONST, phrase.getKind());

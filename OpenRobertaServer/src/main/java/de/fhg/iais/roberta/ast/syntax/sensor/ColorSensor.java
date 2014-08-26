@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br>
  * To create an instance from this class use the method {@link #make(ColorSensorMode, SensorPort)}.<br>
  */
-public class ColorSensor extends Sensor {
+public class ColorSensor<V> extends Sensor<V> {
     private final ColorSensorMode mode;
     private final SensorPort port;
 
@@ -33,8 +33,8 @@ public class ColorSensor extends Sensor {
      * @param port on where the sensor is connected. See enum {@link SensorPort} for all possible sensor ports.
      * @return read only object of class {@link ColorSensor}
      */
-    public static ColorSensor make(ColorSensorMode mode, SensorPort port) {
-        return new ColorSensor(mode, port);
+    public static <V> ColorSensor<V> make(ColorSensorMode mode, SensorPort port) {
+        return new ColorSensor<V>(mode, port);
     }
 
     /**
@@ -57,7 +57,7 @@ public class ColorSensor extends Sensor {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitColorSensor(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitColorSensor(this);
     }
 }

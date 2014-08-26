@@ -15,12 +15,12 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * 
  * @author kcvejoski
  */
-public final class Binary extends Expr {
+public final class Binary<V> extends Expr<V> {
     private final Op op;
-    private final Expr left;
-    private final Expr right;
+    private final Expr<V> left;
+    private final Expr<V> right;
 
-    private Binary(Op op, Expr left, Expr right) {
+    private Binary(Op op, Expr<V> left, Expr<V> right) {
         super(Phrase.Kind.BINARY);
         Assert.isTrue(op != null && left != null && right != null && left.isReadOnly() && right.isReadOnly());
         this.op = op;
@@ -37,8 +37,8 @@ public final class Binary extends Expr {
      * @param right expression on the right hand side
      * @return Binary expression
      */
-    public static Binary make(Op op, Expr left, Expr right) {
-        return new Binary(op, left, right);
+    public static <V> Binary<V> make(Op op, Expr<V> left, Expr<V> right) {
+        return new Binary<V>(op, left, right);
     }
 
     /**
@@ -51,14 +51,14 @@ public final class Binary extends Expr {
     /**
      * @return the expression on the left hand side. Returns subclass of {@link Expr}.
      */
-    public Expr getLeft() {
+    public Expr<V> getLeft() {
         return this.left;
     }
 
     /**
      * @return the expression on the right hand side. Returns subclass of {@link Expr}.
      */
-    public Expr getRight() {
+    public Expr<V> getRight() {
         return this.right;
     }
 
@@ -78,8 +78,8 @@ public final class Binary extends Expr {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitBinary(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitBinary(this);
     }
 
     /**

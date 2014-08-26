@@ -10,11 +10,11 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br/>
  * The client must provide the {@link ActorPort} and {@link MotionParam} (number of rotations or degrees and speed).
  */
-public final class MotorOnAction extends Action {
+public final class MotorOnAction<V> extends Action<V> {
     private final ActorPort port;
-    private final MotionParam param;
+    private final MotionParam<V> param;
 
-    private MotorOnAction(ActorPort port, MotionParam param) {
+    private MotorOnAction(ActorPort port, MotionParam<V> param) {
         super(Phrase.Kind.MOTOR_ON_ACTION);
         Assert.isTrue(param != null);
         this.param = param;
@@ -29,14 +29,14 @@ public final class MotorOnAction extends Action {
      * @param param {@link MotionParam} that set up the parameters for the movement of the robot (number of rotations or degrees and speed),
      * @return read only object of class {@link MotorOnAction}.
      */
-    public static MotorOnAction make(ActorPort port, MotionParam param) {
-        return new MotorOnAction(port, param);
+    public static <V> MotorOnAction<V> make(ActorPort port, MotionParam<V> param) {
+        return new MotorOnAction<V>(port, param);
     }
 
     /**
      * @return {@link MotionParam} for the motor (number of rotations or degrees and speed).
      */
-    public MotionParam getParam() {
+    public MotionParam<V> getParam() {
         return this.param;
     }
 
@@ -53,8 +53,8 @@ public final class MotorOnAction extends Action {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitMotorOnAction(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitMotorOnAction(this);
     }
 
 }

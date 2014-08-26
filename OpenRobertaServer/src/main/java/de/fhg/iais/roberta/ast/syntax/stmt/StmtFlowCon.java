@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * Object from this class will generate code for flow control of a statement. <br>
  * See enum {@link Flow} for all possible flows.
  */
-public class StmtFlowCon extends Stmt {
+public class StmtFlowCon<V> extends Stmt<V> {
     private final Flow flow;
 
     private StmtFlowCon(Flow flow) {
@@ -27,8 +27,8 @@ public class StmtFlowCon extends Stmt {
      * @param flow, see enum {@link Flow} for all the possible kind of flow controls
      * @return read only object of class {@link StmtFlowCon}.
      */
-    public static StmtFlowCon make(Flow flow) {
-        return new StmtFlowCon(flow);
+    public static <V> StmtFlowCon<V> make(Flow flow) {
+        return new StmtFlowCon<V>(flow);
     }
 
     /**
@@ -84,8 +84,8 @@ public class StmtFlowCon extends Stmt {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitStmtFlowCon(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitStmtFlowCon(this);
     }
 
 }

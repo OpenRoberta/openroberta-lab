@@ -5,11 +5,11 @@ import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 /**
  * This class is parameter class used to set the speed of a motor and the type of movement the motor {@link MotorDuration.Mode}.
  */
-public class MotionParam {
-    private final Expr speed;
-    private final MotorDuration duration;
+public class MotionParam<V> {
+    private final Expr<V> speed;
+    private final MotorDuration<V> duration;
 
-    private MotionParam(Builder mpb) {
+    private MotionParam(Builder<V> mpb) {
         this.speed = mpb.speed;
         this.duration = mpb.duration;
     }
@@ -22,23 +22,23 @@ public class MotionParam {
     /**
      * @return speed of the motor
      */
-    public Expr getSpeed() {
+    public Expr<V> getSpeed() {
         return this.speed;
     }
 
     /**
      * @return duration of the motors movement
      */
-    public MotorDuration getDuration() {
+    public MotorDuration<V> getDuration() {
         return this.duration;
     }
 
     /**
      * Static class for building object of class {@link MotionParam}.
      */
-    public static class Builder {
-        private Expr speed;
-        private MotorDuration duration;
+    public static class Builder<V> {
+        private Expr<V> speed;
+        private MotorDuration<V> duration;
 
         /**
          * Set the speed of the motor.
@@ -46,7 +46,7 @@ public class MotionParam {
          * @param speed
          * @return reference returned so calls can be chained
          */
-        public Builder speed(Expr speed) {
+        public Builder<V> speed(Expr<V> speed) {
             this.speed = speed;
             return this;
         }
@@ -57,7 +57,7 @@ public class MotionParam {
          * @param duration
          * @return reference returned so calls can be chained
          */
-        public Builder duration(MotorDuration duration) {
+        public Builder<V> duration(MotorDuration<V> duration) {
             this.duration = duration;
             return this;
         }
@@ -67,8 +67,8 @@ public class MotionParam {
          * 
          * @return the object constructed by the builder.
          */
-        public MotionParam build() {
-            return new MotionParam(this);
+        public MotionParam<V> build() {
+            return new MotionParam<V>(this);
         }
     }
 

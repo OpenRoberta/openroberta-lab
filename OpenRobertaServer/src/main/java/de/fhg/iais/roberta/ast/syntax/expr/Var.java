@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.codegen.lejos.Visitor;
  * User must provide name of the variable and type of the variable, if the variable is created before in the code TypeVar should be <b>NONE</b>.
  * To create an instance from this class use the method {@link #make(String, TypeVar)}.<br>
  */
-public class Var extends Expr {
+public class Var<V> extends Expr<V> {
     private final TypeVar typeVar;
     private final String name;
 
@@ -28,8 +28,8 @@ public class Var extends Expr {
      * @param typeVar type of the variable,
      * @return read only object of class {@link Var}
      */
-    public static Var make(String value, TypeVar typeVar) {
-        return new Var(value, typeVar);
+    public static <V> Var<V> make(String value, TypeVar typeVar) {
+        return new Var<V>(value, typeVar);
     }
 
     /**
@@ -62,8 +62,8 @@ public class Var extends Expr {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitVar(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitVar(this);
     }
 
     /**

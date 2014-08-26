@@ -5,9 +5,9 @@ import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 /**
  * This class is parameter class used to set the type of the motor duration mode {@link MotorMoveMode} and value for the duration.
  */
-public class MotorDuration {
+public class MotorDuration<V> {
     private MotorMoveMode type;
-    private Expr value;
+    private Expr<V> value;
 
     /**
      * This constructor creates correct object of the class {@link MotorDuration}.<br>
@@ -18,7 +18,7 @@ public class MotorDuration {
      * @param type of the motor movement
      * @param value for the movement
      */
-    public MotorDuration(MotorMoveMode type, Expr value) {
+    public MotorDuration(MotorMoveMode type, Expr<V> value) {
         super();
         this.setType(type);
         this.value = value;
@@ -29,7 +29,7 @@ public class MotorDuration {
      * 
      * @return value of the duration as {@link Expr}
      */
-    public Expr getValue() {
+    public Expr<V> getValue() {
         return this.value;
     }
 
@@ -38,7 +38,7 @@ public class MotorDuration {
      * 
      * @param value
      */
-    public void setValue(Expr value) {
+    public void setValue(Expr<V> value) {
         this.value = value;
     }
 

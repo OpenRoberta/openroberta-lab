@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br>
  * To create an instance from this class use the method {@link #make(Mode, BrickKey)}.<br>
  */
-public class BrickSensor extends Sensor {
+public class BrickSensor<V> extends Sensor<V> {
     private final BrickKey key;
     private final Mode mode;
 
@@ -32,8 +32,8 @@ public class BrickSensor extends Sensor {
      * @param key on the brick. See enum {@link BrickKey} for all possible keys.
      * @return read only object of class {@link BrickSensor}
      */
-    public static BrickSensor make(Mode mode, BrickKey key) {
-        return new BrickSensor(mode, key);
+    public static <V> BrickSensor<V> make(Mode mode, BrickKey key) {
+        return new BrickSensor<V>(mode, key);
     }
 
     /**
@@ -63,7 +63,7 @@ public class BrickSensor extends Sensor {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitBrickSensor(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitBrickSensor(this);
     }
 }

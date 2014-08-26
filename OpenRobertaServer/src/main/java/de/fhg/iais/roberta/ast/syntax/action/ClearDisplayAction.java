@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.codegen.lejos.Visitor;
 /**
  * This class represents the <b>robActions_display_clear</b> block from Blockly into the AST (abstract syntax tree).
  */
-public final class ClearDisplayAction extends Action {
+public final class ClearDisplayAction<V> extends Action<V> {
 
     private ClearDisplayAction() {
         super(Kind.CLEAR_DISPLAY_ACTION);
@@ -17,8 +17,8 @@ public final class ClearDisplayAction extends Action {
      * 
      * @return read only object of class {@link ClearDisplayAction}.
      */
-    public static ClearDisplayAction make() {
-        return new ClearDisplayAction();
+    public static <V> ClearDisplayAction<V> make() {
+        return new ClearDisplayAction<V>();
     }
 
     @Override
@@ -27,7 +27,7 @@ public final class ClearDisplayAction extends Action {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitClearDisplayAction(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitClearDisplayAction(this);
     }
 }

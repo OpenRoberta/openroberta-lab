@@ -15,12 +15,12 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * <br>
  * See {@link #getMode()} for the kind of the repeat statements.
  */
-public class RepeatStmt extends Stmt {
+public class RepeatStmt<V> extends Stmt<V> {
     private final Mode mode;
-    private final Expr expr;
-    private final StmtList list;
+    private final Expr<V> expr;
+    private final StmtList<V> list;
 
-    private RepeatStmt(Mode mode, Expr expr, StmtList list) {
+    private RepeatStmt(Mode mode, Expr<V> expr, StmtList<V> list) {
         super(Phrase.Kind.REPEAT_STMT);
         Assert.isTrue(expr.isReadOnly() && list.isReadOnly());
         this.expr = expr;
@@ -37,8 +37,8 @@ public class RepeatStmt extends Stmt {
      * @param list of statements
      * @return read only object of {@link RepeatStmt}
      */
-    public static RepeatStmt make(Mode mode, Expr expr, StmtList list) {
-        return new RepeatStmt(mode, expr, list);
+    public static <V> RepeatStmt<V> make(Mode mode, Expr<V> expr, StmtList<V> list) {
+        return new RepeatStmt<V>(mode, expr, list);
     }
 
     /**
@@ -51,14 +51,14 @@ public class RepeatStmt extends Stmt {
     /**
      * @return expression that should be evaluated.
      */
-    public final Expr getExpr() {
+    public final Expr<V> getExpr() {
         return this.expr;
     }
 
     /**
      * @return list of statements.
      */
-    public final StmtList getList() {
+    public final StmtList<V> getList() {
         return this.list;
     }
 
@@ -113,8 +113,8 @@ public class RepeatStmt extends Stmt {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitRepeatStmt(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitRepeatStmt(this);
     }
 
 }

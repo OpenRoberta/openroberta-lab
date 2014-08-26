@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.blockly.generated.Project;
-import de.fhg.iais.roberta.codegen.lejos.JavaGenerateCode;
+import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -30,11 +30,7 @@ public class Helper {
     public static String generateStringWithoutWrapping(String pathToProgramXml) throws Exception {
         JaxbTransformer transformer = generateTransformer(pathToProgramXml);
         BrickConfiguration brickConfiguration = new BrickConfiguration.Builder().build();
-        JavaGenerateCode generator = new JavaGenerateCode("Test", brickConfiguration, transformer.getTree());
-
-        generator.generate(false);
-
-        String code = generator.getCode();
+        String code = AstToLejosJavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), false);
         System.out.println(code);
         return code;
     }
@@ -48,11 +44,7 @@ public class Helper {
      */
     public static String generateString(String pathToProgramXml, BrickConfiguration brickConfiguration) throws Exception {
         JaxbTransformer transformer = generateTransformer(pathToProgramXml);
-        JavaGenerateCode generator = new JavaGenerateCode("Test", brickConfiguration, transformer.getTree());
-
-        generator.generate(true);
-
-        String code = generator.getCode();
+        String code = AstToLejosJavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), true);
         System.out.println(code);
         return code;
     }
@@ -74,7 +66,7 @@ public class Helper {
         JaxbTransformer transformer = new JaxbTransformer();
         transformer.projectToAST(project);
         ArrayList<Phrase> tree = transformer.getTree();
-        Assert.isTrue(tree.size() == 1);
+        Assert.isTrue(tree.size() >= 1);
         return tree.get(0);
     }
 

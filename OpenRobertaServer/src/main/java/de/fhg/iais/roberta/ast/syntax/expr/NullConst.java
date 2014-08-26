@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.codegen.lejos.Visitor;
  * <br>
  * To create an instance from this class use the method {@link #make()}.<br>
  */
-public class NullConst extends Expr {
+public class NullConst<V> extends Expr<V> {
 
     private NullConst() {
         super(Phrase.Kind.NULL_CONST);
@@ -21,8 +21,8 @@ public class NullConst extends Expr {
      * 
      * @return read only object of class {@link NullConst}.
      */
-    public static NullConst make() {
-        return new NullConst();
+    public static <V> NullConst<V> make() {
+        return new NullConst<V>();
     }
 
     /**
@@ -48,8 +48,8 @@ public class NullConst extends Expr {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitNullConst(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitNullConst(this);
     }
 
 }

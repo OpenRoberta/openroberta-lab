@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.codegen.lejos.Visitor;
  * <br>
  * To create an instance from this class use the method {@link #make(SensorPort)}.<br>
  */
-public class TouchSensor extends Sensor {
+public class TouchSensor<V> extends Sensor<V> {
     private final SensorPort port;
 
     private TouchSensor(SensorPort port) {
@@ -28,8 +28,8 @@ public class TouchSensor extends Sensor {
      * @param port on which the sensor is connected. See enum {@link SensorPort} for all possible ports that the sensor can be connected.
      * @return read only object of {@link TouchSensor}
      */
-    public static TouchSensor make(SensorPort port) {
-        return new TouchSensor(port);
+    public static <V> TouchSensor<V> make(SensorPort port) {
+        return new TouchSensor<V>(port);
     }
 
     /**
@@ -45,8 +45,8 @@ public class TouchSensor extends Sensor {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitTouchSensor(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitTouchSensor(this);
     }
 
 }

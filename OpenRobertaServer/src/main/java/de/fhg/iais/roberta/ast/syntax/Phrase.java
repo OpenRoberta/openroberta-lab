@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax;
 
-import de.fhg.iais.roberta.codegen.lejos.Visitable;
+import de.fhg.iais.roberta.codegen.lejos.Visitor;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.dbc.Assert;
  * - {@link #getKind()}<br>
  * - {@link #getAs(Class)}<br>
  */
-abstract public class Phrase implements Visitable {
+abstract public class Phrase<V> {
     private boolean readOnly = false;
     private final Kind kind;
 
@@ -70,6 +70,20 @@ abstract public class Phrase implements Visitable {
     public final Kind getKind() {
         return this.kind;
     }
+
+    /**
+     * visit this phrase
+     * 
+     * @param visitor to be used
+     */
+    public final V visit(Visitor<V> visitor) {
+        return this.accept(visitor);
+    }
+
+    /**
+     * accept an visitor
+     */
+    protected abstract V accept(Visitor<V> visitor);
 
     /**
      * append a newline, then append spaces up to an indentation level, then append an (optional) text<br>

@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br>
  * To create an instance from this class use the method {@link #make(GyroSensorMode, SensorPort)}.<br>
  */
-public class GyroSensor extends Sensor {
+public class GyroSensor<V> extends Sensor<V> {
     private final GyroSensorMode mode;
     private final SensorPort port;
 
@@ -33,8 +33,8 @@ public class GyroSensor extends Sensor {
      * @param port on where the sensor is connected. See enum {@link SensorPort} for all possible sensor ports.
      * @return read only object of {@link GyroSensor}
      */
-    public static GyroSensor make(GyroSensorMode mode, SensorPort port) {
-        return new GyroSensor(mode, port);
+    public static <V> GyroSensor<V> make(GyroSensorMode mode, SensorPort port) {
+        return new GyroSensor<V>(mode, port);
     }
 
     /**
@@ -57,7 +57,7 @@ public class GyroSensor extends Sensor {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitGyroSensor(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitGyroSensor(this);
     }
 }

@@ -16,11 +16,11 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * <br>
  * The enumeration {@link Op} contains all allowed unary operations.
  */
-public class Unary extends Expr {
+public class Unary<V> extends Expr<V> {
     private final Op op;
-    private final Expr expr;
+    private final Expr<V> expr;
 
-    private Unary(Op op, Expr expr) {
+    private Unary(Op op, Expr<V> expr) {
         super(Phrase.Kind.UNARY);
         Assert.isTrue(op != null && expr != null && expr.isReadOnly());
         this.op = op;
@@ -35,8 +35,8 @@ public class Unary extends Expr {
      * @param expr expression over which the operation is performed
      * @return read only object of class {@link Unary}
      */
-    public static Unary make(Op op, Expr expr) {
-        return new Unary(op, expr);
+    public static <V> Unary<V> make(Op op, Expr<V> expr) {
+        return new Unary<V>(op, expr);
     }
 
     /**
@@ -49,7 +49,7 @@ public class Unary extends Expr {
     /**
      * @return the expression on which the operation is performed. Returns subclass of {@link Expr}.
      */
-    public Expr getExpr() {
+    public Expr<V> getExpr() {
         return this.expr;
     }
 
@@ -139,8 +139,8 @@ public class Unary extends Expr {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitUnary(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitUnary(this);
     }
 
 }

@@ -7,8 +7,8 @@ import de.fhg.iais.roberta.ast.syntax.Category;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.Action;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
-import de.fhg.iais.roberta.ast.syntax.action.ClearDisplayAction;
 import de.fhg.iais.roberta.ast.syntax.action.BrickLedColor;
+import de.fhg.iais.roberta.ast.syntax.action.ClearDisplayAction;
 import de.fhg.iais.roberta.ast.syntax.action.DriveAction;
 import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
 import de.fhg.iais.roberta.ast.syntax.action.LightAction;
@@ -89,8 +89,8 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * 
  * @author kcvejoski
  */
-public class JaxbTransformer {
-    private final ArrayList<Phrase> tree = new ArrayList<Phrase>();
+public class JaxbTransformer<V> {
+    private final ArrayList<Phrase<V>> tree = new ArrayList<Phrase<V>>();
 
     /**
      * Converts object of type {@link Project} to AST tree.
@@ -114,28 +114,28 @@ public class JaxbTransformer {
     /**
      * @return abstract syntax tree generated from JAXB objects.
      */
-    public ArrayList<Phrase> getTree() {
+    public ArrayList<Phrase<V>> getTree() {
         return this.tree;
     }
 
-    private Phrase blockToAST(Block block) {
+    private Phrase<V> blockToAST(Block block) {
 
         List<Value> values;
         List<Field> fields;
         List<ExprParam> exprParams;
 
-        ExprList exprList;
+        ExprList<V> exprList;
 
-        Phrase left;
-        Phrase right;
-        Phrase expr;
-        Phrase var;
+        Phrase<V> left;
+        Phrase<V> right;
+        Phrase<V> expr;
+        Phrase<V> var;
 
         String mode;
         String port;
 
-        MotionParam mp;
-        MotorDuration md;
+        MotionParam<V> mp;
+        MotorDuration<V> md;
 
         switch ( block.getType() ) {
         //ACTION
@@ -144,7 +144,7 @@ public class JaxbTransformer {
                 port = extractField(fields, "MOTORPORT", (short) 0);
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam("POWER", Integer.class));
-                mp = new MotionParam.Builder().speed((Expr) expr).build();
+                mp = new MotionParam.Builder<V>().speed((Expr<V>) expr).build();
                 return MotorOnAction.make(ActorPort.get(port), mp);
 
             case "robActions_motor_on_for":
@@ -154,8 +154,8 @@ public class JaxbTransformer {
                 values = extractValues(block, (short) 2);
                 left = extractValue(values, new ExprParam("POWER", Integer.class));
                 right = extractValue(values, new ExprParam("VALUE", Integer.class));
-                md = new MotorDuration(MotorMoveMode.get(mode), (Expr) right);
-                mp = new MotionParam.Builder().speed((Expr) left).duration(md).build();
+                md = new MotorDuration<V>(MotorMoveMode.get(mode), (Expr<V>) right);
+                mp = new MotionParam.Builder<V>().speed((Expr<V>) left).duration(md).build();
                 return MotorOnAction.make(ActorPort.get(port), mp);
 
             case "robActions_motorDiff_on":
@@ -163,7 +163,7 @@ public class JaxbTransformer {
                 mode = extractField(fields, "DIRECTION", (short) 0);
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam("POWER", Integer.class));
-                mp = new MotionParam.Builder().speed((Expr) expr).build();
+                mp = new MotionParam.Builder<V>().speed((Expr<V>) expr).build();
                 return DriveAction.make(DriveDirection.get(mode), mp);
 
             case "robActions_motorDiff_on_for":
@@ -172,8 +172,8 @@ public class JaxbTransformer {
                 values = extractValues(block, (short) 2);
                 left = extractValue(values, new ExprParam("POWER", Integer.class));
                 right = extractValue(values, new ExprParam("DISTANCE", Integer.class));
-                md = new MotorDuration(MotorMoveMode.DISTANCE, (Expr) right);
-                mp = new MotionParam.Builder().speed((Expr) left).duration(md).build();
+                md = new MotorDuration<V>(MotorMoveMode.DISTANCE, (Expr<V>) right);
+                mp = new MotionParam.Builder<V>().speed((Expr<V>) left).duration(md).build();
                 return DriveAction.make(DriveDirection.get(mode), mp);
 
             case "robActions_motorDiff_turn":
@@ -181,7 +181,7 @@ public class JaxbTransformer {
                 mode = extractField(fields, "DIRECTION", (short) 0);
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam("POWER", Integer.class));
-                mp = new MotionParam.Builder().speed((Expr) expr).build();
+                mp = new MotionParam.Builder<V>().speed((Expr<V>) expr).build();
                 return TurnAction.make(TurnDirection.get(mode), mp);
 
             case "robActions_motorDiff_turn_for":
@@ -190,8 +190,8 @@ public class JaxbTransformer {
                 values = extractValues(block, (short) 2);
                 left = extractValue(values, new ExprParam("POWER", Integer.class));
                 right = extractValue(values, new ExprParam("DISTANCE", Integer.class));
-                md = new MotorDuration(MotorMoveMode.DISTANCE, (Expr) right);
-                mp = new MotionParam.Builder().speed((Expr) left).duration(md).build();
+                md = new MotorDuration<V>(MotorMoveMode.DISTANCE, (Expr<V>) right);
+                mp = new MotionParam.Builder<V>().speed((Expr<V>) left).duration(md).build();
                 return TurnAction.make(TurnDirection.get(mode), mp);
 
             case "robActions_motorDiff_stop":
@@ -207,7 +207,7 @@ public class JaxbTransformer {
                 values = extractValues(block, (short) 1);
                 port = extractField(fields, "MOTORPORT", (short) 0);
                 left = extractValue(values, new ExprParam("POWER", Integer.class));
-                return MotorSetPowerAction.make(ActorPort.get(port), (Expr) left);
+                return MotorSetPowerAction.make(ActorPort.get(port), (Expr<V>) left);
 
             case "robActions_motor_stop":
                 fields = extractFields(block, (short) 2);
@@ -217,18 +217,18 @@ public class JaxbTransformer {
 
             case "robActions_display_text":
                 values = extractValues(block, (short) 3);
-                Phrase msg = extractValue(values, new ExprParam("OUT", String.class));
-                Phrase col = extractValue(values, new ExprParam("COL", Integer.class));
-                Phrase row = extractValue(values, new ExprParam("ROW", Integer.class));
-                return ShowTextAction.make((Expr) msg, (Expr) col, (Expr) row);
+                Phrase<V> msg = extractValue(values, new ExprParam("OUT", String.class));
+                Phrase<V> col = extractValue(values, new ExprParam("COL", Integer.class));
+                Phrase<V> row = extractValue(values, new ExprParam("ROW", Integer.class));
+                return ShowTextAction.make((Expr<V>) msg, (Expr<V>) col, (Expr<V>) row);
 
             case "robActions_display_picture":
                 fields = extractFields(block, (short) 1);
                 values = extractValues(block, (short) 2);
                 String pic = extractField(fields, "PICTURE", (short) 0);
-                Phrase x = extractValue(values, new ExprParam("X", Integer.class));
-                Phrase y = extractValue(values, new ExprParam("Y", Integer.class));
-                return ShowPictureAction.make(pic, (Expr) x, (Expr) y);
+                Phrase<V> x = extractValue(values, new ExprParam("X", Integer.class));
+                Phrase<V> y = extractValue(values, new ExprParam("Y", Integer.class));
+                return ShowPictureAction.make(pic, (Expr<V>) x, (Expr<V>) y);
 
             case "robActions_display_clear":
                 return ClearDisplayAction.make();
@@ -237,7 +237,7 @@ public class JaxbTransformer {
                 values = extractValues(block, (short) 2);
                 left = extractValue(values, new ExprParam("FREQUENCE", Integer.class));
                 right = extractValue(values, new ExprParam("DURATION", Integer.class));
-                return ToneAction.make((Expr) left, (Expr) right);
+                return ToneAction.make((Expr<V>) left, (Expr<V>) right);
 
             case "robActions_play_file":
                 fields = extractFields(block, (short) 1);
@@ -247,11 +247,11 @@ public class JaxbTransformer {
             case "robActions_play_setVolume":
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam("VOLUME", Integer.class));
-                return VolumeAction.make(VolumeAction.Mode.SET, (Expr) expr);
+                return VolumeAction.make(VolumeAction.Mode.SET, (Expr<V>) expr);
 
             case "robActions_play_getVolume":
                 expr = NullConst.make();
-                return VolumeAction.make(VolumeAction.Mode.GET, (Expr) expr);
+                return VolumeAction.make(VolumeAction.Mode.GET, (Expr<V>) expr);
 
             case "robActions_brickLight_on":
                 fields = extractFields(block, (short) 2);
@@ -405,16 +405,16 @@ public class JaxbTransformer {
             case "logic_ternary":
                 values = block.getValue();
                 Assert.isTrue(values.size() <= 3, "Number of values is not less or equal to 3!");
-                Phrase ifExpr = extractValue(values, new ExprParam("IF", Boolean.class));
-                Phrase thenStmt = extractValue(values, new ExprParam("THEN", Stmt.class));
-                Phrase elseStmt = extractValue(values, new ExprParam("ELSE", Stmt.class));
-                StmtList thenList = StmtList.make();
-                thenList.addStmt(ExprStmt.make((Expr) thenStmt));
+                Phrase<V> ifExpr = extractValue(values, new ExprParam("IF", Boolean.class));
+                Phrase<V> thenStmt = extractValue(values, new ExprParam("THEN", Stmt.class));
+                Phrase<V> elseStmt = extractValue(values, new ExprParam("ELSE", Stmt.class));
+                StmtList<V> thenList = StmtList.make();
+                thenList.addStmt(ExprStmt.make((Expr<V>) thenStmt));
                 thenList.setReadOnly();
-                StmtList elseList = StmtList.make();
-                elseList.addStmt(ExprStmt.make((Expr) elseStmt));
+                StmtList<V> elseList = StmtList.make();
+                elseList.addStmt(ExprStmt.make((Expr<V>) elseStmt));
                 elseList.setReadOnly();
-                return IfStmt.make((Expr) ifExpr, thenList, elseList);
+                return IfStmt.make((Expr<V>) ifExpr, thenList, elseList);
 
                 //Mathematik
             case "math_number":
@@ -467,7 +467,7 @@ public class JaxbTransformer {
                 values = extractValues(block, (short) 1);
                 left = extractVar(block);
                 right = extractValue(values, new ExprParam("DELTA", Integer.class));
-                return Binary.make(Binary.Op.MATH_CHANGE, (Expr) left, (Expr) right);
+                return Binary.make(Binary.Op.MATH_CHANGE, (Expr<V>) left, (Expr<V>) right);
 
             case "math_round":
                 exprParams = new ArrayList<ExprParam>();
@@ -505,7 +505,7 @@ public class JaxbTransformer {
 
             case "text_join":
                 exprList = blockToExprList(block, String.class);
-                List<Expr> textList = new ArrayList<Expr>();
+                List<Expr<V>> textList = new ArrayList<Expr<V>>();
                 textList.add(exprList);
                 return Func.make(Function.TEXT_JOIN, textList);
 
@@ -513,7 +513,7 @@ public class JaxbTransformer {
                 values = extractValues(block, (short) 1);
                 left = extractVar(block);
                 right = extractValue(values, new ExprParam("TEXT", String.class));
-                return Binary.make(Binary.Op.TEXT_APPEND, (Expr) left, (Expr) right);
+                return Binary.make(Binary.Op.TEXT_APPEND, (Expr<V>) left, (Expr<V>) right);
 
             case "text_length":
                 exprParams = new ArrayList<ExprParam>();
@@ -568,11 +568,11 @@ public class JaxbTransformer {
                 return blockToFunction(block, exprParams, "MODE");
 
             case "text_prompt":
-                List<Expr> lstExpr = new ArrayList<Expr>();
+                List<Expr<V>> lstExpr = new ArrayList<Expr<V>>();
                 fields = extractFields(block, (short) 2);
                 String type = extractField(fields, "TYPE", (short) 0);
                 String text = extractField(fields, "TEXT", (short) 1);
-                StringConst txtExpr = StringConst.make(text);
+                StringConst<V> txtExpr = StringConst.make(text);
                 lstExpr.add(txtExpr);
                 return Func.make(Function.get(type), lstExpr);
 
@@ -625,9 +625,9 @@ public class JaxbTransformer {
                 //VARIABLEN
             case "variables_set":
                 values = extractValues(block, (short) 1);
-                Phrase p = extractValue(values, new ExprParam("VALUE", EmptyExpr.class));
+                Phrase<V> p = extractValue(values, new ExprParam("VALUE", EmptyExpr.class));
                 expr = convertPhraseToExpr(p);
-                return AssignStmt.make((Var) extractVar(block), (Expr) expr);
+                return AssignStmt.make((Var<V>) extractVar(block), (Expr<V>) expr);
 
             case "variables_get":
                 return extractVar(block);
@@ -653,12 +653,12 @@ public class JaxbTransformer {
                 }
 
             case "robControls_wait":
-                StmtList list = StmtList.make();
+                StmtList<V> list = StmtList.make();
                 int mutation = block.getMutation().getWait().intValue();
                 values = extractValues(block, (short) (mutation + 1));
                 for ( int i = 0; i <= mutation; i++ ) {
                     expr = extractValue(values, new ExprParam("WAIT" + i, Boolean.class));
-                    list.addStmt((Stmt) extractRepeatStatement(block, expr, "WHILE", "DO" + i, mutation + 1));
+                    list.addStmt((Stmt<V>) extractRepeatStatement(block, expr, "WHILE", "DO" + i, mutation + 1));
                 }
                 return list;
 
@@ -684,14 +684,14 @@ public class JaxbTransformer {
                 var = extractVar(block);
                 values = extractValues(block, (short) 3);
                 exprList = ExprList.make();
-                Var var1 = Var.make(((Var) var).getValue(), TypeVar.INTEGER);
+                Var<V> var1 = Var.make(((Var<V>) var).getValue(), TypeVar.INTEGER);
 
-                Phrase from = extractValue(values, new ExprParam("FROM", Integer.class));
-                Phrase to = extractValue(values, new ExprParam("TO", Integer.class));
-                Phrase by = extractValue(values, new ExprParam("BY", Integer.class));
-                Binary exprAssig = Binary.make(Binary.Op.ASSIGNMENT, (Expr) var1, (Expr) from);
-                Binary exprCondition = Binary.make(Binary.Op.LTE, (Expr) var, (Expr) to);
-                Binary exprBy = Binary.make(Binary.Op.ADD_ASSIGNMENT, (Expr) var, (Expr) by);
+                Phrase<V> from = extractValue(values, new ExprParam("FROM", Integer.class));
+                Phrase<V> to = extractValue(values, new ExprParam("TO", Integer.class));
+                Phrase<V> by = extractValue(values, new ExprParam("BY", Integer.class));
+                Binary<V> exprAssig = Binary.make(Binary.Op.ASSIGNMENT, (Expr<V>) var1, (Expr<V>) from);
+                Binary<V> exprCondition = Binary.make(Binary.Op.LTE, (Expr<V>) var, (Expr<V>) to);
+                Binary<V> exprBy = Binary.make(Binary.Op.ADD_ASSIGNMENT, (Expr<V>) var, (Expr<V>) by);
                 exprList.addExpr(exprAssig);
                 exprList.addExpr(exprCondition);
                 exprList.addExpr(exprBy);
@@ -703,7 +703,7 @@ public class JaxbTransformer {
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam("LIST", List.class));
 
-                Binary exprBinary = Binary.make(Binary.Op.IN, (Expr) var, (Expr) expr);
+                Binary<V> exprBinary = Binary.make(Binary.Op.IN, (Expr<V>) var, (Expr<V>) expr);
                 return extractRepeatStatement(block, exprBinary, "FOR_EACH");
 
             case "controls_flow_statements":
@@ -719,10 +719,10 @@ public class JaxbTransformer {
                 from = NumConst.make("0");
                 to = extractValue(values, new ExprParam("TIMES", Integer.class));
                 by = NumConst.make("1");
-                exprAssig = Binary.make(Binary.Op.ASSIGNMENT, (Expr) var, (Expr) from);
+                exprAssig = Binary.make(Binary.Op.ASSIGNMENT, (Expr<V>) var, (Expr<V>) from);
                 var = Var.make("i", TypeVar.NONE);
-                exprCondition = Binary.make(Binary.Op.LT, (Expr) var, (Expr) to);
-                Unary increment = Unary.make(Unary.Op.POSTFIX_INCREMENTS, (Expr) var);
+                exprCondition = Binary.make(Binary.Op.LT, (Expr<V>) var, (Expr<V>) to);
+                Unary<V> increment = Unary.make(Unary.Op.POSTFIX_INCREMENTS, (Expr<V>) var);
                 exprList.addExpr(exprAssig);
                 exprList.addExpr(exprCondition);
                 exprList.addExpr(increment);
@@ -734,35 +734,35 @@ public class JaxbTransformer {
         }
     }
 
-    private Phrase blockToUnaryExpr(Block block, ExprParam exprParam, String operationType) {
+    private Phrase<V> blockToUnaryExpr(Block block, ExprParam exprParam, String operationType) {
         String op = getOperation(block, operationType);
         List<Value> values = extractValues(block, (short) 1);
-        Phrase expr = extractValue(values, exprParam);
-        return Unary.make(Unary.Op.get(op), (Expr) expr);
+        Phrase<V> expr = extractValue(values, exprParam);
+        return Unary.make(Unary.Op.get(op), (Expr<V>) expr);
     }
 
-    private Binary blockToBinaryExpr(Block block, ExprParam leftExpr, ExprParam rightExpr, String operationType) {
+    private Binary<V> blockToBinaryExpr(Block block, ExprParam leftExpr, ExprParam rightExpr, String operationType) {
         String op = getOperation(block, operationType);
         List<Value> values = extractValues(block, (short) 2);
-        Phrase left = extractValue(values, leftExpr);
-        Phrase right = extractValue(values, rightExpr);
+        Phrase<V> left = extractValue(values, leftExpr);
+        Phrase<V> right = extractValue(values, rightExpr);
         return Binary.make(Binary.Op.get(op), convertPhraseToExpr(left), convertPhraseToExpr(right));
     }
 
-    private Func blockToFunction(Block block, List<ExprParam> exprParams, String operationType) {
+    private Func<V> blockToFunction(Block block, List<ExprParam> exprParams, String operationType) {
         String op = getOperation(block, operationType);
-        List<Expr> params = new ArrayList<Expr>();
+        List<Expr<V>> params = new ArrayList<Expr<V>>();
         List<Value> values = extractValues(block, (short) exprParams.size());
         for ( ExprParam exprParam : exprParams ) {
-            params.add((Expr) extractValue(values, exprParam));
+            params.add((Expr<V>) extractValue(values, exprParam));
         }
         return Func.make(Func.Function.get(op), params);
     }
 
-    private Phrase blocksToIfStmt(Block block, int _else, int _elseIf) {
-        List<Expr> exprsList = new ArrayList<Expr>();
-        List<StmtList> thenList = new ArrayList<StmtList>();
-        StmtList elseList = null;
+    private Phrase<V> blocksToIfStmt(Block block, int _else, int _elseIf) {
+        List<Expr<V>> exprsList = new ArrayList<Expr<V>>();
+        List<StmtList<V>> thenList = new ArrayList<StmtList<V>>();
+        StmtList<V> elseList = null;
 
         List<Value> values = new ArrayList<Value>();
         List<Statement> statements = new ArrayList<Statement>();
@@ -780,7 +780,7 @@ public class JaxbTransformer {
             if ( _else != 0 && i == _elseIf + _else ) {
                 elseList = extractStatement(statements, "ELSE");
             } else {
-                Phrase p = extractValue(values, new ExprParam("IF" + i, Boolean.class));
+                Phrase<V> p = extractValue(values, new ExprParam("IF" + i, Boolean.class));
 
                 exprsList.add(convertPhraseToExpr(p));
                 thenList.add(extractStatement(statements, "DO" + i));
@@ -805,7 +805,7 @@ public class JaxbTransformer {
         }
     }
 
-    private ExprList blockToExprList(Block block, Class<?> defVal) {
+    private ExprList<V> blockToExprList(Block block, Class<?> defVal) {
         int items = 0;
         if ( block.getMutation().getItems() != null ) {
             items = block.getMutation().getItems().intValue();
@@ -815,7 +815,7 @@ public class JaxbTransformer {
         return valuesToExprList(values, defVal, items);
     }
 
-    private Phrase blockToConst(Block block, String type) {
+    private Phrase<V> blockToConst(Block block, String type) {
         //what about template class?
         List<Field> fields = extractFields(block, (short) 1);
         String field = extractField(fields, type, (short) 0);
@@ -835,8 +835,8 @@ public class JaxbTransformer {
         }
     }
 
-    private StmtList blocksToStmtList(List<Block> statementBolcks) {
-        StmtList stmtList = StmtList.make();
+    private StmtList<V> blocksToStmtList(List<Block> statementBolcks) {
+        StmtList<V> stmtList = StmtList.make();
         for ( Block sb : statementBolcks ) {
             convertPhraseToStmt(stmtList, sb);
         }
@@ -844,37 +844,37 @@ public class JaxbTransformer {
         return stmtList;
     }
 
-    private void convertPhraseToStmt(StmtList stmtList, Block sb) {
-        Phrase p = blockToAST(sb);
-        Stmt stmt;
+    private void convertPhraseToStmt(StmtList<V> stmtList, Block sb) {
+        Phrase<V> p = blockToAST(sb);
+        Stmt<V> stmt;
         if ( p.getKind().getCategory() == Category.EXPR ) {
-            stmt = ExprStmt.make((Expr) p);
+            stmt = ExprStmt.make((Expr<V>) p);
         } else if ( p.getKind().getCategory() == Category.ACTOR ) {
-            stmt = ActionStmt.make((Action) p);
+            stmt = ActionStmt.make((Action<V>) p);
         } else if ( p.getKind().getCategory() == Category.SENSOR ) {
-            stmt = SensorStmt.make((Sensor) p);
+            stmt = SensorStmt.make((Sensor<V>) p);
         } else {
-            stmt = (Stmt) p;
+            stmt = (Stmt<V>) p;
         }
         stmtList.addStmt(stmt);
     }
 
-    private Expr convertPhraseToExpr(Phrase p) {
-        Expr expr;
+    private Expr<V> convertPhraseToExpr(Phrase<V> p) {
+        Expr<V> expr;
         if ( p.getKind().getCategory() == Category.SENSOR ) {
-            expr = SensorExpr.make((Sensor) p);
+            expr = SensorExpr.make((Sensor<V>) p);
         } else if ( p.getKind().getCategory() == Category.ACTOR ) {
-            expr = ActionExpr.make((Action) p);
+            expr = ActionExpr.make((Action<V>) p);
         } else {
-            expr = (Expr) p;
+            expr = (Expr<V>) p;
         }
         return expr;
     }
 
-    private ExprList valuesToExprList(List<Value> values, Class<?> defVal, int nItems) {
-        ExprList exprList = ExprList.make();
+    private ExprList<V> valuesToExprList(List<Value> values, Class<?> defVal, int nItems) {
+        ExprList<V> exprList = ExprList.make();
         for ( int i = 0; i < nItems; i++ ) {
-            exprList.addExpr((Expr) extractValue(values, new ExprParam("ADD" + i, defVal)));
+            exprList.addExpr((Expr<V>) extractValue(values, new ExprParam("ADD" + i, defVal)));
         }
         exprList.setReadOnly();
         return exprList;
@@ -888,17 +888,17 @@ public class JaxbTransformer {
         return op;
     }
 
-    private Phrase extractRepeatStatement(Block block, Phrase expr, String mode) {
+    private Phrase<V> extractRepeatStatement(Block block, Phrase<V> expr, String mode) {
         return extractRepeatStatement(block, expr, mode, "DO", 1);
     }
 
-    private Phrase extractRepeatStatement(Block block, Phrase expr, String mode, String location, int mutation) {
+    private Phrase<V> extractRepeatStatement(Block block, Phrase<V> expr, String mode, String location, int mutation) {
         List<Statement> statements = extractStatements(block, (short) mutation);
-        StmtList stmtList = extractStatement(statements, location);
+        StmtList<V> stmtList = extractStatement(statements, location);
         return RepeatStmt.make(RepeatStmt.Mode.get(mode), convertPhraseToExpr(expr), stmtList);
     }
 
-    private Phrase extractVar(Block block) {
+    private Phrase<V> extractVar(Block block) {
         List<Field> fields = extractFields(block, (short) 1);
         String field = extractField(fields, "VAR", (short) 0);
         return Var.make(field, TypeVar.NONE);
@@ -911,7 +911,7 @@ public class JaxbTransformer {
         return values;
     }
 
-    private Phrase extractValue(List<Value> values, ExprParam param) {
+    private Phrase<V> extractValue(List<Value> values, ExprParam param) {
         for ( Value value : values ) {
             if ( value.getName().equals(param.getName()) ) {
                 return blockToAST(value.getBlock());
@@ -927,8 +927,8 @@ public class JaxbTransformer {
         return statements;
     }
 
-    private StmtList extractStatement(List<Statement> statements, String stmtName) {
-        StmtList stmtList = StmtList.make();
+    private StmtList<V> extractStatement(List<Statement> statements, String stmtName) {
+        StmtList<V> stmtList = StmtList.make();
         for ( Statement statement : statements ) {
             if ( statement.getName().equals(stmtName) ) {
                 return blocksToStmtList(statement.getBlock());

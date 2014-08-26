@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br/>
  * The client must provide the {@link Status}.
  */
-public class LightStatusAction extends Action {
+public class LightStatusAction<V> extends Action<V> {
     private final Status status;
 
     private LightStatusAction(Status status) {
@@ -26,8 +26,8 @@ public class LightStatusAction extends Action {
      * @param status in which we want to set the lights (off or reset).
      * @return read only object of class {@link LightStatusAction}.
      */
-    public static LightStatusAction make(Status status) {
-        return new LightStatusAction(status);
+    public static <V> LightStatusAction<V> make(Status status) {
+        return new LightStatusAction<V>(status);
     }
 
     /**
@@ -43,8 +43,8 @@ public class LightStatusAction extends Action {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitLightStatusAction(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitLightStatusAction(this);
     }
 
     /**

@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br>
  * To create an instance from this class use the method {@link #make(MotorTachoMode, ActorPort)}.<br>
  */
-public class EncoderSensor extends Sensor {
+public class EncoderSensor<V> extends Sensor<V> {
     private final MotorTachoMode mode;
     private final ActorPort motor;
 
@@ -35,8 +35,8 @@ public class EncoderSensor extends Sensor {
      * @param port on where the sensor is connected. See enum {@link SensorPort} for all possible sensor ports.
      * @return read only object of {@link EncoderSensor}
      */
-    public static EncoderSensor make(MotorTachoMode mode, ActorPort motor) {
-        return new EncoderSensor(mode, motor);
+    public static <V> EncoderSensor<V> make(MotorTachoMode mode, ActorPort motor) {
+        return new EncoderSensor<V>(mode, motor);
     }
 
     /**
@@ -59,7 +59,7 @@ public class EncoderSensor extends Sensor {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitEncoderSensor(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitEncoderSensor(this);
     }
 }

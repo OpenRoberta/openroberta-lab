@@ -11,12 +11,12 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br/>
  * The client must provide the name of the picture and x and y coordinates.
  */
-public class ShowPictureAction extends Action {
+public class ShowPictureAction<V> extends Action<V> {
     private final String pic;
-    private final Expr x;
-    private final Expr y;
+    private final Expr<V> x;
+    private final Expr<V> y;
 
-    private ShowPictureAction(String pic, Expr x, Expr y) {
+    private ShowPictureAction(String pic, Expr<V> x, Expr<V> y) {
         super(Phrase.Kind.SHOW_PICTURE_ACTION);
         Assert.isTrue(pic != null && x != null && y != null);
         this.pic = pic;
@@ -33,8 +33,8 @@ public class ShowPictureAction extends Action {
      * @param y postition where the picture will start
      * @return read only object of class {@link ShowPictureAction}.
      */
-    public static ShowPictureAction make(String pic, Expr x, Expr y) {
-        return new ShowPictureAction(pic, x, y);
+    public static <V> ShowPictureAction<V> make(String pic, Expr<V> x, Expr<V> y) {
+        return new ShowPictureAction<V>(pic, x, y);
     }
 
     /**
@@ -47,14 +47,14 @@ public class ShowPictureAction extends Action {
     /**
      * @return position x of the picture on the display.
      */
-    public Expr getX() {
+    public Expr<V> getX() {
         return this.x;
     }
 
     /**
      * @return position y of the picture on the display
      */
-    public Expr getY() {
+    public Expr<V> getY() {
         return this.y;
     }
 
@@ -64,7 +64,7 @@ public class ShowPictureAction extends Action {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitShowPictureAction(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitShowPictureAction(this);
     }
 }

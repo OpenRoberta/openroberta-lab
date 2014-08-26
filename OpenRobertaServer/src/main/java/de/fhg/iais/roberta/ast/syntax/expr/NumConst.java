@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.codegen.lejos.Visitor;
  * <br>
  * To create an instance from this class use the method {@link #make(String)}.<br>
  */
-public class NumConst extends Expr {
+public class NumConst<V> extends Expr<V> {
     private final String value;
 
     private NumConst(String value) {
@@ -24,8 +24,8 @@ public class NumConst extends Expr {
      * @param value of the numerical constant
      * @return read only object of class {@link NumConst}.
      */
-    public static NumConst make(String value) {
-        return new NumConst(value);
+    public static <V> NumConst<V> make(String value) {
+        return new NumConst<V>(value);
     }
 
     /**
@@ -51,7 +51,7 @@ public class NumConst extends Expr {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitNumConst(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitNumConst(this);
     }
 }

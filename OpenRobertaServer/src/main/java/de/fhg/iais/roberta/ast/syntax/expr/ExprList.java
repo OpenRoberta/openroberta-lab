@@ -13,8 +13,8 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * This class allows to create list of {@link Expr} elements.
  * Initially object from this class is writable. After adding all the elements to the list call {@link #setReadOnly()}.
  */
-public class ExprList extends Expr {
-    private final List<Expr> el = new ArrayList<Expr>();
+public class ExprList<V> extends Expr<V> {
+    private final List<Expr<V>> el = new ArrayList<Expr<V>>();
 
     private ExprList() {
         super(Phrase.Kind.EXPR_LIST);
@@ -23,8 +23,8 @@ public class ExprList extends Expr {
     /**
      * @return writable object of type {@link ExprList}.
      */
-    public static ExprList make() {
-        return new ExprList();
+    public static <V> ExprList<V> make() {
+        return new ExprList<V>();
     }
 
     /**
@@ -32,7 +32,7 @@ public class ExprList extends Expr {
      * 
      * @param expr
      */
-    public final void addExpr(Expr expr) {
+    public final void addExpr(Expr<V> expr) {
         Assert.isTrue(mayChange() && expr != null && expr.isReadOnly());
         this.el.add(expr);
     }
@@ -40,7 +40,7 @@ public class ExprList extends Expr {
     /**
      * @return list with elements of type {@link Expr}.
      */
-    public final List<Expr> get() {
+    public final List<Expr<V>> get() {
         Assert.isTrue(isReadOnly());
         return Collections.unmodifiableList(this.el);
     }
@@ -59,7 +59,7 @@ public class ExprList extends Expr {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         boolean first = true;
-        for ( Expr expr : this.el ) {
+        for ( Expr<?> expr : this.el ) {
             if ( first ) {
                 first = false;
             } else {
@@ -71,7 +71,7 @@ public class ExprList extends Expr {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitExprList(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitExprList(this);
     }
 }

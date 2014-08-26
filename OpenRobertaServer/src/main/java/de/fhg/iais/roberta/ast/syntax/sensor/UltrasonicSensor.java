@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br>
  * To create an instance from this class use the method {@link #make(UltrasonicSensorMode, SensorPort)}.<br>
  */
-public class UltrasonicSensor extends Sensor {
+public class UltrasonicSensor<V> extends Sensor<V> {
     private final UltrasonicSensorMode mode;
     private final SensorPort port;
 
@@ -34,8 +34,8 @@ public class UltrasonicSensor extends Sensor {
      * @param port on where the sensor is connected. See enum {@link SensorPort} for all possible sensor ports.
      * @return read only object of {@link UltrasonicSensor}
      */
-    public static UltrasonicSensor make(UltrasonicSensorMode mode, SensorPort port) {
-        return new UltrasonicSensor(mode, port);
+    public static <V> UltrasonicSensor<V> make(UltrasonicSensorMode mode, SensorPort port) {
+        return new UltrasonicSensor<V>(mode, port);
     }
 
     /**
@@ -58,7 +58,7 @@ public class UltrasonicSensor extends Sensor {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitUltrasonicSensor(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitUltrasonicSensor(this);
     }
 }

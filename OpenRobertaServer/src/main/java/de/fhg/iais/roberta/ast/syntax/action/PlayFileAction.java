@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br/>
  * The client must provide the name of the file.
  */
-public class PlayFileAction extends Action {
+public class PlayFileAction<V> extends Action<V> {
     private final String fileName;
 
     private PlayFileAction(String fileName) {
@@ -26,8 +26,8 @@ public class PlayFileAction extends Action {
      * @param filename of the sound,
      * @return read only object of class {@link PlayFileAction}.
      */
-    public static PlayFileAction make(String filename) {
-        return new PlayFileAction(filename);
+    public static <V> PlayFileAction<V> make(String filename) {
+        return new PlayFileAction<V>(filename);
     }
 
     /**
@@ -43,7 +43,7 @@ public class PlayFileAction extends Action {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitPlayFileAction(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitPlayFileAction(this);
     }
 }

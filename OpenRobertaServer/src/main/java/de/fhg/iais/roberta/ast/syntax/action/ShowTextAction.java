@@ -13,12 +13,12 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br>
  * The client must provide the message and x and y coordinates.
  */
-public class ShowTextAction extends Action {
-    private final Expr msg;
-    private final Expr x;
-    private final Expr y;
+public class ShowTextAction<V> extends Action<V> {
+    private final Expr<V> msg;
+    private final Expr<V> x;
+    private final Expr<V> y;
 
-    private ShowTextAction(Expr msg, Expr column, Expr row) {
+    private ShowTextAction(Expr<V> msg, Expr<V> column, Expr<V> row) {
         super(Phrase.Kind.SHOW_TEXT_ACTION);
         Assert.isTrue(msg != null && column != null && row != null);
         this.msg = msg;
@@ -35,28 +35,28 @@ public class ShowTextAction extends Action {
      * @param y postition where the message will start
      * @return read only object of class {@link ShowTextAction}.
      */
-    public static ShowTextAction make(Expr msg, Expr x, Expr y) {
-        return new ShowTextAction(msg, x, y);
+    public static <V> ShowTextAction<V> make(Expr<V> msg, Expr<V> x, Expr<V> y) {
+        return new ShowTextAction<V>(msg, x, y);
     }
 
     /**
      * @return the message.
      */
-    public Expr getMsg() {
+    public Expr<V> getMsg() {
         return this.msg;
     }
 
     /**
      * @return position x of the picture on the display.
      */
-    public Expr getX() {
+    public Expr<V> getX() {
         return this.x;
     }
 
     /**
      * @return position y of the picture on the display.
      */
-    public Expr getY() {
+    public Expr<V> getY() {
         return this.y;
     }
 
@@ -66,8 +66,8 @@ public class ShowTextAction extends Action {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitShowTextAction(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitShowTextAction(this);
     }
 
 }

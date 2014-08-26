@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
  * - {@link #getKind()}<br>
  * - {@link #getAs(Class)}<br>
  */
-public abstract class Sensor extends Phrase {
+public abstract class Sensor<V> extends Phrase<V> {
 
     /**
      * This constructor set the kind of the sensor object used in the AST (abstract syntax tree). All possible kinds can be found in {@link Kind}.

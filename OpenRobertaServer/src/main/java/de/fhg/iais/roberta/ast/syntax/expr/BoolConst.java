@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.codegen.lejos.Visitor;
  * <br>
  * To create an instance from this class use the method {@link #make(boolean)}.<br>
  */
-public class BoolConst extends Expr {
+public class BoolConst<V> extends Expr<V> {
     private final boolean value;
 
     private BoolConst(boolean value) {
@@ -26,8 +26,8 @@ public class BoolConst extends Expr {
      * @param value that the boolean constant will have
      * @return read only object of class {@link BoolConst}.
      */
-    public static BoolConst make(boolean value) {
-        return new BoolConst(value);
+    public static <V> BoolConst<V> make(boolean value) {
+        return new BoolConst<V>(value);
     }
 
     /**
@@ -53,8 +53,8 @@ public class BoolConst extends Expr {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitBoolConst(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitBoolConst(this);
     }
 
 }

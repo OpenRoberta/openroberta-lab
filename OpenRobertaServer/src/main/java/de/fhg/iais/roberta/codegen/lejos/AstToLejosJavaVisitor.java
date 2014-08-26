@@ -1,8 +1,11 @@
 package de.fhg.iais.roberta.codegen.lejos;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.Phrase.Kind;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.ClearDisplayAction;
@@ -53,35 +56,56 @@ import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
+import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
  * This class is implementing {@link Visitor}. All methods are implemented and they
  * append a human-readable JAVA code representation of a phrase to a StringBuilder. <b>This representation is correct JAVA code.</b> <br>
- * <br>
- * To create object of this class use {@link #JavaVisitor(StringBuilder, int, BrickConfiguration)} constructor.
- * 
- * @author kcvejoski
  */
-public class JavaVisitor implements Visitor<JavaVisitor> {
-    private final StringBuilder sb;
-    private int indentation;
+public class AstToLejosJavaVisitor implements Visitor<Void> {
+    public static final String INDENT = "    ";
+
     private final BrickConfiguration brickConfiguration;
+    private final String programName;
+    private final StringBuilder sb = new StringBuilder();
+
+    private int indentation;
 
     /**
-     * This constructor create valid object of the class {@link JavaVisitor}. <br>
-     * <br>
-     * Client must provide empty or non-empty {@link StringBuilder} object on which
-     * generated JAVA code will be appended, value for the indentation and valid {@link BrickConfiguration} object.
+     * initialize the Java code generator visitor.
      * 
-     * @param sb on which code will be appended,
-     * @param indentation value,
-     * @param brickConfiguration object with valid configuration.
+     * @param programName name of the program
+     * @param brickConfiguration hardware configuration of the brick
+     * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    public JavaVisitor(StringBuilder sb, int indentation, BrickConfiguration brickConfiguration) {
-        this.sb = sb;
-        this.indentation = indentation;
+    AstToLejosJavaVisitor(String programName, BrickConfiguration brickConfiguration, int indentation) {
+        this.programName = programName;
         this.brickConfiguration = brickConfiguration;
+        this.indentation = indentation;
+    }
+
+    /**
+     * factory method to generate Java code from an AST.<br>
+     * 
+     * @param programName name of the program
+     * @param brickConfiguration hardware configuration of the brick
+     * @param phrases to generate the code from
+     */
+    public static String generate(String programName, BrickConfiguration brickConfiguration, List<Phrase<Void>> phrases, boolean withWrapping) //
+    {
+        Assert.notNull(programName);
+        Assert.notNull(brickConfiguration);
+        Assert.isTrue(phrases.size() >= 1);
+
+        AstToLejosJavaVisitor astVisitor = new AstToLejosJavaVisitor(programName, brickConfiguration, withWrapping ? 2 : 0);
+        astVisitor.generatePrefix(withWrapping);
+        for ( Phrase<Void> phrase : phrases ) {
+            astVisitor.sb.append("\n");
+            phrase.visit(astVisitor);
+        }
+        astVisitor.generateSuffix(withWrapping);
+        return astVisitor.sb.toString();
     }
 
     /**
@@ -89,7 +113,7 @@ public class JavaVisitor implements Visitor<JavaVisitor> {
      * 
      * @return indentation value of the visitor.
      */
-    public int getIndentation() {
+    int getIndentation() {
         return this.indentation;
     }
 
@@ -103,43 +127,43 @@ public class JavaVisitor implements Visitor<JavaVisitor> {
     }
 
     @Override
-    public JavaVisitor visitNumConst(NumConst numConst) {
+    public Void visitNumConst(NumConst<Void> numConst) {
         this.sb.append(numConst.getValue());
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitBoolConst(BoolConst boolConst) {
+    public Void visitBoolConst(BoolConst<Void> boolConst) {
         this.sb.append(boolConst.isValue());
-        return this;
+        return null;
     };
 
     @Override
-    public JavaVisitor visitMathConst(MathConst mathConst) {
+    public Void visitMathConst(MathConst<Void> mathConst) {
         this.sb.append(mathConst.getMathConst());
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitColorConst(ColorConst colorConst) {
+    public Void visitColorConst(ColorConst<Void> colorConst) {
         this.sb.append(colorConst.getValue().getJavaCode());
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitStringConst(StringConst stringConst) {
+    public Void visitStringConst(StringConst<Void> stringConst) {
         this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.getValue())).append("\"");
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitNullConst(NullConst nullConst) {
+    public Void visitNullConst(NullConst<Void> nullConst) {
         this.sb.append("null");
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitVar(Var var) {
+    public Void visitVar(Var<Void> var) {
         switch ( var.getTypeVar() ) {
             case INTEGER:
                 this.sb.append("int " + var.getValue());
@@ -148,11 +172,11 @@ public class JavaVisitor implements Visitor<JavaVisitor> {
                 this.sb.append(var.getValue());
                 break;
         }
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitUnary(Unary unary) {
+    public Void visitUnary(Unary<Void> unary) {
         if ( unary.getOp() == Unary.Op.POSTFIX_INCREMENTS ) {
             generateExprCode(unary, this.sb);
             this.sb.append(unary.getOp().getOpSymbol());
@@ -160,31 +184,31 @@ public class JavaVisitor implements Visitor<JavaVisitor> {
             this.sb.append(unary.getOp().getOpSymbol());
             generateExprCode(unary, this.sb);
         }
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitBinary(Binary binary) {
+    public Void visitBinary(Binary<Void> binary) {
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
         this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
         generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitActionExpr(ActionExpr actionExpr) {
-        actionExpr.getAction().accept(this);
-        return this;
+    public Void visitActionExpr(ActionExpr<Void> actionExpr) {
+        actionExpr.getAction().visit(this);
+        return null;
     }
 
     @Override
-    public JavaVisitor visitSensorExpr(SensorExpr sensorExpr) {
-        sensorExpr.getSens().accept(this);
-        return this;
+    public Void visitSensorExpr(SensorExpr<Void> sensorExpr) {
+        sensorExpr.getSens().visit(this);
+        return null;
     }
 
     @Override
-    public JavaVisitor visitEmptyExpr(EmptyExpr emptyExpr) {
+    public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
         switch ( emptyExpr.getDefVal().getName() ) {
             case "java.lang.String":
                 this.sb.append("\"\"");
@@ -193,13 +217,13 @@ public class JavaVisitor implements Visitor<JavaVisitor> {
                 this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
                 break;
         }
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitExprList(ExprList exprList) {
+    public Void visitExprList(ExprList<Void> exprList) {
         boolean first = true;
-        for ( Expr expr : exprList.get() ) {
+        for ( Expr<Void> expr : exprList.get() ) {
             if ( first ) {
                 first = false;
             } else {
@@ -209,60 +233,60 @@ public class JavaVisitor implements Visitor<JavaVisitor> {
                     this.sb.append(", ");
                 }
             }
-            expr.accept(this);
+            expr.visit(this);
         }
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitFunc(Func funct) {
+    public Void visitFunc(Func<Void> funct) {
         switch ( funct.getFunctName() ) {
             case PRINT:
                 this.sb.append("System.out.println(");
-                funct.getParam().get(0).accept(this);
+                funct.getParam().get(0).visit(this);
                 this.sb.append(")");
                 break;
             default:
                 break;
         }
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitActionStmt(ActionStmt actionStmt) {
-        actionStmt.getAction().accept(this);
-        return this;
+    public Void visitActionStmt(ActionStmt<Void> actionStmt) {
+        actionStmt.getAction().visit(this);
+        return null;
     }
 
     @Override
-    public JavaVisitor visitAssignStmt(AssignStmt assignStmt) {
-        assignStmt.getName().accept(this);
+    public Void visitAssignStmt(AssignStmt<Void> assignStmt) {
+        assignStmt.getName().visit(this);
         this.sb.append(" = ");
-        assignStmt.getExpr().accept(this);
+        assignStmt.getExpr().visit(this);
         this.sb.append(";");
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitExprStmt(ExprStmt exprStmt) {
-        exprStmt.getExpr().accept(this);
+    public Void visitExprStmt(ExprStmt<Void> exprStmt) {
+        exprStmt.getExpr().visit(this);
         this.sb.append(";");
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitIfStmt(IfStmt ifStmt) {
+    public Void visitIfStmt(IfStmt<Void> ifStmt) {
         if ( ifStmt.isTernary() ) {
             generateCodeFromTernary(ifStmt);
         } else {
             generateCodeFromIfElse(ifStmt);
             generateCodeFromElse(ifStmt);
         }
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitRepeatStmt(RepeatStmt repeatStmt) {
+    public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
         switch ( repeatStmt.getMode() ) {
             case UNTIL:
             case WHILE:
@@ -278,46 +302,46 @@ public class JavaVisitor implements Visitor<JavaVisitor> {
                 break;
         }
         incrIndentation();
-        repeatStmt.getList().accept(this);
+        repeatStmt.getList().visit(this);
         decrIndentation();
         nlIndent();
         this.sb.append("}");
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitSensorStmt(SensorStmt sensorStmt) {
-        sensorStmt.getSensor().accept(this);
-        return this;
+    public Void visitSensorStmt(SensorStmt<Void> sensorStmt) {
+        sensorStmt.getSensor().visit(this);
+        return null;
     }
 
     @Override
-    public JavaVisitor visitStmtFlowCon(StmtFlowCon stmtFlowCon) {
+    public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
         this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase() + ";");
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitStmtList(StmtList stmtList) {
+    public Void visitStmtList(StmtList<Void> stmtList) {
         for ( Stmt stmt : stmtList.get() ) {
             nlIndent();
-            stmt.accept(this);
+            stmt.visit(this);
         }
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
+    public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
         this.sb.append("hal.clearDisplay();");
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitVolumeAction(VolumeAction volumeAction) {
+    public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
         switch ( volumeAction.getMode() ) {
             case SET:
                 this.sb.append("hal.setVolume(");
-                volumeAction.getVolume().accept(this);
+                volumeAction.getVolume().visit(this);
                 this.sb.append(");");
                 break;
             case GET:
@@ -326,17 +350,17 @@ public class JavaVisitor implements Visitor<JavaVisitor> {
             default:
                 throw new DbcException("Invalid volume action mode!");
         }
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitLightAction(LightAction lightAction) {
+    public Void visitLightAction(LightAction<Void> lightAction) {
         this.sb.append("hal.ledOn(" + lightAction.getColor().getJavaCode() + ", " + lightAction.isBlink() + ");");
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitLightStatusAction(LightStatusAction lightStatusAction) {
+    public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         switch ( lightStatusAction.getStatus() ) {
             case OFF:
                 this.sb.append("hal.ledOff();");
@@ -347,84 +371,84 @@ public class JavaVisitor implements Visitor<JavaVisitor> {
             default:
                 throw new DbcException("Invalid LED status mode!");
         }
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitPlayFileAction(PlayFileAction playFileAction) {
+    public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
         this.sb.append("hal.playFile(\"" + playFileAction.getFileName() + "\");");
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitShowPictureAction(ShowPictureAction showPictureAction) {
+    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
         this.sb.append("hal.drawPicture(\"" + showPictureAction.getPicture() + "\", ");
-        showPictureAction.getX().accept(this);
+        showPictureAction.getX().visit(this);
         this.sb.append(", ");
-        showPictureAction.getY().accept(this);
+        showPictureAction.getY().visit(this);
         this.sb.append(");");
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitShowTextAction(ShowTextAction showTextAction) {
+    public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         this.sb.append("hal.drawText(");
-        showTextAction.getMsg().accept(this);
+        showTextAction.getMsg().visit(this);
         this.sb.append(", ");
-        showTextAction.getX().accept(this);
+        showTextAction.getX().visit(this);
         this.sb.append(", ");
-        showTextAction.getY().accept(this);
+        showTextAction.getY().visit(this);
         this.sb.append(");");
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitToneAction(ToneAction toneAction) {
+    public Void visitToneAction(ToneAction<Void> toneAction) {
         this.sb.append("hal.playTone(");
-        toneAction.getFrequency().accept(this);
+        toneAction.getFrequency().visit(this);
         this.sb.append(", ");
-        toneAction.getDuration().accept(this);
+        toneAction.getDuration().visit(this);
         this.sb.append(");");
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction) {
+    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         // it is just temporary variable just to be able to write the code. This will be replaced by the brick configuration method.
         boolean isRegulated = true;
         String methodName = isRegulated ? "hal.setRegulatedMotorSpeed(" : "hal.setUnregulatedMotorSpeed(";
         this.sb.append(methodName + motorSetPowerAction.getPort().getJavaCode() + ", ");
-        motorSetPowerAction.getPower().accept(this);
+        motorSetPowerAction.getPower().visit(this);
         this.sb.append(");");
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction) {
+    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
         // it is just temporary variable just to be able to write the code. This will be replaced by the brick configuration method.
         boolean isRegulated = true;
         String methodName = isRegulated ? "hal.getRegulatedMotorSpeed(" : "hal.getUnregulatedMotorSpeed(";
         this.sb.append(methodName + motorGetPowerAction.getPort().getJavaCode() + ")");
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitMotorOnAction(MotorOnAction motorOnAction) {
+    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         // TODO Auto-generated method stub
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitMotorStopAction(MotorStopAction motorStopAction) {
+    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         // it is just temporary variable just to be able to write the code. This will be replaced by the brick configuration method.
         boolean isRegulated = true;
         String methodName = isRegulated ? "hal.stopRegulatedMotor(" : "hal.stopUnregulatedMotor(";
         this.sb.append(methodName + motorStopAction.getPort().getJavaCode() + ", " + motorStopAction.getMode().getJavaCode() + ");");
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitTurnAction(TurnAction turnAction) {
+    public Void visitTurnAction(TurnAction<Void> turnAction) {
         boolean isDuration = turnAction.getParam().getDuration() != null;
         boolean isRegulated = true;
         String methodName = "hal.rotateDirection" + (isDuration ? "DistanceRegulated" : isRegulated ? "Regulated" : "Unregulated") + "(";
@@ -434,17 +458,17 @@ public class JavaVisitor implements Visitor<JavaVisitor> {
         //Set the right motor to motor port B, this will be changed when brick configuration provides information on which port the right motor is set. 
         this.sb.append(ActorPort.B.getJavaCode() + ", ");
         this.sb.append(turnAction.getDirection().getJavaCode() + ", ");
-        turnAction.getParam().getSpeed().accept(this);
+        turnAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {
             this.sb.append(", ");
-            turnAction.getParam().getDuration().getValue().accept(this);
+            turnAction.getParam().getDuration().getValue().visit(this);
         }
         this.sb.append(");");
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitDriveAction(DriveAction driveAction) {
+    public Void visitDriveAction(DriveAction<Void> driveAction) {
         boolean isDuration = driveAction.getParam().getDuration() != null;
         boolean isRegulated = true;
         String methodName = isDuration ? "hal.driveDistance(" : isRegulated ? "hal.regulatedDrive(" : "hal.unregulatedDrive(";
@@ -455,17 +479,17 @@ public class JavaVisitor implements Visitor<JavaVisitor> {
         //Set the right motor to motor port B, this will be changed when brick configuration provides information on which port the right motor is set. 
         this.sb.append(ActorPort.B.getJavaCode() + ", ");
         this.sb.append(driveAction.getDirection().getJavaCode() + ", ");
-        driveAction.getParam().getSpeed().accept(this);
+        driveAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {
             this.sb.append(", ");
-            driveAction.getParam().getDuration().getValue().accept(this);
+            driveAction.getParam().getDuration().getValue().visit(this);
         }
         this.sb.append(");");
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitMotorDriveStopAction(MotorDriveStopAction stopAction) {
+    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
         boolean isRegulated = true;
         String methodName = isRegulated ? "hal.stopRegulatedDrive(" : "hal.stopUnregulatedDrive(";
         this.sb.append(methodName);
@@ -473,11 +497,11 @@ public class JavaVisitor implements Visitor<JavaVisitor> {
         this.sb.append(ActorPort.A.getJavaCode() + ", ");
         //Set the right motor to motor port B, this will be changed when brick configuration provides information on which port the right motor is set. 
         this.sb.append(ActorPort.B.getJavaCode() + ");");
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitBrickSensor(BrickSensor brickSensor) {
+    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
         switch ( brickSensor.getMode() ) {
             case IS_PRESSED:
                 this.sb.append("hal.isPressed(" + brickSensor.getKey().getJavaCode() + ")");
@@ -488,11 +512,11 @@ public class JavaVisitor implements Visitor<JavaVisitor> {
             default:
                 throw new DbcException("Invalide mode for BrickSensor!");
         }
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitColorSensor(ColorSensor colorSensor) {
+    public Void visitColorSensor(ColorSensor<Void> colorSensor) {
         switch ( colorSensor.getMode() ) {
             case GET_MODE:
                 this.sb.append("hal.getColorSensorModeName(" + colorSensor.getPort().getJavaCode() + ")");
@@ -504,11 +528,11 @@ public class JavaVisitor implements Visitor<JavaVisitor> {
                 this.sb.append("hal.setColorSensorMode(" + colorSensor.getPort().getJavaCode() + ", " + colorSensor.getMode().getJavaCode() + ");");
                 break;
         }
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitEncoderSensor(EncoderSensor encoderSensor) {
+    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
         switch ( encoderSensor.getMode() ) {
             case GET_MODE:
                 this.sb.append("hal.getMotorTachoMode(" + encoderSensor.getMotor().getJavaCode() + ")");
@@ -525,11 +549,11 @@ public class JavaVisitor implements Visitor<JavaVisitor> {
                 this.sb.append("hal.setMotorTachoMode(" + encoderSensor.getMotor().getJavaCode() + ", " + encoderSensor.getMode().getJavaCode() + ");");
                 break;
         }
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitGyroSensor(GyroSensor gyroSensor) {
+    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         switch ( gyroSensor.getMode() ) {
             case GET_MODE:
                 this.sb.append("hal.getGyroSensorModeName(" + gyroSensor.getPort().getJavaCode() + ")");
@@ -544,11 +568,11 @@ public class JavaVisitor implements Visitor<JavaVisitor> {
                 this.sb.append("hal.setGyroSensorMode(" + gyroSensor.getPort().getJavaCode() + ", " + gyroSensor.getMode().getJavaCode() + ");");
                 break;
         }
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitInfraredSensor(InfraredSensor infraredSensor) {
+    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
         switch ( infraredSensor.getMode() ) {
             case GET_MODE:
                 this.sb.append("hal.getInfraredSensorModeName(" + infraredSensor.getPort().getJavaCode() + ")");
@@ -560,11 +584,11 @@ public class JavaVisitor implements Visitor<JavaVisitor> {
                 this.sb.append("hal.setInfraredSensorMode(" + infraredSensor.getPort().getJavaCode() + ", " + infraredSensor.getMode().getJavaCode() + ");");
                 break;
         }
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitTimerSensor(TimerSensor timerSensor) {
+    public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         switch ( timerSensor.getMode() ) {
             case GET_SAMPLE:
                 this.sb.append("hal.getTimerValue(" + timerSensor.getTimer() + ")");
@@ -575,17 +599,17 @@ public class JavaVisitor implements Visitor<JavaVisitor> {
             default:
                 throw new DbcException("Invalid Time Mode!");
         }
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitTouchSensor(TouchSensor touchSensor) {
+    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
         this.sb.append("hal.isPressed(" + touchSensor.getPort().getJavaCode() + ")");
-        return this;
+        return null;
     }
 
     @Override
-    public JavaVisitor visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
+    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
         switch ( ultrasonicSensor.getMode() ) {
             case GET_MODE:
                 this.sb.append("hal.getUltraSonicSensorModeName(" + ultrasonicSensor.getPort().getJavaCode() + ")");
@@ -601,7 +625,7 @@ public class JavaVisitor implements Visitor<JavaVisitor> {
                     + ");");
                 break;
         }
-        return this;
+        return null;
     }
 
     private void incrIndentation() {
@@ -617,7 +641,7 @@ public class JavaVisitor implements Visitor<JavaVisitor> {
             return;
         } else {
             for ( int i = 0; i < this.indentation; i++ ) {
-                this.sb.append(JavaGenerateCode.INDENT);
+                this.sb.append(INDENT);
             }
         }
     }
@@ -631,41 +655,41 @@ public class JavaVisitor implements Visitor<JavaVisitor> {
         return " ";
     }
 
-    private boolean parenthesesCheck(Binary binary) {
+    private boolean parenthesesCheck(Binary<Void> binary) {
         return binary.getOp() == Op.MINUS && binary.getRight().getKind() == Kind.BINARY && binary.getRight().getPrecedence() <= binary.getPrecedence();
     }
 
-    private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr expr, Binary binary) {
+    private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr<Void> expr, Binary<Void> binary) {
         if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption ) {
             // parentheses are omitted
-            expr.accept(this);
+            expr.visit(this);
         } else {
             sb.append("(" + whitespace());
-            expr.accept(this);
+            expr.visit(this);
             sb.append(whitespace() + ")");
         }
     }
 
-    private void generateExprCode(Unary unary, StringBuilder sb) {
+    private void generateExprCode(Unary<Void> unary, StringBuilder sb) {
         if ( unary.getExpr().getPrecedence() < unary.getPrecedence() ) {
             sb.append("(");
-            unary.getExpr().accept(this);
+            unary.getExpr().visit(this);
             sb.append(")");
         } else {
-            unary.getExpr().accept(this);
+            unary.getExpr().visit(this);
         }
     }
 
-    private void generateCodeFromTernary(IfStmt ifStmt) {
+    private void generateCodeFromTernary(IfStmt<Void> ifStmt) {
         this.sb.append("(" + whitespace());
-        ifStmt.getExpr().get(0).accept(this);
+        ifStmt.getExpr().get(0).visit(this);
         this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace());
-        ((ExprStmt) ifStmt.getThenList().get(0).get().get(0)).getExpr().accept(this);
+        ((ExprStmt) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
         this.sb.append(whitespace() + ":" + whitespace());
-        ((ExprStmt) ifStmt.getElseList().get().get(0)).getExpr().accept(this);
+        ((ExprStmt) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
     }
 
-    private void generateCodeFromIfElse(IfStmt ifStmt) {
+    private void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
         for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
             if ( i == 0 ) {
                 generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i));
@@ -673,7 +697,7 @@ public class JavaVisitor implements Visitor<JavaVisitor> {
                 generateCodeFromStmtCondition("else if", ifStmt.getExpr().get(i));
             }
             incrIndentation();
-            ifStmt.getThenList().get(i).accept(this);
+            ifStmt.getThenList().get(i).visit(this);
             decrIndentation();
             if ( i + 1 < ifStmt.getExpr().size() ) {
                 nlIndent();
@@ -682,22 +706,50 @@ public class JavaVisitor implements Visitor<JavaVisitor> {
         }
     }
 
-    private void generateCodeFromElse(IfStmt ifStmt) {
+    private void generateCodeFromElse(IfStmt<Void> ifStmt) {
         if ( ifStmt.getElseList().get().size() != 0 ) {
             nlIndent();
             this.sb.append("}").append(whitespace()).append("else").append(whitespace() + "{");
             incrIndentation();
-            ifStmt.getElseList().accept(this);
+            ifStmt.getElseList().visit(this);
             decrIndentation();
         }
         nlIndent();
         this.sb.append("}");
     }
 
-    private void generateCodeFromStmtCondition(String stmtType, Expr expr) {
+    private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
         this.sb.append(stmtType + whitespace() + "(" + whitespace());
-        expr.accept(this);
+        expr.visit(this);
         this.sb.append(whitespace() + ")" + whitespace() + "{");
+    }
+
+    private void generatePrefix(boolean withWrapping) {
+        if ( !withWrapping ) {
+            return;
+        }
+        this.sb.append("package generated.main;\n\n");
+        this.sb.append("import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;\n");
+        this.sb.append("import de.fhg.iais.roberta.ast.syntax.HardwareComponent;\n");
+        this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.ActorPort;\n");
+        this.sb.append("import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;\n");
+        this.sb.append("import de.fhg.iais.roberta.codegen.lejos.Hal;\n\n");
+        this.sb.append("public class " + this.programName + " {\n");
+        this.sb.append(INDENT).append(this.brickConfiguration.generateRegenerate()).append("\n\n");
+        this.sb.append(INDENT).append("public static void main(String[] args) {\n");
+        this.sb.append(INDENT).append(INDENT).append("new ").append(this.programName).append("().run();\n");
+        this.sb.append(INDENT).append("}\n\n");
+
+        this.sb.append(INDENT).append("public void run() {\n");
+        this.sb.append(INDENT).append(INDENT).append("Hal hal = new Hal(brickConfiguration);");
+    }
+
+    private void generateSuffix(boolean withWrapping) {
+        if ( !withWrapping ) {
+            return;
+        }
+
+        this.sb.append("\n").append(INDENT).append("}\n}\n");
     }
 
 }

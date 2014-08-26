@@ -11,11 +11,11 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br/>
  * The client must provide the {@link ActorPort} on which the motor is connected.
  */
-public class MotorSetPowerAction extends Action {
+public class MotorSetPowerAction<V> extends Action<V> {
     private final ActorPort port;
-    private final Expr power;
+    private final Expr<V> power;
 
-    private MotorSetPowerAction(ActorPort port, Expr power) {
+    private MotorSetPowerAction(ActorPort port, Expr<V> power) {
         super(Phrase.Kind.MOTOR_GET_POWER_ACTION);
         Assert.isTrue(port != null && power.isReadOnly());
         this.port = port;
@@ -29,8 +29,8 @@ public class MotorSetPowerAction extends Action {
      * @param port on which the motor is connected that we want to set,
      * @return read only object of class {@link MotorSetPowerAction}.
      */
-    public static MotorSetPowerAction make(ActorPort port, Expr power) {
-        return new MotorSetPowerAction(port, power);
+    public static <V> MotorSetPowerAction<V> make(ActorPort port, Expr<V> power) {
+        return new MotorSetPowerAction<V>(port, power);
     }
 
     /**
@@ -43,7 +43,7 @@ public class MotorSetPowerAction extends Action {
     /**
      * @return value of the power of the motor.
      */
-    public Expr getPower() {
+    public Expr<V> getPower() {
         return this.power;
     }
 
@@ -53,7 +53,7 @@ public class MotorSetPowerAction extends Action {
     }
 
     @Override
-    public void accept(Visitor visitor) {
-        visitor.visitMotorSetPowerAction(this);
+    protected V accept(Visitor<V> visitor) {
+        return visitor.visitMotorSetPowerAction(this);
     }
 }
