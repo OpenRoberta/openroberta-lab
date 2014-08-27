@@ -5,7 +5,7 @@ import java.net.URL;
 import lejos.hardware.Key;
 import lejos.hardware.KeyListener;
 
-public class BackgroundTasks implements KeyListener {
+public class BackgroundTasks implements KeyListener, Runnable {
 
     private final RobertaTokenRegister rtr;
     private final RobertaDownloader rd;
@@ -18,7 +18,7 @@ public class BackgroundTasks implements KeyListener {
         this.rd = new RobertaDownloader(serverDownloadRessource, token);
     }
 
-    public void register() {
+    public void startRegisteringThread() {
         this.rtr.setErrorInfo(false);
         this.rtr.setRegisteredInfo(false);
         this.rtr.setTimeOutInfo(false);
@@ -26,13 +26,19 @@ public class BackgroundTasks implements KeyListener {
         this.tokenThread.start();
     }
 
-    public void download() {
+    public void startDownloadThread() {
         this.downloadThread = new Thread(this.rd);
         this.downloadThread.start();
     }
 
     public void stopDownload() {
-        setDLInterruptInfo(true);
+        this.rd.getHttpConnection().disconnect();
+    }
+
+    @Override
+    public void run() {
+        // TODO Auto-generated method stub
+
     }
 
     @Override
@@ -65,7 +71,4 @@ public class BackgroundTasks implements KeyListener {
         this.rtr.setRegInterruptInfo(bool);
     }
 
-    public void setDLInterruptInfo(boolean bool) {
-        this.rd.setDLInterruptInfo(bool);
-    }
 }

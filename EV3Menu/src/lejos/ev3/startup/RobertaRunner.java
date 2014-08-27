@@ -126,7 +126,6 @@ public class RobertaRunner implements Runnable {
                 Delay.msDelay(200);
             }
             System.out.println("Waiting for process to die");
-            ;
             program.waitFor();
             System.out.println("Program finished");
             // Turn the LED off, in case left on

@@ -144,8 +144,7 @@ public class GraphicStartup implements Menu {
     private static final String ICNo =
         "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00f0\u0000\u0000\u000f\u00f0\u0000\u0000\u000f\u00fc\u0003\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00c0\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u0003\u0000\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u0000\u00c0\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u0003\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u0003\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00f0\u0000\u0000\u000f\u00f0\u0000\u0000\u000f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
 
-    // Roberta Icon (maybe not the best quality possible, done with ev3image tool
-    // from lejos). Black/white roberta image required for best result?!
+    // Roberta menu icon
     private static final String ICRoberta =
         "\u0000\u0000\u0080\u0000\u0000\u0000\u0080\u0000\u0000\u00c0\u00c3\u0001\u0010\u0001\u00c0\u0001\u00dc\u00c0\u00c1\u0000\u0058\u002f\u00fe\u0000\u009c\u0010\u007c\u0000\u007c\u0080\u001c\u0000\u0078\u0084\u001d\u0000\u0070\u000c\u0004\u0000\u0070\u0000\u0002\u0000\u0080\u00f0\u0001\u0000\u0000\u003f\u0000\u0000\u0000\u0038\u0000\u0000\u0000\u0018\u0000\u0000\u0000\u001c\u0000\u0000\u0000\u001c\u00c0\u0001\u0000\u001c\u00f8\u0003\u0000\u00dc\u00ff\u0003\u0000\u00dc\u00ff\u0003\u0000\u00bc\u00ff\r\u0000\u00f8\u00ff\u001e\u0000\u00f4\u007f\u001f\u0080\u00cf\u00c7\u003f\u00c0\u00ff\u00bb\u003f\u00e0\u00fb\u00fd\u0033\u00e0\u0007\u00ff\u003b\u00e0\u00ff\u00cf\u003b\u00e0\u00ff\u00ef\u001f\u00c0\u00ff\u00ff\u001f\u0080\u00f7\u00fe\u000f\u0000\u0000\u00b8\u0007";
 
@@ -1497,7 +1496,7 @@ public class GraphicStartup implements Menu {
         //                return;
         //            }
         //        }
-        serverURLString = "10.0.1.19:1999";
+        serverURLString = "10.0.1.11:1999";
 
         try {
             serverTokenRessource = new URL("http://" + serverURLString + "/token");
@@ -1513,7 +1512,7 @@ public class GraphicStartup implements Menu {
             this.backgroundTasks = new BackgroundTasks(serverTokenRessource, serverDownloadRessource, token);
             Key escapeKey = LocalEV3.get().getKey("Escape");
             escapeKey.addKeyListener(this.backgroundTasks);
-            this.backgroundTasks.register();
+            this.backgroundTasks.startRegisteringThread();
 
             newScreen(" Robertalab");
             lcd.drawString("waiting for", 0, 2);
@@ -1542,7 +1541,9 @@ public class GraphicStartup implements Menu {
             newScreen(" Robertalab");
             lcd.drawString("Success!", 0, 3);
             Delay.msDelay(2000);
-            this.backgroundTasks.download();
+            this.backgroundTasks.startDownloadThread();
+
+            RobertaRunner robertaRunner = new RobertaRunner(this.ind, echoIn, echoErr);
 
         } else {
             GraphicMenu menu = new GraphicMenu(new String[] {
