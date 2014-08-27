@@ -1,7 +1,6 @@
 
 var DUMMY;
 var activityString = "Aktivität:";
-var viewDirection;
 
 // -------------------------------------
 // Dummy Controll TEST Input
@@ -9,28 +8,41 @@ var viewDirection;
 
 $(document).keydown(function(e){
 	if (e.keyCode == 37) { 
-		moveLeft();
-		DUMMY = "#dummyLeft";
+		//moveLeft();
+		//DUMMY = "#dummyLeft";
+		
+		moveRoberta("left");
+		
 		return false;
 	}
 
 	if (e.keyCode == 38) { 
-		moveUp();
-		DUMMY = "#dummyUp";
+		//moveUp();
+		//DUMMY = "#dummyUp";
+		
+		moveRoberta("up");
+		
 		return false;
 	}
 
 	if (e.keyCode == 39) { 
-		moveRight();
-		DUMMY = "#dummyRight";
+		//moveRight();
+		//DUMMY = "#dummyRight";
+		
+		moveRoberta("right");
+		
 		return false;
 	}
 
 	if (e.keyCode == 40) { 
-		DUMMY = "#dummyDown";
-		moveDown();
+		//DUMMY = "#dummyDown";
+		//moveDown();
+		
+		moveRoberta("down");
+		
 		return false;
 	}
+
 });
 
 
@@ -47,14 +59,43 @@ function viewSimulator(status){
 	if(status == true){
 		$( "#simulatorDiv" ).css( "display", "block" );   
 		displayActivity("keine Aktivität");
-		$( "#dummyRight" ).css( "display", "block" );
+		//$( "#dummyRight" ).css( "display", "block" );
+		
+		init();
 	}
 	
 	else{
-		$( "#simulatorDiv" ).css( "display", "none" );
-		resetParams(); // Reset Simulator		
+		$( "#simulatorDiv" ).css( "display", "none" );	
 	}
 }
+
+//--------------------------------------------
+// Function to execute commands
+// received from the interpreter.
+//--------------------------------------------
+
+function exeCmd(type){
+	if(type == "LEFT"){
+		moveLeft();
+		DUMMY = "#dummyLeft";
+	}
+	
+	else if(type == "RIGHT"){
+		moveRight();
+		DUMMY = "#dummyRight";
+	}
+	
+	else if(type == "FOREWARD"){
+		moveUp();
+		DUMMY = "#dummyUp";
+	}
+	
+	else if(type == "BACKWARD"){
+		DUMMY = "#dummyDown";
+		moveDown();
+	}
+}
+
 
 //--------------------------------------------
 // Functions for moving the background.
@@ -194,38 +235,34 @@ var scroll = new BackgroundScroll();
 function moveRight(){
 	scroll.initStop(false);
 	scroll.initLeft(true);
-	viewPosition = "right";
 	displayActivity("Bewebgung Richtung Osten");
 }
 
 function moveLeft(){
 	scroll.initStop(false);
 	scroll.initRight(true);
-	viewPosition = "left";
 	displayActivity("Bewebgung Richtung Westen");
 }
 
 function moveUp(){
 	scroll.initStop(false);
 	scroll.initDown(true);
-	viewPosition = "up";
 	displayActivity("Bewebgung Richtung Norden");
 }	 
 
 function moveDown(){
 	scroll.initStop(false);
 	scroll.initUp(true);
-	viewPosition = "down";
 	displayActivity("Bewebgung Richtung Süden");
 }
 
-function moveStop(){
+function movteStop(){
 	scroll.initStop(false);
 	displayActivity("Stop");
 }
 
 //----------------------------------------------------------
-// Function for displaying the four different robot graphics.
+//Function for displaying the four different robot graphics.
 //----------------------------------------------------------
 
 function displayDummy(up, down, left, right){
@@ -237,17 +274,9 @@ function displayDummy(up, down, left, right){
 
 //----------------------------------------------------------------
 //Functions for displaying information about the current activity.
+
 //----------------------------------------------------------------
 
 function displayActivity(intel){
-	$( "#positionData" ).text( activityString + " " + intel);
-}
-
-//----------------------------------------------------------
-//Function for resetting the simulator parameters
-//----------------------------------------------------------
-
-function resetParams(){
-	displayDummy("none", "none" ,"none", "block");
-	moveStop();
+	$( "#positionData" ).text( activityString + " " + intel );
 }

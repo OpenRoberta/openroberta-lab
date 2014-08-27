@@ -22,7 +22,9 @@
 <link href="css/styles.css" type="text/css" rel="stylesheet">
 
 <link rel="stylesheet" type="text/css" href="/css/simulator.css"></link>
-<script type="text/javascript" src="simulator.js" charset="utf-8"></script>
+<script type="text/javascript" src="simulator/three.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="simulator/simulator.js" charset="utf-8"></script>
+<script type="text/javascript" src="simulator/main.js" charset="utf-8"></script>
 
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
@@ -104,19 +106,7 @@
       <li><a id="deleteLink" href="#delete">Delete User</a></li>
     </ul>
     
-    <script type="text/javascript">
-    
-    </script>
-    
-    <div id="simulatorDiv"> 
-    	<button id="closeBtn" class="button" onclick="viewSimulator(false);">Beenden</button>	
-    	<button id="closeBtn" class="button" onclick="moveStop();">Stop</button>
-		<div id="positionData"></div>
-		<div id="dummyDown" class="dummy"></div>
-		<div id="dummyUp" class="dummy"></div>	
-		<div id="dummyLeft" class="dummy"></div>	
-		<div id="dummyRight" class="dummy"></div>		
-    </div>
+    <div id="simulatorDiv"></div>
     
     <div id="blockly">
       <div id="blocklyDiv" style="height: 100%; width: 100%; z-index: 1;"></div>
