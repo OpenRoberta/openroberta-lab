@@ -37,7 +37,7 @@ public class QAServerUITest {
         this.driver.findElement(By.id("toolbox1")).click();
         this.driver.findElement(By.id("toolbox2")).click();
         this.driver.findElement(By.xpath("//input[@value='Simulator Test']")).click();
-        this.driver.findElement(By.id("closeBtn")).click();
+        //this.driver.findElement(By.id("closeBtn")).click();
         this.driver.findElement(By.linkText("Logo")).click();
     }
 
