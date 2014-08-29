@@ -107,7 +107,7 @@ Blockly.Toolbox.init = function() {
   var tree = new Blockly.Toolbox.TreeControl('root', Blockly.Toolbox.CONFIG_);
   Blockly.Toolbox.tree_ = tree;
   tree.setShowRootNode(false);
-  tree.setShowLines(false);
+  tree.setShowLines(true);
   tree.setShowExpandIcons(false);
   tree.setSelectedItem(null);
 
@@ -160,7 +160,18 @@ Blockly.Toolbox.populate_ = function() {
       }
       var name = childIn.tagName.toUpperCase();
       if (name == 'CATEGORY') {
-        var childOut = rootOut.createNode(childIn.getAttribute('name'));
+         // TODO add the right colors depending on the name of the category. A new attribute could be created.
+         // TODO adjust the width of the box to the longest name, later this should be calculated.
+         var html = '<svg width="100" height="40">'
+         + '<g>'
+         + '<rect x = "0" y = "10" width="100" height="30" style="fill:rgb(0,0,255)">'
+         + '</rect>'
+         + '<text x = "10" y = "30" fill ="white">'
+         + childIn.getAttribute('name');
+         + '</text>'
+         + '</g>'
+         + '</svg>';
+        var childOut = rootOut.createNode(html);
         childOut.blocks = [];
         treeOut.add(childOut);
         var custom = childIn.getAttribute('custom');
@@ -247,6 +258,7 @@ Blockly.Toolbox.TreeControl.prototype.handleTouchEvent_ = function(e) {
  * @override
  */
 Blockly.Toolbox.TreeControl.prototype.createNode = function(opt_html) {
+    var html = 'style="color:blue;text-align:center"';
   return new Blockly.Toolbox.TreeNode(opt_html || '', this.getConfig(),
       this.getDomHelper());
 };
