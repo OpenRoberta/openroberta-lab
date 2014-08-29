@@ -15,7 +15,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 import de.fhg.iais.roberta.javaServer.jetty.ServerStarter;
 
-public class QAServerUITest {
+public class LocalServerUITest {
     private WebDriver driver;
     private String baseUrl;
     private boolean acceptNextAlert = true;
