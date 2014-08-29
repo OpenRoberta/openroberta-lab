@@ -1,9 +1,8 @@
 package de.fhg.iais.roberta.javaServer.basics;
 
 import static org.junit.Assert.fail;
-
 import java.util.concurrent.TimeUnit;
-
+import org.eclipse.jetty.server.Server;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,16 +13,27 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import de.fhg.iais.roberta.javaServer.jetty.ServerStarter;
+
 public class QAServerUITest {
     private WebDriver driver;
     private String baseUrl;
     private boolean acceptNextAlert = true;
     private StringBuffer verificationErrors = new StringBuffer();
 
+    /**
+     * using our build in OR-Jetty server and port
+     */
+    private int port;
+    private Server server;
+    
+    
     @Before
     public void setUp() throws Exception {
+    	this.port = 1999;
+    	this.server = new ServerStarter().start(port);
         this.driver = new FirefoxDriver();
-        this.baseUrl = "http://mp-devel.iais.fraunhofer.de:1999/";
+        this.baseUrl = "http://localhost:" + port;
         this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
 
@@ -44,6 +54,7 @@ public class QAServerUITest {
     @After
     public void tearDown() throws Exception {
         this.driver.quit();
+        this.server.stop();
         String verificationErrorString = this.verificationErrors.toString();
         if ( !"".equals(verificationErrorString) ) {
             fail(verificationErrorString);
