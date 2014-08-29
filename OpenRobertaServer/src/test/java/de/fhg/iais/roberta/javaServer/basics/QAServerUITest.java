@@ -22,7 +22,7 @@ public class QAServerUITest {
     private StringBuffer verificationErrors = new StringBuffer();
 
     /**
-     * using our build in OR-Jetty server and port
+     * using our build in OR-Jetty server and a test port
      */
     private int port;
     private Server server;
@@ -30,7 +30,7 @@ public class QAServerUITest {
     
     @Before
     public void setUp() throws Exception {
-    	this.port = 1999;
+    	this.port = 1997;
     	this.server = new ServerStarter().start(port);
         this.driver = new FirefoxDriver();
         this.baseUrl = "http://localhost:" + port;
