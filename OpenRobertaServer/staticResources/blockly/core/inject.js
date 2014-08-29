@@ -1,4 +1,4 @@
-/**
+ /**
  * @license
  * Visual Blocks Editor
  *
@@ -422,6 +422,7 @@ Blockly.init_ = function() {
  * @param {Node|string} tree DOM tree of blocks, or text representation of same.
  */
 Blockly.updateToolbox = function(tree) {
+    console.log(tree);
   tree = Blockly.parseToolboxTree_(tree);
   if (!tree) {
     if (Blockly.languageTree) {
