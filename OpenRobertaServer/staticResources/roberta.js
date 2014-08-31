@@ -251,7 +251,7 @@ function init() {
 		}else{
 			alert("We use the user program table");
 			//saveUPToServer();
-			//runOnBrick();
+			runOnBrick();
 		}
 
 	}, 'save+run the program');

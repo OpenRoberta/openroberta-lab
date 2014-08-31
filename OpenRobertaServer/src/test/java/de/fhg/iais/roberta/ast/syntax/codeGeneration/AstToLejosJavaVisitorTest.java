@@ -17,6 +17,7 @@ public class AstToLejosJavaVisitorTest {
         + "import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;\n"
         + "import de.fhg.iais.roberta.ast.syntax.HardwareComponent;\n"
         + "import de.fhg.iais.roberta.ast.syntax.action.ActorPort;\n"
+        + "import de.fhg.iais.roberta.ast.syntax.action.BrickLedColor;\n"
         + "import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;\n"
         + "import de.fhg.iais.roberta.codegen.lejos.Hal;\n\n";
     private static final String BRICK_CONFIGURATION = "" //
@@ -30,6 +31,12 @@ public class AstToLejosJavaVisitorTest {
         + "    public static void main(String[] args) {\n"
         + "        new Test().run();\n"
         + "    }\n\n";
+    private static final String SUFFIX = "" //
+        + "        try {\n"
+        + "            Thread.sleep(2000);\n"
+        + "        } catch ( InterruptedException e ) {\n"
+        + "            // ok\n"
+        + "        }\n";
     private static BrickConfiguration brickConfiguration;
 
     @BeforeClass
@@ -50,6 +57,7 @@ public class AstToLejosJavaVisitorTest {
             + "    public void run() {\n"
             + "        Hal hal = new Hal(brickConfiguration);\n"
             + "        hal.drawText(\"Hallo\", 0, 3);\n"
+            + SUFFIX
             + "    }\n"
             + "}\n";
 
@@ -69,6 +77,7 @@ public class AstToLejosJavaVisitorTest {
             + "        for ( int i = 0; i < 10; i++ ) {\n"
             + "            hal.drawText(\"Hallo\", 0, 3);\n"
             + "        }\n"
+            + SUFFIX
             + "    }\n"
             + "}\n";
 
@@ -97,6 +106,7 @@ public class AstToLejosJavaVisitorTest {
             + "        hal.setVolume(50);\n"
             + "        for ( int i = 1; i <= 10; i += 1 ) {\n\n"
             + "        }\n"
+            + SUFFIX
             + "    }\n"
             + "}\n";
 
@@ -126,6 +136,7 @@ public class AstToLejosJavaVisitorTest {
             + "                }\n"
             + "            }\n"
             + "        }\n"
+            + SUFFIX
             + "    }\n"
             + "}\n";
 
@@ -157,6 +168,7 @@ public class AstToLejosJavaVisitorTest {
                 + "            }\n"
                 + "            hal.ledOn(BrickLedColor.GREEN, true);\n"
                 + "        }\n"
+                + SUFFIX
                 + "    }\n"
                 + "}\n";
 

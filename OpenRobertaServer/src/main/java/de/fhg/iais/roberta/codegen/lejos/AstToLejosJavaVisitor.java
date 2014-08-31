@@ -733,6 +733,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.HardwareComponent;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.ActorPort;\n");
+        this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.BrickLedColor;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;\n");
         this.sb.append("import de.fhg.iais.roberta.codegen.lejos.Hal;\n\n");
         this.sb.append("public class " + this.programName + " {\n");
@@ -750,7 +751,19 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
             return;
         }
 
-        this.sb.append("\n").append(INDENT).append("}\n}\n");
+        this.sb.append("\n");
+        this.sb.append(INDENT).append(INDENT).append("try {\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("Thread.sleep(2000);\n");
+        this.sb.append(INDENT).append(INDENT).append("} catch ( InterruptedException e ) {\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("// ok\n");
+        this.sb.append(INDENT).append(INDENT).append("}\n");
+
+        try {
+            Thread.sleep(2000);
+        } catch ( InterruptedException e ) {
+            // ok
+        }
+        this.sb.append(INDENT).append("}\n}\n");
     }
 
 }
