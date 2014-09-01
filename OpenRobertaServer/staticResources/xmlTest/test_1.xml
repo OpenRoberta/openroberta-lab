@@ -1,0 +1,11 @@
+<project xmlns="http://www.w3.org/1999/xhtml">
+  <instance x="1" y="-2">
+    <block type="controls_if" inline="false">
+      <value name="IF0">
+        <block type="logic_compare" inline="true">
+          <field name="OP">EQ</field>
+        </block>
+      </value>
+    </block>
+  </instance>
+</project>

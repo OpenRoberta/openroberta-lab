@@ -1,0 +1,439 @@
+html, body {
+    margin: 0px !important;
+    padding: 0px !important;
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    background-color: #e6e6e6;
+}
+
+#wrapper {
+    height: 100%;
+    width: 100%;
+}
+
+#head-section {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 60px;
+    background-color: #ffffff;
+    box-shadow: 0px 3px 5px #aeaeaf;
+    -webkit-box-shadow: 0px 3px 5px #aeaeaf;
+    z-index: 100;
+}
+
+ul#head-navigation {
+    float: left;
+    list-style-type: none;
+    padding: 0px;
+    margin: 5px 0px 0px 20px;
+}
+
+ul#head-navigation li {
+    float: left;
+    margin-right: 20px;
+}
+
+ul#head-navigation a {
+    text-decoration: none;
+    color: #c7c7c7;
+    text-align: center;
+    display: block;
+    float: left;
+}
+
+ul#head-navigation a:hover {
+    text-decoration: none;
+    color: #333333;
+}
+
+.head-navi-icons {
+    height: 32px;
+    background-repeat: no-repeat;
+    display: block;
+    margin: 0 auto;
+}
+
+.head-navi-icons.help {
+    background-image: url(img/head-navi-icons/help.png);
+    width: 23px;
+}
+
+ul#head-navigation a:hover .head-navi-icons.help {
+    background-image: url(img/head-navi-icons/help_active.png);
+}
+
+.head-navi-icons.settings {
+    background-image: url(img/head-navi-icons/settings.png);
+    width: 24px;
+}
+
+ul#head-navigation a:hover .head-navi-icons.settings {
+    background-image: url(img/head-navi-icons/settings_active.png);
+}
+
+.head-navi-icons.community {
+    background-image: url(img/head-navi-icons/community.png);
+    width: 34px;
+}
+
+ul#head-navigation a:hover .head-navi-icons.community{
+    background-image: url(img/head-navi-icons/community_active.png);
+}
+
+.head-navi-icons.project {
+    background-image: url(img/head-navi-icons/project.png);
+    width: 22px;
+}
+
+ul#head-navigation a:hover .head-navi-icons.project, ul#head-navigation li:hover .head-navi-icons.project {
+    background-image: url(img/head-navi-icons/project_active.png);
+}
+
+.head-navi-icons.developer {
+    background-image: url(img/head-navi-icons/developer.png);
+    width: 22px;
+}
+
+ul#head-navigation a:hover .head-navi-icons.developer, ul#head-navigation li:hover .head-navi-icons.developer {
+    background-image: url(img/head-navi-icons/developer_active.png);
+}
+
+.head-navi-text {
+    font-family: 'Roboto', sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#logo {
+    width: 222px;
+    height: 60px;
+    background-image: url(img/logo.png);
+    background-repeat: no-repeat;
+    float: right;
+}
+
+#logo a {
+    display: block;
+    width: 222px;
+    height: 60px;
+    text-indent: -9999px;
+}
+
+#main-section {
+    height: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin-top: 60px;
+    z-index: 99;
+    background: #ffffff; /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover,  #ffffff 0%, #e6e6e6 100%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#ffffff), color-stop(100%,#e6e6e6)); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover,  #ffffff 0%,#e6e6e6 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover,  #ffffff 0%,#e6e6e6 100%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover,  #ffffff 0%,#e6e6e6 100%); /* IE10+ */
+    background: radial-gradient(ellipse at center,  #ffffff 0%,#e6e6e6 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e6e6e6',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    
+    /* CANT HANDLE THE OVERFLOW, SO ITS SET TO HIDDEN TEMPORARY */
+    overflow: hidden;
+}
+
+#control-panel {
+    position: absolute;
+    bottom: 30px;
+    left: 20px;
+    font-size: 13px;
+    z-index: 3;
+}
+
+.submit#run {
+    display: block;
+    position: fixed;
+    bottom: 30px;
+    right: 95px;
+    background-image: url(img/button_start.png);
+    width: 87px;
+    height: 28px;
+    border-style: none;
+    background-color: transparent;
+    text-indent: 480px;
+    cursor: pointer;
+}
+
+.submit#run:hover {
+    background-image: url(img/button_start_hover.png);    
+}
+
+/* ### WELCOME-SCREEN ############################################################ */
+
+#welcome-screen {
+    position: relative;
+    height: 100%;
+    widows: 100%;
+}
+
+#bricks-shell {
+    width: 600px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 600px;
+    margin: -300px;
+}
+
+.bricks {
+    position: absolute;
+}
+
+.bricks {
+    display: block;
+    height: 100%;
+    width: 100%;
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.bricks span {
+    position: absolute;
+}
+
+.bricks#welcome-brick1 span {
+    bottom: 5px;
+    right: 40px;
+}
+
+.bricks#welcome-brick2 span {
+    bottom: 35px;
+    left: 10px;
+}
+
+.bricks#welcome-brick3 span {
+    top: 35px;
+    right: 10px;
+}
+
+.bricks#welcome-brick4 span {
+    top: 5px;
+    left: 40px;
+}
+
+#welcome-brick1 {
+    width: 321px;
+    height: 293px;
+    background-image: url(img/welcome-screen/brick1.png);
+    top: 0;
+    left: 0;
+}
+#welcome-brick1:hover {
+    background-image: url(img/welcome-screen/brick1_active.png);
+}
+
+#welcome-brick2 {
+    width: 293px;
+    height: 321px;
+    background-image: url(img/welcome-screen/brick2.png);
+    right: 0;
+    top: 0;
+}
+#welcome-brick2:hover {
+    background-image: url(img/welcome-screen/brick2_active.png);
+}
+
+#welcome-brick3 {
+    width: 293px;
+    height: 321px;
+    background-image: url(img/welcome-screen/brick3.png);
+    bottom: 0;
+    left: 0;
+}
+#welcome-brick3:hover {
+    background-image: url(img/welcome-screen/brick3_active.png);
+}
+
+#welcome-brick4 {
+    width: 321px;
+    height: 293px;
+    background-image: url(img/welcome-screen/brick4.png);
+    bottom: 0;
+    right: 0;
+}
+#welcome-brick4:hover {
+    background-image: url(img/welcome-screen/brick4_active.png);
+}
+
+/* ### TUTORIALS ############################################################ */
+
+#tutorials {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-image: url(img/overlay-50percent.png);
+    background-repeat: repeat;
+    z-index: 100000;
+}
+
+#popup-tutorial {
+    width: 390px;
+    height: 240px;
+    padding: 30px;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 15px #9f9e9e;
+    border-radius: 3px;
+    border: 2px solid #999999;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 20px;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+#popup-tutorial h2 {
+    font-size: 25px;
+    font-weight: 600;
+    margin-top: 0px;
+    text-transform: uppercase;
+}
+
+#close-tutorials {
+    display: block;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    margin-right: -16px;
+    margin-top: -16px;
+    width: 32px;
+    height: 32px;
+    background-image: url(img/close-icon.png);
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+#close-tutorials:hover {
+    background-image: url(img/close-icon_hover.png);    
+}
+
+#next-tutorial {
+    position: absolute;
+    margin-top: 225px;
+    background-image: url(img/button_next.png);
+    width: 178px;
+    height: 50px;
+    padding-top: 7px;
+    padding-left: 15px;
+    cursor: pointer;
+    font-family: 'Open Sans', sans-serif;
+    text-transform: uppercase;
+    font-size: 30px;
+    color: #ffffff;
+}
+
+#next-tutorial:hover {
+    background-image: url(img/button_next_hover.png);  
+}
+
+#roberta-tutorial {
+    width: 135px;
+    height: 154px;
+    display: block;
+    position: absolute;
+    background-image: url(img/roberta-tutorial.png);
+    margin-left: 310px;
+    margin-top: 130px;
+}
+
+#action-menu {
+    position: absolute;
+    bottom: 0;
+    left: 150px;
+    opacity: 0.5;
+}
+
+#action-menu:hover {
+    opacity: 1;
+}
+
+#action-menu input {
+    font-size: 12px !important;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* ### OVERWRITE OLD STYLES ############################################################ */
+
+.ui-widget-content {
+    background: transparent;
+    border: none;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100%;
+    height: 100%;
+}
+
+#blocklyDiv {
+    background-color: none;
+    background-image: url(img/grid-pattern-background.png);
+    background-repeat: repeat;
+    height: 60%;
+    min-height: 60%;
+}
+
+.blocklySvg {
+    background-color: none !important;
+    background: none !important;
+    border: none !important;
+    height: 100% !important;
+    min-height: 100% !important;
+}
+
+.blocklyToolboxDiv {
+    background-color: none! important;
+    background: none !important;
+}
+
+.ui-tabs .ui-tabs-nav {
+    opacity: 0.5;
+    position: absolute;
+    margin-left: 350px;
+    margin-top: 5px;
+    font-size: 12px !important;
+    z-index: 99999;
+}
+
+.ui-tabs .ui-tabs-nav:hover {
+    opacity: 1 !important;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-active {
+    background-color: #82cded;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    background: #d5f0fc;
+}
+
+.blocklyTreeRoot {
+    background-image: url(img/overlay-50percent.png) !important;;
+    background-repeat: repeat; 
+}
+
+.blocklyTreeLabel {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: bold; 
+}

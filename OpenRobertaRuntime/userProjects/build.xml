@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="compileLejos" basedir=".." default="jar">
+
+	<property name="lib.lejos" value="${basedir}/lib" />
+	
+	<property name="brick.runtime" value="/home/root/lejos" />
+	<property name="brick.roberta" value="/home/roberta/lib" />
+	
+	<property name="input.dir" value="${basedir}/${user.projects.dir}/${token.dir}/src" />
+	<property name="output.dir" value="${basedir}/${user.projects.dir}/${token.dir}/target" />
+
+	<property name="main.package.file" value="${main.package}.${main.name}" />
+	<property name="program.jar" value="${main.name}.jar" />
+
+	<path id="lejos">
+		<fileset dir="${lib.lejos}">
+			<include name="*.jar"/>
+		</fileset>
+	</path>
+	
+	<target name="makeDir" description="create target folder">
+		<mkdir dir="${output.dir}" />
+	</target>
+
+	<target name="clean" description="delete old files" depends="makeDir">
+		<delete dir="${output.dir}" includes="*"/>
+	</target>
+
+	<target name="compile" description="build class files" depends="clean">
+		<javac srcdir="${input.dir}" destdir="${output.dir}" includeantruntime="false" fork="yes" debug="true" verbose="true" debuglevel="lines,vars,source">
+			<classpath refid="lejos"/>
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile">
+		<jar destfile="${output.dir}/${program.jar}">
+			<manifest>
+				<attribute name="Main-Class" value="${main.package.file}"/>
+				<attribute name="Class-Path" value="${brick.runtime}/lib/ev3classes.jar ${brick.runtime}/lib/dbusjava.jar ${brick.runtime}/libjna/usr/share/java/jna.jar ${brick.roberta}/OpenRobertaRuntime-0.0.1-SNAPSHOT.jar ${brick.roberta}/OpenRobertaShared-0.0.1-SNAPSHOT.jar"/>
+			</manifest>
+			<fileset dir="${output.dir}">
+				<include name="**/**.class"/>
+			</fileset>
+		</jar>
+	</target>
+</project>

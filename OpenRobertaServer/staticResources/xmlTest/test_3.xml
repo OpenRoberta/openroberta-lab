@@ -1,0 +1,50 @@
+<project xmlns="http://www.w3.org/1999/xhtml">
+  <instance x="91" y="24">
+    <block type="controls_repeat_ext" id="14" inline="true">
+      <statement name="DO">
+        <block type="robControls_loopUntil" id="16" inline="false">
+          <field name="PROPERTY">ULTRASONIC</field>
+          <field name="OP">EQ</field>
+          <value name="VALUE">
+            <block type="math_number" id="17">
+              <field name="NUM">30</field>
+            </block>
+          </value>
+           <statement name="DO">
+           <!-- <block type="robActions_motorDiff_on_for" id="18" inline="false">
+              <field name="DIRECTION">FOREWARD</field>
+              <value name="POWER">
+                <block type="math_number" id="19">
+                  <field name="NUM">30</field>
+                </block>
+              </value>
+              <value name="DISTANCE">
+                <block type="math_number" id="20">
+                  <field name="NUM">10</field>
+                </block>
+              </value>
+            </block> -->
+          </statement> 
+        </block>
+     <block type="robActions_motorDiff_stop" id="21"></block>
+      </statement>
+    </block>
+    <block type="controls_if" id="22" inline="false">
+      <mutation elseif="1"></mutation>
+      <repetitions>
+        <value name="IF0">
+          <block type="robSensors_colour" id="23">
+            <field name="MEASURE">COLOUR</field>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="robActions_motorDiff_stop" id="24"></block>
+        </statement>
+        <statement name="DO1">
+          <block type="robActions_motorDiff_stop" id="25"></block>
+          <block type="robActions_motorDiff_stop" id="26"></block>
+        </statement>
+      </repetitions>
+    </block>
+  </instance>
+</project>

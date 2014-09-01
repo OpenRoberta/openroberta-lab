@@ -1,0 +1,33 @@
+package de.fhg.iais.roberta.ast.syntax.sensor;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import de.fhg.iais.roberta.dbc.DbcException;
+
+public class GyroSensorModeTest {
+
+    @Test
+    public void testBuilder() {
+        GyroSensorMode mode = GyroSensorMode.get("Angle");
+        Assert.assertEquals(GyroSensorMode.ANGLE, mode);
+    }
+
+    @Test(expected = DbcException.class)
+    public void invalideMode() {
+        GyroSensorMode mode = GyroSensorMode.get("ad");
+
+    }
+
+    @Test(expected = DbcException.class)
+    public void invalideMode1() {
+        GyroSensorMode mode = GyroSensorMode.get("");
+
+    }
+
+    @Test(expected = DbcException.class)
+    public void invalideMode2() {
+        GyroSensorMode mode = GyroSensorMode.get(null);
+
+    }
+}

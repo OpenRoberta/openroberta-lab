@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<script type="text/javascript" src="/common/jquery/jquery-2.0.3.js" charset="utf-8"></script>
+<script type="text/javascript" src="/common/ui/jquery-ui.js" charset="utf-8"></script>
+<script type="text/javascript" src="/common/basics.js" charset="utf-8"></script>
+<script type="text/javascript" src="/common/jquery.dataTables.min.js" charset="utf-8"></script>
+
+<script type="text/javascript" src="/blockly/blockly_compressed.js"></script>
+<script type="text/javascript" src="/blockly/blocks_compressed.js"></script>
+<script type="text/javascript" src="/blockly/msg/js/de.js"></script>
+
+<script type="text/javascript" src="/roberta.js"></script>
+<script type="text/javascript" src="/users.js"></script>
+<script type="text/javascript" src="/userPrograms.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/common/themes/base/jquery.ui.theme.css"></link>
+<link rel="stylesheet" type="text/css" href="/common/themes/base/jquery.ui.tabs.css"></link>
+<link rel="stylesheet" type="text/css" href="/roberta.css"></link>
+<link rel="stylesheet" type="text/css" href="/common/jquery.dataTables.min.css"></link>
+<link href="css/styles.css" type="text/css" rel="stylesheet">
+
+<link rel="stylesheet" type="text/css" href="/css/simulator.css"></link>
+<script type="text/javascript" src="simulator/three.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="simulator/simulator.js" charset="utf-8"></script>
+<script type="text/javascript" src="simulator/main.js" charset="utf-8"></script>
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title class="header">Testfeld f&uuml;r BlOcKlY</title>
+</head>
+
+<body>
+ <div id="wrapper">
+        <div id="head-section">
+            <ul id="head-navigation">
+                <li>
+                    <a href="#">
+                        <span class="head-navi-icons help"></span>
+                        <span class="head-navi-text">Hilfe</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="head-navi-icons settings"></span>
+                        <span class="head-navi-text">Einstellungen</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="head-navi-icons community"></span>
+                        <span class="head-navi-text">Community</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="head-navi-icons project"></span>
+                        <span class="head-navi-text">Programm</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="head-navi-icons developer"></span>
+                        <span class="head-navi-text">Entwickler</span>
+                    </a>
+                </li>
+                <li>
+                   	<a href="#">
+                        <span id="signInIcon" class="head-navi-icons community"></span>
+                        <span id="setName" class="head-navi-text">SignIn</span>
+                    </a>
+                </li>
+            </ul>
+            <div id="logo">
+                <a href="index.html">Logo</a>
+            </div>
+        </div>
+        
+<div id="tutorials">
+      <div id="popup-tutorial">
+        <span id="close-tutorials"></span>
+        <span id="roberta-tutorial"></span>
+        <span id="next-tutorial">weiter</span>
+        <h2>Sign In</h2>
+		      My Account Name
+		      <br>
+		      <input id="accountNameS" class='input' type="text" value="" />
+		      <br>
+		      My Password
+		      <br>
+		      <input id="pass1S" class='input' type="password"  value="" />
+		      <br>
+		      <input id="signIn" class='submit' type="submit" value="SigIn" /><input id="newUser" href="#register" class='submit' type="submit" value="NewUser" /> 
+      </div>
+</div>
+       
+<div id="main-section">
+  <div id="tabs" >
+    <ul>
+      <li><a href="#blockly">Test Nepo :-)</a></li>
+      <li><a href="#listing">Listing</a></li>
+      <li><a href="#logging">Logging</a></li>
+      <li><a href="#readme">README</a></li>
+      <li><a id="registerLink" href="#register">Register User</a></li>
+      <li><a id="deleteLink" href="#delete">Delete User</a></li>
+    </ul>
+    
+    <div id="simulatorDiv"></div>
+    
+    <div id="blockly">
+      <div id="blocklyDiv" style="height: 100%; width: 100%; z-index: 1;"></div>
+      <br>
+      <div id="control-panel">
+          <input id="save" class='submit' type="submit" value="save" />
+          <input id="load" class='submit' type="submit" value="load" />
+          <input id="add" class='submit' type="submit" value="add" />
+          <input id="del" class='submit' type="submit" value="delete" />
+          <input id="run" class='submit' type="submit" value="run" />
+          <input id="name" class='input' type="text" value="" />
+          <br>
+          <input id="toolbox1" class='button' type="submit" value="Anf&auml;nger:" />
+          <input id="toolbox2" class='button' type="submit" value="Experte:" />
+          <input class='button' onclick="viewSimulator(true);" type="submit" value="Simulator Test" />
+      </div>      
+    </div>
+    <div id="listing">
+      <table id="programNameTable" class="tableSize">
+        <thead></thead>
+        <tbody></tbody>
+        <tfoot>
+        </tfoot>
+      </table>
+      <br>
+      <input id="loadFromListing" class='submit' type="submit" value="load" />
+      <div id="redrawCounter" class="rightGray">0</div></br>
+    </div>
+    <div id="logging">
+      <br />
+      <div>
+        <input id="toggle" class="button" type="submit" value="log ein/aus" /><br></br>
+        <hr />
+        <br></br>
+        <ol id="log" class="log">
+        </ol>
+        <div class="counter">Count:</div>
+        <div class="counter" id="counter">0</div>
+      </div>
+    </div>
+    <div id="readme">
+      <br />
+      <div>blo ckl y blo ckl y blo ckl y blo ckl y blo ckl y </div>
+    </div>
+   	<div id="register">
+      <br>
+      My Account Name
+      <br>
+      <input id="accountName" class='input' type="text" value="" />
+      <br>
+      My Password
+      <br>
+      <input id="pass1" class='input' type="password"  value="" />
+      <br>
+      Retype Password
+      <br>
+      <input id="pass2" class='input' type="password"  value="" />
+      <br>
+      My Name
+      <br>
+      <input id="userName" class='input' type="text" value="" />
+      <br>
+      My Email
+      <br>
+      <input id="userEmail" class='input' type="text" value="" />
+      <br>
+      <input  type="radio" name="role" value="student">Student
+      <input type="radio" name="role" value="professor">Professor<br>
+      <input id="saveUser" class='submit' type="submit" value="save" />
+    </div>
+    <div id="delete">
+      <br>
+      My Account Name
+      <br>
+      <input id="accountNameD" class='input' type="text" value="" />
+      <br>
+      <input id="deleteUser" class='submit' type="submit" value="delete" />
+    </div>
+  </div>
+ </div> 
+
+<script type="text/javascript">
+   $("#close-tutorials").click(function() {
+       $( "#tutorials" ).fadeOut(700);
+   });
+   $("#signInIcon").click(function() {
+       $( "#tutorials" ).fadeIn(700);
+   });
+   $("#newUser").click(function(){
+	   $( "#tutorials" ).fadeOut(700);
+	   $("#registerLink").click();
+   });
+
+</script>
+
+</body>
+</html>

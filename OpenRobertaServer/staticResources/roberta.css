@@ -1,0 +1,103 @@
+@charset "UTF-8";
+
+.input {
+	color: red;
+	background-color: #aaeeaa;
+	width: 5cm;
+	border: thick;
+	text-align: center;
+}
+
+.blockly {
+	width: 100%;
+    height: 60%;
+}
+
+.result {
+	color: green;
+	background-color: #ccccff;
+	width: 5cm;
+	border: thin;
+	text-align: right;
+	font-weight: bold;
+}
+
+.cm1 {
+	width: 1cm;
+}
+
+.programs {
+	color: green;
+	text-align: left;
+}
+
+.rightGray {
+    float: right;
+    width: 2.0cm;
+    text-align: center;
+    color: gray;
+}
+
+.selected {
+    background-color: yellow;
+}
+
+.counter {
+	color: #bbbbbb;
+	background-color: #eeeeee;
+	width: 15mm;
+	text-align: center;
+	font-size: smaller;
+	float: left;
+}
+
+.button {
+	font-family: cursive;
+	width: 160pt;
+}
+
+.ui-widget-header {
+	border: 0px;
+	padding-bottom: 30px;
+	background-color: #ffffff;
+}
+
+
+.ui-tabs .ui-tabs-nav {
+	padding: 0 0;
+}
+
+.ui-tabs .ui-tabs-panel {
+	padding: 0 0;
+}
+
+.ui-widget-content {
+	display: block;
+	float: left;
+	margin-top: 5px;
+	padding-top: 10px;
+	padding-left: 10px;
+	border-width: 2px;
+	border-color: green;
+	border-style: solid;
+	width: 90%;
+}
+
+.log {
+	background-color: #f0f0f0;
+	font-size: small;
+	overflow: auto;
+	height: 10cm;
+}
+
+.log0 {
+	background-color: #FFFFDD;
+}
+
+.log1 {
+	background-color: #DDFFFF;
+}
+
+.lERR {
+	background-color: #FF3333;
+}
