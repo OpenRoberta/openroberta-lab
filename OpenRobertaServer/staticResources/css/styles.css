@@ -3,10 +3,18 @@ html, body {
     padding: 0px !important;
     height: 100%;
     width: 100%;
+    font-family: 'Roboto', sans-serif;
 }
 
 body {
     background-color: #e6e6e6;
+}
+
+h2 {
+    font-size: 25px;
+    font-weight: 600;
+    margin-top: 0px;
+    text-transform: uppercase;
 }
 
 #wrapper {
@@ -36,6 +44,7 @@ ul#head-navigation {
 ul#head-navigation li {
     float: left;
     margin-right: 20px;
+    padding-bottom: 9px;
 }
 
 ul#head-navigation a {
@@ -46,7 +55,8 @@ ul#head-navigation a {
     float: left;
 }
 
-ul#head-navigation a:hover {
+ul#head-navigation a:hover,
+ul#head-navigation li:hover a {
     text-decoration: none;
     color: #333333;
 }
@@ -103,6 +113,15 @@ ul#head-navigation a:hover .head-navi-icons.developer, ul#head-navigation li:hov
     background-image: url(img/head-navi-icons/developer_active.png);
 }
 
+.head-navi-icons.user {
+    background-image: url(img/head-navi-icons/user.png);
+    width: 34px;
+}
+
+ul#head-navigation a:hover .head-navi-icons.user {
+    background-image: url(img/head-navi-icons/user_active.png);
+}
+
 .head-navi-text {
     font-family: 'Roboto', sans-serif;
     font-size: 10px;
@@ -123,6 +142,59 @@ ul#head-navigation a:hover .head-navi-icons.developer, ul#head-navigation li:hov
     width: 222px;
     height: 60px;
     text-indent: -9999px;
+}
+
+#project-submenu {
+    position: absolute;
+    margin-top: 55px;
+    padding: 15px;
+    background-color: #fff;
+    border-top: 1px dashed #cfcfcf;
+    border-right: 1px solid #bababa;
+    border-bottom: 1px solid #bababa;
+    border-left: 1px solid #bababa;
+    display: none;
+}
+
+#project-submenu input[type=submit] {
+    display: block;
+    width: 170px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    height: 30px;
+    margin-bottom: 5px;
+    border: none;
+    color: #ffffff;
+    background-color: #afca04;
+    border-radius: 3px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+#project-submenu input:hover[type=submit] {
+    background-color: #b7d302;
+}
+
+#project-submenu input[type=text] {
+    display: block;
+    width: 170px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    height: 24px;
+    margin-bottom: 5px;
+    background-color: #ffffff;
+    color: #333333;
+    border: 1px solid #afca04;
+    border-radius: 3px;
+}
+
+#project-submenu input:hover[type=text] {
+    background-color: #ffffff;
+}
+
+
+ul#head-navigation li:hover #project-submenu {
+    display: block;
 }
 
 #main-section {
@@ -283,6 +355,7 @@ ul#head-navigation a:hover .head-navi-icons.developer, ul#head-navigation li:hov
     background-image: url(img/overlay-50percent.png);
     background-repeat: repeat;
     z-index: 100000;
+    display: none;
 }
 
 #popup-tutorial {
@@ -303,11 +376,123 @@ ul#head-navigation a:hover .head-navi-icons.developer, ul#head-navigation li:hov
     right: 0;
 }
 
-#popup-tutorial h2 {
-    font-size: 25px;
-    font-weight: 600;
-    margin-top: 0px;
-    text-transform: uppercase;
+#new-user,
+#delete-user {
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+#login-popup,
+#new-user,
+#delete-user {
+    font-family: 'Roboto', sans-serif;
+}
+
+#login-popup label,
+#new-user label,
+#delete-user label {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#login-popup input,
+#new-user input,
+#delete-user input {
+    padding: 7px 8px 7px 32px;
+    border: 1px solid #afca04;
+    border-radius: 3px;
+    background-color: #ffffff;
+    margin-bottom: 15px;
+    color: #c7c7c7;
+    font-size: 14px;
+    text-align: left;
+}
+
+#login-popup input#accountNameS,
+#new-user input#accountName,
+#delete input#accountNameD {
+    background-image: url(img/login_user-icon.png);
+    background-repeat: no-repeat;
+    background-position: center left;
+}
+
+#login-popup input#accountNameS:active,
+#login-popup input#accountNameS:focus,
+#new-user input#accountName:active,
+#new-user input#accountName:focus,
+#delete input#accountNameD:active,
+#delete input#accountNameD:focus {
+    background-image: url(img/login_user-icon_active.png);
+    background-repeat: no-repeat;
+    background-position: center left;
+    color: #333333;
+}
+
+#login-popup input#pass1S,
+#new-user input#pass1,
+#new-user input#pass2 {
+    background-image: url(img/login_pw-icon.png);
+    background-repeat: no-repeat;
+    background-position: center left;
+}
+
+#login-popup input#pass1S:active,
+#login-popup input#pass1S:focus,
+#new-user input#pass1:active,
+#new-user input#pass1:focus,
+#new-user input#pass2:active,
+#new-user input#pass2:focus {
+    background-image: url(img/login_pw-icon_active.png);
+    background-repeat: no-repeat;
+    background-position: center left;
+    color: #333333;
+}
+
+#new-user input#userName {
+    background-image: url(img/login_name-icon.png);
+    background-repeat: no-repeat;
+    background-position: center left;
+}
+
+#new-user input#userName:active,
+#new-user input#userName:focus {
+    background-image: url(img/login_name-icon_active.png);
+    background-repeat: no-repeat;
+    background-position: center left;
+    color: #333333;
+}
+
+#new-user input#userEmail {
+    background-image: url(img/login_email-icon.png);
+    background-repeat: no-repeat;
+    background-position: center left;
+}
+
+#new-user input#userEmail:active,
+#new-user input#userEmail:focus {
+    background-image: url(img/login_email-icon_active.png);
+    background-repeat: no-repeat;
+    background-position: center left;
+    color: #333333;
+}
+
+#login-popup .submit,
+#new-user .submit,
+#delete-user .submit {
+    padding: 7px 9px;
+    border: none;
+    font-size: 16px;
+    border-radius: 3px;
+    color: #ffffff;
+    background-color: #afca04;
+    cursor: pointer;
+}
+
+#login-popup .submit:hover,
+#new-user .submit:hover,
+#delete-user .submit:hover {
+    background-color: #b7d032;
 }
 
 #close-tutorials {

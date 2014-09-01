@@ -22,9 +22,7 @@
 <link href="css/styles.css" type="text/css" rel="stylesheet">
 
 <link rel="stylesheet" type="text/css" href="/css/simulator.css"></link>
-<script type="text/javascript" src="simulator/three.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="simulator/simulator.js" charset="utf-8"></script>
-<script type="text/javascript" src="simulator/main.js" charset="utf-8"></script>
+<script type="text/javascript" src="simulator.js" charset="utf-8"></script>
 
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
@@ -58,17 +56,32 @@
                         <span class="head-navi-icons project"></span>
                         <span class="head-navi-text">Programm</span>
                     </a>
+                    <div id="project-submenu">
+                        Programm
+                          <input id="save" class='submit' type="submit" value="Speichern" />
+                          <input id="load" class='submit' type="submit" value="Laden" />
+                          <input id="add" class='submit' type="submit" value="Hinzufügen" />
+                          <input id="del" class='submit' type="submit" value="Löschen" />
+                          <input id="name" class='input' type="text" value="Name des Programms" />
+                          <br>
+                        Toolbox
+                          <input id="toolbox1" class='button' type="submit" value="Anf&auml;nger:" />
+                          <input id="toolbox2" class='button' type="submit" value="Experte:" />
+                        <br>
+                        Simulation
+                          <input class='button' onclick="viewSimulator(true);" type="submit" value="Simulator Test" />
+                        </div>
                 </li>
-                <li>
+                <!-- <li>
                     <a href="#">
                         <span class="head-navi-icons developer"></span>
                         <span class="head-navi-text">Entwickler</span>
                     </a>
-                </li>
+                </li> -->
                 <li>
                    	<a href="#">
-                        <span id="signInIcon" class="head-navi-icons community"></span>
-                        <span id="setName" class="head-navi-text">SignIn</span>
+                        <span id="signInIcon" class="head-navi-icons user"></span>
+                        <span id="setName" class="head-navi-text">Login</span>
                     </a>
                 </li>
             </ul>
@@ -81,17 +94,16 @@
       <div id="popup-tutorial">
         <span id="close-tutorials"></span>
         <span id="roberta-tutorial"></span>
-        <span id="next-tutorial">weiter</span>
-        <h2>Sign In</h2>
-		      My Account Name
-		      <br>
-		      <input id="accountNameS" class='input' type="text" value="" />
-		      <br>
-		      My Password
-		      <br>
-		      <input id="pass1S" class='input' type="password"  value="" />
-		      <br>
-		      <input id="signIn" class='submit' type="submit" value="SigIn" /><input id="newUser" href="#register" class='submit' type="submit" value="NewUser" /> 
+        <!-- <span id="next-tutorial">weiter</span> -->
+        <h2>Login</h2>
+            <div id="login-popup">
+                <label for="accountNameS">Benutzername</label>
+                <input id="accountNameS" class='input' type="text" value="" />
+                <label for="pass1S">Passwort</label>
+                <input id="pass1S" class='input' type="password"  value="" /><br>
+                <input id="signIn" class='submit' type="submit" value="Login" />
+                <input id="newUser" href="#register" class='submit' type="submit" value="Neuer Benutzer" /> 
+            </div>
       </div>
 </div>
        
@@ -106,22 +118,25 @@
       <li><a id="deleteLink" href="#delete">Delete User</a></li>
     </ul>
     
-    <div id="simulatorDiv"></div>
+    <script type="text/javascript">
+    
+    </script>
+    
+    <div id="simulatorDiv"> 
+    	<button id="closeBtn" class="button" onclick="viewSimulator(false);">Beenden</button>	
+    	<button id="closeBtn" class="button" onclick="moveStop();">Stop</button>
+		<div id="positionData"></div>
+		<div id="dummyDown" class="dummy"></div>
+		<div id="dummyUp" class="dummy"></div>	
+		<div id="dummyLeft" class="dummy"></div>	
+		<div id="dummyRight" class="dummy"></div>		
+    </div>
     
     <div id="blockly">
       <div id="blocklyDiv" style="height: 100%; width: 100%; z-index: 1;"></div>
       <br>
       <div id="control-panel">
-          <input id="save" class='submit' type="submit" value="save" />
-          <input id="load" class='submit' type="submit" value="load" />
-          <input id="add" class='submit' type="submit" value="add" />
-          <input id="del" class='submit' type="submit" value="delete" />
           <input id="run" class='submit' type="submit" value="run" />
-          <input id="name" class='input' type="text" value="" />
-          <br>
-          <input id="toolbox1" class='button' type="submit" value="Anf&auml;nger:" />
-          <input id="toolbox2" class='button' type="submit" value="Experte:" />
-          <input class='button' onclick="viewSimulator(true);" type="submit" value="Simulator Test" />
       </div>      
     </div>
     <div id="listing">
@@ -149,41 +164,32 @@
     </div>
     <div id="readme">
       <br />
-      <div>blo ckl y blo ckl y blo ckl y blo ckl y blo ckl y </div>
+      <div>Content Readme</div>
     </div>
    	<div id="register">
-      <br>
-      My Account Name
-      <br>
-      <input id="accountName" class='input' type="text" value="" />
-      <br>
-      My Password
-      <br>
-      <input id="pass1" class='input' type="password"  value="" />
-      <br>
-      Retype Password
-      <br>
-      <input id="pass2" class='input' type="password"  value="" />
-      <br>
-      My Name
-      <br>
-      <input id="userName" class='input' type="text" value="" />
-      <br>
-      My Email
-      <br>
-      <input id="userEmail" class='input' type="text" value="" />
-      <br>
-      <input  type="radio" name="role" value="student">Student
-      <input type="radio" name="role" value="professor">Professor<br>
-      <input id="saveUser" class='submit' type="submit" value="save" />
+        <div id="new-user">
+            <h2>Benutzer erstellen</h2>
+            <label for="accountName">Benutzername</label>
+            <input id="accountName" class='input' type="text" value="" />
+            <label for="pass1">Passwort</label>
+            <input id="pass1" class='input' type="password"  value="" />
+            <label for="pass2">Passwort wiederholen</label>
+            <input id="pass2" class='input' type="password"  value="" />
+            <label for="userName">Name</label>
+            <input id="userName" class='input' type="text" value="" />
+            <label for="userEmail">E-Mail</label>
+            <input id="userEmail" class='input' type="text" value="" /><br>
+            <input  type="radio" name="role" value="schueler">Schüler
+            <input type="radio" name="role" value="lehrer">Lehrer<br>
+            <input id="saveUser" class='submit' type="submit" value="Benutzer registrieren" />
+        </div>
     </div>
     <div id="delete">
-      <br>
-      My Account Name
-      <br>
-      <input id="accountNameD" class='input' type="text" value="" />
-      <br>
-      <input id="deleteUser" class='submit' type="submit" value="delete" />
+        <div id="delete-user">
+          <h2>Benutzer löschen</h2>
+          <input id="accountNameD" class='input' type="text" value="" /><br>
+          <input id="deleteUser" class='submit' type="submit" value="Benutzer löschen" />
+        </div>
     </div>
   </div>
  </div> 
