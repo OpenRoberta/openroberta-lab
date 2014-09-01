@@ -38,17 +38,14 @@ public class LocalServerUITest {
     }
 
     @Test
-    public void testORQAServerUI() throws Exception {
-        this.driver.get(this.baseUrl + "/");
-        this.driver.findElement(By.id("welcome-brick1")).click();
-        this.driver.findElement(By.id("close-tutorials")).click();
-        this.driver.findElement(By.linkText("Logo")).click();
-        this.driver.findElement(By.id("welcome-brick4")).click();
-        this.driver.findElement(By.id("toolbox1")).click();
-        this.driver.findElement(By.id("toolbox2")).click();
-        this.driver.findElement(By.xpath("//input[@value='Simulator Test']")).click();
-        //this.driver.findElement(By.id("closeBtn")).click();
-        this.driver.findElement(By.linkText("Logo")).click();
+    public void testLukas() throws Exception {
+      driver.get(baseUrl + "/");
+      driver.findElement(By.id("welcome-brick1")).click();
+      driver.findElement(By.linkText("Logo")).click();
+      driver.findElement(By.id("welcome-brick3")).click();
+      driver.findElement(By.linkText("Logo")).click();
+      driver.findElement(By.id("welcome-brick4")).click();
+      driver.findElement(By.linkText("Logo")).click();
     }
 
     @After
