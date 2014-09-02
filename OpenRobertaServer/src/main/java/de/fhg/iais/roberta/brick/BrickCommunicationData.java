@@ -5,13 +5,14 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.util.Clock;
+import de.fhg.iais.roberta.util.Pair;
 
 public class BrickCommunicationData {
     private static final Logger LOG = LoggerFactory.getLogger(BrickCommunicationData.class);
 
     private Clock lastRequestClock = Clock.start();
     private BrickCommunicationState lastRequest = BrickCommunicationState.NOTHING_TO_DO;
-    private String token;
+    private final String token;
     private String programName;
     private String brickConfiguration;
 
@@ -19,7 +20,7 @@ public class BrickCommunicationData {
         this.token = token;
     }
 
-    public synchronized String brickDownloadRequest() {
+    public synchronized Pair<String, String> brickDownloadRequest() {
         BrickCommunicationState download = BrickCommunicationState.DOWNLOAD_REQUEST_FROM_BRICK_ARRIVED;
         BrickCommunicationState nothingToDo = BrickCommunicationState.NOTHING_TO_DO;
         if ( this.lastRequest == nothingToDo || this.lastRequest == download ) {
@@ -36,11 +37,11 @@ public class BrickCommunicationData {
             }
             LOG.debug("Waiting BRICK got run button after " + waitTime.elapsedSecFormatted() + ". " + this.lastRequest + " -> " + nothingToDo);
             this.lastRequest = nothingToDo;
-            return this.programName;
+            return Pair.of(this.token, this.programName);
         } else if ( this.lastRequest == BrickCommunicationState.RUN_BUTTON_WAS_PRESSED ) {
             LOG.debug("BRICK detects run button press " + this.lastRequestClock.elapsedSecFormatted() + " ago. " + this.lastRequest + " -> " + nothingToDo);
             this.lastRequest = nothingToDo;
-            return this.programName;
+            return Pair.of(this.token, this.programName);
         } else {
             throw new DbcException("Found an invalid BrickCommunicationRequest: " + this.lastRequest);
         }

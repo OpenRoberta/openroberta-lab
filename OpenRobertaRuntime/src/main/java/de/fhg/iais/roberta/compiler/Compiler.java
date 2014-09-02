@@ -10,10 +10,12 @@ import org.apache.tools.ant.ProjectHelper;
  * 
  * @author dpyka
  */
+@Deprecated
 public class Compiler {
 
+    @Deprecated
     public static void main(String[] args) {
-        runBuild("userProjects", "1Q2W3E4R", "blinker2", "generated.main");
+        runBuild("userProjects", "01234567", "blinker2", "generated.main");
     }
 
     /**
@@ -27,6 +29,7 @@ public class Compiler {
      * @param mainFile
      * @param mainPackage
      */
+    @Deprecated
     private static void runBuild(String userProjectsDir, String token, String mainFile, String mainPackage) {
 
         File buildFile = new File(userProjectsDir + "\\build.xml");

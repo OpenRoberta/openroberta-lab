@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Singleton;
 
+import de.fhg.iais.roberta.util.Pair;
+
 /**
  * class, that synchronizes the communication between the bricks and the web-app. Thread-safe. See class {@link BrickCommunicationData} for
  * further explanations.<br>
@@ -25,7 +27,7 @@ public class BrickCommunicator {
         LOG.info("created");
     }
 
-    public String iAmABrickAndWantToWaitForARunButtonPress(String token) {
+    public Pair<String, String> iAmABrickAndWantToWaitForARunButtonPress(String token) {
         BrickCommunicationData singleState = getSingleState(token);
         return singleState.brickDownloadRequest();
     }

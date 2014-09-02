@@ -9,6 +9,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.tools.ant.ProjectHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -24,7 +25,7 @@ import de.fhg.iais.roberta.persistence.connector.SessionWrapper;
 public class CompilerWorkflow {
 
     private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflow.class);
-    private static final String BASE_DIR = "../OpenRobertaRuntime/userProjects/"; // TODO: temprorary path has to be be removed 
+    public static final String BASE_DIR = "../OpenRobertaRuntime/userProjects/"; // TODO: temporary path has to be be removed 
 
     /**
      * - load the program from the database<br>
@@ -63,13 +64,14 @@ public class CompilerWorkflow {
         } catch ( Exception e ) {
             return "blocks could not be transformed (message: " + e.getMessage() + ")";
         }
-        String javaCode = AstToLejosJavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), true);
+        String javaCode = AstToLejosJavaVisitor.generate(programName, brickConfiguration, transformer.getTree(), true);
         LOG.info("to be compiled: {}", javaCode);
         try {
             storeGeneratedProgram(token, programName, javaCode);
         } catch ( Exception e ) {
             return "generated java code could not be stored (message: + " + e.getMessage() + ")";
         }
+        runBuild(BASE_DIR, token, programName, "generated.main");
         return null;
     }
 
@@ -94,7 +96,37 @@ public class CompilerWorkflow {
     }
 
     private static void storeGeneratedProgram(String token, String programName, String javaCode) throws Exception {
-        File javaFile = new File(BASE_DIR + token + "/" + programName + ".java");
+        File javaFile = new File(BASE_DIR + token + "/src/" + programName + ".java");
         FileUtils.writeStringToFile(javaFile, javaCode, StandardCharsets.UTF_8.displayName());
     }
+
+    /**
+     * 1. Make target folder (if not exists).<br>
+     * 2. Clean target folder (everything inside).<br>
+     * 3. Compile .java files to .class.<br>
+     * 4. Make jar from class files and add META-INF entries.<br>
+     * 
+     * @param userProjectsDir
+     * @param token
+     * @param mainFile
+     * @param mainPackage
+     */
+    private static void runBuild(String userProjectsDir, String token, String mainFile, String mainPackage) {
+
+        File buildFile = new File(userProjectsDir + "/build.xml");
+        org.apache.tools.ant.Project project = new org.apache.tools.ant.Project();
+
+        project.setProperty("user.projects.dir", userProjectsDir);
+        project.setProperty("token.dir", token);
+        project.setProperty("main.name", mainFile);
+        project.setProperty("main.package", mainPackage);
+
+        project.init();
+
+        ProjectHelper projectHelper = ProjectHelper.getProjectHelper();
+        projectHelper.parse(project, buildFile);
+
+        project.executeTarget(project.getDefaultTarget());
+    }
+
 }
