@@ -2,16 +2,22 @@ package lejos.ev3.startup;
 
 import java.net.URL;
 
+import lejos.ev3.startup.GraphicStartup.IndicatorThread;
 import lejos.hardware.Key;
 import lejos.hardware.KeyListener;
 
-public class BackgroundTasks implements KeyListener, Runnable {
+public class BackgroundTasks implements KeyListener {
 
     private final RobertaTokenRegister rtr;
     private final RobertaDownloader rd;
 
+    private RobertaLauncher rl;
+
     private Thread tokenThread;
     private Thread downloadThread;
+    private Thread launcherThread;
+
+    private boolean autorun = true;
 
     public BackgroundTasks(URL serverTokenRessource, URL serverDownloadRessource, String token) {
         this.rtr = new RobertaTokenRegister(serverTokenRessource, token);
@@ -31,19 +37,21 @@ public class BackgroundTasks implements KeyListener, Runnable {
         this.downloadThread.start();
     }
 
+    public void startLauncherThread(IndicatorThread ind, EchoThread echoIn, EchoThread echoErr) {
+        this.rl = new RobertaLauncher(ind, echoIn, echoErr, this.rd);
+        this.launcherThread = new Thread(this.rl);
+        this.launcherThread.start();
+    }
+
     public void stopDownload() {
         this.rd.getHttpConnection().disconnect();
     }
 
     @Override
-    public void run() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public void keyPressed(Key arg0) {
-        setRegInterruptInfo(true);
+        if ( GraphicStartup.isRobertaRegistered == false ) {
+            this.rtr.getHttpConnection().disconnect();
+        }
     }
 
     @Override
@@ -63,12 +71,8 @@ public class BackgroundTasks implements KeyListener, Runnable {
         return this.rtr.getErrorInfo();
     }
 
-    public boolean getRegInterruptInfo() {
-        return this.rtr.getRegInterruptInfo();
-    }
-
-    public void setRegInterruptInfo(boolean bool) {
-        this.rtr.setRegInterruptInfo(bool);
+    public void setRobertaAutorun(boolean bool) {
+        this.autorun = bool;
     }
 
 }

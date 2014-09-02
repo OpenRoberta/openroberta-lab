@@ -13,7 +13,6 @@ import java.net.URL;
  */
 public class RobertaDownloader implements Runnable {
 
-    private boolean downloadRequestHanging = false;
     private boolean hasDownloaded = false;
 
     private HttpURLConnection httpURLConnection;
@@ -21,7 +20,7 @@ public class RobertaDownloader implements Runnable {
     private final URL serverURL;
     private final String token;
 
-    private String fileName;
+    private static String fileName;
     private final String PROGRAMS_DIRECTORY = "/home/lejos/programs";
 
     public RobertaDownloader(URL serverURL, String token) {
@@ -29,16 +28,12 @@ public class RobertaDownloader implements Runnable {
         this.token = token;
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+
     public HttpURLConnection getHttpConnection() {
         return this.httpURLConnection;
-    }
-
-    public boolean getHangingRequestInfo() {
-        return this.downloadRequestHanging;
-    }
-
-    public void setHangingRequestInfo(boolean bool) {
-        this.downloadRequestHanging = bool;
     }
 
     public boolean getDownloadCompleteInfo() {
@@ -51,7 +46,6 @@ public class RobertaDownloader implements Runnable {
 
     @Override
     public void run() {
-        setHangingRequestInfo(true);
         setDownloadCompleteInfo(false);
 
         DataOutputStream dos = null;
@@ -69,16 +63,16 @@ public class RobertaDownloader implements Runnable {
             byte[] buffer = new byte[4096];
             int n;
 
-            this.fileName = this.httpURLConnection.getHeaderField("fileName");
-            System.out.println("http header fileName: " + this.fileName);
-            fos = new FileOutputStream(new File(this.PROGRAMS_DIRECTORY, this.fileName));
+            RobertaDownloader.fileName = this.httpURLConnection.getHeaderField("fileName");
+            System.out.println("http header fileName: " + RobertaDownloader.fileName);
+            fos = new FileOutputStream(new File(this.PROGRAMS_DIRECTORY, RobertaDownloader.fileName));
 
             while ( (n = is.read(buffer)) != -1 ) {
                 fos.write(buffer, 0, n);
             }
             setDownloadCompleteInfo(true);
         } catch ( IOException e ) {
-            System.out.println("force disconnect");
+            System.out.println("force disconnect (download)");
         } finally {
             try {
                 if ( dos != null ) {
@@ -92,7 +86,6 @@ public class RobertaDownloader implements Runnable {
                 }
             } catch ( IOException e ) {
             }
-            setHangingRequestInfo(false);
         }
     }
 

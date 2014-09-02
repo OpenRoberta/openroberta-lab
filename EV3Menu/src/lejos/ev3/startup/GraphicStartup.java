@@ -148,9 +148,9 @@ public class GraphicStartup implements Menu {
     private static final String ICRoberta =
         "\u0000\u0000\u0080\u0000\u0000\u0000\u0080\u0000\u0000\u00c0\u00c3\u0001\u0010\u0001\u00c0\u0001\u00dc\u00c0\u00c1\u0000\u0058\u002f\u00fe\u0000\u009c\u0010\u007c\u0000\u007c\u0080\u001c\u0000\u0078\u0084\u001d\u0000\u0070\u000c\u0004\u0000\u0070\u0000\u0002\u0000\u0080\u00f0\u0001\u0000\u0000\u003f\u0000\u0000\u0000\u0038\u0000\u0000\u0000\u0018\u0000\u0000\u0000\u001c\u0000\u0000\u0000\u001c\u00c0\u0001\u0000\u001c\u00f8\u0003\u0000\u00dc\u00ff\u0003\u0000\u00dc\u00ff\u0003\u0000\u00bc\u00ff\r\u0000\u00f8\u00ff\u001e\u0000\u00f4\u007f\u001f\u0080\u00cf\u00c7\u003f\u00c0\u00ff\u00bb\u003f\u00e0\u00fb\u00fd\u0033\u00e0\u0007\u00ff\u003b\u00e0\u00ff\u00cf\u003b\u00e0\u00ff\u00ef\u001f\u00c0\u00ff\u00ff\u001f\u0080\u00f7\u00fe\u000f\u0000\u0000\u00b8\u0007";
 
-    private BackgroundTasks backgroundTasks;
+    private static BackgroundTasks backgroundTasks;
 
-    private static boolean isRegistered = false;
+    public static boolean isRobertaRegistered = false;
     private static String token;
     private static String serverURLString;
     private static URL serverTokenRessource;
@@ -1507,28 +1507,26 @@ public class GraphicStartup implements Menu {
 
         newScreen(" Robertalab");
 
-        if ( GraphicStartup.isRegistered == false ) {
+        if ( GraphicStartup.isRobertaRegistered == false ) {
             token = new RobertaTokenGenerator().generateToken(8);
-            this.backgroundTasks = new BackgroundTasks(serverTokenRessource, serverDownloadRessource, token);
+            GraphicStartup.backgroundTasks = new BackgroundTasks(serverTokenRessource, serverDownloadRessource, token);
             Key escapeKey = LocalEV3.get().getKey("Escape");
-            escapeKey.addKeyListener(this.backgroundTasks);
-            this.backgroundTasks.startRegisteringThread();
+            escapeKey.addKeyListener(GraphicStartup.backgroundTasks);
+            GraphicStartup.backgroundTasks.startRegisteringThread();
 
             newScreen(" Robertalab");
             lcd.drawString("waiting for", 0, 2);
             lcd.drawString("registration...", 0, 3);
 
-            while ( this.backgroundTasks.getRegisteredInfo() == false ) {
-                if ( this.backgroundTasks.getRegInterruptInfo() == true ) {
-                    return;
-                } else if ( this.backgroundTasks.getTimeOutInfo() == true ) {
+            while ( GraphicStartup.backgroundTasks.getRegisteredInfo() == false ) {
+                if ( GraphicStartup.backgroundTasks.getTimeOutInfo() == true ) {
                     newScreen(" Robertalab");
                     lcd.drawString("Time out!", 0, 3);
                     Button.waitForAnyPress();
                     return;
-                } else if ( this.backgroundTasks.getErrorInfo() == true ) {
+                } else if ( GraphicStartup.backgroundTasks.getErrorInfo() == true ) {
                     newScreen(" Robertalab");
-                    lcd.drawString("Error!", 0, 3);
+                    lcd.drawString("Error/ abort!", 0, 3);
                     Button.waitForAnyPress();
                     return;
                 } else {
@@ -1536,14 +1534,13 @@ public class GraphicStartup implements Menu {
                 }
             }
 
-            isRegistered = true;
+            isRobertaRegistered = true;
             this.indiBA.setRobertalab(true);
             newScreen(" Robertalab");
             lcd.drawString("Success!", 0, 3);
             Delay.msDelay(2000);
-            this.backgroundTasks.startDownloadThread();
-
-            RobertaRunner robertaRunner = new RobertaRunner(this.ind, echoIn, echoErr);
+            GraphicStartup.backgroundTasks.startDownloadThread();
+            GraphicStartup.backgroundTasks.startLauncherThread(this.ind, echoIn, echoErr);
 
         } else {
             GraphicMenu menu = new GraphicMenu(new String[] {
@@ -1558,7 +1555,7 @@ public class GraphicStartup implements Menu {
                     case 0:
                         newScreen(" Robertalab");
                         if ( getYesNo("     Confirm", false) == 1 ) {
-                            isRegistered = false;
+                            isRobertaRegistered = false;
                             token = null;
                             serverURLString = null;
                             serverTokenRessource = null;
@@ -1569,19 +1566,6 @@ public class GraphicStartup implements Menu {
                 }
             } while ( selected >= 0 );
         }
-
-        // refactor 2
-        /*if ( robertaDownloader.getHangingRequestInfo() == false && runner.getFinishedInfo() == true ) {
-            executerService.execute(robertaDownloader);
-            robertaDownloader.setHangingRequestInfo(true);
-            robertaDownloader.setDownloadCompleteInfo(false);
-        }
-        if ( robertaDownloader.getDownloadCompleteInfo() == true && runner.getRunningInfo() == false ) {
-            runner.setFileName(robertaDownloader.getFileName());
-            executerService.execute(runner);
-            runner.setRunningInfo(true);
-        }*/
-
     }
 
     /**
@@ -1996,6 +1980,10 @@ public class GraphicStartup implements Menu {
 
             drawLaunchScreen();
 
+            if ( isRobertaRegistered == true ) {
+                backgroundTasks.setRobertaAutorun(false);
+            }
+
             program = new ProcessBuilder(command.split(" ")).directory(new File(directory)).start();
             BufferedReader input = new BufferedReader(new InputStreamReader(program.getInputStream()));
             BufferedReader err = new BufferedReader(new InputStreamReader(program.getErrorStream()));
@@ -2034,6 +2022,8 @@ public class GraphicStartup implements Menu {
             program = null;
         } catch ( Exception e ) {
             System.err.println("Failed to execute program: " + e);
+        } finally {
+            backgroundTasks.setRobertaAutorun(true);
         }
     }
 

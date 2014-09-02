@@ -13,7 +13,7 @@ import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.lcd.Image;
 import lejos.utility.Delay;
 
-public class RobertaRunner implements Runnable {
+public class RobertaLauncher implements Runnable {
 
     private final IndicatorThread ind;
     private EchoThread echoIn, echoErr;
@@ -29,58 +29,50 @@ public class RobertaRunner implements Runnable {
 
     private static final GraphicsLCD glcd = LocalEV3.get().getGraphicsLCD();
 
+    private final RobertaDownloader rd;
+    private boolean autorun = true;
+
     private static Process program; // the running user program, if any
     private static String programName; // The name of the running program
     private static String mainClass;
 
-    private static boolean isRunning = false;
-    private static boolean finished = true;
-
-    public RobertaRunner(IndicatorThread ind, EchoThread echoIn, EchoThread echoErr) {
+    public RobertaLauncher(IndicatorThread ind, EchoThread echoIn, EchoThread echoErr, RobertaDownloader rd) {
         this.ind = ind;
         this.echoIn = echoIn;
         this.echoErr = echoErr;
+        this.rd = rd;
     }
 
     public void setFileName(String programName) {
-        RobertaRunner.programName = programName;
+        RobertaLauncher.programName = programName;
     }
 
-    public boolean getRunningInfo() {
-        return isRunning;
-    }
-
-    public void setRunningInfo(boolean bool) {
-        isRunning = bool;
-    }
-
-    public boolean getFinishedInfo() {
-        return finished;
-    }
-
-    public void setFinishedInfo(boolean bool) {
-        finished = bool;
+    public void setRobertaAutorun(boolean bool) {
+        this.autorun = bool;
     }
 
     @Override
     public void run() {
-        setRunningInfo(true);
-        setFinishedInfo(false);
-        File robertalabFile = new File(RobertaRunner.PROGRAMS_DIRECTORY, programName);
-        JarFile jar;
-        try {
-            jar = new JarFile(robertalabFile);
-            mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
-            jar.close();
-        } catch ( IOException e ) {
-            System.err.println("Exception running program");
-            return;
+        while ( this.autorun ) {
+            if ( this.rd.getDownloadCompleteInfo() ) {
+                File robertalabFile = new File(RobertaLauncher.PROGRAMS_DIRECTORY, programName);
+                JarFile jar;
+                try {
+                    jar = new JarFile(robertalabFile);
+                    mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
+                    jar.close();
+                } catch ( IOException e ) {
+                    System.err.println("Exception running program");
+                    return;
+                }
+                this.ind.suspend();
+                exec(robertalabFile, JAVA_RUN_CP + robertalabFile.getPath() + " lejos.internal.ev3.EV3Wrapper " + mainClass, RobertaLauncher.PROGRAMS_DIRECTORY);
+                this.ind.resume();
+            } else {
+                Delay.msDelay(500);
+            }
         }
-        this.ind.suspend();
-        exec(robertalabFile, JAVA_RUN_CP + robertalabFile.getPath() + " lejos.internal.ev3.EV3Wrapper " + mainClass, RobertaRunner.PROGRAMS_DIRECTORY);
-        this.ind.resume();
-        setRunningInfo(false);
-        setFinishedInfo(true);
+
     }
 
     /**

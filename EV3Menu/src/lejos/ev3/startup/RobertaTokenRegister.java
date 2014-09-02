@@ -22,11 +22,15 @@ public class RobertaTokenRegister implements Runnable {
     private boolean isRegistered = false;
     private boolean hasError = false;
 
-    private boolean regInterruptRequest = false;
+    private HttpURLConnection httpURLConnection;
 
     public RobertaTokenRegister(URL serverURL, String token) {
         this.serverURL = serverURL;
         this.token = token;
+    }
+
+    public HttpURLConnection getHttpConnection() {
+        return this.httpURLConnection;
     }
 
     public void setTimeOutInfo(boolean bool) {
@@ -53,44 +57,46 @@ public class RobertaTokenRegister implements Runnable {
         return this.hasError;
     }
 
-    public boolean getRegInterruptInfo() {
-        return this.regInterruptRequest;
-    }
-
-    public void setRegInterruptInfo(boolean bool) {
-        this.regInterruptRequest = bool;
-    }
-
     /**
      * send token to server, get OK response if registered successfully
      * TODO refactor with json library instead of string
      */
     @Override
     public void run() {
-        setRegisteredInfo(false);
-        setTimeOutInfo(false);
-        setErrorInfo(false);
-        try {
-            HttpURLConnection httpURLConnection = openConnection(this.serverURL);
+        DataOutputStream dos = null;
+        BufferedReader br = null;
 
-            DataOutputStream dos = new DataOutputStream(httpURLConnection.getOutputStream());
+        try {
+            this.httpURLConnection = openConnection(this.serverURL);
+
+            dos = new DataOutputStream(this.httpURLConnection.getOutputStream());
             dos.writeBytes(this.token);
             dos.flush();
             dos.close();
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+            br = new BufferedReader(new InputStreamReader(this.httpURLConnection.getInputStream()));
             String serverResponse = "";
-            while ( (serverResponse = in.readLine()) != null ) {
+            while ( (serverResponse = br.readLine()) != null ) {
                 System.out.println(serverResponse);
             }
-            in.close();
+            br.close();
             setRegisteredInfo(true);
         } catch ( SocketTimeoutException ste ) {
             setTimeOutInfo(true);
             ste.printStackTrace();
         } catch ( IOException e ) {
             setErrorInfo(true);
-            e.printStackTrace();
+            System.out.println("force disconnect (registerToken)");
+        } finally {
+            try {
+                if ( dos != null ) {
+                    dos.close();
+                }
+                if ( br != null ) {
+                    br.close();
+                }
+            } catch ( IOException e ) {
+            }
         }
     }
 
