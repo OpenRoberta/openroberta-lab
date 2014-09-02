@@ -9,44 +9,40 @@ import org.apache.tools.ant.ProjectHelper;
  * Class which compiles the generated user programs via ant script (build.xml).<br>
  * 
  * @author dpyka
- * 
  */
-public class Compiler
-{
+public class Compiler {
 
-	public static void main(String[] args)
-	{
-		runBuild("userProjects", "01234567", "blinker2", "generated.main");
-	}
+    public static void main(String[] args) {
+        runBuild("userProjects", "1Q2W3E4R", "blinker2", "generated.main");
+    }
 
-	/**
-	 * 1. Make target folder (if not exists).<br>
-	 * 2. Clean target folder (everything inside).<br>
-	 * 3. Compile .java files to .class.<br>
-	 * 4. Make jar from class files and add META-INF entries.<br>
-	 * 
-	 * @param userProjectsDir
-	 * @param token
-	 * @param mainFile
-	 * @param mainPackage
-	 */
-	private static void runBuild(String userProjectsDir, String token, String mainFile, String mainPackage)
-	{
+    /**
+     * 1. Make target folder (if not exists).<br>
+     * 2. Clean target folder (everything inside).<br>
+     * 3. Compile .java files to .class.<br>
+     * 4. Make jar from class files and add META-INF entries.<br>
+     * 
+     * @param userProjectsDir
+     * @param token
+     * @param mainFile
+     * @param mainPackage
+     */
+    private static void runBuild(String userProjectsDir, String token, String mainFile, String mainPackage) {
 
-		File buildFile = new File(userProjectsDir + "\\build.xml");
-		Project project = new Project();
+        File buildFile = new File(userProjectsDir + "\\build.xml");
+        Project project = new Project();
 
-		project.setProperty("user.projects.dir", userProjectsDir);
-		project.setProperty("token.dir", token);
-		project.setProperty("main.name", mainFile);
-		project.setProperty("main.package", mainPackage);
+        project.setProperty("user.projects.dir", userProjectsDir);
+        project.setProperty("token.dir", token);
+        project.setProperty("main.name", mainFile);
+        project.setProperty("main.package", mainPackage);
 
-		project.init();
+        project.init();
 
-		ProjectHelper projectHelper = ProjectHelper.getProjectHelper();
-		projectHelper.parse(project, buildFile);
+        ProjectHelper projectHelper = ProjectHelper.getProjectHelper();
+        projectHelper.parse(project, buildFile);
 
-		project.executeTarget(project.getDefaultTarget());
-	}
+        project.executeTarget(project.getDefaultTarget());
+    }
 
 }
