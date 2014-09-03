@@ -15,8 +15,8 @@ import de.fhg.iais.roberta.dbc.DbcException;
 public class StmtFlowCon<V> extends Stmt<V> {
     private final Flow flow;
 
-    private StmtFlowCon(Flow flow) {
-        super(Phrase.Kind.STMT_FLOW_CONTROL);
+    private StmtFlowCon(Flow flow, boolean disabled, String comment) {
+        super(Phrase.Kind.STMT_FLOW_CONTROL, disabled, comment);
         this.flow = flow;
         setReadOnly();
     }
@@ -25,10 +25,12 @@ public class StmtFlowCon<V> extends Stmt<V> {
      * Create read only object of {@link StmtFlowCon}.
      * 
      * @param flow, see enum {@link Flow} for all the possible kind of flow controls
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link StmtFlowCon}.
      */
-    public static <V> StmtFlowCon<V> make(Flow flow) {
-        return new StmtFlowCon<V>(flow);
+    public static <V> StmtFlowCon<V> make(Flow flow, boolean disabled, String comment) {
+        return new StmtFlowCon<V>(flow, disabled, comment);
     }
 
     /**

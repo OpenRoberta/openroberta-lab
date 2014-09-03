@@ -20,18 +20,18 @@ public class EncoderSensorTest {
 
     @Test
     public void getMode() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/sensors/sensor_setEncoder.xml");
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setEncoder.xml");
 
-        EncoderSensor cs = (EncoderSensor) transformer.getTree().get(0);
+        EncoderSensor<Void> cs = (EncoderSensor<Void>) transformer.getTree().get(0);
 
         Assert.assertEquals(MotorTachoMode.ROTATION, cs.getMode());
     }
 
     @Test
     public void getPort() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/sensors/sensor_setEncoder.xml");
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setEncoder.xml");
 
-        EncoderSensor cs = (EncoderSensor) transformer.getTree().get(0);
+        EncoderSensor<Void> cs = (EncoderSensor<Void>) transformer.getTree().get(0);
 
         Assert.assertEquals(ActorPort.A, cs.getMotor());
     }

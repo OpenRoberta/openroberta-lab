@@ -15,8 +15,8 @@ import de.fhg.iais.roberta.dbc.DbcException;
 public class MathConst<V> extends Expr<V> {
     private final Const mathConst;
 
-    private MathConst(Const mathConst) {
-        super(Phrase.Kind.MATH_CONST);
+    private MathConst(Const mathConst, boolean disabled, String comment) {
+        super(Phrase.Kind.MATH_CONST, disabled, comment);
         this.mathConst = mathConst;
         setReadOnly();
     }
@@ -25,10 +25,12 @@ public class MathConst<V> extends Expr<V> {
      * creates instance of {@link BoolConst}. This instance is read only and can not be modified.
      * 
      * @param mathConst, see enum {@link Const} for all defined constants
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link MathConst}.
      */
-    public static <V> MathConst<V> make(Const mathConst) {
-        return new MathConst<V>(mathConst);
+    public static <V> MathConst<V> make(Const mathConst, boolean disabled, String comment) {
+        return new MathConst<V>(mathConst, disabled, comment);
     }
 
     /**

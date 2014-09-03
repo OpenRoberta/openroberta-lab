@@ -167,7 +167,7 @@ h1 {
 
   <div id="blocklyDiv"></div>
    <xml id="toolbox" style="display: none">
-    <category name="Aktion" custom="VARIABLE">
+    <category name="Aktion" >
         <category name="Brick">
           <block type="robBrick_EV3-Brick"></block> 
           <block type="robBrick_ultrasonic"></block> 
@@ -394,6 +394,7 @@ h1 {
     </category>
     <category name="Kontrolle">
         <category name="Entscheidung">
+            <block type="robControls_start"></block>
             <block type="controls_if"></block>
             <block type="robControls_if"></block>
             <block type="robControls_ifElse"></block>
@@ -432,7 +433,7 @@ h1 {
             <block type="robControls_wait">
             </block>
             <block type="robControls_wait_for">
-                <value name="VALUE0">
+                <value name="WAIT0">
                     <block type="logic_compare">
                         <value name="A">
                             <block type="robSensors_getSample">

@@ -192,7 +192,7 @@ Blockly.Blocks['robControls_wait_for'] = {
 	init : function() {
 		this.setColourRGB(Blockly.CAT_ROBCONTROLS_RGB);
 		// this.setInputsInline(true);
-		this.appendValueInput('VALUE0').appendField(Blockly.Msg.WAIT_TITLE)
+		this.appendValueInput('WAIT0').appendField(Blockly.Msg.WAIT_TITLE)
 				.setCheck('Boolean');
 		this.setPreviousStatement(true);
 		this.setNextStatement(true);
@@ -225,7 +225,7 @@ Blockly.Blocks['robControls_wait_for'] = {
 				this.appendStatementInput('DO0').appendField(
 						Blockly.Msg.CONTROLS_IF_MSG_THEN);
 			}
-			this.appendValueInput('VALUE' + x).appendField('oder warte bis')
+			this.appendValueInput('WAIT' + x).appendField('oder warte bis')
 					.setCheck('Boolean');
 			this.appendStatementInput('DO' + x).appendField(
 					Blockly.Msg.CONTROLS_IF_MSG_THEN);
@@ -247,7 +247,7 @@ Blockly.Blocks['robControls_wait_for'] = {
 			if (this.waitCount_ == 1)
 				this.appendStatementInput('DO0').appendField(
 						Blockly.Msg.CONTROLS_IF_MSG_THEN);
-			this.appendValueInput('VALUE' + this.waitCount_).appendField(
+			this.appendValueInput('WAIT' + this.waitCount_).appendField(
 					'oder warte bis').setCheck('Boolean');
 			this.appendStatementInput('DO' + this.waitCount_).appendField(
 					Blockly.Msg.CONTROLS_IF_MSG_THEN);
@@ -255,7 +255,7 @@ Blockly.Blocks['robControls_wait_for'] = {
 					'logic_compare');
 			lc.initSvg();
 			lc.render();
-			var connection = this.getInput('VALUE' + this.waitCount_).connection;
+			var connection = this.getInput('WAIT' + this.waitCount_).connection;
 			connection.connect(lc.outputConnection);
 
 			var s = Blockly.Block.obtain(Blockly.mainWorkspace,
@@ -273,7 +273,7 @@ Blockly.Blocks['robControls_wait_for'] = {
 			connection.connect(v.outputConnection);
 		} else if (num == -1) {
 			this.removeInput('DO' + this.waitCount_);
-			this.removeInput('VALUE' + this.waitCount_);
+			this.removeInput('WAIT' + this.waitCount_);
 			this.waitCount_--;
 			if (this.waitCount_ == 0) {
 				this.removeInput('DO0');

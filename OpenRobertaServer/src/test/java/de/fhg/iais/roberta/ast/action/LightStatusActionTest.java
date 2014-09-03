@@ -28,7 +28,7 @@ public class LightStatusActionTest {
     public void invalidStatus() throws Exception {
         try {
             @SuppressWarnings("unused")
-            LightStatusAction<Void> lsa = LightStatusAction.make(Status.valueOf("invalid"));
+            LightStatusAction<Void> lsa = LightStatusAction.make(Status.valueOf("invalid"), false, "");
             Assert.fail();
         } catch ( Exception e ) {
             Assert.assertEquals("No enum constant de.fhg.iais.roberta.ast.syntax.action.LightStatusAction.Status.invalid", e.getMessage());

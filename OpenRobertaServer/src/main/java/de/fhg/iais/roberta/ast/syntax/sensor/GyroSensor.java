@@ -18,8 +18,8 @@ public class GyroSensor<V> extends Sensor<V> {
     private final GyroSensorMode mode;
     private final SensorPort port;
 
-    private GyroSensor(GyroSensorMode mode, SensorPort port) {
-        super(Phrase.Kind.GYRO_SENSIG);
+    private GyroSensor(GyroSensorMode mode, SensorPort port, boolean disabled, String comment) {
+        super(Phrase.Kind.GYRO_SENSIG, disabled, comment);
         Assert.isTrue(mode != null);
         this.mode = mode;
         this.port = port;
@@ -30,11 +30,13 @@ public class GyroSensor<V> extends Sensor<V> {
      * Create object of the class {@link GyroSensor}.
      * 
      * @param mode in which the sensor is operating. See enum {@link GyroSensorMode} for all possible modes that the sensor have.
-     * @param port on where the sensor is connected. See enum {@link SensorPort} for all possible sensor ports.
+     * @param port on where the sensor is connected. See enum {@link SensorPort} for all possible sensor ports
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of {@link GyroSensor}
      */
-    public static <V> GyroSensor<V> make(GyroSensorMode mode, SensorPort port) {
-        return new GyroSensor<V>(mode, port);
+    public static <V> GyroSensor<V> make(GyroSensorMode mode, SensorPort port, boolean disabled, String comment) {
+        return new GyroSensor<V>(mode, port, disabled, comment);
     }
 
     /**

@@ -13,8 +13,8 @@ import de.fhg.iais.roberta.dbc.Assert;
 public class LightStatusAction<V> extends Action<V> {
     private final Status status;
 
-    private LightStatusAction(Status status) {
-        super(Phrase.Kind.LIGHT_STATUS_ACTION);
+    private LightStatusAction(Status status, boolean disabled, String comment) {
+        super(Phrase.Kind.LIGHT_STATUS_ACTION, disabled, comment);
         Assert.isTrue(status != null);
         this.status = status;
         setReadOnly();
@@ -23,11 +23,13 @@ public class LightStatusAction<V> extends Action<V> {
     /**
      * Creates instance of {@link LightStatusAction}. This instance is read only and can not be modified.
      * 
-     * @param status in which we want to set the lights (off or reset).
+     * @param status in which we want to set the lights (off or reset),
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link LightStatusAction}.
      */
-    public static <V> LightStatusAction<V> make(Status status) {
-        return new LightStatusAction<V>(status);
+    public static <V> LightStatusAction<V> make(Status status, boolean disabled, String comment) {
+        return new LightStatusAction<V>(status, disabled, comment);
     }
 
     /**

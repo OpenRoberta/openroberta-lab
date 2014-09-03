@@ -16,8 +16,8 @@ public class DriveAction<V> extends Action<V> {
     private final DriveDirection direction;
     private final MotionParam<V> param;
 
-    private DriveAction(DriveDirection direction, MotionParam<V> param) {
-        super(Phrase.Kind.DRIVE_ACTION);
+    private DriveAction(DriveDirection direction, MotionParam<V> param, boolean disabled, String comment) {
+        super(Phrase.Kind.DRIVE_ACTION, disabled, comment);
         Assert.isTrue(direction != null && param != null);
         this.direction = direction;
         this.param = param;
@@ -29,10 +29,12 @@ public class DriveAction<V> extends Action<V> {
      * 
      * @param direction {@link DriveDirection} in which the robot will drive,
      * @param param {@link MotionParam} that set up the parameters for the movement of the robot (distance the robot should cover and speed),
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link DriveAction}
      */
-    public static <V> DriveAction<V> make(DriveDirection direction, MotionParam<V> param) {
-        return new DriveAction<V>(direction, param);
+    public static <V> DriveAction<V> make(DriveDirection direction, MotionParam<V> param, boolean disabled, String comment) {
+        return new DriveAction<V>(direction, param, disabled, comment);
     }
 
     /**

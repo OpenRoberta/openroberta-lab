@@ -16,7 +16,7 @@ import org.xml.sax.InputSource;
 
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
-import de.fhg.iais.roberta.blockly.generated.Project;
+import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
 import de.fhg.iais.roberta.persistence.ProgramProcessor;
 import de.fhg.iais.roberta.persistence.bo.Program;
@@ -83,12 +83,12 @@ public class CompilerWorkflow {
      * @throws Exception
      */
     private static JaxbTransformer<Void> generateTransformer(String blocklyXml) throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
         InputStream stream = new ByteArrayInputStream(blocklyXml.getBytes(StandardCharsets.UTF_8));
         InputSource src = new InputSource(stream);
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+        BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer<Void> transformer = new JaxbTransformer<>();
         transformer.projectToAST(project);

@@ -15,19 +15,16 @@ public class GyroSensorModeTest {
 
     @Test(expected = DbcException.class)
     public void invalideMode() {
-        GyroSensorMode mode = GyroSensorMode.get("ad");
-
+        GyroSensorMode.get("ad");
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode1() {
-        GyroSensorMode mode = GyroSensorMode.get("");
-
+        GyroSensorMode.get("");
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode2() {
-        GyroSensorMode mode = GyroSensorMode.get(null);
-
+        GyroSensorMode.get(null);
     }
 }

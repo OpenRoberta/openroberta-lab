@@ -22,8 +22,8 @@ public class Func<V> extends Expr<V> {
     private final Function functName;
     private final List<Expr<V>> param;
 
-    private Func(Function name, List<Expr<V>> param) {
-        super(Phrase.Kind.FUNCTIONS);
+    private Func(Function name, List<Expr<V>> param, boolean disabled, String comment) {
+        super(Phrase.Kind.FUNCTIONS, disabled, comment);
         Assert.isTrue(name != null && param != null);
         this.functName = name;
         this.param = param;
@@ -38,8 +38,8 @@ public class Func<V> extends Expr<V> {
      * @param param list of parameters for the function,
      * @return read only object of class {@link Func}
      */
-    public static <V> Func<V> make(Function name, List<Expr<V>> param) {
-        return new Func<V>(name, param);
+    public static <V> Func<V> make(Function name, List<Expr<V>> param, boolean disabled, String comment) {
+        return new Func<V>(name, param, disabled, comment);
     }
 
     /**

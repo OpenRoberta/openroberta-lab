@@ -10,26 +10,26 @@ public class NullConstTest {
 
     @Test
     public void make() throws Exception {
-        NullConst<Void> nullConst = NullConst.make();
+        NullConst<Void> nullConst = NullConst.make(false, "");
         String a = "NullConst [null]";
         Assert.assertEquals(a, nullConst.toString());
     }
 
     @Test
     public void getValue() throws Exception {
-        NullConst<Void> nullConst = NullConst.make();
+        NullConst<Void> nullConst = NullConst.make(false, "");
         Assert.assertEquals(null, nullConst.getValue());
     }
 
     @Test
     public void getPresedance() throws Exception {
-        NullConst<Void> nullConst = NullConst.make();
+        NullConst<Void> nullConst = NullConst.make(false, "");
         Assert.assertEquals(999, nullConst.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
-        NullConst<Void> nullConst = NullConst.make();
+        NullConst<Void> nullConst = NullConst.make(false, "");
         Assert.assertEquals(Assoc.NONE, nullConst.getAssoc());
     }
 }

@@ -16,8 +16,8 @@ import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 public class TouchSensor<V> extends Sensor<V> {
     private final SensorPort port;
 
-    private TouchSensor(SensorPort port) {
-        super(Phrase.Kind.TOUCH_SENSING);
+    private TouchSensor(SensorPort port, boolean disabled, String comment) {
+        super(Phrase.Kind.TOUCH_SENSING, disabled, comment);
         this.port = port;
         setReadOnly();
     }
@@ -25,11 +25,13 @@ public class TouchSensor<V> extends Sensor<V> {
     /**
      * Create object of the class {@link TouchSensor}.
      * 
-     * @param port on which the sensor is connected. See enum {@link SensorPort} for all possible ports that the sensor can be connected.
+     * @param port on which the sensor is connected. See enum {@link SensorPort} for all possible ports that the sensor can be connected
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of {@link TouchSensor}
      */
-    public static <V> TouchSensor<V> make(SensorPort port) {
-        return new TouchSensor<V>(port);
+    public static <V> TouchSensor<V> make(SensorPort port, boolean disabled, String comment) {
+        return new TouchSensor<V>(port, disabled, comment);
     }
 
     /**

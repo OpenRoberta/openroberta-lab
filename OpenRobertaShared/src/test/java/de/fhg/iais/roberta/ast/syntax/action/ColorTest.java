@@ -15,19 +15,16 @@ public class ColorTest {
 
     @Test(expected = DbcException.class)
     public void invalideMode() {
-        BrickLedColor mode = BrickLedColor.get("ad");
-
+        BrickLedColor.get("ad");
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode1() {
-        BrickLedColor mode = BrickLedColor.get("");
-
+        BrickLedColor.get("");
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode2() {
-        BrickLedColor mode = BrickLedColor.get(null);
-
+        BrickLedColor.get(null);
     }
 }

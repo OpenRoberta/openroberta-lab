@@ -19,8 +19,8 @@ public class IfStmt<V> extends Stmt<V> {
     private final StmtList<V> elseList;
     private final boolean ternary;
 
-    private IfStmt(List<Expr<V>> expr, List<StmtList<V>> thenList, StmtList<V> elseList, boolean ternary) {
-        super(Phrase.Kind.IF_STMT);
+    private IfStmt(List<Expr<V>> expr, List<StmtList<V>> thenList, StmtList<V> elseList, boolean ternary, boolean disabled, String comment) {
+        super(Phrase.Kind.IF_STMT, disabled, comment);
         Assert.isTrue(expr.size() == thenList.size() && elseList.isReadOnly());
         this.expr = expr;
         this.thenList = thenList;
@@ -35,10 +35,12 @@ public class IfStmt<V> extends Stmt<V> {
      * @param expr list of all expressions that should be evaluated in the <b>if</b> parts
      * @param thenList all statements that are in the <b>then</b> parts
      * @param elseList all statements that are in the <b>else</b> parts
+     * @param disabled state of the block
+     * @param comment added from the user
      * @return read only object of class {@link IfStmt}
      */
-    public static <V> IfStmt<V> make(List<Expr<V>> expr, List<StmtList<V>> thenList, StmtList<V> elseList) {
-        return new IfStmt<V>(expr, thenList, elseList, false);
+    public static <V> IfStmt<V> make(List<Expr<V>> expr, List<StmtList<V>> thenList, StmtList<V> elseList, boolean disabled, String comment) {
+        return new IfStmt<V>(expr, thenList, elseList, false, disabled, comment);
     }
 
     /**
@@ -47,14 +49,16 @@ public class IfStmt<V> extends Stmt<V> {
      * @param expr expression that should be evaluated in the <b>if</b> part
      * @param thenList statement that is in the <b>then</b> part
      * @param elseList all statement that is in the <b>else</b> part
+     * @param disabled state of the block
+     * @param comment added from the user
      * @return read only object of class {@link IfStmt}
      */
-    public static <V> IfStmt<V> make(Expr<V> expr, StmtList<V> thenList, StmtList<V> elseList) {
+    public static <V> IfStmt<V> make(Expr<V> expr, StmtList<V> thenList, StmtList<V> elseList, boolean disabled, String comment) {
         List<Expr<V>> exprsList = new ArrayList<Expr<V>>();
         List<StmtList<V>> thensList = new ArrayList<StmtList<V>>();
         exprsList.add(expr);
         thensList.add(thenList);
-        return new IfStmt<V>(exprsList, thensList, elseList, true);
+        return new IfStmt<V>(exprsList, thensList, elseList, true, disabled, comment);
     }
 
     /**
@@ -62,12 +66,14 @@ public class IfStmt<V> extends Stmt<V> {
      * 
      * @param expr list of all expressions that should be evaluated in the <b>if</b> parts
      * @param thenList all statements that are in the <b>then</b> parts
+     * @param disabled state of the block
+     * @param comment added from the user
      * @return read only object of class {@link IfStmt}
      */
-    public static <V> IfStmt<V> make(List<Expr<V>> expr, List<StmtList<V>> thenList) {
+    public static <V> IfStmt<V> make(List<Expr<V>> expr, List<StmtList<V>> thenList, boolean disabled, String comment) {
         StmtList<V> elseList = StmtList.make();
         elseList.setReadOnly();
-        return new IfStmt<V>(expr, thenList, elseList, false);
+        return new IfStmt<V>(expr, thenList, elseList, false, disabled, comment);
     }
 
     /**

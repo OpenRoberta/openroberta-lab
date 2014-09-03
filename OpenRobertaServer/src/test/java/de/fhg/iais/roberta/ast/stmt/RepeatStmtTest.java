@@ -27,18 +27,18 @@ public class RepeatStmtTest {
 
     @Test
     public void getMode() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/control/repeat_stmt.xml");
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/control/repeat_stmt.xml");
 
-        RepeatStmt repeatStmt = (RepeatStmt) transformer.getTree().get(0);
+        RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(0);
 
         Assert.assertEquals(Mode.TIMES, repeatStmt.getMode());
     }
 
     @Test
     public void getExpr() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/control/repeat_stmt.xml");
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/control/repeat_stmt.xml");
 
-        RepeatStmt repeatStmt = (RepeatStmt) transformer.getTree().get(0);
+        RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(0);
 
         Assert.assertEquals("Binary [ASSIGNMENT, Var [i], NumConst [0]], Binary [LT, Var [i], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i]]", repeatStmt
             .getExpr()
@@ -47,9 +47,9 @@ public class RepeatStmtTest {
 
     @Test
     public void getList() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/control/repeat_stmt.xml");
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/control/repeat_stmt.xml");
 
-        RepeatStmt repeatStmt = (RepeatStmt) transformer.getTree().get(0);
+        RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(0);
 
         String a =
             "\nexprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba]]\n"
@@ -150,17 +150,17 @@ public class RepeatStmtTest {
 
     @Test(expected = DbcException.class)
     public void invalid() {
-        RepeatStmt.Mode op = RepeatStmt.Mode.get("");
+        RepeatStmt.Mode.get("");
     }
 
     @Test(expected = DbcException.class)
     public void invalid1() {
-        RepeatStmt.Mode op = RepeatStmt.Mode.get(null);
+        RepeatStmt.Mode.get(null);
     }
 
     @Test(expected = DbcException.class)
     public void invalid2() {
-        RepeatStmt.Mode op = RepeatStmt.Mode.get("asdf");
+        RepeatStmt.Mode.get("asdf");
     }
 
 }

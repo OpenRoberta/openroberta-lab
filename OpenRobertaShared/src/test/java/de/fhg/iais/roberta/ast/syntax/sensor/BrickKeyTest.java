@@ -15,16 +15,16 @@ public class BrickKeyTest {
 
     @Test(expected = DbcException.class)
     public void invalideMode() {
-        BrickKey mode = BrickKey.get("ad");
+        BrickKey.get("ad");
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode1() {
-        BrickKey mode = BrickKey.get("");
+        BrickKey.get("");
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode2() {
-        BrickKey mode = BrickKey.get(null);
+        BrickKey.get(null);
     }
 }

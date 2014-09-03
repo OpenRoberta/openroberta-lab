@@ -11,18 +11,20 @@ import de.fhg.iais.roberta.ast.visitor.AstVisitor;
  */
 public class NullConst<V> extends Expr<V> {
 
-    private NullConst() {
-        super(Phrase.Kind.NULL_CONST);
+    private NullConst(boolean disabled, String comment) {
+        super(Phrase.Kind.NULL_CONST, disabled, comment);
         setReadOnly();
     }
 
     /**
      * creates instance of {@link NullConst}. This instance is read only and can not be modified.
      * 
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link NullConst}.
      */
-    public static <V> NullConst<V> make() {
-        return new NullConst<V>();
+    public static <V> NullConst<V> make(boolean disabled, String comment) {
+        return new NullConst<V>(disabled, comment);
     }
 
     /**

@@ -15,19 +15,16 @@ public class TurnDirectionTest {
 
     @Test(expected = DbcException.class)
     public void invalideMode() {
-        TurnDirection mode = TurnDirection.get("ad");
-
+        TurnDirection.get("ad");
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode1() {
-        TurnDirection mode = TurnDirection.get("");
-
+        TurnDirection.get("");
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode2() {
-        TurnDirection mode = TurnDirection.get(null);
-
+        TurnDirection.get(null);
     }
 }

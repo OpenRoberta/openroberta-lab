@@ -20,18 +20,18 @@ public class InfraredSensorTest {
 
     @Test
     public void getMode() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/sensors/sensor_setInfrared.xml");
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setInfrared.xml");
 
-        InfraredSensor cs = (InfraredSensor) transformer.getTree().get(0);
+        InfraredSensor<Void> cs = (InfraredSensor<Void>) transformer.getTree().get(0);
 
         Assert.assertEquals(InfraredSensorMode.DISTANCE, cs.getMode());
     }
 
     @Test
     public void getPort() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/sensors/sensor_setInfrared.xml");
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setInfrared.xml");
 
-        InfraredSensor cs = (InfraredSensor) transformer.getTree().get(0);
+        InfraredSensor<Void> cs = (InfraredSensor<Void>) transformer.getTree().get(0);
 
         Assert.assertEquals(SensorPort.S4, cs.getPort());
     }

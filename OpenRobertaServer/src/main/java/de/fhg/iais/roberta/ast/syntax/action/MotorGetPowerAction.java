@@ -13,8 +13,8 @@ import de.fhg.iais.roberta.dbc.Assert;
 public class MotorGetPowerAction<V> extends Action<V> {
     private final ActorPort port;
 
-    private MotorGetPowerAction(ActorPort port) {
-        super(Phrase.Kind.MOTOR_GET_POWER_ACTION);
+    private MotorGetPowerAction(ActorPort port, boolean disabled, String comment) {
+        super(Phrase.Kind.MOTOR_GET_POWER_ACTION, disabled, comment);
         Assert.isTrue(port != null);
         this.port = port;
         setReadOnly();
@@ -24,10 +24,12 @@ public class MotorGetPowerAction<V> extends Action<V> {
      * Creates instance of {@link MotorGetPowerAction}. This instance is read only and can not be modified.
      * 
      * @param port on which the motor is connected that we want to check,
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link MotorGetPowerAction}.
      */
-    public static <V> MotorGetPowerAction<V> make(ActorPort port) {
-        return new MotorGetPowerAction<V>(port);
+    public static <V> MotorGetPowerAction<V> make(ActorPort port, boolean disabled, String comment) {
+        return new MotorGetPowerAction<V>(port, disabled, comment);
     }
 
     /**

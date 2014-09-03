@@ -10,7 +10,7 @@ import org.xml.sax.InputSource;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
-import de.fhg.iais.roberta.blockly.generated.Project;
+import de.fhg.iais.roberta.blockly.generated.BlockSet;
 
 public class IfStmtTest {
 
@@ -42,7 +42,7 @@ public class IfStmtTest {
 
     @Test
     public void getExpr() throws Exception {
-        IfStmt ifStmt = (IfStmt) Helper.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(0);
+        IfStmt<Void> ifStmt = (IfStmt<Void>) Helper.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(0);
 
         String a = "[Binary [EQ, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]]]";
         Assert.assertEquals(a, ifStmt.getExpr().toString());
@@ -50,7 +50,7 @@ public class IfStmtTest {
 
     @Test
     public void getThen() throws Exception {
-        IfStmt ifStmt = (IfStmt) Helper.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(0);
+        IfStmt<Void> ifStmt = (IfStmt<Void>) Helper.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(0);
 
         String a = "[\nexprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]]";
         Assert.assertEquals(a, ifStmt.getThenList().toString());
@@ -58,7 +58,7 @@ public class IfStmtTest {
 
     @Test
     public void getElse() throws Exception {
-        IfStmt ifStmt = (IfStmt) Helper.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(0);
+        IfStmt<Void> ifStmt = (IfStmt<Void>) Helper.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(0);
 
         String a = "\nSensorStmt DrehSensor [mode=RESET, motor=A]";
         Assert.assertEquals(a, ifStmt.getElseList().toString());
@@ -66,11 +66,11 @@ public class IfStmtTest {
 
     @Test
     public void ifStmt2() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
         InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/if_stmt2.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+        BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer<?> transformer = new JaxbTransformer<>();
         transformer.projectToAST(project);

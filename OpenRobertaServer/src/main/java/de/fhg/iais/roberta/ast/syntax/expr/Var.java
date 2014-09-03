@@ -14,8 +14,8 @@ public class Var<V> extends Expr<V> {
     private final TypeVar typeVar;
     private final String name;
 
-    private Var(String value, TypeVar typeVar) {
-        super(Phrase.Kind.VAR);
+    private Var(String value, TypeVar typeVar, boolean disabled, String comment) {
+        super(Phrase.Kind.VAR, disabled, comment);
         this.name = value;
         this.typeVar = typeVar;
         setReadOnly();
@@ -26,10 +26,12 @@ public class Var<V> extends Expr<V> {
      * 
      * @param value name of the variable,
      * @param typeVar type of the variable,
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link Var}
      */
-    public static <V> Var<V> make(String value, TypeVar typeVar) {
-        return new Var<V>(value, typeVar);
+    public static <V> Var<V> make(String value, TypeVar typeVar, boolean disabled, String comment) {
+        return new Var<V>(value, typeVar, disabled, comment);
     }
 
     /**

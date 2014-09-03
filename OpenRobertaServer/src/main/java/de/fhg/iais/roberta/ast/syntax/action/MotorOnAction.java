@@ -14,8 +14,8 @@ public final class MotorOnAction<V> extends Action<V> {
     private final ActorPort port;
     private final MotionParam<V> param;
 
-    private MotorOnAction(ActorPort port, MotionParam<V> param) {
-        super(Phrase.Kind.MOTOR_ON_ACTION);
+    private MotorOnAction(ActorPort port, MotionParam<V> param, boolean disabled, String comment) {
+        super(Phrase.Kind.MOTOR_ON_ACTION, disabled, comment);
         Assert.isTrue(param != null);
         this.param = param;
         this.port = port;
@@ -27,10 +27,12 @@ public final class MotorOnAction<V> extends Action<V> {
      * 
      * @param port {@link ActorPort} on which the motor is connected,
      * @param param {@link MotionParam} that set up the parameters for the movement of the robot (number of rotations or degrees and speed),
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link MotorOnAction}.
      */
-    public static <V> MotorOnAction<V> make(ActorPort port, MotionParam<V> param) {
-        return new MotorOnAction<V>(port, param);
+    public static <V> MotorOnAction<V> make(ActorPort port, MotionParam<V> param, boolean disabled, String comment) {
+        return new MotorOnAction<V>(port, param, disabled, comment);
     }
 
     /**

@@ -15,19 +15,16 @@ public class DriveDirectionTest {
 
     @Test(expected = DbcException.class)
     public void invalideMode() {
-        DriveDirection mode = DriveDirection.get("ad");
-
+        DriveDirection.get("ad");
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode1() {
-        DriveDirection mode = DriveDirection.get("");
-
+        DriveDirection.get("");
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode2() {
-        DriveDirection mode = DriveDirection.get(null);
-
+        DriveDirection.get(null);
     }
 }

@@ -139,7 +139,7 @@ public class Templates {
             + "        </value> "
             + "      </block> "
             + "      <block type='robControls_wait_for'> "
-            + "        <value name='VALUE0'> "
+            + "        <value name='WAIT0'> "
             + "          <block type='logic_compare'> "
             + "            <value name='A'> "
             + "              <block type='robSensors_getSample'> "
@@ -186,7 +186,7 @@ public class Templates {
             + "    </block> "
             + "    <block type='robColour_picker'> "
             + "      <field name='COLOUR'>#FFFFFF</field> "
-            + "    </block> "		
+            + "    </block> "
             + "    <block type='robColour_picker'> "
             + "      <field name='COLOUR'>#532115</field> "
             + "    </block> "
@@ -455,7 +455,7 @@ public class Templates {
                 + "      <block type='robControls_wait'> "
                 + "      </block> "
                 + "      <block type='robControls_wait_for'> "
-                + "        <value name='VALUE0'> "
+                + "        <value name='WAIT0'> "
                 + "          <block type='logic_compare'> "
                 + "            <value name='A'> "
                 + "              <block type='robSensors_getSample'> "
@@ -622,12 +622,12 @@ public class Templates {
                 + "  <category name='Variablen' custom='VARIABLE'/> "
                 + "  <category name='Funktionen' custom='PROCEDURE'/> "
                 + "</xml> ";
-        templates.put("1", eins);
-        templates.put("2", zwei);
+        this.templates.put("1", eins);
+        this.templates.put("2", zwei);
         LOG.info("created");
     }
 
     public String get(String key) {
-        return templates.get(key);
+        return this.templates.get(key);
     }
 }

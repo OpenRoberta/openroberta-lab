@@ -11,13 +11,13 @@ public class StmtFlowContrTest {
 
     @Test
     public void make() throws Exception {
-        StmtFlowCon flowCon = StmtFlowCon.make(Flow.BREAK);
+        StmtFlowCon<Void> flowCon = StmtFlowCon.make(Flow.BREAK, false, "");
         Assert.assertEquals("\nStmtFlowCon [BREAK]", flowCon.toString());
     }
 
     @Test
     public void getFlow() throws Exception {
-        StmtFlowCon flowCon = StmtFlowCon.make(Flow.BREAK);
+        StmtFlowCon<Void> flowCon = StmtFlowCon.make(Flow.BREAK, false, "");
         Assert.assertEquals(Flow.BREAK, flowCon.getFlow());
     }
 
@@ -39,16 +39,16 @@ public class StmtFlowContrTest {
 
     @Test(expected = DbcException.class)
     public void invalid() {
-        StmtFlowCon.Flow op = StmtFlowCon.Flow.get("");
+        StmtFlowCon.Flow.get("");
     }
 
     @Test(expected = DbcException.class)
     public void invalid1() {
-        StmtFlowCon.Flow op = StmtFlowCon.Flow.get(null);
+        StmtFlowCon.Flow.get(null);
     }
 
     @Test(expected = DbcException.class)
     public void invalid2() {
-        StmtFlowCon.Flow op = StmtFlowCon.Flow.get("asdf");
+        StmtFlowCon.Flow.get("asdf");
     }
 }

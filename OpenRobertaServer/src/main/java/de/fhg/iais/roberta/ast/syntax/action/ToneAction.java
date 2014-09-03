@@ -15,8 +15,8 @@ public class ToneAction<V> extends Action<V> {
     private final Expr<V> frequency;
     private final Expr<V> duration;
 
-    private ToneAction(Expr<V> frequency, Expr<V> duration) {
-        super(Phrase.Kind.TONE_ACTION);
+    private ToneAction(Expr<V> frequency, Expr<V> duration, boolean disabled, String comment) {
+        super(Phrase.Kind.TONE_ACTION, disabled, comment);
         Assert.isTrue(frequency.isReadOnly() && duration.isReadOnly() && frequency != null && duration != null);
         this.frequency = frequency;
         this.duration = duration;
@@ -28,10 +28,12 @@ public class ToneAction<V> extends Action<V> {
      * 
      * @param frequency of the sound,
      * @param duration of the sound,
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link ToneAction}.
      */
-    public static <V> ToneAction<V> make(Expr<V> frequency, Expr<V> duration) {
-        return new ToneAction<V>(frequency, duration);
+    public static <V> ToneAction<V> make(Expr<V> frequency, Expr<V> duration, boolean disabled, String comment) {
+        return new ToneAction<V>(frequency, duration, disabled, comment);
     }
 
     /**

@@ -20,8 +20,8 @@ public final class Binary<V> extends Expr<V> {
     private final Expr<V> left;
     private final Expr<V> right;
 
-    private Binary(Op op, Expr<V> left, Expr<V> right) {
-        super(Phrase.Kind.BINARY);
+    private Binary(Op op, Expr<V> left, Expr<V> right, boolean disabled, String comment) {
+        super(Phrase.Kind.BINARY, disabled, comment);
         Assert.isTrue(op != null && left != null && right != null && left.isReadOnly() && right.isReadOnly());
         this.op = op;
         this.left = left;
@@ -35,10 +35,12 @@ public final class Binary<V> extends Expr<V> {
      * @param op operator
      * @param left expression on the left hand side,
      * @param right expression on the right hand side
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return Binary expression
      */
-    public static <V> Binary<V> make(Op op, Expr<V> left, Expr<V> right) {
-        return new Binary<V>(op, left, right);
+    public static <V> Binary<V> make(Op op, Expr<V> left, Expr<V> right, boolean disabled, String comment) {
+        return new Binary<V>(op, left, right, disabled, comment);
     }
 
     /**

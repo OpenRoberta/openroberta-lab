@@ -15,8 +15,8 @@ import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 public class ColorConst<V> extends Expr<V> {
     private final PickColor value;
 
-    private ColorConst(String value) {
-        super(Phrase.Kind.PICK_COLOR_CONST);
+    private ColorConst(String value, boolean disabled, String comment) {
+        super(Phrase.Kind.PICK_COLOR_CONST, disabled, comment);
         this.value = PickColor.get(value);
         setReadOnly();
     }
@@ -25,10 +25,12 @@ public class ColorConst<V> extends Expr<V> {
      * creates instance of {@link ColorConst}. This instance is read only and cannot be modified.
      * 
      * @param value that the color constant will have
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link ColorConst}.
      */
-    public static <V> ColorConst<V> make(String value) {
-        return new ColorConst<V>(value);
+    public static <V> ColorConst<V> make(String value, boolean disabled, String comment) {
+        return new ColorConst<V>(value, disabled, comment);
     }
 
     /**

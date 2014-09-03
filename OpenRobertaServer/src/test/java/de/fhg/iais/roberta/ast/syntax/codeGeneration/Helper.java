@@ -10,13 +10,11 @@ import org.xml.sax.InputSource;
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
-import de.fhg.iais.roberta.blockly.generated.Project;
+import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
- * 
- * @author kcvejoski
  */
 public class Helper {
     /**
@@ -56,11 +54,11 @@ public class Helper {
      * @throws Exception
      */
     public static JaxbTransformer<Void> generateTransformer(String pathToProgramXml) throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
         InputSource src = new InputSource(Helper.class.getResourceAsStream(pathToProgramXml));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+        BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer<Void> transformer = new JaxbTransformer<>();
         transformer.projectToAST(project);
@@ -86,11 +84,11 @@ public class Helper {
      * @throws Exception
      */
     public static <V> List<Phrase<V>> generateASTs(String pathToProgramXml) throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
         InputSource src = new InputSource(Helper.class.getResourceAsStream(pathToProgramXml));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+        BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer<V> transformer = new JaxbTransformer<V>();
         transformer.projectToAST(project);

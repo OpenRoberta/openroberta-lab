@@ -42,6 +42,7 @@ import de.fhg.iais.roberta.ast.syntax.functions.Func;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.GetSampleSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensor;
@@ -56,6 +57,9 @@ import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
+import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
+import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
+import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
@@ -626,6 +630,30 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
                     + ");");
                 break;
         }
+        return null;
+    }
+
+    @Override
+    public Void visitGetSampleSensor(GetSampleSensor<Void> getSampleSensor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitMainTask(MainTask<Void> mainTask) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitActivityTask(ActivityTask<Void> activityTask) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitStartActivityTask(StartActivityTask<Void> startActivityTask) {
+        // TODO Auto-generated method stub
         return null;
     }
 

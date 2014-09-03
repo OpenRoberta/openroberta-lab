@@ -12,7 +12,7 @@ public class ExprStmt<V> extends Stmt<V> {
     private final Expr<V> expr;
 
     private ExprStmt(Expr<V> expr) {
-        super(Phrase.Kind.EXPR_STMT);
+        super(Phrase.Kind.EXPR_STMT, false, "");
         Assert.isTrue(expr.isReadOnly());
         this.expr = expr;
         setReadOnly();
@@ -22,6 +22,8 @@ public class ExprStmt<V> extends Stmt<V> {
      * Create object of the class {@link ExprStmt}.
      * 
      * @param expr that we want to wrap
+     * @param disabled state of the block
+     * @param comment added from the user
      * @return statement with wrapped expression inside
      */
     public static <V> ExprStmt<V> make(Expr<V> expr) {

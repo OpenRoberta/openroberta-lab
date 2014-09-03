@@ -14,7 +14,7 @@ public class SensorExpr<V> extends Expr<V> {
     private final Sensor<V> sensor;
 
     private SensorExpr(Sensor<V> sens) {
-        super(Phrase.Kind.SENSOR_EXPR);
+        super(Phrase.Kind.SENSOR_EXPR, false, "");
         Assert.isTrue(sens.isReadOnly());
         this.sensor = sens;
         setReadOnly();
@@ -23,7 +23,9 @@ public class SensorExpr<V> extends Expr<V> {
     /**
      * Create object of the class {@link SensorExpr}.
      * 
-     * @param sensor that we want to wrap
+     * @param sensor that we want to wrap,
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return expression with wrapped sensor inside
      */
     public static <V> SensorExpr<V> make(Sensor<V> sens) {

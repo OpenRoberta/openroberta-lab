@@ -14,8 +14,8 @@ import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 public class BoolConst<V> extends Expr<V> {
     private final boolean value;
 
-    private BoolConst(boolean value) {
-        super(Phrase.Kind.BOOL_CONST);
+    private BoolConst(boolean value, boolean disabled, String comment) {
+        super(Phrase.Kind.BOOL_CONST, disabled, comment);
         this.value = value;
         setReadOnly();
     }
@@ -23,11 +23,13 @@ public class BoolConst<V> extends Expr<V> {
     /**
      * creates instance of {@link BoolConst}. This instance is read only and can not be modified.
      * 
-     * @param value that the boolean constant will have
+     * @param value that the boolean constant will have,
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link BoolConst}.
      */
-    public static <V> BoolConst<V> make(boolean value) {
-        return new BoolConst<V>(value);
+    public static <V> BoolConst<V> make(boolean value, boolean disabled, String comment) {
+        return new BoolConst<V>(value, disabled, comment);
     }
 
     /**

@@ -18,4 +18,13 @@ public class ControlTest {
                 + ")]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/wait_stmt.xml"));
     }
+
+    @Test
+    public void robWaitFor() throws Exception {
+        String a =
+            "BlockAST [project=[[\n"
+                + "(repeat [WHILE, Binary [EQ, SensorExpr [GetSampleSensor [sensorType=TOUCH, sensorPort=S1]], BoolConst [true]]]\n"
+                + ")]]]";
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/wait_stmt1.xml"));
+    }
 }

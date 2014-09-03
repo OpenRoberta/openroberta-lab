@@ -8,7 +8,7 @@ import javax.xml.bind.Unmarshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fhg.iais.roberta.blockly.generated.Project;
+import de.fhg.iais.roberta.blockly.generated.BlockSet;
 
 public class JAXBProviderFactory {
     private static final Logger LOG = LoggerFactory.getLogger(JAXBProviderFactory.class);
@@ -32,7 +32,7 @@ public class JAXBProviderFactory {
     }
 
     public JAXBContext getJAXBContext(Class<?> type) {
-        if ( type == Project.class ) {
+        if ( type == BlockSet.class ) {
             return this.context;
         } else {
             LOG.error("context not valid for type " + type.getName());
@@ -41,7 +41,7 @@ public class JAXBProviderFactory {
     }
 
     public Marshaller getMarshaller(Class<?> type) {
-        if ( type == Project.class ) {
+        if ( type == BlockSet.class ) {
             try {
                 Marshaller marshaller = this.context.createMarshaller();
                 marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", this.nsMapper);
@@ -57,7 +57,7 @@ public class JAXBProviderFactory {
     }
 
     public Unmarshaller getUnmarshaller(Class<?> type) {
-        if ( type == Project.class ) {
+        if ( type == BlockSet.class ) {
             try {
                 Unmarshaller unmarshaller = this.context.createUnmarshaller();
                 return unmarshaller;

@@ -15,19 +15,16 @@ public class InfraredSensorModeTest {
 
     @Test(expected = DbcException.class)
     public void invalideMode() {
-        InfraredSensorMode mode = InfraredSensorMode.get("ad");
-
+        InfraredSensorMode.get("ad");
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode1() {
-        InfraredSensorMode mode = InfraredSensorMode.get("");
-
+        InfraredSensorMode.get("");
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode2() {
-        InfraredSensorMode mode = InfraredSensorMode.get(null);
-
+        InfraredSensorMode.get(null);
     }
 }

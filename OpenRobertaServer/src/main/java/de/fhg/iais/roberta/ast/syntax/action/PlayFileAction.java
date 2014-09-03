@@ -13,8 +13,8 @@ import de.fhg.iais.roberta.dbc.Assert;
 public class PlayFileAction<V> extends Action<V> {
     private final String fileName;
 
-    private PlayFileAction(String fileName) {
-        super(Phrase.Kind.PLAY_FILE_ACTION);
+    private PlayFileAction(String fileName, boolean disabled, String comment) {
+        super(Phrase.Kind.PLAY_FILE_ACTION, disabled, comment);
         Assert.isTrue(!fileName.equals(""));
         this.fileName = fileName;
         setReadOnly();
@@ -24,10 +24,12 @@ public class PlayFileAction<V> extends Action<V> {
      * Creates instance of {@link PlayFileAction}. This instance is read only and can not be modified.
      * 
      * @param filename of the sound,
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link PlayFileAction}.
      */
-    public static <V> PlayFileAction<V> make(String filename) {
-        return new PlayFileAction<V>(filename);
+    public static <V> PlayFileAction<V> make(String filename, boolean disabled, String comment) {
+        return new PlayFileAction<V>(filename, disabled, comment);
     }
 
     /**

@@ -14,8 +14,8 @@ public class MotorStopAction<V> extends Action<V> {
     private final ActorPort port;
     private final MotorStopMode mode;
 
-    private MotorStopAction(ActorPort port, MotorStopMode mode) {
-        super(Phrase.Kind.MOTOR_STOP_ACTION);
+    private MotorStopAction(ActorPort port, MotorStopMode mode, boolean disabled, String comment) {
+        super(Phrase.Kind.MOTOR_STOP_ACTION, disabled, comment);
         Assert.isTrue(port != null && mode != null);
         this.port = port;
         this.mode = mode;
@@ -27,10 +27,12 @@ public class MotorStopAction<V> extends Action<V> {
      * 
      * @param port {@link ActorPort} on which the motor is connected,
      * @param mode of stopping {@link MotorStopMode},
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link MotorStopAction}.
      */
-    public static <V> MotorStopAction<V> make(ActorPort port, MotorStopMode mode) {
-        return new MotorStopAction<V>(port, mode);
+    public static <V> MotorStopAction<V> make(ActorPort port, MotorStopMode mode, boolean disabled, String comment) {
+        return new MotorStopAction<V>(port, mode, disabled, comment);
     }
 
     /**

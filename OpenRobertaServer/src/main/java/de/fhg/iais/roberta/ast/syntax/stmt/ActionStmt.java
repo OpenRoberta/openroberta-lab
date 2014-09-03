@@ -12,7 +12,7 @@ public class ActionStmt<V> extends Stmt<V> {
     private final Action<V> action;
 
     private ActionStmt(Action<V> action) {
-        super(Phrase.Kind.AKTION_STMT);
+        super(Phrase.Kind.AKTION_STMT, false, "");
         Assert.isTrue(action.isReadOnly());
         this.action = action;
         setReadOnly();
@@ -22,6 +22,8 @@ public class ActionStmt<V> extends Stmt<V> {
      * Create object of the class {@link AssignStmt}.
      * 
      * @param action that we want to wrap
+     * @param disabled state of the block
+     * @param comment added from the user
      * @return statement with wrapped action inside
      */
     public static <V> ActionStmt<V> make(Action<V> action) {

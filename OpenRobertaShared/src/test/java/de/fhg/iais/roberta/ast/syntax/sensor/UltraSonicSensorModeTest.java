@@ -15,19 +15,16 @@ public class UltraSonicSensorModeTest {
 
     @Test(expected = DbcException.class)
     public void invalideMode() {
-        UltrasonicSensorMode mode = UltrasonicSensorMode.get("ad");
-
+        UltrasonicSensorMode.get("ad");
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode1() {
-        UltrasonicSensorMode mode = UltrasonicSensorMode.get("");
-
+        UltrasonicSensorMode.get("");
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode2() {
-        UltrasonicSensorMode mode = UltrasonicSensorMode.get(null);
-
+        UltrasonicSensorMode.get(null);
     }
 }

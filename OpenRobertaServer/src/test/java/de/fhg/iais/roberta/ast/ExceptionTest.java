@@ -8,17 +8,17 @@ import org.junit.Test;
 import org.xml.sax.InputSource;
 
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
-import de.fhg.iais.roberta.blockly.generated.Project;
+import de.fhg.iais.roberta.blockly.generated.BlockSet;
 
 public class ExceptionTest {
 
     @Test
     public void valueException() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Project.class);
+        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
         InputSource src = new InputSource(Math.class.getResourceAsStream("/ast/exceptions/value_exception.xml"));
-        Project project = (Project) jaxbUnmarshaller.unmarshal(src);
+        BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer<?> transformer = new JaxbTransformer<>();
 

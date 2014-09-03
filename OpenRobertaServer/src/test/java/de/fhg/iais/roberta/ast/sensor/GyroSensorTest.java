@@ -20,18 +20,18 @@ public class GyroSensorTest {
 
     @Test
     public void getMode() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/sensors/sensor_setGyro.xml");
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setGyro.xml");
 
-        GyroSensor cs = (GyroSensor) transformer.getTree().get(0);
+        GyroSensor<Void> cs = (GyroSensor<Void>) transformer.getTree().get(0);
 
         Assert.assertEquals(GyroSensorMode.ANGLE, cs.getMode());
     }
 
     @Test
     public void getPort() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/sensors/sensor_setGyro.xml");
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setGyro.xml");
 
-        GyroSensor cs = (GyroSensor) transformer.getTree().get(0);
+        GyroSensor<Void> cs = (GyroSensor<Void>) transformer.getTree().get(0);
 
         Assert.assertEquals(SensorPort.S2, cs.getPort());
     }

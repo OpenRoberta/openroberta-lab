@@ -15,19 +15,16 @@ public class MotorStopModeTest {
 
     @Test(expected = DbcException.class)
     public void invalideMode() {
-        MotorStopMode mode = MotorStopMode.get("ad");
-
+        MotorStopMode.get("ad");
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode1() {
-        MotorStopMode mode = MotorStopMode.get("");
-
+        MotorStopMode.get("");
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode2() {
-        MotorStopMode mode = MotorStopMode.get(null);
-
+        MotorStopMode.get(null);
     }
 }

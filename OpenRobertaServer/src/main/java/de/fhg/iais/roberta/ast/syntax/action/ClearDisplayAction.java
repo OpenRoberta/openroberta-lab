@@ -7,18 +7,20 @@ import de.fhg.iais.roberta.ast.visitor.AstVisitor;
  */
 public final class ClearDisplayAction<V> extends Action<V> {
 
-    private ClearDisplayAction() {
-        super(Kind.CLEAR_DISPLAY_ACTION);
+    private ClearDisplayAction(boolean disabled, String comment) {
+        super(Kind.CLEAR_DISPLAY_ACTION, disabled, comment);
         setReadOnly();
     }
 
     /**
      * Creates instance of {@link ClearDisplayAction}. This instance is read only and can not be modified.
      * 
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link ClearDisplayAction}.
      */
-    public static <V> ClearDisplayAction<V> make() {
-        return new ClearDisplayAction<V>();
+    public static <V> ClearDisplayAction<V> make(boolean disabled, String comment) {
+        return new ClearDisplayAction<V>(disabled, comment);
     }
 
     @Override

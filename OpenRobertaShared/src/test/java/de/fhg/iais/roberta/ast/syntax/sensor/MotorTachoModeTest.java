@@ -15,19 +15,16 @@ public class MotorTachoModeTest {
 
     @Test(expected = DbcException.class)
     public void invalideMode() {
-        MotorTachoMode mode = MotorTachoMode.get("ad");
-
+        MotorTachoMode.get("ad");
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode1() {
-        MotorTachoMode mode = MotorTachoMode.get("");
-
+        MotorTachoMode.get("");
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode2() {
-        MotorTachoMode mode = MotorTachoMode.get(null);
-
+        MotorTachoMode.get(null);
     }
 }

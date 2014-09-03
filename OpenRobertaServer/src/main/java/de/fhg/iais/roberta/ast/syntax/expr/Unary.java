@@ -20,8 +20,8 @@ public class Unary<V> extends Expr<V> {
     private final Op op;
     private final Expr<V> expr;
 
-    private Unary(Op op, Expr<V> expr) {
-        super(Phrase.Kind.UNARY);
+    private Unary(Op op, Expr<V> expr, boolean disabled, String comment) {
+        super(Phrase.Kind.UNARY, disabled, comment);
         Assert.isTrue(op != null && expr != null && expr.isReadOnly());
         this.op = op;
         this.expr = expr;
@@ -32,11 +32,13 @@ public class Unary<V> extends Expr<V> {
      * creates instance of {@link Unary}. This instance is read only and can not be modified.
      * 
      * @param op operator
-     * @param expr expression over which the operation is performed
+     * @param expr expression over which the operation is performed,
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link Unary}
      */
-    public static <V> Unary<V> make(Op op, Expr<V> expr) {
-        return new Unary<V>(op, expr);
+    public static <V> Unary<V> make(Op op, Expr<V> expr, boolean disabled, String comment) {
+        return new Unary<V>(op, expr, disabled, comment);
     }
 
     /**

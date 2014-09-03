@@ -20,18 +20,18 @@ public class UltraSonicSensorTest {
 
     @Test
     public void getMode() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/sensors/sensor_setUltrasonic.xml");
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setUltrasonic.xml");
 
-        UltrasonicSensor cs = (UltrasonicSensor) transformer.getTree().get(0);
+        UltrasonicSensor<Void> cs = (UltrasonicSensor<Void>) transformer.getTree().get(0);
 
         Assert.assertEquals(UltrasonicSensorMode.DISTANCE, cs.getMode());
     }
 
     @Test
     public void getPort() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/sensors/sensor_setUltrasonic.xml");
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setUltrasonic.xml");
 
-        UltrasonicSensor cs = (UltrasonicSensor) transformer.getTree().get(0);
+        UltrasonicSensor<Void> cs = (UltrasonicSensor<Void>) transformer.getTree().get(0);
 
         Assert.assertEquals(SensorPort.S4, cs.getPort());
     }

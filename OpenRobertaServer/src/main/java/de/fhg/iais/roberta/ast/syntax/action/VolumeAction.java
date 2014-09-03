@@ -15,8 +15,8 @@ public class VolumeAction<V> extends Action<V> {
     private final Mode mode;
     private final Expr<V> volume;
 
-    private VolumeAction(Mode mode, Expr<V> volume) {
-        super(Phrase.Kind.VOLUME_ACTION);
+    private VolumeAction(Mode mode, Expr<V> volume, boolean disabled, String comment) {
+        super(Phrase.Kind.VOLUME_ACTION, disabled, comment);
         Assert.isTrue(volume != null && volume.isReadOnly() && mode != null);
         this.volume = volume;
         this.mode = mode;
@@ -28,10 +28,12 @@ public class VolumeAction<V> extends Action<V> {
      * 
      * @param mode of the action {@link Mode},
      * @param volume value
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link VolumeAction}.
      */
-    public static <V> VolumeAction<V> make(Mode mode, Expr<V> volume) {
-        return new VolumeAction<V>(mode, volume);
+    public static <V> VolumeAction<V> make(Mode mode, Expr<V> volume, boolean disabled, String comment) {
+        return new VolumeAction<V>(mode, volume, disabled, comment);
     }
 
     /**

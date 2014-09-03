@@ -12,8 +12,8 @@ import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 public class StringConst<V> extends Expr<V> {
     private final String value;
 
-    private StringConst(String value) {
-        super(Phrase.Kind.STRING_CONST);
+    private StringConst(String value, boolean disabled, String comment) {
+        super(Phrase.Kind.STRING_CONST, disabled, comment);
         this.value = value;
         setReadOnly();
     }
@@ -21,11 +21,13 @@ public class StringConst<V> extends Expr<V> {
     /**
      * creates instance of {@link StringConst}. This instance is read only and can not be modified.
      * 
-     * @param value that the boolean constant will have
+     * @param value that the boolean constant will have,
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link StringConst}.
      */
-    public static <V> StringConst<V> make(String value) {
-        return new StringConst<V>(value);
+    public static <V> StringConst<V> make(String value, boolean disabled, String comment) {
+        return new StringConst<V>(value, disabled, comment);
     }
 
     /**

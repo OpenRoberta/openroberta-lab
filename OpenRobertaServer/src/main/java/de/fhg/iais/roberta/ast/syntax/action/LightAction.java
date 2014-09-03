@@ -14,8 +14,8 @@ public class LightAction<V> extends Action<V> {
     private final BrickLedColor color;
     private final boolean blink;
 
-    private LightAction(BrickLedColor color, boolean blink) {
-        super(Phrase.Kind.LIGHT_ACTION);
+    private LightAction(BrickLedColor color, boolean blink, boolean disabled, String comment) {
+        super(Phrase.Kind.LIGHT_ACTION, disabled, comment);
         Assert.isTrue(color != null);
         this.color = color;
         this.blink = blink;
@@ -27,10 +27,12 @@ public class LightAction<V> extends Action<V> {
      * 
      * @param color of the lights on the brick. All possible colors are defined in {@link BrickLedColor},
      * @param blink type of the blinking,
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link LightAction}.
      */
-    public static <V> LightAction<V> make(BrickLedColor color, boolean blink) {
-        return new LightAction<V>(color, blink);
+    public static <V> LightAction<V> make(BrickLedColor color, boolean blink, boolean disabled, String comment) {
+        return new LightAction<V>(color, blink, disabled, comment);
     }
 
     /**

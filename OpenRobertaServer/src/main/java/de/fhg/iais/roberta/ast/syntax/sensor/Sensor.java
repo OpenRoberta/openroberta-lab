@@ -12,10 +12,12 @@ public abstract class Sensor<V> extends Phrase<V> {
     /**
      * This constructor set the kind of the sensor object used in the AST (abstract syntax tree). All possible kinds can be found in {@link Kind}.
      * 
-     * @param kind of the the sensor object used in AST
+     * @param kind of the the sensor object used in AST,
+     * @param disabled is the block,
+     * @param comment of the user for the specific block
      */
-    public Sensor(Kind kind) {
-        super(kind);
+    public Sensor(Kind kind, boolean disabled, String comment) {
+        super(kind, disabled, comment);
     }
 
 }

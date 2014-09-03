@@ -32,6 +32,7 @@ import de.fhg.iais.roberta.ast.syntax.functions.Func;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.GetSampleSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensor;
@@ -45,6 +46,9 @@ import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
+import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
+import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
+import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
 
 /**
  * Interface to be used with the visitor pattern to traverse an AST (and generate code, e.g.).
@@ -367,5 +371,33 @@ public interface AstVisitor<V> {
      * @param ultrasonicSensor to be visited
      */
     public V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor);
+
+    /**
+     * visit a {@link GetSampleSensor}.
+     * 
+     * @param GetSampleSensor to be visited
+     */
+    public V visitGetSampleSensor(GetSampleSensor<V> getSampleSensor);
+
+    /**
+     * visit a {@link MainTask}.
+     * 
+     * @param MainTask to be visited
+     */
+    public V visitMainTask(MainTask<V> mainTask);
+
+    /**
+     * visit a {@link ActivityTask}.
+     * 
+     * @param activityTask to be visited
+     */
+    public V visitActivityTask(ActivityTask<V> activityTask);
+
+    /**
+     * visit a {@link StartActivityTask}.
+     * 
+     * @param startActivityTask to be visited
+     */
+    public V visitStartActivityTask(StartActivityTask<V> startActivityTask);
 
 }

@@ -33,6 +33,7 @@ import de.fhg.iais.roberta.ast.syntax.functions.Func;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.GetSampleSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensor;
@@ -47,6 +48,9 @@ import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
+import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
+import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
+import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
 
 /**
  * This class is THE default implementation of {@link AstVisitor}. All methods are implemented empty ... and may be overwritten in subclasses
@@ -60,6 +64,7 @@ public abstract class AstDefaultVisitorInspecting implements AstVisitor<Void> {
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
     public AstDefaultVisitorInspecting() {
+
     }
 
     @Override
@@ -320,6 +325,26 @@ public abstract class AstDefaultVisitorInspecting implements AstVisitor<Void> {
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitGetSampleSensor(GetSampleSensor<Void> getSampleSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitMainTask(MainTask<Void> mainTask) {
+        return null;
+    }
+
+    @Override
+    public Void visitActivityTask(ActivityTask<Void> activityTask) {
+        return null;
+    }
+
+    @Override
+    public Void visitStartActivityTask(StartActivityTask<Void> startActivityTask) {
         return null;
     }
 }

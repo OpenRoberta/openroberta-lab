@@ -22,15 +22,21 @@ abstract public class Phrase<V> {
     private static final Logger LOG = LoggerFactory.getLogger(Phrase.class);
 
     private boolean readOnly = false;
+    private final boolean disabled;
+    private final String comment;
     private final Kind kind;
 
     /**
      * This constructor set the kind of the object used in the AST (abstract syntax tree). All possible kinds can be found in {@link Kind}.
      * 
-     * @param kind of the the object used in AST
+     * @param kind of the the object used in AST,
+     * @param disabled,
+     * @param comment that the user added to the block
      */
-    public Phrase(Kind kind) {
+    public Phrase(Kind kind, boolean disabled, String comment) {
         this.kind = kind;
+        this.disabled = disabled;
+        this.comment = comment;
     }
 
     /**
@@ -59,6 +65,20 @@ abstract public class Phrase<V> {
      */
     public final Kind getKind() {
         return this.kind;
+    }
+
+    /**
+     * @return true if the block is disabled, o/w false
+     */
+    public boolean isDisabled() {
+        return this.disabled;
+    }
+
+    /**
+     * @return comment that the user added to the block
+     */
+    public String getComment() {
+        return this.comment;
     }
 
     /**
@@ -108,6 +128,7 @@ abstract public class Phrase<V> {
         BRICK_SENSIG( Category.SENSOR ),
         GYRO_SENSIG( Category.SENSOR ),
         TIMER_SENSING( Category.SENSOR ),
+        GET_SAMPLE_SENSING( Category.SENSOR ),
         EXPR_LIST( Category.EXPR ),
         STRING_CONST( Category.EXPR ),
         PICK_COLOR_CONST( Category.EXPR ),
@@ -122,6 +143,7 @@ abstract public class Phrase<V> {
         ACTION_EXPR( Category.EXPR ),
         EMPTY_EXPR( Category.EXPR ),
         FUNCTIONS( Category.EXPR ),
+        START_ACTIVITY_TASK( Category.EXPR ),
         IF_STMT( Category.STMT ),
         REPEAT_STMT( Category.STMT ),
         EXPR_STMT( Category.STMT ),
@@ -143,7 +165,9 @@ abstract public class Phrase<V> {
         PLAY_FILE_ACTION( Category.ACTOR ),
         VOLUME_ACTION( Category.ACTOR ),
         LIGHT_STATUS_ACTION( Category.ACTOR ),
-        STOP_ACTION( Category.ACTOR );
+        STOP_ACTION( Category.ACTOR ),
+        MAIN_TASK( Category.TASK ),
+        ACTIVITY_TASK( Category.TASK );
 
         private final Category category;
 

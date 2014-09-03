@@ -20,8 +20,8 @@ public class EncoderSensor<V> extends Sensor<V> {
     private final MotorTachoMode mode;
     private final ActorPort motor;
 
-    private EncoderSensor(MotorTachoMode mode, ActorPort motor) {
-        super(Phrase.Kind.ENCODER_SENSING);
+    private EncoderSensor(MotorTachoMode mode, ActorPort motor, boolean disabled, String comment) {
+        super(Phrase.Kind.ENCODER_SENSING, disabled, comment);
         Assert.isTrue(mode != null);
         this.mode = mode;
         this.motor = motor;
@@ -32,11 +32,13 @@ public class EncoderSensor<V> extends Sensor<V> {
      * Create object of the class {@link EncoderSensor}.
      * 
      * @param mode in which the sensor is operating. See enum {@link MotorTachoMode} for all possible modes that the sensor have.
-     * @param port on where the sensor is connected. See enum {@link SensorPort} for all possible sensor ports.
+     * @param port on where the sensor is connected. See enum {@link SensorPort} for all possible sensor ports
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of {@link EncoderSensor}
      */
-    public static <V> EncoderSensor<V> make(MotorTachoMode mode, ActorPort motor) {
-        return new EncoderSensor<V>(mode, motor);
+    public static <V> EncoderSensor<V> make(MotorTachoMode mode, ActorPort motor, boolean disabled, String comment) {
+        return new EncoderSensor<V>(mode, motor, disabled, comment);
     }
 
     /**

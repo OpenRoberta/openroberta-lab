@@ -19,8 +19,8 @@ public class UltrasonicSensor<V> extends Sensor<V> {
     private final UltrasonicSensorMode mode;
     private final SensorPort port;
 
-    private UltrasonicSensor(UltrasonicSensorMode mode, SensorPort port) {
-        super(Phrase.Kind.ULTRASONIC_SENSING);
+    private UltrasonicSensor(UltrasonicSensorMode mode, SensorPort port, boolean disabled, String comment) {
+        super(Phrase.Kind.ULTRASONIC_SENSING, disabled, comment);
         Assert.isTrue(mode != null);
         this.mode = mode;
         this.port = port;
@@ -32,10 +32,12 @@ public class UltrasonicSensor<V> extends Sensor<V> {
      * 
      * @param mode in which the sensor is operating. See enum {@link UltrasonicSensorMode} for all possible modes that the sensor have.
      * @param port on where the sensor is connected. See enum {@link SensorPort} for all possible sensor ports.
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of {@link UltrasonicSensor}
      */
-    public static <V> UltrasonicSensor<V> make(UltrasonicSensorMode mode, SensorPort port) {
-        return new UltrasonicSensor<V>(mode, port);
+    public static <V> UltrasonicSensor<V> make(UltrasonicSensorMode mode, SensorPort port, boolean disabled, String comment) {
+        return new UltrasonicSensor<V>(mode, port, disabled, comment);
     }
 
     /**

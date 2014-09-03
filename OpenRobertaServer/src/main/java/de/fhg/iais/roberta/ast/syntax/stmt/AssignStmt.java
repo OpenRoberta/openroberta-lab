@@ -20,8 +20,8 @@ public class AssignStmt<V> extends Stmt<V> {
     private final Var<V> name;
     private final Expr<V> expr;
 
-    private AssignStmt(Var<V> name, Expr<V> expr) {
-        super(Phrase.Kind.ASSIGN_STMT);
+    private AssignStmt(Var<V> name, Expr<V> expr, boolean disabled, String comment) {
+        super(Phrase.Kind.ASSIGN_STMT, disabled, comment);
         Assert.isTrue(name.isReadOnly() && expr.isReadOnly());
         this.name = name;
         this.expr = expr;
@@ -33,10 +33,12 @@ public class AssignStmt<V> extends Stmt<V> {
      * 
      * @param name of the variable
      * @param expr that we want to assign to the {@link #name}
+     * @param disabled state of the block
+     * @param comment added from the user
      * @return instance of {@link AssignStmt}
      */
-    public static <V> AssignStmt<V> make(Var<V> name, Expr<V> expr) {
-        return new AssignStmt<V>(name, expr);
+    public static <V> AssignStmt<V> make(Var<V> name, Expr<V> expr, boolean disabled, String comment) {
+        return new AssignStmt<V>(name, expr, disabled, comment);
     }
 
     /**

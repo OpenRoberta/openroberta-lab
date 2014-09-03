@@ -12,8 +12,8 @@ import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 public class NumConst<V> extends Expr<V> {
     private final String value;
 
-    private NumConst(String value) {
-        super(Phrase.Kind.NUM_CONST);
+    private NumConst(String value, boolean disabled, String comment) {
+        super(Phrase.Kind.NUM_CONST, disabled, comment);
         this.value = value;
         setReadOnly();
     }
@@ -21,11 +21,13 @@ public class NumConst<V> extends Expr<V> {
     /**
      * creates instance of {@link NumConst}. This instance is read only and can not be modified.
      * 
-     * @param value of the numerical constant
+     * @param value of the numerical constant,
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link NumConst}.
      */
-    public static <V> NumConst<V> make(String value) {
-        return new NumConst<V>(value);
+    public static <V> NumConst<V> make(String value, boolean disabled, String comment) {
+        return new NumConst<V>(value, disabled, comment);
     }
 
     /**

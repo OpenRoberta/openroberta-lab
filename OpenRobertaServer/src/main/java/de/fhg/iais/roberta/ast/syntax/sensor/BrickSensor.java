@@ -17,8 +17,8 @@ public class BrickSensor<V> extends Sensor<V> {
     private final BrickKey key;
     private final Mode mode;
 
-    private BrickSensor(Mode mode, BrickKey key) {
-        super(Phrase.Kind.BRICK_SENSIG);
+    private BrickSensor(Mode mode, BrickKey key, boolean disabled, String comment) {
+        super(Phrase.Kind.BRICK_SENSIG, disabled, comment);
         Assert.isTrue(mode != null && !key.equals(""));
         this.mode = mode;
         this.key = key;
@@ -29,11 +29,13 @@ public class BrickSensor<V> extends Sensor<V> {
      * Creates instance of {@link BrickSensor}. This instance is read only and can not be modified.
      * 
      * @param mode in which the sensor is operating. See enum {@link Mode} for all possible modes that the sensor have.
-     * @param key on the brick. See enum {@link BrickKey} for all possible keys.
+     * @param key on the brick. See enum {@link BrickKey} for all possible keys,
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link BrickSensor}
      */
-    public static <V> BrickSensor<V> make(Mode mode, BrickKey key) {
-        return new BrickSensor<V>(mode, key);
+    public static <V> BrickSensor<V> make(Mode mode, BrickKey key, boolean disabled, String comment) {
+        return new BrickSensor<V>(mode, key, disabled, comment);
     }
 
     /**

@@ -15,19 +15,16 @@ public class SensorPortTest {
 
     @Test(expected = DbcException.class)
     public void invalideMode() {
-        SensorPort mode = SensorPort.get("ad");
-
+        SensorPort.get("ad");
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode1() {
-        SensorPort mode = SensorPort.get("");
-
+        SensorPort.get("");
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode2() {
-        SensorPort mode = SensorPort.get(null);
-
+        SensorPort.get(null);
     }
 }

@@ -9,18 +9,20 @@ import de.fhg.iais.roberta.ast.visitor.AstVisitor;
  */
 public class MotorDriveStopAction<V> extends Action<V> {
 
-    private MotorDriveStopAction() {
-        super(Phrase.Kind.STOP_ACTION);
+    private MotorDriveStopAction(boolean disabled, String comment) {
+        super(Phrase.Kind.STOP_ACTION, disabled, comment);
         setReadOnly();
     }
 
     /**
      * Creates instance of {@link MotorDriveStopAction}. This instance is read only and can not be modified.
      * 
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link MotorDriveStopAction}.
      */
-    public static <V> MotorDriveStopAction<V> make() {
-        return new MotorDriveStopAction<V>();
+    public static <V> MotorDriveStopAction<V> make(boolean disabled, String comment) {
+        return new MotorDriveStopAction<V>(disabled, comment);
     }
 
     @Override

@@ -15,19 +15,16 @@ public class ColorSensorModeTest {
 
     @Test(expected = DbcException.class)
     public void invalideMode() {
-        ColorSensorMode mode = ColorSensorMode.get("ad");
-
+        ColorSensorMode.get("ad");
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode1() {
-        ColorSensorMode mode = ColorSensorMode.get("");
-
+        ColorSensorMode.get("");
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode2() {
-        ColorSensorMode mode = ColorSensorMode.get(null);
-
+        ColorSensorMode.get(null);
     }
 }

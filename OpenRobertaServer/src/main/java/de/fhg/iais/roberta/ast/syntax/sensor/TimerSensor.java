@@ -18,8 +18,8 @@ public class TimerSensor<V> extends Sensor<V> {
     private final TimerSensorMode mode;
     private final int timer;
 
-    private TimerSensor(TimerSensorMode mode, int timer) {
-        super(Phrase.Kind.TIMER_SENSING);
+    private TimerSensor(TimerSensorMode mode, int timer, boolean disabled, String comment) {
+        super(Phrase.Kind.TIMER_SENSING, disabled, comment);
         Assert.isTrue(timer < 10);
         this.mode = mode;
         this.timer = timer;
@@ -30,11 +30,13 @@ public class TimerSensor<V> extends Sensor<V> {
      * Create object of the class {@link TimerSensor}.
      * 
      * @param mode in which the sensor is operating. See enum {@link TimerSensorMode} for all possible modes that the sensor have.
-     * @param timer integer value
+     * @param timer integer value,
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of {@link TimerSensor}
      */
-    public static <V> TimerSensor<V> make(TimerSensorMode mode, int timer) {
-        return new TimerSensor<V>(mode, timer);
+    public static <V> TimerSensor<V> make(TimerSensorMode mode, int timer, boolean disabled, String comment) {
+        return new TimerSensor<V>(mode, timer, disabled, comment);
     }
 
     /**

@@ -20,18 +20,18 @@ public class ColorSensorTest {
 
     @Test
     public void getMode() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/sensors/sensor_setColor.xml");
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setColor.xml");
 
-        ColorSensor cs = (ColorSensor) transformer.getTree().get(0);
+        ColorSensor<Void> cs = (ColorSensor<Void>) transformer.getTree().get(0);
 
         Assert.assertEquals(ColorSensorMode.COLOUR, cs.getMode());
     }
 
     @Test
     public void getPort() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/sensors/sensor_setColor.xml");
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setColor.xml");
 
-        ColorSensor cs = (ColorSensor) transformer.getTree().get(0);
+        ColorSensor<Void> cs = (ColorSensor<Void>) transformer.getTree().get(0);
 
         Assert.assertEquals(SensorPort.S3, cs.getPort());
     }

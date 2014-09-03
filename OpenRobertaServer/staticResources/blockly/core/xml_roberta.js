@@ -14,7 +14,7 @@ goog.provide('Blockly.Xml.Roberta');
  */
 Blockly.Xml.Roberta.workspaceToDom = function (workspace) {
 	var width = Blockly.svgSize().width;
-	var xml = goog.dom.createDom('project');
+	var xml = goog.dom.createDom('block_set');
 	var blocks = workspace.getTopBlocks(true);
 	for (var i = 0, block; block = blocks[i]; i++) {
 		var top = goog.dom.createDom('instance');
@@ -373,7 +373,7 @@ Blockly.Xml.Roberta.textToDom = function(text) {
   var dom = oParser.parseFromString(text, 'text/xml');
   // The DOM should have one and only one top-level node, an XML tag.
   if (!dom || !dom.firstChild ||
-      dom.firstChild.nodeName.toLowerCase() != 'project' ||
+      dom.firstChild.nodeName.toLowerCase() != 'block_set' ||
       dom.firstChild !== dom.lastChild) {
     // Whatever we got back from the parser is not XML.
     throw 'Blockly.Xml.Roberta.textToDom did not obtain a valid XML tree.';

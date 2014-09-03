@@ -19,9 +19,9 @@ public class TouchSensorTest {
 
     @Test
     public void getPort() throws Exception {
-        JaxbTransformer transformer = Helper.generateTransformer("/ast/sensors/sensor_Touch.xml");
+        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_Touch.xml");
 
-        TouchSensor cs = (TouchSensor) transformer.getTree().get(0);
+        TouchSensor<Void> cs = (TouchSensor<Void>) transformer.getTree().get(0);
 
         Assert.assertEquals(SensorPort.S1, cs.getPort());
     }

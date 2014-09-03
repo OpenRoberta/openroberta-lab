@@ -34,7 +34,7 @@ public class BrickSensorTest {
     public void invalideMode() throws Exception {
         try {
             @SuppressWarnings("unused")
-            BrickSensor<Void> va = BrickSensor.make(BrickSensor.Mode.valueOf("invalid"), null);
+            BrickSensor<Void> va = BrickSensor.make(BrickSensor.Mode.valueOf("invalid"), null, false, "");
             Assert.fail();
         } catch ( Exception e ) {
             Assert.assertEquals("No enum constant de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor.Mode.invalid", e.getMessage());

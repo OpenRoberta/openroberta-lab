@@ -12,10 +12,12 @@ public abstract class Expr<V> extends Phrase<V> {
     /**
      * create a mutable expression of the given {@link Kind}
      * 
-     * @param kind the kind of the expression
+     * @param kind the kind of the expression,
+     * @param disabled is the block,
+     * @param comment of the user for the specific block
      */
-    public Expr(Kind kind) {
-        super(kind);
+    public Expr(Kind kind, boolean disabled, String comment) {
+        super(kind, disabled, comment);
     }
 
     /**

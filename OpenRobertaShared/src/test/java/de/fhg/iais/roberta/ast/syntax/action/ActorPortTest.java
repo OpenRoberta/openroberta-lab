@@ -15,19 +15,19 @@ public class ActorPortTest {
 
     @Test(expected = DbcException.class)
     public void invalideMode() {
-        ActorPort mode = ActorPort.get("ad");
+        ActorPort.get("ad");
 
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode1() {
-        ActorPort mode = ActorPort.get("");
+        ActorPort.get("");
 
     }
 
     @Test(expected = DbcException.class)
     public void invalideMode2() {
-        ActorPort mode = ActorPort.get(null);
+        ActorPort.get(null);
 
     }
 }

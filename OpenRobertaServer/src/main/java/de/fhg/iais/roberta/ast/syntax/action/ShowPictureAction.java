@@ -16,8 +16,8 @@ public class ShowPictureAction<V> extends Action<V> {
     private final Expr<V> x;
     private final Expr<V> y;
 
-    private ShowPictureAction(String pic, Expr<V> x, Expr<V> y) {
-        super(Phrase.Kind.SHOW_PICTURE_ACTION);
+    private ShowPictureAction(String pic, Expr<V> x, Expr<V> y, boolean disabled, String comment) {
+        super(Phrase.Kind.SHOW_PICTURE_ACTION, disabled, comment);
         Assert.isTrue(pic != null && x != null && y != null);
         this.pic = pic;
         this.x = x;
@@ -30,11 +30,13 @@ public class ShowPictureAction<V> extends Action<V> {
      * 
      * @param pic that will be printed on the display of the brick,
      * @param x position where the picture will start
-     * @param y postition where the picture will start
+     * @param y postition where the picture will start,
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link ShowPictureAction}.
      */
-    public static <V> ShowPictureAction<V> make(String pic, Expr<V> x, Expr<V> y) {
-        return new ShowPictureAction<V>(pic, x, y);
+    public static <V> ShowPictureAction<V> make(String pic, Expr<V> x, Expr<V> y, boolean disabled, String comment) {
+        return new ShowPictureAction<V>(pic, x, y, disabled, comment);
     }
 
     /**

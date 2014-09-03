@@ -26,7 +26,7 @@ public class JavaVisitorTest {
 
     @Test
     public void visitMathConst() throws Exception {
-        MathConst mathConst = MathConst.make(Const.E);
+        MathConst<Void> mathConst = MathConst.make(Const.E, false, "");
         AstToLejosJavaVisitor visitor = new AstToLejosJavaVisitor("Test", brickConfiguration, 0);
         mathConst.visit(visitor);
         Assert.assertEquals(Const.E.toString(), visitor.getSb().toString());
@@ -34,7 +34,7 @@ public class JavaVisitorTest {
 
     @Test
     public void visitEmptyExpr() throws Exception {
-        EmptyExpr emptyExpr = EmptyExpr.make(Double.class);
+        EmptyExpr<Void> emptyExpr = EmptyExpr.make(Double.class);
         AstToLejosJavaVisitor visitor = new AstToLejosJavaVisitor("Test", brickConfiguration, 0);
         emptyExpr.visit(visitor);
         Assert.assertEquals("[[EmptyExpr [defVal=class java.lang.Double]]]", visitor.getSb().toString());

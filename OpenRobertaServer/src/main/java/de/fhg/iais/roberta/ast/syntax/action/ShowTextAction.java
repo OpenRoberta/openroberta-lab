@@ -18,8 +18,8 @@ public class ShowTextAction<V> extends Action<V> {
     private final Expr<V> x;
     private final Expr<V> y;
 
-    private ShowTextAction(Expr<V> msg, Expr<V> column, Expr<V> row) {
-        super(Phrase.Kind.SHOW_TEXT_ACTION);
+    private ShowTextAction(Expr<V> msg, Expr<V> column, Expr<V> row, boolean disabled, String comment) {
+        super(Phrase.Kind.SHOW_TEXT_ACTION, disabled, comment);
         Assert.isTrue(msg != null && column != null && row != null);
         this.msg = msg;
         this.x = column;
@@ -32,11 +32,13 @@ public class ShowTextAction<V> extends Action<V> {
      * 
      * @param msg that will be printed on the display of the brick,
      * @param x position where the message will start
-     * @param y postition where the message will start
+     * @param y postition where the message will start,
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link ShowTextAction}.
      */
-    public static <V> ShowTextAction<V> make(Expr<V> msg, Expr<V> x, Expr<V> y) {
-        return new ShowTextAction<V>(msg, x, y);
+    public static <V> ShowTextAction<V> make(Expr<V> msg, Expr<V> x, Expr<V> y, boolean disabled, String comment) {
+        return new ShowTextAction<V>(msg, x, y, disabled, comment);
     }
 
     /**

@@ -20,8 +20,8 @@ public class RepeatStmt<V> extends Stmt<V> {
     private final Expr<V> expr;
     private final StmtList<V> list;
 
-    private RepeatStmt(Mode mode, Expr<V> expr, StmtList<V> list) {
-        super(Phrase.Kind.REPEAT_STMT);
+    private RepeatStmt(Mode mode, Expr<V> expr, StmtList<V> list, boolean disabled, String comment) {
+        super(Phrase.Kind.REPEAT_STMT, disabled, comment);
         Assert.isTrue(expr.isReadOnly() && list.isReadOnly());
         this.expr = expr;
         this.list = list;
@@ -35,10 +35,12 @@ public class RepeatStmt<V> extends Stmt<V> {
      * @param mode of the repeat statement. See enum {@link Mode} for all possible modes.
      * @param expr that should be evaluated
      * @param list of statements
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of {@link RepeatStmt}
      */
-    public static <V> RepeatStmt<V> make(Mode mode, Expr<V> expr, StmtList<V> list) {
-        return new RepeatStmt<V>(mode, expr, list);
+    public static <V> RepeatStmt<V> make(Mode mode, Expr<V> expr, StmtList<V> list, boolean disabled, String comment) {
+        return new RepeatStmt<V>(mode, expr, list, disabled, comment);
     }
 
     /**

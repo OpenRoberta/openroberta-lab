@@ -15,8 +15,8 @@ public class MotorSetPowerAction<V> extends Action<V> {
     private final ActorPort port;
     private final Expr<V> power;
 
-    private MotorSetPowerAction(ActorPort port, Expr<V> power) {
-        super(Phrase.Kind.MOTOR_GET_POWER_ACTION);
+    private MotorSetPowerAction(ActorPort port, Expr<V> power, boolean disabled, String comment) {
+        super(Phrase.Kind.MOTOR_GET_POWER_ACTION, disabled, comment);
         Assert.isTrue(port != null && power.isReadOnly());
         this.port = port;
         this.power = power;
@@ -27,10 +27,12 @@ public class MotorSetPowerAction<V> extends Action<V> {
      * Creates instance of {@link MotorSetPowerAction}. This instance is read only and can not be modified.
      * 
      * @param port on which the motor is connected that we want to set,
+     * @param disabled state of the block,
+     * @param comment added from the user
      * @return read only object of class {@link MotorSetPowerAction}.
      */
-    public static <V> MotorSetPowerAction<V> make(ActorPort port, Expr<V> power) {
-        return new MotorSetPowerAction<V>(port, power);
+    public static <V> MotorSetPowerAction<V> make(ActorPort port, Expr<V> power, boolean disabled, String comment) {
+        return new MotorSetPowerAction<V>(port, power, disabled, comment);
     }
 
     /**
