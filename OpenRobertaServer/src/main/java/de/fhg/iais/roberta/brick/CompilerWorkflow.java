@@ -54,14 +54,12 @@ public class CompilerWorkflow {
             return "program has no blocks";
         }
         blocklyXml = blocklyXml.replaceAll("http://www.w3.org/1999/xhtml", "http://de.fhg.iais.roberta.blockly");
-        blocklyXml =
-            blocklyXml
-                .replaceFirst("<instance x=\"\\d+\" y=\"\\d+\"><block type=\"robControls_start\" id=\"\\d+\" deletable=\"false\"></block></instance>", "");
         BrickConfiguration brickConfiguration = new BrickConfiguration.Builder().build();
         JaxbTransformer<Void> transformer;
         try {
             transformer = generateTransformer(blocklyXml);
         } catch ( Exception e ) {
+            LOG.error("Transformer failed", e);
             return "blocks could not be transformed (message: " + e.getMessage() + ")";
         }
         String javaCode = AstToLejosJavaVisitor.generate(programName, brickConfiguration, transformer.getTree(), true);

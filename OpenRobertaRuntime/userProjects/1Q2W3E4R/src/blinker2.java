@@ -17,7 +17,8 @@ public class blinker2 {
 
     public void run() {
         Hal hal = new Hal(brickConfiguration);
-hal.ledOn(BrickLedColor.GREEN, true);
+
+hal.ledOn(BrickLedColor.GREEN, false);
         try {
             Thread.sleep(2000);
         } catch ( InterruptedException e ) {
