@@ -156,6 +156,8 @@ public class GraphicStartup implements Menu {
     private static URL serverTokenRessource;
     private static URL serverDownloadRessource;
 
+    public int selectTest;
+
     private static final String PROGRAMS_DIRECTORY = "/home/lejos/programs";
     private static final String SAMPLES_DIRECTORY = "/home/root/lejos/samples";
     private static final String TOOLS_DIRECTORY = "/home/root/lejos/tools";
@@ -1472,6 +1474,14 @@ public class GraphicStartup implements Menu {
         }
     }
 
+    public static List<String> getIPs() {
+        return ips;
+    }
+
+    public static GraphicMenu getMenu() {
+        return curMenu;
+    }
+
     /**
      * Roberta submenu implementation.
      */
@@ -1517,6 +1527,7 @@ public class GraphicStartup implements Menu {
             newScreen(" Robertalab");
             lcd.drawString("waiting for", 0, 2);
             lcd.drawString("registration...", 0, 3);
+            lcd.drawString("     " + token, 0, 5);
 
             while ( GraphicStartup.backgroundTasks.getRegisteredInfo() == false ) {
                 if ( GraphicStartup.backgroundTasks.getTimeOutInfo() == true ) {
@@ -1981,7 +1992,7 @@ public class GraphicStartup implements Menu {
             drawLaunchScreen();
 
             if ( isRobertaRegistered == true ) {
-                backgroundTasks.setRobertaAutorun(false);
+                RobertaObserver.setAutorun(false);
             }
 
             program = new ProcessBuilder(command.split(" ")).directory(new File(directory)).start();
@@ -2023,7 +2034,7 @@ public class GraphicStartup implements Menu {
         } catch ( Exception e ) {
             System.err.println("Failed to execute program: " + e);
         } finally {
-            backgroundTasks.setRobertaAutorun(true);
+            RobertaObserver.setAutorun(true);
         }
     }
 

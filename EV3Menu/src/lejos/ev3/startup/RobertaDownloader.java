@@ -8,19 +8,18 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import lejos.utility.Delay;
+
 /**
  * @author dpyka
  */
 public class RobertaDownloader implements Runnable {
-
-    private boolean hasDownloaded = false;
 
     private HttpURLConnection httpURLConnection;
 
     private final URL serverURL;
     private final String token;
 
-    private static String fileName;
     private final String PROGRAMS_DIRECTORY = "/home/lejos/programs";
 
     public RobertaDownloader(URL serverURL, String token) {
@@ -28,63 +27,56 @@ public class RobertaDownloader implements Runnable {
         this.token = token;
     }
 
-    public String getFileName() {
-        return fileName;
-    }
-
     public HttpURLConnection getHttpConnection() {
         return this.httpURLConnection;
     }
 
-    public boolean getDownloadCompleteInfo() {
-        return this.hasDownloaded;
-    }
-
-    public void setDownloadCompleteInfo(boolean bool) {
-        this.hasDownloaded = bool;
-    }
-
     @Override
     public void run() {
-        setDownloadCompleteInfo(false);
+        while ( true ) {
+            if ( RobertaObserver.isExecuted() == true && RobertaObserver.isDownloaded() == false ) {
 
-        DataOutputStream dos = null;
-        InputStream is = null;
-        FileOutputStream fos = null;
+                DataOutputStream dos = null;
+                InputStream is = null;
+                FileOutputStream fos = null;
 
-        try {
-            this.httpURLConnection = openConnection(this.serverURL);
+                try {
+                    this.httpURLConnection = openConnection(this.serverURL);
 
-            dos = new DataOutputStream(this.httpURLConnection.getOutputStream());
-            dos.writeBytes(this.token);
-            dos.flush();
+                    dos = new DataOutputStream(this.httpURLConnection.getOutputStream());
+                    dos.writeBytes(this.token);
+                    dos.flush();
 
-            is = this.httpURLConnection.getInputStream();
-            byte[] buffer = new byte[4096];
-            int n;
+                    is = this.httpURLConnection.getInputStream();
+                    byte[] buffer = new byte[4096];
+                    int n;
 
-            RobertaDownloader.fileName = this.httpURLConnection.getHeaderField("fileName");
-            System.out.println("http header fileName: " + RobertaDownloader.fileName);
-            fos = new FileOutputStream(new File(this.PROGRAMS_DIRECTORY, RobertaDownloader.fileName));
+                    RobertaObserver.setUserFileName(this.httpURLConnection.getHeaderField("fileName"));
+                    System.out.println("http header fileName: " + RobertaObserver.getUserFileName());
+                    fos = new FileOutputStream(new File(this.PROGRAMS_DIRECTORY, RobertaObserver.getUserFileName()));
 
-            while ( (n = is.read(buffer)) != -1 ) {
-                fos.write(buffer, 0, n);
-            }
-            setDownloadCompleteInfo(true);
-        } catch ( IOException e ) {
-            System.out.println("force disconnect (download)");
-        } finally {
-            try {
-                if ( dos != null ) {
-                    dos.close();
+                    while ( (n = is.read(buffer)) != -1 ) {
+                        fos.write(buffer, 0, n);
+                    }
+                    RobertaObserver.setDownloaded(true);
+                } catch ( IOException e ) {
+                    System.out.println("force disconnect (download)");
+                } finally {
+                    try {
+                        if ( dos != null ) {
+                            dos.close();
+                        }
+                        if ( is != null ) {
+                            is.close();
+                        }
+                        if ( fos != null ) {
+                            fos.close();
+                        }
+                    } catch ( IOException e ) {
+                    }
                 }
-                if ( is != null ) {
-                    is.close();
-                }
-                if ( fos != null ) {
-                    fos.close();
-                }
-            } catch ( IOException e ) {
+            } else {
+                Delay.msDelay(500);
             }
         }
     }

@@ -1,5 +1,0 @@
-REM copy "our" files to an existing lejos installation (version 0.8.1)
-REM quick way to install robertalab firmware stuff
-REM TODO add pscp.exe and write batch file
-pscp -scp EV3Menu.jar root@10.0.1.1:/home/root/lejos/bin/utils
-REM +robertaRuntime lib (hal)

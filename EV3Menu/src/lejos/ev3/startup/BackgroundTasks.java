@@ -17,8 +17,6 @@ public class BackgroundTasks implements KeyListener {
     private Thread downloadThread;
     private Thread launcherThread;
 
-    private boolean autorun = true;
-
     public BackgroundTasks(URL serverTokenRessource, URL serverDownloadRessource, String token) {
         this.rtr = new RobertaTokenRegister(serverTokenRessource, token);
         this.rd = new RobertaDownloader(serverDownloadRessource, token);
@@ -38,7 +36,7 @@ public class BackgroundTasks implements KeyListener {
     }
 
     public void startLauncherThread(IndicatorThread ind, EchoThread echoIn, EchoThread echoErr) {
-        this.rl = new RobertaLauncher(ind, echoIn, echoErr, this.rd);
+        this.rl = new RobertaLauncher(ind, echoIn, echoErr);
         this.launcherThread = new Thread(this.rl);
         this.launcherThread.start();
     }
@@ -70,9 +68,4 @@ public class BackgroundTasks implements KeyListener {
     public boolean getErrorInfo() {
         return this.rtr.getErrorInfo();
     }
-
-    public void setRobertaAutorun(boolean bool) {
-        this.autorun = bool;
-    }
-
 }

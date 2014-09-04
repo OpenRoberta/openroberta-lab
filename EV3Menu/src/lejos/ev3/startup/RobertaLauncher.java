@@ -11,6 +11,7 @@ import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.lcd.Image;
+import lejos.hardware.lcd.TextLCD;
 import lejos.utility.Delay;
 
 public class RobertaLauncher implements Runnable {
@@ -28,51 +29,57 @@ public class RobertaLauncher implements Runnable {
     private static final Image image = new Image(178, 128, Utils.stringToBytes8(OpenRobertaLabLogo));
 
     private static final GraphicsLCD glcd = LocalEV3.get().getGraphicsLCD();
-
-    private final RobertaDownloader rd;
-    private boolean autorun = true;
+    private static final TextLCD lcd = LocalEV3.get().getTextLCD();
 
     private static Process program; // the running user program, if any
     private static String programName; // The name of the running program
     private static String mainClass;
 
-    public RobertaLauncher(IndicatorThread ind, EchoThread echoIn, EchoThread echoErr, RobertaDownloader rd) {
+    public RobertaLauncher(IndicatorThread ind, EchoThread echoIn, EchoThread echoErr) {
         this.ind = ind;
         this.echoIn = echoIn;
         this.echoErr = echoErr;
-        this.rd = rd;
     }
 
     public void setFileName(String programName) {
         RobertaLauncher.programName = programName;
     }
 
-    public void setRobertaAutorun(boolean bool) {
-        this.autorun = bool;
-    }
-
     @Override
     public void run() {
-        while ( this.autorun ) {
-            if ( this.rd.getDownloadCompleteInfo() ) {
-                File robertalabFile = new File(RobertaLauncher.PROGRAMS_DIRECTORY, programName);
-                JarFile jar;
-                try {
-                    jar = new JarFile(robertalabFile);
-                    mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
-                    jar.close();
-                } catch ( IOException e ) {
-                    System.err.println("Exception running program");
-                    return;
+        while ( true ) {
+            if ( RobertaObserver.isAutorun() ) {
+                if ( RobertaObserver.isDownloaded() == true && RobertaObserver.isExecuted() == true ) {
+                    RobertaObserver.setExecuted(false);
+
+                    glcd.drawImage(image, 0, 0, 0);
+
+                    setFileName(RobertaObserver.getUserFileName());
+                    File robertalabFile = new File(RobertaLauncher.PROGRAMS_DIRECTORY, programName);
+                    JarFile jar;
+                    try {
+                        jar = new JarFile(robertalabFile);
+                        mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
+                        jar.close();
+                    } catch ( IOException e ) {
+                        System.err.println("Exception running program");
+                        return;
+                    }
+                    this.ind.suspend();
+                    exec(
+                        robertalabFile,
+                        JAVA_RUN_CP + robertalabFile.getPath() + " lejos.internal.ev3.EV3Wrapper " + mainClass,
+                        RobertaLauncher.PROGRAMS_DIRECTORY);
+                    this.ind.resume();
+                    RobertaObserver.setDownloaded(false);
+                    RobertaObserver.setExecuted(true);
+                } else {
+                    Delay.msDelay(500);
                 }
-                this.ind.suspend();
-                exec(robertalabFile, JAVA_RUN_CP + robertalabFile.getPath() + " lejos.internal.ev3.EV3Wrapper " + mainClass, RobertaLauncher.PROGRAMS_DIRECTORY);
-                this.ind.resume();
             } else {
                 Delay.msDelay(500);
             }
         }
-
     }
 
     /**
@@ -125,6 +132,11 @@ public class RobertaLauncher implements Runnable {
             glcd.setAutoRefresh(true);
             glcd.clear();
             glcd.refresh();
+            int row = 1;
+            for ( String ip : GraphicStartup.getIPs() ) {
+                lcd.drawString(ip, 8 - ip.length() / 2, row++);
+            }
+            GraphicStartup.getMenu().display(RobertaObserver.getMenuIndex(), 0, 0);
             program = null;
         } catch ( Exception e ) {
             System.err.println("Failed to execute program: " + e);
