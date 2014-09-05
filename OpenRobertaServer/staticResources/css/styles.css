@@ -73,7 +73,7 @@ ul#head-navigation li:hover a {
     width: 23px;
 }
 
-ul#head-navigation a:hover .head-navi-icons.help {
+ul#head-navigation a:hover .head-navi-icons.help, ul#head-navigation li:hover .head-navi-icons.help {
     background-image: url(img/head-navi-icons/help_active.png);
 }
 
@@ -82,7 +82,7 @@ ul#head-navigation a:hover .head-navi-icons.help {
     width: 24px;
 }
 
-ul#head-navigation a:hover .head-navi-icons.settings {
+ul#head-navigation a:hover .head-navi-icons.settings, ul#head-navigation li:hover .head-navi-icons.settings {
     background-image: url(img/head-navi-icons/settings_active.png);
 }
 
@@ -91,7 +91,7 @@ ul#head-navigation a:hover .head-navi-icons.settings {
     width: 34px;
 }
 
-ul#head-navigation a:hover .head-navi-icons.community{
+ul#head-navigation a:hover .head-navi-icons.community, ul#head-navigation li:hover .head-navi-icons.community {
     background-image: url(img/head-navi-icons/community_active.png);
 }
 
@@ -118,7 +118,7 @@ ul#head-navigation a:hover .head-navi-icons.developer, ul#head-navigation li:hov
     width: 34px;
 }
 
-ul#head-navigation a:hover .head-navi-icons.user {
+ul#head-navigation a:hover .head-navi-icons.user, ul#head-navigation li:hover .head-navi-icons.user {
     background-image: url(img/head-navi-icons/user_active.png);
 }
 
@@ -348,7 +348,7 @@ ul#head-navigation li:hover #project-submenu {
 
 /* ### TUTORIALS ############################################################ */
 
-#tutorials {
+#login {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -358,7 +358,17 @@ ul#head-navigation li:hover #project-submenu {
     display: none;
 }
 
-#popup-tutorial {
+#program {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-image: url(img/overlay-50percent.png);
+    background-repeat: repeat;
+    z-index: 100000;
+    display: none;
+}
+
+.popup-window {
     width: 390px;
     height: 240px;
     padding: 30px;
@@ -383,20 +393,24 @@ ul#head-navigation li:hover #project-submenu {
 }
 
 #login-popup,
+#program-popup,
 #new-user,
 #delete-user {
     font-family: 'Roboto', sans-serif;
 }
 
 #login-popup label,
+#program-popup label,
 #new-user label,
-#delete-user label {
+#delete-user label,
+#control-panel label {
     display: block;
     font-size: 16px;
     font-weight: bold;
 }
 
 #login-popup input,
+#program-popup input,
 #new-user input,
 #delete-user input {
     padding: 7px 8px 7px 32px;
@@ -477,9 +491,25 @@ ul#head-navigation li:hover #project-submenu {
     color: #333333;
 }
 
+#program-popup input#programName {
+    background-image: url(img/program_name-icon.png);
+    background-repeat: no-repeat;
+    background-position: center left;
+}
+
+#program-popup input#programName:active,
+#program-popup input#programName:focus {
+    background-image: url(img/program_name-icon_active.png);
+    background-repeat: no-repeat;
+    background-position: center left;
+    color: #333333;
+}
+
 #login-popup .submit,
+#program-popup .submit,
 #new-user .submit,
-#delete-user .submit {
+#delete-user .submit,
+#control-panel input.button {
     padding: 7px 9px;
     border: none;
     font-size: 16px;
@@ -489,13 +519,21 @@ ul#head-navigation li:hover #project-submenu {
     cursor: pointer;
 }
 
+#control-panel input.button#toolbox1,
+#control-panel input.button#toolbox2 {
+    margin-top: 5px;
+    width: 110px;
+}
+
 #login-popup .submit:hover,
+#program-popup .submit:hover,
 #new-user .submit:hover,
-#delete-user .submit:hover {
+#delete-user .submit:hover,
+#control-panel input.button:hover {
     background-color: #b7d032;
 }
 
-#close-tutorials {
+.close-popup {
     display: block;
     position: absolute;
     top: 0px;
@@ -509,7 +547,7 @@ ul#head-navigation li:hover #project-submenu {
     cursor: pointer;
 }
 
-#close-tutorials:hover {
+.close-popup:hover {
     background-image: url(img/close-icon_hover.png);    
 }
 
@@ -532,7 +570,7 @@ ul#head-navigation li:hover #project-submenu {
     background-image: url(img/button_next_hover.png);  
 }
 
-#roberta-tutorial {
+.roberta-popup {
     width: 135px;
     height: 154px;
     display: block;

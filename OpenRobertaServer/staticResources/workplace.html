@@ -28,7 +28,7 @@
 
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-<title class="header">Testfeld f&uuml;r BlOcKlY</title>
+<title class="header">Open Roberta Lab</title>
 </head>
 
 <body>
@@ -50,40 +50,31 @@
                 <li>
                     <a href="#">
                         <span class="head-navi-icons community"></span>
-                        <span class="head-navi-text">Community</span>
+                        <span class="head-navi-text">Gruppen</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a id="programPopUp" href="#">
                         <span class="head-navi-icons project"></span>
                         <span class="head-navi-text">Programm</span>
                     </a>
-                    <div id="project-submenu">
-                        Programm
-                          <input id="save" class='submit' type="submit" value="Speichern" />
-                          <input id="load" class='submit' type="submit" value="Laden" />
-                          <input id="add" class='submit' type="submit" value="Hinzufügen" />
-                          <input id="del" class='submit' type="submit" value="Löschen" />
-                          <input id="name" class='input' type="text" value="Name des Programms" />
-                          <br>
-                        Toolbox
-                          <input id="toolbox1" class='button' type="submit" value="Anf&auml;nger:" />
-                          <input id="toolbox2" class='button' type="submit" value="Experte:" />
-                        <br>
-                        Simulation
-                          <input class='button' onclick="viewSimulator(true);" type="submit" value="Simulator Test" />
-                        </div>
+                    <!-- UNNEEDED SUBMENU 
+                        <div id="project-submenu">
+                            Simulation
+                            <input class='button' onclick="viewSimulator(true);" type="submit" value="Simulator Test" />
+                        </div> -->
                 </li>
-                <!-- <li>
+                <!-- UNNEDED BUTTON
+                <li>
                     <a href="#">
                         <span class="head-navi-icons developer"></span>
                         <span class="head-navi-text">Entwickler</span>
                     </a>
                 </li> -->
                 <li>
-                   	<a href="#">
+                   	<a id="signInPopUp" href="#">
                         <span id="signInIcon" class="head-navi-icons user"></span>
-                        <span id="setName" class="head-navi-text">Login</span>
+                        <span id="setName" class="head-navi-text">Anmeldung</span>
                     </a>
                 </li>
             </ul>
@@ -92,19 +83,33 @@
             </div>
         </div>
         
-<div id="tutorials">
-      <div id="popup-tutorial">
-        <span id="close-tutorials"></span>
-        <span id="roberta-tutorial"></span>
+<div id="login">
+      <div class="popup-window">
+        <span class="close-popup"></span>
+        <span class="roberta-popup"></span>
         <!-- <span id="next-tutorial">weiter</span> -->
-        <h2>Login</h2>
+        <h2>Anmeldung</h2>
             <div id="login-popup">
                 <label for="accountNameS">Benutzername</label>
                 <input id="accountNameS" class='input' type="text" value="" />
                 <label for="pass1S">Passwort</label>
                 <input id="pass1S" class='input' type="password"  value="" /><br>
-                <input id="signIn" class='submit' type="submit" value="Login" />
+                <input id="signIn" class='submit' type="submit" value="Anmelden" />
                 <input id="newUser" href="#register" class='submit' type="submit" value="Neuer Benutzer" /> 
+            </div>
+      </div>
+</div>   
+<div id="program">
+      <div class="popup-window" style="height: 160px;">
+        <span class="close-popup"></span>
+        <h2>Programm</h2>
+            <div id="program-popup">
+                <label for="programName">Programmname</label>
+                <input id="programName" id="name" class='input' type="text" value="" /><br>
+                <input id="save" class='submit' type="submit" value="Speichern" />
+                <input id="load" class='submit' type="submit" value="Laden" />
+                <input id="add" class='submit' type="submit" value="Hinzufügen" />
+                <input id="del" class='submit' type="submit" value="Löschen" />
             </div>
       </div>
 </div>
@@ -118,6 +123,7 @@
       <li><a href="#readme">README</a></li>
       <li><a id="registerLink" href="#register">Register User</a></li>
       <li><a id="deleteLink" href="#delete">Delete User</a></li>
+      <li><a onclick="viewSimulator(true);">Simulator Test</a></li>
     </ul>
     
     
@@ -135,6 +141,9 @@
       <div id="blocklyDiv" style="height: 100%; width: 100%; z-index: 1;"></div>
       <br>
       <div id="control-panel">
+          <label>Toolbox</label>
+          <input id="toolbox1" class='button' type="submit" value="Anf&auml;nger" /><br>
+          <input id="toolbox2" class='button' type="submit" value="Experte" />
           <input id="run" class='submit' type="submit" value="run" />
       </div>      
     </div>
@@ -194,14 +203,20 @@
  </div> 
 
 <script type="text/javascript">
-   $("#close-tutorials").click(function() {
-       $( "#tutorials" ).fadeOut(700);
+   $("#login .close-popup").click(function() {
+       $( "#login" ).fadeOut(700);
    });
-   $("#signInIcon").click(function() {
-       $( "#tutorials" ).fadeIn(700);
+   $("#program .close-popup").click(function() {
+       $( "#program" ).fadeOut(700);
+   });
+   $("#signInPopUp").click(function() {
+       $( "#login" ).fadeIn(700);
+   });
+   $("#programPopUp").click(function() {
+       $( "#program" ).fadeIn(700);
    });
    $("#newUser").click(function(){
-	   $( "#tutorials" ).fadeOut(700);
+	   $( "#login" ).fadeOut(700);
 	   $("#registerLink").click();
    });
 
