@@ -624,6 +624,7 @@ ul#head-navigation li:hover #project-submenu {
 }
 
 .blocklyToolboxDiv {
+	width: 200px;
     background-color: none! important;
     background: none !important;
 }
@@ -655,6 +656,7 @@ ul#head-navigation li:hover #project-submenu {
 }
 
 .blocklyTreeLabel {
+	width: 180px !important;
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
     text-transform: uppercase;

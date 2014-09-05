@@ -338,6 +338,7 @@ Blockly.Css.CONTENT = [
   '  height: 40px;',
   '  padding-right: 1em;',
   '  white-space: nowrap;',
+  '  margin-top: 6px;',
   '}',
 
   '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {',
@@ -354,6 +355,8 @@ Blockly.Css.CONTENT = [
   '  width: 16px;',
   '  vertical-align: middle;',
   '  background-image: url(<<<PATH>>>/media/tree.png);',
+  '  margin-top: -30px;',
+  '  margin-left: 10px;',
   '}',
 
   '.blocklyTreeIconClosedLtr {',
@@ -394,6 +397,7 @@ Blockly.Css.CONTENT = [
   '  font-size: 16px;',
   '  padding: 0 3px;',
   '  vertical-align: middle;',
+  '  margin-left: -20px;',
   '}',
 
   '.blocklyTreeSelected  {',
@@ -401,8 +405,18 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyTreeSelected .blocklyTreeLabel {',
-  '  color: #fff;',
+  '  color: #000;',
   '}',
+  
+  '.catName {',
+  '  color: #f00;',
+  '}',
+  
+  '.blocklyTreeSelected .catName {',
+  '  color: #00f;',
+  '}',
+  
+  
 
   /* Copied from: goog/css/colorpicker-simplegrid.css */
   /*
@@ -656,3 +670,4 @@ Blockly.Css.CONTENT = [
 
   ''
 ];
+
