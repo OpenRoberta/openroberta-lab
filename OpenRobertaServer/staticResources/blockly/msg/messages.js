@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @license
  * Visual Blocks Language
  *
@@ -35,7 +35,6 @@
 goog.provide('Blockly.Msg.en');
 
 goog.require('Blockly.Msg');
-
 
 /**
  * Due to the frequency of long strings, the 80-column wrap rule need not apply
@@ -225,7 +224,7 @@ Blockly.Msg.CONTROLS_IF_MSG_IF = 'if';
 Blockly.Msg.CONTROLS_IF_MSG_ELSEIF = 'else if';
 /// block text - See [https://code.google.com/p/blockly/wiki/IfElse https://code.google.com/p/blockly/wiki/IfElse].  The English word "otherwise" would probably be superior to "else", but the latter is used because it is traditional and shorter.
 Blockly.Msg.CONTROLS_IF_MSG_ELSE = 'else';
-Blockly.Msg.CONTROLS_IF_MSG_THEN = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
+Blockly.Msg.CONTROLS_IF_MSG_THEN = 'do';
 Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /// tooltip - Describes [https://code.google.com/p/blockly/wiki/IfElse#Block_Modification if block modification].
 Blockly.Msg.CONTROLS_IF_IF_TOOLTIP = 'Add, remove, or reorder sections to reconfigure this if block.';
@@ -240,15 +239,15 @@ Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = 'Add a final, catch-all condition to the 
 Blockly.Msg.LOGIC_COMPARE_HELPURL = 'https://en.wikipedia.org/wiki/Inequality_(mathematics)';
 /// tooltip - Describes the equals (=) block.
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = 'Return true if both inputs equal each other.';
-/// tooltip - Describes the not equals (≠) block.
+/// tooltip - Describes the not equals (?) block.
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_NEQ = 'Return true if both inputs are not equal to each other.';
 /// tooltip - Describes the less than (<) block.
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LT = 'Return true if the first input is smaller than the second input.';
-/// tooltip - Describes the less than or equals (≤) block.
+/// tooltip - Describes the less than or equals (=) block.
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LTE = 'Return true if the first input is smaller than or equal to the second input.';
 /// tooltip - Describes the greater than (>) block.
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = 'Return true if the first input is greater than the second input.';
-/// tooltip - Describes the greater than or equals (≥) block.
+/// tooltip - Describes the greater than or equals (=) block.
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE = 'Return true if the first input is greater than or equal to the second input.';
 
 /// url - Information about the Boolean conjunction ("and") and disjunction ("or") operators.  Consider using the translation of [https://en.wikipedia.org/wiki/Boolean_logic https://en.wikipedia.org/wiki/Boolean_logic], if it exists in your language.
@@ -387,10 +386,10 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ACOS = 'Return the arccosine of a number.';
 /// tooltip - The [https://en.wikipedia.org/wiki/Inverse_trigonometric_functions inverse] of the [https://en.wikipedia.org/wiki/Cosine#Sine.2C_cosine_and_tangent tangent] function, using [https://en.wikipedia.org/wiki/Degree_(angle) degrees], not radians.
 Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = 'Return the arctangent of a number.';
 
-/// url - Information about the mathematical constants Pi (π), e, the golden ratio (φ), √ 2, √ 1/2, and infinity (∞).
+/// url - Information about the mathematical constants Pi (p), e, the golden ratio (f), v 2, v 1/2, and infinity (8).
 Blockly.Msg.MATH_CONSTANT_HELPURL = 'https://en.wikipedia.org/wiki/Mathematical_constant';
 /// tooltip - Provides the specified [https://en.wikipedia.org/wiki/Mathematical_constant mathematical constant].
-Blockly.Msg.MATH_CONSTANT_TOOLTIP = 'Return one of the common constants: π (3.141…), e (2.718…), φ (1.618…), sqrt(2) (1.414…), sqrt(½) (0.707…), or ∞ (infinity).';
+Blockly.Msg.MATH_CONSTANT_TOOLTIP = 'Return one of the common constants: p (3.141…), e (2.718…), f (1.618…), sqrt(2) (1.414…), sqrt(½) (0.707…), or 8 (infinity).';
 /// dropdown - A number is '''even''' if it is a multiple of 2.  For example, 4 is even (yielding true), but 3 is not (false).
 Blockly.Msg.MATH_IS_EVEN = 'is even';
 /// dropdown - A number is '''odd''' if it is not a multiple of 2.  For example, 3 is odd (yielding true), but 4 is not (false).  The opposite of "odd" is "even".
@@ -1093,32 +1092,61 @@ Blockly.Msg.PROCEDURES_CREATE_DO = 'Create "%1"';
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = 'If a value is true, then return a second value.';
 /// warning - This appears if the user tries to use this block outside of a function definition.
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = 'Warning: This block may be used only within a function definition.';
-Blockly.Msg.MOTOR_TITLE_SPEED = 'Tempo';
-Blockly.Msg.MOTOR_TITLE_DISTANCE = 'Strecke cm';
-Blockly.Msg.MOTOR_FOREWARD = 'vorwärts';
-Blockly.Msg.MOTOR_BACKWARD = 'rückwärts';
-Blockly.Msg.MOTOR_TITLE_DRIVE = 'Fahr';
-Blockly.Msg.MOTOR_RIGHT = 'rechts';
-Blockly.Msg.MOTOR_LEFT = 'links';
-Blockly.Msg.MOTOR_TITLE_TURN = 'Dreh';
-Blockly.Msg.DISPLAY_TITLE_SHOW = 'Zeige';
-Blockly.Msg.DISPLAY_TITLE_COL = 'in Spalte';
-Blockly.Msg.DISPLAY_TITLE_ROW = 'in Zeile';
-Blockly.Msg.PLAYTONE_TITLE = 'Spiele Ton';
-Blockly.Msg.PLAYTONE_TITLE_FREQUENZ = 'Frequenz';
-Blockly.Msg.PLAYTONE_TITLE_DURATION = 'Dauer';
-Blockly.Msg.BRICKLIGHT_ON = 'an';
-Blockly.Msg.BRICKLIGHT_OFF = 'aus';
-Blockly.Msg.BRICKLIGHT_TITLE = 'Statusleuchte';
-Blockly.Msg.BRICKLIGHT_TITLE_COLOR = 'Farbe';
-Blockly.Msg.BRICKLIGHT_GREEN = 'grün';
+Blockly.Msg.YES = 'yes';
+Blockly.Msg.NO = 'no';
+Blockly.Msg.ON = 'on';
+Blockly.Msg.OFF = 'off';
+Blockly.Msg.FOR = 'for';
+Blockly.Msg.GET = 'get';
+Blockly.Msg.SET = 'set';
+Blockly.Msg.BRICK_WHEEL_DIAMETER = 'wheel diameter';
+Blockly.Msg.BRICK_TRACK_WIDTH = 'track width'
+Blockly.Msg.MOTOR = 'motor';
+Blockly.Msg.MOTOR_MIDDLE = 'middle';
+Blockly.Msg.MOTOR_BIG = 'big';
+Blockly.Msg.MOTOR_NONE = 'none';
+Blockly.Msg.MOTOR_REGULATION = 'regulation';
+Blockly.Msg.MOTOR_OTHER = 'other power consumer';
+Blockly.Msg.MOTOR_SIDE = 'side';
+Blockly.Msg.MOTOR_ROTATION_REVERSE = 'direction of rotation';
+Blockly.Msg.MOTOR_SPEED = 'speed';
+Blockly.Msg.MOTOR_DRIVE = 'drive';
+Blockly.Msg.MOTOR_DISTANCE = 'distance cm';
+Blockly.Msg.MOTOR_DEGREE = 'degree';
+Blockly.Msg.MOTOR_ROTATION = 'rotation';
+Blockly.Msg.MOTOR_FOREWARD = 'forwards';
+Blockly.Msg.MOTOR_BACKWARD = 'backwards';
+Blockly.Msg.MOTOR_DRIVE = 'drive';
+Blockly.Msg.MOTOR_RIGHT = 'right';
+Blockly.Msg.MOTOR_LEFT = 'left';
+Blockly.Msg.MOTOR_TURN = 'turn';
+Blockly.Msg.MOTOR_PORT = 'motor port';
+Blockly.Msg.MOTOR_STOP = 'stop';
+Blockly.Msg.MOTOR_FLOAT = 'float';
+Blockly.Msg.MOTOR_BRAKE = 'brake';
+Blockly.Msg.DISPLAY_SHOW = 'show';
+Blockly.Msg.DISPLAY_COL = 'in column';
+Blockly.Msg.DISPLAY_ROW = 'in row';
+Blockly.Msg.DISPLAY_CLEAR = 'clear display';
+Blockly.Msg.DISPLAY_PICTURE = 'picture';
+Blockly.Msg.DISPLAY_TEXT = 'text';
+Blockly.Msg.PLAY = 'play';
+Blockly.Msg.PLAY_TONE = 'tone';
+Blockly.Msg.PLAY_FREQUENZ = 'frequency';
+Blockly.Msg.PLAY_DURATION = 'duration';
+Blockly.Msg.PLAY_VOLUME = 'volume';
+Blockly.Msg.PLAY_FILE = 'file';
+Blockly.Msg.BRICKLIGHT_ON = 'on';
+Blockly.Msg.BRICKLIGHT_FLASH = 'flashing';
+Blockly.Msg.BRICKLIGHT_DOUBLE_FLASH = 'double flashing';
+Blockly.Msg.BRICKLIGHT = 'brick light';
+Blockly.Msg.BRICKLIGHT_COLOR = 'colour';
+Blockly.Msg.BRICKLIGHT_GREEN = 'green';
 Blockly.Msg.BRICKLIGHT_ORANGE = 'orange';
-Blockly.Msg.BRICKLIGHT_RED = 'rot';
-Blockly.Msg.BRICKLIGHT_TITLE_BLINK = 'blinkend';
-Blockly.Msg.BRICKLIGHT_YES = 'ja';
-Blockly.Msg.BRICKLIGHT_NO = 'nein';
-Blockly.Msg.WAIT_TITLE = 'Warte bis';
-Blockly.Msg.WAIT_FOREVER = 'unendlich';
+Blockly.Msg.BRICKLIGHT_RED = 'red';
+Blockly.Msg.WAIT = 'wait until';
+Blockly.Msg.WAIT_FOREVER = 'undefinitely';
+Blockly.Msg.WAIT_OR = 'or wait for';
 Blockly.Msg.SENSOR_ULTRASONIC = 'ultrasonic sensor';
 Blockly.Msg.SENSOR_TOUCH = 'touch sensor';
 Blockly.Msg.SENSOR_TIME = 'time';
@@ -1136,33 +1164,28 @@ Blockly.Msg.SENSOR_KEY_ESCAPE = 'escape';
 Blockly.Msg.SENSOR_KEY_ANY = 'any';
 Blockly.Msg.SENSOR_RESET = 'reset';
 Blockly.Msg.SENSOR_RESET_II = '';
-Blockly.Msg.SENSOR_TITLE = 'Miss';
 Blockly.Msg.SENSOR_SET_MODE = 'set mode';
 Blockly.Msg.SENSOR_GET_MODE = 'get mode';
-Blockly.Msg.SENSOR_GET_SAMPLE = 'get sample';
+Blockly.Msg.SENSOR_GET_SAMPLE = 'get value';
 Blockly.Msg.SENSOR_IS_PRESSED = 'pressed?';
 Blockly.Msg.SENSOR_WAIT = 'wait until';
 Blockly.Msg.SENSOR_WAIT_PRESSED = 'pressed';
 Blockly.Msg.SENSOR_WAIT_PRESSED_RELEASED = 'pressed or released';
-Blockly.Msg.MODE_DISTANCE = 'Abstand';
-Blockly.Msg.MODE_PRESENCE = 'Anwesenheit';
+Blockly.Msg.START = 'start';
+Blockly.Msg.START_ACTIVITY = 'activity';
+Blockly.Msg.START_PROGRAM = 'program';
+Blockly.Msg.MODE = 'mode';
+Blockly.Msg.MODE_DISTANCE = 'distance';
+Blockly.Msg.MODE_PRESENCE = 'presence';
 Blockly.Msg.MODE_STATE = 'state';
 Blockly.Msg.MODE_COLOUR = 'colour';
 Blockly.Msg.MODE_LIGHT = 'light';
 Blockly.Msg.MODE_AMBIENTLIGHT = 'ambient light';
-Blockly.Msg.MODE_ROTATION = 'ratation';
+Blockly.Msg.MODE_ROTATION = 'rotation';
 Blockly.Msg.MODE_DEGREE = 'degree';
 Blockly.Msg.MODE_ANGLE = 'angle';
 Blockly.Msg.MODE_RATE = 'rate';
-Blockly.Msg.WAIT_SENSOR_TOUCH = Blockly.Msg.SENSOR_TOUCH;
-Blockly.Msg.WAIT_SENSOR_TIME = Blockly.Msg.SENSOR_TIME;
-Blockly.Msg.WAIT_SENSOR_COLOUR = Blockly.Msg.SENSOR_COLOUR;
-Blockly.Msg.WAIT_SENSOR_ULTRASONIC = Blockly.Msg.SENSOR_ULTRASONIC;
-Blockly.Msg.LOOP_SENSOR_TOUCH = Blockly.Msg.SENSOR_TOUCH;
-Blockly.Msg.LOOP_SENSOR_TIME = Blockly.Msg.SENSOR_TIME;
-Blockly.Msg.LOOP_SENSOR_COLOUR = Blockly.Msg.SENSOR_COLOUR;
-Blockly.Msg.LOOP_SENSOR_ULTRASONIC = Blockly.Msg.SENSOR_ULTRASONIC;
-Blockly.Msg.LOOP_COUNT = 'Zahl';
-Blockly.Msg.LOOP_FOREVER = 'unendlich oft';
-Blockly.Msg.LOOP_TITLE = 'Wiederhole bis';
-Blockly.Msg.LOOP_TITLE_FOREVER = 'Wiederhole unendlich oft';
+Blockly.Msg.LOOP_COUNT = 'number';
+Blockly.Msg.LOOP_FOREVER = 'undefinitely';
+Blockly.Msg.LOOP = 'repeat until';
+Blockly.Msg.LOOP_FOREVER = 'repeat undefinitely';
