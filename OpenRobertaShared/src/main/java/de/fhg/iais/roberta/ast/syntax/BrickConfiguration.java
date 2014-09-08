@@ -64,8 +64,6 @@ public class BrickConfiguration {
         appendOptional(sb, "Sensor", "S2", this.sensor2);
         appendOptional(sb, "Sensor", "S3", this.sensor3);
         appendOptional(sb, "Sensor", "S4", this.sensor4);
-        appendOptional(sb, "Sensor", "S4", this.sensor4);
-        appendOptional(sb, "Sensor", "S4", this.sensor4);
         sb.append("    .build();");
         return sb.toString();
     }
