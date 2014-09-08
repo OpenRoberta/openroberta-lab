@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +54,10 @@ public class SessionWrapper {
      */
     public void close() {
         LOG.info("close session (after commit)");
-        this.session.getTransaction().commit();
+        Transaction transaction = this.session.getTransaction();
+        if ( transaction.isActive() ) {
+            transaction.commit();
+        }
         this.session.close();
         this.session = null;
     }

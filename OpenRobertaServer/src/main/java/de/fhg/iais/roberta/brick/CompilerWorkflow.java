@@ -9,6 +9,9 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.tools.ant.BuildEvent;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.BuildListener;
 import org.apache.tools.ant.ProjectHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,7 +83,7 @@ public class CompilerWorkflow {
      * @return jaxb the transformer
      * @throws Exception
      */
-    private static JaxbTransformer<Void> generateTransformer(String blocklyXml) throws Exception {
+    public static JaxbTransformer<Void> generateTransformer(String blocklyXml) throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
@@ -93,7 +96,7 @@ public class CompilerWorkflow {
         return transformer;
     }
 
-    private static void storeGeneratedProgram(String token, String programName, String javaCode) throws Exception {
+    public static void storeGeneratedProgram(String token, String programName, String javaCode) throws Exception {
         File javaFile = new File(BASE_DIR + token + "/src/" + programName + ".java");
         FileUtils.writeStringToFile(javaFile, javaCode, StandardCharsets.UTF_8.displayName());
     }
@@ -109,22 +112,58 @@ public class CompilerWorkflow {
      * @param mainFile
      * @param mainPackage
      */
-    private static void runBuild(String userProjectsDir, String token, String mainFile, String mainPackage) {
+    public static void runBuild(String userProjectsDir, String token, String mainFile, String mainPackage) {
 
         File buildFile = new File(userProjectsDir + "/build.xml");
         org.apache.tools.ant.Project project = new org.apache.tools.ant.Project();
 
+        project.init();
         project.setProperty("user.projects.dir", userProjectsDir);
         project.setProperty("token.dir", token);
         project.setProperty("main.name", mainFile);
         project.setProperty("main.package", mainPackage);
 
-        project.init();
-
         ProjectHelper projectHelper = ProjectHelper.getProjectHelper();
         projectHelper.parse(project, buildFile);
 
-        project.executeTarget(project.getDefaultTarget());
+        final StringBuilder sb = new StringBuilder();
+        project.addBuildListener(new BuildListener() {
+            @Override
+            public void taskStarted(BuildEvent event) {
+            }
+
+            @Override
+            public void taskFinished(BuildEvent event) {
+            }
+
+            @Override
+            public void targetStarted(BuildEvent event) {
+                sb.append(event.getTarget().getName()).append("\n");
+            }
+
+            @Override
+            public void targetFinished(BuildEvent event) {
+            }
+
+            @Override
+            public void messageLogged(BuildEvent event) {
+                sb.append(event.getMessage()).append("\n");
+            }
+
+            @Override
+            public void buildStarted(BuildEvent event) {
+            }
+
+            @Override
+            public void buildFinished(BuildEvent event) {
+            }
+        });
+        try {
+            project.executeTarget(project.getDefaultTarget());
+        } catch ( BuildException e ) {
+            LOG.error("build exception. Messages are:\n" + sb.toString(), e);
+            throw e;
+        }
     }
 
 }
