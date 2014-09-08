@@ -194,5 +194,29 @@
       </exclusions>
     </dependency>
   </dependencies>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>gr.abiss.mvn.plugins</groupId>
+        <artifactId>maven-jstools-plugin</artifactId>
+        <version>0.6</version>
+        <inherited>false</inherited>
+        <configuration>
+          <jsDir>${basedir}/staticResources/roberta</jsDir>
+          <includes>**/*.js</includes>
+          <excludes>**/*_compressed.js</excludes>
+          <caseSensitive>true</caseSensitive>
+          <outputBaseDirectory>${project.build.directory}/site/</outputBaseDirectory>
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>jsdoc</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>
 
