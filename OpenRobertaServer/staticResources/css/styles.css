@@ -368,9 +368,29 @@ ul#head-navigation li:hover #project-submenu {
     display: none;
 }
 
+#register-user {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-image: url(img/overlay-50percent.png);
+    background-repeat: repeat;
+    z-index: 100000;
+    display: none;
+}
+
+#delete-user {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-image: url(img/overlay-50percent.png);
+    background-repeat: repeat;
+    z-index: 100000;
+    display: none;
+}
+
 .popup-window {
     width: 390px;
-    height: 240px;
+    height: 270px;
     padding: 30px;
     background-color: #ffffff;
     box-shadow: 0px 0px 15px #9f9e9e;
@@ -386,10 +406,13 @@ ul#head-navigation li:hover #project-submenu {
     right: 0;
 }
 
-#new-user,
-#delete-user {
-    margin-left: 20px;
-    margin-top: 20px;
+.popup-window a {
+    font-size: 14px;
+    color: #333333;
+}
+
+.popup-window a:hover {
+    color: #afca04;
 }
 
 #login-popup,
@@ -425,7 +448,7 @@ ul#head-navigation li:hover #project-submenu {
 
 #login-popup input#accountNameS,
 #new-user input#accountName,
-#delete input#accountNameD {
+#delete-user input#accountNameD {
     background-image: url(img/login_user-icon.png);
     background-repeat: no-repeat;
     background-position: center left;
@@ -435,8 +458,8 @@ ul#head-navigation li:hover #project-submenu {
 #login-popup input#accountNameS:focus,
 #new-user input#accountName:active,
 #new-user input#accountName:focus,
-#delete input#accountNameD:active,
-#delete input#accountNameD:focus {
+#delete-user input#accountNameD:active,
+#delete-user input#accountNameD:focus {
     background-image: url(img/login_user-icon_active.png);
     background-repeat: no-repeat;
     background-position: center left;
@@ -495,6 +518,8 @@ ul#head-navigation li:hover #project-submenu {
     background-image: url(img/program_name-icon.png);
     background-repeat: no-repeat;
     background-position: center left;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 #program-popup input#programName:active,
@@ -577,7 +602,7 @@ ul#head-navigation li:hover #project-submenu {
     position: absolute;
     background-image: url(img/roberta-tutorial.png);
     margin-left: 310px;
-    margin-top: 130px;
+    margin-top: 160px;
 }
 
 #action-menu {

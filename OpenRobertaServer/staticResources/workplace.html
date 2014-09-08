@@ -95,7 +95,8 @@
                 <label for="pass1S">Passwort</label>
                 <input id="pass1S" class='input' type="password"  value="" /><br>
                 <input id="signIn" class='submit' type="submit" value="Anmelden" />
-                <input id="newUser" href="#register" class='submit' type="submit" value="Neuer Benutzer" /> 
+                <input id="newUser" href="#register" class='submit' type="submit" value="Neuer Benutzer" /><br>
+                <a id="delete-user-link"href="#">Benutzer löschen</a>
             </div>
       </div>
 </div>   
@@ -113,6 +114,39 @@
             </div>
       </div>
 </div>
+<div id="register-user">
+      <div class="popup-window" style="height: 500px;">
+        <span class="close-popup"></span>
+        <h2>Benutzer erstellen</h2>
+            <div id="register-user-popup">
+                <div id="new-user">
+                    <label for="accountName">Benutzername</label>
+                    <input id="accountName" class='input' type="text" value="" />
+                    <label for="pass1">Passwort</label>
+                    <input id="pass1" class='input' type="password"  value="" />
+                    <label for="pass2">Passwort wiederholen</label>
+                    <input id="pass2" class='input' type="password"  value="" />
+                    <label for="userName">Name</label>
+                    <input id="userName" class='input' type="text" value="" />
+                    <label for="userEmail">E-Mail</label>
+                    <input id="userEmail" class='input' type="text" value="" /><br>
+                    <input  type="radio" name="role" value="schueler">Schüler
+                    <input type="radio" name="role" value="lehrer">Lehrer<br>
+                    <input id="saveUser" class='submit' type="submit" value="Benutzer registrieren" />
+                </div>
+            </div>
+      </div>
+</div>
+<div id="delete-user">
+      <div class="popup-window" style="height: 160px;">
+        <span class="close-popup"></span>
+        <h2>Benutzer löschen</h2>
+            <div id="delete-user-popup">
+                <input id="accountNameD" class='input' type="text" value="" /><br>
+                <input id="deleteUser" class='submit' type="submit" value="Benutzer löschen" />
+            </div>
+      </div>
+</div>
        
 <div id="main-section">
   <div id="tabs" >
@@ -121,8 +155,8 @@
       <li><a href="#listing">Listing</a></li>
       <li><a href="#logging">Logging</a></li>
       <li><a href="#readme">README</a></li>
-      <li><a id="registerLink" href="#register">Register User</a></li>
-      <li><a id="deleteLink" href="#delete">Delete User</a></li>
+      <!-- <li><a id="registerLink" href="#register">Register User</a></li>
+      <li><a id="deleteLink" href="#delete">Delete User</a></li> -->
       <li><a onclick="viewSimulator(true);">Simulator Test</a></li>
     </ul>
     
@@ -174,7 +208,7 @@
       <br />
       <div>Content Readme</div>
     </div>
-   	<div id="register">
+   	<!-- <div id="register">
         <div id="new-user">
             <h2>Benutzer erstellen</h2>
             <label for="accountName">Benutzername</label>
@@ -198,7 +232,7 @@
           <input id="accountNameD" class='input' type="text" value="" /><br>
           <input id="deleteUser" class='submit' type="submit" value="Benutzer löschen" />
         </div>
-    </div>
+    </div> -->
   </div>
  </div> 
 
@@ -212,12 +246,22 @@
    $("#signInPopUp").click(function() {
        $( "#login" ).fadeIn(700);
    });
+   $("#delete-user-link").click(function() {
+       $( "#login" ).fadeOut(700);
+       $( "#delete-user" ).fadeIn(700);
+   });
+   $("#register-user .close-popup").click(function() {
+       $( "#register-user" ).fadeOut(700);
+   });
+   $("#delete-user .close-popup").click(function() {
+       $( "#delete-user" ).fadeOut(700);
+   });
    $("#programPopUp").click(function() {
        $( "#program" ).fadeIn(700);
    });
    $("#newUser").click(function(){
 	   $( "#login" ).fadeOut(700);
-	   $("#registerLink").click();
+	   $( "#register-user" ).fadeIn(700);
    });
 
 </script>
