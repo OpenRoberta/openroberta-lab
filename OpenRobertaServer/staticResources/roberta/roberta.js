@@ -44,9 +44,8 @@ function response(result) {
 
 function saveToServer() {
 	var xml = Blockly.Xml.Roberta.workspaceToDom(Blockly.mainWorkspace);
-	// var xml_text = Blockly.Xml.domToPrettyText (xml);
 	var xml_text = Blockly.Xml.domToText(xml);
-	var $name = $('#name');
+	var $name = $('#programName');
 	COMM.json("/blocks", {
 		"cmd" : "saveP",
 		"name" : $name.val(),
@@ -55,9 +54,9 @@ function saveToServer() {
 }
 
 function runOnBrick() {
-	var $name = $('#name');
+	var $name = $('#programName');
 	COMM.json("/blocks", {
-		"cmd" : "runP",
+		"cmd" : "runP",		
 		"name" : $name.val()
 	}, response);
 }
@@ -74,7 +73,7 @@ function showProgram(result, load) {
 };
 
 function loadFromServer(load) {
-	var $name = $('#name');
+	var $name = $('#programName');
 	COMM.json("/blocks", {
 		"cmd" : "loadP",
 		"name" : $name.val()
@@ -84,7 +83,7 @@ function loadFromServer(load) {
 }
 
 function deleteOnServer() {
-	var $name = $('#name');
+	var $name = $('#programName');
 	COMM.json("/blocks", {
 		"cmd" : "deletePN",
 		"name" : $name.val()

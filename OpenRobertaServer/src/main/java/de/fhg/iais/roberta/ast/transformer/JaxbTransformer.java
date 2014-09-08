@@ -118,7 +118,9 @@ public class JaxbTransformer<V> {
                 block.setY(instance.getY());
                 first = false;
             }
+            //if ( !block.isDisabled() ) {
             this.tree.add(blockToAST(block));
+            //}
         }
     }
 

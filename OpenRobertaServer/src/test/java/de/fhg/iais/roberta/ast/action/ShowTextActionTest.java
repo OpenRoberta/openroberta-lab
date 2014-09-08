@@ -35,4 +35,11 @@ public class ShowTextActionTest {
         ShowTextAction<Void> spa = (ShowTextAction<Void>) transformer.getTree().get(0);
         Assert.assertEquals("NumConst [0]", spa.getY().toString());
     }
+
+    @Test
+    public void missing() throws Exception {
+        String a =
+            "BlockAST [project=[[ShowTextAction [EmptyExpr [defVal=class java.lang.String], EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]], ShowTextAction [StringConst [Hallo], EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]], ShowTextAction [StringConst [Hallo], EmptyExpr [defVal=class java.lang.Integer], NumConst [0]], ShowTextAction [StringConst [Hallo], NumConst [0], EmptyExpr [defVal=class java.lang.Integer]]]]]";
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_ShowTextMissing.xml"));
+    }
 }

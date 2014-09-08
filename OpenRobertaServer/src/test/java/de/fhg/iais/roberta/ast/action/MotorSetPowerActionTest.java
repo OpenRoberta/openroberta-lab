@@ -30,4 +30,9 @@ public class MotorSetPowerActionTest {
         Assert.assertEquals("NumConst [30]", mgp.getPower().toString());
     }
 
+    @Test
+    public void powerMissing() throws Exception {
+        String a = "BlockAST [project=[[MotorSetPowerAction [port=B, power=EmptyExpr [defVal=class java.lang.Integer]]]]]";
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_MotorSetPowerMissing.xml"));
+    }
 }

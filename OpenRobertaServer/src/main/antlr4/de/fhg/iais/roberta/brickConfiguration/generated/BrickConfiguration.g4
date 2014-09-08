@@ -13,12 +13,14 @@ ATTACHSENSOR : 'color' | 'touch' | 'ultrasonic' | 'infrared'
             | 'Infrarot' | 'Drehung'
             ;
 			
-attachActor	: MOTORTYPE 'motor' REGULATION?						# Motor
+attachActor	: LEFTORRIGHT MOTORTYPE 'motor' REGULATION?			# Motor
 			;
 			
 SENSORPORT	: [1234];
 
 ACTORPORT	: [ABCD];
+
+LEFTORRIGHT : 'left'| 'right' | 'links' | 'rechts';
 
 MOTORTYPE	: 'middle' | 'large';
 

@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.codeGeneration;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
@@ -173,6 +174,38 @@ public class AstToLejosJavaVisitorTest {
                 + "}\n";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_code_generator4.xml");
+    }
+
+    @Ignore
+    public void test5() throws Exception {
+
+        String a =
+            "" //
+                + IMPORTS
+                + MAIN_CLASS
+                + BRICK_CONFIGURATION
+                + MAIN_METHOD
+                + "    public void run() {\n"
+                + "        Hal hal = new Hal(brickConfiguration);\n"
+                + "        if ( 5 < hal.getRegulatedMotorSpeed(ActorPort.B) ) {\n\n\n"
+                + "            hal.rotateDirectionRegulated(ActorPort.A, ActorPort.B, TurnDirection.RIGHT, 50);\n"
+                + "        }\n"
+                + "        if ( hal.getRegulatedMotorTachoValue(ActorPort.A) + hal.getInfraredSensorValue(SensorPort.S4) == hal.getUltraSonicSensorValue(SensorPort.S4) ) {\n"
+                + "            hal.setInfraredSensorMode(SensorPort.S4, InfraredSensorMode.SEEK);\n"
+                + "            hal.ledOff();\n"
+                + "        } else {\n"
+                + "            hal.resetGyroSensor(SensorPort.S2);\n"
+                + "            while ( hal.isPressed(SensorPort.S1) ) {\n"
+                + "                hal.drawPicture(\"SMILEY1\", 0, 0);\n"
+                + "                hal.clearDisplay();\n"
+                + "            }\n"
+                + "            hal.ledOn(BrickLedColor.GREEN, true);\n"
+                + "        }\n"
+                + SUFFIX
+                + "    }\n"
+                + "}\n";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator5.xml");
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {

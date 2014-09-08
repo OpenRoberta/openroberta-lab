@@ -22,14 +22,15 @@ public class Antlr4BrickConfigurationTest {
 
     @Test
     public void testExpr1() throws Exception {
-        String p = expr2String("brick Craesy-PID-2014 { sensor port 1 touch; actor port B middle motor; }");
-        String r = "(connectorl brick Craesy-PID-2014 { (connector sensor port 1 touch ;) (connector actor port B (attachActor middle motor) ;) })";
+        String p = expr2String("brick Craesy-PID-2014 { sensor port 1 touch; actor port B left middle motor; }");
+        String r = "(connectorl brick Craesy-PID-2014 { (connector sensor port 1 touch ;) (connector actor port B (attachActor left middle motor) ;) })";
         assertEquals(r, p);
     }
 
     @Test
     public void testparseTree2Ast1() throws Exception {
-        BrickConfiguration conf = BrickConfigurationTreeToAst.startWalkForVisiting("brick Craesy-PID-2014 { sensor port 3 touch; actor port A large motor; }");
+        BrickConfiguration conf =
+            BrickConfigurationTreeToAst.startWalkForVisiting("brick Craesy-PID-2014 { sensor port 3 touch; actor port A left large motor; }");
         System.out.println(conf);
     }
 

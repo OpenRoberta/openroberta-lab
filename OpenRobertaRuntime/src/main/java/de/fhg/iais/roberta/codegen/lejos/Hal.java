@@ -54,8 +54,8 @@ public class Hal {
     public Hal(BrickConfiguration brickConfiguration) {
         this.deviceHandler = new DeviceHandler(brickConfiguration);
 
-        this.wheelDiameter = brickConfiguration.getWheelDiameter();
-        this.trackWidth = brickConfiguration.getTrackWidth();
+        this.wheelDiameter = brickConfiguration.getWheelDiameterCM();
+        this.trackWidth = brickConfiguration.getTrackWidthCM();
 
         this.brick = LocalEV3.get();
         // TODO test if needed for Motor/ Sensorport enums from lejos??

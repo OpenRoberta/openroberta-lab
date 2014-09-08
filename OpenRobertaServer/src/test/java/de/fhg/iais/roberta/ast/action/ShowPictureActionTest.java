@@ -35,4 +35,11 @@ public class ShowPictureActionTest {
         ShowPictureAction<Void> spa = (ShowPictureAction<Void>) transformer.getTree().get(0);
         Assert.assertEquals("NumConst [0]", spa.getY().toString());
     }
+
+    @Test
+    public void missing() throws Exception {
+        String a =
+            "BlockAST [project=[[ShowPictureAction [SMILEY1, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]], ShowPictureAction [SMILEY1, NumConst [0], EmptyExpr [defVal=class java.lang.Integer]], ShowPictureAction [SMILEY1, EmptyExpr [defVal=class java.lang.Integer], NumConst [0]]]]]";
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_ShowPictureMissing.xml"));
+    }
 }

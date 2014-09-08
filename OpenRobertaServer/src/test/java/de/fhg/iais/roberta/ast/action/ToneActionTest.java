@@ -28,4 +28,11 @@ public class ToneActionTest {
         ToneAction<Void> ta = (ToneAction<Void>) transformer.getTree().get(0);
         Assert.assertEquals("NumConst [100]", ta.getDuration().toString());
     }
+
+    @Test
+    public void missing() throws Exception {
+        String a =
+            "BlockAST [project=[[ToneAction [EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]], ToneAction [NumConst [300], EmptyExpr [defVal=class java.lang.Integer]], ToneAction [EmptyExpr [defVal=class java.lang.Integer], NumConst [100]]]]]";
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_PlaySoundMissing.xml"));
+    }
 }

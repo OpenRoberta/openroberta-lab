@@ -14,7 +14,8 @@ public enum HardwareComponent {
     EV3GyroSensor( Category.SENSOR, "gyro" ),
     EV3MediumRegulatedMotor( Category.ACTOR, "regulated", "middle" ),
     EV3LargeRegulatedMotor( Category.ACTOR, "regulated", "large" ),
-    //UnRegulatedMiddleMotor( Category.AKTOR, "unregulated", "middle" ),
+    EV3MediumUnRegulatedMotor( Category.ACTOR, "unregulated", "middle" ),
+    EV3LargeUnRegulatedMotor( Category.ACTOR, "unregulated", "large" ),
     BasicMotor( Category.ACTOR, "unregulated", "large" ),
     NXTMotor( Category.ACTOR, "PH" ),
     NXTRegulatedMotor( Category.ACTOR, "PH" );

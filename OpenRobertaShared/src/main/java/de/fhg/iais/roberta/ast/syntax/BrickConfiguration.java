@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.dbc.Assert;
 
 public class BrickConfiguration {
+
     private final HardwareComponent sensor1;
     private final HardwareComponent sensor2;
     private final HardwareComponent sensor3;
@@ -25,8 +26,8 @@ public class BrickConfiguration {
     // needed for differential drive pilot
     // TODO change to cm!!!
     // see next TODO
-    private final double wheelDiameter;
-    private final double trackWidth;
+    private final double wheelDiameterCM;
+    private final double trackWidthCM;
 
     private BrickConfiguration(
         HardwareComponent sensor1,
@@ -37,8 +38,8 @@ public class BrickConfiguration {
         HardwareComponent actorB,
         HardwareComponent actorC,
         HardwareComponent actorD,
-        double wheelDiameter,
-        double trackWidth) {
+        double wheelDiameterCM,
+        double trackWidthCM) {
         super();
         this.sensor1 = sensor1;
         this.sensor2 = sensor2;
@@ -48,8 +49,8 @@ public class BrickConfiguration {
         this.actorB = actorB;
         this.actorC = actorC;
         this.actorD = actorD;
-        this.wheelDiameter = wheelDiameter;
-        this.trackWidth = trackWidth;
+        this.wheelDiameterCM = wheelDiameterCM;
+        this.trackWidthCM = trackWidthCM;
     }
 
     public String generateRegenerate() {
@@ -62,6 +63,8 @@ public class BrickConfiguration {
         appendOptional(sb, "Sensor", "S1", this.sensor1);
         appendOptional(sb, "Sensor", "S2", this.sensor2);
         appendOptional(sb, "Sensor", "S3", this.sensor3);
+        appendOptional(sb, "Sensor", "S4", this.sensor4);
+        appendOptional(sb, "Sensor", "S4", this.sensor4);
         appendOptional(sb, "Sensor", "S4", this.sensor4);
         sb.append("    .build();");
         return sb.toString();
@@ -107,12 +110,12 @@ public class BrickConfiguration {
         return this.actorD;
     }
 
-    public double getWheelDiameter() {
-        return this.wheelDiameter;
+    public double getWheelDiameterCM() {
+        return this.wheelDiameterCM;
     }
 
-    public double getTrackWidth() {
-        return this.trackWidth;
+    public double getTrackWidthCM() {
+        return this.trackWidthCM;
     }
 
     // TODO
@@ -188,7 +191,33 @@ public class BrickConfiguration {
 
         @Override
         public String toString() {
-            return "BrickConfiguration [actors=" + this.actorMapping + ", sensors=" + this.sensorMapping + "]";
+            return "BrickConfiguration.Builder [actors=" + this.actorMapping + ", sensors=" + this.sensorMapping + "]";
         }
     }
+
+    @Override
+    public String toString() {
+        return "BrickConfiguration [sensor1="
+            + this.sensor1
+            + ", sensor2="
+            + this.sensor2
+            + ", sensor3="
+            + this.sensor3
+            + ", sensor4="
+            + this.sensor4
+            + ", actorA="
+            + this.actorA
+            + ", actorB="
+            + this.actorB
+            + ", actorC="
+            + this.actorC
+            + ", actorD="
+            + this.actorD
+            + ", wheelDiameter="
+            + this.wheelDiameterCM
+            + ", trackWidth="
+            + this.trackWidthCM
+            + "]";
+    }
+
 }

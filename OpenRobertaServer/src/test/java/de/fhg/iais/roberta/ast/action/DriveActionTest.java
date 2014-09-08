@@ -34,4 +34,16 @@ public class DriveActionTest {
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_MotorDiffOnFor.xml"));
     }
 
+    @Test
+    public void motorDiffOnForMissing() throws Exception {
+        String a =
+            "BlockAST [project=[[DriveAction [FOREWARD, MotionParam [speed=EmptyExpr [defVal=class java.lang.Integer], duration=MotorDuration [type=DISTANCE, value=EmptyExpr [defVal=class java.lang.Integer]]]], DriveAction [FOREWARD, MotionParam [speed=NumConst [50], duration=MotorDuration [type=DISTANCE, value=EmptyExpr [defVal=class java.lang.Integer]]]], DriveAction [FOREWARD, MotionParam [speed=EmptyExpr [defVal=class java.lang.Integer], duration=MotorDuration [type=DISTANCE, value=NumConst [20]]]]]]]";
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_MotorDiffOnForMissing.xml"));
+    }
+
+    @Test
+    public void motorDiffOnMissing() throws Exception {
+        String a = "BlockAST [project=[[DriveAction [FOREWARD, MotionParam [speed=EmptyExpr [defVal=class java.lang.Integer], duration=null]]]]]";
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_MotorDiffOnMissing.xml"));
+    }
 }
