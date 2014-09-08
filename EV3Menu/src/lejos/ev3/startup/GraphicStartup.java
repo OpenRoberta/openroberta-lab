@@ -1519,7 +1519,7 @@ public class GraphicStartup implements Menu {
 
         if ( GraphicStartup.isRobertaRegistered == false ) {
             token = new RobertaTokenGenerator().generateToken(8);
-            GraphicStartup.backgroundTasks = new BackgroundTasks(serverTokenRessource, serverDownloadRessource, token);
+            GraphicStartup.backgroundTasks = new BackgroundTasks(serverTokenRessource, serverDownloadRessource, token, this.ind, echoIn, echoErr);
             Key escapeKey = LocalEV3.get().getKey("Escape");
             escapeKey.addKeyListener(GraphicStartup.backgroundTasks);
             GraphicStartup.backgroundTasks.startRegisteringThread();
@@ -1550,8 +1550,7 @@ public class GraphicStartup implements Menu {
             newScreen(" Robertalab");
             lcd.drawString("Success!", 0, 3);
             Delay.msDelay(2000);
-            GraphicStartup.backgroundTasks.startDownloadThread();
-            GraphicStartup.backgroundTasks.startLauncherThread(this.ind, echoIn, echoErr);
+            backgroundTasks.reconnectRoberta();
 
         } else {
             GraphicMenu menu = new GraphicMenu(new String[] {
@@ -1566,6 +1565,7 @@ public class GraphicStartup implements Menu {
                     case 0:
                         newScreen(" Robertalab");
                         if ( getYesNo("     Confirm", false) == 1 ) {
+                            backgroundTasks.disconnectRoberta();
                             isRobertaRegistered = false;
                             token = null;
                             serverURLString = null;
@@ -1992,7 +1992,7 @@ public class GraphicStartup implements Menu {
             drawLaunchScreen();
 
             if ( isRobertaRegistered == true ) {
-                RobertaObserver.setAutorun(false);
+                backgroundTasks.disconnectRoberta();
             }
 
             program = new ProcessBuilder(command.split(" ")).directory(new File(directory)).start();
@@ -2034,7 +2034,7 @@ public class GraphicStartup implements Menu {
         } catch ( Exception e ) {
             System.err.println("Failed to execute program: " + e);
         } finally {
-            RobertaObserver.setAutorun(true);
+            backgroundTasks.reconnectRoberta();
         }
     }
 

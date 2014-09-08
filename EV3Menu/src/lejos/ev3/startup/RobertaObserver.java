@@ -1,10 +1,17 @@
 package lejos.ev3.startup;
 
+/**
+ * Contains status variables as control structure of token-, donwload- and launcher thread.<br>
+ * Everything static.<br>
+ * 
+ * @author dpyka
+ */
 public class RobertaObserver {
 
     private static boolean isDownloaded = false;
     private static boolean isExecuted = true;
-    private static boolean autorun = true;
+    private static boolean autorun = false;
+    private static boolean isPaused = false;
 
     private static String userFileName = "";
 
@@ -48,6 +55,14 @@ public class RobertaObserver {
 
     public static void setMenuIndex(int menuIndex) {
         RobertaObserver.menuIndex = menuIndex;
+    }
+
+    public static boolean isPaused() {
+        return isPaused;
+    }
+
+    public static void setPaused(boolean isPaused) {
+        RobertaObserver.isPaused = isPaused;
     }
 
 }

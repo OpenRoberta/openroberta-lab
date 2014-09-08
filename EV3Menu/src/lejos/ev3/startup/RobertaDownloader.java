@@ -33,7 +33,7 @@ public class RobertaDownloader implements Runnable {
 
     @Override
     public void run() {
-        while ( true ) {
+        while ( RobertaObserver.isAutorun() ) {
             if ( RobertaObserver.isExecuted() == true && RobertaObserver.isDownloaded() == false ) {
 
                 DataOutputStream dos = null;
