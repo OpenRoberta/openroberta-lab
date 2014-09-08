@@ -47,35 +47,28 @@ public class RobertaLauncher implements Runnable {
 
     @Override
     public void run() {
-        while ( true ) {
-            if ( RobertaObserver.isAutorun() ) {
-                if ( RobertaObserver.isDownloaded() == true && RobertaObserver.isExecuted() == true ) {
-                    RobertaObserver.setExecuted(false);
+        while ( RobertaObserver.isAutorun() ) {
+            if ( RobertaObserver.isDownloaded() == true && RobertaObserver.isExecuted() == true ) {
+                RobertaObserver.setExecuted(false);
 
-                    glcd.drawImage(image, 0, 0, 0);
+                glcd.drawImage(image, 0, 0, 0);
 
-                    setFileName(RobertaObserver.getUserFileName());
-                    File robertalabFile = new File(RobertaLauncher.PROGRAMS_DIRECTORY, programName);
-                    JarFile jar;
-                    try {
-                        jar = new JarFile(robertalabFile);
-                        mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
-                        jar.close();
-                    } catch ( IOException e ) {
-                        System.err.println("Exception running program");
-                        return;
-                    }
-                    this.ind.suspend();
-                    exec(
-                        robertalabFile,
-                        JAVA_RUN_CP + robertalabFile.getPath() + " lejos.internal.ev3.EV3Wrapper " + mainClass,
-                        RobertaLauncher.PROGRAMS_DIRECTORY);
-                    this.ind.resume();
-                    RobertaObserver.setDownloaded(false);
-                    RobertaObserver.setExecuted(true);
-                } else {
-                    Delay.msDelay(500);
+                setFileName(RobertaObserver.getUserFileName());
+                File robertalabFile = new File(RobertaLauncher.PROGRAMS_DIRECTORY, programName);
+                JarFile jar;
+                try {
+                    jar = new JarFile(robertalabFile);
+                    mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
+                    jar.close();
+                } catch ( IOException e ) {
+                    System.err.println("Exception running program");
+                    return;
                 }
+                this.ind.suspend();
+                exec(robertalabFile, JAVA_RUN_CP + robertalabFile.getPath() + " lejos.internal.ev3.EV3Wrapper " + mainClass, RobertaLauncher.PROGRAMS_DIRECTORY);
+                this.ind.resume();
+                RobertaObserver.setDownloaded(false);
+                RobertaObserver.setExecuted(true);
             } else {
                 Delay.msDelay(500);
             }
@@ -97,6 +90,7 @@ public class RobertaLauncher implements Runnable {
             glcd.setAutoRefresh(false);
 
             glcd.drawImage(image, 0, 0, 0);
+            glcd.refresh();
 
             program = new ProcessBuilder(command.split(" ")).directory(new File(directory)).start();
             BufferedReader input = new BufferedReader(new InputStreamReader(program.getInputStream()));
@@ -132,11 +126,11 @@ public class RobertaLauncher implements Runnable {
             glcd.setAutoRefresh(true);
             glcd.clear();
             glcd.refresh();
-            int row = 1;
+            /*int row = 1;
             for ( String ip : GraphicStartup.getIPs() ) {
                 lcd.drawString(ip, 8 - ip.length() / 2, row++);
-            }
-            GraphicStartup.getMenu().display(RobertaObserver.getMenuIndex(), 0, 0);
+            }*/
+            //GraphicStartup.getMenu().display(RobertaObserver.getMenuIndex(), 0, 0);
             program = null;
         } catch ( Exception e ) {
             System.err.println("Failed to execute program: " + e);
