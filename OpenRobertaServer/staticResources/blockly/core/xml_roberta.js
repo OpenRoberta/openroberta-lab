@@ -216,9 +216,9 @@ Blockly.Xml.Roberta.domToBlock = function (workspace, xmlBlockList, opt_reuseBlo
 			block.parent_ = parentBlock;
 		} else {
 			block = Blockly.Block.obtain(workspace, prototypeName);
-			//    if (id) {
-			//      block.id = parseInt(id, 10);
-			//    }
+			if (id) {
+			  block.id = parseInt(id, 10);
+			}
 		}
 		if (!block.svg_) {
 			block.initSvg();
