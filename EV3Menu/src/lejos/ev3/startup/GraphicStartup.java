@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -152,7 +153,7 @@ public class GraphicStartup implements Menu {
 
     public static boolean isRobertaRegistered = false;
     private static String token;
-    private static String serverURLString;
+    private static String serverURLString = "";
     private static URL serverTokenRessource;
     private static URL serverDownloadRessource;
 
@@ -1487,37 +1488,34 @@ public class GraphicStartup implements Menu {
      */
     private void robertaMenu() {
         TextLCD lcd = LocalEV3.get().getTextLCD();
-        //RobertaRunner runner = new RobertaRunner(this.ind, echoIn, echoErr);
-
-        //--- enter server address (for noobs only :-)) ---
-        //        newScreen(" Enter IP");
-        //        while ( serverURLString.equals("") ) {
-        //            // is empty string if Button.ESCAPE is pressed @IpAddressKeyboard
-        //            serverURLString = new IpAddressKeyboard().getString();
-        //            try {
-        //                File file = new File("/home/lejos/programs/serverIP.txt");
-        //                if ( file.exists() ) {
-        //                    file.delete();
-        //                }
-        //                PrintWriter pw = new PrintWriter("/home/lejos/programs/serverIP.txt");
-        //                pw.println(serverURLString);
-        //                pw.close();
-        //            } catch ( FileNotFoundException e ) {
-        //                return;
-        //            }
-        //        }
-        serverURLString = "10.0.1.11:1999";
-
-        try {
-            serverTokenRessource = new URL("http://" + serverURLString + "/token");
-            serverDownloadRessource = new URL("http://" + serverURLString + "/download");
-        } catch ( MalformedURLException e ) {
-            return;
-        }
-
         newScreen(" Robertalab");
 
         if ( GraphicStartup.isRobertaRegistered == false ) {
+
+            newScreen(" Enter IP");
+            while ( serverURLString.equals("") ) {
+                serverURLString = new IpAddressKeyboard().getString();
+                try {
+                    File file = new File("/home/lejos/programs/serverIP.txt");
+                    if ( file.exists() ) {
+                        file.delete();
+                    }
+                    PrintWriter pw = new PrintWriter("/home/lejos/programs/serverIP.txt");
+                    pw.println(serverURLString);
+                    pw.close();
+                } catch ( FileNotFoundException e ) {
+                    return;
+                }
+            }
+            //serverURLString = "10.0.1.11:1999";
+
+            try {
+                serverTokenRessource = new URL("http://" + serverURLString + "/token");
+                serverDownloadRessource = new URL("http://" + serverURLString + "/download");
+            } catch ( MalformedURLException e ) {
+                return;
+            }
+
             token = new RobertaTokenGenerator().generateToken(8);
             GraphicStartup.backgroundTasks = new BackgroundTasks(serverTokenRessource, serverDownloadRessource, token, this.ind, echoIn, echoErr);
             Key escapeKey = LocalEV3.get().getKey("Escape");
