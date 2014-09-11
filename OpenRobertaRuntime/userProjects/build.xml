@@ -28,6 +28,7 @@
 
 	<target name="compile" description="build class files" depends="clean">
 		<javac srcdir="${input.dir}" destdir="${output.dir}" includeantruntime="false" fork="yes" debug="true" verbose="true" debuglevel="lines,vars,source">
+			<include name="${main.name}.java"/>
 			<classpath refid="lejos"/>
 		</javac>
 	</target>
