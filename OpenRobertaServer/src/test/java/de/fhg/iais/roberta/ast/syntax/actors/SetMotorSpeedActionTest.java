@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.ast.syntax.actors;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
@@ -11,6 +10,6 @@ public class SetMotorSpeedActionTest {
     public void setMotorSpeed() throws Exception {
         String a = "\nhal.setRegulatedMotorSpeed(ActorPort.B, 30);";
 
-        Assert.assertEquals(a, Helper.generateStringWithoutWrapping("/ast/actions/action_MotorSetPower.xml"));
+        Helper.assertCodeIsOk(a, "/ast/actions/action_MotorSetPower.xml");
     }
 }

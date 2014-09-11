@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.ast.syntax.stmt;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
@@ -25,7 +24,7 @@ public class WhileUntilStmtTest {
                 + "    }\n"
                 + "}";
 
-        Assert.assertEquals(a, Helper.generateStringWithoutWrapping("/syntax/stmt/whileUntil_stmt.xml"));
+        Helper.assertCodeIsOk(a, "/syntax/stmt/whileUntil_stmt.xml");
     }
 
     @Test
@@ -38,6 +37,6 @@ public class WhileUntilStmtTest {
             + "    System.out.println(\"\");\n"
             + "}";
 
-        Assert.assertEquals(a, Helper.generateStringWithoutWrapping("/ast/control/repeat_stmt_loopForever.xml"));
+        Helper.assertCodeIsOk(a, "/ast/control/repeat_stmt_loopForever.xml");
     }
 }

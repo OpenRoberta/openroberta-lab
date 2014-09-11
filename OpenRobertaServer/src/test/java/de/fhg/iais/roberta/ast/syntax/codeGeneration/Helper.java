@@ -5,6 +5,7 @@ import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
+import org.junit.Assert;
 import org.xml.sax.InputSource;
 
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
@@ -99,5 +100,10 @@ public class Helper {
     public static <V> Phrase<V> generateAST(String pathToProgramXml) throws Exception {
         List<Phrase<V>> tree = generateASTs(pathToProgramXml);
         return tree.get(0);
+    }
+
+    public static void assertCodeIsOk(String a, String fileName) throws Exception {
+        // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
+        Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generateStringWithoutWrapping(fileName).replaceAll("\\s+", ""));
     }
 }

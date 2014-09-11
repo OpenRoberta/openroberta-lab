@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
 
@@ -47,6 +48,14 @@ public final class MotorOnAction<V> extends Action<V> {
      */
     public ActorPort getPort() {
         return this.port;
+    }
+
+    public MotorMoveMode getDurationMode() {
+        return this.param.getDuration().getType();
+    }
+
+    public Expr<V> getDurationValue() {
+        return this.param.getDuration().getValue();
     }
 
     @Override

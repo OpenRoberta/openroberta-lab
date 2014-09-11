@@ -18,6 +18,11 @@ public class AstToLejosJavaVisitorTest {
         + "import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;\n"
         + "import de.fhg.iais.roberta.ast.syntax.HardwareComponent;\n"
         + "import de.fhg.iais.roberta.ast.syntax.action.ActorPort;\n"
+        + "import de.fhg.iais.roberta.ast.syntax.action.MotorMoveMode;\n"
+        + "import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;\n"
+        + "import de.fhg.iais.roberta.ast.syntax.action.MotorStopMode;\n"
+        + "import de.fhg.iais.roberta.ast.syntax.action.MotorType;\n"
+        + "import de.fhg.iais.roberta.ast.syntax.action.TurnDirection;\n"
         + "import de.fhg.iais.roberta.ast.syntax.action.BrickLedColor;\n"
         + "import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;\n"
         + "import de.fhg.iais.roberta.codegen.lejos.Hal;\n\n";
@@ -101,11 +106,13 @@ public class AstToLejosJavaVisitorTest {
             + "        } else if ( PickColor.RED == hal.getColorSensorValue(SensorPort.S3) ) {\n"
             + "            while ( true ) {\n"
             + "                hal.drawPicture(\"SMILEY1\", 0, 0);\n\n"
+            + "                hal.rotateUnregulatedMotor(ActorPort.B,30);"
             + "            }\n"
             + "        }\n"
             + "        hal.playFile(\"SOUNDFILE1\");\n"
             + "        hal.setVolume(50);\n"
             + "        for ( int i = 1; i <= 10; i += 1 ) {\n\n"
+            + "           hal.rotateUnregulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);"
             + "        }\n"
             + SUFFIX
             + "    }\n"
@@ -134,6 +141,7 @@ public class AstToLejosJavaVisitorTest {
             + "            } else {\n"
             + "                hal.setUltrasonicSensorMode(SensorPort.S4, UltrasonicSensorMode.DISTANCE);\n"
             + "                while ( !hal.isPressedAndReleased(BrickKey.UP) ) {\n\n"
+            + "                     hal.rotateUnregulatedMotor(ActorPort.B,30);"
             + "                }\n"
             + "            }\n"
             + "        }\n"
@@ -156,6 +164,8 @@ public class AstToLejosJavaVisitorTest {
                 + "    public void run() {\n"
                 + "        Hal hal = new Hal(brickConfiguration);\n"
                 + "        if ( 5 < hal.getRegulatedMotorSpeed(ActorPort.B) ) {\n\n\n"
+                + "            hal.rotateUnregulatedMotor(ActorPort.B,30);\n"
+                + "            hal.rotateUnregulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);\n"
                 + "            hal.rotateDirectionRegulated(ActorPort.A, ActorPort.B, TurnDirection.RIGHT, 50);\n"
                 + "        }\n"
                 + "        if ( hal.getRegulatedMotorTachoValue(ActorPort.A) + hal.getInfraredSensorValue(SensorPort.S4) == hal.getUltraSonicSensorValue(SensorPort.S4) ) {\n"
@@ -206,6 +216,25 @@ public class AstToLejosJavaVisitorTest {
                 + "}\n";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_code_generator5.xml");
+    }
+
+    @Test
+    public void test6() throws Exception {
+
+        String a = "" //
+            + IMPORTS
+            + MAIN_CLASS
+            + BRICK_CONFIGURATION
+            + MAIN_METHOD
+            + "    public void run() {\n"
+            + "        Hal hal = new Hal(brickConfiguration);\n"
+            + "        hal.drawText(\"Hallo\", 0, 0);\n"
+            + "        hal.playTone(300, 3000);\n"
+            + SUFFIX
+            + "    }\n"
+            + "}\n";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator6.xml");
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {

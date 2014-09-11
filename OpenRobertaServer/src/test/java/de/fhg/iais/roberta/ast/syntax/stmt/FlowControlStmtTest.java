@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.ast.syntax.stmt;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
@@ -21,6 +20,6 @@ public class FlowControlStmtTest {
                 + "    break;\n"
                 + "}";
 
-        Assert.assertEquals(a, Helper.generateStringWithoutWrapping("/syntax/stmt/flowControl_stmt.xml"));
+        Helper.assertCodeIsOk(a, "/syntax/stmt/flowControl_stmt.xml");
     }
 }

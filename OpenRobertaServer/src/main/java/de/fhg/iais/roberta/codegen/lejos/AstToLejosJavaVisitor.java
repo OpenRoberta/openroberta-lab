@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
+import de.fhg.iais.roberta.ast.syntax.Category;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.Phrase.Kind;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
@@ -106,7 +107,9 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         AstToLejosJavaVisitor astVisitor = new AstToLejosJavaVisitor(programName, brickConfiguration, withWrapping ? 2 : 0);
         astVisitor.generatePrefix(withWrapping);
         for ( Phrase<Void> phrase : phrases ) {
-            astVisitor.sb.append("\n");
+            if ( phrase.getKind().getCategory() != Category.TASK ) {
+                astVisitor.sb.append("\n").append(INDENT).append(INDENT);
+            }
             phrase.visit(astVisitor);
         }
         astVisitor.generateSuffix(withWrapping);
@@ -439,7 +442,17 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        // TODO Auto-generated method stub
+        //TODO for unregulated motor (ask Daniel!)
+        boolean isRegulated = true;
+        String methodName = isRegulated ? "hal.rotateUnregulatedMotor(" : "hal.rotateUnregulatedMotor(";
+        this.sb.append(methodName + motorOnAction.getPort().getJavaCode() + ", ");
+        motorOnAction.getParam().getSpeed().visit(this);
+        if ( motorOnAction.getParam().getDuration() != null ) {
+            this.sb.append(", " + motorOnAction.getDurationMode().getJavaCode());
+            this.sb.append(", ");
+            motorOnAction.getDurationValue().visit(this);
+        }
+        this.sb.append(");");
         return null;
     }
 
@@ -641,8 +654,8 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-        // TODO Auto-generated method stub
         return null;
+
     }
 
     @Override
@@ -761,6 +774,11 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.HardwareComponent;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.ActorPort;\n");
+        this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.MotorMoveMode;\n");
+        this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;\n");
+        this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.MotorStopMode;\n");
+        this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.MotorType;\n");
+        this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.TurnDirection;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.BrickLedColor;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;\n");
         this.sb.append("import de.fhg.iais.roberta.codegen.lejos.Hal;\n\n");

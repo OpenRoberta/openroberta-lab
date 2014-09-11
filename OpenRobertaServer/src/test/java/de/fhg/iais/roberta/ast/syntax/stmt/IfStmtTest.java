@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.ast.syntax.stmt;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
@@ -39,14 +38,14 @@ public class IfStmtTest {
                 + "    item = 3 * 9;\n"
                 + "}";
 
-        Assert.assertEquals(a, Helper.generateStringWithoutWrapping("/syntax/stmt/if_stmt.xml"));
+        Helper.assertCodeIsOk(a, "/syntax/stmt/if_stmt.xml");
     }
 
     @Test
     public void ifStmt1() throws Exception {
         String a = "\nif ( ( 5 + 7 == 5 + 7 ) >= ( 5 + 7 == 5 + 7 && 5 + 7 <= 5 + 7 ) ) {\n}";
 
-        Assert.assertEquals(a, Helper.generateStringWithoutWrapping("/syntax/stmt/if_stmt1.xml"));
+        Helper.assertCodeIsOk(a, "/syntax/stmt/if_stmt1.xml");
     }
 
     @Test
@@ -67,7 +66,7 @@ public class IfStmtTest {
                 + "    System.out.println(0);\n"
                 + "}";
 
-        Assert.assertEquals(a, Helper.generateStringWithoutWrapping("/syntax/stmt/if_stmt2.xml"));
+        Helper.assertCodeIsOk(a, "/syntax/stmt/if_stmt2.xml");
     }
 
     @Test
@@ -84,6 +83,6 @@ public class IfStmtTest {
                 + "    item = 3 * 9;\n"
                 + "}";
 
-        Assert.assertEquals(a, Helper.generateStringWithoutWrapping("/syntax/stmt/if_stmt3.xml"));
+        Helper.assertCodeIsOk(a, "/syntax/stmt/if_stmt3.xml");
     }
 }

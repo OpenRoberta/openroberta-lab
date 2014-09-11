@@ -204,8 +204,8 @@ public class JaxbTransformer<V> {
                 mode = extractField(fields, "DIRECTION", (short) 0);
                 values = extractValues(block, (short) 2);
                 left = extractValue(values, new ExprParam("POWER", Integer.class));
-                right = extractValue(values, new ExprParam("DISTANCE", Integer.class));
-                md = new MotorDuration<V>(MotorMoveMode.DISTANCE, (Expr<V>) right);
+                right = extractValue(values, new ExprParam("DEGREE", Integer.class));
+                md = new MotorDuration<V>(MotorMoveMode.DEGREE, (Expr<V>) right);
                 mp = new MotionParam.Builder<V>().speed((Expr<V>) left).duration(md).build();
                 return TurnAction.make(TurnDirection.get(mode), mp, disabled, comment);
 
