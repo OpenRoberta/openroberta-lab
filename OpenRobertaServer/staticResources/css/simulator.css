@@ -4,7 +4,7 @@
 	height: 100%;
 	width: 100%;
 	display: none;
-	z-index: 2;
+	z-index: 20;
 	position: absolute;
 	background-color: #fefefe;
 	background-image:url('./img/simulator/pattern_bg.png');

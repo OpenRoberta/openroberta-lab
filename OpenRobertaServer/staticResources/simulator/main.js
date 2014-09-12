@@ -30,8 +30,12 @@
 		renderer.setSize( window.innerWidth, window.innerHeight );
 		renderer.setClearColor( 0xffffff, 1);
 		
-		$( "#simulatorDiv" ).append( renderer.domElement );
+		$( "#simulatorRender" ).append( renderer.domElement );
 	}
+	
+function clear(){
+	renderer.clear();
+}
 
 function animate() {
 

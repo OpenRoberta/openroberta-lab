@@ -1,6 +1,8 @@
 
 var DUMMY;
 var activityString = "Aktivität:";
+var speed = 5
+
 
 // -------------------------------------
 // Dummy Controll TEST Input
@@ -8,8 +10,8 @@ var activityString = "Aktivität:";
 
 $(document).keydown(function(e){
 	if (e.keyCode == 37) { 
-		//moveLeft();
-		//DUMMY = "#dummyLeft";
+		moveLeft();
+		DUMMY = "#dummyLeft";
 		
 		moveRoberta("left");
 		
@@ -17,8 +19,8 @@ $(document).keydown(function(e){
 	}
 
 	if (e.keyCode == 38) { 
-		//moveUp();
-		//DUMMY = "#dummyUp";
+		moveUp();
+		DUMMY = "#dummyUp";
 		
 		moveRoberta("up");
 		
@@ -26,8 +28,8 @@ $(document).keydown(function(e){
 	}
 
 	if (e.keyCode == 39) { 
-		//moveRight();
-		//DUMMY = "#dummyRight";
+		moveRight();
+		DUMMY = "#dummyRight";
 		
 		moveRoberta("right");
 		
@@ -35,8 +37,8 @@ $(document).keydown(function(e){
 	}
 
 	if (e.keyCode == 40) { 
-		//DUMMY = "#dummyDown";
-		//moveDown();
+		DUMMY = "#dummyDown";
+		moveDown();
 		
 		moveRoberta("down");
 		
@@ -59,13 +61,15 @@ function viewSimulator(status){
 	if(status == true){
 		$( "#simulatorDiv" ).css( "display", "block" );   
 		displayActivity("keine Aktivität");
-		//$( "#dummyRight" ).css( "display", "block" );
+		$( "#dummyUp" ).css( "display", "block" );
 		
-		init();
+		//init();
 	}
 	
 	else{
-		$( "#simulatorDiv" ).css( "display", "none" );	
+		$( "#simulatorDiv" ).css( "display", "none" );
+		//$( "#simulatorRender" ).empty();
+		moveStop();
 	}
 }
 
@@ -108,7 +112,7 @@ var BackgroundScroll = function(params) {
 		imageHeight: $('#simulatorDiv').height()
 	}, params);
 
-	var step = 1,
+	var step = speed,
 	current = 0,
 	restartPosition = - (params.imageWidth - params.imageHeight),
 	active;
@@ -256,7 +260,7 @@ function moveDown(){
 	displayActivity("Bewebgung Richtung Süden");
 }
 
-function movteStop(){
+function moveStop(){
 	scroll.initStop(false);
 	displayActivity("Stop");
 }
