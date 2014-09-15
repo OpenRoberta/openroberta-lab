@@ -21,9 +21,9 @@ function viewSimulator(status){
 	else{
 		$( "#simulatorDiv" ).css( "display", "none" );
 		moveStop();
+		clearDraw();
 	}
 }
-
 
 //--------------------------------------------------
 // Function to draw and rotate the canvas and image
@@ -48,19 +48,22 @@ function rotateClockwise(degree){
 	drawRotated(angleInDegrees);
 }
 
-
 function rotateCounterClockwise(degree){
 	angleInDegrees -= degree;
 	drawRotated(angleInDegrees);
 }
 
 function drawRotated(degrees){
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	clearDraw();
 	ctx.save();
     ctx.translate(canvas.width/2,canvas.height/2);
     ctx.rotate(degrees*Math.PI/180); 
     ctx.drawImage(image,-image.width/2,-image.width/2);
   	ctx.restore();
+}
+
+function clearDraw(){
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 // -------------------------------------
@@ -109,14 +112,14 @@ $(document).keydown(function(e){
 	
 	if (e.keyCode == 68) { 
 		
-		rotateClockwise(90);
+		rotateClockwise(10);
 		
 		return false;
 	}
 	
 	if (e.keyCode == 65) { 
 		
-		rotateCounterClockwise(90);
+		rotateCounterClockwise(10);
 		
 		return false;
 	}
@@ -145,7 +148,6 @@ function exeCmd(type){
 	}
 }
 
-
 //--------------------------------------------
 // Functions for moving the background.
 //--------------------------------------------
@@ -161,6 +163,10 @@ var BackgroundScroll = function(params) {
 	current = 0,
 	restartPosition = - (params.imageWidth - params.imageHeight),
 	active;
+	
+	var scroll = function(){
+		
+	}
 
 	var scrollLeft = function() {
 
@@ -193,7 +199,6 @@ var BackgroundScroll = function(params) {
 		}
 
 		$('#simulatorDiv').css('backgroundPosition', current + 'px 0');
-
 	};
 
 	var scrollDown = function() {
@@ -210,9 +215,8 @@ var BackgroundScroll = function(params) {
 		if (current == restartPosition){
 			current = 0;
 		}
-		
+				
 		$('#simulatorDiv').css("backgroundPosition", 0 + 'px' + ' ' + current + 'px'); 
-
 	};
 
 	var scrollUp = function() {
