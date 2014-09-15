@@ -670,4 +670,3 @@ Blockly.Css.CONTENT = [
 
   ''
 ];
-
