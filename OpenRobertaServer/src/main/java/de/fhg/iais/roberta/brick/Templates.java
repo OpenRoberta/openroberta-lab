@@ -15,7 +15,7 @@ public class Templates {
 
 	public Templates() {
 		String eins = ""
-				+ " <xml id='toolbox' style='display: none'> "
+				+ " <toolbox_set id='toolbox' style='display: none'> "
 				+ "  <category name='Aktion'> "
 				+ "    <block type='robActions_motorDiff_on'>" //
 				+ "      <value name='POWER'>" //
@@ -177,9 +177,9 @@ public class Templates {
 				+ "    </block> " + "  </category> "
 				+ "  <category name='Variablen' custom='VARIABLE'/> "
 				+ "  <category name='Funktionen' custom='PROCEDURE'/> "
-				+ "</xml> ";
+				+ "</toolbox_set> ";
 		String zwei = ""
-				+ " <xml id='toolbox' style='display: none'> "
+				+ " <toolbox_set id='toolbox' style='display: none'> "
 				+ "  <category name='Aktion'> "
 				+ "  <category name='Bewegung'> "
 				+ "    <block type='robActions_motor_on'>" //
@@ -554,7 +554,7 @@ public class Templates {
 				+ "  </category> "
 				+ "  <category name='Variablen' custom='VARIABLE'/> "
 				+ "  <category name='Funktionen' custom='PROCEDURE'/> "
-				+ "</xml> ";
+				+ "</toolbox_set> ";
 		templates.put("1", eins);
 		templates.put("2", zwei);
 		LOG.info("created");

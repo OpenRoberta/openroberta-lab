@@ -66,7 +66,7 @@ Blockly.Icon.prototype.iconY_ = 0;
 Blockly.Icon.prototype.createIcon_ = function() {
   /* Here's the markup that will be generated:
   <g class="blocklyIconGroup"></g>
-  */
+   */
   this.iconGroup_ = Blockly.createSvgElement('g', {}, null);
   this.block_.getSvgRoot().appendChild(this.iconGroup_);
   Blockly.bindEvent_(this.iconGroup_, 'mouseup', this, this.iconClick_);
@@ -90,11 +90,11 @@ Blockly.Icon.prototype.dispose = function() {
  */
 Blockly.Icon.prototype.updateEditable = function() {
   if (!this.block_.isInFlyout) {
-    Blockly.addClass_(/** @type {!Element} */ (this.iconGroup_),
-                      'blocklyIconGroup');
+    Blockly.addClass_(/** @type {!Element} */
+    (this.iconGroup_), 'blocklyIconGroup');
   } else {
-    Blockly.removeClass_(/** @type {!Element} */ (this.iconGroup_),
-                         'blocklyIconGroup');
+    Blockly.removeClass_(/** @type {!Element} */
+    (this.iconGroup_), 'blocklyIconGroup');
   }
 };
 
@@ -120,9 +120,12 @@ Blockly.Icon.prototype.iconClick_ = function(e) {
 /**
  * Change the colour of the associated bubble to match its block.
  */
-Blockly.Icon.prototype.updateColour = function() {
+Blockly.Icon.prototype.updateColour = function(color) {
   if (this.isVisible()) {
-     this.bubble_.setColour(this.block_.getColour());
+    if (color)
+      this.bubble_.setColour(color);
+    else
+      this.bubble_.setColour(this.block_.getColour());
   }
 };
 
@@ -143,8 +146,8 @@ Blockly.Icon.prototype.renderIcon = function(cursorX) {
   if (Blockly.RTL) {
     cursorX -= diameter;
   }
-  this.iconGroup_.setAttribute('transform',
-      'translate(' + cursorX + ', ' + TOP_MARGIN + ')');
+  this.iconGroup_.setAttribute('transform', 'translate(' + cursorX + ', '
+      + TOP_MARGIN + ')');
   this.computeIconLocation();
   if (Blockly.RTL) {
     cursorX -= Blockly.BlockSvg.SEP_SPACE_X;
@@ -187,5 +190,8 @@ Blockly.Icon.prototype.computeIconLocation = function() {
  * @return {!Object} Object with x and y properties.
  */
 Blockly.Icon.prototype.getIconLocation = function() {
-  return {x: this.iconX_, y: this.iconY_};
+  return {
+    x : this.iconX_,
+    y : this.iconY_
+  };
 };

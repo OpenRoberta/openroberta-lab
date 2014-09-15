@@ -202,9 +202,33 @@ Blockly.Css.CONTENT = [
   //'  stroke-width: 1px;',
   //'  stroke: #ccc;',
   '}',
+  
+  '.blocklyIconShieldWarning {',
+  '  cursor: default;',
+  '  fill: #FFDC00;',
+  //'  stroke-width: 1px;',
+  //'  stroke: #ccc;',
+  '}',
+  
+  '.blocklyIconShieldError {',
+  '  cursor: default;',
+  '  fill: #E2001A;',
+  //'  stroke-width: 1px;',
+  //'  stroke: #ccc;',
+  '}',
 
   '.blocklyIconGroup:hover>.blocklyIconShield {',
   '  fill: #007da6;',
+  //'  stroke: #fff;',
+  '}',
+  
+  '.blocklyIconGroup:hover>.blocklyIconShieldWarning {',
+  '  fill: #FFDC00;',
+  //'  stroke: #fff;',
+  '}',
+  
+  '.blocklyIconGroup:hover>.blocklyIconShieldError {',
+  '  fill: #E2001A;',
   //'  stroke: #fff;',
   '}',
 
@@ -219,6 +243,10 @@ Blockly.Css.CONTENT = [
   '  font-weight: bold;',
   '  fill: #ccc;',
   '  text-anchor: middle;',
+  '}',
+  
+  '.blocklyIconMarkWarningError {',
+  '  fill: #000;',
   '}',
 
   '.blocklyWarningBody {',
@@ -670,3 +698,4 @@ Blockly.Css.CONTENT = [
 
   ''
 ];
+
