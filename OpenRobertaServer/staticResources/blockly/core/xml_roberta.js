@@ -96,6 +96,24 @@ Blockly.Xml.blockToDom_ = function(block, statement_list) {
     element.appendChild(commentElement);
   }
 
+  if (block.warning) {
+    var warningElement = goog.dom.createDom('warning', null, block.warning
+        .getText());
+    warningElement.setAttribute('pinned', block.warning.isVisible());
+    var hw = block.warning.getBubbleSize();
+    warningElement.setAttribute('h', hw.height);
+    warningElement.setAttribute('w', hw.width);
+    element.appendChild(warningElement);
+  }
+
+  if (block.error) {
+    var errorElement = goog.dom.createDom('error', null, block.error.getText());
+    errorElement.setAttribute('pinned', block.error.isVisible());
+    var hw = block.error.getBubbleSize();
+    errorElement.setAttribute('h', hw.height);
+    errorElement.setAttribute('w', hw.width);
+    element.appendChild(errorElement);
+  }
   var hasValues = false;
   for (var i = 0, input; input = block.inputList[i]; i++) {
     var container;
@@ -362,6 +380,30 @@ Blockly.Xml.childToBlock = function(workspace, block, xmlChild, opt_reuseBlock,
       block.comment.setBubbleSize(bubbleW, bubbleH);
     }
     break;
+  case 'warning':
+    block.setWarningText(xmlChild.textContent);
+    var visible = xmlChild.getAttribute('pinned');
+    if (visible) {
+      block.warning.setVisible(visible == 'true');
+    }
+    var bubbleW = parseInt(xmlChild.getAttribute('w'), 10);
+    var bubbleH = parseInt(xmlChild.getAttribute('h'), 10);
+    if (!isNaN(bubbleW) && !isNaN(bubbleH)) {
+      block.warning.bubble_.setBubbleSize(bubbleW, bubbleH);
+    }
+    break;
+  case 'error':
+    block.setErrorText(xmlChild.textContent);
+    var visible = xmlChild.getAttribute('pinned');
+    if (visible) {
+      block.error.setVisible(visible == 'true');
+    }
+    var bubbleW = parseInt(xmlChild.getAttribute('w'), 10);
+    var bubbleH = parseInt(xmlChild.getAttribute('h'), 10);
+    if (!isNaN(bubbleW) && !isNaN(bubbleH)) {
+      block.error.bubble_.setBubbleSize(bubbleW, bubbleH);
+    }
+    break;
   case 'title':
     // Titles were renamed to field in December 2013.
     // Fall through.
@@ -412,7 +454,50 @@ Blockly.Xml.textToDom = function(text) {
   return dom.firstChild;
 };
 
-//Export symbols that would otherwise be renamed by Closure compiler.
+/**
+ * Converts a DOM structure into properly indented text.
+ * @param {!Element} dom A tree of XML elements.
+ * @return {string} Text representation.
+ */
+Blockly.Xml.domToPrettyText = function(dom) {
+  // This function is not guaranteed to be correct for all XML.
+  // But it handles the XML that Blockly generates.
+  var blob = Blockly.Xml.domToText(dom);
+  // Place every open and close tag on its own line.
+  var lines = blob.split('<');
+  // Indent every line.
+  var indent = '';
+  for (var x = 1; x < lines.length; x++) {
+    var line = lines[x];
+    if (line[0] == '/') {
+      indent = indent.substring(2);
+    }
+    lines[x] = indent + '<' + line;
+    if (line[0] != '/' && line.slice(-2) != '/>') {
+      indent += '  ';
+    }
+  }
+  // Pull simple tags back together.
+  // E.g. <foo></foo>
+  var text = lines.join('\n');
+  text = text.replace(/(<(\w+)\b[^>]*>[^\n]*)\n *<\/\2>/g, '$1</$2>');
+  // Trim leading blank line.
+  return text.replace(/^\n/, '');
+};
+
+/**
+ * Converts a DOM structure into plain text.
+ * Currently the text format is fairly ugly: all one line with no whitespace.
+ * @param {!Element} dom A tree of XML elements.
+ * @return {string} Text representation.
+ */
+Blockly.Xml.domToText = function(dom) {
+  var oSerializer = new XMLSerializer();
+  return oSerializer.serializeToString(dom);
+};
+
+
+// Export symbols that would otherwise be renamed by Closure compiler.
 Blockly['Xml'] = Blockly.Xml;
 Blockly.Xml['domToText'] = Blockly.Xml.domToText;
 Blockly.Xml['domToWorkspace'] = Blockly.Xml.domToWorkspace;

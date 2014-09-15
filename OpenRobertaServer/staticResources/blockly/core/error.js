@@ -19,37 +19,37 @@
  */
 
 /**
- * @fileoverview Object representing a warning.
+ * @fileoverview Object representing a error.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
-goog.provide('Blockly.Warning');
+goog.provide('Blockly.Error');
 
 goog.require('Blockly.Bubble');
 goog.require('Blockly.Icon');
 
 
 /**
- * Class for a warning.
- * @param {!Blockly.Block} block The block associated with this warning.
+ * Class for a error.
+ * @param {!Blockly.Block} block The block associated with this error.
  * @extends {Blockly.Icon}
  * @constructor
  */
-Blockly.Warning = function(block) {
-  Blockly.Warning.superClass_.constructor.call(this, block);
+Blockly.Error = function(block) {
+  Blockly.Error.superClass_.constructor.call(this, block);
   this.createIcon_();
 };
-goog.inherits(Blockly.Warning, Blockly.Icon);
+goog.inherits(Blockly.Error, Blockly.Icon);
 
 
 /**
- * Create the text for the warning's bubble.
+ * Create the text for the error's bubble.
  * @param {string} text The text to display.
  * @return {!SVGTextElement} The top-level node of the text.
  * @private
  */
-Blockly.Warning.textToDom_ = function(text) {
+Blockly.Error.textToDom_ = function(text) {
   var paragraph = /** @type {!SVGTextElement} */ (
       Blockly.createSvgElement('text',
           {'class': 'blocklyText blocklyBubbleText',
@@ -66,38 +66,37 @@ Blockly.Warning.textToDom_ = function(text) {
 };
 
 /**
- * Warning text (if bubble is not visible).
+ * Error text (if bubble is not visible).
  * @private
  */
-Blockly.Warning.prototype.text_ = '';
+Blockly.Error.prototype.text_ = '';
 
 /**
  * Create the icon on the block.
  * @private
  */
-Blockly.Warning.prototype.createIcon_ = function() {
+Blockly.Error.prototype.createIcon_ = function() {
   Blockly.Icon.prototype.createIcon_.call(this);
   /* Here's the markup that will be generated:
   <path class="blocklyIconShield" d="..."/>
   <text class="blocklyIconMark" x="8" y="13">!</text>
   */
-  var iconShield = Blockly.createSvgElement('path',
-      {'class': 'blocklyIconShield blocklyIconShieldWarning',
-       'd': 'M 2,15 Q -1,15 0.5,12 L 6.5,1.7 Q 8,-1 9.5,1.7 L 15.5,12 ' +
-       'Q 17,15 14,15 z'},
+  var iconShield = Blockly.createSvgElement('polygon',
+      {'class': 'blocklyIconShield blocklyIconShieldError',
+       'points': '4,0 11,0 15,4 15,11 11,15 4,15 0,11 0,4'},
       this.iconGroup_);
   this.iconMark_ = Blockly.createSvgElement('text',
       {'class': 'blocklyIconMark  blocklyIconMarkWarningError',
-       'x': Blockly.Icon.RADIUS,
-       'y': 2 * Blockly.Icon.RADIUS - 3}, this.iconGroup_);
-  this.iconMark_.appendChild(document.createTextNode('!'));
+       'x': Blockly.Icon.RADIUS - 0.25,
+       'y': 2 * Blockly.Icon.RADIUS - 4}, this.iconGroup_);
+  this.iconMark_.appendChild(document.createTextNode('\u00D7'));
 };
 
 /**
- * Show or hide the warning bubble.
+ * Show or hide the error bubble.
  * @param {boolean} visible True if the bubble should be visible.
  */
-Blockly.Warning.prototype.setVisible = function(visible) {
+Blockly.Error.prototype.setVisible = function(visible) {
   if (visible == this.isVisible()) {
     // No change.
     return;
@@ -106,7 +105,7 @@ Blockly.Warning.prototype.setVisible = function(visible) {
   var size = this.getBubbleSize();
   if (visible) {
     // Create the bubble.
-    var paragraph = Blockly.Warning.textToDom_(this.text_);
+    var paragraph = Blockly.Error.textToDom_(this.text_);
     this.bubble_ = new Blockly.Bubble(
         /** @type {!Blockly.Workspace} */ (this.block_.workspace),
         paragraph, this.block_.svg_.svgPath_,
@@ -120,8 +119,8 @@ Blockly.Warning.prototype.setVisible = function(visible) {
         textElement.setAttribute('x', maxWidth + Blockly.Bubble.BORDER_WIDTH);
       }
     }
-    this.updateColour('#FFDC00');
-    // Bump the warning into the right location.
+    this.updateColour('#E2001A');
+    // Bump the error into the right location.
     var size = this.bubble_.getBubbleSize();
     this.bubble_.setBubbleSize(size.width, size.height);
   } else {
@@ -136,11 +135,11 @@ Blockly.Warning.prototype.setVisible = function(visible) {
 };
 
 /**
- * Bring the warning to the top of the stack when clicked on.
+ * Bring the error to the top of the stack when clicked on.
  * @param {!Event} e Mouse up event.
  * @private
  */
-Blockly.Warning.prototype.bodyFocus_ = function(e) {
+Blockly.Error.prototype.bodyFocus_ = function(e) {
   this.bubble_.promote_();
 };
 
@@ -148,7 +147,7 @@ Blockly.Warning.prototype.bodyFocus_ = function(e) {
  * Get the dimensions of this comment's bubble.
  * @return {!Object} Object with width and height properties.
  */
-Blockly.Warning.prototype.getBubbleSize = function() {
+Blockly.Error.prototype.getBubbleSize = function() {
   if (this.isVisible()) {
     return this.bubble_.getBubbleSize();
   } else {
@@ -161,7 +160,7 @@ Blockly.Warning.prototype.getBubbleSize = function() {
  * @param {number} width Width of the bubble.
  * @param {number} height Height of the bubble.
  */
-Blockly.Warning.prototype.setBubbleSize = function(width, height) {
+Blockly.Error.prototype.setBubbleSize = function(width, height) {
   if (this.textarea_) {
     this.bubble_.setBubbleSize(width, height);
   } else {
@@ -174,15 +173,15 @@ Blockly.Warning.prototype.setBubbleSize = function(width, height) {
  * Returns this comment's text.
  * @return {string} Comment text.
  */
-Blockly.Warning.prototype.getText = function() {
+Blockly.Error.prototype.getText = function() {
   return this.textarea_ ? this.textarea_.value : this.text_;
 };
 
 /**
- * Set this warning's text.
- * @param {string} text Warning text.
+ * Set this error's text.
+ * @param {string} text Error text.
  */
-Blockly.Warning.prototype.setText = function(text) {
+Blockly.Error.prototype.setText = function(text) {
   if (this.text_ == text) {
     return;
   }
@@ -194,9 +193,9 @@ Blockly.Warning.prototype.setText = function(text) {
 };
 
 /**
- * Dispose of this warning.
+ * Dispose of this error.
  */
-Blockly.Warning.prototype.dispose = function() {
-  this.block_.warning = null;
+Blockly.Error.prototype.dispose = function() {
+  this.block_.error = null;
   Blockly.Icon.prototype.dispose.call(this);
 };

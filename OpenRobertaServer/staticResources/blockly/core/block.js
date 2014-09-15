@@ -37,6 +37,7 @@ goog.require('Blockly.Mutator');
 goog.require('Blockly.MutatorPlus');
 goog.require('Blockly.MutatorMinus');
 goog.require('Blockly.Warning');
+goog.require('Blockly.Error');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');
 goog.require('goog.Timer');
@@ -107,7 +108,7 @@ Blockly.Block = function() {
 Blockly.Block.obtain = function(workspace, prototypeName) {
     if (Blockly.Realtime.isEnabled()) {
         return Blockly.Realtime.obtainBlock(workspace, prototypeName);
-    } else {
+     } else {
         var newBlock = new Blockly.Block();
         newBlock.initialize(workspace, prototypeName);
         return newBlock;
@@ -235,7 +236,14 @@ Blockly.Block.prototype.comment = null;
 Blockly.Block.prototype.warning = null;
 
 /**
- * Returns a list of mutator, comment, and warning icons.
+ * Block's error icon (if any).
+ * 
+ * @type {Blockly.Error}
+ */
+Blockly.Block.prototype.error = null;
+
+/**
+ * Returns a list of mutator, comment, and warning / error icons.
  * 
  * @return {!Array} List of icons.
  */
@@ -256,6 +264,9 @@ Blockly.Block.prototype.getIcons = function() {
     if (this.warning) {
         icons.push(this.warning);
     }
+    if (this.error) {
+      icons.push(this.error);
+  }
     return icons;
 };
 
@@ -690,8 +701,9 @@ Blockly.Block.prototype.showHelp_ = function() {
  */
 Blockly.Block.prototype.duplicate_ = function() {
     // Create a duplicate via XML.
-    var xmlBlock = Blockly.Xml.blockToDom_(this);
-    Blockly.Xml.deleteNext(xmlBlock);
+    var statement_list = [];
+    var xmlBlock = Blockly.Xml.blockToDom_(this, statement_list);
+    // Blockly.Xml.deleteNext(xmlBlock);
     var newBlock = Blockly.Xml.domToBlock(
     /** @type {!Blockly.Workspace} */
     (this.workspace), xmlBlock);
@@ -2034,6 +2046,37 @@ Blockly.Block.prototype.setWarningText = function(text) {
     if (changedState && this.rendered) {
         this.render();
         // Adding or removing a warning icon will cause the block to change shape.
+        this.bumpNeighbours_();
+    }
+};
+
+/**
+ * Set this block's error text.
+ * 
+ * @param {?string}
+ *            text The text, or null to delete.
+ */
+Blockly.Block.prototype.setErrorText = function(text) {
+    if (this.isInFlyout) {
+        text = null;
+    }
+    var changedState = false;
+    if (goog.isString(text)) {
+        if (!this.error) {
+            this.error = new Blockly.Error(this);
+            changedState = true;
+        }
+        this.error.setText(/** @type {string} */
+        (text));
+    } else {
+        if (this.error) {
+            this.error.dispose();
+            changedState = true;
+        }
+    }
+    if (changedState && this.rendered) {
+        this.render();
+        // Adding or removing a error icon will cause the block to change shape.
         this.bumpNeighbours_();
     }
 };
