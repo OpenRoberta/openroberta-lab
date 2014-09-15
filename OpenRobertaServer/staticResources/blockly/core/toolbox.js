@@ -51,8 +51,7 @@ Blockly.Toolbox.selectedOption_ = null;
  * TODO document this variables / constants
  * 
  */
-Blockly.Toolbox.toolblockWidth = 160,
-Blockly.Toolbox.toolblockHeight = 40;
+Blockly.Toolbox.toolblockWidth = 160, Blockly.Toolbox.toolblockHeight = 40;
 Blockly.Toolbox.catcolor = null;
 
 /**
@@ -80,27 +79,27 @@ Blockly.Toolbox.CONFIG_ = {
 Blockly.Toolbox.createNodeHtml = function(catName, isSub) {
   if (isSub) {
     var svgOutline = 'd="m0,40 h120 c1.6,0,2.8-1.3,2.8-2.8 v-7 l7.8,0.5 l2.5-5.5 c3-10.7,0.3-16.3-10.3-15.7 v-7 c0-1.6-1.3-2.8-2.8-2.8 h-120 v40 z"/>';
-    var svgText = '<text class="catName" x="5" y="25" style="font-size:10px;">' + catName + '</text>';
+    var svgText = '<text class="catName" x="5" y="25" style="font-size:10px;">'
+        + catName + '</text>';
   } else {
     var svgOutline = 'd="m0,40 h140 c1.6,0,2.8-1.3,2.8-2.8 v-7 l7.8,0.5 l2.5-5.5 c3-10.7,0.3-16.3-10.3-15.7 v-7 c0-1.6-1.3-2.8-2.8-2.8 h-140 v40 z"/>';
-    var svgText = '<text class="catName" x="15" y="25" style="font-size:16px;">' + catName + '</text>';
+    var svgText = '<text class="catName" x="15" y="25" style="font-size:16px;">'
+        + catName + '</text>';
   }
   var html = '<svg width="' + Blockly.Toolbox.toolblockWidth + '" height="'
       + Blockly.Toolbox.toolblockHeight + '">' + '<g>'
-      
+
       //not needed anymore, class definition is in css.js 
       /*+ '<style type="text/css" > <![CDATA['
       + 'text.catName { fill: #ffffff;}'
       + '.blocklyTreeSelected text.catName { fill: #000000;}'
       + ']]></style>'
-      */
-        // just for testing where the rows are:
-        // + '<rect x="0" y="0" width="160" height="60"></rect>'
-      
+       */
+      // just for testing where the rows are:
+      // + '<rect x="0" y="0" width="160" height="60"></rect>'
       + '<path style="fill:rgb(' + Blockly.Toolbox.catcolor[0] + ','
       + Blockly.Toolbox.catcolor[1] + ',' + Blockly.Toolbox.catcolor[2] + ')" '
-      + svgOutline + svgText 
-      + '</g>' + '</svg>';
+      + svgOutline + svgText + '</g>' + '</svg>';
   return html;
 };
 
@@ -211,7 +210,7 @@ Blockly.Toolbox.populate_ = function() {
       }
       var name = childIn.tagName.toUpperCase();
       if (name == 'CATEGORY') {
-        console.log('for-Schleife', childIn.getAttribute('name'));
+        //console.log('for-Schleife', childIn.getAttribute('name'));
         // TODO adjust the width of the box to the longest name, later this
         // should be calculated.
         var catname = childIn.getAttribute('name');
@@ -469,9 +468,3 @@ Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(e) {
 Blockly.Toolbox.TreeNode.prototype.onDoubleClick_ = function(e) {
   // NOP.
 };
-
-
-
-
-
-

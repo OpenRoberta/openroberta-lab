@@ -31,13 +31,15 @@ goog.provide('Blockly.Workspace');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Trashcan');
 goog.require('Blockly.Xml');
-goog.require('Blockly.Xml.Roberta');
-
+// goog.require('Blockly.Xml.Roberta');
 
 /**
  * Class for a workspace.
- * @param {Function} getMetrics A function that returns size/scrolling metrics.
- * @param {Function} setMetrics A function that sets size/scrolling metrics.
+ * 
+ * @param {Function}
+ *            getMetrics A function that returns size/scrolling metrics.
+ * @param {Function}
+ *            setMetrics A function that sets size/scrolling metrics.
  * @constructor
  */
 Blockly.Workspace = function(getMetrics, setMetrics) {
@@ -59,40 +61,45 @@ Blockly.Workspace = function(getMetrics, setMetrics) {
 };
 
 /**
- * Angle away from the horizontal to sweep for blocks.  Order of execution is
+ * Angle away from the horizontal to sweep for blocks. Order of execution is
  * generally top to bottom, but a small angle changes the scan to give a bit of
- * a left to right bias (reversed in RTL).  Units are in degrees.
- * See: http://tvtropes.org/pmwiki/pmwiki.php/Main/DiagonalBilling.
+ * a left to right bias (reversed in RTL). Units are in degrees. See:
+ * http://tvtropes.org/pmwiki/pmwiki.php/Main/DiagonalBilling.
  */
 Blockly.Workspace.SCAN_ANGLE = 3;
 
 /**
  * Can this workspace be dragged around (true) or is it fixed (false)?
+ * 
  * @type {boolean}
  */
 Blockly.Workspace.prototype.dragMode = false;
 
 /**
  * Current horizontal scrolling offset.
+ * 
  * @type {number}
  */
 Blockly.Workspace.prototype.scrollX = 0;
 
 /**
  * Current vertical scrolling offset.
+ * 
  * @type {number}
  */
 Blockly.Workspace.prototype.scrollY = 0;
 
 /**
  * The workspace's trashcan (if any).
+ * 
  * @type {Blockly.Trashcan}
  */
 Blockly.Workspace.prototype.trashcan = null;
 
 /**
- * PID of upcoming firing of a change event.  Used to fire only one event
- * after multiple changes.
+ * PID of upcoming firing of a change event. Used to fire only one event after
+ * multiple changes.
+ * 
  * @type {?number}
  * @private
  */
@@ -100,22 +107,20 @@ Blockly.Workspace.prototype.fireChangeEventPid_ = null;
 
 /**
  * This workspace's scrollbars, if they exist.
+ * 
  * @type {Blockly.ScrollbarPair}
  */
 Blockly.Workspace.prototype.scrollbar = null;
 
 /**
  * Create the trash can elements.
+ * 
  * @return {!Element} The workspace's SVG group.
  */
 Blockly.Workspace.prototype.createDom = function() {
   /*
-  <g>
-    [Trashcan may go here]
-    <g></g>
-    <g></g>
-  </g>
-  */
+   * <g> [Trashcan may go here] <g></g> <g></g> </g>
+   */
   this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
   this.svgBlockCanvas_ = Blockly.createSvgElement('g', {}, this.svgGroup_);
   this.svgBubbleCanvas_ = Blockly.createSvgElement('g', {}, this.svgGroup_);
@@ -124,8 +129,8 @@ Blockly.Workspace.prototype.createDom = function() {
 };
 
 /**
- * Dispose of this workspace.
- * Unlink from all DOM elements to prevent memory leaks.
+ * Dispose of this workspace. Unlink from all DOM elements to prevent memory
+ * leaks.
  */
 Blockly.Workspace.prototype.dispose = function() {
   if (this.svgGroup_) {
@@ -154,6 +159,7 @@ Blockly.Workspace.prototype.addTrashcan = function() {
 
 /**
  * Get the SVG element that forms the drawing surface.
+ * 
  * @return {!Element} SVG element.
  */
 Blockly.Workspace.prototype.getCanvas = function() {
@@ -162,6 +168,7 @@ Blockly.Workspace.prototype.getCanvas = function() {
 
 /**
  * Get the SVG element that forms the bubble surface.
+ * 
  * @return {!SVGGElement} SVG element.
  */
 Blockly.Workspace.prototype.getBubbleCanvas = function() {
@@ -170,7 +177,9 @@ Blockly.Workspace.prototype.getBubbleCanvas = function() {
 
 /**
  * Add a block to the list of top blocks.
- * @param {!Blockly.Block} block Block to remove.
+ * 
+ * @param {!Blockly.Block}
+ *            block Block to remove.
  */
 Blockly.Workspace.prototype.addTopBlock = function(block) {
   this.topBlocks_.push(block);
@@ -182,7 +191,9 @@ Blockly.Workspace.prototype.addTopBlock = function(block) {
 
 /**
  * Remove a block from the list of top blocks.
- * @param {!Blockly.Block} block Block to remove.
+ * 
+ * @param {!Blockly.Block}
+ *            block Block to remove.
  */
 Blockly.Workspace.prototype.removeTopBlock = function(block) {
   var found = false;
@@ -203,9 +214,11 @@ Blockly.Workspace.prototype.removeTopBlock = function(block) {
 };
 
 /**
- * Finds the top-level blocks and returns them.  Blocks are optionally sorted
- * by position; top to bottom (with slight LTR or RTL bias).
- * @param {boolean} ordered Sort the list if true.
+ * Finds the top-level blocks and returns them. Blocks are optionally sorted by
+ * position; top to bottom (with slight LTR or RTL bias).
+ * 
+ * @param {boolean}
+ *            ordered Sort the list if true.
  * @return {!Array.<!Blockly.Block>} The top-level block objects.
  */
 Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
@@ -226,7 +239,8 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
 };
 
 /**
- * Find all blocks in workspace.  No particular order.
+ * Find all blocks in workspace. No particular order.
+ * 
  * @return {!Array.<!Blockly.Block>} Array of blocks.
  */
 Blockly.Workspace.prototype.getAllBlocks = function() {
@@ -261,7 +275,9 @@ Blockly.Workspace.prototype.render = function() {
 
 /**
  * Finds the block with the specified ID in this workspace.
- * @param {string} id ID of block to find.
+ * 
+ * @param {string}
+ *            id ID of block to find.
  * @return {Blockly.Block} The matching block, or null if not found.
  */
 Blockly.Workspace.prototype.getBlockById = function(id) {
@@ -277,7 +293,9 @@ Blockly.Workspace.prototype.getBlockById = function(id) {
 
 /**
  * Turn the visual trace functionality on or off.
- * @param {boolean} armed True if the trace should be on.
+ * 
+ * @param {boolean}
+ *            armed True if the trace should be on.
  */
 Blockly.Workspace.prototype.traceOn = function(armed) {
   this.traceOn_ = armed;
@@ -287,13 +305,17 @@ Blockly.Workspace.prototype.traceOn = function(armed) {
   }
   if (armed) {
     this.traceWrapper_ = Blockly.bindEvent_(this.svgBlockCanvas_,
-        'blocklySelectChange', this, function() {this.traceOn_ = false});
+        'blocklySelectChange', this, function() {
+          this.traceOn_ = false
+        });
   }
 };
 
 /**
  * Highlight a block in the workspace.
- * @param {?string} id ID of block to find.
+ * 
+ * @param {?string}
+ *            id ID of block to find.
  */
 Blockly.Workspace.prototype.highlightBlock = function(id) {
   if (this.traceOn_ && Blockly.Block.dragMode_ != 0) {
@@ -322,15 +344,17 @@ Blockly.Workspace.prototype.highlightBlock = function(id) {
   }
   // Restore the monitor for user activity after the selection event has fired.
   var thisWorkspace = this;
-  setTimeout(function() {thisWorkspace.traceOn(true);}, 1);
+  setTimeout(function() {
+    thisWorkspace.traceOn(true);
+  }, 1);
 };
 
 /**
- * Fire a change event for this workspace.  Changes include new block, dropdown
- * edits, mutations, connections, etc.  Groups of simultaneous changes (e.g.
- * a tree of blocks being deleted) are merged into one event.
- * Applications may hook workspace changes by listening for
- * 'blocklyWorkspaceChange' on Blockly.mainWorkspace.getCanvas().
+ * Fire a change event for this workspace. Changes include new block, dropdown
+ * edits, mutations, connections, etc. Groups of simultaneous changes (e.g. a
+ * tree of blocks being deleted) are merged into one event. Applications may
+ * hook workspace changes by listening for 'blocklyWorkspaceChange' on
+ * Blockly.mainWorkspace.getCanvas().
  */
 Blockly.Workspace.prototype.fireChangeEvent = function() {
   if (this.fireChangeEventPid_) {
@@ -339,18 +363,19 @@ Blockly.Workspace.prototype.fireChangeEvent = function() {
   var canvas = this.svgBlockCanvas_;
   if (canvas) {
     this.fireChangeEventPid_ = window.setTimeout(function() {
-        Blockly.fireUiEvent(canvas, 'blocklyWorkspaceChange');
-      }, 0);
+      Blockly.fireUiEvent(canvas, 'blocklyWorkspaceChange');
+    }, 0);
   }
 };
 
 /**
  * Paste the provided block onto the workspace.
- * @param {!Element} xmlBlock XML block element.
+ * 
+ * @param {!Element}
+ *            xmlBlock XML block element.
  */
 Blockly.Workspace.prototype.paste = function(xmlBlock) {
-  if (xmlBlock.getElementsByTagName('block').length >=
-      this.remainingCapacity()) {
+  if (xmlBlock.getElementsByTagName('block').length >= this.remainingCapacity()) {
     return;
   }
   var block = Blockly.Xml.domToBlock(this, xmlBlock);
@@ -367,8 +392,8 @@ Blockly.Workspace.prototype.paste = function(xmlBlock) {
       var allBlocks = this.getAllBlocks();
       for (var x = 0, otherBlock; otherBlock = allBlocks[x]; x++) {
         var otherXY = otherBlock.getRelativeToSurfaceXY();
-        if (Math.abs(blockX - otherXY.x) <= 1 &&
-            Math.abs(blockY - otherXY.y) <= 1) {
+        if (Math.abs(blockX - otherXY.x) <= 1
+            && Math.abs(blockY - otherXY.y) <= 1) {
           if (Blockly.RTL) {
             blockX -= Blockly.SNAP_RADIUS;
           } else {
@@ -385,8 +410,9 @@ Blockly.Workspace.prototype.paste = function(xmlBlock) {
 };
 
 /**
- * The number of blocks that may be added to the workspace before reaching
- *     the maxBlocks.
+ * The number of blocks that may be added to the workspace before reaching the
+ * maxBlocks.
+ * 
  * @return {number} Number of blocks left.
  */
 Blockly.Workspace.prototype.remainingCapacity = function() {
