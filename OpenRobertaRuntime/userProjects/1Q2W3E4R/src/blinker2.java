@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.codegen.lejos.Hal;
 
 public class blinker2 {
     private BrickConfiguration brickConfiguration = new BrickConfiguration.Builder()
+    .addActor(ActorPort.A, HardwareComponent.EV3LargeRegulatedMotor)
     .build();
 
     public static void main(String[] args) {

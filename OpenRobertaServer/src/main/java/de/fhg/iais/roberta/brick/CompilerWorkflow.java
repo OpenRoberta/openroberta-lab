@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
+import de.fhg.iais.roberta.ast.syntax.HardwareComponent;
+import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
@@ -57,7 +59,7 @@ public class CompilerWorkflow {
             return "program has no blocks";
         }
         blocklyXml = blocklyXml.replaceAll("http://www.w3.org/1999/xhtml", "http://de.fhg.iais.roberta.blockly");
-        BrickConfiguration brickConfiguration = new BrickConfiguration.Builder().build();
+        BrickConfiguration brickConfiguration = new BrickConfiguration.Builder().addActor(ActorPort.A, HardwareComponent.EV3LargeRegulatedMotor).build();
         JaxbTransformer<Void> transformer;
         try {
             transformer = generateTransformer(blocklyXml);
