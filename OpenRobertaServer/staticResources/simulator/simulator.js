@@ -1,56 +1,10 @@
 
-var DUMMY;
 var activityString = "Aktivität:";
-var speed = 5
-
-
-// -------------------------------------
-// Dummy Controll TEST Input
-//-------------------------------------
-
-$(document).keydown(function(e){
-	if (e.keyCode == 37) { 
-		moveLeft();
-		DUMMY = "#dummyLeft";
-		
-		moveRoberta("left");
-		
-		return false;
-	}
-
-	if (e.keyCode == 38) { 
-		moveUp();
-		DUMMY = "#dummyUp";
-		
-		moveRoberta("up");
-		
-		return false;
-	}
-
-	if (e.keyCode == 39) { 
-		moveRight();
-		DUMMY = "#dummyRight";
-		
-		moveRoberta("right");
-		
-		return false;
-	}
-
-	if (e.keyCode == 40) { 
-		DUMMY = "#dummyDown";
-		moveDown();
-		
-		moveRoberta("down");
-		
-		return false;
-	}
-
-});
-
-
-$(document).on("keyup", function() {
-	$(DUMMY).stop(true);
-});
+var speed = 5;
+var ctx;
+var image;
+var canvas;
+var angleInDegrees = 0;
 
 //--------------------------------------------
 // Function to show / hide the simulator view.
@@ -60,18 +14,113 @@ function viewSimulator(status){
 
 	if(status == true){
 		$( "#simulatorDiv" ).css( "display", "block" );   
-		displayActivity("keine Aktivität");
-		$( "#dummyUp" ).css( "display", "block" );
-		
-		//init();
+		displayActivity("keine Aktivität");		
+		drawRoberta();
 	}
 	
 	else{
 		$( "#simulatorDiv" ).css( "display", "none" );
-		//$( "#simulatorRender" ).empty();
 		moveStop();
 	}
 }
+
+
+//--------------------------------------------------
+// Function to draw and rotate the canvas and image
+//--------------------------------------------------
+
+function drawRoberta(){
+	
+	canvas = document.getElementById("robertaCanvas");
+	ctx = canvas.getContext("2d");
+	
+	image = document.createElement("img");
+	
+	image.onload = function() {
+	    ctx.drawImage(image,canvas.width/2-image.width/2,canvas.height/2-image.width/2);
+   };
+	
+   image.src = '../css/img/simulator/dummy_up.png';
+}
+
+function rotateClockwise(degree){
+	angleInDegrees += degree;
+	drawRotated(angleInDegrees);
+}
+
+
+function rotateCounterClockwise(degree){
+	angleInDegrees -= degree;
+	drawRotated(angleInDegrees);
+}
+
+function drawRotated(degrees){
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.save();
+    ctx.translate(canvas.width/2,canvas.height/2);
+    ctx.rotate(degrees*Math.PI/180); 
+    ctx.drawImage(image,-image.width/2,-image.width/2);
+  	ctx.restore();
+}
+
+// -------------------------------------
+// Dummy Controll TEST Input
+//-------------------------------------
+
+$(document).keydown(function(e){
+	if (e.keyCode == 37) { 
+		moveLeft();
+	
+		moveRoberta("left");
+		
+		return false;
+	}
+
+	if (e.keyCode == 38) { 
+		moveUp();
+		
+		moveRoberta("up");
+		
+		return false;
+	}
+
+	if (e.keyCode == 39) { 
+		moveRight();
+		
+		moveRoberta("right");
+		
+		return false;
+	}
+
+	if (e.keyCode == 40) { 
+		moveDown();
+		
+		moveRoberta("down");
+		
+		return false;
+	}
+	
+	if (e.keyCode == 87) { 
+		
+		drawRotated(90);
+		
+		return false;
+	}
+	
+	if (e.keyCode == 68) { 
+		
+		rotateClockwise(90);
+		
+		return false;
+	}
+	
+	if (e.keyCode == 65) { 
+		
+		rotateCounterClockwise(90);
+		
+		return false;
+	}
+});
 
 //--------------------------------------------
 // Function to execute commands
@@ -81,21 +130,17 @@ function viewSimulator(status){
 function exeCmd(type){
 	if(type == "LEFT"){
 		moveLeft();
-		DUMMY = "#dummyLeft";
 	}
 	
 	else if(type == "RIGHT"){
 		moveRight();
-		DUMMY = "#dummyRight";
 	}
 	
 	else if(type == "FOREWARD"){
 		moveUp();
-		DUMMY = "#dummyUp";
 	}
 	
 	else if(type == "BACKWARD"){
-		DUMMY = "#dummyDown";
 		moveDown();
 	}
 }
@@ -131,8 +176,6 @@ var BackgroundScroll = function(params) {
 			current = 0;
 		}
 		
-		displayDummy("none", "none" ,"none", "block");
-
 		$('#simulatorDiv').css('backgroundPosition', current + 'px 0');    		
 	};
 
@@ -148,8 +191,6 @@ var BackgroundScroll = function(params) {
 		if (current == restartPosition){
 			current = 0;
 		}
-
-		displayDummy("none", "none" ,"block", "none");
 
 		$('#simulatorDiv').css('backgroundPosition', current + 'px 0');
 
@@ -170,8 +211,6 @@ var BackgroundScroll = function(params) {
 			current = 0;
 		}
 		
-		displayDummy("block", "none" ,"none", "none");
-
 		$('#simulatorDiv').css("backgroundPosition", 0 + 'px' + ' ' + current + 'px'); 
 
 	};
@@ -190,9 +229,7 @@ var BackgroundScroll = function(params) {
 		if (current == restartPosition){
 			current = 0;
 		}
-		
-		displayDummy("none", "block" ,"none", "none");
-		
+				
 		$('#simulatorDiv').css("backgroundPosition", 0 + 'px' + ' ' + current + 'px'); 
 
 	};
@@ -231,7 +268,7 @@ var BackgroundScroll = function(params) {
 };
 
 //----------------------------------------------------------------
-//Functions for executing the activities.
+// Functions for executing the activities.
 //----------------------------------------------------------------
 
 var scroll = new BackgroundScroll(); 
@@ -265,20 +302,8 @@ function moveStop(){
 	displayActivity("Stop");
 }
 
-//----------------------------------------------------------
-//Function for displaying the four different robot graphics.
-//----------------------------------------------------------
-
-function displayDummy(up, down, left, right){
-	$( "#dummyRight" ).css( "display", right );
-	$( "#dummyLeft" ).css( "display", left );
-	$( "#dummyUp" ).css( "display", up );
-	$( "#dummyDown" ).css( "display", down );
-}
-
 //----------------------------------------------------------------
-//Functions for displaying information about the current activity.
-
+// Functions for displaying information about the current activity.
 //----------------------------------------------------------------
 
 function displayActivity(intel){

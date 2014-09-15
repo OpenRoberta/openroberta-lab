@@ -26,13 +26,14 @@
 /** Objects **/
 
 .dummy{
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 230px;
-	width: 200px;
-	height: 200px;
-	z-index: 10;
+   	padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 300px;
+    display: block;
 }
+
 
 #dummyDown{
 	background-image:url('./img/simulator/dummy_down.png');

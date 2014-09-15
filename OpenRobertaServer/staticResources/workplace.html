@@ -24,9 +24,7 @@
     <!-- TESTING  <link rel="stylesheet" href="css/jquery-ui_modified.css"></link> -->
 
     <link rel="stylesheet" type="text/css" href="/css/simulator.css"></link>
-    <script type="text/javascript" src="simulator/three.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="simulator/simulator.js" charset="utf-8"></script>
-    <script type="text/javascript" src="simulator/main.js" charset="utf-8"></script>
 
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <title>Open Roberta Lab</title>
@@ -127,15 +125,11 @@
     </ul>
     
     <div id="simulatorDiv"> 
-    	   <button id="closeBtn" class="button" onclick="viewSimulator(false);">Beenden</button>	
-    	   <button id="closeBtn" class="button" onclick="moveStop();">Stop</button>
-    	   <div id="positionData"></div>
-    	<div id="simulatorRender"></div>
-		
-		<div id="dummyDown" class="dummy"></div>
-		<div id="dummyUp" class="dummy"></div>	
-		<div id="dummyLeft" class="dummy"></div>	
-		<div id="dummyRight" class="dummy"></div>		
+    	<button id="closeBtn" class="button" onclick="viewSimulator(false);">Beenden</button>	
+    	<button id="closeBtn" class="button" onclick="moveStop();">Stop</button>
+    	<div id="positionData"></div>
+    	<!--  <div id="simulatorRender"></div> -->
+    	<canvas id="robertaCanvas" width="200" height="200" class="dummy"></canvas>
     </div>
     
     <div id="blockly">
