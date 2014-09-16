@@ -1,50 +1,91 @@
-<project xmlns="http://www.w3.org/1999/xhtml">
-  <instance x="91" y="24">
-    <block type="controls_repeat_ext" id="14" inline="true">
-      <statement name="DO">
-        <block type="robControls_loopUntil" id="16" inline="false">
-          <field name="PROPERTY">ULTRASONIC</field>
-          <field name="OP">EQ</field>
-          <value name="VALUE">
-            <block type="math_number" id="17">
-              <field name="NUM">30</field>
-            </block>
-          </value>
-           <statement name="DO">
-           <!-- <block type="robActions_motorDiff_on_for" id="18" inline="false">
-              <field name="DIRECTION">FOREWARD</field>
-              <value name="POWER">
-                <block type="math_number" id="19">
-                  <field name="NUM">30</field>
-                </block>
-              </value>
-              <value name="DISTANCE">
-                <block type="math_number" id="20">
-                  <field name="NUM">10</field>
-                </block>
-              </value>
-            </block> -->
-          </statement> 
+<block_set xmlns="http://www.w3.org/1999/xhtml">
+  <instance x="49" y="5">
+    <block type="robControls_start" id="43"></block>
+    <block type="robActions_motor_on_for" id="110" inline="false">
+      <field name="MOTORPORT">B</field>
+      <field name="MOTORROTATION">ROTATIONS</field>
+      <value name="POWER">
+        <block type="math_number" id="111">
+          <field name="NUM">30</field>
         </block>
-     <block type="robActions_motorDiff_stop" id="21"></block>
-      </statement>
+      </value>
+      <value name="VALUE">
+        <block type="math_number" id="112">
+          <field name="NUM">1</field>
+        </block>
+      </value>
     </block>
-    <block type="controls_if" id="22" inline="false">
-      <mutation elseif="1"></mutation>
+    <block type="robActions_motorDiff_on_for" id="133" inline="false">
+      <field name="DIRECTION">FOREWARD</field>
+      <value name="POWER">
+        <block type="math_number" id="134">
+          <field name="NUM">50</field>
+        </block>
+      </value>
+      <value name="DISTANCE">
+        <block type="math_number" id="135">
+          <field name="NUM">20</field>
+        </block>
+      </value>
+    </block>
+    <block type="robActions_motor_stop" id="145">
+      <field name="MOTORPORT">A</field>
+      <field name="MODE">FLOAT</field>
+    </block>
+    <block type="robActions_play_tone" id="153" inline="false">
+      <value name="FREQUENCE">
+        <block type="math_number" id="154">
+          <field name="NUM">300</field>
+        </block>
+      </value>
+    </block>
+    <block type="robControls_ifElse" id="160" inline="false">
+      <mutation else="1"></mutation>
       <repetitions>
         <value name="IF0">
-          <block type="robSensors_colour" id="23">
-            <field name="MEASURE">COLOUR</field>
+          <block type="logic_compare" id="207" inline="true">
+            <field name="OP">EQ</field>
+            <value name="A">
+              <block type="math_number" id="208">
+                <field name="NUM">300</field>
+              </block>
+            </value>
+            <value name="B">
+              <block type="math_number" id="155">
+                <field name="NUM">100</field>
+              </block>
+            </value>
           </block>
         </value>
         <statement name="DO0">
-          <block type="robActions_motorDiff_stop" id="24"></block>
+          <block type="robActions_brickLight_off" id="255"></block>
         </statement>
-        <statement name="DO1">
-          <block type="robActions_motorDiff_stop" id="25"></block>
-          <block type="robActions_motorDiff_stop" id="26"></block>
+        <statement name="ELSE">
+          <block type="robActions_brickLight_reset" id="259"></block>
         </statement>
       </repetitions>
     </block>
+    <block type="robControls_loopForever" id="175">
+      <statement name="DO">
+        <block type="robControls_wait_for" id="232" inline="false">
+          <value name="WAIT0">
+            <block type="logic_compare" id="233" inline="true">
+              <field name="OP">EQ</field>
+              <value name="A">
+                <block type="robSensors_getSample" id="234">
+                  <field name="SENSORTYPE">TOUCH</field>
+                  <field name="SENSORPORT">1</field>
+                </block>
+              </value>
+              <value name="B">
+                <block type="logic_boolean" id="235">
+                  <field name="BOOL">TRUE</field>
+                </block>
+              </value>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
   </instance>
-</project>
+</block_set>
