@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
-import de.fhg.iais.roberta.ast.syntax.NepoBlocklyId;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.Phrase.Kind;
 import de.fhg.iais.roberta.ast.syntax.action.ClearDisplayAction;
@@ -73,7 +72,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     private final AddErrorProvider addErrorProvider = new AddErrorProvider();
 
-    private final List<NepoProblem> errors = new ArrayList<>();
+    private final List<NepoInfo> errors = new ArrayList<>();
     private BlocklyType resultType;
 
     /**
@@ -88,11 +87,11 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
     }
 
     /**
-     * factory method to generate Java code from an AST.<br>
+     * factory method to typecheck an AST.<br>
      * 
      * @param programName name of the program
      * @param brickConfiguration hardware configuration of the brick
-     * @param phrases to generate the code from
+     * @param phrase to typecheck
      */
     public static TypecheckVisitor makeVisitorAndTypecheck(String programName, BrickConfiguration brickConfiguration, Phrase<BlocklyType> phrase) //
     {
@@ -104,10 +103,20 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
         return astVisitor;
     }
 
-    public List<NepoProblem> getErrors() {
+    /**
+     * get the errors and problems that the typecheckers assembled during its visit
+     * 
+     * @return the errors and problems list
+     */
+    public List<NepoInfo> getErrors() {
         return this.errors;
     }
 
+    /**
+     * return the type that was inferenced by the typechecker for the given phrase
+     * 
+     * @return the resulting type.May be <code>null</code> if type errors occurred
+     */
     public BlocklyType getResultType() {
         return this.resultType;
     }
@@ -165,14 +174,14 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
     public BlocklyType visitBinary(Binary<BlocklyType> binary) {
         BlocklyType left = binary.getLeft().visit(this);
         BlocklyType right = binary.getRight().visit(this);
-        TypeSignature signature = TypeTransformations.getBinarySignature(binary.getOp().getOpSymbol());
+        Sig signature = TypeTransformations.getBinarySignature(binary.getOp().getOpSymbol());
         return signature.typeCheck(binary, Arrays.asList(left, right), this.addErrorProvider);
     }
 
     @Override
     public BlocklyType visitFunc(Func<BlocklyType> func) {
         List<BlocklyType> paramTypes = typecheckList(func.getParam());
-        TypeSignature signature = TypeTransformations.getFunctionSignature(func.getFunctName().name());
+        Sig signature = TypeTransformations.getFunctionSignature(func.getFunctName().name());
         BlocklyType resultType = signature.typeCheck(func, paramTypes, this.addErrorProvider);
         return resultType;
     }
@@ -385,7 +394,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
             if ( this.errors.size() >= this.ERROR_LIMIT_FOR_TYPECHECK ) {
                 throw new RuntimeException("aborting typecheck. More than " + this.ERROR_LIMIT_FOR_TYPECHECK + " found.");
             } else {
-                NepoProblem error = NepoProblem.of(NepoBlocklyId.of(-1), 1, phrase.getKind(), message);
+                NepoInfo error = NepoInfo.error(message);
                 this.errors.add(error);
             }
         }

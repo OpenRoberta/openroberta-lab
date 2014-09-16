@@ -6,19 +6,19 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.typecheck.TypecheckVisitor.AddErrorProvider;
 import de.fhg.iais.roberta.dbc.Assert;
 
-public class TypeSignature {
+public class Sig {
     private final BlocklyType returnType;
     private final BlocklyType[] paramTypes;
 
-    private TypeSignature(BlocklyType returnType, BlocklyType[] paramTypes) {
+    private Sig(BlocklyType returnType, BlocklyType[] paramTypes) {
         Assert.notNull(returnType);
         Assert.notNull(returnType);
         this.returnType = returnType;
         this.paramTypes = paramTypes;
     }
 
-    public static TypeSignature of(BlocklyType returnType, BlocklyType... paramTypes) {
-        return new TypeSignature(returnType, paramTypes);
+    public static Sig of(BlocklyType returnType, BlocklyType... paramTypes) {
+        return new Sig(returnType, paramTypes);
     }
 
     public BlocklyType typeCheck(Phrase<BlocklyType> phraseWhoseSignaturIsChecked, List<BlocklyType> paramTypes, AddErrorProvider addErrorProvider) {

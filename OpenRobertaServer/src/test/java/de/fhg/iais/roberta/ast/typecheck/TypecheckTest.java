@@ -6,9 +6,6 @@ import org.junit.Test;
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
-import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
-import de.fhg.iais.roberta.ast.typecheck.NepoProblem;
-import de.fhg.iais.roberta.ast.typecheck.TypecheckVisitor;
 
 public class TypecheckTest {
     private static final BrickConfiguration BRICK_CONFIGURATION = new BrickConfiguration.Builder().build();
@@ -46,7 +43,7 @@ public class TypecheckTest {
         System.out.println(ast);
         TypecheckVisitor typechecker = TypecheckVisitor.makeVisitorAndTypecheck("test", BRICK_CONFIGURATION, ast);
         Assert.assertTrue(typechecker.getErrors().size() > 0);
-        for ( NepoProblem error : typechecker.getErrors() ) {
+        for ( NepoInfo error : typechecker.getErrors() ) {
             System.out.println(error);
         }
     }
@@ -57,7 +54,7 @@ public class TypecheckTest {
         System.out.println(ast);
         TypecheckVisitor typechecker = TypecheckVisitor.makeVisitorAndTypecheck("test", BRICK_CONFIGURATION, ast);
         Assert.assertTrue(typechecker.getErrors().size() > 0);
-        for ( NepoProblem error : typechecker.getErrors() ) {
+        for ( NepoInfo error : typechecker.getErrors() ) {
             System.out.println(error);
         }
     }
