@@ -57,6 +57,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
+import de.fhg.iais.roberta.ast.typecheck.NepoInfo.Severity;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
 
@@ -69,10 +70,10 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     private final BrickConfiguration brickConfiguration;
     private final String programName;
+    private final Phrase<BlocklyType> phrase;
 
-    private final AddErrorProvider addErrorProvider = new AddErrorProvider();
-
-    private final List<NepoInfo> errors = new ArrayList<>();
+    private List<NepoInfo> infos = null;
+    private int errorCount = 0;
     private BlocklyType resultType;
 
     /**
@@ -80,10 +81,12 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
      * 
      * @param programName name of the program
      * @param brickConfiguration hardware configuration of the brick
+     * @param phrase
      */
-    TypecheckVisitor(String programName, BrickConfiguration brickConfiguration) {
+    TypecheckVisitor(String programName, BrickConfiguration brickConfiguration, Phrase<BlocklyType> phrase) {
         this.programName = programName;
         this.brickConfiguration = brickConfiguration;
+        this.phrase = phrase;
     }
 
     /**
@@ -98,19 +101,38 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
     {
         Assert.notNull(programName);
         Assert.notNull(brickConfiguration);
+        Assert.notNull(phrase);
 
-        TypecheckVisitor astVisitor = new TypecheckVisitor(programName, brickConfiguration);
+        TypecheckVisitor astVisitor = new TypecheckVisitor(programName, brickConfiguration, phrase);
         astVisitor.resultType = phrase.visit(astVisitor);
         return astVisitor;
     }
 
     /**
-     * get the errors and problems that the typechecker assembled during its visit
+     * get the number of <b>errors</b>
      * 
-     * @return the errors and problems list
+     * @return the number of <b>errors</b> detected during this type check visit
      */
-    public List<NepoInfo> getErrors() {
-        return this.errors;
+    public int getErrorCount() {
+        if ( this.infos == null ) {
+            this.infos = InfoCollector.collectInfos(this.phrase);
+            for ( NepoInfo info : this.infos ) {
+                if ( info.getSeverity() == Severity.ERROR ) {
+                    this.errorCount++;
+                }
+            }
+        }
+        return this.errorCount;
+    }
+
+    /**
+     * get the list of all infos (errors, warnings) generated during this typecheck visit
+     * 
+     * @return the list of all infos
+     */
+    public List<NepoInfo> getInfos() {
+        getErrorCount(); // for the side effect
+        return this.infos;
     }
 
     /**
@@ -176,14 +198,14 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
         BlocklyType left = binary.getLeft().visit(this);
         BlocklyType right = binary.getRight().visit(this);
         Sig signature = TypeTransformations.getBinarySignature(binary.getOp().getOpSymbol());
-        return signature.typeCheck(binary, Arrays.asList(left, right), this.addErrorProvider);
+        return signature.typeCheck(binary, Arrays.asList(left, right));
     }
 
     @Override
     public BlocklyType visitFunc(Func<BlocklyType> func) {
         List<BlocklyType> paramTypes = typecheckList(func.getParam());
         Sig signature = TypeTransformations.getFunctionSignature(func.getFunctName().name());
-        BlocklyType resultType = signature.typeCheck(func, paramTypes, this.addErrorProvider);
+        BlocklyType resultType = signature.typeCheck(func, paramTypes);
         return resultType;
     }
 
@@ -392,11 +414,12 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     private void checkFor(Phrase<BlocklyType> phrase, boolean condition, String message) {
         if ( !condition ) {
-            if ( this.errors.size() >= this.ERROR_LIMIT_FOR_TYPECHECK ) {
+            if ( this.errorCount >= this.ERROR_LIMIT_FOR_TYPECHECK ) {
                 throw new RuntimeException("aborting typecheck. More than " + this.ERROR_LIMIT_FOR_TYPECHECK + " found.");
             } else {
+                this.errorCount++;
                 NepoInfo error = NepoInfo.error(message);
-                this.errors.add(error);
+                phrase.addInfo(error);
             }
         }
     }
@@ -404,12 +427,6 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
     private void checkLookupNotNull(Phrase<BlocklyType> phrase, String name, Object supposedToBeNotNull, String message) {
         if ( supposedToBeNotNull == null ) {
             checkFor(phrase, false, message + ": " + name);
-        }
-    }
-
-    public class AddErrorProvider {
-        public void addError(Phrase<BlocklyType> phrase, String message) {
-            checkFor(phrase, false, message);
         }
     }
 }

@@ -15,7 +15,7 @@ public class TypecheckTest {
         Phrase<BlocklyType> ast = Helper.generateAST("/ast/expressions/expr_typecorrect0.xml");
         System.out.println(ast);
         TypecheckVisitor typechecker = TypecheckVisitor.makeVisitorAndTypecheck("test", BRICK_CONFIGURATION, ast);
-        Assert.assertEquals(0, typechecker.getErrors().size());
+        Assert.assertEquals(0, typechecker.getErrorCount());
         System.out.println(typechecker.getResultType());
     }
 
@@ -24,7 +24,7 @@ public class TypecheckTest {
         Phrase<BlocklyType> ast = Helper.generateAST("/ast/expressions/expr_typecorrect1.xml");
         System.out.println(ast);
         TypecheckVisitor typechecker = TypecheckVisitor.makeVisitorAndTypecheck("test", BRICK_CONFIGURATION, ast);
-        Assert.assertEquals(0, typechecker.getErrors().size());
+        Assert.assertEquals(0, typechecker.getErrorCount());
         System.out.println(typechecker.getResultType());
     }
 
@@ -33,7 +33,7 @@ public class TypecheckTest {
         Phrase<BlocklyType> ast = Helper.generateAST("/ast/expressions/expr_typecorrect2.xml");
         System.out.println(ast);
         TypecheckVisitor typechecker = TypecheckVisitor.makeVisitorAndTypecheck("test", BRICK_CONFIGURATION, ast);
-        Assert.assertEquals(0, typechecker.getErrors().size());
+        Assert.assertEquals(0, typechecker.getErrorCount());
         System.out.println(typechecker.getResultType());
     }
 
@@ -42,8 +42,8 @@ public class TypecheckTest {
         Phrase<BlocklyType> ast = Helper.generateAST("/ast/expressions/expr_typeerror0.xml");
         System.out.println(ast);
         TypecheckVisitor typechecker = TypecheckVisitor.makeVisitorAndTypecheck("test", BRICK_CONFIGURATION, ast);
-        Assert.assertTrue(typechecker.getErrors().size() > 0);
-        for ( NepoInfo error : typechecker.getErrors() ) {
+        Assert.assertTrue(typechecker.getErrorCount() > 0);
+        for ( NepoInfo error : typechecker.getInfos() ) {
             System.out.println(error);
         }
     }
@@ -53,8 +53,8 @@ public class TypecheckTest {
         Phrase<BlocklyType> ast = Helper.generateAST("/ast/expressions/expr_typeerror1.xml");
         System.out.println(ast);
         TypecheckVisitor typechecker = TypecheckVisitor.makeVisitorAndTypecheck("test", BRICK_CONFIGURATION, ast);
-        Assert.assertTrue(typechecker.getErrors().size() > 0);
-        for ( NepoInfo error : typechecker.getErrors() ) {
+        Assert.assertTrue(typechecker.getErrorCount() > 0);
+        for ( NepoInfo error : typechecker.getInfos() ) {
             System.out.println(error);
         }
     }

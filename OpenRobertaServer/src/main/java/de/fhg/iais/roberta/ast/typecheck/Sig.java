@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.ast.typecheck;
 import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
-import de.fhg.iais.roberta.ast.typecheck.TypecheckVisitor.AddErrorProvider;
 import de.fhg.iais.roberta.dbc.Assert;
 
 public class Sig {
@@ -21,9 +20,9 @@ public class Sig {
         return new Sig(returnType, paramTypes);
     }
 
-    public BlocklyType typeCheck(Phrase<BlocklyType> phraseWhoseSignaturIsChecked, List<BlocklyType> paramTypes, AddErrorProvider addErrorProvider) {
+    public BlocklyType typeCheck(Phrase<BlocklyType> phraseWhoseSignaturIsChecked, List<BlocklyType> paramTypes) {
         if ( paramTypes.size() != this.paramTypes.length ) {
-            addErrorProvider.addError(phraseWhoseSignaturIsChecked, "number of parameters don't match");
+            phraseWhoseSignaturIsChecked.addInfo(NepoInfo.error("number of parameters don't match"));
         }
         int i = 0;
         BlocklyType capturedType = null;
@@ -35,12 +34,12 @@ public class Sig {
                         capturedType = paramType;
                     } else if ( paramType != capturedType ) {
                         String message = "for parameter " + i + " the expected captured type is: " + capturedType + ", but found was type : " + paramType;
-                        addErrorProvider.addError(phraseWhoseSignaturIsChecked, message);
+                        phraseWhoseSignaturIsChecked.addInfo(NepoInfo.error(message));
                         return null;
                     }
                 } else {
                     String message = "for parameter " + i + " expected: " + this.paramTypes[i] + ", but found: " + paramType;
-                    addErrorProvider.addError(phraseWhoseSignaturIsChecked, message);
+                    phraseWhoseSignaturIsChecked.addInfo(NepoInfo.error(message));
                     return null;
                 }
             }
