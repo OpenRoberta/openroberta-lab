@@ -378,13 +378,15 @@ Blockly.Css.CONTENT = [
   '  background-color: #e4e4e4;',
   '}',
 
+  // throw away the arrow icons in the toolbox:
   '.blocklyTreeIcon {',
   '  height: 16px;',
-  '  width: 16px;',
+  //'  width: 16px;',
+  '  width: 13px;',
   '  vertical-align: middle;',
-  '  background-image: url(<<<PATH>>>/media/tree.png);',
-  '  margin-top: -30px;',
-  '  margin-left: 10px;',
+  //'  background-image: url(<<<PATH>>>/media/tree.png);',
+  //'  margin-top: -30px;',
+  //'  margin-left: 10px;',
   '}',
 
   '.blocklyTreeIconClosedLtr {',
@@ -436,12 +438,13 @@ Blockly.Css.CONTENT = [
   '  color: #000;',
   '}',
   
+  // class for the toolblocks label (default is white, selected is black)
   '.catName {',
-  '  color: #f00;',
+  '  fill: #fff;',
   '}',
   
   '.blocklyTreeSelected .catName {',
-  '  color: #00f;',
+  '  fill: #000;',
   '}',
   
   
