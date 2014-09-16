@@ -431,7 +431,7 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyTreeSelected  {',
-  '  background-color: #57e !important;',
+  //'  background-color: #57e !important;',
   '}',
 
   '.blocklyTreeSelected .blocklyTreeLabel {',
