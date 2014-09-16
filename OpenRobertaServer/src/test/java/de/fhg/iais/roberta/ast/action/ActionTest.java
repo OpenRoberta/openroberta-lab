@@ -37,7 +37,7 @@ public class ActionTest {
 
         JaxbTransformer<?> transformer = new JaxbTransformer<>();
         try {
-            transformer.projectToAST(project);
+            transformer.blockSetToAST(project);
             Assert.fail();
         } catch ( Exception e ) {
             Assert.assertEquals("Invalid Block: robActions_brickLight_on1", e.getMessage());

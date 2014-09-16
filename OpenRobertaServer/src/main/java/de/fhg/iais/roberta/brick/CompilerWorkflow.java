@@ -94,7 +94,7 @@ public class CompilerWorkflow {
         BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer<Void> transformer = new JaxbTransformer<>();
-        transformer.projectToAST(project);
+        transformer.blockSetToAST(project);
         return transformer;
     }
 

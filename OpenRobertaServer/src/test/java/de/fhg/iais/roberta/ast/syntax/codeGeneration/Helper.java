@@ -62,7 +62,7 @@ public class Helper {
         BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer<Void> transformer = new JaxbTransformer<>();
-        transformer.projectToAST(project);
+        transformer.blockSetToAST(project);
         return transformer;
     }
 
@@ -92,7 +92,7 @@ public class Helper {
         BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer<V> transformer = new JaxbTransformer<V>();
-        transformer.projectToAST(project);
+        transformer.blockSetToAST(project);
         List<Phrase<V>> tree = transformer.getTree();
         return tree;
     }

@@ -87,7 +87,6 @@ import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
-import de.fhg.iais.roberta.persistence.bo.Project;
 
 /**
  * JAXB to AST transformer. Client should provide tree of jaxb objects.
@@ -98,11 +97,11 @@ public class JaxbTransformer<V> {
     private final ArrayList<Phrase<V>> tree = new ArrayList<Phrase<V>>();
 
     /**
-     * Converts object of type {@link Project} to AST tree.
+     * Converts object of type {@link BlockSet} to AST tree.
      * 
      * @param program
      */
-    public void projectToAST(BlockSet program) {
+    public void blockSetToAST(BlockSet program) {
         List<Instance> instances = program.getInstance();
         for ( Instance instance : instances ) {
             instanceToAST(instance);
@@ -681,7 +680,7 @@ public class JaxbTransformer<V> {
                 values = extractValues(block, (short) (mutation + 1));
                 for ( int i = 0; i <= mutation; i++ ) {
                     expr = extractValue(values, new ExprParam("WAIT" + i, Boolean.class));
-                    list.addStmt((Stmt<V>) extractRepeatStatement(block, expr, "WHILE", "DO" + i, mutation + 1));
+                    list.addStmt((Stmt<V>) extractRepeatStatement(block, expr, "WAIT", "DO" + i, mutation + 1));
                 }
                 return list;
 

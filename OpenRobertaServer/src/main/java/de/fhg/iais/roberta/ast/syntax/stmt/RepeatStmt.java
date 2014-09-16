@@ -80,7 +80,7 @@ public class RepeatStmt<V> extends Stmt<V> {
      * @author kcvejoski
      */
     public static enum Mode {
-        WHILE(), UNTIL(), TIMES(), FOR(), FOR_EACH();
+        WHILE(), UNTIL(), TIMES(), FOR(), FOR_EACH(), WAIT();
 
         private final String[] values;
 
