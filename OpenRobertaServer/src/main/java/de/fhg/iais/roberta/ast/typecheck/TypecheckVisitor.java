@@ -87,11 +87,12 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
     }
 
     /**
-     * factory method to typecheck an AST.<br>
+     * typecheck an AST. This is done ba an visitor, which is an instance of this class<br>
      * 
      * @param programName name of the program
      * @param brickConfiguration hardware configuration of the brick
      * @param phrase to typecheck
+     * @return the typecheck visitor (to get information about errors and the derived type)
      */
     public static TypecheckVisitor makeVisitorAndTypecheck(String programName, BrickConfiguration brickConfiguration, Phrase<BlocklyType> phrase) //
     {
@@ -104,7 +105,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
     }
 
     /**
-     * get the errors and problems that the typecheckers assembled during its visit
+     * get the errors and problems that the typechecker assembled during its visit
      * 
      * @return the errors and problems list
      */
