@@ -57,7 +57,6 @@ goog.require('goog.ui.ColorPicker');
 goog.require('goog.ui.tree.TreeControl');
 goog.require('goog.userAgent');
 
-
 /**
  * Path to Blockly's directory.  Can be relative, absolute, or remote.
  * Used for loading additional resources.
@@ -99,51 +98,51 @@ Blockly.makeColour = function(hue) {
 /**
  * The rgb value for block colours in logic category.
  */
-Blockly.CAT_LOGIC_RGB = [51, 184, 202];
+Blockly.CAT_LOGIC_RGB = [ 51, 184, 202 ];
 /**
  * The rgb value for block colours in colour category.
  */
-Blockly.CAT_COLOUR_RGB = [109, 191, 169];
+Blockly.CAT_COLOUR_RGB = [ 109, 191, 169 ];
 /**
  * The rgb value for block colours in lists category.
  */
-Blockly.CAT_LISTS_RGB = [31, 130, 192];
+Blockly.CAT_LISTS_RGB = [ 31, 130, 192 ];
 /**
  * The rgb value for block colours in loops category.
  */
-Blockly.CAT_LOOPS_RGB = [235, 106, 10];
+Blockly.CAT_LOOPS_RGB = [ 235, 106, 10 ];
 /**
  * The rgb value for block colours in math category.
  */
-Blockly.CAT_MATH_RGB = [0, 90, 148];
+Blockly.CAT_MATH_RGB = [ 0, 90, 148 ];
 /**
  * The rgb value for block colours in procedures category.
  */
-Blockly.CAT_PROCEDURES_RGB = [57, 55, 139];
+Blockly.CAT_PROCEDURES_RGB = [ 57, 55, 139 ];
 /**
  * The rgb value for block colours in actions category.
  */
-Blockly.CAT_ROBACTIONS_RGB = [242, 148, 9];
+Blockly.CAT_ROBACTIONS_RGB = [ 242, 148, 9 ];
 /**
  * The rgb value for block colours in activity category.
  */
-Blockly.CAT_ROBACTIVITY_RGB = [226, 0, 26];
+Blockly.CAT_ROBACTIVITY_RGB = [ 226, 0, 26 ];
 /**
  * The rgb value for block colours in controls category.
  */
-Blockly.CAT_ROBCONTROLS_RGB = [235, 106, 10];
+Blockly.CAT_ROBCONTROLS_RGB = [ 235, 106, 10 ];
 /**
  * The rgb value for block colours in sensors category.
  */
-Blockly.CAT_ROBSENSORS_RGB = [143, 164, 2];
+Blockly.CAT_ROBSENSORS_RGB = [ 143, 164, 2 ];
 /**
  * The rgb value for block colours in text category.
  */
-Blockly.CAT_TEXT_RGB = [177, 200, 0];
+Blockly.CAT_TEXT_RGB = [ 177, 200, 0 ];
 /**
  * The rgb value for block colours in variables category.
  */
-Blockly.CAT_VARIABLES_RGB = [144, 133, 186];
+Blockly.CAT_VARIABLES_RGB = [ 144, 133, 186 ];
 
 /**
  * ENUM for a right-facing value input.  E.g. 'test' or 'return'.
@@ -273,8 +272,10 @@ Blockly.clipboard_ = null;
  * @return {!Object} Contains width and height properties.
  */
 Blockly.svgSize = function() {
-  return {width: Blockly.svg.cachedWidth_,
-          height: Blockly.svg.cachedHeight_};
+  return {
+    width : Blockly.svg.cachedWidth_,
+    height : Blockly.svg.cachedHeight_
+  };
 };
 
 /**
@@ -309,8 +310,8 @@ Blockly.onMouseDown_ = function(e) {
   Blockly.svgResize();
   Blockly.terminateDrag_(); // In case mouse-up event was lost.
   Blockly.hideChaff();
-  var isTargetSvg = e.target && e.target.nodeName &&
-      e.target.nodeName.toLowerCase() == 'svg';
+  var isTargetSvg = e.target && e.target.nodeName
+      && e.target.nodeName.toLowerCase() == 'svg';
   if (!Blockly.readOnly && Blockly.selected && isTargetSvg) {
     // Clicking on the document clears the selection.
     Blockly.selected.unselect();
@@ -318,16 +319,15 @@ Blockly.onMouseDown_ = function(e) {
   if (e.target == Blockly.svg && Blockly.isRightButton(e)) {
     // Right-click.
     Blockly.showContextMenu_(e);
-  } else if ((Blockly.readOnly || isTargetSvg) &&
-             Blockly.mainWorkspace.scrollbar) {
+  } else if ((Blockly.readOnly || isTargetSvg)
+      && Blockly.mainWorkspace.scrollbar) {
     // If the workspace is editable, only allow dragging when gripping empty
     // space.  Otherwise, allow dragging when gripping anywhere.
     Blockly.mainWorkspace.dragMode = true;
     // Record the current mouse position.
     Blockly.mainWorkspace.startDragMouseX = e.clientX;
     Blockly.mainWorkspace.startDragMouseY = e.clientY;
-    Blockly.mainWorkspace.startDragMetrics =
-        Blockly.mainWorkspace.getMetrics();
+    Blockly.mainWorkspace.startDragMetrics = Blockly.mainWorkspace.getMetrics();
     Blockly.mainWorkspace.startScrollX = Blockly.mainWorkspace.scrollX;
     Blockly.mainWorkspace.startScrollY = Blockly.mainWorkspace.scrollY;
   }
@@ -358,14 +358,14 @@ Blockly.onMouseMove_ = function(e) {
     var y = Blockly.mainWorkspace.startScrollY + dy;
     x = Math.min(x, -metrics.contentLeft);
     y = Math.min(y, -metrics.contentTop);
-    x = Math.max(x, metrics.viewWidth - metrics.contentLeft -
-                 metrics.contentWidth);
-    y = Math.max(y, metrics.viewHeight - metrics.contentTop -
-                 metrics.contentHeight);
+    x = Math.max(x, metrics.viewWidth - metrics.contentLeft
+        - metrics.contentWidth);
+    y = Math.max(y, metrics.viewHeight - metrics.contentTop
+        - metrics.contentHeight);
 
     // Move the scrollbars and the page will scroll automatically.
-    Blockly.mainWorkspace.scrollbar.set(-x - metrics.contentLeft,
-                                        -y - metrics.contentTop);
+    Blockly.mainWorkspace.scrollbar.set(-x - metrics.contentLeft, -y
+        - metrics.contentTop);
   }
 };
 
@@ -397,8 +397,8 @@ Blockly.onKeyDown_ = function(e) {
       e.preventDefault();
     }
   } else if (e.altKey || e.ctrlKey || e.metaKey) {
-    if (Blockly.selected && Blockly.selected.isDeletable() &&
-        Blockly.selected.workspace == Blockly.mainWorkspace) {
+    if (Blockly.selected && Blockly.selected.isDeletable()
+        && Blockly.selected.workspace == Blockly.mainWorkspace) {
       Blockly.hideChaff();
       if (e.keyCode == 67) {
         // 'c' for copy.
@@ -433,13 +433,15 @@ Blockly.terminateDrag_ = function() {
  * @private
  */
 Blockly.copy_ = function(block) {
-  var xmlBlock = Blockly.Xml.blockToDom_(block);
-  Blockly.Xml.deleteNext(xmlBlock);
+  var statement_list = [];
+  var xmlBlock = Blockly.Xml.blockToDom_(block, statement_list);
+  statement_list.push(xmlBlock);
+  Blockly.Xml.deleteNext(statement_list);
   // Encode start position in XML.
   var xy = block.getRelativeToSurfaceXY();
   xmlBlock.setAttribute('x', Blockly.RTL ? -xy.x : xy.x);
   xmlBlock.setAttribute('y', xy.y);
-  Blockly.clipboard_ = xmlBlock;
+  Blockly.clipboard_ = statement_list;
 };
 
 /**
@@ -472,7 +474,9 @@ Blockly.showContextMenu_ = function(e) {
     }
 
     // Option to collapse top blocks.
-    var collapseOption = {enabled: hasExpandedBlocks};
+    var collapseOption = {
+      enabled : hasExpandedBlocks
+    };
     collapseOption.text = Blockly.Msg.COLLAPSE_ALL;
     collapseOption.callback = function() {
       var ms = 0;
@@ -488,7 +492,9 @@ Blockly.showContextMenu_ = function(e) {
     options.push(collapseOption);
 
     // Option to expand top blocks.
-    var expandOption = {enabled: hasCollapsedBlocks};
+    var expandOption = {
+      enabled : hasCollapsedBlocks
+    };
     expandOption.text = Blockly.Msg.EXPAND_ALL;
     expandOption.callback = function() {
       var ms = 0;
@@ -526,8 +532,8 @@ Blockly.onContextMenu_ = function(e) {
 Blockly.hideChaff = function(opt_allowToolbox) {
   Blockly.Tooltip.hide();
   Blockly.WidgetDiv.hide();
-  if (!opt_allowToolbox &&
-      Blockly.Toolbox.flyout_ && Blockly.Toolbox.flyout_.autoClose) {
+  if (!opt_allowToolbox && Blockly.Toolbox.flyout_
+      && Blockly.Toolbox.flyout_.autoClose) {
     Blockly.Toolbox.clearSelection();
   }
 };
@@ -538,17 +544,17 @@ Blockly.hideChaff = function(opt_allowToolbox) {
  * Deselect this text, so that it doesn't mess up any subsequent drag.
  */
 Blockly.removeAllRanges = function() {
-  if (window.getSelection) {  // W3
+  if (window.getSelection) { // W3
     var sel = window.getSelection();
     if (sel && sel.removeAllRanges) {
       sel.removeAllRanges();
       window.setTimeout(function() {
-          try {
-            window.getSelection().removeAllRanges();
-          } catch (e) {
-            // MSIE throws 'error 800a025e' here.
-          }
-        }, 0);
+        try {
+          window.getSelection().removeAllRanges();
+        } catch (e) {
+          // MSIE throws 'error 800a025e' here.
+        }
+      }, 0);
     }
   }
 };
@@ -597,7 +603,7 @@ Blockly.loadAudio_ = function(filenames, name) {
  * @private
  */
 Blockly.preloadAudio_ = function() {
-  for (var name in Blockly.SOUNDS_) {
+  for ( var name in Blockly.SOUNDS_) {
     var sound = Blockly.SOUNDS_[name];
     sound.volume = .01;
     sound.play();
@@ -615,8 +621,8 @@ Blockly.playAudio = function(name, opt_volume) {
   var sound = Blockly.SOUNDS_[name];
   if (sound) {
     var mySound;
-    var ie9 = goog.userAgent.DOCUMENT_MODE &&
-              goog.userAgent.DOCUMENT_MODE === 9;
+    var ie9 = goog.userAgent.DOCUMENT_MODE
+        && goog.userAgent.DOCUMENT_MODE === 9;
     if (ie9 || goog.userAgent.IPAD || goog.userAgent.ANDROID) {
       // Creating a new audio node causes lag in IE9, Android and iPad. Android
       // and IE9 refetch the file from the server, iPad uses a singleton audio
@@ -672,7 +678,7 @@ Blockly.setCursorHand_ = function(closed) {
  */
 Blockly.getMainWorkspaceMetrics_ = function() {
   var svgSize = Blockly.svgSize();
-  svgSize.width -= Blockly.Toolbox.width;  // Zero if no Toolbox.
+  svgSize.width -= Blockly.Toolbox.width; // Zero if no Toolbox.
   var viewWidth = svgSize.width - Blockly.Scrollbar.scrollbarThickness;
   var viewHeight = svgSize.height - Blockly.Scrollbar.scrollbarThickness;
   try {
@@ -684,14 +690,14 @@ Blockly.getMainWorkspaceMetrics_ = function() {
   if (Blockly.mainWorkspace.scrollbar) {
     // Add a border around the content that is at least half a screenful wide.
     // Ensure border is wide enough that blocks can scroll over entire screen.
-    var leftEdge = Math.min(blockBox.x - viewWidth / 2,
-                            blockBox.x + blockBox.width - viewWidth);
+    var leftEdge = Math.min(blockBox.x - viewWidth / 2, blockBox.x
+        + blockBox.width - viewWidth);
     var rightEdge = Math.max(blockBox.x + blockBox.width + viewWidth / 2,
-                             blockBox.x + viewWidth);
-    var topEdge = Math.min(blockBox.y - viewHeight / 2,
-                           blockBox.y + blockBox.height - viewHeight);
+        blockBox.x + viewWidth);
+    var topEdge = Math.min(blockBox.y - viewHeight / 2, blockBox.y
+        + blockBox.height - viewHeight);
     var bottomEdge = Math.max(blockBox.y + blockBox.height + viewHeight / 2,
-                              blockBox.y + viewHeight);
+        blockBox.y + viewHeight);
   } else {
     var leftEdge = blockBox.x;
     var rightEdge = leftEdge + blockBox.width;
@@ -700,16 +706,16 @@ Blockly.getMainWorkspaceMetrics_ = function() {
   }
   var absoluteLeft = Blockly.RTL ? 0 : Blockly.Toolbox.width;
   var metrics = {
-    viewHeight: svgSize.height,
-    viewWidth: svgSize.width,
-    contentHeight: bottomEdge - topEdge,
-    contentWidth: rightEdge - leftEdge,
-    viewTop: -Blockly.mainWorkspace.scrollY,
-    viewLeft: -Blockly.mainWorkspace.scrollX,
-    contentTop: topEdge,
-    contentLeft: leftEdge,
-    absoluteTop: 0,
-    absoluteLeft: absoluteLeft
+    viewHeight : svgSize.height,
+    viewWidth : svgSize.width,
+    contentHeight : bottomEdge - topEdge,
+    contentWidth : rightEdge - leftEdge,
+    viewTop : -Blockly.mainWorkspace.scrollY,
+    viewLeft : -Blockly.mainWorkspace.scrollX,
+    contentTop : topEdge,
+    contentLeft : leftEdge,
+    absoluteTop : 0,
+    absoluteLeft : absoluteLeft
   };
   return metrics;
 };
@@ -726,19 +732,19 @@ Blockly.setMainWorkspaceMetrics_ = function(xyRatio) {
   }
   var metrics = Blockly.getMainWorkspaceMetrics_();
   if (goog.isNumber(xyRatio.x)) {
-    Blockly.mainWorkspace.scrollX = -metrics.contentWidth * xyRatio.x -
-        metrics.contentLeft;
+    Blockly.mainWorkspace.scrollX = -metrics.contentWidth * xyRatio.x
+        - metrics.contentLeft;
   }
   if (goog.isNumber(xyRatio.y)) {
-    Blockly.mainWorkspace.scrollY = -metrics.contentHeight * xyRatio.y -
-        metrics.contentTop;
+    Blockly.mainWorkspace.scrollY = -metrics.contentHeight * xyRatio.y
+        - metrics.contentTop;
   }
-  var translation = 'translate(' +
-      (Blockly.mainWorkspace.scrollX + metrics.absoluteLeft) + ',' +
-      (Blockly.mainWorkspace.scrollY + metrics.absoluteTop) + ')';
+  var translation = 'translate('
+      + (Blockly.mainWorkspace.scrollX + metrics.absoluteLeft) + ','
+      + (Blockly.mainWorkspace.scrollY + metrics.absoluteTop) + ')';
   Blockly.mainWorkspace.getCanvas().setAttribute('transform', translation);
-  Blockly.mainWorkspace.getBubbleCanvas().setAttribute('transform',
-                                                       translation);
+  Blockly.mainWorkspace.getBubbleCanvas()
+      .setAttribute('transform', translation);
 };
 
 /**
@@ -765,7 +771,7 @@ Blockly.doCommand = function(cmdThunk) {
  */
 Blockly.addChangeListener = function(func) {
   return Blockly.bindEvent_(Blockly.mainWorkspace.getCanvas(),
-                            'blocklyWorkspaceChange', null, func);
+      'blocklyWorkspaceChange', null, func);
 };
 
 /**

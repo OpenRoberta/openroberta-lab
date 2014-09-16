@@ -375,13 +375,14 @@ Blockly.Workspace.prototype.fireChangeEvent = function() {
  *            xmlBlock XML block element.
  */
 Blockly.Workspace.prototype.paste = function(xmlBlock) {
-  if (xmlBlock.getElementsByTagName('block').length >= this.remainingCapacity()) {
-    return;
-  }
+  // & if (xmlBlock.getElementsByTagName('block').length >=
+  // this.remainingCapacity()) {
+  // return;
+  // }
   var block = Blockly.Xml.domToBlock(this, xmlBlock);
   // Move the duplicate to original position.
-  var blockX = parseInt(xmlBlock.getAttribute('x'), 10);
-  var blockY = parseInt(xmlBlock.getAttribute('y'), 10);
+  var blockX = parseInt(xmlBlock[0].getAttribute('x'), 10);
+  var blockY = parseInt(xmlBlock[0].getAttribute('y'), 10);
   if (!isNaN(blockX) && !isNaN(blockY)) {
     if (Blockly.RTL) {
       blockX = -blockX;

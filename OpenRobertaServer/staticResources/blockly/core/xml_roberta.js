@@ -486,6 +486,14 @@ Blockly.Xml.domToPrettyText = function(dom) {
 };
 
 /**
+ * Remove any 'next' block (statements in a stack).
+ * @param {!Element} xmlBlock XML block element.
+ */
+Blockly.Xml.deleteNext = function(xmlBlock) {
+  xmlBlock.splice(0, 1);
+};
+
+/**
  * Converts a DOM structure into plain text.
  * Currently the text format is fairly ugly: all one line with no whitespace.
  * @param {!Element} dom A tree of XML elements.
@@ -495,7 +503,6 @@ Blockly.Xml.domToText = function(dom) {
   var oSerializer = new XMLSerializer();
   return oSerializer.serializeToString(dom);
 };
-
 
 // Export symbols that would otherwise be renamed by Closure compiler.
 Blockly['Xml'] = Blockly.Xml;
