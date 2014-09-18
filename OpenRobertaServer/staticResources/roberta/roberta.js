@@ -197,6 +197,11 @@ function startProgram() {
   }
 }
 
+function checkProgram() {
+  // TODO
+  alert("Your program will be checked soon ;-)");
+}
+
 function init() {
   $('#tabs').tabs({
     heightStyle : 'content',
