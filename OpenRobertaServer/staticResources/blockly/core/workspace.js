@@ -30,6 +30,9 @@ goog.provide('Blockly.Workspace');
 // goog.require('Blockly.Block');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Trashcan');
+goog.require('Blockly.StartButton');
+goog.require('Blockly.CheckButton');
+goog.require('Blockly.SaveButton');
 goog.require('Blockly.Xml');
 // goog.require('Blockly.Xml.Roberta');
 
@@ -97,6 +100,27 @@ Blockly.Workspace.prototype.scrollY = 0;
 Blockly.Workspace.prototype.trashcan = null;
 
 /**
+ * The workspace's startButton (if any).
+ * 
+ * @type {Blockly.startButton}
+ */
+Blockly.Workspace.prototype.startButton = null;
+
+/**
+ * The workspace's checkButton (if any).
+ * 
+ * @type {Blockly.checkButton}
+ */
+Blockly.Workspace.prototype.checkButton = null;
+
+/**
+ * The workspace's save button.
+ * 
+ * @type {Blockly.saveButton}
+ */
+Blockly.Workspace.prototype.saveButton = null;
+
+/**
  * PID of upcoming firing of a change event. Used to fire only one event after
  * multiple changes.
  * 
@@ -143,6 +167,13 @@ Blockly.Workspace.prototype.dispose = function() {
     this.trashcan.dispose();
     this.trashcan = null;
   }
+  this.startButton.dispose();
+  this.startButton = null;
+  this.checkButton.dispose();
+  this.checkButton = null;
+  this.saveButton.dispose();
+  this.saveButton = null;
+
 };
 
 /**
@@ -155,6 +186,36 @@ Blockly.Workspace.prototype.addTrashcan = function() {
     this.svgGroup_.insertBefore(svgTrashcan, this.svgBlockCanvas_);
     this.trashcan.init();
   }
+};
+
+/**
+ * Add a startButton.
+ */
+Blockly.Workspace.prototype.addStartButton = function() {
+  this.startButton = new Blockly.StartButton(this);
+  var svgStartButton = this.startButton.createDom();
+  this.svgGroup_.insertBefore(svgStartButton, this.svgBlockCanvas_);
+  this.startButton.init();
+};
+
+/**
+ * Add a checkButton.
+ */
+Blockly.Workspace.prototype.addCheckButton = function() {
+  this.checkButton = new Blockly.CheckButton(this);
+  var svgCheckButton = this.checkButton.createDom();
+  this.svgGroup_.insertBefore(svgCheckButton, this.svgBlockCanvas_);
+  this.checkButton.init();
+};
+
+/**
+ * Add a saveButton.
+ */
+Blockly.Workspace.prototype.addSaveButton = function() {
+  this.saveButton = new Blockly.SaveButton(this);
+  var svgSaveButton = this.saveButton.createDom();
+  this.svgGroup_.insertBefore(svgSaveButton, this.svgBlockCanvas_);
+  this.saveButton.init();
 };
 
 /**

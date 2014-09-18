@@ -185,6 +185,18 @@ function initProgramNameTable() {
   $('#programNameTable tbody').on('click', 'tr', selectionFn);
 }
 
+function startProgram() {
+  if (userId == "none") {
+    // alert("No user id, you need to sign in");
+    saveToServer();
+    runOnBrick();
+  } else {
+    // alert("We use the user program table");
+    // saveUPToServer();
+    runOnBrick();
+  }
+}
+
 function init() {
   $('#tabs').tabs({
     heightStyle : 'content',

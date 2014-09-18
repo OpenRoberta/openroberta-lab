@@ -72,7 +72,8 @@ Blockly.setUidCounter = function(val) {
 };
 
 /**
- * Generate a unique id. This will be locally or globally unique, depending on whether we are in single user or realtime collaborative mode.
+ * Generate a unique id. This will be locally or globally unique, depending on
+ * whether we are in single user or realtime collaborative mode.
  * 
  * @return {string}
  */
@@ -103,7 +104,8 @@ Blockly.Block = function() {
  * @param {!Blockly.Workspace}
  *            workspace The block's workspace.
  * @param {?string}
- *            prototypeName Name of the language object containing type-specific functions for this block.
+ *            prototypeName Name of the language object containing type-specific
+ *            functions for this block.
  * @return {!Blockly.Block} The created block
  */
 Blockly.Block.obtain = function(workspace, prototypeName) {
@@ -122,7 +124,8 @@ Blockly.Block.obtain = function(workspace, prototypeName) {
  * @param {!Blockly.Workspace}
  *            workspace The new block's workspace.
  * @param {?string}
- *            prototypeName Name of the language object containing type-specific functions for this block.
+ *            prototypeName Name of the language object containing type-specific
+ *            functions for this block.
  */
 Blockly.Block.prototype.initialize = function(workspace, prototypeName) {
   this.id = Blockly.genUid();
@@ -296,7 +299,8 @@ Blockly.Block.prototype.getSvgRoot = function() {
 };
 
 /**
- * Is the mouse dragging a block? 0 - No drag operation. 1 - Still inside the sticky DRAG_RADIUS. 2 - Freely draggable.
+ * Is the mouse dragging a block? 0 - No drag operation. 1 - Still inside the
+ * sticky DRAG_RADIUS. 2 - Freely draggable.
  * 
  * @private
  */
@@ -384,12 +388,14 @@ Blockly.Block.prototype.unselect = function() {
  * Dispose of this block.
  * 
  * @param {boolean}
- *            healStack If true, then try to heal any gap by connecting the next statement with the previous statement. Otherwise, dispose of all children of
- *            this block.
+ *            healStack If true, then try to heal any gap by connecting the next
+ *            statement with the previous statement. Otherwise, dispose of all
+ *            children of this block.
  * @param {boolean}
  *            animate If true, show a disposal animation and sound.
  * @param {boolean}
- *            dontRemoveFromWorkspace If true, don't remove this block from the workspace's list of top blocks.
+ *            dontRemoveFromWorkspace If true, don't remove this block from the
+ *            workspace's list of top blocks.
  */
 Blockly.Block.prototype.dispose = function(healStack, animate,
     dontRemoveFromWorkspace) {
@@ -409,7 +415,7 @@ Blockly.Block.prototype.dispose = function(healStack, animate,
   }
 
   // Just deleting this block from the DOM would result in a memory leak as
-  // well as corruption of the connection database.  Therefore we must
+  // well as corruption of the connection database. Therefore we must
   // methodically step through the blocks and carefully disassemble them.
 
   if (Blockly.selected == this) {
@@ -458,7 +464,8 @@ Blockly.Block.prototype.dispose = function(healStack, animate,
 };
 
 /**
- * Unplug this block from its superior block. If this block is a statement, optionally reconnect the block underneath with the block on top.
+ * Unplug this block from its superior block. If this block is a statement,
+ * optionally reconnect the block underneath with the block on top.
  * 
  * @param {boolean}
  *            healStack Disconnect child statement and reconnect stack.
@@ -500,7 +507,8 @@ Blockly.Block.prototype.unplug = function(healStack, bump) {
 };
 
 /**
- * Return the coordinates of the top-left corner of this block relative to the drawing surface's origin (0,0).
+ * Return the coordinates of the top-left corner of this block relative to the
+ * drawing surface's origin (0,0).
  * 
  * @return {!Object} Object with .x and .y properties.
  */
@@ -540,7 +548,8 @@ Blockly.Block.prototype.moveBy = function(dx, dy) {
 };
 
 /**
- * Returns a bounding box describing the dimensions of this block and any blocks stacked below it.
+ * Returns a bounding box describing the dimensions of this block and any blocks
+ * stacked below it.
  * 
  * @return {!Object} Object with height and width properties.
  */
@@ -581,7 +590,7 @@ Blockly.Block.prototype.onMouseDown_ = function(e) {
     this.showContextMenu_(e);
   } else if (!this.isMovable()) {
     // Allow unmovable blocks to be selected and context menued, but not
-    // dragged.  Let this event bubble up to document, so the workspace may be
+    // dragged. Let this event bubble up to document, so the workspace may be
     // dragged instead.
     return;
   } else {
@@ -612,12 +621,13 @@ Blockly.Block.prototype.onMouseDown_ = function(e) {
       }
     }
   }
-  // This event has been handled.  No need to bubble up to the document.
+  // This event has been handled. No need to bubble up to the document.
   e.stopPropagation();
 };
 
 /**
- * Handle a mouse-up anywhere in the SVG pane. Is only registered when a block is clicked. We can't use mouseUp on the block since a fast-moving cursor can
+ * Handle a mouse-up anywhere in the SVG pane. Is only registered when a block
+ * is clicked. We can't use mouseUp on the block since a fast-moving cursor can
  * briefly escape the block before it catches up.
  * 
  * @param {!Event}
@@ -651,7 +661,7 @@ Blockly.Block.prototype.onMouseUp_ = function(e) {
       goog.Timer.callOnce(trashcan.close, 100, trashcan);
       Blockly.selected.dispose(false, true);
       // Dropping a block on the trash can will usually cause the workspace to
-      // resize to contain the newly positioned block.  Force a second resize
+      // resize to contain the newly positioned block. Force a second resize
       // now that the block has been deleted.
       Blockly.fireUiEvent(window, 'resize');
     }
@@ -876,7 +886,8 @@ Blockly.Block.prototype.showContextMenu_ = function(e) {
  * Returns all connections originating from this block.
  * 
  * @param {boolean}
- *            all If true, return all connections even hidden ones. Otherwise return those that are visible.
+ *            all If true, return all connections even hidden ones. Otherwise
+ *            return those that are visible.
  * @return {!Array.<!Blockly.Connection>} Array of connections.
  * @private
  */
@@ -904,7 +915,8 @@ Blockly.Block.prototype.getConnections_ = function(all) {
 };
 
 /**
- * Move the connections for this block and all blocks attached under it. Also update any attached bubbles.
+ * Move the connections for this block and all blocks attached under it. Also
+ * update any attached bubbles.
  * 
  * @param {number}
  *            dx Horizontal offset from current location.
@@ -965,8 +977,10 @@ Blockly.Block.prototype.onMouseMove_ = function(e) {
     if (e.type == 'mousemove' && e.clientX <= 1 && e.clientY == 0
         && e.button == 0) {
       /*
-       * HACK: Safari Mobile 6.0 and Chrome for Android 18.0 fire rogue mousemove events on certain touch actions. Ignore events with these signatures.
-       * This may result in a one-pixel blind spot in other browsers, but this shouldn't be noticable.
+       * HACK: Safari Mobile 6.0 and Chrome for Android 18.0 fire rogue
+       * mousemove events on certain touch actions. Ignore events with these
+       * signatures. This may result in a one-pixel blind spot in other
+       * browsers, but this shouldn't be noticable.
        */
       e.stopPropagation();
       return;
@@ -1033,13 +1047,14 @@ Blockly.Block.prototype.onMouseMove_ = function(e) {
         this_.workspace.trashcan.onMouseMove(e);
       }
     }
-    // This event has been handled.  No need to bubble up to the document.
+    // This event has been handled. No need to bubble up to the document.
     e.stopPropagation();
   });
 };
 
 /**
- * Bump unconnected blocks out of alignment. Two blocks which aren't actually connected should not coincidentally line up on screen.
+ * Bump unconnected blocks out of alignment. Two blocks which aren't actually
+ * connected should not coincidentally line up on screen.
  * 
  * @private
  */
@@ -1065,7 +1080,7 @@ Blockly.Block.prototype.bumpNeighbours_ = function() {
     var neighbours = connection.neighbours_(Blockly.SNAP_RADIUS);
     for (var y = 0; y < neighbours.length; y++) {
       var otherConnection = neighbours[y];
-      // If both connections are connected, that's probably fine.  But if
+      // If both connections are connected, that's probably fine. But if
       // either one of them is unconnected, then there could be confusion.
       if (!connection.targetConnection || !otherConnection.targetConnection) {
         // Only bump blocks if they are from different tree structures.
@@ -1093,7 +1108,8 @@ Blockly.Block.prototype.getParent = function() {
 };
 
 /**
- * Return the parent block that surrounds the current block, or null if this block has no surrounding block. A parent block might just be the previous
+ * Return the parent block that surrounds the current block, or null if this
+ * block has no surrounding block. A parent block might just be the previous
  * statement, whereas the surrounding block is an if statement, while loop, etc.
  * 
  * @return {Blockly.Block} The block that surrounds the current block.
@@ -1124,7 +1140,8 @@ Blockly.Block.prototype.getNextBlock = function() {
 };
 
 /**
- * Return the top-most block in this block's tree. This will return itself if this block is at the top level.
+ * Return the top-most block in this block's tree. This will return itself if
+ * this block is at the top level.
  * 
  * @return {!Blockly.Block} The root block.
  */
@@ -1139,8 +1156,9 @@ Blockly.Block.prototype.getRootBlock = function() {
 };
 
 /**
- * Find all the blocks that are directly nested inside this one. Includes value and block inputs, as well as any following statement. Excludes any connection on
- * an output tab or any preceding statement.
+ * Find all the blocks that are directly nested inside this one. Includes value
+ * and block inputs, as well as any following statement. Excludes any connection
+ * on an output tab or any preceding statement.
  * 
  * @return {!Array.<!Blockly.Block>} Array of blocks.
  */
@@ -1164,7 +1182,7 @@ Blockly.Block.prototype.setParent = function(newParent) {
         break;
       }
     }
-    // Move this block up the DOM.  Keep track of x/y translations.
+    // Move this block up the DOM. Keep track of x/y translations.
     var xy = this.getRelativeToSurfaceXY();
     this.workspace.getCanvas().appendChild(this.svg_.getRootElement());
     this.svg_.getRootElement().setAttribute('transform',
@@ -1207,8 +1225,10 @@ Blockly.Block.prototype.setParent = function(newParent) {
 };
 
 /**
- * Find all the blocks that are directly or indirectly nested inside this one. Includes this block in the list. Includes value and block inputs, as well as any
- * following statements. Excludes any connection on an output tab or any preceding statements.
+ * Find all the blocks that are directly or indirectly nested inside this one.
+ * Includes this block in the list. Includes value and block inputs, as well as
+ * any following statements. Excludes any connection on an output tab or any
+ * preceding statements.
  * 
  * @return {!Array.<!Blockly.Block>} Flattened array of blocks.
  */
@@ -1291,7 +1311,8 @@ Blockly.Block.prototype.setEditable = function(editable) {
  * Set the URL of this block's help page.
  * 
  * @param {string|Function}
- *            url URL string for block help, or function that returns a URL. Null for no help.
+ *            url URL string for block help, or function that returns a URL.
+ *            Null for no help.
  */
 Blockly.Block.prototype.setHelpUrl = function(url) {
   this.helpUrl = url;
@@ -1435,7 +1456,8 @@ Blockly.Block.prototype.setTitleValue = function(newValue, name) {
  * Change the tooltip text for a block.
  * 
  * @param {string|!Function}
- *            newTip Text for tooltip or a parent element to link to for its tooltip. May be a function that returns a string.
+ *            newTip Text for tooltip or a parent element to link to for its
+ *            tooltip. May be a function that returns a string.
  */
 Blockly.Block.prototype.setTooltip = function(newTip) {
   this.tooltip = newTip;
@@ -1447,7 +1469,8 @@ Blockly.Block.prototype.setTooltip = function(newTip) {
  * @param {boolean}
  *            newBoolean True if there can be a previous statement.
  * @param {string|Array.
- *            <string>|null} opt_check Statement type or list of statement types. Null or undefined if any type could be connected.
+ *            <string>|null} opt_check Statement type or list of statement
+ *            types. Null or undefined if any type could be connected.
  */
 Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
   if (this.previousConnection) {
@@ -1478,7 +1501,8 @@ Blockly.Block.prototype.setPreviousStatement = function(newBoolean, opt_check) {
  * @param {boolean}
  *            newBoolean True if there can be a next statement.
  * @param {string|Array.
- *            <string>|null} opt_check Statement type or list of statement types. Null or undefined if any type could be connected.
+ *            <string>|null} opt_check Statement type or list of statement
+ *            types. Null or undefined if any type could be connected.
  */
 Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
   if (this.nextConnection) {
@@ -1506,7 +1530,9 @@ Blockly.Block.prototype.setNextStatement = function(newBoolean, opt_check) {
  * @param {boolean}
  *            newBoolean True if there is an output.
  * @param {string|Array.
- *            <string>|null} opt_check Returned type or list of returned types. Null or undefined if any type could be returned (e.g. variable get).
+ *            <string>|null} opt_check Returned type or list of returned types.
+ *            Null or undefined if any type could be returned (e.g. variable
+ *            get).
  */
 Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
   if (this.outputConnection) {
@@ -1534,8 +1560,9 @@ Blockly.Block.prototype.setOutput = function(newBoolean, opt_check) {
  * Change the output type on a block.
  * 
  * @param {string|Array.
- *            <string>|null} check Returned type or list of returned types. Null or undefined if any type could be returned (e.g. variable get). It is fine if
- *            this is the same as the old type.
+ *            <string>|null} check Returned type or list of returned types. Null
+ *            or undefined if any type could be returned (e.g. variable get). It
+ *            is fine if this is the same as the old type.
  * @throws {goog.asserts.AssertionError}
  *             if the block did not already have an output.
  */
@@ -1576,7 +1603,8 @@ Blockly.Block.prototype.setDisabled = function(disabled) {
 };
 
 /**
- * Get whether the block is disabled or not due to parents. The block's own disabled property is not considered.
+ * Get whether the block is disabled or not due to parents. The block's own
+ * disabled property is not considered.
  * 
  * @return {boolean} True if disabled.
  */
@@ -1678,7 +1706,8 @@ Blockly.Block.prototype.toString = function(opt_maxLength) {
  * Shortcut for appending a value input row.
  * 
  * @param {string}
- *            name Language-neutral identifier which may used to find this input again. Should be unique to this block.
+ *            name Language-neutral identifier which may used to find this input
+ *            again. Should be unique to this block.
  * @return {!Blockly.Input} The input object created.
  */
 Blockly.Block.prototype.appendValueInput = function(name) {
@@ -1689,7 +1718,8 @@ Blockly.Block.prototype.appendValueInput = function(name) {
  * Shortcut for appending a statement input row.
  * 
  * @param {string}
- *            name Language-neutral identifier which may used to find this input again. Should be unique to this block.
+ *            name Language-neutral identifier which may used to find this input
+ *            again. Should be unique to this block.
  * @return {!Blockly.Input} The input object created.
  */
 Blockly.Block.prototype.appendStatementInput = function(name) {
@@ -1700,7 +1730,8 @@ Blockly.Block.prototype.appendStatementInput = function(name) {
  * Shortcut for appending a dummy input row.
  * 
  * @param {string}
- *            opt_name Language-neutral identifier which may used to find this input again. Should be unique to this block.
+ *            opt_name Language-neutral identifier which may used to find this
+ *            input again. Should be unique to this block.
  * @return {!Blockly.Input} The input object created.
  */
 Blockly.Block.prototype.appendDummyInput = function(opt_name) {
@@ -1711,20 +1742,33 @@ Blockly.Block.prototype.appendDummyInput = function(opt_name) {
  * Interpolate a message string, creating fields and inputs.
  * 
  * @param {string}
- *            msg The message string to parse. %1, %2, etc. are symbols for value inputs or for Fields, such as an instance of Blockly.FieldDropdown, which
- *            would be placed as a field in either the following value input or a dummy input. The newline character forces the creation of an unnamed dummy
- *            input if any fields need placement. Note that '%10' would be interpreted as a reference to the tenth argument. To show the first argument followed
- *            by a zero, use '%1 0'. (Spaces around tokens are stripped.) To display a percentage sign followed by a number (e.g., "%123"), put that text in a
- *            Blockly.FieldLabel (as described below).
+ *            msg The message string to parse. %1, %2, etc. are symbols for
+ *            value inputs or for Fields, such as an instance of
+ *            Blockly.FieldDropdown, which would be placed as a field in either
+ *            the following value input or a dummy input. The newline character
+ *            forces the creation of an unnamed dummy input if any fields need
+ *            placement. Note that '%10' would be interpreted as a reference to
+ *            the tenth argument. To show the first argument followed by a zero,
+ *            use '%1 0'. (Spaces around tokens are stripped.) To display a
+ *            percentage sign followed by a number (e.g., "%123"), put that text
+ *            in a Blockly.FieldLabel (as described below).
  * @param {!Array.
- *            <?string|number|Array.<string>|Blockly.Field>|number} var_args A series of tuples that each specify the value inputs to create. Each tuple has at
- *            least two elements. The first is its name; the second is its type, which can be any of: - A string (such as 'Number'), denoting the one type
- *            allowed in the corresponding socket. - An array of strings (such as ['Number', 'List']), denoting the different types allowed in the corresponding
- *            socket. - null, denoting that any type is allowed in the corresponding socket. - Blockly.Field, in which case that field instance, such as an
- *            instance of Blockly.FieldDropdown, appears (instead of a socket). If the type is any of the first three options (which are legal arguments to
- *            setCheck()), there should be a third element in the tuple, giving its alignment. The final parameter is not a tuple, but just an alignment for any
- *            trailing dummy inputs. This last parameter is mandatory; there may be any number of tuples (though the number of tuples must match the symbols in
- *            msg).
+ *            <?string|number|Array.<string>|Blockly.Field>|number} var_args A
+ *            series of tuples that each specify the value inputs to create.
+ *            Each tuple has at least two elements. The first is its name; the
+ *            second is its type, which can be any of: - A string (such as
+ *            'Number'), denoting the one type allowed in the corresponding
+ *            socket. - An array of strings (such as ['Number', 'List']),
+ *            denoting the different types allowed in the corresponding socket. -
+ *            null, denoting that any type is allowed in the corresponding
+ *            socket. - Blockly.Field, in which case that field instance, such
+ *            as an instance of Blockly.FieldDropdown, appears (instead of a
+ *            socket). If the type is any of the first three options (which are
+ *            legal arguments to setCheck()), there should be a third element in
+ *            the tuple, giving its alignment. The final parameter is not a
+ *            tuple, but just an alignment for any trailing dummy inputs. This
+ *            last parameter is mandatory; there may be any number of tuples
+ *            (though the number of tuples must match the symbols in msg).
  */
 Blockly.Block.prototype.interpolateMsg = function(msg, var_args) {
   /**
@@ -1732,7 +1776,8 @@ Blockly.Block.prototype.interpolateMsg = function(msg, var_args) {
    * 
    * @this !Blockly.Input
    * @param {Blockly.Field|Array.
-   *            <string|Blockly.Field>} field This is either a Field or a tuple of a name and a Field.
+   *            <string|Blockly.Field>} field This is either a Field or a tuple
+   *            of a name and a Field.
    */
   function addFieldToInput(field) {
     if (field instanceof Blockly.Field) {
@@ -1809,9 +1854,11 @@ Blockly.Block.prototype.interpolateMsg.INLINE_REGEX_ = /%1\s*$/;
  * Add a value input, statement input or local variable to this block.
  * 
  * @param {number}
- *            type Either Blockly.INPUT_VALUE or Blockly.NEXT_STATEMENT or Blockly.DUMMY_INPUT.
+ *            type Either Blockly.INPUT_VALUE or Blockly.NEXT_STATEMENT or
+ *            Blockly.DUMMY_INPUT.
  * @param {string}
- *            name Language-neutral identifier which may used to find this input again. Should be unique to this block.
+ *            name Language-neutral identifier which may used to find this input
+ *            again. Should be unique to this block.
  * @return {!Blockly.Input} The input object created.
  * @private
  */
@@ -1837,7 +1884,8 @@ Blockly.Block.prototype.appendInput_ = function(type, name) {
  * @param {string}
  *            name The name of the input to move.
  * @param {?string}
- *            refName Name of input that should be after the moved input, or null to be the input at the end.
+ *            refName Name of input that should be after the moved input, or
+ *            null to be the input at the end.
  */
 Blockly.Block.prototype.moveInputBefore = function(name, refName) {
   if (name == refName) {
@@ -1949,7 +1997,8 @@ Blockly.Block.prototype.getInput = function(name) {
  * 
  * @param {string}
  *            name The name of the input.
- * @return {Blockly.Block} The attached value block, or null if the input is either disconnected or if the input does not exist.
+ * @return {Blockly.Block} The attached value block, or null if the input is
+ *         either disconnected or if the input does not exist.
  */
 Blockly.Block.prototype.getInputTargetBlock = function(name) {
   var input = this.getInput(name);
@@ -2120,7 +2169,8 @@ Blockly.Block.prototype.setErrorText = function(text) {
 };
 
 /**
- * Render the block. Lays out and reflows a block based on its contents and settings.
+ * Render the block. Lays out and reflows a block based on its contents and
+ * settings.
  */
 Blockly.Block.prototype.render = function() {
   goog.asserts.assertObject(this.svg_,

@@ -449,6 +449,7 @@ Blockly.Xml.textToDom = function(text) {
           && dom.firstChild.nodeName.toLowerCase() != 'toolbox_set' && dom.firstChild.nodeName
           .toLowerCase() != 'brick_set') || dom.firstChild !== dom.lastChild) {
     // Whatever we got back from the parser is not XML.
+    console.log(dom.firstChild.nodeName.toLowerCase());
     throw 'Blockly.Xml.textToDom did not obtain a valid XML tree.';
   }
   return dom.firstChild;

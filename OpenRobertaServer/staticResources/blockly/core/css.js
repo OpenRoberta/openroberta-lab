@@ -48,6 +48,22 @@ Blockly.Css.inject = function() {
  * Array making up the CSS content for Blockly.
  */
 Blockly.Css.CONTENT = [
+  '.blocklyButtonSaveBack {',
+  'fill: #33B8CA;',
+  '}',
+  
+  '.blocklyButtonCheckBack {',
+  'fill: #005A94;',
+  '}',
+  
+  '.blocklyButtonStartBack {',
+  'fill: #afca04;',
+  '}',
+  
+  '.blocklyButtonTrashBack {',
+  'fill: #fff;',
+  '}',
+                       
   '.blocklySvg {',
   '  background-color: #fff;',
   '  border: 1px solid #ddd;',
