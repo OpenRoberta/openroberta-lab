@@ -60,6 +60,10 @@ Blockly.Css.CONTENT = [
   'fill: #afca04;',
   '}',
   
+  '.blocklyButtonStartHoverBack, .blocklyButtonCheckHoverBack, .blocklyButtonSaveHoverBack {',
+  'fill: #E2001A;',
+  '}',
+  
   '.blocklyButtonTrashBack {',
   'fill: #fff;',
   '}',

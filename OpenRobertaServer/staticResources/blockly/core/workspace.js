@@ -30,6 +30,7 @@ goog.provide('Blockly.Workspace');
 // goog.require('Blockly.Block');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Trashcan');
+goog.require('Blockly.Button');
 goog.require('Blockly.StartButton');
 goog.require('Blockly.CheckButton');
 goog.require('Blockly.SaveButton');
