@@ -125,17 +125,17 @@ public class DeviceHandler {
             case EV3ColorSensor:
                 EV3ColorSensor ev3ColorSensor = new EV3ColorSensor(hardwarePort);
                 this.lejosColorSensors.put(sensorPort, ev3ColorSensor);
-                setColorSensorMode(sensorPort, this.brickConfiguration.getPreSetColorSensorMode(sensorPort));
+                setColorSensorMode(sensorPort, ColorSensorMode.COLOUR);
                 break;
             case EV3IRSensor:
                 EV3IRSensor ev3IRSensor = new EV3IRSensor(hardwarePort);
                 this.lejosInfraredSensors.put(sensorPort, ev3IRSensor);
-                setInfraredMode(sensorPort, this.brickConfiguration.getPreSetInfraredSensorMode(sensorPort));
+                setInfraredMode(sensorPort, InfraredSensorMode.DISTANCE);
                 break;
             case EV3GyroSensor:
                 EV3GyroSensor ev3GyroSensor = new EV3GyroSensor(hardwarePort);
                 this.lejosGyroSensors.put(sensorPort, ev3GyroSensor);
-                setGyroSensorMode(sensorPort, this.brickConfiguration.getPreSetGyroSensorMode(sensorPort));
+                setGyroSensorMode(sensorPort, GyroSensorMode.ANGLE);
                 break;
             case EV3TouchSensor:
                 EV3TouchSensor ev3TouchSensor = new EV3TouchSensor(hardwarePort);
@@ -144,7 +144,7 @@ public class DeviceHandler {
             case EV3UltrasonicSensor:
                 EV3UltrasonicSensor ev3UltrasonicSensor = new EV3UltrasonicSensor(hardwarePort);
                 this.lejosUltrasonicSensors.put(sensorPort, ev3UltrasonicSensor);
-                setUltrasonicSensorMode(sensorPort, this.brickConfiguration.getPreSetUltrasonicSensorMode(sensorPort));
+                setUltrasonicSensorMode(sensorPort, UltrasonicSensorMode.DISTANCE);
                 break;
             default:
                 return; // no sensor on this port
@@ -153,6 +153,8 @@ public class DeviceHandler {
 
     public DeviceHandler(BrickConfiguration brickConfiguration) {
         this.brickConfiguration = brickConfiguration;
+        //createMotorObject();
+        //createSampleProvider();
     }
 
     public RegulatedMotor getRegulatedMotor(ActorPort actorPort) {
@@ -203,8 +205,22 @@ public class DeviceHandler {
         return this.lejosSampleProvider.get(sensorPort);
     }
 
+    // test
     public void setColorSensorMode(SensorPort sensorPort, ColorSensorMode sensorMode) {
-        SampleProvider sp = getColorSensor(sensorPort).getMode(sensorMode.toString());
+        SampleProvider sp = null;
+        switch ( sensorMode ) {
+            case COLOUR:
+                sp = getColorSensor(sensorPort).getMode("ColorID");
+                break;
+            case AMBIENTLIGHT:
+                sp = getColorSensor(sensorPort).getMode("Ambient");
+                break;
+            case LIGHT:
+                sp = getColorSensor(sensorPort).getMode("Red");
+                break;
+            default:
+                break;
+        }
         this.lejosSampleProvider.put(sensorPort, sp);
         this.colorModes.put(sensorPort, sensorMode);
     }

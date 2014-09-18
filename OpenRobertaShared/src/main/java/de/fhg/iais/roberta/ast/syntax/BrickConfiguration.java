@@ -4,11 +4,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
-import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
-import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.dbc.Assert;
 
 public class BrickConfiguration {
@@ -24,7 +20,6 @@ public class BrickConfiguration {
     private final HardwareComponent actorD;
 
     // needed for differential drive pilot
-    // TODO change to cm!!!
     // see next TODO
     private final double wheelDiameterCM;
     private final double trackWidthCM;
@@ -114,26 +109,6 @@ public class BrickConfiguration {
 
     public double getTrackWidthCM() {
         return this.trackWidthCM;
-    }
-
-    // TODO
-    public ColorSensorMode getPreSetColorSensorMode(SensorPort sensorPort) {
-        return null;
-    }
-
-    // TODO
-    public UltrasonicSensorMode getPreSetUltrasonicSensorMode(SensorPort sensorPort) {
-        return null;
-    }
-
-    // TODO
-    public InfraredSensorMode getPreSetInfraredSensorMode(SensorPort sensorPort) {
-        return null;
-    }
-
-    // TODO
-    public GyroSensorMode getPreSetGyroSensorMode(SensorPort sensorPort) {
-        return null;
     }
 
     public static class Builder {

@@ -51,8 +51,6 @@ public class RobertaLauncher implements Runnable {
             if ( RobertaObserver.isDownloaded() == true && RobertaObserver.isExecuted() == true ) {
                 RobertaObserver.setExecuted(false);
 
-                glcd.drawImage(image, 0, 0, 0);
-
                 setFileName(RobertaObserver.getUserFileName());
                 File robertalabFile = new File(RobertaLauncher.PROGRAMS_DIRECTORY, programName);
                 JarFile jar;
@@ -67,8 +65,10 @@ public class RobertaLauncher implements Runnable {
                 this.ind.suspend();
                 exec(robertalabFile, JAVA_RUN_CP + robertalabFile.getPath() + " lejos.internal.ev3.EV3Wrapper " + mainClass, RobertaLauncher.PROGRAMS_DIRECTORY);
                 this.ind.resume();
+
                 RobertaObserver.setDownloaded(false);
                 RobertaObserver.setExecuted(true);
+
             } else {
                 Delay.msDelay(500);
             }
@@ -85,9 +85,12 @@ public class RobertaLauncher implements Runnable {
                 String jarName = jar.getName();
                 programName = jarName.substring(0, jarName.length() - 4); // Remove .jar
             }
-            glcd.clear();
-            glcd.refresh();
-            glcd.setAutoRefresh(false);
+
+            Image screenshot = new Image(178, 128, glcd.getHWDisplay());
+
+            lcd.clear();
+            lcd.refresh();
+            lcd.setAutoRefresh(false);
 
             glcd.drawImage(image, 0, 0, 0);
             glcd.refresh();
@@ -123,14 +126,12 @@ public class RobertaLauncher implements Runnable {
             System.out.println("Program finished");
             // Turn the LED off, in case left on
             Button.LEDPattern(0);
-            glcd.setAutoRefresh(true);
-            glcd.clear();
+            lcd.setAutoRefresh(true);
+            lcd.clear();
+            lcd.refresh();
+            glcd.drawImage(screenshot, 0, 0, 0);
             glcd.refresh();
-            /*int row = 1;
-            for ( String ip : GraphicStartup.getIPs() ) {
-                lcd.drawString(ip, 8 - ip.length() / 2, row++);
-            }*/
-            //GraphicStartup.getMenu().display(RobertaObserver.getMenuIndex(), 0, 0);
+
             program = null;
         } catch ( Exception e ) {
             System.err.println("Failed to execute program: " + e);
