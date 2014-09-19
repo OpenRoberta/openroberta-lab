@@ -1526,11 +1526,13 @@ public class GraphicStartup implements Menu {
                 if ( GraphicStartup.backgroundTasks.getTimeOutInfo() == true ) {
                     newScreen(" Robertalab");
                     lcd.drawString("Time out!", 0, 3);
+                    serverURLString = "";
                     Button.waitForAnyPress();
                     return;
                 } else if ( GraphicStartup.backgroundTasks.getErrorInfo() == true ) {
                     newScreen(" Robertalab");
                     lcd.drawString("Error/ abort!", 0, 3);
+                    serverURLString = "";
                     Button.waitForAnyPress();
                     return;
                 } else {

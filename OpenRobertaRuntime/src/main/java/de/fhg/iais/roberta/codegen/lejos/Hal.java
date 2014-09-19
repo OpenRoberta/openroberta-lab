@@ -68,37 +68,6 @@ public class Hal {
     }
 
     /**
-     * instantiate all lejos objects for devices that are needed
-     * 
-     * @param actorPort1
-     * @param actorPort2
-     * @param actorPort3
-     * @param actorPort4
-     * @param sensorPort1
-     * @param sensorPort2
-     * @param sensorPort3
-     * @param sensorPort4
-     */
-    public void createDevicesFromConfiguration(
-        ActorPort actorPort1,
-        ActorPort actorPort2,
-        ActorPort actorPort3,
-        ActorPort actorPort4,
-        SensorPort sensorPort1,
-        SensorPort sensorPort2,
-        SensorPort sensorPort3,
-        SensorPort sensorPort4) {
-        this.deviceHandler.createMotorObject(actorPort1);
-        this.deviceHandler.createMotorObject(actorPort2);
-        this.deviceHandler.createMotorObject(actorPort3);
-        this.deviceHandler.createMotorObject(actorPort4);
-        this.deviceHandler.createSampleProvider(sensorPort1);
-        this.deviceHandler.createSampleProvider(sensorPort2);
-        this.deviceHandler.createSampleProvider(sensorPort3);
-        this.deviceHandler.createSampleProvider(sensorPort4);
-    }
-
-    /**
      * @param speedPercent
      * @return degrees per second
      */
