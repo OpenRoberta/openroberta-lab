@@ -1,6 +1,6 @@
 <block_set xmlns="http://www.w3.org/1999/xhtml">
   <instance x="49" y="5">
-    <block type="robControls_start" id="43"></block>
+    <block type="robControls_start" id="43" deletable="false"></block>
     <block type="robActions_display_text" id="630" inline="false">
       <value name="OUT">
         <block type="text" id="631">

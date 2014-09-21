@@ -682,7 +682,8 @@ Blockly.Block.prototype.onMouseUp_ = function(e) {
             if (block.type == 'robControls_activity'
                 || block.type == 'robControls_start'
                 || block.type == 'procedures_defnoreturn'
-                || block.type == 'procedures_defreturn') {
+                || block.type == 'procedures_defreturn'
+                || block.type == 'robBrick_EV3-Brick') {
               disabled = false;
             }
             found = true;

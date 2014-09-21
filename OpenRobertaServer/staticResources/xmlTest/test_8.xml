@@ -1,6 +1,6 @@
 <block_set xmlns="http://www.w3.org/1999/xhtml">
   <instance x="-39" y="-1">
-    <block type="robControls_start" id="726"></block>
+    <block type="robControls_start" id="726" deletable="false"></block>
     <block type="controls_if" id="731" inline="false">
       <value name="IF0">
         <block type="robSensors_touch_isPressed" id="831">

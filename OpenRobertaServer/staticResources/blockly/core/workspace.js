@@ -32,6 +32,7 @@ goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Trashcan');
 goog.require('Blockly.Button');
 goog.require('Blockly.StartButton');
+goog.require('Blockly.BackButton');
 goog.require('Blockly.CheckButton');
 goog.require('Blockly.SaveButton');
 goog.require('Blockly.Xml');
@@ -122,6 +123,13 @@ Blockly.Workspace.prototype.checkButton = null;
 Blockly.Workspace.prototype.saveButton = null;
 
 /**
+ * The workspace's back button.
+ * 
+ * @type {Blockly.backButton}
+ */
+Blockly.Workspace.prototype.backButton = null;
+
+/**
  * PID of upcoming firing of a change event. Used to fire only one event after
  * multiple changes.
  * 
@@ -168,13 +176,22 @@ Blockly.Workspace.prototype.dispose = function() {
     this.trashcan.dispose();
     this.trashcan = null;
   }
-  this.startButton.dispose();
-  this.startButton = null;
-  this.checkButton.dispose();
-  this.checkButton = null;
-  this.saveButton.dispose();
-  this.saveButton = null;
-
+  if (this.startButton) {
+    this.startButton.dispose();
+    this.startButton = null;
+  }
+  if (this.checkButton) {
+    this.checkButton.dispose();
+    this.checkButton = null;
+  }
+  if (this.saveButton) {
+    this.saveButton.dispose();
+    this.saveButton = null;
+  }
+  if (this.backButton) {
+    this.backButton.dispose();
+    this.backButton = null;
+  }
 };
 
 /**
@@ -193,30 +210,48 @@ Blockly.Workspace.prototype.addTrashcan = function() {
  * Add a startButton.
  */
 Blockly.Workspace.prototype.addStartButton = function() {
-  this.startButton = new Blockly.StartButton(this);
-  var svgStartButton = this.startButton.createDom();
-  this.svgGroup_.insertBefore(svgStartButton, this.svgBlockCanvas_);
-  this.startButton.init();
+  if (Blockly.hasStartButton && !Blockly.readOnly) {
+    this.startButton = new Blockly.StartButton(this);
+    var svgStartButton = this.startButton.createDom();
+    this.svgGroup_.insertBefore(svgStartButton, this.svgBlockCanvas_);
+    this.startButton.init();
+  }
 };
 
 /**
  * Add a checkButton.
  */
 Blockly.Workspace.prototype.addCheckButton = function() {
-  this.checkButton = new Blockly.CheckButton(this);
-  var svgCheckButton = this.checkButton.createDom();
-  this.svgGroup_.insertBefore(svgCheckButton, this.svgBlockCanvas_);
-  this.checkButton.init();
+  if (Blockly.hasCheckButton && !Blockly.readOnly) {
+    this.checkButton = new Blockly.CheckButton(this);
+    var svgCheckButton = this.checkButton.createDom();
+    this.svgGroup_.insertBefore(svgCheckButton, this.svgBlockCanvas_);
+    this.checkButton.init();
+  }
 };
 
 /**
  * Add a saveButton.
  */
 Blockly.Workspace.prototype.addSaveButton = function() {
-  this.saveButton = new Blockly.SaveButton(this);
-  var svgSaveButton = this.saveButton.createDom();
-  this.svgGroup_.insertBefore(svgSaveButton, this.svgBlockCanvas_);
-  this.saveButton.init();
+  if (Blockly.hasSaveButton) {
+    this.saveButton = new Blockly.SaveButton(this);
+    var svgSaveButton = this.saveButton.createDom();
+    this.svgGroup_.insertBefore(svgSaveButton, this.svgBlockCanvas_);
+    this.saveButton.init();
+  }
+};
+
+/**
+ * Add a backButton.
+ */
+Blockly.Workspace.prototype.addBackButton = function() {
+  if (Blockly.hasBackButton) {
+    this.backButton = new Blockly.BackButton(this);
+    var svgBackButton = this.backButton.createDom();
+    this.svgGroup_.insertBefore(svgBackButton, this.svgBlockCanvas_);
+    this.backButton.init();
+  }
 };
 
 /**

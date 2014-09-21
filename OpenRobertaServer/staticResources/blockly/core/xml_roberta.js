@@ -13,11 +13,14 @@ goog.provide('Blockly.Xml');
  * 
  * @param {!Object}
  *            workspace The SVG workspace.
+ * @param {!Object}
+ *            type type of workspace, blocks or bricks.
  * @return {!Element} XML document.
  */
-Blockly.Xml.workspaceToDom = function(workspace) {
+Blockly.Xml.workspaceToDom = function(workspace, type) {
+  var typeOfWS = type || 'block_set';
   var width = Blockly.svgSize().width;
-  var xml = goog.dom.createDom('block_set');
+  var xml = goog.dom.createDom(typeOfWS);
   var blocks = workspace.getTopBlocks(true);
   for (var i = 0, block; block = blocks[i]; i++) {
     var top = goog.dom.createDom('instance');
@@ -449,7 +452,6 @@ Blockly.Xml.textToDom = function(text) {
           && dom.firstChild.nodeName.toLowerCase() != 'toolbox_set' && dom.firstChild.nodeName
           .toLowerCase() != 'brick_set') || dom.firstChild !== dom.lastChild) {
     // Whatever we got back from the parser is not XML.
-    console.log(dom.firstChild.nodeName.toLowerCase());
     throw 'Blockly.Xml.textToDom did not obtain a valid XML tree.';
   }
   return dom.firstChild;
@@ -457,7 +459,9 @@ Blockly.Xml.textToDom = function(text) {
 
 /**
  * Converts a DOM structure into properly indented text.
- * @param {!Element} dom A tree of XML elements.
+ * 
+ * @param {!Element}
+ *            dom A tree of XML elements.
  * @return {string} Text representation.
  */
 Blockly.Xml.domToPrettyText = function(dom) {
@@ -488,16 +492,20 @@ Blockly.Xml.domToPrettyText = function(dom) {
 
 /**
  * Remove any 'next' block (statements in a stack).
- * @param {!Element} xmlBlock XML block element.
+ * 
+ * @param {!Element}
+ *            xmlBlock XML block element.
  */
 Blockly.Xml.deleteNext = function(xmlBlock) {
   xmlBlock.splice(0, 1);
 };
 
 /**
- * Converts a DOM structure into plain text.
- * Currently the text format is fairly ugly: all one line with no whitespace.
- * @param {!Element} dom A tree of XML elements.
+ * Converts a DOM structure into plain text. Currently the text format is fairly
+ * ugly: all one line with no whitespace.
+ * 
+ * @param {!Element}
+ *            dom A tree of XML elements.
  * @return {string} Text representation.
  */
 Blockly.Xml.domToText = function(dom) {

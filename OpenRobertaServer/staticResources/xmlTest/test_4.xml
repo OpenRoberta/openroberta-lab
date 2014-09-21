@@ -1,6 +1,6 @@
 <block_set xmlns="http://www.w3.org/1999/xhtml">
   <instance x="49" y="5">
-    <block type="robControls_start" id="43"></block>
+    <block type="robControls_start" id="43" deletable="false"></block>
     <block type="lists_setIndex" id="276" inline="true">
       <mutation at="true"></mutation>
       <field name="MODE">SET</field>

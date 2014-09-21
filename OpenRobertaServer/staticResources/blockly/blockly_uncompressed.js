@@ -24,6 +24,7 @@ if (!window.goog) {
 
 // Build map of all dependencies (used and unused).
 var dir = window.BLOCKLY_DIR.match(/[^\/]+$/)[0];
+goog.addDependency("../../../" + dir + "/core/backButton.js", ['Blockly.BackButton'], ['Blockly.Button', 'Blockly.BlockSvg']);
 goog.addDependency("../../../" + dir + "/core/block.js", ['Blockly.Block'], ['Blockly.BlockSvg', 'Blockly.Blocks', 'Blockly.Comment', 'Blockly.Connection', 'Blockly.ContextMenu', 'Blockly.Input', 'Blockly.Msg', 'Blockly.Mutator', 'Blockly.MutatorPlus', 'Blockly.MutatorMinus', 'Blockly.Warning', 'Blockly.Error', 'Blockly.Workspace', 'Blockly.Xml', 'goog.Timer', 'goog.array', 'goog.asserts', 'goog.string']);
 goog.addDependency("../../../" + dir + "/core/blockly.js", ['Blockly'], ['Blockly.Block', 'Blockly.Connection', 'Blockly.FieldAngle', 'Blockly.FieldCheckbox', 'Blockly.FieldColour', 'Blockly.FieldRobColour', 'Blockly.FieldDropdown', 'Blockly.FieldImage', 'Blockly.FieldTextInput', 'Blockly.FieldVariable', 'Blockly.Generator', 'Blockly.Msg', 'Blockly.Procedures', 'Blockly.Realtime', 'Blockly.Toolbox', 'Blockly.WidgetDiv', 'Blockly.Workspace', 'Blockly.inject', 'Blockly.utils', 'goog.color', 'goog.dom', 'goog.events', 'goog.string', 'goog.ui.ColorPicker', 'goog.ui.tree.TreeControl', 'goog.userAgent']);
 goog.addDependency("../../../" + dir + "/core/blocks.js", ['Blockly.Blocks'], ['goog.asserts']);
@@ -69,7 +70,7 @@ goog.addDependency("../../../" + dir + "/core/utils.js", ['Blockly.utils'], []);
 goog.addDependency("../../../" + dir + "/core/variables.js", ['Blockly.Variables'], ['Blockly.Toolbox', 'Blockly.Workspace']);
 goog.addDependency("../../../" + dir + "/core/warning.js", ['Blockly.Warning'], ['Blockly.Bubble', 'Blockly.Icon']);
 goog.addDependency("../../../" + dir + "/core/widgetdiv.js", ['Blockly.WidgetDiv'], ['Blockly.Css', 'goog.dom']);
-goog.addDependency("../../../" + dir + "/core/workspace.js", ['Blockly.Workspace'], ['Blockly.ScrollbarPair', 'Blockly.Trashcan', 'Blockly.Button', 'Blockly.StartButton', 'Blockly.CheckButton', 'Blockly.SaveButton', 'Blockly.Xml']);
+goog.addDependency("../../../" + dir + "/core/workspace.js", ['Blockly.Workspace'], ['Blockly.ScrollbarPair', 'Blockly.Trashcan', 'Blockly.Button', 'Blockly.StartButton', 'Blockly.BackButton', 'Blockly.CheckButton', 'Blockly.SaveButton', 'Blockly.Xml']);
 goog.addDependency("../../../" + dir + "/core/xml_roberta.js", ['Blockly.Xml'], []);
 goog.addDependency("../../alltests.js", [], []);
 goog.addDependency("base.js", [], []);
@@ -935,6 +936,7 @@ goog.addDependency("../../third_party/closure/goog/osapi/osapi.js", ['goog.osapi
 
 // Load Blockly.
 goog.require('Blockly');
+goog.require('Blockly.BackButton');
 goog.require('Blockly.Block');
 goog.require('Blockly.BlockSvg');
 goog.require('Blockly.Blocks');

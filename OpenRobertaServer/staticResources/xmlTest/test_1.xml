@@ -1,6 +1,6 @@
 <block_set xmlns="http://www.w3.org/1999/xhtml">
   <instance x="49" y="5">
-    <block type="robControls_start" id="43"></block>
+    <block type="robControls_start" id="43" deletable="false"></block>
     <block type="robActions_motor_on" id="19" inline="false">
       <field name="MOTORPORT">B</field>
       <value name="POWER">

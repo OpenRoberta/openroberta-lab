@@ -34,6 +34,7 @@ Blockly.Blocks['robControls_start'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(false);
     this.setNextStatement(true);
+    this.setDeletable(false);
   }
 };
 

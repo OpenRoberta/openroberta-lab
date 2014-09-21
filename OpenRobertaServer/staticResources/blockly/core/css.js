@@ -52,7 +52,7 @@ Blockly.Css.CONTENT = [
   'fill: #33B8CA;',
   '}',
   
-  '.blocklyButtonCheckBack {',
+  '.blocklyButtonCheckBack, .blocklyButtonBackBack {',
   'fill: #005A94;',
   '}',
   
@@ -60,7 +60,7 @@ Blockly.Css.CONTENT = [
   'fill: #afca04;',
   '}',
   
-  '.blocklyButtonStartHoverBack, .blocklyButtonCheckHoverBack, .blocklyButtonSaveHoverBack {',
+  '.blocklyButtonStartHoverBack, .blocklyButtonCheckHoverBack, .blocklyButtonSaveHoverBack, .blocklyButtonBackHoverBack {',
   'fill: #E2001A;',
   '}',
   

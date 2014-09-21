@@ -26,7 +26,7 @@ Blockly.Blocks['robBrick_EV3-Brick'] = {
    */
 
   init : function() {
-    this.setColourRGB([ 220, 220, 220 ]);
+    this.setColourRGB([ 170, 170, 170 ]);
     // this.setInputsInline(true);
     var wheelDiameter = new Blockly.FieldTextInput('5.6');
     var trackWidth = new Blockly.FieldTextInput('17');
@@ -49,6 +49,7 @@ Blockly.Blocks['robBrick_EV3-Brick'] = {
         .setAlign(Blockly.ALIGN_RIGHT).setCheck('String');
     this.appendValueInput('MD').appendField('M D')
         .setAlign(Blockly.ALIGN_RIGHT).setCheck('String');
+    this.setDeletable(false);
   }
 };
 
@@ -210,10 +211,6 @@ Blockly.Blocks['robBrick_motor_middle'] = {
     var motorReverse = new Blockly.FieldDropdown([
         [ Blockly.Msg.MOTOR_FOREWARD, 'OFF' ],
         [ Blockly.Msg.MOTOR_BACKWARD, 'ON' ] ]);
-    var motorSide = new Blockly.FieldDropdown([
-        [ Blockly.Msg.MOTOR_NONE, 'NONE' ],
-        [ Blockly.Msg.MOTOR_RIGHT, 'RIGHT' ],
-        [ Blockly.Msg.MOTOR_LEFT, 'LEFT' ] ]);
     this.appendDummyInput().appendField(
         Blockly.Msg.MOTOR_MIDDLE + ' ' + Blockly.Msg.MOTOR);
     this.appendDummyInput().appendField(Blockly.Msg.MOTOR_REGULATION)
@@ -222,8 +219,6 @@ Blockly.Blocks['robBrick_motor_middle'] = {
     this.appendDummyInput().appendField(Blockly.Msg.MOTOR_ROTATION_REVERSE)
         .appendField(motorReverse, 'MOTOR_REVERSE').setAlign(
             Blockly.ALIGN_RIGHT);
-    this.appendDummyInput().appendField(Blockly.Msg.MOTOR_SIDE).appendField(
-        motorSide, 'MOTOR_DRIVE').setAlign(Blockly.ALIGN_RIGHT);
     this.setOutput(true, 'String');
   }
 };

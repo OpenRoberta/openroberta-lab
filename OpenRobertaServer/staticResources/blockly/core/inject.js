@@ -39,9 +39,9 @@ goog.require('goog.dom');
  */
 Blockly.inject = function(container, opt_options) {
   // Verify that the container is in document.
-  if (!goog.dom.contains(document, container)) {
-    throw 'Error: container is not in current document.';
-  }
+  //if (!goog.dom.contains(document, container)) {
+  //  throw 'Error: container is not in current document.';
+  //}
   if (opt_options) {
     // TODO(scr): don't mix this in to global variables.
     goog.mixin(Blockly, Blockly.parseOptions_(opt_options));
@@ -101,6 +101,8 @@ Blockly.parseOptions_ = function(options) {
     var hasCategories = false;
     var hasTrashcan = false;
     var hasCollapse = false;
+    var hasStartButton = false;
+    var hasCheckButton = false;
     var tree = null;
   } else {
     var tree = Blockly.parseToolboxTree_(options['toolbox']);
@@ -109,6 +111,22 @@ Blockly.parseOptions_ = function(options) {
     var hasTrashcan = options['trashcan'];
     if (hasTrashcan === undefined) {
       hasTrashcan = hasCategories;
+    }
+    var hasStartButton = options['start'];
+    if (hasStartButton === undefined) {
+      hasStartButton = false;
+    }
+    var hasSaveButton = options['save'];
+    if (hasStartButton === undefined) {
+      hasStartButton = false;
+    }
+    var hasBackButton = options['back'];
+    if (hasBackButton === undefined) {
+      hasBackButton = false;
+    }
+    var hasCheckButton = options['check'];
+    if (hasCheckButton === undefined) {
+      hasCheckButton = false;
     }
     var hasCollapse = options['collapse'];
     if (hasCollapse === undefined) {
@@ -135,6 +153,10 @@ Blockly.parseOptions_ = function(options) {
     hasCategories : hasCategories,
     hasScrollbars : hasScrollbars,
     hasTrashcan : hasTrashcan,
+    hasCheckButton : hasCheckButton,
+    hasStartButton : hasStartButton,
+    hasSaveButton : hasSaveButton,
+    hasBackButton : hasBackButton,
     languageTree : tree,
     enableRealtime : enableRealtime,
     realtimeOptions : realtimeOptions
@@ -447,6 +469,7 @@ Blockly.init_ = function() {
   Blockly.mainWorkspace.addStartButton();
   Blockly.mainWorkspace.addCheckButton();
   Blockly.mainWorkspace.addSaveButton();
+  Blockly.mainWorkspace.addBackButton();
 
   // Load the sounds.
   Blockly.loadAudio_(

@@ -72,7 +72,8 @@ function test(path) {
   var xmlDomResult = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
   removeAttributeDom(xmlDomResult);
   var xmlTextResult = Blockly.Xml.domToPrettyText(xmlDomResult);
-
+  console.log(xmlTextSource.trim());
+  console.log(xmlTextResult.trim());
   if (xmlTextSource.trim() == xmlTextResult.trim())
     setResultOk();
   else
@@ -96,7 +97,6 @@ var test2 = function() {
   var xmlDomResult = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
   // removeAttributeDom(xmlDomResult);
   var xmlTextResult = Blockly.Xml.domToPrettyText(xmlDomResult);
-
   if (xmlTextSource == xmlTextResult)
     setResultOk();
   else
