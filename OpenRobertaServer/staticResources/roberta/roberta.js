@@ -20,33 +20,9 @@ function injectBlockly(toolbox) {
     });
     // should this come from the server?
     var text = "<block_set xmlns='http: // www.w3.org/1999/xhtml'>"
-        + "<instance x='25' y='50'>"
-        + "<block type='robControls_start' id='1' inline='true'>" + "</block>"
-        + "</instance>" + "</block_set>";
+        + "<instance x='25' y='50'>" + "<block type='robControls_start'>"
+        + "</block>" + "</instance>" + "</block_set>";
     var xml = Blockly.Xml.textToDom(text);
-    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
-  }
-}
-
-function injectBrickly(toolbox) {
-  response(toolbox);
-  if (toolbox.rc === 'ok') {
-    Blockly.inject(window.frames['bricklyF'].contentDocument
-        .getElementById('tt'), {
-      path : '/blockly/',
-      toolbox : toolbox.data,
-      trash : true,
-      check : false,
-      start : false
-    });
-
-    // should this come from the server?
-    var text = "<block_set xmlns='http: // www.w3.org/1999/xhtml'>"
-        + "<instance x='25' y='50'>" + "<block type='robBrick_EV3-Brick'>"
-        + "<field name='WHEEL_DIAMETER'>5.6</field>"
-        + "<field name='TRACK_WIDTH'>17</field>" + "</block>" + "</instance>"
-        + "</block_set>";
-    Blockly.Xml.textToDom(text);
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
   }
 }
