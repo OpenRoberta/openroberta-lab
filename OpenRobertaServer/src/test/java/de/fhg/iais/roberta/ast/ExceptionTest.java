@@ -23,7 +23,7 @@ public class ExceptionTest {
         JaxbTransformer<?> transformer = new JaxbTransformer<>();
 
         try {
-            transformer.projectToAST(project);
+            transformer.blockSetToAST(project);
             Assert.fail();
         } catch ( Exception e ) {
             Assert.assertEquals("Values size is not less or equal to 2!", e.getMessage());

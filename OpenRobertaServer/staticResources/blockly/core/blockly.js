@@ -57,38 +57,41 @@ goog.require('goog.ui.ColorPicker');
 goog.require('goog.ui.tree.TreeControl');
 goog.require('goog.userAgent');
 
-
 /**
- * Path to Blockly's directory.  Can be relative, absolute, or remote.
- * Used for loading additional resources.
+ * Path to Blockly's directory. Can be relative, absolute, or remote. Used for
+ * loading additional resources.
  */
 Blockly.pathToBlockly = './';
 
 /**
  * Required name space for SVG elements.
+ * 
  * @const
  */
 Blockly.SVG_NS = 'http://www.w3.org/2000/svg';
 /**
  * Required name space for HTML elements.
+ * 
  * @const
  */
 Blockly.HTML_NS = 'http://www.w3.org/1999/xhtml';
 
 /**
- * The richness of block colours, regardless of the hue.
- * Must be in the range of 0 (inclusive) to 1 (exclusive).
+ * The richness of block colours, regardless of the hue. Must be in the range of
+ * 0 (inclusive) to 1 (exclusive).
  */
 Blockly.HSV_SATURATION = 0.88;
 /**
- * The intensity of block colours, regardless of the hue.
- * Must be in the range of 0 (inclusive) to 1 (exclusive).
+ * The intensity of block colours, regardless of the hue. Must be in the range
+ * of 0 (inclusive) to 1 (exclusive).
  */
 Blockly.HSV_VALUE = 0.64;
 
 /**
  * Convert a hue (HSV model) into an RGB hex triplet.
- * @param {number} hue Hue on a colour wheel (0-360).
+ * 
+ * @param {number}
+ *            hue Hue on a colour wheel (0-360).
  * @return {string} RGB code, e.g. '#5ba65b'.
  */
 Blockly.makeColour = function(hue) {
@@ -99,96 +102,105 @@ Blockly.makeColour = function(hue) {
 /**
  * The rgb value for block colours in logic category.
  */
-Blockly.CAT_LOGIC_RGB = [51, 184, 202];
+Blockly.CAT_LOGIC_RGB = [ 51, 184, 202 ];
 /**
  * The rgb value for block colours in colour category.
  */
-Blockly.CAT_COLOUR_RGB = [109, 191, 169];
+Blockly.CAT_COLOUR_RGB = [ 109, 191, 169 ];
 /**
  * The rgb value for block colours in lists category.
  */
-Blockly.CAT_LISTS_RGB = [31, 130, 192];
+Blockly.CAT_LISTS_RGB = [ 31, 130, 192 ];
 /**
  * The rgb value for block colours in loops category.
  */
-Blockly.CAT_LOOPS_RGB = [235, 106, 10];
+Blockly.CAT_LOOPS_RGB = [ 235, 106, 10 ];
 /**
  * The rgb value for block colours in math category.
  */
-Blockly.CAT_MATH_RGB = [0, 90, 148];
+Blockly.CAT_MATH_RGB = [ 0, 90, 148 ];
 /**
  * The rgb value for block colours in procedures category.
  */
-Blockly.CAT_PROCEDURES_RGB = [57, 55, 139];
+Blockly.CAT_PROCEDURES_RGB = [ 57, 55, 139 ];
 /**
  * The rgb value for block colours in actions category.
  */
-Blockly.CAT_ROBACTIONS_RGB = [242, 148, 9];
+Blockly.CAT_ROBACTIONS_RGB = [ 242, 148, 9 ];
 /**
  * The rgb value for block colours in activity category.
  */
-Blockly.CAT_ROBACTIVITY_RGB = [226, 0, 26];
+Blockly.CAT_ROBACTIVITY_RGB = [ 226, 0, 26 ];
 /**
  * The rgb value for block colours in controls category.
  */
-Blockly.CAT_ROBCONTROLS_RGB = [235, 106, 10];
+Blockly.CAT_ROBCONTROLS_RGB = [ 235, 106, 10 ];
 /**
  * The rgb value for block colours in sensors category.
  */
-Blockly.CAT_ROBSENSORS_RGB = [143, 164, 2];
+Blockly.CAT_ROBSENSORS_RGB = [ 143, 164, 2 ];
 /**
  * The rgb value for block colours in text category.
  */
-Blockly.CAT_TEXT_RGB = [177, 200, 0];
+Blockly.CAT_TEXT_RGB = [ 177, 200, 0 ];
 /**
  * The rgb value for block colours in variables category.
  */
-Blockly.CAT_VARIABLES_RGB = [144, 133, 186];
+Blockly.CAT_VARIABLES_RGB = [ 144, 133, 186 ];
 
 /**
- * ENUM for a right-facing value input.  E.g. 'test' or 'return'.
+ * ENUM for a right-facing value input. E.g. 'test' or 'return'.
+ * 
  * @const
  */
 Blockly.INPUT_VALUE = 1;
 /**
- * ENUM for a left-facing value output.  E.g. 'call random'.
+ * ENUM for a left-facing value output. E.g. 'call random'.
+ * 
  * @const
  */
 Blockly.OUTPUT_VALUE = 2;
 /**
- * ENUM for a down-facing block stack.  E.g. 'then-do' or 'else-do'.
+ * ENUM for a down-facing block stack. E.g. 'then-do' or 'else-do'.
+ * 
  * @const
  */
 Blockly.NEXT_STATEMENT = 3;
 /**
- * ENUM for an up-facing block stack.  E.g. 'close screen'.
+ * ENUM for an up-facing block stack. E.g. 'close screen'.
+ * 
  * @const
  */
 Blockly.PREVIOUS_STATEMENT = 4;
 /**
- * ENUM for an dummy input.  Used to add field(s) with no input.
+ * ENUM for an dummy input. Used to add field(s) with no input.
+ * 
  * @const
  */
 Blockly.DUMMY_INPUT = 5;
 
 /**
  * ENUM for left alignment.
+ * 
  * @const
  */
 Blockly.ALIGN_LEFT = -1;
 /**
  * ENUM for centre alignment.
+ * 
  * @const
  */
 Blockly.ALIGN_CENTRE = 0;
 /**
  * ENUM for right alignment.
+ * 
  * @const
  */
 Blockly.ALIGN_RIGHT = 1;
 
 /**
  * Lookup table for determining the opposite type of a connection.
+ * 
  * @const
  */
 Blockly.OPPOSITE_TYPE = [];
@@ -199,6 +211,7 @@ Blockly.OPPOSITE_TYPE[Blockly.PREVIOUS_STATEMENT] = Blockly.NEXT_STATEMENT;
 
 /**
  * Database of pre-loaded sounds.
+ * 
  * @private
  * @const
  */
@@ -206,19 +219,21 @@ Blockly.SOUNDS_ = Object.create(null);
 
 /**
  * Currently selected block.
+ * 
  * @type {Blockly.Block}
  */
 Blockly.selected = null;
 
 /**
- * Is Blockly in a read-only, non-editable mode?
- * Note that this property may only be set before init is called.
- * It can't be used to dynamically toggle editability on and off.
+ * Is Blockly in a read-only, non-editable mode? Note that this property may
+ * only be set before init is called. It can't be used to dynamically toggle
+ * editability on and off.
  */
 Blockly.readOnly = false;
 
 /**
  * Currently highlighted connection (during a drag).
+ * 
  * @type {Blockly.Connection}
  * @private
  */
@@ -226,6 +241,7 @@ Blockly.highlightedConnection_ = null;
 
 /**
  * Connection on dragged block that matches the highlighted connection.
+ * 
  * @type {Blockly.Connection}
  * @private
  */
@@ -233,36 +249,42 @@ Blockly.localConnection_ = null;
 
 /**
  * Number of pixels the mouse must move before a drag starts.
+ * 
  * @const
  */
 Blockly.DRAG_RADIUS = 5;
 
 /**
  * Maximum misalignment between connections for them to snap together.
+ * 
  * @const
  */
 Blockly.SNAP_RADIUS = 20;
 
 /**
  * Delay in ms between trigger and bumping unconnected block out of alignment.
+ * 
  * @const
  */
 Blockly.BUMP_DELAY = 250;
 
 /**
  * Number of characters to truncate a collapsed block to.
+ * 
  * @const
  */
 Blockly.COLLAPSE_CHARS = 30;
 
 /**
  * The main workspace (defined by inject.js).
+ * 
  * @type {Blockly.Workspace}
  */
 Blockly.mainWorkspace = null;
 
 /**
  * Contents of the local clipboard.
+ * 
  * @type {Element}
  * @private
  */
@@ -270,16 +292,19 @@ Blockly.clipboard_ = null;
 
 /**
  * Returns the dimensions of the current SVG image.
+ * 
  * @return {!Object} Contains width and height properties.
  */
 Blockly.svgSize = function() {
-  return {width: Blockly.svg.cachedWidth_,
-          height: Blockly.svg.cachedHeight_};
+  return {
+    width : Blockly.svg.cachedWidth_,
+    height : Blockly.svg.cachedHeight_
+  };
 };
 
 /**
- * Size the SVG image to completely fill its container.
- * Record the height/width of the SVG image.
+ * Size the SVG image to completely fill its container. Record the height/width
+ * of the SVG image.
  */
 Blockly.svgResize = function() {
   var svg = Blockly.svg;
@@ -302,15 +327,17 @@ Blockly.svgResize = function() {
 
 /**
  * Handle a mouse-down on SVG drawing surface.
- * @param {!Event} e Mouse down event.
+ * 
+ * @param {!Event}
+ *            e Mouse down event.
  * @private
  */
 Blockly.onMouseDown_ = function(e) {
   Blockly.svgResize();
   Blockly.terminateDrag_(); // In case mouse-up event was lost.
   Blockly.hideChaff();
-  var isTargetSvg = e.target && e.target.nodeName &&
-      e.target.nodeName.toLowerCase() == 'svg';
+  var isTargetSvg = e.target && e.target.nodeName
+      && e.target.nodeName.toLowerCase() == 'svg';
   if (!Blockly.readOnly && Blockly.selected && isTargetSvg) {
     // Clicking on the document clears the selection.
     Blockly.selected.unselect();
@@ -318,16 +345,15 @@ Blockly.onMouseDown_ = function(e) {
   if (e.target == Blockly.svg && Blockly.isRightButton(e)) {
     // Right-click.
     Blockly.showContextMenu_(e);
-  } else if ((Blockly.readOnly || isTargetSvg) &&
-             Blockly.mainWorkspace.scrollbar) {
+  } else if ((Blockly.readOnly || isTargetSvg)
+      && Blockly.mainWorkspace.scrollbar) {
     // If the workspace is editable, only allow dragging when gripping empty
-    // space.  Otherwise, allow dragging when gripping anywhere.
+    // space. Otherwise, allow dragging when gripping anywhere.
     Blockly.mainWorkspace.dragMode = true;
     // Record the current mouse position.
     Blockly.mainWorkspace.startDragMouseX = e.clientX;
     Blockly.mainWorkspace.startDragMouseY = e.clientY;
-    Blockly.mainWorkspace.startDragMetrics =
-        Blockly.mainWorkspace.getMetrics();
+    Blockly.mainWorkspace.startDragMetrics = Blockly.mainWorkspace.getMetrics();
     Blockly.mainWorkspace.startScrollX = Blockly.mainWorkspace.scrollX;
     Blockly.mainWorkspace.startScrollY = Blockly.mainWorkspace.scrollY;
   }
@@ -335,7 +361,9 @@ Blockly.onMouseDown_ = function(e) {
 
 /**
  * Handle a mouse-up anywhere on the page.
- * @param {!Event} e Mouse up event.
+ * 
+ * @param {!Event}
+ *            e Mouse up event.
  * @private
  */
 Blockly.onMouseUp_ = function(e) {
@@ -345,7 +373,9 @@ Blockly.onMouseUp_ = function(e) {
 
 /**
  * Handle a mouse-move on SVG drawing surface.
- * @param {!Event} e Mouse move event.
+ * 
+ * @param {!Event}
+ *            e Mouse move event.
  * @private
  */
 Blockly.onMouseMove_ = function(e) {
@@ -358,20 +388,22 @@ Blockly.onMouseMove_ = function(e) {
     var y = Blockly.mainWorkspace.startScrollY + dy;
     x = Math.min(x, -metrics.contentLeft);
     y = Math.min(y, -metrics.contentTop);
-    x = Math.max(x, metrics.viewWidth - metrics.contentLeft -
-                 metrics.contentWidth);
-    y = Math.max(y, metrics.viewHeight - metrics.contentTop -
-                 metrics.contentHeight);
+    x = Math.max(x, metrics.viewWidth - metrics.contentLeft
+        - metrics.contentWidth);
+    y = Math.max(y, metrics.viewHeight - metrics.contentTop
+        - metrics.contentHeight);
 
     // Move the scrollbars and the page will scroll automatically.
-    Blockly.mainWorkspace.scrollbar.set(-x - metrics.contentLeft,
-                                        -y - metrics.contentTop);
+    Blockly.mainWorkspace.scrollbar.set(-x - metrics.contentLeft, -y
+        - metrics.contentTop);
   }
 };
 
 /**
  * Handle a key-down on SVG drawing surface.
- * @param {!Event} e Key down event.
+ * 
+ * @param {!Event}
+ *            e Key down event.
  * @private
  */
 Blockly.onKeyDown_ = function(e) {
@@ -397,8 +429,8 @@ Blockly.onKeyDown_ = function(e) {
       e.preventDefault();
     }
   } else if (e.altKey || e.ctrlKey || e.metaKey) {
-    if (Blockly.selected && Blockly.selected.isDeletable() &&
-        Blockly.selected.workspace == Blockly.mainWorkspace) {
+    if (Blockly.selected && Blockly.selected.isDeletable()
+        && Blockly.selected.workspace == Blockly.mainWorkspace) {
       Blockly.hideChaff();
       if (e.keyCode == 67) {
         // 'c' for copy.
@@ -420,6 +452,7 @@ Blockly.onKeyDown_ = function(e) {
 
 /**
  * Stop binding to the global mouseup and mousemove events.
+ * 
  * @private
  */
 Blockly.terminateDrag_ = function() {
@@ -429,22 +462,28 @@ Blockly.terminateDrag_ = function() {
 
 /**
  * Copy a block onto the local clipboard.
- * @param {!Blockly.Block} block Block to be copied.
+ * 
+ * @param {!Blockly.Block}
+ *            block Block to be copied.
  * @private
  */
 Blockly.copy_ = function(block) {
-  var xmlBlock = Blockly.Xml.blockToDom_(block);
-  Blockly.Xml.deleteNext(xmlBlock);
+  var statement_list = [];
+  var xmlBlock = Blockly.Xml.blockToDom_(block, statement_list);
+  statement_list.push(xmlBlock);
+  Blockly.Xml.deleteNext(statement_list);
   // Encode start position in XML.
   var xy = block.getRelativeToSurfaceXY();
   xmlBlock.setAttribute('x', Blockly.RTL ? -xy.x : xy.x);
   xmlBlock.setAttribute('y', xy.y);
-  Blockly.clipboard_ = xmlBlock;
+  Blockly.clipboard_ = statement_list;
 };
 
 /**
  * Show the context menu for the workspace.
- * @param {!Event} e Mouse event.
+ * 
+ * @param {!Event}
+ *            e Mouse event.
  * @private
  */
 Blockly.showContextMenu_ = function(e) {
@@ -472,7 +511,9 @@ Blockly.showContextMenu_ = function(e) {
     }
 
     // Option to collapse top blocks.
-    var collapseOption = {enabled: hasExpandedBlocks};
+    var collapseOption = {
+      enabled : hasExpandedBlocks
+    };
     collapseOption.text = Blockly.Msg.COLLAPSE_ALL;
     collapseOption.callback = function() {
       var ms = 0;
@@ -488,7 +529,9 @@ Blockly.showContextMenu_ = function(e) {
     options.push(collapseOption);
 
     // Option to expand top blocks.
-    var expandOption = {enabled: hasCollapsedBlocks};
+    var expandOption = {
+      enabled : hasCollapsedBlocks
+    };
     expandOption.text = Blockly.Msg.EXPAND_ALL;
     expandOption.callback = function() {
       var ms = 0;
@@ -509,7 +552,9 @@ Blockly.showContextMenu_ = function(e) {
 
 /**
  * Cancel the native context menu, unless the focus is on an HTML input widget.
- * @param {!Event} e Mouse down event.
+ * 
+ * @param {!Event}
+ *            e Mouse down event.
  * @private
  */
 Blockly.onContextMenu_ = function(e) {
@@ -521,41 +566,45 @@ Blockly.onContextMenu_ = function(e) {
 
 /**
  * Close tooltips, context menus, dropdown selections, etc.
- * @param {boolean=} opt_allowToolbox If true, don't close the toolbox.
+ * 
+ * @param {boolean=}
+ *            opt_allowToolbox If true, don't close the toolbox.
  */
 Blockly.hideChaff = function(opt_allowToolbox) {
   Blockly.Tooltip.hide();
   Blockly.WidgetDiv.hide();
-  if (!opt_allowToolbox &&
-      Blockly.Toolbox.flyout_ && Blockly.Toolbox.flyout_.autoClose) {
+  if (!opt_allowToolbox && Blockly.Toolbox.flyout_
+      && Blockly.Toolbox.flyout_.autoClose) {
     Blockly.Toolbox.clearSelection();
   }
 };
 
 /**
- * Deselect any selections on the webpage.
- * Chrome will select text outside the SVG when double-clicking.
- * Deselect this text, so that it doesn't mess up any subsequent drag.
+ * Deselect any selections on the webpage. Chrome will select text outside the
+ * SVG when double-clicking. Deselect this text, so that it doesn't mess up any
+ * subsequent drag.
  */
 Blockly.removeAllRanges = function() {
-  if (window.getSelection) {  // W3
+  if (window.getSelection) { // W3
     var sel = window.getSelection();
     if (sel && sel.removeAllRanges) {
       sel.removeAllRanges();
       window.setTimeout(function() {
-          try {
-            window.getSelection().removeAllRanges();
-          } catch (e) {
-            // MSIE throws 'error 800a025e' here.
-          }
-        }, 0);
+        try {
+          window.getSelection().removeAllRanges();
+        } catch (e) {
+          // MSIE throws 'error 800a025e' here.
+        }
+      }, 0);
     }
   }
 };
 
 /**
  * Is this event targeting a text input widget?
- * @param {!Event} e An event.
+ * 
+ * @param {!Event}
+ *            e An event.
  * @return {boolean} True if text input.
  * @private
  */
@@ -564,11 +613,15 @@ Blockly.isTargetInput_ = function(e) {
 };
 
 /**
- * Load an audio file.  Cache it, ready for instantaneous playing.
- * @param {!Array.<string>} filenames List of file types in decreasing order of
- *   preference (i.e. increasing size).  E.g. ['media/go.mp3', 'media/go.wav']
- *   Filenames include path from Blockly's root.  File extensions matter.
- * @param {string} name Name of sound.
+ * Load an audio file. Cache it, ready for instantaneous playing.
+ * 
+ * @param {!Array.
+ *            <string>} filenames List of file types in decreasing order of
+ *            preference (i.e. increasing size). E.g. ['media/go.mp3',
+ *            'media/go.wav'] Filenames include path from Blockly's root. File
+ *            extensions matter.
+ * @param {string}
+ *            name Name of sound.
  * @private
  */
 Blockly.loadAudio_ = function(filenames, name) {
@@ -594,10 +647,11 @@ Blockly.loadAudio_ = function(filenames, name) {
 
 /**
  * Preload all the audio files so that they play quickly when asked for.
+ * 
  * @private
  */
 Blockly.preloadAudio_ = function() {
-  for (var name in Blockly.SOUNDS_) {
+  for ( var name in Blockly.SOUNDS_) {
     var sound = Blockly.SOUNDS_[name];
     sound.volume = .01;
     sound.play();
@@ -606,17 +660,20 @@ Blockly.preloadAudio_ = function() {
 };
 
 /**
- * Play an audio file at specified value.  If volume is not specified,
- * use full volume (1).
- * @param {string} name Name of sound.
- * @param {?number} opt_volume Volume of sound (0-1).
+ * Play an audio file at specified value. If volume is not specified, use full
+ * volume (1).
+ * 
+ * @param {string}
+ *            name Name of sound.
+ * @param {?number}
+ *            opt_volume Volume of sound (0-1).
  */
 Blockly.playAudio = function(name, opt_volume) {
   var sound = Blockly.SOUNDS_[name];
   if (sound) {
     var mySound;
-    var ie9 = goog.userAgent.DOCUMENT_MODE &&
-              goog.userAgent.DOCUMENT_MODE === 9;
+    var ie9 = goog.userAgent.DOCUMENT_MODE
+        && goog.userAgent.DOCUMENT_MODE === 9;
     if (ie9 || goog.userAgent.IPAD || goog.userAgent.ANDROID) {
       // Creating a new audio node causes lag in IE9, Android and iPad. Android
       // and IE9 refetch the file from the server, iPad uses a singleton audio
@@ -632,16 +689,20 @@ Blockly.playAudio = function(name, opt_volume) {
 
 /**
  * Set the mouse cursor to be either a closed hand or the default.
- * @param {boolean} closed True for closed hand.
+ * 
+ * @param {boolean}
+ *            closed True for closed hand.
  * @private
  */
 Blockly.setCursorHand_ = function(closed) {
   if (Blockly.readOnly) {
     return;
   }
-  /* Hotspot coordinates are baked into the CUR file, but they are still
-     required due to a Chrome bug.
-     http://code.google.com/p/chromium/issues/detail?id=1446 */
+  /*
+   * Hotspot coordinates are baked into the CUR file, but they are still
+   * required due to a Chrome bug.
+   * http://code.google.com/p/chromium/issues/detail?id=1446
+   */
   var cursor = '';
   if (closed) {
     cursor = 'url(' + Blockly.pathToBlockly + 'media/handclosed.cur) 7 3, auto';
@@ -656,23 +717,21 @@ Blockly.setCursorHand_ = function(closed) {
 
 /**
  * Return an object with all the metrics required to size scrollbars for the
- * main workspace.  The following properties are computed:
- * .viewHeight: Height of the visible rectangle,
- * .viewWidth: Width of the visible rectangle,
- * .contentHeight: Height of the contents,
- * .contentWidth: Width of the content,
- * .viewTop: Offset of top edge of visible rectangle from parent,
- * .viewLeft: Offset of left edge of visible rectangle from parent,
- * .contentTop: Offset of the top-most content from the y=0 coordinate,
- * .contentLeft: Offset of the left-most content from the x=0 coordinate.
- * .absoluteTop: Top-edge of view.
+ * main workspace. The following properties are computed: .viewHeight: Height of
+ * the visible rectangle, .viewWidth: Width of the visible rectangle,
+ * .contentHeight: Height of the contents, .contentWidth: Width of the content,
+ * .viewTop: Offset of top edge of visible rectangle from parent, .viewLeft:
+ * Offset of left edge of visible rectangle from parent, .contentTop: Offset of
+ * the top-most content from the y=0 coordinate, .contentLeft: Offset of the
+ * left-most content from the x=0 coordinate. .absoluteTop: Top-edge of view.
  * .absoluteLeft: Left-edge of view.
+ * 
  * @return {Object} Contains size and position metrics of main workspace.
  * @private
  */
 Blockly.getMainWorkspaceMetrics_ = function() {
   var svgSize = Blockly.svgSize();
-  svgSize.width -= Blockly.Toolbox.width;  // Zero if no Toolbox.
+  svgSize.width -= Blockly.Toolbox.width; // Zero if no Toolbox.
   var viewWidth = svgSize.width - Blockly.Scrollbar.scrollbarThickness;
   var viewHeight = svgSize.height - Blockly.Scrollbar.scrollbarThickness;
   try {
@@ -684,14 +743,14 @@ Blockly.getMainWorkspaceMetrics_ = function() {
   if (Blockly.mainWorkspace.scrollbar) {
     // Add a border around the content that is at least half a screenful wide.
     // Ensure border is wide enough that blocks can scroll over entire screen.
-    var leftEdge = Math.min(blockBox.x - viewWidth / 2,
-                            blockBox.x + blockBox.width - viewWidth);
+    var leftEdge = Math.min(blockBox.x - viewWidth / 2, blockBox.x
+        + blockBox.width - viewWidth);
     var rightEdge = Math.max(blockBox.x + blockBox.width + viewWidth / 2,
-                             blockBox.x + viewWidth);
-    var topEdge = Math.min(blockBox.y - viewHeight / 2,
-                           blockBox.y + blockBox.height - viewHeight);
+        blockBox.x + viewWidth);
+    var topEdge = Math.min(blockBox.y - viewHeight / 2, blockBox.y
+        + blockBox.height - viewHeight);
     var bottomEdge = Math.max(blockBox.y + blockBox.height + viewHeight / 2,
-                              blockBox.y + viewHeight);
+        blockBox.y + viewHeight);
   } else {
     var leftEdge = blockBox.x;
     var rightEdge = leftEdge + blockBox.width;
@@ -700,24 +759,26 @@ Blockly.getMainWorkspaceMetrics_ = function() {
   }
   var absoluteLeft = Blockly.RTL ? 0 : Blockly.Toolbox.width;
   var metrics = {
-    viewHeight: svgSize.height,
-    viewWidth: svgSize.width,
-    contentHeight: bottomEdge - topEdge,
-    contentWidth: rightEdge - leftEdge,
-    viewTop: -Blockly.mainWorkspace.scrollY,
-    viewLeft: -Blockly.mainWorkspace.scrollX,
-    contentTop: topEdge,
-    contentLeft: leftEdge,
-    absoluteTop: 0,
-    absoluteLeft: absoluteLeft
+    viewHeight : svgSize.height,
+    viewWidth : svgSize.width,
+    contentHeight : bottomEdge - topEdge,
+    contentWidth : rightEdge - leftEdge,
+    viewTop : -Blockly.mainWorkspace.scrollY,
+    viewLeft : -Blockly.mainWorkspace.scrollX,
+    contentTop : topEdge,
+    contentLeft : leftEdge,
+    absoluteTop : 0,
+    absoluteLeft : absoluteLeft
   };
   return metrics;
 };
 
 /**
  * Sets the X/Y translations of the main workspace to match the scrollbars.
- * @param {!Object} xyRatio Contains an x and/or y property which is a float
- *     between 0 and 1 specifying the degree of scrolling.
+ * 
+ * @param {!Object}
+ *            xyRatio Contains an x and/or y property which is a float between 0
+ *            and 1 specifying the degree of scrolling.
  * @private
  */
 Blockly.setMainWorkspaceMetrics_ = function(xyRatio) {
@@ -726,28 +787,30 @@ Blockly.setMainWorkspaceMetrics_ = function(xyRatio) {
   }
   var metrics = Blockly.getMainWorkspaceMetrics_();
   if (goog.isNumber(xyRatio.x)) {
-    Blockly.mainWorkspace.scrollX = -metrics.contentWidth * xyRatio.x -
-        metrics.contentLeft;
+    Blockly.mainWorkspace.scrollX = -metrics.contentWidth * xyRatio.x
+        - metrics.contentLeft;
   }
   if (goog.isNumber(xyRatio.y)) {
-    Blockly.mainWorkspace.scrollY = -metrics.contentHeight * xyRatio.y -
-        metrics.contentTop;
+    Blockly.mainWorkspace.scrollY = -metrics.contentHeight * xyRatio.y
+        - metrics.contentTop;
   }
-  var translation = 'translate(' +
-      (Blockly.mainWorkspace.scrollX + metrics.absoluteLeft) + ',' +
-      (Blockly.mainWorkspace.scrollY + metrics.absoluteTop) + ')';
+  var translation = 'translate('
+      + (Blockly.mainWorkspace.scrollX + metrics.absoluteLeft) + ','
+      + (Blockly.mainWorkspace.scrollY + metrics.absoluteTop) + ')';
   Blockly.mainWorkspace.getCanvas().setAttribute('transform', translation);
-  Blockly.mainWorkspace.getBubbleCanvas().setAttribute('transform',
-                                                       translation);
+  Blockly.mainWorkspace.getBubbleCanvas()
+      .setAttribute('transform', translation);
 };
 
 /**
- * Execute a command.  Generally, a command is the result of a user action
- * e.g., a click, drag or context menu selection.  Calling the cmdThunk function
+ * Execute a command. Generally, a command is the result of a user action e.g.,
+ * a click, drag or context menu selection. Calling the cmdThunk function
  * through doCommand() allows us to capture information that can be used for
  * capabilities like undo (which is supported by the realtime collaboration
  * feature).
- * @param {function()} cmdThunk A function representing the command execution.
+ * 
+ * @param {function()}
+ *            cmdThunk A function representing the command execution.
  */
 Blockly.doCommand = function(cmdThunk) {
   if (Blockly.Realtime.isEnabled) {
@@ -759,18 +822,22 @@ Blockly.doCommand = function(cmdThunk) {
 
 /**
  * When something in Blockly's workspace changes, call a function.
- * @param {!Function} func Function to call.
+ * 
+ * @param {!Function}
+ *            func Function to call.
  * @return {!Array.<!Array>} Opaque data that can be passed to
- *     removeChangeListener.
+ *         removeChangeListener.
  */
 Blockly.addChangeListener = function(func) {
   return Blockly.bindEvent_(Blockly.mainWorkspace.getCanvas(),
-                            'blocklyWorkspaceChange', null, func);
+      'blocklyWorkspaceChange', null, func);
 };
 
 /**
  * Stop listening for Blockly's workspace changes.
- * @param {!Array.<!Array>} bindData Opaque data from addChangeListener.
+ * 
+ * @param {!Array.
+ *            <!Array>} bindData Opaque data from addChangeListener.
  */
 Blockly.removeChangeListener = function(bindData) {
   Blockly.unbindEvent_(bindData);
@@ -778,6 +845,7 @@ Blockly.removeChangeListener = function(bindData) {
 
 /**
  * Returns the main workspace.
+ * 
  * @return {!Blockly.Workspace} The main workspace.
  */
 Blockly.getMainWorkspace = function() {

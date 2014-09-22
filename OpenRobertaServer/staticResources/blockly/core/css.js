@@ -48,6 +48,26 @@ Blockly.Css.inject = function() {
  * Array making up the CSS content for Blockly.
  */
 Blockly.Css.CONTENT = [
+  '.blocklyButtonSaveBack {',
+  'fill: #33B8CA;',
+  '}',
+  
+  '.blocklyButtonCheckBack, .blocklyButtonBackBack {',
+  'fill: #005A94;',
+  '}',
+  
+  '.blocklyButtonStartBack {',
+  'fill: #afca04;',
+  '}',
+  
+  '.blocklyButtonStartHoverBack, .blocklyButtonCheckHoverBack, .blocklyButtonSaveHoverBack, .blocklyButtonBackHoverBack {',
+  'fill: #E2001A;',
+  '}',
+  
+  '.blocklyButtonTrashBack {',
+  'fill: #fff;',
+  '}',
+                       
   '.blocklySvg {',
   '  background-color: #fff;',
   '  border: 1px solid #ddd;',
@@ -378,13 +398,15 @@ Blockly.Css.CONTENT = [
   '  background-color: #e4e4e4;',
   '}',
 
+  // throw away the arrow icons in the toolbox:
   '.blocklyTreeIcon {',
   '  height: 16px;',
-  '  width: 16px;',
+  //'  width: 16px;',
+  '  width: 13px;',
   '  vertical-align: middle;',
-  '  background-image: url(<<<PATH>>>/media/tree.png);',
-  '  margin-top: -30px;',
-  '  margin-left: 10px;',
+  //'  background-image: url(<<<PATH>>>/media/tree.png);',
+  //'  margin-top: -30px;',
+  //'  margin-left: 10px;',
   '}',
 
   '.blocklyTreeIconClosedLtr {',
@@ -429,19 +451,20 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyTreeSelected  {',
-  '  background-color: #57e !important;',
+  //'  background-color: #57e !important;',
   '}',
 
   '.blocklyTreeSelected .blocklyTreeLabel {',
   '  color: #000;',
   '}',
   
+  // class for the toolblocks label (default is white, selected is black)
   '.catName {',
-  '  color: #f00;',
+  '  fill: #fff;',
   '}',
   
   '.blocklyTreeSelected .catName {',
-  '  color: #00f;',
+  '  fill: #000;',
   '}',
   
   

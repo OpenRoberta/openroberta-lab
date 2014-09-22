@@ -3,6 +3,8 @@ package de.fhg.iais.roberta.ast.syntax;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.fhg.iais.roberta.ast.typecheck.NepoInfo;
+import de.fhg.iais.roberta.ast.typecheck.NepoInfos;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 
 /**
@@ -25,6 +27,8 @@ abstract public class Phrase<V> {
     private final boolean disabled;
     private final String comment;
     private final Kind kind;
+
+    private final NepoInfos infos = new NepoInfos(); // the content of the info object is MUTABLE !!!
 
     /**
      * This constructor set the kind of the object used in the AST (abstract syntax tree). All possible kinds can be found in {@link Kind}.
@@ -70,15 +74,28 @@ abstract public class Phrase<V> {
     /**
      * @return true if the block is disabled, o/w false
      */
-    public boolean isDisabled() {
+    public final boolean isDisabled() {
         return this.disabled;
     }
 
     /**
      * @return comment that the user added to the block
      */
-    public String getComment() {
+    public final String getComment() {
         return this.comment;
+    }
+
+    /**
+     * add an info (error, warning e.g.) to this phrase
+     * 
+     * @param info to be added
+     */
+    public final void addInfo(NepoInfo info) {
+        this.infos.addInfo(info);
+    }
+
+    public final NepoInfos getInfos() {
+        return this.infos;
     }
 
     /**

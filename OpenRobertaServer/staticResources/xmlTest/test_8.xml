@@ -1,67 +1,100 @@
-<project xmlns="http://www.w3.org/1999/xhtml">
-  <instance x="109" y="110">
-    <block type="controls_if" id="45" inline="false">
+<block_set xmlns="http://www.w3.org/1999/xhtml">
+  <instance x="-39" y="-1">
+    <block type="robControls_start" id="726" deletable="false"></block>
+    <block type="controls_if" id="731" inline="false">
       <value name="IF0">
-        <block type="robSensors_ultrasonic" id="62">
-          <field name="MEASURE">DISTANCE</field>
+        <block type="robSensors_touch_isPressed" id="831">
+          <field name="SENSORPORT">1</field>
         </block>
       </value>
       <statement name="DO0">
-        <block type="controls_repeat_ext" id="73" inline="true">
-          <value name="TIMES">
-            <block type="math_number" id="134">
-              <field name="NUM">0</field>
+        <block type="text_append" id="818" inline="false">
+          <field name="VAR">item</field>
+          <value name="TEXT">
+            <block type="text" id="819">
+              <field name="TEXT"></field>
             </block>
           </value>
-          <statement name="DO">
-            <block type="robControls_loopUntil" id="81" inline="false">
-              <field name="PROPERTY">ULTRASONIC</field>
-              <field name="OP">EQ</field>
-              <value name="VALUE">
-                <block type="math_number" id="82">
-                  <field name="NUM">30</field>
-                </block>
-              </value>
-              <statement name="DO">
-                <block type="robActions_motorDiff_on_for" id="102" inline="false">
-                  <field name="DIRECTION">FOREWARD</field>
-                  <value name="POWER">
-                    <block type="math_number" id="103">
-                      <field name="NUM">30</field>
-                    </block>
-                  </value>
-                  <value name="DISTANCE">
-                    <block type="math_number" id="104">
-                      <field name="NUM">10</field>
-                    </block>
-                  </value>
-                </block>
-              </statement>
+        </block>
+        <block type="text_append" id="820" inline="false">
+          <field name="VAR">item</field>
+          <value name="TEXT">
+            <block type="text" id="821">
+              <field name="TEXT"></field>
             </block>
-            <block type="robControls_wait" id="112" inline="false">
-              <field name="SENSOR">ULTRASONIC</field>
-              <field name="OP">EQ</field>
-              <value name="VALUE">
-                <block type="math_number" id="113">
-                  <field name="NUM">25</field>
-                </block>
-              </value>
-            </block>
-          </statement>
+          </value>
         </block>
       </statement>
     </block>
-    <block type="text_print" id="58" inline="false">
-      <value name="TEXT">
-        <block type="text" id="140">
-          <field name="TEXT"></field>
+    <block type="robControls_if" id="736" inline="false">
+      <statement name="DO0">
+        <block type="text_append" id="822" inline="false">
+          <field name="VAR">item</field>
+          <value name="TEXT">
+            <block type="text" id="823">
+              <field name="TEXT"></field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+    <block type="robControls_ifElse" id="741" inline="false">
+      <mutation else="1"></mutation>
+      <repetitions>
+        <value name="IF0">
+          <block type="robSensors_touch_isPressed" id="832">
+            <field name="SENSORPORT">1</field>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="text_append" id="824" inline="false">
+            <field name="VAR">item</field>
+            <value name="TEXT">
+              <block type="text" id="825">
+                <field name="TEXT"></field>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <statement name="ELSE">
+          <block type="text_append" id="826" inline="false">
+            <field name="VAR">item</field>
+            <value name="TEXT">
+              <block type="text" id="827">
+                <field name="TEXT"></field>
+              </block>
+            </value>
+          </block>
+        </statement>
+      </repetitions>
+    </block>
+    <block type="controls_for" id="752" inline="true">
+      <field name="VAR">i</field>
+      <value name="FROM">
+        <block type="math_number" id="753">
+          <field name="NUM">1</field>
         </block>
       </value>
+      <value name="TO">
+        <block type="math_number" id="754">
+          <field name="NUM">10</field>
+        </block>
+      </value>
+      <value name="BY">
+        <block type="math_number" id="755">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+      <statement name="DO">
+        <block type="text_append" id="828" inline="false">
+          <field name="VAR">item</field>
+          <value name="TEXT">
+            <block type="text" id="829">
+              <field name="TEXT"></field>
+            </block>
+          </value>
+        </block>
+      </statement>
     </block>
   </instance>
-  <instance x="288" y="171">
-    <block type="logic_compare" id="128" inline="true">
-      <field name="OP">EQ</field>
-    </block>
-  </instance>
-</project>
+</block_set>

@@ -13,21 +13,40 @@ function injectBlockly(toolbox) {
     Blockly.inject(document.getElementById('blocklyDiv'), {
       path : '/blockly/',
       toolbox : toolbox.data,
-      trash : true
+      trashcan : true,
+      save : true,
+      check : true,
+      start : true
     });
-    var block = new Blockly.Block();
-    block.initialize(Blockly.mainWorkspace, 'robControls_start');
-    // block.setMovable(false);
-    block.setDeletable(false);
-    block.initSvg();
-    block.moveBy(25, 20);
-    block.render();
-    var blockBox = block.svg_.getRootElement().getBBox();
-    block.cached_width_ = blockBox.width;
-    block.cached_height_ = blockBox.height;
-    block.cached_area_ = blockBox.width * blockBox.height;
-    var statement_list = [];
-    var xml = Blockly.Xml.blockToDom_(block, statement_list);
+    // should this come from the server?
+    var text = "<block_set xmlns='http: // www.w3.org/1999/xhtml'>"
+        + "<instance x='25' y='50'>"
+        + "<block type='robControls_start' id='1' inline='true'>" + "</block>"
+        + "</instance>" + "</block_set>";
+    var xml = Blockly.Xml.textToDom(text);
+    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+  }
+}
+
+function injectBrickly(toolbox) {
+  response(toolbox);
+  if (toolbox.rc === 'ok') {
+    Blockly.inject(window.frames['bricklyF'].contentDocument
+        .getElementById('tt'), {
+      path : '/blockly/',
+      toolbox : toolbox.data,
+      trash : true,
+      check : false,
+      start : false
+    });
+
+    // should this come from the server?
+    var text = "<block_set xmlns='http: // www.w3.org/1999/xhtml'>"
+        + "<instance x='25' y='50'>" + "<block type='robBrick_EV3-Brick'>"
+        + "<field name='WHEEL_DIAMETER'>5.6</field>"
+        + "<field name='TRACK_WIDTH'>17</field>" + "</block>" + "</instance>"
+        + "</block_set>";
+    Blockly.Xml.textToDom(text);
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
   }
 }
@@ -117,10 +136,10 @@ function showToolbox(result) {
   }
 }
 
-function loadToolbox(number) {
+function loadToolbox(toolbox) {
   COMM.json("/blocks", {
     "cmd" : "loadT",
-    "name" : number
+    "name" : toolbox
   }, showToolbox);
 }
 
@@ -185,6 +204,35 @@ function initProgramNameTable() {
   $('#programNameTable tbody').on('click', 'tr', selectionFn);
 }
 
+function startProgram() {
+  if (userId == "none") {
+    // alert("No user id, you need to sign in");
+    saveToServer();
+    runOnBrick();
+  } else {
+    // alert("We use the user program table");
+    // saveUPToServer();
+    runOnBrick();
+  }
+}
+
+function checkProgram() {
+  // TODO
+  alert("Your program will be checked soon ;-)");
+}
+
+function switchToBlockly() {
+  document.getElementById('tabs').style.display = 'inline';
+  document.getElementById('bricklyFrame').style.height = '0';
+  document.getElementById('bricklyFrame').style.width = '0';
+}
+
+function switchToBrickly() {
+  document.getElementById('tabs').style.display = 'none';
+  document.getElementById('bricklyFrame').style.height = '100%';
+  document.getElementById('bricklyFrame').style.width = '100%';
+}
+
 function init() {
   $('#tabs').tabs({
     heightStyle : 'content',
@@ -200,15 +248,10 @@ function init() {
   $('#loadFromListing').onWrap('click', myLoadFromListing,
       'load blocks from program list');
 
-  $('#save').onWrap('click', function() {
-    if (userId == "none") {
-      alert("No user id, saving in the general table");
-      saveToServer();
-    } else {
-      alert("Saving in the user account");
-      saveUPToServer();
-    }
-  }, 'save the blocks');
+  // #brickConfiguration is provisional, should be integrated in the menue
+  $('#brickConfiguration').onWrap('click', function() {
+    switchToBrickly();
+  }, 'show brick configuration');
 
   $('#load').onWrap('click', function() {
     if (userId == "none") {
@@ -264,15 +307,20 @@ function init() {
   }, 'load blocks from program list');
 
   $('#toolbox1').onWrap('click', function() {
-    loadToolbox('1');
+    loadToolbox('beginner');
   }, 'load toolbox 1');
   $('#toolbox2').onWrap('click', function() {
-    loadToolbox('2');
+    loadToolbox('expert');
   }, 'load toolbox 2');
   COMM.json("/blocks", {
     "cmd" : "loadT",
-    "name" : "1"
+    "name" : "beginner"
   }, injectBlockly);
+  /*
+   * COMM.json("/blocks", { "cmd" : "loadT", "name" : "brickEV3" },
+   * injectBlrickly);
+   */
+
 };
 
 $(document).ready(WRAP.fn3(init, 'page init'));

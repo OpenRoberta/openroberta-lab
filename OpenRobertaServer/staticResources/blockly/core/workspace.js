@@ -30,6 +30,11 @@ goog.provide('Blockly.Workspace');
 // goog.require('Blockly.Block');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Trashcan');
+goog.require('Blockly.Button');
+goog.require('Blockly.StartButton');
+goog.require('Blockly.BackButton');
+goog.require('Blockly.CheckButton');
+goog.require('Blockly.SaveButton');
 goog.require('Blockly.Xml');
 // goog.require('Blockly.Xml.Roberta');
 
@@ -97,6 +102,34 @@ Blockly.Workspace.prototype.scrollY = 0;
 Blockly.Workspace.prototype.trashcan = null;
 
 /**
+ * The workspace's startButton (if any).
+ * 
+ * @type {Blockly.startButton}
+ */
+Blockly.Workspace.prototype.startButton = null;
+
+/**
+ * The workspace's checkButton (if any).
+ * 
+ * @type {Blockly.checkButton}
+ */
+Blockly.Workspace.prototype.checkButton = null;
+
+/**
+ * The workspace's save button.
+ * 
+ * @type {Blockly.saveButton}
+ */
+Blockly.Workspace.prototype.saveButton = null;
+
+/**
+ * The workspace's back button.
+ * 
+ * @type {Blockly.backButton}
+ */
+Blockly.Workspace.prototype.backButton = null;
+
+/**
  * PID of upcoming firing of a change event. Used to fire only one event after
  * multiple changes.
  * 
@@ -143,6 +176,22 @@ Blockly.Workspace.prototype.dispose = function() {
     this.trashcan.dispose();
     this.trashcan = null;
   }
+  if (this.startButton) {
+    this.startButton.dispose();
+    this.startButton = null;
+  }
+  if (this.checkButton) {
+    this.checkButton.dispose();
+    this.checkButton = null;
+  }
+  if (this.saveButton) {
+    this.saveButton.dispose();
+    this.saveButton = null;
+  }
+  if (this.backButton) {
+    this.backButton.dispose();
+    this.backButton = null;
+  }
 };
 
 /**
@@ -154,6 +203,54 @@ Blockly.Workspace.prototype.addTrashcan = function() {
     var svgTrashcan = this.trashcan.createDom();
     this.svgGroup_.insertBefore(svgTrashcan, this.svgBlockCanvas_);
     this.trashcan.init();
+  }
+};
+
+/**
+ * Add a startButton.
+ */
+Blockly.Workspace.prototype.addStartButton = function() {
+  if (Blockly.hasStartButton && !Blockly.readOnly) {
+    this.startButton = new Blockly.StartButton(this);
+    var svgStartButton = this.startButton.createDom();
+    this.svgGroup_.insertBefore(svgStartButton, this.svgBlockCanvas_);
+    this.startButton.init();
+  }
+};
+
+/**
+ * Add a checkButton.
+ */
+Blockly.Workspace.prototype.addCheckButton = function() {
+  if (Blockly.hasCheckButton && !Blockly.readOnly) {
+    this.checkButton = new Blockly.CheckButton(this);
+    var svgCheckButton = this.checkButton.createDom();
+    this.svgGroup_.insertBefore(svgCheckButton, this.svgBlockCanvas_);
+    this.checkButton.init();
+  }
+};
+
+/**
+ * Add a saveButton.
+ */
+Blockly.Workspace.prototype.addSaveButton = function() {
+  if (Blockly.hasSaveButton) {
+    this.saveButton = new Blockly.SaveButton(this);
+    var svgSaveButton = this.saveButton.createDom();
+    this.svgGroup_.insertBefore(svgSaveButton, this.svgBlockCanvas_);
+    this.saveButton.init();
+  }
+};
+
+/**
+ * Add a backButton.
+ */
+Blockly.Workspace.prototype.addBackButton = function() {
+  if (Blockly.hasBackButton) {
+    this.backButton = new Blockly.BackButton(this);
+    var svgBackButton = this.backButton.createDom();
+    this.svgGroup_.insertBefore(svgBackButton, this.svgBlockCanvas_);
+    this.backButton.init();
   }
 };
 
@@ -375,13 +472,14 @@ Blockly.Workspace.prototype.fireChangeEvent = function() {
  *            xmlBlock XML block element.
  */
 Blockly.Workspace.prototype.paste = function(xmlBlock) {
-  if (xmlBlock.getElementsByTagName('block').length >= this.remainingCapacity()) {
-    return;
-  }
+  // & if (xmlBlock.getElementsByTagName('block').length >=
+  // this.remainingCapacity()) {
+  // return;
+  // }
   var block = Blockly.Xml.domToBlock(this, xmlBlock);
   // Move the duplicate to original position.
-  var blockX = parseInt(xmlBlock.getAttribute('x'), 10);
-  var blockY = parseInt(xmlBlock.getAttribute('y'), 10);
+  var blockX = parseInt(xmlBlock[0].getAttribute('x'), 10);
+  var blockY = parseInt(xmlBlock[0].getAttribute('y'), 10);
   if (!isNaN(blockX) && !isNaN(blockY)) {
     if (Blockly.RTL) {
       blockX = -blockX;

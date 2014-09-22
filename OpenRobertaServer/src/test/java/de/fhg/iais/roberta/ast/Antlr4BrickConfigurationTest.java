@@ -10,7 +10,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
+import de.fhg.iais.roberta.ast.syntax.BrickConfigurationOld;
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationLexer;
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationParser;
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationParser.ConnectorlContext;
@@ -29,7 +29,7 @@ public class Antlr4BrickConfigurationTest {
 
     @Test
     public void testparseTree2Ast1() throws Exception {
-        BrickConfiguration conf =
+        BrickConfigurationOld conf =
             BrickConfigurationTreeToAst.startWalkForVisiting("brick Craesy-PID-2014 { sensor port 3 touch; actor port A left large motor; }");
         System.out.println(conf);
     }

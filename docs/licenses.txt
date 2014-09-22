@@ -10,3 +10,4 @@ This product includes software developed by the Apache Software Foundation (http
 This product includes software developed by John Resig (http://jquery.com), licensed under the terms of the MIT License.
 This product includes software developed by Paul Bakaus and the jQuery UI Team (http://jqueryui.com/), licensed under the terms MIT License.
 This product includes software developed by the leJOS group (http://www.lejos.org), licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+This product includes software provided  by Oracle (http://www.oracle.com), Java for LEGO® Mindstorms® EV3, Oracle Java SE Embedded version, licensed under OTN license terms.

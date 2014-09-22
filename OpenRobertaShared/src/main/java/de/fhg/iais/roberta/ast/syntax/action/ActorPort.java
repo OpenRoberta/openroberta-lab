@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * This enumeration contains all the actor ports that brick can have.
  */
 public enum ActorPort {
-    A(), B(), C(), D();
+    A( "MA" ), B( "MB" ), C( "MC" ), D( "MD" );
 
     private final String[] values;
 

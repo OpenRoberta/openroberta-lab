@@ -1,57 +1,70 @@
 package de.fhg.iais.roberta.ast.syntax;
 
-import java.util.Arrays;
+import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
+import de.fhg.iais.roberta.ast.syntax.action.HardwareComponentType;
+import de.fhg.iais.roberta.ast.syntax.action.MotorSide;
+import de.fhg.iais.roberta.dbc.Assert;
 
-import de.fhg.iais.roberta.dbc.DbcException;
+public class HardwareComponent {
+    private final HardwareComponentType componentType;
+    private final DriveDirection rotationDirection;
+    private final MotorSide motorSide;
 
-public enum HardwareComponent {
-    EV3ColorSensor( Category.SENSOR, "color", "colour", "Farbe" ), //
-    EV3TouchSensor( Category.SENSOR, "touch", "Berührung" ),
-    EV3UltrasonicSensor( Category.SENSOR, "ultrasonic", "Ultraschall" ),
-    EV3IRSensor( Category.SENSOR, "infrared", "Infrarot" ),
-    RotationSensor( Category.SENSOR, "rotation", "Drehung" ), // => motor rotations -> Category.AKTOR???
-    BrickSensor( Category.SENSOR, "?" ),
-    EV3GyroSensor( Category.SENSOR, "gyro" ),
-    EV3MediumRegulatedMotor( Category.ACTOR, "regulated", "middle" ),
-    EV3LargeRegulatedMotor( Category.ACTOR, "regulated", "large" ),
-    EV3MediumUnRegulatedMotor( Category.ACTOR, "unregulated", "middle" ),
-    EV3LargeUnRegulatedMotor( Category.ACTOR, "unregulated", "large" ),
-    BasicMotor( Category.ACTOR, "unregulated", "large" ),
-    NXTMotor( Category.ACTOR, "PH" ),
-    NXTRegulatedMotor( Category.ACTOR, "PH" );
+    public HardwareComponent(HardwareComponentType componentType, DriveDirection rotationDirection, MotorSide motorSide) {
+        Assert.isTrue(componentType != null);
+        this.componentType = componentType;
+        this.rotationDirection = rotationDirection;
+        this.motorSide = motorSide;
+    }
 
-    private final Category category;
-    private final String[] attributes;
+    public HardwareComponent(HardwareComponentType componentType) {
+        Assert.isTrue(componentType != null);
+        this.componentType = componentType;
+        this.rotationDirection = null;
+        this.motorSide = null;
+    }
 
-    private HardwareComponent(Category category, String... attributes) {
-        this.category = category;
-        this.attributes = Arrays.copyOf(attributes, attributes.length);
-        for ( int i = 0; i < attributes.length; i++ ) {
-            this.attributes[i] = this.attributes[i].toLowerCase();
-        }
-        Arrays.sort(this.attributes);
+    public HardwareComponentType getComponentType() {
+        return this.componentType;
+    }
+
+    public DriveDirection getRotationDirection() {
+        return this.rotationDirection;
+    }
+
+    public MotorSide getMotorSide() {
+        return this.motorSide;
     }
 
     public Category getCategory() {
-        return this.category;
+        return this.componentType.getCategory();
     }
 
-    public boolean attributesMatchAttributes(String... attributes) {
-        for ( String attribute : attributes ) {
-            attribute = attribute.toLowerCase();
-            if ( Arrays.binarySearch(this.attributes, attribute) < 0 ) {
-                return false;
-            }
-        }
-        return true;
+    public boolean isRegulated() {
+        return this.componentType.attributesMatchAttributes("regulated");
     }
 
-    public static HardwareComponent attributesMatch(String... attributes) {
-        for ( HardwareComponent hardwareComponent : HardwareComponent.values() ) {
-            if ( hardwareComponent.attributesMatchAttributes(attributes) ) {
-                return hardwareComponent;
-            }
+    public String generateRegenerate() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("new HardwareComponentN(").append(this.componentType.name());
+        if ( getCategory() == Category.ACTOR ) {
+            sb.append(", ").append(this.rotationDirection.name()).append(", ").append(this.motorSide.name());
         }
-        throw new DbcException("No hardware component matches attributes " + Arrays.toString(attributes));
+        return sb.toString();
+    }
+
+    public static HardwareComponentType attributesMatch(String... attributes) {
+        return HardwareComponentType.attributesMatch(attributes);
+    }
+
+    @Override
+    public String toString() {
+        return "HardwareComponentN [componentType="
+            + this.componentType
+            + ", rotationDirection="
+            + this.rotationDirection
+            + ", motorSide="
+            + this.motorSide
+            + "]";
     }
 }

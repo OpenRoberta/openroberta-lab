@@ -1,11 +1,34 @@
-<project xmlns="http://www.w3.org/1999/xhtml">
-  <instance x="1" y="-2">
-    <block type="controls_if" inline="false">
-      <value name="IF0">
-        <block type="logic_compare" inline="true">
-          <field name="OP">EQ</field>
+<block_set xmlns="http://www.w3.org/1999/xhtml">
+  <instance x="49" y="5">
+    <block type="robControls_start" id="43" deletable="false"></block>
+    <block type="robActions_motor_on" id="19" inline="false">
+      <field name="MOTORPORT">B</field>
+      <value name="POWER">
+        <block type="math_number" id="20">
+          <field name="NUM">30</field>
         </block>
       </value>
     </block>
+    <block type="controls_if" id="55" inline="false">
+      <value name="IF0">
+        <block type="robSensors_touch_isPressed" id="57">
+          <field name="SENSORPORT">1</field>
+        </block>
+      </value>
+      <statement name="DO0">
+        <block type="text_append" id="81" inline="false">
+          <field name="VAR">item</field>
+          <value name="TEXT">
+            <block type="text" id="82">
+              <field name="TEXT"></field>
+            </block>
+          </value>
+        </block>
+      </statement>
+    </block>
+    <block type="robActions_brickLight_on" id="91">
+      <field name="SWITCH_COLOR">GREEN</field>
+      <field name="SWITCH_BLINK">ON</field>
+    </block>
   </instance>
-</project>
+</block_set>

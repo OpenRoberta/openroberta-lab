@@ -11,9 +11,9 @@ public class ControlTest {
     public void robWait() throws Exception {
         String a =
             "BlockAST [project=[[\n"
-                + "(repeat [WHILE, Binary [EQ, NumConst [0], NumConst [0]]]\n"
+                + "(repeat [WAIT, Binary [EQ, NumConst [0], NumConst [0]]]\n"
                 + "exprStmt Funct [PRINT, [StringConst [1]]]\n"
-                + ")\n(repeat [WHILE, Binary [EQ, NumConst [0], NumConst [0]]]\n"
+                + ")\n(repeat [WAIT, Binary [EQ, NumConst [0], NumConst [0]]]\n"
                 + "exprStmt Funct [PRINT, [StringConst [2]]]\n"
                 + ")]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/wait_stmt.xml"));
@@ -23,7 +23,7 @@ public class ControlTest {
     public void robWaitFor() throws Exception {
         String a =
             "BlockAST [project=[[\n"
-                + "(repeat [WHILE, Binary [EQ, SensorExpr [GetSampleSensor [sensorType=TOUCH, sensorPort=S1]], BoolConst [true]]]\n"
+                + "(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [sensorType=TOUCH, sensorPort=S1]], BoolConst [true]]]\n"
                 + ")]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/wait_stmt1.xml"));
     }

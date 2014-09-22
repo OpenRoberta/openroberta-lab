@@ -2,174 +2,146 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <script type="text/javascript" src="/common/jquery/jquery-2.0.3.js" charset="utf-8"></script>
-    <script type="text/javascript" src="/common/ui/jquery-ui.js" charset="utf-8"></script>
-    <script type="text/javascript" src="/common/basics.js" charset="utf-8"></script>
-    <script type="text/javascript" src="/common/jquery.dataTables.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/common/jquery/jquery-2.0.3.js" charset="utf-8"></script>
+<script type="text/javascript" src="/common/ui/jquery-ui.js" charset="utf-8"></script>
+<script type="text/javascript" src="/common/basics.js" charset="utf-8"></script>
+<script type="text/javascript" src="/common/jquery.dataTables.min.js" charset="utf-8"></script>
 
-    <script type="text/javascript" src="/blockly/blockly_compressed.js"></script>
-    <script type="text/javascript" src="/blockly/blocks_compressed.js"></script>
-    <script type="text/javascript" src="/blockly/msg/js/de.js"></script>
+<script type="text/javascript" src="/blockly/blockly_compressed.js"></script>
+<script type="text/javascript" src="/blockly/blocks_compressed.js"></script>
+<script type="text/javascript" src="/blockly/msg/js/de.js"></script>
 
-    <script type="text/javascript" src="/roberta/roberta.js"></script>
-    <script type="text/javascript" src="/roberta/popups.js"></script>
-    <script type="text/javascript" src="/roberta/users.js"></script>
-    <script type="text/javascript" src="/roberta/userPrograms.js"></script>
+<script type="text/javascript" src="/roberta/roberta.js"></script>
+<script type="text/javascript" src="/roberta/popups.js"></script>
+<script type="text/javascript" src="/roberta/users.js"></script>
+<script type="text/javascript" src="/roberta/userPrograms.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="/common/themes/base/jquery.ui.theme.css"></link>
-    <link rel="stylesheet" type="text/css" href="/common/themes/base/jquery.ui.tabs.css"></link>
-    <link rel="stylesheet" type="text/css" href="/css/roberta.css"></link>
-    <link rel="stylesheet" type="text/css" href="/common/jquery.dataTables.min.css"></link>
-    <link rel="stylesheet" type="text/css" href="css/styles.css"></link>
-    <!-- TESTING  <link rel="stylesheet" href="css/jquery-ui_modified.css"></link> -->
+<link rel="stylesheet" type="text/css" href="/common/themes/base/jquery.ui.theme.css"></link>
+<link rel="stylesheet" type="text/css" href="/common/themes/base/jquery.ui.tabs.css"></link>
+<link rel="stylesheet" type="text/css" href="/css/roberta.css"></link>
+<link rel="stylesheet" type="text/css" href="/common/jquery.dataTables.min.css"></link>
+<link rel="stylesheet" type="text/css" href="css/styles.css"></link>
+<!-- TESTING  <link rel="stylesheet" href="css/jquery-ui_modified.css"></link> -->
 
-    <link rel="stylesheet" type="text/css" href="/css/simulator.css"></link>
-    <script type="text/javascript" src="simulator/simulator.js" charset="utf-8"></script>
+<link rel="stylesheet" type="text/css" href="/css/simulator.css"></link>
+<script type="text/javascript" src="simulator/simulator.js" charset="utf-8"></script>
 
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <title>Open Roberta Lab</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>Open Roberta Lab</title>
 </head>
 
 <body>
     <div id="head-section">
         <ul id="head-navigation">
-            <li>
-                <a href="#">
-                    <span class="head-navi-icons help"></span>
-                    <span class="head-navi-text">Hilfe</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <span class="head-navi-icons settings"></span>
-                    <span class="head-navi-text">Einstellungen</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <span class="head-navi-icons community"></span>
-                    <span class="head-navi-text">Gruppen</span>
-                </a>
-            </li>
-            <li>
-                <a class="popup-opener" id="open-program" href="#">
-                    <span class="head-navi-icons project"></span>
-                    <span class="head-navi-text">Programm</span>
-                </a>
-                <!-- UNNEEDED SUBMENU 
+            <li><a href="#"> <span class="head-navi-icons help"></span> <span class="head-navi-text">Hilfe</span>
+            </a></li>
+            <li><a href="#" id="brickConfiguration" type="submit"> <span class="head-navi-icons settings"></span> <span class="head-navi-text">Einstellungen</span>
+            </a></li>
+            <li><a href="#"> <span class="head-navi-icons community"></span> <span class="head-navi-text">Gruppen</span>
+            </a></li>
+            <li><a class="popup-opener" id="open-program" href="#"> <span class="head-navi-icons project"></span> <span class="head-navi-text">Programm</span>
+            </a> <!-- UNNEEDED SUBMENU 
                     <div id="project-submenu">
                         Simulation
                         <input class='button' onclick="viewSimulator(true);" type="submit" value="Simulator Test" />
-                    </div> -->
-            </li>
-            <li>
-               	<a class="popup-opener" id="open-login-user" href="#">
-                    <span id="signInIcon" class="head-navi-icons user"></span>
-                    <span id="setName" class="head-navi-text">Anmeldung</span>
-                </a>
-            </li>
+                    </div> --></li>
+            <li><a class="popup-opener" id="open-login-user" href="#"> <span id="signInIcon" class="head-navi-icons user"></span> <span id="setName"
+                    class="head-navi-text"
+                >Anmeldung</span>
+            </a></li>
         </ul>
         <div id="logo">
             <a href="index.html">Logo</a>
         </div>
     </div>
-    
-    <!-- ################## POPUPS ################## --> 
-     <div class="jquerypopup" id="login-user" title="Anmeldung">
-         <label for="accountNameS">Benutzername</label>
-         <input id="accountNameS" class='input' type="text" value="" />
-         <label for="pass1S">Passwort</label>
-         <input id="pass1S" class='input' type="password"  value="" /><br />
-         <input id="signIn" class='submit' type="submit" value="Anmelden" />
-         <input id="open-register-user" href="#register" class='submit popup-opener' type="submit" value="Neuer Benutzer" /><br />
-         <a class="popup-opener" id="open-delete-user" href="#">Benutzer löschen</a>
-         <span class="roberta-popup"></span>
-     </div>
-     <div class="jquerypopup" id="register-user" title="Benutzer erstellen">
-         <label for="accountName">Benutzername</label>
-         <input id="accountName" class='input' type="text" value="" />
-         <label for="pass1">Passwort</label>
-         <input id="pass1" class='input' type="password"  value="" />
-         <label for="pass2">Passwort wiederholen</label>
-         <input id="pass2" class='input' type="password"  value="" />
-         <label for="userName">Name</label>
-         <input id="userName" class='input' type="text" value="" />
-         <label for="userEmail">E-Mail</label>
-         <input id="userEmail" class='input' type="text" value="" /><br />
-         <input  type="radio" name="role" value="schueler">Schüler
-         <input type="radio" name="role" value="lehrer">Lehrer<br />
-         <input id="saveUser" class='submit' type="submit" value="Benutzer registrieren" />
-     </div>
-     <div class="jquerypopup" id="delete-user" title="Benutzer löschen">
-         <input id="accountNameD" class='input' type="text" value="" /><br />
-         <input id="deleteUser" class='submit' type="submit" value="Benutzer löschen" />
-     </div>
-     <div class="jquerypopup" id="program" title="Programm">
-         <label for="programName">Programmname</label>
-         <input id="programName" id="name" class='input' type="text" value="" /><br />
-         <input id="save" class='submit' type="submit" value="Speichern" />
-         <input id="load" class='submit' type="submit" value="Laden" />
-         <input id="add" class='submit' type="submit" value="Hinzufügen" />
-         <input id="del" class='submit' type="submit" value="Löschen" />
-     </div>
-        <!-- ################## END POPUPS ################## --> 
-       
-<div id="main-section">
-  <div id="tabs" >
-    <ul>
-      <li><a href="#blockly">Test Nepo :-)</a></li>
-      <li><a href="#listing">Listing</a></li>
-      <li><a href="#logging">Logging</a></li>
-      <li><a href="#readme">README</a></li>
-      <li><a onclick="viewSimulator(true);">Simulator Test</a></li>
-    </ul>
-    
-    <div id="simulatorDiv"> 
-    	<button id="closeBtn" class="button" onclick="viewSimulator(false);">Beenden</button>	
-    	<button id="closeBtn" class="button" onclick="moveStop();">Stop</button>
-    	<div id="positionData"></div>
-    	<!--  <div id="simulatorRender"></div> -->
-    	<canvas id="robertaCanvas" width="212" height="212" class="dummy"></canvas>
+
+    <!-- ################## POPUPS ################## -->
+    <div class="jquerypopup" id="login-user" title="Anmeldung">
+        <label for="accountNameS">Benutzername</label> <input id="accountNameS" class='input' type="text" value="" /> <label for="pass1S">Passwort</label> <input
+            id="pass1S" class='input' type="password" value=""
+        /><br /> <input id="signIn" class='submit' type="submit" value="Anmelden" /> <input id="open-register-user" href="#register"
+            class='submit popup-opener' type="submit" value="Neuer Benutzer"
+        /><br /> <a class="popup-opener" id="open-delete-user" href="#">Benutzer löschen</a> <span class="roberta-popup"></span>
     </div>
-    
-    <div id="blockly">
-      <div id="blocklyDiv" style="height: 100%; width: 100%; z-index: 1;"></div>
-      <br />
-      <div id="control-panel">
-          <label>Toolbox</label>
-          <input id="toolbox1" class='button' type="submit" value="Anf&auml;nger" /><br />
-          <input id="toolbox2" class='button' type="submit" value="Experte" />
-          <input id="run" class='submit' type="submit" value="run" />
-      </div>      
+    <div class="jquerypopup" id="register-user" title="Benutzer erstellen">
+        <label for="accountName">Benutzername</label> <input id="accountName" class='input' type="text" value="" /> <label for="pass1">Passwort</label> <input
+            id="pass1" class='input' type="password" value=""
+        /> <label for="pass2">Passwort wiederholen</label> <input id="pass2" class='input' type="password" value="" /> <label for="userName">Name</label> <input
+            id="userName" class='input' type="text" value=""
+        /> <label for="userEmail">E-Mail</label> <input id="userEmail" class='input' type="text" value="" /><br /> <input type="radio" name="role"
+            value="schueler"
+        >Schüler <input type="radio" name="role" value="lehrer">Lehrer<br /> <input id="saveUser" class='submit' type="submit"
+                value="Benutzer registrieren"
+            />
     </div>
-    <div id="listing" style="overflow: scroll;">
-      <table id="programNameTable" class="tableSize">
-        <thead></thead>
-        <tbody></tbody>
-        <tfoot>
-        </tfoot>
-      </table>
-      <br />
-      <input id="loadFromListing" class='submit' type="submit" value="load" />
-      <div id="redrawCounter" class="rightGray">0</div></br>
+    <div class="jquerypopup" id="delete-user" title="Benutzer löschen">
+        <input id="accountNameD" class='input' type="text" value="" /><br /> <input id="deleteUser" class='submit' type="submit" value="Benutzer löschen" />
     </div>
-    <div id="logging">
-      <br />
-      <div>
-        <input id="toggle" class="button" type="submit" value="log ein/aus" /><br /></br>
-        <hr />
-        <br /></br>
-        <ol id="log" class="log">
-        </ol>
-        <div class="counter">Count:</div>
-        <div class="counter" id="counter">0</div>
-      </div>
+    <div class="jquerypopup" id="program" title="Programm">
+        <label for="programName">Programmname</label> <input id="programName" id="name" class='input' type="text" value="" /><br /> <input id="save"
+            class='submit' type="submit" value="Speichern"
+        /> <input id="load" class='submit' type="submit" value="Laden" /> <input id="add" class='submit' type="submit" value="Hinzufügen" /> <input id="del"
+            class='submit' type="submit" value="Löschen"
+        />
     </div>
-    <div id="readme">
-      <br />
-      <div>Content Readme</div>
+    <!-- ################## END POPUPS ################## -->
+
+    <div id="main-section">
+        <div id="tabs">
+            <ul>
+                <li><a href="#blockly">Test Nepo :-)</a></li>
+                <li><a href="#listing">Listing</a></li>
+                <li><a href="#logging">Logging</a></li>
+                <li><a href="#readme">README</a></li>
+                <li><a onclick="viewSimulator(true);">Simulator Test</a></li>
+            </ul>
+
+            <div id="simulatorDiv">
+                <button id="closeBtn" class="button" onclick="viewSimulator(false);">Beenden</button>
+                <button id="closeBtn" class="button" onclick="moveStop();">Stop</button>
+                <div id="positionData"></div>
+                <!--  <div id="simulatorRender"></div> -->
+                <canvas id="robertaCanvas" width="212" height="212" class="dummy"></canvas>
+            </div>
+
+            <div id="blockly">
+                <div id="blocklyDiv" style="height: 100%; width: 100%; z-index: 1;"></div>
+                <br />
+                <div id="control-panel">
+                    <label>Toolbox</label> <input id="toolbox1" class='button' type="submit" value="Anf&auml;nger" /><br /> <input id="toolbox2"
+                        class='button' type="submit" value="Experte"
+                    />
+                </div>
+            </div>
+            <div id="listing" style="overflow: scroll;">
+                <table id="programNameTable" class="tableSize">
+                    <thead></thead>
+                    <tbody></tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+                <br /> <input id="loadFromListing" class='submit' type="submit" value="load" />
+                <div id="redrawCounter" class="rightGray">0</div>
+                </br>
+            </div>
+            <div id="logging">
+                <br />
+                <div>
+                    <input id="toggle" class="button" type="submit" value="log ein/aus" /><br /> </br>
+                    <hr />
+                    <br /> </br>
+                    <ol id="log" class="log">
+                    </ol>
+                    <div class="counter">Count:</div>
+                    <div class="counter" id="counter">0</div>
+                </div>
+            </div>
+            <div id="readme">
+                <br />
+                <div>Content Readme</div>
+            </div>
+        </div>
+        <iframe src="bricklyFrame.html" id="bricklyFrame" style="height: 0; width: 0; border: none;"></iframe>
     </div>
-  </div>
- </div> 
 </body>
 </html>

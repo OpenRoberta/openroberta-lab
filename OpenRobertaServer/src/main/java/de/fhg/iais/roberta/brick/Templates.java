@@ -14,7 +14,7 @@ public class Templates {
 	private final Map<String, String> templates = new ConcurrentHashMap<>();
 
 	public Templates() {
-		String eins = ""
+		String beginner = ""
 				+ " <toolbox_set id='toolbox' style='display: none'> "
 				+ "  <category name='Aktion'> "
 				+ "    <block type='robActions_motorDiff_on'>" //
@@ -178,7 +178,7 @@ public class Templates {
 				+ "  <category name='Variablen' custom='VARIABLE'/> "
 				+ "  <category name='Funktionen' custom='PROCEDURE'/> "
 				+ "</toolbox_set> ";
-		String zwei = ""
+		String expert = ""
 				+ " <toolbox_set id='toolbox' style='display: none'> "
 				+ "  <category name='Aktion'> "
 				+ "  <category name='Bewegung'> "
@@ -555,8 +555,20 @@ public class Templates {
 				+ "  <category name='Variablen' custom='VARIABLE'/> "
 				+ "  <category name='Funktionen' custom='PROCEDURE'/> "
 				+ "</toolbox_set> ";
-		templates.put("1", eins);
-		templates.put("2", zwei);
+		String brickEV3 = ""
+				+ "<toolbox_set id='toolbox' style='display: none'>"
+				+ "  <block type='robBrick_ultrasonic'></block>"
+				+ "  <block type='robBrick_colour'></block>"
+				+ "  <block type='robBrick_infrared'></block>"
+				+ "  <block type='robBrick_touch'></block>"
+				+ "  <block type='robBrick_gyro'></block>"
+				+ "  <block type='robBrick_motor_middle'></block>"
+				+ "  <block type='robBrick_motor_big'>"
+				+ "    <field name='MOTOR_DRIVE'>RIGHT</field>" + "  </block>"
+				+ "  <block type='robBrick_actor'></block>" + "</toolbox_set>";
+		templates.put("beginner", beginner);
+		templates.put("expert", expert);
+		templates.put("brickEV3", brickEV3);
 		LOG.info("created");
 	}
 

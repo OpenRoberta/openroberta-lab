@@ -177,7 +177,6 @@ public class GraphicStartup implements Menu {
     private final BroadcastThread broadcast = new BroadcastThread();
     private final RemoteMenuThread remoteMenuThread = new RemoteMenuThread();
 
-    // private GraphicMenu curMenu;
     private int timeout = 0;
     private boolean btVisibility;
     private static String version = "Unknown";
@@ -1475,14 +1474,6 @@ public class GraphicStartup implements Menu {
         }
     }
 
-    public static List<String> getIPs() {
-        return ips;
-    }
-
-    public static GraphicMenu getMenu() {
-        return curMenu;
-    }
-
     /**
      * Roberta submenu implementation.
      */
@@ -1531,11 +1522,13 @@ public class GraphicStartup implements Menu {
                 if ( GraphicStartup.backgroundTasks.getTimeOutInfo() == true ) {
                     newScreen(" Robertalab");
                     lcd.drawString("Time out!", 0, 3);
+                    serverURLString = "";
                     Button.waitForAnyPress();
                     return;
                 } else if ( GraphicStartup.backgroundTasks.getErrorInfo() == true ) {
                     newScreen(" Robertalab");
                     lcd.drawString("Error/ abort!", 0, 3);
+                    serverURLString = "";
                     Button.waitForAnyPress();
                     return;
                 } else {
@@ -1566,7 +1559,7 @@ public class GraphicStartup implements Menu {
                             backgroundTasks.disconnectRoberta();
                             isRobertaRegistered = false;
                             token = null;
-                            serverURLString = null;
+                            serverURLString = "";
                             serverTokenRessource = null;
                             serverDownloadRessource = null;
                             this.indiBA.setRobertalab(false);
@@ -2020,7 +2013,7 @@ public class GraphicStartup implements Menu {
                 Delay.msDelay(200);
             }
             System.out.println("Waiting for process to die");
-            ;
+
             program.waitFor();
             System.out.println("Program finished");
             // Turn the LED off, in case left on
@@ -2032,7 +2025,9 @@ public class GraphicStartup implements Menu {
         } catch ( Exception e ) {
             System.err.println("Failed to execute program: " + e);
         } finally {
-            backgroundTasks.reconnectRoberta();
+            if ( isRobertaRegistered == true ) {
+                backgroundTasks.reconnectRoberta();
+            }
         }
     }
 

@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.ast.syntax.action.BrickLedColor;
 import de.fhg.iais.roberta.codegen.lejos.Hal;
 
 public class blinker2 {
-    private BrickConfiguration brickConfiguration = new BrickConfiguration.Builder().build();
+    private final BrickConfiguration brickConfiguration = new BrickConfiguration.Builder().build();
 
     public static void main(String[] args) {
         new blinker2().run();

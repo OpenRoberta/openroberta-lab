@@ -73,7 +73,7 @@ public class IfStmtTest {
         BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
 
         JaxbTransformer<?> transformer = new JaxbTransformer<>();
-        transformer.projectToAST(project);
+        transformer.blockSetToAST(project);
         String a =
             "BlockAST [project=[[\n"
                 + "if Binary [EQ, NumConst [1], NumConst [1]]\n"

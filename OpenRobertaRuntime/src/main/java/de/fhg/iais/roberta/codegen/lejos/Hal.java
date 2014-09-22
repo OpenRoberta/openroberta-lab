@@ -68,37 +68,6 @@ public class Hal {
     }
 
     /**
-     * instantiate all lejos objects for devices that are needed
-     * 
-     * @param actorPort1
-     * @param actorPort2
-     * @param actorPort3
-     * @param actorPort4
-     * @param sensorPort1
-     * @param sensorPort2
-     * @param sensorPort3
-     * @param sensorPort4
-     */
-    public void createDevicesFromConfiguration(
-        ActorPort actorPort1,
-        ActorPort actorPort2,
-        ActorPort actorPort3,
-        ActorPort actorPort4,
-        SensorPort sensorPort1,
-        SensorPort sensorPort2,
-        SensorPort sensorPort3,
-        SensorPort sensorPort4) {
-        this.deviceHandler.createMotorObject(actorPort1);
-        this.deviceHandler.createMotorObject(actorPort2);
-        this.deviceHandler.createMotorObject(actorPort3);
-        this.deviceHandler.createMotorObject(actorPort4);
-        this.deviceHandler.createSampleProvider(sensorPort1);
-        this.deviceHandler.createSampleProvider(sensorPort2);
-        this.deviceHandler.createSampleProvider(sensorPort3);
-        this.deviceHandler.createSampleProvider(sensorPort4);
-    }
-
-    /**
      * @param speedPercent
      * @return degrees per second
      */
@@ -131,6 +100,24 @@ public class Hal {
      * @param actorPort
      * @param speedPercent
      */
+    public void turnOnRegulatedMotor(ActorPort actorPort, int speedPercent) {
+        setRegulatedMotorSpeed(actorPort, speedPercent);
+        this.deviceHandler.getRegulatedMotor(actorPort).forward();
+    }
+
+    /**
+     * @param actorPort
+     * @param speedPercent
+     */
+    public void turnOnUnregulatedMotor(ActorPort actorPort, int speedPercent) {
+        setUnregulatedMotorSpeed(actorPort, speedPercent);
+        this.deviceHandler.getUnregulatedMotor(actorPort).forward();
+    }
+
+    /**
+     * @param actorPort
+     * @param speedPercent
+     */
     public void setRegulatedMotorSpeed(ActorPort actorPort, int speedPercent) {
         this.deviceHandler.getRegulatedMotor(actorPort).setSpeed(toDegPerSec(speedPercent));
     }
@@ -148,9 +135,18 @@ public class Hal {
      * @param speedPercent
      * @param rotations
      */
-    public void rotateRegulatedMotor(ActorPort actorPort, int speedPercent, int rotations) {
+    public void rotateRegulatedMotor(ActorPort actorPort, int speedPercent, MotorMoveMode mode, int rotations) {
         this.deviceHandler.getRegulatedMotor(actorPort).setSpeed(toDegPerSec(speedPercent));
-        this.deviceHandler.getRegulatedMotor(actorPort).rotate(rotations);
+        switch ( mode ) {
+            case DEGREE:
+                this.deviceHandler.getRegulatedMotor(actorPort).rotate(rotations);
+                break;
+            case ROTATIONS:
+                this.deviceHandler.getRegulatedMotor(actorPort).rotate(rotationsToAngle(rotations));
+                break;
+            default:
+                throw new DbcException("incorrect MotorMoveMode");
+        }
     }
 
     /**
@@ -161,7 +157,6 @@ public class Hal {
      */
     public void rotateUnregulatedMotor(ActorPort actorPort, int speedPercent, MotorMoveMode mode, int value) {
         this.deviceHandler.getUnregulatedMotor(actorPort).setPower(speedPercent);
-
         if ( value >= 0 ) {
             this.deviceHandler.getUnregulatedMotor(actorPort).forward();
             switch ( mode ) {
@@ -176,7 +171,7 @@ public class Hal {
                     }
                     break;
                 default:
-                    throw new DbcException("Wrong MotorMoveMode");
+                    throw new DbcException("incorrect MotorMoveMode");
             }
 
         } else {
@@ -194,7 +189,7 @@ public class Hal {
                     }
                     break;
                 default:
-                    throw new DbcException("Wrong MotorMoveMode");
+                    throw new DbcException("incorrect MotorMoveMode");
             }
         }
         this.deviceHandler.getUnregulatedMotor(actorPort).stop();
@@ -235,14 +230,14 @@ public class Hal {
     // --- END Aktion Bewegung ---
     // --- Aktion Fahren ---
 
-    public void regulatedDrive(ActorPort left, ActorPort right, DriveDirection direction, int speedPercent) {
+    public void regulatedDrive(ActorPort left, ActorPort right, boolean isReverse, DriveDirection direction, int speedPercent) {
         DifferentialPilot dPilot =
             new DifferentialPilot(
                 this.wheelDiameter,
                 this.trackWidth,
                 this.deviceHandler.getRegulatedMotor(left),
                 this.deviceHandler.getRegulatedMotor(right),
-                false);
+                isReverse);
         dPilot.setRotateSpeed(toDegPerSec(speedPercent));
         switch ( direction ) {
             case FOREWARD:
@@ -272,14 +267,14 @@ public class Hal {
     //        }
     //    }
 
-    public void driveDistance(ActorPort left, ActorPort right, DriveDirection direction, int speedPercent, int distance) {
+    public void driveDistance(ActorPort left, ActorPort right, boolean isReverse, DriveDirection direction, int speedPercent, int distance) {
         DifferentialPilot dPilot =
             new DifferentialPilot(
                 this.wheelDiameter,
                 this.trackWidth,
                 this.deviceHandler.getRegulatedMotor(left),
                 this.deviceHandler.getRegulatedMotor(right),
-                false);
+                isReverse);
         dPilot.setRotateSpeed(toDegPerSec(speedPercent));
         switch ( direction ) {
             case FOREWARD:
@@ -289,7 +284,7 @@ public class Hal {
                 dPilot.travel(-distance);
                 break;
             default:
-                throw new DbcException("wrong DriveAction.Direction");
+                throw new DbcException("incorrect DriveAction");
         }
     }
 
@@ -310,14 +305,14 @@ public class Hal {
      * @param direction
      * @param speedPercent
      */
-    public void rotateDirectionRegulated(ActorPort left, ActorPort right, TurnDirection direction, int speedPercent) {
+    public void rotateDirectionRegulated(ActorPort left, ActorPort right, boolean isReverse, TurnDirection direction, int speedPercent) {
         DifferentialPilot dPilot =
             new DifferentialPilot(
                 this.wheelDiameter,
                 this.trackWidth,
                 this.deviceHandler.getRegulatedMotor(left),
                 this.deviceHandler.getRegulatedMotor(right),
-                false);
+                isReverse);
         dPilot.setRotateSpeed(toDegPerSec(speedPercent));
         switch ( direction ) {
             case RIGHT:
@@ -327,7 +322,7 @@ public class Hal {
                 dPilot.rotateLeft();
                 break;
             default:
-                throw new DbcException("wrong TurnAction.Direction");
+                throw new DbcException("incorrect TurnAction");
         }
     }
 
@@ -337,14 +332,14 @@ public class Hal {
      * @param direction
      * @param speedPercent
      */
-    public void rotateDirectionUnregulated(ActorPort left, ActorPort right, TurnDirection direction, int speedPercent) {
+    public void rotateDirectionUnregulated(ActorPort left, ActorPort right, boolean isReverse, TurnDirection direction, int speedPercent) {
         DifferentialPilot dPilot =
             new DifferentialPilot(
                 this.wheelDiameter,
                 this.trackWidth,
                 this.deviceHandler.getRegulatedMotor(left),
                 this.deviceHandler.getRegulatedMotor(right),
-                false);
+                isReverse);
         dPilot.setRotateSpeed(toDegPerSec(speedPercent));
         switch ( direction ) {
             case RIGHT:
@@ -354,7 +349,7 @@ public class Hal {
                 dPilot.rotateLeft();
                 break;
             default:
-                throw new DbcException("wrong TurnAction.Direction");
+                throw new DbcException("incorrect TurnAction");
         }
     }
 
@@ -382,14 +377,14 @@ public class Hal {
      * @param speedPercent
      * @param angle
      */
-    public void rotateDirectionAngle(ActorPort left, ActorPort right, TurnDirection direction, int speedPercent, int angle) {
+    public void rotateDirectionAngle(ActorPort left, ActorPort right, boolean isReverse, TurnDirection direction, int speedPercent, int angle) {
         DifferentialPilot dPilot =
             new DifferentialPilot(
                 this.wheelDiameter,
                 this.trackWidth,
                 this.deviceHandler.getRegulatedMotor(left),
                 this.deviceHandler.getRegulatedMotor(right),
-                false);
+                isReverse);
         dPilot.setRotateSpeed(toDegPerSec(speedPercent));
         switch ( direction ) {
             case RIGHT:
@@ -400,7 +395,7 @@ public class Hal {
                 dPilot.rotate(angle, false);
                 break;
             default:
-                throw new DbcException("wrong TurnAction.Direction");
+                throw new DbcException("incorrect TurnAction");
         }
     }
 

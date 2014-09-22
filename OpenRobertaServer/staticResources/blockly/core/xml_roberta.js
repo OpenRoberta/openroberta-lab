@@ -13,11 +13,14 @@ goog.provide('Blockly.Xml');
  * 
  * @param {!Object}
  *            workspace The SVG workspace.
+ * @param {!Object}
+ *            type type of workspace, blocks or bricks.
  * @return {!Element} XML document.
  */
-Blockly.Xml.workspaceToDom = function(workspace) {
+Blockly.Xml.workspaceToDom = function(workspace, type) {
+  var typeOfWS = type || 'block_set';
   var width = Blockly.svgSize().width;
-  var xml = goog.dom.createDom('block_set');
+  var xml = goog.dom.createDom(typeOfWS);
   var blocks = workspace.getTopBlocks(true);
   for (var i = 0, block; block = blocks[i]; i++) {
     var top = goog.dom.createDom('instance');
@@ -456,7 +459,9 @@ Blockly.Xml.textToDom = function(text) {
 
 /**
  * Converts a DOM structure into properly indented text.
- * @param {!Element} dom A tree of XML elements.
+ * 
+ * @param {!Element}
+ *            dom A tree of XML elements.
  * @return {string} Text representation.
  */
 Blockly.Xml.domToPrettyText = function(dom) {
@@ -486,16 +491,27 @@ Blockly.Xml.domToPrettyText = function(dom) {
 };
 
 /**
- * Converts a DOM structure into plain text.
- * Currently the text format is fairly ugly: all one line with no whitespace.
- * @param {!Element} dom A tree of XML elements.
+ * Remove any 'next' block (statements in a stack).
+ * 
+ * @param {!Element}
+ *            xmlBlock XML block element.
+ */
+Blockly.Xml.deleteNext = function(xmlBlock) {
+  xmlBlock.splice(0, 1);
+};
+
+/**
+ * Converts a DOM structure into plain text. Currently the text format is fairly
+ * ugly: all one line with no whitespace.
+ * 
+ * @param {!Element}
+ *            dom A tree of XML elements.
  * @return {string} Text representation.
  */
 Blockly.Xml.domToText = function(dom) {
   var oSerializer = new XMLSerializer();
   return oSerializer.serializeToString(dom);
 };
-
 
 // Export symbols that would otherwise be renamed by Closure compiler.
 Blockly['Xml'] = Blockly.Xml;

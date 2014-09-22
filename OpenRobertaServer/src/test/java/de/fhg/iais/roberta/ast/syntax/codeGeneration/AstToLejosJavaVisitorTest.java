@@ -5,8 +5,8 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
-import de.fhg.iais.roberta.ast.syntax.HardwareComponent;
+import de.fhg.iais.roberta.ast.syntax.BrickConfigurationOld;
+import de.fhg.iais.roberta.ast.syntax.HardwareComponentOld;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 
@@ -43,13 +43,13 @@ public class AstToLejosJavaVisitorTest {
         + "        } catch ( InterruptedException e ) {\n"
         + "            // ok\n"
         + "        }\n";
-    private static BrickConfiguration brickConfiguration;
+    private static BrickConfigurationOld brickConfiguration;
 
     @BeforeClass
     public static void setupConfigurationForAllTests() {
-        BrickConfiguration.Builder builder = new BrickConfiguration.Builder();
-        builder.addActor(ActorPort.A, HardwareComponent.EV3MediumRegulatedMotor).addActor(ActorPort.D, HardwareComponent.EV3LargeRegulatedMotor);
-        builder.addSensor(SensorPort.S1, HardwareComponent.EV3TouchSensor).addSensor(SensorPort.S2, HardwareComponent.EV3UltrasonicSensor);
+        BrickConfigurationOld.Builder builder = new BrickConfigurationOld.Builder();
+        builder.addActor(ActorPort.A, HardwareComponentOld.EV3MediumRegulatedMotor).addActor(ActorPort.D, HardwareComponentOld.EV3LargeRegulatedMotor);
+        builder.addSensor(SensorPort.S1, HardwareComponentOld.EV3TouchSensor).addSensor(SensorPort.S2, HardwareComponentOld.EV3UltrasonicSensor);
         brickConfiguration = builder.build();
     }
 

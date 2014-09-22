@@ -3,13 +3,13 @@ package de.fhg.iais.roberta.codegen.lejos;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
+import de.fhg.iais.roberta.ast.syntax.BrickConfigurationOld;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst.Const;
 
 public class JavaVisitorTest {
-    private static final BrickConfiguration brickConfiguration = new BrickConfiguration.Builder().build();
+    private static final BrickConfigurationOld brickConfiguration = new BrickConfigurationOld.Builder().build();
 
     @Test
     public void getIndentaion() throws Exception {
