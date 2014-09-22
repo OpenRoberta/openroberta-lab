@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import de.fhg.iais.roberta.ast.syntax.BrickConfigurationOld;
+import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.Category;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.Phrase.Kind;
@@ -72,7 +72,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
 public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     public static final String INDENT = "    ";
 
-    private final BrickConfigurationOld brickConfiguration;
+    private final BrickConfiguration brickConfiguration;
     private final String programName;
     private final StringBuilder sb = new StringBuilder();
 
@@ -85,7 +85,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
      * @param brickConfiguration hardware configuration of the brick
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    AstToLejosJavaVisitor(String programName, BrickConfigurationOld brickConfiguration, int indentation) {
+    AstToLejosJavaVisitor(String programName, BrickConfiguration brickConfiguration, int indentation) {
         this.programName = programName;
         this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
@@ -98,7 +98,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public static String generate(String programName, BrickConfigurationOld brickConfiguration, List<Phrase<Void>> phrases, boolean withWrapping) //
+    public static String generate(String programName, BrickConfiguration brickConfiguration, List<Phrase<Void>> phrases, boolean withWrapping) //
     {
         Assert.notNull(programName);
         Assert.notNull(brickConfiguration);
@@ -422,8 +422,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        // it is just temporary variable just to be able to write the code. This will be replaced by the brick configuration method.
-        boolean isRegulated = true;
+        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
         String methodName = isRegulated ? "hal.setRegulatedMotorSpeed(" : "hal.setUnregulatedMotorSpeed(";
         this.sb.append(methodName + motorSetPowerAction.getPort().getJavaCode() + ", ");
         motorSetPowerAction.getPower().visit(this);
@@ -433,8 +432,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        // it is just temporary variable just to be able to write the code. This will be replaced by the brick configuration method.
-        boolean isRegulated = true;
+        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorGetPowerAction.getPort());
         String methodName = isRegulated ? "hal.getRegulatedMotorSpeed(" : "hal.getUnregulatedMotorSpeed(";
         this.sb.append(methodName + motorGetPowerAction.getPort().getJavaCode() + ")");
         return null;
@@ -442,12 +440,17 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        //TODO for unregulated motor (ask Daniel!)
-        boolean isRegulated = true;
-        String methodName = isRegulated ? "hal.rotateUnregulatedMotor(" : "hal.rotateUnregulatedMotor(";
+        String methodName;
+        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorOnAction.getPort());
+        boolean duration = motorOnAction.getParam().getDuration() == null ? false : true;
+        if ( duration ) {
+            methodName = isRegulated ? "hal.rotateRegulatedMotor(" : "hal.rotateUnregulatedMotor(";
+        } else {
+            methodName = isRegulated ? "hal.turnOnRegulatedMotor(" : "hal.turnOnUnregulatedMotor(";
+        }
         this.sb.append(methodName + motorOnAction.getPort().getJavaCode() + ", ");
         motorOnAction.getParam().getSpeed().visit(this);
-        if ( motorOnAction.getParam().getDuration() != null ) {
+        if ( duration ) {
             this.sb.append(", " + motorOnAction.getDurationMode().getJavaCode());
             this.sb.append(", ");
             motorOnAction.getDurationValue().visit(this);
@@ -773,10 +776,12 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         this.sb.append("package generated.main;\n\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.HardwareComponent;\n");
+        this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.HardwareComponentType;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.ActorPort;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.MotorMoveMode;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.MotorStopMode;\n");
+        this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.MotorSide;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.MotorType;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.TurnDirection;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.BrickLedColor;\n");

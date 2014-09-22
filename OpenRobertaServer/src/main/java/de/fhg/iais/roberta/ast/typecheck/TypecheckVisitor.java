@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import de.fhg.iais.roberta.ast.syntax.BrickConfigurationOld;
+import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.Phrase.Kind;
 import de.fhg.iais.roberta.ast.syntax.action.ClearDisplayAction;
@@ -68,7 +68,7 @@ import de.fhg.iais.roberta.dbc.Assert;
 public class TypecheckVisitor implements AstVisitor<BlocklyType> {
     private final int ERROR_LIMIT_FOR_TYPECHECK = 10;
 
-    private final BrickConfigurationOld brickConfiguration;
+    private final BrickConfiguration brickConfiguration;
     private final String programName;
     private final Phrase<BlocklyType> phrase;
 
@@ -83,7 +83,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
      * @param brickConfiguration hardware configuration of the brick
      * @param phrase
      */
-    TypecheckVisitor(String programName, BrickConfigurationOld brickConfiguration, Phrase<BlocklyType> phrase) {
+    TypecheckVisitor(String programName, BrickConfiguration brickConfiguration, Phrase<BlocklyType> phrase) {
         this.programName = programName;
         this.brickConfiguration = brickConfiguration;
         this.phrase = phrase;
@@ -97,7 +97,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
      * @param phrase to typecheck
      * @return the typecheck visitor (to get information about errors and the derived type)
      */
-    public static TypecheckVisitor makeVisitorAndTypecheck(String programName, BrickConfigurationOld brickConfiguration, Phrase<BlocklyType> phrase) //
+    public static TypecheckVisitor makeVisitorAndTypecheck(String programName, BrickConfiguration brickConfiguration, Phrase<BlocklyType> phrase) //
     {
         Assert.notNull(programName);
         Assert.notNull(brickConfiguration);
@@ -197,7 +197,8 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
     public BlocklyType visitBinary(Binary<BlocklyType> binary) {
         BlocklyType left = binary.getLeft().visit(this);
         BlocklyType right = binary.getRight().visit(this);
-        Sig signature = TypeTransformations.getBinarySignature(binary.getOp().getOpSymbol());
+        //        Sig signature = TypeTransformations.getBinarySignature(binary.getOp().getOpSymbol());
+        Sig signature = binary.getOp().getSignature();
         return signature.typeCheck(binary, Arrays.asList(left, right));
     }
 
@@ -236,12 +237,12 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     @Override
     public BlocklyType visitAssignStmt(AssignStmt<BlocklyType> assignStmt) {
-        return null;
+        return BlocklyType.VOID;
     }
 
     @Override
     public BlocklyType visitExprStmt(ExprStmt<BlocklyType> exprStmt) {
-        return null;
+        return BlocklyType.VOID;
     }
 
     @Override
@@ -266,7 +267,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     @Override
     public BlocklyType visitStmtList(StmtList<BlocklyType> stmtList) {
-        return null;
+        return BlocklyType.VOID;
     }
 
     @Override

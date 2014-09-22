@@ -55,4 +55,8 @@ public enum HardwareComponentType {
         }
         throw new DbcException("No hardware component matches attributes " + Arrays.toString(attributes));
     }
+
+    public String getJavaCode() {
+        return this.getClass().getSimpleName() + "." + this;
+    }
 }

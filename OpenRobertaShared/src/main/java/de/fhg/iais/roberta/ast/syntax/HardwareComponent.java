@@ -11,14 +11,18 @@ public class HardwareComponent {
     private final MotorSide motorSide;
 
     public HardwareComponent(HardwareComponentType componentType, DriveDirection rotationDirection, MotorSide motorSide) {
-        Assert.isTrue(componentType != null);
+        Assert.isTrue(componentType != null && rotationDirection != null && motorSide != null);
         this.componentType = componentType;
         this.rotationDirection = rotationDirection;
         this.motorSide = motorSide;
     }
 
     public HardwareComponent(HardwareComponentType componentType) {
-        Assert.isTrue(componentType != null);
+        if ( componentType.getCategory() == Category.ACTOR ) {
+            Assert.isTrue(componentType != null && this.rotationDirection != null && this.motorSide != null);
+        } else {
+            Assert.isTrue(componentType != null);
+        }
         this.componentType = componentType;
         this.rotationDirection = null;
         this.motorSide = null;
@@ -46,10 +50,11 @@ public class HardwareComponent {
 
     public String generateRegenerate() {
         StringBuilder sb = new StringBuilder();
-        sb.append("new HardwareComponentN(").append(this.componentType.name());
+        sb.append("new HardwareComponent(").append(this.componentType.getJavaCode());
         if ( getCategory() == Category.ACTOR ) {
-            sb.append(", ").append(this.rotationDirection.name()).append(", ").append(this.motorSide.name());
+            sb.append(", ").append(this.rotationDirection.getJavaCode()).append(", ").append(this.motorSide.getJavaCode());
         }
+        sb.append(")");
         return sb.toString();
     }
 
@@ -59,7 +64,7 @@ public class HardwareComponent {
 
     @Override
     public String toString() {
-        return "HardwareComponentN [componentType="
+        return "HardwareComponent [componentType="
             + this.componentType
             + ", rotationDirection="
             + this.rotationDirection

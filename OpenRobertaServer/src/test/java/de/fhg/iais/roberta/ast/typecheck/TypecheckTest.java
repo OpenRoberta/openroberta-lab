@@ -3,12 +3,12 @@ package de.fhg.iais.roberta.ast.typecheck;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.ast.syntax.BrickConfigurationOld;
+import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 
 public class TypecheckTest {
-    private static final BrickConfigurationOld BRICK_CONFIGURATION = new BrickConfigurationOld.Builder().build();
+    private static final BrickConfiguration BRICK_CONFIGURATION = new BrickConfiguration.Builder().build();
 
     @Test
     public void test0ok() throws Exception {
