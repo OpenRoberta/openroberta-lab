@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
+import de.fhg.iais.roberta.ast.syntax.BrickConfigurationOld;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.Phrase.Kind;
 import de.fhg.iais.roberta.ast.syntax.action.ClearDisplayAction;
@@ -68,7 +68,7 @@ import de.fhg.iais.roberta.dbc.Assert;
 public class TypecheckVisitor implements AstVisitor<BlocklyType> {
     private final int ERROR_LIMIT_FOR_TYPECHECK = 10;
 
-    private final BrickConfiguration brickConfiguration;
+    private final BrickConfigurationOld brickConfiguration;
     private final String programName;
     private final Phrase<BlocklyType> phrase;
 
@@ -83,7 +83,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
      * @param brickConfiguration hardware configuration of the brick
      * @param phrase
      */
-    TypecheckVisitor(String programName, BrickConfiguration brickConfiguration, Phrase<BlocklyType> phrase) {
+    TypecheckVisitor(String programName, BrickConfigurationOld brickConfiguration, Phrase<BlocklyType> phrase) {
         this.programName = programName;
         this.brickConfiguration = brickConfiguration;
         this.phrase = phrase;
@@ -97,7 +97,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
      * @param phrase to typecheck
      * @return the typecheck visitor (to get information about errors and the derived type)
      */
-    public static TypecheckVisitor makeVisitorAndTypecheck(String programName, BrickConfiguration brickConfiguration, Phrase<BlocklyType> phrase) //
+    public static TypecheckVisitor makeVisitorAndTypecheck(String programName, BrickConfigurationOld brickConfiguration, Phrase<BlocklyType> phrase) //
     {
         Assert.notNull(programName);
         Assert.notNull(brickConfiguration);

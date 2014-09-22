@@ -20,18 +20,18 @@ public class BrickConfigurationTest {
 
     @Test
     public void testBuilder() {
-        BrickConfiguration.Builder builder = new BrickConfiguration.Builder();
-        builder.addActor(ActorPort.A, HardwareComponent.EV3LargeRegulatedMotor);
-        builder.addActor(ActorPort.B, HardwareComponent.EV3MediumRegulatedMotor);
-        builder.addSensor(SensorPort.S1, HardwareComponent.EV3UltrasonicSensor);
-        builder.addSensor(SensorPort.S4, HardwareComponent.EV3ColorSensor);
-        BrickConfiguration conf = builder.build();
+        BrickConfigurationOld.Builder builder = new BrickConfigurationOld.Builder();
+        builder.addActor(ActorPort.A, HardwareComponentOld.EV3LargeRegulatedMotor);
+        builder.addActor(ActorPort.B, HardwareComponentOld.EV3MediumRegulatedMotor);
+        builder.addSensor(SensorPort.S1, HardwareComponentOld.EV3UltrasonicSensor);
+        builder.addSensor(SensorPort.S4, HardwareComponentOld.EV3ColorSensor);
+        BrickConfigurationOld conf = builder.build();
 
-        assertEquals(HardwareComponent.EV3LargeRegulatedMotor, conf.getActorA());
-        assertEquals(HardwareComponent.EV3MediumRegulatedMotor, conf.getActorB());
+        assertEquals(HardwareComponentOld.EV3LargeRegulatedMotor, conf.getActorA());
+        assertEquals(HardwareComponentOld.EV3MediumRegulatedMotor, conf.getActorB());
         assertNull(conf.getActorC());
-        assertEquals(HardwareComponent.EV3UltrasonicSensor, conf.getSensor1());
-        assertEquals(HardwareComponent.EV3ColorSensor, conf.getSensor4());
+        assertEquals(HardwareComponentOld.EV3UltrasonicSensor, conf.getSensor1());
+        assertEquals(HardwareComponentOld.EV3ColorSensor, conf.getSensor4());
         assertNull(conf.getSensor2());
 
         assertEquals(this.expectedBrickConfigurationGenerator, conf.generateRegenerate().replaceAll("\\s+", ""));
@@ -39,19 +39,19 @@ public class BrickConfigurationTest {
 
     @Test
     public void testBuilderFluent() {
-        BrickConfiguration conf =
-            new BrickConfiguration.Builder()
-                .addActor(ActorPort.A, HardwareComponent.EV3LargeRegulatedMotor)
-                .addActor(ActorPort.B, HardwareComponent.EV3MediumRegulatedMotor)
-                .addSensor(SensorPort.S1, HardwareComponent.EV3UltrasonicSensor)
-                .addSensor(SensorPort.S4, HardwareComponent.EV3ColorSensor)
+        BrickConfigurationOld conf =
+            new BrickConfigurationOld.Builder()
+                .addActor(ActorPort.A, HardwareComponentOld.EV3LargeRegulatedMotor)
+                .addActor(ActorPort.B, HardwareComponentOld.EV3MediumRegulatedMotor)
+                .addSensor(SensorPort.S1, HardwareComponentOld.EV3UltrasonicSensor)
+                .addSensor(SensorPort.S4, HardwareComponentOld.EV3ColorSensor)
                 .build();
 
-        assertEquals(HardwareComponent.EV3LargeRegulatedMotor, conf.getActorA());
-        assertEquals(HardwareComponent.EV3MediumRegulatedMotor, conf.getActorB());
+        assertEquals(HardwareComponentOld.EV3LargeRegulatedMotor, conf.getActorA());
+        assertEquals(HardwareComponentOld.EV3MediumRegulatedMotor, conf.getActorB());
         assertNull(conf.getActorC());
-        assertEquals(HardwareComponent.EV3UltrasonicSensor, conf.getSensor1());
-        assertEquals(HardwareComponent.EV3ColorSensor, conf.getSensor4());
+        assertEquals(HardwareComponentOld.EV3UltrasonicSensor, conf.getSensor1());
+        assertEquals(HardwareComponentOld.EV3ColorSensor, conf.getSensor4());
         assertNull(conf.getSensor2());
 
         assertEquals(this.expectedBrickConfigurationGenerator, conf.generateRegenerate().replaceAll("\\s+", ""));
@@ -59,7 +59,7 @@ public class BrickConfigurationTest {
 
     @Test
     public void testVisitorBuilder() {
-        BrickConfiguration.Builder builder = new BrickConfiguration.Builder();
+        BrickConfigurationOld.Builder builder = new BrickConfigurationOld.Builder();
         builder.visiting("regulated", "large");
         builder.visitingActorPort("A");
         builder.visiting("regulated", "middle");
@@ -68,26 +68,26 @@ public class BrickConfigurationTest {
         builder.visitingSensorPort("1");
         builder.visiting("Farbe");
         builder.visitingSensorPort("4");
-        BrickConfiguration conf = builder.build();
+        BrickConfigurationOld conf = builder.build();
 
-        assertEquals(HardwareComponent.EV3LargeRegulatedMotor, conf.getActorA());
-        assertEquals(HardwareComponent.EV3MediumRegulatedMotor, conf.getActorB());
-        assertEquals(HardwareComponent.EV3UltrasonicSensor, conf.getSensor1());
-        assertEquals(HardwareComponent.EV3ColorSensor, conf.getSensor4());
+        assertEquals(HardwareComponentOld.EV3LargeRegulatedMotor, conf.getActorA());
+        assertEquals(HardwareComponentOld.EV3MediumRegulatedMotor, conf.getActorB());
+        assertEquals(HardwareComponentOld.EV3UltrasonicSensor, conf.getSensor1());
+        assertEquals(HardwareComponentOld.EV3ColorSensor, conf.getSensor4());
 
         assertEquals(this.expectedBrickConfigurationGenerator, conf.generateRegenerate().replaceAll("\\s+", ""));
     }
 
     @Test(expected = DbcException.class)
     public void testVisitorExc1() {
-        BrickConfiguration.Builder builder = new BrickConfiguration.Builder();
+        BrickConfigurationOld.Builder builder = new BrickConfigurationOld.Builder();
         builder.visiting("regulated", "latsch");
         builder.visitingActorPort("A");
     }
 
     @Test(expected = DbcException.class)
     public void testVisitorExc2() {
-        BrickConfiguration.Builder builder = new BrickConfiguration.Builder();
+        BrickConfigurationOld.Builder builder = new BrickConfigurationOld.Builder();
         builder.visiting("regulated", "large");
         builder.visitingActorPort("X");
     }

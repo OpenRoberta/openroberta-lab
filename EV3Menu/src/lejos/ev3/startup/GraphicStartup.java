@@ -1474,10 +1474,6 @@ public class GraphicStartup implements Menu {
         }
     }
 
-    public static void refresh() {
-        GraphicStartup.lcd.refresh();
-    }
-
     /**
      * Roberta submenu implementation.
      */

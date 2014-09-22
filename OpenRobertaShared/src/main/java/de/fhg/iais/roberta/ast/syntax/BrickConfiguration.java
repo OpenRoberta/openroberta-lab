@@ -1,11 +1,17 @@
 package de.fhg.iais.roberta.ast.syntax;
 
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
+import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
+import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;
+import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
+import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.dbc.Assert;
+import de.fhg.iais.roberta.util.Pair;
 
 public class BrickConfiguration {
 
@@ -20,6 +26,7 @@ public class BrickConfiguration {
     private final HardwareComponent actorD;
 
     // needed for differential drive pilot
+    // TODO change to cm!!!
     // see next TODO
     private final double wheelDiameterCM;
     private final double trackWidthCM;
@@ -66,8 +73,7 @@ public class BrickConfiguration {
     private static void appendOptional(StringBuilder sb, String sensorOrActor, String port, HardwareComponent hc) {
         if ( hc != null ) {
             sb.append("    .add").append(sensorOrActor).append("(");
-            sb.append(sensorOrActor).append("Port.").append(port).append(", ");
-            sb.append("HardwareComponent.").append(hc.name()).append(")\n");
+            sb.append(sensorOrActor).append("Port.").append(port).append(", ").append(hc.generateRegenerate()).append(")\n");
         }
     }
 
@@ -111,22 +117,66 @@ public class BrickConfiguration {
         return this.trackWidthCM;
     }
 
+    // TODO
+    public ColorSensorMode getPreSetColorSensorMode(SensorPort sensorPort) {
+        return null;
+    }
+
+    // TODO
+    public UltrasonicSensorMode getPreSetUltrasonicSensorMode(SensorPort sensorPort) {
+        return null;
+    }
+
+    // TODO
+    public InfraredSensorMode getPreSetInfraredSensorMode(SensorPort sensorPort) {
+        return null;
+    }
+
+    // TODO
+    public GyroSensorMode getPreSetGyroSensorMode(SensorPort sensorPort) {
+        return null;
+    }
+
     public static class Builder {
         private final Map<ActorPort, HardwareComponent> actorMapping = new TreeMap<>();
         private final Map<SensorPort, HardwareComponent> sensorMapping = new TreeMap<>();
         private HardwareComponent lastVisited = null;
 
         // TODO taken from lejos, converted to cm, implement method to set these
-        private final double wheelDiameter = 5.6f;
-        private final double trackWidth = 11.2f;
+        private double wheelDiameter;
+        private double trackWidth;
 
         public Builder addActor(ActorPort port, HardwareComponent component) {
             this.actorMapping.put(port, component);
             return this;
         }
 
+        public Builder addActors(List<Pair<ActorPort, HardwareComponent>> actors) {
+            for ( Pair<ActorPort, HardwareComponent> pair : actors ) {
+                this.actorMapping.put(pair.getFirst(), pair.getSecond());
+            }
+            return this;
+        }
+
         public Builder addSensor(SensorPort port, HardwareComponent component) {
             this.sensorMapping.put(port, component);
+            return this;
+        }
+
+        public Builder addSensors(List<Pair<SensorPort, HardwareComponent>> sensors) {
+            for ( Pair<SensorPort, HardwareComponent> pair : sensors ) {
+                this.sensorMapping.put(pair.getFirst(), pair.getSecond());
+            }
+            return this;
+        }
+
+        public Builder setWheelDiameter(double wheelDiameter) {
+            this.wheelDiameter = wheelDiameter;
+            return this;
+        }
+
+        public Builder setTrackWidth(double trackWidth) {
+            this.trackWidth = trackWidth;
             return this;
         }
 
@@ -144,9 +194,9 @@ public class BrickConfiguration {
             this.lastVisited = null;
         }
 
-        public void visiting(String... attributes) {
-            this.lastVisited = HardwareComponent.attributesMatch(attributes);
-        }
+        //        public void visiting(String... attributes) {
+        //            this.lastVisited = HardwareComponentN.attributesMatch(attributes);
+        //        }
 
         public BrickConfiguration build() {
             return new BrickConfiguration(

@@ -7,7 +7,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
+import de.fhg.iais.roberta.ast.syntax.BrickConfigurationOld;
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationBaseVisitor;
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationLexer;
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationParser;
@@ -17,13 +17,13 @@ import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationParser
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationParser.SensorStmtContext;
 
 public class BrickConfigurationTreeToAst extends BrickConfigurationBaseVisitor<Void> {
-    BrickConfiguration.Builder builder = new BrickConfiguration.Builder();
+    BrickConfigurationOld.Builder builder = new BrickConfigurationOld.Builder();
 
     /**
      * take a brick configuration program as String, parse it, create a visitor as an instance of this class and visit the parse tree to create an AST.<br>
      * Factory method
      */
-    public static BrickConfiguration startWalkForVisiting(String stmt) throws Exception {
+    public static BrickConfigurationOld startWalkForVisiting(String stmt) throws Exception {
         InputStream inputStream = new ByteArrayInputStream(stmt.getBytes("UTF-8"));
         ANTLRInputStream input = new ANTLRInputStream(inputStream);
         BrickConfigurationLexer lex = new BrickConfigurationLexer(input);

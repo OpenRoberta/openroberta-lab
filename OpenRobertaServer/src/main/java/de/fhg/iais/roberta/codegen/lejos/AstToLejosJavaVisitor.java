@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
+import de.fhg.iais.roberta.ast.syntax.BrickConfigurationOld;
 import de.fhg.iais.roberta.ast.syntax.Category;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.Phrase.Kind;
@@ -72,7 +72,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
 public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     public static final String INDENT = "    ";
 
-    private final BrickConfiguration brickConfiguration;
+    private final BrickConfigurationOld brickConfiguration;
     private final String programName;
     private final StringBuilder sb = new StringBuilder();
 
@@ -85,7 +85,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
      * @param brickConfiguration hardware configuration of the brick
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    AstToLejosJavaVisitor(String programName, BrickConfiguration brickConfiguration, int indentation) {
+    AstToLejosJavaVisitor(String programName, BrickConfigurationOld brickConfiguration, int indentation) {
         this.programName = programName;
         this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
@@ -98,7 +98,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public static String generate(String programName, BrickConfiguration brickConfiguration, List<Phrase<Void>> phrases, boolean withWrapping) //
+    public static String generate(String programName, BrickConfigurationOld brickConfiguration, List<Phrase<Void>> phrases, boolean withWrapping) //
     {
         Assert.notNull(programName);
         Assert.notNull(brickConfiguration);

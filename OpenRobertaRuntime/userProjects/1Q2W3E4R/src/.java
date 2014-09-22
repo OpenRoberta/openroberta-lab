@@ -23,6 +23,7 @@ public class  {
 
     public void run() {
         Hal hal = new Hal(brickConfiguration);
+        hal.rotateUnregulatedMotor(ActorPort.B, 30, MotorMoveMode.ROTATIONS, 10);
         try {
             Thread.sleep(2000);
         } catch ( InterruptedException e ) {

@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.InputSource;
 
-import de.fhg.iais.roberta.ast.syntax.BrickConfigurationN;
+import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.transformer.JaxbBrickConfigTransformer;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
@@ -33,7 +33,7 @@ public class BrickConfigurationTest {
         BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
 
         JaxbBrickConfigTransformer transformer = new JaxbBrickConfigTransformer();
-        BrickConfigurationN b = transformer.blockSetToBrickConfiguration(project);
+        BrickConfiguration b = transformer.blockSetToBrickConfiguration(project);
         System.out.println(b.generateRegenerate());
         Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateRegenerate().replaceAll("\\s+", ""));
     }
@@ -54,7 +54,7 @@ public class BrickConfigurationTest {
         BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
 
         JaxbBrickConfigTransformer transformer = new JaxbBrickConfigTransformer();
-        BrickConfigurationN b = transformer.blockSetToBrickConfiguration(project);
+        BrickConfiguration b = transformer.blockSetToBrickConfiguration(project);
         System.out.println(b.generateRegenerate());
         Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateRegenerate().replaceAll("\\s+", ""));
     }

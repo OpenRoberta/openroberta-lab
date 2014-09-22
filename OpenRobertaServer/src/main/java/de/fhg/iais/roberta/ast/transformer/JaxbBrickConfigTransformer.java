@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.ast.transformer;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.fhg.iais.roberta.ast.syntax.BrickConfigurationN;
-import de.fhg.iais.roberta.ast.syntax.HardwareComponentN;
+import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
+import de.fhg.iais.roberta.ast.syntax.HardwareComponent;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
 import de.fhg.iais.roberta.ast.syntax.action.HardwareComponentType;
@@ -21,7 +21,7 @@ import de.fhg.iais.roberta.util.Pair;
 
 public class JaxbBrickConfigTransformer {
 
-    public BrickConfigurationN blockSetToBrickConfiguration(BlockSet program) {
+    public BrickConfiguration blockSetToBrickConfiguration(BlockSet program) {
         List<Instance> instances = program.getInstance();
         List<Block> blocks = instances.get(0).getBlock();
         return blockToBrickConfiguration(blocks.get(0));
@@ -29,15 +29,15 @@ public class JaxbBrickConfigTransformer {
 
     private void extractHardwareComponent(
         List<Value> values,
-        List<Pair<SensorPort, HardwareComponentN>> sensors,
-        List<Pair<ActorPort, HardwareComponentN>> actors) {
+        List<Pair<SensorPort, HardwareComponent>> sensors,
+        List<Pair<ActorPort, HardwareComponent>> actors) {
         for ( Value value : values ) {
             if ( value.getName().startsWith("S") ) {
                 //Extract sensor
-                sensors.add(Pair.of(SensorPort.get(value.getName()), new HardwareComponentN(extractHardwareComponentType(value.getBlock()))));
+                sensors.add(Pair.of(SensorPort.get(value.getName()), new HardwareComponent(extractHardwareComponentType(value.getBlock()))));
             } else {
                 //Extract actor
-                actors.add(Pair.of(ActorPort.get(value.getName()), new HardwareComponentN(
+                actors.add(Pair.of(ActorPort.get(value.getName()), new HardwareComponent(
                     extractHardwareComponentType(value.getBlock()),
                     extractDirectionOfRotation(value.getBlock()),
                     extractMotorSide(value.getBlock()))));
@@ -92,12 +92,12 @@ public class JaxbBrickConfigTransformer {
         return MotorSide.get(extractField(fields, "MOTOR_DRIVE", (short) 2));
     }
 
-    private BrickConfigurationN blockToBrickConfiguration(Block block) {
+    private BrickConfiguration blockToBrickConfiguration(Block block) {
         List<Field> fields;
         List<Value> values;
 
-        List<Pair<SensorPort, HardwareComponentN>> sensors = new ArrayList<Pair<SensorPort, HardwareComponentN>>();
-        List<Pair<ActorPort, HardwareComponentN>> actors = new ArrayList<Pair<ActorPort, HardwareComponentN>>();
+        List<Pair<SensorPort, HardwareComponent>> sensors = new ArrayList<Pair<SensorPort, HardwareComponent>>();
+        List<Pair<ActorPort, HardwareComponent>> actors = new ArrayList<Pair<ActorPort, HardwareComponent>>();
 
         double trackWidth;
         double wheelDiameter;
@@ -109,7 +109,7 @@ public class JaxbBrickConfigTransformer {
                 wheelDiameter = Double.valueOf(extractField(fields, "WHEEL_DIAMETER", (short) 0)).doubleValue();
                 trackWidth = Double.valueOf(extractField(fields, "TRACK_WIDTH", (short) 1)).doubleValue();
                 extractHardwareComponent(values, sensors, actors);
-                return new BrickConfigurationN.Builder()
+                return new BrickConfiguration.Builder()
                     .setTrackWidth(trackWidth)
                     .setWheelDiameter(wheelDiameter)
                     .addActors(actors)

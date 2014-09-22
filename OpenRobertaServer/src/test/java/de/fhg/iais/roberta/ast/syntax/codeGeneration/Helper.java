@@ -8,7 +8,7 @@ import javax.xml.bind.Unmarshaller;
 import org.junit.Assert;
 import org.xml.sax.InputSource;
 
-import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
+import de.fhg.iais.roberta.ast.syntax.BrickConfigurationOld;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
@@ -27,7 +27,7 @@ public class Helper {
      */
     public static String generateStringWithoutWrapping(String pathToProgramXml) throws Exception {
         JaxbTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        BrickConfiguration brickConfiguration = new BrickConfiguration.Builder().build();
+        BrickConfigurationOld brickConfiguration = new BrickConfigurationOld.Builder().build();
         String code = AstToLejosJavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), false);
         System.out.println(code);
         return code;
@@ -40,7 +40,7 @@ public class Helper {
      * @return the code as string
      * @throws Exception
      */
-    public static String generateString(String pathToProgramXml, BrickConfiguration brickConfiguration) throws Exception {
+    public static String generateString(String pathToProgramXml, BrickConfigurationOld brickConfiguration) throws Exception {
         JaxbTransformer<Void> transformer = generateTransformer(pathToProgramXml);
         String code = AstToLejosJavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), true);
         System.out.println(code);

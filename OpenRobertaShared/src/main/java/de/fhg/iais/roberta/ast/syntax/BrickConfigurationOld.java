@@ -1,45 +1,38 @@
 package de.fhg.iais.roberta.ast.syntax;
 
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
-import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
-import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.dbc.Assert;
-import de.fhg.iais.roberta.util.Pair;
 
-public class BrickConfigurationN {
+public class BrickConfigurationOld {
 
-    private final HardwareComponentN sensor1;
-    private final HardwareComponentN sensor2;
-    private final HardwareComponentN sensor3;
-    private final HardwareComponentN sensor4;
+    private final HardwareComponentOld sensor1;
+    private final HardwareComponentOld sensor2;
+    private final HardwareComponentOld sensor3;
+    private final HardwareComponentOld sensor4;
 
-    private final HardwareComponentN actorA;
-    private final HardwareComponentN actorB;
-    private final HardwareComponentN actorC;
-    private final HardwareComponentN actorD;
+    private final HardwareComponentOld actorA;
+    private final HardwareComponentOld actorB;
+    private final HardwareComponentOld actorC;
+    private final HardwareComponentOld actorD;
 
     // needed for differential drive pilot
-    // TODO change to cm!!!
     // see next TODO
     private final double wheelDiameterCM;
     private final double trackWidthCM;
 
-    private BrickConfigurationN(
-        HardwareComponentN sensor1,
-        HardwareComponentN sensor2,
-        HardwareComponentN sensor3,
-        HardwareComponentN sensor4,
-        HardwareComponentN actorA,
-        HardwareComponentN actorB,
-        HardwareComponentN actorC,
-        HardwareComponentN actorD,
+    private BrickConfigurationOld(
+        HardwareComponentOld sensor1,
+        HardwareComponentOld sensor2,
+        HardwareComponentOld sensor3,
+        HardwareComponentOld sensor4,
+        HardwareComponentOld actorA,
+        HardwareComponentOld actorB,
+        HardwareComponentOld actorC,
+        HardwareComponentOld actorD,
         double wheelDiameterCM,
         double trackWidthCM) {
         super();
@@ -70,42 +63,43 @@ public class BrickConfigurationN {
         return sb.toString();
     }
 
-    private static void appendOptional(StringBuilder sb, String sensorOrActor, String port, HardwareComponentN hc) {
+    private static void appendOptional(StringBuilder sb, String sensorOrActor, String port, HardwareComponentOld hc) {
         if ( hc != null ) {
             sb.append("    .add").append(sensorOrActor).append("(");
-            sb.append(sensorOrActor).append("Port.").append(port).append(", ").append(hc.generateRegenerate()).append(")\n");
+            sb.append(sensorOrActor).append("Port.").append(port).append(", ");
+            sb.append("HardwareComponent.").append(hc.name()).append(")\n");
         }
     }
 
-    public HardwareComponentN getSensor1() {
+    public HardwareComponentOld getSensor1() {
         return this.sensor1;
     }
 
-    public HardwareComponentN getSensor2() {
+    public HardwareComponentOld getSensor2() {
         return this.sensor2;
     }
 
-    public HardwareComponentN getSensor3() {
+    public HardwareComponentOld getSensor3() {
         return this.sensor3;
     }
 
-    public HardwareComponentN getSensor4() {
+    public HardwareComponentOld getSensor4() {
         return this.sensor4;
     }
 
-    public HardwareComponentN getActorA() {
+    public HardwareComponentOld getActorA() {
         return this.actorA;
     }
 
-    public HardwareComponentN getActorB() {
+    public HardwareComponentOld getActorB() {
         return this.actorB;
     }
 
-    public HardwareComponentN getActorC() {
+    public HardwareComponentOld getActorC() {
         return this.actorC;
     }
 
-    public HardwareComponentN getActorD() {
+    public HardwareComponentOld getActorD() {
         return this.actorD;
     }
 
@@ -117,66 +111,22 @@ public class BrickConfigurationN {
         return this.trackWidthCM;
     }
 
-    // TODO
-    public ColorSensorMode getPreSetColorSensorMode(SensorPort sensorPort) {
-        return null;
-    }
-
-    // TODO
-    public UltrasonicSensorMode getPreSetUltrasonicSensorMode(SensorPort sensorPort) {
-        return null;
-    }
-
-    // TODO
-    public InfraredSensorMode getPreSetInfraredSensorMode(SensorPort sensorPort) {
-        return null;
-    }
-
-    // TODO
-    public GyroSensorMode getPreSetGyroSensorMode(SensorPort sensorPort) {
-        return null;
-    }
-
     public static class Builder {
-        private final Map<ActorPort, HardwareComponentN> actorMapping = new TreeMap<>();
-        private final Map<SensorPort, HardwareComponentN> sensorMapping = new TreeMap<>();
-        private HardwareComponentN lastVisited = null;
+        private final Map<ActorPort, HardwareComponentOld> actorMapping = new TreeMap<>();
+        private final Map<SensorPort, HardwareComponentOld> sensorMapping = new TreeMap<>();
+        private HardwareComponentOld lastVisited = null;
 
         // TODO taken from lejos, converted to cm, implement method to set these
-        private double wheelDiameter;
-        private double trackWidth;
+        private final double wheelDiameter = 5.6f;
+        private final double trackWidth = 11.2f;
 
-        public Builder addActor(ActorPort port, HardwareComponentN component) {
+        public Builder addActor(ActorPort port, HardwareComponentOld component) {
             this.actorMapping.put(port, component);
             return this;
         }
 
-        public Builder addActors(List<Pair<ActorPort, HardwareComponentN>> actors) {
-            for ( Pair<ActorPort, HardwareComponentN> pair : actors ) {
-                this.actorMapping.put(pair.getFirst(), pair.getSecond());
-            }
-            return this;
-        }
-
-        public Builder addSensor(SensorPort port, HardwareComponentN component) {
+        public Builder addSensor(SensorPort port, HardwareComponentOld component) {
             this.sensorMapping.put(port, component);
-            return this;
-        }
-
-        public Builder addSensors(List<Pair<SensorPort, HardwareComponentN>> sensors) {
-            for ( Pair<SensorPort, HardwareComponentN> pair : sensors ) {
-                this.sensorMapping.put(pair.getFirst(), pair.getSecond());
-            }
-            return this;
-        }
-
-        public Builder setWheelDiameter(double wheelDiameter) {
-            this.wheelDiameter = wheelDiameter;
-            return this;
-        }
-
-        public Builder setTrackWidth(double trackWidth) {
-            this.trackWidth = trackWidth;
             return this;
         }
 
@@ -194,12 +144,12 @@ public class BrickConfigurationN {
             this.lastVisited = null;
         }
 
-        //        public void visiting(String... attributes) {
-        //            this.lastVisited = HardwareComponentN.attributesMatch(attributes);
-        //        }
+        public void visiting(String... attributes) {
+            this.lastVisited = HardwareComponentOld.attributesMatch(attributes);
+        }
 
-        public BrickConfigurationN build() {
-            return new BrickConfigurationN(
+        public BrickConfigurationOld build() {
+            return new BrickConfigurationOld(
                 this.sensorMapping.get(SensorPort.S1),
                 this.sensorMapping.get(SensorPort.S2),
                 this.sensorMapping.get(SensorPort.S3),

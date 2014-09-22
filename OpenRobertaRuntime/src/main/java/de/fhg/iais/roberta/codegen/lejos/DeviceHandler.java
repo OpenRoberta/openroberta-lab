@@ -17,8 +17,8 @@ import lejos.robotics.EncoderMotor;
 import lejos.robotics.RegulatedMotor;
 import lejos.robotics.SampleProvider;
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
-import de.fhg.iais.roberta.ast.syntax.HardwareComponent;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
+import de.fhg.iais.roberta.ast.syntax.action.HardwareComponentType;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensorMode;
@@ -51,17 +51,17 @@ public class DeviceHandler {
     }
 
     private void createDevices(BrickConfiguration brickConfiguration) {
-        initMotors(ActorPort.A, brickConfiguration.getActorA(), lejos.hardware.port.MotorPort.A);
-        initMotors(ActorPort.B, brickConfiguration.getActorB(), lejos.hardware.port.MotorPort.B);
-        initMotors(ActorPort.C, brickConfiguration.getActorC(), lejos.hardware.port.MotorPort.C);
-        initMotors(ActorPort.D, brickConfiguration.getActorD(), lejos.hardware.port.MotorPort.D);
-        createSampleProvider(SensorPort.S1, brickConfiguration.getSensor1(), lejos.hardware.port.SensorPort.S1);
-        createSampleProvider(SensorPort.S2, brickConfiguration.getSensor2(), lejos.hardware.port.SensorPort.S2);
-        createSampleProvider(SensorPort.S3, brickConfiguration.getSensor3(), lejos.hardware.port.SensorPort.S3);
-        createSampleProvider(SensorPort.S4, brickConfiguration.getSensor4(), lejos.hardware.port.SensorPort.S4);
+        initMotors(ActorPort.A, brickConfiguration.getActorA().getComponentType(), lejos.hardware.port.MotorPort.A);
+        initMotors(ActorPort.B, brickConfiguration.getActorB().getComponentType(), lejos.hardware.port.MotorPort.B);
+        initMotors(ActorPort.C, brickConfiguration.getActorC().getComponentType(), lejos.hardware.port.MotorPort.C);
+        initMotors(ActorPort.D, brickConfiguration.getActorD().getComponentType(), lejos.hardware.port.MotorPort.D);
+        initSensors(SensorPort.S1, brickConfiguration.getSensor1().getComponentType(), lejos.hardware.port.SensorPort.S1);
+        initSensors(SensorPort.S2, brickConfiguration.getSensor2().getComponentType(), lejos.hardware.port.SensorPort.S2);
+        initSensors(SensorPort.S3, brickConfiguration.getSensor3().getComponentType(), lejos.hardware.port.SensorPort.S3);
+        initSensors(SensorPort.S4, brickConfiguration.getSensor4().getComponentType(), lejos.hardware.port.SensorPort.S4);
     }
 
-    private void initMotors(ActorPort actorPort, HardwareComponent actorType, Port hardwarePort) {
+    private void initMotors(ActorPort actorPort, HardwareComponentType actorType, Port hardwarePort) {
         if ( actorType != null ) {
             switch ( actorType ) {
                 case EV3LargeRegulatedMotor:
@@ -88,7 +88,7 @@ public class DeviceHandler {
 
     }
 
-    private void createSampleProvider(SensorPort sensorPort, HardwareComponent sensorType, Port hardwarePort) {
+    private void initSensors(SensorPort sensorPort, HardwareComponentType sensorType, Port hardwarePort) {
         if ( sensorType != null ) {
             switch ( sensorType ) {
                 case EV3ColorSensor:
@@ -170,22 +170,23 @@ public class DeviceHandler {
         return this.lejosSampleProvider.get(sensorPort);
     }
 
+    //    Distance
+    //    Listen
+
+    //    ColorID
+    //    Red
+    //    RGB
+    //    Ambient
+
+    //    Rate
+    //    Angle
+    //    Angle and Rate
+
+    //    Touch
+
     // test
     public void setColorSensorMode(SensorPort sensorPort, ColorSensorMode sensorMode) {
-        SampleProvider sp = null;
-        switch ( sensorMode ) {
-            case COLOUR:
-                sp = getColorSensor(sensorPort).getMode("ColorID");
-                break;
-            case AMBIENTLIGHT:
-                sp = getColorSensor(sensorPort).getMode("Ambient");
-                break;
-            case LIGHT:
-                sp = getColorSensor(sensorPort).getMode("Red");
-                break;
-            default:
-                break;
-        }
+        SampleProvider sp = getColorSensor(sensorPort).getMode(sensorMode.toString());
         this.lejosSampleProvider.put(sensorPort, sp);
         this.colorModes.put(sensorPort, sensorMode);
     }
