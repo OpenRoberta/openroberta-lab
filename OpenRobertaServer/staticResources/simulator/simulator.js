@@ -1,10 +1,9 @@
 
 var activityString = "Aktivität:";
 var speed = 5;
-var ctx;
-var image;
-var canvas;
 var angleInDegrees = 0;
+var ctx, image, canvas;
+
 
 //--------------------------------------------
 // Function to show / hide the simulator view.
@@ -79,34 +78,22 @@ function clearDraw(){
 
 $(document).keydown(function(e){
 	if (e.keyCode == 37) { 
-		moveLeft();
-	
-		moveRoberta("left");
-		
+		moveLeft();		
 		return false;
 	}
 
 	if (e.keyCode == 38) { 
-		moveUp();
-		
-		moveRoberta("up");
-		
+		moveUp();		
 		return false;
 	}
 
 	if (e.keyCode == 39) { 
-		moveRight();
-		
-		moveRoberta("right");
-		
+		moveRight();		
 		return false;
 	}
 
 	if (e.keyCode == 40) { 
-		moveDown();
-		
-		moveRoberta("down");
-		
+		moveDown();		
 		return false;
 	}
 	
@@ -133,30 +120,7 @@ $(document).keydown(function(e){
 });
 
 //--------------------------------------------
-// Function to execute commands
-// received from the interpreter.
-//--------------------------------------------
-
-function exeCmd(type){
-	if(type == "LEFT"){
-		moveLeft();
-	}
-	
-	else if(type == "RIGHT"){
-		moveRight();
-	}
-	
-	else if(type == "FOREWARD"){
-		moveUp();
-	}
-	
-	else if(type == "BACKWARD"){
-		moveDown();
-	}
-}
-
-//--------------------------------------------
-// Functions for moving the background.
+// Functions for scrolling the background.
 //--------------------------------------------
 
 var BackgroundScroll = function(params) {
@@ -185,107 +149,48 @@ var BackgroundScroll = function(params) {
 		}
 	}
 	
-	
-	/*
-
-	var scrollLeft = function() {
-
-		if(active == true){
-			current -= step;
-		}
-
-		else{
-			current = step;
-		}
-	
-		if (current == restartPosition){
-			current = 0;
-		}
-		
-		$('#simulatorDiv').css('backgroundPosition', current + 'px 0');    		
-	};
-
-	var scrollRight = function() {
-		if(active == true){
-			current += step;
-		}
-
-		else{
-			current = step;
-		}
-
-		if (current == restartPosition){
-			current = 0;
-		}
-
-		$('#simulatorDiv').css('backgroundPosition', current + 'px 0');
-	};
-
-	var scrollDown = function() {
-
-		if(active == true){
-
-			current += step;
-		}
-
-		else{
-			current = step;
-		}
-
-		if (current == restartPosition){
-			current = 0;
-		}
-				
-		$('#simulatorDiv').css("backgroundPosition", 0 + 'px' + ' ' + current + 'px'); 
-	};
-
-	var scrollUp = function() {
-
-		if(active == true){
-
-			current -= step;
-		}
-
-		else{
-			current = step;
-		}
-
-		if (current == restartPosition){
-			current = 0;
-		}
-				
-		$('#simulatorDiv').css("backgroundPosition", 0 + 'px' + ' ' + current + 'px'); 
-
-	}; */
-	
 	var scrollStop = function() {
 		$('#simulatorDiv').css("backgroundPosition", 0 + 'px' + ' ' + 0 + 'px'); 
 	};
 	
 	var interval;
+	var direction = 0;
 
-	this.initLeft = function(status) {
-		active = status;
+	this.initLeft = function() {
 		interval = setInterval(scroll(-10, 0), params.scrollSpeed);
 	};
 
-	this.initRight = function(status) {
-		active = status;
+	this.initRight = function() {
 		interval = setInterval(scroll(+10, 0), params.scrollSpeed);
 	};
 
-	this.initDown = function(status) {
-		active = status;
-		interval = setInterval(scroll(0, +10), params.scrollSpeed);
+	this.initDown = function() {
+		
+		// calculation for the translation of the current angle to the background scrolling
+		//  THIS IS A TEST!
+		
+		if(angleInDegrees > 0){
+			direction += (angleInDegrees * (-1)) * 0.1;
+		}
+		
+		else if(angleInDegrees < 0){
+			direction -= angleInDegrees * 0.1;
+		}
+		
+		else{
+			direction = 0;
+		}
+		
+		console.log(direction); 
+		 
+		interval = setInterval(scroll(direction, +10), params.scrollSpeed);
 	};
 
-	this.initUp = function(status) {
-		active = status;
-		interval = setInterval(scroll(0, -10), params.scrollSpeed);
+	this.initUp = function() {		
+		interval = setInterval(scroll(direction, -10), params.scrollSpeed);
 	};
 	
-	this.initStop = function(status) {
-		active = status;
+	this.initStop = function() {
 		clearInterval(interval);
 		interval = 0;
 	};
@@ -304,25 +209,25 @@ function moveRight(){
 }
 
 function moveLeft(){
-	scroll.initStop(false);
-	scroll.initRight(true);
+	scroll.initStop();
+	scroll.initRight();
 	displayActivity("Bewebgung Richtung Westen");
 }
 
 function moveUp(){
-	scroll.initStop(false);
-	scroll.initDown(true);
+	scroll.initStop();
+	scroll.initDown();
 	displayActivity("Bewebgung Richtung Norden");
 }	 
 
 function moveDown(){
-	scroll.initStop(false);
-	scroll.initUp(true);
+	scroll.initStop();
+	scroll.initUp();
 	displayActivity("Bewebgung Richtung Süden");
 }
 
 function moveStop(){
-	scroll.initStop(false);
+	scroll.initStop();
 	displayActivity("Stop");
 }
 
