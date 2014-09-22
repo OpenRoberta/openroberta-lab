@@ -776,12 +776,11 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         this.sb.append("package generated.main;\n\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.HardwareComponent;\n");
+        this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.HardwareComponentType;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.ActorPort;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.MotorMoveMode;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.MotorStopMode;\n");
-        this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.HardwareComponentType;\n");
-        this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.HardwareComponent;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.MotorSide;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.MotorType;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.TurnDirection;\n");

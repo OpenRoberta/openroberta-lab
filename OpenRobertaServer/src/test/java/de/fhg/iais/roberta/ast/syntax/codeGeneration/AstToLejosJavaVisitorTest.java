@@ -20,10 +20,12 @@ public class AstToLejosJavaVisitorTest {
         + "package generated.main;\n\n"
         + "import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;\n"
         + "import de.fhg.iais.roberta.ast.syntax.HardwareComponent;\n"
+        + "import de.fhg.iais.roberta.ast.syntax.action.HardwareComponentType;\n"
         + "import de.fhg.iais.roberta.ast.syntax.action.ActorPort;\n"
         + "import de.fhg.iais.roberta.ast.syntax.action.MotorMoveMode;\n"
         + "import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;\n"
         + "import de.fhg.iais.roberta.ast.syntax.action.MotorStopMode;\n"
+        + "import de.fhg.iais.roberta.ast.syntax.action.MotorSide;\n"
         + "import de.fhg.iais.roberta.ast.syntax.action.MotorType;\n"
         + "import de.fhg.iais.roberta.ast.syntax.action.TurnDirection;\n"
         + "import de.fhg.iais.roberta.ast.syntax.action.BrickLedColor;\n"
@@ -31,10 +33,10 @@ public class AstToLejosJavaVisitorTest {
         + "import de.fhg.iais.roberta.codegen.lejos.Hal;\n\n";
     private static final String BRICK_CONFIGURATION = "" //
         + "    private BrickConfiguration brickConfiguration = new BrickConfiguration.Builder()\n"
-        + "    .addActor(ActorPort.A, new HardwareComponent(EV3MediumRegulatedMotor, FOREWARD, LEFT))\n"
-        + "    .addActor(ActorPort.B, new HardwareComponent(EV3LargeRegulatedMotor, FOREWARD, RIGHT))\n"
-        + "    .addSensor(SensorPort.S1, new HardwareComponent(EV3TouchSensor))\n"
-        + "    .addSensor(SensorPort.S2, new HardwareComponent(EV3UltrasonicSensor))\n"
+        + "    .addActor(ActorPort.A, new HardwareComponent(HardwareComponentType.EV3MediumRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))\n"
+        + "    .addActor(ActorPort.B, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))\n"
+        + "    .addSensor(SensorPort.S1, new HardwareComponent(HardwareComponentType.EV3TouchSensor))\n"
+        + "    .addSensor(SensorPort.S2, new HardwareComponent(HardwareComponentType.EV3UltrasonicSensor))\n"
         + "    .build();\n\n";
     private static final String MAIN_METHOD = "" //
         + "    public static void main(String[] args) {\n"
