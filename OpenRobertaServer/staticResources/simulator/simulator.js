@@ -54,12 +54,19 @@ function rotateCounterClockwise(degree){
 }
 
 function drawRotated(degrees){
+	console.log("current angleInDegrees:" + angleInDegrees);
 	clearDraw();
 	ctx.save();
     ctx.translate(canvas.width/2,canvas.height/2);
     ctx.rotate(degrees*Math.PI/180); 
     ctx.drawImage(image,-image.width/2,-image.width/2);
   	ctx.restore();
+  	
+  	// Check angleInDegrees and reset if angleInDegrees is over 360 or under -360.
+  	
+  	if(angleInDegrees == -360 || angleInDegrees == 360){
+  		angleInDegrees = 0;
+  	}
 }
 
 function clearDraw(){
@@ -161,12 +168,25 @@ var BackgroundScroll = function(params) {
 
 	var step = speed,
 	current = 0,
+	currentX = 0,
+	currentY = 0,
 	restartPosition = - (params.imageWidth - params.imageHeight),
 	active;
 	
-	var scroll = function(){
-		
+	var scroll = function(x, y){
+		currentX += x;
+		currentY += y;
+		$('#simulatorDiv').css('backgroundPosition', currentX + 'px' + ' ' + currentY + 'px');    		
 	}
+	
+	function checkScrollAngleDirection(){
+		if(angleInDegrees > 0 && angleInDegrees < 90){
+			return 
+		}
+	}
+	
+	
+	/*
 
 	var scrollLeft = function() {
 
@@ -177,7 +197,7 @@ var BackgroundScroll = function(params) {
 		else{
 			current = step;
 		}
-
+	
 		if (current == restartPosition){
 			current = 0;
 		}
@@ -236,7 +256,7 @@ var BackgroundScroll = function(params) {
 				
 		$('#simulatorDiv').css("backgroundPosition", 0 + 'px' + ' ' + current + 'px'); 
 
-	};
+	}; */
 	
 	var scrollStop = function() {
 		$('#simulatorDiv').css("backgroundPosition", 0 + 'px' + ' ' + 0 + 'px'); 
@@ -246,22 +266,22 @@ var BackgroundScroll = function(params) {
 
 	this.initLeft = function(status) {
 		active = status;
-		interval = setInterval(scrollLeft, params.scrollSpeed);
+		interval = setInterval(scroll(-10, 0), params.scrollSpeed);
 	};
 
 	this.initRight = function(status) {
 		active = status;
-		interval = setInterval(scrollRight, params.scrollSpeed);
+		interval = setInterval(scroll(+10, 0), params.scrollSpeed);
 	};
 
 	this.initDown = function(status) {
 		active = status;
-		interval = setInterval(scrollDown, params.scrollSpeed);
+		interval = setInterval(scroll(0, +10), params.scrollSpeed);
 	};
 
 	this.initUp = function(status) {
 		active = status;
-		interval = setInterval(scrollUp, params.scrollSpeed);
+		interval = setInterval(scroll(0, -10), params.scrollSpeed);
 	};
 	
 	this.initStop = function(status) {
