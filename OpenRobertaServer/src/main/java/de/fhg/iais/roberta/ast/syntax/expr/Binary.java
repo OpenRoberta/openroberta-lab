@@ -3,6 +3,8 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 import java.util.Locale;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
+import de.fhg.iais.roberta.ast.typecheck.Sig;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
@@ -90,37 +92,39 @@ public final class Binary<V> extends Expr<V> {
      * @author kcvejoski
      */
     public static enum Op {
-        ADD( 100, Assoc.LEFT, "+" ),
-        MINUS( 100, Assoc.LEFT, "-" ),
-        MULTIPLY( 200, Assoc.LEFT, "*" ),
-        DIVIDE( 200, Assoc.LEFT, "/" ),
-        MOD( 200, Assoc.NONE, "%" ),
-        EQ( 80, Assoc.LEFT, "==" ),
-        NEQ( 80, Assoc.LEFT, "!=", "<>" ),
-        LT( 90, Assoc.LEFT, "<" ),
-        LTE( 90, Assoc.LEFT, "<=" ),
-        GT( 90, Assoc.LEFT, ">" ),
-        GTE( 90, Assoc.LEFT, ">=" ),
-        AND( 70, Assoc.LEFT, "&&" ),
-        OR( 60, Assoc.LEFT, "||" ),
-        MATH_CHANGE( 80, Assoc.NONE ),
-        TEXT_APPEND( 1, Assoc.LEFT, "TEXTAPPEND" ),
-        IN( 1, Assoc.LEFT, ":" ),
-        ASSIGNMENT( 1, Assoc.RIGHT, "=" ),
-        ADD_ASSIGNMENT( 1, Assoc.RIGHT, "+=" ),
-        MINUS_ASSIGNMENT( 1, Assoc.RIGHT, "-=" ),
-        MULTIPLY_ASSIGNMENT( 1, Assoc.RIGHT, "*=" ),
-        DIVIDE_ASSIGNMENT( 1, Assoc.RIGHT, "/=" ),
-        MOD_ASSIGNMENT( 1, Assoc.RIGHT, "%=" );
+        ADD( 100, Assoc.LEFT, Sig.of(BlocklyType.NUMERIC, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "+" ),
+        MINUS( 100, Assoc.LEFT, Sig.of(BlocklyType.NUMERIC, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "-" ),
+        MULTIPLY( 200, Assoc.LEFT, Sig.of(BlocklyType.NUMERIC, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "*" ),
+        DIVIDE( 200, Assoc.LEFT, Sig.of(BlocklyType.NUMERIC, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "/" ),
+        MOD( 200, Assoc.NONE, Sig.of(BlocklyType.NUMERIC, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "%" ),
+        EQ( 80, Assoc.LEFT, Sig.of(BlocklyType.BOOL, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), "==" ),
+        NEQ( 80, Assoc.LEFT, Sig.of(BlocklyType.BOOL, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), "!=", "<>" ),
+        LT( 90, Assoc.LEFT, Sig.of(BlocklyType.BOOL, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "<" ),
+        LTE( 90, Assoc.LEFT, Sig.of(BlocklyType.BOOL, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "<=" ),
+        GT( 90, Assoc.LEFT, Sig.of(BlocklyType.BOOL, BlocklyType.NUMERIC, BlocklyType.NUMERIC), ">" ),
+        GTE( 90, Assoc.LEFT, Sig.of(BlocklyType.BOOL, BlocklyType.NUMERIC, BlocklyType.NUMERIC), ">=" ),
+        AND( 70, Assoc.LEFT, Sig.of(BlocklyType.BOOL, BlocklyType.BOOL, BlocklyType.BOOL), "&&" ),
+        OR( 60, Assoc.LEFT, Sig.of(BlocklyType.BOOL, BlocklyType.BOOL, BlocklyType.BOOL), "||" ),
+        MATH_CHANGE( 80, Assoc.NONE, Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE) ),
+        TEXT_APPEND( 1, Assoc.LEFT, Sig.of(BlocklyType.STRING, BlocklyType.STRING, BlocklyType.STRING), "TEXTAPPEND" ),
+        IN( 1, Assoc.LEFT, Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), ":" ),
+        ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), "=" ),
+        ADD_ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.NUMERIC, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "+=" ),
+        MINUS_ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.NUMERIC, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "-=" ),
+        MULTIPLY_ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.NUMERIC, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "*=" ),
+        DIVIDE_ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.NUMERIC, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "/=" ),
+        MOD_ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.NUMERIC, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "%=" );
 
         private final String[] values;
         private final int precedence;
         private final Assoc assoc;
+        private final Sig sig;
 
-        private Op(int precedence, Assoc assoc, String... values) {
+        private Op(int precedence, Assoc assoc, Sig sig, String... values) {
             this.precedence = precedence;
             this.assoc = assoc;
             this.values = values;
+            this.sig = sig;
         }
 
         /**
@@ -146,6 +150,15 @@ public final class Binary<V> extends Expr<V> {
          */
         public Assoc getAssoc() {
             return this.assoc;
+        }
+
+        /**
+         * get the signature. The caller has to check for <code>null</code>!
+         * 
+         * @return the signature; if not found, return <code>null</code>
+         */
+        public Sig getSignature() {
+            return this.sig;
         }
 
         /**

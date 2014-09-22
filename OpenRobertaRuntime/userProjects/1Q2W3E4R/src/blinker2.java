@@ -6,6 +6,9 @@ import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.MotorMoveMode;
 import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
 import de.fhg.iais.roberta.ast.syntax.action.MotorStopMode;
+import de.fhg.iais.roberta.ast.syntax.action.HardwareComponentType;
+import de.fhg.iais.roberta.ast.syntax.action.HardwareComponent;
+import de.fhg.iais.roberta.ast.syntax.action.MotorSide;
 import de.fhg.iais.roberta.ast.syntax.action.MotorType;
 import de.fhg.iais.roberta.ast.syntax.action.TurnDirection;
 import de.fhg.iais.roberta.ast.syntax.action.BrickLedColor;
@@ -14,7 +17,8 @@ import de.fhg.iais.roberta.codegen.lejos.Hal;
 
 public class blinker2 {
     private BrickConfiguration brickConfiguration = new BrickConfiguration.Builder()
-    .addActor(ActorPort.A, HardwareComponent.EV3LargeRegulatedMotor)
+    .addActor(ActorPort.A, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))
+    .addActor(ActorPort.B, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))
     .build();
 
     public static void main(String[] args) {

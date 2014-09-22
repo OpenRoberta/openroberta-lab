@@ -5,12 +5,9 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
-import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
-import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.dbc.Assert;
+import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.util.Pair;
 
 public class BrickConfiguration {
@@ -117,24 +114,19 @@ public class BrickConfiguration {
         return this.trackWidthCM;
     }
 
-    // TODO
-    public ColorSensorMode getPreSetColorSensorMode(SensorPort sensorPort) {
-        return null;
-    }
-
-    // TODO
-    public UltrasonicSensorMode getPreSetUltrasonicSensorMode(SensorPort sensorPort) {
-        return null;
-    }
-
-    // TODO
-    public InfraredSensorMode getPreSetInfraredSensorMode(SensorPort sensorPort) {
-        return null;
-    }
-
-    // TODO
-    public GyroSensorMode getPreSetGyroSensorMode(SensorPort sensorPort) {
-        return null;
+    public boolean isMotorRegulated(ActorPort port) {
+        switch ( port ) {
+            case A:
+                return getActorA().isRegulated();
+            case B:
+                return getActorB().isRegulated();
+            case C:
+                return getActorC().isRegulated();
+            case D:
+                return getActorD().isRegulated();
+            default:
+                throw new DbcException("Invalid Actor Port!");
+        }
     }
 
     public static class Builder {
