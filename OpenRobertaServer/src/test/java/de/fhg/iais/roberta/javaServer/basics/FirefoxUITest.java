@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.javaServer.basics;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import org.eclipse.jetty.server.Server;
 import org.junit.After;
@@ -20,12 +21,9 @@ import de.fhg.iais.roberta.javaServer.jetty.ServerStarter;
 public class FirefoxUITest {
 	private WebDriver driver;
 	private String baseUrl;
+	private String randomUser;
 	private boolean acceptNextAlert = true;
 	private StringBuffer verificationErrors = new StringBuffer();
-
-	/**
-	 * using our build in OR-Jetty server and a test port
-	 */
 	static final int port = 1997;
 	private Server server;
 
@@ -35,21 +33,32 @@ public class FirefoxUITest {
 		driver = new FirefoxDriver();
 		driver.manage().window().maximize();
 		baseUrl = "http://localhost:" + port;
+		// Creating a random username, length 20, specify char set
+		char[] chars = "ABcd!@1246ghijklmnopqrstuvwXYZ".toCharArray();
+		StringBuilder sb = new StringBuilder();
+		Random random = new Random();
+		for (int i = 0; i < 20; i++) {
+			char c = chars[random.nextInt(chars.length)];
+			sb.append(c);
+		}
+		randomUser = sb.toString();
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 
 	@Test
-	public void testUIElements() throws Exception {
+	public void LandingpageUITest() throws Exception {
 		driver.get(baseUrl + "/");
-
 		// Home screen elements, page roundtrip
 		driver.findElement(By.id("welcome-brick1")).click();
 		driver.findElement(By.linkText("Logo")).click();
 		driver.findElement(By.id("welcome-brick3")).click();
 		driver.findElement(By.linkText("Logo")).click();
 		driver.findElement(By.id("welcome-brick4")).click();
+	}
 
-		// Testing WORKPLACE
+	@Test
+	public void BlocklyUITest() throws Exception {
+		driver.get(baseUrl + "/workplace.html");
 		// click buttons left & check their labels
 		driver.findElement(By.xpath("//*[@id=\":1\"]")).click();
 		assertEquals("AKTION",
@@ -78,8 +87,7 @@ public class FirefoxUITest {
 		driver.findElement(By.xpath("//*[@id=\":9\"]")).click();
 		assertEquals("FUNKTIONEN",
 				driver.findElement(By.xpath("//*[@id=\":9.label\"]")).getText());
-
-		// MOVE BLOCK
+		// Move Blockly Element
 		driver.findElement(By.xpath("//*[@id=\":1\"]")).click();
 		// Note: element id changes
 		driver.findElement(By.xpath("//*[@id=\"66\"]")).click();
@@ -89,9 +97,39 @@ public class FirefoxUITest {
 		Actions builder = new Actions(driver);
 		// Move start item
 		builder.dragAndDropBy(dragElement_first, 10, 50).build().perform();
-
 		// And finally going home again to start screen
 		driver.findElement(By.linkText("Logo")).click();
+	}
+
+	@Test
+	public void CreateUserUITest() throws Exception {
+		driver.get(baseUrl + "/workplace.html");
+		driver.findElement(By.id("signInIcon")).click();
+		driver.findElement(By.id("open-register-user")).click();
+		driver.findElement(By.id("accountName")).clear();
+		driver.findElement(By.id("accountName")).sendKeys("" + randomUser);
+		driver.findElement(By.id("pass1")).clear();
+		driver.findElement(By.id("pass1")).sendKeys("test1234!");
+		driver.findElement(By.id("pass2")).clear();
+		driver.findElement(By.id("pass2")).sendKeys("test1234!");
+		driver.findElement(By.id("userName")).clear();
+		driver.findElement(By.id("userName")).sendKeys("RobertaSelenium");
+		driver.findElement(By.id("userEmail")).clear();
+		driver.findElement(By.id("userEmail")).sendKeys("test@roberta.de");
+		driver.findElement(By.name("role")).click();
+		driver.findElement(By.id("saveUser")).click();
+		assertEquals("User created!", closeAlertAndGetItsText());
+	}
+
+	@Test
+	public void LoginUserUITest() throws Exception {
+		driver.get(baseUrl + "/workplace.html");
+		driver.findElement(By.id("signInIcon")).click();
+		driver.findElement(By.id("accountNameS")).clear();
+		driver.findElement(By.id("accountNameS")).sendKeys("" + randomUser);
+		driver.findElement(By.id("pass1S")).clear();
+		driver.findElement(By.id("pass1S")).sendKeys("test1234!");
+		driver.findElement(By.id("signIn")).click();
 	}
 
 	@After
