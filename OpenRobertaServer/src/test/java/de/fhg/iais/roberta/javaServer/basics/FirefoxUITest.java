@@ -33,7 +33,7 @@ public class FirefoxUITest {
 	public void setUp() throws Exception {
 		server = new ServerStarter().start(port);
 		driver = new FirefoxDriver();
-		//driver.manage().window().maximize();
+		driver.manage().window().maximize();
 		baseUrl = "http://localhost:" + port;
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
