@@ -61,6 +61,7 @@ function saveToServer() {
   var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace, 'brick_set');
   var xml_text = Blockly.Xml.domToText(xml);
   alert("to save: \n" + xml_text);
+  LOG.info('save brick configuration');
   back();
   // TODO
   // var $name = $('#programName');

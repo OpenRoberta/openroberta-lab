@@ -1,5 +1,4 @@
 function myLoadFromListing() {
-
   if (userId == "none") {
 
   } else {
@@ -14,30 +13,42 @@ function myLoadFromListing() {
 }
 
 function saveUPToServer() {
-  var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-  // var xml_text = Blockly.Xml.domToPrettyText (xml);
-  var xml_text = Blockly.Xml.domToText(xml);
-  var $name = $('#name');
-  COMM.json("/blocks", {
-    "cmd" : "saveUserP",
-    "name" : $name.val(),
-    "program" : xml_text
-  }, response);
+  if ($('#programName')) {
+    var $name = $('#programName');
+    setProgram($name.val());
+  }
+  if (userState.program) {
+    var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+    var xml_text = Blockly.Xml.domToText(xml);
+    userState.programSaved = true;
+    LOG.info('save ' + userState.program + ' signed in: ' + userState.id);
+    COMM.json("/blocks", {
+      "cmd" : "saveUserP",
+      "name" : userState.program,
+      "program" : xml_text
+    }, response);
+  } else {
+    alert('There is no name for your program available\n\n please save one with a name or load one');
+  }
 }
 
 function loadUPFromServer(load) {
-  var $name = $('#name');
+  var $name = $('#programName');
   COMM.json("/blocks", {
     "cmd" : "loadUserP",
     "name" : $name.val()
   }, function(result) {
-    showProgram(result, load);
+    showProgram(result, load, $name.val());
   });
 }
 
 function deleteUPOnServer() {
-
-  var $name = $('#name');
+  var $name = $('#programName');
+  userState.programSaved = false;
+  if (usertState.program === $name.val) {
+    setProgram();
+  }
+  LOG.info('del ' + $name.val() + ' signed in: ' + userState.id);
   COMM.json("/blocks", {
     "cmd" : "deleteUserPN",
     "name" : $name.val()

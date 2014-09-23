@@ -1,4 +1,12 @@
-var token = '1A2B3C4D';
+var userState = {
+  id : false,
+  name : null,
+  program : null,
+  programSaved : true,
+  brickSaved : true,
+  toolbox : 'beginner',
+  token : '1A2B3C4D'
+};
 
 /**
  * Inject Blockly with initial toolbox
@@ -26,6 +34,14 @@ function injectBlockly(toolbox) {
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
   }
 }
+function setProgram(name) {
+  if (name) {
+    userState.program = name;
+    $("#setProgram").text(name);
+  } else {
+    $("#setProgram").text('Programm')
+  } // bad because of language dependent
+}
 
 function incrCounter(e) {
   var $counter = $('#counter');
@@ -39,32 +55,45 @@ function response(result) {
 };
 
 function saveToServer() {
-  var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-  var xml_text = Blockly.Xml.domToText(xml);
-  var $name = $('#programName');
-  COMM.json("/blocks", {
-    "cmd" : "saveP",
-    "name" : $name.val(),
-    "program" : xml_text
-  }, response);
+  if ($('#programName')) {
+    var $name = $('#programName');
+    setProgram($name.val());
+  }
+  if (userState.program) {
+    var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+    var xml_text = Blockly.Xml.domToText(xml);
+    userState.programSaved = true;
+    LOG.info('delete ' + userState.program + ' signed in: ' + userState.id);
+    COMM.json("/blocks", {
+      "cmd" : "saveP",
+      "name" : userState.program,
+      "program" : xml_text
+    }, response);
+  } else {
+    alert('There is no name for your program available\n\n please save one with a name or load one');
+  }
 }
 
 function runOnBrick() {
-  var $name = $('#programName');
-  COMM.json("/blocks", {
-    "cmd" : "runP",
-    "name" : $name.val()
-  }, response);
+  if (userState.program) {
+    LOG.info('run ' + userState.program + ' signed in: ' + userState.id);
+    COMM.json("/blocks", {
+      "cmd" : "runP",
+      "name" : userState.program,
+    }, response);
+  }
 }
 
-function showProgram(result, load) {
+function showProgram(result, load, name) {
   response(result);
   if (result.rc === 'ok') {
+    setProgram(name);
     var xml = Blockly.Xml.textToDom(result.data);
     if (load) {
       Blockly.mainWorkspace.clear();
     }
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+    LOG.info('show ' + userState.program + ' signed in: ' + userState.id);
   }
 };
 
@@ -74,12 +103,18 @@ function loadFromServer(load) {
     "cmd" : "loadP",
     "name" : $name.val()
   }, function(result) {
-    showProgram(result, load);
+    showProgram(result, load, $name.val());
   });
+  LOG.info('load ' + $name.val() + ' signed in: ' + userState.id);
 }
 
 function deleteOnServer() {
   var $name = $('#programName');
+  userState.programSaved = false;
+  if (usertState.program === $name.val) {
+    setProgram();
+  }
+  LOG.info('del ' + $name.val() + ' signed in: ' + userState.id);
   COMM.json("/blocks", {
     "cmd" : "deletePN",
     "name" : $name.val()
@@ -93,13 +128,15 @@ function loadFromListing() {
     return;
   }
   var programName = $programRow[0].textContent;
+  LOG.info('loadFromList ' + programName + ' signed in: ' + userState.id);
   COMM.json("/blocks", {
     "cmd" : "loadP",
     "name" : programName
   }, function(result) {
     $("#tabs").tabs("option", "active", 0);
     $('#name').val(programName);
-    showProgram(result, true);
+    userState.programSaved = true;
+    showProgram(result, true, programName);
   });
 }
 
@@ -108,6 +145,7 @@ var toolboxDone = false;
 function showToolbox(result) {
   response(result);
   if (result.rc === 'ok') {
+    userState.toolbox = result.name;
     Blockly.updateToolbox(result.data);
   }
 }
@@ -181,13 +219,13 @@ function initProgramNameTable() {
 }
 
 function startProgram() {
-  if (userId == "none") {
+  if (userState.id) {
     // alert("No user id, you need to sign in");
-    saveToServer();
+    saveUPToServer();
     runOnBrick();
   } else {
     // alert("We use the user program table");
-    // saveUPToServer();
+    saveToServer();
     runOnBrick();
   }
 }
@@ -221,8 +259,8 @@ function init() {
   $('#saveUser').onWrap('click', saveUserToServer, 'save the user data');
   $('#deleteUser').onWrap('click', deleteUserOnServer, 'delete user data');
   $('#signIn').onWrap('click', signIn, 'signing in ');
-  $('#loadFromListing').onWrap('click', myLoadFromListing,
-      'load blocks from program list');
+  // $('#loadFromListing').onWrap('click', myLoadFromListing,
+  // 'load blocks from program list');
 
   // #brickConfiguration is provisional, should be integrated in the menue
   $('#brickConfiguration').onWrap('click', function() {
@@ -230,50 +268,37 @@ function init() {
   }, 'show brick configuration');
 
   $('#load').onWrap('click', function() {
-    if (userId == "none") {
-      alert("No user id, using the general table");
-      loadFromServer(true);
-    } else {
-      alert("We use the user account");
+    if (userState.id) {
       loadUPFromServer(true);
+    } else {
+      loadFromServer(true);
     }
-
   }, 'load the blocks');
 
   $('#add').onWrap('click', function() {
-
-    if (userId == "none") {
-      alert("No user id, you need to sign in");
-      loadFromServer(false);
+    if (userState.id) {
+      loadUPFromServer(true);
     } else {
-      alert("We use the user program table");
-      loadUPFromServer(false);
+      loadFromServer(true);
     }
-
   }, 'add the blocks');
-
+  $('#save').onWrap('click', function() {
+    if (userState.id) {
+      saveUPToServer();
+    } else {
+      saveToServer();
+    }
+  }, 'save program');
   $('#del').onWrap('click', function() {
-    if (userId == "none") {
-      alert("No user id, you need to sign in");
-      deleteOnServer();
-    } else {
-      alert("We use the user program table");
+    if (userState.id) {
       deleteUPOnServer();
+    } else {
+      deleteOnServer();
     }
-  }, 'add the blocks');
+  }, 'del program');
 
   $('#run').onWrap('click', function() {
-
-    if (userId == "none") {
-      alert("No user id, you need to sign in");
-      saveToServer();
-      runOnBrick();
-    } else {
-      alert("We use the user program table");
-      // saveUPToServer();
-      runOnBrick();
-    }
-
+    startProgram();
   }, 'save+run the program');
   // =============================================================================
 
@@ -292,11 +317,6 @@ function init() {
     "cmd" : "loadT",
     "name" : "beginner"
   }, injectBlockly);
-  /*
-   * COMM.json("/blocks", { "cmd" : "loadT", "name" : "brickEV3" },
-   * injectBlrickly);
-   */
-
 };
 
 $(document).ready(WRAP.fn3(init, 'page init'));
