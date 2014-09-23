@@ -75,6 +75,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
+import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
@@ -403,8 +404,8 @@ public class JaxbTransformer<V> {
             case "robSensors_getSample":
                 fields = extractFields(block, (short) 2);
                 mode = extractField(fields, "SENSORTYPE", (short) 0);
-                port = extractField(fields, "SENSORPORT", (short) 1);
-                return GetSampleSensor.make(GetSampleSensor.SensorType.get(mode), SensorPort.get(port), disabled, comment);
+                port = extractField(fields, GetSampleSensor.SensorType.get(mode).getPortTypeName(), (short) 1);
+                return GetSampleSensor.make(GetSampleSensor.SensorType.get(mode), port, disabled, comment);
 
                 //Logik
             case "logic_compare":
@@ -682,7 +683,8 @@ public class JaxbTransformer<V> {
                     expr = extractValue(values, new ExprParam("WAIT" + i, Boolean.class));
                     list.addStmt((Stmt<V>) extractRepeatStatement(block, expr, "WAIT", "DO" + i, mutation + 1));
                 }
-                return list;
+                list.setReadOnly();
+                return WaitStmt.make(list, disabled, comment);
 
             case "robControls_loopForever":
                 expr = BoolConst.make(true, disabled, comment);

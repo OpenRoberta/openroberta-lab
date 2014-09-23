@@ -65,7 +65,7 @@ public class CompilerWorkflow {
         blocklyXml = blocklyXml.replaceAll("http://www.w3.org/1999/xhtml", "http://de.fhg.iais.roberta.blockly");
         BrickConfiguration brickConfiguration =
             new BrickConfiguration.Builder()
-                .setTrackWidth(17)
+                .setTrackWidth(13)
                 .setWheelDiameter(5.6)
                 .addActor(ActorPort.A, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))
                 .addActor(ActorPort.B, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))

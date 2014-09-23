@@ -30,6 +30,7 @@ public class AstToLejosJavaVisitorTest {
         + "import de.fhg.iais.roberta.ast.syntax.action.TurnDirection;\n"
         + "import de.fhg.iais.roberta.ast.syntax.action.BrickLedColor;\n"
         + "import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;\n"
+        + "import de.fhg.iais.roberta.ast.syntax.sensor.BrickKey;\n"
         + "import de.fhg.iais.roberta.codegen.lejos.Hal;\n\n";
     private static final String BRICK_CONFIGURATION = "" //
         + "    private BrickConfiguration brickConfiguration = new BrickConfiguration.Builder()\n"

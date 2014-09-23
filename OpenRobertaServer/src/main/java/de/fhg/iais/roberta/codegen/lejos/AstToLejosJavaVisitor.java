@@ -54,10 +54,12 @@ import de.fhg.iais.roberta.ast.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
+import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
@@ -304,6 +306,9 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
             case FOR:
                 generateCodeFromStmtCondition("for", repeatStmt.getExpr());
                 break;
+            case WAIT:
+                generateCodeFromStmtCondition("if", repeatStmt.getExpr());
+                break;
             case FOR_EACH:
                 break;
             default:
@@ -311,6 +316,9 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         }
         incrIndentation();
         repeatStmt.getList().visit(this);
+        if ( repeatStmt.getMode() == Mode.WAIT ) {
+            this.sb.append("break;");
+        }
         decrIndentation();
         nlIndent();
         this.sb.append("}");
@@ -335,6 +343,17 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
             nlIndent();
             stmt.visit(this);
         }
+        return null;
+    }
+
+    @Override
+    public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
+        this.sb.append("while ( true ) {");
+        incrIndentation();
+        visitStmtList(waitStmt.getStatements());
+        decrIndentation();
+        nlIndent();
+        this.sb.append("}");
         return null;
     }
 
@@ -421,24 +440,6 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
-        String methodName = isRegulated ? "hal.setRegulatedMotorSpeed(" : "hal.setUnregulatedMotorSpeed(";
-        this.sb.append(methodName + motorSetPowerAction.getPort().getJavaCode() + ", ");
-        motorSetPowerAction.getPower().visit(this);
-        this.sb.append(");");
-        return null;
-    }
-
-    @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorGetPowerAction.getPort());
-        String methodName = isRegulated ? "hal.getRegulatedMotorSpeed(" : "hal.getUnregulatedMotorSpeed(";
-        this.sb.append(methodName + motorGetPowerAction.getPort().getJavaCode() + ")");
-        return null;
-    }
-
-    @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         String methodName;
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorOnAction.getPort());
@@ -460,10 +461,48 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     }
 
     @Override
+    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
+        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
+        String methodName = isRegulated ? "hal.setRegulatedMotorSpeed(" : "hal.setUnregulatedMotorSpeed(";
+        this.sb.append(methodName + motorSetPowerAction.getPort().getJavaCode() + ", ");
+        motorSetPowerAction.getPower().visit(this);
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
+    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
+        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorGetPowerAction.getPort());
+        String methodName = isRegulated ? "hal.getRegulatedMotorSpeed(" : "hal.getUnregulatedMotorSpeed(";
+        this.sb.append(methodName + motorGetPowerAction.getPort().getJavaCode() + ")");
+        return null;
+    }
+
+    @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorStopAction.getPort());
         String methodName = isRegulated ? "hal.stopRegulatedMotor(" : "hal.stopUnregulatedMotor(";
         this.sb.append(methodName + motorStopAction.getPort().getJavaCode() + ", " + motorStopAction.getMode().getJavaCode() + ");");
+        return null;
+    }
+
+    @Override
+    public Void visitDriveAction(DriveAction<Void> driveAction) {
+        boolean isDuration = driveAction.getParam().getDuration() != null;
+        String methodName = isDuration ? "hal.driveDistance(" : "hal.regulatedDrive(";
+
+        this.sb.append(methodName);
+        //Set the left motor to motor port A, this will be changed when brick configuration provides information on which port the left motor is set. 
+        this.sb.append(ActorPort.A.getJavaCode() + ", ");
+        //Set the right motor to motor port B, this will be changed when brick configuration provides information on which port the right motor is set. 
+        this.sb.append(ActorPort.B.getJavaCode() + ", false, ");
+        this.sb.append(driveAction.getDirection().getJavaCode() + ", ");
+        driveAction.getParam().getSpeed().visit(this);
+        if ( isDuration ) {
+            this.sb.append(", ");
+            driveAction.getParam().getDuration().getValue().visit(this);
+        }
+        this.sb.append(");");
         return null;
     }
 
@@ -482,27 +521,6 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         if ( isDuration ) {
             this.sb.append(", ");
             turnAction.getParam().getDuration().getValue().visit(this);
-        }
-        this.sb.append(");");
-        return null;
-    }
-
-    @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
-        boolean isDuration = driveAction.getParam().getDuration() != null;
-        boolean isRegulated = true;
-        String methodName = isDuration ? "hal.driveDistance(" : isRegulated ? "hal.regulatedDrive(" : "hal.unregulatedDrive(";
-
-        this.sb.append(methodName);
-        //Set the left motor to motor port A, this will be changed when brick configuration provides information on which port the left motor is set. 
-        this.sb.append(ActorPort.A.getJavaCode() + ", ");
-        //Set the right motor to motor port B, this will be changed when brick configuration provides information on which port the right motor is set. 
-        this.sb.append(ActorPort.B.getJavaCode() + ", ");
-        this.sb.append(driveAction.getDirection().getJavaCode() + ", ");
-        driveAction.getParam().getSpeed().visit(this);
-        if ( isDuration ) {
-            this.sb.append(", ");
-            driveAction.getParam().getDuration().getValue().visit(this);
         }
         this.sb.append(");");
         return null;
@@ -785,6 +803,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.TurnDirection;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.BrickLedColor;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;\n");
+        this.sb.append("import de.fhg.iais.roberta.ast.syntax.sensor.BrickKey;\n");
         this.sb.append("import de.fhg.iais.roberta.codegen.lejos.Hal;\n\n");
         this.sb.append("public class " + this.programName + " {\n");
         this.sb.append(INDENT).append(this.brickConfiguration.generateRegenerate()).append("\n\n");

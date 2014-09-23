@@ -9,7 +9,6 @@ import de.fhg.iais.roberta.dbc.DbcException;
  */
 public enum PickColor {
     GREEN( "GRÜN" ), RED( "ROT" ), WHITE( "WEIß", "WEISS" ), BLUE( "BLAU" );
-
     private final String[] values;
 
     private PickColor(String... values) {

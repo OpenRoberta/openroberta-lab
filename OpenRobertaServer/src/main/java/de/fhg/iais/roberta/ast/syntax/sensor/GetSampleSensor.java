@@ -9,31 +9,31 @@ import de.fhg.iais.roberta.dbc.DbcException;
 
 public class GetSampleSensor<V> extends Sensor<V> {
     private final SensorType sensorType;
-    private final SensorPort sensorPort;
+    private final String port;
 
-    private GetSampleSensor(SensorType sensorType, SensorPort sensorPort, boolean disabled, String comment) {
+    private GetSampleSensor(SensorType sensorType, String port, boolean disabled, String comment) {
         super(Phrase.Kind.GET_SAMPLE_SENSING, disabled, comment);
-        Assert.isTrue(sensorType != null && sensorPort != null);
+        Assert.isTrue(sensorType != null && port != "");
         this.sensorType = sensorType;
-        this.sensorPort = sensorPort;
+        this.port = port;
         setReadOnly();
     }
 
-    public static <V> GetSampleSensor<V> make(SensorType sensorType, SensorPort sensorPort, boolean disabled, String comment) {
-        return new GetSampleSensor<V>(sensorType, sensorPort, disabled, comment);
+    public static <V> GetSampleSensor<V> make(SensorType sensorType, String port, boolean disabled, String comment) {
+        return new GetSampleSensor<V>(sensorType, port, disabled, comment);
     }
 
     public SensorType getSensorType() {
         return this.sensorType;
     }
 
-    public SensorPort getSensorPort() {
-        return this.sensorPort;
+    public String getPort() {
+        return this.port;
     }
 
     @Override
     public String toString() {
-        return "GetSampleSensor [sensorType=" + this.sensorType + ", sensorPort=" + this.sensorPort + "]";
+        return "GetSampleSensor [sensorType=" + this.sensorType + ", port=" + this.port + "]";
     }
 
     @Override
@@ -42,19 +42,21 @@ public class GetSampleSensor<V> extends Sensor<V> {
     }
 
     public enum SensorType {
-        TOUCH( "touch sensor (gedrückt)" ),
-        ULTRASONIC( "ultrasonic sensor" ),
-        COLOUR( "colour sensor" ),
-        INFRARED( "infrared sensor" ),
-        ENCODER( "encoder" ),
-        KEYS_PRESSED( "brick button (gedrückt)" ),
-        KEYS_PRESSED_RELEASED( "brick button (geklickt)" ),
-        GYRO( "gyroscope" ),
-        TIME( "time" );
+        TOUCH( "SENSORPORT", "touch sensor (gedrückt)" ), ULTRASONIC( "SENSORPORT", "ultrasonic sensor" ), COLOUR( "SENSORPORT", "colour sensor" ), INFRARED(
+            "SENSORPORT",
+            "infrared sensor" ), ENCODER( "MOTORPORT", "encoder" ), KEYS_PRESSED( "KEY", "brick button (gedrückt)" ), KEYS_PRESSED_RELEASED(
+            "KEY",
+            "brick button (geklickt)" ), GYRO( "SENSORPORT", "gyroscope" ), TIME( "SENSORNUM", "time" );
         private final String[] values;
+        private final String portTypeName;
 
-        private SensorType(String... values) {
+        private SensorType(String portTypeName, String... values) {
             this.values = values;
+            this.portTypeName = portTypeName;
+        }
+
+        public String getPortTypeName() {
+            return this.portTypeName;
         }
 
         public String getJavaCode() {

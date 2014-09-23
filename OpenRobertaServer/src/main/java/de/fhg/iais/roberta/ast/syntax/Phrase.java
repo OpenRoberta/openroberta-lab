@@ -169,6 +169,7 @@ abstract public class Phrase<V> {
         AKTION_STMT( Category.STMT ),
         SENSOR_STMT( Category.STMT ),
         STMT_FLOW_CONTROL( Category.STMT ),
+        WAIT_STMT( Category.STMT ),
         TURN_ACTION( Category.ACTOR ),
         DRIVE_ACTION( Category.ACTOR ),
         SHOW_TEXT_ACTION( Category.ACTOR ),

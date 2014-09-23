@@ -50,6 +50,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
+import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
@@ -61,7 +62,7 @@ import de.fhg.iais.roberta.ast.visitor.AstVisitor;
  */
 public class InfoCollector<T> implements AstVisitor<T> {
 
-    private List<NepoInfo> infos = new ArrayList<>();
+    private final List<NepoInfo> infos = new ArrayList<>();
 
     /**
      * initialize the info collector visitor.
@@ -378,5 +379,11 @@ public class InfoCollector<T> implements AstVisitor<T> {
 
     private void extractInfos(Phrase<T> numConst) {
         this.infos.addAll(numConst.getInfos().getInfos());
+    }
+
+    @Override
+    public T visitWaitStmt(WaitStmt<T> waitStmt) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

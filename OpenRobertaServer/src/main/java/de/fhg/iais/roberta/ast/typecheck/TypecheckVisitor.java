@@ -54,6 +54,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
+import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
@@ -429,5 +430,11 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
         if ( supposedToBeNotNull == null ) {
             checkFor(phrase, false, message + ": " + name);
         }
+    }
+
+    @Override
+    public BlocklyType visitWaitStmt(WaitStmt<BlocklyType> waitStmt) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

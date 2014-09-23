@@ -7,6 +7,7 @@ import java.util.Set;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.ast.visitor.AstDefaultVisitorInspecting;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
@@ -56,6 +57,12 @@ public class AstToVarsVisitor extends AstDefaultVisitorInspecting {
     public Void visitNumConst(NumConst<Void> numConst) {
         String numName = numConst.getValue();
         this.allVars.add(numName);
+        return null;
+    }
+
+    @Override
+    public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
+        // TODO Auto-generated method stub
         return null;
     }
 }
