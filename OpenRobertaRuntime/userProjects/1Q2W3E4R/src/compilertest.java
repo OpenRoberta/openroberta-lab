@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.ast.syntax.action.BrickLedColor;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.codegen.lejos.Hal;
 
-public class sensor2 {
+public class compilertest {
     private BrickConfiguration brickConfiguration = new BrickConfiguration.Builder()
     .setWheelDiameter(5.6)
     .setTrackWidth(17.0)
@@ -24,15 +24,15 @@ public class sensor2 {
     .build();
 
     public static void main(String[] args) {
-        new sensor2().run();
+        new compilertest().run();
     }
 
     public void run() {
         Hal hal = new Hal(brickConfiguration);
-        hal.turnOnRegulatedMotor(ActorPort.B, 100);
-        while ( !hal.isPressed(SensorPort.S4) ) {
+        hal.turnOnRegulatedMotor(ActorPort.B, 30);
+        while ( !hal.isPressed(SensorPort.S1) ) {
         }
-        hal.stopRegulatedMotor(ActorPort.B, MotorStopMode.FLOAT);
+        hal.stopRegulatedMotor(ActorPort.A, MotorStopMode.FLOAT);
         try {
             Thread.sleep(2000);
         } catch ( InterruptedException e ) {

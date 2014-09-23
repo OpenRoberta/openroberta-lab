@@ -2,6 +2,8 @@
 <project name="compileLejos" basedir=".." default="jar">
 
 	<property name="lib.lejos" value="${basedir}/lib" />
+	<property name="lib.openrobertaruntime" value="${basedir}/target" />
+	<property name="lib.openrobertashared" value="${basedir}/../OpenRobertaShared/target" />
 	
 	<property name="brick.runtime" value="/home/root/lejos" />
 	<property name="brick.roberta" value="/home/roberta/lib" />
@@ -9,12 +11,26 @@
 	<property name="input.dir" value="${basedir}/${user.projects.dir}/${token.dir}/src" />
 	<property name="output.dir" value="${basedir}/${user.projects.dir}/${token.dir}/target" />
 
-	<property name="main.package.file" value="${main.package}.${main.name}" />
+	<property name="main.class" value="${main.package}.${main.name}" />
 	<property name="program.jar" value="${main.name}.jar" />
 
 	<path id="lejos">
 		<fileset dir="${lib.lejos}">
-			<include name="*.jar"/>
+			<include name="dbusjava.jar"/>
+			<include name="ev3classes.jar"/>
+			<include name="jna.jar"/>
+		</fileset>
+	</path>
+	
+	<path id="runtime">
+		<fileset dir="${lib.openrobertaruntime}">
+			<include name="OpenRobertaRuntime-0.0.1-SNAPSHOT.jar"/>
+		</fileset>
+	</path>
+	
+	<path id="shared">
+		<fileset dir="${lib.openrobertashared}">
+			<include name="OpenRobertaShared-0.0.1-SNAPSHOT.jar"/>
 		</fileset>
 	</path>
 	
@@ -30,17 +46,19 @@
 		<javac srcdir="${input.dir}" destdir="${output.dir}" includeantruntime="false" fork="yes" debug="true" verbose="true" debuglevel="lines,vars,source">
 			<include name="${main.name}.java"/>
 			<classpath refid="lejos"/>
+			<classpath refid="runtime"/>
+			<classpath refid="shared"/>
 		</javac>
 	</target>
 
 	<target name="jar" depends="compile">
 		<jar destfile="${output.dir}/${program.jar}">
 			<manifest>
-				<attribute name="Main-Class" value="${main.package.file}"/>
+				<attribute name="Main-Class" value="${main.class}"/>
 				<attribute name="Class-Path" value="${brick.runtime}/lib/ev3classes.jar ${brick.runtime}/lib/dbusjava.jar ${brick.runtime}/libjna/usr/share/java/jna.jar ${brick.roberta}/OpenRobertaRuntime-0.0.1-SNAPSHOT.jar ${brick.roberta}/OpenRobertaShared-0.0.1-SNAPSHOT.jar"/>
 			</manifest>
 			<fileset dir="${output.dir}">
-				<include name="**/**.class"/>
+				<include name="**/${main.name}.class"/>
 			</fileset>
 		</jar>
 	</target>

@@ -16,8 +16,11 @@ import de.fhg.iais.roberta.codegen.lejos.Hal;
 
 public class blinker2 {
     private BrickConfiguration brickConfiguration = new BrickConfiguration.Builder()
+    .setWheelDiameter(5.6)
+    .setTrackWidth(17.0)
     .addActor(ActorPort.A, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))
-    .addActor(ActorPort.B, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))
+    .addActor(ActorPort.B, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))
+    .addSensor(SensorPort.S4, new HardwareComponent(HardwareComponentType.EV3TouchSensor))
     .build();
 
     public static void main(String[] args) {

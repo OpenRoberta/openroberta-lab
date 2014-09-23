@@ -328,32 +328,33 @@ public class Hal {
         }
     }
 
-    /**
-     * @param left
-     * @param right
-     * @param direction
-     * @param speedPercent
-     */
-    public void rotateDirectionUnregulated(ActorPort left, ActorPort right, boolean isReverse, TurnDirection direction, int speedPercent) {
-        DifferentialPilot dPilot =
-            new DifferentialPilot(
-                this.wheelDiameter,
-                this.trackWidth,
-                this.deviceHandler.getRegulatedMotor(left),
-                this.deviceHandler.getRegulatedMotor(right),
-                isReverse);
-        dPilot.setRotateSpeed(toDegPerSec(speedPercent));
-        switch ( direction ) {
-            case RIGHT:
-                dPilot.rotateRight();
-                break;
-            case LEFT:
-                dPilot.rotateLeft();
-                break;
-            default:
-                throw new DbcException("incorrect TurnAction");
-        }
-    }
+    // TODO needed -> ask beate
+    //    /**
+    //     * @param left
+    //     * @param right
+    //     * @param direction
+    //     * @param speedPercent
+    //     */
+    //    public void rotateDirectionUnregulated(ActorPort left, ActorPort right, boolean isReverse, TurnDirection direction, int speedPercent) {
+    //        DifferentialPilot dPilot =
+    //            new DifferentialPilot(
+    //                this.wheelDiameter,
+    //                this.trackWidth,
+    //                this.deviceHandler.getRegulatedMotor(left),
+    //                this.deviceHandler.getRegulatedMotor(right),
+    //                isReverse);
+    //        dPilot.setRotateSpeed(toDegPerSec(speedPercent));
+    //        switch ( direction ) {
+    //            case RIGHT:
+    //                dPilot.rotateRight();
+    //                break;
+    //            case LEFT:
+    //                dPilot.rotateLeft();
+    //                break;
+    //            default:
+    //                throw new DbcException("incorrect TurnAction");
+    //        }
+    //    }
 
     // not needed at the moment
     //    public void rotateDirectionDistanceRegulated(ActorPort left, ActorPort right, TurnDirection direction, int speedPercent, int distance) {
