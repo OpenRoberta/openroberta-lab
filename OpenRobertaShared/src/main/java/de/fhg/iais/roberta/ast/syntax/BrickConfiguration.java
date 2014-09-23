@@ -55,6 +55,8 @@ public class BrickConfiguration {
     public String generateRegenerate() {
         StringBuilder sb = new StringBuilder();
         sb.append("private BrickConfiguration brickConfiguration = new BrickConfiguration.Builder()\n");
+        sb.append("    .setWheelDiameter(" + this.wheelDiameterCM + ")\n");
+        sb.append("    .setTrackWidth(" + this.trackWidthCM + ")\n");
         appendOptional(sb, "Actor", "A", this.actorA);
         appendOptional(sb, "Actor", "B", this.actorB);
         appendOptional(sb, "Actor", "C", this.actorC);

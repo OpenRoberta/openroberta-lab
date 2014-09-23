@@ -208,8 +208,10 @@ public class Hal {
             case FLOAT:
                 this.deviceHandler.getRegulatedMotor(actorPort).flt();
                 this.deviceHandler.getRegulatedMotor(actorPort).stop();
+                break;
             case NONFLOAT:
                 this.deviceHandler.getRegulatedMotor(actorPort).stop();
+                break;
             default:
                 throw new DbcException("Wrong MotorStopMode");
         }

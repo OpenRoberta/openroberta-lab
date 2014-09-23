@@ -2,12 +2,11 @@ package generated.main;
 
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.HardwareComponent;
+import de.fhg.iais.roberta.ast.syntax.action.HardwareComponentType;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.MotorMoveMode;
 import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
 import de.fhg.iais.roberta.ast.syntax.action.MotorStopMode;
-import de.fhg.iais.roberta.ast.syntax.action.HardwareComponentType;
-import de.fhg.iais.roberta.ast.syntax.action.HardwareComponent;
 import de.fhg.iais.roberta.ast.syntax.action.MotorSide;
 import de.fhg.iais.roberta.ast.syntax.action.MotorType;
 import de.fhg.iais.roberta.ast.syntax.action.TurnDirection;

@@ -17,8 +17,8 @@ import lejos.robotics.EncoderMotor;
 import lejos.robotics.RegulatedMotor;
 import lejos.robotics.SampleProvider;
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
+import de.fhg.iais.roberta.ast.syntax.HardwareComponent;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
-import de.fhg.iais.roberta.ast.syntax.action.HardwareComponentType;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensorMode;
@@ -51,19 +51,19 @@ public class DeviceHandler {
     }
 
     private void createDevices(BrickConfiguration brickConfiguration) {
-        initMotors(ActorPort.A, brickConfiguration.getActorA().getComponentType(), lejos.hardware.port.MotorPort.A);
-        initMotors(ActorPort.B, brickConfiguration.getActorB().getComponentType(), lejos.hardware.port.MotorPort.B);
-        initMotors(ActorPort.C, brickConfiguration.getActorC().getComponentType(), lejos.hardware.port.MotorPort.C);
-        initMotors(ActorPort.D, brickConfiguration.getActorD().getComponentType(), lejos.hardware.port.MotorPort.D);
-        initSensors(SensorPort.S1, brickConfiguration.getSensor1().getComponentType(), lejos.hardware.port.SensorPort.S1);
-        initSensors(SensorPort.S2, brickConfiguration.getSensor2().getComponentType(), lejos.hardware.port.SensorPort.S2);
-        initSensors(SensorPort.S3, brickConfiguration.getSensor3().getComponentType(), lejos.hardware.port.SensorPort.S3);
-        initSensors(SensorPort.S4, brickConfiguration.getSensor4().getComponentType(), lejos.hardware.port.SensorPort.S4);
+        initMotors(ActorPort.A, brickConfiguration.getActorA(), lejos.hardware.port.MotorPort.A);
+        initMotors(ActorPort.B, brickConfiguration.getActorB(), lejos.hardware.port.MotorPort.B);
+        initMotors(ActorPort.C, brickConfiguration.getActorC(), lejos.hardware.port.MotorPort.C);
+        initMotors(ActorPort.D, brickConfiguration.getActorD(), lejos.hardware.port.MotorPort.D);
+        initSensors(SensorPort.S1, brickConfiguration.getSensor1(), lejos.hardware.port.SensorPort.S1);
+        initSensors(SensorPort.S2, brickConfiguration.getSensor2(), lejos.hardware.port.SensorPort.S2);
+        initSensors(SensorPort.S3, brickConfiguration.getSensor3(), lejos.hardware.port.SensorPort.S3);
+        initSensors(SensorPort.S4, brickConfiguration.getSensor4(), lejos.hardware.port.SensorPort.S4);
     }
 
-    private void initMotors(ActorPort actorPort, HardwareComponentType actorType, Port hardwarePort) {
+    private void initMotors(ActorPort actorPort, HardwareComponent actorType, Port hardwarePort) {
         if ( actorType != null ) {
-            switch ( actorType ) {
+            switch ( actorType.getComponentType() ) {
                 case EV3LargeRegulatedMotor:
                     RegulatedMotor ev3LargeRegulatedMotor = new EV3LargeRegulatedMotor(hardwarePort);
                     this.lejosRegulatedMotors.put(actorPort, ev3LargeRegulatedMotor);
@@ -88,9 +88,9 @@ public class DeviceHandler {
 
     }
 
-    private void initSensors(SensorPort sensorPort, HardwareComponentType sensorType, Port hardwarePort) {
+    private void initSensors(SensorPort sensorPort, HardwareComponent sensorType, Port hardwarePort) {
         if ( sensorType != null ) {
-            switch ( sensorType ) {
+            switch ( sensorType.getComponentType() ) {
                 case EV3ColorSensor:
                     EV3ColorSensor ev3ColorSensor = new EV3ColorSensor(hardwarePort);
                     this.lejosColorSensors.put(sensorPort, ev3ColorSensor);
@@ -170,23 +170,8 @@ public class DeviceHandler {
         return this.lejosSampleProvider.get(sensorPort);
     }
 
-    //    Distance
-    //    Listen
-
-    //    ColorID
-    //    Red
-    //    RGB
-    //    Ambient
-
-    //    Rate
-    //    Angle
-    //    Angle and Rate
-
-    //    Touch
-
-    // test
     public void setColorSensorMode(SensorPort sensorPort, ColorSensorMode sensorMode) {
-        SampleProvider sp = getColorSensor(sensorPort).getMode(sensorMode.toString());
+        SampleProvider sp = getColorSensor(sensorPort).getMode(sensorMode.getLejosModeName());
         this.lejosSampleProvider.put(sensorPort, sp);
         this.colorModes.put(sensorPort, sensorMode);
     }
@@ -197,7 +182,7 @@ public class DeviceHandler {
     }
 
     public void setUltrasonicSensorMode(SensorPort sensorPort, UltrasonicSensorMode sensorMode) {
-        SampleProvider sp = getUltrasonicSensor(sensorPort).getMode(sensorMode.toString());
+        SampleProvider sp = getUltrasonicSensor(sensorPort).getMode(sensorMode.getLejosModeName());
         this.lejosSampleProvider.put(sensorPort, sp);
         this.ultrasonicModes.put(sensorPort, sensorMode);
     }
@@ -209,7 +194,7 @@ public class DeviceHandler {
     }
 
     public void setGyroSensorMode(SensorPort sensorPort, GyroSensorMode sensorMode) {
-        SampleProvider sp = getGyroSensor(sensorPort).getMode(sensorMode.toString());
+        SampleProvider sp = getGyroSensor(sensorPort).getMode(sensorMode.getLejosModeName());
         this.lejosSampleProvider.put(sensorPort, sp);
         this.gyroModes.put(sensorPort, sensorMode);
     }

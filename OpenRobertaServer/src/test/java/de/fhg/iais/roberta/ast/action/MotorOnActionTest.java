@@ -12,7 +12,8 @@ public class MotorOnActionTest {
 
     @Test
     public void make() throws Exception {
-        String a = "BlockAST [project=[[MotorOnAction [B, MotionParam [speed=NumConst [30], duration=null]]]]]";
+        String a =
+            "BlockAST [project=[[MotorOnAction [B, MotionParam [speed=NumConst [30], duration=null]], MotorOnAction [C, MotionParam [speed=NumConst [50], duration=null]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_MotorOn.xml"));
     }
 

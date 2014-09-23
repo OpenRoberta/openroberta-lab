@@ -33,6 +33,8 @@ public class AstToLejosJavaVisitorTest {
         + "import de.fhg.iais.roberta.codegen.lejos.Hal;\n\n";
     private static final String BRICK_CONFIGURATION = "" //
         + "    private BrickConfiguration brickConfiguration = new BrickConfiguration.Builder()\n"
+        + "    .setWheelDiameter(5.6)\n"
+        + "    .setTrackWidth(17.0)\n"
         + "    .addActor(ActorPort.A, new HardwareComponent(HardwareComponentType.EV3MediumRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))\n"
         + "    .addActor(ActorPort.B, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))\n"
         + "    .addSensor(SensorPort.S1, new HardwareComponent(HardwareComponentType.EV3TouchSensor))\n"
@@ -53,6 +55,7 @@ public class AstToLejosJavaVisitorTest {
     @BeforeClass
     public static void setupConfigurationForAllTests() {
         BrickConfiguration.Builder builder = new BrickConfiguration.Builder();
+        builder.setTrackWidth(17).setWheelDiameter(5.6);
         builder.addActor(ActorPort.A, new HardwareComponent(HardwareComponentType.EV3MediumRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT)).addActor(
             ActorPort.B,
             new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT));
@@ -175,7 +178,7 @@ public class AstToLejosJavaVisitorTest {
                 + "        if ( 5 < hal.getRegulatedMotorSpeed(ActorPort.B) ) {\n\n\n"
                 + "            hal.turnOnRegulatedMotor(ActorPort.B,30);\n"
                 + "            hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);\n"
-                + "            hal.rotateDirectionRegulated(ActorPort.A, ActorPort.B, TurnDirection.RIGHT, 50);\n"
+                + "            hal.rotateDirectionRegulated(ActorPort.A, ActorPort.B, false, TurnDirection.RIGHT, 50);\n"
                 + "        }\n"
                 + "        if ( hal.getRegulatedMotorTachoValue(ActorPort.A) + hal.getInfraredSensorValue(SensorPort.S4) == hal.getUltraSonicSensorValue(SensorPort.S4) ) {\n"
                 + "            hal.setInfraredSensorMode(SensorPort.S4, InfraredSensorMode.SEEK);\n"

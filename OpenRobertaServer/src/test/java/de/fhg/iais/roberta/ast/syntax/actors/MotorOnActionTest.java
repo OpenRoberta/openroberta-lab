@@ -8,7 +8,7 @@ public class MotorOnActionTest {
 
     @Test
     public void motorOn() throws Exception {
-        String a = "hal.turnOnRegulatedMotor(ActorPort.B, 30);";
+        String a = "hal.turnOnRegulatedMotor(ActorPort.B, 30);" + "hal.turnOnUnregulatedMotor(ActorPort.C, 50);";
 
         Helper.assertCodeIsOk(a, "/ast/actions/action_MotorOn.xml");
     }

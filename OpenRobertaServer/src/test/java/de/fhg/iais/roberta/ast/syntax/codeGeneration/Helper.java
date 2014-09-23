@@ -35,7 +35,9 @@ public class Helper {
         BrickConfiguration brickConfiguration =
             new BrickConfiguration.Builder()
                 .addActor(ActorPort.A, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(ActorPort.B, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.B, new HardwareComponent(HardwareComponentType.EV3MediumRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))
+                .addActor(ActorPort.C, new HardwareComponent(HardwareComponentType.EV3LargeUnRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.D, new HardwareComponent(HardwareComponentType.EV3MediumUnRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))
                 .build();
         String code = AstToLejosJavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), false);
         System.out.println(code);

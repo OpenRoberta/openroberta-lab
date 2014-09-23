@@ -8,14 +8,14 @@ public class TurnActionTest {
 
     @Test
     public void turn() throws Exception {
-        String a = "\nhal.rotateDirectionRegulated(ActorPort.A, ActorPort.B, TurnDirection.RIGHT, 50);";
+        String a = "\nhal.rotateDirectionRegulated(ActorPort.A, ActorPort.B, false, TurnDirection.RIGHT, 50);";
 
         Helper.assertCodeIsOk(a, "/ast/actions/action_MotorDiffTurn.xml");
     }
 
     @Test
     public void turnFor() throws Exception {
-        String a = "\nhal.rotateDirectionDistanceRegulated(ActorPort.A, ActorPort.B, TurnDirection.RIGHT, 50, 20);";
+        String a = "\nhal.rotateDirectionAngle(ActorPort.A, ActorPort.B, false, TurnDirection.RIGHT, 50, 20);";
 
         Helper.assertCodeIsOk(a, "/ast/actions/action_MotorDiffTurnFor.xml");
     }

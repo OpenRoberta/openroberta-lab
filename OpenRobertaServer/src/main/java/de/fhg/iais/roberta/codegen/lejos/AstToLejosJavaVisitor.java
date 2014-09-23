@@ -442,7 +442,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         String methodName;
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorOnAction.getPort());
-        boolean duration = motorOnAction.getParam().getDuration() == null ? false : true;
+        boolean duration = motorOnAction.getParam().getDuration() != null;
         if ( duration ) {
             methodName = isRegulated ? "hal.rotateRegulatedMotor(" : "hal.rotateUnregulatedMotor(";
         } else {
@@ -461,8 +461,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        // it is just temporary variable just to be able to write the code. This will be replaced by the brick configuration method.
-        boolean isRegulated = true;
+        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorStopAction.getPort());
         String methodName = isRegulated ? "hal.stopRegulatedMotor(" : "hal.stopUnregulatedMotor(";
         this.sb.append(methodName + motorStopAction.getPort().getJavaCode() + ", " + motorStopAction.getMode().getJavaCode() + ");");
         return null;
@@ -471,13 +470,13 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
         boolean isDuration = turnAction.getParam().getDuration() != null;
-        boolean isRegulated = true;
-        String methodName = "hal.rotateDirection" + (isDuration ? "DistanceRegulated" : isRegulated ? "Regulated" : "Unregulated") + "(";
+        boolean isRegulated = this.brickConfiguration.getActorA().isRegulated();
+        String methodName = "hal.rotateDirection" + (isDuration ? "Angle" : isRegulated ? "Regulated" : "Unregulated") + "(";
         this.sb.append(methodName);
         //Set the left motor to motor port A, this will be changed when brick configuration provides information on which port the left motor is set. 
         this.sb.append(ActorPort.A.getJavaCode() + ", ");
         //Set the right motor to motor port B, this will be changed when brick configuration provides information on which port the right motor is set. 
-        this.sb.append(ActorPort.B.getJavaCode() + ", ");
+        this.sb.append(ActorPort.B.getJavaCode() + ", false, ");
         this.sb.append(turnAction.getDirection().getJavaCode() + ", ");
         turnAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {

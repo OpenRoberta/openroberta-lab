@@ -18,6 +18,8 @@ public class BrickConfigurationTest {
     public void test1() throws Exception {
         String a =
             "private BrickConfiguration brickConfiguration = new BrickConfiguration.Builder()"
+                + ".setWheelDiameter(5.6)"
+                + ".setTrackWidth(17.0)"
                 + ".addActor(ActorPort.A, new HardwareComponent(HardwareComponentType.EV3MediumRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))"
                 + ".addActor(ActorPort.B, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.NONE))"
                 + ".addSensor(SensorPort.S1, new HardwareComponent(HardwareComponentType.EV3TouchSensor))"
@@ -42,6 +44,8 @@ public class BrickConfigurationTest {
     public void test2() throws Exception {
         String a =
             "private BrickConfiguration brickConfiguration = new BrickConfiguration.Builder()"
+                + ".setWheelDiameter(5.0)"
+                + ".setTrackWidth(17.0)"
                 + ".addActor(ActorPort.A, new HardwareComponent(HardwareComponentType.EV3MediumRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))"
                 + ".addSensor(SensorPort.S3, new HardwareComponent(HardwareComponentType.EV3IRSensor))"
                 + ".build();";
@@ -63,6 +67,8 @@ public class BrickConfigurationTest {
     public void test3() throws Exception {
         String a =
             "private BrickConfiguration brickConfiguration = new BrickConfiguration.Builder()"
+                + ".setWheelDiameter(5.6)."
+                + "setTrackWidth(17.0)"
                 + ".addActor(ActorPort.B, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))"
                 + ".addActor(ActorPort.C, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))"
                 + ".addSensor(SensorPort.S1, new HardwareComponent(HardwareComponentType.EV3TouchSensor))"

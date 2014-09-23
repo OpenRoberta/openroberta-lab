@@ -10,12 +10,16 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * @author kcvejoski
  */
 public enum UltrasonicSensorMode implements SensorsMode {
-    DISTANCE(), PRESENCE(), GET_MODE(), GET_SAMPLE();
+    DISTANCE( "Distance" ), PRESENCE( "Listen" ), GET_MODE(), GET_SAMPLE();
 
     private final String[] values;
 
     private UltrasonicSensorMode(String... values) {
         this.values = values;
+    }
+
+    public String getLejosModeName() {
+        return this.values[0];
     }
 
     public String getJavaCode() {
