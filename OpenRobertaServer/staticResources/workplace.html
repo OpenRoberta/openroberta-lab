@@ -33,22 +33,36 @@
 <body>
     <div id="head-section">
         <ul id="head-navigation">
-            <li><a href="#"> <span class="head-navi-icons help"></span> <span class="head-navi-text">Hilfe</span>
-            </a></li>
-            <li><a href="#" id="brickConfiguration" type="submit"> <span class="head-navi-icons settings"></span> <span class="head-navi-text">Einstellungen</span>
-            </a></li>
-            <li><a href="#"> <span class="head-navi-icons community"></span> <span class="head-navi-text">Gruppen</span>
-            </a></li>
-            <li><a class="popup-opener" id="open-program" href="#"> <span class="head-navi-icons project"></span> <span id="setProgram" class="head-navi-text">Programm</span>
-            </a> <!-- UNNEEDED SUBMENU 
-                    <div id="project-submenu">
-                        Simulation
-                        <input class='button' onclick="viewSimulator(true);" type="submit" value="Simulator Test" />
-                    </div> --></li>
-            <li><a class="popup-opener" id="open-login-user" href="#"> <span id="signInIcon" class="head-navi-icons user"></span> <span id="setName"
-                    class="head-navi-text"
-                >Anmeldung</span>
-            </a></li>
+            <li>
+                <a href="#"><span class="head-navi-icons help"></span> <span class="head-navi-text">Hilfe</span></a>
+            </li>
+            <li>
+                <a href="#" id="brickConfiguration" type="submit"><span class="head-navi-icons settings"></span> <span class="head-navi-text">Einstellungen</span></a>
+            </li>
+            <li>
+                <a href="#"><span class="head-navi-icons community"></span> <span class="head-navi-text">Gruppen</span></a>
+            </li>
+            <li>
+                <a class="popup-opener" id="open-program" href="#"><span class="head-navi-icons project"></span> <span id="setProgram" class="head-navi-text">Programm</span></a>
+            </li>
+            <li>
+                <a class="popup-opener" id="open-login-user" href="#"><span id="signInIcon" class="head-navi-icons user"></span> <span id="setName" class="head-navi-text">Anmeldung</span></a>
+            </li>
+            <li>
+                <a id="head-navigation-blockly"><span class="head-navi-icons help"></span> <span class="head-navi-text">Test Nepo :-)</span></a>
+            </li>
+            <li>
+                <a id="head-navigation-listing"><span class="head-navi-icons help"></span> <span class="head-navi-text">Listing</span></a>
+            </li>
+            <li>
+                <a id="head-navigation-logging"><span class="head-navi-icons help"></span> <span class="head-navi-text">Logging</span></a>
+            </li>
+            <li>
+                <a id="head-navigation-readme"><span class="head-navi-icons help"></span> <span class="head-navi-text">README</span></a>
+            </li>
+            <li>
+                <a id="head-navigation-simtest"><span class="head-navi-icons help"></span> <span class="head-navi-text">Simulator Test</span></a>
+            </li>
         </ul>
         <div id="logo">
             <a href="index.html">Logo</a>
@@ -88,12 +102,12 @@
 
     <div id="main-section">
         <div id="tabs">
-            <ul>
-                <li><a href="#blockly">Test Nepo :-)</a></li>
-                <li><a href="#listing">Listing</a></li>
-                <li><a href="#logging">Logging</a></li>
-                <li><a href="#readme">README</a></li>
-                <li><a onclick="viewSimulator(true);">Simulator Test</a></li>
+            <ul class="hidden">
+                <li><a id="tabBlockly" href="#blockly">Test Nepo :-)</a></li>
+                <li><a id="tabListing"  href="#listing">Listing</a></li>
+                <li><a id="tabLogging" href="#logging">Logging</a></li>
+                <li><a id="tabReadme" href="#readme">README</a></li>
+                <li><a id="tabSimtest" onclick="viewSimulator(true);">Simulator Test</a></li>
             </ul>
 
             <div id="simulatorDiv">
@@ -113,6 +127,7 @@
                     />
                 </div>
             </div>
+            
             <div id="listing" style="overflow: scroll;">
                 <table id="programNameTable" class="tableSize">
                     <thead></thead>
@@ -122,20 +137,21 @@
                 </table>
                 <br /> <input id="loadFromListing" class='submit' type="submit" value="load" />
                 <div id="redrawCounter" class="rightGray">0</div>
-                </br>
             </div>
+            
             <div id="logging">
                 <br />
                 <div>
-                    <input id="toggle" class="button" type="submit" value="log ein/aus" /><br /> </br>
+                    <input id="toggle" class="button" type="submit" value="log ein/aus" /><br />
                     <hr />
-                    <br /> </br>
+                    <br />
                     <ol id="log" class="log">
                     </ol>
                     <div class="counter">Count:</div>
                     <div class="counter" id="counter">0</div>
                 </div>
             </div>
+            
             <div id="readme">
                 <br />
                 <div>Content Readme</div>

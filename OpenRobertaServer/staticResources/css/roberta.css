@@ -101,3 +101,7 @@
 .lERR {
 	background-color: #FF3333;
 }
+
+.hidden {
+	display: none;
+}

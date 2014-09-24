@@ -34,6 +34,7 @@ function injectBlockly(toolbox) {
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
   }
 }
+
 function setProgram(name) {
   if (name) {
     userState.program = name;
@@ -248,6 +249,23 @@ function switchToBrickly() {
 }
 
 function init() {
+	$('#head-navigation').menu({
+		select: function(event, ui) {
+			var id = ui.item.children().attr('id');
+			if (id === 'head-navigation-blockly') {
+				$('#tabBlockly').click();
+			} else if (id === 'head-navigation-listing') {
+				COMM.json("/blocks", {"cmd" : "loadPN"}, showPrograms);
+				$('#tabListing').click();
+			} else if (id === 'head-navigation-logging') {
+				$('#tabLogging').click();
+			} else if (id === 'head-navigation-readme') {
+				$('#tabReadme').click();
+			} else if (id === 'head-navigation-simtest') {
+				$('#tabSimtest').click();
+			}
+	}});
+	
   $('#tabs').tabs({
     heightStyle : 'content',
     active : 0,
