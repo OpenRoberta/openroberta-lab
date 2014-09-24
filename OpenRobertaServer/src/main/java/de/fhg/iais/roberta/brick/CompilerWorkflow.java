@@ -34,7 +34,7 @@ import de.fhg.iais.roberta.persistence.connector.SessionWrapper;
 public class CompilerWorkflow {
 
     private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflow.class);
-    public static final String BASE_DIR = "../OpenRobertaRuntime/userProjects/"; // TODO: temporary path has to be be removed 
+    public static final String BASE_DIR = "../OpenRobertaRuntime/userProjects/"; // TODO: temporary path has to be be removed
 
     /**
      * - load the program from the database<br>
@@ -45,7 +45,7 @@ public class CompilerWorkflow {
      * - compile the code and generate a jar in the token-specific directory (use a ant script, will be replaced later)<br>
      * <b>Note:</b> the jar is prepared for upload, but not uploaded from here. After a handshake with the brick (the brick has to tell, that it is ready) the
      * jar is uploaded to the brick from another thread and then started on the brick
-     * 
+     *
      * @param session to retrieve the the program from the database
      * @param token the credential the end user (at the terminal) and the brick have both agreed to use
      * @param projectName to retrieve the program code
@@ -54,6 +54,7 @@ public class CompilerWorkflow {
      * @return a message in case of an error; null otherwise
      */
     public static String execute(SessionWrapper session, String token, String projectName, String programName, String configurationName) {
+        LOG.info("compiler workflow started for program {}", programName);
         Program program = new ProgramProcessor().getProgram(session, projectName, programName);
         if ( program == null ) {
             return "program not found";
@@ -79,24 +80,25 @@ public class CompilerWorkflow {
             return "blocks could not be transformed (message: " + e.getMessage() + ")";
         }
         String javaCode = AstToLejosJavaVisitor.generate(programName, brickConfiguration, transformer.getTree(), true);
-        LOG.info("to be compiled: {}", javaCode);
+        LOG.debug("to be compiled: {}", javaCode);
         try {
             storeGeneratedProgram(token, programName, javaCode);
         } catch ( Exception e ) {
             return "generated java code could not be stored (message: + " + e.getMessage() + ")";
         }
         runBuild(BASE_DIR, token, programName, "generated.main");
+        LOG.info("brick jar for program {} generated successfully", programName);
         return null;
     }
 
     /**
      * return the jaxb transformer for a given program test.
-     * 
+     *
      * @param blocklyXml the blockly XML as String
      * @return jaxb the transformer
      * @throws Exception
      */
-    public static JaxbTransformer<Void> generateTransformer(String blocklyXml) throws Exception {
+    static JaxbTransformer<Void> generateTransformer(String blocklyXml) throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
@@ -109,7 +111,7 @@ public class CompilerWorkflow {
         return transformer;
     }
 
-    public static void storeGeneratedProgram(String token, String programName, String javaCode) throws Exception {
+    static void storeGeneratedProgram(String token, String programName, String javaCode) throws Exception {
         File javaFile = new File(BASE_DIR + token + "/src/" + programName + ".java");
         FileUtils.writeStringToFile(javaFile, javaCode, StandardCharsets.UTF_8.displayName());
     }
@@ -119,13 +121,13 @@ public class CompilerWorkflow {
      * 2. Clean target folder (everything inside).<br>
      * 3. Compile .java files to .class.<br>
      * 4. Make jar from class files and add META-INF entries.<br>
-     * 
+     *
      * @param userProjectsDir
      * @param token
      * @param mainFile
      * @param mainPackage
      */
-    public static void runBuild(String userProjectsDir, String token, String mainFile, String mainPackage) {
+    static void runBuild(String userProjectsDir, String token, String mainFile, String mainPackage) {
 
         File buildFile = new File(userProjectsDir + "/build.xml");
         org.apache.tools.ant.Project project = new org.apache.tools.ant.Project();
@@ -174,7 +176,7 @@ public class CompilerWorkflow {
         try {
             project.executeTarget(project.getDefaultTarget());
         } catch ( BuildException e ) {
-            LOG.error("build exception. Messages are:\n" + sb.toString(), e);
+            LOG.error("build exception. Stacktrace is suppressed. Messages from build script are:\n" + sb.toString());
             throw e;
         }
     }
