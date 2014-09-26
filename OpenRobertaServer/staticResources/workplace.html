@@ -34,39 +34,66 @@
     <div id="head-section">
         <ul id="head-navigation">
             <li>
-                <a href="#"><span class="head-navi-icons help"></span> <span class="head-navi-text">Hilfe</span></a>
+                <a href="#"><span class="head-navi-icons project"></span><span class="head-navi-text">Programm</span></a>
+                <ul id="submenu-program" class="head-navigation-submenu">
+                    <li id="start">Starten</li>
+                    <li id="check">Checken</li>
+                    <li id="new">Neu</li>
+                    <li id="open"> Öffnen ... </li>
+                    <li id="save">Speichern</li>
+                    <li id="saveAs">Speichern unter ...</li>
+                    <li id="attach">Anhängen ...</li>
+                    <li id="divide">Teilen ...</li>
+                    <li id="properties">Eigenschaften</li>
+                </ul>
             </li>
             <li>
-                <a href="#" id="brickConfiguration" type="submit"><span class="head-navi-icons settings"></span> <span class="head-navi-text">Einstellungen</span></a>
+                <a href="#"><span class="head-navi-icons settings"></span><span class="head-navi-text">Einstellungen</span></a>
+                <ul id="submenu-settings" class="head-navigation-submenu">
+                    <li id="roboter">Roboter</li>
+                    <li id="toolbox">Toolbox</li>
+                    <li id="close">Schließen</li>
+                </ul>
             </li>
             <li>
-                <a href="#"><span class="head-navi-icons community"></span> <span class="head-navi-text">Gruppen</span></a>
+                <a href="#"><span class="head-navi-icons settings"></span><span class="head-navi-text">Verbindung</span></a>
+                <ul id="submenu-connection" class="head-navigation-submenu">
+                    <li id="wifi">WIFI ...</li>
+                    <li id="usb">USB ...</li>
+                    <li id="bluetooth">Bluetooth ...</li>
+                    <li id="disconnect">Trennen</li>
+                </ul>
             </li>
             <li>
-                <a class="popup-opener" id="open-program" href="#"><span class="head-navi-icons project"></span> <span id="setProgram" class="head-navi-text">Programm</span></a>
+                <a href="#"><span class="head-navi-icons community"></span><span class="head-navi-text">Gruppen</span></a>
+            </li>
+            <li>
+                <a href="#"><span class="head-navi-icons community"></span><span class="head-navi-text">Entwicklertools</span></a>
+                <ul id="submenu-developertools" class="head-navigation-submenu">
+                    <li id="logging">Logging</li>
+                    <li id="simtest">Simulator Test</li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" id="head-navigation-readme"><span class="head-navi-icons help"></span><span class="head-navi-text">Hilfe</span></a>
             </li>
             <li>
                 <a class="popup-opener" id="open-login-user" href="#"><span id="signInIcon" class="head-navi-icons user"></span> <span id="setName" class="head-navi-text">Anmeldung</span></a>
+                <ul id="submenu-login" class="head-navigation-submenu">
+                    <li id="login">Anmelden</li>
+                    <li id="logout">Abmelden</li>
+                    <li id="new">Neu ...</li>
+                    <li id="change">Ändern ...</li>
+                </ul>
             </li>
             <li>
-                <a id="head-navigation-blockly"><span class="head-navi-icons help"></span> <span class="head-navi-text">Test Nepo :-)</span></a>
+                <a id="head-navigation-blockly"><span class="head-navi-icons help"></span><span class="head-navi-text">Test Nepo :-)</span></a>
             </li>
-            <li>
-                <a id="head-navigation-listing"><span class="head-navi-icons help"></span> <span class="head-navi-text">Listing</span></a>
-            </li>
-            <li>
-                <a id="head-navigation-logging"><span class="head-navi-icons help"></span> <span class="head-navi-text">Logging</span></a>
-            </li>
-            <li>
-                <a id="head-navigation-readme"><span class="head-navi-icons help"></span> <span class="head-navi-text">README</span></a>
-            </li>
-            <li>
-                <a id="head-navigation-simtest"><span class="head-navi-icons help"></span> <span class="head-navi-text">Simulator Test</span></a>
-            </li>
+             
+            <div id="logo">
+                <a href="index.html">Logo</a>
+            </div>
         </ul>
-        <div id="logo">
-            <a href="index.html">Logo</a>
-        </div>
     </div>
 
     <!-- ################## POPUPS ################## -->

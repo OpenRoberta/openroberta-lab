@@ -36,10 +36,32 @@ ul#head-navigation {
     margin: 5px 0px 0px 20px;
 }
 
-ul#head-navigation li {
+ul#head-navigation > li {
     float: left;
     margin-right: 20px;
     padding-bottom: 9px;
+    padding-top: 6px;
+    padding-left: 9px;
+}
+
+ul#head-navigation .head-navigation-submenu {
+	position: absolute;
+	cursor: pointer;
+	list-style-type: none;
+	width: 10%;
+}
+
+ul#head-navigation .head-navigation-submenu > li {
+	background-color: white;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	font-size: 70%;
+}
+
+ul#head-navigation .head-navigation-submenu > li:hover {
+    background-color: #e6e6e6;
 }
 
 ul#head-navigation a {
@@ -137,6 +159,7 @@ ul#head-navigation a:hover .head-navi-icons.user, ul#head-navigation li:hover .h
     width: 222px;
     height: 60px;
     text-indent: -9999px;
+    float: right;
 }
 
 #project-submenu {
@@ -437,7 +460,7 @@ ul#head-navigation li:hover #project-submenu {
     background-image: url(img/program_name-icon.png);
     background-repeat: no-repeat;
     background-position: center left;
-    width: 100%;
+    width: 90%;
     box-sizing: border-box;
 }
 
