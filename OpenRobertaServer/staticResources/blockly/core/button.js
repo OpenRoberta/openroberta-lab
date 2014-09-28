@@ -19,24 +19,20 @@ Blockly.Button = function(workspace) {
 };
 
 /**
- * URL of the button image (minus lid).
- * 
- * @type {string}
- * @private
- */
-Blockly.Button.prototype.BUTTON_HOVER_URL_ = '';
-Blockly.Button.prototype.BUTTON_URL_ = '';
-
-Blockly.Button.prototype.BUTTON_BACK_CLASS = '';
-Blockly.Button.prototype.BUTTON_BACK_HOVER_CLASS = '';
-
-/**
  * Width and height of the background.
  * 
  * @type {number}
  * @private
  */
-Blockly.Button.prototype.SIZE_ = 50;
+Blockly.Button.prototype.SIZE_ = 70;
+
+/**
+ * Position of the button in the sqare.
+ * 
+ * @type {number}
+ * @private
+ */
+Blockly.Button.prototype.POSITION = 0;
 
 /**
  * Width of the button image.
@@ -55,12 +51,20 @@ Blockly.Button.prototype.IMG_WIDTH_ = 0;
 Blockly.Button.prototype.IMG_HEIGHT_ = 0;
 
 /**
+ * SVG Path of the buttons image.
+ * 
+ * @type {string}
+ * @private
+ */
+Blockly.Button.prototype.IMG_PATH_ = null;
+
+/**
  * Distance between button and bottom edge of workspace.
  * 
  * @type {number}
  * @private
  */
-Blockly.Button.prototype.MARGIN_BOTTOM_ = 30;
+Blockly.Button.prototype.OUTER_MARGIN_ = 30;
 
 /**
  * Distance between button and right edge of workspace.
@@ -68,7 +72,7 @@ Blockly.Button.prototype.MARGIN_BOTTOM_ = 30;
  * @type {number}
  * @private
  */
-Blockly.Button.prototype.MARGIN_SIDE_ = 30;
+Blockly.Button.prototype.INNER_MARGIN_ = 2;
 
 /**
  * Extent of hotspot on all sides beyond the size of the image.
@@ -142,7 +146,8 @@ Blockly.Button.prototype.img_y_ = 0;
 Blockly.Button.prototype.createDom = function() {
   this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
   this.svgBack_ = Blockly.createSvgElement('rect', {
-    'class' : this.BUTTON_BACK_CLASS,
+    'id' : 'button' + this.POSITION,
+    'class' : 'blocklyButtonBack',
     'x' : 0,
     'y' : 0,
     'width' : this.SIZE_,
@@ -152,15 +157,11 @@ Blockly.Button.prototype.createDom = function() {
   }, this.svgGroup_);
   this.img_x_ = (this.SIZE_ - this.IMG_WIDTH_) / 2;
   this.img_y_ = (this.SIZE_ - this.IMG_HEIGHT_) / 2;
-  this.svgImg_ = Blockly.createSvgElement('image', {
-    'class' : 'blocklyButton',
-    'width' : this.IMG_WIDTH_,
-    'height' : this.IMG_HEIGHT_,
-    'x' : this.img_x_,
-    'y' : this.img_y_
+  this.svgPath_ = Blockly.createSvgElement('path', {
+    'class' : 'blocklyButtonPath'
   }, this.svgGroup_);
-  this.svgImg_.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-      Blockly.pathToBlockly + this.BUTTON_URL_);
+  this.svgPath_.setAttribute('d', 'm' + this.img_x_ + ',' + this.img_y_
+      + this.IMG_PATH_);
   return this.svgGroup_;
 };
 
@@ -200,10 +201,29 @@ Blockly.Button.prototype.position_ = function() {
     // There are no metrics available (workspace is probably not visible).
     return;
   }
-  this.left_ = metrics.viewWidth + metrics.absoluteLeft - this.SIZE_
-      - this.MARGIN_SIDE_;
-  this.top_ = metrics.viewHeight + metrics.absoluteTop - (this.SIZE_)
-      - this.MARGIN_BOTTOM_;
+  if (this.POSITION == 1) {
+    this.left_ = metrics.viewWidth + metrics.absoluteLeft - (this.SIZE_ * 2)
+        - this.OUTER_MARGIN_ - this.INNER_MARGIN_;
+    this.top_ = metrics.viewHeight + metrics.absoluteTop - (this.SIZE_ * 2)
+        - this.OUTER_MARGIN_ - this.INNER_MARGIN_;
+  } else if (this.POSITION == 2) {
+    this.left_ = metrics.viewWidth + metrics.absoluteLeft - (this.SIZE_)
+        - this.OUTER_MARGIN_;
+    this.top_ = metrics.viewHeight + metrics.absoluteTop - (this.SIZE_ * 2)
+        - this.OUTER_MARGIN_ - this.INNER_MARGIN_;
+  } else if (this.POSITION == 3) {
+    this.left_ = metrics.viewWidth + metrics.absoluteLeft - (this.SIZE_ * 2)
+        - this.OUTER_MARGIN_ - this.INNER_MARGIN_;
+    this.top_ = metrics.viewHeight + metrics.absoluteTop - (this.SIZE_)
+        - this.OUTER_MARGIN_;
+  } else if (this.POSITION == 4) {
+    this.left_ = metrics.viewWidth + metrics.absoluteLeft - (this.SIZE_)
+        - this.OUTER_MARGIN_;
+    this.top_ = metrics.viewHeight + metrics.absoluteTop - (this.SIZE_)
+        - this.OUTER_MARGIN_;
+  } else {
+    return;
+  }
   this.svgGroup_.setAttribute('transform', 'translate(' + this.left_ + ','
       + this.top_ + ')');
 };
@@ -222,12 +242,14 @@ Blockly.Button.prototype.onMouseOver_ = function(e) {
   Blockly.setCursorHand_(true);
   // this.svgGroup_.setAttribute('transform', 'translate(' + this.left_ + ','
   // + this.top_ + ') rotate(-15 50 0)');
-  this.svgBack_.setAttribute('class', this.BUTTON_BACK_HOVER_CLASS);
+  this.svgBack_.setAttribute('class', 'blocklyButtonHoverBack');
+  this.svgPath_.setAttribute('class', 'blocklyButtonHoverPath');
 };
 
 Blockly.Button.prototype.onMouseOut_ = function(e) {
   Blockly.setCursorHand_(false);
   // this.svgGroup_.setAttribute('transform', 'translate(' + this.left_ + ','
   // + this.top_ + ')');
-  this.svgBack_.setAttribute('class', this.BUTTON_BACK_CLASS);
+  this.svgBack_.setAttribute('class', 'blocklyButtonBack');
+  this.svgPath_.setAttribute('class', 'blocklyButtonPath');
 };

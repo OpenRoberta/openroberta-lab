@@ -48,20 +48,24 @@ Blockly.Css.inject = function() {
  * Array making up the CSS content for Blockly.
  */
 Blockly.Css.CONTENT = [
-  '.blocklyButtonSaveBack {',
-  'fill: #33B8CA;',
+  '.blocklyButtonPath {',
+  'fill: #333333;',
+  'stroke: #333333;',
+  'stroke-linecap: round;',
   '}',
   
-  '.blocklyButtonCheckBack, .blocklyButtonBackBack {',
-  'fill: #005A94;',
+  '.blocklyButtonHoverPath {',
+  'fill: #333333;',
+  'stroke: #333333;',
+  'stroke-linecap: round;',
   '}',
   
-  '.blocklyButtonStartBack {',
-  'fill: #afca04;',
+  '.blocklyButtonHoverBack {',
+  'fill: #fff;',
   '}',
   
-  '.blocklyButtonStartHoverBack, .blocklyButtonCheckHoverBack, .blocklyButtonSaveHoverBack, .blocklyButtonBackHoverBack {',
-  'fill: #E2001A;',
+  '.blocklyButtonBack {',
+  'fill: #fff;',
   '}',
   
   '.blocklyButtonTrashBack {',
@@ -364,6 +368,7 @@ Blockly.Css.CONTENT = [
   '  background: url(<<<PATH>>>/media/sprites.png) no-repeat 0 0 !important;',
   '}',
 
+  
   /* Category tree in Toolbox. */
   '.blocklyToolboxDiv {',
   '  background-color: #ddd;',

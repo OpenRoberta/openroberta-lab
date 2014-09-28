@@ -15,18 +15,23 @@ goog.require('Blockly.BlockSvg');
  *            workspace The workspace to sit in.
  * @constructor
  */
-Blockly.CheckButton = function(workspace) {
+Blockly.CheckButton = function(workspace, position) {
   Blockly.Button.call(this, workspace);
-  this.BUTTON_HOVER_URL_ = 'media/check_button_hover.png';
-  this.BUTTON_URL_ = 'media/check_button.png';
+  this.POSITION = position;
   this.IMG_WIDTH_ = 36;
   this.IMG_HEIGHT_ = 36;
-  this.BUTTON_BACK_CLASS = 'blocklyButtonCheckBack';
-  this.BUTTON_BACK_HOVER_CLASS = 'blocklyButtonCheckHoverBack';
+  this.IMG_PATH_ = "m5,20l10,11m0,0l16,-25";
 };
 goog.inherits(Blockly.CheckButton, Blockly.Button);
 
 /** @inheritDoc */
 Blockly.CheckButton.prototype.onMouseUp_ = function(e) {
   checkProgram();
+};
+
+/** @inheritDoc */
+Blockly.CheckButton.prototype.createDom = function() {
+  Blockly.CheckButton.superClass_.createDom.call(this);
+  this.svgPath_.setAttribute( 'stroke-width', '10px');
+  return this.svgGroup_;
 };

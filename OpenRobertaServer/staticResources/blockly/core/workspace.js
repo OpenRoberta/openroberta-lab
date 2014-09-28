@@ -211,7 +211,7 @@ Blockly.Workspace.prototype.addTrashcan = function() {
  */
 Blockly.Workspace.prototype.addStartButton = function() {
   if (Blockly.hasStartButton && !Blockly.readOnly) {
-    this.startButton = new Blockly.StartButton(this);
+    this.startButton = new Blockly.StartButton(this, 2);
     var svgStartButton = this.startButton.createDom();
     this.svgGroup_.insertBefore(svgStartButton, this.svgBlockCanvas_);
     this.startButton.init();
@@ -223,7 +223,7 @@ Blockly.Workspace.prototype.addStartButton = function() {
  */
 Blockly.Workspace.prototype.addCheckButton = function() {
   if (Blockly.hasCheckButton && !Blockly.readOnly) {
-    this.checkButton = new Blockly.CheckButton(this);
+    this.checkButton = new Blockly.CheckButton(this, 4);
     var svgCheckButton = this.checkButton.createDom();
     this.svgGroup_.insertBefore(svgCheckButton, this.svgBlockCanvas_);
     this.checkButton.init();
@@ -235,7 +235,7 @@ Blockly.Workspace.prototype.addCheckButton = function() {
  */
 Blockly.Workspace.prototype.addSaveButton = function() {
   if (Blockly.hasSaveButton) {
-    this.saveButton = new Blockly.SaveButton(this);
+    this.saveButton = new Blockly.SaveButton(this, 3);
     var svgSaveButton = this.saveButton.createDom();
     this.svgGroup_.insertBefore(svgSaveButton, this.svgBlockCanvas_);
     this.saveButton.init();
@@ -247,7 +247,7 @@ Blockly.Workspace.prototype.addSaveButton = function() {
  */
 Blockly.Workspace.prototype.addBackButton = function() {
   if (Blockly.hasBackButton) {
-    this.backButton = new Blockly.BackButton(this);
+    this.backButton = new Blockly.BackButton(this, 2);
     var svgBackButton = this.backButton.createDom();
     this.svgGroup_.insertBefore(svgBackButton, this.svgBlockCanvas_);
     this.backButton.init();

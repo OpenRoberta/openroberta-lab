@@ -23,6 +23,7 @@ function injectBrickly(toolbox) {
       trashcan : true,
       save : true,
       back : true,
+      check : true,
       scrollbars : true
     });
 
@@ -79,10 +80,10 @@ function loadToolbox(toolbox) {
   }, showToolbox);
 }
 
-// function checkProgram() {
-// // TODO do we need this here?
-// alert("Your program will be checked soon ;-)");
-// }
+function checkProgram() {
+  // TODO do we need this here?
+  alert("Your configuration will be checked soon ;-)");
+}
 
 function back() {
   parent.switchToBlockly();

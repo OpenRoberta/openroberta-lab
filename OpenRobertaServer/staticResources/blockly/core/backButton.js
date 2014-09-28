@@ -15,18 +15,23 @@ goog.require('Blockly.BlockSvg');
  *            workspace The workspace to sit in.
  * @constructor
  */
-Blockly.BackButton = function(workspace) {
+Blockly.BackButton = function(workspace, position) {
   Blockly.Button.call(this, workspace);
-  this.BUTTON_HOVER_URL_ = 'media/back_button_hover.png';
-  this.BUTTON_URL_ = 'media/back_button.png';
+  this.POSITION = position;
   this.IMG_WIDTH_ = 36;
   this.IMG_HEIGHT_ = 36;
-  this.BUTTON_BACK_CLASS = 'blocklyButtonBackBack';
-  this.BUTTON_BACK_HOVER_CLASS = 'blocklyButtonBackHoverBack';
+  this.IMG_PATH_ = "m31,18l-23,0m9,-10l-10,10l10,10"
 };
 goog.inherits(Blockly.BackButton, Blockly.Button);
 
 /** @inheritDoc */
 Blockly.BackButton.prototype.onMouseUp_ = function(e) {
   back();
+};
+
+/** @inheritDoc */
+Blockly.BackButton.prototype.createDom = function() {
+  Blockly.BackButton.superClass_.createDom.call(this);
+  this.svgPath_.setAttribute( 'stroke-width', '10px');
+  return this.svgGroup_;
 };

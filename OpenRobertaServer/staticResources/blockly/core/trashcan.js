@@ -61,7 +61,7 @@ Blockly.Trashcan.prototype.LID_URL_ = 'media/trashlid.png';
  * @type {number}
  * @private
  */
-Blockly.Trashcan.prototype.TILE_ = 50;
+Blockly.Trashcan.prototype.TILE_ = 70;
 
 /**
  * Width of both the trash can and lid images.
@@ -69,7 +69,7 @@ Blockly.Trashcan.prototype.TILE_ = 50;
  * @type {number}
  * @private
  */
-Blockly.Trashcan.prototype.WIDTH_ = 40;
+Blockly.Trashcan.prototype.WIDTH_ = 36;
 
 /**
  * Height of the trashcan image (minus lid).
@@ -77,7 +77,7 @@ Blockly.Trashcan.prototype.WIDTH_ = 40;
  * @type {number}
  * @private
  */
-Blockly.Trashcan.prototype.BODY_HEIGHT_ = 34;
+Blockly.Trashcan.prototype.BODY_HEIGHT_ = 30;
 
 /**
  * Height of the lid image.
@@ -85,7 +85,7 @@ Blockly.Trashcan.prototype.BODY_HEIGHT_ = 34;
  * @type {number}
  * @private
  */
-Blockly.Trashcan.prototype.LID_HEIGHT_ = 12;
+Blockly.Trashcan.prototype.LID_HEIGHT_ = 7;
 
 /**
  * Distance between trashcan and bottom edge of workspace.
@@ -93,7 +93,7 @@ Blockly.Trashcan.prototype.LID_HEIGHT_ = 12;
  * @type {number}
  * @private
  */
-Blockly.Trashcan.prototype.MARGIN_BOTTOM_ = 82;
+Blockly.Trashcan.prototype.MARGIN_BOTTOM_ = 102;
 
 /**
  * Distance between trashcan and right edge of workspace.
@@ -101,7 +101,7 @@ Blockly.Trashcan.prototype.MARGIN_BOTTOM_ = 82;
  * @type {number}
  * @private
  */
-Blockly.Trashcan.prototype.MARGIN_SIDE_ = 82;
+Blockly.Trashcan.prototype.MARGIN_SIDE_ = 102;
 
 /**
  * Extent of hotspot on all sides beyond the size of the image.
@@ -187,7 +187,7 @@ Blockly.Trashcan.prototype.createDom = function() {
    */
   this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
   this.svgBack_ = Blockly.createSvgElement('rect', {
-    'class' : 'blocklyButtonTrashBack',
+    'class' : 'blocklyButtonBack',
     'x' : 0,
     'y' : 0,
     'width' : this.TILE_,
@@ -195,22 +195,17 @@ Blockly.Trashcan.prototype.createDom = function() {
     'rx' : Blockly.BlockSvg.CORNER_RADIUS,
     'ry' : Blockly.BlockSvg.CORNER_RADIUS
   }, this.svgGroup_);
-  this.svgBody_ = Blockly.createSvgElement('image', {
-    'width' : this.WIDTH_,
-    'height' : this.BODY_HEIGHT_,
-    'x' : 5,
-    'y' : 12
+  
+  this.svgBody_ = Blockly.createSvgElement('path', {
+    'class' : 'blocklyButtonPath'
   }, this.svgGroup_);
-  this.svgBody_.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-      Blockly.pathToBlockly + this.BODY_URL_);
-  this.svgLid_ = Blockly.createSvgElement('image', {
-    'width' : this.WIDTH_,
-    'height' : this.LID_HEIGHT_,
-    'x' : 5,
-    'y' : 0
+  this.svgBody_.setAttribute('d', "m20,23l30,0l0,30l-30,0l0,-30zm5,4l3,0l0,22l-3,0l0,-22zm8,0l3,0l0,22l-3,0l0,-22zl0,0zm8,0l4,0l0,22l-4,0l0,-22z");
+  this.svgBody_.setAttribute('fill-rule', 'evenodd');
+  this.svgLid_ = Blockly.createSvgElement('path', {
+    'class' : 'blocklyButtonPath'
   }, this.svgGroup_);
-  this.svgLid_.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href',
-      Blockly.pathToBlockly + this.LID_URL_);
+  this.svgLid_.setAttribute('d', "m18.5,18l33,0m-24,0l4,-4l7,0l4,4");
+  this.svgLid_.setAttribute('stroke-width', '3px');
   return this.svgGroup_;
 };
 
@@ -319,7 +314,7 @@ Blockly.Trashcan.prototype.animateLid_ = function() {
   this.lidAngle_ = Math.max(0, this.lidAngle_);
   this.svgLid_.setAttribute('transform', 'rotate('
       + (Blockly.RTL ? -this.lidAngle_ : this.lidAngle_) + ', '
-      + (Blockly.RTL ? 4 : this.WIDTH_ - 4) + ', ' + (this.LID_HEIGHT_ - 2)
+      + (Blockly.RTL ? 4 : 49) + ', ' + (18)
       + ')');
   if (this.isOpen ? (this.lidAngle_ < 45) : (this.lidAngle_ > 0)) {
     this.lidTask_ = goog.Timer.callOnce(this.animateLid_, 5, this);
