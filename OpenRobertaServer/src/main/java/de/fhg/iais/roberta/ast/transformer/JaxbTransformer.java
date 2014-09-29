@@ -49,6 +49,7 @@ import de.fhg.iais.roberta.ast.syntax.functions.Func;
 import de.fhg.iais.roberta.ast.syntax.functions.Func.Function;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickKey;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor.Mode;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
@@ -405,7 +406,26 @@ public class JaxbTransformer<V> {
                 fields = extractFields(block, (short) 2);
                 mode = extractField(fields, "SENSORTYPE", (short) 0);
                 port = extractField(fields, GetSampleSensor.SensorType.get(mode).getPortTypeName(), (short) 1);
-                return GetSampleSensor.make(GetSampleSensor.SensorType.get(mode), port, disabled, comment);
+                switch ( GetSampleSensor.SensorType.get(mode) ) {
+                    case TOUCH:
+                        return TouchSensor.make(SensorPort.get(port), disabled, comment);
+                    case ULTRASONIC:
+                        return UltrasonicSensor.make(UltrasonicSensorMode.GET_SAMPLE, SensorPort.get(port), disabled, comment);
+                    case COLOUR:
+                        return ColorSensor.make(ColorSensorMode.GET_SAMPLE, SensorPort.get(port), disabled, comment);
+                    case INFRARED:
+                        return InfraredSensor.make(InfraredSensorMode.GET_SAMPLE, SensorPort.get(port), disabled, comment);
+                    case ENCODER:
+                        return EncoderSensor.make(MotorTachoMode.GET_SAMPLE, ActorPort.get(port), disabled, comment);
+                    case KEYS_PRESSED:
+                        return BrickSensor.make(Mode.IS_PRESSED, BrickKey.get(port), disabled, comment);
+                    case GYRO:
+                        return GyroSensor.make(GyroSensorMode.GET_SAMPLE, SensorPort.get(port), disabled, comment);
+                    case TIME:
+                        return TimerSensor.make(TimerSensorMode.GET_SAMPLE, Integer.valueOf(port), disabled, comment);
+                    default:
+                        throw new DbcException("Invalid sensor!");
+                }
 
                 //Logik
             case "logic_compare":

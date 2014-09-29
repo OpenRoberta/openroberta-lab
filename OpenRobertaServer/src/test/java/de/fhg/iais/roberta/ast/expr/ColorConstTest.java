@@ -13,7 +13,7 @@ public class ColorConstTest {
 
     @Test
     public void make() throws Exception {
-        String a = "BlockAST [project=[[ColorConst [RED]]]]";
+        String a = "BlockAST [project=[[ColorConst [BROWN]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/colour/colour_const1.xml"));
     }
@@ -22,7 +22,7 @@ public class ColorConstTest {
     public void isValue() throws Exception {
         JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/colour/colour_const1.xml");
         ColorConst<Void> colorConst = (ColorConst<Void>) transformer.getTree().get(0);
-        Assert.assertEquals(PickColor.RED, colorConst.getValue());
+        Assert.assertEquals(PickColor.BROWN, colorConst.getValue());
     }
 
     @Test
@@ -38,4 +38,5 @@ public class ColorConstTest {
         ColorConst<Void> colorConst = (ColorConst<Void>) transformer.getTree().get(0);
         Assert.assertEquals(Assoc.NONE, colorConst.getAssoc());
     }
+
 }

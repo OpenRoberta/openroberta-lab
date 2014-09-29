@@ -8,15 +8,36 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * All colors that are legal.
  */
 public enum PickColor {
-    GREEN( "GRÜN" ), RED( "ROT" ), WHITE( "WEIß", "WEISS" ), BLUE( "BLAU" );
-    private final String[] values;
 
-    private PickColor(String... values) {
+    RED( 0, "#B30006", "ROT" ), GREEN( 1, "#00642E", "GRÜN" ), BLUE( 2, "#0057A6" ), YELLOW( 3, "#F7D117" ), MAGENTA( 4 ), ORANGE( 5 ), WHITE(
+        6,
+        "#FFFFFF",
+        "WEIß",
+        "WEISS" ), BLACK( 7, "#000000" ), PINK( 8 ), GRAY( 9 ), LIGHT_GRAY( 10 ), DARK_GRAY( 11 ), CYAN( 12 ), BROWN( 13, "#532115" ), NONE( -1, "#585858" );
+
+    private final String[] values;
+    private final int colorID;
+
+    private PickColor(int colorID, String... values) {
         this.values = values;
+        this.colorID = colorID;
+    }
+
+    public int getColorID() {
+        return this.colorID;
     }
 
     public String getJavaCode() {
         return this.getClass().getSimpleName() + "." + this;
+    }
+
+    public PickColor get(int id) {
+        for ( PickColor sp : PickColor.values() ) {
+            if ( sp.colorID == id ) {
+                return sp;
+            }
+        }
+        throw new DbcException("Invalid color: " + id);
     }
 
     /**

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
+import de.fhg.iais.roberta.ast.syntax.action.MotorSide;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
@@ -129,6 +130,32 @@ public class BrickConfiguration {
             default:
                 throw new DbcException("Invalid Actor Port!");
         }
+    }
+
+    public ActorPort getLeftMotorPort() {
+        if ( getActorA().getMotorSide() == MotorSide.LEFT ) {
+            return ActorPort.A;
+        } else if ( getActorB().getMotorSide() == MotorSide.LEFT ) {
+            return ActorPort.B;
+        } else if ( getActorC().getMotorSide() == MotorSide.LEFT ) {
+            return ActorPort.C;
+        } else if ( getActorD().getMotorSide() == MotorSide.LEFT ) {
+            return ActorPort.D;
+        }
+        throw new DbcException("No left motor defined");
+    }
+
+    public ActorPort getRightMotorPort() {
+        if ( getActorA().getMotorSide() == MotorSide.RIGHT ) {
+            return ActorPort.A;
+        } else if ( getActorB().getMotorSide() == MotorSide.RIGHT ) {
+            return ActorPort.B;
+        } else if ( getActorC().getMotorSide() == MotorSide.RIGHT ) {
+            return ActorPort.C;
+        } else if ( getActorD().getMotorSide() == MotorSide.RIGHT ) {
+            return ActorPort.D;
+        }
+        throw new DbcException("No right motor defined");
     }
 
     public static class Builder {

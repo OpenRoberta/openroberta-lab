@@ -574,6 +574,7 @@ public class Hal {
     public int getUltraSonicSensorValue(SensorPort sensorPort) {
         float[] sample = new float[this.deviceHandler.getSampleProvider(sensorPort).sampleSize()];
         this.deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
+        System.out.println(sample[0]);
         switch ( this.deviceHandler.getUltrasonicSensorModeName(sensorPort) ) {
             case PRESENCE:
                 return Math.round(sample[0]); // whatever :-D
@@ -612,13 +613,15 @@ public class Hal {
     public int getColorSensorValue(SensorPort sensorPort) {
         float[] sample = new float[this.deviceHandler.getSampleProvider(sensorPort).sampleSize()];
         this.deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
+        System.out.println(sample[0]);
+        System.out.println(this.deviceHandler.getColorSensorModeName(sensorPort).toString());
         switch ( this.deviceHandler.getColorSensorModeName(sensorPort) ) {
             case AMBIENTLIGHT:
-                return Math.round(sample[0]);
+                return Math.round(sample[0] * 100);
             case COLOUR:
                 return Math.round(sample[0]/* 3 values */);
             case LIGHT:
-                return Math.round(sample[0]);
+                return Math.round(sample[0] * 100);
             default:
                 throw new DbcException("sensor type or sensor mode missmatch");
         }
@@ -652,6 +655,7 @@ public class Hal {
     public int getInfraredSensorValue(SensorPort sensorPort) {
         float[] sample = new float[this.deviceHandler.getSampleProvider(sensorPort).sampleSize()];
         this.deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
+        System.out.println(sample[0]);
         switch ( this.deviceHandler.getInfraredSensorModeName(sensorPort) ) {
             case DISTANCE:
                 return Math.round(sample[0]);
