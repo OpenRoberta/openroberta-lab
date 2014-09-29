@@ -497,7 +497,7 @@ Blockly.Xml.domToPrettyText = function(dom) {
  *            xmlBlock XML block element.
  */
 Blockly.Xml.deleteNext = function(xmlBlock) {
-  xmlBlock.splice(0, 1);
+  xmlBlock.splice(0, xmlBlock.length-1);
 };
 
 /**

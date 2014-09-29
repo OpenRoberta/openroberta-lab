@@ -476,6 +476,8 @@ Blockly.copy_ = function(block) {
   var xy = block.getRelativeToSurfaceXY();
   xmlBlock.setAttribute('x', Blockly.RTL ? -xy.x : xy.x);
   xmlBlock.setAttribute('y', xy.y);
+  // make it unique
+  xmlBlock.setAttribute('id', Blockly.genUid());
   Blockly.clipboard_ = statement_list;
 };
 

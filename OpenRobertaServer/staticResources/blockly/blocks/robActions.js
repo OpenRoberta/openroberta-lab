@@ -300,8 +300,7 @@ Blockly.Blocks['robActions_display_text'] = {
     this.setColourRGB(Blockly.CAT_ROBACTIONS_RGB);
     // this.setInputsInline(true);
     this.appendValueInput('OUT').appendField(
-        Blockly.Msg.DISPLAY_SHOW + ' ' + Blockly.Msg.DISPLAY_TEXT).setCheck(
-        'Text');
+        Blockly.Msg.DISPLAY_SHOW + ' ' + Blockly.Msg.DISPLAY_TEXT);
     this.appendValueInput('COL').setCheck('Number').setAlign(
         Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.DISPLAY_COL);
     this.appendValueInput('ROW').setCheck('Number').setAlign(
