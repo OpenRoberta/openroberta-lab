@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -1482,20 +1483,47 @@ public class GraphicStartup implements Menu {
         newScreen(" Robertalab");
 
         if ( GraphicStartup.isRobertaRegistered == false ) {
-
-            newScreen(" Enter IP");
-            while ( serverURLString.equals("") ) {
-                serverURLString = new IpAddressKeyboard().getString();
+            File file = new File("/home/lejos/programs/serverIP.txt");
+            if ( file.exists() ) {
                 try {
-                    File file = new File("/home/lejos/programs/serverIP.txt");
-                    if ( file.exists() ) {
-                        file.delete();
+                    BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+                    String temp = bufferedReader.readLine();
+                    lcd.drawString("use " + temp + " ?", 0, 2);
+                    if ( getYesNo("     Confirm", false) == 1 ) {
+                        serverURLString = temp;
+                    } else {
+                        newScreen(" Enter IP");
+                        while ( serverURLString.equals("") ) {
+                            serverURLString = new IpAddressKeyboard().getString();
+                            try {
+                                if ( file.exists() ) {
+                                    file.delete();
+                                }
+                                PrintWriter pw = new PrintWriter("/home/lejos/programs/serverIP.txt");
+                                pw.println(serverURLString);
+                                pw.close();
+                            } catch ( FileNotFoundException e ) {
+                                return;
+                            }
+                        }
                     }
-                    PrintWriter pw = new PrintWriter("/home/lejos/programs/serverIP.txt");
-                    pw.println(serverURLString);
-                    pw.close();
-                } catch ( FileNotFoundException e ) {
-                    return;
+                } catch ( IOException e ) {
+                    e.printStackTrace();
+                }
+            } else {
+                newScreen(" Enter IP");
+                while ( serverURLString.equals("") ) {
+                    serverURLString = new IpAddressKeyboard().getString();
+                    try {
+                        if ( file.exists() ) {
+                            file.delete();
+                        }
+                        PrintWriter pw = new PrintWriter("/home/lejos/programs/serverIP.txt");
+                        pw.println(serverURLString);
+                        pw.close();
+                    } catch ( FileNotFoundException e ) {
+                        return;
+                    }
                 }
             }
             //serverURLString = "10.0.1.11:1999";
