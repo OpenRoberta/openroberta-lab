@@ -51,17 +51,17 @@ public class DeviceHandler {
     }
 
     private void createDevices(BrickConfiguration brickConfiguration) {
-        initMotors(ActorPort.A, brickConfiguration.getActorA(), lejos.hardware.port.MotorPort.A);
-        initMotors(ActorPort.B, brickConfiguration.getActorB(), lejos.hardware.port.MotorPort.B);
-        initMotors(ActorPort.C, brickConfiguration.getActorC(), lejos.hardware.port.MotorPort.C);
-        initMotors(ActorPort.D, brickConfiguration.getActorD(), lejos.hardware.port.MotorPort.D);
-        initSensors(SensorPort.S1, brickConfiguration.getSensor1(), lejos.hardware.port.SensorPort.S1);
-        initSensors(SensorPort.S2, brickConfiguration.getSensor2(), lejos.hardware.port.SensorPort.S2);
-        initSensors(SensorPort.S3, brickConfiguration.getSensor3(), lejos.hardware.port.SensorPort.S3);
-        initSensors(SensorPort.S4, brickConfiguration.getSensor4(), lejos.hardware.port.SensorPort.S4);
+        initMotor(ActorPort.A, brickConfiguration.getActorA(), lejos.hardware.port.MotorPort.A);
+        initMotor(ActorPort.B, brickConfiguration.getActorB(), lejos.hardware.port.MotorPort.B);
+        initMotor(ActorPort.C, brickConfiguration.getActorC(), lejos.hardware.port.MotorPort.C);
+        initMotor(ActorPort.D, brickConfiguration.getActorD(), lejos.hardware.port.MotorPort.D);
+        initSensor(SensorPort.S1, brickConfiguration.getSensor1(), lejos.hardware.port.SensorPort.S1);
+        initSensor(SensorPort.S2, brickConfiguration.getSensor2(), lejos.hardware.port.SensorPort.S2);
+        initSensor(SensorPort.S3, brickConfiguration.getSensor3(), lejos.hardware.port.SensorPort.S3);
+        initSensor(SensorPort.S4, brickConfiguration.getSensor4(), lejos.hardware.port.SensorPort.S4);
     }
 
-    private void initMotors(ActorPort actorPort, HardwareComponent actorType, Port hardwarePort) {
+    private void initMotor(ActorPort actorPort, HardwareComponent actorType, Port hardwarePort) {
         if ( actorType != null ) {
             switch ( actorType.getComponentType() ) {
                 case EV3LargeRegulatedMotor:
@@ -84,11 +84,12 @@ public class DeviceHandler {
                 default:
                     throw new DbcException("No such actor type!");
             }
+            setTachoSensorMode(actorPort, MotorTachoMode.DEGREE);
         }
 
     }
 
-    private void initSensors(SensorPort sensorPort, HardwareComponent sensorType, Port hardwarePort) {
+    private void initSensor(SensorPort sensorPort, HardwareComponent sensorType, Port hardwarePort) {
         if ( sensorType != null ) {
             switch ( sensorType.getComponentType() ) {
                 case EV3ColorSensor:
@@ -128,6 +129,14 @@ public class DeviceHandler {
 
     public EncoderMotor getUnregulatedMotor(ActorPort actorPort) {
         return this.lejosUnregulatedMotors.get(actorPort);
+    }
+
+    public void setTachoSensorMode(ActorPort actorPort, MotorTachoMode tachoMode) {
+        this.tachoModes.put(actorPort, tachoMode);
+    }
+
+    public MotorTachoMode getTachoSensorModeName(ActorPort actorPort) {
+        return this.tachoModes.get(actorPort);
     }
 
     public EV3ColorSensor getColorSensor(SensorPort sensorPort) {

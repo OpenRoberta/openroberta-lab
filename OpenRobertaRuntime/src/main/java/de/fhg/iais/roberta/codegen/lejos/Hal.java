@@ -23,6 +23,7 @@ import de.fhg.iais.roberta.ast.syntax.sensor.BrickKey;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensorMode;
+import de.fhg.iais.roberta.ast.syntax.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.dbc.DbcException;
@@ -136,6 +137,7 @@ public class Hal {
     /**
      * @param actorPort
      * @param speedPercent
+     * @param mode
      * @param rotations
      */
     public void rotateRegulatedMotor(ActorPort actorPort, int speedPercent, MotorMoveMode mode, int rotations) {
@@ -198,14 +200,26 @@ public class Hal {
         this.deviceHandler.getUnregulatedMotor(actorPort).stop();
     }
 
+    /**
+     * @param actorPort
+     * @return
+     */
     public int getRegulatedMotorSpeed(ActorPort actorPort) {
         return toPercent(this.deviceHandler.getRegulatedMotor(actorPort).getSpeed());
     }
 
+    /**
+     * @param actorPort
+     * @return
+     */
     public int getUnregulatedMotorSpeed(ActorPort actorPort) {
         return this.deviceHandler.getUnregulatedMotor(actorPort).getPower();
     }
 
+    /**
+     * @param actorPort
+     * @param floating
+     */
     public void stopRegulatedMotor(ActorPort actorPort, MotorStopMode floating) {
         switch ( floating ) {
             case FLOAT:
@@ -220,6 +234,10 @@ public class Hal {
         }
     }
 
+    /**
+     * @param actorPort
+     * @param floating
+     */
     public void stopUnregulatedMotor(ActorPort actorPort, MotorStopMode floating) {
         switch ( floating ) {
             case FLOAT:
@@ -235,6 +253,13 @@ public class Hal {
     // --- END Aktion Bewegung ---
     // --- Aktion Fahren ---
 
+    /**
+     * @param left
+     * @param right
+     * @param isReverse
+     * @param direction
+     * @param speedPercent
+     */
     public void regulatedDrive(ActorPort left, ActorPort right, boolean isReverse, DriveDirection direction, int speedPercent) {
         DifferentialPilot dPilot =
             new DifferentialPilot(
@@ -272,6 +297,14 @@ public class Hal {
     //        }
     //    }
 
+    /**
+     * @param left
+     * @param right
+     * @param isReverse
+     * @param direction
+     * @param speedPercent
+     * @param distance
+     */
     public void driveDistance(ActorPort left, ActorPort right, boolean isReverse, DriveDirection direction, int speedPercent, int distance) {
         DifferentialPilot dPilot =
             new DifferentialPilot(
@@ -293,6 +326,10 @@ public class Hal {
         }
     }
 
+    /**
+     * @param left
+     * @param right
+     */
     public void stopRegulatedDrive(ActorPort left, ActorPort right) {
         this.deviceHandler.getRegulatedMotor(left).stop();
         this.deviceHandler.getRegulatedMotor(right).stop();
@@ -307,6 +344,7 @@ public class Hal {
     /**
      * @param left
      * @param right
+     * @param isReverse
      * @param direction
      * @param speedPercent
      */
@@ -331,7 +369,7 @@ public class Hal {
         }
     }
 
-    // TODO needed -> ask beate
+    // TODO needed? -> ask beate
     //    /**
     //     * @param left
     //     * @param right
@@ -379,6 +417,7 @@ public class Hal {
     /**
      * @param left
      * @param right
+     * @param isReverse
      * @param direction
      * @param speedPercent
      * @param angle
@@ -672,34 +711,68 @@ public class Hal {
     // END Sensoren IRSensor ---
     // --- Aktorsensor Drehsensor ---
 
-    //    /**
-    //     * TODO motor tacho does not work the same way as sensors and sample provider<br>
-    //     * block needs to be changed, no mode can be stored in motors
-    //     * 
-    //     * @param actorPort
-    //     */
-    //    public void setMotorTachoMode(ActorPort actorPort, Enum mode) {
-    //        //
-    //    }
+    /**
+     * @param actorPort
+     * @param tachoMode
+     */
+    public void setMotorTachoMode(ActorPort actorPort, MotorTachoMode tachoMode) {
+        this.deviceHandler.setTachoSensorMode(actorPort, tachoMode);
+    }
 
-    //    public PH getMotorTachoMode(ActorPort actorPort) {
-    //        return PH;
-    //    }
+    /**
+     * @param actorPort
+     * @return
+     */
+    public MotorTachoMode getMotorTachoMode(ActorPort actorPort) {
+        return this.deviceHandler.getTachoSensorModeName(actorPort);
+    }
 
+    /**
+     * @param actorPort
+     */
     public void resetRegulatedMotorTacho(ActorPort actorPort) {
         this.deviceHandler.getRegulatedMotor(actorPort).resetTachoCount();
     }
 
+    /**
+     * @param actorPort
+     */
     public void resetUnregulatedMotorTacho(ActorPort actorPort) {
         this.deviceHandler.getUnregulatedMotor(actorPort).resetTachoCount();
     }
 
-    public int getRegulatedMotorTachoValue(ActorPort actorPort) {
-        return this.deviceHandler.getRegulatedMotor(actorPort).getTachoCount();
+    /**
+     * @param actorPort
+     * @param tachoMode
+     * @return tacho count (degrees) or rotations as double
+     */
+    public double getRegulatedMotorTachoValue(ActorPort actorPort) {
+        MotorTachoMode tachoMode = this.deviceHandler.getTachoSensorModeName(actorPort);
+        switch ( tachoMode ) {
+            case DEGREE:
+                return this.deviceHandler.getRegulatedMotor(actorPort).getTachoCount();
+            case ROTATION:
+                return Math.round(this.deviceHandler.getRegulatedMotor(actorPort).getTachoCount() / 360 * 100) / 100;
+            default:
+                throw new DbcException("incorrect MotorTachoMode");
+        }
     }
 
-    public int getUnregulatedMotorTachoValue(ActorPort actorPort) {
-        return this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount();
+    /**
+     * @param actorPort
+     * @param tachoMode
+     * @return tacho count (degrees) or rotations as double
+     */
+    public double getUnregulatedMotorTachoValue(ActorPort actorPort) {
+        MotorTachoMode tachoMode = this.deviceHandler.getTachoSensorModeName(actorPort);
+        switch ( tachoMode ) {
+            case DEGREE:
+                return this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount();
+            case ROTATION:
+                return Math.round(this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() / 360 * 100) / 100;
+            default:
+                throw new DbcException("incorrect MotorTachoMode");
+        }
     }
 
     // END Aktorsensor Drehsensor ---
