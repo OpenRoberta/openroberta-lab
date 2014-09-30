@@ -53,7 +53,6 @@ import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor.Mode;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
-import de.fhg.iais.roberta.ast.syntax.sensor.GetSampleSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensor;
@@ -61,6 +60,7 @@ import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
+import de.fhg.iais.roberta.ast.syntax.sensor.SensorType;
 import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.TouchSensor;
@@ -92,8 +92,6 @@ import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
  * JAXB to AST transformer. Client should provide tree of jaxb objects.
- * 
- * @author kcvejoski
  */
 public class JaxbTransformer<V> {
     private final ArrayList<Phrase<V>> tree = new ArrayList<Phrase<V>>();
@@ -405,8 +403,8 @@ public class JaxbTransformer<V> {
             case "robSensors_getSample":
                 fields = extractFields(block, (short) 2);
                 mode = extractField(fields, "SENSORTYPE", (short) 0);
-                port = extractField(fields, GetSampleSensor.SensorType.get(mode).getPortTypeName(), (short) 1);
-                switch ( GetSampleSensor.SensorType.get(mode) ) {
+                port = extractField(fields, SensorType.get(mode).getPortTypeName(), (short) 1);
+                switch ( SensorType.get(mode) ) {
                     case TOUCH:
                         return TouchSensor.make(SensorPort.get(port), disabled, comment);
                     case ULTRASONIC:

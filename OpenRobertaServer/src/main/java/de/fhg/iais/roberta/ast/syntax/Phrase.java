@@ -145,7 +145,6 @@ abstract public class Phrase<V> {
         BRICK_SENSIG( Category.SENSOR ),
         GYRO_SENSIG( Category.SENSOR ),
         TIMER_SENSING( Category.SENSOR ),
-        GET_SAMPLE_SENSING( Category.SENSOR ),
         EXPR_LIST( Category.EXPR ),
         STRING_CONST( Category.EXPR ),
         PICK_COLOR_CONST( Category.EXPR ),

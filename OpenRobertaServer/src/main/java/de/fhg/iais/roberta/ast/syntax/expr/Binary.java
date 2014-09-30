@@ -88,8 +88,6 @@ public final class Binary<V> extends Expr<V> {
 
     /**
      * Operators for the binary expression.
-     * 
-     * @author kcvejoski
      */
     public static enum Op {
         ADD( 100, Assoc.LEFT, Sig.of(BlocklyType.NUMERIC, BlocklyType.NUMERIC, BlocklyType.NUMERIC), "+" ),

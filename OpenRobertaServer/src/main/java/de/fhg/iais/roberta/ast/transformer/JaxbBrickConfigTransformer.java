@@ -19,6 +19,10 @@ import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.util.Pair;
 
+/**
+ * JAXB to AST transformer for the brick configuration. Client should provide tree of jaxb objects.
+ */
+
 public class JaxbBrickConfigTransformer {
 
     public BrickConfiguration blockSetToBrickConfiguration(BlockSet program) {
@@ -27,10 +31,7 @@ public class JaxbBrickConfigTransformer {
         return blockToBrickConfiguration(blocks.get(0));
     }
 
-    private void extractHardwareComponent(
-        List<Value> values,
-        List<Pair<SensorPort, HardwareComponent>> sensors,
-        List<Pair<ActorPort, HardwareComponent>> actors) {
+    private void extractHardwareComponent(List<Value> values, List<Pair<SensorPort, HardwareComponent>> sensors, List<Pair<ActorPort, HardwareComponent>> actors) {
         for ( Value value : values ) {
             if ( value.getName().startsWith("S") ) {
                 //Extract sensor
@@ -109,12 +110,7 @@ public class JaxbBrickConfigTransformer {
                 wheelDiameter = Double.valueOf(extractField(fields, "WHEEL_DIAMETER", (short) 0)).doubleValue();
                 trackWidth = Double.valueOf(extractField(fields, "TRACK_WIDTH", (short) 1)).doubleValue();
                 extractHardwareComponent(values, sensors, actors);
-                return new BrickConfiguration.Builder()
-                    .setTrackWidth(trackWidth)
-                    .setWheelDiameter(wheelDiameter)
-                    .addActors(actors)
-                    .addSensors(sensors)
-                    .build();
+                return new BrickConfiguration.Builder().setTrackWidth(trackWidth).setWheelDiameter(wheelDiameter).addActors(actors).addSensors(sensors).build();
             default:
                 throw new DbcException("There was no correct configuration block found!");
         }

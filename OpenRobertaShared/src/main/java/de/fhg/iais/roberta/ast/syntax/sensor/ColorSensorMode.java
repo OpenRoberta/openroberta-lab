@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
 /**
  * Modes in which the sensor can operate.
  */
-public enum ColorSensorMode implements SensorsMode {
+public enum ColorSensorMode {
     COLOUR( "ColorID" ), LIGHT( "Red" ), AMBIENTLIGHT( "Ambient" ), GET_MODE(), GET_SAMPLE();
 
     private final String[] values;
@@ -16,10 +16,16 @@ public enum ColorSensorMode implements SensorsMode {
         this.values = values;
     }
 
+    /**
+     * @return valid Java code name of the enumeration
+     */
     public String getJavaCode() {
         return this.getClass().getSimpleName() + "." + this;
     }
 
+    /**
+     * @return name that Lejos is using for this mode
+     */
     public String getLejosModeName() {
         return this.values[0];
     }

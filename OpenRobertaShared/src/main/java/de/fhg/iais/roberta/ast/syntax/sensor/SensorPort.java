@@ -16,6 +16,9 @@ public enum SensorPort {
         this.values = values;
     }
 
+    /**
+     * @return valid Java code name of the enumeration
+     */
     public String getJavaCode() {
         return this.getClass().getSimpleName() + "." + this;
     }

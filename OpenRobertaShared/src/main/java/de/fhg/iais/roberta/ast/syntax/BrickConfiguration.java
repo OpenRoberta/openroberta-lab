@@ -11,6 +11,11 @@ import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.util.Pair;
 
+/**
+ * This class represents model of the hardware configuration of the brick. It is used in the code generation. <br>
+ * <br>
+ * The {@link BrickConfiguration} contains four sensor ports and four actor ports. Client cannot connect more than that.
+ */
 public class BrickConfiguration {
 
     private final HardwareComponent sensor1;
@@ -23,9 +28,6 @@ public class BrickConfiguration {
     private final HardwareComponent actorC;
     private final HardwareComponent actorD;
 
-    // needed for differential drive pilot
-    // TODO change to cm!!!
-    // see next TODO
     private final double wheelDiameterCM;
     private final double trackWidthCM;
 
@@ -53,6 +55,9 @@ public class BrickConfiguration {
         this.trackWidthCM = trackWidthCM;
     }
 
+    /**
+     * @return Java code used in the code generation to regenerates the same brick configuration
+     */
     public String generateRegenerate() {
         StringBuilder sb = new StringBuilder();
         sb.append("private BrickConfiguration brickConfiguration = new BrickConfiguration.Builder()\n");
@@ -77,46 +82,82 @@ public class BrickConfiguration {
         }
     }
 
+    /**
+     * @return hardware component connected on sensor port 1
+     */
     public HardwareComponent getSensor1() {
         return this.sensor1;
     }
 
+    /**
+     * @return hardware component connected on sensor port 2
+     */
     public HardwareComponent getSensor2() {
         return this.sensor2;
     }
 
+    /**
+     * @return hardware component connected on sensor port 3
+     */
     public HardwareComponent getSensor3() {
         return this.sensor3;
     }
 
+    /**
+     * @return hardware component connected on sensor port 4
+     */
     public HardwareComponent getSensor4() {
         return this.sensor4;
     }
 
+    /**
+     * @return hardware component connected on actor port A
+     */
     public HardwareComponent getActorA() {
         return this.actorA;
     }
 
+    /**
+     * @return hardware component connected on actor port B
+     */
     public HardwareComponent getActorB() {
         return this.actorB;
     }
 
+    /**
+     * @return hardware component connected on actor port C
+     */
     public HardwareComponent getActorC() {
         return this.actorC;
     }
 
+    /**
+     * @return hardware component connected on actor port D
+     */
     public HardwareComponent getActorD() {
         return this.actorD;
     }
 
+    /**
+     * @return wheel diameter in cm
+     */
     public double getWheelDiameterCM() {
         return this.wheelDiameterCM;
     }
 
+    /**
+     * @return track width in cm
+     */
     public double getTrackWidthCM() {
         return this.trackWidthCM;
     }
 
+    /**
+     * Check if the motor is regulated. Client must provide valid {@link ActorPort}.
+     * 
+     * @param port on which the motor is connected
+     * @return if the motor is regulated
+     */
     public boolean isMotorRegulated(ActorPort port) {
         switch ( port ) {
             case A:
@@ -132,6 +173,9 @@ public class BrickConfiguration {
         }
     }
 
+    /**
+     * @return port on which the left motor is connected
+     */
     public ActorPort getLeftMotorPort() {
         if ( getActorA().getMotorSide() == MotorSide.LEFT ) {
             return ActorPort.A;
@@ -145,6 +189,9 @@ public class BrickConfiguration {
         throw new DbcException("No left motor defined");
     }
 
+    /**
+     * @return port on which the right motor is connected
+     */
     public ActorPort getRightMotorPort() {
         if ( getActorA().getMotorSide() == MotorSide.RIGHT ) {
             return ActorPort.A;
@@ -158,20 +205,35 @@ public class BrickConfiguration {
         throw new DbcException("No right motor defined");
     }
 
+    /**
+     * This class is a builder of {@link BrickConfiguration}
+     */
     public static class Builder {
         private final Map<ActorPort, HardwareComponent> actorMapping = new TreeMap<>();
         private final Map<SensorPort, HardwareComponent> sensorMapping = new TreeMap<>();
         private HardwareComponent lastVisited = null;
 
-        // TODO taken from lejos, converted to cm, implement method to set these
         private double wheelDiameter;
         private double trackWidth;
 
+        /**
+         * Add actor to the {@link BrickConfiguration}
+         * 
+         * @param port on which the component is connected
+         * @param component we want to connect
+         * @return
+         */
         public Builder addActor(ActorPort port, HardwareComponent component) {
             this.actorMapping.put(port, component);
             return this;
         }
 
+        /**
+         * Client must provide list of {@link Pair} ({@link ActorPort} and {@link HardwareComponent})
+         * 
+         * @param actors we want to connect to the brick configuration
+         * @return
+         */
         public Builder addActors(List<Pair<ActorPort, HardwareComponent>> actors) {
             for ( Pair<ActorPort, HardwareComponent> pair : actors ) {
                 this.actorMapping.put(pair.getFirst(), pair.getSecond());
@@ -179,11 +241,24 @@ public class BrickConfiguration {
             return this;
         }
 
+        /**
+         * Add sensor to the {@link BrickConfiguration}
+         * 
+         * @param port on which the component is connected
+         * @param component we want to connect
+         * @return
+         */
         public Builder addSensor(SensorPort port, HardwareComponent component) {
             this.sensorMapping.put(port, component);
             return this;
         }
 
+        /**
+         * Client must provide list of {@link Pair} ({@link SensorPort} and {@link HardwareComponent})
+         * 
+         * @param sensors we want to connect to the brick configuration
+         * @return
+         */
         public Builder addSensors(List<Pair<SensorPort, HardwareComponent>> sensors) {
             for ( Pair<SensorPort, HardwareComponent> pair : sensors ) {
                 this.sensorMapping.put(pair.getFirst(), pair.getSecond());
@@ -191,11 +266,23 @@ public class BrickConfiguration {
             return this;
         }
 
+        /**
+         * Set the wheel diameter
+         * 
+         * @param wheelDiameter in cm
+         * @return
+         */
         public Builder setWheelDiameter(double wheelDiameter) {
             this.wheelDiameter = wheelDiameter;
             return this;
         }
 
+        /**
+         * Set the track width
+         * 
+         * @param trackWidth in cm
+         * @return
+         */
         public Builder setTrackWidth(double trackWidth) {
             this.trackWidth = trackWidth;
             return this;
@@ -215,9 +302,9 @@ public class BrickConfiguration {
             this.lastVisited = null;
         }
 
-        //        public void visiting(String... attributes) {
-        //            this.lastVisited = HardwareComponentN.attributesMatch(attributes);
-        //        }
+        public void visiting(String... attributes) {
+            this.lastVisited = HardwareComponent.attributesMatch(attributes);
+        }
 
         public BrickConfiguration build() {
             return new BrickConfiguration(

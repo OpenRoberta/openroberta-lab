@@ -6,10 +6,8 @@ import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
  * Modes in which the sensor can operate.
- * 
- * @author kcvejoski
  */
-public enum UltrasonicSensorMode implements SensorsMode {
+public enum UltrasonicSensorMode {
     DISTANCE( "Distance" ), PRESENCE( "Listen" ), GET_MODE(), GET_SAMPLE();
 
     private final String[] values;
@@ -22,6 +20,9 @@ public enum UltrasonicSensorMode implements SensorsMode {
         return this.values[0];
     }
 
+    /**
+     * @return valid Java code name of the enumeration
+     */
     public String getJavaCode() {
         return this.getClass().getSimpleName() + "." + this;
     }

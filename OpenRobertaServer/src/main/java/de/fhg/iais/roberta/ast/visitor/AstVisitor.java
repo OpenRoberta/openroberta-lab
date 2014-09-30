@@ -32,7 +32,6 @@ import de.fhg.iais.roberta.ast.syntax.functions.Func;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
-import de.fhg.iais.roberta.ast.syntax.sensor.GetSampleSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensor;
@@ -372,13 +371,6 @@ public interface AstVisitor<V> {
      * @param ultrasonicSensor to be visited
      */
     public V visitUltrasonicSensor(UltrasonicSensor<V> ultrasonicSensor);
-
-    /**
-     * visit a {@link GetSampleSensor}.
-     * 
-     * @param GetSampleSensor to be visited
-     */
-    public V visitGetSampleSensor(GetSampleSensor<V> getSampleSensor);
 
     /**
      * visit a {@link MainTask}.

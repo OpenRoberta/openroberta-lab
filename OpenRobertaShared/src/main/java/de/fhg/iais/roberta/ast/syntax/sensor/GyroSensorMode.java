@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
 /**
  * Modes in which the sensor can operate.
  */
-public enum GyroSensorMode implements SensorsMode {
+public enum GyroSensorMode {
     RATE( "Rate" ), ANGLE( "Angle" ), GET_MODE(), GET_SAMPLE(), RESET();
 
     private final String[] values;
@@ -16,10 +16,16 @@ public enum GyroSensorMode implements SensorsMode {
         this.values = values;
     }
 
+    /**
+     * @return valid Java code name of the enumeration
+     */
     public String getJavaCode() {
         return this.getClass().getSimpleName() + "." + this;
     }
 
+    /**
+     * @return name that Lejos is using for this mode
+     */
     public String getLejosModeName() {
         return this.values[0];
     }

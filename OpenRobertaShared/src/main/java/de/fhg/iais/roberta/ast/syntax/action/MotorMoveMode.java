@@ -6,8 +6,6 @@ import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
  * This enum provides all possible motor types of movements.
- * 
- * @author kcvejoski
  */
 public enum MotorMoveMode {
     ROTATIONS(), DEGREE(), DISTANCE();
@@ -18,6 +16,9 @@ public enum MotorMoveMode {
         this.values = values;
     }
 
+    /**
+     * @return valid Java code name of the enumeration
+     */
     public String getJavaCode() {
         return this.getClass().getSimpleName() + "." + this;
     }

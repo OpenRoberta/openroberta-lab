@@ -70,8 +70,6 @@ public class Var<V> extends Expr<V> {
 
     /**
      * Type of variables. Use NONE if the variable is defined already.
-     * 
-     * @author kcvejoski
      */
     public static enum TypeVar {
         DOUBLE, INTEGER, STRING, NONE;

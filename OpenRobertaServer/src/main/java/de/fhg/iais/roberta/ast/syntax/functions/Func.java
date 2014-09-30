@@ -27,7 +27,6 @@ public class Func<V> extends Expr<V> {
         Assert.isTrue(name != null && param != null);
         this.functName = name;
         this.param = param;
-
         setReadOnly();
     }
 

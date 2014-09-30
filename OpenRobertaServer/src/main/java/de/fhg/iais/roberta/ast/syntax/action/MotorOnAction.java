@@ -50,10 +50,16 @@ public final class MotorOnAction<V> extends Action<V> {
         return this.port;
     }
 
+    /**
+     * @return duration type of motor movement
+     */
     public MotorMoveMode getDurationMode() {
         return this.param.getDuration().getType();
     }
 
+    /**
+     * @return value of the duration of the motor movement
+     */
     public Expr<V> getDurationValue() {
         return this.param.getDuration().getValue();
     }

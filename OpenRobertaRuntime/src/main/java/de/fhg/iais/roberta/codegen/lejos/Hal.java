@@ -65,6 +65,9 @@ public class Hal {
         this.led = this.brick.getLED();
         this.keys = this.brick.getKeys();
         this.audio = this.brick.getAudio();
+        for ( int i = 0; i < this.timers.length; i++ ) {
+            this.timers[i] = new Stopwatch();
+        }
     }
 
     /**
@@ -803,7 +806,8 @@ public class Hal {
      * @return
      */
     public int getTimerValue(int timerNumber) {
-        return this.timers[timerNumber].elapsed();
+        return this.timers[timerNumber - 1].elapsed();
+        //return this.timer.elapsed();
     }
 
     /**
@@ -812,7 +816,8 @@ public class Hal {
      * @param timer
      */
     public void resetTimer(int timerNumber) {
-        this.timers[timerNumber].reset();
+        this.timers[timerNumber - 1].reset();
+        //this.timer.reset();
     }
 
     // END Sensoren Zeitgeber ---

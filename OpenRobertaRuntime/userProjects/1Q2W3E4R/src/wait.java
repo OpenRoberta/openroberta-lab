@@ -40,10 +40,14 @@ public class wait {
         Hal hal = new Hal(brickConfiguration);
         while ( true ) {
             if ( hal.isPressed(SensorPort.S2) == true ) {
-break;
+                hal.driveDistance(ActorPort.A, ActorPort.B, false, DriveDirection.FOREWARD, 50, 30);
+                break;
+            }
+            if ( hal.getTimerValue(1) > 3000 ) {
+                hal.driveDistance(ActorPort.A, ActorPort.B, false, DriveDirection.FOREWARD, 50, 30);
+                break;
             }
         }
-        hal.driveDistance(ActorPort.A, ActorPort.B, false, DriveDirection.FOREWARD, 50, 30);
         try {
             Thread.sleep(2000);
         } catch ( InterruptedException e ) {

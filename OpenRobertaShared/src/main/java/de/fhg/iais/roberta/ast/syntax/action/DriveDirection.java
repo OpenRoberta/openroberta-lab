@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
+import java.util.Arrays;
 import java.util.Locale;
 
 import de.fhg.iais.roberta.dbc.DbcException;
@@ -13,11 +14,38 @@ public enum DriveDirection {
     private final String[] values;
 
     private DriveDirection(String... values) {
-        this.values = values;
+        this.values = Arrays.copyOf(values, values.length);
+        Arrays.sort(this.values);
     }
 
+    /**
+     * @return valid Java code name of the enumeration
+     */
     public String getJavaCode() {
         return this.getClass().getSimpleName() + "." + this;
+    }
+
+    private boolean attributesMatchAttributes(String... attributes) {
+        for ( String attribute : attributes ) {
+            attribute = attribute.toUpperCase();
+            if ( Arrays.binarySearch(this.values, attribute) >= 0 ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param attributes which direction should contain
+     * @return {@link DriveDirection} which contains given attributes
+     */
+    public static DriveDirection attributesMatch(String... attributes) {
+        for ( DriveDirection driveDirection : DriveDirection.values() ) {
+            if ( driveDirection.attributesMatchAttributes(attributes) ) {
+                return driveDirection;
+            }
+        }
+        throw new DbcException("No hardware component matches attributes " + Arrays.toString(attributes));
     }
 
     /**

@@ -1,20 +1,51 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
+import java.util.Arrays;
 import java.util.Locale;
 
 import de.fhg.iais.roberta.dbc.DbcException;
 
 public enum MotorSide {
-    RIGHT(), LEFT(), NONE();
+    RIGHT( "right" ), LEFT( "left" ), NONE( "none" );
 
     private final String[] values;
 
     private MotorSide(String... values) {
-        this.values = values;
+        this.values = Arrays.copyOf(values, values.length);
+        for ( int i = 0; i < values.length; i++ ) {
+            this.values[i] = this.values[i].toLowerCase();
+        }
+        Arrays.sort(this.values);
     }
 
+    /**
+     * @return valid Java code name of the enumeration
+     */
     public String getJavaCode() {
         return this.getClass().getSimpleName() + "." + this;
+    }
+
+    private boolean attributesMatchAttributes(String... attributes) {
+        for ( String attribute : attributes ) {
+            attribute = attribute.toLowerCase();
+            if ( Arrays.binarySearch(this.values, attribute) >= 0 ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param attributes which side should contain
+     * @return {@link MotorSide} which contains given attributes
+     */
+    public static MotorSide attributesMatch(String... attributes) {
+        for ( MotorSide motorSide : MotorSide.values() ) {
+            if ( motorSide.attributesMatchAttributes(attributes) ) {
+                return motorSide;
+            }
+        }
+        throw new DbcException("No hardware component matches attributes " + Arrays.toString(attributes));
     }
 
     /**

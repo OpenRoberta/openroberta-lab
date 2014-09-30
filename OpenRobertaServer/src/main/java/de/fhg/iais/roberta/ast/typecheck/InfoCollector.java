@@ -36,7 +36,6 @@ import de.fhg.iais.roberta.ast.syntax.functions.Func;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
-import de.fhg.iais.roberta.ast.syntax.sensor.GetSampleSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensor;
@@ -350,12 +349,6 @@ public class InfoCollector<T> implements AstVisitor<T> {
     @Override
     public T visitUltrasonicSensor(UltrasonicSensor<T> ultrasonicSensor) {
         extractInfos(ultrasonicSensor);
-        return null;
-    }
-
-    @Override
-    public T visitGetSampleSensor(GetSampleSensor<T> getSampleSensor) {
-        extractInfos(getSampleSensor);
         return null;
     }
 
