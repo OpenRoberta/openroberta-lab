@@ -35,9 +35,9 @@ public class AstToLejosJavaVisitorTest {
         + "import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;\n"
         + "import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensorMode;\n"
         + "import de.fhg.iais.roberta.ast.syntax.sensor.MotorTachoMode;\n"
-        + "import de.fhg.iais.roberta.ast.syntax.sensor.SensorsMode;\n"
         + "import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensorMode;\n"
         + "import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensorMode;\n"
+        + "import de.fhg.iais.roberta.ast.syntax.sensor.SensorType;\n"
         + "import de.fhg.iais.roberta.codegen.lejos.Hal;\n\n";
     private static final String BRICK_CONFIGURATION = "" //
         + "    private BrickConfiguration brickConfiguration = new BrickConfiguration.Builder()\n"
@@ -123,7 +123,7 @@ public class AstToLejosJavaVisitorTest {
             + "        if ( hal.isPressed(SensorPort.S1) ) {\n"
             + "            hal.setUltrasonicSensorMode(SensorPort.S4, UltrasonicSensorMode.DISTANCE);\n"
             + "            hal.ledOn(BrickLedColor.GREEN, true);\n"
-            + "        } else if ( PickColor.RED == hal.getColorSensorValue(SensorPort.S3) ) {\n"
+            + "        } else if ( 0 == hal.getColorSensorValue(SensorPort.S3) ) {\n"
             + "            while ( true ) {\n"
             + "                hal.drawPicture(\"SMILEY1\", 0, 0);\n\n"
             + "                hal.turnOnRegulatedMotor(ActorPort.B,30);"

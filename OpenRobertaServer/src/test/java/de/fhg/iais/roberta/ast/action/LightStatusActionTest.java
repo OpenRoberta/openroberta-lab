@@ -6,7 +6,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.ast.syntax.action.LightStatusAction;
 import de.fhg.iais.roberta.ast.syntax.action.LightStatusAction.Status;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
-import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
+import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
 
 public class LightStatusActionTest {
 
@@ -19,7 +19,7 @@ public class LightStatusActionTest {
 
     @Test
     public void getStatus() throws Exception {
-        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_BrickLightStatus.xml");
+        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_BrickLightStatus.xml");
         LightStatusAction<Void> lsa = (LightStatusAction<Void>) transformer.getTree().get(0);
         Assert.assertEquals(LightStatusAction.Status.OFF, lsa.getStatus());
     }

@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
 import de.fhg.iais.roberta.ast.syntax.action.HardwareComponentType;
 import de.fhg.iais.roberta.ast.syntax.action.MotorSide;
-import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
+import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
 
@@ -31,7 +31,7 @@ public class Helper {
      * @throws Exception
      */
     public static String generateStringWithoutWrapping(String pathToProgramXml) throws Exception {
-        JaxbTransformer<Void> transformer = generateTransformer(pathToProgramXml);
+        JaxbProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
         BrickConfiguration brickConfiguration =
             new BrickConfiguration.Builder()
                 .addActor(ActorPort.A, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))
@@ -52,7 +52,7 @@ public class Helper {
      * @throws Exception
      */
     public static String generateString(String pathToProgramXml, BrickConfiguration brickConfiguration) throws Exception {
-        JaxbTransformer<Void> transformer = generateTransformer(pathToProgramXml);
+        JaxbProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
         String code = AstToLejosJavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), true);
         System.out.println(code);
         return code;
@@ -65,15 +65,15 @@ public class Helper {
      * @return jaxb transformer
      * @throws Exception
      */
-    public static JaxbTransformer<Void> generateTransformer(String pathToProgramXml) throws Exception {
+    public static JaxbProgramTransformer<Void> generateTransformer(String pathToProgramXml) throws Exception {
         JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
         InputSource src = new InputSource(Helper.class.getResourceAsStream(pathToProgramXml));
         BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
 
-        JaxbTransformer<Void> transformer = new JaxbTransformer<>();
-        transformer.blockSetToAST(project);
+        JaxbProgramTransformer<Void> transformer = new JaxbProgramTransformer<>();
+        transformer.transform(project);
         return transformer;
     }
 
@@ -102,8 +102,8 @@ public class Helper {
         InputSource src = new InputSource(Helper.class.getResourceAsStream(pathToProgramXml));
         BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
 
-        JaxbTransformer<V> transformer = new JaxbTransformer<V>();
-        transformer.blockSetToAST(project);
+        JaxbProgramTransformer<V> transformer = new JaxbProgramTransformer<V>();
+        transformer.transform(project);
         List<Phrase<V>> tree = transformer.getTree();
         return tree;
     }

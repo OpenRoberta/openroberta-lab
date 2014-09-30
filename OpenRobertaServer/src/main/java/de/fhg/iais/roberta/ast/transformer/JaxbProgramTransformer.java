@@ -3,9 +3,8 @@ package de.fhg.iais.roberta.ast.transformer;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.fhg.iais.roberta.ast.syntax.Category;
+import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
-import de.fhg.iais.roberta.ast.syntax.action.Action;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.BrickLedColor;
 import de.fhg.iais.roberta.ast.syntax.action.ClearDisplayAction;
@@ -29,17 +28,13 @@ import de.fhg.iais.roberta.ast.syntax.action.ToneAction;
 import de.fhg.iais.roberta.ast.syntax.action.TurnAction;
 import de.fhg.iais.roberta.ast.syntax.action.TurnDirection;
 import de.fhg.iais.roberta.ast.syntax.action.VolumeAction;
-import de.fhg.iais.roberta.ast.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
-import de.fhg.iais.roberta.ast.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
-import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
-import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary.Op;
@@ -58,7 +53,6 @@ import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.MotorTachoMode;
-import de.fhg.iais.roberta.ast.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorType;
 import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensor;
@@ -66,12 +60,10 @@ import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.TouchSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensorMode;
-import de.fhg.iais.roberta.ast.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
-import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon.Flow;
@@ -81,11 +73,8 @@ import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
-import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
@@ -93,44 +82,10 @@ import de.fhg.iais.roberta.dbc.DbcException;
 /**
  * JAXB to AST transformer. Client should provide tree of jaxb objects.
  */
-public class JaxbTransformer<V> {
-    private final ArrayList<Phrase<V>> tree = new ArrayList<Phrase<V>>();
+public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
 
-    /**
-     * Converts object of type {@link BlockSet} to AST tree.
-     * 
-     * @param program
-     */
-    public void blockSetToAST(BlockSet program) {
-        List<Instance> instances = program.getInstance();
-        for ( Instance instance : instances ) {
-            instanceToAST(instance);
-        }
-    }
-
-    private void instanceToAST(Instance instance) {
-        boolean first = true;
-        List<Block> blocks = instance.getBlock();
-        for ( Block block : blocks ) {
-            if ( first ) {
-                block.setX(instance.getX());
-                block.setY(instance.getY());
-                first = false;
-            }
-            //if ( !block.isDisabled() ) {
-            this.tree.add(blockToAST(block));
-            //}
-        }
-    }
-
-    /**
-     * @return abstract syntax tree generated from JAXB objects.
-     */
-    public ArrayList<Phrase<V>> getTree() {
-        return this.tree;
-    }
-
-    private Phrase<V> blockToAST(Block block) {
+    @Override
+    protected Phrase<V> blockToAST(Block block) {
         String comment = extractComment(block);
         boolean disabled = isDisabled(block);
 
@@ -786,239 +741,9 @@ public class JaxbTransformer<V> {
         }
     }
 
-    private Phrase<V> blockToUnaryExpr(Block block, ExprParam exprParam, String operationType) {
-        String op = getOperation(block, operationType);
-        List<Value> values = extractValues(block, (short) 1);
-        Phrase<V> expr = extractValue(values, exprParam);
-        return Unary.make(Unary.Op.get(op), (Expr<V>) expr, isDisabled(block), extractComment(block));
-    }
-
-    private Binary<V> blockToBinaryExpr(Block block, ExprParam leftExpr, ExprParam rightExpr, String operationType) {
-        String op = getOperation(block, operationType);
-        List<Value> values = extractValues(block, (short) 2);
-        Phrase<V> left = extractValue(values, leftExpr);
-        Phrase<V> right = extractValue(values, rightExpr);
-        return Binary.make(Binary.Op.get(op), convertPhraseToExpr(left), convertPhraseToExpr(right), isDisabled(block), extractComment(block));
-    }
-
-    private Func<V> blockToFunction(Block block, List<ExprParam> exprParams, String operationType) {
-        String op = getOperation(block, operationType);
-        List<Expr<V>> params = new ArrayList<Expr<V>>();
-        List<Value> values = extractValues(block, (short) exprParams.size());
-        for ( ExprParam exprParam : exprParams ) {
-            params.add((Expr<V>) extractValue(values, exprParam));
-        }
-        return Func.make(Func.Function.get(op), params, isDisabled(block), extractComment(block));
-    }
-
-    private Phrase<V> blocksToIfStmt(Block block, int _else, int _elseIf) {
-        List<Expr<V>> exprsList = new ArrayList<Expr<V>>();
-        List<StmtList<V>> thenList = new ArrayList<StmtList<V>>();
-        StmtList<V> elseList = null;
-
-        List<Value> values = new ArrayList<Value>();
-        List<Statement> statements = new ArrayList<Statement>();
-
-        if ( _else + _elseIf != 0 ) {
-            List<Object> valAndStmt = block.getRepetitions().getValueAndStatement();
-            Assert.isTrue(valAndStmt.size() <= 2 * _elseIf + 2 + _else);
-            convertStmtValList(values, statements, valAndStmt);
-        } else {
-            values = extractValues(block, (short) 1);
-            statements = extractStatements(block, (short) 1);
-        }
-
-        for ( int i = 0; i < _elseIf + _else + 1; i++ ) {
-            if ( _else != 0 && i == _elseIf + _else ) {
-                elseList = extractStatement(statements, "ELSE");
-            } else {
-                Phrase<V> p = extractValue(values, new ExprParam("IF" + i, Boolean.class));
-
-                exprsList.add(convertPhraseToExpr(p));
-                thenList.add(extractStatement(statements, "DO" + i));
-            }
-        }
-
-        if ( _else != 0 ) {
-            return IfStmt.make(exprsList, thenList, elseList, isDisabled(block), extractComment(block));
-        } else {
-            return IfStmt.make(exprsList, thenList, isDisabled(block), extractComment(block));
-        }
-    }
-
-    private void convertStmtValList(List<Value> values, List<Statement> statements, List<Object> valAndStmt) {
-        for ( int i = 0; i < valAndStmt.size(); i++ ) {
-            Object ob = valAndStmt.get(i);
-            if ( ob.getClass() == Value.class ) {
-                values.add((Value) ob);
-            } else {
-                statements.add((Statement) ob);
-            }
-        }
-    }
-
-    private ExprList<V> blockToExprList(Block block, Class<?> defVal) {
-        int items = 0;
-        if ( block.getMutation().getItems() != null ) {
-            items = block.getMutation().getItems().intValue();
-        }
-        List<Value> values = block.getValue();
-        Assert.isTrue(values.size() <= items, "Number of values is not less or equal to number of items in mutation!");
-        return valuesToExprList(values, defVal, items);
-    }
-
-    private Phrase<V> blockToConst(Block block, String type) {
-        //what about template class?
-        List<Field> fields = extractFields(block, (short) 1);
-        String field = extractField(fields, type, (short) 0);
-        switch ( type ) {
-            case "BOOL":
-                return BoolConst.make(Boolean.parseBoolean(field.toLowerCase()), isDisabled(block), extractComment(block));
-            case "NUM":
-                return NumConst.make(field, isDisabled(block), extractComment(block));
-            case "TEXT":
-                return StringConst.make(field, isDisabled(block), extractComment(block));
-            case "CONSTANT":
-                return MathConst.make(MathConst.Const.get(field), isDisabled(block), extractComment(block));
-            case "COLOUR":
-                return ColorConst.make(field, isDisabled(block), extractComment(block));
-            default:
-                throw new DbcException("Invalid type constant!");
-        }
-    }
-
-    private StmtList<V> blocksToStmtList(List<Block> statementBolcks) {
-        StmtList<V> stmtList = StmtList.make();
-        for ( Block sb : statementBolcks ) {
-            convertPhraseToStmt(stmtList, sb);
-        }
-        stmtList.setReadOnly();
-        return stmtList;
-    }
-
-    private void convertPhraseToStmt(StmtList<V> stmtList, Block sb) {
-        Phrase<V> p = blockToAST(sb);
-        Stmt<V> stmt;
-        if ( p.getKind().getCategory() == Category.EXPR ) {
-            stmt = ExprStmt.make((Expr<V>) p);
-        } else if ( p.getKind().getCategory() == Category.ACTOR ) {
-            stmt = ActionStmt.make((Action<V>) p);
-        } else if ( p.getKind().getCategory() == Category.SENSOR ) {
-            stmt = SensorStmt.make((Sensor<V>) p);
-        } else {
-            stmt = (Stmt<V>) p;
-        }
-        stmtList.addStmt(stmt);
-    }
-
-    private Expr<V> convertPhraseToExpr(Phrase<V> p) {
-        Expr<V> expr;
-        if ( p.getKind().getCategory() == Category.SENSOR ) {
-            expr = SensorExpr.make((Sensor<V>) p);
-        } else if ( p.getKind().getCategory() == Category.ACTOR ) {
-            expr = ActionExpr.make((Action<V>) p);
-        } else {
-            expr = (Expr<V>) p;
-        }
-        return expr;
-    }
-
-    private ExprList<V> valuesToExprList(List<Value> values, Class<?> defVal, int nItems) {
-        ExprList<V> exprList = ExprList.make();
-        for ( int i = 0; i < nItems; i++ ) {
-            exprList.addExpr((Expr<V>) extractValue(values, new ExprParam("ADD" + i, defVal)));
-        }
-        exprList.setReadOnly();
-        return exprList;
-    }
-
-    private String getOperation(Block block, String operationType) {
-        String op = operationType;
-        if ( block.getField().size() != 0 ) {
-            op = extractOperation(block, operationType);
-        }
-        return op;
-    }
-
-    private Phrase<V> extractRepeatStatement(Block block, Phrase<V> expr, String mode) {
-        return extractRepeatStatement(block, expr, mode, "DO", 1);
-    }
-
-    private Phrase<V> extractRepeatStatement(Block block, Phrase<V> expr, String mode, String location, int mutation) {
-        List<Statement> statements = extractStatements(block, (short) mutation);
-        StmtList<V> stmtList = extractStatement(statements, location);
-        return RepeatStmt.make(RepeatStmt.Mode.get(mode), convertPhraseToExpr(expr), stmtList, isDisabled(block), extractComment(block));
-    }
-
-    private Phrase<V> extractVar(Block block) {
-        List<Field> fields = extractFields(block, (short) 1);
-        String field = extractField(fields, "VAR", (short) 0);
-        return Var.make(field, TypeVar.NONE, isDisabled(block), extractComment(block));
-    }
-
-    private List<Value> extractValues(Block block, short numOfValues) {
-        List<Value> values;
-        values = block.getValue();
-        Assert.isTrue(values.size() <= numOfValues, "Values size is not less or equal to " + numOfValues + "!");
-        return values;
-    }
-
-    private Phrase<V> extractValue(List<Value> values, ExprParam param) {
-        for ( Value value : values ) {
-            if ( value.getName().equals(param.getName()) ) {
-                return blockToAST(value.getBlock());
-            }
-        }
-        return EmptyExpr.make(param.getDefaultValue());
-    }
-
-    private List<Statement> extractStatements(Block block, short numOfStatements) {
-        List<Statement> statements;
-        statements = block.getStatement();
-        Assert.isTrue(statements.size() <= numOfStatements, "Statements size is not less or equal to " + numOfStatements + "!");
-        return statements;
-    }
-
-    private StmtList<V> extractStatement(List<Statement> statements, String stmtName) {
-        StmtList<V> stmtList = StmtList.make();
-        for ( Statement statement : statements ) {
-            if ( statement.getName().equals(stmtName) ) {
-                return blocksToStmtList(statement.getBlock());
-            }
-        }
-        stmtList.setReadOnly();
-        return stmtList;
-    }
-
-    private List<Field> extractFields(Block block, short numOfFields) {
-        List<Field> fields;
-        fields = block.getField();
-        Assert.isTrue(fields.size() == numOfFields, "Number of fields is not equal to " + numOfFields + "!");
-        return fields;
-    }
-
-    private String extractField(List<Field> fields, String name, short fieldLocation) {
-        Field field = fields.get(fieldLocation);
-        Assert.isTrue(field.getName().equals(name), "Field name is not equal to " + name + "!");
-        return field.getValue();
-    }
-
-    private String extractOperation(Block block, String name) {
-        List<Field> fields = extractFields(block, (short) 1);
-        String operation = extractField(fields, name, (short) 0);
-        return operation;
-    }
-
-    private String extractComment(Block block) {
-        return block.getComment() == null ? "" : block.getComment().getValue();
-    }
-
-    private boolean isDisabled(Block block) {
-        return block.isDisabled() == null ? false : true;
-    }
-
     @Override
-    public String toString() {
-        return "BlockAST [project=[" + this.tree + "]]";
+    protected BrickConfiguration blockToBrickConfiguration(Block block) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

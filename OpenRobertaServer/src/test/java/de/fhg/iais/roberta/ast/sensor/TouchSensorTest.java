@@ -6,7 +6,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.ast.syntax.sensor.TouchSensor;
-import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
+import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
 
 public class TouchSensorTest {
 
@@ -19,7 +19,7 @@ public class TouchSensorTest {
 
     @Test
     public void getPort() throws Exception {
-        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_Touch.xml");
+        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_Touch.xml");
 
         TouchSensor<Void> cs = (TouchSensor<Void>) transformer.getTree().get(0);
 

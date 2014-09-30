@@ -28,7 +28,8 @@ public enum PickColor {
     }
 
     public String getJavaCode() {
-        return this.getClass().getSimpleName() + "." + this;
+        return String.valueOf(this.colorID);
+        // return this.getClass().getSimpleName() + "." + this;
     }
 
     public PickColor get(int id) {

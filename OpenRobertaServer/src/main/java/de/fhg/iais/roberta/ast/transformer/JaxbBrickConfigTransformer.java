@@ -5,6 +5,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.HardwareComponent;
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
 import de.fhg.iais.roberta.ast.syntax.action.HardwareComponentType;
@@ -15,15 +16,16 @@ import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.util.Pair;
 
 /**
  * JAXB to AST transformer for the brick configuration. Client should provide tree of jaxb objects.
+ * 
+ * @param <V>
  */
 
-public class JaxbBrickConfigTransformer {
+public class JaxbBrickConfigTransformer<V> extends JaxbAstTransformer<V> {
 
     public BrickConfiguration blockSetToBrickConfiguration(BlockSet program) {
         List<Instance> instances = program.getInstance();
@@ -43,7 +45,6 @@ public class JaxbBrickConfigTransformer {
                     extractDirectionOfRotation(value.getBlock()),
                     extractMotorSide(value.getBlock()))));
             }
-
         }
     }
 
@@ -93,7 +94,8 @@ public class JaxbBrickConfigTransformer {
         return MotorSide.get(extractField(fields, "MOTOR_DRIVE", (short) 2));
     }
 
-    private BrickConfiguration blockToBrickConfiguration(Block block) {
+    @Override
+    protected BrickConfiguration blockToBrickConfiguration(Block block) {
         List<Field> fields;
         List<Value> values;
 
@@ -116,24 +118,9 @@ public class JaxbBrickConfigTransformer {
         }
     }
 
-    private List<Field> extractFields(Block block, short numOfFields) {
-        List<Field> fields;
-        fields = block.getField();
-        Assert.isTrue(fields.size() == numOfFields, "Number of fields is not equal to " + numOfFields + "!");
-        return fields;
-    }
-
-    private String extractField(List<Field> fields, String name, short fieldLocation) {
-        Field field = fields.get(fieldLocation);
-        Assert.isTrue(field.getName().equals(name), "Field name is not equal to " + name + "!");
-        return field.getValue();
-    }
-
-    private List<Value> extractValues(Block block, short numOfValues) {
-        List<Value> values;
-        values = block.getValue();
-        Assert.isTrue(values.size() <= numOfValues, "Values size is not less or equal to " + numOfValues + "!");
-        return values;
+    @Override
+    protected Phrase<V> blockToAST(Block block) {
+        return null;
     }
 
 }

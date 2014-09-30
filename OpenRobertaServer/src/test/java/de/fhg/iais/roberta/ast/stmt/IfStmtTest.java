@@ -9,7 +9,7 @@ import org.xml.sax.InputSource;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
-import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
+import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 
 public class IfStmtTest {
@@ -72,8 +72,8 @@ public class IfStmtTest {
         InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/if_stmt2.xml"));
         BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
 
-        JaxbTransformer<?> transformer = new JaxbTransformer<>();
-        transformer.blockSetToAST(project);
+        JaxbProgramTransformer<?> transformer = new JaxbProgramTransformer<>();
+        transformer.transform(project);
         String a =
             "BlockAST [project=[[\n"
                 + "if Binary [EQ, NumConst [1], NumConst [1]]\n"

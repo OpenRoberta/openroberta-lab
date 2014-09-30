@@ -31,7 +31,7 @@ public class WhileUntilStmtTest {
     public void loopForever() throws Exception {
         String a = "" //
             + "\nwhile ( true ) {\n"
-            + "    System.out.println(PickColor.GREEN);\n"
+            + "    System.out.println(1);\n"
             + "}\n"
             + "while ( true ) {\n"
             + "    System.out.println(\"\");\n"

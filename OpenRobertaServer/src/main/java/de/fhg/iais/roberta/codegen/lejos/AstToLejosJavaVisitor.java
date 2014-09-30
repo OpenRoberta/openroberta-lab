@@ -803,9 +803,9 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensorMode;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.sensor.MotorTachoMode;\n");
-        this.sb.append("import de.fhg.iais.roberta.ast.syntax.sensor.SensorsMode;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensorMode;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensorMode;\n");
+        this.sb.append("import de.fhg.iais.roberta.ast.syntax.sensor.SensorType;\n");
         this.sb.append("import de.fhg.iais.roberta.codegen.lejos.Hal;\n\n");
         this.sb.append("public class " + this.programName + " {\n");
         this.sb.append(INDENT).append(this.brickConfiguration.generateRegenerate()).append("\n\n");

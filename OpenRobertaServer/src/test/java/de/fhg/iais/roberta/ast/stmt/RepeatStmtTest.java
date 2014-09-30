@@ -6,7 +6,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt.Mode;
-import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
+import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 public class RepeatStmtTest {
@@ -27,7 +27,7 @@ public class RepeatStmtTest {
 
     @Test
     public void getMode() throws Exception {
-        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/control/repeat_stmt.xml");
+        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/control/repeat_stmt.xml");
 
         RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(0);
 
@@ -36,7 +36,7 @@ public class RepeatStmtTest {
 
     @Test
     public void getExpr() throws Exception {
-        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/control/repeat_stmt.xml");
+        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/control/repeat_stmt.xml");
 
         RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(0);
 
@@ -47,7 +47,7 @@ public class RepeatStmtTest {
 
     @Test
     public void getList() throws Exception {
-        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/control/repeat_stmt.xml");
+        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/control/repeat_stmt.xml");
 
         RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(0);
 

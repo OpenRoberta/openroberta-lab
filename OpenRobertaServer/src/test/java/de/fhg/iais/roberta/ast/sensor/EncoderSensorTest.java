@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.MotorTachoMode;
-import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
+import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
 
 public class EncoderSensorTest {
 
@@ -20,7 +20,7 @@ public class EncoderSensorTest {
 
     @Test
     public void getMode() throws Exception {
-        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setEncoder.xml");
+        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setEncoder.xml");
 
         EncoderSensor<Void> cs = (EncoderSensor<Void>) transformer.getTree().get(0);
 
@@ -29,7 +29,7 @@ public class EncoderSensorTest {
 
     @Test
     public void getPort() throws Exception {
-        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setEncoder.xml");
+        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setEncoder.xml");
 
         EncoderSensor<Void> cs = (EncoderSensor<Void>) transformer.getTree().get(0);
 

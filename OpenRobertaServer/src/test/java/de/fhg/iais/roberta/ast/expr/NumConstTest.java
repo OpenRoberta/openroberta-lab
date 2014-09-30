@@ -6,7 +6,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
-import de.fhg.iais.roberta.ast.transformer.JaxbTransformer;
+import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
 
 public class NumConstTest {
 
@@ -18,21 +18,21 @@ public class NumConstTest {
 
     @Test
     public void getValue() throws Exception {
-        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_num_constant.xml");
+        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_num_constant.xml");
         NumConst<Void> numConst = (NumConst<Void>) transformer.getTree().get(0);
         Assert.assertEquals("0", numConst.getValue());
     }
 
     @Test
     public void getPresedance() throws Exception {
-        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_num_constant.xml");
+        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_num_constant.xml");
         NumConst<Void> numConst = (NumConst<Void>) transformer.getTree().get(0);
         Assert.assertEquals(999, numConst.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
-        JaxbTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_num_constant.xml");
+        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_num_constant.xml");
         NumConst<Void> numConst = (NumConst<Void>) transformer.getTree().get(0);
         Assert.assertEquals(Assoc.NONE, numConst.getAssoc());
     }
