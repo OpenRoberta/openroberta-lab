@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="EV3Menu" basedir="." default="copy">
+<project name="EV3Menu" basedir="." default="jar">
     <property file="local.properties" />
     <property file="build.properties" />
 
@@ -29,11 +29,5 @@
                 <attribute name="Class-Path" value="${lejos.home}/lib/ev3classes.jar ${lejos.home}/lib/dbusjava.jar ${lejos.home}/libjna/usr/share/java/jna.jar"/>
             </manifest>
         </jar>  
-    </target>
-
-    <target name="copy" depends="jar">
-    	<scp todir="${credentials}@${ev3.host}:${lejos.menu.dir}" trust="true">
-    	    <fileset file="${classes.jar}"/>
-    	</scp>
     </target>
 </project>

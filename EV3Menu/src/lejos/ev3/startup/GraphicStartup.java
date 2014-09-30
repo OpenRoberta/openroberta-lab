@@ -1488,7 +1488,8 @@ public class GraphicStartup implements Menu {
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
                     String temp = bufferedReader.readLine();
-                    lcd.drawString("use " + temp + " ?", 0, 2);
+                    lcd.drawString("use last IP?", 0, 1);
+                    lcd.drawString(temp, 0, 2);
                     if ( getYesNo("     Confirm", false) == 1 ) {
                         serverURLString = temp;
                     } else {
@@ -1573,7 +1574,7 @@ public class GraphicStartup implements Menu {
 
         } else {
             GraphicMenu menu = new GraphicMenu(new String[] {
-                "New session"
+                "Disconnect"
             }, new String[] {
                 ICRoberta
             }, 3);
