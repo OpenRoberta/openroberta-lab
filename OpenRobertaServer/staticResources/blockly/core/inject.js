@@ -33,18 +33,17 @@ goog.require('goog.dom');
  * Initialize the SVG document with various handlers.
  * 
  * @param {!Element}
- *            container Containing element.
+ *          container Containing element.
  * @param {Object}
- *            opt_options Optional dictionary of options.
+ *          opt_options Optional dictionary of options.
  */
 Blockly.inject = function(container, opt_options) {
   // Verify that the container is in document.
-  //if (!goog.dom.contains(document, container)) {
-  //  throw 'Error: container is not in current document.';
-  //}
+  if (!goog.dom.contains(document, container)) {
+    throw 'Error: container is not in current document.';
+  }
   if (opt_options) {
-    // TODO(scr): don't mix this in to global variables.
-    goog.mixin(Blockly, Blockly.parseOptions_(opt_options));
+    Blockly.parseOptions_(opt_options);
   }
   var startUi = function() {
     Blockly.createDom_(container);
@@ -65,7 +64,7 @@ Blockly.inject = function(container, opt_options) {
  * Parse the provided toolbox tree into a consistent DOM format.
  * 
  * @param {Node|string}
- *            tree DOM tree of blocks, or text representation of same.
+ *          tree DOM tree of blocks, or text representation of same.
  * @return {Node} DOM tree of blocks or null.
  * @private
  */
@@ -91,8 +90,7 @@ Blockly.parseToolboxTree_ = function(tree) {
  * Configure Blockly to behave according to a set of options.
  * 
  * @param {!Object}
- *            options Dictionary of options.
- * @return {Object} Parsed options.
+ *          options Dictionary of options.
  * @private
  */
 Blockly.parseOptions_ = function(options) {
@@ -101,6 +99,8 @@ Blockly.parseOptions_ = function(options) {
     var hasCategories = false;
     var hasTrashcan = false;
     var hasCollapse = false;
+    var hasComments = false;
+    var hasDisable = false;
     var hasStartButton = false;
     var hasCheckButton = false;
     var tree = null;
@@ -132,6 +132,14 @@ Blockly.parseOptions_ = function(options) {
     if (hasCollapse === undefined) {
       hasCollapse = hasCategories;
     }
+    var hasComments = options['comments'];
+    if (hasComments === undefined) {
+      hasComments = hasCategories;
+    }
+    var hasDisable = options['disable'];
+    if (hasDisable === undefined) {
+      hasDisable = hasCategories;
+    }
   }
   if (tree && !hasCategories) {
     // Scrollbars are not compatible with a non-flyout toolbox.
@@ -144,30 +152,31 @@ Blockly.parseOptions_ = function(options) {
   }
   var enableRealtime = !!options['realtime'];
   var realtimeOptions = enableRealtime ? options['realtimeOptions'] : undefined;
-  return {
-    RTL : !!options['rtl'],
-    collapse : hasCollapse,
-    readOnly : readOnly,
-    maxBlocks : options['maxBlocks'] || Infinity,
-    pathToBlockly : options['path'] || './',
-    hasCategories : hasCategories,
-    hasScrollbars : hasScrollbars,
-    hasTrashcan : hasTrashcan,
-    hasCheckButton : hasCheckButton,
-    hasStartButton : hasStartButton,
-    hasSaveButton : hasSaveButton,
-    hasBackButton : hasBackButton,
-    languageTree : tree,
-    enableRealtime : enableRealtime,
-    realtimeOptions : realtimeOptions
-  };
+
+  Blockly.RTL = !!options['rtl'];
+  Blockly.collapse = hasCollapse;
+  Blockly.comments = hasComments;
+  Blockly.disable = hasDisable;
+  Blockly.readOnly = readOnly;
+  Blockly.maxBlocks = options['maxBlocks'] || Infinity;
+  Blockly.pathToBlockly = options['path'] || './';
+  Blockly.hasCategories = hasCategories;
+  Blockly.hasScrollbars = hasScrollbars;
+  Blockly.hasTrashcan = hasTrashcan;
+  Blockly.hasCheckButton = hasCheckButton;
+  Blockly.hasStartButton = hasStartButton;
+  Blockly.hasSaveButton = hasSaveButton;
+  Blockly.hasBackButton = hasBackButton;
+  Blockly.languageTree = tree;
+  Blockly.enableRealtime = enableRealtime;
+  Blockly.realtimeOptions = realtimeOptions;
 };
 
 /**
  * Create the SVG image.
  * 
  * @param {!Element}
- *            container Containing element.
+ *          container Containing element.
  * @private
  */
 Blockly.createDom_ = function(container) {
@@ -321,7 +330,6 @@ Blockly.createDom_ = function(container) {
       Blockly.mainWorkspace.flyout_ = new Blockly.Flyout();
       var flyout = Blockly.mainWorkspace.flyout_;
       var flyoutSvg = flyout.createDom();
-      flyout.init(Blockly.mainWorkspace, true);
       flyout.autoClose = false;
       // Insert the flyout behind the workspace so that blocks appear on top.
       goog.dom.insertSiblingBefore(flyoutSvg, Blockly.mainWorkspace.svgGroup_);
@@ -417,8 +425,6 @@ Blockly.init_ = function() {
   // Also, 'keydown' has to be on the whole document since the browser doesn't
   // understand a concept of focus on the SVG image.
   Blockly.bindEvent_(Blockly.svg, 'mousedown', null, Blockly.onMouseDown_);
-  Blockly.bindEvent_(Blockly.svg, 'mousemove', null, Blockly.onMouseMove_);
-  // Blockly.bindEvent_(Blockly.svg, 'mouseover', null, Blockly.onMouseOver_);
   Blockly.bindEvent_(Blockly.svg, 'contextmenu', null, Blockly.onContextMenu_);
   Blockly.bindEvent_(Blockly.WidgetDiv.DIV, 'contextmenu', null,
       Blockly.onContextMenu_);
@@ -446,7 +452,7 @@ Blockly.init_ = function() {
       Blockly.Toolbox.init();
     } else {
       // Build a fixed flyout with the root blocks.
-      Blockly.mainWorkspace.flyout_.init(Blockly.mainWorkspace, true);
+      Blockly.mainWorkspace.flyout_.init(Blockly.mainWorkspace);
       Blockly.mainWorkspace.flyout_.show(Blockly.languageTree.childNodes);
       // Translate the workspace sideways to avoid the fixed flyout.
       Blockly.mainWorkspace.scrollX = Blockly.mainWorkspace.flyout_.width_;
@@ -482,7 +488,7 @@ Blockly.init_ = function() {
  * Modify the block tree on the existing toolbox.
  * 
  * @param {Node|string}
- *            tree DOM tree of blocks, or text representation of same.
+ *          tree DOM tree of blocks, or text representation of same.
  */
 Blockly.updateToolbox = function(tree) {
   tree = Blockly.parseToolboxTree_(tree);

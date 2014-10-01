@@ -33,7 +33,7 @@ goog.require('goog.dom');
 goog.require('goog.style');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuItem');
-
+goog.require('goog.userAgent');
 
 /**
  * Class for an editable dropdown field.
@@ -54,12 +54,11 @@ Blockly.FieldDropdown = function(menuGenerator, opt_changeHandler) {
   var firstTuple = this.getOptions_()[0];
   this.value_ = firstTuple[1];
 
-  // Add dropdown arrow: "option ▾" (LTR) or "▾ אופציה" (RTL)
-  // Android can't (in 2014) display "▾", so use "▼" instead.
-  var arrowChar = goog.userAgent.ANDROID ? '\u25BC' : '\u25BE';
+  // Add dropdown arrow: "option â–¾" (LTR) or "â–¾ ××•×¤×¦×™×”" (RTL)
   this.arrow_ = Blockly.createSvgElement('tspan', {}, null);
-  this.arrow_.appendChild(document.createTextNode(
-      Blockly.RTL ? arrowChar + ' ' : ' ' + arrowChar));
+  this.arrow_.appendChild(document
+      .createTextNode(Blockly.RTL ? Blockly.FieldDropdown.ARROW_CHAR + ' '
+          : ' ' + Blockly.FieldDropdown.ARROW_CHAR));
 
   // Call parent's constructor.
   Blockly.FieldDropdown.superClass_.constructor.call(this, firstTuple[0]);
@@ -70,6 +69,11 @@ goog.inherits(Blockly.FieldDropdown, Blockly.Field);
  * Horizontal distance that a checkmark ovehangs the dropdown.
  */
 Blockly.FieldDropdown.CHECKMARK_OVERHANG = 25;
+
+/**
+ * Android can't (in 2014) display "â–¾", so use "â–¼" instead.
+ */
+Blockly.FieldDropdown.ARROW_CHAR = goog.userAgent.ANDROID ? '\u25BC' : '\u25BE';
 
 /**
  * Clone this FieldDropdown.
@@ -114,19 +118,39 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
   var menu = new goog.ui.Menu();
   var options = this.getOptions_();
   for (var x = 0; x < options.length; x++) {
-    var text = options[x][0];  // Human-readable text.
+    var text = options[x][0]; // Human-readable text.
     var value = options[x][1]; // Language-neutral value.
     var menuItem = new goog.ui.MenuItem(text);
     menuItem.setValue(value);
     menuItem.setCheckable(true);
-    menu.addItem(menuItem);
+    menu.addChild(menuItem, true);
     menuItem.setChecked(value == this.value_);
   }
+  // Listen for mouse/keyboard events.
   goog.events.listen(menu, goog.ui.Component.EventType.ACTION, callback);
+  // Listen for touch events (why doesn't Closure handle this already?).
+  function callbackTouchStart(e) {
+    var control = this.getOwnerControl(/** @type {Node} */
+    (e.target));
+    // Highlight the menu item.
+    control.handleMouseDown(e);
+  }
+  function callbackTouchEnd(e) {
+    var control = this.getOwnerControl(/** @type {Node} */
+    (e.target));
+    // Activate the menu item.
+    control.performActionInternal(e);
+  }
+  menu.getHandler().listen(menu.getElement(), goog.events.EventType.TOUCHSTART,
+      callbackTouchStart);
+  menu.getHandler().listen(menu.getElement(), goog.events.EventType.TOUCHEND,
+      callbackTouchEnd);
+
   // Record windowSize and scrollOffset before adding menu.
   var windowSize = goog.dom.getViewportSize();
   var scrollOffset = goog.style.getViewportPageOffset(document);
-  var xy = Blockly.getAbsoluteXY_(/** @type {!Element} */ (this.borderRect_));
+  var xy = Blockly.getAbsoluteXY_(/** @type {!Element} */
+  (this.borderRect_));
   var borderBBox = this.borderRect_.getBBox();
   var div = Blockly.WidgetDiv.DIV;
   menu.render(div);
@@ -137,8 +161,8 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
 
   // Position the menu.
   // Flip menu vertically if off the bottom.
-  if (xy.y + menuSize.height + borderBBox.height >=
-      windowSize.height + scrollOffset.y) {
+  if (xy.y + menuSize.height + borderBBox.height >= windowSize.height
+      + scrollOffset.y) {
     xy.y -= menuSize.height;
   } else {
     xy.y += borderBBox.height;
@@ -174,7 +198,9 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
   if (!goog.isArray(options) || options.length < 2) {
     return;
   }
-  var strings = options.map(function(t) {return t[0];});
+  var strings = options.map(function(t) {
+    return t[0];
+  });
   var shortest = Blockly.shortestStringLength(strings);
   var prefixLength = Blockly.commonWordPrefix(strings, shortest);
   var suffixLength = Blockly.commonWordSuffix(strings, shortest);
@@ -197,7 +223,7 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
     var text = options[x][0];
     var value = options[x][1];
     text = text.substring(prefixLength, text.length - suffixLength);
-    newOptions[x] = [text, value];
+    newOptions[x] = [ text, value ];
   }
   this.menuGenerator_ = newOptions;
 };
@@ -212,7 +238,7 @@ Blockly.FieldDropdown.prototype.getOptions_ = function() {
   if (goog.isFunction(this.menuGenerator_)) {
     return this.menuGenerator_.call(this);
   }
-  return /** @type {!Array.<!Array.<string>>} */ (this.menuGenerator_);
+  return /** @type {!Array.<!Array.<string>>} */(this.menuGenerator_);
 };
 
 /**
@@ -250,7 +276,7 @@ Blockly.FieldDropdown.prototype.setValue = function(newValue) {
 Blockly.FieldDropdown.prototype.setText = function(text) {
   if (this.sourceBlock_) {
     // Update arrow's colour.
-    this.arrow_.style.fill = this.sourceBlock_.getColour();
+    this.arrow_.style.fill = Blockly.makeColour(this.sourceBlock_.getColour());
   }
   if (text === null || text === this.text_) {
     // No change if null.

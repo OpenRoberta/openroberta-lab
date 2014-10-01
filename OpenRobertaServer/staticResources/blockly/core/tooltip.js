@@ -31,7 +31,6 @@
 
 goog.provide('Blockly.Tooltip');
 
-
 /**
  * Is a tooltip currently showing?
  */
@@ -58,7 +57,10 @@ Blockly.Tooltip.showPid_ = 0;
  * Last observed location of the mouse pointer (freezes when tooltip appears).
  * @private
  */
-Blockly.Tooltip.lastXY_ = {x: 0, y: 0};
+Blockly.Tooltip.lastXY_ = {
+  x : 0,
+  y : 0
+};
 
 /**
  * Current element being pointed at.
@@ -137,19 +139,26 @@ Blockly.Tooltip.createDom = function() {
     <rect class="blocklyTooltipBackground"/>
     <text class="blocklyTooltipText"></text>
   </g>
-  */
-  var svgGroup = /** @type {!SVGGElement} */ (
-      Blockly.createSvgElement('g', {'class': 'blocklyHidden'}, null));
+   */
+  var svgGroup = /** @type {!SVGGElement} */
+  (Blockly.createSvgElement('g', {
+    'class' : 'blocklyHidden'
+  }, null));
   Blockly.Tooltip.svgGroup_ = svgGroup;
-  Blockly.Tooltip.svgShadow_ = /** @type {!SVGRectElement} */ (
-      Blockly.createSvgElement(
-          'rect', {'class': 'blocklyTooltipShadow', 'x': 2, 'y': 2}, svgGroup));
-  Blockly.Tooltip.svgBackground_ = /** @type {!SVGRectElement} */ (
-      Blockly.createSvgElement(
-          'rect', {'class': 'blocklyTooltipBackground'}, svgGroup));
-  Blockly.Tooltip.svgText_ = /** @type {!SVGTextElement} */ (
-      Blockly.createSvgElement(
-          'text', {'class': 'blocklyTooltipText'}, svgGroup));
+  Blockly.Tooltip.svgShadow_ = /** @type {!SVGRectElement} */
+  (Blockly.createSvgElement('rect', {
+    'class' : 'blocklyTooltipShadow',
+    'x' : 2,
+    'y' : 2
+  }, svgGroup));
+  Blockly.Tooltip.svgBackground_ = /** @type {!SVGRectElement} */
+  (Blockly.createSvgElement('rect', {
+    'class' : 'blocklyTooltipBackground'
+  }, svgGroup));
+  Blockly.Tooltip.svgText_ = /** @type {!SVGTextElement} */
+  (Blockly.createSvgElement('text', {
+    'class' : 'blocklyTooltipText'
+  }, svgGroup));
   return svgGroup;
 };
 
@@ -196,10 +205,10 @@ Blockly.Tooltip.onMouseOut_ = function(e) {
   // event and kill it if a mouseOver is received immediately.
   // This way the task only fully executes if mousing into the void.
   Blockly.Tooltip.mouseOutPid_ = window.setTimeout(function() {
-        Blockly.Tooltip.element_ = null;
-        Blockly.Tooltip.poisonedElement_ = null;
-        Blockly.Tooltip.hide();
-      }, 1);
+    Blockly.Tooltip.element_ = null;
+    Blockly.Tooltip.poisonedElement_ = null;
+    Blockly.Tooltip.hide();
+  }, 1);
   window.clearTimeout(Blockly.Tooltip.showPid_);
 };
 
@@ -235,8 +244,8 @@ Blockly.Tooltip.onMouseMove_ = function(e) {
     window.clearTimeout(Blockly.Tooltip.showPid_);
     // Maybe this time the mouse will stay put.  Schedule showing of tooltip.
     Blockly.Tooltip.lastXY_ = Blockly.mouseToSvg(e);
-    Blockly.Tooltip.showPid_ =
-        window.setTimeout(Blockly.Tooltip.show_, Blockly.Tooltip.HOVER_MS);
+    Blockly.Tooltip.showPid_ = window.setTimeout(Blockly.Tooltip.show_,
+        Blockly.Tooltip.HOVER_MS);
   }
 };
 
@@ -264,7 +273,8 @@ Blockly.Tooltip.show_ = function() {
   }
   // Erase all existing text.
   goog.dom.removeChildren(
-      /** @type {!Element} */ (Blockly.Tooltip.svgText_));
+  /** @type {!Element} */
+  (Blockly.Tooltip.svgText_));
   // Get the new text.
   var tip = Blockly.Tooltip.element_.tooltip;
   if (goog.isFunction(tip)) {
@@ -274,8 +284,10 @@ Blockly.Tooltip.show_ = function() {
   // Create new text, line by line.
   var lines = tip.split('\n');
   for (var i = 0; i < lines.length; i++) {
-    var tspanElement = Blockly.createSvgElement('tspan',
-        {'dy': '1em', 'x': Blockly.Tooltip.MARGINS}, Blockly.Tooltip.svgText_);
+    var tspanElement = Blockly.createSvgElement('tspan', {
+      'dy' : '1em',
+      'x' : Blockly.Tooltip.MARGINS
+    }, Blockly.Tooltip.svgText_);
     var textNode = document.createTextNode(lines[i]);
     tspanElement.appendChild(textNode);
   }
@@ -294,8 +306,7 @@ Blockly.Tooltip.show_ = function() {
     // Right-align the paragraph.
     // This cannot be done until the tooltip is rendered on screen.
     var maxWidth = bBox.width;
-    for (var x = 0, textElement;
-         textElement = Blockly.Tooltip.svgText_.childNodes[x]; x++) {
+    for (var x = 0, textElement; textElement = Blockly.Tooltip.svgText_.childNodes[x]; x++) {
       textElement.setAttribute('text-anchor', 'end');
       textElement.setAttribute('x', maxWidth + Blockly.Tooltip.MARGINS);
     }
@@ -324,8 +335,8 @@ Blockly.Tooltip.show_ = function() {
       anchorX = svgSize.width - bBox.width - 2 * Blockly.Tooltip.MARGINS;
     }
   }
-  Blockly.Tooltip.svgGroup_.setAttribute('transform',
-      'translate(' + anchorX + ',' + anchorY + ')');
+  Blockly.Tooltip.svgGroup_.setAttribute('transform', 'translate(' + anchorX
+      + ',' + anchorY + ')');
 };
 
 /**
@@ -373,7 +384,7 @@ Blockly.Tooltip.wrap_ = function(text, limit) {
     score = Blockly.Tooltip.wrapScore_(words, wordBreaks, limit);
     text = Blockly.Tooltip.wrapToText_(words, wordBreaks);
     lineCount++;
-  } while (score > lastScore)
+  } while (score > lastScore);
   return lastText;
 };
 
@@ -388,7 +399,7 @@ Blockly.Tooltip.wrap_ = function(text, limit) {
 Blockly.Tooltip.wrapScore_ = function(words, wordBreaks, limit) {
   // If this function becomes a performance liability, add caching.
   // Compute the length of each line.
-  var lineLengths = [0];
+  var lineLengths = [ 0 ];
   var linePunctuation = [];
   for (var i = 0; i < words.length; i++) {
     lineLengths[lineLengths.length - 1] += words[i].length;
@@ -421,8 +432,8 @@ Blockly.Tooltip.wrapScore_ = function(words, wordBreaks, limit) {
   // previous line.  For example, this looks wrong:
   // aaa bbb
   // ccc ddd eee
-  if (lineLengths.length > 1 && lineLengths[lineLengths.length - 1] <=
-      lineLengths[lineLengths.length - 2]) {
+  if (lineLengths.length > 1
+      && lineLengths[lineLengths.length - 1] <= lineLengths[lineLengths.length - 2]) {
     score += 0.5;
   }
   return score;
@@ -448,8 +459,8 @@ Blockly.Tooltip.wrapMutate_ = function(words, wordBreaks, limit) {
     var mutatedWordBreaks = [].concat(wordBreaks);
     mutatedWordBreaks[i] = !mutatedWordBreaks[i];
     mutatedWordBreaks[i + 1] = !mutatedWordBreaks[i + 1];
-    var mutatedScore =
-        Blockly.Tooltip.wrapScore_(words, mutatedWordBreaks, limit);
+    var mutatedScore = Blockly.Tooltip.wrapScore_(words, mutatedWordBreaks,
+        limit);
     if (mutatedScore > bestScore) {
       bestScore = mutatedScore;
       bestBreaks = mutatedWordBreaks;

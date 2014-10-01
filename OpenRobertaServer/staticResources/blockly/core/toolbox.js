@@ -28,20 +28,19 @@ goog.provide('Blockly.Toolbox');
 
 goog.require('Blockly.Flyout');
 goog.require('goog.events.BrowserFeature');
+goog.require('goog.html.SafeHtml');
 goog.require('goog.style');
 goog.require('goog.ui.tree.TreeControl');
 goog.require('goog.ui.tree.TreeNode');
 
 /**
  * Width of the toolbox.
- * 
  * @type {number}
  */
 Blockly.Toolbox.width = 0;
 
 /**
  * The SVG group currently selected.
- * 
  * @type {SVGGElement}
  * @private
  */
@@ -56,7 +55,6 @@ Blockly.Toolbox.catcolor = null;
 
 /**
  * Configuration constants for Closure's tree UI.
- * 
  * @type {Object.<string,*>}
  * @const
  * @private
@@ -104,12 +102,9 @@ Blockly.Toolbox.createNodeHtml = function(catName, isSub) {
 };
 
 /**
- * Creates the toolbox's DOM. Only needs to be called once.
- * 
- * @param {!Element}
- *            svg The top-level SVG element.
- * @param {!Element}
- *            container The SVG's HTML parent element.
+ * Creates the toolbox's DOM.  Only needs to be called once.
+ * @param {!Element} svg The top-level SVG element.
+ * @param {!Element} container The SVG's HTML parent element.
  */
 Blockly.Toolbox.createDom = function(svg, container) {
   // Create an HTML container for the Toolbox menu.
@@ -144,7 +139,8 @@ Blockly.Toolbox.init = function() {
       + 'media/1x1.gif';
   Blockly.Toolbox.CONFIG_['cssCollapsedFolderIcon'] = 'blocklyTreeIconClosed'
       + (Blockly.RTL ? 'Rtl' : 'Ltr');
-  var tree = new Blockly.Toolbox.TreeControl('root', Blockly.Toolbox.CONFIG_);
+  var tree = new Blockly.Toolbox.TreeControl(goog.html.SafeHtml.EMPTY,
+      Blockly.Toolbox.CONFIG_);
   Blockly.Toolbox.tree_ = tree;
   tree.setShowRootNode(false);
   tree.setShowLines(false);
@@ -152,7 +148,7 @@ Blockly.Toolbox.init = function() {
   tree.setSelectedItem(null);
 
   Blockly.Toolbox.HtmlDiv.style.display = 'block';
-  Blockly.Toolbox.flyout_.init(Blockly.mainWorkspace, true);
+  Blockly.Toolbox.flyout_.init(Blockly.mainWorkspace);
   Blockly.Toolbox.populate_();
   tree.render(Blockly.Toolbox.HtmlDiv);
 
@@ -164,7 +160,6 @@ Blockly.Toolbox.init = function() {
 
 /**
  * Move the toolbox to the edge.
- * 
  * @private
  */
 Blockly.Toolbox.position_ = function() {
@@ -185,16 +180,8 @@ Blockly.Toolbox.position_ = function() {
   }
 };
 
-// function to get an RGB value out of the category color array
-// for example Blockly.CAT_ROBACTIONS_RGB is [242, 148, 9], not needed at the
-// moment
-/*
- * function getRGBvalue(i) { return Blockly.Toolbox.catcolor[i]; }
- */
-
 /**
  * Fill the toolbox with categories and blocks.
- * 
  * @private
  */
 Blockly.Toolbox.populate_ = function() {
@@ -305,15 +292,11 @@ Blockly.Toolbox.clearSelection = function() {
 
 /**
  * Extention of a TreeControl object that uses a custom tree node.
- * 
- * @param {string}
- *            html The HTML content of the node label.
- * @param {Object=}
- *            opt_config The configuration for the tree. See
- *            goog.ui.tree.TreeControl.DefaultConfig. If not specified, a
- *            default config will be used.
- * @param {goog.dom.DomHelper=}
- *            opt_domHelper Optional DOM helper.
+ * @param {!goog.html.SafeHtml} html The HTML content of the node label.
+ * @param {Object=} opt_config The configuration for the tree. See
+ *    goog.ui.tree.TreeControl.DefaultConfig. If not specified, a default config
+ *    will be used.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.tree.TreeControl}
  */
@@ -324,7 +307,6 @@ goog.inherits(Blockly.Toolbox.TreeControl, goog.ui.tree.TreeControl);
 
 /**
  * Adds touch handling to TreeControl.
- * 
  * @override
  */
 Blockly.Toolbox.TreeControl.prototype.enterDocument = function() {
@@ -339,9 +321,7 @@ Blockly.Toolbox.TreeControl.prototype.enterDocument = function() {
 };
 /**
  * Handles touch events.
- * 
- * @param {!goog.events.BrowserEvent}
- *            e The browser event.
+ * @param {!goog.events.BrowserEvent} e The browser event.
  * @private
  */
 Blockly.Toolbox.TreeControl.prototype.handleTouchEvent_ = function(e) {
@@ -358,22 +338,21 @@ Blockly.Toolbox.TreeControl.prototype.handleTouchEvent_ = function(e) {
 
 /**
  * Creates a new tree node using a custom tree node.
- * 
- * @param {string=}
- *            html The HTML content of the node label.
+ * @param {string=} html The HTML content of the node label.
  * @return {!goog.ui.tree.TreeNode} The new item.
  * @override
  */
 Blockly.Toolbox.TreeControl.prototype.createNode = function(opt_html) {
-  return new Blockly.Toolbox.TreeNode(opt_html || '', this.getConfig(), this
-      .getDomHelper());
+  return new Blockly.Toolbox.TreeNode(opt_html ? opt_html
+      : goog.html.SafeHtml.EMPTY,
+  // TODO
+  // goog.html.SafeHtml.from(opt_html) : goog.html.SafeHtml.EMPTY,
+  this.getConfig(), this.getDomHelper());
 };
 
 /**
  * Display/hide the flyout when an item is selected.
- * 
- * @param {goog.ui.tree.BaseNode}
- *            node The item to select.
+ * @param {goog.ui.tree.BaseNode} node The item to select.
  * @override
  */
 Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
@@ -391,15 +370,11 @@ Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
 
 /**
  * An single node in the tree, customized for Blockly's UI.
- * 
- * @param {string}
- *            html The html content of the node label.
- * @param {Object=}
- *            opt_config The configuration for the tree. See
- *            goog.ui.tree.TreeControl.DefaultConfig. If not specified, a
- *            default config will be used.
- * @param {goog.dom.DomHelper=}
- *            opt_domHelper Optional DOM helper.
+ * @param {!goog.html.SafeHtml} html The HTML content of the node label.
+ * @param {Object=} opt_config The configuration for the tree. See
+ *    goog.ui.tree.TreeControl.DefaultConfig. If not specified, a default config
+ *    will be used.
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper.
  * @constructor
  * @extends {goog.ui.tree.TreeNode}
  */
@@ -439,9 +414,7 @@ Blockly.Toolbox.TreeNode.prototype.getExpandIconElement = function() {
 
 /**
  * Expand or collapse the node on mouse click.
- * 
- * @param {!goog.events.BrowserEvent}
- *            e The browser event.
+ * @param {!goog.events.BrowserEvent} e The browser event.
  * @override
  */
 Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(e) {
@@ -459,9 +432,7 @@ Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(e) {
 
 /**
  * Supress the inherited double-click behaviour.
- * 
- * @param {!goog.events.BrowserEvent}
- *            e The browser event.
+ * @param {!goog.events.BrowserEvent} e The browser event.
  * @override
  * @private
  */

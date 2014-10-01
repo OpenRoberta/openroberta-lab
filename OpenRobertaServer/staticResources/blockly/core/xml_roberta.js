@@ -497,7 +497,7 @@ Blockly.Xml.domToPrettyText = function(dom) {
  *            xmlBlock XML block element.
  */
 Blockly.Xml.deleteNext = function(xmlBlock) {
-  xmlBlock.splice(0, xmlBlock.length-1);
+  xmlBlock.splice(0, xmlBlock.length - 1);
 };
 
 /**
@@ -514,8 +514,10 @@ Blockly.Xml.domToText = function(dom) {
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.
-Blockly['Xml'] = Blockly.Xml;
-Blockly.Xml['domToText'] = Blockly.Xml.domToText;
-Blockly.Xml['domToWorkspace'] = Blockly.Xml.domToWorkspace;
-Blockly.Xml['textToDom'] = Blockly.Xml.textToDom;
-Blockly.Xml['workspaceToDom'] = Blockly.Xml.workspaceToDom;
+if (!window['Blockly']['Xml']) {
+  window['Blockly']['Xml'] = {};
+}
+window['Blockly']['Xml']['domToText'] = Blockly.Xml.domToText;
+window['Blockly']['Xml']['domToWorkspace'] = Blockly.Xml.domToWorkspace;
+window['Blockly']['Xml']['textToDom'] = Blockly.Xml.textToDom;
+window['Blockly']['Xml']['workspaceToDom'] = Blockly.Xml.workspaceToDom;

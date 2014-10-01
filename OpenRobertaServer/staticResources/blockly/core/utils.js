@@ -28,7 +28,6 @@
 
 goog.provide('Blockly.utils');
 
-
 /**
  * Add a CSS class to a element.
  * Similar to Closure's goog.dom.classes.add, except it handles SVG elements.
@@ -85,7 +84,7 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
     func.apply(thisObject, arguments);
   };
   node.addEventListener(name, wrapFunc, false);
-  var bindData = [[node, name, wrapFunc]];
+  var bindData = [ [ node, name, wrapFunc ] ];
   // Add equivalent touch event.
   if (name in Blockly.bindEvent_.TOUCH_MAP) {
     wrapFunc = function(e) {
@@ -100,9 +99,10 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
       // Stop the browser from scrolling/zooming the page
       e.preventDefault();
     };
-    node.addEventListener(Blockly.bindEvent_.TOUCH_MAP[name],
-                             wrapFunc, false);
-    bindData.push([node, Blockly.bindEvent_.TOUCH_MAP[name], wrapFunc]);
+    for (var i = 0, eventName; eventName = Blockly.bindEvent_.TOUCH_MAP[name][i]; i++) {
+      node.addEventListener(eventName, wrapFunc, false);
+      bindData.push([ node, eventName, wrapFunc ]);
+    }
   }
   return bindData;
 };
@@ -115,9 +115,9 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
 Blockly.bindEvent_.TOUCH_MAP = {};
 if ('ontouchstart' in document.documentElement) {
   Blockly.bindEvent_.TOUCH_MAP = {
-    'mousedown': 'touchstart',
-    'mousemove': 'touchmove',
-    'mouseup': 'touchend'
+    'mousedown' : [ 'touchstart' ],
+    'mousemove' : [ 'touchmove' ],
+    'mouseup' : [ 'touchend', 'touchcancel' ]
   };
 }
 
@@ -149,7 +149,7 @@ Blockly.fireUiEventNow = function(node, eventName) {
   if (doc.createEvent) {
     // W3
     var evt = doc.createEvent('UIEvents');
-    evt.initEvent(eventName, true, true);  // event type, bubbling, cancelable
+    evt.initEvent(eventName, true, true); // event type, bubbling, cancelable
     node.dispatchEvent(evt);
   } else if (doc.createEventObject) {
     // MSIE
@@ -168,7 +168,7 @@ Blockly.fireUiEventNow = function(node, eventName) {
 Blockly.fireUiEvent = function(node, eventName) {
   var fire = function() {
     Blockly.fireUiEventNow(node, eventName);
-  }
+  };
   setTimeout(fire, 0);
 };
 
@@ -190,7 +190,10 @@ Blockly.noEvent = function(e) {
  * @private
  */
 Blockly.getRelativeXY_ = function(element) {
-  var xy = {x: 0, y: 0};
+  var xy = {
+    x : 0,
+    y : 0
+  };
   // First, check for x and y attributes.
   var x = element.getAttribute('x');
   if (x) {
@@ -206,8 +209,8 @@ Blockly.getRelativeXY_ = function(element) {
   // 'translate(12, 0)'.
   // Note that IE (9,10) returns 'translate(16 8)' instead of
   // 'translate(16, 8)'.
-  var r = transform &&
-          transform.match(/translate\(\s*([-\d.]+)([ ,]\s*([-\d.]+)\s*\))?/);
+  var r = transform
+      && transform.match(/translate\(\s*([-\d.]+)([ ,]\s*([-\d.]+)\s*\))?/);
   if (r) {
     xy.x += parseInt(r[1], 10);
     if (r[3]) {
@@ -234,7 +237,10 @@ Blockly.getSvgXY_ = function(element) {
     y += xy.y;
     element = element.parentNode;
   } while (element && element != Blockly.svg);
-  return {x: x, y: y};
+  return {
+    x : x,
+    y : y
+  };
 };
 
 /**
@@ -257,15 +263,15 @@ Blockly.getAbsoluteXY_ = function(element) {
  * @return {!SVGElement} Newly created SVG element.
  */
 Blockly.createSvgElement = function(name, attrs, opt_parent) {
-  var e = /** @type {!SVGElement} */ (
-      document.createElementNS(Blockly.SVG_NS, name));
-  for (var key in attrs) {
+  var e = /** @type {!SVGElement} */
+  (document.createElementNS(Blockly.SVG_NS, name));
+  for ( var key in attrs) {
     e.setAttribute(key, attrs[key]);
   }
   // IE defines a unique attribute "runtimeStyle", it is NOT applied to
   // elements created with createElementNS. However, Closure checks for IE
   // and assumes the presence of the attribute and crashes.
-  if (document.body.runtimeStyle) {  // Indicates presence of IE-only attr.
+  if (document.body.runtimeStyle) { // Indicates presence of IE-only attr.
     e.runtimeStyle = e.currentStyle = e.style;
   }
   if (opt_parent) {
@@ -321,8 +327,8 @@ Blockly.convertCoordinates = function(x, y, toSvg) {
 Blockly.mouseToSvg = function(e) {
   var scrollX = window.scrollX || window.pageXOffset;
   var scrollY = window.scrollY || window.pageYOffset;
-  return Blockly.convertCoordinates(e.clientX + scrollX,
-                                    e.clientY + scrollY, true);
+  return Blockly.convertCoordinates(e.clientX + scrollX, e.clientY + scrollY,
+      true);
 };
 
 /**
