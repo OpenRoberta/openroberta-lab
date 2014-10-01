@@ -74,8 +74,10 @@ function clearDraw(){
 
 // -------------------------------------
 // Dummy Controll TEST Input
+// ToDo: Simulator DIV itself needs its key listener 
+// Needs refactoring.
 //-------------------------------------
-
+/*
 $(document).keydown(function(e){
 	if (e.keyCode == 37) { 
 		moveLeft();		
@@ -118,7 +120,7 @@ $(document).keydown(function(e){
 		return false;
 	}
 });
-
+*/
 //--------------------------------------------
 // Functions for scrolling the background.
 //--------------------------------------------
