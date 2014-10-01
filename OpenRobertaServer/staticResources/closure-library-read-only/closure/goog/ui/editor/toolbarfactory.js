@@ -17,19 +17,18 @@
  * an editor toolbar.
  *
  * @author attila@google.com (Attila Bodis)
- * @author jparent@google.com (Julie Parent)
  */
 
 goog.provide('goog.ui.editor.ToolbarFactory');
 
 goog.require('goog.array');
 goog.require('goog.dom');
+goog.require('goog.dom.TagName');
 goog.require('goog.string');
 goog.require('goog.string.Unicode');
 goog.require('goog.style');
-goog.require('goog.ui.Component.State');
-goog.require('goog.ui.Container.Orientation');
-goog.require('goog.ui.ControlContent');
+goog.require('goog.ui.Component');
+goog.require('goog.ui.Container');
 goog.require('goog.ui.Option');
 goog.require('goog.ui.Toolbar');
 goog.require('goog.ui.ToolbarButton');
@@ -168,7 +167,7 @@ goog.ui.editor.ToolbarFactory.getLegacySizeFromPx = function(px) {
 
 /**
  * Map of legacy font sizes (0-7) to equivalent pixel sizes.
- * @type {Array.<number>}
+ * @type {!Array.<number>}
  * @private
  */
 goog.ui.editor.ToolbarFactory.LEGACY_SIZE_TO_PX_MAP_ =
@@ -431,7 +430,7 @@ goog.ui.editor.ToolbarFactory.createContent_ = function(caption, opt_classNames,
     opt_domHelper) {
   // FF2 doesn't like empty DIVs, especially when rendered right-to-left.
   if ((!caption || caption == '') && goog.userAgent.GECKO &&
-      !goog.userAgent.isVersion('1.9a')) {
+      !goog.userAgent.isVersionOrHigher('1.9a')) {
     caption = goog.string.Unicode.NBSP;
   }
   return (opt_domHelper || goog.dom.getDomHelper()).createDom(

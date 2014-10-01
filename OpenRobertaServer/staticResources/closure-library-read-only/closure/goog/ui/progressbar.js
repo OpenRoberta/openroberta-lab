@@ -26,11 +26,10 @@ goog.provide('goog.ui.ProgressBar.Orientation');
 goog.require('goog.a11y.aria');
 goog.require('goog.asserts');
 goog.require('goog.dom');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.ui.Component');
-goog.require('goog.ui.Component.EventType');
 goog.require('goog.ui.RangeModel');
 goog.require('goog.userAgent');
 
@@ -45,6 +44,9 @@ goog.require('goog.userAgent');
 goog.ui.ProgressBar = function(opt_domHelper) {
   goog.ui.Component.call(this, opt_domHelper);
 
+  /** @type {?HTMLDivElement} */
+  this.thumbElement_;
+
   /**
    * The underlying data model for the progress bar.
    * @type {goog.ui.RangeModel}
@@ -55,6 +57,7 @@ goog.ui.ProgressBar = function(opt_domHelper) {
                      this.handleChange_, false, this);
 };
 goog.inherits(goog.ui.ProgressBar, goog.ui.Component);
+goog.tagUnsealableClass(goog.ui.ProgressBar);
 
 
 /**
@@ -76,10 +79,10 @@ goog.ui.ProgressBar.Orientation = {
 goog.ui.ProgressBar.ORIENTATION_TO_CSS_NAME_ = {};
 goog.ui.ProgressBar.ORIENTATION_TO_CSS_NAME_[
     goog.ui.ProgressBar.Orientation.VERTICAL] =
-        goog.getCssName('progress-bar-vertical');
+    goog.getCssName('progress-bar-vertical');
 goog.ui.ProgressBar.ORIENTATION_TO_CSS_NAME_[
     goog.ui.ProgressBar.Orientation.HORIZONTAL] =
-        goog.getCssName('progress-bar-horizontal');
+    goog.getCssName('progress-bar-horizontal');
 
 
 /**
@@ -164,8 +167,9 @@ goog.ui.ProgressBar.prototype.detachEvents_ = function() {
  */
 goog.ui.ProgressBar.prototype.decorateInternal = function(element) {
   goog.ui.ProgressBar.superClass_.decorateInternal.call(this, element);
-  goog.dom.classes.add(this.getElement(), goog.ui.ProgressBar.
-      ORIENTATION_TO_CSS_NAME_[this.orientation_]);
+  goog.dom.classlist.add(
+      goog.asserts.assert(this.getElement()),
+      goog.ui.ProgressBar.ORIENTATION_TO_CSS_NAME_[this.orientation_]);
 
   // find thumb
   var thumb = goog.dom.getElementsByTagNameAndClass(
@@ -237,7 +241,7 @@ goog.ui.ProgressBar.prototype.setMinimum = function(v) {
 goog.ui.ProgressBar.prototype.setMinimumState_ = function() {
   var element = this.getElement();
   goog.asserts.assert(element,
-       'The progress bar DOM element cannot be null.');
+      'The progress bar DOM element cannot be null.');
   goog.a11y.aria.setState(element, 'valuemin', this.getMinimum());
 };
 
@@ -357,8 +361,9 @@ goog.ui.ProgressBar.prototype.setOrientation = function(orient) {
     this.orientation_ = orient;
 
     // Update the DOM
-    if (this.getElement()) {
-      goog.dom.classes.swap(this.getElement(), oldCss, newCss);
+    var element = this.getElement();
+    if (element) {
+      goog.dom.classlist.swap(element, oldCss, newCss);
       this.initializeUi_();
       this.updateUi_();
     }

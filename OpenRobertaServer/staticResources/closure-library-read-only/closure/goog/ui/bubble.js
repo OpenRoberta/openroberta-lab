@@ -24,20 +24,17 @@
 goog.provide('goog.ui.Bubble');
 
 goog.require('goog.Timer');
-goog.require('goog.dom');
 goog.require('goog.events');
-goog.require('goog.events.Event');
 goog.require('goog.events.EventType');
 goog.require('goog.math.Box');
 goog.require('goog.positioning');
 goog.require('goog.positioning.AbsolutePosition');
-goog.require('goog.positioning.AbstractPosition');
 goog.require('goog.positioning.AnchoredPosition');
 goog.require('goog.positioning.Corner');
+goog.require('goog.positioning.CornerBit');
 goog.require('goog.style');
 goog.require('goog.ui.Component');
 goog.require('goog.ui.Popup');
-goog.require('goog.ui.Popup.AnchoredPosition');
 
 
 
@@ -99,6 +96,7 @@ goog.ui.Bubble = function(message, opt_config, opt_domHelper) {
 
 };
 goog.inherits(goog.ui.Bubble, goog.ui.Component);
+goog.tagUnsealableClass(goog.ui.Bubble);
 
 
 /**
@@ -112,7 +110,7 @@ goog.ui.Bubble.prototype.timeout_ = null;
 
 /**
  * Key returned by the bubble timer.
- * @type {number}
+ * @type {?number}
  * @private
  */
 goog.ui.Bubble.prototype.timerId_ = 0;
@@ -261,7 +259,7 @@ goog.ui.Bubble.prototype.configureElement_ = function() {
   }
   var closeButton = this.getDomHelper().getElement(this.closeButtonId_);
   this.listener_ = goog.events.listen(closeButton,
-        goog.events.EventType.CLICK, this.hideBubble_, false, this);
+      goog.events.EventType.CLICK, this.hideBubble_, false, this);
 
   if (this.timeout_) {
     this.timerId_ = goog.Timer.callOnce(this.hideBubble_, this.timeout_, this);
@@ -281,7 +279,7 @@ goog.ui.Bubble.prototype.unconfigureElement_ = function() {
   }
   if (this.timerId_) {
     goog.Timer.clear(this.timerId_);
-    this.timerId = null;
+    this.timerId_ = null;
   }
 
   var element = this.getElement();
@@ -326,7 +324,7 @@ goog.ui.Bubble.prototype.hideBubble_ = function() {
  * given the position of the anchor element and the size of the viewport.
  *
  * @param {Element} anchorElement The element to which the bubble is attached.
- * @return {goog.ui.Popup.AnchoredPosition} The AnchoredPosition to give to
+ * @return {!goog.ui.Popup.AnchoredPosition} The AnchoredPosition to give to
  *     {@link #setPosition}.
  */
 goog.ui.Bubble.prototype.getComputedAnchoredPosition = function(anchorElement) {
@@ -370,7 +368,7 @@ goog.ui.Bubble.prototype.computePinnedCorner_ = function(anchorElement) {
  * button anchor element on its frame rather than on the corner.
  *
  * @param {goog.positioning.Corner} corner The corner.
- * @return {goog.math.Box} the computed margin. Only left or right fields are
+ * @return {!goog.math.Box} the computed margin. Only left or right fields are
  *     non-zero, but they may be negative.
  * @private
  */
@@ -428,7 +426,7 @@ goog.ui.Bubble.prototype.computeHtmlForCorner_ = function(corner) {
       '<tr>' +
       '<td class="' + this.config_.cssBubbleLeft + '">' +
       '<td class="' + this.config_.cssBubbleFont + '"' +
-      ' style="padding:0 4;background:white">' + message +
+      ' style="padding:0 4px;background:white">' + message +
       '<td id="' + this.closeButtonId_ + '"' +
       ' class="' + this.config_.cssCloseButton + '"/>' +
       '<td class="' + this.config_.cssBubbleRight + '">' +

@@ -33,7 +33,7 @@ goog.dom.BrowserFeature = {
    * created. False in Internet Explorer prior to version 9.
    */
   CAN_ADD_NAME_OR_TYPE_ATTRIBUTES: !goog.userAgent.IE ||
-      goog.userAgent.isDocumentMode(9),
+      goog.userAgent.isDocumentModeOrHigher(9),
 
   /**
    * Whether we can use element.children to access an element's Element
@@ -41,14 +41,15 @@ goog.dom.BrowserFeature = {
    * nodes in the collection.)
    */
   CAN_USE_CHILDREN_ATTRIBUTE: !goog.userAgent.GECKO && !goog.userAgent.IE ||
-      goog.userAgent.IE && goog.userAgent.isDocumentMode(9) ||
-      goog.userAgent.GECKO && goog.userAgent.isVersion('1.9.1'),
+      goog.userAgent.IE && goog.userAgent.isDocumentModeOrHigher(9) ||
+      goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9.1'),
 
   /**
    * Opera, Safari 3, and Internet Explorer 9 all support innerText but they
    * include text nodes in script and style tags. Not document-mode-dependent.
    */
-  CAN_USE_INNER_TEXT: goog.userAgent.IE && !goog.userAgent.isVersion('9'),
+  CAN_USE_INNER_TEXT: (
+      goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9')),
 
   /**
    * MSIE, Opera, and Safari>=4 support element.parentElement to access an
@@ -62,5 +63,10 @@ goog.dom.BrowserFeature = {
    * innerHTML.
    * MSDN: http://msdn.microsoft.com/en-us/library/ms533897(VS.85).aspx#1
    */
-  INNER_HTML_NEEDS_SCOPED_ELEMENT: goog.userAgent.IE
+  INNER_HTML_NEEDS_SCOPED_ELEMENT: goog.userAgent.IE,
+
+  /**
+   * Whether we use legacy IE range API.
+   */
+  LEGACY_IE_RANGES: goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9)
 };

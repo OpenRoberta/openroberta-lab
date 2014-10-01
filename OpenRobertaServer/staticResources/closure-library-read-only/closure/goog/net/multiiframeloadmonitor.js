@@ -18,6 +18,7 @@
  */
 goog.provide('goog.net.MultiIframeLoadMonitor');
 
+goog.require('goog.events');
 goog.require('goog.net.IframeLoadMonitor');
 
 
@@ -33,6 +34,7 @@ goog.require('goog.net.IframeLoadMonitor');
  * @param {boolean=} opt_hasContent true if the monitor should wait until the
  *     iframes have content (body.firstChild != null).
  * @constructor
+ * @final
  */
 goog.net.MultiIframeLoadMonitor = function(iframes, callback, opt_hasContent) {
   /**
@@ -52,7 +54,7 @@ goog.net.MultiIframeLoadMonitor = function(iframes, callback, opt_hasContent) {
 
   for (var i = 0; i < iframes.length; i++) {
     var iframeLoadMonitor = new goog.net.IframeLoadMonitor(
-      iframes[i], opt_hasContent);
+        iframes[i], opt_hasContent);
     if (iframeLoadMonitor.isLoaded()) {
       // Already loaded - don't need to wait
       iframeLoadMonitor.dispose();
@@ -62,7 +64,7 @@ goog.net.MultiIframeLoadMonitor = function(iframes, callback, opt_hasContent) {
       // required.
       this.pendingIframeLoadMonitors_.push(iframeLoadMonitor);
       goog.events.listen(
-        iframeLoadMonitor, goog.net.IframeLoadMonitor.LOAD_EVENT, this);
+          iframeLoadMonitor, goog.net.IframeLoadMonitor.LOAD_EVENT, this);
     }
   }
   if (!this.pendingIframeLoadMonitors_.length) {

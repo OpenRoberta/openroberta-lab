@@ -30,6 +30,7 @@ goog.provide('goog.db.KeyRange');
  *
  * @param {!IDBKeyRange} range Underlying IDBKeyRange object.
  * @constructor
+ * @final
  */
 goog.db.KeyRange = function(range) {
   /**
@@ -104,4 +105,14 @@ goog.db.KeyRange.lowerBound = function(lower, opt_lowerOpen) {
 goog.db.KeyRange.upperBound = function(upper, opt_upperOpen) {
   return new goog.db.KeyRange(goog.db.KeyRange.IDB_KEY_RANGE_.upperBound(
       upper, opt_upperOpen));
+};
+
+
+/**
+ * Returns underlying key range object. This is used in ObjectStore's openCursor
+ * and count methods.
+ * @return {!IDBKeyRange}
+ */
+goog.db.KeyRange.prototype.range = function() {
+  return this.range_;
 };

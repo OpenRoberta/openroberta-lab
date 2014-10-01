@@ -16,11 +16,13 @@
  * @fileoverview A delayed callback that pegs to the next animation frame
  * instead of a user-configurable timeout.
  *
+ * @author nicksantos@google.com (Nick Santos)
  */
 
 goog.provide('goog.async.AnimationDelay');
 
-goog.require('goog.async.Delay');
+goog.require('goog.Disposable');
+goog.require('goog.events');
 goog.require('goog.functions');
 
 
@@ -29,6 +31,8 @@ goog.require('goog.functions');
 // goog.async.Delay? I'm not sure if there's enough code for this to really
 // make sense. Subclassing seems like the wrong approach for a variety of
 // reasons. Maybe there should be a common interface?
+
+
 
 /**
  * A delayed callback that pegs to the next animation frame
@@ -49,9 +53,10 @@ goog.require('goog.functions');
  * @param {Object=} opt_handler The object scope to invoke the function in.
  * @constructor
  * @extends {goog.Disposable}
+ * @final
  */
 goog.async.AnimationDelay = function(listener, opt_window, opt_handler) {
-  goog.base(this);
+  goog.async.AnimationDelay.base(this, 'constructor');
 
   /**
    * The function that will be invoked after a delay.
@@ -231,7 +236,7 @@ goog.async.AnimationDelay.prototype.doAction_ = function() {
 /** @override */
 goog.async.AnimationDelay.prototype.disposeInternal = function() {
   this.stop();
-  goog.base(this, 'disposeInternal');
+  goog.async.AnimationDelay.base(this, 'disposeInternal');
 };
 
 

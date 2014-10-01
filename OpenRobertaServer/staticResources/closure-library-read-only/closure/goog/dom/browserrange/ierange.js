@@ -18,23 +18,18 @@
  * DO NOT USE THIS FILE DIRECTLY.  Use goog.dom.Range instead.
  *
  * @author robbyw@google.com (Robby Walker)
- * @author ojan@google.com (Ojan Vafai)
- * @author jparent@google.com (Julie Parent)
  */
 
 
 goog.provide('goog.dom.browserrange.IeRange');
 
 goog.require('goog.array');
-goog.require('goog.debug.Logger');
 goog.require('goog.dom');
-goog.require('goog.dom.NodeIterator');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.RangeEndpoint');
 goog.require('goog.dom.TagName');
 goog.require('goog.dom.browserrange.AbstractRange');
-goog.require('goog.iter');
-goog.require('goog.iter.StopIteration');
+goog.require('goog.log');
 goog.require('goog.string');
 
 
@@ -45,6 +40,7 @@ goog.require('goog.string');
  * @param {Document} doc The document the range exists in.
  * @constructor
  * @extends {goog.dom.browserrange.AbstractRange}
+ * @final
  */
 goog.dom.browserrange.IeRange = function(range, doc) {
   /**
@@ -67,17 +63,17 @@ goog.inherits(goog.dom.browserrange.IeRange,
 
 /**
  * Logging object.
- * @type {goog.debug.Logger}
+ * @type {goog.log.Logger}
  * @private
  */
 goog.dom.browserrange.IeRange.logger_ =
-    goog.debug.Logger.getLogger('goog.dom.browserrange.IeRange');
+    goog.log.getLogger('goog.dom.browserrange.IeRange');
 
 
 /**
  * Returns a browser range spanning the given node's contents.
  * @param {Node} node The node to select.
- * @return {TextRange} A browser range spanning the node's contents.
+ * @return {!TextRange} A browser range spanning the node's contents.
  * @private
  */
 goog.dom.browserrange.IeRange.getBrowserRangeForNode_ = function(node) {
@@ -133,7 +129,7 @@ goog.dom.browserrange.IeRange.getBrowserRangeForNode_ = function(node) {
  * @param {number} startOffset The offset within the start node.
  * @param {Node} endNode The node to end with.
  * @param {number} endOffset The offset within the end node.
- * @return {TextRange} A browser range spanning the node's contents.
+ * @return {!TextRange} A browser range spanning the node's contents.
  * @private
  */
 goog.dom.browserrange.IeRange.getBrowserRangeForNodes_ = function(startNode,
@@ -142,7 +138,7 @@ goog.dom.browserrange.IeRange.getBrowserRangeForNodes_ = function(startNode,
   var child, collapse = false;
   if (startNode.nodeType == goog.dom.NodeType.ELEMENT) {
     if (startOffset > startNode.childNodes.length) {
-      goog.dom.browserrange.IeRange.logger_.severe(
+      goog.log.error(goog.dom.browserrange.IeRange.logger_,
           'Cannot have startOffset > startNode child count');
     }
     child = startNode.childNodes[startOffset];
@@ -178,7 +174,7 @@ goog.dom.browserrange.IeRange.getBrowserRangeForNodes_ = function(startNode,
   collapse = false;
   if (endNode.nodeType == goog.dom.NodeType.ELEMENT) {
     if (endOffset > endNode.childNodes.length) {
-      goog.dom.browserrange.IeRange.logger_.severe(
+      goog.log.error(goog.dom.browserrange.IeRange.logger_,
           'Cannot have endOffset > endNode child count');
     }
     child = endNode.childNodes[endOffset];
@@ -202,7 +198,7 @@ goog.dom.browserrange.IeRange.getBrowserRangeForNodes_ = function(startNode,
 /**
  * Create a range object that selects the given node's text.
  * @param {Node} node The node to select.
- * @return {goog.dom.browserrange.IeRange} An IE range wrapper object.
+ * @return {!goog.dom.browserrange.IeRange} An IE range wrapper object.
  */
 goog.dom.browserrange.IeRange.createFromNodeContents = function(node) {
   var range = new goog.dom.browserrange.IeRange(
@@ -246,7 +242,7 @@ goog.dom.browserrange.IeRange.createFromNodeContents = function(node) {
  * @param {number} startOffset The offset within the start node.
  * @param {Node} endNode The node to end with.
  * @param {number} endOffset The offset within the end node.
- * @return {goog.dom.browserrange.AbstractRange} A wrapper object.
+ * @return {!goog.dom.browserrange.AbstractRange} A wrapper object.
  */
 goog.dom.browserrange.IeRange.createFromNodes = function(startNode,
     startOffset, endNode, endOffset) {
@@ -307,7 +303,7 @@ goog.dom.browserrange.IeRange.prototype.endOffset_ = -1;
 
 
 /**
- * @return {goog.dom.browserrange.IeRange} A clone of this range.
+ * @return {!goog.dom.browserrange.IeRange} A clone of this range.
  * @override
  */
 goog.dom.browserrange.IeRange.prototype.clone = function() {
@@ -436,7 +432,7 @@ goog.dom.browserrange.IeRange.prototype.findDeepestContainer_ = function(node) {
       var inChildRange = isNativeInRangeErratic ?
           (this.compareBrowserRangeEndpoints(childRange, start, start) >= 0 &&
               this.compareBrowserRangeEndpoints(childRange, start, end) <= 0) :
-           this.range_.inRange(childRange);
+          this.range_.inRange(childRange);
       if (inChildRange) {
         return this.findDeepestContainer_(child);
       }
@@ -809,7 +805,7 @@ goog.dom.browserrange.IeRange.prototype.removeContents = function() {
 
 /**
  * @param {TextRange} range The range to get a dom helper for.
- * @return {goog.dom.DomHelper} A dom helper for the document the range
+ * @return {!goog.dom.DomHelper} A dom helper for the document the range
  *     resides in.
  * @private
  */

@@ -22,8 +22,7 @@
 goog.provide('goog.ui.ToggleButton');
 
 goog.require('goog.ui.Button');
-goog.require('goog.ui.Component.State');
-goog.require('goog.ui.ControlContent');
+goog.require('goog.ui.Component');
 goog.require('goog.ui.CustomButtonRenderer');
 goog.require('goog.ui.registry');
 
@@ -38,7 +37,7 @@ goog.require('goog.ui.registry');
  *     structure to display as the button's caption.
  * @param {goog.ui.ButtonRenderer=} opt_renderer Renderer used to render or
  *     decorate the button; defaults to {@link goog.ui.CustomButtonRenderer}.
- * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM hepler, used for
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
  *     document interaction.
  * @constructor
  * @extends {goog.ui.Button}
@@ -53,7 +52,7 @@ goog.inherits(goog.ui.ToggleButton, goog.ui.Button);
 
 // Register a decorator factory function for goog.ui.ToggleButtons.
 goog.ui.registry.setDecoratorByClassName(
-  goog.getCssName('goog-toggle-button'), function() {
-  // ToggleButton defaults to using CustomButtonRenderer.
-  return new goog.ui.ToggleButton(null);
-});
+    goog.getCssName('goog-toggle-button'), function() {
+      // ToggleButton defaults to using CustomButtonRenderer.
+      return new goog.ui.ToggleButton(null);
+    });

@@ -94,14 +94,12 @@ goog.provide('goog.ui.ac.InputHandler');
 goog.require('goog.Disposable');
 goog.require('goog.Timer');
 goog.require('goog.a11y.aria');
-goog.require('goog.asserts');
 goog.require('goog.dom');
 goog.require('goog.dom.selection');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventType');
 goog.require('goog.events.KeyCodes');
 goog.require('goog.events.KeyHandler');
-goog.require('goog.events.KeyHandler.EventType');
 goog.require('goog.string');
 goog.require('goog.userAgent');
 goog.require('goog.userAgent.product');
@@ -148,6 +146,13 @@ goog.ui.ac.InputHandler = function(opt_separators, opt_literals,
   this.literals_ = opt_literals || '';
 
   /**
+   * Whether to prevent highlighted item selection when tab is pressed.
+   * @type {boolean}
+   * @private
+   */
+  this.preventSelectionOnTab_ = false;
+
+  /**
    * Whether to prevent the default behavior (moving focus to another element)
    * when tab is pressed.  This occurs by default only for multi-value mode.
    * @type {boolean}
@@ -170,14 +175,14 @@ goog.ui.ac.InputHandler = function(opt_separators, opt_literals,
 
   /**
    * Event handler used by the input handler to manage events.
-   * @type {goog.events.EventHandler}
+   * @type {goog.events.EventHandler.<!goog.ui.ac.InputHandler>}
    * @private
    */
   this.eh_ = new goog.events.EventHandler(this);
 
   /**
    * Event handler to help us find an input element that already has the focus.
-   * @type {goog.events.EventHandler}
+   * @type {goog.events.EventHandler.<!goog.ui.ac.InputHandler>}
    * @private
    */
   this.activateHandler_ = new goog.events.EventHandler(this);
@@ -211,7 +216,7 @@ goog.inherits(goog.ui.ac.InputHandler, goog.Disposable);
 goog.ui.ac.InputHandler.REQUIRES_ASYNC_BLUR_ =
     (goog.userAgent.product.IPHONE || goog.userAgent.product.IPAD) &&
         // Check the webkit version against the version for iOS 4.2.1.
-        !goog.userAgent.isVersion('533.17.9');
+        !goog.userAgent.isVersionOrHigher('533.17.9');
 
 
 /**
@@ -517,7 +522,9 @@ goog.ui.ac.InputHandler.prototype.detachInputs = function(var_args) {
  * @return {boolean} Whether to suppress the update event.
  */
 goog.ui.ac.InputHandler.prototype.selectRow = function(row, opt_multi) {
-  this.setTokenText(row.toString(), opt_multi);
+  if (this.activeElement_) {
+    this.setTokenText(row.toString(), opt_multi);
+  }
   return false;
 };
 
@@ -577,7 +584,7 @@ goog.ui.ac.InputHandler.prototype.setTokenText =
       // to detect. Since text editing is finicky we restrict this
       // workaround to Firefox and IE 9 where it's necessary.
       if (goog.userAgent.GECKO ||
-          (goog.userAgent.IE && goog.userAgent.isVersion('9'))) {
+          (goog.userAgent.IE && goog.userAgent.isVersionOrHigher('9'))) {
         el.blur();
       }
       // Join the array and replace the contents of the input.
@@ -613,6 +620,7 @@ goog.ui.ac.InputHandler.prototype.disposeInternal = function() {
   delete this.eh_;
   this.activateHandler_.dispose();
   this.keyHandler_.dispose();
+  goog.dispose(this.timer_);
 };
 
 
@@ -620,10 +628,14 @@ goog.ui.ac.InputHandler.prototype.disposeInternal = function() {
  * Sets the entry separator characters.
  *
  * @param {string} separators The separator characters to set.
+ * @param {string=} opt_defaultSeparators The defaultSeparator character to set.
  */
-goog.ui.ac.InputHandler.prototype.setSeparators = function(separators) {
+goog.ui.ac.InputHandler.prototype.setSeparators =
+    function(separators, opt_defaultSeparators) {
   this.separators_ = separators;
-  this.defaultSeparator_ = this.separators_.substring(0, 1);
+  this.defaultSeparator_ =
+      goog.isDefAndNotNull(opt_defaultSeparators) ?
+      opt_defaultSeparators : this.separators_.substring(0, 1);
 
   var wspaceExp = this.multi_ ? '[\\s' + this.separators_ + ']+' : '[\\s]+';
 
@@ -683,6 +695,16 @@ goog.ui.ac.InputHandler.prototype.setTrimmingRegExp = function(trimmer) {
  */
 goog.ui.ac.InputHandler.prototype.setPreventDefaultOnTab = function(newValue) {
   this.preventDefaultOnTab_ = newValue;
+};
+
+
+/**
+ * Sets whether we will prevent highlighted item selection on TAB.
+ * @param {boolean} newValue Whether to prevent selection on TAB.
+ */
+goog.ui.ac.InputHandler.prototype.setPreventSelectionOnTab =
+    function(newValue) {
+  this.preventSelectionOnTab_ = newValue;
 };
 
 
@@ -800,7 +822,7 @@ goog.ui.ac.InputHandler.prototype.handleKeyEvent = function(e) {
     // action is also prevented if the input is a multi input, to prevent the
     // user tabbing out of the field.
     case goog.events.KeyCodes.TAB:
-      if (this.ac_.isOpen() && !e.shiftKey) {
+      if (this.ac_.isOpen() && !e.shiftKey && !this.preventSelectionOnTab_) {
         // Ensure the menu is up to date before completing.
         this.update();
         if (this.ac_.selectHilited() && this.preventDefaultOnTab_) {
@@ -997,19 +1019,19 @@ goog.ui.ac.InputHandler.prototype.handleBlur = function(opt_e) {
     // In order to fix the bug, we set a timeout to process the blur event, so
     // that any pending selection event can be processed first.
     this.activeTimeoutId_ =
-        window.setTimeout(goog.bind(this.processBlur_, this), 0);
+        window.setTimeout(goog.bind(this.processBlur, this), 0);
     return;
   } else {
-    this.processBlur_();
+    this.processBlur();
   }
 };
 
 
 /**
  * Helper function that does the logic to handle an element blurring.
- * @private
+ * @protected
  */
-goog.ui.ac.InputHandler.prototype.processBlur_ = function() {
+goog.ui.ac.InputHandler.prototype.processBlur = function() {
   // it's possible that a blur event could fire when there's no active element,
   // in the case where attachInput was called on an input that already had
   // the focus
@@ -1269,7 +1291,7 @@ goog.ui.ac.InputHandler.prototype.getTokenIndex_ = function(text, caret) {
  * entries.
  *
  * @param {string} text Input text.
- * @return {Array} Parsed array.
+ * @return {!Array.<string>} Parsed array.
  * @private
  */
 goog.ui.ac.InputHandler.prototype.splitInput_ = function(text) {

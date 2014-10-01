@@ -17,6 +17,7 @@
  * @suppress {deprecated} Use goog.i18n instead.
  */
 
+/** @suppress {extraProvide} */
 goog.provide('goog.locale.TimeZoneList');
 
 goog.require('goog.locale');
@@ -27,8 +28,8 @@ goog.require('goog.locale');
  * the current locale, selected based on the region or language provided.
  *
  * This method depends on goog.locale.TimeZone*__<locale> available
- * from http://go/js_locale_data. User of this method
- * has to add dependacy to this.
+ * from http://go/js_locale_data. Users of this method must add a dependency on
+ * this.
  *
  * @param {string=} opt_regionOrLang If region tag is provided, timezone ids
  *    specific this region are considered. If language is provided, all regions
@@ -36,7 +37,7 @@ goog.require('goog.locale');
  *    this parameter is not speficied, current locale is used to
  *    extract this information.
  *
- * @return {Array.<Object>} Localized and relevant list of timezone names
+ * @return {!Array.<Object>} Localized and relevant list of timezone names
  *    and ids.
  */
 goog.locale.getTimeZoneSelectedShortNames = function(opt_regionOrLang) {
@@ -50,8 +51,8 @@ goog.locale.getTimeZoneSelectedShortNames = function(opt_regionOrLang) {
  * the current locale, selected based on the region or language provided.
  *
  * This method depends on goog.locale.TimeZone*__<locale> available
- * from http://go/js_locale_data. User of this method
- * has to add dependacy to this.
+ * from http://go/js_locale_data. Users of this method must add a dependency on
+ * this.
  *
  * @param {string=} opt_regionOrLang If region tag is provided, timezone ids
  *    specific this region are considered. If language is provided, all regions
@@ -59,7 +60,7 @@ goog.locale.getTimeZoneSelectedShortNames = function(opt_regionOrLang) {
  *    this parameter is not speficied, current locale is used to
  *    extract this information.
  *
- * @return {Array.<Object>} Localized and relevant list of timezone names
+ * @return {!Array.<Object>} Localized and relevant list of timezone names
  *    and ids.
  */
 goog.locale.getTimeZoneSelectedLongNames = function(opt_regionOrLang) {
@@ -73,15 +74,15 @@ goog.locale.getTimeZoneSelectedLongNames = function(opt_regionOrLang) {
  * the current locale.
  *
  * This method depends on goog.locale.TimeZoneAllLongNames__<locale> available
- * from http://go/js_locale_data. User of this method
- * has to add dependacy to this.
+ * from http://go/js_locale_data. Users of this method must add a dependency on
+ * this.
  *
  * @return {Array.<Object>} localized and relevant list of timezone names
  *    and ids.
  */
 goog.locale.getTimeZoneAllLongNames = function() {
   var locale = goog.locale.getLocale();
-  return /** @type {Array} */ (
+  return /** @type {Array.<Object>} */ (
       goog.locale.getResource('TimeZoneAllLongNames', locale));
 };
 
@@ -91,8 +92,8 @@ goog.locale.getTimeZoneAllLongNames = function() {
  * the current locale, selected based on the region or language provided.
  *
  * This method depends on goog.locale.TimeZone*__<locale> available
- * from http://go/js_locale_data. User of this method
- * has to add dependacy to this.
+ * from http://go/js_locale_data. Users of this method must add a dependency on
+ * this.
  *
  * @param {string} nameType Resource name to be loaded to get the names.
  *
@@ -101,7 +102,7 @@ goog.locale.getTimeZoneAllLongNames = function() {
  *    for which this language is defacto official is considered. If it is
  *    undefined, current locale is used to extract this information.
  *
- * @return {Array.<Object>} Localized and relevant list of timezone names
+ * @return {!Array.<Object>} Localized and relevant list of timezone names
  *    and ids.
  * @private
  */
@@ -111,7 +112,7 @@ goog.locale.getTimeZoneNameList_ = function(nameType, opt_resource) {
   if (!opt_resource) {
     opt_resource = goog.locale.getRegionSubTag(locale);
   }
-    // if there is no region subtag, use the language itself as the resource
+  // if there is no region subtag, use the language itself as the resource
   if (!opt_resource) {
     opt_resource = locale;
   }

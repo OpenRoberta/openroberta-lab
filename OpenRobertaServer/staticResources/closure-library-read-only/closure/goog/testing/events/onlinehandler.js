@@ -28,19 +28,20 @@ goog.require('goog.net.NetworkStatusMonitor');
  * NetworkStatusMonitor test double.
  * @param {boolean} initialState The initial online state of the mock.
  * @constructor
- * @extends {goog.net.NetworkStatusMonitor}
+ * @extends {goog.events.EventTarget}
+ * @implements {goog.net.NetworkStatusMonitor}
+ * @final
  */
 goog.testing.events.OnlineHandler = function(initialState) {
-  goog.base(this);
+  goog.testing.events.OnlineHandler.base(this, 'constructor');
 
   /**
    * Whether the mock is online.
-   * @type {boolean}
-   * @private
+   * @private {boolean}
    */
   this.online_ = initialState;
 };
-goog.inherits(goog.testing.events.OnlineHandler, goog.net.NetworkStatusMonitor);
+goog.inherits(goog.testing.events.OnlineHandler, goog.events.EventTarget);
 
 
 /** @override */

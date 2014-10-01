@@ -21,10 +21,16 @@
 goog.provide('goog.ui.PaletteRenderer');
 
 goog.require('goog.a11y.aria');
+goog.require('goog.a11y.aria.Role');
+goog.require('goog.a11y.aria.State');
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.NodeIterator');
 goog.require('goog.dom.NodeType');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.TagName');
+goog.require('goog.dom.classlist');
+goog.require('goog.iter');
 goog.require('goog.style');
 goog.require('goog.ui.ControlRenderer');
 goog.require('goog.userAgent');
@@ -81,15 +87,17 @@ goog.ui.PaletteRenderer.CSS_CLASS = goog.getCssName('goog-palette');
  * renderer's own CSS class and additional state-specific classes applied to
  * it.
  * @param {goog.ui.Control} palette goog.ui.Palette to render.
- * @return {Element} Root element for the palette.
+ * @return {!Element} Root element for the palette.
  * @override
  */
 goog.ui.PaletteRenderer.prototype.createDom = function(palette) {
   var classNames = this.getClassNames(palette);
-  return palette.getDomHelper().createDom(
-      'div', classNames ? classNames.join(' ') : null,
+  var element = palette.getDomHelper().createDom(
+      goog.dom.TagName.DIV, classNames ? classNames.join(' ') : null,
       this.createGrid(/** @type {Array.<Node>} */(palette.getContent()),
           palette.getSize(), palette.getDomHelper()));
+  goog.a11y.aria.setRole(element, goog.a11y.aria.Role.GRID);
+  return element;
 };
 
 
@@ -123,16 +131,15 @@ goog.ui.PaletteRenderer.prototype.createGrid = function(items, size, dom) {
  * Returns a table element (or equivalent) that wraps the given rows.
  * @param {Array.<Element>} rows Array of row elements.
  * @param {goog.dom.DomHelper} dom DOM helper for document interaction.
- * @return {Element} Palette table element.
+ * @return {!Element} Palette table element.
  */
 goog.ui.PaletteRenderer.prototype.createTable = function(rows, dom) {
-  var table = dom.createDom('table',
+  var table = dom.createDom(goog.dom.TagName.TABLE,
       goog.getCssName(this.getCssClass(), 'table'),
-      dom.createDom('tbody', goog.getCssName(this.getCssClass(), 'body'),
-          rows));
+      dom.createDom(goog.dom.TagName.TBODY,
+          goog.getCssName(this.getCssClass(), 'body'), rows));
   table.cellSpacing = 0;
   table.cellPadding = 0;
-  goog.a11y.aria.setRole(table, 'grid');
   return table;
 };
 
@@ -141,10 +148,13 @@ goog.ui.PaletteRenderer.prototype.createTable = function(rows, dom) {
  * Returns a table row element (or equivalent) that wraps the given cells.
  * @param {Array.<Element>} cells Array of cell elements.
  * @param {goog.dom.DomHelper} dom DOM helper for document interaction.
- * @return {Element} Row element.
+ * @return {!Element} Row element.
  */
 goog.ui.PaletteRenderer.prototype.createRow = function(cells, dom) {
-  return dom.createDom('tr', goog.getCssName(this.getCssClass(), 'row'), cells);
+  var row = dom.createDom(goog.dom.TagName.TR,
+      goog.getCssName(this.getCssClass(), 'row'), cells);
+  goog.a11y.aria.setRole(row, goog.a11y.aria.Role.ROW);
+  return row;
 };
 
 
@@ -153,17 +163,47 @@ goog.ui.PaletteRenderer.prototype.createRow = function(cells, dom) {
  * item (which must be a DOM node).
  * @param {Node|string} node Palette item.
  * @param {goog.dom.DomHelper} dom DOM helper for document interaction.
- * @return {Element} Cell element.
+ * @return {!Element} Cell element.
  */
 goog.ui.PaletteRenderer.prototype.createCell = function(node, dom) {
-  var cell = dom.createDom('td', {
+  var cell = dom.createDom(goog.dom.TagName.TD, {
     'class': goog.getCssName(this.getCssClass(), 'cell'),
     // Cells must have an ID, for accessibility, so we generate one here.
     'id': goog.getCssName(this.getCssClass(), 'cell-') +
         goog.ui.PaletteRenderer.cellId_++
   }, node);
-  goog.a11y.aria.setRole(cell, 'gridcell');
+  goog.a11y.aria.setRole(cell, goog.a11y.aria.Role.GRIDCELL);
+  // Initialize to an unselected state.
+  goog.a11y.aria.setState(cell, goog.a11y.aria.State.SELECTED, false);
+
+  if (!goog.dom.getTextContent(cell) && !goog.a11y.aria.getLabel(cell)) {
+    var ariaLabelForCell = this.findAriaLabelForCell_(cell);
+    if (ariaLabelForCell) {
+      goog.a11y.aria.setLabel(cell, ariaLabelForCell);
+    }
+  }
   return cell;
+};
+
+
+/**
+ * Descends the DOM and tries to find an aria label for a grid cell
+ * from the first child with a label or title.
+ * @param {!Element} cell The cell.
+ * @return {string} The label to use.
+ * @private
+ */
+goog.ui.PaletteRenderer.prototype.findAriaLabelForCell_ = function(cell) {
+  var iter = new goog.dom.NodeIterator(cell);
+  var label = '';
+  var node;
+  while (!label && (node = goog.iter.nextOrValue(iter, null))) {
+    if (node.nodeType == goog.dom.NodeType.ELEMENT) {
+      label = goog.a11y.aria.getLabel(/** @type {!Element} */ (node)) ||
+          node.title;
+    }
+  }
+  return label;
 };
 
 
@@ -207,8 +247,8 @@ goog.ui.PaletteRenderer.prototype.decorate = function(palette, element) {
 goog.ui.PaletteRenderer.prototype.setContent = function(element, content) {
   var items = /** @type {Array.<Node>} */ (content);
   if (element) {
-    var tbody = goog.dom.getElementsByTagNameAndClass(
-        'tbody', goog.getCssName(this.getCssClass(), 'body'), element)[0];
+    var tbody = goog.dom.getElementsByTagNameAndClass(goog.dom.TagName.TBODY,
+        goog.getCssName(this.getCssClass(), 'body'), element)[0];
     if (tbody) {
       var index = 0;
       goog.array.forEach(tbody.rows, function(row) {
@@ -262,8 +302,8 @@ goog.ui.PaletteRenderer.prototype.setContent = function(element, content) {
 goog.ui.PaletteRenderer.prototype.getContainingItem = function(palette, node) {
   var root = palette.getElement();
   while (node && node.nodeType == goog.dom.NodeType.ELEMENT && node != root) {
-    if (node.tagName == 'TD' && goog.dom.classes.has(
-        /** @type {Element} */ (node),
+    if (node.tagName == goog.dom.TagName.TD && goog.dom.classlist.contains(
+        /** @type {!Element} */ (node),
         goog.getCssName(this.getCssClass(), 'cell'))) {
       return node.firstChild;
     }
@@ -286,14 +326,30 @@ goog.ui.PaletteRenderer.prototype.highlightCell = function(palette,
                                                            node,
                                                            highlight) {
   if (node) {
-    var cell = /** @type {Element} */ (node.parentNode);
-    goog.dom.classes.enable(cell,
+    var cell = this.getCellForItem(node);
+    goog.asserts.assert(cell);
+    goog.dom.classlist.enable(cell,
         goog.getCssName(this.getCssClass(), 'cell-hover'), highlight);
     // See http://www.w3.org/TR/2006/WD-aria-state-20061220/#activedescendent
     // for an explanation of the activedescendent.
-    var table = /** @type {!Element} */ (palette.getElement().firstChild);
-    goog.a11y.aria.setState(table, 'activedescendent', cell.id);
+    if (highlight) {
+      goog.a11y.aria.setState(palette.getElementStrict(),
+          goog.a11y.aria.State.ACTIVEDESCENDANT, cell.id);
+    } else if (cell.id == goog.a11y.aria.getState(palette.getElementStrict(),
+        goog.a11y.aria.State.ACTIVEDESCENDANT)) {
+      goog.a11y.aria.removeState(palette.getElementStrict(),
+          goog.a11y.aria.State.ACTIVEDESCENDANT);
+    }
   }
+};
+
+
+/**
+ * @param {Node} node Item whose cell is to be returned.
+ * @return {Element} The grid cell for the palette item.
+ */
+goog.ui.PaletteRenderer.prototype.getCellForItem = function(node) {
+  return /** @type {Element} */ (node ? node.parentNode : null);
 };
 
 
@@ -307,10 +363,11 @@ goog.ui.PaletteRenderer.prototype.highlightCell = function(palette,
  */
 goog.ui.PaletteRenderer.prototype.selectCell = function(palette, node, select) {
   if (node) {
-    var cell = /** @type {Element} */ (node.parentNode);
-    goog.dom.classes.enable(cell,
+    var cell = /** @type {!Element} */ (node.parentNode);
+    goog.dom.classlist.enable(cell,
         goog.getCssName(this.getCssClass(), 'cell-selected'),
         select);
+    goog.a11y.aria.setState(cell, goog.a11y.aria.State.SELECTED, select);
   }
 };
 

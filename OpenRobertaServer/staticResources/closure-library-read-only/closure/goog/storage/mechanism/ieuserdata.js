@@ -40,14 +40,15 @@ goog.require('goog.userAgent');
  *     one will be created if not provided.
  * @constructor
  * @extends {goog.storage.mechanism.IterableMechanism}
+ * @final
  */
 goog.storage.mechanism.IEUserData = function(storageKey, opt_storageNodeId) {
-  goog.base(this);
+  goog.storage.mechanism.IEUserData.base(this, 'constructor');
 
   // Tested on IE6, IE7 and IE8. It seems that IE9 introduces some security
   // features which make persistent (loaded) node attributes invisible from
   // JavaScript.
-  if (goog.userAgent.IE && !goog.userAgent.isDocumentMode(9)) {
+  if (goog.userAgent.IE && !goog.userAgent.isDocumentModeOrHigher(9)) {
     if (!goog.storage.mechanism.IEUserData.storageMap_) {
       goog.storage.mechanism.IEUserData.storageMap_ = new goog.structs.Map();
     }
@@ -273,7 +274,7 @@ goog.storage.mechanism.IEUserData.prototype.saveNode_ = function() {
 /**
  * Returns the storage node.
  *
- * @return {Element} Storage DOM Element.
+ * @return {!Element} Storage DOM Element.
  * @private
  */
 goog.storage.mechanism.IEUserData.prototype.getNode_ = function() {

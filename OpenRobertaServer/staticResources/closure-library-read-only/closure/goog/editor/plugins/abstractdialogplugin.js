@@ -17,7 +17,6 @@
  * Trogedit dialog has its own plugin.
  *
  * @author nicksantos@google.com (Nick Santos)
- * @author marcosalmeida@google.com (Marcos Almeida)
  */
 
 goog.provide('goog.editor.plugins.AbstractDialogPlugin');
@@ -264,7 +263,7 @@ goog.editor.plugins.AbstractDialogPlugin.prototype.disposeOriginalSelection =
 goog.editor.plugins.AbstractDialogPlugin.prototype.disposeInternal =
     function() {
   this.disposeDialog_();
-  goog.base(this, 'disposeInternal');
+  goog.editor.plugins.AbstractDialogPlugin.base(this, 'disposeInternal');
 };
 
 

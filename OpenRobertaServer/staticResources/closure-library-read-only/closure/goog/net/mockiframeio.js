@@ -18,9 +18,10 @@
 
 goog.provide('goog.net.MockIFrameIo');
 goog.require('goog.events.EventTarget');
+goog.require('goog.json');
 goog.require('goog.net.ErrorCode');
+goog.require('goog.net.EventType');
 goog.require('goog.net.IframeIo');
-goog.require('goog.net.IframeIo.IncrementalDataEvent');
 
 
 
@@ -31,6 +32,7 @@ goog.require('goog.net.IframeIo.IncrementalDataEvent');
  *     events.
  * @constructor
  * @extends {goog.events.EventTarget}
+ * @final
  */
 goog.net.MockIFrameIo = function(testQueue) {
   goog.events.EventTarget.call(this);
@@ -94,6 +96,18 @@ goog.net.MockIFrameIo.prototype.lastCustomError_ = null;
 goog.net.MockIFrameIo.prototype.lastUri_ = null;
 
 
+/** @private {Function} */
+goog.net.MockIFrameIo.prototype.errorChecker_;
+
+
+/** @private {boolean} */
+goog.net.MockIFrameIo.prototype.success_;
+
+
+/** @private {boolean} */
+goog.net.MockIFrameIo.prototype.complete_;
+
+
 /**
  * Simulates the iframe send.
  *
@@ -125,7 +139,7 @@ goog.net.MockIFrameIo.prototype.send = function(uri, opt_method, opt_noCache,
  *     caching.
  */
 goog.net.MockIFrameIo.prototype.sendFromForm = function(form, opt_uri,
-     opt_noCache) {
+    opt_noCache) {
   if (this.active_) {
     throw Error('[goog.net.IframeIo] Unable to send, already active.');
   }
@@ -292,27 +306,3 @@ goog.net.MockIFrameIo.prototype.setErrorChecker = function(fn) {
 goog.net.MockIFrameIo.prototype.getErrorChecker = function() {
   return this.errorChecker_;
 };
-
-
-/**
- * Returns the number of milliseconds after which an incomplete request will be
- * aborted, or 0 if no timeout is set.
- * @return {number} Timeout interval in milliseconds.
- */
-goog.net.MockIFrameIo.prototype.getTimeoutInterval = function() {
-  return this.timeoutInterval_;
-};
-
-
-/**
- * Sets the number of milliseconds after which an incomplete request will be
- * aborted and a {@link goog.net.EventType.TIMEOUT} event raised; 0 means no
- * timeout is set.
- * @param {number} ms Timeout interval in milliseconds; 0 means none.
- */
-goog.net.MockIFrameIo.prototype.setTimeoutInterval = function(ms) {
-  // TODO (pupius) - never used - doesn't look like timeouts were implemented
-  this.timeoutInterval_ = Math.max(0, ms);
-};
-
-

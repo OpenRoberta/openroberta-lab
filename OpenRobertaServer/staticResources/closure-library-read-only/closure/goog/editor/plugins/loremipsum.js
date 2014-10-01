@@ -17,6 +17,7 @@
  * empty and does not have the focus. Applies to both editable and uneditable
  * fields.
  *
+ * @author nicksantos@google.com (Nick Santos)
  */
 
 goog.provide('goog.editor.plugins.LoremIpsum');
@@ -35,6 +36,7 @@ goog.require('goog.functions');
  * @param {string} message The lorem ipsum message.
  * @constructor
  * @extends {goog.editor.Plugin}
+ * @final
  */
 goog.editor.plugins.LoremIpsum = function(message) {
   goog.editor.Plugin.call(this);

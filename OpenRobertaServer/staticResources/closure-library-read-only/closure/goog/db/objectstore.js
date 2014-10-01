@@ -41,6 +41,11 @@ goog.require('goog.events');
  *
  * @param {!IDBObjectStore} store The backing IndexedDb object.
  * @constructor
+ *
+ * TODO(user): revisit msg in exception and errors in this class. In newer
+ *     Chrome (v22+) the error/request come with a DOM error string that is
+ *     already very descriptive.
+ * @final
  */
 goog.db.ObjectStore = function(store) {
   /**
@@ -277,36 +282,9 @@ goog.db.ObjectStore.prototype.getAll = function(opt_range, opt_direction) {
  *     moves in a forward direction with duplicates.
  * @return {!goog.db.Cursor} The cursor.
  * @throws {goog.db.Error} If there was a problem opening the cursor.
- * @suppress {accessControls}
  */
 goog.db.ObjectStore.prototype.openCursor = function(opt_range, opt_direction) {
-  var msg = 'opening cursor ' + this.getName();
-  var cursor = new goog.db.Cursor();
-  var request;
-
-  try {
-    var range = opt_range ? opt_range.range_ : null;
-    if (opt_direction) {
-      request = this.store_.openCursor(range, opt_direction);
-    } else {
-      request = this.store_.openCursor(range);
-    }
-  } catch (ex) {
-    cursor.dispose();
-    throw goog.db.Error.fromException(ex, msg);
-  }
-  request.onsuccess = function(ev) {
-    cursor.cursor_ = ev.target.result || null;
-    if (cursor.cursor_) {
-      cursor.dispatchEvent(goog.db.Cursor.EventType.NEW_DATA);
-    } else {
-      cursor.dispatchEvent(goog.db.Cursor.EventType.COMPLETE);
-    }
-  };
-  request.onerror = function(ev) {
-    cursor.dispatchEvent(goog.db.Cursor.EventType.ERROR);
-  };
-  return cursor;
+  return goog.db.Cursor.openCursor(this.store_, opt_range, opt_direction);
 };
 
 
@@ -345,7 +323,7 @@ goog.db.ObjectStore.prototype.clear = function() {
  *     available option is unique, which defaults to false. If unique is true,
  *     the index will enforce that there is only ever one object in the object
  *     store for each unique value it indexes on.
- * @return {goog.db.Index} The newly created, wrapped index.
+ * @return {!goog.db.Index} The newly created, wrapped index.
  * @throws {goog.db.Error} In case of an error creating the index.
  */
 goog.db.ObjectStore.prototype.createIndex = function(
@@ -364,7 +342,7 @@ goog.db.ObjectStore.prototype.createIndex = function(
  * Gets an index.
  *
  * @param {string} name Name of the index to fetch.
- * @return {goog.db.Index} The requested wrapped index.
+ * @return {!goog.db.Index} The requested wrapped index.
  * @throws {goog.db.Error} In case of an error getting the index.
  */
 goog.db.ObjectStore.prototype.getIndex = function(name) {
@@ -392,3 +370,31 @@ goog.db.ObjectStore.prototype.deleteIndex = function(name) {
     throw goog.db.Error.fromException(ex, msg);
   }
 };
+
+
+/**
+ * Gets number of records within a key range.
+ *
+ * @param {!goog.db.KeyRange=} opt_range The key range. If undefined, this will
+ *     count all records in the object store.
+ * @return {!goog.async.Deferred} The deferred number of records.
+ */
+goog.db.ObjectStore.prototype.count = function(opt_range) {
+  var request;
+  var d = new goog.async.Deferred();
+
+  try {
+    var range = opt_range ? opt_range.range() : null;
+    request = this.store_.count(range);
+  } catch (ex) {
+    d.errback(goog.db.Error.fromException(ex, this.getName()));
+  }
+  request.onsuccess = function(ev) {
+    d.callback(ev.target.result);
+  };
+  request.onerror = function(ev) {
+    d.errback(goog.db.Error.fromRequest(ev.target, this.getName()));
+  };
+  return d;
+};
+

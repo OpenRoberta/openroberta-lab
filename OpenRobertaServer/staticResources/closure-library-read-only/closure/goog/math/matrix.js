@@ -21,6 +21,7 @@ goog.provide('goog.math.Matrix');
 goog.require('goog.array');
 goog.require('goog.math');
 goog.require('goog.math.Size');
+goog.require('goog.string');
 
 
 
@@ -49,12 +50,14 @@ goog.require('goog.math.Size');
  * @param {number=} opt_n Number of columns of the matrix (only applicable if
  *     the first argument is also numeric).
  * @constructor
+ * @final
  */
 goog.math.Matrix = function(m, opt_n) {
   if (m instanceof goog.math.Matrix) {
     this.array_ = m.toArray();
   } else if (goog.isArrayLike(m) &&
-             goog.math.Matrix.isValidArray(/** @type {!Array} */ (m))) {
+             goog.math.Matrix.isValidArray(
+                 /** @type {Array.<!Array.<number>>} */ (m))) {
     this.array_ = goog.array.clone(/** @type {!Array.<!Array.<number>>} */ (m));
   } else if (m instanceof goog.math.Size) {
     this.array_ = goog.math.Matrix.createZeroPaddedArray_(m.height, m.width);
@@ -112,7 +115,7 @@ goog.math.Matrix.forEach = function(matrix, fn, opt_obj) {
 /**
  * Tests whether an array is a valid matrix.  A valid array is an array of
  * arrays where all arrays are of the same length and all elements are numbers.
- * @param {Array} arr An array to test.
+ * @param {Array.<!Array.<number>>} arr An array to test.
  * @return {boolean} Whether the array is a valid matrix.
  */
 goog.math.Matrix.isValidArray = function(arr) {

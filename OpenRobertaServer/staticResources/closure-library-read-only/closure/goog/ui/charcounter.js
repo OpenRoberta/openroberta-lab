@@ -36,14 +36,15 @@ goog.require('goog.events.InputHandler');
  *
  * @extends {goog.events.EventTarget}
  * @param {HTMLInputElement|HTMLTextAreaElement} elInput Input or text area
- *     element to count the number of characters in.  You can pass in null
- *     for this if you don't want to expose the number of chars remaining.
+ *     element to count the number of characters in.
  * @param {Element} elCount HTML element to display the remaining number of
- *     characters in.
+ *     characters in. You can pass in null for this if you don't want to expose
+ *     the number of chars remaining.
  * @param {number} maxLength The maximum length.
  * @param {goog.ui.CharCounter.Display=} opt_displayMode Display mode for this
  *     char counter. Defaults to {@link goog.ui.CharCounter.Display.REMAINING}.
  * @constructor
+ * @final
  */
 goog.ui.CharCounter = function(elInput, elCount, maxLength, opt_displayMode) {
   goog.events.EventTarget.call(this);
@@ -76,7 +77,7 @@ goog.ui.CharCounter = function(elInput, elCount, maxLength, opt_displayMode) {
    */
   this.display_ = opt_displayMode || goog.ui.CharCounter.Display.REMAINING;
 
-  elInput.maxLength = maxLength;
+  elInput.removeAttribute('maxlength');
 
   /**
    * The input handler that provides the input event.
@@ -88,7 +89,7 @@ goog.ui.CharCounter = function(elInput, elCount, maxLength, opt_displayMode) {
   goog.events.listen(this.inputHandler_,
       goog.events.InputHandler.EventType.INPUT, this.onChange_, false, this);
 
-  this.checkLength_();
+  this.checkLength();
 };
 goog.inherits(goog.ui.CharCounter, goog.events.EventTarget);
 
@@ -112,8 +113,7 @@ goog.ui.CharCounter.Display = {
  */
 goog.ui.CharCounter.prototype.setMaxLength = function(maxLength) {
   this.maxLength_ = maxLength;
-  this.elInput_.maxLength = maxLength;
-  this.checkLength_();
+  this.checkLength();
 };
 
 
@@ -134,7 +134,7 @@ goog.ui.CharCounter.prototype.getMaxLength = function() {
  */
 goog.ui.CharCounter.prototype.setDisplayMode = function(displayMode) {
   this.display_ = displayMode;
-  this.checkLength_();
+  this.checkLength();
 };
 
 
@@ -155,17 +155,15 @@ goog.ui.CharCounter.prototype.getDisplayMode = function() {
  * @private
  */
 goog.ui.CharCounter.prototype.onChange_ = function(event) {
-  this.checkLength_();
+  this.checkLength();
 };
 
 
 /**
  * Checks length of text in input field and updates the counter. Truncates text
  * if the maximum lengths is exceeded.
- *
- * @private
  */
-goog.ui.CharCounter.prototype.checkLength_ = function() {
+goog.ui.CharCounter.prototype.checkLength = function() {
   var count = this.elInput_.value.length;
 
   // There's no maxlength property for textareas so instead we truncate the

@@ -15,14 +15,15 @@
 /**
  * @fileoverview Plugin to handle enter keys.
  *
+ * @author robbyw@google.com (Robby Walker)
  */
 
 goog.provide('goog.editor.plugins.EnterHandler');
 
 goog.require('goog.dom');
-goog.require('goog.dom.AbstractRange');
 goog.require('goog.dom.NodeOffset');
 goog.require('goog.dom.NodeType');
+goog.require('goog.dom.Range');
 goog.require('goog.dom.TagName');
 goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Plugin');
@@ -31,6 +32,8 @@ goog.require('goog.editor.plugins.Blockquote');
 goog.require('goog.editor.range');
 goog.require('goog.editor.style');
 goog.require('goog.events.KeyCodes');
+goog.require('goog.functions');
+goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.userAgent');
 
@@ -71,7 +74,7 @@ goog.editor.plugins.EnterHandler.prototype.getTrogClassId = function() {
 
 /** @override */
 goog.editor.plugins.EnterHandler.prototype.enable = function(fieldObject) {
-  goog.base(this, 'enable', fieldObject);
+  goog.editor.plugins.EnterHandler.base(this, 'enable', fieldObject);
 
   if (goog.editor.BrowserFeature.SUPPORTS_OPERA_DEFAULTBLOCK_COMMAND &&
       (this.tag == goog.dom.TagName.P || this.tag == goog.dom.TagName.DIV)) {
@@ -477,7 +480,7 @@ goog.editor.plugins.EnterHandler.prototype.ensureBlockIeOpera = function(tag,
   }
 
 
-  if (goog.userAgent.IE && !goog.userAgent.isVersion(9)) {
+  if (goog.userAgent.IE && !goog.userAgent.isVersionOrHigher(9)) {
     // IE (before IE9) has a bug where if the cursor is directly before a block
     // node (e.g., the content is "foo[cursor]<blockquote>bar</blockquote>"),
     // the FormatBlock command actually formats the "bar" instead of the "foo".
@@ -524,7 +527,7 @@ goog.editor.plugins.EnterHandler.prototype.ensureBlockIeOpera = function(tag,
 
 /**
  * Deletes the content at the current cursor position.
- * @return {Node|Object} Something representing the current cursor position.
+ * @return {!Node|!Object} Something representing the current cursor position.
  *    See deleteCursorSelectionIE_ and deleteCursorSelectionW3C_ for details.
  *    Should be passed to releasePositionObject_ when no longer in use.
  * @private
@@ -551,7 +554,7 @@ goog.editor.plugins.EnterHandler.prototype.releasePositionObject_ =
 /**
  * Delete the selection at the current cursor position, then returns a temporary
  * node at the current position.
- * @return {Node} A temporary node marking the current cursor position. This
+ * @return {!Node} A temporary node marking the current cursor position. This
  *     node should eventually be removed from the DOM.
  * @private
  */
@@ -571,7 +574,7 @@ goog.editor.plugins.EnterHandler.prototype.deleteCursorSelectionIE_ =
 /**
  * Delete the selection at the current cursor position, then returns the node
  * at the current position.
- * @return {goog.editor.range.Point} The current cursor position. Note that
+ * @return {!goog.editor.range.Point} The current cursor position. Note that
  *    unlike simulateEnterIE_, this should not be removed from the DOM.
  * @private
  */

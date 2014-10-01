@@ -39,10 +39,9 @@
  * re-encoding.
  *
  * Uses features of RFC 3986 for parsing/formatting URIs:
- *   http://gbiv.com/protocols/uri/rfc/rfc3986.html
+ *   http://www.ietf.org/rfc/rfc3986.txt
  *
  * @author gboyer@google.com (Garrett Boyer) - The "lightened" design.
- * @author msamuel@google.com (Mike Samuel) - Domain knowledge and regexes.
  */
 
 goog.provide('goog.uri.utils');
@@ -127,7 +126,7 @@ goog.uri.utils.buildFromEncodedParts = function(opt_scheme, opt_userInfo,
 /**
  * A regular expression for breaking a URI into its component parts.
  *
- * {@link http://www.gbiv.com/protocols/uri/rfc/rfc3986.html#RFC2234} says
+ * {@link http://www.ietf.org/rfc/rfc3986.txt} says in Appendix B
  * As the "first-match-wins" algorithm is identical to the "greedy"
  * disambiguation method used by POSIX regular expressions, it is natural and
  * commonplace to use a regular expression for parsing the potential five
@@ -189,19 +188,19 @@ goog.uri.utils.buildFromEncodedParts = function(opt_scheme, opt_userInfo,
 goog.uri.utils.splitRe_ = new RegExp(
     '^' +
     '(?:' +
-      '([^:/?#.]+)' +                     // scheme - ignore special characters
-                                          // used by other URL parts such as :,
-                                          // ?, /, #, and .
+        '([^:/?#.]+)' +                  // scheme - ignore special characters
+                                         // used by other URL parts such as :,
+                                         // ?, /, #, and .
     ':)?' +
     '(?://' +
-      '(?:([^/?#]*)@)?' +                 // userInfo
-      '([^/#?]*?)' +                      // domain
-      '(?::([0-9]+))?' +                  // port
-      '(?=[/#?]|$)' +                     // authority-terminating character
+        '(?:([^/?#]*)@)?' +              // userInfo
+        '([^/#?]*?)' +                   // domain
+        '(?::([0-9]+))?' +               // port
+        '(?=[/#?]|$)' +                  // authority-terminating character
     ')?' +
-    '([^?#]+)?' +                         // path
-    '(?:\\?([^#]*))?' +                   // query
-    '(?:#(.*))?' +                        // fragment
+    '([^?#]+)?' +                        // path
+    '(?:\\?([^#]*))?' +                  // query
+    '(?:#(.*))?' +                       // fragment
     '$');
 
 
@@ -236,6 +235,7 @@ goog.uri.utils.ComponentIndex = {
  *     arbitrary strings may still look like path names.
  */
 goog.uri.utils.split = function(uri) {
+  goog.uri.utils.phishingProtection_();
 
   // See @return comment -- never null.
   return /** @type {!Array.<string|undefined>} */ (
@@ -243,15 +243,71 @@ goog.uri.utils.split = function(uri) {
 };
 
 
+/**
+ * Safari has a nasty bug where if you have an http URL with a username, e.g.,
+ * http://evil.com%2F@google.com/
+ * Safari will report that window.location.href is
+ * http://evil.com/google.com/
+ * so that anyone who tries to parse the domain of that URL will get
+ * the wrong domain. We've seen exploits where people use this to trick
+ * Safari into loading resources from evil domains.
+ *
+ * To work around this, we run a little "Safari phishing check", and throw
+ * an exception if we see this happening.
+ *
+ * There is no convenient place to put this check. We apply it to
+ * anyone doing URI parsing on Webkit. We're not happy about this, but
+ * it fixes the problem.
+ *
+ * This should be removed once Safari fixes their bug.
+ *
+ * Exploit reported by Masato Kinugawa.
+ *
+ * @type {boolean}
+ * @private
+ */
+goog.uri.utils.needsPhishingProtection_ = goog.userAgent.WEBKIT;
+
+
+/**
+ * Check to see if the user is being phished.
+ * @private
+ */
+goog.uri.utils.phishingProtection_ = function() {
+  if (goog.uri.utils.needsPhishingProtection_) {
+    // Turn protection off, so that we don't recurse.
+    goog.uri.utils.needsPhishingProtection_ = false;
+
+    // Use quoted access, just in case the user isn't using location externs.
+    var location = goog.global['location'];
+    if (location) {
+      var href = location['href'];
+      if (href) {
+        var domain = goog.uri.utils.getDomain(href);
+        if (domain && domain != location['hostname']) {
+          // Phishing attack
+          goog.uri.utils.needsPhishingProtection_ = true;
+          throw Error();
+        }
+      }
+    }
+  }
+};
 
 
 /**
  * @param {?string} uri A possibly null string.
+ * @param {boolean=} opt_preserveReserved If true, percent-encoding of RFC-3986
+ *     reserved characters will not be removed.
  * @return {?string} The string URI-decoded, or null if uri is null.
  * @private
  */
-goog.uri.utils.decodeIfPossible_ = function(uri) {
-  return uri && decodeURIComponent(uri);
+goog.uri.utils.decodeIfPossible_ = function(uri, opt_preserveReserved) {
+  if (!uri) {
+    return uri;
+  }
+
+  return opt_preserveReserved ? decodeURI(uri) : decodeURIComponent(uri);
 };
 
 
@@ -337,7 +393,8 @@ goog.uri.utils.getDomainEncoded = function(uri) {
  * @return {?string} The decoded domain, or null if none.
  */
 goog.uri.utils.getDomain = function(uri) {
-  return goog.uri.utils.decodeIfPossible_(goog.uri.utils.getDomainEncoded(uri));
+  return goog.uri.utils.decodeIfPossible_(
+      goog.uri.utils.getDomainEncoded(uri), true /* opt_preserveReserved */);
 };
 
 
@@ -372,7 +429,8 @@ goog.uri.utils.getPathEncoded = function(uri) {
  *     slash, if any.
  */
 goog.uri.utils.getPath = function(uri) {
-  return goog.uri.utils.decodeIfPossible_(goog.uri.utils.getPathEncoded(uri));
+  return goog.uri.utils.decodeIfPossible_(
+      goog.uri.utils.getPathEncoded(uri), true /* opt_preserveReserved */);
 };
 
 
@@ -471,7 +529,7 @@ goog.uri.utils.removeFragment = function(uri) {
  *
  * @param {string} uri1 The first URI.
  * @param {string} uri2 The second URI.
- * @return {boolean} Whether they have the same domain and port.
+ * @return {boolean} Whether they have the same scheme, domain and port.
  */
 goog.uri.utils.haveSameDomain = function(uri1, uri2) {
   var pieces1 = goog.uri.utils.split(uri1);
@@ -641,7 +699,7 @@ goog.uri.utils.buildQueryDataBuffer_ = function(
  * @param {goog.uri.utils.QueryArray} keysAndValues Alternating keys and
  *     values.  See the typedef.
  * @param {number=} opt_startIndex A start offset into the arary, defaults to 0.
- * @return {string} The encoded query string, in the for 'a=1&b=2'.
+ * @return {string} The encoded query string, in the form 'a=1&b=2'.
  */
 goog.uri.utils.buildQueryData = function(keysAndValues, opt_startIndex) {
   var buffer = goog.uri.utils.buildQueryDataBuffer_(
@@ -678,7 +736,7 @@ goog.uri.utils.buildQueryDataBufferFromMap_ = function(buffer, map) {
  * @param {Object} map An object where keys are URI-encoded parameter keys,
  *     and the values are arbitrary types or arrays.  Keys with a null value
  *     are dropped.
- * @return {string} The encoded query string, in the for 'a=1&b=2'.
+ * @return {string} The encoded query string, in the form 'a=1&b=2'.
  */
 goog.uri.utils.buildQueryDataFromMap = function(map) {
   var buffer = goog.uri.utils.buildQueryDataBufferFromMap_([], map);
@@ -745,13 +803,17 @@ goog.uri.utils.appendParamsFromMap = function(uri, map) {
  *
  * @param {string} uri The original URI, which may already have query data.
  * @param {string} key The key, which must already be URI encoded.
- * @param {*} value The value, which will be stringized and encoded (assumed
- *     not already to be encoded).
+ * @param {*=} opt_value The value, which will be stringized and encoded
+ *     (assumed not already to be encoded).  If omitted, undefined, or null, the
+ *     key will be added as a valueless parameter.
  * @return {string} The URI with the query parameter added.
  */
-goog.uri.utils.appendParam = function(uri, key, value) {
-  return goog.uri.utils.appendQueryData_(
-      [uri, '&', key, '=', goog.string.urlEncode(value)]);
+goog.uri.utils.appendParam = function(uri, key, opt_value) {
+  var paramArr = [uri, '&', key];
+  if (goog.isDefAndNotNull(opt_value)) {
+    paramArr.push('=', goog.string.urlEncode(opt_value));
+  }
+  return goog.uri.utils.appendQueryData_(paramArr);
 };
 
 
@@ -972,6 +1034,29 @@ goog.uri.utils.appendPath = function(baseUri, path) {
     path = path.substr(1);
   }
   return goog.string.buildString(baseUri, '/', path);
+};
+
+
+/**
+ * Replaces the path.
+ * @param {string} uri URI to use as the base.
+ * @param {string} path New path.
+ * @return {string} Updated URI.
+ */
+goog.uri.utils.setPath = function(uri, path) {
+  // Add any missing '/'.
+  if (!goog.string.startsWith(path, '/')) {
+    path = '/' + path;
+  }
+  var parts = goog.uri.utils.split(uri);
+  return goog.uri.utils.buildFromEncodedParts(
+      parts[goog.uri.utils.ComponentIndex.SCHEME],
+      parts[goog.uri.utils.ComponentIndex.USER_INFO],
+      parts[goog.uri.utils.ComponentIndex.DOMAIN],
+      parts[goog.uri.utils.ComponentIndex.PORT],
+      path,
+      parts[goog.uri.utils.ComponentIndex.QUERY_DATA],
+      parts[goog.uri.utils.ComponentIndex.FRAGMENT]);
 };
 
 

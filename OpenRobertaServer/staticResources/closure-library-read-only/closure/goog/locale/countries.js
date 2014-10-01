@@ -32,7 +32,7 @@ goog.provide('goog.locale.countries');
 
 /**
  * List of codes for countries valid today.
- * @type {Array}
+ * @type {Array.<string>}
  */
 
 /* ~!@# Countries #@!~ (special comment meaningful to generation script) */
@@ -44,7 +44,6 @@ goog.locale.countries = [
   'AI',
   'AL',
   'AM',
-  'AN',
   'AO',
   'AQ',
   'AR',
@@ -67,6 +66,7 @@ goog.locale.countries = [
   'BM',
   'BN',
   'BO',
+  'BQ',
   'BR',
   'BS',
   'BT',
@@ -89,6 +89,7 @@ goog.locale.countries = [
   'CR',
   'CU',
   'CV',
+  'CW',
   'CX',
   'CY',
   'CZ',
@@ -243,8 +244,10 @@ goog.locale.countries = [
   'SN',
   'SO',
   'SR',
+  'SS',
   'ST',
   'SV',
+  'SX',
   'SY',
   'SZ',
   'TC',

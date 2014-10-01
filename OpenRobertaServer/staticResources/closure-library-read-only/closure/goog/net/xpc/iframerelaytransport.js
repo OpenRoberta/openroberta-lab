@@ -20,9 +20,17 @@
 goog.provide('goog.net.xpc.IframeRelayTransport');
 
 goog.require('goog.dom');
+goog.require('goog.dom.safe');
 goog.require('goog.events');
+goog.require('goog.html.SafeHtml');
+goog.require('goog.log');
+goog.require('goog.log.Level');
 goog.require('goog.net.xpc');
+goog.require('goog.net.xpc.CfgFields');
 goog.require('goog.net.xpc.Transport');
+goog.require('goog.net.xpc.TransportTypes');
+goog.require('goog.string');
+goog.require('goog.string.Const');
 goog.require('goog.userAgent');
 
 
@@ -39,9 +47,10 @@ goog.require('goog.userAgent');
  *     the correct window.
  * @constructor
  * @extends {goog.net.xpc.Transport}
+ * @final
  */
 goog.net.xpc.IframeRelayTransport = function(channel, opt_domHelper) {
-  goog.base(this, opt_domHelper);
+  goog.net.xpc.IframeRelayTransport.base(this, 'constructor', opt_domHelper);
 
   /**
    * The channel this transport belongs to.
@@ -137,7 +146,8 @@ if (goog.userAgent.WEBKIT) {
       var ifr = goog.net.xpc.IframeRelayTransport.iframeRefs_.
           shift().iframeElement;
       goog.dom.removeNode(ifr);
-      goog.net.xpc.logger.finest('iframe removed');
+      goog.log.log(goog.net.xpc.logger, goog.log.Level.FINEST,
+          'iframe removed');
     }
 
     goog.net.xpc.IframeRelayTransport.cleanupTimer_ = window.setTimeout(
@@ -328,7 +338,9 @@ goog.net.xpc.IframeRelayTransport.prototype.send_ =
   // handler is not triggered
   if (goog.userAgent.IE) {
     var div = this.getWindow().document.createElement('div');
-    div.innerHTML = '<iframe onload="this.xpcOnload()"></iframe>';
+    goog.dom.safe.setInnerHtml(div, goog.html.SafeHtml.create('iframe', {
+      'onload': goog.string.Const.from('this.xpcOnload()')
+    }));
     var ifr = div.childNodes[0];
     div = null;
     ifr['xpcOnload'] = goog.net.xpc.IframeRelayTransport.iframeLoadHandler_;
@@ -368,7 +380,7 @@ goog.net.xpc.IframeRelayTransport.prototype.send_ =
 
   this.getWindow().document.body.appendChild(ifr);
 
-  goog.net.xpc.logger.finest('msg sent: ' + url);
+  goog.log.log(goog.net.xpc.logger, goog.log.Level.FINEST, 'msg sent: ' + url);
 };
 
 
@@ -378,7 +390,7 @@ goog.net.xpc.IframeRelayTransport.prototype.send_ =
  * @this Element
  */
 goog.net.xpc.IframeRelayTransport.iframeLoadHandler_ = function() {
-  goog.net.xpc.logger.finest('iframe-load');
+  goog.log.log(goog.net.xpc.logger, goog.log.Level.FINEST, 'iframe-load');
   goog.dom.removeNode(this);
   this.xpcOnload = null;
 };
@@ -386,7 +398,7 @@ goog.net.xpc.IframeRelayTransport.iframeLoadHandler_ = function() {
 
 /** @override */
 goog.net.xpc.IframeRelayTransport.prototype.disposeInternal = function() {
-  goog.base(this, 'disposeInternal');
+  goog.net.xpc.IframeRelayTransport.base(this, 'disposeInternal');
   if (goog.userAgent.WEBKIT) {
     goog.net.xpc.IframeRelayTransport.cleanup_(0);
   }

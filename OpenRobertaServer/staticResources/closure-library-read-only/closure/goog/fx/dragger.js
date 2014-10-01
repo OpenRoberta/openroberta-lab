@@ -28,7 +28,6 @@ goog.provide('goog.fx.Dragger.EventType');
 
 goog.require('goog.dom');
 goog.require('goog.events');
-goog.require('goog.events.BrowserEvent.MouseButton');
 goog.require('goog.events.Event');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
@@ -61,6 +60,7 @@ goog.fx.Dragger = function(target, opt_handle, opt_limits) {
 
   this.document_ = goog.dom.getOwnerDocument(target);
   this.eventHandler_ = new goog.events.EventHandler(this);
+  this.registerDisposable(this.eventHandler_);
 
   // Add listener. Do not use the event handler here since the event handler is
   // used for listeners added and removed during the drag operation.
@@ -69,6 +69,9 @@ goog.fx.Dragger = function(target, opt_handle, opt_limits) {
       this.startDrag, false, this);
 };
 goog.inherits(goog.fx.Dragger, goog.events.EventTarget);
+// Dragger is meant to be extended, but defines most properties on its
+// prototype, thus making it unsuitable for sealing.
+goog.tagUnsealableClass(goog.fx.Dragger);
 
 
 /**
@@ -80,7 +83,41 @@ goog.fx.Dragger.HAS_SET_CAPTURE_ =
     // IE and Gecko after 1.9.3 has setCapture
     // WebKit does not yet: https://bugs.webkit.org/show_bug.cgi?id=27330
     goog.userAgent.IE ||
-    goog.userAgent.GECKO && goog.userAgent.isVersion('1.9.3');
+    goog.userAgent.GECKO && goog.userAgent.isVersionOrHigher('1.9.3');
+
+
+/**
+ * Creates copy of node being dragged.  This is a utility function to be used
+ * wherever it is inappropriate for the original source to follow the mouse
+ * cursor itself.
+ *
+ * @param {Element} sourceEl Element to copy.
+ * @return {!Element} The clone of {@code sourceEl}.
+ */
+goog.fx.Dragger.cloneNode = function(sourceEl) {
+  var clonedEl = /** @type {Element} */ (sourceEl.cloneNode(true)),
+      origTexts = sourceEl.getElementsByTagName('textarea'),
+      dragTexts = clonedEl.getElementsByTagName('textarea');
+  // Cloning does not copy the current value of textarea elements, so correct
+  // this manually.
+  for (var i = 0; i < origTexts.length; i++) {
+    dragTexts[i].value = origTexts[i].value;
+  }
+  switch (sourceEl.tagName.toLowerCase()) {
+    case 'tr':
+      return goog.dom.createDom(
+          'table', null, goog.dom.createDom('tbody', null, clonedEl));
+    case 'td':
+    case 'th':
+      return goog.dom.createDom(
+          'table', null, goog.dom.createDom('tbody', null, goog.dom.createDom(
+          'tr', null, clonedEl)));
+    case 'textarea':
+      clonedEl.value = sourceEl.value;
+    default:
+      return clonedEl;
+  }
+};
 
 
 /**
@@ -237,14 +274,6 @@ goog.fx.Dragger.prototype.document_;
 
 
 /**
- * Event handler used to simplify managing events.
- * @type {goog.events.EventHandler}
- * @private
- */
-goog.fx.Dragger.prototype.eventHandler_;
-
-
-/**
  * The SCROLL event target used to make drag element follow scrolling.
  * @type {EventTarget}
  * @private
@@ -287,7 +316,9 @@ goog.fx.Dragger.prototype.enableRightPositioningForRtl =
 
 /**
  * Returns the event handler, intended for subclass use.
- * @return {goog.events.EventHandler} The event handler.
+ * @return {goog.events.EventHandler.<T>} The event handler.
+ * @this T
+ * @template T
  */
 goog.fx.Dragger.prototype.getHandler = function() {
   return this.eventHandler_;
@@ -376,7 +407,6 @@ goog.fx.Dragger.prototype.disposeInternal = function() {
 
   this.target = null;
   this.handle = null;
-  this.eventHandler_ = null;
 };
 
 
@@ -427,9 +457,7 @@ goog.fx.Dragger.prototype.startDrag = function(e) {
     this.clientY = this.startY = e.clientY;
     this.screenX = e.screenX;
     this.screenY = e.screenY;
-    this.deltaX = this.useRightPositioningForRtl_ ?
-        goog.style.bidi.getOffsetStart(this.target) : this.target.offsetLeft;
-    this.deltaY = this.target.offsetTop;
+    this.computeInitialPosition();
     this.pageScroll = goog.dom.getDomHelper(this.document_).getDocumentScroll();
 
     this.mouseDownTime_ = goog.now();
@@ -532,13 +560,6 @@ goog.fx.Dragger.prototype.endDrag = function(e, opt_dragCanceled) {
   } else {
     this.dispatchEvent(goog.fx.Dragger.EventType.EARLY_CANCEL);
   }
-
-  // Call preventDefault to prevent mouseup from being raised if this is a
-  // touchend event.
-  if (e.type == goog.events.EventType.TOUCHEND ||
-      e.type == goog.events.EventType.TOUCHCANCEL) {
-    e.preventDefault();
-  }
 };
 
 
@@ -632,7 +653,7 @@ goog.fx.Dragger.prototype.handleMove_ = function(e) {
  *
  * @param {number} dx The horizontal movement delta.
  * @param {number} dy The vertical movement delta.
- * @return {goog.math.Coordinate} The newly calculated drag element position.
+ * @return {!goog.math.Coordinate} The newly calculated drag element position.
  * @private
  */
 goog.fx.Dragger.prototype.calculatePosition_ = function(dx, dy) {
@@ -709,6 +730,18 @@ goog.fx.Dragger.prototype.limitY = function(y) {
   var maxY = top != null ? top + height : Infinity;
   var minY = top != null ? top : -Infinity;
   return Math.min(maxY, Math.max(minY, y));
+};
+
+
+/**
+ * Overridable function for computing the initial position of the target
+ * before dragging begins.
+ * @protected
+ */
+goog.fx.Dragger.prototype.computeInitialPosition = function() {
+  this.deltaX = this.useRightPositioningForRtl_ ?
+      goog.style.bidi.getOffsetStart(this.target) : this.target.offsetLeft;
+  this.deltaY = this.target.offsetTop;
 };
 
 

@@ -17,6 +17,7 @@
  * that works on any similar DOM structure regardless of whether it is the same
  * actual nodes.
  *
+ * @author robbyw@google.com (Robby Walker)
  */
 
 goog.provide('goog.dom.NodeOffset');
@@ -33,6 +34,7 @@ goog.require('goog.dom.TagName');
  * @param {Node} baseNode The node to calculate the offset from.
  * @extends {goog.Disposable}
  * @constructor
+ * @final
  */
 goog.dom.NodeOffset = function(node, baseNode) {
   goog.Disposable.call(this);

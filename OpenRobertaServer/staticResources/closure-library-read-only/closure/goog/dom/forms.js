@@ -16,8 +16,6 @@
  * @fileoverview Utilities for manipulating a form and elements.
  *
  * @author arv@google.com (Erik Arvidsson)
- * @author jonp@google.com (Jon Perlow)
- * @author elsigh@google.com (Lindsey Simon)
  */
 
 goog.provide('goog.dom.forms');
@@ -136,7 +134,7 @@ goog.dom.forms.addFormDataToMap_ = function(map, name, value) {
 
 /**
  * Adds a name/value pair to an string buffer array in the form 'name=value'.
- * @param {Array} sb The string buffer array for storing data.
+ * @param {Array.<string>} sb The string buffer array for storing data.
  * @param {string} name The name.
  * @param {string} value The value.
  * @private
@@ -266,18 +264,19 @@ goog.dom.$F = goog.dom.forms.getValue;
 goog.dom.forms.getValueByName = function(form, name) {
   var els = form.elements[name];
 
-  if (els.type) {
-    return goog.dom.forms.getValue(els);
-  } else {
-    for (var i = 0; i < els.length; i++) {
-      var val = goog.dom.forms.getValue(els[i]);
-      if (val) {
-        return val;
+  if (els) {
+    if (els.type) {
+      return goog.dom.forms.getValue(els);
+    } else {
+      for (var i = 0; i < els.length; i++) {
+        var val = goog.dom.forms.getValue(els[i]);
+        if (val) {
+          return val;
+        }
       }
     }
-
-    return null;
   }
+  return null;
 };
 
 
@@ -343,7 +342,7 @@ goog.dom.forms.setValue = function(el, opt_value) {
         break;
       case 'select-multiple':
         goog.dom.forms.setSelectMultiple_(el,
-            /** @type {Array} */ (opt_value));
+            /** @type {Array.<string>} */ (opt_value));
         break;
       default:
         el.value = goog.isDefAndNotNull(opt_value) ? opt_value : '';

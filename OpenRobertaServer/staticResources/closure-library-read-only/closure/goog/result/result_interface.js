@@ -14,11 +14,14 @@
 
 /**
  * @fileoverview Defines an interface that represents a Result.
+ *
+ * NOTE: goog.result is soft deprecated - we expect to replace this and
+ * {@link goog.async.Deferred} with {@link goog.Promise}.
  */
 
 goog.provide('goog.result.Result');
 
-goog.require('goog.debug.Error');
+goog.require('goog.Thenable');
 
 
 
@@ -28,24 +31,30 @@ goog.require('goog.debug.Error');
  * to a 'Promise' or a 'Future' in other languages and frameworks.
  *
  * @interface
+ * @extends {goog.Thenable}
+ * @deprecated Use {@link goog.Promise} instead - http://go/promisemigration
  */
 goog.result.Result = function() {};
 
 
 /**
  * Attaches handlers to be called when the value of this Result is available.
+ * Handlers are called in the order they were added by wait.
  *
- * @param {!function(!goog.result.Result)} handler The function called when
- *     the value is available. The function is passed the Result object as the
- *     only argument.
+ * @param {!function(this:T, !goog.result.Result)} handler The function called
+ *     when the value is available. The function is passed the Result object as
+ *     the only argument.
+ * @param {T=} opt_scope Optional scope for the handler.
+ * @template T
  */
-goog.result.Result.prototype.wait = function(handler) {};
+goog.result.Result.prototype.wait = function(handler, opt_scope) {};
 
 
 /**
  * The States this object can be in.
  *
  * @enum {string}
+ * @deprecated Use {@link goog.Promise} instead - http://go/promisemigration
  */
 goog.result.Result.State = {
   /** The operation was a success and the value is available. */
@@ -98,11 +107,13 @@ goog.result.Result.prototype.isCanceled = function() {};
 /**
  * The value to be passed to the error handlers invoked upon cancellation.
  * @constructor
- * @param {string=} opt_msg The error message for CancelError.
- * @extends {goog.debug.Error}
+ * @extends {Error}
+ * @final
+ * @deprecated Use {@link goog.Promise} instead - http://go/promisemigration
  */
-goog.result.Result.CancelError = function(opt_msg) {
-  var msg = opt_msg || 'Result canceled';
-  goog.base(this, msg);
+goog.result.Result.CancelError = function() {
+  // Note that this does not derive from goog.debug.Error in order to prevent
+  // stack trace capture and reduce the amount of garbage generated during a
+  // cancel() operation.
 };
-goog.inherits(goog.result.Result.CancelError, goog.debug.Error);
+goog.inherits(goog.result.Result.CancelError, Error);

@@ -20,8 +20,9 @@ goog.provide('goog.proto2.Descriptor');
 goog.provide('goog.proto2.Metadata');
 
 goog.require('goog.array');
+goog.require('goog.asserts');
 goog.require('goog.object');
-goog.require('goog.proto2.Util');
+goog.require('goog.string');
 
 
 /**
@@ -44,6 +45,7 @@ goog.proto2.Metadata;
  *      message described by this descriptor.
  *
  * @constructor
+ * @final
  */
 goog.proto2.Descriptor = function(messageType, metadata, fields) {
 
@@ -82,6 +84,23 @@ goog.proto2.Descriptor = function(messageType, metadata, fields) {
     var field = fields[i];
     this.fields_[field.getTag()] = field;
   }
+};
+
+
+/**
+ * Returns the metadata descriptor representing the definition of a message.
+ *
+ * @param {function(new:goog.proto2.Message)} messageType Constructor for the
+ *     message type to which this metadata applies.
+ * @return {!goog.proto2.Descriptor} The new descriptor.
+ */
+goog.proto2.Descriptor.getDescriptor = function(messageType) {
+  // Descriptors are lazy-created and cached on the constructor.
+  // Imitate private property convention to encourage use of public getters.
+  return messageType['descriptor_'] ||
+      // Create an instance of messageType to reach the "getDescriptor" method.
+      // At most one instance will ever be created in this way.
+      (messageType['descriptor_'] = (new messageType()).getDescriptor());
 };
 
 
@@ -184,7 +203,7 @@ goog.proto2.Descriptor.prototype.findFieldByName = function(name) {
  * @return {goog.proto2.FieldDescriptor} The field found, if any.
  */
 goog.proto2.Descriptor.prototype.findFieldByTag = function(tag) {
-  goog.proto2.Util.assert(goog.string.isNumeric(tag));
+  goog.asserts.assert(goog.string.isNumeric(tag));
   return this.fields_[parseInt(tag, 10)] || null;
 };
 

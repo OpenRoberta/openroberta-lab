@@ -15,6 +15,7 @@
 /**
  * @fileoverview Basic animation controls.
  *
+ * @author arv@google.com (Erik Arvidsson)
  */
 goog.provide('goog.fx.anim');
 goog.provide('goog.fx.anim.Animated');
@@ -22,6 +23,7 @@ goog.provide('goog.fx.anim.Animated');
 goog.require('goog.async.AnimationDelay');
 goog.require('goog.async.Delay');
 goog.require('goog.object');
+
 
 
 /**
@@ -166,8 +168,8 @@ goog.fx.anim.requestAnimationFrame_ = function() {
       // time in ms, as returned from goog.now().
       goog.fx.anim.animationDelay_ = new goog.async.AnimationDelay(
           function(now) {
-        goog.fx.anim.cycleAnimations_(now);
-      }, goog.fx.anim.animationWindow_);
+            goog.fx.anim.cycleAnimations_(now);
+          }, goog.fx.anim.animationWindow_);
     } else {
       goog.fx.anim.animationDelay_ = new goog.async.Delay(function() {
         goog.fx.anim.cycleAnimations_(goog.now());

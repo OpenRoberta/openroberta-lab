@@ -40,9 +40,13 @@ goog.require('goog.crypt.Hash');
  * The properties declared here are discussed in the above algorithm document.
  * @constructor
  * @extends {goog.crypt.Hash}
+ * @final
+ * @struct
  */
 goog.crypt.Sha1 = function() {
-  goog.base(this);
+  goog.crypt.Sha1.base(this, 'constructor');
+
+  this.blockSize = 512 / 8;
 
   /**
    * Holds the previous values of accumulated variables a-e in the compress_
@@ -75,9 +79,19 @@ goog.crypt.Sha1 = function() {
   this.pad_ = [];
 
   this.pad_[0] = 128;
-  for (var i = 1; i < 64; ++i) {
+  for (var i = 1; i < this.blockSize; ++i) {
     this.pad_[i] = 0;
   }
+
+  /**
+   * @private {number}
+   */
+  this.inbuf_ = 0;
+
+  /**
+   * @private {number}
+   */
+  this.total_ = 0;
 
   this.reset();
 };
@@ -113,17 +127,27 @@ goog.crypt.Sha1.prototype.compress_ = function(buf, opt_offset) {
   // get 16 big endian words
   if (goog.isString(buf)) {
     for (var i = 0; i < 16; i++) {
-      W[i] = (buf.charCodeAt(opt_offset++) << 24) |
-             (buf.charCodeAt(opt_offset++) << 16) |
-             (buf.charCodeAt(opt_offset++) << 8) |
-             (buf.charCodeAt(opt_offset++));
+      // TODO(user): [bug 8140122] Recent versions of Safari for Mac OS and iOS
+      // have a bug that turns the post-increment ++ operator into pre-increment
+      // during JIT compilation.  We have code that depends heavily on SHA-1 for
+      // correctness and which is affected by this bug, so I've removed all uses
+      // of post-increment ++ in which the result value is used.  We can revert
+      // this change once the Safari bug
+      // (https://bugs.webkit.org/show_bug.cgi?id=109036) has been fixed and
+      // most clients have been updated.
+      W[i] = (buf.charCodeAt(opt_offset) << 24) |
+             (buf.charCodeAt(opt_offset + 1) << 16) |
+             (buf.charCodeAt(opt_offset + 2) << 8) |
+             (buf.charCodeAt(opt_offset + 3));
+      opt_offset += 4;
     }
   } else {
     for (var i = 0; i < 16; i++) {
-      W[i] = (buf[opt_offset++] << 24) |
-             (buf[opt_offset++] << 16) |
-             (buf[opt_offset++] << 8) |
-             (buf[opt_offset++]);
+      W[i] = (buf[opt_offset] << 24) |
+             (buf[opt_offset + 1] << 16) |
+             (buf[opt_offset + 2] << 8) |
+             (buf[opt_offset + 3]);
+      opt_offset += 4;
     }
   }
 
@@ -182,7 +206,7 @@ goog.crypt.Sha1.prototype.update = function(bytes, opt_length) {
     opt_length = bytes.length;
   }
 
-  var lengthMinusBlock = opt_length - 64;
+  var lengthMinusBlock = opt_length - this.blockSize;
   var n = 0;
   // Using local instead of member variables gives ~5% speedup on Firefox 16.
   var buf = this.buf_;
@@ -197,14 +221,16 @@ goog.crypt.Sha1.prototype.update = function(bytes, opt_length) {
     if (inbuf == 0) {
       while (n <= lengthMinusBlock) {
         this.compress_(bytes, n);
-        n += 64;
+        n += this.blockSize;
       }
     }
 
     if (goog.isString(bytes)) {
       while (n < opt_length) {
-        buf[inbuf++] = bytes.charCodeAt(n++);
-        if (inbuf == 64) {
+        buf[inbuf] = bytes.charCodeAt(n);
+        ++inbuf;
+        ++n;
+        if (inbuf == this.blockSize) {
           this.compress_(buf);
           inbuf = 0;
           // Jump to the outer loop so we use the full-block optimization.
@@ -213,8 +239,10 @@ goog.crypt.Sha1.prototype.update = function(bytes, opt_length) {
       }
     } else {
       while (n < opt_length) {
-        buf[inbuf++] = bytes[n++];
-        if (inbuf == 64) {
+        buf[inbuf] = bytes[n];
+        ++inbuf;
+        ++n;
+        if (inbuf == this.blockSize) {
           this.compress_(buf);
           inbuf = 0;
           // Jump to the outer loop so we use the full-block optimization.
@@ -238,11 +266,11 @@ goog.crypt.Sha1.prototype.digest = function() {
   if (this.inbuf_ < 56) {
     this.update(this.pad_, 56 - this.inbuf_);
   } else {
-    this.update(this.pad_, 64 - (this.inbuf_ - 56));
+    this.update(this.pad_, this.blockSize - (this.inbuf_ - 56));
   }
 
   // Add # bits.
-  for (var i = 63; i >= 56; i--) {
+  for (var i = this.blockSize - 1; i >= 56; i--) {
     this.buf_[i] = totalBits & 255;
     totalBits /= 256; // Don't use bit-shifting here!
   }
@@ -252,7 +280,8 @@ goog.crypt.Sha1.prototype.digest = function() {
   var n = 0;
   for (var i = 0; i < 5; i++) {
     for (var j = 24; j >= 0; j -= 8) {
-      digest[n++] = (this.chain_[i] >> j) & 255;
+      digest[n] = (this.chain_[i] >> j) & 255;
+      ++n;
     }
   }
 

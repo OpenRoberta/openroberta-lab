@@ -16,6 +16,7 @@
  * @fileoverview Abstract class for all UI components. This defines the standard
  * design pattern that all UI components should follow.
  *
+ * @author attila@google.com (Attila Bodis)
  * @see ../demos/samplecomponent.html
  * @see http://code.google.com/p/closure-library/wiki/IntroToComponents
  */
@@ -26,8 +27,9 @@ goog.provide('goog.ui.Component.EventType');
 goog.provide('goog.ui.Component.State');
 
 goog.require('goog.array');
-goog.require('goog.array.ArrayLike');
+goog.require('goog.asserts');
 goog.require('goog.dom');
+goog.require('goog.dom.NodeType');
 goog.require('goog.events.EventHandler');
 goog.require('goog.events.EventTarget');
 goog.require('goog.object');
@@ -45,12 +47,111 @@ goog.require('goog.ui.IdGenerator');
  */
 goog.ui.Component = function(opt_domHelper) {
   goog.events.EventTarget.call(this);
+  /**
+   * DomHelper used to interact with the document, allowing components to be
+   * created in a different window.
+   * @protected {!goog.dom.DomHelper}
+   * @suppress {underscore|visibility}
+   */
   this.dom_ = opt_domHelper || goog.dom.getDomHelper();
 
-  // Set the defalt right to left value.
+  /**
+   * Whether the component is rendered right-to-left.  Right-to-left is set
+   * lazily when {@link #isRightToLeft} is called the first time, unless it has
+   * been set by calling {@link #setRightToLeft} explicitly.
+   * @private {?boolean}
+   */
   this.rightToLeft_ = goog.ui.Component.defaultRightToLeft_;
+
+  /**
+   * Unique ID of the component, lazily initialized in {@link
+   * goog.ui.Component#getId} if needed.  This property is strictly private and
+   * must not be accessed directly outside of this class!
+   * @private {?string}
+   */
+  this.id_ = null;
+
+  /**
+   * Whether the component is in the document.
+   * @private {boolean}
+   */
+  this.inDocument_ = false;
+
+  // TODO(attila): Stop referring to this private field in subclasses.
+  /**
+   * The DOM element for the component.
+   * @private {Element}
+   */
+  this.element_ = null;
+
+  /**
+   * Event handler.
+   * TODO(user): rename it to handler_ after all component subclasses in
+   * inside Google have been cleaned up.
+   * Code search: http://go/component_code_search
+   * @private {goog.events.EventHandler|undefined}
+   */
+  this.googUiComponentHandler_ = void 0;
+
+  /**
+   * Arbitrary data object associated with the component.  Such as meta-data.
+   * @private {*}
+   */
+  this.model_ = null;
+
+  /**
+   * Parent component to which events will be propagated.  This property is
+   * strictly private and must not be accessed directly outside of this class!
+   * @private {goog.ui.Component?}
+   */
+  this.parent_ = null;
+
+  /**
+   * Array of child components.  Lazily initialized on first use.  Must be kept
+   * in sync with {@code childIndex_}.  This property is strictly private and
+   * must not be accessed directly outside of this class!
+   * @private {Array.<goog.ui.Component>?}
+   */
+  this.children_ = null;
+
+  /**
+   * Map of child component IDs to child components.  Used for constant-time
+   * random access to child components by ID.  Lazily initialized on first use.
+   * Must be kept in sync with {@code children_}.  This property is strictly
+   * private and must not be accessed directly outside of this class!
+   *
+   * We use a plain Object, not a {@link goog.structs.Map}, for simplicity.
+   * This means components can't have children with IDs such as 'constructor' or
+   * 'valueOf', but this shouldn't really be an issue in practice, and if it is,
+   * we can always fix it later without changing the API.
+   *
+   * @private {Object}
+   */
+  this.childIndex_ = null;
+
+  /**
+   * Flag used to keep track of whether a component decorated an already
+   * existing element or whether it created the DOM itself.
+   *
+   * If an element is decorated, dispose will leave the node in the document.
+   * It is up to the app to remove the node.
+   *
+   * If an element was rendered, dispose will remove the node automatically.
+   *
+   * @private {boolean}
+   */
+  this.wasDecorated_ = false;
 };
 goog.inherits(goog.ui.Component, goog.events.EventTarget);
+
+
+/**
+ * @define {boolean} Whether to support calling decorate with an element that is
+ *     not yet in the document. If true, we check if the element is in the
+ *     document, and avoid calling enterDocument if it isn't. If false, we
+ *     maintain legacy behavior (always call enterDocument from decorate).
+ */
+goog.define('goog.ui.Component.ALLOW_DETACHED_DECORATION', false);
 
 
 /**
@@ -61,12 +162,24 @@ goog.inherits(goog.ui.Component, goog.events.EventTarget);
 goog.ui.Component.prototype.idGenerator_ = goog.ui.IdGenerator.getInstance();
 
 
+// TODO(gboyer): See if we can remove this and just check goog.i18n.bidi.IS_RTL.
+/**
+ * @define {number} Defines the default BIDI directionality.
+ *     0: Unknown.
+ *     1: Left-to-right.
+ *     -1: Right-to-left.
+ */
+goog.define('goog.ui.Component.DEFAULT_BIDI_DIR', 0);
+
+
 /**
  * The default right to left value.
  * @type {?boolean}
  * @private
  */
-goog.ui.Component.defaultRightToLeft_ = null;
+goog.ui.Component.defaultRightToLeft_ =
+    (goog.ui.Component.DEFAULT_BIDI_DIR == 1) ? false :
+    (goog.ui.Component.DEFAULT_BIDI_DIR == -1) ? true : null;
 
 
 /**
@@ -318,123 +431,6 @@ goog.ui.Component.setDefaultRightToLeft = function(rightToLeft) {
 
 
 /**
- * Unique ID of the component, lazily initialized in {@link
- * goog.ui.Component#getId} if needed.  This property is strictly private and
- * must not be accessed directly outside of this class!
- * @type {?string}
- * @private
- */
-goog.ui.Component.prototype.id_ = null;
-
-
-/**
- * DomHelper used to interact with the document, allowing components to be
- * created in a different window.
- * @type {!goog.dom.DomHelper}
- * @protected
- * @suppress {underscore}
- */
-goog.ui.Component.prototype.dom_;
-
-
-/**
- * Whether the component is in the document.
- * @type {boolean}
- * @private
- */
-goog.ui.Component.prototype.inDocument_ = false;
-
-
-// TODO(attila): Stop referring to this private field in subclasses.
-/**
- * The DOM element for the component.
- * @type {Element}
- * @private
- */
-goog.ui.Component.prototype.element_ = null;
-
-
-/**
- * Event handler.
- * TODO(user): rename it to handler_ after all component subclasses in
- * inside Google have been cleaned up.
- * Code search: http://go/component_code_search
- * @type {goog.events.EventHandler}
- * @private
- */
-goog.ui.Component.prototype.googUiComponentHandler_;
-
-
-/**
- * Whether the component is rendered right-to-left.  Right-to-left is set
- * lazily when {@link #isRightToLeft} is called the first time, unless it has
- * been set by calling {@link #setRightToLeft} explicitly.
- * @type {?boolean}
- * @private
- */
-goog.ui.Component.prototype.rightToLeft_ = null;
-
-
-/**
- * Arbitrary data object associated with the component.  Such as meta-data.
- * @type {*}
- * @private
- */
-goog.ui.Component.prototype.model_ = null;
-
-
-/**
- * Parent component to which events will be propagated.  This property is
- * strictly private and must not be accessed directly outside of this class!
- * @type {goog.ui.Component?}
- * @private
- */
-goog.ui.Component.prototype.parent_ = null;
-
-
-/**
- * Array of child components.  Lazily initialized on first use.  Must be kept in
- * sync with {@code childIndex_}.  This property is strictly private and must
- * not be accessed directly outside of this class!
- * @type {Array.<goog.ui.Component>?}
- * @private
- */
-goog.ui.Component.prototype.children_ = null;
-
-
-/**
- * Map of child component IDs to child components.  Used for constant-time
- * random access to child components by ID.  Lazily initialized on first use.
- * Must be kept in sync with {@code children_}.  This property is strictly
- * private and must not be accessed directly outside of this class!
- *
- * We use a plain Object, not a {@link goog.structs.Map}, for simplicity.
- * This means components can't have children with IDs such as 'constructor' or
- * 'valueOf', but this shouldn't really be an issue in practice, and if it is,
- * we can always fix it later without changing the API.
- *
- * @type {Object}
- * @private
- */
-goog.ui.Component.prototype.childIndex_ = null;
-
-
-/**
- * Flag used to keep track of whether a component decorated an already existing
- * element or whether it created the DOM itself.
- *
- * If an element is decorated, dispose will leave the node in the document.
- * It is up to the app to remove the node.
- *
- * If an element was rendered, dispose will remove the node automatically.
- *
- * @type {boolean}
- * @private
- */
-goog.ui.Component.prototype.wasDecorated_ = false;
-
-
-/**
  * Gets the unique ID for the instance of this component.  If the instance
  * doesn't already have an ID, generates one on the fly.
  * @return {string} Unique component ID.
@@ -496,8 +492,9 @@ goog.ui.Component.prototype.getElementStrict = function() {
  * does not actually change which element is rendered, only the element that is
  * associated with this UI component.
  *
+ * This should only be used by subclasses and its associated renderers.
+ *
  * @param {Element} element Root element for the component.
- * @protected
  */
 goog.ui.Component.prototype.setElementInternal = function(element) {
   this.element_ = element;
@@ -529,14 +526,33 @@ goog.ui.Component.prototype.getElementByClass = function(className) {
 
 
 /**
+ * Similar to {@code getElementByClass} except that it expects the
+ * element to be present in the dom thus returning a required value. Otherwise,
+ * will assert.
+ * @param {string} className The name of the class to look for.
+ * @return {!Element} The first item with the class name provided.
+ */
+goog.ui.Component.prototype.getRequiredElementByClass = function(className) {
+  var el = this.getElementByClass(className);
+  goog.asserts.assert(el, 'Expected element in component with class: %s',
+      className);
+  return el;
+};
+
+
+/**
  * Returns the event handler for this component, lazily created the first time
  * this method is called.
- * @return {!goog.events.EventHandler} Event handler for this component.
+ * @return {!goog.events.EventHandler.<T>} Event handler for this component.
  * @protected
+ * @this T
+ * @template T
  */
 goog.ui.Component.prototype.getHandler = function() {
-  return this.googUiComponentHandler_ ||
-         (this.googUiComponentHandler_ = new goog.events.EventHandler(this));
+  if (!this.googUiComponentHandler_) {
+    this.googUiComponentHandler_ = new goog.events.EventHandler(this);
+  }
+  return this.googUiComponentHandler_;
 };
 
 
@@ -697,7 +713,12 @@ goog.ui.Component.prototype.render_ = function(opt_parentElement,
 
 
 /**
- * Decorates the element for the UI component.
+ * Decorates the element for the UI component. If the element is in the
+ * document, the enterDocument method will be called.
+ *
+ * If goog.ui.Component.ALLOW_DETACHED_DECORATION is false, the caller must
+ * pass an element that is in the document.
+ *
  * @param {Element} element Element to decorate.
  */
 goog.ui.Component.prototype.decorate = function(element) {
@@ -707,14 +728,19 @@ goog.ui.Component.prototype.decorate = function(element) {
     this.wasDecorated_ = true;
 
     // Set the DOM helper of the component to match the decorated element.
-    if (!this.dom_ ||
-        this.dom_.getDocument() != goog.dom.getOwnerDocument(element)) {
+    var doc = goog.dom.getOwnerDocument(element);
+    if (!this.dom_ || this.dom_.getDocument() != doc) {
       this.dom_ = goog.dom.getDomHelper(element);
     }
 
     // Call specific component decorate logic.
     this.decorateInternal(element);
-    this.enterDocument();
+
+    // If supporting detached decoration, check that element is in doc.
+    if (!goog.ui.Component.ALLOW_DETACHED_DECORATION ||
+        goog.dom.contains(doc, element)) {
+      this.enterDocument();
+    }
   } else {
     throw Error(goog.ui.Component.Error.DECORATE_INVALID);
   }
@@ -764,6 +790,9 @@ goog.ui.Component.prototype.enterDocument = function() {
   this.inDocument_ = true;
 
   // Propagate enterDocument to child components that have a DOM, if any.
+  // If a child was decorated before entering the document (permitted when
+  // goog.ui.Component.ALLOW_DETACHED_DECORATION is true), its enterDocument
+  // will be called here.
   this.forEachChild(function(child) {
     if (!child.isInDocument() && child.getElement()) {
       child.enterDocument();
@@ -854,7 +883,7 @@ goog.ui.Component.prototype.makeId = function(idFragment) {
  * object's values are the id fragments and the new values are the generated
  * ids.  The key will remain the same.
  * @param {Object} object The object that will be used to create the ids.
- * @return {Object} An object of id keys to generated ids.
+ * @return {!Object} An object of id keys to generated ids.
  */
 goog.ui.Component.prototype.makeIds = function(object) {
   var ids = {};
@@ -923,7 +952,7 @@ goog.ui.Component.prototype.addChild = function(child, opt_render) {
   // reposition any already-rendered child to the end.  Instead, perhaps
   // addChild(child, false) should never reposition the child; instead, clients
   // that need the repositioning will use addChildAt explicitly.  Right now,
-  // clients can get around this by calling addChild first.
+  // clients can get around this by calling addChild before calling decorate.
   this.addChildAt(child, this.getChildCount(), opt_render);
 };
 
@@ -949,14 +978,13 @@ goog.ui.Component.prototype.addChild = function(child, opt_render) {
  * Clients of this API may call {@code addChild} and {@code addChildAt} with
  * {@code opt_render} set to true.  If {@code opt_render} is true, calling these
  * methods will automatically render the child component's element into the
- * parent component's element.  However, {@code parent.addChild(child, true)}
- * will throw an error if:
- *  <ul>
- *    <li>the parent component has no DOM (i.e. {@code parent.getElement()} is
- *        null), or
- *    <li>the child component is already in the document, regardless of the
- *        parent's DOM state.
- *  </ul>
+ * parent component's element. If the parent does not yet have an element, then
+ * {@code createDom} will automatically be invoked on the parent before
+ * rendering the child.
+ *
+ * Invoking {@code parent.addChild(child, true)} will throw an error if the
+ * child component is already in the document, regardless of the parent's DOM
+ * state.
  *
  * If {@code opt_render} is true and the parent component is not already
  * in the document, {@code enterDocument} will not be called on this component
@@ -974,6 +1002,8 @@ goog.ui.Component.prototype.addChild = function(child, opt_render) {
  * @return {void} Nada.
  */
 goog.ui.Component.prototype.addChildAt = function(child, index, opt_render) {
+  goog.asserts.assert(!!child, 'Provided element must not be null.');
+
   if (child.inDocument_ && (opt_render || !this.inDocument_)) {
     // Adding a child that's already in the document is an error, except if the
     // parent is also in the document and opt_render is false (e.g. decorate()).
@@ -1107,7 +1137,7 @@ goog.ui.Component.prototype.getChildCount = function() {
 /**
  * Returns an array containing the IDs of the children of this component, or an
  * empty array if the component has no children.
- * @return {Array.<string>} Child component IDs.
+ * @return {!Array.<string>} Child component IDs.
  */
 goog.ui.Component.prototype.getChildIds = function() {
   var ids = [];

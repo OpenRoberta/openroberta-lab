@@ -20,6 +20,7 @@
  * not be usable using a normal object literal {}. Some examples
  * include __proto__ (all newer browsers), toString/hasOwnProperty (IE
  * <= 8).
+ * @author chrishenry@google.com (Chris Henry)
  */
 
 goog.provide('goog.labs.structs.Map');
@@ -34,6 +35,8 @@ goog.require('goog.object');
 /**
  * Creates a new map.
  * @constructor
+ * @struct
+ * @final
  */
 goog.labs.structs.Map = function() {
   // clear() initializes the map to the empty state.
@@ -81,6 +84,12 @@ goog.labs.structs.Map.prototype.secondaryStoreKeys_;
  * @private
  */
 goog.labs.structs.Map.prototype.secondaryStoreValues_;
+
+
+/**
+ * @private {number}
+ */
+goog.labs.structs.Map.prototype.count_;
 
 
 /**
@@ -251,7 +260,7 @@ goog.labs.structs.Map.prototype.getValues = function() {
 
 
 /**
- * @return {!Array.<Array>} An array of entries. Each entry is of the
+ * @return {!Array.<Array.<?>>} An array of entries. Each entry is of the
  *     form [key, value]. Do not rely on consistent ordering of entries.
  */
 goog.labs.structs.Map.prototype.getEntries = function() {
@@ -326,7 +335,7 @@ goog.labs.structs.Map.prototype.assertKeyIsString_ = function(key) {
  * @enum {boolean}
  */
 goog.labs.structs.Map.BrowserFeature = {
-  // TODO(user): Replace with goog.userAgent detection.
+  // TODO(chrishenry): Replace with goog.userAgent detection.
   /**
    * Whether Object.create method is supported.
    */

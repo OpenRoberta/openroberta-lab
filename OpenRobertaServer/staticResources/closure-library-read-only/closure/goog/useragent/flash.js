@@ -26,7 +26,7 @@ goog.require('goog.string');
  * @define {boolean} Whether we know at compile-time that the browser doesn't
  * have flash.
  */
-goog.userAgent.flash.ASSUME_NO_FLASH = false;
+goog.define('goog.userAgent.flash.ASSUME_NO_FLASH', false);
 
 
 /**
@@ -117,6 +117,9 @@ goog.userAgent.flash.init_ = function() {
  */
 goog.userAgent.flash.getVersion_ = function(desc) {
   var matches = desc.match(/[\d]+/g);
+  if (!matches) {
+    return '';
+  }
   matches.length = 3;  // To standardize IE vs FF
   return matches.join('.');
 };

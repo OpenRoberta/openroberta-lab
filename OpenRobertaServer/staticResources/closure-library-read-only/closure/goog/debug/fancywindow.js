@@ -26,11 +26,13 @@
 
 goog.provide('goog.debug.FancyWindow');
 
+goog.require('goog.array');
 goog.require('goog.debug.DebugWindow');
 goog.require('goog.debug.LogManager');
 goog.require('goog.debug.Logger');
-goog.require('goog.debug.Logger.Level');
 goog.require('goog.dom.DomHelper');
+goog.require('goog.dom.safe');
+goog.require('goog.html.SafeHtml');
 goog.require('goog.object');
 goog.require('goog.string');
 goog.require('goog.userAgent');
@@ -48,7 +50,7 @@ goog.require('goog.userAgent');
  */
 goog.debug.FancyWindow = function(opt_identifier, opt_prefix) {
   this.readOptionsFromLocalStorage_();
-  goog.base(this, opt_identifier, opt_prefix);
+  goog.debug.FancyWindow.base(this, 'constructor', opt_identifier, opt_prefix);
 };
 goog.inherits(goog.debug.FancyWindow, goog.debug.DebugWindow);
 
@@ -75,7 +77,7 @@ goog.debug.FancyWindow.LOCAL_STORE_PREFIX = 'fancywindow.sel.';
 
 /** @override */
 goog.debug.FancyWindow.prototype.writeBufferToLog = function() {
-  this.lastCall_ = goog.now();
+  this.lastCall = goog.now();
   if (this.hasActiveWindow()) {
     var logel = this.dh_.getElement('log');
 
@@ -83,12 +85,12 @@ goog.debug.FancyWindow.prototype.writeBufferToLog = function() {
     var scroll =
         logel.scrollHeight - (logel.scrollTop + logel.offsetHeight) <= 100;
 
-    for (var i = 0; i < this.outputBuffer_.length; i++) {
+    for (var i = 0; i < this.outputBuffer.length; i++) {
       var div = this.dh_.createDom('div', 'logmsg');
-      div.innerHTML = this.outputBuffer_[i];
+      div.innerHTML = this.outputBuffer[i];
       logel.appendChild(div);
     }
-    this.outputBuffer_.length = 0;
+    this.outputBuffer.length = 0;
     this.resizeStuff_();
 
     if (scroll) {
@@ -104,12 +106,12 @@ goog.debug.FancyWindow.prototype.writeInitialDocument = function() {
     return;
   }
 
-  var doc = this.win_.document;
+  var doc = this.win.document;
   doc.open();
   doc.write(this.getHtml_());
   doc.close();
 
-  (goog.userAgent.IE ? doc.body : this.win_).onresize =
+  (goog.userAgent.IE ? doc.body : this.win).onresize =
       goog.bind(this.resizeStuff_, this);
 
   // Create a dom helper for the logging window
@@ -121,11 +123,11 @@ goog.debug.FancyWindow.prototype.writeInitialDocument = function() {
   this.dh_.getElement('closebutton').onclick =
       goog.bind(this.closeOptions_, this);
   this.dh_.getElement('clearbutton').onclick =
-      goog.bind(this.clear_, this);
+      goog.bind(this.clear, this);
   this.dh_.getElement('exitbutton').onclick =
       goog.bind(this.exit_, this);
 
-  this.writeSavedMessages_();
+  this.writeSavedMessages();
 };
 
 
@@ -136,16 +138,16 @@ goog.debug.FancyWindow.prototype.writeInitialDocument = function() {
  */
 goog.debug.FancyWindow.prototype.openOptions_ = function() {
   var el = this.dh_.getElement('optionsarea');
-  el.innerHTML = '';
+  goog.dom.safe.setInnerHtml(el, goog.html.SafeHtml.EMPTY);
 
   var loggers = goog.debug.FancyWindow.getLoggers_();
   var dh = this.dh_;
   for (var i = 0; i < loggers.length; i++) {
-    var logger = goog.debug.Logger.getLogger(loggers[i]);
+    var logger = loggers[i];
     var curlevel = logger.getLevel() ? logger.getLevel().name : 'INHERIT';
     var div = dh.createDom('div', {},
-        this.getDropDown_('sel' + loggers[i], curlevel),
-        dh.createDom('span', {}, loggers[i] || '(root)'));
+        this.getDropDown_('sel' + logger.getName(), curlevel),
+        dh.createDom('span', {}, logger.getName() || '(root)'));
     el.appendChild(div);
   }
 
@@ -189,8 +191,8 @@ goog.debug.FancyWindow.prototype.closeOptions_ = function() {
   var loggers = goog.debug.FancyWindow.getLoggers_();
   var dh = this.dh_;
   for (var i = 0; i < loggers.length; i++) {
-    var logger = goog.debug.Logger.getLogger(loggers[i]);
-    var sel = dh.getElement('sel' + loggers[i]);
+    var logger = loggers[i];
+    var sel = dh.getElement('sel' + logger.getName());
     var level = sel.options[sel.selectedIndex].text;
     if (level == 'INHERIT') {
       logger.setLevel(null);
@@ -204,7 +206,7 @@ goog.debug.FancyWindow.prototype.closeOptions_ = function() {
 
 
 /**
- * Resize the lof elements
+ * Resizes the log elements
  * @private
  */
 goog.debug.FancyWindow.prototype.resizeStuff_ = function() {
@@ -225,15 +227,15 @@ goog.debug.FancyWindow.prototype.resizeStuff_ = function() {
  */
 goog.debug.FancyWindow.prototype.exit_ = function(e) {
   this.setEnabled(false);
-  if (this.win_) {
-    this.win_.close();
+  if (this.win) {
+    this.win.close();
   }
 };
 
 
 /** @override */
 goog.debug.FancyWindow.prototype.getStyleRules = function() {
-  return goog.base(this, 'getStyleRules') +
+  return goog.debug.FancyWindow.base(this, 'getStyleRules') +
       'html,body{height:100%;width:100%;margin:0px;padding:0px;' +
       'background-color:#FFF;overflow:hidden}' +
       '*{}' +
@@ -265,12 +267,12 @@ goog.debug.FancyWindow.prototype.getHtml_ = function() {
   return '' +
       '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"' +
       '"http://www.w3.org/TR/html4/loose.dtd">' +
-      '<html><head><title>Logging: ' + this.identifier_ + '</title>' +
+      '<html><head><title>Logging: ' + this.identifier + '</title>' +
       '<style>' + this.getStyleRules() + '</style>' +
       '</head><body>' +
       '<div id="log" style="overflow:auto"></div>' +
       '<div id="head">' +
-      '<p><b>Logging: ' + this.identifier_ + '</b></p><p>' +
+      '<p><b>Logging: ' + this.identifier + '</b></p><p>' +
       this.welcomeMessage + '</p>' +
       '<span id="clearbutton">clear</span>' +
       '<span id="exitbutton">exit</span>' +
@@ -296,8 +298,8 @@ goog.debug.FancyWindow.prototype.writeOptionsToLocalStorage_ = function() {
   var loggers = goog.debug.FancyWindow.getLoggers_();
   var storedKeys = goog.debug.FancyWindow.getStoredKeys_();
   for (var i = 0; i < loggers.length; i++) {
-    var key = goog.debug.FancyWindow.LOCAL_STORE_PREFIX + loggers[i];
-    var level = goog.debug.Logger.getLogger(loggers[i]).getLevel();
+    var key = goog.debug.FancyWindow.LOCAL_STORE_PREFIX + loggers[i].getName();
+    var level = loggers[i].getLevel();
     if (key in storedKeys) {
       if (!level) {
         window.localStorage.removeItem(key);
@@ -322,7 +324,7 @@ goog.debug.FancyWindow.prototype.readOptionsFromLocalStorage_ = function() {
   var storedKeys = goog.debug.FancyWindow.getStoredKeys_();
   for (var key in storedKeys) {
     var loggerName = key.replace(goog.debug.FancyWindow.LOCAL_STORE_PREFIX, '');
-    var logger = goog.debug.Logger.getLogger(loggerName);
+    var logger = goog.debug.LogManager.getLogger(loggerName);
     var curLevel = logger.getLevel();
     var storedLevel = window.localStorage.getItem(key).toString();
     if (!curLevel || curLevel.toString() != storedLevel) {
@@ -335,7 +337,7 @@ goog.debug.FancyWindow.prototype.readOptionsFromLocalStorage_ = function() {
 /**
  * Helper function to create a list of locally stored keys. Used to avoid
  * expensive localStorage.getItem() calls.
- * @return {Object} List of keys.
+ * @return {!Object} List of keys.
  * @private
  */
 goog.debug.FancyWindow.getStoredKeys_ = function() {
@@ -352,12 +354,21 @@ goog.debug.FancyWindow.getStoredKeys_ = function() {
 
 
 /**
- * Gets a sorted array of all the loggers registered
- * @return {Array} Array of logger idents, e.g. goog.net.XhrIo.
+ * Gets a sorted array of all the loggers registered.
+ * @return {!Array.<!goog.debug.Logger>} Array of logger instances.
  * @private
  */
 goog.debug.FancyWindow.getLoggers_ = function() {
-  var loggers = goog.object.getKeys(goog.debug.LogManager.getLoggers());
-  loggers.sort();
+  var loggers = goog.object.getValues(goog.debug.LogManager.getLoggers());
+
+  /**
+   * @param {!goog.debug.Logger} a
+   * @param {!goog.debug.Logger} b
+   * @return {number}
+   */
+  var loggerSort = function(a, b) {
+    return goog.array.defaultCompare(a.getName(), b.getName());
+  };
+  goog.array.sort(loggers, loggerSort);
   return loggers;
 };

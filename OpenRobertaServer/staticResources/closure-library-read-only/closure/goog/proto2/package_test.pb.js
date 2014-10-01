@@ -26,10 +26,12 @@ goog.require('proto2.TestAllTypes');
 goog.setTestOnly('package_test.pb');
 
 
+
 /**
  * Message TestPackageTypes.
  * @constructor
  * @extends {goog.proto2.Message}
+ * @final
  */
 someprotopackage.TestPackageTypes = function() {
   goog.proto2.Message.apply(this);

@@ -41,14 +41,16 @@ goog.require('goog.asserts');
 goog.require('goog.async.Deferred');
 goog.require('goog.crypt.hash32');
 goog.require('goog.debug.Error');
+goog.require('goog.events');
 goog.require('goog.events.EventHandler');
 goog.require('goog.fs');
-goog.require('goog.fs.DirectoryEntry.Behavior');
-goog.require('goog.fs.Error.ErrorCode');
-goog.require('goog.fs.FileSaver.EventType');
+goog.require('goog.fs.DirectoryEntry');
+goog.require('goog.fs.Error');
+goog.require('goog.fs.FileSaver');
 goog.require('goog.net.EventType');
-goog.require('goog.net.XhrIo.ResponseType');
+goog.require('goog.net.XhrIo');
 goog.require('goog.net.XhrIoPool');
+goog.require('goog.object');
 
 
 
@@ -63,9 +65,10 @@ goog.require('goog.net.XhrIoPool');
  *     downloading files.
  * @constructor
  * @extends {goog.Disposable}
+ * @final
  */
 goog.net.FileDownloader = function(dir, opt_pool) {
-  goog.base(this);
+  goog.net.FileDownloader.base(this, 'constructor');
 
   /**
    * The directory in which the downloaded files are stored.
@@ -90,7 +93,7 @@ goog.net.FileDownloader = function(dir, opt_pool) {
 
   /**
    * The handler for URL capturing events.
-   * @type {!goog.events.EventHandler}
+   * @type {!goog.events.EventHandler.<!goog.net.FileDownloader>}
    * @private
    */
   this.eventHandler_ = new goog.events.EventHandler(this);
@@ -597,7 +600,7 @@ goog.net.FileDownloader.prototype.disposeInternal = function() {
   goog.dispose(this.pool_);
   delete this.pool_;
 
-  goog.base(this, 'disposeInternal');
+  goog.net.FileDownloader.base(this, 'disposeInternal');
 };
 
 
@@ -612,9 +615,11 @@ goog.net.FileDownloader.prototype.disposeInternal = function() {
  *
  * @constructor
  * @extends {goog.debug.Error}
+ * @final
  */
 goog.net.FileDownloader.Error = function(download, opt_fsErr) {
-  goog.base(this, 'Error capturing URL ' + download.url);
+  goog.net.FileDownloader.Error.base(
+      this, 'constructor', 'Error capturing URL ' + download.url);
 
   /**
    * The URL the event relates to.
@@ -668,7 +673,7 @@ goog.net.FileDownloader.Error.prototype.fileError;
  * @private
  */
 goog.net.FileDownloader.Download_ = function(url, downloader) {
-  goog.base(this);
+  goog.net.FileDownloader.Download_.base(this, 'constructor');
 
   /**
    * The URL for the file being downloaded.
@@ -737,5 +742,5 @@ goog.net.FileDownloader.Download_.prototype.disposeInternal = function() {
     this.writer.abort();
   }
 
-  goog.base(this, 'disposeInternal');
+  goog.net.FileDownloader.Download_.base(this, 'disposeInternal');
 };

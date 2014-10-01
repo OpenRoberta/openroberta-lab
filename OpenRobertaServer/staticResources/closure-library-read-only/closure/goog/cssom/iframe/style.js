@@ -49,10 +49,12 @@
 
 goog.provide('goog.cssom.iframe.style');
 
+goog.require('goog.asserts');
 goog.require('goog.cssom');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.TagName');
+goog.require('goog.dom.classlist');
 goog.require('goog.string');
 goog.require('goog.style');
 goog.require('goog.userAgent');
@@ -137,7 +139,7 @@ goog.cssom.iframe.style.CssRuleSet_.prototype.initializeFromCssRule =
     return false;
   }
   var selector;
-  var declarations;
+  var declarations = '';
   if (ruleStyle &&
       (selector = cssRule.selectorText) &&
       (declarations = ruleStyle.cssText)) {
@@ -190,7 +192,7 @@ goog.cssom.iframe.style.CssRuleSet_.prototype.setSelectorsFromString =
 
 /**
  * Make a copy of this ruleset.
- * @return {goog.cssom.iframe.style.CssRuleSet_} A new CssRuleSet containing
+ * @return {!goog.cssom.iframe.style.CssRuleSet_} A new CssRuleSet containing
  *     the same data as this one.
  */
 goog.cssom.iframe.style.CssRuleSet_.prototype.clone = function() {
@@ -244,7 +246,8 @@ goog.cssom.iframe.style.CssRuleSet_.prototype.writeToArray = function(array) {
     if (i < (selectorCount - 1)) {
       array.push(goog.cssom.iframe.style.SELECTOR_DELIMITER_);
     }
-    if (goog.userAgent.GECKO && !goog.userAgent.isVersion('1.9a')) {
+    if (goog.userAgent.GECKO &&
+        !goog.userAgent.isVersionOrHigher('1.9a')) {
       // In Gecko pre-1.9 (Firefox 2 and lower) we need to add !important
       // to rulesets that match "A" tags, otherwise Gecko's built-in
       // stylesheet will take precedence when designMode is on.
@@ -523,7 +526,7 @@ goog.cssom.iframe.style.NodeAncestry_ = function(el) {
     var className = node.className;
     var classNamesLookup = {};
     if (className) {
-      var classNames = goog.dom.classes.get(node);
+      var classNames = goog.dom.classlist.get(goog.asserts.assertElement(node));
       for (var i = 0; i < classNames.length; i++) {
         classNamesLookup[classNames[i]] = 1;
       }
@@ -564,7 +567,7 @@ goog.cssom.iframe.style.resetDomCache = function() {
 /**
  * Inspects a document and returns all active rule sets
  * @param {Document} doc The document from which to read CSS rules.
- * @return {Array.<goog.cssom.iframe.style.CssRuleSet_>} An array of CssRuleSet
+ * @return {!Array.<goog.cssom.iframe.style.CssRuleSet_>} An array of CssRuleSet
  *     objects representing all the active rule sets in the document.
  * @private
  */
@@ -620,7 +623,7 @@ goog.cssom.iframe.style.ruleSetCache_.loadRuleSetsForDocument = function(doc) {
  * Retrieves the array of css rulesets for this document. A cached
  * version will be used when possible.
  * @param {Document} doc The document for which to get rulesets.
- * @return {Array.<goog.cssom.iframe.style.CssRuleSet_>} An array of CssRuleSet
+ * @return {!Array.<goog.cssom.iframe.style.CssRuleSet_>} An array of CssRuleSet
  *     objects representing the css rule sets in the supplied document.
  */
 goog.cssom.iframe.style.ruleSetCache_.getRuleSetsForDocument = function(doc) {
@@ -920,7 +923,7 @@ goog.cssom.iframe.style.getBackgroundXYValues_ = function(styleObject) {
  * has a transparent background what you're going to see through it is its
  * ancestors.
  * @param {Element} element The element from which to copy background styles.
- * @return {Object} Object containing background* properties.
+ * @return {!Object} Object containing background* properties.
  */
 goog.cssom.iframe.style.getBackgroundContext = function(element) {
   var propertyValues = {

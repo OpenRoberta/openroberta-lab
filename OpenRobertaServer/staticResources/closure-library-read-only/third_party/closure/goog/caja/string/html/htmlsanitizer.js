@@ -62,9 +62,9 @@ goog.require('goog.string.html.HtmlSaxHandler');
  * Strips unsafe tags and attributes from HTML.
  *
  * @param {string} htmlText The HTML text to sanitize.
- * @param {function(string) : string} opt_urlPolicy A transform to apply to URL
+ * @param {function(string): string=} opt_urlPolicy A transform to apply to URL
  *     attribute values.
- * @param {function(string) : string} opt_nmTokenPolicy A transform to apply to
+ * @param {function(string): string=} opt_nmTokenPolicy A transform to apply to
  *     names, IDs, and classes.
  * @return {string} A sanitized HTML, safe to be embedded on the page.
  */
@@ -390,7 +390,7 @@ goog.string.html.HtmlSanitizer.Attributes = {
 
 
 /**
- * @inheritDoc
+ * @override
  */
 goog.string.html.HtmlSanitizer.prototype.startTag =
     function(tagName, attribs) {
@@ -428,7 +428,7 @@ goog.string.html.HtmlSanitizer.prototype.startTag =
 
 
 /**
- * @inheritDoc
+ * @override
  */
 goog.string.html.HtmlSanitizer.prototype.endTag = function(tagName) {
   if (this.ignoring_) {
@@ -477,7 +477,7 @@ goog.string.html.HtmlSanitizer.prototype.endTag = function(tagName) {
 
 
 /**
- * @inheritDoc
+ * @override
  */
 goog.string.html.HtmlSanitizer.prototype.pcdata = function(text) {
   if (!this.ignoring_) {
@@ -487,7 +487,7 @@ goog.string.html.HtmlSanitizer.prototype.pcdata = function(text) {
 
 
 /**
- * @inheritDoc
+ * @override
  */
 goog.string.html.HtmlSanitizer.prototype.rcdata = function(text) {
   if (!this.ignoring_) {
@@ -497,7 +497,7 @@ goog.string.html.HtmlSanitizer.prototype.rcdata = function(text) {
 
 
 /**
- * @inheritDoc
+ * @override
  */
 goog.string.html.HtmlSanitizer.prototype.cdata = function(text) {
   if (!this.ignoring_) {
@@ -507,7 +507,7 @@ goog.string.html.HtmlSanitizer.prototype.cdata = function(text) {
 
 
 /**
- * @inheritDoc
+ * @override
  */
 goog.string.html.HtmlSanitizer.prototype.startDoc = function() {
   this.stack_ = [];
@@ -516,7 +516,7 @@ goog.string.html.HtmlSanitizer.prototype.startDoc = function() {
 
 
 /**
- * @inheritDoc
+ * @override
  */
 goog.string.html.HtmlSanitizer.prototype.endDoc = function() {
   for (var i = this.stack_.length; --i >= 0;) {

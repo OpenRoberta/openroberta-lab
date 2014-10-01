@@ -24,8 +24,7 @@ goog.provide('goog.ui.AnimatedZippy');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.fx.Animation');
-goog.require('goog.fx.Animation.EventType');
-goog.require('goog.fx.Transition.EventType');
+goog.require('goog.fx.Transition');
 goog.require('goog.fx.easing');
 goog.require('goog.ui.Zippy');
 goog.require('goog.ui.ZippyEvent');
@@ -42,13 +41,16 @@ goog.require('goog.ui.ZippyEvent');
  *     string id.
  * @param {boolean=} opt_expanded Initial expanded/visibility state. Defaults to
  *     false.
+ * @param {goog.dom.DomHelper=} opt_domHelper An optional DOM helper.
  * @constructor
  * @extends {goog.ui.Zippy}
  */
-goog.ui.AnimatedZippy = function(header, content, opt_expanded) {
+goog.ui.AnimatedZippy = function(header, content, opt_expanded, opt_domHelper) {
+  var domHelper = opt_domHelper || goog.dom.getDomHelper();
+
   // Create wrapper element and move content into it.
-  var elWrapper = goog.dom.createDom('div', {'style': 'overflow:hidden'});
-  var elContent = goog.dom.getElement(content);
+  var elWrapper = domHelper.createDom('div', {'style': 'overflow:hidden'});
+  var elContent = domHelper.getElement(content);
   elContent.parentNode.replaceChild(elWrapper, elContent);
   elWrapper.appendChild(elContent);
 
@@ -67,7 +69,8 @@ goog.ui.AnimatedZippy = function(header, content, opt_expanded) {
   this.anim_ = null;
 
   // Call constructor of super class.
-  goog.ui.Zippy.call(this, header, elContent, opt_expanded);
+  goog.ui.Zippy.call(this, header, elContent, opt_expanded,
+      undefined, domHelper);
 
   // Set initial state.
   // NOTE: Set the class names as well otherwise animated zippys
@@ -77,6 +80,7 @@ goog.ui.AnimatedZippy = function(header, content, opt_expanded) {
   this.updateHeaderClassName(expanded);
 };
 goog.inherits(goog.ui.AnimatedZippy, goog.ui.Zippy);
+goog.tagUnsealableClass(goog.ui.AnimatedZippy);
 
 
 /**
@@ -182,7 +186,7 @@ goog.ui.AnimatedZippy.prototype.onAnimationCompleted_ = function(expanded) {
     this.getContentElement().style.marginTop = '0';
   }
 
-  goog.events.removeAll(this.anim_);
+  goog.events.removeAll(/** @type {!goog.fx.Animation} */ (this.anim_));
   this.setExpandedInternal(expanded);
   this.anim_ = null;
 

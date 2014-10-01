@@ -26,8 +26,7 @@ goog.require('goog.array');
 goog.require('goog.object');
 goog.require('goog.ui.ColorMenuButtonRenderer');
 goog.require('goog.ui.ColorPalette');
-goog.require('goog.ui.Component.EventType');
-goog.require('goog.ui.ControlContent');
+goog.require('goog.ui.Component');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuButton');
 goog.require('goog.ui.registry');
@@ -45,7 +44,7 @@ goog.require('goog.ui.registry');
  *     should contain at least one {@link goog.ui.ColorPalette} if present.
  * @param {goog.ui.MenuButtonRenderer=} opt_renderer Button renderer;
  *     defaults to {@link goog.ui.ColorMenuButtonRenderer}.
- * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM hepler, used for
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
  *     document interaction.
  * @constructor
  * @extends {goog.ui.MenuButton}
@@ -76,17 +75,17 @@ goog.ui.ColorMenuButton.PALETTES = {
   /** Default pastel colors. */
   PASTEL: [
     '#f4cccc', '#fce5cd', '#fff2cc', '#d9ead3', '#d0e0e3', '#cfe2f3', '#d9d2e9',
-      '#ead1dc',
+    '#ead1dc',
     '#ea9999', '#f9cb9c', '#ffe599', '#b6d7a8', '#a2c4c9', '#9fc5e8', '#b4a7d6',
-      '#d5a6bd',
+    '#d5a6bd',
     '#e06666', '#f6b26b', '#ffd966', '#93c47d', '#76a5af', '#6fa8dc', '#8e7cc3',
-      '#c27ba0',
+    '#c27ba0',
     '#cc0000', '#e69138', '#f1c232', '#6aa84f', '#45818e', '#3d85c6', '#674ea7',
-      '#a64d79',
+    '#a64d79',
     '#990000', '#b45f06', '#bf9000', '#38761d', '#134f5c', '#0b5394', '#351c75',
-      '#741b47',
+    '#741b47',
     '#660000', '#783f04', '#7f6000', '#274e13', '#0c343d', '#073763', '#20124d',
-      '#4c1130'
+    '#4c1130'
   ]
 };
 
@@ -106,9 +105,9 @@ goog.ui.ColorMenuButton.NO_COLOR = 'none';
  * containing default color palettes.
  * @param {Array.<goog.ui.Control>=} opt_extraItems Optional extra menu items to
  *     add before the color palettes.
- * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM hepler, used for
+ * @param {goog.dom.DomHelper=} opt_domHelper Optional DOM helper, used for
  *     document interaction.
- * @return {goog.ui.Menu} Color menu.
+ * @return {!goog.ui.Menu} Color menu.
  */
 goog.ui.ColorMenuButton.newColorMenu = function(opt_extraItems, opt_domHelper) {
   var menu = new goog.ui.Menu(opt_domHelper);
@@ -131,7 +130,7 @@ goog.ui.ColorMenuButton.newColorMenu = function(opt_extraItems, opt_domHelper) {
 
 /**
  * Returns the currently selected color (null if none).
- * @return {?string} The selected color.
+ * @return {string} The selected color.
  */
 goog.ui.ColorMenuButton.prototype.getSelectedColor = function() {
   return /** @type {string} */ (this.getValue());

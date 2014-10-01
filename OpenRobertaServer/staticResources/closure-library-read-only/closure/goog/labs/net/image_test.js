@@ -19,13 +19,11 @@
  */
 
 
-/** @suppress {extraRequire} */
+/** @suppress {extraProvide} */
 goog.provide('goog.labs.net.imageTest');
 
 goog.require('goog.events');
 goog.require('goog.labs.net.image');
-goog.require('goog.result');
-goog.require('goog.result.Result');
 goog.require('goog.string');
 goog.require('goog.testing.AsyncTestCase');
 goog.require('goog.testing.jsunit');
@@ -40,21 +38,11 @@ function testValidImage() {
 
   asyncTestCase.waitForAsync('image load');
 
-  assertEquals(0, goog.events.getTotalListenerCount());
-
-  var result = goog.labs.net.image.load(url);
-
-  goog.result.waitOnSuccess(result, function(value) {
-
-    assertEquals(goog.result.Result.State.SUCCESS, result.getState());
-
+  goog.labs.net.image.load(url).then(function(value) {
     assertEquals('IMG', value.tagName);
     assertTrue(goog.string.endsWith(value.src, url));
-    assertUndefined(result.getError());
-
     assertEquals('Listeners should have been cleaned up.',
                  0, goog.events.getTotalListenerCount());
-
     asyncTestCase.continueTesting();
   });
 }
@@ -65,42 +53,28 @@ function testInvalidImage() {
 
   asyncTestCase.waitForAsync('image load');
 
-  assertEquals(0, goog.events.getTotalListenerCount());
-
-  var result = goog.labs.net.image.load(url);
-
-  goog.result.wait(result, function(result) {
-
-    assertEquals(goog.result.Result.State.ERROR, result.getState());
-    assertUndefined(result.getValue());
-    assertUndefined(result.getError());
-
-    assertEquals('Listeners should have been cleaned up.',
-                 0, goog.events.getTotalListenerCount());
-
-    asyncTestCase.continueTesting();
-  });
+  goog.labs.net.image.load(url).then(
+      fail /* opt_onResolved */,
+      function() {
+        assertEquals('Listeners should have been cleaned up.',
+            0, goog.events.getTotalListenerCount());
+        asyncTestCase.continueTesting();
+      });
 }
 
 function testImageFactory() {
   var returnedImage = new Image();
   var factory = function() {
     return returnedImage;
-  }
+  };
   var countedFactory = goog.testing.recordFunction(factory);
 
   var url = 'testdata/cleardot.gif';
 
   asyncTestCase.waitForAsync('image load');
-  assertEquals(0, goog.events.getTotalListenerCount());
-  var result = goog.labs.net.image.load(url, countedFactory);
-
-  goog.result.waitOnSuccess(result, function(value) {
-    assertEquals(goog.result.Result.State.SUCCESS, result.getState());
+  goog.labs.net.image.load(url, countedFactory).then(function(value) {
     assertEquals(returnedImage, value);
     assertEquals(1, countedFactory.getCallCount());
-    assertUndefined(result.getError());
-
     assertEquals('Listeners should have been cleaned up.',
                  0, goog.events.getTotalListenerCount());
     asyncTestCase.continueTesting();
@@ -113,14 +87,8 @@ function testExistingImage() {
   var url = 'testdata/cleardot.gif';
 
   asyncTestCase.waitForAsync('image load');
-  assertEquals(0, goog.events.getTotalListenerCount());
-  var result = goog.labs.net.image.load(url, image);
-
-  goog.result.waitOnSuccess(result, function(value) {
-    assertEquals(goog.result.Result.State.SUCCESS, result.getState());
+  goog.labs.net.image.load(url, image).then(function(value) {
     assertEquals(image, value);
-    assertUndefined(result.getError());
-
     assertEquals('Listeners should have been cleaned up.',
                  0, goog.events.getTotalListenerCount());
     asyncTestCase.continueTesting();

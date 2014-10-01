@@ -26,7 +26,6 @@ goog.require('goog.ui.CustomButtonRenderer');
 goog.require('goog.ui.INLINE_BLOCK_CLASSNAME');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuRenderer');
-goog.require('goog.userAgent');
 
 
 
@@ -53,40 +52,6 @@ goog.ui.MenuButtonRenderer.CSS_CLASS = goog.getCssName('goog-menu-button');
 
 
 /**
- * A property to denote content elements that have been wrapped in an extra
- * div to work around FF2/RTL bugs.
- * @type {string}
- * @private
- */
-goog.ui.MenuButtonRenderer.WRAPPER_PROP_ = '__goog_wrapper_div';
-
-
-if (goog.userAgent.GECKO) {
-  /**
-   * Takes the menubutton's root element, and sets its content to the given
-   * text caption or DOM structure. Because the DOM structure of this button is
-   * conditional based on whether we need to work around FF2/RTL bugs, we
-   * override the default implementation to take this into account.
-   * @param {Element} element The control's root element.
-   * @param {goog.ui.ControlContent} content Text caption or DOM
-   *     structure to be set as the control's content.
-   * @override
-   */
-  goog.ui.MenuButtonRenderer.prototype.setContent = function(element,
-      content) {
-    var caption =
-        goog.ui.MenuButtonRenderer.superClass_.getContentElement.call(this,
-            /** @type {Element} */ (element && element.firstChild));
-    if (caption) {
-      goog.dom.replaceNode(
-          this.createCaption(content, goog.dom.getDomHelper(element)),
-          caption);
-    }
-  };
-} // end goog.userAgent.GECKO
-
-
-/**
  * Takes the button's root element and returns the parent element of the
  * button's contents.  Overrides the superclass implementation by taking
  * the nested DIV structure of menu buttons into account.
@@ -96,14 +61,8 @@ if (goog.userAgent.GECKO) {
  * @override
  */
 goog.ui.MenuButtonRenderer.prototype.getContentElement = function(element) {
-  var content =
-      goog.ui.MenuButtonRenderer.superClass_.getContentElement.call(this,
-          /** @type {Element} */ (element && element.firstChild));
-  if (goog.userAgent.GECKO && content &&
-      content[goog.ui.MenuButtonRenderer.WRAPPER_PROP_]) {
-    content = /** @type {Element} */ (content.firstChild);
-  }
-  return content;
+  return goog.ui.MenuButtonRenderer.superClass_.getContentElement.call(this,
+      /** @type {Element} */ (element && element.firstChild));
 };
 
 
@@ -125,7 +84,7 @@ goog.ui.MenuButtonRenderer.prototype.decorate = function(control, element) {
   if (menuElem) {
     // Move the menu element directly under the body (but hide it first to
     // prevent flicker; see bug 1089244).
-    goog.style.showElement(menuElem, false);
+    goog.style.setElementShown(menuElem, false);
     goog.dom.appendChild(goog.dom.getOwnerDocument(menuElem).body, menuElem);
 
     // Decorate the menu and attach it to the button.
@@ -193,7 +152,7 @@ goog.ui.MenuButtonRenderer.prototype.createCaption = function(content, dom) {
  *     to wrap in a box.
  * @param {string} cssClass The CSS class for the renderer.
  * @param {goog.dom.DomHelper} dom DOM helper, used for document interaction.
- * @return {Element} Caption element.
+ * @return {!Element} Caption element.
  */
 goog.ui.MenuButtonRenderer.wrapCaption = function(content, cssClass, dom) {
   return dom.createDom(

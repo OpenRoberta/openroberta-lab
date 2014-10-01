@@ -40,6 +40,7 @@ goog.require('goog.string');
  * Olson time zone data base (through pytz), and will be updated timely.
  *
  * @constructor
+ * @final
  */
 goog.i18n.TimeZone = function() {
   /**
@@ -123,7 +124,7 @@ goog.i18n.TimeZone.NameType = {
  *           January 1, 1970, and each adjustment is the adjustment to apply
  *           for times after the DST transition, given as minutes EAST of UTC.
  *     </ul>
- * @return {goog.i18n.TimeZone} A goog.i18n.TimeZone object for the given
+ * @return {!goog.i18n.TimeZone} A goog.i18n.TimeZone object for the given
  *     time zone data.
  */
 goog.i18n.TimeZone.createTimeZone = function(timeZoneData) {
@@ -142,7 +143,7 @@ goog.i18n.TimeZone.createTimeZone = function(timeZoneData) {
 /**
  * This factory method creates a time zone object with a constant offset.
  * @param {number} timeZoneOffsetInMinutes Offset in minutes WEST of UTC.
- * @return {goog.i18n.TimeZone} A time zone object with the given constant
+ * @return {!goog.i18n.TimeZone} A time zone object with the given constant
  *     offset.  Note that the time zone ID of this object will use the POSIX
  *     convention, which has a reversed sign ("Etc/GMT+8" means UTC-8 or PST).
  * @private
@@ -223,7 +224,7 @@ goog.i18n.TimeZone.composeUTCString_ = function(offset) {
 /**
  * Convert the contents of time zone object to a timeZoneData object, suitable
  * for passing to goog.i18n.TimeZone.createTimeZone.
- * @return {Object} A timeZoneData object (see the documentation for
+ * @return {!Object} A timeZoneData object (see the documentation for
  *     goog.i18n.TimeZone.createTimeZone).
  */
 goog.i18n.TimeZone.prototype.getTimeZoneData = function() {
@@ -338,4 +339,3 @@ goog.i18n.TimeZone.prototype.getTimeZoneId = function() {
 goog.i18n.TimeZone.prototype.isDaylightTime = function(date) {
   return this.getDaylightAdjustment(date) > 0;
 };
-

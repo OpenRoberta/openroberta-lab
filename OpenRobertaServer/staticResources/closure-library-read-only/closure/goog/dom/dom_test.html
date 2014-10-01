@@ -92,6 +92,21 @@ See the COPYING file for details.
   <div id="tabIndex1" tabindex="1">Test</div>
   <div id="tabIndex2" tabindex="2">Test</div>
 
+  <form>
+    <a href="testUrl" id="noTabIndexAnchor">Test</a>
+    <input id="noTabIndexInput">
+    <textarea id="noTabIndexTextArea">Test</textarea>
+    <select id="noTabIndexSelect"><option>Test</option></select>
+    <button id="noTabIndexButton">Test</button>
+    <button id="negTabIndexButton" tabindex="-1">Test</button>
+    <button id="zeroTabIndexButton" tabindex="0">Test</button>
+    <button id="posTabIndexButton" tabindex="1">Test</button>
+    <button id="disabledNoTabIndexButton" disabled>Test</button>
+    <button id="disabledNegTabIndexButton" disabled tabindex="-1">Test</button>
+    <button id="disabledZeroTabIndexButton" disabled tabindex="0">Test</button>
+    <button id="disabledPosTabIndexButton" disabled tabindex="1">Test</button>
+  </form>
+
   <div id="toReplace">Replace Test</div>
 
   <iframe id="iframe"></iframe>
@@ -102,6 +117,12 @@ See the COPYING file for details.
   <iframe id="myIframe" style="width:400px;height:200px;"></iframe>
 
   <a id='link' href='foo.html'>Foo</a>
+
+  <svg id="testSvg" width="100" height="100" viewPort="0 0 100 100" version="1.0">
+    <g id="testG">
+      <rect id="testRect" x="10" y="10" width="50" height="50"/>
+    </g>
+  </svg>
 
 <script src="dom_test.js"></script></body>
 </html>

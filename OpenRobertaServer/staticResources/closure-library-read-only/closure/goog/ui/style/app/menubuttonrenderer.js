@@ -17,7 +17,6 @@
  * subclasses.
  *
  * @author attila@google.com (Attila Bodis)
- * @author gveen@google.com (Greg Veen)
  */
 
 goog.provide('goog.ui.style.app.MenuButtonRenderer');
@@ -26,7 +25,6 @@ goog.require('goog.a11y.aria.Role');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.style');
-goog.require('goog.ui.ControlContent');
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuRenderer');
 goog.require('goog.ui.style.app.ButtonRenderer');
@@ -39,6 +37,7 @@ goog.require('goog.ui.style.app.ButtonRenderer');
  * dropdown element into the content element after the specified content.
  * @constructor
  * @extends {goog.ui.style.app.ButtonRenderer}
+ * @final
  */
 goog.ui.style.app.MenuButtonRenderer = function() {
   goog.ui.style.app.ButtonRenderer.call(this);
@@ -138,7 +137,7 @@ goog.ui.style.app.MenuButtonRenderer.prototype.decorate =
   if (menuElem) {
     // Move the menu element directly under the body (but hide it first to
     // prevent flicker; see bug 1089244).
-    goog.style.showElement(menuElem, false);
+    goog.style.setElementShown(menuElem, false);
     goog.dom.appendChild(goog.dom.getOwnerDocument(menuElem).body, menuElem);
 
     // Decorate the menu and attach it to the button.

@@ -16,6 +16,7 @@
  * @fileoverview Implementation of AES in JavaScript.
  * @see http://en.wikipedia.org/wiki/Advanced_Encryption_Standard
  *
+ * @author nnaze@google.com (Nathan Naze) - port to Closure
  */
 
 goog.provide('goog.crypt.Aes');
@@ -42,6 +43,8 @@ goog.require('goog.crypt.BlockCipher');
  * @param {!Array.<number>} key The key as an array of integers in {0, 255}.
  *     The key must have lengths of 16, 24, or 32 integers for 128-,
  *     192-, or 256-bit encryption, respectively.
+ * @final
+ * @struct
  */
 goog.crypt.Aes = function(key) {
   goog.crypt.Aes.assertKeyArray_(key);
@@ -89,7 +92,7 @@ goog.crypt.Aes = function(key) {
  * @define {boolean} Whether to call test method stubs.  This can be enabled
  *     for unit testing.
  */
-goog.crypt.Aes.ENABLE_TEST_MODE = false;
+goog.define('goog.crypt.Aes.ENABLE_TEST_MODE', false);
 
 
 /**

@@ -17,6 +17,7 @@
  *
  * (Based loosly on my animation code for 13thparallel.org, with extra
  * inspiration from the DojoToolkit's modifications to my code)
+ * @author arv@google.com (Erik Arvidsson)
  */
 
 goog.provide('goog.fx.Animation');
@@ -46,7 +47,7 @@ goog.require('goog.fx.anim.Animated');  // Unreferenced: interface
  * @extends {goog.fx.TransitionBase}
  */
 goog.fx.Animation = function(start, end, duration, opt_acc) {
-  goog.base(this);
+  goog.fx.Animation.base(this, 'constructor');
 
   if (!goog.isArray(start) || !goog.isArray(end)) {
     throw Error('Start and end parameters must be arrays');
@@ -357,7 +358,7 @@ goog.fx.Animation.prototype.disposeInternal = function() {
     this.stop(false);
   }
   this.onDestroy();
-  goog.base(this, 'disposeInternal');
+  goog.fx.Animation.base(this, 'disposeInternal');
 };
 
 
@@ -371,7 +372,7 @@ goog.fx.Animation.prototype.destroy = function() {
 };
 
 
-/** @inheritDoc */
+/** @override */
 goog.fx.Animation.prototype.onAnimationFrame = function(now) {
   this.cycle(now);
 };
@@ -461,7 +462,7 @@ goog.fx.Animation.prototype.dispatchAnimationEvent = function(type) {
  * @extends {goog.events.Event}
  */
 goog.fx.AnimationEvent = function(type, anim) {
-  goog.base(this, type);
+  goog.fx.AnimationEvent.base(this, 'constructor', type);
 
   /**
    * The current coordinates.
@@ -522,7 +523,7 @@ goog.inherits(goog.fx.AnimationEvent, goog.events.Event);
 
 /**
  * Returns the coordinates as integers (rounded to nearest integer).
- * @return {Array.<number>} An array of the coordinates rounded to
+ * @return {!Array.<number>} An array of the coordinates rounded to
  *     the nearest integer.
  */
 goog.fx.AnimationEvent.prototype.coordsAsInts = function() {

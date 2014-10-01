@@ -19,11 +19,12 @@
  * using CSS background tiling instead of as a grid of nodes.
  *
  * @author robbyw@google.com (Robby Walker)
- * @author abefettig@google.com (Abe Fettig)
  */
 
 goog.provide('goog.ui.DimensionPickerRenderer');
 
+goog.require('goog.a11y.aria.Announcer');
+goog.require('goog.a11y.aria.LivePriority');
 goog.require('goog.dom');
 goog.require('goog.dom.TagName');
 goog.require('goog.i18n.bidi');
@@ -43,6 +44,9 @@ goog.require('goog.userAgent');
  */
 goog.ui.DimensionPickerRenderer = function() {
   goog.ui.ControlRenderer.call(this);
+
+  /** @private {goog.a11y.aria.Announcer} */
+  this.announcer_ = new goog.a11y.aria.Announcer();
 };
 goog.inherits(goog.ui.DimensionPickerRenderer, goog.ui.ControlRenderer);
 goog.addSingletonGetter(goog.ui.DimensionPickerRenderer);
@@ -196,14 +200,17 @@ goog.ui.DimensionPickerRenderer.prototype.addElementContents_ = function(
 /**
  * Creates a div and adds the appropriate contents to it.
  * @param {goog.ui.Control} control Picker to render.
- * @return {Element} Root element for the palette.
+ * @return {!Element} Root element for the palette.
  * @override
  */
 goog.ui.DimensionPickerRenderer.prototype.createDom = function(control) {
   var palette = /** @type {goog.ui.DimensionPicker} */ (control);
   var classNames = this.getClassNames(palette);
+  // Hide the element from screen readers so they don't announce "1 of 1" for
+  // the perceived number of items in the palette.
   var element = palette.getDomHelper().createDom(goog.dom.TagName.DIV, {
-    'class' : classNames ? classNames.join(' ') : ''
+    'class': classNames ? classNames.join(' ') : '',
+    'aria-hidden': 'true'
   });
   this.addElementContents_(palette, element);
   this.updateSize(palette, element);
@@ -269,7 +276,7 @@ goog.ui.DimensionPickerRenderer.prototype.getGridOffsetY = function(
 
 
 /**
- * Sets the highlighted size.
+ * Sets the highlighted size. Does nothing if the palette hasn't been rendered.
  * @param {goog.ui.DimensionPicker} palette The table size palette.
  * @param {number} columns The number of columns to highlight.
  * @param {number} rows The number of rows to highlight.
@@ -277,6 +284,10 @@ goog.ui.DimensionPickerRenderer.prototype.getGridOffsetY = function(
 goog.ui.DimensionPickerRenderer.prototype.setHighlightedSize = function(
     palette, columns, rows) {
   var element = palette.getElement();
+  // Can't update anything if DimensionPicker hasn't been rendered.
+  if (!element) {
+    return;
+  }
 
   // Style the highlight div.
   var style = this.getHighlightDiv_(element).style;
@@ -288,6 +299,16 @@ goog.ui.DimensionPickerRenderer.prototype.setHighlightedSize = function(
   if (palette.isRightToLeft()) {
     style.right = '0';
   }
+
+  /**
+   * @desc The dimension of the columns and rows currently selected in the
+   * dimension picker, as text that can be spoken by a screen reader.
+   */
+  var MSG_DIMENSION_PICKER_HIGHLIGHTED_DIMENSIONS = goog.getMsg(
+      '{$numCols} by {$numRows}',
+      {'numCols': columns, 'numRows': rows});
+  this.announcer_.say(MSG_DIMENSION_PICKER_HIGHLIGHTED_DIMENSIONS,
+      goog.a11y.aria.LivePriority.ASSERTIVE);
 
   // Update the size text.
   goog.dom.setTextContent(this.getStatusDiv_(element),

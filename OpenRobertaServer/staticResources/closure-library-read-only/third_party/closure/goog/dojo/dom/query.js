@@ -64,6 +64,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *        future queries using the same selector evaluate against the DOM branch
  *        too.
  *    5.) matched nodes are pruned to ensure they are unique
+ * @deprecated This is an all-software query selector. When developing for
+ *     recent browsers, use document.querySelector. See information at
+ *     http://caniuse.com/queryselector and
+ *     https://developer.mozilla.org/en-US/docs/DOM/Document.querySelector .
  */
 
 goog.provide('goog.dom.query');
@@ -189,6 +193,10 @@ goog.require('goog.userAgent');
    * @param {(string|Node)=} opt_root A Node (or node id) to scope the search
    *     from (optional).
    * @return { {length: number} } The elements that matched the query.
+   *
+   * @deprecated This is an all-software query selector. Use
+   *     document.querySelector. See
+   *     https://developer.mozilla.org/en-US/docs/DOM/Document.querySelector .
    */
 goog.dom.query = (function() {
   ////////////////////////////////////////////////////////////////////////
@@ -198,6 +206,8 @@ goog.dom.query = (function() {
   var cssCaseBug = (goog.userAgent.WEBKIT &&
                      ((goog.dom.getDocument().compatMode) == 'BackCompat')
                    );
+
+  var legacyIE = goog.userAgent.IE && !goog.userAgent.isVersionOrHigher('9');
 
   // On browsers that support the "children" collection we can avoid a lot of
   // iteration on chaff (non-element) nodes.
@@ -838,7 +848,7 @@ goog.dom.query = (function() {
     }
   };
 
-  var defaultGetter = (goog.userAgent.IE) ? function(cond) {
+  var defaultGetter = (legacyIE) ? function(cond) {
     var clc = cond.toLowerCase();
     if (clc == 'class') {
       cond = 'className';
@@ -1258,7 +1268,7 @@ goog.dom.query = (function() {
   var qsaAvail = (
     !!goog.dom.getDocument()[qsa] &&
     // see #5832
-    (!goog.userAgent.WEBKIT || goog.userAgent.isVersion('526'))
+    (!goog.userAgent.WEBKIT || goog.userAgent.isVersionOrHigher('526'))
   );
 
   /** @param {boolean=} opt_forceDOM */
@@ -1299,7 +1309,7 @@ goog.dom.query = (function() {
       //    http://www.w3.org/TR/css3-selectors/#w3cselgrammar
       (specials.indexOf(qcz) == -1) &&
       // IE's QSA impl sucks on pseudos
-      (!goog.userAgent.IE || (query.indexOf(':') == -1)) &&
+      (!legacyIE || (query.indexOf(':') == -1)) &&
 
       (!(cssCaseBug && (query.indexOf('.') >= 0))) &&
 
@@ -1340,7 +1350,7 @@ goog.dom.query = (function() {
           // the zipping function into 'remove' comments mode instead of the
           // normal 'skip it' which every other QSA-clued browser enjoys
           // skip expensive duplication checks and just wrap in an array.
-          if (goog.userAgent.IE) {
+          if (legacyIE) {
             r.commentStrip = true;
           } else {
             r.nozip = true;
@@ -1380,7 +1390,7 @@ goog.dom.query = (function() {
   // NOTE:
   //    this function is Moo inspired, but our own impl to deal correctly
   //    with XML in IE
-  var _nodeUID = goog.userAgent.IE ? function(node) {
+  var _nodeUID = legacyIE ? function(node) {
     if (caseSensitive) {
       // XML docs don't have uniqueID on their nodes
       return node.getAttribute('_uid') ||
@@ -1432,7 +1442,7 @@ goog.dom.query = (function() {
 
     // we have to fork here for IE and XML docs because we can't set
     // expandos on their nodes (apparently). *sigh*
-    if (goog.userAgent.IE && caseSensitive) {
+    if (legacyIE && caseSensitive) {
       var szidx = _zipIdx + '';
       arr[0].setAttribute(_zipIdxName, szidx);
       for (var x = 1, te; te = arr[x]; x++) {
@@ -1441,7 +1451,7 @@ goog.dom.query = (function() {
         }
         te.setAttribute(_zipIdxName, szidx);
       }
-    } else if (goog.userAgent.IE && arr.commentStrip) {
+    } else if (legacyIE && arr.commentStrip) {
       try {
         for (var x = 1, te; te = arr[x]; x++) {
           if (isElement(te)) {
@@ -1508,7 +1518,7 @@ goog.dom.query = (function() {
         goog.userAgent.OPERA &&
           (root.doctype || od.toString() == '[object XMLDocument]') ||
         !!od &&
-        (goog.userAgent.IE ? od.xml : (root.xmlVersion || od.xmlVersion));
+        (legacyIE ? od.xml : (root.xmlVersion || od.xmlVersion));
 
     // NOTE:
     //    adding 'true' as the 2nd argument to getQueryFunc is useful for

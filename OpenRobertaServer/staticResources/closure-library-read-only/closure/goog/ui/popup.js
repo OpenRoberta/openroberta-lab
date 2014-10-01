@@ -15,6 +15,7 @@
 /**
  * @fileoverview Definition of the Popup class.
  *
+ * @author eae@google.com (Emil A Eklund)
  * @see ../demos/popup.html
  */
 
@@ -29,14 +30,12 @@ goog.provide('goog.ui.Popup.ViewPortClientPosition');
 goog.provide('goog.ui.Popup.ViewPortPosition');
 
 goog.require('goog.math.Box');
-goog.require('goog.positioning');
 goog.require('goog.positioning.AbsolutePosition');
 goog.require('goog.positioning.AnchoredPosition');
 goog.require('goog.positioning.AnchoredViewportPosition');
 goog.require('goog.positioning.ClientPosition');
 goog.require('goog.positioning.Corner');
 goog.require('goog.positioning.Overflow');
-goog.require('goog.positioning.OverflowStatus');
 goog.require('goog.positioning.ViewportClientPosition');
 goog.require('goog.positioning.ViewportPosition');
 goog.require('goog.style');
@@ -74,12 +73,13 @@ goog.ui.Popup = function(opt_element, opt_position) {
    *
    * @type {goog.positioning.AbstractPosition|undefined}
    * @protected
-   * @suppress {underscore}
+   * @suppress {underscore|visibility}
    */
   this.position_ = opt_position || undefined;
   goog.ui.PopupBase.call(this, opt_element);
 };
 goog.inherits(goog.ui.Popup, goog.ui.PopupBase);
+goog.tagUnsealableClass(goog.ui.Popup);
 
 
 /**
@@ -208,7 +208,7 @@ goog.ui.Popup.prototype.reposition = function() {
   var el = this.getElement();
   if (hideForPositioning) {
     el.style.visibility = 'hidden';
-    goog.style.showElement(el, true);
+    goog.style.setElementShown(el, true);
   }
 
   this.position_.reposition(el, this.popupCorner_, this.margin_);
@@ -218,7 +218,7 @@ goog.ui.Popup.prototype.reposition = function() {
     // method in PopupBase. Resetting it here causes flickering in some
     // situations, even if set to visible after the display property has been
     // set to none by the call below.
-    goog.style.showElement(el, false);
+    goog.style.setElementShown(el, false);
   }
 };
 
@@ -240,6 +240,7 @@ goog.ui.Popup.prototype.reposition = function() {
  *
  * @deprecated Use {@link goog.positioning.AnchoredPosition} instead, this
  *     alias will be removed at the end of Q1 2009.
+ * @final
  */
 goog.ui.Popup.AnchoredPosition = goog.positioning.AnchoredPosition;
 
@@ -287,6 +288,7 @@ goog.ui.Popup.AnchoredViewPortPosition =
  *
  * @deprecated Use {@link goog.positioning.AbsolutePosition} instead, this alias
  *     will be removed at the end of Q1 2009.
+ * @final
  */
 goog.ui.Popup.AbsolutePosition = goog.positioning.AbsolutePosition;
 
@@ -325,6 +327,7 @@ goog.ui.Popup.ViewPortPosition = goog.positioning.ViewportPosition;
  *
  * @deprecated Use {@link goog.positioning.ClientPosition} instead, this alias
  *     will be removed at the end of Q1 2009.
+ * @final
  */
 goog.ui.Popup.ClientPosition = goog.positioning.ClientPosition;
 

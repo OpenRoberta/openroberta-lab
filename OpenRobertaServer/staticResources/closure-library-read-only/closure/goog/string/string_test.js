@@ -16,20 +16,30 @@
  * @fileoverview Unit tests for goog.string.
  */
 
+/** @suppress {extraProvide} */
 goog.provide('goog.stringTest');
 
 goog.require('goog.functions');
 goog.require('goog.object');
 goog.require('goog.string');
+goog.require('goog.string.Unicode');
+goog.require('goog.testing.MockControl');
 goog.require('goog.testing.PropertyReplacer');
 goog.require('goog.testing.jsunit');
 
 goog.setTestOnly('goog.stringTest');
 
-var stubs = new goog.testing.PropertyReplacer();
+var stubs;
+var mockControl;
+
+function setUp() {
+  stubs = new goog.testing.PropertyReplacer();
+  mockControl = new goog.testing.MockControl();
+}
 
 function tearDown() {
   stubs.reset();
+  mockControl.$tearDown();
 }
 
 
@@ -191,13 +201,13 @@ function testStripNewLines() {
 function testCanonicalizeNewlines() {
   assertEquals('Should replace all types of new line with \\n',
                goog.string.canonicalizeNewlines(
-                    'some\nlines\rthat\r\nare\n\nsplit'),
+      'some\nlines\rthat\r\nare\n\nsplit'),
                'some\nlines\nthat\nare\n\nsplit');
 }
 
 
 // === tests for goog.string.normalizeWhitespace ===
-function testWhitespace() {
+function testNormalizeWhitespace() {
   assertEquals('All whitespace chars should be replaced with a normal space',
                goog.string.normalizeWhitespace('\xa0 \n\t \xa0 \n\t'),
                '         ');
@@ -293,19 +303,45 @@ function testCaseInsensitiveEndsWith() {
               goog.string.caseInsensitiveEndsWith('ABCD', 'abcde'));
 }
 
+// === tests for goog.string.caseInsensitiveEquals ===
+function testCaseInsensitiveEquals() {
+
+  function assertCaseInsensitiveEquals(str1, str2) {
+    assertTrue(goog.string.caseInsensitiveEquals(str1, str2));
+  }
+
+  function assertCaseInsensitiveNotEquals(str1, str2) {
+    assertFalse(goog.string.caseInsensitiveEquals(str1, str2));
+  }
+
+  assertCaseInsensitiveEquals('abc', 'abc');
+  assertCaseInsensitiveEquals('abc', 'abC');
+  assertCaseInsensitiveEquals('d,e,F,G', 'd,e,F,G');
+  assertCaseInsensitiveEquals('ABCD EFGH 1234', 'abcd efgh 1234');
+  assertCaseInsensitiveEquals('FooBarBaz', 'fOObARbAZ');
+
+  assertCaseInsensitiveNotEquals('ABCD EFGH', 'abcd efg');
+  assertCaseInsensitiveNotEquals('ABC DEFGH', 'ABCD EFGH');
+  assertCaseInsensitiveNotEquals('FooBarBaz', 'fOObARbAZ ');
+}
+
 
 // === tests for goog.string.subs ===
 function testSubs() {
-  assertEquals('Should be the same', goog.string.subs('nothing to subs'),
-               'nothing to subs');
-  assertEquals('Should be the same', goog.string.subs('%s', '1'), '1');
   assertEquals('Should be the same',
-               goog.string.subs('%s%s%s', '1', 2, true), '12true');
+               'nothing to subs',
+               goog.string.subs('nothing to subs'));
+  assertEquals('Should be the same',
+               '1',
+               goog.string.subs('%s', '1'));
+  assertEquals('Should be the same',
+               '12true',
+               goog.string.subs('%s%s%s', '1', 2, true));
   function f() {
-    assertTrue('This should not be called', false);
+    fail('This should not be called');
   }
   f.toString = function() { return 'f'; };
-  assertEquals('Should not call function', goog.string.subs('%s', f), 'f');
+  assertEquals('Should not call function', 'f', goog.string.subs('%s', f));
 
   // If the string that is to be substituted in contains $& then it will be
   // usually be replaced with %s, we need to check goog.string.subs, handles
@@ -323,6 +359,23 @@ function testSubs() {
     assertEquals('$' + i + ' should not be substituted',
         '_$' + i + '_', goog.string.subs('%s', '_$' + i + '_'));
   }
+
+  assertEquals(
+      'Only the first three "%s" strings should be replaced.',
+      'test foo test bar test baz test %s test %s test',
+      goog.string.subs(
+          'test %s test %s test %s test %s test %s test',
+          'foo', 'bar', 'baz'));
+}
+
+
+/**
+ * Verifies that if too many arguments are given, they are ignored.
+ * Logic test for bug documented here: http://go/eusxz
+ */
+function testSubsTooManyArguments() {
+  assertEquals('one', goog.string.subs('one', 'two', 'three'));
+  assertEquals('onetwo', goog.string.subs('one%s', 'two', 'three'));
 }
 
 
@@ -411,21 +464,37 @@ function testNewLineToBr() {
 
 // === tests for goog.string.htmlEscape and .unescapeEntities ===
 function testHtmlEscapeAndUnescapeEntities() {
-  var text = '"x1 < x2 && y2 > y1"';
-  var html = '&quot;x1 &lt; x2 &amp;&amp; y2 &gt; y1&quot;';
+  var text = '\'"x1 < x2 && y2 > y1"\'';
+  var html = '&#39;&quot;x1 &lt; x2 &amp;&amp; y2 &gt; y1&quot;&#39;';
 
-  assertEquals('Testing htmlEscape', goog.string.htmlEscape(text), html);
-  assertEquals('Testing htmlEscape', goog.string.htmlEscape(text, false), html);
-  assertEquals('Testing htmlEscape', goog.string.htmlEscape(text, true), html);
-  assertEquals('Testing unescapeEntities',
-               goog.string.unescapeEntities(html), text);
+  assertEquals('Testing htmlEscape', html, goog.string.htmlEscape(text));
+  assertEquals('Testing htmlEscape', html, goog.string.htmlEscape(text, false));
+  assertEquals('Testing htmlEscape', html, goog.string.htmlEscape(text, true));
+  assertEquals('Testing unescapeEntities', text,
+               goog.string.unescapeEntities(html));
 
-  assertEquals('escape -> unescape',
-               goog.string.unescapeEntities(goog.string.htmlEscape(text)),
-               text);
-  assertEquals('unescape -> escape',
-               goog.string.htmlEscape(goog.string.unescapeEntities(html)),
-               html);
+  assertEquals('escape -> unescape', text,
+               goog.string.unescapeEntities(goog.string.htmlEscape(text)));
+  assertEquals('unescape -> escape', html,
+               goog.string.htmlEscape(goog.string.unescapeEntities(html)));
+}
+
+function testHtmlUnescapeEntitiesWithDocument() {
+  var documentMock = {
+    createElement: mockControl.createFunctionMock('createElement')
+  };
+  var divMock = document.createElement('div');
+  documentMock.createElement('div').$returns(divMock);
+  mockControl.$replayAll();
+
+  var html = '&lt;a&b&gt;';
+  var text = '<a&b>';
+
+  assertEquals('wrong unescaped value',
+      text, goog.string.unescapeEntitiesWithDocument(html, documentMock));
+  assertNotEquals('divMock.innerHTML should have been used', '',
+      divMock.innerHTML);
+  mockControl.$verifyAll();
 }
 
 function testHtmlEscapeAndUnescapeEntitiesUsingDom() {
@@ -462,6 +531,19 @@ function testHtmlEscapeAndUnescapePureXmlEntities_() {
   assertEquals('unescape -> escape',
                goog.string.htmlEscape(
                    goog.string.unescapePureXmlEntities_(html)), html);
+}
+
+function testHtmlEscapeDetectDoubleEscaping() {
+  stubs.set(goog.string, 'DETECT_DOUBLE_ESCAPING', true);
+  assertEquals('&#101; &lt; pi', goog.string.htmlEscape('e < pi'));
+  assertEquals('&#101; &lt; pi', goog.string.htmlEscape('e < pi', true));
+}
+
+function testHtmlEscapeNullByte() {
+  assertEquals('&#0;', goog.string.htmlEscape('\x00'));
+  assertEquals('&#0;', goog.string.htmlEscape('\x00', true));
+  assertEquals('\\x00', goog.string.htmlEscape('\\x00'));
+  assertEquals('\\x00', goog.string.htmlEscape('\\x00', true));
 }
 
 var globalXssVar = 0;
@@ -542,12 +624,27 @@ function testUnescapeEntitiesPreservesWhitespace() {
 
 
 // === tests for goog.string.whitespaceEscape ===
-function testWhiteSpaceEscape() {
+function testWhitespaceEscape() {
   assertEquals('Should be the same',
       goog.string.whitespaceEscape('one two  three   four    five     '),
       'one two &#160;three &#160; four &#160; &#160;five &#160; &#160; ');
 }
 
+
+// === tests for goog.string.preserveSpaces ===
+function testPreserveSpaces() {
+  var nbsp = goog.string.Unicode.NBSP;
+  assertEquals('', goog.string.preserveSpaces(''));
+  assertEquals(nbsp + 'a', goog.string.preserveSpaces(' a'));
+  assertEquals(nbsp + ' a', goog.string.preserveSpaces('  a'));
+  assertEquals(nbsp + ' ' + nbsp + 'a', goog.string.preserveSpaces('   a'));
+  assertEquals('a ' + nbsp + 'b', goog.string.preserveSpaces('a  b'));
+  assertEquals('a\n' + nbsp + 'b', goog.string.preserveSpaces('a\n b'));
+
+  // We don't care about trailing spaces.
+  assertEquals('a ', goog.string.preserveSpaces('a '));
+  assertEquals('a \n' + nbsp + 'b', goog.string.preserveSpaces('a \n b'));
+}
 
 
 // === tests for goog.string.stripQuotes ===
@@ -616,7 +713,7 @@ function testTruncateMiddle() {
       goog.string.truncateMiddle(html, 14));
   assertEquals('Should not clip html char',
       'true &amp;&amp;...= false',
-       goog.string.truncateMiddle(html, 14, true));
+      goog.string.truncateMiddle(html, 14, true));
 
   assertEquals('ab...xyz', goog.string.truncateMiddle(str, 5, null, 3));
   assertEquals('abcdefg...xyz', goog.string.truncateMiddle(str, 10, null, 3));
@@ -628,7 +725,7 @@ function testTruncateMiddle() {
       goog.string.truncateMiddle(html, 14, null, 3));
   assertEquals('Should not clip html char',
       'true &amp;&amp; fal...lse',
-       goog.string.truncateMiddle(html, 14, true, 3));
+      goog.string.truncateMiddle(html, 14, true, 3));
 }
 
 
@@ -887,6 +984,7 @@ function assertHashcodeEquals(expectedHashCode, str) {
       expectedHashCode, goog.string.hashCode(str));
 }
 
+
 /**
  * Verify we get random-ish looking values for hash of Strings.
  */
@@ -1025,8 +1123,8 @@ function testParseInt() {
   assertTrue(isNaN(goog.string.parseInt(' ')));
   assertTrue(isNaN(goog.string.parseInt('a')));
   assertTrue(isNaN(goog.string.parseInt('FFAA')));
-  assertEquals(1, goog.string.parseInt(1))
-  assertEquals(1234567890123456, goog.string.parseInt(1234567890123456))
+  assertEquals(1, goog.string.parseInt(1));
+  assertEquals(1234567890123456, goog.string.parseInt(1234567890123456));
   assertEquals(2, goog.string.parseInt(' 2.3'));
   assertEquals(16, goog.string.parseInt('0x10'));
   assertEquals(11, goog.string.parseInt('11'));
@@ -1072,4 +1170,70 @@ function testParseInt() {
   assertEquals(-50, goog.string.parseInt('-0x32    '));
   assertEquals(-243, goog.string.parseInt('   -0xF3    '));
   assertTrue(isNaN(goog.string.parseInt(' - 0x32 ')));
+}
+
+function testIsLowerCamelCase() {
+  assertTrue(goog.string.isLowerCamelCase('foo'));
+  assertTrue(goog.string.isLowerCamelCase('fooBar'));
+  assertTrue(goog.string.isLowerCamelCase('fooBarBaz'));
+  assertTrue(goog.string.isLowerCamelCase('innerHTML'));
+
+  assertFalse(goog.string.isLowerCamelCase(''));
+  assertFalse(goog.string.isLowerCamelCase('a3a'));
+  assertFalse(goog.string.isLowerCamelCase('goog.dom'));
+  assertFalse(goog.string.isLowerCamelCase('Foo'));
+  assertFalse(goog.string.isLowerCamelCase('FooBar'));
+  assertFalse(goog.string.isLowerCamelCase('ABCBBD'));
+}
+
+function testIsUpperCamelCase() {
+  assertFalse(goog.string.isUpperCamelCase(''));
+  assertFalse(goog.string.isUpperCamelCase('foo'));
+  assertFalse(goog.string.isUpperCamelCase('fooBar'));
+  assertFalse(goog.string.isUpperCamelCase('fooBarBaz'));
+  assertFalse(goog.string.isUpperCamelCase('innerHTML'));
+  assertFalse(goog.string.isUpperCamelCase('a3a'));
+  assertFalse(goog.string.isUpperCamelCase('goog.dom'));
+  assertFalse(goog.string.isUpperCamelCase('Boyz2Men'));
+
+  assertTrue(goog.string.isUpperCamelCase('ABCBBD'));
+  assertTrue(goog.string.isUpperCamelCase('Foo'));
+  assertTrue(goog.string.isUpperCamelCase('FooBar'));
+  assertTrue(goog.string.isUpperCamelCase('FooBarBaz'));
+}
+
+function testSplitLimit() {
+  assertArrayEquals(['a*a*a*a'], goog.string.splitLimit('a*a*a*a', '*', -1));
+  assertArrayEquals(['a*a*a*a'], goog.string.splitLimit('a*a*a*a', '*', 0));
+  assertArrayEquals(['a', 'a*a*a'], goog.string.splitLimit('a*a*a*a', '*', 1));
+  assertArrayEquals(['a', 'a', 'a*a'],
+                    goog.string.splitLimit('a*a*a*a', '*', 2));
+  assertArrayEquals(['a', 'a', 'a', 'a'],
+                    goog.string.splitLimit('a*a*a*a', '*', 3));
+  assertArrayEquals(['a', 'a', 'a', 'a'],
+                    goog.string.splitLimit('a*a*a*a', '*', 4));
+
+  assertArrayEquals(['bbbbbbbbbbbb'],
+                    goog.string.splitLimit('bbbbbbbbbbbb', 'a', 10));
+  assertArrayEquals(['babab', 'bab', 'abb'],
+                    goog.string.splitLimit('bababaababaaabb', 'aa', 10));
+  assertArrayEquals(['babab', 'babaaabb'],
+                    goog.string.splitLimit('bababaababaaabb', 'aa', 1));
+  assertArrayEquals(
+      ['b', 'a', 'b', 'a', 'b', 'a', 'a', 'b', 'a', 'b', 'aaabb'],
+      goog.string.splitLimit('bababaababaaabb', '', 10));
+}
+
+function testContains() {
+  assertTrue(goog.string.contains('moot', 'moo'));
+  assertFalse(goog.string.contains('moo', 'moot'));
+  assertFalse(goog.string.contains('Moot', 'moo'));
+  assertTrue(goog.string.contains('moo', 'moo'));
+}
+
+function testCaseInsensitiveContains() {
+  assertTrue(goog.string.caseInsensitiveContains('moot', 'moo'));
+  assertFalse(goog.string.caseInsensitiveContains('moo', 'moot'));
+  assertTrue(goog.string.caseInsensitiveContains('Moot', 'moo'));
+  assertTrue(goog.string.caseInsensitiveContains('moo', 'moo'));
 }

@@ -23,17 +23,15 @@
  * https://bugzilla.mozilla.org/show_bug.cgi?id=669026.
  *
  * @author gboyer@google.com (Garrett Boyer)
- * @author jparent@google.com (Julie Parent)
  * @author nicksantos@google.com (Nick Santos)
- * @author ojan@google.com (Ojan Vafai)
  */
 
 
 goog.provide('goog.editor.ContentEditableField');
 
 goog.require('goog.asserts');
-goog.require('goog.debug.Logger');
 goog.require('goog.editor.Field');
+goog.require('goog.log');
 
 
 
@@ -46,7 +44,7 @@ goog.require('goog.editor.Field');
  * @param {string} id An identifer for the field. This is used to find the
  *     field and the element associated with this field.
  * @param {Document=} opt_doc The document that the element with the given
- *     id can be found it.
+ *     id can be found in.
  * @constructor
  * @extends {goog.editor.Field}
  */
@@ -60,7 +58,7 @@ goog.inherits(goog.editor.ContentEditableField, goog.editor.Field);
  * @override
  */
 goog.editor.ContentEditableField.prototype.logger =
-    goog.debug.Logger.getLogger('goog.editor.ContentEditableField');
+    goog.log.getLogger('goog.editor.ContentEditableField');
 
 
 /** @override */

@@ -15,20 +15,21 @@
 /**
  * @fileoverview goog.editor plugin to handle splitting block quotes.
  *
+ * @author robbyw@google.com (Robby Walker)
  */
 
 goog.provide('goog.editor.plugins.Blockquote');
 
-goog.require('goog.debug.Logger');
 goog.require('goog.dom');
 goog.require('goog.dom.NodeType');
 goog.require('goog.dom.TagName');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.editor.BrowserFeature');
 goog.require('goog.editor.Command');
 goog.require('goog.editor.Plugin');
 goog.require('goog.editor.node');
 goog.require('goog.functions');
+goog.require('goog.log');
 
 
 
@@ -42,6 +43,7 @@ goog.require('goog.functions');
  *     blockquotes.  Defaults to 'tr_bq'.
  * @constructor
  * @extends {goog.editor.Plugin}
+ * @final
  */
 goog.editor.plugins.Blockquote = function(requiresClassNameToSplit,
     opt_className) {
@@ -84,12 +86,12 @@ goog.editor.plugins.Blockquote.CLASS_ID = 'Blockquote';
 
 /**
  * Logging object.
- * @type {goog.debug.Logger}
+ * @type {goog.log.Logger}
  * @protected
  * @override
  */
 goog.editor.plugins.Blockquote.prototype.logger =
-    goog.debug.Logger.getLogger('goog.editor.plugins.Blockquote');
+    goog.log.getLogger('goog.editor.plugins.Blockquote');
 
 
 /** @override */
@@ -131,8 +133,8 @@ goog.editor.plugins.Blockquote.isBlockquote = function(node, isAlreadySetup,
   if (!requiresClassNameToSplit) {
     return isAlreadySetup;
   }
-  var hasClassName = goog.dom.classes.has(/** @type {Element} */ (node),
-      className);
+  var hasClassName = goog.dom.classlist.contains(
+      /** @type {!Element} */ (node), className);
   return isAlreadySetup ? hasClassName : !hasClassName;
 };
 
@@ -159,7 +161,8 @@ goog.editor.plugins.Blockquote.prototype.isSplittableBlockquote =
     return true;
   }
 
-  return goog.dom.classes.has(node, this.className_);
+  return goog.dom.classlist.contains(/** @type {!Element} */ (node),
+      this.className_);
 };
 
 
@@ -172,7 +175,8 @@ goog.editor.plugins.Blockquote.prototype.isSplittableBlockquote =
 goog.editor.plugins.Blockquote.prototype.isSetupBlockquote =
     function(node) {
   return node.tagName == goog.dom.TagName.BLOCKQUOTE &&
-      goog.dom.classes.has(node, this.className_);
+      goog.dom.classlist.contains(/** @type {!Element} */ (node),
+          this.className_);
 };
 
 
@@ -211,7 +215,7 @@ goog.editor.plugins.Blockquote.findAndRemoveSingleChildAncestor_ = function(
     node, root) {
   var predicateFunc = function(parentNode) {
     return parentNode != root && parentNode.childNodes.length == 1;
-  }
+  };
   var ancestor = goog.editor.node.findHighestMatchingAncestor(node,
       predicateFunc);
   if (!ancestor) {
@@ -247,10 +251,10 @@ goog.editor.plugins.Blockquote.prototype.isSupportedCommand = function(
  * function returns true, the event that caused it to be called should be
  * canceled.
  * @param {string} command The command to execute.
- * @param {...*} var_args Single additional argument representing the
- *     current cursor position.  In IE, it is a single node.  In any other
- *     browser, it is an object with a {@code node} key and an {@code offset}
- *     key.
+ * @param {...*} var_args Single additional argument representing the current
+ *     cursor position. If BrowserFeature.HAS_W3C_RANGES it is an object with a
+ *     {@code node} key and an {@code offset} key. In other cases (legacy IE)
+ *     it is a single node.
  * @return {boolean|undefined} Boolean true when the quoted region has been
  *     split, false or undefined otherwise.
  * @override

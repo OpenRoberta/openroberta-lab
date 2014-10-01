@@ -24,11 +24,11 @@ goog.require('goog.dom.TagName');
 goog.require('goog.events.Event');
 goog.require('goog.string');
 goog.require('goog.ui.editor.AbstractDialog');
-goog.require('goog.ui.editor.AbstractDialog.Builder');
-goog.require('goog.ui.editor.AbstractDialog.EventType');
 
 
 // *** Public interface ***************************************************** //
+
+
 
 /**
  * Creates a dialog to let the user enter a customized hello world message.
@@ -36,6 +36,7 @@ goog.require('goog.ui.editor.AbstractDialog.EventType');
  * dialog's dom structure.
  * @constructor
  * @extends {goog.ui.editor.AbstractDialog}
+ * @final
  */
 goog.demos.editor.HelloWorldDialog = function(domHelper) {
   goog.ui.editor.AbstractDialog.call(this, domHelper);
@@ -46,16 +47,20 @@ goog.inherits(goog.demos.editor.HelloWorldDialog,
 
 // *** Event **************************************************************** //
 
+
+
 /**
  * OK event object for the hello world dialog.
  * @param {string} message Customized hello world message chosen by the user.
  * @constructor
  * @extends {goog.events.Event}
+ * @final
  */
 goog.demos.editor.HelloWorldDialog.OkEvent = function(message) {
   this.message = message;
 };
 goog.inherits(goog.demos.editor.HelloWorldDialog.OkEvent, goog.events.Event);
+
 
 /**
  * Event type.
@@ -64,6 +69,7 @@ goog.inherits(goog.demos.editor.HelloWorldDialog.OkEvent, goog.events.Event);
  */
 goog.demos.editor.HelloWorldDialog.OkEvent.prototype.type =
     goog.ui.editor.AbstractDialog.EventType.OK;
+
 
 /**
  * Customized hello world message chosen by the user.
@@ -74,6 +80,7 @@ goog.demos.editor.HelloWorldDialog.OkEvent.prototype.message;
 
 // *** Protected interface ************************************************** //
 
+
 /** @override */
 goog.demos.editor.HelloWorldDialog.prototype.createDialogControl = function() {
   var builder = new goog.ui.editor.AbstractDialog.Builder(this);
@@ -83,6 +90,7 @@ goog.demos.editor.HelloWorldDialog.prototype.createDialogControl = function() {
       setContent(this.createContent_());
   return builder.build();
 };
+
 
 /**
  * Creates and returns the event object to be used when dispatching the OK
@@ -111,6 +119,7 @@ goog.demos.editor.HelloWorldDialog.prototype.createOkEvent = function(e) {
 
 // *** Private implementation *********************************************** //
 
+
 /**
  * Input element where the user will type their hello world message.
  * @type {Element}
@@ -136,6 +145,7 @@ goog.demos.editor.HelloWorldDialog.prototype.createContent_ = function() {
                             null,
                             [MSG_HELLO_WORLD_DIALOG_PROMPT, this.input_]);
 };
+
 
 /**
  * Returns the hello world message currently typed into the dialog's input.

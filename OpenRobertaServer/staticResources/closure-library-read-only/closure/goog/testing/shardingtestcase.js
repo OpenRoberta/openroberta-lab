@@ -30,12 +30,15 @@
  *   </li>
  * </ol>
  *
+ * @author nicksantos@google.com (Nick Santos)
  */
 
 goog.provide('goog.testing.ShardingTestCase');
 
 goog.require('goog.asserts');
 goog.require('goog.testing.TestCase');
+
+
 
 /**
  * A test case that runs tests in per-file shards.
@@ -44,9 +47,10 @@ goog.require('goog.testing.TestCase');
  * @param {number} numShards Number of shards to split up test cases into.
  * @extends {goog.testing.TestCase}
  * @constructor
+ * @final
  */
 goog.testing.ShardingTestCase = function(shardIndex, numShards, opt_name) {
-  goog.base(this, opt_name);
+  goog.testing.ShardingTestCase.base(this, 'constructor', opt_name);
 
   goog.asserts.assert(shardIndex > 0, 'Shard index should be positive');
   goog.asserts.assert(numShards > 0, 'Number of shards should be positive');
@@ -97,7 +101,7 @@ goog.testing.ShardingTestCase.prototype.runTests = function() {
   }
 
   // Call original runTests method to execute the tests.
-  goog.base(this, 'runTests');
+  goog.testing.ShardingTestCase.base(this, 'runTests');
 };
 
 
