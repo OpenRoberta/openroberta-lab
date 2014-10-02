@@ -102,6 +102,73 @@ Blockly.Msg.RENAME_VARIABLE = 'Rename variable...';
 /// prompt - Prompts the user to enter the new name for the selected variable.  See [https://code.google.com/p/blockly/wiki/Variables#Dropdown_menu https://code.google.com/p/blockly/wiki/Variables#Dropdown_menu].\n\nParameters:\n* %1 - the name of the variable to be renamed.
 Blockly.Msg.RENAME_VARIABLE_TITLE = 'Rename all "%1" variables to:';
 
+
+// Tooltips for the robot blocks
+/// Rob Actions tooltips
+Blockly.Msg.MOTOR_ON_TOOLTIP = 'Turns motor on with specific power.';
+Blockly.Msg.MOTOR_ON_FOR_TOOLTIP = 'Turns motor on and stops motor after execution of rotations/degrees.';
+Blockly.Msg.MOTOR_GETPOWER_TOOLTIP = 'Gets current power of this motor.';
+Blockly.Msg.MOTOR_SETPOWER_TOOLTIP = 'Sets power of this motor.';
+Blockly.Msg.MOTOR_STOP_TOOLTIP = 'Stops this motor.';
+Blockly.Msg.MOTORDIFF_ON_TOOLTIP = 'XXX';
+Blockly.Msg.MOTORDIFF_ON_FOR_TOOLTIP = 'XXX';
+Blockly.Msg.MOTORDIFF_STOP_TOOLTIP = 'XXX';
+Blockly.Msg.MOTORDIFF_TURN_TOOLTIP = 'XXX';
+Blockly.Msg.MOTORDIFF_TURN_FOR_TOOLTIP = '';
+Blockly.Msg.DISPLAY_PICTURE_TOOLTIP = 'Displays a picture on the screen.';
+Blockly.Msg.DISPLAY_TEXT_TOOLTIP = 'Displays a text on the screen.';
+Blockly.Msg.DISPLAY_CLEAR_TOOLTIP = 'Clears the display.';
+Blockly.Msg.PLAY_TONE_TOOLTIP = 'Plays a tone.';
+Blockly.Msg.PLAY_FILE_TOOLTIP = 'Plays a sound file.';
+Blockly.Msg.PLAY_SETVOLUME_TOOLTIP = 'Sets volume.';
+Blockly.Msg.PLAY_GETVOLUME_TOOLTIP = 'Gets current volume.';
+Blockly.Msg.BRICKLIGHT_ON_TOOLTIP = 'Turns bricklight on.';
+Blockly.Msg.BRICKLIGHT_OFF_TOOLTIP = 'Turns bricklight off.';
+Blockly.Msg.BRICKLIGHT_RESET_TOOLTIP = 'Resets bricklight. Sets the default bricklight: green and blinking.';
+/// Rob Controls tooltips
+Blockly.Msg.START_TOOLTIP = 'The starting point for the main program.';
+Blockly.Msg.ACTIVITY_TOOLTIP = 'Marker for a new task.';
+Blockly.Msg.START_ACTIVITY_TOOLTIP = 'Block starting additional activity.';
+Blockly.Msg.WAIT_TOOLTIP = 'Block waiting for a condition becoming true.';
+Blockly.Msg.WAIT_FOR_TOOLTIP = 'Block waiting for sensor values.';
+Blockly.Msg.LOOPFOREVER_TOOLTIP = 'Repeats indefinitely an action.';
+Blockly.Msg.IFELSE_TOOLTIP = 'Checks the condition in "if". If the condition is true, executes the "do" action; otherwise executes the "else" action';
+Blockly.Msg.IF_TOOLTIP = 'Checks the condition in "if". If the condition is true, executes the "do" action.';
+/// Rob Sensors tooltips
+Blockly.Msg.GETSAMPLE_TOOLTIP = 'Gets the current reading from choosen sensor.';
+Blockly.Msg.TOUCH_ISPRESSED_TOOLTIP = 'Is the touch sensor pressed?';
+Blockly.Msg.KEY_ISPRESSED_TOOLTIP = 'Is the specific key (button of the brick) pressed?';
+Blockly.Msg.KEY_ISPRESSEDANDRELEASED_TOOLTIP = 'Is the specific key (button of the brick) pressed and released?';
+Blockly.Msg.ULTRASONIC_SETMODE_TOOLTIP = 'Sets the mode of the ultrasonic sensor.';
+Blockly.Msg.ULTRASONIC_GETMODE_TOOLTIP = 'Gets the mode of the ultrasonic sensor.';
+Blockly.Msg.ULTRASONIC_GETSAMPLE_TOOLTIP = 'Gets the current reading from the ultrasonic sensor.';
+Blockly.Msg.COLOUR_SETMODE_TOOLTIP = 'Sets the mode of the colour sensor.';
+Blockly.Msg.COLOUR_GETMODE_TOOLTIP = 'Gets the mode of the colour sensor.';
+Blockly.Msg.COLOUR_GETSAMPLE_TOOLTIP = 'Gets the current reading from the colour sensor.';
+Blockly.Msg.INFRARED_SETMODE_TOOLTIP = 'Sets the mode of the infrared sensor.';
+Blockly.Msg.INFRARED_GETMODE_TOOLTIP = 'Gets the mode of the infrared sensor.';
+Blockly.Msg.INFRARED_GETSAMPLE_TOOLTIP = 'Gets the current reading from the infrared sensor.';
+Blockly.Msg.ENCODER_SETMODE_TOOLTIP = 'Sets the mode of the motor encoder.'; 
+Blockly.Msg.ENCODER_GETMODE_TOOLTIP = 'Gets the mode of the motor encoder.';
+Blockly.Msg.ENCODER_RESET_TOOLTIP = 'Resets the motor encoder.';
+Blockly.Msg.ENCODER_GETSAMPLE_TOOLTIP = 'Gets the current reading from the motor encoder.';
+Blockly.Msg.GYRO_SETMODE_TOOLTIP = 'Sets the mode of the gyro sensor.';
+Blockly.Msg.GYRO_GETMODE_TOOLTIP = 'Gets the mode of the gyro sensor.';
+Blockly.Msg.GYRO_RESET_TOOLTIP = 'Resets the gyro sensor.';
+Blockly.Msg.GYRO_GETSAMPLE_TOOLTIP = 'Gets the current reading from the gyro sensor.';
+Blockly.Msg.TIMER_RESET_TOOLTIP = 'Resets the timer.';
+Blockly.Msg.TIMER_GETSAMPLE_TOOLTIP = 'Gets the current reading from the timer.';
+/// Rob Brick tooltips
+Blockly.Msg.EV3BRICK_TOOLTIP = 'EV3 brick.';
+Blockly.Msg.ULTRASONIC_TOOLTIP = 'Represents EV3 ultrasonic sensor.';
+Blockly.Msg.COLOUR_TOOLTIP = 'Represents EV3 colour sensor.';
+Blockly.Msg.INFRARED_TOOLTIP = 'Represents infrared sensor.';
+Blockly.Msg.TOUCH_TOOLTIP = 'Is the touch sensor pressed?';
+Blockly.Msg.GYRO_TOOLTIP = 'Represents gyro sensor.';
+Blockly.Msg.MOTOR_BIG_TOOLTIP = 'Represents a big motor.';
+Blockly.Msg.MOTOR_MIDDLE_TOOLTIP = 'Represents a middle motor.';
+Blockly.Msg.ACTOR_TOOLTIP = 'Represents any actor.';
+
 // Colour Blocks.
 /// url - Information about colour.
 Blockly.Msg.COLOUR_PICKER_HELPURL = 'https://en.wikipedia.org/wiki/Color';
@@ -1100,7 +1167,7 @@ Blockly.Msg.FOR = 'for';
 Blockly.Msg.GET = 'get';
 Blockly.Msg.SET = 'set';
 Blockly.Msg.BRICK_WHEEL_DIAMETER = 'wheel diameter';
-Blockly.Msg.BRICK_TRACK_WIDTH = 'track width'
+Blockly.Msg.BRICK_TRACK_WIDTH = 'track width';
 Blockly.Msg.MOTOR = 'motor';
 Blockly.Msg.MOTOR_MIDDLE = 'middle';
 Blockly.Msg.MOTOR_BIG = 'big';
@@ -1145,7 +1212,7 @@ Blockly.Msg.BRICKLIGHT_GREEN = 'green';
 Blockly.Msg.BRICKLIGHT_ORANGE = 'orange';
 Blockly.Msg.BRICKLIGHT_RED = 'red';
 Blockly.Msg.WAIT = 'wait until';
-Blockly.Msg.WAIT_FOREVER = 'undefinitely';
+Blockly.Msg.WAIT_FOREVER = 'indefinitely';
 Blockly.Msg.WAIT_OR = 'or wait for';
 Blockly.Msg.SENSOR_ULTRASONIC = 'ultrasonic sensor';
 Blockly.Msg.SENSOR_TOUCH = 'touch sensor';
@@ -1186,6 +1253,5 @@ Blockly.Msg.MODE_DEGREE = 'degree';
 Blockly.Msg.MODE_ANGLE = 'angle';
 Blockly.Msg.MODE_RATE = 'rate';
 Blockly.Msg.LOOP_COUNT = 'number';
-Blockly.Msg.LOOP_FOREVER = 'undefinitely';
 Blockly.Msg.LOOP = 'repeat until';
-Blockly.Msg.LOOP_FOREVER = 'repeat undefinitely';
+Blockly.Msg.LOOP_FOREVER = 'repeat indefinitely';

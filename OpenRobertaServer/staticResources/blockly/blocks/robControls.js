@@ -35,6 +35,7 @@ Blockly.Blocks['robControls_start'] = {
     this.setPreviousStatement(false);
     this.setNextStatement(true);
     this.setDeletable(false);
+    this.setTooltip(Blockly.Msg.START_TOOLTIP);
   }
 };
 
@@ -59,6 +60,7 @@ Blockly.Blocks['robControls_activity'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(false);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.ACTIVITY_TOOLTIP);
   }
 };
 
@@ -82,6 +84,7 @@ Blockly.Blocks['robControls_start_activity'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.START_ACTIVITY_TOOLTIP);
   }
 };
 
@@ -106,6 +109,7 @@ Blockly.Blocks['robControls_wait'] = {
     this.setNextStatement(true);
     this.waitCount_ = 0;
     this.setMutatorPlus(new Blockly.MutatorPlus(this));
+    this.setTooltip(Blockly.Msg.WAIT_TOOLTIP);
   },
 
   mutationToDom : function() {
@@ -201,6 +205,7 @@ Blockly.Blocks['robControls_wait_for'] = {
     this.setNextStatement(true);
     this.waitCount_ = 0;
     this.setMutatorPlus(new Blockly.MutatorPlus(this));
+    this.setTooltip(Blockly.Msg.WAIT_FOR_TOOLTIP);
   },
 
   mutationToDom : function() {
@@ -303,6 +308,7 @@ Blockly.Blocks['robControls_loopForever'] = {
     // this.setInputsInline(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.LOOPFOREVER_TOOLTIP);
   }
 };
 
@@ -322,6 +328,7 @@ Blockly.Blocks['robControls_ifElse'] = {
     this.elseIfCount_ = 0;
     this.elseCount_ = 1;
     // this.updateShape_(0);
+    this.setTooltip(Blockly.Msg.IFELSE_TOOLTIP);
   },
   mutationToDom : function() {
     if (!this.elseIfCount_ && !this.elseCount_) {
@@ -413,6 +420,7 @@ Blockly.Blocks['robControls_if'] = {
     this.setNextStatement(true);
     this.setMutatorPlus(new Blockly.MutatorPlus(this));
     this.elseIfCount_ = 0;
+    this.setTooltip(Blockly.Msg.IF_TOOLTIP);
   },
   mutationToDom : function() {
     if (!this.elseIfCount_) {

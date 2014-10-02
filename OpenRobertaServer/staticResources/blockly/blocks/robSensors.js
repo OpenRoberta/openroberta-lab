@@ -50,6 +50,7 @@ Blockly.Blocks['robSensors_getSample'] = {
     this.newSensorType = null;
     this.update = false;
     this.setOutput(true, [ 'Number', 'Boolean', 'Colour' ]);
+    this.setTooltip(Blockly.Msg.GETSAMPLE_TOOLTIP);
   },
 
   /**
@@ -219,6 +220,7 @@ Blockly.Blocks['robSensors_touch_isPressed'] = {
     this.appendDummyInput().appendField(Blockly.Msg.SENSOR_TOUCH).appendField(
         sensorPort, 'SENSORPORT').appendField(Blockly.Msg.SENSOR_IS_PRESSED);
     this.setOutput(true, 'Boolean');
+    this.setTooltip(Blockly.Msg.TOUCH_ISPRESSED_TOOLTIP);
   }
 };
 
@@ -249,6 +251,7 @@ Blockly.Blocks['robSensors_key_isPressed'] = {
     this.appendDummyInput().appendField(Blockly.Msg.SENSOR_KEY).appendField(
         key, 'KEY').appendField(Blockly.Msg.SENSOR_IS_PRESSED);
     this.setOutput(true, 'Boolean');
+    this.setTooltip(Blockly.Msg.KEY_ISPRESSED_TOOLTIP);
   }
 };
 
@@ -279,6 +282,7 @@ Blockly.Blocks['robSensors_key_isPressedAndReleased'] = {
     this.appendDummyInput().appendField(Blockly.Msg.SENSOR_KEY).appendField(
         key, 'KEY').appendField("geklickt?");
     this.setOutput(true, 'Boolean');
+    this.setTooltip(Blockly.Msg.KEY_ISPRESSEDANDRELEASED_TOOLTIP);
   }
 };
 
@@ -309,6 +313,7 @@ Blockly.Blocks['robSensors_ultrasonic_setMode'] = {
             'SENSORPORT').appendField(mode, 'MODE');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.ULTRASONIC_SETMODE_TOOLTIP);
   }
 };
 
@@ -337,6 +342,7 @@ Blockly.Blocks['robSensors_ultrasonic_getMode'] = {
         .appendField(Blockly.Msg.SENSOR_ULTRASONIC).appendField(sensorPort,
             'SENSORPORT');
     this.setOutput(true, 'Number');
+    this.setTooltip(Blockly.Msg.ULTRASONIC_GETMODE_TOOLTIP);
   }
 };
 
@@ -361,6 +367,7 @@ Blockly.Blocks['robSensors_ultrasonic_getSample'] = {
         .appendField(Blockly.Msg.SENSOR_ULTRASONIC).appendField(sensorPort,
             'SENSORPORT');
     this.setOutput(true, 'Number');
+    this.setTooltip(Blockly.Msg.ULTRASONIC_GETSAMPLE_TOOLTIP);
   }
 };
 
@@ -391,6 +398,7 @@ Blockly.Blocks['robSensors_colour_setMode'] = {
             'SENSORPORT').appendField(mode, 'MODE');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.COLOUR_SETMODE_TOOLTIP);
   }
 };
 
@@ -420,6 +428,7 @@ Blockly.Blocks['robSensors_colour_getMode'] = {
         .appendField(Blockly.Msg.SENSOR_COLOUR).appendField(sensorPort,
             'SENSORPORT');
     this.setOutput(true, 'Number');
+    this.setTooltip(Blockly.Msg.COLOUR_GETMODE_TOOLTIP);
   }
 };
 
@@ -447,6 +456,7 @@ Blockly.Blocks['robSensors_colour_getSample'] = {
         .appendField(Blockly.Msg.SENSOR_COLOUR).appendField(sensorPort,
             'SENSORPORT');
     this.setOutput(true, [ 'Number', 'Colour' ]);
+    this.setTooltip(Blockly.Msg.COLOUR_GETSAMPLE_TOOLTIP);
   }
 };
 
@@ -477,6 +487,7 @@ Blockly.Blocks['robSensors_infrared_setMode'] = {
             'SENSORPORT').appendField(mode, 'MODE');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.INFRARED_SETMODE_TOOLTIP);
   }
 };
 
@@ -504,6 +515,7 @@ Blockly.Blocks['robSensors_infrared_getMode'] = {
         .appendField(Blockly.Msg.SENSOR_INFRARED).appendField(sensorPort,
             'SENSORPORT');
     this.setOutput(true, 'Number');
+    this.setTooltip(Blockly.Msg.INFRARED_GETMODE_TOOLTIP);
   }
 };
 
@@ -529,6 +541,7 @@ Blockly.Blocks['robSensors_infrared_getSample'] = {
         .appendField(Blockly.Msg.SENSOR_INFRARED).appendField(sensorPort,
             'SENSORPORT');
     this.setOutput(true, 'Number');
+    this.setTooltip(Blockly.Msg.INFRARED_GETSAMPLE_TOOLTIP);
   }
 };
 
@@ -559,6 +572,7 @@ Blockly.Blocks['robSensors_encoder_setMode'] = {
             'MOTORPORT').appendField(mode, 'MODE');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.ENCODER_SETMODE_TOOLTIP);
   }
 };
 
@@ -587,6 +601,7 @@ Blockly.Blocks['robSensors_encoder_getMode'] = {
         .appendField(Blockly.Msg.SENSOR_ENCODER).appendField(motorport,
             'MOTORPORT');
     this.setOutput(true, 'Number');
+    this.setTooltip(Blockly.Msg.ENCODER_GETMODE_TOOLTIP);
   }
 };
 
@@ -612,6 +627,7 @@ Blockly.Blocks['robSensors_encoder_reset'] = {
         .appendField(Blockly.Msg.SENSOR_RESET_II);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.ENCODER_RESET_TOOLTIP);
   }
 };
 
@@ -637,6 +653,7 @@ Blockly.Blocks['robSensors_encoder_getSample'] = {
         .appendField(Blockly.Msg.SENSOR_ENCODER).appendField(motorport,
             'MOTORPORT');
     this.setOutput(true, 'Number');
+    this.setTooltip(Blockly.Msg.ENCODER_GETSAMPLE_TOOLTIP);
   }
 };
 
@@ -666,6 +683,7 @@ Blockly.Blocks['robSensors_gyro_setMode'] = {
             'SENSORPORT').appendField(mode, 'MODE');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.GYRO_SETMODE_TOOLTIP);
   }
 };
 
@@ -693,6 +711,7 @@ Blockly.Blocks['robSensors_gyro_getMode'] = {
         .appendField(Blockly.Msg.SENSOR_GYRO).appendField(sensorPort,
             'SENSORPORT');
     this.setOutput(true, 'Number');
+    this.setTooltip(Blockly.Msg.GYRO_GETMODE_TOOLTIP);
   }
 };
 
@@ -718,6 +737,7 @@ Blockly.Blocks['robSensors_gyro_reset'] = {
         .appendField(Blockly.Msg.SENSOR_RESET_II);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.GYRO_RESET_TOOLTIP);
   }
 };
 
@@ -740,9 +760,10 @@ Blockly.Blocks['robSensors_gyro_getSample'] = {
         [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
     // this.setInputsInline(true);
     this.appendDummyInput().appendField(Blockly.Msg.SENSOR_GET_SAMPLE)
-        .appendField(Blockly.Msg.SENSOR_ENCODER).appendField(sensorPort,
+        .appendField(Blockly.Msg.SENSOR_GYRO).appendField(sensorPort,
             'SENSORPORT');
     this.setOutput(true, 'Number');
+    this.setTooltip(Blockly.Msg.GYRO_GETSAMPLE_TOOLTIP);
   }
 };
 
@@ -769,6 +790,7 @@ Blockly.Blocks['robSensors_timer_reset'] = {
         sensorNum, 'SENSORNUM').appendField(Blockly.Msg.SENSOR_RESET_II);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.TIMER_RESET_TOOLTIP);
   }
 };
 
@@ -795,5 +817,6 @@ Blockly.Blocks['robSensors_timer_getSample'] = {
     this.appendDummyInput().appendField(Blockly.Msg.SENSOR_GET_SAMPLE)
         .appendField(sensorNum, 'SENSORNUM');
     this.setOutput(true, 'Number');
+    this.setTooltip(Blockly.Msg.TIMER_GETSAMPLE_TOOLTIP);
   }
 };

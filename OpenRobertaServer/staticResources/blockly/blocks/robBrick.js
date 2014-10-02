@@ -50,6 +50,7 @@ Blockly.Blocks['robBrick_EV3-Brick'] = {
     this.appendValueInput('MD').appendField('M D')
         .setAlign(Blockly.ALIGN_RIGHT).setCheck('String');
     this.setDeletable(false);
+    this.setTooltip(Blockly.Msg.EV3BRICK_TOOLTIP);
   }
 };
 
@@ -69,6 +70,7 @@ Blockly.Blocks['robBrick_ultrasonic'] = {
     this.setColourRGB([ 143, 164, 2 ]);
     this.appendDummyInput().appendField(Blockly.Msg.SENSOR_ULTRASONIC);
     this.setOutput(true, 'Number');
+    this.setTooltip(Blockly.Msg.ULTRASONIC_TOOLTIP);
   }
 };
 
@@ -87,6 +89,7 @@ Blockly.Blocks['robBrick_colour'] = {
     this.setColourRGB([ 143, 164, 2 ]);
     this.appendDummyInput().appendField(Blockly.Msg.SENSOR_COLOUR);
     this.setOutput(true, 'Number');
+    this.setTooltip(Blockly.Msg.COLOUR_TOOLTIP);
   }
 };
 
@@ -106,6 +109,7 @@ Blockly.Blocks['robBrick_infrared'] = {
     this.setColourRGB([ 143, 164, 2 ]);
     this.appendDummyInput().appendField(Blockly.Msg.SENSOR_INFRARED);
     this.setOutput(true, 'Number');
+    this.setTooltip(Blockly.Msg.INFRARED_TOOLTIP);
   }
 };
 
@@ -125,6 +129,7 @@ Blockly.Blocks['robBrick_touch'] = {
     // this.setInputsInline(true);
     this.appendDummyInput().appendField(Blockly.Msg.SENSOR_TOUCH);
     this.setOutput(true, 'Number');
+    this.setTooltip(Blockly.Msg.TOUCH_TOOLTIP);
   }
 };
 
@@ -144,6 +149,7 @@ Blockly.Blocks['robBrick_gyro'] = {
     this.setColourRGB([ 143, 164, 2 ]);
     this.appendDummyInput().appendField(Blockly.Msg.SENSOR_GYRO);
     this.setOutput(true, 'Number');
+    this.setTooltip(Blockly.Msg.GYRO_TOOLTIP);
   }
 };
 
@@ -185,12 +191,13 @@ Blockly.Blocks['robBrick_motor_big'] = {
     this.appendDummyInput().appendField(Blockly.Msg.MOTOR_SIDE).appendField(
         motorSide, 'MOTOR_DRIVE').setAlign(Blockly.ALIGN_RIGHT);
     this.setOutput(true, 'String');
+    this.setTooltip(Blockly.Msg.MOTOR_BIG_TOOLTIP);
   }
 };
 
 Blockly.Blocks['robBrick_motor_middle'] = {
   /**
-   * Represent a middle motor.
+   * Represents a middle motor.
    * 
    * @constructs robActions_motor_middle
    * @this.Blockly.Block
@@ -220,12 +227,13 @@ Blockly.Blocks['robBrick_motor_middle'] = {
         .appendField(motorReverse, 'MOTOR_REVERSE').setAlign(
             Blockly.ALIGN_RIGHT);
     this.setOutput(true, 'String');
+    this.setTooltip(Blockly.Msg.MOTOR_MIDDLE_TOOLTIP);
   }
 };
 
 Blockly.Blocks['robBrick_actor'] = {
   /**
-   * Represent a big motor.
+   * Represent any actor.
    * 
    * @constructs robActions_motor_on
    * @this.Blockly.Block
@@ -238,5 +246,6 @@ Blockly.Blocks['robBrick_actor'] = {
     // this.setInputsInline(true);
     this.appendDummyInput('ACTOR').appendField(Blockly.Msg.MOTOR_OTHER);
     this.setOutput(true, 'String');
+    this.setTooltip(Blockly.Msg.ACTOR_TOOLTIP);
   }
 };

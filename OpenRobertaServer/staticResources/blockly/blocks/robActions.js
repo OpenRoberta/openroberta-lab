@@ -40,6 +40,7 @@ Blockly.Blocks['robActions_motor_on'] = {
         .setCheck('Number');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.MOTOR_ON_TOOLTIP);
   }
 };
 
@@ -79,6 +80,7 @@ Blockly.Blocks['robActions_motor_on_for'] = {
         'Number');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.MOTOR_ON_FOR_TOOLTIP);
   }
 };
 
@@ -106,6 +108,7 @@ Blockly.Blocks['robActions_motor_getPower'] = {
         Blockly.Msg.GET + ' ' + Blockly.Msg.MOTOR_SPEED).appendField(motorPort,
         'MOTORPORT');
     this.setOutput(true, 'Number');
+    this.setTooltip(Blockly.Msg.MOTOR_GETPOWER_TOOLTIP);
   }
 };
 
@@ -134,6 +137,7 @@ Blockly.Blocks['robActions_motor_setPower'] = {
         motorPort, 'MOTORPORT').appendField(Blockly.Msg.MOTOR_SPEED);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.MOTOR_SETPOWER_TOOLTIP);
   }
 };
 
@@ -165,6 +169,7 @@ Blockly.Blocks['robActions_motor_stop'] = {
         motorPort, 'MOTORPORT').appendField(mode, 'MODE');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.MOTOR_STOP_TOOLTIP);
   }
 };
 
@@ -181,6 +186,7 @@ Blockly.Blocks['robActions_motorDiff_on'] = {
         .appendField(Blockly.Msg.MOTOR_SPEED).setCheck('Number');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.MOTORDIFF_ON_TOOLTIP);
   }
 };
 
@@ -199,6 +205,7 @@ Blockly.Blocks['robActions_motorDiff_on_for'] = {
         .appendField(Blockly.Msg.MOTOR_DISTANCE);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.MOTORDIFF_ON_FOR_TOOLTIP);
   }
 };
 
@@ -210,6 +217,7 @@ Blockly.Blocks['robActions_motorDiff_stop'] = {
     this.appendDummyInput().appendField(Blockly.Msg.MOTOR_STOP);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.MOTORDIFF_STOP_TOOLTIP);
   }
 };
 
@@ -226,6 +234,7 @@ Blockly.Blocks['robActions_motorDiff_turn'] = {
         .appendField(Blockly.Msg.MOTOR_SPEED).setCheck('Number');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.MOTORDIFF_TURN_TOOLTIP);
   }
 };
 
@@ -244,6 +253,7 @@ Blockly.Blocks['robActions_motorDiff_turn_for'] = {
         Blockly.Msg.MOTOR_DEGREE);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.MOTORDIFF_TURN_FOR_TOOLTIP);
   }
 };
 
@@ -278,6 +288,7 @@ Blockly.Blocks['robActions_display_picture'] = {
         .appendField("y");
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.DISPLAY_PICTURE_TOOLTIP);
   }
 };
 
@@ -307,6 +318,7 @@ Blockly.Blocks['robActions_display_text'] = {
         Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.DISPLAY_ROW);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.DISPLAY_TEXT_TOOLTIP);
   }
 };
 
@@ -325,6 +337,7 @@ Blockly.Blocks['robActions_display_clear'] = {
     this.appendDummyInput().appendField(Blockly.Msg.DISPLAY_CLEAR);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.DISPLAY_CLEAR_TOOLTIP);
   }
 };
 
@@ -351,12 +364,13 @@ Blockly.Blocks['robActions_play_tone'] = {
         Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.PLAY_DURATION);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.PLAY_TONE_TOOLTIP);
   }
 };
 
 Blockly.Blocks['robActions_play_file'] = {
   /**
-   * Display a picture on the screen.
+   * Play a sound file.
    * 
    * @constructs robActions_play_file
    * @this.Blockly.Block
@@ -377,6 +391,7 @@ Blockly.Blocks['robActions_play_file'] = {
         'FILE');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.PLAY_FILE_TOOLTIP);
   }
 };
 
@@ -398,6 +413,7 @@ Blockly.Blocks['robActions_play_setVolume'] = {
         Blockly.Msg.SET + ' ' + Blockly.Msg.PLAY_VOLUME).setCheck('Number');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.PLAY_SETVOLUME_TOOLTIP);
   }
 };
 
@@ -418,6 +434,7 @@ Blockly.Blocks['robActions_play_getVolume'] = {
     this.appendDummyInput().appendField(
         Blockly.Msg.GET + ' ' + Blockly.Msg.PLAY_VOLUME);
     this.setOutput(true, 'Number');
+    this.setTooltip(Blockly.Msg.PLAY_GETVOLUME_TOOLTIP);
   }
 };
 
@@ -453,6 +470,7 @@ Blockly.Blocks['robActions_brickLight_on'] = {
         Blockly.Msg.MOD).appendField(dropdownLightState, 'SWITCH_BLINK');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.BRICKLIGHT_ON_TOOLTIP);
   }
 };
 
@@ -472,8 +490,10 @@ Blockly.Blocks['robActions_brickLight_off'] = {
         Blockly.Msg.OFF);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.BRICKLIGHT_OFF_TOOLTIP);
   }
 };
+
 Blockly.Blocks['robActions_brickLight_reset'] = {
   /**
    * Reset bricklight. Set the default bricklight: green and blinking.
@@ -489,5 +509,6 @@ Blockly.Blocks['robActions_brickLight_reset'] = {
         Blockly.Msg.BRICKLIGHT).appendField(Blockly.Msg.SENSOR_RESET_II);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
+    this.setTooltip(Blockly.Msg.BRICKLIGHT_RESET_TOOLTIP);
   }
 };
