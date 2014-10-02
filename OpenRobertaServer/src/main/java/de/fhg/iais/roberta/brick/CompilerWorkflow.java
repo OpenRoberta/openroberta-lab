@@ -27,8 +27,6 @@ import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
-import de.fhg.iais.roberta.persistence.ProgramProcessor;
-import de.fhg.iais.roberta.persistence.bo.Program;
 import de.fhg.iais.roberta.persistence.connector.SessionWrapper;
 
 public class CompilerWorkflow {
@@ -45,23 +43,18 @@ public class CompilerWorkflow {
      * - compile the code and generate a jar in the token-specific directory (use a ant script, will be replaced later)<br>
      * <b>Note:</b> the jar is prepared for upload, but not uploaded from here. After a handshake with the brick (the brick has to tell, that it is ready) the
      * jar is uploaded to the brick from another thread and then started on the brick
-     * 
+     *
      * @param session to retrieve the the program from the database
      * @param token the credential the end user (at the terminal) and the brick have both agreed to use
+     * @param
      * @param projectName to retrieve the program code
      * @param programName to retrieve the program code
      * @param configurationName the hardware configuration that is expected to have been used when assembling the brick
      * @return a message in case of an error; null otherwise
      */
-    public static String execute(SessionWrapper session, String token, String projectName, String programName, String configurationName) {
-        LOG.info("compiler workflow started for program {}", programName);
-        Program program = new ProgramProcessor().getProgram(session, projectName, programName);
-        if ( program == null ) {
-            return "program not found";
-        }
-        String blocklyXml = program.getProgramText();
-        if ( blocklyXml == null ) {
-            return "program has no blocks";
+    public static String execute(SessionWrapper session, String token, String programName, String blocklyXml, String brickConfigurationAsXmlString) {
+        if ( blocklyXml == null || blocklyXml.trim().equals("") ) {
+            return "program not found or program has no blocks";
         }
         blocklyXml = blocklyXml.replaceAll("http://www.w3.org/1999/xhtml", "http://de.fhg.iais.roberta.blockly");
         BrickConfiguration brickConfiguration =
@@ -94,7 +87,7 @@ public class CompilerWorkflow {
 
     /**
      * return the jaxb transformer for a given program test.
-     * 
+     *
      * @param blocklyXml the blockly XML as String
      * @return jaxb the transformer
      * @throws Exception
@@ -122,7 +115,7 @@ public class CompilerWorkflow {
      * 2. Clean target folder (everything inside).<br>
      * 3. Compile .java files to .class.<br>
      * 4. Make jar from class files and add META-INF entries.<br>
-     * 
+     *
      * @param userProjectsDir
      * @param token
      * @param mainFile

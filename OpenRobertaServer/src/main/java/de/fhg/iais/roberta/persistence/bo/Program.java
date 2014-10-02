@@ -1,9 +1,9 @@
 package de.fhg.iais.roberta.persistence.bo;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,18 +23,32 @@ public class Program implements WithSurrogateId {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "PROJECT_ID")
-    private Project project;
-
-    @Column(name = "TEXT")
-    private String text;
+    @JoinColumn(name = "OWNER_ID")
+    private User owner;
 
     @Column(name = "PROGRAM_TEXT")
     private String programText;
 
-    @Column(name = "ACCESS")
-    @Enumerated(EnumType.STRING)
-    private Access access;
+    @Column(name = "CREATED")
+    private Timestamp created;
+
+    @Column(name = "LAST_CHANGED")
+    private Timestamp lastChanged;
+
+    @Column(name = "LAST_CHECKED")
+    private Timestamp lastChecked;
+
+    @Column(name = "LAST_ERRORFREE")
+    private Timestamp lastErrorFree;
+
+    @Column(name = "NUMBER_OF_BLOCKS")
+    private int numberOfBlocks;
+
+    @Column(name = "TAGS")
+    private String tags;
+
+    @Column(name = "ICON_NUMBER")
+    private int iconNumber;
 
     protected Program() {
         // Hibernate
@@ -42,18 +56,15 @@ public class Program implements WithSurrogateId {
 
     /**
      * create a new program
-     * 
+     *
      * @param name the name of the program, not null
-     * @param project the project this program belongs to, not null
-     * @param text describing the program literally
-     * @param programText the xml representation of the program
+     * @param owner the user who created and thus owns the program
      */
-    public Program(String name, Project project, String text, String programText) {
+    public Program(String name, User owner) {
         this.name = name;
-        this.project = project;
-        this.text = text;
-        this.programText = programText;
-        this.access = Access.Private;
+        this.owner = owner;
+        this.created = Util.getNow();
+        this.lastChanged = Util.getNow();
     }
 
     @Override
@@ -69,14 +80,6 @@ public class Program implements WithSurrogateId {
         this.name = name;
     }
 
-    public String getText() {
-        return this.text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
     public String getProgramText() {
         return this.programText;
     }
@@ -85,12 +88,65 @@ public class Program implements WithSurrogateId {
         this.programText = programText;
     }
 
-    public Access getAccess() {
-        return this.access;
+    public Timestamp getLastChecked() {
+        return this.lastChecked;
     }
 
-    public void setAccess(Access access) {
-        this.access = access;
+    public void setLastChecked(Timestamp lastChecked) {
+        this.lastChecked = lastChecked;
     }
 
+    public Timestamp getLastErrorFree() {
+        return this.lastErrorFree;
+    }
+
+    public void setLastErrorFree(Timestamp lastErrorFree) {
+        this.lastErrorFree = lastErrorFree;
+    }
+
+    public int getNumberOfBlocks() {
+        return this.numberOfBlocks;
+    }
+
+    public void setNumberOfBlocks(int numberOfBlocks) {
+        this.numberOfBlocks = numberOfBlocks;
+    }
+
+    public String getTags() {
+        return this.tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+    /**
+     * return the number of one of the predefined icon images, that can be attached to a program.
+     *
+     * @return the icon number; return 0 if no icon exists
+     */
+    public int getIconNumber() {
+        return this.iconNumber;
+    }
+
+    public void setIconNumber(int iconNumber) {
+        this.iconNumber = iconNumber;
+    }
+
+    /**
+     * get the user, who is the owner
+     *
+     * @return the owner, never <code>null</code>
+     */
+    public User getOwner() {
+        return this.owner;
+    }
+
+    public Timestamp getCreated() {
+        return this.created;
+    }
+
+    public Timestamp getLastChanged() {
+        return this.lastChanged;
+    }
 }

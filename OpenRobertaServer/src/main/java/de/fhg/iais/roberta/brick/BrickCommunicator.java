@@ -32,9 +32,9 @@ public class BrickCommunicator {
         return singleState.brickDownloadRequest();
     }
 
-    public String theRunButtonWasPressed(String token, String programName, String configurationName) {
+    public String theRunButtonWasPressed(String token, String programName, String brickConfigurationName) {
         BrickCommunicationData singleState = getSingleState(token);
-        return singleState.runButtonPressed(programName, configurationName);
+        return singleState.runButtonPressed(programName, brickConfigurationName);
     }
 
     private BrickCommunicationData getSingleState(String token) {

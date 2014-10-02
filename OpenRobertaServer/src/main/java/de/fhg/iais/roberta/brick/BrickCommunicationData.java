@@ -14,7 +14,7 @@ public class BrickCommunicationData {
     private BrickCommunicationState lastRequest = BrickCommunicationState.NOTHING_TO_DO;
     private final String token;
     private String programName;
-    private String brickConfiguration;
+    private String brickConfigurationName;
 
     public BrickCommunicationData(String token) {
         this.token = token;
@@ -47,11 +47,11 @@ public class BrickCommunicationData {
         }
     }
 
-    public synchronized String runButtonPressed(String programName, String brickConfiguration) {
+    public synchronized String runButtonPressed(String programName, String brickConfigurationName) {
         String commResult = this.lastRequest == BrickCommunicationState.DOWNLOAD_REQUEST_FROM_BRICK_ARRIVED ? "Brick is waiting" : "Brick is not waiting";
         LOG.debug("RUN button pressed. " + commResult + ". state " + this.lastRequest + " entered " + this.lastRequestClock.elapsedSecFormatted() + " ago");
         this.programName = programName;
-        this.brickConfiguration = brickConfiguration;
+        this.brickConfigurationName = brickConfigurationName;
         this.lastRequestClock = Clock.start();
         this.lastRequest = BrickCommunicationState.RUN_BUTTON_WAS_PRESSED;
         notify();
@@ -62,7 +62,7 @@ public class BrickCommunicationData {
         return this.programName;
     }
 
-    public String getBrickConfiguration() {
-        return this.brickConfiguration;
+    public String getBrickConfigurationName() {
+        return this.brickConfigurationName;
     }
 }
