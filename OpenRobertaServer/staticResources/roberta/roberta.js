@@ -127,7 +127,7 @@ function loadFromListing() {
     if ($programRow.length <= 0) {
         return;
     }
-    var programName = $programRow[0].textContent;
+    var programName = $programRow[0].children[0].textContent;
     LOG.info('loadFromList ' + programName + ' signed in: ' + userState.id);
     COMM.json("/blocks", {
         "cmd" : "loadP",
@@ -160,14 +160,9 @@ function loadToolbox(toolbox) {
 function showPrograms(result) {
     response(result);
     if (result.rc === 'ok') {
-        var programNames = result.programNames;
-        var namesArrayArray = [];
-        for (var i = 0; i < programNames.length; i++) {
-            namesArrayArray.push([ programNames[i] ]);
-        }
         var $table = $('#programNameTable').dataTable();
         $table.fnClearTable();
-        $table.fnAddData(namesArrayArray);
+        $table.fnAddData(result.programNames);
     }
 }
 
@@ -188,9 +183,24 @@ function beforeActivateTab(event, ui) {
 
 function initProgramNameTable() {
     var columns = [ {
-        "sName" : "program name",
+        "sTitle" : "Name des Programms",
         "sClass" : "programs"
-    } ];
+    }, {
+        "sTitle" : "User",
+        "sClass" : "programs"
+    }, {
+        "sTitle" : "Blöcke",
+        "sClass" : "programs"
+    }, {
+        "sTitle" : "Icon",
+        "sClass" : "programs"
+    }, {
+        "sTitle" : "Created",
+        "sClass" : "programs"
+    }, {
+        "sTitle" : "Last Update",
+        "sClass" : "programs"
+    }, ];
     var $programs = $('#programNameTable');
     $programs.dataTable({
         "sDom" : '<lip>t<r>',
@@ -246,7 +256,9 @@ function switchToBrickly() {
 
 function init() {
     $('#head-navigation').menu({
-        position: { my: "left-30 top+60" },
+        position : {
+            my : "left-30 top+60"
+        },
         select : function(event, ui) {
             var id = ui.item.children().attr('id');
             if (id === 'head-navigation-blockly') {

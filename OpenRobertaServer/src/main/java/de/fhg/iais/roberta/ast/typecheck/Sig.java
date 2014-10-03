@@ -6,36 +6,7 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
- * needed to typecheck a blockly program. Defines the signature of a function/method/operator.<br>
- *
- * <pre>
- *                    ANY
- *                     I
- *  +---------+--------+-------+
- *  I         I        I       I
- * STRING   COLOR   NUMERIC   BOOL
- *  I         I        I       I
- *  +---------+        I       I
- *            I        I       I
- *           NULL      I       I
- *            I        I       I
- *            +--------+-------+
- *                     I
- *                   NOTHING
- * </pre>
- * 
- * <b>Note:</b><br>
- * <ul>
- * <li>our simple type system cannot be extended by new types (e.g. classes) and is thus closed
- * <li>ANY is supertype of all concrete types, NOTHING is subtype of all concrete types
- * <li>VOID represents no type, e.g. methods that return no object (void in Java)
- * <li>NULL is subtype of reference types (String and Color)
- * <li>there is only one numeric type
- * <li>R, S and T are used for type variables
- * <li>a CAPTURED_TYPE is used to transfer type information in a signature and is not used explicitly. E.g. in <code>eq(TxT->Bool)</code> the type variable is
- * captured, expressing that T has to be substituted by the same concrete type at all places
- * <li>COMPARABLE, ADDABLE are abstract types used for <code>< <= > >= == !=</code> and <code>+</code> (strings and numeric!)
- * </ul>
+ * needed to typecheck a blockly program. Defines the signature of a function/method/operator. see {@link BlocklyType} for further explanation
  *
  * @author rbudde
  */
@@ -45,7 +16,7 @@ public class Sig {
 
     private Sig(BlocklyType returnType, BlocklyType[] paramTypes) {
         Assert.notNull(returnType);
-        Assert.notNull(returnType);
+        Assert.notNull(paramTypes);
         this.returnType = returnType;
         this.paramTypes = paramTypes;
     }

@@ -76,16 +76,13 @@ public class Program implements WithSurrogateId {
         return this.name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getProgramText() {
         return this.programText;
     }
 
     public void setProgramText(String programText) {
         this.programText = programText;
+        this.lastChanged = Util.getNow();
     }
 
     public Timestamp getLastChecked() {
@@ -118,6 +115,7 @@ public class Program implements WithSurrogateId {
 
     public void setTags(String tags) {
         this.tags = tags;
+        this.lastChanged = Util.getNow();
     }
 
     /**

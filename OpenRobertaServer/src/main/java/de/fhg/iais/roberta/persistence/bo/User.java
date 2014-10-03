@@ -105,4 +105,8 @@ public class User implements WithSurrogateId {
     public Timestamp getLastLogin() {
         return this.lastLogin;
     }
+
+    public void setLastLogin() {
+        this.lastLogin = Util.getNow();
+    }
 }

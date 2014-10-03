@@ -4,8 +4,11 @@ import java.io.IOException;
 
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.SessionManager;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.server.session.HashSessionManager;
+import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.slf4j.Logger;
@@ -27,7 +30,7 @@ import de.fhg.iais.roberta.persistence.dao.ProgramDao;
  * - configures jaxb and the package with the providers<br>
  * - configures a resource holder for static content<br>
  * - configures hibernate and tests the connection to the database. Hibernate uses Sqlite as underlying database<br>
- * 
+ *
  * @author rbudde
  */
 public class ServerStarter {
@@ -36,7 +39,7 @@ public class ServerStarter {
 
     /**
      * startup and shutdown. See {@link ServerStarter}
-     * 
+     *
      * @param args unused
      * @throws Exception
      */
@@ -47,7 +50,7 @@ public class ServerStarter {
 
     /**
      * startup. See {@link ServerStarter}
-     * 
+     *
      * @param port the port jetty should listen to
      * @throws Exception
      */
@@ -56,7 +59,9 @@ public class ServerStarter {
 
         RobertaGuiceServletConfig robertaGuiceServletConfig = new RobertaGuiceServletConfig();
 
-        ServletContextHandler context = new ServletContextHandler(server, "/");
+        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        context.setServer(server);
+        context.setContextPath("/");
         context.addEventListener(robertaGuiceServletConfig);
         context.addFilter(GuiceFilter.class, "/*", null);
         ServletHolder servletHolder = new ServletHolder(new ServletContainer());
@@ -64,6 +69,8 @@ public class ServerStarter {
             "com.sun.jersey.config.property.packages",
             "de.fhg.iais.roberta.javaServer.resources,de.fhg.iais.roberta.javaServer.provider");
         context.addServlet(servletHolder, "/*");
+        SessionManager sm = new HashSessionManager();
+        context.setSessionHandler(new SessionHandler(sm));
 
         ResourceHandler resourceHandler = new ResourceHandler();
         resourceHandler.setDirectoriesListed(true);
