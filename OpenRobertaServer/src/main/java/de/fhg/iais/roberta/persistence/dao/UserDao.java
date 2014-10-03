@@ -60,20 +60,9 @@ public class UserDao extends AbstractDao<User> {
         }
     }
 
-    public int deleteUserByAccountName(String accountName) {
-
-        Assert.notNull(accountName);
-        Query hql = this.session.createQuery("from User where accountName=:accountName");
-        hql.setString("accountName", accountName);
-
-        @SuppressWarnings("unchecked")
-        List<User> il = hql.list();
-        if ( il.size() == 0 ) {
-            return 0;
-        } else {
-            User toBeDeleted = il.get(0);
-            this.session.delete(toBeDeleted);
-            return 1;
-        }
+    public int deleteUser(User userToBeDeleted) {
+        Assert.notNull(userToBeDeleted);
+        this.session.delete(userToBeDeleted);
+        return 1;
     }
 }

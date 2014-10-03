@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.dbc.Assert;
  * class for wrapping a hibernate session. This class eases the use of sessions. It creates transactions, after commits a new transaction is created
  * automatically. Closing a session forces a commit.<br>
  * <b>If neither close nor commit are called for this wrapper objects, changes of the database w.r.t. to the wrappped session are <i>not persisted</i>!</b>
- * 
+ *
  * @author rbudde
  */
 public class SessionWrapper {
@@ -23,11 +23,11 @@ public class SessionWrapper {
 
     /**
      * wrap a hibernate session. Package visible: may only be called from {@link SessionFactoryWrapper}
-     * 
+     *
      * @param session the hibernate session to be wrapped
      */
     SessionWrapper(Session session) {
-        LOG.info("open session + start transaction");
+        LOG.debug("open session + start transaction");
         this.session = session;
         this.session.beginTransaction();
     }
@@ -44,7 +44,7 @@ public class SessionWrapper {
      * commit the current transaction and start a new one
      */
     public void commit() {
-        LOG.info("commit + start transaction");
+        LOG.debug("commit + start transaction");
         this.session.getTransaction().commit();
         this.session.beginTransaction();
     }
@@ -53,7 +53,7 @@ public class SessionWrapper {
      * commit the current transaction and close the session
      */
     public void close() {
-        LOG.info("close session (after commit)");
+        LOG.debug("close session (after commit)");
         Transaction transaction = this.session.getTransaction();
         if ( transaction.isActive() ) {
             transaction.commit();
@@ -72,7 +72,7 @@ public class SessionWrapper {
 
     /**
      * create a HQL query
-     * 
+     *
      * @param query the SQL query
      * @return the Query object
      */
@@ -82,7 +82,7 @@ public class SessionWrapper {
 
     /**
      * persist an entity in the underlying database.
-     * 
+     *
      * @param toBePersisted the entity to be persisted
      * @return the key of the persisted object
      */
@@ -92,7 +92,7 @@ public class SessionWrapper {
 
     /**
      * delete an entity in the underlying database. The session is flushed.
-     * 
+     *
      * @param toBeDeleted the entity to be deleted
      */
     public void delete(Object toBeDeleted) {

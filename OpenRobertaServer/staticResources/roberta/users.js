@@ -4,7 +4,6 @@ var userId = "none";
 var userRole = "none";
 
 function saveUserToServer() {
-
     var $userAccountName = $("#accountName");
     var $userName = $('#userName');
     var $userEmail = $("#userEmail");
@@ -55,7 +54,6 @@ function deleteUserOnServer() {
 }
 
 function signIn() {
-
     var $userAccountName = $("#accountNameS");
     var $pass1 = $('#pass1S');
 

@@ -162,7 +162,9 @@ function showPrograms(result) {
     if (result.rc === 'ok') {
         var $table = $('#programNameTable').dataTable();
         $table.fnClearTable();
-        $table.fnAddData(result.programNames);
+        if (result.programNames.length > 0) {
+            $table.fnAddData(result.programNames);
+        }
     }
 }
 

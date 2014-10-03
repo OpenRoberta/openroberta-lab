@@ -41,13 +41,17 @@ public class UserProcessor {
         return userDao.loadUser(account);
     }
 
-    public int deleteUserProgramByName(SessionWrapper session, String account) {
-        UserDao userDao = new UserDao(session);
-        User user = userDao.loadUser(account);
-        if ( user == null ) {
+    public int deleteUserByAccount(SessionWrapper session, int userIdOfUserLoggedIn, String account) {
+        if ( userIdOfUserLoggedIn <= 1 ) {
             return 0;
         } else {
-            return userDao.deleteUserByAccountName(account);
+            UserDao userDao = new UserDao(session);
+            User user = userDao.loadUser(account);
+            if ( user == null || user.getId() != userIdOfUserLoggedIn ) {
+                return 0;
+            } else {
+                return userDao.deleteUser(user);
+            }
         }
     }
 
