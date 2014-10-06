@@ -1,12 +1,14 @@
 package lejos.ev3.startup;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+
+import org.json.JSONObject;
 
 /**
  * handles registration of the token<br>
@@ -63,16 +65,23 @@ public class RobertaTokenRegister implements Runnable {
      */
     @Override
     public void run() {
-        DataOutputStream dos = null;
+        //DataOutputStream dos = null;
+        OutputStream os = null;
         BufferedReader br = null;
 
         try {
             this.httpURLConnection = openConnection(this.serverURL);
 
-            dos = new DataOutputStream(this.httpURLConnection.getOutputStream());
-            dos.writeBytes(this.token);
-            dos.flush();
-            dos.close();
+            JSONObject jsonTest = new JSONObject();
+            jsonTest.put("Name", "Roberta01");
+            jsonTest.put("Token", this.token);
+
+            os = this.httpURLConnection.getOutputStream();
+            os.write(jsonTest.toString().getBytes("UTF-8"));
+
+            //            dos = new DataOutputStream(this.httpURLConnection.getOutputStream());
+            //            dos.flush();
+            //            dos.close();
 
             br = new BufferedReader(new InputStreamReader(this.httpURLConnection.getInputStream()));
             String serverResponse = "";
@@ -89,8 +98,8 @@ public class RobertaTokenRegister implements Runnable {
             System.out.println("force disconnect (registerToken)");
         } finally {
             try {
-                if ( dos != null ) {
-                    dos.close();
+                if ( os != null ) {
+                    os.close();
                 }
                 if ( br != null ) {
                     br.close();
@@ -117,6 +126,7 @@ public class RobertaTokenRegister implements Runnable {
         httpURLConnection.setDoOutput(true);
         httpURLConnection.setRequestMethod("POST");
         httpURLConnection.setReadTimeout(300000);
+        httpURLConnection.setRequestProperty("Content-Type", "application/json; charset=utf8");
         return httpURLConnection;
     }
 

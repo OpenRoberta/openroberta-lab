@@ -26,7 +26,7 @@
         <jar destfile="${classes.jar}" basedir="${classes.dir}">
             <manifest>
                 <attribute name="Main-Class" value="${main.class}"/>
-                <attribute name="Class-Path" value="${lejos.home}/lib/ev3classes.jar ${lejos.home}/lib/dbusjava.jar ${lejos.home}/libjna/usr/share/java/jna.jar"/>
+                <attribute name="Class-Path" value="${lejos.home}/lib/ev3classes.jar ${lejos.home}/lib/dbusjava.jar ${lejos.home}/libjna/usr/share/java/jna.jar /home/roberta/lib/json-20140107.jar"/>
             </manifest>
         </jar>  
     </target>
