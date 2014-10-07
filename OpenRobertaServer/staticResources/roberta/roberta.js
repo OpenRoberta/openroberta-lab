@@ -272,59 +272,68 @@ function init() {
     });
 
     $("#head-navigation #submenu-program > li").click(function() {
-        var id = this.id;
-        if (id === 'start') {
-            $("#program").dialog("open");
-        } else if (id === 'check') {
-            $("#program").dialog("open");
-        } else if (id === 'new') {
-            $("#program").dialog("open");
-        } else if (id === 'open') {
+        $(".ui-dialog-content").dialog("close");   // close all opened popups
+        if (this.id === 'start') {
+        } else if (this.id === 'check') {
+        } else if (this.id === 'new') {
+            $("#new-program").dialog("open");
+        } else if (this.id === 'open') {
             $('#tabListing').click();
-        } else if (id === 'save') {
-            $("#program").dialog("open");
-        } else if (id === 'saveAs') {
-            $("#program").dialog("open");
-        } else if (id === 'attach') {
-        } else if (id === 'divide') {
-        } else if (id === 'properties') {
+        } else if (this.id === 'save') {
+        } else if (this.id === 'saveAs') {
+            $("#save-program").dialog("open");
+        } else if (this.id === 'attach') {
+            $("#add-program").dialog("open");
+        } else if (this.id === 'divide') {
+        } else if (this.id === 'delete') {
+            $("#delete-program").dialog("open");
+        } else if (this.id === 'properties') {
         }
+        return false;
     });
 
     $("#head-navigation #submenu-settings > li").click(function() {
-        var id = this.id;
-        if (id === 'roboter') {
+        $(".ui-dialog-content").dialog("close");   // close all opened popups
+        if (this.id === 'roboter') {
             switchToBrickly();
-        } else if (id === 'toolbox') {
-        } else if (id === 'close') {
+        } else if (this.id === 'toolbox') {
+        } else if (this.id === 'close') {
         }
+        return false;
     });
 
     $("#head-navigation #submenu-connection > li").click(function() {
-        var id = this.id;
-        if (id === 'wifi') {
-        } else if (id === 'usb') {
-        } else if (id === 'bluetooth') {
-        } else if (id === 'disconnect') {
+        $(".ui-dialog-content").dialog("close");   // close all opened popups
+        if (this.id === 'wifi') {
+        } else if (this.id === 'usb') {
+        } else if (this.id === 'bluetooth') {
+        } else if (this.id === 'disconnect') {
         }
+        return false;
     });
 
     $("#head-navigation #submenu-developertools > li").click(function() {
-        var id = this.id;
-        if (id === 'logging') {
+        $(".ui-dialog-content").dialog("close");   // close all opened popups
+        if (this.id === 'logging') {
             $('#tabLogging').click();
-        } else if (id === 'simtest') {
+        } else if (this.id === 'simtest') {
             $('#tabSimtest').click();
         }
+        return false;
     });
 
     $("#head-navigation #submenu-login > li").click(function() {
-        var id = this.id;
-        if (id === 'login') {
-        } else if (id === 'logout') {
-        } else if (id === 'new') {
-        } else if (id === 'change') {
+        $(".ui-dialog-content").dialog("close");   // close all opened popups
+        if (this.id === 'login') {
+            $("#login-user").dialog("open");
+        } else if (this.id === 'logout') {
+        } else if (this.id === 'new') {
+            $("#register-user").dialog("open");
+        } else if (this.id === 'change') {
+        } else if (this.id === 'delete') {
+            $("#delete-user").dialog("open");
         }
+        return false;
     });
 
     $('#tabs').tabs({

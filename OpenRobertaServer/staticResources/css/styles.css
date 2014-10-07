@@ -66,16 +66,10 @@ ul#head-navigation .head-navigation-submenu > li:hover {
 
 ul#head-navigation a {
     text-decoration: none;
-    color: #c7c7c7;
+    color: #333333;
     text-align: center;
     display: block;
     float: left;
-}
-
-ul#head-navigation a:hover,
-ul#head-navigation li:hover a {
-    text-decoration: none;
-    color: #333333;
 }
 
 .head-navi-icons {
@@ -86,57 +80,33 @@ ul#head-navigation li:hover a {
 }
 
 .head-navi-icons.help {
-    background-image: url(img/head-navi-icons/help.png);
+    background-image: url(img/head-navi-icons/help_active.png);
     width: 23px;
 }
 
-ul#head-navigation a:hover .head-navi-icons.help, ul#head-navigation li:hover .head-navi-icons.help {
-    background-image: url(img/head-navi-icons/help_active.png);
-}
-
 .head-navi-icons.settings {
-    background-image: url(img/head-navi-icons/settings.png);
+    background-image: url(img/head-navi-icons/settings_active.png);
     width: 24px;
 }
 
-ul#head-navigation a:hover .head-navi-icons.settings, ul#head-navigation li:hover .head-navi-icons.settings {
-    background-image: url(img/head-navi-icons/settings_active.png);
-}
-
 .head-navi-icons.community {
-    background-image: url(img/head-navi-icons/community.png);
-    width: 34px;
-}
-
-ul#head-navigation a:hover .head-navi-icons.community, ul#head-navigation li:hover .head-navi-icons.community {
     background-image: url(img/head-navi-icons/community_active.png);
+    width: 34px;
 }
 
 .head-navi-icons.project {
-    background-image: url(img/head-navi-icons/project.png);
-    width: 22px;
-}
-
-ul#head-navigation a:hover .head-navi-icons.project, ul#head-navigation li:hover .head-navi-icons.project {
     background-image: url(img/head-navi-icons/project_active.png);
+    width: 22px;
 }
 
 .head-navi-icons.developer {
-    background-image: url(img/head-navi-icons/developer.png);
+    background-image: url(img/head-navi-icons/developer_active.png);
     width: 22px;
 }
 
-ul#head-navigation a:hover .head-navi-icons.developer, ul#head-navigation li:hover .head-navi-icons.developer {
-    background-image: url(img/head-navi-icons/developer_active.png);
-}
-
 .head-navi-icons.user {
-    background-image: url(img/head-navi-icons/user.png);
-    width: 34px;
-}
-
-ul#head-navigation a:hover .head-navi-icons.user, ul#head-navigation li:hover .head-navi-icons.user {
     background-image: url(img/head-navi-icons/user_active.png);
+    width: 34px;
 }
 
 .head-navi-text {
@@ -365,7 +335,7 @@ ul#head-navigation li:hover #project-submenu {
 }
 
 #login-user label,
-#program label,
+.program label,
 #register-user label,
 #delete-user label,
 #control-panel label {
@@ -375,7 +345,7 @@ ul#head-navigation li:hover #project-submenu {
 }
 
 #login-user input,
-#program input,
+.program input,
 #register-user input,
 #delete-user input {
     padding: 7px 8px 7px 32px;
@@ -456,24 +426,24 @@ ul#head-navigation li:hover #project-submenu {
     color: #333333;
 }
 
-#program input#programName {
+.program input#programName {
     background-image: url(img/program_name-icon.png);
     background-repeat: no-repeat;
     background-position: center left;
-    width: 90%;
+    width: 140%;
     box-sizing: border-box;
 }
 
-#program input#programName:active,
-#program input#programName:focus {
-    background-image: url(img/program_name-icon_active.png);
+.program input#programName:active,
+.program input#programName:focus {
+	background-image: url(img/program_name-icon_active.png);
     background-repeat: no-repeat;
     background-position: center left;
     color: #333333;
 }
 
 #login-user .submit,
-#program .submit,
+.program .submit,
 #register-user .submit,
 #delete-user .submit,
 #control-panel input.button {
@@ -493,7 +463,7 @@ ul#head-navigation li:hover #project-submenu {
 }
 
 #login-user .submit:hover,
-#program .submit:hover,
+.program .submit:hover,
 #register-user .submit:hover,
 #delete-user .submit:hover,
 #control-panel input.button:hover {

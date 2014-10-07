@@ -38,12 +38,13 @@
                 <ul id="submenu-program" class="head-navigation-submenu">
                     <li id="start">Starten</li>
                     <li id="check">Checken</li>
-                    <li id="new">Neu</li>
+                    <li id="new">Neu ...</li>
                     <li id="open"> Öffnen ... </li>
                     <li id="save">Speichern</li>
                     <li id="saveAs">Speichern unter ...</li>
                     <li id="attach">Anhängen ...</li>
-                    <li id="divide">Teilen ...</li>
+                    <li id="divide">Teilen</li>
+                    <li id="delete">Löschen ...</li>
                     <li id="properties">Eigenschaften</li>
                 </ul>
             </li>
@@ -78,12 +79,13 @@
                 <a href="#" id="head-navigation-readme"><span class="head-navi-icons help"></span><span class="head-navi-text">Hilfe</span></a>
             </li>
             <li>
-                <a class="popup-opener" id="open-login-user" href="#"><span id="signInIcon" class="head-navi-icons user"></span> <span id="setName" class="head-navi-text">Anmeldung</span></a>
+                <a href="#"><span class="head-navi-icons user"></span><span id="setName" class="head-navi-text">Anmeldung</span></a>
                 <ul id="submenu-login" class="head-navigation-submenu">
                     <li id="login">Anmelden</li>
                     <li id="logout">Abmelden</li>
                     <li id="new">Neu ...</li>
                     <li id="change">Ändern ...</li>
+                    <li id="delete">Benutzer löschen ...</li>
                 </ul>
             </li>
             <li>
@@ -98,32 +100,57 @@
 
     <!-- ################## POPUPS ################## -->
     <div class="jquerypopup" id="login-user" title="Anmeldung">
-        <label for="accountNameS">Benutzername</label> <input id="accountNameS" class='input' type="text" value="" /> <label for="pass1S">Passwort</label> <input
-            id="pass1S" class='input' type="password" value=""
-        /><br /> <input id="signIn" class='submit' type="submit" value="Anmelden" /> <input id="open-register-user" href="#register"
-            class='submit popup-opener' type="submit" value="Neuer Benutzer"
-        /><br /> <a class="popup-opener" id="open-delete-user" href="#">Benutzer löschen</a> <span class="roberta-popup"></span>
+        <label for="accountNameS">Benutzername</label>
+        <input id="accountNameS" class='input' type="text" value="" />
+        <label for="pass1S">Passwort</label>
+        <input id="pass1S" class='input' type="password" value="" /><br/>
+        <input id="signIn" class='submit' type="submit" value="Anmelden" />
+        <input id="open-register-user" href="#register" class='submit popup-opener' type="submit" value="Neuer Benutzer" /><br/>
     </div>
+
     <div class="jquerypopup" id="register-user" title="Benutzer erstellen">
-        <label for="accountName">Benutzername</label> <input id="accountName" class='input' type="text" value="" /> <label for="pass1">Passwort</label> <input
-            id="pass1" class='input' type="password" value=""
-        /> <label for="pass2">Passwort wiederholen</label> <input id="pass2" class='input' type="password" value="" /> <label for="userName">Name</label> <input
-            id="userName" class='input' type="text" value=""
-        /> <label for="userEmail">E-Mail</label> <input id="userEmail" class='input' type="text" value="" /><br /> <input type="radio" name="role"
-            value="schueler"
-        >Schüler <input type="radio" name="role" value="lehrer">Lehrer<br /> <input id="saveUser" class='submit' type="submit"
-                value="Benutzer registrieren"
-            />
+        <label for="accountName">Benutzername</label>
+        <input id="accountName" class='input' type="text" value="" />
+        <label for="pass1">Passwort</label>
+        <input id="pass1" class='input' type="password" value="" />
+        <label for="pass2">Passwort wiederholen</label>
+        <input id="pass2" class='input' type="password" value="" />
+        <label for="userName">Name</label>
+        <input id="userName" class='input' type="text" value="" />
+        <label for="userEmail">E-Mail</label>
+        <input id="userEmail" class='input' type="text" value="" /><br/>
+        <input type="radio" name="role" value="schueler">Schüler
+        <input type="radio" name="role" value="lehrer">Lehrer<br/>
+        <input id="saveUser" class='submit' type="submit" value="Benutzer registrieren" />
     </div>
+
     <div class="jquerypopup" id="delete-user" title="Benutzer löschen">
-        <input id="accountNameD" class='input' type="text" value="" /><br /> <input id="deleteUser" class='submit' type="submit" value="Benutzer löschen" />
+        <input id="accountNameD" class='input' type="text" value="" /><br/>
+        <input id="deleteUser" class='submit' type="submit" value="Benutzer löschen" />
     </div>
-    <div class="jquerypopup" id="program" title="Programm">
-        <label for="programName">Programmname</label> <input id="programName" id="name" class='input' type="text" value="" /><br /> <input id="save"
-            class='submit' type="submit" value="Speichern"
-        /> <input id="load" class='submit' type="submit" value="Laden" /> <input id="add" class='submit' type="submit" value="Hinzufügen" /> <input id="del"
-            class='submit' type="submit" value="Löschen"
-        />
+
+    <div class="jquerypopup program" id="add-program" title="Programm">
+        <label for="programName">Programmname</label>
+        <input id="programName" id="name" class='input' type="text" value="" /><br/>
+        <input id="add" class='submit' type="submit" value="Hinzufügen" />
+    </div>
+
+    <div class="jquerypopup program" id="delete-program" title="Programm">
+        <label for="programName">Programmname</label>
+        <input id="programName" id="name" class='input' type="text" value="" /><br/>
+        <input id="del" class='submit' type="submit" value="Löschen" />
+    </div>
+
+    <div class="jquerypopup program" id="save-program" title="Programm">
+        <label for="programName">Programmname</label>
+        <input id="programName" id="name" class='input' type="text" value="" /><br/>
+        <input id="save" class='submit' type="submit" value="Speichern" />
+    </div>
+
+    <div class="jquerypopup program" id="new-program" title="Programm">
+        <label for="programName">Programmname</label>
+        <input id="programName" id="name" class='input' type="text" value="" /><br/>
+        <input id="save" class='submit' type="submit" value="Anlegen" />
     </div>
     <!-- ################## END POPUPS ################## -->
 
@@ -147,9 +174,9 @@
 
             <div id="blockly">
                 <div id="blocklyDiv" style="height: 100%; width: 100%; z-index: 1;"></div>
-                <br />
+                <br/>
                 <div id="control-panel">
-                    <label>Toolbox</label> <input id="toolbox1" class='button' type="submit" value="Anf&auml;nger" /><br /> <input id="toolbox2"
+                    <label>Toolbox</label> <input id="toolbox1" class='button' type="submit" value="Anf&auml;nger" /><br/> <input id="toolbox2"
                         class='button' type="submit" value="Experte"
                     />
                 </div>
@@ -162,16 +189,16 @@
                     <tfoot>
                     </tfoot>
                 </table>
-                <br /> <input id="loadFromListing" class='submit' type="submit" value="load" />
+                <br/> <input id="loadFromListing" class='submit' type="submit" value="load" />
                 <div id="redrawCounter" class="rightGray">0</div>
             </div>
             
             <div id="logging">
-                <br />
+                <br/>
                 <div>
-                    <input id="toggle" class="button" type="submit" value="log ein/aus" /><br />
+                    <input id="toggle" class="button" type="submit" value="log ein/aus" /><br/>
                     <hr />
-                    <br />
+                    <br/>
                     <ol id="log" class="log">
                     </ol>
                     <div class="counter">Count:</div>
@@ -180,7 +207,7 @@
             </div>
             
             <div id="readme">
-                <br />
+                <br/>
                 <div>Content Readme</div>
             </div>
         </div>
