@@ -517,6 +517,11 @@ ul#head-navigation li:hover #project-submenu {
     font-family: 'Open Sans', sans-serif;
 }
 
+/* ### FEEDBACK to Jira button ################################################## */
+#atlwdg-trigger {
+	z-index: 100;
+}
+
 /* ### jQuery POPUP ############################################################ */
 
 .jquerypopup a {
