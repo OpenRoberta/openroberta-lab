@@ -65,7 +65,7 @@ public class TextlyTreeToAst extends TextlyBaseVisitor<Phrase<Void>> {
         String op = ctx.getChild(1).getText();
         Phrase<Void> left = visit(ctx.getChild(0));
         Phrase<Void> right = visit(ctx.getChild(2));
-        return Binary.make(Binary.Op.get(op), (Expr<Void>) left, (Expr<Void>) right, false, "");
+        return Binary.make(Binary.Op.get(op), (Expr<Void>) left, (Expr<Void>) right, null, null);
     }
 
     @Override
@@ -85,19 +85,19 @@ public class TextlyTreeToAst extends TextlyBaseVisitor<Phrase<Void>> {
 
     @Override
     public Phrase<Void> visitVarName(VarNameContext ctx) {
-        return Var.make(ctx.VAR().getText(), TypeVar.INTEGER, false, "");
+        return Var.make(ctx.VAR().getText(), TypeVar.INTEGER, null, null);
     }
 
     @Override
     public Phrase<Void> visitIntConst(IntConstContext ctx) {
-        return NumConst.make(ctx.INT().getText(), false, "");
+        return NumConst.make(ctx.INT().getText(), null, null);
     }
 
     @Override
     public Phrase<Void> visitUnary(UnaryContext ctx) {
         String op = ctx.getChild(0).getText(); // strange name for the operand. Obviously from the last rule!
         Phrase<Void> expr = visit(ctx.getChild(1));
-        return Unary.make(Unary.Op.get(op), (Expr<Void>) expr, false, "");
+        return Unary.make(Unary.Op.get(op), (Expr<Void>) expr, null, null);
     }
 
     @Override
@@ -141,13 +141,13 @@ public class TextlyTreeToAst extends TextlyBaseVisitor<Phrase<Void>> {
     public Phrase<Void> visitRepeatStmt(RepeatStmtContext ctx) {
         Phrase<Void> expr = visit(ctx.expr());
         Phrase<Void> stmtl = visit(ctx.stmtl());
-        return RepeatStmt.make(Mode.FOR, (Expr<Void>) expr, (StmtList<Void>) stmtl, false, "");
+        return RepeatStmt.make(Mode.FOR, (Expr<Void>) expr, (StmtList<Void>) stmtl, null, null);
     }
 
     @Override
     public Phrase<Void> visitAssignStmt(AssignStmtContext ctx) {
-        Phrase<Void> name = Var.make(ctx.VAR().getText(), TypeVar.INTEGER, false, "");
+        Phrase<Void> name = Var.make(ctx.VAR().getText(), TypeVar.INTEGER, null, null);
         Phrase<Void> expr = visit(ctx.expr());
-        return AssignStmt.make((Var<Void>) name, (Expr<Void>) expr, false, "");
+        return AssignStmt.make((Var<Void>) name, (Expr<Void>) expr, null, null);
     }
 }

@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
@@ -16,8 +18,8 @@ public class DriveAction<V> extends Action<V> {
     private final DriveDirection direction;
     private final MotionParam<V> param;
 
-    private DriveAction(DriveDirection direction, MotionParam<V> param, boolean disabled, String comment) {
-        super(Phrase.Kind.DRIVE_ACTION, disabled, comment);
+    private DriveAction(DriveDirection direction, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(Phrase.Kind.DRIVE_ACTION, properties, comment);
         Assert.isTrue(direction != null && param != null);
         this.direction = direction;
         this.param = param;
@@ -29,12 +31,12 @@ public class DriveAction<V> extends Action<V> {
      * 
      * @param direction {@link DriveDirection} in which the robot will drive,
      * @param param {@link MotionParam} that set up the parameters for the movement of the robot (distance the robot should cover and speed),
-     * @param disabled state of the block,
-     * @param comment added from the user
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment added from the user,
      * @return read only object of class {@link DriveAction}
      */
-    public static <V> DriveAction<V> make(DriveDirection direction, MotionParam<V> param, boolean disabled, String comment) {
-        return new DriveAction<V>(direction, param, disabled, comment);
+    public static <V> DriveAction<V> make(DriveDirection direction, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new DriveAction<V>(direction, param, properties, comment);
     }
 
     /**

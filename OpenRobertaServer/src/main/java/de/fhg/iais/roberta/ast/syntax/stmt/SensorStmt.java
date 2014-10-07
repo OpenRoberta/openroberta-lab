@@ -12,7 +12,7 @@ public class SensorStmt<V> extends Stmt<V> {
     private final Sensor<V> sensor;
 
     private SensorStmt(Sensor<V> sensor) {
-        super(Phrase.Kind.SENSOR_STMT, false, "");
+        super(Phrase.Kind.SENSOR_STMT, null, null);
         Assert.isTrue(sensor != null && sensor.isReadOnly());
         this.sensor = sensor;
         setReadOnly();
@@ -22,8 +22,6 @@ public class SensorStmt<V> extends Stmt<V> {
      * Create object of the class {@link SensorStmt}.
      * 
      * @param sensor that we want to wrap
-     * @param disabled state of the block,
-     * @param comment added from the user
      * @return statement with wrapped sensor inside
      */
     public static <V> SensorStmt<V> make(Sensor<V> sensor) {

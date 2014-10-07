@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 
@@ -8,14 +10,14 @@ import de.fhg.iais.roberta.ast.visitor.AstVisitor;
  * Object from this class will generate code for creating a variable.<br/>
  * <br>
  * User must provide name of the variable and type of the variable, if the variable is created before in the code TypeVar should be <b>NONE</b>.
- * To create an instance from this class use the method {@link #make(String, TypeVar)}.<br>
+ * To create an instance from this class use the method {@link #make(String, TypeVar, boolean, String)}.<br>
  */
 public class Var<V> extends Expr<V> {
     private final TypeVar typeVar;
     private final String name;
 
-    private Var(String value, TypeVar typeVar, boolean disabled, String comment) {
-        super(Phrase.Kind.VAR, disabled, comment);
+    private Var(String value, TypeVar typeVar, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(Phrase.Kind.VAR, properties, comment);
         this.name = value;
         this.typeVar = typeVar;
         setReadOnly();
@@ -26,12 +28,12 @@ public class Var<V> extends Expr<V> {
      * 
      * @param value name of the variable,
      * @param typeVar type of the variable,
-     * @param disabled state of the block,
-     * @param comment added from the user
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment added from the user,
      * @return read only object of class {@link Var}
      */
-    public static <V> Var<V> make(String value, TypeVar typeVar, boolean disabled, String comment) {
-        return new Var<V>(value, typeVar, disabled, comment);
+    public static <V> Var<V> make(String value, TypeVar typeVar, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new Var<V>(value, typeVar, properties, comment);
     }
 
     /**

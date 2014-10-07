@@ -11,13 +11,13 @@ public class StmtFlowContrTest {
 
     @Test
     public void make() throws Exception {
-        StmtFlowCon<Void> flowCon = StmtFlowCon.make(Flow.BREAK, false, "");
+        StmtFlowCon<Void> flowCon = StmtFlowCon.make(Flow.BREAK, null, null);
         Assert.assertEquals("\nStmtFlowCon [BREAK]", flowCon.toString());
     }
 
     @Test
     public void getFlow() throws Exception {
-        StmtFlowCon<Void> flowCon = StmtFlowCon.make(Flow.BREAK, false, "");
+        StmtFlowCon<Void> flowCon = StmtFlowCon.make(Flow.BREAK, null, null);
         Assert.assertEquals(Flow.BREAK, flowCon.getFlow());
     }
 

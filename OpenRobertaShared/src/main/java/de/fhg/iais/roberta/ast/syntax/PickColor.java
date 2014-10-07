@@ -9,11 +9,21 @@ import de.fhg.iais.roberta.dbc.DbcException;
  */
 public enum PickColor {
 
-    RED( 0, "#B30006", "ROT" ), GREEN( 1, "#00642E", "GRÜN" ), BLUE( 2, "#0057A6" ), YELLOW( 3, "#F7D117" ), MAGENTA( 4 ), ORANGE( 5 ), WHITE(
-        6,
-        "#FFFFFF",
-        "WEIß",
-        "WEISS" ), BLACK( 7, "#000000" ), PINK( 8 ), GRAY( 9 ), LIGHT_GRAY( 10 ), DARK_GRAY( 11 ), CYAN( 12 ), BROWN( 13, "#532115" ), NONE( -1, "#585858" );
+    RED( 0, "#B30006", "ROT" ),
+    GREEN( 1, "#00642E", "GRÜN" ),
+    BLUE( 2, "#0057A6" ),
+    YELLOW( 3, "#F7D117" ),
+    MAGENTA( 4, "#000000" ),
+    ORANGE( 5, "#000000" ),
+    WHITE( 6, "#FFFFFF", "WEIß", "WEISS" ),
+    BLACK( 7, "#000000" ),
+    PINK( 8, "#000000" ),
+    GRAY( 9, "#000000" ),
+    LIGHT_GRAY( 10, "#000000" ),
+    DARK_GRAY( 11, "#000000" ),
+    CYAN( 12, "#000000" ),
+    BROWN( 13, "#532115" ),
+    NONE( -1, "#585858" );
 
     private final String[] values;
     private final int colorID;
@@ -25,6 +35,10 @@ public enum PickColor {
 
     public int getColorID() {
         return this.colorID;
+    }
+
+    public String getHex() {
+        return this.values[0];
     }
 
     public String getJavaCode() {

@@ -13,7 +13,7 @@ public class ColorSensorTest {
 
     @Test
     public void sensorSetColor() throws Exception {
-        String a = "BlockAST [project=[[ColorSensor [mode=COLOUR, port=S3]]]]";
+        String a = "BlockAST [project=[[Location [x=-59, y=1], ColorSensor [mode=COLOUR, port=S3]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_setColor.xml"));
     }
@@ -22,7 +22,7 @@ public class ColorSensorTest {
     public void getMode() throws Exception {
         JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setColor.xml");
 
-        ColorSensor<Void> cs = (ColorSensor<Void>) transformer.getTree().get(0);
+        ColorSensor<Void> cs = (ColorSensor<Void>) transformer.getTree().get(1);
 
         Assert.assertEquals(ColorSensorMode.COLOUR, cs.getMode());
     }
@@ -31,21 +31,21 @@ public class ColorSensorTest {
     public void getPort() throws Exception {
         JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setColor.xml");
 
-        ColorSensor<Void> cs = (ColorSensor<Void>) transformer.getTree().get(0);
+        ColorSensor<Void> cs = (ColorSensor<Void>) transformer.getTree().get(1);
 
         Assert.assertEquals(SensorPort.S3, cs.getPort());
     }
 
     @Test
     public void sensorGetModeColor() throws Exception {
-        String a = "BlockAST [project=[[ColorSensor [mode=GET_MODE, port=S3]]]]";
+        String a = "BlockAST [project=[[Location [x=-59, y=55], ColorSensor [mode=GET_MODE, port=S3]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getModeColor.xml"));
     }
 
     @Test
     public void sensorGetSampleColor() throws Exception {
-        String a = "BlockAST [project=[[ColorSensor [mode=GET_SAMPLE, port=S3]]]]";
+        String a = "BlockAST [project=[[Location [x=-65, y=105], ColorSensor [mode=GET_SAMPLE, port=S3]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getSampleColor.xml"));
     }

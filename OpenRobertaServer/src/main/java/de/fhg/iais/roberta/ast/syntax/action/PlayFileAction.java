@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
@@ -13,8 +15,8 @@ import de.fhg.iais.roberta.dbc.Assert;
 public class PlayFileAction<V> extends Action<V> {
     private final String fileName;
 
-    private PlayFileAction(String fileName, boolean disabled, String comment) {
-        super(Phrase.Kind.PLAY_FILE_ACTION, disabled, comment);
+    private PlayFileAction(String fileName, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(Phrase.Kind.PLAY_FILE_ACTION, properties, comment);
         Assert.isTrue(!fileName.equals(""));
         this.fileName = fileName;
         setReadOnly();
@@ -24,12 +26,12 @@ public class PlayFileAction<V> extends Action<V> {
      * Creates instance of {@link PlayFileAction}. This instance is read only and can not be modified.
      * 
      * @param filename of the sound,
-     * @param disabled state of the block,
-     * @param comment added from the user
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment added from the user,
      * @return read only object of class {@link PlayFileAction}.
      */
-    public static <V> PlayFileAction<V> make(String filename, boolean disabled, String comment) {
-        return new PlayFileAction<V>(filename, disabled, comment);
+    public static <V> PlayFileAction<V> make(String filename, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new PlayFileAction<V>(filename, properties, comment);
     }
 
     /**

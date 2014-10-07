@@ -16,12 +16,10 @@ public class StmtList<V> extends Stmt<V> {
     private final List<Stmt<V>> sl = new ArrayList<Stmt<V>>();
 
     private StmtList() {
-        super(Phrase.Kind.STMT_LIST, false, "");
+        super(Phrase.Kind.STMT_LIST, null, null);
     }
 
     /**
-     * @param disabled state of the block,
-     * @param comment added from the user
      * @return writable object of type {@link StmtList}.
      */
     public static <V> StmtList<V> make() {

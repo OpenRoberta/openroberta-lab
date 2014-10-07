@@ -1,34 +1,23 @@
 package de.fhg.iais.roberta.ast.syntax.tasks;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 
 public class MainTask<V> extends Task<V> {
 
-    private final int x;
-    private final int y;
-
-    private MainTask(int x, int y, boolean disabled, String comment) {
-        super(Phrase.Kind.MAIN_TASK, disabled, comment);
-        this.x = x;
-        this.y = y;
+    private MainTask(BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(Phrase.Kind.MAIN_TASK, properties, comment);
         setReadOnly();
     }
 
     /**
      * creates instance of {@link MainTask}. This instance is read only and cannot be modified.
      */
-    public static <V> MainTask<V> make(int x, int y, boolean disabled, String comment) {
-        return new MainTask<V>(x, y, disabled, comment);
-    }
-
-    public int getX() {
-        return this.x;
-    }
-
-    public int getY() {
-        return this.y;
+    public static <V> MainTask<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new MainTask<V>(properties, comment);
     }
 
     @Override
@@ -48,7 +37,7 @@ public class MainTask<V> extends Task<V> {
 
     @Override
     public String toString() {
-        return "MainTask [x=" + this.x + ", y=" + this.y + "]";
+        return "MainTask []";
     }
 
 }

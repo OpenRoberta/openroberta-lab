@@ -11,7 +11,7 @@ public class PhraseTest {
 
     @Test
     public void test() {
-        Phrase<?> phrase = StringConst.make("testString", false, "");
+        Phrase<?> phrase = StringConst.make("testString", null, null);
         assertEquals(Kind.STRING_CONST, phrase.getKind());
     }
 

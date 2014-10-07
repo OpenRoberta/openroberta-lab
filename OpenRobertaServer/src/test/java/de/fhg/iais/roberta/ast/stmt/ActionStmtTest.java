@@ -10,7 +10,7 @@ public class ActionStmtTest {
 
     @Test
     public void make() throws Exception {
-        MotorDriveStopAction<Void> action = MotorDriveStopAction.make(false, "");
+        MotorDriveStopAction<Void> action = MotorDriveStopAction.make(null, null);
         ActionStmt<Void> actionStmt = ActionStmt.make(action);
 
         String a = "\nAktionStmt [StopAction []]";
@@ -19,7 +19,7 @@ public class ActionStmtTest {
 
     @Test
     public void getAction() throws Exception {
-        MotorDriveStopAction<Void> action = MotorDriveStopAction.make(false, "");
+        MotorDriveStopAction<Void> action = MotorDriveStopAction.make(null, null);
         ActionStmt<Void> actionStmt = ActionStmt.make(action);
 
         Assert.assertEquals("StopAction []", actionStmt.getAction().toString());

@@ -2,6 +2,8 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import java.util.Locale;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
@@ -12,7 +14,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * <br>
  * Client must provide operation and expression over which operation is executed. <br>
  * <br>
- * To create an instance from this class use the method {@link #make(Op, Expr)}.<br>
+ * To create an instance from this class use the method {@link #make(Op, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
  * <br>
  * The enumeration {@link Op} contains all allowed unary operations.
  */
@@ -20,8 +22,8 @@ public class Unary<V> extends Expr<V> {
     private final Op op;
     private final Expr<V> expr;
 
-    private Unary(Op op, Expr<V> expr, boolean disabled, String comment) {
-        super(Phrase.Kind.UNARY, disabled, comment);
+    private Unary(Op op, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(Phrase.Kind.UNARY, properties, comment);
         Assert.isTrue(op != null && expr != null && expr.isReadOnly());
         this.op = op;
         this.expr = expr;
@@ -33,12 +35,12 @@ public class Unary<V> extends Expr<V> {
      * 
      * @param op operator
      * @param expr expression over which the operation is performed,
-     * @param disabled state of the block,
-     * @param comment added from the user
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment added from the user,
      * @return read only object of class {@link Unary}
      */
-    public static <V> Unary<V> make(Op op, Expr<V> expr, boolean disabled, String comment) {
-        return new Unary<V>(op, expr, disabled, comment);
+    public static <V> Unary<V> make(Op op, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new Unary<V>(op, expr, properties, comment);
     }
 
     /**

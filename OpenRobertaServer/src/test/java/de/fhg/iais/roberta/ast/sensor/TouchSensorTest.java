@@ -12,7 +12,7 @@ public class TouchSensorTest {
 
     @Test
     public void sensorTouch() throws Exception {
-        String a = "BlockAST [project=[[TouchSensor [port=S1]]]]";
+        String a = "BlockAST [project=[[Location [x=-86, y=1], TouchSensor [port=S1]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_Touch.xml"));
     }
@@ -21,7 +21,7 @@ public class TouchSensorTest {
     public void getPort() throws Exception {
         JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_Touch.xml");
 
-        TouchSensor<Void> cs = (TouchSensor<Void>) transformer.getTree().get(0);
+        TouchSensor<Void> cs = (TouchSensor<Void>) transformer.getTree().get(1);
 
         Assert.assertEquals(SensorPort.S1, cs.getPort());
     }

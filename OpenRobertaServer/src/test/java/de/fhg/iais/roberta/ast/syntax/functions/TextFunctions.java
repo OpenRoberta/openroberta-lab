@@ -18,27 +18,27 @@ public class TextFunctions {
     @Test
     public void getPresedence() {
         ArrayList<Expr<Void>> param = new ArrayList<Expr<Void>>();
-        StringConst<Void> stringConst = StringConst.make("AS", false, "");
+        StringConst<Void> stringConst = StringConst.make("AS", null, null);
         param.add(stringConst);
-        Func<Void> funct = Func.make(Function.ABS, param, false, "");
+        Func<Void> funct = Func.make(Function.ABS, param, null, null);
         Assert.assertEquals(10, funct.getPrecedence());
     }
 
     @Test
     public void getAssoc() {
         ArrayList<Expr<Void>> param = new ArrayList<Expr<Void>>();
-        StringConst<Void> stringConst = StringConst.make("AS", false, "");
+        StringConst<Void> stringConst = StringConst.make("AS", null, null);
         param.add(stringConst);
-        Func<Void> funct = Func.make(Function.ABS, param, false, "");
+        Func<Void> funct = Func.make(Function.ABS, param, null, null);
         Assert.assertEquals(Assoc.LEFT, funct.getAssoc());
     }
 
     @Test
     public void getOpSymbol() {
         ArrayList<Expr<Void>> param = new ArrayList<Expr<Void>>();
-        StringConst<Void> stringConst = StringConst.make("AS", false, "");
+        StringConst<Void> stringConst = StringConst.make("AS", null, null);
         param.add(stringConst);
-        Func<Void> funct = Func.make(Function.POWER, param, false, "");
+        Func<Void> funct = Func.make(Function.POWER, param, null, null);
         Assert.assertEquals("^", funct.getFunctName().getOpSymbol());
     }
 

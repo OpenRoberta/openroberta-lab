@@ -11,7 +11,7 @@ public class LightActionTest {
 
     @Test
     public void make() throws Exception {
-        String a = "BlockAST [project=[[LightAction [GREEN, true]]]]";
+        String a = "BlockAST [project=[[Location [x=-9, y=1], LightAction [GREEN, true]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_BrickLight.xml"));
     }
@@ -28,5 +28,20 @@ public class LightActionTest {
         LightAction<?> la = (LightAction<?>) Helper.generateAST("/ast/actions/action_BrickLight.xml");
 
         Assert.assertEquals(true, la.isBlink());
+    }
+
+    @Test
+    public void reverseTransformatin() throws Exception {
+        Helper.assertTransformationIsOk("/ast/actions/action_BrickLight.xml");
+    }
+
+    @Test
+    public void reverseTransformatin1() throws Exception {
+        Helper.assertTransformationIsOk("/ast/actions/action_BrickLight1.xml");
+    }
+
+    @Test
+    public void reverseTransformatin2() throws Exception {
+        Helper.assertTransformationIsOk("/ast/actions/action_BrickLight2.xml");
     }
 }

@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
@@ -15,8 +17,8 @@ public class ToneAction<V> extends Action<V> {
     private final Expr<V> frequency;
     private final Expr<V> duration;
 
-    private ToneAction(Expr<V> frequency, Expr<V> duration, boolean disabled, String comment) {
-        super(Phrase.Kind.TONE_ACTION, disabled, comment);
+    private ToneAction(Expr<V> frequency, Expr<V> duration, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(Phrase.Kind.TONE_ACTION, properties, comment);
         Assert.isTrue(frequency.isReadOnly() && duration.isReadOnly() && frequency != null && duration != null);
         this.frequency = frequency;
         this.duration = duration;
@@ -28,12 +30,12 @@ public class ToneAction<V> extends Action<V> {
      * 
      * @param frequency of the sound,
      * @param duration of the sound,
-     * @param disabled state of the block,
-     * @param comment added from the user
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment added from the user,
      * @return read only object of class {@link ToneAction}.
      */
-    public static <V> ToneAction<V> make(Expr<V> frequency, Expr<V> duration, boolean disabled, String comment) {
-        return new ToneAction<V>(frequency, duration, disabled, comment);
+    public static <V> ToneAction<V> make(Expr<V> frequency, Expr<V> duration, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new ToneAction<V>(frequency, duration, properties, comment);
     }
 
     /**

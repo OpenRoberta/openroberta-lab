@@ -14,7 +14,7 @@ public class RepeatStmtTest {
     @Test
     public void repeatStmt() throws Exception {
         String a =
-            "BlockAST [project=[[\n"
+            "BlockAST [project=[[Location [x=33, y=-573], \n"
                 + "(repeat [TIMES, Binary [ASSIGNMENT, Var [i], NumConst [0]], Binary [LT, Var [i], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i]]]\n"
                 + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba]]\n"
                 + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba1]]\n"
@@ -29,7 +29,7 @@ public class RepeatStmtTest {
     public void getMode() throws Exception {
         JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/control/repeat_stmt.xml");
 
-        RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(0);
+        RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(1);
 
         Assert.assertEquals(Mode.TIMES, repeatStmt.getMode());
     }
@@ -38,7 +38,7 @@ public class RepeatStmtTest {
     public void getExpr() throws Exception {
         JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/control/repeat_stmt.xml");
 
-        RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(0);
+        RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(1);
 
         Assert.assertEquals("Binary [ASSIGNMENT, Var [i], NumConst [0]], Binary [LT, Var [i], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i]]", repeatStmt
             .getExpr()
@@ -49,7 +49,7 @@ public class RepeatStmtTest {
     public void getList() throws Exception {
         JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/control/repeat_stmt.xml");
 
-        RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(0);
+        RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(1);
 
         String a =
             "\nexprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba]]\n"
@@ -63,7 +63,7 @@ public class RepeatStmtTest {
     @Test
     public void repeatStmt1() throws Exception {
         String a =
-            "BlockAST [project=[[\n"
+            "BlockAST [project=[[Location [x=-93, y=1], \n"
                 + "(repeat [TIMES, Binary [ASSIGNMENT, Var [i], NumConst [0]], Binary [LT, Var [i], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i]]]\n)]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/repeat_stmt1.xml"));
@@ -72,7 +72,7 @@ public class RepeatStmtTest {
     @Test
     public void repeatStmtWhileUntil() throws Exception {
         String a =
-            "BlockAST [project=[[\n"
+            "BlockAST [project=[[Location [x=-372, y=47], \n"
                 + "(repeat [WHILE, BoolConst [true]]\n"
                 + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [sd]]\n"
                 + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
@@ -84,7 +84,7 @@ public class RepeatStmtTest {
     @Test
     public void repeatStmtWhileUntil1() throws Exception {
         String a =
-            "BlockAST [project=[[\n"
+            "BlockAST [project=[[Location [x=-372, y=47], \n"
                 + "(repeat [WHILE, BoolConst [true]]\n"
                 + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [sd]]\n"
                 + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
@@ -96,7 +96,7 @@ public class RepeatStmtTest {
 
     @Test
     public void repeatStmtWhileUntil2() throws Exception {
-        String a = "BlockAST [project=[[\n" + "(repeat [WHILE, EmptyExpr [defVal=class java.lang.Boolean]]\n)]]]";
+        String a = "BlockAST [project=[[Location [x=-93, y=101], \n" + "(repeat [WHILE, EmptyExpr [defVal=class java.lang.Boolean]]\n)]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/repeat_stmt_whileUntil2.xml"));
     }
@@ -104,7 +104,7 @@ public class RepeatStmtTest {
     @Test
     public void repeatStmtFor() throws Exception {
         String a =
-            "BlockAST [project=[[\n"
+            "BlockAST [project=[[Location [x=-517, y=190], \n"
                 + "(repeat [FOR, Binary [ASSIGNMENT, Var [i], NumConst [1]], Binary [LTE, Var [i], NumConst [10]], Binary [ADD_ASSIGNMENT, Var [i], NumConst [1]]]\n"
                 + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [kllk]]\n"
                 + ")]]]";
@@ -115,7 +115,7 @@ public class RepeatStmtTest {
     @Test
     public void repeatStmtFor1() throws Exception {
         String a =
-            "BlockAST [project=[[\n"
+            "BlockAST [project=[[Location [x=-93, y=190], \n"
                 + "(repeat [FOR, Binary [ASSIGNMENT, Var [i], NumConst [1]], Binary [LTE, Var [i], NumConst [10]], Binary [ADD_ASSIGNMENT, Var [i], NumConst [1]]]\n)]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/repeat_stmt_for1.xml"));
@@ -124,7 +124,7 @@ public class RepeatStmtTest {
     @Test
     public void repeatStmtForEach() throws Exception {
         String a =
-            "BlockAST [project=[[\n"
+            "BlockAST [project=[[Location [x=-436, y=284], \n"
                 + "(repeat [FOR_EACH, Binary [IN, Var [j], EmptyExpr [defVal=interface java.util.List]]]\n"
                 + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [gg]]\n"
                 + ")]]]";
@@ -134,7 +134,8 @@ public class RepeatStmtTest {
 
     @Test
     public void repeatStmtForEach1() throws Exception {
-        String a = "BlockAST [project=[[\n" + "(repeat [FOR_EACH, Binary [IN, Var [i], EmptyExpr [defVal=interface java.util.List]]]\n)]]]";
+        String a =
+            "BlockAST [project=[[Location [x=-93, y=290], \n" + "(repeat [FOR_EACH, Binary [IN, Var [i], EmptyExpr [defVal=interface java.util.List]]]\n)]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/repeat_stmt_for_each1.xml"));
     }
@@ -142,7 +143,7 @@ public class RepeatStmtTest {
     @Test
     public void loopForever() throws Exception {
         String a =
-            "BlockAST [project=[[\n"
+            "BlockAST [project=[[Location [x=1, y=379], \n"
                 + "(repeat [WHILE, BoolConst [true]]\nexprStmt Funct [PRINT, [ColorConst [GREEN]]]\n), \n(repeat [WHILE, BoolConst [true]]\nexprStmt Funct [PRINT, [EmptyExpr [defVal=class java.lang.String]]]\n)]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/repeat_stmt_loopForever.xml"));

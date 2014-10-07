@@ -10,7 +10,7 @@ public class ExprListTest {
 
     @Test
     public void make() throws Exception {
-        NumConst<Void> numConst = NumConst.make("0", false, "");
+        NumConst<Void> numConst = NumConst.make("0", null, null);
         ExprList<Void> exprList = ExprList.make();
         exprList.addExpr(numConst);
 
@@ -21,7 +21,7 @@ public class ExprListTest {
 
     @Test
     public void get() throws Exception {
-        NumConst<Void> numConst = NumConst.make("0", false, "");
+        NumConst<Void> numConst = NumConst.make("0", null, null);
         ExprList<Void> exprList = ExprList.make();
         exprList.addExpr(numConst);
         exprList.setReadOnly();
@@ -32,7 +32,7 @@ public class ExprListTest {
 
     @Test
     public void getPresedance() throws Exception {
-        NumConst<Void> numConst = NumConst.make("0", false, "");
+        NumConst<Void> numConst = NumConst.make("0", null, null);
         ExprList<Void> exprList = ExprList.make();
         exprList.addExpr(numConst);
         exprList.setReadOnly();
@@ -46,7 +46,7 @@ public class ExprListTest {
 
     @Test
     public void getAssoc() throws Exception {
-        NumConst<Void> numConst = NumConst.make("0", false, "");
+        NumConst<Void> numConst = NumConst.make("0", null, null);
         ExprList<Void> exprList = ExprList.make();
         exprList.addExpr(numConst);
         exprList.setReadOnly();

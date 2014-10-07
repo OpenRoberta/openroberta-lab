@@ -17,12 +17,10 @@ public class ExprList<V> extends Expr<V> {
     private final List<Expr<V>> el = new ArrayList<Expr<V>>();
 
     private ExprList() {
-        super(Phrase.Kind.EXPR_LIST, false, "");
+        super(Phrase.Kind.EXPR_LIST, null, null);
     }
 
     /**
-     * @param disabled state of the block,
-     * @param comment added from the user
      * @return writable object of type {@link ExprList}.
      */
     public static <V> ExprList<V> make() {

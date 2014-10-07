@@ -13,7 +13,7 @@ public class UnaryTest {
 
     @Test
     public void make() throws Exception {
-        String a = "BlockAST [project=[[Unary [NEG, NumConst [10]]]]]";
+        String a = "BlockAST [project=[[Location [x=-46, y=111], Unary [NEG, NumConst [10]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_single1.xml"));
     }
@@ -21,35 +21,35 @@ public class UnaryTest {
     @Test
     public void getOp() throws Exception {
         JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
-        Unary<Void> unary = (Unary<Void>) transformer.getTree().get(0);
+        Unary<Void> unary = (Unary<Void>) transformer.getTree().get(1);
         Assert.assertEquals(Unary.Op.NEG, unary.getOp());
     }
 
     @Test
     public void getExpr() throws Exception {
         JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
-        Unary<Void> unary = (Unary<Void>) transformer.getTree().get(0);
+        Unary<Void> unary = (Unary<Void>) transformer.getTree().get(1);
         Assert.assertEquals("NumConst [10]", unary.getExpr().toString());
     }
 
     @Test
     public void getPresedance() throws Exception {
         JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
-        Unary<Void> unary = (Unary<Void>) transformer.getTree().get(0);
+        Unary<Void> unary = (Unary<Void>) transformer.getTree().get(1);
         Assert.assertEquals(10, unary.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
         JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
-        Unary<Void> unary = (Unary<Void>) transformer.getTree().get(0);
+        Unary<Void> unary = (Unary<Void>) transformer.getTree().get(1);
         Assert.assertEquals(Assoc.LEFT, unary.getAssoc());
     }
 
     @Test
     public void getOpSymbol() throws Exception {
         JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
-        Unary<Void> unary = (Unary<Void>) transformer.getTree().get(0);
+        Unary<Void> unary = (Unary<Void>) transformer.getTree().get(1);
         Assert.assertEquals("-", unary.getOp().getOpSymbol());
     }
 

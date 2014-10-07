@@ -2,6 +2,8 @@ package de.fhg.iais.roberta.ast.syntax.stmt;
 
 import java.util.Locale;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.dbc.DbcException;
@@ -15,8 +17,8 @@ import de.fhg.iais.roberta.dbc.DbcException;
 public class StmtFlowCon<V> extends Stmt<V> {
     private final Flow flow;
 
-    private StmtFlowCon(Flow flow, boolean disabled, String comment) {
-        super(Phrase.Kind.STMT_FLOW_CONTROL, disabled, comment);
+    private StmtFlowCon(Flow flow, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(Phrase.Kind.STMT_FLOW_CONTROL, properties, comment);
         this.flow = flow;
         setReadOnly();
     }
@@ -24,13 +26,13 @@ public class StmtFlowCon<V> extends Stmt<V> {
     /**
      * Create read only object of {@link StmtFlowCon}.
      * 
-     * @param flow, see enum {@link Flow} for all the possible kind of flow controls
-     * @param disabled state of the block,
-     * @param comment added from the user
+     * @param flow, see enum {@link Flow} for all the possible kind of flow controls,
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment added from the user,
      * @return read only object of class {@link StmtFlowCon}.
      */
-    public static <V> StmtFlowCon<V> make(Flow flow, boolean disabled, String comment) {
-        return new StmtFlowCon<V>(flow, disabled, comment);
+    public static <V> StmtFlowCon<V> make(Flow flow, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new StmtFlowCon<V>(flow, properties, comment);
     }
 
     /**

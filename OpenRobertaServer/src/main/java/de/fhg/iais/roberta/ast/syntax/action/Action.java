@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 
 /**
@@ -16,11 +18,11 @@ public abstract class Action<V> extends Phrase<V> {
      * This constructor set the kind of the action object used in the AST (abstract syntax tree). All possible kinds can be found in {@link Kind}.
      * 
      * @param kind of the the action object used in AST,
-     * @param disabled is the block,
+     * @param properties of the block,
      * @param comment of the user for the specific block
      */
-    public Action(Kind kind, boolean disabled, String comment) {
-        super(kind, disabled, comment);
+    public Action(Kind kind, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(kind, properties, comment);
     }
 
 }

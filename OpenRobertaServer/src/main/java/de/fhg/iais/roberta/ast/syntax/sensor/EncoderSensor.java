@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.sensor;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
@@ -14,14 +16,14 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br>
  * The client must provide the {@link ActorPort} and {@link MotorTachoMode}. See enum {@link MotorTachoMode} for all possible modes of the sensor.<br>
  * <br>
- * To create an instance from this class use the method {@link #make(MotorTachoMode, ActorPort)}.<br>
+ * To create an instance from this class use the method {@link #make(MotorTachoMode, ActorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class EncoderSensor<V> extends Sensor<V> {
     private final MotorTachoMode mode;
     private final ActorPort motor;
 
-    private EncoderSensor(MotorTachoMode mode, ActorPort motor, boolean disabled, String comment) {
-        super(Phrase.Kind.ENCODER_SENSING, disabled, comment);
+    private EncoderSensor(MotorTachoMode mode, ActorPort motor, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(Phrase.Kind.ENCODER_SENSING, properties, comment);
         Assert.isTrue(mode != null);
         this.mode = mode;
         this.motor = motor;
@@ -33,12 +35,12 @@ public class EncoderSensor<V> extends Sensor<V> {
      * 
      * @param mode in which the sensor is operating. See enum {@link MotorTachoMode} for all possible modes that the sensor have.
      * @param port on where the sensor is connected. See enum {@link SensorPort} for all possible sensor ports
-     * @param disabled state of the block,
-     * @param comment added from the user
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment added from the user,
      * @return read only object of {@link EncoderSensor}
      */
-    public static <V> EncoderSensor<V> make(MotorTachoMode mode, ActorPort motor, boolean disabled, String comment) {
-        return new EncoderSensor<V>(mode, motor, disabled, comment);
+    public static <V> EncoderSensor<V> make(MotorTachoMode mode, ActorPort motor, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new EncoderSensor<V>(mode, motor, properties, comment);
     }
 
     /**

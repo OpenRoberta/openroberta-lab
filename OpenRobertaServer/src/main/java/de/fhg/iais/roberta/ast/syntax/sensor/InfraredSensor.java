@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.sensor;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
@@ -13,14 +15,14 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br>
  * The client must provide the {@link SensorPort} and {@link InfraredSensorMode}. See enum {@link InfraredSensorMode} for all possible modes of the sensor.<br>
  * <br>
- * To create an instance from this class use the method {@link #make(InfraredSensorMode, SensorPort)}.<br>
+ * To create an instance from this class use the method {@link #make(InfraredSensorMode, SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class InfraredSensor<V> extends Sensor<V> {
     private final InfraredSensorMode mode;
     private final SensorPort port;
 
-    private InfraredSensor(InfraredSensorMode mode, SensorPort port, boolean disabled, String comment) {
-        super(Phrase.Kind.INFRARED_SENSING, disabled, comment);
+    private InfraredSensor(InfraredSensorMode mode, SensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(Phrase.Kind.INFRARED_SENSING, properties, comment);
         Assert.isTrue(mode != null);
         this.mode = mode;
         this.port = port;
@@ -30,14 +32,14 @@ public class InfraredSensor<V> extends Sensor<V> {
     /**
      * Create object of the class {@link InfraredSensor}.
      * 
-     * @param mode in which the sensor is operating. See enum {@link InfraredSensorMode} for all possible modes that the sensor have.
-     * @param port on where the sensor is connected. See enum {@link SensorPort} for all possible sensor ports
-     * @param disabled state of the block,
-     * @param comment added from the user
+     * @param mode in which the sensor is operating. See enum {@link InfraredSensorMode} for all possible modes that the sensor have,
+     * @param port on where the sensor is connected. See enum {@link SensorPort} for all possible sensor ports,
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment added from the user,
      * @return read only object of class {@link InfraredSensor}
      */
-    public static <V> InfraredSensor<V> make(InfraredSensorMode mode, SensorPort port, boolean disabled, String comment) {
-        return new InfraredSensor<V>(mode, port, disabled, comment);
+    public static <V> InfraredSensor<V> make(InfraredSensorMode mode, SensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new InfraredSensor<V>(mode, port, properties, comment);
     }
 
     /**

@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
@@ -14,8 +16,8 @@ public class MotorStopAction<V> extends Action<V> {
     private final ActorPort port;
     private final MotorStopMode mode;
 
-    private MotorStopAction(ActorPort port, MotorStopMode mode, boolean disabled, String comment) {
-        super(Phrase.Kind.MOTOR_STOP_ACTION, disabled, comment);
+    private MotorStopAction(ActorPort port, MotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(Phrase.Kind.MOTOR_STOP_ACTION, properties, comment);
         Assert.isTrue(port != null && mode != null);
         this.port = port;
         this.mode = mode;
@@ -27,12 +29,12 @@ public class MotorStopAction<V> extends Action<V> {
      * 
      * @param port {@link ActorPort} on which the motor is connected,
      * @param mode of stopping {@link MotorStopMode},
-     * @param disabled state of the block,
-     * @param comment added from the user
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment added from the user,
      * @return read only object of class {@link MotorStopAction}.
      */
-    public static <V> MotorStopAction<V> make(ActorPort port, MotorStopMode mode, boolean disabled, String comment) {
-        return new MotorStopAction<V>(port, mode, disabled, comment);
+    public static <V> MotorStopAction<V> make(ActorPort port, MotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new MotorStopAction<V>(port, mode, properties, comment);
     }
 
     /**
