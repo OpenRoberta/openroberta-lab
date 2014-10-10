@@ -12,7 +12,7 @@ public class SensorExprTest {
 
     @Test
     public void make() throws Exception {
-        TouchSensor<Void> touchSensor = TouchSensor.make(SensorPort.S1, false, "");
+        TouchSensor<Void> touchSensor = TouchSensor.make(SensorPort.S1, null, null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
         String a = "SensorExpr [TouchSensor [port=S1]]";
         Assert.assertEquals(a, sensorExpr.toString());
@@ -20,7 +20,7 @@ public class SensorExprTest {
 
     @Test
     public void getSensor() throws Exception {
-        TouchSensor<Void> touchSensor = TouchSensor.make(SensorPort.S1, false, "");
+        TouchSensor<Void> touchSensor = TouchSensor.make(SensorPort.S1, null, null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
         String a = "TouchSensor [port=S1]";
         Assert.assertEquals(a, sensorExpr.getSens().toString());
@@ -28,14 +28,14 @@ public class SensorExprTest {
 
     @Test
     public void getPresedance() throws Exception {
-        TouchSensor<Void> touchSensor = TouchSensor.make(SensorPort.S1, false, "");
+        TouchSensor<Void> touchSensor = TouchSensor.make(SensorPort.S1, null, null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
         Assert.assertEquals(999, sensorExpr.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
-        TouchSensor<Void> touchSensor = TouchSensor.make(SensorPort.S1, false, "");
+        TouchSensor<Void> touchSensor = TouchSensor.make(SensorPort.S1, null, null);
         SensorExpr<Void> sensorExpr = SensorExpr.make(touchSensor);
         Assert.assertEquals(Assoc.NONE, sensorExpr.getAssoc());
     }

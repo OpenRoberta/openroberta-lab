@@ -10,7 +10,7 @@ public class SensorTest {
     @Test
     public void sensorSet() throws Exception {
         String a =
-            "BlockAST [project=[[\n"
+            "BlockAST [project=[[Location [x=-96, y=73], \n"
                 + "if SensorExpr [TouchSensor [port=S1]]\n"
                 + ",then\n"
                 + "SensorStmt UltraSSensor [mode=DISTANCE, port=S4]\n"
@@ -26,7 +26,7 @@ public class SensorTest {
     @Test
     public void sensorReset() throws Exception {
         String a =
-            "BlockAST [project=[[\n"
+            "BlockAST [project=[[Location [x=-96, y=73], \n"
                 + "if SensorExpr [TouchSensor [port=S1]]\n"
                 + ",then\n"
                 + "SensorStmt DrehSensor [mode=RESET, motor=A]\n"
@@ -40,7 +40,7 @@ public class SensorTest {
     @Test
     public void sensorGetMode() throws Exception {
         String a =
-            "BlockAST [project=[[\n"
+            "BlockAST [project=[[Location [x=-96, y=73], \n"
                 + "if SensorExpr [TouchSensor [port=S1]]\n"
                 + ",then\n"
                 + "Var [item] := SensorExpr [UltraSSensor [mode=GET_MODE, port=S4]]\n\n"
@@ -56,7 +56,7 @@ public class SensorTest {
     @Test
     public void sensorGetSample() throws Exception {
         String a =
-            "BlockAST [project=[[\n"
+            "BlockAST [project=[[Location [x=-96, y=73], \n"
                 + "if SensorExpr [TouchSensor [port=S1]]\n"
                 + ",then\n"
                 + "Var [item] := SensorExpr [UltraSSensor [mode=GET_SAMPLE, port=S4]]\n\n"

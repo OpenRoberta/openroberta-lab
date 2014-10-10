@@ -28,8 +28,6 @@ public class trololo {
     .setTrackWidth(13.0)
     .addActor(ActorPort.A, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))
     .addActor(ActorPort.B, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))
-    .addSensor(SensorPort.S1, new HardwareComponent(HardwareComponentType.EV3ColorSensor))
-    .addSensor(SensorPort.S2, new HardwareComponent(HardwareComponentType.EV3TouchSensor))
     .build();
 
     public static void main(String[] args) {

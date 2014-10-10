@@ -12,7 +12,7 @@ public final class ActionExpr<V> extends Expr<V> {
     private final Action<V> action;
 
     private ActionExpr(Action<V> action) {
-        super(Phrase.Kind.ACTION_EXPR, false, "");
+        super(Phrase.Kind.ACTION_EXPR, null, null);
         Assert.isTrue(action.isReadOnly());
         this.action = action;
         setReadOnly();
@@ -22,8 +22,6 @@ public final class ActionExpr<V> extends Expr<V> {
      * Create object of the class {@link ActionExpr}.
      * 
      * @param action that we want to wrap
-     * @param disabled state of the block,
-     * @param comment added from the user
      * @return expression with wrapped action inside
      */
     public static <V> ActionExpr<V> make(Action<V> action) {

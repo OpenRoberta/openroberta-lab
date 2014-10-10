@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.PickColor;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
@@ -10,13 +12,13 @@ import de.fhg.iais.roberta.ast.visitor.AstVisitor;
  * <br>
  * The client must provide the value of the color. <br>
  * <br>
- * To create an instance from this class use the method {@link #make(String)}.<br>
+ * To create an instance from this class use the method {@link #make(String, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class ColorConst<V> extends Expr<V> {
     private final PickColor value;
 
-    private ColorConst(String value, boolean disabled, String comment) {
-        super(Phrase.Kind.PICK_COLOR_CONST, disabled, comment);
+    private ColorConst(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(Phrase.Kind.PICK_COLOR_CONST, properties, comment);
         this.value = PickColor.get(value);
         setReadOnly();
     }
@@ -24,13 +26,13 @@ public class ColorConst<V> extends Expr<V> {
     /**
      * creates instance of {@link ColorConst}. This instance is read only and cannot be modified.
      * 
-     * @param value that the color constant will have
-     * @param disabled state of the block,
-     * @param comment added from the user
+     * @param value that the color constant will have,
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment added from the user,
      * @return read only object of class {@link ColorConst}.
      */
-    public static <V> ColorConst<V> make(String value, boolean disabled, String comment) {
-        return new ColorConst<V>(value, disabled, comment);
+    public static <V> ColorConst<V> make(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new ColorConst<V>(value, properties, comment);
     }
 
     /**

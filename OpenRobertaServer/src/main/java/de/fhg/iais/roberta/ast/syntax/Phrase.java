@@ -24,8 +24,9 @@ abstract public class Phrase<V> {
     private static final Logger LOG = LoggerFactory.getLogger(Phrase.class);
 
     private boolean readOnly = false;
-    private final boolean disabled;
-    private final String comment;
+
+    private final BlocklyBlockProperties id;
+    private final BlocklyComment comment;
     private final Kind kind;
 
     private final NepoInfos infos = new NepoInfos(); // the content of the info object is MUTABLE !!!
@@ -37,9 +38,9 @@ abstract public class Phrase<V> {
      * @param disabled,
      * @param comment that the user added to the block
      */
-    public Phrase(Kind kind, boolean disabled, String comment) {
+    public Phrase(Kind kind, BlocklyBlockProperties id, BlocklyComment comment) {
         this.kind = kind;
-        this.disabled = disabled;
+        this.id = id;
         this.comment = comment;
     }
 
@@ -71,17 +72,14 @@ abstract public class Phrase<V> {
         return this.kind;
     }
 
-    /**
-     * @return true if the block is disabled, o/w false
-     */
-    public final boolean isDisabled() {
-        return this.disabled;
+    public BlocklyBlockProperties getProperty() {
+        return this.id;
     }
 
     /**
      * @return comment that the user added to the block
      */
-    public final String getComment() {
+    public final BlocklyComment getComment() {
         return this.comment;
     }
 
@@ -178,13 +176,15 @@ abstract public class Phrase<V> {
         CLEAR_DISPLAY_ACTION( Category.ACTOR ),
         MOTOR_ON_ACTION( Category.ACTOR ),
         MOTOR_GET_POWER_ACTION( Category.ACTOR ),
+        MOTOR_SET_POWER_ACTION( Category.ACTOR ),
         MOTOR_STOP_ACTION( Category.ACTOR ),
         PLAY_FILE_ACTION( Category.ACTOR ),
         VOLUME_ACTION( Category.ACTOR ),
         LIGHT_STATUS_ACTION( Category.ACTOR ),
         STOP_ACTION( Category.ACTOR ),
         MAIN_TASK( Category.TASK ),
-        ACTIVITY_TASK( Category.TASK );
+        ACTIVITY_TASK( Category.TASK ),
+        LOCATION( Category.TASK );
 
         private final Category category;
 

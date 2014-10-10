@@ -2,6 +2,8 @@ package de.fhg.iais.roberta.ast.syntax.stmt;
 
 import java.util.Locale;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
@@ -20,8 +22,8 @@ public class RepeatStmt<V> extends Stmt<V> {
     private final Expr<V> expr;
     private final StmtList<V> list;
 
-    private RepeatStmt(Mode mode, Expr<V> expr, StmtList<V> list, boolean disabled, String comment) {
-        super(Phrase.Kind.REPEAT_STMT, disabled, comment);
+    private RepeatStmt(Mode mode, Expr<V> expr, StmtList<V> list, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(Phrase.Kind.REPEAT_STMT, properties, comment);
         Assert.isTrue(expr.isReadOnly() && list.isReadOnly());
         this.expr = expr;
         this.list = list;
@@ -32,15 +34,15 @@ public class RepeatStmt<V> extends Stmt<V> {
     /**
      * Create read only object of {@link RepeatStmt}.
      * 
-     * @param mode of the repeat statement. See enum {@link Mode} for all possible modes.
-     * @param expr that should be evaluated
-     * @param list of statements
-     * @param disabled state of the block,
-     * @param comment added from the user
+     * @param mode of the repeat statement. See enum {@link Mode} for all possible modes,
+     * @param expr that should be evaluated,
+     * @param list of statements,
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment added from the user,
      * @return read only object of {@link RepeatStmt}
      */
-    public static <V> RepeatStmt<V> make(Mode mode, Expr<V> expr, StmtList<V> list, boolean disabled, String comment) {
-        return new RepeatStmt<V>(mode, expr, list, disabled, comment);
+    public static <V> RepeatStmt<V> make(Mode mode, Expr<V> expr, StmtList<V> list, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new RepeatStmt<V>(mode, expr, list, properties, comment);
     }
 
     /**

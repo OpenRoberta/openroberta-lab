@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.expr;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
@@ -14,7 +15,7 @@ public class MathConstTest {
 
     @Test
     public void make() throws Exception {
-        String a = "BlockAST [project=[[MathConst [E]]]]";
+        String a = "BlockAST [project=[[Location [x=131, y=-615], MathConst [E]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_constant1.xml"));
     }
@@ -22,22 +23,42 @@ public class MathConstTest {
     @Test
     public void getMathConst() throws Exception {
         JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_constant1.xml");
-        MathConst<Void> mathConst = (MathConst<Void>) transformer.getTree().get(0);
+        MathConst<Void> mathConst = (MathConst<Void>) transformer.getTree().get(1);
         Assert.assertEquals(Const.E, mathConst.getMathConst());
     }
 
     @Test
     public void getPresedance() throws Exception {
         JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_constant1.xml");
-        MathConst<Void> mathConst = (MathConst<Void>) transformer.getTree().get(0);
+        MathConst<Void> mathConst = (MathConst<Void>) transformer.getTree().get(1);
         Assert.assertEquals(999, mathConst.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
         JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_constant1.xml");
-        MathConst<Void> mathConst = (MathConst<Void>) transformer.getTree().get(0);
+        MathConst<Void> mathConst = (MathConst<Void>) transformer.getTree().get(1);
         Assert.assertEquals(Assoc.NONE, mathConst.getAssoc());
+    }
+
+    @Ignore
+    public void reverseTransformatin() throws Exception {
+        Helper.assertTransformationIsOk("/ast/math/math_constant.xml");
+    }
+
+    @Test
+    public void reverseTransformatin1() throws Exception {
+        Helper.assertTransformationIsOk("/ast/math/math_constant1.xml");
+    }
+
+    @Test
+    public void reverseTransformatin2() throws Exception {
+        Helper.assertTransformationIsOk("/ast/math/math_constant2.xml");
+    }
+
+    @Test
+    public void reverseTransformatin3() throws Exception {
+        Helper.assertTransformationIsOk("/ast/math/math_constant3.xml");
     }
 
     @Test(expected = DbcException.class)

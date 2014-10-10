@@ -17,7 +17,7 @@ public class IfStmtTest {
     @Test
     public void ifStmt() throws Exception {
         String a =
-            "BlockAST [project=[[\n"
+            "BlockAST [project=[[Location [x=68, y=133], \n"
                 + "if Binary [EQ, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]]\n"
                 + ",then\n"
                 + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
@@ -29,7 +29,7 @@ public class IfStmtTest {
     @Test
     public void ifStmt1() throws Exception {
         String a =
-            "BlockAST [project=[[\n"
+            "BlockAST [project=[[Location [x=68, y=133], \n"
                 + "if Binary [EQ, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]]\n"
                 + ",then\n"
                 + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
@@ -42,7 +42,7 @@ public class IfStmtTest {
 
     @Test
     public void getExpr() throws Exception {
-        IfStmt<Void> ifStmt = (IfStmt<Void>) Helper.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(0);
+        IfStmt<Void> ifStmt = (IfStmt<Void>) Helper.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(1);
 
         String a = "[Binary [EQ, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]]]";
         Assert.assertEquals(a, ifStmt.getExpr().toString());
@@ -50,7 +50,7 @@ public class IfStmtTest {
 
     @Test
     public void getThen() throws Exception {
-        IfStmt<Void> ifStmt = (IfStmt<Void>) Helper.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(0);
+        IfStmt<Void> ifStmt = (IfStmt<Void>) Helper.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(1);
 
         String a = "[\nexprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]]";
         Assert.assertEquals(a, ifStmt.getThenList().toString());
@@ -58,7 +58,7 @@ public class IfStmtTest {
 
     @Test
     public void getElse() throws Exception {
-        IfStmt<Void> ifStmt = (IfStmt<Void>) Helper.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(0);
+        IfStmt<Void> ifStmt = (IfStmt<Void>) Helper.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(1);
 
         String a = "\nSensorStmt DrehSensor [mode=RESET, motor=A]";
         Assert.assertEquals(a, ifStmt.getElseList().toString());
@@ -75,7 +75,7 @@ public class IfStmtTest {
         JaxbProgramTransformer<?> transformer = new JaxbProgramTransformer<>();
         transformer.transform(project);
         String a =
-            "BlockAST [project=[[\n"
+            "BlockAST [project=[[Location [x=68, y=133], \n"
                 + "if Binary [EQ, NumConst [1], NumConst [1]]\n"
                 + ",then\n"
                 + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
@@ -89,7 +89,7 @@ public class IfStmtTest {
     @Test
     public void ifStmt3() throws Exception {
         String a =
-            "BlockAST [project=[[\n"
+            "BlockAST [project=[[Location [x=68, y=133], \n"
                 + "if Binary [EQ, NumConst [1], NumConst [1]]\n"
                 + ",then\n"
                 + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
@@ -106,7 +106,7 @@ public class IfStmtTest {
     @Test
     public void ifStmt4() throws Exception {
         String a =
-            "BlockAST [project=[[\n"
+            "BlockAST [project=[[Location [x=68, y=133], \n"
                 + "if Binary [EQ, NumConst [1], NumConst [1]]\n"
                 + ",then\n"
                 + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
@@ -123,7 +123,7 @@ public class IfStmtTest {
     @Test
     public void ifStmt5() throws Exception {
         String a =
-            "BlockAST [project=[[\n"
+            "BlockAST [project=[[Location [x=68, y=133], \n"
                 + "if Binary [EQ, NumConst [1], NumConst [1]]\n"
                 + ",then\n"
                 + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
@@ -138,7 +138,7 @@ public class IfStmtTest {
     @Test
     public void ifStmt6() throws Exception {
         String a =
-            "BlockAST [project=[[\n"
+            "BlockAST [project=[[Location [x=68, y=133], \n"
                 + "if Binary [EQ, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]]\n"
                 + ",then\n"
                 + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
@@ -152,7 +152,7 @@ public class IfStmtTest {
     @Test
     public void ifStmt7() throws Exception {
         String a =
-            "BlockAST [project=[[\n"
+            "BlockAST [project=[[Location [x=64, y=67], \n"
                 + "if NullConst [null]\n"
                 + ",then\n"
                 + "AktionStmt [DriveAction [FOREWARD, MotionParam [speed=NumConst [50], duration=null]]]\n"
@@ -164,7 +164,7 @@ public class IfStmtTest {
 
     @Test
     public void ifStmt8() throws Exception {
-        String a = "BlockAST [project=[[\nif EmptyExpr [defVal=class java.lang.Boolean]\n,then\n]]]";
+        String a = "BlockAST [project=[[Location [x=-93, y=1], \nif EmptyExpr [defVal=class java.lang.Boolean]\n,then\n]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/if_stmt8.xml"));
     }
@@ -172,13 +172,13 @@ public class IfStmtTest {
     @Test
     public void ifStmt9() throws Exception {
 
-        String a = "BlockAST [project=[[\nif EmptyExpr [defVal=class java.lang.Boolean]\n,then\n]]]";
+        String a = "BlockAST [project=[[Location [x=-93, y=90], \nif EmptyExpr [defVal=class java.lang.Boolean]\n,then\n]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/if_stmt9.xml"));
     }
 
     @Test
     public void ifStmt10() throws Exception {
-        String a = "BlockAST [project=[[\nif EmptyExpr [defVal=class java.lang.Boolean]\n,then\n]]]";
+        String a = "BlockAST [project=[[Location [x=-93, y=179], \nif EmptyExpr [defVal=class java.lang.Boolean]\n,then\n]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/if_stmt10.xml"));
     }

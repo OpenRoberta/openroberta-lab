@@ -60,6 +60,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
+import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
@@ -417,7 +418,13 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
         this.sb.append("hal.drawText(");
-        showTextAction.getMsg().visit(this);
+        if ( showTextAction.getMsg().getKind() != Phrase.Kind.STRING_CONST ) {
+            this.sb.append("String.valueOf(");
+            showTextAction.getMsg().visit(this);
+            this.sb.append(")");
+        } else {
+            showTextAction.getMsg().visit(this);
+        }
         this.sb.append(", ");
         showTextAction.getX().visit(this);
         this.sb.append(", ");
@@ -835,6 +842,12 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
             // ok
         }
         this.sb.append(INDENT).append("}\n}\n");
+    }
+
+    @Override
+    public Void visitLocation(Location<Void> location) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

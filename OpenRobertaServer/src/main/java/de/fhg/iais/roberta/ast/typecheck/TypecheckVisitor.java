@@ -55,6 +55,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
+import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
 import de.fhg.iais.roberta.ast.typecheck.NepoInfo.Severity;
@@ -400,6 +401,11 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
         return null;
     }
 
+    @Override
+    public BlocklyType visitWaitStmt(WaitStmt<BlocklyType> waitStmt) {
+        return null;
+    }
+
     private List<BlocklyType> typecheckList(List<Expr<BlocklyType>> params) {
         List<BlocklyType> paramTypes = new ArrayList<>(params.size());
         for ( Expr<BlocklyType> param : params ) {
@@ -427,7 +433,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
     }
 
     @Override
-    public BlocklyType visitWaitStmt(WaitStmt<BlocklyType> waitStmt) {
+    public BlocklyType visitLocation(Location<BlocklyType> location) {
         // TODO Auto-generated method stub
         return null;
     }

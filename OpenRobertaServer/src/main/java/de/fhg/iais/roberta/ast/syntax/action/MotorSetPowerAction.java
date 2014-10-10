@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
@@ -15,8 +17,8 @@ public class MotorSetPowerAction<V> extends Action<V> {
     private final ActorPort port;
     private final Expr<V> power;
 
-    private MotorSetPowerAction(ActorPort port, Expr<V> power, boolean disabled, String comment) {
-        super(Phrase.Kind.MOTOR_GET_POWER_ACTION, disabled, comment);
+    private MotorSetPowerAction(ActorPort port, Expr<V> power, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(Phrase.Kind.MOTOR_SET_POWER_ACTION, properties, comment);
         Assert.isTrue(port != null && power.isReadOnly());
         this.port = port;
         this.power = power;
@@ -27,12 +29,12 @@ public class MotorSetPowerAction<V> extends Action<V> {
      * Creates instance of {@link MotorSetPowerAction}. This instance is read only and can not be modified.
      * 
      * @param port on which the motor is connected that we want to set,
-     * @param disabled state of the block,
-     * @param comment added from the user
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment added from the user,
      * @return read only object of class {@link MotorSetPowerAction}.
      */
-    public static <V> MotorSetPowerAction<V> make(ActorPort port, Expr<V> power, boolean disabled, String comment) {
-        return new MotorSetPowerAction<V>(port, power, disabled, comment);
+    public static <V> MotorSetPowerAction<V> make(ActorPort port, Expr<V> power, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new MotorSetPowerAction<V>(port, power, properties, comment);
     }
 
     /**

@@ -26,7 +26,7 @@ public class JavaVisitorTest {
 
     @Test
     public void visitMathConst() throws Exception {
-        MathConst<Void> mathConst = MathConst.make(Const.E, false, "");
+        MathConst<Void> mathConst = MathConst.make(Const.E, null, null);
         AstToLejosJavaVisitor visitor = new AstToLejosJavaVisitor("Test", brickConfiguration, 0);
         mathConst.visit(visitor);
         Assert.assertEquals(Const.E.toString(), visitor.getSb().toString());

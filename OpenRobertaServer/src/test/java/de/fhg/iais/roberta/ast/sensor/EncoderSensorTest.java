@@ -13,7 +13,7 @@ public class EncoderSensorTest {
 
     @Test
     public void sensorSetEncoder() throws Exception {
-        String a = "BlockAST [project=[[DrehSensor [mode=ROTATION, motor=A]]]]";
+        String a = "BlockAST [project=[[Location [x=-33, y=1], DrehSensor [mode=ROTATION, motor=A]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_setEncoder.xml"));
     }
@@ -22,7 +22,7 @@ public class EncoderSensorTest {
     public void getMode() throws Exception {
         JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setEncoder.xml");
 
-        EncoderSensor<Void> cs = (EncoderSensor<Void>) transformer.getTree().get(0);
+        EncoderSensor<Void> cs = (EncoderSensor<Void>) transformer.getTree().get(1);
 
         Assert.assertEquals(MotorTachoMode.ROTATION, cs.getMode());
     }
@@ -31,28 +31,28 @@ public class EncoderSensorTest {
     public void getPort() throws Exception {
         JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setEncoder.xml");
 
-        EncoderSensor<Void> cs = (EncoderSensor<Void>) transformer.getTree().get(0);
+        EncoderSensor<Void> cs = (EncoderSensor<Void>) transformer.getTree().get(1);
 
         Assert.assertEquals(ActorPort.A, cs.getMotor());
     }
 
     @Test
     public void sensorGetModeEncoder() throws Exception {
-        String a = "BlockAST [project=[[DrehSensor [mode=GET_MODE, motor=A]]]]";
+        String a = "BlockAST [project=[[Location [x=-33, y=55], DrehSensor [mode=GET_MODE, motor=A]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getModeEncoder.xml"));
     }
 
     @Test
     public void sensorGetSampleEncoder() throws Exception {
-        String a = "BlockAST [project=[[DrehSensor [mode=GET_SAMPLE, motor=A]]]]";
+        String a = "BlockAST [project=[[Location [x=-40, y=159], DrehSensor [mode=GET_SAMPLE, motor=A]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getSampleEncoder.xml"));
     }
 
     @Test
     public void sensorResetEncoder() throws Exception {
-        String a = "BlockAST [project=[[DrehSensor [mode=RESET, motor=A]]]]";
+        String a = "BlockAST [project=[[Location [x=-40, y=105], DrehSensor [mode=RESET, motor=A]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_resetEncoder.xml"));
     }

@@ -14,7 +14,7 @@ public class TimerSensorTest {
     public void getMode() throws Exception {
         JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_resetTimer.xml");
 
-        TimerSensor<Void> cs = (TimerSensor<Void>) transformer.getTree().get(0);
+        TimerSensor<Void> cs = (TimerSensor<Void>) transformer.getTree().get(1);
 
         Assert.assertEquals(TimerSensorMode.RESET, cs.getMode());
     }
@@ -23,21 +23,21 @@ public class TimerSensorTest {
     public void getTimer() throws Exception {
         JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_resetTimer.xml");
 
-        TimerSensor<Void> cs = (TimerSensor<Void>) transformer.getTree().get(0);
+        TimerSensor<Void> cs = (TimerSensor<Void>) transformer.getTree().get(1);
 
         Assert.assertEquals(1, cs.getTimer());
     }
 
     @Test
     public void sensorResetTimer() throws Exception {
-        String a = "BlockAST [project=[[TimerSensor [mode=RESET, timer=1]]]]";
+        String a = "BlockAST [project=[[Location [x=-96, y=73], TimerSensor [mode=RESET, timer=1]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_resetTimer.xml"));
     }
 
     @Test
     public void sensorGetSampleTimer() throws Exception {
-        String a = "BlockAST [project=[[TimerSensor [mode=GET_SAMPLE, timer=1]]]]";
+        String a = "BlockAST [project=[[Location [x=1, y=1], TimerSensor [mode=GET_SAMPLE, timer=1]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getSampleTimer.xml"));
     }

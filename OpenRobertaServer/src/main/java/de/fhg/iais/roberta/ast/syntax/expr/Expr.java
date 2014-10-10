@@ -1,9 +1,11 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 
 /**
- * the top class of all expressions. There are two ways for a client to find out which kind of expresion an {@link #Expr}-object is:<br>
+ * the top class of all expressions. There are two ways for a client to find out which kind of expression an {@link #Expr}-object is:<br>
  * - {@link #getKind()}<br>
  * - {@link #getAs(Class)}<br>
  */
@@ -13,11 +15,11 @@ public abstract class Expr<V> extends Phrase<V> {
      * create a mutable expression of the given {@link Kind}
      * 
      * @param kind the kind of the expression,
-     * @param disabled is the block,
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment of the user for the specific block
      */
-    public Expr(Kind kind, boolean disabled, String comment) {
-        super(kind, disabled, comment);
+    public Expr(Kind kind, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(kind, properties, comment);
     }
 
     /**

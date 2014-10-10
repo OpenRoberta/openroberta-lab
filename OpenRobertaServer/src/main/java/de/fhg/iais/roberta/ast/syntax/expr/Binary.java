@@ -2,6 +2,8 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import java.util.Locale;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
 import de.fhg.iais.roberta.ast.typecheck.Sig;
@@ -12,18 +14,16 @@ import de.fhg.iais.roberta.dbc.DbcException;
 /**
  * This class represents all binary operations from Blockly into the AST (abstract syntax tree).<br>
  * <br>
- * To create an instance from this class use the method {@link #make(Op, Expr, Expr)}.<br>
+ * To create an instance from this class use the method {@link #make(Op, Expr, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
  * The enumeration {@link Op} contains all allowed binary operations.
- * 
- * @author kcvejoski
  */
 public final class Binary<V> extends Expr<V> {
     private final Op op;
     private final Expr<V> left;
     private final Expr<V> right;
 
-    private Binary(Op op, Expr<V> left, Expr<V> right, boolean disabled, String comment) {
-        super(Phrase.Kind.BINARY, disabled, comment);
+    private Binary(Op op, Expr<V> left, Expr<V> right, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(Phrase.Kind.BINARY, properties, comment);
         Assert.isTrue(op != null && left != null && right != null && left.isReadOnly() && right.isReadOnly());
         this.op = op;
         this.left = left;
@@ -36,13 +36,13 @@ public final class Binary<V> extends Expr<V> {
      * 
      * @param op operator
      * @param left expression on the left hand side,
-     * @param right expression on the right hand side
-     * @param disabled state of the block,
-     * @param comment added from the user
+     * @param right expression on the right hand side,
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment added from the user,
      * @return Binary expression
      */
-    public static <V> Binary<V> make(Op op, Expr<V> left, Expr<V> right, boolean disabled, String comment) {
-        return new Binary<V>(op, left, right, disabled, comment);
+    public static <V> Binary<V> make(Op op, Expr<V> left, Expr<V> right, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new Binary<V>(op, left, right, properties, comment);
     }
 
     /**

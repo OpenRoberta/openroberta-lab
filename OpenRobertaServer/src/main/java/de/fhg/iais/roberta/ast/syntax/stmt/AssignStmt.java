@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.stmt;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
@@ -14,14 +16,14 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br>
  * The client must provide the name of the variable and value.<br>
  * <br>
- * To create an instance from this class use the method {@link #make(Var, Expr)}.<br>
+ * To create an instance from this class use the method {@link #make(Var, Expr, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class AssignStmt<V> extends Stmt<V> {
     private final Var<V> name;
     private final Expr<V> expr;
 
-    private AssignStmt(Var<V> name, Expr<V> expr, boolean disabled, String comment) {
-        super(Phrase.Kind.ASSIGN_STMT, disabled, comment);
+    private AssignStmt(Var<V> name, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(Phrase.Kind.ASSIGN_STMT, properties, comment);
         Assert.isTrue(name.isReadOnly() && expr.isReadOnly());
         this.name = name;
         this.expr = expr;
@@ -31,14 +33,14 @@ public class AssignStmt<V> extends Stmt<V> {
     /**
      * Create object of the class {@link AssignStmt}.
      * 
-     * @param name of the variable
-     * @param expr that we want to assign to the {@link #name}
-     * @param disabled state of the block
-     * @param comment added from the user
+     * @param name of the variable,
+     * @param expr that we want to assign to the {@link #name},
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment added from the user,
      * @return instance of {@link AssignStmt}
      */
-    public static <V> AssignStmt<V> make(Var<V> name, Expr<V> expr, boolean disabled, String comment) {
-        return new AssignStmt<V>(name, expr, disabled, comment);
+    public static <V> AssignStmt<V> make(Var<V> name, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new AssignStmt<V>(name, expr, properties, comment);
     }
 
     /**

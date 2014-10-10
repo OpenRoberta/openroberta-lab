@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
@@ -14,8 +16,8 @@ public class LightAction<V> extends Action<V> {
     private final BrickLedColor color;
     private final boolean blink;
 
-    private LightAction(BrickLedColor color, boolean blink, boolean disabled, String comment) {
-        super(Phrase.Kind.LIGHT_ACTION, disabled, comment);
+    private LightAction(BrickLedColor color, boolean blink, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(Phrase.Kind.LIGHT_ACTION, properties, comment);
         Assert.isTrue(color != null);
         this.color = color;
         this.blink = blink;
@@ -27,12 +29,12 @@ public class LightAction<V> extends Action<V> {
      * 
      * @param color of the lights on the brick. All possible colors are defined in {@link BrickLedColor},
      * @param blink type of the blinking,
-     * @param disabled state of the block,
-     * @param comment added from the user
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment added from the user,
      * @return read only object of class {@link LightAction}.
      */
-    public static <V> LightAction<V> make(BrickLedColor color, boolean blink, boolean disabled, String comment) {
-        return new LightAction<V>(color, blink, disabled, comment);
+    public static <V> LightAction<V> make(BrickLedColor color, boolean blink, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new LightAction<V>(color, blink, properties, comment);
     }
 
     /**
@@ -47,6 +49,13 @@ public class LightAction<V> extends Action<V> {
      */
     public boolean isBlink() {
         return this.blink;
+    }
+
+    /**
+     * @return type of blinking.
+     */
+    public String isBlinkingOnOff() {
+        return this.blink ? "ON" : "OFF";
     }
 
     @Override

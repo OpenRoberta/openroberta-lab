@@ -752,7 +752,7 @@ public class Hal {
             case DEGREE:
                 return this.deviceHandler.getRegulatedMotor(actorPort).getTachoCount();
             case ROTATION:
-                return Math.round(this.deviceHandler.getRegulatedMotor(actorPort).getTachoCount() / 360 * 100) / 100;
+                return Math.round(this.deviceHandler.getRegulatedMotor(actorPort).getTachoCount() / 360.0 * 100.0) / 100.0;
             default:
                 throw new DbcException("incorrect MotorTachoMode");
         }

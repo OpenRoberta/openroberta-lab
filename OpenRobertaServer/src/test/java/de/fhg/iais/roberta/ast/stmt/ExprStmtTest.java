@@ -10,7 +10,7 @@ public class ExprStmtTest {
 
     @Test
     public void make() throws Exception {
-        NumConst<Void> expr = NumConst.make("0", false, "");
+        NumConst<Void> expr = NumConst.make("0", null, null);
         ExprStmt<Void> exprStmt = ExprStmt.make(expr);
 
         String a = "\nexprStmt NumConst [0]";
@@ -19,7 +19,7 @@ public class ExprStmtTest {
 
     @Test
     public void getExpr() throws Exception {
-        NumConst<Void> expr = NumConst.make("0", false, "");
+        NumConst<Void> expr = NumConst.make("0", null, null);
         ExprStmt<Void> exprStmt = ExprStmt.make(expr);
 
         Assert.assertEquals("NumConst [0]", exprStmt.getExpr().toString());

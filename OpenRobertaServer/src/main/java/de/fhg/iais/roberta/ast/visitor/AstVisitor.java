@@ -47,6 +47,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
+import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
 
@@ -399,5 +400,12 @@ public interface AstVisitor<V> {
      * @param waitStmt to be visited
      */
     public V visitWaitStmt(WaitStmt<V> waitStmt);
+
+    /**
+     * visit a {@link Location}.
+     * 
+     * @param waitStmt to be visited
+     */
+    public V visitLocation(Location<V> location);
 
 }

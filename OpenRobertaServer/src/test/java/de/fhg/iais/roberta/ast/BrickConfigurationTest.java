@@ -35,7 +35,7 @@ public class BrickConfigurationTest {
         BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
 
         JaxbBrickConfigTransformer transformer = new JaxbBrickConfigTransformer();
-        BrickConfiguration b = transformer.blockSetToBrickConfiguration(project);
+        BrickConfiguration b = transformer.transform(project);
         System.out.println(b.generateRegenerate());
         Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateRegenerate().replaceAll("\\s+", ""));
     }
@@ -58,7 +58,7 @@ public class BrickConfigurationTest {
         BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
 
         JaxbBrickConfigTransformer transformer = new JaxbBrickConfigTransformer();
-        BrickConfiguration b = transformer.blockSetToBrickConfiguration(project);
+        BrickConfiguration b = transformer.transform(project);
         System.out.println(b.generateRegenerate());
         Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateRegenerate().replaceAll("\\s+", ""));
     }
@@ -83,7 +83,7 @@ public class BrickConfigurationTest {
         BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
 
         JaxbBrickConfigTransformer transformer = new JaxbBrickConfigTransformer();
-        BrickConfiguration b = transformer.blockSetToBrickConfiguration(project);
+        BrickConfiguration b = transformer.transform(project);
         System.out.println(b.generateRegenerate());
         Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateRegenerate().replaceAll("\\s+", ""));
     }

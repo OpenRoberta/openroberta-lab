@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 
@@ -7,13 +9,13 @@ import de.fhg.iais.roberta.ast.visitor.AstVisitor;
  * This class represents the <b>math_number</b> block from Blockly into the AST (abstract syntax tree).
  * Object from this class will generate code numerical value.<br/>
  * <br>
- * To create an instance from this class use the method {@link #make(String)}.<br>
+ * To create an instance from this class use the method {@link #make(String, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class NumConst<V> extends Expr<V> {
     private final String value;
 
-    private NumConst(String value, boolean disabled, String comment) {
-        super(Phrase.Kind.NUM_CONST, disabled, comment);
+    private NumConst(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(Phrase.Kind.NUM_CONST, properties, comment);
         this.value = value;
         setReadOnly();
     }
@@ -22,12 +24,12 @@ public class NumConst<V> extends Expr<V> {
      * creates instance of {@link NumConst}. This instance is read only and can not be modified.
      * 
      * @param value of the numerical constant,
-     * @param disabled state of the block,
-     * @param comment added from the user
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment added from the user,
      * @return read only object of class {@link NumConst}.
      */
-    public static <V> NumConst<V> make(String value, boolean disabled, String comment) {
-        return new NumConst<V>(value, disabled, comment);
+    public static <V> NumConst<V> make(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new NumConst<V>(value, properties, comment);
     }
 
     /**

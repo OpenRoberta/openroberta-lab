@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
@@ -16,8 +18,8 @@ public class ShowPictureAction<V> extends Action<V> {
     private final Expr<V> x;
     private final Expr<V> y;
 
-    private ShowPictureAction(String pic, Expr<V> x, Expr<V> y, boolean disabled, String comment) {
-        super(Phrase.Kind.SHOW_PICTURE_ACTION, disabled, comment);
+    private ShowPictureAction(String pic, Expr<V> x, Expr<V> y, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(Phrase.Kind.SHOW_PICTURE_ACTION, properties, comment);
         Assert.isTrue(pic != null && x != null && y != null);
         this.pic = pic;
         this.x = x;
@@ -29,14 +31,14 @@ public class ShowPictureAction<V> extends Action<V> {
      * Creates instance of {@link ShowPictureAction}. This instance is read only and can not be modified.
      * 
      * @param pic that will be printed on the display of the brick,
-     * @param x position where the picture will start
+     * @param x position where the picture will start,
      * @param y postition where the picture will start,
-     * @param disabled state of the block,
-     * @param comment added from the user
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment added from the user,
      * @return read only object of class {@link ShowPictureAction}.
      */
-    public static <V> ShowPictureAction<V> make(String pic, Expr<V> x, Expr<V> y, boolean disabled, String comment) {
-        return new ShowPictureAction<V>(pic, x, y, disabled, comment);
+    public static <V> ShowPictureAction<V> make(String pic, Expr<V> x, Expr<V> y, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new ShowPictureAction<V>(pic, x, y, properties, comment);
     }
 
     /**

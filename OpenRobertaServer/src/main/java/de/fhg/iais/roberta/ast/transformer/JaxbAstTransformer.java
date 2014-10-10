@@ -3,7 +3,8 @@ package de.fhg.iais.roberta.ast.transformer;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Category;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.Action;
@@ -31,9 +32,8 @@ import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.blockly.generated.BlockSet;
+import de.fhg.iais.roberta.blockly.generated.Comment;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.dbc.Assert;
@@ -49,18 +49,6 @@ abstract public class JaxbAstTransformer<V> {
         return this.tree;
     }
 
-    /**
-     * Converts object of type {@link BlockSet} to AST tree.
-     * 
-     * @param program
-     */
-    public void transform(BlockSet set) {
-        List<Instance> instances = set.getInstance();
-        for ( Instance instance : instances ) {
-            instanceToAST(instance);
-        }
-    }
-
     @Override
     public String toString() {
         return "BlockAST [project=[" + this.tree + "]]";
@@ -68,28 +56,11 @@ abstract public class JaxbAstTransformer<V> {
 
     abstract protected Phrase<V> blockToAST(Block block);
 
-    abstract protected BrickConfiguration blockToBrickConfiguration(Block block);
-
-    protected void instanceToAST(Instance instance) {
-        boolean first = true;
-        List<Block> blocks = instance.getBlock();
-        for ( Block block : blocks ) {
-            if ( first ) {
-                block.setX(instance.getX());
-                block.setY(instance.getY());
-                first = false;
-            }
-            //if ( !block.isDisabled() ) {
-            this.tree.add(blockToAST(block));
-            //}
-        }
-    }
-
     protected Phrase<V> blockToUnaryExpr(Block block, ExprParam exprParam, String operationType) {
         String op = getOperation(block, operationType);
         List<Value> values = extractValues(block, (short) 1);
         Phrase<V> expr = extractValue(values, exprParam);
-        return Unary.make(Unary.Op.get(op), (Expr<V>) expr, isDisabled(block), extractComment(block));
+        return Unary.make(Unary.Op.get(op), (Expr<V>) expr, extractBlockProperties(block), extractComment(block));
     }
 
     protected Binary<V> blockToBinaryExpr(Block block, ExprParam leftExpr, ExprParam rightExpr, String operationType) {
@@ -97,7 +68,7 @@ abstract public class JaxbAstTransformer<V> {
         List<Value> values = extractValues(block, (short) 2);
         Phrase<V> left = extractValue(values, leftExpr);
         Phrase<V> right = extractValue(values, rightExpr);
-        return Binary.make(Binary.Op.get(op), convertPhraseToExpr(left), convertPhraseToExpr(right), isDisabled(block), extractComment(block));
+        return Binary.make(Binary.Op.get(op), convertPhraseToExpr(left), convertPhraseToExpr(right), extractBlockProperties(block), extractComment(block));
     }
 
     protected Func<V> blockToFunction(Block block, List<ExprParam> exprParams, String operationType) {
@@ -107,7 +78,7 @@ abstract public class JaxbAstTransformer<V> {
         for ( ExprParam exprParam : exprParams ) {
             params.add((Expr<V>) extractValue(values, exprParam));
         }
-        return Func.make(Func.Function.get(op), params, isDisabled(block), extractComment(block));
+        return Func.make(Func.Function.get(op), params, extractBlockProperties(block), extractComment(block));
     }
 
     protected Phrase<V> blocksToIfStmt(Block block, int _else, int _elseIf) {
@@ -139,9 +110,9 @@ abstract public class JaxbAstTransformer<V> {
         }
 
         if ( _else != 0 ) {
-            return IfStmt.make(exprsList, thenList, elseList, isDisabled(block), extractComment(block));
+            return IfStmt.make(exprsList, thenList, elseList, extractBlockProperties(block), extractComment(block));
         } else {
-            return IfStmt.make(exprsList, thenList, isDisabled(block), extractComment(block));
+            return IfStmt.make(exprsList, thenList, extractBlockProperties(block), extractComment(block));
         }
     }
 
@@ -172,15 +143,15 @@ abstract public class JaxbAstTransformer<V> {
         String field = extractField(fields, type, (short) 0);
         switch ( type ) {
             case "BOOL":
-                return BoolConst.make(Boolean.parseBoolean(field.toLowerCase()), isDisabled(block), extractComment(block));
+                return BoolConst.make(Boolean.parseBoolean(field.toLowerCase()), extractBlockProperties(block), extractComment(block));
             case "NUM":
-                return NumConst.make(field, isDisabled(block), extractComment(block));
+                return NumConst.make(field, extractBlockProperties(block), extractComment(block));
             case "TEXT":
-                return StringConst.make(field, isDisabled(block), extractComment(block));
+                return StringConst.make(field, extractBlockProperties(block), extractComment(block));
             case "CONSTANT":
-                return MathConst.make(MathConst.Const.get(field), isDisabled(block), extractComment(block));
+                return MathConst.make(MathConst.Const.get(field), extractBlockProperties(block), extractComment(block));
             case "COLOUR":
-                return ColorConst.make(field, isDisabled(block), extractComment(block));
+                return ColorConst.make(field, extractBlockProperties(block), extractComment(block));
             default:
                 throw new DbcException("Invalid type constant!");
         }
@@ -246,13 +217,13 @@ abstract public class JaxbAstTransformer<V> {
     protected Phrase<V> extractRepeatStatement(Block block, Phrase<V> expr, String mode, String location, int mutation) {
         List<Statement> statements = extractStatements(block, (short) mutation);
         StmtList<V> stmtList = extractStatement(statements, location);
-        return RepeatStmt.make(RepeatStmt.Mode.get(mode), convertPhraseToExpr(expr), stmtList, isDisabled(block), extractComment(block));
+        return RepeatStmt.make(RepeatStmt.Mode.get(mode), convertPhraseToExpr(expr), stmtList, extractBlockProperties(block), extractComment(block));
     }
 
     protected Phrase<V> extractVar(Block block) {
         List<Field> fields = extractFields(block, (short) 1);
         String field = extractField(fields, "VAR", (short) 0);
-        return Var.make(field, TypeVar.NONE, isDisabled(block), extractComment(block));
+        return Var.make(field, TypeVar.NONE, extractBlockProperties(block), extractComment(block));
     }
 
     protected List<Value> extractValues(Block block, short numOfValues) {
@@ -308,11 +279,31 @@ abstract public class JaxbAstTransformer<V> {
         return operation;
     }
 
-    protected String extractComment(Block block) {
-        return block.getComment() == null ? "" : block.getComment().getValue();
+    protected BlocklyComment extractComment(Block block) {
+        if ( block.getComment() != null ) {
+            Comment comment = block.getComment();
+            return BlocklyComment.make(comment.getValue(), comment.isPinned(), comment.getH(), comment.getW());
+        }
+        return null;
+    }
+
+    protected BlocklyBlockProperties extractBlockProperties(Block block) {
+        return BlocklyBlockProperties.of(block.getType(), block.getId(), isDisabled(block), isCollapsed(block), isInline(block));
     }
 
     protected boolean isDisabled(Block block) {
         return block.isDisabled() == null ? false : true;
+    }
+
+    protected boolean isCollapsed(Block block) {
+        return block.isCollapsed() == null ? false : true;
+    }
+
+    protected Boolean isInline(Block block) {
+        if ( block.isInline() == null ) {
+            return null;
+        }
+        return block.isInline();
+
     }
 }

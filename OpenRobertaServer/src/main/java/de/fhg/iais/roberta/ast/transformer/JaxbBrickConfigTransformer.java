@@ -24,10 +24,9 @@ import de.fhg.iais.roberta.util.Pair;
  * 
  * @param <V>
  */
-
 public class JaxbBrickConfigTransformer<V> extends JaxbAstTransformer<V> {
 
-    public BrickConfiguration blockSetToBrickConfiguration(BlockSet program) {
+    public BrickConfiguration transform(BlockSet program) {
         List<Instance> instances = program.getInstance();
         List<Block> blocks = instances.get(0).getBlock();
         return blockToBrickConfiguration(blocks.get(0));
@@ -94,8 +93,7 @@ public class JaxbBrickConfigTransformer<V> extends JaxbAstTransformer<V> {
         return MotorSide.get(extractField(fields, "MOTOR_DRIVE", (short) 2));
     }
 
-    @Override
-    protected BrickConfiguration blockToBrickConfiguration(Block block) {
+    private BrickConfiguration blockToBrickConfiguration(Block block) {
         List<Field> fields;
         List<Value> values;
 
@@ -122,5 +120,4 @@ public class JaxbBrickConfigTransformer<V> extends JaxbAstTransformer<V> {
     protected Phrase<V> blockToAST(Block block) {
         return null;
     }
-
 }

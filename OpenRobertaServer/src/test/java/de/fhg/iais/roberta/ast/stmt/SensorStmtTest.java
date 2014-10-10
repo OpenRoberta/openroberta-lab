@@ -11,7 +11,7 @@ public class SensorStmtTest {
 
     @Test
     public void make() throws Exception {
-        TouchSensor<Void> touchSensor = TouchSensor.make(SensorPort.S1, false, "");
+        TouchSensor<Void> touchSensor = TouchSensor.make(SensorPort.S1, null, null);
         SensorStmt<Void> sensorStmt = SensorStmt.make(touchSensor);
 
         String a = "\nSensorStmt TouchSensor [port=S1]";
@@ -20,7 +20,7 @@ public class SensorStmtTest {
 
     @Test
     public void getSensor() throws Exception {
-        TouchSensor<Void> touchSensor = TouchSensor.make(SensorPort.S1, false, "");
+        TouchSensor<Void> touchSensor = TouchSensor.make(SensorPort.S1, null, null);
         SensorStmt<Void> sensorStmt = SensorStmt.make(touchSensor);
 
         Assert.assertEquals("TouchSensor [port=S1]", sensorStmt.getSensor().toString());

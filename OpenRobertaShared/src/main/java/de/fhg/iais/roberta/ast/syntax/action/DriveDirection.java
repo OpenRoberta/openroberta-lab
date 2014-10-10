@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * Direction in which the robot will drive.
  */
 public enum DriveDirection {
-    FOREWARD( "OFF" ), BACKWARD( "ON" );
+    FOREWARD( "OFF" ), BACKWARD( "ON", "BACKWARDS" );
 
     private final String[] values;
 

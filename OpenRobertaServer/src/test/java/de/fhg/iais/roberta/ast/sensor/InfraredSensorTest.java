@@ -13,7 +13,7 @@ public class InfraredSensorTest {
 
     @Test
     public void sensorSetInfrared() throws Exception {
-        String a = "BlockAST [project=[[InfraredSensor [mode=DISTANCE, port=S4]]]]";
+        String a = "BlockAST [project=[[Location [x=-47, y=1], InfraredSensor [mode=DISTANCE, port=S4]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_setInfrared.xml"));
     }
@@ -22,7 +22,7 @@ public class InfraredSensorTest {
     public void getMode() throws Exception {
         JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setInfrared.xml");
 
-        InfraredSensor<Void> cs = (InfraredSensor<Void>) transformer.getTree().get(0);
+        InfraredSensor<Void> cs = (InfraredSensor<Void>) transformer.getTree().get(1);
 
         Assert.assertEquals(InfraredSensorMode.DISTANCE, cs.getMode());
     }
@@ -31,21 +31,21 @@ public class InfraredSensorTest {
     public void getPort() throws Exception {
         JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setInfrared.xml");
 
-        InfraredSensor<Void> cs = (InfraredSensor<Void>) transformer.getTree().get(0);
+        InfraredSensor<Void> cs = (InfraredSensor<Void>) transformer.getTree().get(1);
 
         Assert.assertEquals(SensorPort.S4, cs.getPort());
     }
 
     @Test
     public void sensorGetModeInfrared() throws Exception {
-        String a = "BlockAST [project=[[InfraredSensor [mode=GET_MODE, port=S4]]]]";
+        String a = "BlockAST [project=[[Location [x=-46, y=55], InfraredSensor [mode=GET_MODE, port=S4]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getModeInfrared.xml"));
     }
 
     @Test
     public void sensorGetSampleInfrared() throws Exception {
-        String a = "BlockAST [project=[[InfraredSensor [mode=GET_SAMPLE, port=S4]]]]";
+        String a = "BlockAST [project=[[Location [x=-11, y=105], InfraredSensor [mode=GET_SAMPLE, port=S4]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getSampleInfrared.xml"));
     }

@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.stmt;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
@@ -14,8 +16,8 @@ import de.fhg.iais.roberta.dbc.Assert;
 public class WaitStmt<V> extends Stmt<V> {
     private final StmtList<V> statements;
 
-    private WaitStmt(StmtList<V> statements, boolean disabled, String comment) {
-        super(Phrase.Kind.WAIT_STMT, disabled, comment);
+    private WaitStmt(StmtList<V> statements, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(Phrase.Kind.WAIT_STMT, properties, comment);
         Assert.isTrue(statements.isReadOnly());
         this.statements = statements;
         setReadOnly();
@@ -24,13 +26,13 @@ public class WaitStmt<V> extends Stmt<V> {
     /**
      * Create read only object of type {@link WaitStmt}
      * 
-     * @param statements
-     * @param disabled is true if the block is disabled
-     * @param comment for the block
+     * @param statements,
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment for the block,
      * @return
      */
-    public static <V> WaitStmt<V> make(StmtList<V> statements, boolean disabled, String comment) {
-        return new WaitStmt<>(statements, disabled, comment);
+    public static <V> WaitStmt<V> make(StmtList<V> statements, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new WaitStmt<>(statements, properties, comment);
     }
 
     /**

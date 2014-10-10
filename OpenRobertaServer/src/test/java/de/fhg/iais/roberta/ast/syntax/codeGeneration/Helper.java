@@ -1,22 +1,31 @@
 package de.fhg.iais.roberta.ast.syntax.codeGeneration;
 
+import java.io.StringWriter;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.junit.Assert;
 import org.xml.sax.InputSource;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
+
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.HardwareComponent;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.ast.syntax.Phrase.Kind;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
 import de.fhg.iais.roberta.ast.syntax.action.HardwareComponentType;
 import de.fhg.iais.roberta.ast.syntax.action.MotorSide;
+import de.fhg.iais.roberta.ast.syntax.tasks.Location;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformer;
 import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
+import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
 
 /**
@@ -110,11 +119,42 @@ public class Helper {
 
     public static <V> Phrase<V> generateAST(String pathToProgramXml) throws Exception {
         List<Phrase<V>> tree = generateASTs(pathToProgramXml);
-        return tree.get(0);
+        return tree.get(1);
+    }
+
+    public static void assertTransformationIsOk(String fileName) throws Exception {
+        JaxbProgramTransformer<Void> transformer = generateTransformer(fileName);
+
+        AstJaxbTransformer<Void> astTransformer = new AstJaxbTransformer<>();
+        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
+        Marshaller m = jaxbContext.createMarshaller();
+        m.setProperty(Marshaller.JAXB_FRAGMENT, true);
+        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+        BlockSet blockSet = new BlockSet();
+
+        Instance instance = null;
+        for ( Phrase<Void> phrase : transformer.getTree() ) {
+            if ( phrase.getKind() == Kind.LOCATION ) {
+                blockSet.getInstance().add(instance);
+                instance = new Instance();
+                instance.setX(((Location<Void>) phrase).getX());
+                instance.setY(((Location<Void>) phrase).getY());
+            }
+            instance.getBlock().add(astTransformer.astToBlock(phrase));
+        }
+        blockSet.getInstance().add(instance);
+
+        m.marshal(blockSet, System.out);
+        StringWriter writer = new StringWriter();
+        m.marshal(blockSet, writer);
+        String t = Resources.toString(Helper.class.getResource(fileName), Charsets.UTF_8);
+
+        Assert.assertEquals(writer.toString().replaceAll("<(\\w+)( [^/>]*)?/>", "<$1$2></$1>").replaceAll("\\s+", ""), t.replaceAll("\\s+", ""));
     }
 
     public static void assertCodeIsOk(String a, String fileName) throws Exception {
-        // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
         Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generateStringWithoutWrapping(fileName).replaceAll("\\s+", ""));
     }
+
 }

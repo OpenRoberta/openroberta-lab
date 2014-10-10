@@ -51,6 +51,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
+import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
@@ -370,13 +371,20 @@ public class InfoCollector<T> implements AstVisitor<T> {
         return null;
     }
 
+    @Override
+    public T visitWaitStmt(WaitStmt<T> waitStmt) {
+        extractInfos(waitStmt);
+        return null;
+    }
+
     private void extractInfos(Phrase<T> numConst) {
         this.infos.addAll(numConst.getInfos().getInfos());
     }
 
     @Override
-    public T visitWaitStmt(WaitStmt<T> waitStmt) {
+    public T visitLocation(Location<T> location) {
         // TODO Auto-generated method stub
         return null;
     }
+
 }

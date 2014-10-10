@@ -3,7 +3,8 @@ package de.fhg.iais.roberta.ast.transformer;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.BrickLedColor;
@@ -70,10 +71,13 @@ import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
+import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.dbc.Assert;
@@ -84,10 +88,31 @@ import de.fhg.iais.roberta.dbc.DbcException;
  */
 public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
 
+    /**
+     * Converts object of type {@link BlockSet} to AST tree.
+     * 
+     * @param program
+     */
+    public void transform(BlockSet set) {
+        List<Instance> instances = set.getInstance();
+        for ( Instance instance : instances ) {
+            instanceToAST(instance);
+        }
+    }
+
+    private void instanceToAST(Instance instance) {
+        List<Block> blocks = instance.getBlock();
+        Location<V> location = Location.make(instance.getX(), instance.getY());
+        this.tree.add(location);
+        for ( Block block : blocks ) {
+            this.tree.add(blockToAST(block));
+        }
+    }
+
     @Override
     protected Phrase<V> blockToAST(Block block) {
-        String comment = extractComment(block);
-        boolean disabled = isDisabled(block);
+        BlocklyComment comment = extractComment(block);
+        BlocklyBlockProperties properties = extractBlockProperties(block);
 
         List<Value> values;
         List<Field> fields;
@@ -114,7 +139,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam("POWER", Integer.class));
                 mp = new MotionParam.Builder<V>().speed((Expr<V>) expr).build();
-                return MotorOnAction.make(ActorPort.get(port), mp, disabled, comment);
+                return MotorOnAction.make(ActorPort.get(port), mp, properties, comment);
 
             case "robActions_motor_on_for":
                 fields = extractFields(block, (short) 2);
@@ -125,7 +150,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 right = extractValue(values, new ExprParam("VALUE", Integer.class));
                 md = new MotorDuration<V>(MotorMoveMode.get(mode), (Expr<V>) right);
                 mp = new MotionParam.Builder<V>().speed((Expr<V>) left).duration(md).build();
-                return MotorOnAction.make(ActorPort.get(port), mp, disabled, comment);
+                return MotorOnAction.make(ActorPort.get(port), mp, properties, comment);
 
             case "robActions_motorDiff_on":
                 fields = extractFields(block, (short) 1);
@@ -133,7 +158,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam("POWER", Integer.class));
                 mp = new MotionParam.Builder<V>().speed((Expr<V>) expr).build();
-                return DriveAction.make(DriveDirection.get(mode), mp, disabled, comment);
+                return DriveAction.make(DriveDirection.get(mode), mp, properties, comment);
 
             case "robActions_motorDiff_on_for":
                 fields = extractFields(block, (short) 1);
@@ -143,7 +168,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 right = extractValue(values, new ExprParam("DISTANCE", Integer.class));
                 md = new MotorDuration<V>(MotorMoveMode.DISTANCE, (Expr<V>) right);
                 mp = new MotionParam.Builder<V>().speed((Expr<V>) left).duration(md).build();
-                return DriveAction.make(DriveDirection.get(mode), mp, disabled, comment);
+                return DriveAction.make(DriveDirection.get(mode), mp, properties, comment);
 
             case "robActions_motorDiff_turn":
                 fields = extractFields(block, (short) 1);
@@ -151,7 +176,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam("POWER", Integer.class));
                 mp = new MotionParam.Builder<V>().speed((Expr<V>) expr).build();
-                return TurnAction.make(TurnDirection.get(mode), mp, disabled, comment);
+                return TurnAction.make(TurnDirection.get(mode), mp, properties, comment);
 
             case "robActions_motorDiff_turn_for":
                 fields = extractFields(block, (short) 1);
@@ -161,35 +186,35 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 right = extractValue(values, new ExprParam("DEGREE", Integer.class));
                 md = new MotorDuration<V>(MotorMoveMode.DEGREE, (Expr<V>) right);
                 mp = new MotionParam.Builder<V>().speed((Expr<V>) left).duration(md).build();
-                return TurnAction.make(TurnDirection.get(mode), mp, disabled, comment);
+                return TurnAction.make(TurnDirection.get(mode), mp, properties, comment);
 
             case "robActions_motorDiff_stop":
-                return MotorDriveStopAction.make(disabled, comment);
+                return MotorDriveStopAction.make(properties, comment);
 
             case "robActions_motor_getPower":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "MOTORPORT", (short) 0);
-                return MotorGetPowerAction.make(ActorPort.get(port), disabled, comment);
+                return MotorGetPowerAction.make(ActorPort.get(port), properties, comment);
 
             case "robActions_motor_setPower":
                 fields = extractFields(block, (short) 1);
                 values = extractValues(block, (short) 1);
                 port = extractField(fields, "MOTORPORT", (short) 0);
                 left = extractValue(values, new ExprParam("POWER", Integer.class));
-                return MotorSetPowerAction.make(ActorPort.get(port), (Expr<V>) left, disabled, comment);
+                return MotorSetPowerAction.make(ActorPort.get(port), (Expr<V>) left, properties, comment);
 
             case "robActions_motor_stop":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, "MOTORPORT", (short) 0);
                 mode = extractField(fields, "MODE", (short) 1);
-                return MotorStopAction.make(ActorPort.get(port), MotorStopMode.get(mode), disabled, comment);
+                return MotorStopAction.make(ActorPort.get(port), MotorStopMode.get(mode), properties, comment);
 
             case "robActions_display_text":
                 values = extractValues(block, (short) 3);
                 Phrase<V> msg = extractValue(values, new ExprParam("OUT", String.class));
                 Phrase<V> col = extractValue(values, new ExprParam("COL", Integer.class));
                 Phrase<V> row = extractValue(values, new ExprParam("ROW", Integer.class));
-                return ShowTextAction.make((Expr<V>) msg, (Expr<V>) col, (Expr<V>) row, disabled, comment);
+                return ShowTextAction.make(convertPhraseToExpr(msg), (Expr<V>) col, (Expr<V>) row, properties, comment);
 
             case "robActions_display_picture":
                 fields = extractFields(block, (short) 1);
@@ -197,122 +222,123 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 String pic = extractField(fields, "PICTURE", (short) 0);
                 Phrase<V> x = extractValue(values, new ExprParam("X", Integer.class));
                 Phrase<V> y = extractValue(values, new ExprParam("Y", Integer.class));
-                return ShowPictureAction.make(pic, (Expr<V>) x, (Expr<V>) y, disabled, comment);
+                return ShowPictureAction.make(pic, (Expr<V>) x, (Expr<V>) y, properties, comment);
 
             case "robActions_display_clear":
-                return ClearDisplayAction.make(disabled, comment);
+                return ClearDisplayAction.make(properties, comment);
 
             case "robActions_play_tone":
                 values = extractValues(block, (short) 2);
                 left = extractValue(values, new ExprParam("FREQUENCE", Integer.class));
                 right = extractValue(values, new ExprParam("DURATION", Integer.class));
-                return ToneAction.make((Expr<V>) left, (Expr<V>) right, disabled, comment);
+                return ToneAction.make((Expr<V>) left, (Expr<V>) right, properties, comment);
 
             case "robActions_play_file":
                 fields = extractFields(block, (short) 1);
                 String filename = extractField(fields, "FILE", (short) 0);
-                return PlayFileAction.make(filename, disabled, comment);
+                return PlayFileAction.make(filename, properties, comment);
 
             case "robActions_play_setVolume":
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam("VOLUME", Integer.class));
-                return VolumeAction.make(VolumeAction.Mode.SET, (Expr<V>) expr, disabled, comment);
+                return VolumeAction.make(VolumeAction.Mode.SET, (Expr<V>) expr, properties, comment);
 
             case "robActions_play_getVolume":
-                expr = NullConst.make(disabled, comment);
-                return VolumeAction.make(VolumeAction.Mode.GET, (Expr<V>) expr, disabled, comment);
+                expr = NullConst.make(properties, comment);
+                return VolumeAction.make(VolumeAction.Mode.GET, (Expr<V>) expr, properties, comment);
 
             case "robActions_brickLight_on":
                 fields = extractFields(block, (short) 2);
                 String color = extractField(fields, "SWITCH_COLOR", (short) 0);
                 String blink = extractField(fields, "SWITCH_BLINK", (short) 1);
-                return LightAction.make(BrickLedColor.get(color), Boolean.valueOf(blink), disabled, comment);
+                boolean blinking = blink.equals("ON") ? true : false;
+                return LightAction.make(BrickLedColor.get(color), blinking, properties, comment);
 
             case "robActions_brickLight_off":
-                return LightStatusAction.make(LightStatusAction.Status.OFF, disabled, comment);
+                return LightStatusAction.make(LightStatusAction.Status.OFF, properties, comment);
 
             case "robActions_brickLight_reset":
-                return LightStatusAction.make(LightStatusAction.Status.RESET, disabled, comment);
+                return LightStatusAction.make(LightStatusAction.Status.RESET, properties, comment);
 
                 //Sensoren
             case "robSensors_touch_isPressed":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return TouchSensor.make(SensorPort.get(port), disabled, comment);
+                return TouchSensor.make(SensorPort.get(port), properties, comment);
 
             case "robSensors_ultrasonic_setMode":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, "SENSORPORT", (short) 0);
                 mode = extractField(fields, "MODE", (short) 1);
-                return UltrasonicSensor.make(UltrasonicSensorMode.get(mode), SensorPort.get(port), disabled, comment);
+                return UltrasonicSensor.make(UltrasonicSensorMode.get(mode), SensorPort.get(port), properties, comment);
 
             case "robSensors_ultrasonic_getMode":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return UltrasonicSensor.make(UltrasonicSensorMode.GET_MODE, SensorPort.get(port), disabled, comment);
+                return UltrasonicSensor.make(UltrasonicSensorMode.GET_MODE, SensorPort.get(port), properties, comment);
 
             case "robSensors_ultrasonic_getSample":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return UltrasonicSensor.make(UltrasonicSensorMode.GET_SAMPLE, SensorPort.get(port), disabled, comment);
+                return UltrasonicSensor.make(UltrasonicSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
 
             case "robSensors_colour_setMode":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, "SENSORPORT", (short) 0);
                 mode = extractField(fields, "MODE", (short) 1);
-                return ColorSensor.make(ColorSensorMode.get(mode), SensorPort.get(port), disabled, comment);
+                return ColorSensor.make(ColorSensorMode.get(mode), SensorPort.get(port), properties, comment);
 
             case "robSensors_colour_getMode":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return ColorSensor.make(ColorSensorMode.GET_MODE, SensorPort.get(port), disabled, comment);
+                return ColorSensor.make(ColorSensorMode.GET_MODE, SensorPort.get(port), properties, comment);
 
             case "robSensors_colour_getSample":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return ColorSensor.make(ColorSensorMode.GET_SAMPLE, SensorPort.get(port), disabled, comment);
+                return ColorSensor.make(ColorSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
 
             case "robSensors_infrared_setMode":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, "SENSORPORT", (short) 0);
                 mode = extractField(fields, "MODE", (short) 1);
-                return InfraredSensor.make(InfraredSensorMode.get(mode), SensorPort.get(port), disabled, comment);
+                return InfraredSensor.make(InfraredSensorMode.get(mode), SensorPort.get(port), properties, comment);
 
             case "robSensors_infrared_getMode":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return InfraredSensor.make(InfraredSensorMode.GET_MODE, SensorPort.get(port), disabled, comment);
+                return InfraredSensor.make(InfraredSensorMode.GET_MODE, SensorPort.get(port), properties, comment);
 
             case "robSensors_infrared_getSample":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return InfraredSensor.make(InfraredSensorMode.GET_SAMPLE, SensorPort.get(port), disabled, comment);
+                return InfraredSensor.make(InfraredSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
 
             case "robSensors_encoder_setMode":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, "MOTORPORT", (short) 0);
                 mode = extractField(fields, "MODE", (short) 1);
-                return EncoderSensor.make(MotorTachoMode.get(mode), ActorPort.get(port), disabled, comment);
+                return EncoderSensor.make(MotorTachoMode.get(mode), ActorPort.get(port), properties, comment);
 
             case "robSensors_encoder_getMode":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "MOTORPORT", (short) 0);
-                return EncoderSensor.make(MotorTachoMode.GET_MODE, ActorPort.get(port), disabled, comment);
+                return EncoderSensor.make(MotorTachoMode.GET_MODE, ActorPort.get(port), properties, comment);
 
             case "robSensors_encoder_getSample":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "MOTORPORT", (short) 0);
-                return EncoderSensor.make(MotorTachoMode.GET_SAMPLE, ActorPort.get(port), disabled, comment);
+                return EncoderSensor.make(MotorTachoMode.GET_SAMPLE, ActorPort.get(port), properties, comment);
 
             case "robSensors_encoder_reset":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "MOTORPORT", (short) 0);
-                return EncoderSensor.make(MotorTachoMode.RESET, ActorPort.get(port), disabled, comment);
+                return EncoderSensor.make(MotorTachoMode.RESET, ActorPort.get(port), properties, comment);
 
             case "robSensors_key_isPressed":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "KEY", (short) 0);
-                return BrickSensor.make(BrickSensor.Mode.IS_PRESSED, BrickKey.get(port), disabled, comment);
+                return BrickSensor.make(BrickSensor.Mode.IS_PRESSED, BrickKey.get(port), properties, comment);
 
                 //            case "robSensors_key_waitForPress":
                 //                fields = extractFields(block, (short) 1);
@@ -322,38 +348,38 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
             case "robSensors_key_isPressedAndReleased":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "KEY", (short) 0);
-                return BrickSensor.make(BrickSensor.Mode.WAIT_FOR_PRESS_AND_RELEASE, BrickKey.get(port), disabled, comment);
+                return BrickSensor.make(BrickSensor.Mode.WAIT_FOR_PRESS_AND_RELEASE, BrickKey.get(port), properties, comment);
 
             case "robSensors_gyro_setMode":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, "SENSORPORT", (short) 0);
                 mode = extractField(fields, "MODE", (short) 1);
-                return GyroSensor.make(GyroSensorMode.get(mode), SensorPort.get(port), disabled, comment);
+                return GyroSensor.make(GyroSensorMode.get(mode), SensorPort.get(port), properties, comment);
 
             case "robSensors_gyro_getMode":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return GyroSensor.make(GyroSensorMode.GET_MODE, SensorPort.get(port), disabled, comment);
+                return GyroSensor.make(GyroSensorMode.GET_MODE, SensorPort.get(port), properties, comment);
 
             case "robSensors_gyro_getSample":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return GyroSensor.make(GyroSensorMode.GET_SAMPLE, SensorPort.get(port), disabled, comment);
+                return GyroSensor.make(GyroSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
 
             case "robSensors_gyro_reset":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
-                return GyroSensor.make(GyroSensorMode.RESET, SensorPort.get(port), disabled, comment);
+                return GyroSensor.make(GyroSensorMode.RESET, SensorPort.get(port), properties, comment);
 
             case "robSensors_timer_getSample":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORNUM", (short) 0);
-                return TimerSensor.make(TimerSensorMode.GET_SAMPLE, Integer.valueOf(port), disabled, comment);
+                return TimerSensor.make(TimerSensorMode.GET_SAMPLE, Integer.valueOf(port), properties, comment);
 
             case "robSensors_timer_reset":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORNUM", (short) 0);
-                return TimerSensor.make(TimerSensorMode.RESET, Integer.valueOf(port), disabled, comment);
+                return TimerSensor.make(TimerSensorMode.RESET, Integer.valueOf(port), properties, comment);
 
             case "robSensors_getSample":
                 fields = extractFields(block, (short) 2);
@@ -361,21 +387,21 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 port = extractField(fields, SensorType.get(mode).getPortTypeName(), (short) 1);
                 switch ( SensorType.get(mode) ) {
                     case TOUCH:
-                        return TouchSensor.make(SensorPort.get(port), disabled, comment);
+                        return TouchSensor.make(SensorPort.get(port), properties, comment);
                     case ULTRASONIC:
-                        return UltrasonicSensor.make(UltrasonicSensorMode.GET_SAMPLE, SensorPort.get(port), disabled, comment);
+                        return UltrasonicSensor.make(UltrasonicSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
                     case COLOUR:
-                        return ColorSensor.make(ColorSensorMode.GET_SAMPLE, SensorPort.get(port), disabled, comment);
+                        return ColorSensor.make(ColorSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
                     case INFRARED:
-                        return InfraredSensor.make(InfraredSensorMode.GET_SAMPLE, SensorPort.get(port), disabled, comment);
+                        return InfraredSensor.make(InfraredSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
                     case ENCODER:
-                        return EncoderSensor.make(MotorTachoMode.GET_SAMPLE, ActorPort.get(port), disabled, comment);
+                        return EncoderSensor.make(MotorTachoMode.GET_SAMPLE, ActorPort.get(port), properties, comment);
                     case KEYS_PRESSED:
-                        return BrickSensor.make(Mode.IS_PRESSED, BrickKey.get(port), disabled, comment);
+                        return BrickSensor.make(Mode.IS_PRESSED, BrickKey.get(port), properties, comment);
                     case GYRO:
-                        return GyroSensor.make(GyroSensorMode.GET_SAMPLE, SensorPort.get(port), disabled, comment);
+                        return GyroSensor.make(GyroSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
                     case TIME:
-                        return TimerSensor.make(TimerSensorMode.GET_SAMPLE, Integer.valueOf(port), disabled, comment);
+                        return TimerSensor.make(TimerSensorMode.GET_SAMPLE, Integer.valueOf(port), properties, comment);
                     default:
                         throw new DbcException("Invalid sensor!");
                 }
@@ -394,7 +420,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 return blockToConst(block, "BOOL");
 
             case "logic_null":
-                return NullConst.make(disabled, comment);
+                return NullConst.make(properties, comment);
 
             case "logic_ternary":
                 values = block.getValue();
@@ -408,7 +434,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 StmtList<V> elseList = StmtList.make();
                 elseList.addStmt(ExprStmt.make((Expr<V>) elseStmt));
                 elseList.setReadOnly();
-                return IfStmt.make((Expr<V>) ifExpr, thenList, elseList, disabled, comment);
+                return IfStmt.make((Expr<V>) ifExpr, thenList, elseList, properties, comment);
 
                 //Mathematik
             case "math_number":
@@ -461,7 +487,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 values = extractValues(block, (short) 1);
                 left = extractVar(block);
                 right = extractValue(values, new ExprParam("DELTA", Integer.class));
-                return Binary.make(Binary.Op.MATH_CHANGE, (Expr<V>) left, (Expr<V>) right, disabled, comment);
+                return Binary.make(Binary.Op.MATH_CHANGE, (Expr<V>) left, (Expr<V>) right, properties, comment);
 
             case "math_round":
                 exprParams = new ArrayList<ExprParam>();
@@ -502,13 +528,13 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 exprList = blockToExprList(block, String.class);
                 List<Expr<V>> textList = new ArrayList<Expr<V>>();
                 textList.add(exprList);
-                return Func.make(Function.TEXT_JOIN, textList, disabled, comment);
+                return Func.make(Function.TEXT_JOIN, textList, properties, comment);
 
             case "text_append":
                 values = extractValues(block, (short) 1);
                 left = extractVar(block);
                 right = extractValue(values, new ExprParam("TEXT", String.class));
-                return Binary.make(Binary.Op.TEXT_APPEND, (Expr<V>) left, (Expr<V>) right, disabled, comment);
+                return Binary.make(Binary.Op.TEXT_APPEND, (Expr<V>) left, (Expr<V>) right, properties, comment);
 
             case "text_length":
                 exprParams = new ArrayList<ExprParam>();
@@ -567,9 +593,9 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 fields = extractFields(block, (short) 2);
                 String type = extractField(fields, "TYPE", (short) 0);
                 String text = extractField(fields, "TEXT", (short) 1);
-                StringConst<V> txtExpr = StringConst.make(text, disabled, comment);
+                StringConst<V> txtExpr = StringConst.make(text, properties, comment);
                 lstExpr.add(txtExpr);
-                return Func.make(Function.get(type), lstExpr, disabled, comment);
+                return Func.make(Function.get(type), lstExpr, properties, comment);
 
             case "text_print":
                 exprParams = new ArrayList<ExprParam>();
@@ -623,7 +649,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 values = extractValues(block, (short) 1);
                 Phrase<V> p = extractValue(values, new ExprParam("VALUE", EmptyExpr.class));
                 expr = convertPhraseToExpr(p);
-                return AssignStmt.make((Var<V>) extractVar(block), (Expr<V>) expr, disabled, comment);
+                return AssignStmt.make((Var<V>) extractVar(block), (Expr<V>) expr, properties, comment);
 
             case "variables_get":
                 return extractVar(block);
@@ -657,10 +683,10 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                     list.addStmt((Stmt<V>) extractRepeatStatement(block, expr, "WAIT", "DO" + i, mutation + 1));
                 }
                 list.setReadOnly();
-                return WaitStmt.make(list, disabled, comment);
+                return WaitStmt.make(list, properties, comment);
 
             case "robControls_loopForever":
-                expr = BoolConst.make(true, disabled, comment);
+                expr = BoolConst.make(true, properties, comment);
                 return extractRepeatStatement(block, expr, RepeatStmt.Mode.WHILE.toString());
 
             case "controls_whileUntil":
@@ -668,7 +694,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 mode = extractField(fields, "MODE", (short) 0);
                 values = extractValues(block, (short) 1);
                 if ( RepeatStmt.Mode.UNTIL == RepeatStmt.Mode.get(mode) ) {
-                    expr = Unary.make(Op.NOT, convertPhraseToExpr(extractValue(values, new ExprParam("BOOL", Boolean.class))), disabled, comment);
+                    expr = Unary.make(Op.NOT, convertPhraseToExpr(extractValue(values, new ExprParam("BOOL", Boolean.class))), properties, comment);
                 } else {
                     expr = extractValue(values, new ExprParam("BOOL", Boolean.class));
                 }
@@ -678,14 +704,14 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 var = extractVar(block);
                 values = extractValues(block, (short) 3);
                 exprList = ExprList.make();
-                Var<V> var1 = Var.make(((Var<V>) var).getValue(), TypeVar.INTEGER, disabled, comment);
+                Var<V> var1 = Var.make(((Var<V>) var).getValue(), TypeVar.INTEGER, properties, comment);
 
                 Phrase<V> from = extractValue(values, new ExprParam("FROM", Integer.class));
                 Phrase<V> to = extractValue(values, new ExprParam("TO", Integer.class));
                 Phrase<V> by = extractValue(values, new ExprParam("BY", Integer.class));
-                Binary<V> exprAssig = Binary.make(Binary.Op.ASSIGNMENT, (Expr<V>) var1, (Expr<V>) from, disabled, comment);
-                Binary<V> exprCondition = Binary.make(Binary.Op.LTE, (Expr<V>) var, (Expr<V>) to, disabled, comment);
-                Binary<V> exprBy = Binary.make(Binary.Op.ADD_ASSIGNMENT, (Expr<V>) var, (Expr<V>) by, disabled, comment);
+                Binary<V> exprAssig = Binary.make(Binary.Op.ASSIGNMENT, (Expr<V>) var1, (Expr<V>) from, properties, comment);
+                Binary<V> exprCondition = Binary.make(Binary.Op.LTE, (Expr<V>) var, (Expr<V>) to, properties, comment);
+                Binary<V> exprBy = Binary.make(Binary.Op.ADD_ASSIGNMENT, (Expr<V>) var, (Expr<V>) by, properties, comment);
                 exprList.addExpr(exprAssig);
                 exprList.addExpr(exprCondition);
                 exprList.addExpr(exprBy);
@@ -697,26 +723,26 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam("LIST", List.class));
 
-                Binary<V> exprBinary = Binary.make(Binary.Op.IN, (Expr<V>) var, (Expr<V>) expr, disabled, comment);
+                Binary<V> exprBinary = Binary.make(Binary.Op.IN, (Expr<V>) var, (Expr<V>) expr, properties, comment);
                 return extractRepeatStatement(block, exprBinary, "FOR_EACH");
 
             case "controls_flow_statements":
                 fields = extractFields(block, (short) 1);
                 mode = extractField(fields, "FLOW", (short) 0);
-                return StmtFlowCon.make(Flow.get(mode), disabled, comment);
+                return StmtFlowCon.make(Flow.get(mode), properties, comment);
 
             case "controls_repeat_ext":
                 values = extractValues(block, (short) 1);
-                var = Var.make("i", TypeVar.INTEGER, disabled, comment);
+                var = Var.make("i", TypeVar.INTEGER, properties, comment);
                 exprList = ExprList.make();
 
-                from = NumConst.make("0", disabled, comment);
+                from = NumConst.make("0", properties, comment);
                 to = extractValue(values, new ExprParam("TIMES", Integer.class));
-                by = NumConst.make("1", disabled, comment);
-                exprAssig = Binary.make(Binary.Op.ASSIGNMENT, (Expr<V>) var, (Expr<V>) from, disabled, comment);
-                var = Var.make("i", TypeVar.NONE, disabled, comment);
-                exprCondition = Binary.make(Binary.Op.LT, (Expr<V>) var, (Expr<V>) to, disabled, comment);
-                Unary<V> increment = Unary.make(Unary.Op.POSTFIX_INCREMENTS, (Expr<V>) var, disabled, comment);
+                by = NumConst.make("1", properties, comment);
+                exprAssig = Binary.make(Binary.Op.ASSIGNMENT, (Expr<V>) var, (Expr<V>) from, properties, comment);
+                var = Var.make("i", TypeVar.NONE, properties, comment);
+                exprCondition = Binary.make(Binary.Op.LT, (Expr<V>) var, (Expr<V>) to, properties, comment);
+                Unary<V> increment = Unary.make(Unary.Op.POSTFIX_INCREMENTS, (Expr<V>) var, properties, comment);
                 exprList.addExpr(exprAssig);
                 exprList.addExpr(exprCondition);
                 exprList.addExpr(increment);
@@ -724,26 +750,21 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 return extractRepeatStatement(block, exprList, "TIMES");
 
             case "robControls_start":
-                return MainTask.make(Integer.parseInt(block.getX()), Integer.parseInt(block.getY()), disabled, comment);
+                return MainTask.make(properties, comment);
 
             case "robControls_activity":
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam("ACTIVITY", String.class));
-                return ActivityTask.make(Integer.parseInt(block.getX()), Integer.parseInt(block.getY()), (Expr<V>) expr, disabled, comment);
+                return ActivityTask.make((Expr<V>) expr, properties, comment);
 
             case "robControls_start_activity":
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam("ACTIVITY", String.class));
-                return StartActivityTask.make((Expr<V>) expr, disabled, comment);
+                return StartActivityTask.make((Expr<V>) expr, properties, comment);
 
             default:
                 throw new DbcException("Invalid Block: " + block.getType());
         }
     }
 
-    @Override
-    protected BrickConfiguration blockToBrickConfiguration(Block block) {
-        // TODO Auto-generated method stub
-        return null;
-    }
 }

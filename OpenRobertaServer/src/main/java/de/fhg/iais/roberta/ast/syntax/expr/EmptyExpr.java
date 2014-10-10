@@ -13,7 +13,7 @@ public class EmptyExpr<V> extends Expr<V> {
     private final Class<?> defVal;
 
     private EmptyExpr(Class<?> defVal) {
-        super(Phrase.Kind.EMPTY_EXPR, false, "");
+        super(Phrase.Kind.EMPTY_EXPR, null, null);
         Assert.isTrue(defVal != null);
         this.defVal = defVal;
         setReadOnly();
@@ -23,8 +23,6 @@ public class EmptyExpr<V> extends Expr<V> {
      * create read only instance from {@link EmptyExpr}.
      * 
      * @param defVal type of the value that the missing expression should have.
-     * @param disabled state of the block,
-     * @param comment added from the user
      * @return read only object of class {@link EmptyExpr}.
      */
     public static <V> EmptyExpr<V> make(Class<?> defVal) {

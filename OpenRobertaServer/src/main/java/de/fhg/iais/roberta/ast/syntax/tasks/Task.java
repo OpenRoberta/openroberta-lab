@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.tasks;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
+import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 
@@ -10,8 +12,8 @@ import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
  */
 public abstract class Task<V> extends Phrase<V> {
 
-    public Task(Kind kind, boolean disabled, String comment) {
-        super(kind, disabled, comment);
+    public Task(Kind kind, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(kind, properties, comment);
     }
 
     /**

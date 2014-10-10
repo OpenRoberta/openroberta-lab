@@ -205,6 +205,7 @@ public class GraphicStartup implements Menu {
 
         if ( args.length > 0 ) {
             hostname = args[0];
+            RobertaObserver.setBrickname(hostname);
         }
 
         if ( args.length > 1 ) {
