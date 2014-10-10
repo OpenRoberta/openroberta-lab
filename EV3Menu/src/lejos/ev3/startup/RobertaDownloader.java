@@ -1,14 +1,16 @@
 package lejos.ev3.startup;
 
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import lejos.utility.Delay;
+
+import org.json.JSONObject;
 
 /**
  * @author dpyka
@@ -36,16 +38,19 @@ public class RobertaDownloader implements Runnable {
         while ( RobertaObserver.isAutorun() ) {
             if ( RobertaObserver.isExecuted() == true && RobertaObserver.isDownloaded() == false ) {
 
-                DataOutputStream dos = null;
+                OutputStream os = null;
                 InputStream is = null;
                 FileOutputStream fos = null;
 
                 try {
                     this.httpURLConnection = openConnection(this.serverURL);
 
-                    dos = new DataOutputStream(this.httpURLConnection.getOutputStream());
-                    dos.writeBytes(this.token);
-                    dos.flush();
+                    JSONObject requestEntity = new JSONObject();
+                    requestEntity.put("BrickName", RobertaObserver.getBrickName());
+                    requestEntity.put("Token", this.token);
+
+                    os = this.httpURLConnection.getOutputStream();
+                    os.write(requestEntity.toString().getBytes("UTF-8"));
 
                     is = this.httpURLConnection.getInputStream();
                     byte[] buffer = new byte[4096];
@@ -63,8 +68,8 @@ public class RobertaDownloader implements Runnable {
                     System.out.println("force disconnect (download)");
                 } finally {
                     try {
-                        if ( dos != null ) {
-                            dos.close();
+                        if ( os != null ) {
+                            os.close();
                         }
                         if ( is != null ) {
                             is.close();
@@ -73,6 +78,7 @@ public class RobertaDownloader implements Runnable {
                             fos.close();
                         }
                     } catch ( IOException e ) {
+                        //
                     }
                 }
             } else {
@@ -98,6 +104,7 @@ public class RobertaDownloader implements Runnable {
         httpURLConnection.setDoOutput(true);
         httpURLConnection.setRequestMethod("POST");
         httpURLConnection.setReadTimeout(0);
+        httpURLConnection.setRequestProperty("Content-Type", "application/json; charset=utf8");
         return httpURLConnection;
     }
 

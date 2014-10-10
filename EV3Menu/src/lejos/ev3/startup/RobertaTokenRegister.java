@@ -65,30 +65,28 @@ public class RobertaTokenRegister implements Runnable {
      */
     @Override
     public void run() {
-        //DataOutputStream dos = null;
         OutputStream os = null;
         BufferedReader br = null;
 
         try {
             this.httpURLConnection = openConnection(this.serverURL);
 
-            JSONObject jsonTest = new JSONObject();
-            jsonTest.put("Name", "Roberta01");
-            jsonTest.put("Token", this.token);
+            JSONObject requestEntity = new JSONObject();
+            requestEntity.put("BrickName", RobertaObserver.getBrickName());
+            requestEntity.put("Token", this.token);
 
             os = this.httpURLConnection.getOutputStream();
-            os.write(jsonTest.toString().getBytes("UTF-8"));
-
-            //            dos = new DataOutputStream(this.httpURLConnection.getOutputStream());
-            //            dos.flush();
-            //            dos.close();
+            os.write(requestEntity.toString().getBytes("UTF-8"));
 
             br = new BufferedReader(new InputStreamReader(this.httpURLConnection.getInputStream()));
-            String serverResponse = "";
-            while ( (serverResponse = br.readLine()) != null ) {
-                System.out.println(serverResponse);
+            StringBuilder responseStrBuilder = new StringBuilder();
+            String responseString;
+            while ( (responseString = br.readLine()) != null ) {
+                responseStrBuilder.append(responseString);
             }
-            br.close();
+            JSONObject response = new JSONObject(responseStrBuilder.toString());
+            System.out.println(response);
+
             setRegisteredInfo(true);
         } catch ( SocketTimeoutException ste ) {
             setTimeOutInfo(true);
@@ -105,6 +103,7 @@ public class RobertaTokenRegister implements Runnable {
                     br.close();
                 }
             } catch ( IOException e ) {
+                //
             }
         }
     }

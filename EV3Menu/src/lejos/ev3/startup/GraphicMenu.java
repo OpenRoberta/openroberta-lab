@@ -168,7 +168,6 @@ public class GraphicMenu extends TextMenu {
 			}
 			if (_length > 1)
 			animate(temp,selectedIndex,dir);
-			RobertaObserver.setMenuIndex(selectedIndex);
 		}
 	}
 	

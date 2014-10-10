@@ -15,7 +15,7 @@ public class RobertaObserver {
 
     private static String userFileName = "";
 
-    private static int menuIndex;
+    private static String brickName = "";
 
     public static boolean isDownloaded() {
         return isDownloaded;
@@ -23,6 +23,14 @@ public class RobertaObserver {
 
     public static void setDownloaded(boolean isDownloaded) {
         RobertaObserver.isDownloaded = isDownloaded;
+    }
+
+    public static String getBrickName() {
+        return brickName;
+    }
+
+    public static void setBrickname(String name) {
+        brickName = name;
     }
 
     public static boolean isExecuted() {
@@ -47,14 +55,6 @@ public class RobertaObserver {
 
     public static void setUserFileName(String userFileName) {
         RobertaObserver.userFileName = userFileName;
-    }
-
-    public static int getMenuIndex() {
-        return menuIndex;
-    }
-
-    public static void setMenuIndex(int menuIndex) {
-        RobertaObserver.menuIndex = menuIndex;
     }
 
     public static boolean isPaused() {
