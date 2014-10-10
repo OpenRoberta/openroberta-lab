@@ -41,7 +41,6 @@ $(document).ready(function() {
   // Open Pop-Up "Login User"
   $("#open-login-user").click(function() {
     $("#login-user").dialog("open");
-    altert("Hello");
   });
 
   // Open Pop-Up "Register User"

@@ -1,16 +1,22 @@
-var token = '1A2B3C4D';
-var userAccountName = "none";
-var userId = "none";
-var userRole = "none";
+var userState = {
+    id : false,
+    name : 'none',
+    role : 'none',
+    program : 'none',
+    programSaved : false,
+    brickSaved : false,
+    robot : 'none',
+    brickConnection : 'none',
+    toolbox : 'none',
+    token : '1A2B3C4D',
+};
 
 function saveUserToServer() {
     var $userAccountName = $("#accountName");
     var $userName = $('#userName');
     var $userEmail = $("#userEmail");
-
     var $pass1 = $('#pass1');
     var $pass2 = $('#pass2');
-
     var $role = $("input[name=role]:checked");
 
     if ($pass1.val() != $pass2.val()) {
@@ -31,7 +37,7 @@ function saveUserToServer() {
             "password" : $pass1.val(),
             "role" : role
         }, function(result) {
-            if (result.created == "False")
+            if (result.created === "False")
                 alert("User already exists, choose a different account name");
             else
                 alert("User created!");
@@ -40,7 +46,6 @@ function saveUserToServer() {
 }
 
 function deleteUserOnServer() {
-
     var $userAccountName = $("#accountNameD");
     alert("To delete " + $userAccountName.val());
     userState.id = null;
@@ -50,7 +55,6 @@ function deleteUserOnServer() {
     }, function(result) {
         alert(result.rc);
     });
-
 }
 
 function signIn() {
@@ -62,17 +66,13 @@ function signIn() {
         "accountName" : $userAccountName.val(),
         "password" : $pass1.val(),
     }, function(response) {
-        if (response.exists == "True") {
-
-            userAccountName = response.userAccountName;
-            userId = response.userId;
-            userRole = response.userRole;
-            userState.id = true;
+        if (response.exists === "True") {
             userState.name = response.userAccountName;
-            $("#setName").text(response.userAccountName);
-            alert("Welcome back " + userId);
+            userState.id = response.userId;
+            userState.role = response.userRole;
+            displayStatus();
+            setHeadNavigationMenuState('login');
             $("#tutorials").fadeOut(700);
-
         } else {
             alert("Wrong user or wrong password!");
         }

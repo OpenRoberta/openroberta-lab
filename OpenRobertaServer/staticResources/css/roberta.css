@@ -62,13 +62,13 @@
 	background-color: #ffffff;
 }
 
-
 .ui-tabs .ui-tabs-nav {
 	padding: 0 0;
 }
 
 .ui-tabs .ui-tabs-panel {
 	padding: 0 0;
+	overflow: auto;
 }
 
 .ui-widget-content {

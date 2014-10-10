@@ -34,14 +34,14 @@
     <div id="head-section">
         <ul id="head-navigation">
             <li>
-                <a href="#"><span class="head-navi-icons project"></span><span class="head-navi-text">Programm</span></a>
+                <a href="#"><span class="head-navi-icons project"></span><span id="setProgram" class="head-navi-text">Programm</span></a>
                 <ul id="submenu-program" class="head-navigation-submenu">
-                    <li id="start">Starten</li>
+                    <li id="run">Starten</li>
                     <li id="check">Checken</li>
                     <li id="new">Neu ...</li>
                     <li id="open"> Öffnen ... </li>
                     <li id="save">Speichern</li>
-                    <li id="saveAs">Speichern unter ...</li>
+                    <li id="saveAs">Speichern als ...</li>
                     <li id="attach">Anhängen ...</li>
                     <li id="divide">Teilen</li>
                     <li id="delete">Löschen ...</li>
@@ -81,19 +81,29 @@
             <li>
                 <a href="#"><span class="head-navi-icons user"></span><span id="setName" class="head-navi-text">Anmeldung</span></a>
                 <ul id="submenu-login" class="head-navigation-submenu">
-                    <li id="login">Anmelden</li>
-                    <li id="logout">Abmelden</li>
-                    <li id="new">Neu ...</li>
-                    <li id="change">Ändern ...</li>
-                    <li id="delete">Benutzer löschen ...</li>
+                    <li id="login" class="login">Anmelden ...</li>
+                    <li id="logout" class="logout">Abmelden</li>
+                    <li id="new" class="login">Neu ...</li>
+                    <li id="change" class="logout">Ändern ...</li>
+                    <li id="delete" class="logout">Benutzer löschen ...</li>
                 </ul>
             </li>
             <li>
                 <a id="head-navigation-blockly"><span class="head-navi-icons help"></span><span class="head-navi-text">Test Nepo :-)</span></a>
             </li>
-             
+            
             <div id="logo">
                 <a href="index.html">Logo</a>
+            </div>
+            
+            <div class="state">
+                Robotersystem: <span id="robot"></span><br/>
+                Verbindung zum Brick: <span id="brickConnection"></span>
+            </div>
+            
+            <div class="state">
+                Rolle: <span id="role"></span><br/>
+                Toolbox: <span id="toolbox"></span>
             </div>
         </ul>
     </div>
@@ -105,7 +115,6 @@
         <label for="pass1S">Passwort</label>
         <input id="pass1S" class='input' type="password" value="" /><br/>
         <input id="signIn" class='submit' type="submit" value="Anmelden" />
-        <input id="open-register-user" href="#register" class='submit popup-opener' type="submit" value="Neuer Benutzer" /><br/>
     </div>
 
     <div class="jquerypopup" id="register-user" title="Benutzer erstellen">
@@ -130,27 +139,21 @@
     </div>
 
     <div class="jquerypopup program" id="add-program" title="Programm">
-        <label for="programName">Programmname</label>
-        <input id="programName" id="name" class='input' type="text" value="" /><br/>
-        <input id="add" class='submit' type="submit" value="Hinzufügen" />
-    </div>
-
-    <div class="jquerypopup program" id="delete-program" title="Programm">
-        <label for="programName">Programmname</label>
-        <input id="programName" id="name" class='input' type="text" value="" /><br/>
-        <input id="del" class='submit' type="submit" value="Löschen" />
+        <label for="programNameAdd">Programmname</label>
+        <input id="programNameAdd" class='input, programName' type="text" value="" /><br/>
+        <input id="addProgram" class='submit' type="submit" value="Hinzufügen" />
     </div>
 
     <div class="jquerypopup program" id="save-program" title="Programm">
-        <label for="programName">Programmname</label>
-        <input id="programName" id="name" class='input' type="text" value="" /><br/>
-        <input id="save" class='submit' type="submit" value="Speichern" />
+        <label for="programNameSave">Programmname</label>
+        <input id="programNameSave" class='input, programName' type="text" value="" /><br/>
+        <input id="saveProgram" class='submit' type="submit" value="Speichern" />
     </div>
 
     <div class="jquerypopup program" id="new-program" title="Programm">
-        <label for="programName">Programmname</label>
-        <input id="programName" id="name" class='input' type="text" value="" /><br/>
-        <input id="save" class='submit' type="submit" value="Anlegen" />
+        <label for="programNameNew">Programmname</label>
+        <input id="programNameNew" class='input, programName' type="text" value="" /><br/>
+        <input id="newProgram" class='submit' type="button" value="Anlegen" />
     </div>
     <!-- ################## END POPUPS ################## -->
 
@@ -158,7 +161,7 @@
         <div id="tabs">
             <ul class="hidden">
                 <li><a id="tabBlockly" href="#blockly">Test Nepo :-)</a></li>
-                <li><a id="tabListing"  href="#listing">Listing</a></li>
+                <li><a id="tabListing" href="#listing">Listing</a></li>
                 <li><a id="tabLogging" href="#logging">Logging</a></li>
                 <li><a id="tabReadme" href="#readme">README</a></li>
                 <li><a id="tabSimtest" onclick="viewSimulator(true);">Simulator Test</a></li>
@@ -182,7 +185,7 @@
                 </div>
             </div>
             
-            <div id="listing" style="overflow: scroll;">
+            <div id="listing">
                 <table id="programNameTable" class="tableSize">
                     <thead></thead>
                     <tbody></tbody>

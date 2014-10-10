@@ -48,7 +48,7 @@ ul#head-navigation .head-navigation-submenu {
 	position: absolute;
 	cursor: pointer;
 	list-style-type: none;
-	width: 10%;
+	width: 8%;
 }
 
 ul#head-navigation .head-navigation-submenu > li {
@@ -116,7 +116,14 @@ ul#head-navigation a {
     text-align: center;
 }
 
-#logo {
+#head-navigation .state {
+    float: right;
+    padding-top: 7px;
+    padding-right: 50px;
+    font-size: x-small;
+}
+
+#head-navigation #logo {
     width: 222px;
     height: 60px;
     background-image: url(img/logo.png);
@@ -124,7 +131,7 @@ ul#head-navigation a {
     float: right;
 }
 
-#logo a {
+#head-navigation #logo a {
     display: block;
     width: 222px;
     height: 60px;
@@ -179,7 +186,6 @@ ul#head-navigation a {
 #project-submenu input:hover[type=text] {
     background-color: #ffffff;
 }
-
 
 ul#head-navigation li:hover #project-submenu {
     display: block;
@@ -426,7 +432,7 @@ ul#head-navigation li:hover #project-submenu {
     color: #333333;
 }
 
-.program input#programName {
+.program input.programName {
     background-image: url(img/program_name-icon.png);
     background-repeat: no-repeat;
     background-position: center left;
@@ -434,8 +440,8 @@ ul#head-navigation li:hover #project-submenu {
     box-sizing: border-box;
 }
 
-.program input#programName:active,
-.program input#programName:focus {
+.program input.programName:active,
+.program input.programName:focus {
 	background-image: url(img/program_name-icon_active.png);
     background-repeat: no-repeat;
     background-position: center left;

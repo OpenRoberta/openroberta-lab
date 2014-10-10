@@ -1,13 +1,3 @@
-var userState = {
-    id : false,
-    name : null,
-    program : null,
-    programSaved : true,
-    brickSaved : true,
-    toolbox : 'beginner',
-    token : '1A2B3C4D'
-};
-
 /**
  * Inject Blockly with initial toolbox
  * 
@@ -39,7 +29,7 @@ function setProgram(name) {
         userState.program = name;
         $("#setProgram").text(name);
     } else {
-        $("#setProgram").text('Programm')
+        $("#setProgram").text('Programm');
     } // bad because of language dependent
 }
 
@@ -55,8 +45,8 @@ function response(result) {
 };
 
 function saveToServer() {
-    if ($('#programName')) {
-        var $name = $('#programName');
+    if ($('#programNameSave')) {
+        var $name = $('#programNameSave');
         setProgram($name.val());
     }
     if (userState.program) {
@@ -98,7 +88,7 @@ function showProgram(result, load, name) {
 };
 
 function loadFromServer(load) {
-    var $name = $('#programName');
+    var $name = $('#programNameLoad');
     COMM.json("/blocks", {
         "cmd" : "loadP",
         "name" : $name.val()
@@ -109,7 +99,7 @@ function loadFromServer(load) {
 }
 
 function deleteOnServer() {
-    var $name = $('#programName');
+    var $name = $('#programNameDelete');
     userState.programSaved = false;
     if (usertState.program === $name.val) {
         setProgram();
@@ -140,17 +130,16 @@ function loadFromListing() {
     });
 }
 
-var toolboxDone = false;
-
 function showToolbox(result) {
     response(result);
     if (result.rc === 'ok') {
-        userState.toolbox = result.name;
+        $('#head-navigation #toolbox').text(userState.toolbox);
         Blockly.updateToolbox(result.data);
     }
 }
 
 function loadToolbox(toolbox) {
+    userState.toolbox = toolbox;
     COMM.json("/blocks", {
         "cmd" : "loadT",
         "name" : toolbox
@@ -256,7 +245,36 @@ function switchToBrickly() {
     document.getElementById('bricklyFrame').style.width = '100%';
 }
 
-function init() {
+/**
+ * Initialize the navigation bar in the head of the page
+ */
+function displayStatus() {
+    $('#setName').text(userState.name);
+    $('#head-navigation #role').text(userState.role);
+    $('#head-navigation #robot').text(userState.robot);
+    $('#head-navigation #brickConnection').text(userState.brickConnection);
+}
+
+/**
+ * Inject Brickly with initial toolbox
+ * 
+ * @param {state} state to be set
+ * 
+ */
+function setHeadNavigationMenuState(state) {
+    $('#head-navigation > li > ul > li').removeClass('ui-state-disabled');
+    if (state === 'login') {
+        $('#head-navigation > li > ul > .login').addClass('ui-state-disabled');
+    } else if (state === 'logout') {
+        $('#head-navigation > li > ul > .logout').addClass('ui-state-disabled');
+    }
+}
+
+/**
+ * Initialize the navigation bar in the head of the page
+ */
+function initHeadNavigation() {
+    
     $('#head-navigation').menu({
         position : {
             my : "left-30 top+60"
@@ -270,29 +288,35 @@ function init() {
             }
         }
     });
-
-    $("#head-navigation #submenu-program > li").click(function() {
+    
+    $('#head-navigation').on('click', '#submenu-program > li:not(.ui-state-disabled)', function () {
         $(".ui-dialog-content").dialog("close");   // close all opened popups
-        if (this.id === 'start') {
+        if (this.id === 'run') {
+            startProgram();
         } else if (this.id === 'check') {
         } else if (this.id === 'new') {
             $("#new-program").dialog("open");
         } else if (this.id === 'open') {
             $('#tabListing').click();
         } else if (this.id === 'save') {
+            if (userState.id) {
+                saveUPToServer();
+            } else {
+                saveToServer();
+            }
         } else if (this.id === 'saveAs') {
             $("#save-program").dialog("open");
         } else if (this.id === 'attach') {
             $("#add-program").dialog("open");
         } else if (this.id === 'divide') {
         } else if (this.id === 'delete') {
-            $("#delete-program").dialog("open");
+            $('#tabListing').click();
         } else if (this.id === 'properties') {
         }
         return false;
     });
 
-    $("#head-navigation #submenu-settings > li").click(function() {
+    $('#head-navigation').on('click', '#submenu-settings > li:not(.ui-state-disabled)', function () {
         $(".ui-dialog-content").dialog("close");   // close all opened popups
         if (this.id === 'roboter') {
             switchToBrickly();
@@ -302,7 +326,7 @@ function init() {
         return false;
     });
 
-    $("#head-navigation #submenu-connection > li").click(function() {
+    $('#head-navigation').on('click', '#submenu-connection > li:not(.ui-state-disabled)', function () {
         $(".ui-dialog-content").dialog("close");   // close all opened popups
         if (this.id === 'wifi') {
         } else if (this.id === 'usb') {
@@ -312,7 +336,7 @@ function init() {
         return false;
     });
 
-    $("#head-navigation #submenu-developertools > li").click(function() {
+    $('#head-navigation').on('click', '#submenu-developertools > li:not(.ui-state-disabled)', function () {
         $(".ui-dialog-content").dialog("close");   // close all opened popups
         if (this.id === 'logging') {
             $('#tabLogging').click();
@@ -322,7 +346,7 @@ function init() {
         return false;
     });
 
-    $("#head-navigation #submenu-login > li").click(function() {
+    $('#head-navigation').on('click', '#submenu-login > li:not(.ui-state-disabled)', function () {
         $(".ui-dialog-content").dialog("close");   // close all opened popups
         if (this.id === 'login') {
             $("#login-user").dialog("open");
@@ -335,54 +359,46 @@ function init() {
         }
         return false;
     });
+    
+    setHeadNavigationMenuState('logout');
+}
 
+function init() {
+
+    initHeadNavigation();
+    initProgramNameTable();
+   
     $('#tabs').tabs({
         heightStyle : 'content',
         active : 0,
         beforeActivate : beforeActivateTab
     });
-    initProgramNameTable();
 
     // Register and signing in changes
     $('#saveUser').onWrap('click', saveUserToServer, 'save the user data');
     $('#deleteUser').onWrap('click', deleteUserOnServer, 'delete user data');
     $('#signIn').onWrap('click', signIn, 'signing in ');
-    // $('#loadFromListing').onWrap('click', myLoadFromListing,
-    // 'load blocks from program list');
-
-    $('#load').onWrap('click', function() {
-        if (userState.id) {
-            loadUPFromServer(true);
-        } else {
-            loadFromServer(true);
-        }
-    }, 'load the blocks');
-
-    $('#add').onWrap('click', function() {
+    
+    $('#addProgram').onWrap('click', function() {
         if (userState.id) {
             loadUPFromServer(true);
         } else {
             loadFromServer(true);
         }
     }, 'add the blocks');
-    $('#save').onWrap('click', function() {
+
+    $('#saveProgram').onWrap('click', function() {
         if (userState.id) {
             saveUPToServer();
         } else {
             saveToServer();
         }
     }, 'save program');
-    $('#del').onWrap('click', function() {
-        if (userState.id) {
-            deleteUPOnServer();
-        } else {
-            deleteOnServer();
-        }
-    }, 'del program');
-
-    $('#run').onWrap('click', function() {
-        startProgram();
-    }, 'save+run the program');
+   
+    $('#newProgram').onWrap('click', function() {
+        var $name = $('#programNameNew');
+        setProgram($name.val());
+    }, 'new program');
     // =============================================================================
 
     $('#toggle').onWrap('click', LOG.toggleVisibility, 'toggle LOG visibility');
