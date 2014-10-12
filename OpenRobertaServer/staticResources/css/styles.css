@@ -704,23 +704,23 @@ ul#head-navigation li:hover #project-submenu {
     background-color: none;
     background-image: url(img/grid-pattern-background.png);
     background-repeat: repeat;
-    height: 60%;
-    min-height: 60%;
+    height: 100%;
+    min-height: 100%;
 }
 
-.blocklySvg {
-    background-color: none !important;
-    background: none !important;
-    border: none !important;
-    height: 100% !important;
-    min-height: 100% !important;
-}
+/* .blocklySvg { */
+/*     background-color: none !important; */
+/*     background: none !important; */
+/*     border: none !important; */
+/*     height: 100% !important; */
+/*     min-height: 100% !important; */
+/* } */
 
-.blocklyToolboxDiv {
-	width: 200px;
-    background-color: none! important;
-    background: none !important;
-}
+/* .blocklyToolboxDiv { */
+/* 	width: 200px; */
+/*     background-color: none! important; */
+/*     background: none !important; */
+/* } */
 
 .ui-tabs .ui-tabs-nav {
     opacity: 0.5;
@@ -743,15 +743,15 @@ ul#head-navigation li:hover #project-submenu {
     background-color: none !important;
 }
 
-.blocklyTreeRoot {
-    background-image: url(img/overlay-50percent.png) !important;;
-    background-repeat: repeat; 
-}
+/* .blocklyTreeRoot { */
+/*     background-image: url(img/overlay-50percent.png) !important;; */
+/*     background-repeat: repeat;  */
+/* } */
 
-.blocklyTreeLabel {
-	width: 180px !important;
-    font-family: 'Roboto', sans-serif;
-    font-size: 16px;
-    text-transform: uppercase;
-    font-weight: bold; 
-}
+/* .blocklyTreeLabel { */
+/* 	width: 180px !important; */
+/*     font-family: 'Roboto', sans-serif; */
+/*     font-size: 16px; */
+/*     text-transform: uppercase; */
+/*     font-weight: bold;  */
+/* } */

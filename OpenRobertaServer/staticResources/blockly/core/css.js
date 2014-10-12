@@ -49,14 +49,14 @@ Blockly.Css.inject = function() {
  */
 Blockly.Css.CONTENT = [
   '.blocklyButtonPath {',
-  'fill: #333333;',
-  'stroke: #333333;',
+  'fill: #333;',
+  'stroke: #333;',
   'stroke-linecap: round;',
   '}',
   
   '.blocklyButtonHoverPath {',
-  'fill: #333333;',
-  'stroke: #333333;',
+  'fill: #333;',
+  'stroke: #333;',
   'stroke-linecap: round;',
   '}',
   
@@ -70,12 +70,6 @@ Blockly.Css.CONTENT = [
   
   '.blocklyButtonTrashBack {',
   'fill: #fff;',
-  '}',
-                       
-  '.blocklySvg {',
-  '  background-color: #fff;',
-  '  border: 1px solid #ddd;',
-  '  overflow: hidden;',  /* IE overflows by default. */
   '}',
 
   '.blocklyWidgetDiv {',
@@ -154,7 +148,7 @@ Blockly.Css.CONTENT = [
 
   '.blocklyText {',
   '  cursor: default;',
-  '  font-family: sans-serif;',
+  '  font-family: "Roboto", sans-serif;',
   '  font-size: 11pt;',
   '  fill: #fff;',
   '}',
@@ -192,6 +186,7 @@ Blockly.Css.CONTENT = [
   '  -webkit-user-select: none;',
   '  user-select: none;',
   '  cursor: inherit;',
+  '  font-family: "Roboto", sans-serif;',
   '}',
 
   '.blocklyHidden {',
@@ -302,14 +297,14 @@ Blockly.Css.CONTENT = [
   '  stroke-width: 1;',
   '  stroke: #ddd;',
   '}',
-
-  '.blocklyFlyoutBackground {',
-  '  fill: #ddd;',
-  '  fill-opacity: .8;',
+  
+  '.blocklyFlyoutBackground  {',
+  '  fill: #fff;',
+  '  fill-opacity: 0',
   '}',
 
-  '.blocklyColourBackground {',
-  '  fill: #666;',
+  '.blocklyFlyoutBackgroundSelected {',
+  '  fill-opacity: .35;',
   '}',
 
   '.blocklyScrollbarBackground {',
@@ -371,44 +366,46 @@ Blockly.Css.CONTENT = [
   
   /* Category tree in Toolbox. */
   '.blocklyToolboxDiv {',
-  '  background-color: #ddd;',
+  '  background-color: #e6e6e6;',
   '  display: none;',
-  '  overflow-x: visible;',
-  '  overflow-y: auto;',
   '  position: absolute;',
+  '  font-size: 16pt;',
+  '  overflow-x: hidden;',
+  //'  font-weight: bold;',
+  '}',
+  
+  '.blocklyToolboxBackground {',
+  '  stroke: #e6e6e6;',
+  '  stroke-width: 2',
+  '}',
+  
+  '.blocklyTreeSub {',
+  '  font-size: 10pt;',
   '}',
 
   '.blocklyTreeRoot {',
   '  padding: 4px 0;',
   '}',
 
-  '.blocklyTreeRoot:focus {',
-  '  outline: none;',
-  '}',
-
   '.blocklyTreeRow {',
   '  line-height: 40px;',
   '  height: 40px;',
-  '  padding-right: 1em;',
+  '  padding-right: 0px;',
   '  white-space: nowrap;',
   '  margin-top: 6px;',
-  '}',
-
-  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {',
-  '  padding-right: 0;',
-  '  padding-left: 1em !important;',
+  '  fill: #fff;', 
   '}',
 
   '.blocklyTreeRow:hover {',
-  '  background-color: #e4e4e4;',
+  '  fill: #333;', 
   '}',
 
   // throw away the arrow icons in the toolbox:
   '.blocklyTreeIcon {',
-  '  height: 16px;',
+  //'  height: 16px;',
   //'  width: 16px;',
-  '  width: 13px;',
-  '  vertical-align: middle;',
+  //'  width: 13px;',
+  //'  vertical-align: middle;',
   //'  background-image: url(<<<PATH>>>/media/tree.png);',
   //'  margin-top: -30px;',
   //'  margin-left: 10px;',
@@ -448,30 +445,16 @@ Blockly.Css.CONTENT = [
 
   '.blocklyTreeLabel {',
   '  cursor: default;',
-  '  font-family: sans-serif;',
-  '  font-size: 16px;',
-  '  padding: 0 3px;',
+ // '  font-family: sans-serif;',
+ // '  font-size: 16px;',
+  '  padding: 0 0px;',
   '  vertical-align: middle;',
-  '  margin-left: -20px;',
-  '}',
-
-  '.blocklyTreeSelected  {',
-  //'  background-color: #57e !important;',
+  '  margin-left: 0px;',
   '}',
 
   '.blocklyTreeSelected .blocklyTreeLabel {',
-  '  color: #000;',
+  '  fill: #333;',
   '}',
-  
-  // class for the toolblocks label (default is white, selected is black)
-  '.catName {',
-  '  fill: #fff;',
-  '}',
-  
-  '.blocklyTreeSelected .catName {',
-  '  fill: #000;',
-  '}',
-  
   
 
   /* Copied from: goog/css/colorpicker-simplegrid.css */
