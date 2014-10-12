@@ -16,12 +16,17 @@ function injectBlockly(toolbox) {
             check : true,
             start : true
         });
-        // should this come from the server?
-        var text = "<block_set xmlns='http: // www.w3.org/1999/xhtml'>" + "<instance x='25' y='50'>" + "<block type='robControls_start'>" + "</block>"
-                + "</instance>" + "</block_set>";
-        var xml = Blockly.Xml.textToDom(text);
-        Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+        initProgramEnvironment();
     }
+}
+
+function initProgramEnvironment() {
+    Blockly.getMainWorkspace().clear();
+    // should this come from the server?
+    var text = "<block_set xmlns='http: // www.w3.org/1999/xhtml'>" + "<instance x='100' y='50'>" + "<block type='robControls_start'>" + "</block>"
+            + "</instance>" + "</block_set>";
+    var xml = Blockly.Xml.textToDom(text);
+    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
 }
 
 function setProgram(name) {
@@ -258,7 +263,8 @@ function displayStatus() {
 /**
  * Inject Brickly with initial toolbox
  * 
- * @param {state} state to be set
+ * @param {state}
+ *            state to be set
  * 
  */
 function setHeadNavigationMenuState(state) {
@@ -274,7 +280,7 @@ function setHeadNavigationMenuState(state) {
  * Initialize the navigation bar in the head of the page
  */
 function initHeadNavigation() {
-    
+
     $('#head-navigation').menu({
         position : {
             my : "left-30 top+60"
@@ -288,13 +294,15 @@ function initHeadNavigation() {
             }
         }
     });
-    
-    $('#head-navigation').on('click', '#submenu-program > li:not(.ui-state-disabled)', function () {
-        $(".ui-dialog-content").dialog("close");   // close all opened popups
+
+    $('#head-navigation').on('click', '#submenu-program > li:not(.ui-state-disabled)', function() {
+        $(".ui-dialog-content").dialog("close"); // close all opened popups
         if (this.id === 'run') {
             startProgram();
         } else if (this.id === 'check') {
+            checkProgram();
         } else if (this.id === 'new') {
+            initProgramEnvironment();
             $("#new-program").dialog("open");
         } else if (this.id === 'open') {
             $('#tabListing').click();
@@ -312,22 +320,30 @@ function initHeadNavigation() {
         } else if (this.id === 'delete') {
             $('#tabListing').click();
         } else if (this.id === 'properties') {
+        } else if (this.id === 'toolboxBeginner') {
+            loadToolbox('beginner');
+            $('#toolboxBeginner').addClass('ui-state-disabled');
+            $('#toolboxExpert').removeClass('ui-state-disabled');
+        } else if (this.id === 'toolboxExpert') {
+            loadToolbox('expert');
+            $('#toolboxExpert').addClass('ui-state-disabled');
+            $('#toolboxBeginner').removeClass('ui-state-disabled');
         }
         return false;
     });
 
-    $('#head-navigation').on('click', '#submenu-settings > li:not(.ui-state-disabled)', function () {
-        $(".ui-dialog-content").dialog("close");   // close all opened popups
+    $('#head-navigation').on('click', '#submenu-settings > li:not(.ui-state-disabled)', function() {
+        $(".ui-dialog-content").dialog("close"); // close all opened popups
         if (this.id === 'roboter') {
             switchToBrickly();
-        } else if (this.id === 'toolbox') {
         } else if (this.id === 'close') {
+            switchToBlockly();
         }
         return false;
     });
 
-    $('#head-navigation').on('click', '#submenu-connection > li:not(.ui-state-disabled)', function () {
-        $(".ui-dialog-content").dialog("close");   // close all opened popups
+    $('#head-navigation').on('click', '#submenu-connection > li:not(.ui-state-disabled)', function() {
+        $(".ui-dialog-content").dialog("close"); // close all opened popups
         if (this.id === 'wifi') {
         } else if (this.id === 'usb') {
         } else if (this.id === 'bluetooth') {
@@ -336,8 +352,8 @@ function initHeadNavigation() {
         return false;
     });
 
-    $('#head-navigation').on('click', '#submenu-developertools > li:not(.ui-state-disabled)', function () {
-        $(".ui-dialog-content").dialog("close");   // close all opened popups
+    $('#head-navigation').on('click', '#submenu-developertools > li:not(.ui-state-disabled)', function() {
+        $(".ui-dialog-content").dialog("close"); // close all opened popups
         if (this.id === 'logging') {
             $('#tabLogging').click();
         } else if (this.id === 'simtest') {
@@ -346,8 +362,8 @@ function initHeadNavigation() {
         return false;
     });
 
-    $('#head-navigation').on('click', '#submenu-login > li:not(.ui-state-disabled)', function () {
-        $(".ui-dialog-content").dialog("close");   // close all opened popups
+    $('#head-navigation').on('click', '#submenu-login > li:not(.ui-state-disabled)', function() {
+        $(".ui-dialog-content").dialog("close"); // close all opened popups
         if (this.id === 'login') {
             $("#login-user").dialog("open");
         } else if (this.id === 'logout') {
@@ -359,7 +375,7 @@ function initHeadNavigation() {
         }
         return false;
     });
-    
+
     setHeadNavigationMenuState('logout');
 }
 
@@ -367,7 +383,7 @@ function init() {
 
     initHeadNavigation();
     initProgramNameTable();
-   
+
     $('#tabs').tabs({
         heightStyle : 'content',
         active : 0,
@@ -378,7 +394,7 @@ function init() {
     $('#saveUser').onWrap('click', saveUserToServer, 'save the user data');
     $('#deleteUser').onWrap('click', deleteUserOnServer, 'delete user data');
     $('#signIn').onWrap('click', signIn, 'signing in ');
-    
+
     $('#addProgram').onWrap('click', function() {
         if (userState.id) {
             loadUPFromServer(true);
@@ -394,7 +410,7 @@ function init() {
             saveToServer();
         }
     }, 'save program');
-   
+
     $('#newProgram').onWrap('click', function() {
         var $name = $('#programNameNew');
         setProgram($name.val());
@@ -405,13 +421,6 @@ function init() {
     $('#loadFromListing').onWrap('click', function() {
         loadFromListing();
     }, 'load blocks from program list');
-
-    $('#toolbox1').onWrap('click', function() {
-        loadToolbox('beginner');
-    }, 'load toolbox 1');
-    $('#toolbox2').onWrap('click', function() {
-        loadToolbox('expert');
-    }, 'load toolbox 2');
     COMM.json("/blocks", {
         "cmd" : "loadT",
         "name" : "beginner"

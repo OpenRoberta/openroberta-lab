@@ -11,7 +11,7 @@ function init() {
  * Inject Brickly with initial toolbox
  * 
  * @param {response}
- *            toolbox
+ *          toolbox
  */
 
 function injectBrickly(toolbox) {
