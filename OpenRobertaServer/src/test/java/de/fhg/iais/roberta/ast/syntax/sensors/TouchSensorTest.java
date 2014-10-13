@@ -11,4 +11,10 @@ public class TouchSensorTest {
 
         Helper.assertCodeIsOk(a, "/ast/sensors/sensor_Touch.xml");
     }
+
+    @Test
+    public void reverseTransformation() throws Exception {
+        Helper.assertTransformationIsOk("/ast/sensors/sensor_Touch.xml");
+    }
+
 }

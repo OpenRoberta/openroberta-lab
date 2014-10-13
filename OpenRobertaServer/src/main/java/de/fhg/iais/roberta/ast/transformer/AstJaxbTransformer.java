@@ -21,6 +21,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.sensor.TouchSensor;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Comment;
 import de.fhg.iais.roberta.blockly.generated.Field;
@@ -235,7 +236,7 @@ public class AstJaxbTransformer<V> {
 
             case SHOW_PICTURE_ACTION:
                 jaxbDestination = new Block();
-                fieldValue = ((ShowPictureAction<V>) astSource).getPicture();
+                fieldValue = ((ShowPictureAction<V>) astSource).getPicture().name();
 
                 blockType = astSource.getProperty().getBlockType();
                 setProperties(astSource, jaxbDestination, blockType);
@@ -301,6 +302,19 @@ public class AstJaxbTransformer<V> {
                 if ( ((VolumeAction<V>) astSource).getMode() == VolumeAction.Mode.SET ) {
                     addValue(jaxbDestination, "VOLUME", ((VolumeAction<V>) astSource).getVolume());
                 }
+
+                return jaxbDestination;
+
+            case TOUCH_SENSING:
+                jaxbDestination = new Block();
+
+                blockType = astSource.getProperty().getBlockType();
+                setProperties(astSource, jaxbDestination, blockType);
+                addComment(astSource, jaxbDestination);
+
+                fieldValue = ((TouchSensor<V>) astSource).getPort().getPortNumber();
+
+                addField(jaxbDestination, "SENSORPORT", fieldValue);
 
                 return jaxbDestination;
 

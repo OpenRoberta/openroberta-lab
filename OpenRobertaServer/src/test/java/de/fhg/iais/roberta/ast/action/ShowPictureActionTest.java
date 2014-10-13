@@ -19,7 +19,7 @@ public class ShowPictureActionTest {
     public void getPicture() throws Exception {
         JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_ShowPicture.xml");
         ShowPictureAction<Void> spa = (ShowPictureAction<Void>) transformer.getTree().get(1);
-        Assert.assertEquals("SMILEY1", spa.getPicture());
+        Assert.assertEquals("SMILEY1", spa.getPicture().name());
     }
 
     @Test

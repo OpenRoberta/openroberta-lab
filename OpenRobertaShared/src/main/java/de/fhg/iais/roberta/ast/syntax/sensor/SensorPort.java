@@ -17,6 +17,13 @@ public enum SensorPort {
     }
 
     /**
+     * @return number of the port
+     */
+    public String getPortNumber() {
+        return values[0];
+    }
+
+    /**
      * @return valid Java code name of the enumeration
      */
     public String getJavaCode() {
@@ -26,7 +33,7 @@ public enum SensorPort {
     /**
      * get sensor port from {@link SensorPort} from string parameter. It is possible for one sensor port to have multiple string mappings.
      * Throws exception if the operator does not exists.
-     * 
+     *
      * @param name of the sensor port
      * @return sensor port from the enum {@link SensorPort}
      */
