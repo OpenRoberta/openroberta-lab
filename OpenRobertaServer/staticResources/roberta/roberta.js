@@ -219,6 +219,11 @@ function initProgramNameTable() {
         }
     });
     $('#programNameTable tbody').on('click', 'tr', selectionFn);
+    $('#programNameTable tbody').on('dblclick', 'tr', function() {
+        selectionFn;
+        $('#loadFromListing').click();
+    });
+
 }
 
 function startProgram() {
@@ -284,17 +289,17 @@ function initHeadNavigation() {
     $('#head-navigation').menu({
         position : {
             my : "left-30 top+60"
-        },
-        select : function(event, ui) {
-            var id = ui.item.children().attr('id');
-            if (id === 'head-navigation-blockly') {
-                $('#tabBlockly').click();
-            } else if (id === 'head-navigation-readme') {
-                $('#tabReadme').click();
-            }
         }
     });
 
+    $('#head-navigation').on('click', '#head-navigation-readme:not(.ui-state-disabled)', function() {
+        $('#tabReadme').click();
+    });
+
+    $('#head-navigation').on('click', '#head-navigation-blockly:not(.ui-state-disabled)', function() {
+        $('#tabBlockly').click();
+    });
+    
     $('#head-navigation').on('click', '#submenu-program > li:not(.ui-state-disabled)', function() {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         if (this.id === 'run') {
