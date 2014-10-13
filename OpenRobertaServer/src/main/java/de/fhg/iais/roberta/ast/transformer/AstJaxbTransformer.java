@@ -149,7 +149,7 @@ public class AstJaxbTransformer<V> {
                 setProperties(astSource, jaxbDestination, blockType);
                 addComment(astSource, jaxbDestination);
                 addField(jaxbDestination, "SWITCH_COLOR", lightAction.getColor().name());
-                addField(jaxbDestination, "SWITCH_BLINK", lightAction.isBlinkingOnOff());
+                addField(jaxbDestination, "SWITCH_BLINK", lightAction.getBlinkMode().name());
 
                 return jaxbDestination;
 

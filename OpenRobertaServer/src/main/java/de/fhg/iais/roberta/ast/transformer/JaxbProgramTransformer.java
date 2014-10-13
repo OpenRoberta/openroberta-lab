@@ -90,7 +90,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
 
     /**
      * Converts object of type {@link BlockSet} to AST tree.
-     * 
+     *
      * @param program
      */
     public void transform(BlockSet set) {
@@ -103,9 +103,9 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
     private void instanceToAST(Instance instance) {
         List<Block> blocks = instance.getBlock();
         Location<V> location = Location.make(instance.getX(), instance.getY());
-        this.tree.add(location);
+        tree.add(location);
         for ( Block block : blocks ) {
-            this.tree.add(blockToAST(block));
+            tree.add(blockToAST(block));
         }
     }
 
@@ -132,7 +132,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
         MotorDuration<V> md;
 
         switch ( block.getType() ) {
-        //ACTION
+        // ACTION
             case "robActions_motor_on":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "MOTORPORT", (short) 0);
@@ -251,8 +251,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 fields = extractFields(block, (short) 2);
                 String color = extractField(fields, "SWITCH_COLOR", (short) 0);
                 String blink = extractField(fields, "SWITCH_BLINK", (short) 1);
-                boolean blinking = blink.equals("ON") ? true : false;
-                return LightAction.make(BrickLedColor.get(color), blinking, properties, comment);
+                return LightAction.make(BrickLedColor.get(color), LightAction.BlinkMode.get(blink), properties, comment);
 
             case "robActions_brickLight_off":
                 return LightStatusAction.make(LightStatusAction.Status.OFF, properties, comment);
@@ -260,7 +259,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
             case "robActions_brickLight_reset":
                 return LightStatusAction.make(LightStatusAction.Status.RESET, properties, comment);
 
-                //Sensoren
+                // Sensoren
             case "robSensors_touch_isPressed":
                 fields = extractFields(block, (short) 1);
                 port = extractField(fields, "SENSORPORT", (short) 0);
@@ -340,10 +339,11 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 port = extractField(fields, "KEY", (short) 0);
                 return BrickSensor.make(BrickSensor.Mode.IS_PRESSED, BrickKey.get(port), properties, comment);
 
-                //            case "robSensors_key_waitForPress":
-                //                fields = extractFields(block, (short) 1);
-                //                port = extractField(fields, "KEY", (short) 0);
-                //                return BrickSensor.make(BrickSensor.Mode.WAIT_FOR_PRESS, BrickKey.get(port));
+                // case "robSensors_key_waitForPress":
+                // fields = extractFields(block, (short) 1);
+                // port = extractField(fields, "KEY", (short) 0);
+                // return BrickSensor.make(BrickSensor.Mode.WAIT_FOR_PRESS,
+                // BrickKey.get(port));
 
             case "robSensors_key_isPressedAndReleased":
                 fields = extractFields(block, (short) 1);
@@ -406,7 +406,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                         throw new DbcException("Invalid sensor!");
                 }
 
-                //Logik
+                // Logik
             case "logic_compare":
                 return blockToBinaryExpr(block, new ExprParam("A", Integer.class), new ExprParam("B", Integer.class), "OP");
 
@@ -436,7 +436,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 elseList.setReadOnly();
                 return IfStmt.make((Expr<V>) ifExpr, thenList, elseList, properties, comment);
 
-                //Mathematik
+                // Mathematik
             case "math_number":
                 return blockToConst(block, "NUM");
 
@@ -519,7 +519,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 exprParams = new ArrayList<ExprParam>();
                 return blockToFunction(block, exprParams, "RANDOM");
 
-                //TEXT
+                // TEXT
             case "text":
                 return blockToConst(block, "TEXT");
 
@@ -561,22 +561,22 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 }
                 return blockToFunction(block, exprParams, "WHERE");
 
-                //            case "text_getSubstring":
-                //TODO Not finished yet
-                //                boolean atArg1 = block.getMutation().isAt1();
-                //                boolean atArg2 = block.getMutation().isAt2();
-                //                fields = extractFields(block, (short) 2);
-                //                //                String where1 = extractField(fields, "WHERE1", (short) 0);
-                //                //                String where2 = extractField(fields, "WHERE2", (short) 1);
-                //                exprParams = new ArrayList<ExprParam>();
-                //                exprParams.add(new ExprParam("STRING", String.class));
-                //                if ( atArg1 == true ) {
-                //                    exprParams.add(new ExprParam("AT", Integer.class));
-                //                }
-                //                if ( atArg2 == true ) {
-                //                    exprParams.add(new ExprParam("AT", Integer.class));
-                //                }
-                //                return blockToFunction(block, exprParams, "SUBSTRING");
+                // case "text_getSubstring":
+                // TODO Not finished yet
+                // boolean atArg1 = block.getMutation().isAt1();
+                // boolean atArg2 = block.getMutation().isAt2();
+                // fields = extractFields(block, (short) 2);
+                // // String where1 = extractField(fields, "WHERE1", (short) 0);
+                // // String where2 = extractField(fields, "WHERE2", (short) 1);
+                // exprParams = new ArrayList<ExprParam>();
+                // exprParams.add(new ExprParam("STRING", String.class));
+                // if ( atArg1 == true ) {
+                // exprParams.add(new ExprParam("AT", Integer.class));
+                // }
+                // if ( atArg2 == true ) {
+                // exprParams.add(new ExprParam("AT", Integer.class));
+                // }
+                // return blockToFunction(block, exprParams, "SUBSTRING");
 
             case "text_changeCase":
                 exprParams = new ArrayList<ExprParam>();
@@ -602,7 +602,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 exprParams.add(new ExprParam("TEXT", String.class));
                 return blockToFunction(block, exprParams, "PRINT");
 
-                //LISTEN
+                // LISTEN
             case "lists_create_empty":
                 return EmptyExpr.make(List.class);
 
@@ -632,19 +632,19 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 exprParams.add(new ExprParam("FIND", List.class));
                 return blockToFunction(block, exprParams, "END");
 
-                //case "lists_getIndex":
-                //TODO not implemented lists_getIndex
+                // case "lists_getIndex":
+                // TODO not implemented lists_getIndex
 
-                //case "lists_setIndex": 
-                //TODO not implemented lists_setIndex
+                // case "lists_setIndex":
+                // TODO not implemented lists_setIndex
 
-                //case "lists_getSublist":
-                //TODO not implemented lists_getSublist
+                // case "lists_getSublist":
+                // TODO not implemented lists_getSublist
 
             case "robColour_picker":
                 return blockToConst(block, "COLOUR");
 
-                //VARIABLEN
+                // VARIABLEN
             case "variables_set":
                 values = extractValues(block, (short) 1);
                 Phrase<V> p = extractValue(values, new ExprParam("VALUE", EmptyExpr.class));
@@ -654,7 +654,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
             case "variables_get":
                 return extractVar(block);
 
-                //KONTROLLE
+                // KONTROLLE
             case "controls_if":
             case "robControls_if":
             case "robControls_ifElse":
