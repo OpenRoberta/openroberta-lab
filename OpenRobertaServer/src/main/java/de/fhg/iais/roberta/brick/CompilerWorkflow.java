@@ -42,7 +42,7 @@ public class CompilerWorkflow {
      * - compile the code and generate a jar in the token-specific directory (use a ant script, will be replaced later)<br>
      * <b>Note:</b> the jar is prepared for upload, but not uploaded from here. After a handshake with the brick (the brick has to tell, that it is ready) the
      * jar is uploaded to the brick from another thread and then started on the brick
-     * 
+     *
      * @param session to retrieve the the program from the database
      * @param token the credential the end user (at the terminal) and the brick have both agreed to use
      * @param
@@ -51,23 +51,21 @@ public class CompilerWorkflow {
      * @param configurationName the hardware configuration that is expected to have been used when assembling the brick
      * @return a message in case of an error; null otherwise
      */
-    public static String execute(SessionWrapper session, String token, String programName, String blocklyXml, String brickConfigurationAsXmlString) {
-        if ( blocklyXml == null || blocklyXml.trim().equals("") ) {
+    public static String execute(SessionWrapper session, String token, String programName, String programText, String configurationText) {
+        if ( programText == null || programText.trim().equals("") ) {
             return "program not found or program has no blocks";
         }
-        blocklyXml = blocklyXml.replaceAll("http://www.w3.org/1999/xhtml", "http://de.fhg.iais.roberta.blockly");
+        programText = programText.replaceAll("http://www.w3.org/1999/xhtml", "http://de.fhg.iais.roberta.blockly");
         BrickConfiguration brickConfiguration =
             new BrickConfiguration.Builder()
                 .setTrackWidth(13)
                 .setWheelDiameter(5.6)
                 .addActor(ActorPort.A, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))
                 .addActor(ActorPort.B, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))
-                //  .addSensor(SensorPort.S1, new HardwareComponent(HardwareComponentType.EV3ColorSensor))
-                //.addSensor(SensorPort.S2, new HardwareComponent(HardwareComponentType.EV3TouchSensor))
                 .build();
         JaxbProgramTransformer<Void> transformer;
         try {
-            transformer = generateTransformer(blocklyXml);
+            transformer = generateTransformer(programText);
         } catch ( Exception e ) {
             LOG.error("Transformer failed", e);
             return "blocks could not be transformed (message: " + e.getMessage() + ")";
@@ -86,7 +84,7 @@ public class CompilerWorkflow {
 
     /**
      * return the jaxb transformer for a given program test.
-     * 
+     *
      * @param blocklyXml the blockly XML as String
      * @return jaxb the transformer
      * @throws Exception
@@ -114,7 +112,7 @@ public class CompilerWorkflow {
      * 2. Clean target folder (everything inside).<br>
      * 3. Compile .java files to .class.<br>
      * 4. Make jar from class files and add META-INF entries.<br>
-     * 
+     *
      * @param userProjectsDir
      * @param token
      * @param mainFile

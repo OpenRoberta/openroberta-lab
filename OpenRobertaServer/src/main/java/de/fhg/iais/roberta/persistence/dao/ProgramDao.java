@@ -27,10 +27,10 @@ public class ProgramDao extends AbstractDao<Program> {
     }
 
     /**
-     * make an program object and persist it (if the program, identified by project&name, does not exist) or update it (if the program exists)
+     * make a program object and persist it (if the program, identified by owner&name, does not exist) or update it (if the program exists)
      *
-     * @param project the project the program belongs to, never null
      * @param name the name of the program, never null
+     * @param owner the user who owns the program, never null
      * @param programText the program text, maybe null
      * @return the persisted program object
      */
@@ -47,10 +47,10 @@ public class ProgramDao extends AbstractDao<Program> {
     }
 
     /**
-     * load an program from the database, identified by its project and its name (both make up the "business" key of an program)
+     * load a program from the database, identified by its owner and its name (both make up the "business" key of a program)
      *
-     * @param projectName the project, never null
-     * @param programName the name of the program, never null
+     * @param name the name of the program, never null
+     * @param owner user who owns the program, never null
      * @return the program, null if the program is not found
      */
     public Program load(String name, User owner) {

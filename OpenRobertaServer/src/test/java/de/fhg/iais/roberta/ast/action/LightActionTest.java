@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.ast.action;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.ast.syntax.action.BlinkMode;
 import de.fhg.iais.roberta.ast.syntax.action.BrickLedColor;
 import de.fhg.iais.roberta.ast.syntax.action.LightAction;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
@@ -27,7 +28,7 @@ public class LightActionTest {
     public void isBlink() throws Exception {
         LightAction<?> la = (LightAction<?>) Helper.generateAST("/ast/actions/action_BrickLight.xml");
 
-        Assert.assertEquals(LightAction.BlinkMode.ON, la.getBlinkMode());
+        Assert.assertEquals(BlinkMode.ON, la.getBlinkMode());
     }
 
     @Test

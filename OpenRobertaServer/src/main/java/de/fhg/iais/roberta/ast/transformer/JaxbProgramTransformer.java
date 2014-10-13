@@ -7,6 +7,7 @@ import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
+import de.fhg.iais.roberta.ast.syntax.action.BlinkMode;
 import de.fhg.iais.roberta.ast.syntax.action.BrickLedColor;
 import de.fhg.iais.roberta.ast.syntax.action.ClearDisplayAction;
 import de.fhg.iais.roberta.ast.syntax.action.DriveAction;
@@ -252,7 +253,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 fields = extractFields(block, (short) 2);
                 String color = extractField(fields, "SWITCH_COLOR", (short) 0);
                 String blink = extractField(fields, "SWITCH_BLINK", (short) 1);
-                return LightAction.make(BrickLedColor.get(color), LightAction.BlinkMode.get(blink), properties, comment);
+                return LightAction.make(BrickLedColor.get(color), BlinkMode.get(blink), properties, comment);
 
             case "robActions_brickLight_off":
                 return LightStatusAction.make(LightStatusAction.Status.OFF, properties, comment);

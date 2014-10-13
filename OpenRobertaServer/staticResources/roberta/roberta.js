@@ -49,7 +49,7 @@ function response(result) {
     incrCounter();
 };
 
-function saveToServer() {
+function saveToServer(continuation) {
     if ($('#programNameSave')) {
         var $name = $('#programNameSave');
         setProgram($name.val());
@@ -63,14 +63,15 @@ function saveToServer() {
             "cmd" : "saveP",
             "name" : userState.program,
             "program" : xml_text
-        }, response);
+        }, continuation);
     } else {
         alert('There is no name for your program available\n\n please save one with a name or load one');
     }
 }
 
-function runOnBrick() {
-    if (userState.program) {
+function runOnBrick(result) {
+    response(result);
+    if (result.rc === 'ok') {
         LOG.info('run ' + userState.program + ' signed in: ' + userState.id);
         COMM.json("/blocks", {
             "cmd" : "runP",
@@ -227,15 +228,7 @@ function initProgramNameTable() {
 }
 
 function startProgram() {
-    if (userState.id) {
-        // alert("No user id, you need to sign in");
-        saveUPToServer();
-        runOnBrick();
-    } else {
-        // alert("We use the user program table");
-        saveToServer();
-        runOnBrick();
-    }
+    saveToServer(runOnBrick);
 }
 
 function checkProgram() {
@@ -299,7 +292,7 @@ function initHeadNavigation() {
     $('#head-navigation').on('click', '#head-navigation-blockly:not(.ui-state-disabled)', function() {
         $('#tabBlockly').click();
     });
-    
+
     $('#head-navigation').on('click', '#submenu-program > li:not(.ui-state-disabled)', function() {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         if (this.id === 'run') {
@@ -312,11 +305,7 @@ function initHeadNavigation() {
         } else if (this.id === 'open') {
             $('#tabListing').click();
         } else if (this.id === 'save') {
-            if (userState.id) {
-                saveUPToServer();
-            } else {
-                saveToServer();
-            }
+            saveToServer(response);
         } else if (this.id === 'saveAs') {
             $("#save-program").dialog("open");
         } else if (this.id === 'attach') {
@@ -409,11 +398,7 @@ function init() {
     }, 'add the blocks');
 
     $('#saveProgram').onWrap('click', function() {
-        if (userState.id) {
-            saveUPToServer();
-        } else {
-            saveToServer();
-        }
+        saveToServer(response);
     }, 'save program');
 
     $('#newProgram').onWrap('click', function() {
