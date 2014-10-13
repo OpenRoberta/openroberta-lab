@@ -56,10 +56,16 @@ public class RobertaDownloader implements Runnable {
                     byte[] buffer = new byte[4096];
                     int n;
 
-                    RobertaObserver.setUserFileName(this.httpURLConnection.getHeaderField("fileName"));
-                    System.out.println("http header fileName: " + RobertaObserver.getUserFileName());
-                    fos = new FileOutputStream(new File(this.PROGRAMS_DIRECTORY, RobertaObserver.getUserFileName()));
+                    String raw = this.httpURLConnection.getHeaderField("Content-Disposition");
+                    String fileName = "";
+                    if ( raw != null && raw.indexOf("=") != -1 ) {
+                        fileName = raw.substring(raw.indexOf("=") + 1);
+                    } else {
+                        fileName = "unknown.jar";
+                    }
+                    RobertaObserver.setUserFileName(fileName);
 
+                    fos = new FileOutputStream(new File(this.PROGRAMS_DIRECTORY, RobertaObserver.getUserFileName()));
                     while ( (n = is.read(buffer)) != -1 ) {
                         fos.write(buffer, 0, n);
                     }
