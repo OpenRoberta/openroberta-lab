@@ -13,6 +13,8 @@ import lejos.utility.Delay;
 import org.json.JSONObject;
 
 /**
+ * Class that handles the file download (.jar file) on /download service of the server
+ * 
  * @author dpyka
  */
 public class RobertaDownloader implements Runnable {
