@@ -18,13 +18,13 @@ import de.fhg.iais.roberta.dbc.Assert;
  * - The generated sessions are not thread-safe.<br>
  * <br>
  * The class <b>should</b> be used as a singleton. Use <b>GUICE</b> to enforce that.
- * 
+ *
  * @author rbudde
  */
 @Singleton
 public final class SessionFactoryWrapper {
     private static final Logger LOG = LoggerFactory.getLogger(SessionFactoryWrapper.class);
-    private static final String CFG_XML = "sqlite-cfg.xml";
+    private static final String CFG_XML = "hibernate-cfg.xml";
     private SessionFactory sessionFactory;
 
     /**
@@ -45,7 +45,7 @@ public final class SessionFactoryWrapper {
 
     /**
      * get a new session-wrapper from the session factory. The session-wrapper and the session contained are <b>not</b> thread-safe.
-     * 
+     *
      * @return the session-wrapper, never null
      */
     public SessionWrapper getSession() {

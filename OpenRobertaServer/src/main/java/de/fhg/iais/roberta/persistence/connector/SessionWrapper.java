@@ -37,7 +37,10 @@ public class SessionWrapper {
      */
     public void rollback() {
         LOG.info("rollback");
-        this.session.getTransaction().rollback();
+        Transaction transaction = this.session.getTransaction();
+        if ( transaction.isActive() ) {
+            transaction.rollback();
+        }
     }
 
     /**
@@ -45,7 +48,10 @@ public class SessionWrapper {
      */
     public void commit() {
         LOG.debug("commit + start transaction");
-        this.session.getTransaction().commit();
+        Transaction transaction = this.session.getTransaction();
+        if ( transaction.isActive() ) {
+            transaction.commit();
+        }
         this.session.beginTransaction();
     }
 
