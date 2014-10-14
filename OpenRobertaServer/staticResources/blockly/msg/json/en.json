@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2014-10-07 10:30:26.576277",
+		"lastupdated": "2014-10-14 21:30:43.554000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -476,6 +476,7 @@
 	"SENSOR_ULTRASONIC": "ultrasonic sensor",
 	"SENSOR_TOUCH": "touch sensor",
 	"SENSOR_TIME": "time",
+	"SENSOR_TIMER": "timer",
 	"SENSOR_COLOUR": "colour sensor",
 	"SENSOR_INFRARED": "infrared sensor",
 	"SENSOR_ENCODER": "encoder",
@@ -494,6 +495,7 @@
 	"SENSOR_GET_MODE": "get mode",
 	"SENSOR_GET_SAMPLE": "get value",
 	"SENSOR_IS_PRESSED": "pressed?",
+	"SENSOR_PRESSED": " (pressed)",
 	"SENSOR_WAIT": "wait until",
 	"SENSOR_WAIT_PRESSED": "pressed",
 	"SENSOR_WAIT_PRESSED_RELEASED": "pressed or released",

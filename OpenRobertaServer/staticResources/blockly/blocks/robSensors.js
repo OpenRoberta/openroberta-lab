@@ -30,13 +30,12 @@ Blockly.Blocks['robSensors_getSample'] = {
     this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
     // this.setInputsInline(true);
     var sensorType = new Blockly.FieldDropdown([
-        [ Blockly.Msg.SENSOR_TOUCH + ' (gedrückt)', 'TOUCH' ],
+        [ Blockly.Msg.SENSOR_TOUCH + Blockly.Msg.SENSOR_PRESSED, 'TOUCH' ],
         [ Blockly.Msg.SENSOR_ULTRASONIC, 'ULTRASONIC' ],
         [ Blockly.Msg.SENSOR_COLOUR, 'COLOUR' ],
         [ Blockly.Msg.SENSOR_INFRARED, 'INFRARED' ],
         [ Blockly.Msg.SENSOR_ENCODER, 'ENCODER' ],
-        [ Blockly.Msg.SENSOR_KEY + ' (gedrückt)', 'KEYS_PRESSED' ],
-        [ Blockly.Msg.SENSOR_KEY + ' (geklickt)', 'KEYS_PRESSED_RELEASED' ],
+        [ Blockly.Msg.SENSOR_KEY + Blockly.Msg.SENSOR_PRESSED, 'KEYS_PRESSED' ],
         [ Blockly.Msg.SENSOR_GYRO, 'GYRO' ],
         [ Blockly.Msg.SENSOR_TIME, 'TIME' ] ], function(option) {
       this.sourceBlock_.updateValue_(option);
@@ -86,12 +85,12 @@ Blockly.Blocks['robSensors_getSample'] = {
   updateShape_ : function() {
     this.update = false;
     var sensorType = new Blockly.FieldDropdown([
-        [ Blockly.Msg.SENSOR_TOUCH + ' (gedrückt)', 'TOUCH' ],
+        [ Blockly.Msg.SENSOR_TOUCH + Blockly.Msg.SENSOR_PRESSED, 'TOUCH' ],
         [ Blockly.Msg.SENSOR_ULTRASONIC, 'ULTRASONIC' ],
         [ Blockly.Msg.SENSOR_COLOUR, 'COLOUR' ],
         [ Blockly.Msg.SENSOR_INFRARED, 'INFRARED' ],
         [ Blockly.Msg.SENSOR_ENCODER, 'ENCODER' ],
-        [ Blockly.Msg.SENSOR_KEY + ' (gedrückt)', 'KEYS_PRESSED' ],
+        [ Blockly.Msg.SENSOR_KEY + Blockly.Msg.SENSOR_PRESSED, 'KEYS_PRESSED' ],
         [ Blockly.Msg.SENSOR_GYRO, 'GYRO' ],
         [ Blockly.Msg.SENSOR_TIME, 'TIME' ] ], function(option) {
       this.sourceBlock_.updateValue_(option);
@@ -109,11 +108,9 @@ Blockly.Blocks['robSensors_getSample'] = {
     var motorPort = new Blockly.FieldDropdown([ [ 'Motor Port A', 'A' ],
         [ 'Motor Port B', 'B' ], [ 'Motor Port C', 'C' ],
         [ 'Motor Port D', 'D' ] ]);
-    var sensorNum = new Blockly.FieldDropdown([ [ 'Zeitgeber 1', '1' ],
-        [ 'Zeitgeber 2', '2' ], [ 'Zeitgeber 3', '3' ], [ 'Zeitgeber 4', '4' ],
-        [ 'Zeitgeber 5', '5' ], [ 'Zeitgeber 6', '6' ], [ 'Zeitgeber 7', '7' ],
-        [ 'Zeitgeber 8', '8' ], [ 'Zeitgeber 9', '9' ],
-        [ 'Zeitgeber 10', '10' ] ]);
+    var sensorNum = new Blockly.FieldDropdown([ [ Blockly.Msg.SENSOR_TIMER + ' 1', '1' ],
+        [ Blockly.Msg.SENSOR_TIMER + ' 2', '2' ], [ Blockly.Msg.SENSOR_TIMER + ' 3', '3' ], [ Blockly.Msg.SENSOR_TIMER + ' 4', '4' ],
+        [ Blockly.Msg.SENSOR_TIMER + ' 5', '5' ] ]);
 
     if (this.newSensorType == 'TOUCH') {
       this.removeInput('DROPDOWN');
@@ -252,37 +249,6 @@ Blockly.Blocks['robSensors_key_isPressed'] = {
         key, 'KEY').appendField(Blockly.Msg.SENSOR_IS_PRESSED);
     this.setOutput(true, 'Boolean');
     this.setTooltip(Blockly.Msg.KEY_ISPRESSED_TOOLTIP);
-  }
-};
-
-Blockly.Blocks['robSensors_key_isPressedAndReleased'] = {
-  /**
-   * Is the specific key (button of the brick) pressed and released?
-   * 
-   * @constructs robSensors_key_isPressedAndReleased
-   * @this.Blockly.Block
-   * @param {String/dropdown}
-   *            KEY - Enter, Up, Down, Left, Right, Escape or Any
-   * @returns immediately
-   * @returns {Boolean}
-   * @memberof Block
-   */
-
-  init : function() {
-    this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
-    // this.setInputsInline(true);
-    var key = new Blockly.FieldDropdown([
-        [ Blockly.Msg.SENSOR_KEY_ENTER, 'ENTER' ],
-        [ Blockly.Msg.SENSOR_KEY_UP, 'UP' ],
-        [ Blockly.Msg.SENSOR_KEY_DOWN, 'DOWN' ],
-        [ Blockly.Msg.SENSOR_KEY_LEFT, 'LEFT' ],
-        [ Blockly.Msg.SENSOR_KEY_RIGHT, 'RIGHT' ],
-        [ Blockly.Msg.SENSOR_KEY_ESCAPE, 'ESCAPE' ],
-        [ Blockly.Msg.SENSOR_KEY_ANY, 'ANY' ] ]);
-    this.appendDummyInput().appendField(Blockly.Msg.SENSOR_KEY).appendField(
-        key, 'KEY').appendField("geklickt?");
-    this.setOutput(true, 'Boolean');
-    this.setTooltip(Blockly.Msg.KEY_ISPRESSEDANDRELEASED_TOOLTIP);
   }
 };
 
@@ -781,11 +747,9 @@ Blockly.Blocks['robSensors_timer_reset'] = {
   init : function() {
     this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
     // this.setInputsInline(true);
-    var sensorNum = new Blockly.FieldDropdown([ [ 'Zeitgeber 1', '1' ],
-        [ 'Zeitgeber 2', '2' ], [ 'Zeitgeber 3', '3' ], [ 'Zeitgeber 4', '4' ],
-        [ 'Zeitgeber 5', '5' ], [ 'Zeitgeber 6', '6' ], [ 'Zeitgeber 7', '7' ],
-        [ 'Zeitgeber 8', '8' ], [ 'Zeitgeber 9', '9' ],
-        [ 'Zeitgeber 10', '10' ] ]);
+    var sensorNum = new Blockly.FieldDropdown([ [ Blockly.Msg.SENSOR_TIMER + ' 1', '1' ],
+        [ Blockly.Msg.SENSOR_TIMER + ' 2', '2' ], [ Blockly.Msg.SENSOR_TIMER + ' 3', '3' ], [ Blockly.Msg.SENSOR_TIMER + ' 4', '4' ],
+        [ Blockly.Msg.SENSOR_TIMER + ' 5', '5' ] ]);
     this.appendDummyInput().appendField(Blockly.Msg.SENSOR_RESET).appendField(
         sensorNum, 'SENSORNUM').appendField(Blockly.Msg.SENSOR_RESET_II);
     this.setPreviousStatement(true);
@@ -809,11 +773,9 @@ Blockly.Blocks['robSensors_timer_getSample'] = {
 
   init : function() {
     this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
-    var sensorNum = new Blockly.FieldDropdown([ [ 'Zeitgeber 1', '1' ],
-        [ 'Zeitgeber 2', '2' ], [ 'Zeitgeber 3', '3' ], [ 'Zeitgeber 4', '4' ],
-        [ 'Zeitgeber 5', '5' ], [ 'Zeitgeber 6', '6' ], [ 'Zeitgeber 7', '7' ],
-        [ 'Zeitgeber 8', '8' ], [ 'Zeitgeber 9', '9' ],
-        [ 'Zeitgeber 10', '10' ] ]);
+    var sensorNum = new Blockly.FieldDropdown([ [ Blockly.Msg.SENSOR_TIMER + ' 1', '1' ],
+        [ Blockly.Msg.SENSOR_TIMER + ' 2', '2' ], [ Blockly.Msg.SENSOR_TIMER + ' 3', '3' ], [ Blockly.Msg.SENSOR_TIMER + ' 4', '4' ],
+        [ Blockly.Msg.SENSOR_TIMER + ' 5', '5' ] ]);
     this.appendDummyInput().appendField(Blockly.Msg.SENSOR_GET_SAMPLE)
         .appendField(sensorNum, 'SENSORNUM');
     this.setOutput(true, 'Number');
