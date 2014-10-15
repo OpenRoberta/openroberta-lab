@@ -49,7 +49,7 @@ function response(result) {
     incrCounter();
 };
 
-function saveToServer(continuation) {
+function saveToServer() {
     if ($('#programNameSave')) {
         var $name = $('#programNameSave');
         setProgram($name.val());
@@ -58,26 +58,23 @@ function saveToServer(continuation) {
         var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
         var xml_text = Blockly.Xml.domToText(xml);
         userState.programSaved = true;
-        LOG.info('delete ' + userState.program + ' signed in: ' + userState.id);
-        COMM.json("/blocks", {
+        LOG.info('save ' + userState.program + ' login: ' + userState.id);
+        return COMM.json("/blocks", {
             "cmd" : "saveP",
             "name" : userState.program,
             "program" : xml_text
-        }, continuation);
+        }, response);
     } else {
         alert('There is no name for your program available\n\n please save one with a name or load one');
     }
 }
 
-function runOnBrick(result) {
-    response(result);
-    if (result.rc === 'ok') {
-        LOG.info('run ' + userState.program + ' signed in: ' + userState.id);
-        COMM.json("/blocks", {
-            "cmd" : "runP",
-            "name" : userState.program,
-        }, response);
-    }
+function runOnBrick() {
+    LOG.info('run ' + userState.program + ' signed in: ' + userState.id);
+    return COMM.json("/blocks", {
+        "cmd" : "runP",
+        "name" : userState.program,
+    }, response);
 }
 
 function showProgram(result, load, name) {
@@ -163,9 +160,9 @@ function showPrograms(result) {
     }
 }
 
-function selectionFn() {
+function selectionFn(event) {
     $('#programNameTable .selected').removeClass('selected');
-    $(this).toggleClass('selected');
+    $(event.target.parentNode).toggleClass('selected');
 }
 
 function beforeActivateTab(event, ui) {
@@ -219,16 +216,17 @@ function initProgramNameTable() {
             $('#redrawCounter').text(counter + 1);
         }
     });
-    $('#programNameTable tbody').on('click', 'tr', selectionFn);
-    $('#programNameTable tbody').on('dblclick', 'tr', function() {
-        selectionFn;
+    $('#programNameTable tbody').onWrap('click', 'tr', selectionFn);
+    $('#programNameTable tbody').onWrap('dblclick', 'tr', function(event) {
+        selectionFn(event);
         $('#loadFromListing').click();
     });
 
 }
 
 function startProgram() {
-    saveToServer(runOnBrick);
+    var saveFuture = saveToServer();
+    saveFuture.then(runOnBrick);
 }
 
 function checkProgram() {
@@ -285,86 +283,93 @@ function initHeadNavigation() {
         }
     });
 
-    $('#head-navigation').on('click', '#head-navigation-readme:not(.ui-state-disabled)', function() {
+    $('#head-navigation').onWrap('click', '#head-navigation-readme:not(.ui-state-disabled)', function() {
         $('#tabReadme').click();
     });
 
-    $('#head-navigation').on('click', '#head-navigation-blockly:not(.ui-state-disabled)', function() {
+    $('#head-navigation').onWrap('click', '#head-navigation-blockly:not(.ui-state-disabled)', function() {
         $('#tabBlockly').click();
     });
 
-    $('#head-navigation').on('click', '#submenu-program > li:not(.ui-state-disabled)', function() {
+    function submenuProgram(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
-        if (this.id === 'run') {
+        var domId = event.target.id;
+        if (domId === 'run') {
             startProgram();
-        } else if (this.id === 'check') {
+        } else if (domId === 'check') {
             checkProgram();
-        } else if (this.id === 'new') {
+        } else if (domId === 'new') {
             initProgramEnvironment();
             $("#new-program").dialog("open");
-        } else if (this.id === 'open') {
+        } else if (domId === 'open') {
             $('#tabListing').click();
-        } else if (this.id === 'save') {
+        } else if (domId === 'save') {
             saveToServer(response);
-        } else if (this.id === 'saveAs') {
+        } else if (domId === 'saveAs') {
             $("#save-program").dialog("open");
-        } else if (this.id === 'attach') {
+        } else if (domId === 'attach') {
             $("#add-program").dialog("open");
-        } else if (this.id === 'divide') {
-        } else if (this.id === 'delete') {
+        } else if (domId === 'divide') {
+        } else if (domId === 'delete') {
             $('#tabListing').click();
-        } else if (this.id === 'properties') {
-        } else if (this.id === 'toolboxBeginner') {
+        } else if (domId === 'properties') {
+        } else if (domId === 'toolboxBeginner') {
             loadToolbox('beginner');
             $('#toolboxBeginner').addClass('ui-state-disabled');
             $('#toolboxExpert').removeClass('ui-state-disabled');
-        } else if (this.id === 'toolboxExpert') {
+        } else if (domId === 'toolboxExpert') {
             loadToolbox('expert');
             $('#toolboxExpert').addClass('ui-state-disabled');
             $('#toolboxBeginner').removeClass('ui-state-disabled');
         }
         return false;
-    });
+    }
 
-    $('#head-navigation').on('click', '#submenu-settings > li:not(.ui-state-disabled)', function() {
+    $('#head-navigation').onWrap('click', '#submenu-program > li:not(.ui-state-disabled)', submenuProgram, 'sub menu of menu "program"');
+
+    $('#head-navigation').onWrap('click', '#submenu-settings > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
-        if (this.id === 'roboter') {
+        var domId = event.target.id;
+        if (domId === 'roboter') {
             switchToBrickly();
-        } else if (this.id === 'close') {
+        } else if (domId === 'close') {
             switchToBlockly();
         }
         return false;
     });
 
-    $('#head-navigation').on('click', '#submenu-connection > li:not(.ui-state-disabled)', function() {
+    $('#head-navigation').onWrap('click', '#submenu-connection > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
-        if (this.id === 'wifi') {
-        } else if (this.id === 'usb') {
-        } else if (this.id === 'bluetooth') {
-        } else if (this.id === 'disconnect') {
+        var domId = event.target.id;
+        if (domId === 'wifi') {
+        } else if (domId === 'usb') {
+        } else if (domId === 'bluetooth') {
+        } else if (domId === 'disconnect') {
         }
         return false;
     });
 
-    $('#head-navigation').on('click', '#submenu-developertools > li:not(.ui-state-disabled)', function() {
+    $('#head-navigation').onWrap('click', '#submenu-developertools > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
-        if (this.id === 'logging') {
+        var domId = event.target.id;
+        if (domId === 'logging') {
             $('#tabLogging').click();
-        } else if (this.id === 'simtest') {
+        } else if (domId === 'simtest') {
             $('#tabSimtest').click();
         }
         return false;
     });
 
-    $('#head-navigation').on('click', '#submenu-login > li:not(.ui-state-disabled)', function() {
+    $('#head-navigation').onWrap('click', '#submenu-login > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
-        if (this.id === 'login') {
+        var domId = event.target.id;
+        if (domId === 'login') {
             $("#login-user").dialog("open");
-        } else if (this.id === 'logout') {
-        } else if (this.id === 'new') {
+        } else if (domId === 'logout') {
+        } else if (domId === 'new') {
             $("#register-user").dialog("open");
-        } else if (this.id === 'change') {
-        } else if (this.id === 'delete') {
+        } else if (domId === 'change') {
+        } else if (domId === 'delete') {
             $("#delete-user").dialog("open");
         }
         return false;
@@ -398,7 +403,7 @@ function init() {
     }, 'add the blocks');
 
     $('#saveProgram').onWrap('click', function() {
-        saveToServer(response);
+        saveToServer();
     }, 'save program');
 
     $('#newProgram').onWrap('click', function() {

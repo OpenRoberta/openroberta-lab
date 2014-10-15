@@ -30,17 +30,17 @@ function saveUserToServer() {
             role = "TEACHER";
         }
         COMM.json("/blocks", {
-            "cmd" : "saveUser",
+            "cmd" : "createUser",
             "accountName" : $userAccountName.val(),
             "userName" : $userName.val(),
             "userEmail" : $userEmail.val(),
             "password" : $pass1.val(),
             "role" : role
         }, function(result) {
-            if (result.created === "False")
-                alert("User already exists, choose a different account name");
-            else
+            if (result.rc === "ok")
                 alert("User created!");
+            else
+                alert("User already exists, choose a different account name");
         });
     }
 }
@@ -62,11 +62,11 @@ function signIn() {
     var $pass1 = $('#pass1S');
 
     COMM.json("/blocks", {
-        "cmd" : "signInUser",
+        "cmd" : "login",
         "accountName" : $userAccountName.val(),
         "password" : $pass1.val(),
     }, function(response) {
-        if (response.exists === "True") {
+        if (response.rc === "ok") {
             userState.name = response.userAccountName;
             userState.id = response.userId;
             userState.role = response.userRole;

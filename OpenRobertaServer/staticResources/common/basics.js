@@ -10,12 +10,13 @@ var COMM = {};
     }
 
     /**
-     * URL-encode a JSON object, issue a GET and expect a JSON object as response.
+     * URL-encode a JSON object, issue a GET and expect a JSON object as
+     * response.
      * 
      * @memberof COMM
      */
     COMM.get = function(url, data, successFn, message) {
-        $.ajax({
+        return $.ajax({
             url : url,
             type : 'GET',
             dataType : 'json',
@@ -36,7 +37,7 @@ var COMM = {};
             log : log,
             data : data
         };
-        $.ajax({
+        return $.ajax({
             url : url,
             type : 'POST',
             contentType : 'application/json; charset=utf-8',
@@ -46,31 +47,32 @@ var COMM = {};
             error : errorFn
         });
     };
-    
+
     /**
      * POST a XML DOM object as ENTITY and expect a JSON object as response.
      * 
      * @memberof COMM
      */
     COMM.xml = function(url, xml, successFn, message) {
-    	$.ajax({
-    		url : url,
-    		type : 'POST',
-    		contentType : 'text/plain; charset=utf-8',
-    		dataType : 'json',
-    		data : xml,
-    		success : WRAP.fn3(successFn, message),
-    		error : errorFn
-    	});
+        return $.ajax({
+            url : url,
+            type : 'POST',
+            contentType : 'text/plain; charset=utf-8',
+            dataType : 'json',
+            data : xml,
+            success : WRAP.fn3(successFn, message),
+            error : errorFn
+        });
     };
 
     /**
-     * URL-encode a JSON object, use jsonp (a cross-site scripting hack used all over the world) to send a request and expect a JSON object as response.
+     * URL-encode a JSON object, use jsonp (a cross-site scripting hack used all
+     * over the world) to send a request and expect a JSON object as response.
      * 
      * @memberof COMM
      */
     COMM.jsonp = function(url, data, successFn) {
-        $.ajax({
+        return $.ajax({
             url : url,
             contentType : 'application/javascript',
             jsonp : 'callback',
@@ -82,7 +84,8 @@ var COMM = {};
     };
 
     /**
-     * redirect the browser to the URL given as parameter. Report that to the server.
+     * redirect the browser to the URL given as parameter. Report that to the
+     * server.
      * 
      * @memberof COMM
      */
@@ -100,7 +103,7 @@ var COMM = {};
      * @memberof COMM
      */
     COMM.ping = function(successFn) {
-        COMM.json('/ping', {}, successFn === undefined ? function() {
+        return COMM.json('/ping', {}, successFn === undefined ? function() {
         } : successFn);
     };
 })($);
@@ -115,7 +118,8 @@ var LOG = {};
     var markerERROR = '[[ERR ]] ';
 
     /**
-     * log info text to a HTML-list with id #log or prepare it to be sent to the server or do both or do nothing, depending on switches
+     * log info text to a HTML-list with id #log or prepare it to be sent to the
+     * server or do both or do nothing, depending on switches
      * 
      * @memberof LOG
      */
@@ -124,7 +128,8 @@ var LOG = {};
     };
 
     /**
-     * log error text to a HTML-list with id #log or prepare it to be sent to the server or do both or do nothing, depending on switches
+     * log error text to a HTML-list with id #log or prepare it to be sent to
+     * the server or do both or do nothing, depending on switches
      * 
      * @memberof LOG
      */
@@ -133,8 +138,9 @@ var LOG = {};
     };
 
     /**
-     * log text to a HTML-list with id #log or prepare it to be sent to the server or do both or do nothing, depending on switches. A marker is prepended to the
-     * message
+     * log text to a HTML-list with id #log or prepare it to be sent to the
+     * server or do both or do nothing, depending on switches. A marker is
+     * prepended to the message
      * 
      * @memberof LOG
      */
@@ -157,7 +163,8 @@ var LOG = {};
     };
 
     /**
-     * set switch for logging to server along with the next ajax call to either true or false
+     * set switch for logging to server along with the next ajax call to either
+     * true or false
      * 
      * @memberof LOG
      */
@@ -188,7 +195,8 @@ var LOG = {};
     };
 
     /**
-     * to be used by COMM only: retrieve logging data, because an ajax request has to be prepared
+     * to be used by COMM only: retrieve logging data, because an ajax request
+     * has to be prepared
      * 
      * @memberof LOG
      */
@@ -235,7 +243,8 @@ var LOG = {};
 var DBC = {};
 (function($) {
     /**
-     * assertEq: assert that two objects are === w.r.t. to type and content, otherwise LOG and throw an exception
+     * assertEq: assert that two objects are === w.r.t. to type and content,
+     * otherwise LOG and throw an exception
      * 
      * @memberof DBC
      */
@@ -259,7 +268,8 @@ var DBC = {};
     };
 
     /**
-     * assertTrue: assert that a condition holds, otherwise LOG and throw an exception
+     * assertTrue: assert that a condition holds, otherwise LOG and throw an
+     * exception
      * 
      * @memberof DBC
      */
@@ -275,13 +285,15 @@ var WRAP = {};
 (function($) {
 
     /**
-     * wrap a function with up to 3 parameters (!) to catch and display errors. An not undefined 2nd parameter is a messages that activates time measuring
+     * wrap a function with up to 3 parameters (!) to catch and display errors.
+     * An not undefined 2nd parameter is a messages that activates time
+     * measuring
      * 
      * @memberof WRAP
      */
     WRAP.fn3 = function(fnToBeWrapped, message) {
         var wrap = function(p0, p1, p2) {
-        	var markerTIMER = '[[TIME]] ';
+            var markerTIMER = '[[TIME]] ';
             var start = new Date();
             try {
                 fnToBeWrapped(p0, p1, p2);
@@ -304,12 +316,25 @@ var WRAP = {};
 })($);
 
 /**
- * add the jquery plugin onWrap to jquery, that wraps the on(event,callback) method with WRAP.fn3
+ * add the jquery plugin onWrap to jquery, that wraps the
+ * on(event,callbackOrFilter,callbackOrMessage) method with WRAP.fn3
  * 
  * @memberof JQUERY
  */
 (function($) {
-    $.fn.onWrap = function(event, callback, message) {
-        return this.on(event, WRAP.fn3(callback, message));
+    $.fn.onWrap = function(event, callbackOrFilter, callbackOrMessage, optMessage) {
+        if (typeof callbackOrFilter === 'string') {
+            if (typeof callbackOrMessage === 'function') {
+                return this.on(event, callbackOrFilter, WRAP.fn3(callbackOrMessage, optMessage));
+            } else {
+                LOG.error("illegal wrapping. Parameter: " + event + " ::: " + callbackOrFilter + " ::: " + callbackOrMessage + " ::: " + optMessage);
+            }
+        } else if (typeof callbackOrFilter === 'function') {
+            if (typeof callbackOrMessage === 'string' || callbackOrMessage === undefined) {
+                return this.on(event, WRAP.fn3(callbackOrFilter, callbackOrMessage));
+            } else {
+                LOG.error("illegal wrapping. Parameter: " + event + " ::: " + callbackOrFilter + " ::: " + callbackOrMessage + " ::: " + optMessage);
+            }
+        }
     };
 })($);
