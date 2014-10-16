@@ -11,6 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import de.fhg.iais.roberta.dbc.Assert;
+import de.fhg.iais.roberta.util.Util;
+
 @Entity
 @Table(name = "PROGRAM")
 public class Program implements WithSurrogateId {
@@ -61,6 +64,8 @@ public class Program implements WithSurrogateId {
      * @param owner the user who created and thus owns the program
      */
     public Program(String name, User owner) {
+        Assert.notNull(name);
+        Assert.notNull(owner);
         this.name = name;
         this.owner = owner;
         this.created = Util.getNow();
@@ -147,4 +152,20 @@ public class Program implements WithSurrogateId {
     public Timestamp getLastChanged() {
         return this.lastChanged;
     }
+
+    @Override
+    public String toString() {
+        return "Program [id="
+            + this.id
+            + ", name="
+            + this.name
+            + ", ownerId="
+            + (this.owner == null ? "???" : this.owner.getId())
+            + ", created="
+            + this.created
+            + ", lastChanged="
+            + this.lastChanged
+            + "]";
+    }
+
 }

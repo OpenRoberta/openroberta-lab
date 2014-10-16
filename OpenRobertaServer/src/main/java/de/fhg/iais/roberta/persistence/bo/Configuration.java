@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import de.fhg.iais.roberta.util.Util;
+
 @Entity
 @Table(name = "CONFIGURATION")
 public class Configuration implements WithSurrogateId {
@@ -136,4 +138,20 @@ public class Configuration implements WithSurrogateId {
     public Timestamp getLastChanged() {
         return this.lastChanged;
     }
+
+    @Override
+    public String toString() {
+        return "Configuration [id="
+            + this.id
+            + ", name="
+            + this.name
+            + ", ownerId="
+            + (this.owner == null ? "???" : this.owner.getId())
+            + ", created="
+            + this.created
+            + ", lastChanged="
+            + this.lastChanged
+            + "]";
+    }
+
 }

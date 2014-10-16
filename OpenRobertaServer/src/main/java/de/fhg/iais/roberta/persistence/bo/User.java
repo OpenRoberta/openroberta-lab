@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import de.fhg.iais.roberta.util.Util;
+
 @Entity
 @Table(name = "USER")
 public class User implements WithSurrogateId {
@@ -109,4 +111,10 @@ public class User implements WithSurrogateId {
     public void setLastLogin() {
         this.lastLogin = Util.getNow();
     }
+
+    @Override
+    public String toString() {
+        return "User [id=" + this.id + ", account=" + this.account + ", role=" + this.role + ", lastLogin=" + this.lastLogin + "]";
+    }
+
 }

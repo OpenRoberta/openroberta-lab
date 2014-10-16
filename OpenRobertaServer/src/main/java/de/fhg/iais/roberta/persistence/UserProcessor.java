@@ -1,13 +1,22 @@
 package de.fhg.iais.roberta.persistence;
 
+import de.fhg.iais.roberta.javaServer.resources.OpenRobertaSessionState;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.connector.SessionWrapper;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
 
 public class UserProcessor {
+    private final SessionWrapper dbSession;
+    private final OpenRobertaSessionState httpSessionState;
 
-    public User getUser(SessionWrapper session, String account, String password) {
-        UserDao userDao = new UserDao(session);
+    public UserProcessor(SessionWrapper dbSession, OpenRobertaSessionState httpSessionState) {
+        super();
+        this.dbSession = dbSession;
+        this.httpSessionState = httpSessionState;
+    }
+
+    public User getUser(String account, String password) {
+        UserDao userDao = new UserDao(this.dbSession);
         User user = userDao.loadUser(account);
         if ( user.isPasswordCorrect(password) ) {
             return user;
@@ -16,8 +25,8 @@ public class UserProcessor {
         }
     }
 
-    public User saveUser(SessionWrapper session, String account, String password, String roleAsString, String email, String tags) {
-        UserDao userDao = new UserDao(session);
+    public User saveUser(String account, String password, String roleAsString, String email, String tags) {
+        UserDao userDao = new UserDao(this.dbSession);
         if ( userDao.loadUser(account) == null ) {
             User user = userDao.persistUser(account, password, roleAsString);
             if ( user == null ) {
@@ -36,16 +45,16 @@ public class UserProcessor {
         }
     }
 
-    public User checkUser(SessionWrapper session, String account) {
-        UserDao userDao = new UserDao(session);
+    public User checkUser(String account) {
+        UserDao userDao = new UserDao(this.dbSession);
         return userDao.loadUser(account);
     }
 
-    public int deleteUserByAccount(SessionWrapper session, int userIdOfUserLoggedIn, String account) {
+    public int deleteUserByAccount(int userIdOfUserLoggedIn, String account) {
         if ( userIdOfUserLoggedIn <= 1 ) {
             return 0;
         } else {
-            UserDao userDao = new UserDao(session);
+            UserDao userDao = new UserDao(this.dbSession);
             User user = userDao.loadUser(account);
             if ( user == null || user.getId() != userIdOfUserLoggedIn ) {
                 return 0;
@@ -54,5 +63,4 @@ public class UserProcessor {
             }
         }
     }
-
 }
