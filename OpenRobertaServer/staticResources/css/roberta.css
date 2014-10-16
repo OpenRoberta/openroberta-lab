@@ -25,13 +25,19 @@ h2 {
     z-index: 100;
 }
 
+ul#head-navigation {
+    float: left;
+    list-style-type: none;
+    padding: 0px;
+    margin: 5px 0px 0px 20px;
+}
+
 ul#head-navigation > li {
     float: left;
     margin-right: 20px;
     padding-bottom: 9px;
     padding-top: 6px;
     padding-left: 9px;
-    list-style-type: none;
 }
 
 ul#head-navigation .head-navigation-submenu {
@@ -186,7 +192,7 @@ ul#head-navigation a {
     font-family: 'Roboto', sans-serif;
     font-size: 18px;
     font-weight: bold;
-    color: whitefff;
+    color: white;
     text-decoration: none;
     text-transform: uppercase;
 }
@@ -195,16 +201,24 @@ ul#head-navigation a {
     position: absolute;
 }
 
-.bricks#welcome-brick1 span,
-.bricks#welcome-brick4 span {
+.bricks#welcome-brick1 span {
     bottom: 5px;
     right: 40px;
 }
 
-.bricks#welcome-brick2 span,
-.bricks#welcome-brick3 span {
-	bottom: 35px;
+.bricks#welcome-brick2 span {
+    bottom: 35px;
     left: 10px;
+}
+
+.bricks#welcome-brick3 span {
+    top: 35px;
+    right: 10px;
+}
+
+.bricks#welcome-brick4 span {
+    top: 5px;
+    left: 40px;
 }
 
 #welcome-brick1 {
