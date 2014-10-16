@@ -501,7 +501,7 @@ function initHeadNavigation() {
 }
 
 /**
- * Initialize the popups
+ * Initialize popups
  */
 function initPopups() {
     // Standard Pop-Up settings, can be overwritten with unique HTML IDs - see below
@@ -535,26 +535,6 @@ function initPopups() {
     // Close all previous Pop-Ups.
     $(".popup-opener").click(function() {
         $(".ui-dialog-content").dialog("close");
-    });
-
-    // Open Pop-Up "Login User"
-    $("#open-login-user").click(function() {
-        $("#login-user").dialog("open");
-    });
-
-    // Open Pop-Up "Register User"
-    $("#open-register-user").click(function() {
-        $("#register-user").dialog("open");
-    });
-
-    // Open Pop-Up "Delete User"
-    $("#open-delete-user").click(function() {
-        $("#delete-user").dialog("open");
-    });
-
-    // Open Pop-Up "Programm"
-    $("#open-program").click(function() {
-        $("#program").dialog("open");
     });
 }
 
