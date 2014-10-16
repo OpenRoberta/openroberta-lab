@@ -1,16 +1,25 @@
-var userState = {
-    id : false,
-    name : 'none',
-    role : 'none',
-    program : 'none',
-    programSaved : false,
-    brickSaved : false,
-    robot : 'none',
-    brickConnection : 'none',
-    toolbox : 'none',
-    token : '1A2B3C4D',
-};
+var userState = {};
+initializeUserState();
 
+/**
+ * Initialize user-state-object
+ */
+function initializeUserState() {
+    userState.id = -1;
+    userState.name = 'none';
+    userState.role = 'none';
+    userState.program = 'none';
+    userState.programSaved = false;
+    userState.brickSaved = false;
+    userState.robot = 'none';
+    userState.brickConnection = 'none';
+    userState.toolbox = 'none';
+    userState.token = '1A2B3C4D';
+}
+
+/**
+ * Create new user
+ */
 function saveUserToServer() {
     var $userAccountName = $("#accountName");
     var $userName = $('#userName');
@@ -20,9 +29,9 @@ function saveUserToServer() {
     var $role = $("input[name=role]:checked");
 
     if ($pass1.val() != $pass2.val()) {
-        alert("Wrong password");
+        displayMessage("Wrong password");
     } else if ($role.val() == null) {
-        alert("Select your role");
+        displayMessage("Select your role");
     } else {
         var roleGerman = $role.val();
         var role = "STUDENT";
@@ -38,26 +47,31 @@ function saveUserToServer() {
             "role" : role
         }, function(result) {
             if (result.rc === "ok")
-                alert("User created!");
+                displayMessage("User created");
             else
-                alert("User already exists, choose a different account name");
+                displayMessage("User already exists, choose a different account name, cause: " + response.cause);
         });
     }
 }
 
+/**
+ * Delete user
+ */
 function deleteUserOnServer() {
     var $userAccountName = $("#accountNameD");
-    alert("To delete " + $userAccountName.val());
     userState.id = null;
     COMM.json("/blocks", {
         "cmd" : "deleteUser",
         "accountName" : $userAccountName.val()
     }, function(result) {
-        alert(result.rc);
+        displayMessage("server return: " + result.rc);
     });
 }
 
-function signIn() {
+/**
+ * Login user
+ */
+function login() {
     var $userAccountName = $("#accountNameS");
     var $pass1 = $('#pass1S');
 
@@ -74,7 +88,24 @@ function signIn() {
             setHeadNavigationMenuState('login');
             $("#tutorials").fadeOut(700);
         } else {
-            alert("Wrong user or wrong password!");
+            displayMessage("Login failed, cause: " + response.cause);
+        }
+    });
+}
+
+/**
+ * Logout user
+ */
+function logout() {
+    COMM.json("/blocks", {
+        "cmd" : "logout"
+    }, function(response) {
+        if (response.rc === "ok") {
+            initializeUserState();
+            displayStatus();
+            setHeadNavigationMenuState('logout');
+        } else {
+            displayMessage("Logout failed, cause: " + response.cause);
         }
     });
 }
@@ -145,7 +176,7 @@ function saveToServer() {
             "program" : xml_text
         }, response);
     } else {
-        alert('There is no name for your program available\n\n please save one with a name or load one');
+        displayMessage("There is no name for your program available\n\n please save one with a name or load one, cause: " + response.cause);
     }
 }
 
@@ -311,7 +342,7 @@ function startProgram() {
 
 function checkProgram() {
     // TODO
-    alert("Your program will be checked soon ;-)");
+    displayMessage("Your program will be checked soon ;-)");
 }
 
 function switchToBlockly() {
@@ -446,6 +477,7 @@ function initHeadNavigation() {
         if (domId === 'login') {
             $("#login-user").dialog("open");
         } else if (domId === 'logout') {
+            logout();
         } else if (domId === 'new') {
             $("#register-user").dialog("open");
         } else if (domId === 'change') {
@@ -458,6 +490,18 @@ function initHeadNavigation() {
     setHeadNavigationMenuState('logout');
 }
 
+/**
+ * Display message
+ * 
+ * @param {message} Messabe to be displayed
+ */
+function displayMessage(message) {
+    $("#show-message > #message").text(message);
+    $("#show-message").dialog("open");
+}
+
+
+
 function init() {
 
     initHeadNavigation();
@@ -469,10 +513,9 @@ function init() {
         beforeActivate : beforeActivateTab
     });
 
-    // Register and signing in changes
     $('#saveUser').onWrap('click', saveUserToServer, 'save the user data');
     $('#deleteUser').onWrap('click', deleteUserOnServer, 'delete user data');
-    $('#signIn').onWrap('click', signIn, 'signing in ');
+    $('#doLogin').onWrap('click', login, 'login ');
 
     $('#addProgram').onWrap('click', function() {
         if (userState.id) {

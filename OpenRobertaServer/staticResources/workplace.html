@@ -35,13 +35,13 @@
                 <ul id="submenu-program" class="head-navigation-submenu">
                     <li id="run">Starten</li>
                     <li id="check">Checken</li>
-                    <li id="new">Neu ...</li>
-                    <li id="open"> Öffnen ... </li>
+                    <li id="new" class="logout">Neu ...</li>
+                    <li id="open" class="logout"> Öffnen ... </li>
                     <li id="save">Speichern</li>
-                    <li id="saveAs">Speichern als ...</li>
+                    <li id="saveAs" class="logout">Speichern als ...</li>
                     <li id="attach">Anhängen ...</li>
                     <li id="divide">Teilen</li>
-                    <li id="delete">Löschen ...</li>
+                    <li id="delete" class="logout">Löschen ...</li>
                     <li id="properties">Eigenschaften</li>
                     <li id="toolboxBeginner">Toolbox Anfänger</li>
                     <li id="toolboxExpert">Toolbox Experte</li>
@@ -112,7 +112,7 @@
         <input id="accountNameS" class='input' type="text" value="" />
         <label for="pass1S">Passwort</label>
         <input id="pass1S" class='input' type="password" value="" /><br/>
-        <input id="signIn" class='submit' type="submit" value="Anmelden" />
+        <input id="doLogin" class='submit' type="submit" value="Anmelden" />
     </div>
 
     <div class="jquerypopup" id="register-user" title="Benutzer erstellen">
@@ -152,6 +152,10 @@
         <label for="programNameNew">Programmname</label>
         <input id="programNameNew" class='input, programName' type="text" value="" /><br/>
         <input id="newProgram" class='submit' type="button" value="Anlegen" />
+    </div>
+
+    <div class="jquerypopup" id="show-message">
+        <span id="message">Test</span>
     </div>
     <!-- ################## END POPUPS ################## -->
 

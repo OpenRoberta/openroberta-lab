@@ -127,6 +127,11 @@ ul#head-navigation a {
     float: right;
 }
 
+.ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled {
+	opacity: 1.0;
+	color: lightgrey;
+}
+
 #main-section {
     height: auto;
     position: absolute;
@@ -367,6 +372,8 @@ ul#head-navigation a {
 #delete-user .submit:hover {
     background-color: #b7d032;
 }
+
+/* ### Tutorials ############################################################ */
 
 #next-tutorial {
     position: absolute;
