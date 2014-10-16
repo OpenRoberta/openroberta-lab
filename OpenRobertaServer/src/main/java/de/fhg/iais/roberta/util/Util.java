@@ -8,7 +8,7 @@ import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fhg.iais.roberta.persistence.Processor;
+import de.fhg.iais.roberta.persistence.AbstractProcessor;
 
 public class Util {
     private static final Logger LOG = LoggerFactory.getLogger(Util.class);
@@ -51,7 +51,7 @@ public class Util {
         LOG.error(SERVER_ERROR + " Detail message: " + detailMessage, new Throwable());
     }
 
-    public static void addResultInfo(JSONObject response, Processor processor) throws JSONException {
+    public static void addResultInfo(JSONObject response, AbstractProcessor processor) throws JSONException {
         if ( processor.wasSuccessful() ) {
             response.put("rc", "ok");
         } else {

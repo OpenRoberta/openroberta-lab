@@ -61,7 +61,7 @@ public class ServerStarter {
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setServer(server);
-        context.setContextPath("/");
+        context.setContextPath("/*");
         context.addEventListener(robertaGuiceServletConfig);
         context.addFilter(GuiceFilter.class, "/*", null);
         ServletHolder servletHolder = new ServletHolder(new ServletContainer());

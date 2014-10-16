@@ -11,30 +11,43 @@ import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.connector.SessionWrapper;
 import de.fhg.iais.roberta.persistence.dao.ConfigurationDao;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
+import de.fhg.iais.roberta.util.Util;
 
-public class ConfigurationProcessor {
-    private final OpenRobertaSessionState httpSessionState;
-    private final SessionWrapper dbSession;
-
+public class ConfigurationProcessor extends AbstractProcessor {
     public ConfigurationProcessor(SessionWrapper dbSession, OpenRobertaSessionState httpSessionState) {
-        this.dbSession = dbSession;
-        this.httpSessionState = httpSessionState;
+        super(dbSession, httpSessionState);
     }
 
     public Configuration getConfiguration(String configurationName, int ownerId) {
-        UserDao userDao = new UserDao(this.dbSession);
-        ConfigurationDao configurationDao = new ConfigurationDao(this.dbSession);
-        User owner = userDao.get(ownerId);
-        Configuration program = configurationDao.load(configurationName, owner);
-        return program;
+        if ( !Util.isValidJavaIdentifier(configurationName) ) {
+            setError("configuration name name is not a valid identifier: " + configurationName);
+            return null;
+        } else if ( this.httpSessionState.isUserLoggedIn() ) {
+            UserDao userDao = new UserDao(this.dbSession);
+            ConfigurationDao configurationDao = new ConfigurationDao(this.dbSession);
+            User owner = userDao.get(ownerId);
+            Configuration configuration = configurationDao.load(configurationName, owner);
+            setResult(configuration != null, "loading of configuration " + configurationName + ".");
+            return configuration;
+        } else {
+            setError("configuration load illegal if not logged in");
+            return null;
+        }
     }
 
-    public Configuration updateConfiguration(String configurationName, int ownerId, String configurationText) {
-        UserDao userDao = new UserDao(this.dbSession);
-        ConfigurationDao configurationDao = new ConfigurationDao(this.dbSession);
-        User owner = userDao.get(ownerId);
-        Configuration configuration = configurationDao.persistConfigurationText(configurationName, owner, configurationText);
-        return configuration;
+    public void updateConfiguration(String configurationName, int ownerId, String configurationText) {
+        if ( !Util.isValidJavaIdentifier(configurationName) ) {
+            setError("configuration name is not a valid identifier: " + configurationName);
+        } else if ( this.httpSessionState.isUserLoggedIn() ) {
+            UserDao userDao = new UserDao(this.dbSession);
+            ConfigurationDao configurationDao = new ConfigurationDao(this.dbSession);
+            User owner = userDao.get(ownerId);
+            Configuration configuration = configurationDao.persistConfigurationText(configurationName, owner, configurationText);
+            setResult(configuration != null, "saving configuration " + configurationName + " to db.");
+        } else {
+            this.httpSessionState.setConfigurationNameAndConfiguration(configurationName, configurationText);
+            setResult(true, "saving configuration " + configurationName + " to session.");
+        }
     }
 
     public List<String> getConfigurationNames(int ownerId) {
@@ -46,6 +59,7 @@ public class ConfigurationProcessor {
         for ( Configuration program : programs ) {
             configurationNames.add(program.getName());
         }
+        setSuccess("found " + configurationNames.size() + " configurations");
         return configurationNames;
     }
 
@@ -64,14 +78,15 @@ public class ConfigurationProcessor {
             configurationInfo.put(program.getCreated().toString());
             configurationInfo.put(program.getLastChanged().toString());
         }
+        setSuccess("found " + configurationInfos.length() + " configuration(s)");
         return configurationInfos;
     }
 
-    public int deleteByName(String programName, int ownerId) {
+    public void deleteByName(String configurationName, int ownerId) {
         UserDao userDao = new UserDao(this.dbSession);
-        ConfigurationDao configuraionDao = new ConfigurationDao(this.dbSession);
+        ConfigurationDao configurationDao = new ConfigurationDao(this.dbSession);
         User owner = userDao.get(ownerId);
-        return configuraionDao.deleteByName(programName, owner);
+        int rowCount = configurationDao.deleteByName(configurationName, owner);
+        setResult(rowCount > 0, "delete of configuration " + configurationName + ".");
     }
-
 }

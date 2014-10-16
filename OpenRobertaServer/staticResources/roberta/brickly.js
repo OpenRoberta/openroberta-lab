@@ -66,7 +66,7 @@ function saveToServer() {
   back();
   // TODO
   // var $name = $('#programName');
-  // COMM.json("/blocks", {
+  // COMM.json("/conf", {
   // "cmd" : "saveP",
   // "name" : $name.val(),
   // "program" : xml_text

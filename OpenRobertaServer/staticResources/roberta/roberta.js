@@ -38,7 +38,7 @@ function saveUserToServer() {
         if (roleGerman === "Lehrer") {
             role = "TEACHER";
         }
-        COMM.json("/blocks", {
+        COMM.json("/user", {
             "cmd" : "createUser",
             "accountName" : $userAccountName.val(),
             "userName" : $userName.val(),
@@ -60,7 +60,7 @@ function saveUserToServer() {
 function deleteUserOnServer() {
     var $userAccountName = $("#accountNameD");
     userState.id = null;
-    COMM.json("/blocks", {
+    COMM.json("/user", {
         "cmd" : "deleteUser",
         "accountName" : $userAccountName.val()
     }, function(result) {
@@ -75,7 +75,7 @@ function login() {
     var $userAccountName = $("#accountNameS");
     var $pass1 = $('#pass1S');
 
-    COMM.json("/blocks", {
+    COMM.json("/user", {
         "cmd" : "login",
         "accountName" : $userAccountName.val(),
         "password" : $pass1.val(),
@@ -97,7 +97,7 @@ function login() {
  * Logout user
  */
 function logout() {
-    COMM.json("/blocks", {
+    COMM.json("/user", {
         "cmd" : "logout"
     }, function(response) {
         if (response.rc === "ok") {
@@ -170,7 +170,7 @@ function saveToServer() {
         var xml_text = Blockly.Xml.domToText(xml);
         userState.programSaved = true;
         LOG.info('save ' + userState.program + ' login: ' + userState.id);
-        return COMM.json("/blocks", {
+        return COMM.json("/program", {
             "cmd" : "saveP",
             "name" : userState.program,
             "program" : xml_text
@@ -182,7 +182,7 @@ function saveToServer() {
 
 function runOnBrick() {
     LOG.info('run ' + userState.program + ' signed in: ' + userState.id);
-    return COMM.json("/blocks", {
+    return COMM.json("/program", {
         "cmd" : "runP",
         "name" : userState.program,
     }, response);
@@ -203,7 +203,7 @@ function showProgram(result, load, name) {
 
 function loadFromServer(load) {
     var $name = $('#programNameLoad');
-    COMM.json("/blocks", {
+    COMM.json("/program", {
         "cmd" : "loadP",
         "name" : $name.val()
     }, function(result) {
@@ -219,8 +219,8 @@ function deleteOnServer() {
         setProgram();
     }
     LOG.info('del ' + $name.val() + ' signed in: ' + userState.id);
-    COMM.json("/blocks", {
-        "cmd" : "deletePN",
+    COMM.json("/program", {
+        "cmd" : "deleteP",
         "name" : $name.val()
     }, function(result) {
     });
@@ -233,7 +233,7 @@ function loadFromListing() {
     }
     var programName = $programRow[0].children[0].textContent;
     LOG.info('loadFromList ' + programName + ' signed in: ' + userState.id);
-    COMM.json("/blocks", {
+    COMM.json("/program", {
         "cmd" : "loadP",
         "name" : programName
     }, function(result) {
@@ -281,7 +281,7 @@ function beforeActivateTab(event, ui) {
     if (ui.newPanel.selector !== '#listing') {
         return;
     }
-    COMM.json("/blocks", {
+    COMM.json("/program", {
         "cmd" : "loadPN",
     }, showPrograms);
 }

@@ -5,62 +5,43 @@ import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.connector.SessionWrapper;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
 
-public class UserProcessor {
-    private final SessionWrapper dbSession;
-    private final OpenRobertaSessionState httpSessionState;
-
+public class UserProcessor extends AbstractProcessor {
     public UserProcessor(SessionWrapper dbSession, OpenRobertaSessionState httpSessionState) {
-        super();
-        this.dbSession = dbSession;
-        this.httpSessionState = httpSessionState;
+        super(dbSession, httpSessionState);
     }
 
     public User getUser(String account, String password) {
         UserDao userDao = new UserDao(this.dbSession);
         User user = userDao.loadUser(account);
-        if ( user.isPasswordCorrect(password) ) {
-            return user;
-        } else {
-            return null;
+        setResult(user != null && user.isPasswordCorrect(password), "user loaded and password checked.");
+        return wasSuccessful() ? user : null;
+    }
+
+    public void saveUser(String account, String password, String roleAsString, String email, String tags) {
+        UserDao userDao = new UserDao(this.dbSession);
+        User user = userDao.persistUser(account, password, roleAsString);
+        setResult(user != null, "user created with account " + account + ".");
+        if ( wasSuccessful() ) {
+            user.setEmail(email);
+            user.setTags(tags);
         }
     }
 
-    public User saveUser(String account, String password, String roleAsString, String email, String tags) {
+    public User getUser(String account) {
         UserDao userDao = new UserDao(this.dbSession);
-        if ( userDao.loadUser(account) == null ) {
-            User user = userDao.persistUser(account, password, roleAsString);
-            if ( user == null ) {
-                return null;
-            } else {
-                if ( email != null ) {
-                    user.setEmail(email);
-                }
-                if ( tags != null ) {
-                    user.setTags(tags);
-                }
-            }
-            return user;
-        } else {
-            return null;
-        }
+        User user = userDao.loadUser(account);
+        setResult(user != null, "user loaded.");
+        return user;
     }
 
-    public User checkUser(String account) {
+    public void deleteUserByAccount(String account, String password) {
         UserDao userDao = new UserDao(this.dbSession);
-        return userDao.loadUser(account);
-    }
-
-    public int deleteUserByAccount(int userIdOfUserLoggedIn, String account) {
-        if ( userIdOfUserLoggedIn <= 1 ) {
-            return 0;
+        User user = userDao.loadUser(account);
+        if ( user != null && user.isPasswordCorrect(password) ) {
+            int rowCount = userDao.deleteUser(user);
+            setResult(rowCount > 0, "user deleted after password check.");
         } else {
-            UserDao userDao = new UserDao(this.dbSession);
-            User user = userDao.loadUser(account);
-            if ( user == null || user.getId() != userIdOfUserLoggedIn ) {
-                return 0;
-            } else {
-                return userDao.deleteUser(user);
-            }
+            setError("user account not found");
         }
     }
 }

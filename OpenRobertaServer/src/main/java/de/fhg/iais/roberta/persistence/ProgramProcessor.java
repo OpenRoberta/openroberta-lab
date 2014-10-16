@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jettison.json.JSONArray;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.javaServer.resources.OpenRobertaSessionState;
 import de.fhg.iais.roberta.persistence.bo.Program;
@@ -15,15 +13,9 @@ import de.fhg.iais.roberta.persistence.dao.ProgramDao;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.util.Util;
 
-public class ProgramProcessor extends Processor {
-    private static final Logger LOG = LoggerFactory.getLogger(ProgramProcessor.class);
-
-    private final SessionWrapper dbSession;
-    private final OpenRobertaSessionState httpSessionState;
-
+public class ProgramProcessor extends AbstractProcessor {
     public ProgramProcessor(SessionWrapper dbSession, OpenRobertaSessionState httpSessionState) {
-        this.dbSession = dbSession;
-        this.httpSessionState = httpSessionState;
+        super(dbSession, httpSessionState);
     }
 
     public Program getProgram(String programName, int ownerId) {
@@ -51,10 +43,10 @@ public class ProgramProcessor extends Processor {
             ProgramDao programDao = new ProgramDao(this.dbSession);
             User owner = userDao.get(ownerId);
             Program program = programDao.persistProgramText(programName, owner, programText);
-            setResult(program == null, "saving program " + programName + " to db.");
+            setResult(program != null, "saving program " + programName + " to db.");
         } else {
             this.httpSessionState.setProgramNameAndProgramText(programName, programText);
-            setResult(true, "saving program " + programName + " to session.");
+            setSuccess("saving program " + programName + " to session.");
         }
     }
 
@@ -87,7 +79,7 @@ public class ProgramProcessor extends Processor {
             programInfo.put(program.getCreated().toString());
             programInfo.put(program.getLastChanged().toString());
         }
-        setSuccess();
+        setSuccess("found " + programInfos.length() + " program(s)");
         return programInfos;
     }
 

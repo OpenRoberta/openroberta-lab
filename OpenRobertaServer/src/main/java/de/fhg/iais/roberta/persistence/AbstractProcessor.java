@@ -3,13 +3,23 @@ package de.fhg.iais.roberta.persistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.fhg.iais.roberta.javaServer.resources.OpenRobertaSessionState;
+import de.fhg.iais.roberta.persistence.connector.SessionWrapper;
 import de.fhg.iais.roberta.util.Util;
 
-public abstract class Processor {
-    private static final Logger LOG = LoggerFactory.getLogger(Processor.class);
+public abstract class AbstractProcessor {
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractProcessor.class);
+
+    protected final SessionWrapper dbSession;
+    protected final OpenRobertaSessionState httpSessionState;
 
     private boolean successful;
     private String message;
+
+    protected AbstractProcessor(SessionWrapper dbSession, OpenRobertaSessionState httpSessionState) {
+        this.dbSession = dbSession;
+        this.httpSessionState = httpSessionState;
+    }
 
     /**
      * remember whether the command was successful or not. The message is LOG-ged anyway. The text " Success: true/false" is appended.
@@ -17,7 +27,7 @@ public abstract class Processor {
     public final void setResult(boolean successful, String message) {
         this.successful = successful;
         this.message = successful ? null : message;
-        LOG.info(message + " Success: " + successful);
+        LOG.info(message + " Result: " + successful);
     }
 
     /**
