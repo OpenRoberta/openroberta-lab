@@ -5,10 +5,8 @@ import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
 import org.junit.Assert;
-import org.xml.sax.InputSource;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
@@ -27,6 +25,7 @@ import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
+import de.fhg.iais.roberta.jaxb.JaxbHelper;
 
 /**
  * This class is used to store helper methods for operation with JAXB objects and generation code from them.
@@ -34,7 +33,7 @@ import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
 public class Helper {
     /**
      * Generate java code as string from a given program fragment. Do not prepend and append wrappings.
-     * 
+     *
      * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
      * @return the code fragment as string
      * @throws Exception
@@ -55,7 +54,7 @@ public class Helper {
 
     /**
      * Generate java code as string from a given program . Prepend and append wrappings.
-     * 
+     *
      * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
      * @return the code as string
      * @throws Exception
@@ -69,18 +68,13 @@ public class Helper {
 
     /**
      * return the jaxb transformer for a given program fragment.
-     * 
+     *
      * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
      * @return jaxb transformer
      * @throws Exception
      */
     public static JaxbProgramTransformer<Void> generateTransformer(String pathToProgramXml) throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(Helper.class.getResourceAsStream(pathToProgramXml));
-        BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
-
+        BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
         JaxbProgramTransformer<Void> transformer = new JaxbProgramTransformer<>();
         transformer.transform(project);
         return transformer;
@@ -88,7 +82,7 @@ public class Helper {
 
     /**
      * return the toString representation for a jaxb transformer for a given program fragment.
-     * 
+     *
      * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
      * @return the toString representation for a jaxb transformer
      * @throws Exception
@@ -99,18 +93,13 @@ public class Helper {
 
     /**
      * return the first and only one phrase from a given program fragment.
-     * 
+     *
      * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
      * @return the first and only one phrase
      * @throws Exception
      */
     public static <V> List<Phrase<V>> generateASTs(String pathToProgramXml) throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(Helper.class.getResourceAsStream(pathToProgramXml));
-        BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
-
+        BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
         JaxbProgramTransformer<V> transformer = new JaxbProgramTransformer<V>();
         transformer.transform(project);
         List<Phrase<V>> tree = transformer.getTree();

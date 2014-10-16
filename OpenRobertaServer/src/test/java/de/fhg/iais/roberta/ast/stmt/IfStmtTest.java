@@ -1,16 +1,10 @@
 package de.fhg.iais.roberta.ast.stmt;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
-
 import org.junit.Assert;
 import org.junit.Test;
-import org.xml.sax.InputSource;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
-import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
-import de.fhg.iais.roberta.blockly.generated.BlockSet;
 
 public class IfStmtTest {
 
@@ -66,14 +60,6 @@ public class IfStmtTest {
 
     @Test
     public void ifStmt2() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(ControlTest.class.getResourceAsStream("/ast/control/if_stmt2.xml"));
-        BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbProgramTransformer<?> transformer = new JaxbProgramTransformer<>();
-        transformer.transform(project);
         String a =
             "BlockAST [project=[[Location [x=68, y=133], \n"
                 + "if Binary [EQ, NumConst [1], NumConst [1]]\n"

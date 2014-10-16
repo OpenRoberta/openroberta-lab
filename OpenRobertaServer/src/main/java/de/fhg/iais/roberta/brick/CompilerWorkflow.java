@@ -1,12 +1,7 @@
 package de.fhg.iais.roberta.brick;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.tools.ant.BuildEvent;
@@ -15,7 +10,6 @@ import org.apache.tools.ant.BuildListener;
 import org.apache.tools.ant.ProjectHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.InputSource;
 
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.HardwareComponent;
@@ -26,6 +20,7 @@ import de.fhg.iais.roberta.ast.syntax.action.MotorSide;
 import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
+import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.persistence.connector.SessionWrapper;
 
 public class CompilerWorkflow {
@@ -90,13 +85,7 @@ public class CompilerWorkflow {
      * @throws Exception
      */
     static JaxbProgramTransformer<Void> generateTransformer(String blocklyXml) throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputStream stream = new ByteArrayInputStream(blocklyXml.getBytes(StandardCharsets.UTF_8));
-        InputSource src = new InputSource(stream);
-        BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
-
+        BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
         JaxbProgramTransformer<Void> transformer = new JaxbProgramTransformer<>();
         transformer.transform(project);
         return transformer;

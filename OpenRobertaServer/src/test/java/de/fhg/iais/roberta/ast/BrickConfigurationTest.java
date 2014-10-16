@@ -1,16 +1,12 @@
 package de.fhg.iais.roberta.ast;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
-
 import org.junit.Assert;
 import org.junit.Test;
-import org.xml.sax.InputSource;
 
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
-import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.transformer.JaxbBrickConfigTransformer;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
+import de.fhg.iais.roberta.jaxb.JaxbHelper;
 
 public class BrickConfigurationTest {
 
@@ -27,14 +23,8 @@ public class BrickConfigurationTest {
                 + ".addSensor(SensorPort.S3, new HardwareComponent(HardwareComponentType.EV3UltrasonicSensor))"
                 + ".build();";
 
-        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(Helper.class.getResourceAsStream("/ast/brickConfiguration/brick_configuration.xml"));
-
-        BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbBrickConfigTransformer transformer = new JaxbBrickConfigTransformer();
+        BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration.xml");
+        JaxbBrickConfigTransformer<Void> transformer = new JaxbBrickConfigTransformer<>();
         BrickConfiguration b = transformer.transform(project);
         System.out.println(b.generateRegenerate());
         Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateRegenerate().replaceAll("\\s+", ""));
@@ -50,14 +40,8 @@ public class BrickConfigurationTest {
                 + ".addSensor(SensorPort.S3, new HardwareComponent(HardwareComponentType.EV3IRSensor))"
                 + ".build();";
 
-        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(Helper.class.getResourceAsStream("/ast/brickConfiguration/brick_configuration1.xml"));
-
-        BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbBrickConfigTransformer transformer = new JaxbBrickConfigTransformer();
+        BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration1.xml");
+        JaxbBrickConfigTransformer<Void> transformer = new JaxbBrickConfigTransformer<>();
         BrickConfiguration b = transformer.transform(project);
         System.out.println(b.generateRegenerate());
         Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateRegenerate().replaceAll("\\s+", ""));
@@ -75,14 +59,8 @@ public class BrickConfigurationTest {
                 + ".addSensor(SensorPort.S4, new HardwareComponent(HardwareComponentType.EV3UltrasonicSensor))"
                 + ".build();";
 
-        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(Helper.class.getResourceAsStream("/ast/brickConfiguration/brick_configuration2.xml"));
-
-        BlockSet project = (BlockSet) jaxbUnmarshaller.unmarshal(src);
-
-        JaxbBrickConfigTransformer transformer = new JaxbBrickConfigTransformer();
+        BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration2.xml");
+        JaxbBrickConfigTransformer<Void> transformer = new JaxbBrickConfigTransformer<>();
         BrickConfiguration b = transformer.transform(project);
         System.out.println(b.generateRegenerate());
         Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateRegenerate().replaceAll("\\s+", ""));
