@@ -14,7 +14,6 @@ import javax.xml.validation.SchemaFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 
@@ -22,14 +21,16 @@ public class JaxbHelper {
     private static final Logger LOG = LoggerFactory.getLogger(JaxbHelper.class);
 
     private static final Schema blockSetSchema;
+    private static final JAXBContext jaxbContext;
     static {
         SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         InputStream xsdStream = JaxbHelper.class.getClassLoader().getResourceAsStream("blockly.xsd");
         StreamSource xsdSource = new StreamSource(xsdStream);
         try {
             blockSetSchema = sf.newSchema(xsdSource);
-        } catch ( SAXException e ) {
-            LOG.error("from blockly.xsd no schema could be generated", e);
+            jaxbContext = JAXBContext.newInstance(BlockSet.class);
+        } catch ( Exception e ) {
+            LOG.error("1. from blockly.xsd no schema could be generated or 2. JAXBContext could not be created", e);
             throw new RuntimeException("from blockly.xsd no schema could be generated");
         }
     }
@@ -46,10 +47,8 @@ public class JaxbHelper {
      * @throws Exception
      */
     public static BlockSet xml2BlockSet(String blocklyXml) throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         jaxbUnmarshaller.setSchema(blockSetSchema);
-        //jaxbUnmarshaller.setSchema(null); // TODO: reactivate validation
 
         InputStream stream = new ByteArrayInputStream(blocklyXml.getBytes(StandardCharsets.UTF_8));
         InputSource src = new InputSource(stream);
@@ -64,7 +63,6 @@ public class JaxbHelper {
      * @throws Exception
      */
     public static BlockSet path2BlockSet(String pathToblocklyXml) throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
         InputSource src = new InputSource(JaxbHelper.class.getResourceAsStream(pathToblocklyXml));
