@@ -24,8 +24,8 @@ import de.fhg.iais.roberta.ast.syntax.action.MotorSetPowerAction;
 import de.fhg.iais.roberta.ast.syntax.action.MotorStopAction;
 import de.fhg.iais.roberta.ast.syntax.action.MotorStopMode;
 import de.fhg.iais.roberta.ast.syntax.action.PlayFileAction;
+import de.fhg.iais.roberta.ast.syntax.action.ShowPicture;
 import de.fhg.iais.roberta.ast.syntax.action.ShowPictureAction;
-import de.fhg.iais.roberta.ast.syntax.action.ShowPictureAction.Picture;
 import de.fhg.iais.roberta.ast.syntax.action.ShowTextAction;
 import de.fhg.iais.roberta.ast.syntax.action.ToneAction;
 import de.fhg.iais.roberta.ast.syntax.action.TurnAction;
@@ -92,7 +92,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
 
     /**
      * Converts object of type {@link BlockSet} to AST tree.
-     *
+     * 
      * @param program
      */
     public void transform(BlockSet set) {
@@ -105,9 +105,9 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
     private void instanceToAST(Instance instance) {
         List<Block> blocks = instance.getBlock();
         Location<V> location = Location.make(instance.getX(), instance.getY());
-        tree.add(location);
+        this.tree.add(location);
         for ( Block block : blocks ) {
-            tree.add(blockToAST(block));
+            this.tree.add(blockToAST(block));
         }
     }
 
@@ -224,7 +224,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 String pic = extractField(fields, "PICTURE", (short) 0);
                 Phrase<V> x = extractValue(values, new ExprParam("X", Integer.class));
                 Phrase<V> y = extractValue(values, new ExprParam("Y", Integer.class));
-                return ShowPictureAction.make(Picture.get(pic), (Expr<V>) x, (Expr<V>) y, properties, comment);
+                return ShowPictureAction.make(ShowPicture.get(pic), (Expr<V>) x, (Expr<V>) y, properties, comment);
 
             case "robActions_display_clear":
                 return ClearDisplayAction.make(properties, comment);
