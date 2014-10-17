@@ -78,9 +78,8 @@ abstract public class JaxbAstTransformer<V> {
     }
 
     protected Func<V> blockToFunction(Block block, List<String> strParams, List<ExprParam> exprParams, String operationType) {
-        String op = getOperation(block, operationType);
         List<Expr<V>> params = extractExprParameters(block, exprParams);
-        return Func.make(Func.Function.get(op), strParams, params, extractBlockProperties(block), extractComment(block));
+        return Func.make(Func.Function.get(operationType), strParams, params, extractBlockProperties(block), extractComment(block));
     }
 
     private List<Expr<V>> extractExprParameters(Block block, List<ExprParam> exprParams) {

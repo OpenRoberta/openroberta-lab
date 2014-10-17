@@ -98,7 +98,8 @@ public class Func<V> extends Expr<V> {
 
     @Override
     public String toString() {
-        return "Funct [" + this.functName + ", " + this.param + "]";
+        String s = this.strParam != null ? ", " + this.strParam : "";
+        return "Funct [" + this.functName + s + ", " + this.param + "]";
     }
 
     @Override
@@ -166,6 +167,9 @@ public class Func<V> extends Expr<V> {
         NUMBER_PROMPT( 10, Assoc.LEFT, "NUMBER" ),
         LISTS_LENGTH( 10, Assoc.LEFT ),
         SUBSTRING( 10, Assoc.LEFT ),
+        GET_INDEX( 10, Assoc.LEFT ),
+        SET_INDEX( 10, Assoc.LEFT ),
+        GET_SUBLIST( 10, Assoc.LEFT ),
         PRINT( 10, Assoc.LEFT );
 
         private final String[] values;

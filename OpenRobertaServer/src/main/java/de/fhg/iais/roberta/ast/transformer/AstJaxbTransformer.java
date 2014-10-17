@@ -292,6 +292,7 @@ public class AstJaxbTransformer<V> {
                 blockType = astSource.getProperty().getBlockType();
                 setProperties(astSource, jaxbDestination, blockType);
                 addComment(astSource, jaxbDestination);
+
                 addField(jaxbDestination, "MOTORPORT", fieldValue);
                 addField(jaxbDestination, "MODE", motorStopAction.getMode().name());
 
@@ -304,6 +305,7 @@ public class AstJaxbTransformer<V> {
                 blockType = astSource.getProperty().getBlockType();
                 setProperties(astSource, jaxbDestination, blockType);
                 addComment(astSource, jaxbDestination);
+
                 addField(jaxbDestination, "FILE", fieldValue);
 
                 return jaxbDestination;
@@ -315,6 +317,7 @@ public class AstJaxbTransformer<V> {
                 blockType = astSource.getProperty().getBlockType();
                 setProperties(astSource, jaxbDestination, blockType);
                 addComment(astSource, jaxbDestination);
+
                 addField(jaxbDestination, "PICTURE", fieldValue);
                 addValue(jaxbDestination, "X", ((ShowPictureAction<V>) astSource).getX());
                 addValue(jaxbDestination, "Y", ((ShowPictureAction<V>) astSource).getY());
@@ -537,11 +540,11 @@ public class AstJaxbTransformer<V> {
 
                 if ( expr > 1 || elseList.get().size() != 0 ) {
                     Mutation mutation = new Mutation();
-                    if ( elseList != null ) {
+                    if ( elseList.get().size() != 0 ) {
                         mutation.setElse(BigInteger.ONE);
                     }
                     if ( expr > 1 ) {
-                        mutation.setElseif(BigInteger.valueOf(expr));
+                        mutation.setElseif(BigInteger.valueOf(expr - 1));
                     }
                     jaxbDestination.setMutation(mutation);
                     repetition = true;
@@ -568,6 +571,15 @@ public class AstJaxbTransformer<V> {
 
                 return jaxbDestination;
 
+            case REPEAT_STMT:
+                jaxbDestination = new Block();
+
+                blockType = astSource.getProperty().getBlockType();
+                setProperties(astSource, jaxbDestination, blockType);
+                addComment(astSource, jaxbDestination);
+
+                return jaxbDestination;
+
             case EMPTY_EXPR:
             case LOCATION:
                 return null;
@@ -588,7 +600,8 @@ public class AstJaxbTransformer<V> {
     }
 
     private void addStatement(Block block, String name, Phrase<V> value) {
-        if ( value.getKind() != Kind.EMPTY_EXPR ) {
+        Assert.isTrue(value.getKind() == Phrase.Kind.STMT_LIST, "Phrase is not STMT_LIST");
+        if ( ((StmtList<V>) value).get().size() != 0 ) {
             Statement statement = new Statement();
             statement.setName(name);
             statement.getBlock().addAll(extractStmtList(value));
@@ -597,7 +610,8 @@ public class AstJaxbTransformer<V> {
     }
 
     private void addStatement(Repetitions repetitions, String name, Phrase<V> value) {
-        if ( value.getKind() != Kind.EMPTY_EXPR ) {
+        Assert.isTrue(value.getKind() == Phrase.Kind.STMT_LIST, "Phrase is not STMT_LIST");
+        if ( ((StmtList<V>) value).get().size() != 0 ) {
             Statement statement = new Statement();
             statement.setName(name);
             statement.getBlock().addAll(extractStmtList(value));

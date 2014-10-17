@@ -571,8 +571,12 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 strParams.add(extractField(fields, "WHERE2", (short) 1));
                 exprParams = new ArrayList<ExprParam>();
                 exprParams.add(new ExprParam("STRING", String.class));
-                exprParams.add(new ExprParam("AT1", Integer.class));
-                exprParams.add(new ExprParam("AT2", Integer.class));
+                if ( block.getMutation().isAt1() ) {
+                    exprParams.add(new ExprParam("AT1", Integer.class));
+                }
+                if ( block.getMutation().isAt2() ) {
+                    exprParams.add(new ExprParam("AT2", Integer.class));
+                }
                 return blockToFunction(block, strParams, exprParams, "SUBSTRING");
 
             case "text_changeCase":
@@ -629,14 +633,45 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 exprParams.add(new ExprParam("FIND", List.class));
                 return blockToFunction(block, exprParams, "END");
 
-                // case "lists_getIndex":
-                // TODO not implemented lists_getIndex
+            case "lists_getIndex":
+                fields = extractFields(block, (short) 2);
+                strParams = new ArrayList<String>();
+                strParams.add(extractField(fields, "MODE", (short) 0));
+                strParams.add(extractField(fields, "WHERE", (short) 1));
+                exprParams = new ArrayList<ExprParam>();
+                exprParams.add(new ExprParam("VALUE", String.class));
+                if ( block.getMutation().isAt() ) {
+                    exprParams.add(new ExprParam("AT", Integer.class));
+                }
+                return blockToFunction(block, strParams, exprParams, "GET_INDEX");
 
-                // case "lists_setIndex":
-                // TODO not implemented lists_setIndex
+            case "lists_setIndex":
+                fields = extractFields(block, (short) 2);
+                strParams = new ArrayList<String>();
+                strParams.add(extractField(fields, "MODE", (short) 0));
+                strParams.add(extractField(fields, "WHERE", (short) 1));
+                exprParams = new ArrayList<ExprParam>();
+                exprParams.add(new ExprParam("LIST", String.class));
+                if ( block.getMutation().isAt() ) {
+                    exprParams.add(new ExprParam("AT", Integer.class));
+                }
+                exprParams.add(new ExprParam("TO", Integer.class));
+                return blockToFunction(block, strParams, exprParams, "SET_INDEX");
 
-                // case "lists_getSublist":
-                // TODO not implemented lists_getSublist
+            case "lists_getSublist":
+                fields = extractFields(block, (short) 2);
+                strParams = new ArrayList<String>();
+                strParams.add(extractField(fields, "WHERE1", (short) 0));
+                strParams.add(extractField(fields, "WHERE2", (short) 1));
+                exprParams = new ArrayList<ExprParam>();
+                exprParams.add(new ExprParam("LIST", String.class));
+                if ( block.getMutation().isAt1() ) {
+                    exprParams.add(new ExprParam("AT1", Integer.class));
+                }
+                if ( block.getMutation().isAt2() ) {
+                    exprParams.add(new ExprParam("AT2", Integer.class));
+                }
+                return blockToFunction(block, strParams, exprParams, "GET_SUBLIST");
 
             case "robColour_picker":
                 return blockToConst(block, "COLOUR");
@@ -763,5 +798,4 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 throw new DbcException("Invalid Block: " + block.getType());
         }
     }
-
 }

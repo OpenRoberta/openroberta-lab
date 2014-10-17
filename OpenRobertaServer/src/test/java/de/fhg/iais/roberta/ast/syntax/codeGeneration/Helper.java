@@ -145,7 +145,7 @@ public class Helper {
 
         System.out.println(diff.toString());
 
-        Assert.assertTrue(diff.similar());
+        Assert.assertTrue(diff.identical());
 
     }
 

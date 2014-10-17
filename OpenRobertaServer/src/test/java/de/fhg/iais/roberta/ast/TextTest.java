@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.ast;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
@@ -65,11 +64,32 @@ public class TextTest {
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/text/text_charAt1.xml"));
     }
 
-    @Ignore
+    @Test
     public void textGetSubString() throws Exception {
-        String a = "BlockAST [project=[[Funct [RANDOM, [Var [text]]]]]]";
+        String a = "BlockAST [project=[[Location [x=-169, y=219], Funct [SUBSTRING, [FIRST, LAST], [Var [text]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/text/text_getSubstring.xml"));
+    }
+
+    @Test
+    public void textGetSubString1() throws Exception {
+        String a = "BlockAST [project=[[Location [x=139, y=239], Funct [SUBSTRING, [FROM_START, FROM_END], [Var [text], NumConst [0], NumConst [0]]]]]]";
+
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/text/text_getSubstring1.xml"));
+    }
+
+    @Test
+    public void textGetSubString2() throws Exception {
+        String a = "BlockAST [project=[[Location [x=139, y=239], Funct [SUBSTRING, [FROM_START, LAST], [Var [text], NumConst [0]]]]]]";
+
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/text/text_getSubstring2.xml"));
+    }
+
+    @Test
+    public void textGetSubString3() throws Exception {
+        String a = "BlockAST [project=[[Location [x=139, y=239], Funct [SUBSTRING, [FIRST, FROM_START], [Var [text], NumConst [0]]]]]]";
+
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/text/text_getSubstring3.xml"));
     }
 
     @Test

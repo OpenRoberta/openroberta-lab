@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.ast.stmt;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
@@ -180,9 +179,49 @@ public class IfStmtTest {
         Helper.assertTransformationIsOk("/ast/control/if_stmt1.xml");
     }
 
-    @Ignore
+    @Test
     public void reverseTransformation2() throws Exception {
         Helper.assertTransformationIsOk("/ast/control/if_stmt2.xml");
+    }
+
+    @Test
+    public void reverseTransformation3() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/if_stmt3.xml");
+    }
+
+    @Test
+    public void reverseTransformation4() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/if_stmt4.xml");
+    }
+
+    @Test
+    public void reverseTransformation5() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/if_stmt5.xml");
+    }
+
+    @Test
+    public void reverseTransformation6() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/if_stmt6.xml");
+    }
+
+    @Test
+    public void reverseTransformation7() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/if_stmt7.xml");
+    }
+
+    @Test
+    public void reverseTransformation8() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/if_stmt8.xml");
+    }
+
+    @Test
+    public void reverseTransformation9() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/if_stmt9.xml");
+    }
+
+    @Test
+    public void reverseTransformation10() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/if_stmt10.xml");
     }
 
 }
