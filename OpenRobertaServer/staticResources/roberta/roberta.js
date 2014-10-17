@@ -250,22 +250,25 @@ function deleteOnServer() {
     });
 }
 
+/**
+ * Load program that was selected in program list
+ */
 function loadFromListing() {
     var $programRow = $('#programNameTable .selected');
-    if ($programRow.length <= 0) {
-        return;
+    if ($programRow.length > 0) {
+        var programName = $programRow[0].children[0].textContent;
+        LOG.info('loadFromList ' + programName + ' signed in: ' + userState.id);
+        COMM.json("/program", {
+            "cmd" : "loadP",
+            "name" : programName
+        }, function(result) {
+            $("#tabs").tabs("option", "active", 0);
+            $('#name').val(programName);
+            $('#programNameSave').val(programName);
+            userState.programSaved = true;
+            showProgram(result, true, programName);
+        });
     }
-    var programName = $programRow[0].children[0].textContent;
-    LOG.info('loadFromList ' + programName + ' signed in: ' + userState.id);
-    COMM.json("/program", {
-        "cmd" : "loadP",
-        "name" : programName
-    }, function(result) {
-        $("#tabs").tabs("option", "active", 0);
-        $('#name').val(programName);
-        userState.programSaved = true;
-        showProgram(result, true, programName);
-    });
 }
 
 function showToolbox(result) {
@@ -359,11 +362,17 @@ function initProgramNameTable() {
 
 }
 
+/**
+ * Run program
+ */
 function startProgram() {
     var saveFuture = saveToServer();
     saveFuture.then(runOnBrick);
 }
 
+/**
+ * Check program
+ */
 function checkProgram() {
     // TODO
     displayMessage("Your program will be checked soon ;-)");
