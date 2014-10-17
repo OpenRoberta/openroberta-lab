@@ -1,5 +1,9 @@
 package de.fhg.iais.roberta.ast.transformer;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.Phrase.Kind;
 import de.fhg.iais.roberta.ast.syntax.action.DriveAction;
@@ -14,6 +18,7 @@ import de.fhg.iais.roberta.ast.syntax.action.ShowTextAction;
 import de.fhg.iais.roberta.ast.syntax.action.ToneAction;
 import de.fhg.iais.roberta.ast.syntax.action.TurnAction;
 import de.fhg.iais.roberta.ast.syntax.action.VolumeAction;
+import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.ast.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
@@ -21,11 +26,33 @@ import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
+import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;
+import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensorMode;
+import de.fhg.iais.roberta.ast.syntax.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.TouchSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensorMode;
+import de.fhg.iais.roberta.ast.syntax.stmt.ActionStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Comment;
 import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
+import de.fhg.iais.roberta.blockly.generated.Repetitions;
+import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
+import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 public class AstJaxbTransformer<V> {
@@ -35,39 +62,50 @@ public class AstJaxbTransformer<V> {
         Phrase<V> value;
         String blockType;
         Block jaxbDestination;
+
         switch ( astSource.getKind() ) {
             case BOOL_CONST:
                 jaxbDestination = new Block();
+
                 fieldValue = String.valueOf(((BoolConst<V>) astSource).isValue()).toUpperCase();
+
                 blockType = astSource.getProperty().getBlockType();
                 setProperties(astSource, jaxbDestination, blockType);
                 addComment(astSource, jaxbDestination);
+
                 addField(jaxbDestination, "BOOL", fieldValue);
 
                 return jaxbDestination;
 
             case PICK_COLOR_CONST:
                 jaxbDestination = new Block();
+
                 fieldValue = ((ColorConst<V>) astSource).getValue().getHex();
+
                 blockType = astSource.getProperty().getBlockType();
                 setProperties(astSource, jaxbDestination, blockType);
                 addComment(astSource, jaxbDestination);
+
                 addField(jaxbDestination, "COLOUR", fieldValue);
 
                 return jaxbDestination;
 
             case MATH_CONST:
                 jaxbDestination = new Block();
+
                 fieldValue = ((MathConst<V>) astSource).getMathConst().name();
+
                 blockType = astSource.getProperty().getBlockType();
                 setProperties(astSource, jaxbDestination, blockType);
                 addComment(astSource, jaxbDestination);
+
                 addField(jaxbDestination, "CONSTANT", fieldValue);
 
                 return jaxbDestination;
 
             case NULL_CONST:
                 jaxbDestination = new Block();
+
                 blockType = astSource.getProperty().getBlockType();
                 setProperties(astSource, jaxbDestination, blockType);
                 addComment(astSource, jaxbDestination);
@@ -76,40 +114,52 @@ public class AstJaxbTransformer<V> {
 
             case STRING_CONST:
                 jaxbDestination = new Block();
+
                 fieldValue = ((StringConst<V>) astSource).getValue();
+
                 blockType = astSource.getProperty().getBlockType();
                 setProperties(astSource, jaxbDestination, blockType);
                 addComment(astSource, jaxbDestination);
+
                 addField(jaxbDestination, "TEXT", fieldValue);
 
                 return jaxbDestination;
 
             case NUM_CONST:
                 jaxbDestination = new Block();
+
                 fieldValue = ((NumConst<V>) astSource).getValue();
+
                 blockType = astSource.getProperty().getBlockType();
                 setProperties(astSource, jaxbDestination, blockType);
                 addComment(astSource, jaxbDestination);
+
                 addField(jaxbDestination, "NUM", fieldValue);
 
                 return jaxbDestination;
 
             case VAR:
                 jaxbDestination = new Block();
+
                 fieldValue = ((Var<V>) astSource).getValue();
+
                 blockType = astSource.getProperty().getBlockType();
                 setProperties(astSource, jaxbDestination, blockType);
                 addComment(astSource, jaxbDestination);
+
                 addField(jaxbDestination, "VAR", fieldValue);
 
                 return jaxbDestination;
 
             case UNARY:
                 jaxbDestination = new Block();
+
                 value = ((Unary<V>) astSource).getExpr();
+
                 blockType = astSource.getProperty().getBlockType();
                 setProperties(astSource, jaxbDestination, blockType);
                 addComment(astSource, jaxbDestination);
+
                 if ( blockType.equals("math_single") ) {
                     fieldValue = ((Unary<V>) astSource).getOp().name();
                     addField(jaxbDestination, "OP", fieldValue);
@@ -117,7 +167,31 @@ public class AstJaxbTransformer<V> {
                 } else {
                     addValue(jaxbDestination, "BOOL", value);
                 }
+
                 return jaxbDestination;
+
+            case BINARY:
+                jaxbDestination = new Block();
+
+                Binary<V> binary = (Binary<V>) astSource;
+
+                blockType = astSource.getProperty().getBlockType();
+                setProperties(astSource, jaxbDestination, blockType);
+                addComment(astSource, jaxbDestination);
+
+                switch ( binary.getOp() ) {
+                    case MATH_CHANGE:
+                        addField(jaxbDestination, "VAR", ((Var<V>) binary.getLeft()).getValue());
+                        addValue(jaxbDestination, "DELTA", binary.getRight());
+                        return jaxbDestination;
+
+                    default:
+                        addField(jaxbDestination, "OP", binary.getOp().name());
+                        addValue(jaxbDestination, "A", binary.getLeft());
+                        addValue(jaxbDestination, "B", binary.getRight());
+                        return jaxbDestination;
+
+                }
 
             case CLEAR_DISPLAY_ACTION:
                 jaxbDestination = new Block();
@@ -318,6 +392,182 @@ public class AstJaxbTransformer<V> {
 
                 return jaxbDestination;
 
+            case ULTRASONIC_SENSING:
+                jaxbDestination = new Block();
+
+                UltrasonicSensor<V> ultrasonicSensor = (UltrasonicSensor<V>) astSource;
+
+                blockType = astSource.getProperty().getBlockType();
+                setProperties(astSource, jaxbDestination, blockType);
+                addComment(astSource, jaxbDestination);
+
+                fieldValue = ultrasonicSensor.getPort().getPortNumber();
+
+                addField(jaxbDestination, "SENSORPORT", fieldValue);
+                if ( ultrasonicSensor.getMode() != UltrasonicSensorMode.GET_MODE && ultrasonicSensor.getMode() != UltrasonicSensorMode.GET_SAMPLE ) {
+                    addField(jaxbDestination, "MODE", ultrasonicSensor.getMode().name());
+                }
+
+                return jaxbDestination;
+
+            case COLOR_SENSING:
+                jaxbDestination = new Block();
+
+                ColorSensor<V> colorSensor = (ColorSensor<V>) astSource;
+
+                blockType = astSource.getProperty().getBlockType();
+                setProperties(astSource, jaxbDestination, blockType);
+                addComment(astSource, jaxbDestination);
+
+                fieldValue = colorSensor.getPort().getPortNumber();
+
+                addField(jaxbDestination, "SENSORPORT", fieldValue);
+                if ( colorSensor.getMode() != ColorSensorMode.GET_MODE && colorSensor.getMode() != ColorSensorMode.GET_SAMPLE ) {
+                    addField(jaxbDestination, "MODE", colorSensor.getMode().name());
+                }
+
+                return jaxbDestination;
+
+            case INFRARED_SENSING:
+                jaxbDestination = new Block();
+
+                InfraredSensor<V> infraredSensor = (InfraredSensor<V>) astSource;
+
+                blockType = astSource.getProperty().getBlockType();
+                setProperties(astSource, jaxbDestination, blockType);
+                addComment(astSource, jaxbDestination);
+
+                fieldValue = infraredSensor.getPort().getPortNumber();
+
+                addField(jaxbDestination, "SENSORPORT", fieldValue);
+                if ( infraredSensor.getMode() != InfraredSensorMode.GET_MODE && infraredSensor.getMode() != InfraredSensorMode.GET_SAMPLE ) {
+                    addField(jaxbDestination, "MODE", infraredSensor.getMode().name());
+                }
+
+                return jaxbDestination;
+
+            case ENCODER_SENSING:
+                jaxbDestination = new Block();
+
+                EncoderSensor<V> encoderSensor = (EncoderSensor<V>) astSource;
+
+                blockType = astSource.getProperty().getBlockType();
+                setProperties(astSource, jaxbDestination, blockType);
+                addComment(astSource, jaxbDestination);
+
+                fieldValue = encoderSensor.getMotor().name();
+
+                addField(jaxbDestination, "MOTORPORT", fieldValue);
+                if ( encoderSensor.getMode() == MotorTachoMode.DEGREE || encoderSensor.getMode() == MotorTachoMode.ROTATION ) {
+                    addField(jaxbDestination, "MODE", encoderSensor.getMode().name());
+                }
+
+                return jaxbDestination;
+
+            case BRICK_SENSIG:
+                jaxbDestination = new Block();
+
+                blockType = astSource.getProperty().getBlockType();
+                setProperties(astSource, jaxbDestination, blockType);
+                addComment(astSource, jaxbDestination);
+
+                fieldValue = ((BrickSensor<V>) astSource).getKey().name();
+
+                addField(jaxbDestination, "KEY", fieldValue);
+
+                return jaxbDestination;
+
+            case GYRO_SENSIG:
+                jaxbDestination = new Block();
+
+                GyroSensor<V> gyroSensor = (GyroSensor<V>) astSource;
+
+                blockType = astSource.getProperty().getBlockType();
+                setProperties(astSource, jaxbDestination, blockType);
+                addComment(astSource, jaxbDestination);
+
+                fieldValue = gyroSensor.getPort().getPortNumber();
+
+                addField(jaxbDestination, "SENSORPORT", fieldValue);
+                if ( gyroSensor.getMode() == GyroSensorMode.ANGLE || gyroSensor.getMode() == GyroSensorMode.RATE ) {
+                    addField(jaxbDestination, "MODE", gyroSensor.getMode().name());
+                }
+
+                return jaxbDestination;
+
+            case TIMER_SENSING:
+                jaxbDestination = new Block();
+
+                blockType = astSource.getProperty().getBlockType();
+                setProperties(astSource, jaxbDestination, blockType);
+                addComment(astSource, jaxbDestination);
+
+                fieldValue = String.valueOf(((TimerSensor<V>) astSource).getTimer());
+
+                addField(jaxbDestination, "SENSORNUM", fieldValue);
+
+                return jaxbDestination;
+
+            case EXPR_STMT:
+                ExprStmt<V> exprStmt = (ExprStmt<V>) astSource;
+                return astToBlock(exprStmt.getExpr());
+
+            case AKTION_STMT:
+                ActionStmt<V> actionStmt = (ActionStmt<V>) astSource;
+                return astToBlock(actionStmt.getAction());
+            case SENSOR_STMT:
+                SensorStmt<V> sensorStmt = (SensorStmt<V>) astSource;
+                return astToBlock(sensorStmt.getSensor());
+
+            case IF_STMT:
+                jaxbDestination = new Block();
+
+                blockType = astSource.getProperty().getBlockType();
+                setProperties(astSource, jaxbDestination, blockType);
+                addComment(astSource, jaxbDestination);
+
+                IfStmt<V> ifStmt = (IfStmt<V>) astSource;
+
+                StmtList<V> elseList = ifStmt.getElseList();
+                int expr = 0;
+
+                boolean repetition = false;
+
+                expr = ifStmt.getExpr().size();
+
+                if ( expr > 1 || elseList.get().size() != 0 ) {
+                    Mutation mutation = new Mutation();
+                    if ( elseList != null ) {
+                        mutation.setElse(BigInteger.ONE);
+                    }
+                    if ( expr > 1 ) {
+                        mutation.setElseif(BigInteger.valueOf(expr));
+                    }
+                    jaxbDestination.setMutation(mutation);
+                    repetition = true;
+                }
+                if ( repetition ) {
+                    Repetitions repetitions = new Repetitions();
+                    for ( int i = 0; i < expr; i++ ) {
+                        addValue(repetitions, "IF" + i, ifStmt.getExpr().get(i));
+                        addStatement(repetitions, "DO" + i, ifStmt.getThenList().get(i));
+                    }
+                    if ( elseList.get().size() != 0 ) {
+                        addStatement(repetitions, "ELSE", ifStmt.getElseList());
+                    }
+                    jaxbDestination.setRepetitions(repetitions);
+                } else {
+                    for ( int i = 0; i < expr; i++ ) {
+                        addValue(jaxbDestination, "IF" + i, ifStmt.getExpr().get(i));
+                        addStatement(jaxbDestination, "DO" + i, ifStmt.getThenList().get(i));
+                    }
+                    if ( elseList.get().size() != 0 ) {
+                        addStatement(jaxbDestination, "ELSE", ifStmt.getElseList());
+                    }
+                }
+
+                return jaxbDestination;
+
             case EMPTY_EXPR:
             case LOCATION:
                 return null;
@@ -327,12 +577,49 @@ public class AstJaxbTransformer<V> {
 
     }
 
+    private List<Block> extractStmtList(Phrase<V> phrase) {
+        List<Block> result = new ArrayList<Block>();
+        Assert.isTrue(phrase.getKind() == Kind.STMT_LIST, "Phrase is not StmtList!");
+        StmtList<V> stmtList = (StmtList<V>) phrase;
+        for ( Stmt<V> stmt : stmtList.get() ) {
+            result.add(astToBlock(stmt));
+        }
+        return result;
+    }
+
+    private void addStatement(Block block, String name, Phrase<V> value) {
+        if ( value.getKind() != Kind.EMPTY_EXPR ) {
+            Statement statement = new Statement();
+            statement.setName(name);
+            statement.getBlock().addAll(extractStmtList(value));
+            block.getStatement().add(statement);
+        }
+    }
+
+    private void addStatement(Repetitions repetitions, String name, Phrase<V> value) {
+        if ( value.getKind() != Kind.EMPTY_EXPR ) {
+            Statement statement = new Statement();
+            statement.setName(name);
+            statement.getBlock().addAll(extractStmtList(value));
+            repetitions.getValueAndStatement().add(statement);
+        }
+    }
+
     private void addValue(Block block, String name, Phrase<V> value) {
         if ( value.getKind() != Kind.EMPTY_EXPR ) {
             Value blockValue = new Value();
             blockValue.setName(name);
             blockValue.setBlock(astToBlock(value));
             block.getValue().add(blockValue);
+        }
+    }
+
+    private void addValue(Repetitions repetitions, String name, Phrase<V> value) {
+        if ( value.getKind() != Kind.EMPTY_EXPR ) {
+            Value blockValue = new Value();
+            blockValue.setName(name);
+            blockValue.setBlock(astToBlock(value));
+            repetitions.getValueAndStatement().add(blockValue);
         }
     }
 

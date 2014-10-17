@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.sensor;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
@@ -48,5 +49,20 @@ public class ColorSensorTest {
         String a = "BlockAST [project=[[Location [x=-65, y=105], ColorSensor [mode=GET_SAMPLE, port=S3]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getSampleColor.xml"));
+    }
+
+    @Test
+    public void reverseTransformation() throws Exception {
+        Helper.assertTransformationIsOk("/ast/sensors/sensor_setColor.xml");
+    }
+
+    @Ignore
+    public void reverseTransformation1() throws Exception {
+        Helper.assertTransformationIsOk("/ast/sensors/sensor_getModeColor.xml");
+    }
+
+    @Test
+    public void reverseTransformation2() throws Exception {
+        Helper.assertTransformationIsOk("/ast/sensors/sensor_getSampleColor.xml");
     }
 }

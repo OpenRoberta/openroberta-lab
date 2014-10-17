@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.stmt;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
@@ -167,6 +168,21 @@ public class IfStmtTest {
         String a = "BlockAST [project=[[Location [x=-93, y=179], \nif EmptyExpr [defVal=class java.lang.Boolean]\n,then\n]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/if_stmt10.xml"));
+    }
+
+    @Test
+    public void reverseTransformation() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/if_stmt.xml");
+    }
+
+    @Test
+    public void reverseTransformation1() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/if_stmt1.xml");
+    }
+
+    @Ignore
+    public void reverseTransformation2() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/if_stmt2.xml");
     }
 
 }
