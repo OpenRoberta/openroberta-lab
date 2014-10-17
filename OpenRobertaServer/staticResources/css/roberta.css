@@ -278,7 +278,8 @@ ul#head-navigation a {
 #login-user input,
 .program input,
 #register-user input,
-#delete-user input {
+#delete-user input,
+#set-token input {
     padding: 7px 8px 7px 32px;
     border: 1px solid #afca04;
     border-radius: 3px;
@@ -307,7 +308,8 @@ ul#head-navigation a {
 
 #login-user input#pass1S,
 #register-user input#pass1,
-#register-user input#pass2 {
+#register-user input#pass2,
+#set-token input#tokenValue {
     background-image: url(img/login_pw-icon.png);
 }
 
@@ -316,7 +318,9 @@ ul#head-navigation a {
 #register-user input#pass1:active,
 #register-user input#pass1:focus,
 #register-user input#pass2:active,
-#register-user input#pass2:focus {
+#register-user input#pass2:focus,
+#set-token input#tokenValue:active,
+#set-token input#tokenValue:focus {
     background-image: url(img/login_pw-icon_active.png);
     color: #333333;
 }
@@ -343,7 +347,6 @@ ul#head-navigation a {
 
 .program input.programName {
     background-image: url(img/program_name-icon.png);
-    width: 140%;
     box-sizing: border-box;
 }
 
@@ -356,8 +359,9 @@ ul#head-navigation a {
 #login-user .submit,
 .program .submit,
 #register-user .submit,
-#delete-user .submit {
-    padding: 7px 9px;
+#delete-user .submit,
+#set-token .submit {
+	padding: 7px 9px;
     border: none;
     font-size: 16px;
     border-radius: 3px;
@@ -369,7 +373,8 @@ ul#head-navigation a {
 #login-user .submit:hover,
 .program .submit:hover,
 #register-user .submit:hover,
-#delete-user .submit:hover {
+#delete-user .submit:hover,
+#set-token .submit:hover {
     background-color: #b7d032;
 }
 
@@ -431,6 +436,10 @@ ul#head-navigation a {
 .jquerypopup input {
     background-repeat: no-repeat;
     background-position: center left;
+}
+
+.jquerypopup .input {
+	width: 140%;
 }
 
 .jquerypopup a {

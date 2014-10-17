@@ -56,6 +56,7 @@
             <li>
                 <a href="#"><span class="head-navi-icons settings"></span><span class="head-navi-text">Verbindung</span></a>
                 <ul id="submenu-connection" class="head-navigation-submenu">
+                    <li id="token">Token ...</li>
                     <li id="wifi">WIFI ...</li>
                     <li id="usb">USB ...</li>
                     <li id="bluetooth">Bluetooth ...</li>
@@ -125,8 +126,8 @@
         <input id="userName" class='input' type="text" value="" />
         <label for="userEmail">E-Mail</label>
         <input id="userEmail" class='input' type="text" value="" /><br/>
-        <input type="radio" name="role" value="schueler">Schüler
-        <input type="radio" name="role" value="lehrer">Lehrer<br/>
+        <input type="radio" name="role" value="schueler" />Schüler
+        <input type="radio" name="role" value="lehrer" />Lehrer<br/>
         <input id="saveUser" class='submit' type="submit" value="Benutzer registrieren" />
     </div>
 
@@ -137,20 +138,26 @@
 
     <div class="jquerypopup program" id="add-program" title="Programm">
         <label for="programNameAdd">Programmname</label>
-        <input id="programNameAdd" class='input, programName' type="text" value="" /><br/>
+        <input id="programNameAdd" class='input programName' type="text" value="" /><br/>
         <input id="addProgram" class='submit' type="submit" value="Hinzufügen" />
     </div>
 
     <div class="jquerypopup program" id="save-program" title="Programm">
         <label for="programNameSave">Programmname</label>
-        <input id="programNameSave" class='input, programName' type="text" value="" /><br/>
+        <input id="programNameSave" class='input programName' type="text" value="" /><br/>
         <input id="saveProgram" class='submit' type="submit" value="Speichern" />
     </div>
 
     <div class="jquerypopup program" id="new-program" title="Programm">
         <label for="programNameNew">Programmname</label>
-        <input id="programNameNew" class='input, programName' type="text" value="" /><br/>
+        <input id="programNameNew" class='input programName' type="text" value="" /><br/>
         <input id="newProgram" class='submit' type="button" value="Anlegen" />
+    </div>
+
+    <div class="jquerypopup" id="set-token" title="Token">
+        <label for="tokenValue">Wert</label>
+        <input id="tokenValue" class='input' type="text" value="" /><br/>
+        <input id="setToken" class='submit' type="button" value="Setzen" />
     </div>
 
     <div class="jquerypopup" id="show-message">

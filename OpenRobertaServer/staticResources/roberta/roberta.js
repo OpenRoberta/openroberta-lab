@@ -146,7 +146,30 @@ function setProgram(name) {
         $("#setProgram").text(name);
     } else {
         $("#setProgram").text('Programm');
-    } // bad because of language dependent
+    } // bad because of language dependency
+}
+
+/**
+ * Set token
+ * 
+ * @param {token}
+ *            token value to be set
+ */
+function setToken(token) {
+    if (token) {
+        COMM.json("/blocks", {
+            "cmd" : "setToken",
+            "token" : token
+        }, function(response) {
+            if (response.rc === "ok") {
+                userState.token = token;
+            } else {
+                displayMessage("Error while setting token, cause: " + response.cause);
+            }
+        });
+    } else {
+        displayMessage("Token value is empty");
+    }
 }
 
 function incrCounter(e) {
@@ -462,7 +485,9 @@ function initHeadNavigation() {
     $('#head-navigation').onWrap('click', '#submenu-connection > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         var domId = event.target.id;
-        if (domId === 'wifi') {
+        if (domId === 'token') {
+            $("#set-token").dialog("open");
+        } else if (domId === 'wifi') {
         } else if (domId === 'usb') {
         } else if (domId === 'bluetooth') {
         } else if (domId === 'disconnect') {
@@ -573,6 +598,11 @@ function init() {
         var $name = $('#programNameNew');
         setProgram($name.val());
     }, 'new program');
+
+    $('#setToken').onWrap('click', function() {
+        var $token = $('#tokenValue');
+        setToken($token.val());
+    }, 'set token');
     // =============================================================================
 
     $('#toggle').onWrap('click', LOG.toggleVisibility, 'toggle LOG visibility');
