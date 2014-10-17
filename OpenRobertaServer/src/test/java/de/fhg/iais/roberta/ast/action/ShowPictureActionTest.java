@@ -11,7 +11,7 @@ public class ShowPictureActionTest {
 
     @Test
     public void make() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-74, y=64], ShowPictureAction [SMILEY1, NumConst [0], NumConst [0]]]]]";
+        String a = "BlockAST [project=[[Location [x=-74, y=64], ShowPictureAction [EYESOPEN, NumConst [0], NumConst [0]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_ShowPicture.xml"));
     }
 
@@ -19,7 +19,7 @@ public class ShowPictureActionTest {
     public void getPicture() throws Exception {
         JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_ShowPicture.xml");
         ShowPictureAction<Void> spa = (ShowPictureAction<Void>) transformer.getTree().get(1);
-        Assert.assertEquals("SMILEY1", spa.getPicture().name());
+        Assert.assertEquals("EYESOPEN", spa.getPicture().name());
     }
 
     @Test
@@ -39,7 +39,7 @@ public class ShowPictureActionTest {
     @Test
     public void missing() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=-9, y=3], ShowPictureAction [SMILEY1, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]], ShowPictureAction [SMILEY1, NumConst [0], EmptyExpr [defVal=class java.lang.Integer]], ShowPictureAction [SMILEY1, EmptyExpr [defVal=class java.lang.Integer], NumConst [0]]]]]";
+            "BlockAST [project=[[Location [x=-9, y=3], ShowPictureAction [FLOWERS, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]], ShowPictureAction [OLDGLASSES, NumConst [0], EmptyExpr [defVal=class java.lang.Integer]], ShowPictureAction [TACHO, EmptyExpr [defVal=class java.lang.Integer], NumConst [0]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_ShowPictureMissing.xml"));
     }
 

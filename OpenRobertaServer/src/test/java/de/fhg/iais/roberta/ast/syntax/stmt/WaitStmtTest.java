@@ -17,7 +17,7 @@ public class WaitStmtTest {
                 + "   hal.driveDistance(ActorPort.A, ActorPort.B, false, DriveDirection.FOREWARD, 50, 20);break;"
                 + "}"
                 + "if ( hal.isPressed(BrickKey.ENTER) == true ) {"
-                + "    hal.drawPicture(\"SMILEY1\", 0, 0);break;"
+                + "    hal.drawPicture(ShowPicture.OLDGLASSES, 0, 0);break;"
                 + "}"
                 + "if ( hal.getTimerValue(1) == 500 ) {"
                 + "     hal.ledOff();break;"

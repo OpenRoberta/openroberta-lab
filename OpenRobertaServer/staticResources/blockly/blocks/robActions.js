@@ -276,9 +276,9 @@ Blockly.Blocks['robActions_display_picture'] = {
   init : function() {
     this.setColourRGB(Blockly.CAT_ROBACTIONS_RGB);
     // this.setInputsInline(true);
-    var picture = new Blockly.FieldDropdown([ [ 'Smiley1', 'SMILEY1' ],
-        [ 'Smiley2', 'SMILEY2' ], [ 'Smiley3', 'SMILEY3' ],
-        [ 'Smiley4', 'SMILEY4' ] ]);
+    var picture = new Blockly.FieldDropdown([ [ 'Brille', 'OLDGLASSES' ],
+        [ 'Augen offen', 'EYESOPEN' ], [ 'Augen zu', 'EYESCLOSED' ],
+        [ 'Blumen', 'FLOWERS' ], ['Tacho', 'TACHO'] ]);
     this.appendDummyInput().appendField(
         Blockly.Msg.DISPLAY_SHOW + ' ' + Blockly.Msg.DISPLAY_PICTURE)
         .appendField(picture, 'PICTURE');
@@ -383,9 +383,10 @@ Blockly.Blocks['robActions_play_file'] = {
   init : function() {
     this.setColourRGB(Blockly.CAT_ROBACTIONS_RGB);
     // this.setInputsInline(true);
-    var file = new Blockly.FieldDropdown([ [ 'Soundfile1', 'SOUNDFILE1' ],
-        [ 'Soundfile2', 'SOUNDFILE2' ], [ 'Soundfile3', 'SOUNDFILE3' ],
-        [ 'Soundfile4', 'SOUNDFILE4' ] ]);
+    //LEJOS system sounds from 0 to 4 in HAL 
+    var file = new Blockly.FieldDropdown([ [ '1', '0' ],
+        [ '2', '1' ], [ '3', '2' ],
+        [ '4', '3' ], [ '5', '4' ] ]);
     this.appendDummyInput().appendField(
         Blockly.Msg.PLAY + ' ' + Blockly.Msg.PLAY_FILE).appendField(file,
         'FILE');
