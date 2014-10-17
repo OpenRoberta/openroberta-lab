@@ -1,10 +1,9 @@
 var userState = {};
-initializeUserState();
 
 /**
  * Initialize user-state-object
  */
-function initializeUserState() {
+function initUserState() {
     userState.id = -1;
     userState.name = 'none';
     userState.role = 'none';
@@ -101,7 +100,7 @@ function logout() {
         "cmd" : "logout"
     }, function(response) {
         if (response.rc === "ok") {
-            initializeUserState();
+            initUserState();
             displayStatus();
             setHeadNavigationMenuState('logout');
         } else {
@@ -140,20 +139,22 @@ function initProgramEnvironment() {
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
 }
 
+/**
+ * Set program name
+ * 
+ * @param {name} Name to be set
+ */
 function setProgram(name) {
     if (name) {
         userState.program = name;
-        $("#setProgram").text(name);
-    } else {
-        $("#setProgram").text('Programm');
-    } // bad because of language dependency
+        displayStatus();
+    }
 }
 
 /**
  * Set token
  * 
- * @param {token}
- *            token value to be set
+ * @param {token} Token value to be set
  */
 function setToken(token) {
     if (token) {
@@ -381,10 +382,19 @@ function switchToBrickly() {
 }
 
 /**
- * Initialize the navigation bar in the head of the page
+ * Display status information in the navigation bar 
  */
 function displayStatus() {
-    $('#setName').text(userState.name);
+    if (userState.name != "none") {
+        $('#setName').text(userState.name);
+    } else {
+        $('#setName').text("Anmeldung");   // Bad because of language dependency
+    }
+    if (userState.program != "none") {
+        $('#setProgram').text(userState.program);
+    } else {
+        $('#setProgram').text("Programm");   // Bad because of language dependency
+    }
     $('#head-navigation #role').text(userState.role);
     $('#head-navigation #robot').text(userState.robot);
     $('#head-navigation #brickConnection').text(userState.brickConnection);
@@ -393,8 +403,7 @@ function displayStatus() {
 /**
  * Inject Brickly with initial toolbox
  * 
- * @param {state}
- *            state to be set
+ * @param {state} State to be set
  * 
  */
 function setHeadNavigationMenuState(state) {
@@ -561,23 +570,7 @@ function initPopups() {
     $(".popup-opener").click(function() {
         $(".ui-dialog-content").dialog("close");
     });
-}
-
-/**
- * Initializations
- */
-function init() {
-
-    initPopups();
-    initHeadNavigation();
-    initProgramNameTable();
-
-    $('#tabs').tabs({
-        heightStyle : 'content',
-        active : 0,
-        beforeActivate : beforeActivateTab
-    });
-
+    
     $('#saveUser').onWrap('click', saveUserToServer, 'save the user data');
     $('#deleteUser').onWrap('click', deleteUserOnServer, 'delete user data');
     $('#doLogin').onWrap('click', login, 'login ');
@@ -603,9 +596,35 @@ function init() {
         var $token = $('#tokenValue');
         setToken($token.val());
     }, 'set token');
+}
+
+
+/**
+ * Initialize tabs
+ */
+function initTabs() {
+    $('#tabs').tabs({
+        heightStyle : 'content',
+        active : 0,
+        beforeActivate : beforeActivateTab
+    });
+}
+
+/**
+ * Initializations
+ */
+function init() {
+
+    initUserState();
+    initTabs();
+    initPopups();
+    initHeadNavigation();
+    initProgramNameTable();
+
     // =============================================================================
 
     $('#toggle').onWrap('click', LOG.toggleVisibility, 'toggle LOG visibility');
+    
     $('#loadFromListing').onWrap('click', function() {
         loadFromListing();
     }, 'load blocks from program list');
