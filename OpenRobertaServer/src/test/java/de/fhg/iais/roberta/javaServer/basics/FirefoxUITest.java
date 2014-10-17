@@ -94,50 +94,47 @@ public class FirefoxUITest {
         this.driver.findElement(By.linkText("Logo")).click();
     }
 
-    // @Test
-    // public void CreateLoginUserUITest() throws Exception {
-    // this.driver.get(this.baseUrl + "/workplace.html");
-    // this.driver.findElement(By.id("signInIcon")).click();
-    // this.driver.findElement(By.id("open-register-user")).click();
-    // this.driver.findElement(By.id("accountName")).clear();
-    // this.driver.findElement(By.id("accountName")).sendKeys("" +
-    // this.randomUser);
-    // this.driver.findElement(By.id("pass1")).clear();
-    // this.driver.findElement(By.id("pass1")).sendKeys("test1234!");
-    // this.driver.findElement(By.id("pass2")).clear();
-    // this.driver.findElement(By.id("pass2")).sendKeys("test1234!");
-    // this.driver.findElement(By.id("userName")).clear();
-    // this.driver.findElement(By.id("userName")).sendKeys("RobertaSelenium");
-    // this.driver.findElement(By.id("userEmail")).clear();
-    // this.driver.findElement(By.id("userEmail")).sendKeys("test@roberta.de");
-    // this.driver.findElement(By.name("role")).click();
-    // this.driver.findElement(By.id("saveUser")).click();
-    // assertEquals("User created!", closeAlertAndGetItsText());
-    // // Try to login, check (at least) if name appears in the UI
-    // this.driver.findElement(By.id("signInIcon")).click();
-    // this.driver.findElement(By.id("accountNameS")).clear();
-    // this.driver.findElement(By.id("accountNameS")).sendKeys("" +
-    // this.randomUser);
-    // this.driver.findElement(By.id("pass1S")).clear();
-    // this.driver.findElement(By.id("pass1S")).sendKeys("test1234!");
-    // this.driver.findElement(By.id("signIn")).click();
-    // closeAlertAndGetItsText();
-    // assertEquals("" + this.randomUser,
-    // this.driver.findElement(By.id("setName")).getText());
-    // }
+    @Test
+    public void CreateLoginUserUITest() throws Exception {
+        this.driver.get(this.baseUrl + "/workplace.html");
+        this.driver.findElement(By.cssSelector("#submenu-login > #new")).click();
+        this.driver.findElement(By.id("accountName")).clear();
+        this.driver.findElement(By.id("accountName")).sendKeys("" + this.randomUser);
+        this.driver.findElement(By.id("pass1")).clear();
+        this.driver.findElement(By.id("pass1")).sendKeys("test1234!");
+        this.driver.findElement(By.id("pass2")).clear();
+        this.driver.findElement(By.id("pass2")).sendKeys("test1234!");
+        this.driver.findElement(By.id("userName")).clear();
+        this.driver.findElement(By.id("userName")).sendKeys("RobertaSelenium");
+        this.driver.findElement(By.id("userEmail")).clear();
+        this.driver.findElement(By.id("userEmail")).sendKeys("test@roberta.de");
+        this.driver.findElement(By.name("role")).click();
+        this.driver.findElement(By.id("saveUser")).click();
+        assertEquals("User created!", closeAlertAndGetItsText());
+        // Try to login, check (at least) if name appears in the UI
+        this.driver.findElement(By.id("setName")).click();
+        this.driver.findElement(By.id("login")).click();
+        this.driver.findElement(By.id("accountNameS")).clear();
+        this.driver.findElement(By.id("accountNameS")).sendKeys("" + this.randomUser);
+        this.driver.findElement(By.id("pass1S")).clear();
+        this.driver.findElement(By.id("pass1S")).sendKeys("test1234!");
+        this.driver.findElement(By.id("doLogin")).click();
+        closeAlertAndGetItsText();
+        assertEquals("" + this.randomUser, this.driver.findElement(By.id("setName")).getText());
+    }
 
-    // @Test
-    // public void LoginWrongUserUITest() throws Exception {
-    // this.driver.get(this.baseUrl + "/workplace.html");
-    // this.driver.findElement(By.id("signInIcon")).click();
-    // this.driver.findElement(By.id("accountNameS")).clear();
-    // this.driver.findElement(By.id("accountNameS")).sendKeys("" +
-    // this.randomUser);
-    // this.driver.findElement(By.id("pass1S")).clear();
-    // this.driver.findElement(By.id("pass1S")).sendKeys("test1234!");
-    // this.driver.findElement(By.id("signIn")).click();
-    // assertEquals("Wrong user or wrong password!", closeAlertAndGetItsText());
-    // }
+    @Test
+    public void LoginWrongUserUITest() throws Exception {
+        this.driver.get(this.baseUrl + "/workplace.html");
+        this.driver.findElement(By.id("setName")).click();
+        this.driver.findElement(By.id("login")).click();
+        this.driver.findElement(By.id("accountNameS")).clear();
+        this.driver.findElement(By.id("accountNameS")).sendKeys("Wrong user");
+        this.driver.findElement(By.id("pass1S")).clear();
+        this.driver.findElement(By.id("pass1S")).sendKeys("test1234!");
+        this.driver.findElement(By.id("doLogin")).click();
+        assertEquals("Wrong user or wrong password!", closeAlertAndGetItsText());
+    }
 
     @After
     public void tearDown() throws Exception {
