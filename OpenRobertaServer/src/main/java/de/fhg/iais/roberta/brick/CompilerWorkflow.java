@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
 import de.fhg.iais.roberta.ast.syntax.action.HardwareComponentType;
 import de.fhg.iais.roberta.ast.syntax.action.MotorSide;
+import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
@@ -57,6 +58,7 @@ public class CompilerWorkflow {
                 .setWheelDiameter(5.6)
                 .addActor(ActorPort.A, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))
                 .addActor(ActorPort.B, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))
+                .addSensor(SensorPort.S1, new HardwareComponent(HardwareComponentType.EV3ColorSensor))
                 .build();
         JaxbProgramTransformer<Void> transformer;
         try {

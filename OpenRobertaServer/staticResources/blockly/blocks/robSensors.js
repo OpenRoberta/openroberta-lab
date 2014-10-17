@@ -357,7 +357,8 @@ Blockly.Blocks['robSensors_colour_setMode'] = {
         [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
     var mode = new Blockly.FieldDropdown([
         [ Blockly.Msg.MODE_COLOUR, 'COLOUR' ],
-        [ Blockly.Msg.MODE_LIGHT, 'LIGHT' ],
+        [ Blockly.Msg.MODE_LIGHT, 'RED' ],
+        [ Blockly.Msg.MODE_RGB, 'RGB' ],
         [ Blockly.Msg.MODE_AMBIENTLIGHT, 'AMBIENTLIGHT' ] ]);
     this.appendDummyInput().appendField(Blockly.Msg.SENSOR_SET_MODE)
         .appendField(Blockly.Msg.SENSOR_COLOUR).appendField(sensorPort,

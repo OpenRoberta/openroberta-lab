@@ -320,6 +320,7 @@ Blockly.Msg.MODE_DISTANCE = "Abstand";
 Blockly.Msg.MODE_LIGHT = "Licht";
 Blockly.Msg.MODE_PRESENCE = "Anwesenheit";
 Blockly.Msg.MODE_RATE = "Drehrate";
+Blockly.Msg.MODE_RGB = "RGB";  // untranslated
 Blockly.Msg.MODE_ROTATION = "Rotation";
 Blockly.Msg.MODE_STATE = "Zustand";
 Blockly.Msg.MOTOR = "Motor";

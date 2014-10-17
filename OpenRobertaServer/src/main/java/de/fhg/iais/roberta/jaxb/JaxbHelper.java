@@ -49,7 +49,7 @@ public class JaxbHelper {
         JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         jaxbUnmarshaller.setSchema(blockSetSchema);
-        jaxbUnmarshaller.setSchema(null); // TODO: reactivate validation
+        //jaxbUnmarshaller.setSchema(null); // TODO: reactivate validation
 
         InputStream stream = new ByteArrayInputStream(blocklyXml.getBytes(StandardCharsets.UTF_8));
         InputSource src = new InputSource(stream);

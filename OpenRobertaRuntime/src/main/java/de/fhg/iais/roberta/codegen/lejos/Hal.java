@@ -26,7 +26,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
  * Connection class between our generated code and the leJOS API
- * 
+ *
  * @author dpyka
  */
 public class Hal {
@@ -61,16 +61,16 @@ public class Hal {
      * @param brickConfiguration
      */
     public Hal(BrickConfiguration brickConfiguration) {
-        this.deviceHandler = new DeviceHandler(brickConfiguration);
+        deviceHandler = new DeviceHandler(brickConfiguration);
 
-        this.wheelDiameter = brickConfiguration.getWheelDiameterCM();
-        this.trackWidth = brickConfiguration.getTrackWidthCM();
+        wheelDiameter = brickConfiguration.getWheelDiameterCM();
+        trackWidth = brickConfiguration.getTrackWidthCM();
 
-        this.brick = LocalEV3.get();
-        this.brick.setDefault();
+        brick = LocalEV3.get();
+        brick.setDefault();
 
-        for ( int i = 0; i < this.timers.length; i++ ) {
-            this.timers[i] = new Stopwatch();
+        for ( int i = 0; i < timers.length; i++ ) {
+            timers[i] = new Stopwatch();
         }
     }
 
@@ -106,7 +106,7 @@ public class Hal {
      */
     public void turnOnRegulatedMotor(ActorPort actorPort, int speedPercent) {
         setRegulatedMotorSpeed(actorPort, speedPercent);
-        this.deviceHandler.getRegulatedMotor(actorPort).forward();
+        deviceHandler.getRegulatedMotor(actorPort).forward();
     }
 
     /**
@@ -115,7 +115,7 @@ public class Hal {
      */
     public void turnOnUnregulatedMotor(ActorPort actorPort, int speedPercent) {
         setUnregulatedMotorSpeed(actorPort, speedPercent);
-        this.deviceHandler.getUnregulatedMotor(actorPort).forward();
+        deviceHandler.getUnregulatedMotor(actorPort).forward();
     }
 
     /**
@@ -123,7 +123,7 @@ public class Hal {
      * @param speedPercent
      */
     public void setRegulatedMotorSpeed(ActorPort actorPort, int speedPercent) {
-        this.deviceHandler.getRegulatedMotor(actorPort).setSpeed(toDegPerSec(speedPercent));
+        deviceHandler.getRegulatedMotor(actorPort).setSpeed(toDegPerSec(speedPercent));
     }
 
     /**
@@ -131,7 +131,7 @@ public class Hal {
      * @param speedPercent
      */
     public void setUnregulatedMotorSpeed(ActorPort actorPort, int speedPercent) {
-        this.deviceHandler.getUnregulatedMotor(actorPort).setPower(speedPercent);
+        deviceHandler.getUnregulatedMotor(actorPort).setPower(speedPercent);
     }
 
     /**
@@ -141,13 +141,13 @@ public class Hal {
      * @param rotations
      */
     public void rotateRegulatedMotor(ActorPort actorPort, int speedPercent, MotorMoveMode mode, int rotations) {
-        this.deviceHandler.getRegulatedMotor(actorPort).setSpeed(toDegPerSec(speedPercent));
+        deviceHandler.getRegulatedMotor(actorPort).setSpeed(toDegPerSec(speedPercent));
         switch ( mode ) {
             case DEGREE:
-                this.deviceHandler.getRegulatedMotor(actorPort).rotate(rotations);
+                deviceHandler.getRegulatedMotor(actorPort).rotate(rotations);
                 break;
             case ROTATIONS:
-                this.deviceHandler.getRegulatedMotor(actorPort).rotate(rotationsToAngle(rotations));
+                deviceHandler.getRegulatedMotor(actorPort).rotate(rotationsToAngle(rotations));
                 break;
             default:
                 throw new DbcException("incorrect MotorMoveMode");
@@ -161,17 +161,17 @@ public class Hal {
      * @param value
      */
     public void rotateUnregulatedMotor(ActorPort actorPort, int speedPercent, MotorMoveMode mode, int value) {
-        this.deviceHandler.getUnregulatedMotor(actorPort).setPower(speedPercent);
+        deviceHandler.getUnregulatedMotor(actorPort).setPower(speedPercent);
         if ( value >= 0 ) {
-            this.deviceHandler.getUnregulatedMotor(actorPort).forward();
+            deviceHandler.getUnregulatedMotor(actorPort).forward();
             switch ( mode ) {
                 case DEGREE:
-                    while ( this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() < value ) {
+                    while ( deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() < value ) {
                         // do nothing
                     }
                     break;
                 case ROTATIONS:
-                    while ( this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() < rotationsToAngle(value) ) {
+                    while ( deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() < rotationsToAngle(value) ) {
                         // do nothing
                     }
                     break;
@@ -181,15 +181,15 @@ public class Hal {
 
         } else {
             // rotations < 0 -> backward
-            this.deviceHandler.getUnregulatedMotor(actorPort).backward();
+            deviceHandler.getUnregulatedMotor(actorPort).backward();
             switch ( mode ) {
                 case DEGREE:
-                    while ( this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() > value ) {
+                    while ( deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() > value ) {
                         // do nothing
                     }
                     break;
                 case ROTATIONS:
-                    while ( this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() > rotationsToAngle(value) ) {
+                    while ( deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() > rotationsToAngle(value) ) {
                         // do nothing
                     }
                     break;
@@ -197,7 +197,7 @@ public class Hal {
                     throw new DbcException("incorrect MotorMoveMode");
             }
         }
-        this.deviceHandler.getUnregulatedMotor(actorPort).stop();
+        deviceHandler.getUnregulatedMotor(actorPort).stop();
     }
 
     /**
@@ -205,7 +205,7 @@ public class Hal {
      * @return
      */
     public int getRegulatedMotorSpeed(ActorPort actorPort) {
-        return toPercent(this.deviceHandler.getRegulatedMotor(actorPort).getSpeed());
+        return toPercent(deviceHandler.getRegulatedMotor(actorPort).getSpeed());
     }
 
     /**
@@ -213,7 +213,7 @@ public class Hal {
      * @return
      */
     public int getUnregulatedMotorSpeed(ActorPort actorPort) {
-        return this.deviceHandler.getUnregulatedMotor(actorPort).getPower();
+        return deviceHandler.getUnregulatedMotor(actorPort).getPower();
     }
 
     /**
@@ -223,11 +223,11 @@ public class Hal {
     public void stopRegulatedMotor(ActorPort actorPort, MotorStopMode floating) {
         switch ( floating ) {
             case FLOAT:
-                this.deviceHandler.getRegulatedMotor(actorPort).flt();
-                this.deviceHandler.getRegulatedMotor(actorPort).stop();
+                deviceHandler.getRegulatedMotor(actorPort).flt();
+                deviceHandler.getRegulatedMotor(actorPort).stop();
                 break;
             case NONFLOAT:
-                this.deviceHandler.getRegulatedMotor(actorPort).stop();
+                deviceHandler.getRegulatedMotor(actorPort).stop();
                 break;
             default:
                 throw new DbcException("Wrong MotorStopMode");
@@ -241,10 +241,10 @@ public class Hal {
     public void stopUnregulatedMotor(ActorPort actorPort, MotorStopMode floating) {
         switch ( floating ) {
             case FLOAT:
-                this.deviceHandler.getUnregulatedMotor(actorPort).flt();
-                this.deviceHandler.getUnregulatedMotor(actorPort).stop();
+                deviceHandler.getUnregulatedMotor(actorPort).flt();
+                deviceHandler.getUnregulatedMotor(actorPort).stop();
             case NONFLOAT:
-                this.deviceHandler.getUnregulatedMotor(actorPort).stop();
+                deviceHandler.getUnregulatedMotor(actorPort).stop();
             default:
                 throw new DbcException("Wrong MotorStopMode");
         }
@@ -262,12 +262,7 @@ public class Hal {
      */
     public void regulatedDrive(ActorPort left, ActorPort right, boolean isReverse, DriveDirection direction, int speedPercent) {
         DifferentialPilot dPilot =
-            new DifferentialPilot(
-                this.wheelDiameter,
-                this.trackWidth,
-                this.deviceHandler.getRegulatedMotor(left),
-                this.deviceHandler.getRegulatedMotor(right),
-                isReverse);
+            new DifferentialPilot(wheelDiameter, trackWidth, deviceHandler.getRegulatedMotor(left), deviceHandler.getRegulatedMotor(right), isReverse);
         dPilot.setRotateSpeed(toDegPerSec(speedPercent));
         switch ( direction ) {
             case FOREWARD:
@@ -291,12 +286,7 @@ public class Hal {
      */
     public void driveDistance(ActorPort left, ActorPort right, boolean isReverse, DriveDirection direction, int speedPercent, int distance) {
         DifferentialPilot dPilot =
-            new DifferentialPilot(
-                this.wheelDiameter,
-                this.trackWidth,
-                this.deviceHandler.getRegulatedMotor(left),
-                this.deviceHandler.getRegulatedMotor(right),
-                isReverse);
+            new DifferentialPilot(wheelDiameter, trackWidth, deviceHandler.getRegulatedMotor(left), deviceHandler.getRegulatedMotor(right), isReverse);
         dPilot.setRotateSpeed(toDegPerSec(speedPercent));
         switch ( direction ) {
             case FOREWARD:
@@ -315,15 +305,9 @@ public class Hal {
      * @param right
      */
     public void stopRegulatedDrive(ActorPort left, ActorPort right) {
-        this.deviceHandler.getRegulatedMotor(left).stop();
-        this.deviceHandler.getRegulatedMotor(right).stop();
+        deviceHandler.getRegulatedMotor(left).stop();
+        deviceHandler.getRegulatedMotor(right).stop();
     }
-
-    // not needed at the moment
-    //    public void stopUnregulatedDrive(ActorPort left, ActorPort right) {
-    //        this.deviceHandler.getUnregulatedMotor(left).stop();
-    //        this.deviceHandler.getUnregulatedMotor(right).stop();
-    //    }
 
     /**
      * @param left
@@ -334,12 +318,7 @@ public class Hal {
      */
     public void rotateDirectionRegulated(ActorPort left, ActorPort right, boolean isReverse, TurnDirection direction, int speedPercent) {
         DifferentialPilot dPilot =
-            new DifferentialPilot(
-                this.wheelDiameter,
-                this.trackWidth,
-                this.deviceHandler.getRegulatedMotor(left),
-                this.deviceHandler.getRegulatedMotor(right),
-                isReverse);
+            new DifferentialPilot(wheelDiameter, trackWidth, deviceHandler.getRegulatedMotor(left), deviceHandler.getRegulatedMotor(right), isReverse);
         dPilot.setRotateSpeed(toDegPerSec(speedPercent));
         switch ( direction ) {
             case RIGHT:
@@ -353,34 +332,6 @@ public class Hal {
         }
     }
 
-    // TODO needed?
-    //    /**
-    //     * @param left
-    //     * @param right
-    //     * @param direction
-    //     * @param speedPercent
-    //     */
-    //    public void rotateDirectionUnregulated(ActorPort left, ActorPort right, boolean isReverse, TurnDirection direction, int speedPercent) {
-    //        DifferentialPilot dPilot =
-    //            new DifferentialPilot(
-    //                this.wheelDiameter,
-    //                this.trackWidth,
-    //                this.deviceHandler.getRegulatedMotor(left),
-    //                this.deviceHandler.getRegulatedMotor(right),
-    //                isReverse);
-    //        dPilot.setRotateSpeed(toDegPerSec(speedPercent));
-    //        switch ( direction ) {
-    //            case RIGHT:
-    //                dPilot.rotateRight();
-    //                break;
-    //            case LEFT:
-    //                dPilot.rotateLeft();
-    //                break;
-    //            default:
-    //                throw new DbcException("incorrect TurnAction");
-    //        }
-    //    }
-
     /**
      * @param left
      * @param right
@@ -391,12 +342,7 @@ public class Hal {
      */
     public void rotateDirectionAngle(ActorPort left, ActorPort right, boolean isReverse, TurnDirection direction, int speedPercent, int angle) {
         DifferentialPilot dPilot =
-            new DifferentialPilot(
-                this.wheelDiameter,
-                this.trackWidth,
-                this.deviceHandler.getRegulatedMotor(left),
-                this.deviceHandler.getRegulatedMotor(right),
-                isReverse);
+            new DifferentialPilot(wheelDiameter, trackWidth, deviceHandler.getRegulatedMotor(left), deviceHandler.getRegulatedMotor(right), isReverse);
         dPilot.setRotateSpeed(toDegPerSec(speedPercent));
         switch ( direction ) {
             case RIGHT:
@@ -420,7 +366,7 @@ public class Hal {
      * @param y
      */
     public void drawText(String text, int x, int y) {
-        this.brick.getTextLCD().drawString(text, x, y);
+        brick.getTextLCD().drawString(text, x, y);
     }
 
     /**
@@ -431,19 +377,19 @@ public class Hal {
     public void drawPicture(ShowPicture smiley, int x, int y) {
         switch ( smiley ) {
             case OLDGLASSES:
-                this.brick.getGraphicsLCD().drawImage(oldGlasses, x, y, 0);
+                brick.getGraphicsLCD().drawImage(oldGlasses, x, y, 0);
                 break;
             case EYESOPEN:
-                this.brick.getGraphicsLCD().drawImage(eyesOpen, x, y, 0);
+                brick.getGraphicsLCD().drawImage(eyesOpen, x, y, 0);
                 break;
             case EYESCLOSED:
-                this.brick.getGraphicsLCD().drawImage(eyesClosed, x, y, 0);
+                brick.getGraphicsLCD().drawImage(eyesClosed, x, y, 0);
                 break;
             case FLOWERS:
-                this.brick.getGraphicsLCD().drawImage(flowers, x, y, 0);
+                brick.getGraphicsLCD().drawImage(flowers, x, y, 0);
                 break;
             case TACHO:
-                this.brick.getGraphicsLCD().drawImage(tacho, x, y, 0);
+                brick.getGraphicsLCD().drawImage(tacho, x, y, 0);
                 break;
             default:
                 throw new DbcException("incorrect show picture");
@@ -452,7 +398,7 @@ public class Hal {
     }
 
     public void clearDisplay() {
-        this.brick.getGraphicsLCD().clear();
+        brick.getGraphicsLCD().clear();
     }
 
     // --- END Aktion Anzeige ---
@@ -463,30 +409,30 @@ public class Hal {
      * @param duration
      */
     public void playTone(int frequency, int duration) {
-        this.brick.getAudio().playTone(frequency, duration);
+        brick.getAudio().playTone(frequency, duration);
     }
 
     /**
      * @param fileNumber
      */
     public void playFile(int systemSound) {
-        this.brick.getAudio().systemSound(systemSound);
+        brick.getAudio().systemSound(systemSound);
     }
 
     /**
      * set the volume of the speaker
-     * 
+     *
      * @param volume
      */
     public void setVolume(int volume) {
-        this.brick.getAudio().setVolume(volume);
+        brick.getAudio().setVolume(volume);
     }
 
     /**
      * @return volume of the speaker
      */
     public int getVolume() {
-        return this.brick.getAudio().getVolume();
+        return brick.getAudio().getVolume();
     }
 
     // -- END Aktion Klang ---
@@ -501,13 +447,13 @@ public class Hal {
             case GREEN:
                 switch ( blinkMode ) {
                     case ON:
-                        this.brick.getLED().setPattern(1);
+                        brick.getLED().setPattern(1);
                         break;
                     case FLASH:
-                        this.brick.getLED().setPattern(4);
+                        brick.getLED().setPattern(4);
                         break;
                     case DOUBLE_FLASH:
-                        this.brick.getLED().setPattern(7);
+                        brick.getLED().setPattern(7);
                         break;
                     default:
                         throw new DbcException("incorrect blink mode");
@@ -516,13 +462,13 @@ public class Hal {
             case RED:
                 switch ( blinkMode ) {
                     case ON:
-                        this.brick.getLED().setPattern(2);
+                        brick.getLED().setPattern(2);
                         break;
                     case FLASH:
-                        this.brick.getLED().setPattern(5);
+                        brick.getLED().setPattern(5);
                         break;
                     case DOUBLE_FLASH:
-                        this.brick.getLED().setPattern(8);
+                        brick.getLED().setPattern(8);
                         break;
                     default:
                         throw new DbcException("incorrect blink mode");
@@ -531,13 +477,13 @@ public class Hal {
             case ORANGE:
                 switch ( blinkMode ) {
                     case ON:
-                        this.brick.getLED().setPattern(3);
+                        brick.getLED().setPattern(3);
                         break;
                     case FLASH:
-                        this.brick.getLED().setPattern(6);
+                        brick.getLED().setPattern(6);
                         break;
                     case DOUBLE_FLASH:
-                        this.brick.getLED().setPattern(9);
+                        brick.getLED().setPattern(9);
                         break;
                     default:
                         throw new DbcException("incorrect blink mode");
@@ -550,7 +496,7 @@ public class Hal {
      * turn off led
      */
     public void ledOff() {
-        this.brick.getLED().setPattern(0);
+        brick.getLED().setPattern(0);
     }
 
     /**
@@ -558,7 +504,7 @@ public class Hal {
      * change to this pattern then
      */
     public void resetLED() {
-        this.brick.getLED().setPattern(0);
+        brick.getLED().setPattern(0);
     }
 
     // --- END Aktion Statusleuchte ---
@@ -569,8 +515,8 @@ public class Hal {
      * @return
      */
     public boolean isPressed(SensorPort sensorPort) {
-        float[] sample = new float[this.deviceHandler.getSampleProvider(sensorPort).sampleSize()];
-        this.deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
+        float[] sample = new float[deviceHandler.getSampleProvider(sensorPort).sampleSize()];
+        deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
         if ( sample[0] == 1.0 ) {
             return true;
         } else {
@@ -586,7 +532,7 @@ public class Hal {
      * @param sensorMode
      */
     public void setUltrasonicSensorMode(SensorPort sensorPort, UltrasonicSensorMode sensorMode) {
-        this.deviceHandler.setUltrasonicSensorMode(sensorPort, sensorMode);
+        deviceHandler.setUltrasonicSensorMode(sensorPort, sensorMode);
     }
 
     /**
@@ -594,7 +540,7 @@ public class Hal {
      * @return
      */
     public UltrasonicSensorMode getUltraSonicSensorModeName(SensorPort sensorPort) {
-        return this.deviceHandler.getUltrasonicSensorModeName(sensorPort);
+        return deviceHandler.getUltrasonicSensorModeName(sensorPort);
     }
 
     /**
@@ -602,10 +548,10 @@ public class Hal {
      * @return
      */
     public int getUltraSonicSensorValue(SensorPort sensorPort) {
-        float[] sample = new float[this.deviceHandler.getSampleProvider(sensorPort).sampleSize()];
-        this.deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
+        float[] sample = new float[deviceHandler.getSampleProvider(sensorPort).sampleSize()];
+        deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
 
-        switch ( this.deviceHandler.getUltrasonicSensorModeName(sensorPort) ) {
+        switch ( deviceHandler.getUltrasonicSensorModeName(sensorPort) ) {
             case PRESENCE:
                 return Math.round(sample[0]);
             case DISTANCE:
@@ -623,7 +569,7 @@ public class Hal {
      * @param sensorMode
      */
     public void setColorSensorMode(SensorPort sensorPort, ColorSensorMode sensorMode) {
-        this.deviceHandler.setColorSensorMode(sensorPort, sensorMode);
+        deviceHandler.setColorSensorMode(sensorPort, sensorMode);
     }
 
     /**
@@ -631,20 +577,20 @@ public class Hal {
      * @return
      */
     public ColorSensorMode getColorSensorModeName(SensorPort sensorPort) {
-        return this.deviceHandler.getColorSensorModeName(sensorPort);
+        return deviceHandler.getColorSensorModeName(sensorPort);
     }
 
     /**
      * TODO interpretation/conversion before return (rgb!)
-     * 
+     *
      * @param sensorPort
      * @return
      */
     public int getColorSensorValue(SensorPort sensorPort) {
-        float[] sample = new float[this.deviceHandler.getSampleProvider(sensorPort).sampleSize()];
-        this.deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
+        float[] sample = new float[deviceHandler.getSampleProvider(sensorPort).sampleSize()];
+        deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
 
-        switch ( this.deviceHandler.getColorSensorModeName(sensorPort) ) {
+        switch ( deviceHandler.getColorSensorModeName(sensorPort) ) {
             case AMBIENTLIGHT:
                 return Math.round(sample[0]);
             case COLOUR:
@@ -666,7 +612,7 @@ public class Hal {
      * @param sensorMode
      */
     public void setInfraredSensorMode(SensorPort sensorPort, InfraredSensorMode sensorMode) {
-        this.deviceHandler.setInfraredMode(sensorPort, sensorMode);
+        deviceHandler.setInfraredMode(sensorPort, sensorMode);
     }
 
     /**
@@ -674,7 +620,7 @@ public class Hal {
      * @return
      */
     public InfraredSensorMode getInfraredSensorModeName(SensorPort sensorPort) {
-        return this.deviceHandler.getInfraredSensorModeName(sensorPort);
+        return deviceHandler.getInfraredSensorModeName(sensorPort);
     }
 
     /**
@@ -682,10 +628,10 @@ public class Hal {
      * @return
      */
     public int getInfraredSensorValue(SensorPort sensorPort) {
-        float[] sample = new float[this.deviceHandler.getSampleProvider(sensorPort).sampleSize()];
-        this.deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
+        float[] sample = new float[deviceHandler.getSampleProvider(sensorPort).sampleSize()];
+        deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
 
-        switch ( this.deviceHandler.getInfraredSensorModeName(sensorPort) ) {
+        switch ( deviceHandler.getInfraredSensorModeName(sensorPort) ) {
             case DISTANCE:
                 return Math.round(sample[0]);
             case SEEK:
@@ -703,7 +649,7 @@ public class Hal {
      * @param tachoMode
      */
     public void setMotorTachoMode(ActorPort actorPort, MotorTachoMode tachoMode) {
-        this.deviceHandler.setTachoSensorMode(actorPort, tachoMode);
+        deviceHandler.setTachoSensorMode(actorPort, tachoMode);
     }
 
     /**
@@ -711,21 +657,21 @@ public class Hal {
      * @return
      */
     public MotorTachoMode getMotorTachoMode(ActorPort actorPort) {
-        return this.deviceHandler.getTachoSensorModeName(actorPort);
+        return deviceHandler.getTachoSensorModeName(actorPort);
     }
 
     /**
      * @param actorPort
      */
     public void resetRegulatedMotorTacho(ActorPort actorPort) {
-        this.deviceHandler.getRegulatedMotor(actorPort).resetTachoCount();
+        deviceHandler.getRegulatedMotor(actorPort).resetTachoCount();
     }
 
     /**
      * @param actorPort
      */
     public void resetUnregulatedMotorTacho(ActorPort actorPort) {
-        this.deviceHandler.getUnregulatedMotor(actorPort).resetTachoCount();
+        deviceHandler.getUnregulatedMotor(actorPort).resetTachoCount();
     }
 
     /**
@@ -733,12 +679,12 @@ public class Hal {
      * @return tacho count (degrees) or rotations as double
      */
     public double getRegulatedMotorTachoValue(ActorPort actorPort) {
-        MotorTachoMode tachoMode = this.deviceHandler.getTachoSensorModeName(actorPort);
+        MotorTachoMode tachoMode = deviceHandler.getTachoSensorModeName(actorPort);
         switch ( tachoMode ) {
             case DEGREE:
-                return this.deviceHandler.getRegulatedMotor(actorPort).getTachoCount();
+                return deviceHandler.getRegulatedMotor(actorPort).getTachoCount();
             case ROTATION:
-                return Math.round(this.deviceHandler.getRegulatedMotor(actorPort).getTachoCount() / 360.0 * 100.0) / 100.0;
+                return Math.round(deviceHandler.getRegulatedMotor(actorPort).getTachoCount() / 360.0 * 100.0) / 100.0;
             default:
                 throw new DbcException("incorrect MotorTachoMode");
         }
@@ -749,12 +695,12 @@ public class Hal {
      * @return tacho count (degrees) or rotations as double
      */
     public double getUnregulatedMotorTachoValue(ActorPort actorPort) {
-        MotorTachoMode tachoMode = this.deviceHandler.getTachoSensorModeName(actorPort);
+        MotorTachoMode tachoMode = deviceHandler.getTachoSensorModeName(actorPort);
         switch ( tachoMode ) {
             case DEGREE:
-                return this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount();
+                return deviceHandler.getUnregulatedMotor(actorPort).getTachoCount();
             case ROTATION:
-                return Math.round(this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() / 360.0 * 100.0) / 100;
+                return Math.round(deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() / 360.0 * 100.0) / 100;
             default:
                 throw new DbcException("incorrect MotorTachoMode");
         }
@@ -770,23 +716,23 @@ public class Hal {
     public boolean isPressed(BrickKey key) {
         switch ( key ) {
             case ANY:
-                if ( this.brick.getKeys().readButtons() != 0 ) {
+                if ( brick.getKeys().readButtons() != 0 ) {
                     return true;
                 } else {
                     return false;
                 }
             case DOWN:
-                return this.brick.getKey("Down").isDown();
+                return brick.getKey("Down").isDown();
             case ENTER:
-                return this.brick.getKey("Enter").isDown();
+                return brick.getKey("Enter").isDown();
             case ESCAPE:
-                return this.brick.getKey("Escape").isDown();
+                return brick.getKey("Escape").isDown();
             case LEFT:
-                return this.brick.getKey("Left").isDown();
+                return brick.getKey("Left").isDown();
             case RIGHT:
-                return this.brick.getKey("Right").isDown();
+                return brick.getKey("Right").isDown();
             case UP:
-                return this.brick.getKey("Up").isDown();
+                return brick.getKey("Up").isDown();
             default:
                 throw new DbcException("wrong button name??");
         }
@@ -799,11 +745,11 @@ public class Hal {
      * @param sensorMode
      */
     public void setGyroSensorMode(SensorPort sensorPort, GyroSensorMode sensorMode) {
-        this.deviceHandler.setGyroSensorMode(sensorPort, sensorMode);
+        deviceHandler.setGyroSensorMode(sensorPort, sensorMode);
     }
 
     public GyroSensorMode getGyroSensorModeName(SensorPort sensorPort) {
-        return this.deviceHandler.getGyroSensorModeName(sensorPort);
+        return deviceHandler.getGyroSensorModeName(sensorPort);
     }
 
     /**
@@ -811,9 +757,9 @@ public class Hal {
      * @return
      */
     public int getGyroSensorValue(SensorPort sensorPort) {
-        float[] sample = new float[this.deviceHandler.getSampleProvider(sensorPort).sampleSize()];
-        this.deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
-        switch ( this.deviceHandler.getGyroSensorModeName(sensorPort) ) {
+        float[] sample = new float[deviceHandler.getSampleProvider(sensorPort).sampleSize()];
+        deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
+        switch ( deviceHandler.getGyroSensorModeName(sensorPort) ) {
             case ANGLE:
                 return Math.round(sample[0]);
             case RATE:
@@ -827,7 +773,7 @@ public class Hal {
      * @param sensorPort
      */
     public void resetGyroSensor(SensorPort sensorPort) {
-        this.deviceHandler.getGyroSensor(sensorPort).reset();
+        deviceHandler.getGyroSensor(sensorPort).reset();
     }
 
     // END Sensoren Gyrosensor ---
@@ -837,14 +783,14 @@ public class Hal {
      * @return
      */
     public int getTimerValue(int timerNumber) {
-        return this.timers[timerNumber - 1].elapsed();
+        return timers[timerNumber - 1].elapsed();
     }
 
     /**
      * @param timerNumber
      */
     public void resetTimer(int timerNumber) {
-        this.timers[timerNumber - 1].reset();
+        timers[timerNumber - 1].reset();
     }
 
     // END Sensoren Zeitgeber ---

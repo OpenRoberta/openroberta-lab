@@ -1249,6 +1249,7 @@ Blockly.Msg.MODE_PRESENCE = 'presence';
 Blockly.Msg.MODE_STATE = 'state';
 Blockly.Msg.MODE_COLOUR = 'colour';
 Blockly.Msg.MODE_LIGHT = 'light';
+Blockly.Msg.MODE_RGB = 'RGB';
 Blockly.Msg.MODE_AMBIENTLIGHT = 'ambient light';
 Blockly.Msg.MODE_ROTATION = 'rotation';
 Blockly.Msg.MODE_DEGREE = 'degree';

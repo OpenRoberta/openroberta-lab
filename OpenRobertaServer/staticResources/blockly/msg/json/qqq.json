@@ -502,6 +502,7 @@
 	"MODE_STATE": "",
 	"MODE_COLOUR": "",
 	"MODE_LIGHT": "",
+	"MODE_RGB": "",
 	"MODE_AMBIENTLIGHT": "",
 	"MODE_ROTATION": "",
 	"MODE_DEGREE": "",
