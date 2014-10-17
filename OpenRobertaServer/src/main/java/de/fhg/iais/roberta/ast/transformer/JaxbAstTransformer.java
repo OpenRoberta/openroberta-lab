@@ -73,12 +73,23 @@ abstract public class JaxbAstTransformer<V> {
 
     protected Func<V> blockToFunction(Block block, List<ExprParam> exprParams, String operationType) {
         String op = getOperation(block, operationType);
+        List<Expr<V>> params = extractExprParameters(block, exprParams);
+        return Func.make(Func.Function.get(op), params, extractBlockProperties(block), extractComment(block));
+    }
+
+    protected Func<V> blockToFunction(Block block, List<String> strParams, List<ExprParam> exprParams, String operationType) {
+        String op = getOperation(block, operationType);
+        List<Expr<V>> params = extractExprParameters(block, exprParams);
+        return Func.make(Func.Function.get(op), strParams, params, extractBlockProperties(block), extractComment(block));
+    }
+
+    private List<Expr<V>> extractExprParameters(Block block, List<ExprParam> exprParams) {
         List<Expr<V>> params = new ArrayList<Expr<V>>();
         List<Value> values = extractValues(block, (short) exprParams.size());
         for ( ExprParam exprParam : exprParams ) {
             params.add((Expr<V>) extractValue(values, exprParam));
         }
-        return Func.make(Func.Function.get(op), params, extractBlockProperties(block), extractComment(block));
+        return params;
     }
 
     protected Phrase<V> blocksToIfStmt(Block block, int _else, int _elseIf) {

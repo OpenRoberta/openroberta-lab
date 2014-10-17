@@ -23,18 +23,29 @@ import de.fhg.iais.roberta.dbc.DbcException;
 public class Func<V> extends Expr<V> {
     private final Function functName;
     private final List<Expr<V>> param;
+    private final List<String> strParam;
 
     private Func(Function name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.FUNCTIONS, properties, comment);
         Assert.isTrue(name != null && param != null);
         this.functName = name;
         this.param = param;
+        this.strParam = null;
+        setReadOnly();
+    }
+
+    private Func(Function name, List<String> strParam, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(Phrase.Kind.FUNCTIONS, properties, comment);
+        Assert.isTrue(name != null && param != null && strParam != null);
+        this.functName = name;
+        this.param = param;
+        this.strParam = strParam;
         setReadOnly();
     }
 
     /**
      * Creates instance of {@link Binary}. This instance is read only and can not be modified.
-     * 
+     *
      * @param name of the function,
      * @param param list of parameters for the function,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
@@ -43,6 +54,20 @@ public class Func<V> extends Expr<V> {
      */
     public static <V> Func<V> make(Function name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new Func<V>(name, param, properties, comment);
+    }
+
+    /**
+     * Creates instance of {@link Binary}. This instance is read only and can not be modified.
+     *
+     * @param name of the function,
+     * @param param list of expression parameters for the function,
+     * @param properties of the block (see {@link BlocklyBlockProperties}),
+     * @param comment that user has added to the block,
+     * @param strParam list of string parameters for the function
+     * @return read only object of class {@link Func}
+     */
+    public static <V> Func<V> make(Function name, List<String> strParam, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new Func<V>(name, strParam, param, properties, comment);
     }
 
     /**
@@ -57,6 +82,13 @@ public class Func<V> extends Expr<V> {
      */
     public List<Expr<V>> getParam() {
         return this.param;
+    }
+
+    /**
+     * @return list of string parameters
+     */
+    public List<String> getStrParam() {
+        return strParam;
     }
 
     @Override
@@ -174,7 +206,7 @@ public class Func<V> extends Expr<V> {
         /**
          * get function from {@link Function} from string parameter. It is possible for one function to have multiple string mappings.
          * Throws exception if the operator does not exists.
-         * 
+         *
          * @param functName of the function
          * @return function from the enum {@link Function}
          */

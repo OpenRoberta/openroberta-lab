@@ -92,7 +92,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
 
     /**
      * Converts object of type {@link BlockSet} to AST tree.
-     * 
+     *
      * @param program
      */
     public void transform(BlockSet set) {
@@ -105,9 +105,9 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
     private void instanceToAST(Instance instance) {
         List<Block> blocks = instance.getBlock();
         Location<V> location = Location.make(instance.getX(), instance.getY());
-        this.tree.add(location);
+        tree.add(location);
         for ( Block block : blocks ) {
-            this.tree.add(blockToAST(block));
+            tree.add(blockToAST(block));
         }
     }
 
@@ -119,6 +119,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
         List<Value> values;
         List<Field> fields;
         List<ExprParam> exprParams;
+        List<String> strParams;
 
         ExprList<V> exprList;
 
@@ -563,22 +564,16 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 }
                 return blockToFunction(block, exprParams, "WHERE");
 
-                // case "text_getSubstring":
-                // TODO Not finished yet
-                // boolean atArg1 = block.getMutation().isAt1();
-                // boolean atArg2 = block.getMutation().isAt2();
-                // fields = extractFields(block, (short) 2);
-                // // String where1 = extractField(fields, "WHERE1", (short) 0);
-                // // String where2 = extractField(fields, "WHERE2", (short) 1);
-                // exprParams = new ArrayList<ExprParam>();
-                // exprParams.add(new ExprParam("STRING", String.class));
-                // if ( atArg1 == true ) {
-                // exprParams.add(new ExprParam("AT", Integer.class));
-                // }
-                // if ( atArg2 == true ) {
-                // exprParams.add(new ExprParam("AT", Integer.class));
-                // }
-                // return blockToFunction(block, exprParams, "SUBSTRING");
+            case "text_getSubstring":
+                fields = extractFields(block, (short) 2);
+                strParams = new ArrayList<String>();
+                strParams.add(extractField(fields, "WHERE1", (short) 0));
+                strParams.add(extractField(fields, "WHERE2", (short) 1));
+                exprParams = new ArrayList<ExprParam>();
+                exprParams.add(new ExprParam("STRING", String.class));
+                exprParams.add(new ExprParam("AT1", Integer.class));
+                exprParams.add(new ExprParam("AT2", Integer.class));
+                return blockToFunction(block, strParams, exprParams, "SUBSTRING");
 
             case "text_changeCase":
                 exprParams = new ArrayList<ExprParam>();
