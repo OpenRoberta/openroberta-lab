@@ -25,4 +25,9 @@ public class TouchSensorTest {
 
         Assert.assertEquals(SensorPort.S1, cs.getPort());
     }
+
+    @Test
+    public void reverseTransformation() throws Exception {
+        Helper.assertTransformationIsOk("/ast/sensors/sensor_Touch.xml");
+    }
 }

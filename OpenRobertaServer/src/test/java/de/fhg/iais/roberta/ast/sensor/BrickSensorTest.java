@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.sensor;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
@@ -60,6 +61,21 @@ public class BrickSensorTest {
         String a = "BlockAST [project=[[Location [x=-26, y=51], BrickSensor [key=ENTER, mode=WAIT_FOR_PRESS_AND_RELEASE]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_brick2.xml"));
+    }
+
+    @Test
+    public void reverseTransformation() throws Exception {
+        Helper.assertTransformationIsOk("/ast/sensors/sensor_brick1.xml");
+    }
+
+    @Ignore
+    public void reverseTransformation1() throws Exception {
+        Helper.assertTransformationIsOk("/ast/sensors/sensor_brick.xml");
+    }
+
+    @Test
+    public void reverseTransformation2() throws Exception {
+        Helper.assertTransformationIsOk("/ast/sensors/sensor_brick2.xml");
     }
 
 }

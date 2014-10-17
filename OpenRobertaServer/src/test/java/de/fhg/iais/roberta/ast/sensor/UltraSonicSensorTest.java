@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.sensor;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
@@ -49,4 +50,20 @@ public class UltraSonicSensorTest {
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getSampleUltrasonic.xml"));
     }
+
+    @Test
+    public void reverseTransformation() throws Exception {
+        Helper.assertTransformationIsOk("/ast/sensors/sensor_setUltrasonic.xml");
+    }
+
+    @Ignore
+    public void reverseTransformation1() throws Exception {
+        Helper.assertTransformationIsOk("/ast/sensors/sensor_getModeUltrasonic.xml");
+    }
+
+    @Test
+    public void reverseTransformation2() throws Exception {
+        Helper.assertTransformationIsOk("/ast/sensors/sensor_getSampleUltrasonic.xml");
+    }
+
 }

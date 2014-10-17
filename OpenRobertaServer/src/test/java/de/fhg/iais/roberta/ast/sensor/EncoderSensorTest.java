@@ -56,4 +56,24 @@ public class EncoderSensorTest {
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_resetEncoder.xml"));
     }
+
+    @Test
+    public void reverseTransformation() throws Exception {
+        Helper.assertTransformationIsOk("/ast/sensors/sensor_setEncoder.xml");
+    }
+
+    @Test
+    public void reverseTransformation1() throws Exception {
+        Helper.assertTransformationIsOk("/ast/sensors/sensor_getModeEncoder.xml");
+    }
+
+    @Test
+    public void reverseTransformation2() throws Exception {
+        Helper.assertTransformationIsOk("/ast/sensors/sensor_getSampleEncoder.xml");
+    }
+
+    @Test
+    public void reverseTransformation3() throws Exception {
+        Helper.assertTransformationIsOk("/ast/sensors/sensor_resetEncoder.xml");
+    }
 }

@@ -49,4 +49,19 @@ public class InfraredSensorTest {
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getSampleInfrared.xml"));
     }
+
+    @Test
+    public void reverseTransformation() throws Exception {
+        Helper.assertTransformationIsOk("/ast/sensors/sensor_setInfrared.xml");
+    }
+
+    @Test
+    public void reverseTransformation1() throws Exception {
+        Helper.assertTransformationIsOk("/ast/sensors/sensor_getModeInfrared.xml");
+    }
+
+    @Test
+    public void reverseTransformation2() throws Exception {
+        Helper.assertTransformationIsOk("/ast/sensors/sensor_getSampleInfrared.xml");
+    }
 }

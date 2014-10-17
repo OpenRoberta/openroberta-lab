@@ -11,7 +11,7 @@ public class PlayFileActionTest {
 
     @Test
     public void make() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-3, y=127], PlayFileAction [SOUNDFILE2]]]]";
+        String a = "BlockAST [project=[[Location [x=1, y=86], PlayFileAction [1]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_PlayFile.xml"));
     }
 
@@ -19,7 +19,7 @@ public class PlayFileActionTest {
     public void getFileName() throws Exception {
         JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_PlayFile.xml");
         PlayFileAction<Void> pfa = (PlayFileAction<Void>) transformer.getTree().get(1);
-        Assert.assertEquals("SOUNDFILE2", pfa.getFileName());
+        Assert.assertEquals("1", pfa.getFileName());
     }
 
     @Test

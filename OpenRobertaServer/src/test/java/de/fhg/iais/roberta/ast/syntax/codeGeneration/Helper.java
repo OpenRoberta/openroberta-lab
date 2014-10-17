@@ -6,6 +6,8 @@ import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
+import org.custommonkey.xmlunit.Diff;
+import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.Assert;
 
 import com.google.common.base.Charsets;
@@ -138,8 +140,13 @@ public class Helper {
         StringWriter writer = new StringWriter();
         m.marshal(blockSet, writer);
         String t = Resources.toString(Helper.class.getResource(fileName), Charsets.UTF_8);
+        XMLUnit.setIgnoreWhitespace(true);
+        Diff diff = XMLUnit.compareXML(writer.toString(), t);
 
-        Assert.assertEquals(writer.toString().replaceAll("<(\\w+)( [^/>]*)?/>", "<$1$2></$1>").replaceAll("\\s+", ""), t.replaceAll("\\s+", ""));
+        System.out.println(diff.toString());
+
+        Assert.assertTrue(diff.similar());
+
     }
 
     public static void assertCodeIsOk(String a, String fileName) throws Exception {

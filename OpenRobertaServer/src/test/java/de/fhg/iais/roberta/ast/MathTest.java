@@ -74,6 +74,11 @@ public class MathTest {
     }
 
     @Test
+    public void reverseTransformationMathChange() throws Exception {
+        Helper.assertTransformationIsOk("/ast/math/math_change.xml");
+    }
+
+    @Test
     public void mathRound() throws Exception {
         String a = "BlockAST [project=[[Location [x=34, y=-492], Funct [ROUNDUP, [NumConst [0]]]]]]";
 

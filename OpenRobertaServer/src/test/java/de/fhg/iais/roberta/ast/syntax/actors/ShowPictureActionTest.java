@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 public class ShowPictureActionTest {
     @Test
     public void drawPicture() throws Exception {
-        String a = "\nhal.drawPicture(\"SMILEY1\", 0, 0);";
+        String a = "\nhal.drawPicture(ShowPicture.EYESOPEN, 0, 0);";
 
         Helper.assertCodeIsOk(a, "/ast/actions/action_ShowPicture.xml");
     }

@@ -57,4 +57,23 @@ public class GyroSensorTest {
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_resetGyro.xml"));
     }
 
+    @Test
+    public void reverseTransformation() throws Exception {
+        Helper.assertTransformationIsOk("/ast/sensors/sensor_setGyro.xml");
+    }
+
+    @Test
+    public void reverseTransformation1() throws Exception {
+        Helper.assertTransformationIsOk("/ast/sensors/sensor_getSampleGyro.xml");
+    }
+
+    @Test
+    public void reverseTransformation2() throws Exception {
+        Helper.assertTransformationIsOk("/ast/sensors/sensor_setGyro.xml");
+    }
+
+    @Test
+    public void reverseTransformation3() throws Exception {
+        Helper.assertTransformationIsOk("/ast/sensors/sensor_getModeGyro.xml");
+    }
 }

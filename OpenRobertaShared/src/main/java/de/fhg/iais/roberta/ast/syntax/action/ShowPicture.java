@@ -5,7 +5,8 @@ import java.util.Locale;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 public enum ShowPicture {
-    OLDGLASSES(), EYESOPEN(), EYESCLOSED(), FLOWERS(), TACHO();
+    OLDGLASSES( "BRILLE", "Brille" ), EYESOPEN( "AUGENOFFEN", "Augen Offen" ), EYESCLOSED( "AUGENZU", "AUGEN ZU" ), FLOWERS( "BLUMEN", "Blumen" ), TACHO(
+        "Tacho" );
 
     private final String[] values;
 
@@ -24,7 +25,7 @@ public enum ShowPicture {
      * get picture from {@link ShowPicture} from string parameter. It is possible
      * for one mode to have multiple string mappings. Throws exception if
      * the mode does not exists.
-     * 
+     *
      * @param name of the picture
      * @return picture from the enum {@link ShowPicture}
      */
