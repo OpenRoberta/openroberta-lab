@@ -1,7 +1,10 @@
 package de.fhg.iais.roberta.guice;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Singleton;
 
+import de.fhg.iais.roberta.brick.BrickCommunicator;
+import de.fhg.iais.roberta.brick.Templates;
 import de.fhg.iais.roberta.javaServer.resources.DownloadJar;
 import de.fhg.iais.roberta.javaServer.resources.HelloWorld;
 import de.fhg.iais.roberta.javaServer.resources.Ping;
@@ -10,6 +13,7 @@ import de.fhg.iais.roberta.javaServer.resources.RestConfiguration;
 import de.fhg.iais.roberta.javaServer.resources.RestProgram;
 import de.fhg.iais.roberta.javaServer.resources.RestUser;
 import de.fhg.iais.roberta.javaServer.resources.TokenReceiver;
+import de.fhg.iais.roberta.persistence.connector.SessionFactoryWrapper;
 
 public class RobertaGuiceModule extends AbstractModule {
     @Override
@@ -23,5 +27,9 @@ public class RobertaGuiceModule extends AbstractModule {
         bind(TokenReceiver.class);
         bind(HelloWorld.class);
         bind(Ping.class);
+
+        bind(SessionFactoryWrapper.class).in(Singleton.class);
+        bind(Templates.class).in(Singleton.class);
+        bind(BrickCommunicator.class).in(Singleton.class);
     }
 }

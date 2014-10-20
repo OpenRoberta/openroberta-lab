@@ -6,8 +6,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Singleton;
-
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.util.Pair;
 
@@ -19,7 +17,6 @@ import de.fhg.iais.roberta.util.Pair;
  *
  * @author rbudde
  */
-@Singleton
 public class BrickCommunicator {
     private static final Logger LOG = LoggerFactory.getLogger(BrickCommunicator.class);
     private final Map<String, BrickCommunicationData> allStates = new ConcurrentHashMap<>();

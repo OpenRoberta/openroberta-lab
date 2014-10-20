@@ -7,8 +7,6 @@ import org.hibernate.service.ServiceRegistryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Singleton;
-
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -21,7 +19,6 @@ import de.fhg.iais.roberta.dbc.Assert;
  *
  * @author rbudde
  */
-@Singleton
 public final class SessionFactoryWrapper {
     private static final Logger LOG = LoggerFactory.getLogger(SessionFactoryWrapper.class);
     private static final String CFG_XML = "hibernate-cfg.xml";

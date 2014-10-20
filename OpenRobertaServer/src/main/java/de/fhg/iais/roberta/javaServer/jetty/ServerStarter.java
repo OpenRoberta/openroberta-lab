@@ -9,8 +9,8 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.server.session.HashSessionManager;
 import org.eclipse.jetty.server.session.SessionHandler;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,21 +56,14 @@ public class ServerStarter {
      */
     public Server start(int port) throws IOException {
         Server server = new Server(port);
-
-        RobertaGuiceServletConfig robertaGuiceServletConfig = new RobertaGuiceServletConfig();
-
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.setServer(server);
-        context.setContextPath("/*");
-        context.addEventListener(robertaGuiceServletConfig);
-        context.addFilter(GuiceFilter.class, "/*", null);
-        ServletHolder servletHolder = new ServletHolder(new ServletContainer());
-        servletHolder.setInitParameter(
-            "com.sun.jersey.config.property.packages",
-            "de.fhg.iais.roberta.javaServer.resources,de.fhg.iais.roberta.javaServer.provider");
-        context.addServlet(servletHolder, "/*");
         SessionManager sm = new HashSessionManager();
         context.setSessionHandler(new SessionHandler(sm));
+
+        RobertaGuiceServletConfig robertaGuiceServletConfig = new RobertaGuiceServletConfig();
+        context.addEventListener(robertaGuiceServletConfig);
+        context.addFilter(GuiceFilter.class, "/*", null);
+        context.addServlet(DefaultServlet.class, "/*");
 
         ResourceHandler resourceHandler = new ResourceHandler();
         resourceHandler.setDirectoriesListed(true);
