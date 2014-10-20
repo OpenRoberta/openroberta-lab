@@ -21,6 +21,7 @@ import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
+import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.persistence.connector.SessionWrapper;
 
@@ -68,12 +69,13 @@ public class CompilerWorkflow {
             return "blocks could not be transformed (message: " + e.getMessage() + ")";
         }
         String javaCode = AstToLejosJavaVisitor.generate(programName, brickConfiguration, transformer.getTree(), true);
-        LOG.debug("to be compiled: {}", javaCode);
+        // LOG.debug("to be compiled:\n{}", javaCode); // TODO: not so exhaustive logging
         try {
             storeGeneratedProgram(token, programName, javaCode);
         } catch ( Exception e ) {
             return "generated java code could not be stored (message: + " + e.getMessage() + ")";
         }
+        LOG.debug("generated program stored in directory/token {}", token);
         runBuild(BASE_DIR, token, programName, "generated.main");
         LOG.info("brick jar for program {} generated successfully", programName);
         return null;
@@ -94,6 +96,7 @@ public class CompilerWorkflow {
     }
 
     static void storeGeneratedProgram(String token, String programName, String javaCode) throws Exception {
+        Assert.isTrue(token != null && programName != null && javaCode != null);
         File javaFile = new File(BASE_DIR + token + "/src/" + programName + ".java");
         FileUtils.writeStringToFile(javaFile, javaCode, StandardCharsets.UTF_8.displayName());
     }
