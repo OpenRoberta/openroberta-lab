@@ -567,11 +567,6 @@ function initPopups() {
         $(this).closest(".jquerypopup").dialog('close');
     });
 
-    // overwritten Styles for unique Pop-Up
-    $("#delete-user").dialog({
-        width : 300
-    });
-
     // define general class for Pop-Up
     $(".jquerypopup").dialog("option", "dialogClass", "jquerypopup");
 
@@ -605,6 +600,14 @@ function initPopups() {
         var $token = $('#tokenValue');
         setToken($token.val());
     }, 'set token');
+
+    // Any submit button in a popup csn be triggered by the Return-Button
+    $(".jquerypopup").keydown(function(event) {
+        if (event.keyCode == 13) {
+            $(this).find("input.submit").click();
+            event.stopPropagation();
+        }
+    });
 }
 
 
