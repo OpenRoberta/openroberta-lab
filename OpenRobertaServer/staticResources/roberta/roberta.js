@@ -540,6 +540,11 @@ function initHeadNavigation() {
         return false;
     });
 
+    // Close submenu when Mouseleave-Event is triggered
+    $('#head-navigation').on('mouseleave', function(event) {
+        $('#head-navigation').menu("collapseAll", null, false );
+    });
+
     setHeadNavigationMenuState('logout');
 }
 
