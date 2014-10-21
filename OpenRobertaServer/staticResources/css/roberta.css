@@ -45,14 +45,13 @@ ul#head-navigation .head-navigation-submenu {
 	width: 8%;
     list-style-type: none;
     cursor: pointer;
+    box-shadow: 2px 4px 4px #999;
+    height: auto;
 }
 
 ul#head-navigation .head-navigation-submenu > li {
 	background-color: white;
-	padding-left: 5px;
-	padding-right: 5px;
-	padding-top: 1px;
-	padding-bottom: 1px;
+	padding: 5px 10px;
 	font-size: 70%;
 }
 
@@ -573,6 +572,40 @@ table.dataTable {
 
 .programs {
     color: #33b8ca;
+}
+
+#programNameTable_wrapper > div {
+    height: 30px;
+    padding: 10px;
+    background-color: #fff;
+}
+
+.dataTables_wrapper .dataTables_length {
+    float: left;
+    width: 33%;
+    padding-top: 10px;
+}
+
+.dataTables_wrapper .dataTables_info {
+    clear: none;
+    float: left;
+    padding-top: 10px;
+    text-align: center;
+    width: 33%;
+}
+
+table.dataTable tbody tr.selected {
+    background-color: #d6f0f4;
+}
+
+table.dataTable.no-footer {
+    border-bottom: 1px solid #bbb;
+}
+
+.submit {
+    border: 1px solid #666;
+    color: #333;
+    font-family: "roboto";
 }
 
 /* ############################################################### */
