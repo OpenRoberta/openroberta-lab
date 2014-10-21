@@ -73,6 +73,7 @@
               <field name="OP">EQ</field>
               <value name="A">
                 <block type="robSensors_getSample" id="234">
+                  <mutation input="TOUCH"></mutation>
                   <field name="SENSORTYPE">TOUCH</field>
                   <field name="SENSORPORT">1</field>
                 </block>
