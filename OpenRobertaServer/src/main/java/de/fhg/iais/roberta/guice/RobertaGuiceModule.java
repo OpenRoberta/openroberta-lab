@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.guice;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
+import com.google.inject.name.Names;
 
 import de.fhg.iais.roberta.brick.BrickCommunicator;
 import de.fhg.iais.roberta.brick.Templates;
@@ -31,5 +32,7 @@ public class RobertaGuiceModule extends AbstractModule {
         bind(SessionFactoryWrapper.class).in(Singleton.class);
         bind(Templates.class).in(Singleton.class);
         bind(BrickCommunicator.class).in(Singleton.class);
+
+        bind(String.class).annotatedWith(Names.named("hibernate-cfg.xml")).toInstance("hibernate-cfg.xml");
     }
 }

@@ -26,8 +26,8 @@ public abstract class AbstractProcessor {
      */
     public final void setResult(boolean successful, String message) {
         this.successful = successful;
-        this.message = successful ? null : message;
-        LOG.info(message + " Result: " + successful);
+        this.message = message + " Result: " + successful;
+        LOG.info(this.message);
     }
 
     /**

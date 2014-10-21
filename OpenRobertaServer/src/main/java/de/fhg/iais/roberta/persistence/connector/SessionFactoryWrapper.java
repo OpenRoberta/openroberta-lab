@@ -7,6 +7,9 @@ import org.hibernate.service.ServiceRegistryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -21,16 +24,16 @@ import de.fhg.iais.roberta.dbc.Assert;
  */
 public final class SessionFactoryWrapper {
     private static final Logger LOG = LoggerFactory.getLogger(SessionFactoryWrapper.class);
-    private static final String CFG_XML = "hibernate-cfg.xml";
     private SessionFactory sessionFactory;
 
     /**
      * configure the session factory
      */
-    public SessionFactoryWrapper() {
+    @Inject
+    public SessionFactoryWrapper(@Named("hibernate-cfg.xml") String cfgXml) {
         try {
             Configuration configuration = new Configuration();
-            configuration.configure(CFG_XML);
+            configuration.configure(cfgXml);
             ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder().applySettings(configuration.getProperties());
             this.sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder.buildServiceRegistry());
             LOG.info("created");
@@ -50,5 +53,17 @@ public final class SessionFactoryWrapper {
         Session session = this.sessionFactory.openSession();
         Assert.notNull(session, "creation of session failed");
         return new SessionWrapper(session);
+    }
+
+    /**
+     * get a new NATIVE session from the session factory. The session is <b>not</b> thread-safe. <b>Use rarely - know what you do</b>
+     *
+     * @return the session-wrapper, never null
+     */
+    public Session getNativeSession() {
+        Assert.notNull(this.sessionFactory, "previous attempt to initialize the session factory failed");
+        Session session = this.sessionFactory.openSession();
+        Assert.notNull(session, "creation of session failed");
+        return session;
     }
 }

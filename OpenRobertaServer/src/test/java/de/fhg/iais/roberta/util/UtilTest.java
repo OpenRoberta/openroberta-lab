@@ -16,5 +16,7 @@ public class UtilTest {
         assertFalse(Util.isValidJavaIdentifier(""));
         assertFalse(Util.isValidJavaIdentifier("1qay"));
         assertFalse(Util.isValidJavaIdentifier(" Pid"));
+        assertFalse(Util.isValidJavaIdentifier("class"));
+        assertFalse(Util.isValidJavaIdentifier("for"));
     }
 }
