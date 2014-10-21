@@ -43,7 +43,8 @@ Blockly.BlockSvg = function(block) {
         'class' : 'blocklyPathBorder'
     }, this.svgGroup_);
     this.svgPath_ = Blockly.createSvgElement('path', {
-        'class' : 'blocklyPath', 'id': this.block_.id
+        'class' : 'blocklyPath',
+        'id' : this.block_.id
     }, this.svgGroup_);
     this.svgPath_.tooltip = this.block_;
     Blockly.Tooltip.bindMouseEvents(this.svgPath_);
@@ -60,14 +61,16 @@ Blockly.BlockSvg.prototype.height = 0;
 Blockly.BlockSvg.prototype.width = 0;
 
 /**
- * Constant for identifying rows that are to be rendered inline. Don't collide with Blockly.INPUT_VALUE and friends.
+ * Constant for identifying rows that are to be rendered inline. Don't collide
+ * with Blockly.INPUT_VALUE and friends.
  * 
  * @const
  */
 Blockly.BlockSvg.INLINE = -1;
 
 /**
- * Initialize the SVG representation with any block attributes which have already been defined.
+ * Initialize the SVG representation with any block attributes which have
+ * already been defined.
  */
 Blockly.BlockSvg.prototype.init = function() {
     var block = this.block_;
@@ -262,7 +265,8 @@ Blockly.BlockSvg.TOP_LEFT_CORNER_START = 'm 0,' + Blockly.BlockSvg.CORNER_RADIUS
 Blockly.BlockSvg.TOP_LEFT_CORNER = 'A ' + Blockly.BlockSvg.CORNER_RADIUS + ',' + Blockly.BlockSvg.CORNER_RADIUS + ' 0 0,1 ' + Blockly.BlockSvg.CORNER_RADIUS
         + ',0';
 /**
- * SVG path for drawing the top-left corner of a statement input. Includes the top notch, a horizontal space, and the rounded inside corner.
+ * SVG path for drawing the top-left corner of a statement input. Includes the
+ * top notch, a horizontal space, and the rounded inside corner.
  * 
  * @const
  */
@@ -270,7 +274,8 @@ Blockly.BlockSvg.INNER_TOP_LEFT_CORNER = Blockly.BlockSvg.NOTCH_PATH_RIGHT + ' h
         + (Blockly.BlockSvg.NOTCH_WIDTH - 15 + Blockly.BlockSvg.SEP_SPACE_BLOCK - Blockly.BlockSvg.CORNER_RADIUS) + ' a ' + Blockly.BlockSvg.CORNER_RADIUS
         + ',' + Blockly.BlockSvg.CORNER_RADIUS + ' 0 0,0 -' + Blockly.BlockSvg.CORNER_RADIUS + ',' + Blockly.BlockSvg.CORNER_RADIUS;
 /**
- * SVG path for drawing the bottom-left corner of a statement input. Includes the rounded inside corner.
+ * SVG path for drawing the bottom-left corner of a statement input. Includes
+ * the rounded inside corner.
  * 
  * @const
  */
@@ -436,7 +441,8 @@ Blockly.BlockSvg.prototype.removeSelect = function() {
 };
 
 /**
- * Adds the dragging class to this block. Also disables the highlights/shadows to improve performance.
+ * Adds the dragging class to this block. Also disables the highlights/shadows
+ * to improve performance.
  */
 Blockly.BlockSvg.prototype.addDragging = function() {
     Blockly.addClass_(/** @type {!Element} */
@@ -452,7 +458,8 @@ Blockly.BlockSvg.prototype.removeDragging = function() {
 };
 
 /**
- * Render the block. Lays out and reflows a block based on its contents and settings.
+ * Render the block. Lays out and reflows a block based on its contents and
+ * settings.
  */
 Blockly.BlockSvg.prototype.render = function() {
     this.block_.rendered = true;
@@ -521,7 +528,8 @@ Blockly.BlockSvg.prototype.renderFields_ = function(fieldList, cursorX, cursorY)
  * 
  * @param {number}
  *            iconWidth Offset of first row due to icons.
- * @return {!Array.<!Array.<!Object>>} 2D array of objects, each containing position information.
+ * @return {!Array.<!Array.<!Object>>} 2D array of objects, each containing
+ *         position information.
  * @private
  */
 Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
@@ -650,7 +658,8 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
  * @param {number}
  *            iconWidth Offset of first row due to icons.
  * @param {!Array.
- *            <!Array.<!Object>>} inputRows 2D array of objects, each containing position information.
+ *            <!Array.<!Object>>} inputRows 2D array of objects, each
+ *            containing position information.
  * @private
  */
 Blockly.BlockSvg.prototype.renderDraw_ = function(iconWidth, inputRows) {
@@ -743,7 +752,8 @@ Blockly.BlockSvg.prototype.renderDrawTop_ = function(steps, connectionsXY, right
  * @param {!Object}
  *            connectionsXY Location of block.
  * @param {!Array.
- *            <!Array.<!Object>>} inputRows 2D array of objects, each containing position information.
+ *            <!Array.<!Object>>} inputRows 2D array of objects, each
+ *            containing position information.
  * @param {number}
  *            iconWidth Offset of first row due to icons.
  * @return {number} Height of block.
@@ -831,7 +841,7 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, inlineSteps, conne
             this.renderFields_(input.fieldRow, fieldX, fieldY);
             steps.push(Blockly.BlockSvg.TAB_PATH_DOWN);
             //if (y != inputRows.length - 1 && !input.connection.targetConnection) {
-                // row.height += Blockly.BlockSvg.SEP_SPACE_BLOCK;
+            // row.height += Blockly.BlockSvg.SEP_SPACE_BLOCK;
             //}
             if ((y == inputRows.length - 1 && input.connection.targetConnection) || (y != inputRows.length - 1 && inputRows[y + 1].type != Blockly.INPUT_VALUE)) {
                 row.height -= Blockly.BlockSvg.SEP_SPACE_BLOCK;

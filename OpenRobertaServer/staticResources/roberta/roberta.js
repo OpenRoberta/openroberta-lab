@@ -115,7 +115,8 @@ function logout() {
 /**
  * Inject Blockly with initial toolbox
  * 
- * @param {response} toolbox
+ * @param {response}
+ *            toolbox
  */
 function injectBlockly(toolbox) {
     response(toolbox);
@@ -144,7 +145,8 @@ function initProgramEnvironment() {
 /**
  * Set program name
  * 
- * @param {name} Name to be set
+ * @param {name}
+ *            Name to be set
  */
 function setProgram(name) {
     if (name) {
@@ -156,7 +158,8 @@ function setProgram(name) {
 /**
  * Set token
  * 
- * @param {token} Token value to be set
+ * @param {token}
+ *            Token value to be set
  */
 function setToken(token) {
     if (token) {
@@ -420,18 +423,18 @@ function switchToBrickly() {
 }
 
 /**
- * Display status information in the navigation bar 
+ * Display status information in the navigation bar
  */
 function displayStatus() {
     if (userState.name != "none") {
         $('#setName').text(userState.name);
     } else {
-        $('#setName').text("Anmeldung");   // Bad because of language dependency
+        $('#setName').text("Anmeldung"); // Bad because of language dependency
     }
     if (userState.program != "none") {
         $('#setProgram').text(userState.program);
     } else {
-        $('#setProgram').text("Programm");   // Bad because of language dependency
+        $('#setProgram').text("Programm"); // Bad because of language dependency
     }
     $('#head-navigation #role').text(userState.role);
     $('#head-navigation #robot').text(userState.robot);
@@ -441,7 +444,8 @@ function displayStatus() {
 /**
  * Inject Brickly with initial toolbox
  * 
- * @param {state} State to be set
+ * @param {state}
+ *            State to be set
  * 
  */
 function setHeadNavigationMenuState(state) {
@@ -456,7 +460,8 @@ function setHeadNavigationMenuState(state) {
 /**
  * Display message
  * 
- * @param {message} Messabe to be displayed
+ * @param {message}
+ *            Messabe to be displayed
  */
 function displayMessage(message) {
     $("#show-message > #message").text(message);
@@ -493,8 +498,8 @@ function initHeadNavigation() {
             initProgramEnvironment();
             $("#new-program").dialog("open");
         } else if (domId === 'open') {
-            $('#loadFromListing').css('display','block');
-            $('#deleteFromListing').css('display','none');
+            $('#loadFromListing').css('display', 'block');
+            $('#deleteFromListing').css('display', 'none');
             $('#tabListing').click();
         } else if (domId === 'save') {
             saveToServer(response);
@@ -504,8 +509,8 @@ function initHeadNavigation() {
             $("#add-program").dialog("open");
         } else if (domId === 'divide') {
         } else if (domId === 'delete') {
-            $('#deleteFromListing').css('display','block');
-            $('#loadFromListing').css('display','none');
+            $('#deleteFromListing').css('display', 'block');
+            $('#loadFromListing').css('display', 'none');
             $('#tabListing').click();
         } else if (domId === 'properties') {
         } else if (domId === 'toolboxBeginner') {
@@ -575,7 +580,7 @@ function initHeadNavigation() {
 
     // Close submenu when Mouseleave-Event is triggered
     $('#head-navigation').on('mouseleave', function(event) {
-        $('#head-navigation').menu("collapseAll", null, false );
+        $('#head-navigation').menu("collapseAll", null, false);
     });
 
     setHeadNavigationMenuState('logout');
@@ -612,7 +617,7 @@ function initPopups() {
     $(".popup-opener").click(function() {
         $(".ui-dialog-content").dialog("close");
     });
-    
+
     $('#saveUser').onWrap('click', saveUserToServer, 'save the user data');
     $('#deleteUser').onWrap('click', deleteUserOnServer, 'delete user data');
     $('#doLogin').onWrap('click', login, 'login ');
@@ -648,7 +653,6 @@ function initPopups() {
     });
 }
 
-
 /**
  * Initialize tabs
  */
@@ -658,7 +662,7 @@ function initTabs() {
         active : 0,
         beforeActivate : beforeActivateTab
     });
-    
+
     $('#loadFromListing').onWrap('click', function() {
         loadFromListing();
     }, 'load blocks from program list');
@@ -666,7 +670,7 @@ function initTabs() {
         "cmd" : "loadT",
         "name" : "beginner"
     }, injectBlockly);
-    
+
     $('#deleteFromListing').onWrap('click', function() {
         deleteFromListing();
     }, 'delete blocks from program list');

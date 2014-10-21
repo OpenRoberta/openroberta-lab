@@ -78,49 +78,33 @@ function clearDraw(){
 // Needs refactoring.
 //-------------------------------------
 /*
-$(document).keydown(function(e){
-	if (e.keyCode == 37) { 
-		moveLeft();		
-		return false;
-	}
-
-	if (e.keyCode == 38) { 
-		moveUp();		
-		return false;
-	}
-
-	if (e.keyCode == 39) { 
-		moveRight();		
-		return false;
-	}
-
-	if (e.keyCode == 40) { 
-		moveDown();		
-		return false;
-	}
-	
-	if (e.keyCode == 87) { 
-		
-		drawRotated(90);
-		
-		return false;
-	}
-	
-	if (e.keyCode == 68) { 
-		
-		rotateClockwise(10);
-		
-		return false;
-	}
-	
-	if (e.keyCode == 65) { 
-		
-		rotateCounterClockwise(10);
-		
-		return false;
-	}
-});
-*/
+ * $(document).keydown(function(e){ if (e.keyCode == 37) { moveLeft(); return
+ * false; }
+ * 
+ * if (e.keyCode == 38) { moveUp(); return false; }
+ * 
+ * if (e.keyCode == 39) { moveRight(); return false; }
+ * 
+ * if (e.keyCode == 40) { moveDown(); return false; }
+ * 
+ * if (e.keyCode == 87) {
+ * 
+ * drawRotated(90);
+ * 
+ * return false; }
+ * 
+ * if (e.keyCode == 68) {
+ * 
+ * rotateClockwise(10);
+ * 
+ * return false; }
+ * 
+ * if (e.keyCode == 65) {
+ * 
+ * rotateCounterClockwise(10);
+ * 
+ * return false; } });
+ */
 //--------------------------------------------
 // Functions for scrolling the background.
 //--------------------------------------------

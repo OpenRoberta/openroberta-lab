@@ -16,22 +16,22 @@ goog.require('Blockly.BlockSvg');
  * @constructor
  */
 Blockly.CheckButton = function(workspace, position) {
-  Blockly.Button.call(this, workspace);
-  this.POSITION = position;
-  this.IMG_WIDTH_ = 36;
-  this.IMG_HEIGHT_ = 36;
-  this.IMG_PATH_ = "m5,20l10,11m0,0l16,-25";
+    Blockly.Button.call(this, workspace);
+    this.POSITION = position;
+    this.IMG_WIDTH_ = 36;
+    this.IMG_HEIGHT_ = 36;
+    this.IMG_PATH_ = "m5,20l10,11m0,0l16,-25";
 };
 goog.inherits(Blockly.CheckButton, Blockly.Button);
 
 /** @inheritDoc */
 Blockly.CheckButton.prototype.onMouseUp_ = function(e) {
-  checkProgram();
+    checkProgram();
 };
 
 /** @inheritDoc */
 Blockly.CheckButton.prototype.createDom = function() {
-  Blockly.CheckButton.superClass_.createDom.call(this);
-  this.svgPath_.setAttribute( 'stroke-width', '10px');
-  return this.svgGroup_;
+    Blockly.CheckButton.superClass_.createDom.call(this);
+    this.svgPath_.setAttribute('stroke-width', '10px');
+    return this.svgGroup_;
 };

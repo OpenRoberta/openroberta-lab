@@ -88,7 +88,8 @@ Blockly.Bubble = function(workspace, content, shape, anchorX, anchorY, bubbleWid
 Blockly.Bubble.BORDER_WIDTH = 3;
 
 /**
- * Determines the thickness of the base of the arrow in relation to the size of the bubble. Higher numbers result in thinner arrows.
+ * Determines the thickness of the base of the arrow in relation to the size of
+ * the bubble. Higher numbers result in thinner arrows.
  */
 Blockly.Bubble.ARROW_THICKNESS = 15;
 
@@ -161,7 +162,8 @@ Blockly.Bubble.prototype.anchorX_ = 0;
 Blockly.Bubble.prototype.anchorY_ = 0;
 
 /**
- * Relative X coordinate of bubble with respect to the anchor's centre. In RTL mode the initial value is negated.
+ * Relative X coordinate of bubble with respect to the anchor's centre. In RTL
+ * mode the initial value is negated.
  * 
  * @private
  */
@@ -207,10 +209,13 @@ Blockly.Bubble.prototype.autoLayout_ = true;
  */
 Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
     /*
-     * Create the bubble. Here's the markup that will be generated: <g> <g filter="url(#blocklyEmboss)"> <path d="... Z" /> <rect class="blocklyDraggable"
-     * rx="8" ry="8" width="180" height="180"/> </g> <g transform="translate(165, 165)" class="blocklyResizeSE"> <polygon points="0,15 15,15 15,0"/> <line
-     * class="blocklyResizeLine" x1="5" y1="14" x2="14" y2="5"/> <line class="blocklyResizeLine" x1="10" y1="14" x2="14" y2="10"/> </g> [...content goes
-     * here...] </g>
+     * Create the bubble. Here's the markup that will be generated: <g> <g
+     * filter="url(#blocklyEmboss)"> <path d="... Z" /> <rect
+     * class="blocklyDraggable" rx="8" ry="8" width="180" height="180"/> </g> <g
+     * transform="translate(165, 165)" class="blocklyResizeSE"> <polygon
+     * points="0,15 15,15 15,0"/> <line class="blocklyResizeLine" x1="5" y1="14"
+     * x2="14" y2="5"/> <line class="blocklyResizeLine" x1="10" y1="14" x2="14"
+     * y2="10"/> </g> [...content goes here...] </g>
      */
     this.bubbleGroup_ = Blockly.createSvgElement('g', {}, null);
     //var bubbleEmboss = Blockly.createSvgElement('g',
@@ -384,7 +389,8 @@ Blockly.Bubble.prototype.promote_ = function() {
 };
 
 /**
- * Notification that the anchor has moved. Update the arrow and bubble accordingly.
+ * Notification that the anchor has moved. Update the arrow and bubble
+ * accordingly.
  * 
  * @param {number}
  *            x Absolute horizontal location.
@@ -574,7 +580,9 @@ Blockly.Bubble.prototype.renderArrow_ = function() {
 
 /**
  * Change the colour of a bubble.
- * @param {string} hexColour Hex code of colour.
+ * 
+ * @param {string}
+ *            hexColour Hex code of colour.
  */
 Blockly.Bubble.prototype.setColour = function(hexColour) {
     this.bubbleBack_.setAttribute('fill', hexColour);

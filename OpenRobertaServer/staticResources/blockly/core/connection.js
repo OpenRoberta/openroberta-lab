@@ -201,13 +201,15 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
 };
 
 /**
- * Does the given block have one and only one connection point that will accept the orphaned block?
+ * Does the given block have one and only one connection point that will accept
+ * the orphaned block?
  * 
  * @param {!Blockly.Block}
  *            block The superior block.
  * @param {!Blockly.Block}
  *            orphanBlock The inferior block.
- * @return {Blockly.Connection} The suitable connection point on 'block', or null.
+ * @return {Blockly.Connection} The suitable connection point on 'block', or
+ *         null.
  * @private
  */
 Blockly.Connection.singleConnection_ = function(block, orphanBlock) {
@@ -270,7 +272,8 @@ Blockly.Connection.prototype.targetBlock = function() {
 };
 
 /**
- * Move the block(s) belonging to the connection to a point where they don't visually interfere with the specified connection.
+ * Move the block(s) belonging to the connection to a point where they don't
+ * visually interfere with the specified connection.
  * 
  * @param {!Blockly.Connection}
  *            staticConnection The connection to move away from.
@@ -402,10 +405,13 @@ Blockly.Connection.prototype.tighten_ = function() {
  * @param {number}
  *            maxLimit The maximum radius to another connection.
  * @param {number}
- *            dx Horizontal offset between this connection's location in the database and the current location (as a result of dragging).
+ *            dx Horizontal offset between this connection's location in the
+ *            database and the current location (as a result of dragging).
  * @param {number}
- *            dy Vertical offset between this connection's location in the database and the current location (as a result of dragging).
- * @return {!Object} Contains two properties: 'connection' which is either another connection or null, and 'radius' which is the distance.
+ *            dy Vertical offset between this connection's location in the
+ *            database and the current location (as a result of dragging).
+ * @return {!Object} Contains two properties: 'connection' which is either
+ *         another connection or null, and 'radius' which is the distance.
  */
 Blockly.Connection.prototype.closest = function(maxLimit, dx, dy) {
     if (this.targetConnection) {
@@ -452,12 +458,16 @@ Blockly.Connection.prototype.closest = function(maxLimit, dx, dy) {
     }
 
     /**
-     * Computes if the current connection is within the allowed radius of another connection. This function is a closure and has access to outside variables.
+     * Computes if the current connection is within the allowed radius of
+     * another connection. This function is a closure and has access to outside
+     * variables.
      * 
      * @param {number}
      *            yIndex The other connection's index in the database.
-     * @return {boolean} True if the search needs to continue: either the current connection's vertical distance from the other connection is less than the
-     *         allowed radius, or if the connection is not compatible.
+     * @return {boolean} True if the search needs to continue: either the
+     *         current connection's vertical distance from the other connection
+     *         is less than the allowed radius, or if the connection is not
+     *         compatible.
      */
     function checkConnection_(yIndex) {
         var connection = db[yIndex];
@@ -509,7 +519,8 @@ Blockly.Connection.prototype.closest = function(maxLimit, dx, dy) {
 };
 
 /**
- * Is this connection compatible with another connection with respect to the value type system. E.g. square_root("Hello") is not compatible.
+ * Is this connection compatible with another connection with respect to the
+ * value type system. E.g. square_root("Hello") is not compatible.
  * 
  * @param {!Blockly.Connection}
  *            otherConnection Connection to compare against.
@@ -535,8 +546,10 @@ Blockly.Connection.prototype.checkType_ = function(otherConnection) {
  * Change a connection's compatibility.
  * 
  * @param {*}
- *            check Compatible value type or list of value types. Null if all types are compatible.
- * @return {!Blockly.Connection} The connection being modified (to allow chaining).
+ *            check Compatible value type or list of value types. Null if all
+ *            types are compatible.
+ * @return {!Blockly.Connection} The connection being modified (to allow
+ *         chaining).
  */
 Blockly.Connection.prototype.setCheck = function(check) {
     if (check) {
@@ -562,7 +575,8 @@ Blockly.Connection.prototype.setCheck = function(check) {
 };
 
 /**
- * Find all nearby compatible connections to this connection. Type checking does not apply, since this function is used for bumping.
+ * Find all nearby compatible connections to this connection. Type checking does
+ * not apply, since this function is used for bumping.
  * 
  * @param {number}
  *            maxLimit The maximum radius to another connection.
@@ -605,11 +619,14 @@ Blockly.Connection.prototype.neighbours_ = function(maxLimit) {
     }
 
     /**
-     * Computes if the current connection is within the allowed radius of another connection. This function is a closure and has access to outside variables.
+     * Computes if the current connection is within the allowed radius of
+     * another connection. This function is a closure and has access to outside
+     * variables.
      * 
      * @param {number}
      *            yIndex The other connection's index in the database.
-     * @return {boolean} True if the current connection's vertical distance from the other connection is less than the allowed radius.
+     * @return {boolean} True if the current connection's vertical distance from
+     *         the other connection is less than the allowed radius.
      */
     function checkConnection_(yIndex) {
         var dx = currentX - db[yIndex].x_;
@@ -624,8 +641,9 @@ Blockly.Connection.prototype.neighbours_ = function(maxLimit) {
 };
 
 /**
- * Hide this connection, as well as all down-stream connections on any block attached to this connection. This happens when a block is collapsed. Also hides
- * down-stream comments.
+ * Hide this connection, as well as all down-stream connections on any block
+ * attached to this connection. This happens when a block is collapsed. Also
+ * hides down-stream comments.
  */
 Blockly.Connection.prototype.hideAll = function() {
     if (this.inDB_) {
@@ -653,8 +671,9 @@ Blockly.Connection.prototype.hideAll = function() {
 };
 
 /**
- * Unhide this connection, as well as all down-stream connections on any block attached to this connection. This happens when a block is expanded. Also unhides
- * down-stream comments.
+ * Unhide this connection, as well as all down-stream connections on any block
+ * attached to this connection. This happens when a block is expanded. Also
+ * unhides down-stream comments.
  * 
  * @return {!Array.<!Blockly.Block>} List of blocks to render.
  */
@@ -696,8 +715,9 @@ Blockly.Connection.prototype.unhideAll = function() {
 };
 
 /**
- * Database of connections. Connections are stored in order of their vertical component. This way connections in an area may be looked up quickly using a binary
- * search.
+ * Database of connections. Connections are stored in order of their vertical
+ * component. This way connections in an area may be looked up quickly using a
+ * binary search.
  * 
  * @constructor
  */
@@ -789,7 +809,9 @@ Blockly.ConnectionDB.prototype.removeConnection_ = function(connection) {
 
 /**
  * Initialize a set of connection DBs for a specified workspace.
- * @param {!Blockly.Workspace} workspace The workspace this DB is for.
+ * 
+ * @param {!Blockly.Workspace}
+ *            workspace The workspace this DB is for.
  */
 Blockly.ConnectionDB.init = function(workspace) {
     // Create four databases, one for each connection type.

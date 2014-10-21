@@ -25,7 +25,6 @@
 'use strict';
 
 /**
- * Name space for the Msg singleton.
- * Msg gets populated in the message files.
+ * Name space for the Msg singleton. Msg gets populated in the message files.
  */
 goog.provide('Blockly.Msg');

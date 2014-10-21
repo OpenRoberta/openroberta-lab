@@ -30,14 +30,12 @@ goog.require('Blockly.Field');
 goog.require('Blockly.FieldColour');
 
 Blockly.FieldRobColour = function(colour, opt_changeHandler) {
-	Blockly.FieldRobColour.superClass_.constructor.call(this,
-			'\u00A0\u00A0\u00A0\u00A0\u00A0');
-	this.changeHandler_ = opt_changeHandler;
-	this.borderRect_.style['fillOpacity'] = 1;
-	// Set the initial state.
-	this.setValue(colour);
-	Blockly.FieldColour.COLUMNS = 8;
-	Blockly.FieldColour.COLOURS = new Array("#585858", "#000000", "#0057a6",
-			"#00642e", "#f7d117", "#b30006", "#FFFFFF", "#532115");
+    Blockly.FieldRobColour.superClass_.constructor.call(this, '\u00A0\u00A0\u00A0\u00A0\u00A0');
+    this.changeHandler_ = opt_changeHandler;
+    this.borderRect_.style['fillOpacity'] = 1;
+    // Set the initial state.
+    this.setValue(colour);
+    Blockly.FieldColour.COLUMNS = 8;
+    Blockly.FieldColour.COLOURS = new Array("#585858", "#000000", "#0057a6", "#00642e", "#f7d117", "#b30006", "#FFFFFF", "#532115");
 };
 goog.inherits(Blockly.FieldRobColour, Blockly.FieldColour);

@@ -15,7 +15,7 @@ goog.require('Blockly.BlockSvg');
  * @constructor
  */
 Blockly.Button = function(workspace) {
-  this.workspace_ = workspace;
+    this.workspace_ = workspace;
 };
 
 /**
@@ -144,50 +144,49 @@ Blockly.Button.prototype.img_y_ = 0;
  * @return {!Element} The button's SVG group.
  */
 Blockly.Button.prototype.createDom = function() {
-  this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
-  this.svgBack_ = Blockly.createSvgElement('rect', {
-    'id' : 'button' + this.POSITION,
-    'class' : 'blocklyButtonBack',
-    'x' : 0,
-    'y' : 0,
-    'width' : this.SIZE_,
-    'height' : this.SIZE_,
-    'rx' : Blockly.BlockSvg.CORNER_RADIUS,
-    'ry' : Blockly.BlockSvg.CORNER_RADIUS
-  }, this.svgGroup_);
-  this.img_x_ = (this.SIZE_ - this.IMG_WIDTH_) / 2;
-  this.img_y_ = (this.SIZE_ - this.IMG_HEIGHT_) / 2;
-  this.svgPath_ = Blockly.createSvgElement('path', {
-    'class' : 'blocklyButtonPath'
-  }, this.svgGroup_);
-  this.svgPath_.setAttribute('d', 'm' + this.img_x_ + ',' + this.img_y_
-      + this.IMG_PATH_);
-  return this.svgGroup_;
+    this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
+    this.svgBack_ = Blockly.createSvgElement('rect', {
+        'id' : 'button' + this.POSITION,
+        'class' : 'blocklyButtonBack',
+        'x' : 0,
+        'y' : 0,
+        'width' : this.SIZE_,
+        'height' : this.SIZE_,
+        'rx' : Blockly.BlockSvg.CORNER_RADIUS,
+        'ry' : Blockly.BlockSvg.CORNER_RADIUS
+    }, this.svgGroup_);
+    this.img_x_ = (this.SIZE_ - this.IMG_WIDTH_) / 2;
+    this.img_y_ = (this.SIZE_ - this.IMG_HEIGHT_) / 2;
+    this.svgPath_ = Blockly.createSvgElement('path', {
+        'class' : 'blocklyButtonPath'
+    }, this.svgGroup_);
+    this.svgPath_.setAttribute('d', 'm' + this.img_x_ + ',' + this.img_y_ + this.IMG_PATH_);
+    return this.svgGroup_;
 };
 
 /**
  * Initialize the button.
  */
 Blockly.Button.prototype.init = function() {
-  this.position_();
-  // If the document resizes, reposition the button.
-  Blockly.bindEvent_(window, 'resize', this, this.position_);
-  Blockly.bindEvent_(this.svgGroup_, 'mouseup', this, this.onMouseUp_);
-  Blockly.bindEvent_(this.svgGroup_, 'mouseover', this, this.onMouseOver_);
-  Blockly.bindEvent_(this.svgGroup_, 'mouseout', this, this.onMouseOut_);
+    this.position_();
+    // If the document resizes, reposition the button.
+    Blockly.bindEvent_(window, 'resize', this, this.position_);
+    Blockly.bindEvent_(this.svgGroup_, 'mouseup', this, this.onMouseUp_);
+    Blockly.bindEvent_(this.svgGroup_, 'mouseover', this, this.onMouseOver_);
+    Blockly.bindEvent_(this.svgGroup_, 'mouseout', this, this.onMouseOut_);
 };
 
 /**
  * Dispose of this button. Unlink from all DOM elements to prevent memory leaks.
  */
 Blockly.Button.prototype.dispose = function() {
-  if (this.svgGroup_) {
-    goog.dom.removeNode(this.svgGroup_);
-    this.svgGroup_ = null;
-  }
-  this.svgImg_ = null;
-  this.svgBack_ = null;
-  this.workspace_ = null;
+    if (this.svgGroup_) {
+        goog.dom.removeNode(this.svgGroup_);
+        this.svgGroup_ = null;
+    }
+    this.svgImg_ = null;
+    this.svgBack_ = null;
+    this.workspace_ = null;
 };
 
 /**
@@ -196,36 +195,27 @@ Blockly.Button.prototype.dispose = function() {
  * @private
  */
 Blockly.Button.prototype.position_ = function() {
-  var metrics = this.workspace_.getMetrics();
-  if (!metrics) {
-    // There are no metrics available (workspace is probably not visible).
-    return;
-  }
-  if (this.POSITION == 1) {
-    this.left_ = metrics.viewWidth + metrics.absoluteLeft - (this.SIZE_ * 2)
-        - this.OUTER_MARGIN_ - this.INNER_MARGIN_;
-    this.top_ = metrics.viewHeight + metrics.absoluteTop - (this.SIZE_ * 2)
-        - this.OUTER_MARGIN_ - this.INNER_MARGIN_;
-  } else if (this.POSITION == 2) {
-    this.left_ = metrics.viewWidth + metrics.absoluteLeft - (this.SIZE_)
-        - this.OUTER_MARGIN_;
-    this.top_ = metrics.viewHeight + metrics.absoluteTop - (this.SIZE_ * 2)
-        - this.OUTER_MARGIN_ - this.INNER_MARGIN_;
-  } else if (this.POSITION == 3) {
-    this.left_ = metrics.viewWidth + metrics.absoluteLeft - (this.SIZE_ * 2)
-        - this.OUTER_MARGIN_ - this.INNER_MARGIN_;
-    this.top_ = metrics.viewHeight + metrics.absoluteTop - (this.SIZE_)
-        - this.OUTER_MARGIN_;
-  } else if (this.POSITION == 4) {
-    this.left_ = metrics.viewWidth + metrics.absoluteLeft - (this.SIZE_)
-        - this.OUTER_MARGIN_;
-    this.top_ = metrics.viewHeight + metrics.absoluteTop - (this.SIZE_)
-        - this.OUTER_MARGIN_;
-  } else {
-    return;
-  }
-  this.svgGroup_.setAttribute('transform', 'translate(' + this.left_ + ','
-      + this.top_ + ')');
+    var metrics = this.workspace_.getMetrics();
+    if (!metrics) {
+        // There are no metrics available (workspace is probably not visible).
+        return;
+    }
+    if (this.POSITION == 1) {
+        this.left_ = metrics.viewWidth + metrics.absoluteLeft - (this.SIZE_ * 2) - this.OUTER_MARGIN_ - this.INNER_MARGIN_;
+        this.top_ = metrics.viewHeight + metrics.absoluteTop - (this.SIZE_ * 2) - this.OUTER_MARGIN_ - this.INNER_MARGIN_;
+    } else if (this.POSITION == 2) {
+        this.left_ = metrics.viewWidth + metrics.absoluteLeft - (this.SIZE_) - this.OUTER_MARGIN_;
+        this.top_ = metrics.viewHeight + metrics.absoluteTop - (this.SIZE_ * 2) - this.OUTER_MARGIN_ - this.INNER_MARGIN_;
+    } else if (this.POSITION == 3) {
+        this.left_ = metrics.viewWidth + metrics.absoluteLeft - (this.SIZE_ * 2) - this.OUTER_MARGIN_ - this.INNER_MARGIN_;
+        this.top_ = metrics.viewHeight + metrics.absoluteTop - (this.SIZE_) - this.OUTER_MARGIN_;
+    } else if (this.POSITION == 4) {
+        this.left_ = metrics.viewWidth + metrics.absoluteLeft - (this.SIZE_) - this.OUTER_MARGIN_;
+        this.top_ = metrics.viewHeight + metrics.absoluteTop - (this.SIZE_) - this.OUTER_MARGIN_;
+    } else {
+        return;
+    }
+    this.svgGroup_.setAttribute('transform', 'translate(' + this.left_ + ',' + this.top_ + ')');
 };
 
 /**
@@ -235,21 +225,21 @@ Blockly.Button.prototype.position_ = function() {
  *            e Mouse move event.
  */
 Blockly.Button.prototype.onMouseUp_ = function(e) {
-  goog.asserts.fail('unimplemented method');
+    goog.asserts.fail('unimplemented method');
 }
 
 Blockly.Button.prototype.onMouseOver_ = function(e) {
-  Blockly.setCursorHand_(true);
-  // this.svgGroup_.setAttribute('transform', 'translate(' + this.left_ + ','
-  // + this.top_ + ') rotate(-15 50 0)');
-  this.svgBack_.setAttribute('class', 'blocklyButtonHoverBack');
-  this.svgPath_.setAttribute('class', 'blocklyButtonHoverPath');
+    Blockly.setCursorHand_(true);
+    // this.svgGroup_.setAttribute('transform', 'translate(' + this.left_ + ','
+    // + this.top_ + ') rotate(-15 50 0)');
+    this.svgBack_.setAttribute('class', 'blocklyButtonHoverBack');
+    this.svgPath_.setAttribute('class', 'blocklyButtonHoverPath');
 };
 
 Blockly.Button.prototype.onMouseOut_ = function(e) {
-  Blockly.setCursorHand_(false);
-  // this.svgGroup_.setAttribute('transform', 'translate(' + this.left_ + ','
-  // + this.top_ + ')');
-  this.svgBack_.setAttribute('class', 'blocklyButtonBack');
-  this.svgPath_.setAttribute('class', 'blocklyButtonPath');
+    Blockly.setCursorHand_(false);
+    // this.svgGroup_.setAttribute('transform', 'translate(' + this.left_ + ','
+    // + this.top_ + ')');
+    this.svgBack_.setAttribute('class', 'blocklyButtonBack');
+    this.svgPath_.setAttribute('class', 'blocklyButtonPath');
 };

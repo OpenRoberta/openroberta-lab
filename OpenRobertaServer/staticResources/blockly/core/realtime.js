@@ -25,12 +25,12 @@
 
 /**
  * @fileoverview Common support code for Blockly apps using realtime
- * collaboration.
- * Note that to use this you must set up a project via the Google Developers
- * Console. Instructions on how to do that can be found in the Blockly wiki page
- * at https://code.google.com/p/blockly/wiki/RealtimeCollaboration
- * Once you do that you can set the clientId in
- * Blockly.Realtime.rtclientOptions_
+ *               collaboration. Note that to use this you must set up a project
+ *               via the Google Developers Console. Instructions on how to do
+ *               that can be found in the Blockly wiki page at
+ *               https://code.google.com/p/blockly/wiki/RealtimeCollaboration
+ *               Once you do that you can set the clientId in
+ *               Blockly.Realtime.rtclientOptions_
  * @author markf@google.com (Mark Friedman)
  */
 'use strict';
@@ -44,6 +44,7 @@ goog.require('rtclient');
 
 /**
  * URL for progress indicator.
+ * 
  * @type {string}
  * @private
  */
@@ -51,6 +52,7 @@ Blockly.Realtime.PROGRESS_URL_ = 'media/progress.gif';
 
 /**
  * Is realtime collaboration enabled?
+ * 
  * @type {boolean}
  * @private
  */
@@ -58,6 +60,7 @@ Blockly.Realtime.enabled_ = false;
 
 /**
  * The Realtime document being collaborated on.
+ * 
  * @type {gapi.drive.realtime.Document}
  * @private
  */
@@ -65,6 +68,7 @@ Blockly.Realtime.document_ = null;
 
 /**
  * The Realtime model of this doc.
+ * 
  * @type {gapi.drive.realtime.Model}
  * @private
  */
@@ -72,6 +76,7 @@ Blockly.Realtime.model_ = null;
 
 /**
  * The unique id associated with this editing session.
+ * 
  * @type {string}
  * @private
  */
@@ -79,6 +84,7 @@ Blockly.Realtime.sessionId_ = null;
 
 /**
  * The function used to initialize the UI after realtime is initialized.
+ * 
  * @type {function()}
  * @private
  */
@@ -86,6 +92,7 @@ Blockly.Realtime.initUi_ = null;
 
 /**
  * A map from block id to blocks.
+ * 
  * @type {gapi.drive.realtime.CollaborativeMap}
  * @private
  */
@@ -93,12 +100,14 @@ Blockly.Realtime.blocksMap_ = null;
 
 /**
  * Are currently syncing from another instance of this realtime doc.
+ * 
  * @type {boolean}
  */
 Blockly.Realtime.withinSync = false;
 
 /**
  * The current instance of the realtime loader client
+ * 
  * @type {rtclient.RealtimeLoader}
  * @private
  */
@@ -106,6 +115,7 @@ Blockly.Realtime.realtimeLoader_ = null;
 
 /**
  * The id of a text area to be used as a realtime chat box.
+ * 
  * @type {string}
  * @private
  */
@@ -113,6 +123,7 @@ Blockly.Realtime.chatBoxElementId_ = null;
 
 /**
  * The initial text to be placed in the realtime chat box.
+ * 
  * @type {string}
  * @private
  */
@@ -120,6 +131,7 @@ Blockly.Realtime.chatBoxInitialText_ = null;
 
 /**
  * Indicator of whether we are in the context of an undo or redo operation.
+ * 
  * @type {boolean}
  * @private
  */
@@ -127,6 +139,7 @@ Blockly.Realtime.withinUndo_ = false;
 
 /**
  * Returns whether realtime collaboration is enabled.
+ * 
  * @return {boolean}
  */
 Blockly.Realtime.isEnabled = function() {
@@ -135,6 +148,7 @@ Blockly.Realtime.isEnabled = function() {
 
 /**
  * The id of the button to use for undo.
+ * 
  * @type {string}
  * @private
  */
@@ -142,6 +156,7 @@ Blockly.Realtime.undoElementId_ = null;
 
 /**
  * The id of the button to use for redo.
+ * 
  * @type {string}
  * @private
  */
@@ -149,6 +164,7 @@ Blockly.Realtime.redoElementId_ = null;
 
 /**
  * URL of the animated progress indicator.
+ * 
  * @type {string}
  * @private
  */
@@ -156,16 +172,18 @@ Blockly.Realtime.PROGRESS_URL_ = 'media/progress.gif';
 
 /**
  * URL of the anonymous user image.
+ * 
  * @type {string}
  * @private
  */
 Blockly.Realtime.ANONYMOUS_URL_ = 'media/anon.jpeg';
 
 /**
- * This function is called the first time that the Realtime model is created
- * for a file. This function should be used to initialize any values of the
- * model.
- * @param {!gapi.drive.realtime.Model} model The Realtime root model object.
+ * This function is called the first time that the Realtime model is created for
+ * a file. This function should be used to initialize any values of the model.
+ * 
+ * @param {!gapi.drive.realtime.Model}
+ *            model The Realtime root model object.
  * @private
  */
 Blockly.Realtime.initializeModel_ = function(model) {
@@ -182,7 +200,9 @@ Blockly.Realtime.initializeModel_ = function(model) {
 
 /**
  * Delete a block from the realtime blocks map.
- * @param {!Blockly.Block} block The block to remove.
+ * 
+ * @param {!Blockly.Block}
+ *            block The block to remove.
  */
 Blockly.Realtime.removeBlock = function(block) {
   Blockly.Realtime.blocksMap_.delete(block.id.toString());
@@ -190,7 +210,9 @@ Blockly.Realtime.removeBlock = function(block) {
 
 /**
  * Add to the list of top-level blocks.
- * @param {!Blockly.Block} block The block to add.
+ * 
+ * @param {!Blockly.Block}
+ *            block The block to add.
  */
 Blockly.Realtime.addTopBlock = function(block) {
   if (Blockly.Realtime.topBlocks_.indexOf(block) == -1) {
@@ -200,7 +222,9 @@ Blockly.Realtime.addTopBlock = function(block) {
 
 /**
  * Delete a block from the list of top-level blocks.
- * @param {!Blockly.Block} block The block to remove.
+ * 
+ * @param {!Blockly.Block}
+ *            block The block to remove.
  */
 Blockly.Realtime.removeTopBlock = function(block) {
   Blockly.Realtime.topBlocks_.removeValue(block);
@@ -208,8 +232,11 @@ Blockly.Realtime.removeTopBlock = function(block) {
 
 /**
  * Obtain a newly created block known by the Realtime API.
- * @param {!Blockly.Workspace} workspace The workspace to put the block in.
- * @param {string} prototypeName The name of the prototype for the block.
+ * 
+ * @param {!Blockly.Workspace}
+ *            workspace The workspace to put the block in.
+ * @param {string}
+ *            prototypeName The name of the prototype for the block.
  * @return {!Blockly.Block}
  */
 Blockly.Realtime.obtainBlock = function(workspace, prototypeName) {
@@ -220,7 +247,9 @@ Blockly.Realtime.obtainBlock = function(workspace, prototypeName) {
 
 /**
  * Get an existing block by id.
- * @param {string} id The block's id.
+ * 
+ * @param {string}
+ *            id The block's id.
  * @return {Blockly.Block} The found block.
  */
 Blockly.Realtime.getBlockById = function(id) {
@@ -229,7 +258,9 @@ Blockly.Realtime.getBlockById = function(id) {
 
 /**
  * Log the event for debugging purposses.
- * @param {gapi.drive.realtime.BaseModelEvent} evt The event that occurred.
+ * 
+ * @param {gapi.drive.realtime.BaseModelEvent}
+ *            evt The event that occurred.
  * @private
  */
 Blockly.Realtime.logEvent_ = function(evt) {
@@ -250,7 +281,9 @@ Blockly.Realtime.logEvent_ = function(evt) {
 
 /**
  * Event handler to call when a block is changed.
- * @param {!gapi.drive.realtime.ObjectChangedEvent} evt The event that occurred.
+ * 
+ * @param {!gapi.drive.realtime.ObjectChangedEvent}
+ *            evt The event that occurred.
  * @private
  */
 Blockly.Realtime.onObjectChange_ = function(evt) {
@@ -285,7 +318,9 @@ Blockly.Realtime.onObjectChange_ = function(evt) {
 
 /**
  * Event handler to call when there is a change to the realtime blocks map.
- * @param {!gapi.drive.realtime.ValueChangedEvent} evt The event that occurred.
+ * 
+ * @param {!gapi.drive.realtime.ValueChangedEvent}
+ *            evt The event that occurred.
  * @private
  */
 Blockly.Realtime.onBlocksMapChange_ = function(evt) {
@@ -303,7 +338,9 @@ Blockly.Realtime.onBlocksMapChange_ = function(evt) {
 /**
  * A convenient wrapper around code that synchronizes the local model being
  * edited with changes from another non-local model.
- * @param {!function()} thunk A thunk of code to call.
+ * 
+ * @param {!function()}
+ *            thunk A thunk of code to call.
  * @private
  */
 Blockly.Realtime.doWithinSync_ = function(thunk) {
@@ -320,11 +357,14 @@ Blockly.Realtime.doWithinSync_ = function(thunk) {
 };
 
 /**
- * Places a block to be synced on this docs main workspace.  The block might
+ * Places a block to be synced on this docs main workspace. The block might
  * already exist on this doc, in which case it is updated and/or moved.
- * @param {!Blockly.Block} block The block.
- * @param {boolean} addToTop Whether to add the block to the workspace/s list of
- *     top-level blocks.
+ * 
+ * @param {!Blockly.Block}
+ *            block The block.
+ * @param {boolean}
+ *            addToTop Whether to add the block to the workspace/s list of
+ *            top-level blocks.
  * @private
  */
 Blockly.Realtime.placeBlockOnWorkspace_ = function(block, addToTop) {
@@ -353,7 +393,9 @@ Blockly.Realtime.placeBlockOnWorkspace_ = function(block, addToTop) {
 
 /**
  * Move a block.
- * @param {!Blockly.Block} block The block to move.
+ * 
+ * @param {!Blockly.Block}
+ *            block The block to move.
  * @private
  */
 Blockly.Realtime.moveBlock_ = function(block) {
@@ -368,7 +410,9 @@ Blockly.Realtime.moveBlock_ = function(block) {
 
 /**
  * Delete a block.
- * @param {!Blockly.Block} block The block to delete.
+ * 
+ * @param {!Blockly.Block}
+ *            block The block to delete.
  */
 Blockly.Realtime.deleteBlock = function(block) {
   Blockly.Realtime.doWithinSync_(function() {
@@ -379,6 +423,7 @@ Blockly.Realtime.deleteBlock = function(block) {
 /**
  * Load all the blocks from the realtime model's blocks map and place them
  * appropriately on the main Blockly workspace.
+ * 
  * @private
  */
 Blockly.Realtime.loadBlocks_ = function() {
@@ -392,7 +437,9 @@ Blockly.Realtime.loadBlocks_ = function() {
 /**
  * Cause a changed block to update the realtime model, and therefore to be
  * synced with other apps editing this same doc.
- * @param {!Blockly.Block} block The block that changed.
+ * 
+ * @param {!Blockly.Block}
+ *            block The block that changed.
  */
 Blockly.Realtime.blockChanged = function(block) {
   if (block.workspace == Blockly.mainWorkspace &&
@@ -423,11 +470,13 @@ Blockly.Realtime.blockChanged = function(block) {
 };
 
 /**
- * This function is called when the Realtime file has been loaded. It should
- * be used to initialize any user interface components and event handlers
- * depending on the Realtime model. In this case, create a text control binder
- * and bind it to our string model that we created in initializeModel.
- * @param {!gapi.drive.realtime.Document} doc The Realtime document.
+ * This function is called when the Realtime file has been loaded. It should be
+ * used to initialize any user interface components and event handlers depending
+ * on the Realtime model. In this case, create a text control binder and bind it
+ * to our string model that we created in initializeModel.
+ * 
+ * @param {!gapi.drive.realtime.Document}
+ *            doc The Realtime document.
  * @private
  */
 Blockly.Realtime.onFileLoaded_ = function(doc) {
@@ -496,9 +545,11 @@ Blockly.Realtime.onFileLoaded_ = function(doc) {
 };
 
 /**
- * Get the sessionId associated with this editing session.  Note that it is
+ * Get the sessionId associated with this editing session. Note that it is
  * unique to the current browser window/tab.
- * @param {gapi.drive.realtime.Document} doc
+ * 
+ * @param {gapi.drive.realtime.Document}
+ *            doc
  * @return {*}
  * @private
  */
@@ -516,6 +567,7 @@ Blockly.Realtime.getSessionId_ = function(doc) {
 /**
  * Register the Blockly types and attributes that are reflected in the realtime
  * model.
+ * 
  * @private
  */
 Blockly.Realtime.registerTypes_ = function() {
@@ -532,6 +584,7 @@ Blockly.Realtime.registerTypes_ = function() {
 
 /**
  * Time period for realtime re-authorization
+ * 
  * @type {number}
  * @private
  */
@@ -539,6 +592,7 @@ Blockly.Realtime.REAUTH_INTERVAL_IN_MILLISECONDS_ = 30 * 60 * 1000;
 
 /**
  * What to do after Realtime authorization.
+ * 
  * @private
  */
 Blockly.Realtime.afterAuth_ = function() {
@@ -555,7 +609,9 @@ Blockly.Realtime.afterAuth_ = function() {
 
 /**
  * Add "Anyone with the link" permissions to the file.
- * @param {string} fileId the file id
+ * 
+ * @param {string}
+ *            fileId the file id
  * @private
  */
 Blockly.Realtime.afterCreate_ = function(fileId) {
@@ -591,18 +647,21 @@ Blockly.Realtime.afterCreate_ = function(fileId) {
 };
 
 /**
- * Get the domain (if it exists) associated with a realtime file.  The callback
+ * Get the domain (if it exists) associated with a realtime file. The callback
  * will be called with the domain, if it exists.
- * @param {string} fileId the id of the file
- * @param {function(string)} callback a function to call back with the domain
+ * 
+ * @param {string}
+ *            fileId the id of the file
+ * @param {function(string)}
+ *            callback a function to call back with the domain
  */
 Blockly.Realtime.getUserDomain = function(fileId, callback) {
   /**
-   * Note that there may be a more direct way to get the domain by, for example,
-   * using the Google profile API but this way we don't need any additional
-   * APIs or scopes.  But if it turns out that the permissions API stops
-   * providing the domain this might have to change.
-   */
+     * Note that there may be a more direct way to get the domain by, for
+     * example, using the Google profile API but this way we don't need any
+     * additional APIs or scopes. But if it turns out that the permissions API
+     * stops providing the domain this might have to change.
+     */
   var request = gapi.client.drive.permissions.list({
     'fileId': fileId
   });
@@ -619,76 +678,78 @@ Blockly.Realtime.getUserDomain = function(fileId, callback) {
 
 /**
  * Options for the Realtime loader.
+ * 
  * @private
  */
 Blockly.Realtime.rtclientOptions_ = {
   /**
-   * Client ID from the console.
-   * This will be set from the options passed into Blockly.Realtime.start()
-   */
+     * Client ID from the console. This will be set from the options passed into
+     * Blockly.Realtime.start()
+     */
   'clientId': null,
 
   /**
-   * The ID of the button to click to authorize. Must be a DOM element ID.
-   */
+     * The ID of the button to click to authorize. Must be a DOM element ID.
+     */
   'authButtonElementId': 'authorizeButton',
 
   /**
-   * The ID of the container of the authorize button.
-   */
+     * The ID of the container of the authorize button.
+     */
   'authDivElementId': 'authButtonDiv',
 
   /**
-   * Function to be called when a Realtime model is first created.
-   */
+     * Function to be called when a Realtime model is first created.
+     */
   'initializeModel': Blockly.Realtime.initializeModel_,
 
   /**
-   * Autocreate files right after auth automatically.
-   */
+     * Autocreate files right after auth automatically.
+     */
   'autoCreate': true,
 
   /**
-   * The name of newly created Drive files.
-   */
+     * The name of newly created Drive files.
+     */
   'defaultTitle': 'Realtime Blockly File',
 
   /**
-   * The name of the folder to place newly created Drive files in.
-   */
+     * The name of the folder to place newly created Drive files in.
+     */
   'defaultFolderTitle': 'Realtime Blockly Folder',
 
   /**
-   * The MIME type of newly created Drive Files. By default the application
-   * specific MIME type will be used:
-   *     application/vnd.google-apps.drive-sdk.
-   */
+     * The MIME type of newly created Drive Files. By default the application
+     * specific MIME type will be used: application/vnd.google-apps.drive-sdk.
+     */
   'newFileMimeType': null, // Using default.
 
   /**
-   * Function to be called every time a Realtime file is loaded.
-   */
+     * Function to be called every time a Realtime file is loaded.
+     */
   'onFileLoaded': Blockly.Realtime.onFileLoaded_,
 
   /**
-   * Function to be called to initialize custom Collaborative Objects types.
-   */
+     * Function to be called to initialize custom Collaborative Objects types.
+     */
   'registerTypes': Blockly.Realtime.registerTypes_,
 
   /**
-   * Function to be called after authorization and before loading files.
-   */
+     * Function to be called after authorization and before loading files.
+     */
   'afterAuth': Blockly.Realtime.afterAuth_,
 
   /**
-   * Function to be called after file creation, if autoCreate is true.
-   */
+     * Function to be called after file creation, if autoCreate is true.
+     */
   'afterCreate': Blockly.Realtime.afterCreate_
 };
 
 /**
  * Parse options to startRealtime().
- * @param {!Object} options Object containing the options.
+ * 
+ * @param {!Object}
+ *            options Object containing the options.
  * @private
  */
 Blockly.Realtime.parseOptions_ = function(options) {
@@ -711,11 +772,15 @@ Blockly.Realtime.parseOptions_ = function(options) {
 };
 
 /**
- * Setup the Blockly container for realtime authorization and start the
- * Realtime loader.
- * @param {function()} uiInitialize Function to initialize the Blockly UI.
- * @param {!Element} uiContainer Container element for the Blockly UI.
- * @param {!Object} options The realtime options.
+ * Setup the Blockly container for realtime authorization and start the Realtime
+ * loader.
+ * 
+ * @param {function()}
+ *            uiInitialize Function to initialize the Blockly UI.
+ * @param {!Element}
+ *            uiContainer Container element for the Blockly UI.
+ * @param {!Object}
+ *            options The realtime options.
  */
 Blockly.Realtime.startRealtime = function(uiInitialize, uiContainer, options) {
   Blockly.Realtime.parseOptions_(options);
@@ -741,7 +806,9 @@ Blockly.Realtime.startRealtime = function(uiInitialize, uiContainer, options) {
 
 /**
  * Setup the Blockly container for realtime authorization.
- * @param {!Element} uiContainer A DOM container element for the Blockly UI.
+ * 
+ * @param {!Element}
+ *            uiContainer A DOM container element for the Blockly UI.
  * @return {!Element} The DOM element for the authorization UI.
  * @private
  */
@@ -780,6 +847,7 @@ Blockly.Realtime.addAuthUi_ = function(uiContainer) {
 
 /**
  * Update the collaborators UI to include the latest set of users.
+ * 
  * @private
  */
 Blockly.Realtime.updateCollabUi_ = function() {
@@ -806,7 +874,9 @@ Blockly.Realtime.updateCollabUi_ = function() {
 
 /**
  * Event handler for when collaborators join.
- * @param {gapi.drive.realtime.CollaboratorJoinedEvent} event The event.
+ * 
+ * @param {gapi.drive.realtime.CollaboratorJoinedEvent}
+ *            event The event.
  * @private
  */
 Blockly.Realtime.onCollaboratorJoined_ = function(event) {
@@ -815,7 +885,9 @@ Blockly.Realtime.onCollaboratorJoined_ = function(event) {
 
 /**
  * Event handler for when collaborators leave.
- * @param {gapi.drive.realtime.CollaboratorLeftEvent} event The event.
+ * 
+ * @param {gapi.drive.realtime.CollaboratorLeftEvent}
+ *            event The event.
  * @private
  */
 Blockly.Realtime.onCollaboratorLeft_ = function(event) {
@@ -823,9 +895,11 @@ Blockly.Realtime.onCollaboratorLeft_ = function(event) {
 };
 
 /**
- * Execute a command.  Generally, a command is the result of a user action
- * e.g., a click, drag or context menu selection.
- * @param {function()} cmdThunk A function representing the command execution.
+ * Execute a command. Generally, a command is the result of a user action e.g.,
+ * a click, drag or context menu selection.
+ * 
+ * @param {function()}
+ *            cmdThunk A function representing the command execution.
  */
 Blockly.Realtime.doCommand = function(cmdThunk) {
   // TODO(): We'd like to use the realtime API compound operations as in the
@@ -850,23 +924,25 @@ Blockly.Realtime.doCommand = function(cmdThunk) {
 /**
  * Generate an id that is unique among the all the sessions that ever
  * collaborated on this document.
- * @param {string} extra A string id which is unique within this particular
- * session.
+ * 
+ * @param {string}
+ *            extra A string id which is unique within this particular session.
  * @return {string}
  */
 Blockly.Realtime.genUid = function(extra) {
-  /* The idea here is that we use the extra string to ensure uniqueness within
-     this session and the current sessionId to ensure uniqueness across
-     all the current sessions.  There's still the (remote) chance that the
-     current sessionId is the same as some old (non-current) one, so we still
-     need to check that our uid hasn't been previously used.
-
-     Note that you could potentially use a random number to generate the id but
-     there remains the small chance of regenerating the same number that's been
-     used before and I'm paranoid.  It's not enough to just check that the
-     random uid hasn't been previously used because other concurrent sessions
-     might generate the same uid at the same time.  Like I said, I'm paranoid.
-   */
+  /*
+     * The idea here is that we use the extra string to ensure uniqueness within
+     * this session and the current sessionId to ensure uniqueness across all
+     * the current sessions. There's still the (remote) chance that the current
+     * sessionId is the same as some old (non-current) one, so we still need to
+     * check that our uid hasn't been previously used.
+     * 
+     * Note that you could potentially use a random number to generate the id
+     * but there remains the small chance of regenerating the same number that's
+     * been used before and I'm paranoid. It's not enough to just check that the
+     * random uid hasn't been previously used because other concurrent sessions
+     * might generate the same uid at the same time. Like I said, I'm paranoid.
+     */
   var potentialUid = Blockly.Realtime.sessionId_ + '-' + extra;
   if (!Blockly.Realtime.blocksMap_.has(potentialUid)) {
     return potentialUid;

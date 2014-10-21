@@ -48,21 +48,21 @@ goog.require('Blockly.Xml');
  * @constructor
  */
 Blockly.Workspace = function(getMetrics, setMetrics) {
-  this.getMetrics = getMetrics;
-  this.setMetrics = setMetrics;
+    this.getMetrics = getMetrics;
+    this.setMetrics = setMetrics;
 
-  /** @type {boolean} */
-  this.isFlyout = false;
-  /**
-   * @type {!Array.<!Blockly.Block>}
-   * @private
-   */
-  this.topBlocks_ = [];
+    /** @type {boolean} */
+    this.isFlyout = false;
+    /**
+     * @type {!Array.<!Blockly.Block>}
+     * @private
+     */
+    this.topBlocks_ = [];
 
-  /** @type {number} */
-  this.maxBlocks = Infinity;
+    /** @type {number} */
+    this.maxBlocks = Infinity;
 
-  Blockly.ConnectionDB.init(this);
+    Blockly.ConnectionDB.init(this);
 };
 
 /**
@@ -151,14 +151,14 @@ Blockly.Workspace.prototype.scrollbar = null;
  * @return {!Element} The workspace's SVG group.
  */
 Blockly.Workspace.prototype.createDom = function() {
-  /*
-   * <g> [Trashcan may go here] <g></g> <g></g> </g>
-   */
-  this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
-  this.svgBlockCanvas_ = Blockly.createSvgElement('g', {}, this.svgGroup_);
-  this.svgBubbleCanvas_ = Blockly.createSvgElement('g', {}, this.svgGroup_);
-  this.fireChangeEvent();
-  return this.svgGroup_;
+    /*
+     * <g> [Trashcan may go here] <g></g> <g></g> </g>
+     */
+    this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
+    this.svgBlockCanvas_ = Blockly.createSvgElement('g', {}, this.svgGroup_);
+    this.svgBubbleCanvas_ = Blockly.createSvgElement('g', {}, this.svgGroup_);
+    this.fireChangeEvent();
+    return this.svgGroup_;
 };
 
 /**
@@ -166,92 +166,92 @@ Blockly.Workspace.prototype.createDom = function() {
  * leaks.
  */
 Blockly.Workspace.prototype.dispose = function() {
-  if (this.svgGroup_) {
-    goog.dom.removeNode(this.svgGroup_);
-    this.svgGroup_ = null;
-  }
-  this.svgBlockCanvas_ = null;
-  this.svgBubbleCanvas_ = null;
-  if (this.trashcan) {
-    this.trashcan.dispose();
-    this.trashcan = null;
-  }
-  if (this.startButton) {
-    this.startButton.dispose();
-    this.startButton = null;
-  }
-  if (this.checkButton) {
-    this.checkButton.dispose();
-    this.checkButton = null;
-  }
-  if (this.saveButton) {
-    this.saveButton.dispose();
-    this.saveButton = null;
-  }
-  if (this.backButton) {
-    this.backButton.dispose();
-    this.backButton = null;
-  }
+    if (this.svgGroup_) {
+        goog.dom.removeNode(this.svgGroup_);
+        this.svgGroup_ = null;
+    }
+    this.svgBlockCanvas_ = null;
+    this.svgBubbleCanvas_ = null;
+    if (this.trashcan) {
+        this.trashcan.dispose();
+        this.trashcan = null;
+    }
+    if (this.startButton) {
+        this.startButton.dispose();
+        this.startButton = null;
+    }
+    if (this.checkButton) {
+        this.checkButton.dispose();
+        this.checkButton = null;
+    }
+    if (this.saveButton) {
+        this.saveButton.dispose();
+        this.saveButton = null;
+    }
+    if (this.backButton) {
+        this.backButton.dispose();
+        this.backButton = null;
+    }
 };
 
 /**
  * Add a trashcan.
  */
 Blockly.Workspace.prototype.addTrashcan = function() {
-  if (Blockly.hasTrashcan && !Blockly.readOnly) {
-    this.trashcan = new Blockly.Trashcan(this);
-    var svgTrashcan = this.trashcan.createDom();
-    this.svgGroup_.insertBefore(svgTrashcan, this.svgBlockCanvas_);
-    this.trashcan.init();
-  }
+    if (Blockly.hasTrashcan && !Blockly.readOnly) {
+        this.trashcan = new Blockly.Trashcan(this);
+        var svgTrashcan = this.trashcan.createDom();
+        this.svgGroup_.insertBefore(svgTrashcan, this.svgBlockCanvas_);
+        this.trashcan.init();
+    }
 };
 
 /**
  * Add a startButton.
  */
 Blockly.Workspace.prototype.addStartButton = function() {
-  if (Blockly.hasStartButton && !Blockly.readOnly) {
-    this.startButton = new Blockly.StartButton(this, 2);
-    var svgStartButton = this.startButton.createDom();
-    this.svgGroup_.insertBefore(svgStartButton, this.svgBlockCanvas_);
-    this.startButton.init();
-  }
+    if (Blockly.hasStartButton && !Blockly.readOnly) {
+        this.startButton = new Blockly.StartButton(this, 2);
+        var svgStartButton = this.startButton.createDom();
+        this.svgGroup_.insertBefore(svgStartButton, this.svgBlockCanvas_);
+        this.startButton.init();
+    }
 };
 
 /**
  * Add a checkButton.
  */
 Blockly.Workspace.prototype.addCheckButton = function() {
-  if (Blockly.hasCheckButton && !Blockly.readOnly) {
-    this.checkButton = new Blockly.CheckButton(this, 4);
-    var svgCheckButton = this.checkButton.createDom();
-    this.svgGroup_.insertBefore(svgCheckButton, this.svgBlockCanvas_);
-    this.checkButton.init();
-  }
+    if (Blockly.hasCheckButton && !Blockly.readOnly) {
+        this.checkButton = new Blockly.CheckButton(this, 4);
+        var svgCheckButton = this.checkButton.createDom();
+        this.svgGroup_.insertBefore(svgCheckButton, this.svgBlockCanvas_);
+        this.checkButton.init();
+    }
 };
 
 /**
  * Add a saveButton.
  */
 Blockly.Workspace.prototype.addSaveButton = function() {
-  if (Blockly.hasSaveButton) {
-    this.saveButton = new Blockly.SaveButton(this, 3);
-    var svgSaveButton = this.saveButton.createDom();
-    this.svgGroup_.insertBefore(svgSaveButton, this.svgBlockCanvas_);
-    this.saveButton.init();
-  }
+    if (Blockly.hasSaveButton) {
+        this.saveButton = new Blockly.SaveButton(this, 3);
+        var svgSaveButton = this.saveButton.createDom();
+        this.svgGroup_.insertBefore(svgSaveButton, this.svgBlockCanvas_);
+        this.saveButton.init();
+    }
 };
 
 /**
  * Add a backButton.
  */
 Blockly.Workspace.prototype.addBackButton = function() {
-  if (Blockly.hasBackButton) {
-    this.backButton = new Blockly.BackButton(this, 2);
-    var svgBackButton = this.backButton.createDom();
-    this.svgGroup_.insertBefore(svgBackButton, this.svgBlockCanvas_);
-    this.backButton.init();
-  }
+    if (Blockly.hasBackButton) {
+        this.backButton = new Blockly.BackButton(this, 2);
+        var svgBackButton = this.backButton.createDom();
+        this.svgGroup_.insertBefore(svgBackButton, this.svgBlockCanvas_);
+        this.backButton.init();
+    }
 };
 
 /**
@@ -260,7 +260,7 @@ Blockly.Workspace.prototype.addBackButton = function() {
  * @return {!Element} SVG element.
  */
 Blockly.Workspace.prototype.getCanvas = function() {
-  return this.svgBlockCanvas_;
+    return this.svgBlockCanvas_;
 };
 
 /**
@@ -269,7 +269,7 @@ Blockly.Workspace.prototype.getCanvas = function() {
  * @return {!SVGGElement} SVG element.
  */
 Blockly.Workspace.prototype.getBubbleCanvas = function() {
-  return this.svgBubbleCanvas_;
+    return this.svgBubbleCanvas_;
 };
 
 /**
@@ -279,11 +279,11 @@ Blockly.Workspace.prototype.getBubbleCanvas = function() {
  *            block Block to remove.
  */
 Blockly.Workspace.prototype.addTopBlock = function(block) {
-  this.topBlocks_.push(block);
-  if (Blockly.Realtime.isEnabled() && this == Blockly.mainWorkspace) {
-    Blockly.Realtime.addTopBlock(block);
-  }
-  this.fireChangeEvent();
+    this.topBlocks_.push(block);
+    if (Blockly.Realtime.isEnabled() && this == Blockly.mainWorkspace) {
+        Blockly.Realtime.addTopBlock(block);
+    }
+    this.fireChangeEvent();
 };
 
 /**
@@ -293,21 +293,21 @@ Blockly.Workspace.prototype.addTopBlock = function(block) {
  *            block Block to remove.
  */
 Blockly.Workspace.prototype.removeTopBlock = function(block) {
-  var found = false;
-  for (var child, x = 0; child = this.topBlocks_[x]; x++) {
-    if (child == block) {
-      this.topBlocks_.splice(x, 1);
-      found = true;
-      break;
+    var found = false;
+    for (var child, x = 0; child = this.topBlocks_[x]; x++) {
+        if (child == block) {
+            this.topBlocks_.splice(x, 1);
+            found = true;
+            break;
+        }
     }
-  }
-  if (!found) {
-    throw 'Block not present in workspace\'s list of top-most blocks.';
-  }
-  if (Blockly.Realtime.isEnabled() && this == Blockly.mainWorkspace) {
-    Blockly.Realtime.removeTopBlock(block);
-  }
-  this.fireChangeEvent();
+    if (!found) {
+        throw 'Block not present in workspace\'s list of top-most blocks.';
+    }
+    if (Blockly.Realtime.isEnabled() && this == Blockly.mainWorkspace) {
+        Blockly.Realtime.removeTopBlock(block);
+    }
+    this.fireChangeEvent();
 };
 
 /**
@@ -319,20 +319,20 @@ Blockly.Workspace.prototype.removeTopBlock = function(block) {
  * @return {!Array.<!Blockly.Block>} The top-level block objects.
  */
 Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
-  // Copy the topBlocks_ list.
-  var blocks = [].concat(this.topBlocks_);
-  if (ordered && blocks.length > 1) {
-    var offset = Math.sin(Blockly.Workspace.SCAN_ANGLE / 180 * Math.PI);
-    if (Blockly.RTL) {
-      offset *= -1;
+    // Copy the topBlocks_ list.
+    var blocks = [].concat(this.topBlocks_);
+    if (ordered && blocks.length > 1) {
+        var offset = Math.sin(Blockly.Workspace.SCAN_ANGLE / 180 * Math.PI);
+        if (Blockly.RTL) {
+            offset *= -1;
+        }
+        blocks.sort(function(a, b) {
+            var aXY = a.getRelativeToSurfaceXY();
+            var bXY = b.getRelativeToSurfaceXY();
+            return (aXY.y + offset * aXY.x) - (bXY.y + offset * bXY.x);
+        });
     }
-    blocks.sort(function(a, b) {
-      var aXY = a.getRelativeToSurfaceXY();
-      var bXY = b.getRelativeToSurfaceXY();
-      return (aXY.y + offset * aXY.x) - (bXY.y + offset * bXY.x);
-    });
-  }
-  return blocks;
+    return blocks;
 };
 
 /**
@@ -341,33 +341,33 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
  * @return {!Array.<!Blockly.Block>} Array of blocks.
  */
 Blockly.Workspace.prototype.getAllBlocks = function() {
-  var blocks = this.getTopBlocks(false);
-  for (var x = 0; x < blocks.length; x++) {
-    blocks.push.apply(blocks, blocks[x].getChildren());
-  }
-  return blocks;
+    var blocks = this.getTopBlocks(false);
+    for (var x = 0; x < blocks.length; x++) {
+        blocks.push.apply(blocks, blocks[x].getChildren());
+    }
+    return blocks;
 };
 
 /**
  * Dispose of all blocks in workspace.
  */
 Blockly.Workspace.prototype.clear = function() {
-  Blockly.hideChaff();
-  while (this.topBlocks_.length) {
-    this.topBlocks_[0].dispose();
-  }
+    Blockly.hideChaff();
+    while (this.topBlocks_.length) {
+        this.topBlocks_[0].dispose();
+    }
 };
 
 /**
  * Render all blocks in workspace.
  */
 Blockly.Workspace.prototype.render = function() {
-  var renderList = this.getAllBlocks();
-  for (var x = 0, block; block = renderList[x]; x++) {
-    if (!block.getChildren().length) {
-      block.render();
+    var renderList = this.getAllBlocks();
+    for (var x = 0, block; block = renderList[x]; x++) {
+        if (!block.getChildren().length) {
+            block.render();
+        }
     }
-  }
 };
 
 /**
@@ -378,14 +378,14 @@ Blockly.Workspace.prototype.render = function() {
  * @return {Blockly.Block} The matching block, or null if not found.
  */
 Blockly.Workspace.prototype.getBlockById = function(id) {
-  // If this O(n) function fails to scale well, maintain a hash table of IDs.
-  var blocks = this.getAllBlocks();
-  for (var x = 0, block; block = blocks[x]; x++) {
-    if (block.id == id) {
-      return block;
+    // If this O(n) function fails to scale well, maintain a hash table of IDs.
+    var blocks = this.getAllBlocks();
+    for (var x = 0, block; block = blocks[x]; x++) {
+        if (block.id == id) {
+            return block;
+        }
     }
-  }
-  return null;
+    return null;
 };
 
 /**
@@ -395,17 +395,16 @@ Blockly.Workspace.prototype.getBlockById = function(id) {
  *            armed True if the trace should be on.
  */
 Blockly.Workspace.prototype.traceOn = function(armed) {
-  this.traceOn_ = armed;
-  if (this.traceWrapper_) {
-    Blockly.unbindEvent_(this.traceWrapper_);
-    this.traceWrapper_ = null;
-  }
-  if (armed) {
-    this.traceWrapper_ = Blockly.bindEvent_(this.svgBlockCanvas_,
-        'blocklySelectChange', this, function() {
-          this.traceOn_ = false
+    this.traceOn_ = armed;
+    if (this.traceWrapper_) {
+        Blockly.unbindEvent_(this.traceWrapper_);
+        this.traceWrapper_ = null;
+    }
+    if (armed) {
+        this.traceWrapper_ = Blockly.bindEvent_(this.svgBlockCanvas_, 'blocklySelectChange', this, function() {
+            this.traceOn_ = false
         });
-  }
+    }
 };
 
 /**
@@ -415,35 +414,35 @@ Blockly.Workspace.prototype.traceOn = function(armed) {
  *            id ID of block to find.
  */
 Blockly.Workspace.prototype.highlightBlock = function(id) {
-  if (this.traceOn_ && Blockly.Block.dragMode_ != 0) {
-    // The blocklySelectChange event normally prevents this, but sometimes
-    // there is a race condition on fast-executing apps.
-    this.traceOn(false);
-  }
-  if (!this.traceOn_) {
-    return;
-  }
-  var block = null;
-  if (id) {
-    block = this.getBlockById(id);
-    if (!block) {
-      return;
+    if (this.traceOn_ && Blockly.Block.dragMode_ != 0) {
+        // The blocklySelectChange event normally prevents this, but sometimes
+        // there is a race condition on fast-executing apps.
+        this.traceOn(false);
     }
-  }
-  // Temporary turn off the listener for selection changes, so that we don't
-  // trip the monitor for detecting user activity.
-  this.traceOn(false);
-  // Select the current block.
-  if (block) {
-    block.select();
-  } else if (Blockly.selected) {
-    Blockly.selected.unselect();
-  }
-  // Restore the monitor for user activity after the selection event has fired.
-  var thisWorkspace = this;
-  setTimeout(function() {
-    thisWorkspace.traceOn(true);
-  }, 1);
+    if (!this.traceOn_) {
+        return;
+    }
+    var block = null;
+    if (id) {
+        block = this.getBlockById(id);
+        if (!block) {
+            return;
+        }
+    }
+    // Temporary turn off the listener for selection changes, so that we don't
+    // trip the monitor for detecting user activity.
+    this.traceOn(false);
+    // Select the current block.
+    if (block) {
+        block.select();
+    } else if (Blockly.selected) {
+        Blockly.selected.unselect();
+    }
+    // Restore the monitor for user activity after the selection event has fired.
+    var thisWorkspace = this;
+    setTimeout(function() {
+        thisWorkspace.traceOn(true);
+    }, 1);
 };
 
 /**
@@ -454,15 +453,15 @@ Blockly.Workspace.prototype.highlightBlock = function(id) {
  * Blockly.mainWorkspace.getCanvas().
  */
 Blockly.Workspace.prototype.fireChangeEvent = function() {
-  if (this.fireChangeEventPid_) {
-    window.clearTimeout(this.fireChangeEventPid_);
-  }
-  var canvas = this.svgBlockCanvas_;
-  if (canvas) {
-    this.fireChangeEventPid_ = window.setTimeout(function() {
-      Blockly.fireUiEvent(canvas, 'blocklyWorkspaceChange');
-    }, 0);
-  }
+    if (this.fireChangeEventPid_) {
+        window.clearTimeout(this.fireChangeEventPid_);
+    }
+    var canvas = this.svgBlockCanvas_;
+    if (canvas) {
+        this.fireChangeEventPid_ = window.setTimeout(function() {
+            Blockly.fireUiEvent(canvas, 'blocklyWorkspaceChange');
+        }, 0);
+    }
 };
 
 /**
@@ -472,39 +471,38 @@ Blockly.Workspace.prototype.fireChangeEvent = function() {
  *            xmlBlock XML block element.
  */
 Blockly.Workspace.prototype.paste = function(xmlBlock) {
-  // & if (xmlBlock.getElementsByTagName('block').length >=
-  // this.remainingCapacity()) {
-  // return;
-  // }
-  var block = Blockly.Xml.domToBlock(this, xmlBlock);
-  // Move the duplicate to original position.
-  var blockX = parseInt(xmlBlock[0].getAttribute('x'), 10);
-  var blockY = parseInt(xmlBlock[0].getAttribute('y'), 10);
-  if (!isNaN(blockX) && !isNaN(blockY)) {
-    if (Blockly.RTL) {
-      blockX = -blockX;
-    }
-    // Offset block until not clobbering another block.
-    do {
-      var collide = false;
-      var allBlocks = this.getAllBlocks();
-      for (var x = 0, otherBlock; otherBlock = allBlocks[x]; x++) {
-        var otherXY = otherBlock.getRelativeToSurfaceXY();
-        if (Math.abs(blockX - otherXY.x) <= 1
-            && Math.abs(blockY - otherXY.y) <= 1) {
-          if (Blockly.RTL) {
-            blockX -= Blockly.SNAP_RADIUS;
-          } else {
-            blockX += Blockly.SNAP_RADIUS;
-          }
-          blockY += Blockly.SNAP_RADIUS * 2;
-          collide = true;
+    // & if (xmlBlock.getElementsByTagName('block').length >=
+    // this.remainingCapacity()) {
+    // return;
+    // }
+    var block = Blockly.Xml.domToBlock(this, xmlBlock);
+    // Move the duplicate to original position.
+    var blockX = parseInt(xmlBlock[0].getAttribute('x'), 10);
+    var blockY = parseInt(xmlBlock[0].getAttribute('y'), 10);
+    if (!isNaN(blockX) && !isNaN(blockY)) {
+        if (Blockly.RTL) {
+            blockX = -blockX;
         }
-      }
-    } while (collide);
-    block.moveBy(blockX, blockY);
-  }
-  block.select();
+        // Offset block until not clobbering another block.
+        do {
+            var collide = false;
+            var allBlocks = this.getAllBlocks();
+            for (var x = 0, otherBlock; otherBlock = allBlocks[x]; x++) {
+                var otherXY = otherBlock.getRelativeToSurfaceXY();
+                if (Math.abs(blockX - otherXY.x) <= 1 && Math.abs(blockY - otherXY.y) <= 1) {
+                    if (Blockly.RTL) {
+                        blockX -= Blockly.SNAP_RADIUS;
+                    } else {
+                        blockX += Blockly.SNAP_RADIUS;
+                    }
+                    blockY += Blockly.SNAP_RADIUS * 2;
+                    collide = true;
+                }
+            }
+        } while (collide);
+        block.moveBy(blockX, blockY);
+    }
+    block.select();
 };
 
 /**
@@ -514,10 +512,10 @@ Blockly.Workspace.prototype.paste = function(xmlBlock) {
  * @return {number} Number of blocks left.
  */
 Blockly.Workspace.prototype.remainingCapacity = function() {
-  if (this.maxBlocks == Infinity) {
-    return Infinity;
-  }
-  return this.maxBlocks - this.getAllBlocks().length;
+    if (this.maxBlocks == Infinity) {
+        return Infinity;
+    }
+    return this.maxBlocks - this.getAllBlocks().length;
 };
 
 // Export symbols that would otherwise be renamed by Closure compiler.
