@@ -54,7 +54,7 @@ function saveUserToServer() {
 }
 
 /**
- * Delete user
+ * Delete user on server
  */
 function deleteUserOnServer() {
     var $userAccountName = $("#accountNameD");
@@ -186,7 +186,6 @@ function response(result) {
     incrCounter();
 };
 
-
 /**
  * Save program to server
  */
@@ -242,6 +241,9 @@ function loadFromServer(load) {
     LOG.info('load ' + $name.val() + ' signed in: ' + userState.id);
 }
 
+/**
+ * Delete program on server
+ */
 function deleteOnServer() {
     var $name = $('#programNameDelete');
     userState.programSaved = false;
@@ -257,7 +259,7 @@ function deleteOnServer() {
 }
 
 /**
- * Load program that was selected in program list
+ * Load the program that was selected in program list
  */
 function loadFromListing() {
     var $programRow = $('#programNameTable .selected');
@@ -269,10 +271,28 @@ function loadFromListing() {
             "name" : programName
         }, function(result) {
             $("#tabs").tabs("option", "active", 0);
-            $('#name').val(programName);
             $('#programNameSave').val(programName);
             userState.programSaved = true;
             showProgram(result, true, programName);
+        });
+    }
+}
+
+/**
+ * Delete the program that was selected in program list
+ */
+function deleteFromListing() {
+    var $programRow = $('#programNameTable .selected');
+    if ($programRow.length > 0) {
+        var programName = $programRow[0].children[0].textContent;
+        LOG.info('deleteFromList ' + programName + ' signed in: ' + userState.id);
+        COMM.json("/program", {
+            "cmd" : "deleteP",
+            "name" : programName
+        }, function(result) {
+            $("#tabs").tabs("option", "active", 0);
+            $('#setProgram').text('Programm');
+            $('#programNameSave').val('');
         });
     }
 }
@@ -363,9 +383,12 @@ function initProgramNameTable() {
     $('#programNameTable tbody').onWrap('click', 'tr', selectionFn);
     $('#programNameTable tbody').onWrap('dblclick', 'tr', function(event) {
         selectionFn(event);
-        $('#loadFromListing').click();
+        if ($('#loadFromListing').css('display') === 'block') {
+            $('#loadFromListing').click();
+        } else if ($('#deleteFromListing').css('display') === 'block') {
+            $('#deleteFromListing').click();
+        }
     });
-
 }
 
 /**
@@ -470,6 +493,8 @@ function initHeadNavigation() {
             initProgramEnvironment();
             $("#new-program").dialog("open");
         } else if (domId === 'open') {
+            $('#loadFromListing').css('display','block');
+            $('#deleteFromListing').css('display','none');
             $('#tabListing').click();
         } else if (domId === 'save') {
             saveToServer(response);
@@ -479,6 +504,8 @@ function initHeadNavigation() {
             $("#add-program").dialog("open");
         } else if (domId === 'divide') {
         } else if (domId === 'delete') {
+            $('#deleteFromListing').css('display','block');
+            $('#loadFromListing').css('display','none');
             $('#tabListing').click();
         } else if (domId === 'properties') {
         } else if (domId === 'toolboxBeginner') {
@@ -631,6 +658,22 @@ function initTabs() {
         active : 0,
         beforeActivate : beforeActivateTab
     });
+    
+    $('#loadFromListing').onWrap('click', function() {
+        loadFromListing();
+    }, 'load blocks from program list');
+    COMM.json("/blocks", {
+        "cmd" : "loadT",
+        "name" : "beginner"
+    }, injectBlockly);
+    
+    $('#deleteFromListing').onWrap('click', function() {
+        deleteFromListing();
+    }, 'delete blocks from program list');
+    COMM.json("/blocks", {
+        "cmd" : "deleteT",
+        "name" : "beginner"
+    });
 }
 
 /**
@@ -647,14 +690,6 @@ function init() {
     // =============================================================================
 
     $('#toggle').onWrap('click', LOG.toggleVisibility, 'toggle LOG visibility');
-    
-    $('#loadFromListing').onWrap('click', function() {
-        loadFromListing();
-    }, 'load blocks from program list');
-    COMM.json("/blocks", {
-        "cmd" : "loadT",
-        "name" : "beginner"
-    }, injectBlockly);
 };
 
 $(document).ready(WRAP.fn3(init, 'page init'));
