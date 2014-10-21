@@ -29,6 +29,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.Binary.Op;
 import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.ast.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
+import de.fhg.iais.roberta.ast.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
@@ -43,6 +44,7 @@ import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.GetSampleSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensor;
@@ -685,6 +687,23 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         return null;
     }
 
+    @Override
+    public Void visitLocation(Location<Void> location) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitEmptyList(EmptyList<Void> emptyList) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
+        return sensorGetSample.getSensor().visit(this);
+    }
+
     private void incrIndentation() {
         this.indentation += 1;
     }
@@ -819,12 +838,6 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("// ok\n");
         this.sb.append(INDENT).append(INDENT).append("}\n");
         this.sb.append(INDENT).append("}\n}\n");
-    }
-
-    @Override
-    public Void visitLocation(Location<Void> location) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
 }

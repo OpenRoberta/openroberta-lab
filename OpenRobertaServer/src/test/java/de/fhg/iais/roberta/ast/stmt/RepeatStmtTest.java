@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.stmt;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
@@ -15,10 +16,10 @@ public class RepeatStmtTest {
     public void repeatStmt() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=33, y=-573], \n"
-                + "(repeat [TIMES, Binary [ASSIGNMENT, Var [i], NumConst [0]], Binary [LT, Var [i], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i]]]\n"
+                + "(repeat [TIMES, Binary [ASSIGNMENT, Var [i0], NumConst [0]], Binary [LT, Var [i0], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i0]]]\n"
                 + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba]]\n"
                 + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba1]]\n"
-                + "(repeat [TIMES, Binary [ASSIGNMENT, Var [i], NumConst [0]], Binary [LT, Var [i], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i]]]\n"
+                + "(repeat [TIMES, Binary [ASSIGNMENT, Var [i1], NumConst [0]], Binary [LT, Var [i1], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i1]]]\n"
                 + ")\n"
                 + ")]]]";
 
@@ -40,9 +41,9 @@ public class RepeatStmtTest {
 
         RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(1);
 
-        Assert.assertEquals("Binary [ASSIGNMENT, Var [i], NumConst [0]], Binary [LT, Var [i], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i]]", repeatStmt
-            .getExpr()
-            .toString());
+        Assert.assertEquals(
+            "Binary [ASSIGNMENT, Var [i0], NumConst [0]], Binary [LT, Var [i0], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i0]]",
+            repeatStmt.getExpr().toString());
     }
 
     @Test
@@ -54,7 +55,7 @@ public class RepeatStmtTest {
         String a =
             "\nexprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba]]\n"
                 + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba1]]\n"
-                + "(repeat [TIMES, Binary [ASSIGNMENT, Var [i], NumConst [0]], Binary [LT, Var [i], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i]]]\n"
+                + "(repeat [TIMES, Binary [ASSIGNMENT, Var [i1], NumConst [0]], Binary [LT, Var [i1], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i1]]]\n"
                 + ")";
 
         Assert.assertEquals(a, repeatStmt.getList().toString());
@@ -64,7 +65,7 @@ public class RepeatStmtTest {
     public void repeatStmt1() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=-93, y=1], \n"
-                + "(repeat [TIMES, Binary [ASSIGNMENT, Var [i], NumConst [0]], Binary [LT, Var [i], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i]]]\n)]]]";
+                + "(repeat [TIMES, Binary [ASSIGNMENT, Var [i0], NumConst [0]], Binary [LT, Var [i0], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i0]]]\n)]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/repeat_stmt1.xml"));
     }
@@ -125,7 +126,7 @@ public class RepeatStmtTest {
     public void repeatStmtForEach() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=-436, y=284], \n"
-                + "(repeat [FOR_EACH, Binary [IN, Var [j], EmptyExpr [defVal=interface java.util.List]]]\n"
+                + "(repeat [FOR_EACH, Binary [IN, Var [j], EmptyList []]]\n"
                 + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [gg]]\n"
                 + ")]]]";
 
@@ -162,6 +163,66 @@ public class RepeatStmtTest {
     @Test(expected = DbcException.class)
     public void invalid2() {
         RepeatStmt.Mode.get("asdf");
+    }
+
+    @Test
+    public void reverseTransformation() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/repeat_stmt.xml");
+    }
+
+    @Test
+    public void reverseTransformation1() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/repeat_stmt1.xml");
+    }
+
+    @Test
+    public void reverseTransformationWhileUntil() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/repeat_stmt_whileUntil.xml");
+    }
+
+    @Test
+    public void reverseTransformationWhileUntil1() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/repeat_stmt_whileUntil1.xml");
+    }
+
+    @Test
+    public void reverseTransformationWhileUntil2() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/repeat_stmt_whileUntil2.xml");
+    }
+
+    @Test
+    public void reverseTransformationWhileUntil3() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/repeat_stmt_whileUntil3.xml");
+    }
+
+    @Test
+    public void reverseTransformationWhileUntil4() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/repeat_stmt_whileUntil4.xml");
+    }
+
+    @Test
+    public void reverseTransformationFor() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/repeat_stmt_for.xml");
+    }
+
+    @Test
+    public void reverseTransformationFor1() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/repeat_stmt_for1.xml");
+    }
+
+    @Test
+    public void reverseTransformationForEach() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/repeat_stmt_for_each.xml");
+    }
+
+    @Test
+    public void reverseTransformationForEach1() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/repeat_stmt_for_each1.xml");
+    }
+
+    @Ignore
+    public void reverseTransformationForLoopForever() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/repeat_stmt_loopForever.xml");
     }
 
 }

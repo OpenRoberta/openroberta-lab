@@ -87,7 +87,7 @@ public class MathTest {
 
     @Test
     public void math_on_list() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-25, y=-449], Funct [AVERAGE, [EmptyExpr [defVal=interface java.util.List]]]]]]";
+        String a = "BlockAST [project=[[Location [x=-25, y=-449], Funct [AVERAGE, [EmptyList []]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_on_list.xml"));
     }

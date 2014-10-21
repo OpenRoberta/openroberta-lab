@@ -34,6 +34,7 @@ import de.fhg.iais.roberta.ast.syntax.action.VolumeAction;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
+import de.fhg.iais.roberta.ast.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
 import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
@@ -47,10 +48,10 @@ import de.fhg.iais.roberta.ast.syntax.functions.Func;
 import de.fhg.iais.roberta.ast.syntax.functions.Func.Function;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickKey;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
-import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor.Mode;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.GetSampleSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensor;
@@ -90,6 +91,8 @@ import de.fhg.iais.roberta.dbc.DbcException;
  */
 public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
 
+    private int variable_counter = 0;
+
     /**
      * Converts object of type {@link BlockSet} to AST tree.
      *
@@ -105,9 +108,9 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
     private void instanceToAST(Instance instance) {
         List<Block> blocks = instance.getBlock();
         Location<V> location = Location.make(instance.getX(), instance.getY());
-        tree.add(location);
+        this.tree.add(location);
         for ( Block block : blocks ) {
-            tree.add(blockToAST(block));
+            this.tree.add(blockToAST(block));
         }
     }
 
@@ -388,26 +391,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 fields = extractFields(block, (short) 2);
                 mode = extractField(fields, "SENSORTYPE", (short) 0);
                 port = extractField(fields, SensorType.get(mode).getPortTypeName(), (short) 1);
-                switch ( SensorType.get(mode) ) {
-                    case TOUCH:
-                        return TouchSensor.make(SensorPort.get(port), properties, comment);
-                    case ULTRASONIC:
-                        return UltrasonicSensor.make(UltrasonicSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
-                    case COLOUR:
-                        return ColorSensor.make(ColorSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
-                    case INFRARED:
-                        return InfraredSensor.make(InfraredSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
-                    case ENCODER:
-                        return EncoderSensor.make(MotorTachoMode.GET_SAMPLE, ActorPort.get(port), properties, comment);
-                    case KEYS_PRESSED:
-                        return BrickSensor.make(Mode.IS_PRESSED, BrickKey.get(port), properties, comment);
-                    case GYRO:
-                        return GyroSensor.make(GyroSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
-                    case TIME:
-                        return TimerSensor.make(TimerSensorMode.GET_SAMPLE, Integer.valueOf(port), properties, comment);
-                    default:
-                        throw new DbcException("Invalid sensor!");
-                }
+                return GetSampleSensor.make(SensorType.get(mode), port, properties, comment);
 
                 // Logik
             case "logic_compare":
@@ -437,7 +421,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
                 StmtList<V> elseList = StmtList.make();
                 elseList.addStmt(ExprStmt.make((Expr<V>) elseStmt));
                 elseList.setReadOnly();
-                return IfStmt.make((Expr<V>) ifExpr, thenList, elseList, properties, comment);
+                return IfStmt.make((Expr<V>) ifExpr, thenList, elseList, properties, comment, 0, 0);
 
                 // Mathematik
             case "math_number":
@@ -605,7 +589,7 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
 
                 // LISTEN
             case "lists_create_empty":
-                return EmptyExpr.make(List.class);
+                return EmptyList.make(extractBlockProperties(block), extractComment(block));
 
             case "lists_create_with":
             case "robLists_create_with":
@@ -765,20 +749,21 @@ public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
 
             case "controls_repeat_ext":
                 values = extractValues(block, (short) 1);
-                var = Var.make("i", TypeVar.INTEGER, properties, comment);
+                var = Var.make("i" + this.variable_counter, TypeVar.INTEGER, properties, comment);
                 exprList = ExprList.make();
-
                 from = NumConst.make("0", properties, comment);
                 to = extractValue(values, new ExprParam("TIMES", Integer.class));
                 by = NumConst.make("1", properties, comment);
                 exprAssig = Binary.make(Binary.Op.ASSIGNMENT, (Expr<V>) var, (Expr<V>) from, properties, comment);
-                var = Var.make("i", TypeVar.NONE, properties, comment);
+                var = Var.make("i" + this.variable_counter, TypeVar.NONE, properties, comment);
                 exprCondition = Binary.make(Binary.Op.LT, (Expr<V>) var, (Expr<V>) to, properties, comment);
                 Unary<V> increment = Unary.make(Unary.Op.POSTFIX_INCREMENTS, (Expr<V>) var, properties, comment);
                 exprList.addExpr(exprAssig);
                 exprList.addExpr(exprCondition);
                 exprList.addExpr(increment);
                 exprList.setReadOnly();
+
+                this.variable_counter++;
                 return extractRepeatStatement(block, exprList, "TIMES");
 
             case "robControls_start":

@@ -33,7 +33,7 @@ abstract public class Phrase<V> {
 
     /**
      * This constructor set the kind of the object used in the AST (abstract syntax tree). All possible kinds can be found in {@link Kind}.
-     * 
+     *
      * @param kind of the the object used in AST,
      * @param disabled,
      * @param comment that the user added to the block
@@ -85,7 +85,7 @@ abstract public class Phrase<V> {
 
     /**
      * add an info (error, warning e.g.) to this phrase
-     * 
+     *
      * @param info to be added
      */
     public final void addInfo(NepoInfo info) {
@@ -99,7 +99,7 @@ abstract public class Phrase<V> {
     /**
      * visit this phrase. Inside this method is a LOG statement, usually commented out. If it is commented in, it will generate a nice trace of the phrases
      * of the AST when they are visited.
-     * 
+     *
      * @param visitor to be used
      */
     public final V visit(AstVisitor<V> visitor) {
@@ -115,7 +115,7 @@ abstract public class Phrase<V> {
     /**
      * append a newline, then append spaces up to an indentation level, then append an (optional) text<br>
      * helper for constructing readable {@link #toString()}- and {@link #generateJava(StringBuilder, int)}-methods for statement trees
-     * 
+     *
      * @param sb the string builder, to which has to be appended
      * @param indentation number defining the level of indentation
      * @param text an (optional) text to append; may be null
@@ -143,6 +143,7 @@ abstract public class Phrase<V> {
         BRICK_SENSIG( Category.SENSOR ),
         GYRO_SENSIG( Category.SENSOR ),
         TIMER_SENSING( Category.SENSOR ),
+        SENSOR_GET_SAMPLE( Category.SENSOR ),
         EXPR_LIST( Category.EXPR ),
         STRING_CONST( Category.EXPR ),
         PICK_COLOR_CONST( Category.EXPR ),
@@ -150,6 +151,7 @@ abstract public class Phrase<V> {
         BOOL_CONST( Category.EXPR ),
         NUM_CONST( Category.EXPR ),
         MATH_CONST( Category.EXPR ),
+        EMPTY_LIST( Category.EXPR ),
         VAR( Category.EXPR ),
         UNARY( Category.EXPR ),
         BINARY( Category.EXPR ),

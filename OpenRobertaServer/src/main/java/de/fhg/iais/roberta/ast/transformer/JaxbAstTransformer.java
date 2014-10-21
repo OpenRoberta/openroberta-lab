@@ -120,9 +120,9 @@ abstract public class JaxbAstTransformer<V> {
         }
 
         if ( _else != 0 ) {
-            return IfStmt.make(exprsList, thenList, elseList, extractBlockProperties(block), extractComment(block));
+            return IfStmt.make(exprsList, thenList, elseList, extractBlockProperties(block), extractComment(block), _else, _elseIf);
         } else {
-            return IfStmt.make(exprsList, thenList, extractBlockProperties(block), extractComment(block));
+            return IfStmt.make(exprsList, thenList, extractBlockProperties(block), extractComment(block), _else, _elseIf);
         }
     }
 

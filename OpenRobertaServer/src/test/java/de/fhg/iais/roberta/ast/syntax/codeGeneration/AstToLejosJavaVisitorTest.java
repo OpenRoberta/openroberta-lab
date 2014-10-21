@@ -85,7 +85,7 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_METHOD
             + "    public void run() {\n"
             + "        Hal hal = new Hal(brickConfiguration);\n"
-            + "        for ( int i = 0; i < 10; i++ ) {\n"
+            + "        for ( int i0 = 0; i0 < 10; i0++ ) {\n"
             + "            hal.drawText(\"Hallo\", 0, 3);\n"
             + "        }\n"
             + SUFFIX

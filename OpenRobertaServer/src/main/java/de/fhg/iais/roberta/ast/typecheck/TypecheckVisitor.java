@@ -27,6 +27,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.ast.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
+import de.fhg.iais.roberta.ast.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
@@ -40,6 +41,7 @@ import de.fhg.iais.roberta.ast.syntax.functions.Func;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.GetSampleSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensor;
@@ -79,7 +81,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     /**
      * initialize the typecheck visitor.
-     * 
+     *
      * @param programName name of the program
      * @param brickConfiguration hardware configuration of the brick
      * @param phrase
@@ -92,7 +94,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     /**
      * typecheck an AST. This is done ba an visitor, which is an instance of this class<br>
-     * 
+     *
      * @param programName name of the program
      * @param brickConfiguration hardware configuration of the brick
      * @param phrase to typecheck
@@ -111,7 +113,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     /**
      * get the number of <b>errors</b>
-     * 
+     *
      * @return the number of <b>errors</b> detected during this type check visit
      */
     public int getErrorCount() {
@@ -128,7 +130,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     /**
      * get the list of all infos (errors, warnings) generated during this typecheck visit
-     * 
+     *
      * @return the list of all infos
      */
     public List<NepoInfo> getInfos() {
@@ -138,7 +140,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     /**
      * return the type that was inferenced by the typechecker for the given phrase
-     * 
+     *
      * @return the resulting type.May be <code>null</code> if type errors occurred
      */
     public BlocklyType getResultType() {
@@ -434,6 +436,18 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     @Override
     public BlocklyType visitLocation(Location<BlocklyType> location) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitEmptyList(EmptyList<BlocklyType> emptyList) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitGetSampleSensor(GetSampleSensor<BlocklyType> sensorGetSample) {
         // TODO Auto-generated method stub
         return null;
     }

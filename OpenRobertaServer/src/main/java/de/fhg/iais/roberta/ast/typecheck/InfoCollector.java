@@ -24,6 +24,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.ast.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
+import de.fhg.iais.roberta.ast.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
@@ -36,6 +37,7 @@ import de.fhg.iais.roberta.ast.syntax.functions.Func;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.GetSampleSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensor;
@@ -72,7 +74,7 @@ public class InfoCollector<T> implements AstVisitor<T> {
 
     /**
      * collects the infos generated during typechecking for an AST. This is done by a visitor, which is an instance of this class<br>
-     * 
+     *
      * @param phrase whose infos should be collected
      * @return list of collected infos
      */
@@ -383,6 +385,18 @@ public class InfoCollector<T> implements AstVisitor<T> {
 
     @Override
     public T visitLocation(Location<T> location) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitEmptyList(EmptyList<T> emptyList) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitGetSampleSensor(GetSampleSensor<T> sensorGetSample) {
         // TODO Auto-generated method stub
         return null;
     }

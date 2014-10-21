@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.Set;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.ast.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.sensor.GetSampleSensor;
 import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.visitor.AstDefaultVisitorInspecting;
@@ -22,7 +24,7 @@ public class AstToVarsVisitor extends AstDefaultVisitorInspecting {
 
     /**
      * initialize the Java code generator visitor.
-     * 
+     *
      * @param programName name of the program
      * @param brickConfiguration hardware configuration of the brick
      * @param indentation to start with. Will be ince/decr depending on block structure
@@ -32,7 +34,7 @@ public class AstToVarsVisitor extends AstDefaultVisitorInspecting {
 
     /**
      * factory method to generate Java code from an AST.<br>
-     * 
+     *
      * @param programName name of the program
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
@@ -69,6 +71,18 @@ public class AstToVarsVisitor extends AstDefaultVisitorInspecting {
 
     @Override
     public Void visitLocation(Location<Void> location) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitEmptyList(EmptyList<Void> emptyList) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
         // TODO Auto-generated method stub
         return null;
     }

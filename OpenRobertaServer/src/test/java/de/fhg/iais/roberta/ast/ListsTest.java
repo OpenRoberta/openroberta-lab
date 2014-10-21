@@ -9,7 +9,7 @@ public class ListsTest {
 
     @Test
     public void listEmpty() throws Exception {
-        String a = "BlockAST [project=[[Location [x=10, y=63], EmptyExpr [defVal=interface java.util.List]]]]";
+        String a = "BlockAST [project=[[Location [x=10, y=63], EmptyList []]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/lists/list_empty.xml"));
     }

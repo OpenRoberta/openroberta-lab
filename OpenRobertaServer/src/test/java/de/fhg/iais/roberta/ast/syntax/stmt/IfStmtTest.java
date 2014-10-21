@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax.stmt;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
@@ -84,5 +85,25 @@ public class IfStmtTest {
                 + "}";
 
         Helper.assertCodeIsOk(a, "/syntax/stmt/if_stmt3.xml");
+    }
+
+    @Test
+    public void reverseTransformation() throws Exception {
+        Helper.assertTransformationIsOk("/syntax/stmt/if_stmt.xml");
+    }
+
+    @Test
+    public void reverseTransformation1() throws Exception {
+        Helper.assertTransformationIsOk("/syntax/stmt/if_stmt1.xml");
+    }
+
+    @Ignore
+    public void reverseTransformation2() throws Exception {
+        Helper.assertTransformationIsOk("/syntax/stmt/if_stmt2.xml");
+    }
+
+    @Test
+    public void reverseTransformation3() throws Exception {
+        Helper.assertTransformationIsOk("/syntax/stmt/if_stmt3.xml");
     }
 }

@@ -39,4 +39,9 @@ public class WhileUntilStmtTest {
 
         Helper.assertCodeIsOk(a, "/ast/control/repeat_stmt_loopForever.xml");
     }
+
+    @Test
+    public void reverseTransformationWhileUntil() throws Exception {
+        Helper.assertTransformationIsOk("/syntax/stmt/whileUntil_stmt.xml");
+    }
 }
