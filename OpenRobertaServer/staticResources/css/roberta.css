@@ -539,6 +539,42 @@ ul#head-navigation a {
     color: #555555;
 }
 
+/* ### jQuery Datatables ############################################################ */
+
+.dataTables_wrapper{
+    font-family: "roboto";
+    font-size: 0.9em;
+	cursor: default;
+}
+
+table.dataTable {
+    margin-bottom: 10px;
+}
+
+.dataTables_length, .dataTables_info {
+    color: #666 !important;
+    font-size: 0.8em;
+	clear: none;
+	float:none;
+	display: inline;
+}
+
+.fg-button.ui-button.ui-state-default {
+    border-radius: 5px;
+    margin: 4px;
+    padding: 2px 5px;
+}
+
+.fg-button.ui-button.ui-state-default:hover {
+    background-color: #8fa402;
+    border: 1px solid #8fa402;
+    color: #fff;
+}
+
+.programs {
+    color: #33b8ca;
+}
+
 /* ############################################################### */
 
 .ui-widget-content {
@@ -601,10 +637,6 @@ ul#head-navigation a {
     height: 60%;
 }
 
-.programs {
-	color: green;
-}
-
 .rightGray {
     float: right;
     width: 2.0cm;
@@ -650,8 +682,4 @@ ul#head-navigation a {
 
 .hidden {
 	display: none;
-}
-
-#programNameTable {
-	cursor: default;
 }
