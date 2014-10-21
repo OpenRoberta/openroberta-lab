@@ -28,9 +28,9 @@ function saveUserToServer() {
     var $role = $("input[name=role]:checked");
 
     if ($pass1.val() != $pass2.val()) {
-        displayMessage("Wrong password");
+        displayMessage("Das eingegebene Passwort ist falsch.");
     } else if ($role.val() == null) {
-        displayMessage("Select your role");
+        displayMessage("Bitte wählen Sie eine Rolle aus.");
     } else {
         var roleGerman = $role.val();
         var role = "STUDENT";
@@ -46,9 +46,9 @@ function saveUserToServer() {
             "role" : role
         }, function(result) {
             if (result.rc === "ok")
-                displayMessage("User created");
+                displayMessage("Der Nutzer wurde angelegt.");
             else
-                displayMessage("User already exists, choose a different account name, cause: " + response.cause);
+                displayMessage("Dieser Nutzer existiert bereits. Bitte wählen Sie einen anderen Account-Namen. Ursache: " + response.cause);
         });
     }
 }
@@ -63,7 +63,10 @@ function deleteUserOnServer() {
         "cmd" : "deleteUser",
         "accountName" : $userAccountName.val()
     }, function(result) {
-        displayMessage("server return: " + result.rc);
+        if (result.rc === "ok")
+            displayMessage("Der Nutzer wurde gelöscht.");
+        else
+            displayMessage("Der Nutzer konnte nicht gelöscht werden. Ursache: " + response.cause);
     });
 }
 
@@ -87,7 +90,7 @@ function login() {
             setHeadNavigationMenuState('login');
             $("#tutorials").fadeOut(700);
         } else {
-            displayMessage("Login failed, cause: " + response.cause);
+            displayMessage("Fehler beim Login. Ursache: " + response.cause);
         }
     });
 }
@@ -104,7 +107,7 @@ function logout() {
             displayStatus();
             setHeadNavigationMenuState('logout');
         } else {
-            displayMessage("Logout failed, cause: " + response.cause);
+            displayMessage("Fehler beim Logout. Ursache: " + response.cause);
         }
     });
 }
@@ -112,8 +115,7 @@ function logout() {
 /**
  * Inject Blockly with initial toolbox
  * 
- * @param {response}
- *            toolbox
+ * @param {response} toolbox
  */
 function injectBlockly(toolbox) {
     response(toolbox);
@@ -165,11 +167,11 @@ function setToken(token) {
             if (response.rc === "ok") {
                 userState.token = token;
             } else {
-                displayMessage("Error while setting token, cause: " + response.cause);
+                displayMessage("Fehler beim Setzen des Token. Ursache: " + response.cause);
             }
         });
     } else {
-        displayMessage("Token value is empty");
+        displayMessage("Ein leeres Token ist nicht erlaubt.");
     }
 }
 
@@ -184,6 +186,10 @@ function response(result) {
     incrCounter();
 };
 
+
+/**
+ * Save program to server
+ */
 function saveToServer() {
     if ($('#programNameSave')) {
         var $name = $('#programNameSave');
@@ -200,7 +206,7 @@ function saveToServer() {
             "program" : xml_text
         }, response);
     } else {
-        displayMessage("There is no name for your program available\n\n please save one with a name or load one, cause: " + response.cause);
+        displayMessage("Sie müssen einen Programmnamen angeben. Ursache: " + response.cause);
     }
 }
 
@@ -375,7 +381,7 @@ function startProgram() {
  */
 function checkProgram() {
     // TODO
-    displayMessage("Your program will be checked soon ;-)");
+    displayMessage("Ihr Programm kann zur Zeit noch nicht geprüft werden. ;-)");
 }
 
 function switchToBlockly() {
