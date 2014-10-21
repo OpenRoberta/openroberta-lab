@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2014-10-17 12:34:27.277000",
+		"lastupdated": "2014-10-21 10:07:34.380000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -455,6 +455,11 @@
 	"DISPLAY_ROW": "in row",
 	"DISPLAY_CLEAR": "clear display",
 	"DISPLAY_PICTURE": "picture",
+	"DISPLAY_PICTURE_GLASSES": "glasses",
+	"DISPLAY_PICTURE_EYES_OPEN": "eyes open",
+	"DISPLAY_PICTURE_EYES_CLOSED": "eyes closed",
+	"DISPLAY_PICTURE_FLOWERS": "flowers",
+	"DISPLAY_PICTURE_TACHO": "tacho",
 	"DISPLAY_TEXT": "text",
 	"PLAY": "play",
 	"PLAY_TONE": "tone",

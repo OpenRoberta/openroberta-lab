@@ -51,6 +51,27 @@ Blockly.Blocks['robSensors_getSample'] = {
     this.setOutput(true, [ 'Number', 'Boolean', 'Colour' ]);
     this.setTooltip(Blockly.Msg.GETSAMPLE_TOOLTIP);
   },
+  /**
+   * Create XML to represent whether the sensor type has changed.
+   * @return {Element} XML storage element.
+   * @this Blockly.Block
+   */
+  mutationToDom: function() {
+    var container = document.createElement('mutation');
+    var input = this.getFieldValue('SENSORTYPE');
+    container.setAttribute('input', input);
+    return container;
+  },
+  /**
+   * Parse XML to restore the sensor type.
+   * @param {!Element} xmlElement XML storage element.
+   * @this Blockly.Block
+   */
+  domToMutation: function(xmlElement) {
+    var input = xmlElement.getAttribute('input');   
+    this.newSensorType = input;
+    this.updateShape_();
+  },
 
   /**
    * Called whenever anything on the workspace changes.

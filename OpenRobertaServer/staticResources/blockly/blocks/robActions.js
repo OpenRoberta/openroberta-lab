@@ -276,9 +276,9 @@ Blockly.Blocks['robActions_display_picture'] = {
   init : function() {
     this.setColourRGB(Blockly.CAT_ROBACTIONS_RGB);
     // this.setInputsInline(true);
-    var picture = new Blockly.FieldDropdown([ [ 'Brille', 'OLDGLASSES' ],
-        [ 'Augen offen', 'EYESOPEN' ], [ 'Augen zu', 'EYESCLOSED' ],
-        [ 'Blumen', 'FLOWERS' ], ['Tacho', 'TACHO'] ]);
+    var picture = new Blockly.FieldDropdown([ [ Blockly.Msg.DISPLAY_PICTURE_GLASSES, 'OLDGLASSES' ],
+        [ Blockly.Msg.DISPLAY_PICTURE_EYES_OPEN, 'EYESOPEN' ], [ Blockly.Msg.DISPLAY_PICTURE_EYES_CLOSED, 'EYESCLOSED' ],
+        [ Blockly.Msg.DISPLAY_PICTURE_FLOWERS, 'FLOWERS' ], [Blockly.Msg.DISPLAY_PICTURE_TACHO, 'TACHO'] ]);
     this.appendDummyInput().appendField(
         Blockly.Msg.DISPLAY_SHOW + ' ' + Blockly.Msg.DISPLAY_PICTURE)
         .appendField(picture, 'PICTURE');
