@@ -94,11 +94,9 @@ Blockly.BlockSvg.prototype.init = function() {
  */
 Blockly.BlockSvg.prototype.updateMovable = function() {
     if (this.block_.isMovable()) {
-        Blockly.addClass_(/** @type {!Element} */
-        (this.svgGroup_), 'blocklyDraggable');
+        Blockly.addClass_(/** @type {!Element} */(this.svgGroup_), 'blocklyDraggable');
     } else {
-        Blockly.removeClass_(/** @type {!Element} */
-        (this.svgGroup_), 'blocklyDraggable');
+        Blockly.removeClass_(/** @type {!Element} */(this.svgGroup_), 'blocklyDraggable');
     }
 };
 
@@ -301,8 +299,7 @@ Blockly.BlockSvg.prototype.dispose = function() {
 Blockly.BlockSvg.prototype.disposeUiEffect = function() {
     Blockly.playAudio('delete');
 
-    var xy = Blockly.getSvgXY_(/** @type {!Element} */
-    (this.svgGroup_));
+    var xy = Blockly.getSvgXY_(/** @type {!Element} */(this.svgGroup_));
     // Deeply clone the current block.
     var clone = this.svgGroup_.cloneNode(true);
     clone.translateX_ = xy.x;
@@ -347,8 +344,7 @@ Blockly.BlockSvg.prototype.connectionUiEffect = function() {
     Blockly.playAudio('click');
 
     // Determine the absolute coordinates of the inferior block.
-    var xy = Blockly.getSvgXY_(/** @type {!Element} */
-    (this.svgGroup_));
+    var xy = Blockly.getSvgXY_(/** @type {!Element} */(this.svgGroup_));
     // Offset the coordinates based on the two connection types.
     if (this.block_.outputConnection) {
         xy.x += Blockly.RTL ? 3 : -3;
@@ -408,12 +404,10 @@ Blockly.BlockSvg.prototype.updateColour = function() {
  */
 Blockly.BlockSvg.prototype.updateDisabled = function() {
     if (this.block_.disabled || this.block_.getInheritedDisabled()) {
-        Blockly.addClass_(/** @type {!Element} */
-        (this.svgGroup_), 'blocklyDisabled');
+        Blockly.addClass_(/** @type {!Element} */(this.svgGroup_), 'blocklyDisabled');
         this.svgPath_.setAttribute('fill', 'url(#blocklyDisabledPattern)');
     } else {
-        Blockly.removeClass_(/** @type {!Element} */
-        (this.svgGroup_), 'blocklyDisabled');
+        Blockly.removeClass_(/** @type {!Element} */(this.svgGroup_), 'blocklyDisabled');
         this.updateColour();
     }
     var children = this.block_.getChildren();
@@ -426,8 +420,7 @@ Blockly.BlockSvg.prototype.updateDisabled = function() {
  * Select this block. Highlight it visually.
  */
 Blockly.BlockSvg.prototype.addSelect = function() {
-    Blockly.addClass_(/** @type {!Element} */
-    (this.svgGroup_), 'blocklySelected');
+    Blockly.addClass_(/** @type {!Element} */(this.svgGroup_), 'blocklySelected');
     // Move the selected block to the top of the stack.
     this.svgGroup_.parentNode.appendChild(this.svgGroup_);
 };
@@ -436,8 +429,7 @@ Blockly.BlockSvg.prototype.addSelect = function() {
  * Unselect this block. Remove its highlighting.
  */
 Blockly.BlockSvg.prototype.removeSelect = function() {
-    Blockly.removeClass_(/** @type {!Element} */
-    (this.svgGroup_), 'blocklySelected');
+    Blockly.removeClass_(/** @type {!Element} */(this.svgGroup_), 'blocklySelected');
 };
 
 /**
@@ -445,16 +437,14 @@ Blockly.BlockSvg.prototype.removeSelect = function() {
  * to improve performance.
  */
 Blockly.BlockSvg.prototype.addDragging = function() {
-    Blockly.addClass_(/** @type {!Element} */
-    (this.svgGroup_), 'blocklyDragging');
+    Blockly.addClass_(/** @type {!Element} */(this.svgGroup_), 'blocklyDragging');
 };
 
 /**
  * Removes the dragging class from this block.
  */
 Blockly.BlockSvg.prototype.removeDragging = function() {
-    Blockly.removeClass_(/** @type {!Element} */
-    (this.svgGroup_), 'blocklyDragging');
+    Blockly.removeClass_(/** @type {!Element} */(this.svgGroup_), 'blocklyDragging');
 };
 
 /**

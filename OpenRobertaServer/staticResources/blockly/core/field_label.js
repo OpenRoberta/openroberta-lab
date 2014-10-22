@@ -99,8 +99,7 @@ Blockly.FieldLabel.prototype.dispose = function() {
  * @return {!Element} The group element.
  */
 Blockly.FieldLabel.prototype.getRootElement = function() {
-    return /** @type {!Element} */
-    (this.textElement_);
+    return /** @type {!Element} */(this.textElement_);
 };
 
 /**

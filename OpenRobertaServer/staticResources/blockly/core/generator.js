@@ -225,8 +225,7 @@ Blockly.Generator.prototype.statementToCode = function(block, name) {
         throw 'Expecting code from statement block "' + targetBlock.type + '".';
     }
     if (code) {
-        code = this.prefixLines(/** @type {string} */
-        (code), this.INDENT);
+        code = this.prefixLines(/** @type {string} */(code), this.INDENT);
     }
     return code;
 };

@@ -294,8 +294,7 @@ Blockly.getAbsoluteXY_ = function(element) {
  * @return {!SVGElement} Newly created SVG element.
  */
 Blockly.createSvgElement = function(name, attrs, opt_parent) {
-    var e = /** @type {!SVGElement} */
-    (document.createElementNS(Blockly.SVG_NS, name));
+    var e = /** @type {!SVGElement} */ (document.createElementNS(Blockly.SVG_NS, name));
     for ( var key in attrs) {
         e.setAttribute(key, attrs[key]);
     }

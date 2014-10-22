@@ -149,23 +149,19 @@ Blockly.Tooltip.createDom = function() {
      * y="2"/> <rect class="blocklyTooltipBackground"/> <text
      * class="blocklyTooltipText"></text> </g>
      */
-    var svgGroup = /** @type {!SVGGElement} */
-    (Blockly.createSvgElement('g', {
+    var svgGroup = /** @type {!SVGGElement} */ (Blockly.createSvgElement('g', {
         'class' : 'blocklyHidden'
     }, null));
     Blockly.Tooltip.svgGroup_ = svgGroup;
-    Blockly.Tooltip.svgShadow_ = /** @type {!SVGRectElement} */
-    (Blockly.createSvgElement('rect', {
+    Blockly.Tooltip.svgShadow_ = /** @type {!SVGRectElement} */ (Blockly.createSvgElement('rect', {
         'class' : 'blocklyTooltipShadow',
         'x' : 2,
         'y' : 2
     }, svgGroup));
-    Blockly.Tooltip.svgBackground_ = /** @type {!SVGRectElement} */
-    (Blockly.createSvgElement('rect', {
+    Blockly.Tooltip.svgBackground_ = /** @type {!SVGRectElement} */ (Blockly.createSvgElement('rect', {
         'class' : 'blocklyTooltipBackground'
     }, svgGroup));
-    Blockly.Tooltip.svgText_ = /** @type {!SVGTextElement} */
-    (Blockly.createSvgElement('text', {
+    Blockly.Tooltip.svgText_ = /** @type {!SVGTextElement} */ (Blockly.createSvgElement('text', {
         'class' : 'blocklyTooltipText'
     }, svgGroup));
     return svgGroup;
@@ -290,8 +286,7 @@ Blockly.Tooltip.show_ = function() {
     }
     // Erase all existing text.
     goog.dom.removeChildren(
-    /** @type {!Element} */
-    (Blockly.Tooltip.svgText_));
+    /** @type {!Element} */ (Blockly.Tooltip.svgText_));
     // Get the new text.
     var tip = Blockly.Tooltip.element_.tooltip;
     if (goog.isFunction(tip)) {

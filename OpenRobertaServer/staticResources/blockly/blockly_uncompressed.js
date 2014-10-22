@@ -49,6 +49,7 @@ goog.addDependency("../../../" + dir + "/core/field_textinput.js", ['Blockly.Fie
 goog.addDependency("../../../" + dir + "/core/field_variable.js", ['Blockly.FieldVariable'], ['Blockly.FieldDropdown', 'Blockly.Msg', 'Blockly.Variables']);
 goog.addDependency("../../../" + dir + "/core/flyout.js", ['Blockly.Flyout'], ['Blockly.Block', 'Blockly.Comment', 'goog.userAgent']);
 goog.addDependency("../../../" + dir + "/core/generator.js", ['Blockly.Generator'], ['Blockly.Block']);
+goog.addDependency("../../../" + dir + "/core/help.js", ['Blockly.Help'], ['Blockly.Bubble', 'Blockly.Icon']);
 goog.addDependency("../../../" + dir + "/core/icon.js", ['Blockly.Icon'], []);
 goog.addDependency("../../../" + dir + "/core/inject.js", ['Blockly.inject'], ['Blockly.Css', 'goog.dom']);
 goog.addDependency("../../../" + dir + "/core/input.js", ['Blockly.Input'], ['Blockly.Connection', 'Blockly.FieldLabel', 'goog.asserts']);
@@ -1597,6 +1598,7 @@ goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.FieldVariable');
 goog.require('Blockly.Flyout');
 goog.require('Blockly.Generator');
+goog.require('Blockly.Help');
 goog.require('Blockly.Icon');
 goog.require('Blockly.Input');
 goog.require('Blockly.Msg');

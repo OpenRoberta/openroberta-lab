@@ -358,21 +358,18 @@ Blockly.Flyout.prototype.show = function(xmlList, opt_color) {
     if (xmlList == Blockly.Variables.NAME_TYPE) {
         // Special category for variables.
         Blockly.Variables.flyoutCategory(blocks, gaps, margin,
-        /** @type {!Blockly.Workspace} */
-        (this.workspace_));
+        /** @type {!Blockly.Workspace} */(this.workspace_));
     } else if (xmlList == Blockly.Procedures.NAME_TYPE) {
         // Special category for procedures.
         Blockly.Procedures.flyoutCategory(blocks, gaps, margin,
-        /** @type {!Blockly.Workspace} */
-        (this.workspace_));
+        /** @type {!Blockly.Workspace} */(this.workspace_));
     } else {
         for (var i = 0, xml; xml = xmlList[i]; i++) {
             if (xml.tagName && xml.tagName.toUpperCase() == 'BLOCK') {
                 var xmlBlockList = [];
                 xmlBlockList.push(xml);
                 var block = Blockly.Xml.domToBlock(
-                /** @type {!Blockly.Workspace} */
-                (this.workspace_), xmlBlockList);
+                /** @type {!Blockly.Workspace} */(this.workspace_), xmlBlockList);
                 blocks.push(block);
                 gaps.push(margin * 3);
             }

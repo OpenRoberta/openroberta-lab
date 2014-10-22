@@ -96,11 +96,9 @@ Blockly.Icon.prototype.dispose = function() {
  */
 Blockly.Icon.prototype.updateEditable = function() {
     if (!this.block_.isInFlyout) {
-        Blockly.addClass_(/** @type {!Element} */
-        (this.iconGroup_), 'blocklyIconGroup');
+        Blockly.addClass_(/** @type {!Element} */ (this.iconGroup_), 'blocklyIconGroup');
     } else {
-        Blockly.removeClass_(/** @type {!Element} */
-        (this.iconGroup_), 'blocklyIconGroup');
+        Blockly.removeClass_(/** @type {!Element} */ (this.iconGroup_), 'blocklyIconGroup');
     }
 };
 

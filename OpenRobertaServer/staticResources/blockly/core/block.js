@@ -716,8 +716,7 @@ Blockly.Block.prototype.duplicate_ = function() {
     statement_list.push(xmlBlock);
     Blockly.Xml.deleteNext(statement_list);
     var newBlock = Blockly.Xml.domToBlock(
-    /** @type {!Blockly.Workspace} */
-    (this.workspace), statement_list);
+    /** @type {!Blockly.Workspace} */(this.workspace), statement_list);
     // Move the duplicate next to the old block.
     var xy = this.getRelativeToSurfaceXY();
     if (Blockly.RTL) {
@@ -2051,8 +2050,7 @@ Blockly.Block.prototype.setCommentText = function(text) {
             this.comment = new Blockly.Comment(this);
             changedState = true;
         }
-        this.comment.setText(/** @type {string} */
-        (text));
+        this.comment.setText(/** @type {string} */(text));
     } else {
         if (this.comment) {
             this.comment.dispose();
@@ -2082,8 +2080,7 @@ Blockly.Block.prototype.setWarningText = function(text) {
             this.warning = new Blockly.Warning(this);
             changedState = true;
         }
-        this.warning.setText(/** @type {string} */
-        (text));
+        this.warning.setText(/** @type {string} */(text));
     } else {
         if (this.warning) {
             this.warning.dispose();
@@ -2113,8 +2110,7 @@ Blockly.Block.prototype.setErrorText = function(text) {
             this.error = new Blockly.Error(this);
             changedState = true;
         }
-        this.error.setText(/** @type {string} */
-        (text));
+        this.error.setText(/** @type {string} */(text));
     } else {
         if (this.error) {
             this.error.dispose();

@@ -126,16 +126,12 @@ Blockly.Field.prototype.updateEditable = function() {
         return;
     }
     if (this.sourceBlock_.isEditable()) {
-        Blockly.addClass_(/** @type {!Element} */
-        (this.fieldGroup_), 'blocklyEditableText');
-        Blockly.removeClass_(/** @type {!Element} */
-        (this.fieldGroup_), 'blocklyNoNEditableText');
+        Blockly.addClass_(/** @type {!Element} */ (this.fieldGroup_), 'blocklyEditableText');
+        Blockly.removeClass_(/** @type {!Element} */ (this.fieldGroup_), 'blocklyNoNEditableText');
         this.fieldGroup_.style.cursor = this.CURSOR;
     } else {
-        Blockly.addClass_(/** @type {!Element} */
-        (this.fieldGroup_), 'blocklyNonEditableText');
-        Blockly.removeClass_(/** @type {!Element} */
-        (this.fieldGroup_), 'blocklyEditableText');
+        Blockly.addClass_(/** @type {!Element} */ (this.fieldGroup_), 'blocklyNonEditableText');
+        Blockly.removeClass_(/** @type {!Element} */ (this.fieldGroup_), 'blocklyEditableText');
         this.fieldGroup_.style.cursor = '';
     }
 };
@@ -168,8 +164,7 @@ Blockly.Field.prototype.setVisible = function(visible) {
  * @return {!Element} The group element.
  */
 Blockly.Field.prototype.getRootElement = function() {
-    return /** @type {!Element} */
-    (this.fieldGroup_);
+    return /** @type {!Element} */ (this.fieldGroup_);
 };
 
 /**
@@ -242,8 +237,7 @@ Blockly.Field.prototype.setText = function(text) {
 Blockly.Field.prototype.updateTextNode_ = function() {
     var text = this.text_;
     // Empty the text element.
-    goog.dom.removeChildren(/** @type {!Element} */
-    (this.textElement_));
+    goog.dom.removeChildren(/** @type {!Element} */ (this.textElement_));
     // Replace whitespace with non-breaking spaces so the text doesn't collapse.
     text = text.replace(/\s/g, Blockly.Field.NBSP);
     if (Blockly.RTL && text) {

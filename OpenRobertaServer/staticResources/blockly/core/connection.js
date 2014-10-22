@@ -109,8 +109,7 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
             var newBlock = this.sourceBlock_;
             var connection;
             while (connection = Blockly.Connection.singleConnection_(
-            /** @type {!Blockly.Block} */
-            (newBlock), orphanBlock)) {
+            /** @type {!Blockly.Block} */(newBlock), orphanBlock)) {
                 // '=' is intentional in line above.
                 if (connection.targetBlock()) {
                     newBlock = connection.targetBlock();
