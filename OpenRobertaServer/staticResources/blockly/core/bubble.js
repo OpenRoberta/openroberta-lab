@@ -583,7 +583,9 @@ Blockly.Bubble.prototype.renderArrow_ = function() {
  *            hexColour Hex code of colour.
  */
 Blockly.Bubble.prototype.setColour = function(hexColour) {
-    this.bubbleBack_.setAttribute('fill', hexColour);
+    this.bubbleBack_.setAttribute('fill', '#fff');
+    this.bubbleBack_.setAttribute('stroke', hexColour);
+    this.bubbleBack_.setAttribute('stroke-width', 3);
     this.bubbleArrow_.setAttribute('fill', hexColour);
 };
 

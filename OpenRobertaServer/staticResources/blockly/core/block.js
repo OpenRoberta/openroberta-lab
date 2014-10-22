@@ -36,6 +36,7 @@ goog.require('Blockly.Msg');
 goog.require('Blockly.Mutator');
 goog.require('Blockly.MutatorPlus');
 goog.require('Blockly.MutatorMinus');
+goog.require('Blockly.Help');
 goog.require('Blockly.Warning');
 goog.require('Blockly.Error');
 goog.require('Blockly.Workspace');
@@ -225,6 +226,13 @@ Blockly.Block.prototype.mutatorPlus = null;
 Blockly.Block.prototype.mutatorMinus = null;
 
 /**
+ * Block's help icon (if any).
+ * 
+ * @type {Blockly.Help}
+ */
+Blockly.Block.prototype.help = null;
+
+/**
  * Block's comment icon (if any).
  * 
  * @type {Blockly.Comment}
@@ -260,6 +268,9 @@ Blockly.Block.prototype.getIcons = function() {
     }
     if (this.mutatorMinus) {
         icons.push(this.mutatorMinus);
+    }
+    if (this.help) {
+        icons.push(this.help);
     }
     if (this.comment) {
         icons.push(this.comment);
@@ -2022,6 +2033,25 @@ Blockly.Block.prototype.setMutatorMinus = function(mutatorMinus) {
         this.mutatorMinus = mutatorMinus;
         if (this.svg_) {
             mutatorMinus.createIcon();
+        }
+    }
+};
+
+/**
+ * Give this block a help button.
+ * 
+ * @param {Blockly.Help}
+ *            help A help instance or null to remove.
+ */
+Blockly.Block.prototype.setHelp = function(help) {
+    if (this.help && this.help !== help) {
+        this.help.dispose();
+    }
+    if (help) {
+        help.block_ = this;
+        this.help = help;
+        if (this.svg_) {
+            help.createIcon();
         }
     }
 };

@@ -330,6 +330,7 @@ Blockly.Msg.MODE_ROTATION = "rotation";
 Blockly.Msg.MODE_STATE = "state";
 Blockly.Msg.MOTOR = "motor";
 Blockly.Msg.MOTORDIFF_ON_FOR_TOOLTIP = "Starts the robot with specific speed and stops after specific distance.";
+Blockly.Msg.MOTORDIFF_ON_HELP = "here comes your help text";
 Blockly.Msg.MOTORDIFF_ON_TOOLTIP = "Starts the robot with specific speed.";
 Blockly.Msg.MOTORDIFF_STOP_TOOLTIP = "Stops the robot.";
 Blockly.Msg.MOTORDIFF_TURN_FOR_TOOLTIP = "Turns the robot for number of degrees.";

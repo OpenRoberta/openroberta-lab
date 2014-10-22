@@ -515,5 +515,6 @@
 	"MODE_RATE": "",
 	"LOOP_COUNT": "",
 	"LOOP": "",
-	"LOOP_FOREVER": ""
+	"LOOP_FOREVER": "",
+	"MOTORDIFF_ON_HELP": ""
 }

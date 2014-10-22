@@ -1263,3 +1263,5 @@ Blockly.Msg.MODE_RATE = 'rate';
 Blockly.Msg.LOOP_COUNT = 'number';
 Blockly.Msg.LOOP = 'repeat until';
 Blockly.Msg.LOOP_FOREVER = 'repeat indefinitely';
+//
+Blockly.Msg.MOTORDIFF_ON_HELP = 'here comes your help text';

@@ -481,5 +481,6 @@
 	"LOOPFOREVER_TOOLTIP": "Wiederholt unendlich oft die Aktion.",
 	"IFELSE_TOOLTIP": "Prüft die Bedingung in wenn. Falls die Bedingung wahr ist, führt die dann-Aktion aus, andernfalls führt die sonst-Aktion aus.",
 	"IF_TOOLTIP": "Prüft die Bedingung in wenn. Falls die Bedingung wahr ist, führt die dann-Aktion aus.",
-	"COLOUR_PICKER_TOOLTIP": "Wählt eine Farbe von der Palette."
+	"COLOUR_PICKER_TOOLTIP": "Wählt eine Farbe von der Palette.",
+	"MOTORDIFF_ON_HELP": "Hier kommt dein Hilfetext :-)"
 }

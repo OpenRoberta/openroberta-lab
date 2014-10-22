@@ -156,6 +156,7 @@ Blockly.Blocks['robActions_motorDiff_on'] = {
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.MOTORDIFF_ON_TOOLTIP);
+        this.setHelp(new Blockly.Help(Blockly.Msg.MOTORDIFF_ON_HELP));
     }
 };
 
