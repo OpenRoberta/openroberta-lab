@@ -17,7 +17,8 @@
 <link rel="stylesheet" type="text/css" href="/common/themes/base/jquery.ui.tabs.css"></link>
 <link rel="stylesheet" type="text/css" href="/css/roberta.css"></link>
 <link rel="stylesheet" type="text/css" href="/common/jquery.dataTables.min.css"></link>
-<!-- TESTING  <link rel="stylesheet" href="css/jquery-ui_modified.css"></link> -->
+<link rel="stylesheet" type="text/css" href="/css/typicons/typicons.min.css" />
+<link rel="stylesheet" type="text/css" href="/css/typicons/roberta_typicons.css" />
 
 <link rel="stylesheet" type="text/css" href="/css/simulator.css"></link>
 <script type="text/javascript" src="simulator/simulator.js" charset="utf-8"></script>
@@ -32,41 +33,42 @@
             <li>
                 <a href="#"><span class="head-navi-icons project"></span><span id="setProgram" class="head-navi-text">Programm</span></a>
                 <ul id="submenu-program" class="head-navigation-submenu">
-                    <li id="run">Starten</li>
-                    <li id="check">Checken</li>
-                    <li id="new" class="logout">Neu ...</li>
-                    <li id="open" class="logout"> Öffnen ... </li>
-                    <li id="save">Speichern</li>
-                    <li id="saveAs" class="logout">Speichern als ...</li>
-                    <li id="attach">Anhängen ...</li>
-                    <li id="divide">Teilen</li>
-                    <li id="delete" class="logout">Löschen ...</li>
-                    <li id="properties">Eigenschaften</li>
-                    <li id="toolboxBeginner">Toolbox Anfänger</li>
-                    <li id="toolboxExpert">Toolbox Experte</li>
+                    <li id="run"><span class="typcn typcn-media-play"></span>starten</li>
+                    <li id="check"><span class="typcn typcn-tick-outline"></span>checken</li>
+                    <li id="new" class="logout"><span class="typcn typcn-document-add"></span>neu ...</li>
+                    <li id="open" class="logout"><span class="typcn typcn-edit"></span>öffnen ... </li>
+                    <li id="save" class="logout"><span class="typcn typcn-download-outline"></span>speichern</li>
+                    <li id="saveAs" class="logout"><span class="typcn typcn-download-outline"></span>speichern unter ...</li>
+                    <li id="attach" class="logout"><span class="typcn typcn-th-list-outline"></span>anhängen ...</li>
+                    <li id="divide" class="logout"><span class="typcn typcn-flow-children"></span>teilen ...</li>
+                    <li id="delete" class="logout"><span class="typcn typcn-delete-outline"></span>löschen ...</li>
+                    <li id="properties"><span class="typcn typcn-info-large-outline"></span>Eigenschaften ...</li>
                 </ul>
             </li>
             <li>
-                <a href="#"><span class="head-navi-icons settings"></span><span class="head-navi-text">Einstellungen</span></a>
-                <ul id="submenu-settings" class="head-navigation-submenu">
-                    <li id="roboter">Roboter</li>
-                    <li id="close">Schließen</li>
+                <a href="#"><span class="head-navi-icons nepo"></span><span class="head-navi-text">Nepo</span></a>
+                <ul id="submenu-nepo" class="head-navigation-submenu">
+                    <li id="toolboxBeginner"><span class="typcn typcn-spanner-outline"></span>Anfänger</li>
+                    <li id="toolboxExpert"><span class="typcn typcn-spanner-outline"></span>Experte</li>
                 </ul>
             </li>
             <li>
-                <a href="#"><span class="head-navi-icons settings"></span><span class="head-navi-text">Verbindung</span></a>
-                <ul id="submenu-connection" class="head-navigation-submenu">
-                    <li id="token">Token ...</li>
-                    <li id="wifi">WIFI ...</li>
-                    <li id="usb">USB ...</li>
-                    <li id="bluetooth">Bluetooth ...</li>
-                    <li id="disconnect">Trennen</li>
+                <a href="#"><span class="head-navi-icons configuration"></span><span id="setConfiguration" class="head-navi-text">Roboter</span></a>
+                <ul id="submenu-configuration" class="head-navigation-submenu">
+                    <li id="check"><span class="typcn typcn-tick-outline"></span>checken</li>
+                    <li id="new" class="logout"><span class="typcn typcn-document-add"></span>neu ...</li>
+                    <li id="open" class="logout"><span class="typcn typcn-edit"></span>öffnen ... </li>
+                    <li id="save" class="logout"><span class="typcn typcn-download-outline"></span>speichern</li>
+                    <li id="saveAs" class="logout"><span class="typcn typcn-download-outline"></span>speichern unter ...</li>
+                    <li id="divide" class="logout"><span class="typcn typcn-flow-children"></span>teilen ...</li>
+                    <li id="delete" class="logout"><span class="typcn typcn-delete-outline"></span>löschen ...</li>
+                    <li id="properties"><span class="typcn typcn-info-large-outline"></span>Eigenschaften ...</li>
                 </ul>
             </li>
             <li>
-                <a href="#"><span class="head-navi-icons community"></span><span class="head-navi-text">Gruppen</span></a>
+                <a href="#" id="head-navigation-connection"><span class="head-navi-icons connection"></span><span class="head-navi-text">Verbindung</span></a>
             </li>
-            <li>
+            <li class="hidden">
                 <a href="#"><span class="head-navi-icons developer"></span><span class="head-navi-text">Entwicklertools</span></a>
                 <ul id="submenu-developertools" class="head-navigation-submenu">
                     <li id="logging">Logging</li>
@@ -79,17 +81,14 @@
             <li>
                 <a href="#"><span class="head-navi-icons user"></span><span id="setName" class="head-navi-text">Anmeldung</span></a>
                 <ul id="submenu-login" class="head-navigation-submenu">
-                    <li id="login" class="login">Anmelden ...</li>
-                    <li id="logout" class="logout">Abmelden</li>
-                    <li id="new" class="login">Neu ...</li>
-                    <li id="change" class="logout">Ändern ...</li>
-                    <li id="delete" class="logout">Benutzer löschen ...</li>
+                    <li id="login" class="login"><span class="typcn typcn-user-outline"></span>anmelden ...</li>
+                    <li id="logout" class="logout"><span class="typcn typcn-user"></span>abmelden</li>
+                    <li id="new" class="login"><span class="typcn typcn-user-add-outline"></span>neu ...</li>
+                    <li id="change" class="logout"><span class="typcn typcn-group-outline"></span>ändern ...</li>
+                    <li class="hidden" id="delete" class="logout"><span class="typcn typcn-user-delete-outline"></spanBenutzer löschen ...</li>
                 </ul>
             </li>
-            <li>
-                <a id="head-navigation-blockly"><span class="head-navi-icons help"></span><span class="head-navi-text">Test Nepo :-)</span></a>
-            </li>
-            
+
             <div id="logo">
                 <a href="index.html"></a>
             </div>
@@ -148,12 +147,6 @@
         <input id="saveProgram" class='submit' type="submit" value="Speichern" />
     </div>
 
-    <div class="jquerypopup program" id="new-program" title="Programm">
-        <label for="programNameNew">Programmname</label>
-        <input id="programNameNew" class='input programName' type="text" value="" /><br/>
-        <input id="newProgram" class='submit' type="button" value="Anlegen" />
-    </div>
-
     <div class="jquerypopup" id="set-token" title="Token">
         <label for="tokenValue">Wert</label>
         <input id="tokenValue" class='input' type="text" value="" /><br/>
@@ -169,7 +162,8 @@
         <div id="tabs">
             <ul class="hidden">
                 <li><a id="tabBlockly" href="#blockly">Test Nepo :-)</a></li>
-                <li><a id="tabListing" href="#listing">Listing</a></li>
+                <li><a id="tabListing" href="#listing">Listing of programs</a></li>
+                <li><a id="tabConfListing" href="#confListing">Listing of configurations</a></li>
                 <li><a id="tabLogging" href="#logging">Logging</a></li>
                 <li><a id="tabReadme" href="#readme">README</a></li>
                 <li><a id="tabSimtest" onclick="viewSimulator(true);">Simulator Test</a></li>
@@ -195,8 +189,22 @@
                     </tfoot>
                 </table>
                 <br/>
-                <input id="loadFromListing" class='submit' type="submit" value="Laden" />
-                <input id="deleteFromListing" class='submit' type="submit" value="Löschen" />
+                <input id="loadFromListing" type="submit" value="Laden" />
+                <input id="deleteFromListing" type="submit" value="Löschen" />
+                <input class="backToBlockly" type="submit" value="Zurück" />
+                <div id="redrawCounter" class="rightGray">0</div>
+            </div>
+            
+            <div id="confListing">
+                <table id="configurationNameTable" class="tableSize">
+                    <thead></thead>
+                    <tbody></tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+                <br/>
+                <input id="loadFromListing" type="submit" value="Laden" />
+                <input class="backToBlockly" type="submit" value="Zurück" />
                 <div id="redrawCounter" class="rightGray">0</div>
             </div>
             
@@ -211,11 +219,13 @@
                     <div class="counter">Count:</div>
                     <div class="counter" id="counter">0</div>
                 </div>
+                <input class="backToBlockly" type="submit" value="Zurück" />
             </div>
             
             <div id="readme">
                 <br/>
                 <div>Content Readme</div>
+                <input class="backToBlockly" type="submit" value="Zurück" />
             </div>
         </div>
         <iframe src="bricklyFrame.html" id="bricklyFrame" style="height: 0; width: 0; border: none;"></iframe>

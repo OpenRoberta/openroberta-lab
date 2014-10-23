@@ -88,6 +88,8 @@ function login() {
             userState.role = response.userRole;
             displayStatus();
             setHeadNavigationMenuState('login');
+            setProgram("");
+            $('#setProgram').text('Programm');
             $("#tutorials").fadeOut(700);
         } else {
             displayMessage("Fehler beim Login. Ursache: " + response.cause);
@@ -316,6 +318,11 @@ function loadToolbox(toolbox) {
     }, showToolbox);
 }
 
+/**
+ * Display programs in a table
+ * 
+ * @param {result} result object of server call
+ */
 function showPrograms(result) {
     response(result);
     if (result.rc === 'ok') {
@@ -327,6 +334,22 @@ function showPrograms(result) {
     }
 }
 
+/**
+ * Display configurations in a table
+ * 
+ * @param {result} result object of server call
+ */
+function showConfigurations(result) {
+    response(result);
+    if (result.rc === 'ok') {
+        var $table = $('#configurationNameTable').dataTable();
+        $table.fnClearTable();
+        if (result.confNames.length > 0) {
+            $table.fnAddData(result.confNames);
+        }
+    }
+}
+
 function selectionFn(event) {
     $('#programNameTable .selected').removeClass('selected');
     $(event.target.parentNode).toggleClass('selected');
@@ -334,12 +357,15 @@ function selectionFn(event) {
 
 function beforeActivateTab(event, ui) {
     $('#tabs').tabs("refresh");
-    if (ui.newPanel.selector !== '#listing') {
-        return;
+    if (ui.newPanel.selector === '#listing') {
+        COMM.json("/program", {
+            "cmd" : "loadPN",
+        }, showPrograms);
+    } else if (ui.newPanel.selector === '#confListing') {
+        COMM.json("/conf", {
+            "cmd" : "loadCN",
+        }, showConfigurations);
     }
-    COMM.json("/program", {
-        "cmd" : "loadPN",
-    }, showPrograms);
 }
 
 function initProgramNameTable() {
@@ -444,9 +470,7 @@ function displayStatus() {
 /**
  * Inject Brickly with initial toolbox
  * 
- * @param {state}
- *            State to be set
- * 
+ * @param {state} State to be set
  */
 function setHeadNavigationMenuState(state) {
     $('#head-navigation > li > ul > li').removeClass('ui-state-disabled');
@@ -475,16 +499,16 @@ function initHeadNavigation() {
 
     $('#head-navigation').menu({
         position : {
-            my : "left-30 top+60"
+            my : "left-50 top+47"
         }
+    });
+
+    $('#head-navigation').onWrap('click', '#head-navigation-connection:not(.ui-state-disabled)', function() {
+        $("#set-token").dialog("open");
     });
 
     $('#head-navigation').onWrap('click', '#head-navigation-readme:not(.ui-state-disabled)', function() {
         $('#tabReadme').click();
-    });
-
-    $('#head-navigation').onWrap('click', '#head-navigation-blockly:not(.ui-state-disabled)', function() {
-        $('#tabBlockly').click();
     });
 
     function submenuProgram(event) {
@@ -496,7 +520,7 @@ function initHeadNavigation() {
             checkProgram();
         } else if (domId === 'new') {
             initProgramEnvironment();
-            $("#new-program").dialog("open");
+            setProgram("Mein Programm");
         } else if (domId === 'open') {
             $('#loadFromListing').css('display', 'block');
             $('#deleteFromListing').css('display', 'none');
@@ -513,7 +537,16 @@ function initHeadNavigation() {
             $('#loadFromListing').css('display', 'none');
             $('#tabListing').click();
         } else if (domId === 'properties') {
-        } else if (domId === 'toolboxBeginner') {
+        }
+        return false;
+    }
+    $('#head-navigation').onWrap('click', '#submenu-program > li:not(.ui-state-disabled)', submenuProgram, 'sub menu of menu "program"');
+    
+    function submenuNepo(event) {
+        $(".ui-dialog-content").dialog("close"); // close all opened popups
+        var domId = event.target.id;
+        console.log('>>> '+domId);
+        if (domId === 'toolboxBeginner') {
             loadToolbox('beginner');
             $('#toolboxBeginner').addClass('ui-state-disabled');
             $('#toolboxExpert').removeClass('ui-state-disabled');
@@ -524,43 +557,43 @@ function initHeadNavigation() {
         }
         return false;
     }
-
-    $('#head-navigation').onWrap('click', '#submenu-program > li:not(.ui-state-disabled)', submenuProgram, 'sub menu of menu "program"');
-
-    $('#head-navigation').onWrap('click', '#submenu-settings > li:not(.ui-state-disabled)', function(event) {
+    $('#head-navigation').onWrap('click', '#submenu-nepo > li:not(.ui-state-disabled)', submenuNepo, 'sub menu of menu "nepo"');
+    
+    function submenuConfiguration(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         var domId = event.target.id;
-        if (domId === 'roboter') {
-            switchToBrickly();
-        } else if (domId === 'close') {
-            switchToBlockly();
+        if (domId === 'check') {
+        } else if (domId === 'new') {
+        } else if (domId === 'open') {
+            $('#tabConfListing').click();
+        } else if (domId === 'save') {
+        } else if (domId === 'saveAs') {
+        } else if (domId === 'delete') {
+        } else if (domId === 'properties') {
         }
         return false;
-    });
-
+    }
+    $('#head-navigation').onWrap('click', '#submenu-configuration > li:not(.ui-state-disabled)', submenuConfiguration, 'sub menu of menu "configuration"');
+    
     $('#head-navigation').onWrap('click', '#submenu-connection > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         var domId = event.target.id;
         if (domId === 'token') {
             $("#set-token").dialog("open");
-        } else if (domId === 'wifi') {
-        } else if (domId === 'usb') {
-        } else if (domId === 'bluetooth') {
-        } else if (domId === 'disconnect') {
         }
         return false;
     });
 
-    $('#head-navigation').onWrap('click', '#submenu-developertools > li:not(.ui-state-disabled)', function(event) {
-        $(".ui-dialog-content").dialog("close"); // close all opened popups
-        var domId = event.target.id;
-        if (domId === 'logging') {
-            $('#tabLogging').click();
-        } else if (domId === 'simtest') {
-            $('#tabSimtest').click();
-        }
-        return false;
-    });
+//    $('#head-navigation').onWrap('click', '#submenu-developertools > li:not(.ui-state-disabled)', function(event) {
+//        $(".ui-dialog-content").dialog("close"); // close all opened popups
+//        var domId = event.target.id;
+//        if (domId === 'logging') {
+//            $('#tabLogging').click();
+//        } else if (domId === 'simtest') {
+//            $('#tabSimtest').click();
+//        }
+//        return false;
+//    });
 
     $('#head-navigation').onWrap('click', '#submenu-login > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
@@ -634,11 +667,6 @@ function initPopups() {
         saveToServer();
     }, 'save program');
 
-    $('#newProgram').onWrap('click', function() {
-        var $name = $('#programNameNew');
-        setProgram($name.val());
-    }, 'new program');
-
     $('#setToken').onWrap('click', function() {
         var $token = $('#tokenValue');
         setToken($token.val());
@@ -678,6 +706,10 @@ function initTabs() {
         "cmd" : "deleteT",
         "name" : "beginner"
     });
+
+    $('.backToBlockly').onWrap('click', function() {
+        $('#tabBlockly').click();
+    });
 }
 
 /**
@@ -690,6 +722,7 @@ function init() {
     initPopups();
     initHeadNavigation();
     initProgramNameTable();
+    setProgram("Mein Programm");
 
     // =============================================================================
 
