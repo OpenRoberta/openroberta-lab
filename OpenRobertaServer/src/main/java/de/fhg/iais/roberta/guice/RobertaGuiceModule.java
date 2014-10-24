@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 
 import de.fhg.iais.roberta.brick.BrickCommunicator;
+import de.fhg.iais.roberta.brick.CompilerWorkflow;
 import de.fhg.iais.roberta.brick.Templates;
 import de.fhg.iais.roberta.javaServer.resources.DownloadJar;
 import de.fhg.iais.roberta.javaServer.resources.HelloWorld;
@@ -32,7 +33,10 @@ public class RobertaGuiceModule extends AbstractModule {
         bind(SessionFactoryWrapper.class).in(Singleton.class);
         bind(Templates.class).in(Singleton.class);
         bind(BrickCommunicator.class).in(Singleton.class);
+        bind(CompilerWorkflow.class).in(Singleton.class);
 
         bind(String.class).annotatedWith(Names.named("hibernate-cfg.xml")).toInstance("hibernate-cfg.xml");
+        bind(String.class).annotatedWith(Names.named("crosscompiler.basedir")).toInstance("../OpenRobertaRuntime/userProjects/"); // TODO: rm relative path!
+        bind(String.class).annotatedWith(Names.named("crosscompiler.build.xml")).toInstance("../OpenRobertaRuntime/.build.xml"); // TODO: rm relative path!
     }
 }

@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import javax.ws.rs.core.Response;
 
@@ -16,6 +18,7 @@ import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import de.fhg.iais.roberta.brick.BrickCommunicator;
+import de.fhg.iais.roberta.brick.CompilerWorkflow;
 import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
 import de.fhg.iais.roberta.javaServer.resources.RestProgram;
 import de.fhg.iais.roberta.javaServer.resources.RestUser;
@@ -25,6 +28,7 @@ public class DBTest {
     private SessionFactoryWrapper sessionFactoryWrapper;
     private DB db;
     private BrickCommunicator brickCommunicator;
+    private CompilerWorkflow compilerWorkflow;
 
     private Response response;
     private HttpSessionState s1;
@@ -37,12 +41,15 @@ public class DBTest {
         this.db = DB.make(session);
         this.db.executeSqlFile("./db/create-tables.sql");
         this.brickCommunicator = new BrickCommunicator();
+        Path tempDirectory = Files.createTempDirectory("userProjects");
+        String buildXml = "../OpenRobertaRuntime/.build.xml"; // TODO: brittle relative path
+        this.compilerWorkflow = new CompilerWorkflow(tempDirectory.toString(), buildXml);
     }
 
     @Test
     public void testCompleteSession() throws Exception {
         RestUser restUser = new RestUser();
-        RestProgram restProgram = new RestProgram(this.sessionFactoryWrapper, this.brickCommunicator);
+        RestProgram restProgram = new RestProgram(this.sessionFactoryWrapper, this.brickCommunicator, this.compilerWorkflow);
         this.s1 = HttpSessionState.init();
         this.s2 = HttpSessionState.init();
         assertTrue(!this.s1.isUserLoggedIn() && !this.s2.isUserLoggedIn());

@@ -11,6 +11,9 @@ import org.apache.tools.ant.ProjectHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.HardwareComponent;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
@@ -28,7 +31,17 @@ import de.fhg.iais.roberta.persistence.connector.DbSession;
 public class CompilerWorkflow {
 
     private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflow.class);
-    public static final String BASE_DIR = "../OpenRobertaRuntime/userProjects/"; // TODO: temporary path has to be be removed
+    public final String pathToCrosscompilerBaseDir;
+    public final String pathToCrossCompilerBuildXML;
+
+    @Inject
+    public CompilerWorkflow(
+        @Named("crosscompiler.basedir") String pathToCrosscompilerBaseDir,
+        @Named("crosscompiler.build.xml") String pathToCrossCompilerBuildXML) //
+    {
+        this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
+        this.pathToCrossCompilerBuildXML = pathToCrossCompilerBuildXML;
+    }
 
     /**
      * - load the program from the database<br>
@@ -48,7 +61,7 @@ public class CompilerWorkflow {
      * @param configurationName the hardware configuration that is expected to have been used when assembling the brick
      * @return a message in case of an error; null otherwise
      */
-    public static String execute(DbSession session, String token, String programName, String programText, String configurationText) {
+    public String execute(DbSession session, String token, String programName, String programText, String configurationText) {
         if ( programText == null || programText.trim().equals("") ) {
             return "program not found or program has no blocks";
         }
@@ -77,7 +90,7 @@ public class CompilerWorkflow {
             return "generated java code could not be stored (message: + " + e.getMessage() + ")";
         }
         LOG.debug("generated program stored in directory/token {}", token);
-        runBuild(BASE_DIR, token, programName, "generated.main");
+        runBuild(token, programName, "generated.main");
         LOG.info("brick jar for program {} generated successfully", programName);
         return null;
     }
@@ -89,16 +102,16 @@ public class CompilerWorkflow {
      * @return jaxb the transformer
      * @throws Exception
      */
-    static JaxbBlocklyProgramTransformer<Void> generateTransformer(String blocklyXml) throws Exception {
+    JaxbBlocklyProgramTransformer<Void> generateTransformer(String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
         JaxbBlocklyProgramTransformer<Void> transformer = new JaxbBlocklyProgramTransformer<>();
         transformer.transform(project);
         return transformer;
     }
 
-    static void storeGeneratedProgram(String token, String programName, String javaCode) throws Exception {
+    void storeGeneratedProgram(String token, String programName, String javaCode) throws Exception {
         Assert.isTrue(token != null && programName != null && javaCode != null);
-        File javaFile = new File(BASE_DIR + token + "/src/" + programName + ".java");
+        File javaFile = new File(this.pathToCrosscompilerBaseDir + token + "/src/" + programName + ".java");
         FileUtils.writeStringToFile(javaFile, javaCode, StandardCharsets.UTF_8.displayName());
     }
 
@@ -113,13 +126,13 @@ public class CompilerWorkflow {
      * @param mainFile
      * @param mainPackage
      */
-    static void runBuild(String userProjectsDir, String token, String mainFile, String mainPackage) {
+    void runBuild(String token, String mainFile, String mainPackage) {
 
-        File buildFile = new File(userProjectsDir + "/build.xml");
+        File buildFile = new File(this.pathToCrossCompilerBuildXML);
         org.apache.tools.ant.Project project = new org.apache.tools.ant.Project();
 
         project.init();
-        project.setProperty("user.projects.dir", userProjectsDir);
+        project.setProperty("user.projects.dir", this.pathToCrosscompilerBaseDir);
         project.setProperty("token.dir", token);
         project.setProperty("main.name", mainFile);
         project.setProperty("main.package", mainPackage);
