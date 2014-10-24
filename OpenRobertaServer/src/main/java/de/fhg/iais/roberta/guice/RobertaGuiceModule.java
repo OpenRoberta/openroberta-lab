@@ -37,6 +37,6 @@ public class RobertaGuiceModule extends AbstractModule {
 
         bind(String.class).annotatedWith(Names.named("hibernate-cfg.xml")).toInstance("hibernate-cfg.xml");
         bind(String.class).annotatedWith(Names.named("crosscompiler.basedir")).toInstance("../OpenRobertaRuntime/userProjects/"); // TODO: rm relative path!
-        bind(String.class).annotatedWith(Names.named("crosscompiler.build.xml")).toInstance("../OpenRobertaRuntime/.build.xml"); // TODO: rm relative path!
+        bind(String.class).annotatedWith(Names.named("crosscompiler.build.xml")).toInstance("../OpenRobertaRuntime/build.xml"); // TODO: rm relative path!
     }
 }

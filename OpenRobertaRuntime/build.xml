@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="compileLejos" basedir=".." default="jar">
+<project name="compileLejos" basedir="." default="jar">
 
 	<property name="lib.lejos" value="${basedir}/lib" />
 	<property name="lib.openrobertaruntime" value="${basedir}/target" />
