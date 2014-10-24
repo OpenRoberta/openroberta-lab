@@ -91,6 +91,10 @@ ul#head-navigation a {
     background-image: url(img/head-navi-icons/arrow-loop-outline.svg);
 }
 
+.head-navi-icons.developer {
+    background-image: url(img/head-navi-icons/spanner-outline.svg);
+}
+
 .head-navi-icons.help {
     background-image: url(img/head-navi-icons/zoom-outline.svg);
 }

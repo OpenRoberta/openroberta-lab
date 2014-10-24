@@ -584,16 +584,16 @@ function initHeadNavigation() {
         return false;
     });
 
-//    $('#head-navigation').onWrap('click', '#submenu-developertools > li:not(.ui-state-disabled)', function(event) {
-//        $(".ui-dialog-content").dialog("close"); // close all opened popups
-//        var domId = event.target.id;
-//        if (domId === 'logging') {
-//            $('#tabLogging').click();
-//        } else if (domId === 'simtest') {
-//            $('#tabSimtest').click();
-//        }
-//        return false;
-//    });
+    $('#head-navigation').onWrap('click', '#submenu-developertools > li:not(.ui-state-disabled)', function(event) {
+        $(".ui-dialog-content").dialog("close"); // close all opened popups
+        var domId = event.target.id;
+        if (domId === 'logging') {
+            $('#tabLogging').click();
+        } else if (domId === 'simtest') {
+            $('#tabSimtest').click();
+        }
+        return false;
+    });
 
     $('#head-navigation').onWrap('click', '#submenu-login > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
