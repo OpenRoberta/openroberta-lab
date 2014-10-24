@@ -15,10 +15,20 @@ public class MathTest {
     }
 
     @Test
+    public void reverseTransformatinArithmetic() throws Exception {
+        Helper.assertTransformationIsOk("/ast/math/math_arithmetic.xml");
+    }
+
+    @Test
     public void mathSingle() throws Exception {
         String a = "BlockAST [project=[[Location [x=-7, y=-604], Funct [LN, [Funct [POWER, [NumConst [5], NumConst [8]]]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_single.xml"));
+    }
+
+    @Test
+    public void reverseTransformatinSingle() throws Exception {
+        Helper.assertTransformationIsOk("/ast/math/math_single.xml");
     }
 
     @Test
@@ -29,13 +39,8 @@ public class MathTest {
     }
 
     @Test
-    public void reverseTransformatinMathSingle1() throws Exception {
+    public void reverseTransformatinSingle1() throws Exception {
         Helper.assertTransformationIsOk("/ast/math/math_single1.xml");
-    }
-
-    @Test
-    public void reverseTransformatinMathSingle2() throws Exception {
-        Helper.assertTransformationIsOk("/ast/math/math_single2.xml");
     }
 
     @Test
@@ -46,10 +51,20 @@ public class MathTest {
     }
 
     @Test
+    public void reverseTransformatinTrig() throws Exception {
+        Helper.assertTransformationIsOk("/ast/math/math_trig.xml");
+    }
+
+    @Test
     public void mathConstant() throws Exception {
         String a = "BlockAST [project=[[Location [x=131, y=-615], Funct [COS, [MathConst [E]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_constant.xml"));
+    }
+
+    @Test
+    public void reverseTransformatinConstant() throws Exception {
+        Helper.assertTransformationIsOk("/ast/math/math_constant.xml");
     }
 
     @Test
@@ -60,10 +75,20 @@ public class MathTest {
     }
 
     @Test
+    public void reverseTransformatinNumberProperty() throws Exception {
+        Helper.assertTransformationIsOk("/ast/math/math_number_property.xml");
+    }
+
+    @Test
     public void mathNumberProperty1() throws Exception {
         String a = "BlockAST [project=[[Location [x=64, y=-525], Funct [DIVISIBLE_BY, [NumConst [8], NumConst [5]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_number_property1.xml"));
+    }
+
+    @Test
+    public void reverseTransformatinNumberProperty1() throws Exception {
+        Helper.assertTransformationIsOk("/ast/math/math_number_property1.xml");
     }
 
     @Test
@@ -86,10 +111,20 @@ public class MathTest {
     }
 
     @Test
+    public void reverseTransformationMathRound() throws Exception {
+        Helper.assertTransformationIsOk("/ast/math/math_round.xml");
+    }
+
+    @Test
     public void math_on_list() throws Exception {
         String a = "BlockAST [project=[[Location [x=-25, y=-449], Funct [AVERAGE, [EmptyList []]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_on_list.xml"));
+    }
+
+    @Test
+    public void reverseTransformationMathOnList() throws Exception {
+        Helper.assertTransformationIsOk("/ast/math/math_on_list.xml");
     }
 
     @Test
@@ -100,10 +135,20 @@ public class MathTest {
     }
 
     @Test
+    public void reverseTransformationMathOnConstrain() throws Exception {
+        Helper.assertTransformationIsOk("/ast/math/math_constrain.xml");
+    }
+
+    @Test
     public void math_random_float() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-140, y=265], \nVar [item] := Funct [RANDOM, []]\n]]]";
+        String a = "BlockAST [project=[[Location [x=-140, y=265], \nVar [item] := Funct [RANDOM_FLOAT, []]\n]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_random_float.xml"));
+    }
+
+    @Test
+    public void reverseTransformationMathRandomFloat() throws Exception {
+        Helper.assertTransformationIsOk("/ast/math/math_random_float.xml");
     }
 
     @Test
@@ -114,9 +159,19 @@ public class MathTest {
     }
 
     @Test
+    public void reverseTransformationMathModulo() throws Exception {
+        Helper.assertTransformationIsOk("/ast/math/math_modulo.xml");
+    }
+
+    @Test
     public void math_random_integer() throws Exception {
         String a = "BlockAST [project=[[Location [x=-73, y=616], Funct [RANDOM_INTEGER, [NumConst [1], NumConst [100]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_random_integer.xml"));
+    }
+
+    @Test
+    public void reverseTransformationRandomInteger() throws Exception {
+        Helper.assertTransformationIsOk("/ast/math/math_random_integer.xml");
     }
 }

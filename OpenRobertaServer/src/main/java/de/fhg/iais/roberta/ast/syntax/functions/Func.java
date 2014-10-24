@@ -88,7 +88,7 @@ public class Func<V> extends Expr<V> {
      * @return list of string parameters
      */
     public List<String> getStrParam() {
-        return strParam;
+        return this.strParam;
     }
 
     @Override
@@ -125,6 +125,7 @@ public class Func<V> extends Expr<V> {
         FROM_END( 1, Assoc.LEFT, "FROMEND" ),
         LISTS_REPEAT( 1, Assoc.LEFT ),
         RANDOM_INTEGER( 1, Assoc.LEFT, "RANDOMINTEGER" ),
+        RANDOM_FLOAT( 1, Assoc.LEFT, "RANDOMFLOAT" ),
         RANDOM( 1, Assoc.LEFT ),
         EVEN( 10, Assoc.LEFT ),
         ODD( 10, Assoc.LEFT ),

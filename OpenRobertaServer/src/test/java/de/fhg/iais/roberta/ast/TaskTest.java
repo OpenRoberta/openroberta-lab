@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.ast;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
@@ -34,12 +33,12 @@ public class TaskTest {
         Helper.assertTransformationIsOk("/ast/task/task_mainTask.xml");
     }
 
-    @Ignore
+    @Test
     public void reverseTransformatinActivityTask() throws Exception {
         Helper.assertTransformationIsOk("/ast/task/task_activityTask.xml");
     }
 
-    @Ignore
+    @Test
     public void reverseTransformatinStartActivityTask() throws Exception {
         Helper.assertTransformationIsOk("/ast/task/task_startActivityTask.xml");
     }

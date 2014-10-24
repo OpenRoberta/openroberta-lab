@@ -65,7 +65,6 @@ public class CompilerWorkflow {
         if ( programText == null || programText.trim().equals("") ) {
             return "program not found or program has no blocks";
         }
-        programText = programText.replaceAll("http://www.w3.org/1999/xhtml", "http://de.fhg.iais.roberta.blockly");
         BrickConfiguration brickConfiguration =
             new BrickConfiguration.Builder()
                 .setTrackWidth(13)

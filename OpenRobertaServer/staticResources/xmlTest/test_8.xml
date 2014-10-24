@@ -1,4 +1,4 @@
-<block_set xmlns="http://www.w3.org/1999/xhtml">
+<block_set xmlns="http://de.fhg.iais.roberta.blockly">
   <instance x="-39" y="-1">
     <block type="robControls_start" id="726" deletable="false"></block>
     <block type="controls_if" id="731" inline="false">

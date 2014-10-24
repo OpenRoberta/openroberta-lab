@@ -113,7 +113,6 @@ abstract public class JaxbAstTransformer<V> {
                 elseList = extractStatement(statements, "ELSE");
             } else {
                 Phrase<V> p = extractValue(values, new ExprParam("IF" + i, Boolean.class));
-
                 exprsList.add(convertPhraseToExpr(p));
                 thenList.add(extractStatement(statements, "DO" + i));
             }
@@ -252,14 +251,14 @@ abstract public class JaxbAstTransformer<V> {
         return EmptyExpr.make(param.getDefaultValue());
     }
 
-    private List<Statement> extractStatements(Block block, short numOfStatements) {
+    protected List<Statement> extractStatements(Block block, short numOfStatements) {
         List<Statement> statements;
         statements = block.getStatement();
         Assert.isTrue(statements.size() <= numOfStatements, "Statements size is not less or equal to " + numOfStatements + "!");
         return statements;
     }
 
-    private StmtList<V> extractStatement(List<Statement> statements, String stmtName) {
+    protected StmtList<V> extractStatement(List<Statement> statements, String stmtName) {
         StmtList<V> stmtList = StmtList.make();
         for ( Statement statement : statements ) {
             if ( statement.getName().equals(stmtName) ) {

@@ -68,6 +68,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon.Flow;
@@ -82,6 +83,7 @@ import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
+import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
@@ -120,6 +122,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
         BlocklyBlockProperties properties = extractBlockProperties(block);
 
         List<Value> values;
+        List<Statement> statements;
         List<Field> fields;
         List<ExprParam> exprParams;
         List<String> strParams;
@@ -504,7 +507,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
 
             case "math_random_float":
                 exprParams = new ArrayList<ExprParam>();
-                return blockToFunction(block, exprParams, "RANDOM");
+                return blockToFunction(block, exprParams, "RANDOM_FLOAT");
 
                 // TEXT
             case "text":
@@ -691,12 +694,22 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 }
             case "robControls_wait_for":
             case "robControls_wait":
+                StmtList<V> statement;
                 StmtList<V> list = StmtList.make();
                 int mutation = block.getMutation() == null ? 0 : block.getMutation().getWait().intValue();
-                values = extractValues(block, (short) (mutation + 1));
+                if ( mutation == 0 ) {
+                    values = extractValues(block, (short) (mutation + 1));
+                    statements = extractStatements(block, (short) (mutation + 1));
+                } else {
+                    List<Object> valAndStmt = block.getRepetitions().getValueAndStatement();
+                    values = new ArrayList<Value>();
+                    statements = new ArrayList<Statement>();
+                    convertStmtValList(values, statements, valAndStmt);
+                }
                 for ( int i = 0; i <= mutation; i++ ) {
                     expr = extractValue(values, new ExprParam("WAIT" + i, Boolean.class));
-                    list.addStmt((Stmt<V>) extractRepeatStatement(block, expr, "WAIT", "DO" + i, mutation + 1));
+                    statement = extractStatement(statements, "DO" + i);
+                    list.addStmt(RepeatStmt.make(Mode.WAIT, convertPhraseToExpr(expr), statement, extractBlockProperties(block), extractComment(block)));
                 }
                 list.setReadOnly();
                 return WaitStmt.make(list, properties, comment);

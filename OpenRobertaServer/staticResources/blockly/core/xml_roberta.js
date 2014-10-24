@@ -54,7 +54,7 @@ Blockly.Xml.blockToDom_ = function(block, statement_list) {
         if (mutation) {
             element.appendChild(mutation);
             if (mutation !== undefined && mutation != null
-                    && (block.type == 'controls_if' || block.type == 'robControls_if' || block.type == 'robControls_ifElse')) {
+                    && (block.type == 'controls_if' || block.type == 'robControls_if' || block.type == 'robControls_ifElse' || block.type == 'robControls_wait_for')) {
                 element.appendChild(repetitions);
                 repe = true;
             }
@@ -475,6 +475,7 @@ Blockly.Xml.domToPrettyText = function(dom) {
     // E.g. <foo></foo>
     var text = lines.join('\n');
     text = text.replace(/(<(\w+)\b[^>]*>[^\n]*)\n *<\/\2>/g, '$1</$2>');
+    text = text.replace('http://www.w3.org/1999/xhtml', 'http://de.fhg.iais.roberta.blockly');
     // Trim leading blank line.
     return text.replace(/^\n/, '');
 };
@@ -499,8 +500,10 @@ Blockly.Xml.deleteNext = function(xmlBlock) {
  */
 Blockly.Xml.domToText = function(dom) {
     var oSerializer = new XMLSerializer();
-    return oSerializer.serializeToString(dom);
-};
+    var text = oSerializer.serializeToString(dom);
+    text = text.replace('http://www.w3.org/1999/xhtml', 'http://de.fhg.iais.roberta.blockly');
+    return text
+ };
 
 // Export symbols that would otherwise be renamed by Closure compiler.
 if (!window['Blockly']['Xml']) {

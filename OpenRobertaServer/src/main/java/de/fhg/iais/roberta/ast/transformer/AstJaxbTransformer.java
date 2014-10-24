@@ -28,6 +28,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.functions.Func;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
@@ -52,6 +53,8 @@ import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
+import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
+import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Comment;
 import de.fhg.iais.roberta.blockly.generated.Field;
@@ -67,108 +70,54 @@ public class AstJaxbTransformer<V> {
     public Block astToBlock(Phrase<V> astSource) {
         String fieldValue;
         Phrase<V> value;
-        String blockType;
-        Block jaxbDestination;
+        Block jaxbDestination = new Block();
         Mutation mutation;
+
+        setBasicProperties(astSource, jaxbDestination);
 
         switch ( astSource.getKind() ) {
             case BOOL_CONST:
-                jaxbDestination = new Block();
-
                 fieldValue = String.valueOf(((BoolConst<V>) astSource).isValue()).toUpperCase();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 addField(jaxbDestination, "BOOL", fieldValue);
 
                 return jaxbDestination;
 
             case PICK_COLOR_CONST:
-                jaxbDestination = new Block();
-
                 fieldValue = ((ColorConst<V>) astSource).getValue().getHex();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 addField(jaxbDestination, "COLOUR", fieldValue.toLowerCase());
 
                 return jaxbDestination;
 
             case MATH_CONST:
-                jaxbDestination = new Block();
-
                 fieldValue = ((MathConst<V>) astSource).getMathConst().name();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 addField(jaxbDestination, "CONSTANT", fieldValue);
 
                 return jaxbDestination;
 
             case NULL_CONST:
-                jaxbDestination = new Block();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 return jaxbDestination;
 
             case STRING_CONST:
-                jaxbDestination = new Block();
-
                 fieldValue = ((StringConst<V>) astSource).getValue();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 addField(jaxbDestination, "TEXT", fieldValue);
 
                 return jaxbDestination;
 
             case NUM_CONST:
-                jaxbDestination = new Block();
-
                 fieldValue = ((NumConst<V>) astSource).getValue();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 addField(jaxbDestination, "NUM", fieldValue);
 
                 return jaxbDestination;
 
             case VAR:
-                jaxbDestination = new Block();
-
                 fieldValue = ((Var<V>) astSource).getValue();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 addField(jaxbDestination, "VAR", fieldValue);
 
                 return jaxbDestination;
 
             case UNARY:
-                jaxbDestination = new Block();
-
                 value = ((Unary<V>) astSource).getExpr();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
-                if ( blockType.equals("math_single") ) {
+                if ( astSource.getProperty().getBlockType().equals("math_single") ) {
                     fieldValue = ((Unary<V>) astSource).getOp().name();
                     addField(jaxbDestination, "OP", fieldValue);
                     addValue(jaxbDestination, "NUM", value);
@@ -179,15 +128,9 @@ public class AstJaxbTransformer<V> {
                 return jaxbDestination;
 
             case BINARY:
-                jaxbDestination = new Block();
-
                 Binary<V> binary = (Binary<V>) astSource;
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 switch ( binary.getOp() ) {
+
                     case MATH_CHANGE:
                         addField(jaxbDestination, "VAR", ((Var<V>) binary.getLeft()).getValue());
                         addValue(jaxbDestination, "DELTA", binary.getRight());
@@ -195,6 +138,11 @@ public class AstJaxbTransformer<V> {
                     case TEXT_APPEND:
                         addField(jaxbDestination, "VAR", ((Var<V>) binary.getLeft()).getValue());
                         addValue(jaxbDestination, "TEXT", binary.getRight());
+                        return jaxbDestination;
+
+                    case MOD:
+                        addValue(jaxbDestination, "DIVIDEND", binary.getLeft());
+                        addValue(jaxbDestination, "DIVISOR", binary.getRight());
                         return jaxbDestination;
 
                     default:
@@ -209,34 +157,16 @@ public class AstJaxbTransformer<V> {
                 return astToBlock(((SensorExpr<V>) astSource).getSens());
 
             case EMPTY_LIST:
-                jaxbDestination = new Block();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 return jaxbDestination;
 
             case CLEAR_DISPLAY_ACTION:
-                jaxbDestination = new Block();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 return jaxbDestination;
 
             case DRIVE_ACTION:
-                jaxbDestination = new Block();
-
                 DriveAction<V> driveAction = (DriveAction<V>) astSource;
 
                 fieldValue = driveAction.getDirection().name();
                 value = driveAction.getParam().getSpeed();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
 
                 addField(jaxbDestination, "DIRECTION", fieldValue);
                 addValue(jaxbDestination, "POWER", value);
@@ -248,13 +178,7 @@ public class AstJaxbTransformer<V> {
                 return jaxbDestination;
 
             case LIGHT_ACTION:
-                jaxbDestination = new Block();
-
                 LightAction<V> lightAction = (LightAction<V>) astSource;
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
 
                 addField(jaxbDestination, "SWITCH_COLOR", lightAction.getColor().name());
                 addField(jaxbDestination, "SWITCH_BLINK", lightAction.getBlinkMode().name());
@@ -262,46 +186,22 @@ public class AstJaxbTransformer<V> {
                 return jaxbDestination;
 
             case LIGHT_STATUS_ACTION:
-                jaxbDestination = new Block();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 return jaxbDestination;
 
             case STOP_ACTION:
-                jaxbDestination = new Block();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 return jaxbDestination;
 
             case MOTOR_GET_POWER_ACTION:
-                jaxbDestination = new Block();
 
                 fieldValue = ((MotorGetPowerAction<V>) astSource).getPort().name();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 addField(jaxbDestination, "MOTORPORT", fieldValue);
 
                 return jaxbDestination;
 
             case MOTOR_ON_ACTION:
-                jaxbDestination = new Block();
-
                 MotorOnAction<V> motorOnAction = (MotorOnAction<V>) astSource;
                 fieldValue = motorOnAction.getPort().name();
                 value = motorOnAction.getParam().getSpeed();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
 
                 addField(jaxbDestination, "MOTORPORT", fieldValue);
                 addValue(jaxbDestination, "POWER", value);
@@ -314,15 +214,9 @@ public class AstJaxbTransformer<V> {
                 return jaxbDestination;
 
             case MOTOR_SET_POWER_ACTION:
-                jaxbDestination = new Block();
-
                 MotorSetPowerAction<V> motorSetPowerAction = (MotorSetPowerAction<V>) astSource;
                 fieldValue = motorSetPowerAction.getPort().name();
                 value = motorSetPowerAction.getPower();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
 
                 addField(jaxbDestination, "MOTORPORT", fieldValue);
                 addValue(jaxbDestination, "POWER", value);
@@ -330,42 +224,21 @@ public class AstJaxbTransformer<V> {
                 return jaxbDestination;
 
             case MOTOR_STOP_ACTION:
-                jaxbDestination = new Block();
-
                 MotorStopAction<V> motorStopAction = (MotorStopAction<V>) astSource;
                 fieldValue = motorStopAction.getPort().name();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 addField(jaxbDestination, "MOTORPORT", fieldValue);
                 addField(jaxbDestination, "MODE", motorStopAction.getMode().name());
 
                 return jaxbDestination;
 
             case PLAY_FILE_ACTION:
-                jaxbDestination = new Block();
-
                 fieldValue = ((PlayFileAction<V>) astSource).getFileName();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 addField(jaxbDestination, "FILE", fieldValue);
 
                 return jaxbDestination;
 
             case SHOW_PICTURE_ACTION:
-                jaxbDestination = new Block();
-
                 fieldValue = ((ShowPictureAction<V>) astSource).getPicture().name();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 addField(jaxbDestination, "PICTURE", fieldValue);
                 addValue(jaxbDestination, "X", ((ShowPictureAction<V>) astSource).getX());
                 addValue(jaxbDestination, "Y", ((ShowPictureAction<V>) astSource).getY());
@@ -373,12 +246,6 @@ public class AstJaxbTransformer<V> {
                 return jaxbDestination;
 
             case SHOW_TEXT_ACTION:
-                jaxbDestination = new Block();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 addValue(jaxbDestination, "OUT", ((ShowTextAction<V>) astSource).getMsg());
                 addValue(jaxbDestination, "COL", ((ShowTextAction<V>) astSource).getX());
                 addValue(jaxbDestination, "ROW", ((ShowTextAction<V>) astSource).getY());
@@ -386,27 +253,15 @@ public class AstJaxbTransformer<V> {
                 return jaxbDestination;
 
             case TONE_ACTION:
-                jaxbDestination = new Block();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 addValue(jaxbDestination, "FREQUENCE", ((ToneAction<V>) astSource).getFrequency());
                 addValue(jaxbDestination, "DURATION", ((ToneAction<V>) astSource).getDuration());
 
                 return jaxbDestination;
 
             case TURN_ACTION:
-                jaxbDestination = new Block();
-
                 TurnAction<V> turnAction = (TurnAction<V>) astSource;
                 fieldValue = turnAction.getDirection().name();
                 value = turnAction.getParam().getSpeed();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
 
                 addField(jaxbDestination, "DIRECTION", fieldValue);
                 addValue(jaxbDestination, "POWER", value);
@@ -418,12 +273,6 @@ public class AstJaxbTransformer<V> {
                 return jaxbDestination;
 
             case VOLUME_ACTION:
-                jaxbDestination = new Block();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 if ( ((VolumeAction<V>) astSource).getMode() == VolumeAction.Mode.SET ) {
                     addValue(jaxbDestination, "VOLUME", ((VolumeAction<V>) astSource).getVolume());
                 }
@@ -431,29 +280,14 @@ public class AstJaxbTransformer<V> {
                 return jaxbDestination;
 
             case TOUCH_SENSING:
-                jaxbDestination = new Block();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 fieldValue = ((TouchSensor<V>) astSource).getPort().getPortNumber();
-
                 addField(jaxbDestination, "SENSORPORT", fieldValue);
 
                 return jaxbDestination;
 
             case ULTRASONIC_SENSING:
-                jaxbDestination = new Block();
-
                 UltrasonicSensor<V> ultrasonicSensor = (UltrasonicSensor<V>) astSource;
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 fieldValue = ultrasonicSensor.getPort().getPortNumber();
-
                 addField(jaxbDestination, "SENSORPORT", fieldValue);
                 if ( ultrasonicSensor.getMode() != UltrasonicSensorMode.GET_MODE && ultrasonicSensor.getMode() != UltrasonicSensorMode.GET_SAMPLE ) {
                     addField(jaxbDestination, "MODE", ultrasonicSensor.getMode().name());
@@ -462,16 +296,8 @@ public class AstJaxbTransformer<V> {
                 return jaxbDestination;
 
             case COLOR_SENSING:
-                jaxbDestination = new Block();
-
                 ColorSensor<V> colorSensor = (ColorSensor<V>) astSource;
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 fieldValue = colorSensor.getPort().getPortNumber();
-
                 addField(jaxbDestination, "SENSORPORT", fieldValue);
                 if ( colorSensor.getMode() != ColorSensorMode.GET_MODE && colorSensor.getMode() != ColorSensorMode.GET_SAMPLE ) {
                     addField(jaxbDestination, "MODE", colorSensor.getMode().name());
@@ -480,16 +306,8 @@ public class AstJaxbTransformer<V> {
                 return jaxbDestination;
 
             case INFRARED_SENSING:
-                jaxbDestination = new Block();
-
                 InfraredSensor<V> infraredSensor = (InfraredSensor<V>) astSource;
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 fieldValue = infraredSensor.getPort().getPortNumber();
-
                 addField(jaxbDestination, "SENSORPORT", fieldValue);
                 if ( infraredSensor.getMode() != InfraredSensorMode.GET_MODE && infraredSensor.getMode() != InfraredSensorMode.GET_SAMPLE ) {
                     addField(jaxbDestination, "MODE", infraredSensor.getMode().name());
@@ -498,16 +316,8 @@ public class AstJaxbTransformer<V> {
                 return jaxbDestination;
 
             case ENCODER_SENSING:
-                jaxbDestination = new Block();
-
                 EncoderSensor<V> encoderSensor = (EncoderSensor<V>) astSource;
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 fieldValue = encoderSensor.getMotor().name();
-
                 addField(jaxbDestination, "MOTORPORT", fieldValue);
                 if ( encoderSensor.getMode() == MotorTachoMode.DEGREE || encoderSensor.getMode() == MotorTachoMode.ROTATION ) {
                     addField(jaxbDestination, "MODE", encoderSensor.getMode().name());
@@ -516,29 +326,14 @@ public class AstJaxbTransformer<V> {
                 return jaxbDestination;
 
             case BRICK_SENSIG:
-                jaxbDestination = new Block();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 fieldValue = ((BrickSensor<V>) astSource).getKey().name();
-
                 addField(jaxbDestination, "KEY", fieldValue);
 
                 return jaxbDestination;
 
             case GYRO_SENSIG:
-                jaxbDestination = new Block();
-
                 GyroSensor<V> gyroSensor = (GyroSensor<V>) astSource;
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 fieldValue = gyroSensor.getPort().getPortNumber();
-
                 addField(jaxbDestination, "SENSORPORT", fieldValue);
                 if ( gyroSensor.getMode() == GyroSensorMode.ANGLE || gyroSensor.getMode() == GyroSensorMode.RATE ) {
                     addField(jaxbDestination, "MODE", gyroSensor.getMode().name());
@@ -547,27 +342,12 @@ public class AstJaxbTransformer<V> {
                 return jaxbDestination;
 
             case TIMER_SENSING:
-                jaxbDestination = new Block();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 fieldValue = String.valueOf(((TimerSensor<V>) astSource).getTimer());
-
                 addField(jaxbDestination, "SENSORNUM", fieldValue);
-
                 return jaxbDestination;
 
             case SENSOR_GET_SAMPLE:
-                jaxbDestination = new Block();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 GetSampleSensor<V> getSampleSensor = (GetSampleSensor<V>) astSource;
-
                 mutation = new Mutation();
                 mutation.setInput(getSampleSensor.getSensorType().name());
                 jaxbDestination.setMutation(mutation);
@@ -577,36 +357,27 @@ public class AstJaxbTransformer<V> {
                 return jaxbDestination;
 
             case EXPR_STMT:
-                ExprStmt<V> exprStmt = (ExprStmt<V>) astSource;
-
-                return astToBlock(exprStmt.getExpr());
+                return astToBlock(((ExprStmt<V>) astSource).getExpr());
 
             case AKTION_STMT:
-                ActionStmt<V> actionStmt = (ActionStmt<V>) astSource;
-
-                return astToBlock(actionStmt.getAction());
+                return astToBlock(((ActionStmt<V>) astSource).getAction());
 
             case SENSOR_STMT:
-                SensorStmt<V> sensorStmt = (SensorStmt<V>) astSource;
-
-                return astToBlock(sensorStmt.getSensor());
+                return astToBlock(((SensorStmt<V>) astSource).getSensor());
 
             case IF_STMT:
-                jaxbDestination = new Block();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 IfStmt<V> ifStmt = (IfStmt<V>) astSource;
+                if ( ifStmt.getProperty().getBlockType().equals("logic_ternary") ) {
+                    addValue(jaxbDestination, "IF", ifStmt.getExpr().get(0));
+                    addValue(jaxbDestination, "THEN", ifStmt.getThenList().get(0).get().get(0));
+                    addValue(jaxbDestination, "ELSE", ifStmt.getElseList().get().get(0));
+                    return jaxbDestination;
+                }
                 int _else = ifStmt.get_else();
                 int _elseIf = ifStmt.get_elseIf();
 
                 StmtList<V> elseList = ifStmt.getElseList();
                 int expr = 0;
-
-                boolean repetition = false;
-
                 expr = ifStmt.getExpr().size();
 
                 if ( _else != 0 || _elseIf != 0 ) {
@@ -618,9 +389,6 @@ public class AstJaxbTransformer<V> {
                         mutation.setElseif(BigInteger.valueOf(_elseIf));
                     }
                     jaxbDestination.setMutation(mutation);
-                    repetition = true;
-                }
-                if ( repetition ) {
                     Repetitions repetitions = new Repetitions();
                     for ( int i = 0; i < expr; i++ ) {
                         addValue(repetitions, "IF" + i, ifStmt.getExpr().get(i));
@@ -630,27 +398,19 @@ public class AstJaxbTransformer<V> {
                         addStatement(repetitions, "ELSE", ifStmt.getElseList());
                     }
                     jaxbDestination.setRepetitions(repetitions);
-                } else {
-                    for ( int i = 0; i < expr; i++ ) {
-                        addValue(jaxbDestination, "IF" + i, ifStmt.getExpr().get(i));
-                        addStatement(jaxbDestination, "DO" + i, ifStmt.getThenList().get(i));
-                    }
-                    if ( elseList.get().size() != 0 ) {
-                        addStatement(jaxbDestination, "ELSE", ifStmt.getElseList());
-                    }
+                    return jaxbDestination;
+                }
+
+                addValue(jaxbDestination, "IF0", ifStmt.getExpr().get(0));
+                addStatement(jaxbDestination, "DO0", ifStmt.getThenList().get(0));
+                if ( elseList.get().size() != 0 ) {
+                    addStatement(jaxbDestination, "ELSE", ifStmt.getElseList());
                 }
 
                 return jaxbDestination;
 
             case REPEAT_STMT:
-                jaxbDestination = new Block();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 RepeatStmt<V> repeatStmt = (RepeatStmt<V>) astSource;
-
                 switch ( repeatStmt.getMode() ) {
                     case TIMES:
                         addValue(jaxbDestination, "TIMES", ((Binary<V>) ((ExprList<V>) repeatStmt.getExpr()).get().get(1)).getRight());
@@ -688,46 +448,28 @@ public class AstJaxbTransformer<V> {
                 return jaxbDestination;
 
             case STMT_FLOW_CONTROL:
-                jaxbDestination = new Block();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 addField(jaxbDestination, "FLOW", ((StmtFlowCon<V>) astSource).getFlow().name());
-
                 return jaxbDestination;
 
             case ASSIGN_STMT:
-                jaxbDestination = new Block();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 AssignStmt<V> assignStmt = (AssignStmt<V>) astSource;
-
                 addField(jaxbDestination, "VAR", assignStmt.getName().getValue());
                 addValue(jaxbDestination, "VALUE", assignStmt.getExpr());
 
                 return jaxbDestination;
 
             case WAIT_STMT:
-                jaxbDestination = new Block();
-
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
-
                 WaitStmt<V> waitStmt = (WaitStmt<V>) astSource;
-                int numOfWait = waitStmt.getStatements().get().size();
-                if ( numOfWait > 1 ) {
-                    mutation = new Mutation();
-                    mutation.setWait(BigInteger.valueOf(numOfWait - 1));
-                    jaxbDestination.setMutation(mutation);
-                }
-
                 StmtList<V> waitStmtList = waitStmt.getStatements();
+                int numOfWait = waitStmtList.get().size();
+                if ( numOfWait == 1 ) {
+                    addValue(jaxbDestination, "WAIT0", ((RepeatStmt<V>) waitStmtList.get().get(0)).getExpr());
+                    addStatement(jaxbDestination, "DO0", ((RepeatStmt<V>) waitStmtList.get().get(0)).getList());
+                    return jaxbDestination;
+                }
+                mutation = new Mutation();
+                mutation.setWait(BigInteger.valueOf(numOfWait - 1));
+                jaxbDestination.setMutation(mutation);
                 Repetitions repetitions = new Repetitions();
                 for ( int i = 0; i < numOfWait; i++ ) {
                     addValue(repetitions, "WAIT" + i, ((RepeatStmt<V>) waitStmtList.get().get(i)).getExpr());
@@ -737,13 +479,81 @@ public class AstJaxbTransformer<V> {
                 return jaxbDestination;
 
             case MAIN_TASK:
-                jaxbDestination = new Block();
+                return jaxbDestination;
 
-                blockType = astSource.getProperty().getBlockType();
-                setProperties(astSource, jaxbDestination, blockType);
-                addComment(astSource, jaxbDestination);
+            case ACTIVITY_TASK:
+                addValue(jaxbDestination, "ACTIVITY", ((ActivityTask<V>) astSource).getActivityName());
 
                 return jaxbDestination;
+
+            case START_ACTIVITY_TASK:
+                addValue(jaxbDestination, "ACTIVITY", ((StartActivityTask<V>) astSource).getActivityName());
+                return jaxbDestination;
+
+            case FUNCTIONS:
+                Func<V> funct = (Func<V>) astSource;
+                switch ( funct.getFunctName() ) {
+                    case POWER:
+                        addField(jaxbDestination, "OP", funct.getFunctName().name());
+                        addValue(jaxbDestination, "A", funct.getParam().get(0));
+                        addValue(jaxbDestination, "B", funct.getParam().get(1));
+                        return jaxbDestination;
+
+                    case PRIME:
+                        mutation = new Mutation();
+                        mutation.setDivisorInput(false);
+                        addField(jaxbDestination, "PROPERTY", funct.getFunctName().name());
+                        addValue(jaxbDestination, "NUMBER_TO_CHECK", funct.getParam().get(0));
+                        jaxbDestination.setMutation(mutation);
+                        return jaxbDestination;
+
+                    case DIVISIBLE_BY:
+                        mutation = new Mutation();
+                        mutation.setDivisorInput(true);
+                        addField(jaxbDestination, "PROPERTY", funct.getFunctName().name());
+                        addValue(jaxbDestination, "NUMBER_TO_CHECK", funct.getParam().get(0));
+                        addValue(jaxbDestination, "DIVISOR", funct.getParam().get(1));
+                        jaxbDestination.setMutation(mutation);
+                        return jaxbDestination;
+
+                    case SUM:
+                    case AVERAGE:
+                    case MIN:
+                    case MAX:
+                    case MEDIAN:
+                    case MODE:
+                    case STD_DEV:
+                    case RANDOM:
+                        addField(jaxbDestination, "OP", funct.getFunctName().name());
+                        addValue(jaxbDestination, "LIST", funct.getParam().get(0));
+                        return jaxbDestination;
+
+                    case RANDOM_INTEGER:
+                        addValue(jaxbDestination, "FROM", funct.getParam().get(0));
+                        addValue(jaxbDestination, "TO", funct.getParam().get(1));
+                        return jaxbDestination;
+
+                    case ROUNDUP:
+                    case ROUNDDOWN:
+                    case LN:
+                    case COS:
+                    case ATAN:
+                        addField(jaxbDestination, "OP", funct.getFunctName().name());
+                        addValue(jaxbDestination, "NUM", funct.getParam().get(0));
+                        return jaxbDestination;
+
+                    case CONSTRAIN:
+                        addValue(jaxbDestination, "VALUE", funct.getParam().get(0));
+                        addValue(jaxbDestination, "LOW", funct.getParam().get(1));
+                        addValue(jaxbDestination, "HIGH", funct.getParam().get(2));
+                        return jaxbDestination;
+
+                    case RANDOM_FLOAT:
+                        return jaxbDestination;
+
+                    default:
+                        return null;
+                }
 
             case EMPTY_EXPR:
             case LOCATION:
@@ -752,6 +562,16 @@ public class AstJaxbTransformer<V> {
                 throw new DbcException("Invalid AST object!");
         }
 
+    }
+
+    private void setBasicProperties(Phrase<V> astSource, Block jaxbDestination) {
+        if ( astSource.getProperty() == null ) {
+            return;
+        }
+        String blockType;
+        blockType = astSource.getProperty().getBlockType();
+        setProperties(astSource, jaxbDestination, blockType);
+        addComment(astSource, jaxbDestination);
     }
 
     private List<Block> extractStmtList(Phrase<V> phrase) {

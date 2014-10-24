@@ -91,6 +91,11 @@ public class LogicTest {
     }
 
     @Test
+    public void reverseTransformatinLogicNull() throws Exception {
+        Helper.assertTransformationIsOk("/ast/logic/logic_null.xml");
+    }
+
+    @Test
     public void logic_ternary() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=-12, y=271], \nif Binary [EQ, NumConst [0], NumConst [0]]\n"
@@ -100,5 +105,10 @@ public class LogicTest {
                 + "exprStmt StringConst [3]\n]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/logic/logic_ternary.xml"));
+    }
+
+    @Test
+    public void reverseTransformatinLogicTernary() throws Exception {
+        Helper.assertTransformationIsOk("/ast/logic/logic_ternary.xml");
     }
 }
