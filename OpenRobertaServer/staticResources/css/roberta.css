@@ -577,40 +577,6 @@ table.dataTable {
     color: #33b8ca;
 }
 
-#programNameTable_wrapper > div {
-    height: 30px;
-    padding: 10px;
-    background-color: #fff;
-}
-
-.dataTables_wrapper .dataTables_length {
-    float: left;
-    width: 33%;
-    padding-top: 10px;
-}
-
-.dataTables_wrapper .dataTables_info {
-    clear: none;
-    float: left;
-    padding-top: 10px;
-    text-align: center;
-    width: 33%;
-}
-
-table.dataTable tbody tr.selected {
-    background-color: #d6f0f4;
-}
-
-table.dataTable.no-footer {
-    border-bottom: 1px solid #bbb;
-}
-
-.submit {
-    border: 1px solid #666;
-    color: #333;
-    font-family: "roboto";
-}
-
 /* ############################################################### */
 
 .ui-widget-content {

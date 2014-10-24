@@ -499,7 +499,8 @@ function initHeadNavigation() {
 
     $('#head-navigation').menu({
         position : {
-            my : "left-50 top+47"
+            at : "left top+47",
+            collision : "fit"
         }
     });
 
@@ -545,7 +546,6 @@ function initHeadNavigation() {
     function submenuNepo(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         var domId = event.target.id;
-        console.log('>>> '+domId);
         if (domId === 'toolboxBeginner') {
             loadToolbox('beginner');
             $('#toolboxBeginner').addClass('ui-state-disabled');
