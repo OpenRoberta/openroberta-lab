@@ -1568,6 +1568,7 @@ public class GraphicStartup implements Menu {
 
             isRobertaRegistered = true;
             this.indiBA.setRobertalab(true);
+            LocalEV3.get().getAudio().systemSound(2);
             newScreen(" Robertalab");
             lcd.drawString("Success!", 0, 3);
             Delay.msDelay(2000);
@@ -1587,6 +1588,7 @@ public class GraphicStartup implements Menu {
                         newScreen(" Robertalab");
                         if ( getYesNo("     Confirm", false) == 1 ) {
                             backgroundTasks.disconnectRoberta();
+                            LocalEV3.get().getAudio().systemSound(3);
                             isRobertaRegistered = false;
                             token = null;
                             serverURLString = "";

@@ -60,8 +60,7 @@ public class RobertaTokenRegister implements Runnable {
     }
 
     /**
-     * send token to server, get OK response if registered successfully
-     * TODO refactor with json library instead of string
+     * send token to server, get ok response if registered successfully, else error
      */
     @Override
     public void run() {
@@ -72,8 +71,8 @@ public class RobertaTokenRegister implements Runnable {
             this.httpURLConnection = openConnection(this.serverURL);
 
             JSONObject requestEntity = new JSONObject();
-            requestEntity.put("BrickName", RobertaObserver.getBrickName());
-            requestEntity.put("Token", this.token);
+            requestEntity.put("brickname", RobertaObserver.getBrickName());
+            requestEntity.put("token", this.token);
 
             os = this.httpURLConnection.getOutputStream();
             os.write(requestEntity.toString().getBytes("UTF-8"));
@@ -87,7 +86,11 @@ public class RobertaTokenRegister implements Runnable {
             JSONObject response = new JSONObject(responseStrBuilder.toString());
             System.out.println(response);
 
-            setRegisteredInfo(true);
+            if ( response.get("response").equals("ok") ) {
+                setRegisteredInfo(true);
+            } else {
+                throw new IOException();
+            }
         } catch ( SocketTimeoutException ste ) {
             setTimeOutInfo(true);
             ste.printStackTrace();

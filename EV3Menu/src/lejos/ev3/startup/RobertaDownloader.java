@@ -48,8 +48,8 @@ public class RobertaDownloader implements Runnable {
                     this.httpURLConnection = openConnection(this.serverURL);
 
                     JSONObject requestEntity = new JSONObject();
-                    requestEntity.put("BrickName", RobertaObserver.getBrickName());
-                    requestEntity.put("Token", this.token);
+                    requestEntity.put("brickname", RobertaObserver.getBrickName());
+                    requestEntity.put("token", this.token);
 
                     os = this.httpURLConnection.getOutputStream();
                     os.write(requestEntity.toString().getBytes("UTF-8"));
