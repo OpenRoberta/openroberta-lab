@@ -8,8 +8,9 @@ public class BlocklyBlockProperties implements INepoId {
     private final boolean disabled;
     private final boolean collapsed;
     private final Boolean inline;
+    private final Boolean deletable;
 
-    private BlocklyBlockProperties(String blockType, String blocklyId, boolean disabled, boolean collapsed, Boolean inline) {
+    private BlocklyBlockProperties(String blockType, String blocklyId, boolean disabled, boolean collapsed, Boolean inline, Boolean deletable) {
         super();
         Assert.isTrue(blocklyId != "" && blockType != "");
         this.blockType = blockType;
@@ -17,10 +18,11 @@ public class BlocklyBlockProperties implements INepoId {
         this.disabled = disabled;
         this.collapsed = collapsed;
         this.inline = inline;
+        this.deletable = deletable;
     }
 
-    public static BlocklyBlockProperties of(String blockType, String blocklyId, boolean disabled, boolean collapsed, Boolean inline) {
-        return new BlocklyBlockProperties(blockType, blocklyId, disabled, collapsed, inline);
+    public static BlocklyBlockProperties of(String blockType, String blocklyId, boolean disabled, boolean collapsed, Boolean inline, Boolean deletable) {
+        return new BlocklyBlockProperties(blockType, blocklyId, disabled, collapsed, inline, deletable);
     }
 
     public String getBlockType() {
@@ -41,6 +43,10 @@ public class BlocklyBlockProperties implements INepoId {
 
     public Boolean isInline() {
         return this.inline;
+    }
+
+    public Boolean isDeletable() {
+        return this.deletable;
     }
 
     @Override

@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
-import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
+import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
 
 public class GyroSensorTest {
 
@@ -20,7 +20,7 @@ public class GyroSensorTest {
 
     @Test
     public void getMode() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setGyro.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setGyro.xml");
 
         GyroSensor<Void> cs = (GyroSensor<Void>) transformer.getTree().get(1);
 
@@ -29,7 +29,7 @@ public class GyroSensorTest {
 
     @Test
     public void getPort() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setGyro.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setGyro.xml");
 
         GyroSensor<Void> cs = (GyroSensor<Void>) transformer.getTree().get(1);
 

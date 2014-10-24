@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.action.ShowTextAction;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
-import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
+import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
 
 public class ShowTextActionTest {
 
@@ -17,21 +17,21 @@ public class ShowTextActionTest {
 
     @Test
     public void getMsg() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_ShowText.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_ShowText.xml");
         ShowTextAction<Void> spa = (ShowTextAction<Void>) transformer.getTree().get(1);
         Assert.assertEquals("StringConst [Hallo]", spa.getMsg().toString());
     }
 
     @Test
     public void getX() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_ShowText.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_ShowText.xml");
         ShowTextAction<Void> spa = (ShowTextAction<Void>) transformer.getTree().get(1);
         Assert.assertEquals("NumConst [0]", spa.getX().toString());
     }
 
     @Test
     public void getY() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_ShowText.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_ShowText.xml");
         ShowTextAction<Void> spa = (ShowTextAction<Void>) transformer.getTree().get(1);
         Assert.assertEquals("NumConst [0]", spa.getY().toString());
     }

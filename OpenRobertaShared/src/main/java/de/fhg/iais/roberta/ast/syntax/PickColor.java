@@ -9,21 +9,11 @@ import de.fhg.iais.roberta.dbc.DbcException;
  */
 public enum PickColor {
 
-    RED( 0, "#B30006", "ROT" ),
-    GREEN( 1, "#00642E", "GRÜN" ),
-    BLUE( 2, "#0057A6" ),
-    YELLOW( 3, "#F7D117" ),
-    MAGENTA( 4, "#000000" ),
-    ORANGE( 5, "#000000" ),
-    WHITE( 6, "#FFFFFF", "WEIß", "WEISS" ),
-    BLACK( 7, "#000000" ),
-    PINK( 8, "#000000" ),
-    GRAY( 9, "#000000" ),
-    LIGHT_GRAY( 10, "#000000" ),
-    DARK_GRAY( 11, "#000000" ),
-    CYAN( 12, "#000000" ),
-    BROWN( 13, "#532115" ),
-    NONE( -1, "#585858" );
+    RED( 0, "#B30006", "ROT", "#b30006" ), GREEN( 1, "#00642E", "GRÜN" ), BLUE( 2, "#0057A6" ), YELLOW( 3, "#F7D117" ), MAGENTA( 4, "#000000" ), ORANGE(
+        5,
+        "#000000" ), WHITE( 6, "#FFFFFF", "WEIß", "WEISS", "#ffffff" ), BLACK( 7, "#000000" ), PINK( 8, "#000000" ), GRAY( 9, "#000000" ), LIGHT_GRAY(
+        10,
+        "#000000" ), DARK_GRAY( 11, "#000000" ), CYAN( 12, "#000000" ), BROWN( 13, "#532115" ), NONE( -1, "#585858" );
 
     private final String[] values;
     private final int colorID;
@@ -58,7 +48,7 @@ public enum PickColor {
     /**
      * get {@link PickColor} from string parameter. It is possible for one color to have multiple string mappings.
      * Throws exception if the color cannot be found.
-     * 
+     *
      * @param name of the color
      * @return enum {@link PickColor}
      */

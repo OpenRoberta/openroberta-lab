@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.ast.syntax.action.HardwareComponentType;
 import de.fhg.iais.roberta.ast.syntax.action.MotorSide;
 import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformer;
-import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
+import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
@@ -41,7 +41,7 @@ public class Helper {
      * @throws Exception
      */
     public static String generateStringWithoutWrapping(String pathToProgramXml) throws Exception {
-        JaxbProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
+        JaxbBlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
         BrickConfiguration brickConfiguration =
             new BrickConfiguration.Builder()
                 .addActor(ActorPort.A, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))
@@ -62,7 +62,7 @@ public class Helper {
      * @throws Exception
      */
     public static String generateString(String pathToProgramXml, BrickConfiguration brickConfiguration) throws Exception {
-        JaxbProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
+        JaxbBlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
         String code = AstToLejosJavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), true);
         System.out.println(code);
         return code;
@@ -75,9 +75,9 @@ public class Helper {
      * @return jaxb transformer
      * @throws Exception
      */
-    public static JaxbProgramTransformer<Void> generateTransformer(String pathToProgramXml) throws Exception {
+    public static JaxbBlocklyProgramTransformer<Void> generateTransformer(String pathToProgramXml) throws Exception {
         BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
-        JaxbProgramTransformer<Void> transformer = new JaxbProgramTransformer<>();
+        JaxbBlocklyProgramTransformer<Void> transformer = new JaxbBlocklyProgramTransformer<>();
         transformer.transform(project);
         return transformer;
     }
@@ -102,7 +102,7 @@ public class Helper {
      */
     public static <V> List<Phrase<V>> generateASTs(String pathToProgramXml) throws Exception {
         BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
-        JaxbProgramTransformer<V> transformer = new JaxbProgramTransformer<V>();
+        JaxbBlocklyProgramTransformer<V> transformer = new JaxbBlocklyProgramTransformer<V>();
         transformer.transform(project);
         List<Phrase<V>> tree = transformer.getTree();
         return tree;
@@ -114,7 +114,7 @@ public class Helper {
     }
 
     public static void assertTransformationIsOk(String fileName) throws Exception {
-        JaxbProgramTransformer<Void> transformer = generateTransformer(fileName);
+        JaxbBlocklyProgramTransformer<Void> transformer = generateTransformer(fileName);
 
         AstJaxbTransformer<Void> astTransformer = new AstJaxbTransformer<>();
         JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);

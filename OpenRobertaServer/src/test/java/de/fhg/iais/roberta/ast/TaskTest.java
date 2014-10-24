@@ -27,4 +27,20 @@ public class TaskTest {
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/task/task_startActivityTask.xml"));
     }
+
+    @Test
+    public void reverseTransformatinMainTask() throws Exception {
+        Helper.assertTransformationIsOk("/ast/task/task_mainTask.xml");
+    }
+
+    @Test
+    public void reverseTransformatinActivityTask() throws Exception {
+        Helper.assertTransformationIsOk("/ast/task/task_activityTask.xml");
+    }
+
+    @Test
+    public void reverseTransformatinStartActivityTask() throws Exception {
+        Helper.assertTransformationIsOk("/ast/task/task_startActivityTask.xml");
+    }
+
 }

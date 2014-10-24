@@ -6,7 +6,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
-import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
+import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
 
 public class MotorOnActionTest {
 
@@ -19,14 +19,14 @@ public class MotorOnActionTest {
 
     @Test
     public void getParam() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_MotorOnFor.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_MotorOnFor.xml");
         MotorOnAction<Void> mo = (MotorOnAction<Void>) transformer.getTree().get(1);
         Assert.assertEquals("MotionParam [speed=NumConst [30], duration=MotorDuration [type=ROTATIONS, value=NumConst [1]]]", mo.getParam().toString());
     }
 
     @Test
     public void getPort() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_MotorOnFor.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_MotorOnFor.xml");
         MotorOnAction<Void> mo = (MotorOnAction<Void>) transformer.getTree().get(1);
         Assert.assertEquals(ActorPort.B, mo.getPort());
     }

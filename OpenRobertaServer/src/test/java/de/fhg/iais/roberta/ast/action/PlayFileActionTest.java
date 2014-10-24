@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.action.PlayFileAction;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
-import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
+import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
 
 public class PlayFileActionTest {
 
@@ -17,7 +17,7 @@ public class PlayFileActionTest {
 
     @Test
     public void getFileName() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_PlayFile.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_PlayFile.xml");
         PlayFileAction<Void> pfa = (PlayFileAction<Void>) transformer.getTree().get(1);
         Assert.assertEquals("1", pfa.getFileName());
     }

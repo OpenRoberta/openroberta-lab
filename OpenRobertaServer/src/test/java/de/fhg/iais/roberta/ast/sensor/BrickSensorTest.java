@@ -7,7 +7,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickKey;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
-import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
+import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
 
 public class BrickSensorTest {
 
@@ -19,14 +19,14 @@ public class BrickSensorTest {
 
     @Test
     public void getKey() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_brick1.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_brick1.xml");
         BrickSensor<Void> bs = (BrickSensor<Void>) transformer.getTree().get(1);
         Assert.assertEquals(BrickKey.ENTER, bs.getKey());
     }
 
     @Test
     public void getMode() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_brick1.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_brick1.xml");
         BrickSensor<Void> bs = (BrickSensor<Void>) transformer.getTree().get(1);
         Assert.assertEquals(BrickSensor.Mode.IS_PRESSED, bs.getMode());
     }

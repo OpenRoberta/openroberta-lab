@@ -6,7 +6,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.ast.syntax.action.TurnAction;
 import de.fhg.iais.roberta.ast.syntax.action.TurnDirection;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
-import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
+import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
 
 public class TurnActionTest {
 
@@ -19,14 +19,14 @@ public class TurnActionTest {
 
     @Test
     public void getDirection() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_MotorDiffTurnFor.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_MotorDiffTurnFor.xml");
         TurnAction<Void> ta = (TurnAction<Void>) transformer.getTree().get(1);
         Assert.assertEquals(TurnDirection.RIGHT, ta.getDirection());
     }
 
     @Test
     public void getParam() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_MotorDiffTurnFor.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_MotorDiffTurnFor.xml");
         TurnAction<Void> ta = (TurnAction<Void>) transformer.getTree().get(1);
         Assert.assertEquals("MotionParam [speed=NumConst [50], duration=MotorDuration [type=DEGREE, value=NumConst [20]]]", ta.getParam().toString());
     }

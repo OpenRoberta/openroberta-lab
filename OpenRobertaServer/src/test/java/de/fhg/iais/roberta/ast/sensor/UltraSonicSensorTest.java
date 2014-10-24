@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensorMode;
-import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
+import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
 
 public class UltraSonicSensorTest {
 
@@ -21,7 +21,7 @@ public class UltraSonicSensorTest {
 
     @Test
     public void getMode() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setUltrasonic.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setUltrasonic.xml");
 
         UltrasonicSensor<Void> cs = (UltrasonicSensor<Void>) transformer.getTree().get(1);
 
@@ -30,7 +30,7 @@ public class UltraSonicSensorTest {
 
     @Test
     public void getPort() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setUltrasonic.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setUltrasonic.xml");
 
         UltrasonicSensor<Void> cs = (UltrasonicSensor<Void>) transformer.getTree().get(1);
 

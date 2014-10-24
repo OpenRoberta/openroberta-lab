@@ -6,7 +6,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
-import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
+import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
 
 public class BoolConstTest {
 
@@ -19,21 +19,21 @@ public class BoolConstTest {
 
     @Test
     public void isValue() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/logic/logic_boolConst.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/logic/logic_boolConst.xml");
         BoolConst<Void> boolConst = (BoolConst<Void>) transformer.getTree().get(1);
         Assert.assertEquals(true, boolConst.isValue());
     }
 
     @Test
     public void getPresedance() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/logic/logic_boolConst.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/logic/logic_boolConst.xml");
         BoolConst<Void> boolConst = (BoolConst<Void>) transformer.getTree().get(1);
         Assert.assertEquals(999, boolConst.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/logic/logic_boolConst.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/logic/logic_boolConst.xml");
         BoolConst<Void> boolConst = (BoolConst<Void>) transformer.getTree().get(1);
         Assert.assertEquals(Assoc.NONE, boolConst.getAssoc());
     }

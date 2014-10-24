@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.action.VolumeAction;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
-import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
+import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
 
 public class VolumeActionTest {
 
@@ -17,14 +17,14 @@ public class VolumeActionTest {
 
     @Test
     public void getVolume() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_SetVolume.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_SetVolume.xml");
         VolumeAction<Void> va = (VolumeAction<Void>) transformer.getTree().get(1);
         Assert.assertEquals("NumConst [50]", va.getVolume().toString());
     }
 
     @Test
     public void getMode() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_SetVolume.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_SetVolume.xml");
         VolumeAction<Void> va = (VolumeAction<Void>) transformer.getTree().get(1);
         Assert.assertEquals(VolumeAction.Mode.SET, va.getMode());
     }

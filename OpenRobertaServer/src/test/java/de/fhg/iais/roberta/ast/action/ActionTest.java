@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
-import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
+import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 
@@ -52,7 +52,7 @@ public class ActionTest {
     @Test
     public void blockException() throws Exception {
         BlockSet project = JaxbHelper.path2BlockSet("/ast/actions/action_Exception.xml");
-        JaxbProgramTransformer<?> transformer = new JaxbProgramTransformer<>();
+        JaxbBlocklyProgramTransformer<?> transformer = new JaxbBlocklyProgramTransformer<>();
         try {
             transformer.transform(project);
             Assert.fail();
@@ -63,7 +63,7 @@ public class ActionTest {
 
     @Test
     public void disabledComment() throws Exception {
-        JaxbProgramTransformer<Void> t = Helper.generateTransformer("/ast/actions/action_DisabledComment.xml");
+        JaxbBlocklyProgramTransformer<Void> t = Helper.generateTransformer("/ast/actions/action_DisabledComment.xml");
 
         Assert.assertEquals(true, t.getTree().get(2).getProperty().isDisabled());
         Assert.assertEquals("h#,,", t.getTree().get(1).getComment().getComment());

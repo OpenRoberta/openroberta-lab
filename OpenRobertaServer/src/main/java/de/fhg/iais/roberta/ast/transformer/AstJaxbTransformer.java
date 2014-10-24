@@ -69,6 +69,7 @@ public class AstJaxbTransformer<V> {
         Phrase<V> value;
         String blockType;
         Block jaxbDestination;
+        Mutation mutation;
 
         switch ( astSource.getKind() ) {
             case BOOL_CONST:
@@ -93,7 +94,7 @@ public class AstJaxbTransformer<V> {
                 setProperties(astSource, jaxbDestination, blockType);
                 addComment(astSource, jaxbDestination);
 
-                addField(jaxbDestination, "COLOUR", fieldValue);
+                addField(jaxbDestination, "COLOUR", fieldValue.toLowerCase());
 
                 return jaxbDestination;
 
@@ -567,6 +568,9 @@ public class AstJaxbTransformer<V> {
 
                 GetSampleSensor<V> getSampleSensor = (GetSampleSensor<V>) astSource;
 
+                mutation = new Mutation();
+                mutation.setInput(getSampleSensor.getSensorType().name());
+                jaxbDestination.setMutation(mutation);
                 addField(jaxbDestination, "SENSORTYPE", getSampleSensor.getSensorType().name());
                 addField(jaxbDestination, getSampleSensor.getSensorType().getPortTypeName(), getSampleSensor.getSensorPort());
 
@@ -606,7 +610,7 @@ public class AstJaxbTransformer<V> {
                 expr = ifStmt.getExpr().size();
 
                 if ( _else != 0 || _elseIf != 0 ) {
-                    Mutation mutation = new Mutation();
+                    mutation = new Mutation();
                     if ( _else != 0 ) {
                         mutation.setElse(BigInteger.ONE);
                     }
@@ -718,17 +722,27 @@ public class AstJaxbTransformer<V> {
                 WaitStmt<V> waitStmt = (WaitStmt<V>) astSource;
                 int numOfWait = waitStmt.getStatements().get().size();
                 if ( numOfWait > 1 ) {
-                    Mutation mutation = new Mutation();
+                    mutation = new Mutation();
                     mutation.setWait(BigInteger.valueOf(numOfWait - 1));
                     jaxbDestination.setMutation(mutation);
                 }
 
                 StmtList<V> waitStmtList = waitStmt.getStatements();
+                Repetitions repetitions = new Repetitions();
                 for ( int i = 0; i < numOfWait; i++ ) {
-                    addValue(jaxbDestination, "WAIT" + i, ((RepeatStmt<V>) waitStmtList.get().get(i)).getExpr());
-                    addStatement(jaxbDestination, "DO" + i, ((RepeatStmt<V>) waitStmtList.get().get(i)).getList());
-
+                    addValue(repetitions, "WAIT" + i, ((RepeatStmt<V>) waitStmtList.get().get(i)).getExpr());
+                    addStatement(repetitions, "DO" + i, ((RepeatStmt<V>) waitStmtList.get().get(i)).getList());
                 }
+                jaxbDestination.setRepetitions(repetitions);
+                return jaxbDestination;
+
+            case MAIN_TASK:
+                jaxbDestination = new Block();
+
+                blockType = astSource.getProperty().getBlockType();
+                setProperties(astSource, jaxbDestination, blockType);
+                addComment(astSource, jaxbDestination);
+
                 return jaxbDestination;
 
             case EMPTY_EXPR:
@@ -801,6 +815,7 @@ public class AstJaxbTransformer<V> {
         setDisabled(astObject, block);
         setCollapsed(astObject, block);
         setInline(astObject, block);
+        setDeletable(astObject, block);
     }
 
     private void setInline(Phrase<V> astObject, Block block) {
@@ -818,6 +833,12 @@ public class AstJaxbTransformer<V> {
     private void setDisabled(Phrase<V> astObject, Block block) {
         if ( astObject.getProperty().isDisabled() ) {
             block.setDisabled(astObject.getProperty().isDisabled());
+        }
+    }
+
+    private void setDeletable(Phrase<V> astObject, Block block) {
+        if ( astObject.getProperty().isDeletable() != null ) {
+            block.setDeletable(astObject.getProperty().isDeletable());
         }
     }
 

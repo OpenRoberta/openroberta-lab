@@ -89,7 +89,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
 /**
  * JAXB to AST transformer. Client should provide tree of jaxb objects.
  */
-public class JaxbProgramTransformer<V> extends JaxbAstTransformer<V> {
+public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
 
     private int variable_counter = 0;
 

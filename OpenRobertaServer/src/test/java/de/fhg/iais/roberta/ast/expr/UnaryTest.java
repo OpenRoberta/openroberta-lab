@@ -6,7 +6,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
-import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
+import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 public class UnaryTest {
@@ -20,35 +20,35 @@ public class UnaryTest {
 
     @Test
     public void getOp() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
         Unary<Void> unary = (Unary<Void>) transformer.getTree().get(1);
         Assert.assertEquals(Unary.Op.NEG, unary.getOp());
     }
 
     @Test
     public void getExpr() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
         Unary<Void> unary = (Unary<Void>) transformer.getTree().get(1);
         Assert.assertEquals("NumConst [10]", unary.getExpr().toString());
     }
 
     @Test
     public void getPresedance() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
         Unary<Void> unary = (Unary<Void>) transformer.getTree().get(1);
         Assert.assertEquals(10, unary.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
         Unary<Void> unary = (Unary<Void>) transformer.getTree().get(1);
         Assert.assertEquals(Assoc.LEFT, unary.getAssoc());
     }
 
     @Test
     public void getOpSymbol() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_single1.xml");
         Unary<Void> unary = (Unary<Void>) transformer.getTree().get(1);
         Assert.assertEquals("-", unary.getOp().getOpSymbol());
     }

@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
-import de.fhg.iais.roberta.ast.transformer.JaxbProgramTransformer;
+import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
 
 public class ColorSensorTest {
 
@@ -21,7 +21,7 @@ public class ColorSensorTest {
 
     @Test
     public void getMode() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setColor.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setColor.xml");
 
         ColorSensor<Void> cs = (ColorSensor<Void>) transformer.getTree().get(1);
 
@@ -30,7 +30,7 @@ public class ColorSensorTest {
 
     @Test
     public void getPort() throws Exception {
-        JaxbProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setColor.xml");
+        JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setColor.xml");
 
         ColorSensor<Void> cs = (ColorSensor<Void>) transformer.getTree().get(1);
 
