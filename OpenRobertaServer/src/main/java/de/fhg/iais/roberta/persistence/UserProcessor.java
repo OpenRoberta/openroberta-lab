@@ -1,12 +1,12 @@
 package de.fhg.iais.roberta.persistence;
 
-import de.fhg.iais.roberta.javaServer.resources.OpenRobertaSessionState;
+import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
 import de.fhg.iais.roberta.persistence.bo.User;
-import de.fhg.iais.roberta.persistence.connector.SessionWrapper;
+import de.fhg.iais.roberta.persistence.connector.DbSession;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
 
 public class UserProcessor extends AbstractProcessor {
-    public UserProcessor(SessionWrapper dbSession, OpenRobertaSessionState httpSessionState) {
+    public UserProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
         super(dbSession, httpSessionState);
     }
 

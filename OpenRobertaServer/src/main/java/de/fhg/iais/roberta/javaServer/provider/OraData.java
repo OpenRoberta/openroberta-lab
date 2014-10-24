@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
     ElementType.PARAMETER
 })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface OraSessionState {
+public @interface OraData {
 }

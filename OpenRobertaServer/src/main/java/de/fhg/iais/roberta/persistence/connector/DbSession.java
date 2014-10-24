@@ -17,8 +17,8 @@ import de.fhg.iais.roberta.dbc.Assert;
  *
  * @author rbudde
  */
-public class SessionWrapper {
-    private static final Logger LOG = LoggerFactory.getLogger(SessionWrapper.class);
+public class DbSession {
+    private static final Logger LOG = LoggerFactory.getLogger(DbSession.class);
     private Session session;
 
     /**
@@ -26,7 +26,7 @@ public class SessionWrapper {
      *
      * @param session the hibernate session to be wrapped
      */
-    SessionWrapper(Session session) {
+    DbSession(Session session) {
         LOG.debug("open session + start transaction");
         this.session = session;
         this.session.beginTransaction();

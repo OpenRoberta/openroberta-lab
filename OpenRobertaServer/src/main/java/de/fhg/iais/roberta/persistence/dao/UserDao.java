@@ -7,7 +7,7 @@ import org.hibernate.Query;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.persistence.bo.Role;
 import de.fhg.iais.roberta.persistence.bo.User;
-import de.fhg.iais.roberta.persistence.connector.SessionWrapper;
+import de.fhg.iais.roberta.persistence.connector.DbSession;
 
 public class UserDao extends AbstractDao<User> {
     /**
@@ -16,7 +16,7 @@ public class UserDao extends AbstractDao<User> {
      * @param session the session used to access the database.
      */
 
-    public UserDao(SessionWrapper session) {
+    public UserDao(DbSession session) {
         super(User.class, session);
     }
 

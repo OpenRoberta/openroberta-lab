@@ -48,11 +48,11 @@ public final class SessionFactoryWrapper {
      *
      * @return the session-wrapper, never null
      */
-    public SessionWrapper getSession() {
+    public DbSession getSession() {
         Assert.notNull(this.sessionFactory, "previous attempt to initialize the session factory failed");
         Session session = this.sessionFactory.openSession();
         Assert.notNull(session, "creation of session failed");
-        return new SessionWrapper(session);
+        return new DbSession(session);
     }
 
     /**

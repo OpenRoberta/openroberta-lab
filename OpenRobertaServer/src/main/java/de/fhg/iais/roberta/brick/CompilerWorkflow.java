@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.persistence.connector.SessionWrapper;
+import de.fhg.iais.roberta.persistence.connector.DbSession;
 
 public class CompilerWorkflow {
 
@@ -48,7 +48,7 @@ public class CompilerWorkflow {
      * @param configurationName the hardware configuration that is expected to have been used when assembling the brick
      * @return a message in case of an error; null otherwise
      */
-    public static String execute(SessionWrapper session, String token, String programName, String programText, String configurationText) {
+    public static String execute(DbSession session, String token, String programName, String programText, String configurationText) {
         if ( programText == null || programText.trim().equals("") ) {
             return "program not found or program has no blocks";
         }

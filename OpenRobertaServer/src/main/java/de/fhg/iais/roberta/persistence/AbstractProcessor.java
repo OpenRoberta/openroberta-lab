@@ -3,20 +3,20 @@ package de.fhg.iais.roberta.persistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fhg.iais.roberta.javaServer.resources.OpenRobertaSessionState;
-import de.fhg.iais.roberta.persistence.connector.SessionWrapper;
+import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
+import de.fhg.iais.roberta.persistence.connector.DbSession;
 import de.fhg.iais.roberta.util.Util;
 
 public abstract class AbstractProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractProcessor.class);
 
-    protected final SessionWrapper dbSession;
-    protected final OpenRobertaSessionState httpSessionState;
+    protected final DbSession dbSession;
+    protected final HttpSessionState httpSessionState;
 
     private boolean successful;
     private String message;
 
-    protected AbstractProcessor(SessionWrapper dbSession, OpenRobertaSessionState httpSessionState) {
+    protected AbstractProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
         this.dbSession = dbSession;
         this.httpSessionState = httpSessionState;
     }

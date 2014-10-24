@@ -8,7 +8,7 @@ import org.hibernate.Query;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.persistence.bo.Program;
 import de.fhg.iais.roberta.persistence.bo.User;
-import de.fhg.iais.roberta.persistence.connector.SessionWrapper;
+import de.fhg.iais.roberta.persistence.connector.DbSession;
 
 /**
  * DAO class to load and store programs objects. A DAO object is always bound to a session. This session defines the transactional context, in which the
@@ -22,7 +22,7 @@ public class ProgramDao extends AbstractDao<Program> {
      *
      * @param session the session used to access the database.
      */
-    public ProgramDao(SessionWrapper session) {
+    public ProgramDao(DbSession session) {
         super(Program.class, session);
     }
 

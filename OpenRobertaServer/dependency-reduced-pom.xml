@@ -152,6 +152,12 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>xmlunit</groupId>
+      <artifactId>xmlunit</artifactId>
+      <version>1.4</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-all</artifactId>
       <version>1.9.5</version>
@@ -190,6 +196,18 @@
         <exclusion>
           <artifactId>webbit</artifactId>
           <groupId>org.webbitserver</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.skyscreamer</groupId>
+      <artifactId>jsonassert</artifactId>
+      <version>1.2.3</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>json</artifactId>
+          <groupId>org.json</groupId>
         </exclusion>
       </exclusions>
     </dependency>

@@ -5,14 +5,25 @@ import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ClientLogger
-{
+public class ClientLogger {
     private static final Logger LOG = LoggerFactory.getLogger(ClientLogger.class);
+    private static final boolean SHORT_LOG = true;
 
     public ClientLogger() {
     }
 
-    public int log(JSONObject request) {
+    public int log(Logger forRequest, JSONObject request) {
+        try {
+            if ( forRequest.isDebugEnabled() ) {
+                if ( SHORT_LOG ) {
+                    forRequest.debug("first 120 char of request: " + request.toString().substring(0, 120));
+                } else {
+                    forRequest.debug("request: " + request);
+                }
+            }
+        } catch ( Exception e ) {
+            LOG.info("Exception caught when the request JSONObject was logged", e);
+        }
         int logLength = 0;
         try {
             JSONArray logs = request.getJSONArray("log");
@@ -26,10 +37,9 @@ public class ClientLogger
             if ( msg.indexOf("JSONObject[\"log\"]") != -1 ) {
                 LOG.error("the request JSONObject has either no 'log' property or its value is no JSONArray");
             } else {
-                LOG.info("Exception caught when the request JSONObject was processed", e);
+                LOG.info("Exception caught when the client payload of the request JSONObject was logged", e);
             }
         }
         return logLength;
     }
-
 }

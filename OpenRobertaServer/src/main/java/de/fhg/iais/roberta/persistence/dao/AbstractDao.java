@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.persistence.dao;
 
 import de.fhg.iais.roberta.persistence.bo.WithSurrogateId;
-import de.fhg.iais.roberta.persistence.connector.SessionWrapper;
+import de.fhg.iais.roberta.persistence.connector.DbSession;
 
 /**
  * parent class for all DAO classes, that load and store business objects. This class contains convenience methods, that may be called from DAO classes
@@ -11,9 +11,9 @@ import de.fhg.iais.roberta.persistence.connector.SessionWrapper;
  */
 public abstract class AbstractDao<T> {
     private Class<T> type;
-    protected SessionWrapper session;
+    protected DbSession session;
 
-    public AbstractDao(Class<T> type, SessionWrapper session) {
+    public AbstractDao(Class<T> type, DbSession session) {
         this.type = type;
         this.session = session;
     }

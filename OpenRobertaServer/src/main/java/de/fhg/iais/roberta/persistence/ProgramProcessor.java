@@ -5,16 +5,16 @@ import java.util.List;
 
 import org.codehaus.jettison.json.JSONArray;
 
-import de.fhg.iais.roberta.javaServer.resources.OpenRobertaSessionState;
+import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
 import de.fhg.iais.roberta.persistence.bo.Program;
 import de.fhg.iais.roberta.persistence.bo.User;
-import de.fhg.iais.roberta.persistence.connector.SessionWrapper;
+import de.fhg.iais.roberta.persistence.connector.DbSession;
 import de.fhg.iais.roberta.persistence.dao.ProgramDao;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.util.Util;
 
 public class ProgramProcessor extends AbstractProcessor {
-    public ProgramProcessor(SessionWrapper dbSession, OpenRobertaSessionState httpSessionState) {
+    public ProgramProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
         super(dbSession, httpSessionState);
     }
 

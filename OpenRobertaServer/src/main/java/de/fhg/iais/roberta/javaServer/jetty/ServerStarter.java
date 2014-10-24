@@ -19,7 +19,7 @@ import com.sun.jersey.spi.container.servlet.ServletContainer;
 
 import de.fhg.iais.roberta.guice.RobertaGuiceServletConfig;
 import de.fhg.iais.roberta.persistence.connector.SessionFactoryWrapper;
-import de.fhg.iais.roberta.persistence.connector.SessionWrapper;
+import de.fhg.iais.roberta.persistence.connector.DbSession;
 import de.fhg.iais.roberta.persistence.dao.ProgramDao;
 
 /**
@@ -81,7 +81,7 @@ public class ServerStarter {
             e.printStackTrace();
         }
 
-        SessionWrapper session = robertaGuiceServletConfig.getCreatedInjector().getInstance(SessionFactoryWrapper.class).getSession();
+        DbSession session = robertaGuiceServletConfig.getCreatedInjector().getInstance(SessionFactoryWrapper.class).getSession();
         ProgramDao projectDao = new ProgramDao(session);
         int numberOfPrograms = projectDao.loadAll().size();
         LOG.info("There are " + numberOfPrograms + " programs stored in the database");
