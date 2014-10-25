@@ -18,8 +18,8 @@ import com.google.inject.servlet.GuiceFilter;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 
 import de.fhg.iais.roberta.guice.RobertaGuiceServletConfig;
-import de.fhg.iais.roberta.persistence.connector.SessionFactoryWrapper;
 import de.fhg.iais.roberta.persistence.connector.DbSession;
+import de.fhg.iais.roberta.persistence.connector.SessionFactoryWrapper;
 import de.fhg.iais.roberta.persistence.dao.ProgramDao;
 
 /**
@@ -35,7 +35,7 @@ import de.fhg.iais.roberta.persistence.dao.ProgramDao;
  */
 public class ServerStarter {
     private static final Logger LOG = LoggerFactory.getLogger(ServerStarter.class);
-    private static final int PORT = 1999;
+    private static final int PORT = 1999; // 8080 is a good choice for public deployments :-)
 
     /**
      * startup and shutdown. See {@link ServerStarter}
