@@ -16,7 +16,8 @@ public class ClientLogger {
         try {
             if ( forRequest.isDebugEnabled() ) {
                 if ( SHORT_LOG ) {
-                    forRequest.debug("first 120 char of request: " + request.toString().substring(0, 120));
+                    String requestString = request.toString();
+                    forRequest.debug("first 120 char of request: " + requestString.substring(0, Math.min(120, requestString.length())));
                 } else {
                     forRequest.debug("request: " + request);
                 }
@@ -24,14 +25,16 @@ public class ClientLogger {
         } catch ( Exception e ) {
             LOG.info("Exception caught when the request JSONObject was logged", e);
         }
-        int logLength = 0;
         try {
             JSONArray logs = request.getJSONArray("log");
-            logLength = logs.length();
-            for ( int i = 0; i < logLength; i++ ) {
-                LOG.info("log entry: " + logs.getString(i));
+            int logLength = logs.length();
+            if ( logLength > 0 ) {
+                for ( int i = 0; i < logLength; i++ ) {
+                    LOG.info("log entry: " + logs.getString(i));
+                }
+                LOG.info(logLength + (logLength == 1 ? " log entry" : " log entries") + " written");
             }
-            LOG.info(logLength + (logLength == 1 ? " log entry" : " log entries") + " written");
+            return logLength;
         } catch ( Exception e ) {
             String msg = e.getMessage();
             if ( msg.indexOf("JSONObject[\"log\"]") != -1 ) {
@@ -39,7 +42,7 @@ public class ClientLogger {
             } else {
                 LOG.info("Exception caught when the client payload of the request JSONObject was logged", e);
             }
+            return 0;
         }
-        return logLength;
     }
 }

@@ -5,7 +5,6 @@ import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.tools.ant.BuildEvent;
-import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.BuildListener;
 import org.apache.tools.ant.ProjectHelper;
 import org.slf4j.Logger;
@@ -25,6 +24,7 @@ import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
+import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.persistence.connector.DbSession;
 
@@ -32,15 +32,15 @@ public class CompilerWorkflow {
 
     private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflow.class);
     public final String pathToCrosscompilerBaseDir;
-    public final String pathToCrossCompilerBuildXML;
+    public final String pathToCrossCompilerBuildXMLResource;
 
     @Inject
     public CompilerWorkflow(
         @Named("crosscompiler.basedir") String pathToCrosscompilerBaseDir,
-        @Named("crosscompiler.build.xml") String pathToCrossCompilerBuildXML) //
+        @Named("crosscompiler.build.xml") String pathToCrossCompilerBuildXMLResource) //
     {
         this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
-        this.pathToCrossCompilerBuildXML = pathToCrossCompilerBuildXML;
+        this.pathToCrossCompilerBuildXMLResource = pathToCrossCompilerBuildXMLResource;
     }
 
     /**
@@ -82,7 +82,7 @@ public class CompilerWorkflow {
             return "blocks could not be transformed (message: " + e.getMessage() + ")";
         }
         String javaCode = AstToLejosJavaVisitor.generate(programName, brickConfiguration, transformer.getTree(), true);
-        // LOG.debug("to be compiled:\n{}", javaCode); // TODO: not so exhaustive logging
+        // LOG.info("to be compiled:\n{}", javaCode); // TODO: not so exhaustive logging
         try {
             storeGeneratedProgram(token, programName, javaCode);
         } catch ( Exception e ) {
@@ -124,58 +124,62 @@ public class CompilerWorkflow {
      * @param token
      * @param mainFile
      * @param mainPackage
+     * @throws Exception
      */
     void runBuild(String token, String mainFile, String mainPackage) {
-
-        File buildFile = new File(this.pathToCrossCompilerBuildXML);
-        org.apache.tools.ant.Project project = new org.apache.tools.ant.Project();
-
-        project.init();
-        project.setProperty("user.projects.dir", this.pathToCrosscompilerBaseDir);
-        project.setProperty("token.dir", token);
-        project.setProperty("main.name", mainFile);
-        project.setProperty("main.package", mainPackage);
-
-        ProjectHelper projectHelper = ProjectHelper.getProjectHelper();
-        projectHelper.parse(project, buildFile);
-
         final StringBuilder sb = new StringBuilder();
-        project.addBuildListener(new BuildListener() {
-            @Override
-            public void taskStarted(BuildEvent event) {
-            }
-
-            @Override
-            public void taskFinished(BuildEvent event) {
-            }
-
-            @Override
-            public void targetStarted(BuildEvent event) {
-                sb.append(event.getTarget().getName()).append("\n");
-            }
-
-            @Override
-            public void targetFinished(BuildEvent event) {
-            }
-
-            @Override
-            public void messageLogged(BuildEvent event) {
-                sb.append(event.getMessage()).append("\n");
-            }
-
-            @Override
-            public void buildStarted(BuildEvent event) {
-            }
-
-            @Override
-            public void buildFinished(BuildEvent event) {
-            }
-        });
         try {
+            File buildFile = new File(this.pathToCrossCompilerBuildXMLResource);
+            org.apache.tools.ant.Project project = new org.apache.tools.ant.Project();
+
+            project.init();
+            project.setProperty("user.projects.dir", this.pathToCrosscompilerBaseDir);
+            project.setProperty("token.dir", token);
+            project.setProperty("main.name", mainFile);
+            project.setProperty("main.package", mainPackage);
+
+            ProjectHelper projectHelper = ProjectHelper.getProjectHelper();
+            projectHelper.parse(project, buildFile);
+
+            project.addBuildListener(new BuildListener() {
+                @Override
+                public void taskStarted(BuildEvent event) {
+                }
+
+                @Override
+                public void taskFinished(BuildEvent event) {
+                }
+
+                @Override
+                public void targetStarted(BuildEvent event) {
+                    sb.append(event.getTarget().getName()).append("\n");
+                }
+
+                @Override
+                public void targetFinished(BuildEvent event) {
+                }
+
+                @Override
+                public void messageLogged(BuildEvent event) {
+                    sb.append(event.getMessage()).append("\n");
+                }
+
+                @Override
+                public void buildStarted(BuildEvent event) {
+                }
+
+                @Override
+                public void buildFinished(BuildEvent event) {
+                }
+            });
             project.executeTarget(project.getDefaultTarget());
-        } catch ( BuildException e ) {
-            LOG.error("build exception. Stacktrace is suppressed. Messages from build script are:\n" + sb.toString());
-            throw e;
+        } catch ( Exception e ) {
+            if ( sb.length() > 0 ) {
+                LOG.error("build exception. Stacktrace is suppressed. Messages from build script are:\n" + sb.toString());
+            } else {
+                LOG.error("exception when preparing the build", e);
+            }
+            throw new DbcException("build exception", e);
         }
     }
 

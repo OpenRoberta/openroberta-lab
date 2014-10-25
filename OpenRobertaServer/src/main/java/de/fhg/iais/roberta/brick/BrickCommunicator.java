@@ -27,10 +27,7 @@ public class BrickCommunicator {
     }
 
     public boolean iAmABrickAndWantATokenToBeAgreedUpon(String token) {
-        synchronized ( BrickCommunicator.class ) {
-            Assert.isTrue(this.allStates.get(token) == null, "token already used. New token required.");
-        }
-
+        Assert.isTrue(this.allStates.get(token) == null, "token already used. New token required.");
         TokenRegistrationData newTokenRegData = new TokenRegistrationData();
         TokenRegistrationData oldTokenRegData = this.openTokenAgreementRequest.put(token, newTokenRegData);
         if ( oldTokenRegData != null ) {

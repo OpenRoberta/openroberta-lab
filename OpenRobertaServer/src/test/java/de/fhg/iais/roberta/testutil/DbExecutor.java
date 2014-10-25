@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.util;
+package de.fhg.iais.roberta.testutil;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -14,24 +14,24 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.dbc.Assert;
 
-public class DB {
-    private static Logger LOG = LoggerFactory.getLogger(DB.class);
+public class DbExecutor {
+    private static Logger LOG = LoggerFactory.getLogger(DbExecutor.class);
 
     private final Session session;
 
-    public static DB make(Session session) {
-        return new DB(session);
+    public static DbExecutor make(Session session) {
+        return new DbExecutor(session);
     }
 
-    private DB(Session session) {
+    private DbExecutor(Session session) {
         this.session = session;
     }
 
-    public void executeSqlFile(String pathToSqlStmtFile) throws Exception {
-        executeSqlFile(new FileInputStream(pathToSqlStmtFile));
+    public void sqlFile(String pathToSqlStmtFile) throws Exception {
+        sqlFile(new FileInputStream(pathToSqlStmtFile));
     }
 
-    public void executeSqlFile(InputStream sqlStmtFileStream) {
+    public void sqlFile(InputStream sqlStmtFileStream) {
         String line = "";
         int count = 0;
         try {
@@ -50,7 +50,7 @@ public class DB {
                         // leeres stmt
                     } else {
                         count++;
-                        executeSqlStmt(sqlStmt);
+                        sqlStmt(sqlStmt);
                     }
                     this.session.flush();
                     sb = new StringBuilder();
@@ -74,22 +74,22 @@ public class DB {
         }
     }
 
-    public void executeSqlStmt(String sqlStmt) {
+    public void sqlStmt(String sqlStmt) {
         if ( isSelect(sqlStmt) ) {
             LOG.debug("SQL: " + sqlStmt);
-            executeSelect(sqlStmt);
+            select(sqlStmt);
         } else if ( isChange(sqlStmt) ) {
             LOG.debug("UPD: " + sqlStmt);
-            executeUpdateWithCommit(sqlStmt);
+            updateWithCommit(sqlStmt);
         } else if ( isDDL(sqlStmt) ) {
             LOG.debug("DDL: " + sqlStmt);
-            executeDDLWithCommit(sqlStmt);
+            ddlWithCommit(sqlStmt);
         } else {
             LOG.error("Ignored: " + sqlStmt);
         }
     }
 
-    public List<Object[]> executeSelect(String sqlStmt) {
+    public List<Object[]> select(String sqlStmt) {
         @SuppressWarnings("unchecked")
         List<Object[]> resultSet = this.session.createSQLQuery(sqlStmt).list();
         LOG.debug("got " + resultSet.size() + " rows");
@@ -103,7 +103,7 @@ public class DB {
         return resultSet;
     }
 
-    public Object executeOneValueSelect(String sqlStmt) {
+    public Object oneValueSelect(String sqlStmt) {
         @SuppressWarnings("unchecked")
         List<Object> resultSet = this.session.createSQLQuery(sqlStmt).list();
         Assert.isTrue(resultSet.size() == 1);
@@ -112,7 +112,7 @@ public class DB {
         return result;
     }
 
-    public int executeUpdateWithCommit(String sqlStmt) {
+    public int updateWithCommit(String sqlStmt) {
         this.session.beginTransaction();
         int result = this.session.createSQLQuery(sqlStmt).executeUpdate();
         LOG.debug("rows affected: " + result);
@@ -120,7 +120,7 @@ public class DB {
         return result;
     }
 
-    public void executeDDLWithCommit(String sqlStmt) {
+    public void ddlWithCommit(String sqlStmt) {
         this.session.beginTransaction();
         int result = this.session.createSQLQuery(sqlStmt).executeUpdate();
         this.session.getTransaction().commit();
