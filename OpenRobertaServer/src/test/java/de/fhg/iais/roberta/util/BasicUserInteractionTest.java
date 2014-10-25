@@ -169,8 +169,8 @@ public class BasicUserInteractionTest {
 
         // user "pid" registers the robot with token "garzi" (and optionally many more ...); runs "p1"
         registerToken(this.brickCommunicator, this.restBlocks, this.s1, this.sessionFactoryWrapper.getSession(), "garzi");
-        this.response = this.restProgram.command(this.s1, mkD("{'cmd':'runP';'name':'p1'}"));
-        assertEntityRc(this.response, "ok");
+        // this.response = this.restProgram.command(this.s1, mkD("{'cmd':'runP';'name':'p1'}"));
+        // assertEntityRc(this.response, "ok");
     }
 
     private int getOneInt(String sqlStmt) {

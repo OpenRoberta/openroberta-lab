@@ -130,7 +130,7 @@ public class BasicPerformanceUserInteractionTest {
         HttpSessionState s = HttpSessionState.init();
         assertTrue(!s.isUserLoggedIn());
 
-        // USER table empty; create user "pid" with success; USER table has 1 row; create same user with error; create second user "minscha"
+        // create user "pid-*" with success
         thinkTimeInMillisec += think(random, 1, 4);
         Response response =
             this.restUser.command(s, this.sessionFactoryWrapper.getSession(), mkD("{'cmd':'createUser';'accountName':'pid-"
@@ -140,7 +140,7 @@ public class BasicPerformanceUserInteractionTest {
                 + "';'userEmail':'cavy@home';'role':'STUDENT'}"));
         assertEntityRc(response, "ok");
 
-        // login with user "pid", create 3 programs; p1 is a REAL program that may be compiled
+        // login with user "pid", create 2 programs
         thinkTimeInMillisec += think(random, 2, 6);
         response = //
             this.restUser.command( //
