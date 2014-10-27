@@ -504,15 +504,8 @@ function initHeadNavigation() {
         }
     });
 
-    $('#head-navigation').onWrap('click', '#head-navigation-connection:not(.ui-state-disabled)', function() {
-        $("#set-token").dialog("open");
-    });
-
-    $('#head-navigation').onWrap('click', '#head-navigation-readme:not(.ui-state-disabled)', function() {
-        $('#tabReadme').click();
-    });
-
-    function submenuProgram(event) {
+    // Submenu Program
+    $('#head-navigation').onWrap('click', '#submenu-program > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         var domId = event.target.id;
         if (domId === 'run') {
@@ -521,7 +514,7 @@ function initHeadNavigation() {
             checkProgram();
         } else if (domId === 'new') {
             initProgramEnvironment();
-            setProgram("Mein Programm");
+            setProgram("meinProgramm");
         } else if (domId === 'open') {
             $('#loadFromListing').css('display', 'block');
             $('#deleteFromListing').css('display', 'none');
@@ -540,10 +533,10 @@ function initHeadNavigation() {
         } else if (domId === 'properties') {
         }
         return false;
-    }
-    $('#head-navigation').onWrap('click', '#submenu-program > li:not(.ui-state-disabled)', submenuProgram, 'sub menu of menu "program"');
+    }, 'sub menu of menu "program"');
     
-    function submenuNepo(event) {
+    // Submenu Nepo
+    $('#head-navigation').onWrap('click', '#submenu-nepo > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         var domId = event.target.id;
         if (domId === 'toolboxBeginner') {
@@ -556,10 +549,10 @@ function initHeadNavigation() {
             $('#toolboxBeginner').removeClass('ui-state-disabled');
         }
         return false;
-    }
-    $('#head-navigation').onWrap('click', '#submenu-nepo > li:not(.ui-state-disabled)', submenuNepo, 'sub menu of menu "nepo"');
+    }, 'sub menu of menu "nepo"');
     
-    function submenuConfiguration(event) {
+    // Submenu Roboter (Configuration)
+    $('#head-navigation').onWrap('click', '#submenu-configuration > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         var domId = event.target.id;
         if (domId === 'check') {
@@ -572,18 +565,19 @@ function initHeadNavigation() {
         } else if (domId === 'properties') {
         }
         return false;
-    }
-    $('#head-navigation').onWrap('click', '#submenu-configuration > li:not(.ui-state-disabled)', submenuConfiguration, 'sub menu of menu "configuration"');
+    }, 'sub menu of menu "roboter" ("configuration")');
     
+    // Submenu Connection
     $('#head-navigation').onWrap('click', '#submenu-connection > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         var domId = event.target.id;
-        if (domId === 'token') {
+        if (domId === 'connect') {
             $("#set-token").dialog("open");
         }
         return false;
-    });
+    }, 'sub menu of menu "connection"');
 
+    // Submenu Developertools
     $('#head-navigation').onWrap('click', '#submenu-developertools > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         var domId = event.target.id;
@@ -593,8 +587,19 @@ function initHeadNavigation() {
             $('#tabSimtest').click();
         }
         return false;
-    });
+    }, 'sub menu of menu "developertools"');
 
+    // Submenu Readme
+    $('#head-navigation').onWrap('click', '#submenu-readme > li:not(.ui-state-disabled)', function(event) {
+        $(".ui-dialog-content").dialog("close"); // close all opened popups
+        var domId = event.target.id;
+        if (domId === 'readme') {
+            $('#tabReadme').click();
+        }
+        return false;
+    }, 'sub menu of menu "readme"');
+
+    // Submenu Login
     $('#head-navigation').onWrap('click', '#submenu-login > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         var domId = event.target.id;
@@ -609,9 +614,9 @@ function initHeadNavigation() {
             $("#delete-user").dialog("open");
         }
         return false;
-    });
+    }, 'sub menu of menu "login"');
 
-    // Close submenu when Mouseleave-Event is triggered
+    // Close submenu on mouseleave
     $('#head-navigation').on('mouseleave', function(event) {
         $('#head-navigation').menu("collapseAll", null, false);
     });
@@ -722,7 +727,7 @@ function init() {
     initPopups();
     initHeadNavigation();
     initProgramNameTable();
-    setProgram("Mein Programm");
+    setProgram("meinProgramm");
 
     // =============================================================================
 
