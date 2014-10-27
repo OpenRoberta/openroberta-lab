@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.util;
 
 import static de.fhg.iais.roberta.testutil.JSONUtil.assertEntityRc;
 import static de.fhg.iais.roberta.testutil.JSONUtil.assertJsonEquals;
+import static de.fhg.iais.roberta.testutil.JSONUtil.downloadJar;
 import static de.fhg.iais.roberta.testutil.JSONUtil.mkD;
 import static de.fhg.iais.roberta.testutil.JSONUtil.registerToken;
 import static org.junit.Assert.assertEquals;
@@ -21,14 +22,15 @@ import org.junit.Test;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
-import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.brick.BrickCommunicator;
 import de.fhg.iais.roberta.brick.CompilerWorkflow;
 import de.fhg.iais.roberta.brick.Templates;
+import de.fhg.iais.roberta.javaServer.resources.DownloadJar;
 import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
 import de.fhg.iais.roberta.javaServer.resources.RestBlocks;
 import de.fhg.iais.roberta.javaServer.resources.RestProgram;
 import de.fhg.iais.roberta.javaServer.resources.RestUser;
+import de.fhg.iais.roberta.javaServer.resources.TokenReceiver;
 import de.fhg.iais.roberta.persistence.connector.SessionFactoryWrapper;
 import de.fhg.iais.roberta.testutil.DbExecutor;
 
@@ -36,15 +38,19 @@ public class BasicUserInteractionTest {
     private SessionFactoryWrapper sessionFactoryWrapper;
     private DbExecutor dbExecutor;
     private BrickCommunicator brickCommunicator;
+    private String crosscompilerBasedir;
     private CompilerWorkflow compilerWorkflow;
 
-    RestUser restUser;
-    RestProgram restProgram;
-    RestBlocks restBlocks;
+    private RestUser restUser;
+    private RestProgram restProgram;
+    private RestBlocks restBlocks;
+    private DownloadJar downloadJar;
+    private TokenReceiver tokenReceiver;
 
     private Response response;
     private HttpSessionState s1;
     private HttpSessionState s2;
+    private String blocklyProgram;
 
     @Before
     public void setup() throws Exception {
@@ -53,14 +59,17 @@ public class BasicUserInteractionTest {
         this.dbExecutor = DbExecutor.make(session);
         this.dbExecutor.sqlFile("db/create-tables.sql");
         this.brickCommunicator = new BrickCommunicator();
-        String tempDirectory = Files.createTempDirectory("userProjects").toString() + "/";
         String buildXml = "../OpenRobertaRuntime/build.xml";
-        this.compilerWorkflow = new CompilerWorkflow(tempDirectory, buildXml);
+        this.crosscompilerBasedir = Files.createTempDirectory("userProjects").toString() + "/";
+        this.compilerWorkflow = new CompilerWorkflow(this.crosscompilerBasedir, buildXml);
         this.restUser = new RestUser();
         this.restProgram = new RestProgram(this.sessionFactoryWrapper, this.brickCommunicator, this.compilerWorkflow);
         this.restBlocks = new RestBlocks(new Templates(), this.brickCommunicator);
+        this.downloadJar = new DownloadJar(this.brickCommunicator, this.crosscompilerBasedir);
+        this.tokenReceiver = new TokenReceiver(this.brickCommunicator);
         this.s1 = HttpSessionState.init();
         this.s2 = HttpSessionState.init();
+        this.blocklyProgram = Resources.toString(BasicPerformanceUserInteractionTest.class.getResource("/ast/actions/action_BrickLight.xml"), Charsets.UTF_8);
     }
 
     @Test
@@ -108,9 +117,8 @@ public class BasicUserInteractionTest {
         assertTrue(this.s1.isUserLoggedIn() && !this.s2.isUserLoggedIn());
         int s1Id = this.s1.getUserId();
         assertEquals(0, getOneInt("select count(*) from PROGRAM where OWNER_ID = " + s1Id));
-        String programP1 = Resources.toString(Helper.class.getResource("/ast/actions/action_BrickLight.xml"), Charsets.UTF_8);
         JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"saveP\";\"name\":\"p1\"}}");
-        fullRequest.getJSONObject("data").put("program", programP1);
+        fullRequest.getJSONObject("data").put("program", this.blocklyProgram);
         this.response = this.restProgram.command(this.s1, fullRequest);
         assertEntityRc(this.response, "ok");
         this.response = this.restProgram.command(this.s1, mkD("{'cmd':'saveP';'name':'p2';'program':'<program>.2.</program>'}"));
@@ -168,9 +176,8 @@ public class BasicUserInteractionTest {
         assertJsonEquals("['p1','p2','p3','p4']", programNames, false);
 
         // user "pid" registers the robot with token "garzi" (and optionally many more ...); runs "p1"
-        registerToken(this.brickCommunicator, this.restBlocks, this.s1, this.sessionFactoryWrapper.getSession(), "garzi");
-        // this.response = this.restProgram.command(this.s1, mkD("{'cmd':'runP';'name':'p1'}"));
-        // assertEntityRc(this.response, "ok");
+        registerToken(this.tokenReceiver, this.restBlocks, this.s1, this.sessionFactoryWrapper.getSession(), "garzi");
+        downloadJar(this.downloadJar, this.restProgram, this.s1, "garzi", "p1");
     }
 
     private int getOneInt(String sqlStmt) {

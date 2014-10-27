@@ -9,9 +9,11 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.skyscreamer.jsonassert.JSONAssert;
 
-import de.fhg.iais.roberta.brick.BrickCommunicator;
+import de.fhg.iais.roberta.javaServer.resources.DownloadJar;
 import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
 import de.fhg.iais.roberta.javaServer.resources.RestBlocks;
+import de.fhg.iais.roberta.javaServer.resources.RestProgram;
+import de.fhg.iais.roberta.javaServer.resources.TokenReceiver;
 import de.fhg.iais.roberta.persistence.connector.DbSession;
 
 public class JSONUtil {
@@ -73,7 +75,7 @@ public class JSONUtil {
     }
 
     public static void registerToken(
-        final BrickCommunicator brickCommunicator,
+        final TokenReceiver tokenReceiver,
         final RestBlocks restBlocks,
         final HttpSessionState sessionState,
         final DbSession dbSession,
@@ -81,8 +83,9 @@ public class JSONUtil {
     {
         ThreadedFunction theBrick = new ThreadedFunction() {
             @Override
-            public boolean apply() {
-                return brickCommunicator.iAmABrickAndWantATokenToBeAgreedUpon(token);
+            public boolean apply() throws Exception {
+                Response response = tokenReceiver.handle(mk("{'token':'" + token + "'}"));
+                return ((JSONObject) response.getEntity()).getString("response").equals("ok");
             }
         };
         ThreadedFunction theUser = new ThreadedFunction() {
@@ -90,6 +93,31 @@ public class JSONUtil {
             public boolean apply() throws Exception {
                 Response response = restBlocks.command(sessionState, dbSession, mkD("{'cmd':'setToken';'token':'" + token + "'}"));
                 return ((JSONObject) response.getEntity()).getString("rc").equals("ok");
+            }
+        };
+        new SenderReceiverJUnit().run(theBrick, theUser);
+    }
+
+    public static void downloadJar(
+        final DownloadJar downloadJar,
+        final RestProgram restProgram,
+        final HttpSessionState sessionState,
+        final String token,
+        final String programName) throws Exception //
+    {
+        ThreadedFunction theBrick = new ThreadedFunction() {
+            @Override
+            public boolean apply() throws Exception {
+                Response response = downloadJar.handle(mk("{'token':'" + token + "'}")); // potentially an infinite wait
+                return response.getStatus() == 200;
+            }
+        };
+        ThreadedFunction theUser = new ThreadedFunction() {
+            @Override
+            public boolean apply() throws Exception {
+                Response response = restProgram.command(sessionState, mkD("{'cmd':'runP';'name':'" + programName + "'}"));
+                JSONObject entity = (JSONObject) response.getEntity();
+                return entity.getString("rc").equals("ok") && entity.getString("data").equals("Brick is waiting");
             }
         };
         new SenderReceiverJUnit().run(theBrick, theUser);
