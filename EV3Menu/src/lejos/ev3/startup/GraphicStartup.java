@@ -171,7 +171,7 @@ public class GraphicStartup implements Menu {
     private static final int maxSleepTime = 10;
 
     // Threads
-    private final IndicatorThread ind = new IndicatorThread();
+    public final IndicatorThread ind = new IndicatorThread();
     private final BatteryIndicator indiBA = new BatteryIndicator();
     private final PipeReader pipeReader = new PipeReader();
     private final RConsole rcons = new RConsole();
@@ -1485,48 +1485,48 @@ public class GraphicStartup implements Menu {
 
         if ( GraphicStartup.isRobertaRegistered == false ) {
             File file = new File("/home/lejos/programs/serverIP.txt");
-            if ( file.exists() ) {
+            if ( !file.exists() ) {
+                PrintWriter pw = null;
                 try {
-                    BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-                    String temp = bufferedReader.readLine();
-                    lcd.drawString("use last IP?", 0, 1);
-                    lcd.drawString(temp, 0, 2);
-                    if ( getYesNo("     Confirm", false) == 1 ) {
-                        serverURLString = temp;
-                    } else {
-                        newScreen(" Enter IP");
-                        while ( serverURLString.equals("") ) {
-                            serverURLString = new IpAddressKeyboard().getString();
-                            try {
-                                if ( file.exists() ) {
-                                    file.delete();
-                                }
-                                PrintWriter pw = new PrintWriter("/home/lejos/programs/serverIP.txt");
-                                pw.println(serverURLString);
-                                pw.close();
-                            } catch ( FileNotFoundException e ) {
-                                return;
-                            }
-                        }
-                    }
-                } catch ( IOException e ) {
-                    e.printStackTrace();
+                    file.delete();
+                    pw = new PrintWriter(file);
+                    pw.println("");
+                } catch ( FileNotFoundException e ) {
+                    // ok
+                } finally {
+                    pw.close();
                 }
-            } else {
-                newScreen(" Enter IP");
-                while ( serverURLString.equals("") ) {
+            }
+
+            try {
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+                String temp = bufferedReader.readLine();
+                bufferedReader.close();
+                if ( temp.equals("") ) {
+                    temp = "none";
+                }
+                lcd.drawString("use last IP?", 0, 1);
+                lcd.drawString(temp, 0, 2);
+                if ( getYesNo("     Confirm", false) == 1 ) {
+                    serverURLString = temp;
+                } else {
+                    newScreen(" Enter IP");
                     serverURLString = new IpAddressKeyboard().getString();
-                    try {
-                        if ( file.exists() ) {
+                    if ( !serverURLString.equals("") ) {
+                        try {
                             file.delete();
+                            PrintWriter pw2 = new PrintWriter(file);
+                            pw2.println(serverURLString);
+                            pw2.close();
+                        } catch ( FileNotFoundException e ) {
+                            return;
                         }
-                        PrintWriter pw = new PrintWriter("/home/lejos/programs/serverIP.txt");
-                        pw.println(serverURLString);
-                        pw.close();
-                    } catch ( FileNotFoundException e ) {
+                    } else {
                         return;
                     }
                 }
+            } catch ( IOException e ) {
+                e.printStackTrace();
             }
             //serverURLString = "10.0.1.11:1999";
 
@@ -1534,7 +1534,9 @@ public class GraphicStartup implements Menu {
                 serverTokenRessource = new URL("http://" + serverURLString + "/token");
                 serverDownloadRessource = new URL("http://" + serverURLString + "/download");
             } catch ( MalformedURLException e ) {
-                return;
+                lcd.refresh();
+                lcd.drawString("invalid URL", 0, 2);
+                Button.waitForAnyPress();
             }
 
             token = new RobertaTokenGenerator().generateToken(8);
