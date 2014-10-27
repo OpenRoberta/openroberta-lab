@@ -154,7 +154,7 @@ public class BrickConfiguration {
 
     /**
      * Check if the motor is regulated. Client must provide valid {@link ActorPort}.
-     * 
+     *
      * @param port on which the motor is connected
      * @return if the motor is regulated
      */
@@ -177,13 +177,13 @@ public class BrickConfiguration {
      * @return port on which the left motor is connected
      */
     public ActorPort getLeftMotorPort() {
-        if ( getActorA().getMotorSide() == MotorSide.LEFT ) {
+        if ( getActorA() != null && getActorA().getMotorSide() == MotorSide.LEFT ) {
             return ActorPort.A;
-        } else if ( getActorB().getMotorSide() == MotorSide.LEFT ) {
+        } else if ( getActorB() != null && getActorB().getMotorSide() == MotorSide.LEFT ) {
             return ActorPort.B;
-        } else if ( getActorC().getMotorSide() == MotorSide.LEFT ) {
+        } else if ( getActorC() != null && getActorC().getMotorSide() == MotorSide.LEFT ) {
             return ActorPort.C;
-        } else if ( getActorD().getMotorSide() == MotorSide.LEFT ) {
+        } else if ( getActorD() != null && getActorD().getMotorSide() == MotorSide.LEFT ) {
             return ActorPort.D;
         }
         throw new DbcException("No left motor defined");
@@ -193,13 +193,13 @@ public class BrickConfiguration {
      * @return port on which the right motor is connected
      */
     public ActorPort getRightMotorPort() {
-        if ( getActorA().getMotorSide() == MotorSide.RIGHT ) {
+        if ( getActorA() != null && getActorA().getMotorSide() == MotorSide.RIGHT ) {
             return ActorPort.A;
-        } else if ( getActorB().getMotorSide() == MotorSide.RIGHT ) {
+        } else if ( getActorB() != null && getActorB().getMotorSide() == MotorSide.RIGHT ) {
             return ActorPort.B;
-        } else if ( getActorC().getMotorSide() == MotorSide.RIGHT ) {
+        } else if ( getActorC() != null && getActorC().getMotorSide() == MotorSide.RIGHT ) {
             return ActorPort.C;
-        } else if ( getActorD().getMotorSide() == MotorSide.RIGHT ) {
+        } else if ( getActorD() != null && getActorD().getMotorSide() == MotorSide.RIGHT ) {
             return ActorPort.D;
         }
         throw new DbcException("No right motor defined");
@@ -218,7 +218,7 @@ public class BrickConfiguration {
 
         /**
          * Add actor to the {@link BrickConfiguration}
-         * 
+         *
          * @param port on which the component is connected
          * @param component we want to connect
          * @return
@@ -230,7 +230,7 @@ public class BrickConfiguration {
 
         /**
          * Client must provide list of {@link Pair} ({@link ActorPort} and {@link HardwareComponent})
-         * 
+         *
          * @param actors we want to connect to the brick configuration
          * @return
          */
@@ -243,7 +243,7 @@ public class BrickConfiguration {
 
         /**
          * Add sensor to the {@link BrickConfiguration}
-         * 
+         *
          * @param port on which the component is connected
          * @param component we want to connect
          * @return
@@ -255,7 +255,7 @@ public class BrickConfiguration {
 
         /**
          * Client must provide list of {@link Pair} ({@link SensorPort} and {@link HardwareComponent})
-         * 
+         *
          * @param sensors we want to connect to the brick configuration
          * @return
          */
@@ -268,7 +268,7 @@ public class BrickConfiguration {
 
         /**
          * Set the wheel diameter
-         * 
+         *
          * @param wheelDiameter in cm
          * @return
          */
@@ -279,7 +279,7 @@ public class BrickConfiguration {
 
         /**
          * Set the track width
-         * 
+         *
          * @param trackWidth in cm
          * @return
          */
