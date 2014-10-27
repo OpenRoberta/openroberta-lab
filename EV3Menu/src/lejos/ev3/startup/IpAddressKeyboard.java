@@ -29,7 +29,7 @@ public class IpAddressKeyboard
                        ".:                ",
                        "                  ",
                        "                  ",
-                       "x D           " };
+                       "x D c         " };
 
     String[] lines = this.upper;
 
@@ -118,6 +118,8 @@ public class IpAddressKeyboard
                         break;
                     case 'D':
                         return sb.toString();
+                    case 'c':
+                        return "";
                     }
                 }
             }
