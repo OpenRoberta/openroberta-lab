@@ -59,7 +59,7 @@ public class SenderReceiverJUnit {
         Future<?> receiverFuture = executorService.submit(theReceiverThread);
         Future<?> senderFuture = executorService.submit(theSenderThread);
         try {
-            receiverFuture.get(10000, TimeUnit.MILLISECONDS);
+            receiverFuture.get(1000000, TimeUnit.MILLISECONDS);
         } catch ( TimeoutException e ) {
             Assert.fail("Timeout of receiver");
         }
