@@ -512,7 +512,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
         boolean isDuration = turnAction.getParam().getDuration() != null;
-        boolean isRegulated = this.brickConfiguration.getActorA().isRegulated();
+        boolean isRegulated = this.brickConfiguration.getActorB().isRegulated();
         String methodName = "hal.rotateDirection" + (isDuration ? "Angle" : isRegulated ? "Regulated" : "Unregulated") + "(";
         this.sb.append(methodName);
         this.sb.append(this.brickConfiguration.getLeftMotorPort().getJavaCode() + ", ");

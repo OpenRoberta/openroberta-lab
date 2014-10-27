@@ -44,6 +44,31 @@ public class MathTest {
     }
 
     @Test
+    public void mathSingle2() throws Exception {
+        String a = "BlockAST [project=[[Location [x=-667, y=112], Unary [NEG, NumConst [0]]]]]";
+
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_single2.xml"));
+    }
+
+    @Test
+    public void reverseTransformatinSingle2() throws Exception {
+        Helper.assertTransformationIsOk("/ast/math/math_single2.xml");
+    }
+
+    @Test
+    public void mathSingle3() throws Exception {
+        String a =
+            "BlockAST [project=[[Location [x=13, y=-6], Funct [ROOT, [NumConst [0]]], Location [x=11, y=43], Funct [ABS, [NumConst [0]]], Location [x=18, y=104], Unary [NEG, NumConst [0]], Location [x=20, y=164], Funct [LN, [NumConst [0]]], Location [x=22, y=233], Funct [LOG10, [NumConst [0]]], Location [x=17, y=304], Funct [EXP, [NumConst [0]]], Location [x=19, y=364], Funct [POW10, [NumConst [0]]]]]]";
+
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_single3.xml"));
+    }
+
+    @Test
+    public void reverseTransformatinSingle3() throws Exception {
+        Helper.assertTransformationIsOk("/ast/math/math_single3.xml");
+    }
+
+    @Test
     public void mathTrig() throws Exception {
         String a = "BlockAST [project=[[Location [x=41, y=-491], Funct [ATAN, [Funct [LN, [Funct [POWER, [NumConst [5], NumConst [8]]]]]]]]]]";
 
@@ -53,6 +78,19 @@ public class MathTest {
     @Test
     public void reverseTransformatinTrig() throws Exception {
         Helper.assertTransformationIsOk("/ast/math/math_trig.xml");
+    }
+
+    @Test
+    public void mathTrig1() throws Exception {
+        String a =
+            "BlockAST [project=[[Location [x=-15, y=173], Funct [SIN, [NumConst [0]]], Location [x=5, y=213], Funct [COS, [NumConst [0]]], Location [x=25, y=253], Funct [TAN, [NumConst [0]]], Location [x=45, y=293], Funct [ASIN, [NumConst [0]]], Location [x=65, y=333], Funct [ACOS, [NumConst [0]]], Location [x=85, y=373], Funct [ATAN, [NumConst [0]]]]]]";
+
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_trig1.xml"));
+    }
+
+    @Test
+    public void reverseTransformatinTrig1() throws Exception {
+        Helper.assertTransformationIsOk("/ast/math/math_trig1.xml");
     }
 
     @Test

@@ -533,11 +533,20 @@ public class AstJaxbTransformer<V> {
                         addValue(jaxbDestination, "TO", funct.getParam().get(1));
                         return jaxbDestination;
 
+                    case ABS:
+                    case ROOT:
                     case ROUNDUP:
                     case ROUNDDOWN:
                     case LN:
+                    case SIN:
                     case COS:
+                    case TAN:
+                    case ASIN:
                     case ATAN:
+                    case ACOS:
+                    case LOG10:
+                    case EXP:
+                    case POW10:
                         addField(jaxbDestination, "OP", funct.getFunctName().name());
                         addValue(jaxbDestination, "NUM", funct.getParam().get(0));
                         return jaxbDestination;
