@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2014-10-24 15:01:34.398000",
+		"lastupdated": "2014-10-26 22:27:16.896000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -522,5 +522,6 @@
 	"LOOP_COUNT": "number",
 	"LOOP": "repeat until",
 	"LOOP_FOREVER": "repeat indefinitely",
-	"MOTORDIFF_ON_HELP": "here comes your help text"
+	"MOTORDIFF_ON_HELP": "here comes your help text",
+	"MOTORDIFF_ON_FOR_HELP": "here comes your help text"
 }

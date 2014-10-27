@@ -1265,3 +1265,4 @@ Blockly.Msg.LOOP = 'repeat until';
 Blockly.Msg.LOOP_FOREVER = 'repeat indefinitely';
 //
 Blockly.Msg.MOTORDIFF_ON_HELP = 'here comes your help text';
+Blockly.Msg.MOTORDIFF_ON_FOR_HELP = 'here comes your help text';

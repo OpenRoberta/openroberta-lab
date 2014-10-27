@@ -5,9 +5,10 @@ goog.provide('Blockly.Help');
 goog.require('Blockly.Bubble');
 goog.require('Blockly.Icon');
 
-Blockly.Help = function(text) {
+Blockly.Help = function(text, animation) {
     Blockly.Help.superClass_.constructor.call(this, this, null);
     this.setText(text);
+    this.setAnimation(animation);
 };
 goog.inherits(Blockly.Help, Blockly.Icon);
 
@@ -19,19 +20,26 @@ Blockly.Help.prototype.clicked_ = false;
  * @private
  */
 Blockly.Help.prototype.text_ = '';
+
+/**
+ * Help animation (if bubble is not visible).
+ * 
+ * @private
+ */
+Blockly.Help.prototype.animation_ = '';
 /**
  * Width of bubble.
  * 
  * @private
  */
-Blockly.Help.prototype.width_ = 160;
+Blockly.Help.prototype.width_ = 0;
 
 /**
  * Height of bubble.
  * 
  * @private
  */
-Blockly.Help.prototype.height_ = 80;
+Blockly.Help.prototype.height_ = 195;
 
 Blockly.Help.prototype.createIcon = function() {
     Blockly.Icon.prototype.createIcon_.call(this);
@@ -52,6 +60,47 @@ Blockly.Help.prototype.createIcon = function() {
 };
 
 /**
+ * Create the editor for the help's bubble.
+ * 
+ * @return {!Element} The top-level node of the content.
+ * @private
+ */
+Blockly.Help.prototype.createContent_ = function() {
+    this.foreignObject_ = Blockly.createSvgElement('foreignObject', {
+        'x' : Blockly.Bubble.BORDER_WIDTH,
+        'y' : Blockly.Bubble.BORDER_WIDTH
+    }, null);
+    var body = document.createElementNS(Blockly.HTML_NS, 'body');
+    body.setAttribute('xmlns', Blockly.HTML_NS);
+    body.className = 'blocklyMinimalBody';
+    this.div_ = document.createElementNS(Blockly.HTML_NS, 'p');
+    this.div_.className = 'blocklyHelpDiv';
+    this.img_ = document.createElementNS(Blockly.HTML_NS, 'img');
+    this.img_.setAttribute('src', this.animation_);
+    this.img_.setAttribute('style', 'float:right');
+    body.appendChild(this.div_);
+    this.div_.appendChild(this.img_);
+    this.foreignObject_.appendChild(body);
+    Blockly.bindEvent_(this.div_, 'mouseup', this, this.divFocus_);
+    return this.foreignObject_;
+};
+
+/**
+ * Callback function triggered when the bubble has resized. Resize the text area
+ * accordingly.
+ * 
+ * @private
+ */
+Blockly.Help.prototype.resizeBubble_ = function() {
+    var size = this.bubble_.getBubbleSize();
+    var doubleBorderWidth = 2 * Blockly.Bubble.BORDER_WIDTH;
+    this.foreignObject_.setAttribute('width', size.width - doubleBorderWidth);
+    this.foreignObject_.setAttribute('height', size.height - doubleBorderWidth);
+    this.div_.style.width = (size.width - doubleBorderWidth - 4) + 'px';
+    this.div_.style.height = (size.height - doubleBorderWidth - 4) + 'px';
+};
+
+/**
  * Show or hide the help bubble.
  * 
  * @param {boolean}
@@ -64,21 +113,35 @@ Blockly.Help.prototype.setVisible = function(visible) {
     }
     var text = this.getText();
     var size = this.getBubbleSize();
-    var paragraph = Blockly.Help.textToDom_(this.text_);
+    var content = this.createContent_();
     if (visible) {
         // Create the bubble.
-        this.bubble_ = new Blockly.Bubble(/** @type {!Blockly.Workspace} */ (this.block_.workspace), paragraph, this.block_.svg_.svgPath_, this.iconX_, this.iconY_, null, null);
+        this.bubble_ = new Blockly.Bubble(this.block_.workspace, this.createContent_(), this.block_.svg_.svgPath_, this.iconX_, this.iconY_, this.width_, this.height_);
+        this.bubble_.registerResizeEvent(this, this.resizeBubble_);
         this.updateColour();
-        this.text_ = null;
     } else {
         // Dispose of the bubble.
         this.bubble_.dispose();
         this.bubble_ = null;
-        this.body_ = null;
+        this.div_ = null;
+        this.img_ = null;
+        this.foreignObject_ = null;
     }
 //Restore the bubble stats after the visibility switch.
     this.setText(text);
     this.setBubbleSize(size.width, size.height);
+};
+
+/**
+ * Bring the help to the top of the stack when clicked on.
+ * 
+ * @param {!Event}
+ *            e Mouse up event.
+ * @private
+ */
+Blockly.Help.prototype.divFocus_ = function(e) {
+    this.bubble_.promote_();
+    this.div_.focus();
 };
 
 /**
@@ -106,8 +169,12 @@ Blockly.Help.prototype.getBubbleSize = function() {
  *            height Height of the bubble.
  */
 Blockly.Help.prototype.setBubbleSize = function(width, height) {
-    this.width_ = width;
-    this.height_ = height;
+    if (this.div_) {
+        this.bubble_.setBubbleSize(width, height);
+    } else {
+        this.width_ = width;
+        this.height_ = height;
+    }
 };
 
 /**
@@ -120,28 +187,17 @@ Blockly.Help.prototype.getText = function() {
 };
 
 /**
- * Create the text for the warning's bubble.
+ * . Set this help's text.
  * 
  * @param {string}
- *            text The text to display.
- * @return {!SVGTextElement} The top-level node of the text.
- * @private
+ *            text Help text.
  */
-Blockly.Help.textToDom_ = function(text) {
-    var paragraph = /** @type {!SVGTextElement} */ (Blockly.createSvgElement('text', {
-        'class' : 'blocklyText blocklyBubbleText',
-        'y' : Blockly.Bubble.BORDER_WIDTH
-    }, null));
-    var lines = text.split('\n');
-    for (var i = 0; i < lines.length; i++) {
-        var tspanElement = Blockly.createSvgElement('tspan', {
-            'dy' : '1em',
-            'x' : Blockly.Bubble.BORDER_WIDTH
-        }, paragraph);
-        var textNode = document.createTextNode(lines[i]);
-        tspanElement.appendChild(textNode);
+Blockly.Help.prototype.setText = function(text) {
+    if (this.div_) {
+        this.div_.innerHTML += text;
+    } else {
+        this.text_ = text;
     }
-    return paragraph;
 };
 
 /**
@@ -150,9 +206,11 @@ Blockly.Help.textToDom_ = function(text) {
  * @param {string}
  *            text Help text.
  */
-Blockly.Help.prototype.setText = function(text) {
-    if (this.text_ == text) {
-        return;
+Blockly.Help.prototype.setAnimation = function(animation) {
+    if (animation) {
+        this.animation_ = Blockly.pathToBlockly + 'media/' + animation;
+        this.width_ = 300;
+    } else {
+        this.width_ = 250;
     }
-    this.text_ = text;
 };

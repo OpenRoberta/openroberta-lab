@@ -370,6 +370,19 @@ Blockly.onMouseDown_ = function(e) {
             Blockly.onTouchUpWrapper_ = Blockly.bindEvent_(document, 'mouseup', null, Blockly.onMouseUp_);
         }
         Blockly.onMouseMoveWrapper_ = Blockly.bindEvent_(document, 'mousemove', null, Blockly.onMouseMove_);
+        // Close all bubbles with a click on the document
+        var topBlocks = Blockly.getMainWorkspace().getTopBlocks(false);
+        for (var i = 0; i < topBlocks.length; i++) {
+            var block = topBlocks[i];
+            var descendants = block.getDescendants();
+            for (var j = 0; j < descendants.length; j++) {
+                var icons = descendants[j].getIcons();
+                for (var k = 0; k < icons.length; k++) {
+                    if (icons[k].bubble_)
+                    icons[k].setVisible(false);
+                }
+            }
+        }
     }
 };
 

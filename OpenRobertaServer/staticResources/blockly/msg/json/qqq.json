@@ -516,5 +516,6 @@
 	"LOOP_COUNT": "",
 	"LOOP": "",
 	"LOOP_FOREVER": "",
-	"MOTORDIFF_ON_HELP": ""
+	"MOTORDIFF_ON_HELP": "",
+	"MOTORDIFF_ON_FOR_HELP": ""
 }
