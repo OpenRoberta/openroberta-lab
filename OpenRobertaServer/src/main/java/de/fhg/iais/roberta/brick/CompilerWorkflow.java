@@ -71,8 +71,8 @@ public class CompilerWorkflow {
                 .setWheelDiameter(5.6)
                 .addActor(ActorPort.B, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))
                 .addActor(ActorPort.C, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))
-                .addSensor(SensorPort.S2, new HardwareComponent(HardwareComponentType.EV3UltrasonicSensor))
-                .addSensor(SensorPort.S3, new HardwareComponent(HardwareComponentType.EV3ColorSensor))
+                .addSensor(SensorPort.S1, new HardwareComponent(HardwareComponentType.EV3TouchSensor))
+                .addSensor(SensorPort.S4, new HardwareComponent(HardwareComponentType.EV3UltrasonicSensor))
                 .build();
         JaxbBlocklyProgramTransformer<Void> transformer;
         try {
