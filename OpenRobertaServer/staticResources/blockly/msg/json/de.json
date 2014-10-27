@@ -482,5 +482,6 @@
 	"IFELSE_TOOLTIP": "Prüft die Bedingung in wenn. Falls die Bedingung wahr ist, führt die dann-Aktion aus, andernfalls führt die sonst-Aktion aus.",
 	"IF_TOOLTIP": "Prüft die Bedingung in wenn. Falls die Bedingung wahr ist, führt die dann-Aktion aus.",
 	"COLOUR_PICKER_TOOLTIP": "Wählt eine Farbe von der Palette.",
-	"MOTORDIFF_ON_HELP": "Hier kommt dein Hilfetext :-)"
+	"MOTORDIFF_ON_HELP": "Dein Roboter fährt solange vorwärts bis er gestoppt wird oder ein anderer Block zum Fahren verwendet wird. Die Geschwindigkeit kannst du im Feld Tempo wählen. Wenn dein Programm zuende ist stoppen die Motoren automatisch.",
+	"MOTORDIFF_ON_FOR_HELP": "Dein Roboter fährt solange vorwärts bis er gestoppt wird oder ein anderer Block zum Fahren verwendet wird. Die Geschwindigkeit kannst du im Feld Tempo wählen. Wenn dein Programm zuende ist stoppen die Motoren automatisch."
 }

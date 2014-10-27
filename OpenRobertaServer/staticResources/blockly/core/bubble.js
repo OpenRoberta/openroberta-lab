@@ -231,23 +231,37 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
         this.resizeGroup_ = Blockly.createSvgElement('g', {
             'class' : Blockly.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE'
         }, this.bubbleGroup_);
-        var resizeSize = 2 * Blockly.Bubble.BORDER_WIDTH;
+        var resizeSize = 4 * Blockly.Bubble.BORDER_WIDTH;
         Blockly.createSvgElement('polygon', {
             'points' : '0,x x,x x,0'.replace(/x/g, resizeSize.toString())
         }, this.resizeGroup_);
         Blockly.createSvgElement('line', {
             'class' : 'blocklyResizeLine',
-            'x1' : resizeSize / 3,
+            'x1' : resizeSize - 8,
             'y1' : resizeSize - 1,
             'x2' : resizeSize - 1,
-            'y2' : resizeSize / 3
+            'y2' : resizeSize - 8
         }, this.resizeGroup_);
         Blockly.createSvgElement('line', {
             'class' : 'blocklyResizeLine',
-            'x1' : resizeSize * 2 / 3,
+            'x1' : resizeSize - 6,
             'y1' : resizeSize - 1,
             'x2' : resizeSize - 1,
-            'y2' : resizeSize * 2 / 3
+            'y2' : resizeSize - 6
+        }, this.resizeGroup_);
+        Blockly.createSvgElement('line', {
+            'class' : 'blocklyResizeLine',
+            'x1' : resizeSize - 4,
+            'y1' : resizeSize - 1,
+            'x2' : resizeSize - 1,
+            'y2' : resizeSize - 4
+        }, this.resizeGroup_);
+        Blockly.createSvgElement('line', {
+            'class' : 'blocklyResizeLine',
+            'x1' : resizeSize - 2,
+            'y1' : resizeSize - 1,
+            'x2' : resizeSize - 1,
+            'y2' : resizeSize - 2
         }, this.resizeGroup_);
     } else {
         this.resizeGroup_ = null;
@@ -487,13 +501,13 @@ Blockly.Bubble.prototype.setBubbleSize = function(width, height) {
     this.height_ = height;
     this.bubbleBack_.setAttribute('width', width);
     this.bubbleBack_.setAttribute('height', height);
+    var resizeSize = 4 * Blockly.Bubble.BORDER_WIDTH;
     if (this.resizeGroup_) {
         if (Blockly.RTL) {
             // Mirror the resize group.
-            var resizeSize = 2 * Blockly.Bubble.BORDER_WIDTH;
-            this.resizeGroup_.setAttribute('transform', 'translate(' + resizeSize + ', ' + (height - doubleBorderWidth) + ') scale(-1 1)');
+             this.resizeGroup_.setAttribute('transform', 'translate(' + resizeSize + ', ' + (height - doubleBorderWidth) + ') scale(-1 1)');
         } else {
-            this.resizeGroup_.setAttribute('transform', 'translate(' + (width - doubleBorderWidth) + ', ' + (height - doubleBorderWidth) + ')');
+            this.resizeGroup_.setAttribute('transform', 'translate(' + (width - resizeSize + Blockly.Bubble.BORDER_WIDTH/2) + ', ' + (height - resizeSize + Blockly.Bubble.BORDER_WIDTH/2) + ')');
         }
     }
     if (this.rendered_) {
@@ -585,7 +599,7 @@ Blockly.Bubble.prototype.renderArrow_ = function() {
 Blockly.Bubble.prototype.setColour = function(hexColour) {
     this.bubbleBack_.setAttribute('fill', '#fff');
     this.bubbleBack_.setAttribute('stroke', hexColour);
-    this.bubbleBack_.setAttribute('stroke-width', 3);
+    this.bubbleBack_.setAttribute('stroke-width', Blockly.Bubble.BORDER_WIDTH);
     this.bubbleArrow_.setAttribute('fill', hexColour);
 };
 

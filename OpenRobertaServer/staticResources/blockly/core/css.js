@@ -162,8 +162,17 @@ Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 
         '.blocklyCommentTextarea {', '  margin: 0;', '  padding: 2px;', '  border: 0;', '  resize: none;',
         //'  background-color: #ffc;',
         '}',
+        '.blocklyHelpDiv {', '  padding: 2px;', '  border: 0;', '  resize: none;', 
+        //'  background-color: #ffc;',
+        '}',
+        'textarea {', '  border: none;', ' margin: 0;', '  padding: 2px;', '  border: 0;', '  resize: none;',
+        //'  background-color: #ffc;',
+        '}',
+        'textarea:focus {', '  border: none;', ' margin: 0;', '  padding: 2px;', '  border: 0;', '  resize: none;',
+        //'  background-color: #ffc;',
+        '}',
 
-        '.blocklyHtmlInput {', '  font-family: sans-serif;', '  font-size: 11pt;', '  border: none;', '  outline: none;', '  width: 100%', '}',
+        '.blocklyHtmlInput {', '  font-family: sans-serif;', '  font-size: 10pt;', '  border: none;', '  outline: none;', '  width: 100%', '}',
 
         '.blocklyMutatorBackground {', '  fill: #fff;', '  stroke-width: 1;', '  stroke: #ddd;', '}',
 
