@@ -79,10 +79,23 @@
             </goals>
             <configuration>
               <transformers>
+                <transformer />
                 <transformer>
-                  <mainClass>de.fhg.iais.roberta.javaServer.jetty.ServerStarter</mainClass>
+                  <manifestEntries>
+                    <Main-Class>de.fhg.iais.roberta.javaServer.jetty.ServerStarter</Main-Class>
+                  </manifestEntries>
                 </transformer>
               </transformers>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
             </configuration>
           </execution>
         </executions>
