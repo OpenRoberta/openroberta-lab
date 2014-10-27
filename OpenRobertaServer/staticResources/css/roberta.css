@@ -68,11 +68,12 @@ ul#head-navigation a {
 }
 
 .head-navi-icons {
-    height: 25px;
-    width: 25px;
+    height: 35px;
+    width: 35px;
     background-repeat: no-repeat;
     display: block;
     margin: 0 auto;
+	background-size: 100%;
 }
 
 .head-navi-icons.project {
@@ -84,7 +85,7 @@ ul#head-navigation a {
 }
 
 .head-navi-icons.configuration {
-    background-image: url(img/head-navi-icons/spanner-outline.svg);
+    background-image: url(img/head-navi-icons/contacts.svg);
 }
 
 .head-navi-icons.connection {
