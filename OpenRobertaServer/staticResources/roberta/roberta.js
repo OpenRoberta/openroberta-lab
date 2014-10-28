@@ -88,8 +88,6 @@ function login() {
             userState.role = response.userRole;
             displayStatus();
             setHeadNavigationMenuState('login');
-            setProgram("");
-            $('#setProgram').text('Programm');
             $("#tutorials").fadeOut(700);
         } else {
             displayMessage("Fehler beim Login. Ursache: " + response.cause);
@@ -305,7 +303,7 @@ function deleteFromListing() {
 function showToolbox(result) {
     response(result);
     if (result.rc === 'ok') {
-        $('#head-navigation #toolbox').text(userState.toolbox);
+        $('#head-navigation #displayToolbox').text(userState.toolbox);
         Blockly.updateToolbox(result.data);
     }
 }
@@ -452,19 +450,10 @@ function switchToBrickly() {
  * Display status information in the navigation bar
  */
 function displayStatus() {
-    if (userState.name != "none") {
-        $('#setName').text(userState.name);
-    } else {
-        $('#setName').text("Anmeldung"); // Bad because of language dependency
-    }
-    if (userState.program != "none") {
-        $('#setProgram').text(userState.program);
-    } else {
-        $('#setProgram').text("Programm"); // Bad because of language dependency
-    }
-    $('#head-navigation #role').text(userState.role);
-    $('#head-navigation #robot').text(userState.robot);
-    $('#head-navigation #brickConnection').text(userState.brickConnection);
+    $('#head-navigation #displayLogin').text(userState.name);
+    $('#head-navigation #displayProgram').text(userState.program);
+    $('#head-navigation #displayBrickConnection').text(userState.brickConnection);
+    $('#head-navigation #displayToolbox').text(userState.toolbox);
 }
 
 /**
@@ -499,7 +488,7 @@ function initHeadNavigation() {
 
     $('#head-navigation').menu({
         position : {
-            at : "left top+47",
+            at : "left top+57",
             collision : "fit"
         }
     });
