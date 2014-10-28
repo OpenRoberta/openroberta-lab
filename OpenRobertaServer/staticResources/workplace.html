@@ -55,14 +55,15 @@
             <li>
                 <a href="#"><span class="head-navi-icons configuration"></span><span id="setConfiguration" class="head-navi-text">Roboter</span></a>
                 <ul id="submenu-configuration" class="head-navigation-submenu">
-                    <li id="check"><span class="typcn typcn-tick-outline"></span>checken</li>
-                    <li id="new" class="logout"><span class="typcn typcn-document-add"></span>neu ...</li>
-                    <li id="open" class="logout"><span class="typcn typcn-edit"></span>öffnen ... </li>
-                    <li id="save" class="logout"><span class="typcn typcn-download-outline"></span>speichern</li>
-                    <li id="saveAs" class="logout"><span class="typcn typcn-download-outline"></span>speichern unter ...</li>
-                    <li id="divide" class="logout"><span class="typcn typcn-flow-children"></span>teilen ...</li>
-                    <li id="delete" class="logout"><span class="typcn typcn-delete-outline"></span>löschen ...</li>
-                    <li id="properties"><span class="typcn typcn-info-large-outline"></span>Eigenschaften ...</li>
+                    <li id="check" class="login logout"><span class="typcn typcn-tick-outline"></span>checken</li>
+                    <li id="standard"><span class="typcn typcn-thumbs-up"></span>Standardkonfiguration</li>
+                    <li id="new" class="login logout"><span class="typcn typcn-document-add"></span>neu ...</li>
+                    <li id="open" class="login logout"><span class="typcn typcn-edit"></span>öffnen ... </li>
+                    <li id="save" class="login logout"><span class="typcn typcn-download-outline"></span>speichern</li>
+                    <li id="saveAs" class="login logout"><span class="typcn typcn-download-outline"></span>speichern unter ...</li>
+                    <li id="divide" class="login logout"><span class="typcn typcn-flow-children"></span>teilen ...</li>
+                    <li id="delete" class="login logout"><span class="typcn typcn-delete-outline"></span>löschen ...</li>
+                    <li id="properties" class="login logout"><span class="typcn typcn-info-large-outline"></span>Eigenschaften ...</li>
                 </ul>
             </li>
             <li>
@@ -171,7 +172,8 @@
                 <li><a id="tabListing" href="#listing">Listing of programs</a></li>
                 <li><a id="tabConfListing" href="#confListing">Listing of configurations</a></li>
                 <li><a id="tabLogging" href="#logging">Logging</a></li>
-                <li><a id="tabReadme" href="#readme">README</a></li>
+                <li><a id="tabReadme" href="#readme">Readme</a></li>
+                <li><a id="tabStandardConfiguration" href="#bricklyFrame">Standard-Configuration</a></li>
                 <li><a id="tabSimtest" onclick="viewSimulator(true);">Simulator Test</a></li>
             </ul>
 
@@ -234,7 +236,7 @@
                 <input class="backToBlockly" type="submit" value="Zurück" />
             </div>
         </div>
-        <iframe src="bricklyFrame.html" id="bricklyFrame" style="height: 0; width: 0; border: none;"></iframe>
+        <iframe src="bricklyFrame.html" id="bricklyFrame" style="height: 100%; width: 100%; border: none;"></iframe>
     </div>
 </body>
 </html>

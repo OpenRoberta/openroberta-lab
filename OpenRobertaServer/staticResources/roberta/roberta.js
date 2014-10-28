@@ -7,7 +7,7 @@ function initUserState() {
     userState.id = -1;
     userState.name = 'none';
     userState.role = 'none';
-    userState.program = 'none';
+    userState.program = 'meinProgramm';
     userState.programSaved = false;
     userState.brickSaved = false;
     userState.robot = 'none';
@@ -294,7 +294,6 @@ function deleteFromListing() {
             "name" : programName
         }, function(result) {
             $("#tabs").tabs("option", "active", 0);
-            $('#setProgram').text('Programm');
             $('#programNameSave').val('');
         });
     }
@@ -435,15 +434,13 @@ function checkProgram() {
 }
 
 function switchToBlockly() {
-    document.getElementById('tabs').style.display = 'inline';
-    document.getElementById('bricklyFrame').style.height = '0';
-    document.getElementById('bricklyFrame').style.width = '0';
+    $('#tabs').css('display','inline');
+    $('#bricklyFrame').css('display','none');
 }
 
 function switchToBrickly() {
-    document.getElementById('tabs').style.display = 'none';
-    document.getElementById('bricklyFrame').style.height = '100%';
-    document.getElementById('bricklyFrame').style.width = '100%';
+    $('#tabs').css('display','none');
+    $('#bricklyFrame').css('display','inline');
 }
 
 /**
@@ -496,6 +493,7 @@ function initHeadNavigation() {
     // Submenu Program
     $('#head-navigation').onWrap('click', '#submenu-program > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
+        switchToBlockly();
         var domId = event.target.id;
         if (domId === 'run') {
             startProgram();
@@ -527,6 +525,7 @@ function initHeadNavigation() {
     // Submenu Nepo
     $('#head-navigation').onWrap('click', '#submenu-nepo > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
+        switchToBlockly();
         var domId = event.target.id;
         if (domId === 'toolboxBeginner') {
             loadToolbox('beginner');
@@ -543,8 +542,11 @@ function initHeadNavigation() {
     // Submenu Roboter (Configuration)
     $('#head-navigation').onWrap('click', '#submenu-configuration > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
+        switchToBlockly();
         var domId = event.target.id;
         if (domId === 'check') {
+        } else if (domId === 'standard') {
+            switchToBrickly();
         } else if (domId === 'new') {
         } else if (domId === 'open') {
             $('#tabConfListing').click();
@@ -559,6 +561,7 @@ function initHeadNavigation() {
     // Submenu Connection
     $('#head-navigation').onWrap('click', '#submenu-connection > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
+        switchToBlockly();
         var domId = event.target.id;
         if (domId === 'connect') {
             $("#set-token").dialog("open");
@@ -569,6 +572,7 @@ function initHeadNavigation() {
     // Submenu Developertools
     $('#head-navigation').onWrap('click', '#submenu-developertools > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
+        switchToBlockly();
         var domId = event.target.id;
         if (domId === 'logging') {
             $('#tabLogging').click();
@@ -581,6 +585,7 @@ function initHeadNavigation() {
     // Submenu Readme
     $('#head-navigation').onWrap('click', '#submenu-readme > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
+        switchToBlockly();
         var domId = event.target.id;
         if (domId === 'readme') {
             $('#tabReadme').click();
@@ -591,6 +596,7 @@ function initHeadNavigation() {
     // Submenu Login
     $('#head-navigation').onWrap('click', '#submenu-login > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
+        switchToBlockly();
         var domId = event.target.id;
         if (domId === 'login') {
             $("#login-user").dialog("open");
@@ -716,7 +722,7 @@ function init() {
     initPopups();
     initHeadNavigation();
     initProgramNameTable();
-    setProgram("meinProgramm");
+    displayStatus();
 
     // =============================================================================
 
