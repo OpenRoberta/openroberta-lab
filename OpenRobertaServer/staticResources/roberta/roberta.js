@@ -28,9 +28,9 @@ function saveUserToServer() {
     var $role = $("input[name=role]:checked");
 
     if ($pass1.val() != $pass2.val()) {
-        displayMessage("Das eingegebene Passwort ist falsch.");
+        displayMessage("Du hast beim eingeben der beiden Passworte etwas falsch gemacht.");
     } else if ($role.val() == null) {
-        displayMessage("Bitte wählen Sie eine Rolle aus.");
+        displayMessage("Du musst angeben, ob Du Schüler oder Lehrer bist.");
     } else {
         var roleGerman = $role.val();
         var role = "STUDENT";
@@ -46,10 +46,10 @@ function saveUserToServer() {
             "role" : role
         }, function(result) {
             if (result.rc === "ok") {
-                displayMessage("Der Nutzer wurde angelegt.");
+                displayMessage("Du hast erfolgreich einen neuen Nutzer angelegt.");
                 $(".ui-dialog-content").dialog("close"); // close all opened popups
             } else {
-                displayMessage("Dieser Nutzer existiert bereits. Bitte wählen Sie einen anderen Account-Namen. Ursache: " + response.cause);
+                displayMessage("Dieser Nutzer existiert bereits. Du musst einen anderen Account-Namen wählen.");
             }
         });
     }
@@ -69,7 +69,7 @@ function deleteUserOnServer() {
             displayMessage("Der Nutzer wurde gelöscht.");
             $(".ui-dialog-content").dialog("close"); // close all opened popups
         } else {
-            displayMessage("Der Nutzer konnte nicht gelöscht werden. Ursache: " + response.cause);
+            displayMessage("Der Nutzer konnte nicht gelöscht werden.");
         }
     });
 }
@@ -95,7 +95,7 @@ function login() {
             $("#tutorials").fadeOut(700);
             $(".ui-dialog-content").dialog("close"); // close all opened popups
         } else {
-            displayMessage("Fehler beim Login. Ursache: " + response.cause);
+            displayMessage("Du hast beim einloggen einen Fehler gemacht.");
         }
     });
 }
@@ -113,7 +113,7 @@ function logout() {
             $('#programNameSave').val('');
             setHeadNavigationMenuState('logout');
         } else {
-            displayMessage("Fehler beim Logout. Ursache: " + response.cause);
+            displayMessage("Beim ausloggen ist ein Fehler passiert.");
         }
         $(".ui-dialog-content").dialog("close"); // close all opened popups
     });
@@ -178,11 +178,11 @@ function setToken(token) {
                 userState.token = token;
                 $(".ui-dialog-content").dialog("close"); // close all opened popups
             } else {
-                displayMessage("Fehler beim Setzen des Token. Ursache: " + response.cause);
+                displayMessage("Das Einstellen der Roboter-Kennung hat nicht funktioniert.");
             }
         });
     } else {
-        displayMessage("Ein leeres Token ist nicht erlaubt.");
+        displayMessage("Du musst die Roboter-Kennung eingeben.");
     }
 }
 
@@ -208,7 +208,7 @@ function saveToServer() {
             if (!$name.val() || $name.val() === "meinProgramm") {
                 $('#head-navigation #submenu-program #save').addClass('login');            
                 $('#head-navigation #submenu-program #save').addClass('ui-state-disabled');
-                displayMessage("Bitte wählen Sie einen anderen Programmnamen.");
+                displayMessage("Du musst einen anderen Programmnamen nehmen.");
                 return;
             }
             $('#head-navigation #submenu-program #save').removeClass('login');
@@ -227,7 +227,7 @@ function saveToServer() {
             "program" : xml_text
         }, response);
     } else {
-        displayMessage("Sie müssen einen Programmnamen angeben. Ursache: " + response.cause);
+        displayMessage("Du musst einen Programmnamen eingeben.");
     }
 }
 
@@ -452,7 +452,7 @@ function startProgram() {
  */
 function checkProgram() {
     // TODO
-    displayMessage("Ihr Programm kann zur Zeit noch nicht geprüft werden. ;-)");
+    displayMessage("Dein Programm kann zur Zeit noch nicht geprüft werden.");
 }
 
 function switchToBlockly() {
