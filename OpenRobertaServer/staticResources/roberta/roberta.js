@@ -112,6 +112,7 @@ function logout() {
             displayStatus();
             $('#programNameSave').val('');
             setHeadNavigationMenuState('logout');
+            initProgramEnvironment();
         } else {
             displayMessage("Beim ausloggen ist ein Fehler passiert.");
         }
