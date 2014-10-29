@@ -1266,3 +1266,16 @@ Blockly.Msg.LOOP_FOREVER = 'repeat indefinitely';
 //
 Blockly.Msg.MOTORDIFF_ON_HELP = 'here comes your help text';
 Blockly.Msg.MOTORDIFF_ON_FOR_HELP = 'here comes your help text';
+Blockly.Msg.MOTORDIFF_STOP_HELP = 'here comes your help text';
+Blockly.Msg.MOTORDIFF_TURN_HELP = 'here comes your help text';
+Blockly.Msg.MOTORDIFF_TURN_HELP = 'here comes your help text';
+Blockly.Msg.MOTORDIFF_TURN_FOR_HELP = 'here comes your help text';
+Blockly.Msg.DISPLAY_PICTURE_HELP = 'here comes your help text';
+Blockly.Msg.DISPLAY_TEXT_HELP = 'here comes your help text';
+Blockly.Msg.DISPLAY_CLEAR_HELP = 'here comes your help text';
+Blockly.Msg.PLAY_TONE_HELP = 'here comes your help text';
+Blockly.Msg.PLAY_SETVOLUME_HELP = 'here comes your help text';
+Blockly.Msg.BRICKLIGHT_ON_HELP = 'here comes your help text';
+Blockly.Msg.BRICKLIGHT_OFF_HELP = 'here comes your help text';
+Blockly.Msg.BRICKLIGHT_RESET_HELP = 'here comes your help text';
+

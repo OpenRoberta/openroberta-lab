@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2014-10-26 22:27:16.896000",
+		"lastupdated": "2014-10-29 13:04:39.759000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -523,5 +523,17 @@
 	"LOOP": "repeat until",
 	"LOOP_FOREVER": "repeat indefinitely",
 	"MOTORDIFF_ON_HELP": "here comes your help text",
-	"MOTORDIFF_ON_FOR_HELP": "here comes your help text"
+	"MOTORDIFF_ON_FOR_HELP": "here comes your help text",
+	"MOTORDIFF_STOP_HELP": "here comes your help text",
+	"MOTORDIFF_TURN_HELP": "here comes your help text",
+	"MOTORDIFF_TURN_HELP": "here comes your help text",
+	"MOTORDIFF_TURN_FOR_HELP": "here comes your help text",
+	"DISPLAY_PICTURE_HELP": "here comes your help text",
+	"DISPLAY_TEXT_HELP": "here comes your help text",
+	"DISPLAY_CLEAR_HELP": "here comes your help text",
+	"PLAY_TONE_HELP": "here comes your help text",
+	"PLAY_SETVOLUME_HELP": "here comes your help text",
+	"BRICKLIGHT_ON_HELP": "here comes your help text",
+	"BRICKLIGHT_OFF_HELP": "here comes your help text",
+	"BRICKLIGHT_RESET_HELP": "here comes your help text"
 }
