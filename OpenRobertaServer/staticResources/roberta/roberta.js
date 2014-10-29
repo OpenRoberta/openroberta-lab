@@ -5,14 +5,14 @@ var userState = {};
  */
 function initUserState() {
     userState.id = -1;
-    userState.name = 'none';
-    userState.role = 'none';
+    userState.name = '';
+    userState.role = '';
     userState.program = 'meinProgramm';
     userState.programSaved = false;
     userState.brickSaved = false;
-    userState.robot = 'none';
-    userState.brickConnection = 'none';
-    userState.toolbox = 'none';
+    userState.robot = '';
+    userState.brickConnection = '';
+    userState.toolbox = '';
     userState.token = '1A2B3C4D';
 }
 
@@ -45,10 +45,12 @@ function saveUserToServer() {
             "password" : $pass1.val(),
             "role" : role
         }, function(result) {
-            if (result.rc === "ok")
+            if (result.rc === "ok") {
                 displayMessage("Der Nutzer wurde angelegt.");
-            else
+                $(".ui-dialog-content").dialog("close"); // close all opened popups
+            } else {
                 displayMessage("Dieser Nutzer existiert bereits. Bitte wählen Sie einen anderen Account-Namen. Ursache: " + response.cause);
+            }
         });
     }
 }
@@ -63,10 +65,12 @@ function deleteUserOnServer() {
         "cmd" : "deleteUser",
         "accountName" : $userAccountName.val()
     }, function(result) {
-        if (result.rc === "ok")
+        if (result.rc === "ok") {
             displayMessage("Der Nutzer wurde gelöscht.");
-        else
+            $(".ui-dialog-content").dialog("close"); // close all opened popups
+        } else {
             displayMessage("Der Nutzer konnte nicht gelöscht werden. Ursache: " + response.cause);
+        }
     });
 }
 
@@ -89,6 +93,7 @@ function login() {
             displayStatus();
             setHeadNavigationMenuState('login');
             $("#tutorials").fadeOut(700);
+            $(".ui-dialog-content").dialog("close"); // close all opened popups
         } else {
             displayMessage("Fehler beim Login. Ursache: " + response.cause);
         }
@@ -105,10 +110,12 @@ function logout() {
         if (response.rc === "ok") {
             initUserState();
             displayStatus();
+            $('#programNameSave').val('');
             setHeadNavigationMenuState('logout');
         } else {
             displayMessage("Fehler beim Logout. Ursache: " + response.cause);
         }
+        $(".ui-dialog-content").dialog("close"); // close all opened popups
     });
 }
 
@@ -169,6 +176,7 @@ function setToken(token) {
         }, function(response) {
             if (response.rc === "ok") {
                 userState.token = token;
+                $(".ui-dialog-content").dialog("close"); // close all opened popups
             } else {
                 displayMessage("Fehler beim Setzen des Token. Ursache: " + response.cause);
             }
@@ -192,16 +200,27 @@ function response(result) {
 /**
  * Save program to server
  */
-function saveToServer() {
+function saveToServer() { 
     if ($('#programNameSave')) {
         var $name = $('#programNameSave');
         setProgram($name.val());
+        if (userState.name) {   // Is someone logged in?
+            if (!$name.val() || $name.val() === "meinProgramm") {
+                $('#head-navigation #submenu-program #save').addClass('login');            
+                $('#head-navigation #submenu-program #save').addClass('ui-state-disabled');
+                displayMessage("Bitte wählen Sie einen anderen Programmnamen.");
+                return;
+            }
+            $('#head-navigation #submenu-program #save').removeClass('login');
+            $('#head-navigation #submenu-program #save').removeClass('ui-state-disabled');
+        }
     }
     if (userState.program) {
         var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
         var xml_text = Blockly.Xml.domToText(xml);
         userState.programSaved = true;
         LOG.info('save ' + userState.program + ' login: ' + userState.id);
+        $(".ui-dialog-content").dialog("close"); // close all opened popups
         return COMM.json("/program", {
             "cmd" : "saveP",
             "name" : userState.program,
@@ -233,6 +252,9 @@ function showProgram(result, load, name) {
     }
 };
 
+/**
+ * Load program from server
+ */
 function loadFromServer(load) {
     var $name = $('#programNameLoad');
     COMM.json("/program", {
@@ -639,17 +661,13 @@ function initPopups() {
         }
     });
 
-    $(".jquerypopup .submit").on('click', function() {
-        $(this).closest(".jquerypopup").dialog('close');
-    });
+    // Close popup on submit
+//    $(".jquerypopup .submit").on('click', function() {
+//        $(this).closest(".jquerypopup").dialog('close');
+//    });
 
     // define general class for Pop-Up
     $(".jquerypopup").dialog("option", "dialogClass", "jquerypopup");
-
-    // Close all previous Pop-Ups.
-    $(".popup-opener").click(function() {
-        $(".ui-dialog-content").dialog("close");
-    });
 
     $('#saveUser').onWrap('click', saveUserToServer, 'save the user data');
     $('#deleteUser').onWrap('click', deleteUserOnServer, 'delete user data');
@@ -672,7 +690,7 @@ function initPopups() {
         setToken($token.val());
     }, 'set token');
 
-    // Any submit button in a popup csn be triggered by the Return-Button
+    // Any submit button in a popup can be triggered by the Return-Button
     $(".jquerypopup").keydown(function(event) {
         if (event.keyCode == 13) {
             $(this).find("input.submit").click();
@@ -721,8 +739,9 @@ function init() {
     initTabs();
     initPopups();
     initHeadNavigation();
-    initProgramNameTable();
+    initProgramNameTable();   
     displayStatus();
+    $('#programNameSave').val('');
 
     // =============================================================================
 
