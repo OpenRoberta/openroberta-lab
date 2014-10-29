@@ -17,7 +17,7 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <guice.verion>3.0</guice.verion>
         <jersey.version>1.18.2</jersey.version>
-        <jetty.version>9.3.0.M0</jetty.version>
+        <jetty.version>9.2.3.v20140905</jetty.version>
     </properties>
     <modules>
         <module>../OpenRobertaShared</module>
