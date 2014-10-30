@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Flaticon WebFont</title>
+    <link rel="stylesheet" type="text/css" href="flaticon.css">
+    <meta charset="UTF-8">
+    <style>
+    body {
+        font-family: sans-serif;
+        line-height: 1.5;
+        font-size: 16px;
+        padding: 20px;
+        color:#333;
+    }
+    * {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    [class^="flaticon-"]:before, [class*=" flaticon-"]:before, [class^="flaticon-"]:after, [class*=" flaticon-"]:after {
+        font-family: Flaticon;
+        font-size: 30px;
+        font-style: normal;
+        margin-left: 20px;
+        color: #333;
+    }
+    .image p {
+		font-size: 12px;
+		margin: 0px;
+		clear: none;
+		width: 300px;
+		line-height: 40px;
+	}
+    .text {
+        float: left;
+        font-size:14px;
+        margin-top: 15px;
+    }
+    .text ul {
+        margin-left:0px;
+        color:#111;
+        margin-bottom:20px;
+    }
+    .text .ex {
+        font-size:12px;
+        color:#666;
+        margin-left:35px;
+        display:block;
+    }
+    .text ul li {
+        margin-top:10px;
+        list-style:none;
+    }
+    .num {
+        background:#66A523;
+        color:#fff;
+        border-radius:20px;
+        padding:1px;
+        display:inline-block;
+        width:22px;
+        height:22px;
+        text-align:center;
+        margin-right: 5px;
+    }
+    .text ul strong {
+        font-weight:normal;
+        color:#000;
+    }
+    .image {
+        width: 280px;
+        float: left;
+        margin-bottom: 15px;
+        margin-right: 30px;
+    }
+    #glyphs {
+        clear: both;
+    }
+    .image p:nth-child(even) i {
+        clear: none;
+    }
+    .glyph {
+        display: inline-block;
+        width: 120px;
+        margin: 10px;
+        text-align: center;
+        vertical-align: top;
+        background: #FFF;
+    }
+    .glyph .glyph-icon {
+        padding: 10px;
+        display: block;
+        font-family:"Flaticon";
+        font-size: 64px;
+        line-height: 1;
+    }
+    .glyph .glyph-icon:before {
+        font-size: 64px;
+        color: #666;
+        margin-left: 0;
+    }
+    .class-name {
+        font-size: 12px;
+    }
+    .author-name {
+		font-size: 10px;
+	}
+	a{
+		color: #66A523;
+	}
+    .instructions {
+        font-style:italic;
+        font-size:22px;
+        margin-bottom:10px;
+    }
+    .iconsuse {
+        font-size:22px;
+        font-style:italic;
+        padding-top:20px;
+        margin-top:20px;
+        border-top:1px solid #bbb;
+    }
+    .usetitle {
+        margin-bottom: 10px;
+        font-size: 20px;
+        font-style: italic;
+    }
+    .class-name:last-child {
+        font-size: 10px;
+        color:#888;
+    }
+    .class-name:last-child a {
+        font-size: 10px;
+        color:#555;
+    }
+    .class-name:last-child a:hover {
+        color:#66A523;
+    }
+    .glyph > input {
+        display: block;
+        width: 100px;
+        margin: 5px auto;
+        text-align: center;
+        font-size: 12px;
+        cursor: text;
+    }
+    .glyph > input.icon-input {
+        font-family:"Flaticon";
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+    h1.logo {
+        font-size: 40px;
+        letter-spacing: -1px;
+        margin-top: -16px;
+        text-transform: lowercase;
+        border-bottom:1px solid #bbb;
+    }
+    h1.logo strong {
+        font-size: 16px;
+        font-family:sans-serif;
+        font-weight:normal;
+        color:#333;
+    }
+    h1.logo a {
+        color:#34302d;
+        text-decoration: none;
+    }
+    h1.logo a span {
+        color:#66A523;
+    }
+    #footer {
+        padding-top:40px;
+        clear:both;
+        text-align:center;
+    }
+    #footer a {
+        color:#66A523;
+    }
+    textarea {
+		margin: 0px;
+		width: 800px;
+		height: 150px;
+		border: 1px solid #CCC;
+		resize: none;
+		background: #EEE;
+    }
+    .author-link, .attrDiv a{
+    	font-size: 12px;
+    	color: #333;
+    	text-decoration: none;
+    }
+    .external {
+    	display: block;
+    }
+    .attrDiv {
+		font-size: 12px;
+	}
+    .attribution {
+        border-top: 1px solid #AAA;
+        margin: 10px 0;
+        padding-top: 15px;
+    }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1 class="logo">
+            <a href="http://www.flaticon.com">
+                <span>FLAT</span>ICON</a>
+            <strong>Font Demo</strong>
+        </h1>
+    </header>
+
+    <section class="demo">
+        <div class="text">
+
+            <div class="instructions">Instructions:</div>
+
+            <ul>
+                <li>
+                    <p>
+                        <span class="num">1</span>Copy the "Fonts" files and CSS files to your website CSS folder.
+                </li>
+                <li>
+                    <p>
+                        <span class="num">2</span>Add the CSS link to your website source code on header.
+                        <br />
+                        <span class="ex">&lt;head&gt;
+                            <br/>...
+                            <br/>&lt;link rel="stylesheet" type="text/css" href="your_website_domain/css_root/flaticon.css"&gt;
+                            <br/>...
+                            <br/>&lt;/head&gt;</span>
+                </li>
+
+                <li>
+                    <p>
+                        <span class="num">3</span>Use the icon class on "display:inline" elements:
+                        <br />
+                        <span class="ex">Use example: &lt;i class=&quot;flaticon-airplane49&quot;&gt;&lt;/i&gt; or &lt;span class=&quot;flaticon-airplane49&quot;&gt;&lt;/span&gt;</span>
+                </li>
+            </ul>
+        </div>
+
+    </section>
+
+    <section id="glyphs"><div class="glyph">
+		<div class="glyph-icon flaticon-add10"></div>
+		<div class="class-name">.flaticon-add10</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/add-document_2771">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-add9"></div>
+		<div class="class-name">.flaticon-add9</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/add-user-outline_2596">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-adjust1"></div>
+		<div class="class-name">.flaticon-adjust1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/adjust-brightness_2763">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-adjust"></div>
+		<div class="class-name">.flaticon-adjust</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/adjust-contrast_2813">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-anchor1"></div>
+		<div class="class-name">.flaticon-anchor1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/anchor_2673">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-anchor"></div>
+		<div class="class-name">.flaticon-anchor</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/anchor-outline_2624">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-archives1"></div>
+		<div class="class-name">.flaticon-archives1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/archives_2546">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-arrow32"></div>
+		<div class="class-name">.flaticon-arrow32</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/arrow-down_2526">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-arrow33"></div>
+		<div class="class-name">.flaticon-arrow33</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/arrow-sync_2533">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-arrow34"></div>
+		<div class="class-name">.flaticon-arrow34</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/arrow-back_2558">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-arrow35"></div>
+		<div class="class-name">.flaticon-arrow35</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/arrow-forward_2577">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-arrow36"></div>
+		<div class="class-name">.flaticon-arrow36</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/arrow-left-outline_2580">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-arrow37"></div>
+		<div class="class-name">.flaticon-arrow37</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/arrow-maximise-outline_2612">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-arrow38"></div>
+		<div class="class-name">.flaticon-arrow38</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/arrow-up-thick_2629">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-arrow39"></div>
+		<div class="class-name">.flaticon-arrow39</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/arrow-left_2668">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-arrow40"></div>
+		<div class="class-name">.flaticon-arrow40</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/arrow-move_2684">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-arrow41"></div>
+		<div class="class-name">.flaticon-arrow41</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/arrow-up-outline_2687">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-arrow42"></div>
+		<div class="class-name">.flaticon-arrow42</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/arrow-down-outline_2729">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-arrow43"></div>
+		<div class="class-name">.flaticon-arrow43</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/arrow-move-outline_2731">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-arrow44"></div>
+		<div class="class-name">.flaticon-arrow44</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/arrow-loop-outline_2734">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-arrow45"></div>
+		<div class="class-name">.flaticon-arrow45</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/arrow-loop_2774">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-arrow46"></div>
+		<div class="class-name">.flaticon-arrow46</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/arrow-shuffle_2796">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-arrow47"></div>
+		<div class="class-name">.flaticon-arrow47</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/arrow-back-outline_2801">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-arrow48"></div>
+		<div class="class-name">.flaticon-arrow48</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/arrow-left-thick_2804">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-arrow49"></div>
+		<div class="class-name">.flaticon-arrow49</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/arrow-right-outline_2805">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-arrow50"></div>
+		<div class="class-name">.flaticon-arrow50</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/arrow-minimise_2806">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-arrow51"></div>
+		<div class="class-name">.flaticon-arrow51</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/arrow-repeat_2808">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-arrow52"></div>
+		<div class="class-name">.flaticon-arrow52</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/arrow-repeat-outline_2812">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-at"></div>
+		<div class="class-name">.flaticon-at</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/at-circular_2574">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-backspace"></div>
+		<div class="class-name">.flaticon-backspace</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/backspace-outline_2692">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-battery1"></div>
+		<div class="class-name">.flaticon-battery1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/battery-high_2532">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-battery2"></div>
+		<div class="class-name">.flaticon-battery2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/battery-charge_2565">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-battery3"></div>
+		<div class="class-name">.flaticon-battery3</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/battery-mid_2769">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-black12"></div>
+		<div class="class-name">.flaticon-black12</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/black-spanner_2735">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-black13"></div>
+		<div class="class-name">.flaticon-black13</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/black-star_2739">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-black14"></div>
+		<div class="class-name">.flaticon-black14</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/black-arrow-sync_2745">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-black15"></div>
+		<div class="class-name">.flaticon-black15</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/black-starburst_2752">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-black16"></div>
+		<div class="class-name">.flaticon-black16</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/black-microphone_2753">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-black17"></div>
+		<div class="class-name">.flaticon-black17</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/black-notes_2764">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-black18"></div>
+		<div class="class-name">.flaticon-black18</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/black-minus_2777">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-black22"></div>
+		<div class="class-name">.flaticon-black22</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/black-plus_2784">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-black23"></div>
+		<div class="class-name">.flaticon-black23</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/black-scissors_2792">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-black3"></div>
+		<div class="class-name">.flaticon-black3</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/black-eye_2566">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-black4"></div>
+		<div class="class-name">.flaticon-black4</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/black-key_2575">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-black5"></div>
+		<div class="class-name">.flaticon-black5</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/black-flag_2587">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-botton2"></div>
+		<div class="class-name">.flaticon-botton2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/botton-play_3000">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-briefcase1"></div>
+		<div class="class-name">.flaticon-briefcase1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/briefcase_2599">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-brush5"></div>
+		<div class="class-name">.flaticon-brush5</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/brush_2614">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-business"></div>
+		<div class="class-name">.flaticon-business</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/business-card_2562">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-calculator2"></div>
+		<div class="class-name">.flaticon-calculator2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/calculator_2803">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-calendar3"></div>
+		<div class="class-name">.flaticon-calendar3</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/calendar-outline_3005">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-camera1"></div>
+		<div class="class-name">.flaticon-camera1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/camera-outline_2698">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-cancel1"></div>
+		<div class="class-name">.flaticon-cancel1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/cancel-black-sign_2748">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-cancel"></div>
+		<div class="class-name">.flaticon-cancel</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/cancel-outline_2531">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-chart3"></div>
+		<div class="class-name">.flaticon-chart3</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/chart-bar_2584">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-chart4"></div>
+		<div class="class-name">.flaticon-chart4</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/chart-area_2787">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-chart5"></div>
+		<div class="class-name">.flaticon-chart5</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/chart-area-outline_2798">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-chart6"></div>
+		<div class="class-name">.flaticon-chart6</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/chart-bar-outline_2807">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-chevron1"></div>
+		<div class="class-name">.flaticon-chevron1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/chevron-right-outline_2732">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-chevron3"></div>
+		<div class="class-name">.flaticon-chevron3</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/chevron-right_2552">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-chevron"></div>
+		<div class="class-name">.flaticon-chevron</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/chevron-left-outline_2708">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-chronograph1"></div>
+		<div class="class-name">.flaticon-chronograph1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/chronograph-helped-me_2711">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-clipboard1"></div>
+		<div class="class-name">.flaticon-clipboard1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/clipboard_2610">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-cloud6"></div>
+		<div class="class-name">.flaticon-cloud6</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/cloud-storage-model_2570">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-code"></div>
+		<div class="class-name">.flaticon-code</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/envelope-outline_3002">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-compass1"></div>
+		<div class="class-name">.flaticon-compass1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/compass_2549">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-complete1"></div>
+		<div class="class-name">.flaticon-complete1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/complete-text-document_2723">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-credit"></div>
+		<div class="class-name">.flaticon-credit</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/credit-card-outline_2765">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-cup2"></div>
+		<div class="class-name">.flaticon-cup2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/cup-of-coffee_2762">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-database2"></div>
+		<div class="class-name">.flaticon-database2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/database_2561">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-delete10"></div>
+		<div class="class-name">.flaticon-delete10</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/delete-document_2789">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-delete4"></div>
+		<div class="class-name">.flaticon-delete4</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/delete_2501">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-delete5"></div>
+		<div class="class-name">.flaticon-delete5</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/delete-outline_2780">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-device2"></div>
+		<div class="class-name">.flaticon-device2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/device-phone_2504">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-device"></div>
+		<div class="class-name">.flaticon-device</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/device-tablet_2712">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-directions1"></div>
+		<div class="class-name">.flaticon-directions1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/directions_2550">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-divide1"></div>
+		<div class="class-name">.flaticon-divide1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/divide-outline_2746">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-divide"></div>
+		<div class="class-name">.flaticon-divide</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/divide-symbol_2693">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-download1"></div>
+		<div class="class-name">.flaticon-download1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/download-file_2564">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-dribble1"></div>
+		<div class="class-name">.flaticon-dribble1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/dribble-circular_2591">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-eject1"></div>
+		<div class="class-name">.flaticon-eject1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/eject-outline_2683">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-eject"></div>
+		<div class="class-name">.flaticon-eject</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/eject_2535">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-empty3"></div>
+		<div class="class-name">.flaticon-empty3</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/empty-document_2768">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-equals1"></div>
+		<div class="class-name">.flaticon-equals1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/equals_2503">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-equal"></div>
+		<div class="class-name">.flaticon-equal</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/equal-outline_2725">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-eye1"></div>
+		<div class="class-name">.flaticon-eye1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/eye-outline_2560">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-facebook3"></div>
+		<div class="class-name">.flaticon-facebook3</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/facebook-social-network_2738">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-favorite3"></div>
+		<div class="class-name">.flaticon-favorite3</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/favorite-outline_3004">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-feather"></div>
+		<div class="class-name">.flaticon-feather</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/feather_2569">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-film6"></div>
+		<div class="class-name">.flaticon-film6</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/film_2606">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-flag"></div>
+		<div class="class-name">.flaticon-flag</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/flag-outline_2571">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-flash"></div>
+		<div class="class-name">.flaticon-flash</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/flash-camera_2721">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-flickr2"></div>
+		<div class="class-name">.flaticon-flickr2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/flickr-circular_2585">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-flickr"></div>
+		<div class="class-name">.flaticon-flickr</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/flickr-outline_2697">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-float2"></div>
+		<div class="class-name">.flaticon-float2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/float-ouline_2750">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-flow1"></div>
+		<div class="class-name">.flaticon-flow1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/flow-switch_2718">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-flow3"></div>
+		<div class="class-name">.flaticon-flow3</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/flow-children_2572">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-flow"></div>
+		<div class="class-name">.flaticon-flow</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/flow-merge_2704">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-folder3"></div>
+		<div class="class-name">.flaticon-folder3</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/folder-delete_2582">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-folder4"></div>
+		<div class="class-name">.flaticon-folder4</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/folder-add_2679">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-foldout1"></div>
+		<div class="class-name">.flaticon-foldout1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/fold-out-map_2690">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-gift1"></div>
+		<div class="class-name">.flaticon-gift1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/gift_2744">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-github1"></div>
+		<div class="class-name">.flaticon-github1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/github-circular_2600">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-github"></div>
+		<div class="class-name">.flaticon-github</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/github_2767">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-globe3"></div>
+		<div class="class-name">.flaticon-globe3</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/globe_2505">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-globe"></div>
+		<div class="class-name">.flaticon-globe</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/globe-outline_2616">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-great"></div>
+		<div class="class-name">.flaticon-great</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/great-example_2676">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-group1"></div>
+		<div class="class-name">.flaticon-group1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/group-outline_2742">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-group"></div>
+		<div class="class-name">.flaticon-group</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/group_2615">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-home1"></div>
+		<div class="class-name">.flaticon-home1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/home-outline_2740">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-i7"></div>
+		<div class="class-name">.flaticon-i7</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/i-downloaded-something_2719">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-i8"></div>
+		<div class="class-name">.flaticon-i8</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/i-denied-the-request_2759">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-image"></div>
+		<div class="class-name">.flaticon-image</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/image-outline_2691">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-infinity1"></div>
+		<div class="class-name">.flaticon-infinity1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/infinity_2625">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-info1"></div>
+		<div class="class-name">.flaticon-info1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/info-black-triangle_2730">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-information"></div>
+		<div class="class-name">.flaticon-information</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/information-outline_2770">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-info"></div>
+		<div class="class-name">.flaticon-info</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/info-outline_2689">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-input2"></div>
+		<div class="class-name">.flaticon-input2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/input-checked-outline_2628">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-input"></div>
+		<div class="class-name">.flaticon-input</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/input-checked_2669">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-key5"></div>
+		<div class="class-name">.flaticon-key5</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/key-outline_2525">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-laptop"></div>
+		<div class="class-name">.flaticon-laptop</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/laptop-device_2743">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-large"></div>
+		<div class="class-name">.flaticon-large</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/info_2678">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-lastfm1"></div>
+		<div class="class-name">.flaticon-lastfm1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/lastfm_2699">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-lastfm"></div>
+		<div class="class-name">.flaticon-lastfm</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/lastfm-circular_2681">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-lightbulb1"></div>
+		<div class="class-name">.flaticon-lightbulb1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/lightbulb_2613">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-link1"></div>
+		<div class="class-name">.flaticon-link1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/link-outline_2506">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-linkedin1"></div>
+		<div class="class-name">.flaticon-linkedin1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/linkedin-circular_2766">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-location1"></div>
+		<div class="class-name">.flaticon-location1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/location-arrow-outline_2623">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-location3"></div>
+		<div class="class-name">.flaticon-location3</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/location-arrow_2553">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-location"></div>
+		<div class="class-name">.flaticon-location</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/location-outline_2592">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-lock1"></div>
+		<div class="class-name">.flaticon-lock1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/lock-closed-outline_2809">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-mail"></div>
+		<div class="class-name">.flaticon-mail</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/mail_2778">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-media10"></div>
+		<div class="class-name">.flaticon-media10</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/media-rewind-outline_2785">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-media1"></div>
+		<div class="class-name">.flaticon-media1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/media-rewind_2586">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-media2"></div>
+		<div class="class-name">.flaticon-media2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/media-fast-forward_2597">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-media3"></div>
+		<div class="class-name">.flaticon-media3</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/media-record-outline_2598">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-media4"></div>
+		<div class="class-name">.flaticon-media4</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/media-pause-outline_2601">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-media5"></div>
+		<div class="class-name">.flaticon-media5</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/media-fast-forward-outline_2670">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-media6"></div>
+		<div class="class-name">.flaticon-media6</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/media-pause_2703">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-media7"></div>
+		<div class="class-name">.flaticon-media7</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/media-stop_2737">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-media8"></div>
+		<div class="class-name">.flaticon-media8</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/media-play-outline_2781">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-media9"></div>
+		<div class="class-name">.flaticon-media9</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/media-stop-outline_2783">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-media"></div>
+		<div class="class-name">.flaticon-media</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/media-record_2538">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-menu2"></div>
+		<div class="class-name">.flaticon-menu2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/menu-outline_2544">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-menu"></div>
+		<div class="class-name">.flaticon-menu</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/menu_3001">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-message1"></div>
+		<div class="class-name">.flaticon-message1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/message-typing_2810">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-messages1"></div>
+		<div class="class-name">.flaticon-messages1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/messages_2563">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-message"></div>
+		<div class="class-name">.flaticon-message</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/message_2782">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-microphone2"></div>
+		<div class="class-name">.flaticon-microphone2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/microphone-outline_2696">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-minimise1"></div>
+		<div class="class-name">.flaticon-minimise1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/minimise-outline_2716">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-music9"></div>
+		<div class="class-name">.flaticon-music9</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/music-note_2543">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-no"></div>
+		<div class="class-name">.flaticon-no</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/no-volume_2547">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-open1"></div>
+		<div class="class-name">.flaticon-open1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/open-the-lock-without-problems_2700">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-out"></div>
+		<div class="class-name">.flaticon-out</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/out-arrow-to-the-right_2802">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-partly"></div>
+		<div class="class-name">.flaticon-partly</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/partly-sunny_2779">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-pencil1"></div>
+		<div class="class-name">.flaticon-pencil1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/pencil-outline_2800">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-phone6"></div>
+		<div class="class-name">.flaticon-phone6</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/phone-call_2715">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-phone7"></div>
+		<div class="class-name">.flaticon-phone7</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/phone-scheme_2717">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-pi1"></div>
+		<div class="class-name">.flaticon-pi1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/pi-number_2761">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-pie1"></div>
+		<div class="class-name">.flaticon-pie1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/pie-chart_2733">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-pie"></div>
+		<div class="class-name">.flaticon-pie</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/pie-chart-outline_2773">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-pin2"></div>
+		<div class="class-name">.flaticon-pin2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/pin-outline_2536">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-pine1"></div>
+		<div class="class-name">.flaticon-pine1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/pine-tree_2576">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-pinterest3"></div>
+		<div class="class-name">.flaticon-pinterest3</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/pinterest-circular_2674">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-pinterest"></div>
+		<div class="class-name">.flaticon-pinterest</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/pinterest_2756">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-pipette1"></div>
+		<div class="class-name">.flaticon-pipette1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/pipette_2542">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-pitcher1"></div>
+		<div class="class-name">.flaticon-pitcher1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/pitcher-of-beer_2688">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-plane7"></div>
+		<div class="class-name">.flaticon-plane7</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/plane-outline_2567">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-plug1"></div>
+		<div class="class-name">.flaticon-plug1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/plug-outline_2794">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-plug"></div>
+		<div class="class-name">.flaticon-plug</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/plug-without-cable_2749">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-point"></div>
+		<div class="class-name">.flaticon-point</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/point-of-interest-outline_2985">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-power1"></div>
+		<div class="class-name">.flaticon-power1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/power_2537">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-power2"></div>
+		<div class="class-name">.flaticon-power2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/power-outline_2541">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-printer1"></div>
+		<div class="class-name">.flaticon-printer1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/printer_2534">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-puzzle2"></div>
+		<div class="class-name">.flaticon-puzzle2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/puzzle-outline_2502">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-puzzle"></div>
+		<div class="class-name">.flaticon-puzzle</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/puzzle-piece_2626">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-radar"></div>
+		<div class="class-name">.flaticon-radar</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/radar-outline_2559">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-refresh5"></div>
+		<div class="class-name">.flaticon-refresh5</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/refresh_2671">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-rounded6"></div>
+		<div class="class-name">.flaticon-rounded6</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/rounded-world_2707">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-rss5"></div>
+		<div class="class-name">.flaticon-rss5</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/rss-black-line_2758">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-rss6"></div>
+		<div class="class-name">.flaticon-rss6</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/rss-outline_2799">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-scissors"></div>
+		<div class="class-name">.flaticon-scissors</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/scissors-outline_2588">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-shopping1"></div>
+		<div class="class-name">.flaticon-shopping1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/shopping-bag_2709">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-shopping2"></div>
+		<div class="class-name">.flaticon-shopping2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/shopping-cart-1_2772">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-signal"></div>
+		<div class="class-name">.flaticon-signal</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/signal-pi-outline_2999">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-skype1"></div>
+		<div class="class-name">.flaticon-skype1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/skype-outline_2555">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-skype2"></div>
+		<div class="class-name">.flaticon-skype2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/skype-social-network_2695">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-small11"></div>
+		<div class="class-name">.flaticon-small11</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/small-flash-outline_2983">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-small13"></div>
+		<div class="class-name">.flaticon-small13</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/small-outline_2986">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-small14"></div>
+		<div class="class-name">.flaticon-small14</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/small-cog-outline_2987">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-small17"></div>
+		<div class="class-name">.flaticon-small17</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/small-attachment-outline_2991">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-small20"></div>
+		<div class="class-name">.flaticon-small20</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/small-zoom-outline_2998">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-small6"></div>
+		<div class="class-name">.flaticon-small6</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/small-buttons_2754">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-snowflake1"></div>
+		<div class="class-name">.flaticon-snowflake1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/snowflake_2573">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-social3"></div>
+		<div class="class-name">.flaticon-social3</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/social-dribble_2680">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-social"></div>
+		<div class="class-name">.flaticon-social</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/social-networking-twitter_2722">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-sort2"></div>
+		<div class="class-name">.flaticon-sort2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/sort-numerically_2603">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-sort"></div>
+		<div class="class-name">.flaticon-sort</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/sort-alphabetically_2609">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-spanner"></div>
+		<div class="class-name">.flaticon-spanner</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/spanner-outline_2795">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-sprocket1"></div>
+		<div class="class-name">.flaticon-sprocket1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/sprocket-mechanism_2694">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-starburst1"></div>
+		<div class="class-name">.flaticon-starburst1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/starburst-outline_2551">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-sunny1"></div>
+		<div class="class-name">.flaticon-sunny1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/sunny_2602">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-tabs1"></div>
+		<div class="class-name">.flaticon-tabs1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/tabs-outline_2590">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-tags1"></div>
+		<div class="class-name">.flaticon-tags1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/tags_2499">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-th2"></div>
+		<div class="class-name">.flaticon-th2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/th-liste-outline_2545">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-the11"></div>
+		<div class="class-name">.flaticon-the11</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/the-arrow-up_2617">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-the12"></div>
+		<div class="class-name">.flaticon-the12</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/the-volume-up_2618">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-the13"></div>
+		<div class="class-name">.flaticon-the13</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/the-arrow-down-thick_2619">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-the14"></div>
+		<div class="class-name">.flaticon-the14</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/the-arrow-forward_2621">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-the15"></div>
+		<div class="class-name">.flaticon-the15</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/the-user-delete-my-friend_2622">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-the16"></div>
+		<div class="class-name">.flaticon-the16</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/the-passenger-plane_2672">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-the17"></div>
+		<div class="class-name">.flaticon-the17</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/the-bell-rang-new-mind_2675">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-the18"></div>
+		<div class="class-name">.flaticon-the18</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/the-arrow-goes-left_2714">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-there1"></div>
+		<div class="class-name">.flaticon-there1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/there-was-nothing-on-the-radar_2701">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-thick1"></div>
+		<div class="class-name">.flaticon-thick1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/thick-right-arrow_2728">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-th"></div>
+		<div class="class-name">.flaticon-th</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/th-list_2611">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-thumbs1"></div>
+		<div class="class-name">.flaticon-thumbs1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/thumbs-up-all-right_2527">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-thumbs2"></div>
+		<div class="class-name">.flaticon-thumbs2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/thumbs-down-negation_2620">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-ticket1"></div>
+		<div class="class-name">.flaticon-ticket1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/ticket_2583">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-tick"></div>
+		<div class="class-name">.flaticon-tick</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/tick_2775">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-time"></div>
+		<div class="class-name">.flaticon-time</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/time-the-work_2720">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-trash2"></div>
+		<div class="class-name">.flaticon-trash2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/trash-pull_2702">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-tumblr3"></div>
+		<div class="class-name">.flaticon-tumblr3</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/tumblr_2578">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-tumblr"></div>
+		<div class="class-name">.flaticon-tumblr</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/tumblr-circular_2608">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-twitter7"></div>
+		<div class="class-name">.flaticon-twitter7</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/twitter-circular_2579">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-upload1"></div>
+		<div class="class-name">.flaticon-upload1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/upload-file_2528">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-user2"></div>
+		<div class="class-name">.flaticon-user2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/user-outline_2736">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-user5"></div>
+		<div class="class-name">.flaticon-user5</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/user-delete_2557">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-user"></div>
+		<div class="class-name">.flaticon-user</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/user_2530">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-video2"></div>
+		<div class="class-name">.flaticon-video2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/video_2556">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-video3"></div>
+		<div class="class-name">.flaticon-video3</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/video-outline_2630">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-vimeo1"></div>
+		<div class="class-name">.flaticon-vimeo1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/vimeo_2724">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-vimeo"></div>
+		<div class="class-name">.flaticon-vimeo</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/vimeo-circular_2581">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-volume9"></div>
+		<div class="class-name">.flaticon-volume9</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/volume-down_2607">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-warning1"></div>
+		<div class="class-name">.flaticon-warning1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/warning-outline_2747">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-warning"></div>
+		<div class="class-name">.flaticon-warning</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/warning_2593">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-waves1"></div>
+		<div class="class-name">.flaticon-waves1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/waves_2500">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-waves"></div>
+		<div class="class-name">.flaticon-waves</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/waves-outline_2786">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-weather2"></div>
+		<div class="class-name">.flaticon-weather2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/weather-shower_2529">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-weather3"></div>
+		<div class="class-name">.flaticon-weather3</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/weather-downpour_2540">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-weather4"></div>
+		<div class="class-name">.flaticon-weather4</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/weather-night_2568">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-weather5"></div>
+		<div class="class-name">.flaticon-weather5</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/weather-stormy_2627">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-wifi2"></div>
+		<div class="class-name">.flaticon-wifi2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/wifi-outline_2554">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-wifi3"></div>
+		<div class="class-name">.flaticon-wifi3</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/wifi-black-line_2741">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-windy1"></div>
+		<div class="class-name">.flaticon-windy1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/windy-and-cloudy_2797">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-windy"></div>
+		<div class="class-name">.flaticon-windy</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/windy_2791">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-wine4"></div>
+		<div class="class-name">.flaticon-wine4</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/wine_2548">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-with3"></div>
+		<div class="class-name">.flaticon-with3</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/attach-file_2677">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-with4"></div>
+		<div class="class-name">.flaticon-with4</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/camera_2705">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-with5"></div>
+		<div class="class-name">.flaticon-with5</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/big-headphones_2710">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-with6"></div>
+		<div class="class-name">.flaticon-with6</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/thermometer_2713">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-with7"></div>
+		<div class="class-name">.flaticon-with7</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/pen_2726">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-with8"></div>
+		<div class="class-name">.flaticon-with8</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/computer-screen_2727">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-with9"></div>
+		<div class="class-name">.flaticon-with9</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/bucket_2751">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-world1"></div>
+		<div class="class-name">.flaticon-world1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/world-outline_2605">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-wristwatch1"></div>
+		<div class="class-name">.flaticon-wristwatch1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/wristwatch_2539">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-yesterday1"></div>
+		<div class="class-name">.flaticon-yesterday1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/upload-document_2757">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-zoom1"></div>
+		<div class="class-name">.flaticon-zoom1</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/zoom_2604">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-zoom2"></div>
+		<div class="class-name">.flaticon-zoom2</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/zoom-out-outline_2682">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-zoom3"></div>
+		<div class="class-name">.flaticon-zoom3</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/zoom-in-outline_2686">Stephen Hutchings</a></div></div><div class="glyph">
+		<div class="glyph-icon flaticon-zoom4"></div>
+		<div class="class-name">.flaticon-zoom4</div><div class="author-name">Author: <a href="http://www.flaticon.com/free-icon/zoom-out_2776">Stephen Hutchings</a></div></div></section>
+
+<section class="attribution">
+
+	<div class="usetitle">License and attribution:</div><div class="attrDiv">Font generated by <a href="http://www.flaticon.com">flaticon.com</a>
+ under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY</a>. The authors are: <a href="http://www.typicons.com">Stephen Hutchings</a>.</div><div class="usetitle">Copy the Attribution License:</div>
+
+<textarea onclick="this.focus();this.select();">Font generated by &lt;a href=&quot;http://www.flaticon.com&quot;&gt;flaticon.com&lt;/a&gt;
+ under &lt;a href=&quot;http://creativecommons.org/licenses/by/3.0/&quot;&gt;CC BY&lt;/a&gt;. The authors are: &lt;a href=&quot;http://www.typicons.com&quot;&gt;Stephen Hutchings&lt;/a&gt;.</textarea>
+
+</section>
+
+<section class="iconsuse">
+    	<div class="usetitle">Examples:</div>
+		<div class="image"><p>&lt;i class=&quot;flaticon-add10&quot;&gt;&lt;/i&gt; <i class="flaticon-add10"></i></p><p>&lt;i class=&quot;flaticon-add9&quot;&gt;&lt;/i&gt; <i class="flaticon-add9"></i></p><p>&lt;i class=&quot;flaticon-adjust1&quot;&gt;&lt;/i&gt; <i class="flaticon-adjust1"></i></p><p>&lt;i class=&quot;flaticon-adjust&quot;&gt;&lt;/i&gt; <i class="flaticon-adjust"></i></p><p>&lt;i class=&quot;flaticon-anchor1&quot;&gt;&lt;/i&gt; <i class="flaticon-anchor1"></i></p></div><div class="image"><p>&lt;span class=&quot;flaticon-anchor&quot;&gt;&lt;/span&gt; <span class="flaticon-anchor"></span></p><p>&lt;span class=&quot;flaticon-archives1&quot;&gt;&lt;/span&gt; <span class="flaticon-archives1"></span></p><p>&lt;span class=&quot;flaticon-arrow32&quot;&gt;&lt;/span&gt; <span class="flaticon-arrow32"></span></p><p>&lt;span class=&quot;flaticon-arrow33&quot;&gt;&lt;/span&gt; <span class="flaticon-arrow33"></span></p><p>&lt;span class=&quot;flaticon-arrow34&quot;&gt;&lt;/span&gt; <span class="flaticon-arrow34"></span></p></div><div class="image"><p>&lt;span class=&quot;flaticon-arrow35&quot;&gt;&lt;/span&gt; <span class="flaticon-arrow35"></span></p><p>&lt;i class=&quot;flaticon-arrow36&quot;&gt;&lt;/i&gt; <i class="flaticon-arrow36"></i></p><p>&lt;i class=&quot;flaticon-arrow37&quot;&gt;&lt;/i&gt; <i class="flaticon-arrow37"></i></p><p>&lt;i class=&quot;flaticon-arrow38&quot;&gt;&lt;/i&gt; <i class="flaticon-arrow38"></i></p><p>&lt;i class=&quot;flaticon-arrow39&quot;&gt;&lt;/i&gt; <i class="flaticon-arrow39"></i></p></div><div class="image"><p>&lt;span class=&quot;flaticon-arrow40&quot;&gt;&lt;/span&gt; <span class="flaticon-arrow40"></span></p><p>&lt;span class=&quot;flaticon-arrow41&quot;&gt;&lt;/span&gt; <span class="flaticon-arrow41"></span></p><p>&lt;span class=&quot;flaticon-arrow42&quot;&gt;&lt;/span&gt; <span class="flaticon-arrow42"></span></p><p>&lt;span class=&quot;flaticon-arrow43&quot;&gt;&lt;/span&gt; <span class="flaticon-arrow43"></span></p><p>&lt;span class=&quot;flaticon-arrow44&quot;&gt;&lt;/span&gt; <span class="flaticon-arrow44"></span></p></div><div class="image"></div>
+</section>
+<div id="footer">
+    <div>Generated by <a href="http://www.flaticon.com">flaticon.com</a>
+    </div>
+</div>
+	</body>
+</html>
