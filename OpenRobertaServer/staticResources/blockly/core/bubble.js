@@ -440,11 +440,11 @@ Blockly.Bubble.prototype.layoutBubble_ = function() {
     } else {
         if (this.anchorX_ + relativeLeft < metrics.viewLeft) {
             // Slide the bubble right until it is onscreen.
-            relativeLeft = metrics.viewLeft - this.anchorX_;
+            relativeLeft = metrics.viewLeft - this.anchorX_ + Blockly.Bubble.BORDER_WIDTH;
         } else if (metrics.viewLeft + metrics.viewWidth < this.anchorX_ + relativeLeft + this.width_ + Blockly.BlockSvg.SEP_SPACE_X
                 + Blockly.Scrollbar.scrollbarThickness) {
             // Slide the bubble left until it is onscreen.
-            relativeLeft = metrics.viewLeft + metrics.viewWidth - this.anchorX_ - this.width_ - Blockly.Scrollbar.scrollbarThickness;
+            relativeLeft = metrics.viewLeft + metrics.viewWidth - this.anchorX_ - this.width_ - Blockly.Scrollbar.scrollbarThickness + Blockly.Bubble.BORDER_WIDTH;
         }
     }
     if (this.anchorY_ + relativeTop < metrics.viewTop) {
