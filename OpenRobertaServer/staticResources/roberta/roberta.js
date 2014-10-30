@@ -300,6 +300,8 @@ function loadFromListing() {
             $('#programNameSave').val(programName);
             userState.programSaved = true;
             showProgram(result, true, programName);
+            $('#head-navigation #submenu-program #save').removeClass('login');
+            $('#head-navigation #submenu-program #save').removeClass('ui-state-disabled');
         });
     }
 }

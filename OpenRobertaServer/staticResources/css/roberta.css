@@ -15,6 +15,29 @@ h2 {
     text-transform: uppercase;
 }
 
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
+    border-bottom-right-radius: 2px;
+}
+.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
+    border-bottom-left-radius: 2px;
+}
+.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
+    border-top-right-radius: 2px;
+}
+.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
+    border-top-left-radius: 2px;
+}
+
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus {
+	border: none;
+	background: none;
+}
+
 #head-section {
     position: absolute;
     width: 100%;
@@ -34,19 +57,29 @@ ul#head-navigation {
 
 ul#head-navigation > li {
     float: left;
-    margin-right: 20px;
     padding-bottom: 9px;
     padding-top: 6px;
-    padding-left: 9px;
+    width: 70px;
+}
+
+ul#head-navigation > li:hover {
+    background-color: #B7D032;
+}
+
+ul#head-navigation a {
+    text-decoration: none;
+    text-align: center;
+    display: block;
+    color: #333333;
 }
 
 ul#head-navigation .head-navigation-submenu {
 	position: absolute;
-	width: auto;
     list-style-type: none;
     cursor: pointer;
     box-shadow: 2px 4px 4px #999;
     height: auto;
+    width: auto;
 }
 
 ul#head-navigation .head-navigation-submenu > li {
@@ -57,14 +90,6 @@ ul#head-navigation .head-navigation-submenu > li {
 
 ul#head-navigation .head-navigation-submenu > li:hover {
     background-color: #e6e6e6;
-}
-
-ul#head-navigation a {
-    text-decoration: none;
-    color: #333333;
-    text-align: center;
-    display: block;
-    float: left;
 }
 
 .head-navi-icons {
@@ -124,6 +149,7 @@ ul#head-navigation a {
     background-image: url(img/logo.png);
     background-repeat: no-repeat;
     float: right;
+    cursor: default;
 }
 
 .ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled {
