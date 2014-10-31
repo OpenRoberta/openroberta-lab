@@ -34,6 +34,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.syntax.functions.Func;
+import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
@@ -46,6 +47,7 @@ import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensor;
 import de.fhg.iais.roberta.ast.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.FunctionStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
@@ -397,6 +399,18 @@ public class InfoCollector<T> implements AstVisitor<T> {
 
     @Override
     public T visitGetSampleSensor(GetSampleSensor<T> sensorGetSample) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitTextPrintFunct(TextPrintFunct<T> textPrintFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitFunctionStmt(FunctionStmt<T> functionStmt) {
         // TODO Auto-generated method stub
         return null;
     }

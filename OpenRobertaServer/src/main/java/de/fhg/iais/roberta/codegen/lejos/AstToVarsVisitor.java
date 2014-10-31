@@ -8,7 +8,9 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
 import de.fhg.iais.roberta.ast.syntax.sensor.GetSampleSensor;
+import de.fhg.iais.roberta.ast.syntax.stmt.FunctionStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.visitor.AstDefaultVisitorInspecting;
@@ -83,6 +85,18 @@ public class AstToVarsVisitor extends AstDefaultVisitorInspecting {
 
     @Override
     public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitFunctionStmt(FunctionStmt<Void> functionStmt) {
         // TODO Auto-generated method stub
         return null;
     }

@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
+import de.fhg.iais.roberta.ast.syntax.expr.FunctionExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
@@ -23,9 +24,12 @@ import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.syntax.expr.Var.TypeVar;
 import de.fhg.iais.roberta.ast.syntax.functions.Func;
+import de.fhg.iais.roberta.ast.syntax.functions.Function;
+import de.fhg.iais.roberta.ast.syntax.functions.Functions;
 import de.fhg.iais.roberta.ast.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.ast.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.FunctionStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
@@ -74,19 +78,19 @@ abstract public class JaxbAstTransformer<V> {
     protected Func<V> blockToFunction(Block block, List<ExprParam> exprParams, String operationType) {
         String op = getOperation(block, operationType);
         List<Expr<V>> params = extractExprParameters(block, exprParams);
-        return Func.make(Func.Function.get(op), params, extractBlockProperties(block), extractComment(block));
+        return Func.make(Functions.get(op), params, extractBlockProperties(block), extractComment(block));
     }
 
     protected Func<V> blockToFunction(Block block, List<String> strParams, List<ExprParam> exprParams, String operationType) {
         List<Expr<V>> params = extractExprParameters(block, exprParams);
-        return Func.make(Func.Function.get(operationType), strParams, params, extractBlockProperties(block), extractComment(block));
+        return Func.make(Functions.get(operationType), strParams, params, extractBlockProperties(block), extractComment(block));
     }
 
-    private List<Expr<V>> extractExprParameters(Block block, List<ExprParam> exprParams) {
+    protected List<Expr<V>> extractExprParameters(Block block, List<ExprParam> exprParams) {
         List<Expr<V>> params = new ArrayList<Expr<V>>();
         List<Value> values = extractValues(block, (short) exprParams.size());
         for ( ExprParam exprParam : exprParams ) {
-            params.add((Expr<V>) extractValue(values, exprParam));
+            params.add(convertPhraseToExpr(extractValue(values, exprParam)));
         }
         return params;
     }
@@ -184,6 +188,8 @@ abstract public class JaxbAstTransformer<V> {
             stmt = ActionStmt.make((Action<V>) p);
         } else if ( p.getKind().getCategory() == Category.SENSOR ) {
             stmt = SensorStmt.make((Sensor<V>) p);
+        } else if ( p.getKind().getCategory() == Category.FUNCTION ) {
+            stmt = FunctionStmt.make((Function<V>) p);
         } else {
             stmt = (Stmt<V>) p;
         }
@@ -196,6 +202,8 @@ abstract public class JaxbAstTransformer<V> {
             expr = SensorExpr.make((Sensor<V>) p);
         } else if ( p.getKind().getCategory() == Category.ACTOR ) {
             expr = ActionExpr.make((Action<V>) p);
+        } else if ( p.getKind().getCategory() == Category.FUNCTION ) {
+            expr = FunctionExpr.make((Function<V>) p);
         } else {
             expr = (Expr<V>) p;
         }

@@ -22,6 +22,8 @@ import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.ast.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
+import de.fhg.iais.roberta.ast.syntax.expr.FunctionExpr;
+import de.fhg.iais.roberta.ast.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
@@ -29,6 +31,24 @@ import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.syntax.functions.Func;
+import de.fhg.iais.roberta.ast.syntax.functions.Functions;
+import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.LenghtOfIsEmptyFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.ListGetIndex;
+import de.fhg.iais.roberta.ast.syntax.functions.ListRepeat;
+import de.fhg.iais.roberta.ast.syntax.functions.ListSetIndex;
+import de.fhg.iais.roberta.ast.syntax.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathNumPropFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathOnListFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathRandomIntFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathSingleFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.TextChangeCaseFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.TextCharAtFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.TextJoinFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.TextPromptFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.TextTrimFunct;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
@@ -156,6 +176,9 @@ public class AstJaxbTransformer<V> {
             case SENSOR_EXPR:
                 return astToBlock(((SensorExpr<V>) astSource).getSens());
 
+            case FUNCTION_EXPR:
+                return astToBlock(((FunctionExpr<V>) astSource).getFunction());
+
             case EMPTY_LIST:
                 return jaxbDestination;
 
@@ -192,7 +215,6 @@ public class AstJaxbTransformer<V> {
                 return jaxbDestination;
 
             case MOTOR_GET_POWER_ACTION:
-
                 fieldValue = ((MotorGetPowerAction<V>) astSource).getPort().name();
                 addField(jaxbDestination, "MOTORPORT", fieldValue);
 
@@ -490,6 +512,144 @@ public class AstJaxbTransformer<V> {
                 addValue(jaxbDestination, "ACTIVITY", ((StartActivityTask<V>) astSource).getActivityName());
                 return jaxbDestination;
 
+            case TEXT_INDEX_OF_FUNCT:
+                IndexOfFunct<V> textIndexOfFunct = (IndexOfFunct<V>) astSource;
+                addField(jaxbDestination, "END", textIndexOfFunct.getFunctName().name());
+                addValue(jaxbDestination, "VALUE", textIndexOfFunct.getParam().get(0));
+                addValue(jaxbDestination, "FIND", textIndexOfFunct.getParam().get(1));
+                return jaxbDestination;
+
+            case TEXT_CHAR_AT_FUNCT:
+                TextCharAtFunct<V> textCharAtFunct = (TextCharAtFunct<V>) astSource;
+                mutation = new Mutation();
+                mutation.setAt(false);
+                addField(jaxbDestination, "WHERE", textCharAtFunct.getFunctName().name());
+                addValue(jaxbDestination, "VALUE", textCharAtFunct.getParam().get(0));
+                if ( textCharAtFunct.getFunctName() == Functions.FROM_START || textCharAtFunct.getFunctName() == Functions.FROM_END ) {
+                    mutation.setAt(true);
+                    addValue(jaxbDestination, "AT", textCharAtFunct.getParam().get(1));
+                }
+                jaxbDestination.setMutation(mutation);
+                return jaxbDestination;
+
+            case GET_SUB_FUNCT:
+                GetSubFunct<V> getSubFunct = (GetSubFunct<V>) astSource;
+                mutation = new Mutation();
+                mutation.setAt1(false);
+                mutation.setAt2(false);
+                addField(jaxbDestination, "WHERE1", getSubFunct.getStrParam().get(0));
+                addField(jaxbDestination, "WHERE2", getSubFunct.getStrParam().get(1));
+                if ( getSubFunct.getFunctName() == Functions.GET_SUBLIST ) {
+                    addValue(jaxbDestination, "LIST", getSubFunct.getParam().get(0));
+                } else {
+                    addValue(jaxbDestination, "STRING", getSubFunct.getParam().get(0));
+                }
+                if ( Functions.get(getSubFunct.getStrParam().get(0)) == Functions.FROM_START
+                    || Functions.get(getSubFunct.getStrParam().get(0)) == Functions.FROM_END ) {
+                    mutation.setAt1(true);
+                    addValue(jaxbDestination, "AT1", getSubFunct.getParam().get(1));
+                }
+                if ( Functions.get(getSubFunct.getStrParam().get(1)) == Functions.FROM_START
+                    || Functions.get(getSubFunct.getStrParam().get(1)) == Functions.FROM_END ) {
+                    mutation.setAt2(true);
+                    addValue(jaxbDestination, "AT2", getSubFunct.getParam().get(getSubFunct.getParam().size() - 1));
+                }
+                jaxbDestination.setMutation(mutation);
+                return jaxbDestination;
+
+            case MATH_NUM_PROP_FUNCT:
+                MathNumPropFunct<V> mathNumPropFunct = (MathNumPropFunct<V>) astSource;
+                mutation = new Mutation();
+                mutation.setDivisorInput(false);
+                addField(jaxbDestination, "PROPERTY", mathNumPropFunct.getFunctName().name());
+                addValue(jaxbDestination, "NUMBER_TO_CHECK", mathNumPropFunct.getParam().get(0));
+                if ( mathNumPropFunct.getFunctName() == Functions.DIVISIBLE_BY ) {
+                    addValue(jaxbDestination, "DIVISOR", mathNumPropFunct.getParam().get(1));
+                    mutation.setDivisorInput(true);
+                }
+                jaxbDestination.setMutation(mutation);
+                return jaxbDestination;
+
+            case MATH_SINGLE_FUNCT:
+                MathSingleFunct<V> mathSingleFunct = (MathSingleFunct<V>) astSource;
+                addField(jaxbDestination, "OP", mathSingleFunct.getFunctName().name());
+                addValue(jaxbDestination, "NUM", mathSingleFunct.getParam().get(0));
+                return jaxbDestination;
+
+            case MATH_ON_LIST_FUNCT:
+                MathOnListFunct<V> mathOnListFunct = (MathOnListFunct<V>) astSource;
+                addField(jaxbDestination, "OP", mathOnListFunct.getFunctName().name());
+                addValue(jaxbDestination, "LIST", mathOnListFunct.getParam().get(0));
+                return jaxbDestination;
+
+            case MATH_CONSTRAIN_FUNCT:
+                MathConstrainFunct<V> mathConstrainFunct = (MathConstrainFunct<V>) astSource;
+                addValue(jaxbDestination, "VALUE", mathConstrainFunct.getParam().get(0));
+                addValue(jaxbDestination, "LOW", mathConstrainFunct.getParam().get(1));
+                addValue(jaxbDestination, "HIGH", mathConstrainFunct.getParam().get(2));
+                return jaxbDestination;
+
+            case MATH_RANDOM_INT_FUNCT:
+                MathRandomIntFunct<V> mathRandomIntFunct = (MathRandomIntFunct<V>) astSource;
+                addValue(jaxbDestination, "FROM", mathRandomIntFunct.getParam().get(0));
+                addValue(jaxbDestination, "TO", mathRandomIntFunct.getParam().get(1));
+                return jaxbDestination;
+
+            case MATH_RANDOM_FLOAT_FUNCT:
+                return jaxbDestination;
+
+            case TEXT_JOIN_FUNCT:
+                TextJoinFunct<V> textJoinFunct = (TextJoinFunct<V>) astSource;
+                ExprList<V> strExprList = (ExprList<V>) textJoinFunct.getParam().get(0);
+                int numOfStrings = (strExprList.get().size());
+                mutation = new Mutation();
+                mutation.setItems(BigInteger.valueOf(numOfStrings));
+                jaxbDestination.setMutation(mutation);
+                for ( int i = 0; i < numOfStrings; i++ ) {
+                    addValue(jaxbDestination, "ADD" + i, strExprList.get().get(i));
+                }
+                return jaxbDestination;
+
+            case LENGHT_OF_IS_EMPTY_FUNCT:
+                LenghtOfIsEmptyFunct<V> lenghtOfFunct = (LenghtOfIsEmptyFunct<V>) astSource;
+                addValue(jaxbDestination, "VALUE", lenghtOfFunct.getParam().get(0));
+                return jaxbDestination;
+
+            case TEXT_CHANGE_CASE_FUNCT:
+                TextChangeCaseFunct<V> textChangeCaseFunct = (TextChangeCaseFunct<V>) astSource;
+                addField(jaxbDestination, "CASE", textChangeCaseFunct.getFunctName().name());
+                addValue(jaxbDestination, "TEXT", textChangeCaseFunct.getParam().get(0));
+                return jaxbDestination;
+
+            case TEXT_TRIM_FUNCT:
+                TextTrimFunct<V> textTrimFunct = (TextTrimFunct<V>) astSource;
+                addField(jaxbDestination, "MODE", textTrimFunct.getFunctName().name());
+                addValue(jaxbDestination, "TEXT", textTrimFunct.getParam().get(0));
+                return jaxbDestination;
+
+            case TEXT_PRINT_FUNCT:
+                TextPrintFunct<V> textPrintFunct = (TextPrintFunct<V>) astSource;
+                addValue(jaxbDestination, "TEXT", textPrintFunct.getParam().get(0));
+                return jaxbDestination;
+
+            case TEXT_PROMPT_FUNCT:
+                TextPromptFunct<V> textPromptFunct = (TextPromptFunct<V>) astSource;
+                addField(jaxbDestination, "TYPE", textPromptFunct.getFunctName().name());
+                addField(jaxbDestination, "TEXT", textPromptFunct.getText());
+                return jaxbDestination;
+
+            case LIST_CREATE:
+                ListCreate<V> listCreate = (ListCreate<V>) astSource;
+                ExprList<V> exprList = listCreate.getValue();
+                int numOfItems = (exprList.get().size());
+                mutation = new Mutation();
+                mutation.setItems(BigInteger.valueOf(numOfItems));
+                jaxbDestination.setMutation(mutation);
+                for ( int i = 0; i < numOfItems; i++ ) {
+                    addValue(jaxbDestination, "ADD" + i, exprList.get().get(i));
+                }
+                return jaxbDestination;
+
             case FUNCTIONS:
                 Func<V> funct = (Func<V>) astSource;
                 switch ( funct.getFunctName() ) {
@@ -499,70 +659,47 @@ public class AstJaxbTransformer<V> {
                         addValue(jaxbDestination, "B", funct.getParam().get(1));
                         return jaxbDestination;
 
-                    case PRIME:
-                        mutation = new Mutation();
-                        mutation.setDivisorInput(false);
-                        addField(jaxbDestination, "PROPERTY", funct.getFunctName().name());
-                        addValue(jaxbDestination, "NUMBER_TO_CHECK", funct.getParam().get(0));
-                        jaxbDestination.setMutation(mutation);
-                        return jaxbDestination;
-
-                    case DIVISIBLE_BY:
-                        mutation = new Mutation();
-                        mutation.setDivisorInput(true);
-                        addField(jaxbDestination, "PROPERTY", funct.getFunctName().name());
-                        addValue(jaxbDestination, "NUMBER_TO_CHECK", funct.getParam().get(0));
-                        addValue(jaxbDestination, "DIVISOR", funct.getParam().get(1));
-                        jaxbDestination.setMutation(mutation);
-                        return jaxbDestination;
-
-                    case SUM:
-                    case AVERAGE:
-                    case MIN:
-                    case MAX:
-                    case MEDIAN:
-                    case MODE:
-                    case STD_DEV:
-                    case RANDOM:
-                        addField(jaxbDestination, "OP", funct.getFunctName().name());
-                        addValue(jaxbDestination, "LIST", funct.getParam().get(0));
-                        return jaxbDestination;
-
-                    case RANDOM_INTEGER:
-                        addValue(jaxbDestination, "FROM", funct.getParam().get(0));
-                        addValue(jaxbDestination, "TO", funct.getParam().get(1));
-                        return jaxbDestination;
-
-                    case ABS:
-                    case ROOT:
-                    case ROUNDUP:
-                    case ROUNDDOWN:
-                    case LN:
-                    case SIN:
-                    case COS:
-                    case TAN:
-                    case ASIN:
-                    case ATAN:
-                    case ACOS:
-                    case LOG10:
-                    case EXP:
-                    case POW10:
-                        addField(jaxbDestination, "OP", funct.getFunctName().name());
-                        addValue(jaxbDestination, "NUM", funct.getParam().get(0));
-                        return jaxbDestination;
-
-                    case CONSTRAIN:
-                        addValue(jaxbDestination, "VALUE", funct.getParam().get(0));
-                        addValue(jaxbDestination, "LOW", funct.getParam().get(1));
-                        addValue(jaxbDestination, "HIGH", funct.getParam().get(2));
-                        return jaxbDestination;
-
-                    case RANDOM_FLOAT:
-                        return jaxbDestination;
-
                     default:
                         return null;
                 }
+
+            case LIST_REPEAT_FUNCT:
+                ListRepeat<V> listRepeat = (ListRepeat<V>) astSource;
+                addValue(jaxbDestination, "ITEM", listRepeat.getParam().get(0));
+                addValue(jaxbDestination, "NUM", listRepeat.getParam().get(1));
+                return jaxbDestination;
+
+            case LIST_INDEX_OF:
+                ListGetIndex<V> listGetIndex = (ListGetIndex<V>) astSource;
+                mutation = new Mutation();
+                mutation.setAt(false);
+                mutation.setStatement(listGetIndex.getMode().isStatment());
+                addField(jaxbDestination, "MODE", listGetIndex.getMode().name());
+                addField(jaxbDestination, "WHERE", listGetIndex.getFunctName().name());
+                addValue(jaxbDestination, "VALUE", listGetIndex.getParam().get(0));
+                if ( listGetIndex.getParam().size() > 1 ) {
+                    addValue(jaxbDestination, "AT", listGetIndex.getParam().get(1));
+                    mutation.setAt(true);
+                }
+                jaxbDestination.setMutation(mutation);
+                return jaxbDestination;
+
+            case LIST_SET_INDEX:
+                ListSetIndex<V> listSetIndex = (ListSetIndex<V>) astSource;
+                mutation = new Mutation();
+                mutation.setAt(false);
+                addField(jaxbDestination, "MODE", listSetIndex.getMode().name());
+                addField(jaxbDestination, "WHERE", listSetIndex.getFunctName().name());
+                addValue(jaxbDestination, "LIST", listSetIndex.getParam().get(0));
+                if ( listSetIndex.getParam().size() > 2 ) {
+                    addValue(jaxbDestination, "AT", listSetIndex.getParam().get(1));
+                    addValue(jaxbDestination, "TO", listSetIndex.getParam().get(2));
+                    mutation.setAt(true);
+                } else {
+                    addValue(jaxbDestination, "TO", listSetIndex.getParam().get(1));
+                }
+                jaxbDestination.setMutation(mutation);
+                return jaxbDestination;
 
             case EMPTY_EXPR:
             case LOCATION:
