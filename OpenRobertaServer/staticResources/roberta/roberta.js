@@ -472,10 +472,37 @@ function switchToBrickly() {
  * Display status information in the navigation bar
  */
 function displayStatus() {
-    $('#head-navigation #displayLogin').text(userState.name);
-    $('#head-navigation #displayProgram').text(userState.program);
-    $('#head-navigation #displayBrickConnection').text(userState.brickConnection);
-    $('#head-navigation #displayToolbox').text(userState.toolbox);
+    if (userState.name) {
+        $('#head-navigation #displayLogin').text(userState.name);
+        $('#head-navigation #iconDisplayLogin').css('display','inline');
+    } else {
+        $('#head-navigation #displayLogin').text('');
+        $('#head-navigation #iconDisplayLogin').css('display','none');
+    }
+    
+    if (userState.program) {
+        $('#head-navigation #displayProgram').text(userState.program);
+        $('#head-navigation #iconDisplayProgram').css('display','inline');
+    } else {
+        $('#head-navigation #displayProgram').text('');
+        $('#head-navigation #iconDisplayProgram').css('display','none');
+    }
+    
+    if (userState.toolbox) {
+        $('#head-navigation #displayToolbox').text(userState.toolbox);
+        $('#head-navigation #iconDisplayToolbox').css('display','inline');
+    } else {
+        $('#head-navigation #displayToolbox').text('');
+        $('#head-navigation #iconDisplayToolbox').css('display','none');
+    }
+    
+    if (userState.brickConnection) {
+        $('#head-navigation #displayBrickConnection').text(userState.brickConnection);
+        $('#head-navigation #iconDisplayBrickConnection').css('display','inline');
+    } else {
+        $('#head-navigation #displayBrickConnection').text('');
+        $('#head-navigation #iconDisplayBrickConnection').css('display','none');
+    }
 }
 
 /**

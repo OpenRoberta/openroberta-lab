@@ -139,32 +139,26 @@ ul#head-navigation .head-navigation-submenu > li:hover {
 #head-navigation .state {
     float: right;
     padding-top: 7px;
-    padding-right: 50px;
-    font-size: x-small;
+    padding-right: 20px;
+    font-size: small;
 }
 
 #head-navigation #logo {
-    width: 222px;
-    height: 60px;
+	width: 222px;
+	height: 60px;
     background-image: url(img/logo.png);
     background-repeat: no-repeat;
     float: right;
     cursor: default;
 }
-#head-navigation #beta { 
--moz-transform:rotate(45deg); /* Firefox 3.6 Firefox 4 */
--webkit-transform:rotate(45deg); /* Safari */
--o-transform:rotate(45deg); /* Opera */
--ms-transform:rotate(45deg); /* IE9 */
-transform:rotate(45deg); /* W3C */
--webkit-margin-before: 0.75em;
--webkit-margin-after: 0em;
--webkit-margin-start: 0px;
--webkit-margin-end: 0px;
-float: right;
-font-size: 2.5em;
-color: red;
-font-weight:bolder;
+
+#head-navigation #beta {
+	position: fixed;
+	left: 92%;
+	top: 3px;
+    background-image: url(img/beta.png);
+    background-repeat: no-repeat;
+    cursor: default;
 }
 
 .ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled {
