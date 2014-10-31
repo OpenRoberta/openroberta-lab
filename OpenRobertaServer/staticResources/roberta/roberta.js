@@ -395,7 +395,7 @@ function initProgramNameTable() {
         "sTitle" : "Name des Programms",
         "sClass" : "programs"
     }, {
-        "sTitle" : "User",
+        "sTitle" : "Erzeugt von",
         "sClass" : "programs"
     }, {
         "sTitle" : "Blöcke",
@@ -404,10 +404,10 @@ function initProgramNameTable() {
         "sTitle" : "Icon",
         "sClass" : "programs"
     }, {
-        "sTitle" : "Created",
+        "sTitle" : "Erzeugt am",
         "sClass" : "programs"
     }, {
-        "sTitle" : "Last Update",
+        "sTitle" : "Letzte Aktualisierung",
         "sClass" : "programs"
     }, ];
     var $programs = $('#programNameTable');
@@ -423,8 +423,8 @@ function initProgramNameTable() {
         "bPaginate" : true,
         "iDisplayLength" : 20,
         "oLanguage" : {
-            "sLengthMenu" : 'Show <select>' + '<option value="10">10</option><option value="20">20</option><option value="25">25</option>'
-                    + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>' + '</select> programs/revisions'
+            "sLengthMenu" : 'Zeige <select>' + '<option value="10">10</option><option value="20">20</option><option value="25">25</option>'
+                    + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>' + '</select> Programme/Revisionen'
         },
         "fnDrawCallback" : function() {
             var counter = +$('#redrawCounter').text();
