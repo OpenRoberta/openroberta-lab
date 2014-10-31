@@ -1,5 +1,6 @@
 # Open Roberta: Getting started.
-***
+========
+
 
 
 ### Introduction: ###
@@ -12,11 +13,9 @@ Basic toolset: Java 1.7, Maven, Git, Browser
 
 Please also check our [wiki](http://wiki.open-roberta.org) for a detailed install instruction, development procedure, coding conventions and further reading. Please also checkout our project [issue tracker](http://wiki.open-roberta.org).
 
-### Fast installation: ###
-Maven is taking care.
-
+###### Fast installation (maven is taking care): ######
+***
 Step 1) Compilation
-
 ***
 
 
@@ -50,9 +49,7 @@ A successful build looks like:
 ``[INFO] BUILD SUCCESS``
 
 ***
-
 Step 2) Starting your own server instance.
-
 ***
 
 ``$ cd ..``
@@ -60,16 +57,12 @@ Step 2) Starting your own server instance.
 ``$ cd OpenRobertaServer``
 
 ``$ java -jar target/OpenRobertaServer-0.0.1-SNAPSHOT.jar``
-
 ***
-
 ###### Accessing your programming environment: ######
 Start your browser at:
 
 `` http://localhost:1999``
 
 ***
-
-That's it!
-
+That's all!
 ***
