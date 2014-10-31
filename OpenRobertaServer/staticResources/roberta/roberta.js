@@ -640,7 +640,7 @@ function initHeadNavigation() {
         switchToBlockly();
         var domId = event.target.id;
         if (domId === 'help') {
-            window.open("http://www.open-roberta.org/ersteschritte.html");
+            window.open("http://www.open-roberta.org/erste-schritte.html");
         }
         return false;
     }, 'sub menu of menu "help"');

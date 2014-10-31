@@ -1,5 +1,11 @@
 @charset "UTF-8";
 
+*:focus{
+    outline: 0;
+    outline:	none;
+}
+
+
 html, body {
     margin: 0px !important;
     padding: 0px !important;
