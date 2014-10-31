@@ -634,16 +634,16 @@ function initHeadNavigation() {
         return false;
     }, 'sub menu of menu "developertools"');
 
-    // Submenu Readme
-    $('#head-navigation').onWrap('click', '#submenu-readme > li:not(.ui-state-disabled)', function(event) {
+    // Submenu Help
+    $('#head-navigation').onWrap('click', '#submenu-help > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         switchToBlockly();
         var domId = event.target.id;
-        if (domId === 'readme') {
-            $('#tabReadme').click();
+        if (domId === 'help') {
+            window.open("http://www.open-roberta.org/ersteschritte.html");
         }
         return false;
-    }, 'sub menu of menu "readme"');
+    }, 'sub menu of menu "help"');
 
     // Submenu Login
     $('#head-navigation').onWrap('click', '#submenu-login > li:not(.ui-state-disabled)', function(event) {
@@ -668,6 +668,10 @@ function initHeadNavigation() {
         $('#head-navigation').menu("collapseAll", null, false);
     });
 
+    $('#head-navigation #logo').onWrap('click', function() {
+        window.open('http://open-roberta.org');
+    }, 'logo was clicked');
+    
     setHeadNavigationMenuState('logout');
 }
 

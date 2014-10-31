@@ -77,13 +77,13 @@
                 <a href="#"><span class="head-navi-icons developer"></span><span class="head-navi-text">Tools</span></a>
                 <ul id="submenu-developertools" class="head-navigation-submenu">
                     <li id="logging"><span class="flaticon-spanner"></span>Logging</li>
-                    <li id="simtest"><span class="flaticon-spanner"></span>Simulator Test</li>
+                    <li class="login logout" id="simtest"><span class="flaticon-spanner"></span>Simulator Test</li>
                 </ul>
             </li>
             <li>
                 <a href="#"><span class="head-navi-icons help"></span><span class="head-navi-text">Hilfe</span></a>
-                <ul id="submenu-readme" class="head-navigation-submenu">
-                    <li id="readme"><span class="flaticon-lightbulb1"></span>anzeigen</li>
+                <ul id="submenu-help" class="head-navigation-submenu">
+                    <li id="help"><span class="flaticon-lightbulb1"></span>anzeigen</li>
                 </ul>
             </li>
             <li>
@@ -98,7 +98,6 @@
             </li>
 
             <div id="logo">
-                <a href="index.html"></a>
             </div>
 
             <div id="beta">
@@ -182,7 +181,6 @@
                 <li><a id="tabListing" href="#listing">Listing of programs</a></li>
                 <li><a id="tabConfListing" href="#confListing">Listing of configurations</a></li>
                 <li><a id="tabLogging" href="#logging">Logging</a></li>
-                <li><a id="tabReadme" href="#readme">Readme</a></li>
                 <li><a id="tabStandardConfiguration" href="#bricklyFrame">Standard-Configuration</a></li>
                 <li><a id="tabSimtest" onclick="viewSimulator(true);">Simulator Test</a></li>
             </ul>
@@ -238,12 +236,6 @@
                     <div class="counter">Count:</div>
                     <div class="counter" id="counter">0</div>
                 </div>
-            </div>
-            
-            <div id="readme">
-                <br/>
-                <div>Content Readme</div>
-                <input class="backToBlockly" type="submit" value="Zurück" />
             </div>
         </div>
         <iframe src="bricklyFrame.html" id="bricklyFrame" style="height: 100%; width: 100%; border: none;"></iframe>

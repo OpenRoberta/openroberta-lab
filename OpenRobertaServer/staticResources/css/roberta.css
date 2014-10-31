@@ -155,7 +155,7 @@ ul#head-navigation .head-navigation-submenu > li:hover {
 #head-navigation #beta {
 	position: fixed;
 	left: 92%;
-	top: 3px;
+	top: 30px;
     background-image: url(img/beta.png);
     background-repeat: no-repeat;
     cursor: default;
