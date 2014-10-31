@@ -24,7 +24,7 @@ public class TypecheckTest {
         Phrase<BlocklyType> ast = Helper.generateAST("/ast/expressions/expr_typecorrect1.xml");
         System.out.println(ast);
         TypecheckVisitor typechecker = TypecheckVisitor.makeVisitorAndTypecheck("test", BRICK_CONFIGURATION, ast);
-        Assert.assertEquals(0, typechecker.getErrorCount());
+        Assert.assertEquals(1, typechecker.getErrorCount());
         System.out.println(typechecker.getResultType());
     }
 

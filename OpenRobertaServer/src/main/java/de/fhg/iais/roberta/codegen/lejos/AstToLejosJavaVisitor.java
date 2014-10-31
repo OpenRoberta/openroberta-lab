@@ -40,6 +40,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.syntax.functions.Func;
+import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
@@ -53,6 +54,7 @@ import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensor;
 import de.fhg.iais.roberta.ast.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.FunctionStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt.Mode;
@@ -252,15 +254,15 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitFunc(Func<Void> funct) {
-        switch ( funct.getFunctName() ) {
-            case PRINT:
-                this.sb.append("System.out.println(");
-                funct.getParam().get(0).visit(this);
-                this.sb.append(")");
-                break;
-            default:
-                break;
-        }
+        //        switch ( funct.getFunctName() ) {
+        //            case PRINT:
+        //                this.sb.append("System.out.println(");
+        //                funct.getParam().get(0).visit(this);
+        //                this.sb.append(")");
+        //                break;
+        //            default:
+        //                break;
+        //        }
         return null;
     }
 
@@ -838,6 +840,21 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("// ok\n");
         this.sb.append(INDENT).append(INDENT).append("}\n");
         this.sb.append(INDENT).append("}\n}\n");
+    }
+
+    @Override
+    public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
+        this.sb.append("System.out.println(");
+        textPrintFunct.getParam().get(0).visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitFunctionStmt(FunctionStmt<Void> functionStmt) {
+        functionStmt.getFunction().visit(this);
+        this.sb.append(";");
+        return null;
     }
 
 }
