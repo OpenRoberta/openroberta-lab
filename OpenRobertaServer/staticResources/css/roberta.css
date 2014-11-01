@@ -159,9 +159,11 @@ ul#head-navigation .head-navigation-submenu > li:hover {
 }
 
 #head-navigation #beta {
-	position: fixed;
-	left: 92%;
-	top: 30px;
+	position: absolute;
+	top: 27px;
+	right: 48px;
+	width: 87px;
+	height: 53px;
     background-image: url(img/beta.png);
     background-repeat: no-repeat;
     cursor: default;
@@ -462,6 +464,7 @@ ul#head-navigation .head-navigation-submenu > li:hover {
 
 /* ### Feedback to Jira button ################################################## */
 #atlwdg-trigger {
+	box-shadow: 0px 3px 5px #aeaeaf;
 	z-index: 100;
 }
 
