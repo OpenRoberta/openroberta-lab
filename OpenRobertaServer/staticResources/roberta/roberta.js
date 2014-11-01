@@ -201,13 +201,13 @@ function response(result) {
 /**
  * Save program to server
  */
-function saveToServer() { 
+function saveToServer() {
     if ($('#programNameSave')) {
         var $name = $('#programNameSave');
         setProgram($name.val());
-        if (userState.name) {   // Is someone logged in?
+        if (userState.name) { // Is someone logged in?
             if (!$name.val() || $name.val() === "meinProgramm") {
-                $('#head-navigation #submenu-program #save').addClass('login');            
+                $('#head-navigation #submenu-program #save').addClass('login');
                 $('#head-navigation #submenu-program #save').addClass('ui-state-disabled');
                 displayMessage("Du musst einen anderen Programmnamen nehmen.");
                 return;
@@ -343,7 +343,8 @@ function loadToolbox(toolbox) {
 /**
  * Display programs in a table
  * 
- * @param {result} result object of server call
+ * @param {result}
+ *            result object of server call
  */
 function showPrograms(result) {
     response(result);
@@ -359,7 +360,8 @@ function showPrograms(result) {
 /**
  * Display configurations in a table
  * 
- * @param {result} result object of server call
+ * @param {result}
+ *            result object of server call
  */
 function showConfigurations(result) {
     response(result);
@@ -459,13 +461,13 @@ function checkProgram() {
 }
 
 function switchToBlockly() {
-    $('#tabs').css('display','inline');
-    $('#bricklyFrame').css('display','none');
+    $('#tabs').css('display', 'inline');
+    $('#bricklyFrame').css('display', 'none');
 }
 
 function switchToBrickly() {
-    $('#tabs').css('display','none');
-    $('#bricklyFrame').css('display','inline');
+    $('#tabs').css('display', 'none');
+    $('#bricklyFrame').css('display', 'inline');
 }
 
 /**
@@ -474,41 +476,42 @@ function switchToBrickly() {
 function displayStatus() {
     if (userState.name) {
         $('#head-navigation #displayLogin').text(userState.name);
-        $('#head-navigation #iconDisplayLogin').css('display','inline');
+        $('#head-navigation #iconDisplayLogin').css('display', 'inline');
     } else {
         $('#head-navigation #displayLogin').text('');
-        $('#head-navigation #iconDisplayLogin').css('display','none');
+        $('#head-navigation #iconDisplayLogin').css('display', 'none');
     }
-    
+
     if (userState.program) {
         $('#head-navigation #displayProgram').text(userState.program);
-        $('#head-navigation #iconDisplayProgram').css('display','inline');
+        $('#head-navigation #iconDisplayProgram').css('display', 'inline');
     } else {
         $('#head-navigation #displayProgram').text('');
-        $('#head-navigation #iconDisplayProgram').css('display','none');
+        $('#head-navigation #iconDisplayProgram').css('display', 'none');
     }
-    
+
     if (userState.toolbox) {
         $('#head-navigation #displayToolbox').text(userState.toolbox);
-        $('#head-navigation #iconDisplayToolbox').css('display','inline');
+        $('#head-navigation #iconDisplayToolbox').css('display', 'inline');
     } else {
         $('#head-navigation #displayToolbox').text('');
-        $('#head-navigation #iconDisplayToolbox').css('display','none');
+        $('#head-navigation #iconDisplayToolbox').css('display', 'none');
     }
-    
+
     if (userState.brickConnection) {
         $('#head-navigation #displayBrickConnection').text(userState.brickConnection);
-        $('#head-navigation #iconDisplayBrickConnection').css('display','inline');
+        $('#head-navigation #iconDisplayBrickConnection').css('display', 'inline');
     } else {
         $('#head-navigation #displayBrickConnection').text('');
-        $('#head-navigation #iconDisplayBrickConnection').css('display','none');
+        $('#head-navigation #iconDisplayBrickConnection').css('display', 'none');
     }
 }
 
 /**
  * Inject Brickly with initial toolbox
  * 
- * @param {state} State to be set
+ * @param {state}
+ *            State to be set
  */
 function setHeadNavigationMenuState(state) {
     $('#head-navigation > li > ul > li').removeClass('ui-state-disabled');
@@ -621,7 +624,7 @@ function initHeadNavigation() {
         }
         return false;
     }, 'sub menu of menu "program"');
-    
+
     // Submenu Nepo
     $('#head-navigation').onWrap('click', '#submenu-nepo > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
@@ -638,7 +641,7 @@ function initHeadNavigation() {
         }
         return false;
     }, 'sub menu of menu "nepo"');
-    
+
     // Submenu Roboter (Configuration)
     $('#head-navigation').onWrap('click', '#submenu-configuration > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
@@ -657,7 +660,7 @@ function initHeadNavigation() {
         }
         return false;
     }, 'sub menu of menu "roboter" ("configuration")');
-    
+
     // Submenu Connection
     $('#head-navigation').onWrap('click', '#submenu-connection > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
@@ -719,7 +722,7 @@ function initHeadNavigation() {
     $('#head-navigation #logo').onWrap('click', function() {
         window.open('http://open-roberta.org');
     }, 'logo was clicked');
-    
+
     setHeadNavigationMenuState('logout');
 }
 
@@ -816,7 +819,7 @@ function init() {
     initTabs();
     initPopups();
     initHeadNavigation();
-    initProgramNameTable();   
+    initProgramNameTable();
     displayStatus();
     $('#programNameSave').val('');
 
