@@ -14,7 +14,6 @@ Please also check our [wiki](http://wiki.open-roberta.org) for a detailed instal
 
 ### Fast installation: ###
 Maven is taking care.
-***
 
 Step 1) Compilation
 
