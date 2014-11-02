@@ -698,11 +698,6 @@ function initPopups() {
         }
     });
 
-    // Close popup on submit
-//    $(".jquerypopup .submit").on('click', function() {
-//        $(this).closest(".jquerypopup").dialog('close');
-//    });
-
     // define general class for Pop-Up
     $(".jquerypopup").dialog("option", "dialogClass", "jquerypopup");
 
@@ -727,12 +722,23 @@ function initPopups() {
         setToken($token.val());
     }, 'set token');
 
-    // Any submit button in a popup can be triggered by the Return-Button
-    $(".jquerypopup").keydown(function(event) {
-        if (event.keyCode == 13) {
-            $(this).find("input.submit").click();
-            event.stopPropagation();
+    // Handle button events in popups
+    $(".jquerypopup").keyup(function(event) {
+        // fix for not working backspace button in password fields
+        if (event.keyCode === $.ui.keyCode.BACKSPACE) {
+            if (event.target.type === "password" && $("#" + event.target.id).val().length > 0) {
+                var length = $("#" + event.target.id).val().length - 1;
+                var res = $("#" + event.target.id).val().substring(0, length);
+                $("#" + event.target.id).val(res);
+            }
         }
+        if (event.keyCode == 27) { // escape
+            window.close();
+        }
+        if (event.keyCode == 13) { // enter
+            $(this).find("input.submit").click();
+        }
+        event.stopPropagation();
     });
 }
 
