@@ -1,4 +1,3 @@
-***
 # Open Roberta: Getting started.
 ***
 
