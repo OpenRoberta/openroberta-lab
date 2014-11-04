@@ -2,9 +2,8 @@
 
 *:focus{
     outline: 0;
-    outline:	none;
+    outline: none;
 }
-
 
 html, body {
     margin: 0px !important;
@@ -322,7 +321,7 @@ ul#head-navigation .head-navigation-submenu > li:hover {
 #set-token input {
     padding: 7px 8px 7px 32px;
     border: 1px solid #afca04;
-    border-radius: 3px;
+    border-radius: 2px;
     background-color: white;
     margin-bottom: 15px;
     color: #c7c7c7;
@@ -404,7 +403,7 @@ ul#head-navigation .head-navigation-submenu > li:hover {
 	padding: 7px 9px;
     border: none;
     font-size: 16px;
-    border-radius: 3px;
+    border-radius: 2px;
     color: white;
     background-color: #afca04;
     cursor: pointer;
