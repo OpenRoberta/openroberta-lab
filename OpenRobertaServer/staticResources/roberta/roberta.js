@@ -542,6 +542,54 @@ function initHeadNavigation() {
         }
     });
 
+    // Open / close menu on click (for tablets)
+    $('#head-navigation > li > a').onWrap('click', function(event) {
+        var domId = event.target.id;
+        if (domId === 'head-navigation-program') {
+            if ($('#head-navigation #submenu-program').css('display') === 'none' ) {
+                $('#head-navigation #submenu-program').css('display','block'); 
+            } else {
+                $('#head-navigation #submenu-program').css('display','none');               
+            }
+        } else if (domId === 'head-navigation-nepo') {
+            if ($('#head-navigation #submenu-nepo').css('display') === 'none' ) {
+                $('#head-navigation #submenu-nepo').css('display','block'); 
+            } else {
+                $('#head-navigation #submenu-nepo').css('display','none');               
+            }
+        } else if (domId === 'head-navigation-configuration') {
+            if ($('#head-navigation #submenu-configuration').css('display') === 'none' ) {
+                $('#head-navigation #submenu-configuration').css('display','block'); 
+            } else {
+                $('#head-navigation #submenu-configuration').css('display','none');               
+            }
+        } else if (domId === 'head-navigation-connection') {
+            if ($('#head-navigation #submenu-connection').css('display') === 'none' ) {
+                $('#head-navigation #submenu-connection').css('display','block'); 
+            } else {
+                $('#head-navigation #submenu-connection').css('display','none');               
+            }
+        } else if (domId === 'head-navigation-developertools') {
+            if ($('#head-navigation #submenu-developertools').css('display') === 'none' ) {
+                $('#head-navigation #submenu-developertools').css('display','block'); 
+            } else {
+                $('#head-navigation #submenu-developertools').css('display','none');               
+            }
+        } else if (domId === 'head-navigation-help') {
+            if ($('#head-navigation #submenu-help').css('display') === 'none' ) {
+                $('#head-navigation #submenu-help').css('display','block'); 
+            } else {
+                $('#head-navigation #submenu-help').css('display','none');               
+            }
+        } else if (domId === 'head-navigation-login') {
+            if ($('#head-navigation #submenu-login').css('display') === 'none' ) {
+                $('#head-navigation #submenu-login').css('display','block'); 
+            } else {
+                $('#head-navigation #submenu-login').css('display','none');               
+            }
+        }
+    });
+
     // Submenu Program
     $('#head-navigation').onWrap('click', '#submenu-program > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
@@ -664,7 +712,7 @@ function initHeadNavigation() {
     }, 'sub menu of menu "login"');
 
     // Close submenu on mouseleave
-    $('#head-navigation').on('mouseleave', function(event) {
+    $('#head-navigation').onWrap('mouseleave', function(event) {
         $('#head-navigation').menu("collapseAll", null, false);
     });
 
@@ -694,11 +742,6 @@ function initPopups() {
             duration : 300
         }
     });
-
-    // Close popup on submit
-//    $(".jquerypopup .submit").on('click', function() {
-//        $(this).closest(".jquerypopup").dialog('close');
-//    });
 
     // define general class for Pop-Up
     $(".jquerypopup").dialog("option", "dialogClass", "jquerypopup");
