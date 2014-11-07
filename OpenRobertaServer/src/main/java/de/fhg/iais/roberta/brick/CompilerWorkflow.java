@@ -82,7 +82,7 @@ public class CompilerWorkflow {
             return "blocks could not be transformed (message: " + e.getMessage() + ")";
         }
         String javaCode = AstToLejosJavaVisitor.generate(programName, brickConfiguration, transformer.getTree(), true);
-        // LOG.info("to be compiled:\n{}", javaCode); // TODO: not so exhaustive logging
+        LOG.info("to be compiled:\n{}", javaCode); // TODO: not so exhaustive logging
         try {
             storeGeneratedProgram(token, programName, javaCode);
         } catch ( Exception e ) {
