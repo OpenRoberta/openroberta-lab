@@ -5,14 +5,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -1484,59 +1482,57 @@ public class GraphicStartup implements Menu {
         newScreen(" Robertalab");
 
         if ( GraphicStartup.isRobertaRegistered == false ) {
-            File file = new File("/home/lejos/programs/serverIP.txt");
-            if ( !file.exists() ) {
-                PrintWriter pw = null;
-                try {
-                    file.delete();
-                    pw = new PrintWriter(file);
-                    pw.println("");
-                } catch ( FileNotFoundException e ) {
-                    // ok
-                } finally {
-                    pw.close();
-                }
-            }
-
-            try {
-                BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-                String temp = bufferedReader.readLine();
-                bufferedReader.close();
-                if ( temp.equals("") ) {
-                    temp = "none";
-                }
-                lcd.drawString("use last IP?", 0, 1);
-                lcd.drawString(temp, 0, 2);
-                if ( getYesNo("     Confirm", false) == 1 ) {
-                    serverURLString = temp;
-                } else {
-                    newScreen(" Enter IP");
-                    serverURLString = new IpAddressKeyboard().getString();
-                    if ( !serverURLString.equals("") ) {
-                        try {
-                            file.delete();
-                            PrintWriter pw2 = new PrintWriter(file);
-                            pw2.println(serverURLString);
-                            pw2.close();
-                        } catch ( FileNotFoundException e ) {
-                            return;
-                        }
-                    } else {
-                        return;
-                    }
-                }
-            } catch ( IOException e ) {
-                e.printStackTrace();
-            }
-            //serverURLString = "10.0.1.11:1999";
+            //            File file = new File("/home/lejos/programs/serverIP.txt");
+            //            if ( !file.exists() ) {
+            //                PrintWriter pw = null;
+            //                try {
+            //                    file.delete();
+            //                    pw = new PrintWriter(file);
+            //                    pw.println("");
+            //                } catch ( FileNotFoundException e ) {
+            //                    // ok
+            //                } finally {
+            //                    pw.close();
+            //                }
+            //            }
+            //
+            //            try {
+            //                BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+            //                String temp = bufferedReader.readLine();
+            //                bufferedReader.close();
+            //                if ( temp.equals("") ) {
+            //                    temp = "none";
+            //                }
+            //                lcd.drawString("use last IP?", 0, 1);
+            //                lcd.drawString(temp, 0, 2);
+            //                if ( getYesNo("     Confirm", false) == 1 ) {
+            //                    serverURLString = temp;
+            //                } else {
+            //                    newScreen(" Enter IP");
+            //                    serverURLString = new IpAddressKeyboard().getString();
+            //                    if ( !serverURLString.equals("") ) {
+            //                        try {
+            //                            file.delete();
+            //                            PrintWriter pw2 = new PrintWriter(file);
+            //                            pw2.println(serverURLString);
+            //                            pw2.close();
+            //                        } catch ( FileNotFoundException e ) {
+            //                            return;
+            //                        }
+            //                    } else {
+            //                        return;
+            //                    }
+            //                }
+            //            } catch ( IOException e ) {
+            //                e.printStackTrace();
+            //            }
+            serverURLString = "193.175.162.161:80";
 
             try {
                 serverTokenRessource = new URL("http://" + serverURLString + "/token");
                 serverDownloadRessource = new URL("http://" + serverURLString + "/download");
             } catch ( MalformedURLException e ) {
-                lcd.refresh();
-                lcd.drawString("invalid URL", 0, 2);
-                Button.waitForAnyPress();
+                // ok
             }
 
             token = new RobertaTokenGenerator().generateToken(8);
