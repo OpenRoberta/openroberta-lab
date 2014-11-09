@@ -136,7 +136,7 @@ public class Helper {
         }
         blockSet.getInstance().add(instance);
 
-        m.marshal(blockSet, System.out);
+        // m.marshal(blockSet, System.out); // only needed for EXTREME debugging
         StringWriter writer = new StringWriter();
         m.marshal(blockSet, writer);
         String t = Resources.toString(Helper.class.getResource(fileName), Charsets.UTF_8);

@@ -16,11 +16,13 @@
         <filtering>true</filtering>
         <directory>src/main/resources</directory>
       </resource>
-      <resource>
+    </resources>
+    <testResources>
+      <testResource>
         <filtering>true</filtering>
         <directory>src/test/resources</directory>
-      </resource>
-    </resources>
+      </testResource>
+    </testResources>
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
