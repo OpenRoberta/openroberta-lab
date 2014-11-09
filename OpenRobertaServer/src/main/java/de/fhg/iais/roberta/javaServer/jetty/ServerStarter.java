@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.javaServer.jetty;
 
 import java.io.IOException;
+import java.util.Properties;
 
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -14,6 +15,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceFilter;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 
@@ -21,6 +23,7 @@ import de.fhg.iais.roberta.guice.RobertaGuiceServletConfig;
 import de.fhg.iais.roberta.persistence.connector.DbSession;
 import de.fhg.iais.roberta.persistence.connector.SessionFactoryWrapper;
 import de.fhg.iais.roberta.persistence.dao.ProgramDao;
+import de.fhg.iais.roberta.util.Util;
 
 /**
  * the main class of the application.<br>
@@ -29,32 +32,61 @@ import de.fhg.iais.roberta.persistence.dao.ProgramDao;
  * - configures jersey and the package with the resources<br>
  * - configures jaxb and the package with the providers<br>
  * - configures a resource holder for static content<br>
- * - configures hibernate and tests the connection to the database. Hibernate uses Sqlite as underlying database<br>
+ * - configures hibernate and tests the connection to the database.<br>
  *
  * @author rbudde
  */
 public class ServerStarter {
     private static final Logger LOG = LoggerFactory.getLogger(ServerStarter.class);
-    private static final int PORT = 1999; // 8080 is a good choice for public deployments :-)
+
+    private final Properties properties;
+    private Injector injector;
 
     /**
-     * startup and shutdown. See {@link ServerStarter}
+     * create the starter. Load the properties.
      *
-     * @param args unused
-     * @throws Exception
+     * @param propertyPath optional URI to properties resource. May be null.
      */
-    public static void main(String[] args) throws Exception {
-        Server server = new ServerStarter().start(PORT);
-        server.join();
+    public ServerStarter(String propertyPath) {
+        this.properties = Util.loadProperties(propertyPath);
     }
 
     /**
-     * startup. See {@link ServerStarter}
+     * startup and shutdown of the server. See {@link ServerStarter}. Uses the first element of the args array. This contains the URI of a property file and
+     * starts either with "file:" if a path of the file system should be used or "classpath:" if the properties should be loaded as a resource from the
+     * classpath. May be <code>null</code>, if the default resource from the classpath should be loaded.
      *
-     * @param port the port jetty should listen to
+     * @param args first element may contain the URI of a property file.
      * @throws Exception
      */
-    public Server start(int port) throws IOException {
+    public static void main(String[] args) throws Exception {
+        ServerStarter serverStarter;
+        if ( args != null && args.length >= 1 ) {
+            serverStarter = new ServerStarter(args[0]);
+        } else {
+            serverStarter = new ServerStarter(null);
+        }
+        Server server = serverStarter.start();
+        LOG.info("*** server started using URI: " + server.getURI() + " ***");
+        serverStarter.logTheNumberOfStoredPrograms();
+        server.join();
+        System.exit(0);
+    }
+
+    /**
+     * startup. See {@link ServerStarter}. If the server could not be created, <b>the process will be terminated by System.exit(status) with status > 0</b>.
+     *
+     * @return the server
+     */
+    public Server start() throws IOException {
+        int port = 1999;
+        String serverPort = this.properties.getProperty("server.jetty.port", "1999");
+        try {
+            port = Integer.parseInt(serverPort);
+        } catch ( Exception e ) {
+            LOG.error("Could not get server port from properties. Server start aborted ... . Invalid value was: " + serverPort, e);
+            System.exit(12);
+        }
         Server server = new Server(port);
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         SessionManager sm = new HashSessionManager();
@@ -78,15 +110,34 @@ public class ServerStarter {
         try {
             server.start();
         } catch ( Exception e ) {
-            e.printStackTrace();
+            LOG.error("Could not start the server at port " + serverPort, e);
+            System.exit(16);
+        }
+        this.injector = robertaGuiceServletConfig.getCreatedInjector();
+        return server;
+    }
+
+    /**
+     * returns the guice injector configured in this class. Even if this not dangerous per se, it should
+     * <b>only be used in tests</b>
+     *
+     * @return the injector
+     */
+    public Injector getInjectorForTests() {
+        return this.injector;
+    }
+
+    private void logTheNumberOfStoredPrograms() {
+        try {
+            DbSession session = this.injector.getInstance(SessionFactoryWrapper.class).getSession();
+            ProgramDao projectDao = new ProgramDao(session);
+            int numberOfPrograms = projectDao.loadAll().size();
+            LOG.info("There are " + numberOfPrograms + " programs stored in the database");
+            session.close();
+        } catch ( Exception e ) {
+            LOG.error("Server was started, but could not connect to the database", e);
+            System.exit(20);
         }
 
-        DbSession session = robertaGuiceServletConfig.getCreatedInjector().getInstance(SessionFactoryWrapper.class).getSession();
-        ProgramDao projectDao = new ProgramDao(session);
-        int numberOfPrograms = projectDao.loadAll().size();
-        LOG.info("There are " + numberOfPrograms + " programs stored in the database");
-        session.close();
-
-        return server;
     }
 }

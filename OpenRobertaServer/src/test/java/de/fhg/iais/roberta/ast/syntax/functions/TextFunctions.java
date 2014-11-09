@@ -57,7 +57,7 @@ public class TextFunctions {
     }
 
     @Test
-    public void concatination() throws Exception {
+    public void concatenation() throws Exception {
         Helper.generateTransformerString("/syntax/functions/text_concat.xml");
 
         String a = "BlockAST [project=[[Funct [UPPERCASE, [Var [text]]]]]]";

@@ -8,12 +8,12 @@ import org.openqa.selenium.By;
 import de.fhg.iais.roberta.testutil.SeleniumHelper;
 import de.fhg.iais.roberta.testutil.SeleniumHelper.Button;
 
-public class SeleniumBasicsTest {
+public class JavascriptBasicModulesTest {
     private SeleniumHelper shAsField;
 
     @Before
     public void setUp() throws Exception {
-        this.shAsField = new SeleniumHelper(1997, "commonTest");
+        this.shAsField = new SeleniumHelper("commonTest");
     }
 
     @After

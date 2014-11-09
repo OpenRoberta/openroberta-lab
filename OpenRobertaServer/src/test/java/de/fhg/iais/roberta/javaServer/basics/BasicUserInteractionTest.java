@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.util;
+package de.fhg.iais.roberta.javaServer.basics;
 
 import static de.fhg.iais.roberta.testutil.JSONUtil.assertEntityRc;
 import static de.fhg.iais.roberta.testutil.JSONUtil.assertJsonEquals;
@@ -8,14 +8,12 @@ import static de.fhg.iais.roberta.testutil.JSONUtil.registerToken;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.math.BigInteger;
-import java.nio.file.Files;
+import java.util.Properties;
 
 import javax.ws.rs.core.Response;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
-import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,13 +30,18 @@ import de.fhg.iais.roberta.javaServer.resources.RestProgram;
 import de.fhg.iais.roberta.javaServer.resources.RestUser;
 import de.fhg.iais.roberta.javaServer.resources.TokenReceiver;
 import de.fhg.iais.roberta.persistence.connector.SessionFactoryWrapper;
-import de.fhg.iais.roberta.testutil.DbExecutor;
+import de.fhg.iais.roberta.testutil.InMemoryDbSetup;
+import de.fhg.iais.roberta.util.Util;
 
 public class BasicUserInteractionTest {
     private SessionFactoryWrapper sessionFactoryWrapper;
-    private DbExecutor dbExecutor;
+    private InMemoryDbSetup memoryDbSetup;
     private BrickCommunicator brickCommunicator;
+
+    private String buildXml;
+    private String connectionUrl;
     private String crosscompilerBasedir;
+
     private CompilerWorkflow compilerWorkflow;
 
     private RestUser restUser;
@@ -54,14 +57,16 @@ public class BasicUserInteractionTest {
 
     @Before
     public void setup() throws Exception {
-        this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-test-cfg.xml");
-        Session session = this.sessionFactoryWrapper.getNativeSession();
-        this.dbExecutor = DbExecutor.make(session);
-        this.dbExecutor.sqlFile("db/create-tables.sql");
+        Properties properties = Util.loadProperties("classpath:openRoberta-basicUserInteraction.properties");
+        this.buildXml = properties.getProperty("crosscompiler.build.xml");
+        this.connectionUrl = properties.getProperty("hibernate.connection.url");
+        this.crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");
+
+        this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-test-cfg.xml", this.connectionUrl);
+        this.memoryDbSetup = new InMemoryDbSetup(this.sessionFactoryWrapper.getNativeSession());
+        this.memoryDbSetup.runRobertaSetup();
         this.brickCommunicator = new BrickCommunicator();
-        String buildXml = "../OpenRobertaRuntime/build.xml";
-        this.crosscompilerBasedir = Files.createTempDirectory("userProjects").toString() + "/";
-        this.compilerWorkflow = new CompilerWorkflow(this.crosscompilerBasedir, buildXml);
+        this.compilerWorkflow = new CompilerWorkflow(this.crosscompilerBasedir, this.buildXml);
         this.restUser = new RestUser();
         this.restProgram = new RestProgram(this.sessionFactoryWrapper, this.brickCommunicator, this.compilerWorkflow);
         this.restBlocks = new RestBlocks(new Templates(), this.brickCommunicator);
@@ -181,6 +186,6 @@ public class BasicUserInteractionTest {
     }
 
     private int getOneInt(String sqlStmt) {
-        return ((BigInteger) this.dbExecutor.oneValueSelect(sqlStmt)).intValue();
+        return this.memoryDbSetup.getOneInt(sqlStmt);
     }
 }

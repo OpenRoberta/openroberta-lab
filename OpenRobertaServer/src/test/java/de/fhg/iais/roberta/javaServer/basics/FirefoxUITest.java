@@ -27,12 +27,12 @@ public class FirefoxUITest {
     private String randomUser;
     private boolean acceptNextAlert = true;
     private final StringBuffer verificationErrors = new StringBuffer();
-    static final int port = 1997;
     private Server server;
 
     @Before
     public void setUp() throws Exception {
-        this.server = new ServerStarter().start(port);
+        this.server = new ServerStarter(null).start();
+        int port = this.server.getURI().getPort();
         this.driver = new FirefoxDriver();
         this.driver.manage().window().maximize();
         this.baseUrl = "http://localhost:" + port;

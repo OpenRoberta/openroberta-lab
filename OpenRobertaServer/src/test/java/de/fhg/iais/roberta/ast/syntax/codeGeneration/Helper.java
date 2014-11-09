@@ -50,7 +50,7 @@ public class Helper {
                 .addActor(ActorPort.D, new HardwareComponent(HardwareComponentType.EV3MediumUnRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))
                 .build();
         String code = AstToLejosJavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), false);
-        System.out.println(code);
+        // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }
 
@@ -64,7 +64,7 @@ public class Helper {
     public static String generateString(String pathToProgramXml, BrickConfiguration brickConfiguration) throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
         String code = AstToLejosJavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), true);
-        System.out.println(code);
+        // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }
 
@@ -143,8 +143,7 @@ public class Helper {
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = XMLUnit.compareXML(writer.toString(), t);
 
-        System.out.println(diff.toString());
-
+        // System.out.println(diff.toString()); // only needed for EXTREME debugging
         Assert.assertTrue(diff.identical());
 
     }

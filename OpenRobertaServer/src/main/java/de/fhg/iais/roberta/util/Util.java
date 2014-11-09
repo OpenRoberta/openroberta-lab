@@ -1,10 +1,12 @@
 package de.fhg.iais.roberta.util;
 
+import java.io.FileReader;
 import java.sql.Timestamp;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Properties;
 
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -15,6 +17,7 @@ import de.fhg.iais.roberta.persistence.AbstractProcessor;
 
 public class Util {
     private static final Logger LOG = LoggerFactory.getLogger(Util.class);
+    private static final String PROPERTY_DEFAULT_PATH = "openRoberta.properties";
     public static final String SERVER_ERROR = "Server error. Operation aborted.";
     private static final String[] reservedWords = new String[] {
         //  @formatter:off
@@ -27,6 +30,42 @@ public class Util {
 
     private Util() {
         // no objects
+    }
+
+    /**
+     * load the OpenRoberta properties. The URI of the properties refers either to the file system or to the classpath. To be used for production and test. If
+     * the parameters is null,
+     * the classpath is searched for a default property file.<br>
+     * <br>
+     * The URI start with "file:" if a path of the file system should be used or starts with "classpath:" if the properties should be loaded as a resource
+     * from the classpath. If <code>null</code>, the resource is loaded from the classpath using the default name "openRoberta.properties".
+     *
+     * @param propertyURI URI of the property file. May be null
+     * @return the properties. Returns null, if errors occur (file not found, ...)
+     */
+    public static Properties loadProperties(String propertyURI) {
+        Properties properties = new Properties();
+        try {
+            if ( propertyURI == null ) {
+                LOG.info("properties from classpath. Using the resource: " + PROPERTY_DEFAULT_PATH);
+                properties.load(Util.class.getClassLoader().getResourceAsStream(PROPERTY_DEFAULT_PATH));
+            } else if ( propertyURI.startsWith("file:") ) {
+                String filesystemPathName = propertyURI.substring(5);
+                LOG.info("properties from file system. Path: " + filesystemPathName);
+                properties.load(new FileReader(filesystemPathName));
+            } else if ( propertyURI.startsWith("classpath:") ) {
+                String classPathName = propertyURI.substring(10);
+                LOG.info("properties from classpath. Using the resource: " + classPathName);
+                properties.load(Util.class.getClassLoader().getResourceAsStream(classPathName));
+            } else {
+                LOG.error("Could not load properties. Invalid URI: " + propertyURI);
+                return null;
+            }
+            return properties;
+        } catch ( Exception e ) {
+            LOG.error("Could not load properties. Inspect the stacktrace", e);
+            return null;
+        }
     }
 
     /**

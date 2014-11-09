@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.testutil.test;
 
 public class BeanTesterFail2 {
+    @SuppressWarnings("unused")
+    // is unused to trigger an error (the field has to be used to guarantee immutability ...
     private boolean readOnly = false;
     private int i;
     private String s;

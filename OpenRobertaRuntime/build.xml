@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="compileLejos" basedir="." default="jar">
 
+	<!-- TODO: this has to be changed. Relative pathes, version numbers, ... .  -->
 	<property name="lib.lejos" value="${basedir}/../OpenRobertaRuntime/lib" />
 	<property name="lib.openrobertaruntime" value="${basedir}/../OpenRobertaRuntime/target" />
 	<property name="lib.openrobertashared" value="${basedir}/../OpenRobertaShared/target" />
+	<property name="version" value="1.0.0-SNAPSHOT" />
 	
 	<property name="brick.runtime" value="/home/root/lejos" />
 	<property name="brick.roberta" value="/home/roberta/lib" />
@@ -24,13 +26,13 @@
 	
 	<path id="runtime">
 		<fileset dir="${lib.openrobertaruntime}">
-			<include name="OpenRobertaRuntime-0.0.1-SNAPSHOT.jar"/>
+			<include name="OpenRobertaRuntime-${version}.jar"/>
 		</fileset>
 	</path>
 	
 	<path id="shared">
 		<fileset dir="${lib.openrobertashared}">
-			<include name="OpenRobertaShared-0.0.1-SNAPSHOT.jar"/>
+			<include name="OpenRobertaShared-${version}.jar"/>
 		</fileset>
 	</path>
 	
@@ -55,7 +57,11 @@
 		<jar destfile="${output.dir}/${program.jar}">
 			<manifest>
 				<attribute name="Main-Class" value="${main.class}"/>
-				<attribute name="Class-Path" value="${brick.runtime}/lib/ev3classes.jar ${brick.runtime}/lib/dbusjava.jar ${brick.runtime}/libjna/usr/share/java/jna.jar ${brick.roberta}/OpenRobertaRuntime-0.0.1-SNAPSHOT.jar ${brick.roberta}/OpenRobertaShared-0.0.1-SNAPSHOT.jar"/>
+				<attribute name="Class-Path" value="${brick.runtime}/lib/ev3classes.jar \
+					${brick.runtime}/lib/dbusjava.jar \
+					${brick.runtime}/libjna/usr/share/java/jna.jar \
+					${brick.roberta}/OpenRobertaRuntime-${version}.jar \
+					${brick.roberta}/OpenRobertaShared-${version}.jar"/>
 			</manifest>
 			<fileset dir="${output.dir}">
 				<include name="**/${main.name}.class"/>

@@ -20,16 +20,22 @@ limitations under the License.
     <parent>
         <groupId>de.fhg.iais.openroberta</groupId>
         <artifactId>OpenRobertaParent</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
         <relativePath>../OpenRobertaParent</relativePath>
     </parent>
     <artifactId>OpenRobertaServer</artifactId>
     <name>OpenRobertaServer</name>
     <description>the server of the OpenRoberta application including the static resources delivered to the browser</description>
+
     <dependencies>
         <dependency>
             <groupId>de.fhg.iais.openroberta</groupId>
             <artifactId>OpenRobertaShared</artifactId>
+        </dependency>
+        <!-- this is a hidden artificially dependency, as the cross compiler from server needs runtime -->
+        <dependency>
+            <groupId>de.fhg.iais.openroberta</groupId>
+            <artifactId>OpenRobertaRuntime</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.inject</groupId>
@@ -60,6 +66,10 @@ limitations under the License.
             <artifactId>hibernate-core</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-c3p0</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
         </dependency>
@@ -85,6 +95,16 @@ limitations under the License.
         </dependency>
     </dependencies>
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>

@@ -19,7 +19,7 @@ limitations under the License.
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.fhg.iais.openroberta</groupId>
     <artifactId>OpenRobertaParent</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>RobertaParent</name>
     <description>the parent project of the OpenRoberta application</description>
@@ -34,6 +34,7 @@ limitations under the License.
         <guice.verion>3.0</guice.verion>
         <jersey.version>1.18.2</jersey.version>
         <jetty.version>9.2.3.v20140905</jetty.version>
+        <hibernate.version>4.2.7.Final</hibernate.version>
     </properties>
     <modules>
         <module>../OpenRobertaShared</module>
@@ -123,7 +124,12 @@ limitations under the License.
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-core</artifactId>
-                <version>4.2.7.Final</version>
+                <version>${hibernate.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+  	            <artifactId>hibernate-c3p0</artifactId>
+                <version>${hibernate.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.hsqldb</groupId>

@@ -35,8 +35,7 @@ public class CompilerWorkflow {
     public final String pathToCrossCompilerBuildXMLResource;
 
     @Inject
-    public CompilerWorkflow(
-        @Named("crosscompiler.basedir") String pathToCrosscompilerBaseDir,
+    public CompilerWorkflow(@Named("crosscompiler.basedir") String pathToCrosscompilerBaseDir, //
         @Named("crosscompiler.build.xml") String pathToCrossCompilerBuildXMLResource) //
     {
         this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;

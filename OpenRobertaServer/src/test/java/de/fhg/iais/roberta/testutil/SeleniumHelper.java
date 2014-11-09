@@ -6,24 +6,31 @@ import static org.junit.Assert.fail;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jetty.server.Server;
+import org.hibernate.Session;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import de.fhg.iais.roberta.javaServer.jetty.ServerStarter;
+import de.fhg.iais.roberta.persistence.connector.SessionFactoryWrapper;
 
 public class SeleniumHelper {
 
     public final int port;
+    public final ServerStarter serverStarter;
     public final Server server;
     public final WebDriver driver;
     public final String baseUrl;
 
-    public SeleniumHelper(int port, String baseUrl) throws Exception {
-        this.port = port;
-        this.server = new ServerStarter().start(port);
+    public SeleniumHelper(String baseUrl) throws Exception {
+        this.serverStarter = new ServerStarter("classpath:openRoberta.properties");
+        this.server = this.serverStarter.start();
+        Session session = this.serverStarter.getInjectorForTests().getInstance(SessionFactoryWrapper.class).getNativeSession();
+        new InMemoryDbSetup(session).runRobertaSetup();
+
+        this.port = this.server.getURI().getPort();
         this.driver = new FirefoxDriver();
-        this.baseUrl = "http://localhost:" + port + "/" + baseUrl + "/";
+        this.baseUrl = "http://localhost:" + this.port + "/" + baseUrl + "/";
         this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         this.driver.get(this.baseUrl);
     }

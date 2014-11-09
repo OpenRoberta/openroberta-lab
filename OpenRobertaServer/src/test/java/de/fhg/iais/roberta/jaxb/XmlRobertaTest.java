@@ -16,8 +16,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import de.fhg.iais.roberta.javaServer.jetty.ServerStarter;
 
 public class XmlRobertaTest {
-    private static final int port = 1997;
-
     private Server server;
     private WebDriver driver;
     private String baseUrl;
@@ -25,8 +23,8 @@ public class XmlRobertaTest {
 
     @Before
     public void setUp() throws Exception {
-
-        this.server = new ServerStarter().start(port);
+        this.server = new ServerStarter(null).start();
+        int port = this.server.getURI().getPort();
         this.driver = new FirefoxDriver();
         this.baseUrl = "http://localhost:" + port + "/";
         this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);

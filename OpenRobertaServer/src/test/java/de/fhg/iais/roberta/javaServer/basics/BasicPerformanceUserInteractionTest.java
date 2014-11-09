@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.util;
+package de.fhg.iais.roberta.javaServer.basics;
 
 import static de.fhg.iais.roberta.testutil.JSONUtil.assertEntityRc;
 import static de.fhg.iais.roberta.testutil.JSONUtil.assertJsonEquals;
@@ -8,8 +8,7 @@ import static de.fhg.iais.roberta.testutil.JSONUtil.registerToken;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.math.BigInteger;
-import java.nio.file.Files;
+import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -20,9 +19,7 @@ import javax.ws.rs.core.Response;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
-import org.hibernate.Session;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,18 +37,24 @@ import de.fhg.iais.roberta.javaServer.resources.RestProgram;
 import de.fhg.iais.roberta.javaServer.resources.RestUser;
 import de.fhg.iais.roberta.javaServer.resources.TokenReceiver;
 import de.fhg.iais.roberta.persistence.connector.SessionFactoryWrapper;
-import de.fhg.iais.roberta.testutil.DbExecutor;
+import de.fhg.iais.roberta.testutil.InMemoryDbSetup;
+import de.fhg.iais.roberta.util.Clock;
+import de.fhg.iais.roberta.util.Util;
 
-@Ignore
 public class BasicPerformanceUserInteractionTest {
     private static final Logger LOG = LoggerFactory.getLogger("workflow");
-    private static final int MAX_PARALLEL_USERS = 30;
-    private static final int MAX_TOTAL_USERS = 400;
+
+    private static final int MAX_PARALLEL_USERS = 5;
+    private static final int MAX_TOTAL_USERS = 10;
 
     private SessionFactoryWrapper sessionFactoryWrapper;
-    private DbExecutor dbExecutor;
+    private InMemoryDbSetup memoryDbSetup;
     private BrickCommunicator brickCommunicator;
+
+    private String buildXml;
+    private String connectionUrl;
     private String crosscompilerBasedir;
+
     private CompilerWorkflow compilerWorkflow;
 
     private RestUser restUser;
@@ -65,14 +68,16 @@ public class BasicPerformanceUserInteractionTest {
 
     @Before
     public void setup() throws Exception {
-        this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-testConcurrent-cfg.xml");
-        Session session = this.sessionFactoryWrapper.getNativeSession();
-        this.dbExecutor = DbExecutor.make(session);
-        this.dbExecutor.sqlFile("./db/create-tables.sql");
+        Properties properties = Util.loadProperties("classpath:openRoberta-basicPerformanceUserInteraction.properties");
+        this.buildXml = properties.getProperty("crosscompiler.build.xml");
+        this.connectionUrl = properties.getProperty("hibernate.connection.url");
+        this.crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");
+
+        this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-testConcurrent-cfg.xml", this.connectionUrl);
+        this.memoryDbSetup = new InMemoryDbSetup(this.sessionFactoryWrapper.getNativeSession());
+        this.memoryDbSetup.runRobertaSetup();
         this.brickCommunicator = new BrickCommunicator();
-        String buildXml = "../OpenRobertaRuntime/build.xml"; // TODO: remove brittle relative path
-        this.crosscompilerBasedir = Files.createTempDirectory("userProjects").toString() + "/";
-        this.compilerWorkflow = new CompilerWorkflow(this.crosscompilerBasedir, buildXml);
+        this.compilerWorkflow = new CompilerWorkflow(this.crosscompilerBasedir, this.buildXml);
         this.restUser = new RestUser();
         this.restProgram = new RestProgram(this.sessionFactoryWrapper, this.brickCommunicator, this.compilerWorkflow);
         this.restBlocks = new RestBlocks(new Templates(), this.brickCommunicator);
@@ -85,16 +90,17 @@ public class BasicPerformanceUserInteractionTest {
 
     @Test
     public void runUsersConcurrent() throws Exception {
+        int baseNumber = 0;
         LOG.info("max parallel users: " + MAX_PARALLEL_USERS + "; total users: " + MAX_TOTAL_USERS);
         LOG.info("");
         @SuppressWarnings("unchecked")
         Future<Boolean>[] futures = (Future<Boolean>[]) new Future<?>[MAX_PARALLEL_USERS];
         for ( int i = 0; i < MAX_PARALLEL_USERS; i++ ) {
-            futures[i] = startWorkflow(i);
+            futures[i] = startWorkflow(baseNumber + i);
         }
         boolean success = true;
         int terminatedWorkflows = 0;
-        int nextFreeUserNumber = MAX_PARALLEL_USERS + 1;
+        int nextFreeUserNumber = baseNumber + MAX_PARALLEL_USERS + 1;
         start: while ( terminatedWorkflows < MAX_TOTAL_USERS ) {
             for ( int i = 0; i < MAX_PARALLEL_USERS; i++ ) {
                 if ( futures[i].isDone() ) {
@@ -162,7 +168,7 @@ public class BasicPerformanceUserInteractionTest {
         assertEntityRc(response, "ok");
         response = this.restProgram.command(s, mkD("{'cmd':'saveP';'name':'p2';'program':'<program>...</program>'}"));
         assertEntityRc(response, "ok");
-        assertEquals(2, getOneInt("select count(*) from PROGRAM where OWNER_ID = " + sId));
+        assertEquals(2, this.memoryDbSetup.getOneInt("select count(*) from PROGRAM where OWNER_ID = " + sId));
 
         // "pid" updates p2, has 2 programs, get list of programs, assert that the names match
         thinkTimeInMillisec += think(random, 0, 6);
@@ -170,7 +176,7 @@ public class BasicPerformanceUserInteractionTest {
         fullRequest.getJSONObject("data").put("program", this.theProgramOfAllUserLol);
         response = this.restProgram.command(s, fullRequest);
         assertEntityRc(response, "ok");
-        assertEquals(2, getOneInt("select count(*) from PROGRAM where OWNER_ID = " + sId));
+        assertEquals(2, this.memoryDbSetup.getOneInt("select count(*) from PROGRAM where OWNER_ID = " + sId));
         response = this.restProgram.command(s, mkD("{'cmd':'loadPN'}"));
         assertEntityRc(response, "ok");
         JSONArray programListing = ((JSONObject) response.getEntity()).getJSONArray("programNames");
@@ -185,10 +191,6 @@ public class BasicPerformanceUserInteractionTest {
         registerToken(this.tokenReceiver, this.restBlocks, s, this.sessionFactoryWrapper.getSession(), "garzi-" + userNumber);
         downloadJar(this.downloadJar, this.restProgram, s, "garzi-" + userNumber, "p2");
         LOG.info("" + userNumber + ";ok;" + clock.elapsedMsec() + ";" + thinkTimeInMillisec + ";");
-    }
-
-    private int getOneInt(String sqlStmt) {
-        return ((BigInteger) this.dbExecutor.oneValueSelect(sqlStmt)).intValue();
     }
 
     private int think(Random random, int lowerBoundForThinking, int upperBoundForThinking) throws Exception {
