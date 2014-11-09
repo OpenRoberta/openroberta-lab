@@ -1,14 +1,8 @@
 @charset "UTF-8";
 
-<<<<<<< HEAD
 *:focus{
     outline: 0;
     outline: none;
-=======
-*:focus {
-	outline: 0;
-	outline: none;
->>>>>>> 8a850c0... fix bug no backspace in password
 }
 
 html, body {
@@ -342,7 +336,6 @@ ul#head-navigation .head-navigation-submenu>li:hover {
 	text-align: left;
 }
 
-<<<<<<< HEAD
 #login-user input,
 .program input,
 #register-user input,
@@ -391,32 +384,6 @@ ul#head-navigation .head-navigation-submenu>li:hover {
 #set-token input#tokenValue:focus {
     background-image: url(img/login_pw-icon_active.png);
     color: #333333;
-=======
-#login-user input#accountNameS, #register-user input#accountName,
-	#delete-user input#accountNameD {
-	background-image: url(img/login_user-icon.png);
-}
-
-#login-user input#accountNameS:active, #login-user input#accountNameS:focus,
-	#register-user input#accountName:active, #register-user input#accountName:focus,
-	#delete-user input#accountNameD:active, #delete-user input#accountNameD:focus
-	{
-	background-image: url(img/login_user-icon_active.png);
-	color: #333333;
-}
-
-#login-user input#pass1S, #register-user input#pass1, #register-user input#pass2,
-	#set-token input#tokenValue {
-	background-image: url(img/login_pw-icon.png);
-}
-
-#login-user input#pass1S:active, #login-user input#pass1S:focus,
-	#register-user input#pass1:active, #register-user input#pass1:focus,
-	#register-user input#pass2:active, #register-user input#pass2:focus,
-	#set-token input#tokenValue:active, #set-token input#tokenValue:focus {
-	background-image: url(img/login_pw-icon_active.png);
-	color: #333333;
->>>>>>> 8a850c0... fix bug no backspace in password
 }
 
 #register-user input#userName {
@@ -452,21 +419,12 @@ ul#head-navigation .head-navigation-submenu>li:hover {
 #login-user .submit, .program .submit, #register-user .submit,
 	#delete-user .submit, #set-token .submit {
 	padding: 7px 9px;
-<<<<<<< HEAD
     border: none;
     font-size: 16px;
     border-radius: 2px;
     color: white;
     background-color: #afca04;
     cursor: pointer;
-=======
-	border: none;
-	font-size: 16px;
-	border-radius: 3px;
-	color: white;
-	background-color: #afca04;
-	cursor: pointer;
->>>>>>> 8a850c0... fix bug no backspace in password
 }
 
 #login-user .submit:hover, .program .submit:hover, #register-user .submit:hover,
