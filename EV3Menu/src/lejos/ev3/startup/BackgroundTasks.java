@@ -1,5 +1,6 @@
 package lejos.ev3.startup;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import lejos.ev3.startup.GraphicStartup.IndicatorThread;
@@ -8,18 +9,26 @@ import lejos.hardware.KeyListener;
 
 public class BackgroundTasks implements KeyListener {
 
+    private URL serverTokenRessource;
+    private URL serverDownloadRessource;
+
     private final RobertaTokenRegister rtr;
     private final RobertaDownloader rd;
-
     private final RobertaLauncher rl;
 
     private Thread tokenThread;
     private Thread downloadThread;
     private Thread launcherThread;
 
-    public BackgroundTasks(URL serverTokenRessource, URL serverDownloadRessource, String token, IndicatorThread ind, EchoThread echoIn, EchoThread echoErr) {
-        this.rtr = new RobertaTokenRegister(serverTokenRessource, token);
-        this.rd = new RobertaDownloader(serverDownloadRessource, token);
+    public BackgroundTasks(String serverURLString, String token, IndicatorThread ind, EchoThread echoIn, EchoThread echoErr) {
+        try {
+            this.serverTokenRessource = new URL("http://" + serverURLString + "/token");
+            this.serverDownloadRessource = new URL("http://" + serverURLString + "/download");
+        } catch ( MalformedURLException e ) {
+            // ok
+        }
+        this.rtr = new RobertaTokenRegister(this.serverTokenRessource, token);
+        this.rd = new RobertaDownloader(this.serverDownloadRessource, token);
         this.rl = new RobertaLauncher(ind, echoIn, echoErr);
     }
 
