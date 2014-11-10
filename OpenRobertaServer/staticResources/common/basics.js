@@ -222,7 +222,7 @@ var LOG = {};
         li.text(marker + obj);
         var $log = $('#log');
         $log.prepend(li);
-        $log.scrollTop($log.prop('scrollHeight'));
+        $log.scrollTop(1);
     }
 
     /**
