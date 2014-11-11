@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
-import de.fhg.iais.roberta.ast.syntax.HardwareComponent;
+import de.fhg.iais.roberta.ast.syntax.EV3Actor;
+import de.fhg.iais.roberta.ast.syntax.EV3BrickConfiguration;
+import de.fhg.iais.roberta.ast.syntax.EV3Sensor;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
@@ -21,7 +23,7 @@ import de.fhg.iais.roberta.util.Pair;
 
 /**
  * JAXB to AST transformer for the brick configuration. Client should provide tree of jaxb objects.
- * 
+ *
  * @param <V>
  */
 public class JaxbBrickConfigTransformer<V> extends JaxbAstTransformer<V> {
@@ -32,14 +34,14 @@ public class JaxbBrickConfigTransformer<V> extends JaxbAstTransformer<V> {
         return blockToBrickConfiguration(blocks.get(0));
     }
 
-    private void extractHardwareComponent(List<Value> values, List<Pair<SensorPort, HardwareComponent>> sensors, List<Pair<ActorPort, HardwareComponent>> actors) {
+    private void extractHardwareComponent(List<Value> values, List<Pair<SensorPort, EV3Sensor>> sensors, List<Pair<ActorPort, EV3Actor>> actors) {
         for ( Value value : values ) {
             if ( value.getName().startsWith("S") ) {
                 //Extract sensor
-                sensors.add(Pair.of(SensorPort.get(value.getName()), new HardwareComponent(extractHardwareComponentType(value.getBlock()))));
+                sensors.add(Pair.of(SensorPort.get(value.getName()), new EV3Sensor(extractHardwareComponentType(value.getBlock()))));
             } else {
                 //Extract actor
-                actors.add(Pair.of(ActorPort.get(value.getName()), new HardwareComponent(
+                actors.add(Pair.of(ActorPort.get(value.getName()), new EV3Actor(
                     extractHardwareComponentType(value.getBlock()),
                     extractDirectionOfRotation(value.getBlock()),
                     extractMotorSide(value.getBlock()))));
@@ -48,34 +50,12 @@ public class JaxbBrickConfigTransformer<V> extends JaxbAstTransformer<V> {
     }
 
     private HardwareComponentType extractHardwareComponentType(Block component) {
-        switch ( component.getType() ) {
-            case "robBrick_touch":
-                return HardwareComponentType.EV3TouchSensor;
-            case "robBrick_colour":
-                return HardwareComponentType.EV3ColorSensor;
-
-            case "robBrick_ultrasonic":
-                return HardwareComponentType.EV3UltrasonicSensor;
-
-            case "robBrick_gyro":
-                return HardwareComponentType.EV3GyroSensor;
-
-            case "robBrick_infrared":
-                return HardwareComponentType.EV3IRSensor;
-
-            case "robBrick_motor_middle":
-                return HardwareComponentType.attributesMatch("middle", extractMotorRegulation(component));
-
-            case "robBrick_motor_big":
-                return HardwareComponentType.attributesMatch("large", extractMotorRegulation(component));
-
-            case "robBrick_actor":
-                return HardwareComponentType.BasicMotor;
-
-            default:
-                throw new DbcException("Invalid Hardware Component!");
+        List<String> attributes = new ArrayList<String>();
+        attributes.add(component.getType());
+        if ( component.getType().equals("robBrick_motor_middle") || component.getType().equals("robBrick_motor_big") ) {
+            attributes.add(extractMotorRegulation(component));
         }
-
+        return HardwareComponentType.attributesMatch(attributes.toArray(new String[attributes.size()]));
     }
 
     private String extractMotorRegulation(Block block) {
@@ -97,8 +77,8 @@ public class JaxbBrickConfigTransformer<V> extends JaxbAstTransformer<V> {
         List<Field> fields;
         List<Value> values;
 
-        List<Pair<SensorPort, HardwareComponent>> sensors = new ArrayList<Pair<SensorPort, HardwareComponent>>();
-        List<Pair<ActorPort, HardwareComponent>> actors = new ArrayList<Pair<ActorPort, HardwareComponent>>();
+        List<Pair<SensorPort, EV3Sensor>> sensors = new ArrayList<Pair<SensorPort, EV3Sensor>>();
+        List<Pair<ActorPort, EV3Actor>> actors = new ArrayList<Pair<ActorPort, EV3Actor>>();
 
         double trackWidth;
         double wheelDiameter;
@@ -110,7 +90,12 @@ public class JaxbBrickConfigTransformer<V> extends JaxbAstTransformer<V> {
                 wheelDiameter = Double.valueOf(extractField(fields, "WHEEL_DIAMETER", (short) 0)).doubleValue();
                 trackWidth = Double.valueOf(extractField(fields, "TRACK_WIDTH", (short) 1)).doubleValue();
                 extractHardwareComponent(values, sensors, actors);
-                return new BrickConfiguration.Builder().setTrackWidth(trackWidth).setWheelDiameter(wheelDiameter).addActors(actors).addSensors(sensors).build();
+                return new EV3BrickConfiguration.Builder()
+                    .setTrackWidth(trackWidth)
+                    .setWheelDiameter(wheelDiameter)
+                    .addActors(actors)
+                    .addSensors(sensors)
+                    .build();
             default:
                 throw new DbcException("There was no correct configuration block found!");
         }

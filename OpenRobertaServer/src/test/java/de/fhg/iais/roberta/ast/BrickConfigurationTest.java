@@ -13,14 +13,14 @@ public class BrickConfigurationTest {
     @Test
     public void test1() throws Exception {
         String a =
-            "private BrickConfiguration brickConfiguration = new BrickConfiguration.Builder()"
+            "private EV3BrickConfiguration brickConfiguration = new EV3BrickConfiguration.Builder()"
                 + ".setWheelDiameter(5.6)"
                 + ".setTrackWidth(17.0)"
-                + ".addActor(ActorPort.A, new HardwareComponent(HardwareComponentType.EV3MediumRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))"
-                + ".addActor(ActorPort.B, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.NONE))"
-                + ".addSensor(SensorPort.S1, new HardwareComponent(HardwareComponentType.EV3TouchSensor))"
-                + ".addSensor(SensorPort.S2, new HardwareComponent(HardwareComponentType.EV3ColorSensor))"
-                + ".addSensor(SensorPort.S3, new HardwareComponent(HardwareComponentType.EV3UltrasonicSensor))"
+                + ".addActor(ActorPort.A, new EV3Actor(HardwareComponentType.EV3MediumRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))"
+                + ".addActor(ActorPort.B, new EV3Actor(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.NONE))"
+                + ".addSensor(SensorPort.S1, new EV3Sensor(HardwareComponentType.EV3TouchSensor))"
+                + ".addSensor(SensorPort.S2, new EV3Sensor(HardwareComponentType.EV3ColorSensor))"
+                + ".addSensor(SensorPort.S3, new EV3Sensor(HardwareComponentType.EV3UltrasonicSensor))"
                 + ".build();";
 
         BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration.xml");
@@ -33,11 +33,11 @@ public class BrickConfigurationTest {
     @Test
     public void test2() throws Exception {
         String a =
-            "private BrickConfiguration brickConfiguration = new BrickConfiguration.Builder()"
+            "private EV3BrickConfiguration brickConfiguration = new EV3BrickConfiguration.Builder()"
                 + ".setWheelDiameter(5.0)"
                 + ".setTrackWidth(17.0)"
-                + ".addActor(ActorPort.A, new HardwareComponent(HardwareComponentType.EV3MediumRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))"
-                + ".addSensor(SensorPort.S3, new HardwareComponent(HardwareComponentType.EV3IRSensor))"
+                + ".addActor(ActorPort.A, new EV3Actor(HardwareComponentType.EV3MediumRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))"
+                + ".addSensor(SensorPort.S3, new EV3Sensor(HardwareComponentType.EV3IRSensor))"
                 + ".build();";
 
         BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration1.xml");
@@ -50,13 +50,13 @@ public class BrickConfigurationTest {
     @Test
     public void test3() throws Exception {
         String a =
-            "private BrickConfiguration brickConfiguration = new BrickConfiguration.Builder()"
+            "private EV3BrickConfiguration brickConfiguration = new EV3BrickConfiguration.Builder()"
                 + ".setWheelDiameter(5.6)."
                 + "setTrackWidth(17.0)"
-                + ".addActor(ActorPort.B, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))"
-                + ".addActor(ActorPort.C, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))"
-                + ".addSensor(SensorPort.S1, new HardwareComponent(HardwareComponentType.EV3TouchSensor))"
-                + ".addSensor(SensorPort.S4, new HardwareComponent(HardwareComponentType.EV3UltrasonicSensor))"
+                + ".addActor(ActorPort.B, new EV3Actor(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))"
+                + ".addActor(ActorPort.C, new EV3Actor(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))"
+                + ".addSensor(SensorPort.S1, new EV3Sensor(HardwareComponentType.EV3TouchSensor))"
+                + ".addSensor(SensorPort.S4, new EV3Sensor(HardwareComponentType.EV3UltrasonicSensor))"
                 + ".build();";
 
         BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration2.xml");

@@ -16,7 +16,7 @@ import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.robotics.EncoderMotor;
 import lejos.robotics.RegulatedMotor;
 import lejos.robotics.SampleProvider;
-import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
+import de.fhg.iais.roberta.ast.syntax.EV3BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.HardwareComponent;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
@@ -46,19 +46,19 @@ public class DeviceHandler {
 
     private final Map<SensorPort, SampleProvider> lejosSampleProvider = new TreeMap<>();
 
-    public DeviceHandler(BrickConfiguration brickConfiguration) {
+    public DeviceHandler(EV3BrickConfiguration brickConfiguration) {
         createDevices(brickConfiguration);
     }
 
-    private void createDevices(BrickConfiguration brickConfiguration) {
-        initMotor(ActorPort.A, brickConfiguration.getActorA(), lejos.hardware.port.MotorPort.A);
-        initMotor(ActorPort.B, brickConfiguration.getActorB(), lejos.hardware.port.MotorPort.B);
-        initMotor(ActorPort.C, brickConfiguration.getActorC(), lejos.hardware.port.MotorPort.C);
-        initMotor(ActorPort.D, brickConfiguration.getActorD(), lejos.hardware.port.MotorPort.D);
-        initSensor(SensorPort.S1, brickConfiguration.getSensor1(), lejos.hardware.port.SensorPort.S1);
-        initSensor(SensorPort.S2, brickConfiguration.getSensor2(), lejos.hardware.port.SensorPort.S2);
-        initSensor(SensorPort.S3, brickConfiguration.getSensor3(), lejos.hardware.port.SensorPort.S3);
-        initSensor(SensorPort.S4, brickConfiguration.getSensor4(), lejos.hardware.port.SensorPort.S4);
+    private void createDevices(EV3BrickConfiguration brickConfiguration) {
+        initMotor(ActorPort.A, brickConfiguration.getActorOnPort(ActorPort.A), lejos.hardware.port.MotorPort.A);
+        initMotor(ActorPort.B, brickConfiguration.getActorOnPort(ActorPort.B), lejos.hardware.port.MotorPort.B);
+        initMotor(ActorPort.C, brickConfiguration.getActorOnPort(ActorPort.C), lejos.hardware.port.MotorPort.C);
+        initMotor(ActorPort.D, brickConfiguration.getActorOnPort(ActorPort.D), lejos.hardware.port.MotorPort.D);
+        initSensor(SensorPort.S1, brickConfiguration.getSensorOnPort(SensorPort.S1), lejos.hardware.port.SensorPort.S1);
+        initSensor(SensorPort.S2, brickConfiguration.getSensorOnPort(SensorPort.S2), lejos.hardware.port.SensorPort.S2);
+        initSensor(SensorPort.S3, brickConfiguration.getSensorOnPort(SensorPort.S3), lejos.hardware.port.SensorPort.S3);
+        initSensor(SensorPort.S4, brickConfiguration.getSensorOnPort(SensorPort.S4), lejos.hardware.port.SensorPort.S4);
     }
 
     private void initMotor(ActorPort actorPort, HardwareComponent actorType, Port hardwarePort) {

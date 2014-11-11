@@ -9,18 +9,18 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * All hardware components that can be connected to the brick.
  */
 public enum HardwareComponentType {
-    EV3ColorSensor( Category.SENSOR, "color", "colour", "Farbe" ), //
-    EV3TouchSensor( Category.SENSOR, "touch", "Berührung" ),
-    EV3UltrasonicSensor( Category.SENSOR, "ultrasonic", "Ultraschall" ),
-    EV3IRSensor( Category.SENSOR, "infrared", "Infrarot" ),
+    EV3ColorSensor( Category.SENSOR, "robBrick_colour", "color", "colour", "Farbe" ), //
+    EV3TouchSensor( Category.SENSOR, "robBrick_touch", "touch", "Berührung" ),
+    EV3UltrasonicSensor( Category.SENSOR, "robBrick_ultrasonic", "ultrasonic", "Ultraschall" ),
+    EV3IRSensor( Category.SENSOR, "robBrick_infrared", "infrared", "Infrarot" ),
     RotationSensor( Category.SENSOR, "rotation", "Drehung" ), // => motor rotations -> Category.AKTOR???
     BrickSensor( Category.SENSOR, "?" ),
-    EV3GyroSensor( Category.SENSOR, "gyro" ),
-    EV3MediumRegulatedMotor( Category.ACTOR, "regulated", "middle", "left", "right", "off", "on" ),
-    EV3LargeRegulatedMotor( Category.ACTOR, "regulated", "large", "left", "right", "off", "on" ),
-    EV3MediumUnRegulatedMotor( Category.ACTOR, "unregulated", "middle", "left", "right", "off", "on" ),
-    EV3LargeUnRegulatedMotor( Category.ACTOR, "unregulated", "large", "left", "right", "off", "on" ),
-    BasicMotor( Category.ACTOR, "unregulated", "large", "left", "right", "off", "on" ),
+    EV3GyroSensor( Category.SENSOR, "robBrick_gyro", "gyro" ),
+    EV3MediumRegulatedMotor( Category.ACTOR, "robBrick_motor_middle", "regulated", "middle", "left", "right", "off", "on" ),
+    EV3LargeRegulatedMotor( Category.ACTOR, "robBrick_motor_big", "regulated", "large", "left", "right", "off", "on" ),
+    EV3MediumUnRegulatedMotor( Category.ACTOR, "robBrick_motor_middle", "unregulated", "middle", "left", "right", "off", "on" ),
+    EV3LargeUnRegulatedMotor( Category.ACTOR, "robBrick_motor_big", "unregulated", "large", "left", "right", "off", "on" ),
+    BasicMotor( Category.ACTOR, "robBrick_actor", "unregulated", "large", "left", "right", "off", "on" ),
     NXTMotor( Category.ACTOR, "PH" ),
     NXTRegulatedMotor( Category.ACTOR, "PH" );
 

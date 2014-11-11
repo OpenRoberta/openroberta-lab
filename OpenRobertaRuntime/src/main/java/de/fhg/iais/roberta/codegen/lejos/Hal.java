@@ -6,7 +6,7 @@ import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.Image;
 import lejos.robotics.navigation.DifferentialPilot;
 import lejos.utility.Stopwatch;
-import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
+import de.fhg.iais.roberta.ast.syntax.EV3BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.BlinkMode;
 import de.fhg.iais.roberta.ast.syntax.action.BrickLedColor;
@@ -60,7 +60,7 @@ public class Hal {
     /**
      * @param brickConfiguration
      */
-    public Hal(BrickConfiguration brickConfiguration) {
+    public Hal(EV3BrickConfiguration brickConfiguration) {
         this.deviceHandler = new DeviceHandler(brickConfiguration);
 
         this.wheelDiameter = brickConfiguration.getWheelDiameterCM();

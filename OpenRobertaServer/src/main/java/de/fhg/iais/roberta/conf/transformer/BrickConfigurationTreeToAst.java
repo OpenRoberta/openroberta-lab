@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
+import de.fhg.iais.roberta.ast.syntax.EV3BrickConfiguration;
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationBaseVisitor;
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationLexer;
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationParser;
@@ -17,7 +18,7 @@ import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationParser
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationParser.SensorStmtContext;
 
 public class BrickConfigurationTreeToAst extends BrickConfigurationBaseVisitor<Void> {
-    BrickConfiguration.Builder builder = new BrickConfiguration.Builder();
+    EV3BrickConfiguration.Builder builder = new EV3BrickConfiguration.Builder();
 
     /**
      * take a brick configuration program as String, parse it, create a visitor as an instance of this class and visit the parse tree to create an AST.<br>
