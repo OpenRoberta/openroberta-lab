@@ -442,6 +442,9 @@ function beforeActivateTab(event, ui) {
     }
 }
 
+/**
+ * Initialize table of programs
+ */
 function initProgramNameTable() {
     var columns = [ {
         "sTitle" : "Name des Programms",
@@ -490,6 +493,61 @@ function initProgramNameTable() {
             $('#loadFromListing').click();
         } else if ($('#deleteFromListing').css('display') === 'block') {
             $('#deleteFromListing').click();
+        }
+    });
+}
+
+/**
+ * Initialize table of configurations
+ */
+function initConfigurationNameTable() {
+    var columns = [ {
+        "sTitle" : "Name der Konfiguration",
+        "sClass" : "configurations"
+    }, {
+        "sTitle" : "Erzeugt von",
+        "sClass" : "configurations"
+    }, {
+        "sTitle" : "Blöcke",
+        "sClass" : "configurations"
+    }, {
+        "sTitle" : "Icon",
+        "sClass" : "configurations"
+    }, {
+        "sTitle" : "Erzeugt am",
+        "sClass" : "configurations"
+    }, {
+        "sTitle" : "Letzte Aktualisierung",
+        "sClass" : "configurations"
+    }, ];
+    var $configurations = $('#configurationNameTable');
+    $configurations.dataTable({
+        "sDom" : '<lip>t<r>',
+        "aaData" : [],
+        "aoColumns" : columns,
+        "oLanguage" : {
+            "sSearch" : "Search all columns:"
+        },
+        "bJQueryUI" : true,
+        "sPaginationType" : "full_numbers",
+        "bPaginate" : true,
+        "iDisplayLength" : 20,
+        "oLanguage" : {
+            "sLengthMenu" : 'Zeige <select>' + '<option value="10">10</option><option value="20">20</option><option value="25">25</option>'
+                    + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>' + '</select> Konfigurationen'
+        },
+        "fnDrawCallback" : function() {
+            var counter = +$('#redrawCounter').text();
+            $('#redrawCounter').text(counter + 1);
+        }
+    });
+    $('#configurationNameTable tbody').onWrap('click', 'tr', selectionFn);
+    $('#configurationNameTable tbody').onWrap('dblclick', 'tr', function(event) {
+        selectionFn(event);
+        if ($('#loadConfigurationFromListing').css('display') === 'block') {
+            $('#loadConfigurationFromListing').click();
+        } else if ($('#deleteConfigurationFromListing').css('display') === 'block') {
+            $('#deleteConfigurationFromListing').click();
         }
     });
 }
@@ -720,7 +778,9 @@ function initHeadNavigation() {
         } else if (domId === 'new') {
             setConfiguration("meineKonfiguration");
         } else if (domId === 'open') {
-            $('#tabConfListing').click();
+            $('#loadConfigurationFromListing').css('display', 'block');
+            $('#deleteConfigurationFromListing').css('display', 'none');
+            $('#tabConfigurationListing').click();
         } else if (domId === 'save') {
             saveConfigurationToServer(response);
         } else if (domId === 'saveAs') {
@@ -916,6 +976,7 @@ function init() {
     initPopups();
     initHeadNavigation();
     initProgramNameTable();
+    initConfigurationNameTable();
     displayStatus();
     $('#programNameSave').val('');
 };
