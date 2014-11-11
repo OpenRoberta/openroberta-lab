@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.Category;
+import de.fhg.iais.roberta.ast.syntax.EV3BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.Phrase.Kind;
 import de.fhg.iais.roberta.ast.syntax.action.ClearDisplayAction;
@@ -78,7 +78,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
 public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     public static final String INDENT = "    ";
 
-    private final BrickConfiguration brickConfiguration;
+    private final EV3BrickConfiguration brickConfiguration;
     private final String programName;
     private final StringBuilder sb = new StringBuilder();
 
@@ -91,7 +91,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
      * @param brickConfiguration hardware configuration of the brick
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    AstToLejosJavaVisitor(String programName, BrickConfiguration brickConfiguration, int indentation) {
+    AstToLejosJavaVisitor(String programName, EV3BrickConfiguration brickConfiguration, int indentation) {
         this.programName = programName;
         this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
@@ -104,7 +104,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public static String generate(String programName, BrickConfiguration brickConfiguration, List<Phrase<Void>> phrases, boolean withWrapping) //
+    public static String generate(String programName, EV3BrickConfiguration brickConfiguration, List<Phrase<Void>> phrases, boolean withWrapping) //
     {
         Assert.notNull(programName);
         Assert.notNull(brickConfiguration);
@@ -514,7 +514,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
         boolean isDuration = turnAction.getParam().getDuration() != null;
-        boolean isRegulated = this.brickConfiguration.getActorB().isRegulated();
+        boolean isRegulated = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
         String methodName = "hal.rotateDirection" + (isDuration ? "Angle" : isRegulated ? "Regulated" : "Unregulated") + "(";
         this.sb.append(methodName);
         this.sb.append(this.brickConfiguration.getLeftMotorPort().getJavaCode() + ", ");
@@ -814,8 +814,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
             return;
         }
         this.sb.append("package generated.main;\n\n");
-        this.sb.append("import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;\n");
-        this.sb.append("import de.fhg.iais.roberta.ast.syntax.HardwareComponent;\n");
+        this.sb.append("import de.fhg.iais.roberta.ast.syntax.*;\n");
         this.sb.append("import de.fhg.iais.roberta.codegen.lejos.Hal;\n\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.*;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.sensor.*;\n");

@@ -5,8 +5,9 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
-import de.fhg.iais.roberta.ast.syntax.HardwareComponent;
+import de.fhg.iais.roberta.ast.syntax.EV3Actor;
+import de.fhg.iais.roberta.ast.syntax.EV3BrickConfiguration;
+import de.fhg.iais.roberta.ast.syntax.EV3Sensor;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
 import de.fhg.iais.roberta.ast.syntax.action.HardwareComponentType;
@@ -18,20 +19,19 @@ public class AstToLejosJavaVisitorTest {
         + "public class Test {\n";
     private static final String IMPORTS = "" //
         + "package generated.main;\n\n"
-        + "import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;\n"
-        + "import de.fhg.iais.roberta.ast.syntax.HardwareComponent;\n"
+        + "import de.fhg.iais.roberta.ast.syntax.*;\n"
         + "import de.fhg.iais.roberta.codegen.lejos.Hal;\n\n"
         + "import de.fhg.iais.roberta.ast.syntax.action.*;\n"
         + "import de.fhg.iais.roberta.ast.syntax.sensor.*;\n";
 
     private static final String BRICK_CONFIGURATION = "" //
-        + "    private BrickConfiguration brickConfiguration = new BrickConfiguration.Builder()\n"
+        + "    private EV3BrickConfiguration brickConfiguration = new EV3BrickConfiguration.Builder()\n"
         + "    .setWheelDiameter(5.6)\n"
         + "    .setTrackWidth(17.0)\n"
-        + "    .addActor(ActorPort.A, new HardwareComponent(HardwareComponentType.EV3MediumRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))\n"
-        + "    .addActor(ActorPort.B, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))\n"
-        + "    .addSensor(SensorPort.S1, new HardwareComponent(HardwareComponentType.EV3TouchSensor))\n"
-        + "    .addSensor(SensorPort.S2, new HardwareComponent(HardwareComponentType.EV3UltrasonicSensor))\n"
+        + "    .addActor(ActorPort.A, new EV3Actor(HardwareComponentType.EV3MediumRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))\n"
+        + "    .addActor(ActorPort.B, new EV3Actor(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))\n"
+        + "    .addSensor(SensorPort.S1, new EV3Sensor(HardwareComponentType.EV3TouchSensor))\n"
+        + "    .addSensor(SensorPort.S2, new EV3Sensor(HardwareComponentType.EV3UltrasonicSensor))\n"
         + "    .build();\n\n";
     private static final String MAIN_METHOD = "" //
         + "    public static void main(String[] args) {\n"
@@ -43,18 +43,18 @@ public class AstToLejosJavaVisitorTest {
         + "        } catch ( InterruptedException e ) {\n"
         + "            // ok\n"
         + "        }\n";
-    private static BrickConfiguration brickConfiguration;
+    private static EV3BrickConfiguration brickConfiguration;
 
     @BeforeClass
     public static void setupConfigurationForAllTests() {
-        BrickConfiguration.Builder builder = new BrickConfiguration.Builder();
+        EV3BrickConfiguration.Builder builder = new EV3BrickConfiguration.Builder();
         builder.setTrackWidth(17).setWheelDiameter(5.6);
-        builder.addActor(ActorPort.A, new HardwareComponent(HardwareComponentType.EV3MediumRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT)).addActor(
+        builder.addActor(ActorPort.A, new EV3Actor(HardwareComponentType.EV3MediumRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT)).addActor(
             ActorPort.B,
-            new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT));
-        builder.addSensor(SensorPort.S1, new HardwareComponent(HardwareComponentType.EV3TouchSensor)).addSensor(
+            new EV3Actor(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT));
+        builder.addSensor(SensorPort.S1, new EV3Sensor(HardwareComponentType.EV3TouchSensor)).addSensor(
             SensorPort.S2,
-            new HardwareComponent(HardwareComponentType.EV3UltrasonicSensor));
+            new EV3Sensor(HardwareComponentType.EV3UltrasonicSensor));
         brickConfiguration = builder.build();
     }
 

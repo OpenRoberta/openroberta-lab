@@ -13,8 +13,8 @@ import org.junit.Assert;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
-import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
-import de.fhg.iais.roberta.ast.syntax.HardwareComponent;
+import de.fhg.iais.roberta.ast.syntax.EV3Actor;
+import de.fhg.iais.roberta.ast.syntax.EV3BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.Phrase.Kind;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
@@ -42,12 +42,12 @@ public class Helper {
      */
     public static String generateStringWithoutWrapping(String pathToProgramXml) throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
-        BrickConfiguration brickConfiguration =
-            new BrickConfiguration.Builder()
-                .addActor(ActorPort.A, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(ActorPort.B, new HardwareComponent(HardwareComponentType.EV3MediumRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))
-                .addActor(ActorPort.C, new HardwareComponent(HardwareComponentType.EV3LargeUnRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(ActorPort.D, new HardwareComponent(HardwareComponentType.EV3MediumUnRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))
+        EV3BrickConfiguration brickConfiguration =
+            new EV3BrickConfiguration.Builder()
+                .addActor(ActorPort.A, new EV3Actor(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.B, new EV3Actor(HardwareComponentType.EV3MediumRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))
+                .addActor(ActorPort.C, new EV3Actor(HardwareComponentType.EV3LargeUnRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.D, new EV3Actor(HardwareComponentType.EV3MediumUnRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))
                 .build();
         String code = AstToLejosJavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), false);
         // System.out.println(code); // only needed for EXTREME debugging
@@ -61,7 +61,7 @@ public class Helper {
      * @return the code as string
      * @throws Exception
      */
-    public static String generateString(String pathToProgramXml, BrickConfiguration brickConfiguration) throws Exception {
+    public static String generateString(String pathToProgramXml, EV3BrickConfiguration brickConfiguration) throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
         String code = AstToLejosJavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), true);
         // System.out.println(code); // only needed for EXTREME debugging
