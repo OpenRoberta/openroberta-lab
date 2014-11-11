@@ -37,6 +37,7 @@ limitations under the License.
         <hibernate.version>4.2.7.Final</hibernate.version>
     </properties>
     <modules>
+        <module>../Resources</module>
         <module>../OpenRobertaShared</module>
         <module>../OpenRobertaServer</module>
         <module>../OpenRobertaRuntime</module>
