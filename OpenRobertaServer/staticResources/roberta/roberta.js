@@ -8,7 +8,9 @@ function initUserState() {
     userState.name = '';
     userState.role = '';
     userState.program = 'meinProgramm';
+    userState.configuration = 'meineKonfiguration';
     userState.programSaved = false;
+    userState.configurationSaved = false;
     userState.brickSaved = false;
     userState.robot = '';
     userState.brickConnection = '';
@@ -164,6 +166,19 @@ function setProgram(name) {
 }
 
 /**
+ * Set configuration name
+ * 
+ * @param {name}
+ *            Name to be set
+ */
+function setConfiguration(name) {
+    if (name) {
+        userState.configuration = name;
+        displayStatus();
+    }
+}
+
+/**
  * Set token
  * 
  * @param {token}
@@ -220,7 +235,7 @@ function saveToServer() {
         var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
         var xml_text = Blockly.Xml.domToText(xml);
         userState.programSaved = true;
-        LOG.info('save ' + userState.program + ' login: ' + userState.id);
+        LOG.info('save program ' + userState.program + ' login: ' + userState.id);
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         return COMM.json("/program", {
             "cmd" : "saveP",
@@ -232,6 +247,41 @@ function saveToServer() {
     }
 }
 
+/**
+ * Save configuration to server
+ */
+function saveConfigurationToServer() {
+    if ($('#configurationNameSave')) {
+        var $name = $('#configurationNameSave');
+        setConfiguration($name.val());
+        if (userState.name) { // Is someone logged in?
+            if (!$name.val() || $name.val() === "meineKonfiguration") {
+                $('#head-navigation #submenu-configuration #save').addClass('login');
+                $('#head-navigation #submenu-configuration #save').addClass('ui-state-disabled');
+                displayMessage("Du musst einen anderen Konfigurationsnamen nehmen.");
+                return;
+            }
+            $('#head-navigation #submenu-configuration #save').removeClass('login');
+            $('#head-navigation #submenu-configuration #save').removeClass('ui-state-disabled');
+        }
+    }
+    if (userState.configuration) {
+        userState.configurationSaved = true;
+        LOG.info('save configuration ' + userState.configuration + ' login: ' + userState.id);
+        $(".ui-dialog-content").dialog("close"); // close all opened popups
+        return COMM.json("/conf", {
+            "cmd" : "saveC",
+            "configurationName" : userState.configuration,
+            "configuration" : ''
+        }, response);
+    } else {
+        displayMessage("Du musst einen Konfigurationsnamen eingeben.");
+    }
+}
+
+/**
+ * Run program
+ */
 function runOnBrick() {
     LOG.info('run ' + userState.program + ' signed in: ' + userState.id);
     return COMM.json("/program", {
@@ -460,6 +510,14 @@ function checkProgram() {
     displayMessage("Dein Programm kann zur Zeit noch nicht geprüft werden.");
 }
 
+/**
+ * Check configuration
+ */
+function checkConfiguration() {
+    // TODO
+    displayMessage("Deine Konfiguration kann zur Zeit noch nicht geprüft werden.");
+}
+
 function switchToBlockly() {
     $('#tabs').css('display', 'inline');
     $('#bricklyFrame').css('display', 'none');
@@ -488,6 +546,14 @@ function displayStatus() {
     } else {
         $('#head-navigation #displayProgram').text('');
         $('#head-navigation #iconDisplayProgram').css('display', 'none');
+    }
+
+    if (userState.configuration) {
+        $('#head-navigation #displayConfiguration').text(userState.configuration);
+        $('#head-navigation #iconDisplayConfiguration').css('display', 'inline');
+    } else {
+        $('#head-navigation #displayConfiguration').text('');
+        $('#head-navigation #iconDisplayConfiguration').css('display', 'none');
     }
 
     if (userState.toolbox) {
@@ -648,14 +714,21 @@ function initHeadNavigation() {
         switchToBlockly();
         var domId = event.target.id;
         if (domId === 'check') {
+            checkConfiguration();
         } else if (domId === 'standard') {
             switchToBrickly();
         } else if (domId === 'new') {
+            setProgram("meineKonfiguration");
         } else if (domId === 'open') {
             $('#tabConfListing').click();
         } else if (domId === 'save') {
+            saveConfigurationToServer(response);
         } else if (domId === 'saveAs') {
+            $("#save-configuration").dialog("open");
         } else if (domId === 'delete') {
+            $('#deleteConfigurationFromListing').css('display', 'block');
+            $('#loadConfigurationFromListing').css('display', 'none');
+            $('#tabConfigurationListing').click();
         } else if (domId === 'properties') {
         }
         return false;
@@ -764,6 +837,10 @@ function initPopups() {
     $('#saveProgram').onWrap('click', function() {
         saveToServer();
     }, 'save program');
+
+    $('#saveConfiguration').onWrap('click', function() {
+        saveConfigurationToServer();
+    }, 'save configuration');
 
     $('#setToken').onWrap('click', function() {
         var $token = $('#tokenValue');

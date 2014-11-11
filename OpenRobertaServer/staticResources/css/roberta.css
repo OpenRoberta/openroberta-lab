@@ -142,7 +142,7 @@ ul#head-navigation .head-navigation-submenu>li:hover {
 
 #head-navigation .state {
 	float: right;
-	padding-top: 7px;
+	padding-top: 2px;
 	padding-right: 20px;
 	font-size: small;
 }
@@ -323,31 +323,15 @@ ul#head-navigation .head-navigation-submenu>li:hover {
 }
 
 /* ### Popup Input Fields ############################################################ */
-#login-user input, .program input, #register-user input, #delete-user input,
-	#set-token input {
+#login-user input, .program input, .configuration input, #register-user input, #delete-user input, #set-token input {
 	padding: 7px 8px 7px 32px;
 	border: 1px solid #afca04;
-	border-radius: 3px;
+	border-radius: 2px;
 	background-color: white;
 	margin-bottom: 15px;
 	color: #c7c7c7;
 	font-size: 14px;
 	text-align: left;
-}
-
-#login-user input,
-.program input,
-#register-user input,
-#delete-user input,
-#set-token input {
-    padding: 7px 8px 7px 32px;
-    border: 1px solid #afca04;
-    border-radius: 2px;
-    background-color: white;
-    margin-bottom: 15px;
-    color: #c7c7c7;
-    font-size: 14px;
-    text-align: left;
 }
 
 #login-user input#accountNameS,
@@ -405,18 +389,19 @@ ul#head-navigation .head-navigation-submenu>li:hover {
 	color: #333333;
 }
 
-.program input.programName {
+.program input.programName, .configuration input.configurationName {
 	background-image: url(img/program_name-icon.png);
 	box-sizing: border-box;
 }
 
-.program input.programName:active, .program input.programName:focus {
+.program input.programName:active, .program input.programName:focus,
+.configuration input.configurationName:active, .configuration input.configurationName:focus {
 	background-image: url(img/program_name-icon_active.png);
 	color: #333333;
 }
 
-#login-user .submit, .program .submit, #register-user .submit,
-	#delete-user .submit, #set-token .submit {
+#login-user .submit, .program .submit, .configuration .submit, #register-user .submit,
+#delete-user .submit, #set-token .submit {
 	padding: 7px 9px;
     border: none;
     font-size: 16px;
@@ -426,8 +411,8 @@ ul#head-navigation .head-navigation-submenu>li:hover {
     cursor: pointer;
 }
 
-#login-user .submit:hover, .program .submit:hover, #register-user .submit:hover,
-	#delete-user .submit:hover, #set-token .submit:hover {
+#login-user .submit:hover, .program .submit:hover, .configuration .submit:hover, #register-user .submit:hover,
+#delete-user .submit:hover, #set-token .submit:hover {
 	background-color: #b7d032;
 }
 
@@ -655,7 +640,7 @@ table.dataTable.no-footer {
 	border-bottom: 1px solid #bbb;
 }
 
-#listing>input, #confListing>input {
+#>input, #conf>input {
 	margin-left: 10px;
 }
 

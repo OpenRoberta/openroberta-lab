@@ -72,14 +72,14 @@ limitations under the License.
             <li>
                 <a href="#" id="head-navigation-configuration"><span class="head-navi-icons configuration"></span><span id="setConfiguration" class="head-navi-text">Roboter</span></a>
                 <ul id="submenu-configuration" class="head-navigation-submenu">
-                    <li id="check" class="login logout"><span class="flaticon-tick"></span>checken</li>
+                    <li id="check"><span class="flaticon-tick"></span>checken</li>
                     <li id="standard"><span class="flaticon-thumbs1"></span>Standardkonfiguration</li>
-                    <li id="new" class="login logout"><span class="flaticon-add10"></span>neu ...</li>
-                    <li id="open" class="login logout"><span class="flaticon-pencil1"></span>öffnen ... </li>
+                    <li id="new" class="logout"><span class="flaticon-add10"></span>neu ...</li>
+                    <li id="open" class="logout"><span class="flaticon-pencil1"></span>öffnen ... </li>
                     <li id="save" class="login logout"><span class="flaticon-empty3"></span>speichern</li>
-                    <li id="saveAs" class="login logout"><span class="flaticon-empty3"></span>speichern unter ...</li>
+                    <li id="saveAs" class="logout"><span class="flaticon-empty3"></span>speichern unter ...</li>
                     <li id="divide" class="login logout"><span class="flaticon-flow3"></span>teilen ...</li>
-                    <li id="delete" class="login logout"><span class="flaticon-delete10"></span>löschen ...</li>
+                    <li id="delete" class="logout"><span class="flaticon-delete10"></span>löschen ...</li>
                     <li id="properties" class="login logout"><span class="flaticon-information"></span>Eigenschaften ...</li>
                 </ul>
             </li>
@@ -132,7 +132,8 @@ limitations under the License.
             
             <div class="state">
                 <span id="iconDisplayLogin" class="flaticon-user"></span><span id="displayLogin" title="Angemeldeter Benutzer">Angemeldeter Benutzer</span><br/>
-                <span id="iconDisplayProgram" class="flaticon-pencil1"></span><span id="displayProgram" title="Ausgewähltes Programm">Ausgewähltes Programm</span>
+                <span id="iconDisplayProgram" class="flaticon-complete1"></span><span id="displayProgram" title="Ausgewähltes Programm">Ausgewähltes Programm</span><br/>
+                <span id="iconDisplayConfiguration" class="flaticon-pencil1"></span><span id="displayConfiguration" title="Ausgewählte Konfiguration">Ausgewählte Konfiguration</span>
             </div>
         </ul>
     </div>
@@ -179,6 +180,12 @@ limitations under the License.
         <input id="saveProgram" class='submit' type="submit" value="Speichern" />
     </div>
 
+    <div class="jquerypopup configuration" id="save-configuration" title="Konfiguration">
+        <label for="configurationNameSave">Name</label>
+        <input id="configurationNameSave" class='input configurationName' type="text" value="" /><br/>
+        <input id="saveConfiguration" class='submit' type="submit" value="Speichern" />
+    </div>
+
     <div class="jquerypopup" id="set-token" title="Token">
         <label for="tokenValue">Wert</label>
         <input id="tokenValue" class='input' type="text" value="" /><br/>
@@ -195,7 +202,7 @@ limitations under the License.
             <ul class="hidden">
                 <li><a id="tabBlockly" href="#blockly">Test Nepo :-)</a></li>
                 <li><a id="tabListing" href="#listing">Listing of programs</a></li>
-                <li><a id="tabConfListing" href="#confListing">Listing of configurations</a></li>
+                <li><a id="tabConfigurationListing" href="#confListing">Listing of configurations</a></li>
                 <li><a id="tabLogging" href="#logging">Logging</a></li>
                 <li><a id="tabStandardConfiguration" href="#bricklyFrame">Standard-Configuration</a></li>
                 <li><a id="tabSimtest" onclick="viewSimulator(true);">Simulator Test</a></li>
@@ -235,7 +242,8 @@ limitations under the License.
                     </tfoot>
                 </table>
                 <br/>
-                <input id="loadFromListing" type="submit" value="Laden" />
+                <input id="loadConfigurationFromListing" type="submit" value="Laden" />
+                <input id="deleteConfigurationFromListing" type="submit" value="Löschen" />
                 <input class="backToBlockly" type="submit" value="Zurück" />
                 <div id="redrawCounter" class="rightGray">0</div>
             </div>
