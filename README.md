@@ -1,4 +1,3 @@
-***
 # Open Roberta: Getting started.
 ***
 
@@ -60,7 +59,7 @@ Step 2) Starting your own server instance.
 
 ``$ cd OpenRobertaServer``
 
-``$ java -jar target/OpenRobertaServer-0.0.1-SNAPSHOT.jar``
+``$ java -jar target/OpenRobertaServer-1.0.0-SNAPSHOT.jar``
 
 ***
 
