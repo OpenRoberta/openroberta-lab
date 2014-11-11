@@ -718,7 +718,7 @@ function initHeadNavigation() {
         } else if (domId === 'standard') {
             switchToBrickly();
         } else if (domId === 'new') {
-            setProgram("meineKonfiguration");
+            setConfiguration("meineKonfiguration");
         } else if (domId === 'open') {
             $('#tabConfListing').click();
         } else if (domId === 'save') {
