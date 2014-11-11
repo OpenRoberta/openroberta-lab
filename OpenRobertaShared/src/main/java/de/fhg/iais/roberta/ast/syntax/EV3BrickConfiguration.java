@@ -77,7 +77,7 @@ public class EV3BrickConfiguration extends BrickConfiguration {
      */
     public boolean isMotorRegulated(ActorPort port) {
         EV3Actor actor = this.actors.get(port);
-        Assert.isTrue(actor != null, "No actor connected to the potrt " + port);
+        Assert.isTrue(actor != null, "No actor connected to the port " + port);
         return actor.isRegulated();
     }
 
@@ -117,14 +117,22 @@ public class EV3BrickConfiguration extends BrickConfiguration {
         sb.append("private EV3BrickConfiguration brickConfiguration = new EV3BrickConfiguration.Builder()\n");
         sb.append("    .setWheelDiameter(" + this.wheelDiameterCM + ")\n");
         sb.append("    .setTrackWidth(" + this.trackWidthCM + ")\n");
-        for ( Map.Entry<ActorPort, EV3Actor> entry : this.actors.entrySet() ) {
-            appendOptional(sb, "Actor", entry.getKey().getJavaCode(), entry.getValue());
-        }
+        appendActors(sb);
+        appendSensors(sb);
+        sb.append("    .build();");
+        return sb.toString();
+    }
+
+    private void appendSensors(StringBuilder sb) {
         for ( Map.Entry<SensorPort, EV3Sensor> entry : this.sensors.entrySet() ) {
             appendOptional(sb, "Sensor", entry.getKey().getJavaCode(), entry.getValue());
         }
-        sb.append("    .build();");
-        return sb.toString();
+    }
+
+    private void appendActors(StringBuilder sb) {
+        for ( Map.Entry<ActorPort, EV3Actor> entry : this.actors.entrySet() ) {
+            appendOptional(sb, "Actor", entry.getKey().getJavaCode(), entry.getValue());
+        }
     }
 
     /**
