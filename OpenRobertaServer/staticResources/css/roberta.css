@@ -613,7 +613,7 @@ ul#head-navigation .head-navigation-submenu>li:hover {
 	color: #33b8ca;
 }
 
-#programNameTable_wrapper>div {
+#programNameTable_wrapper>div, #configurationNameTable_wrapper>div {
 	padding: 10px;
 	background-color: #F6F6F6;
 }
