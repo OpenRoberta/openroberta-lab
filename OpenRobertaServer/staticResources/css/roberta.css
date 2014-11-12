@@ -609,7 +609,7 @@ ul#head-navigation .head-navigation-submenu>li:hover {
 	color: white;
 }
 
-.programs {
+.programs, .configurations {
 	color: #33b8ca;
 }
 

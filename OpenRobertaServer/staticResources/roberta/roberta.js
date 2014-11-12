@@ -266,13 +266,15 @@ function saveConfigurationToServer() {
         }
     }
     if (userState.configuration) {
+        var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+        var xml_text = Blockly.Xml.domToText(xml);
         userState.configurationSaved = true;
         LOG.info('save configuration ' + userState.configuration + ' login: ' + userState.id);
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         return COMM.json("/conf", {
             "cmd" : "saveC",
             "configurationName" : userState.configuration,
-            "configuration" : ''
+            "configuration" : xml_text
         }, response);
     } else {
         displayMessage("Du musst einen Konfigurationsnamen eingeben.");
@@ -299,7 +301,20 @@ function showProgram(result, load, name) {
             Blockly.mainWorkspace.clear();
         }
         Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
-        LOG.info('show ' + userState.program + ' signed in: ' + userState.id);
+        LOG.info('show program ' + userState.program + ' signed in: ' + userState.id);
+    }
+};
+
+function showConfiguration(result, load, name) {
+    response(result);
+    if (result.rc === 'ok') {
+        setConfiguration(name);
+        var xml = Blockly.Xml.textToDom(result.data);
+        if (load) {
+            Blockly.mainWorkspace.clear();
+        }
+        Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+        LOG.info('show configuration ' + userState.configuration + ' signed in: ' + userState.id);
     }
 };
 
@@ -357,6 +372,28 @@ function loadFromListing() {
 }
 
 /**
+ * Load the configuration that was selected in configurations list
+ */
+function loadConfigurationFromListing() {
+    var $configurationRow = $('#configurationNameTable .selected');
+    if ($configurationRow.length > 0) {
+        var configurationName = $configurationRow[0].children[0].textContent;
+        LOG.info('loadFromConfigurationList ' + configurationName + ' signed in: ' + userState.id);
+        COMM.json("/conf", {
+            "cmd" : "loadC",
+            "name" : configurationName
+        }, function(result) {
+            $("#tabs").tabs("option", "active", 0);
+            $('#configurationNameSave').val(configurationName);
+            userState.configurationSaved = true;
+            showConfiguration(result, true, configurationName);
+            $('#head-navigation #submenu-configuration #save').removeClass('login');
+            $('#head-navigation #submenu-configuration #save').removeClass('ui-state-disabled');
+        });
+    }
+}
+
+/**
  * Delete the program that was selected in program list
  */
 function deleteFromListing() {
@@ -370,6 +407,24 @@ function deleteFromListing() {
         }, function(result) {
             $("#tabs").tabs("option", "active", 0);
             $('#programNameSave').val('');
+        });
+    }
+}
+
+/**
+ * Delete the configuration that was selected in configurations list
+ */
+function deleteConfigurationFromListing() {
+    var $configurationRow = $('#configurationNameTable .selected');
+    if ($configurationRow.length > 0) {
+        var configurationName = $configurationRow[0].children[0].textContent;
+        LOG.info('deleteFromConfigurationList ' + configurationName + ' signed in: ' + userState.id);
+        COMM.json("/conf", {
+            "cmd" : "deleteC",
+            "name" : configurationName
+        }, function(result) {
+            $("#tabs").tabs("option", "active", 0);
+            $('#configurationNameSave').val('');
         });
     }
 }
@@ -418,8 +473,8 @@ function showConfigurations(result) {
     if (result.rc === 'ok') {
         var $table = $('#configurationNameTable').dataTable();
         $table.fnClearTable();
-        if (result.confNames.length > 0) {
-            $table.fnAddData(result.confNames);
+        if (result.configurationNames.length > 0) {
+            $table.fnAddData(result.configurationNames);
         }
     }
 }
@@ -498,7 +553,7 @@ function initProgramNameTable() {
 }
 
 /**
- * Initialize table of configurations
+ * Initialize configurations table
  */
 function initConfigurationNameTable() {
     var columns = [ {
@@ -506,9 +561,6 @@ function initConfigurationNameTable() {
         "sClass" : "configurations"
     }, {
         "sTitle" : "Erzeugt von",
-        "sClass" : "configurations"
-    }, {
-        "sTitle" : "Blöcke",
         "sClass" : "configurations"
     }, {
         "sTitle" : "Icon",
@@ -937,6 +989,7 @@ function initTabs() {
         beforeActivate : beforeActivateTab
     });
 
+    // load program
     $('#loadFromListing').onWrap('click', function() {
         loadFromListing();
     }, 'load blocks from program list');
@@ -945,13 +998,23 @@ function initTabs() {
         "name" : "beginner"
     }, injectBlockly);
 
+    // load configuration
+    $('#loadConfigurationFromListing').onWrap('click', function() {
+        loadConfigurationFromListing();
+    }, 'load configuration from configuration list');
+    COMM.json("/conf", {
+        "cmd" : "loadC"
+    });
+
+    // delete program
     $('#deleteFromListing').onWrap('click', function() {
         deleteFromListing();
     }, 'delete blocks from program list');
-    COMM.json("/blocks", {
-        "cmd" : "deleteT",
-        "name" : "beginner"
-    });
+
+    // delete configuration
+    $('#deleteConfigurationFromListing').onWrap('click', function() {
+        deleteConfigurationFromListing();
+    }, 'delete configuration from configurations list');
 
     $('.backToBlockly').onWrap('click', function() {
         $('#tabBlockly').click();
@@ -979,6 +1042,7 @@ function init() {
     initConfigurationNameTable();
     displayStatus();
     $('#programNameSave').val('');
+    $('#configurationNameSave').val('');
 };
 
 $(document).ready(WRAP.fn3(init, 'page init'));
