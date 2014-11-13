@@ -431,8 +431,8 @@ function deleteFromListing() {
             "cmd" : "deleteP",
             "name" : programName
         }, function(result) {
-            $("#tabs").tabs("option", "active", 0);
             $('#programNameSave').val('');
+            responseAndRefreshList(result);
         });
     }
 }
@@ -449,8 +449,8 @@ function deleteConfigurationFromListing() {
             "cmd" : "deleteC",
             "name" : configurationName
         }, function(result) {
-            $("#tabs").tabs("option", "active", 0);
             $('#configurationNameSave').val('');
+            responseAndRefreshList(result);
         });
     }
 }
