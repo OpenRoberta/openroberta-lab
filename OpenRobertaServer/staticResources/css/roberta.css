@@ -416,10 +416,6 @@ ul#head-navigation .head-navigation-submenu>li:hover {
 	background-color: #b7d032;
 }
 
-.backToBlockly {
-	margin-top: 20px;
-}
-
 /* ### Tutorials ############################################################ */
 #next-tutorial {
 	position: absolute;
@@ -582,6 +578,7 @@ ul#head-navigation .head-navigation-submenu>li:hover {
 .dataTables_wrapper {
 	font-size: 0.8em;
 	cursor: default;
+	margin-bottom: 15pt;
 }
 
 .dataTables_length, .dataTables_info {
@@ -725,7 +722,8 @@ table.dataTable.no-footer {
 }
 
 .button {
-	width: 160pt;
+	margin-left: 5pt;
+	width: 100pt;
 }
 
 .log {

@@ -570,9 +570,9 @@ function initProgramNameTable() {
     $('#programNameTable tbody').onWrap('click', 'tr', selectionFn);
     $('#programNameTable tbody').onWrap('dblclick', 'tr', function(event) {
         selectionFn(event);
-        if ($('#loadFromListing').css('display') === 'block') {
+        if ($('#loadFromListing').css('display') === 'inline') {
             $('#loadFromListing').click();
-        } else if ($('#deleteFromListing').css('display') === 'block') {
+        } else if ($('#deleteFromListing').css('display') === 'inline') {
             $('#deleteFromListing').click();
         }
     });
@@ -622,9 +622,9 @@ function initConfigurationNameTable() {
     $('#configurationNameTable tbody').onWrap('click', 'tr', selectionFn);
     $('#configurationNameTable tbody').onWrap('dblclick', 'tr', function(event) {
         selectionFn(event);
-        if ($('#loadConfigurationFromListing').css('display') === 'block') {
+        if ($('#loadConfigurationFromListing').css('display') === 'inline') {
             $('#loadConfigurationFromListing').click();
-        } else if ($('#deleteConfigurationFromListing').css('display') === 'block') {
+        } else if ($('#deleteConfigurationFromListing').css('display') === 'inline') {
             $('#deleteConfigurationFromListing').click();
         }
     });
@@ -808,7 +808,7 @@ function initHeadNavigation() {
             initProgramEnvironment();
             setProgram("meinProgramm");
         } else if (domId === 'open') {
-            $('#loadFromListing').css('display', 'block');
+            $('#loadFromListing').css('display', 'inline');
             $('#deleteFromListing').css('display', 'none');
             $('#tabListing').click();
         } else if (domId === 'save') {
@@ -819,7 +819,7 @@ function initHeadNavigation() {
             $("#add-program").dialog("open");
         } else if (domId === 'divide') {
         } else if (domId === 'delete') {
-            $('#deleteFromListing').css('display', 'block');
+            $('#deleteFromListing').css('display', 'inline');
             $('#loadFromListing').css('display', 'none');
             $('#tabListing').click();
         } else if (domId === 'properties') {
@@ -856,7 +856,7 @@ function initHeadNavigation() {
         } else if (domId === 'new') {
             setConfiguration("meineKonfiguration");
         } else if (domId === 'open') {
-            $('#loadConfigurationFromListing').css('display', 'block');
+            $('#loadConfigurationFromListing').css('display', 'inline');
             $('#deleteConfigurationFromListing').css('display', 'none');
             $('#tabConfigurationListing').click();
         } else if (domId === 'save') {
@@ -864,7 +864,7 @@ function initHeadNavigation() {
         } else if (domId === 'saveAs') {
             $("#save-configuration").dialog("open");
         } else if (domId === 'delete') {
-            $('#deleteConfigurationFromListing').css('display', 'block');
+            $('#deleteConfigurationFromListing').css('display', 'inline');
             $('#loadConfigurationFromListing').css('display', 'none');
             $('#tabConfigurationListing').click();
         } else if (domId === 'properties') {
