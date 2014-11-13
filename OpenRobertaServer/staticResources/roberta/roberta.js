@@ -208,9 +208,35 @@ function incrCounter(e) {
     $counter.text('' + (counter + 1));
 }
 
+/**
+ * Handle result of server call
+ * 
+ * @param {result}
+ *            Result-object from server call
+ */
 function response(result) {
     LOG.info('result from server: ' + JSON.stringify(result));
     incrCounter();
+};
+
+/**
+ * Handle result of server call and refresh list if necessary
+ * 
+ * @param {result}
+ *            Result-object from server call
+ */
+function responseAndRefreshList(result) {
+    response(result);
+    var activeTab = $("#tabs div[aria-expanded='true']" ).attr('id');
+    if (activeTab === 'listing') {
+        COMM.json("/program", {
+            "cmd" : "loadPN",
+        }, showPrograms);
+    } else if (activeTab === 'confListing') {
+        COMM.json("/conf", {
+            "cmd" : "loadCN",
+        }, showConfigurations);
+    }
 };
 
 /**
@@ -241,7 +267,7 @@ function saveToServer() {
             "cmd" : "saveP",
             "name" : userState.program,
             "program" : xml_text
-        }, response);
+        },  responseAndRefreshList);
     } else {
         displayMessage("Du musst einen Programmnamen eingeben.");
     }
@@ -273,9 +299,9 @@ function saveConfigurationToServer() {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         return COMM.json("/conf", {
             "cmd" : "saveC",
-            "configurationName" : userState.configuration,
+            "name" : userState.configuration,
             "configuration" : xml_text
-        }, response);
+        }, responseAndRefreshList);
     } else {
         displayMessage("Du musst einen Konfigurationsnamen eingeben.");
     }
@@ -1002,9 +1028,6 @@ function initTabs() {
     $('#loadConfigurationFromListing').onWrap('click', function() {
         loadConfigurationFromListing();
     }, 'load configuration from configuration list');
-    COMM.json("/conf", {
-        "cmd" : "loadC"
-    });
 
     // delete program
     $('#deleteFromListing').onWrap('click', function() {
