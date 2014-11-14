@@ -5,12 +5,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -1222,7 +1224,7 @@ public class GraphicStartup implements Menu {
      * Clears the screen, displays a number and allows user to change the digits
      * of the number individually using the NXT buttons. Note the array of bytes
      * represent ASCII characters, not actual numbers.
-     * 
+     *
      * @param digits
      *        Number of digits in the PIN.
      * @param title
@@ -1753,7 +1755,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Ask the user for confirmation of an action.
-     * 
+     *
      * @param prompt
      *        A description of the action about to be performed
      * @return 1=yes 0=no < 0 escape
@@ -1857,7 +1859,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Format a string for use when displaying the volume.
-     * 
+     *
      * @param vol
      *        Volume setting 0-10
      * @return String version.
@@ -1886,7 +1888,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Read a button press. If the read timesout then exit the system.
-     * 
+     *
      * @return The bitcode of the button.
      */
     private int getButtonPress() {
@@ -1899,7 +1901,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Present the menu for a single file.
-     * 
+     *
      * @param file
      */
     private void fileMenu(File file, int type) {
@@ -2013,7 +2015,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Present the menu for a menu tool.
-     * 
+     *
      * @param file
      */
     private void toolMenu(File file) {
@@ -2238,7 +2240,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Method to add spaces before capital letters and remove .jar extension.
-     * 
+     *
      * @param fileName
      * @return
      */
@@ -2307,7 +2309,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Start a new screen display. Clear the screen and set the screen title.
-     * 
+     *
      * @param title
      */
     private void newScreen(String title) {
@@ -2317,7 +2319,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Display a status message
-     * 
+     *
      * @param msg
      */
     private void msg(String msg) {
@@ -2338,7 +2340,7 @@ public class GraphicStartup implements Menu {
      * Obtain a menu item selection Allow the user to make a selection from the
      * specified menu item. If a power off timeout has been specified and no
      * choice is made within this time power off the NXT.
-     * 
+     *
      * @param menu
      *        Menu to display.
      * @param cur
