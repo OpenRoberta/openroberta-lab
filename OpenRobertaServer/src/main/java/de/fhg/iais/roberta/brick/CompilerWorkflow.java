@@ -13,8 +13,9 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
-import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
-import de.fhg.iais.roberta.ast.syntax.HardwareComponent;
+import de.fhg.iais.roberta.ast.syntax.EV3Actor;
+import de.fhg.iais.roberta.ast.syntax.EV3BrickConfiguration;
+import de.fhg.iais.roberta.ast.syntax.EV3Sensor;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
 import de.fhg.iais.roberta.ast.syntax.action.HardwareComponentType;
@@ -35,8 +36,7 @@ public class CompilerWorkflow {
     public final String pathToCrossCompilerBuildXMLResource;
 
     @Inject
-    public CompilerWorkflow(
-        @Named("crosscompiler.basedir") String pathToCrosscompilerBaseDir,
+    public CompilerWorkflow(@Named("crosscompiler.basedir") String pathToCrosscompilerBaseDir, //
         @Named("crosscompiler.build.xml") String pathToCrossCompilerBuildXMLResource) //
     {
         this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
@@ -65,14 +65,14 @@ public class CompilerWorkflow {
         if ( programText == null || programText.trim().equals("") ) {
             return "program not found or program has no blocks";
         }
-        BrickConfiguration brickConfiguration =
-            new BrickConfiguration.Builder()
+        EV3BrickConfiguration brickConfiguration =
+            new EV3BrickConfiguration.Builder()
                 .setTrackWidth(13)
                 .setWheelDiameter(5.6)
-                .addActor(ActorPort.B, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(ActorPort.C, new HardwareComponent(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))
-                .addSensor(SensorPort.S1, new HardwareComponent(HardwareComponentType.EV3TouchSensor))
-                .addSensor(SensorPort.S4, new HardwareComponent(HardwareComponentType.EV3UltrasonicSensor))
+                .addActor(ActorPort.B, new EV3Actor(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.C, new EV3Actor(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))
+                .addSensor(SensorPort.S1, new EV3Sensor(HardwareComponentType.EV3TouchSensor))
+                .addSensor(SensorPort.S4, new EV3Sensor(HardwareComponentType.EV3UltrasonicSensor))
                 .build();
         JaxbBlocklyProgramTransformer<Void> transformer;
         try {
@@ -82,7 +82,7 @@ public class CompilerWorkflow {
             return "blocks could not be transformed (message: " + e.getMessage() + ")";
         }
         String javaCode = AstToLejosJavaVisitor.generate(programName, brickConfiguration, transformer.getTree(), true);
-        // LOG.info("to be compiled:\n{}", javaCode); // TODO: not so exhaustive logging
+        LOG.info("to be compiled:\n{}", javaCode); // only needed for EXTREME debugging
         try {
             storeGeneratedProgram(token, programName, javaCode);
         } catch ( Exception e ) {

@@ -8,7 +8,9 @@ function initUserState() {
     userState.name = '';
     userState.role = '';
     userState.program = 'meinProgramm';
+    userState.configuration = 'meineKonfiguration';
     userState.programSaved = false;
+    userState.configurationSaved = false;
     userState.brickSaved = false;
     userState.robot = '';
     userState.brickConnection = '';
@@ -164,6 +166,19 @@ function setProgram(name) {
 }
 
 /**
+ * Set configuration name
+ * 
+ * @param {name}
+ *            Name to be set
+ */
+function setConfiguration(name) {
+    if (name) {
+        userState.configuration = name;
+        displayStatus();
+    }
+}
+
+/**
  * Set token
  * 
  * @param {token}
@@ -193,9 +208,35 @@ function incrCounter(e) {
     $counter.text('' + (counter + 1));
 }
 
+/**
+ * Handle result of server call
+ * 
+ * @param {result}
+ *            Result-object from server call
+ */
 function response(result) {
     LOG.info('result from server: ' + JSON.stringify(result));
     incrCounter();
+};
+
+/**
+ * Handle result of server call and refresh list if necessary
+ * 
+ * @param {result}
+ *            Result-object from server call
+ */
+function responseAndRefreshList(result) {
+    response(result);
+    var activeTab = $("#tabs div[aria-expanded='true']" ).attr('id');
+    if (activeTab === 'listing') {
+        COMM.json("/program", {
+            "cmd" : "loadPN",
+        }, showPrograms);
+    } else if (activeTab === 'confListing') {
+        COMM.json("/conf", {
+            "cmd" : "loadCN",
+        }, showConfigurations);
+    }
 };
 
 /**
@@ -220,18 +261,55 @@ function saveToServer() {
         var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
         var xml_text = Blockly.Xml.domToText(xml);
         userState.programSaved = true;
-        LOG.info('save ' + userState.program + ' login: ' + userState.id);
+        LOG.info('save program ' + userState.program + ' login: ' + userState.id);
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         return COMM.json("/program", {
             "cmd" : "saveP",
             "name" : userState.program,
             "program" : xml_text
-        }, response);
+        },  responseAndRefreshList);
     } else {
         displayMessage("Du musst einen Programmnamen eingeben.");
     }
 }
 
+/**
+ * Save configuration to server
+ */
+function saveConfigurationToServer() {
+    if ($('#configurationNameSave')) {
+        var $name = $('#configurationNameSave');
+        setConfiguration($name.val());
+        if (userState.name) { // Is someone logged in?
+            if (!$name.val() || $name.val() === "meineKonfiguration") {
+                $('#head-navigation #submenu-configuration #save').addClass('login');
+                $('#head-navigation #submenu-configuration #save').addClass('ui-state-disabled');
+                displayMessage("Du musst einen anderen Konfigurationsnamen nehmen.");
+                return;
+            }
+            $('#head-navigation #submenu-configuration #save').removeClass('login');
+            $('#head-navigation #submenu-configuration #save').removeClass('ui-state-disabled');
+        }
+    }
+    if (userState.configuration) {
+        var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+        var xml_text = Blockly.Xml.domToText(xml);
+        userState.configurationSaved = true;
+        LOG.info('save configuration ' + userState.configuration + ' login: ' + userState.id);
+        $(".ui-dialog-content").dialog("close"); // close all opened popups
+        return COMM.json("/conf", {
+            "cmd" : "saveC",
+            "name" : userState.configuration,
+            "configuration" : xml_text
+        }, responseAndRefreshList);
+    } else {
+        displayMessage("Du musst einen Konfigurationsnamen eingeben.");
+    }
+}
+
+/**
+ * Run program
+ */
 function runOnBrick() {
     LOG.info('run ' + userState.program + ' signed in: ' + userState.id);
     return COMM.json("/program", {
@@ -249,7 +327,20 @@ function showProgram(result, load, name) {
             Blockly.mainWorkspace.clear();
         }
         Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
-        LOG.info('show ' + userState.program + ' signed in: ' + userState.id);
+        LOG.info('show program ' + userState.program + ' signed in: ' + userState.id);
+    }
+};
+
+function showConfiguration(result, load, name) {
+    response(result);
+    if (result.rc === 'ok') {
+        setConfiguration(name);
+        var xml = Blockly.Xml.textToDom(result.data);
+        if (load) {
+            Blockly.mainWorkspace.clear();
+        }
+        Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+        LOG.info('show configuration ' + userState.configuration + ' signed in: ' + userState.id);
     }
 };
 
@@ -307,6 +398,28 @@ function loadFromListing() {
 }
 
 /**
+ * Load the configuration that was selected in configurations list
+ */
+function loadConfigurationFromListing() {
+    var $configurationRow = $('#configurationNameTable .selected');
+    if ($configurationRow.length > 0) {
+        var configurationName = $configurationRow[0].children[0].textContent;
+        LOG.info('loadFromConfigurationList ' + configurationName + ' signed in: ' + userState.id);
+        COMM.json("/conf", {
+            "cmd" : "loadC",
+            "name" : configurationName
+        }, function(result) {
+            $("#tabs").tabs("option", "active", 0);
+            $('#configurationNameSave').val(configurationName);
+            userState.configurationSaved = true;
+            showConfiguration(result, true, configurationName);
+            $('#head-navigation #submenu-configuration #save').removeClass('login');
+            $('#head-navigation #submenu-configuration #save').removeClass('ui-state-disabled');
+        });
+    }
+}
+
+/**
  * Delete the program that was selected in program list
  */
 function deleteFromListing() {
@@ -318,8 +431,26 @@ function deleteFromListing() {
             "cmd" : "deleteP",
             "name" : programName
         }, function(result) {
-            $("#tabs").tabs("option", "active", 0);
             $('#programNameSave').val('');
+            responseAndRefreshList(result);
+        });
+    }
+}
+
+/**
+ * Delete the configuration that was selected in configurations list
+ */
+function deleteConfigurationFromListing() {
+    var $configurationRow = $('#configurationNameTable .selected');
+    if ($configurationRow.length > 0) {
+        var configurationName = $configurationRow[0].children[0].textContent;
+        LOG.info('deleteFromConfigurationList ' + configurationName + ' signed in: ' + userState.id);
+        COMM.json("/conf", {
+            "cmd" : "deleteC",
+            "name" : configurationName
+        }, function(result) {
+            $('#configurationNameSave').val('');
+            responseAndRefreshList(result);
         });
     }
 }
@@ -368,8 +499,8 @@ function showConfigurations(result) {
     if (result.rc === 'ok') {
         var $table = $('#configurationNameTable').dataTable();
         $table.fnClearTable();
-        if (result.confNames.length > 0) {
-            $table.fnAddData(result.confNames);
+        if (result.configurationNames.length > 0) {
+            $table.fnAddData(result.configurationNames);
         }
     }
 }
@@ -392,6 +523,9 @@ function beforeActivateTab(event, ui) {
     }
 }
 
+/**
+ * Initialize table of programs
+ */
 function initProgramNameTable() {
     var columns = [ {
         "sTitle" : "Name des Programms",
@@ -436,10 +570,62 @@ function initProgramNameTable() {
     $('#programNameTable tbody').onWrap('click', 'tr', selectionFn);
     $('#programNameTable tbody').onWrap('dblclick', 'tr', function(event) {
         selectionFn(event);
-        if ($('#loadFromListing').css('display') === 'block') {
+        if ($('#loadFromListing').css('display') === 'inline') {
             $('#loadFromListing').click();
-        } else if ($('#deleteFromListing').css('display') === 'block') {
+        } else if ($('#deleteFromListing').css('display') === 'inline') {
             $('#deleteFromListing').click();
+        }
+    });
+}
+
+/**
+ * Initialize configurations table
+ */
+function initConfigurationNameTable() {
+    var columns = [ {
+        "sTitle" : "Name der Konfiguration",
+        "sClass" : "configurations"
+    }, {
+        "sTitle" : "Erzeugt von",
+        "sClass" : "configurations"
+    }, {
+        "sTitle" : "Icon",
+        "sClass" : "configurations"
+    }, {
+        "sTitle" : "Erzeugt am",
+        "sClass" : "configurations"
+    }, {
+        "sTitle" : "Letzte Aktualisierung",
+        "sClass" : "configurations"
+    }, ];
+    var $configurations = $('#configurationNameTable');
+    $configurations.dataTable({
+        "sDom" : '<lip>t<r>',
+        "aaData" : [],
+        "aoColumns" : columns,
+        "oLanguage" : {
+            "sSearch" : "Search all columns:"
+        },
+        "bJQueryUI" : true,
+        "sPaginationType" : "full_numbers",
+        "bPaginate" : true,
+        "iDisplayLength" : 20,
+        "oLanguage" : {
+            "sLengthMenu" : 'Zeige <select>' + '<option value="10">10</option><option value="20">20</option><option value="25">25</option>'
+                    + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>' + '</select> Konfigurationen'
+        },
+        "fnDrawCallback" : function() {
+            var counter = +$('#redrawCounter').text();
+            $('#redrawCounter').text(counter + 1);
+        }
+    });
+    $('#configurationNameTable tbody').onWrap('click', 'tr', selectionFn);
+    $('#configurationNameTable tbody').onWrap('dblclick', 'tr', function(event) {
+        selectionFn(event);
+        if ($('#loadConfigurationFromListing').css('display') === 'inline') {
+            $('#loadConfigurationFromListing').click();
+        } else if ($('#deleteConfigurationFromListing').css('display') === 'inline') {
+            $('#deleteConfigurationFromListing').click();
         }
     });
 }
@@ -458,6 +644,14 @@ function startProgram() {
 function checkProgram() {
     // TODO
     displayMessage("Dein Programm kann zur Zeit noch nicht geprüft werden.");
+}
+
+/**
+ * Check configuration
+ */
+function checkConfiguration() {
+    // TODO
+    displayMessage("Deine Konfiguration kann zur Zeit noch nicht geprüft werden.");
 }
 
 function switchToBlockly() {
@@ -488,6 +682,14 @@ function displayStatus() {
     } else {
         $('#head-navigation #displayProgram').text('');
         $('#head-navigation #iconDisplayProgram').css('display', 'none');
+    }
+
+    if (userState.configuration) {
+        $('#head-navigation #displayConfiguration').text(userState.configuration);
+        $('#head-navigation #iconDisplayConfiguration').css('display', 'inline');
+    } else {
+        $('#head-navigation #displayConfiguration').text('');
+        $('#head-navigation #iconDisplayConfiguration').css('display', 'none');
     }
 
     if (userState.toolbox) {
@@ -545,6 +747,54 @@ function initHeadNavigation() {
         }
     });
 
+    // Open / close menu on click (for tablets)
+    $('#head-navigation > li > a').onWrap('click', function(event) {
+        var domId = event.target.id;
+        if (domId === 'head-navigation-program') {
+            if ($('#head-navigation #submenu-program').css('display') === 'none' ) {
+                $('#head-navigation #submenu-program').css('display','block'); 
+            } else {
+                $('#head-navigation #submenu-program').css('display','none');               
+            }
+        } else if (domId === 'head-navigation-nepo') {
+            if ($('#head-navigation #submenu-nepo').css('display') === 'none' ) {
+                $('#head-navigation #submenu-nepo').css('display','block'); 
+            } else {
+                $('#head-navigation #submenu-nepo').css('display','none');               
+            }
+        } else if (domId === 'head-navigation-configuration') {
+            if ($('#head-navigation #submenu-configuration').css('display') === 'none' ) {
+                $('#head-navigation #submenu-configuration').css('display','block'); 
+            } else {
+                $('#head-navigation #submenu-configuration').css('display','none');               
+            }
+        } else if (domId === 'head-navigation-connection') {
+            if ($('#head-navigation #submenu-connection').css('display') === 'none' ) {
+                $('#head-navigation #submenu-connection').css('display','block'); 
+            } else {
+                $('#head-navigation #submenu-connection').css('display','none');               
+            }
+        } else if (domId === 'head-navigation-developertools') {
+            if ($('#head-navigation #submenu-developertools').css('display') === 'none' ) {
+                $('#head-navigation #submenu-developertools').css('display','block'); 
+            } else {
+                $('#head-navigation #submenu-developertools').css('display','none');               
+            }
+        } else if (domId === 'head-navigation-help') {
+            if ($('#head-navigation #submenu-help').css('display') === 'none' ) {
+                $('#head-navigation #submenu-help').css('display','block'); 
+            } else {
+                $('#head-navigation #submenu-help').css('display','none');               
+            }
+        } else if (domId === 'head-navigation-login') {
+            if ($('#head-navigation #submenu-login').css('display') === 'none' ) {
+                $('#head-navigation #submenu-login').css('display','block'); 
+            } else {
+                $('#head-navigation #submenu-login').css('display','none');               
+            }
+        }
+    });
+
     // Submenu Program
     $('#head-navigation').onWrap('click', '#submenu-program > li:not(.ui-state-disabled)', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
@@ -558,7 +808,7 @@ function initHeadNavigation() {
             initProgramEnvironment();
             setProgram("meinProgramm");
         } else if (domId === 'open') {
-            $('#loadFromListing').css('display', 'block');
+            $('#loadFromListing').css('display', 'inline');
             $('#deleteFromListing').css('display', 'none');
             $('#tabListing').click();
         } else if (domId === 'save') {
@@ -569,7 +819,7 @@ function initHeadNavigation() {
             $("#add-program").dialog("open");
         } else if (domId === 'divide') {
         } else if (domId === 'delete') {
-            $('#deleteFromListing').css('display', 'block');
+            $('#deleteFromListing').css('display', 'inline');
             $('#loadFromListing').css('display', 'none');
             $('#tabListing').click();
         } else if (domId === 'properties') {
@@ -600,14 +850,23 @@ function initHeadNavigation() {
         switchToBlockly();
         var domId = event.target.id;
         if (domId === 'check') {
+            checkConfiguration();
         } else if (domId === 'standard') {
             switchToBrickly();
         } else if (domId === 'new') {
+            setConfiguration("meineKonfiguration");
         } else if (domId === 'open') {
-            $('#tabConfListing').click();
+            $('#loadConfigurationFromListing').css('display', 'inline');
+            $('#deleteConfigurationFromListing').css('display', 'none');
+            $('#tabConfigurationListing').click();
         } else if (domId === 'save') {
+            saveConfigurationToServer(response);
         } else if (domId === 'saveAs') {
+            $("#save-configuration").dialog("open");
         } else if (domId === 'delete') {
+            $('#deleteConfigurationFromListing').css('display', 'inline');
+            $('#loadConfigurationFromListing').css('display', 'none');
+            $('#tabConfigurationListing').click();
         } else if (domId === 'properties') {
         }
         return false;
@@ -667,7 +926,7 @@ function initHeadNavigation() {
     }, 'sub menu of menu "login"');
 
     // Close submenu on mouseleave
-    $('#head-navigation').on('mouseleave', function(event) {
+    $('#head-navigation').onWrap('mouseleave', function(event) {
         $('#head-navigation').menu("collapseAll", null, false);
     });
 
@@ -717,6 +976,10 @@ function initPopups() {
         saveToServer();
     }, 'save program');
 
+    $('#saveConfiguration').onWrap('click', function() {
+        saveConfigurationToServer();
+    }, 'save configuration');
+
     $('#setToken').onWrap('click', function() {
         var $token = $('#tokenValue');
         setToken($token.val());
@@ -752,6 +1015,7 @@ function initTabs() {
         beforeActivate : beforeActivateTab
     });
 
+    // load program
     $('#loadFromListing').onWrap('click', function() {
         loadFromListing();
     }, 'load blocks from program list');
@@ -760,13 +1024,20 @@ function initTabs() {
         "name" : "beginner"
     }, injectBlockly);
 
+    // load configuration
+    $('#loadConfigurationFromListing').onWrap('click', function() {
+        loadConfigurationFromListing();
+    }, 'load configuration from configuration list');
+
+    // delete program
     $('#deleteFromListing').onWrap('click', function() {
         deleteFromListing();
     }, 'delete blocks from program list');
-    COMM.json("/blocks", {
-        "cmd" : "deleteT",
-        "name" : "beginner"
-    });
+
+    // delete configuration
+    $('#deleteConfigurationFromListing').onWrap('click', function() {
+        deleteConfigurationFromListing();
+    }, 'delete configuration from configurations list');
 
     $('.backToBlockly').onWrap('click', function() {
         $('#tabBlockly').click();
@@ -774,21 +1045,27 @@ function initTabs() {
 }
 
 /**
+ * Initialize logging
+ */
+function initLogging() {
+    $('#toggle').onWrap('click', LOG.toggleVisibility, 'toggle LOG visibility');
+    $('#clearLog').onWrap('click', function() {$('#log li').remove();}, 'clear LOG list');
+}
+
+/**
  * Initializations
  */
 function init() {
-
+    initLogging();
     initUserState();
     initTabs();
     initPopups();
     initHeadNavigation();
     initProgramNameTable();
+    initConfigurationNameTable();
     displayStatus();
     $('#programNameSave').val('');
-
-    // =============================================================================
-
-    $('#toggle').onWrap('click', LOG.toggleVisibility, 'toggle LOG visibility');
+    $('#configurationNameSave').val('');
 };
 
 $(document).ready(WRAP.fn3(init, 'page init'));

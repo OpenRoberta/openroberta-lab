@@ -1,5 +1,10 @@
 package de.fhg.iais.roberta.guice;
 
+import java.util.Properties;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
@@ -18,6 +23,9 @@ import de.fhg.iais.roberta.javaServer.resources.TokenReceiver;
 import de.fhg.iais.roberta.persistence.connector.SessionFactoryWrapper;
 
 public class RobertaGuiceModule extends AbstractModule {
+    private static final Logger LOG = LoggerFactory.getLogger(RobertaGuiceModule.class);
+    private static final String PROPERTY_PATH = "openRoberta.properties";
+
     @Override
     protected void configure() {
         // configure at least one JAX-RS resource or the server won't start.
@@ -35,10 +43,14 @@ public class RobertaGuiceModule extends AbstractModule {
         bind(BrickCommunicator.class).in(Singleton.class);
         bind(CompilerWorkflow.class).in(Singleton.class);
 
-        bind(String.class).annotatedWith(Names.named("hibernate-cfg.xml")).toInstance("hibernate-cfg.xml");
-        bind(String.class).annotatedWith(Names.named("crosscompiler.basedir")).toInstance("../OpenRobertaRuntime/userProjects/"); // TODO: rm relative path!
-        bind(String.class).annotatedWith(Names.named("crosscompiler.build.xml")).toInstance("../OpenRobertaRuntime/build.xml"); // TODO: rm relative path!
+        bind(String.class).annotatedWith(Names.named("hibernate.config.xml")).toInstance("hibernate-cfg.xml");
 
-        bind(String.class).annotatedWith(Names.named("version")).toInstance("ORA-1.0.0-RC-2");
+        try {
+            Properties properties = new Properties();
+            properties.load(this.getClass().getClassLoader().getResourceAsStream(PROPERTY_PATH));
+            Names.bindProperties(binder(), properties);
+        } catch ( Exception e ) {
+            LOG.error("Could not load property file " + PROPERTY_PATH, e);
+        }
     }
 }

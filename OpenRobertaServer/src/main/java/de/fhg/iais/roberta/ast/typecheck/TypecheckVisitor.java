@@ -38,6 +38,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.syntax.functions.Func;
+import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
@@ -50,6 +51,7 @@ import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensor;
 import de.fhg.iais.roberta.ast.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.FunctionStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
@@ -448,6 +450,18 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     @Override
     public BlocklyType visitGetSampleSensor(GetSampleSensor<BlocklyType> sensorGetSample) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitTextPrintFunct(TextPrintFunct<BlocklyType> textPrintFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitFunctionStmt(FunctionStmt<BlocklyType> functionStmt) {
         // TODO Auto-generated method stub
         return null;
     }

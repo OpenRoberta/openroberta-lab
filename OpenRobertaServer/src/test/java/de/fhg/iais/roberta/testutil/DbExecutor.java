@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,8 +28,13 @@ public class DbExecutor {
         this.session = session;
     }
 
-    public void sqlFile(String pathToSqlStmtFile) throws Exception {
-        sqlFile(new FileInputStream(pathToSqlStmtFile));
+    public void sqlFile(String pathToSqlStmtFile, String sqlReturningPositiveNumberIfSqlFileAlreadyLoaded) throws Exception {
+        int result = ((BigInteger) oneValueSelect(sqlReturningPositiveNumberIfSqlFileAlreadyLoaded)).intValue();
+        if ( result == 0 ) {
+            sqlFile(new FileInputStream(pathToSqlStmtFile));
+        } else {
+            LOG.info("test sql says, that sqlFile " + pathToSqlStmtFile + " has already been executed. Skipping execution.");
+        }
     }
 
     public void sqlFile(InputStream sqlStmtFileStream) {

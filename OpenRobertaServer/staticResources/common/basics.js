@@ -221,8 +221,8 @@ var LOG = {};
         }
         li.text(marker + obj);
         var $log = $('#log');
-        $log.append(li);
-        $log.scrollTop($log.prop('scrollHeight'));
+        $log.prepend(li);
+        $log.scrollTop(1);
     }
 
     /**

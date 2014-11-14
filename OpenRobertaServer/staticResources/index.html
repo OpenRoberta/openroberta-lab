@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+<!--
+Copyright 2014, 2015 The Open Roberta project.
+See the NOTICE file distributed with this work for additional information
+regarding copyright ownership.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
 <head>
 <script type="text/javascript" src="/common/jquery/jquery-2.0.3.js" charset="utf-8"></script>
 <script type="text/javascript" src="/common/ui/jquery-ui.js" charset="utf-8"></script>
@@ -32,7 +48,7 @@
     <div id="head-section">
         <ul id="head-navigation">
             <li>
-                <a href="#"><span class="head-navi-icons project"></span><span class="head-navi-text">Programm</span></a>
+                <a href="#" id="head-navigation-program"><span class="head-navi-icons project"></span><span class="head-navi-text">Programm</span></a>
                 <ul id="submenu-program" class="head-navigation-submenu">
                     <li id="run"><span class="flaticon-botton2"></span>starten</li>
                     <li id="check"><span class="flaticon-tick"></span>checken</li>
@@ -47,47 +63,47 @@
                 </ul>
             </li>
             <li>
-                <a href="#"><span class="head-navi-icons nepo"></span><span class="head-navi-text">Nepo</span></a>
+                <a href="#" id="head-navigation-nepo"><span class="head-navi-icons nepo"></span><span class="head-navi-text">Nepo</span></a>
                 <ul id="submenu-nepo" class="head-navigation-submenu">
                     <li id="toolboxBeginner" class="logout"><span class="flaticon-spanner"></span>Anfänger</li>
                     <li id="toolboxExpert" class="logout"><span class="flaticon-spanner"></span>Experte</li>
                 </ul>
             </li>
             <li>
-                <a href="#"><span class="head-navi-icons configuration"></span><span id="setConfiguration" class="head-navi-text">Roboter</span></a>
+                <a href="#" id="head-navigation-configuration"><span class="head-navi-icons configuration"></span><span id="setConfiguration" class="head-navi-text">Roboter</span></a>
                 <ul id="submenu-configuration" class="head-navigation-submenu">
-                    <li id="check" class="login logout"><span class="flaticon-tick"></span>checken</li>
+                    <li id="check"><span class="flaticon-tick"></span>checken</li>
                     <li id="standard"><span class="flaticon-thumbs1"></span>Standardkonfiguration</li>
-                    <li id="new" class="login logout"><span class="flaticon-add10"></span>neu ...</li>
-                    <li id="open" class="login logout"><span class="flaticon-pencil1"></span>öffnen ... </li>
+                    <li id="new" class="logout"><span class="flaticon-add10"></span>neu ...</li>
+                    <li id="open" class="logout"><span class="flaticon-pencil1"></span>öffnen ... </li>
                     <li id="save" class="login logout"><span class="flaticon-empty3"></span>speichern</li>
-                    <li id="saveAs" class="login logout"><span class="flaticon-empty3"></span>speichern unter ...</li>
+                    <li id="saveAs" class="logout"><span class="flaticon-empty3"></span>speichern unter ...</li>
                     <li id="divide" class="login logout"><span class="flaticon-flow3"></span>teilen ...</li>
-                    <li id="delete" class="login logout"><span class="flaticon-delete10"></span>löschen ...</li>
+                    <li id="delete" class="logout"><span class="flaticon-delete10"></span>löschen ...</li>
                     <li id="properties" class="login logout"><span class="flaticon-information"></span>Eigenschaften ...</li>
                 </ul>
             </li>
             <li>
-                <a href="#"><span class="head-navi-icons connection"></span><span class="head-navi-text">Verbindung</span></a>
+                <a href="#" id="head-navigation-connection"><span class="head-navi-icons connection"></span><span class="head-navi-text">Verbindung</span></a>
                 <ul id="submenu-connection" class="head-navigation-submenu">
                     <li id="connect"><span class="flaticon-botton2"></span>verbinden ...</li>
                 </ul>
             </li>
             <li>
-                <a href="#"><span class="head-navi-icons developer"></span><span class="head-navi-text">Tools</span></a>
+                <a href="#" id="head-navigation-developertools"><span class="head-navi-icons developer"></span><span class="head-navi-text">Tools</span></a>
                 <ul id="submenu-developertools" class="head-navigation-submenu">
                     <li id="logging"><span class="flaticon-spanner"></span>Logging</li>
                     <li class="login logout" id="simtest"><span class="flaticon-spanner"></span>Simulator Test</li>
                 </ul>
             </li>
             <li>
-                <a href="#"><span class="head-navi-icons help"></span><span class="head-navi-text">Hilfe</span></a>
+                <a href="#" id="head-navigation-help"><span class="head-navi-icons help"></span><span class="head-navi-text">Hilfe</span></a>
                 <ul id="submenu-help" class="head-navigation-submenu">
                     <li id="help"><span class="flaticon-lightbulb1"></span>anzeigen</li>
                 </ul>
             </li>
             <li>
-                <a href="#"><span class="head-navi-icons user"></span><span class="head-navi-text">Anmeldung</span></a>
+                <a href="#" id="head-navigation-login"><span class="head-navi-icons user"></span><span class="head-navi-text">Anmeldung</span></a>
                 <ul id="submenu-login" class="head-navigation-submenu">
                     <li id="login" class="login"><span class="flaticon-user"></span>anmelden ...</li>
                     <li id="logout" class="logout"><span class="flaticon-user2"></span>abmelden</li>
@@ -116,7 +132,8 @@
             
             <div class="state">
                 <span id="iconDisplayLogin" class="flaticon-user"></span><span id="displayLogin" title="Angemeldeter Benutzer">Angemeldeter Benutzer</span><br/>
-                <span id="iconDisplayProgram" class="flaticon-pencil1"></span><span id="displayProgram" title="Ausgewähltes Programm">Ausgewähltes Programm</span>
+                <span id="iconDisplayProgram" class="flaticon-complete1"></span><span id="displayProgram" title="Ausgewähltes Programm">Ausgewähltes Programm</span><br/>
+                <span id="iconDisplayConfiguration" class="flaticon-pencil1"></span><span id="displayConfiguration" title="Ausgewählte Konfiguration">Ausgewählte Konfiguration</span>
             </div>
         </ul>
     </div>
@@ -163,6 +180,12 @@
         <input id="saveProgram" class='submit' type="submit" value="Speichern" />
     </div>
 
+    <div class="jquerypopup configuration" id="save-configuration" title="Konfiguration">
+        <label for="configurationNameSave">Name</label>
+        <input id="configurationNameSave" class='input configurationName' type="text" value="" /><br/>
+        <input id="saveConfiguration" class='submit' type="submit" value="Speichern" />
+    </div>
+
     <div class="jquerypopup" id="set-token" title="Token">
         <label for="tokenValue">Wert</label>
         <input id="tokenValue" class='input' type="text" value="" /><br/>
@@ -179,15 +202,15 @@
             <ul class="hidden">
                 <li><a id="tabBlockly" href="#blockly">Test Nepo :-)</a></li>
                 <li><a id="tabListing" href="#listing">Listing of programs</a></li>
-                <li><a id="tabConfListing" href="#confListing">Listing of configurations</a></li>
+                <li><a id="tabConfigurationListing" href="#confListing">Listing of configurations</a></li>
                 <li><a id="tabLogging" href="#logging">Logging</a></li>
                 <li><a id="tabStandardConfiguration" href="#bricklyFrame">Standard-Configuration</a></li>
                 <li><a id="tabSimtest" onclick="viewSimulator(true);">Simulator Test</a></li>
             </ul>
 
             <div id="simulatorDiv">
-                <button id="closeBtn" class="button" onclick="viewSimulator(false);">Beenden</button>
-                <button id="closeBtn" class="button" onclick="moveStop();">Stop</button>
+                <button id="closeBtn" class="button" onclick="viewSimulator(false)">Beenden</button>
+                <button id="closeBtn" class="button" onclick="moveStop()">Stop</button>
                 <div id="positionData"></div>
                 <!--  <div id="simulatorRender"></div> -->
                 <canvas id="robertaCanvas" width="212" height="212" class="dummy"></canvas>
@@ -204,10 +227,9 @@
                     <tfoot>
                     </tfoot>
                 </table>
-                <br/>
-                <input id="loadFromListing" type="submit" value="Laden" />
-                <input id="deleteFromListing" type="submit" value="Löschen" />
-                <input class="backToBlockly" type="submit" value="Zurück" />
+                <input class="button" id="loadFromListing" type="submit" value="Laden" />
+                <input class="button" id="deleteFromListing" type="submit" value="Löschen" />
+                <input class="button backToBlockly" type="submit" value="Zurück" />
                 <div id="redrawCounter" class="rightGray">0</div>
             </div>
             
@@ -218,9 +240,9 @@
                     <tfoot>
                     </tfoot>
                 </table>
-                <br/>
-                <input id="loadFromListing" type="submit" value="Laden" />
-                <input class="backToBlockly" type="submit" value="Zurück" />
+                <input class="button" id="loadConfigurationFromListing" type="submit" value="Laden" />
+                <input class="button" id="deleteConfigurationFromListing" type="submit" value="Löschen" />
+                <input class="button backToBlockly" type="submit" value="Zurück" />
                 <div id="redrawCounter" class="rightGray">0</div>
             </div>
             
@@ -228,10 +250,11 @@
                 <br/>
                 <div>
                     <input id="toggle" class="button" type="submit" value="log ein/aus" />
-                    <input class="backToBlockly" type="submit" value="Zurück" />
+                    <input id="clearLog" class="button" type="submit" value="Liste leeren" />
+                    <input class="button backToBlockly" class="button" type="submit" value="Zurück" />
                     <hr />
                     <br/>
-                    <ol id="log" class="log">
+                    <ol id="log" class="log" reversed>
                     </ol>
                     <div class="counter">Count:</div>
                     <div class="counter" id="counter">0</div>

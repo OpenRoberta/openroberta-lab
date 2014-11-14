@@ -144,10 +144,9 @@ public class RepeatStmtTest {
     @Test
     public void loopForever() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=1, y=379], \n"
-                + "(repeat [WHILE, BoolConst [true]]\nexprStmt Funct [PRINT, [ColorConst [GREEN]]]\n), \n(repeat [WHILE, BoolConst [true]]\nexprStmt Funct [PRINT, [EmptyExpr [defVal=class java.lang.String]]]\n)]]]";
+            "BlockAST[project=[[Location[x=1,y=379],(repeat[WHILE,BoolConst[true]]FunctionStmt[TextPrintFunct[[ColorConst[GREEN]]]]),(repeat[WHILE,BoolConst[true]]FunctionStmt[TextPrintFunct[[EmptyExpr[defVal=classjava.lang.String]]]])]]]";
 
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/repeat_stmt_loopForever.xml"));
+        Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generateTransformerString("/ast/control/repeat_stmt_loopForever.xml").replaceAll("\\s+", ""));
     }
 
     @Test(expected = DbcException.class)

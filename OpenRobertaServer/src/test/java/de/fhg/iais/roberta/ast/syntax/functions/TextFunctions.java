@@ -10,7 +10,6 @@ import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
-import de.fhg.iais.roberta.ast.syntax.functions.Func.Function;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 public class TextFunctions {
@@ -20,7 +19,7 @@ public class TextFunctions {
         ArrayList<Expr<Void>> param = new ArrayList<Expr<Void>>();
         StringConst<Void> stringConst = StringConst.make("AS", null, null);
         param.add(stringConst);
-        Func<Void> funct = Func.make(Function.ABS, param, null, null);
+        Func<Void> funct = Func.make(Functions.ABS, param, null, null);
         Assert.assertEquals(10, funct.getPrecedence());
     }
 
@@ -29,7 +28,7 @@ public class TextFunctions {
         ArrayList<Expr<Void>> param = new ArrayList<Expr<Void>>();
         StringConst<Void> stringConst = StringConst.make("AS", null, null);
         param.add(stringConst);
-        Func<Void> funct = Func.make(Function.ABS, param, null, null);
+        Func<Void> funct = Func.make(Functions.ABS, param, null, null);
         Assert.assertEquals(Assoc.LEFT, funct.getAssoc());
     }
 
@@ -38,27 +37,27 @@ public class TextFunctions {
         ArrayList<Expr<Void>> param = new ArrayList<Expr<Void>>();
         StringConst<Void> stringConst = StringConst.make("AS", null, null);
         param.add(stringConst);
-        Func<Void> funct = Func.make(Function.POWER, param, null, null);
+        Func<Void> funct = Func.make(Functions.POWER, param, null, null);
         Assert.assertEquals("^", funct.getFunctName().getOpSymbol());
     }
 
     @Test(expected = DbcException.class)
     public void invalid() {
-        Function.get("");
+        Functions.get("");
     }
 
     @Test(expected = DbcException.class)
     public void invalid1() {
-        Function.get(null);
+        Functions.get(null);
     }
 
     @Test(expected = DbcException.class)
     public void invalid2() {
-        Function.get("asdf");
+        Functions.get("asdf");
     }
 
     @Test
-    public void concatination() throws Exception {
+    public void concatenation() throws Exception {
         Helper.generateTransformerString("/syntax/functions/text_concat.xml");
 
         String a = "BlockAST [project=[[Funct [UPPERCASE, [Var [text]]]]]]";

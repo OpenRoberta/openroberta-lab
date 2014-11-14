@@ -30,10 +30,11 @@ public final class SessionFactoryWrapper {
      * configure the session factory
      */
     @Inject
-    public SessionFactoryWrapper(@Named("hibernate-cfg.xml") String cfgXml) {
+    public SessionFactoryWrapper(@Named("hibernate.config.xml") String cfgXml, @Named("hibernate.connection.url") String databaseUrl) {
         try {
             Configuration configuration = new Configuration();
             configuration.configure(cfgXml);
+            configuration.setProperty("hibernate.connection.url", databaseUrl);
             ServiceRegistryBuilder serviceRegistryBuilder = new ServiceRegistryBuilder().applySettings(configuration.getProperties());
             this.sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder.buildServiceRegistry());
             LOG.info("created");

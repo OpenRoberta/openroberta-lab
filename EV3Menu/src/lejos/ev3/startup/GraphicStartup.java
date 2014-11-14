@@ -13,12 +13,10 @@ import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.net.InetAddress;
-import java.net.MalformedURLException;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.net.URL;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -153,8 +151,6 @@ public class GraphicStartup implements Menu {
     public static boolean isRobertaRegistered = false;
     private static String token;
     private static String serverURLString = "";
-    private static URL serverTokenRessource;
-    private static URL serverDownloadRessource;
 
     public int selectTest;
 
@@ -330,7 +326,7 @@ public class GraphicStartup implements Menu {
      */
     private void mainMenu() {
         GraphicMenu menu = new GraphicMenu(new String[] {
-            "Run Default", " Open Roberta lab", "Programs", "Samples", "Tools", "Bluetooth", "Wifi", "Sound", "System", "Version"
+            "Run Default", " Open Roberta Lab", "Programs", "Samples", "Tools", "Bluetooth", "Wifi", "Sound", "System", "Version"
         }, new String[] {
             ICDefault, ICRoberta, ICFiles, ICSamples, ICTools, ICBlue, ICWifi, ICSound, ICEV3, ICLeJOS
         }, 3);
@@ -1482,61 +1478,21 @@ public class GraphicStartup implements Menu {
         newScreen(" Robertalab");
 
         if ( GraphicStartup.isRobertaRegistered == false ) {
-            //            File file = new File("/home/lejos/programs/serverIP.txt");
-            //            if ( !file.exists() ) {
-            //                PrintWriter pw = null;
-            //                try {
-            //                    file.delete();
-            //                    pw = new PrintWriter(file);
-            //                    pw.println("");
-            //                } catch ( FileNotFoundException e ) {
-            //                    // ok
-            //                } finally {
-            //                    pw.close();
-            //                }
-            //            }
-            //
-            //            try {
-            //                BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-            //                String temp = bufferedReader.readLine();
-            //                bufferedReader.close();
-            //                if ( temp.equals("") ) {
-            //                    temp = "none";
-            //                }
-            //                lcd.drawString("use last IP?", 0, 1);
-            //                lcd.drawString(temp, 0, 2);
-            //                if ( getYesNo("     Confirm", false) == 1 ) {
-            //                    serverURLString = temp;
-            //                } else {
-            //                    newScreen(" Enter IP");
-            //                    serverURLString = new IpAddressKeyboard().getString();
-            //                    if ( !serverURLString.equals("") ) {
-            //                        try {
-            //                            file.delete();
-            //                            PrintWriter pw2 = new PrintWriter(file);
-            //                            pw2.println(serverURLString);
-            //                            pw2.close();
-            //                        } catch ( FileNotFoundException e ) {
-            //                            return;
-            //                        }
-            //                    } else {
-            //                        return;
-            //                    }
-            //                }
-            //            } catch ( IOException e ) {
-            //                e.printStackTrace();
-            //            }
-            serverURLString = "193.175.162.161:80";
-
-            try {
-                serverTokenRessource = new URL("http://" + serverURLString + "/token");
-                serverDownloadRessource = new URL("http://" + serverURLString + "/download");
-            } catch ( MalformedURLException e ) {
-                // ok
+            if ( this.indiBA.getWifi() == false ) {
+                newScreen("Warning");
+                lcd.drawString("No Wifi connected!", 0, 2);
+                if ( getYesNo("    Continue?", false) == 1 ) {
+                    // go on
+                } else {
+                    return;
+                }
             }
 
+            getIPAddress();
+            //serverURLString = "193.175.162.161:80";
+
             token = new RobertaTokenGenerator().generateToken(8);
-            GraphicStartup.backgroundTasks = new BackgroundTasks(serverTokenRessource, serverDownloadRessource, token, this.ind, echoIn, echoErr);
+            GraphicStartup.backgroundTasks = new BackgroundTasks(serverURLString, token, this.ind, echoIn, echoErr);
             Key escapeKey = LocalEV3.get().getKey("Escape");
             escapeKey.addKeyListener(GraphicStartup.backgroundTasks);
             GraphicStartup.backgroundTasks.startRegisteringThread();
@@ -1548,16 +1504,10 @@ public class GraphicStartup implements Menu {
 
             while ( GraphicStartup.backgroundTasks.getRegisteredInfo() == false ) {
                 if ( GraphicStartup.backgroundTasks.getTimeOutInfo() == true ) {
-                    newScreen(" Robertalab");
-                    lcd.drawString("Time out!", 0, 3);
-                    serverURLString = "";
-                    Button.waitForAnyPress();
+                    openRobertaLabConnectionError("    Timeout!", "", "");
                     return;
                 } else if ( GraphicStartup.backgroundTasks.getErrorInfo() == true ) {
-                    newScreen(" Robertalab");
-                    lcd.drawString("Error/ abort!", 0, 3);
-                    serverURLString = "";
-                    Button.waitForAnyPress();
+                    openRobertaLabConnectionError("     Ooops...", "  Something went", "    wrong! :(");
                     return;
                 } else {
                     Delay.msDelay(500);
@@ -1573,31 +1523,111 @@ public class GraphicStartup implements Menu {
             backgroundTasks.reconnectRoberta();
 
         } else {
-            GraphicMenu menu = new GraphicMenu(new String[] {
-                "Disconnect"
-            }, new String[] {
-                ICRoberta
-            }, 3);
-            int selected = 0;
-            do {
-                selected = getSelection(menu, selected);
-                switch ( selected ) {
-                    case 0:
-                        newScreen(" Robertalab");
-                        if ( getYesNo("     Confirm", false) == 1 ) {
-                            backgroundTasks.disconnectRoberta();
-                            LocalEV3.get().getAudio().systemSound(3);
-                            isRobertaRegistered = false;
-                            token = null;
-                            serverURLString = "";
-                            serverTokenRessource = null;
-                            serverDownloadRessource = null;
-                            this.indiBA.setRobertalab(false);
-                            return;
-                        }
-                }
-            } while ( selected >= 0 );
+            openRobertaLabConnectedMenu();
         }
+    }
+
+    /**
+     * Requests an IP Address from the user where the server is running.<br>
+     * For developer version only.
+     */
+    private void getIPAddress() {
+        File file = new File("/home/lejos/programs/serverIP.txt");
+        if ( !file.exists() ) {
+            PrintWriter pw = null;
+            try {
+                file.delete();
+                pw = new PrintWriter(file);
+                pw.println("");
+            } catch ( FileNotFoundException e ) {
+                // ok
+            } finally {
+                pw.close();
+            }
+        }
+
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+            String temp = bufferedReader.readLine();
+            bufferedReader.close();
+            if ( temp.equals("") ) {
+                temp = "none";
+            }
+            newScreen("IP");
+            lcd.drawString("use last IP?", 0, 1);
+            lcd.drawString(temp, 0, 2);
+            if ( getYesNo("     Confirm", false) == 1 ) {
+                serverURLString = temp;
+            } else {
+                newScreen(" Enter IP");
+                serverURLString = new IpAddressKeyboard().getString();
+                if ( !serverURLString.equals("") ) {
+                    try {
+                        file.delete();
+                        PrintWriter pw2 = new PrintWriter(file);
+                        pw2.println(serverURLString);
+                        pw2.close();
+                    } catch ( FileNotFoundException e ) {
+                        return;
+                    }
+                } else {
+                    return;
+                }
+            }
+        } catch ( IOException e ) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openRobertaLabConnectionError(String line1, String line2, String line3) {
+        newScreen(" Robertalab");
+        lcd.drawString(line1, 0, 2);
+        lcd.drawString(line2, 0, 3);
+        lcd.drawString(line3, 0, 4);
+        lcd.drawString("  Press any key", 0, 6);
+        serverURLString = "";
+        Button.waitForAnyPress();
+    }
+
+    private void openRobertaLabConnectedMenu() {
+        GraphicMenu menu = new GraphicMenu(new String[] {
+            "Disconnect", "Update"
+        }, new String[] {
+            ICRoberta, ICRoberta
+        }, 3);
+        int selected = 0;
+        do {
+            selected = getSelection(menu, selected);
+            switch ( selected ) {
+                case 0:
+                    newScreen(" Robertalab");
+                    if ( getYesNo("Disconnect?", false) == 1 ) {
+                        disconnect();
+                        break;
+                    }
+                case 1:
+                    updateOpenRoberta();
+                    if ( getYesNo("   Restart now?", false) == 1 ) {
+                        shutdown();
+                    }
+            }
+        } while ( selected >= 0 );
+    }
+
+    private void disconnect() {
+        backgroundTasks.disconnectRoberta();
+        isRobertaRegistered = false;
+        token = null;
+        serverURLString = "";
+        this.indiBA.setRobertalab(false);
+        LocalEV3.get().getAudio().systemSound(3);
+    }
+
+    private void updateOpenRoberta() {
+        RobertaUpdater robertaUpdater = new RobertaUpdater(serverURLString);
+        robertaUpdater.update();
+        lcd.drawString("Brick updated!", 0, 2);
+
     }
 
     /**

@@ -44,7 +44,7 @@ public abstract class AbstractProcessor {
     public final void setSuccess(String message) {
         this.successful = true;
         this.message = message;
-        LOG.error("Success: " + message);
+        LOG.info("Success: " + message);
     }
 
     /**

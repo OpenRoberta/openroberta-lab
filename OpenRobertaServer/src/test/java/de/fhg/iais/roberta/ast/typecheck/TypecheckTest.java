@@ -3,12 +3,12 @@ package de.fhg.iais.roberta.ast.typecheck;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
+import de.fhg.iais.roberta.ast.syntax.EV3BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 
 public class TypecheckTest {
-    private static final BrickConfiguration BRICK_CONFIGURATION = new BrickConfiguration.Builder().build();
+    private static final EV3BrickConfiguration BRICK_CONFIGURATION = new EV3BrickConfiguration.Builder().build();
 
     @Test
     public void test0ok() throws Exception {
@@ -24,7 +24,7 @@ public class TypecheckTest {
         Phrase<BlocklyType> ast = Helper.generateAST("/ast/expressions/expr_typecorrect1.xml");
         System.out.println(ast);
         TypecheckVisitor typechecker = TypecheckVisitor.makeVisitorAndTypecheck("test", BRICK_CONFIGURATION, ast);
-        Assert.assertEquals(0, typechecker.getErrorCount());
+        Assert.assertEquals(1, typechecker.getErrorCount());
         System.out.println(typechecker.getResultType());
     }
 

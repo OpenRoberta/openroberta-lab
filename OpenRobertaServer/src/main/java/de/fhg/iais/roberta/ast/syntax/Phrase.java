@@ -158,6 +158,7 @@ abstract public class Phrase<V> {
         SENSOR_EXPR( Category.EXPR ),
         ACTION_EXPR( Category.EXPR ),
         EMPTY_EXPR( Category.EXPR ),
+        FUNCTION_EXPR( Category.EXPR ),
         FUNCTIONS( Category.EXPR ),
         START_ACTIVITY_TASK( Category.EXPR ),
         IF_STMT( Category.STMT ),
@@ -167,6 +168,7 @@ abstract public class Phrase<V> {
         ASSIGN_STMT( Category.STMT ),
         AKTION_STMT( Category.STMT ),
         SENSOR_STMT( Category.STMT ),
+        FUNCTION_STMT( Category.STMT ),
         STMT_FLOW_CONTROL( Category.STMT ),
         WAIT_STMT( Category.STMT ),
         TURN_ACTION( Category.ACTOR ),
@@ -186,7 +188,26 @@ abstract public class Phrase<V> {
         STOP_ACTION( Category.ACTOR ),
         MAIN_TASK( Category.TASK ),
         ACTIVITY_TASK( Category.TASK ),
-        LOCATION( Category.TASK );
+        LOCATION( Category.TASK ),
+        TEXT_INDEX_OF_FUNCT( Category.FUNCTION ),
+        TEXT_CHAR_AT_FUNCT( Category.FUNCTION ),
+        GET_SUB_FUNCT( Category.FUNCTION ),
+        MATH_SINGLE_FUNCT( Category.FUNCTION ),
+        MATH_ON_LIST_FUNCT( Category.FUNCTION ),
+        MATH_CONSTRAIN_FUNCT( Category.FUNCTION ),
+        MATH_RANDOM_INT_FUNCT( Category.FUNCTION ),
+        MATH_RANDOM_FLOAT_FUNCT( Category.FUNCTION ),
+        MATH_NUM_PROP_FUNCT( Category.FUNCTION ),
+        LENGHT_OF_IS_EMPTY_FUNCT( Category.FUNCTION ),
+        TEXT_JOIN_FUNCT( Category.FUNCTION ),
+        TEXT_TRIM_FUNCT( Category.FUNCTION ),
+        TEXT_PRINT_FUNCT( Category.FUNCTION ),
+        TEXT_PROMPT_FUNCT( Category.FUNCTION ),
+        LIST_REPEAT_FUNCT( Category.FUNCTION ),
+        LIST_CREATE( Category.EXPR ),
+        LIST_INDEX_OF( Category.FUNCTION ),
+        LIST_SET_INDEX( Category.FUNCTION ),
+        TEXT_CHANGE_CASE_FUNCT( Category.FUNCTION );
 
         private final Category category;
 

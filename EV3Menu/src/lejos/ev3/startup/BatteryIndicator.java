@@ -78,6 +78,10 @@ public class BatteryIndicator {
         this.wifi = wifi;
     }
 
+    public boolean getWifi() {
+        return this.wifi;
+    }
+
     public void setUsb(boolean usb) {
         this.usb = usb;
     }
