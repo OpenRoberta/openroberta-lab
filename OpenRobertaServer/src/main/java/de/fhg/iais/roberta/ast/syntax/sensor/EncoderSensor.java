@@ -4,7 +4,9 @@ import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -32,7 +34,7 @@ public class EncoderSensor<V> extends Sensor<V> {
 
     /**
      * Create object of the class {@link EncoderSensor}.
-     * 
+     *
      * @param mode in which the sensor is operating. See enum {@link MotorTachoMode} for all possible modes that the sensor have.
      * @param port on where the sensor is connected. See enum {@link SensorPort} for all possible sensor ports
      * @param properties of the block (see {@link BlocklyBlockProperties}),
@@ -65,5 +67,19 @@ public class EncoderSensor<V> extends Sensor<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitEncoderSensor(this);
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+
+        String fieldValue = getMotor().name();
+        AstJaxbTransformerHelper.addField(jaxbDestination, "MOTORPORT", fieldValue);
+        if ( getMode() == MotorTachoMode.DEGREE || getMode() == MotorTachoMode.ROTATION ) {
+            AstJaxbTransformerHelper.addField(jaxbDestination, "MODE", getMode().name());
+        }
+
+        return jaxbDestination;
     }
 }

@@ -22,7 +22,6 @@ import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
 import de.fhg.iais.roberta.ast.syntax.action.HardwareComponentType;
 import de.fhg.iais.roberta.ast.syntax.action.MotorSide;
 import de.fhg.iais.roberta.ast.syntax.tasks.Location;
-import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformer;
 import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
@@ -116,7 +115,6 @@ public class Helper {
     public static void assertTransformationIsOk(String fileName) throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = generateTransformer(fileName);
 
-        AstJaxbTransformer<Void> astTransformer = new AstJaxbTransformer<>();
         JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
         Marshaller m = jaxbContext.createMarshaller();
         m.setProperty(Marshaller.JAXB_FRAGMENT, true);
@@ -132,18 +130,19 @@ public class Helper {
                 instance.setX(((Location<Void>) phrase).getX());
                 instance.setY(((Location<Void>) phrase).getY());
             }
-            instance.getBlock().add(astTransformer.astToBlock(phrase));
+            instance.getBlock().add(phrase.astToBlock());
+            //instance.getBlock().add(AstJaxbTransformer.astToBlock(phrase));
         }
         blockSet.getInstance().add(instance);
 
-        // m.marshal(blockSet, System.out); // only needed for EXTREME debugging
+        //m.marshal(blockSet, System.out); // only needed for EXTREME debugging
         StringWriter writer = new StringWriter();
         m.marshal(blockSet, writer);
         String t = Resources.toString(Helper.class.getResource(fileName), Charsets.UTF_8);
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = XMLUnit.compareXML(writer.toString(), t);
 
-        // System.out.println(diff.toString()); // only needed for EXTREME debugging
+        //System.out.println(diff.toString()); // only needed for EXTREME debugging
         Assert.assertTrue(diff.identical());
 
     }

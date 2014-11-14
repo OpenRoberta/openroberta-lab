@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.functions.Function;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -54,5 +55,11 @@ public class FunctionExpr<V> extends Expr<V> {
     @Override
     public String toString() {
         return "FunctionExpr [" + this.function + "]";
+    }
+
+    @Override
+    public Block astToBlock() {
+        Phrase<?> p = ((FunctionExpr<?>) this).getFunction();
+        return p.astToBlock();
     }
 }

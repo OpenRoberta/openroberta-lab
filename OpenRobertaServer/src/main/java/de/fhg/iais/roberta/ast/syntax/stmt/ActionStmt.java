@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.ast.syntax.stmt;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.Action;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -20,7 +21,7 @@ public class ActionStmt<V> extends Stmt<V> {
 
     /**
      * Create object of the class {@link AssignStmt}.
-     * 
+     *
      * @param action that we want to wrap
      * @return statement with wrapped action inside
      */
@@ -45,5 +46,10 @@ public class ActionStmt<V> extends Stmt<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitActionStmt(this);
+    }
+
+    @Override
+    public Block astToBlock() {
+        return getAction().astToBlock();
     }
 }

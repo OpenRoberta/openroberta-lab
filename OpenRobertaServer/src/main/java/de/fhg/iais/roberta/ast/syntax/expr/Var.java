@@ -3,7 +3,9 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 
 /**
  * This class represents the <b>variables_set</b> and <b>variables_get</b> blocks from Blockly into the AST (abstract syntax tree).
@@ -25,7 +27,7 @@ public class Var<V> extends Expr<V> {
 
     /**
      * creates instance of {@link Var}. This instance is read only and can not be modified.
-     * 
+     *
      * @param value name of the variable,
      * @param typeVar type of the variable,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
@@ -75,5 +77,13 @@ public class Var<V> extends Expr<V> {
      */
     public static enum TypeVar {
         DOUBLE, INTEGER, STRING, NONE;
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        AstJaxbTransformerHelper.addField(jaxbDestination, "VAR", getValue());
+        return jaxbDestination;
     }
 }

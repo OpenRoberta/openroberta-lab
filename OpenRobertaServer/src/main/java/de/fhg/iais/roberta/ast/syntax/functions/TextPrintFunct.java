@@ -6,7 +6,9 @@ import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -64,6 +66,15 @@ public class TextPrintFunct<V> extends Function<V> {
     @Override
     public String toString() {
         return "TextPrintFunct [" + this.param + "]";
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+
+        AstJaxbTransformerHelper.addValue(jaxbDestination, "TEXT", getParam().get(0));
+        return jaxbDestination;
     }
 
 }

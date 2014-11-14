@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.ast.syntax.stmt;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -20,7 +21,7 @@ public class SensorStmt<V> extends Stmt<V> {
 
     /**
      * Create object of the class {@link SensorStmt}.
-     * 
+     *
      * @param sensor that we want to wrap
      * @return statement with wrapped sensor inside
      */
@@ -43,6 +44,11 @@ public class SensorStmt<V> extends Stmt<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitSensorStmt(this);
+    }
+
+    @Override
+    public Block astToBlock() {
+        return getSensor().astToBlock();
     }
 
 }

@@ -8,7 +8,9 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -108,5 +110,22 @@ public class Func<V> extends Expr<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitFunc(this);
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+
+        switch ( getFunctName() ) {
+            case POWER:
+                AstJaxbTransformerHelper.addField(jaxbDestination, "OP", getFunctName().name());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, "A", getParam().get(0));
+                AstJaxbTransformerHelper.addValue(jaxbDestination, "B", getParam().get(1));
+                return jaxbDestination;
+
+            default:
+                return null;
+        }
     }
 }

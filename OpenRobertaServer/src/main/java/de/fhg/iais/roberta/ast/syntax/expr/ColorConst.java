@@ -4,7 +4,9 @@ import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.PickColor;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 
 /**
  * This class represents the <b>robColour_picker</b> block from Blockly into the AST (abstract syntax tree).
@@ -25,7 +27,7 @@ public class ColorConst<V> extends Expr<V> {
 
     /**
      * creates instance of {@link ColorConst}. This instance is read only and cannot be modified.
-     * 
+     *
      * @param value that the color constant will have,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
@@ -60,5 +62,13 @@ public class ColorConst<V> extends Expr<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitColorConst(this);
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        AstJaxbTransformerHelper.addField(jaxbDestination, "COLOUR", getValue().getHex().toLowerCase());
+        return jaxbDestination;
     }
 }

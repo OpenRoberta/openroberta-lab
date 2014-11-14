@@ -1,12 +1,17 @@
 package de.fhg.iais.roberta.ast.syntax.functions;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
+import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -64,5 +69,21 @@ public class TextJoinFunct<V> extends Function<V> {
     @Override
     public String toString() {
         return "TextJoinFunct [" + this.param + "]";
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+
+        ExprList<?> strExprList = (ExprList<?>) getParam().get(0);
+        int numOfStrings = (strExprList.get().size());
+        Mutation mutation = new Mutation();
+        mutation.setItems(BigInteger.valueOf(numOfStrings));
+        jaxbDestination.setMutation(mutation);
+        for ( int i = 0; i < numOfStrings; i++ ) {
+            AstJaxbTransformerHelper.addValue(jaxbDestination, "ADD" + i, strExprList.get().get(i));
+        }
+        return jaxbDestination;
     }
 }

@@ -5,7 +5,10 @@ import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor.Mode;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
@@ -103,6 +106,21 @@ public class GetSampleSensor<V> extends Sensor<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitGetSampleSensor(this);
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+
+        Mutation mutation = new Mutation();
+        mutation.setInput(getSensorType().name());
+        jaxbDestination.setMutation(mutation);
+
+        AstJaxbTransformerHelper.addField(jaxbDestination, "SENSORTYPE", getSensorType().name());
+        AstJaxbTransformerHelper.addField(jaxbDestination, getSensorType().getPortTypeName(), getSensorPort());
+
+        return jaxbDestination;
     }
 
 }

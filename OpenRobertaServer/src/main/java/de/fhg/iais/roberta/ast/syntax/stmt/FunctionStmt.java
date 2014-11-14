@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.ast.syntax.stmt;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.functions.Function;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -44,5 +45,11 @@ public class FunctionStmt<V> extends Stmt<V> {
     @Override
     public String toString() {
         return "FunctionStmt [" + this.function + "]";
+    }
+
+    @Override
+    public Block astToBlock() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

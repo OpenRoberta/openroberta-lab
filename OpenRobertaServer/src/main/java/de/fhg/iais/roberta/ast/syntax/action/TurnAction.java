@@ -3,7 +3,9 @@ package de.fhg.iais.roberta.ast.syntax.action;
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -26,7 +28,7 @@ public class TurnAction<V> extends Action<V> {
 
     /**
      * Creates instance of {@link TurnAction}. This instance is read only and can not be modified.
-     * 
+     *
      * @param direction {@link TurnDirection} in which the robot will drive,
      * @param param {@link MotionParam} that set up the parameters for the movement of the robot (distance the robot should cover and speed),
      * @param properties of the block (see {@link BlocklyBlockProperties}),
@@ -59,5 +61,20 @@ public class TurnAction<V> extends Action<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitTurnAction(this);
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+
+        AstJaxbTransformerHelper.addField(jaxbDestination, "DIRECTION", getDirection().name());
+        AstJaxbTransformerHelper.addValue(jaxbDestination, "POWER", getParam().getSpeed());
+
+        if ( getParam().getDuration() != null ) {
+            AstJaxbTransformerHelper.addValue(jaxbDestination, getParam().getDuration().getType().name(), getParam().getDuration().getValue());
+        }
+
+        return jaxbDestination;
     }
 }

@@ -4,7 +4,9 @@ import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -27,7 +29,7 @@ public class MotorSetPowerAction<V> extends Action<V> {
 
     /**
      * Creates instance of {@link MotorSetPowerAction}. This instance is read only and can not be modified.
-     * 
+     *
      * @param port on which the motor is connected that we want to set,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
@@ -59,5 +61,16 @@ public class MotorSetPowerAction<V> extends Action<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitMotorSetPowerAction(this);
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+
+        AstJaxbTransformerHelper.addField(jaxbDestination, "MOTORPORT", getPort().name());
+        AstJaxbTransformerHelper.addValue(jaxbDestination, "POWER", getPower());
+
+        return jaxbDestination;
     }
 }

@@ -5,7 +5,9 @@ import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -32,7 +34,7 @@ public class AssignStmt<V> extends Stmt<V> {
 
     /**
      * Create object of the class {@link AssignStmt}.
-     * 
+     *
      * @param name of the variable,
      * @param expr that we want to assign to the {@link #name},
      * @param properties of the block (see {@link BlocklyBlockProperties}),
@@ -68,6 +70,17 @@ public class AssignStmt<V> extends Stmt<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitAssignStmt(this);
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+
+        AstJaxbTransformerHelper.addField(jaxbDestination, "VAR", getName().getValue());
+        AstJaxbTransformerHelper.addValue(jaxbDestination, "VALUE", getExpr());
+
+        return jaxbDestination;
     }
 
 }

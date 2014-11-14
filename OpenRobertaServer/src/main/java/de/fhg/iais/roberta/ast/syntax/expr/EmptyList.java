@@ -3,7 +3,9 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 
 /**
  * This class represents the <b>lists_create_empty</b> block from Blockly into the AST (abstract syntax tree).
@@ -47,6 +49,13 @@ public class EmptyList<V> extends Expr<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitEmptyList(this);
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        return jaxbDestination;
     }
 
 }

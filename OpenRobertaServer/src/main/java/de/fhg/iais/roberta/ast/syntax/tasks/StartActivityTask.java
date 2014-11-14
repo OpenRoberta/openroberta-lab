@@ -5,7 +5,9 @@ import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 
 public class StartActivityTask<V> extends Expr<V> {
 
@@ -45,5 +47,14 @@ public class StartActivityTask<V> extends Expr<V> {
     @Override
     public String toString() {
         return "StartActivityTask [activityName=" + this.activityName + "]";
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+
+        AstJaxbTransformerHelper.addValue(jaxbDestination, "ACTIVITY", getActivityName());
+        return jaxbDestination;
     }
 }

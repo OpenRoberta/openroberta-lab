@@ -4,7 +4,9 @@ import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -29,7 +31,7 @@ public class ShowPictureAction<V> extends Action<V> {
 
     /**
      * Creates instance of {@link ShowPictureAction}. This instance is read only and can not be modified.
-     * 
+     *
      * @param pic that will be printed on the display of the brick,
      * @param x position where the picture will start,
      * @param y position where the picture will start,
@@ -70,5 +72,18 @@ public class ShowPictureAction<V> extends Action<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitShowPictureAction(this);
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        String fieldValue = getPicture().name();
+        AstJaxbTransformerHelper.addField(jaxbDestination, "PICTURE", fieldValue);
+        AstJaxbTransformerHelper.addValue(jaxbDestination, "X", getX());
+        AstJaxbTransformerHelper.addValue(jaxbDestination, "Y", getY());
+
+        return jaxbDestination;
+
     }
 }

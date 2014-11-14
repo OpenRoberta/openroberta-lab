@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.Action;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -20,7 +21,7 @@ public final class ActionExpr<V> extends Expr<V> {
 
     /**
      * Create object of the class {@link ActionExpr}.
-     * 
+     *
      * @param action that we want to wrap
      * @return expression with wrapped action inside
      */
@@ -53,5 +54,11 @@ public final class ActionExpr<V> extends Expr<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitActionExpr(this);
+    }
+
+    @Override
+    public Block astToBlock() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

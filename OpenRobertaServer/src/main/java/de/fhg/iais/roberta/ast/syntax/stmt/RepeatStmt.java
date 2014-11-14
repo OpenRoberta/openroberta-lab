@@ -5,8 +5,14 @@ import java.util.Locale;
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
+import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
+import de.fhg.iais.roberta.ast.syntax.expr.Unary;
+import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
@@ -33,7 +39,7 @@ public class RepeatStmt<V> extends Stmt<V> {
 
     /**
      * Create read only object of {@link RepeatStmt}.
-     * 
+     *
      * @param mode of the repeat statement. See enum {@link Mode} for all possible modes,
      * @param expr that should be evaluated,
      * @param list of statements,
@@ -78,7 +84,7 @@ public class RepeatStmt<V> extends Stmt<V> {
 
     /**
      * Modes in which the repeat statement can be set.
-     * 
+     *
      * @author kcvejoski
      */
     public static enum Mode {
@@ -93,7 +99,7 @@ public class RepeatStmt<V> extends Stmt<V> {
         /**
          * get mode from {@link Mode} from string parameter. It is possible for one mode to have multiple string mappings.
          * Throws exception if the mode does not exists.
-         * 
+         *
          * @param name of the mode
          * @return mode from the enum {@link Mode}
          */
@@ -119,6 +125,48 @@ public class RepeatStmt<V> extends Stmt<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitRepeatStmt(this);
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+
+        switch ( getMode() ) {
+            case TIMES:
+                AstJaxbTransformerHelper.addValue(jaxbDestination, "TIMES", ((Binary<?>) ((ExprList<?>) getExpr()).get().get(1)).getRight());
+                break;
+
+            case WAIT:
+            case UNTIL:
+                AstJaxbTransformerHelper.addField(jaxbDestination, "MODE", getMode().name());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, "BOOL", ((Unary<?>) getExpr()).getExpr());
+                break;
+
+            case WHILE:
+                AstJaxbTransformerHelper.addField(jaxbDestination, "MODE", getMode().name());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, "BOOL", getExpr());
+                break;
+
+            case FOR:
+                ExprList<?> exprList = (ExprList<?>) getExpr();
+                AstJaxbTransformerHelper.addField(jaxbDestination, "VAR", ((Var<?>) ((Binary<?>) exprList.get().get(0)).getLeft()).getValue());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, "FROM", ((Binary<?>) exprList.get().get(0)).getRight());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, "TO", ((Binary<?>) exprList.get().get(1)).getRight());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, "BY", ((Binary<?>) exprList.get().get(2)).getRight());
+                break;
+
+            case FOR_EACH:
+                Binary<?> exprBinary = (Binary<?>) getExpr();
+                AstJaxbTransformerHelper.addField(jaxbDestination, "VAR", ((Var<?>) exprBinary.getLeft()).getValue());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, "LIST", exprBinary.getRight());
+                break;
+            default:
+                break;
+        }
+        AstJaxbTransformerHelper.addStatement(jaxbDestination, "DO", getList());
+
+        return jaxbDestination;
     }
 
 }

@@ -6,7 +6,9 @@ import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -32,7 +34,7 @@ public class IndexOfFunct<V> extends Function<V> {
 
     /**
      * Creates instance of {@link IndexOfFunct}. This instance is read only and can not be modified.
-     * 
+     *
      * @param name of the function,
      * @param param list of parameters for the function,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
@@ -76,6 +78,17 @@ public class IndexOfFunct<V> extends Function<V> {
     @Override
     public String toString() {
         return "IndexOfFunct [" + this.functName + ", " + this.param + "]";
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+
+        AstJaxbTransformerHelper.addField(jaxbDestination, "END", getFunctName().name());
+        AstJaxbTransformerHelper.addValue(jaxbDestination, "VALUE", getParam().get(0));
+        AstJaxbTransformerHelper.addValue(jaxbDestination, "FIND", getParam().get(1));
+        return jaxbDestination;
     }
 
 }

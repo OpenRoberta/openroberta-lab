@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.ast.syntax.stmt;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -20,7 +21,7 @@ public class ExprStmt<V> extends Stmt<V> {
 
     /**
      * Create object of the class {@link ExprStmt}.
-     * 
+     *
      * @param expr that we want to wrap
      * @return statement with wrapped expression inside
      */
@@ -48,4 +49,8 @@ public class ExprStmt<V> extends Stmt<V> {
         return visitor.visitExprStmt(this);
     }
 
+    @Override
+    public Block astToBlock() {
+        return getExpr().astToBlock();
+    }
 }

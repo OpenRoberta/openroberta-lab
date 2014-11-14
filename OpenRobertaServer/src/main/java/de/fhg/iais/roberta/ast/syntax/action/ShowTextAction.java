@@ -4,7 +4,9 @@ import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -31,7 +33,7 @@ public class ShowTextAction<V> extends Action<V> {
 
     /**
      * Creates instance of {@link ShowTextAction}. This instance is read only and can not be modified.
-     * 
+     *
      * @param msg that will be printed on the display of the brick,
      * @param x position where the message will start,
      * @param y position where the message will start,
@@ -72,6 +74,18 @@ public class ShowTextAction<V> extends Action<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitShowTextAction(this);
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+
+        AstJaxbTransformerHelper.addValue(jaxbDestination, "OUT", getMsg());
+        AstJaxbTransformerHelper.addValue(jaxbDestination, "COL", getX());
+        AstJaxbTransformerHelper.addValue(jaxbDestination, "ROW", getY());
+
+        return jaxbDestination;
     }
 
 }

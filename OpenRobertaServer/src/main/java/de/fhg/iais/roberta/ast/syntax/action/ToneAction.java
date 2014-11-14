@@ -4,7 +4,9 @@ import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -27,7 +29,7 @@ public class ToneAction<V> extends Action<V> {
 
     /**
      * Creates instance of {@link ToneAction}. This instance is read only and can not be modified.
-     * 
+     *
      * @param frequency of the sound,
      * @param duration of the sound,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
@@ -60,5 +62,16 @@ public class ToneAction<V> extends Action<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitToneAction(this);
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+
+        AstJaxbTransformerHelper.addValue(jaxbDestination, "FREQUENCE", getFrequency());
+        AstJaxbTransformerHelper.addValue(jaxbDestination, "DURATION", getDuration());
+
+        return jaxbDestination;
     }
 }
