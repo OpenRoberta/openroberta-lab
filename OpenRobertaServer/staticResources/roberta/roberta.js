@@ -4,6 +4,7 @@ var userState = {};
  * Initialize user-state-object
  */
 function initUserState() {
+    userState.language = 'de';
     userState.id = -1;
     userState.name = '';
     userState.role = '';
@@ -92,7 +93,7 @@ function login() {
             userState.name = response.userAccountName;
             userState.id = response.userId;
             userState.role = response.userRole;
-            displayStatus();
+            displayState();
             setHeadNavigationMenuState('login');
             $("#tutorials").fadeOut(700);
             $(".ui-dialog-content").dialog("close"); // close all opened popups
@@ -111,7 +112,7 @@ function logout() {
     }, function(response) {
         if (response.rc === "ok") {
             initUserState();
-            displayStatus();
+            displayState();
             $('#programNameSave').val('');
             setHeadNavigationMenuState('logout');
             initProgramEnvironment();
@@ -161,7 +162,7 @@ function initProgramEnvironment() {
 function setProgram(name) {
     if (name) {
         userState.program = name;
-        displayStatus();
+        displayState();
     }
 }
 
@@ -174,7 +175,7 @@ function setProgram(name) {
 function setConfiguration(name) {
     if (name) {
         userState.configuration = name;
-        displayStatus();
+        displayState();
     }
 }
 
@@ -667,7 +668,7 @@ function switchToBrickly() {
 /**
  * Display status information in the navigation bar
  */
-function displayStatus() {
+function displayState() {
     if (userState.name) {
         $('#head-navigation #displayLogin').text(userState.name);
         $('#head-navigation #iconDisplayLogin').css('display', 'inline');
@@ -796,7 +797,7 @@ function initHeadNavigation() {
     });
 
     // Submenu Program
-    $('#head-navigation').onWrap('click', '#submenu-program > li:not(.ui-state-disabled)', function(event) {
+    $('#head-navigation').onWrap('click', '#submenu-program > li:not(.ui-state-disabled) > span', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         switchToBlockly();
         var domId = event.target.id;
@@ -816,7 +817,7 @@ function initHeadNavigation() {
         } else if (domId === 'saveAs') {
             $("#save-program").dialog("open");
         } else if (domId === 'attach') {
-            $("#add-program").dialog("open");
+            $("#attach-program").dialog("open");
         } else if (domId === 'divide') {
         } else if (domId === 'delete') {
             $('#deleteFromListing').css('display', 'inline');
@@ -828,7 +829,7 @@ function initHeadNavigation() {
     }, 'sub menu of menu "program"');
 
     // Submenu Nepo
-    $('#head-navigation').onWrap('click', '#submenu-nepo > li:not(.ui-state-disabled)', function(event) {
+    $('#head-navigation').onWrap('click', '#submenu-nepo > li:not(.ui-state-disabled) > span', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         switchToBlockly();
         var domId = event.target.id;
@@ -845,7 +846,7 @@ function initHeadNavigation() {
     }, 'sub menu of menu "nepo"');
 
     // Submenu Roboter (Configuration)
-    $('#head-navigation').onWrap('click', '#submenu-configuration > li:not(.ui-state-disabled)', function(event) {
+    $('#head-navigation').onWrap('click', '#submenu-configuration > li:not(.ui-state-disabled) > span', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         switchToBlockly();
         var domId = event.target.id;
@@ -873,7 +874,7 @@ function initHeadNavigation() {
     }, 'sub menu of menu "roboter" ("configuration")');
 
     // Submenu Connection
-    $('#head-navigation').onWrap('click', '#submenu-connection > li:not(.ui-state-disabled)', function(event) {
+    $('#head-navigation').onWrap('click', '#submenu-connection > li:not(.ui-state-disabled) > span', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         switchToBlockly();
         var domId = event.target.id;
@@ -884,20 +885,20 @@ function initHeadNavigation() {
     }, 'sub menu of menu "connection"');
 
     // Submenu Developertools
-    $('#head-navigation').onWrap('click', '#submenu-developertools > li:not(.ui-state-disabled)', function(event) {
+    $('#head-navigation').onWrap('click', '#submenu-developertools > li:not(.ui-state-disabled) > span', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         switchToBlockly();
         var domId = event.target.id;
         if (domId === 'logging') {
             $('#tabLogging').click();
-        } else if (domId === 'simtest') {
-            $('#tabSimtest').click();
+        } else if (domId === 'simulator') {
+            $('#tabSimulator').click();
         }
         return false;
     }, 'sub menu of menu "developertools"');
 
     // Submenu Help
-    $('#head-navigation').onWrap('click', '#submenu-help > li:not(.ui-state-disabled)', function(event) {
+    $('#head-navigation').onWrap('click', '#submenu-help > li:not(.ui-state-disabled) > span', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         switchToBlockly();
         var domId = event.target.id;
@@ -908,7 +909,7 @@ function initHeadNavigation() {
     }, 'sub menu of menu "help"');
 
     // Submenu Login
-    $('#head-navigation').onWrap('click', '#submenu-login > li:not(.ui-state-disabled)', function(event) {
+    $('#head-navigation').onWrap('click', '#submenu-login > li:not(.ui-state-disabled) > span', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         switchToBlockly();
         var domId = event.target.id;
@@ -964,7 +965,7 @@ function initPopups() {
     $('#deleteUser').onWrap('click', deleteUserOnServer, 'delete user data');
     $('#doLogin').onWrap('click', login, 'login ');
 
-    $('#addProgram').onWrap('click', function() {
+    $('#attachProgram').onWrap('click', function() {
         if (userState.id) {
             loadUPFromServer(true);
         } else {
@@ -1053,6 +1054,79 @@ function initLogging() {
 }
 
 /**
+ * Translate the web page
+ */
+function translate(jsdata) {   
+    $("[lkey]").each (function (index)
+    {
+        var key = $(this).attr('lkey');
+        var value = jsdata[key];
+        if (key  === 'login') {
+            $('#login-user').dialog('option', 'title', value);
+        } else if (key  === 'doLogin') {
+            $('#login-user #doLogin').attr('value', value);
+        } else if (key  === 'registerUser') {
+            $('#register-user').dialog('option', 'title', value);
+            $('#register-user #saveUser').attr('value', value);
+        } else if (key  === 'deleteUser') {
+            $('#delete-user').dialog('option', 'title', value);
+            $('#delete-user #deleteUser').attr('value', value);
+        } else if (key  === 'attachProgram') {
+            $('#attach-program').dialog('option', 'title', value);
+            $('#attach-program #attachProgram').attr('value', value);
+        } else if (key  === 'saveProgram') {
+            $('#save-program').dialog('option', 'title', value);
+            $('#save-program #saveProgram').attr('value', value);
+        } else if (key  === 'saveConfiguration') {
+            $('#save-configuration').dialog('option', 'title', value);
+            $('#save-configuration #saveConfiguration').attr('value', value);
+        } else if (key  === 'setToken') {
+            $('#set-token').dialog('option', 'title', value);
+            $('#set-token #saveConfiguration').attr('value', value);
+        } else if (key  === 'attention') {
+            $('#show-message').dialog('option', 'title', value);
+        }
+        // console.log('key/value = ' + key + '/' + value);
+        $(this).html(value);
+    });
+};
+
+/**
+ * Switch to another language
+ * 
+ * @param {langCode}
+ *            Code of lnguage to switch to
+ */
+function switchLanguage(langCode) {
+    var langs = ['De', 'En'];
+    for (i in langs) {
+        $("." + langs[i] + "").css('display','none');
+    }
+    if (langs.indexOf(langCode) > 0) {
+        $("." + langCode + "").css('display','inline');
+        userState.language = langCode;
+        $.getJSON('css/lang/' + langCode + '.json', translate);
+    } else {
+        $(".De").css('display','inline');
+        userState.language = 'De';
+        $.getJSON('css/lang/De.json', translate);
+    }
+}
+
+/**
+ * Initialize language switching
+ */
+function initializeLanguages() {
+    $('#setLangDe').onWrap('click', function() {
+        switchLanguage('De');
+    }, 'switch language to "De"');
+    
+    $('#setLangEn').onWrap('click', function() {
+        switchLanguage('En');
+    }, 'switch language to "En"');
+}
+
+/**
  * Initializations
  */
 function init() {
@@ -1063,9 +1137,11 @@ function init() {
     initHeadNavigation();
     initProgramNameTable();
     initConfigurationNameTable();
-    displayStatus();
     $('#programNameSave').val('');
     $('#configurationNameSave').val('');
+    initializeLanguages();
+    switchLanguage('De');
+    displayState();
 };
 
 $(document).ready(WRAP.fn3(init, 'page init'));
