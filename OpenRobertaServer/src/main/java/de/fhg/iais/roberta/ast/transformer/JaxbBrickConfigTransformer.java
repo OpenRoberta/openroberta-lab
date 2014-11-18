@@ -3,14 +3,9 @@ package de.fhg.iais.roberta.ast.transformer;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
-import de.fhg.iais.roberta.ast.syntax.EV3Actor;
-import de.fhg.iais.roberta.ast.syntax.EV3BrickConfiguration;
-import de.fhg.iais.roberta.ast.syntax.EV3Sensor;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
-import de.fhg.iais.roberta.ast.syntax.action.HardwareComponentType;
 import de.fhg.iais.roberta.ast.syntax.action.MotorSide;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -18,7 +13,13 @@ import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.blockly.generated.Value;
+import de.fhg.iais.roberta.brickconfiguration.BrickConfiguration;
+import de.fhg.iais.roberta.brickconfiguration.ev3.EV3Actor;
+import de.fhg.iais.roberta.brickconfiguration.ev3.EV3BrickConfiguration;
+import de.fhg.iais.roberta.brickconfiguration.ev3.EV3Sensor;
 import de.fhg.iais.roberta.dbc.DbcException;
+import de.fhg.iais.roberta.hardwarecomponents.ev3.HardwareComponentEV3Actor;
+import de.fhg.iais.roberta.hardwarecomponents.ev3.HardwareComponentEV3Sensor;
 import de.fhg.iais.roberta.util.Pair;
 
 /**
@@ -38,29 +39,30 @@ public class JaxbBrickConfigTransformer<V> extends JaxbAstTransformer<V> {
         for ( Value value : values ) {
             if ( value.getName().startsWith("S") ) {
                 //Extract sensor
-                sensors.add(Pair.of(SensorPort.get(value.getName()), new EV3Sensor(extractHardwareComponentType(value.getBlock()))));
+                sensors.add(Pair.of(SensorPort.get(value.getName()), new EV3Sensor(extractHardwareComponentTypeSensor(value.getBlock()))));
             } else {
                 //Extract actor
                 actors.add(Pair.of(ActorPort.get(value.getName()), new EV3Actor(
-                    extractHardwareComponentType(value.getBlock()),
+                    extractHardwareComponentTypeActor(value.getBlock()),
+                    extractMotorRegulation(value.getBlock()),
                     extractDirectionOfRotation(value.getBlock()),
                     extractMotorSide(value.getBlock()))));
             }
         }
     }
 
-    private HardwareComponentType extractHardwareComponentType(Block component) {
-        List<String> attributes = new ArrayList<String>();
-        attributes.add(component.getType());
-        if ( component.getType().equals("robBrick_motor_middle") || component.getType().equals("robBrick_motor_big") ) {
-            attributes.add(extractMotorRegulation(component));
-        }
-        return HardwareComponentType.attributesMatch(attributes.toArray(new String[attributes.size()]));
+    private HardwareComponentEV3Sensor extractHardwareComponentTypeSensor(Block component) {
+
+        return HardwareComponentEV3Sensor.find(component.getType());
     }
 
-    private String extractMotorRegulation(Block block) {
+    private HardwareComponentEV3Actor extractHardwareComponentTypeActor(Block component) {
+        return HardwareComponentEV3Actor.find(component.getType());
+    }
+
+    private boolean extractMotorRegulation(Block block) {
         List<Field> fields = extractFields(block, (short) 3);
-        return extractField(fields, "MOTOR_REGULATION", (short) 0).equals("TRUE") ? "regulated" : "unregulated";
+        return extractField(fields, "MOTOR_REGULATION", (short) 0).equals("TRUE") ? true : false;
     }
 
     private DriveDirection extractDirectionOfRotation(Block block) {

@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.ast.expr;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
@@ -41,7 +40,7 @@ public class MathConstTest {
         Assert.assertEquals(Assoc.NONE, mathConst.getAssoc());
     }
 
-    @Ignore
+    @Test
     public void reverseTransformatin() throws Exception {
         Helper.assertTransformationIsOk("/ast/math/math_constant.xml");
     }

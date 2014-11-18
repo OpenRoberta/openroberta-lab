@@ -1,7 +1,9 @@
-package de.fhg.iais.roberta.ast.syntax;
+package de.fhg.iais.roberta.brickconfiguration.ev3;
 
-import de.fhg.iais.roberta.ast.syntax.action.HardwareComponentType;
+import de.fhg.iais.roberta.brickconfiguration.HardwareComponent;
 import de.fhg.iais.roberta.dbc.Assert;
+import de.fhg.iais.roberta.hardwarecomponents.Category;
+import de.fhg.iais.roberta.hardwarecomponents.ev3.HardwareComponentEV3Sensor;
 
 public class EV3Sensor extends HardwareComponent {
 
@@ -11,8 +13,8 @@ public class EV3Sensor extends HardwareComponent {
      *
      * @param componentType of the sensor
      */
-    public EV3Sensor(HardwareComponentType componentType) {
-        Assert.isTrue(componentType.getCategory() == Category.SENSOR);
+    public EV3Sensor(HardwareComponentEV3Sensor componentType) {
+        Assert.isTrue(componentType != null);
         this.setComponentType(componentType);
     }
 

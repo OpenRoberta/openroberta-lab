@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.ast;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
@@ -73,7 +72,7 @@ public class LogicTest {
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/logic/logic_negate1.xml"));
     }
 
-    @Ignore
+    @Test
     public void reverseTransformatinLogicNegate1() throws Exception {
         Helper.assertTransformationIsOk("/ast/logic/logic_negate1.xml");
     }

@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.ast.stmt;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
@@ -144,7 +143,7 @@ public class RepeatStmtTest {
     @Test
     public void loopForever() throws Exception {
         String a =
-            "BlockAST[project=[[Location[x=1,y=379],(repeat[WHILE,BoolConst[true]]FunctionStmt[TextPrintFunct[[ColorConst[GREEN]]]]),(repeat[WHILE,BoolConst[true]]FunctionStmt[TextPrintFunct[[EmptyExpr[defVal=classjava.lang.String]]]])]]]";
+            "BlockAST[project=[[Location[x=1,y=379],(repeat[FOREVER,BoolConst[true]]FunctionStmt[TextPrintFunct[[ColorConst[GREEN]]]]),(repeat[FOREVER,BoolConst[true]]FunctionStmt[TextPrintFunct[[EmptyExpr[defVal=classjava.lang.String]]]])]]]";
 
         Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generateTransformerString("/ast/control/repeat_stmt_loopForever.xml").replaceAll("\\s+", ""));
     }
@@ -219,7 +218,7 @@ public class RepeatStmtTest {
         Helper.assertTransformationIsOk("/ast/control/repeat_stmt_for_each1.xml");
     }
 
-    @Ignore
+    @Test
     public void reverseTransformationForLoopForever() throws Exception {
         Helper.assertTransformationIsOk("/ast/control/repeat_stmt_loopForever.xml");
     }

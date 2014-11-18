@@ -728,7 +728,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
 
             case "robControls_loopForever":
                 expr = BoolConst.make(true, properties, comment);
-                return extractRepeatStatement(block, expr, RepeatStmt.Mode.WHILE.toString());
+                return extractRepeatStatement(block, expr, RepeatStmt.Mode.FOREVER.toString());
 
             case "controls_whileUntil":
                 fields = extractFields(block, (short) 1);

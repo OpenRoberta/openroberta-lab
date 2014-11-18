@@ -13,19 +13,20 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
-import de.fhg.iais.roberta.ast.syntax.EV3Actor;
-import de.fhg.iais.roberta.ast.syntax.EV3BrickConfiguration;
-import de.fhg.iais.roberta.ast.syntax.EV3Sensor;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
-import de.fhg.iais.roberta.ast.syntax.action.HardwareComponentType;
 import de.fhg.iais.roberta.ast.syntax.action.MotorSide;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
+import de.fhg.iais.roberta.brickconfiguration.ev3.EV3Actor;
+import de.fhg.iais.roberta.brickconfiguration.ev3.EV3BrickConfiguration;
+import de.fhg.iais.roberta.brickconfiguration.ev3.EV3Sensor;
 import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
+import de.fhg.iais.roberta.hardwarecomponents.ev3.HardwareComponentEV3Actor;
+import de.fhg.iais.roberta.hardwarecomponents.ev3.HardwareComponentEV3Sensor;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 
@@ -69,10 +70,10 @@ public class CompilerWorkflow {
             new EV3BrickConfiguration.Builder()
                 .setTrackWidth(13)
                 .setWheelDiameter(5.6)
-                .addActor(ActorPort.B, new EV3Actor(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(ActorPort.C, new EV3Actor(HardwareComponentType.EV3LargeRegulatedMotor, DriveDirection.FOREWARD, MotorSide.RIGHT))
-                .addSensor(SensorPort.S1, new EV3Sensor(HardwareComponentType.EV3TouchSensor))
-                .addSensor(SensorPort.S4, new EV3Sensor(HardwareComponentType.EV3UltrasonicSensor))
+                .addActor(ActorPort.B, new EV3Actor(HardwareComponentEV3Actor.EV3_LARGE_MOTOR, true, DriveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.C, new EV3Actor(HardwareComponentEV3Actor.EV3_LARGE_MOTOR, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
+                .addSensor(SensorPort.S1, new EV3Sensor(HardwareComponentEV3Sensor.EV3_TOUCH_SENSOR))
+                .addSensor(SensorPort.S4, new EV3Sensor(HardwareComponentEV3Sensor.EV3_ULTRASONIC_SENSOR))
                 .build();
         JaxbBlocklyProgramTransformer<Void> transformer;
         try {

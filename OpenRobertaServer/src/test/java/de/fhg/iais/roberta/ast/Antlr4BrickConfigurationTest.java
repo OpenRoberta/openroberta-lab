@@ -10,10 +10,10 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationLexer;
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationParser;
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationParser.ConnectorlContext;
+import de.fhg.iais.roberta.brickconfiguration.BrickConfiguration;
 import de.fhg.iais.roberta.conf.transformer.BrickConfigurationTreeToAst;
 
 public class Antlr4BrickConfigurationTest {

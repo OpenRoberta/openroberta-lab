@@ -16,8 +16,6 @@ import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.robotics.EncoderMotor;
 import lejos.robotics.RegulatedMotor;
 import lejos.robotics.SampleProvider;
-import de.fhg.iais.roberta.ast.syntax.EV3BrickConfiguration;
-import de.fhg.iais.roberta.ast.syntax.HardwareComponent;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;
@@ -25,6 +23,8 @@ import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensorMode;
+import de.fhg.iais.roberta.brickconfiguration.HardwareComponent;
+import de.fhg.iais.roberta.brickconfiguration.ev3.EV3BrickConfiguration;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 public class DeviceHandler {
@@ -63,20 +63,20 @@ public class DeviceHandler {
 
     private void initMotor(ActorPort actorPort, HardwareComponent actorType, Port hardwarePort) {
         if ( actorType != null ) {
-            switch ( actorType.getComponentType() ) {
-                case EV3LargeRegulatedMotor:
+            switch ( actorType.getComponentType().getTypeName() ) {
+                case "EV3_LARGE_MOTOR":
                     RegulatedMotor ev3LargeRegulatedMotor = new EV3LargeRegulatedMotor(hardwarePort);
                     this.lejosRegulatedMotors.put(actorPort, ev3LargeRegulatedMotor);
                     break;
-                case EV3MediumRegulatedMotor:
+                case "EV3_MEDIUM_MOTOR":
                     RegulatedMotor ev3MediumRegulatedMotor = new EV3MediumRegulatedMotor(hardwarePort);
                     this.lejosRegulatedMotors.put(actorPort, ev3MediumRegulatedMotor);
                     break;
-                case NXTRegulatedMotor:
+                case "NXTRegulatedMotor":
                     RegulatedMotor nxtRegulatedMotor = new NXTRegulatedMotor(hardwarePort);
                     this.lejosRegulatedMotors.put(actorPort, nxtRegulatedMotor);
                     break;
-                case NXTMotor:
+                case "NXTMotor":
                     // EV3Motor can be accessed by NXTMotor as unregulated motor too!!!
                     EncoderMotor nxtMotor = new NXTMotor(hardwarePort);
                     this.lejosUnregulatedMotors.put(actorPort, nxtMotor);
@@ -91,28 +91,28 @@ public class DeviceHandler {
 
     private void initSensor(SensorPort sensorPort, HardwareComponent sensorType, Port hardwarePort) {
         if ( sensorType != null ) {
-            switch ( sensorType.getComponentType() ) {
-                case EV3ColorSensor:
+            switch ( sensorType.getComponentType().getTypeName() ) {
+                case "EV3_COLOR_SENSOR":
                     EV3ColorSensor ev3ColorSensor = new EV3ColorSensor(hardwarePort);
                     this.lejosColorSensors.put(sensorPort, ev3ColorSensor);
                     setColorSensorMode(sensorPort, ColorSensorMode.COLOUR);
                     break;
-                case EV3IRSensor:
+                case "EV3_IR_SENSOR":
                     EV3IRSensor ev3IRSensor = new EV3IRSensor(hardwarePort);
                     this.lejosInfraredSensors.put(sensorPort, ev3IRSensor);
                     setInfraredMode(sensorPort, InfraredSensorMode.DISTANCE);
                     break;
-                case EV3GyroSensor:
+                case "EV3_GYRO_SENSOR":
                     EV3GyroSensor ev3GyroSensor = new EV3GyroSensor(hardwarePort);
                     this.lejosGyroSensors.put(sensorPort, ev3GyroSensor);
                     setGyroSensorMode(sensorPort, GyroSensorMode.ANGLE);
                     break;
-                case EV3TouchSensor:
+                case "EV3_TOUCH_SENSOR":
                     EV3TouchSensor ev3TouchSensor = new EV3TouchSensor(hardwarePort);
                     this.lejosTouchSensors.put(sensorPort, ev3TouchSensor);
                     setTouchSensorMode(sensorPort);
                     break;
-                case EV3UltrasonicSensor:
+                case "EV3_ULTRASONIC_SENSOR":
                     EV3UltrasonicSensor ev3UltrasonicSensor = new EV3UltrasonicSensor(hardwarePort);
                     this.lejosUltrasonicSensors.put(sensorPort, ev3UltrasonicSensor);
                     setUltrasonicSensorMode(sensorPort, UltrasonicSensorMode.DISTANCE);

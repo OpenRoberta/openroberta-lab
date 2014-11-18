@@ -16,7 +16,7 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.hibernate.Session;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.Ignore;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
@@ -79,7 +79,7 @@ public class BasicUserInteractionTest {
         this.blocklyProgram = Resources.toString(BasicPerformanceUserInteractionTest.class.getResource("/ast/actions/action_BrickLight.xml"), Charsets.UTF_8);
     }
 
-    @Test
+    @Ignore
     public void test() throws Exception {
         assertTrue(!this.s1.isUserLoggedIn() && !this.s2.isUserLoggedIn());
 

@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import de.fhg.iais.roberta.ast.syntax.Category;
-import de.fhg.iais.roberta.ast.syntax.EV3BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.Phrase.Kind;
 import de.fhg.iais.roberta.ast.syntax.action.ClearDisplayAction;
@@ -68,8 +66,10 @@ import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.brickconfiguration.ev3.EV3BrickConfiguration;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
+import de.fhg.iais.roberta.hardwarecomponents.Category;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they
@@ -304,6 +304,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         switch ( repeatStmt.getMode() ) {
             case UNTIL:
             case WHILE:
+            case FOREVER:
                 generateCodeFromStmtCondition("while", repeatStmt.getExpr());
                 break;
             case TIMES:
@@ -818,6 +819,8 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         this.sb.append("import de.fhg.iais.roberta.codegen.lejos.Hal;\n\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.*;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.sensor.*;\n");
+        this.sb.append("import de.fhg.iais.roberta.hardwarecomponents.ev3.*;\n");
+        this.sb.append("import de.fhg.iais.roberta.brickconfiguration.ev3.*;\n");
         this.sb.append("public class " + this.programName + " {\n");
         this.sb.append(INDENT).append(this.brickConfiguration.generateRegenerate()).append("\n\n");
         this.sb.append(INDENT).append("public static void main(String[] args) {\n");

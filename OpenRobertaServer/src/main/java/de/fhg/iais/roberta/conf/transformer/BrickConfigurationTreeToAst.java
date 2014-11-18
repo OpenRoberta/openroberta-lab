@@ -7,8 +7,6 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import de.fhg.iais.roberta.ast.syntax.BrickConfiguration;
-import de.fhg.iais.roberta.ast.syntax.EV3BrickConfiguration;
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationBaseVisitor;
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationLexer;
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationParser;
@@ -16,6 +14,8 @@ import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationParser
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationParser.ConnectorlContext;
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationParser.MotorContext;
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationParser.SensorStmtContext;
+import de.fhg.iais.roberta.brickconfiguration.BrickConfiguration;
+import de.fhg.iais.roberta.brickconfiguration.ev3.EV3BrickConfiguration;
 
 public class BrickConfigurationTreeToAst extends BrickConfigurationBaseVisitor<Void> {
     EV3BrickConfiguration.Builder builder = new EV3BrickConfiguration.Builder();
@@ -40,23 +40,23 @@ public class BrickConfigurationTreeToAst extends BrickConfigurationBaseVisitor<V
     @Override
     public Void visitActorStmt(ActorStmtContext ctx) {
         super.visitActorStmt(ctx);
-        this.builder.visitingActorPort(ctx.ACTORPORT().getText());
+        // this.builder.visitingActorPort(ctx.ACTORPORT().getText());
         return null;
     }
 
     @Override
     public Void visitSensorStmt(SensorStmtContext ctx) {
-        this.builder.visiting(ctx.ATTACHSENSOR().getText());
-        this.builder.visitingSensorPort(ctx.SENSORPORT().getText());
+        //  this.builder.visiting(ctx.ATTACHSENSOR().getText());
+        //this.builder.visitingSensorPort(ctx.SENSORPORT().getText());
         return null;
     }
 
     @Override
     public Void visitMotor(MotorContext ctx) {
         TerminalNode regulation = ctx.REGULATION();
-        this.builder.visiting(ctx.MOTORTYPE().getText(), regulation == null ? "regulated" : regulation.getText(), ctx.LEFTORRIGHT().getText(), ctx
-            .ROTATION()
-            .getText());
+        //        this.builder.visiting(ctx.MOTORTYPE().getText(), regulation == null ? "regulated" : regulation.getText(), ctx.LEFTORRIGHT().getText(), ctx
+        //            .ROTATION()
+        //            .getText());
         return null;
     }
 }

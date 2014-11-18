@@ -3,10 +3,10 @@ package de.fhg.iais.roberta.codegen.lejos;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.ast.syntax.EV3BrickConfiguration;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst.Const;
+import de.fhg.iais.roberta.brickconfiguration.ev3.EV3BrickConfiguration;
 
 public class JavaVisitorTest {
     private static final EV3BrickConfiguration brickConfiguration = new EV3BrickConfiguration.Builder().build();

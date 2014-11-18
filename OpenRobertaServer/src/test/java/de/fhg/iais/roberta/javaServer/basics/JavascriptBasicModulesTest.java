@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.javaServer.basics;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.Ignore;
 import org.openqa.selenium.By;
 
 import de.fhg.iais.roberta.testutil.SeleniumHelper;
@@ -21,7 +21,7 @@ public class JavascriptBasicModulesTest {
         this.shAsField.tearDown();
     }
 
-    @Test
+    @Ignore
     public void testBasics() throws Exception {
         SeleniumHelper sh = this.shAsField; // for brevity
         // mandatory elements for Java <-> Javascript communication:

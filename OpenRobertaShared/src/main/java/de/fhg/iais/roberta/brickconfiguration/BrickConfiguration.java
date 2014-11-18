@@ -1,5 +1,11 @@
-package de.fhg.iais.roberta.ast.syntax;
+package de.fhg.iais.roberta.brickconfiguration;
 
+/**
+ * This is a top class of all classes used to represent the hardware configuration of the brick. Every class that represents more specific brick hardware
+ * configuration must extend this class.<br>
+ * <br>
+ * <b>It is used in the code generation. </b>
+ */
 public abstract class BrickConfiguration {
 
     /**

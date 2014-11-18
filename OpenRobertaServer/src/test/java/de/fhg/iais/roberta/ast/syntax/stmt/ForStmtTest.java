@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.ast.syntax.stmt;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
@@ -34,7 +33,7 @@ public class ForStmtTest {
         Helper.assertCodeIsOk(a, "/ast/control/repeat_stmt.xml");
     }
 
-    @Ignore
+    @Test
     public void reverseTransformation() throws Exception {
         Helper.assertTransformationIsOk("/syntax/stmt/for_stmt.xml");
     }

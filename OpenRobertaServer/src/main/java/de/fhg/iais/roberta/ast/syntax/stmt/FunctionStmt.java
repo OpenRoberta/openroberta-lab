@@ -49,7 +49,6 @@ public class FunctionStmt<V> extends Stmt<V> {
 
     @Override
     public Block astToBlock() {
-        // TODO Auto-generated method stub
-        return null;
+        return getFunction().astToBlock();
     }
 }

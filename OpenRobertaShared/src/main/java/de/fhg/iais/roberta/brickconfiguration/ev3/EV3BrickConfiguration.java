@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.ast.syntax;
+package de.fhg.iais.roberta.brickconfiguration.ev3;
 
 import java.util.List;
 import java.util.Map;
@@ -7,6 +7,7 @@ import java.util.TreeMap;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.MotorSide;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
+import de.fhg.iais.roberta.brickconfiguration.BrickConfiguration;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.util.Pair;
@@ -23,6 +24,16 @@ public class EV3BrickConfiguration extends BrickConfiguration {
     private final double wheelDiameterCM;
     private final double trackWidthCM;
 
+    /**
+     * This constructor sets the each actor connected to given port, each sensor to given port, wheel diameter and track width. <br>
+     * Client must provide <b>{@code Map<ActorPort, EV3Actor>}</b> where each {@link EV3Actor} is connected to {@link ActorPort} and
+     * {@code Map<SensorPort, EV3Sensor>} where each {@link EV3Sensor} is connected to {@link SensorPort}.
+     *
+     * @param actors connected to the brick
+     * @param sensors connected to the brick
+     * @param wheelDiameterCM of the brick wheels
+     * @param trackWidthCM of the brick
+     */
     public EV3BrickConfiguration(Map<ActorPort, EV3Actor> actors, Map<SensorPort, EV3Sensor> sensors, double wheelDiameterCM, double trackWidthCM) {
         super();
         this.actors = actors;
@@ -31,17 +42,31 @@ public class EV3BrickConfiguration extends BrickConfiguration {
         this.trackWidthCM = trackWidthCM;
     }
 
+    /**
+     * Returns the sensor connected on given port.
+     *
+     * @param sensorPort
+     * @return connected sensor on given port
+     */
     public EV3Sensor getSensorOnPort(SensorPort sensorPort) {
         EV3Sensor sensor = this.sensors.get(sensorPort);
         return sensor;
     }
 
+    /**
+     * Returns the actor connected on given port.
+     *
+     * @param actorPort
+     * @return connected actor on given port
+     */
     public EV3Actor getActorOnPort(ActorPort actorPort) {
         EV3Actor actor = this.actors.get(actorPort);
         return actor;
     }
 
     /**
+     * Get all the actors connected to the brick
+     *
      * @return the actors
      */
     public Map<ActorPort, EV3Actor> getActors() {
@@ -49,6 +74,8 @@ public class EV3BrickConfiguration extends BrickConfiguration {
     }
 
     /**
+     * All the sensors connected to the brick
+     * 
      * @return the sensors
      */
     public Map<SensorPort, EV3Sensor> getSensors() {
@@ -141,7 +168,6 @@ public class EV3BrickConfiguration extends BrickConfiguration {
     public static class Builder {
         private final Map<ActorPort, EV3Actor> actorMapping = new TreeMap<>();
         private final Map<SensorPort, EV3Sensor> sensorMapping = new TreeMap<>();
-        private HardwareComponent lastVisited = null;
 
         private double wheelDiameter;
         private double trackWidth;
@@ -216,24 +242,6 @@ public class EV3BrickConfiguration extends BrickConfiguration {
         public Builder setTrackWidth(double trackWidth) {
             this.trackWidth = trackWidth;
             return this;
-        }
-
-        public void visitingActorPort(String visiting) {
-            Assert.isTrue(this.lastVisited.getCategory() == Category.ACTOR);
-            ActorPort port = ActorPort.get(visiting);
-            this.actorMapping.put(port, (EV3Actor) this.lastVisited);
-            this.lastVisited = null;
-        }
-
-        public void visitingSensorPort(String visiting) {
-            Assert.isTrue(this.lastVisited.getCategory() == Category.SENSOR);
-            SensorPort port = SensorPort.get(visiting);
-            this.sensorMapping.put(port, (EV3Sensor) this.lastVisited);
-            this.lastVisited = null;
-        }
-
-        public void visiting(String... attributes) {
-            this.lastVisited = HardwareComponent.attributesMatch(attributes);
         }
 
         public EV3BrickConfiguration build() {

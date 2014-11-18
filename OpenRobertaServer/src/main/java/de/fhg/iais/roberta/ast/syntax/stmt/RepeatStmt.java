@@ -88,7 +88,7 @@ public class RepeatStmt<V> extends Stmt<V> {
      * @author kcvejoski
      */
     public static enum Mode {
-        WHILE(), UNTIL(), TIMES(), FOR(), FOR_EACH(), WAIT();
+        WHILE(), UNTIL(), TIMES(), FOR(), FOR_EACH(), WAIT(), FOREVER();
 
         private final String[] values;
 
@@ -161,6 +161,7 @@ public class RepeatStmt<V> extends Stmt<V> {
                 AstJaxbTransformerHelper.addField(jaxbDestination, "VAR", ((Var<?>) exprBinary.getLeft()).getValue());
                 AstJaxbTransformerHelper.addValue(jaxbDestination, "LIST", exprBinary.getRight());
                 break;
+
             default:
                 break;
         }
