@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
 import de.fhg.iais.roberta.javaServer.resources.RestBlocks;
 import de.fhg.iais.roberta.javaServer.resources.RestProgram;
 import de.fhg.iais.roberta.javaServer.resources.TokenReceiver;
-import de.fhg.iais.roberta.persistence.connector.DbSession;
+import de.fhg.iais.roberta.persistence.util.DbSession;
 
 public class JSONUtil {
     private JSONUtil() {

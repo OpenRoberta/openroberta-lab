@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.guice;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -10,7 +11,12 @@ import com.sun.jersey.guice.JerseyServletModule;
 import com.sun.jersey.guice.spi.container.servlet.GuiceContainer;
 
 public class RobertaGuiceServletConfig extends GuiceServletContextListener {
-    Injector injector;
+    private Injector injector;
+    private final Properties openRobertaProperties;
+
+    public RobertaGuiceServletConfig(Properties openRobertaProperties) {
+        this.openRobertaProperties = openRobertaProperties;
+    }
 
     @Override
     protected Injector getInjector() {
@@ -18,7 +24,7 @@ public class RobertaGuiceServletConfig extends GuiceServletContextListener {
             @Override
             protected void configureServlets() {
                 // configure at least one JAX-RS resource or the server won't start.
-                install(new RobertaGuiceModule());
+                install(new RobertaGuiceModule(RobertaGuiceServletConfig.this.openRobertaProperties));
                 Map<String, String> initParams = new HashMap<String, String>();
                 // initParams.put("com.sun.jersey.config.feature.Trace", "true");
                 initParams.put("com.sun.jersey.api.json.POJOMappingFeature", "true");

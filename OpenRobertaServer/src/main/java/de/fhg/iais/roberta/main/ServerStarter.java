@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.javaServer.jetty;
+package de.fhg.iais.roberta.main;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -20,19 +20,20 @@ import com.google.inject.servlet.GuiceFilter;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 
 import de.fhg.iais.roberta.guice.RobertaGuiceServletConfig;
-import de.fhg.iais.roberta.persistence.connector.DbSession;
-import de.fhg.iais.roberta.persistence.connector.SessionFactoryWrapper;
 import de.fhg.iais.roberta.persistence.dao.ProgramDao;
+import de.fhg.iais.roberta.persistence.util.DbSession;
+import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.Util;
 
 /**
- * the main class of the application.<br>
+ * <b>the main class of the application, the main activity is starting the server.</b><br>
  * <br>
  * - starts an embedded jetty (see {@link ServletContainer}<br>
  * - configures jersey and the package with the resources<br>
  * - configures jaxb and the package with the providers<br>
  * - configures a resource holder for static content<br>
  * - configures hibernate and tests the connection to the database.<br>
+ * <br>
  *
  * @author rbudde
  */
@@ -92,7 +93,7 @@ public class ServerStarter {
         SessionManager sm = new HashSessionManager();
         context.setSessionHandler(new SessionHandler(sm));
 
-        RobertaGuiceServletConfig robertaGuiceServletConfig = new RobertaGuiceServletConfig();
+        RobertaGuiceServletConfig robertaGuiceServletConfig = new RobertaGuiceServletConfig(this.properties);
         context.addEventListener(robertaGuiceServletConfig);
         context.addFilter(GuiceFilter.class, "/*", null);
         context.addServlet(DefaultServlet.class, "/*");

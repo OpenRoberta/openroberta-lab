@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,11 +37,12 @@ import de.fhg.iais.roberta.javaServer.resources.RestBlocks;
 import de.fhg.iais.roberta.javaServer.resources.RestProgram;
 import de.fhg.iais.roberta.javaServer.resources.RestUser;
 import de.fhg.iais.roberta.javaServer.resources.TokenReceiver;
-import de.fhg.iais.roberta.persistence.connector.SessionFactoryWrapper;
-import de.fhg.iais.roberta.testutil.InMemoryDbSetup;
+import de.fhg.iais.roberta.persistence.util.DbSetup;
+import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.Clock;
 import de.fhg.iais.roberta.util.Util;
 
+@Ignore
 public class BasicPerformanceUserInteractionTest {
     private static final Logger LOG = LoggerFactory.getLogger("workflow");
 
@@ -48,7 +50,7 @@ public class BasicPerformanceUserInteractionTest {
     private static final int MAX_TOTAL_USERS = 10;
 
     private SessionFactoryWrapper sessionFactoryWrapper;
-    private InMemoryDbSetup memoryDbSetup;
+    private DbSetup memoryDbSetup;
     private BrickCommunicator brickCommunicator;
 
     private String buildXml;
@@ -74,8 +76,8 @@ public class BasicPerformanceUserInteractionTest {
         this.crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");
 
         this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-testConcurrent-cfg.xml", this.connectionUrl);
-        this.memoryDbSetup = new InMemoryDbSetup(this.sessionFactoryWrapper.getNativeSession());
-        this.memoryDbSetup.runRobertaSetup();
+        this.memoryDbSetup = new DbSetup(this.sessionFactoryWrapper.getNativeSession());
+        this.memoryDbSetup.runDefaultRobertaSetup();
         this.brickCommunicator = new BrickCommunicator();
         this.compilerWorkflow = new CompilerWorkflow(this.crosscompilerBasedir, this.buildXml);
         this.restUser = new RestUser();

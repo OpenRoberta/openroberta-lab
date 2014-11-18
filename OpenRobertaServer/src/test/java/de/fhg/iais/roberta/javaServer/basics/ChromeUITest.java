@@ -17,7 +17,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import de.fhg.iais.roberta.javaServer.jetty.ServerStarter;
+import de.fhg.iais.roberta.main.ServerStarter;
 
 /**
  * Download chrome driver for your OS.

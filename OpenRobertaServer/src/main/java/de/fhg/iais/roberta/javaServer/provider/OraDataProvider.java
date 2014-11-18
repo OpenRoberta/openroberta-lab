@@ -18,8 +18,8 @@ import com.sun.jersey.spi.inject.Injectable;
 import com.sun.jersey.spi.inject.InjectableProvider;
 
 import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
-import de.fhg.iais.roberta.persistence.connector.DbSession;
-import de.fhg.iais.roberta.persistence.connector.SessionFactoryWrapper;
+import de.fhg.iais.roberta.persistence.util.DbSession;
+import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 
 @Provider
 public class OraDataProvider implements InjectableProvider<OraData, Parameter> {

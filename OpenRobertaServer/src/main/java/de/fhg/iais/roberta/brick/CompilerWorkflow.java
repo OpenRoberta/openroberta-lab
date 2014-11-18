@@ -27,7 +27,7 @@ import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
-import de.fhg.iais.roberta.persistence.connector.DbSession;
+import de.fhg.iais.roberta.persistence.util.DbSession;
 
 public class CompilerWorkflow {
 

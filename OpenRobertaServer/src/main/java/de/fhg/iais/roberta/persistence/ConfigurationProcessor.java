@@ -8,9 +8,9 @@ import org.codehaus.jettison.json.JSONArray;
 import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
 import de.fhg.iais.roberta.persistence.bo.Configuration;
 import de.fhg.iais.roberta.persistence.bo.User;
-import de.fhg.iais.roberta.persistence.connector.DbSession;
 import de.fhg.iais.roberta.persistence.dao.ConfigurationDao;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
+import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.util.Util;
 
 public class ConfigurationProcessor extends AbstractProcessor {

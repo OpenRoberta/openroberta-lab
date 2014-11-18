@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.persistence.bo.Configuration;
 import de.fhg.iais.roberta.persistence.bo.Program;
 import de.fhg.iais.roberta.persistence.bo.User;
-import de.fhg.iais.roberta.persistence.connector.DbSession;
+import de.fhg.iais.roberta.persistence.util.DbSession;
 
 /**
  * DAO class to load and store configuration objects. A DAO object is always bound to a session. This session defines the transactional context, in which the

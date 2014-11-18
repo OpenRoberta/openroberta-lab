@@ -2,8 +2,8 @@ package de.fhg.iais.roberta.persistence;
 
 import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
 import de.fhg.iais.roberta.persistence.bo.User;
-import de.fhg.iais.roberta.persistence.connector.DbSession;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
+import de.fhg.iais.roberta.persistence.util.DbSession;
 
 public class UserProcessor extends AbstractProcessor {
     public UserProcessor(DbSession dbSession, HttpSessionState httpSessionState) {

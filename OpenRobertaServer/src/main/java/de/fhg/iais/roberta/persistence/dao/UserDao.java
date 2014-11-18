@@ -7,7 +7,7 @@ import org.hibernate.Query;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.persistence.bo.Role;
 import de.fhg.iais.roberta.persistence.bo.User;
-import de.fhg.iais.roberta.persistence.connector.DbSession;
+import de.fhg.iais.roberta.persistence.util.DbSession;
 
 public class UserDao extends AbstractDao<User> {
     /**

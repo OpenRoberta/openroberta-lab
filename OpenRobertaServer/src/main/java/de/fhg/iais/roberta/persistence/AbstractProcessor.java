@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
-import de.fhg.iais.roberta.persistence.connector.DbSession;
+import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.util.Util;
 
 public abstract class AbstractProcessor {

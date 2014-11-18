@@ -20,11 +20,15 @@ import de.fhg.iais.roberta.javaServer.resources.RestConfiguration;
 import de.fhg.iais.roberta.javaServer.resources.RestProgram;
 import de.fhg.iais.roberta.javaServer.resources.RestUser;
 import de.fhg.iais.roberta.javaServer.resources.TokenReceiver;
-import de.fhg.iais.roberta.persistence.connector.SessionFactoryWrapper;
+import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 
 public class RobertaGuiceModule extends AbstractModule {
     private static final Logger LOG = LoggerFactory.getLogger(RobertaGuiceModule.class);
-    private static final String PROPERTY_PATH = "openRoberta.properties";
+    private final Properties openRobertaProperties;
+
+    public RobertaGuiceModule(Properties openRobertaProperties) {
+        this.openRobertaProperties = openRobertaProperties;
+    }
 
     @Override
     protected void configure() {
@@ -46,11 +50,9 @@ public class RobertaGuiceModule extends AbstractModule {
         bind(String.class).annotatedWith(Names.named("hibernate.config.xml")).toInstance("hibernate-cfg.xml");
 
         try {
-            Properties properties = new Properties();
-            properties.load(this.getClass().getClassLoader().getResourceAsStream(PROPERTY_PATH));
-            Names.bindProperties(binder(), properties);
+            Names.bindProperties(binder(), this.openRobertaProperties);
         } catch ( Exception e ) {
-            LOG.error("Could not load property file " + PROPERTY_PATH, e);
+            LOG.error("Could not load properties", e);
         }
     }
 }

@@ -13,7 +13,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-import de.fhg.iais.roberta.javaServer.jetty.ServerStarter;
+import de.fhg.iais.roberta.main.ServerStarter;
 
 public class XmlRobertaTest {
     private Server server;

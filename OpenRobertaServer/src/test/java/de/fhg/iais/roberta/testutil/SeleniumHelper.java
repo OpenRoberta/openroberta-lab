@@ -11,8 +11,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-import de.fhg.iais.roberta.javaServer.jetty.ServerStarter;
-import de.fhg.iais.roberta.persistence.connector.SessionFactoryWrapper;
+import de.fhg.iais.roberta.main.ServerStarter;
+import de.fhg.iais.roberta.persistence.util.DbSetup;
+import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 
 public class SeleniumHelper {
 
@@ -26,7 +27,7 @@ public class SeleniumHelper {
         this.serverStarter = new ServerStarter("classpath:openRoberta.properties");
         this.server = this.serverStarter.start();
         Session session = this.serverStarter.getInjectorForTests().getInstance(SessionFactoryWrapper.class).getNativeSession();
-        new InMemoryDbSetup(session).runRobertaSetup();
+        new DbSetup(session).runDefaultRobertaSetup();
 
         this.port = this.server.getURI().getPort();
         this.driver = new FirefoxDriver();

@@ -18,7 +18,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 
-import de.fhg.iais.roberta.javaServer.jetty.ServerStarter;
+import de.fhg.iais.roberta.main.ServerStarter;
 
 @Ignore
 public class FirefoxUITest {

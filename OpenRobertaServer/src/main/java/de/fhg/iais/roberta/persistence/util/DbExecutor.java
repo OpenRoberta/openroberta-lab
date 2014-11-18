@@ -1,7 +1,6 @@
-package de.fhg.iais.roberta.testutil;
+package de.fhg.iais.roberta.persistence.util;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -28,12 +27,12 @@ public class DbExecutor {
         this.session = session;
     }
 
-    public void sqlFile(String pathToSqlStmtFile, String sqlReturningPositiveNumberIfSqlFileAlreadyLoaded) throws Exception {
+    public void sqlFile(String nameOfResourceContainingSql, String sqlReturningPositiveNumberIfSqlFileAlreadyLoaded) throws Exception {
         int result = ((BigInteger) oneValueSelect(sqlReturningPositiveNumberIfSqlFileAlreadyLoaded)).intValue();
         if ( result == 0 ) {
-            sqlFile(new FileInputStream(pathToSqlStmtFile));
+            sqlFile(this.getClass().getResourceAsStream(nameOfResourceContainingSql));
         } else {
-            LOG.info("test sql says, that sqlFile " + pathToSqlStmtFile + " has already been executed. Skipping execution.");
+            LOG.info("test sql says, that DDL of  " + nameOfResourceContainingSql + " has already been executed. Skipping execution.");
         }
     }
 
@@ -86,10 +85,10 @@ public class DbExecutor {
             select(sqlStmt);
         } else if ( isChange(sqlStmt) ) {
             LOG.debug("UPD: " + sqlStmt);
-            updateWithCommit(sqlStmt);
+            update(sqlStmt);
         } else if ( isDDL(sqlStmt) ) {
             LOG.debug("DDL: " + sqlStmt);
-            ddlWithCommit(sqlStmt);
+            ddl(sqlStmt);
         } else {
             LOG.error("Ignored: " + sqlStmt);
         }
@@ -118,18 +117,14 @@ public class DbExecutor {
         return result;
     }
 
-    public int updateWithCommit(String sqlStmt) {
-        this.session.beginTransaction();
+    public int update(String sqlStmt) {
         int result = this.session.createSQLQuery(sqlStmt).executeUpdate();
         LOG.debug("rows affected: " + result);
-        this.session.getTransaction().commit();
         return result;
     }
 
-    public void ddlWithCommit(String sqlStmt) {
-        this.session.beginTransaction();
+    public void ddl(String sqlStmt) {
         int result = this.session.createSQLQuery(sqlStmt).executeUpdate();
-        this.session.getTransaction().commit();
         LOG.debug("rows affected (probably 0): " + result);
     }
 
@@ -146,6 +141,9 @@ public class DbExecutor {
     }
 
     private static boolean sW(String testString, String expected) {
+        if ( testString.length() < expected.length() ) {
+            return false;
+        }
         return testString.substring(0, expected.length()).equalsIgnoreCase(expected);
     }
 }

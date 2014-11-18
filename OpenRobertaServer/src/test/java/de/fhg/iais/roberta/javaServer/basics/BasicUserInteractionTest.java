@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
+import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,13 +30,13 @@ import de.fhg.iais.roberta.javaServer.resources.RestBlocks;
 import de.fhg.iais.roberta.javaServer.resources.RestProgram;
 import de.fhg.iais.roberta.javaServer.resources.RestUser;
 import de.fhg.iais.roberta.javaServer.resources.TokenReceiver;
-import de.fhg.iais.roberta.persistence.connector.SessionFactoryWrapper;
-import de.fhg.iais.roberta.testutil.InMemoryDbSetup;
+import de.fhg.iais.roberta.persistence.util.DbSetup;
+import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.Util;
 
 public class BasicUserInteractionTest {
     private SessionFactoryWrapper sessionFactoryWrapper;
-    private InMemoryDbSetup memoryDbSetup;
+    private DbSetup memoryDbSetup;
     private BrickCommunicator brickCommunicator;
 
     private String buildXml;
@@ -63,8 +64,9 @@ public class BasicUserInteractionTest {
         this.crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");
 
         this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-test-cfg.xml", this.connectionUrl);
-        this.memoryDbSetup = new InMemoryDbSetup(this.sessionFactoryWrapper.getNativeSession());
-        this.memoryDbSetup.runRobertaSetup();
+        Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
+        this.memoryDbSetup = new DbSetup(nativeSession);
+        this.memoryDbSetup.runDefaultRobertaSetup();
         this.brickCommunicator = new BrickCommunicator();
         this.compilerWorkflow = new CompilerWorkflow(this.crosscompilerBasedir, this.buildXml);
         this.restUser = new RestUser();

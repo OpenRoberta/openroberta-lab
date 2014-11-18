@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.persistence.connector;
+package de.fhg.iais.roberta.persistence.util;
 
 import java.sql.Types;
 

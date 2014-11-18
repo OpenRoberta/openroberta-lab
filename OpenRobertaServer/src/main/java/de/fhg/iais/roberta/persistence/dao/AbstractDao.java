@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.persistence.dao;
 
 import de.fhg.iais.roberta.persistence.bo.WithSurrogateId;
-import de.fhg.iais.roberta.persistence.connector.DbSession;
+import de.fhg.iais.roberta.persistence.util.DbSession;
 
 /**
  * parent class for all DAO classes, that load and store business objects. This class contains convenience methods, that may be called from DAO classes

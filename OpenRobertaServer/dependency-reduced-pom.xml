@@ -92,11 +92,7 @@
             <configuration>
               <transformers>
                 <transformer />
-                <transformer>
-                  <manifestEntries>
-                    <Main-Class>de.fhg.iais.roberta.javaServer.jetty.ServerStarter</Main-Class>
-                  </manifestEntries>
-                </transformer>
+                <transformer />
               </transformers>
               <filters>
                 <filter>

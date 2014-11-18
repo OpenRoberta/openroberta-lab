@@ -1,7 +1,0 @@
-/*C3*/SET SCHEMA PUBLIC
-DELETE FROM USER WHERE ID=49
-INSERT INTO USER VALUES(49,'dani','dani','','STUDENT','2014-10-24 08:25:14.263000','2014-10-27 10:42:01.501000',NULL)
-COMMIT
-DELETE FROM PROGRAM WHERE ID=57
-INSERT INTO PROGRAM VALUES(57,'test',49,'<block_set xmlns="http://de.fhg.iais.roberta.blockly"><instance x="100" y="50"><block type="robControls_start" id="10" deletable="false"></block><block type="robActions_display_text" id="33" inline="false"><value name="OUT"><block type="text" id="34"><field name="TEXT">Hallo</field></block></value><value name="COL"><block type="math_number" id="35"><field name="NUM">0</field></block></value><value name="ROW"><block type="math_number" id="36"><field name="NUM">0</field></block></value></block></instance></block_set>','2014-10-24 08:25:29.805000','2014-10-27 10:43:09.371000',NULL,NULL,0,NULL,0)
-COMMIT
