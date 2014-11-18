@@ -187,12 +187,13 @@ function setConfiguration(name) {
  */
 function setToken(token) {
     if (token) {
+        var resToken = token.toUpperCase(); 
         COMM.json("/blocks", {
             "cmd" : "setToken",
-            "token" : token
+            "token" : resToken
         }, function(response) {
             if (response.rc === "ok") {
-                userState.token = token;
+                userState.token = resToken;
                 $(".ui-dialog-content").dialog("close"); // close all opened popups
             } else {
                 displayMessage("message9");
@@ -732,7 +733,6 @@ function setHeadNavigationMenuState(state) {
  *            Messabe to be displayed
  */
 function displayMessage(messageId) {
-    console.log(messageId);
     $('.message').css('display', 'none');
     $('#' + messageId + '').css('display', 'inline');
     $("#show-message").dialog("open");
