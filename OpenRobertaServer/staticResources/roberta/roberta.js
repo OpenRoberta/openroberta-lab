@@ -1075,6 +1075,14 @@ function translate(jsdata) {
             $('#set-token #saveConfiguration').attr('value', value);
         } else if (key  === 'attention') {
             $('#show-message').dialog('option', 'title', value);
+        } else if (key  === 'back') {
+            $('.backToBlockly').attr('value', value);
+        } else if (key  === 'load') {
+            $('.buttonLoad').attr('value', value);
+        } else if (key  === 'doDelete') {
+            $('.buttonDelete').attr('value', value);
+        } else if (key  === 'emptyList') {
+            $('#clearLog').attr('value', value);
         }
         //console.log('key/value = ' + key + '/' + value);
         $(this).html(value);

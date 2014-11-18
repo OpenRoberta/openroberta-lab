@@ -230,8 +230,8 @@ limitations under the License.
             </ul>
 
             <div id="simulatorDiv">
-                <button id="closeBtn" class="button" onclick="viewSimulator(false)">Beenden</button>
-                <button id="closeBtn" class="button" onclick="moveStop()">Stop</button>
+                <button id="closeBtn" class="button" onclick="viewSimulator(false)" lkey="finish">Beenden</button>
+                <button id="closeBtn" class="button" onclick="moveStop()" lkey="stop">Stop</button>
                 <div id="positionData"></div>
                 <!--  <div id="simulatorRender"></div> -->
                 <canvas id="robertaCanvas" width="212" height="212" class="dummy"></canvas>
@@ -248,9 +248,9 @@ limitations under the License.
                     <tfoot>
                     </tfoot>
                 </table>
-                <input class="button" id="loadFromListing" type="submit" value="Laden" />
-                <input class="button" id="deleteFromListing" type="submit" value="Löschen" />
-                <input class="button backToBlockly" type="submit" value="Zurück" />
+                <input class="button buttonLoad" id="loadFromListing" lkey="load" type="submit" value="Laden" />
+                <input class="button buttonDelete" id="deleteFromListing" lkey="doDelete" type="submit" value="Löschen" />
+                <input class="button backToBlockly" lkey="back" type="submit" value="Zurück" />
             </div>
             
             <div id="confListing">
@@ -260,16 +260,16 @@ limitations under the License.
                     <tfoot>
                     </tfoot>
                 </table>
-                <input class="button" id="loadConfigurationFromListing" type="submit" value="Laden" />
-                <input class="button" id="deleteConfigurationFromListing" type="submit" value="Löschen" />
-                <input class="button backToBlockly" type="submit" value="Zurück" />
+                <input class="button buttonLoad" id="loadConfigurationFromListing" lkey="load" type="submit" value="Laden" />
+                <input class="button buttonDelete" id="deleteConfigurationFromListing" lkey="doDelete" type="submit" value="Löschen" />
+                <input class="button backToBlockly" lkey="back" type="submit" value="Zurück" />
             </div>
             
             <div id="logging">
                 <br/>
                 <div>
-                    <input id="clearLog" class="button" type="submit" value="Liste leeren" />
-                    <input class="button backToBlockly" class="button" type="submit" value="Zurück" />
+                    <input id="clearLog" class="button" lkey="emptyList" type="submit" value="Liste leeren" />
+                    <input class="button backToBlockly" lkey="back" class="button" type="submit" value="Zurück" />
                     <hr />
                     <br/>
                     <ol id="log" class="log" reversed>
