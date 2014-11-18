@@ -204,12 +204,6 @@ function setToken(token) {
     }
 }
 
-function incrCounter(e) {
-    var $counter = $('#counter');
-    var counter = Number($counter.text());
-    $counter.text('' + (counter + 1));
-}
-
 /**
  * Handle result of server call
  * 
@@ -218,7 +212,6 @@ function incrCounter(e) {
  */
 function response(result) {
     LOG.info('result from server: ' + JSON.stringify(result));
-    incrCounter();
 };
 
 /**
@@ -565,8 +558,6 @@ function initProgramNameTable() {
                     + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>' + '</select> Programme/Revisionen'
         },
         "fnDrawCallback" : function() {
-            var counter = +$('#redrawCounter').text();
-            $('#redrawCounter').text(counter + 1);
         }
     });
     $('#programNameTable tbody').onWrap('click', 'tr', selectionFn);
@@ -617,8 +608,6 @@ function initConfigurationNameTable() {
                     + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>' + '</select> Konfigurationen'
         },
         "fnDrawCallback" : function() {
-            var counter = +$('#redrawCounter').text();
-            $('#redrawCounter').text(counter + 1);
         }
     });
     $('#configurationNameTable tbody').onWrap('click', 'tr', selectionFn);
