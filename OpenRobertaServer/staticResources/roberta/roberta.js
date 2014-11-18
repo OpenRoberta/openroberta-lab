@@ -31,9 +31,9 @@ function saveUserToServer() {
     var $role = $("input[name=role]:checked");
 
     if ($pass1.val() != $pass2.val()) {
-        displayMessage("Du hast beim eingeben der beiden Passworte etwas falsch gemacht.");
+        displayMessage("message1");
     } else if ($role.val() == null) {
-        displayMessage("Du musst angeben, ob Du Schüler oder Lehrer bist.");
+        displayMessage("message2");
     } else {
         var roleGerman = $role.val();
         var role = "STUDENT";
@@ -49,10 +49,10 @@ function saveUserToServer() {
             "role" : role
         }, function(result) {
             if (result.rc === "ok") {
-                displayMessage("Du hast erfolgreich einen neuen Nutzer angelegt.");
+                displayMessage("message3");
                 $(".ui-dialog-content").dialog("close"); // close all opened popups
             } else {
-                displayMessage("Dieser Nutzer existiert bereits. Du musst einen anderen Account-Namen wählen.");
+                displayMessage("message4");
             }
         });
     }
@@ -69,10 +69,10 @@ function deleteUserOnServer() {
         "accountName" : $userAccountName.val()
     }, function(result) {
         if (result.rc === "ok") {
-            displayMessage("Der Nutzer wurde gelöscht.");
+            displayMessage("message5");
             $(".ui-dialog-content").dialog("close"); // close all opened popups
         } else {
-            displayMessage("Der Nutzer konnte nicht gelöscht werden.");
+            displayMessage("message6");
         }
     });
 }
@@ -98,7 +98,7 @@ function login() {
             $("#tutorials").fadeOut(700);
             $(".ui-dialog-content").dialog("close"); // close all opened popups
         } else {
-            displayMessage("Du hast beim einloggen einen Fehler gemacht.");
+            displayMessage("message7");
         }
     });
 }
@@ -117,7 +117,7 @@ function logout() {
             setHeadNavigationMenuState('logout');
             initProgramEnvironment();
         } else {
-            displayMessage("Beim ausloggen ist ein Fehler passiert.");
+            displayMessage("message8");
         }
         $(".ui-dialog-content").dialog("close"); // close all opened popups
     });
@@ -195,11 +195,11 @@ function setToken(token) {
                 userState.token = token;
                 $(".ui-dialog-content").dialog("close"); // close all opened popups
             } else {
-                displayMessage("Das Einstellen der Roboter-Kennung hat nicht funktioniert.");
+                displayMessage("message9");
             }
         });
     } else {
-        displayMessage("Du musst die Roboter-Kennung eingeben.");
+        displayMessage("message10");
     }
 }
 
@@ -251,7 +251,7 @@ function saveToServer() {
             if (!$name.val() || $name.val() === "meinProgramm") {
                 $('#head-navigation #submenu-program #save').addClass('login');
                 $('#head-navigation #submenu-program #save').addClass('ui-state-disabled');
-                displayMessage("Du musst einen anderen Programmnamen nehmen.");
+                displayMessage("message11");
                 return;
             }
             $('#head-navigation #submenu-program #save').removeClass('login');
@@ -270,7 +270,7 @@ function saveToServer() {
             "program" : xml_text
         },  responseAndRefreshList);
     } else {
-        displayMessage("Du musst einen Programmnamen eingeben.");
+        displayMessage("message12");
     }
 }
 
@@ -285,7 +285,7 @@ function saveConfigurationToServer() {
             if (!$name.val() || $name.val() === "meineKonfiguration") {
                 $('#head-navigation #submenu-configuration #save').addClass('login');
                 $('#head-navigation #submenu-configuration #save').addClass('ui-state-disabled');
-                displayMessage("Du musst einen anderen Konfigurationsnamen nehmen.");
+                displayMessage("message11");
                 return;
             }
             $('#head-navigation #submenu-configuration #save').removeClass('login');
@@ -304,7 +304,7 @@ function saveConfigurationToServer() {
             "configuration" : xml_text
         }, responseAndRefreshList);
     } else {
-        displayMessage("Du musst einen Konfigurationsnamen eingeben.");
+        displayMessage("message12");
     }
 }
 
@@ -644,7 +644,7 @@ function startProgram() {
  */
 function checkProgram() {
     // TODO
-    displayMessage("Dein Programm kann zur Zeit noch nicht geprüft werden.");
+    displayMessage("message13");
 }
 
 /**
@@ -652,7 +652,7 @@ function checkProgram() {
  */
 function checkConfiguration() {
     // TODO
-    displayMessage("Deine Konfiguration kann zur Zeit noch nicht geprüft werden.");
+    displayMessage("message14");
 }
 
 function switchToBlockly() {
@@ -731,8 +731,10 @@ function setHeadNavigationMenuState(state) {
  * @param {message}
  *            Messabe to be displayed
  */
-function displayMessage(message) {
-    $("#show-message > #message").text(message);
+function displayMessage(messageId) {
+    console.log(messageId);
+    $('.message').css('display', 'none');
+    $('#' + messageId + '').css('display', 'inline');
     $("#show-message").dialog("open");
 }
 
@@ -1086,7 +1088,7 @@ function translate(jsdata) {
         } else if (key  === 'attention') {
             $('#show-message').dialog('option', 'title', value);
         }
-        // console.log('key/value = ' + key + '/' + value);
+        //console.log('key/value = ' + key + '/' + value);
         $(this).html(value);
     });
 };

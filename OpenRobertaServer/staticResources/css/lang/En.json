@@ -41,5 +41,19 @@
     "saveProgram" : "Save program",
     "saveConfiguration" : "Save configuration",
     "setToken" : "Set token",
-    "attention" : "Attention"
+    "attention" : "Attention",
+	"message1" : "Something went wrong while you filled in the two passwords.",
+	"message2" : "You have to choose whether you are student or teacher.",
+	"message3" : "User was created.",
+	"message4" : "This username already exists. Please choose another one.",
+	"message5" : "The user was successfully deleted.",
+    "message6" : "The user could not be deleted.",
+    "message7" : "There was an error while logging in.",
+    "message8" : "There was an error while logging out.",
+    "message9" : "The token for the roboter could not be set.",
+    "message10" : "You have to fill in the token.",
+    "message11" : "You have to choose another name.",
+    "message12" : "please fill in a name.",
+    "message13" : "Your program cann't be checked.",
+    "message14" : "Your configuration cann't be checked."
 }
