@@ -7,7 +7,10 @@ import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -85,5 +88,33 @@ public class GetSubFunct<V> extends Function<V> {
     @Override
     public String toString() {
         return "GetSubFunct [" + this.functName + ", " + this.strParam + ", " + this.param + "]";
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        Mutation mutation = new Mutation();
+
+        mutation.setAt1(false);
+        mutation.setAt2(false);
+        AstJaxbTransformerHelper.addField(jaxbDestination, "WHERE1", getStrParam().get(0));
+        AstJaxbTransformerHelper.addField(jaxbDestination, "WHERE2", getStrParam().get(1));
+        if ( getFunctName() == Functions.GET_SUBLIST ) {
+            AstJaxbTransformerHelper.addValue(jaxbDestination, "LIST", getParam().get(0));
+        } else {
+            AstJaxbTransformerHelper.addValue(jaxbDestination, "STRING", getParam().get(0));
+        }
+        if ( Functions.get(getStrParam().get(0)) == Functions.FROM_START || Functions.get(getStrParam().get(0)) == Functions.FROM_END ) {
+            mutation.setAt1(true);
+            AstJaxbTransformerHelper.addValue(jaxbDestination, "AT1", getParam().get(1));
+        }
+        if ( Functions.get(getStrParam().get(1)) == Functions.FROM_START || Functions.get(getStrParam().get(1)) == Functions.FROM_END ) {
+            mutation.setAt2(true);
+            AstJaxbTransformerHelper.addValue(jaxbDestination, "AT2", getParam().get(getParam().size() - 1));
+        }
+        jaxbDestination.setMutation(mutation);
+        return jaxbDestination;
+
     }
 }

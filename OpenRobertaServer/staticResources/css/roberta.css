@@ -712,15 +712,6 @@ table.dataTable.no-footer {
 	background-color: yellow;
 }
 
-.counter {
-	color: #bbbbbb;
-	background-color: #eeeeee;
-	width: 15mm;
-	text-align: center;
-	font-size: smaller;
-	float: left;
-}
-
 .button {
 	margin-left: 5pt;
 	width: 100pt;
@@ -748,3 +739,25 @@ table.dataTable.no-footer {
 .hidden {
 	display: none;
 }
+
+.invisible {
+	visibility: hidden;
+}
+
+.De, .En {
+	display; inline;
+}
+
+#setLangDe {
+	background-image: url(svg/Flag_of_Germany.svg);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+#setLangEn {
+    background: url(svg/Flag_of_the_United_Kingdom.svg);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    font-size: 80%;
+}
+

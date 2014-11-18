@@ -3,7 +3,9 @@ package de.fhg.iais.roberta.ast.syntax.functions;
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 
 /**
  * This class represents the <b>math_random_float</b> block from Blockly into the AST (abstract syntax tree).<br>
@@ -49,6 +51,13 @@ public class MathRandomFloatFunct<V> extends Function<V> {
     @Override
     public String toString() {
         return "MathRandomFloatFunct []";
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        return jaxbDestination;
     }
 
 }

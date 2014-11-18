@@ -5,9 +5,11 @@ import java.util.Locale;
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
 import de.fhg.iais.roberta.ast.typecheck.Sig;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
@@ -33,7 +35,7 @@ public final class Binary<V> extends Expr<V> {
 
     /**
      * Creates instance of {@link Binary}. This instance is read only and can not be modified.
-     * 
+     *
      * @param op operator
      * @param left expression on the left hand side,
      * @param right expression on the right hand side,
@@ -152,7 +154,7 @@ public final class Binary<V> extends Expr<V> {
 
         /**
          * get the signature. The caller has to check for <code>null</code>!
-         * 
+         *
          * @return the signature; if not found, return <code>null</code>
          */
         public Sig getSignature() {
@@ -162,7 +164,7 @@ public final class Binary<V> extends Expr<V> {
         /**
          * get operator from {@link Op} from string parameter. It is possible for one operator to have multiple string mappings.
          * Throws exception if the operator does not exists.
-         * 
+         *
          * @param name of the operator
          * @return operator from the enum {@link Op}
          */
@@ -185,4 +187,31 @@ public final class Binary<V> extends Expr<V> {
         }
     }
 
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        switch ( getOp() ) {
+
+            case MATH_CHANGE:
+                AstJaxbTransformerHelper.addField(jaxbDestination, "VAR", ((Var<?>) getLeft()).getValue());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, "DELTA", getRight());
+                return jaxbDestination;
+            case TEXT_APPEND:
+                AstJaxbTransformerHelper.addField(jaxbDestination, "VAR", ((Var<?>) getLeft()).getValue());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, "TEXT", getRight());
+                return jaxbDestination;
+
+            case MOD:
+                AstJaxbTransformerHelper.addValue(jaxbDestination, "DIVIDEND", getLeft());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, "DIVISOR", getRight());
+                return jaxbDestination;
+
+            default:
+                AstJaxbTransformerHelper.addField(jaxbDestination, "OP", getOp().name());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, "A", getLeft());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, "B", getRight());
+                return jaxbDestination;
+        }
+    }
 }

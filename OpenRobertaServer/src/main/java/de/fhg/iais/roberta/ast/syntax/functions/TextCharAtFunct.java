@@ -6,7 +6,10 @@ import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -76,4 +79,20 @@ public class TextCharAtFunct<V> extends Function<V> {
         return "TextCharAtFunct [" + this.functName + ", " + this.param + "]";
     }
 
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        Mutation mutation = new Mutation();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+
+        mutation.setAt(false);
+        AstJaxbTransformerHelper.addField(jaxbDestination, "WHERE", getFunctName().name());
+        AstJaxbTransformerHelper.addValue(jaxbDestination, "VALUE", getParam().get(0));
+        if ( getFunctName() == Functions.FROM_START || getFunctName() == Functions.FROM_END ) {
+            mutation.setAt(true);
+            AstJaxbTransformerHelper.addValue(jaxbDestination, "AT", getParam().get(1));
+        }
+        jaxbDestination.setMutation(mutation);
+        return jaxbDestination;
+    }
 }

@@ -5,7 +5,9 @@ import java.util.Locale;
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
@@ -32,7 +34,7 @@ public class Unary<V> extends Expr<V> {
 
     /**
      * creates instance of {@link Unary}. This instance is read only and can not be modified.
-     * 
+     *
      * @param op operator
      * @param expr expression over which the operation is performed,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
@@ -119,7 +121,7 @@ public class Unary<V> extends Expr<V> {
         /**
          * get operator from {@link Op} from string parameter. It is possible for one operator to have multiple string mappings.
          * Throws exception if the operator does not exists.
-         * 
+         *
          * @param name of the operator
          * @return operator from the enum {@link Op}, never null
          */
@@ -145,6 +147,19 @@ public class Unary<V> extends Expr<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitUnary(this);
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        if ( getProperty().getBlockType().equals("math_single") ) {
+            AstJaxbTransformerHelper.addField(jaxbDestination, "OP", getOp().name());
+            AstJaxbTransformerHelper.addValue(jaxbDestination, "NUM", getExpr());
+        } else {
+            AstJaxbTransformerHelper.addValue(jaxbDestination, "BOOL", getExpr());
+        }
+        return jaxbDestination;
     }
 
 }

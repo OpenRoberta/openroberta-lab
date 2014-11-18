@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax.stmt;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,11 @@ import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
+import de.fhg.iais.roberta.blockly.generated.Repetitions;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -181,6 +186,55 @@ public class IfStmt<V> extends Stmt<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitIfStmt(this);
+    }
+
+    @Override
+    public Block astToBlock() {
+        Mutation mutation;
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+
+        if ( getProperty().getBlockType().equals("logic_ternary") ) {
+            AstJaxbTransformerHelper.addValue(jaxbDestination, "IF", getExpr().get(0));
+            AstJaxbTransformerHelper.addValue(jaxbDestination, "THEN", getThenList().get(0).get().get(0));
+            AstJaxbTransformerHelper.addValue(jaxbDestination, "ELSE", getElseList().get().get(0));
+            return jaxbDestination;
+        }
+        int _else = get_else();
+        int _elseIf = get_elseIf();
+
+        StmtList<?> elseList = getElseList();
+        int expr = 0;
+        expr = getExpr().size();
+
+        if ( _else != 0 || _elseIf != 0 ) {
+            mutation = new Mutation();
+            if ( _else != 0 ) {
+                mutation.setElse(BigInteger.ONE);
+            }
+            if ( _elseIf > 0 ) {
+                mutation.setElseif(BigInteger.valueOf(_elseIf));
+            }
+            jaxbDestination.setMutation(mutation);
+            Repetitions repetitions = new Repetitions();
+            for ( int i = 0; i < expr; i++ ) {
+                AstJaxbTransformerHelper.addValue(repetitions, "IF" + i, getExpr().get(i));
+                AstJaxbTransformerHelper.addStatement(repetitions, "DO" + i, getThenList().get(i));
+            }
+            if ( elseList.get().size() != 0 ) {
+                AstJaxbTransformerHelper.addStatement(repetitions, "ELSE", getElseList());
+            }
+            jaxbDestination.setRepetitions(repetitions);
+            return jaxbDestination;
+        }
+
+        AstJaxbTransformerHelper.addValue(jaxbDestination, "IF0", getExpr().get(0));
+        AstJaxbTransformerHelper.addStatement(jaxbDestination, "DO0", getThenList().get(0));
+        if ( elseList.get().size() != 0 ) {
+            AstJaxbTransformerHelper.addStatement(jaxbDestination, "ELSE", getElseList());
+        }
+
+        return jaxbDestination;
     }
 
 }

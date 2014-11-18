@@ -7,7 +7,10 @@ import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
@@ -119,6 +122,27 @@ public class ListSetIndex<V> extends Function<V> {
             }
             throw new DbcException("Invalid mode name: " + s);
         }
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+
+        Mutation mutation = new Mutation();
+        mutation.setAt(false);
+        AstJaxbTransformerHelper.addField(jaxbDestination, "MODE", getMode().name());
+        AstJaxbTransformerHelper.addField(jaxbDestination, "WHERE", getFunctName().name());
+        AstJaxbTransformerHelper.addValue(jaxbDestination, "LIST", getParam().get(0));
+        if ( getParam().size() > 2 ) {
+            AstJaxbTransformerHelper.addValue(jaxbDestination, "AT", getParam().get(1));
+            AstJaxbTransformerHelper.addValue(jaxbDestination, "TO", getParam().get(2));
+            mutation.setAt(true);
+        } else {
+            AstJaxbTransformerHelper.addValue(jaxbDestination, "TO", getParam().get(1));
+        }
+        jaxbDestination.setMutation(mutation);
+        return jaxbDestination;
     }
 
 }

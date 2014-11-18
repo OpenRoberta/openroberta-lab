@@ -4,7 +4,9 @@ import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -27,7 +29,7 @@ public class VolumeAction<V> extends Action<V> {
 
     /**
      * Creates instance of {@link VolumeAction}. This instance is read only and can not be modified.
-     * 
+     *
      * @param mode of the action {@link Mode},
      * @param volume value,
      * @param properties of the block (see {@link BlocklyBlockProperties}),,
@@ -67,6 +69,18 @@ public class VolumeAction<V> extends Action<V> {
      */
     public static enum Mode {
         SET, GET;
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+
+        if ( getMode() == VolumeAction.Mode.SET ) {
+            AstJaxbTransformerHelper.addValue(jaxbDestination, "VOLUME", getVolume());
+        }
+
+        return jaxbDestination;
     }
 
 }

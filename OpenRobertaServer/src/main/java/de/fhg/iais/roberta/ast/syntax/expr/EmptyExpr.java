@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -21,7 +22,7 @@ public class EmptyExpr<V> extends Expr<V> {
 
     /**
      * create read only instance from {@link EmptyExpr}.
-     * 
+     *
      * @param defVal type of the value that the missing expression should have.
      * @return read only object of class {@link EmptyExpr}.
      */
@@ -54,6 +55,11 @@ public class EmptyExpr<V> extends Expr<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitEmptyExpr(this);
+    }
+
+    @Override
+    public Block astToBlock() {
+        return null;
     }
 
 }

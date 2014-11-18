@@ -6,6 +6,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
@@ -29,7 +30,7 @@ public class ExprList<V> extends Expr<V> {
 
     /**
      * Add new element to the list.
-     * 
+     *
      * @param expr
      */
     public final void addExpr(Expr<V> expr) {
@@ -73,5 +74,11 @@ public class ExprList<V> extends Expr<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitExprList(this);
+    }
+
+    @Override
+    public Block astToBlock() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

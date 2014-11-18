@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.ast.typecheck.NepoInfo;
 import de.fhg.iais.roberta.ast.typecheck.NepoInfos;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 
 /**
  * the top class of all class used to represent the AST (abstract syntax tree) of a program. After construction an AST should be immutable. The logic to achieve
@@ -111,6 +112,8 @@ abstract public class Phrase<V> {
      * accept an visitor
      */
     protected abstract V accept(AstVisitor<V> visitor);
+
+    public abstract Block astToBlock();
 
     /**
      * append a newline, then append spaces up to an indentation level, then append an (optional) text<br>

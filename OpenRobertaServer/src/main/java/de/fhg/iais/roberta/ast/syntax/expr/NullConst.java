@@ -3,7 +3,9 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 
 /**
  * This class represents the <b>logic_null</b> block from Blockly into the AST (abstract syntax tree).
@@ -20,7 +22,7 @@ public class NullConst<V> extends Expr<V> {
 
     /**
      * creates instance of {@link NullConst}. This instance is read only and can not be modified.
-     * 
+     *
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of class {@link NullConst}.
@@ -54,6 +56,13 @@ public class NullConst<V> extends Expr<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitNullConst(this);
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        return jaxbDestination;
     }
 
 }

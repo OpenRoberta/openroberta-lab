@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.ast.syntax;
 
 import de.fhg.iais.roberta.dbc.Assert;
 
-public class BlocklyBlockProperties implements INepoId {
+public class BlocklyBlockProperties {
     private final String blockType;
     private final String blocklyId;
     private final boolean disabled;

@@ -5,7 +5,9 @@ import java.util.Locale;
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
@@ -25,7 +27,7 @@ public class MathConst<V> extends Expr<V> {
 
     /**
      * creates instance of {@link BoolConst}. This instance is read only and can not be modified.
-     * 
+     *
      * @param mathConst, see enum {@link Const} for all defined constants
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
@@ -72,8 +74,8 @@ public class MathConst<V> extends Expr<V> {
         /**
          * get constant from {@link Const} from string parameter. It is possible for one constant to have multiple string mappings.
          * Throws exception if the constant does not exists.
-         * 
-         * @param name of the contant
+         *
+         * @param name of the constant
          * @return constant from the enum {@link Const}
          */
         public static Const get(String s) {
@@ -98,5 +100,13 @@ public class MathConst<V> extends Expr<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitMathConst(this);
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        AstJaxbTransformerHelper.addField(jaxbDestination, "CONSTANT", getMathConst().name());
+        return jaxbDestination;
     }
 }

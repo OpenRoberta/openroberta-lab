@@ -6,6 +6,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -28,7 +29,7 @@ public class StmtList<V> extends Stmt<V> {
 
     /**
      * Add new element to the list.
-     * 
+     *
      * @param stmt
      */
     public final void addStmt(Stmt<V> stmt) {
@@ -56,5 +57,11 @@ public class StmtList<V> extends Stmt<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitStmtList(this);
+    }
+
+    @Override
+    public Block astToBlock() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.ast.syntax.tasks;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 
 public class Location<V> extends Task<V> {
 
@@ -49,6 +50,11 @@ public class Location<V> extends Task<V> {
     @Override
     public String toString() {
         return "Location [x=" + this.x + ", y=" + this.y + "]";
+    }
+
+    @Override
+    public Block astToBlock() {
+        return null;
     }
 
 }

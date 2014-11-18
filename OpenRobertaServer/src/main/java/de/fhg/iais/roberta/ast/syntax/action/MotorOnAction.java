@@ -4,7 +4,9 @@ import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -27,7 +29,7 @@ public final class MotorOnAction<V> extends Action<V> {
 
     /**
      * Creates instance of {@link MotorOnAction}. This instance is read only and can not be modified.
-     * 
+     *
      * @param port {@link ActorPort} on which the motor is connected,
      * @param param {@link MotionParam} that set up the parameters for the movement of the robot (number of rotations or degrees and speed),
      * @param properties of the block (see {@link BlocklyBlockProperties}),
@@ -74,6 +76,22 @@ public final class MotorOnAction<V> extends Action<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitMotorOnAction(this);
+    }
+
+    @Override
+    public Block astToBlock() {
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+
+        AstJaxbTransformerHelper.addField(jaxbDestination, "MOTORPORT", getPort().name());
+        AstJaxbTransformerHelper.addValue(jaxbDestination, "POWER", getParam().getSpeed());
+
+        if ( getParam().getDuration() != null ) {
+            AstJaxbTransformerHelper.addField(jaxbDestination, "MOTORROTATION", getDurationMode().name());
+            AstJaxbTransformerHelper.addValue(jaxbDestination, "VALUE", getDurationValue());
+        }
+
+        return jaxbDestination;
     }
 
 }
