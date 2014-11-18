@@ -1051,7 +1051,6 @@ function initTabs() {
  * Initialize logging
  */
 function initLogging() {
-    $('#toggle').onWrap('click', LOG.toggleVisibility, 'toggle LOG visibility');
     $('#clearLog').onWrap('click', function() {$('#log li').remove();}, 'clear LOG list');
 }
 
