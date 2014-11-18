@@ -13,6 +13,10 @@ import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.fhg.iais.roberta.brick.BrickCommunicationData;
+import de.fhg.iais.roberta.brick.BrickCommunicationData.State;
+import de.fhg.iais.roberta.brick.BrickCommunicator;
+import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
 import de.fhg.iais.roberta.persistence.AbstractProcessor;
 
 public class Util {
@@ -118,6 +122,43 @@ public class Util {
         } else {
             response.put("rc", "ERROR");
             response.put("cause", processor.getErrorMessage());
+        }
+    }
+
+    /**
+     * add information for the Javascript client to the result json, especially about the state of the robot. This method must be <b>total</b>, i.e. must
+     * <b>never</b> throw exceptions.
+     *
+     * @param response the response object to enrich with data
+     * @param httpSessionState needed to access the token
+     * @param brickCommunicator needed to access the robot's state
+     */
+    public static void addFrontendInfo(JSONObject response, HttpSessionState httpSessionState, BrickCommunicator brickCommunicator) {
+        try {
+            response.put("serverTime", new Date());
+            if ( httpSessionState != null ) {
+                String token = httpSessionState.getToken();
+                if ( token != null ) {
+                    BrickCommunicationData brickState = brickCommunicator.getSingleState(token);
+                    if ( brickState != null ) {
+                        Pair<Clock, State> infoAboutLastRequest = brickState.getInfoAboutLastRequest();
+                        if ( infoAboutLastRequest != null ) {
+                            Clock clock = infoAboutLastRequest.getFirst();
+                            State request = infoAboutLastRequest.getSecond();
+                            if ( request == State.DOWNLOAD_REQUEST_FROM_BRICK_ARRIVED ) {
+                                response.put("robot_state", "robot.waiting");
+                                if ( clock != null ) {
+                                    response.put("robot_waiting", clock.elapsedSecFormatted());
+                                }
+                            } else {
+                                response.put("robot_state", "robot.not_waiting");
+                            }
+                        }
+                    }
+                }
+            }
+        } catch ( Exception e ) {
+            LOG.error("when adding info for the client, an unexpected exception occured. Some info for the client may be missing", e);
         }
     }
 }

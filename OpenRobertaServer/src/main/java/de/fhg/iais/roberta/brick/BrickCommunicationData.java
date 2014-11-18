@@ -72,6 +72,10 @@ public class BrickCommunicationData {
         return this.programName;
     }
 
+    public Pair<Clock, State> getInfoAboutLastRequest() {
+        return Pair.of(this.lastRequestClock, this.lastRequest);
+    }
+
     public String getBrickConfigurationName() {
         return this.brickConfigurationName;
     }

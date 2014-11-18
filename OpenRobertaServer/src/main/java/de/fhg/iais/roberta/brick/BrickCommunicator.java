@@ -64,7 +64,7 @@ public class BrickCommunicator {
         return singleState.runButtonPressed(programName, brickConfigurationName);
     }
 
-    private BrickCommunicationData getSingleState(String token) {
+    public BrickCommunicationData getSingleState(String token) {
         BrickCommunicationData singleState = this.allStates.get(token);
         if ( singleState == null ) {
             LOG.info("a communication state for token " + token + " is created. THIS IS A TEMPORARY FIX"); // TODO: make brick comm more robust

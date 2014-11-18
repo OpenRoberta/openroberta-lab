@@ -80,7 +80,7 @@ public class BasicPerformanceUserInteractionTest {
         this.memoryDbSetup.runDefaultRobertaSetup();
         this.brickCommunicator = new BrickCommunicator();
         this.compilerWorkflow = new CompilerWorkflow(this.crosscompilerBasedir, this.buildXml);
-        this.restUser = new RestUser();
+        this.restUser = new RestUser(this.brickCommunicator);
         this.restProgram = new RestProgram(this.sessionFactoryWrapper, this.brickCommunicator, this.compilerWorkflow);
         this.restBlocks = new RestBlocks(new Templates(), this.brickCommunicator);
         this.downloadJar = new DownloadJar(this.brickCommunicator, this.crosscompilerBasedir);
