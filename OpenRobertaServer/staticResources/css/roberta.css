@@ -721,7 +721,6 @@ table.dataTable.no-footer {
 	background-color: #f0f0f0;
 	font-size: small;
 	overflow: auto;
-	height: 10cm;
 }
 
 .log0 {
@@ -745,7 +744,7 @@ table.dataTable.no-footer {
 }
 
 .De, .En {
-	display; inline;
+	display: inline;
 }
 
 #setLangDe {

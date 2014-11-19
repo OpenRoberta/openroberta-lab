@@ -211,7 +211,26 @@ function setToken(token) {
  *            Result-object from server call
  */
 function response(result) {
-    LOG.info('result from server: ' + JSON.stringify(result));
+    var str = "{";
+    var comma = false;
+    for (key in result) {
+        if(comma) {
+            str += ',';
+        } else {
+            comma = true;
+        }
+        str += '"' + key + '":';
+        if (result.hasOwnProperty(key)) {
+            // The output of items is limited to the first 100 characters
+            if (result[key].length > 100) {
+                str += '"' + JSON.stringify(result[key]).substring(1,100) + ' ..."';
+            } else {
+                str += JSON.stringify(result[key]);
+            }
+        }
+    }
+    str += '}';    
+    LOG.info('result from server: ' + str);
 };
 
 /**
