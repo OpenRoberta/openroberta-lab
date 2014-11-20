@@ -14,7 +14,7 @@ function initUserState() {
     userState.configurationSaved = false;
     userState.brickSaved = false;
     userState.robot = '';
-    userState.brickConnection = '';
+    userState.robotState = 'robot.dontKnow';
     userState.toolbox = 'beginner';
     userState.token = '1A2B3C4D';
 }
@@ -49,6 +49,7 @@ function saveUserToServer() {
             "role" : role
         }, function(result) {
             if (result.rc === "ok") {
+                setRobotState(result);
                 displayMessage("message3");
                 $(".ui-dialog-content").dialog("close"); // close all opened popups
             } else {
@@ -69,6 +70,7 @@ function deleteUserOnServer() {
         "accountName" : $userAccountName.val()
     }, function(result) {
         if (result.rc === "ok") {
+            setRobotState(result);
             displayMessage("message5");
             $(".ui-dialog-content").dialog("close"); // close all opened popups
         } else {
@@ -93,8 +95,8 @@ function login() {
             userState.name = response.userAccountName;
             userState.id = response.userId;
             userState.role = response.userRole;
-            displayState();
             setHeadNavigationMenuState('login');
+            setRobotState(response);
             $("#tutorials").fadeOut(700);
             $(".ui-dialog-content").dialog("close"); // close all opened popups
         } else {
@@ -112,10 +114,10 @@ function logout() {
     }, function(response) {
         if (response.rc === "ok") {
             initUserState();
-            displayState();
             $('#programNameSave').val('');
             setHeadNavigationMenuState('logout');
             initProgramEnvironment();
+            setRobotState(response);
         } else {
             displayMessage("message8");
         }
@@ -142,6 +144,7 @@ function injectBlockly(toolbox) {
             start : true
         });
         initProgramEnvironment();
+        setRobotState(toolbox);
     }
 }
 
@@ -195,6 +198,7 @@ function setToken(token) {
         }, function(response) {
             if (response.rc === "ok") {
                 userState.token = resToken;
+                setRobotState(response);
                 $(".ui-dialog-content").dialog("close"); // close all opened popups
             } else {
                 displayMessage("message9");
@@ -430,6 +434,7 @@ function loadConfigurationFromListing() {
             showConfiguration(result, true, configurationName);
             $('#head-navigation #submenu-configuration #save').removeClass('login');
             $('#head-navigation #submenu-configuration #save').removeClass('ui-state-disabled');
+            setRobotState(result);
         });
     }
 }
@@ -448,6 +453,7 @@ function deleteFromListing() {
         }, function(result) {
             $('#programNameSave').val('');
             responseAndRefreshList(result);
+            setRobotState(result);
         });
     }
 }
@@ -466,18 +472,32 @@ function deleteConfigurationFromListing() {
         }, function(result) {
             $('#configurationNameSave').val('');
             responseAndRefreshList(result);
+            setRobotState(result);
         });
     }
 }
 
+/**
+ * Show toolbox
+ * 
+ * @param {result}
+ *            result of server call
+ */
 function showToolbox(result) {
     response(result);
     if (result.rc === 'ok') {
         $('#head-navigation #displayToolbox').text(userState.toolbox);
         Blockly.updateToolbox(result.data);
+        setRobotState(result);
     }
 }
 
+/**
+ * Load toolbox from server
+ * 
+ * @param {toolbox}
+ *            toolbox to be loaded
+ */
 function loadToolbox(toolbox) {
     userState.toolbox = toolbox;
     COMM.json("/blocks", {
@@ -500,6 +520,7 @@ function showPrograms(result) {
         if (result.programNames.length > 0) {
             $table.fnAddData(result.programNames);
         }
+        setRobotState(result);
     }
 }
 
@@ -517,6 +538,7 @@ function showConfigurations(result) {
         if (result.configurationNames.length > 0) {
             $table.fnAddData(result.configurationNames);
         }
+        setRobotState(result);
     }
 }
 
@@ -711,12 +733,12 @@ function displayState() {
         $('#head-navigation #iconDisplayToolbox').css('display', 'none');
     }
 
-    if (userState.brickConnection) {
-        $('#head-navigation #displayBrickConnection').text(userState.brickConnection);
-        $('#head-navigation #iconDisplayBrickConnection').css('display', 'inline');
+    if (userState.robotState) {
+        $('#head-navigation #displayRobotState').text(userState.robotState);
+        $('#head-navigation #iconDisplayRobotState').css('display', 'inline');
     } else {
-        $('#head-navigation #displayBrickConnection').text('');
-        $('#head-navigation #iconDisplayBrickConnection').css('display', 'none');
+        $('#head-navigation #displayRobotState').text('');
+        $('#head-navigation #iconDisplayRobotState').css('display', 'none');
     }
 }
 
@@ -1060,6 +1082,21 @@ function initLogging() {
 }
 
 /**
+ * Set robot state
+ * 
+ * @param {response}
+ *            response of server call
+ */
+function setRobotState(response) {
+    var robotState = response.robot_state;
+    if (robotState === 'robot.waiting') {
+        robotState += ' for ' + response.robot_waiting;        
+    }
+    userState.robotState = robotState;
+    displayState();
+}
+
+/**
  * Translate the web page
  */
 function translate(jsdata) {   
@@ -1109,7 +1146,7 @@ function translate(jsdata) {
  * Switch to another language
  * 
  * @param {langCode}
- *            Code of lnguage to switch to
+ *            Code of language to switch to
  */
 function switchLanguage(langCode) {
     var langs = ['De', 'En'];
