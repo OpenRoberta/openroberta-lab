@@ -834,29 +834,29 @@ function initHeadNavigation() {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         switchToBlockly();
         var domId = event.target.id;
-        if (domId === 'run') {
+        if (domId === 'runProgram') {
             startProgram();
-        } else if (domId === 'check') {
+        } else if (domId === 'checkProgram') {
             checkProgram();
-        } else if (domId === 'new') {
+        } else if (domId === 'newProgram') {
             initProgramEnvironment();
             setProgram("meinProgramm");
-        } else if (domId === 'open') {
+        } else if (domId === 'openProgram') {
             $('#loadFromListing').css('display', 'inline');
             $('#deleteFromListing').css('display', 'none');
             $('#tabListing').click();
-        } else if (domId === 'save') {
+        } else if (domId === 'saveProgram') {
             saveToServer(response);
-        } else if (domId === 'saveAs') {
+        } else if (domId === 'saveAsProgram') {
             $("#save-program").dialog("open");
-        } else if (domId === 'attach') {
+        } else if (domId === 'attachProgram') {
             $("#attach-program").dialog("open");
-        } else if (domId === 'divide') {
-        } else if (domId === 'delete') {
+        } else if (domId === 'divideProgram') {
+        } else if (domId === 'deleteProgram') {
             $('#deleteFromListing').css('display', 'inline');
             $('#loadFromListing').css('display', 'none');
             $('#tabListing').click();
-        } else if (domId === 'properties') {
+        } else if (domId === 'propertiesProgram') {
         }
         return false;
     }, 'sub menu of menu "program"');
@@ -883,25 +883,25 @@ function initHeadNavigation() {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         switchToBlockly();
         var domId = event.target.id;
-        if (domId === 'check') {
+        if (domId === 'checkConfiguration') {
             checkConfiguration();
-        } else if (domId === 'standard') {
+        } else if (domId === 'standardConfiguration') {
             switchToBrickly();
-        } else if (domId === 'new') {
+        } else if (domId === 'newConfiguration') {
             setConfiguration("meineKonfiguration");
-        } else if (domId === 'open') {
+        } else if (domId === 'openConfiguration') {
             $('#loadConfigurationFromListing').css('display', 'inline');
             $('#deleteConfigurationFromListing').css('display', 'none');
             $('#tabConfigurationListing').click();
-        } else if (domId === 'save') {
+        } else if (domId === 'saveConfiguration') {
             saveConfigurationToServer(response);
-        } else if (domId === 'saveAs') {
+        } else if (domId === 'saveAsConfiguration') {
             $("#save-configuration").dialog("open");
-        } else if (domId === 'delete') {
+        } else if (domId === 'deleteConfiguration') {
             $('#deleteConfigurationFromListing').css('display', 'inline');
             $('#loadConfigurationFromListing').css('display', 'none');
             $('#tabConfigurationListing').click();
-        } else if (domId === 'properties') {
+        } else if (domId === 'propertiesConfiguration') {
         }
         return false;
     }, 'sub menu of menu "roboter" ("configuration")');
