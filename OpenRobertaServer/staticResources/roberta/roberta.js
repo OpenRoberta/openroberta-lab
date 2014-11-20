@@ -15,7 +15,7 @@ function initUserState() {
     userState.brickSaved = false;
     userState.robot = '';
     userState.brickConnection = '';
-    userState.toolbox = '';
+    userState.toolbox = 'beginner';
     userState.token = '1A2B3C4D';
 }
 
@@ -132,6 +132,7 @@ function logout() {
 function injectBlockly(toolbox) {
     response(toolbox);
     if (toolbox.rc === 'ok') {
+        $('#blocklyDiv').html('');
         Blockly.inject(document.getElementById('blocklyDiv'), {
             path : '/blockly/',
             toolbox : toolbox.data,
@@ -1030,10 +1031,6 @@ function initTabs() {
     $('#loadFromListing').onWrap('click', function() {
         loadFromListing();
     }, 'load blocks from program list');
-    COMM.json("/blocks", {
-        "cmd" : "loadT",
-        "name" : "beginner"
-    }, injectBlockly);
 
     // load configuration
     $('#loadConfigurationFromListing').onWrap('click', function() {
@@ -1119,15 +1116,17 @@ function switchLanguage(langCode) {
     for (i in langs) {
         $("." + langs[i] + "").css('display','none');
     }
-    if (langs.indexOf(langCode) > 0) {
-        $("." + langCode + "").css('display','inline');
-        userState.language = langCode;
-        $.getJSON('css/lang/' + langCode + '.json', translate);
-    } else {
-        $(".De").css('display','inline');
-        userState.language = 'De';
-        $.getJSON('css/lang/De.json', translate);
+    if (langs.indexOf(langCode) < 0) {
+        langCode = "De";
     }
+    $("." + langCode + "").css('display','inline');
+    userState.language = langCode;
+    $.getJSON('css/lang/' + langCode.toLowerCase() + '.json', translate);
+    $.getScript('blockly/msg/js/' + langCode.toLowerCase() + '.js');
+    COMM.json("/blocks", {
+        "cmd" : "loadT",
+        "name" : userState.toolbox
+    }, injectBlockly);
 }
 
 /**
