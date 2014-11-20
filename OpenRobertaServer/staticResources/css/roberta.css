@@ -717,6 +717,10 @@ table.dataTable.no-footer {
 	width: 100pt;
 }
 
+.button:hover {
+	background-color: #B7D032;
+}
+
 .log {
 	background-color: #f0f0f0;
 	font-size: small;
