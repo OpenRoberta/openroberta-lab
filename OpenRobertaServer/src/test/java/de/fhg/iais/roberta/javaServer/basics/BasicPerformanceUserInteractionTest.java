@@ -46,8 +46,8 @@ import de.fhg.iais.roberta.util.Util;
 public class BasicPerformanceUserInteractionTest {
     private static final Logger LOG = LoggerFactory.getLogger("workflow");
 
-    private static final int MAX_PARALLEL_USERS = 5;
-    private static final int MAX_TOTAL_USERS = 10;
+    private static final int MAX_PARALLEL_USERS = 30;
+    private static final int MAX_TOTAL_USERS = 400;
 
     private SessionFactoryWrapper sessionFactoryWrapper;
     private DbSetup memoryDbSetup;

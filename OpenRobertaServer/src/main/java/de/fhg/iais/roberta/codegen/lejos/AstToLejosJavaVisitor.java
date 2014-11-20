@@ -824,7 +824,17 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         this.sb.append("public class " + this.programName + " {\n");
         this.sb.append(INDENT).append(this.brickConfiguration.generateRegenerate()).append("\n\n");
         this.sb.append(INDENT).append("public static void main(String[] args) {\n");
-        this.sb.append(INDENT).append(INDENT).append("new ").append(this.programName).append("().run();\n");
+        this.sb.append(INDENT).append(INDENT).append("try {\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("new ").append(this.programName).append("().run();\n");
+        this.sb.append(INDENT).append(INDENT).append("} catch ( Exception e ) {\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lejos.hardware.lcd.TextLCD lcd = lejos.hardware.ev3.LocalEV3.get().getTextLCD();\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.clear();\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Fehler im EV3-Roboter\", 0, 2);\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Fehlermeldung\", 0, 4);\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(e.getMessage(), 0, 5);\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Press any key\", 0, 7);\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lejos.hardware.Button.waitForAnyPress();\n");
+        this.sb.append(INDENT).append(INDENT).append("}\n");
         this.sb.append(INDENT).append("}\n\n");
 
         this.sb.append(INDENT).append("public void run() {\n");
