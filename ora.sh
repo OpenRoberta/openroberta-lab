@@ -30,6 +30,9 @@ function helpFn {
   echo '                                     Needs a file name. Creates files and a directory with this name AS PREFIX.'
   echo '                                     if the database exists, it is not recreated. If a table "PROGRAM" is found'
   echo '                                     in the database, it is expected, that the setup was already done.'
+  echo '  --export PATH-TO-INSTALLATION-DIR  create a self-contained installation with an empty database'
+  echo '                                     The installation contains a top level start script "start.sh",'
+  echo '                                     that can be used without parameter or with a proerty file as parameter.'
 }
 
 function startFn {
@@ -40,6 +43,31 @@ function startFn {
   echo "executing: $run"
   cd OpenRobertaServer
   $run
+}
+
+function exportApplication {
+  exportpath="$1"
+  if [[ -e "$exportpath-qqqqqq" ]]; then
+     echo "target directory \"$exportpath\" already exists - exit 4"
+     exit 4
+  fi
+  echo "creating the target directory \"$exportpath\""
+  mkdir "$exportpath"
+  echo "creating an empty data base"
+  $0 --createemptydb "${exportpath}/db/openroberta-db"
+  serverjar="OpenRobertaServer-${oraversion}.jar"
+  webresources="OpenRobertaServer/staticResources"
+  echo "copying the jar"
+  cp "OpenRobertaServer/target/$serverjar" "$exportpath"
+  echo "copying the web resources"
+  echo cp -r "$webresources" "$exportpath"
+  echo 'creating the start script "start.sh"'
+  cat >"${exportpath}/start.sh" <<.eof
+#!/bin/bash
+run="java -cp $serverjar de.fhg.iais.roberta.main.ServerStarter \$1"
+echo "executing: \$run"
+\$run
+.eof
 }
 
 function createemptydb {
@@ -85,6 +113,8 @@ while [[ "$cmd" != '' ]]; do
    --scpev3libs|-l)    scpev3libsFn ;;
    --createemptydb|-c) dbpath="$1"; shift
                        createemptydb "$dbpath" ;;
+   --export|-e)        exportpath="$1"; shift
+                       exportApplication "$exportpath" ;;
    --start|-s)         cmd="$1"; shift
                        if [[ $cmd != '' && $cmd != -* ]]; then
                           propfile="file:$cmd"

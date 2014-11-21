@@ -38,7 +38,17 @@ public class AstToLejosJavaVisitorTest {
         + "    .build();\n\n";
     private static final String MAIN_METHOD = "" //
         + "    public static void main(String[] args) {\n"
-        + "        new Test().run();\n"
+        + "        try {\n"
+        + "            new Test().run();\n"
+        + "        } catch ( Exception e ) {\n"
+        + "            lejos.hardware.lcd.TextLCD lcd = lejos.hardware.ev3.LocalEV3.get().getTextLCD();\n"
+        + "            lcd.clear();\n"
+        + "            lcd.drawString(\"Fehler im EV3-Roboter\", 0, 2);\n"
+        + "            lcd.drawString(\"Fehlermeldung\", 0, 4);\n"
+        + "            lcd.drawString(e.getMessage(), 0, 5);\n"
+        + "            lcd.drawString(\"Press any key\", 0, 7);\n"
+        + "            lejos.hardware.Button.waitForAnyPress();\n"
+        + "        }\n"
         + "    }\n\n";
     private static final String SUFFIX = "" //
         + "        try {\n"
