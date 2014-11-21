@@ -236,7 +236,7 @@ function response(result) {
     }
     str += '}';    
     LOG.info('result from server: ' + str);
-};
+}
 
 /**
  * Handle result of server call and refresh list if necessary
@@ -256,7 +256,7 @@ function responseAndRefreshList(result) {
             "cmd" : "loadCN",
         }, showConfigurations);
     }
-};
+}
 
 /**
  * Save program to server
@@ -311,16 +311,9 @@ function saveConfigurationToServer() {
         }
     }
     if (userState.configuration) {
-        var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-        var xml_text = Blockly.Xml.domToText(xml);
         userState.configurationSaved = true;
-        LOG.info('save configuration ' + userState.configuration + ' login: ' + userState.id);
         $(".ui-dialog-content").dialog("close"); // close all opened popups
-        return COMM.json("/conf", {
-            "cmd" : "saveC",
-            "name" : userState.configuration,
-            "configuration" : xml_text
-        }, responseAndRefreshList);
+        document.getElementById('bricklyFrame').contentWindow.saveToServer(userState.configuration);
     } else {
         displayMessage("message12");
     }
@@ -360,6 +353,7 @@ function showConfiguration(result, load, name) {
         }
         Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
         LOG.info('show configuration ' + userState.configuration + ' signed in: ' + userState.id);
+        switchToBrickly();
     }
 };
 
@@ -742,12 +736,6 @@ function displayState() {
     }
 }
 
-/**
- * Inject Brickly with initial toolbox
- * 
- * @param {state}
- *            State to be set
- */
 function setHeadNavigationMenuState(state) {
     $('#head-navigation > li > ul > li').removeClass('ui-state-disabled');
     if (state === 'login') {
@@ -832,31 +820,32 @@ function initHeadNavigation() {
     // Submenu Program
     $('#head-navigation').onWrap('click', '#submenu-program > li:not(.ui-state-disabled) > span', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
-        switchToBlockly();
         var domId = event.target.id;
-        if (domId === 'runProgram') {
+        if (domId === 'runProg') {
             startProgram();
-        } else if (domId === 'checkProgram') {
+        } else if (domId === 'checkProg') {
             checkProgram();
-        } else if (domId === 'newProgram') {
+        } else if (domId === 'newProg') {
             initProgramEnvironment();
             setProgram("meinProgramm");
-        } else if (domId === 'openProgram') {
+        } else if (domId === 'openProg') {
+            switchToBlockly();
             $('#loadFromListing').css('display', 'inline');
             $('#deleteFromListing').css('display', 'none');
             $('#tabListing').click();
-        } else if (domId === 'saveProgram') {
+        } else if (domId === 'saveProg') {
             saveToServer(response);
-        } else if (domId === 'saveAsProgram') {
+        } else if (domId === 'saveAsProg') {
             $("#save-program").dialog("open");
-        } else if (domId === 'attachProgram') {
+        } else if (domId === 'attachProg') {
             $("#attach-program").dialog("open");
-        } else if (domId === 'divideProgram') {
-        } else if (domId === 'deleteProgram') {
+        } else if (domId === 'divideProg') {
+        } else if (domId === 'deleteProg') {
+            switchToBlockly();
             $('#deleteFromListing').css('display', 'inline');
             $('#loadFromListing').css('display', 'none');
             $('#tabListing').click();
-        } else if (domId === 'propertiesProgram') {
+        } else if (domId === 'propertiesProg') {
         }
         return false;
     }, 'sub menu of menu "program"');
@@ -864,7 +853,6 @@ function initHeadNavigation() {
     // Submenu Nepo
     $('#head-navigation').onWrap('click', '#submenu-nepo > li:not(.ui-state-disabled) > span', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
-        switchToBlockly();
         var domId = event.target.id;
         if (domId === 'toolboxBeginner') {
             loadToolbox('beginner');
@@ -881,27 +869,28 @@ function initHeadNavigation() {
     // Submenu Roboter (Configuration)
     $('#head-navigation').onWrap('click', '#submenu-configuration > li:not(.ui-state-disabled) > span', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
-        switchToBlockly();
         var domId = event.target.id;
-        if (domId === 'checkConfiguration') {
+        if (domId === 'checkConfig') {
             checkConfiguration();
-        } else if (domId === 'standardConfiguration') {
+        } else if (domId === 'standardConfig') {
             switchToBrickly();
-        } else if (domId === 'newConfiguration') {
+        } else if (domId === 'newConfig') {
             setConfiguration("meineKonfiguration");
-        } else if (domId === 'openConfiguration') {
+        } else if (domId === 'openConfig') {
+            switchToBlockly();
             $('#loadConfigurationFromListing').css('display', 'inline');
             $('#deleteConfigurationFromListing').css('display', 'none');
             $('#tabConfigurationListing').click();
-        } else if (domId === 'saveConfiguration') {
-            saveConfigurationToServer(response);
-        } else if (domId === 'saveAsConfiguration') {
+        } else if (domId === 'saveConfig') {
+            saveConfigurationToServer();
+        } else if (domId === 'saveAsConfig') {
             $("#save-configuration").dialog("open");
-        } else if (domId === 'deleteConfiguration') {
+        } else if (domId === 'deleteConfig') {
+            switchToBlockly();
             $('#deleteConfigurationFromListing').css('display', 'inline');
             $('#loadConfigurationFromListing').css('display', 'none');
             $('#tabConfigurationListing').click();
-        } else if (domId === 'propertiesConfiguration') {
+        } else if (domId === 'propertiesConfig') {
         }
         return false;
     }, 'sub menu of menu "roboter" ("configuration")');
@@ -909,7 +898,6 @@ function initHeadNavigation() {
     // Submenu Connection
     $('#head-navigation').onWrap('click', '#submenu-connection > li:not(.ui-state-disabled) > span', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
-        switchToBlockly();
         var domId = event.target.id;
         if (domId === 'connect') {
             $("#set-token").dialog("open");
@@ -920,11 +908,12 @@ function initHeadNavigation() {
     // Submenu Developertools
     $('#head-navigation').onWrap('click', '#submenu-developertools > li:not(.ui-state-disabled) > span', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
-        switchToBlockly();
         var domId = event.target.id;
         if (domId === 'logging') {
+            switchToBlockly();
             $('#tabLogging').click();
         } else if (domId === 'simulator') {
+            switchToBlockly();
             $('#tabSimulator').click();
         }
         return false;
@@ -933,7 +922,6 @@ function initHeadNavigation() {
     // Submenu Help
     $('#head-navigation').onWrap('click', '#submenu-help > li:not(.ui-state-disabled) > span', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
-        switchToBlockly();
         var domId = event.target.id;
         if (domId === 'help') {
             window.open("http://www.open-roberta.org/erste-schritte.html");
@@ -944,7 +932,6 @@ function initHeadNavigation() {
     // Submenu Login
     $('#head-navigation').onWrap('click', '#submenu-login > li:not(.ui-state-disabled) > span', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
-        switchToBlockly();
         var domId = event.target.id;
         if (domId === 'login') {
             $("#login-user").dialog("open");
@@ -1194,7 +1181,6 @@ function init() {
     $('#configurationNameSave').val('');
     initializeLanguages();
     switchLanguage('De');
-    displayState();
 };
 
 $(document).ready(WRAP.fn3(init, 'page init'));

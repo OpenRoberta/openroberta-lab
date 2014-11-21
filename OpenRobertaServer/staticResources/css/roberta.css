@@ -765,3 +765,10 @@ table.dataTable.no-footer {
     font-size: 70%;
 }
 
+#bricklyFrame {
+	height: 100%;
+	width: 100%;
+	border: none;
+}
+
+

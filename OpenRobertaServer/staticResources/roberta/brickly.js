@@ -13,7 +13,6 @@ function init() {
  * @param {response}
  *            toolbox
  */
-
 function injectBrickly(toolbox) {
     response(toolbox);
     if (toolbox.rc === 'ok') {
@@ -40,30 +39,19 @@ function injectBrickly(toolbox) {
     }
 }
 
-function incrCounter(e) {
-    var $counter = $('#counter');
-    var counter = Number($counter.text());
-    $counter.text('' + (counter + 1));
-}
-
 function response(result) {
     LOG.info('result from server: ' + JSON.stringify(result));
-    incrCounter();
 };
 
-function saveToServer() {
+function saveToServer(name) {
     var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace, 'brick_set');
     var xml_text = Blockly.Xml.domToText(xml);
-    alert("to save: \n" + xml_text);
-    LOG.info('save brick configuration');
-    back();
-    // TODO
-    // var $name = $('#programName');
-    // COMM.json("/conf", {
-    // "cmd" : "saveP",
-    // "name" : $name.val(),
-    // "program" : xml_text
-    // }, response);
+    LOG.info('save brick configuration ' + name);
+    COMM.json("/conf", {
+        "cmd" : "saveC",
+        "name" : name,
+        "configuration" : xml_text
+    });
 }
 
 function loadToolbox(toolbox) {
@@ -75,7 +63,6 @@ function loadToolbox(toolbox) {
 
 function checkProgram() {
     // TODO do we need this here?
-    alert("Your configuration will be checked soon ;-)");
 }
 
 function back() {
