@@ -35,12 +35,14 @@ limitations under the License.
         <jersey.version>1.18.2</jersey.version>
         <jetty.version>9.2.3.v20140905</jetty.version>
         <hibernate.version>4.2.7.Final</hibernate.version>
+        <json.version>20140107</json.version>
     </properties>
     <modules>
-        <module>../Resources</module>
         <module>../OpenRobertaShared</module>
-        <module>../OpenRobertaServer</module>
         <module>../OpenRobertaRuntime</module>
+        <module>../EV3Menu</module>
+        <module>../OpenRobertaServer</module>
+        <module>../Resources</module>
     </modules>
     <repositories>
         <repository>
@@ -57,6 +59,16 @@ limitations under the License.
     </repositories>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>de.fhg.iais.openroberta</groupId>
+                <artifactId>EV3Menu</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.fhg.iais.openroberta</groupId>
+                <artifactId>OpenRobertaServer</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>de.fhg.iais.openroberta</groupId>
                 <artifactId>OpenRobertaShared</artifactId>
@@ -150,7 +162,7 @@ limitations under the License.
             <dependency>
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr4</artifactId>
-                <version>4.2</version>
+                <version>4.3</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -165,7 +177,7 @@ limitations under the License.
             <dependency>
                 <groupId>org.json</groupId>
                 <artifactId>json</artifactId>
-                <version>20140107</version>
+                <version>${json.version}</version>
             </dependency>
             <dependency>
                 <groupId>xmlunit</groupId>

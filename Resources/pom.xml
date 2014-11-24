@@ -16,15 +16,86 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
         <groupId>de.fhg.iais.openroberta</groupId>
         <artifactId>OpenRobertaParent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../OpenRobertaParent</relativePath>
-  </parent>
-  <artifactId>Resources</artifactId>
-  <name>Resources</name>
-  <description>resources as licence information, formatter, installation files</description>
-  <packaging>pom</packaging>
+    </parent>
+    <artifactId>Resources</artifactId>
+    <name>Resources</name>
+    <description>resources as licence information, formatter, installation files</description>
+    <packaging>pom</packaging>
+    <dependencies>
+        <dependency>
+            <groupId>de.fhg.iais.openroberta</groupId>
+            <artifactId>EV3Menu</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.fhg.iais.openroberta</groupId>
+            <artifactId>OpenRobertaServer</artifactId>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.9</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>de.fhg.iais.openroberta</groupId>
+                                    <artifactId>OpenRobertaServer</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>de.fhg.iais.openroberta</groupId>
+                                    <artifactId>EV3Menu</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>de.fhg.iais.openroberta</groupId>
+                                    <artifactId>OpenRobertaShared</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>de.fhg.iais.openroberta</groupId>
+                                    <artifactId>OpenRobertaRuntime</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.json</groupId>
+                                    <artifactId>json</artifactId>
+                                    <version>${json.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>resources</outputDirectory>
+                            <overWriteReleases>true</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -1,7 +1,6 @@
 #!/bin/bash
 
 ipaddr='10.0.1.1'
-oraversion='1.0.0-SNAPSHOT'
 
 function helpFn {
   echo 'THIS SCRIPT IS FOR DEVELOPERS, WHO PULLED THE GIT-REPOSITORY AND WORK WITH THE OpenRoberta ARTIFACT';
@@ -9,13 +8,11 @@ function helpFn {
   echo '';
   echo 'you may customize the script by defining default values. Values are now:';
   echo 'ipaddr='"$ipaddr";
-  echo 'oraversion='"$oraversion";
   echo '';
   echo 'miscelleneous commands';
   echo '';
   echo '  --help                             get help';
   echo '  --ipaddr {IP-ADDR}                 set the ip addr of the EV3 brick for further commands';
-  echo '  --version {ORA-VERSION}            set the version of the OpenRoberta artifact for further commands';
   echo '';
   echo 'commands available after a successful mvn clean install';
   echo '';
@@ -29,15 +26,15 @@ function helpFn {
   echo '  --createemptydb PATH-TO-DB         create an empty database with all tables needed for the OpenRoberta server'
   echo '                                     Needs a file name. Creates files and a directory with this name AS PREFIX.'
   echo '                                     if the database exists, it is not recreated. If a table "PROGRAM" is found'
-  echo '                                     in the database, it is expected, that the setup was already done.'
+  echo '                                     in an existing database, it is assumed, that the setup has already been done.'
   echo '  --export PATH-TO-INSTALLATION-DIR  create a self-contained installation with an empty database'
   echo '                                     The installation contains a top level start script "start.sh",'
-  echo '                                     that can be used without parameter or with a proerty file as parameter.'
+  echo '                                     that can be used without parameter or with a property file as parameter.'
 }
 
 function startFn {
   propfile="$1"
-  serverjar="target/OpenRobertaServer-${oraversion}.jar"
+  serverjar="Resources/resources/OpenRobertaServer.jar"
   main='de.fhg.iais.roberta.main.ServerStarter'
   run="java -cp ${serverjar} ${main} ${propfile}"
   echo "executing: $run"
@@ -47,7 +44,7 @@ function startFn {
 
 function exportApplication {
   exportpath="$1"
-  if [[ -e "$exportpath-qqqqqq" ]]; then
+  if [[ -e "$exportpath" ]]; then
      echo "target directory \"$exportpath\" already exists - exit 4"
      exit 4
   fi
@@ -55,24 +52,64 @@ function exportApplication {
   mkdir "$exportpath"
   echo "creating an empty data base"
   $0 --createemptydb "${exportpath}/db/openroberta-db"
-  serverjar="OpenRobertaServer-${oraversion}.jar"
-  webresources="OpenRobertaServer/staticResources"
-  echo "copying the jar"
-  cp "OpenRobertaServer/target/$serverjar" "$exportpath"
   echo "copying the web resources"
-  echo cp -r "$webresources" "$exportpath"
-  echo 'creating the start script "start.sh"'
+  webresources="OpenRobertaServer/staticResources"
+  cp -r "$webresources" "$exportpath"
+  echo 'creating directories for user programs and resources'
+  mkdir  "${exportpath}/userProjects"
+  mkdir  "${exportpath}/resources"
+  mkdir  "${exportpath}/lib"
+  echo "copying resources"
+  cp OpenRobertaServer/src/main/resources/openRoberta.properties "$exportpath/resources"
+  cp OpenRobertaRuntime/build.xml "${exportpath}/resources"
+  cp Resources/resources/OpenRobertaServer.jar "$exportpath/lib"
+  cp Resources/resources/json.jar "${exportpath}/lib"
+  cp Resources/resources/OpenRobertaRuntime.jar "${exportpath}/lib"
+  cp Resources/resources/OpenRobertaShared.jar "${exportpath}/lib"
+  cp Resources/resources/EV3Menu.jar "${exportpath}/lib"
+  echo 'creating the start scripts "start.sh" and "start.bat"'
+# -------------- begin of here documents --------------------------------------------------
+  cat >"${exportpath}/openRoberta.properties" <<.eof
+server.jetty.port = 1999
+version = your_version
+
+crosscompiler.basedir    = userProjects/
+crosscompiler.build.xml  = resources/build.xml
+
+hibernate.connection.url = jdbc:hsqldb:file:db/openroberta-db
+
+# brick update rest service file references
+runtime.jar.dir.file = "lib/OpenRobertaRuntime.jar"
+shared.jar.dir.file = "lib/OpenRobertaShared.jar"
+ev3menu.jar.dir.file = "lib/EV3Menu.jar"
+jsonlib.jar.dir.file = "lib/json.jar"
+.eof
   cat >"${exportpath}/start.sh" <<.eof
 #!/bin/bash
-run="java -cp $serverjar de.fhg.iais.roberta.main.ServerStarter \$1"
+properties="\$1"
+if [[ "\$properties" == "" ]]; then
+   properties="resources/openRoberta.properties"
+fi
+run="java -cp lib/OpenRobertaServer.jar de.fhg.iais.roberta.main.ServerStarter file:\$properties"
 echo "executing: \$run"
 \$run
 .eof
+  cat >"${exportpath}/start.bat" <<.eof
+@echo off
+set "PROPERTIES=%1"
+if not "%PROPERTIES%" == "" goto gotProperties
+set "PROPERTIES=resources\openRoberta.properties"
+:gotProperties
+set "RUN=java -cp lib\OpenRobertaServer.jar de.fhg.iais.roberta.main.ServerStarter file:%PROPERTIES%"
+echo executing: "%RUN%"
+%RUN%
+.eof
+# -------------- end of here documents ----------------------------------------------------
 }
 
 function createemptydb {
   dbpath="$1"
-  serverjar="OpenRobertaServer/target/OpenRobertaServer-${oraversion}.jar"
+  serverjar="Resources/resources/OpenRobertaServer.jar"
   main='de.fhg.iais.roberta.main.Administration'
   run="java -cp ${serverjar} ${main} createemptydb ${dbpath}"
   echo "executing: $run"
@@ -80,15 +117,15 @@ function createemptydb {
 }
 
 function scpev3menuFn {
-  run="scp EV3Menu/dist/EV3Menu.jar root@${ipaddr}:/home/root/lejos/bin/utils"
+  run="scp Resources/resources/EV3Menu.jar root@${ipaddr}:/home/root/lejos/bin/utils"
   echo "executing: ${run}"
   $run
 }
 
 function scpev3libsFn {
-  runtime="OpenRobertaRuntime/target/OpenRobertaRuntime-${oraversion}.jar"
-  shared="OpenRobertaShared/target/OpenRobertaShared-${oraversion}.jar"
-  json='EV3Menu/lib/json-20140107.jar'
+  runtime="Resources/resources/OpenRobertaRuntime.jar"
+  shared="Resources/resources/OpenRobertaShared.jar"
+  json='Resources/resources/json.jar'
   run="ssh root@${ipaddr} mkdir -p /home/roberta/lib"
   echo "executing: ${run}"
   $run
@@ -108,7 +145,6 @@ while [[ "$cmd" != '' ]]; do
    case "$cmd" in
    --help|-h)          helpFn ;;
    --ipaddr|-i)        ipaddr="$1"; shift ;;
-   --version|-v)       oraversion="$1"; shift ;;
    --scpev3menu|-m)    scpev3menuFn ;;
    --scpev3libs|-l)    scpev3libsFn ;;
    --createemptydb|-c) dbpath="$1"; shift

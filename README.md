@@ -1,4 +1,4 @@
-# Open Roberta: Getting started.
+# Open Roberta: Getting started with an own deployment of the OpenRoberta programming environment.
 ***
 
 
@@ -20,7 +20,7 @@ Step 1) Compilation
 ***
 
 
-``$ cd /OpenRobertaParent ``
+``$ cd /OpenRobertaParent # move from the root folder to the folder of the (maven) parent project``
 
 ``$ mvn clean install  ``
 
@@ -51,15 +51,28 @@ A successful build looks like:
 
 ***
 
-Step 2) Starting your own server instance.
+Step 2a) Starting your own server instance, if a unix-like shell is available (on either lin* or win*).
 
 ***
 
-``$ cd ..``
+``$ cd .. # return to the root folder``
 
-``$ cd OpenRobertaServer``
 
-``$ java -jar target/OpenRobertaServer-1.0.0-SNAPSHOT.jar``
+``$ ./ora.sh --start # start the server, using default properties. Use --help for more options.``
+
+***
+
+***
+
+Step 2b) Starting your own server instance, without using the shell script
+
+***
+
+``$ cd .. # return to the root folder``
+
+``$ cd OpenRobertaServer # go to the folder of the server resources and the database``
+
+``$ java -cp target/OpenRobertaServer-1.0.0-SNAPSHOT.jar de.fhg.iais.roberta.main.ServerStarter # start``
 
 ***
 

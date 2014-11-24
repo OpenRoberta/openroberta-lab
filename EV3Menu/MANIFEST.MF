@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Built-By: rbudde
+Build-Jdk: 1.7.0_51
+Main-Class: lejos.ev3.startup.GraphicStartup
+Class-Path: /home/root/lejos/libjna/usr/share/java/jna.jar /home/root/lejos/lib/ev3classes.jar /home/root/lejos/lib/dbusjava.jar /home/roberta/lib/json.jar
