@@ -1136,21 +1136,25 @@ function translate(jsdata) {
  *            Code of language to switch to
  */
 function switchLanguage(langCode) {
-    var langs = ['De', 'En'];
-    for (i in langs) {
-        $("." + langs[i] + "").css('display','none');
+    if (userState.language != langCode) {
+        var langs = ['De', 'En'];
+        for (i in langs) {
+            $("." + langs[i] + "").css('display','none');
+            $("#setLang" + langs[i] + "").css('font-size','50%');
+        }
+        if (langs.indexOf(langCode) < 0) {
+            langCode = "De";
+        }
+        $("." + langCode + "").css('display','inline');
+        $("#setLang" + langCode + "").css('font-size','70%');
+        userState.language = langCode;
+        $.getJSON('css/lang/' + langCode.toLowerCase() + '.json', translate);
+        $.getScript('blockly/msg/js/' + langCode.toLowerCase() + '.js');
+        COMM.json("/blocks", {
+            "cmd" : "loadT",
+            "name" : userState.toolbox
+        }, injectBlockly);
     }
-    if (langs.indexOf(langCode) < 0) {
-        langCode = "De";
-    }
-    $("." + langCode + "").css('display','inline');
-    userState.language = langCode;
-    $.getJSON('css/lang/' + langCode.toLowerCase() + '.json', translate);
-    $.getScript('blockly/msg/js/' + langCode.toLowerCase() + '.js');
-    COMM.json("/blocks", {
-        "cmd" : "loadT",
-        "name" : userState.toolbox
-    }, injectBlockly);
 }
 
 /**
