@@ -550,7 +550,7 @@
     "MENU.NEPO" : "Nepo",
     	"MENU.BEGINNER" : "Beginner",
     	"MENU.EXPERT" : "Expert",
-    "MENU.ROBOT" : "Roboter",
+    "MENU.ROBOT" : "Robot",
 		"MENU.DEFAULT_CONFIGURATION" : "default configuration",
     "MENU.CONNECTION" : "Connection",
     	"MENU.CONNECT" : "connect ...",

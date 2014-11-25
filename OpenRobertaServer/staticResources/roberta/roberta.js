@@ -1,3 +1,4 @@
+var bricklyActive = false;
 var userState = {};
 
 /**
@@ -339,6 +340,7 @@ function showProgram(result, load, name) {
         }
         Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
         LOG.info('show program ' + userState.program + ' signed in: ' + userState.id);
+        bricklyActive = false;
     }
 };
 
@@ -353,6 +355,7 @@ function showConfiguration(result, load, name) {
         Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
         LOG.info('show configuration ' + userState.configuration + ' signed in: ' + userState.id);
         switchToBrickly();
+        bricklyActive = true;
     }
 };
 
@@ -874,6 +877,7 @@ function initHeadNavigation() {
             checkConfiguration();
         } else if (domId === 'standardConfig') {
             switchToBrickly();
+            bricklyActive = true;
         } else if (domId === 'newConfig') {
             setConfiguration("meineKonfiguration");
         } else if (domId === 'openConfig') {
@@ -1056,8 +1060,12 @@ function initTabs() {
         deleteConfigurationFromListing();
     }, 'delete configuration from configurations list');
 
-    $('.backToBlockly').onWrap('click', function() {
-        $('#tabBlockly').click();
+    $('.backButton').onWrap('click', function() {
+        if (bricklyActive) {
+            switchToBrickly();
+        } else {
+            $('#tabBlockly').click();
+        }
     });
 }
 
@@ -1116,7 +1124,7 @@ function translate(jsdata) {
         } else if (key  === 'POPUP.ATTENTION') {
             $('#show-message').dialog('option', 'title', value);
         } else if (key  === 'BUTTON.BACK') {
-            $('.backToBlockly').attr('value', value);
+            $('.backButton').attr('value', value);
         } else if (key  === 'BUTTON.LOAD') {
             $('.buttonLoad').attr('value', value);
         } else if (key  === 'BUTTON.DO_DELETE') {
