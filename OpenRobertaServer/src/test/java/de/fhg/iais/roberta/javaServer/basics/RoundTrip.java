@@ -175,7 +175,7 @@ public class RoundTrip {
         WebElement onHoverProgramElement1 = RoundTrip.driver.findElement(By.cssSelector("span.head-navi-text"));
         actions.moveToElement(onHoverProgramElement1);
         actions.perform();
-        WebElement userProgramSaveAsElement = (new WebDriverWait(RoundTrip.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("saveAs")));
+        WebElement userProgramSaveAsElement = (new WebDriverWait(RoundTrip.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("saveAsProg")));
         userProgramSaveAsElement.click();
         RoundTrip.driver.findElement(By.id("programNameSave")).clear();
         RoundTrip.driver.findElement(By.id("programNameSave")).sendKeys(programName);
@@ -194,7 +194,7 @@ public class RoundTrip {
         actions.perform();
 
         int index = Arrays.binarySearch(blocklyPrograms, program);
-        WebElement userProgramOpenElement = (new WebDriverWait(RoundTrip.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("open")));
+        WebElement userProgramOpenElement = (new WebDriverWait(RoundTrip.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("openProg")));
         userProgramOpenElement.click();
         WebElement programTable = RoundTrip.driver.findElement(By.id("programNameTable"));
         WebElement tr = programTable.findElements(By.tagName("tr")).get(index + 1);

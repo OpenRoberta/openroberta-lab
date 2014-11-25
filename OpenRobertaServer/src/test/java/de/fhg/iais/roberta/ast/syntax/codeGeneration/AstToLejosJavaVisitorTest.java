@@ -17,7 +17,8 @@ import de.fhg.iais.roberta.hardwarecomponents.ev3.HardwareComponentEV3Sensor;
 
 public class AstToLejosJavaVisitorTest {
     private static final String MAIN_CLASS = "" //
-        + "public class Test {\n";
+        + "public class Test {\n"
+        + "private static final boolean TRUE = true;";
     private static final String IMPORTS = "" //
         + "package generated.main;\n\n"
         + "import de.fhg.iais.roberta.ast.syntax.*;\n"
@@ -122,10 +123,12 @@ public class AstToLejosJavaVisitorTest {
             + "            hal.setUltrasonicSensorMode(SensorPort.S4, UltrasonicSensorMode.DISTANCE);\n"
             + "            hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
             + "        } else if ( 0 == hal.getColorSensorValue(SensorPort.S3) ) {\n"
+            + "        if ( TRUE ) {\n"
             + "            while ( true ) {\n"
             + "                hal.drawPicture(ShowPicture.EYESOPEN, 0, 0);\n\n"
             + "                hal.turnOnRegulatedMotor(ActorPort.B,30);"
             + "            }\n"
+            + "        }\n"
             + "        }\n"
             + "        hal.playFile(1);\n"
             + "        hal.setVolume(50);\n"
@@ -158,9 +161,11 @@ public class AstToLejosJavaVisitorTest {
             + "                hal.drawPicture(ShowPicture.FLOWERS, 15, 15);\n"
             + "            } else {\n"
             + "                hal.setUltrasonicSensorMode(SensorPort.S4, UltrasonicSensorMode.DISTANCE);\n"
+            + "            if ( TRUE ) {\n"
             + "                while ( !hal.isPressedAndReleased(BrickKey.UP) ) {\n\n"
             + "                     hal.turnOnRegulatedMotor(ActorPort.B,30);"
             + "                }\n"
+            + "            }\n"
             + "            }\n"
             + "        }\n"
             + SUFFIX
@@ -191,10 +196,12 @@ public class AstToLejosJavaVisitorTest {
                 + "            hal.ledOff();\n"
                 + "        } else {\n"
                 + "            hal.resetGyroSensor(SensorPort.S2);\n"
+                + "        if ( TRUE ) {\n"
                 + "            while ( hal.isPressed(SensorPort.S1) ) {\n"
                 + "                hal.drawPicture(ShowPicture.OLDGLASSES, 0, 0);\n"
                 + "                hal.clearDisplay();\n"
                 + "            }\n"
+                + "         }\n"
                 + "            hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
                 + "        }\n"
                 + SUFFIX
