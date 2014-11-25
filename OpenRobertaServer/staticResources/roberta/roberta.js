@@ -116,7 +116,6 @@ function logout() {
             initUserState();
             $('#programNameSave').val('');
             setHeadNavigationMenuState('logout');
-            initProgramEnvironment();
             setRobotState(response);
         } else {
             displayMessage("MESSAGE.LOGOUT_ERROR");
