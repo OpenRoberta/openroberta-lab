@@ -1099,8 +1099,10 @@ function translate(jsdata) {
     {
         var key = $(this).attr('lkey');
         var value = jsdata[key];
-        if (key  === 'MENU.LOGIN') {
+        //console.log('key/value = ' + key + '/' + value);
+        if (key === 'MENU.LOGIN') {
             $('#login-user').dialog('option', 'title', value);
+            $(this).html(value);            
         } else if (key  === 'POPUP.DO_LOGIN') {
             $('#login-user #doLogin').attr('value', value);
         } else if (key  === 'POPUP.REGISTER_USER') {
@@ -1131,9 +1133,23 @@ function translate(jsdata) {
             $('.buttonDelete').attr('value', value);
         } else if (key  === 'BUTTON.EMPTY_LIST') {
             $('#clearLog').attr('value', value);
+        } else if (key  === 'HINT.LANGUAGE_GERMAN') {
+            $('#setLangDe').prop('title', value);
+        } else if (key  === 'HINT.LANGUAGE_ENGLISH') {
+            $('#setLangEn').prop('title', value);
+        } else if (key  === 'HINT.ROBOT_STATE') {
+            $('#displayRobotState').prop('title', value);
+        } else if (key  === 'HINT.TOOLBOX') {
+            $('#displayToolbox').prop('title', value);
+        } else if (key  === 'HINT.USER') {
+            $('#displayLogin').prop('title', value);
+        } else if (key  === 'HINT.PROGRAM') {
+            $('#displayProgram').prop('title', value);
+        } else if (key  === 'HINT.CONFIGURATION') {
+            $('#displayConfiguration').prop('title', value);
+        } else {
+            $(this).html(value);            
         }
-        //console.log('key/value = ' + key + '/' + value);
-        $(this).html(value);
     });
 };
 
@@ -1148,13 +1164,15 @@ function switchLanguage(langCode) {
         var langs = ['De', 'En'];
         for (i in langs) {
             $("." + langs[i] + "").css('display','none');
-            $("#setLang" + langs[i] + "").css('font-size','50%');
+            $("#setLang" + langs[i] + "").removeClass('bigFlag');
+            $("#setLang" + langs[i] + "").addClass('smallFlag');
         }
         if (langs.indexOf(langCode) < 0) {
             langCode = "De";
         }
         $("." + langCode + "").css('display','inline');
-        $("#setLang" + langCode + "").css('font-size','70%');
+        $("#setLang" + langCode + "").removeClass('smallFlag');
+        $("#setLang" + langCode + "").addClass('bigFlag');
         userState.language = langCode;
         $.getJSON('blockly/msg/json/' + langCode.toLowerCase() + '.json', translate);
         $.getScript('blockly/msg/js/' + langCode.toLowerCase() + '.js');

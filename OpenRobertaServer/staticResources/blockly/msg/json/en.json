@@ -599,5 +599,12 @@
     "MESSAGE.NAME_ERROR" : "You have to choose another name.",
     "MESSAGE.EMPTY_NAME" : "Please fill in a name.",
     "MESSAGE.PROGRAM_NOT_CHECKABLE" : "Your program cann't be checked.",
-    "MESSAGE.CONFIGURATION_NOT_CHECKABLE" : "Your configuration cann't be checked."
+    "MESSAGE.CONFIGURATION_NOT_CHECKABLE" : "Your configuration cann't be checked.",
+    "HINT.LANGUAGE_GERMAN" : "German",
+    "HINT.LANGUAGE_ENGLISH" : "English",
+    "HINT.ROBOT_STATE" : "Robot state",
+    "HINT.TOOLBOX" : "Toolbox",
+    "HINT.USER" : "User",
+    "HINT.PROGRAM" : "Program",
+    "HINT.CONFIGURATION" : "Configuration"
 }

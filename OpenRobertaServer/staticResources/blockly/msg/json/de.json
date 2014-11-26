@@ -581,5 +581,12 @@
     "MESSAGE.NAME_ERROR" : "Du musst einen anderen Namen nehmen.",
     "MESSAGE.EMPTY_NAME" : "Du musst einen Namen eingeben.",
     "MESSAGE.PROGRAM_NOT_CHECKABLE" : "Dein Programm kann zur Zeit noch nicht geprüft werden.",
-    "MESSAGE.CONFIGURATION_NOT_CHECKABLE" : "Deine Konfiguration kann zur Zeit noch nicht geprüft werden."
+    "MESSAGE.CONFIGURATION_NOT_CHECKABLE" : "Deine Konfiguration kann zur Zeit noch nicht geprüft werden.",
+    "HINT.LANGUAGE_GERMAN" : "Deutsch",
+    "HINT.LANGUAGE_ENGLISH" : "Englisch",
+    "HINT.ROBOT_STATE" : "Roboter-Status",
+    "HINT.TOOLBOX" : "Werkzeugkasten",
+    "HINT.USER" : "Angemeldeter Benutzer",
+    "HINT.PROGRAM" : "Programm",
+    "HINT.CONFIGURATION" : "Konfiguration"
 	}
