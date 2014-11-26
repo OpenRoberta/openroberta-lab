@@ -79,7 +79,11 @@ public class Hal {
      * @return units per second
      */
     private double toUnitsPerSecond(int speedPercent) {
-        return this.wheelDiameter * 3.14 / 100.0 * speedPercent;
+        return getMaxTravelSpeed() * (speedPercent);
+    }
+
+    private double getMaxTravelSpeed() {
+        return 720.0 / (360.0 / this.wheelDiameter * 3.14);
     }
 
     /**
@@ -305,6 +309,7 @@ public class Hal {
                 this.deviceHandler.getRegulatedMotor(left),
                 this.deviceHandler.getRegulatedMotor(right),
                 isReverse);
+
         dPilot.setTravelSpeed(toUnitsPerSecond(speedPercent));
         switch ( direction ) {
             case FOREWARD:

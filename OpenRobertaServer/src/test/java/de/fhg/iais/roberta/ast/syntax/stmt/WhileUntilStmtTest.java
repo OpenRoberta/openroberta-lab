@@ -9,20 +9,20 @@ public class WhileUntilStmtTest {
     @Test
     public void whileUntilStmt() throws Exception {
         String a =
-            "\nwhile ( true ) {\n"
-                + "}\n"
-                + "while ( !(0 == 0) ) {\n"
-                + "}\n"
-                + "while ( !true ) {\n"
-                + "}\n"
-                + "while ( !(15 == 20) ) {\n"
+            "\nif ( TRUE ) {\nwhile ( true ) {\n"
+                + "}}\n"
+                + "if ( TRUE ) {\nwhile ( !(0 == 0) ) {\n"
+                + "}}\n"
+                + "if ( TRUE ) {\nwhile ( !true ) {\n"
+                + "}}\n"
+                + "if ( TRUE ) {\nwhile ( !(15 == 20) ) {\n"
                 + "    item MATH_CHANGE 1;\n"
-                + "}\n"
-                + "while ( !true ) {\n"
-                + "    while ( !(15 == 20) ) {\n"
+                + "}}\n"
+                + "if ( TRUE ) {\nwhile ( !true ) {\n"
+                + "    if ( TRUE ) {\nwhile ( !(15 == 20) ) {\n"
                 + "        item MATH_CHANGE 1;\n"
-                + "    }\n"
-                + "}";
+                + "    }}\n"
+                + "}}";
 
         Helper.assertCodeIsOk(a, "/syntax/stmt/whileUntil_stmt.xml");
     }
@@ -30,12 +30,14 @@ public class WhileUntilStmtTest {
     @Test
     public void loopForever() throws Exception {
         String a = "" //
+            + "if ( TRUE ) {\n"
             + "\nwhile ( true ) {\n"
             + "    System.out.println(1);\n"
-            + "}\n"
+            + "}}\n"
+            + "if ( TRUE ) {\n"
             + "while ( true ) {\n"
             + "    System.out.println(\"\");\n"
-            + "}";
+            + "}}";
 
         Helper.assertCodeIsOk(a, "/ast/control/repeat_stmt_loopForever.xml");
     }

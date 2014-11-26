@@ -227,6 +227,9 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
             case "java.lang.String":
                 this.sb.append("\"\"");
                 break;
+            case "java.lang.Boolean":
+                this.sb.append("true");
+                break;
             default:
                 this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
                 break;
@@ -301,11 +304,16 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
+        boolean additionalClosingBracket = false;
         switch ( repeatStmt.getMode() ) {
             case UNTIL:
             case WHILE:
             case FOREVER:
+                this.sb.append("if ( TRUE ) {");
+                incrIndentation();
+                nlIndent();
                 generateCodeFromStmtCondition("while", repeatStmt.getExpr());
+                additionalClosingBracket = true;
                 break;
             case TIMES:
             case FOR:
@@ -325,6 +333,11 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         decrIndentation();
         nlIndent();
         this.sb.append("}");
+        if ( additionalClosingBracket ) {
+            decrIndentation();
+            nlIndent();
+            this.sb.append("}");
+        }
         return null;
     }
 
@@ -822,6 +835,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         this.sb.append("import de.fhg.iais.roberta.hardwarecomponents.ev3.*;\n");
         this.sb.append("import de.fhg.iais.roberta.brickconfiguration.ev3.*;\n");
         this.sb.append("public class " + this.programName + " {\n");
+        this.sb.append("private static final boolean TRUE = true;\n");
         this.sb.append(INDENT).append(this.brickConfiguration.generateRegenerate()).append("\n\n");
         this.sb.append(INDENT).append("public static void main(String[] args) {\n");
         this.sb.append(INDENT).append(INDENT).append("try {\n");
