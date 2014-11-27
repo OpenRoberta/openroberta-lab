@@ -314,6 +314,7 @@ function saveConfigurationToServer() {
         userState.configurationSaved = true;
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         document.getElementById('bricklyFrame').contentWindow.saveToServer(userState.configuration);
+        responseAndRefreshList();
     } else {
         displayMessage("MESSAGE.EMPTY_NAME");
     }
@@ -561,22 +562,22 @@ function beforeActivateTab(event, ui) {
  */
 function initProgramNameTable() {
     var columns = [ {
-        "sTitle" : "Name des Programms",
+        "sTitle" : "<span lkey='DATATABLE.PROGRAM_NAME'>Name des Programms</span>",
         "sClass" : "programs"
     }, {
-        "sTitle" : "Erzeugt von",
+        "sTitle" : "<span lkey='DATATABLE.CREATED_BY'>Erzeugt von</span>",
         "sClass" : "programs"
     }, {
-        "sTitle" : "Blöcke",
+        "sTitle" : "<span lkey='DATATABLE.BLOCKS'>Blöcke</span>",
         "sClass" : "programs"
     }, {
-        "sTitle" : "Icon",
+        "sTitle" : "<span lkey='DATATABLE.ICON'>Icon</span>",
         "sClass" : "programs"
     }, {
-        "sTitle" : "Erzeugt am",
+        "sTitle" : "<span lkey='DATATABLE.CREATED_ON'>Erzeugt am</span>",
         "sClass" : "programs"
     }, {
-        "sTitle" : "Letzte Aktualisierung",
+        "sTitle" : "<span lkey='DATATABLE.ACTUALIZATION'>Letzte Aktualisierung</span>",
         "sClass" : "programs"
     }, ];
     var $programs = $('#programNameTable');
@@ -584,16 +585,22 @@ function initProgramNameTable() {
         "sDom" : '<lip>t<r>',
         "aaData" : [],
         "aoColumns" : columns,
-        "oLanguage" : {
-            "sSearch" : "Search all columns:"
-        },
         "bJQueryUI" : true,
         "sPaginationType" : "full_numbers",
         "bPaginate" : true,
         "iDisplayLength" : 20,
         "oLanguage" : {
-            "sLengthMenu" : 'Zeige <select>' + '<option value="10">10</option><option value="20">20</option><option value="25">25</option>'
-                    + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>' + '</select> Programme/Revisionen'
+            "sLengthMenu" : '<span lkey="DATATABLE.SHOW">Zeige</span> <select>' + '<option value="10">10</option><option value="20">20</option><option value="25">25</option>'
+                    + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>' + '</select> <span lkey="DATATABLE.PROGRAMS">Programme</span>',
+            "oPaginate": {
+                "sFirst": "<span lkey='DATATABLE.FIRST'>Erste</span>",
+                "sPrevious": "<span lkey='DATATABLE.PREVIOUS'>Vorige</span>",
+                "sNext": "<span lkey='DATATABLE.NEXT'>Nächste</span>",
+                "sLast": "<span lkey='DATATABLE.LAST'>Letzte</span>"
+            },
+            "sEmptyTable": "<span lkey='DATATABLE.EMPTY_TABLE'>Die Tabelle ist leer</span>",
+            "sInfo": "<span lkey='DATATABLE.SHOWING'>Zeige</span> _START_ <span lkey='DATATABLE.TO'>bis</span> _END_ <span lkey='DATATABLE.OF'>von</span> _TOTAL_ <span lkey='DATATABLE.ENTRIES'>Einträgen</span>",
+            "sInfoEmpty": "&nbsp;"
         },
         "fnDrawCallback" : function() {
         }
@@ -614,19 +621,19 @@ function initProgramNameTable() {
  */
 function initConfigurationNameTable() {
     var columns = [ {
-        "sTitle" : "Name der Konfiguration",
+        "sTitle" : "<span lkey='DATATABLE.CONFIGURATION_NAME'>Name der Konfiguration</span>",
         "sClass" : "configurations"
     }, {
-        "sTitle" : "Erzeugt von",
+        "sTitle" : "<span lkey='DATATABLE.CREATED_BY'>Erzeugt von</span>",
         "sClass" : "configurations"
     }, {
-        "sTitle" : "Icon",
+        "sTitle" : "<span lkey='DATATABLE.ICON'>Icon</span>",
         "sClass" : "configurations"
     }, {
-        "sTitle" : "Erzeugt am",
+        "sTitle" : "<span lkey='DATATABLE.CREATED_ON'>Erzeugt am</span>",
         "sClass" : "configurations"
     }, {
-        "sTitle" : "Letzte Aktualisierung",
+        "sTitle" : "<span lkey='DATATABLE.ACTUALIZATION'>Letzte Aktualisierung</span>",
         "sClass" : "configurations"
     }, ];
     var $configurations = $('#configurationNameTable');
@@ -634,16 +641,22 @@ function initConfigurationNameTable() {
         "sDom" : '<lip>t<r>',
         "aaData" : [],
         "aoColumns" : columns,
-        "oLanguage" : {
-            "sSearch" : "Search all columns:"
-        },
         "bJQueryUI" : true,
         "sPaginationType" : "full_numbers",
         "bPaginate" : true,
         "iDisplayLength" : 20,
         "oLanguage" : {
-            "sLengthMenu" : 'Zeige <select>' + '<option value="10">10</option><option value="20">20</option><option value="25">25</option>'
-                    + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>' + '</select> Konfigurationen'
+            "sLengthMenu" : '<span lkey="DATATABLE.SHOW">Zeige</span> <select>' + '<option value="10">10</option><option value="20">20</option><option value="25">25</option>'
+                    + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>' + '</select> <span lkey="DATATABLE.CONFIGURATIONS">Konfigurationen</span>',
+            "oPaginate": {
+                "sFirst": "<span lkey='DATATABLE.FIRST'>Erste</span>",
+                "sPrevious": "<span lkey='DATATABLE.PREVIOUS'>Vorige</span>",
+                "sNext": "<span lkey='DATATABLE.NEXT'>Nächste</span>",
+                "sLast": "<span lkey='DATATABLE.LAST'>Letzte</span>"
+            },
+            "sEmptyTable": "<span lkey='DATATABLE.EMPTY_TABLE'>Die Tabelle ist leer</span>",
+            "sInfo": "<span lkey='DATATABLE.SHOWING'>Zeige</span> _START_ <span lkey='DATATABLE.TO'>bis</span> _END_ <span lkey='DATATABLE.OF'>von</span> _TOTAL_ <span lkey='DATATABLE.ENTRIES'>Einträgen</span>",
+            "sInfoEmpty": "&nbsp;"
         },
         "fnDrawCallback" : function() {
         }
@@ -1061,6 +1074,7 @@ function initTabs() {
     }, 'delete configuration from configurations list');
 
     $('.backButton').onWrap('click', function() {
+        console.log(bricklyActive);
         if (bricklyActive) {
             switchToBrickly();
         } else {
