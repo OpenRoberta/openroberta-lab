@@ -607,5 +607,7 @@
     "DATATABLE.SHOWING" : "Zeige",
     "DATATABLE.TO" : "bis",
     "DATATABLE.OF" : "von",
-    "DATATABLE.ENTRIES" : "Einträgen"    
+    "DATATABLE.ENTRIES" : "Einträgen",
+    "ROBOT.NOT_WAITING" : "Roboter inaktiv",
+    "ROBOT.WAITING" : "Roboter wartet"     
 	}

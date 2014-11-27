@@ -624,5 +624,7 @@
     "DATATABLE.SHOWING" : "Showing",
     "DATATABLE.TO" : "to",
     "DATATABLE.OF" : "of",
-    "DATATABLE.ENTRIES" : "entries"     
+    "DATATABLE.ENTRIES" : "entries",
+    "ROBOT.NOT_WAITING" : "Robot not waiting",     
+    "ROBOT.WAITING" : "Robot waiting"     
 }

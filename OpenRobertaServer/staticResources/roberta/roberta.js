@@ -16,6 +16,7 @@ function initUserState() {
     userState.brickSaved = false;
     userState.robot = '';
     userState.robotState = 'robot.dontKnow';
+    userState.waiting = '0';
     userState.toolbox = 'beginner';
     userState.token = '1A2B3C4D';
 }
@@ -742,8 +743,14 @@ function displayState() {
         $('#head-navigation #iconDisplayToolbox').css('display', 'none');
     }
 
+    $('.robotState').css('display','none');
     if (userState.robotState) {
-        $('#head-navigation #displayRobotState').text(userState.robotState);
+        var robotState = escape(userState.robotState);
+        $('#' + robotState + '').css('display','inline');
+        if (userState.waiting) {
+            var str = $('#' + robotState + '').text() + ' ' + userState.waiting;
+            $('#' + robotState + '').text(str);
+        }
         $('#head-navigation #iconDisplayRobotState').css('display', 'inline');
     } else {
         $('#head-navigation #displayRobotState').text('');
@@ -768,9 +775,19 @@ function setHeadNavigationMenuState(state) {
  */
 function displayMessage(messageId) {
     $('.message').css('display', 'none');
-    messageId = messageId.replace( /(:|\.|\[|\])/g, "\\$1" );   // Escape periods and colons
+    messageId = escape(messageId);
     $('#' + messageId + '').css('display', 'inline');
     $("#show-message").dialog("open");
+}
+
+/**
+ * Escape periods and colons in given string
+ * 
+ * @param {str}
+ *            string to be escaped
+ */
+function escape(str) {
+    return str.replace( /(:|\.|\[|\])/g, "\\$1" );
 }
 
 /**
@@ -1074,7 +1091,6 @@ function initTabs() {
     }, 'delete configuration from configurations list');
 
     $('.backButton').onWrap('click', function() {
-        console.log(bricklyActive);
         if (bricklyActive) {
             switchToBrickly();
         } else {
@@ -1097,11 +1113,10 @@ function initLogging() {
  *            response of server call
  */
 function setRobotState(response) {
-    var robotState = response.robot_state;
-    if (robotState === 'robot.waiting') {
-        robotState += ' for ' + response.robot_waiting;        
+    if (response.robotState === 'robot.waiting') {
+        userState.waiting = response.robot_waiting;
     }
-    userState.robotState = robotState;
+    userState.robotState = response.robotState;
     displayState();
 }
 
