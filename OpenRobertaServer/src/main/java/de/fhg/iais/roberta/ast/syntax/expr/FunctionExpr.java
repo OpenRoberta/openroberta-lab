@@ -48,8 +48,7 @@ public class FunctionExpr<V> extends Expr<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        // TODO Auto-generated method stub
-        return null;
+        return visitor.visitFunctionExpr(this);
     }
 
     @Override

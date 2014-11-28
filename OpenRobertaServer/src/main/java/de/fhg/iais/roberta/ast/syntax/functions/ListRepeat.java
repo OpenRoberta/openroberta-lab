@@ -59,8 +59,7 @@ public class ListRepeat<V> extends Function<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        // TODO Auto-generated method stub
-        return null;
+        return visitor.visitListRepeat(this);
     }
 
     @Override
@@ -72,10 +71,8 @@ public class ListRepeat<V> extends Function<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-
         AstJaxbTransformerHelper.addValue(jaxbDestination, "ITEM", getParam().get(0));
         AstJaxbTransformerHelper.addValue(jaxbDestination, "NUM", getParam().get(1));
         return jaxbDestination;
-
     }
 }

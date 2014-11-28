@@ -69,8 +69,7 @@ public class LenghtOfIsEmptyFunct<V> extends Function<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        // TODO Auto-generated method stub
-        return null;
+        return visitor.visitLenghtOfIsEmptyFunct(this);
     }
 
     @Override

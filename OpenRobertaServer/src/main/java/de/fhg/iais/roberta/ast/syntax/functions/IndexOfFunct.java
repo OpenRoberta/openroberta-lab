@@ -71,8 +71,7 @@ public class IndexOfFunct<V> extends Function<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        // TODO Auto-generated method stub
-        return null;
+        return visitor.visitIndexOfFunct(this);
     }
 
     @Override

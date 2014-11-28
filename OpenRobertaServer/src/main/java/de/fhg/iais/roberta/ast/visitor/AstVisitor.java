@@ -22,6 +22,8 @@ import de.fhg.iais.roberta.ast.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
+import de.fhg.iais.roberta.ast.syntax.expr.FunctionExpr;
+import de.fhg.iais.roberta.ast.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
@@ -30,7 +32,24 @@ import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.syntax.functions.Func;
+import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.LenghtOfIsEmptyFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.ListGetIndex;
+import de.fhg.iais.roberta.ast.syntax.functions.ListRepeat;
+import de.fhg.iais.roberta.ast.syntax.functions.ListSetIndex;
+import de.fhg.iais.roberta.ast.syntax.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathNumPropFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathOnListFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathRandomFloatFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathRandomIntFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathSingleFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.TextChangeCaseFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.TextCharAtFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.TextPromptFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.TextTrimFunct;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
@@ -422,22 +441,155 @@ public interface AstVisitor<V> {
     /**
      * visit a {@link Location}.
      *
-     * @param waitStmt to be visited
+     * @param location to be visited
      */
     public V visitLocation(Location<V> location);
 
     /**
      * visit a {@link TextPrintFunct}.
      *
-     * @param waitStmt to be visited
+     * @param textPrintFunct to be visited
      */
     public V visitTextPrintFunct(TextPrintFunct<V> textPrintFunct);
 
     /**
      * visit a {@link FunctionStmt}.
      *
-     * @param waitStmt to be visited
+     * @param functionStmt to be visited
      */
     public V visitFunctionStmt(FunctionStmt<V> functionStmt);
+
+    /**
+     * visit a {@link FunctionExpr}.
+     *
+     * @param functionExpr to be visited
+     */
+    public V visitFunctionExpr(FunctionExpr<V> functionExpr);
+
+    /**
+     * visit a {@link GetSubFunct}.
+     *
+     * @param getSubFunct to be visited
+     */
+    public V visitGetSubFunct(GetSubFunct<V> getSubFunct);
+
+    /**
+     * visit a {@link IndexOfFunct}.
+     *
+     * @param indexOfFunct to be visited
+     */
+    public V visitIndexOfFunct(IndexOfFunct<V> indexOfFunct);
+
+    /**
+     * visit a {@link LenghtOfIsEmptyFunct}.
+     *
+     * @param lenghtOfIsEmptyFunct to be visited
+     */
+    public V visitLenghtOfIsEmptyFunct(LenghtOfIsEmptyFunct<V> lenghtOfIsEmptyFunct);
+
+    /**
+     * visit a {@link ListCreate}.
+     *
+     * @param listCreate to be visited
+     */
+    public V visitListCreate(ListCreate<V> listCreate);
+
+    /**
+     * visit a {@link ListGetIndex}.
+     *
+     * @param listGetIndex to be visited
+     */
+    public V visitListGetIndex(ListGetIndex<V> listGetIndex);
+
+    /**
+     * visit a {@link ListRepeat}.
+     *
+     * @param listRepeat to be visited
+     */
+    public V visitListRepeat(ListRepeat<V> listRepeat);
+
+    /**
+     * visit a {@link ListSetIndex}.
+     *
+     * @param listSetIndex to be visited
+     */
+    public V visitListSetIndex(ListSetIndex<V> listSetIndex);
+
+    /**
+     * visit a {@link MathConstrainFunct}.
+     *
+     * @param mathConstrainFunct to be visited
+     */
+    public V visitMathConstrainFunct(MathConstrainFunct<V> mathConstrainFunct);
+
+    /**
+     * visit a {@link MathNumPropFunct}.
+     *
+     * @param mathNumPropFunct to be visited
+     */
+    public V visitMathNumPropFunct(MathNumPropFunct<V> mathNumPropFunct);
+
+    /**
+     * visit a {@link MathOnListFunct}.
+     *
+     * @param mathOnListFunct to be visited
+     */
+    public V visitMathOnListFunct(MathOnListFunct<V> mathOnListFunct);
+
+    /**
+     * visit a {@link MathRandomFloatFunct}.
+     *
+     * @param mathOnListFunct to be visited
+     */
+    public V visitMathRandomFloatFunct(MathRandomFloatFunct<V> mathRandomFloatFunct);
+
+    /**
+     * visit a {@link MathRandomIntFunct}.
+     *
+     * @param mathRandomIntFunct to be visited
+     */
+    public V visitMathRandomIntFunct(MathRandomIntFunct<V> mathRandomIntFunct);
+
+    /**
+     * visit a {@link MathSingleFunct}.
+     *
+     * @param mathSingleFunct to be visited
+     */
+    public V visitMathSingleFunct(MathSingleFunct<V> mathSingleFunct);
+
+    /**
+     * visit a {@link TextChangeCaseFunct}.
+     *
+     * @param textChangeCaseFunct to be visited
+     */
+    public V visitTextChangeCaseFunct(TextChangeCaseFunct<V> textChangeCaseFunct);
+
+    /**
+     * visit a {@link TextCharAtFunct}.
+     *
+     * @param textCharAtFunct to be visited
+     */
+    public V visitTextCharAtFunct(TextCharAtFunct<V> textCharAtFunct);
+
+    /**
+     * visit a {@link TextJoinFunct}.
+     *
+     * @param textJoinFunct to be visited
+     */
+    public V visitTextJoinFunct(TextJoinFunct<V> textJoinFunct);
+
+    /**
+     * visit a {@link TextPromptFunct}.
+     *
+     * @param textPromptFunct to be visited
+     */
+    public V visitTextPromptFunct(TextPromptFunct<V> textPromptFunct);
+
+    /**
+     * visit a {@link TextTrimFunct}.
+     *
+     * @param textTrimFunct to be visited
+     */
+    public V visitTextTrimFunct(TextTrimFunct<V> textTrimFunct);
 
 }

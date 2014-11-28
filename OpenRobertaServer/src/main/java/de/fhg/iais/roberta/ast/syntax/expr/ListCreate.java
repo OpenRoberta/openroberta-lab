@@ -56,8 +56,7 @@ public class ListCreate<V> extends Expr<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        // TODO Auto-generated method stub
-        return null;
+        return visitor.visitListCreate(this);
     }
 
     @Override
@@ -80,5 +79,4 @@ public class ListCreate<V> extends Expr<V> {
         }
         return jaxbDestination;
     }
-
 }

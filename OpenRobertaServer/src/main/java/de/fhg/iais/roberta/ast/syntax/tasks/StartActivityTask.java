@@ -29,14 +29,12 @@ public class StartActivityTask<V> extends Expr<V> {
 
     @Override
     public int getPrecedence() {
-        // TODO Auto-generated method stub
-        return 0;
+        return 999;
     }
 
     @Override
     public Assoc getAssoc() {
-        // TODO Auto-generated method stub
-        return null;
+        return Assoc.NONE;
     }
 
     @Override
@@ -53,7 +51,6 @@ public class StartActivityTask<V> extends Expr<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-
         AstJaxbTransformerHelper.addValue(jaxbDestination, "ACTIVITY", getActivityName());
         return jaxbDestination;
     }

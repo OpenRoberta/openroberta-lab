@@ -72,7 +72,6 @@ public class TextPrintFunct<V> extends Function<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-
         AstJaxbTransformerHelper.addValue(jaxbDestination, "TEXT", getParam().get(0));
         return jaxbDestination;
     }

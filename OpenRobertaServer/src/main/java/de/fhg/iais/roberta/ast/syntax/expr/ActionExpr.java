@@ -58,7 +58,6 @@ public final class ActionExpr<V> extends Expr<V> {
 
     @Override
     public Block astToBlock() {
-        // TODO Auto-generated method stub
-        return null;
+        return getAction().astToBlock();
     }
 }

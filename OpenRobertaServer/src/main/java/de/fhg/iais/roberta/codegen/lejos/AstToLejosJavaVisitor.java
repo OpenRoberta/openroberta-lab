@@ -30,6 +30,8 @@ import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
+import de.fhg.iais.roberta.ast.syntax.expr.FunctionExpr;
+import de.fhg.iais.roberta.ast.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
@@ -38,7 +40,24 @@ import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.syntax.functions.Func;
+import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.LenghtOfIsEmptyFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.ListGetIndex;
+import de.fhg.iais.roberta.ast.syntax.functions.ListRepeat;
+import de.fhg.iais.roberta.ast.syntax.functions.ListSetIndex;
+import de.fhg.iais.roberta.ast.syntax.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathNumPropFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathOnListFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathRandomFloatFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathRandomIntFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathSingleFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.TextChangeCaseFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.TextCharAtFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.TextPromptFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.TextTrimFunct;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
@@ -880,6 +899,120 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     public Void visitFunctionStmt(FunctionStmt<Void> functionStmt) {
         functionStmt.getFunction().visit(this);
         this.sb.append(";");
+        return null;
+    }
+
+    @Override
+    public Void visitFunctionExpr(FunctionExpr<Void> functionExpr) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitLenghtOfIsEmptyFunct(LenghtOfIsEmptyFunct<Void> lenghtOfIsEmptyFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitListCreate(ListCreate<Void> listCreate) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitListRepeat(ListRepeat<Void> listRepeat) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitTextChangeCaseFunct(TextChangeCaseFunct<Void> textChangeCaseFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitTextCharAtFunct(TextCharAtFunct<Void> textCharAtFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitTextPromptFunct(TextPromptFunct<Void> textPromptFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitTextTrimFunct(TextTrimFunct<Void> textTrimFunct) {
+        // TODO Auto-generated method stub
         return null;
     }
 

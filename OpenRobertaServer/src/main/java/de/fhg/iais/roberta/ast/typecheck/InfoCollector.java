@@ -26,6 +26,8 @@ import de.fhg.iais.roberta.ast.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
+import de.fhg.iais.roberta.ast.syntax.expr.FunctionExpr;
+import de.fhg.iais.roberta.ast.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
@@ -34,7 +36,24 @@ import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.syntax.functions.Func;
+import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.LenghtOfIsEmptyFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.ListGetIndex;
+import de.fhg.iais.roberta.ast.syntax.functions.ListRepeat;
+import de.fhg.iais.roberta.ast.syntax.functions.ListSetIndex;
+import de.fhg.iais.roberta.ast.syntax.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathNumPropFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathOnListFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathRandomFloatFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathRandomIntFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathSingleFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.TextChangeCaseFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.TextCharAtFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.TextPromptFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.TextTrimFunct;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
@@ -411,6 +430,120 @@ public class InfoCollector<T> implements AstVisitor<T> {
 
     @Override
     public T visitFunctionStmt(FunctionStmt<T> functionStmt) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitFunctionExpr(FunctionExpr<T> functionExpr) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitGetSubFunct(GetSubFunct<T> getSubFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitIndexOfFunct(IndexOfFunct<T> indexOfFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitLenghtOfIsEmptyFunct(LenghtOfIsEmptyFunct<T> lenghtOfIsEmptyFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitListCreate(ListCreate<T> listCreate) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitListGetIndex(ListGetIndex<T> listGetIndex) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitListRepeat(ListRepeat<T> listRepeat) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitListSetIndex(ListSetIndex<T> listSetIndex) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitMathConstrainFunct(MathConstrainFunct<T> mathConstrainFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitMathNumPropFunct(MathNumPropFunct<T> mathNumPropFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitMathOnListFunct(MathOnListFunct<T> mathOnListFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitMathRandomFloatFunct(MathRandomFloatFunct<T> mathRandomFloatFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitMathRandomIntFunct(MathRandomIntFunct<T> mathRandomIntFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitMathSingleFunct(MathSingleFunct<T> mathSingleFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitTextChangeCaseFunct(TextChangeCaseFunct<T> textChangeCaseFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitTextCharAtFunct(TextCharAtFunct<T> textCharAtFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitTextJoinFunct(TextJoinFunct<T> textJoinFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitTextPromptFunct(TextPromptFunct<T> textPromptFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitTextTrimFunct(TextTrimFunct<T> textTrimFunct) {
         // TODO Auto-generated method stub
         return null;
     }

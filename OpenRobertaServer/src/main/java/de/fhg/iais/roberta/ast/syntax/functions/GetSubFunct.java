@@ -81,8 +81,7 @@ public class GetSubFunct<V> extends Function<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        // TODO Auto-generated method stub
-        return null;
+        return visitor.visitGetSubFunct(this);
     }
 
     @Override

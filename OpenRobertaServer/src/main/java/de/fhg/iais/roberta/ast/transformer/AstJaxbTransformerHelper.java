@@ -27,16 +27,6 @@ public final class AstJaxbTransformerHelper {
         addComment(astSource, jaxbDestination);
     }
 
-    private static List<Block> extractStmtList(Phrase<?> phrase) {
-        List<Block> result = new ArrayList<Block>();
-        Assert.isTrue(phrase.getKind() == Kind.STMT_LIST, "Phrase is not StmtList!");
-        StmtList<?> stmtList = (StmtList<?>) phrase;
-        for ( Stmt<?> stmt : stmtList.get() ) {
-            result.add(stmt.astToBlock());
-        }
-        return result;
-    }
-
     public static void addStatement(Block block, String name, Phrase<?> value) {
         Assert.isTrue(value.getKind() == Phrase.Kind.STMT_LIST, "Phrase is not STMT_LIST");
         if ( ((StmtList<?>) value).get().size() != 0 ) {
@@ -80,6 +70,16 @@ public final class AstJaxbTransformerHelper {
         field.setName(name);
         field.setValue(value);
         block.getField().add(field);
+    }
+
+    private static List<Block> extractStmtList(Phrase<?> phrase) {
+        List<Block> result = new ArrayList<Block>();
+        Assert.isTrue(phrase.getKind() == Kind.STMT_LIST, "Phrase is not StmtList!");
+        StmtList<?> stmtList = (StmtList<?>) phrase;
+        for ( Stmt<?> stmt : stmtList.get() ) {
+            result.add(stmt.astToBlock());
+        }
+        return result;
     }
 
     private static void setProperties(Phrase<?> astSource, Block block, String type) {
