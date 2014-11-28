@@ -16,7 +16,7 @@ function initUserState() {
     userState.brickSaved = false;
     userState.robot = '';
     userState.robotState = 'robot.dontKnow';
-    userState.waiting = '0';
+    userState.waiting = '';
     userState.toolbox = 'beginner';
     userState.token = '1A2B3C4D';
 }
@@ -1113,10 +1113,12 @@ function initLogging() {
  *            response of server call
  */
 function setRobotState(response) {
-    if (response.robotState === 'robot.waiting') {
+    if (response.robot_state === 'robot.waiting') {
         userState.waiting = response.robot_waiting;
+    } else {
+        userState.waiting = '';
     }
-    userState.robotState = response.robotState;
+    userState.robotState = response.robot_state;
     displayState();
 }
 
