@@ -1,6 +1,7 @@
 #!/bin/bash
 
 ipaddr='10.0.1.1'
+oraversion='1.0.1-SNAPSHOT'
 
 function helpFn {
   echo 'THIS SCRIPT IS FOR DEVELOPERS, WHO PULLED THE GIT-REPOSITORY AND WORK WITH THE OpenRoberta ARTIFACT';
@@ -8,11 +9,13 @@ function helpFn {
   echo '';
   echo 'you may customize the script by defining default values. Values are now:';
   echo 'ipaddr='"$ipaddr";
+  echo 'oraversion='"$oraversion";
   echo '';
   echo 'miscelleneous commands';
   echo '';
   echo '  --help                             get help';
   echo '  --ipaddr {IP-ADDR}                 set the ip addr of the EV3 brick for further commands';
+  echo '  --version {VERSION}                set the version to something like d.d.d where d is one or more digits, e.g. 1.0.1'
   echo '';
   echo 'commands available after a successful mvn clean install';
   echo '';
@@ -21,7 +24,7 @@ function helpFn {
   echo '                                     a java7 installation is required, java+javac must be in the path' ;
   echo '  --scpev3menu                       scp the ev3menu.jar to the EV3, uses ipaddr';
   echo '                                     the root password is "", thus hit return if you are asked';
-  echo '  --scpev3libs                       scp libraries to the EV3, uses ipaddr and version';
+  echo '  --scpev3libs                       scp libraries to the EV3, uses ipaddr';
   echo '                                     the root password is "", thus hit return everytime you are asked';
   echo '  --createemptydb PATH-TO-DB         create an empty database with all tables needed for the OpenRoberta server'
   echo '                                     Needs a file name. Creates files and a directory with this name AS PREFIX.'
@@ -34,7 +37,7 @@ function helpFn {
 
 function startFn {
   propfile="$1"
-  serverjar="Resources/resources/OpenRobertaServer.jar"
+  serverjar="../Resources/resources/OpenRobertaServer.jar"
   main='de.fhg.iais.roberta.main.ServerStarter'
   run="java -cp ${serverjar} ${main} ${propfile}"
   echo "executing: $run"
@@ -58,39 +61,42 @@ function exportApplication {
   echo 'creating directories for user programs and resources'
   mkdir  "${exportpath}/userProjects"
   mkdir  "${exportpath}/resources"
-  mkdir  "${exportpath}/lib"
   echo "copying resources"
-  cp OpenRobertaServer/src/main/resources/openRoberta.properties "$exportpath/resources"
-  cp OpenRobertaRuntime/build.xml "${exportpath}/resources"
-  cp Resources/resources/OpenRobertaServer.jar "$exportpath/lib"
-  cp Resources/resources/json.jar "${exportpath}/lib"
-  cp Resources/resources/OpenRobertaRuntime.jar "${exportpath}/lib"
-  cp Resources/resources/OpenRobertaShared.jar "${exportpath}/lib"
-  cp Resources/resources/EV3Menu.jar "${exportpath}/lib"
+  cp OpenRobertaRuntime/crosscompiler-ev3-build.xml "${exportpath}"
+  cp Resources/resources/*.jar "$exportpath/resources"
   echo 'creating the start scripts "start.sh" and "start.bat"'
 # -------------- begin of here documents --------------------------------------------------
   cat >"${exportpath}/openRoberta.properties" <<.eof
 server.jetty.port = 1999
-version = your_version
 
-crosscompiler.basedir    = userProjects/
-crosscompiler.build.xml  = resources/build.xml
+# the following properties are retrieved from the parent pom.xml. They are used to guarantee that
+# - the versions of the jars in the server
+# - the versions of the jars on the robot
+# - the version of the user program jar (generated on the server and transmitted to the robot) and the version of the jars on the robot match
+# Note, that in every jar there is a top-level property file that contains the version at the time of compiling the classes contained in the jar
+version = ${oraversion}
+validversionrange.From = ${oraversion}
+validversionrange.To = ${oraversion}
 
+# directory to store (temporarily) the generated user programs
+crosscompiler.basedir = userProjects/
+# the ant script that uses the cross compiler and jar building tools to build the jar containing the user program
+crosscompiler.build.xml = crosscompiler-ev3-build.xml
+
+# the URL of the database
 hibernate.connection.url = jdbc:hsqldb:file:db/openroberta-db
 
-# brick update rest service file references
-runtime.jar.dir.file = "lib/OpenRobertaRuntime.jar"
-shared.jar.dir.file = "lib/OpenRobertaShared.jar"
-ev3menu.jar.dir.file = "lib/EV3Menu.jar"
-jsonlib.jar.dir.file = "lib/json.jar"
+# the brick update rest service and the cross compiler need a directory in which all jars/resources for updating are stored
+robot.resources.dir = resources
+
 .eof
   cat >"${exportpath}/start.sh" <<.eof
 #!/bin/bash
 properties="\$1"
 if [[ "\$properties" == "" ]]; then
-   properties="resources/openRoberta.properties"
+   properties="openRoberta.properties"
 fi
-run="java -cp lib/OpenRobertaServer.jar de.fhg.iais.roberta.main.ServerStarter file:\$properties"
+run="java -cp resources/OpenRobertaServer.jar de.fhg.iais.roberta.main.ServerStarter file:\$properties"
 echo "executing: \$run"
 \$run
 .eof
@@ -98,9 +104,9 @@ echo "executing: \$run"
 @echo off
 set "PROPERTIES=%1"
 if not "%PROPERTIES%" == "" goto gotProperties
-set "PROPERTIES=resources\openRoberta.properties"
+set "PROPERTIES=openRoberta.properties"
 :gotProperties
-set "RUN=java -cp lib\OpenRobertaServer.jar de.fhg.iais.roberta.main.ServerStarter file:%PROPERTIES%"
+set "RUN=java -cp resources\OpenRobertaServer.jar de.fhg.iais.roberta.main.ServerStarter file:%PROPERTIES%"
 echo executing: "%RUN%"
 %RUN%
 .eof
@@ -145,6 +151,7 @@ while [[ "$cmd" != '' ]]; do
    case "$cmd" in
    --help|-h)          helpFn ;;
    --ipaddr|-i)        ipaddr="$1"; shift ;;
+   --version|-v)       oraversion="$1"; shift ;;
    --scpev3menu|-m)    scpev3menuFn ;;
    --scpev3libs|-l)    scpev3libsFn ;;
    --createemptydb|-c) dbpath="$1"; shift

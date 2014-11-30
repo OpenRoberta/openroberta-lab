@@ -19,11 +19,13 @@ import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceFilter;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 
+import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.guice.RobertaGuiceServletConfig;
 import de.fhg.iais.roberta.persistence.dao.ProgramDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.VersionChecker;
 
 /**
  * <b>the main class of the application, the main activity is starting the server.</b><br>
@@ -81,6 +83,9 @@ public class ServerStarter {
      */
     public Server start() throws IOException {
         int port = 1999;
+        String versionFrom = this.properties.getProperty("validversionrange.From", "?");
+        String versionTo = this.properties.getProperty("validversionrange.To", "?");
+        Assert.isTrue(new VersionChecker(versionFrom, versionTo).validateServerSide(), "invalid versions found - this should NEVER occur");
         String serverPort = this.properties.getProperty("server.jetty.port", "1999");
         try {
             port = Integer.parseInt(serverPort);

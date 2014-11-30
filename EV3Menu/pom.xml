@@ -20,7 +20,7 @@ limitations under the License.
     <parent>
         <groupId>de.fhg.iais.openroberta</groupId>
         <artifactId>OpenRobertaParent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
         <relativePath>../OpenRobertaParent</relativePath>
     </parent>
     <artifactId>EV3Menu</artifactId>
@@ -35,16 +35,16 @@ limitations under the License.
             <artifactId>OpenRobertaRuntime</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.lejos</groupId>
-            <artifactId>jna</artifactId>
-        </dependency>
-        <dependency>
             <groupId>de.fhg.iais.roberta</groupId>
             <artifactId>ev3classes</artifactId>
         </dependency>
         <dependency>
             <groupId>de.fhg.iais.roberta</groupId>
             <artifactId>dbusjava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.lejos</groupId>
+            <artifactId>jna</artifactId>
         </dependency>
         <dependency>
             <groupId>org.json</groupId>

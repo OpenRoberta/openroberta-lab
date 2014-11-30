@@ -60,6 +60,7 @@ public class RoundTripTest {
     private static String buildXml;
     private static String connectionUrl;
     private static String crosscompilerBasedir;
+    private static String robotResourcesDir;
 
     private static CompilerWorkflow compilerWorkflow;
 
@@ -245,13 +246,14 @@ public class RoundTripTest {
         buildXml = properties.getProperty("crosscompiler.build.xml");
         connectionUrl = properties.getProperty("hibernate.connection.url");
         crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");
+        robotResourcesDir = properties.getProperty("robot.resources.dir");
 
         RoundTripTest.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", connectionUrl);
         nativeSession = sessionFactoryWrapper.getNativeSession();
         memoryDbSetup = new DbSetup(nativeSession);
         memoryDbSetup.runDefaultRobertaSetup();
         brickCommunicator = new BrickCommunicator();
-        compilerWorkflow = new CompilerWorkflow(crosscompilerBasedir, buildXml);
+        compilerWorkflow = new CompilerWorkflow(crosscompilerBasedir, robotResourcesDir, buildXml);
         restUser = new RestUser(brickCommunicator);
         restProgram = new RestProgram(sessionFactoryWrapper, brickCommunicator, compilerWorkflow);
 

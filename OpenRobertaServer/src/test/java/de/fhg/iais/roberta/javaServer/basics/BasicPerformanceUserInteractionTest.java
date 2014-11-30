@@ -56,6 +56,7 @@ public class BasicPerformanceUserInteractionTest {
     private String buildXml;
     private String connectionUrl;
     private String crosscompilerBasedir;
+    private String robotResourcesDir;
 
     private CompilerWorkflow compilerWorkflow;
 
@@ -74,12 +75,13 @@ public class BasicPerformanceUserInteractionTest {
         this.buildXml = properties.getProperty("crosscompiler.build.xml");
         this.connectionUrl = properties.getProperty("hibernate.connection.url");
         this.crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");
+        this.robotResourcesDir = properties.getProperty("robot.resources.dir");
 
         this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-testConcurrent-cfg.xml", this.connectionUrl);
         this.memoryDbSetup = new DbSetup(this.sessionFactoryWrapper.getNativeSession());
         this.memoryDbSetup.runDefaultRobertaSetup();
         this.brickCommunicator = new BrickCommunicator();
-        this.compilerWorkflow = new CompilerWorkflow(this.crosscompilerBasedir, this.buildXml);
+        this.compilerWorkflow = new CompilerWorkflow(this.crosscompilerBasedir, this.robotResourcesDir, this.buildXml);
         this.restUser = new RestUser(this.brickCommunicator);
         this.restProgram = new RestProgram(this.sessionFactoryWrapper, this.brickCommunicator, this.compilerWorkflow);
         this.restBlocks = new RestBlocks(new Templates(), this.brickCommunicator);

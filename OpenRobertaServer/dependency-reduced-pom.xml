@@ -3,7 +3,7 @@
   <parent>
     <artifactId>OpenRobertaParent</artifactId>
     <groupId>de.fhg.iais.openroberta</groupId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <relativePath>../OpenRobertaParent/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
@@ -11,18 +11,6 @@
   <name>OpenRobertaServer</name>
   <description>the server of the OpenRoberta application including the static resources delivered to the browser</description>
   <build>
-    <resources>
-      <resource>
-        <filtering>true</filtering>
-        <directory>src/main/resources</directory>
-      </resource>
-    </resources>
-    <testResources>
-      <testResource>
-        <filtering>true</filtering>
-        <directory>src/test/resources</directory>
-      </testResource>
-    </testResources>
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>

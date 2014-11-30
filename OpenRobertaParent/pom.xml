@@ -19,13 +19,21 @@ limitations under the License.
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.fhg.iais.openroberta</groupId>
     <artifactId>OpenRobertaParent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>RobertaParent</name>
     <description>the parent project of the OpenRoberta application</description>
     <url>http://www.openroberta.de</url>
     <inceptionYear>2014</inceptionYear>
+
     <properties>
+    <!-- the server and the crosscompiler SHOULD be compatible between(including) the following two versions of software deployed on the ROBOT -->
+        <validversionrange.From>1.0.1</validversionrange.From>
+        <validversionrange.To>1.0.1</validversionrange.To>
+
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
+        <buildTimeStamp>${maven.build.timestamp}</buildTimeStamp>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <source.level>1.7</source.level>
@@ -36,7 +44,12 @@ limitations under the License.
         <jetty.version>9.2.3.v20140905</jetty.version>
         <hibernate.version>4.2.7.Final</hibernate.version>
         <json.version>20140107</json.version>
+
+        <ev3classes.version>0.8.1-beta</ev3classes.version>
+        <dbusjava.version>0.8.1-beta</dbusjava.version>
+        <jna.version>3.2.7</jna.version>
     </properties>
+
     <modules>
         <module>../OpenRobertaShared</module>
         <module>../OpenRobertaRuntime</module>
@@ -44,6 +57,7 @@ limitations under the License.
         <module>../OpenRobertaServer</module>
         <module>../Resources</module>
     </modules>
+
     <repositories>
         <repository>
             <id>ORA-releases</id>
@@ -57,6 +71,7 @@ limitations under the License.
             </snapshots>
         </repository>
     </repositories>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -82,17 +97,17 @@ limitations under the License.
             <dependency>
                 <groupId>de.fhg.iais.roberta</groupId>
                 <artifactId>ev3classes</artifactId>
-                <version>0.8.1-beta</version>
+                <version>${ev3classes.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.fhg.iais.roberta</groupId>
                 <artifactId>dbusjava</artifactId>
-                <version>0.8.1-beta</version>
+                <version>${dbusjava.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.lejos</groupId>
                 <artifactId>jna</artifactId>
-                <version>3.2.7</version>
+                <version>${jna.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -141,7 +156,7 @@ limitations under the License.
             </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>
-  	            <artifactId>hibernate-c3p0</artifactId>
+                <artifactId>hibernate-c3p0</artifactId>
                 <version>${hibernate.version}</version>
             </dependency>
             <dependency>
@@ -211,6 +226,7 @@ limitations under the License.
             </dependency>
         </dependencies>
     </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -246,6 +262,22 @@ limitations under the License.
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
+    </build>
+
     <reporting>
         <plugins>
             <plugin>
@@ -277,6 +309,7 @@ limitations under the License.
         <system>Bamboo</system>
         <url>http://mp-devel.iais.fraunhofer.de:8085/browse/ORA</url>
     </ciManagement>
+
     <organization>
         <name>Open Roberta</name>
         <url>http://www.openroberta.de</url>
@@ -362,6 +395,7 @@ limitations under the License.
             <timezone>+1</timezone>
         </contributor>
     </contributors>
+
     <licenses>
         <license>
             <name>Educational Community License, Version 2.0</name>

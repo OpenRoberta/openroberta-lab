@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="compileLejos" basedir="." default="jar">
-
-	<!-- TODO: this has to be changed. Relative pathes, version numbers, ... .  -->
-	<property name="lib.lejos" value="${basedir}/../OpenRobertaRuntime/lib" />
-	<property name="lib.openrobertaruntime" value="${basedir}/../OpenRobertaRuntime/target" />
-	<property name="lib.openrobertashared" value="${basedir}/../OpenRobertaShared/target" />
-	<property name="version" value="1.0.0-SNAPSHOT" />
-	
+	<!-- note: the basedir will be set to the directory in which this build file is stored -->
 	<property name="brick.runtime" value="/home/root/lejos" />
 	<property name="brick.roberta" value="/home/roberta/lib" />
 	
@@ -17,7 +11,7 @@
 	<property name="program.jar" value="${main.name}.jar" />
 
 	<path id="lejos">
-		<fileset dir="${lib.lejos}">
+		<fileset dir="${robot.resources.dir}">
 			<include name="dbusjava.jar"/>
 			<include name="ev3classes.jar"/>
 			<include name="jna.jar"/>
@@ -25,14 +19,9 @@
 	</path>
 	
 	<path id="runtime">
-		<fileset dir="${lib.openrobertaruntime}">
-			<include name="OpenRobertaRuntime-${version}.jar"/>
-		</fileset>
-	</path>
-	
-	<path id="shared">
-		<fileset dir="${lib.openrobertashared}">
-			<include name="OpenRobertaShared-${version}.jar"/>
+		<fileset dir="${robot.resources.dir}">
+			<include name="OpenRobertaRuntime.jar"/>
+			<include name="OpenRobertaShared.jar"/>
 		</fileset>
 	</path>
 	
@@ -49,7 +38,6 @@
 			<include name="${main.name}.java"/>
 			<classpath refid="lejos"/>
 			<classpath refid="runtime"/>
-			<classpath refid="shared"/>
 		</javac>
 	</target>
 
