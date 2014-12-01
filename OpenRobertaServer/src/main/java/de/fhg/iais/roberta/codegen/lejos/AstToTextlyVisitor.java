@@ -60,7 +60,6 @@ import de.fhg.iais.roberta.ast.syntax.functions.TextPromptFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextTrimFunct;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
-import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GetSampleSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
@@ -85,59 +84,51 @@ import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
-import de.fhg.iais.roberta.brickconfiguration.ev3.EV3BrickConfiguration;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
-import de.fhg.iais.roberta.hardwarecomponents.Category;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they
- * append a human-readable JAVA code representation of a phrase to a StringBuilder. <b>This representation is correct JAVA code.</b> <br>
+ * append a human-readable text(ly) representation of a blockly program
  */
-public class AstToLejosJavaVisitor implements AstVisitor<Void> {
+public class AstToTextlyVisitor implements AstVisitor<Void> {
     public static final String INDENT = "    ";
 
-    private final EV3BrickConfiguration brickConfiguration;
     private final String programName;
     private final StringBuilder sb = new StringBuilder();
 
     private int indentation;
 
     /**
-     * initialize the Java code generator visitor.
+     * initialize the textly generator visitor.
      *
      * @param programName name of the program
      * @param brickConfiguration hardware configuration of the brick
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    AstToLejosJavaVisitor(String programName, EV3BrickConfiguration brickConfiguration, int indentation) {
+    AstToTextlyVisitor(String programName, int indentation) {
         this.programName = programName;
-        this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
     }
 
     /**
-     * factory method to generate Java code from an AST.<br>
+     * factory method to generate textly code from an AST.<br>
      *
      * @param programName name of the program
-     * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public static String generate(String programName, EV3BrickConfiguration brickConfiguration, List<Phrase<Void>> phrases, boolean withWrapping) //
+    public static String generate(String programName, List<Phrase<Void>> phrases, boolean withWrapping) //
     {
         Assert.notNull(programName);
-        Assert.notNull(brickConfiguration);
         Assert.isTrue(phrases.size() >= 1);
 
-        AstToLejosJavaVisitor astVisitor = new AstToLejosJavaVisitor(programName, brickConfiguration, withWrapping ? 2 : 0);
-        astVisitor.generatePrefix(withWrapping);
+        AstToTextlyVisitor astVisitor = new AstToTextlyVisitor(programName, 1);
+        astVisitor.sb.append("\n{\n").append(INDENT);
         for ( Phrase<Void> phrase : phrases ) {
-            if ( phrase.getKind().getCategory() != Category.TASK ) {
-                astVisitor.sb.append("\n").append(INDENT).append(INDENT);
-            }
             phrase.visit(astVisitor);
         }
-        astVisitor.generateSuffix(withWrapping);
+        astVisitor.sb.append("\n}\n");
+
         return astVisitor.sb.toString();
     }
 
@@ -179,7 +170,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append(colorConst.getValue().getJavaCode());
+        this.sb.append(colorConst.getValue().getColorID());
         return null;
     }
 
@@ -323,16 +314,11 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
-        boolean additionalClosingBracket = false;
         switch ( repeatStmt.getMode() ) {
             case UNTIL:
             case WHILE:
             case FOREVER:
-                this.sb.append("if ( TRUE ) {");
-                incrIndentation();
-                nlIndent();
                 generateCodeFromStmtCondition("while", repeatStmt.getExpr());
-                additionalClosingBracket = true;
                 break;
             case TIMES:
             case FOR:
@@ -352,11 +338,6 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         decrIndentation();
         nlIndent();
         this.sb.append("}");
-        if ( additionalClosingBracket ) {
-            decrIndentation();
-            nlIndent();
-            this.sb.append("}");
-        }
         return null;
     }
 
@@ -383,15 +364,9 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
-        this.sb.append("if ( TRUE ) {");
-        incrIndentation();
-        nlIndent();
-        this.sb.append("while ( true ) {");
+        this.sb.append("wait {");
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
-        decrIndentation();
-        nlIndent();
-        this.sb.append("}");
         decrIndentation();
         nlIndent();
         this.sb.append("}");
@@ -400,7 +375,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        this.sb.append("hal.clearDisplay();");
+        this.sb.append("Display.clear();");
         return null;
     }
 
@@ -408,12 +383,12 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
         switch ( volumeAction.getMode() ) {
             case SET:
-                this.sb.append("hal.setVolume(");
+                this.sb.append("Sound.setVolume(");
                 volumeAction.getVolume().visit(this);
                 this.sb.append(");");
                 break;
             case GET:
-                this.sb.append("hal.getVolume()");
+                this.sb.append("Sound.getVolume()");
                 break;
             default:
                 throw new DbcException("Invalid volume action mode!");
@@ -423,7 +398,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        this.sb.append("hal.ledOn(" + lightAction.getColor().getJavaCode() + ", " + lightAction.getBlinkMode().getJavaCode() + ");");
+        this.sb.append("LED.on(" + lightAction.getColor() + ", " + lightAction.getBlinkMode() + ");");
         return null;
     }
 
@@ -431,10 +406,10 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
         switch ( lightStatusAction.getStatus() ) {
             case OFF:
-                this.sb.append("hal.ledOff();");
+                this.sb.append("LED.off();");
                 break;
             case RESET:
-                this.sb.append("hal.resetLED();");
+                this.sb.append("LED.reset();");
                 break;
             default:
                 throw new DbcException("Invalid LED status mode!");
@@ -444,13 +419,13 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        this.sb.append("hal.playFile(" + playFileAction.getFileName() + ");");
+        this.sb.append("Sound.playFile(" + playFileAction.getFileName() + ");");
         return null;
     }
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        this.sb.append("hal.drawPicture(" + showPictureAction.getPicture().getJavaCode() + ", ");
+        this.sb.append("Display.drawPicture(" + showPictureAction.getPicture() + ", ");
         showPictureAction.getX().visit(this);
         this.sb.append(", ");
         showPictureAction.getY().visit(this);
@@ -460,7 +435,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        this.sb.append("hal.drawText(");
+        this.sb.append("Display.drawText(");
         if ( showTextAction.getMsg().getKind() != Phrase.Kind.STRING_CONST ) {
             this.sb.append("String.valueOf(");
             showTextAction.getMsg().visit(this);
@@ -478,7 +453,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        this.sb.append("hal.playTone(");
+        this.sb.append("Sound.playTone(");
         toneAction.getFrequency().visit(this);
         this.sb.append(", ");
         toneAction.getDuration().visit(this);
@@ -488,18 +463,11 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        String methodName;
-        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorOnAction.getPort());
         boolean duration = motorOnAction.getParam().getDuration() != null;
-        if ( duration ) {
-            methodName = isRegulated ? "hal.rotateRegulatedMotor(" : "hal.rotateUnregulatedMotor(";
-        } else {
-            methodName = isRegulated ? "hal.turnOnRegulatedMotor(" : "hal.turnOnUnregulatedMotor(";
-        }
-        this.sb.append(methodName + motorOnAction.getPort().getJavaCode() + ", ");
+        this.sb.append("Motor.on(" + motorOnAction.getPort() + ", ");
         motorOnAction.getParam().getSpeed().visit(this);
         if ( duration ) {
-            this.sb.append(", " + motorOnAction.getDurationMode().getJavaCode());
+            this.sb.append(", " + motorOnAction.getDurationMode());
             this.sb.append(", ");
             motorOnAction.getDurationValue().visit(this);
         }
@@ -509,9 +477,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
-        String methodName = isRegulated ? "hal.setRegulatedMotorSpeed(" : "hal.setUnregulatedMotorSpeed(";
-        this.sb.append(methodName + motorSetPowerAction.getPort().getJavaCode() + ", ");
+        this.sb.append("Motor.setPower(" + motorSetPowerAction.getPort() + ", ");
         motorSetPowerAction.getPower().visit(this);
         this.sb.append(");");
         return null;
@@ -519,28 +485,21 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorGetPowerAction.getPort());
-        String methodName = isRegulated ? "hal.getRegulatedMotorSpeed(" : "hal.getUnregulatedMotorSpeed(";
-        this.sb.append(methodName + motorGetPowerAction.getPort().getJavaCode() + ")");
+        this.sb.append("Motor.getPower(" + motorGetPowerAction.getPort() + ")");
         return null;
     }
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorStopAction.getPort());
-        String methodName = isRegulated ? "hal.stopRegulatedMotor(" : "hal.stopUnregulatedMotor(";
-        this.sb.append(methodName + motorStopAction.getPort().getJavaCode() + ", " + motorStopAction.getMode().getJavaCode() + ");");
+        this.sb.append("Motor.stop(" + motorStopAction.getPort() + ", " + motorStopAction.getMode() + ");");
         return null;
     }
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         boolean isDuration = driveAction.getParam().getDuration() != null;
-        String methodName = isDuration ? "hal.driveDistance(" : "hal.regulatedDrive(";
-        this.sb.append(methodName);
-        this.sb.append(this.brickConfiguration.getLeftMotorPort().getJavaCode() + ", ");
-        this.sb.append(this.brickConfiguration.getRightMotorPort().getJavaCode() + ", false, ");
-        this.sb.append(driveAction.getDirection().getJavaCode() + ", ");
+        this.sb.append("Motor.driveDistance(");
+        this.sb.append(driveAction.getDirection() + ", ");
         driveAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {
             this.sb.append(", ");
@@ -553,12 +512,8 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
         boolean isDuration = turnAction.getParam().getDuration() != null;
-        boolean isRegulated = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
-        String methodName = "hal.rotateDirection" + (isDuration ? "Angle" : isRegulated ? "Regulated" : "Unregulated") + "(";
-        this.sb.append(methodName);
-        this.sb.append(this.brickConfiguration.getLeftMotorPort().getJavaCode() + ", ");
-        this.sb.append(this.brickConfiguration.getRightMotorPort().getJavaCode() + ", false, ");
-        this.sb.append(turnAction.getDirection().getJavaCode() + ", ");
+        this.sb.append("Motor.rotateDirection(");
+        this.sb.append(turnAction.getDirection() + ", ");
         turnAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {
             this.sb.append(", ");
@@ -570,11 +525,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        boolean isRegulated = true;
-        String methodName = isRegulated ? "hal.stopRegulatedDrive(" : "hal.stopUnregulatedDrive(";
-        this.sb.append(methodName);
-        this.sb.append(this.brickConfiguration.getLeftMotorPort().getJavaCode() + ", ");
-        this.sb.append(this.brickConfiguration.getRightMotorPort().getJavaCode() + ");");
+        this.sb.append("Motor.driveStop()");
         return null;
     }
 
@@ -582,10 +533,10 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
         switch ( brickSensor.getMode() ) {
             case IS_PRESSED:
-                this.sb.append("hal.isPressed(" + brickSensor.getKey().getJavaCode() + ")");
+                this.sb.append("Button.isPressed(" + brickSensor.getKey() + ")");
                 break;
             case WAIT_FOR_PRESS_AND_RELEASE:
-                this.sb.append("hal.isPressedAndReleased(" + brickSensor.getKey().getJavaCode() + ")");
+                this.sb.append("Button.isPressedAndReleased(" + brickSensor.getKey() + ")");
                 break;
             default:
                 throw new DbcException("Invalide mode for BrickSensor!");
@@ -597,17 +548,13 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
         switch ( colorSensor.getMode() ) {
             case GET_MODE:
-                this.sb.append("hal.getColorSensorModeName(" + colorSensor.getPort().getJavaCode() + ")");
+                this.sb.append("ColorSensor.getMode(" + colorSensor.getPort() + ")");
                 break;
             case GET_SAMPLE:
-                if ( colorSensor.getMode() == ColorSensorMode.COLOUR ) {
-                    this.sb.append("PickColor.get(hal.getColorSensorValue(" + colorSensor.getPort().getJavaCode() + "))");
-                } else {
-                    this.sb.append("hal.getColorSensorValue(" + colorSensor.getPort().getJavaCode() + ")");
-                }
+                this.sb.append("ColorSensor.getValue(" + colorSensor.getPort() + ")");
                 break;
             default:
-                this.sb.append("hal.setColorSensorMode(" + colorSensor.getPort().getJavaCode() + ", " + colorSensor.getMode().getJavaCode() + ");");
+                this.sb.append("ColorSensor.setMode(" + colorSensor.getPort() + ", " + colorSensor.getMode() + ");");
                 break;
         }
         return null;
@@ -617,18 +564,17 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
         switch ( encoderSensor.getMode() ) {
             case GET_MODE:
-                this.sb.append("hal.getMotorTachoMode(" + encoderSensor.getMotor().getJavaCode() + ")");
+                this.sb.append("Motor.getTachoMode(" + encoderSensor.getMotor() + ")");
                 break;
             case GET_SAMPLE:
                 boolean isRegulated = true;
-                String methodName = isRegulated ? "hal.getRegulatedMotorTachoValue(" : "hal.getUnregulatedMotorTachoValuestop(";
-                this.sb.append(methodName + encoderSensor.getMotor().getJavaCode() + ")");
+                this.sb.append("Motor.getTachoValue(" + encoderSensor.getMotor() + ")");
                 break;
             case RESET:
-                this.sb.append("hal.resetMotorTacho(" + encoderSensor.getMotor().getJavaCode() + ");");
+                this.sb.append("Motor.resetTacho(" + encoderSensor.getMotor() + ");");
                 break;
             default:
-                this.sb.append("hal.setMotorTachoMode(" + encoderSensor.getMotor().getJavaCode() + ", " + encoderSensor.getMode().getJavaCode() + ");");
+                this.sb.append("Motor.setTachoMode(" + encoderSensor.getMotor() + ", " + encoderSensor.getMode() + ");");
                 break;
         }
         return null;
@@ -638,16 +584,16 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         switch ( gyroSensor.getMode() ) {
             case GET_MODE:
-                this.sb.append("hal.getGyroSensorModeName(" + gyroSensor.getPort().getJavaCode() + ")");
+                this.sb.append("GyroSensor.getMode(" + gyroSensor.getPort() + ")");
                 break;
             case GET_SAMPLE:
-                this.sb.append("hal.getGyroSensorValue(" + gyroSensor.getPort().getJavaCode() + ")");
+                this.sb.append("GyroSensor.getValue(" + gyroSensor.getPort() + ")");
                 break;
             case RESET:
-                this.sb.append("hal.resetGyroSensor(" + gyroSensor.getPort().getJavaCode() + ");");
+                this.sb.append("GyroSensor.reset(" + gyroSensor.getPort() + ");");
                 break;
             default:
-                this.sb.append("hal.setGyroSensorMode(" + gyroSensor.getPort().getJavaCode() + ", " + gyroSensor.getMode().getJavaCode() + ");");
+                this.sb.append("GyroSensor.setMode(" + gyroSensor.getPort() + ", " + gyroSensor.getMode() + ");");
                 break;
         }
         return null;
@@ -657,13 +603,13 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
         switch ( infraredSensor.getMode() ) {
             case GET_MODE:
-                this.sb.append("hal.getInfraredSensorModeName(" + infraredSensor.getPort().getJavaCode() + ")");
+                this.sb.append("InfraredSensor.getMode(" + infraredSensor.getPort() + ")");
                 break;
             case GET_SAMPLE:
-                this.sb.append("hal.getInfraredSensorValue(" + infraredSensor.getPort().getJavaCode() + ")");
+                this.sb.append("InfraredSensor.getValue(" + infraredSensor.getPort() + ")");
                 break;
             default:
-                this.sb.append("hal.setInfraredSensorMode(" + infraredSensor.getPort().getJavaCode() + ", " + infraredSensor.getMode().getJavaCode() + ");");
+                this.sb.append("InfraredSensor.setMode(" + infraredSensor.getPort() + ", " + infraredSensor.getMode() + ");");
                 break;
         }
         return null;
@@ -673,10 +619,10 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         switch ( timerSensor.getMode() ) {
             case GET_SAMPLE:
-                this.sb.append("hal.getTimerValue(" + timerSensor.getTimer() + ")");
+                this.sb.append("Timer.getValue(" + timerSensor.getTimer() + ")");
                 break;
             case RESET:
-                this.sb.append("hal.resetTimer(" + timerSensor.getTimer() + ");");
+                this.sb.append("Timer.reset(" + timerSensor.getTimer() + ");");
                 break;
             default:
                 throw new DbcException("Invalid Time Mode!");
@@ -686,7 +632,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("hal.isPressed(" + touchSensor.getPort().getJavaCode() + ")");
+        this.sb.append("Bumper.isPressed(" + touchSensor.getPort() + ")");
         return null;
     }
 
@@ -694,17 +640,13 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
         switch ( ultrasonicSensor.getMode() ) {
             case GET_MODE:
-                this.sb.append("hal.getUltraSonicSensorModeName(" + ultrasonicSensor.getPort().getJavaCode() + ")");
+                this.sb.append("UltraSonicSensor.getMode(" + ultrasonicSensor.getPort() + ")");
                 break;
             case GET_SAMPLE:
-                this.sb.append("hal.getUltraSonicSensorValue(" + ultrasonicSensor.getPort().getJavaCode() + ")");
+                this.sb.append("UltraSonicSensor.getValue(" + ultrasonicSensor.getPort() + ")");
                 break;
             default:
-                this.sb.append("hal.setUltrasonicSensorMode("
-                    + ultrasonicSensor.getPort().getJavaCode()
-                    + ", "
-                    + ultrasonicSensor.getMode().getJavaCode()
-                    + ");");
+                this.sb.append("UltraSonicSensor.setMode(" + ultrasonicSensor.getPort() + ", " + ultrasonicSensor.getMode() + ");");
                 break;
         }
         return null;
@@ -743,6 +685,21 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
         return sensorGetSample.getSensor().visit(this);
+    }
+
+    @Override
+    public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
+        this.sb.append("System.out.println(");
+        textPrintFunct.getParam().get(0).visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitFunctionStmt(FunctionStmt<Void> functionStmt) {
+        functionStmt.getFunction().visit(this);
+        this.sb.append(";");
+        return null;
     }
 
     private void incrIndentation() {
@@ -846,66 +803,6 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
             nlIndent();
             this.sb.append("break;");
         }
-    }
-
-    private void generatePrefix(boolean withWrapping) {
-        if ( !withWrapping ) {
-            return;
-        }
-        this.sb.append("package generated.main;\n\n");
-        this.sb.append("import de.fhg.iais.roberta.ast.syntax.*;\n");
-        this.sb.append("import de.fhg.iais.roberta.codegen.lejos.Hal;\n\n");
-        this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.*;\n");
-        this.sb.append("import de.fhg.iais.roberta.ast.syntax.sensor.*;\n");
-        this.sb.append("import de.fhg.iais.roberta.hardwarecomponents.ev3.*;\n");
-        this.sb.append("import de.fhg.iais.roberta.brickconfiguration.ev3.*;\n");
-        this.sb.append("public class " + this.programName + " {\n");
-        this.sb.append("private static final boolean TRUE = true;\n");
-        this.sb.append(INDENT).append(this.brickConfiguration.generateRegenerate()).append("\n\n");
-        this.sb.append(INDENT).append("public static void main(String[] args) {\n");
-        this.sb.append(INDENT).append(INDENT).append("try {\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("new ").append(this.programName).append("().run();\n");
-        this.sb.append(INDENT).append(INDENT).append("} catch ( Exception e ) {\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lejos.hardware.lcd.TextLCD lcd = lejos.hardware.ev3.LocalEV3.get().getTextLCD();\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.clear();\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Fehler im EV3-Roboter\", 0, 2);\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Fehlermeldung\", 0, 4);\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(e.getMessage(), 0, 5);\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Press any key\", 0, 7);\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lejos.hardware.Button.waitForAnyPress();\n");
-        this.sb.append(INDENT).append(INDENT).append("}\n");
-        this.sb.append(INDENT).append("}\n\n");
-
-        this.sb.append(INDENT).append("public void run() {\n");
-        this.sb.append(INDENT).append(INDENT).append("Hal hal = new Hal(brickConfiguration);");
-    }
-
-    private void generateSuffix(boolean withWrapping) {
-        if ( !withWrapping ) {
-            return;
-        }
-        this.sb.append("\n");
-        this.sb.append(INDENT).append(INDENT).append("try {\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("Thread.sleep(2000);\n");
-        this.sb.append(INDENT).append(INDENT).append("} catch ( InterruptedException e ) {\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("// ok\n");
-        this.sb.append(INDENT).append(INDENT).append("}\n");
-        this.sb.append(INDENT).append("}\n}\n");
-    }
-
-    @Override
-    public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
-        this.sb.append("System.out.println(");
-        textPrintFunct.getParam().get(0).visit(this);
-        this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitFunctionStmt(FunctionStmt<Void> functionStmt) {
-        functionStmt.getFunction().visit(this);
-        this.sb.append(";");
-        return null;
     }
 
     @Override
@@ -1021,5 +918,4 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         // TODO Auto-generated method stub
         return null;
     }
-
 }

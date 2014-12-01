@@ -77,6 +77,13 @@
               <goal>shade</goal>
             </goals>
             <configuration>
+              <artifactSet>
+                <excludes>
+                  <exclude>de.fhg.iais.roberta:ev3classes:jar:</exclude>
+                  <exclude>de.fhg.iais.roberta:dbusjava:jar:</exclude>
+                  <exclude>org.lejos:jna:jar:</exclude>
+                </excludes>
+              </artifactSet>
               <transformers>
                 <transformer />
                 <transformer />

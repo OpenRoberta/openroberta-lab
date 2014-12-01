@@ -45,20 +45,39 @@ limitations under the License.
                 <version>2.9</version>
                 <executions>
                     <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <excludes>
+                                <exclude>de.fhg.iais.roberta:EV3Menu:jar:</exclude>
+                                <exclude>de.fhg.iais.roberta:ev3classes:jar:</exclude>
+                                <exclude>de.fhg.iais.roberta:dbusjava:jar:</exclude>
+                                <exclude>org.lejos:jna:jar:</exclude>
+                            </excludes>
+                           <includeScope>compile</includeScope>
+                            <outputDirectory>resources</outputDirectory>
+                            <overWriteReleases>true</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.9</version>
+                <executions>
+                    <execution>
                         <id>copy</id>
-                        <phase>install</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>copy</goal>
                         </goals>
                         <configuration>
                             <artifactItems>
-                                <artifactItem>
-                                    <groupId>de.fhg.iais.openroberta</groupId>
-                                    <artifactId>OpenRobertaServer</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                </artifactItem>
                                 <artifactItem>
                                     <groupId>de.fhg.iais.openroberta</groupId>
                                     <artifactId>EV3Menu</artifactId>
@@ -109,7 +128,7 @@ limitations under the License.
                                     <overWrite>true</overWrite>
                                 </artifactItem>
                             </artifactItems>
-                            <outputDirectory>resources</outputDirectory>
+                            <outputDirectory>updateResources</outputDirectory>
                             <overWriteReleases>true</overWriteReleases>
                             <overWriteSnapshots>true</overWriteSnapshots>
                             <stripVersion>true</stripVersion>

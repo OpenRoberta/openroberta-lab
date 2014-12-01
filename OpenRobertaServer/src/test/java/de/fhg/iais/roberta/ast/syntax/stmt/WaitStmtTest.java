@@ -8,7 +8,7 @@ public class WaitStmtTest {
 
     @Test
     public void test1() throws Exception {
-        String a = "while(true){if(hal.isPressed(BrickKey.ENTER)==true){break;}}";
+        String a = "if(TRUE){while(true){if(hal.isPressed(BrickKey.ENTER)==true){break;}}}";
 
         Helper.assertCodeIsOk(a, "/ast/control/wait_stmt2.xml");
     }

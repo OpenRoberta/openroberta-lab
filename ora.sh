@@ -37,12 +37,33 @@ function helpFn {
 
 function startFn {
   propfile="$1"
-  serverjar="../Resources/resources/OpenRobertaServer.jar"
   main='de.fhg.iais.roberta.main.ServerStarter'
-  run="java -cp ${serverjar} ${main} ${propfile}"
+  run='java -cp "../Resources/resources/*" '"${main} ${propfile}"
   echo "executing: $run"
   cd OpenRobertaServer
-  $run
+  eval $run
+}
+
+function check64bit7jdk {
+  javaversion=`java -version 2>&1`
+  echo
+  echo 'you are using the following java runtime:'
+  echo $javaversion
+  echo
+  case "$javaversion" in
+    *64-Bit*) : ;;
+    *)        echo '**********************************************************************************************'
+              echo '* Using the PATH java is resolved to a 32 bit version. The server needs a 64 bit jdk. Exit 4 *'
+              echo '**********************************************************************************************'
+              exit 4 ;;
+  esac
+  case "$javaversion" in
+    *1\.7\.*) : ;;
+    *)        echo '**********************************************************************************************'
+              echo '* Using the PATH java is not resolved to version 7. The server needs a version 7 jdk. Exit 4 *'
+              echo '**********************************************************************************************'
+              exit 4 ;;
+  esac
 }
 
 function exportApplication {
@@ -59,10 +80,12 @@ function exportApplication {
   webresources="OpenRobertaServer/staticResources"
   cp -r "$webresources" "$exportpath"
   echo 'creating directories for user programs and resources'
-  mkdir  "${exportpath}/userProjects"
-  mkdir  "${exportpath}/resources"
+  mkdir "${exportpath}/userProjects"
+  mkdir "${exportpath}/resources"
+  mkdir "${exportpath}/updateResources"
   echo "copying resources"
   cp OpenRobertaRuntime/crosscompiler-ev3-build.xml "${exportpath}"
+  cp Resources/updateResources/*.jar "$exportpath/updateResources"
   cp Resources/resources/*.jar "$exportpath/resources"
   echo 'creating the start scripts "start.sh" and "start.bat"'
 # -------------- begin of here documents --------------------------------------------------
@@ -87,26 +110,53 @@ crosscompiler.build.xml = crosscompiler-ev3-build.xml
 hibernate.connection.url = jdbc:hsqldb:file:db/openroberta-db
 
 # the brick update rest service and the cross compiler need a directory in which all jars/resources for updating are stored
-robot.resources.dir = resources
+robot.resources.dir = updateResources
 
 .eof
   cat >"${exportpath}/start.sh" <<.eof
 #!/bin/bash
+javaversion=\`java -version 2>&1\`
+case "\$javaversion" in
+  *64-Bit*) : ;;
+  *) echo 'java is resolved to a 32 bit version. The server needs a 64 bit jdk. Exit 4.'
+     exit 4 ;;
+esac
+case "\$javaversion" in
+  *1\\.7\\.*) : ;;
+  *) echo 'java is not resolved to a version 7. The server needs a version 7 jdk. Exit 4.'
+     exit 4 ;;
+esac
 properties="\$1"
 if [[ "\$properties" == "" ]]; then
    properties="openRoberta.properties"
 fi
-run="java -cp resources/OpenRobertaServer.jar de.fhg.iais.roberta.main.ServerStarter file:\$properties"
+run="java -cp \"resources/*\" de.fhg.iais.roberta.main.ServerStarter file:\$properties"
 echo "executing: \$run"
-\$run
+eval \$run
 .eof
   cat >"${exportpath}/start.bat" <<.eof
+rem this start.bat uses the C:\Windows\System32\java.exe to start the server.
+rem It passes a 1.7 argument to let this exe select the right java installation.
+rem If this does not work on your system, you have to tweak the path variable.
+rem For local installations inspect your firewall settings, if the robot cannot connect.
 @echo off
+java -version:"1.7" -version 2>&1 | find "64-Bit" >nul:
+if errorlevel 1 (
+  echo java is resolved to a 32 bit version. The server needs a 64 bit jdk. Exit 4.
+  pause
+  exit 4
+)
+java -version:"1.7" -version 2>&1 | find "1.7." >nul:
+if errorlevel 1 (
+  echo java is not resolved to a version 7. The server needs a version 7 jdk. Exit 4.
+  pause
+  exit 4
+)
 set "PROPERTIES=%1"
 if not "%PROPERTIES%" == "" goto gotProperties
 set "PROPERTIES=openRoberta.properties"
 :gotProperties
-set "RUN=java -cp resources\OpenRobertaServer.jar de.fhg.iais.roberta.main.ServerStarter file:%PROPERTIES%"
+set RUN=java -version:"1.7" -cp "resources\*" de.fhg.iais.roberta.main.ServerStarter file:%PROPERTIES%
 echo executing: "%RUN%"
 %RUN%
 .eof
@@ -115,23 +165,22 @@ echo executing: "%RUN%"
 
 function createemptydb {
   dbpath="$1"
-  serverjar="Resources/resources/OpenRobertaServer.jar"
   main='de.fhg.iais.roberta.main.Administration'
-  run="java -cp ${serverjar} ${main} createemptydb ${dbpath}"
+  run='java -cp "Resources/resources/*" '"${main} createemptydb ${dbpath}"
   echo "executing: $run"
-  $run
+  eval $run
 }
 
 function scpev3menuFn {
-  run="scp Resources/resources/EV3Menu.jar root@${ipaddr}:/home/root/lejos/bin/utils"
+  run="scp Resources/updateResources/EV3Menu.jar root@${ipaddr}:/home/root/lejos/bin/utils"
   echo "executing: ${run}"
   $run
 }
 
 function scpev3libsFn {
-  runtime="Resources/resources/OpenRobertaRuntime.jar"
-  shared="Resources/resources/OpenRobertaShared.jar"
-  json='Resources/resources/json.jar'
+  runtime="Resources/updateResources/OpenRobertaRuntime.jar"
+  shared="Resources/updateResources/OpenRobertaShared.jar"
+  json='Resources/updateResources/json.jar'
   run="ssh root@${ipaddr} mkdir -p /home/roberta/lib"
   echo "executing: ${run}"
   $run
@@ -147,6 +196,7 @@ if [[ "$cmd" == '' ]]; then
    helpFn
    exit 0
 fi
+check64bit7jdk
 while [[ "$cmd" != '' ]]; do
    case "$cmd" in
    --help|-h)          helpFn ;;

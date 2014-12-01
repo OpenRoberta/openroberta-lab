@@ -37,6 +37,8 @@ public class VersionChecker {
                 if ( version.equals("?") || !versionValid(version) ) {
                     LOG.error("version of " + propertyPrefix + " is " + version + " and considered NOT ACCEPTABLE");
                     return false;
+                } else {
+                    LOG.info("version of " + propertyPrefix + " is " + version + " and considered ok");
                 }
             } catch ( Exception e ) {
                 LOG.error("properties from /" + propertyPrefix + ".properties could not be loaded. Versioncheck fails");

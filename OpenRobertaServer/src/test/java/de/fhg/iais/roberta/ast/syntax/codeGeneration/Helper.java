@@ -25,6 +25,7 @@ import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.brickconfiguration.ev3.EV3Actor;
 import de.fhg.iais.roberta.brickconfiguration.ev3.EV3BrickConfiguration;
 import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
+import de.fhg.iais.roberta.codegen.lejos.AstToTextlyVisitor;
 import de.fhg.iais.roberta.hardwarecomponents.ev3.HardwareComponentEV3Actor;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 
@@ -48,9 +49,11 @@ public class Helper {
                 .addActor(ActorPort.C, new EV3Actor(HardwareComponentEV3Actor.EV3_LARGE_MOTOR, false, DriveDirection.FOREWARD, MotorSide.LEFT))
                 .addActor(ActorPort.D, new EV3Actor(HardwareComponentEV3Actor.EV3_MEDIUM_MOTOR, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
                 .build();
-        String code = AstToLejosJavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), false);
-        // System.out.println(code); // only needed for EXTREME debugging
-        return code;
+        String javaCode = AstToLejosJavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), false);
+        // System.out.println(javaCode); // only needed for EXTREME debugging
+        // String textlyCode = AstToTextlyVisitor.generate("Test", transformer.getTree(), false);
+        // System.out.println(textlyCode); // only needed for EXTREME debugging
+        return javaCode;
     }
 
     /**
@@ -63,6 +66,20 @@ public class Helper {
     public static String generateString(String pathToProgramXml, EV3BrickConfiguration brickConfiguration) throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
         String code = AstToLejosJavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), true);
+        // System.out.println(code); // only needed for EXTREME debugging
+        return code;
+    }
+
+    /**
+     * Generate textly code as string from a given program . Prepend and append wrappings.
+     *
+     * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
+     * @return the code as string
+     * @throws Exception
+     */
+    public static String generateString(String pathToProgramXml) throws Exception {
+        JaxbBlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
+        String code = AstToTextlyVisitor.generate("Test", transformer.getTree(), true);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }
@@ -142,7 +159,7 @@ public class Helper {
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = XMLUnit.compareXML(writer.toString(), t);
 
-        //        System.out.println(diff.toString()); // only needed for EXTREME debugging
+        // System.out.println(diff.toString()); // only needed for EXTREME debugging
         Assert.assertTrue(diff.identical());
 
     }
