@@ -30,9 +30,6 @@
 #
 # This script also generates:
 #   blocks_compressed.js: The compressed Blockly language blocks.
-#   javascript_compressed.js: The compressed Javascript generator.
-#   python_compressed.js: The compressed Python generator.
-#   dart_compressed.js: The compressed Dart generator.
 #   msg/js/<LANG>.js for every language <LANG> defined in msg/js/<LANG>.json.
 
 import errno, glob, httplib, json, os, re, subprocess, sys, threading, urllib
@@ -129,7 +126,7 @@ delete window.BLOCKLY_BOOT;
 document.write('<script type="text/javascript">var goog = undefined;</script>');
 // Load fresh Closure Library.
 document.write('<script type="text/javascript" src="' + window.BLOCKLY_DIR +
-    '/../closure-library-read-only/closure/goog/base.js"></script>');
+    '../../../../closure-library-read-only/closure/goog/base.js"></script>');
 document.write('<script type="text/javascript">window.BLOCKLY_BOOT()</script>');
 """)
     f.close()
@@ -149,9 +146,6 @@ class Gen_compressed(threading.Thread):
   def run(self):
     self.gen_core()
     self.gen_blocks()
-    self.gen_generator('javascript')
-    self.gen_generator('python')
-    self.gen_generator('dart')
 
   def gen_core(self):
     target_filename = 'blockly_compressed.js'
@@ -403,14 +397,14 @@ class Gen_langfiles(threading.Thread):
 
 if __name__ == '__main__':
   try:
-    calcdeps = import_path(os.path.join(os.path.pardir,
+    calcdeps = import_path(os.path.join(os.path.pardir, os.path.pardir, os.path.pardir, os.path.pardir,
           'closure-library-read-only', 'closure', 'bin', 'calcdeps.py'))
   except ImportError:
     print("""Error: Closure not found.  Read this:
 http://code.google.com/p/blockly/wiki/Closure""")
     sys.exit(1)
   search_paths = calcdeps.ExpandDirectories(
-      ['core', os.path.join(os.path.pardir, 'closure-library-read-only')])
+      ['core', os.path.join(os.path.pardir, os.path.pardir, os.path.pardir, os.path.pardir, 'closure-library-read-only')])
 
   # Run both tasks in parallel threads.
   # Uncompressed is limited by processor speed.
