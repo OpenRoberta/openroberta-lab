@@ -10,7 +10,7 @@ function initUserState() {
     userState.name = '';
     userState.role = '';
     userState.program = 'meinProgramm';
-    userState.configuration = 'meineKonfiguration';
+    userState.configuration = 'Standardkonfiguration';
     userState.programSaved = false;
     userState.configurationSaved = false;
     userState.brickSaved = false;
@@ -301,7 +301,7 @@ function saveConfigurationToServer() {
         var $name = $('#configurationNameSave');
         setConfiguration($name.val());
         if (userState.name) { // Is someone logged in?
-            if (!$name.val() || $name.val() === "meineKonfiguration") {
+            if (!$name.val() || $name.val() === "Standardkonfiguration") {
                 $('#head-navigation #submenu-configuration #save').addClass('login');
                 $('#head-navigation #submenu-configuration #save').addClass('ui-state-disabled');
                 displayMessage("MESSAGE.NAME_ERROR");
@@ -329,6 +329,7 @@ function runOnBrick() {
     return COMM.json("/program", {
         "cmd" : "runP",
         "name" : userState.program,
+        "configuration" : userState.configuration,
     }, response);
 }
 
@@ -910,7 +911,7 @@ function initHeadNavigation() {
             switchToBrickly();
             bricklyActive = true;
         } else if (domId === 'newConfig') {
-            setConfiguration("meineKonfiguration");
+            setConfiguration("Standardkonfiguration");
         } else if (domId === 'openConfig') {
             switchToBlockly();
             $('#loadConfigurationFromListing').css('display', 'inline');
