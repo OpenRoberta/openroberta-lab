@@ -28,7 +28,7 @@ public class ORAhandler {
     private ORApushCmd pushCmd;
     private Thread serverCommunicator;
 
-    /**
+    /** 
      * Creates a control object for most of the Open Roberta Lab related
      * functionality.
      */

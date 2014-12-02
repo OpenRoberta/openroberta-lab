@@ -25,7 +25,6 @@ import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Properties;
 import java.util.jar.JarFile;
 
 import lejos.hardware.Battery;
@@ -178,7 +177,7 @@ public class GraphicStartup implements Menu {
     private static LocalBTDevice bt;
     private static GraphicStartup menu = new GraphicStartup();
 
-    private static ORAhandler oraHandler = new ORAhandler();
+    private static ORAhandler oraHandler = null;
 
     private static TextLCD lcd = LocalEV3.get().getTextLCD();
 
@@ -1221,7 +1220,7 @@ public class GraphicStartup implements Menu {
      * Clears the screen, displays a number and allows user to change the digits
      * of the number individually using the NXT buttons. Note the array of bytes
      * represent ASCII characters, not actual numbers.
-     *
+     * 
      * @param digits
      *        Number of digits in the PIN.
      * @param title
@@ -1473,6 +1472,8 @@ public class GraphicStartup implements Menu {
      * Roberta submenu implementation.
      */
     private void robertaMenu() {
+        oraHandler = new ORAhandler();
+
         if ( ORAhandler.isRegistered() == false ) {
             if ( this.indiBA.getWifi() == false ) {
                 newScreen(" Robertalab");
@@ -1488,21 +1489,16 @@ public class GraphicStartup implements Menu {
             ORAhandler.setBrickData(ORAhandler.KEY_TOKEN, new ORAtokenGenerator().generateToken());
             ORAhandler.setBrickData(ORAhandler.KEY_MACADDR, macaddr);
             ORAhandler.setBrickData(ORAhandler.KEY_BATTERY, getBatteryStatus());
-            ORAhandler.setBrickData(ORAhandler.KEY_VERSION, getORAversion());
+
             System.out.println(ORAhandler.getBrickData());
 
-            String ip = getIPAddress();
+            oraHandler.startServerCommunicator(getIPAddress(), this.ind);
             // 193.175.162.161:80
-            if ( ip.equals("none") ) {
-                return;
-            } else {
-                oraHandler.startServerCommunicator(ip, this.ind);
-            }
 
             newScreen(" Robertalab");
             lcd.drawString("    Wating for", 0, 2);
             lcd.drawString("  registration...", 0, 3);
-            lcd.drawString("     " + ORAhandler.getBrickData().getString(ORAhandler.KEY_TOKEN), 0, 5);
+            lcd.drawString("    " + ORAhandler.getBrickData().getString(ORAhandler.KEY_TOKEN), 0, 5);
 
             while ( ORAhandler.isRegistered() == false ) {
                 int id = Button.waitForAnyEvent(500);
@@ -1516,7 +1512,7 @@ public class GraphicStartup implements Menu {
                 }
             }
             newScreen(" Robertalab");
-            lcd.drawString("    Success!", 0, 3);
+            lcd.drawString("   Success!", 0, 3);
             LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
             Delay.msDelay(2000);
         } else {
@@ -1525,28 +1521,8 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Get ORA ev3menu version from EV3Menu.properties in jar file.
-     *
-     * @return
-     */
-    public static String getORAversion() {
-        Properties menuProperties = new Properties();
-        InputStream is = ClassLoader.getSystemResourceAsStream("EV3Menu.properties");
-        try {
-            menuProperties.load(is);
-            String tmp = menuProperties.getProperty("version");
-            int i = tmp.indexOf("-");
-            tmp = tmp.substring(0, i);
-            System.out.println(tmp);
-            return tmp;
-        } catch ( IOException e ) {
-            return "unknown";
-        }
-    }
-
-    /**
      * Get the name of the brick to send it to ORA server t odisplay it on client page.
-     *
+     * 
      * @return brickname
      */
     public static String getBrickName() {
@@ -1555,7 +1531,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Get the battery status to send it to ORA server to display it on client page.
-     *
+     * 
      * @return battery
      */
     public static String getBatteryStatus() {
@@ -1568,7 +1544,7 @@ public class GraphicStartup implements Menu {
     /**
      * Expose userprogram process to check if it is running (!= null).
      * Do not allow execution of a second userprogram from ORA.
-     *
+     * 
      * @return
      */
     public static Process getUserprogram() {
@@ -1629,9 +1605,9 @@ public class GraphicStartup implements Menu {
 
     private void openRobertaLabConnectedMenu() {
         GraphicMenu menu = new GraphicMenu(new String[] {
-            "Disconnect"
+            "Disconnect", "Update"
         }, new String[] {
-            ICRoberta
+            ICRoberta, ICRoberta
         }, 3);
         int selected = 0;
         do {
@@ -1639,19 +1615,17 @@ public class GraphicStartup implements Menu {
             switch ( selected ) {
                 case 0:
                     newScreen(" Robertalab");
-                    if ( getYesNo("   Disconnect?", false) == 1 ) {
+                    if ( getYesNo("Disconnect?", false) == 1 ) {
                         disconnect();
                     }
                     break;
             }
-            break;
         } while ( selected >= 0 );
     }
 
     private void disconnect() {
         oraHandler.disconnect();
         ORAhandler.setRegistered(false);
-        ORAhandler.setConnectionError(false);
         newScreen(" Robertalab");
         lcd.drawString("  Disconnected!", 0, 3);
         LocalEV3.get().getAudio().systemSound(Sounds.DESCENDING);
@@ -1782,7 +1756,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Ask the user for confirmation of an action.
-     *
+     * 
      * @param prompt
      *        A description of the action about to be performed
      * @return 1=yes 0=no < 0 escape
@@ -1886,7 +1860,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Format a string for use when displaying the volume.
-     *
+     * 
      * @param vol
      *        Volume setting 0-10
      * @return String version.
@@ -1915,7 +1889,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Read a button press. If the read timesout then exit the system.
-     *
+     * 
      * @return The bitcode of the button.
      */
     private int getButtonPress() {
@@ -1928,7 +1902,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Present the menu for a single file.
-     *
+     * 
      * @param file
      */
     private void fileMenu(File file, int type) {
@@ -2042,7 +2016,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Present the menu for a menu tool.
-     *
+     * 
      * @param file
      */
     private void toolMenu(File file) {
@@ -2259,7 +2233,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Method to add spaces before capital letters and remove .jar extension.
-     *
+     * 
      * @param fileName
      * @return
      */
@@ -2328,7 +2302,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Start a new screen display. Clear the screen and set the screen title.
-     *
+     * 
      * @param title
      */
     private void newScreen(String title) {
@@ -2338,7 +2312,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Display a status message
-     *
+     * 
      * @param msg
      */
     private void msg(String msg) {
@@ -2359,7 +2333,7 @@ public class GraphicStartup implements Menu {
      * Obtain a menu item selection Allow the user to make a selection from the
      * specified menu item. If a power off timeout has been specified and no
      * choice is made within this time power off the NXT.
-     *
+     * 
      * @param menu
      *        Menu to display.
      * @param cur
@@ -2396,6 +2370,7 @@ public class GraphicStartup implements Menu {
         if ( selection == -3 ) {
             shutdown();
         }
+        // TODO ORA magic number
 
         return selection;
     }
@@ -2531,20 +2506,21 @@ public class GraphicStartup implements Menu {
                 System.err.println("Failed to get network properties: " + e);
             }
             // --- get MAC address for ORA ---
-            if ( current.getDisplayName().equals("wlan0") ) {
-                try {
-                    byte[] mac = current.getHardwareAddress();
-                    if ( mac != null ) {
-                        StringBuilder sb = new StringBuilder();
-                        for ( int i = 0; i < mac.length; i++ ) {
-                            sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));
-                        }
+            try {
+                byte[] mac = current.getHardwareAddress();
+                if ( mac != null ) {
+                    StringBuilder sb = new StringBuilder();
+                    for ( int i = 0; i < mac.length; i++ ) {
+                        sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));
+                    }
+                    System.out.println(sb.toString());
+                    if ( current.getDisplayName().equals("br0") ) {
                         macaddr = sb.toString();
                         System.out.println("macaddr for ORA: " + macaddr);
                     }
-                } catch ( SocketException e ) {
-                    e.printStackTrace();
                 }
+            } catch ( SocketException e ) {
+                e.printStackTrace();
             }
             // --- END get MAC address for ORA ---
             Enumeration<InetAddress> addresses = current.getInetAddresses();
