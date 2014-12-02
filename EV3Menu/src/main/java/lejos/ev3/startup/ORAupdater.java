@@ -9,20 +9,27 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Download all required files for Open Roberta lab to the brick.<br>
+ * Download all required library files and menu for Open Roberta lab to the brick.<br>
  * 
  * @author dpyka
  */
-public class RobertaUpdater {
+public class ORAupdater {
 
-    private final String serverURLString;
+    private final String serverBaseIP;
     private final File libDir = new File("/home/roberta/lib");
     private final File menuDir = new File("/home/root/lejos/bin/utils");
 
-    public RobertaUpdater(String serverURLString) {
-        this.serverURLString = serverURLString;
+    /**
+     * Creates an object for updating the brick.
+     * @param serverBaseIP The server's base IP like 192.168.56.1:1999.
+     */
+    public ORAupdater(String serverBaseIP) {
+        this.serverBaseIP = serverBaseIP;
     }
 
+    /**
+     * Download all files required for Open Roberta Lab.
+     */
     public void update() {
         getRuntime();
         getShared();
@@ -30,40 +37,52 @@ public class RobertaUpdater {
         getEV3Menu();
     }
 
+    /**
+     * Download the generated jar from OpenRobertaRuntime.
+     */
     private void getRuntime() {
         URL runtimeURL = null;
         try {
-            runtimeURL = new URL("http://" + this.serverURLString + "/update/runtime");
+            runtimeURL = new URL("http://" + this.serverBaseIP + "/update/runtime");
         } catch ( MalformedURLException e ) {
             // ok
         }
         downloadFile(runtimeURL, this.libDir);
     }
 
+    /**
+     * Download the generated jar from OpenRobertaShared.
+     */
     private void getShared() {
         URL sharedURL = null;
         try {
-            sharedURL = new URL("http://" + this.serverURLString + "/update/shared");
+            sharedURL = new URL("http://" + this.serverBaseIP + "/update/shared");
         } catch ( MalformedURLException e ) {
             // ok
         }
         downloadFile(sharedURL, this.libDir);
     }
 
+    /**
+     * Download the JSON library for brick server communication.
+     */
     private void getJsonLib() {
         URL jsonURL = null;
         try {
-            jsonURL = new URL("http://" + this.serverURLString + "/update/jsonlib");
+            jsonURL = new URL("http://" + this.serverBaseIP + "/update/jsonlib");
         } catch ( MalformedURLException e ) {
             // ok
         }
         downloadFile(jsonURL, this.libDir);
     }
 
+    /**
+     * Download the EV3Menu. Restart is needed to launch the "new" one.
+     */
     private void getEV3Menu() {
         URL menuURL = null;
         try {
-            menuURL = new URL("http://" + this.serverURLString + "/update/ev3menu");
+            menuURL = new URL("http://" + this.serverBaseIP + "/update/ev3menu");
         } catch ( MalformedURLException e ) {
             // ok
         }
@@ -86,7 +105,7 @@ public class RobertaUpdater {
         httpURLConnection.setDoInput(true);
         httpURLConnection.setDoOutput(false);
         httpURLConnection.setRequestMethod("GET");
-        httpURLConnection.setReadTimeout(30);
+        httpURLConnection.setReadTimeout(30000);
         return httpURLConnection;
     }
 
