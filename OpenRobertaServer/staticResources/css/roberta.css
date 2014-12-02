@@ -777,4 +777,10 @@ table.dataTable.no-footer {
 	border: none;
 }
 
+#listing > h2, #confListing > h2 {
+	margin-top: 20px;
+	margin-left: 45%;
+}
+
+
 
