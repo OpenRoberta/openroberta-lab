@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.codegen.lejos;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -84,11 +85,13 @@ import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
+import de.fhg.iais.roberta.ast.usedhardwarecheck.HardwareCheckVisitor;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.brickconfiguration.ev3.EV3BrickConfiguration;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.hardwarecomponents.Category;
+import de.fhg.iais.roberta.hardwarecomponents.ev3.HardwareComponentEV3Sensor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they
@@ -100,6 +103,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     private final EV3BrickConfiguration brickConfiguration;
     private final String programName;
     private final StringBuilder sb = new StringBuilder();
+    private final Set<HardwareComponentEV3Sensor> usedSensors;
 
     private int indentation;
 
@@ -108,12 +112,14 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
      *
      * @param programName name of the program
      * @param brickConfiguration hardware configuration of the brick
+     * @param usedSensors in the current program
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    AstToLejosJavaVisitor(String programName, EV3BrickConfiguration brickConfiguration, int indentation) {
+    AstToLejosJavaVisitor(String programName, EV3BrickConfiguration brickConfiguration, Set<HardwareComponentEV3Sensor> usedSensors, int indentation) {
         this.programName = programName;
         this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
+        this.usedSensors = usedSensors;
     }
 
     /**
@@ -129,7 +135,8 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrases.size() >= 1);
 
-        AstToLejosJavaVisitor astVisitor = new AstToLejosJavaVisitor(programName, brickConfiguration, withWrapping ? 2 : 0);
+        Set<HardwareComponentEV3Sensor> usedSensors = HardwareCheckVisitor.check(phrases);
+        AstToLejosJavaVisitor astVisitor = new AstToLejosJavaVisitor(programName, brickConfiguration, usedSensors, withWrapping ? 2 : 0);
         astVisitor.generatePrefix(withWrapping);
         for ( Phrase<Void> phrase : phrases ) {
             if ( phrase.getKind().getCategory() != Category.TASK ) {
@@ -248,6 +255,9 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
                 break;
             case "java.lang.Boolean":
                 this.sb.append("true");
+                break;
+            case "java.lang.Integer":
+                this.sb.append("0");
                 break;
             default:
                 this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
@@ -745,154 +755,6 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         return sensorGetSample.getSensor().visit(this);
     }
 
-    private void incrIndentation() {
-        this.indentation += 1;
-    }
-
-    private void decrIndentation() {
-        this.indentation -= 1;
-    }
-
-    private void indent() {
-        if ( this.indentation <= 0 ) {
-            return;
-        } else {
-            for ( int i = 0; i < this.indentation; i++ ) {
-                this.sb.append(INDENT);
-            }
-        }
-    }
-
-    private void nlIndent() {
-        this.sb.append("\n");
-        indent();
-    }
-
-    private String whitespace() {
-        return " ";
-    }
-
-    private boolean parenthesesCheck(Binary<Void> binary) {
-        return binary.getOp() == Op.MINUS && binary.getRight().getKind() == Kind.BINARY && binary.getRight().getPrecedence() <= binary.getPrecedence();
-    }
-
-    private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr<Void> expr, Binary<Void> binary) {
-        if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption ) {
-            // parentheses are omitted
-            expr.visit(this);
-        } else {
-            sb.append("(" + whitespace());
-            expr.visit(this);
-            sb.append(whitespace() + ")");
-        }
-    }
-
-    private void generateExprCode(Unary<Void> unary, StringBuilder sb) {
-        if ( unary.getExpr().getPrecedence() < unary.getPrecedence() ) {
-            sb.append("(");
-            unary.getExpr().visit(this);
-            sb.append(")");
-        } else {
-            unary.getExpr().visit(this);
-        }
-    }
-
-    private void generateCodeFromTernary(IfStmt<Void> ifStmt) {
-        this.sb.append("(" + whitespace());
-        ifStmt.getExpr().get(0).visit(this);
-        this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace());
-        ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
-        this.sb.append(whitespace() + ":" + whitespace());
-        ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
-    }
-
-    private void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
-        for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
-            if ( i == 0 ) {
-                generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i));
-            } else {
-                generateCodeFromStmtCondition("else if", ifStmt.getExpr().get(i));
-            }
-            incrIndentation();
-            ifStmt.getThenList().get(i).visit(this);
-            decrIndentation();
-            if ( i + 1 < ifStmt.getExpr().size() ) {
-                nlIndent();
-                this.sb.append("}").append(whitespace());
-            }
-        }
-    }
-
-    private void generateCodeFromElse(IfStmt<Void> ifStmt) {
-        if ( ifStmt.getElseList().get().size() != 0 ) {
-            nlIndent();
-            this.sb.append("}").append(whitespace()).append("else").append(whitespace() + "{");
-            incrIndentation();
-            ifStmt.getElseList().visit(this);
-            decrIndentation();
-        }
-        nlIndent();
-        this.sb.append("}");
-    }
-
-    private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
-        this.sb.append(stmtType + whitespace() + "(" + whitespace());
-        expr.visit(this);
-        this.sb.append(whitespace() + ")" + whitespace() + "{");
-    }
-
-    private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
-        if ( repeatStmt.getMode() == Mode.WAIT ) {
-            nlIndent();
-            this.sb.append("break;");
-        }
-    }
-
-    private void generatePrefix(boolean withWrapping) {
-        if ( !withWrapping ) {
-            return;
-        }
-        this.sb.append("package generated.main;\n\n");
-        this.sb.append("import de.fhg.iais.roberta.ast.syntax.*;\n");
-        this.sb.append("import de.fhg.iais.roberta.codegen.lejos.Hal;\n\n");
-        this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.*;\n");
-        this.sb.append("import de.fhg.iais.roberta.ast.syntax.sensor.*;\n");
-        this.sb.append("import de.fhg.iais.roberta.hardwarecomponents.ev3.*;\n");
-        this.sb.append("import de.fhg.iais.roberta.brickconfiguration.ev3.*;\n");
-        this.sb.append("public class " + this.programName + " {\n");
-        this.sb.append("private static final boolean TRUE = true;\n");
-        this.sb.append(INDENT).append(this.brickConfiguration.generateRegenerate()).append("\n\n");
-        this.sb.append(INDENT).append("public static void main(String[] args) {\n");
-        this.sb.append(INDENT).append(INDENT).append("try {\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("new ").append(this.programName).append("().run();\n");
-        this.sb.append(INDENT).append(INDENT).append("} catch ( Exception e ) {\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lejos.hardware.lcd.TextLCD lcd = lejos.hardware.ev3.LocalEV3.get().getTextLCD();\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.clear();\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Fehler im EV3-Roboter\", 0, 2);\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Fehlermeldung\", 0, 4);\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(e.getMessage(), 0, 5);\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Press any key\", 0, 7);\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lejos.hardware.Button.waitForAnyPress();\n");
-        this.sb.append(INDENT).append(INDENT).append("}\n");
-        this.sb.append(INDENT).append("}\n\n");
-
-        this.sb.append(INDENT).append("public void run() {\n");
-        this.sb.append(INDENT).append(INDENT).append("Hal hal = new Hal(brickConfiguration);");
-    }
-
-    private void generateSuffix(boolean withWrapping) {
-        if ( !withWrapping ) {
-            return;
-        }
-        this.sb.append("\n");
-        this.sb.append(INDENT).append(INDENT).append("try {\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("Thread.sleep(2000);\n");
-        this.sb.append(INDENT).append(INDENT).append("} catch ( InterruptedException e ) {\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("// ok\n");
-        this.sb.append(INDENT).append(INDENT).append("}\n");
-        this.sb.append(INDENT).append("}\n}\n");
-    }
-
     @Override
     public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
         this.sb.append("System.out.println(");
@@ -1020,6 +882,174 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     public Void visitTextTrimFunct(TextTrimFunct<Void> textTrimFunct) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    private void incrIndentation() {
+        this.indentation += 1;
+    }
+
+    private void decrIndentation() {
+        this.indentation -= 1;
+    }
+
+    private void indent() {
+        if ( this.indentation <= 0 ) {
+            return;
+        } else {
+            for ( int i = 0; i < this.indentation; i++ ) {
+                this.sb.append(INDENT);
+            }
+        }
+    }
+
+    private void nlIndent() {
+        this.sb.append("\n");
+        indent();
+    }
+
+    private String whitespace() {
+        return " ";
+    }
+
+    private boolean parenthesesCheck(Binary<Void> binary) {
+        return binary.getOp() == Op.MINUS && binary.getRight().getKind() == Kind.BINARY && binary.getRight().getPrecedence() <= binary.getPrecedence();
+    }
+
+    private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr<Void> expr, Binary<Void> binary) {
+        if ( expr.getPrecedence() >= binary.getPrecedence() && !minusAdaption ) {
+            // parentheses are omitted
+            expr.visit(this);
+        } else {
+            sb.append("(" + whitespace());
+            expr.visit(this);
+            sb.append(whitespace() + ")");
+        }
+    }
+
+    private void generateExprCode(Unary<Void> unary, StringBuilder sb) {
+        if ( unary.getExpr().getPrecedence() < unary.getPrecedence() ) {
+            sb.append("(");
+            unary.getExpr().visit(this);
+            sb.append(")");
+        } else {
+            unary.getExpr().visit(this);
+        }
+    }
+
+    private void generateCodeFromTernary(IfStmt<Void> ifStmt) {
+        this.sb.append("(" + whitespace());
+        ifStmt.getExpr().get(0).visit(this);
+        this.sb.append(whitespace() + ")" + whitespace() + "?" + whitespace());
+        ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
+        this.sb.append(whitespace() + ":" + whitespace());
+        ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
+    }
+
+    private void generateCodeFromIfElse(IfStmt<Void> ifStmt) {
+        for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
+            if ( i == 0 ) {
+                generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i));
+            } else {
+                generateCodeFromStmtCondition("else if", ifStmt.getExpr().get(i));
+            }
+            incrIndentation();
+            ifStmt.getThenList().get(i).visit(this);
+            decrIndentation();
+            if ( i + 1 < ifStmt.getExpr().size() ) {
+                nlIndent();
+                this.sb.append("}").append(whitespace());
+            }
+        }
+    }
+
+    private void generateCodeFromElse(IfStmt<Void> ifStmt) {
+        if ( ifStmt.getElseList().get().size() != 0 ) {
+            nlIndent();
+            this.sb.append("}").append(whitespace()).append("else").append(whitespace() + "{");
+            incrIndentation();
+            ifStmt.getElseList().visit(this);
+            decrIndentation();
+        }
+        nlIndent();
+        this.sb.append("}");
+    }
+
+    private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
+        this.sb.append(stmtType + whitespace() + "(" + whitespace());
+        expr.visit(this);
+        this.sb.append(whitespace() + ")" + whitespace() + "{");
+    }
+
+    private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
+        if ( repeatStmt.getMode() == Mode.WAIT ) {
+            nlIndent();
+            this.sb.append("break;");
+        }
+    }
+
+    private void generatePrefix(boolean withWrapping) {
+        if ( !withWrapping ) {
+            return;
+        }
+        this.sb.append("package generated.main;\n\n");
+        this.sb.append("import de.fhg.iais.roberta.ast.syntax.*;\n");
+        this.sb.append("import de.fhg.iais.roberta.codegen.lejos.Hal;\n\n");
+        this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.*;\n");
+        this.sb.append("import de.fhg.iais.roberta.ast.syntax.sensor.*;\n");
+        this.sb.append("import de.fhg.iais.roberta.hardwarecomponents.ev3.*;\n");
+        this.sb.append("import de.fhg.iais.roberta.brickconfiguration.ev3.*;\n\n");
+        this.sb.append("import java.util.LinkedHashSet;\n");
+        this.sb.append("import java.util.Set;\n");
+        this.sb.append("import java.util.Arrays;\n\n");
+
+        this.sb.append("public class " + this.programName + " {\n");
+        this.sb.append(INDENT).append("private static final boolean TRUE = true;\n");
+        this.sb.append(INDENT).append(this.brickConfiguration.generateRegenerate()).append("\n\n");
+        this.sb.append(INDENT).append(generateRegenerateUsedSensors()).append("\n\n");
+        this.sb.append(INDENT).append("public static void main(String[] args) {\n");
+        this.sb.append(INDENT).append(INDENT).append("try {\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("new ").append(this.programName).append("().run();\n");
+        this.sb.append(INDENT).append(INDENT).append("} catch ( Exception e ) {\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lejos.hardware.lcd.TextLCD lcd = lejos.hardware.ev3.LocalEV3.get().getTextLCD();\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.clear();\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Fehler im EV3-Roboter\", 0, 2);\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Fehlermeldung\", 0, 4);\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(e.getMessage(), 0, 5);\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Press any key\", 0, 7);\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lejos.hardware.Button.waitForAnyPress();\n");
+        this.sb.append(INDENT).append(INDENT).append("}\n");
+        this.sb.append(INDENT).append("}\n\n");
+
+        this.sb.append(INDENT).append("public void run() {\n");
+        this.sb.append(INDENT).append(INDENT).append("Hal hal = new Hal(brickConfiguration, usedSensors);");
+    }
+
+    private void generateSuffix(boolean withWrapping) {
+        if ( !withWrapping ) {
+            return;
+        }
+        this.sb.append("\n");
+        this.sb.append(INDENT).append(INDENT).append("try {\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("Thread.sleep(2000);\n");
+        this.sb.append(INDENT).append(INDENT).append("} catch ( InterruptedException e ) {\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("// ok\n");
+        this.sb.append(INDENT).append(INDENT).append("}\n");
+        this.sb.append(INDENT).append("}\n}\n");
+    }
+
+    private String generateRegenerateUsedSensors() {
+        StringBuilder sb = new StringBuilder();
+        String arrayOfSensors = "";
+        for ( HardwareComponentEV3Sensor usedSensor : this.usedSensors ) {
+            arrayOfSensors += usedSensor.getJavaCode();
+            arrayOfSensors += ",";
+        }
+        sb.append("private Set<HardwareComponentEV3Sensor> usedSensors = " + "new LinkedHashSet<HardwareComponentEV3Sensor>(");
+        if ( this.usedSensors.size() > 0 ) {
+            sb.append("Arrays.asList(" + arrayOfSensors.substring(0, arrayOfSensors.length() - 1) + ")");
+        }
+        sb.append(");");
+        return sb.toString();
     }
 
 }

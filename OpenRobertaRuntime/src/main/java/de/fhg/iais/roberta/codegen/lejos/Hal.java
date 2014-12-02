@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.codegen.lejos;
 
+import java.util.Set;
+
 import lejos.ev3.startup.utils.Utils;
 import lejos.hardware.ev3.EV3;
 import lejos.hardware.ev3.LocalEV3;
@@ -23,6 +25,7 @@ import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.brickconfiguration.ev3.EV3BrickConfiguration;
 import de.fhg.iais.roberta.dbc.DbcException;
+import de.fhg.iais.roberta.hardwarecomponents.ev3.HardwareComponentEV3Sensor;
 
 /**
  * Connection class between our generated code and the leJOS API
@@ -60,8 +63,8 @@ public class Hal {
     /**
      * @param brickConfiguration
      */
-    public Hal(EV3BrickConfiguration brickConfiguration) {
-        this.deviceHandler = new DeviceHandler(brickConfiguration);
+    public Hal(EV3BrickConfiguration brickConfiguration, Set<HardwareComponentEV3Sensor> usedSensors) {
+        this.deviceHandler = new DeviceHandler(brickConfiguration, usedSensors);
 
         this.wheelDiameter = brickConfiguration.getWheelDiameterCM();
         this.trackWidth = brickConfiguration.getTrackWidthCM();

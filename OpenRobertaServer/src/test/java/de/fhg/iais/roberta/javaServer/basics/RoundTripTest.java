@@ -181,6 +181,79 @@ public class RoundTripTest {
         RoundTripTest.server.stop();
     }
 
+    private static void initialize() {
+        Properties properties = Util.loadProperties("classpath:openRoberta.properties");
+        buildXml = properties.getProperty("crosscompiler.build.xml");
+        connectionUrl = properties.getProperty("hibernate.connection.url");
+        crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");
+        robotResourcesDir = properties.getProperty("robot.resources.dir");
+    
+        RoundTripTest.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", connectionUrl);
+        nativeSession = sessionFactoryWrapper.getNativeSession();
+        memoryDbSetup = new DbSetup(nativeSession);
+        memoryDbSetup.runDefaultRobertaSetup();
+        brickCommunicator = new BrickCommunicator();
+        compilerWorkflow = new CompilerWorkflow(crosscompilerBasedir, robotResourcesDir, buildXml);
+        restUser = new RestUser(brickCommunicator);
+        restProgram = new RestProgram(sessionFactoryWrapper, brickCommunicator, compilerWorkflow);
+    
+        s1 = HttpSessionState.init();
+    }
+
+    private static void setUpDatabase() throws Exception {
+        assertEquals(0, getOneInt("select count(*) from USER"));
+        RoundTripTest.response =
+            RoundTripTest.restUser.command(
+                RoundTripTest.s1,
+                RoundTripTest.sessionFactoryWrapper.getSession(),
+                mkD("{'cmd':'createUser';'accountName':'orA';'password':'Pid';'userEmail':'cavy@home';'role':'STUDENT'}"));
+        assertEquals(1, getOneInt("select count(*) from USER"));
+        assertTrue(!RoundTripTest.s1.isUserLoggedIn());
+        RoundTripTest.response = //
+            RoundTripTest.restUser.command( //
+                RoundTripTest.s1,
+                RoundTripTest.sessionFactoryWrapper.getSession(),
+                mkD("{'cmd':'login';'accountName':'orA';'password':'Pid'}"));
+        assertEntityRc(RoundTripTest.response, "ok");
+        assertTrue(RoundTripTest.s1.isUserLoggedIn());
+        int s1Id = RoundTripTest.s1.getUserId();
+        assertEquals(0, getOneInt("select count(*) from PROGRAM where OWNER_ID = " + s1Id));
+        for ( String program : RoundTripTest.blocklyPrograms ) {
+            RoundTripTest.blocklyProgram =
+                Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + program + ".xml"), Charsets.UTF_8);
+            JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"saveP\";\"name\":\"" + program + "\"}}");
+            fullRequest.getJSONObject("data").put("program", RoundTripTest.blocklyProgram);
+            RoundTripTest.response = RoundTripTest.restProgram.command(RoundTripTest.s1, fullRequest);
+            assertEntityRc(RoundTripTest.response, "ok");
+        }
+    }
+
+    private static void startServerAndLogin() throws IOException {
+        RoundTripTest.server = new ServerStarter("classpath:openRoberta.properties").start();
+        int port = RoundTripTest.server.getURI().getPort();
+        RoundTripTest.driver = new FirefoxDriver();
+        RoundTripTest.driver.manage().window().maximize();
+        RoundTripTest.baseUrl = "http://localhost:" + port;
+        RoundTripTest.driver.get(RoundTripTest.baseUrl + "/");
+        RoundTripTest.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+    
+        Actions actions = new Actions(RoundTripTest.driver);
+    
+        //Login
+        WebElement onHoverUserElement = RoundTripTest.driver.findElement(By.id("head-navigation-login"));
+        actions.moveByOffset(1, 1);
+        actions.moveToElement(onHoverUserElement);
+        actions.perform();
+    
+        WebElement userLoginElement = (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("login")));
+        userLoginElement.click();
+        RoundTripTest.driver.findElement(By.id("accountNameS")).clear();
+        RoundTripTest.driver.findElement(By.id("accountNameS")).sendKeys("orA");
+        RoundTripTest.driver.findElement(By.id("pass1S")).clear();
+        RoundTripTest.driver.findElement(By.id("pass1S")).sendKeys("Pid");
+        RoundTripTest.driver.findElement(By.id("doLogin")).click();
+    }
+
     private String saveProgram(String programName) throws InterruptedException, Exception, JSONException {
         Actions actions = new Actions(RoundTripTest.driver);
         WebElement onHoverProgramElement1 = RoundTripTest.driver.findElement(By.id("head-navigation-program"));
@@ -213,79 +286,6 @@ public class RoundTripTest {
         tr.findElement(By.tagName("td")).click();
         Thread.sleep(500);
         RoundTripTest.driver.findElement(By.id("loadFromListing")).click();
-    }
-
-    private static void startServerAndLogin() throws IOException {
-        RoundTripTest.server = new ServerStarter("classpath:openRoberta.properties").start();
-        int port = RoundTripTest.server.getURI().getPort();
-        RoundTripTest.driver = new FirefoxDriver();
-        RoundTripTest.driver.manage().window().maximize();
-        RoundTripTest.baseUrl = "http://localhost:" + port;
-        RoundTripTest.driver.get(RoundTripTest.baseUrl + "/");
-        RoundTripTest.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-
-        Actions actions = new Actions(RoundTripTest.driver);
-
-        //Login
-        WebElement onHoverUserElement = RoundTripTest.driver.findElement(By.id("head-navigation-login"));
-        actions.moveByOffset(1, 1);
-        actions.moveToElement(onHoverUserElement);
-        actions.perform();
-
-        WebElement userLoginElement = (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("login")));
-        userLoginElement.click();
-        RoundTripTest.driver.findElement(By.id("accountNameS")).clear();
-        RoundTripTest.driver.findElement(By.id("accountNameS")).sendKeys("orA");
-        RoundTripTest.driver.findElement(By.id("pass1S")).clear();
-        RoundTripTest.driver.findElement(By.id("pass1S")).sendKeys("Pid");
-        RoundTripTest.driver.findElement(By.id("doLogin")).click();
-    }
-
-    private static void initialize() {
-        Properties properties = Util.loadProperties("classpath:openRoberta.properties");
-        buildXml = properties.getProperty("crosscompiler.build.xml");
-        connectionUrl = properties.getProperty("hibernate.connection.url");
-        crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");
-        robotResourcesDir = properties.getProperty("robot.resources.dir");
-
-        RoundTripTest.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", connectionUrl);
-        nativeSession = sessionFactoryWrapper.getNativeSession();
-        memoryDbSetup = new DbSetup(nativeSession);
-        memoryDbSetup.runDefaultRobertaSetup();
-        brickCommunicator = new BrickCommunicator();
-        compilerWorkflow = new CompilerWorkflow(crosscompilerBasedir, robotResourcesDir, buildXml);
-        restUser = new RestUser(brickCommunicator);
-        restProgram = new RestProgram(sessionFactoryWrapper, brickCommunicator, compilerWorkflow);
-
-        s1 = HttpSessionState.init();
-    }
-
-    private static void setUpDatabase() throws Exception {
-        assertEquals(0, getOneInt("select count(*) from USER"));
-        RoundTripTest.response =
-            RoundTripTest.restUser.command(
-                RoundTripTest.s1,
-                RoundTripTest.sessionFactoryWrapper.getSession(),
-                mkD("{'cmd':'createUser';'accountName':'orA';'password':'Pid';'userEmail':'cavy@home';'role':'STUDENT'}"));
-        assertEquals(1, getOneInt("select count(*) from USER"));
-        assertTrue(!RoundTripTest.s1.isUserLoggedIn());
-        RoundTripTest.response = //
-            RoundTripTest.restUser.command( //
-                RoundTripTest.s1,
-                RoundTripTest.sessionFactoryWrapper.getSession(),
-                mkD("{'cmd':'login';'accountName':'orA';'password':'Pid'}"));
-        assertEntityRc(RoundTripTest.response, "ok");
-        assertTrue(RoundTripTest.s1.isUserLoggedIn());
-        int s1Id = RoundTripTest.s1.getUserId();
-        assertEquals(0, getOneInt("select count(*) from PROGRAM where OWNER_ID = " + s1Id));
-        for ( String program : RoundTripTest.blocklyPrograms ) {
-            RoundTripTest.blocklyProgram =
-                Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + program + ".xml"), Charsets.UTF_8);
-            JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"saveP\";\"name\":\"" + program + "\"}}");
-            fullRequest.getJSONObject("data").put("program", RoundTripTest.blocklyProgram);
-            RoundTripTest.response = RoundTripTest.restProgram.command(RoundTripTest.s1, fullRequest);
-            assertEntityRc(RoundTripTest.response, "ok");
-        }
     }
 
     private static int getOneInt(String sqlStmt) {

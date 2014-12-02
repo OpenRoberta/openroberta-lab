@@ -124,14 +124,35 @@ public class Helper {
         return tree;
     }
 
+    /**
+     * Generate AST from XML Blockly stored program
+     *
+     * @param pathToProgramXml
+     * @return AST of the program
+     * @throws Exception
+     */
     public static <V> Phrase<V> generateAST(String pathToProgramXml) throws Exception {
         List<Phrase<V>> tree = generateASTs(pathToProgramXml);
         return tree.get(1);
     }
 
+    /**
+     * Asserts if transformation of Blockly XML saved program is correct.<br>
+     * <br>
+     * <b>Transformation:</b>
+     * <ol>
+     * <li>XML to JAXB</li>
+     * <li>JAXB to AST</li>
+     * <li>AST to JAXB</li>
+     * <li>JAXB to XML</li>
+     * </ol>
+     * Return true if the first XML is equal to second XML.
+     *
+     * @param fileName of the program
+     * @throws Exception
+     */
     public static void assertTransformationIsOk(String fileName) throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = generateTransformer(fileName);
-
         JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
         Marshaller m = jaxbContext.createMarshaller();
         m.setProperty(Marshaller.JAXB_FRAGMENT, true);
@@ -148,10 +169,8 @@ public class Helper {
                 instance.setY(((Location<Void>) phrase).getY());
             }
             instance.getBlock().add(phrase.astToBlock());
-            //instance.getBlock().add(AstJaxbTransformer.astToBlock(phrase));
         }
         blockSet.getInstance().add(instance);
-
         //        m.marshal(blockSet, System.out); // only needed for EXTREME debugging
         StringWriter writer = new StringWriter();
         m.marshal(blockSet, writer);
@@ -161,7 +180,6 @@ public class Helper {
 
         // System.out.println(diff.toString()); // only needed for EXTREME debugging
         Assert.assertTrue(diff.identical());
-
     }
 
     /**
@@ -177,8 +195,16 @@ public class Helper {
         Assert.assertTrue(diff.identical());
     }
 
-    public static void assertCodeIsOk(String a, String fileName) throws Exception {
-        Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generateStringWithoutWrapping(fileName).replaceAll("\\s+", ""));
+    /**
+     * Assert that Java code generated from Blockly XML program is correct.<br>
+     * All white space are ignored!
+     *
+     * @param correctJavaCode correct java code
+     * @param fileName of the program we want to generate java code
+     * @throws Exception
+     */
+    public static void assertCodeIsOk(String correctJavaCode, String fileName) throws Exception {
+        Assert.assertEquals(correctJavaCode.replaceAll("\\s+", ""), Helper.generateStringWithoutWrapping(fileName).replaceAll("\\s+", ""));
     }
 
 }

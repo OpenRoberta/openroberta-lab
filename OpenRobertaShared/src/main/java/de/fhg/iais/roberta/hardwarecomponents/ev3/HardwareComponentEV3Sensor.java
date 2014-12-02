@@ -62,4 +62,5 @@ public final class HardwareComponentEV3Sensor extends HardwareComponentType {
         }
         return null;
     }
+
 }

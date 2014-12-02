@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.codegen.lejos;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
@@ -26,6 +27,7 @@ import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.brickconfiguration.HardwareComponent;
 import de.fhg.iais.roberta.brickconfiguration.ev3.EV3BrickConfiguration;
 import de.fhg.iais.roberta.dbc.DbcException;
+import de.fhg.iais.roberta.hardwarecomponents.ev3.HardwareComponentEV3Sensor;
 
 public class DeviceHandler {
 
@@ -45,8 +47,10 @@ public class DeviceHandler {
     private final Map<SensorPort, GyroSensorMode> gyroModes = new TreeMap<>();
 
     private final Map<SensorPort, SampleProvider> lejosSampleProvider = new TreeMap<>();
+    private final Set<HardwareComponentEV3Sensor> usedSensors;
 
-    public DeviceHandler(EV3BrickConfiguration brickConfiguration) {
+    public DeviceHandler(EV3BrickConfiguration brickConfiguration, Set<HardwareComponentEV3Sensor> usedSensors) {
+        this.usedSensors = usedSensors;
         createDevices(brickConfiguration);
     }
 
@@ -86,11 +90,14 @@ public class DeviceHandler {
             }
             setTachoSensorMode(actorPort, MotorTachoMode.DEGREE);
         }
+    }
 
+    private boolean isUsed(HardwareComponent actorType) {
+        return this.usedSensors.contains(actorType.getComponentType());
     }
 
     private void initSensor(SensorPort sensorPort, HardwareComponent sensorType, Port hardwarePort) {
-        if ( sensorType != null ) {
+        if ( sensorType != null && isUsed(sensorType) ) {
             switch ( sensorType.getComponentType().getTypeName() ) {
                 case "EV3_COLOR_SENSOR":
                     EV3ColorSensor ev3ColorSensor = new EV3ColorSensor(hardwarePort);
