@@ -19,6 +19,7 @@ import org.eclipse.jetty.server.Server;
 import org.hibernate.Session;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.openqa.selenium.By;
@@ -44,6 +45,7 @@ import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.IntegrationTest;
 import de.fhg.iais.roberta.util.Util;
 
+@Ignore
 @Category(IntegrationTest.class)
 public class RoundTripTest {
     private static final String resourcePath = "/roundtrip/";
@@ -190,7 +192,7 @@ public class RoundTripTest {
         connectionUrl = properties.getProperty("hibernate.connection.url");
         crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");
         robotResourcesDir = properties.getProperty("robot.resources.dir");
-    
+
         RoundTripTest.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", connectionUrl);
         nativeSession = sessionFactoryWrapper.getNativeSession();
         memoryDbSetup = new DbSetup(nativeSession);
@@ -199,7 +201,7 @@ public class RoundTripTest {
         compilerWorkflow = new CompilerWorkflow(crosscompilerBasedir, robotResourcesDir, buildXml);
         restUser = new RestUser(brickCommunicator);
         restProgram = new RestProgram(sessionFactoryWrapper, brickCommunicator, compilerWorkflow);
-    
+
         s1 = HttpSessionState.init();
     }
 
@@ -239,15 +241,15 @@ public class RoundTripTest {
         RoundTripTest.baseUrl = "http://localhost:" + port;
         RoundTripTest.driver.get(RoundTripTest.baseUrl + "/");
         RoundTripTest.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-    
+
         Actions actions = new Actions(RoundTripTest.driver);
-    
+
         //Login
         WebElement onHoverUserElement = RoundTripTest.driver.findElement(By.id("head-navigation-login"));
         actions.moveByOffset(1, 1);
         actions.moveToElement(onHoverUserElement);
         actions.perform();
-    
+
         WebElement userLoginElement = (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("login")));
         userLoginElement.click();
         RoundTripTest.driver.findElement(By.id("accountNameS")).clear();

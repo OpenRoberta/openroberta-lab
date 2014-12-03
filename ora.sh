@@ -177,15 +177,15 @@ function createemptydb {
 }
 
 function scpev3menuFn {
-  run="scp Resources/updateResources/EV3Menu.jar root@${ipaddr}:/home/root/lejos/bin/utils"
+  run="scp OpenRobertaServer/target/updateResources/EV3Menu.jar root@${ipaddr}:/home/root/lejos/bin/utils"
   echo "executing: ${run}"
   $run
 }
 
 function scpev3libsFn {
-  runtime="Resources/updateResources/OpenRobertaRuntime.jar"
-  shared="Resources/updateResources/OpenRobertaShared.jar"
-  json='Resources/updateResources/json.jar'
+  runtime="OpenRobertaServer/target/updateResources/OpenRobertaRuntime.jar"
+  shared="OpenRobertaServer/target/updateResources/OpenRobertaShared.jar"
+  json='OpenRobertaServer/target/updateResources/json.jar'
   run="ssh root@${ipaddr} mkdir -p /home/roberta/lib"
   echo "executing: ${run}"
   $run

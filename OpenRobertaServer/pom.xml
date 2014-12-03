@@ -158,7 +158,7 @@ limitations under the License.
                 <executions>
                     <execution>
                         <id>copy-dependencies</id>
-                        <phase>install</phase>
+                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
@@ -184,7 +184,7 @@ limitations under the License.
                 <executions>
                     <execution>
                         <id>copyServer</id>
-                        <phase>install</phase>
+                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>copy</goal>
                         </goals>
@@ -213,7 +213,7 @@ limitations under the License.
                 <executions>
                     <execution>
                         <id>copyUpdateResources</id>
-                        <phase>install</phase>
+                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>copy</goal>
                         </goals>
@@ -263,7 +263,7 @@ limitations under the License.
                 <executions>
                     <execution>
                         <id>copyCrossCompilerResources</id>
-                        <phase>install</phase>
+                        <phase>pre-integration-test</phase>
                         <goals>
                             <goal>copy</goal>
                         </goals>
@@ -354,7 +354,7 @@ limitations under the License.
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>package</phase>
+                        <phase>integration-test</phase>
                         <goals>
                             <goal>integration-test</goal>
                         </goals>

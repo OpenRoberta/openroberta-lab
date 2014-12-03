@@ -44,7 +44,6 @@ import de.fhg.iais.roberta.util.Clock;
 import de.fhg.iais.roberta.util.IntegrationTest;
 import de.fhg.iais.roberta.util.Util;
 
-@Ignore
 @Category(IntegrationTest.class)
 public class BasicPerformanceUserInteractionTest {
     private static final Logger LOG = LoggerFactory.getLogger("workflow");
@@ -96,6 +95,7 @@ public class BasicPerformanceUserInteractionTest {
     }
 
     @Test
+    @Ignore
     public void runUsersConcurrent() throws Exception {
         int baseNumber = 0;
         LOG.info("max parallel users: " + MAX_PARALLEL_USERS + "; total users: " + MAX_TOTAL_USERS);
