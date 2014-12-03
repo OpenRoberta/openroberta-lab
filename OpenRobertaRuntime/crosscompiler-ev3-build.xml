@@ -11,17 +11,8 @@
 	<property name="program.jar" value="${main.name}.jar" />
 
 	<path id="lejos">
-		<fileset dir="${robot.resources.dir}">
-			<include name="dbusjava.jar"/>
-			<include name="ev3classes.jar"/>
-			<include name="jna.jar"/>
-		</fileset>
-	</path>
-	
-	<path id="runtime">
-		<fileset dir="${robot.resources.dir}">
-			<include name="OpenRobertaRuntime.jar"/>
-			<include name="OpenRobertaShared.jar"/>
+		<fileset dir="${crosscompiler.resources.dir}">
+			<include name="*.jar"/>
 		</fileset>
 	</path>
 	
@@ -37,7 +28,6 @@
 		<javac srcdir="${input.dir}" destdir="${output.dir}" includeantruntime="false" fork="yes" debug="true" verbose="true" debuglevel="lines,vars,source">
 			<include name="${main.name}.java"/>
 			<classpath refid="lejos"/>
-			<classpath refid="runtime"/>
 		</javac>
 	</target>
 

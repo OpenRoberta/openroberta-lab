@@ -132,9 +132,8 @@ public class AstToTextlyVisitorTest {
     }
 
     private void assertCodeIsOk(String a, String pathToProgramXml) throws Exception {
-        // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
         String code = Helper.generateString(pathToProgramXml);
-        System.out.println(code); // only needed for EXTREME debugging
+        // System.out.println(code); // only needed for EXTREME debugging
         Assert.assertEquals(a.replaceAll("\\s+", ""), code.replaceAll("\\s+", ""));
     }
 }

@@ -10,6 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
@@ -18,8 +19,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
 import de.fhg.iais.roberta.main.ServerStarter;
+import de.fhg.iais.roberta.util.IntegrationTest;
 
 @Ignore
+@Category(IntegrationTest.class)
 public class SafariUITest {
     private WebDriver driver;
     private String baseUrl;

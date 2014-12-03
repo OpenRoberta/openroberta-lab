@@ -10,6 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
@@ -18,6 +19,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import de.fhg.iais.roberta.main.ServerStarter;
+import de.fhg.iais.roberta.util.IntegrationTest;
 
 /**
  * Download chrome driver for your OS.
@@ -26,6 +28,7 @@ import de.fhg.iais.roberta.main.ServerStarter;
  * "path to Google chrome driver");
  */
 @Ignore
+@Category(IntegrationTest.class)
 public class ChromeUITest {
     private WebDriver driver;
     private String baseUrl;

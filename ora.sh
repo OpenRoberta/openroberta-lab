@@ -38,7 +38,7 @@ function helpFn {
 function startFn {
   propfile="$1"
   main='de.fhg.iais.roberta.main.ServerStarter'
-  run='java -cp "../Resources/resources/*" '"${main} ${propfile}"
+  run='java -cp "target/resources/*" '"${main} ${propfile}"
   echo "executing: $run"
   cd OpenRobertaServer
   eval $run
@@ -82,11 +82,13 @@ function exportApplication {
   echo 'creating directories for user programs and resources'
   mkdir "${exportpath}/userProjects"
   mkdir "${exportpath}/resources"
+  mkdir "${exportpath}/crossCompilerResources"
   mkdir "${exportpath}/updateResources"
   echo "copying resources"
   cp OpenRobertaRuntime/crosscompiler-ev3-build.xml "${exportpath}"
-  cp Resources/updateResources/*.jar "$exportpath/updateResources"
-  cp Resources/resources/*.jar "$exportpath/resources"
+  cp OpenRobertaServer/target/resources/*.jar "$exportpath/resources"
+  cp OpenRobertaServer/target/updateResources/*.jar "$exportpath/updateResources"
+  cp OpenRobertaServer/target/crossCompilerResources/*.jar "$exportpath/crossCompilerResources"
   echo 'creating the start scripts "start.sh" and "start.bat"'
 # -------------- begin of here documents --------------------------------------------------
   cat >"${exportpath}/openRoberta.properties" <<.eof
@@ -109,9 +111,12 @@ crosscompiler.build.xml = crosscompiler-ev3-build.xml
 # the URL of the database
 hibernate.connection.url = jdbc:hsqldb:file:db/openroberta-db
 
-# the brick update rest service and the cross compiler need a directory in which all jars/resources for updating are stored
-robot.resources.dir = updateResources
-
+# the server needs a directory in which jars it is dependant from are stored # only for documentation. Not used.
+robot.updateResources.dir = resources
+# the brick update rest service needs a directory in which jars/resources for updating are stored
+robot.updateResources.dir = updateResources
+# the cross compiler need a directory in which all jars/resources for compilation are stored
+robot.crossCompilerResources.dir = crossCompilerResources
 .eof
   cat >"${exportpath}/start.sh" <<.eof
 #!/bin/bash
@@ -166,7 +171,7 @@ echo executing: "%RUN%"
 function createemptydb {
   dbpath="$1"
   main='de.fhg.iais.roberta.main.Administration'
-  run='java -cp "Resources/resources/*" '"${main} createemptydb ${dbpath}"
+  run='java -cp "OpenRobertaServer/target/resources/*" '"${main} createemptydb ${dbpath}"
   echo "executing: $run"
   eval $run
 }

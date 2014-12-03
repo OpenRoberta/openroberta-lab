@@ -20,6 +20,7 @@ import org.hibernate.Session;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -40,8 +41,10 @@ import de.fhg.iais.roberta.javaServer.resources.RestUser;
 import de.fhg.iais.roberta.main.ServerStarter;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
+import de.fhg.iais.roberta.util.IntegrationTest;
 import de.fhg.iais.roberta.util.Util;
 
+@Category(IntegrationTest.class)
 public class RoundTripTest {
     private static final String resourcePath = "/roundtrip/";
     private static final String[] blocklyPrograms = {

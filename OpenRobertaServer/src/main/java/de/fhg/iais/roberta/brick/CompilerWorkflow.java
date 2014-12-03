@@ -34,16 +34,16 @@ public class CompilerWorkflow {
 
     private static final Logger LOG = LoggerFactory.getLogger(CompilerWorkflow.class);
     public final String pathToCrosscompilerBaseDir;
-    public final String robotResourcesDir;
+    public final String crossCompilerResourcesDir;
     public final String pathToCrossCompilerBuildXMLResource;
 
     @Inject
     public CompilerWorkflow(@Named("crosscompiler.basedir") String pathToCrosscompilerBaseDir, //
-        @Named("robot.resources.dir") String robotResourcesDir, //
+        @Named("robot.crossCompilerResources.dir") String crossCompilerResourcesDir, //
         @Named("crosscompiler.build.xml") String pathToCrossCompilerBuildXMLResource) //
     {
         this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
-        this.robotResourcesDir = robotResourcesDir;
+        this.crossCompilerResourcesDir = crossCompilerResourcesDir;
         this.pathToCrossCompilerBuildXMLResource = pathToCrossCompilerBuildXMLResource;
     }
 
@@ -138,7 +138,7 @@ public class CompilerWorkflow {
 
             project.init();
             project.setProperty("user.projects.dir", this.pathToCrosscompilerBaseDir);
-            project.setProperty("robot.resources.dir", this.robotResourcesDir);
+            project.setProperty("crosscompiler.resources.dir", this.crossCompilerResourcesDir);
             project.setProperty("token.dir", token);
             project.setProperty("main.name", mainFile);
             project.setProperty("main.package", mainPackage);

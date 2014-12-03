@@ -17,6 +17,7 @@ import org.codehaus.jettison.json.JSONObject;
 import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
@@ -32,8 +33,10 @@ import de.fhg.iais.roberta.javaServer.resources.RestUser;
 import de.fhg.iais.roberta.javaServer.resources.TokenReceiver;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
+import de.fhg.iais.roberta.util.IntegrationTest;
 import de.fhg.iais.roberta.util.Util;
 
+@Category(IntegrationTest.class)
 public class BasicUserInteractionTest {
     private SessionFactoryWrapper sessionFactoryWrapper;
     private DbSetup memoryDbSetup;
