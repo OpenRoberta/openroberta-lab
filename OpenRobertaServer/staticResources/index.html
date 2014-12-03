@@ -52,7 +52,7 @@ limitations under the License.
                 <ul id="submenu-program" class="head-navigation-submenu">
                     <li><span id="runProg" class="flaticon-botton2" lkey="MENU.START">starten</span></li>
                     <li><span id="checkProg" class="flaticon-tick" lkey="MENU.CHECK">checken</span></li>
-                    <li class="logout"><span id="newProg" class="flaticon-add10" lkey="MENU.NEW">neu ...</span></li>
+                    <li><span id="newProg" class="flaticon-add10" lkey="MENU.NEW">neu ...</span></li>
                     <li class="logout"><span id="openProg" class="flaticon-pencil1"lkey="MENU.OPEN">öffnen ...</span></li>
                     <li class="login logout"><span id="saveProg" class="flaticon-empty3" lkey="MENU.SAVE">speichern</span></li>
                     <li class="logout"><span id="saveAsProg" class="flaticon-empty3" lkey="MENU.SAVE_AS">speichern unter ...</span></li>
@@ -63,24 +63,24 @@ limitations under the License.
                 </ul>
             </li>
             <li>
-                <a href="#" id="head-navigation-nepo"><span class="head-navi-icons nepo"></span><span class="head-navi-text" lkey="MENU.NEPO"></span></a>
-                <ul id="submenu-nepo" class="head-navigation-submenu">
-                    <li class="logout"><span id="toolboxBeginner" class="flaticon-spanner" lkey="MENU.BEGINNER">Anfänger</span></li>
-                    <li class="logout"><span id="toolboxExpert" class="flaticon-spanner" lkey="MENU.EXPERT">Experte</span></li>
-                </ul>
-            </li>
-            <li>
                 <a href="#" id="head-navigation-configuration"><span class="head-navi-icons configuration"></span><span class="head-navi-text" lkey="MENU.ROBOT"></span></a>
                 <ul id="submenu-configuration" class="head-navigation-submenu">
                     <li><span id="checkConfig" class="flaticon-tick" lkey="MENU.CHECK">checken</span></li>
                     <li><span id="standardConfig" class="flaticon-thumbs1" lkey="MENU.DEFAULT_CONFIGURATION">Standardkonfiguration</span></li>
-                    <li class="logout"><span id="newConfig" class="flaticon-add10" lkey="MENU.NEW">neu ...</span></li>
+                    <li><span id="newConfig" class="flaticon-add10" lkey="MENU.NEW">neu ...</span></li>
                     <li class="logout"><span id="openConfig" class="flaticon-pencil1" lkey="MENU.OPEN">öffnen ... </span></li>
                     <li class="login logout"><span id="saveConfig" class="flaticon-empty3" lkey="MENU.SAVE">speichern</span></li>
                     <li class="logout"><span id="saveAsConfig" class="flaticon-empty3" lkey="MENU.SAVE_AS">speichern unter ...</span></li>
                     <li class="login logout"><span id="divideConfig" class="flaticon-flow3" lkey="MENU.DIVIDE">teilen ...</span></li>
                     <li class="logout"><span id="deleteConfig" class="flaticon-delete10" lkey="MENU.DELETE">löschen ...</span></li>
                     <li class="login logout"><span id="propertiesConfig" class="flaticon-information" lkey="MENU.PROPERTIES">Eigenschaften ...</span></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#" id="head-navigation-nepo"><span class="head-navi-icons nepo"></span><span class="head-navi-text" lkey="MENU.NEPO"></span></a>
+                <ul id="submenu-nepo" class="head-navigation-submenu">
+                    <li><span id="toolboxBeginner" class="flaticon-spanner" lkey="MENU.BEGINNER">Anfänger</span></li>
+                    <li><span id="toolboxExpert" class="flaticon-spanner" lkey="MENU.EXPERT">Experte</span></li>
                 </ul>
             </li>
             <li>
@@ -107,9 +107,9 @@ limitations under the License.
                 <ul id="submenu-login" class="head-navigation-submenu">
                     <li class="login"><span id="login" class="flaticon-user" lkey="MENU.LOG_IN">anmelden ...</span></li>
                     <li class="logout"><span id="logout" class="flaticon-user2" lkey="MENU.LOG_OUT">abmelden</span></li>
-                    <li class="login"><span id="new" class="flaticon-add9" lkey="MENU.NEW">neu ...</span></li>
-                    <li class="login logout"><span id="change" class="flaticon-group1" lkey="MENU.CHANGE">ändern ...</span></li>
-                    <li class="hidden" id="delete" class="logout"><span class="flaticon-user5" lkey="MENU.DELETE_USER">Benutzer löschen ...</span></li>
+                    <li><span id="new" class="flaticon-add9" lkey="MENU.NEW">neu ...</span></li>
+                    <li class="hidden"><span id="change" class="flaticon-group1" lkey="MENU.CHANGE">ändern ...</span></li>
+                    <li class="logout" id="deleteUser" class="logout"><span class="flaticon-user5" lkey="MENU.DELETE_USER">Benutzer löschen ...</span></li>
                 </ul>
             </li>
 
@@ -162,8 +162,6 @@ limitations under the License.
         <input id="userName" class='input' type="text" value="" />
         <label for="userEmail" lkey="POPUP.EMAIL">E-Mail</label>
         <input id="userEmail" class='input' type="text" value="" /><br/>
-        <input type="radio" name="role" value="schueler" /><span lkey="POPUP.STUDENT">Schüler</span>
-        <input type="radio" name="role" value="lehrer" /><span lkey="POPUP.TEACHER">Lehrer</span><br/>
         <input id="saveUser" class='submit' type="submit" lkey="POPUP.REGISTER_USER" value="Benutzer registrieren" />
     </div>
 
@@ -199,7 +197,6 @@ limitations under the License.
     <div class="jquerypopup" id="show-message" title="Achtung">
         <span class="message" id="messageDummy" lkey="POPUP.ATTENTION">Dummy</span>   <!-- don't delete this line -->
         <span class="message" id="MESSAGE.PASSWORD_ERROR" lkey="MESSAGE.PASSWORD_ERROR">Du hast beim eingeben der beiden Passworte etwas falsch gemacht.</span>
-        <span class="message" id="MESSAGE.TEACHER_OR_STUDENT" lkey="MESSAGE.TEACHER_OR_STUDENT">Du musst angeben, ob Du Schüler oder Lehrer bist.</span>
         <span class="message" id="MESSAGE.USER_CREATED" lkey="MESSAGE.USER_CREATED">Du hast erfolgreich einen neuen Nutzer angelegt.</span>
         <span class="message" id="MESSAGE.USER_EXISTS" lkey="MESSAGE.USER_EXISTS">Dieser Nutzer existiert bereits. Du musst einen anderen Account-Namen wählen.</span>
         <span class="message" id="MESSAGE.USER_DELETED" lkey="MESSAGE.USER_DELETED">Der Nutzer wurde gelöscht.</span>
