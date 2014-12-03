@@ -8,7 +8,6 @@ function initUserState() {
     userState.language = 'de';
     userState.id = -1;
     userState.name = '';
-    userState.role = '';
     userState.program = 'meinProgramm';
     userState.configuration = 'Standardkonfiguration';
     userState.programSaved = false;
@@ -30,30 +29,26 @@ function saveUserToServer() {
     var $userEmail = $("#userEmail");
     var $pass1 = $('#pass1');
     var $pass2 = $('#pass2');
-    var $role = $("input[name=role]:checked");
 
     if ($pass1.val() != $pass2.val()) {
         displayMessage("MESSAGE.PASSWORD_ERROR");
-    } else if ($role.val() == null) {
-        displayMessage("MESSAGE.TEACHER_OR_STUDENT");
     } else {
-        var roleGerman = $role.val();
-        var role = "STUDENT";
-        if (roleGerman === "Lehrer") {
-            role = "TEACHER";
-        }
         COMM.json("/user", {
             "cmd" : "createUser",
             "accountName" : $userAccountName.val(),
             "userName" : $userName.val(),
             "userEmail" : $userEmail.val(),
             "password" : $pass1.val(),
-            "role" : role
+            "role" : 'TEACHER',
         }, function(result) {
             if (result.rc === "ok") {
                 setRobotState(result);
                 displayMessage("MESSAGE.USER_CREATED");
                 $(".ui-dialog-content").dialog("close"); // close all opened popups
+                $('#accountNameS').val($userAccountName.val());
+                $('#pass1S').val($pass1.val());
+                console.log($('#pass1S').val());
+                login();
             } else {
                 displayMessage("MESSAGE.USER_EXISTS");
             }
@@ -65,13 +60,14 @@ function saveUserToServer() {
  * Delete user on server
  */
 function deleteUserOnServer() {
-    var $userAccountName = $("#accountNameD");
-    userState.id = null;
     COMM.json("/user", {
         "cmd" : "deleteUser",
-        "accountName" : $userAccountName.val()
+        "accountName" : userState.name,
+        "password" : ""
     }, function(result) {
         if (result.rc === "ok") {
+            userState.id = null;
+            userState.name = '';
             setRobotState(result);
             displayMessage("MESSAGE.USER_DELETED");
             $(".ui-dialog-content").dialog("close"); // close all opened popups
@@ -96,7 +92,6 @@ function login() {
         if (response.rc === "ok") {
             userState.name = response.userAccountName;
             userState.id = response.userId;
-            userState.role = response.userRole;
             setHeadNavigationMenuState('login');
             setRobotState(response);
             $("#tutorials").fadeOut(700);
@@ -800,57 +795,40 @@ function initHeadNavigation() {
         position : {
             at : "left top+57",
             collision : "fit"
-        }
+        },
     });
-
-    // Open / close menu on click (for tablets)
-    // DEACTIVATED BECAUSE OF PROBLEMS WITH THE SELENIUM TESTS !!!
-//    $('#head-navigation > li > a').onWrap('click', function(event) {
-//        var domId = event.target.id;
-//        if (domId === 'head-navigation-program') {
-//            if ($('#head-navigation #submenu-program').css('display') === 'none' ) {
-//                $('#head-navigation #submenu-program').css('display','block'); 
-//            } else {
-//                $('#head-navigation #submenu-program').css('display','none');               
-//            }
-//        } else if (domId === 'head-navigation-nepo') {
-//            if ($('#head-navigation #submenu-nepo').css('display') === 'none' ) {
-//                $('#head-navigation #submenu-nepo').css('display','block'); 
-//            } else {
-//                $('#head-navigation #submenu-nepo').css('display','none');               
-//            }
-//        } else if (domId === 'head-navigation-configuration') {
-//            if ($('#head-navigation #submenu-configuration').css('display') === 'none' ) {
-//                $('#head-navigation #submenu-configuration').css('display','block'); 
-//            } else {
-//                $('#head-navigation #submenu-configuration').css('display','none');               
-//            }
-//        } else if (domId === 'head-navigation-connection') {
-//            if ($('#head-navigation #submenu-connection').css('display') === 'none' ) {
-//                $('#head-navigation #submenu-connection').css('display','block'); 
-//            } else {
-//                $('#head-navigation #submenu-connection').css('display','none');               
-//            }
-//        } else if (domId === 'head-navigation-developertools') {
-//            if ($('#head-navigation #submenu-developertools').css('display') === 'none' ) {
-//                $('#head-navigation #submenu-developertools').css('display','block'); 
-//            } else {
-//                $('#head-navigation #submenu-developertools').css('display','none');               
-//            }
-//        } else if (domId === 'head-navigation-help') {
-//            if ($('#head-navigation #submenu-help').css('display') === 'none' ) {
-//                $('#head-navigation #submenu-help').css('display','block'); 
-//            } else {
-//                $('#head-navigation #submenu-help').css('display','none');               
-//            }
-//        } else if (domId === 'head-navigation-login') {
-//            if ($('#head-navigation #submenu-login').css('display') === 'none' ) {
-//                $('#head-navigation #submenu-login').css('display','block'); 
-//            } else {
-//                $('#head-navigation #submenu-login').css('display','none');               
-//            }
-//        }
-//    });
+    
+    $('#head-navigation > li > ul').find('li').hide();
+    
+    // Open menus on click 
+    $('#head-navigation-program').onWrap('click', function() {
+        $('#head-navigation > li > ul').find('li').hide();
+        $('#submenu-program').find('li').not('.hidden').show();
+    });
+    $('#head-navigation-nepo').onWrap('click', function() {
+        $('#head-navigation > li > ul').find('li').hide();
+        $('#submenu-nepo').find('li').not('.hidden').show();
+    });
+    $('#head-navigation-configuration').onWrap('click', function() {
+        $('#head-navigation > li > ul').find('li').hide();
+        $('#submenu-configuration').find('li').not('.hidden').show();
+    });
+    $('#head-navigation-connection').onWrap('click', function() {
+        $('#head-navigation > li > ul').find('li').hide();
+        $('#submenu-connection').find('li').not('.hidden').show();
+    });
+    $('#head-navigation-developertools').onWrap('click', function() {
+        $('#head-navigation > li > ul').find('li').hide();
+        $('#submenu-developertools').find('li').not('.hidden').show();
+    });
+    $('#head-navigation-help').onWrap('click', function() {
+        $('#head-navigation > li > ul').find('li').hide();
+        $('#submenu-help').find('li').not('.hidden').show();
+    });
+    $('#head-navigation-login').onWrap('click', function() {
+        $('#head-navigation > li > ul').find('li').hide();
+        $('#submenu-login').find('li').not('.hidden').show();
+    });
 
     // Submenu Program
     $('#head-navigation').onWrap('click', '#submenu-program > li:not(.ui-state-disabled) > span', function(event) {
@@ -885,22 +863,6 @@ function initHeadNavigation() {
         return false;
     }, 'sub menu of menu "program"');
 
-    // Submenu Nepo
-    $('#head-navigation').onWrap('click', '#submenu-nepo > li:not(.ui-state-disabled) > span', function(event) {
-        $(".ui-dialog-content").dialog("close"); // close all opened popups
-        var domId = event.target.id;
-        if (domId === 'toolboxBeginner') {
-            loadToolbox('beginner');
-            $('#toolboxBeginner').addClass('ui-state-disabled');
-            $('#toolboxExpert').removeClass('ui-state-disabled');
-        } else if (domId === 'toolboxExpert') {
-            loadToolbox('expert');
-            $('#toolboxExpert').addClass('ui-state-disabled');
-            $('#toolboxBeginner').removeClass('ui-state-disabled');
-        }
-        return false;
-    }, 'sub menu of menu "nepo"');
-
     // Submenu Roboter (Configuration)
     $('#head-navigation').onWrap('click', '#submenu-configuration > li:not(.ui-state-disabled) > span', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
@@ -930,6 +892,22 @@ function initHeadNavigation() {
         }
         return false;
     }, 'sub menu of menu "roboter" ("configuration")');
+
+    // Submenu Nepo
+    $('#head-navigation').onWrap('click', '#submenu-nepo > li:not(.ui-state-disabled) > span', function(event) {
+        $(".ui-dialog-content").dialog("close"); // close all opened popups
+        var domId = event.target.id;
+        if (domId === 'toolboxBeginner') {
+            loadToolbox('beginner');
+            $('#toolboxBeginner').addClass('ui-state-disabled');
+            $('#toolboxExpert').removeClass('ui-state-disabled');
+        } else if (domId === 'toolboxExpert') {
+            loadToolbox('expert');
+            $('#toolboxExpert').addClass('ui-state-disabled');
+            $('#toolboxBeginner').removeClass('ui-state-disabled');
+        }
+        return false;
+    }, 'sub menu of menu "nepo"');
 
     // Submenu Connection
     $('#head-navigation').onWrap('click', '#submenu-connection > li:not(.ui-state-disabled) > span', function(event) {
@@ -976,6 +954,7 @@ function initHeadNavigation() {
         } else if (domId === 'new') {
             $("#register-user").dialog("open");
         } else if (domId === 'change') {
+            // open the same popup as in case 'new', but with fields prefilled
         } else if (domId === 'delete') {
             $("#delete-user").dialog("open");
         }
@@ -984,7 +963,7 @@ function initHeadNavigation() {
 
     // Close submenu on mouseleave
     $('#head-navigation').onWrap('mouseleave', function(event) {
-        $('#head-navigation').menu("collapseAll", null, false);
+        $('#head-navigation > li > ul').find('li').hide();
     });
 
     $('#head-navigation #logo').onWrap('click', function() {
