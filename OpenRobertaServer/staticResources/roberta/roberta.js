@@ -14,7 +14,7 @@ function initUserState() {
     userState.configurationSaved = false;
     userState.brickSaved = false;
     userState.robot = '';
-    userState.robotState = 'robot.dontKnow';
+    userState.robotState = 'robot.not_waiting';
     userState.waiting = '';
     userState.toolbox = 'beginner';
     userState.token = '1A2B3C4D';
@@ -743,8 +743,9 @@ function displayState() {
         var robotState = escape(userState.robotState);
         $('#' + robotState + '').css('display','inline');
         if (userState.waiting) {
-            var str = $('#' + robotState + '').text() + ' ' + userState.waiting;
-            $('#' + robotState + '').text(str);
+            var waitingTime = escape("robot.waiting_time");
+            $('#' + waitingTime + '').css('display','inline');
+            $('#' + waitingTime + '').text(' ' + userState.waiting);
         }
         $('#head-navigation #iconDisplayRobotState').css('display', 'inline');
     } else {
