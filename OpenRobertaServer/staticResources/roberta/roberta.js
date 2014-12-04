@@ -47,7 +47,6 @@ function saveUserToServer() {
                 $(".ui-dialog-content").dialog("close"); // close all opened popups
                 $('#accountNameS').val($userAccountName.val());
                 $('#pass1S').val($pass1.val());
-                console.log($('#pass1S').val());
                 login();
             } else {
                 displayMessage("MESSAGE.USER_EXISTS");
@@ -559,22 +558,22 @@ function beforeActivateTab(event, ui) {
  */
 function initProgramNameTable() {
     var columns = [ {
-        "sTitle" : "<span lkey='DATATABLE.PROGRAM_NAME'>Name des Programms</span>",
+        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_PROGRAM_NAME'>Name des Programms</span>",
         "sClass" : "programs"
     }, {
-        "sTitle" : "<span lkey='DATATABLE.CREATED_BY'>Erzeugt von</span>",
+        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>Erzeugt von</span>",
         "sClass" : "programs"
     }, {
-        "sTitle" : "<span lkey='DATATABLE.BLOCKS'>Blöcke</span>",
+        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_BLOCKS'>Blöcke</span>",
         "sClass" : "programs"
     }, {
-        "sTitle" : "<span lkey='DATATABLE.ICON'>Icon</span>",
+        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_ICON'>Icon</span>",
         "sClass" : "programs"
     }, {
-        "sTitle" : "<span lkey='DATATABLE.CREATED_ON'>Erzeugt am</span>",
+        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>Erzeugt am</span>",
         "sClass" : "programs"
     }, {
-        "sTitle" : "<span lkey='DATATABLE.ACTUALIZATION'>Letzte Aktualisierung</span>",
+        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_ACTUALIZATION'>Letzte Aktualisierung</span>",
         "sClass" : "programs"
     }, ];
     var $programs = $('#programNameTable');
@@ -587,16 +586,16 @@ function initProgramNameTable() {
         "bPaginate" : true,
         "iDisplayLength" : 20,
         "oLanguage" : {
-            "sLengthMenu" : '<span lkey="DATATABLE.SHOW">Zeige</span> <select>' + '<option value="10">10</option><option value="20">20</option><option value="25">25</option>'
-                    + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>' + '</select> <span lkey="DATATABLE.PROGRAMS">Programme</span>',
+            "sLengthMenu" : '<span lkey="Blockly.Msg.DATATABLE_SHOW">Zeige</span> <select>' + '<option value="10">10</option><option value="20">20</option><option value="25">25</option>'
+                    + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>' + '</select> <span lkey="Blockly.Msg.DATATABLE_PROGRAMS">Programme</span>',
             "oPaginate": {
-                "sFirst": "<span lkey='DATATABLE.FIRST'>Erste</span>",
-                "sPrevious": "<span lkey='DATATABLE.PREVIOUS'>Vorige</span>",
-                "sNext": "<span lkey='DATATABLE.NEXT'>Nächste</span>",
-                "sLast": "<span lkey='DATATABLE.LAST'>Letzte</span>"
+                "sFirst": "<span lkey='Blockly.Msg.DATATABLE_FIRST'>Erste</span>",
+                "sPrevious": "<span lkey='Blockly.Msg.DATATABLE_PREVIOUS'>Vorige</span>",
+                "sNext": "<span lkey='Blockly.Msg.DATATABLE_NEXT'>Nächste</span>",
+                "sLast": "<span lkey='Blockly.Msg.DATATABLE_LAST'>Letzte</span>"
             },
-            "sEmptyTable": "<span lkey='DATATABLE.EMPTY_TABLE'>Die Tabelle ist leer</span>",
-            "sInfo": "<span lkey='DATATABLE.SHOWING'>Zeige</span> _START_ <span lkey='DATATABLE.TO'>bis</span> _END_ <span lkey='DATATABLE.OF'>von</span> _TOTAL_ <span lkey='DATATABLE.ENTRIES'>Einträgen</span>",
+            "sEmptyTable": "<span lkey='Blockly.Msg.DATATABLE_EMPTY_TABLE'>Die Tabelle ist leer</span>",
+            "sInfo": "<span lkey='Blockly.Msg.DATATABLE_SHOWING'>Zeige</span> _START_ <span lkey='Blockly.Msg.DATATABLE_TO'>bis</span> _END_ <span lkey='Blockly.Msg.DATATABLE_OF'>von</span> _TOTAL_ <span lkey='Blockly.Msg.DATATABLE_ENTRIES'>Einträgen</span>",
             "sInfoEmpty": "&nbsp;"
         },
         "fnDrawCallback" : function() {
@@ -618,19 +617,19 @@ function initProgramNameTable() {
  */
 function initConfigurationNameTable() {
     var columns = [ {
-        "sTitle" : "<span lkey='DATATABLE.CONFIGURATION_NAME'>Name der Konfiguration</span>",
+        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_CONFIGURATION_NAME'>Name der Konfiguration</span>",
         "sClass" : "configurations"
     }, {
-        "sTitle" : "<span lkey='DATATABLE.CREATED_BY'>Erzeugt von</span>",
+        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>Erzeugt von</span>",
         "sClass" : "configurations"
     }, {
-        "sTitle" : "<span lkey='DATATABLE.ICON'>Icon</span>",
+        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_ICON'>Icon</span>",
         "sClass" : "configurations"
     }, {
-        "sTitle" : "<span lkey='DATATABLE.CREATED_ON'>Erzeugt am</span>",
+        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>Erzeugt am</span>",
         "sClass" : "configurations"
     }, {
-        "sTitle" : "<span lkey='DATATABLE.ACTUALIZATION'>Letzte Aktualisierung</span>",
+        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_ACTUALIZATION'>Letzte Aktualisierung</span>",
         "sClass" : "configurations"
     }, ];
     var $configurations = $('#configurationNameTable');
@@ -643,16 +642,16 @@ function initConfigurationNameTable() {
         "bPaginate" : true,
         "iDisplayLength" : 20,
         "oLanguage" : {
-            "sLengthMenu" : '<span lkey="DATATABLE.SHOW">Zeige</span> <select>' + '<option value="10">10</option><option value="20">20</option><option value="25">25</option>'
-                    + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>' + '</select> <span lkey="DATATABLE.CONFIGURATIONS">Konfigurationen</span>',
+            "sLengthMenu" : '<span lkey="Blockly.Msg.DATATABLE_SHOW">Zeige</span> <select>' + '<option value="10">10</option><option value="20">20</option><option value="25">25</option>'
+                    + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>' + '</select> <span lkey="Blockly.Msg.DATATABLE_CONFIGURATIONS">Konfigurationen</span>',
             "oPaginate": {
-                "sFirst": "<span lkey='DATATABLE.FIRST'>Erste</span>",
-                "sPrevious": "<span lkey='DATATABLE.PREVIOUS'>Vorige</span>",
-                "sNext": "<span lkey='DATATABLE.NEXT'>Nächste</span>",
-                "sLast": "<span lkey='DATATABLE.LAST'>Letzte</span>"
+                "sFirst": "<span lkey='Blockly.Msg.DATATABLE_FIRST'>Erste</span>",
+                "sPrevious": "<span lkey='Blockly.Msg.DATATABLE_PREVIOUS'>Vorige</span>",
+                "sNext": "<span lkey='Blockly.Msg.DATATABLE_NEXT'>Nächste</span>",
+                "sLast": "<span lkey='Blockly.Msg.DATATABLE_LAST'>Letzte</span>"
             },
-            "sEmptyTable": "<span lkey='DATATABLE.EMPTY_TABLE'>Die Tabelle ist leer</span>",
-            "sInfo": "<span lkey='DATATABLE.SHOWING'>Zeige</span> _START_ <span lkey='DATATABLE.TO'>bis</span> _END_ <span lkey='DATATABLE.OF'>von</span> _TOTAL_ <span lkey='DATATABLE.ENTRIES'>Einträgen</span>",
+            "sEmptyTable": "<span lkey='Blockly.Msg.DATATABLE_EMPTY_TABLE'>Die Tabelle ist leer</span>",
+            "sInfo": "<span lkey='Blockly.Msg.DATATABLE.SHOWING'>Zeige</span> _START_ <span lkey='Blockly.Msg.DATATABLE_TO'>bis</span> _END_ <span lkey='Blockly.Msg.DATATABLE_OF'>von</span> _TOTAL_ <span lkey='Blockly.Msg.DATATABLE_ENTRIES'>Einträgen</span>",
             "sInfoEmpty": "&nbsp;"
         },
         "fnDrawCallback" : function() {
@@ -1110,54 +1109,56 @@ function translate(jsdata) {
     $("[lkey]").each (function (index)
     {
         var key = $(this).attr('lkey');
-        var value = jsdata[key];
-        //console.log('key/value = ' + key + '/' + value);
-        if (key === 'MENU.LOGIN') {
+        var value = eval(key);
+        if (value == undefined) {
+            console.log('UNDEFINED    key : value = ' + key + ' : ' + value);            
+        }
+        if (key === 'Blockly.Msg.MENU_LOGIN') {
             $('#login-user').dialog('option', 'title', value);
             $(this).html(value);            
-        } else if (key  === 'POPUP.DO_LOGIN') {
+        } else if (key === 'Blockly.Msg.POPUP_DO_LOGIN') {
             $('#login-user #doLogin').attr('value', value);
-        } else if (key  === 'POPUP.REGISTER_USER') {
+        } else if (key === 'Blockly.Msg.POPUP_REGISTER_USER') {
             $('#register-user').dialog('option', 'title', value);
             $('#register-user #saveUser').attr('value', value);
-        } else if (key  === 'POPUP.DELETE_USER') {
+        } else if (key === 'Blockly.Msg.POPUP_DELETE_USER') {
             $('#delete-user').dialog('option', 'title', value);
             $('#delete-user #deleteUser').attr('value', value);
-        } else if (key  === 'POPUP.ATTACH_PROGRAM') {
+        } else if (key === 'Blockly.Msg.POPUP_ATTACH_PROGRAM') {
             $('#attach-program').dialog('option', 'title', value);
             $('#attach-program #attachProgram').attr('value', value);
-        } else if (key  === 'POPUP.SAVE_PROGRAM') {
+        } else if (key === 'Blockly.Msg.POPUP_SAVE_PROGRAM') {
             $('#save-program').dialog('option', 'title', value);
             $('#save-program #saveProgram').attr('value', value);
-        } else if (key  === 'POPUP.SAVE_CONFIGURATION') {
+        } else if (key === 'Blockly.Msg.POPUP_SAVE_CONFIGURATION') {
             $('#save-configuration').dialog('option', 'title', value);
             $('#save-configuration #saveConfiguration').attr('value', value);
-        } else if (key  === 'POPUP.SET_TOKEN') {
+        } else if (key === 'Blockly.Msg.POPUP_SET_TOKEN') {
             $('#set-token').dialog('option', 'title', value);
             $('#set-token #setToken').attr('value', value);
-        } else if (key  === 'POPUP.ATTENTION') {
+        } else if (key === 'Blockly.Msg.POPUP_ATTENTION') {
             $('#show-message').dialog('option', 'title', value);
-        } else if (key  === 'BUTTON.BACK') {
+        } else if (key === 'Blockly.Msg.BUTTON_BACK') {
             $('.backButton').attr('value', value);
-        } else if (key  === 'BUTTON.LOAD') {
+        } else if (key === 'Blockly.Msg.BUTTON_LOAD') {
             $('.buttonLoad').attr('value', value);
-        } else if (key  === 'BUTTON.DO_DELETE') {
+        } else if (key === 'Blockly.Msg.BUTTON_DO_DELETE') {
             $('.buttonDelete').attr('value', value);
-        } else if (key  === 'BUTTON.EMPTY_LIST') {
+        } else if (key === 'Blockly.Msg.BUTTON_EMPTY_LIST') {
             $('#clearLog').attr('value', value);
-        } else if (key  === 'HINT.LANGUAGE_GERMAN') {
+        } else if (key === 'Blockly.Msg.HINT_LANGUAGE_GERMAN') {
             $('#setLangDe').prop('title', value);
-        } else if (key  === 'HINT.LANGUAGE_ENGLISH') {
+        } else if (key === 'Blockly.Msg.HINT_LANGUAGE_ENGLISH') {
             $('#setLangEn').prop('title', value);
-        } else if (key  === 'HINT.ROBOT_STATE') {
+        } else if (key === 'Blockly.Msg.HINT_ROBOT_STATE') {
             $('#displayRobotState').prop('title', value);
-        } else if (key  === 'HINT.TOOLBOX') {
+        } else if (key === 'Blockly.Msg.HINT_TOOLBOX') {
             $('#displayToolbox').prop('title', value);
-        } else if (key  === 'HINT.USER') {
+        } else if (key === 'Blockly.Msg.HINT_USER') {
             $('#displayLogin').prop('title', value);
-        } else if (key  === 'HINT.PROGRAM') {
+        } else if (key === 'Blockly.Msg.HINT_PROGRAM') {
             $('#displayProgram').prop('title', value);
-        } else if (key  === 'HINT.CONFIGURATION') {
+        } else if (key === 'Blockly.Msg.HINT_CONFIGURATION') {
             $('#displayConfiguration').prop('title', value);
         } else {
             $(this).html(value);            
@@ -1186,8 +1187,7 @@ function switchLanguage(langCode) {
         $("#setLang" + langCode + "").removeClass('smallFlag');
         $("#setLang" + langCode + "").addClass('bigFlag');
         userState.language = langCode;
-        $.getJSON('blockly/msg/json/' + langCode.toLowerCase() + '.json', translate);
-        $.getScript('blockly/msg/js/' + langCode.toLowerCase() + '.js');
+        $.getScript('blockly/msg/js/' + langCode.toLowerCase() + '.js', translate);
         COMM.json("/blocks", {
             "cmd" : "loadT",
             "name" : userState.toolbox
