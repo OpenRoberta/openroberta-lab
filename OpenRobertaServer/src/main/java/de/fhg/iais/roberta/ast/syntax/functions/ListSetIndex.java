@@ -18,16 +18,16 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * This class represents the <b>lists_setIndex</b> block from Blockly into the AST (abstract syntax tree).<br>
  * <br>
  * The user must provide name of the function and list of parameters. <br>
- * To create an instance from this class use the method {@link #make(Functions, List, BlocklyBlockProperties, BlocklyComment)}.<br>
- * The enumeration {@link Functions} contains all allowed functions.
+ * To create an instance from this class use the method {@link #make(FunctionNames, List, BlocklyBlockProperties, BlocklyComment)}.<br>
+ * The enumeration {@link FunctionNames} contains all allowed functions.
  */
 public class ListSetIndex<V> extends Function<V> {
     private final Mode mode;
-    private final Functions functName;
+    private final FunctionNames functName;
 
     private final List<Expr<V>> param;
 
-    private ListSetIndex(Mode mode, Functions name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private ListSetIndex(Mode mode, FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Kind.LIST_SET_INDEX, properties, comment);
         Assert.isTrue(mode != null && name != null && param != null);
         this.mode = mode;
@@ -46,14 +46,14 @@ public class ListSetIndex<V> extends Function<V> {
      * @param comment that user has added to the block,
      * @return read only object of class {@link ListSetIndex}
      */
-    public static <V> ListSetIndex<V> make(Mode mode, Functions name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> ListSetIndex<V> make(Mode mode, FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new ListSetIndex<V>(mode, name, param, properties, comment);
     }
 
     /**
      * @return name of the function
      */
-    public Functions getFunctName() {
+    public FunctionNames getFunctName() {
         return this.functName;
     }
 

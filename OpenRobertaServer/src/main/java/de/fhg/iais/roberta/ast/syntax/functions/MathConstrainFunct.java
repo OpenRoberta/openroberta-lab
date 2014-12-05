@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br>
  * The user must provide name of the function and list of parameters. <br>
  * To create an instance from this class use the method {@link #make(List, BlocklyBlockProperties, BlocklyComment)}.<br>
- * The enumeration {@link Functions} contains all allowed functions.
+ * The enumeration {@link FunctionNames} contains all allowed functions.
  */
 public class MathConstrainFunct<V> extends Function<V> {
     private final List<Expr<V>> param;

@@ -22,9 +22,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.syntax.expr.Var.TypeVar;
-import de.fhg.iais.roberta.ast.syntax.functions.Func;
 import de.fhg.iais.roberta.ast.syntax.functions.Function;
-import de.fhg.iais.roberta.ast.syntax.functions.Functions;
 import de.fhg.iais.roberta.ast.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.ast.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
@@ -75,16 +73,16 @@ abstract public class JaxbAstTransformer<V> {
         return Binary.make(Binary.Op.get(op), convertPhraseToExpr(left), convertPhraseToExpr(right), extractBlockProperties(block), extractComment(block));
     }
 
-    protected Func<V> blockToFunction(Block block, List<ExprParam> exprParams, String operationType) {
-        String op = getOperation(block, operationType);
-        List<Expr<V>> params = extractExprParameters(block, exprParams);
-        return Func.make(Functions.get(op), params, extractBlockProperties(block), extractComment(block));
-    }
-
-    protected Func<V> blockToFunction(Block block, List<String> strParams, List<ExprParam> exprParams, String operationType) {
-        List<Expr<V>> params = extractExprParameters(block, exprParams);
-        return Func.make(Functions.get(operationType), strParams, params, extractBlockProperties(block), extractComment(block));
-    }
+    //    protected Func<V> blockToFunction(Block block, List<ExprParam> exprParams, String operationType) {
+    //        String op = getOperation(block, operationType);
+    //        List<Expr<V>> params = extractExprParameters(block, exprParams);
+    //        return Func.make(Functions.get(op), params, extractBlockProperties(block), extractComment(block));
+    //    }
+    //
+    //    protected Func<V> blockToFunction(Block block, List<String> strParams, List<ExprParam> exprParams, String operationType) {
+    //        List<Expr<V>> params = extractExprParameters(block, exprParams);
+    //        return Func.make(Functions.get(operationType), strParams, params, extractBlockProperties(block), extractComment(block));
+    //    }
 
     protected List<Expr<V>> extractExprParameters(Block block, List<ExprParam> exprParams) {
         List<Expr<V>> params = new ArrayList<Expr<V>>();

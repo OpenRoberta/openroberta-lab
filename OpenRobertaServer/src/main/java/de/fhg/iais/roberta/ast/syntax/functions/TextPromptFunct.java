@@ -16,13 +16,13 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br>
  * The user must provide name of the function and list of parameters. <br>
  * To create an instance from this class use the method {@link #make(List, BlocklyBlockProperties, BlocklyComment)}.<br>
- * The enumeration {@link Functions} contains all allowed functions.
+ * The enumeration {@link FunctionNames} contains all allowed functions.
  */
 public class TextPromptFunct<V> extends Function<V> {
-    private final Functions functName;
+    private final FunctionNames functName;
     private final String text;
 
-    private TextPromptFunct(Functions name, String strParam, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private TextPromptFunct(FunctionNames name, String strParam, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.TEXT_PROMPT_FUNCT, properties, comment);
         Assert.isTrue(name != null && strParam != null);
         this.functName = name;
@@ -40,14 +40,14 @@ public class TextPromptFunct<V> extends Function<V> {
      * @param strParam list of string parameters for the function
      * @return read only object of class {@link TextPromptFunct}
      */
-    public static <V> TextPromptFunct<V> make(Functions name, String strParam, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> TextPromptFunct<V> make(FunctionNames name, String strParam, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new TextPromptFunct<V>(name, strParam, properties, comment);
     }
 
     /**
      * @return name of the function
      */
-    public Functions getFunctName() {
+    public FunctionNames getFunctName() {
         return this.functName;
     }
 

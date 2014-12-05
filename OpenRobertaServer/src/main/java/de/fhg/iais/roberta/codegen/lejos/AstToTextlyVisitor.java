@@ -39,7 +39,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
-import de.fhg.iais.roberta.ast.syntax.functions.Func;
+import de.fhg.iais.roberta.ast.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.LenghtOfIsEmptyFunct;
@@ -266,7 +266,7 @@ public class AstToTextlyVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitFunc(Func<Void> funct) {
+    public Void visitFunc(MathPowerFunct<Void> funct) {
         //        switch ( funct.getFunctName() ) {
         //            case PRINT:
         //                this.sb.append("System.out.println(");

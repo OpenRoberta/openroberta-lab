@@ -40,7 +40,6 @@ import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
-import de.fhg.iais.roberta.ast.syntax.functions.Func;
 import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.LenghtOfIsEmptyFunct;
@@ -50,6 +49,7 @@ import de.fhg.iais.roberta.ast.syntax.functions.ListSetIndex;
 import de.fhg.iais.roberta.ast.syntax.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathOnListFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathSingleFunct;
@@ -180,6 +180,28 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMathConst(MathConst<Void> mathConst) {
+        switch ( mathConst.getMathConst() ) {
+            case PI:
+                this.sb.append("Math.PI");
+                break;
+            case E:
+                this.sb.append("Math.E");
+                break;
+            case GOLDEN_RATIO:
+                this.sb.append("(1.0 + Math.sqrt(5.0)) / 2.0");
+                break;
+            case SQRT2:
+                this.sb.append("Math.sqrt(2)");
+                break;
+            case SQRT1_2:
+                this.sb.append("Math.sqrt(1.0/2.0)");
+                break;
+            case INFINITY:
+                this.sb.append("Double.POSITIVE_INFINITY");
+                break;
+            default:
+                break;
+        }
         this.sb.append(mathConst.getMathConst());
         return null;
     }
@@ -285,7 +307,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitFunc(Func<Void> funct) {
+    public Void visitFunc(MathPowerFunct<Void> funct) {
         //        switch ( funct.getFunctName() ) {
         //            case PRINT:
         //                this.sb.append("System.out.println(");
@@ -826,7 +848,20 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
-        // TODO Auto-generated method stub
+        switch ( mathNumPropFunct.getFunctName() ) {
+            case EVEN:
+                this.sb.append("isEven( ");
+                mathNumPropFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
+                break;
+            case ODD:
+                this.sb.append("isOdd( ");
+                mathNumPropFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
+                break;
+            default:
+                break;
+        }
         return null;
     }
 
@@ -850,7 +885,58 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
-        // TODO Auto-generated method stub
+        switch ( mathSingleFunct.getFunctName() ) {
+            case ROOT:
+                this.sb.append("Math.sqrt(");
+                break;
+            case ABS:
+                this.sb.append("Math.abs(");
+                break;
+            case LN:
+                this.sb.append("Math.log(");
+                break;
+            case LOG10:
+                this.sb.append("Math.log10(");
+                break;
+            case EXP:
+                this.sb.append("Math.exp(");
+                break;
+            case POW10:
+                this.sb.append("Math.pow(10, ");
+                break;
+            case SIN:
+                this.sb.append("Math.sin(");
+                break;
+            case COS:
+                this.sb.append("Math.cos(");
+                break;
+            case TAN:
+                this.sb.append("Math.tan(");
+                break;
+            case ASIN:
+                this.sb.append("Math.asin(");
+                break;
+            case ATAN:
+                this.sb.append("Math.atan(");
+                break;
+            case ACOS:
+                this.sb.append("Math.acos(");
+                break;
+            case ROUND:
+                this.sb.append("Math.round(");
+                break;
+            case ROUNDUP:
+                this.sb.append("Math.ceil(");
+                break;
+            case ROUNDDOWN:
+                this.sb.append("Math.floor(");
+                break;
+            default:
+                break;
+        }
+        mathSingleFunct.getParam().get(0).visit(this);
+        this.sb.append(")");
+
         return null;
     }
 

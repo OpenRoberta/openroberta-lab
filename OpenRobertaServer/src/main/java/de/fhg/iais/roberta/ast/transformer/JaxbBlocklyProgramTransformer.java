@@ -44,7 +44,8 @@ import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary.Op;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.syntax.expr.Var.TypeVar;
-import de.fhg.iais.roberta.ast.syntax.functions.Functions;
+import de.fhg.iais.roberta.ast.syntax.functions.MathPowerFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.FunctionNames;
 import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.LenghtOfIsEmptyFunct;
@@ -448,11 +449,13 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 return blockToConst(block, "NUM");
 
             case "math_arithmetic":
-                if ( getOperation(block, "OP").equals("POWER") ) {
+                op = extractOperation(block, "OP");
+                if ( op.equals("POWER") ) {
                     exprParams = new ArrayList<ExprParam>();
                     exprParams.add(new ExprParam("A", Integer.class));
                     exprParams.add(new ExprParam("B", Integer.class));
-                    return blockToFunction(block, exprParams, "OP");
+                    params = extractExprParameters(block, exprParams);
+                    return MathPowerFunct.make(FunctionNames.POWER, params, extractBlockProperties(block), extractComment(block));
                 } else {
                     return blockToBinaryExpr(block, new ExprParam("A", Integer.class), new ExprParam("B", Integer.class), "OP");
                 }
@@ -471,7 +474,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                     exprParams.add(new ExprParam("DIVISOR", Integer.class));
                 }
                 params = extractExprParameters(block, exprParams);
-                return MathNumPropFunct.make(Functions.get(op), params, extractBlockProperties(block), extractComment(block));
+                return MathNumPropFunct.make(FunctionNames.get(op), params, extractBlockProperties(block), extractComment(block));
 
             case "math_change":
                 values = extractValues(block, (short) 1);
@@ -489,14 +492,14 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 exprParams.add(new ExprParam("NUM", Integer.class));
                 op = getOperation(block, "OP");
                 params = extractExprParameters(block, exprParams);
-                return MathSingleFunct.make(Functions.get(op), params, extractBlockProperties(block), extractComment(block));
+                return MathSingleFunct.make(FunctionNames.get(op), params, extractBlockProperties(block), extractComment(block));
 
             case "math_on_list":
                 exprParams = new ArrayList<ExprParam>();
                 exprParams.add(new ExprParam("LIST", ArrayList.class));
                 op = getOperation(block, "OP");
                 params = extractExprParameters(block, exprParams);
-                return MathOnListFunct.make(Functions.get(op), params, extractBlockProperties(block), extractComment(block));
+                return MathOnListFunct.make(FunctionNames.get(op), params, extractBlockProperties(block), extractComment(block));
 
             case "math_modulo":
                 return blockToBinaryExpr(block, new ExprParam("DIVIDEND", Integer.class), new ExprParam("DIVISOR", Integer.class), "MOD");
@@ -543,7 +546,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 exprParams = new ArrayList<ExprParam>();
                 exprParams.add(new ExprParam("VALUE", String.class));
                 params = extractExprParameters(block, exprParams);
-                return LenghtOfIsEmptyFunct.make(Functions.get(block.getType()), params, extractBlockProperties(block), extractComment(block));
+                return LenghtOfIsEmptyFunct.make(FunctionNames.get(block.getType()), params, extractBlockProperties(block), extractComment(block));
 
             case "text_indexOf":
             case "lists_indexOf":
@@ -552,7 +555,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 exprParams.add(new ExprParam("FIND", String.class));
                 op = getOperation(block, "END");
                 params = extractExprParameters(block, exprParams);
-                return IndexOfFunct.make(Functions.get(op), params, extractBlockProperties(block), extractComment(block));
+                return IndexOfFunct.make(FunctionNames.get(op), params, extractBlockProperties(block), extractComment(block));
 
             case "text_charAt":
                 boolean atArg = block.getMutation().isAt();
@@ -563,7 +566,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 }
                 op = getOperation(block, "WHERE");
                 params = extractExprParameters(block, exprParams);
-                return TextCharAtFunct.make(Functions.get(op), params, extractBlockProperties(block), extractComment(block));
+                return TextCharAtFunct.make(FunctionNames.get(op), params, extractBlockProperties(block), extractComment(block));
 
             case "text_getSubstring":
                 fields = extractFields(block, (short) 2);
@@ -579,27 +582,27 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                     exprParams.add(new ExprParam("AT2", Integer.class));
                 }
                 params = extractExprParameters(block, exprParams);
-                return GetSubFunct.make(Functions.get("SUBSTRING"), strParams, params, extractBlockProperties(block), extractComment(block));
+                return GetSubFunct.make(FunctionNames.get("SUBSTRING"), strParams, params, extractBlockProperties(block), extractComment(block));
 
             case "text_changeCase":
                 exprParams = new ArrayList<ExprParam>();
                 exprParams.add(new ExprParam("TEXT", String.class));
                 op = getOperation(block, "CASE");
                 params = extractExprParameters(block, exprParams);
-                return TextChangeCaseFunct.make(Functions.get(op), params, extractBlockProperties(block), extractComment(block));
+                return TextChangeCaseFunct.make(FunctionNames.get(op), params, extractBlockProperties(block), extractComment(block));
 
             case "text_trim":
                 exprParams = new ArrayList<ExprParam>();
                 exprParams.add(new ExprParam("TEXT", String.class));
                 op = getOperation(block, "MODE");
                 params = extractExprParameters(block, exprParams);
-                return TextTrimFunct.make(Functions.get(op), params, extractBlockProperties(block), extractComment(block));
+                return TextTrimFunct.make(FunctionNames.get(op), params, extractBlockProperties(block), extractComment(block));
 
             case "text_prompt":
                 fields = extractFields(block, (short) 2);
                 String type = extractField(fields, "TYPE", (short) 0);
                 String text = extractField(fields, "TEXT", (short) 1);
-                return TextPromptFunct.make(Functions.get(type), text, properties, comment);
+                return TextPromptFunct.make(FunctionNames.get(type), text, properties, comment);
 
             case "text_print":
                 exprParams = new ArrayList<ExprParam>();
@@ -633,7 +636,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 params = extractExprParameters(block, exprParams);
                 return ListGetIndex.make(
                     ListGetIndex.Mode.get(op),
-                    Functions.get(extractField(fields, "WHERE", (short) 1)),
+                    FunctionNames.get(extractField(fields, "WHERE", (short) 1)),
                     params,
                     extractBlockProperties(block),
                     extractComment(block));
@@ -651,7 +654,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 params = extractExprParameters(block, exprParams);
                 return ListSetIndex.make(
                     ListSetIndex.Mode.get(op),
-                    Functions.get(extractField(fields, "WHERE", (short) 1)),
+                    FunctionNames.get(extractField(fields, "WHERE", (short) 1)),
                     params,
                     extractBlockProperties(block),
                     extractComment(block));
@@ -670,7 +673,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                     exprParams.add(new ExprParam("AT2", Integer.class));
                 }
                 params = extractExprParameters(block, exprParams);
-                return GetSubFunct.make(Functions.get("GET_SUBLIST"), strParams, params, extractBlockProperties(block), extractComment(block));
+                return GetSubFunct.make(FunctionNames.get("GET_SUBLIST"), strParams, params, extractBlockProperties(block), extractComment(block));
 
             case "robColour_picker":
                 return blockToConst(block, "COLOUR");

@@ -19,7 +19,7 @@ public class TextFunctions {
         ArrayList<Expr<Void>> param = new ArrayList<Expr<Void>>();
         StringConst<Void> stringConst = StringConst.make("AS", null, null);
         param.add(stringConst);
-        Func<Void> funct = Func.make(Functions.ABS, param, null, null);
+        MathPowerFunct<Void> funct = MathPowerFunct.make(FunctionNames.ABS, param, null, null);
         Assert.assertEquals(10, funct.getPrecedence());
     }
 
@@ -28,7 +28,7 @@ public class TextFunctions {
         ArrayList<Expr<Void>> param = new ArrayList<Expr<Void>>();
         StringConst<Void> stringConst = StringConst.make("AS", null, null);
         param.add(stringConst);
-        Func<Void> funct = Func.make(Functions.ABS, param, null, null);
+        MathPowerFunct<Void> funct = MathPowerFunct.make(FunctionNames.ABS, param, null, null);
         Assert.assertEquals(Assoc.LEFT, funct.getAssoc());
     }
 
@@ -37,23 +37,23 @@ public class TextFunctions {
         ArrayList<Expr<Void>> param = new ArrayList<Expr<Void>>();
         StringConst<Void> stringConst = StringConst.make("AS", null, null);
         param.add(stringConst);
-        Func<Void> funct = Func.make(Functions.POWER, param, null, null);
+        MathPowerFunct<Void> funct = MathPowerFunct.make(FunctionNames.POWER, param, null, null);
         Assert.assertEquals("^", funct.getFunctName().getOpSymbol());
     }
 
     @Test(expected = DbcException.class)
     public void invalid() {
-        Functions.get("");
+        FunctionNames.get("");
     }
 
     @Test(expected = DbcException.class)
     public void invalid1() {
-        Functions.get(null);
+        FunctionNames.get(null);
     }
 
     @Test(expected = DbcException.class)
     public void invalid2() {
-        Functions.get("asdf");
+        FunctionNames.get("asdf");
     }
 
     @Test
