@@ -54,12 +54,17 @@ public class ConfigurationDao extends AbstractDao<Program> {
      * @param programName the name of the program, never null
      * @return the program, null if the program is not found
      */
-    public Configuration load(String name, User owner) {
+    public Configuration load(String name, User user) {
         Assert.notNull(name);
-        Assert.notNull(owner);
-        Query hql = this.session.createQuery("from Configuration where name=:name and owner=:owner");
-        hql.setString("name", name);
-        hql.setEntity("owner", owner);
+        Query hql;
+        if ( user != null ) {
+            hql = this.session.createQuery("from Configuration where name=:name and (owner is null or owner=:owner)");
+            hql.setString("name", name);
+            hql.setEntity("owner", user);
+        } else {
+            hql = this.session.createQuery("from Configuration where name=:name and owner is null");
+            hql.setString("name", name);
+        }
         @SuppressWarnings("unchecked")
         List<Configuration> il = hql.list();
         Assert.isTrue(il.size() <= 1);

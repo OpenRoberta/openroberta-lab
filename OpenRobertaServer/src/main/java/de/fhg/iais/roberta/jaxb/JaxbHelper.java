@@ -11,6 +11,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -63,10 +64,11 @@ public class JaxbHelper {
      * @throws Exception
      */
     public static BlockSet path2BlockSet(String pathToblocklyXml) throws Exception {
-        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-
-        InputSource src = new InputSource(JaxbHelper.class.getResourceAsStream(pathToblocklyXml));
-        return (BlockSet) jaxbUnmarshaller.unmarshal(src);
+        //sInputSource src = new InputSource(JaxbHelper.class.getResourceAsStream(pathToblocklyXml));
+        return xml2BlockSet(IOUtils.toString(JaxbHelper.class.getResourceAsStream(pathToblocklyXml), "UTF-8"));
+        //        InputSource src = new InputSource(JaxbHelper.class.getResourceAsStream(pathToblocklyXml));
+        //        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+        //
+        //        return (BlockSet) jaxbUnmarshaller.unmarshal(src);
     }
-
 }

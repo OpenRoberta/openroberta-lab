@@ -438,8 +438,7 @@ Blockly.Xml.textToDom = function(text) {
     // The DOM should have one and only one top-level node, an XML tag.
     if (!dom
             || !dom.firstChild
-            || (dom.firstChild.nodeName.toLowerCase() != 'block_set' && dom.firstChild.nodeName.toLowerCase() != 'toolbox_set' && dom.firstChild.nodeName
-                    .toLowerCase() != 'brick_set') || dom.firstChild !== dom.lastChild) {
+            || (dom.firstChild.nodeName.toLowerCase() != 'block_set' && dom.firstChild.nodeName.toLowerCase() != 'toolbox_set') || dom.firstChild !== dom.lastChild) {
         // Whatever we got back from the parser is not XML.
         throw 'Blockly.Xml.textToDom did not obtain a valid XML tree.';
     }

@@ -18,20 +18,22 @@ public class ConfigurationProcessor extends AbstractProcessor {
         super(dbSession, httpSessionState);
     }
 
-    public Configuration getConfiguration(String configurationName, int ownerId) {
+    public Configuration getConfiguration(String configurationName, int userId) {
         if ( !Util.isValidJavaIdentifier(configurationName) ) {
             setError("configuration name name is not a valid identifier: " + configurationName);
             return null;
-        } else if ( this.httpSessionState.isUserLoggedIn() ) {
-            UserDao userDao = new UserDao(this.dbSession);
+        } else {
             ConfigurationDao configurationDao = new ConfigurationDao(this.dbSession);
-            User owner = userDao.get(ownerId);
-            Configuration configuration = configurationDao.load(configurationName, owner);
+            Configuration configuration = null;
+            if ( this.httpSessionState.isUserLoggedIn() ) {
+                UserDao userDao = new UserDao(this.dbSession);
+                User owner = userDao.get(userId);
+                configuration = configurationDao.load(configurationName, owner);
+            } else {
+                configuration = configurationDao.load(configurationName, null);
+            }
             setResult(configuration != null, "loading of configuration " + configurationName + ".");
             return configuration;
-        } else {
-            setError("configuration load illegal if not logged in");
-            return null;
         }
     }
 

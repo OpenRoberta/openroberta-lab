@@ -13,6 +13,8 @@ public class DbSetup {
     private static final String DB_CREATE_TABLES_SQL = "/create-tables.sql";
     private static final String SQL_RETURNING_POSITIVENUMBER_IF_SQLFILE_ALREADY_LOADED =
         "select count(*) from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'PROGRAM'";
+    private static final String SQL_RETURNING_POSITIVENUMBER_IF_SETUP_WAS_SUCCESSFUL =
+        "select count(*) from CONFIGURATION where NAME = 'Standardkonfiguration'";
 
     private final DbExecutor dbExecutor;
 
@@ -21,14 +23,14 @@ public class DbSetup {
     }
 
     public void runDefaultRobertaSetup() {
-        runDatabaseSetup(DB_CREATE_TABLES_SQL, SQL_RETURNING_POSITIVENUMBER_IF_SQLFILE_ALREADY_LOADED);
+        runDatabaseSetup(DB_CREATE_TABLES_SQL, SQL_RETURNING_POSITIVENUMBER_IF_SQLFILE_ALREADY_LOADED, SQL_RETURNING_POSITIVENUMBER_IF_SETUP_WAS_SUCCESSFUL);
     }
 
-    public void runDatabaseSetup(String nameOfResourceContainingSql, String sqlReturningPositiveNumberIfSqlFileAlreadyLoaded) {
+    public void runDatabaseSetup(String sqlResource, String sqlReturningPositiveIfSqlFileAlreadyLoaded, String sqlReturningPositiveIfSetupSuccessful) {
         try {
-            this.dbExecutor.sqlFile(nameOfResourceContainingSql, SQL_RETURNING_POSITIVENUMBER_IF_SQLFILE_ALREADY_LOADED);
+            this.dbExecutor.sqlFile(sqlResource, sqlReturningPositiveIfSqlFileAlreadyLoaded, sqlReturningPositiveIfSetupSuccessful);
         } catch ( Exception e ) {
-            LOG.error("failure during execution of sql statements from classpath resource " + nameOfResourceContainingSql);
+            LOG.error("failure during execution of sql statements from classpath resource " + sqlResource, e);
         }
     }
 

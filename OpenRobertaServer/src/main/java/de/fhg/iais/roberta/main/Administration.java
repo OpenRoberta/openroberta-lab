@@ -1,5 +1,8 @@
 package de.fhg.iais.roberta.main;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +45,9 @@ public class Administration {
             case "createemptydb":
                 main.runDatabaseSetup();
                 break;
+            case "sql":
+                main.runSql();
+                break;
             default:
                 LOG.error("invalid argument: " + args[0] + " - exit 4");
                 System.exit(4);
@@ -55,8 +61,25 @@ public class Administration {
         SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", "jdbc:hsqldb:file:" + this.args[1]);
         Session nativeSession = sessionFactoryWrapper.getNativeSession();
         DbSetup dbSetup = new DbSetup(nativeSession);
+        nativeSession.beginTransaction();
         dbSetup.runDefaultRobertaSetup();
         nativeSession.createSQLQuery("shutdown").executeUpdate();
+        nativeSession.close();
+    }
+
+    private void runSql() {
+        LOG.info("*** runsql ***");
+        expectArgs(3);
+        String sqlQuery = this.args[2];
+        SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", "jdbc:hsqldb:file:" + this.args[1]);
+        Session nativeSession = sessionFactoryWrapper.getNativeSession();
+        nativeSession.beginTransaction();
+        List<Object[]> resultSet = nativeSession.createSQLQuery(sqlQuery).list();
+        LOG.info("result set has " + resultSet.size() + " rows");
+        for ( Object[] object : resultSet ) {
+            LOG.info("  " + Arrays.toString(object));
+        }
+        nativeSession.getTransaction().rollback();
         nativeSession.close();
     }
 

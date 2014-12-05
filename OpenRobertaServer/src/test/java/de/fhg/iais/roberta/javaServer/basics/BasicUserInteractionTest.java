@@ -81,7 +81,7 @@ public class BasicUserInteractionTest {
         this.tokenReceiver = new TokenReceiver(this.brickCommunicator);
         this.s1 = HttpSessionState.init();
         this.s2 = HttpSessionState.init();
-        this.blocklyProgram = Resources.toString(BasicPerformanceUserInteractionTest.class.getResource("/ast/actions/action_BrickLight.xml"), Charsets.UTF_8);
+        this.blocklyProgram = Resources.toString(BasicUserInteractionTest.class.getResource("/ast/actions/action_BrickLight.xml"), Charsets.UTF_8);
     }
 
     @Test

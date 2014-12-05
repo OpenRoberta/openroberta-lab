@@ -34,7 +34,7 @@ public class JavaVisitorTest {
         MathConst<Void> mathConst = MathConst.make(Const.E, null, null);
         AstToLejosJavaVisitor visitor = new AstToLejosJavaVisitor("Test", brickConfiguration, usedSensors, 0);
         mathConst.visit(visitor);
-        Assert.assertEquals(Const.E.toString(), visitor.getSb().toString());
+        Assert.assertEquals("Math.E", visitor.getSb().toString());
     }
 
     @Test

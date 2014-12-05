@@ -202,7 +202,6 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
             default:
                 break;
         }
-        this.sb.append(mathConst.getMathConst());
         return null;
     }
 

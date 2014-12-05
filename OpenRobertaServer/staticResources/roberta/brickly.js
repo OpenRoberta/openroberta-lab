@@ -27,13 +27,13 @@ function injectBrickly(toolbox) {
         });
 
         // should this come from the server?
-        var text = "<brick_set xmlns='http: // www.w3.org/1999/xhtml'>" + "<instance x='75' y='75'>" + "<block type='robBrick_EV3-Brick'>"
+        var text = "<block_set xmlns='http://de.fhg.iais.roberta.blockly'>" +  "<instance x='75' y='75'>" + "<block type='robBrick_EV3-Brick'>"
                 + "<value name='S1'>" + "<block type='robBrick_touch'></block>" + "</value>" + "<value name='S4'>"
                 + "<block type='robBrick_ultrasonic'></block>" + "</value>" + "<value name='MB'>" + "<block type='robBrick_motor_big'>"
                 + "<field name='MOTOR_REGULATION'>TRUE</field>" + "<field name='MOTOR_REVERSE'>OFF</field>" + "<field name='MOTOR_DRIVE'>RIGHT</field>"
                 + "</block>" + "</value>" + "<value name='MC'>" + "<block type='robBrick_motor_big'>" + "<field name='MOTOR_REGULATION'>TRUE</field>"
                 + "<field name='MOTOR_REVERSE'>OFF</field>" + "<field name='MOTOR_DRIVE'>LEFT</field>" + "</block>" + "</value>" + "</block>" + "</instance>"
-                + "</brick_set>";
+                + "</block_set>";
         var xml = Blockly.Xml.textToDom(text);
         Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
     }
@@ -44,7 +44,7 @@ function response(result) {
 };
 
 function saveToServer(name) {
-    var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace, 'brick_set');
+    var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
     var xml_text = Blockly.Xml.domToText(xml);
     LOG.info('save brick configuration ' + name);
     COMM.json("/conf", {

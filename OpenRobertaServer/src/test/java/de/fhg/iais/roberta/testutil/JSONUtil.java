@@ -115,7 +115,8 @@ public class JSONUtil {
         ThreadedFunction theUser = new ThreadedFunction() {
             @Override
             public boolean apply() throws Exception {
-                Response response = restProgram.command(sessionState, mkD("{'cmd':'runP';'name':'" + programName + "'}"));
+                Response response =
+                    restProgram.command(sessionState, mkD("{'cmd':'runP';'name':'" + programName + "', 'configuration': 'Standardkonfiguration'}"));
                 JSONObject entity = (JSONObject) response.getEntity();
                 return entity.getString("rc").equals("ok") && entity.getString("data").equals("Brick is waiting");
             }

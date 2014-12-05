@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.dbc.Assert;
+import de.fhg.iais.roberta.dbc.DbcException;
 
 public class DbExecutor {
     private static Logger LOG = LoggerFactory.getLogger(DbExecutor.class);
@@ -27,12 +28,31 @@ public class DbExecutor {
         this.session = session;
     }
 
-    public void sqlFile(String nameOfResourceContainingSql, String sqlReturningPositiveNumberIfSqlFileAlreadyLoaded) throws Exception {
-        int result = ((BigInteger) oneValueSelect(sqlReturningPositiveNumberIfSqlFileAlreadyLoaded)).intValue();
+    /**
+     * execute the sql statements found in a resource. Check if the execution is necessary. It not, return. After loading, check if the execution was
+     * successful.
+     * If not, throw an exception.
+     *
+     * @param sqlResource contains SQL statements separated by a semicolon AT THE END of a LINE.
+     * @param sqlPositiveIfSqlFileAlreadyLoaded sql returning positive number if sql file has already been loaded. May be null. Executed before loading.
+     * @param sqlPositiveIfSetupSuccessful sql returning positive number if sql file has been successfully loaded. May be null. executed after loading.
+     * @throws Exception
+     */
+    public void sqlFile(String sqlResource, String sqlPositiveIfSqlFileAlreadyLoaded, String sqlPositiveIfSetupSuccessful) throws Exception {
+        int result = 0;
+        if ( sqlPositiveIfSqlFileAlreadyLoaded != null ) {
+            result = ((BigInteger) oneValueSelect(sqlPositiveIfSqlFileAlreadyLoaded)).intValue();
+        }
         if ( result == 0 ) {
-            sqlFile(this.getClass().getResourceAsStream(nameOfResourceContainingSql));
+            sqlFile(this.getClass().getResourceAsStream(sqlResource));
+            if ( sqlPositiveIfSetupSuccessful != null ) {
+                result = ((BigInteger) oneValueSelect(sqlPositiveIfSetupSuccessful)).intValue();
+                if ( result <= 0 ) {
+                    throw new DbcException("loading sql from resource " + sqlResource + " was NOT successful");
+                }
+            }
         } else {
-            LOG.info("test sql says, that DDL of  " + nameOfResourceContainingSql + " has already been executed. Skipping execution.");
+            LOG.info("test sql says, that DDL of  " + sqlResource + " has already been executed. Skipping execution.");
         }
     }
 
@@ -133,7 +153,7 @@ public class DbExecutor {
     }
 
     private static boolean isChange(String sqlStmt) {
-        return sW(sqlStmt, "insert ") || sW(sqlStmt, "update ") || sW(sqlStmt, "delete ");
+        return sW(sqlStmt, "insert ") || sW(sqlStmt, "update ") || sW(sqlStmt, "delete ") || sqlStmt.trim().equals("commit");
     }
 
     private static boolean isDDL(String sqlStmt) {
