@@ -335,7 +335,9 @@ ul#head-navigation .head-navigation-submenu>li:hover {
 
 #login-user input#accountNameS,
 #register-user input#accountName,
-#delete-user input#accountNameD {
+#delete-user input#accountNameD,
+#share-program input#programShareWith,
+#share-configuration input#configurationShareWith {
     background-image: url(img/login_user-icon.png);
 }
 

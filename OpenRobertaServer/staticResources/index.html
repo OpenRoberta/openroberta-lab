@@ -53,12 +53,10 @@ limitations under the License.
                     <li><span id="runProg" class="flaticon-botton2" lkey="Blockly.Msg.MENU_START">starten</span></li>
                     <li><span id="checkProg" class="flaticon-tick" lkey="Blockly.Msg.MENU_CHECK">checken</span></li>
                     <li><span id="newProg" class="flaticon-add10" lkey="Blockly.Msg.MENU_NEW">neu ...</span></li>
-                    <li class="logout"><span id="openProg" class="flaticon-pencil1"lkey="Blockly.Msg.MENU_OPEN">öffnen ...</span></li>
+                    <li class="logout"><span id="listProg" class="flaticon-pencil1"lkey="Blockly.Msg.MENU_LIST">Liste ...</span></li>
                     <li class="login logout"><span id="saveProg" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE">speichern</span></li>
                     <li class="logout"><span id="saveAsProg" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE_AS">speichern unter ...</span></li>
                     <li class="logout"><span id="attachProg" class="flaticon-th2" lkey="Blockly.Msg.MENU_ATTACH">anhängen ...</span></li>
-                    <li class="logout"><span id="divideProg" class="flaticon-flow3" lkey="Blockly.Msg.MENU_DIVIDE">teilen ...</span></li>
-                    <li class="logout"><span id="deleteProg" class="flaticon-delete10" lkey="Blockly.Msg.MENU_DELETE">löschen ...</span></li>
                     <li><span id="propertiesProg" class="flaticon-information" lkey="Blockly.Msg.MENU_PROPERTIES">Eigenschaften</span></li>
                 </ul>
             </li>
@@ -68,11 +66,9 @@ limitations under the License.
                     <li><span id="checkConfig" class="flaticon-tick" lkey="Blockly.Msg.MENU_CHECK">checken</span></li>
                     <li><span id="standardConfig" class="flaticon-thumbs1" lkey="Blockly.Msg.MENU_DEFAULT_CONFIGURATION">Standardkonfiguration</span></li>
                     <li><span id="newConfig" class="flaticon-add10" lkey="Blockly.Msg.MENU_NEW">neu ...</span></li>
-                    <li class="logout"><span id="openConfig" class="flaticon-pencil1" lkey="Blockly.Msg.MENU_OPEN">öffnen ... </span></li>
+                    <li class="logout"><span id="listConfig" class="flaticon-pencil1" lkey="Blockly.Msg.MENU_LIST">Liste ... </span></li>
                     <li class="login logout"><span id="saveConfig" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE">speichern</span></li>
                     <li class="logout"><span id="saveAsConfig" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE_AS">speichern unter ...</span></li>
-                    <li class="login logout"><span id="divideConfig" class="flaticon-flow3" lkey="Blockly.Msg.MENU_DIVIDE">teilen ...</span></li>
-                    <li class="logout"><span id="deleteConfig" class="flaticon-delete10" lkey="Blockly.Msg.MENU_DELETE">löschen ...</span></li>
                     <li class="login logout"><span id="propertiesConfig" class="flaticon-information" lkey="Blockly.Msg.MENU_PROPERTIES">Eigenschaften ...</span></li>
                 </ul>
             </li>
@@ -143,6 +139,7 @@ limitations under the License.
     </div>
 
     <!-- ################## POPUPS ################## -->
+    
     <div class="jquerypopup" id="login-user" title="Anmeldung">
         <label for="accountNameS" lkey="Blockly.Msg.POPUP_USERNAME"></label>
         <input id="accountNameS" class='input' type="text" value="" />
@@ -182,10 +179,22 @@ limitations under the License.
         <input id="saveProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SAVE_PROGRAM" value="Programm speichern" />
     </div>
 
+    <div class="jquerypopup program" id="share-program" title="Programm teilen mit">
+        <label for="programShareWith" lkey="Blockly.Msg.POPUP_SHARE_WITH">Teilen mit</label>
+        <input id="programShareWith" class='input programShareWithName' type="text" value="" /><br/>
+        <input id="shareProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SHARE" value="Programm teilen" />
+    </div>
+
     <div class="jquerypopup configuration" id="save-configuration" title="Konfiguration speichern">
         <label for="configurationNameSave" lkey="Blockly.Msg.POPUP_NAME">Name</label>
         <input id="configurationNameSave" class='input configurationName' type="text" value="" /><br/>
         <input id="saveConfiguration" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SAVE_CONFIGURATION" value="Konfiguration speichern" />
+    </div>
+
+    <div class="jquerypopup configuration" id="share-configuration" title="Konfiguration teilen mit">
+        <label for="configurationShareWith" lkey="Blockly.Msg.POPUP_SHARE_WITH">Teilen mit</label>
+        <input id="configurationShareWith" class='input configurationShareWithName' type="text" value="" /><br/>
+        <input id="shareConfiguration" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SHARE" value="Konfiguration teilen" />
     </div>
 
     <div class="jquerypopup" id="set-token" title="Token setzen">
@@ -209,7 +218,9 @@ limitations under the License.
         <span class="message" id="MESSAGE.EMPTY_NAME" lkey="Blockly.Msg.MESSAGE_EMPTY_NAME">Du musst einen Namen eingeben.</span>
         <span class="message" id="MESSAGE.PROGRAM_NOT_CHECKABLE" lkey="Blockly.Msg.MESSAGE_PROGRAM_NOT_CHECKABLE">Dein Programm kann zur Zeit noch nicht geprüft werden.</span>
         <span class="message" id="MESSAGE.CONFIGURATION_NOT_CHECKABLE" lkey="Blockly.Msg.MESSAGE_CONFIGURATION_NOT_CHECKABLE">Deine Konfiguration kann zur Zeit noch nicht geprüft werden.</span>
+        <span class="message" id="MESSAGE.NOT_AVAILABLE" lkey="Blockly.Msg.MESSAGE_NOT_AVAILABLE">Funktionalität nicht verfügbar.</span>
     </div>
+    
     <!-- ################## END POPUPS ################## -->
 
     <div id="main-section">
@@ -245,6 +256,7 @@ limitations under the License.
                 </table>
                 <input class="button buttonLoad" id="loadFromListing" lkey="Blockly.Msg.BUTTON_LOAD" type="submit" value="Laden" />
                 <input class="button buttonDelete" id="deleteFromListing" lkey="Blockly.Msg.BUTTON_DO_DELETE" type="submit" value="Löschen" />
+                <input class="button buttonShare" id="shareFromListing" lkey="Blockly.Msg.BUTTON_DO_SHARE" type="submit" value="Teilen" />
                 <input class="button backButton" lkey="Blockly.Msg.BUTTON_BACK" type="submit" value="Zurück" />
             </div>
             
@@ -258,6 +270,7 @@ limitations under the License.
                 </table>
                 <input class="button buttonLoad" id="loadConfigurationFromListing" lkey="Blockly.Msg.BUTTON_LOAD" type="submit" value="Laden" />
                 <input class="button buttonDelete" id="deleteConfigurationFromListing" lkey="Blockly.Msg.BUTTON_DO_DELETE" type="submit" value="Löschen" />
+                <input class="button buttonShare" id="shareConfigurationFromListing" lkey="Blockly.Msg.BUTTON_DO_SHARE" type="submit" value="Teilen" />
                 <input class="button backButton" lkey="Blockly.Msg.BUTTON_BACK" type="submit" value="Zurück" />
             </div>
             

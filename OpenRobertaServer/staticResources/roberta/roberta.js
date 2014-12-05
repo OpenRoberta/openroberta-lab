@@ -564,6 +564,12 @@ function initProgramNameTable() {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>Erzeugt von</span>",
         "sClass" : "programs"
     }, {
+//        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_SHARED_WITH'>Geteilt mit</span>",
+//        "sClass" : "programs"
+//    }, {
+//        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_SHARED_FOR'>Geteilt für</span>",
+//        "sClass" : "programs"
+//    }, {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_BLOCKS'>Blöcke</span>",
         "sClass" : "programs"
     }, {
@@ -623,6 +629,12 @@ function initConfigurationNameTable() {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>Erzeugt von</span>",
         "sClass" : "configurations"
     }, {
+//        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_SHARED_WITH'>Geteilt mit</span>",
+//        "sClass" : "programs"
+//    }, {
+//        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_SHARED_FOR'>Geteilt für</span>",
+//        "sClass" : "programs"
+//    }, {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_ICON'>Icon</span>",
         "sClass" : "configurations"
     }, {
@@ -651,7 +663,7 @@ function initConfigurationNameTable() {
                 "sLast": "<span lkey='Blockly.Msg.DATATABLE_LAST'>Letzte</span>"
             },
             "sEmptyTable": "<span lkey='Blockly.Msg.DATATABLE_EMPTY_TABLE'>Die Tabelle ist leer</span>",
-            "sInfo": "<span lkey='Blockly.Msg.DATATABLE.SHOWING'>Zeige</span> _START_ <span lkey='Blockly.Msg.DATATABLE_TO'>bis</span> _END_ <span lkey='Blockly.Msg.DATATABLE_OF'>von</span> _TOTAL_ <span lkey='Blockly.Msg.DATATABLE_ENTRIES'>Einträgen</span>",
+            "sInfo": "<span lkey='Blockly.Msg.DATATABLE_SHOWING'>Zeige</span> _START_ <span lkey='Blockly.Msg.DATATABLE_TO'>bis</span> _END_ <span lkey='Blockly.Msg.DATATABLE_OF'>von</span> _TOTAL_ <span lkey='Blockly.Msg.DATATABLE_ENTRIES'>Einträgen</span>",
             "sInfoEmpty": "&nbsp;"
         },
         "fnDrawCallback" : function() {
@@ -841,10 +853,8 @@ function initHeadNavigation() {
         } else if (domId === 'newProg') {
             initProgramEnvironment();
             setProgram("meinProgramm");
-        } else if (domId === 'openProg') {
+        } else if (domId === 'listProg') {
             switchToBlockly();
-            $('#loadFromListing').css('display', 'inline');
-            $('#deleteFromListing').css('display', 'none');
             $('#tabListing').click();
         } else if (domId === 'saveProg') {
             saveToServer(response);
@@ -852,12 +862,6 @@ function initHeadNavigation() {
             $("#save-program").dialog("open");
         } else if (domId === 'attachProg') {
             $("#attach-program").dialog("open");
-        } else if (domId === 'divideProg') {
-        } else if (domId === 'deleteProg') {
-            switchToBlockly();
-            $('#deleteFromListing').css('display', 'inline');
-            $('#loadFromListing').css('display', 'none');
-            $('#tabListing').click();
         } else if (domId === 'propertiesProg') {
         }
         return false;
@@ -874,20 +878,13 @@ function initHeadNavigation() {
             bricklyActive = true;
         } else if (domId === 'newConfig') {
             setConfiguration("Standardkonfiguration");
-        } else if (domId === 'openConfig') {
+        } else if (domId === 'listConfig') {
             switchToBlockly();
-            $('#loadConfigurationFromListing').css('display', 'inline');
-            $('#deleteConfigurationFromListing').css('display', 'none');
             $('#tabConfigurationListing').click();
         } else if (domId === 'saveConfig') {
             saveConfigurationToServer();
         } else if (domId === 'saveAsConfig') {
             $("#save-configuration").dialog("open");
-        } else if (domId === 'deleteConfig') {
-            switchToBlockly();
-            $('#deleteConfigurationFromListing').css('display', 'inline');
-            $('#loadConfigurationFromListing').css('display', 'none');
-            $('#tabConfigurationListing').click();
         } else if (domId === 'propertiesConfig') {
         }
         return false;
@@ -1012,9 +1009,17 @@ function initPopups() {
         saveToServer();
     }, 'save program');
 
+    $('#shareProgram').onWrap('click', function() {
+        displayMessage("MESSAGE.NOT_AVAILABLE");
+    }, 'share program');
+
     $('#saveConfiguration').onWrap('click', function() {
         saveConfigurationToServer();
     }, 'save configuration');
+
+    $('#shareConfiguration').onWrap('click', function() {
+        displayMessage("MESSAGE.NOT_AVAILABLE");
+    }, 'share configuration');
 
     $('#setToken').onWrap('click', function() {
         var $token = $('#tokenValue');
@@ -1070,6 +1075,16 @@ function initTabs() {
     $('#deleteConfigurationFromListing').onWrap('click', function() {
         deleteConfigurationFromListing();
     }, 'delete configuration from configurations list');
+
+    // share program
+    $('#shareFromListing').onWrap('click', function() {
+        $("#share-program").dialog("open");
+    }, 'share program');
+
+    // share configuration
+    $('#shareConfigurationFromListing').onWrap('click', function() {
+        $("#share-configuration").dialog("open");
+    }, 'share configuration');
 
     $('.backButton').onWrap('click', function() {
         if (bricklyActive) {
@@ -1131,6 +1146,11 @@ function translate(jsdata) {
         } else if (key === 'Blockly.Msg.POPUP_SAVE_PROGRAM') {
             $('#save-program').dialog('option', 'title', value);
             $('#save-program #saveProgram').attr('value', value);
+        } else if (key === 'Blockly.Msg.POPUP_SHARE') {
+            $('#share-program').dialog('option', 'title', value);
+            $('#share-program #shareProgram').attr('value', value);
+            $('#share-configuration').dialog('option', 'title', value);
+            $('#share-configuration #shareConfiguration').attr('value', value);
         } else if (key === 'Blockly.Msg.POPUP_SAVE_CONFIGURATION') {
             $('#save-configuration').dialog('option', 'title', value);
             $('#save-configuration #saveConfiguration').attr('value', value);
@@ -1145,6 +1165,8 @@ function translate(jsdata) {
             $('.buttonLoad').attr('value', value);
         } else if (key === 'Blockly.Msg.BUTTON_DO_DELETE') {
             $('.buttonDelete').attr('value', value);
+        } else if (key === 'Blockly.Msg.BUTTON_DO_SHARE') {
+            $('.buttonShare').attr('value', value);
         } else if (key === 'Blockly.Msg.BUTTON_EMPTY_LIST') {
             $('#clearLog').attr('value', value);
         } else if (key === 'Blockly.Msg.HINT_LANGUAGE_GERMAN') {
