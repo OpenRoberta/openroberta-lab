@@ -31,7 +31,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
-import de.fhg.iais.roberta.ast.syntax.functions.Func;
+import de.fhg.iais.roberta.ast.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.LenghtOfIsEmptyFunct;
@@ -144,11 +144,11 @@ public interface AstVisitor<V> {
     public V visitBinary(Binary<V> binary);
 
     /**
-     * visit a {@link Func}.
+     * visit a {@link MathPowerFunct}.
      *
      * @param funct to be visited
      */
-    public V visitFunc(Func<V> func);
+    public V visitFunc(MathPowerFunct<V> func);
 
     /**
      * visit a {@link ActionExpr}.

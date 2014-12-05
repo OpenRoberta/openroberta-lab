@@ -38,7 +38,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
-import de.fhg.iais.roberta.ast.syntax.functions.Func;
+import de.fhg.iais.roberta.ast.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.LenghtOfIsEmptyFunct;
@@ -227,7 +227,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
     }
 
     @Override
-    public BlocklyType visitFunc(Func<BlocklyType> func) {
+    public BlocklyType visitFunc(MathPowerFunct<BlocklyType> func) {
         List<BlocklyType> paramTypes = typecheckList(func.getParam());
         Sig signature = TypeTransformations.getFunctionSignature(func.getFunctName().name());
         BlocklyType resultType = signature.typeCheck(func, paramTypes);

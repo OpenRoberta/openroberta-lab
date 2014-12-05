@@ -29,7 +29,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
-import de.fhg.iais.roberta.ast.syntax.functions.Func;
+import de.fhg.iais.roberta.ast.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
@@ -115,7 +115,7 @@ public abstract class AstDefaultVisitorInspecting implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitFunc(Func<Void> func) {
+    public Void visitFunc(MathPowerFunct<Void> func) {
         return null;
     }
 

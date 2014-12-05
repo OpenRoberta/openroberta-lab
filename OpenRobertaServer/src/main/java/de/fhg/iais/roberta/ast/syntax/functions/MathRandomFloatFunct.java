@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
  * <br>
  * The user must provide name of the function and list of parameters. <br>
  * To create an instance from this class use the method {@link #make(BlocklyBlockProperties, BlocklyComment)}.<br>
- * The enumeration {@link Functions} contains all allowed functions.
+ * The enumeration {@link FunctionNames} contains all allowed functions.
  */
 public class MathRandomFloatFunct<V> extends Function<V> {
     private MathRandomFloatFunct(BlocklyBlockProperties properties, BlocklyComment comment) {

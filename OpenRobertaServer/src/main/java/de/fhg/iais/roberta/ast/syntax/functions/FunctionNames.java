@@ -5,7 +5,7 @@ import java.util.Locale;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.dbc.DbcException;
 
-public enum Functions {
+public enum FunctionNames {
     DIVISIBLE_BY( 80, Assoc.NONE ),
     MAX( 80, Assoc.NONE ),
     MIN( 80, Assoc.NONE ),
@@ -61,7 +61,7 @@ public enum Functions {
     private final int precedence;
     private final Assoc assoc;
 
-    private Functions(int precedence, Assoc assoc, String... values) {
+    private FunctionNames(int precedence, Assoc assoc, String... values) {
         this.precedence = precedence;
         this.assoc = assoc;
         this.values = values;
@@ -93,18 +93,18 @@ public enum Functions {
     }
 
     /**
-     * get function from {@link Functions} from string parameter. It is possible for one function to have multiple string mappings.
+     * get function from {@link FunctionNames} from string parameter. It is possible for one function to have multiple string mappings.
      * Throws exception if the operator does not exists.
      *
      * @param functName of the function
-     * @return function from the enum {@link Functions}
+     * @return function from the enum {@link FunctionNames}
      */
-    public static Functions get(String s) {
+    public static FunctionNames get(String s) {
         if ( s == null || s.isEmpty() ) {
             throw new DbcException("Invalid function name: " + s);
         }
         String sUpper = s.trim().toUpperCase(Locale.GERMAN);
-        for ( Functions funct : Functions.values() ) {
+        for ( FunctionNames funct : FunctionNames.values() ) {
             if ( funct.toString().equals(sUpper) ) {
                 return funct;
             }

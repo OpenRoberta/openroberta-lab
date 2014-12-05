@@ -38,7 +38,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
-import de.fhg.iais.roberta.ast.syntax.functions.Func;
+import de.fhg.iais.roberta.ast.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.LenghtOfIsEmptyFunct;
@@ -150,7 +150,7 @@ public class HardwareCheckVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitFunc(Func<Void> func) {
+    public Void visitFunc(MathPowerFunct<Void> func) {
         for ( Expr<Void> expr : func.getParam() ) {
             expr.visit(this);
         }

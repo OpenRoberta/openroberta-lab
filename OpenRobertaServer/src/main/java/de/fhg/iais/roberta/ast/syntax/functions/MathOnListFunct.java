@@ -15,14 +15,14 @@ import de.fhg.iais.roberta.dbc.Assert;
  * This class represents the <b>math_on_list</b> block from Blockly into the AST (abstract syntax tree).<br>
  * <br>
  * The user must provide name of the function and list of parameters. <br>
- * To create an instance from this class use the method {@link #make(Functions, List, BlocklyBlockProperties, BlocklyComment)}.<br>
- * The enumeration {@link Functions} contains all allowed functions.
+ * To create an instance from this class use the method {@link #make(FunctionNames, List, BlocklyBlockProperties, BlocklyComment)}.<br>
+ * The enumeration {@link FunctionNames} contains all allowed functions.
  */
 public class MathOnListFunct<V> extends Function<V> {
-    private final Functions functName;
+    private final FunctionNames functName;
     private final List<Expr<V>> param;
 
-    private MathOnListFunct(Functions name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private MathOnListFunct(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Kind.MATH_ON_LIST_FUNCT, properties, comment);
         Assert.isTrue(name != null && param != null);
         this.functName = name;
@@ -39,14 +39,14 @@ public class MathOnListFunct<V> extends Function<V> {
      * @param comment that user has added to the block,
      * @return read only object of class {@link MathOnListFunct}
      */
-    public static <V> MathOnListFunct<V> make(Functions name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> MathOnListFunct<V> make(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new MathOnListFunct<V>(name, param, properties, comment);
     }
 
     /**
      * @return name of the function
      */
-    public Functions getFunctName() {
+    public FunctionNames getFunctName() {
         return this.functName;
     }
 

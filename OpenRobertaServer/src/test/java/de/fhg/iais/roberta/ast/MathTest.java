@@ -9,7 +9,7 @@ public class MathTest {
 
     @Test
     public void mathArithmetic() throws Exception {
-        String a = "BlockAST [project=[[Location [x=27, y=-575], Binary [ADD, NumConst [1], Funct [POWER, [NumConst [5], NumConst [8]]]]]]]";
+        String a = "BlockAST [project=[[Location [x=27, y=-575], Binary [ADD, NumConst [1], MathPowerFunct [POWER, [NumConst [5], NumConst [8]]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_arithmetic.xml"));
     }
@@ -21,7 +21,7 @@ public class MathTest {
 
     @Test
     public void mathSingle() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-7, y=-604], MathSingleFunct [LN, [Funct [POWER, [NumConst [5], NumConst [8]]]]]]]]";
+        String a = "BlockAST [project=[[Location [x=-7, y=-604], MathSingleFunct [LN, [MathPowerFunct [POWER, [NumConst [5], NumConst [8]]]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_single.xml"));
     }
@@ -71,7 +71,7 @@ public class MathTest {
     @Test
     public void mathTrig() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=41, y=-491], MathSingleFunct [ATAN, [FunctionExpr [MathSingleFunct [LN, [Funct [POWER, [NumConst [5], NumConst [8]]]]]]]]]]]";
+            "BlockAST [project=[[Location [x=41, y=-491], MathSingleFunct [ATAN, [FunctionExpr [MathSingleFunct [LN, [MathPowerFunct [POWER, [NumConst [5], NumConst [8]]]]]]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_trig.xml"));
     }

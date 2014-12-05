@@ -17,15 +17,15 @@ import de.fhg.iais.roberta.dbc.Assert;
  * This class represents the <b>text_getSubstring</b> and blocks <b>lists_getSublist</b> from Blockly into the AST (abstract syntax tree).<br>
  * <br>
  * The user must provide name of the function and list of parameters. <br>
- * To create an instance from this class use the method {@link #make(Functions, List, List, BlocklyBlockProperties, BlocklyComment)}.<br>
- * The enumeration {@link Functions} contains all allowed functions.
+ * To create an instance from this class use the method {@link #make(FunctionNames, List, List, BlocklyBlockProperties, BlocklyComment)}.<br>
+ * The enumeration {@link FunctionNames} contains all allowed functions.
  */
 public class GetSubFunct<V> extends Function<V> {
-    private final Functions functName;
+    private final FunctionNames functName;
     private final List<Expr<V>> param;
     private final List<String> strParam;
 
-    private GetSubFunct(Functions name, List<String> strParam, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private GetSubFunct(FunctionNames name, List<String> strParam, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.GET_SUB_FUNCT, properties, comment);
         Assert.isTrue(name != null && param != null && strParam != null);
         this.functName = name;
@@ -44,14 +44,14 @@ public class GetSubFunct<V> extends Function<V> {
      * @param strParam list of string parameters for the function
      * @return read only object of class {@link GetSubFunct}
      */
-    public static <V> GetSubFunct<V> make(Functions name, List<String> strParam, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> GetSubFunct<V> make(FunctionNames name, List<String> strParam, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new GetSubFunct<V>(name, strParam, param, properties, comment);
     }
 
     /**
      * @return name of the function
      */
-    public Functions getFunctName() {
+    public FunctionNames getFunctName() {
         return this.functName;
     }
 
@@ -99,16 +99,16 @@ public class GetSubFunct<V> extends Function<V> {
         mutation.setAt2(false);
         AstJaxbTransformerHelper.addField(jaxbDestination, "WHERE1", getStrParam().get(0));
         AstJaxbTransformerHelper.addField(jaxbDestination, "WHERE2", getStrParam().get(1));
-        if ( getFunctName() == Functions.GET_SUBLIST ) {
+        if ( getFunctName() == FunctionNames.GET_SUBLIST ) {
             AstJaxbTransformerHelper.addValue(jaxbDestination, "LIST", getParam().get(0));
         } else {
             AstJaxbTransformerHelper.addValue(jaxbDestination, "STRING", getParam().get(0));
         }
-        if ( Functions.get(getStrParam().get(0)) == Functions.FROM_START || Functions.get(getStrParam().get(0)) == Functions.FROM_END ) {
+        if ( FunctionNames.get(getStrParam().get(0)) == FunctionNames.FROM_START || FunctionNames.get(getStrParam().get(0)) == FunctionNames.FROM_END ) {
             mutation.setAt1(true);
             AstJaxbTransformerHelper.addValue(jaxbDestination, "AT1", getParam().get(1));
         }
-        if ( Functions.get(getStrParam().get(1)) == Functions.FROM_START || Functions.get(getStrParam().get(1)) == Functions.FROM_END ) {
+        if ( FunctionNames.get(getStrParam().get(1)) == FunctionNames.FROM_START || FunctionNames.get(getStrParam().get(1)) == FunctionNames.FROM_END ) {
             mutation.setAt2(true);
             AstJaxbTransformerHelper.addValue(jaxbDestination, "AT2", getParam().get(getParam().size() - 1));
         }

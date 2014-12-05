@@ -13,7 +13,7 @@ public class BinaryTest {
 
     @Test
     public void make() throws Exception {
-        String a = "BlockAST [project=[[Location [x=27, y=-575], Binary [ADD, NumConst [1], Funct [POWER, [NumConst [5], NumConst [8]]]]]]]";
+        String a = "BlockAST [project=[[Location [x=27, y=-575], Binary [ADD, NumConst [1], MathPowerFunct [POWER, [NumConst [5], NumConst [8]]]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_arithmetic.xml"));
     }
 
@@ -35,7 +35,7 @@ public class BinaryTest {
     public void getRight() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_arithmetic.xml");
         Binary<Void> binary = (Binary<Void>) transformer.getTree().get(1);
-        Assert.assertEquals("Funct [POWER, [NumConst [5], NumConst [8]]]", binary.getRight().toString());
+        Assert.assertEquals("MathPowerFunct [POWER, [NumConst [5], NumConst [8]]]", binary.getRight().toString());
     }
 
     @Test
