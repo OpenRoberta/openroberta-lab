@@ -577,7 +577,10 @@ function initProgramNameTable() {
         "sClass" : "programs"
     }, {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>Erzeugt am</span>",
-        "sClass" : "programs"
+        "sClass" : "programs",
+            type:       "date",
+            def:        function () { return new Date(); },
+            dateFormat: 'D, d M y'
     }, {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_ACTUALIZATION'>Letzte Aktualisierung</span>",
         "sClass" : "programs"
@@ -587,6 +590,15 @@ function initProgramNameTable() {
         "sDom" : '<lip>t<r>',
         "aaData" : [],
         "aoColumns" : columns,
+        "aoColumnDefs": [
+                         {   // format date fields
+                             "aTargets" : [4,5],   // indexes of columns to be formatted
+                             "sType": "date",
+                             "mRender": function(data) {
+                                 return formatDate(data);
+                             }
+                         }
+                     ],
         "bJQueryUI" : true,
         "sPaginationType" : "full_numbers",
         "bPaginate" : true,
@@ -649,6 +661,15 @@ function initConfigurationNameTable() {
         "sDom" : '<lip>t<r>',
         "aaData" : [],
         "aoColumns" : columns,
+        "aoColumnDefs": [
+                         {   // format date fields
+                             "aTargets" : [3,4],   // indexes of columns to be formatted
+                             "sType": "date",
+                             "mRender": function(data) {
+                                 return formatDate(data);
+                             }
+                         }
+                     ],
         "bJQueryUI" : true,
         "sPaginationType" : "full_numbers",
         "bPaginate" : true,
@@ -679,6 +700,27 @@ function initConfigurationNameTable() {
         }
     });
 }
+
+/**
+ * Format date
+ * 
+ * @param {date}
+ *            date from server to be formatted
+ */
+function formatDate(date) {
+    if(date) {
+        var YYYY = date.substring(0,4);
+        var MM = date.substring(5,7);
+        var DD = date.substring(8,10);
+        var hh = date.substring(11,13);
+        var mm = date.substring(14,16);
+        var ss = date.substring(17,19);
+        var str = DD + '.' + MM + '.' + YYYY + ', ' + hh + ':' + mm + ':' + ss;
+        return str;
+    }
+    return "";
+}
+
 
 /**
  * Run program
