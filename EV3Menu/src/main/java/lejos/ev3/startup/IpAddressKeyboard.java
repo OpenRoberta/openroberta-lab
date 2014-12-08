@@ -10,7 +10,7 @@ import lejos.hardware.lcd.TextLCD;
 /**
  * Keyboard based on {@link Keyboard} , lejos class for wifi password input.<br>
  * IpAddressKeyboard for IP or URL input, example: 10.0.1.10:1999<br>
- * 
+ *
  * @author dpyka
  */
 public class IpAddressKeyboard
@@ -51,7 +51,7 @@ public class IpAddressKeyboard
 
     /**
      * Returns the token that was created via RobertaKeyboard.
-     * 
+     *
      * @return token as String
      */
     String getString()
@@ -119,13 +119,13 @@ public class IpAddressKeyboard
                     case 'D':
                         return sb.toString();
                     case 'c':
-                        return "";
+                        return "none";
                     }
                 }
             }
             else if (b == Button.ID_ESCAPE)
             {
-                return "";
+                return "none";
             }
 
             displayCursor(true);
