@@ -1329,7 +1329,6 @@ Blockly.Msg.BUTTON_DO_DELETE = 'Delete';
 Blockly.Msg.BUTTON_DO_SHARE = 'Share';
 Blockly.Msg.BUTTON_EMPTY_LIST = 'Empty list';
 Blockly.Msg.MESSAGE_PASSWORD_ERROR = 'Something went wrong while you filled in the two passwords.';
-Blockly.Msg.MESSAGE_USER_CREATED = 'User was created.';
 Blockly.Msg.MESSAGE_USER_EXISTS = 'This username already exists. Please choose another one.';
 Blockly.Msg.MESSAGE_USER_DELETED = 'The user was successfully deleted.';
 Blockly.Msg.MESSAGE_USER_DELETE_ERROR = 'The user could not be deleted.';

@@ -571,7 +571,6 @@
     "BUTTON_EMPTY_LIST" : "Liste leeren",
 	"MESSAGE_PASSWORD_ERROR" : "Du hast beim eingeben der beiden Passworte etwas falsch gemacht.",
 	"MESSAGE_TEACHER_OR_STUDENT" : "Du musst angeben, ob Du Schüler oder Lehrer bist.",
-	"MESSAGE_USER_CREATED" : "Du hast erfolgreich einen neuen Nutzer angelegt.",
 	"MESSAGE_USER_EXISTS" : "Dieser Nutzer existiert bereits. Du musst einen anderen Account-Namen wählen.",
 	"MESSAGE_USER_DELETED" : "Der Nutzer wurde gelöscht.",
     "MESSAGE_USER_DELETE_ERROR" : "Der Nutzer konnte nicht gelöscht werden.",

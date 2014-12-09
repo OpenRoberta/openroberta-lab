@@ -43,7 +43,6 @@ function saveUserToServer() {
         }, function(result) {
             if (result.rc === "ok") {
                 setRobotState(result);
-                displayMessage("MESSAGE.USER_CREATED");
                 $(".ui-dialog-content").dialog("close"); // close all opened popups
                 $('#accountNameS').val($userAccountName.val());
                 $('#pass1S').val($pass1.val());
@@ -577,10 +576,7 @@ function initProgramNameTable() {
         "sClass" : "programs"
     }, {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>Erzeugt am</span>",
-        "sClass" : "programs",
-            type:       "date",
-            def:        function () { return new Date(); },
-            dateFormat: 'D, d M y'
+        "sClass" : "programs"
     }, {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_ACTUALIZATION'>Letzte Aktualisierung</span>",
         "sClass" : "programs"
