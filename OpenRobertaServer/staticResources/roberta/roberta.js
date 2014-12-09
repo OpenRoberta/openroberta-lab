@@ -307,7 +307,7 @@ function saveConfigurationToServer() {
     if (userState.configuration) {
         userState.configurationSaved = true;
         $(".ui-dialog-content").dialog("close"); // close all opened popups
-        document.getElementById('bricklyFrame').contentWindow.saveToServer(userState.configuration);
+        document.getElementById('bricklyFrame').contentWindow.saveConfigurationToServer(userState.configuration);
         responseAndRefreshList();
     } else {
         displayMessage("MESSAGE.EMPTY_NAME");
@@ -340,17 +340,23 @@ function showProgram(result, load, name) {
     }
 };
 
+/**
+ * Show configuration in brickly iframe
+ * 
+ * @param {result}
+ *            Result-object of server call
+ * @param {load}
+ *            load configuration into workspace
+ * @param {name}
+ *            name of configuration
+ */
 function showConfiguration(result, load, name) {
     response(result);
     if (result.rc === 'ok') {
-        setConfiguration(name);
-        var xml = Blockly.Xml.textToDom(result.data);
-        if (load) {
-            Blockly.mainWorkspace.clear();
-        }
-        Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
-        LOG.info('show configuration ' + userState.configuration + ' signed in: ' + userState.id);
         switchToBrickly();
+        setConfiguration(name);
+        document.getElementById('bricklyFrame').contentWindow.showConfiguration(load, result.data);
+        LOG.info('show configuration ' + userState.configuration + ' signed in: ' + userState.id);
         bricklyActive = true;
     }
 };
@@ -912,6 +918,7 @@ function initHeadNavigation() {
         if (domId === 'checkConfig') {
             checkConfiguration();
         } else if (domId === 'standardConfig') {
+            document.getElementById('bricklyFrame').contentWindow.showStandardConfiguration();
             switchToBrickly();
             bricklyActive = true;
         } else if (domId === 'newConfig') {
