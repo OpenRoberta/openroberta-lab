@@ -25,8 +25,17 @@ function injectBrickly(toolbox) {
             check : true,
             scrollbars : true
         });
-        
-        showStandardConfiguration();
+
+        // should this come from the server?
+        var text = "<block_set xmlns='http://de.fhg.iais.roberta.blockly'>" +  "<instance x='75' y='75'>" + "<block type='robBrick_EV3-Brick'>"
+                + "<value name='S1'>" + "<block type='robBrick_touch'></block>" + "</value>" + "<value name='S4'>"
+                + "<block type='robBrick_ultrasonic'></block>" + "</value>" + "<value name='MB'>" + "<block type='robBrick_motor_big'>"
+                + "<field name='MOTOR_REGULATION'>TRUE</field>" + "<field name='MOTOR_REVERSE'>OFF</field>" + "<field name='MOTOR_DRIVE'>RIGHT</field>"
+                + "</block>" + "</value>" + "<value name='MC'>" + "<block type='robBrick_motor_big'>" + "<field name='MOTOR_REGULATION'>TRUE</field>"
+                + "<field name='MOTOR_REVERSE'>OFF</field>" + "<field name='MOTOR_DRIVE'>LEFT</field>" + "</block>" + "</value>" + "</block>" + "</instance>"
+                + "</block_set>";
+        var xml = Blockly.Xml.textToDom(text);
+        Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
     }
 }
 
@@ -58,23 +67,6 @@ function showConfiguration(load, data) {
     if (load) {
         Blockly.mainWorkspace.clear();
     }
-    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
-};
-
-/**
- * Show standard configuration
- *            
- */
-function showStandardConfiguration() {
-    // This should come from the server?
-    var text = "<block_set xmlns='http://de.fhg.iais.roberta.blockly'>" +  "<instance x='75' y='75'>" + "<block type='robBrick_EV3-Brick'>"
-            + "<value name='S1'>" + "<block type='robBrick_touch'></block>" + "</value>" + "<value name='S4'>"
-            + "<block type='robBrick_ultrasonic'></block>" + "</value>" + "<value name='MB'>" + "<block type='robBrick_motor_big'>"
-            + "<field name='MOTOR_REGULATION'>TRUE</field>" + "<field name='MOTOR_REVERSE'>OFF</field>" + "<field name='MOTOR_DRIVE'>RIGHT</field>"
-            + "</block>" + "</value>" + "<value name='MC'>" + "<block type='robBrick_motor_big'>" + "<field name='MOTOR_REGULATION'>TRUE</field>"
-            + "<field name='MOTOR_REVERSE'>OFF</field>" + "<field name='MOTOR_DRIVE'>LEFT</field>" + "</block>" + "</value>" + "</block>" + "</instance>"
-            + "</block_set>";
-    var xml = Blockly.Xml.textToDom(text);
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
 };
 

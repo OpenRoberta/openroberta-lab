@@ -918,7 +918,6 @@ function initHeadNavigation() {
         if (domId === 'checkConfig') {
             checkConfiguration();
         } else if (domId === 'standardConfig') {
-            document.getElementById('bricklyFrame').contentWindow.showStandardConfiguration();
             switchToBrickly();
             bricklyActive = true;
         } else if (domId === 'newConfig') {
