@@ -1140,6 +1140,7 @@ function initTabs() {
             switchToBrickly();
         } else {
             $('#tabBlockly').click();
+            switchLanguage(userState.language, true);
         }
     });
 }
@@ -1243,9 +1244,11 @@ function translate(jsdata) {
  * 
  * @param {langCode}
  *            Code of language to switch to
+ * @param {forceSwitch}
+ *            force the language setting
  */
-function switchLanguage(langCode) {
-    if (userState.language != langCode) {
+function switchLanguage(langCode, forceSwitch) {
+    if (forceSwitch || userState.language != langCode) {
         var langs = ['De', 'En'];
         for (i in langs) {
             $("." + langs[i] + "").css('display','none');
@@ -1272,11 +1275,11 @@ function switchLanguage(langCode) {
  */
 function initializeLanguages() {
     $('#setLangDe').onWrap('click', function() {
-        switchLanguage('De');
+        switchLanguage('De', false);
     }, 'switch language to "De"');
     
     $('#setLangEn').onWrap('click', function() {
-        switchLanguage('En');
+        switchLanguage('En', false);
     }, 'switch language to "En"');
 }
 
@@ -1294,7 +1297,7 @@ function init() {
     $('#programNameSave').val('');
     $('#configurationNameSave').val('');
     initializeLanguages();
-    switchLanguage('De');
+    switchLanguage('De', true);
 };
 
 $(document).ready(WRAP.fn3(init, 'page init'));
