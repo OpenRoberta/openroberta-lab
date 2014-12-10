@@ -41,26 +41,30 @@ function injectBrickly(toolbox) {
 
 function response(result) {
     LOG.info('result from server: ' + JSON.stringify(result));
+    return true;
 };
 
-function saveConfigurationToServer(name) {
+
+/**
+ * Save configuration to server
+ * 
+ * @param {name}
+ *        configuration name    
+ *            
+ */
+function getXmlOfConfiguration(name) {
     var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
     var xml_text = Blockly.Xml.domToText(xml);
-    LOG.info('save brick configuration ' + name);
-    COMM.json("/conf", {
-        "cmd" : "saveC",
-        "name" : name,
-        "configuration" : xml_text
-    }, response);
+    return xml_text;
 }
 
 /**
  * Show configuration
  * 
  * @param {load}
- *            
+ *        load configuration    
  * @param {data}
- *            
+ *        data of server call    
  */
 function showConfiguration(load, data) {
     var xml = Blockly.Xml.textToDom(data);

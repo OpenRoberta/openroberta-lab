@@ -307,8 +307,13 @@ function saveConfigurationToServer() {
     if (userState.configuration) {
         userState.configurationSaved = true;
         $(".ui-dialog-content").dialog("close"); // close all opened popups
-        document.getElementById('bricklyFrame').contentWindow.saveConfigurationToServer(userState.configuration);
-        responseAndRefreshList();
+        var xml_text = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
+        LOG.info('save brick configuration ' + userState.configuration);
+        COMM.json("/conf", {
+            "cmd" : "saveC",
+            "name" : userState.configuration,
+            "configuration" : xml_text
+        }, responseAndRefreshList);
     } else {
         displayMessage("MESSAGE.EMPTY_NAME");
     }
