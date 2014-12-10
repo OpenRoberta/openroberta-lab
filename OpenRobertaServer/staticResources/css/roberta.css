@@ -62,8 +62,6 @@ ul#head-navigation {
 
 ul#head-navigation>li {
 	float: left;
-	padding-bottom: 9px;
-	padding-top: 6px;
 	width: 70px;
 }
 
@@ -76,6 +74,8 @@ ul#head-navigation a {
 	text-align: center;
 	display: block;
 	color: #333333;
+	padding-bottom: 8px;
+	padding-top: 6px;
 }
 
 ul#head-navigation .head-navigation-submenu {
