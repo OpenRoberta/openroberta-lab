@@ -105,7 +105,7 @@ limitations under the License.
                     <li class="logout"><span id="logout" class="flaticon-user2" lkey="Blockly.Msg.MENU_LOG_OUT">abmelden</span></li>
                     <li><span id="new" class="flaticon-add9" lkey="Blockly.Msg.MENU_NEW">neu ...</span></li>
                     <li class="hidden"><span id="change" class="flaticon-group1" lkey="Blockly.Msg.MENU_CHANGE">ändern ...</span></li>
-                    <li class="logout" id="deleteUser" class="logout"><span class="flaticon-user5" lkey="Blockly.Msg.MENU_DELETE_USER">Benutzer löschen ...</span></li>
+                    <li class="logout"><span id="delete" class="flaticon-user5" lkey="Blockly.Msg.MENU_DELETE_USER">Benutzer löschen ...</span></li>
                 </ul>
             </li>
 
@@ -115,10 +115,9 @@ limitations under the License.
             <div id="beta">
             </div>
             
-            <!-- Has to be removed in the future !!! -->
             <div class="state">
-                <a href="http://www.iais.fraunhofer.de/impressum.html" target="_blank" class="publishingNotes De">Impressum</a>
-                <a href="http://www.iais.fraunhofer.de/index.php?id=4515&L=1" target="_blank" class="publishingNotes En">Publishing notes</a>
+                <a href="http://www.iais.fraunhofer.de/impressum.html" target="_blank" class="publishingNotes De">Impressum</a>   <!-- Has to be removed in the future !!! -->
+                <a href="http://www.iais.fraunhofer.de/index.php?id=4515&L=1" target="_blank" class="publishingNotes En">Publishing notes</a>   <!-- Has to be removed in the future !!! -->
                 <br/>
                 <span id="setLangDe" class="bigFlag" title="Deutsch" lkey="Blockly.Msg.HINT_LANGUAGE_GERMAN"></span>
                 <span id="setLangEn" class="smallFlag" title="Englisch" lkey="Blockly.Msg.HINT_LANGUAGE_ENGLISH"></span>
@@ -162,7 +161,8 @@ limitations under the License.
     </div>
 
     <div class="jquerypopup" id="delete-user" title="Benutzer löschen">
-        <input id="accountNameD" class='input' type="text" value="" /><br/>
+        <label for="pass1D" lkey="Blockly.Msg.POPUP_PASSWORD"></label>
+        <input id="pass1D" class='input' type="password" value="" /><br/>
         <input id="deleteUser" class='submit' type="submit" lkey="Blockly.Msg.POPUP_DELETE_USER" value="Benutzer löschen" />
     </div>
 

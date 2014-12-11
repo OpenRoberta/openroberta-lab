@@ -354,12 +354,15 @@ ul#head-navigation .head-navigation-submenu>li:hover {
 #login-user input#pass1S,
 #register-user input#pass1,
 #register-user input#pass2,
+#delete-user input#pass1D,
 #set-token input#tokenValue {
     background-image: url(img/login_pw-icon.png);
 }
 
 #login-user input#pass1S:active,
 #login-user input#pass1S:focus,
+#delete-user input#pass1D:active,
+#delete-user input#pass1D:focus,
 #register-user input#pass1:active,
 #register-user input#pass1:focus,
 #register-user input#pass2:active,

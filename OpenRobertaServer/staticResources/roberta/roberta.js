@@ -58,15 +58,14 @@ function saveUserToServer() {
  * Delete user on server
  */
 function deleteUserOnServer() {
+    var $pass1 = $('#pass1D');
     COMM.json("/user", {
         "cmd" : "deleteUser",
         "accountName" : userState.name,
-        "password" : ""
+        "password" : $pass1.val()
     }, function(result) {
         if (result.rc === "ok") {
-            userState.id = null;
-            userState.name = '';
-            setRobotState(result);
+            logout();
             displayMessage("MESSAGE.USER_DELETED");
             $(".ui-dialog-content").dialog("close"); // close all opened popups
         } else {
