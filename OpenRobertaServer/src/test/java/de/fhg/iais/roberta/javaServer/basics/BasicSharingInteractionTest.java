@@ -60,6 +60,7 @@ public class BasicSharingInteractionTest {
 
     private CompilerWorkflow compilerWorkflow;
     private String crosscompilerBasedir;
+    private String robotResourcesDir;
     
     private RestUser restUser;
     private RestProgram restProgram;
@@ -73,15 +74,17 @@ public class BasicSharingInteractionTest {
         this.connectionUrl = properties.getProperty("hibernate.connection.url");
         this.buildXml = properties.getProperty("crosscompiler.build.xml");
         this.crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");
+        this.robotResourcesDir = properties.getProperty("robot.resources.dir");
 
-        this.sessionFactoryWrapper = new SessionFactoryWrapper("my-hybernate-test-cdg.xml",this.connectionUrl);
+        
+        this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-test-cfg.xml",this.connectionUrl);
         Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
         this.memoryDbSetup = new DbSetup(nativeSession);
         this.memoryDbSetup.runDefaultRobertaSetup();
 
         
         this.brickCommunicator = new BrickCommunicator();
-        this.compilerWorkflow = new CompilerWorkflow(this.crosscompilerBasedir, this.buildXml);
+        this.compilerWorkflow = new CompilerWorkflow(this.crosscompilerBasedir, this.robotResourcesDir, this.buildXml);
 
         this.restUser = new RestUser(this.brickCommunicator);
         this.restProgram = new RestProgram(this.sessionFactoryWrapper, this.brickCommunicator, this.compilerWorkflow);
@@ -135,7 +138,7 @@ public class BasicSharingInteractionTest {
                 + userNumber
                 + "';'password':'dip-"
                 + userNumber
-                + "';'userEmail':'cavy@home';'role':'STUDENT';'tag':'RWTH'}"));
+                + "';'userEmail':'cavy@home';'role':'STUDENT'}"));
         
         assertEntityRc(response, "ok");
         
@@ -171,16 +174,19 @@ public class BasicSharingInteractionTest {
         int sId = s.getUserId();
         
         //Show list of people irrespective of their relation
-      response = this.restUser.command(
-      			s,
-      		 	this.sessionFactoryWrapper.getSession(),
-      		 	mkD("{'cmd':'obtainUsers'; 'sortBy':'created';'offset':0;'tagFilter':'RWTH'}"));
-      assertEntityRc(response, "ok");
+//      response = this.restUser.command(
+//      			s,
+//      		 	this.sessionFactoryWrapper.getSession(),
+//      		 	mkD("{'cmd':'obtainUsers'; 'sortBy':'created';'offset':0;'tagFilter':'RWTH'}"));
+//      assertEntityRc(response, "ok");
       
 //      // Change user_program relations "pid-*" with success
-//	response = this.restProgram.command(s, mkD("{'cmd':'setUsersRights';'usersList': "
-//			+ "[{'id':46; 'name':'pid-4';'right':'READ'}, "
-//			+ "{'id':49; 'name':'pid-7';'right':'WRITE'}];'programName':'test';'userId':"+sId+"}"));
+        response = this.restProgram.command(s, mkD("{'cmd':'shareP';'userToShare':'pid-7';'programName':'test','right':'WRITE'}"));
+        response = this.restProgram.command(s, mkD("{'cmd':'shareP';'userToShare':'pid-5';'programName':'test','right':'READ'}"));
+        response = this.restProgram.command(s, mkD("{'cmd':'shareP';'userToShare':'pid-7';'programName':'test','right':'NONE'}"));
+        
+        assertEntityRc(response, "ok");
+
 //	  
 //      //Show list of people related to a given program
 //      response = this.restUser.command(s,this.sessionFactoryWrapper.getSession(),mkD("{'cmd':'usersFromProgram';'programName':'test'}"));

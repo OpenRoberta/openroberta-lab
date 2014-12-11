@@ -60,6 +60,7 @@ public class BasicUserInteractionTest {
     private HttpSessionState s2;
     private String blocklyProgram;
 
+    
     @Before
     public void setup() throws Exception {
         Properties properties = Util.loadProperties("classpath:openRoberta-basicUserInteraction.properties");

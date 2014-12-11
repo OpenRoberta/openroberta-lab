@@ -25,7 +25,7 @@ public class UserProgramProcessor extends AbstractProcessor {
         super(dbSession, httpSessionState);
     }
     
-    public void setRigths(int ownerId, String programName, JSONArray usersJSONArray){
+    public void setRights(int ownerId, String programName, JSONArray usersJSONArray){
     	
     	UserProgramDao userProgramDao = new UserProgramDao(this.dbSession);
         ProgramDao programDao = new ProgramDao(this.dbSession);
@@ -59,6 +59,28 @@ public class UserProgramProcessor extends AbstractProcessor {
         }
         
 //        setError("JSON etc");
+    }
+    
+    public void shareToUser(int ownerId, String userToShareName, String programName, String right){
+    	
+        ProgramDao programDao = new ProgramDao(this.dbSession);
+        UserDao userDao = new UserDao(this.dbSession);
+        
+        User owner = userDao.get(ownerId);
+        Program programToShare = programDao.load(programName, owner);
+        User userToShare = userDao.loadUser(userToShareName);
+        
+    	UserProgramDao userProgramDao = new UserProgramDao(this.dbSession);
+    	if(right.equals("NONE")){
+    		int userProgram = userProgramDao.deleteUserProgram(userToShare, programToShare);
+    		setResult(userProgram == 1, "user program deleted.");
+    	}else{
+    		UserProgram userProgram = userProgramDao.persistUserProgram(userToShare, programToShare, right);
+    		setResult(userProgram != null, "user program persisted.");
+    	}
+    	
+        
+    	
     }
     
     /**

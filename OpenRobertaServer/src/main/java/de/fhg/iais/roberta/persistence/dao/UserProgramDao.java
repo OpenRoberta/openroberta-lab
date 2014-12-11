@@ -49,9 +49,8 @@ public class UserProgramDao extends AbstractDao<UserProgram> {
         UserProgram userProgram = loadUserProgram(user,program);
         if ( userProgram == null ) {
             UserProgram userProgram2 = new UserProgram(user,program,relation);
-            userProgram2.setRelation(relation);
             this.session.save(userProgram2);
-            return userProgram;
+            return userProgram2;
         } else {
             userProgram.setRelation(relation);
             return userProgram;

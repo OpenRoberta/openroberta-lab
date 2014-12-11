@@ -65,15 +65,14 @@ public class BasicPersistUserProgram {
     @Before
     public void setup() throws Exception {
     	
+       
         Properties properties = Util.loadProperties("classpath:openRoberta-basicUserInteraction.properties");
         this.connectionUrl = properties.getProperty("hibernate.connection.url");
-        this.sessionFactoryWrapper = new SessionFactoryWrapper("my-hybernate-test-cdg.xml", this.connectionUrl);
-        Session session = this.sessionFactoryWrapper.getNativeSession();
-        
+
+        this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-test-cfg.xml", this.connectionUrl);
         Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
         this.memoryDbSetup = new DbSetup(nativeSession);
         this.memoryDbSetup.runDefaultRobertaSetup();
-        
 
     }
 
@@ -121,7 +120,7 @@ public class BasicPersistUserProgram {
           userNumber+=1;
           
         }
-        
+       
         List<Program> programList = programDao.loadAll();
         assertTrue(programList.size() == 100);
         
@@ -137,17 +136,15 @@ public class BasicPersistUserProgram {
     	if(user != null){
     		UserProgram userProgram = userProgramDao.loadUserProgram(user, program);
     		if(userProgram == null){
-                Relation relation = Relation.valueOf("WRITE");
-                UserProgram userProgram2 = new UserProgram(user, program,relation);
+                UserProgram userProgram2 = new UserProgram(user, program,Relation.WRITE);
                 hSession.save(userProgram2);
                 hSession.commit();
-
     		}
     	}	        
 
         userNumber+=2;
       }
-      
+
       //Show list of users from program dao
       List<UserProgram> userProgramList = userProgramDao.loadUserProgramByProgram(program);
       assertTrue(userProgramList.size() == 50);
