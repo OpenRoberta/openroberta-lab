@@ -148,6 +148,18 @@ ul#head-navigation .head-navigation-submenu>li:hover {
 	font-size: small;
 }
 
+#state1 {
+	min-width: 155px;
+}
+
+#state2 {
+	min-width: 140px;
+}
+
+#state3 {
+	width: 95px;
+}
+
 #head-navigation #logo {
 	width: 222px;
 	height: 60px;
@@ -354,12 +366,15 @@ ul#head-navigation .head-navigation-submenu>li:hover {
 #login-user input#pass1S,
 #register-user input#pass1,
 #register-user input#pass2,
+#delete-user input#pass1D,
 #set-token input#tokenValue {
     background-image: url(img/login_pw-icon.png);
 }
 
 #login-user input#pass1S:active,
 #login-user input#pass1S:focus,
+#delete-user input#pass1D:active,
+#delete-user input#pass1D:focus,
 #register-user input#pass1:active,
 #register-user input#pass1:focus,
 #register-user input#pass2:active,
@@ -747,11 +762,13 @@ table.dataTable.no-footer {
 .smallFlag {
 	width: 15px;
 	height: 10px;
+	margin-top: 10px;
 }
 
 .bigFlag {
 	width: 21px;
 	height: 14px;
+	margin-top: 10px;
 }
 
 #setLangDe {
