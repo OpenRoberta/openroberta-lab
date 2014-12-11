@@ -747,11 +747,13 @@ table.dataTable.no-footer {
 .smallFlag {
 	width: 15px;
 	height: 10px;
+	margin-top: 10px;
 }
 
 .bigFlag {
 	width: 21px;
 	height: 14px;
+	margin-top: 10px;
 }
 
 #setLangDe {

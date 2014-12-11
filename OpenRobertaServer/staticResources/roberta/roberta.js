@@ -545,8 +545,13 @@ function showConfigurations(result) {
     }
 }
 
-function selectionFn(event) {
+function selectionPFn(event) {
     $('#programNameTable .selected').removeClass('selected');
+    $(event.target.parentNode).toggleClass('selected');
+}
+
+function selectionCFn(event) {
+    $('#configurationNameTable .selected').removeClass('selected');
     $(event.target.parentNode).toggleClass('selected');
 }
 
@@ -626,9 +631,9 @@ function initProgramNameTable() {
         "fnDrawCallback" : function() {
         }
     });
-    $('#programNameTable tbody').onWrap('click', 'tr', selectionFn);
+    $('#programNameTable tbody').onWrap('click', 'tr', selectionPFn);
     $('#programNameTable tbody').onWrap('dblclick', 'tr', function(event) {
-        selectionFn(event);
+        selectionPFn(event);
         if ($('#loadFromListing').css('display') === 'inline') {
             $('#loadFromListing').click();
         } else if ($('#deleteFromListing').css('display') === 'inline') {
@@ -697,9 +702,9 @@ function initConfigurationNameTable() {
         "fnDrawCallback" : function() {
         }
     });
-    $('#configurationNameTable tbody').onWrap('click', 'tr', selectionFn);
+    $('#configurationNameTable tbody').onWrap('click', 'tr', selectionCFn);
     $('#configurationNameTable tbody').onWrap('dblclick', 'tr', function(event) {
-        selectionFn(event);
+        selectionCFn(event);
         if ($('#loadConfigurationFromListing').css('display') === 'inline') {
             $('#loadConfigurationFromListing').click();
         } else if ($('#deleteConfigurationFromListing').css('display') === 'inline') {
