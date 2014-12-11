@@ -148,6 +148,18 @@ ul#head-navigation .head-navigation-submenu>li:hover {
 	font-size: small;
 }
 
+#state1 {
+	min-width: 155px;
+}
+
+#state2 {
+	min-width: 140px;
+}
+
+#state3 {
+	width: 95px;
+}
+
 #head-navigation #logo {
 	width: 222px;
 	height: 60px;
