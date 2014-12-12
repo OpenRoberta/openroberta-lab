@@ -7,7 +7,7 @@ import org.json.JSONObject;
 /**
  * No Singleton Pattern but not recommended to use more than one. This is a
  * member of GraphicStartup.
- *
+ * 
  * @author dpyka
  */
 public class ORAhandler {
@@ -24,6 +24,7 @@ public class ORAhandler {
 
     private static boolean hasConnectionError = false;
     private static boolean isRegistered = false;
+    private static boolean interrupt = false;
 
     private ORApushCmd pushCmd;
     private Thread serverCommunicator;
@@ -33,13 +34,14 @@ public class ORAhandler {
      * functionality.
      */
     public ORAhandler() {
+        setInterrupt(false);
         setRegistered(false);
         setConnectionError(false);
     }
 
     /**
      * Returns the JSONObject brick data which will be send to the server.
-     *
+     * 
      * @return JSONObejct brickdata
      */
     public static JSONObject getBrickData() {
@@ -48,7 +50,7 @@ public class ORAhandler {
 
     /**
      * Set one key/value pair in the brickdata JSONObject.
-     *
+     * 
      * @param key
      *        String The key in the jsonobject (use predefined static keywords)
      * @param value
@@ -62,7 +64,7 @@ public class ORAhandler {
      * Start the brick server "push" communication. IndicatorThread ind from
      * GraphicStartup is needed (for hiding explicitly) when launching a user
      * program.
-     *
+     * 
      * @param serverBaseIP
      *        String The base IP like 192.168.56.1:1999
      * @param ind
@@ -70,6 +72,7 @@ public class ORAhandler {
      *        status icons).
      */
     public void startServerCommunicator(String serverBaseIP, IndicatorThread ind) {
+        setInterrupt(false);
         setRegistered(false);
         setConnectionError(false);
         this.pushCmd = new ORApushCmd(serverBaseIP, this.ind);
@@ -83,6 +86,7 @@ public class ORAhandler {
      * listener (not possible at the moment?!)
      */
     public void disconnect() {
+        setInterrupt(true);
         if ( this.pushCmd.getHttpConnection() != null ) {
             this.pushCmd.getHttpConnection().disconnect();
         }
@@ -102,5 +106,13 @@ public class ORAhandler {
 
     public static void setConnectionError(boolean hasConnectionError) {
         ORAhandler.hasConnectionError = hasConnectionError;
+    }
+
+    public static boolean isInterrupt() {
+        return interrupt;
+    }
+
+    public static void setInterrupt(boolean interrupt) {
+        ORAhandler.interrupt = interrupt;
     }
 }

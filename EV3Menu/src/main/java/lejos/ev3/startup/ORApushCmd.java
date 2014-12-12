@@ -77,7 +77,7 @@ public class ORApushCmd implements Runnable {
     public void run() {
         OutputStream os = null;
         BufferedReader br = null;
-        while ( true ) {
+        while ( !ORAhandler.isInterrupt() ) {
             try {
                 this.httpURLConnection = openConnection();
 
@@ -109,9 +109,10 @@ public class ORApushCmd implements Runnable {
                 switch ( command ) {
                     case CMD_REPEAT:
                         ORAhandler.setRegistered(true);
+                        ORAhandler.setConnectionError(false);
                         break;
                     case CMD_ABORT:
-                        throw new IOException();
+                        ORAhandler.setInterrupt(true);
                     case CMD_UPDATE:
                         this.oraUpdater.update();
                         break;
