@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.IndexLocation;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
@@ -19,15 +20,15 @@ import de.fhg.iais.roberta.dbc.Assert;
  * The enumeration {@link FunctionNames} contains all allowed functions.
  */
 public class IndexOfFunct<V> extends Function<V> {
-    private final FunctionNames functName;
+    private final IndexLocation location;
     private final List<Expr<V>> param;
 
     //private final List<String> strParam;
 
-    private IndexOfFunct(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private IndexOfFunct(IndexLocation name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Kind.TEXT_INDEX_OF_FUNCT, properties, comment);
         Assert.isTrue(name != null && param != null);
-        this.functName = name;
+        this.location = name;
         this.param = param;
         setReadOnly();
     }
@@ -41,15 +42,15 @@ public class IndexOfFunct<V> extends Function<V> {
      * @param comment that user has added to the block,
      * @return read only object of class {@link IndexOfFunct}
      */
-    public static <V> IndexOfFunct<V> make(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> IndexOfFunct<V> make(IndexLocation name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new IndexOfFunct<V>(name, param, properties, comment);
     }
 
     /**
      * @return name of the function
      */
-    public FunctionNames getFunctName() {
-        return this.functName;
+    public IndexLocation getLocation() {
+        return this.location;
     }
 
     /**
@@ -61,12 +62,12 @@ public class IndexOfFunct<V> extends Function<V> {
 
     @Override
     public int getPrecedence() {
-        return this.functName.getPrecedence();
+        return 1;
     }
 
     @Override
     public Assoc getAssoc() {
-        return this.functName.getAssoc();
+        return Assoc.LEFT;
     }
 
     @Override
@@ -76,7 +77,7 @@ public class IndexOfFunct<V> extends Function<V> {
 
     @Override
     public String toString() {
-        return "IndexOfFunct [" + this.functName + ", " + this.param + "]";
+        return "IndexOfFunct [" + this.location + ", " + this.param + "]";
     }
 
     @Override
@@ -84,7 +85,7 @@ public class IndexOfFunct<V> extends Function<V> {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        AstJaxbTransformerHelper.addField(jaxbDestination, "END", getFunctName().name());
+        AstJaxbTransformerHelper.addField(jaxbDestination, "END", getLocation().name());
         AstJaxbTransformerHelper.addValue(jaxbDestination, "VALUE", getParam().get(0));
         AstJaxbTransformerHelper.addValue(jaxbDestination, "FIND", getParam().get(1));
         return jaxbDestination;

@@ -117,7 +117,7 @@ public class ListsTest {
 
     @Test
     public void listSetIndex() throws Exception {
-        String a = "BlockAST [project=[[Location [x=18, y=289], ListSetIndex [SET, FROM_START, [Var [liste], NumConst [0], NumConst [12]]]]]]";
+        String a = "BlockAST [project=[[Location [x=18, y=289], ListSetIndex [SET, FROM_START, [Var [liste], NumConst [12], NumConst [0]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/lists/list_setIndex.xml"));
     }
@@ -141,7 +141,7 @@ public class ListsTest {
 
     @Test
     public void listSetIndex2() throws Exception {
-        String a = "BlockAST [project=[[Location [x=18, y=289], ListSetIndex [INSERT, FROM_START, [Var [liste], NumConst [1], NumConst [12]]]]]]";
+        String a = "BlockAST [project=[[Location [x=18, y=289], ListSetIndex [INSERT, FROM_START, [Var [liste], NumConst [12], NumConst [1]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/lists/list_setIndex2.xml"));
     }

@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
+import de.fhg.iais.roberta.ast.syntax.IndexLocation;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.Phrase.Kind;
 import de.fhg.iais.roberta.ast.syntax.action.ClearDisplayAction;
@@ -188,7 +189,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
                 this.sb.append("Math.E");
                 break;
             case GOLDEN_RATIO:
-                this.sb.append("(1.0 + Math.sqrt(5.0)) / 2.0");
+                this.sb.append("BlocklyMethods.GOLDEN_RATIO");
                 break;
             case SQRT2:
                 this.sb.append("Math.sqrt(2)");
@@ -252,7 +253,13 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     public Void visitBinary(Binary<Void> binary) {
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
         this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
-        generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+        if ( binary.getOp() == Op.TEXT_APPEND ) {
+            this.sb.append("String.valueOf(");
+            generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+            this.sb.append(")");
+        } else {
+            generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+        }
         return null;
     }
 
@@ -766,12 +773,6 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitEmptyList(EmptyList<Void> emptyList) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
         return sensorGetSample.getSensor().visit(this);
     }
@@ -793,55 +794,150 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitFunctionExpr(FunctionExpr<Void> functionExpr) {
-        // TODO Auto-generated method stub
+        functionExpr.getFunction().visit(this);
         return null;
     }
 
     @Override
     public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
-        // TODO Auto-generated method stub
+        this.sb.append("BlocklyMethods.listsGetSubList( ");
+        getSubFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        IndexLocation where1 = IndexLocation.get(getSubFunct.getStrParam().get(0));
+        this.sb.append(where1.getJavaCode());
+        if ( where1 == IndexLocation.FROM_START || where1 == IndexLocation.FROM_END ) {
+            this.sb.append(", ");
+            getSubFunct.getParam().get(1).visit(this);
+        }
+        this.sb.append(", ");
+        IndexLocation where2 = IndexLocation.get(getSubFunct.getStrParam().get(1));
+        this.sb.append(where2.getJavaCode());
+        if ( where2 == IndexLocation.FROM_START || where2 == IndexLocation.FROM_END ) {
+            this.sb.append(", ");
+            if ( getSubFunct.getParam().size() == 3 ) {
+                getSubFunct.getParam().get(2).visit(this);
+            } else {
+                getSubFunct.getParam().get(1).visit(this);
+            }
+        }
+        this.sb.append(")");
         return null;
+
     }
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
-        // TODO Auto-generated method stub
+        switch ( indexOfFunct.getLocation() ) {
+            case FIRST:
+                this.sb.append("BlocklyMethods.findFirst( ");
+                indexOfFunct.getParam().get(0).visit(this);
+                this.sb.append(", ");
+                indexOfFunct.getParam().get(1).visit(this);
+                this.sb.append(")");
+                break;
+            case LAST:
+                this.sb.append("BlocklyMethods.findLast( ");
+                indexOfFunct.getParam().get(0).visit(this);
+                this.sb.append(", ");
+                indexOfFunct.getParam().get(1).visit(this);
+                this.sb.append(")");
+                break;
+            default:
+                break;
+        }
         return null;
     }
 
     @Override
     public Void visitLenghtOfIsEmptyFunct(LenghtOfIsEmptyFunct<Void> lenghtOfIsEmptyFunct) {
-        // TODO Auto-generated method stub
+        switch ( lenghtOfIsEmptyFunct.getFunctName() ) {
+            case LISTS_LENGTH:
+                this.sb.append("BlocklyMethods.lenght( ");
+                lenghtOfIsEmptyFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
+                break;
+
+            case LIST_IS_EMPTY:
+                this.sb.append("BlocklyMethods.isEmpty( ");
+                lenghtOfIsEmptyFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
+                break;
+            default:
+                break;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitEmptyList(EmptyList<Void> emptyList) {
+        this.sb.append("BlocklyMethods.createEmptyList()");
         return null;
     }
 
     @Override
     public Void visitListCreate(ListCreate<Void> listCreate) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
-        // TODO Auto-generated method stub
+        this.sb.append("BlocklyMethods.createListWith( ");
+        listCreate.getValue().visit(this);
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
-        // TODO Auto-generated method stub
+        this.sb.append("BlocklyMethods.createListWithItem( ");
+        listRepeat.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        listRepeat.getParam().get(1).visit(this);
+        this.sb.append(")");
+        return null;
+    }
+
+    @Override
+    public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
+        this.sb.append("BlocklyMethods.listsIndex( ");
+        listGetIndex.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        this.sb.append(listGetIndex.getElementOperation().getJavaCode());
+        this.sb.append(", ");
+        this.sb.append(listGetIndex.getLocation().getJavaCode());
+        if ( listGetIndex.getParam().size() == 2 ) {
+            this.sb.append(", ");
+            listGetIndex.getParam().get(1).visit(this);
+        }
+        this.sb.append(")");
+        if ( listGetIndex.getElementOperation().isStatment() ) {
+            this.sb.append(";");
+        }
         return null;
     }
 
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
-        // TODO Auto-generated method stub
+        this.sb.append("BlocklyMethods.listsIndex( ");
+        listSetIndex.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        this.sb.append(listSetIndex.getElementOperation().getJavaCode());
+        this.sb.append(", ");
+        listSetIndex.getParam().get(1).visit(this);
+        this.sb.append(", ");
+        this.sb.append(listSetIndex.getLocation().getJavaCode());
+        if ( listSetIndex.getParam().size() == 3 ) {
+            this.sb.append(", ");
+            listSetIndex.getParam().get(2).visit(this);
+        }
+        this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        // TODO Auto-generated method stub
+        this.sb.append("BlocklyMethods.clamp( ");
+        mathConstrainFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        mathConstrainFunct.getParam().get(1).visit(this);
+        this.sb.append(", ");
+        mathConstrainFunct.getParam().get(2).visit(this);
+        this.sb.append(")");
         return null;
     }
 
@@ -849,13 +945,40 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
         switch ( mathNumPropFunct.getFunctName() ) {
             case EVEN:
-                this.sb.append("isEven( ");
+                this.sb.append("BlocklyMethods.isEven( ");
                 mathNumPropFunct.getParam().get(0).visit(this);
                 this.sb.append(")");
                 break;
             case ODD:
-                this.sb.append("isOdd( ");
+                this.sb.append("BlocklyMethods.isOdd( ");
                 mathNumPropFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
+                break;
+            case PRIME:
+                this.sb.append("BlocklyMethods.isPrime( ");
+                mathNumPropFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
+                break;
+            case WHOLE:
+                this.sb.append("BlocklyMethods.isWhole( ");
+                mathNumPropFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
+                break;
+            case POSITIVE:
+                this.sb.append("BlocklyMethods.isPositive( ");
+                mathNumPropFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
+                break;
+            case NEGATIVE:
+                this.sb.append("BlocklyMethods.isNegative( ");
+                mathNumPropFunct.getParam().get(0).visit(this);
+                this.sb.append(")");
+                break;
+            case DIVISIBLE_BY:
+                this.sb.append("BlocklyMethods.isDivisibleBy( ");
+                mathNumPropFunct.getParam().get(0).visit(this);
+                this.sb.append(", ");
+                mathNumPropFunct.getParam().get(1).visit(this);
                 this.sb.append(")");
                 break;
             default:
@@ -866,19 +989,43 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
-        // TODO Auto-generated method stub
+        switch ( mathOnListFunct.getFunctName() ) {
+            case SUM:
+                this.sb.append("BlocklyMethods.sumOnList(");
+                mathOnListFunct.getParam().get(0).visit(this);
+                break;
+            case MIN:
+                this.sb.append("BlocklyMethods.minOnList(");
+                mathOnListFunct.getParam().get(0).visit(this);
+                break;
+            case MAX:
+                this.sb.append("BlocklyMethods.maxOnList(");
+                mathOnListFunct.getParam().get(0).visit(this);
+                break;
+            case AVERAGE:
+                this.sb.append("BlocklyMethods.averageOnList(");
+                mathOnListFunct.getParam().get(0).visit(this);
+                break;
+            default:
+                break;
+        }
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
-        // TODO Auto-generated method stub
+        this.sb.append("BlocklyMethods.randDouble()");
         return null;
     }
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
-        // TODO Auto-generated method stub
+        this.sb.append("BlocklyMethods.randInt(");
+        mathRandomIntFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        mathRandomIntFunct.getParam().get(1).visit(this);
+        this.sb.append(")");
         return null;
     }
 
@@ -953,7 +1100,18 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        // TODO Auto-generated method stub
+        boolean isFirst = true;
+        List<Expr<Void>> params = textJoinFunct.getParam();
+        this.sb.append("BlocklyMethods.textJoin(");
+        for ( Expr<Void> expr : params ) {
+            if ( isFirst ) {
+                isFirst = false;
+            } else {
+                this.sb.append(", ");
+            }
+            expr.visit(this);
+        }
+        this.sb.append(")");
         return null;
     }
 

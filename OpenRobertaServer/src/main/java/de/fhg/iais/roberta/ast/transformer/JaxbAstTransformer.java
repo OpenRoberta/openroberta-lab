@@ -62,7 +62,7 @@ abstract public class JaxbAstTransformer<V> {
         String op = getOperation(block, operationType);
         List<Value> values = extractValues(block, (short) 1);
         Phrase<V> expr = extractValue(values, exprParam);
-        return Unary.make(Unary.Op.get(op), (Expr<V>) expr, extractBlockProperties(block), extractComment(block));
+        return Unary.make(Unary.Op.get(op), convertPhraseToExpr(expr), extractBlockProperties(block), extractComment(block));
     }
 
     protected Binary<V> blockToBinaryExpr(Block block, ExprParam leftExpr, ExprParam rightExpr, String operationType) {
@@ -211,7 +211,7 @@ abstract public class JaxbAstTransformer<V> {
     protected ExprList<V> valuesToExprList(List<Value> values, Class<?> defVal, int nItems) {
         ExprList<V> exprList = ExprList.make();
         for ( int i = 0; i < nItems; i++ ) {
-            exprList.addExpr((Expr<V>) extractValue(values, new ExprParam("ADD" + i, defVal)));
+            exprList.addExpr(convertPhraseToExpr(extractValue(values, new ExprParam("ADD" + i, defVal))));
         }
         exprList.setReadOnly();
         return exprList;

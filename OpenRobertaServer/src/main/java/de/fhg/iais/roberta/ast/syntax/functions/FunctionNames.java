@@ -9,10 +9,7 @@ public enum FunctionNames {
     DIVISIBLE_BY( 80, Assoc.NONE ),
     MAX( 80, Assoc.NONE ),
     MIN( 80, Assoc.NONE ),
-    FIRST( 1, Assoc.LEFT ),
-    LAST( 1, Assoc.LEFT ),
-    FROM_START( 1, Assoc.LEFT, "FROMSTART" ),
-    FROM_END( 1, Assoc.LEFT, "FROMEND" ),
+
     LISTS_REPEAT( 1, Assoc.LEFT ),
     RANDOM( 1, Assoc.LEFT ),
     EVEN( 10, Assoc.LEFT ),

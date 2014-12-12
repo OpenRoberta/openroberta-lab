@@ -5,6 +5,8 @@ import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.IndexLocation;
+import de.fhg.iais.roberta.ast.syntax.ListElementOperations;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.BlinkMode;
@@ -44,7 +46,6 @@ import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary.Op;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.syntax.expr.Var.TypeVar;
-import de.fhg.iais.roberta.ast.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.FunctionNames;
 import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
@@ -55,6 +56,7 @@ import de.fhg.iais.roberta.ast.syntax.functions.ListSetIndex;
 import de.fhg.iais.roberta.ast.syntax.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathOnListFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathSingleFunct;
@@ -165,7 +167,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 port = extractField(fields, "MOTORPORT", (short) 0);
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam("POWER", Integer.class));
-                mp = new MotionParam.Builder<V>().speed((Expr<V>) expr).build();
+                mp = new MotionParam.Builder<V>().speed(convertPhraseToExpr(expr)).build();
                 return MotorOnAction.make(ActorPort.get(port), mp, properties, comment);
 
             case "robActions_motor_on_for":
@@ -175,8 +177,8 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 values = extractValues(block, (short) 2);
                 left = extractValue(values, new ExprParam("POWER", Integer.class));
                 right = extractValue(values, new ExprParam("VALUE", Integer.class));
-                md = new MotorDuration<V>(MotorMoveMode.get(mode), (Expr<V>) right);
-                mp = new MotionParam.Builder<V>().speed((Expr<V>) left).duration(md).build();
+                md = new MotorDuration<V>(MotorMoveMode.get(mode), convertPhraseToExpr(right));
+                mp = new MotionParam.Builder<V>().speed(convertPhraseToExpr(left)).duration(md).build();
                 return MotorOnAction.make(ActorPort.get(port), mp, properties, comment);
 
             case "robActions_motorDiff_on":
@@ -184,7 +186,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 mode = extractField(fields, "DIRECTION", (short) 0);
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam("POWER", Integer.class));
-                mp = new MotionParam.Builder<V>().speed((Expr<V>) expr).build();
+                mp = new MotionParam.Builder<V>().speed(convertPhraseToExpr(expr)).build();
                 return DriveAction.make(DriveDirection.get(mode), mp, properties, comment);
 
             case "robActions_motorDiff_on_for":
@@ -194,7 +196,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 left = extractValue(values, new ExprParam("POWER", Integer.class));
                 right = extractValue(values, new ExprParam("DISTANCE", Integer.class));
                 md = new MotorDuration<V>(MotorMoveMode.DISTANCE, (Expr<V>) right);
-                mp = new MotionParam.Builder<V>().speed((Expr<V>) left).duration(md).build();
+                mp = new MotionParam.Builder<V>().speed(convertPhraseToExpr(left)).duration(md).build();
                 return DriveAction.make(DriveDirection.get(mode), mp, properties, comment);
 
             case "robActions_motorDiff_turn":
@@ -202,7 +204,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 mode = extractField(fields, "DIRECTION", (short) 0);
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam("POWER", Integer.class));
-                mp = new MotionParam.Builder<V>().speed((Expr<V>) expr).build();
+                mp = new MotionParam.Builder<V>().speed(convertPhraseToExpr(expr)).build();
                 return TurnAction.make(TurnDirection.get(mode), mp, properties, comment);
 
             case "robActions_motorDiff_turn_for":
@@ -211,8 +213,8 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 values = extractValues(block, (short) 2);
                 left = extractValue(values, new ExprParam("POWER", Integer.class));
                 right = extractValue(values, new ExprParam("DEGREE", Integer.class));
-                md = new MotorDuration<V>(MotorMoveMode.DEGREE, (Expr<V>) right);
-                mp = new MotionParam.Builder<V>().speed((Expr<V>) left).duration(md).build();
+                md = new MotorDuration<V>(MotorMoveMode.DEGREE, convertPhraseToExpr(right));
+                mp = new MotionParam.Builder<V>().speed(convertPhraseToExpr(left)).duration(md).build();
                 return TurnAction.make(TurnDirection.get(mode), mp, properties, comment);
 
             case "robActions_motorDiff_stop":
@@ -228,7 +230,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 values = extractValues(block, (short) 1);
                 port = extractField(fields, "MOTORPORT", (short) 0);
                 left = extractValue(values, new ExprParam("POWER", Integer.class));
-                return MotorSetPowerAction.make(ActorPort.get(port), (Expr<V>) left, properties, comment);
+                return MotorSetPowerAction.make(ActorPort.get(port), convertPhraseToExpr(left), properties, comment);
 
             case "robActions_motor_stop":
                 fields = extractFields(block, (short) 2);
@@ -241,7 +243,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 Phrase<V> msg = extractValue(values, new ExprParam("OUT", String.class));
                 Phrase<V> col = extractValue(values, new ExprParam("COL", Integer.class));
                 Phrase<V> row = extractValue(values, new ExprParam("ROW", Integer.class));
-                return ShowTextAction.make(convertPhraseToExpr(msg), (Expr<V>) col, (Expr<V>) row, properties, comment);
+                return ShowTextAction.make(convertPhraseToExpr(msg), convertPhraseToExpr(col), convertPhraseToExpr(row), properties, comment);
 
             case "robActions_display_picture":
                 fields = extractFields(block, (short) 1);
@@ -249,7 +251,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 String pic = extractField(fields, "PICTURE", (short) 0);
                 Phrase<V> x = extractValue(values, new ExprParam("X", Integer.class));
                 Phrase<V> y = extractValue(values, new ExprParam("Y", Integer.class));
-                return ShowPictureAction.make(ShowPicture.get(pic), (Expr<V>) x, (Expr<V>) y, properties, comment);
+                return ShowPictureAction.make(ShowPicture.get(pic), convertPhraseToExpr(x), convertPhraseToExpr(y), properties, comment);
 
             case "robActions_display_clear":
                 return ClearDisplayAction.make(properties, comment);
@@ -258,7 +260,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 values = extractValues(block, (short) 2);
                 left = extractValue(values, new ExprParam("FREQUENCE", Integer.class));
                 right = extractValue(values, new ExprParam("DURATION", Integer.class));
-                return ToneAction.make((Expr<V>) left, (Expr<V>) right, properties, comment);
+                return ToneAction.make(convertPhraseToExpr(left), convertPhraseToExpr(right), properties, comment);
 
             case "robActions_play_file":
                 fields = extractFields(block, (short) 1);
@@ -268,11 +270,11 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
             case "robActions_play_setVolume":
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam("VOLUME", Integer.class));
-                return VolumeAction.make(VolumeAction.Mode.SET, (Expr<V>) expr, properties, comment);
+                return VolumeAction.make(VolumeAction.Mode.SET, convertPhraseToExpr(expr), properties, comment);
 
             case "robActions_play_getVolume":
                 expr = NullConst.make(properties, comment);
-                return VolumeAction.make(VolumeAction.Mode.GET, (Expr<V>) expr, properties, comment);
+                return VolumeAction.make(VolumeAction.Mode.GET, convertPhraseToExpr(expr), properties, comment);
 
             case "robActions_brickLight_on":
                 fields = extractFields(block, (short) 2);
@@ -437,12 +439,12 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 Phrase<V> thenStmt = extractValue(values, new ExprParam("THEN", Stmt.class));
                 Phrase<V> elseStmt = extractValue(values, new ExprParam("ELSE", Stmt.class));
                 StmtList<V> thenList = StmtList.make();
-                thenList.addStmt(ExprStmt.make((Expr<V>) thenStmt));
+                thenList.addStmt(ExprStmt.make(convertPhraseToExpr(thenStmt)));
                 thenList.setReadOnly();
                 StmtList<V> elseList = StmtList.make();
-                elseList.addStmt(ExprStmt.make((Expr<V>) elseStmt));
+                elseList.addStmt(ExprStmt.make(convertPhraseToExpr(elseStmt)));
                 elseList.setReadOnly();
-                return IfStmt.make((Expr<V>) ifExpr, thenList, elseList, properties, comment, 0, 0);
+                return IfStmt.make(convertPhraseToExpr(ifExpr), thenList, elseList, properties, comment, 0, 0);
 
                 // Mathematik
             case "math_number":
@@ -480,7 +482,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 values = extractValues(block, (short) 1);
                 left = extractVar(block);
                 right = extractValue(values, new ExprParam("DELTA", Integer.class));
-                return Binary.make(Binary.Op.MATH_CHANGE, (Expr<V>) left, (Expr<V>) right, properties, comment);
+                return Binary.make(Binary.Op.MATH_CHANGE, convertPhraseToExpr(left), convertPhraseToExpr(right), properties, comment);
 
             case "math_single":
             case "math_round":
@@ -537,7 +539,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 values = extractValues(block, (short) 1);
                 left = extractVar(block);
                 right = extractValue(values, new ExprParam("TEXT", String.class));
-                return Binary.make(Binary.Op.TEXT_APPEND, (Expr<V>) left, (Expr<V>) right, properties, comment);
+                return Binary.make(Binary.Op.TEXT_APPEND, convertPhraseToExpr(left), convertPhraseToExpr(right), properties, comment);
 
             case "text_isEmpty":
             case "text_length":
@@ -555,7 +557,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 exprParams.add(new ExprParam("FIND", String.class));
                 op = getOperation(block, "END");
                 params = extractExprParameters(block, exprParams);
-                return IndexOfFunct.make(FunctionNames.get(op), params, extractBlockProperties(block), extractComment(block));
+                return IndexOfFunct.make(IndexLocation.get(op), params, extractBlockProperties(block), extractComment(block));
 
             case "text_charAt":
                 boolean atArg = block.getMutation().isAt();
@@ -566,7 +568,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 }
                 op = getOperation(block, "WHERE");
                 params = extractExprParameters(block, exprParams);
-                return TextCharAtFunct.make(FunctionNames.get(op), params, extractBlockProperties(block), extractComment(block));
+                return TextCharAtFunct.make(IndexLocation.get(op), params, extractBlockProperties(block), extractComment(block));
 
             case "text_getSubstring":
                 fields = extractFields(block, (short) 2);
@@ -635,8 +637,8 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 }
                 params = extractExprParameters(block, exprParams);
                 return ListGetIndex.make(
-                    ListGetIndex.Mode.get(op),
-                    FunctionNames.get(extractField(fields, "WHERE", (short) 1)),
+                    ListElementOperations.get(op),
+                    IndexLocation.get(extractField(fields, "WHERE", (short) 1)),
                     params,
                     extractBlockProperties(block),
                     extractComment(block));
@@ -647,14 +649,14 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
 
                 exprParams = new ArrayList<ExprParam>();
                 exprParams.add(new ExprParam("LIST", String.class));
+                exprParams.add(new ExprParam("TO", Integer.class));
                 if ( block.getMutation().isAt() ) {
                     exprParams.add(new ExprParam("AT", Integer.class));
                 }
-                exprParams.add(new ExprParam("TO", Integer.class));
                 params = extractExprParameters(block, exprParams);
                 return ListSetIndex.make(
-                    ListSetIndex.Mode.get(op),
-                    FunctionNames.get(extractField(fields, "WHERE", (short) 1)),
+                    ListElementOperations.get(op),
+                    IndexLocation.get(extractField(fields, "WHERE", (short) 1)),
                     params,
                     extractBlockProperties(block),
                     extractComment(block));
@@ -683,7 +685,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 values = extractValues(block, (short) 1);
                 Phrase<V> p = extractValue(values, new ExprParam("VALUE", EmptyExpr.class));
                 expr = convertPhraseToExpr(p);
-                return AssignStmt.make((Var<V>) extractVar(block), (Expr<V>) expr, properties, comment);
+                return AssignStmt.make((Var<V>) extractVar(block), convertPhraseToExpr(expr), properties, comment);
 
             case "variables_get":
                 return extractVar(block);
@@ -753,9 +755,9 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 Phrase<V> from = extractValue(values, new ExprParam("FROM", Integer.class));
                 Phrase<V> to = extractValue(values, new ExprParam("TO", Integer.class));
                 Phrase<V> by = extractValue(values, new ExprParam("BY", Integer.class));
-                Binary<V> exprAssig = Binary.make(Binary.Op.ASSIGNMENT, (Expr<V>) var1, (Expr<V>) from, properties, comment);
-                Binary<V> exprCondition = Binary.make(Binary.Op.LTE, (Expr<V>) var, (Expr<V>) to, properties, comment);
-                Binary<V> exprBy = Binary.make(Binary.Op.ADD_ASSIGNMENT, (Expr<V>) var, (Expr<V>) by, properties, comment);
+                Binary<V> exprAssig = Binary.make(Binary.Op.ASSIGNMENT, convertPhraseToExpr(var1), convertPhraseToExpr(from), properties, comment);
+                Binary<V> exprCondition = Binary.make(Binary.Op.LTE, convertPhraseToExpr(var), convertPhraseToExpr(to), properties, comment);
+                Binary<V> exprBy = Binary.make(Binary.Op.ADD_ASSIGNMENT, convertPhraseToExpr(var), convertPhraseToExpr(by), properties, comment);
                 exprList.addExpr(exprAssig);
                 exprList.addExpr(exprCondition);
                 exprList.addExpr(exprBy);
@@ -767,7 +769,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam("LIST", List.class));
 
-                Binary<V> exprBinary = Binary.make(Binary.Op.IN, (Expr<V>) var, (Expr<V>) expr, properties, comment);
+                Binary<V> exprBinary = Binary.make(Binary.Op.IN, convertPhraseToExpr(var), convertPhraseToExpr(expr), properties, comment);
                 return extractRepeatStatement(block, exprBinary, "FOR_EACH");
 
             case "controls_flow_statements":
@@ -782,10 +784,10 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 from = NumConst.make("0", properties, comment);
                 to = extractValue(values, new ExprParam("TIMES", Integer.class));
                 by = NumConst.make("1", properties, comment);
-                exprAssig = Binary.make(Binary.Op.ASSIGNMENT, (Expr<V>) var, (Expr<V>) from, properties, comment);
+                exprAssig = Binary.make(Binary.Op.ASSIGNMENT, convertPhraseToExpr(var), convertPhraseToExpr(from), properties, comment);
                 var = Var.make("i" + this.variable_counter, TypeVar.NONE, properties, comment);
-                exprCondition = Binary.make(Binary.Op.LT, (Expr<V>) var, (Expr<V>) to, properties, comment);
-                Unary<V> increment = Unary.make(Unary.Op.POSTFIX_INCREMENTS, (Expr<V>) var, properties, comment);
+                exprCondition = Binary.make(Binary.Op.LT, convertPhraseToExpr(var), convertPhraseToExpr(to), properties, comment);
+                Unary<V> increment = Unary.make(Unary.Op.POSTFIX_INCREMENTS, convertPhraseToExpr(var), properties, comment);
                 exprList.addExpr(exprAssig);
                 exprList.addExpr(exprCondition);
                 exprList.addExpr(increment);
@@ -800,12 +802,12 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
             case "robControls_activity":
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam("ACTIVITY", String.class));
-                return ActivityTask.make((Expr<V>) expr, properties, comment);
+                return ActivityTask.make(convertPhraseToExpr(expr), properties, comment);
 
             case "robControls_start_activity":
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam("ACTIVITY", String.class));
-                return StartActivityTask.make((Expr<V>) expr, properties, comment);
+                return StartActivityTask.make(convertPhraseToExpr(expr), properties, comment);
 
             default:
                 throw new DbcException("Invalid Block: " + block.getType());

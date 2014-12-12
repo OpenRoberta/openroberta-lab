@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.IndexLocation;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
@@ -44,7 +45,12 @@ public class GetSubFunct<V> extends Function<V> {
      * @param strParam list of string parameters for the function
      * @return read only object of class {@link GetSubFunct}
      */
-    public static <V> GetSubFunct<V> make(FunctionNames name, List<String> strParam, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> GetSubFunct<V> make(
+        FunctionNames name,
+        List<String> strParam,
+        List<Expr<V>> param,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment) {
         return new GetSubFunct<V>(name, strParam, param, properties, comment);
     }
 
@@ -104,16 +110,15 @@ public class GetSubFunct<V> extends Function<V> {
         } else {
             AstJaxbTransformerHelper.addValue(jaxbDestination, "STRING", getParam().get(0));
         }
-        if ( FunctionNames.get(getStrParam().get(0)) == FunctionNames.FROM_START || FunctionNames.get(getStrParam().get(0)) == FunctionNames.FROM_END ) {
+        if ( IndexLocation.get(getStrParam().get(0)) == IndexLocation.FROM_START || IndexLocation.get(getStrParam().get(0)) == IndexLocation.FROM_END ) {
             mutation.setAt1(true);
             AstJaxbTransformerHelper.addValue(jaxbDestination, "AT1", getParam().get(1));
         }
-        if ( FunctionNames.get(getStrParam().get(1)) == FunctionNames.FROM_START || FunctionNames.get(getStrParam().get(1)) == FunctionNames.FROM_END ) {
+        if ( IndexLocation.get(getStrParam().get(1)) == IndexLocation.FROM_START || IndexLocation.get(getStrParam().get(1)) == IndexLocation.FROM_END ) {
             mutation.setAt2(true);
             AstJaxbTransformerHelper.addValue(jaxbDestination, "AT2", getParam().get(getParam().size() - 1));
         }
         jaxbDestination.setMutation(mutation);
         return jaxbDestination;
-
     }
 }
