@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2014-12-09 08:21:36.568000",
+		"lastupdated": "2014-12-15 08:33:43.555000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -587,7 +587,6 @@
 	"BUTTON_EMPTY_LIST": "Empty list",
 	"MESSAGE_PASSWORD_ERROR": "Something went wrong while you filled in the two passwords.",
 	"MESSAGE_USER_EXISTS": "This username already exists. Please choose another one.",
-	"MESSAGE_USER_DELETED": "The user was successfully deleted.",
 	"MESSAGE_USER_DELETE_ERROR": "The user could not be deleted.",
 	"MESSAGE_LOGIN_ERROR": "There was an error while logging in.",
 	"MESSAGE_LOGOUT_ERROR": "There was an error while logging out.",

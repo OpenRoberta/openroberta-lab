@@ -66,7 +66,6 @@ function deleteUserOnServer() {
     }, function(result) {
         if (result.rc === "ok") {
             logout();
-            displayMessage("MESSAGE.USER_DELETED");
             $(".ui-dialog-content").dialog("close"); // close all opened popups
         } else {
             displayMessage("MESSAGE.USER_DELETE_ERROR");
@@ -232,23 +231,29 @@ function response(result) {
 }
 
 /**
- * Handle result of server call and refresh list if necessary
+ * Handle result of server call and refresh program list
  * 
  * @param {result}
  *            Result-object from server call
  */
-function responseAndRefreshList(result) {
+function responseAndRefreshProgramList(result) {
     response(result);
-    var activeTab = $("#tabs div[aria-expanded='true']" ).attr('id');
-    if (activeTab === 'listing') {
-        COMM.json("/program", {
-            "cmd" : "loadPN",
-        }, showPrograms);
-    } else if (activeTab === 'confListing') {
-        COMM.json("/conf", {
-            "cmd" : "loadCN",
-        }, showConfigurations);
-    }
+    COMM.json("/program", {
+        "cmd" : "loadPN",
+    }, showPrograms);
+}
+
+/**
+ * Handle result of server call and refresh configuration list
+ * 
+ * @param {result}
+ *            Result-object from server call
+ */
+function responseAndRefreshConfigurationList(result) {
+    response(result);
+    COMM.json("/conf", {
+        "cmd" : "loadCN",
+    }, showConfigurations);
 }
 
 /**
@@ -279,7 +284,7 @@ function saveToServer() {
             "cmd" : "saveP",
             "name" : userState.program,
             "program" : xml_text
-        },  responseAndRefreshList);
+        },  responseAndRefreshProgramList);
     } else {
         displayMessage("MESSAGE.EMPTY_NAME");
     }
@@ -312,7 +317,7 @@ function saveConfigurationToServer() {
             "cmd" : "saveC",
             "name" : userState.configuration,
             "configuration" : xml_text
-        }, responseAndRefreshList);
+        }, responseAndRefreshConfigurationList);
     } else {
         displayMessage("MESSAGE.EMPTY_NAME");
     }
@@ -392,7 +397,6 @@ function deleteOnServer() {
     COMM.json("/program", {
         "cmd" : "deleteP",
         "name" : $name.val()
-    }, function(result) {
     });
 }
 
@@ -454,7 +458,7 @@ function deleteFromListing() {
             "name" : programName
         }, function(result) {
             $('#programNameSave').val('');
-            responseAndRefreshList(result);
+            responseAndRefreshProgramList(result);
             setRobotState(result);
         });
     }
@@ -473,7 +477,7 @@ function deleteConfigurationFromListing() {
             "name" : configurationName
         }, function(result) {
             $('#configurationNameSave').val('');
-            responseAndRefreshList(result);
+            responseAndRefreshConfigurationList(result);
             setRobotState(result);
         });
     }
