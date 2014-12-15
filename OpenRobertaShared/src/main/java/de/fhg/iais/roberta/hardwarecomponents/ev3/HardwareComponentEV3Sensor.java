@@ -13,14 +13,14 @@ import de.fhg.iais.roberta.hardwarecomponents.HardwareComponentType;
  * This class represents all possible EV3 sensors.
  */
 public final class HardwareComponentEV3Sensor extends HardwareComponentType {
-    public static final HardwareComponentEV3Sensor EV3_COLOR_SENSOR = new HardwareComponentEV3Sensor("robBrick_colour");
-    public static final HardwareComponentEV3Sensor EV3_TOUCH_SENSOR = new HardwareComponentEV3Sensor("robBrick_touch");
-    public static final HardwareComponentEV3Sensor EV3_ULTRASONIC_SENSOR = new HardwareComponentEV3Sensor("robBrick_ultrasonic");
-    public static final HardwareComponentEV3Sensor EV3_IR_SENSOR = new HardwareComponentEV3Sensor("robBrick_infrared");
-    public static final HardwareComponentEV3Sensor EV3_GYRO_SENSOR = new HardwareComponentEV3Sensor("robBrick_gyro");
+    public static final HardwareComponentEV3Sensor EV3_COLOR_SENSOR = new HardwareComponentEV3Sensor("robBrick_colour", "colour");
+    public static final HardwareComponentEV3Sensor EV3_TOUCH_SENSOR = new HardwareComponentEV3Sensor("robBrick_touch", "touch");
+    public static final HardwareComponentEV3Sensor EV3_ULTRASONIC_SENSOR = new HardwareComponentEV3Sensor("robBrick_ultrasonic", "ultrasonic");
+    public static final HardwareComponentEV3Sensor EV3_IR_SENSOR = new HardwareComponentEV3Sensor("robBrick_infrared", "infrared");
+    public static final HardwareComponentEV3Sensor EV3_GYRO_SENSOR = new HardwareComponentEV3Sensor("robBrick_gyro", "gyro");
 
-    private HardwareComponentEV3Sensor(String name) {
-        super(name, Category.SENSOR);
+    private HardwareComponentEV3Sensor(String name, String shortName) {
+        super(name, shortName, Category.SENSOR);
     }
 
     /**

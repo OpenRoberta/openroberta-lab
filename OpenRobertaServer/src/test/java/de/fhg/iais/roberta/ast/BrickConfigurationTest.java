@@ -24,7 +24,7 @@ public class BrickConfigurationTest {
                 + ".build();";
 
         BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration0.xml");
-        JaxbBrickConfigTransformer<Void> transformer = new JaxbBrickConfigTransformer<>();
+        JaxbBrickConfigTransformer transformer = new JaxbBrickConfigTransformer();
         BrickConfiguration b = transformer.transform(project);
         System.out.println(b.generateRegenerate());
         Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateRegenerate().replaceAll("\\s+", ""));
@@ -41,7 +41,7 @@ public class BrickConfigurationTest {
                 + ".build();";
 
         BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration1.xml");
-        JaxbBrickConfigTransformer<Void> transformer = new JaxbBrickConfigTransformer<>();
+        JaxbBrickConfigTransformer transformer = new JaxbBrickConfigTransformer();
         BrickConfiguration b = transformer.transform(project);
         System.out.println(b.generateRegenerate());
         Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateRegenerate().replaceAll("\\s+", ""));
@@ -60,7 +60,7 @@ public class BrickConfigurationTest {
                 + ".build();";
 
         BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration2.xml");
-        JaxbBrickConfigTransformer<Void> transformer = new JaxbBrickConfigTransformer<>();
+        JaxbBrickConfigTransformer transformer = new JaxbBrickConfigTransformer();
         BrickConfiguration b = transformer.transform(project);
         System.out.println(b.generateRegenerate());
         Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateRegenerate().replaceAll("\\s+", ""));
@@ -79,7 +79,7 @@ public class BrickConfigurationTest {
                 + ".build();";
 
         BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration3.xml");
-        JaxbBrickConfigTransformer<Void> transformer = new JaxbBrickConfigTransformer<>();
+        JaxbBrickConfigTransformer transformer = new JaxbBrickConfigTransformer();
         BrickConfiguration b = transformer.transform(project);
         System.out.println(b.generateRegenerate());
         Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateRegenerate().replaceAll("\\s+", ""));

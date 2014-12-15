@@ -13,16 +13,16 @@ import de.fhg.iais.roberta.hardwarecomponents.HardwareComponentType;
  * This class represents all possible EV3 actors.
  */
 public class HardwareComponentEV3Actor extends HardwareComponentType {
-    public static final HardwareComponentEV3Actor EV3_MEDIUM_MOTOR = new HardwareComponentEV3Actor("robBrick_motor_middle");
-    public static final HardwareComponentEV3Actor EV3_LARGE_MOTOR = new HardwareComponentEV3Actor("robBrick_motor_big");
+    public static final HardwareComponentEV3Actor EV3_MEDIUM_MOTOR = new HardwareComponentEV3Actor("robBrick_motor_middle", "middle motor");
+    public static final HardwareComponentEV3Actor EV3_LARGE_MOTOR = new HardwareComponentEV3Actor("robBrick_motor_big", "big motor");
 
     /**
      * This constructors set the name that maps the actor to specific blockly block.
      *
      * @param name of the blockly block for this actor
      */
-    public HardwareComponentEV3Actor(String name) {
-        super(name, Category.ACTOR);
+    public HardwareComponentEV3Actor(String name, String shortName) {
+        super(name, shortName, Category.ACTOR);
     }
 
     /**

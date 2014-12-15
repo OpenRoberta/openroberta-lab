@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.brickconfiguration.BrickConfiguration;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
+import de.fhg.iais.roberta.hardwarecomponents.HardwareComponentType;
 import de.fhg.iais.roberta.util.Pair;
 
 /**
@@ -40,6 +41,52 @@ public class EV3BrickConfiguration extends BrickConfiguration {
         this.sensors = sensors;
         this.wheelDiameterCM = wheelDiameterCM;
         this.trackWidthCM = trackWidthCM;
+    }
+
+    @Override
+    public String generateRegenerate() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("private EV3BrickConfiguration brickConfiguration = new EV3BrickConfiguration.Builder()\n");
+        sb.append("    .setWheelDiameter(" + this.wheelDiameterCM + ")\n");
+        sb.append("    .setTrackWidth(" + this.trackWidthCM + ")\n");
+        appendActors(sb);
+        appendSensors(sb);
+        sb.append("    .build();");
+        return sb.toString();
+    }
+
+    @Override
+    public String generateText(String name) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("configuration ").append(name).append(" {\n");
+        sb.append("  wheel diameter ").append(this.wheelDiameterCM).append(" cm;\n");
+        sb.append("  track width    ").append(this.trackWidthCM).append(" cm;\n");
+        if ( this.sensors.size() > 0 ) {
+            sb.append("  sensors {\n");
+            for ( SensorPort port : this.sensors.keySet() ) {
+                sb.append("    ").append(port.getPortNumber()).append(" : ");
+                HardwareComponentType hc = this.sensors.get(port).getComponentType();
+                sb.append(hc.getShortName()).append(";\n");
+            }
+            sb.append("  }\n");
+        }
+        if ( this.actors.size() > 0 ) {
+            sb.append("  actors {\n");
+            for ( ActorPort port : this.actors.keySet() ) {
+                sb.append("    ").append(port).append(" : ");
+                EV3Actor actor = this.actors.get(port);
+                HardwareComponentType hc = actor.getComponentType();
+                if ( actor.isRegulated() ) {
+                    sb.append("regulated ");
+                }
+                sb.append(actor.getMotorSide().getText()).append(" ");
+                sb.append(actor.getRotationDirection().toString().toLowerCase()).append(" ");
+                sb.append(hc.getShortName()).append(";\n");
+            }
+            sb.append("  }\n");
+        }
+        sb.append("}");
+        return sb.toString();
     }
 
     /**
@@ -75,7 +122,7 @@ public class EV3BrickConfiguration extends BrickConfiguration {
 
     /**
      * All the sensors connected to the brick
-     * 
+     *
      * @return the sensors
      */
     public Map<SensorPort, EV3Sensor> getSensors() {
@@ -136,18 +183,6 @@ public class EV3BrickConfiguration extends BrickConfiguration {
             }
         }
         throw new DbcException("No right motor defined!");
-    }
-
-    @Override
-    public String generateRegenerate() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("private EV3BrickConfiguration brickConfiguration = new EV3BrickConfiguration.Builder()\n");
-        sb.append("    .setWheelDiameter(" + this.wheelDiameterCM + ")\n");
-        sb.append("    .setTrackWidth(" + this.trackWidthCM + ")\n");
-        appendActors(sb);
-        appendSensors(sb);
-        sb.append("    .build();");
-        return sb.toString();
     }
 
     private void appendSensors(StringBuilder sb) {
