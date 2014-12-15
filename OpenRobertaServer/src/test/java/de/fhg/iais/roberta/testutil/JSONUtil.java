@@ -9,11 +9,11 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.skyscreamer.jsonassert.JSONAssert;
 
+import de.fhg.iais.roberta.javaServer.resources.BrickCommand;
 import de.fhg.iais.roberta.javaServer.resources.DownloadJar;
 import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
 import de.fhg.iais.roberta.javaServer.resources.RestBlocks;
 import de.fhg.iais.roberta.javaServer.resources.RestProgram;
-import de.fhg.iais.roberta.javaServer.resources.TokenReceiver;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 
 public class JSONUtil {
@@ -40,6 +40,11 @@ public class JSONUtil {
     public static JSONObject mk(String s) throws JSONException {
         String sR = s.replaceAll("'", "\"");
         return new JSONObject(sR);
+    }
+
+    public static JSONObject mkRegisterToken(String token) throws JSONException {
+        String s = "{'token':'" + token + "','cmd':'register','macaddr':'00-9A-90-00-2B-5B','brickname':'Garzi','battery':'7.2','version':'1.0.1'}";
+        return mk(s);
     }
 
     /**
@@ -75,7 +80,7 @@ public class JSONUtil {
     }
 
     public static void registerToken(
-        final TokenReceiver tokenReceiver,
+        final BrickCommand brickCommand,
         final RestBlocks restBlocks,
         final HttpSessionState sessionState,
         final DbSession dbSession,
@@ -84,7 +89,7 @@ public class JSONUtil {
         ThreadedFunction theBrick = new ThreadedFunction() {
             @Override
             public boolean apply() throws Exception {
-                Response response = tokenReceiver.handle(mk("{'token':'" + token + "'}"));
+                Response response = brickCommand.handle(mkRegisterToken(token));
                 return ((JSONObject) response.getEntity()).getString("response").equals("ok");
             }
         };

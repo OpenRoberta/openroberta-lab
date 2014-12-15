@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.util.Clock;
-import de.fhg.iais.roberta.util.Pair;
 
 /**
  * This class is responsible for the synchronisation between the one browser client and one brick. The synchronisation is based on a agreed upon token.
@@ -18,72 +17,207 @@ import de.fhg.iais.roberta.util.Pair;
  */
 public class BrickCommunicationData {
     private static final Logger LOG = LoggerFactory.getLogger(BrickCommunicationData.class);
+    private static final int TIMEOUT_UNTIL_TOKEN_EXPIRES_WHEN_USER_DOESNT_APPROVE = 300000;
+    private static final int WAIT_FOR_A_BRICK_PUSH_COMMAND = 1000;
 
-    private Clock lastRequestClock = Clock.start();
-    private State lastRequest = State.NOTHING_TO_DO;
     private final String token;
+    private final String robotIdentificator;
+    private final String robotName;
+    private final String version;
+
+    private Clock clock;
+    private State state;
+
+    private String battery;
+
+    private String command;
     private String programName;
     private String brickConfigurationName;
 
-    public BrickCommunicationData(String token) {
+    public BrickCommunicationData(String token, String robotIdentificator, String robotName, String version) {
         this.token = token;
+        this.robotIdentificator = robotIdentificator;
+        this.robotName = robotName;
+        this.version = version;
+
+        this.clock = Clock.start();
+        this.state = State.WAIT_FOR_TOKENAPPROVAL_FROM_USER;
     }
 
-    public synchronized Pair<String, String> brickDownloadRequest() {
-        if ( this.lastRequest == State.RUN_BUTTON_WAS_PRESSED ) {
-            LOG.debug("Found an outdated BrickCommunicationRequest: " + this.lastRequest + ". Reset to " + State.NOTHING_TO_DO);
-            this.lastRequest = State.NOTHING_TO_DO;
+    /**
+     * method called from a thread, which is triggered by a BRICK request. This method blocks until the user has approved the brick token or a timeout occurs.
+     *
+     * @return true, if user approved the token; false otherwise
+     */
+    public synchronized boolean brickTokenAgreementRequest() {
+        LOG.debug("BRICK starts waiting for the client to approve a token");
+        this.state = State.WAIT_FOR_TOKENAPPROVAL_FROM_USER;
+        this.clock = Clock.start();
+        while ( this.clock.elapsedMsec() < TIMEOUT_UNTIL_TOKEN_EXPIRES_WHEN_USER_DOESNT_APPROVE && this.state == State.WAIT_FOR_TOKENAPPROVAL_FROM_USER ) {
+            try {
+                wait(TIMEOUT_UNTIL_TOKEN_EXPIRES_WHEN_USER_DOESNT_APPROVE);
+            } catch ( InterruptedException e ) {
+                // try again
+            }
         }
-        LOG.debug("BRICK starts waiting for run button. " + this.lastRequest + " -> " + State.DOWNLOAD_REQUEST_FROM_BRICK_ARRIVED);
-        this.lastRequest = State.DOWNLOAD_REQUEST_FROM_BRICK_ARRIVED;
-        this.lastRequestClock = Clock.start();
-        Clock waitTime = Clock.start();
-        while ( this.lastRequest == State.DOWNLOAD_REQUEST_FROM_BRICK_ARRIVED ) {
+        boolean success = this.state != State.WAIT_FOR_TOKENAPPROVAL_FROM_USER;
+        LOG.debug("BRICK request for token approval terminated. Time elapsed: " + this.clock.elapsedMsec() + ", success: " + success);
+        return success;
+    }
+
+    /**
+     * method called from a server thread. This method terminates immediately and wakes up the thread, which runs on behalf of a token approval request
+     * from the brick token.
+     *
+     * @return true, if user approved the token; false otherwise
+     */
+    public synchronized void userApprovedTheBrickToken() {
+        if ( this.state == State.WAIT_FOR_TOKENAPPROVAL_FROM_USER ) {
+            LOG.debug("user approved the token. The approval request was scheduled " + this.clock.elapsedSecFormatted() + " ago");
+            this.state = State.WAIT_FOR_PUSH_CMD_FROM_BRICK;
+            this.clock = Clock.start();
+            notifyAll();
+        } else {
+            LOG.info("user approval lost. Nobody is waiting. The approval request was scheduled " + this.clock.elapsedSecFormatted() + " ago");
+        }
+    }
+
+    /**
+     * method called from a thread, which is triggered by a BRICK push command request. This method blocks until either the server issues a push command or
+     * a timer thread triggers a timeout.
+     *
+     * @return true, if user approved the token; false otherwise
+     */
+    public synchronized void brickHasSentAPushRequest() {
+        if ( this.state != State.WAIT_FOR_PUSH_CMD_FROM_BRICK && this.state != State.BRICK_IS_BUSY ) {
+            LOG.error("Brick has sent a push request not awaited for. Programming error: Logic or Time race? The request is ACCEPTED. State is "
+                + this.state
+                + ". The state setting request was scheduled "
+                + this.clock.elapsedSecFormatted()
+                + " ago. ");
+        }
+        this.state = State.BRICK_WAITING_FOR_PUSH_FROM_SERVER;
+        this.clock = Clock.start();
+        while ( this.state == State.BRICK_WAITING_FOR_PUSH_FROM_SERVER ) {
             try {
                 wait();
             } catch ( InterruptedException e ) {
                 // try again
             }
         }
-        LOG.debug("Waiting BRICK got answer after " + waitTime.elapsedSecFormatted() + ". " + this.lastRequest + " -> " + State.NOTHING_TO_DO);
-        this.lastRequest = State.NOTHING_TO_DO;
-        return Pair.of(this.token, this.programName);
+        LOG.debug("BRICK push request terminated.");
     }
 
-    public synchronized String runButtonPressed(String programName, String brickConfigurationName) {
-        String commResult = this.lastRequest == State.DOWNLOAD_REQUEST_FROM_BRICK_ARRIVED ? "Brick is waiting" : "Brick is not waiting";
-        LOG.debug("RUN button pressed. " + commResult + ". state " + this.lastRequest + " entered " + this.lastRequestClock.elapsedSecFormatted() + " ago");
-        this.programName = programName;
-        this.brickConfigurationName = brickConfigurationName;
-        this.lastRequestClock = Clock.start();
-        this.lastRequest = State.RUN_BUTTON_WAS_PRESSED;
-        notifyAll();
-        return commResult;
-    }
-
-    public synchronized void abortBrickDownloadRequest() {
-        if ( this.lastRequest == State.DOWNLOAD_REQUEST_FROM_BRICK_ARRIVED ) {
-            this.lastRequest = State.ABORT_DOWNLOAD_REQUEST;
+    /**
+     * method called from a timer thread. This method terminates immediately an wakes up a waiting thread, which runs on behalf of a push command from the
+     * brick.
+     */
+    public synchronized void terminatePushAndRequestNextPush() {
+        if ( this.state == State.BRICK_WAITING_FOR_PUSH_FROM_SERVER ) {
+            this.state = State.WAIT_FOR_PUSH_CMD_FROM_BRICK;
+            this.command = "repeat";
+            this.clock = Clock.start();
             notifyAll();
         }
+    }
+
+    /**
+     * method called from a server thread. This method terminates immediately (if the brick waits for a push command) or after 1 sec (if we expect a push
+     * command in the very near future. It wakes up the thread, which runs on behalf of a push command request from the brick.
+     *
+     * @return the state of the brick
+     */
+    public synchronized String runButtonPressed(String programName, String brickConfigurationName) {
+        if ( !isBrickWaitingForPushCommand() ) {
+            LOG.error("RUN button pressed, but brick is not waiting. Bad luck!");
+            return "robot.ev3.not_waiting";
+        } else {
+            LOG.debug("RUN button pressed. Wait state entered " + this.clock.elapsedSecFormatted() + " ago");
+            this.command = "download";
+            this.programName = programName;
+            this.brickConfigurationName = brickConfigurationName;
+            this.clock = Clock.start();
+            this.state = State.BRICK_IS_BUSY;
+            notifyAll();
+            return "robot.ev3.push.run";
+        }
+    }
+
+    /**
+     * method called from a server thread. This method terminates immediately (if the brick waits for a push command) or after 1 sec (if we expect a push
+     * command in the very near future. It wakes up the thread, which runs on behalf of a push command request from the brick.
+     *
+     * @return the state of the brick
+     */
+    public synchronized String updateButtonPressed() {
+        if ( !isBrickWaitingForPushCommand() ) {
+            LOG.error("UPDATE button pressed, but brick is not waiting. Bad luck!");
+            return "robot.ev3.not_waiting";
+        } else {
+            LOG.debug("UPDATE button pressed. Wait state entered " + this.clock.elapsedSecFormatted() + " ago");
+            this.command = "update";
+            this.clock = Clock.start();
+            this.state = State.BRICK_IS_BUSY;
+            notifyAll();
+            return "robot.ev3.push.update";
+        }
+    }
+
+    private boolean isBrickWaitingForPushCommand() {
+        if ( this.state == State.WAIT_FOR_PUSH_CMD_FROM_BRICK ) {
+            try {
+                Thread.sleep(WAIT_FOR_A_BRICK_PUSH_COMMAND);
+            } catch ( InterruptedException e ) {
+                // ok
+            }
+        }
+        return this.state == State.BRICK_WAITING_FOR_PUSH_FROM_SERVER;
+    }
+
+    public String getToken() {
+        return this.token;
+    }
+
+    public String getRobotIdentificator() {
+        return this.robotIdentificator;
+    }
+
+    public String getRobotName() {
+        return this.robotName;
+    }
+
+    public String getBattery() {
+        return this.battery;
+    }
+
+    public void setBattery(String battery) {
+        this.battery = battery;
+    }
+
+    public String getCommand() {
+        return this.command;
     }
 
     public String getProgramName() {
         return this.programName;
     }
 
-    public Pair<Clock, State> getInfoAboutLastRequest() {
-        return Pair.of(this.lastRequestClock, this.lastRequest);
+    public long getElapsedMsecOfStartOfLastRequest() {
+        return this.clock.elapsedMsec();
     }
 
     public String getBrickConfigurationName() {
         return this.brickConfigurationName;
     }
 
+    public State getState() {
+        return this.state;
+    }
+
     /**
-     * the three states of communication between the brick (requesting a download or not) and the browser client (run button pressed).
+     * the four states of communication between the brick and the browser client.
      */
     public enum State {
-        RUN_BUTTON_WAS_PRESSED, DOWNLOAD_REQUEST_FROM_BRICK_ARRIVED, ABORT_DOWNLOAD_REQUEST, NOTHING_TO_DO;
+        WAIT_FOR_TOKENAPPROVAL_FROM_USER, WAIT_FOR_PUSH_CMD_FROM_BRICK, BRICK_WAITING_FOR_PUSH_FROM_SERVER, BRICK_IS_BUSY;
     }
 }
