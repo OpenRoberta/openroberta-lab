@@ -958,9 +958,6 @@ function initHeadNavigation() {
         if (domId === 'logging') {
             switchToBlockly();
             $('#tabLogging').click();
-        } else if (domId === 'simulator') {
-            switchToBlockly();
-            $('#tabSimulator').click();
         }
         return false;
     }, 'sub menu of menu "developertools"');

@@ -1297,7 +1297,6 @@ Blockly.Msg.MENU_CONNECTION = 'Connection';
 Blockly.Msg.MENU_CONNECT = 'connect ...';
 Blockly.Msg.MENU_TOOLS = 'Tools';
 Blockly.Msg.MENU_LOGGING = 'logging';
-Blockly.Msg.MENU_SIMULATOR = 'simulator';
 Blockly.Msg.MENU_HELP = 'Help';
 Blockly.Msg.MENU_SHOW = 'show';
 Blockly.Msg.MENU_LOGIN = 'Login';

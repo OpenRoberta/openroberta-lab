@@ -379,7 +379,6 @@ Blockly.Msg.MENU_ROBOT = "Robot";
 Blockly.Msg.MENU_SAVE = "save";
 Blockly.Msg.MENU_SAVE_AS = "save as ...";
 Blockly.Msg.MENU_SHOW = "show";
-Blockly.Msg.MENU_SIMULATOR = "simulator";
 Blockly.Msg.MENU_START = "run";
 Blockly.Msg.MENU_TOOLS = "Tools";
 Blockly.Msg.MESSAGE_CONFIGURATION_NOT_CHECKABLE = "Your configuration can not be checked.";

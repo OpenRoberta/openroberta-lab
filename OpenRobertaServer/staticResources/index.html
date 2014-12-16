@@ -35,8 +35,6 @@ limitations under the License.
 <link rel="stylesheet" type="text/css" href="/common/jquery.dataTables.min.css"></link>
 <link rel="stylesheet" type="text/css" href="/css/flaticons/flaticon.css" />
 
-<link rel="stylesheet" type="text/css" href="/css/simulator.css"></link>
-
 <!-- Feedback badge, reports user feedback to issue tracker. --> 
 <script type="text/javascript" src="http://jira.open-roberta.org/s/en_USy3ler1/786/12/1.1.2/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?collectorId=2f42fc3c"></script>
  
@@ -89,7 +87,6 @@ limitations under the License.
                 <a href="#" id="head-navigation-developertools"><span class="head-navi-icons developer"></span><span class="head-navi-text" lkey="Blockly.Msg.MENU_TOOLS"></span></a>
                 <ul id="submenu-developertools" class="head-navigation-submenu">
                     <li><span id="logging" class="flaticon-spanner" lkey="Blockly.Msg.MENU_LOGGING">Logging</span></li>
-                    <li class="login logout"><span id="simulator" class="flaticon-spanner" lkey="Blockly.Msg.MENU_SIMULATOR">Simulator</span></li>
                 </ul>
             </li>
             <li>
@@ -228,16 +225,7 @@ limitations under the License.
                 <li><a id="tabConfigurationListing" href="#confListing">Listing of configurations</a></li>
                 <li><a id="tabLogging" href="#logging">Logging</a></li>
                 <li><a id="tabBrickly" href="#bricklyFrame">Brickly</a></li>
-                <li><a id="tabSimulator" onclick="viewSimulator(true);">Simulator</a></li>
             </ul>
-
-            <div id="simulatorDiv">
-                <button id="closeBtn" class="button" onclick="viewSimulator(false)" lkey="Blockly.Msg.BUTTON_FINISH">Beenden</button>
-                <button id="closeBtn" class="button" onclick="moveStop()" lkey="Blockly.Msg.BUTTON_STOP">Stop</button>
-                <div id="positionData"></div>
-                <!--  <div id="simulatorRender"></div> -->
-                <canvas id="robertaCanvas" width="212" height="212" class="dummy"></canvas>
-            </div>
 
             <div id="blockly">
                 <div id="blocklyDiv"></div>

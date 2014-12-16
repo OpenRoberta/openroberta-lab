@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2014-12-16 08:54:40.565000",
+		"lastupdated": "2014-12-16 09:19:42.982000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -554,7 +554,6 @@
 	"MENU_CONNECT": "connect ...",
 	"MENU_TOOLS": "Tools",
 	"MENU_LOGGING": "logging",
-	"MENU_SIMULATOR": "simulator",
 	"MENU_HELP": "Help",
 	"MENU_SHOW": "show",
 	"MENU_LOGIN": "Login",

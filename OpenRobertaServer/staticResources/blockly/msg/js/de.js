@@ -379,7 +379,6 @@ Blockly.Msg.MENU_ROBOT = "Roboter";
 Blockly.Msg.MENU_SAVE = "speichern";
 Blockly.Msg.MENU_SAVE_AS = "speichern unter ...";
 Blockly.Msg.MENU_SHOW = "anzeigen";
-Blockly.Msg.MENU_SIMULATOR = "Simulator";
 Blockly.Msg.MENU_START = "starten";
 Blockly.Msg.MENU_TOOLS = "Werkzeuge";
 Blockly.Msg.MESSAGE_CONFIGURATION_NOT_CHECKABLE = "Deine Konfiguration kann zur Zeit noch nicht geprüft werden.";
