@@ -385,22 +385,6 @@ function loadFromServer(load) {
 }
 
 /**
- * Delete program on server
- */
-function deleteOnServer() {
-    var $name = $('#programNameDelete');
-    userState.programSaved = false;
-    if (usertState.program === $name.val) {
-        setProgram();
-    }
-    LOG.info('del ' + $name.val() + ' signed in: ' + userState.id);
-    COMM.json("/program", {
-        "cmd" : "deleteP",
-        "name" : $name.val()
-    });
-}
-
-/**
  * Load the program that was selected in program list
  */
 function loadFromListing() {
