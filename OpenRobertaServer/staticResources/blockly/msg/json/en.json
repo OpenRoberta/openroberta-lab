@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2014-12-15 08:33:43.555000",
+		"lastupdated": "2014-12-16 08:54:40.565000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -609,7 +609,6 @@
 	"DATATABLE_SHARED_WITH": "Shared with",
 	"DATATABLE_SHARED_FOR": "Shared for",
 	"DATATABLE_BLOCKS": "Blocks",
-	"DATATABLE_ICON": "Icon",
 	"DATATABLE_CREATED_ON": "Creation date",
 	"DATATABLE_ACTUALIZATION": "Actualization date",
 	"DATATABLE_CONFIGURATION_NAME": "Configuration name",

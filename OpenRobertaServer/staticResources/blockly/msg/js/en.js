@@ -105,7 +105,6 @@ Blockly.Msg.DATATABLE_CREATED_ON = "Creation date";
 Blockly.Msg.DATATABLE_EMPTY_TABLE = "There are no entries in this table";
 Blockly.Msg.DATATABLE_ENTRIES = "entries";
 Blockly.Msg.DATATABLE_FIRST = "First";
-Blockly.Msg.DATATABLE_ICON = "Icon";
 Blockly.Msg.DATATABLE_LAST = "Last";
 Blockly.Msg.DATATABLE_NEXT = "Next";
 Blockly.Msg.DATATABLE_OF = "of";

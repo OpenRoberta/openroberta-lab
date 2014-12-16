@@ -123,15 +123,6 @@ public class Program implements WithSurrogateId {
         this.lastChanged = Util.getNow();
     }
 
-    /**
-     * return the number of one of the predefined icon images, that can be attached to a program.
-     *
-     * @return the icon number; return 0 if no icon exists
-     */
-    public int getIconNumber() {
-        return this.iconNumber;
-    }
-
     public void setIconNumber(int iconNumber) {
         this.iconNumber = iconNumber;
     }

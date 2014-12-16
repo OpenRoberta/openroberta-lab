@@ -105,7 +105,6 @@ Blockly.Msg.DATATABLE_CREATED_ON = "Erzeugt am";
 Blockly.Msg.DATATABLE_EMPTY_TABLE = "Die Tabelle ist leer";
 Blockly.Msg.DATATABLE_ENTRIES = "Einträgen";
 Blockly.Msg.DATATABLE_FIRST = "Erste";
-Blockly.Msg.DATATABLE_ICON = "Icon";
 Blockly.Msg.DATATABLE_LAST = "Letzte";
 Blockly.Msg.DATATABLE_NEXT = "Nächste";
 Blockly.Msg.DATATABLE_OF = "von";

@@ -110,19 +110,6 @@ public class Configuration implements WithSurrogateId {
     }
 
     /**
-     * return the number of one of the predefined icon images, that can be attached to a configuration.
-     *
-     * @return the icon number; return 0 if no icon exists
-     */
-    public int getIconNumber() {
-        return this.iconNumber;
-    }
-
-    public void setIconNumber(int iconNumber) {
-        this.iconNumber = iconNumber;
-    }
-
-    /**
      * get the user, who is the owner
      *
      * @return the owner, never <code>null</code>

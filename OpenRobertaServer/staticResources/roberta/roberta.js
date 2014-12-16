@@ -575,9 +575,6 @@ function initProgramNameTable() {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_BLOCKS'>Blöcke</span>",
         "sClass" : "programs"
     }, {
-        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_ICON'>Icon</span>",
-        "sClass" : "programs"
-    }, {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>Erzeugt am</span>",
         "sClass" : "programs"
     }, {
@@ -591,7 +588,7 @@ function initProgramNameTable() {
         "aoColumns" : columns,
         "aoColumnDefs": [
                          {   // format date fields
-                             "aTargets" : [4,5],   // indexes of columns to be formatted
+                             "aTargets" : [3,4],   // indexes of columns to be formatted
                              "sType": "date",
                              "mRender": function(data) {
                                  return formatDate(data);
@@ -646,9 +643,6 @@ function initConfigurationNameTable() {
 //        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_SHARED_FOR'>Geteilt für</span>",
 //        "sClass" : "programs"
 //    }, {
-        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_ICON'>Icon</span>",
-        "sClass" : "configurations"
-    }, {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>Erzeugt am</span>",
         "sClass" : "configurations"
     }, {
@@ -662,7 +656,7 @@ function initConfigurationNameTable() {
         "aoColumns" : columns,
         "aoColumnDefs": [
                          {   // format date fields
-                             "aTargets" : [3,4],   // indexes of columns to be formatted
+                             "aTargets" : [2,3],   // indexes of columns to be formatted
                              "sType": "date",
                              "mRender": function(data) {
                                  return formatDate(data);

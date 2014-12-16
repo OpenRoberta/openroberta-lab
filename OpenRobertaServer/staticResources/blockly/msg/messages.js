@@ -1352,7 +1352,6 @@ Blockly.Msg.DATATABLE_CREATED_BY = 'Creator';
 Blockly.Msg.DATATABLE_SHARED_WITH = 'Shared with';
 Blockly.Msg.DATATABLE_SHARED_FOR = 'Shared for';
 Blockly.Msg.DATATABLE_BLOCKS = 'Blocks';
-Blockly.Msg.DATATABLE_ICON = 'Icon';
 Blockly.Msg.DATATABLE_CREATED_ON = 'Creation date';
 Blockly.Msg.DATATABLE_ACTUALIZATION = 'Actualization date';
 Blockly.Msg.DATATABLE_CONFIGURATION_NAME = 'Configuration name';
