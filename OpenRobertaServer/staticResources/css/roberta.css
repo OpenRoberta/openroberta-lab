@@ -731,10 +731,13 @@ table.dataTable.no-footer {
 .button {
 	margin-left: 5pt;
 	width: 100pt;
+    background-color: #afca04;
+    color: white;
+    font-size: 16px;
 }
 
 .button:hover {
-	background-color: #B7D032;
+	background-color: #b7d032;
 }
 
 .log {
