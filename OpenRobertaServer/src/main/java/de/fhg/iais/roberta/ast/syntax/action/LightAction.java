@@ -22,7 +22,7 @@ public class LightAction<V> extends Action<V> {
 
     private LightAction(BrickLedColor color, BlinkMode blinkMode, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.LIGHT_ACTION, properties, comment);
-        Assert.isTrue(color != null);
+        Assert.isTrue(color != null && blinkMode != null);
         this.color = color;
         this.blinkMode = blinkMode;
         setReadOnly();
@@ -32,11 +32,11 @@ public class LightAction<V> extends Action<V> {
      * Creates instance of {@link LightAction}. This instance is read only and
      * can not be modified.
      *
-     * @param color of the lights on the brick. All possible colors are defined in {@link BrickLedColor},
-     * @param blinkMode type of the blinking,
+     * @param color of the lights on the brick. All possible colors are defined in {@link BrickLedColor}; must be <b>not</b> null,
+     * @param blinkMode type of the blinking; must be <b>not</b> null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link LightAction}.
+     * @return read only object of class {@link LightAction}
      */
     public static <V> LightAction<V> make(BrickLedColor color, BlinkMode blinkMode, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new LightAction<V>(color, blinkMode, properties, comment);

@@ -24,7 +24,7 @@ public class ColorSensor<V> extends Sensor<V> {
 
     private ColorSensor(ColorSensorMode mode, SensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.COLOR_SENSING, properties, comment);
-        Assert.isTrue(mode != null);
+        Assert.isTrue(mode != null && port != null);
         this.mode = mode;
         this.port = port;
         setReadOnly();
@@ -33,8 +33,8 @@ public class ColorSensor<V> extends Sensor<V> {
     /**
      * Create object of the class {@link ColorSensor}.
      *
-     * @param mode in which the sensor is operating. See enum {@link ColorSensorMode} for all possible modes that the sensor have.
-     * @param port on where the sensor is connected. See enum {@link SensorPort} for all possible sensor ports,
+     * @param mode in which the sensor is operating; must be <b>not</b> null; see enum {@link ColorSensorMode} for all possible modes that the sensor have,
+     * @param port on where the sensor is connected; must be <b>not</b> null; see enum {@link SensorPort} for all possible sensor ports,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of class {@link ColorSensor}
@@ -44,14 +44,14 @@ public class ColorSensor<V> extends Sensor<V> {
     }
 
     /**
-     * @return get the mode of sensor. See enum {@link ColorSensorMode} for all possible modes that the sensor have.
+     * @return get the mode of sensor. See enum {@link ColorSensorMode} for all possible modes that the sensor have
      */
     public ColorSensorMode getMode() {
         return this.mode;
     }
 
     /**
-     * @return get the port on which the sensor is connected. See enum {@link SensorPort} for all possible sensor ports.
+     * @return get the port on which the sensor is connected. See enum {@link SensorPort} for all possible sensor ports
      */
     public SensorPort getPort() {
         return this.port;

@@ -67,8 +67,8 @@ public class GetSampleSensor<V> extends Sensor<V> {
     /**
      * Create object of the class {@link GetSampleSensor}.
      *
-     * @param sensorType
-     * @param port on which the sensor is connected
+     * @param sensorType; must be <b>not</b> null,
+     * @param port on which the sensor is connected; must be <b>non-empty</b> string,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of class {@link GetSampleSensor}

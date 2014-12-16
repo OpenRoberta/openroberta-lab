@@ -22,12 +22,8 @@ import de.fhg.iais.roberta.ast.syntax.functions.MathOnListFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathSingleFunct;
-import de.fhg.iais.roberta.ast.syntax.functions.TextChangeCaseFunct;
-import de.fhg.iais.roberta.ast.syntax.functions.TextCharAtFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
-import de.fhg.iais.roberta.ast.syntax.functions.TextPromptFunct;
-import de.fhg.iais.roberta.ast.syntax.functions.TextTrimFunct;
 import de.fhg.iais.roberta.ast.syntax.sensor.GetSampleSensor;
 import de.fhg.iais.roberta.ast.syntax.stmt.FunctionStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
@@ -205,31 +201,7 @@ public class AstToVarsVisitor extends AstDefaultVisitorInspecting {
     }
 
     @Override
-    public Void visitTextChangeCaseFunct(TextChangeCaseFunct<Void> textChangeCaseFunct) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitTextCharAtFunct(TextCharAtFunct<Void> textCharAtFunct) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitTextPromptFunct(TextPromptFunct<Void> textPromptFunct) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitTextTrimFunct(TextTrimFunct<Void> textTrimFunct) {
         // TODO Auto-generated method stub
         return null;
     }

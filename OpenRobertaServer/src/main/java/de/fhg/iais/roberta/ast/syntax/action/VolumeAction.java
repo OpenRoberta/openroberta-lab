@@ -30,8 +30,8 @@ public class VolumeAction<V> extends Action<V> {
     /**
      * Creates instance of {@link VolumeAction}. This instance is read only and can not be modified.
      *
-     * @param mode of the action {@link Mode},
-     * @param volume value,
+     * @param mode of the action {@link Mode} must be <b>not</b> null,
+     * @param volume value must be <b>not</b> null and <b>read only</b>,
      * @param properties of the block (see {@link BlocklyBlockProperties}),,
      * @param comment added from the user,
      * @return read only object of class {@link VolumeAction}.

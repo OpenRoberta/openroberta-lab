@@ -6,6 +6,7 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.dbc.Assert;
 
 /**
  * This class represents the <b>math_number</b> block from Blockly into the AST (abstract syntax tree).
@@ -18,6 +19,7 @@ public class NumConst<V> extends Expr<V> {
 
     private NumConst(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.NUM_CONST, properties, comment);
+        Assert.isTrue(!value.equals(""));
         this.value = value;
         setReadOnly();
     }
@@ -25,10 +27,10 @@ public class NumConst<V> extends Expr<V> {
     /**
      * creates instance of {@link NumConst}. This instance is read only and can not be modified.
      *
-     * @param value of the numerical constant,
+     * @param value of the numerical constant; must be <b>non-empty</b> string,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link NumConst}.
+     * @return read only object of class {@link NumConst}
      */
     public static <V> NumConst<V> make(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new NumConst<V>(value, properties, comment);

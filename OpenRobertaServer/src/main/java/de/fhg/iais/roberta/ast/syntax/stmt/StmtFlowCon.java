@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
@@ -21,6 +22,7 @@ public class StmtFlowCon<V> extends Stmt<V> {
 
     private StmtFlowCon(Flow flow, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.STMT_FLOW_CONTROL, properties, comment);
+        Assert.isTrue(flow != null);
         this.flow = flow;
         setReadOnly();
     }
@@ -28,17 +30,17 @@ public class StmtFlowCon<V> extends Stmt<V> {
     /**
      * Create read only object of {@link StmtFlowCon}.
      *
-     * @param flow, see enum {@link Flow} for all the possible kind of flow controls,
+     * @param flow; must be <b>not</b> null; see enum {@link Flow} for all the possible kind of flow controls,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link StmtFlowCon}.
+     * @return read only object of class {@link StmtFlowCon}
      */
     public static <V> StmtFlowCon<V> make(Flow flow, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new StmtFlowCon<V>(flow, properties, comment);
     }
 
     /**
-     * @return the kind of control. See enum {@link Flow} for all the possible kind of flow controls.
+     * @return the kind of control. See enum {@link Flow} for all the possible kind of flow controls
      */
     public Flow getFlow() {
         return this.flow;

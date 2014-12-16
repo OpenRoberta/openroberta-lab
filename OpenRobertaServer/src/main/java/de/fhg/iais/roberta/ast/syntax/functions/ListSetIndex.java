@@ -39,9 +39,9 @@ public class ListSetIndex<V> extends Function<V> {
     /**
      * Creates instance of {@link ListSetIndex}. This instance is read only and can not be modified.
      *
-     * @param mode
-     * @param name of the function,
-     * @param param list of parameters for the function,
+     * @param mode; must be <b>not</b> null,
+     * @param name of the function; must be <b>not</b> null,
+     * @param param list of parameters for the function; must be <b>not</b> null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment that user has added to the block,
      * @return read only object of class {@link ListSetIndex}

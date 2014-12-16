@@ -54,12 +54,8 @@ import de.fhg.iais.roberta.ast.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathSingleFunct;
-import de.fhg.iais.roberta.ast.syntax.functions.TextChangeCaseFunct;
-import de.fhg.iais.roberta.ast.syntax.functions.TextCharAtFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
-import de.fhg.iais.roberta.ast.syntax.functions.TextPromptFunct;
-import de.fhg.iais.roberta.ast.syntax.functions.TextTrimFunct;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
@@ -1087,18 +1083,6 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitTextChangeCaseFunct(TextChangeCaseFunct<Void> textChangeCaseFunct) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitTextCharAtFunct(TextCharAtFunct<Void> textCharAtFunct) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
         boolean isFirst = true;
         List<Expr<Void>> params = textJoinFunct.getParam();
@@ -1112,18 +1096,6 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
             expr.visit(this);
         }
         this.sb.append(")");
-        return null;
-    }
-
-    @Override
-    public Void visitTextPromptFunct(TextPromptFunct<Void> textPromptFunct) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void visitTextTrimFunct(TextTrimFunct<Void> textTrimFunct) {
-        // TODO Auto-generated method stub
         return null;
     }
 

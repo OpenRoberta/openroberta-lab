@@ -15,9 +15,24 @@ import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.dbc.Assert;
 
+/**
+ * This class is a helper class containing helper methods for AST => JAXB transformation.
+ *
+ * @author kcvejoski
+ */
 public final class AstJaxbTransformerHelper {
 
+    /**
+     * Sets the basic properties(<i>comments and visual state</i>) of a Blockly block. <br>
+     * <br>
+     * <b>astSource</b> is representation of the block in the AST,<br>
+     * <b>jaxbDestination</b> is representation of the block with JAXB classes
+     *
+     * @param astSource block from which properties are extracted; must be <b>not</b> null,
+     * @param jaxbDestination to which properties are applied; must be <b>not</b> null,
+     */
     public static void setBasicProperties(Phrase<?> astSource, Block jaxbDestination) {
+        Assert.isTrue(astSource != null && jaxbDestination != null);
         if ( astSource.getProperty() == null ) {
             return;
         }
@@ -27,7 +42,18 @@ public final class AstJaxbTransformerHelper {
         addComment(astSource, jaxbDestination);
     }
 
+    /**
+     * Add's a statement {@link Statement} object to JAXB block representation {@link Block}.
+     * <p>
+     * This method does <b>not</b> add the statement object into {@link Repetitions} object.
+     *
+     * @param block to which the statement will be added; must be <b>not</b> null,
+     * @param name of the statement; must be <b>non-empty</b> string
+     * @param value is the AST representation of the Blockly block where the statement is stored; must be <b>not</b> null and {@link Phrase#getKind()} must be
+     *        {@link Kind#STMT_LIST}
+     */
     public static void addStatement(Block block, String name, Phrase<?> value) {
+        Assert.isTrue(block != null && value != null && !name.equals(""));
         Assert.isTrue(value.getKind() == Phrase.Kind.STMT_LIST, "Phrase is not STMT_LIST");
         if ( ((StmtList<?>) value).get().size() != 0 ) {
             Statement statement = new Statement();
@@ -37,7 +63,16 @@ public final class AstJaxbTransformerHelper {
         }
     }
 
+    /**
+     * Add's a statement {@link Statement} object to JAXB {@link Repetitions} object.
+     *
+     * @param repetitions object to which the statement will be added; must be <b>not</b> null
+     * @param name of the statement; must be <b>non-empty</b> string
+     * @param value is the AST representation of the Blockly block where the statement is stored; must be <b>not</b> null and {@link Phrase#getKind()} must be
+     *        {@link Kind#STMT_LIST}
+     */
     public static void addStatement(Repetitions repetitions, String name, Phrase<?> value) {
+        Assert.isTrue(repetitions != null && value != null && !name.equals(""));
         Assert.isTrue(value.getKind() == Phrase.Kind.STMT_LIST, "Phrase is not STMT_LIST");
         if ( ((StmtList<?>) value).get().size() != 0 ) {
             Statement statement = new Statement();
@@ -47,7 +82,17 @@ public final class AstJaxbTransformerHelper {
         }
     }
 
+    /**
+     * Add's a value {@link Value} object to JAXB block representation {@link Block}.
+     * <p>
+     * This method does <b>not</b> add the value object into {@link Repetitions} object.
+     *
+     * @param block to which the value will be added; must be <b>not</b> null,
+     * @param name of the value; must be <b>non-empty</b> string
+     * @param value is the AST representation of the Blockly block where the value is stored; must be <b>not</b> null
+     */
     public static void addValue(Block block, String name, Phrase<?> value) {
+        Assert.isTrue(block != null && value != null && !name.equals(""));
         if ( value.getKind() != Kind.EMPTY_EXPR ) {
             Value blockValue = new Value();
             blockValue.setName(name);
@@ -56,6 +101,13 @@ public final class AstJaxbTransformerHelper {
         }
     }
 
+    /**
+     * Add's a value {@link Value} object to JAXB block representation {@link Block}.
+     *
+     * @param repetitions to which the value will be added; must be <b>not</b> null,
+     * @param name of the value; must be <b>non-empty</b> string
+     * @param value is the AST representation of the Blockly block where the value is stored; must be <b>not</b> null
+     */
     public static void addValue(Repetitions repetitions, String name, Phrase<?> value) {
         if ( value.getKind() != Kind.EMPTY_EXPR ) {
             Value blockValue = new Value();
@@ -65,7 +117,17 @@ public final class AstJaxbTransformerHelper {
         }
     }
 
+    /**
+     * Add's a value {@link Field} object to JAXB block representation {@link Block}.
+     * <p>
+     * This method does <b>not</b> add the {@link Field} object into {@link Repetitions} object.
+     *
+     * @param block to which the field will be added; must be <b>not</b> null,
+     * @param name of the field; must be <b>non-empty</b> string
+     * @param value is the AST representation of the Blockly block where the value is stored
+     */
     public static void addField(Block block, String name, String value) {
+        Assert.isTrue(block != null && !name.equals(""));
         Field field = new Field();
         field.setName(name);
         field.setValue(value);

@@ -29,8 +29,9 @@ public class TurnAction<V> extends Action<V> {
     /**
      * Creates instance of {@link TurnAction}. This instance is read only and can not be modified.
      *
-     * @param direction {@link TurnDirection} in which the robot will drive,
-     * @param param {@link MotionParam} that set up the parameters for the movement of the robot (distance the robot should cover and speed),
+     * @param direction {@link TurnDirection} in which the robot will drive; must be <b>not</b> null,
+     * @param param {@link MotionParam} that set up the parameters for the movement of the robot (distance the robot should cover and speed); must be <b>not</b>
+     *        null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of class {@link TurnAction}.

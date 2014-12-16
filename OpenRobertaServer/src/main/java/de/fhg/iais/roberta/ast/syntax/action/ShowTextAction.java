@@ -34,12 +34,12 @@ public class ShowTextAction<V> extends Action<V> {
     /**
      * Creates instance of {@link ShowTextAction}. This instance is read only and can not be modified.
      *
-     * @param msg that will be printed on the display of the brick,
-     * @param x position where the message will start,
-     * @param y position where the message will start,
+     * @param msg that will be printed on the display of the brick; must be <b>not</b> null,
+     * @param x position where the message will start; must be <b>not</b> null,
+     * @param y position where the message will start; must be <b>not</b> null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link ShowTextAction}.
+     * @return read only object of class {@link ShowTextAction}
      */
     public static <V> ShowTextAction<V> make(Expr<V> msg, Expr<V> x, Expr<V> y, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new ShowTextAction<V>(msg, x, y, properties, comment);

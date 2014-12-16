@@ -29,7 +29,8 @@ public class TouchSensor<V> extends Sensor<V> {
     /**
      * Create object of the class {@link TouchSensor}.
      *
-     * @param port on which the sensor is connected. See enum {@link SensorPort} for all possible ports that the sensor can be connected,
+     * @param port on which the sensor is connected; must be <b>not</b> null; see enum {@link SensorPort} for all possible ports that the sensor can be
+     *        connected,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of {@link TouchSensor}

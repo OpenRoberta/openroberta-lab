@@ -31,7 +31,6 @@ import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
-import de.fhg.iais.roberta.ast.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.LenghtOfIsEmptyFunct;
@@ -41,15 +40,12 @@ import de.fhg.iais.roberta.ast.syntax.functions.ListSetIndex;
 import de.fhg.iais.roberta.ast.syntax.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathOnListFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathSingleFunct;
-import de.fhg.iais.roberta.ast.syntax.functions.TextChangeCaseFunct;
-import de.fhg.iais.roberta.ast.syntax.functions.TextCharAtFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
-import de.fhg.iais.roberta.ast.syntax.functions.TextPromptFunct;
-import de.fhg.iais.roberta.ast.syntax.functions.TextTrimFunct;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
@@ -558,38 +554,9 @@ public interface AstVisitor<V> {
     public V visitMathSingleFunct(MathSingleFunct<V> mathSingleFunct);
 
     /**
-     * visit a {@link TextChangeCaseFunct}.
-     *
-     * @param textChangeCaseFunct to be visited
-     */
-    public V visitTextChangeCaseFunct(TextChangeCaseFunct<V> textChangeCaseFunct);
-
-    /**
-     * visit a {@link TextCharAtFunct}.
-     *
-     * @param textCharAtFunct to be visited
-     */
-    public V visitTextCharAtFunct(TextCharAtFunct<V> textCharAtFunct);
-
-    /**
      * visit a {@link TextJoinFunct}.
      *
      * @param textJoinFunct to be visited
      */
     public V visitTextJoinFunct(TextJoinFunct<V> textJoinFunct);
-
-    /**
-     * visit a {@link TextPromptFunct}.
-     *
-     * @param textPromptFunct to be visited
-     */
-    public V visitTextPromptFunct(TextPromptFunct<V> textPromptFunct);
-
-    /**
-     * visit a {@link TextTrimFunct}.
-     *
-     * @param textTrimFunct to be visited
-     */
-    public V visitTextTrimFunct(TextTrimFunct<V> textTrimFunct);
-
 }

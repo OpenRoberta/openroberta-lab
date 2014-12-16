@@ -8,6 +8,11 @@ import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
 
+/**
+ * This class represents the <b>robControls_start</b> block from Blockly
+ * into the AST (abstract syntax tree). Object from this class points to the main thread of the program.<br/>
+ * <br/>
+ */
 public class MainTask<V> extends Task<V> {
 
     private MainTask(BlocklyBlockProperties properties, BlocklyComment comment) {

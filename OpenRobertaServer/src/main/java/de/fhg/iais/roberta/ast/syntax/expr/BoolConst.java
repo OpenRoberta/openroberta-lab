@@ -30,7 +30,7 @@ public class BoolConst<V> extends Expr<V> {
      * @param value that the boolean constant will have,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link BoolConst}.
+     * @return read only object of class {@link BoolConst}
      */
     public static <V> BoolConst<V> make(boolean value, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new BoolConst<V>(value, properties, comment);

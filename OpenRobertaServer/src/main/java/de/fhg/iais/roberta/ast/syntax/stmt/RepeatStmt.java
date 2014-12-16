@@ -30,7 +30,7 @@ public class RepeatStmt<V> extends Stmt<V> {
 
     private RepeatStmt(Mode mode, Expr<V> expr, StmtList<V> list, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.REPEAT_STMT, properties, comment);
-        Assert.isTrue(expr.isReadOnly() && list.isReadOnly());
+        Assert.isTrue(mode != null && expr != null && list != null && expr.isReadOnly() && list.isReadOnly());
         this.expr = expr;
         this.list = list;
         this.mode = mode;
@@ -40,9 +40,9 @@ public class RepeatStmt<V> extends Stmt<V> {
     /**
      * Create read only object of {@link RepeatStmt}.
      *
-     * @param mode of the repeat statement. See enum {@link Mode} for all possible modes,
-     * @param expr that should be evaluated,
-     * @param list of statements,
+     * @param mode of the repeat statement; must be <b>not</b> null; see enum {@link Mode} for all possible modes,
+     * @param expr that should be evaluated; must be <b>not</b> null and <b>read only</b>,
+     * @param list of statements; must be <b>not</b> null and <b>read only</b>,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of {@link RepeatStmt}
@@ -52,21 +52,21 @@ public class RepeatStmt<V> extends Stmt<V> {
     }
 
     /**
-     * @return mode of the repeat statement. See enum {@link Mode} for all possible modes.
+     * @return mode of the repeat statement. See enum {@link Mode} for all possible modes
      */
     public Mode getMode() {
         return this.mode;
     }
 
     /**
-     * @return expression that should be evaluated.
+     * @return expression that should be evaluated
      */
     public final Expr<V> getExpr() {
         return this.expr;
     }
 
     /**
-     * @return list of statements.
+     * @return list of statements
      */
     public final StmtList<V> getList() {
         return this.list;

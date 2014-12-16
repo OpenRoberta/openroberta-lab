@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
+import de.fhg.iais.roberta.dbc.Assert;
 
 /**
  * This class represents <b>robLists_create_with</b> and <b>lists_create_with</b> blocks from Blockly into the AST (abstract syntax tree).
@@ -21,6 +22,7 @@ public class ListCreate<V> extends Expr<V> {
 
     private ListCreate(ExprList<V> exprList, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.LIST_CREATE, properties, comment);
+        Assert.isTrue(exprList != null && exprList.isReadOnly());
         this.exprList = exprList;
         setReadOnly();
     }
@@ -28,10 +30,10 @@ public class ListCreate<V> extends Expr<V> {
     /**
      * creates instance of {@link ListCreate}. This instance is read only and can not be modified.
      *
-     * @param exprList,
+     * @param exprList; must be <b>not</b> null and <b>read only</b>,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link ListCreate}.
+     * @return read only object of class {@link ListCreate}
      */
     public static <V> ListCreate<V> make(ExprList<V> exprList, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new ListCreate<V>(exprList, properties, comment);

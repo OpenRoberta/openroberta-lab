@@ -31,8 +31,7 @@ public class TextPrintFunct<V> extends Function<V> {
     /**
      * Creates instance of {@link TextPrintFunct}. This instance is read only and can not be modified.
      *
-     * @param name of the function,
-     * @param param list of parameters for the function,
+     * @param param list of parameters for the function; must be <b>not</b> null,,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment that user has added to the block,
      * @return read only object of class {@link TextPrintFunct}

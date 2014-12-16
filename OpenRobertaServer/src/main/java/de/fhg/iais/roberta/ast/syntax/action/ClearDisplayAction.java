@@ -21,7 +21,7 @@ public final class ClearDisplayAction<V> extends Action<V> {
      *
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link ClearDisplayAction}.
+     * @return read only object of class {@link ClearDisplayAction}
      */
     public static <V> ClearDisplayAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
         return new ClearDisplayAction<V>(properties, comment);
