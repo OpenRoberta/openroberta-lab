@@ -33,7 +33,7 @@ public class TimerSensor<V> extends Sensor<V> {
     /**
      * Create object of the class {@link TimerSensor}.
      *
-     * @param mode in which the sensor is operating. See enum {@link TimerSensorMode} for all possible modes that the sensor have,
+     * @param mode in which the sensor is operating; must be <b>not</b> null; see enum {@link TimerSensorMode} for all possible modes that the sensor have,
      * @param timer integer value,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,

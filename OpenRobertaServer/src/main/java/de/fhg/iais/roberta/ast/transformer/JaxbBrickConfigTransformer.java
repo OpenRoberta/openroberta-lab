@@ -29,8 +29,14 @@ import de.fhg.iais.roberta.util.Pair;
  */
 public class JaxbBrickConfigTransformer<V> extends JaxbAstTransformer<V> {
 
-    public BrickConfiguration transform(BlockSet program) {
-        List<Instance> instances = program.getInstance();
+    /**
+     * Returns brick configuration from given Blockly brick configuration.
+     *
+     * @param configuration
+     * @return brick configuration
+     */
+    public BrickConfiguration transform(BlockSet configuration) {
+        List<Instance> instances = configuration.getInstance();
         List<Block> blocks = instances.get(0).getBlock();
         return blockToBrickConfiguration(blocks.get(0));
     }
@@ -52,7 +58,6 @@ public class JaxbBrickConfigTransformer<V> extends JaxbAstTransformer<V> {
     }
 
     private HardwareComponentEV3Sensor extractHardwareComponentTypeSensor(Block component) {
-
         return HardwareComponentEV3Sensor.find(component.getType());
     }
 
@@ -62,17 +67,17 @@ public class JaxbBrickConfigTransformer<V> extends JaxbAstTransformer<V> {
 
     private boolean extractMotorRegulation(Block block) {
         List<Field> fields = extractFields(block, (short) 3);
-        return extractField(fields, "MOTOR_REGULATION", (short) 0).equals("TRUE") ? true : false;
+        return extractField(fields, "MOTOR_REGULATION").equals("TRUE") ? true : false;
     }
 
     private DriveDirection extractDirectionOfRotation(Block block) {
         List<Field> fields = extractFields(block, (short) 3);
-        return DriveDirection.get(extractField(fields, "MOTOR_REVERSE", (short) 1));
+        return DriveDirection.get(extractField(fields, "MOTOR_REVERSE"));
     }
 
     private MotorSide extractMotorSide(Block block) {
         List<Field> fields = extractFields(block, (short) 3);
-        return MotorSide.get(extractField(fields, "MOTOR_DRIVE", (short) 2));
+        return MotorSide.get(extractField(fields, "MOTOR_DRIVE"));
     }
 
     private BrickConfiguration blockToBrickConfiguration(Block block) {
@@ -89,8 +94,8 @@ public class JaxbBrickConfigTransformer<V> extends JaxbAstTransformer<V> {
             case "robBrick_EV3-Brick":
                 fields = extractFields(block, (short) 2);
                 values = extractValues(block, (short) 8);
-                wheelDiameter = Double.valueOf(extractField(fields, "WHEEL_DIAMETER", (short) 0)).doubleValue();
-                trackWidth = Double.valueOf(extractField(fields, "TRACK_WIDTH", (short) 1)).doubleValue();
+                wheelDiameter = Double.valueOf(extractField(fields, "WHEEL_DIAMETER")).doubleValue();
+                trackWidth = Double.valueOf(extractField(fields, "TRACK_WIDTH")).doubleValue();
                 extractHardwareComponent(values, sensors, actors);
                 return new EV3BrickConfiguration.Builder()
                     .setTrackWidth(trackWidth)

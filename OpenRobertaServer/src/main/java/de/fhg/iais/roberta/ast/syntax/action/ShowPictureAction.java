@@ -32,12 +32,12 @@ public class ShowPictureAction<V> extends Action<V> {
     /**
      * Creates instance of {@link ShowPictureAction}. This instance is read only and can not be modified.
      *
-     * @param pic that will be printed on the display of the brick,
-     * @param x position where the picture will start,
-     * @param y position where the picture will start,
+     * @param pic that will be printed on the display of the brick; must be <b>not</b> null,
+     * @param x position where the picture will start; must be <b>not</b> null,
+     * @param y position where the picture will start; must be <b>not</b> null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link ShowPictureAction}.
+     * @return read only object of class {@link ShowPictureAction}
      */
     public static <V> ShowPictureAction<V> make(ShowPicture pic, Expr<V> x, Expr<V> y, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new ShowPictureAction<V>(pic, x, y, properties, comment);

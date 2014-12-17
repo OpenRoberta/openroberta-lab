@@ -28,14 +28,14 @@ public class StringConst<V> extends Expr<V> {
      * @param value that the boolean constant will have,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link StringConst}.
+     * @return read only object of class {@link StringConst}
      */
     public static <V> StringConst<V> make(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new StringConst<V>(value, properties, comment);
     }
 
     /**
-     * @return the value of the string constant.
+     * @return the value of the string constant
      */
     public String getValue() {
         return this.value;

@@ -27,10 +27,10 @@ public class LightStatusAction<V> extends Action<V> {
     /**
      * Creates instance of {@link LightStatusAction}. This instance is read only and can not be modified.
      *
-     * @param status in which we want to set the lights (off or reset),
+     * @param status in which we want to set the lights (off or reset); must be <b>not</b> null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link LightStatusAction}.
+     * @return read only object of class {@link LightStatusAction}
      */
     public static <V> LightStatusAction<V> make(Status status, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new LightStatusAction<V>(status, properties, comment);
@@ -53,17 +53,17 @@ public class LightStatusAction<V> extends Action<V> {
         return visitor.visitLightStatusAction(this);
     }
 
-    /**
-     * Status in which user can set the lights.
-     */
-    public static enum Status {
-        OFF, RESET;
-    }
-
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         return jaxbDestination;
+    }
+
+    /**
+     * Status in which user can set the lights.
+     */
+    public static enum Status {
+        OFF, RESET;
     }
 }

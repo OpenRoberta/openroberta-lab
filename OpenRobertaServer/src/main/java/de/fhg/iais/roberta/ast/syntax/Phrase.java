@@ -114,6 +114,9 @@ abstract public class Phrase<V> {
      */
     protected abstract V accept(AstVisitor<V> visitor);
 
+    /**
+     * @return converts AST representation of block to JAXB representation of block
+     */
     public abstract Block astToBlock();
 
     /**

@@ -27,10 +27,10 @@ public class PlayFileAction<V> extends Action<V> {
     /**
      * Creates instance of {@link PlayFileAction}. This instance is read only and can not be modified.
      *
-     * @param filename of the sound,
+     * @param filename of the sound; must be different then empty string,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link PlayFileAction}.
+     * @return read only object of class {@link PlayFileAction}
      */
     public static <V> PlayFileAction<V> make(String filename, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new PlayFileAction<V>(filename, properties, comment);

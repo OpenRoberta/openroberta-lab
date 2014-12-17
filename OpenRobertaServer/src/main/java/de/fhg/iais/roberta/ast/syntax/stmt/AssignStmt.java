@@ -26,7 +26,7 @@ public class AssignStmt<V> extends Stmt<V> {
 
     private AssignStmt(Var<V> name, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.ASSIGN_STMT, properties, comment);
-        Assert.isTrue(name.isReadOnly() && expr.isReadOnly());
+        Assert.isTrue(name != null && expr != null && name.isReadOnly() && expr.isReadOnly());
         this.name = name;
         this.expr = expr;
         setReadOnly();
@@ -35,8 +35,8 @@ public class AssignStmt<V> extends Stmt<V> {
     /**
      * Create object of the class {@link AssignStmt}.
      *
-     * @param name of the variable,
-     * @param expr that we want to assign to the {@link #name},
+     * @param name of the variable; must be <b>not</b> null and <b>read only</b>,,
+     * @param expr that we want to assign to the {@link #name}; must be <b>not</b> null and <b>read only</b>,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return instance of {@link AssignStmt}

@@ -30,10 +30,11 @@ public class MotorSetPowerAction<V> extends Action<V> {
     /**
      * Creates instance of {@link MotorSetPowerAction}. This instance is read only and can not be modified.
      *
-     * @param port on which the motor is connected that we want to set,
+     * @param port on which the motor is connected that we want to set; must be <b>not</b> null,
+     * @param power to which motor should be set; must be <b>read only</b>
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link MotorSetPowerAction}.
+     * @return read only object of class {@link MotorSetPowerAction}
      */
     public static <V> MotorSetPowerAction<V> make(ActorPort port, Expr<V> power, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new MotorSetPowerAction<V>(port, power, properties, comment);

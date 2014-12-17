@@ -23,7 +23,7 @@ public class MotorDriveStopAction<V> extends Action<V> {
      *
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link MotorDriveStopAction}.
+     * @return read only object of class {@link MotorDriveStopAction}
      */
     public static <V> MotorDriveStopAction<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
         return new MotorDriveStopAction<V>(properties, comment);

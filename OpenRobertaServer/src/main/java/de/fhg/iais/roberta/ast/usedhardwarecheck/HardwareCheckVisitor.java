@@ -38,7 +38,6 @@ import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
-import de.fhg.iais.roberta.ast.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.LenghtOfIsEmptyFunct;
@@ -48,15 +47,12 @@ import de.fhg.iais.roberta.ast.syntax.functions.ListSetIndex;
 import de.fhg.iais.roberta.ast.syntax.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathOnListFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathPowerFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathSingleFunct;
-import de.fhg.iais.roberta.ast.syntax.functions.TextChangeCaseFunct;
-import de.fhg.iais.roberta.ast.syntax.functions.TextCharAtFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
-import de.fhg.iais.roberta.ast.syntax.functions.TextPromptFunct;
-import de.fhg.iais.roberta.ast.syntax.functions.TextTrimFunct;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
@@ -85,9 +81,20 @@ import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.hardwarecomponents.ev3.HardwareComponentEV3Sensor;
 
+/**
+ * This visitor collects information for used sensors in blockly program.
+ *
+ * @author kcvejoski
+ */
 public class HardwareCheckVisitor implements AstVisitor<Void> {
     private final Set<HardwareComponentEV3Sensor> usedSensors = new LinkedHashSet<HardwareComponentEV3Sensor>();
 
+    /**
+     * Returns set of used sensor in Blockly program.
+     *
+     * @param phrases list of {@link Phrase} representing blockly program,
+     * @return set of used sensors
+     */
     public static Set<HardwareComponentEV3Sensor> check(List<Phrase<Void>> phrases) {
         Assert.isTrue(phrases.size() >= 1);
         HardwareCheckVisitor checkVisitor = new HardwareCheckVisitor();
@@ -97,7 +104,7 @@ public class HardwareCheckVisitor implements AstVisitor<Void> {
         return checkVisitor.getUsedSensors();
     }
 
-    public Set<HardwareComponentEV3Sensor> getUsedSensors() {
+    private Set<HardwareComponentEV3Sensor> getUsedSensors() {
         return this.usedSensors;
     }
 
@@ -533,37 +540,8 @@ public class HardwareCheckVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitTextChangeCaseFunct(TextChangeCaseFunct<Void> textChangeCaseFunct) {
-        for ( Expr<Void> expr : textChangeCaseFunct.getParam() ) {
-            expr.visit(this);
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitTextCharAtFunct(TextCharAtFunct<Void> textCharAtFunct) {
-        for ( Expr<Void> expr : textCharAtFunct.getParam() ) {
-            expr.visit(this);
-        }
-        return null;
-    }
-
-    @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
         for ( Expr<Void> expr : textJoinFunct.getParam() ) {
-            expr.visit(this);
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitTextPromptFunct(TextPromptFunct<Void> textPromptFunct) {
-        return null;
-    }
-
-    @Override
-    public Void visitTextTrimFunct(TextTrimFunct<Void> textTrimFunct) {
-        for ( Expr<Void> expr : textTrimFunct.getParam() ) {
             expr.visit(this);
         }
         return null;

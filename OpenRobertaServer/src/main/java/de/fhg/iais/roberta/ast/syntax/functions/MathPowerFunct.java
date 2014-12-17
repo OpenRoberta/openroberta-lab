@@ -35,8 +35,8 @@ public class MathPowerFunct<V> extends Expr<V> {
     /**
      * Creates instance of {@link Binary}. This instance is read only and can not be modified.
      *
-     * @param name of the function,
-     * @param param list of parameters for the function,
+     * @param name of the function; must be <b>not</b> null,
+     * @param param list of parameters for the function; must be <b>not</b> null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment that user has added to the block,
      * @return read only object of class {@link MathPowerFunct}

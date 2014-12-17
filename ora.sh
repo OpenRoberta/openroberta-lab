@@ -3,10 +3,12 @@
 ipaddr='10.0.1.1'
 oraversion='1.0.1-SNAPSHOT'
 
-function helpFn {
+function _helpFn {
+  # be careful when changing the help function. All words starting with "--" are extracted by a compgen function and considered COMMANDS!
   echo 'THIS SCRIPT IS FOR DEVELOPERS, WHO PULLED THE GIT-REPOSITORY AND WORK WITH THE OpenRoberta ARTIFACT';
-  echo 'use: ora.sh --CMD1 OPT_PARM1 --CMD2 OPT_PARM2 ... ...';
-  echo '';
+  echo 'you may chain commands, e.g. first set a version string, then export the application to an external directory';
+  echo 'IF you source with ". ora-please-source.sh", you get completion from the bash when you type TAB (as usual ...)';
+  $0 --java
   echo 'you may customize the script by defining default values. Values are now:';
   echo 'ipaddr='"$ipaddr";
   echo 'oraversion='"$oraversion";
@@ -14,8 +16,14 @@ function helpFn {
   echo 'miscelleneous commands';
   echo '';
   echo '  --help                             get help';
+  echo '  --java                             show the actual java version';
   echo '  --ipaddr {IP-ADDR}                 set the ip addr of the EV3 brick for further commands';
-  echo '  --version {VERSION}                set the version to something like d.d.d where d is one or more digits, e.g. 1.0.1'
+  echo '  --version {VERSION}                set the version to something like d.d.d where d is one or more digits, e.g. 1.10.1'
+  echo ''
+  echo '  --checkout-db OR --restore-db      restore the state of the database to the state last checked out.'
+  echo '                                     this makes sense, if you changed the db during test and dont want to commit your changes'
+  echo '  --sqlclient                        start the hsqldb client to query the database. The openroberta server must NOT run and'
+  echo '                                     and thus access the database. We do not use hsqldb with a db server, but as a standalone.';
   echo '';
   echo 'commands available after a successful mvn clean install';
   echo '';
@@ -35,7 +43,7 @@ function helpFn {
   echo '                                     that can be used without parameter or with a property file as parameter.'
 }
 
-function startFn {
+function _startFn {
   propfile="$1"
   main='de.fhg.iais.roberta.main.ServerStarter'
   run='java -cp "target/resources/*" '"${main} ${propfile}"
@@ -44,12 +52,8 @@ function startFn {
   eval $run
 }
 
-function check64bit7jdk {
+function _check64bit7jdk {
   javaversion=`java -version 2>&1`
-  echo
-  echo 'you are using the following java runtime:'
-  echo $javaversion
-  echo
   case "$javaversion" in
     *64-Bit*) : ;;
     *)        echo '**********************************************************************************************'
@@ -66,7 +70,7 @@ function check64bit7jdk {
   esac
 }
 
-function exportApplication {
+function _exportApplication {
   exportpath="$1"
   if [[ -e "$exportpath" ]]; then
      echo "target directory \"$exportpath\" already exists - exit 4"
@@ -168,7 +172,7 @@ echo executing: "%RUN%"
 # -------------- end of here documents ----------------------------------------------------
 }
 
-function createemptydb {
+function _createemptydb {
   dbpath="$1"
   main='de.fhg.iais.roberta.main.Administration'
   run='java -cp "OpenRobertaServer/target/resources/*" '"${main} createemptydb ${dbpath}"
@@ -176,13 +180,21 @@ function createemptydb {
   eval $run
 }
 
-function scpev3menuFn {
+function _scpev3menuFn {
   run="scp OpenRobertaServer/target/updateResources/EV3Menu.jar root@${ipaddr}:/home/root/lejos/bin/utils"
   echo "executing: ${run}"
   $run
 }
 
-function scpev3libsFn {
+function _javaversion {
+  javaversion=`java -version 2>&1`
+  echo
+  echo 'you are using the following java runtime:'
+  echo $javaversion
+  echo
+}
+
+function _scpev3libsFn {
   runtime="OpenRobertaServer/target/updateResources/OpenRobertaRuntime.jar"
   shared="OpenRobertaServer/target/updateResources/OpenRobertaShared.jar"
   json='OpenRobertaServer/target/updateResources/json.jar'
@@ -196,33 +208,40 @@ function scpev3libsFn {
 
 # ---------------------------------------- begin of the script ----------------------------------------------------
 cmd="$1"; shift
-
 if [[ "$cmd" == '' ]]; then
-   helpFn
+   _helpFn
    exit 0
 fi
-check64bit7jdk
+if [[ "$cmd" == '--java' ]]; then
+   _javaversion
+   cmd="$1"; shift
+fi
+_check64bit7jdk
 while [[ "$cmd" != '' ]]; do
    case "$cmd" in
-   --help|-h)          helpFn ;;
-   --ipaddr|-i)        ipaddr="$1"; shift ;;
+   --help|-h)          _helpFn ;;
+   --ipaddr|-ip)       ipaddr="$1"; shift ;;
+   --checkout-db|--restore-db)
+                       git checkout HEAD -- OpenRobertaServer/db/openroberta-db.[lps]* ;;
+   --sqlclient|-sql)   dbjar=' OpenRobertaServer/target/resources/hsqldb-2.3.2.jar'
+                       dbdriver='org.hsqldb.jdbc.JDBCDriver'
+                       dburl='jdbc:hsqldb:file:OpenRobertaServer/db/openroberta-db'
+                       java -jar $dbjar --driver $dbdriver --url $dburl --user orA --password Pid ;;
    --version|-v)       oraversion="$1"; shift ;;
-   --scpev3menu|-m)    scpev3menuFn ;;
-   --scpev3libs|-l)    scpev3libsFn ;;
-   --createemptydb|-c) dbpath="$1"; shift
-                       createemptydb "$dbpath" ;;
+   --scpev3menu|-menu) _scpev3menuFn ;;
+   --scpev3libs|-libs) _scpev3libsFn ;;
+   --createemptydb)    dbpath="$1"; shift
+                       _createemptydb "$dbpath" ;;
    --export|-e)        exportpath="$1"; shift
-                       exportApplication "$exportpath" ;;
+                       _exportApplication "$exportpath" ;;
    --start|-s)         cmd="$1"; shift
                        if [[ $cmd != '' && $cmd != -* ]]; then
                           propfile="file:$cmd"
                           cmd="$1"; shift
                        fi
-                       startFn "$propfile"
+                       _startFn "$propfile"
                        continue ;; # because cmd is already set
    *)                  echo 'invalid or no parameter: "'"$cmd"'"'
-                       echo ''
-                       helpFn
                        exit 4 ;;
    esac
 

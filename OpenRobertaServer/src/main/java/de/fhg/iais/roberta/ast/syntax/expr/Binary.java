@@ -36,9 +36,9 @@ public final class Binary<V> extends Expr<V> {
     /**
      * Creates instance of {@link Binary}. This instance is read only and can not be modified.
      *
-     * @param op operator
-     * @param left expression on the left hand side,
-     * @param right expression on the right hand side,
+     * @param op operator; must be <b>not</b> null,
+     * @param left expression on the left hand side; must be <b>not</b> null and <b>read only</b>,
+     * @param right expression on the right hand side; must be <b>not</b> null and <b>read only</b>,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return Binary expression
@@ -48,21 +48,21 @@ public final class Binary<V> extends Expr<V> {
     }
 
     /**
-     * @return the operation in the binary expression. See enum {@link Op} for all possible operations.
+     * @return the operation in the binary expression. See enum {@link Op} for all possible operations
      */
     public Op getOp() {
         return this.op;
     }
 
     /**
-     * @return the expression on the left hand side. Returns subclass of {@link Expr}.
+     * @return the expression on the left hand side. Returns subclass of {@link Expr}
      */
     public Expr<V> getLeft() {
         return this.left;
     }
 
     /**
-     * @return the expression on the right hand side. Returns subclass of {@link Expr}.
+     * @return the expression on the right hand side. Returns subclass of {@link Expr}
      */
     public Expr<V> getRight() {
         return this.right;

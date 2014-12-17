@@ -38,11 +38,11 @@ public class GetSubFunct<V> extends Function<V> {
     /**
      * Creates instance of {@link GetSubFunct}. This instance is read only and can not be modified.
      *
-     * @param name of the function,
-     * @param param list of expression parameters for the function,
+     * @param name of the function; must be <b>not</b> null,
+     * @param param list of expression parameters for the function; must be <b>not</b> null,,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment that user has added to the block,
-     * @param strParam list of string parameters for the function
+     * @param strParam list of string parameters for the function; must be <b>not</b> null,
      * @return read only object of class {@link GetSubFunct}
      */
     public static <V> GetSubFunct<V> make(

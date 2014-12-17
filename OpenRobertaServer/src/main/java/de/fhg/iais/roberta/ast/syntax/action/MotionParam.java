@@ -14,11 +14,6 @@ public class MotionParam<V> {
         this.duration = mpb.duration;
     }
 
-    @Override
-    public String toString() {
-        return "MotionParam [speed=" + this.speed + ", duration=" + this.duration + "]";
-    }
-
     /**
      * @return speed of the motor
      */
@@ -31,6 +26,11 @@ public class MotionParam<V> {
      */
     public MotorDuration<V> getDuration() {
         return this.duration;
+    }
+
+    @Override
+    public String toString() {
+        return "MotionParam [speed=" + this.speed + ", duration=" + this.duration + "]";
     }
 
     /**

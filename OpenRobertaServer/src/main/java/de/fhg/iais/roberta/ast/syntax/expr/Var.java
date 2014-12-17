@@ -6,6 +6,7 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.dbc.Assert;
 
 /**
  * This class represents the <b>variables_set</b> and <b>variables_get</b> blocks from Blockly into the AST (abstract syntax tree).
@@ -20,6 +21,7 @@ public class Var<V> extends Expr<V> {
 
     private Var(String value, TypeVar typeVar, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.VAR, properties, comment);
+        Assert.isTrue(!value.equals("") && typeVar != null);
         this.name = value;
         this.typeVar = typeVar;
         setReadOnly();
@@ -28,8 +30,8 @@ public class Var<V> extends Expr<V> {
     /**
      * creates instance of {@link Var}. This instance is read only and can not be modified.
      *
-     * @param value name of the variable,
-     * @param typeVar type of the variable,
+     * @param value name of the variable; must be <b>non-empty</b> string,
+     * @param typeVar type of the variable; must be <b>not</b> null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of class {@link Var}
@@ -73,7 +75,7 @@ public class Var<V> extends Expr<V> {
     }
 
     /**
-     * Type of variables. Use NONE if the variable is defined already.
+     * Type of variables. Use NONE if the variable is defined already
      */
     public static enum TypeVar {
         DOUBLE, INTEGER, STRING, NONE;

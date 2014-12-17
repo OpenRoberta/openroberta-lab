@@ -26,7 +26,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -242,13 +241,9 @@ public class RoundTripTest {
         RoundTripTest.driver.get(RoundTripTest.baseUrl + "/");
         RoundTripTest.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
-        Actions actions = new Actions(RoundTripTest.driver);
-
         //Login
-        WebElement onHoverUserElement = RoundTripTest.driver.findElement(By.id("head-navigation-login"));
-        actions.moveByOffset(1, 1);
-        actions.moveToElement(onHoverUserElement);
-        actions.perform();
+        WebElement user = RoundTripTest.driver.findElement(By.id("head-navigation-login"));
+        user.click();
 
         WebElement userLoginElement = (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("login")));
         userLoginElement.click();
@@ -260,11 +255,8 @@ public class RoundTripTest {
     }
 
     private String saveProgram(String programName) throws InterruptedException, Exception, JSONException {
-        Actions actions = new Actions(RoundTripTest.driver);
-        WebElement onHoverProgramElement1 = RoundTripTest.driver.findElement(By.id("head-navigation-program"));
-        actions.moveByOffset(1, 1);
-        actions.moveToElement(onHoverProgramElement1);
-        actions.perform();
+        WebElement programElement = RoundTripTest.driver.findElement(By.id("head-navigation-program"));
+        programElement.click();
         WebElement userProgramSaveAsElement = (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("saveAsProg")));
         userProgramSaveAsElement.click();
         RoundTripTest.driver.findElement(By.id("programNameSave")).clear();
@@ -277,14 +269,11 @@ public class RoundTripTest {
     }
 
     private void loadProgram(String program) throws InterruptedException {
-        Actions actions = new Actions(RoundTripTest.driver);
-        WebElement onHoverProgramElement = RoundTripTest.driver.findElement(By.id("head-navigation-program"));
-        actions.moveByOffset(1, 1);
-        actions.moveToElement(onHoverProgramElement);
-        actions.perform();
-
+        WebElement programElement = RoundTripTest.driver.findElement(By.id("head-navigation-program"));
+        programElement.click();
         int index = Arrays.binarySearch(blocklyPrograms, program);
-        WebElement userProgramOpenElement = (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("openProg")));
+        WebElement userProgramOpenElement =
+            (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.cssSelector("listProg")));
         userProgramOpenElement.click();
         WebElement programTable = RoundTripTest.driver.findElement(By.id("programNameTable"));
         WebElement tr = programTable.findElements(By.tagName("tr")).get(index + 1);

@@ -25,7 +25,7 @@ public class NullConst<V> extends Expr<V> {
      *
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link NullConst}.
+     * @return read only object of class {@link NullConst}
      */
     public static <V> NullConst<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
         return new NullConst<V>(properties, comment);

@@ -25,7 +25,7 @@ public class InfraredSensor<V> extends Sensor<V> {
 
     private InfraredSensor(InfraredSensorMode mode, SensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.INFRARED_SENSING, properties, comment);
-        Assert.isTrue(mode != null);
+        Assert.isTrue(mode != null && port != null);
         this.mode = mode;
         this.port = port;
         setReadOnly();
@@ -34,8 +34,8 @@ public class InfraredSensor<V> extends Sensor<V> {
     /**
      * Create object of the class {@link InfraredSensor}.
      *
-     * @param mode in which the sensor is operating. See enum {@link InfraredSensorMode} for all possible modes that the sensor have,
-     * @param port on where the sensor is connected. See enum {@link SensorPort} for all possible sensor ports,
+     * @param mode in which the sensor is operating; must be <b>not</b> null; see enum {@link InfraredSensorMode} for all possible modes that the sensor have,
+     * @param port on where the sensor is connected; must be <b>not</b> null; see enum {@link SensorPort} for all possible sensor ports,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of class {@link InfraredSensor}

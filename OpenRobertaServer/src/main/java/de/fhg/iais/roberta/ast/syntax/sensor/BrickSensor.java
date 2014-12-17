@@ -23,7 +23,7 @@ public class BrickSensor<V> extends Sensor<V> {
 
     private BrickSensor(Mode mode, BrickKey key, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.BRICK_SENSIG, properties, comment);
-        Assert.isTrue(mode != null && !key.equals(""));
+        Assert.isTrue(mode != null && key != null);
         this.mode = mode;
         this.key = key;
         setReadOnly();
@@ -32,8 +32,8 @@ public class BrickSensor<V> extends Sensor<V> {
     /**
      * Creates instance of {@link BrickSensor}. This instance is read only and can not be modified.
      *
-     * @param mode in which the sensor is operating. See enum {@link Mode} for all possible modes that the sensor have.
-     * @param key on the brick. See enum {@link BrickKey} for all possible keys,
+     * @param mode in which the sensor is operating; must be <b>not</b> null; see enum {@link Mode} for all possible modes that the sensor have
+     * @param key on the brick; must be <b>not</b> null; see enum {@link BrickKey} for all possible keys,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of class {@link BrickSensor}
@@ -43,14 +43,14 @@ public class BrickSensor<V> extends Sensor<V> {
     }
 
     /**
-     * @return get the key. See enum {@link BrickKey} for all possible keys.
+     * @return get the key. See enum {@link BrickKey} for all possible keys
      */
     public BrickKey getKey() {
         return this.key;
     }
 
     /**
-     * @return get the mode of sensor. See enum {@link Mode} for all possible modes that the sensor have.
+     * @return get the mode of sensor. See enum {@link Mode} for all possible modes that the sensor have
      */
     public Mode getMode() {
         return this.mode;

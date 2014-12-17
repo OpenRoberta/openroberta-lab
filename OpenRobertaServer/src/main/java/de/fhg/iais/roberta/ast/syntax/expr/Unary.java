@@ -35,8 +35,8 @@ public class Unary<V> extends Expr<V> {
     /**
      * creates instance of {@link Unary}. This instance is read only and can not be modified.
      *
-     * @param op operator
-     * @param expr expression over which the operation is performed,
+     * @param op operator; ; must be <b>not</b> null,
+     * @param expr expression over which the operation is performed; must be <b>not</b> null and <b>read only</b>,,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of class {@link Unary}
@@ -46,14 +46,14 @@ public class Unary<V> extends Expr<V> {
     }
 
     /**
-     * @return the operation in the binary expression. See enum {@link Op} for all possible operations.
+     * @return the operation in the binary expression. See enum {@link Op} for all possible operations
      */
     public Op getOp() {
         return this.op;
     }
 
     /**
-     * @return the expression on which the operation is performed. Returns subclass of {@link Expr}.
+     * @return the expression on which the operation is performed. Returns subclass of {@link Expr}
      */
     public Expr<V> getExpr() {
         return this.expr;

@@ -9,7 +9,6 @@ public enum FunctionNames {
     DIVISIBLE_BY( 80, Assoc.NONE ),
     MAX( 80, Assoc.NONE ),
     MIN( 80, Assoc.NONE ),
-
     LISTS_REPEAT( 1, Assoc.LEFT ),
     RANDOM( 1, Assoc.LEFT ),
     EVEN( 10, Assoc.LEFT ),
@@ -39,19 +38,12 @@ public enum FunctionNames {
     ROUND( 10, Assoc.LEFT ),
     ROUNDUP( 10, Assoc.LEFT, "CEIL" ),
     ROUNDDOWN( 10, Assoc.LEFT, "FLOOR" ),
-    TEXT_LENGTH( 10, Assoc.LEFT, "text_length" ),
-    IS_EMPTY( 10, Assoc.LEFT, "text_isEmpty", "TEXT_ISEMPTY" ),
     LIST_IS_EMPTY( 10, Assoc.LEFT, "LISTS_ISEMPTY" ),
-    UPPERCASE( 10, Assoc.LEFT ),
-    LOWERCASE( 10, Assoc.LEFT ),
-    TITLECASE( 10, Assoc.LEFT ),
     LEFT( 10, Assoc.LEFT ),
     RIGHT( 10, Assoc.LEFT ),
-    BOTH( 10, Assoc.LEFT ),
     TEXT( 10, Assoc.LEFT, "TEXT" ),
     NUMBER( 10, Assoc.LEFT, "NUMBER" ),
     LISTS_LENGTH( 10, Assoc.LEFT, "lists_length" ),
-    SUBSTRING( 10, Assoc.LEFT ),
     GET_SUBLIST( 10, Assoc.LEFT );
 
     private final String[] values;

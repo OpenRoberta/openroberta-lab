@@ -23,8 +23,6 @@ public class IndexOfFunct<V> extends Function<V> {
     private final IndexLocation location;
     private final List<Expr<V>> param;
 
-    //private final List<String> strParam;
-
     private IndexOfFunct(IndexLocation name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Kind.TEXT_INDEX_OF_FUNCT, properties, comment);
         Assert.isTrue(name != null && param != null);
@@ -36,8 +34,8 @@ public class IndexOfFunct<V> extends Function<V> {
     /**
      * Creates instance of {@link IndexOfFunct}. This instance is read only and can not be modified.
      *
-     * @param name of the function,
-     * @param param list of parameters for the function,
+     * @param name of the function; must be <b>not</b> null,
+     * @param param list of parameters for the function; must be <b>not</b> null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment that user has added to the block,
      * @return read only object of class {@link IndexOfFunct}

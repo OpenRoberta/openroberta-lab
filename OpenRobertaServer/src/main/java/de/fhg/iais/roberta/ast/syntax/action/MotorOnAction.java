@@ -21,7 +21,7 @@ public final class MotorOnAction<V> extends Action<V> {
 
     private MotorOnAction(ActorPort port, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.MOTOR_ON_ACTION, properties, comment);
-        Assert.isTrue(param != null);
+        Assert.isTrue(param != null && port != null);
         this.param = param;
         this.port = port;
         setReadOnly();
@@ -34,7 +34,7 @@ public final class MotorOnAction<V> extends Action<V> {
      * @param param {@link MotionParam} that set up the parameters for the movement of the robot (number of rotations or degrees and speed),
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link MotorOnAction}.
+     * @return read only object of class {@link MotorOnAction}
      */
     public static <V> MotorOnAction<V> make(ActorPort port, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new MotorOnAction<V>(port, param, properties, comment);
@@ -93,5 +93,4 @@ public final class MotorOnAction<V> extends Action<V> {
 
         return jaxbDestination;
     }
-
 }

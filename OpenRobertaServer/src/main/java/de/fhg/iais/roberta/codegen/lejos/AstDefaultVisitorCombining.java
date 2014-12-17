@@ -58,7 +58,7 @@ import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 public abstract class AstDefaultVisitorCombining<V> implements AstVisitor<V> {
     /**
      * initialize the Java code generator visitor.
-     * 
+     *
      * @param programName name of the program
      * @param brickConfiguration hardware configuration of the brick
      * @param indentation to start with. Will be ince/decr depending on block structure
@@ -68,14 +68,14 @@ public abstract class AstDefaultVisitorCombining<V> implements AstVisitor<V> {
 
     /**
      * a default result must be supplied
-     * 
+     *
      * @return the default
      */
     abstract public V defaultResult();
 
     /**
      * the aggregation of results must be supplied
-     * 
+     *
      * @param vs the results
      * @return aggregation of two results
      * @return
@@ -84,7 +84,7 @@ public abstract class AstDefaultVisitorCombining<V> implements AstVisitor<V> {
 
     /**
      * the aggregation of results must be supplied
-     * 
+     *
      * @param vs the results
      * @return aggregation of two results
      * @return
@@ -93,7 +93,7 @@ public abstract class AstDefaultVisitorCombining<V> implements AstVisitor<V> {
 
     /**
      * the aggregation of results must be supplied
-     * 
+     *
      * @param vs the results
      * @return aggregation of two results
      * @return

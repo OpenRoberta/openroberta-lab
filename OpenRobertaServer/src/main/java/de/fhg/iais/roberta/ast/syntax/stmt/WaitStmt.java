@@ -24,7 +24,7 @@ public class WaitStmt<V> extends Stmt<V> {
 
     private WaitStmt(StmtList<V> statements, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.WAIT_STMT, properties, comment);
-        Assert.isTrue(statements.isReadOnly());
+        Assert.isTrue(statements != null && statements.isReadOnly());
         this.statements = statements;
         setReadOnly();
     }
@@ -32,7 +32,7 @@ public class WaitStmt<V> extends Stmt<V> {
     /**
      * Create read only object of type {@link WaitStmt}
      *
-     * @param statements,
+     * @param statements; must be <b>not</b> null and <b>read only</b>,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment for the block,
      * @return

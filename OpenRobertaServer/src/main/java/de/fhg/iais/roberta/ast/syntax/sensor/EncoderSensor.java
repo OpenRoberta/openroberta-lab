@@ -26,7 +26,7 @@ public class EncoderSensor<V> extends Sensor<V> {
 
     private EncoderSensor(MotorTachoMode mode, ActorPort motor, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.ENCODER_SENSING, properties, comment);
-        Assert.isTrue(mode != null);
+        Assert.isTrue(mode != null && motor != null);
         this.mode = mode;
         this.motor = motor;
         setReadOnly();
@@ -35,8 +35,8 @@ public class EncoderSensor<V> extends Sensor<V> {
     /**
      * Create object of the class {@link EncoderSensor}.
      *
-     * @param mode in which the sensor is operating. See enum {@link MotorTachoMode} for all possible modes that the sensor have.
-     * @param port on where the sensor is connected. See enum {@link SensorPort} for all possible sensor ports
+     * @param mode in which the sensor is operating; must be <b>not</b> null; see enum {@link MotorTachoMode} for all possible modes that the sensor have,
+     * @param port on where the sensor is connected; must be <b>not</b> null; see enum {@link SensorPort} for all possible sensor ports,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of {@link EncoderSensor}
@@ -46,14 +46,14 @@ public class EncoderSensor<V> extends Sensor<V> {
     }
 
     /**
-     * @return get the mode of sensor. See enum {@link MotorTachoMode} for all possible modes that the sensor have.
+     * @return get the mode of sensor. See enum {@link MotorTachoMode} for all possible modes that the sensor have
      */
     public MotorTachoMode getMode() {
         return this.mode;
     }
 
     /**
-     * @return get the port on which the sensor is connected. See enum {@link SensorPort} for all possible sensor ports.
+     * @return get the port on which the sensor is connected. See enum {@link SensorPort} for all possible sensor ports
      */
     public ActorPort getMotor() {
         return this.motor;

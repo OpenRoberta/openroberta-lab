@@ -29,11 +29,11 @@ public class MotorStopAction<V> extends Action<V> {
     /**
      * Creates instance of {@link MotorStopAction}. This instance is read only and can not be modified.
      *
-     * @param port {@link ActorPort} on which the motor is connected,
-     * @param mode of stopping {@link MotorStopMode},
+     * @param port {@link ActorPort} on which the motor is connected; must be <b>not</b> null,
+     * @param mode of stopping {@link MotorStopMode}; must be <b>not</b> null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link MotorStopAction}.
+     * @return read only object of class {@link MotorStopAction}
      */
     public static <V> MotorStopAction<V> make(ActorPort port, MotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new MotorStopAction<V>(port, mode, properties, comment);
@@ -73,5 +73,4 @@ public class MotorStopAction<V> extends Action<V> {
 
         return jaxbDestination;
     }
-
 }
