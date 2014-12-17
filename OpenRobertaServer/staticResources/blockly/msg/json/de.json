@@ -572,6 +572,8 @@
 	"MESSAGE_TEACHER_OR_STUDENT" : "Du musst angeben, ob Du Schüler oder Lehrer bist.",
 	"MESSAGE_USER_EXISTS" : "Dieser Nutzer existiert bereits. Du musst einen anderen Account-Namen wählen.",
     "MESSAGE_USER_DELETE_ERROR" : "Der Nutzer konnte nicht gelöscht werden.",
+    "MESSAGE_USER_DELETED" : "Der Nutzer wurde gelöscht",
+    "MESSAGE_USER_CREATED" : "Der Nutzer wurde angelegt",
     "MESSAGE_LOGIN_ERROR" : "Du hast beim einloggen einen Fehler gemacht.",
     "MESSAGE_LOGOUT_ERROR" : "Beim ausloggen ist ein Fehler passiert.",
     "MESSAGE_SET_TOKEN_ERROR" : "Das Einstellen der Roboter-Kennung hat nicht funktioniert.",

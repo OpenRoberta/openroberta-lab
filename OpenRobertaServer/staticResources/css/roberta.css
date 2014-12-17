@@ -804,5 +804,15 @@ table.dataTable.no-footer {
 	margin-left: 45%;
 }
 
+#toastContainer {
+    float: left;
+    margin-left: 100px;
+    width: 500px;
+    height: 60px;
+    text-align: center;
+}
 
-
+#toast {
+    padding-top: 17px;
+    font-weight: bold;
+}

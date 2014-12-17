@@ -1,5 +1,6 @@
 var bricklyActive = false;
 var userState = {};
+var toastMessages = [];
 
 /**
  * Initialize user-state-object
@@ -42,6 +43,7 @@ function saveUserToServer() {
             "role" : 'TEACHER',
         }, function(result) {
             if (result.rc === "ok") {
+                queueToastMessage(Blockly.Msg.MESSAGE_USER_CREATED);
                 setRobotState(result);
                 $(".ui-dialog-content").dialog("close"); // close all opened popups
                 $('#accountNameS').val($userAccountName.val());
@@ -65,6 +67,7 @@ function deleteUserOnServer() {
         "password" : $pass1.val()
     }, function(result) {
         if (result.rc === "ok") {
+            queueToastMessage(Blockly.Msg.MESSAGE_USER_DELETED);
             logout();
             $(".ui-dialog-content").dialog("close"); // close all opened popups
         } else {
@@ -1264,6 +1267,38 @@ function initializeLanguages() {
     $('#setLangEn').onWrap('click', function() {
         switchLanguage('En', false);
     }, 'switch language to "En"');
+}
+
+/**
+ * Queue toast message
+ * 
+ * @param {message}
+ *            Message to be queued
+ */
+function queueToastMessage(message)
+{
+    toastMessages.unshift(message);
+    if (toastMessages.length === 1) {
+        displayToastMessages();
+    }
+}
+
+/**
+ * Display toast messages
+ */
+function displayToastMessages()
+{
+    $('#toast').text(toastMessages[toastMessages.length-1]);
+
+    $('#toastContainer').delay(100).fadeIn("slow", function()
+    {
+        $(this).delay(3000).fadeOut("slow", function() {
+            toastMessages.pop();
+            if (toastMessages.length > 0) {
+                displayToastMessages();
+            }
+        });
+    });
 }
 
 /**

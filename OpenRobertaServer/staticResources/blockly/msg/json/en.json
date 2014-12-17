@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2014-12-16 09:19:42.982000",
+		"lastupdated": "2014-12-17 10:33:41.565000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -587,6 +587,8 @@
 	"MESSAGE_PASSWORD_ERROR": "Something went wrong while you filled in the two passwords.",
 	"MESSAGE_USER_EXISTS": "This username already exists. Please choose another one.",
 	"MESSAGE_USER_DELETE_ERROR": "The user could not be deleted.",
+	"MESSAGE_USER_DELETED": "The user was successfully deleted",
+	"MESSAGE_USER_CREATED": "The user was successfully created",
 	"MESSAGE_LOGIN_ERROR": "There was an error while logging in.",
 	"MESSAGE_LOGOUT_ERROR": "There was an error while logging out.",
 	"MESSAGE_SET_TOKEN_ERROR": "The token for the roboter could not be set.",
