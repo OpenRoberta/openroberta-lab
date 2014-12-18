@@ -262,7 +262,8 @@ Blockly.Blocks['logic_compare'] = {
         this.setColourRGB(Blockly.CAT_LOGIC_RGB);
         this.setOutput(true, 'Boolean');
         this.appendValueInput('A');
-        this.appendValueInput('B').appendField(new Blockly.FieldDropdown(OPERATORS), 'OP');
+        this.appendDummyInput('OP_DROP').appendField(new Blockly.FieldDropdown(OPERATORS), 'OP')
+        this.appendValueInput('B');
         this.setInputsInline(true);
         // Assign 'this' to a variable for use in the tooltip closure below.
         var thisBlock = this;

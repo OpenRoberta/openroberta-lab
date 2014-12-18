@@ -28,16 +28,22 @@ Blockly.Blocks['robSensors_getSample'] = {
      */
     init : function() {
         this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
-        // this.setInputsInline(true);
         var sensorType = new Blockly.FieldDropdown([ [ Blockly.Msg.SENSOR_TOUCH + Blockly.Msg.SENSOR_PRESSED, 'TOUCH' ],
-                [ Blockly.Msg.SENSOR_ULTRASONIC, 'ULTRASONIC' ], [ Blockly.Msg.SENSOR_COLOUR, 'COLOUR' ], [ Blockly.Msg.SENSOR_INFRARED, 'INFRARED' ],
-                [ Blockly.Msg.SENSOR_ENCODER, 'ENCODER' ], [ Blockly.Msg.SENSOR_KEY + Blockly.Msg.SENSOR_PRESSED, 'KEYS_PRESSED' ],
-                [ Blockly.Msg.SENSOR_GYRO, 'GYRO' ], [ Blockly.Msg.SENSOR_TIME, 'TIME' ] ], function(option) {
+                [ Blockly.Msg.MODE_DISTANCE + ' ' + Blockly.Msg.SENSOR_ULTRASONIC, 'ULTRASONIC_DISTANCE' ],
+                [ Blockly.Msg.MODE_PRESENCE + ' ' + Blockly.Msg.SENSOR_ULTRASONIC, 'ULTRASONIC_PRESENCE' ],
+                [ Blockly.Msg.MODE_COLOUR + ' ' + Blockly.Msg.SENSOR_COLOUR, 'COLOUR_COLOUR' ],
+                [ Blockly.Msg.MODE_LIGHT + ' ' + Blockly.Msg.SENSOR_COLOUR, 'COLOUR_LIGHT' ],
+                [ Blockly.Msg.MODE_AMBIENTLIGHT + ' ' + Blockly.Msg.SENSOR_COLOUR, 'COLOUR_AMBIENTLIGHT' ],
+                [ Blockly.Msg.MODE_DISTANCE + ' ' + Blockly.Msg.SENSOR_INFRARED, 'INFRARED_DISTANCE' ],
+                [ Blockly.Msg.MODE_ROTATION + ' ' + Blockly.Msg.SENSOR_ENCODER, 'ENCODER_ROTATION' ],
+                [ Blockly.Msg.MODE_DEGREE + ' ' + Blockly.Msg.SENSOR_ENCODER, 'ENCODERMODE_DEGREE' ],
+                [ Blockly.Msg.SENSOR_KEY + ' ' + Blockly.Msg.SENSOR_PRESSED, 'KEYS_PRESSED' ],
+                [ Blockly.Msg.MODE_ANGLE + ' ' + Blockly.Msg.SENSOR_GYRO, 'GYRO_ANGLE' ],
+                [ Blockly.Msg.MODE_RATE + ' ' + Blockly.Msg.SENSOR_GYRO, 'GYRO_RATE' ], [ Blockly.Msg.SENSOR_TIME, 'TIME' ] ], function(option) {
             this.sourceBlock_.updateValue_(option);
         });
         var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
-        this.appendDummyInput('DROPDOWN').appendField(Blockly.Msg.SENSOR_GET_SAMPLE).appendField(sensorType, 'SENSORTYPE')
-                .appendField(sensorPort, 'SENSORPORT');
+        this.appendDummyInput('DROPDOWN').appendField(Blockly.Msg.GET).appendField(sensorType, 'SENSORTYPE').appendField(sensorPort, 'SENSORPORT');
         this.oldSensorType = 'TOUCH';
         this.newSensorType = null;
         this.update = false;
@@ -102,9 +108,17 @@ Blockly.Blocks['robSensors_getSample'] = {
     updateShape_ : function() {
         this.update = false;
         var sensorType = new Blockly.FieldDropdown([ [ Blockly.Msg.SENSOR_TOUCH + Blockly.Msg.SENSOR_PRESSED, 'TOUCH' ],
-                [ Blockly.Msg.SENSOR_ULTRASONIC, 'ULTRASONIC' ], [ Blockly.Msg.SENSOR_COLOUR, 'COLOUR' ], [ Blockly.Msg.SENSOR_INFRARED, 'INFRARED' ],
-                [ Blockly.Msg.SENSOR_ENCODER, 'ENCODER' ], [ Blockly.Msg.SENSOR_KEY + Blockly.Msg.SENSOR_PRESSED, 'KEYS_PRESSED' ],
-                [ Blockly.Msg.SENSOR_GYRO, 'GYRO' ], [ Blockly.Msg.SENSOR_TIME, 'TIME' ] ], function(option) {
+                [ Blockly.Msg.MODE_DISTANCE + ' ' + Blockly.Msg.SENSOR_ULTRASONIC, 'ULTRASONIC_DISTANCE' ],
+                [ Blockly.Msg.MODE_PRESENCE + ' ' + Blockly.Msg.SENSOR_ULTRASONIC, 'ULTRASONIC_PRESENCE' ],
+                [ Blockly.Msg.MODE_COLOUR + ' ' + Blockly.Msg.SENSOR_COLOUR, 'COLOUR_COLOUR' ],
+                [ Blockly.Msg.MODE_LIGHT + ' ' + Blockly.Msg.SENSOR_COLOUR, 'COLOUR_LIGHT' ],
+                [ Blockly.Msg.MODE_AMBIENTLIGHT + ' ' + Blockly.Msg.SENSOR_COLOUR, 'COLOUR_AMBIENTLIGHT' ],
+                [ Blockly.Msg.MODE_DISTANCE + ' ' + Blockly.Msg.SENSOR_INFRARED, 'INFRARED_DISTANCE' ],
+                [ Blockly.Msg.MODE_ROTATION + ' ' + Blockly.Msg.SENSOR_ENCODER, 'ENCODER_ROTATION' ],
+                [ Blockly.Msg.MODE_DEGREE + ' ' + Blockly.Msg.SENSOR_ENCODER, 'ENCODER_DEGREE' ],
+                [ Blockly.Msg.SENSOR_KEY + ' ' + Blockly.Msg.SENSOR_PRESSED, 'KEYS_PRESSED' ],
+                [ Blockly.Msg.MODE_ANGLE + ' ' + Blockly.Msg.SENSOR_GYRO, 'GYRO_ANGLE' ],
+                [ Blockly.Msg.MODE_RATE + ' ' + Blockly.Msg.SENSOR_GYRO, 'GYRO_RATE' ], [ Blockly.Msg.SENSOR_TIME, 'TIME' ] ], function(option) {
             this.sourceBlock_.updateValue_(option);
         });
         var key = new Blockly.FieldDropdown([ [ Blockly.Msg.SENSOR_KEY_ENTER, 'ENTER' ], [ Blockly.Msg.SENSOR_KEY_UP, 'UP' ],
@@ -115,51 +129,41 @@ Blockly.Blocks['robSensors_getSample'] = {
         var sensorNum = new Blockly.FieldDropdown([ [ Blockly.Msg.SENSOR_TIMER + ' 1', '1' ], [ Blockly.Msg.SENSOR_TIMER + ' 2', '2' ],
                 [ Blockly.Msg.SENSOR_TIMER + ' 3', '3' ], [ Blockly.Msg.SENSOR_TIMER + ' 4', '4' ], [ Blockly.Msg.SENSOR_TIMER + ' 5', '5' ] ]);
 
-        if (this.newSensorType == 'TOUCH') {
-            this.removeInput('DROPDOWN');
-            this.appendDummyInput('DROPDOWN').appendField(Blockly.Msg.SENSOR_GET_SAMPLE).appendField(sensorType, 'SENSORTYPE').appendField(sensorPort,
-                    'SENSORPORT');
-            this.appendValue_('BOOL');
-            sensorType.setValue('TOUCH');
-        } else if (this.newSensorType == 'ENCODER') {
-            this.removeInput('DROPDOWN');
-            this.appendDummyInput('DROPDOWN').appendField(Blockly.Msg.SENSOR_GET_SAMPLE).appendField(sensorType, 'SENSORTYPE').appendField(motorPort,
-                    'MOTORPORT');
-            this.appendValue_('NUM');
-            sensorType.setValue('ENCODER');
+        this.removeInput('DROPDOWN');
+        if (this.newSensorType == 'ENCODER_ROTATION') {
+            this.appendDummyInput('DROPDOWN').appendField(Blockly.Msg.GET).appendField(sensorType, 'SENSORTYPE').appendField(motorPort, 'MOTORPORT');
+            this.appendValue_('NUM_REV', 2);
+        } else if (this.newSensorType == 'ENCODER_DEGREE') {
+            this.appendDummyInput('DROPDOWN').appendField(Blockly.Msg.GET).appendField(sensorType, 'SENSORTYPE').appendField(motorPort, 'MOTORPORT');
+            this.appendValue_('NUM_REV', 180);
         } else if (this.newSensorType == 'KEYS_PRESSED') {
-            this.removeInput('DROPDOWN');
-            this.appendDummyInput('DROPDOWN').appendField(Blockly.Msg.SENSOR_GET_SAMPLE).appendField(sensorType, 'SENSORTYPE').appendField(key, 'KEY');
+            this.appendDummyInput('DROPDOWN').appendField(Blockly.Msg.GET).appendField(sensorType, 'SENSORTYPE').appendField(key, 'KEY');
             this.appendValue_('BOOL');
-            sensorType.setValue('KEYS_PRESSED');
         } else if (this.newSensorType == 'TIME') {
-            this.removeInput('DROPDOWN');
-            this.appendDummyInput('DROPDOWN').appendField(Blockly.Msg.SENSOR_GET_SAMPLE).appendField(sensorType, 'SENSORTYPE').appendField(sensorNum,
-                    'SENSORNUM');
-            this.appendValue_('NUM', 500);
-            sensorType.setValue('TIME');
+            this.appendDummyInput('DROPDOWN').appendField(Blockly.Msg.GET).appendField(sensorType, 'SENSORTYPE').appendField(sensorNum, 'SENSORNUM');
+            this.appendValue_('NUM_REV', 500);
         } else {
-            this.removeInput('DROPDOWN');
-            this.appendDummyInput('DROPDOWN').appendField(Blockly.Msg.SENSOR_GET_SAMPLE).appendField(sensorType, 'SENSORTYPE').appendField(sensorPort,
-                    'SENSORPORT');
-            if (this.newSensorType == 'GYRO') {
-                this.appendValue_('NUM', 90);
+            this.appendDummyInput('DROPDOWN').appendField(Blockly.Msg.GET).appendField(sensorType, 'SENSORTYPE').appendField(sensorPort, 'SENSORPORT');
+            if (this.newSensorType == 'TOUCH') {
+                this.appendValue_('BOOL');
+            } else if (this.newSensorType == 'GYRO_ANGLE' || this.newSensorType == 'GYRO_RATE') {
+                this.appendValue_('NUM_REV', 90);
                 sensorPort.setValue('2');
-                sensorType.setValue('GYRO');
-            } else if (this.newSensorType == 'ULTRASONIC') {
+            } else if (this.newSensorType == 'ULTRASONIC_DISTANCE' || this.newSensorType == 'ULTRASONIC_PRESENCE') {
                 this.appendValue_('NUM');
                 sensorPort.setValue('4');
-                sensorType.setValue('ULTRASONIC');
-            } else if (this.newSensorType == 'COLOUR') {
+            } else if (this.newSensorType == 'COLOUR_COLOUR') {
                 this.appendValue_('COLOUR');
                 sensorPort.setValue('3');
-                sensorType.setValue('COLOUR');
-            } else if (this.newSensorType == 'INFRARED') {
+            } else if (this.newSensorType == 'COLOUR_LIGHT' || this.newSensorType == 'COLOUR_AMBIENTLIGHT') {
+                this.appendValue_('NUM');
+                sensorPort.setValue('3');
+            } else if (this.newSensorType == 'INFRARED_DISTANCE') {
                 this.appendValue_('NUM');
                 sensorPort.setValue('4');
-                sensorType.setValue('INFRARED');
             }
         }
+        sensorType.setValue(this.newSensorType);
     },
 
     /**
@@ -168,24 +172,38 @@ Blockly.Blocks['robSensors_getSample'] = {
      * @this Blockly.Block
      */
     appendValue_ : function(type, value) {
-        if (!value)
-            var value = 30;
+        value = value || 30;
         var logComp = this.getParent();
         if (logComp && logComp.type != 'logic_compare')
             logComp = null;
         if (logComp) {
+            var OPERATORS;
             var valueB = logComp.getInput('B');
             valueB.connection.targetConnection.sourceBlock_.dispose();
+            logComp.removeInput('B');
+            logComp.removeInput('OP_DROP');
             var block = null;
             if (type == 'NUM') {
+                OPERATORS = Blockly.RTL ? [ [ '>', 'LT' ], [ '\u2265', 'LTE' ], [ '<', 'GT' ], [ '\u2264', 'GTE' ], [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ] : [
+                        [ '<', 'LT' ], [ '\u2264', 'LTE' ], [ '>', 'GT' ], [ '\u2265', 'GTE' ], [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ];
+                block = Blockly.Block.obtain(Blockly.mainWorkspace, 'math_number');
+                block.setFieldValue(value.toString(), 'NUM');
+            } else if (type == 'NUM_REV') {
+                OPERATORS = Blockly.RTL ? [ [ '<', 'GT' ], [ '\u2264', 'GTE' ], [ '>', 'LT' ], [ '\u2265', 'LTE' ], [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ] : [
+                        [ '>', 'GT' ], [ '\u2265', 'GTE' ], [ '<', 'LT' ], [ '\u2264', 'LTE' ], [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ];
                 block = Blockly.Block.obtain(Blockly.mainWorkspace, 'math_number');
                 block.setFieldValue(value.toString(), 'NUM');
             } else if (type == 'BOOL') {
+                var OPERATORS = Blockly.RTL ? [ [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ] : [ [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ];
                 block = Blockly.Block.obtain(Blockly.mainWorkspace, 'logic_boolean');
             } else {
+                OPERATORS = Blockly.RTL ? [ [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ] : [ [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ];
                 block = Blockly.Block.obtain(Blockly.mainWorkspace, 'robColour_picker');
                 block.setFieldValue('#b30006', 'COLOUR')
             }
+            logComp.appendDummyInput('OP_DROP').appendField(new Blockly.FieldDropdown(OPERATORS), 'OP')
+            logComp.appendValueInput('B');
+            valueB = logComp.getInput('B');
             block.initSvg();
             block.render();
             valueB.connection.connect(block.outputConnection);
@@ -241,65 +259,14 @@ Blockly.Blocks['robSensors_key_isPressed'] = {
     }
 };
 
-Blockly.Blocks['robSensors_ultrasonic_setMode'] = {
-    /**
-     * Set the mode of the ultrasonic sensor.
-     * 
-     * @constructs robSensors_ultrasonic_setMode
-     * @this.Blockly.Block
-     * @param {String/dropdown}
-     *            SENSORPORT - 1, 2, 3 or 4
-     * @param {String/dropdown}
-     *            MODE - Distance or Presence
-     * @returns immediately
-     * @memberof Block
-     */
-
-    init : function() {
-        this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
-        // this.setInputsInline(true);
-        var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
-        var mode = new Blockly.FieldDropdown([ [ Blockly.Msg.MODE_DISTANCE, 'DISTANCE' ], [ Blockly.Msg.MODE_PRESENCE, 'PRESENCE' ] ]);
-        this.appendDummyInput().appendField(Blockly.Msg.SENSOR_SET_MODE).appendField(Blockly.Msg.SENSOR_ULTRASONIC).appendField(sensorPort, 'SENSORPORT')
-                .appendField(mode, 'MODE');
-        this.setPreviousStatement(true);
-        this.setNextStatement(true);
-        this.setTooltip(Blockly.Msg.ULTRASONIC_SETMODE_TOOLTIP);
-    }
-};
-
-Blockly.Blocks['robSensors_ultrasonic_getMode'] = {
-    /**
-     * Get the mode of the ultrasonic sensor.
-     * 
-     * @constructs robSensors_ultrasonic_getMode
-     * @this.Blockly.Block
-     * @param {String/dropdown}
-     *            SENSORPORT - 1, 2, 3 or 4
-     * @returns immediately
-     * @returns {Number} Possible modes are: <br>
-     *          0 - distance mode in cm <br>
-     *          2 - listen mode
-     * 
-     * @memberof Block
-     */
-    /** @todo check mode outputs */
-    init : function() {
-        this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
-        // this.setInputsInline(true);
-        var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
-        this.appendDummyInput().appendField(Blockly.Msg.SENSOR_GET_MODE).appendField(Blockly.Msg.SENSOR_ULTRASONIC).appendField(sensorPort, 'SENSORPORT');
-        this.setOutput(true, 'Number');
-        this.setTooltip(Blockly.Msg.ULTRASONIC_GETMODE_TOOLTIP);
-    }
-};
-
 Blockly.Blocks['robSensors_ultrasonic_getSample'] = {
     /**
-     * Get the current reading from the ultrasonic sensor.
+     * Get the current distance from the ultrasonic sensor.
      * 
-     * @constructs robSensors_ultrasonic_getSample
+     * @constructs robSensors_ultrasonic_getDistance
      * @this.Blockly.Block
+     * @param {String/dropdown}
+     *            MODE - Distance or Presence
      * @param {String/dropdown}
      *            SENSORPORT - 1, 2, 3 or 4
      * @returns immediately
@@ -308,65 +275,12 @@ Blockly.Blocks['robSensors_ultrasonic_getSample'] = {
      */
     init : function() {
         this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
-        // this.setInputsInline(true);
         var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
-        this.appendDummyInput().appendField(Blockly.Msg.SENSOR_GET_SAMPLE).appendField(Blockly.Msg.SENSOR_ULTRASONIC).appendField(sensorPort, 'SENSORPORT');
+        var mode = new Blockly.FieldDropdown([ [ Blockly.Msg.MODE_DISTANCE, 'DISTANCE' ], [ Blockly.Msg.MODE_PRESENCE, 'PRESENCE' ] ]);
+        this.appendDummyInput().appendField(Blockly.Msg.GET).appendField(mode, 'MODE').appendField(Blockly.Msg.SENSOR_ULTRASONIC).appendField(sensorPort,
+                'SENSORPORT');
         this.setOutput(true, 'Number');
         this.setTooltip(Blockly.Msg.ULTRASONIC_GETSAMPLE_TOOLTIP);
-    }
-};
-
-Blockly.Blocks['robSensors_colour_setMode'] = {
-    /**
-     * Set the mode of the colour sensor.
-     * 
-     * @constructs robSensors_colour_setMode
-     * @this.Blockly.Block
-     * @param {String/dropdown}
-     *            SENSORPORT - 1, 2, 3 or 4
-     * @param {String/dropdown}
-     *            MODE - Colour, Light or Ambient light
-     * @returns immediately
-     * @memberof Block
-     */
-    init : function() {
-        this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
-        // this.setInputsInline(true);
-        var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
-        var mode = new Blockly.FieldDropdown([ [ Blockly.Msg.MODE_COLOUR, 'COLOUR' ], [ Blockly.Msg.MODE_LIGHT, 'RED' ], [ Blockly.Msg.MODE_RGB, 'RGB' ],
-                [ Blockly.Msg.MODE_AMBIENTLIGHT, 'AMBIENTLIGHT' ] ]);
-        this.appendDummyInput().appendField(Blockly.Msg.SENSOR_SET_MODE).appendField(Blockly.Msg.SENSOR_COLOUR).appendField(sensorPort, 'SENSORPORT')
-                .appendField(mode, 'MODE');
-        this.setPreviousStatement(true);
-        this.setNextStatement(true);
-        this.setTooltip(Blockly.Msg.COLOUR_SETMODE_TOOLTIP);
-    }
-};
-
-Blockly.Blocks['robSensors_colour_getMode'] = {
-    /**
-     * Get the mode of the colour sensor.
-     * 
-     * @constructs robSensors_colour_getMode
-     * @this.Blockly.Block
-     * @param {String/dropdown}
-     *            SENSORPORT - 1, 2, 3 or 4
-     * @returns immediately
-     * @returns {Number} Possible modes are: <br>
-     *          0 - colour mode <br>
-     *          1 - light mode <br>
-     *          2 - ambient light mode
-     * 
-     * @memberof Block
-     */
-
-    init : function() {
-        this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
-        // this.setInputsInline(true);
-        var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
-        this.appendDummyInput().appendField(Blockly.Msg.SENSOR_GET_MODE).appendField(Blockly.Msg.SENSOR_COLOUR).appendField(sensorPort, 'SENSORPORT');
-        this.setOutput(true, 'Number');
-        this.setTooltip(Blockly.Msg.COLOUR_GETMODE_TOOLTIP);
     }
 };
 
@@ -376,6 +290,8 @@ Blockly.Blocks['robSensors_colour_getSample'] = {
      * 
      * @constructs robSensors_colour_getSample
      * @this.Blockly.Block
+     * @param {String/dropdown}
+     *            MODE - Colour, Light or Ambient light
      * @param {String/dropdown}
      *            SENSORPORT - 1, 2, 3 or 4
      * @returns immediately
@@ -387,63 +303,13 @@ Blockly.Blocks['robSensors_colour_getSample'] = {
 
     init : function() {
         this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
-        // this.setInputsInline(true);
+        var mode = new Blockly.FieldDropdown([ [ Blockly.Msg.MODE_COLOUR, 'COLOUR' ], [ Blockly.Msg.MODE_LIGHT, 'RED' ], [ Blockly.Msg.MODE_RGB, 'RGB' ],
+                [ Blockly.Msg.MODE_AMBIENTLIGHT, 'AMBIENTLIGHT' ] ]);
         var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
-        this.appendDummyInput().appendField(Blockly.Msg.SENSOR_GET_SAMPLE).appendField(Blockly.Msg.SENSOR_COLOUR).appendField(sensorPort, 'SENSORPORT');
+        this.appendDummyInput().appendField(Blockly.Msg.GET).appendField(mode, 'MODE').appendField(Blockly.Msg.SENSOR_COLOUR).appendField(sensorPort,
+                'SENSORPORT');
         this.setOutput(true, [ 'Number', 'Colour' ]);
         this.setTooltip(Blockly.Msg.COLOUR_GETSAMPLE_TOOLTIP);
-    }
-};
-
-Blockly.Blocks['robSensors_infrared_setMode'] = {
-    /**
-     * Set the mode of the infrared sensor.
-     * 
-     * @constructs robSensors_infrared_setMode
-     * @this.Blockly.Block
-     * @param {String/dropdown}
-     *            SENSORPORT - 1, 2, 3 or 4
-     * @param {String/dropdown}
-     *            MODE - Distance or Seek
-     * @returns immediately
-     * @memberof Block
-     */
-
-    init : function() {
-        this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
-        // this.setInputsInline(true);
-        var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
-        var mode = new Blockly.FieldDropdown([ [ Blockly.Msg.MODE_DISTANCE, 'DISTANCE' ], [ Blockly.Msg.MODE_PRESENCE, 'SEEK' ] ]);
-        this.appendDummyInput().appendField(Blockly.Msg.SENSOR_SET_MODE).appendField(Blockly.Msg.SENSOR_INFRARED).appendField(sensorPort, 'SENSORPORT')
-                .appendField(mode, 'MODE');
-        this.setPreviousStatement(true);
-        this.setNextStatement(true);
-        this.setTooltip(Blockly.Msg.INFRARED_SETMODE_TOOLTIP);
-    }
-};
-
-Blockly.Blocks['robSensors_infrared_getMode'] = {
-    /**
-     * Get the mode of the infrared sensor.
-     * 
-     * @constructs robSensors_infrared_getMode
-     * @this.Blockly.Block
-     * @param {String/dropdown}
-     *            SENSORPORT - 1, 2, 3 or 4
-     * @returns immediately
-     * @returns {Number} Possible modes are: <br>
-     *          0 - distance relative <br>
-     *          1 - seek mode
-     * @memberof Block
-     */
-
-    init : function() {
-        this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
-        // this.setInputsInline(true);
-        var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
-        this.appendDummyInput().appendField(Blockly.Msg.SENSOR_GET_MODE).appendField(Blockly.Msg.SENSOR_INFRARED).appendField(sensorPort, 'SENSORPORT');
-        this.setOutput(true, 'Number');
-        this.setTooltip(Blockly.Msg.INFRARED_GETMODE_TOOLTIP);
     }
 };
 
@@ -454,6 +320,8 @@ Blockly.Blocks['robSensors_infrared_getSample'] = {
      * @constructs robSensors_infrared_getSample
      * @this.Blockly.Block
      * @param {String/dropdown}
+     *            MODE - Distance or Seek
+     * @param {String/dropdown}
      *            SENSORPORT - 1, 2, 3 or 4
      * @returns immediately
      * @returns {Number}
@@ -462,64 +330,12 @@ Blockly.Blocks['robSensors_infrared_getSample'] = {
 
     init : function() {
         this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
-        // this.setInputsInline(true);
+        var mode = new Blockly.FieldDropdown([ [ Blockly.Msg.MODE_DISTANCE, 'DISTANCE' ], [ Blockly.Msg.MODE_PRESENCE, 'SEEK' ] ]);
         var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
-        this.appendDummyInput().appendField(Blockly.Msg.SENSOR_GET_SAMPLE).appendField(Blockly.Msg.SENSOR_INFRARED).appendField(sensorPort, 'SENSORPORT');
+        this.appendDummyInput().appendField(Blockly.Msg.GET).appendField(mode, 'MODE').appendField(Blockly.Msg.SENSOR_INFRARED).appendField(sensorPort,
+                'SENSORPORT');
         this.setOutput(true, 'Number');
         this.setTooltip(Blockly.Msg.INFRARED_GETSAMPLE_TOOLTIP);
-    }
-};
-
-Blockly.Blocks['robSensors_encoder_setMode'] = {
-    /**
-     * Set the mode of the motor encoder.
-     * 
-     * @constructs robSensors_encoder_setMode
-     * @this.Blockly.Block
-     * @param {String/dropdown}
-     *            MOTORPORT - A, B, C or D
-     * @param {String/dropdown}
-     *            MODE - Rotation or Degree
-     * @returns immediately
-     * @memberof Block
-     */
-
-    init : function() {
-        this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
-        // this.setInputsInline(true);
-        var motorport = new Blockly.FieldDropdown([ [ 'A', 'A' ], [ 'B', 'B' ], [ 'C', 'C' ], [ 'D', 'D' ] ]);
-        var mode = new Blockly.FieldDropdown([ [ Blockly.Msg.MODE_ROTATION, 'ROTATION' ], [ Blockly.Msg.MODE_DEGREE, 'DEGREE' ] ]);
-        this.appendDummyInput().appendField(Blockly.Msg.SENSOR_SET_MODE).appendField(Blockly.Msg.SENSOR_ENCODER).appendField(motorport, 'MOTORPORT')
-                .appendField(mode, 'MODE');
-        this.setPreviousStatement(true);
-        this.setNextStatement(true);
-        this.setTooltip(Blockly.Msg.ENCODER_SETMODE_TOOLTIP);
-    }
-};
-
-Blockly.Blocks['robSensors_encoder_getMode'] = {
-    /**
-     * Get the mode of the motor encoder.
-     * 
-     * @constructs robSensors_encoder_getMode
-     * @this.Blockly.Block
-     * @param {String/dropdown}
-     *            MOTORPORT - A, B, C or D
-     * @returns immediately
-     * @returns {Number} Possible modes are: <br>
-     *          0 - rotation <br>
-     *          1 - degree
-     * 
-     * @memberof Block
-     */
-
-    init : function() {
-        this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
-        var motorport = new Blockly.FieldDropdown([ [ 'A', 'A' ], [ 'B', 'B' ], [ 'C', 'C' ], [ 'D', 'D' ] ]);
-        // this.setInputsInline(true);
-        this.appendDummyInput().appendField(Blockly.Msg.SENSOR_GET_MODE).appendField(Blockly.Msg.SENSOR_ENCODER).appendField(motorport, 'MOTORPORT');
-        this.setOutput(true, 'Number');
-        this.setTooltip(Blockly.Msg.ENCODER_GETMODE_TOOLTIP);
     }
 };
 
@@ -554,6 +370,8 @@ Blockly.Blocks['robSensors_encoder_getSample'] = {
      * @constructs robSensors_encoder_getSample
      * @this.Blockly.Block
      * @param {String/dropdown}
+     *            MODE - Rotation or Degree
+     * @param {String/dropdown}
      *            MOTORPORT - A, B, C or D
      * @returns immediately
      * @returns {Number}
@@ -562,63 +380,12 @@ Blockly.Blocks['robSensors_encoder_getSample'] = {
 
     init : function() {
         this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
+        var mode = new Blockly.FieldDropdown([ [ Blockly.Msg.MODE_ROTATION, 'ROTATION' ], [ Blockly.Msg.MODE_DEGREE, 'DEGREE' ] ]);
         var motorport = new Blockly.FieldDropdown([ [ 'A', 'A' ], [ 'B', 'B' ], [ 'C', 'C' ], [ 'D', 'D' ] ]);
-        // this.setInputsInline(true);
-        this.appendDummyInput().appendField(Blockly.Msg.SENSOR_GET_SAMPLE).appendField(Blockly.Msg.SENSOR_ENCODER).appendField(motorport, 'MOTORPORT');
+        this.appendDummyInput().appendField(Blockly.Msg.GET).appendField(mode, 'MODE').appendField(Blockly.Msg.SENSOR_ENCODER).appendField(motorport,
+                'MOTORPORT');
         this.setOutput(true, 'Number');
         this.setTooltip(Blockly.Msg.ENCODER_GETSAMPLE_TOOLTIP);
-    }
-};
-
-Blockly.Blocks['robSensors_gyro_setMode'] = {
-    /**
-     * Set the mode of the gyro sensor.
-     * 
-     * @constructs robSensors_gyro_setMode
-     * @this.Blockly.Block
-     * @param {String/dropdown}
-     *            SENSORPORT - 1, 2, 3 or 4
-     * @param {String/dropdown}
-     *            MODE - Angle or Rate
-     * @returns immediately
-     * @memberof Block
-     */
-
-    init : function() {
-        this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
-        // this.setInputsInline(true);
-        var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
-        var mode = new Blockly.FieldDropdown([ [ Blockly.Msg.MODE_ANGLE, 'ANGLE' ], [ Blockly.Msg.MODE_RATE, 'RATE' ] ]);
-        this.appendDummyInput().appendField(Blockly.Msg.SENSOR_SET_MODE).appendField(Blockly.Msg.SENSOR_GYRO).appendField(sensorPort, 'SENSORPORT')
-                .appendField(mode, 'MODE');
-        this.setPreviousStatement(true);
-        this.setNextStatement(true);
-        this.setTooltip(Blockly.Msg.GYRO_SETMODE_TOOLTIP);
-    }
-};
-
-Blockly.Blocks['robSensors_gyro_getMode'] = {
-    /**
-     * Get the mode of the gyro sensor.
-     * 
-     * @constructs robSensors_gyro_getMode
-     * @this.Blockly.Block
-     * @param {String/dropdown}
-     *            SENSORPORT - 1, 2, 3 or 4
-     * @returns immediately
-     * @returns {Number} Possible modes are: <br>
-     *          0 - degree <br>
-     *          1 - rate deg/sec
-     * @memberof Block
-     */
-
-    init : function() {
-        this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
-        // this.setInputsInline(true);
-        var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
-        this.appendDummyInput().appendField(Blockly.Msg.SENSOR_GET_MODE).appendField(Blockly.Msg.SENSOR_GYRO).appendField(sensorPort, 'SENSORPORT');
-        this.setOutput(true, 'Number');
-        this.setTooltip(Blockly.Msg.GYRO_GETMODE_TOOLTIP);
     }
 };
 
@@ -653,6 +420,8 @@ Blockly.Blocks['robSensors_gyro_getSample'] = {
      * @constructs robSensors_gyro_getSample
      * @this.Blockly.Block
      * @param {String/dropdown}
+     *            MODE - Angle or Rate
+     * @param {String/dropdown}
      *            SENSORPORT - 1, 2, 3 or 4
      * @returns immediately
      * @returns {Number}
@@ -662,8 +431,9 @@ Blockly.Blocks['robSensors_gyro_getSample'] = {
     init : function() {
         this.setColourRGB(Blockly.CAT_ROBSENSORS_RGB);
         var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
-        // this.setInputsInline(true);
-        this.appendDummyInput().appendField(Blockly.Msg.SENSOR_GET_SAMPLE).appendField(Blockly.Msg.SENSOR_GYRO).appendField(sensorPort, 'SENSORPORT');
+        var mode = new Blockly.FieldDropdown([ [ Blockly.Msg.MODE_ANGLE, 'ANGLE' ], [ Blockly.Msg.MODE_RATE, 'RATE' ] ]);
+        this.appendDummyInput().appendField(Blockly.Msg.GET).appendField(mode, 'MODE').appendField(Blockly.Msg.SENSOR_GYRO).appendField(sensorPort,
+                'SENSORPORT');
         this.setOutput(true, 'Number');
         this.setTooltip(Blockly.Msg.GYRO_GETSAMPLE_TOOLTIP);
     }

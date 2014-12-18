@@ -170,10 +170,9 @@ public class Templates {
 				+ "    </block> " + "    <block type='robColour_picker'> "
 				+ "      <field name='COLOUR'>#532115</field> "
 				+ "    </block> " + "  </category> "
-				// + "  <category name='Variablen' custom='VARIABLE'/> "
-				+ "  <category name='Variablen'/> "
-				// + "  <category name='Funktionen' custom='PROCEDURE'/> "
-				+ "  <category name='Funktionen'/> " + "</toolbox_set> ";
+				+ "  <category name='Variablen' custom='VARIABLE'/> "
+				+ "  <category name='Funktionen' custom='PROCEDURE'/> "
+				+ "</toolbox_set> ";
 		String expert = ""
 				+ " <toolbox_set id='toolbox' style='display: none'> "
 				+ "  <category name='Aktion'> "
@@ -318,66 +317,24 @@ public class Templates {
 				+ "    <block type='robActions_brickLight_on'></block>" //
 				+ "    <block type='robActions_brickLight_off'></block>" //
 				+ "    <block type='robActions_brickLight_reset'></block>" //
-				+ "  </category> "
-				+ "  </category> "
+				+ "  </category> " + "  </category> "
 				+ "  <category name='Sensoren'> "
-				+ "    <category name='Berührungssensor'> "
 				+ "      <block type='robSensors_touch_isPressed'>"
-				+ "      </block>"
-				+ "    </category> "
-				+ "    <category name='Ultraschallsensor'> "
-				+ "      <block type='robSensors_ultrasonic_setMode'> "
-				+ "        <field name='SENSORPORT'>4</field> "
-				+ "      </block>"
-				+ "      <block type='robSensors_ultrasonic_getMode'>"
-				+ "        <field name='SENSORPORT'>4</field> "
 				+ "      </block>"
 				+ "      <block type='robSensors_ultrasonic_getSample'>"
 				+ "        <field name='SENSORPORT'>4</field> "
 				+ "      </block>"
-				+ "    </category> "
-				+ "    <category name='Farbsensor'> "
-				+ "      <block type='robSensors_colour_setMode'>"
-				+ "        <field name='SENSORPORT'>3</field> "
-				+ "      </block>"
-				+ "      <block type='robSensors_colour_getMode'>"
-				+ "        <field name='SENSORPORT'>3</field> "
-				+ "      </block>"
 				+ "      <block type='robSensors_colour_getSample'>"
 				+ "        <field name='SENSORPORT'>3</field> "
 				+ "      </block>"
-				+ "    </category> "
-				+ "    <category name='Infrarotsensor'> "
-				+ "      <block type='robSensors_infrared_setMode'>"
-				+ "        <field name='SENSORPORT'>4</field> "
-				+ "      </block>"
-				+ "      <block type='robSensors_infrared_getMode'>"
-				+ "        <field name='SENSORPORT'>4</field> "
-				+ "      </block>"
 				+ "      <block type='robSensors_infrared_getSample'>"
 				+ "        <field name='SENSORPORT'>4</field> "
-				+ "      </block>"
-				+ "    </category> "
-				+ "    <category name='Drehsensor'> "
-				+ "      <block type='robSensors_encoder_setMode'>"
-				+ "      </block>"
-				+ "      <block type='robSensors_encoder_getMode'>"
 				+ "      </block>"
 				+ "      <block type='robSensors_encoder_reset'>"
 				+ "      </block>"
 				+ "      <block type='robSensors_encoder_getSample'>"
 				+ "      </block>"
-				+ "    </category> "
-				+ "    <category name='Steintasten'> "
 				+ "      <block type='robSensors_key_isPressed'>"
-				+ "      </block>"
-				+ "    </category> "
-				+ "    <category name='Kreiselsensor'> "
-				+ "      <block type='robSensors_gyro_setMode'>"
-				+ "        <field name='SENSORPORT'>2</field> "
-				+ "      </block>"
-				+ "      <block type='robSensors_gyro_getMode'>"
-				+ "        <field name='SENSORPORT'>2</field> "
 				+ "      </block>"
 				+ "      <block type='robSensors_gyro_reset'>"
 				+ "        <field name='SENSORPORT'>2</field> "
@@ -385,17 +342,12 @@ public class Templates {
 				+ "      <block type='robSensors_gyro_getSample'>"
 				+ "        <field name='SENSORPORT'>2</field> "
 				+ "      </block>"
-				+ "    </category> "
-				+ "    <category name='Zeitgeber'> "
 				+ "      <block type='robSensors_timer_getSample'>"
 				+ "      </block>"
 				+ "      <block type='robSensors_timer_reset'>"
-				+ "      </block>"
-				+ "    </category> "
-				+ "  </category> "
+				+ "      </block>" + "  </category> "
 				+ "  <category name='Kontrolle'> "
 				+ "    <category name='Entscheidung'> "
-				// + "      <block type='controls_if'/> "
 				+ "      <block type='robControls_if'/> "
 				+ "      <block type='robControls_ifElse'/> "
 				+ "    </category> " + "    <category name='Schleifen'> "
@@ -423,6 +375,12 @@ public class Templates {
 				+ "      <block type='controls_flow_statements'/> "
 				+ "    </category> " + "    <category name='Warten'> "
 				+ "      <block type='robControls_wait'> " + "      </block> "
+				+ "      <block type='robControls_wait_time'> "
+				+ "        <value name='WAIT'> "
+				+ "          <block type='math_number'> "
+				+ "            <field name='NUM'>500</field> "
+				+ "          </block> " + "        </value> "
+				+ "      </block> "
 				+ "      <block type='robControls_wait_for'> "
 				+ "        <value name='WAIT0'> "
 				+ "          <block type='logic_compare'> "
@@ -435,21 +393,18 @@ public class Templates {
 				+ "          </block> " + "        </value> "
 				+ "      </block> " + "    </category> "
 				+ "    <category name='Tasks'> "
-				/*
-				 * + "      <block type='robControls_activity'> " +
-				 * "        <value name='ACTIVITY'> " +
-				 * "          <block type='variables_get'> " +
-				 * "            <field name='VAR'>zwei</field> " +
-				 * "          </block> " + "        </value> " +
-				 * "      </block> " +
-				 * "      <block type='robControls_start_activity'> " +
-				 * "        <value name='ACTIVITY'> " +
-				 * "          <block type='variables_get'> " +
-				 * "            <field name='VAR'>zwei</field> " +
-				 * "          </block> " + "        </value> " +
-				 * "      </block> "
-				 */
-				+ "    </category> " + "  </category> "
+				+ "      <block type='robControls_activity'> "
+				+ "        <value name='ACTIVITY'> "
+				+ "          <block type='variables_get'> "
+				+ "            <field name='VAR'>zwei</field> "
+				+ "          </block> " + "        </value> "
+				+ "      </block> "
+				+ "      <block type='robControls_start_activity'> "
+				+ "        <value name='ACTIVITY'> "
+				+ "          <block type='variables_get'> "
+				+ "            <field name='VAR'>zwei</field> "
+				+ "          </block> " + "        </value> "
+				+ "      </block> " + "    </category> " + "  </category> "
 				+ "  <category name='Logik'> "
 				+ "    <block type='logic_compare'/> "
 				+ "    <block type='logic_operation'/> "
@@ -460,106 +415,79 @@ public class Templates {
 				+ "  <category name='Mathematik'> "
 				+ "    <block type='math_number'/> "
 				+ "    <block type='math_arithmetic'/> "
-				/*
-				 * + "    <block type='math_single'/> " +
-				 * "    <block type='math_trig'/> " +
-				 * "    <block type='math_constant'/> " +
-				 * "    <block type='math_number_property'/> " +
-				 * "    <block type='math_change'> " +
-				 * "      <value name='DELTA'> " +
-				 * "        <block type='math_number'> " +
-				 * "          <field name='NUM'>1</field> " +
-				 * "        </block> " + "      </value> " + "    </block> " +
-				 * "    <block type='math_round'/> " +
-				 * "    <block type='math_on_list'/> " +
-				 * "    <block type='math_modulo'/> " +
-				 * "    <block type='math_constrain'> " +
-				 * "      <value name='LOW'> " +
-				 * "        <block type='math_number'> " +
-				 * "          <field name='NUM'>1</field> " +
-				 * "        </block> " + "      </value> " +
-				 * "      <value name='HIGH'> " +
-				 * "        <block type='math_number'> " +
-				 * "          <field name='NUM'>100</field> " +
-				 * "        </block> " + "      </value> " + "    </block> " +
-				 * "    <block type='math_random_int'> " +
-				 * "      <value name='FROM'> " +
-				 * "        <block type='math_number'> " +
-				 * "          <field name='NUM'>1</field> " +
-				 * "        </block> " + "      </value> " +
-				 * "      <value name='TO'> " +
-				 * "        <block type='math_number'> " +
-				 * "          <field name='NUM'>100</field> " +
-				 * "        </block> " + "      </value> " + "    </block> " +
-				 * "    <block type='math_random_float'/> "
-				 */
-				+ "  </category> " + "  <category name='Text'> "
-				+ "    <block type='text'/> "
-				/*
-				 * + "    <block type='robText_join'/> " +
-				 * "    <block type='text_append'> " +
-				 * "      <value name='TEXT'> " +
-				 * "        <block type='text'/> " + "      </value> " +
-				 * "    </block> " + "    <block type='text_length'/> " +
-				 * "    <block type='text_isEmpty'/> " +
-				 * "    <block type='text_indexOf'> " +
-				 * "      <value name='VALUE'> " +
-				 * "        <block type='variables_get'> " +
-				 * "          <field name='VAR'>text</field> " +
-				 * "        </block> " + "      </value> " + "    </block> " +
-				 * "    <block type='text_charAt'> " +
-				 * "      <value name='VALUE'> " +
-				 * "        <block type='variables_get'> " +
-				 * "          <field name='VAR'>text</field> " +
-				 * "        </block> " + "      </value> " + "    </block> " +
-				 * "    <block type='text_getSubstring'> " +
-				 * "      <value name='STRING'> " +
-				 * "        <block type='variables_get'> " +
-				 * "          <field name='VAR'>text</field> " +
-				 * "        </block> " + "      </value> " + "    </block> " +
-				 * "    <block type='text_changeCase'/> " +
-				 * "    <block type='text_trim'/> " +
-				 * "    <block type='text_prompt'/> "
-				 */
-				+ "  </category> " + "  <category name='Listen'> "
-				/*
-				 * + "    <block type='lists_create_empty'/> " +
-				 * "    <block type='robLists_create_with'/> " +
-				 * "    <block type='lists_repeat'> " +
-				 * "      <value name='NUM'> " +
-				 * "        <block type='math_number'> " +
-				 * "          <field name='NUM'>5</field> " +
-				 * "        </block> " + "      </value> " + "    </block> " +
-				 * "    <block type='lists_length'/> " +
-				 * "    <block type='lists_isEmpty'/> " +
-				 * "    <block type='lists_indexOf'> " +
-				 * "      <value name='VALUE'> " +
-				 * "        <block type='variables_get'> " +
-				 * "          <field name='VAR'>liste</field> " +
-				 * "        </block> " + "      </value> " + "    </block> " +
-				 * "    <block type='lists_getIndex'> " +
-				 * "      <value name='VALUE'> " +
-				 * "        <block type='variables_get'> " +
-				 * "          <field name='VAR'>liste</field> " +
-				 * "        </block> " + "      </value> " + "    </block> " +
-				 * "    <block type='lists_setIndex'> " +
-				 * "      <value name='LIST'> " +
-				 * "        <block type='variables_get'> " +
-				 * "          <field name='VAR'>liste</field> " +
-				 * "        </block> " + "      </value> " + "    </block> " +
-				 * "    <block type='lists_getSublist'> " +
-				 * "      <value name='LIST'> " +
-				 * "        <block type='variables_get'> " +
-				 * "          <field name='VAR'>liste</field> " +
-				 * "        </block> " + "      </value> " + "    </block> "
-				 */
+				+ "    <block type='math_single'/> "
+				+ "    <block type='math_trig'/> "
+				+ "    <block type='math_constant'/> "
+				+ "    <block type='math_number_property'/> "
+				+ "    <block type='math_change'> "
+				+ "      <value name='DELTA'> "
+				+ "        <block type='math_number'> "
+				+ "          <field name='NUM'>1</field> "
+				+ "        </block> " + "      </value> " + "    </block> "
+				+ "    <block type='math_round'/> "
+				+ "    <block type='math_on_list'/> "
+				+ "    <block type='math_modulo'/> "
+				+ "    <block type='math_constrain'> "
+				+ "      <value name='LOW'> "
+				+ "        <block type='math_number'> "
+				+ "          <field name='NUM'>1</field> "
+				+ "        </block> " + "      </value> "
+				+ "      <value name='HIGH'> "
+				+ "        <block type='math_number'> "
+				+ "          <field name='NUM'>100</field> "
+				+ "        </block> " + "      </value> " + "    </block> "
+				+ "    <block type='math_random_int'> "
+				+ "      <value name='FROM'> "
+				+ "        <block type='math_number'> "
+				+ "          <field name='NUM'>1</field> "
+				+ "        </block> " + "      </value> "
+				+ "      <value name='TO'> "
+				+ "        <block type='math_number'> "
+				+ "          <field name='NUM'>100</field> "
+				+ "        </block> " + "      </value> " + "    </block> "
+				+ "    <block type='math_random_float'/> " + "  </category> "
+				+ "  <category name='Text'> " + "    <block type='text'/> "
+				+ "    <block type='robText_join'/> "
+				+ "    <block type='text_append'> "
+				+ "      <value name='TEXT'> "
+				+ "        <block type='text'/> " + "      </value> "
+				+ "    </block> " + "  </category> "
+				+ "  <category name='Listen'> "
+				+ "    <block type='lists_create_empty'/> "
+				+ "    <block type='robLists_create_with'/> "
+				+ "    <block type='lists_repeat'> "
+				+ "      <value name='NUM'> "
+				+ "        <block type='math_number'> "
+				+ "          <field name='NUM'>5</field> "
+				+ "        </block> " + "      </value> " + "    </block> "
+				+ "    <block type='lists_length'/> "
+				+ "    <block type='lists_isEmpty'/> "
+				+ "    <block type='lists_indexOf'> "
+				+ "      <value name='VALUE'> "
+				+ "        <block type='variables_get'> "
+				+ "          <field name='VAR'>liste</field> "
+				+ "        </block> " + "      </value> " + "    </block> "
+				+ "    <block type='lists_getIndex'> "
+				+ "      <value name='VALUE'> "
+				+ "        <block type='variables_get'> "
+				+ "          <field name='VAR'>liste</field> "
+				+ "        </block> " + "      </value> " + "    </block> "
+				+ "    <block type='lists_setIndex'> "
+				+ "      <value name='LIST'> "
+				+ "        <block type='variables_get'> "
+				+ "          <field name='VAR'>liste</field> "
+				+ "        </block> " + "      </value> " + "    </block> "
+				+ "    <block type='lists_getSublist'> "
+				+ "      <value name='LIST'> "
+				+ "        <block type='variables_get'> "
+				+ "          <field name='VAR'>liste</field> "
+				+ "        </block> " + "      </value> " + "    </block> "
 				+ "  </category> " + "  <category name='Farben'> "
 				+ "    <block type='robColour_picker'> " + "    </block> "
 				+ "  </category> "
-				// + "  <category name='Variablen' custom='VARIABLE'/> "
-				+ "  <category name='Variablen'/> "
-				// + "  <category name='Funktionen' custom='PROCEDURE'/> "
-				+ "  <category name='Funktionen'/> " + "</toolbox_set> ";
+				+ "  <category name='Variablen' custom='VARIABLE'/> "
+				+ "  <category name='Funktionen' custom='PROCEDURE'/> "
+				+ "</toolbox_set> ";
 		String brickEV3 = ""
 				+ "<toolbox_set id='toolbox' style='display: none'>"
 				+ "  <block type='robBrick_ultrasonic'></block>"
@@ -576,7 +504,6 @@ public class Templates {
 		templates.put("brickEV3", brickEV3);
 		LOG.info("created");
 	}
-
 	public String get(String key) {
 		return templates.get(key);
 	}

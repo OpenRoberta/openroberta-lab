@@ -1,7 +1,11 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
+<<<<<<< HEAD
 		"lastupdated": "2015-01-22 11:50:57.068000",
+=======
+		"lastupdated": "2014-12-18 23:15:43.156000",
+>>>>>>> ORA-369 move setmode to getvalue sensor blocks, add wait_for_ms block, reactivate blocks in Template.java
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -475,7 +479,7 @@
 	"BRICKLIGHT_GREEN": "green",
 	"BRICKLIGHT_ORANGE": "orange",
 	"BRICKLIGHT_RED": "red",
-	"WAIT": "wait until",
+	"WAIT": "wait",
 	"WAIT_FOREVER": "indefinitely",
 	"WAIT_OR": "or wait for",
 	"SENSOR_ULTRASONIC": "ultrasonic sensor",
@@ -501,7 +505,7 @@
 	"SENSOR_GET_SAMPLE": "get value",
 	"SENSOR_IS_PRESSED": "pressed?",
 	"SENSOR_PRESSED": " (pressed)",
-	"SENSOR_WAIT": "wait until",
+	"WAIT_UNTIL": "wait until",
 	"SENSOR_WAIT_PRESSED": "pressed",
 	"SENSOR_WAIT_PRESSED_RELEASED": "pressed or released",
 	"START": "start",
