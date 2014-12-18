@@ -99,7 +99,7 @@ Blockly.Blocks['robControls_wait'] = {
     init : function() {
         this.setColourRGB(Blockly.CAT_ROBCONTROLS_RGB);
         // this.setInputsInline(true);
-        this.appendValueInput('WAIT').appendField(Blockly.Msg.WAIT).setCheck('Boolean');
+        this.appendValueInput('WAIT0').appendField(Blockly.Msg.WAIT_UNTIL).setCheck('Boolean');
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.waitCount_ = 0;
@@ -150,7 +150,7 @@ Blockly.Blocks['robControls_wait'] = {
             this.waitCount_++;
             if (this.waitCount_ == 1)
                 this.appendStatementInput('DO0').appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
-            this.appendValueInput('WAIT' + this.waitCount_).appendField(Blockly.Msg.SENSOR_WAIT).setCheck('Boolean');
+            this.appendValueInput('WAIT' + this.waitCount_).appendField(Blockly.Msg.WAIT_OR).setCheck('Boolean');
             this.appendStatementInput('DO' + this.waitCount_).appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
         } else if (num == -1) {
             this.removeInput('DO' + this.waitCount_);
