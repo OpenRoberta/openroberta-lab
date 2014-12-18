@@ -757,50 +757,61 @@ function switchToBrickly() {
  */
 function displayState() {
     if (userState.name) {
-        $('#head-navigation #displayLogin').text(userState.name);
-        $('#head-navigation #iconDisplayLogin').css('display', 'inline');
+        $('#displayLogin').text(userState.name);
+        $('#iconDisplayLogin').removeClass('error');
+        $('#iconDisplayLogin').addClass('ok');
     } else {
-        $('#head-navigation #displayLogin').text('');
-        $('#head-navigation #iconDisplayLogin').css('display', 'none');
+        $('#displayLogin').text('');
+        $('#iconDisplayLogin').removeClass('ok');
+        $('#iconDisplayLogin').addClass('error');
     }
 
     if (userState.program) {
-        $('#head-navigation #displayProgram').text(userState.program);
-        $('#head-navigation #iconDisplayProgram').css('display', 'inline');
+        $('#displayProgram').text(userState.program);
+        $('#iconDisplayProgram').removeClass('error');
+        $('#iconDisplayProgram').addClass('ok');
     } else {
-        $('#head-navigation #displayProgram').text('');
-        $('#head-navigation #iconDisplayProgram').css('display', 'none');
+        $('#displayProgram').text('');
+        $('#iconDisplayProgram').removeClass('ok');
+        $('#iconDisplayProgram').addClass('error');
     }
 
     if (userState.configuration) {
-        $('#head-navigation #displayConfiguration').text(userState.configuration);
-        $('#head-navigation #iconDisplayConfiguration').css('display', 'inline');
+        $('#displayConfiguration').text(userState.configuration);
+        $('#iconDisplayConfiguration').removeClass('error');
+        $('#iconDisplayConfiguration').addClass('ok');
     } else {
-        $('#head-navigation #displayConfiguration').text('');
-        $('#head-navigation #iconDisplayConfiguration').css('display', 'none');
+        $('#displayConfiguration').text('');
+        $('#iconDisplayConfiguration').removeClass('ok');
+        $('#iconDisplayConfiguration').addClass('error');
     }
 
     if (userState.toolbox) {
-        $('#head-navigation #displayToolbox').text(userState.toolbox);
-        $('#head-navigation #iconDisplayToolbox').css('display', 'inline');
+        $('#displayToolbox').text(userState.toolbox);
+        $('#iconDisplayToolbox').removeClass('error');
+        $('#iconDisplayToolbox').addClass('ok');
     } else {
-        $('#head-navigation #displayToolbox').text('');
-        $('#head-navigation #iconDisplayToolbox').css('display', 'none');
+        $('#displayToolbox').text('');
+        $('#iconDisplayToolbox').removeClass('ok');
+        $('#iconDisplayToolbox').addClass('error');
     }
 
     $('.robotState').css('display','none');
     if (userState.robotState) {
+        $('#iconDisplayRobotState').removeClass('error');
+        $('#iconDisplayRobotState').addClass('ok');
         var robotState = escape(userState.robotState);
         $('#' + robotState + '').css('display','inline');
         if (userState.waiting) {
             var waitingTime = escape("robot.waiting_time");
             $('#' + waitingTime + '').css('display','inline');
             $('#' + waitingTime + '').text(' ' + userState.waiting);
+        } else {
+            $('#iconDisplayRobotState').removeClass('ok');
+            $('#iconDisplayRobotState').addClass('error');            
         }
-        $('#head-navigation #iconDisplayRobotState').css('display', 'inline');
     } else {
-        $('#head-navigation #displayRobotState').text('');
-        $('#head-navigation #iconDisplayRobotState').css('display', 'none');
+        $('#displayRobotState').text('');
     }
 }
 
@@ -1145,7 +1156,7 @@ function initLogging() {
  *            response of server call
  */
 function setRobotState(response) {
-    if (response.robot_state === 'robot.waiting') {
+    if (response.robot_waiting != undefined) {
         userState.waiting = response.robot_waiting;
     } else {
         userState.waiting = '';
@@ -1320,6 +1331,7 @@ function pingServer() {
 function init() {
     initLogging();
     initUserState();
+    pingServer();
     initTabs();
     initPopups();
     initHeadNavigation();
@@ -1329,7 +1341,6 @@ function init() {
     $('#configurationNameSave').val('');
     initializeLanguages();
     switchLanguage('De', true);
-    pingServer();
 };
 
 $(document).ready(WRAP.fn3(init, 'page init'));
