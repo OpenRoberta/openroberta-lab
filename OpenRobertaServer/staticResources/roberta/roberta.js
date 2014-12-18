@@ -1302,6 +1302,19 @@ function displayToastMessages()
 }
 
 /**
+ * Regularly ping the server to keep status information up-to-date
+ */
+function pingServer() {
+    setTimeout( function() {
+        COMM.json("/ping", {
+        }, function(response) {
+            setRobotState(response);
+            pingServer();
+        });
+    }, 5000);
+}
+
+/**
  * Initializations
  */
 function init() {
@@ -1316,6 +1329,7 @@ function init() {
     $('#configurationNameSave').val('');
     initializeLanguages();
     switchLanguage('De', true);
+    pingServer();
 };
 
 $(document).ready(WRAP.fn3(init, 'page init'));
