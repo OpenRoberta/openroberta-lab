@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.dbc.Assert;
  */
 public abstract class HardwareComponentType {
     private final String name;
+    private final String shortName;
     private final Category category;
 
     /**
@@ -16,19 +17,11 @@ public abstract class HardwareComponentType {
      * @param name
      * @param category
      */
-    public HardwareComponentType(String name, Category category) {
-        Assert.isTrue(!name.equals("") && category != null);
-        this.category = category;
+    public HardwareComponentType(String name, String shortName, Category category) {
+        Assert.isTrue(!name.equals("") && shortName != null && category != null);
         this.name = name;
-    }
-
-    /**
-     * Get the category in which belongs. See enum {@link Category} for all categories.
-     *
-     * @return the category
-     */
-    public Category getCategory() {
-        return this.category;
+        this.shortName = shortName;
+        this.category = category;
     }
 
     /**
@@ -38,6 +31,24 @@ public abstract class HardwareComponentType {
      */
     public String getName() {
         return this.name;
+    }
+
+    /**
+     * The short name of the blockly block mapped to this hardware component. This name is used ion textual representations of this component.
+     *
+     * @return the shortm name
+     */
+    public String getShortName() {
+        return this.shortName;
+    }
+
+    /**
+     * Get the category in which belongs. See enum {@link Category} for all categories.
+     *
+     * @return the category
+     */
+    public Category getCategory() {
+        return this.category;
     }
 
     /**

@@ -13,6 +13,11 @@ public abstract class BrickConfiguration {
      */
     abstract public String generateRegenerate();
 
+    /**
+     * @return text which defines the brick configuration
+     */
+    abstract public String generateText(String name);
+
     protected static void appendOptional(StringBuilder sb, String sensorOrActor, String port, HardwareComponent hc) {
         if ( hc != null ) {
             sb.append("    .add").append(sensorOrActor).append("(");

@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.ast.syntax.action;
 import java.util.Arrays;
 import java.util.Locale;
 
+import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 public enum MotorSide {
@@ -11,6 +12,7 @@ public enum MotorSide {
     private final String[] values;
 
     private MotorSide(String... values) {
+        Assert.isTrue(values.length > 0);
         this.values = Arrays.copyOf(values, values.length);
         for ( int i = 0; i < values.length; i++ ) {
             this.values[i] = this.values[i].toLowerCase();
@@ -23,6 +25,13 @@ public enum MotorSide {
      */
     public String getJavaCode() {
         return this.getClass().getSimpleName() + "." + this;
+    }
+
+    /**
+     * @return textual representation
+     */
+    public String getText() {
+        return this.values[0];
     }
 
     private boolean attributesMatchAttributes(String... attributes) {
@@ -51,7 +60,7 @@ public enum MotorSide {
     /**
      * Get the side of the motor from {@link MotorSide} from string parameter.
      * Throws exception if the motor side does not exists.
-     * 
+     *
      * @param name of the side
      * @return name of the side from the enum {@link MotorSide}
      */

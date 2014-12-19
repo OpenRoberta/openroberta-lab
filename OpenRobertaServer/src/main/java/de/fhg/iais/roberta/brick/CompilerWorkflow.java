@@ -104,7 +104,7 @@ public class CompilerWorkflow {
      * @return jaxb the transformer
      * @throws Exception
      */
-    JaxbBlocklyProgramTransformer<Void> generateProgramTransformer(String blocklyXml) throws Exception {
+    private JaxbBlocklyProgramTransformer<Void> generateProgramTransformer(String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
         JaxbBlocklyProgramTransformer<Void> transformer = new JaxbBlocklyProgramTransformer<>();
         transformer.transform(project);
@@ -118,13 +118,13 @@ public class CompilerWorkflow {
      * @return brick configuration
      * @throws Exception
      */
-    BrickConfiguration generateConfiguration(String blocklyXml) throws Exception {
+    private BrickConfiguration generateConfiguration(String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        JaxbBrickConfigTransformer<Void> transformer = new JaxbBrickConfigTransformer<>();
+        JaxbBrickConfigTransformer transformer = new JaxbBrickConfigTransformer();
         return transformer.transform(project);
     }
 
-    void storeGeneratedProgram(String token, String programName, String javaCode) throws Exception {
+    private void storeGeneratedProgram(String token, String programName, String javaCode) throws Exception {
         Assert.isTrue(token != null && programName != null && javaCode != null);
         File javaFile = new File(this.pathToCrosscompilerBaseDir + token + "/src/" + programName + ".java");
         FileUtils.writeStringToFile(javaFile, javaCode, StandardCharsets.UTF_8.displayName());
@@ -136,11 +136,9 @@ public class CompilerWorkflow {
      * 3. Compile .java files to .class.<br>
      * 4. Make jar from class files and add META-INF entries.<br>
      *
-     * @param userProjectsDir
      * @param token
      * @param mainFile
      * @param mainPackage
-     * @throws Exception
      */
     void runBuild(String token, String mainFile, String mainPackage) {
         final StringBuilder sb = new StringBuilder();

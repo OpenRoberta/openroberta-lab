@@ -10,17 +10,17 @@ import de.fhg.iais.roberta.dbc.DbcException;
 public enum SensorPort {
     S1( "1" ), S2( "2" ), S3( "3" ), S4( "4" );
 
-    private final String[] values;
+    private final String number;
 
-    private SensorPort(String... values) {
-        this.values = values;
+    private SensorPort(String number) {
+        this.number = number;
     }
 
     /**
      * @return number of the port
      */
     public String getPortNumber() {
-        return values[0];
+        return this.number;
     }
 
     /**
@@ -46,10 +46,8 @@ public enum SensorPort {
             if ( sp.toString().equals(sUpper) ) {
                 return sp;
             }
-            for ( String value : sp.values ) {
-                if ( sUpper.equals(value) ) {
-                    return sp;
-                }
+            if ( sUpper.equals(sp.number) ) {
+                return sp;
             }
         }
         throw new DbcException("Invalid sensor port: " + s);
