@@ -75,10 +75,10 @@ public class EncoderSensor<V> extends Sensor<V> {
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         String fieldValue = getMotor().name();
-        AstJaxbTransformerHelper.addField(jaxbDestination, "MOTORPORT", fieldValue);
         if ( getMode() == MotorTachoMode.DEGREE || getMode() == MotorTachoMode.ROTATION ) {
             AstJaxbTransformerHelper.addField(jaxbDestination, "MODE", getMode().name());
         }
+        AstJaxbTransformerHelper.addField(jaxbDestination, "MOTORPORT", fieldValue);
 
         return jaxbDestination;
     }

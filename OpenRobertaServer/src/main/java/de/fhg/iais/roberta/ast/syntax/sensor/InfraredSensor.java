@@ -74,10 +74,8 @@ public class InfraredSensor<V> extends Sensor<V> {
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         String fieldValue = getPort().getPortNumber();
+        AstJaxbTransformerHelper.addField(jaxbDestination, "MODE", getMode().name());
         AstJaxbTransformerHelper.addField(jaxbDestination, "SENSORPORT", fieldValue);
-        if ( getMode() != InfraredSensorMode.GET_MODE && getMode() != InfraredSensorMode.GET_SAMPLE ) {
-            AstJaxbTransformerHelper.addField(jaxbDestination, "MODE", getMode().name());
-        }
 
         return jaxbDestination;
     }

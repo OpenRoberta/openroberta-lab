@@ -73,10 +73,10 @@ public class GyroSensor<V> extends Sensor<V> {
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         String fieldValue = getPort().getPortNumber();
-        AstJaxbTransformerHelper.addField(jaxbDestination, "SENSORPORT", fieldValue);
         if ( getMode() == GyroSensorMode.ANGLE || getMode() == GyroSensorMode.RATE ) {
             AstJaxbTransformerHelper.addField(jaxbDestination, "MODE", getMode().name());
         }
+        AstJaxbTransformerHelper.addField(jaxbDestination, "SENSORPORT", fieldValue);
         return jaxbDestination;
     }
 }

@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * Modes in which the sensor can operate.
  */
 public enum GyroSensorMode {
-    RATE( "Rate" ), ANGLE( "Angle" ), GET_MODE(), GET_SAMPLE(), RESET();
+    RATE( "Rate" ), ANGLE( "Angle" ), RESET();
 
     private final String[] values;
 
@@ -33,7 +33,7 @@ public enum GyroSensorMode {
     /**
      * get mode from {@link GyroSensorMode} from string parameter. It is possible for one mode to have multiple string mappings.
      * Throws exception if the mode does not exists.
-     * 
+     *
      * @param name of the mode
      * @return mode from the enum {@link GyroSensorMode}
      */

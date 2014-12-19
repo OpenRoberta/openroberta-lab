@@ -11,11 +11,4 @@ public class BrickSensorTest {
 
         Helper.assertCodeIsOk(a, "/ast/sensors/sensor_brick1.xml");
     }
-
-    @Test
-    public void isPressedAndReleased() throws Exception {
-        String a = "\nhal.isPressedAndReleased(BrickKey.ENTER)";
-
-        Helper.assertCodeIsOk(a, "/ast/sensors/sensor_brick2.xml");
-    }
 }

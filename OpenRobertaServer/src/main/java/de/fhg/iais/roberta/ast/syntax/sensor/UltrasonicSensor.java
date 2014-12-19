@@ -75,10 +75,9 @@ public class UltrasonicSensor<V> extends Sensor<V> {
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         String fieldValue = getPort().getPortNumber();
+        AstJaxbTransformerHelper.addField(jaxbDestination, "MODE", getMode().name());
         AstJaxbTransformerHelper.addField(jaxbDestination, "SENSORPORT", fieldValue);
-        if ( getMode() != UltrasonicSensorMode.GET_MODE && getMode() != UltrasonicSensorMode.GET_SAMPLE ) {
-            AstJaxbTransformerHelper.addField(jaxbDestination, "MODE", getMode().name());
-        }
+
         return jaxbDestination;
     }
 }

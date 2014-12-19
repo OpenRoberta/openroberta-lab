@@ -73,6 +73,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
@@ -417,6 +418,12 @@ public class HardwareCheckVisitor implements AstVisitor<Void> {
     }
 
     @Override
+    public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
+        waitTimeStmt.getTime().visit(this);
+        return null;
+    }
+
+    @Override
     public Void visitLocation(Location<Void> location) {
         return null;
     }
@@ -546,4 +553,5 @@ public class HardwareCheckVisitor implements AstVisitor<Void> {
         }
         return null;
     }
+
 }

@@ -91,6 +91,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
@@ -291,69 +292,29 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 port = extractField(fields, BlocklyConstants.SENSORPORT);
                 return TouchSensor.make(SensorPort.get(port), properties, comment);
 
-            case "robSensors_ultrasonic_setMode":
+            case "robSensors_ultrasonic_getSample":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, BlocklyConstants.SENSORPORT);
                 mode = extractField(fields, BlocklyConstants.MODE_);
                 return UltrasonicSensor.make(UltrasonicSensorMode.get(mode), SensorPort.get(port), properties, comment);
 
-            case "robSensors_ultrasonic_getMode":
-                fields = extractFields(block, (short) 1);
-                port = extractField(fields, BlocklyConstants.SENSORPORT);
-                return UltrasonicSensor.make(UltrasonicSensorMode.GET_MODE, SensorPort.get(port), properties, comment);
-
-            case "robSensors_ultrasonic_getSample":
-                fields = extractFields(block, (short) 1);
-                port = extractField(fields, BlocklyConstants.SENSORPORT);
-                return UltrasonicSensor.make(UltrasonicSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
-
-            case "robSensors_colour_setMode":
+            case "robSensors_colour_getSample":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, BlocklyConstants.SENSORPORT);
                 mode = extractField(fields, BlocklyConstants.MODE_);
                 return ColorSensor.make(ColorSensorMode.get(mode), SensorPort.get(port), properties, comment);
 
-            case "robSensors_colour_getMode":
-                fields = extractFields(block, (short) 1);
-                port = extractField(fields, BlocklyConstants.SENSORPORT);
-                return ColorSensor.make(ColorSensorMode.GET_MODE, SensorPort.get(port), properties, comment);
-
-            case "robSensors_colour_getSample":
-                fields = extractFields(block, (short) 1);
-                port = extractField(fields, BlocklyConstants.SENSORPORT);
-                return ColorSensor.make(ColorSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
-
-            case "robSensors_infrared_setMode":
+            case "robSensors_infrared_getSample":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, BlocklyConstants.SENSORPORT);
                 mode = extractField(fields, BlocklyConstants.MODE_);
                 return InfraredSensor.make(InfraredSensorMode.get(mode), SensorPort.get(port), properties, comment);
 
-            case "robSensors_infrared_getMode":
-                fields = extractFields(block, (short) 1);
-                port = extractField(fields, BlocklyConstants.SENSORPORT);
-                return InfraredSensor.make(InfraredSensorMode.GET_MODE, SensorPort.get(port), properties, comment);
-
-            case "robSensors_infrared_getSample":
-                fields = extractFields(block, (short) 1);
-                port = extractField(fields, BlocklyConstants.SENSORPORT);
-                return InfraredSensor.make(InfraredSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
-
-            case "robSensors_encoder_setMode":
+            case "robSensors_encoder_getSample":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, BlocklyConstants.MOTORPORT);
                 mode = extractField(fields, BlocklyConstants.MODE_);
                 return EncoderSensor.make(MotorTachoMode.get(mode), ActorPort.get(port), properties, comment);
-
-            case "robSensors_encoder_getMode":
-                fields = extractFields(block, (short) 1);
-                port = extractField(fields, BlocklyConstants.MOTORPORT);
-                return EncoderSensor.make(MotorTachoMode.GET_MODE, ActorPort.get(port), properties, comment);
-
-            case "robSensors_encoder_getSample":
-                fields = extractFields(block, (short) 1);
-                port = extractField(fields, BlocklyConstants.MOTORPORT);
-                return EncoderSensor.make(MotorTachoMode.GET_SAMPLE, ActorPort.get(port), properties, comment);
 
             case "robSensors_encoder_reset":
                 fields = extractFields(block, (short) 1);
@@ -365,26 +326,11 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 port = extractField(fields, BlocklyConstants.KEY);
                 return BrickSensor.make(BrickSensor.Mode.IS_PRESSED, BrickKey.get(port), properties, comment);
 
-            case "robSensors_key_isPressedAndReleased":
-                fields = extractFields(block, (short) 1);
-                port = extractField(fields, BlocklyConstants.KEY);
-                return BrickSensor.make(BrickSensor.Mode.WAIT_FOR_PRESS_AND_RELEASE, BrickKey.get(port), properties, comment);
-
-            case "robSensors_gyro_setMode":
+            case "robSensors_gyro_getSample":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, BlocklyConstants.SENSORPORT);
                 mode = extractField(fields, BlocklyConstants.MODE_);
                 return GyroSensor.make(GyroSensorMode.get(mode), SensorPort.get(port), properties, comment);
-
-            case "robSensors_gyro_getMode":
-                fields = extractFields(block, (short) 1);
-                port = extractField(fields, BlocklyConstants.SENSORPORT);
-                return GyroSensor.make(GyroSensorMode.GET_MODE, SensorPort.get(port), properties, comment);
-
-            case "robSensors_gyro_getSample":
-                fields = extractFields(block, (short) 1);
-                port = extractField(fields, BlocklyConstants.SENSORPORT);
-                return GyroSensor.make(GyroSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
 
             case "robSensors_gyro_reset":
                 fields = extractFields(block, (short) 1);
@@ -687,6 +633,11 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 }
                 list.setReadOnly();
                 return WaitStmt.make(list, properties, comment);
+
+            case "robControls_wait_time":
+                values = extractValues(block, (short) 1);
+                expr = extractValue(values, new ExprParam(BlocklyConstants.WAIT, Integer.class));
+                return WaitTimeStmt.make(convertPhraseToExpr(expr), extractBlockProperties(block), extractComment(block));
 
             case "robControls_loopForever":
                 expr = BoolConst.make(true, properties, comment);

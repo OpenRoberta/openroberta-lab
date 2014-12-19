@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * Modes in which the sensor can operate.
  */
 public enum InfraredSensorMode {
-    DISTANCE(), SEEK(), GET_MODE(), GET_SAMPLE();
+    DISTANCE(), SEEK();
     private final String[] values;
 
     private InfraredSensorMode(String... values) {
@@ -25,7 +25,7 @@ public enum InfraredSensorMode {
     /**
      * get mode from {@link InfraredSensorMode} from string parameter. It is possible for one mode to have multiple string mappings.
      * Throws exception if the mode does not exists.
-     * 
+     *
      * @param name of the mode
      * @return mode from the enum {@link InfraredSensorMode}
      */

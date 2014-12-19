@@ -13,7 +13,11 @@ public class ColorSensorTest {
 
     @Test
     public void sensorSetColor() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-59, y=1], ColorSensor [mode=COLOUR, port=S3]]]]";
+        String a =
+            "BlockAST [project=[[Location [x=-15, y=107], ColorSensor [mode=COLOUR, port=S3], "
+                + "Location [x=-13, y=147], ColorSensor [mode=RED, port=S1], "
+                + "Location [x=-11, y=187], ColorSensor [mode=RGB, port=S2], "
+                + "Location [x=-11, y=224], ColorSensor [mode=AMBIENTLIGHT, port=S4]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_setColor.xml"));
     }
@@ -23,8 +27,14 @@ public class ColorSensorTest {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setColor.xml");
 
         ColorSensor<Void> cs = (ColorSensor<Void>) transformer.getTree().get(1);
+        ColorSensor<Void> cs1 = (ColorSensor<Void>) transformer.getTree().get(3);
+        ColorSensor<Void> cs2 = (ColorSensor<Void>) transformer.getTree().get(5);
+        ColorSensor<Void> cs3 = (ColorSensor<Void>) transformer.getTree().get(7);
 
         Assert.assertEquals(ColorSensorMode.COLOUR, cs.getMode());
+        Assert.assertEquals(ColorSensorMode.RED, cs1.getMode());
+        Assert.assertEquals(ColorSensorMode.RGB, cs2.getMode());
+        Assert.assertEquals(ColorSensorMode.AMBIENTLIGHT, cs3.getMode());
     }
 
     @Test
@@ -32,36 +42,18 @@ public class ColorSensorTest {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setColor.xml");
 
         ColorSensor<Void> cs = (ColorSensor<Void>) transformer.getTree().get(1);
+        ColorSensor<Void> cs1 = (ColorSensor<Void>) transformer.getTree().get(3);
+        ColorSensor<Void> cs2 = (ColorSensor<Void>) transformer.getTree().get(5);
+        ColorSensor<Void> cs3 = (ColorSensor<Void>) transformer.getTree().get(7);
 
         Assert.assertEquals(SensorPort.S3, cs.getPort());
-    }
-
-    @Test
-    public void sensorGetModeColor() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-59, y=55], ColorSensor [mode=GET_MODE, port=S3]]]]";
-
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getModeColor.xml"));
-    }
-
-    @Test
-    public void sensorGetSampleColor() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-65, y=105], ColorSensor [mode=GET_SAMPLE, port=S3]]]]";
-
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getSampleColor.xml"));
+        Assert.assertEquals(SensorPort.S1, cs1.getPort());
+        Assert.assertEquals(SensorPort.S2, cs2.getPort());
+        Assert.assertEquals(SensorPort.S4, cs3.getPort());
     }
 
     @Test
     public void reverseTransformation() throws Exception {
         Helper.assertTransformationIsOk("/ast/sensors/sensor_setColor.xml");
-    }
-
-    @Test
-    public void reverseTransformation1() throws Exception {
-        Helper.assertTransformationIsOk("/ast/sensors/sensor_getModeColor.xml");
-    }
-
-    @Test
-    public void reverseTransformation2() throws Exception {
-        Helper.assertTransformationIsOk("/ast/sensors/sensor_getSampleColor.xml");
     }
 }

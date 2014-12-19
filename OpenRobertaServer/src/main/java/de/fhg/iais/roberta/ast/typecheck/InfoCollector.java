@@ -69,6 +69,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
@@ -516,6 +517,12 @@ public class InfoCollector<T> implements AstVisitor<T> {
 
     @Override
     public T visitTextJoinFunct(TextJoinFunct<T> textJoinFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitWaitTimeStmt(WaitTimeStmt<T> waitTimeStmt) {
         // TODO Auto-generated method stub
         return null;
     }

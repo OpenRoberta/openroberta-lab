@@ -27,6 +27,7 @@ import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
 import de.fhg.iais.roberta.ast.syntax.sensor.GetSampleSensor;
 import de.fhg.iais.roberta.ast.syntax.stmt.FunctionStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.visitor.AstDefaultVisitorInspecting;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
@@ -202,6 +203,12 @@ public class AstToVarsVisitor extends AstDefaultVisitorInspecting {
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
         // TODO Auto-generated method stub
         return null;
     }

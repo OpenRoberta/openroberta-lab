@@ -32,10 +32,9 @@ public class EV3ProgramUsedHardwareCheckTest {
         List<Phrase<Void>> phrases = Helper.generateASTs("/syntax/code_generator/java_code_generator2.xml");
 
         Set<HardwareComponentEV3Sensor> hardwareCheckVisitor = HardwareCheckVisitor.check(phrases);
-        Assert
-            .assertEquals(
-                "[HardwareComponentType [robBrick_touch, SENSOR], HardwareComponentType [robBrick_ultrasonic, SENSOR], HardwareComponentType [robBrick_colour, SENSOR]]",
-                hardwareCheckVisitor.toString());
+        Assert.assertEquals(
+            "[HardwareComponentType [robBrick_touch, SENSOR], HardwareComponentType [robBrick_colour, SENSOR]]",
+            hardwareCheckVisitor.toString());
     }
 
     @Test
@@ -90,7 +89,7 @@ public class EV3ProgramUsedHardwareCheckTest {
         Set<HardwareComponentEV3Sensor> hardwareCheckVisitor = HardwareCheckVisitor.check(phrases);
         Assert
             .assertEquals(
-                "[HardwareComponentType [robBrick_ultrasonic, SENSOR], HardwareComponentType [robBrick_colour, SENSOR], HardwareComponentType [robBrick_infrared, SENSOR], HardwareComponentType [robBrick_gyro, SENSOR]]",
+                "[HardwareComponentType [robBrick_touch, SENSOR], HardwareComponentType [robBrick_ultrasonic, SENSOR], HardwareComponentType [robBrick_gyro, SENSOR], HardwareComponentType [robBrick_colour, SENSOR], HardwareComponentType [robBrick_infrared, SENSOR]]",
                 hardwareCheckVisitor.toString());
     }
 }

@@ -62,7 +62,9 @@ import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GetSampleSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.TouchSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensor;
@@ -78,6 +80,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
@@ -433,6 +436,14 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     }
 
     @Override
+    public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
+        this.sb.append("hal.wait(");
+        waitTimeStmt.getTime().visit(this);
+        this.sb.append(");");
+        return null;
+    }
+
+    @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
         this.sb.append("hal.clearDisplay();");
         return null;
@@ -629,77 +640,39 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        switch ( colorSensor.getMode() ) {
-            case GET_MODE:
-                this.sb.append("hal.getColorSensorModeName(" + colorSensor.getPort().getJavaCode() + ")");
-                break;
-            case GET_SAMPLE:
-                if ( colorSensor.getMode() == ColorSensorMode.COLOUR ) {
-                    this.sb.append("PickColor.get(hal.getColorSensorValue(" + colorSensor.getPort().getJavaCode() + "))");
-                } else {
-                    this.sb.append("hal.getColorSensorValue(" + colorSensor.getPort().getJavaCode() + ")");
-                }
-                break;
-            default:
-                this.sb.append("hal.setColorSensorMode(" + colorSensor.getPort().getJavaCode() + ", " + colorSensor.getMode().getJavaCode() + ");");
-                break;
+        if ( colorSensor.getMode() == ColorSensorMode.COLOUR ) {
+            this.sb.append("PickColor.get(hal.getColorSensorValue(" + colorSensor.getPort().getJavaCode() + ", " + colorSensor.getMode().getJavaCode() + "))");
+        } else {
+            this.sb.append("hal.getColorSensorValue(" + colorSensor.getPort().getJavaCode() + ", " + colorSensor.getMode().getJavaCode() + ")");
         }
         return null;
     }
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        switch ( encoderSensor.getMode() ) {
-            case GET_MODE:
-                this.sb.append("hal.getMotorTachoMode(" + encoderSensor.getMotor().getJavaCode() + ")");
-                break;
-            case GET_SAMPLE:
-                boolean isRegulated = true;
-                String methodName = isRegulated ? "hal.getRegulatedMotorTachoValue(" : "hal.getUnregulatedMotorTachoValuestop(";
-                this.sb.append(methodName + encoderSensor.getMotor().getJavaCode() + ")");
-                break;
-            case RESET:
-                this.sb.append("hal.resetMotorTacho(" + encoderSensor.getMotor().getJavaCode() + ");");
-                break;
-            default:
-                this.sb.append("hal.setMotorTachoMode(" + encoderSensor.getMotor().getJavaCode() + ", " + encoderSensor.getMode().getJavaCode() + ");");
-                break;
+        if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
+            this.sb.append("hal.resetMotorTacho(" + encoderSensor.getMotor().getJavaCode() + ");");
+        } else {
+            boolean isRegulated = true;
+            String methodName = isRegulated ? "hal.getRegulatedMotorTachoValue(" : "hal.getUnregulatedMotorTachoValuestop(";
+            this.sb.append(methodName + encoderSensor.getMotor().getJavaCode() + ", " + encoderSensor.getMode().getJavaCode() + ")");
         }
         return null;
     }
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        switch ( gyroSensor.getMode() ) {
-            case GET_MODE:
-                this.sb.append("hal.getGyroSensorModeName(" + gyroSensor.getPort().getJavaCode() + ")");
-                break;
-            case GET_SAMPLE:
-                this.sb.append("hal.getGyroSensorValue(" + gyroSensor.getPort().getJavaCode() + ")");
-                break;
-            case RESET:
-                this.sb.append("hal.resetGyroSensor(" + gyroSensor.getPort().getJavaCode() + ");");
-                break;
-            default:
-                this.sb.append("hal.setGyroSensorMode(" + gyroSensor.getPort().getJavaCode() + ", " + gyroSensor.getMode().getJavaCode() + ");");
-                break;
+        if ( gyroSensor.getMode() == GyroSensorMode.RESET ) {
+            this.sb.append("hal.resetGyroSensor(" + gyroSensor.getPort().getJavaCode() + ");");
+        } else {
+            this.sb.append("hal.getGyroSensorValue(" + gyroSensor.getPort().getJavaCode() + ", " + gyroSensor.getMode().getJavaCode() + ")");
         }
         return null;
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        switch ( infraredSensor.getMode() ) {
-            case GET_MODE:
-                this.sb.append("hal.getInfraredSensorModeName(" + infraredSensor.getPort().getJavaCode() + ")");
-                break;
-            case GET_SAMPLE:
-                this.sb.append("hal.getInfraredSensorValue(" + infraredSensor.getPort().getJavaCode() + ")");
-                break;
-            default:
-                this.sb.append("hal.setInfraredSensorMode(" + infraredSensor.getPort().getJavaCode() + ", " + infraredSensor.getMode().getJavaCode() + ");");
-                break;
-        }
+        this.sb.append("hal.getInfraredSensorValue(" + infraredSensor.getPort().getJavaCode() + ", " + infraredSensor.getMode().getJavaCode() + ")");
         return null;
     }
 
@@ -726,21 +699,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        switch ( ultrasonicSensor.getMode() ) {
-            case GET_MODE:
-                this.sb.append("hal.getUltraSonicSensorModeName(" + ultrasonicSensor.getPort().getJavaCode() + ")");
-                break;
-            case GET_SAMPLE:
-                this.sb.append("hal.getUltraSonicSensorValue(" + ultrasonicSensor.getPort().getJavaCode() + ")");
-                break;
-            default:
-                this.sb.append("hal.setUltrasonicSensorMode("
-                    + ultrasonicSensor.getPort().getJavaCode()
-                    + ", "
-                    + ultrasonicSensor.getMode().getJavaCode()
-                    + ");");
-                break;
-        }
+        this.sb.append("hal.getUltraSonicSensorValue(" + ultrasonicSensor.getPort().getJavaCode() + ", " + ultrasonicSensor.getMode().getJavaCode() + ")");
         return null;
     }
 
@@ -1266,5 +1225,4 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         sb.append(");");
         return sb.toString();
     }
-
 }

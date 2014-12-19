@@ -33,33 +33,33 @@ public class GetSampleSensor<V> extends Sensor<V> {
         Assert.isTrue(sensorType != null && port != "");
         this.sensorPort = port;
         this.sensorType = sensorType;
-        switch ( SensorType.get(sensorType.name()) ) {
-            case TOUCH:
+        switch ( sensorType.getSensorType() ) {
+            case "TOUCH":
                 this.sensor = TouchSensor.make(SensorPort.get(port), properties, comment);
                 break;
-            case ULTRASONIC:
-                this.sensor = UltrasonicSensor.make(UltrasonicSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
+            case "ULTRASONIC":
+                this.sensor = UltrasonicSensor.make(UltrasonicSensorMode.get(sensorType.getSensorMode()), SensorPort.get(port), properties, comment);
                 break;
-            case COLOUR:
-                this.sensor = ColorSensor.make(ColorSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
+            case "COLOUR":
+                this.sensor = ColorSensor.make(ColorSensorMode.get(sensorType.getSensorMode()), SensorPort.get(port), properties, comment);
                 break;
-            case INFRARED:
-                this.sensor = InfraredSensor.make(InfraredSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
+            case "INFRARED":
+                this.sensor = InfraredSensor.make(InfraredSensorMode.get(sensorType.getSensorMode()), SensorPort.get(port), properties, comment);
                 break;
-            case ENCODER:
-                this.sensor = EncoderSensor.make(MotorTachoMode.GET_SAMPLE, ActorPort.get(port), properties, comment);
+            case "ENCODER":
+                this.sensor = EncoderSensor.make(MotorTachoMode.get(sensorType.getSensorMode()), ActorPort.get(port), properties, comment);
                 break;
-            case KEYS_PRESSED:
+            case "KEYS_PRESSED":
                 this.sensor = BrickSensor.make(Mode.IS_PRESSED, BrickKey.get(port), properties, comment);
                 break;
-            case GYRO:
-                this.sensor = GyroSensor.make(GyroSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
+            case "GYRO":
+                this.sensor = GyroSensor.make(GyroSensorMode.get(sensorType.getSensorMode()), SensorPort.get(port), properties, comment);
                 break;
-            case TIME:
+            case "TIME":
                 this.sensor = TimerSensor.make(TimerSensorMode.GET_SAMPLE, Integer.valueOf(port), properties, comment);
                 break;
             default:
-                throw new DbcException("Invalid sensor!");
+                throw new DbcException("Invalid sensor " + sensorType.getSensorType() + "!");
         }
         setReadOnly();
     }
