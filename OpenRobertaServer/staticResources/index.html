@@ -37,7 +37,7 @@ limitations under the License.
 
 <!-- Feedback badge, reports user feedback to issue tracker. --> 
 <script type="text/javascript" src="http://jira.open-roberta.org/s/en_USy3ler1/786/12/1.1.2/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?collectorId=2f42fc3c"></script>
- 
+
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>Open Roberta Lab</title>
 </head>
@@ -46,7 +46,14 @@ limitations under the License.
     <div id="head-section">
         <ul id="head-navigation">
             <li>
-                <a href="#" id="head-navigation-program"><span class="head-navi-icons project"></span><span class="head-navi-text" lkey="Blockly.Msg.MENU_PROGRAM"></span></a>
+                <a href="#" id="head-navigation-overview"><span class="head-navi-icons overview"></span></a>
+                <ul id="submenu-overview" class="head-navigation-submenu">
+                    <li><span id="clickTabProgram" lkey="Blockly.Msg.TAB_PROGRAM">Program</span></li>
+                    <li><span id="clickTabConfiguration" lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</span></li>
+                </ul>
+            </li>
+            <li id="head-navigation-program-edit">
+                <a href="#" id="head-navigation-program"><span class="head-navi-icons program"></span></a>
                 <ul id="submenu-program" class="head-navigation-submenu">
                     <li><span id="runProg" class="flaticon-botton2" lkey="Blockly.Msg.MENU_START">starten</span></li>
                     <li><span id="checkProg" class="flaticon-tick" lkey="Blockly.Msg.MENU_CHECK">checken</span></li>
@@ -54,49 +61,48 @@ limitations under the License.
                     <li class="logout"><span id="listProg" class="flaticon-pencil1"lkey="Blockly.Msg.MENU_LIST">Liste ...</span></li>
                     <li class="login logout"><span id="saveProg" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE">speichern</span></li>
                     <li class="logout"><span id="saveAsProg" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE_AS">speichern unter ...</span></li>
-                    <li class="logout"><span id="attachProg" class="flaticon-th2" lkey="Blockly.Msg.MENU_ATTACH">anhängen ...</span></li>
-                    <li><span id="propertiesProg" class="flaticon-information" lkey="Blockly.Msg.MENU_PROPERTIES">Eigenschaften</span></li>
+                    <li class="hidden"><span id="attachProg" class="flaticon-th2" lkey="Blockly.Msg.MENU_ATTACH">anhängen ...</span></li>
+                    <li class="hidden"><span id="propertiesProg" class="flaticon-information" lkey="Blockly.Msg.MENU_PROPERTIES">Eigenschaften</span></li>
                 </ul>
             </li>
-            <li>
-                <a href="#" id="head-navigation-configuration"><span class="head-navi-icons configuration"></span><span class="head-navi-text" lkey="Blockly.Msg.MENU_ROBOT"></span></a>
+            <li id="head-navigation-configuration-edit">
+                <a href="#" id="head-navigation-configuration"><span class="head-navi-icons configuration"></span></a>
                 <ul id="submenu-configuration" class="head-navigation-submenu">
                     <li><span id="checkConfig" class="flaticon-tick" lkey="Blockly.Msg.MENU_CHECK">checken</span></li>
-                    <li><span id="standardConfig" class="flaticon-thumbs1" lkey="Blockly.Msg.MENU_DEFAULT_CONFIGURATION">Standardkonfiguration</span></li>
                     <li><span id="newConfig" class="flaticon-add10" lkey="Blockly.Msg.MENU_NEW">neu ...</span></li>
                     <li class="logout"><span id="listConfig" class="flaticon-pencil1" lkey="Blockly.Msg.MENU_LIST">Liste ... </span></li>
                     <li class="login logout"><span id="saveConfig" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE">speichern</span></li>
                     <li class="logout"><span id="saveAsConfig" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE_AS">speichern unter ...</span></li>
-                    <li class="login logout"><span id="propertiesConfig" class="flaticon-information" lkey="Blockly.Msg.MENU_PROPERTIES">Eigenschaften ...</span></li>
+                    <li class="hidden"><span id="propertiesConfig" class="flaticon-information" lkey="Blockly.Msg.MENU_PROPERTIES">Eigenschaften ...</span></li>
                 </ul>
             </li>
             <li>
-                <a href="#" id="head-navigation-nepo"><span class="head-navi-icons nepo"></span><span class="head-navi-text" lkey="Blockly.Msg.MENU_NEPO"></span></a>
+                <a href="#" id="head-navigation-nepo"><span class="head-navi-icons nepo"></span></a>
                 <ul id="submenu-nepo" class="head-navigation-submenu">
                     <li><span id="toolboxBeginner" class="flaticon-spanner" lkey="Blockly.Msg.MENU_BEGINNER">Anfänger</span></li>
                     <li><span id="toolboxExpert" class="flaticon-spanner" lkey="Blockly.Msg.MENU_EXPERT">Experte</span></li>
                 </ul>
             </li>
             <li>
-                <a href="#" id="head-navigation-connection"><span class="head-navi-icons connection"></span><span class="head-navi-text" lkey="Blockly.Msg.MENU_CONNECTION"></span></a>
+                <a href="#" id="head-navigation-connection"><span class="head-navi-icons connection"></span></a>
                 <ul id="submenu-connection" class="head-navigation-submenu">
                     <li><span id="connect" class="flaticon-botton2" lkey="Blockly.Msg.MENU_CONNECT">verbinden ...</span></li>
                 </ul>
             </li>
             <li>
-                <a href="#" id="head-navigation-developertools"><span class="head-navi-icons developer"></span><span class="head-navi-text" lkey="Blockly.Msg.MENU_TOOLS"></span></a>
+                <a href="#" id="head-navigation-developertools"><span class="head-navi-icons developer"></span></a>
                 <ul id="submenu-developertools" class="head-navigation-submenu">
                     <li><span id="logging" class="flaticon-spanner" lkey="Blockly.Msg.MENU_LOGGING">Logging</span></li>
                 </ul>
             </li>
             <li>
-                <a href="#" id="head-navigation-help"><span class="head-navi-icons help"></span><span class="head-navi-text" lkey="Blockly.Msg.MENU_HELP"></span></a>
+                <a href="#" id="head-navigation-help"><span class="head-navi-icons help"></span></a>
                 <ul id="submenu-help" class="head-navigation-submenu">
                     <li><span id="help" class="flaticon-lightbulb1" lkey="Blockly.Msg.MENU_SHOW">anzeigen</span></li>
                 </ul>
             </li>
             <li>
-                <a href="#" id="head-navigation-login"><span class="head-navi-icons user"></span><span class="head-navi-text" lkey="Blockly.Msg.MENU_LOGIN"></span></a>
+                <a href="#" id="head-navigation-login"><span class="head-navi-icons user"></span></a>
                 <ul id="submenu-login" class="head-navigation-submenu">
                     <li class="login"><span id="login" class="flaticon-user" lkey="Blockly.Msg.MENU_LOG_IN">anmelden ...</span></li>
                     <li class="logout"><span id="logout" class="flaticon-user2" lkey="Blockly.Msg.MENU_LOG_OUT">abmelden</span></li>
@@ -112,7 +118,7 @@ limitations under the License.
             <div id="beta">
             </div>
             
-            <div class="state" id="state3">
+            <div class="state" id="state2">
                 <a href="http://www.iais.fraunhofer.de/impressum.html" target="_blank" class="publishingNotes De">Impressum</a>   <!-- Has to be removed in the future !!! -->
                 <a href="http://www.iais.fraunhofer.de/index.php?id=4515&L=1" target="_blank" class="publishingNotes En">Publishing notes</a>   <!-- Has to be removed in the future !!! -->
                 <br/>
@@ -120,15 +126,10 @@ limitations under the License.
                 <span id="setLangEn" class="smallFlag" title="Englisch" lkey="Blockly.Msg.HINT_LANGUAGE_ENGLISH"></span>
             </div>
             
-            <div class="state" id="state2">
-                <span id="iconDisplayToolbox" class="flaticon-spanner"></span><span id="displayToolbox" title="Werkzeugkasten" lkey="Blockly.Msg.HINT_TOOLBOX"></span><br/>
-                <span id="iconDisplayRobotState" class="flaticon-botton2"></span><span id="displayRobotState" title="Roboter-Status" lkey="Blockly.Msg.HINT_ROBOT_STATE"><span class="robotState" id="robot.not_waiting" lkey="Blockly.Msg.ROBOT_NOT_WAITING">Roboter inaktiv</span><span class="robotState" id="robot.waiting" lkey="Blockly.Msg.ROBOT_WAITING">Roboter wartet</span><span class="robotState" id="robot.waiting_time">xxx sec</span></span>
-            </div>
-            
             <div class="state" id="state1">
                 <span id="iconDisplayLogin" class="flaticon-user"></span><span id="displayLogin" title="Angemeldeter Benutzer" lkey="Blockly.Msg.HINT_USER">Angemeldeter Benutzer</span><br/>
-                <span id="iconDisplayProgram" class="flaticon-complete1"></span><span id="displayProgram" title="Ausgewähltes Programm" lkey="Blockly.Msg.HINT_PROGRAM">Ausgewähltes Programm</span><br/>
-                <span id="iconDisplayConfiguration" class="flaticon-pencil1"></span><span id="displayConfiguration" title="Ausgewählte Konfiguration" lkey="Blockly.Msg.HINT_CONFIGURATION">Ausgewählte Konfiguration</span>
+                <span id="iconDisplayToolbox" class="flaticon-spanner"></span><span id="displayToolbox" title="Werkzeugkasten" lkey="Blockly.Msg.HINT_TOOLBOX"></span><br/>
+                <span id="iconDisplayRobotState" class="flaticon-botton2"></span><span id="displayRobotState" title="Roboter-Status" lkey="Blockly.Msg.HINT_ROBOT_STATE"><span class="robotState" id="robot.not_waiting" lkey="Blockly.Msg.ROBOT_NOT_WAITING">Roboter inaktiv</span><span class="robotState" id="robot.waiting" lkey="Blockly.Msg.ROBOT_WAITING">Roboter wartet</span><span class="robotState" id="robot.waiting_time">xxx sec</span></span>
             </div>
 
 			<div id="toastContainer">
@@ -136,7 +137,15 @@ limitations under the License.
 				</div>
 			</div>
         </ul>
+        
+        <div id="head-navigation-tabs">
+            <div id="tabProgram"><span lkey="Blockly.Msg.TAB_PROGRAM">Program</span>&nbsp;<span id="tabProgramName"></span></div>
+            <div id="tabConfiguration"><span lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</span>&nbsp;<span id="tabConfigurationName"></span></div>
+        </div>
+        
     </div>
+
+    
 
     <!-- ################## POPUPS ################## -->
     
@@ -222,14 +231,18 @@ limitations under the License.
     
     <!-- ################## END POPUPS ################## -->
 
+    <!-- ################## TABS ################## -->
+
     <div id="main-section">
         <div id="tabs">
-            <ul class="hidden">
-                <li><a id="tabBlockly" href="#blockly">Blockly</a></li>
-                <li><a id="tabListing" href="#listing">Listing of programs</a></li>
-                <li><a id="tabConfigurationListing" href="#confListing">Listing of configurations</a></li>
-                <li><a id="tabLogging" href="#logging">Logging</a></li>
-                <li><a id="tabBrickly" href="#bricklyFrame">Brickly</a></li>
+            <ul>
+                <li class="hidden"><a id="tabBlockly" href="#blockly">Blockly</a></li>
+                <li class="hidden"><a id="tabListing" href="#listing">Listing of programs</a></li>
+                <li class="hidden"><a id="tabConfigurationListing" href="#confListing">Listing of configurations</a></li>
+                <li class="hidden"><a id="tabLogging" href="#logging">Logging</a></li>
+                <li class="hidden"><a id="tabBrickly" href="#bricklyFrame">Brickly</a></li>
+                <li class="hidden"><a id="tabProgram" href="#blockly"><span lkey="Blockly.Msg.TAB_PROGRAM">Program</span>&nbsp;<span id="tabProgramName"></span></a></li>
+                <li class="hidden"><a id="tabConfiguration" href="#brickly"><span lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</span>&nbsp;<span id="tabConfigurationName"></span></a></li>
             </ul>
 
             <div id="blockly">
@@ -273,7 +286,11 @@ limitations under the License.
                 </ol>
             </div>
         </div>
+        
         <iframe src="bricklyFrame.html" id="bricklyFrame"></iframe>
     </div>
+
+    <!-- ################## END TABS ################## -->
+    
 </body>
 </html>

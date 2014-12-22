@@ -374,20 +374,6 @@ function showConfiguration(result, load, name) {
 };
 
 /**
- * Load program from server
- */
-function loadFromServer(load) {
-    var $name = $('#programNameLoad');
-    COMM.json("/program", {
-        "cmd" : "loadP",
-        "name" : $name.val()
-    }, function(result) {
-        showProgram(result, load, $name.val());
-    });
-    LOG.info('load ' + $name.val() + ' signed in: ' + userState.id);
-}
-
-/**
  * Load the program that was selected in program list
  */
 function loadFromListing() {
@@ -767,23 +753,15 @@ function displayState() {
     }
 
     if (userState.program) {
-        $('#displayProgram').text(userState.program);
-        $('#iconDisplayProgram').removeClass('error');
-        $('#iconDisplayProgram').addClass('ok');
+        $('#tabProgramName').text(userState.program);
     } else {
-        $('#displayProgram').text('');
-        $('#iconDisplayProgram').removeClass('ok');
-        $('#iconDisplayProgram').addClass('error');
+        $('#tabProgramName').text('');
     }
 
     if (userState.configuration) {
-        $('#displayConfiguration').text(userState.configuration);
-        $('#iconDisplayConfiguration').removeClass('error');
-        $('#iconDisplayConfiguration').addClass('ok');
+        $('#tabConfigurationName').text(userState.configuration);
     } else {
-        $('#displayConfiguration').text('');
-        $('#iconDisplayConfiguration').removeClass('ok');
-        $('#iconDisplayConfiguration').addClass('error');
+        $('#tabConfigurationName').text('');
     }
 
     if (userState.toolbox) {
@@ -854,7 +832,7 @@ function initHeadNavigation() {
 
     $('#head-navigation').menu({
         position : {
-            at : "left top+57",
+            at : "left top+49",
             collision : "fit"
         },
     });
@@ -862,6 +840,10 @@ function initHeadNavigation() {
     $('#head-navigation > li > ul').find('li').hide();
     
     // Open menus on click 
+    $('#head-navigation-overview').onWrap('click', function() {
+        $('#head-navigation > li > ul').find('li').hide();
+        $('#submenu-overview').find('li').not('.hidden').show();
+    });
     $('#head-navigation-program').onWrap('click', function() {
         $('#head-navigation > li > ul').find('li').hide();
         $('#submenu-program').find('li').not('.hidden').show();
@@ -890,6 +872,18 @@ function initHeadNavigation() {
         $('#head-navigation > li > ul').find('li').hide();
         $('#submenu-login').find('li').not('.hidden').show();
     });
+
+    // Submenu Overview
+    $('#head-navigation').onWrap('click', '#submenu-overview > li:not(.ui-state-disabled) > span', function(event) {
+        $(".ui-dialog-content").dialog("close"); // close all opened popups
+        var domId = event.target.id;
+        if (domId === 'clickTabProgram') {
+            $('#tabProgram').click();
+        } else if (domId === 'clickTabConfiguration') {
+            $('#tabConfiguration').click();
+        }
+        return false;
+    }, 'sub menu of menu "overview"');
 
     // Submenu Program
     $('#head-navigation').onWrap('click', '#submenu-program > li:not(.ui-state-disabled) > span', function(event) {
@@ -922,9 +916,6 @@ function initHeadNavigation() {
         var domId = event.target.id;
         if (domId === 'checkConfig') {
             checkConfiguration();
-        } else if (domId === 'standardConfig') {
-            switchToBrickly();
-            bricklyActive = true;
         } else if (domId === 'newConfig') {
             setConfiguration("Standardkonfiguration");
         } else if (domId === 'listConfig') {
@@ -1044,11 +1035,7 @@ function initPopups() {
     $('#doLogin').onWrap('click', login, 'login ');
 
     $('#attachProgram').onWrap('click', function() {
-        if (userState.id) {
-            loadUPFromServer(true);
-        } else {
-            loadFromServer(true);
-        }
+        // TODO
     }, 'add the blocks');
 
     $('#saveProgram').onWrap('click', function() {
@@ -1140,6 +1127,26 @@ function initTabs() {
             switchLanguage(userState.language, true);
         }
     });
+
+    $('#tabProgram').onWrap('click', function() {
+        $('#head-navigation-tabs *').removeClass('tabClickedBorder');
+        $('#head-navigation-tabs *').removeClass('tabClicked');
+        $('#tabProgram span').addClass('tabClicked');
+        $('#tabProgram').addClass('tabClickedBorder');
+        $('#head-navigation-configuration-edit').css('display','none');
+        $('#head-navigation-program-edit').css('display','inline');
+        switchToBlockly();
+    });
+    
+    $('#tabConfiguration').onWrap('click', function() {
+        $('#head-navigation-tabs *').removeClass('tabClickedBorder');
+        $('#head-navigation-tabs *').removeClass('tabClicked');
+        $('#tabConfiguration span').addClass('tabClicked');
+        $('#tabConfiguration').addClass('tabClickedBorder');
+        $('#head-navigation-program-edit').css('display','none');
+        $('#head-navigation-configuration-edit').css('display','inline');
+        switchToBrickly();
+    });
 }
 
 /**
@@ -1226,10 +1233,6 @@ function translate(jsdata) {
             $('#displayToolbox').prop('title', value);
         } else if (key === 'Blockly.Msg.HINT_USER') {
             $('#displayLogin').prop('title', value);
-        } else if (key === 'Blockly.Msg.HINT_PROGRAM') {
-            $('#displayProgram').prop('title', value);
-        } else if (key === 'Blockly.Msg.HINT_CONFIGURATION') {
-            $('#displayConfiguration').prop('title', value);
         } else {
             $(this).html(value);            
         }
@@ -1331,7 +1334,6 @@ function pingServer() {
 function init() {
     initLogging();
     initUserState();
-    pingServer();
     initTabs();
     initPopups();
     initHeadNavigation();
@@ -1341,6 +1343,10 @@ function init() {
     $('#configurationNameSave').val('');
     initializeLanguages();
     switchLanguage('De', true);
+    pingServer();
+    $('#tabProgram span').addClass('tabClicked');
+    $('#tabProgram').addClass('tabClickedBorder');
+    $('#head-navigation-configuration-edit').css('display','none');
 };
 
 $(document).ready(WRAP.fn3(init, 'page init'));

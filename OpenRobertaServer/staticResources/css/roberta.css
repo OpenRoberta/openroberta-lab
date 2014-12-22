@@ -38,17 +38,15 @@ h2 {
 
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover,
 .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {
-	border: none;
+	border: 0 none;
 	background: none;
 }
 
 #head-section {
 	position: absolute;
 	width: 100%;
-	height: 60px;
+	height: 40px;
 	background-color: white;
-	box-shadow: 0px 3px 5px #aeaeaf;
-	-webkit-box-shadow: 0px 3px 5px #aeaeaf;
 	z-index: 100;
 }
 
@@ -106,16 +104,16 @@ ul#head-navigation .head-navigation-submenu>li:hover {
 	background-size: 100%;
 }
 
-.head-navi-icons.project {
-	background-image: url(img/head-navi-icons/document-text.svg);
+.head-navi-icons.overview {
+    background-image: url(img/head-navi-icons/th-menu.svg);
+}
+
+.head-navi-icons.program, .head-navi-icons.configuration {
+    background-image: url(img/head-navi-icons/document-text.svg);
 }
 
 .head-navi-icons.nepo {
 	background-image: url(img/head-navi-icons/puzzle-outline.svg);
-}
-
-.head-navi-icons.configuration {
-	background-image: url(img/head-navi-icons/contacts.svg);
 }
 
 .head-navi-icons.connection {
@@ -134,13 +132,6 @@ ul#head-navigation .head-navigation-submenu>li:hover {
 	background-image: url(img/head-navi-icons/user-outline.svg);
 }
 
-.head-navi-text {
-	font-family: 'Roboto', sans-serif;
-	font-size: 10px;
-	font-weight: bold;
-	text-align: center;
-}
-
 #head-navigation .state {
 	float: right;
 	padding-top: 2px;
@@ -149,20 +140,16 @@ ul#head-navigation .head-navigation-submenu>li:hover {
 }
 
 #state1 {
-	min-width: 155px;
-}
-
-#state2 {
 	min-width: 140px;
 }
 
-#state3 {
+#state2 {
 	width: 95px;
 }
 
 #head-navigation #logo {
 	width: 222px;
-	height: 60px;
+	height: 40px;
 	background-image: url(img/logo.png);
 	background-repeat: no-repeat;
 	float: right;
@@ -191,7 +178,7 @@ ul#head-navigation .head-navigation-submenu>li:hover {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	margin-top: 60px;
+	margin-top: 83px;
 	z-index: 99;
 	background: #ffffff; /* Old browsers */
 	background: -moz-radial-gradient(center, ellipse cover, #ffffff 0%, #e6e6e6 100%);
@@ -660,7 +647,7 @@ table.dataTable.no-footer {
 /* ############################################################### */
 .ui-widget-content {
 	background: transparent;
-	border: none !important;
+	border: 0 none !important;
 	margin: 0 !important;
 	padding: 0 !important;
 	width: 100%;
@@ -671,7 +658,7 @@ table.dataTable.no-footer {
 
 #blocklyDiv {
 	background-color: none;
-	background-image: url(img/grid-pattern-background.png);
+    background-image: url(img/grid-pattern-background.png);
 	background-repeat: repeat;
 	height: 100%;
 	min-height: 100%;
@@ -680,15 +667,13 @@ table.dataTable.no-footer {
 .ui-tabs .ui-tabs-nav {
 	opacity: 0.5;
 	position: absolute;
-	margin-left: 350px;
-	margin-top: 5px;
 	font-size: 12px !important;
 	z-index: 99999;
 	padding: 0 0;
 }
 
 .ui-tabs .ui-tabs-nav:hover {
-	opacity: 1 !important;
+    opacity: 1 !important;
 }
 
 .ui-tabs .ui-tabs-panel {
@@ -696,13 +681,11 @@ table.dataTable.no-footer {
 	overflow: auto;
 }
 
-.ui-state-default, .ui-tabs .ui-tabs-nav li.ui-tabs-active {
-	background-color: none !important;
-}
-
 .ui-widget-header {
-	padding-bottom: 30px;
-	background-color: white;
+    width: 100%;
+    background: none;
+    background-color: white;
+    opacity: 1 !important;
 }
 
 .input {
@@ -796,7 +779,7 @@ table.dataTable.no-footer {
 #bricklyFrame {
 	height: 100%;
 	width: 100%;
-	border: none;
+	border-top: 2px solid #aaaaaa;
 }
 
 #listing > h2, #confListing > h2 {
@@ -808,7 +791,7 @@ table.dataTable.no-footer {
     float: left;
     margin-left: 100px;
     width: 500px;
-    height: 60px;
+    height: 40px;
     text-align: center;
 }
 
@@ -825,3 +808,29 @@ table.dataTable.no-footer {
     color: #e2001a;
 }
 
+.tabClicked {
+    color: #afca04;
+}
+
+.tabClickedBorder {
+    border-bottom: 6px solid #afca04;
+}
+
+#head-navigation-tabs a:hover {
+    background-color: #b7d032;
+}
+
+#head-navigation-tabs {
+    background: none;
+    border: 0 none;
+    cursor: pointer;
+    margin-top: 55px;
+    font-size: 15px;
+}
+
+#tabProgram, #tabConfiguration {
+    display: inline;
+    padding-bottom: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
