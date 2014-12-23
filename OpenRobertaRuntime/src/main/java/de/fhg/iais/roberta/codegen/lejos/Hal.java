@@ -6,6 +6,7 @@ import lejos.ev3.startup.utils.Utils;
 import lejos.hardware.ev3.EV3;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.Image;
+import lejos.robotics.SampleProvider;
 import lejos.robotics.navigation.DifferentialPilot;
 import lejos.utility.Stopwatch;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
@@ -551,8 +552,9 @@ public class Hal {
      * @return
      */
     public boolean isPressed(SensorPort sensorPort) {
-        float[] sample = new float[this.deviceHandler.getSampleProvider(sensorPort).sampleSize()];
-        this.deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
+        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, "Touch");
+        float[] sample = new float[sampleProvider.sampleSize()];
+        sampleProvider.fetchSample(sample, 0);
         if ( sample[0] == 1.0 ) {
             return true;
         } else {
@@ -565,29 +567,14 @@ public class Hal {
 
     /**
      * @param sensorPort
-     * @param sensorMode
-     */
-    public void setUltrasonicSensorMode(SensorPort sensorPort, UltrasonicSensorMode sensorMode) {
-        this.deviceHandler.setUltrasonicSensorMode(sensorPort, sensorMode);
-    }
-
-    /**
-     * @param sensorPort
      * @return
      */
-    public UltrasonicSensorMode getUltraSonicSensorModeName(SensorPort sensorPort) {
-        return this.deviceHandler.getUltrasonicSensorModeName(sensorPort);
-    }
+    public int getUltraSonicSensorValue(SensorPort sensorPort, UltrasonicSensorMode sensorMode) {
+        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, sensorMode.name());
+        float[] sample = new float[sampleProvider.sampleSize()];
+        sampleProvider.fetchSample(sample, 0);
 
-    /**
-     * @param sensorPort
-     * @return
-     */
-    public int getUltraSonicSensorValue(SensorPort sensorPort) {
-        float[] sample = new float[this.deviceHandler.getSampleProvider(sensorPort).sampleSize()];
-        this.deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
-
-        switch ( this.deviceHandler.getUltrasonicSensorModeName(sensorPort) ) {
+        switch ( sensorMode ) {
             case PRESENCE:
                 return Math.round(sample[0]);
             case DISTANCE:
@@ -601,43 +588,30 @@ public class Hal {
     // --- Sensoren Farbsensor ---
 
     /**
-     * @param sensorPort
-     * @param sensorMode
-     */
-    public void setColorSensorMode(SensorPort sensorPort, ColorSensorMode sensorMode) {
-        this.deviceHandler.setColorSensorMode(sensorPort, sensorMode);
-    }
-
-    /**
-     * @param sensorPort
-     * @return
-     */
-    public ColorSensorMode getColorSensorModeName(SensorPort sensorPort) {
-        return this.deviceHandler.getColorSensorModeName(sensorPort);
-    }
-
-    /**
      * TODO interpretation/conversion before return (rgb!)
      *
      * @param sensorPort
      * @return
      */
-    public int getColorSensorValue(SensorPort sensorPort) {
-        float[] sample = new float[this.deviceHandler.getSampleProvider(sensorPort).sampleSize()];
-        this.deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
+    public int getColorSensorValue(SensorPort sensorPort, ColorSensorMode sensorMode) {
+        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, sensorMode.name());
+        float[] sample = new float[sampleProvider.sampleSize()];
+        sampleProvider.fetchSample(sample, 0);
 
-        switch ( this.deviceHandler.getColorSensorModeName(sensorPort) ) {
-            case AMBIENTLIGHT:
-                return Math.round(sample[0]);
-            case COLOUR:
-                return Math.round(sample[0]);
-            case RED:
-                return Math.round(sample[0]);
-            case RGB:
-                return Math.round(sample[0]/* 3 values */);
-            default:
-                throw new DbcException("sensor type or sensor mode missmatch");
-        }
+        return Math.round(sample[0]);
+        //        TODO Why is this swich case statement
+        //        switch ( sensorMode ) {
+        //            case AMBIENTLIGHT:
+        //                return Math.round(sample[0]);
+        //            case COLOUR:
+        //                return Math.round(sample[0]);
+        //            case RED:
+        //                return Math.round(sample[0]);
+        //            case RGB:
+        //                return Math.round(sample[0]/* 3 values */);
+        //            default:
+        //                throw new DbcException("sensor type or sensor mode missmatch");
+        //        }
     }
 
     // END Sensoren Farbsensor ---
@@ -645,56 +619,73 @@ public class Hal {
 
     /**
      * @param sensorPort
-     * @param sensorMode
+     * @return
      */
-    public void setInfraredSensorMode(SensorPort sensorPort, InfraredSensorMode sensorMode) {
-        this.deviceHandler.setInfraredMode(sensorPort, sensorMode);
+    public int getInfraredSensorValue(SensorPort sensorPort, InfraredSensorMode sensorMode) {
+        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, sensorMode.name());
+        float[] sample = new float[sampleProvider.sampleSize()];
+        sampleProvider.fetchSample(sample, 0);
+
+        return Math.round(sample[0]);
+        //        TODO Why is used this switch case statement ???
+        //        switch ( sensorMode) {
+        //            case DISTANCE:
+        //                return Math.round(sample[0]);
+        //            case SEEK:
+        //                return Math.round(sample[0]);
+        //            default:
+        //                throw new DbcException("sensor type or sensor mode missmatch");
+        //        }
     }
+
+    // END Sensoren IRSensor ---
+    // --- Sensor Gyrosensor ---
 
     /**
      * @param sensorPort
      * @return
      */
-    public InfraredSensorMode getInfraredSensorModeName(SensorPort sensorPort) {
-        return this.deviceHandler.getInfraredSensorModeName(sensorPort);
-    }
+    public int getGyroSensorValue(SensorPort sensorPort, GyroSensorMode sensorMode) {
+        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, sensorMode.name());
+        float[] sample = new float[sampleProvider.sampleSize()];
+        sampleProvider.fetchSample(sample, 0);
 
-    /**
-     * @param sensorPort
-     * @return
-     */
-    public int getInfraredSensorValue(SensorPort sensorPort) {
-        float[] sample = new float[this.deviceHandler.getSampleProvider(sensorPort).sampleSize()];
-        this.deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
-
-        switch ( this.deviceHandler.getInfraredSensorModeName(sensorPort) ) {
-            case DISTANCE:
+        switch ( sensorMode ) {
+            case ANGLE:
                 return Math.round(sample[0]);
-            case SEEK:
+            case RATE:
                 return Math.round(sample[0]);
             default:
                 throw new DbcException("sensor type or sensor mode missmatch");
         }
     }
 
-    // END Sensoren IRSensor ---
-    // --- Aktorsensor Drehsensor ---
-
     /**
-     * @param actorPort
-     * @param tachoMode
+     * @param sensorPort
      */
-    public void setMotorTachoMode(ActorPort actorPort, MotorTachoMode tachoMode) {
-        this.deviceHandler.setTachoSensorMode(actorPort, tachoMode);
+    public void resetGyroSensor(SensorPort sensorPort) {
+        this.deviceHandler.getGyroSensor().reset();
     }
 
+    // END Sensoren Gyrosensor ---
+    // --- Sensoren Zeitgeber ---
     /**
-     * @param actorPort
+     * @param timerNumber
      * @return
      */
-    public MotorTachoMode getMotorTachoMode(ActorPort actorPort) {
-        return this.deviceHandler.getTachoSensorModeName(actorPort);
+    public int getTimerValue(int timerNumber) {
+        return this.timers[timerNumber - 1].elapsed();
     }
+
+    /**
+     * @param timerNumber
+     */
+    public void resetTimer(int timerNumber) {
+        this.timers[timerNumber - 1].reset();
+    }
+
+    // END Sensoren Zeitgeber ---
+    // --- Aktorsensor Drehsensor ---
 
     /**
      * @param actorPort
@@ -714,9 +705,8 @@ public class Hal {
      * @param actorPort
      * @return tacho count (degrees) or rotations as double
      */
-    public double getRegulatedMotorTachoValue(ActorPort actorPort) {
-        MotorTachoMode tachoMode = this.deviceHandler.getTachoSensorModeName(actorPort);
-        switch ( tachoMode ) {
+    public double getRegulatedMotorTachoValue(ActorPort actorPort, MotorTachoMode mode) {
+        switch ( mode ) {
             case DEGREE:
                 return this.deviceHandler.getRegulatedMotor(actorPort).getTachoCount();
             case ROTATION:
@@ -730,9 +720,8 @@ public class Hal {
      * @param actorPort
      * @return tacho count (degrees) or rotations as double
      */
-    public double getUnregulatedMotorTachoValue(ActorPort actorPort) {
-        MotorTachoMode tachoMode = this.deviceHandler.getTachoSensorModeName(actorPort);
-        switch ( tachoMode ) {
+    public double getUnregulatedMotorTachoValue(ActorPort actorPort, MotorTachoMode mode) {
+        switch ( mode ) {
             case DEGREE:
                 return this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount();
             case ROTATION:
@@ -775,59 +764,4 @@ public class Hal {
     }
 
     // END Sensoren Steintasten ---
-    // --- Sensor Gyrosensor ---
-    /**
-     * @param sensorPort
-     * @param sensorMode
-     */
-    public void setGyroSensorMode(SensorPort sensorPort, GyroSensorMode sensorMode) {
-        this.deviceHandler.setGyroSensorMode(sensorPort, sensorMode);
-    }
-
-    public GyroSensorMode getGyroSensorModeName(SensorPort sensorPort) {
-        return this.deviceHandler.getGyroSensorModeName(sensorPort);
-    }
-
-    /**
-     * @param sensorPort
-     * @return
-     */
-    public int getGyroSensorValue(SensorPort sensorPort) {
-        float[] sample = new float[this.deviceHandler.getSampleProvider(sensorPort).sampleSize()];
-        this.deviceHandler.getSampleProvider(sensorPort).fetchSample(sample, 0);
-        switch ( this.deviceHandler.getGyroSensorModeName(sensorPort) ) {
-            case ANGLE:
-                return Math.round(sample[0]);
-            case RATE:
-                return Math.round(sample[0]);
-            default:
-                throw new DbcException("sensor type or sensor mode missmatch");
-        }
-    }
-
-    /**
-     * @param sensorPort
-     */
-    public void resetGyroSensor(SensorPort sensorPort) {
-        this.deviceHandler.getGyroSensor(sensorPort).reset();
-    }
-
-    // END Sensoren Gyrosensor ---
-    // --- Sensoren Zeitgeber ---
-    /**
-     * @param timerNumber
-     * @return
-     */
-    public int getTimerValue(int timerNumber) {
-        return this.timers[timerNumber - 1].elapsed();
-    }
-
-    /**
-     * @param timerNumber
-     */
-    public void resetTimer(int timerNumber) {
-        this.timers[timerNumber - 1].reset();
-    }
-
-    // END Sensoren Zeitgeber ---
 }
