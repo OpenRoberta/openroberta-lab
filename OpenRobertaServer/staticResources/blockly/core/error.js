@@ -52,7 +52,7 @@ goog.inherits(Blockly.Error, Blockly.Icon);
  * @private
  */
 Blockly.Error.textToDom_ = function(text) {
-    var paragraph = /** @type {!SVGTextElement} */(Blockly.createSvgElement('text', {
+    var paragraph = (Blockly.createSvgElement('text', {
         'class' : 'blocklyText blocklyBubbleText',
         'y' : Blockly.Bubble.BORDER_WIDTH
     }, null));
@@ -114,8 +114,7 @@ Blockly.Error.prototype.setVisible = function(visible) {
     if (visible) {
         // Create the bubble.
         var paragraph = Blockly.Error.textToDom_(this.text_);
-        this.bubble_ = new Blockly.Bubble(
-        /** @type {!Blockly.Workspace} */ (this.block_.workspace), paragraph, this.block_.svg_.svgPath_, this.iconX_, this.iconY_, null, null);
+        this.bubble_ = new Blockly.Bubble((this.block_.workspace), paragraph, this.block_.svg_.svgPath_, this.iconX_, this.iconY_, null, null);
         if (Blockly.RTL) {
             // Right-align the paragraph.
             // This cannot be done until the bubble is rendered on screen.

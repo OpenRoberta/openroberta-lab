@@ -47,13 +47,15 @@ Blockly.Xml.blockToDom_ = function(block, statement_list) {
     var repe = false;
     statement_list.push(element);
     element.setAttribute('type', block.type);
+
     element.setAttribute('id', block.id);
     if (block.mutationToDom) {
         // Custom data for an advanced block.
         var mutation = block.mutationToDom();
         if (mutation) {
             element.appendChild(mutation);
-            if (mutation !== undefined && mutation != null
+            if (mutation !== undefined
+                    && mutation != null
                     && (block.type == 'controls_if' || block.type == 'robControls_if' || block.type == 'robControls_ifElse' || block.type == 'robControls_wait_for')) {
                 element.appendChild(repetitions);
                 repe = true;
@@ -436,9 +438,8 @@ Blockly.Xml.textToDom = function(text) {
     var oParser = new DOMParser();
     var dom = oParser.parseFromString(text, 'text/xml');
     // The DOM should have one and only one top-level node, an XML tag.
-    if (!dom
-            || !dom.firstChild
-            || (dom.firstChild.nodeName.toLowerCase() != 'block_set' && dom.firstChild.nodeName.toLowerCase() != 'toolbox_set') || dom.firstChild !== dom.lastChild) {
+    if (!dom || !dom.firstChild || (dom.firstChild.nodeName.toLowerCase() != 'block_set' && dom.firstChild.nodeName.toLowerCase() != 'toolbox_set')
+            || dom.firstChild !== dom.lastChild) {
         // Whatever we got back from the parser is not XML.
         throw 'Blockly.Xml.textToDom did not obtain a valid XML tree.';
     }
@@ -502,7 +503,7 @@ Blockly.Xml.domToText = function(dom) {
     var text = oSerializer.serializeToString(dom);
     text = text.replace('http://www.w3.org/1999/xhtml', 'http://de.fhg.iais.roberta.blockly');
     return text
- };
+};
 
 // Export symbols that would otherwise be renamed by Closure compiler.
 if (!window['Blockly']['Xml']) {
