@@ -209,6 +209,18 @@ Blockly.OPPOSITE_TYPE[Blockly.NEXT_STATEMENT] = Blockly.PREVIOUS_STATEMENT;
 Blockly.OPPOSITE_TYPE[Blockly.PREVIOUS_STATEMENT] = Blockly.NEXT_STATEMENT;
 
 /**
+ * Lookup table for determining the color of a data type .
+ * 
+ * @const
+ */
+Blockly.DATA_TYPE = [];
+Blockly.DATA_TYPE['Number'] = Blockly.CAT_MATH_RGB;
+Blockly.DATA_TYPE['String'] = Blockly.CAT_TEXT_RGB;
+Blockly.DATA_TYPE['Boolean'] = Blockly.CAT_LOGIC_RGB;
+Blockly.DATA_TYPE['Array'] = Blockly.CAT_LISTS_RGB;
+Blockly.DATA_TYPE['Colour'] = Blockly.CAT_COLOUR_RGB;
+
+/**
  * Database of pre-loaded sounds.
  * 
  * @private
@@ -379,7 +391,7 @@ Blockly.onMouseDown_ = function(e) {
                 var icons = descendants[j].getIcons();
                 for (var k = 0; k < icons.length; k++) {
                     if (icons[k].bubble_)
-                    icons[k].setVisible(false);
+                        icons[k].setVisible(false);
                 }
             }
         }
@@ -866,7 +878,7 @@ Blockly.addChangeListener = function(func) {
  * Stop listening for Blockly's workspace changes.
  * 
  * @param {!Array.
- *          <!Array>} bindData Opaque data from addChangeListener.
+ *            <!Array>} bindData Opaque data from addChangeListener.
  */
 Blockly.removeChangeListener = function(bindData) {
     Blockly.unbindEvent_(bindData);

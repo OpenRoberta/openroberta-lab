@@ -316,6 +316,7 @@ Blockly.Flyout.prototype.hide = function() {
         Blockly.unbindEvent_(this.reflowWrapper_);
         this.reflowWrapper_ = null;
     }
+    this.width_ = 0;
     // Do NOT delete the blocks here. Wait until Flyout.show.
     // https://neil.fraser.name/news/2014/08/09/
 };
@@ -357,19 +358,27 @@ Blockly.Flyout.prototype.show = function(xmlList, opt_color) {
     var gaps = [];
     if (xmlList == Blockly.Variables.NAME_TYPE) {
         // Special category for variables.
-        Blockly.Variables.flyoutCategory(blocks, gaps, margin,
-        /** @type {!Blockly.Workspace} */(this.workspace_));
+        Blockly.Variables.flyoutCategory(blocks, gaps, margin, (this.workspace_));
+        // if no variables defined, open help of start block (to define variables)
+        if (blocks.length == 0) {
+            var topBlocks = Blockly.getMainWorkspace().getTopBlocks(true);
+            for (var i = 0; i < topBlocks.length; i++) {
+                var block = topBlocks[i];
+                if (block.type == 'robControls_start') {
+                    block.help.iconClick_();
+                    return;
+                }
+            }
+        }
     } else if (xmlList == Blockly.Procedures.NAME_TYPE) {
         // Special category for procedures.
-        Blockly.Procedures.flyoutCategory(blocks, gaps, margin,
-        /** @type {!Blockly.Workspace} */(this.workspace_));
+        Blockly.Procedures.flyoutCategory(blocks, gaps, margin, (this.workspace_));
     } else {
         for (var i = 0, xml; xml = xmlList[i]; i++) {
             if (xml.tagName && xml.tagName.toUpperCase() == 'BLOCK') {
                 var xmlBlockList = [];
                 xmlBlockList.push(xml);
-                var block = Blockly.Xml.domToBlock(
-                /** @type {!Blockly.Workspace} */(this.workspace_), xmlBlockList);
+                var block = Blockly.Xml.domToBlock((this.workspace_), xmlBlockList);
                 blocks.push(block);
                 gaps.push(margin * 3);
             }

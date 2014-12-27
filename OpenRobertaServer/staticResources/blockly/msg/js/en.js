@@ -546,6 +546,7 @@ Blockly.Msg.SET = "set";
 Blockly.Msg.START = "start";
 Blockly.Msg.START_ACTIVITY = "activity";
 Blockly.Msg.START_ACTIVITY_TOOLTIP = "Starts additional activity.";
+Blockly.Msg.START_HELP = "here comes your help text";
 Blockly.Msg.START_PROGRAM = "program";
 Blockly.Msg.START_TOOLTIP = "The starting point for the main program.";
 Blockly.Msg.TAB_CONFIGURATION = "Configuration";

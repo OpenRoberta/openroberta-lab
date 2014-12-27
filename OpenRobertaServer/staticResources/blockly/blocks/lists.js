@@ -194,6 +194,7 @@ Blockly.Blocks['robLists_create_with'] = {
         this.appendValueInput('ADD2');
         this.setOutput(true, 'Array');
         this.setMutatorPlus(new Blockly.MutatorPlus(this));
+        this.setMutatorMinus(new Blockly.MutatorMinus(this));
         this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP);
         this.itemCount_ = 3;
     },

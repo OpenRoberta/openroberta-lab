@@ -129,7 +129,9 @@ Blockly.ContextMenu.hide = function() {
  */
 Blockly.ContextMenu.callbackFactory = function(block, xml) {
     return function() {
-        var newBlock = Blockly.Xml.domToBlock(block.workspace, xml);
+        var blockList = [];
+        blockList.push(xml);
+        var newBlock = Blockly.Xml.domToBlock(block.workspace, blockList);
         // Move the new block next to the old block.
         var xy = block.getRelativeToSurfaceXY();
         if (Blockly.RTL) {

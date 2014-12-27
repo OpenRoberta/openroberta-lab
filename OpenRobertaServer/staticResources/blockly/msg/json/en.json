@@ -2,10 +2,14 @@
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
 <<<<<<< HEAD
+<<<<<<< HEAD
 		"lastupdated": "2015-01-22 11:50:57.068000",
 =======
 		"lastupdated": "2014-12-18 23:15:43.156000",
 >>>>>>> ORA-369 move setmode to getvalue sensor blocks, add wait_for_ms block, reactivate blocks in Template.java
+=======
+		"lastupdated": "2014-12-27 23:41:46.761000",
+>>>>>>> ORA-376 add global variables in start block, make variables blockly type-save, assign type depending color to variables (getter and setter)
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -526,6 +530,7 @@
 	"LOOP_COUNT": "number",
 	"LOOP": "repeat until",
 	"LOOP_FOREVER": "repeat indefinitely",
+	"START_HELP": "here comes your help text",
 	"MOTORDIFF_ON_HELP": "here comes your help text",
 	"MOTORDIFF_ON_FOR_HELP": "here comes your help text",
 	"MOTORDIFF_STOP_HELP": "here comes your help text",
