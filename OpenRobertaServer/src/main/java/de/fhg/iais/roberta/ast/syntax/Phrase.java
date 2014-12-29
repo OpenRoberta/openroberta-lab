@@ -160,6 +160,7 @@ abstract public class Phrase<V> {
         MATH_CONST( Category.EXPR ),
         EMPTY_LIST( Category.EXPR ),
         VAR( Category.EXPR ),
+        VAR_DECLARATION( Category.EXPR ),
         UNARY( Category.EXPR ),
         BINARY( Category.EXPR ),
         SENSOR_EXPR( Category.EXPR ),

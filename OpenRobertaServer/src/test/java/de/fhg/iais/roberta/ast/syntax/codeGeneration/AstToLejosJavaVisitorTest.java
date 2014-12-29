@@ -262,6 +262,50 @@ public class AstToLejosJavaVisitorTest {
         assertCodeIsOk(a, "/syntax/code_generator/java_code_generator6.xml");
     }
 
+    @Test
+    public void test7() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + MAIN_CLASS
+            + BRICK_CONFIGURATION
+            + "private Set<HardwareComponentEV3Sensor> usedSensors = new LinkedHashSet<HardwareComponentEV3Sensor>();\n"
+            + MAIN_METHOD
+            + "    public void run() {\n"
+            + "        Hal hal = new Hal(brickConfiguration, usedSensors);\n"
+            + "        hal.turnOnRegulatedMotor(ActorPort.B,30);\n"
+            + "        hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);\n"
+            + SUFFIX
+            + "    }\n"
+            + "}\n";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator7.xml");
+    }
+
+    @Test
+    public void test8() throws Exception {
+
+        String a = "" //
+            + IMPORTS
+            + MAIN_CLASS
+            + BRICK_CONFIGURATION
+            + "private Set<HardwareComponentEV3Sensor> usedSensors = new LinkedHashSet<HardwareComponentEV3Sensor>();\n"
+            + MAIN_METHOD
+            + "    public void run() {\n"
+            + "        Hal hal = new Hal(brickConfiguration, usedSensors);\n"
+            + "        float item = 10;\n"
+            + "        String item2 = \"TTTT\";\n"
+            + "        boolean item3 = true;\n"
+            + "        hal.drawText(String.valueOf(item), 0, 0);\n"
+            + "        hal.drawText(String.valueOf(item2), 0, 0);\n"
+            + "        hal.drawText(String.valueOf(item3), 0, 0);\n"
+            + "        item3 = false;\n"
+            + SUFFIX
+            + "    }\n"
+            + "}\n";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator8.xml");
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
         Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));

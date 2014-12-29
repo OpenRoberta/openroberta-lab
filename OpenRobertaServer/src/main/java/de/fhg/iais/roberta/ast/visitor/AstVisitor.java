@@ -31,6 +31,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.LenghtOfIsEmptyFunct;
@@ -124,6 +125,13 @@ public interface AstVisitor<V> {
      * @param var to be visited
      */
     public V visitVar(Var<V> var);
+
+    /**
+     * visit a {@link VarDeclaration}.
+     *
+     * @param var to be visited
+     */
+    public V visitVarDeclaration(VarDeclaration<V> var);
 
     /**
      * visit a {@link Unary}.

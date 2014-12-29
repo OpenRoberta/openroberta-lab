@@ -38,6 +38,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.LenghtOfIsEmptyFunct;
@@ -141,6 +142,12 @@ public class HardwareCheckVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitVar(Var<Void> var) {
+        return null;
+    }
+
+    @Override
+    public Void visitVarDeclaration(VarDeclaration<Void> var) {
+        var.getValue().visit(this);
         return null;
     }
 
@@ -398,6 +405,7 @@ public class HardwareCheckVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
+        mainTask.getVariables().visit(this);
         return null;
     }
 

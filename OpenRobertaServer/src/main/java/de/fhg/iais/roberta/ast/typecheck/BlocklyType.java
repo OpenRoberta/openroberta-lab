@@ -1,5 +1,9 @@
 package de.fhg.iais.roberta.ast.typecheck;
 
+import java.util.Locale;
+
+import de.fhg.iais.roberta.dbc.DbcException;
+
 /**
  * needed to typecheck a blockly program. Defines the types usable in a signature of a function/method/operator<br>
  * The basis structure of the types is:
@@ -39,23 +43,64 @@ package de.fhg.iais.roberta.ast.typecheck;
  */
 public enum BlocklyType {
     // @formatter:off
-    ANY,
-    COMPARABLE(ANY), ADDABLE(ANY),
-    BOOL(COMPARABLE), NUMERIC(COMPARABLE, ADDABLE), STRING(COMPARABLE, ADDABLE), COLOR(ANY), //
-    NULL(STRING, COLOR),
-    REF(NULL), PRIM(NUMERIC, BOOL),
-    NOTHING(REF, PRIM),
-    VOID,
-    CAPTURED_TYPE, R, S, T;
+    ANY("", ""),
+    COMPARABLE("", "", ANY), ADDABLE("", "", ANY),
+    BOOL("BOOLEAN", "boolean", COMPARABLE), NUMERIC("NUMBER", "float", COMPARABLE, ADDABLE), STRING("STRING", "String", COMPARABLE, ADDABLE), COLOR("COLOUR", "String", ANY), //
+    NULL("", "", STRING, COLOR),
+    REF("", "",NULL), PRIM("", "",NUMERIC, BOOL),
+    NOTHING("", "",REF, PRIM),
+    VOID("", "void"),
+    CAPTURED_TYPE("", ""), R("", ""), S("", ""), T("", "");
     // @formatter:on
 
+    private final String blocklyName;
+    private final String javaTypeName;
     private final BlocklyType[] superTypes;
 
-    private BlocklyType(BlocklyType... superTypes) {
+    private BlocklyType(String blocklyName, String javaTypeName, BlocklyType... superTypes) {
+        this.blocklyName = blocklyName;
+        this.javaTypeName = javaTypeName;
         this.superTypes = superTypes;
+    }
+
+    /**
+     * @return the blocklyName
+     */
+    public String getBlocklyName() {
+        return this.blocklyName;
+    }
+
+    /**
+     * @return the javaTypeName
+     */
+    public String getJavaCode() {
+        return javaTypeName;
     }
 
     public BlocklyType[] getSuperTypes() {
         return this.superTypes;
+    }
+
+    /**
+     * get variable type from {@link BlocklyType} from string parameter.
+     * Throws exception if the actor variable type does not exists.
+     *
+     * @param name of the variable type
+     * @return variable type from the enum {@link BlocklyType}
+     */
+    public static BlocklyType get(String variableType) {
+        if ( variableType == null || variableType.isEmpty() ) {
+            throw new DbcException("Invalid variable type: " + variableType);
+        }
+        String sUpper = variableType.trim().toUpperCase(Locale.GERMAN);
+        for ( BlocklyType ap : BlocklyType.values() ) {
+            if ( ap.toString().equals(sUpper) ) {
+                return ap;
+            }
+            if ( sUpper.equals(ap.getBlocklyName()) ) {
+                return ap;
+            }
+        }
+        throw new DbcException("Invalid variableType: " + variableType);
     }
 }

@@ -35,6 +35,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.LenghtOfIsEmptyFunct;
@@ -523,6 +524,12 @@ public class InfoCollector<T> implements AstVisitor<T> {
 
     @Override
     public T visitWaitTimeStmt(WaitTimeStmt<T> waitTimeStmt) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitVarDeclaration(VarDeclaration<T> var) {
         // TODO Auto-generated method stub
         return null;
     }

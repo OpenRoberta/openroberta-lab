@@ -151,6 +151,7 @@ public final class AstJaxbTransformerHelper {
         setCollapsed(astSource, block);
         setInline(astSource, block);
         setDeletable(astSource, block);
+        setMovable(astSource, block);
     }
 
     private static void setInline(Phrase<?> astObject, Block block) {
@@ -174,6 +175,12 @@ public final class AstJaxbTransformerHelper {
     private static void setDeletable(Phrase<?> astObject, Block block) {
         if ( astObject.getProperty().isDeletable() != null ) {
             block.setDeletable(astObject.getProperty().isDeletable());
+        }
+    }
+
+    private static void setMovable(Phrase<?> astObject, Block block) {
+        if ( astObject.getProperty().isMovable() != null ) {
+            block.setMovable(astObject.getProperty().isMovable());
         }
     }
 

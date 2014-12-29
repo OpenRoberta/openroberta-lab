@@ -295,7 +295,14 @@ abstract public class JaxbAstTransformer<V> {
     }
 
     protected BlocklyBlockProperties extractBlockProperties(Block block) {
-        return BlocklyBlockProperties.make(block.getType(), block.getId(), isDisabled(block), isCollapsed(block), isInline(block), isDeletable(block));
+        return BlocklyBlockProperties.make(
+            block.getType(),
+            block.getId(),
+            isDisabled(block),
+            isCollapsed(block),
+            isInline(block),
+            isDeletable(block),
+            isMovable(block));
     }
 
     protected boolean isDisabled(Block block) {
@@ -318,5 +325,12 @@ abstract public class JaxbAstTransformer<V> {
             return null;
         }
         return block.isDeletable();
+    }
+
+    protected Boolean isMovable(Block block) {
+        if ( block.isMovable() == null ) {
+            return null;
+        }
+        return block.isMovable();
     }
 }

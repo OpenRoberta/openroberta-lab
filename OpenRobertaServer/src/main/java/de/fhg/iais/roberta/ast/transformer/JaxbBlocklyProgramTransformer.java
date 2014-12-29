@@ -47,6 +47,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary.Op;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.syntax.expr.Var.TypeVar;
+import de.fhg.iais.roberta.ast.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.ast.syntax.functions.FunctionNames;
 import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
@@ -96,6 +97,7 @@ import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
+import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Field;
@@ -593,6 +595,15 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
             case "variables_get":
                 return extractVar(block);
 
+            case "variables_declare":
+                fields = extractFields(block, (short) 2);
+                values = extractValues(block, (short) 1);
+                BlocklyType typeVar = BlocklyType.get(extractField(fields, "TYPE"));
+                String name = extractField(fields, "VAR");
+                expr = extractValue(values, new ExprParam("VALUE", Integer.class));
+                boolean next = block.getMutation().isNext();
+                return VarDeclaration.make(typeVar, name, convertPhraseToExpr(expr), next, properties, comment);
+
                 // KONTROLLE
             case "controls_if":
             case "robControls_if":
@@ -706,7 +717,14 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 return extractRepeatStatement(block, exprList, BlocklyConstants.TIMES);
 
             case "robControls_start":
-                return MainTask.make(properties, comment);
+                if ( block.getMutation().isDeclare() == true ) {
+                    statements = extractStatements(block, (short) 1);
+                    statement = extractStatement(statements, "ST");
+                    return MainTask.make(statement, properties, comment);
+                }
+                StmtList<V> listOfVariables = StmtList.make();
+                listOfVariables.setReadOnly();
+                return MainTask.make(listOfVariables, properties, comment);
 
             case "robControls_activity":
                 values = extractValues(block, (short) 1);

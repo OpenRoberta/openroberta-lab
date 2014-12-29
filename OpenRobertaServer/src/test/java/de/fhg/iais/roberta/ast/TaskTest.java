@@ -9,9 +9,21 @@ public class TaskTest {
 
     @Test
     public void mainTask() throws Exception {
-        String a = "BlockAST [project=[[Location [x=11, y=35], MainTask []]]]";
+        String a =
+            "BlockAST [project=[[Location [x=140, y=103], MainTask [\n"
+                + "exprStmt VarDeclaration [NUMERIC, item, NumConst [0], true]\n"
+                + "exprStmt VarDeclaration [STRING, item2, StringConst [], true]\n"
+                + "exprStmt VarDeclaration [BOOL, item3, BoolConst [true], true]\n"
+                + "exprStmt VarDeclaration [COLOR, item4, ColorConst [NONE], false]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/task/task_mainTask.xml"));
+    }
+
+    @Test
+    public void mainTask1() throws Exception {
+        String a = "BlockAST [project=[[Location [x=10, y=83], MainTask []]]]";
+
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/task/task_mainTask1.xml"));
     }
 
     @Test
@@ -31,6 +43,11 @@ public class TaskTest {
     @Test
     public void reverseTransformatinMainTask() throws Exception {
         Helper.assertTransformationIsOk("/ast/task/task_mainTask.xml");
+    }
+
+    @Test
+    public void reverseTransformatinMainTask1() throws Exception {
+        Helper.assertTransformationIsOk("/ast/task/task_mainTask1.xml");
     }
 
     @Test

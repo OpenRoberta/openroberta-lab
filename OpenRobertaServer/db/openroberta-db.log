@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*C4*/SET SCHEMA PUBLIC
 <<<<<<< HEAD
 DELETE FROM USER WHERE ID=42
@@ -25,4 +26,9 @@ COMMIT
 DELETE FROM PROGRAM WHERE ID=45
 INSERT INTO PROGRAM VALUES(45,'test3',53,'<block_set xmlns="http://de.fhg.iais.roberta.blockly"><instance x="100" y="50"><block type="robControls_start" id="10" deletable="false"></block><block type="robActions_display_text" id="22" inline="false"><value name="OUT"><block type="text" id="23"><field name="TEXT">Hallo</field></block></value><value name="COL"><block type="math_number" id="24"><field name="NUM">0</field></block></value><value name="ROW"><block type="math_number" id="25"><field name="NUM">0</field></block></value></block><block type="robActions_display_picture" id="93" inline="false"><field name="PICTURE">OLDGLASSES</field><value name="X"><block type="math_number" id="94"><field name="NUM">0</field></block></value><value name="Y"><block type="math_number" id="95"><field name="NUM">0</field></block></value></block><block type="robControls_wait_for" id="138" inline="false"><value name="WAIT0"><block type="logic_compare" id="139" inline="true"><field name="OP">EQ</field><value name="A"><block type="robSensors_getSample" id="140"><mutation input="TOUCH"></mutation><field name="SENSORTYPE">TOUCH</field><field name="SENSORPORT">1</field></block></value><value name="B"><block type="logic_boolean" id="141"><field name="BOOL">TRUE</field></block></value></block></value></block></instance></block_set>','2014-12-23 11:02:37.341000','2014-12-23 11:02:39.336000',NULL,NULL,0,NULL,0)
 >>>>>>> ORA-372 v0.1 of the HAL and DeviceHandler for the new sensor blocks
+=======
+/*C3*/SET SCHEMA PUBLIC
+DELETE FROM USER WHERE ID=53
+INSERT INTO USER VALUES(53,'koki','1','1','TEACHER','2014-12-19 09:18:04.976000','2014-12-29 09:40:19.410000',NULL)
+>>>>>>> ORA-378 Transformation for new Start block with variable declaration
 COMMIT

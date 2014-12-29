@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.FunctionExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.LenghtOfIsEmptyFunct;
@@ -209,6 +210,12 @@ public class AstToVarsVisitor extends AstDefaultVisitorInspecting {
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitVarDeclaration(VarDeclaration<Void> var) {
         // TODO Auto-generated method stub
         return null;
     }

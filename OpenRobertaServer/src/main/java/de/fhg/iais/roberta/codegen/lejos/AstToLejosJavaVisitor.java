@@ -41,6 +41,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.LenghtOfIsEmptyFunct;
@@ -233,6 +234,14 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
                 this.sb.append(var.getValue());
                 break;
         }
+        return null;
+    }
+
+    @Override
+    public Void visitVarDeclaration(VarDeclaration<Void> var) {
+        this.sb.append(var.getTypeVar().getJavaCode()).append(" ");
+        this.sb.append(var.getName()).append(" = ");
+        var.getValue().visit(this);
         return null;
     }
 
@@ -705,6 +714,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
+        mainTask.getVariables().visit(this);
         return null;
 
     }
