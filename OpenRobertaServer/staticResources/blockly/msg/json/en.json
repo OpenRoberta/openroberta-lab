@@ -3,6 +3,7 @@
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		"lastupdated": "2015-01-22 11:50:57.068000",
 =======
 		"lastupdated": "2014-12-18 23:15:43.156000",
@@ -10,6 +11,9 @@
 =======
 		"lastupdated": "2014-12-27 23:41:46.761000",
 >>>>>>> ORA-376 add global variables in start block, make variables blockly type-save, assign type depending color to variables (getter and setter)
+=======
+		"lastupdated": "2015-01-02 12:45:01.447000",
+>>>>>>> ORA-376 add types to lists, refactore variable messages
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -324,16 +328,16 @@
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "Prompt for user for a number.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Prompt for user for some text.",
 	"LISTS_CREATE_EMPTY_HELPURL": "https://en.wikipedia.org/wiki/Linked_list#Empty_lists",
-	"LISTS_CREATE_EMPTY_TITLE": "create empty list",
+	"LISTS_CREATE_EMPTY_TITLE": "create empty %1 list",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Returns a list, of length 0, containing no data records",
 	"LISTS_CREATE_WITH_TOOLTIP": "Create a list with any number of items.",
-	"LISTS_CREATE_WITH_INPUT_WITH": "create list with",
+	"LISTS_CREATE_WITH_INPUT_WITH": "create %1 list with %2",
 	"LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "list",
 	"LISTS_CREATE_WITH_CONTAINER_TOOLTIP": "Add, remove, or reorder sections to reconfigure this list block.",
 	"LISTS_CREATE_WITH_ITEM_TOOLTIP": "Add an item to the list.",
 	"LISTS_REPEAT_HELPURL": "https://code.google.com/p/blockly/wiki/Lists#create_list_with",
 	"LISTS_REPEAT_TOOLTIP": "Creates a list consisting of the given value repeated the specified number of times.",
-	"LISTS_REPEAT_TITLE": "create list with item %1 repeated %2 times",
+	"LISTS_REPEAT_TITLE": "create %1 list with item %2 repeated %3 times",
 	"LISTS_LENGTH_HELPURL": "https://code.google.com/p/blockly/wiki/Lists#length_of",
 	"LISTS_LENGTH_TITLE": "length of %1",
 	"LISTS_LENGTH_TOOLTIP": "Returns the length of a list.",
@@ -393,16 +397,22 @@
 	"LISTS_GET_SUBLIST_TAIL": "",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Creates a copy of the specified portion of a list.",
 	"ORDINAL_NUMBER_SUFFIX": "",
+	"VARIABLES_CREATE_TITLE": "Create",
+	"VARIABLES_CREATE_WITH": "with",
 	"VARIABLES_GET_HELPURL": "https://code.google.com/p/blockly/wiki/Variables#Get",
 	"VARIABLES_GET_TITLE": "",
 	"VARIABLES_GET_TAIL": "",
 	"VARIABLES_GET_TOOLTIP": "Returns the value of this variable.",
 	"VARIABLES_GET_CREATE_SET": "Create 'set %1'",
 	"VARIABLES_SET_HELPURL": "https://code.google.com/p/blockly/wiki/Variables#Set",
-	"VARIABLES_SET_TITLE": "set",
-	"VARIABLES_SET_TAIL": "to",
+	"VARIABLES_SET_TITLE": "set %1 to %2",
 	"VARIABLES_SET_TOOLTIP": "Sets this variable to be equal to the input.",
 	"VARIABLES_SET_CREATE_GET": "Create 'get %1'",
+	"VARIABLES_TYPE_NUMBER": "Number",
+	"VARIABLES_TYPE_BOOLEAN": "Boolean",
+	"VARIABLES_TYPE_STRING": "String",
+	"VARIABLES_TYPE_ARRAY": "Array",
+	"VARIABLES_TYPE_COLOUR": "Colour",
 	"PROCEDURES_DEFNORETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
 	"PROCEDURES_DEFNORETURN_TITLE": "to",
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "do something",

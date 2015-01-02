@@ -125,6 +125,27 @@ Blockly.Variables.updateType = function(name, type) {
 };
 
 /**
+ * Find all instances of the specified variable and delete them.
+ * 
+ * @param {string}
+ *            name Variable to update.
+ * @param {string}
+ *            type New data type.
+ */
+Blockly.Variables.deleteAll = function(name) {
+    var blocks = Blockly.mainWorkspace.getAllBlocks();
+    // Iterate through every block.
+    for (var x = 0; x < blocks.length; x++) {
+        var func = blocks[x].setType;
+        if (func) {
+            if (blocks[x].getFieldValue('VAR') === name) {
+                blocks[x].dispose(true, true, false);
+            }
+        }
+    }
+};
+
+/**
  * Find the declaration instance of the specified variable and return the data
  * type.
  * 
@@ -227,7 +248,6 @@ Blockly.Variables.generateUniqueName = function() {
     } else {
         newName = 'i';
     }
-    console.log(newName);
     return newName;
 };
 

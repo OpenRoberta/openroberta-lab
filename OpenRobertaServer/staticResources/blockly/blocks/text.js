@@ -297,8 +297,9 @@ Blockly.Blocks['text_append'] = {
     init : function() {
         this.setHelpUrl(Blockly.Msg.TEXT_APPEND_HELPURL);
         this.setColourRGB(Blockly.CAT_TEXT_RGB);
-        this.appendValueInput('TEXT').appendField(Blockly.Msg.TEXT_APPEND_TO).appendField(new Blockly.FieldVariable(Blockly.Msg.TEXT_APPEND_VARIABLE), 'VAR')
-                .appendField(Blockly.Msg.TEXT_APPEND_APPENDTEXT);
+        this.setInputsInline(true);
+        this.appendValueInput('VAR').appendField(Blockly.Msg.TEXT_APPEND_TO).setCheck('String');
+        this.appendValueInput('TEXT').appendField(Blockly.Msg.TEXT_APPEND_APPENDTEXT);
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         // Assign 'this' to a variable for use in the tooltip closure below.

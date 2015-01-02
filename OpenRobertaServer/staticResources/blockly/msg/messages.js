@@ -815,14 +815,14 @@ Blockly.Msg.TEXT_PROMPT_TOOLTIP_TEXT = 'Prompt for user for some text.';
 /// url - Information on empty lists.
 Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = 'https://en.wikipedia.org/wiki/Linked_list#Empty_lists';
 /// block text - See [https://code.google.com/p/blockly/wiki/Lists#create_empty_list https://code.google.com/p/blockly/wiki/Lists#create_empty_list].
-Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = 'create empty list';
+Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = 'create empty %1 list';
 /// block text - See [https://code.google.com/p/blockly/wiki/Lists#create_empty_list https://code.google.com/p/blockly/wiki/Lists#create_empty_list].
 Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP = 'Returns a list, of length 0, containing no data records';
 
 /// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#create_list_with https://code.google.com/p/blockly/wiki/Lists#create_list_with].
 Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP = 'Create a list with any number of items.';
 /// block text - See [https://code.google.com/p/blockly/wiki/Lists#create_list_with https://code.google.com/p/blockly/wiki/Lists#create_list_with].
-Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH = 'create list with';
+Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH = 'create %1 list with %2';
 /// block text - This appears in a sub-block when [https://code.google.com/p/blockly/wiki/Lists#changing_number_of_inputs changing the number of inputs in a ''''create list with'''' block].
 Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TITLE_ADD = 'list';
 /// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#changing_number_of_inputs https://code.google.com/p/blockly/wiki/Lists#changing_number_of_inputs].
@@ -838,7 +838,7 @@ Blockly.Msg.LISTS_REPEAT_TOOLTIP = 'Creates a list consisting of the given value
 /// block text - See [https://code.google.com/p/blockly/wiki/Lists#create_list_with
 /// https://code.google.com/p/blockly/wiki/Lists#create_list_with].
 ///\n\nParameters:\n* %1 - the item (text) to be repeated\n* %2 - the number of times to repeat it
-Blockly.Msg.LISTS_REPEAT_TITLE = 'create list with item %1 repeated %2 times';
+Blockly.Msg.LISTS_REPEAT_TITLE = 'create %1 list with item %2 repeated %3 times';
 
 /// url - Information about how the length of a list is computed (i.e., by the total number of elements, not the number of different elements).
 Blockly.Msg.LISTS_LENGTH_HELPURL = 'https://code.google.com/p/blockly/wiki/Lists#length_of';
@@ -1046,6 +1046,8 @@ Blockly.Msg.LISTS_GET_SUBLIST_TOOLTIP = 'Creates a copy of the specified portion
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = '';
 
 // Variables Blocks.
+Blockly.Msg.VARIABLES_CREATE_TITLE = 'Create';
+Blockly.Msg.VARIABLES_CREATE_WITH = 'with';
 /// url - Information about ''variables'' in computer programming.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Variable_(computer_science) https://en.wikipedia.org/wiki/Variable_(computer_science)], if it exists.
 Blockly.Msg.VARIABLES_GET_HELPURL = 'https://code.google.com/p/blockly/wiki/Variables#Get';
 /// block text - This precedes the name of a variable when getting its values.  In most (all?) languages, it should be the empty string.  If unsure, ask yourself if any word should go before "x" in the expression "x + 1".
@@ -1058,20 +1060,21 @@ Blockly.Msg.VARIABLES_GET_TOOLTIP = 'Returns the value of this variable.';
 /// context menu - Selecting this creates a block to set (change) the value of this variable.
 /// \n\nParameters:\n* %1 - the name of the variable.
 Blockly.Msg.VARIABLES_GET_CREATE_SET = 'Create "set %1"';
-
 /// url - Information about ''variables'' in computer programming.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Variable_(computer_science) https://en.wikipedia.org/wiki/Variable_(computer_science)], if it exists.
 Blockly.Msg.VARIABLES_SET_HELPURL = 'https://code.google.com/p/blockly/wiki/Variables#Set';
 /// block text - The imperative or infinitive form of the verb "set", as in: '''set''' [the value of] x to 7.
-Blockly.Msg.VARIABLES_SET_TITLE = 'set';
+Blockly.Msg.VARIABLES_SET_TITLE = 'set %1 to %2';
 Blockly.Msg.VARIABLES_SET_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
-/// block text - The word that goes after the name of the variable and before its new
-/// value in: set [the value of] x '''to''' 7.
-Blockly.Msg.VARIABLES_SET_TAIL = 'to';
 /// tooltip - This initializes or changes the value of the named variable.
 Blockly.Msg.VARIABLES_SET_TOOLTIP = 'Sets this variable to be equal to the input.';
 /// context menu - Selecting this creates a block to get (change) the value of
 /// this variable.\n\nParameters:\n* %1 - the name of the variable.
 Blockly.Msg.VARIABLES_SET_CREATE_GET = 'Create "get %1"';
+Blockly.Msg.VARIABLES_TYPE_NUMBER = 'Number';
+Blockly.Msg.VARIABLES_TYPE_BOOLEAN = 'Boolean';
+Blockly.Msg.VARIABLES_TYPE_STRING = 'String';
+Blockly.Msg.VARIABLES_TYPE_ARRAY = 'Array';
+Blockly.Msg.VARIABLES_TYPE_COLOUR = 'Colour';
 
 // Procedures Blocks.
 /// url - Information about defining [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that do not have return values.

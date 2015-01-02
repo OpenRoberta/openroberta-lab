@@ -232,7 +232,7 @@ Blockly.Blocks['math_change'] = {
         this.interpolateMsg(
         // TODO: Combine these messages instead of using concatenation.
         Blockly.Msg.MATH_CHANGE_TITLE_CHANGE + ' %1 ' + Blockly.Msg.MATH_CHANGE_INPUT_BY + ' %2', [ 'VAR',
-                new Blockly.FieldVariable(Blockly.Msg.MATH_CHANGE_TITLE_ITEM) ], [ 'DELTA', 'Number', Blockly.ALIGN_RIGHT ], Blockly.ALIGN_RIGHT);
+                'Number' ], [ 'DELTA', 'Number', Blockly.ALIGN_RIGHT ], Blockly.ALIGN_RIGHT);
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         // Assign 'this' to a variable for use in the tooltip closure below.
@@ -308,7 +308,7 @@ Blockly.Blocks['math_on_list'] = {
                 thisBlock.outputConnection.setCheck('Number');
             }
         });
-        this.appendValueInput('LIST').setCheck('Array').appendField(dropdown, 'OP');
+        this.appendValueInput('LIST').setCheck('Array_Number').appendField(dropdown, 'OP');
         this.setTooltip(function() {
             var mode = thisBlock.getFieldValue('OP');
             var TOOLTIPS = {

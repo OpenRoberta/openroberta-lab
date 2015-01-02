@@ -381,24 +381,24 @@ public class Templates {
 				+ "        </value> "
 				+ "      </block> "
 				+ "      <block type='controls_whileUntil'/> "
-				+ "      <block type='controls_for'> "
-				+ "        <value name='FROM'> "
-				+ "          <block type='math_number'> "
-				+ "            <field name='NUM'>1</field> "
-				+ "          </block> " //
-				+ "        </value> "
-				+ "        <value name='TO'> "
-				+ "          <block type='math_number'> "
-				+ "            <field name='NUM'>10</field> "
-				+ "          </block> " //
-				+ "        </value> "
-				+ "        <value name='BY'> "
-				+ "          <block type='math_number'> "
-				+ "            <field name='NUM'>1</field> "
-				+ "          </block> " //
-				+ "        </value> "
-				+ "      </block> " //
-				+ "      <block type='controls_forEach'/> "
+				/*
+				 * TODO make them available again +
+				 * "      <block type='controls_for'> " +
+				 * "        <value name='FROM'> " +
+				 * "          <block type='math_number'> " +
+				 * "            <field name='NUM'>1</field> " +
+				 * "          </block> " // + "        </value> " +
+				 * "        <value name='TO'> " +
+				 * "          <block type='math_number'> " +
+				 * "            <field name='NUM'>10</field> " +
+				 * "          </block> " // + "        </value> " +
+				 * "        <value name='BY'> " +
+				 * "          <block type='math_number'> " +
+				 * "            <field name='NUM'>1</field> " +
+				 * "          </block> " // + "        </value> " +
+				 * "      </block> " //
+				 * "      <block type='controls_forEach'/> "
+				 */
 				+ "      <block type='controls_flow_statements'/> "
 				+ "    </category> " //
 				+ "    <category name='Warten'> "
@@ -446,13 +446,14 @@ public class Templates {
 				+ "    <block type='math_trig'/> "
 				+ "    <block type='math_constant'/> "
 				+ "    <block type='math_number_property'/> "
-				+ "    <block type='math_change'> "
-				+ "      <value name='DELTA'> "
-				+ "        <block type='math_number'> "
-				+ "          <field name='NUM'>1</field> "
-				+ "        </block> " //
-				+ "      </value> " //
-				+ "    </block> "
+				/*
+				 * + "    <block type='math_change'> " +
+				 * "      <value name='DELTA'> " +
+				 * "        <block type='math_number'> " +
+				 * "          <field name='NUM'>1</field> " +
+				 * "        </block> " // + "      </value> " // +
+				 * "    </block> "
+				 */
 				+ "    <block type='math_round'/> "
 				+ "    <block type='math_on_list'/> "
 				+ "    <block type='math_modulo'/> "
