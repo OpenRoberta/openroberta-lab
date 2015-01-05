@@ -173,9 +173,9 @@ public class GraphicStartup implements Menu {
     private boolean btVisibility;
     private static String version = "Unknown";
     private static String hostname;
-    private static List<String> ips = getIPAddresses();
+    public static List<String> ips = getIPAddresses();
     private static LocalBTDevice bt;
-    private static GraphicStartup menu = new GraphicStartup();
+    public static GraphicStartup menu = new GraphicStartup();
 
     private static ORAhandler oraHandler = new ORAhandler();
 
@@ -369,7 +369,7 @@ public class GraphicStartup implements Menu {
                     break;
             }
 
-            if ( selection < 0 ) {
+            if ( selection < 0 && selection > -4 ) {
                 if ( getYesNo("  Shut down EV3 ?", false) == 1 ) {
                     break;
                 }
@@ -2844,7 +2844,7 @@ public class GraphicStartup implements Menu {
         }
     }
 
-    private void execInThisJVM(File jar) {
+    public void execInThisJVM(File jar) {
         try {
             LCD.clearDisplay();
             new JarMain(jar);

@@ -11,8 +11,6 @@ import org.json.JSONObject;
  * @author dpyka
  */
 public class ORAhandler {
-    private final IndicatorThread ind = null;
-
     // brick data keywords
     public static final String KEY_BRICKNAME = "brickname";
     public static final String KEY_TOKEN = "token";
@@ -28,6 +26,8 @@ public class ORAhandler {
 
     private ORApushCmd pushCmd;
     private Thread serverCommunicator;
+
+    public static Process program = null;
 
     /** 
      * Creates a control object for most of the Open Roberta Lab related
@@ -75,7 +75,7 @@ public class ORAhandler {
         setInterrupt(false);
         setRegistered(false);
         setConnectionError(false);
-        this.pushCmd = new ORApushCmd(serverBaseIP, this.ind);
+        this.pushCmd = new ORApushCmd(serverBaseIP, ind);
         this.serverCommunicator = new Thread(this.pushCmd);
         this.serverCommunicator.start();
     }

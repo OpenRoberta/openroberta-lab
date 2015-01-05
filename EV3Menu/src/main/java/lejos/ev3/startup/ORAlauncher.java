@@ -7,10 +7,11 @@ import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.lcd.Image;
+import lejos.utility.Delay;
 
 /**
  * Executes the Open Roberta lab user program after it is downloaded.
- *
+ * 
  * @author dpyka
  */
 public class ORAlauncher {
@@ -47,8 +48,19 @@ public class ORAlauncher {
         File robertalabFile = new File(ORAlauncher.PROGRAMS_DIRECTORY, programName);
         this.ind.suspend();
         System.out.println("run: " + CMD_ORA_RUN + robertalabFile.getPath());
+        GraphicStartup.menu.suspend();
         exec(CMD_ORA_RUN + robertalabFile.getPath(), ORAlauncher.PROGRAMS_DIRECTORY);
+        //GraphicStartup.menu.execInThisJVM(robertalabFile);
+        GraphicStartup.menu.resume();
         this.ind.resume();
+        redrawIPs();
+    }
+
+    private void redrawIPs() {
+        int row = 1;
+        for ( String ip : GraphicStartup.ips ) {
+            LocalEV3.get().getTextLCD().drawString(ip, 8 - ip.length() / 2, row++);
+        }
     }
 
     /**
@@ -61,9 +73,8 @@ public class ORAlauncher {
      *        The programs where all user programs are saved.
      */
     private void exec(String command, String directory) {
-        Process program = null;
         try {
-            Image screenshot = new Image(178, 128, glcd.getHWDisplay());
+            //Image screenshot = new Image(178, 128, glcd.getHWDisplay());
 
             glcd.clear();
             glcd.refresh();
@@ -72,43 +83,45 @@ public class ORAlauncher {
             glcd.drawImage(image, 0, 0, 0);
             glcd.refresh();
 
-            program = new ProcessBuilder(command.split(" ")).directory(new File(directory)).start();
-            // int exitvalue = -1;
+            ORAhandler.program = new ProcessBuilder(command.split(" ")).directory(new File(directory)).start();
 
             System.out.println("Running an Open Roberta Lab Program!");
             while ( true ) {
                 int b = Button.getButtons();
                 if ( b == 6 ) {
                     System.out.println("Killing the process");
-                    program.destroy();
+                    ORAhandler.program.destroy();
                     GraphicStartup.resetMotors();
-                    break;
+                    Delay.msDelay(1000);
                 }
-                // try {
-                // exitvalue = program.exitValue();
-                // } catch ( IllegalThreadStateException e ) {
-                // exitvalue = -1;
-                // }
-                // if ( exitvalue != -1 ) {
-                // break;
-                // }
-                // Delay.msDelay(200);
+                try {
+                    // we do not use lejos wrapper for sysout and syserr
+                    // this is an alternative method to check if process is terminated
+                    // exitvalue is 143 if process was killed by another one
+                    // exitvalue is 0 if process terminates regularly
+                    // throws exception if not yet terminated
+                    System.out.println("process exitvalue: " + ORAhandler.program.exitValue());
+                    break;
+                } catch ( IllegalThreadStateException e ) {
+                    // go on
+                }
+                Delay.msDelay(200);
             }
 
             System.out.println("Waiting for process to die");
-            program.waitFor();
+            ORAhandler.program.waitFor();
             System.out.println("Program finished");
             // Turn the LED off, in case left on
             Button.LEDPattern(0);
             glcd.setAutoRefresh(true);
             glcd.clear();
             glcd.refresh();
-            glcd.drawImage(screenshot, 0, 0, 0);
+            //glcd.drawImage(screenshot, 0, 0, 0);
             glcd.refresh();
 
-            program = null;
+            ORAhandler.program = null;
         } catch ( Exception e ) {
-            System.err.println("Failed to execute program: " + e);
+            System.err.println("Failed to execute ORA program: " + e);
         }
     }
 
