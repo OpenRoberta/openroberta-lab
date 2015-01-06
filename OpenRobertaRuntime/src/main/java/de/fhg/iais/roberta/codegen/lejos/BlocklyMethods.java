@@ -77,9 +77,27 @@ public class BlocklyMethods {
         return rand.nextDouble();
     }
 
-    @SafeVarargs
-    public static <T> ArrayList<T> createListWith(T... a) {
-        return new ArrayList<T>(Arrays.asList(a));
+    //
+    //    @SafeVarargs
+    //    public static <T> ArrayList<T> createListWith(T... a) {
+    //        return new ArrayList<T>(Arrays.asList(a));
+    //    }
+
+    public static ArrayList<Float> createListWith(Number... a) {
+        ArrayList<Float> result = new ArrayList<Float>();
+        for ( Number number : a ) {
+            result.add(number.floatValue());
+
+        }
+        return result;
+    }
+
+    public static ArrayList<Boolean> createListWith(Boolean... a) {
+        return new ArrayList<Boolean>(Arrays.asList(a));
+    }
+
+    public static ArrayList<String> createListWith(String... a) {
+        return new ArrayList<String>(Arrays.asList(a));
     }
 
     public static <T> ArrayList<T> createListWithItem(T item, int times) {

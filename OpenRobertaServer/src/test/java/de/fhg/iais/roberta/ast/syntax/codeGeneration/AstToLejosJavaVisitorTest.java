@@ -21,6 +21,7 @@ public class AstToLejosJavaVisitorTest {
     private static final String IMPORTS = "" //
         + "package generated.main;\n\n"
         + "import de.fhg.iais.roberta.ast.syntax.*;\n"
+        + "import de.fhg.iais.roberta.codegen.lejos.BlocklyMethods;\n"
         + "import de.fhg.iais.roberta.codegen.lejos.Hal;\n\n"
         + "import de.fhg.iais.roberta.ast.syntax.action.*;\n"
         + "import de.fhg.iais.roberta.ast.syntax.sensor.*;\n"
@@ -28,6 +29,7 @@ public class AstToLejosJavaVisitorTest {
         + "import de.fhg.iais.roberta.ev3.components.*;\n\n"
         + "import java.util.LinkedHashSet;\n"
         + "import java.util.Set;\n"
+        + "import java.util.List;\n"
         + "import java.util.Arrays;\n";
 
     private static final String BRICK_CONFIGURATION = "" //
@@ -84,7 +86,7 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_METHOD
             + "    public void run() {\n"
             + "        Hal hal = new Hal(brickConfiguration, usedSensors);\n"
-            + "        hal.drawText(\"Hallo\", 0, 3);\n"
+            + "        hal.drawText(\"Hallo\", (int) 0, (int) 3);\n"
             + SUFFIX
             + "    }\n"
             + "}\n";
@@ -104,7 +106,7 @@ public class AstToLejosJavaVisitorTest {
             + "    public void run() {\n"
             + "        Hal hal = new Hal(brickConfiguration, usedSensors);\n"
             + "        for ( int i0 = 0; i0 < 10; i0++ ) {\n"
-            + "            hal.drawText(\"Hallo\", 0, 3);\n"
+            + "            hal.drawText(\"Hallo\", (int) 0, (int) 3);\n"
             + "        }\n"
             + SUFFIX
             + "    }\n"
@@ -250,7 +252,7 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_METHOD
             + "    public void run() {\n"
             + "        Hal hal = new Hal(brickConfiguration, usedSensors);\n"
-            + "        hal.drawText(\"Hallo\", 0, 0);\n"
+            + "        hal.drawText(\"Hallo\", (int) 0, (int) 0);\n"
             + "        hal.playTone(300, 3000);\n"
             + SUFFIX
             + "    }\n"
@@ -292,9 +294,9 @@ public class AstToLejosJavaVisitorTest {
             + "        float item = 10;\n"
             + "        String item2 = \"TTTT\";\n"
             + "        boolean item3 = true;\n"
-            + "        hal.drawText(String.valueOf(item), 0, 0);\n"
-            + "        hal.drawText(String.valueOf(item2), 0, 0);\n"
-            + "        hal.drawText(String.valueOf(item3), 0, 0);\n"
+            + "        hal.drawText(String.valueOf(item), (int) 0, (int) 0);\n"
+            + "        hal.drawText(String.valueOf(item2), (int) 0, (int) 0);\n"
+            + "        hal.drawText(String.valueOf(item3), (int) 0, (int) 0);\n"
             + "        item3 = false;\n"
             + SUFFIX
             + "    }\n"

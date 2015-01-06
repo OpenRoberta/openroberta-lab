@@ -520,9 +520,9 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         } else {
             showTextAction.getMsg().visit(this);
         }
-        this.sb.append(", ");
+        this.sb.append(", (int) ");
         showTextAction.getX().visit(this);
-        this.sb.append(", ");
+        this.sb.append(", (int) ");
         showTextAction.getY().visit(this);
         this.sb.append(");");
         return null;
@@ -1178,6 +1178,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         }
         this.sb.append("package generated.main;\n\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.*;\n");
+        this.sb.append("import de.fhg.iais.roberta.codegen.lejos.BlocklyMethods;\n");
         this.sb.append("import de.fhg.iais.roberta.codegen.lejos.Hal;\n\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.*;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.sensor.*;\n");
@@ -1185,6 +1186,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         this.sb.append("import de.fhg.iais.roberta.ev3.components.*;\n\n");
         this.sb.append("import java.util.LinkedHashSet;\n");
         this.sb.append("import java.util.Set;\n");
+        this.sb.append("import java.util.List;\n");
         this.sb.append("import java.util.Arrays;\n\n");
 
         this.sb.append("public class " + this.programName + " {\n");

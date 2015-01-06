@@ -44,7 +44,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
 public enum BlocklyType {
     // @formatter:off
     ANY("", ""),
-    COMPARABLE("", "", ANY), ADDABLE("", "", ANY),
+    COMPARABLE("", "", ANY), ADDABLE("", "", ANY), ARRAY("ARRAY", "List", COMPARABLE),
     BOOL("BOOLEAN", "boolean", COMPARABLE), NUMERIC("NUMBER", "float", COMPARABLE, ADDABLE), NUMERIC_INT("NUMBER", "int", COMPARABLE, ADDABLE), STRING("STRING", "String", COMPARABLE, ADDABLE), COLOR("COLOUR", "String", ANY), //
     NULL("", "", STRING, COLOR),
     REF("", "",NULL), PRIM("", "",NUMERIC, BOOL),
