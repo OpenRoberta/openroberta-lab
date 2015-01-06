@@ -8,6 +8,7 @@ import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.Image;
 import lejos.robotics.SampleProvider;
 import lejos.robotics.navigation.DifferentialPilot;
+import lejos.utility.Delay;
 import lejos.utility.Stopwatch;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.BlinkMode;
@@ -24,9 +25,9 @@ import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensorMode;
-import de.fhg.iais.roberta.brickconfiguration.ev3.EV3BrickConfiguration;
 import de.fhg.iais.roberta.dbc.DbcException;
-import de.fhg.iais.roberta.hardwarecomponents.ev3.HardwareComponentEV3Sensor;
+import de.fhg.iais.roberta.ev3.EV3BrickConfiguration;
+import de.fhg.iais.roberta.ev3.EV3Sensors;
 
 /**
  * Connection class between our generated code and the leJOS API
@@ -64,7 +65,7 @@ public class Hal {
     /**
      * @param brickConfiguration
      */
-    public Hal(EV3BrickConfiguration brickConfiguration, Set<HardwareComponentEV3Sensor> usedSensors) {
+    public Hal(EV3BrickConfiguration brickConfiguration, Set<EV3Sensors> usedSensors) {
         this.deviceHandler = new DeviceHandler(brickConfiguration, usedSensors);
 
         this.wheelDiameter = brickConfiguration.getWheelDiameterCM();
@@ -764,4 +765,8 @@ public class Hal {
     }
 
     // END Sensoren Steintasten ---
+
+    public void waitFor(long time) {
+        Delay.msDelay(time);
+    }
 }

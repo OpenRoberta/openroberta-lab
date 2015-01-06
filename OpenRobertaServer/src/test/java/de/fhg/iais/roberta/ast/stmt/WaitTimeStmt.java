@@ -20,7 +20,7 @@ public class WaitTimeStmt {
 
     @Test
     public void javaCode() throws Exception {
-        String a = "\nhal.wait(500);";
+        String a = "\nhal.waitFor(500);";
 
         Helper.assertCodeIsOk(a, "/ast/control/wait_time_stmt.xml");
     }

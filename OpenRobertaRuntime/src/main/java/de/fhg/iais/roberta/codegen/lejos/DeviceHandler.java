@@ -24,9 +24,9 @@ import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.brickconfiguration.HardwareComponent;
-import de.fhg.iais.roberta.brickconfiguration.ev3.EV3BrickConfiguration;
 import de.fhg.iais.roberta.dbc.DbcException;
-import de.fhg.iais.roberta.hardwarecomponents.ev3.HardwareComponentEV3Sensor;
+import de.fhg.iais.roberta.ev3.EV3BrickConfiguration;
+import de.fhg.iais.roberta.ev3.EV3Sensors;
 
 public class DeviceHandler {
 
@@ -40,9 +40,9 @@ public class DeviceHandler {
     private SampleProviderBean[] portS3;
     private SampleProviderBean[] portS4;
 
-    private final Set<HardwareComponentEV3Sensor> usedSensors;
+    private final Set<EV3Sensors> usedSensors;
 
-    public DeviceHandler(EV3BrickConfiguration brickConfiguration, Set<HardwareComponentEV3Sensor> usedSensors) {
+    public DeviceHandler(EV3BrickConfiguration brickConfiguration, Set<EV3Sensors> usedSensors) {
         this.usedSensors = usedSensors;
         createDevices(brickConfiguration);
     }
@@ -52,12 +52,10 @@ public class DeviceHandler {
         initMotor(ActorPort.B, brickConfiguration.getActorOnPort(ActorPort.B), lejos.hardware.port.MotorPort.B);
         initMotor(ActorPort.C, brickConfiguration.getActorOnPort(ActorPort.C), lejos.hardware.port.MotorPort.C);
         initMotor(ActorPort.D, brickConfiguration.getActorOnPort(ActorPort.D), lejos.hardware.port.MotorPort.D);
-        long startTime = System.currentTimeMillis();
         this.portS1 = initSensor(SensorPort.S1, brickConfiguration.getSensorOnPort(SensorPort.S1), lejos.hardware.port.SensorPort.S1);
         this.portS2 = initSensor(SensorPort.S2, brickConfiguration.getSensorOnPort(SensorPort.S2), lejos.hardware.port.SensorPort.S2);
         this.portS3 = initSensor(SensorPort.S3, brickConfiguration.getSensorOnPort(SensorPort.S3), lejos.hardware.port.SensorPort.S3);
         this.portS4 = initSensor(SensorPort.S4, brickConfiguration.getSensorOnPort(SensorPort.S4), lejos.hardware.port.SensorPort.S4);
-        System.out.println(System.currentTimeMillis() - startTime);
     }
 
     private void initMotor(ActorPort actorPort, HardwareComponent actorType, Port hardwarePort) {

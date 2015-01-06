@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.hardwarecomponents.ev3;
+package de.fhg.iais.roberta.ev3;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -12,16 +12,16 @@ import de.fhg.iais.roberta.hardwarecomponents.HardwareComponentType;
 /**
  * This class represents all possible EV3 actors.
  */
-public class HardwareComponentEV3Actor extends HardwareComponentType {
-    public static final HardwareComponentEV3Actor EV3_MEDIUM_MOTOR = new HardwareComponentEV3Actor("robBrick_motor_middle", "middle motor");
-    public static final HardwareComponentEV3Actor EV3_LARGE_MOTOR = new HardwareComponentEV3Actor("robBrick_motor_big", "big motor");
+public class EV3Actors extends HardwareComponentType {
+    public static final EV3Actors EV3_MEDIUM_MOTOR = new EV3Actors("robBrick_motor_middle", "middle motor");
+    public static final EV3Actors EV3_LARGE_MOTOR = new EV3Actors("robBrick_motor_big", "big motor");
 
     /**
      * This constructors set the name that maps the actor to specific blockly block.
      *
      * @param name of the blockly block for this actor
      */
-    public HardwareComponentEV3Actor(String name, String shortName) {
+    public EV3Actors(String name, String shortName) {
         super(name, shortName, Category.ACTOR);
     }
 
@@ -31,10 +31,10 @@ public class HardwareComponentEV3Actor extends HardwareComponentType {
      * @param blocklyName
      * @return EV3 actor
      */
-    public static HardwareComponentEV3Actor find(String blocklyName) {
-        Iterator<HardwareComponentEV3Actor> iter = ACTORS.iterator();
+    public static EV3Actors find(String blocklyName) {
+        Iterator<EV3Actors> iter = ACTORS.iterator();
         while ( iter.hasNext() ) {
-            HardwareComponentEV3Actor actor = iter.next();
+            EV3Actors actor = iter.next();
             if ( blocklyName.equals(actor.getName()) ) {
                 return actor;
             }
@@ -42,11 +42,11 @@ public class HardwareComponentEV3Actor extends HardwareComponentType {
         throw new DbcException();
     }
 
-    private static final HardwareComponentEV3Actor[] values = {
+    private static final EV3Actors[] values = {
         EV3_MEDIUM_MOTOR, EV3_LARGE_MOTOR
     };
 
-    public static final List<HardwareComponentEV3Actor> ACTORS = Collections.unmodifiableList(Arrays.asList(values));
+    public static final List<EV3Actors> ACTORS = Collections.unmodifiableList(Arrays.asList(values));
 
     @Override
     public String getJavaCode() {
@@ -56,7 +56,7 @@ public class HardwareComponentEV3Actor extends HardwareComponentType {
     @Override
     public String getTypeName() {
         int counter = 0;
-        for ( HardwareComponentEV3Actor actor : ACTORS ) {
+        for ( EV3Actors actor : ACTORS ) {
             if ( actor.getName().equals(this.getName()) ) {
                 return this.getClass().getFields()[counter].getName();
             }

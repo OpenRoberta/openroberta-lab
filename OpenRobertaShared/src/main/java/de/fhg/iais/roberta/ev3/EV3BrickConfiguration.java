@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.brickconfiguration.ev3;
+package de.fhg.iais.roberta.ev3;
 
 import java.util.List;
 import java.util.Map;
@@ -10,6 +10,8 @@ import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.brickconfiguration.BrickConfiguration;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
+import de.fhg.iais.roberta.ev3.components.EV3Actor;
+import de.fhg.iais.roberta.ev3.components.EV3Sensor;
 import de.fhg.iais.roberta.hardwarecomponents.HardwareComponentType;
 import de.fhg.iais.roberta.util.Pair;
 

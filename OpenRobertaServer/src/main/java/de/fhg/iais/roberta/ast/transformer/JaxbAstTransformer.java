@@ -36,6 +36,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Comment;
 import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.dbc.Assert;
@@ -332,5 +333,19 @@ abstract public class JaxbAstTransformer<V> {
             return null;
         }
         return block.isMovable();
+    }
+
+    protected int getElseIf(Mutation mutation) {
+        if ( mutation != null && mutation.getElseif() != null ) {
+            return mutation.getElseif().intValue();
+        }
+        return 0;
+    }
+
+    protected int getElse(Mutation mutation) {
+        if ( mutation != null && mutation.getElse() != null ) {
+            return mutation.getElse().intValue();
+        }
+        return 0;
     }
 }

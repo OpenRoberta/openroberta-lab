@@ -14,13 +14,13 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.brickconfiguration.BrickConfiguration;
-import de.fhg.iais.roberta.brickconfiguration.ev3.EV3Actor;
-import de.fhg.iais.roberta.brickconfiguration.ev3.EV3BrickConfiguration;
-import de.fhg.iais.roberta.brickconfiguration.ev3.EV3Sensor;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
-import de.fhg.iais.roberta.hardwarecomponents.ev3.HardwareComponentEV3Actor;
-import de.fhg.iais.roberta.hardwarecomponents.ev3.HardwareComponentEV3Sensor;
+import de.fhg.iais.roberta.ev3.EV3BrickConfiguration;
+import de.fhg.iais.roberta.ev3.EV3Actors;
+import de.fhg.iais.roberta.ev3.EV3Sensors;
+import de.fhg.iais.roberta.ev3.components.EV3Actor;
+import de.fhg.iais.roberta.ev3.components.EV3Sensor;
 import de.fhg.iais.roberta.util.Pair;
 
 /**
@@ -120,14 +120,14 @@ public class JaxbBrickConfigTransformer {
         for ( Value value : values ) {
             if ( value.getName().startsWith("S") ) {
                 // Extract sensor
-                sensors.add(Pair.of(SensorPort.get(value.getName()), new EV3Sensor(HardwareComponentEV3Sensor.find(value.getBlock().getType()))));
+                sensors.add(Pair.of(SensorPort.get(value.getName()), new EV3Sensor(EV3Sensors.find(value.getBlock().getType()))));
             } else {
                 // Extract actor
                 List<Field> fields = extractFields(value.getBlock(), (short) 3);
                 actors.add(Pair.of(
                     ActorPort.get(value.getName()),
                     new EV3Actor(
-                        HardwareComponentEV3Actor.find(value.getBlock().getType()),
+                        EV3Actors.find(value.getBlock().getType()),
                         extractField(fields, "MOTOR_REGULATION", 0).equals("TRUE"),
                         DriveDirection.get(extractField(fields, "MOTOR_REVERSE", 1)),
                         MotorSide.get(extractField(fields, "MOTOR_DRIVE", 2)))));

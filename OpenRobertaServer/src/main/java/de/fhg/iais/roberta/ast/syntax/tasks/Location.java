@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax.tasks;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
@@ -16,7 +17,7 @@ public class Location<V> extends Task<V> {
     private final String y;
 
     private Location(String x, String y) {
-        super(Phrase.Kind.LOCATION, null, null);
+        super(Phrase.Kind.LOCATION, BlocklyBlockProperties.make("t", "t", true, false, false, false, false), null);
         Assert.isTrue(!x.equals("") && !y.equals(""));
         this.x = x;
         this.y = y;

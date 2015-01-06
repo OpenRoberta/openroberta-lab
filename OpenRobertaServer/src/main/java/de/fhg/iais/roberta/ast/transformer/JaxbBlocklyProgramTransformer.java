@@ -405,13 +405,12 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                     exprParams.add(new ExprParam(BlocklyConstants.B, Integer.class));
                     params = extractExprParameters(block, exprParams);
                     return MathPowerFunct.make(FunctionNames.POWER, params, extractBlockProperties(block), extractComment(block));
-                } else {
-                    return blockToBinaryExpr(
-                        block,
-                        new ExprParam(BlocklyConstants.A, Integer.class),
-                        new ExprParam(BlocklyConstants.B, Integer.class),
-                        BlocklyConstants.OP_);
                 }
+                return blockToBinaryExpr(
+                    block,
+                    new ExprParam(BlocklyConstants.A, Integer.class),
+                    new ExprParam(BlocklyConstants.B, Integer.class),
+                    BlocklyConstants.OP_);
 
             case "math_constant":
                 return blockToConst(block, BlocklyConstants.CONSTANT);
@@ -608,19 +607,10 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
             case "controls_if":
             case "robControls_if":
             case "robControls_ifElse":
-                int _else = 0;
-                int _elseIf = 0;
-                if ( block.getMutation() == null ) {
-                    return blocksToIfStmt(block, _else, _elseIf);
-                }
                 Mutation mutation = block.getMutation();
-                if ( mutation.getElse() != null ) {
-                    _else = mutation.getElse().intValue();
-                }
-                if ( mutation.getElseif() != null ) {
-                    _elseIf = mutation.getElseif().intValue();
-                    return blocksToIfStmt(block, _else, _elseIf);
-                }
+                int _else = getElse(mutation);
+                int _elseIf = getElseIf(mutation);
+
                 return blocksToIfStmt(block, _else, _elseIf);
 
             case "robControls_wait_for":

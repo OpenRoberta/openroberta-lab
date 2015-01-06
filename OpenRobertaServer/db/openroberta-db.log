@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 /*C4*/SET SCHEMA PUBLIC
 <<<<<<< HEAD
 DELETE FROM USER WHERE ID=42
@@ -31,4 +32,12 @@ INSERT INTO PROGRAM VALUES(45,'test3',53,'<block_set xmlns="http://de.fhg.iais.r
 DELETE FROM USER WHERE ID=53
 INSERT INTO USER VALUES(53,'koki','1','1','TEACHER','2014-12-19 09:18:04.976000','2014-12-29 09:40:19.410000',NULL)
 >>>>>>> ORA-378 Transformation for new Start block with variable declaration
+=======
+/*C5*/SET SCHEMA PUBLIC
+DELETE FROM USER WHERE ID=53
+INSERT INTO USER VALUES(53,'koki','1','1','TEACHER','2014-12-19 09:18:04.976000','2014-12-29 16:11:08.050000',NULL)
+COMMIT
+DELETE FROM PROGRAM WHERE ID=47
+INSERT INTO PROGRAM VALUES(47,'Test2',53,'<block_set xmlns="http://de.fhg.iais.roberta.blockly"><instance x="0" y="0"><block type="text" id="14"><field name="TEXT"></field></block></instance><instance x="100" y="50"><block type="robControls_start" id="20" deletable="false"><mutation declare="true"></mutation><statement name="ST"><block type="variables_declare" id="137" inline="true" deletable="false" movable="false"><mutation next="false" datatype="String"></mutation><field name="TYPE">String</field><field name="VAR">Element</field><value name="VALUE"><block type="text" id="139"><field name="TEXT">Hello</field></block></value></block></statement></block><block type="robActions_display_picture" id="117" inline="false"><field name="PICTURE">OLDGLASSES</field><value name="X"><block type="math_number" id="118"><field name="NUM">0</field></block></value><value name="Y"><block type="math_number" id="119"><field name="NUM">0</field></block></value></block><block type="robControls_wait_for" id="129" inline="false"><value name="WAIT0"><block type="logic_compare" id="130" inline="true"><field name="OP">LT</field><value name="A"><block type="robSensors_getSample" id="131"><mutation input="ULTRASONIC_PRESENCE"></mutation><field name="SENSORTYPE">ULTRASONIC_PRESENCE</field><field name="SENSORPORT">4</field></block></value><value name="B"><block type="math_number" id="149"><field name="NUM">30</field></block></value></block></value></block><block type="robActions_display_text" id="51" inline="false"><value name="OUT"><block type="variables_get" id="140"><mutation datatype="String"></mutation><field name="VAR">Element</field></block></value><value name="COL"><block type="math_number" id="53"><field name="NUM">0</field></block></value><value name="ROW"><block type="math_number" id="54"><field name="NUM">0</field></block></value></block><block type="robControls_wait_for" id="143" inline="false"><value name="WAIT0"><block type="logic_compare" id="130" inline="true"><field name="OP">EQ</field><value name="A"><block type="robSensors_getSample" id="131"><mutation input="TOUCH"></mutation><field name="SENSORTYPE">TOUCH</field><field name="SENSORPORT">1</field></block></value><value name="B"><block type="logic_boolean" id="132"><field name="BOOL">TRUE</field></block></value></block></value></block></instance></block_set>','2014-12-29 15:50:33.346000','2014-12-29 16:11:21.295000',NULL,NULL,0,NULL,0)
+>>>>>>> ORA-372 Improvement in code generation
 COMMIT

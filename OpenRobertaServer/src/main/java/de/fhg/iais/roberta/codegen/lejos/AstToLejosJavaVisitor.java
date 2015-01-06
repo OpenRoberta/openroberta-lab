@@ -88,11 +88,11 @@ import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
 import de.fhg.iais.roberta.ast.usedhardwarecheck.HardwareCheckVisitor;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
-import de.fhg.iais.roberta.brickconfiguration.ev3.EV3BrickConfiguration;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
+import de.fhg.iais.roberta.ev3.EV3BrickConfiguration;
+import de.fhg.iais.roberta.ev3.EV3Sensors;
 import de.fhg.iais.roberta.hardwarecomponents.Category;
-import de.fhg.iais.roberta.hardwarecomponents.ev3.HardwareComponentEV3Sensor;
 
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they
@@ -104,7 +104,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     private final EV3BrickConfiguration brickConfiguration;
     private final String programName;
     private final StringBuilder sb = new StringBuilder();
-    private final Set<HardwareComponentEV3Sensor> usedSensors;
+    private final Set<EV3Sensors> usedSensors;
 
     private int indentation;
 
@@ -116,7 +116,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
      * @param usedSensors in the current program
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    AstToLejosJavaVisitor(String programName, EV3BrickConfiguration brickConfiguration, Set<HardwareComponentEV3Sensor> usedSensors, int indentation) {
+    AstToLejosJavaVisitor(String programName, EV3BrickConfiguration brickConfiguration, Set<EV3Sensors> usedSensors, int indentation) {
         this.programName = programName;
         this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
@@ -136,10 +136,13 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrases.size() >= 1);
 
-        Set<HardwareComponentEV3Sensor> usedSensors = HardwareCheckVisitor.check(phrases);
+        Set<EV3Sensors> usedSensors = HardwareCheckVisitor.check(phrases);
         AstToLejosJavaVisitor astVisitor = new AstToLejosJavaVisitor(programName, brickConfiguration, usedSensors, withWrapping ? 2 : 0);
         astVisitor.generatePrefix(withWrapping);
         for ( Phrase<Void> phrase : phrases ) {
+            if ( phrase.getProperty().isDisabled() ) {
+                continue;
+            }
             if ( phrase.getKind().getCategory() != Category.TASK ) {
                 astVisitor.sb.append("\n").append(INDENT).append(INDENT);
             }
@@ -435,6 +438,8 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         this.sb.append("while ( true ) {");
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
+        nlIndent();
+        this.sb.append("hal.waitFor(15);");
         decrIndentation();
         nlIndent();
         this.sb.append("}");
@@ -446,7 +451,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
-        this.sb.append("hal.wait(");
+        this.sb.append("hal.waitFor(");
         waitTimeStmt.getTime().visit(this);
         this.sb.append(");");
         return null;
@@ -1180,8 +1185,8 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         this.sb.append("import de.fhg.iais.roberta.codegen.lejos.Hal;\n\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.*;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.sensor.*;\n");
-        this.sb.append("import de.fhg.iais.roberta.hardwarecomponents.ev3.*;\n");
-        this.sb.append("import de.fhg.iais.roberta.brickconfiguration.ev3.*;\n\n");
+        this.sb.append("import de.fhg.iais.roberta.ev3.*;\n");
+        this.sb.append("import de.fhg.iais.roberta.ev3.components.*;\n\n");
         this.sb.append("import java.util.LinkedHashSet;\n");
         this.sb.append("import java.util.Set;\n");
         this.sb.append("import java.util.Arrays;\n\n");
@@ -1224,11 +1229,11 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     private String generateRegenerateUsedSensors() {
         StringBuilder sb = new StringBuilder();
         String arrayOfSensors = "";
-        for ( HardwareComponentEV3Sensor usedSensor : this.usedSensors ) {
+        for ( EV3Sensors usedSensor : this.usedSensors ) {
             arrayOfSensors += usedSensor.getJavaCode();
             arrayOfSensors += ",";
         }
-        sb.append("private Set<HardwareComponentEV3Sensor> usedSensors = " + "new LinkedHashSet<HardwareComponentEV3Sensor>(");
+        sb.append("private Set<EV3Sensors> usedSensors = " + "new LinkedHashSet<EV3Sensors>(");
         if ( this.usedSensors.size() > 0 ) {
             sb.append("Arrays.asList(" + arrayOfSensors.substring(0, arrayOfSensors.length() - 1) + ")");
         }

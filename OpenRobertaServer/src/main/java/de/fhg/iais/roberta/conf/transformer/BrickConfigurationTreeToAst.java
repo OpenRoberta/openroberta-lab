@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationParser
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationParser.MotorContext;
 import de.fhg.iais.roberta.brickConfiguration.generated.BrickConfigurationParser.SensorStmtContext;
 import de.fhg.iais.roberta.brickconfiguration.BrickConfiguration;
-import de.fhg.iais.roberta.brickconfiguration.ev3.EV3BrickConfiguration;
+import de.fhg.iais.roberta.ev3.EV3BrickConfiguration;
 
 public class BrickConfigurationTreeToAst extends BrickConfigurationBaseVisitor<Void> {
     EV3BrickConfiguration.Builder builder = new EV3BrickConfiguration.Builder();
