@@ -28,8 +28,15 @@ public class ListsCreateWithTest {
 
     @Test
     public void Test3() throws Exception {
-        String a = "BlocklyMethods.createListWith(true, 0, \"553\")";
+        String a = "BlocklyMethods.createListWith(true, true, true)";
 
         Helper.assertCodeIsOk(a, "/syntax/lists/lists_create_with3.xml");
+    }
+
+    @Test
+    public void Test4() throws Exception {
+        String a = "BlocklyMethods.createListWith(-1,0,13)";
+
+        Helper.assertCodeIsOk(a, "/syntax/lists/lists_create_with4.xml");
     }
 }

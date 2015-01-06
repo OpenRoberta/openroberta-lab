@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <title>Blockly Playground</title>
-<script type="text/javascript" src="/blockly/blockly_compressed.js"></script>
-<script type="text/javascript" src="/blockly/blocks_compressed.js"></script>
+<script type="text/javascript" src="../blockly_uncompressed.js"></script>
+<!-- <script type="text/javascript" src="/blockly/blockly_compressed.js"></script>
+<script type="text/javascript" src="/blockly/blocks_compressed.js"></script> -->
 <script type="text/javascript" src="../generators/javascript.js"></script>
 <script type="text/javascript" src="../generators/javascript/logic.js"></script>
 <script type="text/javascript" src="../generators/javascript/loops.js"></script>
@@ -181,7 +182,7 @@ h1 {
 
   <div id="blocklyDiv"></div>
    				 
-<toolbox_set id="toolbox" style="display: none">
+   <toolbox_set id="toolbox" style="display: none">
 	<category name="Aktion">
 		<category name="Bewegung">
 			<block type="robActions_motor_on">
@@ -253,7 +254,7 @@ h1 {
 					</block>
 				</value>
 			</block>
-		</category>
+		</category> 
 		<category name="Anzeige">
 			<block type="robActions_display_text">
 				<value name="OUT">
@@ -316,19 +317,19 @@ h1 {
 			<block type="robActions_brickLight_on"></block>
 			<block type="robActions_brickLight_off"></block>
 			<block type="robActions_brickLight_reset"></block>
-		</category>
-	</category>
+		</category> 
+	</category> 
 	<category name="Sensoren">
 		<block type="robSensors_touch_isPressed">
 		</block>
 		<block type="robSensors_ultrasonic_getSample">
-			<field name="SENSORPORT">4</field>
+			<field name="SENSORPORT">4</field> 
 		</block>
 		<block type="robSensors_colour_getSample">
-			<field name="SENSORPORT">3</field>
+			<field name="SENSORPORT">3</field> 
 		</block>
 		<block type="robSensors_infrared_getSample">
-			<field name="SENSORPORT">4</field>
+			<field name="SENSORPORT">4</field> 
 		</block>
 		<block type="robSensors_encoder_reset">
 		</block>
@@ -337,10 +338,10 @@ h1 {
 		<block type="robSensors_key_isPressed">
 		</block>
 		<block type="robSensors_gyro_reset">
-			<field name="SENSORPORT">2</field>
+			<field name="SENSORPORT">2</field> 
 		</block>
 		<block type="robSensors_gyro_getSample">
-			<field name="SENSORPORT">2</field>
+			<field name="SENSORPORT">2</field> 
 		</block>
 		<block type="robSensors_timer_getSample">
 		</block>
@@ -351,44 +352,26 @@ h1 {
 		<category name="Entscheidung">
 			<block type="robControls_if"></block>
 			<block type="robControls_ifElse"></block>
-		</category>
+		</category> 
 		<category name="Schleifen">
 			<block type="controls_repeat_ext">
 				<value name="TIMES">
 					<block type="math_number">
 						<field name="NUM">10</field>
-					</block>
+					</block> 
 				</value>
 			</block>
 			<block type="controls_whileUntil"></block>
-			<block type="controls_for">
-				<value name="FROM">
-					<block type="math_number">
-						<field name="NUM">1</field>
-					</block>
-				</value>
-				<value name="TO">
-					<block type="math_number">
-						<field name="NUM">10</field>
-					</block>
-				</value>
-				<value name="BY">
-					<block type="math_number">
-						<field name="NUM">1</field>
-					</block>
-				</value>
-			</block>
-			<block type="controls_forEach"></block>
 			<block type="controls_flow_statements"></block>
-		</category>
+		</category> 
 		<category name="Warten">
-			<block type="robControls_wait">
+			<block type="robControls_wait"> 
 			</block>
 			<block type="robControls_wait_time">
 				<value name="WAIT">
 					<block type="math_number">
 						<field name="NUM">500</field>
-					</block>
+					</block> 
 				</value>
 			</block>
 			<block type="robControls_wait_for">
@@ -396,21 +379,20 @@ h1 {
 					<block type="logic_compare">
 						<value name="A">
 							<block type="robSensors_getSample">
-							</block>
+							</block> 
 						</value>
 						<value name="B">
 							<block type="logic_boolean">
-							</block>
+							</block> 
 						</value>
-					</block>
+					</block> 
 				</value>
-			</block>
+			</block> 
 		</category>
-		<category name="Tasks">
-			<block type="robControls_activity"></block>
-			<block type="robControls_start_activity"></block>
-			<block type="robControls_start"></block>
-		</category>
+		<category name="Tasks"> 
+			<block type="robControls_activity"></block> 
+			<block type="robControls_start_activity"></block> 
+		</category> 
 	</category>
 	<category name="Logik">
 		<block type="logic_compare"></block>
@@ -418,7 +400,7 @@ h1 {
 		<block type="logic_negate"></block>
 		<block type="logic_boolean"></block>
 		<block type="logic_null"></block>
-		<block type="logic_ternary"></block>
+		<block type="logic_ternary"></block> 
 	</category>
 	<category name="Mathematik">
 		<block type="math_number"></block>
@@ -427,13 +409,6 @@ h1 {
 		<block type="math_trig"></block>
 		<block type="math_constant"></block>
 		<block type="math_number_property"></block>
-		<block type="math_change">
-			<value name="DELTA">
-				<block type="math_number">
-					<field name="NUM">1</field>
-				</block>
-			</value>
-		</block>
 		<block type="math_round"></block>
 		<block type="math_on_list"></block>
 		<block type="math_modulo"></block>
@@ -441,34 +416,34 @@ h1 {
 			<value name="LOW">
 				<block type="math_number">
 					<field name="NUM">1</field>
-				</block>
+				</block> 
 			</value>
 			<value name="HIGH">
 				<block type="math_number">
 					<field name="NUM">100</field>
-				</block>
-			</value>
+				</block> 
+			</value> 
 		</block>
 		<block type="math_random_int">
 			<value name="FROM">
 				<block type="math_number">
 					<field name="NUM">1</field>
-				</block>
+				</block> 
 			</value>
 			<value name="TO">
 				<block type="math_number">
 					<field name="NUM">100</field>
-				</block>
-			</value>
+				</block> 
+			</value> 
 		</block>
-		<block type="math_random_float"></block>
+		<block type="math_random_float"></block> 
 	</category>
-	<category name="Text">
+	<category name="Text"> 
 		<block type="text"></block>
 		<block type="robText_join"></block>
 		<block type="text_append">
 			<value name="TEXT">
-				<block type="text"></block>
+				<block type="text"></block> 
 			</value>
 		</block>
 	</category>
@@ -479,22 +454,22 @@ h1 {
 			<value name="NUM">
 				<block type="math_number">
 					<field name="NUM">5</field>
-				</block>
-			</value>
+				</block> 
+			</value> 
 		</block>
 		<block type="lists_length"></block>
 		<block type="lists_isEmpty"></block>
-		<block type="lists_indexOf">
+		<block type="lists_indexOf"> 
 		</block>
-		<block type="lists_getIndex">
+		<block type="lists_getIndex"> 
 		</block>
-		<block type="lists_setIndex">
+		<block type="lists_setIndex"> 
 		</block>
-		<block type="lists_getSublist">
+		<block type="lists_getSublist"> 
 		</block>
-	</category>
+	</category> 
 	<category name="Farben">
-		<block type="robColour_picker">
+		<block type="robColour_picker"> 
 		</block>
 	</category>
 	<category name="Variablen" custom="VARIABLE"></category>

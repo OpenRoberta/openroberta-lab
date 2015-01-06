@@ -5,14 +5,13 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
-import de.fhg.iais.roberta.ast.syntax.expr.Var.TypeVar;
 import de.fhg.iais.roberta.ast.syntax.stmt.AssignStmt;
 
 public class AssignmentStmtTest {
 
     @Test
     public void make() throws Exception {
-        Var<Void> var = Var.make("item", TypeVar.INTEGER, null, null);
+        Var<Void> var = Var.make("item", null, null);
         NumConst<Void> numConst = NumConst.make("0", null, null);
         AssignStmt<Void> assignStmt = AssignStmt.make(var, numConst, null, null);
 
@@ -22,7 +21,7 @@ public class AssignmentStmtTest {
 
     @Test
     public void getName() throws Exception {
-        Var<Void> var = Var.make("item", TypeVar.INTEGER, null, null);
+        Var<Void> var = Var.make("item", null, null);
         NumConst<Void> numConst = NumConst.make("0", null, null);
         AssignStmt<Void> assignStmt = AssignStmt.make(var, numConst, null, null);
 
@@ -31,7 +30,7 @@ public class AssignmentStmtTest {
 
     @Test
     public void getExpr() throws Exception {
-        Var<Void> var = Var.make("item", TypeVar.INTEGER, null, null);
+        Var<Void> var = Var.make("item", null, null);
         NumConst<Void> numConst = NumConst.make("0", null, null);
         AssignStmt<Void> assignStmt = AssignStmt.make(var, numConst, null, null);
 

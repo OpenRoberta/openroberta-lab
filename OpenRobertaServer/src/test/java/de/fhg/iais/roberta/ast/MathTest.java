@@ -195,7 +195,7 @@ public class MathTest {
 
     @Test
     public void math_on_list() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-25, y=-449], MathOnListFunct [AVERAGE, [EmptyList []]]]]]";
+        String a = "BlockAST [project=[[Location [x=-25, y=-449], MathOnListFunct [AVERAGE, [EmptyList [NUMERIC]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_on_list.xml"));
     }
@@ -208,7 +208,7 @@ public class MathTest {
     @Test
     public void math_on_list1() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=-714, y=201], MathOnListFunct [SUM, [EmptyList []]], Location [x=-694, y=241], MathOnListFunct [MIN, [EmptyList []]], Location [x=-674, y=281], MathOnListFunct [MAX, [EmptyList []]], Location [x=-654, y=321], MathOnListFunct [AVERAGE, [EmptyList []]], Location [x=-634, y=361], MathOnListFunct [MEDIAN, [EmptyList []]], Location [x=-614, y=401], MathOnListFunct [MODE, [EmptyList []]], Location [x=-594, y=441], MathOnListFunct [STD_DEV, [EmptyList []]], Location [x=-574, y=481], MathOnListFunct [RANDOM, [EmptyList []]]]]]";
+            "BlockAST [project=[[Location [x=-714, y=201], MathOnListFunct [SUM, [EmptyList [NUMERIC]]], Location [x=-694, y=241], MathOnListFunct [MIN, [EmptyList [NUMERIC]]], Location [x=-674, y=281], MathOnListFunct [MAX, [EmptyList [NUMERIC]]], Location [x=-654, y=321], MathOnListFunct [AVERAGE, [EmptyList [NUMERIC]]], Location [x=-634, y=361], MathOnListFunct [MEDIAN, [EmptyList [NUMERIC]]], Location [x=-614, y=401], MathOnListFunct [MODE, [EmptyList [NUMERIC]]], Location [x=-594, y=441], MathOnListFunct [STD_DEV, [EmptyList [NUMERIC]]], Location [x=-574, y=481], MathOnListFunct [RANDOM, [EmptyList [NUMERIC]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_on_list1.xml"));
     }

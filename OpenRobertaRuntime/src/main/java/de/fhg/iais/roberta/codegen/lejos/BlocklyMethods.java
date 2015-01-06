@@ -77,10 +77,6 @@ public class BlocklyMethods {
         return rand.nextDouble();
     }
 
-    public static List<Void> createEmptyList() {
-        return new ArrayList<Void>();
-    }
-
     @SafeVarargs
     public static <T> ArrayList<T> createListWith(T... a) {
         return new ArrayList<T>(Arrays.asList(a));

@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -150,8 +151,8 @@ public class RepeatStmt<V> extends Stmt<V> {
 
             case FOR:
                 ExprList<?> exprList = (ExprList<?>) getExpr();
-                AstJaxbTransformerHelper.addField(jaxbDestination, "VAR", ((Var<?>) ((Binary<?>) exprList.get().get(0)).getLeft()).getValue());
-                AstJaxbTransformerHelper.addValue(jaxbDestination, "FROM", ((Binary<?>) exprList.get().get(0)).getRight());
+                AstJaxbTransformerHelper.addField(jaxbDestination, "VAR", ((VarDeclaration<?>) exprList.get().get(0)).getName());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, "FROM", ((VarDeclaration<?>) exprList.get().get(0)).getValue());
                 AstJaxbTransformerHelper.addValue(jaxbDestination, "TO", ((Binary<?>) exprList.get().get(1)).getRight());
                 AstJaxbTransformerHelper.addValue(jaxbDestination, "BY", ((Binary<?>) exprList.get().get(2)).getRight());
                 break;

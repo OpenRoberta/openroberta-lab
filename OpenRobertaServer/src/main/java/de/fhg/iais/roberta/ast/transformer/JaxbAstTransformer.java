@@ -22,7 +22,6 @@ import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
-import de.fhg.iais.roberta.ast.syntax.expr.Var.TypeVar;
 import de.fhg.iais.roberta.ast.syntax.functions.Function;
 import de.fhg.iais.roberta.ast.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.ast.syntax.stmt.ActionStmt;
@@ -228,7 +227,7 @@ abstract public class JaxbAstTransformer<V> {
     protected Phrase<V> extractVar(Block block) {
         List<Field> fields = extractFields(block, (short) 1);
         String field = extractField(fields, BlocklyConstants.VAR);
-        return Var.make(field, TypeVar.NONE, extractBlockProperties(block), extractComment(block));
+        return Var.make(field, extractBlockProperties(block), extractComment(block));
     }
 
     protected List<Value> extractValues(Block block, short numOfValues) {

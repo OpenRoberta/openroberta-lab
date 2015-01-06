@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 public class ListsEmptyListTest {
     @Test
     public void Test() throws Exception {
-        String a = "BlocklyMethods.createEmptyList()";
+        String a = "newArrayList<String>()" + "newArrayList<String>()" + "newArrayList<Boolean>()" + "newArrayList<Float>()";
 
         Helper.assertCodeIsOk(a, "/syntax/lists/lists_empty_list.xml");
     }

@@ -140,11 +140,6 @@ public class BlocklyMethodsTest {
     }
 
     @Test
-    public void createEmptyList() {
-        Assert.assertTrue(BlocklyMethods.createEmptyList().size() == 0);
-    }
-
-    @Test
     public void createListWith() {
         Assert.assertTrue(BlocklyMethods.createListWith(1, 1, 1, 1, 1).toString().equals("[1, 1, 1, 1, 1]"));
         Assert.assertTrue(BlocklyMethods.createListWith("a", "a").toString().equals("[a, a]"));

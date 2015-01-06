@@ -188,14 +188,7 @@ public class AstToTextlyVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitVar(Var<Void> var) {
-        switch ( var.getTypeVar() ) {
-            case INTEGER:
-                this.sb.append("int " + var.getValue());
-                break;
-            default:
-                this.sb.append(var.getValue());
-                break;
-        }
+        this.sb.append(var.getValue());
         return null;
     }
 
@@ -855,7 +848,9 @@ public class AstToTextlyVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        // TODO Auto-generated method stub
+        this.sb.append(var.getTypeVar().getJavaCode()).append(" ");
+        this.sb.append(var.getName()).append(" = ");
+        var.getValue().visit(this);
         return null;
     }
 }

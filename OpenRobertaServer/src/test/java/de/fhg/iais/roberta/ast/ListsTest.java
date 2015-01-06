@@ -9,7 +9,7 @@ public class ListsTest {
 
     @Test
     public void listEmpty() throws Exception {
-        String a = "BlockAST [project=[[Location [x=10, y=63], EmptyList []]]]";
+        String a = "BlockAST [project=[[Location [x=10, y=63], EmptyList [STRING]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/lists/list_empty.xml"));
     }
@@ -21,7 +21,7 @@ public class ListsTest {
 
     @Test
     public void listRepeat() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-44, y=113], ListRepeat [[NumConst [4], NumConst [5]]]]]]";
+        String a = "BlockAST [project=[[Location [x=-44, y=113], ListRepeat [NUMERIC, [NumConst [4], NumConst [5]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/lists/list_repeat.xml"));
     }
@@ -69,7 +69,7 @@ public class ListsTest {
 
     @Test
     public void listCreateWith() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-44, y=113], ListRepeat [[NumConst [4], NumConst [5]]]]]]";
+        String a = "BlockAST [project=[[Location [x=-44, y=113], ListRepeat [NUMERIC, [NumConst [4], NumConst [5]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/lists/list_repeat.xml"));
     }

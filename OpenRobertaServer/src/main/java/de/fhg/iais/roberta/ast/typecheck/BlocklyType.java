@@ -45,7 +45,7 @@ public enum BlocklyType {
     // @formatter:off
     ANY("", ""),
     COMPARABLE("", "", ANY), ADDABLE("", "", ANY),
-    BOOL("BOOLEAN", "boolean", COMPARABLE), NUMERIC("NUMBER", "float", COMPARABLE, ADDABLE), STRING("STRING", "String", COMPARABLE, ADDABLE), COLOR("COLOUR", "String", ANY), //
+    BOOL("BOOLEAN", "boolean", COMPARABLE), NUMERIC("NUMBER", "float", COMPARABLE, ADDABLE), NUMERIC_INT("NUMBER", "int", COMPARABLE, ADDABLE), STRING("STRING", "String", COMPARABLE, ADDABLE), COLOR("COLOUR", "String", ANY), //
     NULL("", "", STRING, COLOR),
     REF("", "",NULL), PRIM("", "",NUMERIC, BOOL),
     NOTHING("", "",REF, PRIM),
@@ -74,7 +74,7 @@ public enum BlocklyType {
      * @return the javaTypeName
      */
     public String getJavaCode() {
-        return javaTypeName;
+        return this.javaTypeName;
     }
 
     public BlocklyType[] getSuperTypes() {

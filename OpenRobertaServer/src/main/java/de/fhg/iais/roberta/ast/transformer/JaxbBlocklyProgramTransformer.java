@@ -46,7 +46,6 @@ import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary.Op;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
-import de.fhg.iais.roberta.ast.syntax.expr.Var.TypeVar;
 import de.fhg.iais.roberta.ast.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.ast.syntax.functions.FunctionNames;
 import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
@@ -518,18 +517,25 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
 
                 // LISTEN
             case "lists_create_empty":
-                return EmptyList.make(extractBlockProperties(block), extractComment(block));
+                fields = extractFields(block, (short) 1);
+                filename = extractField(fields, "LIST_TYPE");
+                return EmptyList.make(BlocklyType.get(filename), extractBlockProperties(block), extractComment(block));
 
             case "lists_create_with":
             case "robLists_create_with":
-                return ListCreate.make(blockToExprList(block, ArrayList.class), extractBlockProperties(block), extractComment(block));
+                fields = extractFields(block, (short) 1);
+                filename = extractField(fields, "LIST_TYPE");
+                return ListCreate
+                    .make(BlocklyType.get(filename), blockToExprList(block, ArrayList.class), extractBlockProperties(block), extractComment(block));
 
             case "lists_repeat":
+                fields = extractFields(block, (short) 1);
+                filename = extractField(fields, "LIST_TYPE");
                 exprParams = new ArrayList<ExprParam>();
                 exprParams.add(new ExprParam(BlocklyConstants.ITEM, List.class));
                 exprParams.add(new ExprParam(BlocklyConstants.NUM, Integer.class));
                 params = extractExprParameters(block, exprParams);
-                return ListRepeat.make(params, extractBlockProperties(block), extractComment(block));
+                return ListRepeat.make(BlocklyType.get(filename), params, extractBlockProperties(block), extractComment(block));
 
             case "lists_getIndex":
                 fields = extractFields(block, (short) 2);
@@ -660,15 +666,16 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 var = extractVar(block);
                 values = extractValues(block, (short) 3);
                 exprList = ExprList.make();
-                Var<V> var1 = Var.make(((Var<V>) var).getValue(), TypeVar.INTEGER, properties, comment);
 
                 Phrase<V> from = extractValue(values, new ExprParam(BlocklyConstants.FROM_, Integer.class));
                 Phrase<V> to = extractValue(values, new ExprParam(BlocklyConstants.TO_, Integer.class));
                 Phrase<V> by = extractValue(values, new ExprParam(BlocklyConstants.BY_, Integer.class));
-                Binary<V> exprAssig = Binary.make(Binary.Op.ASSIGNMENT, convertPhraseToExpr(var1), convertPhraseToExpr(from), properties, comment);
+                VarDeclaration<V> var1 =
+                    VarDeclaration.make(BlocklyType.NUMERIC_INT, ((Var<V>) var).getValue(), convertPhraseToExpr(from), false, properties, comment);
+                //                Binary<V> exprAssig = Binary.make(Binary.Op.ASSIGNMENT, convertPhraseToExpr(var1), convertPhraseToExpr(from), properties, comment);
                 Binary<V> exprCondition = Binary.make(Binary.Op.LTE, convertPhraseToExpr(var), convertPhraseToExpr(to), properties, comment);
                 Binary<V> exprBy = Binary.make(Binary.Op.ADD_ASSIGNMENT, convertPhraseToExpr(var), convertPhraseToExpr(by), properties, comment);
-                exprList.addExpr(exprAssig);
+                exprList.addExpr(var1);
                 exprList.addExpr(exprCondition);
                 exprList.addExpr(exprBy);
                 exprList.setReadOnly();
@@ -689,16 +696,17 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
 
             case "controls_repeat_ext":
                 values = extractValues(block, (short) 1);
-                var = Var.make("i" + this.variable_counter, TypeVar.INTEGER, properties, comment);
                 exprList = ExprList.make();
                 from = NumConst.make("0", properties, comment);
                 to = extractValue(values, new ExprParam(BlocklyConstants.TIMES, Integer.class));
                 by = NumConst.make("1", properties, comment);
-                exprAssig = Binary.make(Binary.Op.ASSIGNMENT, convertPhraseToExpr(var), convertPhraseToExpr(from), properties, comment);
-                var = Var.make("i" + this.variable_counter, TypeVar.NONE, properties, comment);
+                //                var = Var.make("i" + this.variable_counter, TypeVar.INTEGER, properties, comment);
+                var1 = VarDeclaration.make(BlocklyType.NUMERIC_INT, "i" + this.variable_counter, convertPhraseToExpr(from), false, properties, comment);
+                //                exprAssig = Binary.make(Binary.Op.ASSIGNMENT, convertPhraseToExpr(var), convertPhraseToExpr(from), properties, comment);
+                var = Var.make("i" + this.variable_counter, properties, comment);
                 exprCondition = Binary.make(Binary.Op.LT, convertPhraseToExpr(var), convertPhraseToExpr(to), properties, comment);
                 Unary<V> increment = Unary.make(Unary.Op.POSTFIX_INCREMENTS, convertPhraseToExpr(var), properties, comment);
-                exprList.addExpr(exprAssig);
+                exprList.addExpr(var1);
                 exprList.addExpr(exprCondition);
                 exprList.addExpr(increment);
                 exprList.setReadOnly();

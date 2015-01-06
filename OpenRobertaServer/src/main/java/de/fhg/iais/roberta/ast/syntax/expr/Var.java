@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
+import javassist.bytecode.stackmap.TypeData.TypeVar;
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
@@ -16,14 +17,12 @@ import de.fhg.iais.roberta.dbc.Assert;
  * To create an instance from this class use the method {@link #make(String, TypeVar, boolean, String)}.<br>
  */
 public class Var<V> extends Expr<V> {
-    private final TypeVar typeVar;
     private final String name;
 
-    private Var(String value, TypeVar typeVar, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private Var(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.VAR, properties, comment);
-        Assert.isTrue(!value.equals("") && typeVar != null);
+        Assert.isTrue(!value.equals(""));
         this.name = value;
-        this.typeVar = typeVar;
         setReadOnly();
     }
 
@@ -31,20 +30,12 @@ public class Var<V> extends Expr<V> {
      * creates instance of {@link Var}. This instance is read only and can not be modified.
      *
      * @param value name of the variable; must be <b>non-empty</b> string,
-     * @param typeVar type of the variable; must be <b>not</b> null,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      * @return read only object of class {@link Var}
      */
-    public static <V> Var<V> make(String value, TypeVar typeVar, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Var<V>(value, typeVar, properties, comment);
-    }
-
-    /**
-     * @return type of the variable
-     */
-    public TypeVar getTypeVar() {
-        return this.typeVar;
+    public static <V> Var<V> make(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new Var<V>(value, properties, comment);
     }
 
     /**
@@ -72,13 +63,6 @@ public class Var<V> extends Expr<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitVar(this);
-    }
-
-    /**
-     * Type of variables. Use NONE if the variable is defined already
-     */
-    public static enum TypeVar {
-        DOUBLE, INTEGER, STRING, NONE;
     }
 
     @Override

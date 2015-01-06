@@ -229,14 +229,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitVar(Var<Void> var) {
-        switch ( var.getTypeVar() ) {
-            case INTEGER:
-                this.sb.append("int " + var.getValue());
-                break;
-            default:
-                this.sb.append(var.getValue());
-                break;
-        }
+        this.sb.append(var.getValue());
         return null;
     }
 
@@ -840,7 +833,10 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitEmptyList(EmptyList<Void> emptyList) {
-        this.sb.append("BlocklyMethods.createEmptyList()");
+        this.sb.append("new ArrayList<"
+            + emptyList.getTypeVar().getJavaCode().substring(0, 1).toUpperCase()
+            + emptyList.getTypeVar().getJavaCode().substring(1).toLowerCase()
+            + ">()");
         return null;
     }
 
