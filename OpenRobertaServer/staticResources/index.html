@@ -77,28 +77,21 @@ limitations under the License.
                 </ul>
             </li>
             <li>
-                <a href="#" id="head-navigation-nepo"><span class="head-navi-icons nepo"></span></a>
-                <ul id="submenu-nepo" class="head-navigation-submenu">
-                    <li><span id="toolboxBeginner" class="flaticon-spanner" lkey="Blockly.Msg.MENU_BEGINNER">Anfänger</span></li>
-                    <li><span id="toolboxExpert" class="flaticon-spanner" lkey="Blockly.Msg.MENU_EXPERT">Experte</span></li>
-                </ul>
-            </li>
-            <li>
-                <a href="#" id="head-navigation-connection"><span class="head-navi-icons connection"></span></a>
-                <ul id="submenu-connection" class="head-navigation-submenu">
+                <a href="#" id="head-navigation-robot"><span class="head-navi-icons robot"></span></a>
+                <ul id="submenu-robot" class="head-navigation-submenu">
                     <li><span id="connect" class="flaticon-botton2" lkey="Blockly.Msg.MENU_CONNECT">verbinden ...</span></li>
-                </ul>
-            </li>
-            <li>
-                <a href="#" id="head-navigation-developertools"><span class="head-navi-icons developer"></span></a>
-                <ul id="submenu-developertools" class="head-navigation-submenu">
-                    <li><span id="logging" class="flaticon-spanner" lkey="Blockly.Msg.MENU_LOGGING">Logging</span></li>
+                    <li><span id="firmware" class="flaticon-botton2" lkey="Blockly.Msg.MENU_UPDATE_FIRMWARE">Firmware aktualisieren</span></li>
+                    <li><span id="robotInfo" class="flaticon-botton2">info</span></li>
                 </ul>
             </li>
             <li>
                 <a href="#" id="head-navigation-help"><span class="head-navi-icons help"></span></a>
                 <ul id="submenu-help" class="head-navigation-submenu">
-                    <li><span id="help" class="flaticon-lightbulb1" lkey="Blockly.Msg.MENU_SHOW">anzeigen</span></li>
+                    <li><span id="firstSteps" class="flaticon-lightbulb1" lkey="Blockly.Msg.MENU_FIRST_STEPS">Erste Schritte</span></li>
+                    <li><span id="startProgramming" class="flaticon-lightbulb1" lkey="Blockly.Msg.MENU_START_PROGRAMMING">Programmieren</span></li>
+                    <li><span id="faq" class="flaticon-lightbulb1" lkey="Blockly.Msg.MENU_FAQ">FAQ</span></li>
+                    <li><span id="stateInfo" class="flaticon-lightbulb1" lkey="Blockly.Msg.MENU_STATE_INFO">Statusinformationen</span></li>
+                    <li><span id="about" class="flaticon-lightbulb1" lkey="Blockly.Msg.MENU_ABOUT">über ...</span></li>
                 </ul>
             </li>
             <li>
@@ -111,6 +104,19 @@ limitations under the License.
                     <li class="logout"><span id="delete" class="flaticon-user5" lkey="Blockly.Msg.MENU_DELETE_USER">Benutzer löschen ...</span></li>
                 </ul>
             </li>
+            <li class="hidden">
+                <a href="#" id="head-navigation-nepo"><span class="head-navi-icons nepo"></span></a>
+                <ul id="submenu-nepo" class="head-navigation-submenu">
+                    <li><span id="toolboxBeginner" class="flaticon-spanner" lkey="Blockly.Msg.MENU_BEGINNER">Anfänger</span></li>
+                    <li><span id="toolboxExpert" class="flaticon-spanner" lkey="Blockly.Msg.MENU_EXPERT">Experte</span></li>
+                </ul>
+            </li>
+            <li class="hidden">
+                <a href="#" id="head-navigation-developertools"><span class="head-navi-icons developer"></span></a>
+                <ul id="submenu-developertools" class="head-navigation-submenu">
+                    <li><span id="logging" class="flaticon-spanner" lkey="Blockly.Msg.MENU_LOGGING">Logging</span></li>
+                </ul>
+            </li>
 
             <div id="logo">
             </div>
@@ -119,8 +125,6 @@ limitations under the License.
             </div>
             
             <div class="state" id="state2">
-                <a href="http://www.iais.fraunhofer.de/impressum.html" target="_blank" class="publishingNotes De">Impressum</a>   <!-- Has to be removed in the future !!! -->
-                <a href="http://www.iais.fraunhofer.de/index.php?id=4515&L=1" target="_blank" class="publishingNotes En">Publishing notes</a>   <!-- Has to be removed in the future !!! -->
                 <br/>
                 <span id="setLangDe" class="bigFlag" title="Deutsch" lkey="Blockly.Msg.HINT_LANGUAGE_GERMAN"></span>
                 <span id="setLangEn" class="smallFlag" title="Englisch" lkey="Blockly.Msg.HINT_LANGUAGE_ENGLISH"></span>
@@ -144,8 +148,6 @@ limitations under the License.
         </div>
         
     </div>
-
-    
 
     <!-- ################## POPUPS ################## -->
     
@@ -213,6 +215,19 @@ limitations under the License.
         <input id="setToken" class='submit' type="button" lkey="Blockly.Msg.POPUP_SET_TOKEN" value="Token setzen" />
     </div>
 
+    <div class="jquerypopup" id="show-about" title="Über ...">
+        <span>Fraunhofer Open Roberta</span><br/>
+        <span>Version&nbsp;</span><span id="version">???</span><br/>&nbsp;<br/>
+        <a href="http://www.iais.fraunhofer.de/impressum.html" target="_blank" class="publishingNotes De">Impressum</a>
+        <a href="http://www.iais.fraunhofer.de/index.php?id=4515&L=1" target="_blank" class="publishingNotes En">Publishing notes</a>
+    </div>
+
+    <div class="jquerypopup" id="show-state-info" title="Statusinformation">
+        <span lkey="Blockly.Msg.POPUP_USERNAME">Benutzer</span>:&nbsp;</span><span id="loggedIn">???</span><br/>
+        <span lkey="Blockly.Msg.TAB_PROGRAM">Programm</span>:&nbsp;<span id="programName">???</span><br/>
+        <span lkey="Blockly.Msg.TAB_CONFIGURATION">Konfiguration</span>:&nbsp;<span id="configurationName">???</span>
+    </div>
+
     <div class="jquerypopup" id="show-message" title="Achtung">
         <span class="message" id="messageDummy" lkey="Blockly.Msg.POPUP_ATTENTION">Dummy</span>   <!-- don't delete this line -->
         <span class="message" id="MESSAGE.PASSWORD_ERROR" lkey="Blockly.Msg.MESSAGE_PASSWORD_ERROR">Du hast beim eingeben der beiden Passworte etwas falsch gemacht.</span>
@@ -241,8 +256,6 @@ limitations under the License.
                 <li class="hidden"><a id="tabConfigurationListing" href="#confListing">Listing of configurations</a></li>
                 <li class="hidden"><a id="tabLogging" href="#logging">Logging</a></li>
                 <li class="hidden"><a id="tabBrickly" href="#bricklyFrame">Brickly</a></li>
-                <li class="hidden"><a id="tabProgram" href="#blockly"><span lkey="Blockly.Msg.TAB_PROGRAM">Program</span>&nbsp;<span id="tabProgramName"></span></a></li>
-                <li class="hidden"><a id="tabConfiguration" href="#brickly"><span lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</span>&nbsp;<span id="tabConfigurationName"></span></a></li>
             </ul>
 
             <div id="blockly">

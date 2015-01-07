@@ -116,7 +116,7 @@ ul#head-navigation .head-navigation-submenu>li:hover {
 	background-image: url(img/head-navi-icons/puzzle-outline.svg);
 }
 
-.head-navi-icons.connection {
+.head-navi-icons.robot {
 	background-image: url(img/head-navi-icons/arrow-loop-outline.svg);
 }
 
@@ -789,7 +789,6 @@ table.dataTable.no-footer {
 
 #toastContainer {
     float: left;
-    margin-left: 100px;
     width: 500px;
     height: 40px;
     text-align: center;

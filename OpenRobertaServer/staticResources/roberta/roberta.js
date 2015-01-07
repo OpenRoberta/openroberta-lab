@@ -6,6 +6,7 @@ var toastMessages = [];
  * Initialize user-state-object
  */
 function initUserState() {
+    userState.version = 'xx.xx.xx';
     userState.language = 'de';
     userState.id = -1;
     userState.name = '';
@@ -848,21 +849,13 @@ function initHeadNavigation() {
         $('#head-navigation > li > ul').find('li').hide();
         $('#submenu-program').find('li').not('.hidden').show();
     });
-    $('#head-navigation-nepo').onWrap('click', function() {
-        $('#head-navigation > li > ul').find('li').hide();
-        $('#submenu-nepo').find('li').not('.hidden').show();
-    });
     $('#head-navigation-configuration').onWrap('click', function() {
         $('#head-navigation > li > ul').find('li').hide();
         $('#submenu-configuration').find('li').not('.hidden').show();
     });
-    $('#head-navigation-connection').onWrap('click', function() {
+    $('#head-navigation-robot').onWrap('click', function() {
         $('#head-navigation > li > ul').find('li').hide();
-        $('#submenu-connection').find('li').not('.hidden').show();
-    });
-    $('#head-navigation-developertools').onWrap('click', function() {
-        $('#head-navigation > li > ul').find('li').hide();
-        $('#submenu-developertools').find('li').not('.hidden').show();
+        $('#submenu-robot').find('li').not('.hidden').show();
     });
     $('#head-navigation-help').onWrap('click', function() {
         $('#head-navigation > li > ul').find('li').hide();
@@ -871,6 +864,14 @@ function initHeadNavigation() {
     $('#head-navigation-login').onWrap('click', function() {
         $('#head-navigation > li > ul').find('li').hide();
         $('#submenu-login').find('li').not('.hidden').show();
+    });
+    $('#head-navigation-nepo').onWrap('click', function() {
+        $('#head-navigation > li > ul').find('li').hide();
+        $('#submenu-nepo').find('li').not('.hidden').show();
+    });
+    $('#head-navigation-developertools').onWrap('click', function() {
+        $('#head-navigation > li > ul').find('li').hide();
+        $('#submenu-developertools').find('li').not('.hidden').show();
     });
 
     // Submenu Overview
@@ -910,7 +911,7 @@ function initHeadNavigation() {
         return false;
     }, 'sub menu of menu "program"');
 
-    // Submenu Roboter (Configuration)
+    // Submenu Configuration
     $('#head-navigation').onWrap('click', '#submenu-configuration > li:not(.ui-state-disabled) > span', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         var domId = event.target.id;
@@ -928,52 +929,49 @@ function initHeadNavigation() {
         } else if (domId === 'propertiesConfig') {
         }
         return false;
-    }, 'sub menu of menu "roboter" ("configuration")');
+    }, 'sub menu of menu "configuration"');
 
-    // Submenu Nepo
-    $('#head-navigation').onWrap('click', '#submenu-nepo > li:not(.ui-state-disabled) > span', function(event) {
-        $(".ui-dialog-content").dialog("close"); // close all opened popups
-        var domId = event.target.id;
-        if (domId === 'toolboxBeginner') {
-            loadToolbox('beginner');
-            $('#toolboxBeginner').addClass('ui-state-disabled');
-            $('#toolboxExpert').removeClass('ui-state-disabled');
-        } else if (domId === 'toolboxExpert') {
-            loadToolbox('expert');
-            $('#toolboxExpert').addClass('ui-state-disabled');
-            $('#toolboxBeginner').removeClass('ui-state-disabled');
-        }
-        return false;
-    }, 'sub menu of menu "nepo"');
-
-    // Submenu Connection
-    $('#head-navigation').onWrap('click', '#submenu-connection > li:not(.ui-state-disabled) > span', function(event) {
+    // Submenu Robot
+    $('#head-navigation').onWrap('click', '#submenu-robot > li:not(.ui-state-disabled) > span', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         var domId = event.target.id;
         if (domId === 'connect') {
             $("#set-token").dialog("open");
+        } else if (domId === 'firmware') {
+            displayMessage("MESSAGE.NOT_AVAILABLE");
+        } else if (domId === 'robotInfo') {
+            displayMessage("MESSAGE.NOT_AVAILABLE");
         }
         return false;
-    }, 'sub menu of menu "connection"');
-
-    // Submenu Developertools
-    $('#head-navigation').onWrap('click', '#submenu-developertools > li:not(.ui-state-disabled) > span', function(event) {
-        $(".ui-dialog-content").dialog("close"); // close all opened popups
-        var domId = event.target.id;
-        if (domId === 'logging') {
-            switchToBlockly();
-            $('#tabLogging').click();
-        }
-        return false;
-    }, 'sub menu of menu "developertools"');
+    }, 'sub menu of menu "robot"');
 
     // Submenu Help
     $('#head-navigation').onWrap('click', '#submenu-help > li:not(.ui-state-disabled) > span', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         var domId = event.target.id;
-        if (domId === 'help') {
-            window.open("http://www.open-roberta.org/erste-schritte.html");
-        }
+        if (domId === 'firstSteps') {
+            if (userState.language === 'De') {
+                window.open("http://www.open-roberta.org/erste-schritte.html");
+            } else {
+                window.open("http://www.open-roberta.org/index.php?id=59&L=1");
+            }            
+        } else if (domId === 'startProgramming') {
+            if (userState.language === 'De') {
+                window.open("http://dev.open-roberta.org/willkommen.html");
+            } else {
+                window.open("http://dev.open-roberta.org/willkommen.html?&L=1");
+            }            
+        } else if (domId === 'faq') {
+            displayMessage("MESSAGE.NOT_AVAILABLE");
+        } else if (domId === 'stateInfo') {
+            $("#loggedIn").text(userState.name);
+            $("#programName").text(userState.program);
+            $("#configurationName").text(userState.configuration);
+            $("#show-state-info").dialog("open");
+        } else if (domId === 'about') {
+            $("#version").text(userState.version);
+            $("#show-about").dialog("open");
+        } 
         return false;
     }, 'sub menu of menu "help"');
 
@@ -995,6 +993,34 @@ function initHeadNavigation() {
         return false;
     }, 'sub menu of menu "login"');
 
+
+    // Submenu Nepo
+    $('#head-navigation').onWrap('click', '#submenu-nepo > li:not(.ui-state-disabled) > span', function(event) {
+        $(".ui-dialog-content").dialog("close"); // close all opened popups
+        var domId = event.target.id;
+        if (domId === 'toolboxBeginner') {
+            loadToolbox('beginner');
+            $('#toolboxBeginner').addClass('ui-state-disabled');
+            $('#toolboxExpert').removeClass('ui-state-disabled');
+        } else if (domId === 'toolboxExpert') {
+            loadToolbox('expert');
+            $('#toolboxExpert').addClass('ui-state-disabled');
+            $('#toolboxBeginner').removeClass('ui-state-disabled');
+        }
+        return false;
+    }, 'sub menu of menu "nepo"');
+
+    // Submenu Developertools
+    $('#head-navigation').onWrap('click', '#submenu-developertools > li:not(.ui-state-disabled) > span', function(event) {
+        $(".ui-dialog-content").dialog("close"); // close all opened popups
+        var domId = event.target.id;
+        if (domId === 'logging') {
+            switchToBlockly();
+            $('#tabLogging').click();
+        }
+        return false;
+    }, 'sub menu of menu "developertools"');
+
     // Close submenu on mouseleave
     $('#head-navigation').onWrap('mouseleave', function(event) {
         $('#head-navigation > li > ul').find('li').hide();
@@ -1003,6 +1029,10 @@ function initHeadNavigation() {
     $('#head-navigation #logo').onWrap('click', function() {
         window.open('http://open-roberta.org');
     }, 'logo was clicked');
+
+    $('#head-navigation #beta').onWrap('click', function() {
+        window.open('http://open-roberta.org');
+    }, 'beta logo was clicked');
 
     setHeadNavigationMenuState('logout');
 }
@@ -1029,7 +1059,7 @@ function initPopups() {
 
     // define general class for Pop-Up
     $(".jquerypopup").dialog("option", "dialogClass", "jquerypopup");
-
+    
     $('#saveUser').onWrap('click', saveUserToServer, 'save the user data');
     $('#deleteUser').onWrap('click', deleteUserOnServer, 'delete user data');
     $('#doLogin').onWrap('click', login, 'login ');
@@ -1183,7 +1213,7 @@ function translate(jsdata) {
         if (value == undefined) {
             console.log('UNDEFINED    key : value = ' + key + ' : ' + value);            
         }
-        if (key === 'Blockly.Msg.MENU_LOGIN') {
+        if (key === 'Blockly.Msg.MENU_LOG_IN') {
             $('#login-user').dialog('option', 'title', value);
             $(this).html(value);            
         } else if (key === 'Blockly.Msg.POPUP_DO_LOGIN') {
@@ -1233,6 +1263,12 @@ function translate(jsdata) {
             $('#displayToolbox').prop('title', value);
         } else if (key === 'Blockly.Msg.HINT_USER') {
             $('#displayLogin').prop('title', value);
+        } else if (key === 'Blockly.Msg.MENU_STATE_INFO') {
+            $('#show-state-info').dialog('option', 'title', value);
+            $(this).html(value);            
+        } else if (key === 'Blockly.Msg.MENU_ABOUT') {
+            $('#show-about').dialog('option', 'title', value);
+            $(this).html(value);            
         } else {
             $(this).html(value);            
         }

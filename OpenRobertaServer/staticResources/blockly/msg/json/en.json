@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2014-12-22 11:37:53.851000",
+		"lastupdated": "2015-01-06 09:58:58.330000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -547,8 +547,13 @@
 	"MENU_BEGINNER": "Beginner",
 	"MENU_EXPERT": "Expert",
 	"MENU_CONNECT": "connect ...",
+	"MENU_UPDATE_FIRMWARE": "update firmware",
 	"MENU_LOGGING": "logging",
-	"MENU_SHOW": "show",
+	"MENU_FIRST_STEPS": "first steps",
+	"MENU_START_PROGRAMMING": "start programming",
+	"MENU_FAQ": "FAQ",
+	"MENU_STATE_INFO": "state information",
+	"MENU_ABOUT": "about ...",
 	"MENU_LOG_IN": "login ...",
 	"MENU_LOG_OUT": "logout",
 	"MENU_CHANGE": "change ...",
