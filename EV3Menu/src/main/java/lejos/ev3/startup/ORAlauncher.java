@@ -2,7 +2,6 @@ package lejos.ev3.startup;
 
 import java.io.File;
 
-import lejos.ev3.startup.GraphicStartup.IndicatorThread;
 import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.GraphicsLCD;
@@ -16,8 +15,6 @@ import lejos.utility.Delay;
  */
 public class ORAlauncher {
 
-    private final IndicatorThread ind;
-
     private static final String CMD_ORA_RUN = "jrun -jar ";
     private static final String PROGRAMS_DIRECTORY = "/home/lejos/programs";
 
@@ -29,13 +26,9 @@ public class ORAlauncher {
 
     /**
      * Creates a new object for launching the Open Roberta Lab user program.
-     * 
-     * @param ind
-     *        The title bar object for the display which needs to be hidden
-     *        while running the user program.
      */
-    public ORAlauncher(IndicatorThread ind) {
-        this.ind = ind;
+    public ORAlauncher() {
+        //
     }
 
     /**
@@ -46,16 +39,18 @@ public class ORAlauncher {
      */
     public void runProgram(String programName) {
         File robertalabFile = new File(ORAlauncher.PROGRAMS_DIRECTORY, programName);
-        this.ind.suspend();
         System.out.println("run: " + CMD_ORA_RUN + robertalabFile.getPath());
         GraphicStartup.menu.suspend();
         exec(CMD_ORA_RUN + robertalabFile.getPath(), ORAlauncher.PROGRAMS_DIRECTORY);
-        //GraphicStartup.menu.execInThisJVM(robertalabFile);
+        Delay.msDelay(1000);
+        GraphicStartup.menu.suspend(); // debug screen when process is killed
         GraphicStartup.menu.resume();
-        this.ind.resume();
         redrawIPs();
     }
 
+    /**
+     * Manually redraw IP addresses on the screen. Used for restoring the screen after user process is terminated.
+     */
     private void redrawIPs() {
         int row = 1;
         for ( String ip : GraphicStartup.ips ) {
@@ -73,8 +68,8 @@ public class ORAlauncher {
      *        The programs where all user programs are saved.
      */
     private void exec(String command, String directory) {
+        Process program = null;
         try {
-            //Image screenshot = new Image(178, 128, glcd.getHWDisplay());
 
             glcd.clear();
             glcd.refresh();
@@ -83,16 +78,15 @@ public class ORAlauncher {
             glcd.drawImage(image, 0, 0, 0);
             glcd.refresh();
 
-            ORAhandler.program = new ProcessBuilder(command.split(" ")).directory(new File(directory)).start();
+            program = new ProcessBuilder(command.split(" ")).directory(new File(directory)).start();
 
             System.out.println("Running an Open Roberta Lab Program!");
             while ( true ) {
                 int b = Button.getButtons();
                 if ( b == 6 ) {
                     System.out.println("Killing the process");
-                    ORAhandler.program.destroy();
+                    program.destroy();
                     GraphicStartup.resetMotors();
-                    Delay.msDelay(1000);
                 }
                 try {
                     // we do not use lejos wrapper for sysout and syserr
@@ -100,7 +94,7 @@ public class ORAlauncher {
                     // exitvalue is 143 if process was killed by another one
                     // exitvalue is 0 if process terminates regularly
                     // throws exception if not yet terminated
-                    System.out.println("process exitvalue: " + ORAhandler.program.exitValue());
+                    System.out.println("ORA process exitvalue: " + program.exitValue());
                     break;
                 } catch ( IllegalThreadStateException e ) {
                     // go on
@@ -109,17 +103,16 @@ public class ORAlauncher {
             }
 
             System.out.println("Waiting for process to die");
-            ORAhandler.program.waitFor();
+            program.waitFor();
             System.out.println("Program finished");
             // Turn the LED off, in case left on
             Button.LEDPattern(0);
             glcd.setAutoRefresh(true);
             glcd.clear();
             glcd.refresh();
-            //glcd.drawImage(screenshot, 0, 0, 0);
             glcd.refresh();
 
-            ORAhandler.program = null;
+            program = null;
         } catch ( Exception e ) {
             System.err.println("Failed to execute ORA program: " + e);
         }

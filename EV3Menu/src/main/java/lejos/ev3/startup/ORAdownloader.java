@@ -42,7 +42,7 @@ public class ORAdownloader {
      * 
      * @return The name of the program.
      */
-    public String downloadProgram() {
+    public String downloadProgram(JSONObject brickData) {
         OutputStream os = null;
         InputStream is = null;
         FileOutputStream fos = null;
@@ -52,10 +52,8 @@ public class ORAdownloader {
         try {
             HttpURLConnection httpURLConnection = openConnection();
 
-            JSONObject requestEntity = ORAhandler.getBrickData();
-
             os = httpURLConnection.getOutputStream();
-            os.write(requestEntity.toString().getBytes("UTF-8"));
+            os.write(brickData.toString().getBytes("UTF-8"));
 
             is = httpURLConnection.getInputStream();
             byte[] buffer = new byte[4096];

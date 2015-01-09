@@ -1,24 +1,12 @@
 package lejos.ev3.startup;
 
-import lejos.ev3.startup.GraphicStartup.IndicatorThread;
-
-import org.json.JSONObject;
-
 /**
  * No Singleton Pattern but not recommended to use more than one. This is a
  * member of GraphicStartup.
- * 
+ *
  * @author dpyka
  */
 public class ORAhandler {
-    // brick data keywords
-    public static final String KEY_BRICKNAME = "brickname";
-    public static final String KEY_TOKEN = "token";
-    public static final String KEY_MACADDR = "macaddr";
-    public static final String KEY_BATTERY = "battery";
-    public static final String KEY_VERSION = "version";
-
-    private static final JSONObject brickData = new JSONObject();
 
     private static boolean hasConnectionError = false;
     private static boolean isRegistered = false;
@@ -27,9 +15,7 @@ public class ORAhandler {
     private ORApushCmd pushCmd;
     private Thread serverCommunicator;
 
-    public static Process program = null;
-
-    /** 
+    /**
      * Creates a control object for most of the Open Roberta Lab related
      * functionality.
      */
@@ -40,42 +26,21 @@ public class ORAhandler {
     }
 
     /**
-     * Returns the JSONObject brick data which will be send to the server.
-     * 
-     * @return JSONObejct brickdata
-     */
-    public static JSONObject getBrickData() {
-        return brickData;
-    }
-
-    /**
-     * Set one key/value pair in the brickdata JSONObject.
-     * 
-     * @param key
-     *        String The key in the jsonobject (use predefined static keywords)
-     * @param value
-     *        String The value in the jsonobject
-     */
-    public static void setBrickData(String key, String value) {
-        brickData.put(key, value);
-    }
-
-    /**
      * Start the brick server "push" communication. IndicatorThread ind from
      * GraphicStartup is needed (for hiding explicitly) when launching a user
      * program.
-     * 
+     *
      * @param serverBaseIP
      *        String The base IP like 192.168.56.1:1999
      * @param ind
      *        IndicatorThread Title bar of the brick (shows battery, title and
      *        status icons).
      */
-    public void startServerCommunicator(String serverBaseIP, IndicatorThread ind) {
+    public void startServerCommunicator(String serverBaseIP, String token) {
         setInterrupt(false);
         setRegistered(false);
         setConnectionError(false);
-        this.pushCmd = new ORApushCmd(serverBaseIP, ind);
+        this.pushCmd = new ORApushCmd(serverBaseIP, token);
         this.serverCommunicator = new Thread(this.pushCmd);
         this.serverCommunicator.start();
     }
@@ -87,6 +52,7 @@ public class ORAhandler {
      */
     public void disconnect() {
         setInterrupt(true);
+        setRegistered(false);
         if ( this.pushCmd.getHttpConnection() != null ) {
             this.pushCmd.getHttpConnection().disconnect();
         }

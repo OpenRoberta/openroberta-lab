@@ -1482,26 +1482,19 @@ public class GraphicStartup implements Menu {
                     return;
                 }
             }
-
-            ORAhandler.setBrickData(ORAhandler.KEY_BRICKNAME, hostname);
-            ORAhandler.setBrickData(ORAhandler.KEY_TOKEN, new ORAtokenGenerator().generateToken());
-            ORAhandler.setBrickData(ORAhandler.KEY_MACADDR, getORAmacAddress());
-            ORAhandler.setBrickData(ORAhandler.KEY_BATTERY, getBatteryStatus());
-            ORAhandler.setBrickData(ORAhandler.KEY_VERSION, getORAversion());
-            System.out.println(ORAhandler.getBrickData());
-
+            String token = new ORAtokenGenerator().generateToken();
             String ip = getIPAddress();
             // 193.175.162.161:80
             if ( ip.equals("none") ) {
                 return;
             } else {
-                oraHandler.startServerCommunicator(ip, this.ind);
+                oraHandler.startServerCommunicator(ip, token);
             }
 
             newScreen(" Robertalab");
             lcd.drawString("    Wating for", 0, 2);
             lcd.drawString("  registration...", 0, 3);
-            lcd.drawString("     " + ORAhandler.getBrickData().getString(ORAhandler.KEY_TOKEN), 0, 5);
+            lcd.drawString("     " + token, 0, 5);
 
             while ( ORAhandler.isRegistered() == false ) {
                 int id = Button.waitForAnyEvent(500);
@@ -1523,7 +1516,7 @@ public class GraphicStartup implements Menu {
         }
     }
 
-    private static String getORAmacAddress() {
+    public static String getORAmacAddress() {
         Enumeration<NetworkInterface> interfaces;
         try {
             interfaces = NetworkInterface.getNetworkInterfaces();
@@ -1747,7 +1740,6 @@ public class GraphicStartup implements Menu {
 
                     if ( newName != null ) {
                         setName(newName);
-                        ORAhandler.setBrickData(ORAhandler.KEY_BRICKNAME, hostname);
                     }
                     break;
                 case 4:

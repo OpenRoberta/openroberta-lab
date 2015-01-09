@@ -8,8 +8,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import lejos.ev3.startup.GraphicStartup.IndicatorThread;
-
 import org.json.JSONObject;
 
 /**
@@ -19,12 +17,22 @@ import org.json.JSONObject;
  */
 public class ORApushCmd implements Runnable {
 
-    private URL pushService = null;
+    private URL pushServiceURL;
     private HttpURLConnection httpURLConnection;
 
     private final ORAdownloader oraDownloader;
     private final ORAupdater oraUpdater;
     private final ORAlauncher oraLauncher;
+
+    private final JSONObject brickData = new JSONObject();
+
+    // brick data keywords
+    public static final String KEY_BRICKNAME = "brickname";
+    public static final String KEY_TOKEN = "token";
+    public static final String KEY_MACADDR = "macaddr";
+    public static final String KEY_BATTERY = "battery";
+    public static final String KEY_VERSION = "version";
+    public static final String KEY_CMD = "cmd";
 
     // brickdata + cmds send to server
     private static final String CMD_REGISTER = "register";
@@ -47,15 +55,20 @@ public class ORApushCmd implements Runnable {
      * @param ind
      *        title bar of the brick's screen
      */
-    public ORApushCmd(String serverBaseIP, IndicatorThread ind) {
+    public ORApushCmd(String serverBaseIP, String token) {
+        // add brick data pairs which will not change during runtime
+        this.brickData.put(KEY_TOKEN, token);
+        this.brickData.put(KEY_MACADDR, GraphicStartup.getORAmacAddress());
+        this.brickData.put(KEY_VERSION, GraphicStartup.getORAversion());
+
         try {
-            this.pushService = new URL("http://" + serverBaseIP + "/pushcmd");
+            this.pushServiceURL = new URL("http://" + serverBaseIP + "/pushcmd");
         } catch ( MalformedURLException e ) {
             // ok
         }
         this.oraDownloader = new ORAdownloader(serverBaseIP);
         this.oraUpdater = new ORAupdater(serverBaseIP);
-        this.oraLauncher = new ORAlauncher(ind);
+        this.oraLauncher = new ORAlauncher();
     }
 
     /**
@@ -70,31 +83,31 @@ public class ORApushCmd implements Runnable {
     }
 
     /**
-     * Method which processes the brick server communication in another thread.
+     * Method which processes the brick server communication in a separate thread.
      * The brick reacts on specific commands from the server.
      */
     @Override
     public void run() {
         OutputStream os = null;
         BufferedReader br = null;
+
         while ( !ORAhandler.isInterrupt() ) {
             try {
                 this.httpURLConnection = openConnection();
 
-                // batterystatus or brickname can change, token and macaddr stay the same
-                ORAhandler.setBrickData(ORAhandler.KEY_BRICKNAME, GraphicStartup.getBrickName());
-                ORAhandler.setBrickData(ORAhandler.KEY_BATTERY, GraphicStartup.getBatteryStatus());
-
-                JSONObject requestEntity = ORAhandler.getBrickData();
+                // add or update brick data pairs which can change during runtime
+                this.brickData.put(KEY_BRICKNAME, GraphicStartup.getBrickName());
+                this.brickData.put(KEY_BATTERY, GraphicStartup.getBatteryStatus());
 
                 if ( ORAhandler.isRegistered() ) {
-                    requestEntity.put("cmd", CMD_PUSH);
+                    this.brickData.put(KEY_CMD, CMD_PUSH);
                 } else {
-                    requestEntity.put("cmd", CMD_REGISTER);
+                    this.brickData.put(KEY_CMD, CMD_REGISTER);
+                    System.out.println("ORA register: " + this.brickData);
                 }
 
                 os = this.httpURLConnection.getOutputStream();
-                os.write(requestEntity.toString().getBytes("UTF-8"));
+                os.write(this.brickData.toString().getBytes("UTF-8"));
 
                 br = new BufferedReader(new InputStreamReader(this.httpURLConnection.getInputStream()));
                 StringBuilder responseStrBuilder = new StringBuilder();
@@ -105,7 +118,7 @@ public class ORApushCmd implements Runnable {
                 JSONObject responseEntity = new JSONObject(responseStrBuilder.toString());
 
                 String command = responseEntity.getString("cmd");
-                System.out.println("cmd from server: " + command);
+                System.out.println("ORA cmd from server: " + command);
                 switch ( command ) {
                     case CMD_REPEAT:
                         ORAhandler.setRegistered(true);
@@ -117,7 +130,7 @@ public class ORApushCmd implements Runnable {
                         this.oraUpdater.update();
                         break;
                     case CMD_DOWNLOAD:
-                        String programName = this.oraDownloader.downloadProgram();
+                        String programName = this.oraDownloader.downloadProgram(this.brickData);
                         if ( GraphicStartup.getUserprogram() == null ) {
                             this.oraLauncher.runProgram(programName);
                         }
@@ -125,7 +138,7 @@ public class ORApushCmd implements Runnable {
                     case CMD_CONFIGURATION:
                         break;
                     default:
-                        System.out.println("Unknown command from server, skip!");
+                        System.out.println("ORA unknown command from server, do nothing!");
                         break;
                 }
             } catch ( IOException ioe ) {
@@ -157,7 +170,7 @@ public class ORApushCmd implements Runnable {
      *         Connection to server failed
      */
     private HttpURLConnection openConnection() throws IOException {
-        HttpURLConnection httpURLConnection = (HttpURLConnection) this.pushService.openConnection();
+        HttpURLConnection httpURLConnection = (HttpURLConnection) this.pushServiceURL.openConnection();
         httpURLConnection.setDoInput(true);
         httpURLConnection.setDoOutput(true);
         httpURLConnection.setRequestMethod("POST");
