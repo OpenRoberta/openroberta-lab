@@ -502,6 +502,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "input name:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Add an input to the function.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "inputs";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder inputs to this function.";
+<<<<<<< HEAD
 Blockly.Msg.PROGRAM_DELETE_ERROR = "Error while deleting a program.";
 Blockly.Msg.PROGRAM_DELETE_SUCCESS = "Program deeleted";
 Blockly.Msg.PROGRAM_ERROR_ID_INVALID = "Program name is not a valid identifier.";
@@ -511,6 +512,10 @@ Blockly.Msg.PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN = "User not logged in.";
 Blockly.Msg.PROGRAM_GET_ONE_SUCCESS = "Program loaded";
 Blockly.Msg.PROGRAM_SAVE_ERROR_NOT_SAVED_TO_DB = "Error while saving the program.";
 Blockly.Msg.PROGRAM_SAVE_SUCCESS = "Program saved";
+=======
+Blockly.Msg.PROCEDURES_TITLE = "' procedure";
+Blockly.Msg.PROCEDURES_VARIABLES_ERROR = "Error: This block may be used only within the '";
+>>>>>>> ORA-376 add local variables for procedures
 Blockly.Msg.REMOVE_COMMENT = "Remove Comment";
 Blockly.Msg.RENAME_VARIABLE = "Rename variable...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Rename all '%1' variables to:";

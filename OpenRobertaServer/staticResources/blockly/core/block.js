@@ -671,8 +671,8 @@ Blockly.Block.prototype.onMouseUp_ = function(e) {
             Blockly.highlightedConnection_.unhighlight();
             Blockly.highlightedConnection_ = null;
         }
-        // Check if this block is part of a task
         if (Blockly.selected) {
+            // Check if this block is part of a task
             var topBlocks = Blockly.getMainWorkspace().getTopBlocks(true);
             var rootBlock = Blockly.selected.getRootBlock();
             var found = false;
@@ -681,8 +681,8 @@ Blockly.Block.prototype.onMouseUp_ = function(e) {
                 var disabled = true;
                 while (block) {
                     if (block == rootBlock) {
-                        if (block.type == 'robControls_activity' || block.type == 'robControls_start' || block.type == 'procedures_defnoreturn'
-                                || block.type == 'procedures_defreturn' || block.type == 'robBrick_EV3-Brick') {
+                        if (block.type == 'robControls_activity' || block.type == 'robControls_start' || block.type == 'robProcedures_defnoreturn'
+                                || block.type == 'robProcedures_defreturn' || block.type == 'robBrick_EV3-Brick') {
                             disabled = false;
                         }
                         found = true;
@@ -697,6 +697,19 @@ Blockly.Block.prototype.onMouseUp_ = function(e) {
                 }
                 if (found)
                     break;
+            }
+            // Check if local variable getter, setter and return only used locally
+            if (Blockly.selected.type == 'variables_set' || Blockly.selected.type == 'variables_get' || Blockly.selected.type == 'robProcedures_ifreturn') {
+                Blockly.selected.checkLocal();
+            }
+            // Notify parents of create list for special case list type
+            if (Blockly.selected.type == 'robLists_create_with' || Blockly.selected.type == 'lists_repeat' || Blockly.selected.type == 'lists_create_empty') {
+                if (Blockly.selected.getParent()) {
+                    if (Blockly.selected.getParent().type == 'robProcedures_defreturn' || Blockly.selected.getParent().type == 'robLocalVariables_declare'
+                            || Blockly.selected.getParent().type == 'robGlobalvariables_declare') {
+                        Blockly.selected.getParent().updateType([ 'Array', ('Array_' + Blockly.selected.listType_) ]);
+                    }
+                }
             }
         }
     });

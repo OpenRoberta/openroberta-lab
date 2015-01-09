@@ -82,7 +82,7 @@ Blockly.Blocks['robControls_start'] = {
                 this.appendStatementInput('ST');
                 this.declare_ = true;
             }
-            var vd = Blockly.Block.obtain(Blockly.mainWorkspace, 'variables_declare');
+            var vd = Blockly.Block.obtain(Blockly.mainWorkspace, 'robGlobalvariables_declare');
             vd.initSvg();
             vd.render();
             var value = vd.getInput('VALUE');

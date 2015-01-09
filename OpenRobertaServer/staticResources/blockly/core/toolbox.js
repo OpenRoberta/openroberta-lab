@@ -294,7 +294,6 @@ Blockly.Toolbox.populate_ = function() {
             }
             var name = childIn.tagName.toUpperCase();
             if (name == 'CATEGORY') {
-                // console.log('for-Schleife', childIn.getAttribute('name'));
                 // TODO adjust the width of the box to the longest name, later this
                 // should be calculated.
                 var catname = childIn.getAttribute('name');
@@ -352,7 +351,6 @@ Blockly.Toolbox.populate_ = function() {
                     // Variables and procedures have special categories that are dynamic.
                     childOut.blocks = custom;
                 } else {
-                    // console.log('das ist eine Kategorie mit Subkategorien:');
                     syncTrees(childIn, childOut, Blockly.Toolbox.catcolor);
                 }
             } else if (name == 'BLOCK') {

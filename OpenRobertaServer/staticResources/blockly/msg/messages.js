@@ -1161,6 +1161,8 @@ Blockly.Msg.PROCEDURES_CREATE_DO = 'Create "%1"';
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = 'If a value is true, then return a second value.';
 /// warning - This appears if the user tries to use this block outside of a function definition.
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = 'Warning: This block may be used only within a function definition.';
+Blockly.Msg.PROCEDURES_VARIABLES_ERROR = 'Error: This block may be used only within the "';
+Blockly.Msg.PROCEDURES_TITLE = '" procedure';
 Blockly.Msg.YES = 'yes';
 Blockly.Msg.NO = 'no';
 Blockly.Msg.ON = 'on';

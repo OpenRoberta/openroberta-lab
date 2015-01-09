@@ -352,6 +352,8 @@
 	"PROCEDURES_CREATE_DO": "Erzeuge \"Aufruf %1\"",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Wenn der erste Wert wahr (true) ist, Gebe den zweiten Wert zurück.",
 	"PROCEDURES_IFRETURN_WARNING": "Warnung: Dieser Block darf nur innerhalb eines Funktionsblock genutzt werden.",
+	"PROCEDURES_VARIABLES_ERROR": "Fehler: Dieser Block kann nur innerhalb der \"",
+    "PROCEDURES_TITLE": "\" Funktion genutzt werden.",
    	"FOR": "für",
    	"GET": "Gib",
    	"SET": "Setze",

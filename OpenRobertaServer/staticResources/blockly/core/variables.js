@@ -167,6 +167,31 @@ Blockly.Variables.getType = function(name) {
 };
 
 /**
+ * Find the declaration instance of the specified variable and return the name
+ * of the procedure if it is declared in a procedure.
+ * 
+ * @param {string}
+ *            name Variable name.
+ * @return {string} name of the procedure or null
+ */
+Blockly.Variables.getProcedureName = function(name) {
+    var blocks = Blockly.mainWorkspace.getAllBlocks();
+    // Iterate through every block.
+    for (var i = 0; i < blocks.length; i++) {
+        var func = blocks[i].getType;
+        if (func) {
+            if (Blockly.Names.equals(name, blocks[i].getFieldValue('VAR'))) {
+                var surroundParent = blocks[i].getSurroundParent();
+                if (surroundParent && (surroundParent.type == 'robProcedures_defnoreturn' || surroundParent.type == 'robProcedures_defreturn')) {
+                    return surroundParent.getFieldValue('NAME');
+                }
+            }
+        }
+    }
+    return null;
+};
+
+/**
  * Construct the blocks required by the flyout for the variable category.
  * 
  * @param {!Array.

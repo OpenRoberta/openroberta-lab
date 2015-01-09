@@ -4,6 +4,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		"lastupdated": "2015-01-22 11:50:57.068000",
 =======
 		"lastupdated": "2014-12-18 23:15:43.156000",
@@ -14,6 +15,9 @@
 =======
 		"lastupdated": "2015-01-02 12:45:01.447000",
 >>>>>>> ORA-376 add types to lists, refactore variable messages
+=======
+		"lastupdated": "2015-01-03 17:38:41.057000",
+>>>>>>> ORA-376 add local variables for procedures
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -436,6 +440,8 @@
 	"PROCEDURES_CREATE_DO": "Create '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "If a value is true, then return a second value.",
 	"PROCEDURES_IFRETURN_WARNING": "Warning: This block may be used only within a function definition.",
+	"PROCEDURES_VARIABLES_ERROR": "Error: This block may be used only within the '",
+	"PROCEDURES_TITLE": "' procedure",
 	"YES": "yes",
 	"NO": "no",
 	"ON": "on",

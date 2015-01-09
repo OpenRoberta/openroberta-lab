@@ -502,6 +502,7 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "Variable:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Eine Eingabe zur Funktion hinzufügen.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "Parameter";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Die Eingaben zu dieser Funktion hinzufügen, entfernen oder neu anordnen.";
+<<<<<<< HEAD
 Blockly.Msg.PROGRAM_DELETE_ERROR = "Fehler beim Löschen des Programms.";
 Blockly.Msg.PROGRAM_DELETE_SUCCESS = "Programm gelöscht";
 Blockly.Msg.PROGRAM_ERROR_ID_INVALID = "Programmname ist kein valider Identifikator.";
@@ -511,6 +512,10 @@ Blockly.Msg.PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN = "Nutzer ist nicht eingeloggt."
 Blockly.Msg.PROGRAM_GET_ONE_SUCCESS = "Programm geladen";
 Blockly.Msg.PROGRAM_SAVE_ERROR_NOT_SAVED_TO_DB = "Fehler beim Speichern des Programms.";
 Blockly.Msg.PROGRAM_SAVE_SUCCESS = "Programm gespeichert";
+=======
+Blockly.Msg.PROCEDURES_TITLE = "\" Funktion genutzt werden.";
+Blockly.Msg.PROCEDURES_VARIABLES_ERROR = "Fehler: Dieser Block kann nur innerhalb der \"";
+>>>>>>> ORA-376 add local variables for procedures
 Blockly.Msg.REMOVE_COMMENT = "Kommentar entfernen";
 Blockly.Msg.RENAME_VARIABLE = "Variable umbenennen...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Alle \"%1\" Variablen umbenennen in:";

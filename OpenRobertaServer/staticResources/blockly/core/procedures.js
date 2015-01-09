@@ -186,20 +186,20 @@ Blockly.Procedures.rename = function(text) {
  *            workspace The flyout's workspace.
  */
 Blockly.Procedures.flyoutCategory = function(blocks, gaps, margin, workspace) {
-    if (Blockly.Blocks['procedures_defnoreturn']) {
-        var block = Blockly.Block.obtain(workspace, 'procedures_defnoreturn');
+    if (Blockly.Blocks['robProcedures_defnoreturn']) {
+        var block = Blockly.Block.obtain(workspace, 'robProcedures_defnoreturn');
         block.initSvg();
         blocks.push(block);
         gaps.push(margin * 2);
     }
-    if (Blockly.Blocks['procedures_defreturn']) {
-        var block = Blockly.Block.obtain(workspace, 'procedures_defreturn');
+    if (Blockly.Blocks['robProcedures_defreturn']) {
+        var block = Blockly.Block.obtain(workspace, 'robProcedures_defreturn');
         block.initSvg();
         blocks.push(block);
         gaps.push(margin * 2);
     }
-    if (Blockly.Blocks['procedures_ifreturn']) {
-        var block = Blockly.Block.obtain(workspace, 'procedures_ifreturn');
+    if (Blockly.Blocks['robProcedures_ifreturn']) {
+        var block = Blockly.Block.obtain(workspace, 'robProcedures_ifreturn');
         block.initSvg();
         blocks.push(block);
         gaps.push(margin * 2);
@@ -212,21 +212,38 @@ Blockly.Procedures.flyoutCategory = function(blocks, gaps, margin, workspace) {
     function populateProcedures(procedureList, templateName) {
         for (var x = 0; x < procedureList.length; x++) {
             var block = Blockly.Block.obtain(workspace, templateName);
-            block.setFieldValue(procedureList[x][0], 'NAME');
-            var tempIds = [];
-            for (var t = 0; t < procedureList[x][1].length; t++) {
-                tempIds[t] = 'ARG' + t;
-            }
-            block.setProcedureParameters(procedureList[x][1], tempIds);
             block.initSvg();
+            block.setFieldValue(procedureList[x][0], 'NAME');
+            if (templateName === 'robProcedures_callreturn') {
+                var returnType = procedureList[x][1].returnType_;
+                if (returnType) {
+                    block.updateProcedureParameters(null, returnType, 99);
+                }
+            }
+            var declarations = procedureList[x][1].getDescendants();
+            var paramNames = [];
+            var paramTypes = [];
+            if (declarations) {
+                for (var i = 0; i < declarations.length; i++) {
+                    if (declarations[i].getProcedureDef)
+                        continue;
+                    if (declarations[i].getVarDecl) {
+                        paramNames.push(declarations[i].getVarDecl()[0]);
+                        paramTypes.push(declarations[i].getType());
+                    } else {
+                        break;
+                    }
+                }
+                block.setProcedureParameters(paramNames, paramTypes);
+            }
             blocks.push(block);
             gaps.push(margin * 2);
         }
     }
 
     var tuple = Blockly.Procedures.allProcedures();
-    populateProcedures(tuple[0], 'procedures_callnoreturn');
-    populateProcedures(tuple[1], 'procedures_callreturn');
+    populateProcedures(tuple[0], 'robProcedures_callnoreturn');
+    populateProcedures(tuple[1], 'robProcedures_callreturn');
 };
 
 /**
@@ -253,6 +270,24 @@ Blockly.Procedures.getCallers = function(name, workspace) {
         }
     }
     return callers;
+};
+
+/**
+ * Find all callers which use this specified variable and update them.
+ * 
+ * @param {string}
+ *            name Variable to update.
+ * @param {string}
+ *            type New data type.
+ */
+Blockly.Procedures.updateCallers = function(varName, varType, workspace, action, opt_procedure) {
+    var procedure = opt_procedure || Blockly.Variables.getProcedureName(varName);
+    if (procedure) {
+        var callers = Blockly.Procedures.getCallers(procedure, workspace);
+        for (var x = 0; x < callers.length; x++) {
+            callers[x].updateProcedureParameters(varName, varType, action);
+        }
+    }
 };
 
 /**

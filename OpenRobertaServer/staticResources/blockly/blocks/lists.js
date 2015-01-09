@@ -42,8 +42,8 @@ Blockly.Blocks['lists_create_empty'] = {
                 [ Blockly.Msg.VARIABLES_TYPE_BOOLEAN, 'Boolean' ], [ Blockly.Msg.VARIABLES_TYPE_COLOUR, 'Colour' ] ], function(option) {
             this.sourceBlock_.updateType_(option);
         });
-        console.log(typeof listType);
-        this.interpolateMsg(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE,["LIST_TYPE",listType],Blockly.ALIGN_RIGHT);
+        this.interpolateMsg(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE, [ "LIST_TYPE", listType ], Blockly.ALIGN_RIGHT);
+        this.listType_ = 'Number';
         this.setTooltip(Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP);
     },
     /**
@@ -57,17 +57,17 @@ Blockly.Blocks['lists_create_empty'] = {
         if (option && this.listType_ !== option) {
             this.listType_ = option;
             // update output
-            var connection = this.outputConnection.targetConnection;
-            if (connection) {
-                this.unplug();
-                this.setOutput(true, [ 'Array', ('Array_' + this.listType_) ]);
-                this.outputConnection.connect(connection);
-            } else {
-                this.setOutput(true, [ 'Array', ('Array_' + this.listType_) ]);
-            }
+            this.changeOutput([ 'Array', ('Array_' + this.listType_) ]);
             var parent = this.getParent();
-            if (parent && parent.type === 'variables_declare') {
-                Blockly.Variables.updateType(parent.getFieldValue('VAR'), [ 'Array', ('Array_' + this.listType_) ]);
+            if (parent) {
+                if (parent.type === 'robGlobalvariables_declare' || parent.type === 'robLocalVariables_declare') {
+                    // Find all instances of the specified variable and update the data type of them.
+                    Blockly.Variables.updateType(parent.getFieldValue('VAR'), [ 'Array', ('Array_' + this.listType_) ]);
+                }
+                if (parent.type === 'robProcedures_defreturn') {
+                    // Find all instances of this local variable and update the data type of them.
+                    Blockly.Procedures.updateCallers(null, [ 'Array', ('Array_' + this.listType_) ], this.workspace, 99, parent.getFieldValue('NAME'));
+                }
             }
         }
     }
@@ -233,8 +233,9 @@ Blockly.Blocks['robLists_create_with'] = {
         this.setMutatorPlus(new Blockly.MutatorPlus(this));
         this.setMutatorMinus(new Blockly.MutatorMinus(this));
         this.setTooltip(Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP);
-        this.listType_ = 'Number';
+        this.listType_ = null;
         this.itemCount_ = 3;
+        this.updateType_('Number');
     },
     /**
      * Create XML to represent list inputs.
@@ -307,7 +308,7 @@ Blockly.Blocks['robLists_create_with'] = {
             this.removeInput('ADD' + this.itemCount_);
         }
         if (this.itemCount_ == 0) {
-            this.interpolateMsg(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE, ["LIST_TYPE", listType ], Blockly.ALIGN_RIGHT);
+            this.interpolateMsg(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE, [ "LIST_TYPE", listType ], Blockly.ALIGN_RIGHT);
             this.mutatorMinus.dispose();
             this.mutatorMinus = null;
             this.render();
@@ -325,25 +326,20 @@ Blockly.Blocks['robLists_create_with'] = {
             this.listType_ = option;
             // update inputs
             for (var i = 0; i < this.itemCount_; i++) {
-                var input = this.getInput('ADD' + i);
-                if (input && input.connection.targetconnection) {
-                    input.connection.targetconnection.targetBlock().unplug();
-                    input.connection.targetconnection.targetBlock().setDisabled(true);
-                }
-                input.setCheck(option);
+                this.getInput('ADD' + i).setCheck(option);
             }
             // update output
-            var connection = this.outputConnection.targetConnection;
-            if (connection) {
-                this.unplug();
-                this.setOutput(true, [ 'Array', ('Array_' + this.listType_) ]);
-                this.outputConnection.connect(connection);
-            } else {
-                this.setOutput(true, [ 'Array', ('Array_' + this.listType_) ]);
-            }
+            this.changeOutput([ 'Array', ('Array_' + this.listType_) ]);
             var parent = this.getParent();
-            if (parent && parent.type === 'variables_declare') {
-                Blockly.Variables.updateType(parent.getFieldValue('VAR'), [ 'Array', ('Array_' + this.listType_) ]);
+            if (parent) {
+                if (parent.type === 'robGlobalvariables_declare' || parent.type === 'robLocalVariables_declare') {
+                    // Find all instances of the specified variable and update the data type of them.
+                    Blockly.Variables.updateType(parent.getFieldValue('VAR'), [ 'Array', ('Array_' + this.listType_) ]);
+                }
+                if (parent.type === 'robProcedures_defreturn') {
+                    // Find all instances of this local variable and update the data type of them.
+                    Blockly.Procedures.updateCallers(null, [ 'Array', ('Array_' + this.listType_) ], this.workspace, 99, parent.getFieldValue('NAME'));
+                }
             }
         }
     }
@@ -379,9 +375,10 @@ Blockly.Blocks['lists_repeat'] = {
                 [ Blockly.Msg.VARIABLES_TYPE_BOOLEAN, 'Boolean' ], [ Blockly.Msg.VARIABLES_TYPE_COLOUR, 'Colour' ] ], function(option) {
             this.sourceBlock_.updateType_(option);
         });
-        this.interpolateMsg(Blockly.Msg.LISTS_REPEAT_TITLE, ["LIST_TYPE", listType ], ["ITEM", 'Number', Blockly.ALIGN_RIGHT ], [ 'NUM', 'Number',
+        this.interpolateMsg(Blockly.Msg.LISTS_REPEAT_TITLE, [ "LIST_TYPE", listType ], [ "ITEM", 'Number', Blockly.ALIGN_RIGHT ], [ 'NUM', 'Number',
                 Blockly.ALIGN_RIGHT ], Blockly.ALIGN_RIGHT);
         this.setTooltip(Blockly.Msg.LISTS_REPEAT_TOOLTIP);
+        this.listType_ = 'Number';
 
     },
     /**
@@ -397,21 +394,14 @@ Blockly.Blocks['lists_repeat'] = {
             // update input
             var input = this.getInput('ITEM');
             if (input && input.connection.targetconnection) {
-                input.connection.targetconnection.targetBlock().unplug();
                 input.connection.targetconnection.targetBlock().setDisabled(true);
+                input.connection.targetconnection.targetBlock().unplug();
             }
             input.setCheck(option);
             // update output
-            var connection = this.outputConnection.targetConnection;
-            if (connection) {
-                this.unplug();
-                this.setOutput(true, [ 'Array', ('Array_' + this.listType_) ]);
-                this.outputConnection.connect(connection);
-            } else {
-                this.setOutput(true, [ 'Array', ('Array_' + this.listType_) ]);
-            }
+            this.changeOutput([ 'Array', ('Array_' + this.listType_) ]);
             var parent = this.getParent();
-            if (parent && parent.type === 'variables_declare') {
+            if (parent && parent.type === 'robGlobalvariables_declare') {
                 Blockly.Variables.updateType(parent.getFieldValue('VAR'), [ 'Array', ('Array_' + this.listType_) ]);
             }
         }
