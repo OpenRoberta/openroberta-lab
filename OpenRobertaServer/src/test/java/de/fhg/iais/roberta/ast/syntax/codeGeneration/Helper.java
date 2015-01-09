@@ -24,8 +24,8 @@ import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
 import de.fhg.iais.roberta.codegen.lejos.AstToTextlyVisitor;
-import de.fhg.iais.roberta.ev3.EV3BrickConfiguration;
 import de.fhg.iais.roberta.ev3.EV3Actors;
+import de.fhg.iais.roberta.ev3.EV3BrickConfiguration;
 import de.fhg.iais.roberta.ev3.components.EV3Actor;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 

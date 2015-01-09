@@ -28,7 +28,7 @@ public class ForStmtTest {
     @Test
     public void forStmt1() throws Exception {
         String a =
-            "for ( int i0 = 0; i0 < 10; i0++ ) {item + String.valueOf(\"Proba\");item + String.valueOf(\"Proba1\");for ( int i1 = 0; i1 < 10; i1++ ) {}}";
+            "for ( int i0 = 0; i0 < 10; i0++ ) {item3 + String.valueOf(\"Proba\");item3 + String.valueOf(\"Proba1\");for ( int i1 = 0; i1 < 10; i1++ ) {}}";
 
         Helper.assertCodeIsOk(a, "/ast/control/repeat_stmt.xml");
     }

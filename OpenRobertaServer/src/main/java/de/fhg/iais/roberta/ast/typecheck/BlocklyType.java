@@ -44,8 +44,12 @@ import de.fhg.iais.roberta.dbc.DbcException;
 public enum BlocklyType {
     // @formatter:off
     ANY("", ""),
-    COMPARABLE("", "", ANY), ADDABLE("", "", ANY), ARRAY("ARRAY", "List", COMPARABLE),
-    BOOL("BOOLEAN", "boolean", COMPARABLE), NUMERIC("NUMBER", "float", COMPARABLE, ADDABLE), NUMERIC_INT("NUMBER", "int", COMPARABLE, ADDABLE), STRING("STRING", "String", COMPARABLE, ADDABLE), COLOR("COLOUR", "String", ANY), //
+    COMPARABLE("", "", ANY), ADDABLE("", "", ANY),
+    ARRAY("Array", "List", COMPARABLE), ARRAY_NUMBER("Array_Number", "List", COMPARABLE),ARRAY_STRING("Array_String", "List", COMPARABLE),
+    BOOL("Boolean", "boolean", COMPARABLE),
+    NUMERIC("Number", "float", COMPARABLE, ADDABLE), NUMERIC_INT("Number", "int", COMPARABLE, ADDABLE),
+    STRING("String", "String", COMPARABLE, ADDABLE),
+    COLOR("Colour", "String", ANY), //
     NULL("", "", STRING, COLOR),
     REF("", "",NULL), PRIM("", "",NUMERIC, BOOL),
     NOTHING("", "",REF, PRIM),
@@ -97,7 +101,7 @@ public enum BlocklyType {
             if ( ap.toString().equals(sUpper) ) {
                 return ap;
             }
-            if ( sUpper.equals(ap.getBlocklyName()) ) {
+            if ( variableType.trim().equals(ap.getBlocklyName()) ) {
                 return ap;
             }
         }

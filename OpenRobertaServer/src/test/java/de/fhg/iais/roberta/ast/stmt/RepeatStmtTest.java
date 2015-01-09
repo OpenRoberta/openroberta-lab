@@ -16,8 +16,8 @@ public class RepeatStmtTest {
         String a =
             "BlockAST [project=[[Location [x=33, y=-573], \n"
                 + "(repeat [TIMES, VarDeclaration [NUMERIC_INT, i0, NumConst [0], false], Binary [LT, Var [i0], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i0]]]\n"
-                + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba]]\n"
-                + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba1]]\n"
+                + "exprStmt Binary [TEXT_APPEND, Var [item3], StringConst [Proba]]\n"
+                + "exprStmt Binary [TEXT_APPEND, Var [item3], StringConst [Proba1]]\n"
                 + "(repeat [TIMES, VarDeclaration [NUMERIC_INT, i1, NumConst [0], false], Binary [LT, Var [i1], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i1]]]\n"
                 + ")\n"
                 + ")]]]";
@@ -52,8 +52,8 @@ public class RepeatStmtTest {
         RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(1);
 
         String a =
-            "\nexprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba]]\n"
-                + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [Proba1]]\n"
+            "\nexprStmt Binary [TEXT_APPEND, Var [item3], StringConst [Proba]]\n"
+                + "exprStmt Binary [TEXT_APPEND, Var [item3], StringConst [Proba1]]\n"
                 + "(repeat [TIMES, VarDeclaration [NUMERIC_INT, i1, NumConst [0], false], Binary [LT, Var [i1], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i1]]]\n"
                 + ")";
 

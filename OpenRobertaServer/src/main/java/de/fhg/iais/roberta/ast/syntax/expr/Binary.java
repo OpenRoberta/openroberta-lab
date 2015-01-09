@@ -198,7 +198,7 @@ public final class Binary<V> extends Expr<V> {
                 AstJaxbTransformerHelper.addValue(jaxbDestination, "DELTA", getRight());
                 return jaxbDestination;
             case TEXT_APPEND:
-                AstJaxbTransformerHelper.addField(jaxbDestination, "VAR", ((Var<?>) getLeft()).getValue());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, "VAR", getLeft());
                 AstJaxbTransformerHelper.addValue(jaxbDestination, "TEXT", getRight());
                 return jaxbDestination;
 

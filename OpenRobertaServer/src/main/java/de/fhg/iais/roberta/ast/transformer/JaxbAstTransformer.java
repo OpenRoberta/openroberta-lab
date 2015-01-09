@@ -32,6 +32,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
+import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Comment;
 import de.fhg.iais.roberta.blockly.generated.Field;
@@ -225,9 +226,10 @@ abstract public class JaxbAstTransformer<V> {
     }
 
     protected Phrase<V> extractVar(Block block) {
+        String typeVar = block.getMutation() != null ? block.getMutation().getDatatype() : "NUMERIC";
         List<Field> fields = extractFields(block, (short) 1);
         String field = extractField(fields, BlocklyConstants.VAR);
-        return Var.make(field, extractBlockProperties(block), extractComment(block));
+        return Var.make(BlocklyType.get(typeVar), field, extractBlockProperties(block), extractComment(block));
     }
 
     protected List<Value> extractValues(Block block, short numOfValues) {

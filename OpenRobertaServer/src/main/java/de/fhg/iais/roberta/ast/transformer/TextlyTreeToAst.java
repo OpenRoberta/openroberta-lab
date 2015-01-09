@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
+import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
 import de.fhg.iais.roberta.textly.generated.TextlyBaseVisitor;
 import de.fhg.iais.roberta.textly.generated.TextlyLexer;
 import de.fhg.iais.roberta.textly.generated.TextlyParser;
@@ -84,7 +85,7 @@ public class TextlyTreeToAst extends TextlyBaseVisitor<Phrase<Void>> {
 
     @Override
     public Phrase<Void> visitVarName(VarNameContext ctx) {
-        return Var.make(ctx.VAR().getText(), null, null);
+        return Var.make(BlocklyType.ANY, ctx.VAR().getText(), null, null);
     }
 
     @Override
@@ -145,7 +146,7 @@ public class TextlyTreeToAst extends TextlyBaseVisitor<Phrase<Void>> {
 
     @Override
     public Phrase<Void> visitAssignStmt(AssignStmtContext ctx) {
-        Phrase<Void> name = Var.make(ctx.VAR().getText(), null, null);
+        Phrase<Void> name = Var.make(BlocklyType.ANY, ctx.VAR().getText(), null, null);
         Phrase<Void> expr = visit(ctx.expr());
         return AssignStmt.make((Var<Void>) name, (Expr<Void>) expr, null, null);
     }

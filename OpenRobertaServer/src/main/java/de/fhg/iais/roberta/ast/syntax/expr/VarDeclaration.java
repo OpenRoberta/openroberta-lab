@@ -103,15 +103,15 @@ public class VarDeclaration<V> extends Expr<V> {
 
     @Override
     public Block astToBlock() {
-        String varType = getTypeVar().getBlocklyName().substring(0, 1).toUpperCase() + getTypeVar().getBlocklyName().substring(1).toLowerCase();
+
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
         mutation.setNext(this.next);
-        mutation.setDatatype(varType);
+        mutation.setDatatype(getTypeVar().getBlocklyName());
         jaxbDestination.setMutation(mutation);
 
-        AstJaxbTransformerHelper.addField(jaxbDestination, "TYPE", varType);
+        AstJaxbTransformerHelper.addField(jaxbDestination, "TYPE", getTypeVar().getBlocklyName());
         AstJaxbTransformerHelper.addField(jaxbDestination, "VAR", getName());
         AstJaxbTransformerHelper.addValue(jaxbDestination, "VALUE", this.value);
 

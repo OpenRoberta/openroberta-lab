@@ -69,4 +69,9 @@ public final class BlocklyConstants {
     public static final String POWER = "POWER";
     public static final String MOTORPORT = "MOTORPORT";
     public static final String VAR = "VAR";
+    public static final String TYPE = "TYPE";
+    public static final String ST = "ST";
+    public static final String LIST_TYPE = "LIST_TYPE";
+    public static final String DELTA = "DELTA";
+    public static final String NEG = "NEG";
 }
