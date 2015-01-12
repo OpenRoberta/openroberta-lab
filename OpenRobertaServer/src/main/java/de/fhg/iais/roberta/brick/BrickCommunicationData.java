@@ -50,7 +50,7 @@ public class BrickCommunicationData {
      * @return true, if user approved the token; false otherwise
      */
     public synchronized boolean brickTokenAgreementRequest() {
-        LOG.debug("BRICK starts waiting for the client to approve a token");
+        LOG.info("BRICK " + this.robotName + " [" + this.robotIdentificator + "] starts waiting for the client to approve a token");
         this.state = State.WAIT_FOR_TOKENAPPROVAL_FROM_USER;
         this.clock = Clock.start();
         while ( this.clock.elapsedMsec() < TIMEOUT_UNTIL_TOKEN_EXPIRES_WHEN_USER_DOESNT_APPROVE && this.state == State.WAIT_FOR_TOKENAPPROVAL_FROM_USER ) {
@@ -61,7 +61,7 @@ public class BrickCommunicationData {
             }
         }
         boolean success = this.state != State.WAIT_FOR_TOKENAPPROVAL_FROM_USER;
-        LOG.debug("BRICK request for token approval terminated. Time elapsed: " + this.clock.elapsedMsec() + ", success: " + success);
+        LOG.info("BRICK request for token approval terminated. Time elapsed: " + this.clock.elapsedMsec() + ", success: " + success);
         return success;
     }
 
@@ -73,7 +73,7 @@ public class BrickCommunicationData {
      */
     public synchronized void userApprovedTheBrickToken() {
         if ( this.state == State.WAIT_FOR_TOKENAPPROVAL_FROM_USER ) {
-            LOG.debug("user approved the token. The approval request was scheduled " + this.clock.elapsedSecFormatted() + " ago");
+            LOG.info("user approved the token. The approval request was scheduled " + this.clock.elapsedSecFormatted() + " ago");
             this.state = State.WAIT_FOR_PUSH_CMD_FROM_BRICK;
             this.clock = Clock.start();
             notifyAll();

@@ -78,6 +78,10 @@ function _exportApplication {
   fi
   echo "creating the target directory \"$exportpath\""
   mkdir "$exportpath"
+  if [ $? -ne 0 ] ; then
+    echo "creating the directory \"$exportpath\" failed - exit 4"
+    exit 4
+  fi
   echo "creating an empty data base"
   $0 --createemptydb "${exportpath}/db/openroberta-db"
   echo "copying the web resources"
