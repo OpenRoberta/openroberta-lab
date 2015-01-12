@@ -35,7 +35,7 @@ public class ORAlauncher {
      * Executes the user's program as a new java process.
      * 
      * @param programName
-     *        String Filename without directory, for example Linefollower.jar.
+     *        Filename without directory, for example Linefollower.jar.
      */
     public void runProgram(String programName) {
         File robertalabFile = new File(ORAlauncher.PROGRAMS_DIRECTORY, programName);
@@ -59,7 +59,7 @@ public class ORAlauncher {
     }
 
     /**
-     * leJOS method from main menu to run a new process. Modified for Open Roberta
+     * Method is based on leJOS program execution. Modified for Open Roberta
      * Lab. No wrapper for sysout and syserr, no stacktrace displaying.
      * 
      * @param command

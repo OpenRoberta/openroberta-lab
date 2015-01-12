@@ -37,10 +37,11 @@ public class ORAdownloader {
     }
 
     /**
-     * Download the user program from the server. Send brickdata as request as
+     * * Download the user program from the server. Send brickdata as request as
      * JSON, receives application/octet-stream.
      * 
-     * @return The name of the program.
+     * @param brickData The content of the communication between brick and ORA server.
+     * @return The name of the downloaded file
      */
     public String downloadProgram(JSONObject brickData) {
         OutputStream os = null;

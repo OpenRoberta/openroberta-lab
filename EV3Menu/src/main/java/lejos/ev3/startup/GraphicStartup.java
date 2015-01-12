@@ -1630,7 +1630,7 @@ public class GraphicStartup implements Menu {
                 return temp;
             } else {
                 newScreen(" Enter IP");
-                temp = new IpAddressKeyboard().getString();
+                temp = new ORAipKeyboard().getString();
                 PrintWriter pw2 = null;
                 try {
                     file.delete();

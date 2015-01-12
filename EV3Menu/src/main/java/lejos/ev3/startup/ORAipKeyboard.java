@@ -6,19 +6,19 @@ import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.TextLCD;
 
 // @formatter:off
-// formatter would change keyboard layout
+// formatter would change keyboard layout for the ev3 screen
 /**
  * Keyboard based on {@link Keyboard} , lejos class for wifi password input.<br>
- * IpAddressKeyboard for IP or URL input, example: 10.0.1.10:1999<br>
+ * IpAddressKeyboard for IP input, used in developer version, example: 10.0.1.10:1999<br>
  *
  * @author dpyka
  */
-public class IpAddressKeyboard
+public class ORAipKeyboard
 {
 
     private final TextLCD lcd = LocalEV3.get().getTextLCD();
 
-    public IpAddressKeyboard()
+    public ORAipKeyboard()
     {
         //
     }
@@ -52,7 +52,7 @@ public class IpAddressKeyboard
     /**
      * Returns the token that was created via RobertaKeyboard.
      *
-     * @return token as String
+     * @return Token as String
      */
     String getString()
     {

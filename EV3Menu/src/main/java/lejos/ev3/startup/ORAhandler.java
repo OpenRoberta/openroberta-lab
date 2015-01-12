@@ -1,8 +1,7 @@
 package lejos.ev3.startup;
 
 /**
- * No Singleton Pattern but not recommended to use more than one. This is a
- * member of GraphicStartup.
+ * No Singleton Pattern but do not use
  *
  * @author dpyka
  */
@@ -26,15 +25,12 @@ public class ORAhandler {
     }
 
     /**
-     * Start the brick server "push" communication. IndicatorThread ind from
-     * GraphicStartup is needed (for hiding explicitly) when launching a user
-     * program.
+     * Start the brick server "push" communication.
      *
      * @param serverBaseIP
-     *        String The base IP like 192.168.56.1:1999
-     * @param ind
-     *        IndicatorThread Title bar of the brick (shows battery, title and
-     *        status icons).
+     *        The base IP like 192.168.56.1:1999
+     * @param token
+     *        Token for client/ brick identification
      */
     public void startServerCommunicator(String serverBaseIP, String token) {
         setInterrupt(false);
@@ -46,9 +42,7 @@ public class ORAhandler {
     }
 
     /**
-     * Disconnect the http connection while brick is waiting for registration to
-     * cancel it by pressing "Escape" key. Fiend a way to deregister button
-     * listener (not possible at the moment?!)
+     * Disconnect the http connection to ORA server.
      */
     public void disconnect() {
         setInterrupt(true);

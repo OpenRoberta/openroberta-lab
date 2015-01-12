@@ -95,7 +95,7 @@ public class ORApushCmd implements Runnable {
             try {
                 this.httpURLConnection = openConnection();
 
-                // add or update brick data pairs which can change during runtime
+                // add or update brick data pairs which can be changed by the user at runtime
                 this.brickData.put(KEY_BRICKNAME, GraphicStartup.getBrickName());
                 this.brickData.put(KEY_BATTERY, GraphicStartup.getBatteryStatus());
 
