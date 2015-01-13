@@ -36,18 +36,19 @@ Blockly.Blocks['robSensors_getSample'] = {
                 [ Blockly.Msg.MODE_AMBIENTLIGHT + ' ' + Blockly.Msg.SENSOR_COLOUR, 'COLOUR_AMBIENTLIGHT' ],
                 [ Blockly.Msg.MODE_DISTANCE + ' ' + Blockly.Msg.SENSOR_INFRARED, 'INFRARED_DISTANCE' ],
                 [ Blockly.Msg.MODE_ROTATION + ' ' + Blockly.Msg.SENSOR_ENCODER, 'ENCODER_ROTATION' ],
-                [ Blockly.Msg.MODE_DEGREE + ' ' + Blockly.Msg.SENSOR_ENCODER, 'ENCODERMODE_DEGREE' ],
+                [ Blockly.Msg.MODE_DEGREE + ' ' + Blockly.Msg.SENSOR_ENCODER, 'ENCODER_DEGREE' ],
                 [ Blockly.Msg.SENSOR_KEY + ' ' + Blockly.Msg.SENSOR_PRESSED, 'KEYS_PRESSED' ],
                 [ Blockly.Msg.MODE_ANGLE + ' ' + Blockly.Msg.SENSOR_GYRO, 'GYRO_ANGLE' ],
                 [ Blockly.Msg.MODE_RATE + ' ' + Blockly.Msg.SENSOR_GYRO, 'GYRO_RATE' ], [ Blockly.Msg.SENSOR_TIME, 'TIME' ] ], function(option) {
-            this.sourceBlock_.updateValue_(option);
+            if (option && this.sourceBlock_.getFieldValue('SENSORTYPE') !== option) {
+                this.sourceBlock_.updateShape_(option);
+            }
         });
         var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
-        this.appendDummyInput('DROPDOWN').appendField(Blockly.Msg.GET).appendField(sensorType, 'SENSORTYPE').appendField(sensorPort, 'SENSORPORT');
-        this.oldSensorType = 'TOUCH';
-        this.newSensorType = null;
-        this.update = false;
-        this.setOutput(true, [ 'Number', 'Boolean', 'Colour' ]);
+        this.appendDummyInput('DROPDOWN').appendField(Blockly.Msg.GET, 'GET').appendField(sensorType, 'SENSORTYPE').appendField(
+                sensorPort, 'SENSORPORT');
+        this.sensorType_ = 'TOUCH';
+        this.setOutput(true, 'Boolean');
         this.setTooltip(Blockly.Msg.GETSAMPLE_TOOLTIP);
     },
     /**
@@ -58,8 +59,7 @@ Blockly.Blocks['robSensors_getSample'] = {
      */
     mutationToDom : function() {
         var container = document.createElement('mutation');
-        var input = this.getFieldValue('SENSORTYPE');
-        container.setAttribute('input', input);
+        container.setAttribute('input', this.sensorType_);
         return container;
     },
     /**
@@ -71,8 +71,8 @@ Blockly.Blocks['robSensors_getSample'] = {
      */
     domToMutation : function(xmlElement) {
         var input = xmlElement.getAttribute('input');
-        this.newSensorType = input;
-        this.updateShape_();
+        this.sensorType_ = input;
+        this.updateShape_(this.sensorType_);
     },
 
     /**
@@ -80,47 +80,17 @@ Blockly.Blocks['robSensors_getSample'] = {
      * 
      * @this Blockly.Block
      */
-    onchange : function() {
-        if (!this.workspace) {
-            // Block has been deleted.
-            return;
-        } else if (this.update)
-            this.updateShape_();
-    },
-    /**
-     * Called from dropdown menu sensortype, if sensortype was clicked.
-     * 
-     * @this Blockly.Block
+    /*
+     * onchange : function() { if (!this.workspace) { // Block has been deleted.
+     * return; } else if (this.update) this.updateShape_(); },
      */
-    updateValue_ : function(option) {
-        this.oldSensorType = this.newSensorType;
-        this.newSensorType = option;
-        if (option != this.oldSensorType) {
-            this.update = true;
-        }
-    },
-
     /**
      * Called whenever the shape has to change.
      * 
      * @this Blockly.Block
      */
-    updateShape_ : function() {
-        this.update = false;
-        var sensorType = new Blockly.FieldDropdown([ [ Blockly.Msg.SENSOR_TOUCH + Blockly.Msg.SENSOR_PRESSED, 'TOUCH' ],
-                [ Blockly.Msg.MODE_DISTANCE + ' ' + Blockly.Msg.SENSOR_ULTRASONIC, 'ULTRASONIC_DISTANCE' ],
-                [ Blockly.Msg.MODE_PRESENCE + ' ' + Blockly.Msg.SENSOR_ULTRASONIC, 'ULTRASONIC_PRESENCE' ],
-                [ Blockly.Msg.MODE_COLOUR + ' ' + Blockly.Msg.SENSOR_COLOUR, 'COLOUR_COLOUR' ],
-                [ Blockly.Msg.MODE_LIGHT + ' ' + Blockly.Msg.SENSOR_COLOUR, 'COLOUR_LIGHT' ],
-                [ Blockly.Msg.MODE_AMBIENTLIGHT + ' ' + Blockly.Msg.SENSOR_COLOUR, 'COLOUR_AMBIENTLIGHT' ],
-                [ Blockly.Msg.MODE_DISTANCE + ' ' + Blockly.Msg.SENSOR_INFRARED, 'INFRARED_DISTANCE' ],
-                [ Blockly.Msg.MODE_ROTATION + ' ' + Blockly.Msg.SENSOR_ENCODER, 'ENCODER_ROTATION' ],
-                [ Blockly.Msg.MODE_DEGREE + ' ' + Blockly.Msg.SENSOR_ENCODER, 'ENCODER_DEGREE' ],
-                [ Blockly.Msg.SENSOR_KEY + ' ' + Blockly.Msg.SENSOR_PRESSED, 'KEYS_PRESSED' ],
-                [ Blockly.Msg.MODE_ANGLE + ' ' + Blockly.Msg.SENSOR_GYRO, 'GYRO_ANGLE' ],
-                [ Blockly.Msg.MODE_RATE + ' ' + Blockly.Msg.SENSOR_GYRO, 'GYRO_RATE' ], [ Blockly.Msg.SENSOR_TIME, 'TIME' ] ], function(option) {
-            this.sourceBlock_.updateValue_(option);
-        });
+    updateShape_ : function(option) {
+        this.sensorType_ = option;
         var key = new Blockly.FieldDropdown([ [ Blockly.Msg.SENSOR_KEY_ENTER, 'ENTER' ], [ Blockly.Msg.SENSOR_KEY_UP, 'UP' ],
                 [ Blockly.Msg.SENSOR_KEY_DOWN, 'DOWN' ], [ Blockly.Msg.SENSOR_KEY_LEFT, 'LEFT' ], [ Blockly.Msg.SENSOR_KEY_RIGHT, 'RIGHT' ],
                 [ Blockly.Msg.SENSOR_KEY_ESCAPE, 'ESCAPE' ], [ Blockly.Msg.SENSOR_KEY_ANY, 'ANY' ] ]);
@@ -128,42 +98,61 @@ Blockly.Blocks['robSensors_getSample'] = {
         var motorPort = new Blockly.FieldDropdown([ [ 'Motor Port A', 'A' ], [ 'Motor Port B', 'B' ], [ 'Motor Port C', 'C' ], [ 'Motor Port D', 'D' ] ]);
         var sensorNum = new Blockly.FieldDropdown([ [ Blockly.Msg.SENSOR_TIMER + ' 1', '1' ], [ Blockly.Msg.SENSOR_TIMER + ' 2', '2' ],
                 [ Blockly.Msg.SENSOR_TIMER + ' 3', '3' ], [ Blockly.Msg.SENSOR_TIMER + ' 4', '4' ], [ Blockly.Msg.SENSOR_TIMER + ' 5', '5' ] ]);
-
-        this.removeInput('DROPDOWN');
-        if (this.newSensorType == 'ENCODER_ROTATION') {
-            this.appendDummyInput('DROPDOWN').appendField(Blockly.Msg.GET).appendField(sensorType, 'SENSORTYPE').appendField(motorPort, 'MOTORPORT');
+        var input = this.getInput('DROPDOWN');
+        var toRemove = [];
+        for (var i = 0, field; field = input.fieldRow[i]; i++) {
+            if (field.name === 'SENSORTYPE' || field.name === 'GET') {
+                continue;
+            }
+            toRemove.push(field.name);
+        }
+        for (var j = 0; j < toRemove.length; j++) {
+            input.removeField(toRemove[j]);
+        }
+        if (this.sensorType_ == 'ENCODER_ROTATION') {
+            input.appendField(motorPort, 'MOTORPORT');
             this.appendValue_('NUM_REV', 2);
-        } else if (this.newSensorType == 'ENCODER_DEGREE') {
-            this.appendDummyInput('DROPDOWN').appendField(Blockly.Msg.GET).appendField(sensorType, 'SENSORTYPE').appendField(motorPort, 'MOTORPORT');
+            this.changeOutput('Number');
+        } else if (this.sensorType_ == 'ENCODER_DEGREE') {
+            input.appendField(motorPort, 'MOTORPORT');
             this.appendValue_('NUM_REV', 180);
-        } else if (this.newSensorType == 'KEYS_PRESSED') {
-            this.appendDummyInput('DROPDOWN').appendField(Blockly.Msg.GET).appendField(sensorType, 'SENSORTYPE').appendField(key, 'KEY');
+            this.changeOutput('Number');
+        } else if (this.sensorType_ == 'KEYS_PRESSED') {
+            input.appendField(key, 'KEY');
             this.appendValue_('BOOL');
-        } else if (this.newSensorType == 'TIME') {
-            this.appendDummyInput('DROPDOWN').appendField(Blockly.Msg.GET).appendField(sensorType, 'SENSORTYPE').appendField(sensorNum, 'SENSORNUM');
+            this.changeOutput('Boolean');
+        } else if (this.sensorType_ == 'TIME') {
+            input.appendField(sensorNum, 'SENSORNUM');
             this.appendValue_('NUM_REV', 500);
+            this.changeOutput('Number');
         } else {
-            this.appendDummyInput('DROPDOWN').appendField(Blockly.Msg.GET).appendField(sensorType, 'SENSORTYPE').appendField(sensorPort, 'SENSORPORT');
-            if (this.newSensorType == 'TOUCH') {
+            input.appendField(sensorPort, 'SENSORPORT');
+            if (this.sensorType_ == 'TOUCH') {
                 this.appendValue_('BOOL');
-            } else if (this.newSensorType == 'GYRO_ANGLE' || this.newSensorType == 'GYRO_RATE') {
+                this.changeOutput('Boolean');
+            } else if (this.sensorType_ == 'GYRO_ANGLE' || this.sensorType_ == 'GYRO_RATE') {
                 this.appendValue_('NUM_REV', 90);
                 sensorPort.setValue('2');
-            } else if (this.newSensorType == 'ULTRASONIC_DISTANCE' || this.newSensorType == 'ULTRASONIC_PRESENCE') {
+                this.changeOutput('Number');
+            } else if (this.sensorType_ == 'ULTRASONIC_DISTANCE' || this.sensorType_ == 'ULTRASONIC_PRESENCE') {
                 this.appendValue_('NUM');
                 sensorPort.setValue('4');
-            } else if (this.newSensorType == 'COLOUR_COLOUR') {
+                this.changeOutput('Number');
+            } else if (this.sensorType_ == 'COLOUR_COLOUR') {
                 this.appendValue_('COLOUR');
                 sensorPort.setValue('3');
-            } else if (this.newSensorType == 'COLOUR_LIGHT' || this.newSensorType == 'COLOUR_AMBIENTLIGHT') {
+                this.changeOutput('Colour');
+            } else if (this.sensorType_ == 'COLOUR_LIGHT' || this.sensorType_ == 'COLOUR_AMBIENTLIGHT') {
                 this.appendValue_('NUM');
                 sensorPort.setValue('3');
-            } else if (this.newSensorType == 'INFRARED_DISTANCE') {
+                this.changeOutput('Number');
+            } else if (this.sensorType_ == 'INFRARED_DISTANCE') {
                 this.appendValue_('NUM');
                 sensorPort.setValue('4');
+                this.changeOutput('Number');
             }
         }
-        sensorType.setValue(this.newSensorType);
+        // sensorType.setValue(this.sensorType_);
     },
 
     /**
@@ -177,35 +166,27 @@ Blockly.Blocks['robSensors_getSample'] = {
         if (logComp && logComp.type != 'logic_compare')
             logComp = null;
         if (logComp) {
-            var OPERATORS;
-            var valueB = logComp.getInput('B');
-            valueB.connection.targetConnection.sourceBlock_.dispose();
-            logComp.removeInput('B');
-            logComp.removeInput('OP_DROP');
+            // change inputs, if block is in logic_compare and not rebuild from mutation.
+            if (logComp.getInputTargetBlock('B')) {
+                logComp.getInputTargetBlock('B').dispose();
+            }
             var block = null;
+            logComp.updateShape(type);
             if (type == 'NUM') {
-                OPERATORS = Blockly.RTL ? [ [ '>', 'LT' ], [ '\u2265', 'LTE' ], [ '<', 'GT' ], [ '\u2264', 'GTE' ], [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ] : [
-                        [ '<', 'LT' ], [ '\u2264', 'LTE' ], [ '>', 'GT' ], [ '\u2265', 'GTE' ], [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ];
                 block = Blockly.Block.obtain(Blockly.mainWorkspace, 'math_number');
                 block.setFieldValue(value.toString(), 'NUM');
             } else if (type == 'NUM_REV') {
-                OPERATORS = Blockly.RTL ? [ [ '<', 'GT' ], [ '\u2264', 'GTE' ], [ '>', 'LT' ], [ '\u2265', 'LTE' ], [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ] : [
-                        [ '>', 'GT' ], [ '\u2265', 'GTE' ], [ '<', 'LT' ], [ '\u2264', 'LTE' ], [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ];
                 block = Blockly.Block.obtain(Blockly.mainWorkspace, 'math_number');
                 block.setFieldValue(value.toString(), 'NUM');
             } else if (type == 'BOOL') {
-                var OPERATORS = Blockly.RTL ? [ [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ] : [ [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ];
                 block = Blockly.Block.obtain(Blockly.mainWorkspace, 'logic_boolean');
             } else {
-                OPERATORS = Blockly.RTL ? [ [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ] : [ [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ];
                 block = Blockly.Block.obtain(Blockly.mainWorkspace, 'robColour_picker');
                 block.setFieldValue('#b30006', 'COLOUR')
             }
-            logComp.appendDummyInput('OP_DROP').appendField(new Blockly.FieldDropdown(OPERATORS), 'OP')
-            logComp.appendValueInput('B');
-            valueB = logComp.getInput('B');
             block.initSvg();
             block.render();
+            var valueB = logComp.getInput('B');
             valueB.connection.connect(block.outputConnection);
         }
     }

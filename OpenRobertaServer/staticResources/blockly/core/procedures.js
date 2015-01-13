@@ -264,7 +264,7 @@ Blockly.Procedures.getCallers = function(name, workspace) {
         if (func) {
             var procName = func.call(blocks[x]);
             // Procedure name may be null if the block is only half-built.
-            if (procName && Blockly.Names.equals(procName, name)) {
+            if (procName && (Blockly.Names.equals(procName, name) || procName === 'robProcedures_ifreturn')) {
                 callers.push(blocks[x]);
             }
         }

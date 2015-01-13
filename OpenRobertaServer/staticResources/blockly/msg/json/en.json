@@ -5,6 +5,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		"lastupdated": "2015-01-22 11:50:57.068000",
 =======
 		"lastupdated": "2014-12-18 23:15:43.156000",
@@ -18,6 +19,9 @@
 =======
 		"lastupdated": "2015-01-03 17:38:41.057000",
 >>>>>>> ORA-376 add local variables for procedures
+=======
+		"lastupdated": "2015-01-10 16:57:20.795000",
+>>>>>>> ORA-376 revise variables and lists, add type markers to svgs
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -404,7 +408,7 @@
 	"VARIABLES_CREATE_TITLE": "Create",
 	"VARIABLES_CREATE_WITH": "with",
 	"VARIABLES_GET_HELPURL": "https://code.google.com/p/blockly/wiki/Variables#Get",
-	"VARIABLES_GET_TITLE": "",
+	"VARIABLES_GET_TITLE": "get",
 	"VARIABLES_GET_TAIL": "",
 	"VARIABLES_GET_TOOLTIP": "Returns the value of this variable.",
 	"VARIABLES_GET_CREATE_SET": "Create 'set %1'",
@@ -415,7 +419,10 @@
 	"VARIABLES_TYPE_NUMBER": "Number",
 	"VARIABLES_TYPE_BOOLEAN": "Boolean",
 	"VARIABLES_TYPE_STRING": "String",
-	"VARIABLES_TYPE_ARRAY": "Array",
+	"VARIABLES_TYPE_ARRAY_NUMBER": "Array Number",
+	"VARIABLES_TYPE_ARRAY_STRING": "Array String",
+	"VARIABLES_TYPE_ARRAY_BOOLEAN": "Array Boolean",
+	"VARIABLES_TYPE_ARRAY_COLOUR": "Array Colour",
 	"VARIABLES_TYPE_COLOUR": "Colour",
 	"PROCEDURES_DEFNORETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
 	"PROCEDURES_DEFNORETURN_TITLE": "to",

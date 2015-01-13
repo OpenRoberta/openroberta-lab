@@ -1051,7 +1051,7 @@ Blockly.Msg.VARIABLES_CREATE_WITH = 'with';
 /// url - Information about ''variables'' in computer programming.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Variable_(computer_science) https://en.wikipedia.org/wiki/Variable_(computer_science)], if it exists.
 Blockly.Msg.VARIABLES_GET_HELPURL = 'https://code.google.com/p/blockly/wiki/Variables#Get';
 /// block text - This precedes the name of a variable when getting its values.  In most (all?) languages, it should be the empty string.  If unsure, ask yourself if any word should go before "x" in the expression "x + 1".
-Blockly.Msg.VARIABLES_GET_TITLE = '';
+Blockly.Msg.VARIABLES_GET_TITLE = 'get';
 Blockly.Msg.VARIABLES_GET_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 /// block text - This follows the name of a variable.  In most (all?) languages, it should be the empty string.  If unsure, ask yourself if any word should go after "x" in the expression "x + 1".
 Blockly.Msg.VARIABLES_GET_TAIL = '';
@@ -1073,7 +1073,10 @@ Blockly.Msg.VARIABLES_SET_CREATE_GET = 'Create "get %1"';
 Blockly.Msg.VARIABLES_TYPE_NUMBER = 'Number';
 Blockly.Msg.VARIABLES_TYPE_BOOLEAN = 'Boolean';
 Blockly.Msg.VARIABLES_TYPE_STRING = 'String';
-Blockly.Msg.VARIABLES_TYPE_ARRAY = 'Array';
+Blockly.Msg.VARIABLES_TYPE_ARRAY_NUMBER = 'Array Number';
+Blockly.Msg.VARIABLES_TYPE_ARRAY_STRING = 'Array String';
+Blockly.Msg.VARIABLES_TYPE_ARRAY_BOOLEAN = 'Array Boolean';
+Blockly.Msg.VARIABLES_TYPE_ARRAY_COLOUR = 'Array Colour';
 Blockly.Msg.VARIABLES_TYPE_COLOUR = 'Colour';
 
 // Procedures Blocks.

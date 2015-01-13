@@ -80,6 +80,8 @@ Blockly.Blocks['robControls_start'] = {
         if (num == 1) {
             if (!this.declare_) {
                 this.appendStatementInput('ST');
+                // making sure only declarations can connect to the statement list
+                this.getInput('ST').connection.setCheck('declaration_only');
                 this.declare_ = true;
             }
             var vd = Blockly.Block.obtain(Blockly.mainWorkspace, 'robGlobalvariables_declare');
@@ -106,6 +108,7 @@ Blockly.Blocks['robControls_start'] = {
             }
             connection.connect(vd.previousConnection);
         } else if (num == -1) {
+            // if the last declaration in the stack has been removed, remove the declaration statement
             this.removeInput('ST');
             this.declare_ = false;
         }
@@ -149,7 +152,8 @@ Blockly.Blocks['robControls_start_activity'] = {
 
     init : function() {
         this.setColourRGB(Blockly.CAT_ROBACTIVITY_RGB);
-        this.appendDummyInput().appendField(Blockly.Msg.START).appendField(new Blockly.FieldTextInput(Blockly.Msg.START_ACTIVITY, Blockly.Procedures.rename), 'ACTIVITY');
+        this.appendDummyInput().appendField(Blockly.Msg.START).appendField(new Blockly.FieldTextInput(Blockly.Msg.START_ACTIVITY, Blockly.Procedures.rename),
+                'ACTIVITY');
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.START_ACTIVITY_TOOLTIP);
@@ -323,7 +327,7 @@ Blockly.Blocks['robControls_wait_for'] = {
             if (x == 1) {
                 this.appendStatementInput('DO0').appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
             }
-            this.appendValueInput('WAIT' + x).appendField(Blockly.Msg.WAIT_UNTIL).setCheck('Boolean');
+            this.appendValueInput('WAIT' + x).appendField(Blockly.Msg.WAIT_OR).setCheck('Boolean');
             this.appendStatementInput('DO' + x).appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
         }
         if (this.waitCount_ >= 1) {
@@ -347,6 +351,7 @@ Blockly.Blocks['robControls_wait_for'] = {
             var lc = Blockly.Block.obtain(Blockly.mainWorkspace, 'logic_compare');
             lc.initSvg();
             lc.render();
+            lc.updateShape('BOOL');
             var connection = this.getInput('WAIT' + this.waitCount_).connection;
             connection.connect(lc.outputConnection);
 
@@ -407,7 +412,6 @@ Blockly.Blocks['robControls_ifElse'] = {
         this.setMutatorPlus(new Blockly.MutatorPlus(this));
         this.elseIfCount_ = 0;
         this.elseCount_ = 1;
-        // this.updateShape_(0);
         this.setTooltip(Blockly.Msg.IFELSE_TOOLTIP);
     },
     mutationToDom : function() {

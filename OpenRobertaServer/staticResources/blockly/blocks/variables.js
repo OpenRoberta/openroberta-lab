@@ -42,22 +42,15 @@ Blockly.Blocks['variables_get'] = {
         this.setTooltip(Blockly.Msg.VARIABLES_GET_TOOLTIP);
         this.contextMenuMsg_ = Blockly.Msg.VARIABLES_GET_CREATE_SET;
         this.contextMenudeclarationType_ = 'variables_set';
+        this.setOutput(true);
         this.dataType_ = null;
     },
 
     setType : function(name, type) {
         var type = type || Blockly.Variables.getType(name);
-        if (this.getParent()) {
-            this.setDisabled(true);
-            this.unplug(true, true);
-        }
         this.dataType_ = type;
-        this.setOutput(true, this.dataType_);
-        if (goog.isArray(this.dataType_)) {
-            this.setColourRGB(Blockly.DATA_TYPE[this.dataType_[0]]);
-        } else {
-            this.setColourRGB(Blockly.DATA_TYPE[this.dataType_]);
-        }
+        this.changeOutput(this.dataType_);
+        this.render();
     },
 
     mutationToDom : function() {
@@ -78,19 +71,8 @@ Blockly.Blocks['variables_get'] = {
      * @this Blockly.Block
      */
     domToMutation : function(xmlElement) {
-        var dataType = xmlElement.getAttribute('datatype');
-        var dataTypeArray = dataType.split(",");
-        if (dataTypeArray.length > 1) {
-            this.dataType_ = dataTypeArray;
-        } else {
-            this.dataType_ = dataType;
-        }
-        this.setOutput(true, this.dataType_);
-        if (goog.isArray(this.dataType_)) {
-            this.setColourRGB(Blockly.DATA_TYPE[this.dataType_[0]]);
-        } else {
-            this.setColourRGB(Blockly.DATA_TYPE[this.dataType_]);
-        }
+        this.dataType_ = xmlElement.getAttribute('datatype');
+        this.changeOutput(this.dataType_);
     },
     /**
      * Return all variables referenced by this block.
@@ -144,12 +126,13 @@ Blockly.Blocks['variables_get'] = {
      * 
      * @this Blockly.Block
      */
-    checkLocal : function() {
+    checkLocal : function(opt_name) {
         if (!this.workspace) {
             // Block has been deleted.
             return;
         }
-        var procedure = Blockly.Variables.getProcedureName(this.getFieldValue('VAR'));
+        var name = opt_name || this.getFieldValue('VAR');
+        var procedure = Blockly.Variables.getProcedureName(name);    
         if (procedure) {
             var legal = false;
             var block = this;
@@ -192,18 +175,9 @@ Blockly.Blocks['variables_set'] = {
     setType : function(name, type) {
         var newType = type || Blockly.Variables.getType(name);
         var input = this.getInput('VALUE');
-        if (input.connection.targetBlock()) {
-            input.connection.targetBlock().setDisabled(true);
-            input.connection.targetBlock().unplug(true, true);
-        }
         this.dataType_ = newType;
-        if (goog.isArray(this.dataType_)) {
-            input.setCheck(this.dataType_[1]);
-            this.setColourRGB(Blockly.DATA_TYPE[this.dataType_[0]]);
-        } else {
-            input.setCheck(this.dataType_);
-            this.setColourRGB(Blockly.DATA_TYPE[this.dataType_]);
-        }
+        input.setCheck(this.dataType_);
+        this.render();
     },
     mutationToDom : function() {
         if (!this.dataType_) {
@@ -223,17 +197,8 @@ Blockly.Blocks['variables_set'] = {
      * @this Blockly.Block
      */
     domToMutation : function(xmlElement) {
-        var dataType = xmlElement.getAttribute('datatype');
-        var dataTypeArray = dataType.split(",");
-        if (dataTypeArray.length > 1) {
-            this.dataType_ = dataTypeArray;
-            this.getInput('VALUE').setCheck(this.dataType_[1]);
-            this.setColourRGB(Blockly.DATA_TYPE[this.dataType_[0]]);
-        } else {
-            this.dataType_ = dataType;
-            this.getInput('VALUE').setCheck(this.dataType_);
-            this.setColourRGB(Blockly.DATA_TYPE[this.dataType_]);
-        }
+        this.dataType_ = xmlElement.getAttribute('datatype');
+        this.getInput('VALUE').setCheck(this.dataType_);
     },
     /**
      * Return all variables referenced by this block.
@@ -265,12 +230,13 @@ Blockly.Blocks['variables_set'] = {
      * 
      * @this Blockly.Block
      */
-    checkLocal : function() {
+    checkLocal : function(opt_name) {
         if (!this.workspace) {
             // Block has been deleted.
             return;
         }
-        var procedure = Blockly.Variables.getProcedureName(this.getFieldValue('VAR'));
+        var name = opt_name || this.getFieldValue('VAR');
+        var procedure = Blockly.Variables.getProcedureName(name);
         if (procedure) {
             var legal = false;
             var block = this;
@@ -304,24 +270,24 @@ Blockly.Blocks['robGlobalvariables_declare'] = {
         this.setColourRGB(Blockly.CAT_ROBACTIVITY_RGB);
         this.setInputsInline(true);
         var declType = new Blockly.FieldDropdown([ [ Blockly.Msg.VARIABLES_TYPE_NUMBER, 'Number' ], [ Blockly.Msg.VARIABLES_TYPE_STRING, 'String' ],
-                [ Blockly.Msg.VARIABLES_TYPE_BOOLEAN, 'Boolean' ], [ Blockly.Msg.VARIABLES_TYPE_ARRAY, 'Array' ],
-                [ Blockly.Msg.VARIABLES_TYPE_COLOUR, 'Colour' ] ], function(option) {
+                [ Blockly.Msg.VARIABLES_TYPE_BOOLEAN, 'Boolean' ], [ Blockly.Msg.VARIABLES_TYPE_ARRAY_NUMBER, 'Array_Number' ],
+                [ Blockly.Msg.VARIABLES_TYPE_ARRAY_STRING, 'Array_String' ], [ Blockly.Msg.VARIABLES_TYPE_ARRAY_BOOLEAN, 'Array_Boolean' ],
+                [ Blockly.Msg.VARIABLES_TYPE_ARRAY_COLOUR, 'Array_Colour' ], [ Blockly.Msg.VARIABLES_TYPE_COLOUR, 'Colour' ] ], function(option) {
             if (option && this.sourceBlock_.getFieldValue('TYPE') !== option) {
                 this.sourceBlock_.updateType(option);
                 this.sourceBlock_.updateShape_(0, option);
             }
         });
         var name = Blockly.Variables.findLegalName(Blockly.Msg.VARIABLES_SET_ITEM, this);
-        this.appendDummyInput().appendField(Blockly.Msg.VARIABLES_CREATE_TITLE).appendField(declType, 'TYPE').appendField(' ').appendField(
-                new Blockly.FieldTextInput(name, Blockly.Variables.renameVariable), 'VAR');
-        this.appendValueInput('VALUE').appendField(Blockly.Msg.VARIABLES_CREATE_WITH);
-        this.setPreviousStatement(true);
+        this.appendValueInput('VALUE').appendField('Variable').appendField(new Blockly.FieldTextInput(name, Blockly.Variables.renameVariable), 'VAR')
+                .appendField(':').appendField(declType, 'TYPE').appendField(Blockly.RTL ? '\u2192' : '\u2190');
+        this.setPreviousStatement(true, 'declaration_only');
         this.setTooltip(Blockly.Msg.VARIABLES_SET_TOOLTIP);
         this.setMutatorMinus(new Blockly.MutatorMinus(this));
         this.setMovable(false);
         this.setDeletable(false);
         this.contextMenuMsg_ = Blockly.Msg.VARIABLES_SET_CREATE_GET;
-        //this.contextMenudeclarationType_ = 'variables_get';
+        this.contextMenudeclarationType_ = 'variables_get';
         this.declarationType_ = 'Number';
         this.nextStatement_ = false;
     },
@@ -353,12 +319,9 @@ Blockly.Blocks['robGlobalvariables_declare'] = {
             this.setNext(this.nextStatement_);
         }
         this.declarationType_ = xmlElement.getAttribute('declaration_type');
-        var declarationTypeArray = this.declarationType_.split(",");
-        if (declarationTypeArray.length > 1) {
-            this.declarationType_ = declarationTypeArray;
+        if (this.declarationType_) {
+            this.getInput('VALUE').setCheck(this.declarationType_);
         }
-        this.updateType(this.declarationType_);
-
     },
     /**
      * Create XML to represent the number of wait counts.
@@ -369,7 +332,7 @@ Blockly.Blocks['robGlobalvariables_declare'] = {
      */
     setNext : function(next) {
         this.nextStatement_ = next;
-        this.setNextStatement(next);
+        this.setNextStatement(next, 'declaration_only');
     },
 
     getType : function() {
@@ -394,8 +357,9 @@ Blockly.Blocks['robGlobalvariables_declare'] = {
      *            option data type.
      * @this Blockly.Block
      */
-    updateShape_ : function(num, option, opt_decl) {
+    updateShape_ : function(num, option) {
         if (num == -1) {
+            // remove declaration
             var parent = this.getParent();
             var nextBlock = this.getNextBlock();
             this.unplug(true, true);
@@ -407,6 +371,7 @@ Blockly.Blocks['robGlobalvariables_declare'] = {
             Blockly.Variables.deleteAll(this.getFieldValue('VAR'));
             this.dispose();
         } else if (num == 0) {
+            // changes in dropdown field TYPE -> change initial value
             if (this.getInputTargetBlock('VALUE')) {
                 this.getInputTargetBlock('VALUE').dispose();
             }
@@ -418,9 +383,10 @@ Blockly.Blocks['robGlobalvariables_declare'] = {
                 block = Blockly.Block.obtain(Blockly.mainWorkspace, 'text');
             } else if (option === 'Boolean') {
                 block = Blockly.Block.obtain(Blockly.mainWorkspace, 'logic_boolean');
-            } else if (option === 'Array') {
-                this.declarationType_ = ([ 'Array', 'Array_Number' ]);
+            } else if (option.substr(0, 5) === 'Array') {
                 block = Blockly.Block.obtain(Blockly.mainWorkspace, 'robLists_create_with');
+                block.setFieldValue(option.substr(6), 'LIST_TYPE');
+                block.updateType_(option.substr(6));
             } else if (option === 'Colour') {
                 block = Blockly.Block.obtain(Blockly.mainWorkspace, 'robColour_picker');
             }
@@ -450,8 +416,9 @@ Blockly.Blocks['robLocalVariables_declare'] = {
         this.setColourRGB(Blockly.CAT_PROCEDURES_RGB);
         this.setInputsInline(true);
         var declType = new Blockly.FieldDropdown([ [ Blockly.Msg.VARIABLES_TYPE_NUMBER, 'Number' ], [ Blockly.Msg.VARIABLES_TYPE_STRING, 'String' ],
-                [ Blockly.Msg.VARIABLES_TYPE_BOOLEAN, 'Boolean' ], [ Blockly.Msg.VARIABLES_TYPE_ARRAY, 'Array' ],
-                [ Blockly.Msg.VARIABLES_TYPE_COLOUR, 'Colour' ] ], function(option) {
+                [ Blockly.Msg.VARIABLES_TYPE_BOOLEAN, 'Boolean' ], [ Blockly.Msg.VARIABLES_TYPE_ARRAY_NUMBER, 'Array_Number' ],
+                [ Blockly.Msg.VARIABLES_TYPE_ARRAY_STRING, 'Array_String' ], [ Blockly.Msg.VARIABLES_TYPE_ARRAY_BOOLEAN, 'Array_Boolean' ],
+                [ Blockly.Msg.VARIABLES_TYPE_ARRAY_COLOUR, 'Array_Colour' ], [ Blockly.Msg.VARIABLES_TYPE_COLOUR, 'Colour' ] ], function(option) {
             if (option && this.sourceBlock_.getFieldValue('TYPE') !== option) {
                 this.sourceBlock_.updateType(option);
             }
@@ -459,15 +426,15 @@ Blockly.Blocks['robLocalVariables_declare'] = {
         var name = Blockly.Variables.findLegalName('x', this);
         this.appendDummyInput().appendField(declType, 'TYPE').appendField(' ').appendField(new Blockly.FieldTextInput(name, Blockly.Variables.renameVariable),
                 'VAR');
-        this.setPreviousStatement(true);
+        this.setPreviousStatement(true, 'declaration_only');
         this.setTooltip(Blockly.Msg.VARIABLES_SET_TOOLTIP);
         this.setMutatorMinus(new Blockly.MutatorMinus(this));
         this.setMovable(false);
         this.setDeletable(false);
         this.contextMenuMsg_ = Blockly.Msg.VARIABLES_SET_CREATE_GET;
         this.contextMenudeclarationType_ = 'variables_get';
-        this.declarationType_ = 'Number';
         this.nextStatement_ = false;
+        this.declarationType_ = 'Number';
     },
     /**
      * Create XML to represent variable declaration insides.
@@ -475,13 +442,7 @@ Blockly.Blocks['robLocalVariables_declare'] = {
      * @return {Element} XML storage element.
      * @this Blockly.Block
      */
-    mutationToDom : Blockly.Blocks['robGlobalvariables_declare'].mutationToDom
-    /*
-     * () { if (this.nextStatement_ === undefined || this.declarationType_ ===
-     * undefined) { return false; } var container =
-     * document.createElement('mutation'); container.setAttribute('next',
-     * this.nextStatement_); return container; }
-     */,
+    mutationToDom : Blockly.Blocks['robGlobalvariables_declare'].mutationToDom,
     /**
      * Parse XML to restore variable declarations.
      * 
@@ -489,14 +450,13 @@ Blockly.Blocks['robLocalVariables_declare'] = {
      *            xmlElement XML storage element.
      * @this Blockly.Block
      */
-    domToMutation : Blockly.Blocks['robGlobalvariables_declare'].domToMutation,
-//        function(xmlElement) {
-//        this.nextStatement_ = xmlElement.getAttribute('next') == 'true';
-//        if (this.nextStatement_) {
-//            this.setNext(this.nextStatement_);
-//        }
-//    },
-    /**
+    domToMutation : function(xmlElement) {
+        this.nextStatement_ = xmlElement.getAttribute('next') == 'true';
+        if (this.nextStatement_) {
+            this.setNext(this.nextStatement_);
+        }
+        this.declarationType_ = xmlElement.getAttribute('declaration_type');
+    },  /**
      * Create XML to represent the number of wait counts.
      * 
      * @param {Element}
@@ -505,7 +465,7 @@ Blockly.Blocks['robLocalVariables_declare'] = {
      */
     setNext : function(next) {
         this.nextStatement_ = next;
-        this.setNextStatement(next);
+        this.setNextStatement(next, 'declaration_only');
     },
 
     getType : function() {

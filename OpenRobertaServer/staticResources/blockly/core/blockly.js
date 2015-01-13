@@ -217,7 +217,10 @@ Blockly.DATA_TYPE = [];
 Blockly.DATA_TYPE['Number'] = Blockly.CAT_MATH_RGB;
 Blockly.DATA_TYPE['String'] = Blockly.CAT_TEXT_RGB;
 Blockly.DATA_TYPE['Boolean'] = Blockly.CAT_LOGIC_RGB;
-Blockly.DATA_TYPE['Array'] = Blockly.CAT_LISTS_RGB;
+Blockly.DATA_TYPE['Array_Number'] = Blockly.CAT_LISTS_RGB;
+Blockly.DATA_TYPE['Array_String'] = Blockly.CAT_LISTS_RGB;
+Blockly.DATA_TYPE['Array_Boolean'] = Blockly.CAT_LISTS_RGB;
+Blockly.DATA_TYPE['Array_Colour'] = Blockly.CAT_LISTS_RGB;
 Blockly.DATA_TYPE['Colour'] = Blockly.CAT_COLOUR_RGB;
 
 /**

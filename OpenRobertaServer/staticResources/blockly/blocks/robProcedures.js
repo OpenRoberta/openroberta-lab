@@ -100,6 +100,8 @@ Blockly.Blocks['robProcedures_defnoreturn'] = {
                 var stackConnectionTarget = this.getInput('STACK').connection.targetConnection;
                 this.removeInput('STACK');
                 this.appendStatementInput('ST');
+                // making sure only declarations can connect to the statement list
+                this.getInput('ST').connection.setCheck('declaration_only');
                 this.appendStatementInput('STACK').appendField(Blockly.Msg.PROCEDURES_DEFNORETURN_DO);
                 if (stackConnectionTarget) {
                     this.getInput('STACK').connection.connect(stackConnectionTarget);
@@ -140,9 +142,12 @@ Blockly.Blocks['robProcedures_defreturn'] = {
      */
     init : function() {
         var declType = new Blockly.FieldDropdown([ [ Blockly.Msg.VARIABLES_TYPE_NUMBER, 'Number' ], [ Blockly.Msg.VARIABLES_TYPE_STRING, 'String' ],
-                [ Blockly.Msg.VARIABLES_TYPE_BOOLEAN, 'Boolean' ], [ Blockly.Msg.VARIABLES_TYPE_ARRAY, 'Array' ],
-                [ Blockly.Msg.VARIABLES_TYPE_COLOUR, 'Colour' ] ], function(option) {
-            this.sourceBlock_.updateType(option);
+                [ Blockly.Msg.VARIABLES_TYPE_BOOLEAN, 'Boolean' ], [ Blockly.Msg.VARIABLES_TYPE_ARRAY_NUMBER, 'Array_Number' ],
+                [ Blockly.Msg.VARIABLES_TYPE_ARRAY_STRING, 'Array_String' ], [ Blockly.Msg.VARIABLES_TYPE_ARRAY_BOOLEAN, 'Array_Boolean' ],
+                [ Blockly.Msg.VARIABLES_TYPE_ARRAY_COLOUR, 'Array_Colour' ], [ Blockly.Msg.VARIABLES_TYPE_COLOUR, 'Colour' ] ], function(option) {
+            if (option && this.sourceBlock_.getFieldValue('TYPE') !== option) {
+                this.sourceBlock_.updateType(option);
+            }
         });
         var name = Blockly.Procedures.findLegalName(Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE, this);
         this.setHelpUrl(Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL);
@@ -155,6 +160,9 @@ Blockly.Blocks['robProcedures_defreturn'] = {
                 .setCheck('Number');
         this.declare_ = false;
         this.returnType_ = 'Number';
+    },
+    getReturnType : function() {
+        return this.returnType_;
     },
     getProcedureDef : function() {
         return [ this.getFieldValue('NAME'), this, true ];
@@ -172,10 +180,6 @@ Blockly.Blocks['robProcedures_defreturn'] = {
             this.addDeclarationStatement_();
         }
         if (this.returnType_) {
-            var returnTypeArray = this.returnType_.split(",");
-            if (returnTypeArray.length > 1) {
-                this.returnType_ = returnTypeArray;
-            }
             this.updateType(this.returnType_);
         }
     },
@@ -229,9 +233,12 @@ Blockly.Blocks['robProcedures_defreturn'] = {
      */
     addDeclarationStatement_ : function() {
         var declType = new Blockly.FieldDropdown([ [ Blockly.Msg.VARIABLES_TYPE_NUMBER, 'Number' ], [ Blockly.Msg.VARIABLES_TYPE_STRING, 'String' ],
-                [ Blockly.Msg.VARIABLES_TYPE_BOOLEAN, 'Boolean' ], [ Blockly.Msg.VARIABLES_TYPE_ARRAY, 'Array' ],
-                [ Blockly.Msg.VARIABLES_TYPE_COLOUR, 'Colour' ] ], function(option) {
-            this.sourceBlock_.updateType(option);
+                [ Blockly.Msg.VARIABLES_TYPE_BOOLEAN, 'Boolean' ], [ Blockly.Msg.VARIABLES_TYPE_ARRAY_NUMBER, 'Array_Number' ],
+                [ Blockly.Msg.VARIABLES_TYPE_ARRAY_STRING, 'Array_String' ], [ Blockly.Msg.VARIABLES_TYPE_ARRAY_BOOLEAN, 'Array_Boolean' ],
+                [ Blockly.Msg.VARIABLES_TYPE_ARRAY_COLOUR, 'Array_Colour' ], [ Blockly.Msg.VARIABLES_TYPE_COLOUR, 'Colour' ] ], function(option) {
+            if (option && this.sourceBlock_.getFieldValue('TYPE') !== option) {
+                this.sourceBlock_.updateType(option);
+            }
         });
         this.setFieldValue(Blockly.Msg.PROCEDURES_BEFORE_PARAMS, 'WITH');
         var returnConnectionTarget = this.getInput('RETURN').connection.targetConnection;
@@ -239,8 +246,12 @@ Blockly.Blocks['robProcedures_defreturn'] = {
         this.removeInput('RETURN');
         this.removeInput('STACK');
         this.appendStatementInput('ST');
+        // making sure only declarations can connect to the statement list
+        this.getInput('ST').connection.setCheck('declaration_only');
         this.appendStatementInput('STACK').appendField(Blockly.Msg.PROCEDURES_DEFNORETURN_DO);
-        this.appendValueInput('RETURN').setAlign(Blockly.ALIGN_RIGHT).appendField(declType, 'TYPE').appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN);
+        this.appendValueInput('RETURN').setAlign(Blockly.ALIGN_RIGHT).appendField(declType, 'TYPE').appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN)
+                .setCheck(this.returnType_);
+        this.setFieldValue(this.returnType_, 'TYPE');
         if (returnConnectionTarget) {
             this.getInput('RETURN').connection.connect(returnConnectionTarget);
         }
@@ -368,9 +379,7 @@ Blockly.Blocks['robProcedures_callnoreturn'] = {
         }
         // Restore rendering and show the changes.
         this.rendered = savedRendered;
-        if (this.rendered) {
-            this.render();
-        }
+        this.render();
     },
     updateProcedureParameters : function(varName, varType, action) {
         if (action == 1) {
@@ -393,17 +402,10 @@ Blockly.Blocks['robProcedures_callnoreturn'] = {
             if (index >= 0) {
                 this.argumentsTypes_[index] = varType;
                 var input = this.getInput('ARG' + index);
-                if (input.connection.targetBlock()) {
-                    input.connection.targetBlock().setDisabled(true);
-                    input.connection.targetBlock().unplug(true, true);
-                }
-                if (goog.isArray(this.argumentsTypes_[index])) {
-                    input.setCheck(this.argumentsTypes_[index][1]);
-                } else {
-                    input.setCheck(this.argumentsTypes_[index]);
-                }
+                input.setCheck(this.argumentsTypes_[index]);
             }
         }
+        this.render();
     },
     /**
      * Create XML to represent the (non-editable) name and arguments.
@@ -527,21 +529,14 @@ Blockly.Blocks['robProcedures_callreturn'] = {
             if (index >= 0) {
                 this.argumentsTypes_[index] = varType;
                 var input = this.getInput('ARG' + index);
-                if (input.connection.targetBlock()) {
-                    input.connection.targetBlock().setDisabled(true);
-                    input.connection.targetBlock().unplug(true, true);
-                }
-                if (goog.isArray(this.argumentsTypes_[index])) {
-                    input.setCheck(this.argumentsTypes_[index][1]);
-                } else {
-                    input.setCheck(this.argumentsTypes_[index]);
-                }
+                input.setCheck(this.argumentsTypes_[index]);
             }
         } else if (action == 99) {
             // update output
             this.outputType_ = varType;
             this.outputConnection.setCheck(this.outputType_);
         }
+        this.render();
     },
     mutationToDom : function() {
         var container = document.createElement('mutation');
@@ -570,10 +565,6 @@ Blockly.Blocks['robProcedures_callreturn'] = {
         }
         this.setProcedureParameters(this.arguments_, this.argumentsTypes_);
         this.outputType_ = xmlElement.getAttribute('output_type');
-        var outputTypeArray = this.outputType_.split(",");
-        if (outputTypeArray.length > 1) {
-            this.outputType_ = outputTypeArray;
-        }
         this.setOutput(true, this.outputType_);
     },
     renameVar : Blockly.Blocks['robProcedures_callnoreturn'].renameVar,
@@ -596,6 +587,7 @@ Blockly.Blocks['robProcedures_ifreturn'] = {
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP);
         this.hasReturnValue_ = true;
+        this.returnType_ = null;
     },
     /**
      * Create XML to represent whether this block has a return value.
@@ -606,6 +598,9 @@ Blockly.Blocks['robProcedures_ifreturn'] = {
     mutationToDom : function() {
         var container = document.createElement('mutation');
         container.setAttribute('value', Number(this.hasReturnValue_));
+        if (this.returnType_) {
+            container.setAttribute('return_type', this.returnType_);
+        }
         return container;
     },
     /**
@@ -618,11 +613,38 @@ Blockly.Blocks['robProcedures_ifreturn'] = {
     domToMutation : function(xmlElement) {
         var value = xmlElement.getAttribute('value');
         this.hasReturnValue_ = (value == 1);
+        this.returnType_ = xmlElement.getAttribute('return_type');
         if (!this.hasReturnValue_) {
             this.removeInput('VALUE');
             this.appendDummyInput('VALUE').appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN);
         } else {
-            this.getInput('VALUE').setCheck(this.getFieldValue('TYPE'));
+            if (this.returnType_) {
+                this.getInput('VALUE').setCheck(this.returnType_);
+            }
+        }
+    },
+    /**
+     * Returns the name of the procedure this block calls.
+     * 
+     * @return {string} Procedure name.
+     * @this Blockly.Block
+     */
+    getProcedureCall : function() {
+        return this.type;
+    },
+    updateProcedureParameters : function(varName, varType, action) {
+        if (action == 99) {
+            // update input
+            var block = this;
+            do {
+                if (block.type == 'robProcedures_defreturn' && block.getFieldValue('NAME') == varName) {
+                    this.returnType_ = varType;
+                    this.getInput('VALUE').setCheck(this.returnType_);
+                    this.render();
+                    break;
+                }
+                block = block.getSurroundParent();
+            } while (block);
         }
     },
     /**
@@ -631,7 +653,7 @@ Blockly.Blocks['robProcedures_ifreturn'] = {
      * 
      * @this Blockly.Block
      */
-    checkLocal : function(opt_option) {
+    checkLocal : function() {
         if (!this.workspace) {
             // Block has been deleted.
             return;
@@ -653,22 +675,22 @@ Blockly.Blocks['robProcedures_ifreturn'] = {
                 this.appendDummyInput('VALUE').appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN);
                 this.hasReturnValue_ = false;
             } else if (block.type == 'robProcedures_defreturn' && !this.hasReturnValue_) {
-                var type = block.getFieldValue('TYPE');
                 this.removeInput('VALUE');
-                this.appendValueInput('VALUE').appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN).setCheck(type);
+                this.appendValueInput('VALUE').appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN);
                 this.hasReturnValue_ = true;
             }
             // 
-            var option = opt_option || block.getFieldValue('TYPE');
-            if (block.type == 'robProcedures_defreturn' && (this.getInput('VALUE').connection.check_ != option)) {
-                if (this.getInputTargetBlock('VALUE')) {
-                    this.getInputTargetBlock('VALUE').setDisabled(true);
-                    this.getInputTargetBlock('VALUE').unplug(true, true);
-                }
-                this.getInput('VALUE').setCheck(option);
+            if (block.type == 'robProcedures_defreturn') {
+                this.returnType_ = block.getReturnType();
+                this.getInput('VALUE').setCheck(this.returnType_);
+                this.render();
             }
             this.setWarningText(null);
         } else {
+            this.returnType_ = null;
+            if (this.hasReturnValue) {
+                this.getInput('VALUE').setCheck(this.returnType_);
+            }
             this.setWarningText(Blockly.Msg.PROCEDURES_IFRETURN_WARNING);
         }
     }

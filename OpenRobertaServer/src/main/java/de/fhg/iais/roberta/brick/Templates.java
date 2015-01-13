@@ -139,6 +139,7 @@ public class Templates {
 				+ "      <block type='robControls_wait_for'> "
 				+ "        <value name='WAIT0'> "
 				+ "          <block type='logic_compare'> "
+				+ "            <mutation operator_range='BOOL'></mutation> "
 				+ "            <value name='A'> "
 				+ "              <block type='robSensors_getSample'> "
 				+ "              </block> " //
@@ -446,14 +447,13 @@ public class Templates {
 				+ "    <block type='math_trig'/> "
 				+ "    <block type='math_constant'/> "
 				+ "    <block type='math_number_property'/> "
-				/*
-				 * + "    <block type='math_change'> " +
-				 * "      <value name='DELTA'> " +
-				 * "        <block type='math_number'> " +
-				 * "          <field name='NUM'>1</field> " +
-				 * "        </block> " // + "      </value> " // +
-				 * "    </block> "
-				 */
+				+ "    <block type='math_change'> "
+				+ "      <value name='DELTA'> "
+				+ "        <block type='math_number'> "
+				+ "          <field name='NUM'>1</field> "
+				+ "        </block> " //
+				+ "      </value> " //
+				+ "    </block> "
 				+ "    <block type='math_round'/> "
 				+ "    <block type='math_on_list'/> "
 				+ "    <block type='math_modulo'/> "

@@ -702,15 +702,6 @@ Blockly.Block.prototype.onMouseUp_ = function(e) {
             if (Blockly.selected.type == 'variables_set' || Blockly.selected.type == 'variables_get' || Blockly.selected.type == 'robProcedures_ifreturn') {
                 Blockly.selected.checkLocal();
             }
-            // Notify parents of create list for special case list type
-            if (Blockly.selected.type == 'robLists_create_with' || Blockly.selected.type == 'lists_repeat' || Blockly.selected.type == 'lists_create_empty') {
-                if (Blockly.selected.getParent()) {
-                    if (Blockly.selected.getParent().type == 'robProcedures_defreturn' || Blockly.selected.getParent().type == 'robLocalVariables_declare'
-                            || Blockly.selected.getParent().type == 'robGlobalvariables_declare') {
-                        Blockly.selected.getParent().updateType([ 'Array', ('Array_' + Blockly.selected.listType_) ]);
-                    }
-                }
-            }
         }
     });
 };

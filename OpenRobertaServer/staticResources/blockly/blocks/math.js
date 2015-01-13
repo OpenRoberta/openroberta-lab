@@ -231,39 +231,21 @@ Blockly.Blocks['math_change'] = {
         this.setColourRGB(Blockly.CAT_MATH_RGB);
         this.interpolateMsg(
         // TODO: Combine these messages instead of using concatenation.
-        Blockly.Msg.MATH_CHANGE_TITLE_CHANGE + ' %1 ' + Blockly.Msg.MATH_CHANGE_INPUT_BY + ' %2', [ 'VAR',
-                'Number' ], [ 'DELTA', 'Number', Blockly.ALIGN_RIGHT ], Blockly.ALIGN_RIGHT);
+        Blockly.Msg.MATH_CHANGE_TITLE_CHANGE + ' %1 ' + Blockly.Msg.MATH_CHANGE_INPUT_BY + ' %2', [ 'VAR', 'Number', Blockly.ALIGN_RIGHT ], [ 'DELTA',
+                'Number', Blockly.ALIGN_RIGHT ], Blockly.ALIGN_RIGHT);
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         // Assign 'this' to a variable for use in the tooltip closure below.
         var thisBlock = this;
         this.setTooltip(function() {
-            return Blockly.Msg.MATH_CHANGE_TOOLTIP.replace('%1', thisBlock.getFieldValue('VAR'));
+            return Blockly.Msg.MATH_CHANGE_TOOLTIP.replace('%1', function() {
+                var variable = thisBlock.getInputTargetBlock('VAR');
+                if (variable)
+                    return variable.getFieldValue('VAR');
+                else
+                    return 'empty';
+            });
         });
-    },
-    /**
-     * Return all variables referenced by this block.
-     * 
-     * @return {!Array.<string>} List of variable names.
-     * @this Blockly.Block
-     */
-    getVars : function() {
-        return [ this.getFieldValue('VAR') ];
-    },
-    /**
-     * Notification that a variable is renaming. If the name matches one of this
-     * block's variables, rename it.
-     * 
-     * @param {string}
-     *            oldName Previous name of variable.
-     * @param {string}
-     *            newName Renamed variable.
-     * @this Blockly.Block
-     */
-    renameVar : function(oldName, newName) {
-        if (Blockly.Names.equals(oldName, this.getFieldValue('VAR'))) {
-            this.setFieldValue(newName, 'VAR');
-        }
     }
 };
 
@@ -303,7 +285,7 @@ Blockly.Blocks['math_on_list'] = {
         this.setOutput(true, 'Number');
         var dropdown = new Blockly.FieldDropdown(OPERATORS, function(newOp) {
             if (newOp == 'MODE') {
-                thisBlock.outputConnection.setCheck('Array');
+                thisBlock.outputConnection.setCheck('Array_Number');
             } else {
                 thisBlock.outputConnection.setCheck('Number');
             }

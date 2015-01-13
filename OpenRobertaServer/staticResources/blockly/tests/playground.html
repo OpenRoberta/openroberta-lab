@@ -3,9 +3,8 @@
 <head>
 <meta charset="utf-8">
 <title>Blockly Playground</title>
-<script type="text/javascript" src="../blockly_uncompressed.js"></script>
-<!-- <script type="text/javascript" src="/blockly/blockly_compressed.js"></script>
-<script type="text/javascript" src="/blockly/blocks_compressed.js"></script> -->
+<script type="text/javascript" src="/blockly/blockly_compressed.js"></script>
+<script type="text/javascript" src="/blockly/blocks_compressed.js"></script>
 <script type="text/javascript" src="../generators/javascript.js"></script>
 <script type="text/javascript" src="../generators/javascript/logic.js"></script>
 <script type="text/javascript" src="../generators/javascript/loops.js"></script>
@@ -33,7 +32,7 @@
 <script type="text/javascript" src="../generators/dart/colour.js"></script>
 <script type="text/javascript" src="../generators/dart/variables.js"></script>
 <script type="text/javascript" src="../generators/dart/procedures.js"></script>
-<script type="text/javascript" src="../msg/js/en.js"></script>
+<script type="text/javascript" src="../msg/messages.js"></script>
 <script type="text/javascript" src="../blocks/logic.js"></script>
 <script type="text/javascript" src="../blocks/loops.js"></script>
 <script type="text/javascript" src="../blocks/math.js"></script>
@@ -56,6 +55,7 @@
 <script type="text/javascript" src="../core/field_robColour.js"></script>
 <script type="text/javascript" src="../core/field_variable.js"></script>
 <script type="text/javascript" src="../core/field_dropdown.js"></script>
+<script type="text/javascript" src="../core/field_label.js"></script>
 <script type="text/javascript" src="../core/blocks.js"></script>
 <script type="text/javascript" src="../core/block.js"></script>
 <script type="text/javascript" src="../core/contextmenu.js"></script>
@@ -375,6 +375,7 @@ h1 {
 			<block type="robControls_wait_for">
 				<value name="WAIT0">
 					<block type="logic_compare">
+                    <mutation operator_range="BOOL"></mutation>
 						<value name="A">
 							<block type="robSensors_getSample">
 							</block> 
@@ -388,6 +389,7 @@ h1 {
 			</block> 
 		</category>
 		<category name="Tasks"> 
+            <block type="robControls_start"></block> 
 			<block type="robControls_activity"></block> 
 			<block type="robControls_start_activity"></block> 
 		</category> 
@@ -407,6 +409,13 @@ h1 {
 		<block type="math_trig"></block>
 		<block type="math_constant"></block>
 		<block type="math_number_property"></block>
+        <block type="math_change">
+            <value name="DELTA">
+				<block type="math_number">
+					<field name="NUM">1</field>
+				</block> 
+			</value>
+        </block>
 		<block type="math_round"></block>
 		<block type="math_on_list"></block>
 		<block type="math_modulo"></block>
@@ -446,8 +455,8 @@ h1 {
 		</block>
 	</category>
 	<category name="Listen">
-		<block type="lists_create_empty"></block>
-		<block type="robLists_create_with"></block>
+        <block type="lists_create_empty"></block>
+        <block type="robLists_create_with"></block>
 		<block type="lists_repeat">
 			<value name="NUM">
 				<block type="math_number">

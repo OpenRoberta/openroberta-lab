@@ -80,7 +80,7 @@ Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 
 
 '.blocklyPathBorder {', '  display: none;', '}',
 
-'.blocklySelected>.blocklyPath {', '  stroke-width: 3px;', '  stroke: #FFDC00;', '}',
+'.blocklySelected>.blocklyPathSelected {', '  stroke-width: 3px;', '  stroke: #FFDC00;', '}',
 
 '.blocklySelected>.blocklyPathBorder {', '  display: none;', '}',
 
