@@ -515,7 +515,11 @@ Blockly.Msg.PROGRAM_SAVE_SUCCESS = "Program saved";
 =======
 Blockly.Msg.PROCEDURES_TITLE = "' procedure";
 Blockly.Msg.PROCEDURES_VARIABLES_ERROR = "Error: This block may be used only within the '";
+<<<<<<< HEAD
 >>>>>>> ORA-376 add local variables for procedures
+=======
+Blockly.Msg.PROCEDURES_VARIABLES_LOOP_ERROR = "Error: This block may be used only within a loop which delcares ";
+>>>>>>> ORA-376 reactivate loops, controls_forEach and controls_for, with local variables
 Blockly.Msg.REMOVE_COMMENT = "Remove Comment";
 Blockly.Msg.RENAME_VARIABLE = "Rename variable...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Rename all '%1' variables to:";

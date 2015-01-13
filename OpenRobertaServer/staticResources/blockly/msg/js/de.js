@@ -515,7 +515,11 @@ Blockly.Msg.PROGRAM_SAVE_SUCCESS = "Programm gespeichert";
 =======
 Blockly.Msg.PROCEDURES_TITLE = "\" Funktion genutzt werden.";
 Blockly.Msg.PROCEDURES_VARIABLES_ERROR = "Fehler: Dieser Block kann nur innerhalb der \"";
+<<<<<<< HEAD
 >>>>>>> ORA-376 add local variables for procedures
+=======
+Blockly.Msg.PROCEDURES_VARIABLES_LOOP_ERROR = "Fehler: Dieser Block kann nur innerhalb einer \" Schleife, die folgende Variable erzeugt: ";
+>>>>>>> ORA-376 reactivate loops, controls_forEach and controls_for, with local variables
 Blockly.Msg.REMOVE_COMMENT = "Kommentar entfernen";
 Blockly.Msg.RENAME_VARIABLE = "Variable umbenennen...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Alle \"%1\" Variablen umbenennen in:";

@@ -698,10 +698,6 @@ Blockly.Block.prototype.onMouseUp_ = function(e) {
                 if (found)
                     break;
             }
-            // Check if local variable getter, setter and return only used locally
-            if (Blockly.selected.type == 'variables_set' || Blockly.selected.type == 'variables_get' || Blockly.selected.type == 'robProcedures_ifreturn') {
-                Blockly.selected.checkLocal();
-            }
         }
     });
 };

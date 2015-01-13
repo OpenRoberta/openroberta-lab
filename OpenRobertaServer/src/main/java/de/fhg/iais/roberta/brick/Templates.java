@@ -382,24 +382,24 @@ public class Templates {
 				+ "        </value> "
 				+ "      </block> "
 				+ "      <block type='controls_whileUntil'/> "
-				/*
-				 * TODO make them available again +
-				 * "      <block type='controls_for'> " +
-				 * "        <value name='FROM'> " +
-				 * "          <block type='math_number'> " +
-				 * "            <field name='NUM'>1</field> " +
-				 * "          </block> " // + "        </value> " +
-				 * "        <value name='TO'> " +
-				 * "          <block type='math_number'> " +
-				 * "            <field name='NUM'>10</field> " +
-				 * "          </block> " // + "        </value> " +
-				 * "        <value name='BY'> " +
-				 * "          <block type='math_number'> " +
-				 * "            <field name='NUM'>1</field> " +
-				 * "          </block> " // + "        </value> " +
-				 * "      </block> " //
-				 * "      <block type='controls_forEach'/> "
-				 */
+				+ "      <block type='controls_for'> "
+				+ "        <value name='FROM'> "
+				+ "          <block type='math_number'> "
+				+ "            <field name='NUM'>1</field> "
+				+ "          </block> " //
+				+ "        </value> "
+				+ "        <value name='TO'> "
+				+ "          <block type='math_number'> "
+				+ "            <field name='NUM'>10</field> "
+				+ "          </block> " //
+				+ "        </value> "
+				+ "        <value name='BY'> "
+				+ "          <block type='math_number'> "
+				+ "            <field name='NUM'>1</field> "
+				+ "          </block> " //
+				+ "        </value> "
+				+ "      </block> " //
+				+ "      <block type='controls_forEach'/> "
 				+ "      <block type='controls_flow_statements'/> "
 				+ "    </category> " //
 				+ "    <category name='Warten'> "

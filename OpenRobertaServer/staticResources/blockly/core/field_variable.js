@@ -144,6 +144,5 @@ Blockly.FieldVariable.dropdownCreate = function() {
  */
 Blockly.FieldVariable.dropdownChange = function(text) {
     this.sourceBlock_.setType(this.getText(), Blockly.Variables.getType(text));
-    this.sourceBlock_.checkLocal(text);
     return undefined;
 };

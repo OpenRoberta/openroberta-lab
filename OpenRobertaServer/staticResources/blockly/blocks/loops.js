@@ -101,18 +101,24 @@ Blockly.Blocks['controls_for'] = {
     init : function() {
         this.setHelpUrl(Blockly.Msg.CONTROLS_FOR_HELPURL);
         this.setColourRGB(Blockly.CAT_LOOPS_RGB);
-        this.appendDummyInput().appendField(Blockly.Msg.CONTROLS_FOR_INPUT_WITH).appendField(new Blockly.FieldVariable(null), 'VAR');
+        var name = Blockly.Variables.findLegalName('i', this);
+        this.appendDummyInput().appendField(Blockly.Msg.CONTROLS_FOR_INPUT_WITH).appendField(
+                new Blockly.FieldTextInput(name, Blockly.Variables.renameVariable), 'VAR');
         this.interpolateMsg(Blockly.Msg.CONTROLS_FOR_INPUT_FROM_TO_BY, [ 'FROM', 'Number', Blockly.ALIGN_RIGHT ], [ 'TO', 'Number', Blockly.ALIGN_RIGHT ], [
                 'BY', 'Number', Blockly.ALIGN_RIGHT ], Blockly.ALIGN_RIGHT);
         this.appendStatementInput('DO').appendField(Blockly.Msg.CONTROLS_FOR_INPUT_DO);
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setInputsInline(true);
+        this.declarationType_ = 'Number';
         // Assign 'this' to a variable for use in the tooltip closure below.
         var thisBlock = this;
         this.setTooltip(function() {
             return Blockly.Msg.CONTROLS_FOR_TOOLTIP.replace('%1', thisBlock.getFieldValue('VAR'));
         });
+    },
+    getType : function() {
+        return this.declarationType_;
     },
     /**
      * Return all variables referenced by this block.
@@ -120,23 +126,8 @@ Blockly.Blocks['controls_for'] = {
      * @return {!Array.<string>} List of variable names.
      * @this Blockly.Block
      */
-    getVars : function() {
+    getVarDecl : function() {
         return [ this.getFieldValue('VAR') ];
-    },
-    /**
-     * Notification that a variable is renaming. If the name matches one of this
-     * block's variables, rename it.
-     * 
-     * @param {string}
-     *            oldName Previous name of variable.
-     * @param {string}
-     *            newName Renamed variable.
-     * @this Blockly.Block
-     */
-    renameVar : function(oldName, newName) {
-        if (Blockly.Names.equals(oldName, this.getFieldValue('VAR'))) {
-            this.setFieldValue(newName, 'VAR');
-        }
     },
     /**
      * Add menu option to create getter block for loop variable.
@@ -171,8 +162,18 @@ Blockly.Blocks['controls_forEach'] = {
     init : function() {
         this.setHelpUrl(Blockly.Msg.CONTROLS_FOREACH_HELPURL);
         this.setColourRGB(Blockly.CAT_LOOPS_RGB);
-        this.appendValueInput('LIST').setCheck('Array').appendField(Blockly.Msg.CONTROLS_FOREACH_INPUT_ITEM)
-                .appendField(new Blockly.FieldVariable(null), 'VAR').appendField(Blockly.Msg.CONTROLS_FOREACH_INPUT_INLIST);
+        var name = Blockly.Variables.findLegalName('j', this);
+        var declType = new Blockly.FieldDropdown([ [ Blockly.Msg.VARIABLES_TYPE_NUMBER, 'Number' ], [ Blockly.Msg.VARIABLES_TYPE_STRING, 'String' ],
+                [ Blockly.Msg.VARIABLES_TYPE_BOOLEAN, 'Boolean' ], [ Blockly.Msg.VARIABLES_TYPE_ARRAY_NUMBER, 'Array_Number' ],
+                [ Blockly.Msg.VARIABLES_TYPE_ARRAY_STRING, 'Array_String' ], [ Blockly.Msg.VARIABLES_TYPE_ARRAY_BOOLEAN, 'Array_Boolean' ],
+                [ Blockly.Msg.VARIABLES_TYPE_ARRAY_COLOUR, 'Array_Colour' ], [ Blockly.Msg.VARIABLES_TYPE_COLOUR, 'Colour' ] ], function(option) {
+            if (option && this.sourceBlock_.getFieldValue('TYPE') !== option) {
+                this.sourceBlock_.updateType(option);
+            }
+        });
+        this.appendValueInput('LIST').appendField(Blockly.Msg.CONTROLS_FOREACH_INPUT_ITEM).appendField(declType, 'TYPE').appendField(
+                new Blockly.FieldTextInput(name, Blockly.Variables.renameVariable), 'VAR').appendField(Blockly.Msg.CONTROLS_FOREACH_INPUT_INLIST).setCheck(
+                'Array_Number');
         if (Blockly.Msg.CONTROLS_FOREACH_INPUT_INLIST_TAIL) {
             this.appendDummyInput().appendField(Blockly.Msg.CONTROLS_FOREACH_INPUT_INLIST_TAIL);
             this.setInputsInline(true);
@@ -182,9 +183,13 @@ Blockly.Blocks['controls_forEach'] = {
         this.setNextStatement(true);
         // Assign 'this' to a variable for use in the tooltip closure below.
         var thisBlock = this;
+        this.declarationType_ = 'Number';
         this.setTooltip(function() {
             return Blockly.Msg.CONTROLS_FOREACH_TOOLTIP.replace('%1', thisBlock.getFieldValue('VAR'));
         });
+    },
+    getType : function() {
+        return this.declarationType_;
     },
     /**
      * Return all variables referenced by this block.
@@ -192,23 +197,13 @@ Blockly.Blocks['controls_forEach'] = {
      * @return {!Array.<string>} List of variable names.
      * @this Blockly.Block
      */
-    getVars : function() {
+    getVarDecl : function() {
         return [ this.getFieldValue('VAR') ];
     },
-    /**
-     * Notification that a variable is renaming. If the name matches one of this
-     * block's variables, rename it.
-     * 
-     * @param {string}
-     *            oldName Previous name of variable.
-     * @param {string}
-     *            newName Renamed variable.
-     * @this Blockly.Block
-     */
-    renameVar : function(oldName, newName) {
-        if (Blockly.Names.equals(oldName, this.getFieldValue('VAR'))) {
-            this.setFieldValue(newName, 'VAR');
-        }
+    updateType : function(option) {
+        this.declarationType_ = option;
+        this.getInput('LIST').connection.setCheck('Array_' + this.declarationType_);
+        Blockly.Variables.updateType(this.getFieldValue('VAR'), option);
     },
     customContextMenu : Blockly.Blocks['controls_for'].customContextMenu
 };

@@ -126,13 +126,13 @@ Blockly.Blocks['variables_get'] = {
      * 
      * @this Blockly.Block
      */
-    checkLocal : function(opt_name) {
+    onchange : function() {
         if (!this.workspace) {
             // Block has been deleted.
             return;
         }
-        var name = opt_name || this.getFieldValue('VAR');
-        var procedure = Blockly.Variables.getProcedureName(name);    
+        var name = this.getFieldValue('VAR');
+        var procedure = Blockly.Variables.getProcedureName(name);
         if (procedure) {
             var legal = false;
             var block = this;
@@ -143,12 +143,21 @@ Blockly.Blocks['variables_get'] = {
                         break;
                     }
                 }
+                // for loops only
+                if (block.id === procedure) {
+                    legal = true;
+                    break;
+                }
                 block = block.getSurroundParent();
             } while (block);
             if (legal) {
                 this.setErrorText(null);
             } else {
-                this.setErrorText(Blockly.Msg.PROCEDURES_VARIABLES_ERROR + procedure + Blockly.Msg.PROCEDURES_TITLE);
+                if ((parseFloat(procedure) == parseInt(procedure)) && !isNaN(procedure)) {
+                    this.setErrorText(Blockly.Msg.PROCEDURES_VARIABLES_LOOP_ERROR + this.getFieldValue('VAR'));
+                } else {
+                    this.setErrorText(Blockly.Msg.PROCEDURES_VARIABLES_ERROR + procedure + Blockly.Msg.PROCEDURES_TITLE);
+                }
             }
         }
     }
@@ -230,12 +239,12 @@ Blockly.Blocks['variables_set'] = {
      * 
      * @this Blockly.Block
      */
-    checkLocal : function(opt_name) {
+    onchange : function() {
         if (!this.workspace) {
             // Block has been deleted.
             return;
         }
-        var name = opt_name || this.getFieldValue('VAR');
+        var name = this.getFieldValue('VAR');
         var procedure = Blockly.Variables.getProcedureName(name);
         if (procedure) {
             var legal = false;
@@ -247,12 +256,21 @@ Blockly.Blocks['variables_set'] = {
                         break;
                     }
                 }
+                // for loops only
+                if (block.id === procedure) {
+                    legal = true;
+                    break;
+                }
                 block = block.getSurroundParent();
             } while (block);
             if (legal) {
                 this.setErrorText(null);
             } else {
-                this.setErrorText(Blockly.Msg.PROCEDURES_VARIABLES_ERROR + procedure + Blockly.Msg.PROCEDURES_TITLE);
+                if ((parseFloat(procedure) == parseInt(procedure)) && !isNaN(procedure)) {
+                    this.setErrorText(Blockly.Msg.PROCEDURES_VARIABLES_LOOP_ERROR + this.getFieldValue('VAR'));
+                } else {
+                    this.setErrorText(Blockly.Msg.PROCEDURES_VARIABLES_ERROR + procedure + Blockly.Msg.PROCEDURES_TITLE);
+                }
             }
         }
     },
@@ -456,7 +474,8 @@ Blockly.Blocks['robLocalVariables_declare'] = {
             this.setNext(this.nextStatement_);
         }
         this.declarationType_ = xmlElement.getAttribute('declaration_type');
-    },  /**
+    },
+    /**
      * Create XML to represent the number of wait counts.
      * 
      * @param {Element}
@@ -467,7 +486,6 @@ Blockly.Blocks['robLocalVariables_declare'] = {
         this.nextStatement_ = next;
         this.setNextStatement(next, 'declaration_only');
     },
-
     getType : function() {
         return this.declarationType_;
     },

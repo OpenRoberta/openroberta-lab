@@ -1165,6 +1165,7 @@ Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = 'If a value is true, then return a sec
 /// warning - This appears if the user tries to use this block outside of a function definition.
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = 'Warning: This block may be used only within a function definition.';
 Blockly.Msg.PROCEDURES_VARIABLES_ERROR = 'Error: This block may be used only within the "';
+Blockly.Msg.PROCEDURES_VARIABLES_LOOP_ERROR = 'Error: This block may be used only within a loop which delcares ';
 Blockly.Msg.PROCEDURES_TITLE = '" procedure';
 Blockly.Msg.YES = 'yes';
 Blockly.Msg.NO = 'no';

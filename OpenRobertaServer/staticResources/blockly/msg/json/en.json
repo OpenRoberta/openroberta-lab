@@ -6,6 +6,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		"lastupdated": "2015-01-22 11:50:57.068000",
 =======
 		"lastupdated": "2014-12-18 23:15:43.156000",
@@ -22,6 +23,9 @@
 =======
 		"lastupdated": "2015-01-10 16:57:20.795000",
 >>>>>>> ORA-376 revise variables and lists, add type markers to svgs
+=======
+		"lastupdated": "2015-01-13 22:33:42.431000",
+>>>>>>> ORA-376 reactivate loops, controls_forEach and controls_for, with local variables
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -448,6 +452,7 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "If a value is true, then return a second value.",
 	"PROCEDURES_IFRETURN_WARNING": "Warning: This block may be used only within a function definition.",
 	"PROCEDURES_VARIABLES_ERROR": "Error: This block may be used only within the '",
+	"PROCEDURES_VARIABLES_LOOP_ERROR": "Error: This block may be used only within a loop which delcares ",
 	"PROCEDURES_TITLE": "' procedure",
 	"YES": "yes",
 	"NO": "no",

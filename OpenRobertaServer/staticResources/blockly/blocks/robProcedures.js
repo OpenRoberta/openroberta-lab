@@ -653,7 +653,7 @@ Blockly.Blocks['robProcedures_ifreturn'] = {
      * 
      * @this Blockly.Block
      */
-    checkLocal : function() {
+    onchange : function() {
         if (!this.workspace) {
             // Block has been deleted.
             return;
