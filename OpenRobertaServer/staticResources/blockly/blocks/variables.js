@@ -297,8 +297,8 @@ Blockly.Blocks['robGlobalvariables_declare'] = {
             }
         });
         var name = Blockly.Variables.findLegalName(Blockly.Msg.VARIABLES_SET_ITEM, this);
-        this.appendValueInput('VALUE').appendField('Variable').appendField(new Blockly.FieldTextInput(name, Blockly.Variables.renameVariable), 'VAR')
-                .appendField(':').appendField(declType, 'TYPE').appendField(Blockly.RTL ? '\u2192' : '\u2190');
+        this.appendValueInput('VALUE').appendField(Blockly.Msg.VARIABLES_TITLE).appendField(new Blockly.FieldTextInput(name, Blockly.Variables.renameVariable), 'VAR')
+                .appendField(':').appendField(declType, 'TYPE').appendField(Blockly.RTL ? '\u2192' : '\u2190').setCheck('Number');
         this.setPreviousStatement(true, 'declaration_only');
         this.setTooltip(Blockly.Msg.VARIABLES_SET_TOOLTIP);
         this.setMutatorMinus(new Blockly.MutatorMinus(this));

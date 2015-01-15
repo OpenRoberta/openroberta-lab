@@ -1046,6 +1046,7 @@ Blockly.Msg.LISTS_GET_SUBLIST_TOOLTIP = 'Creates a copy of the specified portion
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = '';
 
 // Variables Blocks.
+Blockly.Msg.VARIABLES_TITLE = 'variable';
 Blockly.Msg.VARIABLES_CREATE_TITLE = 'Create';
 Blockly.Msg.VARIABLES_CREATE_WITH = 'with';
 /// url - Information about ''variables'' in computer programming.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Variable_(computer_science) https://en.wikipedia.org/wiki/Variable_(computer_science)], if it exists.

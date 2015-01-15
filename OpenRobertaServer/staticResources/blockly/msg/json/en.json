@@ -7,6 +7,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		"lastupdated": "2015-01-22 11:50:57.068000",
 =======
 		"lastupdated": "2014-12-18 23:15:43.156000",
@@ -26,6 +27,9 @@
 =======
 		"lastupdated": "2015-01-13 22:33:42.431000",
 >>>>>>> ORA-376 reactivate loops, controls_forEach and controls_for, with local variables
+=======
+		"lastupdated": "2015-01-15 21:12:36.502000",
+>>>>>>> ORA-376 minor improvements in variables and block types
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -409,6 +413,7 @@
 	"LISTS_GET_SUBLIST_TAIL": "",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Creates a copy of the specified portion of a list.",
 	"ORDINAL_NUMBER_SUFFIX": "",
+	"VARIABLES_TITLE": "variable",
 	"VARIABLES_CREATE_TITLE": "Create",
 	"VARIABLES_CREATE_WITH": "with",
 	"VARIABLES_GET_HELPURL": "https://code.google.com/p/blockly/wiki/Variables#Get",

@@ -368,6 +368,10 @@ Blockly.Blocks['robControls_wait_for'] = {
             connection.connect(v.outputConnection);
         } else if (num == -1) {
             this.removeInput('DO' + this.waitCount_);
+            var targetBlock = this.getInputTargetBlock('WAIT' + this.waitCount_);
+            if (targetBlock){
+                targetBlock.dispose();
+            }
             this.removeInput('WAIT' + this.waitCount_);
             this.waitCount_--;
             if (this.waitCount_ == 0) {

@@ -88,9 +88,7 @@ Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 
 
 '.blocklyDragging>.blocklyPathDark {', '  display: none;', '}',
 
-'.blocklyDisabled>.blocklyPath {', '  fill-opacity: .5;', '  stroke-opacity: .5;', '}',
-
-'.blocklyDisabled>.blocklyPathLight,', '.blocklyDisabled>.blocklyPathDark {', '  display: none;', '}',
+'.blocklyDisabled>.blocklyPath {', '  fill-opacity: .3;', '  stroke-opacity: .3;', '}',
 
 '.blocklyText {', '  cursor: default;', '  font-family: "Roboto", sans-serif;', '  font-size: 11pt;', '  fill: #fff;', '}',
 

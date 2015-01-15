@@ -423,9 +423,11 @@ Blockly.BlockSvg.prototype.updateColour = function() {
 Blockly.BlockSvg.prototype.updateDisabled = function() {
     if (this.block_.disabled || this.block_.getInheritedDisabled()) {
         Blockly.addClass_((this.svgGroup_), 'blocklyDisabled');
-        this.svgPath_.setAttribute('fill', 'url(#blocklyDisabledPattern)');
+       // this.svgPath_.setAttribute('fill', 'url(#blocklyDisabledPattern)');
+        this.svgPath_.setAttribute('stroke', '#000000');
     } else {
         Blockly.removeClass_((this.svgGroup_), 'blocklyDisabled');
+        this.svgPath_.setAttribute('stroke', 'none');
         this.updateColour();
     }
     var children = this.block_.getChildren();

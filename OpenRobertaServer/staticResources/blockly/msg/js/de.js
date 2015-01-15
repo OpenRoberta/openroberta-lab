@@ -656,6 +656,7 @@ Blockly.Msg.VARIABLES_SET_CREATE_GET = "Erzeuge \"Lese %1\"";
 Blockly.Msg.VARIABLES_SET_HELPURL = "https://de.wikipedia.org/wiki/Variable_%28Programmierung%29";
 Blockly.Msg.VARIABLES_SET_TITLE = "Schreibe %1 %2";
 Blockly.Msg.VARIABLES_SET_TOOLTIP = "Setzt den Wert einer Variable.";
+Blockly.Msg.VARIABLES_TITLE = "Variable";
 Blockly.Msg.VARIABLES_TYPE_ARRAY_BOOLEAN = "Liste logischer Wert";
 Blockly.Msg.VARIABLES_TYPE_ARRAY_COLOUR = "Liste Farbe";
 Blockly.Msg.VARIABLES_TYPE_ARRAY_NUMBER = "Liste Zahl";

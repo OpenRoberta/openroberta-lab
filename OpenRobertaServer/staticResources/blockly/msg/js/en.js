@@ -656,6 +656,7 @@ Blockly.Msg.VARIABLES_SET_CREATE_GET = "Create 'get %1'";
 Blockly.Msg.VARIABLES_SET_HELPURL = "https://code.google.com/p/blockly/wiki/Variables#Set";
 Blockly.Msg.VARIABLES_SET_TITLE = "set %1 to %2";
 Blockly.Msg.VARIABLES_SET_TOOLTIP = "Sets this variable to be equal to the input.";
+Blockly.Msg.VARIABLES_TITLE = "variable";
 Blockly.Msg.VARIABLES_TYPE_ARRAY_BOOLEAN = "Array Boolean";
 Blockly.Msg.VARIABLES_TYPE_ARRAY_COLOUR = "Array Colour";
 Blockly.Msg.VARIABLES_TYPE_ARRAY_NUMBER = "Array Number";

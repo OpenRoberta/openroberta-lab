@@ -313,6 +313,7 @@
 	"LISTS_GET_SUBLIST_TAIL": "",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Creates a copy of the specified portion of a list.",
 	"ORDINAL_NUMBER_SUFFIX": "",
+	"VARIABLES_TITLE": "Variable",
 	"VARIABLES_CREATE_TITLE": "Erzeuge",
     "VARIABLES_CREATE_WITH": "mit",
 	"VARIABLES_GET_HELPURL": "https://de.wikipedia.org/wiki/Variable_%28Programmierung%29",

@@ -427,11 +427,13 @@ public class Templates {
 				+ "        </value> "
 				+ "      </block> " //
 				+ "    </category> "
-				+ "    <category name='Tasks'> " //
-				+ "      <block type='robControls_activity'></block> " //
-				+ "      <block type='robControls_start_activity'></block> " //
-				+ "    </category> " //
-				+ "  </category> "
+				// TODO implement in next release
+				/*
+				 * + "    <category name='Tasks'> " // +
+				 * "      <block type='robControls_activity'></block> " // +
+				 * "      <block type='robControls_start_activity'></block> " //
+				 * + "    </category> " //
+				 */+ "  </category> "
 				+ "  <category name='Logik'> "
 				+ "    <block type='logic_compare'/> "
 				+ "    <block type='logic_operation'/> "
