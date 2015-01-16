@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.action;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
@@ -69,8 +70,8 @@ public class TurnAction<V> extends Action<V> {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        AstJaxbTransformerHelper.addField(jaxbDestination, "DIRECTION", getDirection().name());
-        AstJaxbTransformerHelper.addValue(jaxbDestination, "POWER", getParam().getSpeed());
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.DIRECTION, getDirection().name());
+        AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.POWER, getParam().getSpeed());
 
         if ( getParam().getDuration() != null ) {
             AstJaxbTransformerHelper.addValue(jaxbDestination, getParam().getDuration().getType().name(), getParam().getDuration().getValue());

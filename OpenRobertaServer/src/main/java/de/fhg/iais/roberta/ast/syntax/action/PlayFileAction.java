@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.action;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
@@ -58,7 +59,7 @@ public class PlayFileAction<V> extends Action<V> {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         String fieldValue = getFileName();
-        AstJaxbTransformerHelper.addField(jaxbDestination, "FILE", fieldValue);
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.FILE, fieldValue);
         return jaxbDestination;
     }
 }

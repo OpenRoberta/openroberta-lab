@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.PickColor;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
@@ -70,7 +71,7 @@ public class ColorConst<V> extends Expr<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        AstJaxbTransformerHelper.addField(jaxbDestination, "COLOUR", getValue().getHex().toLowerCase());
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.COLOUR, getValue().getHex().toLowerCase());
         return jaxbDestination;
     }
 }

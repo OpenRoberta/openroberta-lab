@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
@@ -85,10 +86,10 @@ public class MathNumPropFunct<V> extends Function<V> {
 
         Mutation mutation = new Mutation();
         mutation.setDivisorInput(false);
-        AstJaxbTransformerHelper.addField(jaxbDestination, "PROPERTY", getFunctName().name());
-        AstJaxbTransformerHelper.addValue(jaxbDestination, "NUMBER_TO_CHECK", getParam().get(0));
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PROPERTY, getFunctName().name());
+        AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.NUMBER_TO_CHECK, getParam().get(0));
         if ( getFunctName() == FunctionNames.DIVISIBLE_BY ) {
-            AstJaxbTransformerHelper.addValue(jaxbDestination, "DIVISOR", getParam().get(1));
+            AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.DIVISOR, getParam().get(1));
             mutation.setDivisorInput(true);
         }
         jaxbDestination.setMutation(mutation);

@@ -4,6 +4,7 @@ import java.math.BigInteger;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
@@ -79,7 +80,7 @@ public class ListCreate<V> extends Expr<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        String varType = getTypeVar().getBlocklyName().substring(0, 1).toUpperCase() + getTypeVar().getBlocklyName().substring(1).toLowerCase();
+
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         ExprList<?> exprList = getValue();
@@ -87,9 +88,9 @@ public class ListCreate<V> extends Expr<V> {
         Mutation mutation = new Mutation();
         mutation.setItems(BigInteger.valueOf(numOfItems));
         jaxbDestination.setMutation(mutation);
-        AstJaxbTransformerHelper.addField(jaxbDestination, "LIST_TYPE", varType);
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.LIST_TYPE, getTypeVar().getBlocklyName());
         for ( int i = 0; i < numOfItems; i++ ) {
-            AstJaxbTransformerHelper.addValue(jaxbDestination, "ADD" + i, exprList.get().get(i));
+            AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.ADD + i, exprList.get().get(i));
         }
         return jaxbDestination;
     }

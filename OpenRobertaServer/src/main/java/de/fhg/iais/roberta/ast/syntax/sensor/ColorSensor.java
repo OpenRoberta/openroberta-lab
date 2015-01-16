@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.sensor;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
@@ -73,8 +74,8 @@ public class ColorSensor<V> extends Sensor<V> {
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         String fieldValue = getPort().getPortNumber();
-        AstJaxbTransformerHelper.addField(jaxbDestination, "MODE", getMode().name());
-        AstJaxbTransformerHelper.addField(jaxbDestination, "SENSORPORT", fieldValue);
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().name());
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
 
         return jaxbDestination;
     }

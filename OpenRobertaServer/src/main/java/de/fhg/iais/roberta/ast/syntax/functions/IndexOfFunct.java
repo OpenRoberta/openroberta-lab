@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.IndexLocation;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
@@ -83,9 +84,9 @@ public class IndexOfFunct<V> extends Function<V> {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        AstJaxbTransformerHelper.addField(jaxbDestination, "END", getLocation().name());
-        AstJaxbTransformerHelper.addValue(jaxbDestination, "VALUE", getParam().get(0));
-        AstJaxbTransformerHelper.addValue(jaxbDestination, "FIND", getParam().get(1));
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.END, getLocation().name());
+        AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, getParam().get(0));
+        AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.FIND, getParam().get(1));
         return jaxbDestination;
     }
 

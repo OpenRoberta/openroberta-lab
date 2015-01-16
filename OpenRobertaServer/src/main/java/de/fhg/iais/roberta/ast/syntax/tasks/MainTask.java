@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.tasks;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
@@ -72,7 +73,7 @@ public class MainTask<V> extends Task<V> {
         Mutation mutation = new Mutation();
         mutation.setDeclare(declare);
         jaxbDestination.setMutation(mutation);
-        AstJaxbTransformerHelper.addStatement(jaxbDestination, "ST", this.variables);
+        AstJaxbTransformerHelper.addStatement(jaxbDestination, BlocklyConstants.ST, this.variables);
         return jaxbDestination;
     }
 

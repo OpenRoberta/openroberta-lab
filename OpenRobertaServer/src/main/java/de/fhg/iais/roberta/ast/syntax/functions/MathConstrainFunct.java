@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
@@ -72,9 +73,9 @@ public class MathConstrainFunct<V> extends Function<V> {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        AstJaxbTransformerHelper.addValue(jaxbDestination, "VALUE", getParam().get(0));
-        AstJaxbTransformerHelper.addValue(jaxbDestination, "LOW", getParam().get(1));
-        AstJaxbTransformerHelper.addValue(jaxbDestination, "HIGH", getParam().get(2));
+        AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, getParam().get(0));
+        AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.LOW, getParam().get(1));
+        AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.HIGH, getParam().get(2));
         return jaxbDestination;
     }
 

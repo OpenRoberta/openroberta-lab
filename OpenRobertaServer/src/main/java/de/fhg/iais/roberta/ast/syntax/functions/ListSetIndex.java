@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.IndexLocation;
 import de.fhg.iais.roberta.ast.syntax.ListElementOperations;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
@@ -100,15 +101,15 @@ public class ListSetIndex<V> extends Function<V> {
 
         Mutation mutation = new Mutation();
         mutation.setAt(false);
-        AstJaxbTransformerHelper.addField(jaxbDestination, "MODE", getElementOperation().name());
-        AstJaxbTransformerHelper.addField(jaxbDestination, "WHERE", getLocation().name());
-        AstJaxbTransformerHelper.addValue(jaxbDestination, "LIST", getParam().get(0));
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getElementOperation().name());
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.WHERE, getLocation().name());
+        AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.LIST_, getParam().get(0));
         if ( getParam().size() > 2 ) {
-            AstJaxbTransformerHelper.addValue(jaxbDestination, "AT", getParam().get(2));
-            AstJaxbTransformerHelper.addValue(jaxbDestination, "TO", getParam().get(1));
+            AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.AT, getParam().get(2));
+            AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.TO_, getParam().get(1));
             mutation.setAt(true);
         } else {
-            AstJaxbTransformerHelper.addValue(jaxbDestination, "TO", getParam().get(1));
+            AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.TO_, getParam().get(1));
         }
         jaxbDestination.setMutation(mutation);
         return jaxbDestination;

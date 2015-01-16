@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.stmt;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
@@ -83,8 +84,8 @@ public class AssignStmt<V> extends Stmt<V> {
         Mutation mutation = new Mutation();
         mutation.setDatatype(varType);
         jaxbDestination.setMutation(mutation);
-        AstJaxbTransformerHelper.addField(jaxbDestination, "VAR", getName().getValue());
-        AstJaxbTransformerHelper.addValue(jaxbDestination, "VALUE", getExpr());
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VAR, getName().getValue());
+        AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, getExpr());
 
         return jaxbDestination;
     }

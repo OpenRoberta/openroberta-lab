@@ -4,6 +4,7 @@ import java.math.BigInteger;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
@@ -67,8 +68,8 @@ public class WaitStmt<V> extends Stmt<V> {
         StmtList<?> waitStmtList = getStatements();
         int numOfWait = waitStmtList.get().size();
         if ( numOfWait == 1 ) {
-            AstJaxbTransformerHelper.addValue(jaxbDestination, "WAIT0", ((RepeatStmt<?>) waitStmtList.get().get(0)).getExpr());
-            AstJaxbTransformerHelper.addStatement(jaxbDestination, "DO0", ((RepeatStmt<?>) waitStmtList.get().get(0)).getList());
+            AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.WAIT + "0", ((RepeatStmt<?>) waitStmtList.get().get(0)).getExpr());
+            AstJaxbTransformerHelper.addStatement(jaxbDestination, BlocklyConstants.DO + "0", ((RepeatStmt<?>) waitStmtList.get().get(0)).getList());
             return jaxbDestination;
         }
         mutation = new Mutation();
@@ -76,8 +77,8 @@ public class WaitStmt<V> extends Stmt<V> {
         jaxbDestination.setMutation(mutation);
         Repetitions repetitions = new Repetitions();
         for ( int i = 0; i < numOfWait; i++ ) {
-            AstJaxbTransformerHelper.addValue(repetitions, "WAIT" + i, ((RepeatStmt<?>) waitStmtList.get().get(i)).getExpr());
-            AstJaxbTransformerHelper.addStatement(repetitions, "DO" + i, ((RepeatStmt<?>) waitStmtList.get().get(i)).getList());
+            AstJaxbTransformerHelper.addValue(repetitions, BlocklyConstants.WAIT + i, ((RepeatStmt<?>) waitStmtList.get().get(i)).getExpr());
+            AstJaxbTransformerHelper.addStatement(repetitions, BlocklyConstants.DO + i, ((RepeatStmt<?>) waitStmtList.get().get(i)).getList());
         }
         jaxbDestination.setRepetitions(repetitions);
         return jaxbDestination;

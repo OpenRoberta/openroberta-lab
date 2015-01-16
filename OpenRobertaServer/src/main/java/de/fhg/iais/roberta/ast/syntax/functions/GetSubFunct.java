@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.IndexLocation;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
@@ -103,20 +104,20 @@ public class GetSubFunct<V> extends Function<V> {
 
         mutation.setAt1(false);
         mutation.setAt2(false);
-        AstJaxbTransformerHelper.addField(jaxbDestination, "WHERE1", getStrParam().get(0));
-        AstJaxbTransformerHelper.addField(jaxbDestination, "WHERE2", getStrParam().get(1));
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.WHERE1, getStrParam().get(0));
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.WHERE2, getStrParam().get(1));
         if ( getFunctName() == FunctionNames.GET_SUBLIST ) {
-            AstJaxbTransformerHelper.addValue(jaxbDestination, "LIST", getParam().get(0));
+            AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.LIST_, getParam().get(0));
         } else {
             AstJaxbTransformerHelper.addValue(jaxbDestination, "STRING", getParam().get(0));
         }
         if ( IndexLocation.get(getStrParam().get(0)) == IndexLocation.FROM_START || IndexLocation.get(getStrParam().get(0)) == IndexLocation.FROM_END ) {
             mutation.setAt1(true);
-            AstJaxbTransformerHelper.addValue(jaxbDestination, "AT1", getParam().get(1));
+            AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.AT1, getParam().get(1));
         }
         if ( IndexLocation.get(getStrParam().get(1)) == IndexLocation.FROM_START || IndexLocation.get(getStrParam().get(1)) == IndexLocation.FROM_END ) {
             mutation.setAt2(true);
-            AstJaxbTransformerHelper.addValue(jaxbDestination, "AT2", getParam().get(getParam().size() - 1));
+            AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.AT2, getParam().get(getParam().size() - 1));
         }
         jaxbDestination.setMutation(mutation);
         return jaxbDestination;

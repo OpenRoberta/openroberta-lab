@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.action;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
@@ -71,8 +72,8 @@ public class LightAction<V> extends Action<V> {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        AstJaxbTransformerHelper.addField(jaxbDestination, "SWITCH_COLOR", getColor().name());
-        AstJaxbTransformerHelper.addField(jaxbDestination, "SWITCH_BLINK", getBlinkMode().name());
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SWITCH_COLOR, getColor().name());
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SWITCH_BLINK, getBlinkMode().name());
 
         return jaxbDestination;
 

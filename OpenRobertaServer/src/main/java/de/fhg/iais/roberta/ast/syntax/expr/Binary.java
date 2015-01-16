@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
@@ -194,23 +195,23 @@ public final class Binary<V> extends Expr<V> {
         switch ( getOp() ) {
 
             case MATH_CHANGE:
-                AstJaxbTransformerHelper.addField(jaxbDestination, "VAR", ((Var<?>) getLeft()).getValue());
-                AstJaxbTransformerHelper.addValue(jaxbDestination, "DELTA", getRight());
+                AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VAR, ((Var<?>) getLeft()).getValue());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.DELTA, getRight());
                 return jaxbDestination;
             case TEXT_APPEND:
-                AstJaxbTransformerHelper.addValue(jaxbDestination, "VAR", getLeft());
-                AstJaxbTransformerHelper.addValue(jaxbDestination, "TEXT", getRight());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VAR, getLeft());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.TEXT, getRight());
                 return jaxbDestination;
 
             case MOD:
-                AstJaxbTransformerHelper.addValue(jaxbDestination, "DIVIDEND", getLeft());
-                AstJaxbTransformerHelper.addValue(jaxbDestination, "DIVISOR", getRight());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.DIVIDEND, getLeft());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.DIVISOR, getRight());
                 return jaxbDestination;
 
             default:
-                AstJaxbTransformerHelper.addField(jaxbDestination, "OP", getOp().name());
-                AstJaxbTransformerHelper.addValue(jaxbDestination, "A", getLeft());
-                AstJaxbTransformerHelper.addValue(jaxbDestination, "B", getRight());
+                AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.OP_, getOp().name());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.A, getLeft());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.B, getRight());
                 return jaxbDestination;
         }
     }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
@@ -84,9 +85,9 @@ public class MathPowerFunct<V> extends Expr<V> {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        AstJaxbTransformerHelper.addField(jaxbDestination, "OP", getFunctName().name());
-        AstJaxbTransformerHelper.addValue(jaxbDestination, "A", getParam().get(0));
-        AstJaxbTransformerHelper.addValue(jaxbDestination, "B", getParam().get(1));
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.OP_, getFunctName().name());
+        AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.A, getParam().get(0));
+        AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.B, getParam().get(1));
         return jaxbDestination;
     }
 }

@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.action;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
@@ -77,7 +78,7 @@ public class VolumeAction<V> extends Action<V> {
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         if ( getMode() == VolumeAction.Mode.SET ) {
-            AstJaxbTransformerHelper.addValue(jaxbDestination, "VOLUME", getVolume());
+            AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VOLUME, getVolume());
         }
 
         return jaxbDestination;

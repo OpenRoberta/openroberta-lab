@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
@@ -82,9 +83,9 @@ public class ListRepeat<V> extends Function<V> {
         Block jaxbDestination = new Block();
         String varType = getTypeVar().getBlocklyName().substring(0, 1).toUpperCase() + getTypeVar().getBlocklyName().substring(1).toLowerCase();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        AstJaxbTransformerHelper.addField(jaxbDestination, "LIST_TYPE", varType);
-        AstJaxbTransformerHelper.addValue(jaxbDestination, "ITEM", getParam().get(0));
-        AstJaxbTransformerHelper.addValue(jaxbDestination, "NUM", getParam().get(1));
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.LIST_TYPE, varType);
+        AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.ITEM, getParam().get(0));
+        AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.NUM, getParam().get(1));
         return jaxbDestination;
     }
 }

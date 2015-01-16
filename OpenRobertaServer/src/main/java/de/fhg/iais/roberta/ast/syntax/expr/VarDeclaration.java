@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
@@ -111,9 +112,9 @@ public class VarDeclaration<V> extends Expr<V> {
         mutation.setDatatype(getTypeVar().getBlocklyName());
         jaxbDestination.setMutation(mutation);
 
-        AstJaxbTransformerHelper.addField(jaxbDestination, "TYPE", getTypeVar().getBlocklyName());
-        AstJaxbTransformerHelper.addField(jaxbDestination, "VAR", getName());
-        AstJaxbTransformerHelper.addValue(jaxbDestination, "VALUE", this.value);
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.TYPE, getTypeVar().getBlocklyName());
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VAR, getName());
+        AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, this.value);
 
         return jaxbDestination;
     }

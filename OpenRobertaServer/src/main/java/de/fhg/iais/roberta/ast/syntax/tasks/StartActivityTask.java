@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.tasks;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
@@ -68,7 +69,7 @@ public class StartActivityTask<V> extends Expr<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        AstJaxbTransformerHelper.addValue(jaxbDestination, "ACTIVITY", getActivityName());
+        AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.ACTIVITY, getActivityName());
         return jaxbDestination;
     }
 }

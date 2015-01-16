@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.sensor;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
@@ -74,9 +75,9 @@ public class GyroSensor<V> extends Sensor<V> {
 
         String fieldValue = getPort().getPortNumber();
         if ( getMode() == GyroSensorMode.ANGLE || getMode() == GyroSensorMode.RATE ) {
-            AstJaxbTransformerHelper.addField(jaxbDestination, "MODE", getMode().name());
+            AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().name());
         }
-        AstJaxbTransformerHelper.addField(jaxbDestination, "SENSORPORT", fieldValue);
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
         return jaxbDestination;
     }
 }

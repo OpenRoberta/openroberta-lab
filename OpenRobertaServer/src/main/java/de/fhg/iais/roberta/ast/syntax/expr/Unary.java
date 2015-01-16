@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
@@ -154,10 +155,10 @@ public class Unary<V> extends Expr<V> {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         if ( getProperty().getBlockType().equals("math_single") ) {
-            AstJaxbTransformerHelper.addField(jaxbDestination, "OP", getOp().name());
-            AstJaxbTransformerHelper.addValue(jaxbDestination, "NUM", getExpr());
+            AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.OP_, getOp().name());
+            AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.NUM, getExpr());
         } else {
-            AstJaxbTransformerHelper.addValue(jaxbDestination, "BOOL", getExpr());
+            AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.BOOL, getExpr());
         }
         return jaxbDestination;
     }

@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
@@ -65,10 +66,10 @@ public class EmptyList<V> extends Expr<V> {
 
     @Override
     public Block astToBlock() {
-        String varType = getTypeVar().getBlocklyName().substring(0, 1).toUpperCase() + getTypeVar().getBlocklyName().substring(1).toLowerCase();
+
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        AstJaxbTransformerHelper.addField(jaxbDestination, "LIST_TYPE", varType);
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.LIST_TYPE, getTypeVar().getBlocklyName());
         return jaxbDestination;
     }
 
