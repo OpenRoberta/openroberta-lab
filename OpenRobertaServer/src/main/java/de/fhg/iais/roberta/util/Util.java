@@ -139,21 +139,12 @@ public class Util {
             if ( httpSessionState != null ) {
                 String token = httpSessionState.getToken();
                 if ( token != null ) {
-                    BrickCommunicationData brickState = brickCommunicator.getSingleState(token);
-                    if ( brickState != null ) {
-                        Pair<Clock, State> infoAboutLastRequest = brickState.getInfoAboutLastRequest();
-                        if ( infoAboutLastRequest != null ) {
-                            Clock clock = infoAboutLastRequest.getFirst();
-                            State request = infoAboutLastRequest.getSecond();
-                            if ( request == State.DOWNLOAD_REQUEST_FROM_BRICK_ARRIVED ) {
-                                response.put("robot_state", "robot.waiting");
-                                if ( clock != null ) {
-                                    response.put("robot_waiting", clock.elapsedSecFormatted());
-                                }
-                            } else {
-                                response.put("robot_state", "robot.not_waiting");
-                            }
-                        }
+                    BrickCommunicationData state = brickCommunicator.getState(token);
+                    if ( state != null ) {
+                        response.put("robot.wait", state.getElapsedMsecOfStartOfLastRequest());
+                        response.put("robot.battery", state.getBattery());
+                        response.put("robot.name", state.getRobotName());
+                        response.put("robot.state", state.getState() == State.BRICK_IS_BUSY ? "busy" : "wait");
                     }
                 }
             }

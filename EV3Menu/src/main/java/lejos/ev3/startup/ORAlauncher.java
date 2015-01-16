@@ -1,17 +1,11 @@
 package lejos.ev3.startup;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.jar.JarFile;
 
-import lejos.ev3.startup.GraphicStartup.IndicatorThread;
 import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.lcd.Image;
-import lejos.hardware.lcd.TextLCD;
 import lejos.utility.Delay;
 
 /**
@@ -19,12 +13,9 @@ import lejos.utility.Delay;
  * 
  * @author dpyka
  */
-public class RobertaLauncher implements Runnable {
+public class ORAlauncher {
 
-    private final IndicatorThread ind;
-    private EchoThread echoIn, echoErr;
-
-    private static final String JAVA_RUN_CP = "jrun -cp ";
+    private static final String CMD_ORA_RUN = "jrun -jar ";
     private static final String PROGRAMS_DIRECTORY = "/home/lejos/programs";
 
     private static final String OpenRobertaLabLogo =
@@ -32,112 +23,98 @@ public class RobertaLauncher implements Runnable {
     private static final Image image = new Image(178, 128, Utils.stringToBytes8(OpenRobertaLabLogo));
 
     private static final GraphicsLCD glcd = LocalEV3.get().getGraphicsLCD();
-    private static final TextLCD lcd = LocalEV3.get().getTextLCD();
 
-    private static Process program;
-    private static String programName;
-    private static String mainClass;
-
-    public RobertaLauncher(IndicatorThread ind, EchoThread echoIn, EchoThread echoErr) {
-        this.ind = ind;
-        this.echoIn = echoIn;
-        this.echoErr = echoErr;
+    /**
+     * Creates a new object for launching the Open Roberta Lab user program.
+     */
+    public ORAlauncher() {
+        //
     }
 
-    public void setFileName(String programName) {
-        RobertaLauncher.programName = programName;
+    /**
+     * Executes the user's program as a new java process.
+     * 
+     * @param programName
+     *        Filename without directory, for example Linefollower.jar.
+     */
+    public void runProgram(String programName) {
+        File robertalabFile = new File(ORAlauncher.PROGRAMS_DIRECTORY, programName);
+        System.out.println("run: " + CMD_ORA_RUN + robertalabFile.getPath());
+        GraphicStartup.menu.suspend();
+        exec(CMD_ORA_RUN + robertalabFile.getPath(), ORAlauncher.PROGRAMS_DIRECTORY);
+        Delay.msDelay(1000);
+        GraphicStartup.menu.suspend(); // debug screen when process is killed
+        GraphicStartup.menu.resume();
+        redrawIPs();
     }
 
-    @Override
-    public void run() {
-        while ( RobertaObserver.isAutorun() ) {
-            if ( RobertaObserver.isDownloaded() == true && RobertaObserver.isExecuted() == true ) {
-                RobertaObserver.setExecuted(false);
-
-                setFileName(RobertaObserver.getUserFileName());
-                File robertalabFile = new File(RobertaLauncher.PROGRAMS_DIRECTORY, programName);
-                JarFile jar;
-                try {
-                    jar = new JarFile(robertalabFile);
-                    mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
-                    jar.close();
-                } catch ( IOException e ) {
-                    System.err.println("Exception running program");
-                    return;
-                }
-                this.ind.suspend();
-                exec(robertalabFile, JAVA_RUN_CP + robertalabFile.getPath() + " lejos.internal.ev3.EV3Wrapper " + mainClass, RobertaLauncher.PROGRAMS_DIRECTORY);
-                this.ind.resume();
-
-                RobertaObserver.setDownloaded(false);
-                RobertaObserver.setExecuted(true);
-
-            } else {
-                Delay.msDelay(500);
-            }
+    /**
+     * Manually redraw IP addresses on the screen. Used for restoring the screen after user process is terminated.
+     */
+    private void redrawIPs() {
+        int row = 1;
+        for ( String ip : GraphicStartup.ips ) {
+            LocalEV3.get().getTextLCD().drawString(ip, 8 - ip.length() / 2, row++);
         }
     }
 
     /**
-     * Execute a program and display its output to System.out and error stream to
-     * System.err
+     * Method is based on leJOS program execution. Modified for Open Roberta
+     * Lab. No wrapper for sysout and syserr, no stacktrace displaying.
+     * 
+     * @param command
+     *        The shell commands to launch the new process.
+     * @param directory
+     *        The programs where all user programs are saved.
      */
-    private void exec(File jar, String command, String directory) {
+    private void exec(String command, String directory) {
+        Process program = null;
         try {
-            if ( jar != null ) {
-                String jarName = jar.getName();
-                programName = jarName.substring(0, jarName.length() - 4); // Remove .jar
-            }
 
-            Image screenshot = new Image(178, 128, glcd.getHWDisplay());
-
-            lcd.clear();
-            lcd.refresh();
-            lcd.setAutoRefresh(false);
+            glcd.clear();
+            glcd.refresh();
+            glcd.setAutoRefresh(false);
 
             glcd.drawImage(image, 0, 0, 0);
             glcd.refresh();
 
             program = new ProcessBuilder(command.split(" ")).directory(new File(directory)).start();
-            BufferedReader input = new BufferedReader(new InputStreamReader(program.getInputStream()));
-            BufferedReader err = new BufferedReader(new InputStreamReader(program.getErrorStream()));
 
-            this.echoIn = new EchoThread(jar.getPath().replace(".jar", ".out"), input, System.out);
-            this.echoErr = new EchoThread(jar.getPath().replace(".jar", ".err"), err, System.err);
-
-            this.echoIn.start();
-            this.echoErr.start();
-
-            System.out.println("Executing " + command + " in " + directory);
-
+            System.out.println("Running an Open Roberta Lab Program!");
             while ( true ) {
                 int b = Button.getButtons();
                 if ( b == 6 ) {
                     System.out.println("Killing the process");
                     program.destroy();
-                    // reset motors after program is aborted
                     GraphicStartup.resetMotors();
-                    break;
                 }
-                if ( !this.echoIn.isAlive() && !this.echoErr.isAlive() ) {
+                try {
+                    // we do not use lejos wrapper for sysout and syserr
+                    // this is an alternative method to check if process is terminated
+                    // exitvalue is 143 if process was killed by another one
+                    // exitvalue is 0 if process terminates regularly
+                    // throws exception if not yet terminated
+                    System.out.println("ORA process exitvalue: " + program.exitValue());
                     break;
+                } catch ( IllegalThreadStateException e ) {
+                    // go on
                 }
                 Delay.msDelay(200);
             }
+
             System.out.println("Waiting for process to die");
             program.waitFor();
             System.out.println("Program finished");
             // Turn the LED off, in case left on
             Button.LEDPattern(0);
-            lcd.setAutoRefresh(true);
-            lcd.clear();
-            lcd.refresh();
-            glcd.drawImage(screenshot, 0, 0, 0);
+            glcd.setAutoRefresh(true);
+            glcd.clear();
+            glcd.refresh();
             glcd.refresh();
 
             program = null;
         } catch ( Exception e ) {
-            System.err.println("Failed to execute program: " + e);
+            System.err.println("Failed to execute ORA program: " + e);
         }
     }
 

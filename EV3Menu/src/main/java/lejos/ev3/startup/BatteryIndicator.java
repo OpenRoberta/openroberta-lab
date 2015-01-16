@@ -50,7 +50,6 @@ public class BatteryIndicator {
     private final boolean rechargeable = false;
     private boolean wifi = false;
     private boolean usb = false;
-    private boolean robertalab = false;
 
     private final TextLCD lcd = LocalEV3.get().getTextLCD();
     private final GraphicsLCD g = LocalEV3.get().getGraphicsLCD();
@@ -84,10 +83,6 @@ public class BatteryIndicator {
 
     public void setUsb(boolean usb) {
         this.usb = usb;
-    }
-
-    public void setRobertalab(boolean roberta) {
-        this.robertalab = roberta;
     }
 
     public synchronized void setDefaultTitle(String title) {
@@ -154,7 +149,7 @@ public class BatteryIndicator {
             this.g.drawRegion(wifiImage, 0, 0, 16, 16, 0, ICON_X, 0, 0);
         }
 
-        if ( this.robertalab ) {
+        if ( ORAhandler.isRegistered() ) {
             this.g.drawRegion(robertaImage, 0, 0, 16, 16, 0, ICON_X - 18, 0, 0);
         }
     }

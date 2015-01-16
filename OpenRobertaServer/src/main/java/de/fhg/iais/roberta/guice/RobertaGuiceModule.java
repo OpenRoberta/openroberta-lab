@@ -12,6 +12,7 @@ import com.google.inject.name.Names;
 import de.fhg.iais.roberta.brick.BrickCommunicator;
 import de.fhg.iais.roberta.brick.CompilerWorkflow;
 import de.fhg.iais.roberta.brick.Templates;
+import de.fhg.iais.roberta.javaServer.resources.BrickCommand;
 import de.fhg.iais.roberta.javaServer.resources.DownloadJar;
 import de.fhg.iais.roberta.javaServer.resources.HelloWorld;
 import de.fhg.iais.roberta.javaServer.resources.Ping;
@@ -19,7 +20,6 @@ import de.fhg.iais.roberta.javaServer.resources.RestBlocks;
 import de.fhg.iais.roberta.javaServer.resources.RestConfiguration;
 import de.fhg.iais.roberta.javaServer.resources.RestProgram;
 import de.fhg.iais.roberta.javaServer.resources.RestUser;
-import de.fhg.iais.roberta.javaServer.resources.TokenReceiver;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 
 public class RobertaGuiceModule extends AbstractModule {
@@ -38,7 +38,7 @@ public class RobertaGuiceModule extends AbstractModule {
         bind(RestProgram.class);
         bind(RestUser.class);
         bind(DownloadJar.class);
-        bind(TokenReceiver.class);
+        bind(BrickCommand.class);
         bind(HelloWorld.class);
         bind(Ping.class);
 

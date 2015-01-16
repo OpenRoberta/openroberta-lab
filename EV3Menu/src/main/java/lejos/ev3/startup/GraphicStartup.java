@@ -25,17 +25,18 @@ import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Properties;
 import java.util.jar.JarFile;
 
 import lejos.hardware.Battery;
 import lejos.hardware.Bluetooth;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
-import lejos.hardware.Key;
 import lejos.hardware.LocalBTDevice;
 import lejos.hardware.LocalWifiDevice;
 import lejos.hardware.RemoteBTDevice;
 import lejos.hardware.Sound;
+import lejos.hardware.Sounds;
 import lejos.hardware.Wifi;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.Font;
@@ -148,12 +149,6 @@ public class GraphicStartup implements Menu {
     private static final String ICRoberta =
         "\u0000\u0000\u0080\u0000\u0000\u0000\u0080\u0000\u0000\u00c0\u00c3\u0001\u0010\u0001\u00c0\u0001\u00dc\u00c0\u00c1\u0000\u0058\u002f\u00fe\u0000\u009c\u0010\u007c\u0000\u007c\u0080\u001c\u0000\u0078\u0084\u001d\u0000\u0070\u000c\u0004\u0000\u0070\u0000\u0002\u0000\u0080\u00f0\u0001\u0000\u0000\u003f\u0000\u0000\u0000\u0038\u0000\u0000\u0000\u0018\u0000\u0000\u0000\u001c\u0000\u0000\u0000\u001c\u00c0\u0001\u0000\u001c\u00f8\u0003\u0000\u00dc\u00ff\u0003\u0000\u00dc\u00ff\u0003\u0000\u00bc\u00ff\r\u0000\u00f8\u00ff\u001e\u0000\u00f4\u007f\u001f\u0080\u00cf\u00c7\u003f\u00c0\u00ff\u00bb\u003f\u00e0\u00fb\u00fd\u0033\u00e0\u0007\u00ff\u003b\u00e0\u00ff\u00cf\u003b\u00e0\u00ff\u00ef\u001f\u00c0\u00ff\u00ff\u001f\u0080\u00f7\u00fe\u000f\u0000\u0000\u00b8\u0007";
 
-    private static BackgroundTasks backgroundTasks;
-
-    public static boolean isRobertaRegistered = false;
-    private static String token;
-    private static String serverURLString = "";
-
     public int selectTest;
 
     private static final String PROGRAMS_DIRECTORY = "/home/lejos/programs";
@@ -167,7 +162,7 @@ public class GraphicStartup implements Menu {
     private static final int maxSleepTime = 10;
 
     // Threads
-    public final IndicatorThread ind = new IndicatorThread();
+    private final IndicatorThread ind = new IndicatorThread();
     private final BatteryIndicator indiBA = new BatteryIndicator();
     private final PipeReader pipeReader = new PipeReader();
     private final RConsole rcons = new RConsole();
@@ -178,13 +173,15 @@ public class GraphicStartup implements Menu {
     private boolean btVisibility;
     private static String version = "Unknown";
     private static String hostname;
-    private static List<String> ips = getIPAddresses();
+    public static List<String> ips = getIPAddresses();
     private static LocalBTDevice bt;
-    private static GraphicStartup menu = new GraphicStartup();
+    public static GraphicStartup menu = new GraphicStartup();
+
+    private static ORAhandler oraHandler = new ORAhandler();
 
     private static TextLCD lcd = LocalEV3.get().getTextLCD();
 
-    private static Process program; // the running user program, if any
+    public static Process program; // the running user program, if any
     private static String programName; // The name of the running program
 
     private static boolean suspend = false;
@@ -201,7 +198,6 @@ public class GraphicStartup implements Menu {
 
         if ( args.length > 0 ) {
             hostname = args[0];
-            RobertaObserver.setBrickname(hostname);
         }
 
         if ( args.length > 1 ) {
@@ -231,8 +227,8 @@ public class GraphicStartup implements Menu {
         TuneThread tuneThread = new TuneThread();
         tuneThread.start();
 
-        System.out.println("Getting IP addresses");
-        ips = getIPAddresses();
+        // System.out.println("Getting IP addresses");
+        // ips = getIPAddresses();
 
         // Start the RMI registry
         InitThread initThread = new InitThread();
@@ -373,7 +369,7 @@ public class GraphicStartup implements Menu {
                     break;
             }
 
-            if ( selection < 0 ) {
+            if ( selection < 0 && selection > -4 ) {
                 if ( getYesNo("  Shut down EV3 ?", false) == 1 ) {
                     break;
                 }
@@ -1224,7 +1220,7 @@ public class GraphicStartup implements Menu {
      * Clears the screen, displays a number and allows user to change the digits
      * of the number individually using the NXT buttons. Note the array of bytes
      * represent ASCII characters, not actual numbers.
-     *
+     * 
      * @param digits
      *        Number of digits in the PIN.
      * @param title
@@ -1436,7 +1432,7 @@ public class GraphicStartup implements Menu {
             if ( selected >= 0 ) {
                 newScreen();
                 RemoteBTDevice btrd = devList.get(selected);
-                byte[] devclass = btrd.getDeviceClass();
+                btrd.getDeviceClass();
                 lcd.drawString(btrd.getName(), 2, 2);
                 lcd.drawString(btrd.getAddress(), 0, 3);
                 // TODO device class is overwritten by menu
@@ -1476,12 +1472,9 @@ public class GraphicStartup implements Menu {
      * Roberta submenu implementation.
      */
     private void robertaMenu() {
-        TextLCD lcd = LocalEV3.get().getTextLCD();
-        newScreen(" Robertalab");
-
-        if ( GraphicStartup.isRobertaRegistered == false ) {
+        if ( ORAhandler.isRegistered() == false ) {
             if ( this.indiBA.getWifi() == false ) {
-                newScreen("Warning");
+                newScreen(" Robertalab");
                 lcd.drawString("No Wifi connected!", 0, 2);
                 if ( getYesNo("    Continue?", false) == 1 ) {
                     // go on
@@ -1489,56 +1482,131 @@ public class GraphicStartup implements Menu {
                     return;
                 }
             }
-
-            getIPAddress();
-            //serverURLString = "193.175.162.161:80";
-
-            token = new RobertaTokenGenerator().generateToken(8);
-            GraphicStartup.backgroundTasks = new BackgroundTasks(serverURLString, token, this.ind, echoIn, echoErr);
-            Key escapeKey = LocalEV3.get().getKey("Escape");
-            escapeKey.addKeyListener(GraphicStartup.backgroundTasks);
-            GraphicStartup.backgroundTasks.startRegisteringThread();
-
-            newScreen(" Robertalab");
-            lcd.drawString("waiting for", 0, 2);
-            lcd.drawString("registration...", 0, 3);
-            lcd.drawString("     " + token, 0, 5);
-
-            while ( GraphicStartup.backgroundTasks.getRegisteredInfo() == false ) {
-                if ( GraphicStartup.backgroundTasks.getTimeOutInfo() == true ) {
-                    openRobertaLabConnectionError("    Timeout!", "", "");
-                    return;
-                } else if ( GraphicStartup.backgroundTasks.getErrorInfo() == true ) {
-                    openRobertaLabConnectionError("     Ooops...", "  Something went", "    wrong! :(");
-                    return;
-                } else {
-                    Delay.msDelay(500);
-                }
+            String token = new ORAtokenGenerator().generateToken();
+            String ip = getIPAddress();
+            // 193.175.162.161:80
+            if ( ip.equals("none") ) {
+                return;
+            } else {
+                oraHandler.startServerCommunicator(ip, token);
             }
 
-            isRobertaRegistered = true;
-            this.indiBA.setRobertalab(true);
-            LocalEV3.get().getAudio().systemSound(2);
             newScreen(" Robertalab");
-            lcd.drawString("Success!", 0, 3);
-            Delay.msDelay(2000);
-            backgroundTasks.reconnectRoberta();
+            lcd.drawString("    Wating for", 0, 2);
+            lcd.drawString("  registration...", 0, 3);
+            lcd.drawString("     " + token, 0, 5);
 
+            while ( ORAhandler.isRegistered() == false ) {
+                int id = Button.waitForAnyEvent(500);
+                if ( id == Button.ID_ESCAPE || ORAhandler.hasConnectionError() ) {
+                    oraHandler.disconnect();
+                    newScreen(" Robertalab");
+                    lcd.drawString("    Canceled!", 0, 3);
+                    LocalEV3.get().getAudio().systemSound(Sounds.BEEP);
+                    Delay.msDelay(2000);
+                    return;
+                }
+            }
+            newScreen(" Robertalab");
+            lcd.drawString("    Success!", 0, 3);
+            LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
+            Delay.msDelay(2000);
         } else {
-            openRobertaLabConnectedMenu();
+            oraMenu();
         }
+    }
+
+    public static String getORAmacAddress() {
+        Enumeration<NetworkInterface> interfaces;
+        try {
+            interfaces = NetworkInterface.getNetworkInterfaces();
+            while ( interfaces.hasMoreElements() ) {
+                NetworkInterface current = interfaces.nextElement();
+                if ( !current.isUp() || current.isLoopback() || current.isVirtual() ) {
+                    continue;
+                }
+                if ( current.getDisplayName().equals("wlan0") ) {
+                    return convertToReadableMAC(current.getHardwareAddress());
+                }
+            }
+            return "usb";
+        } catch ( SocketException e ) {
+            return "unknown";
+        }
+    }
+
+    private static String convertToReadableMAC(byte[] macRaw) {
+        if ( macRaw != null ) {
+            StringBuilder sb = new StringBuilder();
+            for ( int i = 0; i < macRaw.length; i++ ) {
+                sb.append(String.format("%02X%s", macRaw[i], (i < macRaw.length - 1) ? "-" : ""));
+            }
+            return sb.toString();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Get ORA ev3menu version from EV3Menu.properties in jar file.
+     * 
+     * @return
+     */
+    public static String getORAversion() {
+        Properties menuProperties = new Properties();
+        InputStream is = ClassLoader.getSystemResourceAsStream("EV3Menu.properties");
+        try {
+            menuProperties.load(is);
+            String tmp = menuProperties.getProperty("version");
+            int i = tmp.indexOf("-");
+            tmp = tmp.substring(0, i);
+            return tmp;
+        } catch ( IOException e ) {
+            return "unknown";
+        }
+    }
+
+    /**
+     * Get the name of the brick to send it to ORA server t odisplay it on client page.
+     * 
+     * @return brickname
+     */
+    public static String getBrickName() {
+        return hostname;
+    }
+
+    /**
+     * Get the battery status to send it to ORA server to display it on client page.
+     * 
+     * @return battery
+     */
+    public static String getBatteryStatus() {
+        int millis = LocalEV3.ev3.getPower().getVoltageMilliVolt();
+        int int1 = (millis - millis % 1000) / 1000;
+        int int2 = (millis % 1000) / 100;
+        return int1 + "." + int2;
+    }
+
+    /**
+     * Expose userprogram process to check if it is running (!= null).
+     * Do not allow execution of a second userprogram from ORA.
+     * 
+     * @return
+     */
+    public static Process getUserprogram() {
+        return program;
     }
 
     /**
      * Requests an IP Address from the user where the server is running.<br>
      * For developer version only.
      */
-    private void getIPAddress() {
+    private String getIPAddress() {
         File file = new File("/home/lejos/programs/serverIP.txt");
         if ( !file.exists() ) {
             PrintWriter pw = null;
             try {
-                file.delete();
+                // file.delete();
                 pw = new PrintWriter(file);
                 pw.println("");
             } catch ( FileNotFoundException e ) {
@@ -1559,43 +1627,33 @@ public class GraphicStartup implements Menu {
             lcd.drawString("use last IP?", 0, 1);
             lcd.drawString(temp, 0, 2);
             if ( getYesNo("     Confirm", false) == 1 ) {
-                serverURLString = temp;
+                return temp;
             } else {
                 newScreen(" Enter IP");
-                serverURLString = new IpAddressKeyboard().getString();
-                if ( !serverURLString.equals("") ) {
-                    try {
-                        file.delete();
-                        PrintWriter pw2 = new PrintWriter(file);
-                        pw2.println(serverURLString);
-                        pw2.close();
-                    } catch ( FileNotFoundException e ) {
-                        return;
-                    }
-                } else {
-                    return;
+                temp = new ORAipKeyboard().getString();
+                PrintWriter pw2 = null;
+                try {
+                    file.delete();
+                    pw2 = new PrintWriter(file);
+                    pw2.println(temp);
+                } catch ( FileNotFoundException e ) {
+                    return "";
+                } finally {
+                    pw2.close();
                 }
+                return temp;
             }
         } catch ( IOException e ) {
             e.printStackTrace();
+            return "";
         }
     }
 
-    private void openRobertaLabConnectionError(String line1, String line2, String line3) {
-        newScreen(" Robertalab");
-        lcd.drawString(line1, 0, 2);
-        lcd.drawString(line2, 0, 3);
-        lcd.drawString(line3, 0, 4);
-        lcd.drawString("  Press any key", 0, 6);
-        serverURLString = "";
-        Button.waitForAnyPress();
-    }
-
-    private void openRobertaLabConnectedMenu() {
+    private void oraMenu() {
         GraphicMenu menu = new GraphicMenu(new String[] {
-            "Disconnect", "Update"
+            "Disconnect"
         }, new String[] {
-            ICRoberta, ICRoberta
+            ICRoberta
         }, 3);
         int selected = 0;
         do {
@@ -1603,33 +1661,21 @@ public class GraphicStartup implements Menu {
             switch ( selected ) {
                 case 0:
                     newScreen(" Robertalab");
-                    if ( getYesNo("Disconnect?", false) == 1 ) {
+                    if ( getYesNo("   Disconnect?", false) == 1 ) {
                         disconnect();
-                        break;
                     }
-                case 1:
-                    updateOpenRoberta();
-                    if ( getYesNo("   Restart now?", false) == 1 ) {
-                        shutdown();
-                    }
+                    break;
             }
+            break;
         } while ( selected >= 0 );
     }
 
     private void disconnect() {
-        backgroundTasks.disconnectRoberta();
-        isRobertaRegistered = false;
-        token = null;
-        serverURLString = "";
-        this.indiBA.setRobertalab(false);
-        LocalEV3.get().getAudio().systemSound(3);
-    }
-
-    private void updateOpenRoberta() {
-        RobertaUpdater robertaUpdater = new RobertaUpdater(serverURLString);
-        robertaUpdater.update();
-        lcd.drawString("Brick updated!", 0, 2);
-
+        oraHandler.disconnect();
+        newScreen(" Robertalab");
+        lcd.drawString("  Disconnected!", 0, 3);
+        LocalEV3.get().getAudio().systemSound(Sounds.DESCENDING);
+        Delay.msDelay(2000);
     }
 
     /**
@@ -1755,7 +1801,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Ask the user for confirmation of an action.
-     *
+     * 
      * @param prompt
      *        A description of the action about to be performed
      * @return 1=yes 0=no < 0 escape
@@ -1859,7 +1905,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Format a string for use when displaying the volume.
-     *
+     * 
      * @param vol
      *        Volume setting 0-10
      * @return String version.
@@ -1888,7 +1934,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Read a button press. If the read timesout then exit the system.
-     *
+     * 
      * @return The bitcode of the button.
      */
     private int getButtonPress() {
@@ -1901,7 +1947,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Present the menu for a single file.
-     *
+     * 
      * @param file
      */
     private void fileMenu(File file, int type) {
@@ -2015,7 +2061,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Present the menu for a menu tool.
-     *
+     * 
      * @param file
      */
     private void toolMenu(File file) {
@@ -2043,10 +2089,6 @@ public class GraphicStartup implements Menu {
             lcd.setAutoRefresh(false);
 
             drawLaunchScreen();
-
-            if ( isRobertaRegistered == true ) {
-                backgroundTasks.disconnectRoberta();
-            }
 
             program = new ProcessBuilder(command.split(" ")).directory(new File(directory)).start();
             BufferedReader input = new BufferedReader(new InputStreamReader(program.getInputStream()));
@@ -2086,10 +2128,6 @@ public class GraphicStartup implements Menu {
             program = null;
         } catch ( Exception e ) {
             System.err.println("Failed to execute program: " + e);
-        } finally {
-            if ( isRobertaRegistered == true ) {
-                backgroundTasks.reconnectRoberta();
-            }
         }
     }
 
@@ -2240,7 +2278,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Method to add spaces before capital letters and remove .jar extension.
-     *
+     * 
      * @param fileName
      * @return
      */
@@ -2309,7 +2347,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Start a new screen display. Clear the screen and set the screen title.
-     *
+     * 
      * @param title
      */
     private void newScreen(String title) {
@@ -2319,7 +2357,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Display a status message
-     *
+     * 
      * @param msg
      */
     private void msg(String msg) {
@@ -2340,7 +2378,7 @@ public class GraphicStartup implements Menu {
      * Obtain a menu item selection Allow the user to make a selection from the
      * specified menu item. If a power off timeout has been specified and no
      * choice is made within this time power off the NXT.
-     *
+     * 
      * @param menu
      *        Menu to display.
      * @param cur
@@ -2798,7 +2836,7 @@ public class GraphicStartup implements Menu {
         }
     }
 
-    private void execInThisJVM(File jar) {
+    public void execInThisJVM(File jar) {
         try {
             LCD.clearDisplay();
             new JarMain(jar);

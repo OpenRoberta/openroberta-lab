@@ -1,13 +1,14 @@
 package de.fhg.iais.roberta.brick;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.fhg.iais.roberta.brick.BrickCommunicationData.State;
 import de.fhg.iais.roberta.dbc.Assert;
-import de.fhg.iais.roberta.util.Pair;
 
 /**
  * class, that synchronizes the communication between the bricks and the web-app. Thread-safe. See class {@link BrickCommunicationData} for
@@ -19,58 +20,91 @@ import de.fhg.iais.roberta.util.Pair;
  */
 public class BrickCommunicator {
     private static final Logger LOG = LoggerFactory.getLogger(BrickCommunicator.class);
+    private static final long PUSH_TIMER_INTERVALL = 2000;
+    private static final long PUSH_TIMEOUT_INTERVALL = 10000;
+
     private final Map<String, BrickCommunicationData> allStates = new ConcurrentHashMap<>();
-    private final Map<String, TokenRegistrationData> openTokenAgreementRequest = new ConcurrentHashMap<>();
 
     public BrickCommunicator() {
-        LOG.info("created");
+        Runnable pushTimerThread = new Runnable() {
+            @Override
+            public void run() {
+                pushTimerRunner();
+            }
+        };
+        new Thread(null, pushTimerThread, "PushTimer").start();
+        LOG.info("timer thread created");
     }
 
-    public boolean iAmABrickAndWantATokenToBeAgreedUpon(String token) {
+    public boolean brickWantsTokenToBeApproved(BrickCommunicationData registration) {
+        String token = registration.getToken();
+        String robotIdentificator = registration.getRobotIdentificator();
+        Assert.isTrue(token != null && robotIdentificator != null);
         Assert.isTrue(this.allStates.get(token) == null, "token already used. New token required.");
-        TokenRegistrationData newTokenRegData = new TokenRegistrationData();
-        TokenRegistrationData oldTokenRegData = this.openTokenAgreementRequest.put(token, newTokenRegData);
-        if ( oldTokenRegData != null ) {
-            oldTokenRegData.abortRequest();
+        for ( String storedToken : this.allStates.keySet() ) {
+            BrickCommunicationData storedState = this.allStates.get(storedToken);
+            if ( robotIdentificator.equals(storedState.getRobotIdentificator()) ) {
+                LOG.error("Token approval request for robotId " + robotIdentificator + ", but an old request is pending. Old request aborted.");
+                storedState.terminatePushAndRequestNextPush(); // notifyAll() executed
+                this.allStates.remove(storedState);
+            }
         }
-        return newTokenRegData.brickTokenAgreementRequest();
+        this.allStates.put(token, registration);
+        return registration.brickTokenAgreementRequest(); // notifyAll() awaited for
+    }
+
+    public String brickWaitsForAServerPush(String token) {
+        BrickCommunicationData state = getState(token);
+        if ( state != null ) {
+            state.brickHasSentAPushRequest();
+            return state.getCommand();
+        } else {
+            LOG.error("a push request from a brick arrived, but no matching state was found in the server - we provoke a server error");
+            return null;
+        }
     }
 
     public boolean aTokenAgreementWasSent(String token) {
-        TokenRegistrationData tokenRegData = this.openTokenAgreementRequest.remove(token);
-        if ( tokenRegData == null ) {
-            LOG.info("token " + token + " is not waited for. Typo error of the user?"); // TODO: make brick comm more robust
+        BrickCommunicationData state = this.allStates.get(token);
+        if ( state == null ) {
+            LOG.info("token " + token + " is not waited for. Typo error of the user?");
             return false;
         } else {
-            tokenRegData.clientAgreedOnTheBrickToken();
-            BrickCommunicationData newSingleState = new BrickCommunicationData(token);
-            BrickCommunicationData oldSingleState = this.allStates.put(token, newSingleState);
-            if ( oldSingleState != null ) {
-                LOG.info("a communication state for token " + token + " exists. THIS IS PROBABLY A PROBLEM"); // TODO: make brick comm more robust
-                oldSingleState.abortBrickDownloadRequest();
-            }
-            LOG.info("token " + token + " is agreed upon.");
+            // todo: version check!
+            state.userApprovedTheBrickToken();
+            LOG.info("token " + token + " is approved ba a user.");
+            return true;
         }
-        return true;
-    }
-
-    public Pair<String, String> iAmABrickAndWantToWaitForARunButtonPress(String token) {
-        BrickCommunicationData singleState = getSingleState(token);
-        return singleState.brickDownloadRequest();
     }
 
     public String theRunButtonWasPressed(String token, String programName, String brickConfigurationName) {
-        BrickCommunicationData singleState = getSingleState(token);
-        return singleState.runButtonPressed(programName, brickConfigurationName);
+        BrickCommunicationData state = getState(token);
+        return state.runButtonPressed(programName, brickConfigurationName);
     }
 
-    public BrickCommunicationData getSingleState(String token) {
-        BrickCommunicationData singleState = this.allStates.get(token);
-        if ( singleState == null ) {
-            LOG.info("a communication state for token " + token + " is created. THIS IS A TEMPORARY FIX"); // TODO: make brick comm more robust
-            singleState = new BrickCommunicationData(token);
-            this.allStates.put(token, singleState);
+    public BrickCommunicationData getState(String token) {
+        BrickCommunicationData state = this.allStates.get(token);
+        if ( state == null ) {
+            LOG.error("a communication state for token " + token + " is created. THIS IS A TEMPORARY FIX"); // TODO: make brick comm more robust
+            state = new BrickCommunicationData(token, "robot-id-generated-" + new Date().getTime(), "robot-name-generated", null);
+            this.allStates.put(token, state);
         }
-        return singleState;
+        return state;
     }
+
+    private void pushTimerRunner() {
+        while ( true ) {
+            try {
+                Thread.sleep(PUSH_TIMER_INTERVALL);
+            } catch ( InterruptedException e ) {
+                // OK
+            }
+            for ( BrickCommunicationData state : this.allStates.values() ) {
+                if ( state.getState() == State.BRICK_WAITING_FOR_PUSH_FROM_SERVER && state.getElapsedMsecOfStartOfLastRequest() > PUSH_TIMEOUT_INTERVALL ) {
+                    state.terminatePushAndRequestNextPush();
+                }
+            }
+        }
+    }
+
 }

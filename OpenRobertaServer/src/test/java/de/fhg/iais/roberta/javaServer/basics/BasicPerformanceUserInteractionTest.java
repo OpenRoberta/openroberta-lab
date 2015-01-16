@@ -32,12 +32,12 @@ import com.google.common.io.Resources;
 import de.fhg.iais.roberta.brick.BrickCommunicator;
 import de.fhg.iais.roberta.brick.CompilerWorkflow;
 import de.fhg.iais.roberta.brick.Templates;
+import de.fhg.iais.roberta.javaServer.resources.BrickCommand;
 import de.fhg.iais.roberta.javaServer.resources.DownloadJar;
 import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
 import de.fhg.iais.roberta.javaServer.resources.RestBlocks;
 import de.fhg.iais.roberta.javaServer.resources.RestProgram;
 import de.fhg.iais.roberta.javaServer.resources.RestUser;
-import de.fhg.iais.roberta.javaServer.resources.TokenReceiver;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.Clock;
@@ -66,7 +66,7 @@ public class BasicPerformanceUserInteractionTest {
     private RestProgram restProgram;
     private RestBlocks restBlocks;
     private DownloadJar downloadJar;
-    private TokenReceiver tokenReceiver;
+    private BrickCommand brickCommand;
 
     private String theProgramOfAllUserLol;
     private ExecutorService executorService;
@@ -88,7 +88,7 @@ public class BasicPerformanceUserInteractionTest {
         this.restProgram = new RestProgram(this.sessionFactoryWrapper, this.brickCommunicator, this.compilerWorkflow);
         this.restBlocks = new RestBlocks(new Templates(), this.brickCommunicator);
         this.downloadJar = new DownloadJar(this.brickCommunicator, this.crosscompilerBasedir);
-        this.tokenReceiver = new TokenReceiver(this.brickCommunicator);
+        this.brickCommand = new BrickCommand(this.brickCommunicator);
         this.theProgramOfAllUserLol =
             Resources.toString(BasicPerformanceUserInteractionTest.class.getResource("/ast/actions/action_BrickLight.xml"), Charsets.UTF_8);
         this.executorService = Executors.newFixedThreadPool(MAX_PARALLEL_USERS + 10);
@@ -195,7 +195,7 @@ public class BasicPerformanceUserInteractionTest {
 
         // user "pid" registers the robot with token "garzi-?" ; runs "p2"
         thinkTimeInMillisec += think(random, 6, 10);
-        registerToken(this.tokenReceiver, this.restBlocks, s, this.sessionFactoryWrapper.getSession(), "garzi-" + userNumber);
+        registerToken(this.brickCommand, this.restBlocks, s, this.sessionFactoryWrapper.getSession(), "garzi-" + userNumber);
         downloadJar(this.downloadJar, this.restProgram, s, "garzi-" + userNumber, "p2");
         LOG.info("" + userNumber + ";ok;" + clock.elapsedMsec() + ";" + thinkTimeInMillisec + ";");
     }

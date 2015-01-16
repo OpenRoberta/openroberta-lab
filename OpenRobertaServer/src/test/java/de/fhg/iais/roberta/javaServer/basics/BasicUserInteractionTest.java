@@ -25,12 +25,12 @@ import com.google.common.io.Resources;
 import de.fhg.iais.roberta.brick.BrickCommunicator;
 import de.fhg.iais.roberta.brick.CompilerWorkflow;
 import de.fhg.iais.roberta.brick.Templates;
+import de.fhg.iais.roberta.javaServer.resources.BrickCommand;
 import de.fhg.iais.roberta.javaServer.resources.DownloadJar;
 import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
 import de.fhg.iais.roberta.javaServer.resources.RestBlocks;
 import de.fhg.iais.roberta.javaServer.resources.RestProgram;
 import de.fhg.iais.roberta.javaServer.resources.RestUser;
-import de.fhg.iais.roberta.javaServer.resources.TokenReceiver;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.IntegrationTest;
@@ -53,12 +53,12 @@ public class BasicUserInteractionTest {
     private RestProgram restProgram;
     private RestBlocks restBlocks;
     private DownloadJar downloadJar;
-    private TokenReceiver tokenReceiver;
 
     private Response response;
     private HttpSessionState s1;
     private HttpSessionState s2;
     private String blocklyProgram;
+    private BrickCommand brickCommand;
 
     @Before
     public void setup() throws Exception {
@@ -78,7 +78,7 @@ public class BasicUserInteractionTest {
         this.restProgram = new RestProgram(this.sessionFactoryWrapper, this.brickCommunicator, this.compilerWorkflow);
         this.restBlocks = new RestBlocks(new Templates(), this.brickCommunicator);
         this.downloadJar = new DownloadJar(this.brickCommunicator, this.crosscompilerBasedir);
-        this.tokenReceiver = new TokenReceiver(this.brickCommunicator);
+        this.brickCommand = new BrickCommand(this.brickCommunicator);
         this.s1 = HttpSessionState.init();
         this.s2 = HttpSessionState.init();
         this.blocklyProgram = Resources.toString(BasicUserInteractionTest.class.getResource("/ast/actions/action_BrickLight.xml"), Charsets.UTF_8);
@@ -188,7 +188,7 @@ public class BasicUserInteractionTest {
         assertJsonEquals("['p1','p2','p3','p4']", programNames, false);
 
         // user "pid" registers the robot with token "garzi" (and optionally many more ...); runs "p1"
-        registerToken(this.tokenReceiver, this.restBlocks, this.s1, this.sessionFactoryWrapper.getSession(), "garzi");
+        registerToken(this.brickCommand, this.restBlocks, this.s1, this.sessionFactoryWrapper.getSession(), "garzi");
         downloadJar(this.downloadJar, this.restProgram, this.s1, "garzi", "p1");
     }
 
