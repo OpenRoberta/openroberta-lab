@@ -269,13 +269,13 @@ function saveToServer() {
         setProgram($name.val());
         if (userState.name) { // Is someone logged in?
             if (!$name.val() || $name.val() === "meinProgramm") {
-                $('#head-navigation #submenu-program #save').addClass('login');
-                $('#head-navigation #submenu-program #save').addClass('ui-state-disabled');
+                $('#menuSaveProg').parent().addClass('login');
+                $('#menuSaveProg').parent().addClass('disabled');
                 displayMessage("MESSAGE.NAME_ERROR");
                 return;
             }
-            $('#head-navigation #submenu-program #save').removeClass('login');
-            $('#head-navigation #submenu-program #save').removeClass('ui-state-disabled');
+            $('#menuSaveProg').parent().removeClass('login');
+            $('#menuSaveProg').parent().removeClass('disabled');
         }
     }
     if (userState.program) {
@@ -303,13 +303,13 @@ function saveConfigurationToServer() {
         setConfiguration($name.val());
         if (userState.name) { // Is someone logged in?
             if (!$name.val() || $name.val() === "Standardkonfiguration") {
-                $('#head-navigation #submenu-configuration #save').addClass('login');
-                $('#head-navigation #submenu-configuration #save').addClass('ui-state-disabled');
+                $('#menuSaveConfig').parent().addClass('login');
+                $('#menuSaveConfig').parent().addClass('disabled');
                 displayMessage("MESSAGE.NAME_ERROR");
                 return;
             }
-            $('#head-navigation #submenu-configuration #save').removeClass('login');
-            $('#head-navigation #submenu-configuration #save').removeClass('ui-state-disabled');
+            $('#menuSaveConfig').parent().removeClass('login');
+            $('#menuSaveConfig').parent().removeClass('disabled');
         }
     }
     if (userState.configuration) {
@@ -390,8 +390,8 @@ function loadFromListing() {
             $('#programNameSave').val(programName);
             userState.programSaved = true;
             showProgram(result, true, programName);
-            $('#head-navigation #submenu-program #save').removeClass('login');
-            $('#head-navigation #submenu-program #save').removeClass('ui-state-disabled');
+            $('#menuSaveProg').parent().removeClass('login');
+            $('#menuSaveProg').parent().removeClass('disabled');
         });
     }
 }
@@ -412,8 +412,8 @@ function loadConfigurationFromListing() {
             $('#configurationNameSave').val(configurationName);
             userState.configurationSaved = true;
             showConfiguration(result, true, configurationName);
-            $('#head-navigation #submenu-configuration #save').removeClass('login');
-            $('#head-navigation #submenu-configuration #save').removeClass('ui-state-disabled');
+            $('#menuSaveConfig').parent().removeClass('login');
+            $('#menuSaveConfig').parent().removeClass('disabled');
             setRobotState(result);
         });
     }
@@ -466,7 +466,7 @@ function deleteConfigurationFromListing() {
 function showToolbox(result) {
     response(result);
     if (result.rc === 'ok') {
-        $('#head-navigation #displayToolbox').text(userState.toolbox);
+        $('#displayToolbox').text(userState.toolbox);
         Blockly.updateToolbox(result.data);
         setRobotState(result);
     }
@@ -534,7 +534,7 @@ function selectionCFn(event) {
 
 function beforeActivateTab(event, ui) {
     $('#tabs').tabs("refresh");
-    if (ui.newPanel.selector === '#listing') {
+    if (ui.newPanel.selector === '#progListing') {
         COMM.json("/program", {
             "cmd" : "loadPN",
         }, showPrograms);
@@ -593,10 +593,10 @@ function initProgramNameTable() {
             "sLengthMenu" : '<span lkey="Blockly.Msg.DATATABLE_SHOW">Zeige</span> <select>' + '<option value="10">10</option><option value="20">20</option><option value="25">25</option>'
                     + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>' + '</select> <span lkey="Blockly.Msg.DATATABLE_PROGRAMS">Programme</span>',
             "oPaginate": {
-                "sFirst": "<span lkey='Blockly.Msg.DATATABLE_FIRST'>Erste</span>",
-                "sPrevious": "<span lkey='Blockly.Msg.DATATABLE_PREVIOUS'>Vorige</span>",
-                "sNext": "<span lkey='Blockly.Msg.DATATABLE_NEXT'>Nächste</span>",
-                "sLast": "<span lkey='Blockly.Msg.DATATABLE_LAST'>Letzte</span>"
+                "sFirst": "<span lkey='Blockly.Msg.DATATABLE_FIRST'>&lt;&lt; Erste</span>",
+                "sPrevious": "<span lkey='Blockly.Msg.DATATABLE_PREVIOUS'>&lt; Vorige</span>",
+                "sNext": "<span lkey='Blockly.Msg.DATATABLE_NEXT'>Nächste &gt;</span>",
+                "sLast": "<span lkey='Blockly.Msg.DATATABLE_LAST'>Letzte &gt;&gt;</span>"
             },
             "sEmptyTable": "<span lkey='Blockly.Msg.DATATABLE_EMPTY_TABLE'>Die Tabelle ist leer</span>",
             "sInfo": "<span lkey='Blockly.Msg.DATATABLE_SHOWING'>Zeige</span> _START_ <span lkey='Blockly.Msg.DATATABLE_TO'>bis</span> _END_ <span lkey='Blockly.Msg.DATATABLE_OF'>von</span> _TOTAL_ <span lkey='Blockly.Msg.DATATABLE_ENTRIES'>Einträgen</span>",
@@ -661,10 +661,10 @@ function initConfigurationNameTable() {
             "sLengthMenu" : '<span lkey="Blockly.Msg.DATATABLE_SHOW">Zeige</span> <select>' + '<option value="10">10</option><option value="20">20</option><option value="25">25</option>'
                     + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>' + '</select> <span lkey="Blockly.Msg.DATATABLE_CONFIGURATIONS">Konfigurationen</span>',
             "oPaginate": {
-                "sFirst": "<span lkey='Blockly.Msg.DATATABLE_FIRST'>Erste</span>",
-                "sPrevious": "<span lkey='Blockly.Msg.DATATABLE_PREVIOUS'>Vorige</span>",
-                "sNext": "<span lkey='Blockly.Msg.DATATABLE_NEXT'>Nächste</span>",
-                "sLast": "<span lkey='Blockly.Msg.DATATABLE_LAST'>Letzte</span>"
+                "sFirst": "<span lkey='Blockly.Msg.DATATABLE_FIRST'>&lt;&lt; Erste</span>",
+                "sPrevious": "<span lkey='Blockly.Msg.DATATABLE_PREVIOUS'>&lt; Vorige</span>",
+                "sNext": "<span lkey='Blockly.Msg.DATATABLE_NEXT'>Nächste &gt;</span>",
+                "sLast": "<span lkey='Blockly.Msg.DATATABLE_LAST'>Letzte &gt;&gt;</span>"
             },
             "sEmptyTable": "<span lkey='Blockly.Msg.DATATABLE_EMPTY_TABLE'>Die Tabelle ist leer</span>",
             "sInfo": "<span lkey='Blockly.Msg.DATATABLE_SHOWING'>Zeige</span> _START_ <span lkey='Blockly.Msg.DATATABLE_TO'>bis</span> _END_ <span lkey='Blockly.Msg.DATATABLE_OF'>von</span> _TOTAL_ <span lkey='Blockly.Msg.DATATABLE_ENTRIES'>Einträgen</span>",
@@ -732,6 +732,7 @@ function checkConfiguration() {
 function switchToBlockly() {
     $('#tabs').css('display', 'inline');
     $('#bricklyFrame').css('display', 'none');
+    $('#tabBlockly').click();
 }
 
 function switchToBrickly() {
@@ -753,17 +754,8 @@ function displayState() {
         $('#iconDisplayLogin').addClass('error');
     }
 
-    if (userState.program) {
-        $('#tabProgramName').text(userState.program);
-    } else {
-        $('#tabProgramName').text('');
-    }
-
-    if (userState.configuration) {
-        $('#tabConfigurationName').text(userState.configuration);
-    } else {
-        $('#tabConfigurationName').text('');
-    }
+    $('#tabProgramName').text(userState.program);
+    $('#tabConfigurationName').text(userState.configuration);
 
     if (userState.toolbox) {
         $('#displayToolbox').text(userState.toolbox);
@@ -795,11 +787,11 @@ function displayState() {
 }
 
 function setHeadNavigationMenuState(state) {
-    $('#head-navigation > li > ul > li').removeClass('ui-state-disabled');
+    $('.nav-pills > li > ul > li').removeClass('disabled');
     if (state === 'login') {
-        $('#head-navigation > li > ul > .login').addClass('ui-state-disabled');
+        $('.nav-pills > li > ul > .login').addClass('disabled');
     } else if (state === 'logout') {
-        $('#head-navigation > li > ul > .logout').addClass('ui-state-disabled');
+        $('.nav-pills > li > ul > .logout').addClass('disabled');
     }
 }
 
@@ -831,208 +823,128 @@ function escape(str) {
  */
 function initHeadNavigation() {
 
-    $('#head-navigation').menu({
-        position : {
-            at : "left top+49",
-            collision : "fit"
-        },
-    });
-    
-    $('#head-navigation > li > ul').find('li').hide();
-    
-    // Open menus on click 
-    $('#head-navigation-overview').onWrap('click', function() {
-        $('#head-navigation > li > ul').find('li').hide();
-        $('#submenu-overview').find('li').not('.hidden').show();
-    });
-    $('#head-navigation-program').onWrap('click', function() {
-        $('#head-navigation > li > ul').find('li').hide();
-        $('#submenu-program').find('li').not('.hidden').show();
-    });
-    $('#head-navigation-configuration').onWrap('click', function() {
-        $('#head-navigation > li > ul').find('li').hide();
-        $('#submenu-configuration').find('li').not('.hidden').show();
-    });
-    $('#head-navigation-robot').onWrap('click', function() {
-        $('#head-navigation > li > ul').find('li').hide();
-        $('#submenu-robot').find('li').not('.hidden').show();
-    });
-    $('#head-navigation-help').onWrap('click', function() {
-        $('#head-navigation > li > ul').find('li').hide();
-        $('#submenu-help').find('li').not('.hidden').show();
-    });
-    $('#head-navigation-login').onWrap('click', function() {
-        $('#head-navigation > li > ul').find('li').hide();
-        $('#submenu-login').find('li').not('.hidden').show();
-    });
-    $('#head-navigation-nepo').onWrap('click', function() {
-        $('#head-navigation > li > ul').find('li').hide();
-        $('#submenu-nepo').find('li').not('.hidden').show();
-    });
-    $('#head-navigation-developertools').onWrap('click', function() {
-        $('#head-navigation > li > ul').find('li').hide();
-        $('#submenu-developertools').find('li').not('.hidden').show();
-    });
-
-    // Submenu Overview
-    $('#head-navigation').onWrap('click', '#submenu-overview > li:not(.ui-state-disabled) > span', function(event) {
+    $('.navbar-fixed-top').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         var domId = event.target.id;
-        if (domId === 'clickTabProgram') {
+        
+        if (domId === 'menuTabProgram') {   //  Submenu 'Overview'
             $('#tabProgram').click();
-        } else if (domId === 'clickTabConfiguration') {
+        } else if (domId === 'menuTabConfiguration') {   //  Submenu 'Overview'
             $('#tabConfiguration').click();
-        }
-        return false;
-    }, 'sub menu of menu "overview"');
-
-    // Submenu Program
-    $('#head-navigation').onWrap('click', '#submenu-program > li:not(.ui-state-disabled) > span', function(event) {
-        $(".ui-dialog-content").dialog("close"); // close all opened popups
-        var domId = event.target.id;
-        if (domId === 'runProg') {
+        } else if (domId === 'menuRunProg') {   //  Submenu 'Program'
             startProgram();
-        } else if (domId === 'checkProg') {
+        } else if (domId === 'menuCheckProg') {   //  Submenu 'Program'
             checkProgram();
-        } else if (domId === 'newProg') {
+        } else if (domId === 'menuNewProg') {   //  Submenu 'Program'
             initProgramEnvironment();
             setProgram("meinProgramm");
-        } else if (domId === 'listProg') {
+        } else if (domId === 'menuListProg') {   //  Submenu 'Program'
             switchToBlockly();
             $('#tabListing').click();
-        } else if (domId === 'saveProg') {
+        } else if (domId === 'menuSaveProg') {   //  Submenu 'Program'
             saveToServer(response);
-        } else if (domId === 'saveAsProg') {
+        } else if (domId === 'menuSaveAsProg') {   //  Submenu 'Program'
             $("#save-program").dialog("open");
-        } else if (domId === 'attachProg') {
+        } else if (domId === 'menuAttachProg') {   //  Submenu 'Program'
             $("#attach-program").dialog("open");
-        } else if (domId === 'propertiesProg') {
-        }
-        return false;
-    }, 'sub menu of menu "program"');
-
-    // Submenu Configuration
-    $('#head-navigation').onWrap('click', '#submenu-configuration > li:not(.ui-state-disabled) > span', function(event) {
-        $(".ui-dialog-content").dialog("close"); // close all opened popups
-        var domId = event.target.id;
-        if (domId === 'checkConfig') {
+        } else if (domId === 'menuPropertiesProg') {   //  Submenu 'Program'
+        } else if (domId === 'menuCheckConfig') {   //  Submenu 'Configuration'
             checkConfiguration();
-        } else if (domId === 'newConfig') {
+        } else if (domId === 'menuNewConfig') {   //  Submenu 'Configuration'
             setConfiguration("Standardkonfiguration");
-        } else if (domId === 'listConfig') {
+        } else if (domId === 'menuListConfig') {   //  Submenu 'Configuration'
             switchToBlockly();
             $('#tabConfigurationListing').click();
-        } else if (domId === 'saveConfig') {
+        } else if (domId === 'menuSaveConfig') {   //  Submenu 'Configuration'
             saveConfigurationToServer();
-        } else if (domId === 'saveAsConfig') {
+        } else if (domId === 'menuSaveAsConfig') {   //  Submenu 'Configuration'
             $("#save-configuration").dialog("open");
-        } else if (domId === 'propertiesConfig') {
-        }
-        return false;
-    }, 'sub menu of menu "configuration"');
-
-    // Submenu Robot
-    $('#head-navigation').onWrap('click', '#submenu-robot > li:not(.ui-state-disabled) > span', function(event) {
-        $(".ui-dialog-content").dialog("close"); // close all opened popups
-        var domId = event.target.id;
-        if (domId === 'connect') {
+        } else if (domId === 'menuPropertiesConfig') {   //  Submenu 'Configuration'
+        } else if (domId === 'menuConnect') {  // Submenu 'Robot'
             $("#set-token").dialog("open");
-        } else if (domId === 'firmware') {
+        } else if (domId === 'menuFirmware') {  // Submenu 'Robot'
             displayMessage("MESSAGE.NOT_AVAILABLE");
-        } else if (domId === 'robotInfo') {
+        } else if (domId === 'menuRobotInfo') {  // Submenu 'Robot'
             displayMessage("MESSAGE.NOT_AVAILABLE");
-        }
-        return false;
-    }, 'sub menu of menu "robot"');
-
-    // Submenu Help
-    $('#head-navigation').onWrap('click', '#submenu-help > li:not(.ui-state-disabled) > span', function(event) {
-        $(".ui-dialog-content").dialog("close"); // close all opened popups
-        var domId = event.target.id;
-        if (domId === 'firstSteps') {
+        } else if (domId === 'menuFirstSteps') {   // Submenu 'Help'
             if (userState.language === 'De') {
                 window.open("http://www.open-roberta.org/erste-schritte.html");
             } else {
                 window.open("http://www.open-roberta.org/index.php?id=59&L=1");
             }            
-        } else if (domId === 'startProgramming') {
+        } else if (domId === 'menuStartProgramming') {   // Submenu 'Help'
             if (userState.language === 'De') {
                 window.open("http://dev.open-roberta.org/willkommen.html");
             } else {
                 window.open("http://dev.open-roberta.org/willkommen.html?&L=1");
             }            
-        } else if (domId === 'faq') {
+        } else if (domId === 'menuFaq') {   // Submenu 'Help'
             displayMessage("MESSAGE.NOT_AVAILABLE");
-        } else if (domId === 'stateInfo') {
+        } else if (domId === 'menuStateInfo') {   // Submenu 'Help'
             $("#loggedIn").text(userState.name);
             $("#programName").text(userState.program);
             $("#configurationName").text(userState.configuration);
             $("#show-state-info").dialog("open");
-        } else if (domId === 'about') {
+        } else if (domId === 'menuAbout') {   // Submenu 'Help'
             $("#version").text(userState.version);
             $("#show-about").dialog("open");
-        } 
-        return false;
-    }, 'sub menu of menu "help"');
-
-    // Submenu Login
-    $('#head-navigation').onWrap('click', '#submenu-login > li:not(.ui-state-disabled) > span', function(event) {
-        $(".ui-dialog-content").dialog("close"); // close all opened popups
-        var domId = event.target.id;
-        if (domId === 'login') {
+        } else if (domId === 'menuLogin') {   // Submenu 'Login'
             $("#login-user").dialog("open");
-        } else if (domId === 'logout') {
+        } else if (domId === 'menuLogout') {   // Submenu 'Login'
             logout();
-        } else if (domId === 'new') {
+        } else if (domId === 'menuNewUser') {   // Submenu 'Login'
             $("#register-user").dialog("open");
-        } else if (domId === 'change') {
+        } else if (domId === 'menuChangeUser') {   // Submenu 'Login'
             // open the same popup as in case 'new', but with fields prefilled
-        } else if (domId === 'delete') {
+        } else if (domId === 'menuDeleteUser') {   // Submenu 'Login'
             $("#delete-user").dialog("open");
+//        } else if (domId === 'toolboxBeginner') {   // Submenu 'Nepo'
+//            loadToolbox('beginner');
+//            $('#toolboxBeginner').addClass('disabled');
+//            $('#toolboxExpert').removeClass('disabled');
+//        } else if (domId === 'toolboxExpert') {   // Submenu 'Nepo'
+//            loadToolbox('expert');
+//            $('#toolboxExpert').addClass('disabled');
+//            $('#toolboxBeginner').removeClass('disabled');
+//        } else if (domId === 'logging') {   // Submenu 'Developer-Tools'
+//            switchToBlockly();
+//            $('#tabLogging').click();
         }
         return false;
-    }, 'sub menu of menu "login"');
-
-
-    // Submenu Nepo
-    $('#head-navigation').onWrap('click', '#submenu-nepo > li:not(.ui-state-disabled) > span', function(event) {
-        $(".ui-dialog-content").dialog("close"); // close all opened popups
-        var domId = event.target.id;
-        if (domId === 'toolboxBeginner') {
-            loadToolbox('beginner');
-            $('#toolboxBeginner').addClass('ui-state-disabled');
-            $('#toolboxExpert').removeClass('ui-state-disabled');
-        } else if (domId === 'toolboxExpert') {
-            loadToolbox('expert');
-            $('#toolboxExpert').addClass('ui-state-disabled');
-            $('#toolboxBeginner').removeClass('ui-state-disabled');
-        }
-        return false;
-    }, 'sub menu of menu "nepo"');
-
-    // Submenu Developertools
-    $('#head-navigation').onWrap('click', '#submenu-developertools > li:not(.ui-state-disabled) > span', function(event) {
-        $(".ui-dialog-content").dialog("close"); // close all opened popups
-        var domId = event.target.id;
-        if (domId === 'logging') {
-            switchToBlockly();
-            $('#tabLogging').click();
-        }
-        return false;
-    }, 'sub menu of menu "developertools"');
-
+    }, 'head navigation menu item clicked');
+    
     // Close submenu on mouseleave
-    $('#head-navigation').onWrap('mouseleave', function(event) {
-        $('#head-navigation > li > ul').find('li').hide();
+    $('.navbar-fixed-top').onWrap('mouseleave', function(event) {
+        $('.navbar-fixed-top .dropdown').removeClass('open');
     });
 
-    $('#head-navigation #logo').onWrap('click', function() {
+    $('#logo').onWrap('click', function() {
         window.open('http://open-roberta.org');
     }, 'logo was clicked');
 
-    $('#head-navigation #beta').onWrap('click', function() {
+    $('#beta').onWrap('click', function() {
         window.open('http://open-roberta.org');
     }, 'beta logo was clicked');
+
+    $('#tabProgram').onWrap('click', function() {
+        $('#tabConfiguration').removeClass('tabClicked');
+        $('#tabProgram').addClass('tabClicked');
+        $('#head-navigation-configuration-edit').css('display','none');
+        $('#head-navigation-program-edit').css('display','inline');
+        $('#menuTabProgram').parent().addClass('disabled');
+        $('#menuTabConfiguration').parent().removeClass('disabled');
+        switchToBlockly();
+    });
+    
+    $('#tabConfiguration').onWrap('click', function() {
+        $('#tabProgram').removeClass('tabClicked');
+        $('#tabConfiguration').addClass('tabClicked');
+        $('#head-navigation-program-edit').css('display','none');
+        $('#head-navigation-configuration-edit').css('display','inline');
+        $('#menuTabConfiguration').parent().addClass('disabled');
+        $('#menuTabProgram').parent().removeClass('disabled');
+        switchToBrickly();
+    });
 
     setHeadNavigationMenuState('logout');
 }
@@ -1157,26 +1069,6 @@ function initTabs() {
             switchLanguage(userState.language, true);
         }
     });
-
-    $('#tabProgram').onWrap('click', function() {
-        $('#head-navigation-tabs *').removeClass('tabClickedBorder');
-        $('#head-navigation-tabs *').removeClass('tabClicked');
-        $('#tabProgram span').addClass('tabClicked');
-        $('#tabProgram').addClass('tabClickedBorder');
-        $('#head-navigation-configuration-edit').css('display','none');
-        $('#head-navigation-program-edit').css('display','inline');
-        switchToBlockly();
-    });
-    
-    $('#tabConfiguration').onWrap('click', function() {
-        $('#head-navigation-tabs *').removeClass('tabClickedBorder');
-        $('#head-navigation-tabs *').removeClass('tabClicked');
-        $('#tabConfiguration span').addClass('tabClicked');
-        $('#tabConfiguration').addClass('tabClickedBorder');
-        $('#head-navigation-program-edit').css('display','none');
-        $('#head-navigation-configuration-edit').css('display','inline');
-        switchToBrickly();
-    });
 }
 
 /**
@@ -1243,8 +1135,6 @@ function translate(jsdata) {
             $('#set-token #setToken').attr('value', value);
         } else if (key === 'Blockly.Msg.POPUP_ATTENTION') {
             $('#show-message').dialog('option', 'title', value);
-        } else if (key === 'Blockly.Msg.BUTTON_BACK') {
-            $('.backButton').attr('value', value);
         } else if (key === 'Blockly.Msg.BUTTON_LOAD') {
             $('.buttonLoad').attr('value', value);
         } else if (key === 'Blockly.Msg.BUTTON_DO_DELETE') {
@@ -1380,8 +1270,8 @@ function init() {
     initializeLanguages();
     switchLanguage('De', true);
     pingServer();
-    $('#tabProgram span').addClass('tabClicked');
-    $('#tabProgram').addClass('tabClickedBorder');
+    $('#menuTabProgram').parent().addClass('disabled');    
+    $('#tabProgram').addClass('tabClicked');    
     $('#head-navigation-configuration-edit').css('display','none');
 };
 

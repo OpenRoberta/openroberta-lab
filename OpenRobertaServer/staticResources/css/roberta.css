@@ -6,330 +6,368 @@
 }
 
 html, body {
-	margin: 0px !important;
-	padding: 0px !important;
-	height: 100%;
-	width: 100%;
-	font-family: 'Roboto', sans-serif;
-}
-
-h2 {
-	font-size: 25px;
-	font-weight: 600;
-	margin-top: 0px;
-	text-transform: uppercase;
-}
-
-.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
-	border-bottom-right-radius: 2px;
-}
-
-.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
-	border-bottom-left-radius: 2px;
-}
-
-.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
-	border-top-right-radius: 2px;
-}
-
-.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
-	border-top-left-radius: 2px;
-}
-
-.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover,
-.ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {
-	border: 0 none;
-	background: none;
-}
-
-#head-section {
-	position: absolute;
-	width: 100%;
-	height: 40px;
-	background-color: white;
-	z-index: 100;
-}
-
-ul#head-navigation {
-	float: left;
-	list-style-type: none;
-	padding: 0px;
-	margin: 5px 0px 0px 20px;
-	cursor: default;
-}
-
-ul#head-navigation>li {
-	float: left;
-	width: 70px;
-}
-
-ul#head-navigation>li:hover {
-	background-color: #B7D032;
-}
-
-ul#head-navigation a {
-	text-decoration: none;
-	text-align: center;
-	display: block;
-	color: #333333;
-	padding-bottom: 8px;
-	padding-top: 6px;
-}
-
-ul#head-navigation .head-navigation-submenu {
-	position: absolute;
-	list-style-type: none;
-	cursor: pointer;
-	box-shadow: 2px 4px 4px #999;
-	height: auto;
-	width: auto;
-}
-
-ul#head-navigation .head-navigation-submenu>li {
-	background-color: white;
-	padding: 5px 10px;
-	font-size: 70%;
-}
-
-ul#head-navigation .head-navigation-submenu>li:hover {
-	background-color: #e6e6e6;
+    margin: 0px !important;
+    padding: 0px !important;
+    height: 100%;
+    width: 100%;
+    font-family: 'Roboto', sans-serif;
 }
 
 .head-navi-icons {
-	height: 35px;
-	width: 35px;
-	background-repeat: no-repeat;
-	display: block;
-	margin: 0 auto;
-	background-size: 100%;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    display: block;
+    height: 35px;
+    margin: 0 auto;
+    width: 35px;
 }
 
-.head-navi-icons.overview {
-    background-image: url(img/head-navi-icons/th-menu.svg);
+#head-navi-icon-overview {
+    background-image: url(/css/img/head-navi-icons/th-menu.svg);
 }
 
-.head-navi-icons.program, .head-navi-icons.configuration {
-    background-image: url(img/head-navi-icons/document-text.svg);
+#head-navi-icon-program, #head-navi-icon-configuration {
+    background-image: url(/css/img/head-navi-icons/document-text.svg);
 }
 
-.head-navi-icons.nepo {
-	background-image: url(img/head-navi-icons/puzzle-outline.svg);
+#head-navi-icon-robot {
+    background-image: url(/css/img/head-navi-icons/arrow-loop-outline.svg);
 }
 
-.head-navi-icons.robot {
-	background-image: url(img/head-navi-icons/arrow-loop-outline.svg);
+#head-navi-icon-help {
+    background-image: url(/css/img/head-navi-icons/lightbulb.svg);
 }
 
-.head-navi-icons.developer {
-	background-image: url(img/head-navi-icons/spanner-outline.svg);
+#head-navi-icon-user {
+    background-image: url(/css/img/head-navi-icons/user-outline.svg);
 }
 
-.head-navi-icons.help {
-	background-image: url(img/head-navi-icons/lightbulb.svg);
+#states {
+    float: right;
+    padding-top: 2px;
+    padding-right: 20px;
+    font-size: small;
+    min-width: 140px;
 }
 
-.head-navi-icons.user {
-	background-image: url(img/head-navi-icons/user-outline.svg);
+#languages {
+    margin-top: 20px;
+    float: right;
+    width: 95px;
 }
 
-#head-navigation .state {
-	float: right;
-	padding-top: 2px;
-	padding-right: 20px;
-	font-size: small;
+.smallFlag {
+    width: 15px;
+    height: 10px;
+    margin-top: 10px;
 }
 
-#state1 {
-	min-width: 140px;
+.bigFlag {
+    width: 21px;
+    height: 14px;
+    margin-top: 10px;
 }
 
-#state2 {
-	width: 95px;
+#setLangDe {
+    background-image: url(/css/svg/Flag_of_Germany.svg);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    display: inline-block;
 }
 
-#head-navigation #logo {
-	width: 222px;
-	height: 40px;
-	background-image: url(img/logo.png);
-	background-repeat: no-repeat;
-	float: right;
+#setLangEn {
+    background-image: url(/css/svg/Flag_of_the_United_Kingdom.svg);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    display: inline-block;
 }
 
-#head-navigation #beta {
-	position: absolute;
-	top: 27px;
-	right: 48px;
-	width: 87px;
-	height: 53px;
-	background-image: url(img/beta.png);
-	background-repeat: no-repeat;
+#logo {
+    width: 222px;
+    height: 40px;
+    background-image: url(/css/img/logo.png);
+    background-repeat: no-repeat;
+    float: right;
 }
 
-.ui-state-disabled, .ui-widget-content .ui-state-disabled,
-	.ui-widget-header .ui-state-disabled {
-	opacity: 1.0;
-	color: lightgrey;
+#beta {
+    position: absolute;
+    top: 27px;
+    right: 48px;
+    width: 87px;
+    height: 53px;
+    background-image: url(/css/img/beta.png);
+    background-repeat: no-repeat;
+}
+
+.tabClicked {
+    color: #afca04;
+    border-bottom: 8px solid #afca04;
+}
+
+.menuTab {
+    text-transform: uppercase;
+}
+
+.hidden {
+    display: none;
 }
 
 #main-section {
-	height: auto;
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	margin-top: 83px;
-	z-index: 99;
-	background: #ffffff; /* Old browsers */
-	background: -moz-radial-gradient(center, ellipse cover, #ffffff 0%, #e6e6e6 100%);
-	/* FF3.6+ */
-	background: -webkit-gradient(radial, center center, 0px, center center, 100%,
-		color-stop(0%, #ffffff), color-stop(100%, #e6e6e6));
-	/* Chrome,Safari4+ */
-	background: -webkit-radial-gradient(center, ellipse cover, #ffffff 0%, #e6e6e6 100%);
-	/* Chrome10+,Safari5.1+ */
-	background: -o-radial-gradient(center, ellipse cover, #ffffff 0%, #e6e6e6 100%);
-	/* Opera 12+ */
-	background: -ms-radial-gradient(center, ellipse cover, #ffffff 0%, #e6e6e6 100%);
-	/* IE10+ */
-	background: radial-gradient(ellipse at center, #ffffff 0%, #e6e6e6 100%);
-	/* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff',
-		endColorstr='#e6e6e6', GradientType=1);
-	/* IE6-9 fallback on horizontal gradient */
-	/* CANT HANDLE THE OVERFLOW, SO ITS SET TO HIDDEN TEMPORARY */
-	overflow: hidden;
+    height: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding-top: 90px;
+    z-index: 99;
+    height: 100%;
+    background: #ffffff; /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover, #ffffff 0%, #e6e6e6 100%);
+    /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%,
+        color-stop(0%, #ffffff), color-stop(100%, #e6e6e6));
+    /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover, #ffffff 0%, #e6e6e6 100%);
+    /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover, #ffffff 0%, #e6e6e6 100%);
+    /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover, #ffffff 0%, #e6e6e6 100%);
+    /* IE10+ */
+    background: radial-gradient(ellipse at center, #ffffff 0%, #e6e6e6 100%);
+    /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff',
+        endColorstr='#e6e6e6', GradientType=1);
+    /* IE6-9 fallback on horizontal gradient */
+    /* CANT HANDLE THE OVERFLOW, SO ITS SET TO HIDDEN TEMPORARY */
+    overflow: hidden;
 }
 
-.submit#run {
-	display: block;
-	position: fixed;
-	bottom: 30px;
-	right: 95px;
-	background-image: url(img/button_start.png);
-	width: 87px;
-	height: 28px;
-	border-style: none;
-	background-color: transparent;
-	text-indent: 480px;
-	cursor: pointer;
+#tabs, #blockly, #progListing, #confListing, #logging {
+    background: transparent;
+    border: 0 none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100%;
+    height: 100%;
+    display: block;
+    float: left;
 }
 
-.submit#run:hover {
-	background-image: url(img/button_start_hover.png);
+#progListing, #confListing, #logging {
+    display: none;
 }
 
-/* ### Welcome-Screen ############################################################ */
-#welcome-screen {
-	position: relative;
-	height: 100%;
-	widows: 100%;
+#bricklyFrame {
+    width: 100%;
+    height: 100%;
 }
 
-#bricks-shell {
-	width: 600px;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	height: 600px;
-	margin: -300px;
+#blocklyDiv {
+    background-color: none;
+    background-image: url(/css/img/grid-pattern-background.png);
+    background-repeat: repeat;
+    height: 100%;
+    min-height: 100%;
 }
 
-.bricks {
-	position: absolute;
-	display: block;
-	height: 100%;
-	width: 100%;
-	font-family: 'Roboto', sans-serif;
-	font-size: 18px;
-	font-weight: bold;
-	color: white;
-	text-decoration: none;
-	text-transform: uppercase;
+#toastContainer {
+    float: left;
+    width: 500px;
+    height: 40px;
+    text-align: right;
 }
 
-.bricks span {
-	position: absolute;
+#toast {
+    padding-top: 17px;
+    font-weight: bold;
+    font-size: large;
 }
 
-.bricks#welcome-brick1 span {
-	bottom: 5px;
-	right: 40px;
+.ok {
+    color: #afca04;
 }
 
-.bricks#welcome-brick2 span {
-	bottom: 35px;
-	left: 10px;
+.error {
+    color: #e2001a;
 }
 
-.bricks#welcome-brick3 span {
-	top: 35px;
-	right: 10px;
+.button {
+    margin-right: 5px;
+    width: 100pt;
+    background-color: #afca04;
+    color: white;
+    font-size: 16px;
 }
 
-.bricks#welcome-brick4 span {
-	top: 5px;
-	left: 40px;
+.button:hover {
+    background-color: #b7d032;
 }
 
-#welcome-brick1 {
-	width: 321px;
-	height: 293px;
-	background-image: url(img/welcome-screen/brick1.png);
-	top: 0;
-	left: 0;
+
+
+/***** BEGIN Overwrite Bootstrap-CSS *****/
+
+.nav#head-navigation-tabs {
+    margin-top: -10px;
 }
 
-#welcome-brick1:hover {
-	background-image: url(img/welcome-screen/brick1_active.png);
+.nav#head-navigation-tabs > li > a {
+    padding: 0px 15px 2px 15px;
 }
 
-#welcome-brick2 {
-	width: 293px;
-	height: 321px;
-	background-image: url(img/welcome-screen/brick2.png);
-	right: 0;
-	top: 0;
+.navbar-default {
+    background-color: white;
 }
 
-#welcome-brick2:hover {
-	background-image: url(img/welcome-screen/brick2_active.png);
+.nav-pills > li > a:hover {
+    background-color: #afca04;
 }
 
-#welcome-brick3 {
-	width: 293px;
-	height: 321px;
-	background-image: url(img/welcome-screen/brick3.png);
-	bottom: 0;
-	left: 0;
+.nav-pills > li > a:focus {
+    background-color: white;
+    outline: none;
 }
 
-#welcome-brick3:hover {
-	background-image: url(img/welcome-screen/brick3_active.png);
+.nav-pills > li > a {
+    color: #333333;
 }
 
-#welcome-brick4 {
-	width: 321px;
-	height: 293px;
-	background-image: url(img/welcome-screen/brick4.png);
-	bottom: 0;
-	right: 0;
+.dropdown-menu > .disabled > a, .dropdown-menu > .disabled > a:hover, .dropdown-menu > .disabled > a:focus {
+    color: #bbbbbb;
 }
 
-#welcome-brick4:hover {
-	background-image: url(img/welcome-screen/brick4_active.png);
+/***** END Overwrite Bootstrap-CSS *****/
+
+
+
+/***** BEGIN JQuery-Popups *****/
+
+.jquerypopup {
+    font-family: 'Roboto', sans-serif;
 }
 
-/* ### Popup Input Fields ############################################################ */
+.jquerypopup label {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.jquerypopup input {
+    background-repeat: no-repeat;
+    background-position: center left;
+}
+
+.jquerypopup .input {
+    width: 100%;
+}
+
+.jquerypopup a {
+    font-size: 14px;
+    color: #333333;
+}
+
+.jquerypopup a:hover {
+    color: #afca04;
+}
+
+.jquerypopup.ui-dialog {
+    background-color: white;
+}
+
+.jquerypopup button.ui-button-icon-only {
+    width: 32px;
+}
+
+.jquerypopup.ui-dialog {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    padding: 30px !important;
+    outline: 0;
+    box-shadow: 0 0 15px #9f9e9e;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 20px;
+}
+
+.jquerypopup.ui-front {
+    z-index: 100;
+}
+
+.jquerypopup.ui-dialog .ui-dialog-title {
+    font-size: 25px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.jquerypopup.ui-dialog .ui-dialog-titlebar {
+    padding: 0;
+    position: relative;
+}
+
+.jquerypopup.ui-dialog .ui-dialog-titlebar-close, .jquerypopup.ui-dialog .ui-dialog-titlebar-close.ui-state-focus
+    {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    margin-right: -46px;
+    margin-top: -46px;
+    width: 32px;
+    height: 32px;
+    background-color: none !important;
+    border: none !important;
+    background-image: url(/css/img/close-icon.png);
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+.jquerypopup.ui-dialog .ui-dialog-titlebar-close:hover {
+    background-image: url(img/close-icon_hover.png);
+    background-color: none !important;
+}
+
+.jquerypopup.ui-dialog .ui-dialog-titlebar-close.ui-state-hover,
+    .jquerypopup.ui-dialog .ui-dialog-titlebar-close.ui-state-focus {
+    background: none;
+    background-image: url(img/close-icon_hover.png);
+    background-repeat: no-repeat;
+    outline: 0;
+}
+
+.jquerypopup.ui-dialog .ui-dialog-titlebar-close .ui-button-text {
+    display: none;
+}
+
+.jquerypopup .ui-widget-header {
+    border: none;
+    background: white;
+    color: #333333;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.jquerypopup .ui-state-default, .jquerypopup .ui-widget-content .ui-state-default,
+    .jquerypopup .ui-widget-header .ui-state-default {
+    border: 1px solid #d3d3d3;
+    font-weight: normal;
+    color: #555555;
+}
+
+/***** END JQuery-Popups *****/
+
+
+/***** BEGIN JQuery-Popup-Input-Fields *****/
+
 #login-user input, .program input, .configuration input, #register-user input, #delete-user input, #set-token input {
-	padding: 7px 8px 7px 32px;
-	border: 1px solid #afca04;
-	border-radius: 2px;
-	background-color: white;
-	margin-bottom: 15px;
-	color: #c7c7c7;
-	font-size: 14px;
-	text-align: left;
+    padding: 7px 8px 7px 32px;
+    border: 1px solid #afca04;
+    border-radius: 2px;
+    background-color: white;
+    margin-bottom: 15px;
+    color: #c7c7c7;
+    font-size: 14px;
+    text-align: left;
 }
 
 #login-user input#accountNameS,
@@ -373,39 +411,39 @@ ul#head-navigation .head-navigation-submenu>li:hover {
 }
 
 #register-user input#userName {
-	background-image: url(img/login_name-icon.png);
+    background-image: url(img/login_name-icon.png);
 }
 
 #register-user input#userName:active, #register-user input#userName:focus
-	{
-	background-image: url(img/login_name-icon_active.png);
-	color: #333333;
+    {
+    background-image: url(img/login_name-icon_active.png);
+    color: #333333;
 }
 
 #register-user input#userEmail {
-	background-image: url(img/login_email-icon.png);
+    background-image: url(img/login_email-icon.png);
 }
 
 #register-user input#userEmail:active, #register-user input#userEmail:focus
-	{
-	background-image: url(img/login_email-icon_active.png);
-	color: #333333;
+    {
+    background-image: url(img/login_email-icon_active.png);
+    color: #333333;
 }
 
 .program input.programName, .configuration input.configurationName {
-	background-image: url(img/program_name-icon.png);
-	box-sizing: border-box;
+    background-image: url(img/program_name-icon.png);
+    box-sizing: border-box;
 }
 
 .program input.programName:active, .program input.programName:focus,
 .configuration input.configurationName:active, .configuration input.configurationName:focus {
-	background-image: url(img/program_name-icon_active.png);
-	color: #333333;
+    background-image: url(img/program_name-icon_active.png);
+    color: #333333;
 }
 
 #login-user .submit, .program .submit, .configuration .submit, #register-user .submit,
 #delete-user .submit, #set-token .submit {
-	padding: 7px 9px;
+    padding: 7px 9px;
     border: none;
     font-size: 16px;
     border-radius: 2px;
@@ -416,420 +454,101 @@ ul#head-navigation .head-navigation-submenu>li:hover {
 
 #login-user .submit:hover, .program .submit:hover, .configuration .submit:hover, #register-user .submit:hover,
 #delete-user .submit:hover, #set-token .submit:hover {
-	background-color: #b7d032;
-}
-
-/* ### Tutorials ############################################################ */
-#next-tutorial {
-	position: absolute;
-	margin-top: 225px;
-	background-image: url(img/button_next.png);
-	width: 178px;
-	height: 50px;
-	padding-top: 7px;
-	padding-left: 15px;
-	cursor: pointer;
-	font-family: 'Open Sans', sans-serif;
-	text-transform: uppercase;
-	font-size: 30px;
-	color: white;
-}
-
-#next-tutorial:hover {
-	background-image: url(img/button_next_hover.png);
-}
-
-#action-menu {
-	position: absolute;
-	bottom: 0;
-	left: 150px;
-	opacity: 0.5;
-}
-
-#action-menu:hover {
-	opacity: 1;
-}
-
-#action-menu input {
-	font-size: 12px !important;
-	font-family: 'Open Sans', sans-serif;
-}
-
-/* ### Feedback to Jira button ################################################## */
-#atlwdg-trigger {
-	box-shadow: 0px 3px 5px #aeaeaf;
-	z-index: 100;
-}
-
-/* ### jQuery Popups ############################################################ */
-.jquerypopup {
-	font-family: 'Roboto', sans-serif;
-}
-
-.jquerypopup label {
-	display: block;
-	font-size: 16px;
-	font-weight: bold;
-}
-
-.jquerypopup input {
-	background-repeat: no-repeat;
-	background-position: center left;
-}
-
-.jquerypopup .input {
-	width: 140%;
-}
-
-.jquerypopup a {
-	font-size: 14px;
-	color: #333333;
-}
-
-.jquerypopup a:hover {
-	color: #afca04;
-}
-
-.jquerypopup.ui-dialog {
-	background-color: white;
-}
-
-.jquerypopup button.ui-button-icon-only {
-	width: 32px;
-}
-
-.jquerypopup.ui-dialog {
-	position: absolute !important;
-	top: 0;
-	left: 0;
-	padding: 30px !important;
-	outline: 0;
-	box-shadow: 0 0 15px #9f9e9e;
-	font-family: 'Open Sans', sans-serif;
-	font-size: 20px;
-}
-
-.jquerypopup.ui-front {
-	z-index: 100;
-}
-
-.jquerypopup.ui-dialog .ui-dialog-title {
-	font-size: 25px;
-	font-weight: 600;
-	text-transform: uppercase;
-}
-
-.jquerypopup.ui-dialog .ui-dialog-titlebar {
-	padding: 0px;
-	position: relative;
-}
-
-.jquerypopup.ui-dialog .ui-dialog-titlebar-close, .jquerypopup.ui-dialog .ui-dialog-titlebar-close.ui-state-focus
-	{
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	margin-right: -46px;
-	margin-top: -46px;
-	width: 32px;
-	height: 32px;
-	background-color: none !important;
-	border: none !important;
-	background-image: url(img/close-icon.png);
-	background-repeat: no-repeat;
-	cursor: pointer;
-}
-
-.jquerypopup.ui-dialog .ui-dialog-titlebar-close:hover {
-	background-image: url(img/close-icon_hover.png);
-	background-color: none !important;
-}
-
-.jquerypopup.ui-dialog .ui-dialog-titlebar-close.ui-state-hover,
-	.jquerypopup.ui-dialog .ui-dialog-titlebar-close.ui-state-focus {
-	background: none;
-	background-image: url(img/close-icon_hover.png);
-	background-repeat: no-repeat;
-	outline: 0;
-}
-
-.jquerypopup.ui-dialog .ui-dialog-titlebar-close .ui-button-text {
-	display: none;
-}
-
-.jquerypopup.ui-widget-content {
-	border: 2px solid #999999;
-	color: #333333;
-}
-
-.jquerypopup .ui-widget-header {
-	border: none;
-	background: white;
-	color: #333333;
-	font-weight: bold;
-	margin-bottom: 20px;
-}
-
-.jquerypopup .ui-state-default, .jquerypopup .ui-widget-content .ui-state-default,
-	.jquerypopup .ui-widget-header .ui-state-default {
-	border: 1px solid #d3d3d3;
-	font-weight: normal;
-	color: #555555;
-}
-
-/* ### jQuery Datatables ############################################################ */
-.dataTables_wrapper {
-	font-size: 0.8em;
-	cursor: default;
-	margin-bottom: 15pt;
-}
-
-.dataTables_length, .dataTables_info {
-	color: #666 !important;
-	font-size: 0.8em;
-	clear: none;
-	float: none;
-	display: inline;
-}
-
-.dataTables_wrapper .dataTables_paginate {
-	padding-right: 100px;
-}
-
-.fg-button.ui-button.ui-state-default {
-	border-radius: 2px;
-	margin: 4px;
-	padding: 2px 5px;
-	color: #333333;
-}
-
-.fg-button.ui-button.ui-state-default:hover {
-	background-color: #8fa402;
-	border: 1px solid #8fa402;
-	color: white;
-}
-
-.programs, .configurations {
-	color: Black;
-}
-
-#programNameTable_wrapper>div, #configurationNameTable_wrapper>div {
-	padding: 10px;
-	background-color: #F6F6F6;
-}
-
-.dataTables_wrapper .dataTables_length {
-	float: left;
-	width: 33%;
-	padding-top: 10px;
-}
-
-.dataTables_wrapper .dataTables_info {
-	clear: none;
-	float: left;
-	padding-top: 10px;
-	text-align: center;
-	width: 33%;
-}
-
-table.dataTable tbody tr.selected {
-	background-color: #d6f0f4;
-}
-
-table.dataTable.no-footer {
-	border-bottom: 1px solid #bbb;
-}
-
-#>input, #conf>input {
-	margin-left: 10px;
-}
-
-/* ############################################################### */
-.ui-widget-content {
-	background: transparent;
-	border: 0 none !important;
-	margin: 0 !important;
-	padding: 0 !important;
-	width: 100%;
-	height: 100%;
-	display: block;
-	float: left;
-}
-
-#blocklyDiv {
-	background-color: none;
-    background-image: url(img/grid-pattern-background.png);
-	background-repeat: repeat;
-	height: 100%;
-	min-height: 100%;
-}
-
-.ui-tabs .ui-tabs-nav {
-	opacity: 0.5;
-	position: absolute;
-	font-size: 12px !important;
-	z-index: 99999;
-	padding: 0 0;
-}
-
-.ui-tabs .ui-tabs-nav:hover {
-    opacity: 1 !important;
-}
-
-.ui-tabs .ui-tabs-panel {
-	padding: 0 0;
-	overflow: auto;
-}
-
-.ui-widget-header {
-    width: 100%;
-    background: none;
-    background-color: white;
-    opacity: 1 !important;
-}
-
-.input {
-	color: red;
-	background-color: #aaeeaa;
-	width: 5cm;
-	border: thick;
-}
-
-.blockly {
-	width: 100%;
-	height: 60%;
-}
-
-.rightGray {
-	float: right;
-	width: 2.0cm;
-	text-align: center;
-	color: gray;
-}
-
-.selected {
-	background-color: yellow;
-}
-
-.button {
-	margin-left: 5pt;
-	width: 100pt;
-    background-color: #afca04;
-    color: white;
-    font-size: 16px;
-}
-
-.button:hover {
-	background-color: #b7d032;
-}
-
-.log {
-	background-color: #f0f0f0;
-	font-size: small;
-	overflow: auto;
-}
-
-.log0 {
-	background-color: #FFFFDD;
-}
-
-.log1 {
-	background-color: #DDFFFF;
-}
-
-.lERR {
-	background-color: #FF3333;
-}
-
-.hidden {
-	display: none;
-}
-
-.smallFlag {
-	width: 15px;
-	height: 10px;
-	margin-top: 10px;
-}
-
-.bigFlag {
-	width: 21px;
-	height: 14px;
-	margin-top: 10px;
-}
-
-#setLangDe {
-	background-image: url(svg/Flag_of_Germany.svg);
-	background-size: 100% 100%;
-    background-repeat: no-repeat;
-	display: inline-block;
-}
-
-#setLangEn {
-	background-image: url(svg/Flag_of_the_United_Kingdom.svg);
-	background-size: 100% 100%;
-    background-repeat: no-repeat;
-	display: inline-block;
-}
-
-.publishingNotes {
-	color: grey;
-	font-size: x-small;
-}
-
-#bricklyFrame {
-	height: 100%;
-	width: 100%;
-	border-top: 2px solid #aaaaaa;
-}
-
-#listing > h2, #confListing > h2 {
-	margin-top: 20px;
-	margin-left: 45%;
-}
-
-#toastContainer {
-    float: left;
-    width: 500px;
-    height: 40px;
-    text-align: center;
-}
-
-#toast {
-    padding-top: 17px;
-    font-weight: bold;
-}
-
-.ok {
-    color: #afca04;
-}
-
-.error {
-    color: #e2001a;
-}
-
-.tabClicked {
-    color: #afca04;
-}
-
-.tabClickedBorder {
-    border-bottom: 6px solid #afca04;
-}
-
-#head-navigation-tabs a:hover {
     background-color: #b7d032;
 }
 
-#head-navigation-tabs {
-    background: none;
-    border: 0 none;
-    cursor: pointer;
-    margin-top: 55px;
-    font-size: 15px;
+/***** END JQuery-Popup-Input-Fields *****/
+
+
+/***** BEGIN JQuery-Datatables *****/
+
+.dataTables_wrapper {
+    margin: 30px 50px 10px 50px;
 }
 
-#tabProgram, #tabConfiguration {
-    display: inline;
-    padding-bottom: 4px;
-    padding-left: 8px;
-    padding-right: 8px;
+#progListing #programNameTable_wrapper,
+#confListing #programNameTable_wrapper {
+    overflow-y: auto;
 }
+
+#progListing table tbody,
+#confListing table tbody {
+    background-color: #ffffff;
+}
+
+#progListing table tbody tr:hover,
+#progListing table tbody tr.selected,
+#confListing table tbody tr:hover,
+#confListing table tbody tr.selected {
+    background-color: #b7d032;
+}
+
+#progListing table thead, #progListing table thead .DataTables_sort_wrapper,
+#confListing table thead, #confListing table thead .DataTables_sort_wrapper {
+    text-transform: uppercase;
+    background-color: #898989;
+    color: #ffffff;
+    text-align: left;
+}
+
+#progListing table,    
+#confListing table {    
+    margin: 0;
+    width: 100%;
+    border-spacing: 0px;
+}
+
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td {
+    padding: 9px;
+}
+
+#progListing table > tbody > tr > td,
+#confListing table > tbody > tr > td {
+    border-top: 1px solid #ddd;
+}
+
+#progListing table.dataTable.no-footer,
+#confListing table.dataTable.no-footer {
+    border-bottom: none !important;
+}
+
+#progListing .programs,
+#confListing .configurations {
+    color: #000000;
+}
+
+#progListing input,
+#confListing input {
+    margin-top: 15px;
+    margin-right: 5px;
+    background-color: #afca04;
+    border: medium none;
+    border-radius: 3px;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 7px 9px;
+}
+
+#progListing input:hover,
+#confListing input:hover {
+    background-color: #b7d032;
+}
+
+#progListing > h2,
+#confListing > h2 {
+    margin-left: 50px;
+}
+
+.tableButtons {
+    margin-left: 50px;
+}
+
+.fg-button {
+    margin-left: 6px;
+}
+
+/***** END JQuery-Datatables *****/
