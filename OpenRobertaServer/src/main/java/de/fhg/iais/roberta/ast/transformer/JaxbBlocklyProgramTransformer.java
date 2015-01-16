@@ -63,6 +63,8 @@ import de.fhg.iais.roberta.ast.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathSingleFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodReturn;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickKey;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
@@ -158,6 +160,8 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
         String op;
         MotionParam<V> mp;
         MotorDuration<V> md;
+
+        boolean isGlobalVariable;
 
         switch ( block.getType() ) {
         // ACTION
@@ -600,14 +604,16 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
             case "variables_get":
                 return extractVar(block);
 
-            case "variables_declare":
+            case "robLocalVariables_declare":
+            case "robGlobalvariables_declare":
+                isGlobalVariable = block.getType().equals("robLocalVariables") ? false : true;
                 fields = extractFields(block, (short) 2);
                 values = extractValues(block, (short) 1);
                 BlocklyType typeVar = BlocklyType.get(extractField(fields, BlocklyConstants.TYPE));
                 String name = extractField(fields, BlocklyConstants.VAR);
                 expr = extractValue(values, new ExprParam(BlocklyConstants.VALUE, Integer.class));
                 boolean next = block.getMutation().isNext();
-                return VarDeclaration.make(typeVar, name, convertPhraseToExpr(expr), next, properties, comment);
+                return VarDeclaration.make(typeVar, name, convertPhraseToExpr(expr), next, isGlobalVariable, properties, comment);
 
                 // KONTROLLE
             case "controls_if":
@@ -671,7 +677,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 Phrase<V> to = extractValue(values, new ExprParam(BlocklyConstants.TO_, Integer.class));
                 Phrase<V> by = extractValue(values, new ExprParam(BlocklyConstants.BY_, Integer.class));
                 VarDeclaration<V> var1 =
-                    VarDeclaration.make(BlocklyType.NUMERIC_INT, ((Var<V>) var).getValue(), convertPhraseToExpr(from), false, properties, comment);
+                    VarDeclaration.make(BlocklyType.NUMERIC_INT, ((Var<V>) var).getValue(), convertPhraseToExpr(from), false, false, properties, comment);
 
                 Binary<V> exprCondition = Binary.make(Binary.Op.LTE, convertPhraseToExpr(var), convertPhraseToExpr(to), properties, comment);
                 Binary<V> exprBy = Binary.make(Binary.Op.ADD_ASSIGNMENT, convertPhraseToExpr(var), convertPhraseToExpr(by), properties, comment);
@@ -682,9 +688,11 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 return extractRepeatStatement(block, exprList, BlocklyConstants.FOR);
 
             case "controls_forEach":
-                var = extractVar(block);
+                fields = extractFields(block, (short) 2);
+                var = Var.make(BlocklyType.get(extractField(fields, BlocklyConstants.TYPE)), extractField(fields, BlocklyConstants.VAR), null, null);
+
                 values = extractValues(block, (short) 1);
-                expr = extractValue(values, new ExprParam(BlocklyConstants.LIST_, List.class));
+                expr = extractValue(values, new ExprParam(BlocklyConstants.LIST_, ArrayList.class));
 
                 Binary<V> exprBinary = Binary.make(Binary.Op.IN, convertPhraseToExpr(var), convertPhraseToExpr(expr), properties, comment);
                 return extractRepeatStatement(block, exprBinary, BlocklyConstants.FOR_EACH);
@@ -700,7 +708,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 from = NumConst.make("0", properties, comment);
                 to = extractValue(values, new ExprParam(BlocklyConstants.TIMES, Integer.class));
                 by = NumConst.make("1", properties, comment);
-                var1 = VarDeclaration.make(BlocklyType.NUMERIC_INT, "i" + this.variable_counter, convertPhraseToExpr(from), false, properties, comment);
+                var1 = VarDeclaration.make(BlocklyType.NUMERIC_INT, "i" + this.variable_counter, convertPhraseToExpr(from), false, false, properties, comment);
                 var = Var.make(BlocklyType.NUMERIC_INT, "i" + this.variable_counter, properties, comment);
                 exprCondition = Binary.make(Binary.Op.LT, convertPhraseToExpr(var), convertPhraseToExpr(to), properties, comment);
                 Unary<V> increment = Unary.make(Unary.Op.POSTFIX_INCREMENTS, convertPhraseToExpr(var), properties, comment);
@@ -731,6 +739,30 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam(BlocklyConstants.ACTIVITY, String.class));
                 return StartActivityTask.make(convertPhraseToExpr(expr), properties, comment);
+
+            case "robProcedures_defnoreturn":
+                fields = extractFields(block, (short) 1);
+                name = extractField(fields, BlocklyConstants.NAME);
+
+                statements = extractStatements(block, (short) 2);
+                exprList = statementsToExprs(statements, BlocklyConstants.ST);
+                statement = extractStatement(statements, BlocklyConstants.STACK);
+
+                return MethodVoid.make(name, exprList, statement, properties, comment);
+
+            case "robProcedures_defreturn":
+                fields = extractFields(block, (short) 2);
+                name = extractField(fields, BlocklyConstants.NAME);
+                Var<V> returnType = Var.make(BlocklyType.get(extractField(fields, BlocklyConstants.TYPE)), "returnType", properties, comment);
+
+                statements = extractStatements(block, (short) 2);
+                exprList = statementsToExprs(statements, BlocklyConstants.ST);
+                statement = extractStatement(statements, BlocklyConstants.STACK);
+
+                values = extractValues(block, (short) 1);
+                expr = extractValue(values, new ExprParam(BlocklyConstants.RETURN, NullConst.class));
+
+                return MethodReturn.make(name, exprList, statement, returnType, convertPhraseToExpr(expr), properties, comment);
 
             default:
                 throw new DbcException("Invalid Block: " + block.getType());

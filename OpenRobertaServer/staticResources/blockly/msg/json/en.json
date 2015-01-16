@@ -8,6 +8,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		"lastupdated": "2015-01-22 11:50:57.068000",
 =======
 		"lastupdated": "2014-12-18 23:15:43.156000",
@@ -30,6 +31,9 @@
 =======
 		"lastupdated": "2015-01-15 21:12:36.502000",
 >>>>>>> ORA-376 minor improvements in variables and block types
+=======
+		"lastupdated": "2015-01-16 16:55:06.280000",
+>>>>>>> ORA-378 adding var type information in for each statement, creating transformation for create method blocks
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},

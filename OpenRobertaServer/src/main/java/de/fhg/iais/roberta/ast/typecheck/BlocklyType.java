@@ -45,11 +45,15 @@ public enum BlocklyType {
     // @formatter:off
     ANY("", ""),
     COMPARABLE("", "", ANY), ADDABLE("", "", ANY),
-    ARRAY("Array", "List", COMPARABLE), ARRAY_NUMBER("Array_Number", "List", COMPARABLE),ARRAY_STRING("Array_String", "List", COMPARABLE),
+    ARRAY("Array", "List", COMPARABLE),
+    ARRAY_NUMBER("Array_Number", "List<Float>", COMPARABLE),
+    ARRAY_STRING("Array_String", "List<String>", COMPARABLE),
+    ARRAY_COLOUR("Array_Colour", "List<Pickcolor>", COMPARABLE),
+    ARRAY_BOOLEAN("Array_Boolean", "List<Boolean>", COMPARABLE),
     BOOL("Boolean", "boolean", COMPARABLE),
     NUMERIC("Number", "float", COMPARABLE, ADDABLE), NUMERIC_INT("Number", "int", COMPARABLE, ADDABLE),
     STRING("String", "String", COMPARABLE, ADDABLE),
-    COLOR("Colour", "String", ANY), //
+    COLOR("Colour", "Pickcolor", ANY), //
     NULL("", "", STRING, COLOR),
     REF("", "",NULL), PRIM("", "",NUMERIC, BOOL),
     NOTHING("", "",REF, PRIM),

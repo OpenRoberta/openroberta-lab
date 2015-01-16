@@ -216,7 +216,9 @@ abstract public class Phrase<V> {
         LIST_CREATE( Category.EXPR ),
         LIST_INDEX_OF( Category.FUNCTION ),
         LIST_SET_INDEX( Category.FUNCTION ),
-        TEXT_CHANGE_CASE_FUNCT( Category.FUNCTION );
+        TEXT_CHANGE_CASE_FUNCT( Category.FUNCTION ),
+        METHOD_VOID( Category.METHOD ),
+        METHOD_RETURN( Category.METHOD );
 
         private final Category category;
 

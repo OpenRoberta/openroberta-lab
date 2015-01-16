@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.expr;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.ast.syntax.PickColor;
+import de.fhg.iais.roberta.ast.syntax.Pickcolor;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.ColorConst;
@@ -22,7 +22,7 @@ public class ColorConstTest {
     public void isValue() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/colour/colour_const1.xml");
         ColorConst<Void> colorConst = (ColorConst<Void>) transformer.getTree().get(1);
-        Assert.assertEquals(PickColor.BROWN, colorConst.getValue());
+        Assert.assertEquals(Pickcolor.BROWN, colorConst.getValue());
     }
 
     @Test

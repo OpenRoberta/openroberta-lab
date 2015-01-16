@@ -47,6 +47,8 @@ import de.fhg.iais.roberta.ast.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathSingleFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodReturn;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
@@ -575,4 +577,18 @@ public interface AstVisitor<V> {
      * @param textJoinFunct to be visited
      */
     public V visitTextJoinFunct(TextJoinFunct<V> textJoinFunct);
+
+    /**
+     * visit a {@link MethodVoid}.
+     *
+     * @param textJoinFunct to be visited
+     */
+    public V visitMethodVoid(MethodVoid<V> methodVoid);
+
+    /**
+     * visit a {@link MethodReturn}.
+     *
+     * @param textJoinFunct to be visited
+     */
+    public V visitMethodReturn(MethodReturn<V> methodReturn);
 }

@@ -5,6 +5,8 @@ import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.Phrase.Kind;
+import de.fhg.iais.roberta.ast.syntax.expr.Expr;
+import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
 import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -59,6 +61,27 @@ public final class AstJaxbTransformerHelper {
             Statement statement = new Statement();
             statement.setName(name);
             statement.getBlock().addAll(extractStmtList(value));
+            block.getStatement().add(statement);
+        }
+    }
+
+    /**
+     * Add's a statement {@link Statement} object to JAXB block representation {@link Block}.
+     * <p>
+     * This method does <b>not</b> add the statement object into {@link Repetitions} object.
+     *
+     * @param block to which the statement will be added; must be <b>not</b> null,
+     * @param name of the statement; must be <b>non-empty</b> string
+     * @param value is the AST representation of the Blockly block where the statement is stored; must be <b>not</b> null and {@link Phrase#getKind()} must be
+     *        {@link Kind#EXPR_LIST}
+     */
+    public static void addStatement(Block block, String name, ExprList<?> exprList) {
+        Assert.isTrue(block != null && exprList != null && !name.equals(""));
+        Assert.isTrue(exprList.getKind() == Phrase.Kind.EXPR_LIST, "Phrase is not EXPR_LIST");
+        if ( exprList.get().size() != 0 ) {
+            Statement statement = new Statement();
+            statement.setName(name);
+            statement.getBlock().addAll(extractExprList(exprList));
             block.getStatement().add(statement);
         }
     }
@@ -140,6 +163,16 @@ public final class AstJaxbTransformerHelper {
         StmtList<?> stmtList = (StmtList<?>) phrase;
         for ( Stmt<?> stmt : stmtList.get() ) {
             result.add(stmt.astToBlock());
+        }
+        return result;
+    }
+
+    private static List<Block> extractExprList(Phrase<?> phrase) {
+        List<Block> result = new ArrayList<Block>();
+        Assert.isTrue(phrase.getKind() == Kind.EXPR_LIST, "Phrase is not ExprList!");
+        ExprList<?> exprList = (ExprList<?>) phrase;
+        for ( Expr<?> expr : exprList.get() ) {
+            result.add(expr.astToBlock());
         }
         return result;
     }

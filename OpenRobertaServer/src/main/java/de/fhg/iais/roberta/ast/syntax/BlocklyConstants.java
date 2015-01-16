@@ -75,4 +75,7 @@ public final class BlocklyConstants {
     public static final String DELTA = "DELTA";
     public static final String NEG = "NEG";
     public static final String DIVIDEND = "DIVIDEND";
+    public static final String NAME = "NAME";
+    public static final String STACK = "STACK";
+    public static final String RETURN = "RETURN";
 }

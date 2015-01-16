@@ -87,6 +87,7 @@ public class ListCreate<V> extends Expr<V> {
         int numOfItems = (exprList.get().size());
         Mutation mutation = new Mutation();
         mutation.setItems(BigInteger.valueOf(numOfItems));
+        mutation.setListType(getTypeVar().getBlocklyName());
         jaxbDestination.setMutation(mutation);
         AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.LIST_TYPE, getTypeVar().getBlocklyName());
         for ( int i = 0; i < numOfItems; i++ ) {

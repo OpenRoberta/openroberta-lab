@@ -167,6 +167,16 @@ abstract public class JaxbAstTransformer<V> {
         return stmtList;
     }
 
+    protected ExprList<V> blocksToExprList(List<Block> exprBolcks) {
+        ExprList<V> exprList = ExprList.make();
+        for ( Block exb : exprBolcks ) {
+            Phrase<V> p = blockToAST(exb);
+            exprList.addExpr(convertPhraseToExpr(p));
+        }
+        exprList.setReadOnly();
+        return exprList;
+    }
+
     protected void convertPhraseToStmt(StmtList<V> stmtList, Block sb) {
         Phrase<V> p = blockToAST(sb);
         Stmt<V> stmt;
@@ -264,6 +274,17 @@ abstract public class JaxbAstTransformer<V> {
         }
         stmtList.setReadOnly();
         return stmtList;
+    }
+
+    protected ExprList<V> statementsToExprs(List<Statement> statements, String stmtName) {
+        ExprList<V> exprList = ExprList.make();
+        for ( Statement statement : statements ) {
+            if ( statement.getName().equals(stmtName) ) {
+                return blocksToExprList(statement.getBlock());
+            }
+        }
+        exprList.setReadOnly();
+        return exprList;
     }
 
     protected List<Field> extractFields(Block block, short numOfFields) {

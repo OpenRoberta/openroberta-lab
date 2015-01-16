@@ -9,9 +9,9 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
+import de.fhg.iais.roberta.ast.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
-import de.fhg.iais.roberta.ast.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -160,6 +160,7 @@ public class RepeatStmt<V> extends Stmt<V> {
 
             case FOR_EACH:
                 Binary<?> exprBinary = (Binary<?>) getExpr();
+                AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.TYPE, ((Var<?>) exprBinary.getLeft()).getTypeVar().getBlocklyName());
                 AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VAR, ((Var<?>) exprBinary.getLeft()).getValue());
                 AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.LIST_, exprBinary.getRight());
                 break;

@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
 /**
  * All colors that are legal.
  */
-public enum PickColor {
+public enum Pickcolor {
 
     RED( 0, "#B30006", "ROT", "#b30006" ), GREEN( 1, "#00642E", "GRÜN" ), BLUE( 2, "#0057A6" ), YELLOW( 3, "#F7D117" ), MAGENTA( 4, "#000000" ), ORANGE(
         5,
@@ -18,7 +18,7 @@ public enum PickColor {
     private final String[] values;
     private final int colorID;
 
-    private PickColor(int colorID, String... values) {
+    private Pickcolor(int colorID, String... values) {
         this.values = values;
         this.colorID = colorID;
     }
@@ -36,8 +36,8 @@ public enum PickColor {
         // return this.getClass().getSimpleName() + "." + this;
     }
 
-    public PickColor get(int id) {
-        for ( PickColor sp : PickColor.values() ) {
+    public Pickcolor get(int id) {
+        for ( Pickcolor sp : Pickcolor.values() ) {
             if ( sp.colorID == id ) {
                 return sp;
             }
@@ -46,18 +46,18 @@ public enum PickColor {
     }
 
     /**
-     * get {@link PickColor} from string parameter. It is possible for one color to have multiple string mappings.
+     * get {@link Pickcolor} from string parameter. It is possible for one color to have multiple string mappings.
      * Throws exception if the color cannot be found.
      *
      * @param name of the color
-     * @return enum {@link PickColor}
+     * @return enum {@link Pickcolor}
      */
-    public static PickColor get(String s) {
+    public static Pickcolor get(String s) {
         if ( s == null || s.isEmpty() ) {
             throw new DbcException("Color missing");
         }
         String sUpper = s.trim().toUpperCase(Locale.GERMAN);
-        for ( PickColor sp : PickColor.values() ) {
+        for ( Pickcolor sp : Pickcolor.values() ) {
             if ( sp.toString().equals(sUpper) ) {
                 return sp;
             }

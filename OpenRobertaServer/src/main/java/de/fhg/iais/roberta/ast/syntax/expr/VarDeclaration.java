@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
- * This class represents the <b>variables_declare</b> blocks from Blockly into the AST (abstract syntax tree).
+ * This class represents the <b>robGlobalvariables_declare</b> blocks from Blockly into the AST (abstract syntax tree).
  * Object from this class will generate code for creating a variable.<br/>
  * <br>
  * User must provide name of the variable, type of the variable and initial value.
@@ -23,14 +23,23 @@ public class VarDeclaration<V> extends Expr<V> {
     private final String name;
     private final Expr<V> value;
     private final boolean next;
+    private final boolean global;
 
-    private VarDeclaration(BlocklyType typeVar, String name, Expr<V> value, boolean next, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private VarDeclaration(
+        BlocklyType typeVar,
+        String name,
+        Expr<V> value,
+        boolean next,
+        boolean global,
+        BlocklyBlockProperties properties,
+        BlocklyComment comment) {
         super(Phrase.Kind.VAR, properties, comment);
-        Assert.isTrue(!name.equals("") && typeVar != null && value.isReadOnly() && value != null);
+        Assert.isTrue(!name.equals("") && typeVar != null && value.isReadOnly());
         this.name = name;
         this.typeVar = typeVar;
         this.value = value;
         this.next = next;
+        this.global = global;
         setReadOnly();
     }
 
@@ -49,9 +58,10 @@ public class VarDeclaration<V> extends Expr<V> {
         String name,
         Expr<V> value,
         boolean next,
+        boolean global,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        return new VarDeclaration<V>(typeVar, name, value, next, properties, comment);
+        return new VarDeclaration<V>(typeVar, name, value, next, global, properties, comment);
     }
 
     /**
@@ -82,6 +92,13 @@ public class VarDeclaration<V> extends Expr<V> {
         return this.next;
     }
 
+    /**
+     * @return the global
+     */
+    public boolean isGlobal() {
+        return this.global;
+    }
+
     @Override
     public int getPrecedence() {
         return 999;
@@ -99,7 +116,7 @@ public class VarDeclaration<V> extends Expr<V> {
 
     @Override
     public String toString() {
-        return "VarDeclaration [" + this.typeVar + ", " + this.name + ", " + this.value + ", " + this.next + "]";
+        return "GlobalVarDeclaration [" + this.typeVar + ", " + this.name + ", " + this.value + ", " + this.next + ", " + this.global + "]";
     }
 
     @Override
@@ -109,11 +126,11 @@ public class VarDeclaration<V> extends Expr<V> {
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
         mutation.setNext(this.next);
-        mutation.setDatatype(getTypeVar().getBlocklyName());
+        mutation.setDeclarationType(getTypeVar().getBlocklyName());
         jaxbDestination.setMutation(mutation);
 
-        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.TYPE, getTypeVar().getBlocklyName());
         AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VAR, getName());
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.TYPE, getTypeVar().getBlocklyName());
         AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, this.value);
 
         return jaxbDestination;

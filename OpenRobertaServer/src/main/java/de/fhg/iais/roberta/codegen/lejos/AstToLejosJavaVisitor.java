@@ -57,6 +57,8 @@ import de.fhg.iais.roberta.ast.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathSingleFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodReturn;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
@@ -291,6 +293,8 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
             case "java.lang.Integer":
                 this.sb.append("0");
                 break;
+            case "java.util.ArrayList":
+                break;
             default:
                 this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
                 break;
@@ -302,16 +306,18 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     public Void visitExprList(ExprList<Void> exprList) {
         boolean first = true;
         for ( Expr<Void> expr : exprList.get() ) {
-            if ( first ) {
-                first = false;
-            } else {
-                if ( expr.getKind() == Kind.BINARY || expr.getKind() == Kind.UNARY ) {
-                    this.sb.append("; ");
+            if ( expr.getKind() != Phrase.Kind.EMPTY_EXPR ) {
+                if ( first ) {
+                    first = false;
                 } else {
-                    this.sb.append(", ");
+                    if ( expr.getKind() == Kind.BINARY || expr.getKind() == Kind.UNARY ) {
+                        this.sb.append("; ");
+                    } else {
+                        this.sb.append(", ");
+                    }
                 }
+                expr.visit(this);
             }
-            expr.visit(this);
         }
         return null;
     }
@@ -1237,5 +1243,17 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         }
         sb.append(");");
         return sb.toString();
+    }
+
+    @Override
+    public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

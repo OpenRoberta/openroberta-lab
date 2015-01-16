@@ -305,6 +305,26 @@ public class AstToLejosJavaVisitorTest {
         assertCodeIsOk(a, "/syntax/code_generator/java_code_generator8.xml");
     }
 
+    @Test
+    public void test9() throws Exception {
+
+        String a =
+            "" //
+                + IMPORTS
+                + MAIN_CLASS
+                + BRICK_CONFIGURATION
+                + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>();\n"
+                + MAIN_METHOD
+                + "    public void run() {\n"
+                + "        Hal hal = new Hal(brickConfiguration, usedSensors);\n"
+                + "floatitem=0;Stringitem2=\"ss\";booleanitem3=true;List<Float>item4=BlocklyMethods.createListWith(1,2,3);List<String>item5=BlocklyMethods.createListWith(\"a\",\"b\");List<Boolean>item6=BlocklyMethods.createListWith(true,false);List<Pickcolor>item7=BlocklyMethods.createListWith(0,4,-1);Pickcoloritem8=-1;"
+                + SUFFIX
+                + "    }\n"
+                + "}\n";
+
+        assertCodeIsOk(a, "/ast/task/task_mainTask.xml");
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
         Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generateString(fileName, brickConfiguration).replaceAll("\\s+", ""));
