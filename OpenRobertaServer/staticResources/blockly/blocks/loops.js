@@ -36,7 +36,7 @@ Blockly.Blocks['controls_repeat'] = {
      */
     init : function() {
         this.setHelpUrl(Blockly.Msg.CONTROLS_REPEAT_HELPURL);
-        this.setColourRGB(Blockly.CAT_LOOPS_RGB);
+        this.setColourRGB(Blockly.CAT_CONTROL_RGB);
         this.appendDummyInput().appendField(Blockly.Msg.CONTROLS_REPEAT_TITLE_REPEAT).appendField(
                 new Blockly.FieldTextInput('10', Blockly.FieldTextInput.nonnegativeIntegerValidator), 'TIMES').appendField(
                 Blockly.Msg.CONTROLS_REPEAT_TITLE_TIMES);
@@ -55,7 +55,7 @@ Blockly.Blocks['controls_repeat_ext'] = {
      */
     init : function() {
         this.setHelpUrl(Blockly.Msg.CONTROLS_REPEAT_HELPURL);
-        this.setColourRGB(Blockly.CAT_LOOPS_RGB);
+        this.setColourRGB(Blockly.CAT_CONTROL_RGB);
         this.interpolateMsg(Blockly.Msg.CONTROLS_REPEAT_TITLE, [ 'TIMES', 'Number', Blockly.ALIGN_RIGHT ], Blockly.ALIGN_RIGHT);
         this.appendStatementInput('DO').appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
         this.setPreviousStatement(true);
@@ -74,7 +74,7 @@ Blockly.Blocks['controls_whileUntil'] = {
     init : function() {
         var OPERATORS = [ [ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE, 'WHILE' ], [ Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL, 'UNTIL' ] ];
         this.setHelpUrl(Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL);
-        this.setColourRGB(Blockly.CAT_LOOPS_RGB);
+        this.setColourRGB(Blockly.CAT_CONTROL_RGB);
         this.appendValueInput('BOOL').setCheck('Boolean').appendField(new Blockly.FieldDropdown(OPERATORS), 'MODE');
         this.appendStatementInput('DO').appendField(Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO);
         this.setPreviousStatement(true);
@@ -100,7 +100,7 @@ Blockly.Blocks['controls_for'] = {
      */
     init : function() {
         this.setHelpUrl(Blockly.Msg.CONTROLS_FOR_HELPURL);
-        this.setColourRGB(Blockly.CAT_LOOPS_RGB);
+        this.setColourRGB(Blockly.CAT_CONTROL_RGB);
         var name = Blockly.Variables.findLegalName('i', this);
         this.appendDummyInput().appendField(Blockly.Msg.CONTROLS_FOR_INPUT_WITH).appendField(
                 new Blockly.FieldTextInput(name, Blockly.Variables.renameVariable), 'VAR');
@@ -161,7 +161,7 @@ Blockly.Blocks['controls_forEach'] = {
      */
     init : function() {
         this.setHelpUrl(Blockly.Msg.CONTROLS_FOREACH_HELPURL);
-        this.setColourRGB(Blockly.CAT_LOOPS_RGB);
+        this.setColourRGB(Blockly.CAT_CONTROL_RGB);
         var name = Blockly.Variables.findLegalName('j', this);
         var declType = new Blockly.FieldDropdown([ [ Blockly.Msg.VARIABLES_TYPE_NUMBER, 'Number' ], [ Blockly.Msg.VARIABLES_TYPE_STRING, 'String' ],
                 [ Blockly.Msg.VARIABLES_TYPE_BOOLEAN, 'Boolean' ], [ Blockly.Msg.VARIABLES_TYPE_ARRAY_NUMBER, 'Array_Number' ],
@@ -218,7 +218,7 @@ Blockly.Blocks['controls_flow_statements'] = {
         var OPERATORS = [ [ Blockly.Msg.CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK, 'BREAK' ],
                 [ Blockly.Msg.CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE, 'CONTINUE' ] ];
         this.setHelpUrl(Blockly.Msg.CONTROLS_FLOW_STATEMENTS_HELPURL);
-        this.setColourRGB(Blockly.CAT_LOOPS_RGB);
+        this.setColourRGB(Blockly.CAT_CONTROL_RGB);
         this.appendDummyInput().appendField(new Blockly.FieldDropdown(OPERATORS), 'FLOW');
         this.setPreviousStatement(true);
         // Assign 'this' to a variable for use in the tooltip closure below.

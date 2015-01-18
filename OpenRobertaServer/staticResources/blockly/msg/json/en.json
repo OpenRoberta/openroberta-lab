@@ -9,6 +9,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		"lastupdated": "2015-01-22 11:50:57.068000",
 =======
 		"lastupdated": "2014-12-18 23:15:43.156000",
@@ -34,6 +35,9 @@
 =======
 		"lastupdated": "2015-01-16 16:55:06.280000",
 >>>>>>> ORA-378 adding var type information in for each statement, creating transformation for create method blocks
+=======
+		"lastupdated": "2015-01-18 21:09:57.539000",
+>>>>>>> ORA-376 fix bugs in lists and variables, toolbox multilingual
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -348,13 +352,14 @@
 	"TEXT_PROMPT_TOOLTIP_NUMBER": "Prompt for user for a number.",
 	"TEXT_PROMPT_TOOLTIP_TEXT": "Prompt for user for some text.",
 	"LISTS_CREATE_EMPTY_HELPURL": "https://en.wikipedia.org/wiki/Linked_list#Empty_lists",
-	"LISTS_CREATE_EMPTY_TITLE": "create empty %1 list",
+	"LISTS_CREATE_EMPTY_TITLE": "empty list",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "Returns a list, of length 0, containing no data records",
 	"LISTS_CREATE_WITH_TOOLTIP": "Create a list with any number of items.",
-	"LISTS_CREATE_WITH_INPUT_WITH": "create %1 list with %2",
+	"LISTS_CREATE_WITH_INPUT_WITH": "list : %1 \u2190 %2 repeated %3 times",
 	"LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "list",
 	"LISTS_CREATE_WITH_CONTAINER_TOOLTIP": "Add, remove, or reorder sections to reconfigure this list block.",
 	"LISTS_CREATE_WITH_ITEM_TOOLTIP": "Add an item to the list.",
+	"LISTS_CREATE_TITLE": "list",
 	"LISTS_REPEAT_HELPURL": "https://code.google.com/p/blockly/wiki/Lists#create_list_with",
 	"LISTS_REPEAT_TOOLTIP": "Creates a list consisting of the given value repeated the specified number of times.",
 	"LISTS_REPEAT_TITLE": "create %1 list with item %2 repeated %3 times",
@@ -432,10 +437,10 @@
 	"VARIABLES_TYPE_NUMBER": "Number",
 	"VARIABLES_TYPE_BOOLEAN": "Boolean",
 	"VARIABLES_TYPE_STRING": "String",
-	"VARIABLES_TYPE_ARRAY_NUMBER": "Array Number",
-	"VARIABLES_TYPE_ARRAY_STRING": "Array String",
-	"VARIABLES_TYPE_ARRAY_BOOLEAN": "Array Boolean",
-	"VARIABLES_TYPE_ARRAY_COLOUR": "Array Colour",
+	"VARIABLES_TYPE_ARRAY_NUMBER": "List Number",
+	"VARIABLES_TYPE_ARRAY_STRING": "List String",
+	"VARIABLES_TYPE_ARRAY_BOOLEAN": "List Boolean",
+	"VARIABLES_TYPE_ARRAY_COLOUR": "List Colour",
 	"VARIABLES_TYPE_COLOUR": "Colour",
 	"PROCEDURES_DEFNORETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
 	"PROCEDURES_DEFNORETURN_TITLE": "to",
@@ -567,6 +572,25 @@
 	"LOOP_COUNT": "number",
 	"LOOP": "repeat until",
 	"LOOP_FOREVER": "repeat indefinitely",
+	"TOOLBOX_ACTION": "Action",
+	"TOOLBOX_SENSOR": "Sensors",
+	"TOOLBOX_CONTROL": "Control",
+	"TOOLBOX_LOGIC": "Logic",
+	"TOOLBOX_MATH": "Math",
+	"TOOLBOX_TEXT": "Text",
+	"TOOLBOX_LIST": "Lists",
+	"TOOLBOX_COLOUR": "Colours",
+	"TOOLBOX_VARIABLE": "Variables",
+	"TOOLBOX_GLOBAL_VARIABLE": "global Variables",
+	"TOOLBOX_PROCEDURE": "Functions",
+	"TOOLBOX_WAIT": "Wait",
+	"TOOLBOX_LOOP": "Loops",
+	"TOOLBOX_DECISION": "Decisions",
+	"TOOLBOX_LIGHT": "Lights",
+	"TOOLBOX_SOUND": "Sounds",
+	"TOOLBOX_DISPLAY": "Display",
+	"TOOLBOX_DRIVE": "Drive",
+	"TOOLBOX_MOVE": "Move",
 	"START_HELP": "here comes your help text",
 	"MOTORDIFF_ON_HELP": "here comes your help text",
 	"MOTORDIFF_ON_FOR_HELP": "here comes your help text",

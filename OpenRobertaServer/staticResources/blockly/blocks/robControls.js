@@ -29,7 +29,7 @@ Blockly.Blocks['robControls_start'] = {
      */
 
     init : function() {
-        this.setColourRGB(Blockly.CAT_ROBACTIVITY_RGB);
+        this.setColourRGB(Blockly.CAT_ACTIVITY_RGB);
         this.appendDummyInput().appendField(Blockly.Msg.START + ' ' + Blockly.Msg.START_PROGRAM);
         this.setMutatorPlus(new Blockly.MutatorPlus(this));
         this.declare_ = false;
@@ -130,7 +130,7 @@ Blockly.Blocks['robControls_activity'] = {
      */
 
     init : function() {
-        this.setColourRGB(Blockly.CAT_ROBACTIVITY_RGB);
+        this.setColourRGB(Blockly.CAT_ACTIVITY_RGB);
         this.appendDummyInput().appendField(new Blockly.FieldTextInput(Blockly.Msg.START_ACTIVITY, Blockly.Procedures.rename), 'ACTIVITY');
         this.setPreviousStatement(false);
         this.setNextStatement(true);
@@ -151,7 +151,7 @@ Blockly.Blocks['robControls_start_activity'] = {
      */
 
     init : function() {
-        this.setColourRGB(Blockly.CAT_ROBACTIVITY_RGB);
+        this.setColourRGB(Blockly.CAT_ACTIVITY_RGB);
         this.appendDummyInput().appendField(Blockly.Msg.START).appendField(new Blockly.FieldTextInput(Blockly.Msg.START_ACTIVITY, Blockly.Procedures.rename),
                 'ACTIVITY');
         this.setPreviousStatement(true);
@@ -173,7 +173,7 @@ Blockly.Blocks['robControls_start_activity'] = {
 Blockly.Blocks['robControls_wait'] = {
 
     init : function() {
-        this.setColourRGB(Blockly.CAT_ROBCONTROLS_RGB);
+        this.setColourRGB(Blockly.CAT_CONTROL_RGB);
         // this.setInputsInline(true);
         this.appendValueInput('WAIT0').appendField(Blockly.Msg.WAIT_UNTIL).setCheck('Boolean');
         this.setPreviousStatement(true);
@@ -267,7 +267,7 @@ Blockly.Blocks['robControls_wait'] = {
 Blockly.Blocks['robControls_wait_time'] = {
 
     init : function() {
-        this.setColourRGB(Blockly.CAT_ROBCONTROLS_RGB);
+        this.setColourRGB(Blockly.CAT_CONTROL_RGB);
         this.setInputsInline(true);
         this.appendValueInput('WAIT').appendField(Blockly.Msg.WAIT).setCheck('Number');
         this.appendDummyInput().appendField('ms');
@@ -290,7 +290,7 @@ Blockly.Blocks['robControls_wait_time'] = {
 Blockly.Blocks['robControls_wait_for'] = {
 
     init : function() {
-        this.setColourRGB(Blockly.CAT_ROBCONTROLS_RGB);
+        this.setColourRGB(Blockly.CAT_CONTROL_RGB);
         this.appendValueInput('WAIT0').appendField(Blockly.Msg.WAIT_UNTIL).setCheck('Boolean');
         this.setPreviousStatement(true);
         this.setNextStatement(true);
@@ -393,7 +393,7 @@ Blockly.Blocks['robControls_wait_for'] = {
 
 Blockly.Blocks['robControls_loopForever'] = {
     init : function() {
-        this.setColourRGB(Blockly.CAT_ROBCONTROLS_RGB);
+        this.setColourRGB(Blockly.CAT_CONTROL_RGB);
         var title = new Blockly.FieldLabel(Blockly.Msg.LOOP_FOREVER);
         this.appendDummyInput().appendField(title, 'TITLE_FOREVER');
         this.appendStatementInput('DO').appendField(Blockly.Msg.CONTROLS_REPEAT_INPUT_DO);
@@ -407,7 +407,7 @@ Blockly.Blocks['robControls_loopForever'] = {
 Blockly.Blocks['robControls_ifElse'] = {
 
     init : function() {
-        this.setColourRGB(Blockly.CAT_ROBCONTROLS_RGB);
+        this.setColourRGB(Blockly.CAT_CONTROL_RGB);
         this.appendValueInput('IF0').appendField(Blockly.Msg.CONTROLS_IF_MSG_IF).setCheck('Boolean');
         this.appendStatementInput('DO0').appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
         this.appendStatementInput('ELSE').appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSE);
@@ -491,7 +491,7 @@ Blockly.Blocks['robControls_ifElse'] = {
 Blockly.Blocks['robControls_if'] = {
 
     init : function() {
-        this.setColourRGB(Blockly.CAT_ROBCONTROLS_RGB);
+        this.setColourRGB(Blockly.CAT_CONTROL_RGB);
         this.appendValueInput('IF0').appendField(Blockly.Msg.CONTROLS_IF_MSG_IF).setCheck('Boolean');
         this.appendStatementInput('DO0').appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
         // this.setInputsInline(true);

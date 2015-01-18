@@ -36,7 +36,7 @@ Blockly.Blocks['lists_create_empty'] = {
      */
     init : function() {
         this.setHelpUrl(Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL);
-        this.setColourRGB(Blockly.CAT_LISTS_RGB);
+        this.setColourRGB(Blockly.CAT_LIST_RGB);
         this.setOutput(true, 'Array_Number');
         var listType = new Blockly.FieldDropdown([ [ Blockly.Msg.VARIABLES_TYPE_NUMBER, 'Number' ], [ Blockly.Msg.VARIABLES_TYPE_STRING, 'String' ],
                 [ Blockly.Msg.VARIABLES_TYPE_BOOLEAN, 'Boolean' ], [ Blockly.Msg.VARIABLES_TYPE_COLOUR, 'Colour' ] ], function(option) {
@@ -44,7 +44,8 @@ Blockly.Blocks['lists_create_empty'] = {
                 this.sourceBlock_.updateType_(option);
             }
         });
-        this.interpolateMsg(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE, [ "LIST_TYPE", listType ], Blockly.ALIGN_RIGHT);
+        this.appendDummyInput().appendField(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE).appendField(':').appendField(listType, 'LIST_TYPE');
+        //  this.interpolateMsg(Blockly.Msg.LISTS_TITLE, [ "LIST_TYPE", listType ], Blockly.ALIGN_RIGHT);
         this.setOutput(true, 'Array_Number');
         this.listType_ = 'Number';
         this.setTooltip(Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP);
@@ -92,14 +93,15 @@ Blockly.Blocks['robLists_create_with'] = {
      * @this Blockly.Block
      */
     init : function() {
-        this.setColourRGB(Blockly.CAT_LISTS_RGB);
+        this.setColourRGB(Blockly.CAT_LIST_RGB);
         var listType = new Blockly.FieldDropdown([ [ Blockly.Msg.VARIABLES_TYPE_NUMBER, 'Number' ], [ Blockly.Msg.VARIABLES_TYPE_STRING, 'String' ],
                 [ Blockly.Msg.VARIABLES_TYPE_BOOLEAN, 'Boolean' ], [ Blockly.Msg.VARIABLES_TYPE_COLOUR, 'Colour' ] ], function(option) {
             this.sourceBlock_.updateType_(option);
         });
-        this
-                .interpolateMsg(Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH, [ "LIST_TYPE", listType ], [ "ADD0", 'Number', Blockly.ALIGN_RIGHT ],
-                        Blockly.ALIGN_RIGHT);
+        this.appendValueInput('ADD0').appendField(Blockly.Msg.LISTS_CREATE_TITLE).appendField(':').appendField(listType, 'LIST_TYPE').appendField(
+                Blockly.RTL ? '\u2192' : '\u2190').setCheck('Number');
+        //this.interpolateMsg(Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH, [ "LIST_TYPE", listType ], [ "ADD0", 'Number', Blockly.ALIGN_RIGHT ],
+        //                Blockly.ALIGN_RIGHT);
         this.setInputsInline(false);
         this.appendValueInput('ADD1').setCheck('Number');
         this.appendValueInput('ADD2').setCheck('Number');
@@ -130,27 +132,29 @@ Blockly.Blocks['robLists_create_with'] = {
      * @this Blockly.Block
      */
     domToMutation : function(xmlElement) {
+        for (var x = 0; x < this.itemCount_; x++) {
+            this.removeInput('ADD' + x);
+        }
         this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
         this.listType_ = xmlElement.getAttribute('list_type');
         var listType = new Blockly.FieldDropdown([ [ Blockly.Msg.VARIABLES_TYPE_NUMBER, 'Number' ], [ Blockly.Msg.VARIABLES_TYPE_STRING, 'String' ],
                 [ Blockly.Msg.VARIABLES_TYPE_BOOLEAN, 'Boolean' ], [ Blockly.Msg.VARIABLES_TYPE_COLOUR, 'Colour' ] ], function(option) {
             this.sourceBlock_.updateType_(option);
         });
-        for (var x = 0; x < this.itemCount_; x++) {
-            this.removeInput('ADD' + x);
-        }
         this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
         for (var x = 0; x < this.itemCount_; x++) {
             if (x == 0) {
-                this.interpolateMsg(Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH, [ "LIST_TYPE", listType ], [ "ADD0", this.listType_, Blockly.ALIGN_RIGHT ],
-                        Blockly.ALIGN_RIGHT);
+                this.appendValueInput('ADD0').appendField(Blockly.Msg.LISTS_CREATE_TITLE).appendField(':').appendField(listType, 'LIST_TYPE').appendField(
+                        Blockly.RTL ? '\u2192' : '\u2190').setCheck('Number');
                 this.setInputsInline(false);
             } else {
                 this.appendValueInput('ADD' + x).setCheck(this.listType_);
             }
         }
         if (this.itemCount_ == 0) {
-            this.interpolateMsg(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE, [ "LIST_TYPE", listType ], Blockly.ALIGN_RIGHT);
+            this.appendDummyInput('EMPTY').appendField(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE).appendField(':').appendField(listType, 'LIST_TYPE');
+            this.mutatorMinus.dispose();
+            this.mutatorMinus = null;
         } else {
             this.setMutatorMinus(new Blockly.MutatorMinus(this));
         }
@@ -168,28 +172,40 @@ Blockly.Blocks['robLists_create_with'] = {
     updateShape_ : function(num) {
         var listType = new Blockly.FieldDropdown([ [ Blockly.Msg.VARIABLES_TYPE_NUMBER, 'Number' ], [ Blockly.Msg.VARIABLES_TYPE_STRING, 'String' ],
                 [ Blockly.Msg.VARIABLES_TYPE_BOOLEAN, 'Boolean' ], [ Blockly.Msg.VARIABLES_TYPE_COLOUR, 'Colour' ] ], function(option) {
-            this.sourceBlock_.updateType_(option);
+            if (option && this.listType_ !== option) {
+                this.sourceBlock_.updateType_(option);
+            }
         });
         if (num == 1) {
             if (this.itemCount_ == 0) {
                 this.removeInput('EMPTY');
-                this.appendValueInput('ADD0').appendField('Erstelle').appendField(listType, 'LIST_TYPE').appendField('Liste mit').setCheck('Number');
+                this.appendValueInput('ADD0').appendField(Blockly.Msg.LISTS_CREATE_TITLE).appendField(':').appendField(listType, 'LIST_TYPE').appendField(
+                        Blockly.RTL ? '\u2192' : '\u2190').setCheck('Number');
+                this.setInputsInline(false);
                 this.setMutatorMinus(new Blockly.MutatorMinus(this));
-                this.render();
             } else {
                 this.appendValueInput('ADD' + this.itemCount_).setCheck(this.listType_);
             }
+            var block = this.getNewValue();
+            block.initSvg();
+            block.render();
+            var value = this.getInput('ADD' + this.itemCount_)
+            value.connection.connect(block.outputConnection);
             this.itemCount_++;
         } else if (num == -1) {
             this.itemCount_--;
+            var target = this.getInputTargetBlock('ADD' + this.itemCount_);
+            if (target) {
+                target.dispose();
+            }
             this.removeInput('ADD' + this.itemCount_);
         }
         if (this.itemCount_ == 0) {
-            this.interpolateMsg(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE, [ "LIST_TYPE", listType ], Blockly.ALIGN_RIGHT);
+            this.appendDummyInput('EMPTY').appendField(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE).appendField(':').appendField(listType, 'LIST_TYPE');
             this.mutatorMinus.dispose();
             this.mutatorMinus = null;
-            this.render();
         }
+        this.render();
     },
     /**
      * Update input and output type according to the value of dropdown menu.
@@ -199,14 +215,38 @@ Blockly.Blocks['robLists_create_with'] = {
      * @this Blockly.Block
      */
     updateType_ : function(option) {
-        if (option && this.listType_ !== option) {
-            this.listType_ = option;
-            // update inputs
-            for (var i = 0; i < this.itemCount_; i++) {
-                this.getInput('ADD' + i).setCheck(option);
+        this.listType_ = option;
+        // update inputs
+        for (var i = 0; i < this.itemCount_; i++) {
+            var target = this.getInputTargetBlock('ADD' + i);
+            if (target) {
+                target.dispose();
             }
-            // update output
-            this.changeOutput('Array_' + this.listType_);
+            var input = this.getInput('ADD' + i)
+            input.setCheck(option);
+            var block = this.getNewValue();
+            block.initSvg();
+            block.render();
+            input.connection.connect(block.outputConnection);
+        }
+        // update output
+        this.changeOutput('Array_' + this.listType_);
+    },
+    getNewValue : function() {
+        var block;
+        switch (this.listType_) {
+        case 'Number':
+            block = Blockly.Block.obtain(Blockly.mainWorkspace, 'math_number');
+            return block;
+        case 'String':
+            block = Blockly.Block.obtain(Blockly.mainWorkspace, 'text');
+            return block;
+        case 'Boolean':
+            block = Blockly.Block.obtain(Blockly.mainWorkspace, 'logic_boolean');
+            return block;
+        case 'Colour':
+            block = Blockly.Block.obtain(Blockly.mainWorkspace, 'robColour_picker');
+            return block;
         }
     }
 };
@@ -219,7 +259,7 @@ Blockly.Blocks['lists_repeat'] = {
      */
     init : function() {
         this.setHelpUrl(Blockly.Msg.LISTS_REPEAT_HELPURL);
-        this.setColourRGB(Blockly.CAT_LISTS_RGB);
+        this.setColourRGB(Blockly.CAT_LIST_RGB);
         this.setOutput(true, 'Array_Number');
         var listType = new Blockly.FieldDropdown([ [ Blockly.Msg.VARIABLES_TYPE_NUMBER, 'Number' ], [ Blockly.Msg.VARIABLES_TYPE_STRING, 'String' ],
                 [ Blockly.Msg.VARIABLES_TYPE_BOOLEAN, 'Boolean' ], [ Blockly.Msg.VARIABLES_TYPE_COLOUR, 'Colour' ] ], function(option) {
@@ -227,7 +267,8 @@ Blockly.Blocks['lists_repeat'] = {
                 this.sourceBlock_.updateType_(option);
             }
         });
-        this.interpolateMsg(Blockly.Msg.LISTS_REPEAT_TITLE, [ "LIST_TYPE", listType ], [ "ITEM", 'Number', Blockly.ALIGN_RIGHT ], [ 'NUM', 'Number',
+        // this.appendDummyInput('EMPTY').appendField(Blockly.Msg.LISTS_CREATE_EMPTY_TITLE).appendField(':').appendField(listType, 'LIST_TYPE').appendField(Blockly.RTL ? '\u2192' : '\u2190').setCheck('Number');
+        this.interpolateMsg(Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH, [ "LIST_TYPE", listType ], [ "ITEM", 'Number', Blockly.ALIGN_RIGHT ], [ 'NUM', 'Number',
                 Blockly.ALIGN_RIGHT ], Blockly.ALIGN_RIGHT);
         this.setTooltip(Blockly.Msg.LISTS_REPEAT_TOOLTIP);
         this.listType_ = 'Number';
@@ -260,7 +301,7 @@ Blockly.Blocks['lists_length'] = {
      */
     init : function() {
         this.setHelpUrl(Blockly.Msg.LISTS_LENGTH_HELPURL);
-        this.setColourRGB(Blockly.CAT_LISTS_RGB);
+        this.setColourRGB(Blockly.CAT_LIST_RGB);
         this.interpolateMsg(Blockly.Msg.LISTS_LENGTH_TITLE, [ "VALUE", [ 'Array_Number', 'Array_String', 'Array_Boolean', 'Array_Colour', 'String' ],
                 Blockly.ALIGN_RIGHT ], Blockly.ALIGN_RIGHT);
         this.setOutput(true, 'Number');
@@ -276,7 +317,7 @@ Blockly.Blocks['lists_isEmpty'] = {
      */
     init : function() {
         this.setHelpUrl(Blockly.Msg.LISTS_IS_EMPTY_HELPURL);
-        this.setColourRGB(Blockly.CAT_LISTS_RGB);
+        this.setColourRGB(Blockly.CAT_LIST_RGB);
         this.interpolateMsg(Blockly.Msg.LISTS_IS_EMPTY_TITLE, [ "VALUE", [ 'Array_Number', 'Array_String', 'Array_Boolean', 'Array_Colour', 'String' ],
                 Blockly.ALIGN_RIGHT ], Blockly.ALIGN_RIGHT);
         this.setInputsInline(true);
@@ -294,7 +335,7 @@ Blockly.Blocks['lists_indexOf'] = {
     init : function() {
         var OPERATORS = [ [ Blockly.Msg.LISTS_INDEX_OF_FIRST, 'FIRST' ], [ Blockly.Msg.LISTS_INDEX_OF_LAST, 'LAST' ] ];
         this.setHelpUrl(Blockly.Msg.LISTS_INDEX_OF_HELPURL);
-        this.setColourRGB(Blockly.CAT_LISTS_RGB);
+        this.setColourRGB(Blockly.CAT_LIST_RGB);
         this.setOutput(true, 'Number');
         this.appendValueInput('VALUE').setCheck([ 'Array_Number', 'Array_String', 'Array_Boolean', 'Array_Colour' ]).appendField(
                 Blockly.Msg.LISTS_INDEX_OF_INPUT_IN_LIST);
@@ -316,7 +357,7 @@ Blockly.Blocks['lists_getIndex'] = {
         this.WHERE_OPTIONS = [ [ Blockly.Msg.LISTS_GET_INDEX_FROM_START, 'FROM_START' ], [ Blockly.Msg.LISTS_GET_INDEX_FROM_END, 'FROM_END' ],
                 [ Blockly.Msg.LISTS_GET_INDEX_FIRST, 'FIRST' ], [ Blockly.Msg.LISTS_GET_INDEX_LAST, 'LAST' ], [ Blockly.Msg.LISTS_GET_INDEX_RANDOM, 'RANDOM' ] ];
         this.setHelpUrl(Blockly.Msg.LISTS_GET_INDEX_HELPURL);
-        this.setColourRGB(Blockly.CAT_LISTS_RGB);
+        this.setColourRGB(Blockly.CAT_LIST_RGB);
         var modeMenu = new Blockly.FieldDropdown(MODE, function(value) {
             var isStatement = (value == 'REMOVE');
             this.sourceBlock_.updateStatement_(isStatement);
@@ -442,7 +483,7 @@ Blockly.Blocks['lists_setIndex'] = {
         this.WHERE_OPTIONS = [ [ Blockly.Msg.LISTS_GET_INDEX_FROM_START, 'FROM_START' ], [ Blockly.Msg.LISTS_GET_INDEX_FROM_END, 'FROM_END' ],
                 [ Blockly.Msg.LISTS_GET_INDEX_FIRST, 'FIRST' ], [ Blockly.Msg.LISTS_GET_INDEX_LAST, 'LAST' ], [ Blockly.Msg.LISTS_GET_INDEX_RANDOM, 'RANDOM' ] ];
         this.setHelpUrl(Blockly.Msg.LISTS_SET_INDEX_HELPURL);
-        this.setColourRGB(Blockly.CAT_LISTS_RGB);
+        this.setColourRGB(Blockly.CAT_LIST_RGB);
         this.appendValueInput('LIST').setCheck([ 'Array_Number', 'Array_String', 'Array_Boolean', 'Array_Colour' ]).appendField(
                 Blockly.Msg.LISTS_SET_INDEX_INPUT_IN_LIST);
         this.appendDummyInput().appendField(new Blockly.FieldDropdown(MODE), 'MODE').appendField('', 'SPACE');
@@ -538,7 +579,7 @@ Blockly.Blocks['lists_getSublist'] = {
         this.WHERE_OPTIONS_2 = [ [ Blockly.Msg.LISTS_GET_SUBLIST_END_FROM_START, 'FROM_START' ], [ Blockly.Msg.LISTS_GET_SUBLIST_END_FROM_END, 'FROM_END' ],
                 [ Blockly.Msg.LISTS_GET_SUBLIST_END_LAST, 'LAST' ] ];
         this.setHelpUrl(Blockly.Msg.LISTS_GET_SUBLIST_HELPURL);
-        this.setColourRGB(Blockly.CAT_LISTS_RGB);
+        this.setColourRGB(Blockly.CAT_LIST_RGB);
         this.appendValueInput('LIST').setCheck([ 'Array_Number', 'Array_String', 'Array_Boolean', 'Array_Colour' ]).appendField(
                 Blockly.Msg.LISTS_GET_SUBLIST_INPUT_IN_LIST);
         this.appendDummyInput('AT1');

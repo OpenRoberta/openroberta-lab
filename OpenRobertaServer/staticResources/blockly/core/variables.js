@@ -184,6 +184,8 @@ Blockly.Variables.getProcedureName = function(name) {
                 var surroundParent = blocks[i].getSurroundParent();
                 if (surroundParent && (surroundParent.type == 'robProcedures_defnoreturn' || surroundParent.type == 'robProcedures_defreturn')) {
                     return surroundParent.getFieldValue('NAME');
+                } else if (surroundParent && (surroundParent.type == 'robControls_start')) {
+                    return 'global';
                 }
                 // special case controls_for loop, variable declaration is implicied.
                 if (blocks[i].type == 'controls_for' || blocks[i].type == 'controls_forEach') {

@@ -815,14 +815,14 @@ Blockly.Msg.TEXT_PROMPT_TOOLTIP_TEXT = 'Prompt for user for some text.';
 /// url - Information on empty lists.
 Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = 'https://en.wikipedia.org/wiki/Linked_list#Empty_lists';
 /// block text - See [https://code.google.com/p/blockly/wiki/Lists#create_empty_list https://code.google.com/p/blockly/wiki/Lists#create_empty_list].
-Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = 'create empty %1 list';
+Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = 'empty list';
 /// block text - See [https://code.google.com/p/blockly/wiki/Lists#create_empty_list https://code.google.com/p/blockly/wiki/Lists#create_empty_list].
 Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP = 'Returns a list, of length 0, containing no data records';
 
 /// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#create_list_with https://code.google.com/p/blockly/wiki/Lists#create_list_with].
 Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP = 'Create a list with any number of items.';
 /// block text - See [https://code.google.com/p/blockly/wiki/Lists#create_list_with https://code.google.com/p/blockly/wiki/Lists#create_list_with].
-Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH = 'create %1 list with %2';
+Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH = 'list : %1 \u2190 %2 repeated %3 times';
 /// block text - This appears in a sub-block when [https://code.google.com/p/blockly/wiki/Lists#changing_number_of_inputs changing the number of inputs in a ''''create list with'''' block].
 Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TITLE_ADD = 'list';
 /// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#changing_number_of_inputs https://code.google.com/p/blockly/wiki/Lists#changing_number_of_inputs].
@@ -830,6 +830,7 @@ Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TOOLTIP = 'Add, remove, or reorder secti
 Blockly.Msg.LISTS_CREATE_WITH_ITEM_TITLE = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 /// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#changing_number_of_inputs https://code.google.com/p/blockly/wiki/Lists#changing_number_of_inputs].
 Blockly.Msg.LISTS_CREATE_WITH_ITEM_TOOLTIP = 'Add an item to the list.';
+Blockly.Msg.LISTS_CREATE_TITLE = 'list';
 
 /// url - Information about [https://code.google.com/p/blockly/wiki/Lists#create_list_with creating a list with multiple copies of a single item].
 Blockly.Msg.LISTS_REPEAT_HELPURL = 'https://code.google.com/p/blockly/wiki/Lists#create_list_with';
@@ -1074,10 +1075,10 @@ Blockly.Msg.VARIABLES_SET_CREATE_GET = 'Create "get %1"';
 Blockly.Msg.VARIABLES_TYPE_NUMBER = 'Number';
 Blockly.Msg.VARIABLES_TYPE_BOOLEAN = 'Boolean';
 Blockly.Msg.VARIABLES_TYPE_STRING = 'String';
-Blockly.Msg.VARIABLES_TYPE_ARRAY_NUMBER = 'Array Number';
-Blockly.Msg.VARIABLES_TYPE_ARRAY_STRING = 'Array String';
-Blockly.Msg.VARIABLES_TYPE_ARRAY_BOOLEAN = 'Array Boolean';
-Blockly.Msg.VARIABLES_TYPE_ARRAY_COLOUR = 'Array Colour';
+Blockly.Msg.VARIABLES_TYPE_ARRAY_NUMBER = 'List Number';
+Blockly.Msg.VARIABLES_TYPE_ARRAY_STRING = 'List String';
+Blockly.Msg.VARIABLES_TYPE_ARRAY_BOOLEAN = 'List Boolean';
+Blockly.Msg.VARIABLES_TYPE_ARRAY_COLOUR = 'List Colour';
 Blockly.Msg.VARIABLES_TYPE_COLOUR = 'Colour';
 
 // Procedures Blocks.
@@ -1272,6 +1273,25 @@ Blockly.Msg.MODE_RATE = 'rate';
 Blockly.Msg.LOOP_COUNT = 'number';
 Blockly.Msg.LOOP = 'repeat until';
 Blockly.Msg.LOOP_FOREVER = 'repeat indefinitely';
+Blockly.Msg.TOOLBOX_ACTION = 'Action';
+Blockly.Msg.TOOLBOX_SENSOR = 'Sensors';
+Blockly.Msg.TOOLBOX_CONTROL = 'Control';
+Blockly.Msg.TOOLBOX_LOGIC = 'Logic';
+Blockly.Msg.TOOLBOX_MATH = 'Math';
+Blockly.Msg.TOOLBOX_TEXT = 'Text';
+Blockly.Msg.TOOLBOX_LIST = 'Lists';
+Blockly.Msg.TOOLBOX_COLOUR = 'Colours';
+Blockly.Msg.TOOLBOX_VARIABLE = 'Variables';
+Blockly.Msg.TOOLBOX_GLOBAL_VARIABLE = 'global Variables';
+Blockly.Msg.TOOLBOX_PROCEDURE = 'Functions';
+Blockly.Msg.TOOLBOX_WAIT = 'Wait';
+Blockly.Msg.TOOLBOX_LOOP = 'Loops';
+Blockly.Msg.TOOLBOX_DECISION = 'Decisions';
+Blockly.Msg.TOOLBOX_LIGHT = 'Lights';
+Blockly.Msg.TOOLBOX_SOUND = 'Sounds';
+Blockly.Msg.TOOLBOX_DISPLAY = 'Display';
+Blockly.Msg.TOOLBOX_DRIVE = 'Drive';
+Blockly.Msg.TOOLBOX_MOVE = 'Move';
 //
 Blockly.Msg.START_HELP = 'here comes your help text';
 Blockly.Msg.MOTORDIFF_ON_HELP = 'here comes your help text';

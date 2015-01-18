@@ -36,7 +36,7 @@ Blockly.Blocks['robProcedures_defnoreturn'] = {
      */
     init : function() {
         this.setHelpUrl(Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL);
-        this.setColourRGB(Blockly.CAT_PROCEDURES_RGB);
+        this.setColourRGB(Blockly.CAT_PROCEDURE_RGB);
         var name = Blockly.Procedures.findLegalName(Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE, this);
         this.appendDummyInput().appendField(new Blockly.FieldTextInput(name, Blockly.Procedures.rename), 'NAME').appendField('', 'WITH');
         this.appendStatementInput('STACK').appendField(Blockly.Msg.PROCEDURES_DEFNORETURN_DO);
@@ -151,7 +151,7 @@ Blockly.Blocks['robProcedures_defreturn'] = {
         });
         var name = Blockly.Procedures.findLegalName(Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE, this);
         this.setHelpUrl(Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL);
-        this.setColourRGB(Blockly.CAT_PROCEDURES_RGB);
+        this.setColourRGB(Blockly.CAT_PROCEDURE_RGB);
         this.appendDummyInput('NAME_ROW').appendField(new Blockly.FieldTextInput(name, Blockly.Procedures.rename), 'NAME').appendField('', 'WITH');
         this.appendStatementInput('STACK').appendField(Blockly.Msg.PROCEDURES_DEFNORETURN_DO);
         this.setMutator(new Blockly.MutatorPlus(this));
@@ -276,7 +276,7 @@ Blockly.Blocks['robProcedures_callnoreturn'] = {
      */
     init : function() {
         this.setHelpUrl(Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL);
-        this.setColourRGB(Blockly.CAT_PROCEDURES_RGB);
+        this.setColourRGB(Blockly.CAT_PROCEDURE_RGB);
         this.appendDummyInput().appendField(Blockly.Msg.PROCEDURES_CALLNORETURN_CALL).appendField('', 'NAME');
         this.setPreviousStatement(true);
         this.setNextStatement(true);
@@ -494,7 +494,7 @@ Blockly.Blocks['robProcedures_callreturn'] = {
      */
     init : function() {
         this.setHelpUrl(Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL);
-        this.setColourRGB(Blockly.CAT_PROCEDURES_RGB);
+        this.setColourRGB(Blockly.CAT_PROCEDURE_RGB);
         this.appendDummyInput().appendField(Blockly.Msg.PROCEDURES_CALLRETURN_CALL).appendField('', 'NAME');
         this.setOutput(true, 'Number');
         // Tooltip is set in domToMutation.
@@ -579,7 +579,7 @@ Blockly.Blocks['robProcedures_ifreturn'] = {
      */
     init : function() {
         this.setHelpUrl('http://c2.com/cgi/wiki?GuardClause');
-        this.setColourRGB(Blockly.CAT_PROCEDURES_RGB);
+        this.setColourRGB(Blockly.CAT_PROCEDURE_RGB);
         this.appendValueInput('CONDITION').setCheck('Boolean').appendField(Blockly.Msg.CONTROLS_IF_MSG_IF);
         this.appendValueInput('VALUE').appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN);
         this.setInputsInline(true);

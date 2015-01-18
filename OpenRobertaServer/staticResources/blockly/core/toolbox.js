@@ -296,59 +296,30 @@ Blockly.Toolbox.populate_ = function() {
             if (name == 'CATEGORY') {
                 // TODO adjust the width of the box to the longest name, later this
                 // should be calculated.
-                var catname = childIn.getAttribute('name');
+                var catMsg = childIn.getAttribute('name');
+                var catname = Blockly.Msg[catMsg];
+                if (!catname) {
+                    catname = catMsg;
+                }
                 // TODO improve handling of Toolbox size variables
                 if (opt_color) {
-
+                    // child categories always have the same colour than the parent
                     var isSub = true;
                 } else {
-
-                    switch (catname) {
-                    // if there is no color until now, pick it
-                    // TODO get the color variable name from the category name (language
-                    // data)
-                    case 'Aktion':
-                        Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(Blockly.CAT_ROBACTIONS_RGB);
-                        break;
-                    case 'Sensoren':
-                        Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(Blockly.CAT_ROBSENSORS_RGB);
-                        break;
-                    case 'Kontrolle':
-                        Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(Blockly.CAT_ROBCONTROLS_RGB);
-                        break;
-                    case 'Logik':
-                        Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(Blockly.CAT_LOGIC_RGB);
-                        break;
-                    case 'Mathematik':
-                        Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(Blockly.CAT_MATH_RGB);
-                        break;
-                    case 'Text':
-                        Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(Blockly.CAT_TEXT_RGB);
-                        break;
-                    case 'Farben':
-                        Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(Blockly.CAT_COLOUR_RGB);
-                        break;
-                    case 'Variablen':
-                        Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(Blockly.CAT_VARIABLES_RGB);
-                        break;
-                    case 'Funktionen':
-                        Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(Blockly.CAT_PROCEDURES_RGB);
-                        break;
-                    case 'Listen':
-                        Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(Blockly.CAT_LISTS_RGB);
-                        break;
-                    default:
+                    var rgbName = 'CAT_' + catMsg.substring(8).toUpperCase() + '_RGB';
+                    var rgbColour = Blockly[rgbName];
+                    if (rgbColour) {
+                        Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(rgbColour);
+                    } else {
                         Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex([ 0, 0, 255 ]);
-                        break;
                     }
                 }
-                var childOut = rootOut.createNode(Blockly.Toolbox.createNodeHtml(childIn.getAttribute('name'), isSub));
+                var childOut = rootOut.createNode(Blockly.Toolbox.createNodeHtml(catname, isSub));
                 childOut.blocks = [];
                 treeOut.add(childOut);
                 var custom = childIn.getAttribute('custom');
                 if (custom) {
                     Blockly.Toolbox.catcolor = null;
-                    // Variables and procedures have special categories that are dynamic.
                     childOut.blocks = custom;
                 } else {
                     syncTrees(childIn, childOut, Blockly.Toolbox.catcolor);

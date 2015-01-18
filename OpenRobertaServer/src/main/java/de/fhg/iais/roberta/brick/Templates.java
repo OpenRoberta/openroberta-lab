@@ -13,7 +13,7 @@ public class Templates {
 	public Templates() {
 		String beginner = ""
 				+ " <toolbox_set id='toolbox' style='display: none'> "
-				+ "  <category name='Aktion'> "
+				+ "  <category name='TOOLBOX_ACTION'> "
 				+ "    <block type='robActions_motorDiff_on'>" //
 				+ "      <value name='POWER'>" //
 				+ "        <block type='math_number'>" //
@@ -96,7 +96,7 @@ public class Templates {
 				+ "    <block type='robActions_brickLight_off'></block>" //
 				+ "    <block type='robActions_brickLight_reset'></block>" //
 				+ "  </category> " //
-				+ "  <category name='Sensoren'> "
+				+ "  <category name='TOOLBOX_SENSOR'> "
 				+ "      <block type='robSensors_touch_isPressed'>"
 				+ "      </block>"
 				+ "      <block type='robSensors_ultrasonic_getSample'>"
@@ -125,7 +125,7 @@ public class Templates {
 				+ "      <block type='robSensors_timer_reset'>"
 				+ "      </block>" //
 				+ "  </category> "
-				+ "  <category name='Kontrolle'> "
+				+ "  <category name='TOOLBOX_CONTROL'> "
 				+ "      <block type='robControls_if'/> "
 				+ "      <block type='robControls_ifElse'/> "
 				+ "      <block type='robControls_loopForever'/> "
@@ -152,19 +152,19 @@ public class Templates {
 				+ "        </value> "
 				+ "      </block> " //
 				+ "  </category> "
-				+ "  <category name='Logik'> "
+				+ "  <category name='TOOLBOX_LOGIC'> "
 				+ "    <block type='logic_compare'/> "
 				+ "    <block type='logic_operation'/> "
 				+ "    <block type='logic_boolean'/> " //
 				+ "  </category> "
-				+ "  <category name='Mathematik'> "
+				+ "  <category name='TOOLBOX_MATH'> "
 				+ "    <block type='math_number'/> "
 				+ "    <block type='math_arithmetic'/> " //
 				+ "  </category> "
-				+ "  <category name='Text'> " //
+				+ "  <category name='TOOLBOX_TEXT'> " //
 				+ "    <block type='text'/> "
 				+ "  </category> " //
-				+ "  <category name='Farben'> "
+				+ "  <category name='TOOLBOX_COLOUR'> "
 				+ "    <block type='robColour_picker'> "
 				+ "      <field name='COLOUR'>#585858</field> "
 				+ "    </block> " //
@@ -190,13 +190,13 @@ public class Templates {
 				+ "      <field name='COLOUR'>#532115</field> "
 				+ "    </block> " //
 				+ "  </category> "
-				+ "  <category name='Variablen' custom='VARIABLE'/> "
-				+ "  <category name='Funktionen' custom='PROCEDURE'/> "
+				+ "  <category name='TOOLBOX_VARIABLE' custom='VARIABLE'/> "
+				+ "  <category name='TOOLBOX_PROCEDURE' custom='PROCEDURE'/> "
 				+ "</toolbox_set> ";
 		String expert = ""
 				+ " <toolbox_set id='toolbox' style='display: none'> "
-				+ "  <category name='Aktion'> "
-				+ "    <category name='Bewegung'> "
+				+ "  <category name='TOOLBOX_ACTION'> "
+				+ "    <category name='TOOLBOX_MOVE'> "
 				+ "      <block type='robActions_motor_on'>" //
 				+ "        <field name='MOTORPORT'>B</field> "
 				+ "          <value name='POWER'>" //
@@ -233,7 +233,7 @@ public class Templates {
 				+ "        <field name='MOTORPORT'>A</field> "
 				+ "      </block>" //
 				+ "    </category> "
-				+ "    <category name='Fahren'> "
+				+ "    <category name='TOOLBOX_DRIVE'> "
 				+ "      <block type='robActions_motorDiff_on'>" //
 				+ "        <value name='POWER'>" //
 				+ "          <block type='math_number'>" //
@@ -275,7 +275,7 @@ public class Templates {
 				+ "        </value>" //
 				+ "      </block>" //
 				+ "    </category> " //
-				+ "    <category name='Anzeige'> "
+				+ "    <category name='TOOLBOX_DISPLAY'> "
 				+ "      <block type='robActions_display_text'>" //
 				+ "        <value name='OUT'>" //
 				+ "          <block type='text'>" //
@@ -308,7 +308,7 @@ public class Templates {
 				+ "      <block type='robActions_display_clear'>" //
 				+ "      </block>" //
 				+ "    </category> "
-				+ "    <category name='Klang'> "
+				+ "    <category name='TOOLBOX_SOUND'> "
 				+ "      <block type='robActions_play_tone'>" //
 				+ "        <value name='FREQUENCE'>" //
 				+ "          <block type='math_number'>" //
@@ -333,13 +333,13 @@ public class Templates {
 				+ "      <block type='robActions_play_getVolume'>" //
 				+ "      </block>" //
 				+ "    </category> "
-				+ "    <category name='Statusleuchte'> "
+				+ "    <category name='TOOLBOX_LIGHT'> "
 				+ "      <block type='robActions_brickLight_on'></block>" //
 				+ "      <block type='robActions_brickLight_off'></block>" //
 				+ "      <block type='robActions_brickLight_reset'></block>" //
 				+ "    </category> " //
 				+ "  </category> " //
-				+ "  <category name='Sensoren'> "
+				+ "  <category name='TOOLBOX_SENSOR'> "
 				+ "    <block type='robSensors_touch_isPressed'>"
 				+ "    </block>"
 				+ "    <block type='robSensors_ultrasonic_getSample'>"
@@ -368,12 +368,12 @@ public class Templates {
 				+ "    <block type='robSensors_timer_reset'>"
 				+ "    </block>" //
 				+ "  </category> "
-				+ "  <category name='Kontrolle'> "
-				+ "    <category name='Entscheidung'> "
+				+ "  <category name='TOOLBOX_CONTROL'> "
+				+ "    <category name='TOOLBOX_DECISION'> "
 				+ "      <block type='robControls_if'/> "
 				+ "      <block type='robControls_ifElse'/> "
 				+ "    </category> " //
-				+ "    <category name='Schleifen'> "
+				+ "    <category name='TOOLBOX_LOOP'> "
 				+ "      <block type='controls_repeat_ext'> "
 				+ "        <value name='TIMES'> "
 				+ "          <block type='math_number'> "
@@ -402,7 +402,7 @@ public class Templates {
 				+ "      <block type='controls_forEach'/> "
 				+ "      <block type='controls_flow_statements'/> "
 				+ "    </category> " //
-				+ "    <category name='Warten'> "
+				+ "    <category name='TOOLBOX_WAIT'> "
 				+ "      <block type='robControls_wait'> " //
 				+ "      </block> "
 				+ "      <block type='robControls_wait_time'> "
@@ -434,7 +434,7 @@ public class Templates {
 				 * "      <block type='robControls_start_activity'></block> " //
 				 * + "    </category> " //
 				 */+ "  </category> "
-				+ "  <category name='Logik'> "
+				+ "  <category name='TOOLBOX_LOGIC'> "
 				+ "    <block type='logic_compare'/> "
 				+ "    <block type='logic_operation'/> "
 				+ "    <block type='logic_negate'/> "
@@ -442,7 +442,7 @@ public class Templates {
 				+ "    <block type='logic_null'/> "
 				+ "    <block type='logic_ternary'/> " //
 				+ "  </category> "
-				+ "  <category name='Mathematik'> "
+				+ "  <category name='TOOLBOX_MATH'> "
 				+ "    <block type='math_number'/> "
 				+ "    <block type='math_arithmetic'/> "
 				+ "    <block type='math_single'/> "
@@ -485,7 +485,7 @@ public class Templates {
 				+ "    </block> "
 				+ "    <block type='math_random_float'/> " //
 				+ "  </category> "
-				+ "  <category name='Text'> " //
+				+ "  <category name='TOOLBOX_TEXT'> " //
 				+ "    <block type='text'/> "
 				+ "    <block type='robText_join'/> "
 				+ "    <block type='text_append'> "
@@ -494,9 +494,19 @@ public class Templates {
 				+ "      </value> "
 				+ "    </block> " //
 				+ "  </category> "
-				+ "  <category name='Listen'> "
+				+ "  <category name='TOOLBOX_LIST'> "
 				+ "    <block type='lists_create_empty'/> "
-				+ "    <block type='robLists_create_with'/> "
+				+ "    <block type='robLists_create_with'> "
+				+ "      <value name='ADD0'>"
+				+ "        <block type='math_number'></block> "
+				+ "      </value> "
+				+ "      <value name='ADD1'>"
+				+ "        <block type='math_number'></block> "
+				+ "      </value> "
+				+ "      <value name='ADD2'>"
+				+ "        <block type='math_number'></block> "
+				+ "      </value> "
+				+ "    </block> " //
 				+ "    <block type='lists_repeat'> "
 				+ "      <value name='NUM'> "
 				+ "        <block type='math_number'> "
@@ -515,11 +525,11 @@ public class Templates {
 				+ "    <block type='lists_getSublist'> " //
 				+ "    </block> "
 				+ "  </category> " //
-				+ "  <category name='Farben'> "
+				+ "  <category name='TOOLBOX_COLOUR'> "
 				+ "    <block type='robColour_picker'> " //
 				+ "    </block> " + "  </category> "
-				+ "  <category name='Variablen' custom='VARIABLE'/> "
-				+ "  <category name='Funktionen' custom='PROCEDURE'/> "
+				+ "  <category name='TOOLBOX_VARIABLE' custom='VARIABLE'/> "
+				+ "  <category name='TOOLBOX_PROCEDURE' custom='PROCEDURE'/> "
 				+ "</toolbox_set> ";
 		String brickEV3 = ""
 				+ "<toolbox_set id='toolbox' style='display: none'>"
