@@ -11,19 +11,19 @@ public class Keyboard {
 	
 	int x = 0, y = 5;
 	
-	String[] lower = {"0123456789-=_+    ", 
-			          ".,@:;?/()*!\"£$%^&#", 
-			          "qwertyuiop[]{}    ", 
-			          "asdfghjkl         ", 
-			          "zxcvbnm<>|\\`¬     ", 
-			          "U l x D           "};
+	String[] lower = {"!@#$%^&*()_+`~    ", 
+					  "1234567890-=      ",
+					  "qwertyuiop[]\\{}|  ",
+					  "asdfghjkl;':\"     ",
+					  "zxcvbnm,./<>?     ",
+					  "U l x D           "};
 	
-	String[] upper = {"0123456789-=_+    ", 
-	                  ".,@:;?/()*!\"£$%^&#", 
-	                  "QWERTYUIOP[]{}    ", 
-	                  "ASDFGHJKL         ", 
-	                  "ZXCVBNM<>|\\`¬     ", 
-	                  "U l x D           "};
+	String[] upper = {"!@#$%^&*()_+`~    ", 
+					  "1234567890-=      ",
+					  "QWERTYUIOP[]\\{}|  ",
+					  "ASDFGHJKL;':\"     ",
+					  "ZXCVBNM,./<>?     ",
+					  "U l x D           "};
 	
 	String[] lines = lower;
 	

@@ -6,8 +6,8 @@ import java.util.TreeMap;
 
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
-import lejos.hardware.motor.NXTMotor;
 import lejos.hardware.motor.NXTRegulatedMotor;
+import lejos.hardware.motor.UnregulatedMotor;
 import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3GyroSensor;
@@ -82,7 +82,7 @@ public class DeviceHandler {
                     break;
                 case "NXTMotor":
                     // EV3Motor can be accessed by NXTMotor as unregulated motor too!!!
-                    EncoderMotor nxtMotor = new NXTMotor(hardwarePort);
+                    UnregulatedMotor nxtMotor = new UnregulatedMotor(hardwarePort);
                     this.lejosUnregulatedMotors.put(actorPort, nxtMotor);
                     break;
                 default:

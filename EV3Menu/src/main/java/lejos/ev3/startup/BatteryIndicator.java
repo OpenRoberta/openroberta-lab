@@ -1,6 +1,7 @@
 package lejos.ev3.startup;
 
 import lejos.hardware.ev3.LocalEV3;
+import lejos.hardware.lcd.CommonLCD;
 import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.lcd.Image;
 import lejos.hardware.lcd.TextLCD;
@@ -119,7 +120,7 @@ public class BatteryIndicator {
     /**
      * Display the battery icon.
      */
-    public synchronized void draw(long time, byte[] buf) {
+    public synchronized void draw(long time) {
         int level = getLevel();
 
         if ( level <= this.levelMin ) {
@@ -143,14 +144,20 @@ public class BatteryIndicator {
             this.lcd.drawInt((level - level % 1000) / 1000, 0, 0);
             this.lcd.drawString(".", 1, 0);
             this.lcd.drawInt((level % 1000) / 100, 2, 0);
+        } else {
+            this.lcd.drawString("   ", 0, 0);
         }
 
         if ( this.wifi ) {
             this.g.drawRegion(wifiImage, 0, 0, 16, 16, 0, ICON_X, 0, 0);
+        } else {
+            this.g.drawRegionRop(null, 0, 0, 16, 16, 0, ICON_X, 0, 0, CommonLCD.ROP_CLEAR);
         }
 
         if ( ORAhandler.isRegistered() ) {
             this.g.drawRegion(robertaImage, 0, 0, 16, 16, 0, ICON_X - 18, 0, 0);
+        } else {
+            this.g.drawRegionRop(null, 0, 0, 16, 16, 0, ICON_X - 18, 0, 0, CommonLCD.ROP_CLEAR);
         }
     }
 }

@@ -2,7 +2,7 @@ package lejos.ev3.startup;
 
 public class Config
 {
-    public static final int VERSION = 0x000801;
+    public static final int VERSION = 0x000900;
     
 	public static final int ANIM_DELAY = 250;
 	public static final int ACTIVITY_TIMEOUT = 1000;

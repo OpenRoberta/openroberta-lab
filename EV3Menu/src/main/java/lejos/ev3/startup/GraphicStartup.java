@@ -60,6 +60,7 @@ import lejos.hardware.port.SensorPort;
 import lejos.hardware.port.TachoMotorPort;
 import lejos.hardware.port.UARTPort;
 import lejos.hardware.sensor.BaseSensor;
+import lejos.internal.ev3.EV3IOPort;
 import lejos.internal.io.Settings;
 import lejos.internal.io.SystemSettings;
 import lejos.remote.ev3.EV3Reply;
@@ -149,8 +150,6 @@ public class GraphicStartup implements Menu {
     private static final String ICRoberta =
         "\u0000\u0000\u0080\u0000\u0000\u0000\u0080\u0000\u0000\u00c0\u00c3\u0001\u0010\u0001\u00c0\u0001\u00dc\u00c0\u00c1\u0000\u0058\u002f\u00fe\u0000\u009c\u0010\u007c\u0000\u007c\u0080\u001c\u0000\u0078\u0084\u001d\u0000\u0070\u000c\u0004\u0000\u0070\u0000\u0002\u0000\u0080\u00f0\u0001\u0000\u0000\u003f\u0000\u0000\u0000\u0038\u0000\u0000\u0000\u0018\u0000\u0000\u0000\u001c\u0000\u0000\u0000\u001c\u00c0\u0001\u0000\u001c\u00f8\u0003\u0000\u00dc\u00ff\u0003\u0000\u00dc\u00ff\u0003\u0000\u00bc\u00ff\r\u0000\u00f8\u00ff\u001e\u0000\u00f4\u007f\u001f\u0080\u00cf\u00c7\u003f\u00c0\u00ff\u00bb\u003f\u00e0\u00fb\u00fd\u0033\u00e0\u0007\u00ff\u003b\u00e0\u00ff\u00cf\u003b\u00e0\u00ff\u00ef\u001f\u00c0\u00ff\u00ff\u001f\u0080\u00f7\u00fe\u000f\u0000\u0000\u00b8\u0007";
 
-    public int selectTest;
-
     private static final String PROGRAMS_DIRECTORY = "/home/lejos/programs";
     private static final String SAMPLES_DIRECTORY = "/home/root/lejos/samples";
     private static final String TOOLS_DIRECTORY = "/home/root/lejos/tools";
@@ -169,6 +168,7 @@ public class GraphicStartup implements Menu {
     private final BroadcastThread broadcast = new BroadcastThread();
     private final RemoteMenuThread remoteMenuThread = new RemoteMenuThread();
 
+    //private GraphicMenu curMenu;
     private int timeout = 0;
     private boolean btVisibility;
     private static String version = "Unknown";
@@ -181,7 +181,7 @@ public class GraphicStartup implements Menu {
 
     private static TextLCD lcd = LocalEV3.get().getTextLCD();
 
-    public static Process program; // the running user program, if any
+    private static Process program; // the running user program, if any
     private static String programName; // The name of the running program
 
     private static boolean suspend = false;
@@ -227,10 +227,10 @@ public class GraphicStartup implements Menu {
         TuneThread tuneThread = new TuneThread();
         tuneThread.start();
 
-        // System.out.println("Getting IP addresses");
-        // ips = getIPAddresses();
+        System.out.println("Getting IP addresses");
+        ips = getIPAddresses();
 
-        // Start the RMI registry
+        // Start the RMI registry 
         InitThread initThread = new InitThread();
         initThread.start();
 
@@ -249,8 +249,10 @@ public class GraphicStartup implements Menu {
      */
     static class InitThread extends Thread {
         /**
-         * Create the Bluetooth local device and connect to DBus Start the RMI
-         * server Broadcast device availability Get the time from a name server
+         * Create the Bluetooth local device and connect to DBus
+         * Start the RMI server
+         * Broadcast device availability
+         * Get the time from a name server
          */
         @Override
         public void run() {
@@ -274,11 +276,11 @@ public class GraphicStartup implements Menu {
             System.out.println("Setting java.rmi.server.hostname to " + lastIp);
             System.setProperty("java.rmi.server.hostname", lastIp);
 
-            try { // special exception handler for registry creation
+            try { //special exception handler for registry creation
                 LocateRegistry.createRegistry(1099);
                 System.out.println("java RMI registry created.");
             } catch ( RemoteException e ) {
-                // do nothing, error means registry already exists
+                //do nothing, error means registry already exists
                 System.out.println("java RMI registry already exists.");
             }
 
@@ -319,8 +321,8 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Display the main system menu. Allow the user to select File, Bluetooth,
-     * Sound, System operations.
+     * Display the main system menu.
+     * Allow the user to select File, Bluetooth, Sound, System operations.
      */
     private void mainMenu() {
         GraphicMenu menu = new GraphicMenu(new String[] {
@@ -369,7 +371,7 @@ public class GraphicStartup implements Menu {
                     break;
             }
 
-            if ( selection < 0 && selection > -4 ) {
+            if ( selection < 0 ) {
                 if ( getYesNo("  Shut down EV3 ?", false) == 1 ) {
                     break;
                 }
@@ -412,7 +414,7 @@ public class GraphicStartup implements Menu {
                 try {
                     System.out.println("Waiting for a remote menu connection");
                     conn = ss.accept();
-                    // conn.setSoTimeout(2000);
+                    //conn.setSoTimeout(2000);
 
                     ObjectOutputStream os = new ObjectOutputStream(conn.getOutputStream());
                     ObjectInputStream is = new ObjectInputStream(conn.getInputStream());
@@ -504,7 +506,7 @@ public class GraphicStartup implements Menu {
                             } else if ( obj instanceof EV3Request ) {
                                 EV3Request request = (EV3Request) obj;
                                 EV3Reply reply = new EV3Reply();
-                                // System.out.println("Request: " + request.request);
+                                //System.out.println("Request: " + request.request);
                                 try {
                                     switch ( request.request ) {
                                         case GET_VOLTAGE_MILLIVOLTS:
@@ -1206,7 +1208,7 @@ public class GraphicStartup implements Menu {
                     } catch ( IOException e ) {
                         System.err.println("Failed to set visibility: " + e);
                     }
-                    // updateBTIcon();
+                    //updateBTIcon();
                     this.ind.updateNow();
                     break;
                 case 3:
@@ -1217,16 +1219,13 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Clears the screen, displays a number and allows user to change the digits
-     * of the number individually using the NXT buttons. Note the array of bytes
-     * represent ASCII characters, not actual numbers.
+     * Clears the screen, displays a number and allows user to change
+     * the digits of the number individually using the NXT buttons.
+     * Note the array of bytes represent ASCII characters, not actual numbers.
      * 
-     * @param digits
-     *        Number of digits in the PIN.
-     * @param title
-     *        The text to display above the numbers.
-     * @param number
-     *        Start with a default PIN. Array of bytes up to 8 length.
+     * @param digits Number of digits in the PIN.
+     * @param title The text to display above the numbers.
+     * @param number Start with a default PIN. Array of bytes up to 8 length.
      * @return
      */
     private boolean enterNumber(String title, byte[] number, int digits) {
@@ -1320,13 +1319,15 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Perform the Bluetooth search operation Search for Bluetooth devices Present
-     * those that are found Allow pairing
+     * Perform the Bluetooth search operation
+     * Search for Bluetooth devices
+     * Present those that are found
+     * Allow pairing
      */
     private void bluetoothSearch() {
         newScreen("Searching");
         ArrayList<RemoteBTDevice> devList;
-        // indiBT.incCount();
+        //indiBT.incCount();
         devList = null;
         try {
             // 0 means "search for all"
@@ -1347,7 +1348,7 @@ public class GraphicStartup implements Menu {
         for ( int i = 0; i < devList.size(); i++ ) {
             RemoteBTDevice btrd = devList.get(i);
             names[i] = btrd.getName();
-            // icons[i] = getDeviceIcon(btrd.getDeviceClass());
+            //icons[i] = getDeviceIcon(btrd.getDeviceClass());
         }
         GraphicListMenu searchMenu = new GraphicListMenu(names, icons);
         GraphicMenu subMenu = new GraphicMenu(new String[] {
@@ -1362,15 +1363,15 @@ public class GraphicStartup implements Menu {
             if ( selected >= 0 ) {
                 RemoteBTDevice btrd = devList.get(selected);
                 newScreen();
-                // LCD.bitBlt(
-                // Utils.stringToBytes8(getDeviceIcon(btrd.getDeviceClass()))
-                // , 7, 7, 0, 0, 2, 16, 7, 7, LCD.ROP_COPY);
+                //LCD.bitBlt(
+                //	Utils.stringToBytes8(getDeviceIcon(btrd.getDeviceClass()))
+                //	, 7, 7, 0, 0, 2, 16, 7, 7, LCD.ROP_COPY);
                 lcd.drawString(names[selected], 2, 2);
                 lcd.drawString(btrd.getAddress(), 0, 3);
                 int subSelection = getSelection(subMenu, 0);
                 if ( subSelection == 0 ) {
                     newScreen("Pairing");
-                    // Bluetooth.addDevice(btrd);
+                    //Bluetooth.addDevice(btrd);
                     // !! Assuming 4 length
                     byte[] pin = {
                         '0', '0', '0', '0'
@@ -1386,7 +1387,7 @@ public class GraphicStartup implements Menu {
                     } catch ( Exception e ) {
                         System.err.println("Failed to pair:" + e);
                         lcd.drawString("UNSUCCESSFUL  ", 0, 6);
-                        // Bluetooth.removeDevice(btrd);
+                        //Bluetooth.removeDevice(btrd);
                     }
                     lcd.drawString("Press any key", 0, 7);
                     getButtonPress();
@@ -1432,14 +1433,14 @@ public class GraphicStartup implements Menu {
             if ( selected >= 0 ) {
                 newScreen();
                 RemoteBTDevice btrd = devList.get(selected);
-                btrd.getDeviceClass();
+                byte[] devclass = btrd.getDeviceClass();
                 lcd.drawString(btrd.getName(), 2, 2);
                 lcd.drawString(btrd.getAddress(), 0, 3);
                 // TODO device class is overwritten by menu
                 // LCD.drawString("0x"+Integer.toHexString(devclass), 0, 4);
                 int subSelection = getSelection(subMenu, 0);
                 if ( subSelection == 0 ) {
-                    // Bluetooth.removeDevice(btrd);
+                    //Bluetooth.removeDevice(btrd);
                     break;
                 }
             }
@@ -1679,15 +1680,16 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Present the system menu. Allow the user to format the filesystem. Change
-     * timeouts and control the default program usage.
+     * Present the system menu.
+     * Allow the user to format the filesystem. Change timeouts and control
+     * the default program usage.
      */
     private void systemMenu() {
         String[] menuData = {
-            "Delete all", "", "Auto Run", "Change name", "NTP host", "Suspend menu", "Unset default"
+            "Delete all", "", "Auto Run", "Change name", "NTP host", "Suspend menu", "Reset", "Unset default"
         };
         String[] iconData = {
-            ICFormat, ICSleep, ICAutoRun, ICDefault, ICDefault, ICDefault, ICDefault
+            ICFormat, ICSleep, ICAutoRun, ICDefault, ICDefault, ICDefault, ICDefault, ICDefault
         };
         boolean rechargeable = false;
         GraphicMenu menu = new GraphicMenu(menuData, iconData, 4);
@@ -1707,8 +1709,8 @@ public class GraphicStartup implements Menu {
             menuData[1] = "Sleep time: " + (this.timeout == 0 ? "off" : String.valueOf(this.timeout));
             File f = getDefaultProgram();
             if ( f == null ) {
-                menuData[6] = null;
-                iconData[6] = null;
+                menuData[7] = null;
+                iconData[7] = null;
             }
             menu.setItems(menuData, iconData);
             selection = getSelection(menu, selection);
@@ -1726,7 +1728,7 @@ public class GraphicStartup implements Menu {
                 case 1:
                     System.out.println("Timeout = " + this.timeout);
                     System.out.println("Max sleep time = " + maxSleepTime);
-                    // timeout++;
+                    //timeout++;
                     if ( this.timeout > maxSleepTime ) {
                         this.timeout = 0;
                     }
@@ -1773,13 +1775,17 @@ public class GraphicStartup implements Menu {
                     Settings.setProperty(defaultProgramAutoRunProperty, "");
                     selection = 0;
                     break;
+                case 7:
+                    EV3IOPort.closeAll();
+                    selection = 0;
+                    break;
             }
         } while ( selection >= 0 );
     }
 
     /**
-     * Present details of the default program Allow the user to specify run on
-     * system start etc.
+     * Present details of the default program
+     * Allow the user to specify run on system start etc.
      */
     private void systemAutoRun() {
         File f = getDefaultProgram();
@@ -1802,12 +1808,11 @@ public class GraphicStartup implements Menu {
     /**
      * Ask the user for confirmation of an action.
      * 
-     * @param prompt
-     *        A description of the action about to be performed
+     * @param prompt A description of the action about to be performed
      * @return 1=yes 0=no < 0 escape
      */
     private int getYesNo(String prompt, boolean yes) {
-        // lcd.bitBlt(null, 178, 64, 0, 0, 0, 64, 178, 64, CommonLCD.ROP_CLEAR);
+        //    	lcd.bitBlt(null, 178, 64, 0, 0, 0, 64, 178, 64, CommonLCD.ROP_CLEAR);
         GraphicMenu menu = new GraphicMenu(new String[] {
             "No", "Yes"
         }, new String[] {
@@ -1834,8 +1839,8 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Display the sound menu. Allow the user to change volume and key click
-     * volume.
+     * Display the sound menu.
+     * Allow the user to change volume and key click volume.
      */
     private void soundMenu() {
         String[] soundMenuData = new String[] {
@@ -1906,8 +1911,7 @@ public class GraphicStartup implements Menu {
     /**
      * Format a string for use when displaying the volume.
      * 
-     * @param vol
-     *        Volume setting 0-10
+     * @param vol Volume setting 0-10
      * @return String version.
      */
     private static String formatVol(int vol) {
@@ -1933,7 +1937,8 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Read a button press. If the read timesout then exit the system.
+     * Read a button press.
+     * If the read timesout then exit the system.
      * 
      * @return The bitcode of the button.
      */
@@ -2075,8 +2080,7 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Execute a program and display its output to System.out and error stream to
-     * System.err
+     * Execute a program and display its output to System.out and error stream to System.err
      */
     private static void exec(File jar, String command, String directory) {
         try {
@@ -2117,7 +2121,7 @@ public class GraphicStartup implements Menu {
                 Delay.msDelay(200);
             }
             System.out.println("Waiting for process to die");
-
+            ;
             program.waitFor();
             System.out.println("Program finished");
             // Turn the LED off, in case left on
@@ -2132,8 +2136,7 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Execute a program and display its output to System.out and error stream to
-     * System.err
+     * Execute a program and display its output to System.out and error stream to System.err
      */
     private static void startProgram(String command, File jar) {
         try {
@@ -2200,8 +2203,8 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Display the files in the file system. Allow the user to choose a file for
-     * further operations.
+     * Display the files in the file system.
+     * Allow the user to choose a file for further operations.
      */
     private void filesMenu() {
         GraphicListMenu menu = new GraphicListMenu(null, null);
@@ -2240,12 +2243,12 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Display the tools from the tools directory. Allow the user to choose a file
-     * for further operations.
+     * Display the tools from the tools directory.
+     * Allow the user to choose a file for further operations.
      */
     private void toolsMenu() {
         GraphicListMenu menu = new GraphicListMenu(null, null);
-        // System.out.println("Finding files ...");
+        //System.out.println("Finding files ...");
         int selection = 0;
         do {
             File[] files = new File(TOOLS_DIRECTORY).listFiles();
@@ -2284,7 +2287,7 @@ public class GraphicStartup implements Menu {
      */
     static private String formatFileName(String fileName) {
         StringBuffer formattedName = new StringBuffer("" + fileName.charAt(0));
-        for ( int i = 1; i < fileName.length(); i++ ) { // Skip the first letter-can't put space before first word
+        for ( int i = 1; i < fileName.length(); i++ ) { //Skip the first letter-can't put space before first word
             if ( fileName.charAt(i) == '.' ) {
                 break;
             }
@@ -2298,12 +2301,12 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Display the samples in the file system. Allow the user to choose a file for
-     * further operations.
+     * Display the samples in the file system.
+     * Allow the user to choose a file for further operations.
      */
     private void samplesMenu() {
         GraphicListMenu menu = new GraphicListMenu(null, null);
-        // System.out.println("Finding files ...");
+        //System.out.println("Finding files ...");
         int selection = 0;
         do {
             File[] files = (new File(SAMPLES_DIRECTORY)).listFiles();
@@ -2346,7 +2349,8 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Start a new screen display. Clear the screen and set the screen title.
+     * Start a new screen display.
+     * Clear the screen and set the screen title.
      * 
      * @param title
      */
@@ -2375,14 +2379,13 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Obtain a menu item selection Allow the user to make a selection from the
-     * specified menu item. If a power off timeout has been specified and no
-     * choice is made within this time power off the NXT.
+     * Obtain a menu item selection
+     * Allow the user to make a selection from the specified menu item. If a
+     * power off timeout has been specified and no choice is made within this
+     * time power off the NXT.
      * 
-     * @param menu
-     *        Menu to display.
-     * @param cur
-     *        Initial item to select.
+     * @param menu Menu to display.
+     * @param cur Initial item to select.
      * @return Selected item or < 0 for escape etc.
      */
     private int getSelection(GraphicMenu menu, int cur) {
@@ -2486,8 +2489,9 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Manage the top line of the display. The top line of the display shows
-     * battery state, menu titles, and I/O activity.
+     * Manage the top line of the display.
+     * The top line of the display shows battery state, menu titles, and I/O
+     * activity.
      */
     class IndicatorThread extends Thread {
         public IndicatorThread() {
@@ -2501,14 +2505,8 @@ public class GraphicStartup implements Menu {
                 while ( true ) {
                     long time = System.currentTimeMillis();
 
-                    byte[] buf = lcd.getDisplay();
-                    // TODO: Fix this
-                    // clear not necessary, pixels are always overwritten
-                    for ( int i = 0; i < lcd.getWidth(); i++ ) {
-                        buf[i] = 0;
-                    }
                     GraphicStartup.this.indiBA.setWifi(ips.size() > 1);
-                    GraphicStartup.this.indiBA.draw(time, buf);
+                    GraphicStartup.this.indiBA.draw(time);
                     lcd.refresh();
 
                     // wait until next tick
@@ -2516,7 +2514,7 @@ public class GraphicStartup implements Menu {
                     this.wait(Config.ANIM_DELAY - (time % Config.ANIM_DELAY));
                 }
             } catch ( InterruptedException e ) {
-                // just terminate
+                //just terminate
             }
         }
 
@@ -2703,7 +2701,8 @@ public class GraphicStartup implements Menu {
     }
 
     /**
-     * Reset all motors to zero power and float state and reset tacho counts
+     * Reset all motors to zero power and float state
+     * and reset tacho counts
      */
     public static void resetMotors() {
         for ( String portName : new String[] {
@@ -2836,7 +2835,7 @@ public class GraphicStartup implements Menu {
         }
     }
 
-    public void execInThisJVM(File jar) {
+    private void execInThisJVM(File jar) {
         try {
             LCD.clearDisplay();
             new JarMain(jar);
