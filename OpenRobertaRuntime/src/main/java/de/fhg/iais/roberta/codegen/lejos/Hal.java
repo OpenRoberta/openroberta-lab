@@ -577,9 +577,10 @@ public class Hal {
 
         switch ( sensorMode ) {
             case PRESENCE:
-                return Math.round(sample[0]);
+                return Math.round(sample[0]); // TODO check: this should return
+                                              // a Boolean at the end
             case DISTANCE:
-                return Math.round(sample[0]) * 100; // ^= distance in cm
+                return Math.round(sample[0] * 100.0f); // ^= distance in cm
             default:
                 throw new DbcException("sensor type or sensor mode missmatch");
         }
@@ -599,20 +600,21 @@ public class Hal {
         float[] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0);
 
-        return Math.round(sample[0]);
-        //        TODO Why is this swich case statement
-        //        switch ( sensorMode ) {
-        //            case AMBIENTLIGHT:
-        //                return Math.round(sample[0]);
-        //            case COLOUR:
-        //                return Math.round(sample[0]);
-        //            case RED:
-        //                return Math.round(sample[0]);
-        //            case RGB:
-        //                return Math.round(sample[0]/* 3 values */);
-        //            default:
-        //                throw new DbcException("sensor type or sensor mode missmatch");
-        //        }
+        switch ( deviceHandler.getColorSensorModeName(sensorPort) ) {
+            case AMBIENTLIGHT:
+                return Math.round(sample[0] * 100.0f); // * 100
+
+            case COLOUR:
+                return Math.round(sample[0]); // TODO check: this should return
+                                              // a Colour
+            case RED:
+                return Math.round(sample[0] * 100.0f); // * 100
+            case RGB:
+                return Math.round(sample[0] * 255.0f); // TODO this is an array
+                                                       // [3], * 255
+            default:
+                throw new DbcException("sensor type or sensor mode missmatch");
+        }
     }
 
     // END Sensoren Farbsensor ---
@@ -628,15 +630,12 @@ public class Hal {
         sampleProvider.fetchSample(sample, 0);
 
         return Math.round(sample[0]);
-        //        TODO Why is used this switch case statement ???
-        //        switch ( sensorMode) {
-        //            case DISTANCE:
-        //                return Math.round(sample[0]);
-        //            case SEEK:
-        //                return Math.round(sample[0]);
-        //            default:
-        //                throw new DbcException("sensor type or sensor mode missmatch");
-        //        }
+        case DISTANCE:
+                return Math.round(sample[0]); // ok
+            case SEEK:
+                return Math.round(sample[0]); // TODO this is an array [8], no
+                                              // conversion.
+
     }
 
     // END Sensoren IRSensor ---
@@ -651,11 +650,11 @@ public class Hal {
         float[] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0);
 
-        switch ( sensorMode ) {
+        switch ( sensorMode ) { // maybe no switch necessary
             case ANGLE:
-                return Math.round(sample[0]);
+                return Math.round(sample[0]); // ok
             case RATE:
-                return Math.round(sample[0]);
+                return Math.round(sample[0]); // ok
             default:
                 throw new DbcException("sensor type or sensor mode missmatch");
         }
