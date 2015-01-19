@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.brick;
 
-import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -77,18 +76,18 @@ public class BrickCommunicator {
         }
     }
 
-    public String theRunButtonWasPressed(String token, String programName, String brickConfigurationName) {
+    public boolean theRunButtonWasPressed(String token, String programName, String brickConfigurationName) {
         BrickCommunicationData state = getState(token);
         return state.runButtonPressed(programName, brickConfigurationName);
     }
 
     public BrickCommunicationData getState(String token) {
         BrickCommunicationData state = this.allStates.get(token);
-        if ( state == null ) {
-            LOG.error("a communication state for token " + token + " is created. THIS IS A TEMPORARY FIX"); // TODO: make brick comm more robust
-            state = new BrickCommunicationData(token, "robot-id-generated-" + new Date().getTime(), "robot-name-generated", null);
-            this.allStates.put(token, state);
-        }
+        //        if ( state == null ) {
+        //            LOG.error("a communication state for token " + token + " is created. THIS IS A TEMPORARY FIX"); // TODO: make brick comm more robust
+        //            state = new BrickCommunicationData(token, "robot-id-generated-" + new Date().getTime(), "robot-name-generated", null);
+        //            this.allStates.put(token, state);
+        //        }
         return state;
     }
 

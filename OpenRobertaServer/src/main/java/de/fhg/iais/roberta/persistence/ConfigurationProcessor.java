@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.persistence;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jettison.json.JSONArray;
@@ -20,7 +19,7 @@ public class ConfigurationProcessor extends AbstractProcessor {
 
     public Configuration getConfiguration(String configurationName, int userId) {
         if ( !Util.isValidJavaIdentifier(configurationName) ) {
-            setError("configuration name name is not a valid identifier: " + configurationName);
+            setError("configuration.error.id_invalid", configurationName);
             return null;
         } else {
             ConfigurationDao configurationDao = new ConfigurationDao(this.dbSession);
@@ -32,37 +31,32 @@ public class ConfigurationProcessor extends AbstractProcessor {
             } else {
                 configuration = configurationDao.load(configurationName, null);
             }
-            setResult(configuration != null, "loading of configuration " + configurationName + ".");
+            if ( configuration == null ) {
+                setError("configuration.get_one.error.not_found");
+            } else {
+                setSuccess("configuration.get_one.success");
+            }
             return configuration;
         }
     }
 
     public void updateConfiguration(String configurationName, int ownerId, String configurationText) {
         if ( !Util.isValidJavaIdentifier(configurationName) ) {
-            setError("configuration name is not a valid identifier: " + configurationName);
-        } else if ( this.httpSessionState.isUserLoggedIn() ) {
+            setError("configuration.error.id_invalid", configurationName);
+            return;
+        }
+        this.httpSessionState.setConfigurationNameAndConfiguration(configurationName, configurationText);
+        if ( this.httpSessionState.isUserLoggedIn() ) {
             UserDao userDao = new UserDao(this.dbSession);
             ConfigurationDao configurationDao = new ConfigurationDao(this.dbSession);
             User owner = userDao.get(ownerId);
             Configuration configuration = configurationDao.persistConfigurationText(configurationName, owner, configurationText);
-            setResult(configuration != null, "saving configuration " + configurationName + " to db.");
-        } else {
-            this.httpSessionState.setConfigurationNameAndConfiguration(configurationName, configurationText);
-            setResult(true, "saving configuration " + configurationName + " to session.");
+            if ( configuration == null ) {
+                setError("configuration.save.error.not_saved_to_db");
+                return;
+            }
         }
-    }
-
-    public List<String> getConfigurationNames(int ownerId) {
-        UserDao userDao = new UserDao(this.dbSession);
-        ConfigurationDao configurationDao = new ConfigurationDao(this.dbSession);
-        User owner = userDao.get(ownerId);
-        List<Configuration> programs = configurationDao.loadAll(owner);
-        List<String> configurationNames = new ArrayList<>();
-        for ( Configuration program : programs ) {
-            configurationNames.add(program.getName());
-        }
-        setSuccess("found " + configurationNames.size() + " configurations");
-        return configurationNames;
+        setSuccess("configuration.save.success");
     }
 
     public JSONArray getConfigurationInfo(int ownerId) {
@@ -79,7 +73,7 @@ public class ConfigurationProcessor extends AbstractProcessor {
             configurationInfo.put(program.getCreated().toString());
             configurationInfo.put(program.getLastChanged().toString());
         }
-        setSuccess("found " + configurationInfos.length() + " configuration(s)");
+        setSuccess("configuration.get_all.success", "" + configurationInfos.length());
         return configurationInfos;
     }
 
@@ -88,6 +82,10 @@ public class ConfigurationProcessor extends AbstractProcessor {
         ConfigurationDao configurationDao = new ConfigurationDao(this.dbSession);
         User owner = userDao.get(ownerId);
         int rowCount = configurationDao.deleteByName(configurationName, owner);
-        setResult(rowCount > 0, "delete of configuration " + configurationName + ".");
+        if ( rowCount > 0 ) {
+            setSuccess("configuration.delete.success");
+        } else {
+            setError("configuration.delete.error");
+        }
     }
 }

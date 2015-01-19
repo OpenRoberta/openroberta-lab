@@ -7,6 +7,7 @@ import java.text.StringCharacterIterator;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -22,7 +23,7 @@ import de.fhg.iais.roberta.persistence.AbstractProcessor;
 public class Util {
     private static final Logger LOG = LoggerFactory.getLogger(Util.class);
     private static final String PROPERTY_DEFAULT_PATH = "openRoberta.properties";
-    public static final String SERVER_ERROR = "Server error. Operation aborted.";
+    public static final String SERVER_ERROR = "server.error";
     private static final String[] reservedWords = new String[] {
         //  @formatter:off
         "abstract", "assert", "boolean", "break", "byte", "case", "catch", "char", "class", "const", "continue", "default", "do", "double", "else", "enum",
@@ -31,6 +32,8 @@ public class Util {
         "throw", "throws", "transient", "true", "try", "void", "volatile", "while"
         //  @formatter:on
         };
+
+    private static final AtomicInteger errorTicketNumber = new AtomicInteger(0);
 
     private Util() {
         // no objects
@@ -117,16 +120,15 @@ public class Util {
     }
 
     public static void addResultInfo(JSONObject response, AbstractProcessor processor) throws JSONException {
-        if ( processor.wasSuccessful() ) {
-            response.put("rc", "ok");
-        } else {
-            response.put("rc", "ERROR");
-            response.put("cause", processor.getErrorMessage());
-        }
+        response.put("rc", processor.getRC());
+        response.put("message", processor.getMessage());
+        response.put("cause", processor.getMessage());
+        response.put("parameter", processor.getParameter()); // if getParameters returns null, nothing bad happens :-)
     }
 
     /**
-     * add information for the Javascript client to the result json, especially about the state of the robot. This method must be <b>total</b>, i.e. must
+     * add information for the Javascript client to the result json, especially about the state of the robot.<br>
+     * This method must be <b>total</b>, i.e. must
      * <b>never</b> throw exceptions.
      *
      * @param response the response object to enrich with data
@@ -151,5 +153,9 @@ public class Util {
         } catch ( Exception e ) {
             LOG.error("when adding info for the client, an unexpected exception occured. Some info for the client may be missing", e);
         }
+    }
+
+    public static String getErrorTicketId() {
+        return "E-" + errorTicketNumber.incrementAndGet();
     }
 }

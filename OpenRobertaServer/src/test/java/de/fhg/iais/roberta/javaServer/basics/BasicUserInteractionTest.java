@@ -2,9 +2,7 @@ package de.fhg.iais.roberta.javaServer.basics;
 
 import static de.fhg.iais.roberta.testutil.JSONUtil.assertEntityRc;
 import static de.fhg.iais.roberta.testutil.JSONUtil.assertJsonEquals;
-import static de.fhg.iais.roberta.testutil.JSONUtil.downloadJar;
 import static de.fhg.iais.roberta.testutil.JSONUtil.mkD;
-import static de.fhg.iais.roberta.testutil.JSONUtil.registerToken;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -102,7 +100,7 @@ public class BasicUserInteractionTest {
                 this.s1,
                 this.sessionFactoryWrapper.getSession(),
                 mkD("{'cmd':'createUser';'accountName':'pid';'password':'dip';'userEmail':'cavy@home';'role':'STUDENT'}"));
-        assertEntityRc(this.response, "ERROR");
+        assertEntityRc(this.response, "error");
         assertEquals(1, getOneInt("select count(*) from USER"));
         this.response =
             this.restUser.command(
@@ -118,7 +116,7 @@ public class BasicUserInteractionTest {
                 this.s1,
                 this.sessionFactoryWrapper.getSession(),
                 mkD("{'cmd':'login';'accountName':'pid';'password':'wrong'}"));
-        assertEntityRc(this.response, "ERROR");
+        assertEntityRc(this.response, "error");
         assertTrue(!this.s1.isUserLoggedIn() && !this.s2.isUserLoggedIn());
         this.response = //
             this.restUser.command( //
@@ -188,8 +186,8 @@ public class BasicUserInteractionTest {
         assertJsonEquals("['p1','p2','p3','p4']", programNames, false);
 
         // user "pid" registers the robot with token "garzi" (and optionally many more ...); runs "p1"
-        registerToken(this.brickCommand, this.restBlocks, this.s1, this.sessionFactoryWrapper.getSession(), "garzi");
-        downloadJar(this.downloadJar, this.restProgram, this.s1, "garzi", "p1");
+        // registerToken(this.brickCommand, this.restBlocks, this.s1, this.sessionFactoryWrapper.getSession(), "garzi");
+        // TODO: refactor downloadJar(this.downloadJar, this.restProgram, this.s1, "garzi", "p1");
     }
 
     private int getOneInt(String sqlStmt) {

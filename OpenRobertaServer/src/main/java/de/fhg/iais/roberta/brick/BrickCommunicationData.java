@@ -125,21 +125,21 @@ public class BrickCommunicationData {
      * method called from a server thread. This method terminates immediately (if the brick waits for a push command) or after 1 sec (if we expect a push
      * command in the very near future. It wakes up the thread, which runs on behalf of a push command request from the brick.
      *
-     * @return the state of the brick
+     * @return true, if the robot was waiting for a "run" command, false otherwise
      */
-    public synchronized String runButtonPressed(String programName, String brickConfigurationName) {
+    public synchronized boolean runButtonPressed(String programName, String brickConfigurationName) {
         if ( !isBrickWaitingForPushCommand() ) {
-            LOG.error("RUN button pressed, but brick is not waiting. Bad luck!");
-            return "robot.ev3.not_waiting";
+            LOG.error("RUN button pressed, but robot is not waiting for that event. Bad luck!");
+            return false;
         } else {
-            LOG.debug("RUN button pressed. Wait state entered " + this.clock.elapsedSecFormatted() + " ago");
+            LOG.info("RUN button pressed and robot is waiting for that event. Wait state entered " + this.clock.elapsedSecFormatted() + " ago");
             this.command = "download";
             this.programName = programName;
             this.brickConfigurationName = brickConfigurationName;
             this.clock = Clock.start();
             this.state = State.BRICK_IS_BUSY;
             notifyAll();
-            return "robot.ev3.push.run";
+            return true;
         }
     }
 

@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 
 public class UserProcessor extends AbstractProcessor {
-	
+
     public UserProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
         super(dbSession, httpSessionState);
     }
@@ -20,63 +20,58 @@ public class UserProcessor extends AbstractProcessor {
     public User getUser(String account, String password) {
         UserDao userDao = new UserDao(this.dbSession);
         User user = userDao.loadUser(account);
-        setResult(user != null && user.isPasswordCorrect(password), "user loaded and password checked.");
-        return wasSuccessful() ? user : null;
+        if ( user != null && user.isPasswordCorrect(password) ) {
+            setSuccess("user.get_one.success");
+            return user;
+        } else {
+            setError("user.get_one.error.id_or_password_wrong");
+            return null;
+        }
     }
 
     public void saveUser(String account, String password, String roleAsString, String email, String tags) {
         UserDao userDao = new UserDao(this.dbSession);
         User user = userDao.persistUser(account, password, roleAsString);
-        setResult(user != null, "user created with account " + account + ".");
-        if ( wasSuccessful() ) {
+        if ( user != null ) {
+            setSuccess("user.create.success");
             user.setEmail(email);
             user.setTags(tags);
+        } else {
+            setError("user.create.error.not_saved_to_db", account);
         }
     }
 
-    public User getUser(String account) {
-        UserDao userDao = new UserDao(this.dbSession);
-        User user = userDao.loadUser(account);
-        setResult(user != null, "user loaded.");
-        return user;
-    }
-    
-    public JSONArray  getUsersJSONArray(String sortBy,int offset,String tagFilter) {
-    	
-        UserDao userDao = new UserDao(this.dbSession);
-        List<User> userList = userDao.loadUserList(sortBy, offset, tagFilter);
-        JSONArray usersJSONArray = new JSONArray();
-
-        for(User user : userList){
-        	
-        	JSONObject userJSON = new JSONObject();
-        	
-            try {
-                if(user != null){
-            
-                	userJSON.put("id",user.getId());
-                	userJSON.put("name",user.getAccount());
-                	userJSON.put("role",user.getRole()); // This will be changed to user rights
-                             	usersJSONArray.put(userJSON);
-                }
-            } 
-            catch (JSONException e) {
-            	//Exception to be trough
-            }
-        }
-        
-        setResult(userList != null, "user list loaded.");
-        return usersJSONArray;
-    }
-    
-    public void deleteUserByAccount(String account, String password) {
+    public void deleteUser(String account, String password) {
         UserDao userDao = new UserDao(this.dbSession);
         User user = userDao.loadUser(account);
         if ( user != null && user.isPasswordCorrect(password) ) {
             int rowCount = userDao.deleteUser(user);
-            setResult(rowCount > 0, "user deleted after password check.");
+            if ( rowCount > 0 ) {
+                setSuccess("user.delete.success");
+            } else {
+                setError("user.delete.error.not_deleted_in_db", account);
+            }
         } else {
-            setError("user account not found");
+            setError("user.delete.error.id_not_found", account);
         }
+    }
+
+    @Deprecated
+    public JSONArray getUsers(String sortBy, int offset, String tagFilter) throws JSONException {
+        UserDao userDao = new UserDao(this.dbSession);
+        List<User> userList = userDao.loadUserList(sortBy, offset, tagFilter);
+        JSONArray usersJSONArray = new JSONArray();
+
+        for ( User user : userList ) {
+            JSONObject userJSON = new JSONObject();
+            if ( user != null ) {
+                userJSON.put("id", user.getId());
+                userJSON.put("name", user.getAccount());
+                userJSON.put("role", user.getRole()); // This will be changed to user rights
+                usersJSONArray.put(userJSON);
+            }
+        }
+        setSuccess("user.get_all.success");
+        return usersJSONArray;
     }
 }

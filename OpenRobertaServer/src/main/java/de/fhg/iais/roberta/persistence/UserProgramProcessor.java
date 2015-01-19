@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.persistence.dao.ProgramDao;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.dao.UserProgramDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
+import de.fhg.iais.roberta.util.Util;
 
 public class UserProgramProcessor extends AbstractProcessor {
 
@@ -19,6 +20,7 @@ public class UserProgramProcessor extends AbstractProcessor {
         super(dbSession, httpSessionState);
     }
 
+    @Deprecated
     public void setRights(int ownerId, String programName, JSONArray usersJSONArray) {
 
         UserProgramDao userProgramDao = new UserProgramDao(this.dbSession);
@@ -46,28 +48,31 @@ public class UserProgramProcessor extends AbstractProcessor {
         }
     }
 
+    @Deprecated
     public void shareToUser(int ownerId, String userToShareName, String programName, String right) {
-
         ProgramDao programDao = new ProgramDao(this.dbSession);
         UserDao userDao = new UserDao(this.dbSession);
 
         User owner = userDao.get(ownerId);
-        if ( owner == null )
+        if ( owner == null ) {
             setError("Owner does not exist");
+        }
         Program programToShare = programDao.load(programName, owner);
-        if ( programToShare == null )
+        if ( programToShare == null ) {
             setError("Program to share does not exists");
+        }
         User userToShare = userDao.loadUser(userToShareName);
-        if ( userToShare == null )
+        if ( userToShare == null ) {
             setError("User to share does not exists");
+        }
 
         UserProgramDao userProgramDao = new UserProgramDao(this.dbSession);
         if ( right.equals("NONE") ) {
             int userProgram = userProgramDao.deleteUserProgram(userToShare, programToShare);
-            setResult(userProgram == 1, "user program deleted.");
+            setSuccess(Util.SERVER_ERROR);
         } else {
             UserProgram userProgram = userProgramDao.persistUserProgram(userToShare, programToShare, right);
-            setResult(userProgram != null, "user program persisted.");
+            setSuccess(Util.SERVER_ERROR);
         }
 
     }

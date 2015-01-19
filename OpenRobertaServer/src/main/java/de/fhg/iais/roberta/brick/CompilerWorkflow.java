@@ -20,7 +20,6 @@ import de.fhg.iais.roberta.brickconfiguration.BrickConfiguration;
 import de.fhg.iais.roberta.brickconfiguration.ev3.EV3BrickConfiguration;
 import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
-import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 
@@ -57,30 +56,28 @@ public class CompilerWorkflow {
      * @param projectName to retrieve the program code
      * @param programName to retrieve the program code
      * @param configurationName the hardware configuration that is expected to have been used when assembling the brick
-     * @return a message in case of an error; null otherwise
+     * @return a message key in case of an error; null otherwise
      */
     public String execute(DbSession session, String token, String programName, String programText, String configurationText) {
         if ( programText == null || programText.trim().equals("") ) {
-            return "program not found or program has no blocks";
-        }
-        if ( configurationText == null || configurationText.trim().equals("") ) {
-            return "configuration not found or configuration has no blocks";
+            return "compilerworkflow.error.program.not_found";
+        } else if ( configurationText == null || configurationText.trim().equals("") ) {
+            return "compilerworkflow.error.configuration.not_found";
         }
 
         JaxbBlocklyProgramTransformer<Void> programTransformer;
         try {
             programTransformer = generateProgramTransformer(programText);
-
         } catch ( Exception e ) {
             LOG.error("Transformer failed", e);
-            return "program could not be transformed (message: " + e.getMessage() + ")";
+            return "compilerworkflow.error.program.transform_failed";
         }
         EV3BrickConfiguration brickConfiguration;
         try {
             brickConfiguration = (EV3BrickConfiguration) generateConfiguration(configurationText);
         } catch ( Exception e ) {
             LOG.error("Generation of the configuration failed", e);
-            return "configurationj could not be transformed (message: " + e.getMessage() + ")";
+            return "compilerworkflow.error.configuration.transform_failed";
         }
 
         String javaCode = AstToLejosJavaVisitor.generate(programName, brickConfiguration, programTransformer.getTree(), true);
@@ -89,12 +86,14 @@ public class CompilerWorkflow {
         try {
             storeGeneratedProgram(token, programName, javaCode);
         } catch ( Exception e ) {
-            return "generated java code could not be stored (message: + " + e.getMessage() + ")";
+            LOG.error("Storing the generated program into directory " + token + " failed", e);
+            return "compilerworkflow.error.program.store_failed";
         }
-        LOG.debug("generated program stored in directory/token {}", token);
-        runBuild(token, programName, "generated.main");
-        LOG.info("brick jar for program {} generated successfully", programName);
-        return null;
+        String messageKey = runBuild(token, programName, "generated.main");
+        if ( messageKey == null ) {
+            LOG.info("jar for program {} generated successfully", programName);
+        }
+        return messageKey;
     }
 
     /**
@@ -140,7 +139,7 @@ public class CompilerWorkflow {
      * @param mainFile
      * @param mainPackage
      */
-    void runBuild(String token, String mainFile, String mainPackage) {
+    String runBuild(String token, String mainFile, String mainPackage) {
         final StringBuilder sb = new StringBuilder();
         try {
             File buildFile = new File(this.pathToCrossCompilerBuildXMLResource);
@@ -188,13 +187,14 @@ public class CompilerWorkflow {
                 }
             });
             project.executeTarget(project.getDefaultTarget());
+            return null;
         } catch ( Exception e ) {
             if ( sb.length() > 0 ) {
                 LOG.error("build exception. Stacktrace is suppressed. Messages from build script are:\n" + sb.toString());
             } else {
                 LOG.error("exception when preparing the build", e);
             }
-            throw new DbcException("build exception", e);
+            return "compilerworkflow.error.program.compile_failed";
         }
     }
 

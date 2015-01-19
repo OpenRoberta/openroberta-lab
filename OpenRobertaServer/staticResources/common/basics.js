@@ -1,13 +1,24 @@
 var COMM = {};
 (function($) {
-    // general error function
+    /**
+     * the default error fn. Should be replaced by an own implementation. Not
+     * public.
+     */
     function errorFn(response) {
-        /* jshint devel : true */
-        alert('COMM errorfn is called.'); // It makes sense to comment this statement out ...
-        LOG.info('COMM errorfn is called. Data follows');
+        alert('The COMM (default) errorfn is called.'); // This is an annoying behavior ...
+        LOG.info('The COMM (default) errorfn is called. Data follows');
         LOG.error(response);
         COMM.ping();
     }
+
+    /**
+     * set a error fn. A error function must accept one parameter: the response.
+     * 
+     * @memberof COMM
+     */
+    COMM.setErrorFn = function(newErrorFn) {
+        errorFn = newErrorFn;
+    };
 
     /**
      * URL-encode a JSON object, issue a GET and expect a JSON object as
