@@ -1192,12 +1192,20 @@ function switchLanguage(langCode, forceSwitch) {
         $("#setLang" + langCode + "").removeClass('smallFlag');
         $("#setLang" + langCode + "").addClass('bigFlag');
         userState.language = langCode;
-        $.getScript('blockly/msg/js/' + langCode.toLowerCase() + '.js', translate);
-        COMM.json("/blocks", {
-            "cmd" : "loadT",
-            "name" : userState.toolbox
-        }, injectBlockly);
+        var future = $.getScript('blockly/msg/js/' + langCode.toLowerCase() + '.js');
+        future.then(switchLanguageInBlockly);
     }
+}
+
+/**
+ * Switch blockly to another language
+ */
+function switchLanguageInBlockly() {
+    var future = translate();
+    COMM.json("/blocks", {
+        "cmd" : "loadT",
+        "name" : userState.toolbox
+    }, injectBlockly);
 }
 
 /**
