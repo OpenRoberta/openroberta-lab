@@ -33,7 +33,7 @@ function saveUserToServer() {
     var $pass2 = $('#pass2');
 
     if ($pass1.val() != $pass2.val()) {
-        displayMessage("MESSAGE.PASSWORD_ERROR");
+        displayMessage("MESSAGE_PASSWORD_ERROR");
     } else {
         COMM.json("/user", {
             "cmd" : "createUser",
@@ -51,7 +51,7 @@ function saveUserToServer() {
                 $('#pass1S').val($pass1.val());
                 login();
             } else {
-                displayMessage("MESSAGE.USER_EXISTS");
+                displayMessage("MESSAGE_USER_EXISTS");
             }
         });
     }
@@ -72,7 +72,7 @@ function deleteUserOnServer() {
             logout();
             $(".ui-dialog-content").dialog("close"); // close all opened popups
         } else {
-            displayMessage("MESSAGE.USER_DELETE_ERROR");
+            displayMessage("MESSAGE_USER_DELETE_ERROR");
         }
     });
 }
@@ -97,7 +97,7 @@ function login() {
             $("#tutorials").fadeOut(700);
             $(".ui-dialog-content").dialog("close"); // close all opened popups
         } else {
-            displayMessage("MESSAGE.LOGIN_ERROR");
+            displayMessage("MESSAGE_LOGIN_ERROR");
         }
     });
 }
@@ -115,7 +115,7 @@ function logout() {
             setHeadNavigationMenuState('logout');
             setRobotState(response);
         } else {
-            displayMessage("MESSAGE.LOGOUT_ERROR");
+            displayMessage("MESSAGE_LOGOUT_ERROR");
         }
         $(".ui-dialog-content").dialog("close"); // close all opened popups
     });
@@ -197,11 +197,11 @@ function setToken(token) {
                 setRobotState(response);
                 $(".ui-dialog-content").dialog("close"); // close all opened popups
             } else {
-                displayMessage("message9");
+                displayMessage("MESSAGE_SET_TOKEN_ERROR");
             }
         });
     } else {
-        displayMessage("MESSAGE.SET_TOKEN");
+        displayMessage("MESSAGE_SET_TOKEN");
     }
 }
 
@@ -271,7 +271,7 @@ function saveToServer() {
             if (!$name.val() || $name.val() === "meinProgramm") {
                 $('#menuSaveProg').parent().addClass('login');
                 $('#menuSaveProg').parent().addClass('disabled');
-                displayMessage("MESSAGE.NAME_ERROR");
+                displayMessage("MESSAGE_NAME_ERROR");
                 return;
             }
             $('#menuSaveProg').parent().removeClass('login');
@@ -290,7 +290,7 @@ function saveToServer() {
             "program" : xml_text
         },  responseAndRefreshProgramList);
     } else {
-        displayMessage("MESSAGE.EMPTY_NAME");
+        displayMessage("MESSAGE_EMPTY_NAME");
     }
 }
 
@@ -305,7 +305,7 @@ function saveConfigurationToServer() {
             if (!$name.val() || $name.val() === "Standardkonfiguration") {
                 $('#menuSaveConfig').parent().addClass('login');
                 $('#menuSaveConfig').parent().addClass('disabled');
-                displayMessage("MESSAGE.NAME_ERROR");
+                displayMessage("MESSAGE_NAME_ERROR");
                 return;
             }
             $('#menuSaveConfig').parent().removeClass('login');
@@ -323,7 +323,7 @@ function saveConfigurationToServer() {
             "configuration" : xml_text
         }, responseAndRefreshConfigurationList);
     } else {
-        displayMessage("MESSAGE.EMPTY_NAME");
+        displayMessage("MESSAGE_EMPTY_NAME");
     }
 }
 
@@ -718,7 +718,7 @@ function startProgram() {
  */
 function checkProgram() {
     // TODO
-    displayMessage("MESSAGE.PROGRAM_NOT_CHECKABLE");
+    displayMessage("MESSAGE_PROGRAM_NOT_CHECKABLE");
 }
 
 /**
@@ -726,7 +726,7 @@ function checkProgram() {
  */
 function checkConfiguration() {
     // TODO
-    displayMessage("MESSAGE.CONFIGURATION_NOT_CHECKABLE");
+    displayMessage("MESSAGE_CONFIGURATION_NOT_CHECKABLE");
 }
 
 function switchToBlockly() {
@@ -802,9 +802,13 @@ function setHeadNavigationMenuState(state) {
  *            Messabe to be displayed
  */
 function displayMessage(messageId) {
-    $('.message').css('display', 'none');
-    messageId = escape(messageId);
-    $('#' + messageId + '').css('display', 'inline');
+    var lkey = 'Blockly.Msg.' + messageId;
+    var value = eval(lkey);
+    if (value === '' || value === undefined) {
+        value = messageId;
+    }
+    $('#message').attr('lkey', lkey);
+    $('#message').html(value);
     $("#show-message").dialog("open");
 }
 
@@ -863,9 +867,9 @@ function initHeadNavigation() {
         } else if (domId === 'menuConnect') {  // Submenu 'Robot'
             $("#set-token").dialog("open");
         } else if (domId === 'menuFirmware') {  // Submenu 'Robot'
-            displayMessage("MESSAGE.NOT_AVAILABLE");
+            displayMessage("MESSAGE_NOT_AVAILABLE");
         } else if (domId === 'menuRobotInfo') {  // Submenu 'Robot'
-            displayMessage("MESSAGE.NOT_AVAILABLE");
+            displayMessage("MESSAGE_NOT_AVAILABLE");
         } else if (domId === 'menuFirstSteps') {   // Submenu 'Help'
             if (userState.language === 'De') {
                 window.open("http://www.open-roberta.org/erste-schritte.html");
@@ -879,7 +883,7 @@ function initHeadNavigation() {
                 window.open("http://dev.open-roberta.org/willkommen.html?&L=1");
             }            
         } else if (domId === 'menuFaq') {   // Submenu 'Help'
-            displayMessage("MESSAGE.NOT_AVAILABLE");
+            displayMessage("MESSAGE_NOT_AVAILABLE");
         } else if (domId === 'menuStateInfo') {   // Submenu 'Help'
             $("#loggedIn").text(userState.name);
             $("#programName").text(userState.program);
@@ -985,7 +989,7 @@ function initPopups() {
     }, 'save program');
 
     $('#shareProgram').onWrap('click', function() {
-        displayMessage("MESSAGE.NOT_AVAILABLE");
+        displayMessage("MESSAGE_NOT_AVAILABLE");
     }, 'share program');
 
     $('#saveConfiguration').onWrap('click', function() {
@@ -993,7 +997,7 @@ function initPopups() {
     }, 'save configuration');
 
     $('#shareConfiguration').onWrap('click', function() {
-        displayMessage("MESSAGE.NOT_AVAILABLE");
+        displayMessage("MESSAGE_NOT_AVAILABLE");
     }, 'share configuration');
 
     $('#setToken').onWrap('click', function() {
