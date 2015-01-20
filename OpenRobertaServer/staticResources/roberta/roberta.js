@@ -9,6 +9,7 @@ function initUserState() {
     userState.version = 'xx.xx.xx';
     userState.language = 'de';
     userState.id = -1;
+    userState.accountName = '';
     userState.name = '';
     userState.program = 'meinProgramm';
     userState.configuration = 'Standardkonfiguration';
@@ -64,7 +65,7 @@ function deleteUserOnServer() {
     var $pass1 = $('#pass1D');
     COMM.json("/user", {
         "cmd" : "deleteUser",
-        "accountName" : userState.name,
+        "accountName" : userState.accountName,
         "password" : $pass1.val()
     }, function(result) {
         if (result.rc === "ok") {
@@ -90,6 +91,7 @@ function login() {
         "password" : $pass1.val(),
     }, function(response) {
         if (response.rc === "ok") {
+            userState.accountName = response.userAccountName;
             userState.name = response.userAccountName;
             userState.id = response.userId;
             setHeadNavigationMenuState('login');
@@ -267,8 +269,8 @@ function saveToServer() {
     if ($('#programNameSave')) {
         var $name = $('#programNameSave');
         setProgram($name.val());
-        if (userState.name) { // Is someone logged in?
-            if (!$name.val() || $name.val() === "meinProgramm") {
+        if (userState.accountName) { // Is someone logged in?
+            if (!$name.val()) {
                 $('#menuSaveProg').parent().addClass('login');
                 $('#menuSaveProg').parent().addClass('disabled');
                 displayMessage("MESSAGE_NAME_ERROR");
@@ -301,8 +303,8 @@ function saveConfigurationToServer() {
     if ($('#configurationNameSave')) {
         var $name = $('#configurationNameSave');
         setConfiguration($name.val());
-        if (userState.name) { // Is someone logged in?
-            if (!$name.val() || $name.val() === "Standardkonfiguration") {
+        if (userState.accountName) { // Is someone logged in?
+            if (!$name.val()) {
                 $('#menuSaveConfig').parent().addClass('login');
                 $('#menuSaveConfig').parent().addClass('disabled');
                 displayMessage("MESSAGE_NAME_ERROR");
@@ -744,7 +746,7 @@ function switchToBrickly() {
  * Display status information in the navigation bar
  */
 function displayState() {
-    if (userState.name) {
+    if (userState.accountName) {
         $('#displayLogin').text(userState.name);
         $('#iconDisplayLogin').removeClass('error');
         $('#iconDisplayLogin').addClass('ok');
