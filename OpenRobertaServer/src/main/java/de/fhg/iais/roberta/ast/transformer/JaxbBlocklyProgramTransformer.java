@@ -435,7 +435,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 values = extractValues(block, (short) 1);
                 left = extractVar(block);
                 right = extractValue(values, new ExprParam(BlocklyConstants.DELTA, Integer.class));
-                return Binary.make(Binary.Op.MATH_CHANGE, convertPhraseToExpr(left), convertPhraseToExpr(right), properties, comment);
+                return Binary.make(Binary.Op.MATH_CHANGE, convertPhraseToExpr(left), convertPhraseToExpr(right), "", properties, comment);
 
             case "math_single":
             case "math_round":
@@ -496,7 +496,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 values = extractValues(block, (short) 2);
                 left = extractValue(values, new ExprParam(BlocklyConstants.VAR, String.class));
                 right = extractValue(values, new ExprParam(BlocklyConstants.TEXT, String.class));
-                return Binary.make(Binary.Op.TEXT_APPEND, convertPhraseToExpr(left), convertPhraseToExpr(right), properties, comment);
+                return Binary.make(Binary.Op.TEXT_APPEND, convertPhraseToExpr(left), convertPhraseToExpr(right), "", properties, comment);
 
             case "lists_length":
             case "lists_isEmpty":
@@ -606,7 +606,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
 
             case "robLocalVariables_declare":
             case "robGlobalvariables_declare":
-                isGlobalVariable = block.getType().equals("robLocalVariables") ? false : true;
+                isGlobalVariable = block.getType().equals("robLocalVariables_declare") ? false : true;
                 fields = extractFields(block, (short) 2);
                 values = extractValues(block, (short) 1);
                 BlocklyType typeVar = BlocklyType.get(extractField(fields, BlocklyConstants.TYPE));
@@ -679,8 +679,8 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 VarDeclaration<V> var1 =
                     VarDeclaration.make(BlocklyType.NUMERIC_INT, ((Var<V>) var).getValue(), convertPhraseToExpr(from), false, false, properties, comment);
 
-                Binary<V> exprCondition = Binary.make(Binary.Op.LTE, convertPhraseToExpr(var), convertPhraseToExpr(to), properties, comment);
-                Binary<V> exprBy = Binary.make(Binary.Op.ADD_ASSIGNMENT, convertPhraseToExpr(var), convertPhraseToExpr(by), properties, comment);
+                Binary<V> exprCondition = Binary.make(Binary.Op.LTE, convertPhraseToExpr(var), convertPhraseToExpr(to), "", properties, comment);
+                Binary<V> exprBy = Binary.make(Binary.Op.ADD_ASSIGNMENT, convertPhraseToExpr(var), convertPhraseToExpr(by), "", properties, comment);
                 exprList.addExpr(var1);
                 exprList.addExpr(exprCondition);
                 exprList.addExpr(exprBy);
@@ -694,7 +694,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam(BlocklyConstants.LIST_, ArrayList.class));
 
-                Binary<V> exprBinary = Binary.make(Binary.Op.IN, convertPhraseToExpr(var), convertPhraseToExpr(expr), properties, comment);
+                Binary<V> exprBinary = Binary.make(Binary.Op.IN, convertPhraseToExpr(var), convertPhraseToExpr(expr), "", properties, comment);
                 return extractRepeatStatement(block, exprBinary, BlocklyConstants.FOR_EACH);
 
             case "controls_flow_statements":
@@ -710,7 +710,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 by = NumConst.make("1", properties, comment);
                 var1 = VarDeclaration.make(BlocklyType.NUMERIC_INT, "i" + this.variable_counter, convertPhraseToExpr(from), false, false, properties, comment);
                 var = Var.make(BlocklyType.NUMERIC_INT, "i" + this.variable_counter, properties, comment);
-                exprCondition = Binary.make(Binary.Op.LT, convertPhraseToExpr(var), convertPhraseToExpr(to), properties, comment);
+                exprCondition = Binary.make(Binary.Op.LT, convertPhraseToExpr(var), convertPhraseToExpr(to), "", properties, comment);
                 Unary<V> increment = Unary.make(Unary.Op.POSTFIX_INCREMENTS, convertPhraseToExpr(var), properties, comment);
                 exprList.addExpr(var1);
                 exprList.addExpr(exprCondition);
@@ -755,11 +755,12 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 name = extractField(fields, BlocklyConstants.NAME);
                 Var<V> returnType = Var.make(BlocklyType.get(extractField(fields, BlocklyConstants.TYPE)), "returnType", properties, comment);
 
-                statements = extractStatements(block, (short) 2);
+                List<Object> valAndStmt = block.getRepetitions().getValueAndStatement();
+                values = new ArrayList<Value>();
+                statements = new ArrayList<Statement>();
+                convertStmtValList(values, statements, valAndStmt);
                 exprList = statementsToExprs(statements, BlocklyConstants.ST);
                 statement = extractStatement(statements, BlocklyConstants.STACK);
-
-                values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam(BlocklyConstants.RETURN, NullConst.class));
 
                 return MethodReturn.make(name, exprList, statement, returnType, convertPhraseToExpr(expr), properties, comment);

@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
 import de.fhg.iais.roberta.ast.typecheck.Sig;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
@@ -24,13 +25,15 @@ public final class Binary<V> extends Expr<V> {
     private final Op op;
     private final Expr<V> left;
     private final Expr<V> right;
+    private final String operationRange;
 
-    private Binary(Op op, Expr<V> left, Expr<V> right, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private Binary(Op op, Expr<V> left, Expr<V> right, String operationRange, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.BINARY, properties, comment);
         Assert.isTrue(op != null && left != null && right != null && left.isReadOnly() && right.isReadOnly());
         this.op = op;
         this.left = left;
         this.right = right;
+        this.operationRange = operationRange;
         this.setReadOnly();
     }
 
@@ -44,8 +47,8 @@ public final class Binary<V> extends Expr<V> {
      * @param comment added from the user,
      * @return Binary expression
      */
-    public static <V> Binary<V> make(Op op, Expr<V> left, Expr<V> right, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new Binary<V>(op, left, right, properties, comment);
+    public static <V> Binary<V> make(Op op, Expr<V> left, Expr<V> right, String operationRange, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new Binary<V>(op, left, right, operationRange, properties, comment);
     }
 
     /**
@@ -67,6 +70,13 @@ public final class Binary<V> extends Expr<V> {
      */
     public Expr<V> getRight() {
         return this.right;
+    }
+
+    /**
+     * @return the operationRange
+     */
+    public String getOperationRange() {
+        return this.operationRange;
     }
 
     @Override
@@ -192,6 +202,11 @@ public final class Binary<V> extends Expr<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        if ( !this.operationRange.equals("") ) {
+            Mutation mutation = new Mutation();
+            mutation.setOperatorRange(this.operationRange);
+            jaxbDestination.setMutation(mutation);
+        }
         switch ( getOp() ) {
 
             case MATH_CHANGE:

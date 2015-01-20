@@ -7,8 +7,7 @@ import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 public class InfraredSensorTest {
     @Test
     public void setInfrared() throws Exception {
-        String a =
-            "\nhal.getInfraredSensorValue(SensorPort.S4, InfraredSensorMode.DISTANCE)" + "hal.getInfraredSensorValue(SensorPort.S3, InfraredSensorMode.SEEK)";
+        String a = "\nhal.getInfraredSensorDistance(SensorPort.S4)" + "hal.getInfraredSensorSeek(SensorPort.S3)";
 
         Helper.assertCodeIsOk(a, "/ast/sensors/sensor_setInfrared.xml");
     }

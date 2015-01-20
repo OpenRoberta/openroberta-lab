@@ -2,13 +2,17 @@ package de.fhg.iais.roberta.ast.syntax.methods;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
+import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
+import de.fhg.iais.roberta.blockly.generated.Repetitions;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -109,8 +113,21 @@ public class MethodReturn<V> extends Method<V> {
 
     @Override
     public Block astToBlock() {
-        // TODO Auto-generated method stub
-        return null;
+        boolean declare = this.parameters.get().size() == 0 ? false : true;
+        Block jaxbDestination = new Block();
+        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        Mutation mutation = new Mutation();
+        mutation.setDeclare(declare);
+        mutation.setReturnType(this.returnType.getTypeVar().getBlocklyName());
+        jaxbDestination.setMutation(mutation);
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.NAME, this.methodName);
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.TYPE, this.returnType.getTypeVar().getBlocklyName());
+        Repetitions repetition = new Repetitions();
+        AstJaxbTransformerHelper.addStatement(repetition, BlocklyConstants.ST, this.parameters);
+        AstJaxbTransformerHelper.addStatement(repetition, BlocklyConstants.STACK, this.body);
+        AstJaxbTransformerHelper.addValue(repetition, BlocklyConstants.RETURN, getReturnValue());
+        jaxbDestination.setRepetitions(repetition);
+        return jaxbDestination;
     }
 
 }

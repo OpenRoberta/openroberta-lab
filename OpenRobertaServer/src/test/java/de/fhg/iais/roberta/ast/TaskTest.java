@@ -11,14 +11,14 @@ public class TaskTest {
     public void mainTask() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=1, y=7], MainTask [\n"
-                + "exprStmt GlobalVarDeclaration [NUMERIC, item, NumConst [0], true, true]\n"
-                + "exprStmt GlobalVarDeclaration [STRING, item2, StringConst [ss], true, true]\n"
-                + "exprStmt GlobalVarDeclaration [BOOL, item3, BoolConst [true], true, true]\n"
-                + "exprStmt GlobalVarDeclaration [ARRAY_NUMBER, item4, ListCreate [NUMERIC, NumConst [1], NumConst [2], NumConst [3]], true, true]\n"
-                + "exprStmt GlobalVarDeclaration [ARRAY_STRING, item5, ListCreate [STRING, StringConst [a], EmptyExpr [defVal=class java.util.ArrayList], StringConst [b]], true, true]\n"
-                + "exprStmt GlobalVarDeclaration [ARRAY_BOOLEAN, item6, ListCreate [BOOL, BoolConst [true], BoolConst [false], EmptyExpr [defVal=class java.util.ArrayList]], true, true]\n"
-                + "exprStmt GlobalVarDeclaration [ARRAY_COLOUR, item7, ListCreate [COLOR, ColorConst [RED], ColorConst [MAGENTA], ColorConst [NONE]], true, true]\n"
-                + "exprStmt GlobalVarDeclaration [COLOR, item8, ColorConst [NONE], false, true]]]]]";
+                + "exprStmt VarDeclaration [NUMERIC, item, NumConst [0], true, true]\n"
+                + "exprStmt VarDeclaration [STRING, item2, StringConst [ss], true, true]\n"
+                + "exprStmt VarDeclaration [BOOL, item3, BoolConst [true], true, true]\n"
+                + "exprStmt VarDeclaration [ARRAY_NUMBER, item4, ListCreate [NUMERIC, NumConst [1], NumConst [2], NumConst [3]], true, true]\n"
+                + "exprStmt VarDeclaration [ARRAY_STRING, item5, ListCreate [STRING, StringConst [a], EmptyExpr [defVal=class java.util.ArrayList], StringConst [b]], true, true]\n"
+                + "exprStmt VarDeclaration [ARRAY_BOOLEAN, item6, ListCreate [BOOL, BoolConst [true], BoolConst [false], EmptyExpr [defVal=class java.util.ArrayList]], true, true]\n"
+                + "exprStmt VarDeclaration [ARRAY_COLOUR, item7, ListCreate [COLOR, ColorConst [RED], ColorConst [MAGENTA], ColorConst [NONE]], true, true]\n"
+                + "exprStmt VarDeclaration [COLOR, item8, ColorConst [NONE], false, true]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/task/task_mainTask.xml"));
     }

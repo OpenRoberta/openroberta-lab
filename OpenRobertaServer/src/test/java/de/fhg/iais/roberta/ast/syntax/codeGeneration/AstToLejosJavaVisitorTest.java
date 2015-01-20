@@ -30,6 +30,7 @@ public class AstToLejosJavaVisitorTest {
         + "import java.util.LinkedHashSet;\n"
         + "import java.util.Set;\n"
         + "import java.util.List;\n"
+        + "import java.util.ArrayList;\n"
         + "import java.util.Arrays;\n";
 
     private static final String BRICK_CONFIGURATION = "" //
@@ -86,7 +87,7 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_METHOD
             + "    public void run() {\n"
             + "        Hal hal = new Hal(brickConfiguration, usedSensors);\n"
-            + "        hal.drawText(\"Hallo\", (int) 0, (int) 3);\n"
+            + "        hal.drawText(\"Hallo\", 0, 3);\n"
             + SUFFIX
             + "    }\n"
             + "}\n";
@@ -106,7 +107,7 @@ public class AstToLejosJavaVisitorTest {
             + "    public void run() {\n"
             + "        Hal hal = new Hal(brickConfiguration, usedSensors);\n"
             + "        for ( int i0 = 0; i0 < 10; i0++ ) {\n"
-            + "            hal.drawText(\"Hallo\", (int) 0, (int) 3);\n"
+            + "            hal.drawText(\"Hallo\", 0, 3);\n"
             + "        }\n"
             + SUFFIX
             + "    }\n"
@@ -128,7 +129,7 @@ public class AstToLejosJavaVisitorTest {
             + "        Hal hal = new Hal(brickConfiguration, usedSensors);\n"
             + "        if ( hal.isPressed(SensorPort.S1) ) {\n"
             + "            hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
-            + "        } else if ( 0 == PickColor.get(hal.getColorSensorValue(SensorPort.S3,ColorSensorMode.COLOUR)) ) {\n"
+            + "        } else if ( Pickcolor.RED == hal.getColorSensorColour(SensorPort.S3) ) {\n"
             + "        if ( TRUE ) {\n"
             + "            while ( true ) {\n"
             + "                hal.drawPicture(ShowPicture.EYESOPEN, 0, 0);\n\n"
@@ -165,7 +166,7 @@ public class AstToLejosJavaVisitorTest {
                 + "        } else {\n"
                 + "            if ( hal.isPressed(SensorPort.S1) ) {\n"
                 + "                hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
-                + "            } else if ( 0 == hal.getUltraSonicSensorValue(SensorPort.S4, UltrasonicSensorMode.DISTANCE) ) {\n"
+                + "            } else if ( 0==hal.getUltraSonicSensorDistance(SensorPort.S4) ) {\n"
                 + "                hal.drawPicture(ShowPicture.FLOWERS, 15, 15);\n"
                 + "            } else {\n"
                 + "            if ( TRUE ) {\n"
@@ -199,7 +200,7 @@ public class AstToLejosJavaVisitorTest {
                 + "            hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);\n"
                 + "            hal.rotateDirectionRegulated(ActorPort.A, ActorPort.B, false, TurnDirection.RIGHT, 50);\n"
                 + "        }\n"
-                + "        if ( hal.getRegulatedMotorTachoValue(ActorPort.A, MotorTachoMode.ROTATION) + hal.getInfraredSensorValue(SensorPort.S4, InfraredSensorMode.DISTANCE) == hal.getUltraSonicSensorValue(SensorPort.S4, UltrasonicSensorMode.DISTANCE) ) {\n"
+                + "        if ( hal.getRegulatedMotorTachoValue(ActorPort.A, MotorTachoMode.ROTATION) + hal.getInfraredSensorDistance(SensorPort.S4) == hal.getUltraSonicSensorDistance(SensorPort.S4) ) {\n"
                 + "            hal.ledOff();\n"
                 + "        } else {\n"
                 + "            hal.resetGyroSensor(SensorPort.S2);\n"
@@ -252,7 +253,7 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_METHOD
             + "    public void run() {\n"
             + "        Hal hal = new Hal(brickConfiguration, usedSensors);\n"
-            + "        hal.drawText(\"Hallo\", (int) 0, (int) 0);\n"
+            + "        hal.drawText(\"Hallo\", 0, 0);\n"
             + "        hal.playTone(300, 3000);\n"
             + SUFFIX
             + "    }\n"
@@ -294,9 +295,9 @@ public class AstToLejosJavaVisitorTest {
             + "        float item = 10;\n"
             + "        String item2 = \"TTTT\";\n"
             + "        boolean item3 = true;\n"
-            + "        hal.drawText(String.valueOf(item), (int) 0, (int) 0);\n"
-            + "        hal.drawText(String.valueOf(item2), (int) 0, (int) 0);\n"
-            + "        hal.drawText(String.valueOf(item3), (int) 0, (int) 0);\n"
+            + "        hal.drawText(String.valueOf(item), 0, 0);\n"
+            + "        hal.drawText(String.valueOf(item2), 0, 0);\n"
+            + "        hal.drawText(String.valueOf(item3), 0, 0);\n"
             + "        item3 = false;\n"
             + SUFFIX
             + "    }\n"
@@ -317,7 +318,7 @@ public class AstToLejosJavaVisitorTest {
                 + MAIN_METHOD
                 + "    public void run() {\n"
                 + "        Hal hal = new Hal(brickConfiguration, usedSensors);\n"
-                + "floatitem=0;Stringitem2=\"ss\";booleanitem3=true;List<Float>item4=BlocklyMethods.createListWith(1,2,3);List<String>item5=BlocklyMethods.createListWith(\"a\",\"b\");List<Boolean>item6=BlocklyMethods.createListWith(true,false);List<Pickcolor>item7=BlocklyMethods.createListWith(0,4,-1);Pickcoloritem8=-1;"
+                + "floatitem=0;Stringitem2=\"ss\";booleanitem3=true;ArrayList<Float>item4=BlocklyMethods.createListWith(1,2,3);ArrayList<String>item5=BlocklyMethods.createListWith(\"a\",\"b\");ArrayList<Boolean>item6=BlocklyMethods.createListWith(true,false);ArrayList<Pickcolor>item7=BlocklyMethods.createListWith(Pickcolor.RED,Pickcolor.MAGENTA,Pickcolor.NONE);Pickcoloritem8=Pickcolor.NONE;"
                 + SUFFIX
                 + "    }\n"
                 + "}\n";

@@ -7,6 +7,7 @@ import java.util.Random;
 
 import de.fhg.iais.roberta.ast.syntax.IndexLocation;
 import de.fhg.iais.roberta.ast.syntax.ListElementOperations;
+import de.fhg.iais.roberta.ast.syntax.Pickcolor;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
@@ -98,6 +99,10 @@ public class BlocklyMethods {
 
     public static ArrayList<String> createListWith(String... a) {
         return new ArrayList<String>(Arrays.asList(a));
+    }
+
+    public static ArrayList<Pickcolor> createListWith(Pickcolor... a) {
+        return new ArrayList<Pickcolor>(Arrays.asList(a));
     }
 
     public static <T> ArrayList<T> createListWithItem(T item, int times) {

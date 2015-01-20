@@ -15,10 +15,10 @@ public class RepeatStmtTest {
     public void repeatStmt() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=33, y=-573], \n"
-                + "(repeat [TIMES, GlobalVarDeclaration [NUMERIC_INT, i0, NumConst [0], false, false], Binary [LT, Var [i0], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i0]]]\n"
+                + "(repeat [TIMES, VarDeclaration [NUMERIC_INT, i0, NumConst [0], false, false], Binary [LT, Var [i0], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i0]]]\n"
                 + "exprStmt Binary [TEXT_APPEND, Var [item3], StringConst [Proba]]\n"
                 + "exprStmt Binary [TEXT_APPEND, Var [item3], StringConst [Proba1]]\n"
-                + "(repeat [TIMES, GlobalVarDeclaration [NUMERIC_INT, i1, NumConst [0], false, false], Binary [LT, Var [i1], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i1]]]\n"
+                + "(repeat [TIMES, VarDeclaration [NUMERIC_INT, i1, NumConst [0], false, false], Binary [LT, Var [i1], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i1]]]\n"
                 + ")\n"
                 + ")]]]";
 
@@ -41,7 +41,7 @@ public class RepeatStmtTest {
         RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(1);
 
         Assert.assertEquals(
-            "GlobalVarDeclaration [NUMERIC_INT, i0, NumConst [0], false, false], Binary [LT, Var [i0], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i0]]",
+            "VarDeclaration [NUMERIC_INT, i0, NumConst [0], false, false], Binary [LT, Var [i0], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i0]]",
             repeatStmt.getExpr().toString());
     }
 
@@ -54,7 +54,7 @@ public class RepeatStmtTest {
         String a =
             "\nexprStmt Binary [TEXT_APPEND, Var [item3], StringConst [Proba]]\n"
                 + "exprStmt Binary [TEXT_APPEND, Var [item3], StringConst [Proba1]]\n"
-                + "(repeat [TIMES, GlobalVarDeclaration [NUMERIC_INT, i1, NumConst [0], false, false], Binary [LT, Var [i1], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i1]]]\n"
+                + "(repeat [TIMES, VarDeclaration [NUMERIC_INT, i1, NumConst [0], false, false], Binary [LT, Var [i1], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i1]]]\n"
                 + ")";
 
         Assert.assertEquals(a, repeatStmt.getList().toString());
@@ -64,7 +64,7 @@ public class RepeatStmtTest {
     public void repeatStmt1() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=-93, y=1], \n"
-                + "(repeat [TIMES, GlobalVarDeclaration [NUMERIC_INT, i0, NumConst [0], false, false], Binary [LT, Var [i0], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i0]]]\n)]]]";
+                + "(repeat [TIMES, VarDeclaration [NUMERIC_INT, i0, NumConst [0], false, false], Binary [LT, Var [i0], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i0]]]\n)]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/repeat_stmt1.xml"));
     }
@@ -105,7 +105,7 @@ public class RepeatStmtTest {
     public void repeatStmtFor() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=-517, y=190], \n"
-                + "(repeat [FOR, GlobalVarDeclaration [NUMERIC_INT, i, NumConst [1], false, false], Binary [LTE, Var [i], NumConst [10]], Binary [ADD_ASSIGNMENT, Var [i], NumConst [1]]]\n"
+                + "(repeat [FOR, VarDeclaration [NUMERIC_INT, i, NumConst [1], false, false], Binary [LTE, Var [i], NumConst [10]], Binary [ADD_ASSIGNMENT, Var [i], NumConst [1]]]\n"
                 + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [kllk]]\n"
                 + ")]]]";
 
@@ -116,7 +116,7 @@ public class RepeatStmtTest {
     public void repeatStmtFor1() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=-93, y=190], \n"
-                + "(repeat [FOR, GlobalVarDeclaration [NUMERIC_INT, i, NumConst [1], false, false], Binary [LTE, Var [i], NumConst [10]], Binary [ADD_ASSIGNMENT, Var [i], NumConst [1]]]\n)]]]";
+                + "(repeat [FOR, VarDeclaration [NUMERIC_INT, i, NumConst [1], false, false], Binary [LTE, Var [i], NumConst [10]], Binary [ADD_ASSIGNMENT, Var [i], NumConst [1]]]\n)]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/repeat_stmt_for1.xml"));
     }

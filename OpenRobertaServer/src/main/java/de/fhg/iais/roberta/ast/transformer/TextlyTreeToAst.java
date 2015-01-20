@@ -65,7 +65,7 @@ public class TextlyTreeToAst extends TextlyBaseVisitor<Phrase<Void>> {
         String op = ctx.getChild(1).getText();
         Phrase<Void> left = visit(ctx.getChild(0));
         Phrase<Void> right = visit(ctx.getChild(2));
-        return Binary.make(Binary.Op.get(op), (Expr<Void>) left, (Expr<Void>) right, null, null);
+        return Binary.make(Binary.Op.get(op), (Expr<Void>) left, (Expr<Void>) right, "", null, null);
     }
 
     @Override

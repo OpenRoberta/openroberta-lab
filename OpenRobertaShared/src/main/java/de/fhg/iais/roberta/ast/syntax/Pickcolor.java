@@ -32,11 +32,11 @@ public enum Pickcolor {
     }
 
     public String getJavaCode() {
-        return String.valueOf(this.colorID);
-        // return this.getClass().getSimpleName() + "." + this;
+        //        return String.valueOf(this.colorID);
+        return this.getClass().getSimpleName() + "." + this;
     }
 
-    public Pickcolor get(int id) {
+    public static Pickcolor get(int id) {
         for ( Pickcolor sp : Pickcolor.values() ) {
             if ( sp.colorID == id ) {
                 return sp;

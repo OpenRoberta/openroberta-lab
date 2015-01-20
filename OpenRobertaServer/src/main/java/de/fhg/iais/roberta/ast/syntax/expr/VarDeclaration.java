@@ -116,7 +116,7 @@ public class VarDeclaration<V> extends Expr<V> {
 
     @Override
     public String toString() {
-        return "GlobalVarDeclaration [" + this.typeVar + ", " + this.name + ", " + this.value + ", " + this.next + ", " + this.global + "]";
+        return "VarDeclaration [" + this.typeVar + ", " + this.name + ", " + this.value + ", " + this.next + ", " + this.global + "]";
     }
 
     @Override

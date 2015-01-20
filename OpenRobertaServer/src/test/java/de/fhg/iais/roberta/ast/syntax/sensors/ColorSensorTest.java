@@ -9,10 +9,10 @@ public class ColorSensorTest {
     @Test
     public void setColor() throws Exception {
         String a =
-            "\nPickColor.get(hal.getColorSensorValue(SensorPort.S3,ColorSensorMode.COLOUR))"
-                + "hal.getColorSensorValue(SensorPort.S1, ColorSensorMode.RED)"
-                + "hal.getColorSensorValue(SensorPort.S2, ColorSensorMode.RGB)"
-                + "hal.getColorSensorValue(SensorPort.S4, ColorSensorMode.AMBIENTLIGHT)";
+            "\nhal.getColorSensorColour(SensorPort.S3)"
+                + "hal.getColorSensorRed(SensorPort.S1)"
+                + "hal.getColorSensorRgb(SensorPort.S2)"
+                + "hal.getColorSensorAmbient(SensorPort.S4)";
 
         Helper.assertCodeIsOk(a, "/ast/sensors/sensor_setColor.xml");
     }

@@ -33,7 +33,7 @@ public class AstToTextlyVisitorTest {
         String a = "{\n" //
             + "   if ( Bumper.isPressed(S1) ) {\n"
             + "      LED.on(GREEN, ON);\n"
-            + "   } else if ( 0 == ColorSensor.getValue(S3, COLOUR) ) {\n"
+            + "   } else if (0 == ColorSensor.getValue(S3, COLOUR) ) {\n"
             + "      while ( true ) {\n"
             + "         Display.drawPicture(EYESOPEN, 0, 0);\n"
             + "         Motor.on(B,30);\n"
@@ -58,7 +58,7 @@ public class AstToTextlyVisitorTest {
             + "        } else {\n"
             + "            if ( Bumper.isPressed(S1) ) {\n"
             + "                LED.on(GREEN, ON);\n"
-            + "            } else if ( 0 == UltraSonicSensor.getValue(S4, DISTANCE) ) {\n"
+            + "            } else if (0 == UltraSonicSensor.getValue(S4, DISTANCE) ) {\n"
             + "                Display.drawPicture(FLOWERS, 15, 15);\n"
             + "            } else {\n"
             + "                while ( !Button.isPressed(UP) ) {\n\n"

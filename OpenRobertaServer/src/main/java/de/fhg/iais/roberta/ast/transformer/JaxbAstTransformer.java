@@ -72,7 +72,17 @@ abstract public class JaxbAstTransformer<V> {
         List<Value> values = extractValues(block, (short) 2);
         Phrase<V> left = extractValue(values, leftExpr);
         Phrase<V> right = extractValue(values, rightExpr);
-        return Binary.make(Binary.Op.get(op), convertPhraseToExpr(left), convertPhraseToExpr(right), extractBlockProperties(block), extractComment(block));
+        String operationRange = "";
+        if ( block.getMutation() != null && block.getMutation().getOperatorRange() != null ) {
+            operationRange = block.getMutation().getOperatorRange();
+        }
+        return Binary.make(
+            Binary.Op.get(op),
+            convertPhraseToExpr(left),
+            convertPhraseToExpr(right),
+            operationRange,
+            extractBlockProperties(block),
+            extractComment(block));
     }
 
     protected List<Expr<V>> extractExprParameters(Block block, List<ExprParam> exprParams) {

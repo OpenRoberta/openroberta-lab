@@ -106,6 +106,27 @@ public final class AstJaxbTransformerHelper {
     }
 
     /**
+     * Add's a statement {@link Statement} object to JAXB block representation {@link Block}.
+     * <p>
+     * This method does <b>not</b> add the statement object into {@link Repetitions} object.
+     *
+     * @param repetitions object to which the statement will be added; must be <b>not</b> null,
+     * @param name of the statement; must be <b>non-empty</b> string
+     * @param value is the AST representation of the Blockly block where the statement is stored; must be <b>not</b> null and {@link Phrase#getKind()} must be
+     *        {@link Kind#EXPR_LIST}
+     */
+    public static void addStatement(Repetitions repetitions, String name, ExprList<?> exprList) {
+        Assert.isTrue(repetitions != null && exprList != null && !name.equals(""));
+        Assert.isTrue(exprList.getKind() == Phrase.Kind.EXPR_LIST, "Phrase is not EXPR_LIST");
+        if ( exprList.get().size() != 0 ) {
+            Statement statement = new Statement();
+            statement.setName(name);
+            statement.getBlock().addAll(extractExprList(exprList));
+            repetitions.getValueAndStatement().add(statement);
+        }
+    }
+
+    /**
      * Add's a value {@link Value} object to JAXB block representation {@link Block}.
      * <p>
      * This method does <b>not</b> add the value object into {@link Repetitions} object.

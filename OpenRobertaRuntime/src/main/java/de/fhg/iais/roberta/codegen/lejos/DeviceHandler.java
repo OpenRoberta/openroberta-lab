@@ -101,8 +101,8 @@ public class DeviceHandler {
                     return infraredSensorSampleProviders(sensorPort, ev3IRSensor);
 
                 case "EV3_GYRO_SENSOR":
-                    EV3GyroSensor ev3GyroSensor = new EV3GyroSensor(hardwarePort);
-                    return gyroSensorSampleProviders(sensorPort, ev3GyroSensor);
+                    this.gyroSensor = new EV3GyroSensor(hardwarePort);
+                    return gyroSensorSampleProviders(sensorPort, this.gyroSensor);
 
                 case "EV3_TOUCH_SENSOR":
                     EV3TouchSensor ev3TouchSensor = new EV3TouchSensor(hardwarePort);
@@ -197,14 +197,16 @@ public class DeviceHandler {
     }
 
     private SampleProviderBean[] gyroSensorSampleProviders(SensorPort sensorPort, EV3GyroSensor ev3GyroSensor) {
-        SampleProviderBean[] gyroSensorSampleProviders = new SampleProviderBean[GyroSensorMode.values().length];
+        SampleProviderBean[] gyroSensorSampleProviders = new SampleProviderBean[GyroSensorMode.values().length - 1];
         int i = 0;
         for ( GyroSensorMode sensorMode : GyroSensorMode.values() ) {
-            SampleProviderBean providerBean = new SampleProviderBean();
-            providerBean.setModeName(sensorMode.name());
-            providerBean.setSampleProvider(ev3GyroSensor.getMode(sensorMode.getLejosModeName()));
-            gyroSensorSampleProviders[i] = providerBean;
-            i++;
+            if ( sensorMode != GyroSensorMode.RESET ) {
+                SampleProviderBean providerBean = new SampleProviderBean();
+                providerBean.setModeName(sensorMode.name());
+                providerBean.setSampleProvider(ev3GyroSensor.getMode(sensorMode.getLejosModeName()));
+                gyroSensorSampleProviders[i] = providerBean;
+                i++;
+            }
         }
         return gyroSensorSampleProviders;
     }

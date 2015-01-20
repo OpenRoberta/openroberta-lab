@@ -61,7 +61,6 @@ import de.fhg.iais.roberta.ast.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.ast.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
-import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GetSampleSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
@@ -71,6 +70,7 @@ import de.fhg.iais.roberta.ast.syntax.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.TouchSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.ast.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
@@ -526,9 +526,9 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         } else {
             showTextAction.getMsg().visit(this);
         }
-        this.sb.append(", (int) ");
+        this.sb.append(", ");
         showTextAction.getX().visit(this);
-        this.sb.append(", (int) ");
+        this.sb.append(", ");
         showTextAction.getY().visit(this);
         this.sb.append(");");
         return null;
@@ -653,21 +653,33 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        if ( colorSensor.getMode() == ColorSensorMode.COLOUR ) {
-            this.sb.append("PickColor.get(hal.getColorSensorValue(" + colorSensor.getPort().getJavaCode() + ", " + colorSensor.getMode().getJavaCode() + "))");
-        } else {
-            this.sb.append("hal.getColorSensorValue(" + colorSensor.getPort().getJavaCode() + ", " + colorSensor.getMode().getJavaCode() + ")");
+        switch ( colorSensor.getMode() ) {
+            case AMBIENTLIGHT:
+                this.sb.append("hal.getColorSensorAmbient(" + colorSensor.getPort().getJavaCode() + ")");
+                break;
+            case COLOUR:
+                this.sb.append("hal.getColorSensorColour(" + colorSensor.getPort().getJavaCode() + ")");
+                break;
+            case RED:
+                this.sb.append("hal.getColorSensorRed(" + colorSensor.getPort().getJavaCode() + ")");
+                break;
+            case RGB:
+                this.sb.append("hal.getColorSensorRgb(" + colorSensor.getPort().getJavaCode() + ")");
+                break;
+            default:
+                throw new DbcException("Invalide mode for Color Sensor!");
         }
         return null;
     }
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
+        boolean isRegulated = this.brickConfiguration.isMotorRegulated(encoderSensor.getMotor());
         if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
-            this.sb.append("hal.resetMotorTacho(" + encoderSensor.getMotor().getJavaCode() + ");");
+            String methodName = isRegulated ? "hal.resetRegulatedMotorTacho(" : "hal.resetUnregulatedMotorTacho(";
+            this.sb.append(methodName + encoderSensor.getMotor().getJavaCode() + ");");
         } else {
-            boolean isRegulated = true;
-            String methodName = isRegulated ? "hal.getRegulatedMotorTachoValue(" : "hal.getUnregulatedMotorTachoValuestop(";
+            String methodName = isRegulated ? "hal.getRegulatedMotorTachoValue(" : "hal.getUnregulatedMotorTachoValue(";
             this.sb.append(methodName + encoderSensor.getMotor().getJavaCode() + ", " + encoderSensor.getMode().getJavaCode() + ")");
         }
         return null;
@@ -685,7 +697,17 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.sb.append("hal.getInfraredSensorValue(" + infraredSensor.getPort().getJavaCode() + ", " + infraredSensor.getMode().getJavaCode() + ")");
+        switch ( infraredSensor.getMode() ) {
+            case DISTANCE:
+                this.sb.append("hal.getInfraredSensorDistance(" + infraredSensor.getPort().getJavaCode() + ")");
+                break;
+            case SEEK:
+                this.sb.append("hal.getInfraredSensorSeek(" + infraredSensor.getPort().getJavaCode() + ")");
+                break;
+            default:
+                throw new DbcException("Invalid Infrared Sensor Mode!");
+        }
+
         return null;
     }
 
@@ -712,7 +734,11 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.sb.append("hal.getUltraSonicSensorValue(" + ultrasonicSensor.getPort().getJavaCode() + ", " + ultrasonicSensor.getMode().getJavaCode() + ")");
+        if ( ultrasonicSensor.getMode() == UltrasonicSensorMode.DISTANCE ) {
+            this.sb.append("hal.getUltraSonicSensorDistance(" + ultrasonicSensor.getPort().getJavaCode() + ")");
+        } else {
+            this.sb.append("hal.getUltraSonicSensorPresence(" + ultrasonicSensor.getPort().getJavaCode() + ")");
+        }
         return null;
     }
 
@@ -848,7 +874,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitListCreate(ListCreate<Void> listCreate) {
-        this.sb.append("BlocklyMethods.createListWith( ");
+        this.sb.append("BlocklyMethods.createListWith(");
         listCreate.getValue().visit(this);
         this.sb.append(")");
         return null;
@@ -856,7 +882,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
-        this.sb.append("BlocklyMethods.createListWithItem( ");
+        this.sb.append("BlocklyMethods.createListWithItem(");
         listRepeat.getParam().get(0).visit(this);
         this.sb.append(", ");
         listRepeat.getParam().get(1).visit(this);
@@ -866,7 +892,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
-        this.sb.append("BlocklyMethods.listsIndex( ");
+        this.sb.append("BlocklyMethods.listsIndex(");
         listGetIndex.getParam().get(0).visit(this);
         this.sb.append(", ");
         this.sb.append(listGetIndex.getElementOperation().getJavaCode());
@@ -885,7 +911,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
-        this.sb.append("BlocklyMethods.listsIndex( ");
+        this.sb.append("BlocklyMethods.listsIndex(");
         listSetIndex.getParam().get(0).visit(this);
         this.sb.append(", ");
         this.sb.append(listSetIndex.getElementOperation().getJavaCode());
@@ -903,7 +929,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        this.sb.append("BlocklyMethods.clamp( ");
+        this.sb.append("BlocklyMethods.clamp(");
         mathConstrainFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
         mathConstrainFunct.getParam().get(1).visit(this);
@@ -917,37 +943,37 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
         switch ( mathNumPropFunct.getFunctName() ) {
             case EVEN:
-                this.sb.append("BlocklyMethods.isEven( ");
+                this.sb.append("BlocklyMethods.isEven(");
                 mathNumPropFunct.getParam().get(0).visit(this);
                 this.sb.append(")");
                 break;
             case ODD:
-                this.sb.append("BlocklyMethods.isOdd( ");
+                this.sb.append("BlocklyMethods.isOdd(");
                 mathNumPropFunct.getParam().get(0).visit(this);
                 this.sb.append(")");
                 break;
             case PRIME:
-                this.sb.append("BlocklyMethods.isPrime( ");
+                this.sb.append("BlocklyMethods.isPrime(");
                 mathNumPropFunct.getParam().get(0).visit(this);
                 this.sb.append(")");
                 break;
             case WHOLE:
-                this.sb.append("BlocklyMethods.isWhole( ");
+                this.sb.append("BlocklyMethods.isWhole(");
                 mathNumPropFunct.getParam().get(0).visit(this);
                 this.sb.append(")");
                 break;
             case POSITIVE:
-                this.sb.append("BlocklyMethods.isPositive( ");
+                this.sb.append("BlocklyMethods.isPositive(");
                 mathNumPropFunct.getParam().get(0).visit(this);
                 this.sb.append(")");
                 break;
             case NEGATIVE:
-                this.sb.append("BlocklyMethods.isNegative( ");
+                this.sb.append("BlocklyMethods.isNegative(");
                 mathNumPropFunct.getParam().get(0).visit(this);
                 this.sb.append(")");
                 break;
             case DIVISIBLE_BY:
-                this.sb.append("BlocklyMethods.isDivisibleBy( ");
+                this.sb.append("BlocklyMethods.isDivisibleBy(");
                 mathNumPropFunct.getParam().get(0).visit(this);
                 this.sb.append(", ");
                 mathNumPropFunct.getParam().get(1).visit(this);
@@ -1193,6 +1219,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         this.sb.append("import java.util.LinkedHashSet;\n");
         this.sb.append("import java.util.Set;\n");
         this.sb.append("import java.util.List;\n");
+        this.sb.append("import java.util.ArrayList;\n");
         this.sb.append("import java.util.Arrays;\n\n");
 
         this.sb.append("public class " + this.programName + " {\n");
