@@ -102,7 +102,7 @@ html, body {
 
 .tabClicked {
     color: #afca04;
-    border-bottom: 8px solid #afca04;
+    border-bottom: 3px solid #afca04;
 }
 
 .menuTab {
@@ -120,7 +120,7 @@ html, body {
     left: 0;
     right: 0;
     bottom: 0;
-    padding-top: 90px;
+    padding-top: 70px;
     z-index: 99;
     height: 100%;
     background: #ffffff; /* Old browsers */
@@ -162,6 +162,7 @@ html, body {
 #bricklyFrame {
     width: 100%;
     height: 100%;
+    border: 0;
 }
 
 #blocklyDiv {
@@ -221,17 +222,18 @@ html, body {
     background-color: white;
 }
 
-.nav-pills > li > a:hover {
-    background-color: #afca04;
-}
-
-.nav-pills > li > a:focus {
-    background-color: white;
+.nav-pills > li > a:hover,
+.nav-pills > li > a:focus,
+.nav .open > a:hover,
+.nav .open > a:focus,
+.nav .open > a {
+	background-color: #afca04;
     outline: none;
 }
 
 .nav-pills > li > a {
     color: #333333;
+    border-radius: 0;
 }
 
 .dropdown-menu > .disabled > a, .dropdown-menu > .disabled > a:hover, .dropdown-menu > .disabled > a:focus {
@@ -292,7 +294,7 @@ html, body {
 }
 
 .jquerypopup.ui-front {
-    z-index: 100;
+    z-index: 9999;
 }
 
 .jquerypopup.ui-dialog .ui-dialog-title {
@@ -319,6 +321,7 @@ html, body {
     border: none !important;
     background-image: url(/css/img/close-icon.png);
     background-repeat: no-repeat;
+    background-color: transparent;
     cursor: pointer;
 }
 
@@ -526,7 +529,7 @@ html, body {
     margin-right: 5px;
     background-color: #afca04;
     border: medium none;
-    border-radius: 3px;
+    border-radius: 2px;
     color: white;
     cursor: pointer;
     font-size: 16px;

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-01-21 13:07:03.865000",
+		"lastupdated": "2015-01-22 11:50:57.068000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -564,15 +564,14 @@
 	"POPUP_USERNAME": "Username",
 	"POPUP_PASSWORD": "Password",
 	"POPUP_REPEAT_PASSWORD": "Repeat password",
-	"POPUP_DO_LOGIN": "Login",
 	"POPUP_REGISTER_USER": "Register user",
 	"POPUP_NAME": "Name",
 	"POPUP_EMAIL": "E-Mail",
 	"POPUP_DELETE_USER": "Delete user",
 	"POPUP_ATTACH_PROGRAM": "Attach program",
 	"POPUP_SAVE_PROGRAM": "Save program",
-	"POPUP_SHARE": "Share",
-	"POPUP_SHARE_WITH": "Share with",
+	"POPUP_SHARE": "Share with",
+	"POPUP_SHARE_WITH": "Name",
 	"POPUP_SAVE_CONFIGURATION": "Save configuration",
 	"POPUP_SET_TOKEN": "Set token",
 	"POPUP_ATTENTION": "Attention",

@@ -56,7 +56,7 @@ limitations under the License.
             <li class="dropdown" id="head-navigation-program-edit"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="head-navi-icon-program" class="head-navi-icons"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="#" id="menuRunProg" class="flaticon-botton2" lkey="Blockly.Msg.MENU_START">starten</a></li>
-                    <li><a href="#" id="menuCheckProg" class="flaticon-tick" lkey="Blockly.Msg.MENU_CHECK">checken</a></li>
+                    <li class="login logout"><a href="#" id="menuCheckProg" class="flaticon-tick" lkey="Blockly.Msg.MENU_CHECK">checken</a></li>
                     <li><a href="#" id="menuNewProg" class="flaticon-add10" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
                     <li class="logout"><a href="#" id="menuListProg" class="flaticon-pencil1" lkey="Blockly.Msg.MENU_LIST">Liste ...</a></li>
                     <li class="login logout"><a href="#" id="menuSaveProg" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
@@ -68,7 +68,7 @@ limitations under the License.
             <!-- Menu Configuration -->
             <li class="dropdown" id="head-navigation-configuration-edit"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="head-navi-icon-configuration" class="head-navi-icons"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="#" id="menuCheckConfig" class="flaticon-tick" lkey="Blockly.Msg.MENU_CHECK">checken</a></li>
+                    <li class="login logout"><a href="#" id="menuCheckConfig" class="flaticon-tick" lkey="Blockly.Msg.MENU_CHECK">checken</a></li>
                     <li><a href="#" id="menuNewConfig" class="flaticon-add10" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
                     <li class="logout"><a href="#" id="menuListConfig" class="flaticon-pencil1" lkey="Blockly.Msg.MENU_LIST">Liste ... </a></li>
                     <li class="login logout"><a href="#" id="menuSaveConfig" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
@@ -149,7 +149,7 @@ limitations under the License.
         <input id="accountNameS" class='input' type="text" value="" />
         <label for="pass1S" lkey="Blockly.Msg.POPUP_PASSWORD"></label>
         <input id="pass1S" class='input' type="password" value="" /><br/>
-        <input id="doLogin" class='submit' type="submit" lkey="Blockly.Msg.POPUP_DO_LOGIN" value="Anmelden" />
+        <input id="doLogin" class='submit' type="submit" value="OK" />
     </div>
 
     <div class="jquerypopup" id="register-user" title="Benutzer registrieren">
@@ -163,49 +163,49 @@ limitations under the License.
         <input id="userName" class='input' type="text" value="" />
         <label for="userEmail" lkey="Blockly.Msg.POPUP_EMAIL">E-Mail</label>
         <input id="userEmail" class='input' type="text" value="" /><br/>
-        <input id="saveUser" class='submit' type="submit" lkey="Blockly.Msg.POPUP_REGISTER_USER" value="Benutzer registrieren" />
+        <input id="saveUser" class='submit' type="submit" lkey="Blockly.Msg.POPUP_REGISTER_USER" value="OK" />
     </div>
 
     <div class="jquerypopup" id="delete-user" title="Benutzer löschen">
         <label for="pass1D" lkey="Blockly.Msg.POPUP_PASSWORD"></label>
         <input id="pass1D" class='input' type="password" value="" /><br/>
-        <input id="deleteUser" class='submit' type="submit" lkey="Blockly.Msg.POPUP_DELETE_USER" value="Benutzer löschen" />
+        <input id="deleteUser" class='submit' type="submit" lkey="Blockly.Msg.POPUP_DELETE_USER" value="OK" />
     </div>
 
     <div class="jquerypopup program" id="attach-program" title="Programm hinzufügen">
         <label for="programNameAttach" lkey="Blockly.Msg.POPUP_NAME">Name</label>
         <input id="programNameAttach" class='input programName' type="text" value="" /><br/>
-        <input id="attachProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_ATTACH_PROGRAM" value="Programm hinzufügen" />
+        <input id="attachProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_ATTACH_PROGRAM" value="OK" />
     </div>
 
     <div class="jquerypopup program" id="save-program" title="Programm speichern">
         <label for="programNameSave" lkey="Blockly.Msg.POPUP_NAME">Name</label>
         <input id="programNameSave" class='input programName' type="text" value="" /><br/>
-        <input id="saveProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SAVE_PROGRAM" value="Programm speichern" />
+        <input id="saveProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SAVE_PROGRAM" value="OK" />
     </div>
 
     <div class="jquerypopup program" id="share-program" title="Programm teilen mit">
         <label for="programShareWith" lkey="Blockly.Msg.POPUP_SHARE_WITH">Teilen mit</label>
         <input id="programShareWith" class='input programShareWithName' type="text" value="" /><br/>
-        <input id="shareProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SHARE" value="Programm teilen" />
+        <input id="shareProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SHARE" value="OK" />
     </div>
 
     <div class="jquerypopup configuration" id="save-configuration" title="Konfiguration speichern">
         <label for="configurationNameSave" lkey="Blockly.Msg.POPUP_NAME">Name</label>
         <input id="configurationNameSave" class='input configurationName' type="text" value="" /><br/>
-        <input id="saveConfiguration" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SAVE_CONFIGURATION" value="Konfiguration speichern" />
+        <input id="saveConfiguration" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SAVE_CONFIGURATION" value="OK" />
     </div>
 
     <div class="jquerypopup configuration" id="share-configuration" title="Konfiguration teilen mit">
         <label for="configurationShareWith" lkey="Blockly.Msg.POPUP_SHARE_WITH">Teilen mit</label>
         <input id="configurationShareWith" class='input configurationShareWithName' type="text" value="" /><br/>
-        <input id="shareConfiguration" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SHARE" value="Konfiguration teilen" />
+        <input id="shareConfiguration" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SHARE" value="OK" />
     </div>
 
     <div class="jquerypopup" id="set-token" title="Token setzen">
         <label for="tokenValue" lkey="Blockly.Msg.POPUP_VALUE">Wert</label>
         <input id="tokenValue" class='input' type="text" value="" /><br/>
-        <input id="setToken" class='submit' type="button" lkey="Blockly.Msg.POPUP_SET_TOKEN" value="Token setzen" />
+        <input id="setToken" class='submit' type="button" lkey="Blockly.Msg.POPUP_SET_TOKEN" value="OK" />
     </div>
 
     <div class="jquerypopup" id="show-about" title="Über ...">
@@ -256,6 +256,7 @@ limitations under the License.
                     <input class="button buttonLoad" id="loadFromListing" lkey="Blockly.Msg.BUTTON_LOAD" type="submit" value="Laden" />
                     <input class="button buttonDelete" id="deleteFromListing" lkey="Blockly.Msg.BUTTON_DO_DELETE" type="submit" value="Löschen" />
                     <input class="button buttonShare" id="shareFromListing" lkey="Blockly.Msg.BUTTON_DO_SHARE" type="submit" value="Teilen" />
+                    <input class="button backButton" type="submit" value="Cancel" />
                 </div>
             </div>
             
@@ -271,6 +272,7 @@ limitations under the License.
                     <input class="button buttonLoad" id="loadConfigurationFromListing" lkey="Blockly.Msg.BUTTON_LOAD" type="submit" value="Laden" />
                     <input class="button buttonDelete" id="deleteConfigurationFromListing" lkey="Blockly.Msg.BUTTON_DO_DELETE" type="submit" value="Löschen" />
                     <input class="button buttonShare" id="shareConfigurationFromListing" lkey="Blockly.Msg.BUTTON_DO_SHARE" type="submit" value="Teilen" />
+                    <input class="button backButton" type="submit" value="Cancel" />
                 </div>
             </div>
             
