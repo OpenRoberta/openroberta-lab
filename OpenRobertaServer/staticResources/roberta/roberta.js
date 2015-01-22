@@ -21,6 +21,7 @@ function initUserState() {
     userState.waiting = '';
     userState.toolbox = 'beginner';
     userState.token = '1A2B3C4D';
+    userState.doPing = true;
 }
 
 /**
@@ -45,14 +46,14 @@ function saveUserToServer() {
             "role" : 'TEACHER',
         }, function(result) {
             if (result.rc === "ok") {
-                queueToastMessage(Blockly.Msg.MESSAGE_USER_CREATED);
                 setRobotState(result);
                 $(".ui-dialog-content").dialog("close"); // close all opened popups
                 $('#accountNameS').val($userAccountName.val());
                 $('#pass1S').val($pass1.val());
+                queueToastMessage(result.message);
                 login();
             } else {
-                displayMessage("MESSAGE_USER_EXISTS");
+                displayMessage(result.message);
             }
         });
     }
@@ -69,11 +70,11 @@ function deleteUserOnServer() {
         "password" : $pass1.val()
     }, function(result) {
         if (result.rc === "ok") {
-            queueToastMessage(Blockly.Msg.MESSAGE_USER_DELETED);
             logout();
+            queueToastMessage(result.message);
             $(".ui-dialog-content").dialog("close"); // close all opened popups
         } else {
-            displayMessage("MESSAGE_USER_DELETE_ERROR");
+            displayMessage(result.message);
         }
     });
 }
@@ -84,7 +85,6 @@ function deleteUserOnServer() {
 function login() {
     var $userAccountName = $("#accountNameS");
     var $pass1 = $('#pass1S');
-
     COMM.json("/user", {
         "cmd" : "login",
         "accountName" : $userAccountName.val(),
@@ -96,10 +96,10 @@ function login() {
             userState.id = response.userId;
             setHeadNavigationMenuState('login');
             setRobotState(response);
-            $("#tutorials").fadeOut(700);
+            queueToastMessage(response.message);
             $(".ui-dialog-content").dialog("close"); // close all opened popups
         } else {
-            displayMessage("MESSAGE_LOGIN_ERROR");
+            displayMessage(response.message);
         }
     });
 }
@@ -116,10 +116,11 @@ function logout() {
             $('#programNameSave').val('');
             setHeadNavigationMenuState('logout');
             setRobotState(response);
+            queueToastMessage(response.message);            
+            $(".ui-dialog-content").dialog("close"); // close all opened popups
         } else {
-            displayMessage("MESSAGE_LOGOUT_ERROR");
+            displayMessage(response.message);
         }
-        $(".ui-dialog-content").dialog("close"); // close all opened popups
     });
 }
 
@@ -188,23 +189,20 @@ function setConfiguration(name) {
  *            Token value to be set
  */
 function setToken(token) {
-    if (token) {
-        var resToken = token.toUpperCase(); 
-        COMM.json("/blocks", {
-            "cmd" : "setToken",
-            "token" : resToken
-        }, function(response) {
-            if (response.rc === "ok") {
-                userState.token = resToken;
-                setRobotState(response);
-                $(".ui-dialog-content").dialog("close"); // close all opened popups
-            } else {
-                displayMessage("MESSAGE_SET_TOKEN_ERROR");
-            }
-        });
-    } else {
-        displayMessage("MESSAGE_SET_TOKEN");
-    }
+    var resToken = token.toUpperCase(); 
+    COMM.json("/blocks", {
+        "cmd" : "setToken",
+        "token" : resToken
+    }, function(response) {
+        if (response.rc === "ok") {
+            userState.token = resToken;
+            setRobotState(response);
+            queueToastMessage(response.message);
+            $(".ui-dialog-content").dialog("close"); // close all opened popups
+        } else {
+           displayMessage(response.message);
+        }
+   });
 }
 
 /**
@@ -234,6 +232,12 @@ function response(result) {
     }
     str += '}';    
     LOG.info('result from server: ' + str);
+    
+    if (result.rc === 'ok') {
+        queueToastMessage(result.message);
+    } else {
+        displayMessage(result.message);
+    }
 }
 
 /**
@@ -273,7 +277,7 @@ function saveToServer() {
             if (!$name.val()) {
                 $('#menuSaveProg').parent().addClass('login');
                 $('#menuSaveProg').parent().addClass('disabled');
-                displayMessage("MESSAGE_NAME_ERROR");
+                displayMessage("MESSAGE_EMPTY_NAME");
                 return;
             }
             $('#menuSaveProg').parent().removeClass('login');
@@ -307,7 +311,7 @@ function saveConfigurationToServer() {
             if (!$name.val()) {
                 $('#menuSaveConfig').parent().addClass('login');
                 $('#menuSaveConfig').parent().addClass('disabled');
-                displayMessage("MESSAGE_NAME_ERROR");
+                displayMessage("MESSAGE_EMPTY_NAME");
                 return;
             }
             $('#menuSaveConfig').parent().removeClass('login');
@@ -388,12 +392,17 @@ function loadFromListing() {
             "cmd" : "loadP",
             "name" : programName
         }, function(result) {
-            $("#tabs").tabs("option", "active", 0);
-            $('#programNameSave').val(programName);
-            userState.programSaved = true;
-            showProgram(result, true, programName);
-            $('#menuSaveProg').parent().removeClass('login');
-            $('#menuSaveProg').parent().removeClass('disabled');
+            if (result.rc === 'ok') {
+                $("#tabs").tabs("option", "active", 0);
+                $('#programNameSave').val(programName);
+                userState.programSaved = true;
+                queueToastMessage(result.message);
+                showProgram(result, true, programName);
+                $('#menuSaveProg').parent().removeClass('login');
+                $('#menuSaveProg').parent().removeClass('disabled');
+            } else {
+                displayMessage(result.message);
+            }
         });
     }
 }
@@ -410,13 +419,18 @@ function loadConfigurationFromListing() {
             "cmd" : "loadC",
             "name" : configurationName
         }, function(result) {
-            $("#tabs").tabs("option", "active", 0);
-            $('#configurationNameSave').val(configurationName);
-            userState.configurationSaved = true;
-            showConfiguration(result, true, configurationName);
-            $('#menuSaveConfig').parent().removeClass('login');
-            $('#menuSaveConfig').parent().removeClass('disabled');
-            setRobotState(result);
+            if (result.rc === 'ok') {
+                $("#tabs").tabs("option", "active", 0);
+                $('#configurationNameSave').val(configurationName);
+                userState.configurationSaved = true;
+                queueToastMessage(result.message);
+                showConfiguration(result, true, configurationName);
+                $('#menuSaveConfig').parent().removeClass('login');
+                $('#menuSaveConfig').parent().removeClass('disabled');
+                setRobotState(result);
+            } else {
+                displayMessage(result.message);
+            }
         });
     }
 }
@@ -433,9 +447,14 @@ function deleteFromListing() {
             "cmd" : "deleteP",
             "name" : programName
         }, function(result) {
-            $('#programNameSave').val('');
-            responseAndRefreshProgramList(result);
-            setRobotState(result);
+            if (result.rc === 'ok') {
+                $('#programNameSave').val('');
+                queueToastMessage(result.message);
+                responseAndRefreshProgramList(result);
+                setRobotState(result);
+            } else {
+                displayMessage(result.message);
+            }
         });
     }
 }
@@ -452,9 +471,14 @@ function deleteConfigurationFromListing() {
             "cmd" : "deleteC",
             "name" : configurationName
         }, function(result) {
-            $('#configurationNameSave').val('');
-            responseAndRefreshConfigurationList(result);
-            setRobotState(result);
+            if (result.rc === 'ok') {
+                $('#configurationNameSave').val('');
+                queueToastMessage(result.message);
+                responseAndRefreshConfigurationList(result);
+                setRobotState(result);
+            } else {
+                displayMessage(result.message);
+            }
         });
     }
 }
@@ -468,7 +492,6 @@ function deleteConfigurationFromListing() {
 function showToolbox(result) {
     response(result);
     if (result.rc === 'ok') {
-        $('#displayToolbox').text(userState.toolbox);
         Blockly.updateToolbox(result.data);
         setRobotState(result);
     }
@@ -715,22 +738,6 @@ function startProgram() {
     saveFuture.then(runOnBrick);
 }
 
-/**
- * Check program
- */
-function checkProgram() {
-    // TODO
-    displayMessage("MESSAGE_PROGRAM_NOT_CHECKABLE");
-}
-
-/**
- * Check configuration
- */
-function checkConfiguration() {
-    // TODO
-    displayMessage("MESSAGE_CONFIGURATION_NOT_CHECKABLE");
-}
-
 function switchToBlockly() {
     $('#tabs').css('display', 'inline');
     $('#bricklyFrame').css('display', 'none');
@@ -760,11 +767,9 @@ function displayState() {
     $('#tabConfigurationName').text(userState.configuration);
 
     if (userState.toolbox) {
-        $('#displayToolbox').text(userState.toolbox);
         $('#iconDisplayToolbox').removeClass('error');
         $('#iconDisplayToolbox').addClass('ok');
     } else {
-        $('#displayToolbox').text('');
         $('#iconDisplayToolbox').removeClass('ok');
         $('#iconDisplayToolbox').addClass('error');
     }
@@ -800,13 +805,15 @@ function setHeadNavigationMenuState(state) {
 /**
  * Display message
  * 
- * @param {message}
- *            Messabe to be displayed
+ * @param {messageId}
+ *            ID of message to be displayed
  */
 function displayMessage(messageId) {
-    var lkey = 'Blockly.Msg.' + messageId;
-    var value = eval(lkey);
-    if (value === '' || value === undefined) {
+    var hlp = messageId.replace(/\./g, "_"); 
+    hlp = hlp.toUpperCase();
+    var lkey = 'Blockly.Msg.' + hlp;
+    var value = Blockly.Msg[hlp];
+    if (value === undefined || value === '') {
         value = messageId;
     }
     $('#message').attr('lkey', lkey);
@@ -840,7 +847,7 @@ function initHeadNavigation() {
         } else if (domId === 'menuRunProg') {   //  Submenu 'Program'
             startProgram();
         } else if (domId === 'menuCheckProg') {   //  Submenu 'Program'
-            checkProgram();
+            displayMessage("MESSAGE_NOT_AVAILABLE");
         } else if (domId === 'menuNewProg') {   //  Submenu 'Program'
             initProgramEnvironment();
             setProgram("meinProgramm");
@@ -855,7 +862,7 @@ function initHeadNavigation() {
             $("#attach-program").dialog("open");
         } else if (domId === 'menuPropertiesProg') {   //  Submenu 'Program'
         } else if (domId === 'menuCheckConfig') {   //  Submenu 'Configuration'
-            checkConfiguration();
+            displayMessage("MESSAGE_NOT_AVAILABLE");
         } else if (domId === 'menuNewConfig') {   //  Submenu 'Configuration'
             setConfiguration("Standardkonfiguration");
         } else if (domId === 'menuListConfig') {   //  Submenu 'Configuration'
@@ -890,6 +897,7 @@ function initHeadNavigation() {
             $("#loggedIn").text(userState.name);
             $("#programName").text(userState.program);
             $("#configurationName").text(userState.configuration);
+            $("#toolbox").text(userState.toolbox);
             $("#show-state-info").dialog("open");
         } else if (domId === 'menuAbout') {   // Submenu 'Help'
             $("#version").text(userState.version);
@@ -1096,7 +1104,12 @@ function setRobotState(response) {
     } else {
         userState.waiting = '';
     }
-    userState.robotState = response.robot_state;
+    if (response.version) {
+        userState.version = response.version;        
+    }
+    if (response.robot_state) {
+        userState.robotState = response.robot_state;
+    }
     displayState();
 }
 
@@ -1106,63 +1119,62 @@ function setRobotState(response) {
 function translate(jsdata) {   
     $("[lkey]").each (function (index)
     {
-        var key = $(this).attr('lkey');
-        var value = eval(key);
-        if (value == undefined) {
-            console.log('UNDEFINED    key : value = ' + key + ' : ' + value);            
-        }
-        if (key === 'Blockly.Msg.MENU_LOG_IN') {
+        var lkey = $(this).attr('lkey');
+        var key = lkey.replace("Blockly.Msg.", ""); 
+        var value = Blockly.Msg[key];
+//        if (value == undefined) {
+//            console.log('UNDEFINED    key : value = ' + key + ' : ' + value);            
+//        }
+        if (lkey === 'Blockly.Msg.MENU_LOG_IN') {
             $('#login-user').dialog('option', 'title', value);
             $(this).html(value);            
-        } else if (key === 'Blockly.Msg.POPUP_DO_LOGIN') {
+        } else if (lkey === 'Blockly.Msg.POPUP_DO_LOGIN') {
             $('#login-user #doLogin').attr('value', value);
-        } else if (key === 'Blockly.Msg.POPUP_REGISTER_USER') {
+        } else if (lkey === 'Blockly.Msg.POPUP_REGISTER_USER') {
             $('#register-user').dialog('option', 'title', value);
             $('#register-user #saveUser').attr('value', value);
-        } else if (key === 'Blockly.Msg.POPUP_DELETE_USER') {
+        } else if (lkey === 'Blockly.Msg.POPUP_DELETE_USER') {
             $('#delete-user').dialog('option', 'title', value);
             $('#delete-user #deleteUser').attr('value', value);
-        } else if (key === 'Blockly.Msg.POPUP_ATTACH_PROGRAM') {
+        } else if (lkey === 'Blockly.Msg.POPUP_ATTACH_PROGRAM') {
             $('#attach-program').dialog('option', 'title', value);
             $('#attach-program #attachProgram').attr('value', value);
-        } else if (key === 'Blockly.Msg.POPUP_SAVE_PROGRAM') {
+        } else if (lkey === 'Blockly.Msg.POPUP_SAVE_PROGRAM') {
             $('#save-program').dialog('option', 'title', value);
             $('#save-program #saveProgram').attr('value', value);
-        } else if (key === 'Blockly.Msg.POPUP_SHARE') {
+        } else if (lkey === 'Blockly.Msg.POPUP_SHARE') {
             $('#share-program').dialog('option', 'title', value);
             $('#share-program #shareProgram').attr('value', value);
             $('#share-configuration').dialog('option', 'title', value);
             $('#share-configuration #shareConfiguration').attr('value', value);
-        } else if (key === 'Blockly.Msg.POPUP_SAVE_CONFIGURATION') {
+        } else if (lkey === 'Blockly.Msg.POPUP_SAVE_CONFIGURATION') {
             $('#save-configuration').dialog('option', 'title', value);
             $('#save-configuration #saveConfiguration').attr('value', value);
-        } else if (key === 'Blockly.Msg.POPUP_SET_TOKEN') {
+        } else if (lkey === 'Blockly.Msg.POPUP_SET_TOKEN') {
             $('#set-token').dialog('option', 'title', value);
             $('#set-token #setToken').attr('value', value);
-        } else if (key === 'Blockly.Msg.POPUP_ATTENTION') {
+        } else if (lkey === 'Blockly.Msg.POPUP_ATTENTION') {
             $('#show-message').dialog('option', 'title', value);
-        } else if (key === 'Blockly.Msg.BUTTON_LOAD') {
+        } else if (lkey === 'Blockly.Msg.BUTTON_LOAD') {
             $('.buttonLoad').attr('value', value);
-        } else if (key === 'Blockly.Msg.BUTTON_DO_DELETE') {
+        } else if (lkey === 'Blockly.Msg.BUTTON_DO_DELETE') {
             $('.buttonDelete').attr('value', value);
-        } else if (key === 'Blockly.Msg.BUTTON_DO_SHARE') {
+        } else if (lkey === 'Blockly.Msg.BUTTON_DO_SHARE') {
             $('.buttonShare').attr('value', value);
-        } else if (key === 'Blockly.Msg.BUTTON_EMPTY_LIST') {
+        } else if (lkey === 'Blockly.Msg.BUTTON_EMPTY_LIST') {
             $('#clearLog').attr('value', value);
-        } else if (key === 'Blockly.Msg.HINT_LANGUAGE_GERMAN') {
+        } else if (lkey === 'Blockly.Msg.HINT_LANGUAGE_GERMAN') {
             $('#setLangDe').prop('title', value);
-        } else if (key === 'Blockly.Msg.HINT_LANGUAGE_ENGLISH') {
+        } else if (lkey === 'Blockly.Msg.HINT_LANGUAGE_ENGLISH') {
             $('#setLangEn').prop('title', value);
-        } else if (key === 'Blockly.Msg.HINT_ROBOT_STATE') {
+        } else if (lkey === 'Blockly.Msg.HINT_ROBOT_STATE') {
             $('#displayRobotState').prop('title', value);
-        } else if (key === 'Blockly.Msg.HINT_TOOLBOX') {
-            $('#displayToolbox').prop('title', value);
-        } else if (key === 'Blockly.Msg.HINT_USER') {
+        } else if (lkey === 'Blockly.Msg.HINT_USER') {
             $('#displayLogin').prop('title', value);
-        } else if (key === 'Blockly.Msg.MENU_STATE_INFO') {
+        } else if (lkey === 'Blockly.Msg.MENU_STATE_INFO') {
             $('#show-state-info').dialog('option', 'title', value);
             $(this).html(value);            
-        } else if (key === 'Blockly.Msg.MENU_ABOUT') {
+        } else if (lkey === 'Blockly.Msg.MENU_ABOUT') {
             $('#show-about').dialog('option', 'title', value);
             $(this).html(value);            
         } else {
@@ -1226,12 +1238,20 @@ function initializeLanguages() {
 /**
  * Queue toast message
  * 
- * @param {message}
- *            Message to be queued
+ * @param {messageId}
+ *            ID of message to be queued
  */
-function queueToastMessage(message)
+function queueToastMessage(messageId)
 {
-    toastMessages.unshift(message);
+    var hlp = messageId.replace(/\./g, "_"); 
+    hlp = hlp.toUpperCase();
+    var lkey = 'Blockly.Msg.' + hlp;
+    var value = Blockly.Msg[hlp];
+    if (value === undefined || value === '') {
+        value = messageId;
+    }
+
+    toastMessages.unshift(value);
     if (toastMessages.length === 1) {
         displayToastMessages();
     }
@@ -1246,7 +1266,7 @@ function displayToastMessages()
 
     $('#toastContainer').delay(100).fadeIn("slow", function()
     {
-        $(this).delay(3000).fadeOut("slow", function() {
+        $(this).delay(1000).fadeOut("slow", function() {
             toastMessages.pop();
             if (toastMessages.length > 0) {
                 displayToastMessages();
@@ -1259,13 +1279,22 @@ function displayToastMessages()
  * Regularly ping the server to keep status information up-to-date
  */
 function pingServer() {
-    setTimeout( function() {
-        COMM.json("/ping", {
-        }, function(response) {
-            setRobotState(response);
-            pingServer();
-        });
-    }, 5000);
+    if (userState.doPing) {
+        setTimeout( function() {
+            COMM.json("/ping", {
+            }, function(response) {
+                setRobotState(response);
+                pingServer();
+            });
+        }, 5000);
+    }
+}
+
+/**
+ * Handle server errors
+ */
+function handleServerErrors() {
+    userState.doPing = false;
 }
 
 /**
@@ -1287,6 +1316,7 @@ function init() {
     $('#menuTabProgram').parent().addClass('disabled');    
     $('#tabProgram').addClass('tabClicked');    
     $('#head-navigation-configuration-edit').css('display','none');
+    COMM.setErrorFn(handleServerErrors);
 };
 
 $(document).ready(WRAP.fn3(init, 'page init'));
