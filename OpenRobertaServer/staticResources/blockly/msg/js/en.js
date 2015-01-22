@@ -489,7 +489,7 @@ Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = "Run the user-defined function '%1' 
 Blockly.Msg.PROCEDURES_CREATE_DO = "Create '%1'";
 Blockly.Msg.PROCEDURES_DEFNORETURN_DO = "";
 Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
-Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = "do something";
+Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = "doSomething";
 Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE = "to";
 Blockly.Msg.PROCEDURES_DEFNORETURN_TOOLTIP = "Creates a function with no output.";
 Blockly.Msg.PROCEDURES_DEFRETURN_HELPURL = "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29";
@@ -641,6 +641,7 @@ Blockly.Msg.TOOLBOX_LIGHT = "Lights";
 Blockly.Msg.TOOLBOX_LIST = "Lists";
 Blockly.Msg.TOOLBOX_LOGIC = "Logic";
 Blockly.Msg.TOOLBOX_LOOP = "Loops";
+Blockly.Msg.TOOLBOX_LOOP_VARIABLE = "loop Variables";
 Blockly.Msg.TOOLBOX_MATH = "Math";
 Blockly.Msg.TOOLBOX_MOVE = "Move";
 Blockly.Msg.TOOLBOX_PROCEDURE = "Functions";
@@ -668,8 +669,12 @@ Blockly.Msg.USER_GET_ONE_SUCCESS = "Login successfull";
 =======
 Blockly.Msg.VARIABLES_CREATE_TITLE = "Create";
 Blockly.Msg.VARIABLES_CREATE_WITH = "with";
+<<<<<<< HEAD
 >>>>>>> ORA-376 add types to lists, refactore variable messages
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "item";
+=======
+Blockly.Msg.VARIABLES_DEFAULT_NAME = "variableName";
+>>>>>>> ORA-376 add sub categories to variables in toolbox
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Create 'set %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://code.google.com/p/blockly/wiki/Variables#Get";
 Blockly.Msg.VARIABLES_GET_TAIL = "";

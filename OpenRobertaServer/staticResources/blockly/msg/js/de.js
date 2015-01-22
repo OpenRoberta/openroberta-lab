@@ -489,7 +489,7 @@ Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = "Rufe einen Funktionsblock mit Rück
 Blockly.Msg.PROCEDURES_CREATE_DO = "Erzeuge \"Aufruf %1\"";
 Blockly.Msg.PROCEDURES_DEFNORETURN_DO = "";
 Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = "https://de.wikipedia.org/wiki/Prozedur_%28Programmierung%29";
-Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = "Funktionsblock";
+Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = "macheEtwas";
 Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE = "to";
 Blockly.Msg.PROCEDURES_DEFNORETURN_TOOLTIP = "Ein Funktionsblock ohne Rückgabewert.";
 Blockly.Msg.PROCEDURES_DEFRETURN_HELPURL = "https://de.wikipedia.org/wiki/Prozedur_%28Programmierung%29";
@@ -636,11 +636,12 @@ Blockly.Msg.TOOLBOX_CONTROL = "Kontrolle";
 Blockly.Msg.TOOLBOX_DECISION = "Entscheidungen";
 Blockly.Msg.TOOLBOX_DISPLAY = "Anzeige";
 Blockly.Msg.TOOLBOX_DRIVE = "Fahren";
-Blockly.Msg.TOOLBOX_GLOBAL_VARIABLE = "global Variables";  // untranslated
+Blockly.Msg.TOOLBOX_GLOBAL_VARIABLE = "Globale Variablen";
 Blockly.Msg.TOOLBOX_LIGHT = "Statusleuchte";
 Blockly.Msg.TOOLBOX_LIST = "Listen";
 Blockly.Msg.TOOLBOX_LOGIC = "Logik";
 Blockly.Msg.TOOLBOX_LOOP = "Schleifen";
+Blockly.Msg.TOOLBOX_LOOP_VARIABLE = "Schleifenvariablen";
 Blockly.Msg.TOOLBOX_MATH = "Mathematik";
 Blockly.Msg.TOOLBOX_MOVE = "Bewegen";
 Blockly.Msg.TOOLBOX_PROCEDURE = "Funktionen";
@@ -668,16 +669,20 @@ Blockly.Msg.USER_GET_ONE_SUCCESS = "Login erfolgreich";
 =======
 Blockly.Msg.VARIABLES_CREATE_TITLE = "Erzeuge";
 Blockly.Msg.VARIABLES_CREATE_WITH = "mit";
+<<<<<<< HEAD
 >>>>>>> ORA-376 add types to lists, refactore variable messages
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "Element";
+=======
+Blockly.Msg.VARIABLES_DEFAULT_NAME = "variablenName";
+>>>>>>> ORA-376 add sub categories to variables in toolbox
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Erzeuge \"Schreibe %1\"";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://de.wikipedia.org/wiki/Variable_%28Programmierung%29";
 Blockly.Msg.VARIABLES_GET_TAIL = "";
-Blockly.Msg.VARIABLES_GET_TITLE = "";
+Blockly.Msg.VARIABLES_GET_TITLE = "Gib";
 Blockly.Msg.VARIABLES_GET_TOOLTIP = "Gibt den Wert der Variable zurück.";
 Blockly.Msg.VARIABLES_SET_CREATE_GET = "Erzeuge \"Lese %1\"";
 Blockly.Msg.VARIABLES_SET_HELPURL = "https://de.wikipedia.org/wiki/Variable_%28Programmierung%29";
-Blockly.Msg.VARIABLES_SET_TITLE = "Schreibe %1 %2";
+Blockly.Msg.VARIABLES_SET_TITLE = "Setze %1 auf %2";
 Blockly.Msg.VARIABLES_SET_TOOLTIP = "Setzt den Wert einer Variable.";
 Blockly.Msg.VARIABLES_TITLE = "Variable";
 Blockly.Msg.VARIABLES_TYPE_ARRAY_BOOLEAN = "Liste logischer Wert";

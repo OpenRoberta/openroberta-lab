@@ -178,18 +178,18 @@ Blockly.Variables.getProcedureName = function(name) {
     var blocks = Blockly.mainWorkspace.getAllBlocks();
     // Iterate through every block.
     for (var i = 0; i < blocks.length; i++) {
-        var func = blocks[i].getType;
+        var func = blocks[i].getVarDecl;
         if (func) {
             if (Blockly.Names.equals(name, blocks[i].getFieldValue('VAR'))) {
+                // special case controls_for loop, variable declaration is implicied.
+                if (blocks[i].type == 'controls_for' || blocks[i].type == 'controls_forEach') {
+                    return blocks[i].id;
+                }
                 var surroundParent = blocks[i].getSurroundParent();
                 if (surroundParent && (surroundParent.type == 'robProcedures_defnoreturn' || surroundParent.type == 'robProcedures_defreturn')) {
                     return surroundParent.getFieldValue('NAME');
                 } else if (surroundParent && (surroundParent.type == 'robControls_start')) {
                     return 'global';
-                }
-                // special case controls_for loop, variable declaration is implicied.
-                if (blocks[i].type == 'controls_for' || blocks[i].type == 'controls_forEach') {
-                    return blocks[i].id;
                 }
             }
         }
@@ -209,8 +209,23 @@ Blockly.Variables.getProcedureName = function(name) {
  * @param {!Blockly.Workspace}
  *            workspace The flyout's workspace.
  */
-Blockly.Variables.flyoutCategory = function(blocks, gaps, margin, workspace) {
-    var variableList = Blockly.Variables.allVariables();
+Blockly.Variables.flyoutCategory = function(xmlList, blocks, gaps, margin, workspace) {
+    var list = [];
+    if (xmlList == 'GLOBAL_VARIABLE') {
+        list = Blockly.Variables.allGlobalVariables();
+    } else if (xmlList == 'LOOP_VARIABLE') {
+        list = Blockly.Variables.allLoopVariables();
+    } else {
+        var tempList = Blockly.Variables.allLocalVariables();
+        for (var i = 0; i < tempList.length; i++) {
+            if (xmlList == tempList[i][0])
+                list.push(tempList[i]);
+        }
+    }
+    var variableList = [];
+    for (var i = 0; i < list.length; i++) {
+        variableList.push(list[i][1]);
+    }
     variableList.sort(goog.string.caseInsensitiveCompare);
     for (var i = 0; i < variableList.length; i++) {
         var getBlock = Blockly.Blocks['variables_get'] ? Blockly.Block.obtain(workspace, 'variables_get') : null;
@@ -331,4 +346,75 @@ Blockly.Variables.isLegalName = function(name, block) {
         }
     }
     return true;
+};
+
+/**
+ * Find all user-created global variables.
+ * 
+ * @return {!Array.<string>} Array of variable names.
+ */
+Blockly.Variables.allGlobalVariables = function() {
+    var topBlocks = Blockly.getMainWorkspace().getTopBlocks(true);
+    var variableList = [];
+    for (var i = 0; i < topBlocks.length; i++) {
+        var block = topBlocks[i];
+        if (block.type === 'robControls_start') {
+            var descandants = block.getDescendants();
+            if (descandants) {
+                variable: for (var i = 1; i < descandants.length; i++) {
+                    if (descandants[i].getVarDecl) {
+                        variableList.push([ 'GLOBAL_VARIABLE', descandants[i].getVarDecl()[0] ]);
+                    } else {
+                        if (!descandants[i].getParent())
+                            break variable;
+                    }
+                }
+            }
+        }
+    }
+    return variableList;
+};
+
+/**
+ * Find all user-created local variables.
+ * 
+ * @return {!Array.<string>} Array of variable names.
+ */
+Blockly.Variables.allLocalVariables = function() {
+    var topBlocks = Blockly.getMainWorkspace().getTopBlocks(true);
+    var variableList = [];
+    procedure: for (var i = 0; i < topBlocks.length; i++) {
+        var block = topBlocks[i];
+        if (block.getProcedureDef) {
+            var variableType = block.getProcedureDef()[0];
+            var descandants = block.getDescendants();
+            if (descandants) {
+                variable: for (var j = 1; j < descandants.length; j++) {
+                    if (descandants[j].getVarDecl) {
+                        variableList.push([ variableType, descandants[j].getVarDecl()[0] ]);
+                    } else {
+                        break variable;
+                    }
+                }
+            }
+        }
+    }
+    return variableList;
+};
+
+/**
+ * Find all user-created loop variables.
+ * 
+ * @return {!Array.<string>} Array of variable names.
+ */
+Blockly.Variables.allLoopVariables = function() {
+    var allBlocks = Blockly.mainWorkspace.getAllBlocks();
+    var variableList = [];
+    for (var i = 0; i < allBlocks.length; i++) {
+        var block = allBlocks[i];
+        if ((block.type == 'controls_for' || block.type == 'controls_forEach') && block.getVarDecl) {
+            variableList.push([ 'LOOP_VARIABLE', block.getVarDecl()[0] ]);
+        }
+    }
+    return variableList;
 };

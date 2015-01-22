@@ -162,7 +162,7 @@ Blockly.Blocks['controls_forEach'] = {
     init : function() {
         this.setHelpUrl(Blockly.Msg.CONTROLS_FOREACH_HELPURL);
         this.setColourRGB(Blockly.CAT_CONTROL_RGB);
-        var name = Blockly.Variables.findLegalName('j', this);
+        var name = Blockly.Variables.findLegalName(Blockly.Msg.VARIABLES_DEFAULT_NAME, this);
         var declType = new Blockly.FieldDropdown([ [ Blockly.Msg.VARIABLES_TYPE_NUMBER, 'Number' ], [ Blockly.Msg.VARIABLES_TYPE_STRING, 'String' ],
                 [ Blockly.Msg.VARIABLES_TYPE_BOOLEAN, 'Boolean' ], [ Blockly.Msg.VARIABLES_TYPE_ARRAY_NUMBER, 'Array_Number' ],
                 [ Blockly.Msg.VARIABLES_TYPE_ARRAY_STRING, 'Array_String' ], [ Blockly.Msg.VARIABLES_TYPE_ARRAY_BOOLEAN, 'Array_Boolean' ],

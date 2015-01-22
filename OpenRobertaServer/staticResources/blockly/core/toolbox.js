@@ -320,6 +320,7 @@ Blockly.Toolbox.populate_ = function() {
                 var custom = childIn.getAttribute('custom');
                 if (custom) {
                     Blockly.Toolbox.catcolor = null;
+                    // Variables and procedures have special categories that are dynamic.
                     childOut.blocks = custom;
                 } else {
                     syncTrees(childIn, childOut, Blockly.Toolbox.catcolor);
@@ -330,9 +331,7 @@ Blockly.Toolbox.populate_ = function() {
         }
     }
     // end of function syncTrees
-
     syncTrees(Blockly.languageTree, Blockly.Toolbox.tree_);
-
     if (rootOut.blocks.length) {
         throw 'Toolbox cannot have both blocks and categories in the root level.';
     }
@@ -443,7 +442,7 @@ Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
         return;
     }
     goog.ui.tree.TreeControl.prototype.setSelectedItem.call(this, node);
-    if (node && node.blocks && node.blocks.length) {
+    if (node && node.blocks && node.blocks.length && (node.blocks != 'VARIABLE')) {
         Blockly.Toolbox.flyout_.show(node.blocks, node.color);
         var htmlSelected = node.getHtml().replace('blocklyFlyoutBackground', 'blocklyFlyoutBackgroundSelected');
         node.setHtml(htmlSelected);
@@ -509,8 +508,24 @@ Blockly.Toolbox.TreeNode.prototype.getExpandIconElement = function() {
  * @override
  */
 Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(e) {
-    // Expand icon.
-    if (this.hasChildren() && this.isUserCollapsible_) {
+    // Expand icon and check for dynamic subnodes (so far only for variables).
+    if (this.blocks == 'VARIABLE') {
+        var variablesDeclared = true;
+        if (this.getExpanded()) {
+            var children = this.removeChildren(true);
+            for (var i = 0; i < children.length; i++) {
+                children[i].dispose();
+            }
+        } else {
+            variablesDeclared = Blockly.Toolbox.addVariableSubNodes(this);
+        }
+        if (variablesDeclared) {
+            this.toggle();
+        } else {
+            Blockly.Toolbox.showNoVariable();
+        }
+        this.select();
+    } else if (this.hasChildren() && this.isUserCollapsible_) {
         this.toggle();
         this.select();
     } else if (this.isSelected()) {
@@ -532,3 +547,61 @@ Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(e) {
 Blockly.Toolbox.TreeNode.prototype.onDoubleClick_ = function(e) {
     // NOP.
 };
+
+/**
+ * Add subnodes to node variable, if variables are declared: - global variables
+ * (in start block) - local variables (in procedure blocks) - loop variables (in
+ * loops)
+ * 
+ * @param {goog.ui.tree.BaseNode}
+ *            node The parent item.
+ * 
+ * @return {boolean} true if subnodes have been added, false otherwise.
+ */
+Blockly.Toolbox.addVariableSubNodes = function(node) {
+    var subNodePresent = false;
+    Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(Blockly.CAT_VARIABLE_RGB);
+    var globalVariables = Blockly.Variables.allGlobalVariables();
+    if (globalVariables.length > 0) {
+        var globalVariableNode = Blockly.Toolbox.tree_.createNode(Blockly.Toolbox.createNodeHtml(Blockly.Msg.TOOLBOX_GLOBAL_VARIABLE, true));
+        globalVariableNode.blocks = 'GLOBAL_VARIABLE';
+        node.addChild(globalVariableNode, true);
+        subNodePresent = true;
+    }
+    var localVariables = Blockly.Variables.allLocalVariables();
+    if (localVariables.length > 0) {
+        var procName = null;
+        for (var i = 0; i < localVariables.length; i++) {
+            if (procName != localVariables[i][0]) {
+                procName = localVariables[i][0];
+                var procNode = Blockly.Toolbox.tree_.createNode(Blockly.Toolbox.createNodeHtml(procName, true));
+                procNode.blocks = procName;
+                node.addChild(procNode, true);
+                subNodePresent = true;
+            }
+        }
+    }
+    var loopVariables = Blockly.Variables.allLoopVariables();
+    if (loopVariables.length > 0) {
+        var loopVariableNode = Blockly.Toolbox.tree_.createNode(Blockly.Toolbox.createNodeHtml(Blockly.Msg.TOOLBOX_LOOP_VARIABLE, true));//Blockly.Msg.TOOLBOX_LOOP_VARIABLE, true));
+        loopVariableNode.blocks = 'LOOP_VARIABLE';
+        node.addChild(loopVariableNode, true);
+        subNodePresent = true;
+    }
+    return subNodePresent;
+};
+
+/**
+ * Show help from start block, if no variable is already declared.
+ * 
+ */
+Blockly.Toolbox.showNoVariable = function() {
+    var topBlocks = Blockly.getMainWorkspace().getTopBlocks(true);
+    for (var i = 0; i < topBlocks.length; i++) {
+        var block = topBlocks[i];
+        if (block.type == 'robControls_start') {
+            block.help.iconClick_();
+            return;
+        }
+    }
+}

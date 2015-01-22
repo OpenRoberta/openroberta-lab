@@ -356,23 +356,20 @@ Blockly.Flyout.prototype.show = function(xmlList, opt_color) {
     // Create the blocks to be shown in this flyout.
     var blocks = [];
     var gaps = [];
-    if (xmlList == Blockly.Variables.NAME_TYPE) {
-        // Special category for variables.
-        Blockly.Variables.flyoutCategory(blocks, gaps, margin, (this.workspace_));
-        // if no variables defined, open help of start block (to define variables)
-        if (blocks.length == 0) {
-            var topBlocks = Blockly.getMainWorkspace().getTopBlocks(true);
-            for (var i = 0; i < topBlocks.length; i++) {
-                var block = topBlocks[i];
-                if (block.type == 'robControls_start') {
-                    block.help.iconClick_();
-                    return;
-                }
+    // String in xmlList instead of a list of blocks indicates special cases
+    if (!goog.isArray(xmlList)) {
+        // flyout for procedures?
+        if (xmlList == Blockly.Procedures.NAME_TYPE) {
+            // Special category for procedures.
+            Blockly.Procedures.flyoutCategory(blocks, gaps, margin, (this.workspace_));
+        } else {
+            Blockly.Variables.flyoutCategory(xmlList, blocks, gaps, margin, (this.workspace_));
+            // no variables declared anymore?
+            if (blocks.length == 0) {
+                this.hide();
+                return;
             }
         }
-    } else if (xmlList == Blockly.Procedures.NAME_TYPE) {
-        // Special category for procedures.
-        Blockly.Procedures.flyoutCategory(blocks, gaps, margin, (this.workspace_));
     } else {
         for (var i = 0, xml; xml = xmlList[i]; i++) {
             if (xml.tagName && xml.tagName.toUpperCase() == 'BLOCK') {

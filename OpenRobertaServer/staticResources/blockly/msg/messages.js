@@ -49,7 +49,7 @@ goog.require('Blockly.Msg');
 /// default name - A simple, general default name for a variable, preferably short.
 /// For more context, see
 /// [[Translating:Blockly#infrequent_message_types]].
-Blockly.Msg.VARIABLES_DEFAULT_NAME = 'item';
+Blockly.Msg.VARIABLES_DEFAULT_NAME = 'variableName';
 
 // Context menus.
 /// context menu - Make a copy of the selected block (and any blocks it contains).
@@ -1092,7 +1092,7 @@ Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE = 'to';
 /// function definition block, as shown on
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#w7cfju this block].
 /// The user will replace it with the function's name.
-Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = 'do something';
+Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = 'doSomething';
 /// block text - This precedes the list of parameters to a function.  See
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#6ot5y5 this sample
 /// function with parameters].
@@ -1282,7 +1282,6 @@ Blockly.Msg.TOOLBOX_TEXT = 'Text';
 Blockly.Msg.TOOLBOX_LIST = 'Lists';
 Blockly.Msg.TOOLBOX_COLOUR = 'Colours';
 Blockly.Msg.TOOLBOX_VARIABLE = 'Variables';
-Blockly.Msg.TOOLBOX_GLOBAL_VARIABLE = 'global Variables';
 Blockly.Msg.TOOLBOX_PROCEDURE = 'Functions';
 Blockly.Msg.TOOLBOX_WAIT = 'Wait';
 Blockly.Msg.TOOLBOX_LOOP = 'Loops';
@@ -1292,6 +1291,8 @@ Blockly.Msg.TOOLBOX_SOUND = 'Sounds';
 Blockly.Msg.TOOLBOX_DISPLAY = 'Display';
 Blockly.Msg.TOOLBOX_DRIVE = 'Drive';
 Blockly.Msg.TOOLBOX_MOVE = 'Move';
+Blockly.Msg.TOOLBOX_GLOBAL_VARIABLE = 'global Variables';
+Blockly.Msg.TOOLBOX_LOOP_VARIABLE = 'loop Variables';
 //
 Blockly.Msg.START_HELP = 'here comes your help text';
 Blockly.Msg.MOTORDIFF_ON_HELP = 'here comes your help text';
