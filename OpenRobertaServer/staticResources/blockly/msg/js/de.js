@@ -489,7 +489,7 @@ Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = "Rufe einen Funktionsblock mit Rück
 Blockly.Msg.PROCEDURES_CREATE_DO = "Erzeuge \"Aufruf %1\"";
 Blockly.Msg.PROCEDURES_DEFNORETURN_DO = "";
 Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = "https://de.wikipedia.org/wiki/Prozedur_%28Programmierung%29";
-Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = "macheEtwas";
+Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = "Funktionsblock";
 Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE = "to";
 Blockly.Msg.PROCEDURES_DEFNORETURN_TOOLTIP = "Ein Funktionsblock ohne Rückgabewert.";
 Blockly.Msg.PROCEDURES_DEFRETURN_HELPURL = "https://de.wikipedia.org/wiki/Prozedur_%28Programmierung%29";
@@ -503,7 +503,9 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "Variable:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Eine Eingabe zur Funktion hinzufügen.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "Parameter";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Die Eingaben zu dieser Funktion hinzufügen, entfernen oder neu anordnen.";
-<<<<<<< HEAD
+Blockly.Msg.PROCEDURES_TITLE = "\" Funktion genutzt werden.";
+Blockly.Msg.PROCEDURES_VARIABLES_ERROR = "Fehler: Dieser Block kann nur innerhalb der \"";
+Blockly.Msg.PROCEDURES_VARIABLES_LOOP_ERROR = "Fehler: Dieser Block kann nur innerhalb einer \" Schleife, die folgende Variable erzeugt: ";
 Blockly.Msg.PROGRAM_DELETE_ERROR = "Fehler beim Löschen des Programms.";
 Blockly.Msg.PROGRAM_DELETE_SUCCESS = "Programm gelöscht";
 Blockly.Msg.PROGRAM_ERROR_ID_INVALID = "Programmname ist kein valider Identifikator.";
@@ -513,14 +515,6 @@ Blockly.Msg.PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN = "Nutzer ist nicht eingeloggt."
 Blockly.Msg.PROGRAM_GET_ONE_SUCCESS = "Programm geladen";
 Blockly.Msg.PROGRAM_SAVE_ERROR_NOT_SAVED_TO_DB = "Fehler beim Speichern des Programms.";
 Blockly.Msg.PROGRAM_SAVE_SUCCESS = "Programm gespeichert";
-=======
-Blockly.Msg.PROCEDURES_TITLE = "\" Funktion genutzt werden.";
-Blockly.Msg.PROCEDURES_VARIABLES_ERROR = "Fehler: Dieser Block kann nur innerhalb der \"";
-<<<<<<< HEAD
->>>>>>> ORA-376 add local variables for procedures
-=======
-Blockly.Msg.PROCEDURES_VARIABLES_LOOP_ERROR = "Fehler: Dieser Block kann nur innerhalb einer \" Schleife, die folgende Variable erzeugt: ";
->>>>>>> ORA-376 reactivate loops, controls_forEach and controls_for, with local variables
 Blockly.Msg.REMOVE_COMMENT = "Kommentar entfernen";
 Blockly.Msg.RENAME_VARIABLE = "Variable umbenennen...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Alle \"%1\" Variablen umbenennen in:";
@@ -624,24 +618,22 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "entferne Leerzeichen von Ende Seite von"
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Entfernt Leerzeichen vom Anfang und / oder Ende eines Textes.";
 Blockly.Msg.TIMER_GETSAMPLE_TOOLTIP = "Gibt den aktuellen Wert des Zeitgebers zurück.";
 Blockly.Msg.TIMER_RESET_TOOLTIP = "Setzt den Zeitgeber zurück.";
-<<<<<<< HEAD
 Blockly.Msg.TOKEN_SET_ERROR_NO_ROBOT_WAITING = "Kein aktiver Roboter.";
 Blockly.Msg.TOKEN_SET_SUCCESS = "Roboterkennung gesetzt";
-Blockly.Msg.TOOLBOX_LOAD_ERROR_NOT_FOUND = "Toolbox nicht gefunden";
-Blockly.Msg.TOOLBOX_LOAD_SUCCESS = "Toolbox geladen";
-=======
 Blockly.Msg.TOOLBOX_ACTION = "Aktion";
 Blockly.Msg.TOOLBOX_COLOUR = "Farben";
 Blockly.Msg.TOOLBOX_CONTROL = "Kontrolle";
 Blockly.Msg.TOOLBOX_DECISION = "Entscheidungen";
 Blockly.Msg.TOOLBOX_DISPLAY = "Anzeige";
 Blockly.Msg.TOOLBOX_DRIVE = "Fahren";
-Blockly.Msg.TOOLBOX_GLOBAL_VARIABLE = "Globale Variablen";
+Blockly.Msg.TOOLBOX_GLOBAL_VARIABLE = "global Variables";  // untranslated
 Blockly.Msg.TOOLBOX_LIGHT = "Statusleuchte";
 Blockly.Msg.TOOLBOX_LIST = "Listen";
+Blockly.Msg.TOOLBOX_LOAD_ERROR_NOT_FOUND = "Toolbox nicht gefunden";
+Blockly.Msg.TOOLBOX_LOAD_SUCCESS = "Toolbox geladen";
 Blockly.Msg.TOOLBOX_LOGIC = "Logik";
 Blockly.Msg.TOOLBOX_LOOP = "Schleifen";
-Blockly.Msg.TOOLBOX_LOOP_VARIABLE = "Schleifenvariablen";
+Blockly.Msg.TOOLBOX_LOOP_VARIABLE = "loop Variables";  // untranslated
 Blockly.Msg.TOOLBOX_MATH = "Mathematik";
 Blockly.Msg.TOOLBOX_MOVE = "Bewegen";
 Blockly.Msg.TOOLBOX_PROCEDURE = "Funktionen";
@@ -650,14 +642,12 @@ Blockly.Msg.TOOLBOX_SOUND = "Klang";
 Blockly.Msg.TOOLBOX_TEXT = "Text";
 Blockly.Msg.TOOLBOX_VARIABLE = "Variablen";
 Blockly.Msg.TOOLBOX_WAIT = "Warten";
->>>>>>> ORA-376 fix bugs in lists and variables, toolbox multilingual
 Blockly.Msg.TOUCH_ISPRESSED_TOOLTIP = "Ist der Berührungssensor gedrückt?";
 Blockly.Msg.TOUCH_TOOLTIP = "Is the touch sensor pressed?";  // untranslated
 Blockly.Msg.ULTRASONIC_GETMODE_TOOLTIP = "Gibt den Modus des Ultraschallsensors zurück.";
 Blockly.Msg.ULTRASONIC_GETSAMPLE_TOOLTIP = "Gibt den aktuellen Wert des Ultraschallsensors zurück.";
 Blockly.Msg.ULTRASONIC_SETMODE_TOOLTIP = "Setzt den Modus des Ultraschallsensors.";
 Blockly.Msg.ULTRASONIC_TOOLTIP = "Represents EV3 ultrasonic sensor.";  // untranslated
-<<<<<<< HEAD
 Blockly.Msg.USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Beim Speichern des Nutzers trat ein Fehler auf.";
 Blockly.Msg.USER_CREATE_SUCCESS = "Der Nutzer wurde angelegt";
 Blockly.Msg.USER_DELETE_ERROR_ID_NOT_FOUND = "Fehler beim Löschen des Nutzers.";
@@ -666,23 +656,17 @@ Blockly.Msg.USER_DELETE_SUCCESS = "Der Nutzer wurde erfolgreich gelöscht";
 Blockly.Msg.USER_GET_ALL_SUCCESS = "Nutzer geladen";
 Blockly.Msg.USER_GET_ONE_ERROR_ID_OR_PASSWORD_WRONG = "Du hast beim Einloggen einen Fehler gemacht.";
 Blockly.Msg.USER_GET_ONE_SUCCESS = "Login erfolgreich";
-=======
 Blockly.Msg.VARIABLES_CREATE_TITLE = "Erzeuge";
 Blockly.Msg.VARIABLES_CREATE_WITH = "mit";
-<<<<<<< HEAD
->>>>>>> ORA-376 add types to lists, refactore variable messages
-Blockly.Msg.VARIABLES_DEFAULT_NAME = "Element";
-=======
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "variablenName";
->>>>>>> ORA-376 add sub categories to variables in toolbox
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Erzeuge \"Schreibe %1\"";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://de.wikipedia.org/wiki/Variable_%28Programmierung%29";
 Blockly.Msg.VARIABLES_GET_TAIL = "";
-Blockly.Msg.VARIABLES_GET_TITLE = "Gib";
+Blockly.Msg.VARIABLES_GET_TITLE = "";
 Blockly.Msg.VARIABLES_GET_TOOLTIP = "Gibt den Wert der Variable zurück.";
 Blockly.Msg.VARIABLES_SET_CREATE_GET = "Erzeuge \"Lese %1\"";
 Blockly.Msg.VARIABLES_SET_HELPURL = "https://de.wikipedia.org/wiki/Variable_%28Programmierung%29";
-Blockly.Msg.VARIABLES_SET_TITLE = "Setze %1 auf %2";
+Blockly.Msg.VARIABLES_SET_TITLE = "Schreibe %1 %2";
 Blockly.Msg.VARIABLES_SET_TOOLTIP = "Setzt den Wert einer Variable.";
 Blockly.Msg.VARIABLES_TITLE = "Variable";
 Blockly.Msg.VARIABLES_TYPE_ARRAY_BOOLEAN = "Liste logischer Wert";

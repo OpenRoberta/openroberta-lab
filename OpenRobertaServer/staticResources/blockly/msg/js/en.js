@@ -503,7 +503,9 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TITLE = "input name:";
 Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = "Add an input to the function.";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TITLE = "inputs";
 Blockly.Msg.PROCEDURES_MUTATORCONTAINER_TOOLTIP = "Add, remove, or reorder inputs to this function.";
-<<<<<<< HEAD
+Blockly.Msg.PROCEDURES_TITLE = "' procedure";
+Blockly.Msg.PROCEDURES_VARIABLES_ERROR = "Error: This block may be used only within the '";
+Blockly.Msg.PROCEDURES_VARIABLES_LOOP_ERROR = "Error: This block may be used only within a loop which delcares ";
 Blockly.Msg.PROGRAM_DELETE_ERROR = "Error while deleting a program.";
 Blockly.Msg.PROGRAM_DELETE_SUCCESS = "Program deeleted";
 Blockly.Msg.PROGRAM_ERROR_ID_INVALID = "Program name is not a valid identifier.";
@@ -513,14 +515,6 @@ Blockly.Msg.PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN = "User not logged in.";
 Blockly.Msg.PROGRAM_GET_ONE_SUCCESS = "Program loaded";
 Blockly.Msg.PROGRAM_SAVE_ERROR_NOT_SAVED_TO_DB = "Error while saving the program.";
 Blockly.Msg.PROGRAM_SAVE_SUCCESS = "Program saved";
-=======
-Blockly.Msg.PROCEDURES_TITLE = "' procedure";
-Blockly.Msg.PROCEDURES_VARIABLES_ERROR = "Error: This block may be used only within the '";
-<<<<<<< HEAD
->>>>>>> ORA-376 add local variables for procedures
-=======
-Blockly.Msg.PROCEDURES_VARIABLES_LOOP_ERROR = "Error: This block may be used only within a loop which delcares ";
->>>>>>> ORA-376 reactivate loops, controls_forEach and controls_for, with local variables
 Blockly.Msg.REMOVE_COMMENT = "Remove Comment";
 Blockly.Msg.RENAME_VARIABLE = "Rename variable...";
 Blockly.Msg.RENAME_VARIABLE_TITLE = "Rename all '%1' variables to:";
@@ -624,12 +618,8 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "trim spaces from right side of";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Return a copy of the text with spaces removed from one or both ends.";
 Blockly.Msg.TIMER_GETSAMPLE_TOOLTIP = "Gets the current reading from the timer.";
 Blockly.Msg.TIMER_RESET_TOOLTIP = "Resets the timer.";
-<<<<<<< HEAD
 Blockly.Msg.TOKEN_SET_ERROR_NO_ROBOT_WAITING = "There is no active robot.";
 Blockly.Msg.TOKEN_SET_SUCCESS = "Token set";
-Blockly.Msg.TOOLBOX_LOAD_ERROR_NOT_FOUND = "Toolbox not found";
-Blockly.Msg.TOOLBOX_LOAD_SUCCESS = "Toolbox loaded";
-=======
 Blockly.Msg.TOOLBOX_ACTION = "Action";
 Blockly.Msg.TOOLBOX_COLOUR = "Colours";
 Blockly.Msg.TOOLBOX_CONTROL = "Control";
@@ -639,6 +629,8 @@ Blockly.Msg.TOOLBOX_DRIVE = "Drive";
 Blockly.Msg.TOOLBOX_GLOBAL_VARIABLE = "global Variables";
 Blockly.Msg.TOOLBOX_LIGHT = "Lights";
 Blockly.Msg.TOOLBOX_LIST = "Lists";
+Blockly.Msg.TOOLBOX_LOAD_ERROR_NOT_FOUND = "Toolbox not found";
+Blockly.Msg.TOOLBOX_LOAD_SUCCESS = "Toolbox loaded";
 Blockly.Msg.TOOLBOX_LOGIC = "Logic";
 Blockly.Msg.TOOLBOX_LOOP = "Loops";
 Blockly.Msg.TOOLBOX_LOOP_VARIABLE = "loop Variables";
@@ -650,14 +642,12 @@ Blockly.Msg.TOOLBOX_SOUND = "Sounds";
 Blockly.Msg.TOOLBOX_TEXT = "Text";
 Blockly.Msg.TOOLBOX_VARIABLE = "Variables";
 Blockly.Msg.TOOLBOX_WAIT = "Wait";
->>>>>>> ORA-376 fix bugs in lists and variables, toolbox multilingual
 Blockly.Msg.TOUCH_ISPRESSED_TOOLTIP = "Is the touch sensor pressed?";
 Blockly.Msg.TOUCH_TOOLTIP = "Is the touch sensor pressed?";
 Blockly.Msg.ULTRASONIC_GETMODE_TOOLTIP = "Gets the mode of the ultrasonic sensor.";
 Blockly.Msg.ULTRASONIC_GETSAMPLE_TOOLTIP = "Gets the current reading from the ultrasonic sensor.";
 Blockly.Msg.ULTRASONIC_SETMODE_TOOLTIP = "Sets the mode of the ultrasonic sensor.";
 Blockly.Msg.ULTRASONIC_TOOLTIP = "Represents EV3 ultrasonic sensor.";
-<<<<<<< HEAD
 Blockly.Msg.USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Error while storing user.";
 Blockly.Msg.USER_CREATE_SUCCESS = "The user was successfully created";
 Blockly.Msg.USER_DELETE_ERROR_ID_NOT_FOUND = "Error while deleting user.";
@@ -666,15 +656,9 @@ Blockly.Msg.USER_DELETE_SUCCESS = "The user was successfully deleted";
 Blockly.Msg.USER_GET_ALL_SUCCESS = "Users loaded";
 Blockly.Msg.USER_GET_ONE_ERROR_ID_OR_PASSWORD_WRONG = "An error occured while logging in.";
 Blockly.Msg.USER_GET_ONE_SUCCESS = "Login successfull";
-=======
 Blockly.Msg.VARIABLES_CREATE_TITLE = "Create";
 Blockly.Msg.VARIABLES_CREATE_WITH = "with";
-<<<<<<< HEAD
->>>>>>> ORA-376 add types to lists, refactore variable messages
-Blockly.Msg.VARIABLES_DEFAULT_NAME = "item";
-=======
 Blockly.Msg.VARIABLES_DEFAULT_NAME = "variableName";
->>>>>>> ORA-376 add sub categories to variables in toolbox
 Blockly.Msg.VARIABLES_GET_CREATE_SET = "Create 'set %1'";
 Blockly.Msg.VARIABLES_GET_HELPURL = "https://code.google.com/p/blockly/wiki/Variables#Get";
 Blockly.Msg.VARIABLES_GET_TAIL = "";

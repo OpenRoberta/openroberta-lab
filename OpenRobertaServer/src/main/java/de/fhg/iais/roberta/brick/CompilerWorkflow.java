@@ -19,11 +19,7 @@ import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.brickconfiguration.BrickConfiguration;
 import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
-<<<<<<< HEAD
-=======
-import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.ev3.EV3BrickConfiguration;
->>>>>>> ORA-372 Improvement in code generation
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 

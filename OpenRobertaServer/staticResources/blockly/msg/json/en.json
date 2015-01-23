@@ -1,55 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-		"lastupdated": "2015-01-22 11:50:57.068000",
-=======
-		"lastupdated": "2014-12-18 23:15:43.156000",
->>>>>>> ORA-369 move setmode to getvalue sensor blocks, add wait_for_ms block, reactivate blocks in Template.java
-=======
-		"lastupdated": "2014-12-27 23:41:46.761000",
->>>>>>> ORA-376 add global variables in start block, make variables blockly type-save, assign type depending color to variables (getter and setter)
-=======
-		"lastupdated": "2015-01-02 12:45:01.447000",
->>>>>>> ORA-376 add types to lists, refactore variable messages
-=======
-		"lastupdated": "2015-01-03 17:38:41.057000",
->>>>>>> ORA-376 add local variables for procedures
-=======
-		"lastupdated": "2015-01-10 16:57:20.795000",
->>>>>>> ORA-376 revise variables and lists, add type markers to svgs
-=======
-		"lastupdated": "2015-01-13 22:33:42.431000",
->>>>>>> ORA-376 reactivate loops, controls_forEach and controls_for, with local variables
-=======
-		"lastupdated": "2015-01-15 21:12:36.502000",
->>>>>>> ORA-376 minor improvements in variables and block types
-=======
-		"lastupdated": "2015-01-16 16:55:06.280000",
->>>>>>> ORA-378 adding var type information in for each statement, creating transformation for create method blocks
-=======
-		"lastupdated": "2015-01-18 21:09:57.539000",
->>>>>>> ORA-376 fix bugs in lists and variables, toolbox multilingual
-=======
-		"lastupdated": "2015-01-20 09:31:53.812000",
->>>>>>> ORA-378 AST transformation for method block, HAL refactoring
-=======
-		"lastupdated": "2015-01-22 12:43:56.817000",
->>>>>>> ORA-376 add sub categories to variables in toolbox
-=======
-		"lastupdated": "2015-01-22 16:45:57.944000",
->>>>>>> ORA-376 fix brick block and flyout
+		"lastupdated": "2015-01-23 12:25:54.531000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
