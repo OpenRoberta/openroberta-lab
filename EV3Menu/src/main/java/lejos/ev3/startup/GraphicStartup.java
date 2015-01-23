@@ -230,7 +230,7 @@ public class GraphicStartup implements Menu {
         System.out.println("Getting IP addresses");
         ips = getIPAddresses();
 
-        // Start the RMI registry 
+        // Start the RMI registry
         InitThread initThread = new InitThread();
         initThread.start();
 
@@ -991,7 +991,7 @@ public class GraphicStartup implements Menu {
                                             BaseSensor sensor = (BaseSensor) con.newInstance(args);
                                             SampleProvider provider;
                                             if ( request.str3 == null ) {
-                                                provider = (SampleProvider) sensor;
+                                                provider = sensor;
                                             } else {
                                                 provider = sensor.getMode(request.str3);
                                             }
@@ -1222,7 +1222,7 @@ public class GraphicStartup implements Menu {
      * Clears the screen, displays a number and allows user to change
      * the digits of the number individually using the NXT buttons.
      * Note the array of bytes represent ASCII characters, not actual numbers.
-     * 
+     *
      * @param digits Number of digits in the PIN.
      * @param title The text to display above the numbers.
      * @param number Start with a default PIN. Array of bytes up to 8 length.
@@ -1486,6 +1486,7 @@ public class GraphicStartup implements Menu {
             String token = new ORAtokenGenerator().generateToken();
             String ip = getIPAddress();
             // 193.175.162.161:80
+            // http://mp-devel.iais.fraunhofer.de:1999
             if ( ip.equals("none") ) {
                 return;
             } else {
@@ -1550,10 +1551,10 @@ public class GraphicStartup implements Menu {
 
     /**
      * Get ORA ev3menu version from EV3Menu.properties in jar file.
-     * 
+     *
      * @return
      */
-    public static String getORAversion() {
+    public static String getORAmenuVersion() {
         Properties menuProperties = new Properties();
         InputStream is = ClassLoader.getSystemResourceAsStream("EV3Menu.properties");
         try {
@@ -1568,8 +1569,17 @@ public class GraphicStartup implements Menu {
     }
 
     /**
+     * Get the leJOS Firmware version.
+     *
+     * @return
+     */
+    public static String getLejosVersion() {
+        return version;
+    }
+
+    /**
      * Get the name of the brick to send it to ORA server t odisplay it on client page.
-     * 
+     *
      * @return brickname
      */
     public static String getBrickName() {
@@ -1578,7 +1588,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Get the battery status to send it to ORA server to display it on client page.
-     * 
+     *
      * @return battery
      */
     public static String getBatteryStatus() {
@@ -1591,7 +1601,7 @@ public class GraphicStartup implements Menu {
     /**
      * Expose userprogram process to check if it is running (!= null).
      * Do not allow execution of a second userprogram from ORA.
-     * 
+     *
      * @return
      */
     public static Process getUserprogram() {
@@ -1807,7 +1817,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Ask the user for confirmation of an action.
-     * 
+     *
      * @param prompt A description of the action about to be performed
      * @return 1=yes 0=no < 0 escape
      */
@@ -1910,7 +1920,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Format a string for use when displaying the volume.
-     * 
+     *
      * @param vol Volume setting 0-10
      * @return String version.
      */
@@ -1939,7 +1949,7 @@ public class GraphicStartup implements Menu {
     /**
      * Read a button press.
      * If the read timesout then exit the system.
-     * 
+     *
      * @return The bitcode of the button.
      */
     private int getButtonPress() {
@@ -1952,7 +1962,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Present the menu for a single file.
-     * 
+     *
      * @param file
      */
     private void fileMenu(File file, int type) {
@@ -2066,7 +2076,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Present the menu for a menu tool.
-     * 
+     *
      * @param file
      */
     private void toolMenu(File file) {
@@ -2281,7 +2291,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Method to add spaces before capital letters and remove .jar extension.
-     * 
+     *
      * @param fileName
      * @return
      */
@@ -2351,7 +2361,7 @@ public class GraphicStartup implements Menu {
     /**
      * Start a new screen display.
      * Clear the screen and set the screen title.
-     * 
+     *
      * @param title
      */
     private void newScreen(String title) {
@@ -2361,7 +2371,7 @@ public class GraphicStartup implements Menu {
 
     /**
      * Display a status message
-     * 
+     *
      * @param msg
      */
     private void msg(String msg) {
@@ -2383,7 +2393,7 @@ public class GraphicStartup implements Menu {
      * Allow the user to make a selection from the specified menu item. If a
      * power off timeout has been specified and no choice is made within this
      * time power off the NXT.
-     * 
+     *
      * @param menu Menu to display.
      * @param cur Initial item to select.
      * @return Selected item or < 0 for escape etc.

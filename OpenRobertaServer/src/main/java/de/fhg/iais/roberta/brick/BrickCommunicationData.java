@@ -23,7 +23,8 @@ public class BrickCommunicationData {
     private final String token;
     private final String robotIdentificator;
     private final String robotName;
-    private final String version;
+    private final String menuversion;
+    private final String lejosversion;
 
     private Clock clock;
     private State state;
@@ -34,11 +35,12 @@ public class BrickCommunicationData {
     private String programName;
     private String brickConfigurationName;
 
-    public BrickCommunicationData(String token, String robotIdentificator, String robotName, String version) {
+    public BrickCommunicationData(String token, String robotIdentificator, String robotName, String menuversion, String lejosversion) {
         this.token = token;
         this.robotIdentificator = robotIdentificator;
         this.robotName = robotName;
-        this.version = version;
+        this.menuversion = menuversion;
+        this.lejosversion = lejosversion;
 
         this.clock = Clock.start();
         this.state = State.WAIT_FOR_TOKENAPPROVAL_FROM_USER;
