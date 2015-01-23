@@ -126,6 +126,23 @@ function logout() {
 }
 
 /**
+ * Update Firmware
+ */
+function updateFirmware() {
+    COMM.json("/robot", {
+        "cmd" : "updateFirmware"
+    }, function(response) {
+        if (response.rc === "ok") {
+            setRobotState(response);
+            queueToastMessage(response.message);            
+            $(".ui-dialog-content").dialog("close"); // close all opened popups
+        } else {
+            displayMessage(response.message);
+        }
+    });
+}
+
+/**
  * Inject Blockly with initial toolbox
  * 
  * @param {response}
@@ -858,7 +875,7 @@ function initHeadNavigation() {
         } else if (domId === 'menuConnect') {  // Submenu 'Robot'
             $("#set-token").dialog("open");
         } else if (domId === 'menuFirmware') {  // Submenu 'Robot'
-            displayMessage("MESSAGE_NOT_AVAILABLE");
+            updateFirmware();
         } else if (domId === 'menuRobotInfo') {  // Submenu 'Robot'
             displayMessage("MESSAGE_NOT_AVAILABLE");
         } else if (domId === 'menuFirstSteps') {   // Submenu 'Help'
