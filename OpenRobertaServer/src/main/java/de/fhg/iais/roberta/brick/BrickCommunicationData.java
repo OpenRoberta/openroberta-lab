@@ -151,17 +151,17 @@ public class BrickCommunicationData {
      *
      * @return the state of the brick
      */
-    public synchronized String updateButtonPressed() {
+    public synchronized boolean firmwareUpdate() {
         if ( !isBrickWaitingForPushCommand() ) {
             LOG.error("UPDATE button pressed, but brick is not waiting. Bad luck!");
-            return "robot.ev3.not_waiting";
+            return false;
         } else {
             LOG.debug("UPDATE button pressed. Wait state entered " + this.clock.elapsedSecFormatted() + " ago");
             this.command = "update";
             this.clock = Clock.start();
             this.state = State.BRICK_IS_BUSY;
             notifyAll();
-            return "robot.ev3.push.update";
+            return true;
         }
     }
 

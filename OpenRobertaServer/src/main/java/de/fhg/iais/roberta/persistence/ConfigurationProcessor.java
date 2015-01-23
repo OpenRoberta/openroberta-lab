@@ -19,7 +19,7 @@ public class ConfigurationProcessor extends AbstractProcessor {
 
     public Configuration getConfiguration(String configurationName, int userId) {
         if ( !Util.isValidJavaIdentifier(configurationName) ) {
-            setError("configuration.error.id_invalid", configurationName);
+            setError(Util.CONFIGURATION_ERROR_ID_INVALID, configurationName);
             return null;
         } else {
             ConfigurationDao configurationDao = new ConfigurationDao(this.dbSession);
@@ -32,9 +32,9 @@ public class ConfigurationProcessor extends AbstractProcessor {
                 configuration = configurationDao.load(configurationName, null);
             }
             if ( configuration == null ) {
-                setError("configuration.get_one.error.not_found");
+                setError(Util.CONFIGURATION_GET_ONE_ERROR_NOT_FOUND);
             } else {
-                setSuccess("configuration.get_one.success");
+                setSuccess(Util.CONFIGURATION_GET_ONE_SUCCESS);
             }
             return configuration;
         }
@@ -42,7 +42,7 @@ public class ConfigurationProcessor extends AbstractProcessor {
 
     public void updateConfiguration(String configurationName, int ownerId, String configurationText) {
         if ( !Util.isValidJavaIdentifier(configurationName) ) {
-            setError("configuration.error.id_invalid", configurationName);
+            setError(Util.CONFIGURATION_ERROR_ID_INVALID, configurationName);
             return;
         }
         this.httpSessionState.setConfigurationNameAndConfiguration(configurationName, configurationText);
@@ -52,11 +52,11 @@ public class ConfigurationProcessor extends AbstractProcessor {
             User owner = userDao.get(ownerId);
             Configuration configuration = configurationDao.persistConfigurationText(configurationName, owner, configurationText);
             if ( configuration == null ) {
-                setError("configuration.save.error.not_saved_to_db");
+                setError(Util.CONFIGURATION_SAVE_ERROR_NOT_SAVED_TO_DB);
                 return;
             }
         }
-        setSuccess("configuration.save.success");
+        setSuccess(Util.CONFIGURATION_SAVE_SUCCESS);
     }
 
     public JSONArray getConfigurationInfo(int ownerId) {
@@ -73,7 +73,7 @@ public class ConfigurationProcessor extends AbstractProcessor {
             configurationInfo.put(program.getCreated().toString());
             configurationInfo.put(program.getLastChanged().toString());
         }
-        setSuccess("configuration.get_all.success", "" + configurationInfos.length());
+        setSuccess(Util.CONFIGURATION_GET_ALL_SUCCESS, "" + configurationInfos.length());
         return configurationInfos;
     }
 
@@ -83,9 +83,9 @@ public class ConfigurationProcessor extends AbstractProcessor {
         User owner = userDao.get(ownerId);
         int rowCount = configurationDao.deleteByName(configurationName, owner);
         if ( rowCount > 0 ) {
-            setSuccess("configuration.delete.success");
+            setSuccess(Util.CONFIGURATION_DELETE_SUCCESS);
         } else {
-            setError("configuration.delete.error");
+            setError(Util.CONFIGURATION_DELETE_ERROR);
         }
     }
 }
