@@ -148,19 +148,19 @@ public class BlocklyMethodsTest {
 
     @Test
     public void createListWithItem() {
-        Assert.assertTrue(BlocklyMethods.createListWithItem(1, 5).toString().equals("[1, 1, 1, 1, 1]"));
+        Assert.assertTrue(BlocklyMethods.createListWithItem((float) 1, 5).toString().equals("[1.0, 1.0, 1.0, 1.0, 1.0]"));
         Assert.assertTrue(BlocklyMethods.createListWithItem("a", 5).toString().equals("[a, a, a, a, a]"));
     }
 
     @Test
     public void lenght() {
-        Assert.assertTrue(BlocklyMethods.lenght(BlocklyMethods.createListWithItem(1, 5)) == 5);
+        Assert.assertTrue(BlocklyMethods.lenght(BlocklyMethods.createListWithItem((float) 1, 5)) == 5);
         Assert.assertTrue(BlocklyMethods.lenght(BlocklyMethods.createListWithItem("a", 2)) == 2);
     }
 
     @Test
     public void isEmpty() {
-        Assert.assertTrue(!BlocklyMethods.isEmpty(BlocklyMethods.createListWithItem(1, 5)));
+        Assert.assertTrue(!BlocklyMethods.isEmpty(BlocklyMethods.createListWithItem((float) 1, 5)));
         Assert.assertTrue(BlocklyMethods.isEmpty(BlocklyMethods.createListWithItem("a", 0)));
     }
 
@@ -200,7 +200,7 @@ public class BlocklyMethodsTest {
     @Test
     public void listsSetIndex() {
         ArrayList<Float> list = BlocklyMethods.createListWith(55.0, 66.0, 11.0);
-        BlocklyMethods.listsIndex(list, ListElementOperations.SET, Float.valueOf(99), IndexLocation.FIRST);
+        BlocklyMethods.listsIndex(list, ListElementOperations.SET, 99, IndexLocation.FIRST);
 
         Assert.assertTrue(list.toString().equals("[99.0, 66.0, 11.0]"));
 

@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -81,9 +82,12 @@ public class ListRepeat<V> extends Function<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        String varType = getTypeVar().getBlocklyName().substring(0, 1).toUpperCase() + getTypeVar().getBlocklyName().substring(1).toLowerCase();
+
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.LIST_TYPE, varType);
+        Mutation mutation = new Mutation();
+        mutation.setListType(this.typeVar.getBlocklyName());
+        jaxbDestination.setMutation(mutation);
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.LIST_TYPE, this.typeVar.getBlocklyName());
         AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.ITEM, getParam().get(0));
         AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.NUM, getParam().get(1));
         return jaxbDestination;

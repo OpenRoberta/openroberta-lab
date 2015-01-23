@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -69,6 +70,9 @@ public class EmptyList<V> extends Expr<V> {
 
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        Mutation mutation = new Mutation();
+        mutation.setListType(getTypeVar().getBlocklyName());
+        jaxbDestination.setMutation(mutation);
         AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.LIST_TYPE, getTypeVar().getBlocklyName());
         return jaxbDestination;
     }

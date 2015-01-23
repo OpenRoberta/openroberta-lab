@@ -1,23 +1,4 @@
-/*C5*/SET SCHEMA PUBLIC
+/*C6*/SET SCHEMA PUBLIC
 DELETE FROM USER WHERE ID=53
-INSERT INTO USER VALUES(53,'koki','1','1','TEACHER','2014-12-19 09:18:04.976000','2015-01-23 12:36:23.530000',NULL)
-COMMIT
-DELETE FROM PROGRAM WHERE ID=64
-INSERT INTO PROGRAM VALUES(64,'test_new',53,'<block_set xmlns="http://de.fhg.iais.roberta.blockly"><instance x="100" y="50"><block type="robControls_start" id="115" deletable="false"><mutation declare="false"></mutation></block><block type="robActions_display_text" id="116" inline="false"><value name="OUT"><block type="text" id="117"><field name="TEXT">Hallo</field></block></value><value name="COL"><block type="math_number" id="118"><field name="NUM">0</field></block></value><value name="ROW"><block type="math_number" id="119"><field name="NUM">0</field></block></value></block></instance></block_set>','2015-01-23 12:30:05.017000','2015-01-23 12:41:03.516000',NULL,NULL,0,NULL,0)
-COMMIT
-/*C8*/SET SCHEMA PUBLIC
-DELETE FROM PROGRAM WHERE ID=64
-INSERT INTO PROGRAM VALUES(64,'test_new',53,'<block_set xmlns="http://de.fhg.iais.roberta.blockly"><instance x="100" y="50"><block type="robControls_start" id="115" deletable="false"><mutation declare="false"></mutation></block><block type="robActions_display_text" id="116" inline="false"><value name="OUT"><block type="text" id="117"><field name="TEXT">Hallo</field></block></value><value name="COL"><block type="math_number" id="118"><field name="NUM">0</field></block></value><value name="ROW"><block type="math_number" id="119"><field name="NUM">0</field></block></value></block></instance></block_set>','2015-01-23 12:30:05.017000','2015-01-23 12:41:30.604000',NULL,NULL,0,NULL,0)
-COMMIT
-DELETE FROM PROGRAM WHERE ID=49
-INSERT INTO PROGRAM VALUES(49,'meinProgramm',53,'<block_set xmlns="http://de.fhg.iais.roberta.blockly"><instance x="100" y="50"><block type="robControls_start" id="10" deletable="false"><mutation declare="false"></mutation></block></instance></block_set>','2015-01-09 16:13:04.795000','2015-01-23 12:41:57.233000',NULL,NULL,0,NULL,0)
-COMMIT
-DELETE FROM USER WHERE ID=53
-INSERT INTO USER VALUES(53,'koki','1','1','TEACHER','2014-12-19 09:18:04.976000','2015-01-23 12:43:57.992000',NULL)
-COMMIT
-DELETE FROM PROGRAM WHERE ID=64
-INSERT INTO PROGRAM VALUES(64,'test_new',53,'<block_set xmlns="http://de.fhg.iais.roberta.blockly"><instance x="100" y="50"><block type="robControls_start" id="115" deletable="false"><mutation declare="false"></mutation></block><block type="robActions_display_text" id="116" inline="false"><value name="OUT"><block type="text" id="117"><field name="TEXT">Hallo</field></block></value><value name="COL"><block type="math_number" id="118"><field name="NUM">0</field></block></value><value name="ROW"><block type="math_number" id="119"><field name="NUM">0</field></block></value></block></instance></block_set>','2015-01-23 12:30:05.017000','2015-01-23 12:44:05.493000',NULL,NULL,0,NULL,0)
-COMMIT
-/*C5*/DELETE FROM PROGRAM WHERE ID=63
-INSERT INTO PROGRAM VALUES(63,'infrared',53,'<block_set xmlns="http://de.fhg.iais.roberta.blockly"><instance x="100" y="50"><block type="robControls_start" id="213" deletable="false"><mutation declare="false"></mutation></block><block type="controls_whileUntil" id="236" inline="false"><field name="MODE">UNTIL</field><value name="BOOL"><block type="logic_compare" id="263" inline="true"><mutation operator_range="NUM"></mutation><field name="OP">EQ</field><value name="A"><block type="robColour_picker" id="270"><field name="COLOUR">#b30006</field></block></value><value name="B"><block type="robSensors_colour_getSample" id="246"><mutation mode="COLOUR"></mutation><field name="MODE">COLOUR</field><field name="SENSORPORT">4</field></block></value></block></value><statement name="DO"><block type="robActions_display_text" id="294" inline="false"><value name="OUT"><block type="robSensors_infrared_getSample" id="311"><mutation mode="DISTANCE"></mutation><field name="MODE">DISTANCE</field><field name="SENSORPORT">2</field></block></value><value name="COL"><block type="math_number" id="296"><field name="NUM">0</field></block></value><value name="ROW"><block type="math_number" id="297"><field name="NUM">0</field></block></value></block></statement></block></instance></block_set>','2015-01-23 10:33:59.011000','2015-01-23 12:45:57.943000',NULL,NULL,0,NULL,0)
+INSERT INTO USER VALUES(53,'koki','1','1','TEACHER','2014-12-19 09:18:04.976000','2015-01-23 14:24:06.210000',NULL)
 COMMIT

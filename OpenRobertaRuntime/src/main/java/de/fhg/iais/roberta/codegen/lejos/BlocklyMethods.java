@@ -78,12 +78,6 @@ public class BlocklyMethods {
         return rand.nextDouble();
     }
 
-    //
-    //    @SafeVarargs
-    //    public static <T> ArrayList<T> createListWith(T... a) {
-    //        return new ArrayList<T>(Arrays.asList(a));
-    //    }
-
     public static ArrayList<Float> createListWith(Number... a) {
         ArrayList<Float> result = new ArrayList<Float>();
         for ( Number number : a ) {
@@ -105,8 +99,32 @@ public class BlocklyMethods {
         return new ArrayList<Pickcolor>(Arrays.asList(a));
     }
 
-    public static <T> ArrayList<T> createListWithItem(T item, int times) {
-        ArrayList<T> result = new ArrayList<T>();
+    public static ArrayList<Float> createListWithItem(Float item, int times) {
+        ArrayList<Float> result = new ArrayList<Float>();
+        for ( int i = 0; i < times; i++ ) {
+            result.add(item);
+        }
+        return result;
+    }
+
+    public static ArrayList<Boolean> createListWithItem(Boolean item, int times) {
+        ArrayList<Boolean> result = new ArrayList<Boolean>();
+        for ( int i = 0; i < times; i++ ) {
+            result.add(item);
+        }
+        return result;
+    }
+
+    public static ArrayList<String> createListWithItem(String item, int times) {
+        ArrayList<String> result = new ArrayList<String>();
+        for ( int i = 0; i < times; i++ ) {
+            result.add(item);
+        }
+        return result;
+    }
+
+    public static ArrayList<Pickcolor> createListWithItem(Pickcolor item, int times) {
+        ArrayList<Pickcolor> result = new ArrayList<Pickcolor>();
         for ( int i = 0; i < times; i++ ) {
             result.add(item);
         }
@@ -129,7 +147,15 @@ public class BlocklyMethods {
         return list.lastIndexOf(item);
     }
 
-    public static <T> T listsIndex(ArrayList<T> list, ListElementOperations operation, T element, IndexLocation indexLocation) {
+    public static float listsIndex(ArrayList<Float> list, ListElementOperations operation, float element, IndexLocation indexLocation) {
+        return listsIndex(list, operation, element, indexLocation, -1);
+    }
+
+    public static String listsIndex(ArrayList<String> list, ListElementOperations operation, String element, IndexLocation indexLocation) {
+        return listsIndex(list, operation, element, indexLocation, -1);
+    }
+
+    public static boolean listsIndex(ArrayList<Boolean> list, ListElementOperations operation, Boolean element, IndexLocation indexLocation) {
         return listsIndex(list, operation, element, indexLocation, -1);
     }
 
@@ -137,14 +163,14 @@ public class BlocklyMethods {
         return listsIndex(list, operation, indexLocation, -1);
     }
 
+    public static <T> T listsIndex(ArrayList<T> list, ListElementOperations operation, IndexLocation indexLocation, int index) {
+        return listsIndex(list, operation, null, indexLocation, index);
+    }
+
     public static <T> T listsIndex(ArrayList<T> list, ListElementOperations operation, T element, IndexLocation indexLocation, int index) {
         int resultIndex = calculateIndex(list, indexLocation, index);
         T result = executeOperation(list, operation, resultIndex, element);
         return result;
-    }
-
-    public static <T> T listsIndex(ArrayList<T> list, ListElementOperations operation, IndexLocation indexLocation, int index) {
-        return listsIndex(list, operation, null, indexLocation, index);
     }
 
     public static <T> ArrayList<T> listsGetSubList(ArrayList<T> list, IndexLocation startLocation, int startIndex, IndexLocation endLocation, int endIndex) {
@@ -216,12 +242,12 @@ public class BlocklyMethods {
         switch ( operation ) {
             case SET:
                 list.set(resultIndex, element);
-                return null;
+                return result;
             case INSERT:
                 //check if it is last index
                 resultIndex = resultIndex == list.size() - 1 ? resultIndex + 1 : resultIndex;
                 list.add(resultIndex, element);
-                return null;
+                return result;
             case GET:
                 break;
             case GET_REMOVE:
@@ -229,7 +255,7 @@ public class BlocklyMethods {
                 break;
             case REMOVE:
                 list.remove(resultIndex);
-                return null;
+                return result;
             default:
                 throw new DbcException("Invalid operation!");
         }
