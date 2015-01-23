@@ -160,6 +160,7 @@ abstract public class Phrase<V> {
         MATH_CONST( Category.EXPR ),
         EMPTY_LIST( Category.EXPR ),
         VAR( Category.EXPR ),
+        VAR_DECLARATION( Category.EXPR ),
         UNARY( Category.EXPR ),
         BINARY( Category.EXPR ),
         SENSOR_EXPR( Category.EXPR ),
@@ -178,6 +179,7 @@ abstract public class Phrase<V> {
         FUNCTION_STMT( Category.STMT ),
         STMT_FLOW_CONTROL( Category.STMT ),
         WAIT_STMT( Category.STMT ),
+        WAIT_TIME( Category.STMT ),
         TURN_ACTION( Category.ACTOR ),
         DRIVE_ACTION( Category.ACTOR ),
         SHOW_TEXT_ACTION( Category.ACTOR ),
@@ -214,7 +216,9 @@ abstract public class Phrase<V> {
         LIST_CREATE( Category.EXPR ),
         LIST_INDEX_OF( Category.FUNCTION ),
         LIST_SET_INDEX( Category.FUNCTION ),
-        TEXT_CHANGE_CASE_FUNCT( Category.FUNCTION );
+        TEXT_CHANGE_CASE_FUNCT( Category.FUNCTION ),
+        METHOD_VOID( Category.METHOD ),
+        METHOD_RETURN( Category.METHOD );
 
         private final Category category;
 

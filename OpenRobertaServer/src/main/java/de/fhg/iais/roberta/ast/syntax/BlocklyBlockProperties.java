@@ -19,8 +19,9 @@ public class BlocklyBlockProperties {
     private final boolean collapsed;
     private final Boolean inline;
     private final Boolean deletable;
+    private final Boolean movable;
 
-    private BlocklyBlockProperties(String blockType, String blocklyId, boolean disabled, boolean collapsed, Boolean inline, Boolean deletable) {
+    private BlocklyBlockProperties(String blockType, String blocklyId, boolean disabled, boolean collapsed, Boolean inline, Boolean deletable, Boolean movable) {
         super();
         Assert.isTrue(blocklyId != "" && blockType != "");
         this.blockType = blockType;
@@ -29,6 +30,7 @@ public class BlocklyBlockProperties {
         this.collapsed = collapsed;
         this.inline = inline;
         this.deletable = deletable;
+        this.movable = movable;
     }
 
     /**
@@ -40,10 +42,18 @@ public class BlocklyBlockProperties {
      * @param collapsed true if the block is collapsed
      * @param inline true if the block is inline (in one line)
      * @param deletable true if the block can be deleted
+     * @param movable true if the block can be moved
      * @return property object with given properties
      */
-    public static BlocklyBlockProperties make(String blockType, String blocklyId, boolean disabled, boolean collapsed, Boolean inline, Boolean deletable) {
-        return new BlocklyBlockProperties(blockType, blocklyId, disabled, collapsed, inline, deletable);
+    public static BlocklyBlockProperties make(
+        String blockType,
+        String blocklyId,
+        boolean disabled,
+        boolean collapsed,
+        Boolean inline,
+        Boolean deletable,
+        Boolean movable) {
+        return new BlocklyBlockProperties(blockType, blocklyId, disabled, collapsed, inline, deletable, movable);
     }
 
     /**
@@ -88,8 +98,30 @@ public class BlocklyBlockProperties {
         return this.deletable;
     }
 
+    /**
+     * @return the movable
+     */
+    public Boolean isMovable() {
+        return this.movable;
+    }
+
     @Override
     public String toString() {
-        return "NepoBlocklyId [blocklyId=" + this.blocklyId + ", disabled=" + this.disabled + ", collapsed=" + this.collapsed + ", inline=" + this.inline + "]";
+        return "BlocklyBlockProperties [blockType="
+            + this.blockType
+            + ", blocklyId="
+            + this.blocklyId
+            + ", disabled="
+            + this.disabled
+            + ", collapsed="
+            + this.collapsed
+            + ", inline="
+            + this.inline
+            + ", deletable="
+            + this.deletable
+            + ", movable="
+            + this.movable
+            + "]";
     }
+
 }

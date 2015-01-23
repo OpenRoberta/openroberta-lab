@@ -12,7 +12,7 @@ import org.json.JSONObject;
 
 /**
  * Class for brick <-> server communication based on json and key words "cmds".
- * 
+ *
  * @author dpyka
  */
 public class ORApushCmd implements Runnable {
@@ -31,7 +31,8 @@ public class ORApushCmd implements Runnable {
     public static final String KEY_TOKEN = "token";
     public static final String KEY_MACADDR = "macaddr";
     public static final String KEY_BATTERY = "battery";
-    public static final String KEY_VERSION = "version";
+    public static final String KEY_LEJOSVERSION = "lejosversion";
+    public static final String KEY_MENUVERSION = "menuversion";
     public static final String KEY_CMD = "cmd";
 
     // brickdata + cmds send to server
@@ -49,7 +50,7 @@ public class ORApushCmd implements Runnable {
      * Creates a new Open Roberta Lab "push" communication object. Additional
      * objects for downloading user programs, updating the brick and launching a
      * program are being created.
-     * 
+     *
      * @param serverBaseIP
      *        The base IP like 192.168.56.1:1999
      * @param ind
@@ -59,7 +60,8 @@ public class ORApushCmd implements Runnable {
         // add brick data pairs which will not change during runtime
         this.brickData.put(KEY_TOKEN, token);
         this.brickData.put(KEY_MACADDR, GraphicStartup.getORAmacAddress());
-        this.brickData.put(KEY_VERSION, GraphicStartup.getORAversion());
+        this.brickData.put(KEY_MENUVERSION, GraphicStartup.getORAmenuVersion());
+        this.brickData.put(KEY_LEJOSVERSION, GraphicStartup.getLejosVersion());
 
         try {
             this.pushServiceURL = new URL("http://" + serverBaseIP + "/pushcmd");
@@ -75,7 +77,7 @@ public class ORApushCmd implements Runnable {
      * Expose http connection to allow the user to cancel the registration
      * process. Otherwise user has to wait until timeout occurs (5minutes). Http
      * connection will "hang" in another thread trying to read from inputstream.
-     * 
+     *
      * @return The http connection the brick uses to communicate with the server.
      */
     public HttpURLConnection getHttpConnection() {
@@ -164,7 +166,7 @@ public class ORApushCmd implements Runnable {
      * Opens an http connection to server. "POST" as request method. Input, output
      * set to "true". 5 minutes readtimeout set. This connection is used for the
      * "push" service. The server will answer the request every few seconds.
-     * 
+     *
      * @return HttpURLConnection http connection object
      * @throws IOException
      *         Connection to server failed

@@ -1,11 +1,11 @@
-package de.fhg.iais.roberta.brickconfiguration.ev3;
+package de.fhg.iais.roberta.ev3.components;
 
 import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
 import de.fhg.iais.roberta.ast.syntax.action.MotorSide;
 import de.fhg.iais.roberta.brickconfiguration.HardwareComponent;
 import de.fhg.iais.roberta.dbc.Assert;
+import de.fhg.iais.roberta.ev3.EV3Actors;
 import de.fhg.iais.roberta.hardwarecomponents.Category;
-import de.fhg.iais.roberta.hardwarecomponents.ev3.HardwareComponentEV3Actor;
 
 public class EV3Actor extends HardwareComponent {
     private final boolean regulated;
@@ -21,7 +21,7 @@ public class EV3Actor extends HardwareComponent {
      * @param rotationDirection rotation direction of the motor
      * @param motorSide on the brick
      */
-    public EV3Actor(HardwareComponentEV3Actor componentType, boolean regulated, DriveDirection rotationDirection, MotorSide motorSide) {
+    public EV3Actor(EV3Actors componentType, boolean regulated, DriveDirection rotationDirection, MotorSide motorSide) {
         Assert.isTrue(componentType != null && rotationDirection != null && motorSide != null);
         this.setComponentType(componentType);
         this.regulated = regulated;

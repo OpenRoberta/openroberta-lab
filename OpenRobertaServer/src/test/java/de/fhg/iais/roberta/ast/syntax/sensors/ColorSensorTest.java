@@ -8,22 +8,12 @@ public class ColorSensorTest {
 
     @Test
     public void setColor() throws Exception {
-        String a = "\nhal.setColorSensorMode(SensorPort.S3, ColorSensorMode.COLOUR);";
+        String a =
+            "\nhal.getColorSensorColour(SensorPort.S3)"
+                + "hal.getColorSensorRed(SensorPort.S1)"
+                + "hal.getColorSensorRgb(SensorPort.S2)"
+                + "hal.getColorSensorAmbient(SensorPort.S4)";
 
         Helper.assertCodeIsOk(a, "/ast/sensors/sensor_setColor.xml");
-    }
-
-    @Test
-    public void getColorModeName() throws Exception {
-        String a = "\nhal.getColorSensorModeName(SensorPort.S3)";
-
-        Helper.assertCodeIsOk(a, "/ast/sensors/sensor_getModeColor.xml");
-    }
-
-    @Test
-    public void getSampleColor() throws Exception {
-        String a = "\nhal.getColorSensorValue(SensorPort.S3)";
-
-        Helper.assertCodeIsOk(a, "/ast/sensors/sensor_getSampleColor.xml");
     }
 }

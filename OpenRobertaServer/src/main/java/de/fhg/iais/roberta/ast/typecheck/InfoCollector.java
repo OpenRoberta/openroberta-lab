@@ -35,6 +35,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.LenghtOfIsEmptyFunct;
@@ -50,6 +51,8 @@ import de.fhg.iais.roberta.ast.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathSingleFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodReturn;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
@@ -69,6 +72,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
@@ -516,6 +520,30 @@ public class InfoCollector<T> implements AstVisitor<T> {
 
     @Override
     public T visitTextJoinFunct(TextJoinFunct<T> textJoinFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitWaitTimeStmt(WaitTimeStmt<T> waitTimeStmt) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitVarDeclaration(VarDeclaration<T> var) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitMethodVoid(MethodVoid<T> methodVoid) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitMethodReturn(MethodReturn<T> methodReturn) {
         // TODO Auto-generated method stub
         return null;
     }

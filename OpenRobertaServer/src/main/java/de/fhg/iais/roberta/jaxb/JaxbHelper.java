@@ -64,11 +64,6 @@ public class JaxbHelper {
      * @throws Exception
      */
     public static BlockSet path2BlockSet(String pathToblocklyXml) throws Exception {
-        //sInputSource src = new InputSource(JaxbHelper.class.getResourceAsStream(pathToblocklyXml));
         return xml2BlockSet(IOUtils.toString(JaxbHelper.class.getResourceAsStream(pathToblocklyXml), "UTF-8"));
-        //        InputSource src = new InputSource(JaxbHelper.class.getResourceAsStream(pathToblocklyXml));
-        //        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-        //
-        //        return (BlockSet) jaxbUnmarshaller.unmarshal(src);
     }
 }

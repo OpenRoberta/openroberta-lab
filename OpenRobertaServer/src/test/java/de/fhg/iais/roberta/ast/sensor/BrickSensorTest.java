@@ -49,17 +49,9 @@ public class BrickSensorTest {
                 + "if SensorExpr [TouchSensor [port=S1]]\n"
                 + ",then\n"
                 + "Var [item] := SensorExpr [BrickSensor [key=ENTER, mode=IS_PRESSED]]\n\n"
-                + "Var [item] := SensorExpr [BrickSensor [key=LEFT, mode=WAIT_FOR_PRESS_AND_RELEASE]]\n\n"
                 + "]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_brick.xml"));
-    }
-
-    @Test
-    public void sensorBrick2() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-26, y=51], BrickSensor [key=ENTER, mode=WAIT_FOR_PRESS_AND_RELEASE]]]]";
-
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_brick2.xml"));
     }
 
     @Test
@@ -71,10 +63,4 @@ public class BrickSensorTest {
     public void reverseTransformation1() throws Exception {
         Helper.assertTransformationIsOk("/ast/sensors/sensor_brick.xml");
     }
-
-    @Test
-    public void reverseTransformation2() throws Exception {
-        Helper.assertTransformationIsOk("/ast/sensors/sensor_brick2.xml");
-    }
-
 }

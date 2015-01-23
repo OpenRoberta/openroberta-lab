@@ -17,9 +17,9 @@ import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
 import de.fhg.iais.roberta.ast.transformer.JaxbBrickConfigTransformer;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.brickconfiguration.BrickConfiguration;
-import de.fhg.iais.roberta.brickconfiguration.ev3.EV3BrickConfiguration;
 import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
+import de.fhg.iais.roberta.ev3.EV3BrickConfiguration;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 

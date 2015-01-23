@@ -13,7 +13,8 @@ public class UltraSonicSensorTest {
 
     @Test
     public void sensorSetUltrasonic() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-72, y=1], UltraSSensor [mode=DISTANCE, port=S4]]]]";
+        String a =
+            "BlockAST [project=[[Location [x=1, y=57], UltraSSensor [mode=DISTANCE, port=S4], Location [x=1, y=98], UltraSSensor [mode=PRESENCE, port=S2]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_setUltrasonic.xml"));
     }
@@ -23,8 +24,10 @@ public class UltraSonicSensorTest {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setUltrasonic.xml");
 
         UltrasonicSensor<Void> cs = (UltrasonicSensor<Void>) transformer.getTree().get(1);
+        UltrasonicSensor<Void> cs1 = (UltrasonicSensor<Void>) transformer.getTree().get(3);
 
         Assert.assertEquals(UltrasonicSensorMode.DISTANCE, cs.getMode());
+        Assert.assertEquals(UltrasonicSensorMode.PRESENCE, cs1.getMode());
     }
 
     @Test
@@ -32,37 +35,15 @@ public class UltraSonicSensorTest {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setUltrasonic.xml");
 
         UltrasonicSensor<Void> cs = (UltrasonicSensor<Void>) transformer.getTree().get(1);
+        UltrasonicSensor<Void> cs1 = (UltrasonicSensor<Void>) transformer.getTree().get(3);
 
         Assert.assertEquals(SensorPort.S4, cs.getPort());
-    }
-
-    @Test
-    public void sensorGetModeUltrasonic() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-72, y=55], UltraSSensor [mode=GET_MODE, port=S4]]]]";
-
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getModeUltrasonic.xml"));
-    }
-
-    @Test
-    public void sensorGetSampleUltrasonic() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-79, y=105], UltraSSensor [mode=GET_SAMPLE, port=S4]]]]";
-
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getSampleUltrasonic.xml"));
+        Assert.assertEquals(SensorPort.S2, cs1.getPort());
     }
 
     @Test
     public void reverseTransformation() throws Exception {
         Helper.assertTransformationIsOk("/ast/sensors/sensor_setUltrasonic.xml");
-    }
-
-    @Test
-    public void reverseTransformation1() throws Exception {
-        Helper.assertTransformationIsOk("/ast/sensors/sensor_getModeUltrasonic.xml");
-    }
-
-    @Test
-    public void reverseTransformation2() throws Exception {
-        Helper.assertTransformationIsOk("/ast/sensors/sensor_getSampleUltrasonic.xml");
     }
 
 }

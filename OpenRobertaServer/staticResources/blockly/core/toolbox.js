@@ -294,56 +294,27 @@ Blockly.Toolbox.populate_ = function() {
             }
             var name = childIn.tagName.toUpperCase();
             if (name == 'CATEGORY') {
-                // console.log('for-Schleife', childIn.getAttribute('name'));
                 // TODO adjust the width of the box to the longest name, later this
                 // should be calculated.
-                var catname = childIn.getAttribute('name');
+                var catMsg = childIn.getAttribute('name');
+                var catname = Blockly.Msg[catMsg];
+                if (!catname) {
+                    catname = catMsg;
+                }
                 // TODO improve handling of Toolbox size variables
                 if (opt_color) {
-
+                    // child categories always have the same colour than the parent
                     var isSub = true;
                 } else {
-
-                    switch (catname) {
-                    // if there is no color until now, pick it
-                    // TODO get the color variable name from the category name (language
-                    // data)
-                    case 'Aktion':
-                        Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(Blockly.CAT_ROBACTIONS_RGB);
-                        break;
-                    case 'Sensoren':
-                        Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(Blockly.CAT_ROBSENSORS_RGB);
-                        break;
-                    case 'Kontrolle':
-                        Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(Blockly.CAT_ROBCONTROLS_RGB);
-                        break;
-                    case 'Logik':
-                        Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(Blockly.CAT_LOGIC_RGB);
-                        break;
-                    case 'Mathematik':
-                        Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(Blockly.CAT_MATH_RGB);
-                        break;
-                    case 'Text':
-                        Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(Blockly.CAT_TEXT_RGB);
-                        break;
-                    case 'Farben':
-                        Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(Blockly.CAT_COLOUR_RGB);
-                        break;
-                    case 'Variablen':
-                        Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(Blockly.CAT_VARIABLES_RGB);
-                        break;
-                    case 'Funktionen':
-                        Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(Blockly.CAT_PROCEDURES_RGB);
-                        break;
-                    case 'Listen':
-                        Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(Blockly.CAT_LISTS_RGB);
-                        break;
-                    default:
+                    var rgbName = 'CAT_' + catMsg.substring(8).toUpperCase() + '_RGB';
+                    var rgbColour = Blockly[rgbName];
+                    if (rgbColour) {
+                        Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(rgbColour);
+                    } else {
                         Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex([ 0, 0, 255 ]);
-                        break;
                     }
                 }
-                var childOut = rootOut.createNode(Blockly.Toolbox.createNodeHtml(childIn.getAttribute('name'), isSub));
+                var childOut = rootOut.createNode(Blockly.Toolbox.createNodeHtml(catname, isSub));
                 childOut.blocks = [];
                 treeOut.add(childOut);
                 var custom = childIn.getAttribute('custom');
@@ -352,7 +323,6 @@ Blockly.Toolbox.populate_ = function() {
                     // Variables and procedures have special categories that are dynamic.
                     childOut.blocks = custom;
                 } else {
-                    // console.log('das ist eine Kategorie mit Subkategorien:');
                     syncTrees(childIn, childOut, Blockly.Toolbox.catcolor);
                 }
             } else if (name == 'BLOCK') {
@@ -361,9 +331,7 @@ Blockly.Toolbox.populate_ = function() {
         }
     }
     // end of function syncTrees
-
     syncTrees(Blockly.languageTree, Blockly.Toolbox.tree_);
-
     if (rootOut.blocks.length) {
         throw 'Toolbox cannot have both blocks and categories in the root level.';
     }
@@ -474,7 +442,7 @@ Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
         return;
     }
     goog.ui.tree.TreeControl.prototype.setSelectedItem.call(this, node);
-    if (node && node.blocks && node.blocks.length) {
+    if (node && node.blocks && node.blocks.length && (node.blocks != 'VARIABLE')) {
         Blockly.Toolbox.flyout_.show(node.blocks, node.color);
         var htmlSelected = node.getHtml().replace('blocklyFlyoutBackground', 'blocklyFlyoutBackgroundSelected');
         node.setHtml(htmlSelected);
@@ -540,8 +508,24 @@ Blockly.Toolbox.TreeNode.prototype.getExpandIconElement = function() {
  * @override
  */
 Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(e) {
-    // Expand icon.
-    if (this.hasChildren() && this.isUserCollapsible_) {
+    // Expand icon and check for dynamic subnodes (so far only for variables).
+    if (this.blocks == 'VARIABLE') {
+        var variablesDeclared = true;
+        if (this.getExpanded()) {
+            var children = this.removeChildren(true);
+            for (var i = 0; i < children.length; i++) {
+                children[i].dispose();
+            }
+        } else {
+            variablesDeclared = Blockly.Toolbox.addVariableSubNodes(this);
+        }
+        if (variablesDeclared) {
+            this.toggle();
+        } else {
+            Blockly.Toolbox.showNoVariable();
+        }
+        this.select();
+    } else if (this.hasChildren() && this.isUserCollapsible_) {
         this.toggle();
         this.select();
     } else if (this.isSelected()) {
@@ -563,3 +547,61 @@ Blockly.Toolbox.TreeNode.prototype.onMouseDown = function(e) {
 Blockly.Toolbox.TreeNode.prototype.onDoubleClick_ = function(e) {
     // NOP.
 };
+
+/**
+ * Add subnodes to node variable, if variables are declared: - global variables
+ * (in start block) - local variables (in procedure blocks) - loop variables (in
+ * loops)
+ * 
+ * @param {goog.ui.tree.BaseNode}
+ *            node The parent item.
+ * 
+ * @return {boolean} true if subnodes have been added, false otherwise.
+ */
+Blockly.Toolbox.addVariableSubNodes = function(node) {
+    var subNodePresent = false;
+    Blockly.Toolbox.catcolor = goog.color.rgbArrayToHex(Blockly.CAT_VARIABLE_RGB);
+    var globalVariables = Blockly.Variables.allGlobalVariables();
+    if (globalVariables.length > 0) {
+        var globalVariableNode = Blockly.Toolbox.tree_.createNode(Blockly.Toolbox.createNodeHtml(Blockly.Msg.TOOLBOX_GLOBAL_VARIABLE, true));
+        globalVariableNode.blocks = 'GLOBAL_VARIABLE';
+        node.addChild(globalVariableNode, true);
+        subNodePresent = true;
+    }
+    var localVariables = Blockly.Variables.allLocalVariables();
+    if (localVariables.length > 0) {
+        var procName = null;
+        for (var i = 0; i < localVariables.length; i++) {
+            if (procName != localVariables[i][0]) {
+                procName = localVariables[i][0];
+                var procNode = Blockly.Toolbox.tree_.createNode(Blockly.Toolbox.createNodeHtml(procName, true));
+                procNode.blocks = procName;
+                node.addChild(procNode, true);
+                subNodePresent = true;
+            }
+        }
+    }
+    var loopVariables = Blockly.Variables.allLoopVariables();
+    if (loopVariables.length > 0) {
+        var loopVariableNode = Blockly.Toolbox.tree_.createNode(Blockly.Toolbox.createNodeHtml(Blockly.Msg.TOOLBOX_LOOP_VARIABLE, true));//Blockly.Msg.TOOLBOX_LOOP_VARIABLE, true));
+        loopVariableNode.blocks = 'LOOP_VARIABLE';
+        node.addChild(loopVariableNode, true);
+        subNodePresent = true;
+    }
+    return subNodePresent;
+};
+
+/**
+ * Show help from start block, if no variable is already declared.
+ * 
+ */
+Blockly.Toolbox.showNoVariable = function() {
+    var topBlocks = Blockly.getMainWorkspace().getTopBlocks(true);
+    for (var i = 0; i < topBlocks.length; i++) {
+        var block = topBlocks[i];
+        if (block.type == 'robControls_start') {
+            block.help.iconClick_();
+            return;
+        }
+    }
+}

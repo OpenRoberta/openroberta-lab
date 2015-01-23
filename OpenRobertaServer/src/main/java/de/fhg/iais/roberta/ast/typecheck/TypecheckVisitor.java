@@ -38,6 +38,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.LenghtOfIsEmptyFunct;
@@ -53,6 +54,8 @@ import de.fhg.iais.roberta.ast.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathSingleFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodReturn;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
@@ -72,6 +75,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
@@ -567,6 +571,30 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     @Override
     public BlocklyType visitTextJoinFunct(TextJoinFunct<BlocklyType> textJoinFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitWaitTimeStmt(WaitTimeStmt<BlocklyType> waitTimeStmt) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitVarDeclaration(VarDeclaration<BlocklyType> var) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitMethodVoid(MethodVoid<BlocklyType> methodVoid) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitMethodReturn(MethodReturn<BlocklyType> methodReturn) {
         // TODO Auto-generated method stub
         return null;
     }

@@ -671,8 +671,8 @@ Blockly.Block.prototype.onMouseUp_ = function(e) {
             Blockly.highlightedConnection_.unhighlight();
             Blockly.highlightedConnection_ = null;
         }
-        // Check if this block is part of a task
         if (Blockly.selected) {
+            // Check if this block is part of a task
             var topBlocks = Blockly.getMainWorkspace().getTopBlocks(true);
             var rootBlock = Blockly.selected.getRootBlock();
             var found = false;
@@ -681,8 +681,8 @@ Blockly.Block.prototype.onMouseUp_ = function(e) {
                 var disabled = true;
                 while (block) {
                     if (block == rootBlock) {
-                        if (block.type == 'robControls_activity' || block.type == 'robControls_start' || block.type == 'procedures_defnoreturn'
-                                || block.type == 'procedures_defreturn' || block.type == 'robBrick_EV3-Brick') {
+                        if (block.type == 'robControls_activity' || block.type == 'robControls_start' || block.type == 'robProcedures_defnoreturn'
+                                || block.type == 'robProcedures_defreturn' || block.type == 'robBrick_EV3-Brick') {
                             disabled = false;
                         }
                         found = true;
@@ -726,8 +726,7 @@ Blockly.Block.prototype.duplicate_ = function() {
     var xmlBlock = Blockly.Xml.blockToDom_(this, statement_list);
     statement_list.push(xmlBlock);
     Blockly.Xml.deleteNext(statement_list);
-    var newBlock = Blockly.Xml.domToBlock(
-    /** @type {!Blockly.Workspace} */(this.workspace), statement_list);
+    var newBlock = Blockly.Xml.domToBlock((this.workspace), statement_list);
     // Move the duplicate next to the old block.
     var xy = this.getRelativeToSurfaceXY();
     if (Blockly.RTL) {
@@ -2058,6 +2057,7 @@ Blockly.Block.prototype.setHelp = function(help) {
 
 /**
  * Returns the comment on this block (or '' if none).
+ * 
  * @return {string} Block's comment.
  */
 Blockly.Block.prototype.getCommentText = function() {
@@ -2071,7 +2071,9 @@ Blockly.Block.prototype.getCommentText = function() {
 
 /**
  * Set this block's comment text.
- * @param {?string} text The text, or null to delete.
+ * 
+ * @param {?string}
+ *            text The text, or null to delete.
  */
 Blockly.Block.prototype.setCommentText = function(text) {
     var changedState = false;
@@ -2080,7 +2082,7 @@ Blockly.Block.prototype.setCommentText = function(text) {
             this.comment = new Blockly.Comment(this);
             changedState = true;
         }
-        this.comment.setText(/** @type {string} */(text));
+        this.comment.setText((text));
     } else {
         if (this.comment) {
             this.comment.dispose();
@@ -2098,7 +2100,9 @@ Blockly.Block.prototype.setCommentText = function(text) {
 
 /**
  * Set this block's warning text.
- * @param {?string} text The text, or null to delete.
+ * 
+ * @param {?string}
+ *            text The text, or null to delete.
  */
 Blockly.Block.prototype.setWarningText = function(text) {
     if (this.isInFlyout) {
@@ -2110,7 +2114,7 @@ Blockly.Block.prototype.setWarningText = function(text) {
             this.warning = new Blockly.Warning(this);
             changedState = true;
         }
-        this.warning.setText(/** @type {string} */(text));
+        this.warning.setText((text));
     } else {
         if (this.warning) {
             this.warning.dispose();
@@ -2140,7 +2144,7 @@ Blockly.Block.prototype.setErrorText = function(text) {
             this.error = new Blockly.Error(this);
             changedState = true;
         }
-        this.error.setText(/** @type {string} */(text));
+        this.error.setText((text));
     } else {
         if (this.error) {
             this.error.dispose();

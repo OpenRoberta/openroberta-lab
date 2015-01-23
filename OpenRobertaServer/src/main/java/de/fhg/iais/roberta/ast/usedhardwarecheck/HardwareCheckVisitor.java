@@ -38,6 +38,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.LenghtOfIsEmptyFunct;
@@ -53,6 +54,8 @@ import de.fhg.iais.roberta.ast.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathSingleFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodReturn;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
@@ -73,13 +76,14 @@ import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
-import de.fhg.iais.roberta.hardwarecomponents.ev3.HardwareComponentEV3Sensor;
+import de.fhg.iais.roberta.ev3.EV3Sensors;
 
 /**
  * This visitor collects information for used sensors in blockly program.
@@ -87,7 +91,7 @@ import de.fhg.iais.roberta.hardwarecomponents.ev3.HardwareComponentEV3Sensor;
  * @author kcvejoski
  */
 public class HardwareCheckVisitor implements AstVisitor<Void> {
-    private final Set<HardwareComponentEV3Sensor> usedSensors = new LinkedHashSet<HardwareComponentEV3Sensor>();
+    private final Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>();
 
     /**
      * Returns set of used sensor in Blockly program.
@@ -95,7 +99,7 @@ public class HardwareCheckVisitor implements AstVisitor<Void> {
      * @param phrases list of {@link Phrase} representing blockly program,
      * @return set of used sensors
      */
-    public static Set<HardwareComponentEV3Sensor> check(List<Phrase<Void>> phrases) {
+    public static Set<EV3Sensors> check(List<Phrase<Void>> phrases) {
         Assert.isTrue(phrases.size() >= 1);
         HardwareCheckVisitor checkVisitor = new HardwareCheckVisitor();
         for ( Phrase<Void> phrase : phrases ) {
@@ -104,7 +108,7 @@ public class HardwareCheckVisitor implements AstVisitor<Void> {
         return checkVisitor.getUsedSensors();
     }
 
-    private Set<HardwareComponentEV3Sensor> getUsedSensors() {
+    private Set<EV3Sensors> getUsedSensors() {
         return this.usedSensors;
     }
 
@@ -140,6 +144,12 @@ public class HardwareCheckVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitVar(Var<Void> var) {
+        return null;
+    }
+
+    @Override
+    public Void visitVarDeclaration(VarDeclaration<Void> var) {
+        var.getValue().visit(this);
         return null;
     }
 
@@ -351,7 +361,7 @@ public class HardwareCheckVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        this.usedSensors.add(HardwareComponentEV3Sensor.EV3_COLOR_SENSOR);
+        this.usedSensors.add(EV3Sensors.EV3_COLOR_SENSOR);
         return null;
     }
 
@@ -362,13 +372,13 @@ public class HardwareCheckVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        this.usedSensors.add(HardwareComponentEV3Sensor.EV3_GYRO_SENSOR);
+        this.usedSensors.add(EV3Sensors.EV3_GYRO_SENSOR);
         return null;
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.usedSensors.add(HardwareComponentEV3Sensor.EV3_IR_SENSOR);
+        this.usedSensors.add(EV3Sensors.EV3_IR_SENSOR);
         return null;
     }
 
@@ -379,13 +389,13 @@ public class HardwareCheckVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.usedSensors.add(HardwareComponentEV3Sensor.EV3_TOUCH_SENSOR);
+        this.usedSensors.add(EV3Sensors.EV3_TOUCH_SENSOR);
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.usedSensors.add(HardwareComponentEV3Sensor.EV3_ULTRASONIC_SENSOR);
+        this.usedSensors.add(EV3Sensors.EV3_ULTRASONIC_SENSOR);
         return null;
     }
 
@@ -397,6 +407,7 @@ public class HardwareCheckVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
+        mainTask.getVariables().visit(this);
         return null;
     }
 
@@ -413,6 +424,12 @@ public class HardwareCheckVisitor implements AstVisitor<Void> {
     @Override
     public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
         waitStmt.getStatements().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
+        waitTimeStmt.getTime().visit(this);
         return null;
     }
 
@@ -546,4 +563,17 @@ public class HardwareCheckVisitor implements AstVisitor<Void> {
         }
         return null;
     }
+
+    @Override
+    public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

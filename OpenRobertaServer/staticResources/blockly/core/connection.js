@@ -108,8 +108,7 @@ Blockly.Connection.prototype.connect = function(otherConnection) {
             // block.  Since this block may be a row, walk down to the end.
             var newBlock = this.sourceBlock_;
             var connection;
-            while (connection = Blockly.Connection.singleConnection_(
-            /** @type {!Blockly.Block} */(newBlock), orphanBlock)) {
+            while (connection = Blockly.Connection.singleConnection_((newBlock), orphanBlock)) {
                 // '=' is intentional in line above.
                 if (connection.targetBlock()) {
                     newBlock = connection.targetBlock();
@@ -313,6 +312,7 @@ Blockly.Connection.prototype.bumpAwayFrom_ = function(staticConnection) {
         dx = -dx;
     }
     rootBlock.moveBy(dx, dy);
+    rootBlock.setDisabled(true);
 };
 
 /**
@@ -528,6 +528,9 @@ Blockly.Connection.prototype.closest = function(maxLimit, dx, dy) {
  */
 Blockly.Connection.prototype.checkType_ = function(otherConnection) {
     if (!this.check_ || !otherConnection.check_) {
+        // special case for variable declarations
+        if ((this.check_ == 'declaration_only' && !otherConnection.check_) || (!this.check_ && otherConnection.check_ == 'declaration_only'))
+            return false;
         // One or both sides are promiscuous enough that anything will fit.
         return true;
     }

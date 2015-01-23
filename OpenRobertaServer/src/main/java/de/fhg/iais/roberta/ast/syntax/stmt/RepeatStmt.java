@@ -4,10 +4,12 @@ import java.util.Locale;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
+import de.fhg.iais.roberta.ast.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
@@ -134,38 +136,39 @@ public class RepeatStmt<V> extends Stmt<V> {
 
         switch ( getMode() ) {
             case TIMES:
-                AstJaxbTransformerHelper.addValue(jaxbDestination, "TIMES", ((Binary<?>) ((ExprList<?>) getExpr()).get().get(1)).getRight());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.TIMES, ((Binary<?>) ((ExprList<?>) getExpr()).get().get(1)).getRight());
                 break;
 
             case WAIT:
             case UNTIL:
-                AstJaxbTransformerHelper.addField(jaxbDestination, "MODE", getMode().name());
-                AstJaxbTransformerHelper.addValue(jaxbDestination, "BOOL", ((Unary<?>) getExpr()).getExpr());
+                AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().name());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.BOOL, ((Unary<?>) getExpr()).getExpr());
                 break;
 
             case WHILE:
-                AstJaxbTransformerHelper.addField(jaxbDestination, "MODE", getMode().name());
-                AstJaxbTransformerHelper.addValue(jaxbDestination, "BOOL", getExpr());
+                AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().name());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.BOOL, getExpr());
                 break;
 
             case FOR:
                 ExprList<?> exprList = (ExprList<?>) getExpr();
-                AstJaxbTransformerHelper.addField(jaxbDestination, "VAR", ((Var<?>) ((Binary<?>) exprList.get().get(0)).getLeft()).getValue());
-                AstJaxbTransformerHelper.addValue(jaxbDestination, "FROM", ((Binary<?>) exprList.get().get(0)).getRight());
-                AstJaxbTransformerHelper.addValue(jaxbDestination, "TO", ((Binary<?>) exprList.get().get(1)).getRight());
-                AstJaxbTransformerHelper.addValue(jaxbDestination, "BY", ((Binary<?>) exprList.get().get(2)).getRight());
+                AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VAR, ((VarDeclaration<?>) exprList.get().get(0)).getName());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.FROM_, ((VarDeclaration<?>) exprList.get().get(0)).getValue());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.TO_, ((Binary<?>) exprList.get().get(1)).getRight());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.BY_, ((Binary<?>) exprList.get().get(2)).getRight());
                 break;
 
             case FOR_EACH:
                 Binary<?> exprBinary = (Binary<?>) getExpr();
-                AstJaxbTransformerHelper.addField(jaxbDestination, "VAR", ((Var<?>) exprBinary.getLeft()).getValue());
-                AstJaxbTransformerHelper.addValue(jaxbDestination, "LIST", exprBinary.getRight());
+                AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.TYPE, ((Var<?>) exprBinary.getLeft()).getTypeVar().getBlocklyName());
+                AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VAR, ((Var<?>) exprBinary.getLeft()).getValue());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.LIST_, exprBinary.getRight());
                 break;
 
             default:
                 break;
         }
-        AstJaxbTransformerHelper.addStatement(jaxbDestination, "DO", getList());
+        AstJaxbTransformerHelper.addStatement(jaxbDestination, BlocklyConstants.DO, getList());
 
         return jaxbDestination;
     }

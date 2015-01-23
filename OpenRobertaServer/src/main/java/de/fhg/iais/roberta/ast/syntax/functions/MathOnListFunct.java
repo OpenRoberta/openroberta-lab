@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
@@ -82,8 +83,8 @@ public class MathOnListFunct<V> extends Function<V> {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        AstJaxbTransformerHelper.addField(jaxbDestination, "OP", getFunctName().name());
-        AstJaxbTransformerHelper.addValue(jaxbDestination, "LIST", getParam().get(0));
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.OP_, getFunctName().name());
+        AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.LIST_, getParam().get(0));
         return jaxbDestination;
     }
 }

@@ -12,13 +12,13 @@ import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
-import de.fhg.iais.roberta.ast.syntax.expr.Var.TypeVar;
 import de.fhg.iais.roberta.ast.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt.Mode;
 import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
+import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
 import de.fhg.iais.roberta.textly.generated.TextlyBaseVisitor;
 import de.fhg.iais.roberta.textly.generated.TextlyLexer;
 import de.fhg.iais.roberta.textly.generated.TextlyParser;
@@ -65,7 +65,7 @@ public class TextlyTreeToAst extends TextlyBaseVisitor<Phrase<Void>> {
         String op = ctx.getChild(1).getText();
         Phrase<Void> left = visit(ctx.getChild(0));
         Phrase<Void> right = visit(ctx.getChild(2));
-        return Binary.make(Binary.Op.get(op), (Expr<Void>) left, (Expr<Void>) right, null, null);
+        return Binary.make(Binary.Op.get(op), (Expr<Void>) left, (Expr<Void>) right, "", null, null);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class TextlyTreeToAst extends TextlyBaseVisitor<Phrase<Void>> {
 
     @Override
     public Phrase<Void> visitVarName(VarNameContext ctx) {
-        return Var.make(ctx.VAR().getText(), TypeVar.INTEGER, null, null);
+        return Var.make(BlocklyType.ANY, ctx.VAR().getText(), null, null);
     }
 
     @Override
@@ -146,7 +146,7 @@ public class TextlyTreeToAst extends TextlyBaseVisitor<Phrase<Void>> {
 
     @Override
     public Phrase<Void> visitAssignStmt(AssignStmtContext ctx) {
-        Phrase<Void> name = Var.make(ctx.VAR().getText(), TypeVar.INTEGER, null, null);
+        Phrase<Void> name = Var.make(BlocklyType.ANY, ctx.VAR().getText(), null, null);
         Phrase<Void> expr = visit(ctx.expr());
         return AssignStmt.make((Var<Void>) name, (Expr<Void>) expr, null, null);
     }

@@ -8,23 +8,9 @@ public class GyroSensorTest {
 
     @Test
     public void setGyro() throws Exception {
-        String a = "\nhal.setGyroSensorMode(SensorPort.S2, GyroSensorMode.ANGLE);";
+        String a = "\nhal.getGyroSensorValue(SensorPort.S2, GyroSensorMode.ANGLE)" + "hal.getGyroSensorValue(SensorPort.S4, GyroSensorMode.RATE)";
 
         Helper.assertCodeIsOk(a, "/ast/sensors/sensor_setGyro.xml");
-    }
-
-    @Test
-    public void getGyroSensorModeName() throws Exception {
-        String a = "\nhal.getGyroSensorModeName(SensorPort.S2)";
-
-        Helper.assertCodeIsOk(a, "/ast/sensors/sensor_getModeGyro.xml");
-    }
-
-    @Test
-    public void getGyroSensorValue() throws Exception {
-        String a = "\nhal.getGyroSensorValue(SensorPort.S2)";
-
-        Helper.assertCodeIsOk(a, "/ast/sensors/sensor_getSampleGyro.xml");
     }
 
     @Test

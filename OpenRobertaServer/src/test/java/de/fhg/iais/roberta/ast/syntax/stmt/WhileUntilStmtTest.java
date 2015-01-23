@@ -32,7 +32,7 @@ public class WhileUntilStmtTest {
         String a = "" //
             + "if ( TRUE ) {\n"
             + "\nwhile ( true ) {\n"
-            + "    System.out.println(1);\n"
+            + "    System.out.println(Pickcolor.GREEN);\n"
             + "}}\n"
             + "if ( TRUE ) {\n"
             + "while ( true ) {\n"

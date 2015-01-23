@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * Modes in which the sensor can operate.
  */
 public enum UltrasonicSensorMode {
-    DISTANCE( "Distance" ), PRESENCE( "Listen" ), GET_MODE(), GET_SAMPLE();
+    DISTANCE( "Distance" ), PRESENCE( "Listen" );
 
     private final String[] values;
 
@@ -30,7 +30,7 @@ public enum UltrasonicSensorMode {
     /**
      * get mode from {@link UltrasonicSensorMode} from string parameter. It is possible for one mode to have multiple string mappings.
      * Throws exception if the mode does not exists.
-     * 
+     *
      * @param name of the mode
      * @return mode from the enum {@link UltrasonicSensorMode}
      */

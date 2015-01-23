@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.action;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
@@ -83,12 +84,12 @@ public final class MotorOnAction<V> extends Action<V> {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        AstJaxbTransformerHelper.addField(jaxbDestination, "MOTORPORT", getPort().name());
-        AstJaxbTransformerHelper.addValue(jaxbDestination, "POWER", getParam().getSpeed());
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MOTORPORT, getPort().name());
+        AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.POWER, getParam().getSpeed());
 
         if ( getParam().getDuration() != null ) {
-            AstJaxbTransformerHelper.addField(jaxbDestination, "MOTORROTATION", getDurationMode().name());
-            AstJaxbTransformerHelper.addValue(jaxbDestination, "VALUE", getDurationValue());
+            AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MOTORROTATION, getDurationMode().name());
+            AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, getDurationValue());
         }
 
         return jaxbDestination;

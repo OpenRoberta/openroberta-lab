@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
@@ -65,7 +66,7 @@ public class StringConst<V> extends Expr<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        AstJaxbTransformerHelper.addField(jaxbDestination, "TEXT", getValue());
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.TEXT, getValue());
         return jaxbDestination;
     }
 }

@@ -285,8 +285,7 @@ Blockly.Tooltip.show_ = function() {
         return;
     }
     // Erase all existing text.
-    goog.dom.removeChildren(
-    /** @type {!Element} */ (Blockly.Tooltip.svgText_));
+    goog.dom.removeChildren((Blockly.Tooltip.svgText_));
     // Get the new text.
     var tip = Blockly.Tooltip.element_.tooltip;
     if (goog.isFunction(tip)) {

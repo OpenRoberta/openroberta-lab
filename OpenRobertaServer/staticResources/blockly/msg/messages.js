@@ -49,7 +49,7 @@ goog.require('Blockly.Msg');
 /// default name - A simple, general default name for a variable, preferably short.
 /// For more context, see
 /// [[Translating:Blockly#infrequent_message_types]].
-Blockly.Msg.VARIABLES_DEFAULT_NAME = 'item';
+Blockly.Msg.VARIABLES_DEFAULT_NAME = 'variableName';
 
 // Context menus.
 /// context menu - Make a copy of the selected block (and any blocks it contains).
@@ -815,14 +815,14 @@ Blockly.Msg.TEXT_PROMPT_TOOLTIP_TEXT = 'Prompt for user for some text.';
 /// url - Information on empty lists.
 Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = 'https://en.wikipedia.org/wiki/Linked_list#Empty_lists';
 /// block text - See [https://code.google.com/p/blockly/wiki/Lists#create_empty_list https://code.google.com/p/blockly/wiki/Lists#create_empty_list].
-Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = 'create empty list';
+Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = 'empty list';
 /// block text - See [https://code.google.com/p/blockly/wiki/Lists#create_empty_list https://code.google.com/p/blockly/wiki/Lists#create_empty_list].
 Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP = 'Returns a list, of length 0, containing no data records';
 
 /// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#create_list_with https://code.google.com/p/blockly/wiki/Lists#create_list_with].
 Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP = 'Create a list with any number of items.';
 /// block text - See [https://code.google.com/p/blockly/wiki/Lists#create_list_with https://code.google.com/p/blockly/wiki/Lists#create_list_with].
-Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH = 'create list with';
+Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH = 'list : %1 \u2190 %2 repeated %3 times';
 /// block text - This appears in a sub-block when [https://code.google.com/p/blockly/wiki/Lists#changing_number_of_inputs changing the number of inputs in a ''''create list with'''' block].
 Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TITLE_ADD = 'list';
 /// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#changing_number_of_inputs https://code.google.com/p/blockly/wiki/Lists#changing_number_of_inputs].
@@ -830,6 +830,7 @@ Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TOOLTIP = 'Add, remove, or reorder secti
 Blockly.Msg.LISTS_CREATE_WITH_ITEM_TITLE = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 /// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#changing_number_of_inputs https://code.google.com/p/blockly/wiki/Lists#changing_number_of_inputs].
 Blockly.Msg.LISTS_CREATE_WITH_ITEM_TOOLTIP = 'Add an item to the list.';
+Blockly.Msg.LISTS_CREATE_TITLE = 'list';
 
 /// url - Information about [https://code.google.com/p/blockly/wiki/Lists#create_list_with creating a list with multiple copies of a single item].
 Blockly.Msg.LISTS_REPEAT_HELPURL = 'https://code.google.com/p/blockly/wiki/Lists#create_list_with';
@@ -838,7 +839,7 @@ Blockly.Msg.LISTS_REPEAT_TOOLTIP = 'Creates a list consisting of the given value
 /// block text - See [https://code.google.com/p/blockly/wiki/Lists#create_list_with
 /// https://code.google.com/p/blockly/wiki/Lists#create_list_with].
 ///\n\nParameters:\n* %1 - the item (text) to be repeated\n* %2 - the number of times to repeat it
-Blockly.Msg.LISTS_REPEAT_TITLE = 'create list with item %1 repeated %2 times';
+Blockly.Msg.LISTS_REPEAT_TITLE = 'create %1 list with item %2 repeated %3 times';
 
 /// url - Information about how the length of a list is computed (i.e., by the total number of elements, not the number of different elements).
 Blockly.Msg.LISTS_LENGTH_HELPURL = 'https://code.google.com/p/blockly/wiki/Lists#length_of';
@@ -1046,10 +1047,13 @@ Blockly.Msg.LISTS_GET_SUBLIST_TOOLTIP = 'Creates a copy of the specified portion
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = '';
 
 // Variables Blocks.
+Blockly.Msg.VARIABLES_TITLE = 'variable';
+Blockly.Msg.VARIABLES_CREATE_TITLE = 'Create';
+Blockly.Msg.VARIABLES_CREATE_WITH = 'with';
 /// url - Information about ''variables'' in computer programming.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Variable_(computer_science) https://en.wikipedia.org/wiki/Variable_(computer_science)], if it exists.
 Blockly.Msg.VARIABLES_GET_HELPURL = 'https://code.google.com/p/blockly/wiki/Variables#Get';
 /// block text - This precedes the name of a variable when getting its values.  In most (all?) languages, it should be the empty string.  If unsure, ask yourself if any word should go before "x" in the expression "x + 1".
-Blockly.Msg.VARIABLES_GET_TITLE = '';
+Blockly.Msg.VARIABLES_GET_TITLE = 'get';
 Blockly.Msg.VARIABLES_GET_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 /// block text - This follows the name of a variable.  In most (all?) languages, it should be the empty string.  If unsure, ask yourself if any word should go after "x" in the expression "x + 1".
 Blockly.Msg.VARIABLES_GET_TAIL = '';
@@ -1058,20 +1062,24 @@ Blockly.Msg.VARIABLES_GET_TOOLTIP = 'Returns the value of this variable.';
 /// context menu - Selecting this creates a block to set (change) the value of this variable.
 /// \n\nParameters:\n* %1 - the name of the variable.
 Blockly.Msg.VARIABLES_GET_CREATE_SET = 'Create "set %1"';
-
 /// url - Information about ''variables'' in computer programming.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Variable_(computer_science) https://en.wikipedia.org/wiki/Variable_(computer_science)], if it exists.
 Blockly.Msg.VARIABLES_SET_HELPURL = 'https://code.google.com/p/blockly/wiki/Variables#Set';
 /// block text - The imperative or infinitive form of the verb "set", as in: '''set''' [the value of] x to 7.
-Blockly.Msg.VARIABLES_SET_TITLE = 'set';
+Blockly.Msg.VARIABLES_SET_TITLE = 'set %1 to %2';
 Blockly.Msg.VARIABLES_SET_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
-/// block text - The word that goes after the name of the variable and before its new
-/// value in: set [the value of] x '''to''' 7.
-Blockly.Msg.VARIABLES_SET_TAIL = 'to';
 /// tooltip - This initializes or changes the value of the named variable.
 Blockly.Msg.VARIABLES_SET_TOOLTIP = 'Sets this variable to be equal to the input.';
 /// context menu - Selecting this creates a block to get (change) the value of
 /// this variable.\n\nParameters:\n* %1 - the name of the variable.
 Blockly.Msg.VARIABLES_SET_CREATE_GET = 'Create "get %1"';
+Blockly.Msg.VARIABLES_TYPE_NUMBER = 'Number';
+Blockly.Msg.VARIABLES_TYPE_BOOLEAN = 'Boolean';
+Blockly.Msg.VARIABLES_TYPE_STRING = 'String';
+Blockly.Msg.VARIABLES_TYPE_ARRAY_NUMBER = 'List Number';
+Blockly.Msg.VARIABLES_TYPE_ARRAY_STRING = 'List String';
+Blockly.Msg.VARIABLES_TYPE_ARRAY_BOOLEAN = 'List Boolean';
+Blockly.Msg.VARIABLES_TYPE_ARRAY_COLOUR = 'List Colour';
+Blockly.Msg.VARIABLES_TYPE_COLOUR = 'Colour';
 
 // Procedures Blocks.
 /// url - Information about defining [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that do not have return values.
@@ -1084,7 +1092,7 @@ Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE = 'to';
 /// function definition block, as shown on
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#w7cfju this block].
 /// The user will replace it with the function's name.
-Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = 'do something';
+Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = 'doSomething';
 /// block text - This precedes the list of parameters to a function.  See
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#6ot5y5 this sample
 /// function with parameters].
@@ -1158,6 +1166,9 @@ Blockly.Msg.PROCEDURES_CREATE_DO = 'Create "%1"';
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = 'If a value is true, then return a second value.';
 /// warning - This appears if the user tries to use this block outside of a function definition.
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = 'Warning: This block may be used only within a function definition.';
+Blockly.Msg.PROCEDURES_VARIABLES_ERROR = 'Error: This block may be used only within the "';
+Blockly.Msg.PROCEDURES_VARIABLES_LOOP_ERROR = 'Error: This block may be used only within a loop which delcares ';
+Blockly.Msg.PROCEDURES_TITLE = '" procedure';
 Blockly.Msg.YES = 'yes';
 Blockly.Msg.NO = 'no';
 Blockly.Msg.ON = 'on';
@@ -1215,7 +1226,7 @@ Blockly.Msg.BRICKLIGHT_COLOR = 'colour';
 Blockly.Msg.BRICKLIGHT_GREEN = 'green';
 Blockly.Msg.BRICKLIGHT_ORANGE = 'orange';
 Blockly.Msg.BRICKLIGHT_RED = 'red';
-Blockly.Msg.WAIT = 'wait until';
+Blockly.Msg.WAIT = 'wait';
 Blockly.Msg.WAIT_FOREVER = 'indefinitely';
 Blockly.Msg.WAIT_OR = 'or wait for';
 Blockly.Msg.SENSOR_ULTRASONIC = 'ultrasonic sensor';
@@ -1241,7 +1252,7 @@ Blockly.Msg.SENSOR_GET_MODE = 'get mode';
 Blockly.Msg.SENSOR_GET_SAMPLE = 'get value';
 Blockly.Msg.SENSOR_IS_PRESSED = 'pressed?';
 Blockly.Msg.SENSOR_PRESSED = ' (pressed)';
-Blockly.Msg.SENSOR_WAIT = 'wait until';
+Blockly.Msg.WAIT_UNTIL = 'wait until';
 Blockly.Msg.SENSOR_WAIT_PRESSED = 'pressed';
 Blockly.Msg.SENSOR_WAIT_PRESSED_RELEASED = 'pressed or released';
 Blockly.Msg.START = 'start';
@@ -1262,7 +1273,28 @@ Blockly.Msg.MODE_RATE = 'rate';
 Blockly.Msg.LOOP_COUNT = 'number';
 Blockly.Msg.LOOP = 'repeat until';
 Blockly.Msg.LOOP_FOREVER = 'repeat indefinitely';
+Blockly.Msg.TOOLBOX_ACTION = 'Action';
+Blockly.Msg.TOOLBOX_SENSOR = 'Sensors';
+Blockly.Msg.TOOLBOX_CONTROL = 'Control';
+Blockly.Msg.TOOLBOX_LOGIC = 'Logic';
+Blockly.Msg.TOOLBOX_MATH = 'Math';
+Blockly.Msg.TOOLBOX_TEXT = 'Text';
+Blockly.Msg.TOOLBOX_LIST = 'Lists';
+Blockly.Msg.TOOLBOX_COLOUR = 'Colours';
+Blockly.Msg.TOOLBOX_VARIABLE = 'Variables';
+Blockly.Msg.TOOLBOX_PROCEDURE = 'Functions';
+Blockly.Msg.TOOLBOX_WAIT = 'Wait';
+Blockly.Msg.TOOLBOX_LOOP = 'Loops';
+Blockly.Msg.TOOLBOX_DECISION = 'Decisions';
+Blockly.Msg.TOOLBOX_LIGHT = 'Lights';
+Blockly.Msg.TOOLBOX_SOUND = 'Sounds';
+Blockly.Msg.TOOLBOX_DISPLAY = 'Display';
+Blockly.Msg.TOOLBOX_DRIVE = 'Drive';
+Blockly.Msg.TOOLBOX_MOVE = 'Move';
+Blockly.Msg.TOOLBOX_GLOBAL_VARIABLE = 'global Variables';
+Blockly.Msg.TOOLBOX_LOOP_VARIABLE = 'loop Variables';
 //
+Blockly.Msg.START_HELP = 'here comes your help text';
 Blockly.Msg.MOTORDIFF_ON_HELP = 'here comes your help text';
 Blockly.Msg.MOTORDIFF_ON_FOR_HELP = 'here comes your help text';
 Blockly.Msg.MOTORDIFF_STOP_HELP = 'here comes your help text';

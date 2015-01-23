@@ -23,7 +23,8 @@ public class BrickCommunicationData {
     private final String token;
     private final String robotIdentificator;
     private final String robotName;
-    private final String version;
+    private final String menuversion;
+    private final String lejosversion;
 
     private Clock clock;
     private State state;
@@ -34,11 +35,12 @@ public class BrickCommunicationData {
     private String programName;
     private String brickConfigurationName;
 
-    public BrickCommunicationData(String token, String robotIdentificator, String robotName, String version) {
+    public BrickCommunicationData(String token, String robotIdentificator, String robotName, String menuversion, String lejosversion) {
         this.token = token;
         this.robotIdentificator = robotIdentificator;
         this.robotName = robotName;
-        this.version = version;
+        this.menuversion = menuversion;
+        this.lejosversion = lejosversion;
 
         this.clock = Clock.start();
         this.state = State.WAIT_FOR_TOKENAPPROVAL_FROM_USER;
@@ -149,17 +151,17 @@ public class BrickCommunicationData {
      *
      * @return the state of the brick
      */
-    public synchronized String updateButtonPressed() {
+    public synchronized boolean firmwareUpdate() {
         if ( !isBrickWaitingForPushCommand() ) {
             LOG.error("UPDATE button pressed, but brick is not waiting. Bad luck!");
-            return "robot.ev3.not_waiting";
+            return false;
         } else {
             LOG.debug("UPDATE button pressed. Wait state entered " + this.clock.elapsedSecFormatted() + " ago");
             this.command = "update";
             this.clock = Clock.start();
             this.state = State.BRICK_IS_BUSY;
             notifyAll();
-            return "robot.ev3.push.update";
+            return true;
         }
     }
 

@@ -46,7 +46,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary.Op;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
-import de.fhg.iais.roberta.ast.syntax.expr.Var.TypeVar;
+import de.fhg.iais.roberta.ast.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.ast.syntax.functions.FunctionNames;
 import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
@@ -63,6 +63,8 @@ import de.fhg.iais.roberta.ast.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathSingleFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodReturn;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickKey;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
@@ -91,10 +93,12 @@ import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
+import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Field;
@@ -156,6 +160,8 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
         String op;
         MotionParam<V> mp;
         MotorDuration<V> md;
+
+        boolean isGlobalVariable;
 
         switch ( block.getType() ) {
         // ACTION
@@ -291,69 +297,29 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 port = extractField(fields, BlocklyConstants.SENSORPORT);
                 return TouchSensor.make(SensorPort.get(port), properties, comment);
 
-            case "robSensors_ultrasonic_setMode":
+            case "robSensors_ultrasonic_getSample":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, BlocklyConstants.SENSORPORT);
                 mode = extractField(fields, BlocklyConstants.MODE_);
                 return UltrasonicSensor.make(UltrasonicSensorMode.get(mode), SensorPort.get(port), properties, comment);
 
-            case "robSensors_ultrasonic_getMode":
-                fields = extractFields(block, (short) 1);
-                port = extractField(fields, BlocklyConstants.SENSORPORT);
-                return UltrasonicSensor.make(UltrasonicSensorMode.GET_MODE, SensorPort.get(port), properties, comment);
-
-            case "robSensors_ultrasonic_getSample":
-                fields = extractFields(block, (short) 1);
-                port = extractField(fields, BlocklyConstants.SENSORPORT);
-                return UltrasonicSensor.make(UltrasonicSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
-
-            case "robSensors_colour_setMode":
+            case "robSensors_colour_getSample":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, BlocklyConstants.SENSORPORT);
                 mode = extractField(fields, BlocklyConstants.MODE_);
                 return ColorSensor.make(ColorSensorMode.get(mode), SensorPort.get(port), properties, comment);
 
-            case "robSensors_colour_getMode":
-                fields = extractFields(block, (short) 1);
-                port = extractField(fields, BlocklyConstants.SENSORPORT);
-                return ColorSensor.make(ColorSensorMode.GET_MODE, SensorPort.get(port), properties, comment);
-
-            case "robSensors_colour_getSample":
-                fields = extractFields(block, (short) 1);
-                port = extractField(fields, BlocklyConstants.SENSORPORT);
-                return ColorSensor.make(ColorSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
-
-            case "robSensors_infrared_setMode":
+            case "robSensors_infrared_getSample":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, BlocklyConstants.SENSORPORT);
                 mode = extractField(fields, BlocklyConstants.MODE_);
                 return InfraredSensor.make(InfraredSensorMode.get(mode), SensorPort.get(port), properties, comment);
 
-            case "robSensors_infrared_getMode":
-                fields = extractFields(block, (short) 1);
-                port = extractField(fields, BlocklyConstants.SENSORPORT);
-                return InfraredSensor.make(InfraredSensorMode.GET_MODE, SensorPort.get(port), properties, comment);
-
-            case "robSensors_infrared_getSample":
-                fields = extractFields(block, (short) 1);
-                port = extractField(fields, BlocklyConstants.SENSORPORT);
-                return InfraredSensor.make(InfraredSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
-
-            case "robSensors_encoder_setMode":
+            case "robSensors_encoder_getSample":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, BlocklyConstants.MOTORPORT);
                 mode = extractField(fields, BlocklyConstants.MODE_);
                 return EncoderSensor.make(MotorTachoMode.get(mode), ActorPort.get(port), properties, comment);
-
-            case "robSensors_encoder_getMode":
-                fields = extractFields(block, (short) 1);
-                port = extractField(fields, BlocklyConstants.MOTORPORT);
-                return EncoderSensor.make(MotorTachoMode.GET_MODE, ActorPort.get(port), properties, comment);
-
-            case "robSensors_encoder_getSample":
-                fields = extractFields(block, (short) 1);
-                port = extractField(fields, BlocklyConstants.MOTORPORT);
-                return EncoderSensor.make(MotorTachoMode.GET_SAMPLE, ActorPort.get(port), properties, comment);
 
             case "robSensors_encoder_reset":
                 fields = extractFields(block, (short) 1);
@@ -365,26 +331,11 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 port = extractField(fields, BlocklyConstants.KEY);
                 return BrickSensor.make(BrickSensor.Mode.IS_PRESSED, BrickKey.get(port), properties, comment);
 
-            case "robSensors_key_isPressedAndReleased":
-                fields = extractFields(block, (short) 1);
-                port = extractField(fields, BlocklyConstants.KEY);
-                return BrickSensor.make(BrickSensor.Mode.WAIT_FOR_PRESS_AND_RELEASE, BrickKey.get(port), properties, comment);
-
-            case "robSensors_gyro_setMode":
+            case "robSensors_gyro_getSample":
                 fields = extractFields(block, (short) 2);
                 port = extractField(fields, BlocklyConstants.SENSORPORT);
                 mode = extractField(fields, BlocklyConstants.MODE_);
                 return GyroSensor.make(GyroSensorMode.get(mode), SensorPort.get(port), properties, comment);
-
-            case "robSensors_gyro_getMode":
-                fields = extractFields(block, (short) 1);
-                port = extractField(fields, BlocklyConstants.SENSORPORT);
-                return GyroSensor.make(GyroSensorMode.GET_MODE, SensorPort.get(port), properties, comment);
-
-            case "robSensors_gyro_getSample":
-                fields = extractFields(block, (short) 1);
-                port = extractField(fields, BlocklyConstants.SENSORPORT);
-                return GyroSensor.make(GyroSensorMode.GET_SAMPLE, SensorPort.get(port), properties, comment);
 
             case "robSensors_gyro_reset":
                 fields = extractFields(block, (short) 1);
@@ -457,13 +408,12 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                     exprParams.add(new ExprParam(BlocklyConstants.B, Integer.class));
                     params = extractExprParameters(block, exprParams);
                     return MathPowerFunct.make(FunctionNames.POWER, params, extractBlockProperties(block), extractComment(block));
-                } else {
-                    return blockToBinaryExpr(
-                        block,
-                        new ExprParam(BlocklyConstants.A, Integer.class),
-                        new ExprParam(BlocklyConstants.B, Integer.class),
-                        BlocklyConstants.OP_);
                 }
+                return blockToBinaryExpr(
+                    block,
+                    new ExprParam(BlocklyConstants.A, Integer.class),
+                    new ExprParam(BlocklyConstants.B, Integer.class),
+                    BlocklyConstants.OP_);
 
             case "math_constant":
                 return blockToConst(block, BlocklyConstants.CONSTANT);
@@ -484,13 +434,13 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
             case "math_change":
                 values = extractValues(block, (short) 1);
                 left = extractVar(block);
-                right = extractValue(values, new ExprParam("DELTA", Integer.class));
-                return Binary.make(Binary.Op.MATH_CHANGE, convertPhraseToExpr(left), convertPhraseToExpr(right), properties, comment);
+                right = extractValue(values, new ExprParam(BlocklyConstants.DELTA, Integer.class));
+                return Binary.make(Binary.Op.MATH_CHANGE, convertPhraseToExpr(left), convertPhraseToExpr(right), "", properties, comment);
 
             case "math_single":
             case "math_round":
             case "math_trig":
-                if ( getOperation(block, BlocklyConstants.OP_).equals("NEG") ) {
+                if ( getOperation(block, BlocklyConstants.OP_).equals(BlocklyConstants.NEG) ) {
                     return blockToUnaryExpr(block, new ExprParam(BlocklyConstants.NUM, Integer.class), BlocklyConstants.OP_);
                 }
                 exprParams = new ArrayList<ExprParam>();
@@ -543,10 +493,10 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 return TextJoinFunct.make(textList, properties, comment);
 
             case "text_append":
-                values = extractValues(block, (short) 1);
-                left = extractVar(block);
+                values = extractValues(block, (short) 2);
+                left = extractValue(values, new ExprParam(BlocklyConstants.VAR, String.class));
                 right = extractValue(values, new ExprParam(BlocklyConstants.TEXT, String.class));
-                return Binary.make(Binary.Op.TEXT_APPEND, convertPhraseToExpr(left), convertPhraseToExpr(right), properties, comment);
+                return Binary.make(Binary.Op.TEXT_APPEND, convertPhraseToExpr(left), convertPhraseToExpr(right), "", properties, comment);
 
             case "lists_length":
             case "lists_isEmpty":
@@ -571,18 +521,25 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
 
                 // LISTEN
             case "lists_create_empty":
-                return EmptyList.make(extractBlockProperties(block), extractComment(block));
+                fields = extractFields(block, (short) 1);
+                filename = extractField(fields, BlocklyConstants.LIST_TYPE);
+                return EmptyList.make(BlocklyType.get(filename), extractBlockProperties(block), extractComment(block));
 
             case "lists_create_with":
             case "robLists_create_with":
-                return ListCreate.make(blockToExprList(block, ArrayList.class), extractBlockProperties(block), extractComment(block));
+                fields = extractFields(block, (short) 1);
+                filename = extractField(fields, BlocklyConstants.LIST_TYPE);
+                return ListCreate
+                    .make(BlocklyType.get(filename), blockToExprList(block, ArrayList.class), extractBlockProperties(block), extractComment(block));
 
             case "lists_repeat":
+                fields = extractFields(block, (short) 1);
+                filename = extractField(fields, BlocklyConstants.LIST_TYPE);
                 exprParams = new ArrayList<ExprParam>();
                 exprParams.add(new ExprParam(BlocklyConstants.ITEM, List.class));
                 exprParams.add(new ExprParam(BlocklyConstants.NUM, Integer.class));
                 params = extractExprParameters(block, exprParams);
-                return ListRepeat.make(params, extractBlockProperties(block), extractComment(block));
+                return ListRepeat.make(BlocklyType.get(filename), params, extractBlockProperties(block), extractComment(block));
 
             case "lists_getIndex":
                 fields = extractFields(block, (short) 2);
@@ -647,23 +604,25 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
             case "variables_get":
                 return extractVar(block);
 
+            case "robLocalVariables_declare":
+            case "robGlobalvariables_declare":
+                isGlobalVariable = block.getType().equals("robLocalVariables_declare") ? false : true;
+                fields = extractFields(block, (short) 2);
+                values = extractValues(block, (short) 1);
+                BlocklyType typeVar = BlocklyType.get(extractField(fields, BlocklyConstants.TYPE));
+                String name = extractField(fields, BlocklyConstants.VAR);
+                expr = extractValue(values, new ExprParam(BlocklyConstants.VALUE, Integer.class));
+                boolean next = block.getMutation().isNext();
+                return VarDeclaration.make(typeVar, name, convertPhraseToExpr(expr), next, isGlobalVariable, properties, comment);
+
                 // KONTROLLE
             case "controls_if":
             case "robControls_if":
             case "robControls_ifElse":
-                int _else = 0;
-                int _elseIf = 0;
-                if ( block.getMutation() == null ) {
-                    return blocksToIfStmt(block, _else, _elseIf);
-                }
                 Mutation mutation = block.getMutation();
-                if ( mutation.getElse() != null ) {
-                    _else = mutation.getElse().intValue();
-                }
-                if ( mutation.getElseif() != null ) {
-                    _elseIf = mutation.getElseif().intValue();
-                    return blocksToIfStmt(block, _else, _elseIf);
-                }
+                int _else = getElse(mutation);
+                int _elseIf = getElseIf(mutation);
+
                 return blocksToIfStmt(block, _else, _elseIf);
 
             case "robControls_wait_for":
@@ -688,6 +647,11 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 list.setReadOnly();
                 return WaitStmt.make(list, properties, comment);
 
+            case "robControls_wait_time":
+                values = extractValues(block, (short) 1);
+                expr = extractValue(values, new ExprParam(BlocklyConstants.WAIT, Integer.class));
+                return WaitTimeStmt.make(convertPhraseToExpr(expr), extractBlockProperties(block), extractComment(block));
+
             case "robControls_loopForever":
                 expr = BoolConst.make(true, properties, comment);
                 return extractRepeatStatement(block, expr, RepeatStmt.Mode.FOREVER.toString());
@@ -708,26 +672,29 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 var = extractVar(block);
                 values = extractValues(block, (short) 3);
                 exprList = ExprList.make();
-                Var<V> var1 = Var.make(((Var<V>) var).getValue(), TypeVar.INTEGER, properties, comment);
 
                 Phrase<V> from = extractValue(values, new ExprParam(BlocklyConstants.FROM_, Integer.class));
                 Phrase<V> to = extractValue(values, new ExprParam(BlocklyConstants.TO_, Integer.class));
                 Phrase<V> by = extractValue(values, new ExprParam(BlocklyConstants.BY_, Integer.class));
-                Binary<V> exprAssig = Binary.make(Binary.Op.ASSIGNMENT, convertPhraseToExpr(var1), convertPhraseToExpr(from), properties, comment);
-                Binary<V> exprCondition = Binary.make(Binary.Op.LTE, convertPhraseToExpr(var), convertPhraseToExpr(to), properties, comment);
-                Binary<V> exprBy = Binary.make(Binary.Op.ADD_ASSIGNMENT, convertPhraseToExpr(var), convertPhraseToExpr(by), properties, comment);
-                exprList.addExpr(exprAssig);
+                VarDeclaration<V> var1 =
+                    VarDeclaration.make(BlocklyType.NUMERIC_INT, ((Var<V>) var).getValue(), convertPhraseToExpr(from), false, false, properties, comment);
+
+                Binary<V> exprCondition = Binary.make(Binary.Op.LTE, convertPhraseToExpr(var), convertPhraseToExpr(to), "", properties, comment);
+                Binary<V> exprBy = Binary.make(Binary.Op.ADD_ASSIGNMENT, convertPhraseToExpr(var), convertPhraseToExpr(by), "", properties, comment);
+                exprList.addExpr(var1);
                 exprList.addExpr(exprCondition);
                 exprList.addExpr(exprBy);
                 exprList.setReadOnly();
                 return extractRepeatStatement(block, exprList, BlocklyConstants.FOR);
 
             case "controls_forEach":
-                var = extractVar(block);
-                values = extractValues(block, (short) 1);
-                expr = extractValue(values, new ExprParam(BlocklyConstants.LIST_, List.class));
+                fields = extractFields(block, (short) 2);
+                var = Var.make(BlocklyType.get(extractField(fields, BlocklyConstants.TYPE)), extractField(fields, BlocklyConstants.VAR), null, null);
 
-                Binary<V> exprBinary = Binary.make(Binary.Op.IN, convertPhraseToExpr(var), convertPhraseToExpr(expr), properties, comment);
+                values = extractValues(block, (short) 1);
+                expr = extractValue(values, new ExprParam(BlocklyConstants.LIST_, ArrayList.class));
+
+                Binary<V> exprBinary = Binary.make(Binary.Op.IN, convertPhraseToExpr(var), convertPhraseToExpr(expr), "", properties, comment);
                 return extractRepeatStatement(block, exprBinary, BlocklyConstants.FOR_EACH);
 
             case "controls_flow_statements":
@@ -737,16 +704,15 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
 
             case "controls_repeat_ext":
                 values = extractValues(block, (short) 1);
-                var = Var.make("i" + this.variable_counter, TypeVar.INTEGER, properties, comment);
                 exprList = ExprList.make();
                 from = NumConst.make("0", properties, comment);
                 to = extractValue(values, new ExprParam(BlocklyConstants.TIMES, Integer.class));
                 by = NumConst.make("1", properties, comment);
-                exprAssig = Binary.make(Binary.Op.ASSIGNMENT, convertPhraseToExpr(var), convertPhraseToExpr(from), properties, comment);
-                var = Var.make("i" + this.variable_counter, TypeVar.NONE, properties, comment);
-                exprCondition = Binary.make(Binary.Op.LT, convertPhraseToExpr(var), convertPhraseToExpr(to), properties, comment);
+                var1 = VarDeclaration.make(BlocklyType.NUMERIC_INT, "i" + this.variable_counter, convertPhraseToExpr(from), false, false, properties, comment);
+                var = Var.make(BlocklyType.NUMERIC_INT, "i" + this.variable_counter, properties, comment);
+                exprCondition = Binary.make(Binary.Op.LT, convertPhraseToExpr(var), convertPhraseToExpr(to), "", properties, comment);
                 Unary<V> increment = Unary.make(Unary.Op.POSTFIX_INCREMENTS, convertPhraseToExpr(var), properties, comment);
-                exprList.addExpr(exprAssig);
+                exprList.addExpr(var1);
                 exprList.addExpr(exprCondition);
                 exprList.addExpr(increment);
                 exprList.setReadOnly();
@@ -755,7 +721,14 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 return extractRepeatStatement(block, exprList, BlocklyConstants.TIMES);
 
             case "robControls_start":
-                return MainTask.make(properties, comment);
+                if ( block.getMutation().isDeclare() == true ) {
+                    statements = extractStatements(block, (short) 1);
+                    statement = extractStatement(statements, BlocklyConstants.ST);
+                    return MainTask.make(statement, properties, comment);
+                }
+                StmtList<V> listOfVariables = StmtList.make();
+                listOfVariables.setReadOnly();
+                return MainTask.make(listOfVariables, properties, comment);
 
             case "robControls_activity":
                 values = extractValues(block, (short) 1);
@@ -766,6 +739,31 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam(BlocklyConstants.ACTIVITY, String.class));
                 return StartActivityTask.make(convertPhraseToExpr(expr), properties, comment);
+
+            case "robProcedures_defnoreturn":
+                fields = extractFields(block, (short) 1);
+                name = extractField(fields, BlocklyConstants.NAME);
+
+                statements = extractStatements(block, (short) 2);
+                exprList = statementsToExprs(statements, BlocklyConstants.ST);
+                statement = extractStatement(statements, BlocklyConstants.STACK);
+
+                return MethodVoid.make(name, exprList, statement, properties, comment);
+
+            case "robProcedures_defreturn":
+                fields = extractFields(block, (short) 2);
+                name = extractField(fields, BlocklyConstants.NAME);
+                Var<V> returnType = Var.make(BlocklyType.get(extractField(fields, BlocklyConstants.TYPE)), "returnType", properties, comment);
+
+                List<Object> valAndStmt = block.getRepetitions().getValueAndStatement();
+                values = new ArrayList<Value>();
+                statements = new ArrayList<Statement>();
+                convertStmtValList(values, statements, valAndStmt);
+                exprList = statementsToExprs(statements, BlocklyConstants.ST);
+                statement = extractStatement(statements, BlocklyConstants.STACK);
+                expr = extractValue(values, new ExprParam(BlocklyConstants.RETURN, NullConst.class));
+
+                return MethodReturn.make(name, exprList, statement, returnType, convertPhraseToExpr(expr), properties, comment);
 
             default:
                 throw new DbcException("Invalid Block: " + block.getType());

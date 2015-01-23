@@ -81,6 +81,11 @@ public class BrickCommunicator {
         return state.runButtonPressed(programName, brickConfigurationName);
     }
 
+    public boolean firmwareUpdateRequested(String token) {
+        BrickCommunicationData state = getState(token);
+        return state.firmwareUpdate();
+    }
+
     public BrickCommunicationData getState(String token) {
         BrickCommunicationData state = this.allStates.get(token);
         //        if ( state == null ) {

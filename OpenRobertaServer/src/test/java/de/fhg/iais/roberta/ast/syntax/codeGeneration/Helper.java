@@ -22,11 +22,11 @@ import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
-import de.fhg.iais.roberta.brickconfiguration.ev3.EV3Actor;
-import de.fhg.iais.roberta.brickconfiguration.ev3.EV3BrickConfiguration;
 import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
 import de.fhg.iais.roberta.codegen.lejos.AstToTextlyVisitor;
-import de.fhg.iais.roberta.hardwarecomponents.ev3.HardwareComponentEV3Actor;
+import de.fhg.iais.roberta.ev3.EV3Actors;
+import de.fhg.iais.roberta.ev3.EV3BrickConfiguration;
+import de.fhg.iais.roberta.ev3.components.EV3Actor;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 
 /**
@@ -44,10 +44,10 @@ public class Helper {
         JaxbBlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
         EV3BrickConfiguration brickConfiguration =
             new EV3BrickConfiguration.Builder()
-                .addActor(ActorPort.A, new EV3Actor(HardwareComponentEV3Actor.EV3_LARGE_MOTOR, true, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(ActorPort.B, new EV3Actor(HardwareComponentEV3Actor.EV3_MEDIUM_MOTOR, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
-                .addActor(ActorPort.C, new EV3Actor(HardwareComponentEV3Actor.EV3_LARGE_MOTOR, false, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(ActorPort.D, new EV3Actor(HardwareComponentEV3Actor.EV3_MEDIUM_MOTOR, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
+                .addActor(ActorPort.A, new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, true, DriveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.B, new EV3Actor(EV3Actors.EV3_MEDIUM_MOTOR, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
+                .addActor(ActorPort.C, new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, false, DriveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.D, new EV3Actor(EV3Actors.EV3_MEDIUM_MOTOR, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
                 .build();
         String javaCode = AstToLejosJavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), false);
         // System.out.println(javaCode); // only needed for EXTREME debugging

@@ -2,10 +2,13 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.dbc.Assert;
 
 /**
  * This class represents the <b>lists_create_empty</b> block from Blockly into the AST (abstract syntax tree).
@@ -14,9 +17,12 @@ import de.fhg.iais.roberta.blockly.generated.Block;
  * To create an instance from this class use the method {@link #make(BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class EmptyList<V> extends Expr<V> {
+    private final BlocklyType typeVar;
 
-    private EmptyList(BlocklyBlockProperties properties, BlocklyComment comment) {
+    private EmptyList(BlocklyType typeVar, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.EMPTY_LIST, properties, comment);
+        Assert.isTrue(typeVar != null);
+        this.typeVar = typeVar;
         setReadOnly();
     }
 
@@ -27,8 +33,15 @@ public class EmptyList<V> extends Expr<V> {
      * @param comment added from the user,
      * @return read only object of class {@link NullConst}
      */
-    public static <V> EmptyList<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new EmptyList<V>(properties, comment);
+    public static <V> EmptyList<V> make(BlocklyType typeVar, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new EmptyList<V>(typeVar, properties, comment);
+    }
+
+    /**
+     * @return the typeVar
+     */
+    public BlocklyType getTypeVar() {
+        return this.typeVar;
     }
 
     @Override
@@ -43,7 +56,7 @@ public class EmptyList<V> extends Expr<V> {
 
     @Override
     public String toString() {
-        return "EmptyList []";
+        return "EmptyList [" + this.typeVar + "]";
     }
 
     @Override
@@ -53,8 +66,10 @@ public class EmptyList<V> extends Expr<V> {
 
     @Override
     public Block astToBlock() {
+
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.LIST_TYPE, getTypeVar().getBlocklyName());
         return jaxbDestination;
     }
 

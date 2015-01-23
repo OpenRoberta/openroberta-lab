@@ -10,28 +10,28 @@ public class PickColorTest {
 
     @Test
     public void testWeiss() {
-        PickColor c1 = PickColor.get("WhItE");
-        PickColor c2 = PickColor.get("weiß");
-        PickColor c3 = PickColor.get("WEIß");
-        PickColor c4 = PickColor.get("WeIsS");
-        assertEquals(PickColor.WHITE, c1);
-        assertEquals(PickColor.WHITE, c2);
-        assertEquals(PickColor.WHITE, c3);
-        assertEquals(PickColor.WHITE, c4);
+        Pickcolor c1 = Pickcolor.get("WhItE");
+        Pickcolor c2 = Pickcolor.get("weiß");
+        Pickcolor c3 = Pickcolor.get("WEIß");
+        Pickcolor c4 = Pickcolor.get("WeIsS");
+        assertEquals(Pickcolor.WHITE, c1);
+        assertEquals(Pickcolor.WHITE, c2);
+        assertEquals(Pickcolor.WHITE, c3);
+        assertEquals(Pickcolor.WHITE, c4);
     }
 
     @Test
     public void testRest() {
-        PickColor c1 = PickColor.get("rot");
-        PickColor c2 = PickColor.get("GRÜN");
-        PickColor c3 = PickColor.get("grün");
-        assertEquals(PickColor.RED, c1);
-        assertEquals(PickColor.GREEN, c2);
-        assertEquals(PickColor.GREEN, c3);
+        Pickcolor c1 = Pickcolor.get("rot");
+        Pickcolor c2 = Pickcolor.get("GRÜN");
+        Pickcolor c3 = Pickcolor.get("grün");
+        assertEquals(Pickcolor.RED, c1);
+        assertEquals(Pickcolor.GREEN, c2);
+        assertEquals(Pickcolor.GREEN, c3);
     }
 
     @Test(expected = DbcException.class)
     public void testExc() {
-        PickColor.get("dies ist keine gültige Farbe");
+        Pickcolor.get("dies ist keine gültige Farbe");
     }
 }

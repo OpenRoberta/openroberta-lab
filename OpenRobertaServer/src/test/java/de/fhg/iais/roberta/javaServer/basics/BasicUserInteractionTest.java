@@ -14,6 +14,7 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.hibernate.Session;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
@@ -35,6 +36,7 @@ import de.fhg.iais.roberta.util.IntegrationTest;
 import de.fhg.iais.roberta.util.Util;
 
 @Category(IntegrationTest.class)
+@Ignore
 public class BasicUserInteractionTest {
     private SessionFactoryWrapper sessionFactoryWrapper;
     private DbSetup memoryDbSetup;

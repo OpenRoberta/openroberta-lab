@@ -262,7 +262,8 @@ Blockly.Blocks['logic_compare'] = {
         this.setColourRGB(Blockly.CAT_LOGIC_RGB);
         this.setOutput(true, 'Boolean');
         this.appendValueInput('A');
-        this.appendValueInput('B').appendField(new Blockly.FieldDropdown(OPERATORS), 'OP');
+        this.appendDummyInput('OP_DROP').appendField(new Blockly.FieldDropdown(OPERATORS), 'OP')
+        this.appendValueInput('B');
         this.setInputsInline(true);
         // Assign 'this' to a variable for use in the tooltip closure below.
         var thisBlock = this;
@@ -278,6 +279,64 @@ Blockly.Blocks['logic_compare'] = {
             };
             return TOOLTIPS[op];
         });
+        this.operatorRange_ = 'NUM';
+    },
+    /**
+     * Create XML to represent the operator's range.
+     * 
+     * @return {Element} XML storage element.
+     * @this Blockly.Block
+     */
+    mutationToDom : function() {
+        var container = document.createElement('mutation');
+        container.setAttribute('operator_range', this.operatorRange_);
+        return container;
+    },
+    /**
+     * Parse XML to restore the operator's range.
+     * 
+     * @param {!Element}
+     *            xmlElement XML storage element.
+     * @this Blockly.Block
+     */
+    domToMutation : function(xmlElement) {
+        this.operatorRange_ = xmlElement.getAttribute('operator_range');
+        this.updateShape(this.operatorRange_);
+    },
+    /**
+     * Modify this block to have (or not have) an input for 'is divisible by'.
+     * 
+     * @param {boolean}
+     *            divisorInput True if this block has a divisor input.
+     * @private
+     * @this Blockly.Block
+     */
+    updateShape : function(range) {
+        // Set the range of operators.
+        if (range) {
+            this.operatorRange_ = range;
+            var OPERATORS;
+            var valueB = this.getInputTargetBlock('B');
+            this.removeInput('B');
+            this.removeInput('OP_DROP');
+            if (range == 'NUM_REV') {
+                OPERATORS = Blockly.RTL ? [ [ '<', 'GT' ], [ '\u2264', 'GTE' ], [ '>', 'LT' ], [ '\u2265', 'LTE' ], [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ] : [
+                        [ '>', 'GT' ], [ '\u2265', 'GTE' ], [ '<', 'LT' ], [ '\u2264', 'LTE' ], [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ];
+            } else if (range == 'BOOL') {
+                var OPERATORS = Blockly.RTL ? [ [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ] : [ [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ];
+            } else if (range == 'COLOUR') {
+                OPERATORS = Blockly.RTL ? [ [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ] : [ [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ];
+            } else {
+                OPERATORS = Blockly.RTL ? [ [ '>', 'LT' ], [ '\u2265', 'LTE' ], [ '<', 'GT' ], [ '\u2264', 'GTE' ], [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ] : [
+                        [ '<', 'LT' ], [ '\u2264', 'LTE' ], [ '>', 'GT' ], [ '\u2265', 'GTE' ], [ '=', 'EQ' ], [ '\u2260', 'NEQ' ] ];
+
+            }
+            this.appendDummyInput('OP_DROP').appendField(new Blockly.FieldDropdown(OPERATORS), 'OP')
+            var inputB = this.appendValueInput('B');
+            if (valueB) {
+                inputB.connection.connect(valueB);
+            }
+        }
     }
 };
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
@@ -81,7 +82,7 @@ public class TextJoinFunct<V> extends Function<V> {
         mutation.setItems(BigInteger.valueOf(numOfStrings));
         jaxbDestination.setMutation(mutation);
         for ( int i = 0; i < numOfStrings; i++ ) {
-            AstJaxbTransformerHelper.addValue(jaxbDestination, "ADD" + i, strExprList.get().get(i));
+            AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.ADD + i, strExprList.get().get(i));
         }
         return jaxbDestination;
     }

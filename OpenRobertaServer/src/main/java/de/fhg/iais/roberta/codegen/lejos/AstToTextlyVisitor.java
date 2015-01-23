@@ -39,6 +39,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.LenghtOfIsEmptyFunct;
@@ -54,12 +55,16 @@ import de.fhg.iais.roberta.ast.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathSingleFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodReturn;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GetSampleSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.TouchSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensor;
@@ -75,6 +80,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
@@ -184,14 +190,7 @@ public class AstToTextlyVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitVar(Var<Void> var) {
-        switch ( var.getTypeVar() ) {
-            case INTEGER:
-                this.sb.append("int " + var.getValue());
-                break;
-            default:
-                this.sb.append(var.getValue());
-                break;
-        }
+        this.sb.append(var.getValue());
         return null;
     }
 
@@ -542,72 +541,34 @@ public class AstToTextlyVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        switch ( colorSensor.getMode() ) {
-            case GET_MODE:
-                this.sb.append("ColorSensor.getMode(" + colorSensor.getPort() + ")");
-                break;
-            case GET_SAMPLE:
-                this.sb.append("ColorSensor.getValue(" + colorSensor.getPort() + ")");
-                break;
-            default:
-                this.sb.append("ColorSensor.setMode(" + colorSensor.getPort() + ", " + colorSensor.getMode() + ");");
-                break;
-        }
+        this.sb.append("ColorSensor.getValue(" + colorSensor.getPort() + ", " + colorSensor.getMode() + ")");
         return null;
     }
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        switch ( encoderSensor.getMode() ) {
-            case GET_MODE:
-                this.sb.append("Motor.getTachoMode(" + encoderSensor.getMotor() + ")");
-                break;
-            case GET_SAMPLE:
-                boolean isRegulated = true;
-                this.sb.append("Motor.getTachoValue(" + encoderSensor.getMotor() + ")");
-                break;
-            case RESET:
-                this.sb.append("Motor.resetTacho(" + encoderSensor.getMotor() + ");");
-                break;
-            default:
-                this.sb.append("Motor.setTachoMode(" + encoderSensor.getMotor() + ", " + encoderSensor.getMode() + ");");
-                break;
+        if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
+            this.sb.append("Motor.resetTacho(" + encoderSensor.getMotor() + ");");
+        } else {
+            boolean isRegulated = true;
+            this.sb.append("Motor.getTachoValue(" + encoderSensor.getMotor() + ", " + encoderSensor.getMode() + ")");
         }
         return null;
     }
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        switch ( gyroSensor.getMode() ) {
-            case GET_MODE:
-                this.sb.append("GyroSensor.getMode(" + gyroSensor.getPort() + ")");
-                break;
-            case GET_SAMPLE:
-                this.sb.append("GyroSensor.getValue(" + gyroSensor.getPort() + ")");
-                break;
-            case RESET:
-                this.sb.append("GyroSensor.reset(" + gyroSensor.getPort() + ");");
-                break;
-            default:
-                this.sb.append("GyroSensor.setMode(" + gyroSensor.getPort() + ", " + gyroSensor.getMode() + ");");
-                break;
+        if ( gyroSensor.getMode() == GyroSensorMode.RESET ) {
+            this.sb.append("GyroSensor.reset(" + gyroSensor.getPort() + ");");
+        } else {
+            this.sb.append("GyroSensor.getValue(" + gyroSensor.getPort() + ", " + gyroSensor.getMode() + ")");
         }
         return null;
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        switch ( infraredSensor.getMode() ) {
-            case GET_MODE:
-                this.sb.append("InfraredSensor.getMode(" + infraredSensor.getPort() + ")");
-                break;
-            case GET_SAMPLE:
-                this.sb.append("InfraredSensor.getValue(" + infraredSensor.getPort() + ")");
-                break;
-            default:
-                this.sb.append("InfraredSensor.setMode(" + infraredSensor.getPort() + ", " + infraredSensor.getMode() + ");");
-                break;
-        }
+        this.sb.append("InfraredSensor.getValue(" + infraredSensor.getPort() + ", " + infraredSensor.getMode() + ")");
         return null;
     }
 
@@ -634,17 +595,7 @@ public class AstToTextlyVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        switch ( ultrasonicSensor.getMode() ) {
-            case GET_MODE:
-                this.sb.append("UltraSonicSensor.getMode(" + ultrasonicSensor.getPort() + ")");
-                break;
-            case GET_SAMPLE:
-                this.sb.append("UltraSonicSensor.getValue(" + ultrasonicSensor.getPort() + ")");
-                break;
-            default:
-                this.sb.append("UltraSonicSensor.setMode(" + ultrasonicSensor.getPort() + ", " + ultrasonicSensor.getMode() + ");");
-                break;
-        }
+        this.sb.append("UltraSonicSensor.getValue(" + ultrasonicSensor.getPort() + ", " + ultrasonicSensor.getMode() + ")");
         return null;
     }
 
@@ -887,6 +838,32 @@ public class AstToTextlyVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitVarDeclaration(VarDeclaration<Void> var) {
+        this.sb.append(var.getTypeVar().getJavaCode()).append(" ");
+        this.sb.append(var.getName()).append(" = ");
+        var.getValue().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
         // TODO Auto-generated method stub
         return null;
     }

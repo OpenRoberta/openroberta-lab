@@ -5,13 +5,13 @@ import java.util.Set;
 
 import de.fhg.iais.roberta.ast.syntax.action.BlinkMode;
 import de.fhg.iais.roberta.ast.syntax.action.BrickLedColor;
-import de.fhg.iais.roberta.brickconfiguration.ev3.EV3BrickConfiguration;
 import de.fhg.iais.roberta.codegen.lejos.Hal;
-import de.fhg.iais.roberta.hardwarecomponents.ev3.HardwareComponentEV3Sensor;
+import de.fhg.iais.roberta.ev3.EV3BrickConfiguration;
+import de.fhg.iais.roberta.ev3.EV3Sensors;
 
 public class Test {
     private final EV3BrickConfiguration brickConfiguration = new EV3BrickConfiguration.Builder().build();
-    private final Set<HardwareComponentEV3Sensor> usedSensors = new HashSet<HardwareComponentEV3Sensor>();
+    private final Set<EV3Sensors> usedSensors = new HashSet<EV3Sensors>();
 
     public static void main(String[] args) {
         new Test().run();

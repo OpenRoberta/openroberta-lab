@@ -27,19 +27,22 @@ Blockly.Blocks['robBrick_EV3-Brick'] = {
 
     init : function() {
         this.setColourRGB([ 170, 170, 170 ]);
-        // this.setInputsInline(true);
-        var wheelDiameter = new Blockly.FieldTextInput('5.6');
+        this.setInputsInline(false);
+        var wheelDiameter = new Blockly.FieldTextInput('5,6');
         var trackWidth = new Blockly.FieldTextInput('17');
-        this.appendValueInput('S1').appendField('S 1').setAlign(Blockly.ALIGN_RIGHT).setCheck('Number');
-        this.appendValueInput('S2').appendField('S 2').setAlign(Blockly.ALIGN_RIGHT).setCheck('Number');
-        this.appendValueInput('S3').appendField(Blockly.Msg.BRICK_WHEEL_DIAMETER).appendField(wheelDiameter, 'WHEEL_DIAMETER').appendField('cm           ')
-                .appendField('S 3').setAlign(Blockly.ALIGN_RIGHT).setCheck('Number');
-        this.appendValueInput('S4').appendField('S 4').setAlign(Blockly.ALIGN_RIGHT).setCheck('Number');
-        this.appendValueInput('MA').appendField('M A').setAlign(Blockly.ALIGN_RIGHT).setCheck('String');
-        this.appendValueInput('MB').appendField(Blockly.Msg.BRICK_TRACK_WIDTH).appendField(trackWidth, 'TRACK_WIDTH').appendField('cm           ').appendField(
-                'M B').setAlign(Blockly.ALIGN_RIGHT).setCheck('String');
-        this.appendValueInput('MC').appendField('M C').setAlign(Blockly.ALIGN_RIGHT).setCheck('String');
-        this.appendValueInput('MD').appendField('M D').setAlign(Blockly.ALIGN_RIGHT).setCheck('String');
+        var image = new Blockly.FieldImage( './blockly/media/EV3.png', 180, 18);
+        this.appendDummyInput().appendField(image,'IMAGE');
+        this.appendDummyInput().appendField(Blockly.Msg.BRICK_WHEEL_DIAMETER).appendField(wheelDiameter, 'WHEEL_DIAMETER').appendField('cm');
+        this.appendDummyInput().appendField(Blockly.Msg.BRICK_TRACK_WIDTH).appendField(trackWidth, 'TRACK_WIDTH').appendField('cm');
+        this.appendValueInput('S1').appendField('Sensor 1').setAlign(Blockly.ALIGN_RIGHT).setCheck('Sensor');
+        this.appendValueInput('S2').appendField('Sensor 2').setAlign(Blockly.ALIGN_RIGHT).setCheck('Sensor');
+        this.appendValueInput('S3').appendField('Sensor 3').setAlign(Blockly.ALIGN_RIGHT).setCheck('Sensor');
+        this.appendValueInput('S4').appendField('Sensor 4').setAlign(Blockly.ALIGN_RIGHT).setCheck('Sensor');
+        this.appendValueInput('MA').appendField('Motor A').setAlign(Blockly.ALIGN_RIGHT).setCheck('Actor');
+        this.appendValueInput('MB').appendField('Motor B').setAlign(Blockly.ALIGN_RIGHT).setCheck('Actor');
+        this.appendValueInput('MC').appendField('Motor C').setAlign(Blockly.ALIGN_RIGHT).setCheck('Actor');
+        this.appendValueInput('MD').appendField('Motor D').setAlign(Blockly.ALIGN_RIGHT).setCheck('Actor');
+        this.setHelp(new Blockly.Help(Blockly.Msg.MOTORDIFF_ON_HELP));
         this.setDeletable(false);
         this.setTooltip(Blockly.Msg.EV3BRICK_TOOLTIP);
     }
@@ -60,7 +63,7 @@ Blockly.Blocks['robBrick_ultrasonic'] = {
     init : function() {
         this.setColourRGB([ 143, 164, 2 ]);
         this.appendDummyInput().appendField(Blockly.Msg.SENSOR_ULTRASONIC);
-        this.setOutput(true, 'Number');
+        this.setOutput(true, 'Sensor');
         this.setTooltip(Blockly.Msg.ULTRASONIC_TOOLTIP);
     }
 };
@@ -79,7 +82,7 @@ Blockly.Blocks['robBrick_colour'] = {
     init : function() {
         this.setColourRGB([ 143, 164, 2 ]);
         this.appendDummyInput().appendField(Blockly.Msg.SENSOR_COLOUR);
-        this.setOutput(true, 'Number');
+        this.setOutput(true, 'Sensor');
         this.setTooltip(Blockly.Msg.COLOUR_TOOLTIP);
     }
 };
@@ -99,7 +102,7 @@ Blockly.Blocks['robBrick_infrared'] = {
     init : function() {
         this.setColourRGB([ 143, 164, 2 ]);
         this.appendDummyInput().appendField(Blockly.Msg.SENSOR_INFRARED);
-        this.setOutput(true, 'Number');
+        this.setOutput(true, 'Sensor');
         this.setTooltip(Blockly.Msg.INFRARED_TOOLTIP);
     }
 };
@@ -119,7 +122,7 @@ Blockly.Blocks['robBrick_touch'] = {
         this.setColourRGB([ 143, 164, 2 ]);
         // this.setInputsInline(true);
         this.appendDummyInput().appendField(Blockly.Msg.SENSOR_TOUCH);
-        this.setOutput(true, 'Number');
+        this.setOutput(true, 'Sensor');
         this.setTooltip(Blockly.Msg.TOUCH_TOOLTIP);
     }
 };
@@ -139,7 +142,7 @@ Blockly.Blocks['robBrick_gyro'] = {
     init : function() {
         this.setColourRGB([ 143, 164, 2 ]);
         this.appendDummyInput().appendField(Blockly.Msg.SENSOR_GYRO);
-        this.setOutput(true, 'Number');
+        this.setOutput(true, 'Sensor');
         this.setTooltip(Blockly.Msg.GYRO_TOOLTIP);
     }
 };
@@ -170,7 +173,7 @@ Blockly.Blocks['robBrick_motor_big'] = {
         this.appendDummyInput().appendField(Blockly.Msg.MOTOR_REGULATION).appendField(motorRegulation, 'MOTOR_REGULATION').setAlign(Blockly.ALIGN_RIGHT);
         this.appendDummyInput().appendField(Blockly.Msg.MOTOR_ROTATION_REVERSE).appendField(motorReverse, 'MOTOR_REVERSE').setAlign(Blockly.ALIGN_RIGHT);
         this.appendDummyInput().appendField(Blockly.Msg.MOTOR_SIDE).appendField(motorSide, 'MOTOR_DRIVE').setAlign(Blockly.ALIGN_RIGHT);
-        this.setOutput(true, 'String');
+        this.setOutput(true, 'Actor');
         this.setTooltip(Blockly.Msg.MOTOR_BIG_TOOLTIP);
     }
 };
@@ -198,7 +201,7 @@ Blockly.Blocks['robBrick_motor_middle'] = {
         this.appendDummyInput().appendField(Blockly.Msg.MOTOR_MIDDLE + ' ' + Blockly.Msg.MOTOR);
         this.appendDummyInput().appendField(Blockly.Msg.MOTOR_REGULATION).appendField(motorRegulation, 'MOTOR_REGULATION').setAlign(Blockly.ALIGN_RIGHT);
         this.appendDummyInput().appendField(Blockly.Msg.MOTOR_ROTATION_REVERSE).appendField(motorReverse, 'MOTOR_REVERSE').setAlign(Blockly.ALIGN_RIGHT);
-        this.setOutput(true, 'String');
+        this.setOutput(true, 'Actor');
         this.setTooltip(Blockly.Msg.MOTOR_MIDDLE_TOOLTIP);
     }
 };
@@ -217,7 +220,7 @@ Blockly.Blocks['robBrick_actor'] = {
         this.setColourRGB([ 242, 148, 0 ]);
         // this.setInputsInline(true);
         this.appendDummyInput('ACTOR').appendField(Blockly.Msg.MOTOR_OTHER);
-        this.setOutput(true, 'String');
+        this.setOutput(true, 'Actor');
         this.setTooltip(Blockly.Msg.ACTOR_TOOLTIP);
     }
 };

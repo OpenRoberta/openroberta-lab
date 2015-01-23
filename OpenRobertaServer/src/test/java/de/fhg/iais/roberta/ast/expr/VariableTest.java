@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.ast.expr;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
@@ -35,6 +36,12 @@ public class VariableTest {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/variables/variable_set1.xml");
         Var<Void> var = (Var<Void>) transformer.getTree().get(1);
         Assert.assertEquals(Assoc.NONE, var.getAssoc());
+    }
+
+    @Ignore
+    public void variableSet4() throws Exception {
+        String a = "BlockAST [project=[[Location [x=-23, y=-797], Var [item]]]]";
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/variables/variable_set4.xml"));
     }
 
     @Test

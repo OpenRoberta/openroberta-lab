@@ -13,7 +13,9 @@ public class EncoderSensorTest {
 
     @Test
     public void sensorSetEncoder() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-33, y=1], DrehSensor [mode=ROTATION, motor=A]]]]";
+        String a =
+            "BlockAST [project=[[Location [x=-20, y=94], DrehSensor [mode=ROTATION, motor=A], "
+                + "Location [x=-15, y=129], DrehSensor [mode=DEGREE, motor=D]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_setEncoder.xml"));
     }
@@ -23,8 +25,10 @@ public class EncoderSensorTest {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setEncoder.xml");
 
         EncoderSensor<Void> cs = (EncoderSensor<Void>) transformer.getTree().get(1);
+        EncoderSensor<Void> cs1 = (EncoderSensor<Void>) transformer.getTree().get(3);
 
         Assert.assertEquals(MotorTachoMode.ROTATION, cs.getMode());
+        Assert.assertEquals(MotorTachoMode.DEGREE, cs1.getMode());
     }
 
     @Test
@@ -32,22 +36,10 @@ public class EncoderSensorTest {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setEncoder.xml");
 
         EncoderSensor<Void> cs = (EncoderSensor<Void>) transformer.getTree().get(1);
+        EncoderSensor<Void> cs1 = (EncoderSensor<Void>) transformer.getTree().get(3);
 
         Assert.assertEquals(ActorPort.A, cs.getMotor());
-    }
-
-    @Test
-    public void sensorGetModeEncoder() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-33, y=55], DrehSensor [mode=GET_MODE, motor=A]]]]";
-
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getModeEncoder.xml"));
-    }
-
-    @Test
-    public void sensorGetSampleEncoder() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-40, y=159], DrehSensor [mode=GET_SAMPLE, motor=A]]]]";
-
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getSampleEncoder.xml"));
+        Assert.assertEquals(ActorPort.D, cs1.getMotor());
     }
 
     @Test
@@ -60,16 +52,6 @@ public class EncoderSensorTest {
     @Test
     public void reverseTransformation() throws Exception {
         Helper.assertTransformationIsOk("/ast/sensors/sensor_setEncoder.xml");
-    }
-
-    @Test
-    public void reverseTransformation1() throws Exception {
-        Helper.assertTransformationIsOk("/ast/sensors/sensor_getModeEncoder.xml");
-    }
-
-    @Test
-    public void reverseTransformation2() throws Exception {
-        Helper.assertTransformationIsOk("/ast/sensors/sensor_getSampleEncoder.xml");
     }
 
     @Test

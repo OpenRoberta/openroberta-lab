@@ -21,35 +21,28 @@ import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensorMode;
-import de.fhg.iais.roberta.ast.syntax.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
 import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.brickconfiguration.HardwareComponent;
-import de.fhg.iais.roberta.brickconfiguration.ev3.EV3BrickConfiguration;
 import de.fhg.iais.roberta.dbc.DbcException;
-import de.fhg.iais.roberta.hardwarecomponents.ev3.HardwareComponentEV3Sensor;
+import de.fhg.iais.roberta.ev3.EV3BrickConfiguration;
+import de.fhg.iais.roberta.ev3.EV3Sensors;
 
 public class DeviceHandler {
 
     private final Map<ActorPort, RegulatedMotor> lejosRegulatedMotors = new TreeMap<>();
     private final Map<ActorPort, EncoderMotor> lejosUnregulatedMotors = new TreeMap<>();
-    private final Map<ActorPort, MotorTachoMode> tachoModes = new TreeMap<>();
 
-    private final Map<SensorPort, EV3ColorSensor> lejosColorSensors = new TreeMap<>();
-    private final Map<SensorPort, EV3TouchSensor> lejosTouchSensors = new TreeMap<>();
-    private final Map<SensorPort, EV3UltrasonicSensor> lejosUltrasonicSensors = new TreeMap<>();
-    private final Map<SensorPort, EV3IRSensor> lejosInfraredSensors = new TreeMap<>();
-    private final Map<SensorPort, EV3GyroSensor> lejosGyroSensors = new TreeMap<>();
+    private EV3GyroSensor gyroSensor = null;
 
-    private final Map<SensorPort, ColorSensorMode> colorModes = new TreeMap<>();
-    private final Map<SensorPort, UltrasonicSensorMode> ultrasonicModes = new TreeMap<>();
-    private final Map<SensorPort, InfraredSensorMode> infraredModes = new TreeMap<>();
-    private final Map<SensorPort, GyroSensorMode> gyroModes = new TreeMap<>();
+    private SampleProviderBean[] portS1;
+    private SampleProviderBean[] portS2;
+    private SampleProviderBean[] portS3;
+    private SampleProviderBean[] portS4;
 
-    private final Map<SensorPort, SampleProvider> lejosSampleProvider = new TreeMap<>();
-    private final Set<HardwareComponentEV3Sensor> usedSensors;
+    private final Set<EV3Sensors> usedSensors;
 
-    public DeviceHandler(EV3BrickConfiguration brickConfiguration, Set<HardwareComponentEV3Sensor> usedSensors) {
+    public DeviceHandler(EV3BrickConfiguration brickConfiguration, Set<EV3Sensors> usedSensors) {
         this.usedSensors = usedSensors;
         createDevices(brickConfiguration);
     }
@@ -59,10 +52,10 @@ public class DeviceHandler {
         initMotor(ActorPort.B, brickConfiguration.getActorOnPort(ActorPort.B), lejos.hardware.port.MotorPort.B);
         initMotor(ActorPort.C, brickConfiguration.getActorOnPort(ActorPort.C), lejos.hardware.port.MotorPort.C);
         initMotor(ActorPort.D, brickConfiguration.getActorOnPort(ActorPort.D), lejos.hardware.port.MotorPort.D);
-        initSensor(SensorPort.S1, brickConfiguration.getSensorOnPort(SensorPort.S1), lejos.hardware.port.SensorPort.S1);
-        initSensor(SensorPort.S2, brickConfiguration.getSensorOnPort(SensorPort.S2), lejos.hardware.port.SensorPort.S2);
-        initSensor(SensorPort.S3, brickConfiguration.getSensorOnPort(SensorPort.S3), lejos.hardware.port.SensorPort.S3);
-        initSensor(SensorPort.S4, brickConfiguration.getSensorOnPort(SensorPort.S4), lejos.hardware.port.SensorPort.S4);
+        this.portS1 = initSensor(SensorPort.S1, brickConfiguration.getSensorOnPort(SensorPort.S1), lejos.hardware.port.SensorPort.S1);
+        this.portS2 = initSensor(SensorPort.S2, brickConfiguration.getSensorOnPort(SensorPort.S2), lejos.hardware.port.SensorPort.S2);
+        this.portS3 = initSensor(SensorPort.S3, brickConfiguration.getSensorOnPort(SensorPort.S3), lejos.hardware.port.SensorPort.S3);
+        this.portS4 = initSensor(SensorPort.S4, brickConfiguration.getSensorOnPort(SensorPort.S4), lejos.hardware.port.SensorPort.S4);
     }
 
     private void initMotor(ActorPort actorPort, HardwareComponent actorType, Port hardwarePort) {
@@ -88,7 +81,6 @@ public class DeviceHandler {
                 default:
                     throw new DbcException("No such actor type!");
             }
-            setTachoSensorMode(actorPort, MotorTachoMode.DEGREE);
         }
     }
 
@@ -96,38 +88,39 @@ public class DeviceHandler {
         return this.usedSensors.contains(actorType.getComponentType());
     }
 
-    private void initSensor(SensorPort sensorPort, HardwareComponent sensorType, Port hardwarePort) {
+    private SampleProviderBean[] initSensor(SensorPort sensorPort, HardwareComponent sensorType, Port hardwarePort) {
         if ( sensorType != null && isUsed(sensorType) ) {
+            SampleProviderBean[] t;
             switch ( sensorType.getComponentType().getTypeName() ) {
                 case "EV3_COLOR_SENSOR":
                     EV3ColorSensor ev3ColorSensor = new EV3ColorSensor(hardwarePort);
-                    this.lejosColorSensors.put(sensorPort, ev3ColorSensor);
-                    setColorSensorMode(sensorPort, ColorSensorMode.COLOUR);
-                    break;
+                    return colorSensorSampleProviders(sensorPort, ev3ColorSensor);
+
                 case "EV3_IR_SENSOR":
                     EV3IRSensor ev3IRSensor = new EV3IRSensor(hardwarePort);
-                    this.lejosInfraredSensors.put(sensorPort, ev3IRSensor);
-                    setInfraredMode(sensorPort, InfraredSensorMode.DISTANCE);
-                    break;
+                    return infraredSensorSampleProviders(sensorPort, ev3IRSensor);
+
                 case "EV3_GYRO_SENSOR":
-                    EV3GyroSensor ev3GyroSensor = new EV3GyroSensor(hardwarePort);
-                    this.lejosGyroSensors.put(sensorPort, ev3GyroSensor);
-                    setGyroSensorMode(sensorPort, GyroSensorMode.ANGLE);
-                    break;
+                    this.gyroSensor = new EV3GyroSensor(hardwarePort);
+                    return gyroSensorSampleProviders(sensorPort, this.gyroSensor);
+
                 case "EV3_TOUCH_SENSOR":
                     EV3TouchSensor ev3TouchSensor = new EV3TouchSensor(hardwarePort);
-                    this.lejosTouchSensors.put(sensorPort, ev3TouchSensor);
-                    setTouchSensorMode(sensorPort);
-                    break;
+                    return touchSensorSampleProviders(sensorPort, ev3TouchSensor);
+
                 case "EV3_ULTRASONIC_SENSOR":
                     EV3UltrasonicSensor ev3UltrasonicSensor = new EV3UltrasonicSensor(hardwarePort);
-                    this.lejosUltrasonicSensors.put(sensorPort, ev3UltrasonicSensor);
-                    setUltrasonicSensorMode(sensorPort, UltrasonicSensorMode.DISTANCE);
-                    break;
+                    long startTime = System.currentTimeMillis();
+                    t = ultrasonicSensorSampleProviders(sensorPort, ev3UltrasonicSensor);
+                    System.out.println(System.currentTimeMillis() - startTime);
+                    return t;
+
                 default:
                     throw new DbcException("No such sensor type!");
             }
+
         }
+        return null;
     }
 
     public RegulatedMotor getRegulatedMotor(ActorPort actorPort) {
@@ -138,81 +131,107 @@ public class DeviceHandler {
         return this.lejosUnregulatedMotors.get(actorPort);
     }
 
-    public void setTachoSensorMode(ActorPort actorPort, MotorTachoMode tachoMode) {
-        this.tachoModes.put(actorPort, tachoMode);
+    /**
+     * @return the gyroSensor
+     */
+    public EV3GyroSensor getGyroSensor() {
+        return this.gyroSensor;
     }
 
-    public MotorTachoMode getTachoSensorModeName(ActorPort actorPort) {
-        return this.tachoModes.get(actorPort);
+    public SampleProvider getProvider(SensorPort sensorPort, String sensorMode) {
+        //        SampleProviderBean[] sampleProviders = this.sensors.get(sensorPort);
+        SampleProviderBean[] sampleProviders = null;
+        switch ( sensorPort ) {
+            case S1:
+                sampleProviders = this.portS1;
+                break;
+            case S2:
+                sampleProviders = this.portS2;
+                break;
+            case S3:
+                sampleProviders = this.portS3;
+                break;
+            case S4:
+                sampleProviders = this.portS4;
+                break;
+
+            default:
+                break;
+        }
+        return findProviderByMode(sampleProviders, sensorMode);
     }
 
-    public EV3ColorSensor getColorSensor(SensorPort sensorPort) {
-        return this.lejosColorSensors.get(sensorPort);
+    private SampleProvider findProviderByMode(SampleProviderBean[] sampleProviders, String sensorMode) {
+        for ( SampleProviderBean bean : sampleProviders ) {
+            if ( bean.getModeName().equals(sensorMode) ) {
+                return bean.getSampleProvider();
+            }
+        }
+        throw new DbcException(sensorMode + " sample provider does not exists!");
     }
 
-    public EV3TouchSensor getTouchSensor(SensorPort sensorPort) {
-        return this.lejosTouchSensors.get(sensorPort);
+    private SampleProviderBean[] colorSensorSampleProviders(SensorPort sensorPort, EV3ColorSensor ev3ColorSensor) {
+        SampleProviderBean[] colorSensorSampleProvider = new SampleProviderBean[ColorSensorMode.values().length];
+        int i = 0;
+        for ( ColorSensorMode sensorMode : ColorSensorMode.values() ) {
+            SampleProviderBean providerBean = new SampleProviderBean();
+            providerBean.setModeName(sensorMode.name());
+            providerBean.setSampleProvider(ev3ColorSensor.getMode(sensorMode.getLejosModeName()));
+            colorSensorSampleProvider[i] = providerBean;
+            i++;
+        }
+        return colorSensorSampleProvider;
     }
 
-    public EV3UltrasonicSensor getUltrasonicSensor(SensorPort sensorPort) {
-        return this.lejosUltrasonicSensors.get(sensorPort);
+    private SampleProviderBean[] infraredSensorSampleProviders(SensorPort sensorPort, EV3IRSensor ev3IRSensor) {
+        SampleProviderBean[] infraredSensorSampleProviders = new SampleProviderBean[InfraredSensorMode.values().length];
+        int i = 0;
+        for ( InfraredSensorMode sensorMode : InfraredSensorMode.values() ) {
+            SampleProviderBean providerBean = new SampleProviderBean();
+            providerBean.setModeName(sensorMode.name());
+            providerBean.setSampleProvider(ev3IRSensor.getMode(sensorMode.getLejosModeName()));
+            infraredSensorSampleProviders[i] = providerBean;
+            i++;
+        }
+        return infraredSensorSampleProviders;
     }
 
-    public EV3IRSensor getInfraredSensor(SensorPort sensorPort) {
-        return this.lejosInfraredSensors.get(sensorPort);
+    private SampleProviderBean[] gyroSensorSampleProviders(SensorPort sensorPort, EV3GyroSensor ev3GyroSensor) {
+        SampleProviderBean[] gyroSensorSampleProviders = new SampleProviderBean[GyroSensorMode.values().length - 1];
+        int i = 0;
+        for ( GyroSensorMode sensorMode : GyroSensorMode.values() ) {
+            if ( sensorMode != GyroSensorMode.RESET ) {
+                SampleProviderBean providerBean = new SampleProviderBean();
+                providerBean.setModeName(sensorMode.name());
+                providerBean.setSampleProvider(ev3GyroSensor.getMode(sensorMode.getLejosModeName()));
+                gyroSensorSampleProviders[i] = providerBean;
+                i++;
+            }
+        }
+        return gyroSensorSampleProviders;
     }
 
-    public EV3GyroSensor getGyroSensor(SensorPort sensorPort) {
-        return this.lejosGyroSensors.get(sensorPort);
+    private SampleProviderBean[] ultrasonicSensorSampleProviders(SensorPort sensorPort, EV3UltrasonicSensor ev3UltrasonicSensor) {
+        SampleProviderBean[] ultrasonicSensorSampleProviders = new SampleProviderBean[UltrasonicSensorMode.values().length];
+        int i = 0;
+        for ( UltrasonicSensorMode sensorMode : UltrasonicSensorMode.values() ) {
+            SampleProviderBean providerBean = new SampleProviderBean();
+            providerBean.setModeName(sensorMode.name());
+            providerBean.setSampleProvider(ev3UltrasonicSensor.getMode(sensorMode.getLejosModeName()));
+            ultrasonicSensorSampleProviders[i] = providerBean;
+            i++;
+        }
+        return ultrasonicSensorSampleProviders;
     }
 
-    public ColorSensorMode getColorSensorModeName(SensorPort sensorPort) {
-        return this.colorModes.get(sensorPort);
-    }
+    private SampleProviderBean[] touchSensorSampleProviders(SensorPort sensorPort, EV3TouchSensor ev3TouchSensor) {
+        SampleProviderBean[] touchSensorSampleProviders = new SampleProviderBean[1];
 
-    public UltrasonicSensorMode getUltrasonicSensorModeName(SensorPort sensorPort) {
-        return this.ultrasonicModes.get(sensorPort);
-    }
+        SampleProviderBean providerBean = new SampleProviderBean();
+        providerBean.setModeName("Touch");
+        providerBean.setSampleProvider(ev3TouchSensor.getMode("Touch"));
+        touchSensorSampleProviders[0] = providerBean;
 
-    public InfraredSensorMode getInfraredSensorModeName(SensorPort sensorPort) {
-        return this.infraredModes.get(sensorPort);
+        return touchSensorSampleProviders;
     }
-
-    public GyroSensorMode getGyroSensorModeName(SensorPort sensorPort) {
-        return this.gyroModes.get(sensorPort);
-    }
-
-    public SampleProvider getSampleProvider(SensorPort sensorPort) {
-        return this.lejosSampleProvider.get(sensorPort);
-    }
-
-    public void setColorSensorMode(SensorPort sensorPort, ColorSensorMode sensorMode) {
-        SampleProvider sp = getColorSensor(sensorPort).getMode(sensorMode.getLejosModeName());
-        this.lejosSampleProvider.put(sensorPort, sp);
-        this.colorModes.put(sensorPort, sensorMode);
-    }
-
-    public void setTouchSensorMode(SensorPort sensorPort) {
-        SampleProvider sp = getTouchSensor(sensorPort).getMode("Touch");
-        this.lejosSampleProvider.put(sensorPort, sp);
-    }
-
-    public void setUltrasonicSensorMode(SensorPort sensorPort, UltrasonicSensorMode sensorMode) {
-        SampleProvider sp = getUltrasonicSensor(sensorPort).getMode(sensorMode.getLejosModeName());
-        this.lejosSampleProvider.put(sensorPort, sp);
-        this.ultrasonicModes.put(sensorPort, sensorMode);
-    }
-
-    public void setInfraredMode(SensorPort sensorPort, InfraredSensorMode sensorMode) {
-        SampleProvider sp = getInfraredSensor(sensorPort).getMode(sensorMode.toString());
-        this.lejosSampleProvider.put(sensorPort, sp);
-        this.infraredModes.put(sensorPort, sensorMode);
-    }
-
-    public void setGyroSensorMode(SensorPort sensorPort, GyroSensorMode sensorMode) {
-        SampleProvider sp = getGyroSensor(sensorPort).getMode(sensorMode.getLejosModeName());
-        this.lejosSampleProvider.put(sensorPort, sp);
-        this.gyroModes.put(sensorPort, sensorMode);
-    }
-
 }

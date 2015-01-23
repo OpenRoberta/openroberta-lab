@@ -7,6 +7,7 @@ import java.util.Random;
 
 import de.fhg.iais.roberta.ast.syntax.IndexLocation;
 import de.fhg.iais.roberta.ast.syntax.ListElementOperations;
+import de.fhg.iais.roberta.ast.syntax.Pickcolor;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
@@ -77,13 +78,31 @@ public class BlocklyMethods {
         return rand.nextDouble();
     }
 
-    public static List<Void> createEmptyList() {
-        return new ArrayList<Void>();
+    //
+    //    @SafeVarargs
+    //    public static <T> ArrayList<T> createListWith(T... a) {
+    //        return new ArrayList<T>(Arrays.asList(a));
+    //    }
+
+    public static ArrayList<Float> createListWith(Number... a) {
+        ArrayList<Float> result = new ArrayList<Float>();
+        for ( Number number : a ) {
+            result.add(number.floatValue());
+
+        }
+        return result;
     }
 
-    @SafeVarargs
-    public static <T> ArrayList<T> createListWith(T... a) {
-        return new ArrayList<T>(Arrays.asList(a));
+    public static ArrayList<Boolean> createListWith(Boolean... a) {
+        return new ArrayList<Boolean>(Arrays.asList(a));
+    }
+
+    public static ArrayList<String> createListWith(String... a) {
+        return new ArrayList<String>(Arrays.asList(a));
+    }
+
+    public static ArrayList<Pickcolor> createListWith(Pickcolor... a) {
+        return new ArrayList<Pickcolor>(Arrays.asList(a));
     }
 
     public static <T> ArrayList<T> createListWithItem(T item, int times) {

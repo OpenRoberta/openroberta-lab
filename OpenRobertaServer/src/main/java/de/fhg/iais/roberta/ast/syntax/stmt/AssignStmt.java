@@ -2,12 +2,14 @@ package de.fhg.iais.roberta.ast.syntax.stmt;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -76,9 +78,14 @@ public class AssignStmt<V> extends Stmt<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        String varType =
+            getName().getTypeVar().getBlocklyName().substring(0, 1).toUpperCase() + getName().getTypeVar().getBlocklyName().substring(1).toLowerCase();
 
-        AstJaxbTransformerHelper.addField(jaxbDestination, "VAR", getName().getValue());
-        AstJaxbTransformerHelper.addValue(jaxbDestination, "VALUE", getExpr());
+        Mutation mutation = new Mutation();
+        mutation.setDatatype(varType);
+        jaxbDestination.setMutation(mutation);
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VAR, getName().getValue());
+        AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, getExpr());
 
         return jaxbDestination;
     }

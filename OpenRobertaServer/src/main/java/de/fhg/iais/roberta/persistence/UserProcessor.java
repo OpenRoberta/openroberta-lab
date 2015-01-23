@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
+import de.fhg.iais.roberta.util.Util;
 
 public class UserProcessor extends AbstractProcessor {
 
@@ -21,10 +22,10 @@ public class UserProcessor extends AbstractProcessor {
         UserDao userDao = new UserDao(this.dbSession);
         User user = userDao.loadUser(account);
         if ( user != null && user.isPasswordCorrect(password) ) {
-            setSuccess("user.get_one.success");
+            setSuccess(Util.USER_GET_ONE_SUCCESS);
             return user;
         } else {
-            setError("user.get_one.error.id_or_password_wrong");
+            setError(Util.USER_GET_ONE_ERROR_ID_OR_PASSWORD_WRONG);
             return null;
         }
     }
@@ -33,11 +34,11 @@ public class UserProcessor extends AbstractProcessor {
         UserDao userDao = new UserDao(this.dbSession);
         User user = userDao.persistUser(account, password, roleAsString);
         if ( user != null ) {
-            setSuccess("user.create.success");
+            setSuccess(Util.USER_CREATE_SUCCESS);
             user.setEmail(email);
             user.setTags(tags);
         } else {
-            setError("user.create.error.not_saved_to_db", account);
+            setError(Util.USER_CREATE_ERROR_NOT_SAVED_TO_DB, account);
         }
     }
 
@@ -47,12 +48,12 @@ public class UserProcessor extends AbstractProcessor {
         if ( user != null && user.isPasswordCorrect(password) ) {
             int rowCount = userDao.deleteUser(user);
             if ( rowCount > 0 ) {
-                setSuccess("user.delete.success");
+                setSuccess(Util.USER_DELETE_SUCCESS);
             } else {
-                setError("user.delete.error.not_deleted_in_db", account);
+                setError(Util.USER_DELETE_ERROR_NOT_DELETED_IN_DB, account);
             }
         } else {
-            setError("user.delete.error.id_not_found", account);
+            setError(Util.USER_DELETE_ERROR_ID_NOT_FOUND, account);
         }
     }
 
@@ -71,7 +72,7 @@ public class UserProcessor extends AbstractProcessor {
                 usersJSONArray.put(userJSON);
             }
         }
-        setSuccess("user.get_all.success");
+        setSuccess(Util.USER_GET_ALL_SUCCESS);
         return usersJSONArray;
     }
 }

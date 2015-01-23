@@ -126,12 +126,12 @@ Blockly.Field.prototype.updateEditable = function() {
         return;
     }
     if (this.sourceBlock_.isEditable()) {
-        Blockly.addClass_(/** @type {!Element} */ (this.fieldGroup_), 'blocklyEditableText');
-        Blockly.removeClass_(/** @type {!Element} */ (this.fieldGroup_), 'blocklyNoNEditableText');
+        Blockly.addClass_((this.fieldGroup_), 'blocklyEditableText');
+        Blockly.removeClass_((this.fieldGroup_), 'blocklyNoNEditableText');
         this.fieldGroup_.style.cursor = this.CURSOR;
     } else {
-        Blockly.addClass_(/** @type {!Element} */ (this.fieldGroup_), 'blocklyNonEditableText');
-        Blockly.removeClass_(/** @type {!Element} */ (this.fieldGroup_), 'blocklyEditableText');
+        Blockly.addClass_((this.fieldGroup_), 'blocklyNonEditableText');
+        Blockly.removeClass_((this.fieldGroup_), 'blocklyEditableText');
         this.fieldGroup_.style.cursor = '';
     }
 };
@@ -164,7 +164,7 @@ Blockly.Field.prototype.setVisible = function(visible) {
  * @return {!Element} The group element.
  */
 Blockly.Field.prototype.getRootElement = function() {
-    return /** @type {!Element} */ (this.fieldGroup_);
+    return (this.fieldGroup_);
 };
 
 /**
@@ -237,7 +237,7 @@ Blockly.Field.prototype.setText = function(text) {
 Blockly.Field.prototype.updateTextNode_ = function() {
     var text = this.text_;
     // Empty the text element.
-    goog.dom.removeChildren(/** @type {!Element} */ (this.textElement_));
+    goog.dom.removeChildren((this.textElement_));
     // Replace whitespace with non-breaking spaces so the text doesn't collapse.
     text = text.replace(/\s/g, Blockly.Field.NBSP);
     if (Blockly.RTL && text) {
@@ -302,8 +302,10 @@ Blockly.Field.prototype.onMouseUp_ = function(e) {
 
 /**
  * Change the tooltip text for this field.
- * @param {string|!Element} newTip Text for tooltip or a parent element to
- *     link to for its tooltip.
+ * 
+ * @param {string|!Element}
+ *            newTip Text for tooltip or a parent element to link to for its
+ *            tooltip.
  */
 Blockly.Field.prototype.setTooltip = function(newTip) {
     // Non-abstract sub-classes may wish to implement this.  See FieldLabel.

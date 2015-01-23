@@ -43,7 +43,7 @@ public class UserProgramProcessor extends AbstractProcessor {
                     userProgramDao.persistUserProgram(user, program, right);
                 }
             } catch ( JSONException e ) {
-                setError("JSON exception");
+                // TODO: crash setError(Util.SYSTEM_ERROR);
             }
         }
     }
@@ -55,15 +55,15 @@ public class UserProgramProcessor extends AbstractProcessor {
 
         User owner = userDao.get(ownerId);
         if ( owner == null ) {
-            setError("Owner does not exist");
+            setError(Util.OWNER_DOES_NOT_EXIST);
         }
         Program programToShare = programDao.load(programName, owner);
         if ( programToShare == null ) {
-            setError("Program to share does not exists");
+            setError(Util.PROGRAM_TO_SHARE_DOES_NOT_EXIST);
         }
         User userToShare = userDao.loadUser(userToShareName);
         if ( userToShare == null ) {
-            setError("User to share does not exists");
+            setError(Util.USER_TO_SHARE_DOES_NOT_EXIST);
         }
 
         UserProgramDao userProgramDao = new UserProgramDao(this.dbSession);

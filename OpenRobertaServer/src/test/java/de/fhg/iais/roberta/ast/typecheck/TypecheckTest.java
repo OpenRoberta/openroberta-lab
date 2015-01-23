@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
-import de.fhg.iais.roberta.brickconfiguration.ev3.EV3BrickConfiguration;
+import de.fhg.iais.roberta.ev3.EV3BrickConfiguration;
 
 public class TypecheckTest {
     private static final EV3BrickConfiguration BRICK_CONFIGURATION = new EV3BrickConfiguration.Builder().build();

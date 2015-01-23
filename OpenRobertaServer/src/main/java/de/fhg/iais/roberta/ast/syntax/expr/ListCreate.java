@@ -4,8 +4,10 @@ import java.math.BigInteger;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
@@ -18,12 +20,14 @@ import de.fhg.iais.roberta.dbc.Assert;
  * To create an instance from this class use the method {@link #make(String, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class ListCreate<V> extends Expr<V> {
+    private final BlocklyType typeVar;
     private final ExprList<V> exprList;
 
-    private ListCreate(ExprList<V> exprList, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private ListCreate(BlocklyType typeVar, ExprList<V> exprList, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.LIST_CREATE, properties, comment);
-        Assert.isTrue(exprList != null && exprList.isReadOnly());
+        Assert.isTrue(exprList != null && exprList.isReadOnly() && typeVar != null);
         this.exprList = exprList;
+        this.typeVar = typeVar;
         setReadOnly();
     }
 
@@ -35,8 +39,8 @@ public class ListCreate<V> extends Expr<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ListCreate}
      */
-    public static <V> ListCreate<V> make(ExprList<V> exprList, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ListCreate<V>(exprList, properties, comment);
+    public static <V> ListCreate<V> make(BlocklyType typeVar, ExprList<V> exprList, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new ListCreate<V>(typeVar, exprList, properties, comment);
     }
 
     /**
@@ -44,6 +48,13 @@ public class ListCreate<V> extends Expr<V> {
      */
     public ExprList<V> getValue() {
         return this.exprList;
+    }
+
+    /**
+     * @return the typeVar
+     */
+    public BlocklyType getTypeVar() {
+        return this.typeVar;
     }
 
     @Override
@@ -63,21 +74,24 @@ public class ListCreate<V> extends Expr<V> {
 
     @Override
     public String toString() {
-        return "ListCreate [" + this.exprList + "]";
+        return "ListCreate [" + this.typeVar + ", " + this.exprList + "]";
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
+
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         ExprList<?> exprList = getValue();
         int numOfItems = (exprList.get().size());
         Mutation mutation = new Mutation();
         mutation.setItems(BigInteger.valueOf(numOfItems));
+        mutation.setListType(getTypeVar().getBlocklyName());
         jaxbDestination.setMutation(mutation);
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.LIST_TYPE, getTypeVar().getBlocklyName());
         for ( int i = 0; i < numOfItems; i++ ) {
-            AstJaxbTransformerHelper.addValue(jaxbDestination, "ADD" + i, exprList.get().get(i));
+            AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.ADD + i, exprList.get().get(i));
         }
         return jaxbDestination;
     }

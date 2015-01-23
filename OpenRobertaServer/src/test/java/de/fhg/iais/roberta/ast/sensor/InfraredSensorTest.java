@@ -13,7 +13,9 @@ public class InfraredSensorTest {
 
     @Test
     public void sensorSetInfrared() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-47, y=1], InfraredSensor [mode=DISTANCE, port=S4]]]]";
+        String a =
+            "BlockAST [project=[[Location [x=-23, y=157], InfraredSensor [mode=DISTANCE, port=S4], "
+                + "Location [x=-19, y=199], InfraredSensor [mode=SEEK, port=S3]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_setInfrared.xml"));
     }
@@ -23,8 +25,10 @@ public class InfraredSensorTest {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setInfrared.xml");
 
         InfraredSensor<Void> cs = (InfraredSensor<Void>) transformer.getTree().get(1);
+        InfraredSensor<Void> cs1 = (InfraredSensor<Void>) transformer.getTree().get(3);
 
         Assert.assertEquals(InfraredSensorMode.DISTANCE, cs.getMode());
+        Assert.assertEquals(InfraredSensorMode.SEEK, cs1.getMode());
     }
 
     @Test
@@ -32,36 +36,14 @@ public class InfraredSensorTest {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setInfrared.xml");
 
         InfraredSensor<Void> cs = (InfraredSensor<Void>) transformer.getTree().get(1);
+        InfraredSensor<Void> cs1 = (InfraredSensor<Void>) transformer.getTree().get(3);
 
         Assert.assertEquals(SensorPort.S4, cs.getPort());
-    }
-
-    @Test
-    public void sensorGetModeInfrared() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-46, y=55], InfraredSensor [mode=GET_MODE, port=S4]]]]";
-
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getModeInfrared.xml"));
-    }
-
-    @Test
-    public void sensorGetSampleInfrared() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-11, y=105], InfraredSensor [mode=GET_SAMPLE, port=S4]]]]";
-
-        Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_getSampleInfrared.xml"));
+        Assert.assertEquals(SensorPort.S3, cs1.getPort());
     }
 
     @Test
     public void reverseTransformation() throws Exception {
         Helper.assertTransformationIsOk("/ast/sensors/sensor_setInfrared.xml");
-    }
-
-    @Test
-    public void reverseTransformation1() throws Exception {
-        Helper.assertTransformationIsOk("/ast/sensors/sensor_getModeInfrared.xml");
-    }
-
-    @Test
-    public void reverseTransformation2() throws Exception {
-        Helper.assertTransformationIsOk("/ast/sensors/sensor_getSampleInfrared.xml");
     }
 }

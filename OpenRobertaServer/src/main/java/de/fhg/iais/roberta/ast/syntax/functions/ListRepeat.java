@@ -4,9 +4,11 @@ import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
@@ -19,12 +21,14 @@ import de.fhg.iais.roberta.dbc.Assert;
  * The enumeration {@link FunctionNames} contains all allowed functions.
  */
 public class ListRepeat<V> extends Function<V> {
+    private final BlocklyType typeVar;
     private final List<Expr<V>> param;
 
-    private ListRepeat(List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private ListRepeat(BlocklyType typeVar, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Kind.LIST_REPEAT_FUNCT, properties, comment);
         Assert.isTrue(param != null);
         this.param = param;
+        this.typeVar = typeVar;
         setReadOnly();
     }
 
@@ -36,8 +40,8 @@ public class ListRepeat<V> extends Function<V> {
      * @param comment that user has added to the block,
      * @return read only object of class {@link ListRepeat}
      */
-    public static <V> ListRepeat<V> make(List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ListRepeat<V>(param, properties, comment);
+    public static <V> ListRepeat<V> make(BlocklyType typeVar, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new ListRepeat<V>(typeVar, param, properties, comment);
     }
 
     /**
@@ -45,6 +49,13 @@ public class ListRepeat<V> extends Function<V> {
      */
     public List<Expr<V>> getParam() {
         return this.param;
+    }
+
+    /**
+     * @return the typeVar
+     */
+    public BlocklyType getTypeVar() {
+        return this.typeVar;
     }
 
     @Override
@@ -64,15 +75,17 @@ public class ListRepeat<V> extends Function<V> {
 
     @Override
     public String toString() {
-        return "ListRepeat [" + this.param + "]";
+        return "ListRepeat [" + this.typeVar + ", " + this.param + "]";
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
+        String varType = getTypeVar().getBlocklyName().substring(0, 1).toUpperCase() + getTypeVar().getBlocklyName().substring(1).toLowerCase();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        AstJaxbTransformerHelper.addValue(jaxbDestination, "ITEM", getParam().get(0));
-        AstJaxbTransformerHelper.addValue(jaxbDestination, "NUM", getParam().get(1));
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.LIST_TYPE, varType);
+        AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.ITEM, getParam().get(0));
+        AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.NUM, getParam().get(1));
         return jaxbDestination;
     }
 }

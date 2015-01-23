@@ -56,7 +56,7 @@ Blockly.Variables.allVariables = function(opt_block) {
     var variableHash = Object.create(null);
     // Iterate through every block and add each variable to the hash.
     for (var x = 0; x < blocks.length; x++) {
-        var func = blocks[x].getVars;
+        var func = blocks[x].getVarDecl;
         if (func) {
             var blockVariables = func.call(blocks[x]);
             for (var y = 0; y < blockVariables.length; y++) {
@@ -84,7 +84,13 @@ Blockly.Variables.allVariables = function(opt_block) {
  * @param {string}
  *            newName New variable name.
  */
-Blockly.Variables.renameVariable = function(oldName, newName) {
+Blockly.Variables.renameVariable = function(newName) {
+    var block = this.sourceBlock_;
+    var oldName = block.getFieldValue('VAR');
+    // Strip leading and trailing whitespace.  Beyond this, all names are legal.
+    newName = newName.replace(/^[\s\xa0]+|[\s\xa0]+$/g, '');
+    // Ensure two identically-named variables don't exist.
+    newName = Blockly.Variables.findLegalName(newName, block);
     var blocks = Blockly.mainWorkspace.getAllBlocks();
     // Iterate through every block.
     for (var x = 0; x < blocks.length; x++) {
@@ -93,6 +99,102 @@ Blockly.Variables.renameVariable = function(oldName, newName) {
             func.call(blocks[x], oldName, newName);
         }
     }
+    return newName;
+};
+
+/**
+ * Find all instances of the specified variable and update the data type of
+ * them.
+ * 
+ * @param {string}
+ *            name Variable to update.
+ * @param {string}
+ *            type New data type.
+ */
+Blockly.Variables.updateType = function(name, type) {
+    var blocks = Blockly.mainWorkspace.getAllBlocks();
+    // Iterate through every block.
+    for (var x = 0; x < blocks.length; x++) {
+        var func = blocks[x].setType;
+        if (func) {
+            if (blocks[x].getFieldValue('VAR') === name) {
+                func.call(blocks[x], name, type);
+            }
+        }
+    }
+};
+
+/**
+ * Find all instances of the specified variable and delete them.
+ * 
+ * @param {string}
+ *            name Variable to update.
+ * @param {string}
+ *            type New data type.
+ */
+Blockly.Variables.deleteAll = function(name) {
+    var blocks = Blockly.mainWorkspace.getAllBlocks();
+    // Iterate through every block.
+    for (var x = 0; x < blocks.length; x++) {
+        var func = blocks[x].setType;
+        if (func) {
+            if (blocks[x].getFieldValue('VAR') === name) {
+                blocks[x].dispose(true, true, false);
+            }
+        }
+    }
+};
+
+/**
+ * Find the declaration instance of the specified variable and return the data
+ * type.
+ * 
+ * @param {string}
+ *            name Variable name.
+ * @return {string} type Data type of the block.
+ */
+Blockly.Variables.getType = function(name) {
+    var blocks = Blockly.mainWorkspace.getAllBlocks();
+    // Iterate through every block.
+    for (var i = 0; i < blocks.length; i++) {
+        var func = blocks[i].getType;
+        if (func) {
+            if (blocks[i].getFieldValue('VAR') === name)
+                return func.call(blocks[i]);
+        }
+    }
+    return null;
+};
+
+/**
+ * Find the declaration instance of the specified variable and return the name
+ * of the procedure if it is declared in a procedure.
+ * 
+ * @param {string}
+ *            name Variable name.
+ * @return {string} name of the procedure or null
+ */
+Blockly.Variables.getProcedureName = function(name) {
+    var blocks = Blockly.mainWorkspace.getAllBlocks();
+    // Iterate through every block.
+    for (var i = 0; i < blocks.length; i++) {
+        var func = blocks[i].getVarDecl;
+        if (func) {
+            if (Blockly.Names.equals(name, blocks[i].getFieldValue('VAR'))) {
+                // special case controls_for loop, variable declaration is implicied.
+                if (blocks[i].type == 'controls_for' || blocks[i].type == 'controls_forEach') {
+                    return blocks[i].id;
+                }
+                var surroundParent = blocks[i].getSurroundParent();
+                if (surroundParent && (surroundParent.type == 'robProcedures_defnoreturn' || surroundParent.type == 'robProcedures_defreturn')) {
+                    return surroundParent.getFieldValue('NAME');
+                } else if (surroundParent && (surroundParent.type == 'robControls_start')) {
+                    return 'global';
+                }
+            }
+        }
+    }
+    return null;
 };
 
 /**
@@ -107,28 +209,33 @@ Blockly.Variables.renameVariable = function(oldName, newName) {
  * @param {!Blockly.Workspace}
  *            workspace The flyout's workspace.
  */
-Blockly.Variables.flyoutCategory = function(blocks, gaps, margin, workspace) {
-    var variableList = Blockly.Variables.allVariables();
-    variableList.sort(goog.string.caseInsensitiveCompare);
-    // In addition to the user's variables, we also want to display the default
-    // variable name at the top.  We also don't want this duplicated if the
-    // user has created a variable of the same name.
-    variableList.unshift(null);
-    var defaultVariable = undefined;
-    for (var i = 0; i < variableList.length; i++) {
-        if (variableList[i] === defaultVariable) {
-            continue;
+Blockly.Variables.flyoutCategory = function(xmlList, blocks, gaps, margin, workspace) {
+    var list = [];
+    if (xmlList == 'GLOBAL_VARIABLE') {
+        list = Blockly.Variables.allGlobalVariables();
+    } else if (xmlList == 'LOOP_VARIABLE') {
+        list = Blockly.Variables.allLoopVariables();
+    } else {
+        var tempList = Blockly.Variables.allLocalVariables();
+        for (var i = 0; i < tempList.length; i++) {
+            if (xmlList == tempList[i][0])
+                list.push(tempList[i]);
         }
+    }
+    var variableList = [];
+    for (var i = 0; i < list.length; i++) {
+        variableList.push(list[i][1]);
+    }
+    variableList.sort(goog.string.caseInsensitiveCompare);
+    for (var i = 0; i < variableList.length; i++) {
         var getBlock = Blockly.Blocks['variables_get'] ? Blockly.Block.obtain(workspace, 'variables_get') : null;
         getBlock && getBlock.initSvg();
         var setBlock = Blockly.Blocks['variables_set'] ? Blockly.Block.obtain(workspace, 'variables_set') : null;
         setBlock && setBlock.initSvg();
-        if (variableList[i] === null) {
-            defaultVariable = (getBlock || setBlock).getVars()[0];
-        } else {
-            getBlock && getBlock.setFieldValue(variableList[i], 'VAR');
-            setBlock && setBlock.setFieldValue(variableList[i], 'VAR');
-        }
+        getBlock && getBlock.setFieldValue(variableList[i], 'VAR');
+        getBlock && getBlock.setType(variableList[i]);
+        setBlock && setBlock.setFieldValue(variableList[i], 'VAR');
+        setBlock && setBlock.setType(variableList[i]);
         setBlock && blocks.push(setBlock);
         getBlock && blocks.push(getBlock);
         if (getBlock && setBlock) {
@@ -188,4 +295,126 @@ Blockly.Variables.generateUniqueName = function() {
         newName = 'i';
     }
     return newName;
+};
+
+/**
+ * Ensure two identically-named variables don't exist.
+ * 
+ * @param {string}
+ *            name Proposed variable name.
+ * @param {!Blockly.Block}
+ *            block Block to disambiguate.
+ * @return {string} Non-colliding name.
+ */
+Blockly.Variables.findLegalName = function(name, block) {
+    while (!Blockly.Variables.isLegalName(name, block)) {
+        // Collision with another variable.
+        var r = name.match(/^(.*?)(\d+)$/);
+        if (!r) {
+            name += '2';
+        } else {
+            name = r[1] + (parseInt(r[2], 10) + 1);
+        }
+    }
+    return name;
+};
+
+/**
+ * Does this variable have a legal name? Illegal names include names of
+ * variables already defined.
+ * 
+ * @param {string}
+ *            name The questionable name.
+ * @param {Blockly.Block}
+ *            opt_exclude Optional block to exclude from comparisons (one
+ *            doesn't want to collide with oneself).
+ * @return {boolean} True if the name is legal.
+ */
+Blockly.Variables.isLegalName = function(name, block) {
+    var blocks = Blockly.mainWorkspace.getAllBlocks();
+    // Iterate through every block.
+    for (var x = 0; x < blocks.length; x++) {
+        if (blocks[x] == block) {
+            continue;
+        }
+        var func = blocks[x].getVarDecl;
+        if (func) {
+            var varName = func.call(blocks[x]);
+            if (Blockly.Names.equals(name, varName[0])) {
+                return false;
+            }
+        }
+    }
+    return true;
+};
+
+/**
+ * Find all user-created global variables.
+ * 
+ * @return {!Array.<string>} Array of variable names.
+ */
+Blockly.Variables.allGlobalVariables = function() {
+    var topBlocks = Blockly.getMainWorkspace().getTopBlocks(true);
+    var variableList = [];
+    for (var i = 0; i < topBlocks.length; i++) {
+        var block = topBlocks[i];
+        if (block.type === 'robControls_start') {
+            var descandants = block.getDescendants();
+            if (descandants) {
+                variable: for (var i = 1; i < descandants.length; i++) {
+                    if (descandants[i].getVarDecl) {
+                        variableList.push([ 'GLOBAL_VARIABLE', descandants[i].getVarDecl()[0] ]);
+                    } else {
+                        if (!descandants[i].getParent())
+                            break variable;
+                    }
+                }
+            }
+        }
+    }
+    return variableList;
+};
+
+/**
+ * Find all user-created local variables.
+ * 
+ * @return {!Array.<string>} Array of variable names.
+ */
+Blockly.Variables.allLocalVariables = function() {
+    var topBlocks = Blockly.getMainWorkspace().getTopBlocks(true);
+    var variableList = [];
+    procedure: for (var i = 0; i < topBlocks.length; i++) {
+        var block = topBlocks[i];
+        if (block.getProcedureDef) {
+            var variableType = block.getProcedureDef()[0];
+            var descandants = block.getDescendants();
+            if (descandants) {
+                variable: for (var j = 1; j < descandants.length; j++) {
+                    if (descandants[j].getVarDecl) {
+                        variableList.push([ variableType, descandants[j].getVarDecl()[0] ]);
+                    } else {
+                        break variable;
+                    }
+                }
+            }
+        }
+    }
+    return variableList;
+};
+
+/**
+ * Find all user-created loop variables.
+ * 
+ * @return {!Array.<string>} Array of variable names.
+ */
+Blockly.Variables.allLoopVariables = function() {
+    var allBlocks = Blockly.mainWorkspace.getAllBlocks();
+    var variableList = [];
+    for (var i = 0; i < allBlocks.length; i++) {
+        var block = allBlocks[i];
+        if ((block.type == 'controls_for' || block.type == 'controls_forEach') && block.getVarDecl) {
+            variableList.push([ 'LOOP_VARIABLE', block.getVarDecl()[0] ]);
+        }
+    }
+    return variableList;
 };

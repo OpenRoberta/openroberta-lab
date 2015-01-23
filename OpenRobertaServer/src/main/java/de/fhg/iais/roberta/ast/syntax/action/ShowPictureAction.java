@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.action;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
@@ -79,9 +80,9 @@ public class ShowPictureAction<V> extends Action<V> {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         String fieldValue = getPicture().name();
-        AstJaxbTransformerHelper.addField(jaxbDestination, "PICTURE", fieldValue);
-        AstJaxbTransformerHelper.addValue(jaxbDestination, "X", getX());
-        AstJaxbTransformerHelper.addValue(jaxbDestination, "Y", getY());
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PICTURE, fieldValue);
+        AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.X_, getX());
+        AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.Y_, getY());
 
         return jaxbDestination;
 

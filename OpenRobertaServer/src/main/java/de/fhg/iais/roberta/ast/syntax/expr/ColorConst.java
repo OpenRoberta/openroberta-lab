@@ -2,8 +2,9 @@ package de.fhg.iais.roberta.ast.syntax.expr;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
-import de.fhg.iais.roberta.ast.syntax.PickColor;
+import de.fhg.iais.roberta.ast.syntax.Pickcolor;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -18,12 +19,12 @@ import de.fhg.iais.roberta.dbc.Assert;
  * To create an instance from this class use the method {@link #make(String, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class ColorConst<V> extends Expr<V> {
-    private final PickColor value;
+    private final Pickcolor value;
 
     private ColorConst(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.PICK_COLOR_CONST, properties, comment);
         Assert.isTrue(!value.equals(""));
-        this.value = PickColor.get(value);
+        this.value = Pickcolor.get(value);
         setReadOnly();
     }
 
@@ -42,7 +43,7 @@ public class ColorConst<V> extends Expr<V> {
     /**
      * @return the value of the string constant.
      */
-    public PickColor getValue() {
+    public Pickcolor getValue() {
         return this.value;
     }
 
@@ -70,7 +71,7 @@ public class ColorConst<V> extends Expr<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        AstJaxbTransformerHelper.addField(jaxbDestination, "COLOUR", getValue().getHex().toLowerCase());
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.COLOUR, getValue().getHex().toLowerCase());
         return jaxbDestination;
     }
 }

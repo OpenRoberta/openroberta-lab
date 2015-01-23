@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.sensor;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
@@ -75,10 +76,10 @@ public class EncoderSensor<V> extends Sensor<V> {
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         String fieldValue = getMotor().name();
-        AstJaxbTransformerHelper.addField(jaxbDestination, "MOTORPORT", fieldValue);
         if ( getMode() == MotorTachoMode.DEGREE || getMode() == MotorTachoMode.ROTATION ) {
-            AstJaxbTransformerHelper.addField(jaxbDestination, "MODE", getMode().name());
+            AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().name());
         }
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MOTORPORT, fieldValue);
 
         return jaxbDestination;
     }
