@@ -189,7 +189,7 @@ public class DeviceHandler {
         for ( InfraredSensorMode sensorMode : InfraredSensorMode.values() ) {
             SampleProviderBean providerBean = new SampleProviderBean();
             providerBean.setModeName(sensorMode.name());
-            providerBean.setSampleProvider(ev3IRSensor.getMode(sensorMode.name()));
+            providerBean.setSampleProvider(ev3IRSensor.getMode(sensorMode.getLejosModeName()));
             infraredSensorSampleProviders[i] = providerBean;
             i++;
         }

@@ -8,11 +8,15 @@ import de.fhg.iais.roberta.dbc.DbcException;
  * Modes in which the sensor can operate.
  */
 public enum InfraredSensorMode {
-    DISTANCE(), SEEK();
+    DISTANCE( "Distance" ), SEEK( "Seek" );
     private final String[] values;
 
     private InfraredSensorMode(String... values) {
         this.values = values;
+    }
+
+    public String getLejosModeName() {
+        return this.values[0];
     }
 
     /**
