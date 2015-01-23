@@ -125,7 +125,7 @@ public class RepeatStmtTest {
     public void repeatStmtForEach() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=-436, y=284], \n"
-                + "(repeat [FOR_EACH, Binary [IN, Var [j], EmptyList [STRING]]]\n"
+                + "(repeat [FOR_EACH, Binary [IN, VarDeclaration [STRING, j, EmptyExpr [defVal=class java.lang.Integer], false, false], EmptyList [STRING]]]\n"
                 + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [gg]]\n"
                 + ")]]]";
 
@@ -135,7 +135,8 @@ public class RepeatStmtTest {
     @Test
     public void repeatStmtForEach1() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=-93, y=290], \n" + "(repeat [FOR_EACH, Binary [IN, Var [i], EmptyExpr [defVal=class java.util.ArrayList]]]\n)]]]";
+            "BlockAST [project=[[Location [x=-93, y=290], \n"
+                + "(repeat [FOR_EACH, Binary [IN, VarDeclaration [NUMERIC, i, EmptyExpr [defVal=class java.lang.Integer], false, false], EmptyExpr [defVal=class java.util.ArrayList]]]\n)]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/repeat_stmt_for_each1.xml"));
     }
@@ -144,7 +145,7 @@ public class RepeatStmtTest {
     public void repeatStmtForEach2() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=39, y=60], \n"
-                + "(repeat [FOR_EACH, Binary [IN, Var [j], ListCreate [NUMERIC, EmptyExpr [defVal=class java.util.ArrayList], EmptyExpr [defVal=class java.util.ArrayList], EmptyExpr [defVal=class java.util.ArrayList]]]]\n"
+                + "(repeat [FOR_EACH, Binary [IN, VarDeclaration [NUMERIC, j, EmptyExpr [defVal=class java.lang.Integer], false, false], ListCreate [NUMERIC, EmptyExpr [defVal=class java.util.ArrayList], EmptyExpr [defVal=class java.util.ArrayList], EmptyExpr [defVal=class java.util.ArrayList]]]]\n"
                 + "AktionStmt [LightAction [GREEN, ON]]\n)]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/repeat_stmt_for_each2.xml"));
@@ -231,6 +232,11 @@ public class RepeatStmtTest {
     @Test
     public void reverseTransformationForEach2() throws Exception {
         Helper.assertTransformationIsOk("/ast/control/repeat_stmt_for_each2.xml");
+    }
+
+    @Test
+    public void reverseTransformationForEach3() throws Exception {
+        Helper.assertTransformationIsOk("/syntax/stmt/forEach_stmt.xml");
     }
 
     @Test

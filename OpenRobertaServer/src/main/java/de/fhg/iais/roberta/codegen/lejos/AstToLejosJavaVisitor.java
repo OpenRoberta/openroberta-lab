@@ -238,8 +238,11 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         this.sb.append(var.getTypeVar().getJavaCode()).append(" ");
-        this.sb.append(var.getName()).append(" = ");
-        var.getValue().visit(this);
+        this.sb.append(var.getName());
+        if ( var.getValue().getKind() != Phrase.Kind.EMPTY_EXPR ) {
+            this.sb.append(" = ");
+            var.getValue().visit(this);
+        }
         return null;
     }
 
@@ -390,6 +393,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
                 generateCodeFromStmtCondition("if", repeatStmt.getExpr());
                 break;
             case FOR_EACH:
+                generateCodeFromStmtCondition("for", repeatStmt.getExpr());
                 break;
             default:
                 break;

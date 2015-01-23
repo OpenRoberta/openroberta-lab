@@ -689,7 +689,16 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
 
             case "controls_forEach":
                 fields = extractFields(block, (short) 2);
-                var = Var.make(BlocklyType.get(extractField(fields, BlocklyConstants.TYPE)), extractField(fields, BlocklyConstants.VAR), null, null);
+                EmptyExpr<V> empty = EmptyExpr.make(Integer.class);
+                var =
+                    VarDeclaration.make(
+                        BlocklyType.get(extractField(fields, BlocklyConstants.TYPE)),
+                        extractField(fields, BlocklyConstants.VAR),
+                        empty,
+                        false,
+                        false,
+                        null,
+                        null);
 
                 values = extractValues(block, (short) 1);
                 expr = extractValue(values, new ExprParam(BlocklyConstants.LIST_, ArrayList.class));

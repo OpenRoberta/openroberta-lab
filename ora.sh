@@ -220,7 +220,7 @@ if [[ "$cmd" == '--java' ]]; then
    _javaversion
    cmd="$1"; shift
 fi
-#_check64bit7jdk
+_check64bit7jdk
 while [[ "$cmd" != '' ]]; do
    case "$cmd" in
    --help|-h)          _helpFn ;;

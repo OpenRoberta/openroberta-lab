@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.codegen.lejos;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -163,29 +164,29 @@ public class BlocklyMethods {
         return listsIndex(list, operation, indexLocation, -1);
     }
 
-    public static <T> T listsIndex(ArrayList<T> list, ListElementOperations operation, IndexLocation indexLocation, int index) {
+    public static <T> T listsIndex(ArrayList<T> list, ListElementOperations operation, IndexLocation indexLocation, float index) {
         return listsIndex(list, operation, null, indexLocation, index);
     }
 
-    public static <T> T listsIndex(ArrayList<T> list, ListElementOperations operation, T element, IndexLocation indexLocation, int index) {
+    public static <T> T listsIndex(ArrayList<T> list, ListElementOperations operation, T element, IndexLocation indexLocation, float index) {
         int resultIndex = calculateIndex(list, indexLocation, index);
         T result = executeOperation(list, operation, resultIndex, element);
         return result;
     }
 
-    public static <T> ArrayList<T> listsGetSubList(ArrayList<T> list, IndexLocation startLocation, int startIndex, IndexLocation endLocation, int endIndex) {
+    public static <T> ArrayList<T> listsGetSubList(ArrayList<T> list, IndexLocation startLocation, int startIndex, IndexLocation endLocation, float endIndex) {
         int fromIndex = calculateIndex(list, startLocation, startIndex);
         int toIndex = calculateIndex(list, endLocation, endIndex);
         return new ArrayList<T>(list.subList(fromIndex, toIndex));
     }
 
-    public static <T> ArrayList<T> listsGetSubList(ArrayList<T> list, IndexLocation startLocation, IndexLocation endLocation, int endIndex) {
+    public static <T> ArrayList<T> listsGetSubList(ArrayList<T> list, IndexLocation startLocation, IndexLocation endLocation, float endIndex) {
         int fromIndex = calculateIndex(list, startLocation, -1);
         int toIndex = calculateIndex(list, endLocation, endIndex);
         return new ArrayList<T>(list.subList(fromIndex, toIndex));
     }
 
-    public static <T> ArrayList<T> listsGetSubList(ArrayList<T> list, IndexLocation startLocation, int startIndex, IndexLocation endLocation) {
+    public static <T> ArrayList<T> listsGetSubList(ArrayList<T> list, IndexLocation startLocation, float startIndex, IndexLocation endLocation) {
         int fromIndex = calculateIndex(list, startLocation, startIndex);
         int toIndex = calculateIndex(list, endLocation, -1);
         return new ArrayList<T>(list.subList(fromIndex, toIndex + 1));
@@ -205,36 +206,55 @@ public class BlocklyMethods {
         return sb.toString();
     }
 
-    public static <T> float sumOnList(List<T> list) {
+    public static float sumOnList(ArrayList<Float> arrayList) {
         float result = 0;
-        for ( T element : list ) {
-            result += ((Number) element).floatValue();
+        for ( float element : arrayList ) {
+            result += element;
         }
         return result;
     }
 
-    public static <T> float minOnList(List<T> list) {
-        float min = ((Number) list.get(0)).floatValue();
-        for ( T element : list ) {
-            min = Math.min(min, ((Number) element).floatValue());
-        }
-        return min;
+    public static float minOnList(ArrayList<Float> list) {
+        return Collections.min(list);
     }
 
-    public static <T> float maxOnList(List<T> list) {
-        float max = ((Number) list.get(0)).floatValue();
-        for ( T element : list ) {
-            max = Math.max(max, ((Number) element).floatValue());
-        }
-        return max;
+    public static float maxOnList(ArrayList<Float> list) {
+        return Collections.max(list);
+
     }
 
-    public static <T> float averageOnList(List<T> list) {
+    public static float averageOnList(ArrayList<Float> list) {
         float sum = 0;
-        for ( T element : list ) {
-            sum += ((Number) element).floatValue();
+        for ( float element : list ) {
+            sum += element;
         }
         return sum / list.size();
+    }
+
+    public static float medianOnList(ArrayList<Float> list) {
+        Collections.sort(list);
+        float median;
+        if ( list.size() % 2 == 0 ) {
+            median = (list.get(list.size() / 2) + list.get(list.size() / 2 - 1)) / 2;
+        } else {
+            median = list.get(list.size() / 2);
+        }
+        return median;
+    }
+
+    public static float standardDeviatioin(ArrayList<Float> list) {
+        int n = list.size();
+        if ( n == 0 ) {
+            return 0;
+        }
+        float variance = 0;
+        float mean = averageOnList(list);
+        for ( Float number : list ) {
+            variance += Math.pow(number - mean, 2);
+        }
+        variance /= n;
+        return (float) Math.sqrt(variance);
+
     }
 
     private static <T> T executeOperation(ArrayList<T> list, ListElementOperations operation, int resultIndex, T element) {
@@ -262,13 +282,13 @@ public class BlocklyMethods {
         return result;
     }
 
-    private static <T> int calculateIndex(ArrayList<T> list, IndexLocation indexLocation, int index) {
+    private static <T> int calculateIndex(ArrayList<T> list, IndexLocation indexLocation, float index) {
         Assert.isTrue(index < list.size(), "Index location is larger then the size of array!");
         switch ( indexLocation ) {
             case FROM_START:
-                return index;
+                return (int) index;
             case FROM_END:
-                return list.size() - index;
+                return (int) (list.size() - index);
             case FIRST:
                 return 0;
             case LAST:

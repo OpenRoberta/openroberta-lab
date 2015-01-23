@@ -1,8 +1,6 @@
 package de.fhg.iais.roberta.codegen.lejos;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -110,33 +108,43 @@ public class BlocklyMethodsTest {
 
     @Test
     public void sumOnList() {
-        List<? extends Number> list = Arrays.asList(1, 1, 3, 4.0, 6.0);
-        Assert.assertEquals(15.0, BlocklyMethods.sumOnList(list), 0);
+        Assert.assertEquals(15.0, BlocklyMethods.sumOnList(BlocklyMethods.createListWith(1.0, 1.0, 3.0, 4.0, 6.0)), 0);
         Assert.assertEquals(10, BlocklyMethods.sumOnList(BlocklyMethods.createListWith(5, 3, 2)), 0);
     }
 
     @Test
     public void minOnList() {
-        List<? extends Number> list = Arrays.asList(1, 1, 3, 4.0, 6.0);
-        Assert.assertEquals(1, BlocklyMethods.minOnList(list), 0);
+        Assert.assertEquals(1.0, BlocklyMethods.minOnList(BlocklyMethods.createListWith(1.0, 1.0, 3.0, 4.0, 6.0)), 0);
         Assert.assertEquals(2, BlocklyMethods.minOnList(BlocklyMethods.createListWith(5, 3, 2)), 0);
         Assert.assertEquals(-1, BlocklyMethods.minOnList(BlocklyMethods.createListWith(5, 3, 2, -1)), 0);
     }
 
     @Test
     public void maxOnList() {
-        List<? extends Number> list = Arrays.asList(1, 1, 3, 4.0, 6.0);
-        Assert.assertEquals(6, BlocklyMethods.maxOnList(list), 0);
+        Assert.assertEquals(6, BlocklyMethods.maxOnList(BlocklyMethods.createListWith(1.0, 1.0, 3.0, 4.0, 6.0)), 0);
         Assert.assertEquals(5, BlocklyMethods.maxOnList(BlocklyMethods.createListWith(5, 3, 2)), 0);
         Assert.assertEquals(5, BlocklyMethods.maxOnList(BlocklyMethods.createListWith(5, 3, 2, -1)), 0);
     }
 
     @Test
     public void averageOnList() {
-        List<? extends Number> list = Arrays.asList(1, 1, 3, 4.0, 6.0);
-        Assert.assertEquals(3, BlocklyMethods.averageOnList(list), 0);
+        Assert.assertEquals(3, BlocklyMethods.averageOnList(BlocklyMethods.createListWith(1.0, 1.0, 3.0, 4.0, 6.0)), 0);
         Assert.assertEquals(3.3333, BlocklyMethods.averageOnList(BlocklyMethods.createListWith(5, 3, 2)), 5);
         Assert.assertEquals(2.25, BlocklyMethods.averageOnList(BlocklyMethods.createListWith(5, 3, 2, -1)), 0);
+    }
+
+    @Test
+    public void medianOnList() {
+        Assert.assertEquals(3, BlocklyMethods.medianOnList(BlocklyMethods.createListWith(1.0, 1.0, 3.0, 4.0, 6.0)), 0);
+        Assert.assertEquals(3, BlocklyMethods.medianOnList(BlocklyMethods.createListWith(5, 3, 2)), 5);
+        Assert.assertEquals(2.5, BlocklyMethods.medianOnList(BlocklyMethods.createListWith(5, 3, 2, -1)), 0);
+    }
+
+    @Test
+    public void standardDeviationOnList() {
+        Assert.assertEquals(1.8973665961010275, BlocklyMethods.standardDeviatioin(BlocklyMethods.createListWith(1.0, 1.0, 3.0, 4.0, 6.0)), 5);
+        Assert.assertEquals(1.247219128924647, BlocklyMethods.standardDeviatioin(BlocklyMethods.createListWith(5, 3, 2)), 5);
+        Assert.assertEquals(2.165063509461097, BlocklyMethods.standardDeviatioin(BlocklyMethods.createListWith(5, 3, 2, -1)), 5);
     }
 
     @Test
