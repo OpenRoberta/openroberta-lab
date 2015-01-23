@@ -45,8 +45,7 @@ Blockly.Blocks['robSensors_getSample'] = {
             }
         });
         var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
-        this.appendDummyInput('DROPDOWN').appendField(Blockly.Msg.GET, 'GET').appendField(sensorType, 'SENSORTYPE').appendField(
-                sensorPort, 'SENSORPORT');
+        this.appendDummyInput('DROPDOWN').appendField(Blockly.Msg.GET, 'GET').appendField(sensorType, 'SENSORTYPE').appendField(sensorPort, 'SENSORPORT');
         this.sensorType_ = 'TOUCH';
         this.setOutput(true, 'Boolean');
         this.setTooltip(Blockly.Msg.GETSAMPLE_TOOLTIP);
@@ -134,10 +133,14 @@ Blockly.Blocks['robSensors_getSample'] = {
                 this.appendValue_('NUM_REV', 90);
                 sensorPort.setValue('2');
                 this.changeOutput('Number');
-            } else if (this.sensorType_ == 'ULTRASONIC_DISTANCE' || this.sensorType_ == 'ULTRASONIC_PRESENCE') {
+            } else if (this.sensorType_ == 'ULTRASONIC_DISTANCE') {
                 this.appendValue_('NUM');
                 sensorPort.setValue('4');
                 this.changeOutput('Number');
+            } else if (this.sensorType_ == 'ULTRASONIC_PRESENCE') {
+                this.appendValue_('BOOL');
+                sensorPort.setValue('4');
+                this.changeOutput('Boolean');
             } else if (this.sensorType_ == 'COLOUR_COLOUR') {
                 this.appendValue_('COLOUR');
                 sensorPort.setValue('3');
@@ -257,13 +260,36 @@ Blockly.Blocks['robSensors_ultrasonic_getSample'] = {
     init : function() {
         this.setColourRGB(Blockly.CAT_SENSOR_RGB);
         var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
-        var mode = new Blockly.FieldDropdown([ [ Blockly.Msg.MODE_DISTANCE, 'DISTANCE' ], [ Blockly.Msg.MODE_PRESENCE, 'PRESENCE' ] ]);
+        var mode = new Blockly.FieldDropdown([ [ Blockly.Msg.MODE_DISTANCE, 'DISTANCE' ], [ Blockly.Msg.MODE_PRESENCE, 'PRESENCE' ] ], function(option) {
+            if (option && this.sourceBlock_.getFieldValue('MODE') !== option) {
+                this.sourceBlock_.updateShape_(option);
+            }
+        });
         this.appendDummyInput().appendField(Blockly.Msg.GET).appendField(mode, 'MODE').appendField(Blockly.Msg.SENSOR_ULTRASONIC).appendField(sensorPort,
                 'SENSORPORT');
+        this.sensorMode_ = 'DISTANCE';
         this.setOutput(true, 'Number');
         this.setTooltip(Blockly.Msg.ULTRASONIC_GETSAMPLE_TOOLTIP);
+    },
+    mutationToDom : function() {
+        var container = document.createElement('mutation');
+        container.setAttribute('mode', this.sensorMode_);
+        return container;
+    },
+    domToMutation : function(xmlElement) {
+        var mode = xmlElement.getAttribute('mode');
+        this.sensorMode_ = mode;
+        this.updateShape_(this.sensorMode_);
+    },
+    updateShape_ : function(option) {
+        this.sensorMode_ = option;
+        if (this.sensorMode_ == 'DISTANCE') {
+            this.changeOutput('Number');
+        } else if (this.sensorMode_ == 'PRESENCE') {
+            this.changeOutput('Boolean');
+        }
     }
-};
+}
 
 Blockly.Blocks['robSensors_colour_getSample'] = {
     /**
@@ -285,12 +311,29 @@ Blockly.Blocks['robSensors_colour_getSample'] = {
     init : function() {
         this.setColourRGB(Blockly.CAT_SENSOR_RGB);
         var mode = new Blockly.FieldDropdown([ [ Blockly.Msg.MODE_COLOUR, 'COLOUR' ], [ Blockly.Msg.MODE_LIGHT, 'RED' ], [ Blockly.Msg.MODE_RGB, 'RGB' ],
-                [ Blockly.Msg.MODE_AMBIENTLIGHT, 'AMBIENTLIGHT' ] ]);
+                [ Blockly.Msg.MODE_AMBIENTLIGHT, 'AMBIENTLIGHT' ] ], function(option) {
+            if (option && this.sourceBlock_.getFieldValue('MODE') !== option) {
+                this.sourceBlock_.updateShape_(option);
+            }
+        });
         var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
         this.appendDummyInput().appendField(Blockly.Msg.GET).appendField(mode, 'MODE').appendField(Blockly.Msg.SENSOR_COLOUR).appendField(sensorPort,
                 'SENSORPORT');
-        this.setOutput(true, [ 'Number', 'Colour' ]);
+        this.setOutput(true, 'Colour');
         this.setTooltip(Blockly.Msg.COLOUR_GETSAMPLE_TOOLTIP);
+        this.sensorMode_ = 'COLOUR';
+    },
+    mutationToDom : Blockly.Blocks['robSensors_ultrasonic_getSample'].mutationToDom,
+    domToMutation : Blockly.Blocks['robSensors_ultrasonic_getSample'].domToMutation,
+    updateShape_ : function(option) {
+        this.sensorMode_ = option;
+        if (this.sensorMode_ == 'COLOUR') {
+            this.changeOutput('Colour');
+        } else if (this.sensorMode_ == 'RGB') {
+            this.changeOutput('Array_Number');
+        } else {
+            this.changeOutput('Number')
+        }
     }
 };
 
@@ -311,12 +354,27 @@ Blockly.Blocks['robSensors_infrared_getSample'] = {
 
     init : function() {
         this.setColourRGB(Blockly.CAT_SENSOR_RGB);
-        var mode = new Blockly.FieldDropdown([ [ Blockly.Msg.MODE_DISTANCE, 'DISTANCE' ], [ Blockly.Msg.MODE_PRESENCE, 'SEEK' ] ]);
+        var mode = new Blockly.FieldDropdown([ [ Blockly.Msg.MODE_DISTANCE, 'DISTANCE' ], [ Blockly.Msg.MODE_PRESENCE, 'SEEK' ] ], function(option) {
+            if (option && this.sourceBlock_.getFieldValue('MODE') !== option) {
+                this.sourceBlock_.updateShape_(option);
+            }
+        });
         var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
         this.appendDummyInput().appendField(Blockly.Msg.GET).appendField(mode, 'MODE').appendField(Blockly.Msg.SENSOR_INFRARED).appendField(sensorPort,
                 'SENSORPORT');
         this.setOutput(true, 'Number');
         this.setTooltip(Blockly.Msg.INFRARED_GETSAMPLE_TOOLTIP);
+        this.sensorMode_ = 'DISTANCE';
+    },
+    mutationToDom : Blockly.Blocks['robSensors_ultrasonic_getSample'].mutationToDom,
+    domToMutation : Blockly.Blocks['robSensors_ultrasonic_getSample'].domToMutation,
+    updateShape_ : function(option) {
+        this.sensorMode_ = option;
+        if (this.sensorMode_ == 'DISTANCE') {
+            this.changeOutput('Number');
+        } else if (this.sensorMode_ == 'SEEK') {
+            this.changeOutput('Array_Number');
+        }
     }
 };
 

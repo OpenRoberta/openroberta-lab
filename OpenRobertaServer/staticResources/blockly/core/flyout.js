@@ -356,30 +356,27 @@ Blockly.Flyout.prototype.show = function(xmlList, opt_color) {
     // Create the blocks to be shown in this flyout.
     var blocks = [];
     var gaps = [];
-    // String in xmlList instead of a list of blocks indicates special cases
-    if (!goog.isArray(xmlList)) {
-        // flyout for procedures?
-        if (xmlList == Blockly.Procedures.NAME_TYPE) {
-            // Special category for procedures.
-            Blockly.Procedures.flyoutCategory(blocks, gaps, margin, (this.workspace_));
-        } else {
-            Blockly.Variables.flyoutCategory(xmlList, blocks, gaps, margin, (this.workspace_));
-            // no variables declared anymore?
-            if (blocks.length == 0) {
-                this.hide();
-                return;
-            }
-        }
+    // flyout for procedures?
+    if (xmlList == Blockly.Procedures.NAME_TYPE) {
+        // Special category for procedures.
+        Blockly.Procedures.flyoutCategory(blocks, gaps, margin, (this.workspace_));
     } else {
-        for (var i = 0, xml; xml = xmlList[i]; i++) {
-            if (xml.tagName && xml.tagName.toUpperCase() == 'BLOCK') {
-                var xmlBlockList = [];
-                xmlBlockList.push(xml);
-                var block = Blockly.Xml.domToBlock((this.workspace_), xmlBlockList);
-                blocks.push(block);
-                gaps.push(margin * 3);
-            }
+        // Special category for variables?.
+        Blockly.Variables.flyoutCategory(xmlList, blocks, gaps, margin, (this.workspace_));
+    }
+    for (var i = 0, xml; xml = xmlList[i]; i++) {
+        if (xml.tagName && xml.tagName.toUpperCase() == 'BLOCK') {
+            var xmlBlockList = [];
+            xmlBlockList.push(xml);
+            var block = Blockly.Xml.domToBlock((this.workspace_), xmlBlockList);
+            blocks.push(block);
+            gaps.push(margin * 3);
         }
+    }
+    // flyout empty?
+    if (blocks.length == 0) {
+        this.hide();
+        return;
     }
 
     // Lay out the blocks vertically.

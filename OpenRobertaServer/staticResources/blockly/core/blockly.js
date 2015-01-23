@@ -219,6 +219,8 @@ Blockly.DATA_TYPE['Array_String'] = Blockly.CAT_LIST_RGB;
 Blockly.DATA_TYPE['Array_Boolean'] = Blockly.CAT_LIST_RGB;
 Blockly.DATA_TYPE['Array_Colour'] = Blockly.CAT_LIST_RGB;
 Blockly.DATA_TYPE['Colour'] = Blockly.CAT_COLOUR_RGB;
+Blockly.DATA_TYPE['Sensor'] = Blockly.CAT_SENSOR_RGB;
+Blockly.DATA_TYPE['Actor'] = Blockly.CAT_ACTION_RGB;
 
 /**
  * Database of pre-loaded sounds.
