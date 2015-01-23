@@ -908,7 +908,7 @@ function initHeadNavigation() {
         } else if (domId === 'menuNewUser') {   // Submenu 'Login'
             $("#register-user").dialog("open");
         } else if (domId === 'menuChangeUser') {   // Submenu 'Login'
-            // open the same popup as in case 'new', but with fields prefilled
+            // open the same popup as in case 'new', but with fields prefilled, but REST-Call is missing
         } else if (domId === 'menuDeleteUser') {   // Submenu 'Login'
             $("#delete-user").dialog("open");
 //        } else if (domId === 'toolboxBeginner') {   // Submenu 'Nepo'
@@ -1013,6 +1013,11 @@ function initPopups() {
         var $token = $('#tokenValue');
         setToken($token.val());
     }, 'set token');
+
+    $('#hideStartupMessage').onWrap('click', function() {
+        $("#show-startup-message").dialog("close");
+        setCookie("hideStartupMessage", true);
+    }, 'hide startup-message');
 
     // Handle button events in popups
     $(".jquerypopup").keyup(function(event) {
@@ -1142,8 +1147,11 @@ function translate(jsdata) {
             $('#save-configuration').dialog('option', 'title', value);
         } else if (lkey === 'Blockly.Msg.POPUP_SET_TOKEN') {
             $('#set-token').dialog('option', 'title', value);
+        } else if (lkey === 'Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE') {
+            $('#hideStartupMessage').attr('value', value);
         } else if (lkey === 'Blockly.Msg.POPUP_ATTENTION') {
             $('#show-message').dialog('option', 'title', value);
+            $('#show-startup-message').dialog('option', 'title', value);
         } else if (lkey === 'Blockly.Msg.BUTTON_LOAD') {
             $('.buttonLoad').attr('value', value);
         } else if (lkey === 'Blockly.Msg.BUTTON_DO_DELETE') {
@@ -1287,6 +1295,31 @@ function handleServerErrors() {
 }
 
 /**
+ * Set cookie
+ * 
+ * @param {key}
+ *            Key of the cookie
+ * @param {value}
+ *            Value of the cookie
+ */
+function setCookie(key, value) {
+    var expires = new Date();
+    expires.setTime(expires.getTime() + (1 * 24 * 60 * 60 * 1000));
+    document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
+}
+
+/**
+ * Get cookie
+ * 
+ * @param {key}
+ *            Key of the cookie to read
+ */
+function getCookie(key) {
+    var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
+    return keyValue ? keyValue[2] : null;
+}
+
+/**
  * Initializations
  */
 function init() {
@@ -1304,6 +1337,9 @@ function init() {
     $('#tabProgram').addClass('tabClicked');    
     $('#head-navigation-configuration-edit').css('display','none');
     COMM.setErrorFn(handleServerErrors);
+    if (!getCookie("hideStartupMessage")) {
+        $("#show-startup-message").dialog("open");
+    }
 };
 
 $(document).ready(WRAP.fn3(init, 'page init'));

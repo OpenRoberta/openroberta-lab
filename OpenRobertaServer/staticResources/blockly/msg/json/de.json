@@ -560,6 +560,7 @@
     "POPUP_SET_TOKEN" : "Token einstellen",
     "POPUP_ATTENTION" : "Achtung",
     "POPUP_VALUE" : "Wert",
+    "POPUP_HIDE_STARTUP_MESSAGE" : "Nicht mehr anzeigen",
     "BUTTON_STOP" : "Stop",
     "BUTTON_FINISH" : "Beenden",
     "BUTTON_LOAD" : "Laden",
@@ -607,6 +608,9 @@
     "COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED" : "Das Programm konnte nicht compiliert werden.",
     "ROBOT_NOT_WAITING" : "Roboter ist nicht aktiv.",
     "ROBOT_PUSH_RUN" : "Roboter wartete und jetzt the jar is pushed to the robot",
+    "ORA_ROBOT_FIRMWAREUPDATE_POSSIBLE" : "The firmware was updated",
+    "ORA_ROBOT_FIRMWAREUPDATE_IMPOSSIBLE" : "The firmware could not be updated.",
+    "ORA_ROBOT_NOT_CONNECTED" : "The robot is no connected.",
     "HINT_LANGUAGE_GERMAN" : "Deutsch",
     "HINT_LANGUAGE_ENGLISH" : "Englisch",
     "HINT_ROBOT_STATE" : "Roboter-Status",
@@ -633,7 +637,5 @@
     "DATATABLE_TO" : "bis",
     "DATATABLE_OF" : "von",
     "DATATABLE_ENTRIES" : "Einträgen",
-    "DATATABLE_EMPTY_TABLE" : "Die Tabelle ist leer",
-    "ROBOT_NOT_WAITING" : "Roboter inaktiv",
-    "ROBOT_WAITING" : "Roboter wartet"     
+    "DATATABLE_EMPTY_TABLE" : "Die Tabelle ist leer"
 	}

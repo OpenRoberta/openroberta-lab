@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-01-22 11:50:57.068000",
+		"lastupdated": "2015-01-23 12:41:22.185000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -576,6 +576,7 @@
 	"POPUP_SET_TOKEN": "Set token",
 	"POPUP_ATTENTION": "Attention",
 	"POPUP_VALUE": "Value",
+	"POPUP_HIDE_STARTUP_MESSAGE": "Do not show again",
 	"BUTTON_STOP": "Stop",
 	"BUTTON_FINISH": "Finish",
 	"BUTTON_LOAD": "Load",
@@ -623,6 +624,9 @@
 	"COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED": "The program could not be compiled.",
 	"ROBOT_NOT_WAITING": "Robot doent wait for a run command.",
 	"ROBOT_PUSH_RUN": "Robot waited and now the jar is pushed to the robot",
+	"ORA_ROBOT_FIRMWAREUPDATE_POSSIBLE": "The firmware was updated",
+	"ORA_ROBOT_FIRMWAREUPDATE_IMPOSSIBLE": "The firmware could not be updated.",
+	"ORA_ROBOT_NOT_CONNECTED": "The robot is no connected.",
 	"HINT_LANGUAGE_GERMAN": "German",
 	"HINT_LANGUAGE_ENGLISH": "English",
 	"HINT_ROBOT_STATE": "Robot state",
@@ -648,7 +652,5 @@
 	"DATATABLE_TO": "to",
 	"DATATABLE_OF": "of",
 	"DATATABLE_ENTRIES": "entries",
-	"DATATABLE_EMPTY_TABLE": "There are no entries in this table",
-	"ROBOT_NOT_WAITING": "Robot not waiting",
-	"ROBOT_WAITING": "Robot waiting"
+	"DATATABLE_EMPTY_TABLE": "There are no entries in this table"
 }
