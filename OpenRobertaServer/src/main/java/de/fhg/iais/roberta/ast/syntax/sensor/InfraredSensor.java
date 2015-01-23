@@ -7,6 +7,7 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -73,7 +74,9 @@ public class InfraredSensor<V> extends Sensor<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-
+        Mutation mutation = new Mutation();
+        mutation.setMode(getMode().name());
+        jaxbDestination.setMutation(mutation);
         String fieldValue = getPort().getPortNumber();
         AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().name());
         AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
