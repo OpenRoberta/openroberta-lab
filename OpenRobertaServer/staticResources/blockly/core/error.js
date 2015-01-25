@@ -88,14 +88,17 @@ Blockly.Error.prototype.createIcon_ = function() {
      */
     var iconShield = Blockly.createSvgElement('polygon', {
         'class' : 'blocklyIconShield blocklyIconShieldError',
-        'points' : '4,0 11,0 15,4 15,11 11,15 4,15 0,11 0,4'
+        'points' : '7,2 17,2 22,7 22,17 17,22 7,22 2,17 2,7'
     }, this.iconGroup_);
-    this.iconMark_ = Blockly.createSvgElement('text', {
+    var iconShield = Blockly.createSvgElement('path', {
         'class' : 'blocklyIconMark  blocklyIconMarkWarningError',
-        'x' : Blockly.Icon.RADIUS - 0.25,
-        'y' : 2 * Blockly.Icon.RADIUS - 4
+        'fill' : '#333333',
+        'd' : 'M16 14.5c.391.391.391 1.023 0 1.414-.195.195-.451.293-.707.293s-.512-.098-.707-.293l-2.293-2.293-2.293 2.293'
+                + 'c-.195.195-.451.293-.707.293s-.512-.098-.707-.293c-.391-.391-.391-1.023 0-1.414l2.293-2.293-2.293-2.293'
+                + 'c-.391-.391-.391-1.023 0-1.414s1.023-.391 1.414 0l2.293 2.293 2.293-2.293c.391-.391 1.023-.391 1.414 0s.391 1.023 0 1.414'
+                + 'l-2.293 2.293 2.293 2.293z'
+
     }, this.iconGroup_);
-    this.iconMark_.appendChild(document.createTextNode('\u00D7'));
 };
 
 /**

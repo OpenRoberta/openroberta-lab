@@ -62,7 +62,8 @@ Blockly.Bubble = function(workspace, content, shape, anchorX, anchorY, bubbleWid
 
     this.setAnchorLocation(anchorX, anchorY);
     if (!bubbleWidth || !bubbleHeight) {
-        var bBox = /** @type {SVGLocatable} */(this.content_).getBBox();
+        var bBox = /** @type {SVGLocatable} */
+        (this.content_).getBBox();
         bubbleWidth = bBox.width + 2 * Blockly.Bubble.BORDER_WIDTH;
         bubbleHeight = bBox.height + 2 * Blockly.Bubble.BORDER_WIDTH;
     }
@@ -217,16 +218,17 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
      * y2="10"/> </g> [...content goes here...] </g>
      */
     this.bubbleGroup_ = Blockly.createSvgElement('g', {}, null);
-    //var bubbleEmboss = Blockly.createSvgElement('g',
-    //  {'filter': 'url(#blocklyEmboss)'}, this.bubbleGroup_);
-    this.bubbleArrow_ = Blockly.createSvgElement('path', {}, this.bubbleGroup_);
+    var bubbleFilter = Blockly.createSvgElement('g', {
+        'filter' : 'url(#blocklyShadowFilter)'
+    }, this.bubbleGroup_);
+    this.bubbleArrow_ = Blockly.createSvgElement('path', {}, bubbleFilter);
     this.bubbleBack_ = Blockly.createSvgElement('rect', {
         'class' : 'blocklyDraggable',
         'x' : 0,
         'y' : 0,
         'rx' : Blockly.Bubble.BORDER_WIDTH,
         'ry' : Blockly.Bubble.BORDER_WIDTH
-    }, this.bubbleGroup_);
+    }, bubbleFilter);
     if (hasResize) {
         this.resizeGroup_ = Blockly.createSvgElement('g', {
             'class' : Blockly.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE'
@@ -444,12 +446,14 @@ Blockly.Bubble.prototype.layoutBubble_ = function() {
         } else if (metrics.viewLeft + metrics.viewWidth < this.anchorX_ + relativeLeft + this.width_ + Blockly.BlockSvg.SEP_SPACE_X
                 + Blockly.Scrollbar.scrollbarThickness) {
             // Slide the bubble left until it is onscreen.
-            relativeLeft = metrics.viewLeft + metrics.viewWidth - this.anchorX_ - this.width_ - Blockly.Scrollbar.scrollbarThickness + Blockly.Bubble.BORDER_WIDTH;
+            relativeLeft = metrics.viewLeft + metrics.viewWidth - this.anchorX_ - this.width_ - Blockly.Scrollbar.scrollbarThickness
+                    + Blockly.Bubble.BORDER_WIDTH;
         }
     }
     if (this.anchorY_ + relativeTop < metrics.viewTop) {
         // Slide the bubble below the block.
-        var bBox = /** @type {SVGLocatable} */(this.shape_).getBBox();
+        var bBox = /** @type {SVGLocatable} */
+        (this.shape_).getBBox();
         relativeTop = bBox.height;
     }
     this.relativeLeft_ = relativeLeft;
@@ -505,9 +509,10 @@ Blockly.Bubble.prototype.setBubbleSize = function(width, height) {
     if (this.resizeGroup_) {
         if (Blockly.RTL) {
             // Mirror the resize group.
-             this.resizeGroup_.setAttribute('transform', 'translate(' + resizeSize + ', ' + (height - doubleBorderWidth) + ') scale(-1 1)');
+            this.resizeGroup_.setAttribute('transform', 'translate(' + resizeSize + ', ' + (height - doubleBorderWidth) + ') scale(-1 1)');
         } else {
-            this.resizeGroup_.setAttribute('transform', 'translate(' + (width - resizeSize + Blockly.Bubble.BORDER_WIDTH/2) + ', ' + (height - resizeSize + Blockly.Bubble.BORDER_WIDTH/2) + ')');
+            this.resizeGroup_.setAttribute('transform', 'translate(' + (width - resizeSize + Blockly.Bubble.BORDER_WIDTH / 2) + ', '
+                    + (height - resizeSize + Blockly.Bubble.BORDER_WIDTH / 2) + ')');
         }
     }
     if (this.rendered_) {

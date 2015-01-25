@@ -31,12 +31,12 @@ Blockly.Blocks['robControls_start'] = {
     init : function() {
         this.setColourRGB(Blockly.CAT_ACTIVITY_RGB);
         this.appendDummyInput().appendField(Blockly.Msg.START + ' ' + Blockly.Msg.START_PROGRAM);
-        this.setMutatorPlus(new Blockly.MutatorPlus(this));
         this.declare_ = false;
         this.setPreviousStatement(false);
         this.setNextStatement(true);
         this.setDeletable(false);
         this.setHelp(new Blockly.Help(Blockly.Msg.START_HELP, 'test1.gif'));
+        this.setMutatorPlus(new Blockly.MutatorPlus(this));
         this.setTooltip(Blockly.Msg.START_TOOLTIP);
     },
     /**

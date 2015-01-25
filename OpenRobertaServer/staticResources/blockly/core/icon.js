@@ -40,7 +40,7 @@ Blockly.Icon = function(block) {
 /**
  * Radius of icons.
  */
-Blockly.Icon.RADIUS = 8;
+Blockly.Icon.RADIUS = 12;
 
 /**
  * Bubble UI (if visible).

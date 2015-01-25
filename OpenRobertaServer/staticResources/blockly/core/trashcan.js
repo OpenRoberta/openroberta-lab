@@ -61,7 +61,7 @@ Blockly.Trashcan.prototype.LID_URL_ = 'media/trashlid.png';
  * @type {number}
  * @private
  */
-Blockly.Trashcan.prototype.TILE_ = 70;
+Blockly.Trashcan.prototype.TILE_ = 48;
 
 /**
  * Width of both the trash can and lid images.
@@ -93,7 +93,7 @@ Blockly.Trashcan.prototype.LID_HEIGHT_ = 7;
  * @type {number}
  * @private
  */
-Blockly.Trashcan.prototype.MARGIN_BOTTOM_ = 102;
+Blockly.Trashcan.prototype.MARGIN_BOTTOM_ = 88;
 
 /**
  * Distance between trashcan and right edge of workspace.
@@ -101,7 +101,7 @@ Blockly.Trashcan.prototype.MARGIN_BOTTOM_ = 102;
  * @type {number}
  * @private
  */
-Blockly.Trashcan.prototype.MARGIN_SIDE_ = 102;
+Blockly.Trashcan.prototype.MARGIN_SIDE_ = 91;
 
 /**
  * Extent of hotspot on all sides beyond the size of the image.
@@ -186,16 +186,6 @@ Blockly.Trashcan.prototype.createDom = function() {
      * height="15" href="media/trashlid.png"></image> </g>
      */
     this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
-    this.svgBack_ = Blockly.createSvgElement('rect', {
-        'class' : 'blocklyButtonBack',
-        'x' : 0,
-        'y' : 0,
-        'width' : this.TILE_,
-        'height' : this.TILE_,
-        'rx' : Blockly.BlockSvg.CORNER_RADIUS,
-        'ry' : Blockly.BlockSvg.CORNER_RADIUS
-    }, this.svgGroup_);
-
     this.svgBody_ = Blockly.createSvgElement('path', {
         'class' : 'blocklyButtonPath'
     }, this.svgGroup_);

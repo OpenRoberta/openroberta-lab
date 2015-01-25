@@ -49,14 +49,17 @@ Blockly.Help.prototype.createIcon = function() {
         'cx' : Blockly.Icon.RADIUS,
         'cy' : Blockly.Icon.RADIUS
     }, this.iconGroup_);
-    var iconShield = Blockly
-            .createSvgElement(
-                    'path',
-                    {
-                        'class' : 'blocklyIconMark',
-                        'transform' : 'scale(0.6)',
-                        'd' : 'm13,3c-4.136,0 -7.5,3.364 -7.5,7.5c0,1.486 0.44,2.922 1.274,4.165l0.08,0.135c1.825,2.606 2.146,3.43 2.146,4.2v3c0,0.552 0.448,1 1,1h2c0,0.26 0.11,0.52 0.29,0.71c0.19,0.18 0.45,0.29 0.71,0.29c0.26,0 0.52,-0.11 0.71,-0.29c0.18,-0.19 0.29,-0.45 0.29,-0.71h2c0.552,0 1,-0.448 1,-1v-3c0,-0.782 0.319,-1.61 2.132,-4.199c0.895,-1.275 1.368,-2.762 1.368,-4.301c0,-4.136 -3.364,-7.5 -7.5,-7.5zm2,18h-4v-1h4v1l0,0zm2.495,-7.347c-1.466,2.093 -2.143,3.289 -2.385,4.347h-1.11v-2c0,-0.552 -0.448,-1 -1,-1s-1,0.448 -1,1v2h-1.113c-0.24,-1.03 -0.898,-2.2 -2.306,-4.22l-0.077,-0.129c-0.657,-0.934 -1.004,-2.024 -1.004,-3.151c0,-3.033 2.467,-5.5 5.5,-5.5s5.5,2.467 5.5,5.5c0,1.126 -0.347,2.216 -1.005,3.153z'
-                    }, this.iconGroup_);
+    var iconShield = Blockly.createSvgElement('path', {
+        'class' : 'blocklyIconMark',
+        'transform' : 'translate(-0.5,0)',
+        'd' : 'M12.5 5.5c-.276 0-.5.224-.5.5s.224.5.5.5c1.083 0 1.964.881 1.964 1.964 0 .276.224.5.5.5s.5-.224.5-.5'
+                + 'c0-1.634-1.33-2.964-2.964-2.964zM12.5 1c-4.136 0-7.5 3.364-7.5 7.5 0 1.486.44 2.922 1.274 4.165l.08.135'
+                + 'c1.825 2.606 2.146 3.43 2.146 4.2v3c0 .552.448 1 1 1h2'
+                + 'c0 .26.11.52.29.71.19.18.45.29.71.29.26 0 .52-.11.71-.29.18-.19.29-.45.29-.71h2c.552 0 1-.448 1-1v-3'
+                + 'c0-.782.319-1.61 2.132-4.199.895-1.275 1.368-2.762 1.368-4.301 0-4.136-3.364-7.5-7.5-7.5zm2 18h-4v-1h4v1zm2.495-7.347'
+                + 'c-1.466 2.093-2.143 3.289-2.385 4.347h-1.11v-2c0-.552-.448-1-1-1s-1 .448-1 1v2h-1.113c-.24-1.03-.898-2.2-2.306-4.22'
+                + 'l-.077-.129c-.657-.934-1.004-2.024-1.004-3.151 0-3.033 2.467-5.5 5.5-5.5s5.5 2.467 5.5 5.5c0 1.126-.347 2.216-1.005 3.153z'
+    }, this.iconGroup_);
 };
 
 /**
@@ -73,7 +76,7 @@ Blockly.Help.prototype.createContent_ = function() {
     var body = document.createElementNS(Blockly.HTML_NS, 'body');
     body.setAttribute('xmlns', Blockly.HTML_NS);
     body.className = 'blocklyMinimalBody';
-    this.div_ = document.createElementNS(Blockly.HTML_NS, 'p');
+    this.div_ = document.createElementNS(Blockly.HTML_NS, 'div');
     this.div_.className = 'blocklyHelpDiv';
     this.img_ = document.createElementNS(Blockly.HTML_NS, 'img');
     this.img_.setAttribute('src', this.animation_);
@@ -116,7 +119,8 @@ Blockly.Help.prototype.setVisible = function(visible) {
     var content = this.createContent_();
     if (visible) {
         // Create the bubble.
-        this.bubble_ = new Blockly.Bubble(this.block_.workspace, this.createContent_(), this.block_.svg_.svgPath_, this.iconX_, this.iconY_, this.width_, this.height_);
+        this.bubble_ = new Blockly.Bubble(this.block_.workspace, this.createContent_(), this.block_.svg_.svgPath_, this.iconX_, this.iconY_, this.width_,
+                this.height_);
         this.bubble_.registerResizeEvent(this, this.resizeBubble_);
         this.updateColour();
     } else {

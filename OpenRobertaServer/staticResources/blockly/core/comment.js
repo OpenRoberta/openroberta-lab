@@ -85,8 +85,9 @@ Blockly.Comment.prototype.createIcon_ = function() {
     }, this.iconGroup_);
     this.iconMark_ = Blockly.createSvgElement('text', {
         'class' : 'blocklyIconMark',
-        'x' : Blockly.Icon.RADIUS,
-        'y' : 2 * Blockly.Icon.RADIUS - 3
+        'transform' : 'scale(1.5)',
+        'x' : Blockly.Icon.RADIUS - 4,
+        'y' : 1 * Blockly.Icon.RADIUS
     }, this.iconGroup_);
     this.iconMark_.appendChild(document.createTextNode('?'));
 };
@@ -176,7 +177,8 @@ Blockly.Comment.prototype.setVisible = function(visible) {
     var size = this.getBubbleSize();
     if (visible) {
         // Create the bubble.
-        this.bubble_ = new Blockly.Bubble(/** @type {!Blockly.Workspace} */(this.block_.workspace), this.createEditor_(), this.block_.svg_.svgPath_, this.iconX_, this.iconY_, this.width_, this.height_);
+        this.bubble_ = new Blockly.Bubble(/** @type {!Blockly.Workspace} */
+        (this.block_.workspace), this.createEditor_(), this.block_.svg_.svgPath_, this.iconX_, this.iconY_, this.width_, this.height_);
         this.bubble_.registerResizeEvent(this, this.resizeBubble_);
         this.updateColour();
         this.text_ = null;

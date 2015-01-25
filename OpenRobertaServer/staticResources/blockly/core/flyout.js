@@ -350,7 +350,8 @@ Blockly.Flyout.prototype.show = function(xmlList, opt_color) {
         this.svgBackground_.setAttribute('fill', opt_color);
         this.svgBackground_.setAttribute('class', 'blocklyFlyoutBackgroundSelected');
     } else {
-        this.svgBackground_.setAttribute('class', 'blocklyFlyoutBackground');
+        this.svgBackground_.setAttribute('fill', '#333333');
+        this.svgBackground_.setAttribute('class', 'blocklyFlyoutBackgroundSelected');
     }
 
     // Create the blocks to be shown in this flyout.

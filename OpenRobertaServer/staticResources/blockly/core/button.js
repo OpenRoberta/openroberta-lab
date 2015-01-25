@@ -24,7 +24,7 @@ Blockly.Button = function(workspace) {
  * @type {number}
  * @private
  */
-Blockly.Button.prototype.SIZE_ = 70;
+Blockly.Button.prototype.SIZE_ = 48;
 
 /**
  * Position of the button in the sqare.
@@ -67,7 +67,7 @@ Blockly.Button.prototype.IMG_PATH_ = null;
 Blockly.Button.prototype.OUTER_MARGIN_ = 30;
 
 /**
- * Distance between button and right edge of workspace.
+ * Distance between buttons of workspace.
  * 
  * @type {number}
  * @private

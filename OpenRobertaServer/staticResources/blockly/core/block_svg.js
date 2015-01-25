@@ -423,7 +423,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
 Blockly.BlockSvg.prototype.updateDisabled = function() {
     if (this.block_.disabled || this.block_.getInheritedDisabled()) {
         Blockly.addClass_((this.svgGroup_), 'blocklyDisabled');
-       // this.svgPath_.setAttribute('fill', 'url(#blocklyDisabledPattern)');
+        // this.svgPath_.setAttribute('fill', 'url(#blocklyDisabledPattern)');
         this.svgPath_.setAttribute('stroke', '#000000');
     } else {
         Blockly.removeClass_((this.svgGroup_), 'blocklyDisabled');
@@ -638,7 +638,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
         }
     }
 
-    // Make inline rows a bit thicker in order to enclose the values.
+    // Make inline rows a bit thicker in order to enclose the values
     for (var y = 0, row; row = inputRows[y]; y++) {
         row.thicker = false;
         if (row.type == Blockly.BlockSvg.INLINE) {
@@ -648,6 +648,12 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
                     row.thicker = true;
                     break;
                 }
+            }
+        }
+        // Make the first row thicker for icons
+        if (y == 0 && this.block_.getIcons().length > 0 && row.thicker != true) {
+            if (row.height < (Blockly.BlockSvg.MIN_BLOCK_Y + 8) && (inputRows.length == 1 || hasStatement)) {
+                row.height = Blockly.BlockSvg.MIN_BLOCK_Y + 8;
             }
         }
     }

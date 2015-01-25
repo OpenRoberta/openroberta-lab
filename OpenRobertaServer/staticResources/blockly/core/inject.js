@@ -261,17 +261,28 @@ Blockly.createDom_ = function(container) {
      * in="offsetBlur"/> <feMergeNode in="SourceGraphic"/> </feMerge> </filter>
      */
     filter = Blockly.createSvgElement('filter', {
-        'id' : 'blocklyTrashcanShadowFilter'
+        'id' : 'blocklyShadowFilter'
     }, defs);
     Blockly.createSvgElement('feGaussianBlur', {
         'in' : 'SourceAlpha',
-        'stdDeviation' : 2,
+        'stdDeviation' : 4,
         'result' : 'blur'
     }, filter);
     Blockly.createSvgElement('feOffset', {
         'in' : 'blur',
         'dx' : 1,
         'dy' : 1,
+        'result' : 'offsetBlur'
+    }, filter);
+    Blockly.createSvgElement('feFlood', {
+        'flood-color' : '#000000',
+        'flood-opacity' : 0.5,
+        'result' : 'offsetColor'
+    }, filter);
+    Blockly.createSvgElement('feComposite', {
+        'in' : 'offsetColor',
+        'in2' : 'offsetBlur',
+        'operator' : 'in',
         'result' : 'offsetBlur'
     }, filter);
     feMerge = Blockly.createSvgElement('feMerge', {}, filter);
@@ -281,16 +292,6 @@ Blockly.createDom_ = function(container) {
     Blockly.createSvgElement('feMergeNode', {
         'in' : 'SourceGraphic'
     }, feMerge);
-    /*
-     * <filter id="blocklyShadowFilter"> <feGaussianBlur stdDeviation="2"/>
-     * </filter>
-     */
-    filter = Blockly.createSvgElement('filter', {
-        'id' : 'blocklyShadowFilter'
-    }, defs);
-    Blockly.createSvgElement('feGaussianBlur', {
-        'stdDeviation' : 2
-    }, filter);
     /*
      * <pattern id="blocklyDisabledPattern" patternUnits="userSpaceOnUse"
      * width="10" height="10"> <rect width="10" height="10" fill="#aaa" /> <path

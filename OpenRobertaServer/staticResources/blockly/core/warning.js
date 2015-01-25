@@ -52,7 +52,8 @@ goog.inherits(Blockly.Warning, Blockly.Icon);
  * @private
  */
 Blockly.Warning.textToDom_ = function(text) {
-    var paragraph = /** @type {!SVGTextElement} */ (Blockly.createSvgElement('text', {
+    var paragraph = /** @type {!SVGTextElement} */
+    (Blockly.createSvgElement('text', {
         'class' : 'blocklyText blocklyBubbleText',
         'y' : Blockly.Bubble.BORDER_WIDTH
     }, null));
@@ -88,14 +89,17 @@ Blockly.Warning.prototype.createIcon_ = function() {
      */
     var iconShield = Blockly.createSvgElement('path', {
         'class' : 'blocklyIconShield blocklyIconShieldWarning',
-        'd' : 'M 2,15 Q -1,15 0.5,12 L 6.5,1.7 Q 8,-1 9.5,1.7 L 15.5,12 ' + 'Q 17,15 14,15 z'
+        'd' : 'M21.171 15.398l-5.912-9.854c-.776-1.293-1.963-2.033-3.259-2.033s-2.483.74-3.259 2.031l-5.912 9.856'
+                + 'c-.786 1.309-.872 2.705-.235 3.83.636 1.126 1.878 1.772 3.406 1.772h12c1.528 0 2.77-.646 3.406-1.771.637-1.125.551-2.521-.235-3.831z'
     }, this.iconGroup_);
-    this.iconMark_ = Blockly.createSvgElement('text', {
+    var iconShield = Blockly.createSvgElement('path', {
         'class' : 'blocklyIconMark  blocklyIconMarkWarningError',
-        'x' : Blockly.Icon.RADIUS,
-        'y' : 2 * Blockly.Icon.RADIUS - 3
+        'fill' : '#333333',
+        'd' : 'M21.171 15.398 m-9.171 2.151c-.854 0-1.55-.695-1.55-1.549 0-.855.695-1.551 1.55-1.551s1.55.696 1.55 1.551c0 .854-.696 1.549-1.55 1.549'
+                + 'zm1.633-7.424c-.011.031-1.401 3.468-1.401 3.468-.038.094-.13.156-.231.156s-.193-.062-.231-.156l-1.391-3.438'
+                + 'c-.09-.233-.129-.443-.129-.655 0-.965.785-1.75 1.75-1.75s1.75.785 1.75 1.75c0 .212-.039.422-.117.625z'
+
     }, this.iconGroup_);
-    this.iconMark_.appendChild(document.createTextNode('!'));
 };
 
 /**

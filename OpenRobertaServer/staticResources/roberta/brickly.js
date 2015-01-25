@@ -21,13 +21,11 @@ function injectBrickly(toolbox) {
             toolbox : toolbox.data,
             trashcan : true,
             save : true,
-            back : true,
-            check : true,
-            scrollbars : true
+        // check : true,
         });
 
         // should this come from the server?
-        var text = "<block_set xmlns='http://de.fhg.iais.roberta.blockly'>" +  "<instance x='75' y='75'>" + "<block type='robBrick_EV3-Brick'>"
+        var text = "<block_set xmlns='http://de.fhg.iais.roberta.blockly'>" + "<instance x='75' y='75'>" + "<block type='robBrick_EV3-Brick'>"
                 + "<value name='S1'>" + "<block type='robBrick_touch'></block>" + "</value>" + "<value name='S4'>"
                 + "<block type='robBrick_ultrasonic'></block>" + "</value>" + "<value name='MB'>" + "<block type='robBrick_motor_big'>"
                 + "<field name='MOTOR_REGULATION'>TRUE</field>" + "<field name='MOTOR_REVERSE'>OFF</field>" + "<field name='MOTOR_DRIVE'>RIGHT</field>"
@@ -44,13 +42,12 @@ function response(result) {
     return true;
 };
 
-
 /**
  * Save configuration to server
  * 
  * @param {name}
- *        configuration name    
- *            
+ *            configuration name
+ * 
  */
 function getXmlOfConfiguration(name) {
     var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
@@ -62,9 +59,9 @@ function getXmlOfConfiguration(name) {
  * Show configuration
  * 
  * @param {load}
- *        load configuration    
+ *            load configuration
  * @param {data}
- *        data of server call    
+ *            data of server call
  */
 function showConfiguration(load, data) {
     var xml = Blockly.Xml.textToDom(data);

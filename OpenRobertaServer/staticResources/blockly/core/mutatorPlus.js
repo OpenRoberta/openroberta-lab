@@ -28,12 +28,11 @@ Blockly.MutatorPlus.prototype.createIcon = function() {
         'rx' : Blockly.BlockSvg.CORNER_RADIUS_FIELD,
         'ry' : Blockly.BlockSvg.CORNER_RADIUS_FIELD
     }, this.iconGroup_);
-    this.iconMark_ = Blockly.createSvgElement('text', {
+    this.iconMark_ = Blockly.createSvgElement('path', {
         'class' : 'blocklyIconMark',
-        'x' : Blockly.Icon.RADIUS,
-        'y' : 2 * Blockly.Icon.RADIUS - 4
+        'd' : 'M15.5 11h-2v-2c0-.553-.447-1-1-1s-1 .447-1 1v2h-2c-.553 0-1 .447-1 1s.447 1 1 1h2v2c0 .553.447 1 1 1s1-.447 1-1v-2h2c.553 0 1-.447 1-1'
+                + 's-.447-1-1-1z'
     }, this.iconGroup_);
-    this.iconMark_.appendChild(document.createTextNode('\u002B'));
 };
 
 Blockly.MutatorPlus.prototype.iconClick_ = function(e) {
