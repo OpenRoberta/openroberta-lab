@@ -1361,7 +1361,6 @@ Blockly.Msg.BUTTON_EMPTY_LIST = 'Empty list';
 Blockly.Msg.MESSAGE_PASSWORD_ERROR = 'Something went wrong while you filled in the two passwords.';
 Blockly.Msg.MESSAGE_NOT_AVAILABLE = 'Not available.';
 Blockly.Msg.MESSAGE_EMPTY_NAME = 'Please fill in a name.';
-
 Blockly.Msg.ORA_TOKEN_SET_SUCCESS = 'Token set';
 Blockly.Msg.ORA_TOKEN_SET_ERROR_NO_ROBOT_WAITING = 'There is no active robot.';
 Blockly.Msg.ORA_TOOLBOX_LOAD_SUCCESS = 'Toolbox loaded';

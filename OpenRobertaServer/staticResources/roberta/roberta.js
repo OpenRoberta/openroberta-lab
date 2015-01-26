@@ -808,10 +808,8 @@ function setHeadNavigationMenuState(state) {
  *            ID of message to be displayed
  */
 function displayMessage(messageId) {
-    var hlp = messageId.replace(/\./g, "_");
-    hlp = hlp.toUpperCase();
-    var lkey = 'Blockly.Msg.' + hlp;
-    var value = Blockly.Msg[hlp];
+    var lkey = 'Blockly.Msg.' + messageId;
+    var value = Blockly.Msg[messageId];
     if (value === undefined || value === '') {
         value = messageId;
     }
@@ -1241,10 +1239,8 @@ function initializeLanguages() {
  *            ID of message to be queued
  */
 function queueToastMessage(messageId) {
-    var hlp = messageId.replace(/\./g, "_");
-    hlp = hlp.toUpperCase();
-    var lkey = 'Blockly.Msg.' + hlp;
-    var value = Blockly.Msg[hlp];
+    var lkey = 'Blockly.Msg.' + messageId;
+    var value = Blockly.Msg[messageId];
     if (value === undefined || value === '') {
         value = messageId;
     }
