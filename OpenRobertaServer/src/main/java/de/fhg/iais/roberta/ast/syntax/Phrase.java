@@ -177,6 +177,7 @@ abstract public class Phrase<V> {
         AKTION_STMT( Category.STMT ),
         SENSOR_STMT( Category.STMT ),
         FUNCTION_STMT( Category.STMT ),
+        METHOD_STMT( Category.STMT ),
         STMT_FLOW_CONTROL( Category.STMT ),
         WAIT_STMT( Category.STMT ),
         WAIT_TIME( Category.STMT ),
@@ -217,7 +218,9 @@ abstract public class Phrase<V> {
         LIST_INDEX_OF( Category.FUNCTION ),
         LIST_SET_INDEX( Category.FUNCTION ),
         TEXT_CHANGE_CASE_FUNCT( Category.FUNCTION ),
+        METHOD_IF_RETURN( Category.METHOD ),
         METHOD_VOID( Category.METHOD ),
+        METHOD_CALL( Category.METHOD ),
         METHOD_RETURN( Category.METHOD );
 
         private final Category category;

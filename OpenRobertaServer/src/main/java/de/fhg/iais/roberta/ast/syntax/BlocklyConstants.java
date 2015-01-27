@@ -78,4 +78,6 @@ public final class BlocklyConstants {
     public static final String NAME = "NAME";
     public static final String STACK = "STACK";
     public static final String RETURN = "RETURN";
+    public static final String CONDITION = "CONDITION";
+    public static final String ARG = "ARG";
 }

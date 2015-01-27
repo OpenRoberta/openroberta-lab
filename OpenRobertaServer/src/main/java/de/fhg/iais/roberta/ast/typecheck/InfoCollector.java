@@ -51,6 +51,8 @@ import de.fhg.iais.roberta.ast.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathSingleFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodCall;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.ast.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.ast.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
@@ -67,6 +69,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.FunctionStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.MethodStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
@@ -544,6 +547,24 @@ public class InfoCollector<T> implements AstVisitor<T> {
 
     @Override
     public T visitMethodReturn(MethodReturn<T> methodReturn) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitMethodIfReturn(MethodIfReturn<T> methodIfReturn) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitMethodStmt(MethodStmt<T> methodStmt) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitMethodCall(MethodCall<T> methodCall) {
         // TODO Auto-generated method stub
         return null;
     }

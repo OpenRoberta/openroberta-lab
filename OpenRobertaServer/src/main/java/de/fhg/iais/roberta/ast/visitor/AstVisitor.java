@@ -47,6 +47,8 @@ import de.fhg.iais.roberta.ast.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathSingleFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodCall;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.ast.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.ast.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
@@ -63,6 +65,7 @@ import de.fhg.iais.roberta.ast.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.FunctionStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.MethodStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
@@ -581,14 +584,35 @@ public interface AstVisitor<V> {
     /**
      * visit a {@link MethodVoid}.
      *
-     * @param textJoinFunct to be visited
+     * @param methodVoid to be visited
      */
     public V visitMethodVoid(MethodVoid<V> methodVoid);
 
     /**
      * visit a {@link MethodReturn}.
      *
-     * @param textJoinFunct to be visited
+     * @param methodReturn to be visited
      */
     public V visitMethodReturn(MethodReturn<V> methodReturn);
+
+    /**
+     * visit a {@link MethodIfReturn}.
+     *
+     * @param methodIfReturn to be visited
+     */
+    public V visitMethodIfReturn(MethodIfReturn<V> methodIfReturn);
+
+    /**
+     * visit a {@link MethodStmt}.
+     *
+     * @param methodStmt to be visited
+     */
+    public V visitMethodStmt(MethodStmt<V> methodStmt);
+
+    /**
+     * visit a {@link MethodCall}.
+     *
+     * @param methodStmt to be visited
+     */
+    public V visitMethodCall(MethodCall<V> methodCall);
 }

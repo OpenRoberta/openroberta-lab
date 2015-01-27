@@ -23,16 +23,19 @@ import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.syntax.functions.Function;
+import de.fhg.iais.roberta.ast.syntax.methods.Method;
 import de.fhg.iais.roberta.ast.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.ast.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.FunctionStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.MethodStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.SensorStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
+import de.fhg.iais.roberta.blockly.generated.Arg;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Comment;
 import de.fhg.iais.roberta.blockly.generated.Field;
@@ -145,7 +148,17 @@ abstract public class JaxbAstTransformer<V> {
         }
         List<Value> values = block.getValue();
         Assert.isTrue(values.size() <= items, "Number of values is not less or equal to number of items in mutation!");
-        return valuesToExprList(values, defVal, items);
+        return valuesToExprList(values, defVal, items, BlocklyConstants.ADD);
+    }
+
+    protected ExprList<V> argumentsToExprList(List<Arg> arguments) {
+        ExprList<V> parameters = ExprList.make();
+        for ( Arg arg : arguments ) {
+            Var<V> parametar = Var.make(BlocklyType.get(arg.getType()), arg.getName(), null, null);
+            parameters.addExpr(parametar);
+        }
+        parameters.setReadOnly();
+        return parameters;
     }
 
     protected Phrase<V> blockToConst(Block block, String type) {
@@ -198,6 +211,8 @@ abstract public class JaxbAstTransformer<V> {
             stmt = SensorStmt.make((Sensor<V>) p);
         } else if ( p.getKind().getCategory() == Category.FUNCTION ) {
             stmt = FunctionStmt.make((Function<V>) p);
+        } else if ( p.getKind().getCategory() == Category.METHOD ) {
+            stmt = MethodStmt.make((Method<V>) p);
         } else {
             stmt = (Stmt<V>) p;
         }
@@ -218,10 +233,10 @@ abstract public class JaxbAstTransformer<V> {
         return expr;
     }
 
-    protected ExprList<V> valuesToExprList(List<Value> values, Class<?> defVal, int nItems) {
+    protected ExprList<V> valuesToExprList(List<Value> values, Class<?> defVal, int nItems, String name) {
         ExprList<V> exprList = ExprList.make();
         for ( int i = 0; i < nItems; i++ ) {
-            exprList.addExpr(convertPhraseToExpr(extractValue(values, new ExprParam(BlocklyConstants.ADD + i, defVal))));
+            exprList.addExpr(convertPhraseToExpr(extractValue(values, new ExprParam(name + i, defVal))));
         }
         exprList.setReadOnly();
         return exprList;

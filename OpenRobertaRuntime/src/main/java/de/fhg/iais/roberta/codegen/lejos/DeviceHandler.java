@@ -156,7 +156,10 @@ public class DeviceHandler {
                 break;
 
             default:
-                break;
+                throw new DbcException("Invalid port " + sensorPort);
+        }
+        if ( sampleProviders == null ) {
+            throw new DbcException("Sensor mode " + sensorMode + " not avaliable on port " + sensorPort);
         }
         return findProviderByMode(sampleProviders, sensorMode);
     }

@@ -63,6 +63,8 @@ import de.fhg.iais.roberta.ast.syntax.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.MathSingleFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextJoinFunct;
 import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodCall;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.ast.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.ast.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickKey;
@@ -99,6 +101,7 @@ import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
 import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
+import de.fhg.iais.roberta.blockly.generated.Arg;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Field;
@@ -773,6 +776,26 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 expr = extractValue(values, new ExprParam(BlocklyConstants.RETURN, NullConst.class));
 
                 return MethodReturn.make(name, exprList, statement, returnType, convertPhraseToExpr(expr), properties, comment);
+
+            case "robProcedures_ifreturn":
+                values = extractValues(block, (short) 2);
+                left = extractValue(values, new ExprParam(BlocklyConstants.CONDITION, Boolean.class));
+                right = extractValue(values, new ExprParam(BlocklyConstants.VALUE, EmptyExpr.class));
+                mode = block.getMutation().getReturnType();
+                return MethodIfReturn.make(convertPhraseToExpr(left), BlocklyType.get(mode), convertPhraseToExpr(right), properties, comment);
+
+            case "robProcedures_callnoreturn":
+            case "robProcedures_callreturn":
+                BlocklyType outputType = block.getMutation().getOutputType() == null ? null : BlocklyType.get(block.getMutation().getOutputType());
+                String methodName = block.getMutation().getName();
+                List<Arg> arguments = block.getMutation().getArg();
+                ExprList<V> parameters = argumentsToExprList(arguments);
+
+                values = extractValues(block, (short) arguments.size());
+
+                ExprList<V> parametersValues = valuesToExprList(values, EmptyExpr.class, arguments.size(), BlocklyConstants.ARG);
+
+                return MethodCall.make(methodName, parameters, parametersValues, outputType, properties, comment);
 
             default:
                 throw new DbcException("Invalid Block: " + block.getType());

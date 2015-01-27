@@ -16,7 +16,7 @@ public class BrickConfigurationTest {
             "private EV3BrickConfiguration brickConfiguration = new EV3BrickConfiguration.Builder()"
                 + ".setWheelDiameter(5.6)"
                 + ".setTrackWidth(17.0)"
-                + ".addActor(ActorPort.A, new EV3Actor(EV3Actors.EV3_MEDIUM_MOTOR, true, DriveDirection.FOREWARD, MotorSide.RIGHT))"
+                + ".addActor(ActorPort.A, new EV3Actor(EV3Actors.EV3_MEDIUM_MOTOR, true, DriveDirection.FOREWARD, MotorSide.NONE))"
                 + ".addActor(ActorPort.B, new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, true, DriveDirection.FOREWARD, MotorSide.NONE))"
                 + ".addSensor(SensorPort.S1, new EV3Sensor(EV3Sensors.EV3_TOUCH_SENSOR))"
                 + ".addSensor(SensorPort.S2, new EV3Sensor(EV3Sensors.EV3_COLOR_SENSOR))"
@@ -36,7 +36,7 @@ public class BrickConfigurationTest {
             "private EV3BrickConfiguration brickConfiguration = new EV3BrickConfiguration.Builder()"
                 + ".setWheelDiameter(5.0)"
                 + ".setTrackWidth(17.0)"
-                + ".addActor(ActorPort.A, new EV3Actor(EV3Actors.EV3_MEDIUM_MOTOR, true, DriveDirection.FOREWARD, MotorSide.LEFT))"
+                + ".addActor(ActorPort.A, new EV3Actor(EV3Actors.EV3_MEDIUM_MOTOR, true, DriveDirection.FOREWARD, MotorSide.NONE))"
                 + ".addSensor(SensorPort.S3, new EV3Sensor(EV3Sensors.EV3_IR_SENSOR))"
                 + ".build();";
 
