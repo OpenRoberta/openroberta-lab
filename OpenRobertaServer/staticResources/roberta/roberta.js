@@ -877,6 +877,14 @@ function initHeadNavigation() {
             updateFirmware();
         } else if (domId === 'menuRobotInfo') { // Submenu 'Robot'
             displayMessage("MESSAGE_NOT_AVAILABLE");
+        } else if (domId === 'menuToolboxBeginner') {   // Submenu 'Nepo'
+            loadToolbox('beginner');
+            $('#menuToolboxBeginner').addClass('disabled');
+            $('#menuToolboxExpert').removeClass('disabled');
+        } else if (domId === 'menuToolboxExpert') {   // Submenu 'Nepo'
+            loadToolbox('expert');
+            $('#menuToolboxExpert').addClass('disabled');
+            $('#menuToolboxBeginner').removeClass('disabled');
         } else if (domId === 'menuFirstSteps') { // Submenu 'Help'
             if (userState.language === 'De') {
                 window.open("http://www.open-roberta.org/erste-schritte.html");
@@ -900,6 +908,9 @@ function initHeadNavigation() {
         } else if (domId === 'menuAbout') { // Submenu 'Help'
             $("#version").text(userState.version);
             $("#show-about").dialog("open");
+        } else if (domId === 'menuLogging') {   // Submenu 'Developer-Tools'
+            switchToBlockly();
+            $('#tabLogging').click();
         } else if (domId === 'menuLogin') { // Submenu 'Login'
             $("#login-user").dialog("open");
         } else if (domId === 'menuLogout') { // Submenu 'Login'
@@ -910,17 +921,6 @@ function initHeadNavigation() {
             // open the same popup as in case 'new', but with fields prefilled, but REST-Call is missing
         } else if (domId === 'menuDeleteUser') { // Submenu 'Login'
             $("#delete-user").dialog("open");
-//        } else if (domId === 'toolboxBeginner') {   // Submenu 'Nepo'
-//            loadToolbox('beginner');
-//            $('#toolboxBeginner').addClass('disabled');
-//            $('#toolboxExpert').removeClass('disabled');
-//        } else if (domId === 'toolboxExpert') {   // Submenu 'Nepo'
-//            loadToolbox('expert');
-//            $('#toolboxExpert').addClass('disabled');
-//            $('#toolboxBeginner').removeClass('disabled');
-//        } else if (domId === 'logging') {   // Submenu 'Developer-Tools'
-//            switchToBlockly();
-//            $('#tabLogging').click();
         }
         return false;
     }, 'head navigation menu item clicked');
@@ -1298,7 +1298,7 @@ function handleServerErrors() {
  */
 function setCookie(key, value) {
     var expires = new Date();
-    expires.setTime(expires.getTime() + (1 * 24 * 60 * 60 * 1000));
+    expires.setTime(expires.getTime() + (30 * 24 * 60 * 60 * 1000));
     document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
 }
 

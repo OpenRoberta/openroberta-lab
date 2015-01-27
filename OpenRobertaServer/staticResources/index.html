@@ -82,6 +82,9 @@ limitations under the License.
                     <li><a href="#" id="menuConnect" class="flaticon-botton2" lkey="Blockly.Msg.MENU_CONNECT">verbinden ...</a></li>
                     <li><a href="#" id="menuFirmware" class="flaticon-botton2" lkey="Blockly.Msg.MENU_UPDATE_FIRMWARE">Firmware aktualisieren</a></li>
                     <li><a href="#" id="menuRobotInfo" class="flaticon-botton2">info</a></li>
+                    <li class="divider"></li>                    
+                    <li class="logout"><a href="#" id="menuToolboxBeginner" class="flaticon-spanner" lkey="Blockly.Msg.MENU_TOOLBOX_BEGINNER">Toolbox Anfänger</a></li>
+                    <li class="logout"><a href="#" id="menuToolboxExpert" class="flaticon-spanner" lkey="Blockly.Msg.MENU_TOOLBOX_EXPERT">Toolbox Experte</a></li>
                 </ul>
             </li>
             <!-- Menu Help -->
@@ -92,6 +95,7 @@ limitations under the License.
                     <li><a href="#" id="menuFaq" class="flaticon-lightbulb1" lkey="Blockly.Msg.MENU_FAQ">FAQ</a></li>
                     <li><a href="#" id="menuStateInfo" class="flaticon-lightbulb1" lkey="Blockly.Msg.MENU_STATE_INFO">Statusinformationen</a></li>
                     <li><a href="#" id="menuAbout" class="flaticon-lightbulb1" lkey="Blockly.Msg.MENU_ABOUT">über ...</a></li>
+                    <li><a href="#" id="menuLogging" class="flaticon-spanner" lkey="Blockly.Msg.MENU_LOGGING">Logging</a></li>
                 </ul>
             </li>
             <!-- Menu User -->
@@ -283,8 +287,10 @@ limitations under the License.
             
             <div id="logging">
                 <br/>
-                <input id="clearLog" class="button" lkey="Blockly.Msg.BUTTON_EMPTY_LIST" type="submit" value="Liste leeren" />
-                <hr />
+                <div class="tableButtons">
+                    <input id="clearLog" class="button" lkey="Blockly.Msg.BUTTON_EMPTY_LIST" type="submit" value="Liste leeren" />
+                </div>
+                <br/>
                 <ol id="log" class="log" reversed>
                 </ol>
             </div>

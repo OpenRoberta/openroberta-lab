@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-01-26 08:12:34.413000",
+		"lastupdated": "2015-01-27 08:03:59.174000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -579,8 +579,8 @@
 	"MENU_SAVE_AS": "save as ...",
 	"MENU_ATTACH": "attach ...",
 	"MENU_PROPERTIES": "properties",
-	"MENU_BEGINNER": "Beginner",
-	"MENU_EXPERT": "Expert",
+	"MENU_TOOLBOX_BEGINNER": "toolbox beginner",
+	"MENU_TOOLBOX_EXPERT": "toolbox expert",
 	"MENU_CONNECT": "connect ...",
 	"MENU_UPDATE_FIRMWARE": "update firmware",
 	"MENU_LOGGING": "logging",

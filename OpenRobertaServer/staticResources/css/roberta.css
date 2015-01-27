@@ -177,13 +177,14 @@ html, body {
     float: left;
     width: 500px;
     height: 40px;
-    text-align: right;
+    text-align: center;
 }
 
 #toast {
     padding-top: 17px;
-    font-weight: bold;
     font-size: large;
+    z-index: 9999;
+    color: #333333;
 }
 
 .ok {
