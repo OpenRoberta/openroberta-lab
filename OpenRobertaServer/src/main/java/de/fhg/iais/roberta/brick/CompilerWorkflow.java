@@ -22,6 +22,7 @@ import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.ev3.EV3BrickConfiguration;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.persistence.util.DbSession;
+import de.fhg.iais.roberta.util.Key;
 
 public class CompilerWorkflow {
 
@@ -58,11 +59,11 @@ public class CompilerWorkflow {
      * @param configurationName the hardware configuration that is expected to have been used when assembling the brick
      * @return a message key in case of an error; null otherwise
      */
-    public String execute(DbSession session, String token, String programName, String programText, String configurationText) {
+    public Key execute(DbSession session, String token, String programName, String programText, String configurationText) {
         if ( programText == null || programText.trim().equals("") ) {
-            return "compilerworkflow.error.program.not_found";
+            return Key.COMPILERWORKFLOW_ERROR_PROGRAM_NOT_FOUND;
         } else if ( configurationText == null || configurationText.trim().equals("") ) {
-            return "compilerworkflow.error.configuration.not_found";
+            return Key.COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND;
         }
 
         JaxbBlocklyProgramTransformer<Void> programTransformer;
@@ -70,14 +71,14 @@ public class CompilerWorkflow {
             programTransformer = generateProgramTransformer(programText);
         } catch ( Exception e ) {
             LOG.error("Transformer failed", e);
-            return "compilerworkflow.error.program.transform_failed";
+            return Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
         }
         EV3BrickConfiguration brickConfiguration;
         try {
             brickConfiguration = (EV3BrickConfiguration) generateConfiguration(configurationText);
         } catch ( Exception e ) {
             LOG.error("Generation of the configuration failed", e);
-            return "compilerworkflow.error.configuration.transform_failed";
+            return Key.COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED;
         }
 
         String javaCode = AstToLejosJavaVisitor.generate(programName, brickConfiguration, programTransformer.getTree(), true);
@@ -87,9 +88,9 @@ public class CompilerWorkflow {
             storeGeneratedProgram(token, programName, javaCode);
         } catch ( Exception e ) {
             LOG.error("Storing the generated program into directory " + token + " failed", e);
-            return "compilerworkflow.error.program.store_failed";
+            return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
         }
-        String messageKey = runBuild(token, programName, "generated.main");
+        Key messageKey = runBuild(token, programName, "generated.main");
         if ( messageKey == null ) {
             LOG.info("jar for program {} generated successfully", programName);
         }
@@ -139,7 +140,7 @@ public class CompilerWorkflow {
      * @param mainFile
      * @param mainPackage
      */
-    String runBuild(String token, String mainFile, String mainPackage) {
+    Key runBuild(String token, String mainFile, String mainPackage) {
         final StringBuilder sb = new StringBuilder();
         try {
             File buildFile = new File(this.pathToCrossCompilerBuildXMLResource);
@@ -194,7 +195,7 @@ public class CompilerWorkflow {
             } else {
                 LOG.error("exception when preparing the build", e);
             }
-            return "compilerworkflow.error.program.compile_failed";
+            return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
         }
     }
 

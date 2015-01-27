@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.persistence.dao.ProgramDao;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.dao.UserProgramDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
-import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.Key;
 
 public class UserProgramProcessor extends AbstractProcessor {
 
@@ -55,24 +55,24 @@ public class UserProgramProcessor extends AbstractProcessor {
 
         User owner = userDao.get(ownerId);
         if ( owner == null ) {
-            setError(Util.OWNER_DOES_NOT_EXIST);
+            setError(Key.OWNER_DOES_NOT_EXIST);
         }
         Program programToShare = programDao.load(programName, owner);
         if ( programToShare == null ) {
-            setError(Util.PROGRAM_TO_SHARE_DOES_NOT_EXIST);
+            setError(Key.PROGRAM_TO_SHARE_DOES_NOT_EXIST);
         }
         User userToShare = userDao.loadUser(userToShareName);
         if ( userToShare == null ) {
-            setError(Util.USER_TO_SHARE_DOES_NOT_EXIST);
+            setError(Key.USER_TO_SHARE_DOES_NOT_EXIST);
         }
 
         UserProgramDao userProgramDao = new UserProgramDao(this.dbSession);
         if ( right.equals("NONE") ) {
             int userProgram = userProgramDao.deleteUserProgram(userToShare, programToShare);
-            setSuccess(Util.SERVER_ERROR);
+            setSuccess(Key.SERVER_ERROR);
         } else {
             UserProgram userProgram = userProgramDao.persistUserProgram(userToShare, programToShare, right);
-            setSuccess(Util.SERVER_ERROR);
+            setSuccess(Key.SERVER_ERROR);
         }
 
     }

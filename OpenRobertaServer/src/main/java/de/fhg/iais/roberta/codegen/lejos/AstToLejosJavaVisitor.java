@@ -150,7 +150,9 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
             }
             phrase.visit(astVisitor);
         }
-        astVisitor.generateSuffix(withWrapping);
+        if ( withWrapping ) {
+            astVisitor.sb.append("\n}\n}\n");
+        }
         return astVisitor.sb.toString();
     }
 
@@ -1237,8 +1239,12 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("lejos.hardware.lcd.TextLCD lcd = lejos.hardware.ev3.LocalEV3.get().getTextLCD();\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.clear();\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Fehler im EV3-Roboter\", 0, 2);\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Fehlermeldung\", 0, 4);\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(e.getMessage(), 0, 5);\n");
+
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("if (e.getMessage() != null) {\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Fehlermeldung\", 0, 4);\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(e.getMessage(), 0, 5);\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("}\n");
+
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Press any key\", 0, 7);\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("lejos.hardware.Button.waitForAnyPress();\n");
         this.sb.append(INDENT).append(INDENT).append("}\n");
@@ -1246,19 +1252,6 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
         this.sb.append(INDENT).append("public void run() {\n");
         this.sb.append(INDENT).append(INDENT).append("Hal hal = new Hal(brickConfiguration, usedSensors);");
-    }
-
-    private void generateSuffix(boolean withWrapping) {
-        if ( !withWrapping ) {
-            return;
-        }
-        this.sb.append("\n");
-        this.sb.append(INDENT).append(INDENT).append("try {\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("Thread.sleep(2000);\n");
-        this.sb.append(INDENT).append(INDENT).append("} catch ( InterruptedException e ) {\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("// ok\n");
-        this.sb.append(INDENT).append(INDENT).append("}\n");
-        this.sb.append(INDENT).append("}\n}\n");
     }
 
     private String generateRegenerateUsedSensors() {

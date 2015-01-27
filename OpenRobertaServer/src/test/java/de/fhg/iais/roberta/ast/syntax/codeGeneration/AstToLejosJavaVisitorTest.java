@@ -51,18 +51,15 @@ public class AstToLejosJavaVisitorTest {
         + "            lejos.hardware.lcd.TextLCD lcd = lejos.hardware.ev3.LocalEV3.get().getTextLCD();\n"
         + "            lcd.clear();\n"
         + "            lcd.drawString(\"Fehler im EV3-Roboter\", 0, 2);\n"
-        + "            lcd.drawString(\"Fehlermeldung\", 0, 4);\n"
-        + "            lcd.drawString(e.getMessage(), 0, 5);\n"
+        + "            if (e.getMessage() != null) {\n"
+        + "                lcd.drawString(\"Fehlermeldung\", 0, 4);\n"
+        + "                lcd.drawString(e.getMessage(), 0, 5);\n"
+        + "            }\n"
         + "            lcd.drawString(\"Press any key\", 0, 7);\n"
         + "            lejos.hardware.Button.waitForAnyPress();\n"
         + "        }\n"
         + "    }\n\n";
-    private static final String SUFFIX = "" //
-        + "        try {\n"
-        + "            Thread.sleep(2000);\n"
-        + "        } catch ( InterruptedException e ) {\n"
-        + "            // ok\n"
-        + "        }\n";
+    private static final String SUFFIX = "";
     private static EV3BrickConfiguration brickConfiguration;
 
     @BeforeClass

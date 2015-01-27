@@ -76,9 +76,9 @@ public class BrickCommunicator {
         }
     }
 
-    public boolean theRunButtonWasPressed(String token, String programName, String brickConfigurationName) {
+    public boolean theRunButtonWasPressed(String token, String programName) {
         BrickCommunicationData state = getState(token);
-        return state.runButtonPressed(programName, brickConfigurationName);
+        return state.runButtonPressed(programName);
     }
 
     public boolean firmwareUpdateRequested(String token) {

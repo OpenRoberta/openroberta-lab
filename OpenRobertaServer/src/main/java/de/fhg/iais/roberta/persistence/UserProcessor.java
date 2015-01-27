@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
-import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.Key;
 
 public class UserProcessor extends AbstractProcessor {
 
@@ -22,23 +22,27 @@ public class UserProcessor extends AbstractProcessor {
         UserDao userDao = new UserDao(this.dbSession);
         User user = userDao.loadUser(account);
         if ( user != null && user.isPasswordCorrect(password) ) {
-            setSuccess(Util.USER_GET_ONE_SUCCESS);
+            setSuccess(Key.USER_GET_ONE_SUCCESS);
             return user;
         } else {
-            setError(Util.USER_GET_ONE_ERROR_ID_OR_PASSWORD_WRONG);
+            setError(Key.USER_GET_ONE_ERROR_ID_OR_PASSWORD_WRONG);
             return null;
         }
     }
 
     public void saveUser(String account, String password, String roleAsString, String email, String tags) {
-        UserDao userDao = new UserDao(this.dbSession);
-        User user = userDao.persistUser(account, password, roleAsString);
-        if ( user != null ) {
-            setSuccess(Util.USER_CREATE_SUCCESS);
-            user.setEmail(email);
-            user.setTags(tags);
+        if ( account == null || account.equals("") || password == null || password.equals("") ) {
+            setError(Key.USER_CREATE_ERROR_MISSING_REQ_FIELDS, account);
         } else {
-            setError(Util.USER_CREATE_ERROR_NOT_SAVED_TO_DB, account);
+            UserDao userDao = new UserDao(this.dbSession);
+            User user = userDao.persistUser(account, password, roleAsString);
+            if ( user != null ) {
+                setSuccess(Key.USER_CREATE_SUCCESS);
+                user.setEmail(email);
+                user.setTags(tags);
+            } else {
+                setError(Key.USER_CREATE_ERROR_NOT_SAVED_TO_DB, account);
+            }
         }
     }
 
@@ -48,12 +52,12 @@ public class UserProcessor extends AbstractProcessor {
         if ( user != null && user.isPasswordCorrect(password) ) {
             int rowCount = userDao.deleteUser(user);
             if ( rowCount > 0 ) {
-                setSuccess(Util.USER_DELETE_SUCCESS);
+                setSuccess(Key.USER_DELETE_SUCCESS);
             } else {
-                setError(Util.USER_DELETE_ERROR_NOT_DELETED_IN_DB, account);
+                setError(Key.USER_DELETE_ERROR_NOT_DELETED_IN_DB, account);
             }
         } else {
-            setError(Util.USER_DELETE_ERROR_ID_NOT_FOUND, account);
+            setError(Key.USER_DELETE_ERROR_ID_NOT_FOUND, account);
         }
     }
 
@@ -72,7 +76,7 @@ public class UserProcessor extends AbstractProcessor {
                 usersJSONArray.put(userJSON);
             }
         }
-        setSuccess(Util.USER_GET_ALL_SUCCESS);
+        setSuccess(Key.USER_GET_ALL_SUCCESS);
         return usersJSONArray;
     }
 }

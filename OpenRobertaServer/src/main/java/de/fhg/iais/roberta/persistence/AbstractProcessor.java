@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.DbSession;
-import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.Key;
 
 public abstract class AbstractProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractProcessor.class);
@@ -15,7 +15,7 @@ public abstract class AbstractProcessor {
     protected final HttpSessionState httpSessionState;
 
     private boolean success;
-    private String message;
+    private Key message;
     private String[] parameter;
 
     protected AbstractProcessor(DbSession dbSession, HttpSessionState httpSessionState) {
@@ -26,7 +26,7 @@ public abstract class AbstractProcessor {
     /**
      * the command failed. Remember that.
      */
-    public final void setSuccess(String message, String... parameter) {
+    public final void setSuccess(Key message, String... parameter) {
         this.success = true;
         this.message = message;
         this.parameter = parameter;
@@ -36,7 +36,7 @@ public abstract class AbstractProcessor {
     /**
      * the command failed. Remember that.
      */
-    public final void setError(String message, String... parameters) {
+    public final void setError(Key message, String... parameters) {
         this.success = false;
         this.message = message;
         this.parameter = parameters;
@@ -57,10 +57,10 @@ public abstract class AbstractProcessor {
      *
      * @return the error message key
      */
-    public final String getMessage() {
+    public final Key getMessage() {
         if ( this.message == null ) {
-            Util.logServerError("error message missing. Returning server error.");
-            return Util.SERVER_ERROR;
+            LOG.error("error message missing. Returning server error.");
+            return Key.SERVER_ERROR;
         } else {
             return this.message;
         }

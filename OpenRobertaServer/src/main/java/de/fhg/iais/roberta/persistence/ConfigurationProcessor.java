@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.dao.ConfigurationDao;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
+import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
 
 public class ConfigurationProcessor extends AbstractProcessor {
@@ -19,7 +20,7 @@ public class ConfigurationProcessor extends AbstractProcessor {
 
     public Configuration getConfiguration(String configurationName, int userId) {
         if ( !Util.isValidJavaIdentifier(configurationName) ) {
-            setError(Util.CONFIGURATION_ERROR_ID_INVALID, configurationName);
+            setError(Key.CONFIGURATION_ERROR_ID_INVALID, configurationName);
             return null;
         } else {
             ConfigurationDao configurationDao = new ConfigurationDao(this.dbSession);
@@ -32,9 +33,9 @@ public class ConfigurationProcessor extends AbstractProcessor {
                 configuration = configurationDao.load(configurationName, null);
             }
             if ( configuration == null ) {
-                setError(Util.CONFIGURATION_GET_ONE_ERROR_NOT_FOUND);
+                setError(Key.CONFIGURATION_GET_ONE_ERROR_NOT_FOUND);
             } else {
-                setSuccess(Util.CONFIGURATION_GET_ONE_SUCCESS);
+                setSuccess(Key.CONFIGURATION_GET_ONE_SUCCESS);
             }
             return configuration;
         }
@@ -42,7 +43,7 @@ public class ConfigurationProcessor extends AbstractProcessor {
 
     public void updateConfiguration(String configurationName, int ownerId, String configurationText) {
         if ( !Util.isValidJavaIdentifier(configurationName) ) {
-            setError(Util.CONFIGURATION_ERROR_ID_INVALID, configurationName);
+            setError(Key.CONFIGURATION_ERROR_ID_INVALID, configurationName);
             return;
         }
         this.httpSessionState.setConfigurationNameAndConfiguration(configurationName, configurationText);
@@ -52,11 +53,11 @@ public class ConfigurationProcessor extends AbstractProcessor {
             User owner = userDao.get(ownerId);
             Configuration configuration = configurationDao.persistConfigurationText(configurationName, owner, configurationText);
             if ( configuration == null ) {
-                setError(Util.CONFIGURATION_SAVE_ERROR_NOT_SAVED_TO_DB);
+                setError(Key.CONFIGURATION_SAVE_ERROR_NOT_SAVED_TO_DB);
                 return;
             }
         }
-        setSuccess(Util.CONFIGURATION_SAVE_SUCCESS);
+        setSuccess(Key.CONFIGURATION_SAVE_SUCCESS);
     }
 
     public JSONArray getConfigurationInfo(int ownerId) {
@@ -73,7 +74,7 @@ public class ConfigurationProcessor extends AbstractProcessor {
             configurationInfo.put(program.getCreated().toString());
             configurationInfo.put(program.getLastChanged().toString());
         }
-        setSuccess(Util.CONFIGURATION_GET_ALL_SUCCESS, "" + configurationInfos.length());
+        setSuccess(Key.CONFIGURATION_GET_ALL_SUCCESS, "" + configurationInfos.length());
         return configurationInfos;
     }
 
@@ -83,9 +84,9 @@ public class ConfigurationProcessor extends AbstractProcessor {
         User owner = userDao.get(ownerId);
         int rowCount = configurationDao.deleteByName(configurationName, owner);
         if ( rowCount > 0 ) {
-            setSuccess(Util.CONFIGURATION_DELETE_SUCCESS);
+            setSuccess(Key.CONFIGURATION_DELETE_SUCCESS);
         } else {
-            setError(Util.CONFIGURATION_DELETE_ERROR);
+            setError(Key.CONFIGURATION_DELETE_ERROR);
         }
     }
 }

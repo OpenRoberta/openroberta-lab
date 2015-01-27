@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 
-public class WaitTimeStmt {
+public class WaitTimeStmtTest {
 
     @Test
     public void test() throws Exception {

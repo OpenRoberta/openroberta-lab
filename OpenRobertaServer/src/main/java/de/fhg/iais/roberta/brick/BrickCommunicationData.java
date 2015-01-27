@@ -33,7 +33,6 @@ public class BrickCommunicationData {
 
     private String command;
     private String programName;
-    private String brickConfigurationName;
 
     public BrickCommunicationData(String token, String robotIdentificator, String robotName, String menuversion, String lejosversion) {
         this.token = token;
@@ -129,7 +128,7 @@ public class BrickCommunicationData {
      *
      * @return true, if the robot was waiting for a "run" command, false otherwise
      */
-    public synchronized boolean runButtonPressed(String programName, String brickConfigurationName) {
+    public synchronized boolean runButtonPressed(String programName) {
         if ( !isBrickWaitingForPushCommand() ) {
             LOG.error("RUN button pressed, but robot is not waiting for that event. Bad luck!");
             return false;
@@ -137,7 +136,6 @@ public class BrickCommunicationData {
             LOG.info("RUN button pressed and robot is waiting for that event. Wait state entered " + this.clock.elapsedSecFormatted() + " ago");
             this.command = "download";
             this.programName = programName;
-            this.brickConfigurationName = brickConfigurationName;
             this.clock = Clock.start();
             this.state = State.BRICK_IS_BUSY;
             notifyAll();
@@ -206,10 +204,6 @@ public class BrickCommunicationData {
 
     public long getElapsedMsecOfStartOfLastRequest() {
         return this.clock.elapsedMsec();
-    }
-
-    public String getBrickConfigurationName() {
-        return this.brickConfigurationName;
     }
 
     public State getState() {

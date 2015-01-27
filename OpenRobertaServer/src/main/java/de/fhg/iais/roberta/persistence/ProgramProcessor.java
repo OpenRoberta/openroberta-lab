@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.dao.ProgramDao;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
+import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
 
 public class ProgramProcessor extends AbstractProcessor {
@@ -19,7 +20,7 @@ public class ProgramProcessor extends AbstractProcessor {
 
     public Program getProgram(String programName, int ownerId) {
         if ( !Util.isValidJavaIdentifier(programName) ) {
-            setError(Util.PROGRAM_ERROR_ID_INVALID, programName);
+            setError(Key.PROGRAM_ERROR_ID_INVALID, programName);
             return null;
         } else if ( this.httpSessionState.isUserLoggedIn() ) {
             UserDao userDao = new UserDao(this.dbSession);
@@ -27,21 +28,21 @@ public class ProgramProcessor extends AbstractProcessor {
             User owner = userDao.get(ownerId);
             Program program = programDao.load(programName, owner);
             if ( program != null ) {
-                setSuccess(Util.PROGRAM_GET_ONE_SUCCESS);
+                setSuccess(Key.PROGRAM_GET_ONE_SUCCESS);
                 return program;
             } else {
-                setError(Util.PROGRAM_GET_ONE_ERROR_NOT_FOUND);
+                setError(Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND);
                 return null;
             }
         } else {
-            setError(Util.PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN);
+            setError(Key.PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN);
             return null;
         }
     }
 
     public void updateProgram(String programName, int ownerId, String programText) {
         if ( !Util.isValidJavaIdentifier(programName) ) {
-            setError(Util.PROGRAM_ERROR_ID_INVALID, programName);
+            setError(Key.PROGRAM_ERROR_ID_INVALID, programName);
             return;
         }
         this.httpSessionState.setProgramNameAndProgramText(programName, programText);
@@ -51,11 +52,11 @@ public class ProgramProcessor extends AbstractProcessor {
             User owner = userDao.get(ownerId);
             Program program = programDao.persistProgramText(programName, owner, programText);
             if ( program == null ) {
-                setError(Util.PROGRAM_SAVE_ERROR_NOT_SAVED_TO_DB);
+                setError(Key.PROGRAM_SAVE_ERROR_NOT_SAVED_TO_DB);
                 return;
             }
         }
-        setSuccess(Util.PROGRAM_SAVE_SUCCESS);
+        setSuccess(Key.PROGRAM_SAVE_SUCCESS);
     }
 
     public JSONArray getProgramInfo(int ownerId) {
@@ -73,7 +74,7 @@ public class ProgramProcessor extends AbstractProcessor {
             programInfo.put(program.getCreated().toString());
             programInfo.put(program.getLastChanged().toString());
         }
-        setSuccess(Util.PROGRAM_GET_ALL_SUCCESS, "" + programInfos.length());
+        setSuccess(Key.PROGRAM_GET_ALL_SUCCESS, "" + programInfos.length());
         return programInfos;
     }
 
@@ -83,9 +84,9 @@ public class ProgramProcessor extends AbstractProcessor {
         User owner = userDao.get(ownerId);
         int rowCount = programDao.deleteByName(programName, owner);
         if ( rowCount > 0 ) {
-            setSuccess(Util.PROGRAM_DELETE_SUCCESS);
+            setSuccess(Key.PROGRAM_DELETE_SUCCESS);
         } else {
-            setError(Util.PROGRAM_DELETE_ERROR);
+            setError(Key.PROGRAM_DELETE_ERROR);
         }
     }
 }

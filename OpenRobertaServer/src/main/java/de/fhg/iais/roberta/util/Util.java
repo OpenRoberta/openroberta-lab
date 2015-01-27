@@ -34,47 +34,6 @@ public class Util {
 
     private static final AtomicInteger errorTicketNumber = new AtomicInteger(0);
 
-    public static final String SERVER_ERROR = "ORA_SERVER_ERROR";
-    public static final String COMMAND_INVALID = "ORA_COMMAND_INVALID";
-    public static final String TOKEN_SET_SUCCESS = "ORA_TOKEN_SET_SUCCESS";
-    public static final String TOKEN_SET_ERROR_NO_ROBOT_WAITING = "ORA_TOKEN_SET_ERROR_NO_ROBOT_WAITING";
-    public static final String TOOLBOX_LOAD_ERROR_NOT_FOUND = "ORA_TOOLBOX_LOAD_ERROR_NOT_FOUND";
-    public static final String TOOLBOX_LOAD_SUCCESS = "ORA_TOOLBOX_LOAD_SUCCESS";
-    public static final String ROBOT_PUSH_RUN = "ORA_ROBOT_PUSH_RUN";
-    public static final String ROBOT_NOT_WAITING = "ORA_ROBOT_NOT_WAITING";
-    public static final String ROBOT_FIRMWAREUPDATE_POSSIBLE = "ORA_ROBOT_FIRMWAREUPDATE_POSSIBLE";
-    public static final String ROBOT_FIRMWAREUPDATE_IMPOSSIBLE = "ORA_ROBOT_FIRMWAREUPDATE_IMPOSSIBLE";
-    public static final String ROBOT_NOT_CONNECTED = "ORA_ROBOT_NOT_CONNECTED";
-    public static final String CONFIGURATION_ERROR_ID_INVALID = "ORA_CONFIGURATION_ERROR_ID_INVALID";
-    public static final String CONFIGURATION_GET_ONE_ERROR_NOT_FOUND = "ORA_CONFIGURATION_GET_ONE_ERROR_NOT_FOUND";
-    public static final String CONFIGURATION_GET_ONE_SUCCESS = "ORA_CONFIGURATION_GET_ONE_SUCCESS";
-    public static final String CONFIGURATION_SAVE_ERROR = "ORA_CONFIGURATION_SAVE_ERROR";
-    public static final String CONFIGURATION_SAVE_SUCCESS = "ORA_CONFIGURATION_SAVE_SUCCESS";
-    public static final String CONFIGURATION_GET_ALL_SUCCESS = "ORA_CONFIGURATION_GET_ALL_SUCCESS";
-    public static final String CONFIGURATION_DELETE_SUCCESS = "ORA_CONFIGURATION_DELETE_SUCCESS";
-    public static final String CONFIGURATION_DELETE_ERROR = "ORA_CONFIGURATION_DELETE_ERROR";
-    public static final String CONFIGURATION_SAVE_ERROR_NOT_SAVED_TO_DB = "ORA_CONFIGURATION_SAVE_ERROR_NOT_SAVED_TO_DB";
-    public static final String PROGRAM_ERROR_ID_INVALID = "ORA_PROGRAM_ERROR_ID_INVALID";
-    public static final String PROGRAM_GET_ONE_SUCCESS = "ORA_PROGRAM_GET_ONE_SUCCESS";
-    public static final String PROGRAM_GET_ONE_ERROR_NOT_FOUND = "ORA_PROGRAM_GET_ONE_ERROR_NOT_FOUND";
-    public static final String PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN = "ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN";
-    public static final String PROGRAM_SAVE_ERROR_NOT_SAVED_TO_DB = "ORA_PROGRAM_SAVE_ERROR_NOT_SAVED_TO_DB";
-    public static final String PROGRAM_SAVE_SUCCESS = "ORA_PROGRAM_SAVE_SUCCESS";
-    public static final String PROGRAM_GET_ALL_SUCCESS = "ORA_PROGRAM_GET_ALL_SUCCESS";
-    public static final String PROGRAM_DELETE_SUCCESS = "ORA_PROGRAM_DELETE_SUCCESS";
-    public static final String PROGRAM_DELETE_ERROR = "ORA_PROGRAM_DELETE_ERROR";
-    public static final String USER_GET_ONE_SUCCESS = "ORA_USER_GET_ONE_SUCCESS";
-    public static final String USER_GET_ONE_ERROR_ID_OR_PASSWORD_WRONG = "ORA_USER_GET_ONE_ERROR_ID_OR_PASSWORD_WRONG";
-    public static final String USER_CREATE_SUCCESS = "ORA_USER_CREATE_SUCCESS";
-    public static final String USER_CREATE_ERROR_NOT_SAVED_TO_DB = "ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB";
-    public static final String USER_DELETE_SUCCESS = "ORA_USER_DELETE_SUCCESS";
-    public static final String USER_DELETE_ERROR_NOT_DELETED_IN_DB = "ORA_USER_DELETE_ERROR_NOT_DELETED_IN_DB";
-    public static final String USER_DELETE_ERROR_ID_NOT_FOUND = "ORA_USER_DELETE_ERROR_ID_NOT_FOUND";
-    public static final String USER_GET_ALL_SUCCESS = "ORA_USER_GET_ALL_SUCCESS";
-    public static final String OWNER_DOES_NOT_EXIST = "ORA_OWNER_DOES_NOT_EXIST";
-    public static final String PROGRAM_TO_SHARE_DOES_NOT_EXIST = "ORA_PROGRAM_TO_SHARE_DOES_NOT_EXIST";
-    public static final String USER_TO_SHARE_DOES_NOT_EXIST = "ORA_USER_TO_SHARE_DOES_NOT_EXIST";
-
     private Util() {
         // no objects
     }
@@ -155,15 +114,29 @@ public class Util {
         return new Timestamp(new Date().getTime());
     }
 
-    public static void logServerError(String detailMessage) {
-        LOG.error(SERVER_ERROR + " Detail message: " + detailMessage, new Throwable());
+    public static void addResultInfo(JSONObject response, AbstractProcessor processor) throws JSONException {
+        String realKey = processor.getMessage().getKey();
+        response.put("rc", processor.getRC());
+        response.put("message", realKey);
+        response.put("cause", realKey);
+        response.put("parameter", processor.getParameter()); // if getParameters returns null, nothing bad happens :-)
     }
 
-    public static void addResultInfo(JSONObject response, AbstractProcessor processor) throws JSONException {
-        response.put("rc", processor.getRC());
-        response.put("message", processor.getMessage());
-        response.put("cause", processor.getMessage());
-        response.put("parameter", processor.getParameter()); // if getParameters returns null, nothing bad happens :-)
+    public static JSONObject addSuccessInfo(JSONObject response, Key key) throws JSONException {
+        addResultInfo(response, "ok", key);
+        return response;
+    }
+
+    public static JSONObject addErrorInfo(JSONObject response, Key key) throws JSONException {
+        addResultInfo(response, "error", key);
+        return response;
+    }
+
+    private static void addResultInfo(JSONObject response, String rc, Key key) throws JSONException {
+        String realKey = key.getKey();
+        response.put("rc", rc);
+        response.put("message", realKey);
+        response.put("cause", realKey);
     }
 
     /**
