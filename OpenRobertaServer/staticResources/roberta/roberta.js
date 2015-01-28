@@ -304,7 +304,7 @@ function saveToServer() {
             "cmd" : "saveP",
             "name" : userState.program,
             "program" : xml_text
-        }, responseAndRefreshProgramList);
+        });
     } else {
         displayMessage("MESSAGE_EMPTY_NAME");
     }
@@ -329,7 +329,7 @@ function saveConfigurationToServer() {
             "cmd" : "saveC",
             "name" : userState.configuration,
             "configuration" : xml_text
-        }, responseAndRefreshConfigurationList);
+        });
     } else {
         displayMessage("MESSAGE_EMPTY_NAME");
     }
@@ -849,6 +849,7 @@ function initHeadNavigation() {
             setProgram("meinProgramm");
             $('#tabProgram').click();
         } else if (domId === 'menuListProg') { //  Submenu 'Program'
+            deactivateHeadMenu();
             switchToBlockly();
             $('#tabListing').click();
         } else if (domId === 'menuSaveProg') { //  Submenu 'Program'
@@ -864,6 +865,7 @@ function initHeadNavigation() {
             setConfiguration("Standardkonfiguration");
             switchToBrickly();
         } else if (domId === 'menuListConfig') { //  Submenu 'Configuration'
+            deactivateHeadMenu();
             switchToBlockly();
             $('#tabConfigurationListing').click();
         } else if (domId === 'menuSaveConfig') { //  Submenu 'Configuration'
@@ -877,11 +879,11 @@ function initHeadNavigation() {
             updateFirmware();
         } else if (domId === 'menuRobotInfo') { // Submenu 'Robot'
             displayMessage("MESSAGE_NOT_AVAILABLE");
-        } else if (domId === 'menuToolboxBeginner') {   // Submenu 'Nepo'
+        } else if (domId === 'menuToolboxBeginner') {   // Submenu 'Robot'
             loadToolbox('beginner');
             $('#menuToolboxBeginner').addClass('disabled');
             $('#menuToolboxExpert').removeClass('disabled');
-        } else if (domId === 'menuToolboxExpert') {   // Submenu 'Nepo'
+        } else if (domId === 'menuToolboxExpert') {   // Submenu 'Robot'
             loadToolbox('expert');
             $('#menuToolboxExpert').addClass('disabled');
             $('#menuToolboxBeginner').removeClass('disabled');
@@ -908,7 +910,7 @@ function initHeadNavigation() {
         } else if (domId === 'menuAbout') { // Submenu 'Help'
             $("#version").text(userState.version);
             $("#show-about").dialog("open");
-        } else if (domId === 'menuLogging') {   // Submenu 'Developer-Tools'
+        } else if (domId === 'menuLogging') {   // Submenu 'Help'
             switchToBlockly();
             $('#tabLogging').click();
         } else if (domId === 'menuLogin') { // Submenu 'Login'
@@ -939,6 +941,7 @@ function initHeadNavigation() {
     }, 'beta logo was clicked');
 
     $('#tabProgram').onWrap('click', function() {
+        activateHeadMenu();
         $('#tabConfiguration').removeClass('tabClicked');
         $('#tabProgram').addClass('tabClicked');
         $('#head-navigation-configuration-edit').css('display', 'none');
@@ -949,6 +952,7 @@ function initHeadNavigation() {
     });
 
     $('#tabConfiguration').onWrap('click', function() {
+        activateHeadMenu();
         $('#tabProgram').removeClass('tabClicked');
         $('#tabConfiguration').addClass('tabClicked');
         $('#head-navigation-program-edit').css('display', 'none');
@@ -1050,11 +1054,13 @@ function initTabs() {
 
     // load program
     $('#loadFromListing').onWrap('click', function() {
+        activateHeadMenu();
         loadFromListing();
     }, 'load blocks from program list');
 
     // load configuration
     $('#loadConfigurationFromListing').onWrap('click', function() {
+        activateHeadMenu();
         loadConfigurationFromListing();
     }, 'load configuration from configuration list');
 
@@ -1079,6 +1085,7 @@ function initTabs() {
     }, 'share configuration');
 
     $('.backButton').onWrap('click', function() {
+        activateHeadMenu();
         if (bricklyActive) {
             switchToBrickly();
         } else {
@@ -1265,6 +1272,20 @@ function displayToastMessages() {
             }
         });
     });
+}
+
+/**
+ * Activate head menu
+ */
+function activateHeadMenu() {
+    $('.nav > .dropdown > a').removeClass('disabled');
+}
+
+/**
+ * Deactivate head menu
+ */
+function deactivateHeadMenu() {
+    $('.nav > .dropdown > a').addClass('disabled');
 }
 
 /**

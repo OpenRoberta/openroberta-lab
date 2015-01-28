@@ -38,7 +38,13 @@ limitations under the License.
 <link rel="stylesheet" type="text/css" href="/common/jquery.dataTables.min.css"></link>
 <link rel="stylesheet" type="text/css" href="/css/flaticons/flaticon.css" />
 
+<!-- Feedback badge, reports user feedback to issue tracker. --> 
+<script type="text/javascript" src="http://jira.open-roberta.org/s/en_USy3ler1/786/12/1.1.2/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?collectorId=2f42fc3c"></script>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>Open Roberta Lab</title>
 </head>
+
 <body>
 
 <!-- ################## HEAD NAVIGATION ################## -->
@@ -289,6 +295,7 @@ limitations under the License.
                 <br/>
                 <div class="tableButtons">
                     <input id="clearLog" class="button" lkey="Blockly.Msg.BUTTON_EMPTY_LIST" type="submit" value="Liste leeren" />
+                    <input class="button backButton" type="submit" value="Cancel" />
                 </div>
                 <br/>
                 <ol id="log" class="log" reversed>

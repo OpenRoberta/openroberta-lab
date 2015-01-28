@@ -107,6 +107,7 @@ html, body {
 
 .menuTab {
     text-transform: uppercase;
+    font-weight: bold;
 }
 
 .hidden {
@@ -175,8 +176,8 @@ html, body {
 
 #toastContainer {
     float: left;
-    width: 500px;
     height: 40px;
+    width: 500px; 
     text-align: center;
 }
 
@@ -525,8 +526,9 @@ html, body {
 }
 
 #progListing input,
-#confListing input {
-    margin-top: 15px;
+#confListing input,
+#logging input {
+	margin-top: 15px;
     margin-right: 5px;
     background-color: #afca04;
     border: medium none;
