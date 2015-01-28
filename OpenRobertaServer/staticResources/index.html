@@ -49,7 +49,7 @@ limitations under the License.
 
 <!-- ################## HEAD NAVIGATION ################## -->
 
-    <nav role="navigation" class="navbar navbar-default navbar-fixed-top">
+    <nav role="navigation" class="navbar navbar-default navbar-fixed-top" id="head-navigation">
         <ul class="nav nav-pills">
             <!-- Menu Navigation -->
             <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="head-navi-icon-overview" class="head-navi-icons"></span></a>
@@ -160,6 +160,7 @@ limitations under the License.
         <label for="pass1S" lkey="Blockly.Msg.POPUP_PASSWORD"></label>
         <input id="pass1S" class='input' type="password" value="" /><br/>
         <input id="doLogin" class='submit' type="submit" value="OK" />
+        <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
     </div>
 
     <div class="jquerypopup" id="register-user" title="Benutzer registrieren">
@@ -174,48 +175,56 @@ limitations under the License.
         <label for="userEmail" lkey="Blockly.Msg.POPUP_EMAIL">E-Mail</label>
         <input id="userEmail" class='input' type="text" value="" /><br/>
         <input id="saveUser" class='submit' type="submit" lkey="Blockly.Msg.POPUP_REGISTER_USER" value="OK" />
+        <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
     </div>
 
     <div class="jquerypopup" id="delete-user" title="Benutzer löschen">
         <label for="pass1D" lkey="Blockly.Msg.POPUP_PASSWORD"></label>
         <input id="pass1D" class='input' type="password" value="" /><br/>
         <input id="deleteUser" class='submit' type="submit" lkey="Blockly.Msg.POPUP_DELETE_USER" value="OK" />
+        <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
     </div>
 
     <div class="jquerypopup program" id="attach-program" title="Programm hinzufügen">
         <label for="programNameAttach" lkey="Blockly.Msg.POPUP_NAME">Name</label>
         <input id="programNameAttach" class='input programName' type="text" value="" /><br/>
         <input id="attachProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_ATTACH_PROGRAM" value="OK" />
+        <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
     </div>
 
     <div class="jquerypopup program" id="save-program" title="Programm speichern">
         <label for="programNameSave" lkey="Blockly.Msg.POPUP_NAME">Name</label>
         <input id="programNameSave" class='input programName' type="text" value="" /><br/>
         <input id="saveProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SAVE_PROGRAM" value="OK" />
+        <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
     </div>
 
     <div class="jquerypopup program" id="share-program" title="Programm teilen mit">
         <label for="programShareWith" lkey="Blockly.Msg.POPUP_SHARE_WITH">Teilen mit</label>
         <input id="programShareWith" class='input programShareWithName' type="text" value="" /><br/>
         <input id="shareProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SHARE" value="OK" />
+        <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
     </div>
 
     <div class="jquerypopup configuration" id="save-configuration" title="Konfiguration speichern">
         <label for="configurationNameSave" lkey="Blockly.Msg.POPUP_NAME">Name</label>
         <input id="configurationNameSave" class='input configurationName' type="text" value="" /><br/>
         <input id="saveConfiguration" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SAVE_CONFIGURATION" value="OK" />
+        <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
     </div>
 
     <div class="jquerypopup configuration" id="share-configuration" title="Konfiguration teilen mit">
         <label for="configurationShareWith" lkey="Blockly.Msg.POPUP_SHARE_WITH">Teilen mit</label>
         <input id="configurationShareWith" class='input configurationShareWithName' type="text" value="" /><br/>
         <input id="shareConfiguration" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SHARE" value="OK" />
+        <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
     </div>
 
     <div class="jquerypopup" id="set-token" title="Token setzen">
         <label for="tokenValue" lkey="Blockly.Msg.POPUP_VALUE">Wert</label>
         <input id="tokenValue" class='input' type="text" value="" /><br/>
         <input id="setToken" class='submit' type="button" lkey="Blockly.Msg.POPUP_SET_TOKEN" value="OK" />
+        <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
     </div>
 
     <div class="jquerypopup" id="show-about" title="Über ...">
@@ -239,6 +248,7 @@ limitations under the License.
     <div class="jquerypopup" id="show-startup-message" title="Achtung">
         <span id="startupMessage" lkey="Blockly.Msg.POPUP_ATTENTION">O Genie, der Herr ehre Dein Ego</span><br/>&nbsp;<br/>
         <input id="hideStartupMessage" class='submit' type="button" lkey="Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE" value="Nicht mehr anzeigen" />
+        <input class='cancelPopup submit' type="submit" value="Cancel" />
     </div>
     
     <!-- ################## END POPUPS ################## -->

@@ -1352,6 +1352,7 @@ Blockly.Msg.POPUP_SET_TOKEN = 'Set token';
 Blockly.Msg.POPUP_ATTENTION = 'Attention';
 Blockly.Msg.POPUP_VALUE = 'Value';
 Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE = 'Do not show again',
+Blockly.Msg.POPUP_CANCEL = 'Cancel',
 Blockly.Msg.BUTTON_STOP = 'Stop';
 Blockly.Msg.BUTTON_FINISH = 'Finish';
 Blockly.Msg.BUTTON_LOAD = 'Load';

@@ -1023,6 +1023,10 @@ function initPopups() {
         setCookie("hideStartupMessage", true);
     }, 'hide startup-message');
 
+    $('.cancelPopup').onWrap('click', function() {
+        $('.ui-dialog-titlebar-close').click();
+    });
+    
     // Handle button events in popups
     $(".jquerypopup").keyup(function(event) {
         // fix for not working backspace button in password fields
@@ -1160,6 +1164,9 @@ function translate(jsdata) {
         } else if (lkey === 'Blockly.Msg.POPUP_ATTENTION') {
             $('#show-message').dialog('option', 'title', value);
             $('#show-startup-message').dialog('option', 'title', value);
+        } else if (lkey === 'Blockly.Msg.POPUP_CANCEL') {
+            $('.cancelPopup').attr('value', value);
+            $('.backButton').attr('value', value);
         } else if (lkey === 'Blockly.Msg.BUTTON_LOAD') {
             $('.buttonLoad').attr('value', value);
         } else if (lkey === 'Blockly.Msg.BUTTON_DO_DELETE') {

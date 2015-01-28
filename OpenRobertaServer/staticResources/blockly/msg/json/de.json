@@ -595,6 +595,7 @@
     "POPUP_ATTENTION" : "Achtung",
     "POPUP_VALUE" : "Wert",
     "POPUP_HIDE_STARTUP_MESSAGE" : "Nicht mehr anzeigen",
+    "POPUP_CANCEL" : "Abbrechen",
     "BUTTON_STOP" : "Stop",
     "BUTTON_FINISH" : "Beenden",
     "BUTTON_LOAD" : "Laden",

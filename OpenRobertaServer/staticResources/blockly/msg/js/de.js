@@ -497,6 +497,7 @@ Blockly.Msg.PLAY_TONE_TOOLTIP = "Spielt einen Ton.";
 Blockly.Msg.PLAY_VOLUME = "Lautstärke";
 Blockly.Msg.POPUP_ATTACH_PROGRAM = "Programm hinzufügen";
 Blockly.Msg.POPUP_ATTENTION = "Achtung";
+Blockly.Msg.POPUP_CANCEL = "Abbrechen";
 Blockly.Msg.POPUP_DELETE_USER = "Benutzer löschen";
 Blockly.Msg.POPUP_EMAIL = "E-Mail";
 Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE = "Nicht mehr anzeigen";

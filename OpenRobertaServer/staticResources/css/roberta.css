@@ -13,6 +13,10 @@ html, body {
     font-family: 'Roboto', sans-serif;
 }
 
+#head-navigation {
+    border-bottom: solid #E6E6E6 2px;  
+}
+
 .head-navi-icons {
     background-repeat: no-repeat;
     background-size: 100% auto;
