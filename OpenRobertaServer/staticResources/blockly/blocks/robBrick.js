@@ -28,10 +28,10 @@ Blockly.Blocks['robBrick_EV3-Brick'] = {
     init : function() {
         this.setColourRGB([ 170, 170, 170 ]);
         this.setInputsInline(false);
-        var wheelDiameter = new Blockly.FieldTextInput('5,6');
-        var trackWidth = new Blockly.FieldTextInput('17');
-        var image = new Blockly.FieldImage( './blockly/media/EV3.png', 180, 18);
-        this.appendDummyInput().appendField(image,'IMAGE');
+        var wheelDiameter = new Blockly.FieldTextInput('0', Blockly.FieldTextInput.nonnegativeNumberValidator)
+        var trackWidth = new Blockly.FieldTextInput('0', Blockly.FieldTextInput.nonnegativeNumberValidator)
+        var image = new Blockly.FieldImage('./blockly/media/EV3.png', 180, 18);
+        this.appendDummyInput().appendField(image, 'IMAGE');
         this.appendDummyInput().appendField(Blockly.Msg.BRICK_WHEEL_DIAMETER).appendField(wheelDiameter, 'WHEEL_DIAMETER').appendField('cm');
         this.appendDummyInput().appendField(Blockly.Msg.BRICK_TRACK_WIDTH).appendField(trackWidth, 'TRACK_WIDTH').appendField('cm');
         this.appendValueInput('S1').appendField('Sensor 1').setAlign(Blockly.ALIGN_RIGHT).setCheck('Sensor');

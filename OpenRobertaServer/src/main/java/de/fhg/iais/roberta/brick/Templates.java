@@ -11,7 +11,7 @@ public class Templates {
     private final Map<String, String> templates = new ConcurrentHashMap<>();
 
     public Templates() {
-        String expert =
+        String beginner =
             "" + " <toolbox_set id='toolbox' style='display: none'> " + "  <category name='TOOLBOX_ACTION'> " + "    <block type='robActions_motorDiff_on'>" //
                 + "      <value name='POWER'>" //
                 + "        <block type='math_number'>" //
@@ -127,12 +127,7 @@ public class Templates {
                 + "      <block type='robControls_if'/> "
                 + "      <block type='robControls_ifElse'/> "
                 + "      <block type='robControls_loopForever'/> "
-                + "      <block type='controls_repeat_ext'> "
-                + "        <value name='TIMES'> "
-                + "          <block type='math_number'> "
-                + "            <field name='NUM'>10</field> "
-                + "          </block> " //
-                + "        </value> "
+                + "      <block type='controls_repeat'> "
                 + "      </block> "
                 + "      <block type='robControls_wait_for'> "
                 + "        <value name='WAIT0'> "
@@ -191,7 +186,7 @@ public class Templates {
                 + "  <category name='TOOLBOX_VARIABLE' custom='VARIABLE'/> "
                 + "  <category name='TOOLBOX_PROCEDURE' custom='PROCEDURE'/> "
                 + "</toolbox_set> ";
-        String beginner =
+        String expert =
             ""
                 + " <toolbox_set id='toolbox' style='display: none'> "
                 + "  <category name='TOOLBOX_ACTION'> "
@@ -373,6 +368,7 @@ public class Templates {
                 + "      <block type='robControls_ifElse'/> "
                 + "    </category> " //
                 + "    <category name='TOOLBOX_LOOP'> "
+                + "      <block type='robControls_loopForever'/> "
                 + "      <block type='controls_repeat_ext'> "
                 + "        <value name='TIMES'> "
                 + "          <block type='math_number'> "

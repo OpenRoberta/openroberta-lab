@@ -26,12 +26,12 @@ function injectBrickly(toolbox) {
 
         // should this come from the server?
         var text = "<block_set xmlns='http://de.fhg.iais.roberta.blockly'>" + "<instance x='75' y='75'>" + "<block type='robBrick_EV3-Brick'>"
-                + "<field name='WHEEL_DIAMETER'>5.6</field>" + "<field name='TRACK_WIDTH'>13.5</field>" + "<value name='S1'>"
-                + "<block type='robBrick_touch'></block>" + "</value>" + "<value name='S4'>" + "<block type='robBrick_ultrasonic'></block>" + "</value>"
-                + "<value name='MB'>" + "<block type='robBrick_motor_big'>" + "<field name='MOTOR_REGULATION'>TRUE</field>"
-                + "<field name='MOTOR_REVERSE'>OFF</field>" + "<field name='MOTOR_DRIVE'>RIGHT</field>" + "</block>" + "</value>" + "<value name='MC'>"
-                + "<block type='robBrick_motor_big'>" + "<field name='MOTOR_REGULATION'>TRUE</field>" + "<field name='MOTOR_REVERSE'>OFF</field>"
-                + "<field name='MOTOR_DRIVE'>LEFT</field>" + "</block>" + "</value>" + "</block>" + "</instance>" + "</block_set>";
+                + "<value name='S1'>" + "<block type='robBrick_touch'></block>" + "</value>" + "<value name='S4'>"
+                + "<block type='robBrick_ultrasonic'></block>" + "</value>" + "<value name='MB'>" + "<block type='robBrick_motor_big'>"
+                + "<field name='MOTOR_REGULATION'>TRUE</field>" + "<field name='MOTOR_REVERSE'>OFF</field>" + "<field name='MOTOR_DRIVE'>RIGHT</field>"
+                + "</block>" + "</value>" + "<value name='MC'>" + "<block type='robBrick_motor_big'>" + "<field name='MOTOR_REGULATION'>TRUE</field>"
+                + "<field name='MOTOR_REVERSE'>OFF</field>" + "<field name='MOTOR_DRIVE'>LEFT</field>" + "</block>" + "</value>" + "</block>" + "</instance>"
+                + "</block_set>";
         var xml = Blockly.Xml.textToDom(text);
         Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
     }

@@ -65,7 +65,13 @@ Blockly.Xml.blockToDom_ = function(block, statement_list) {
 
     function fieldToDom(field) {
         if (field.name && field.EDITABLE) {
-            var container = goog.dom.createDom('field', null, field.getValue());
+            var value = field.getValue();
+            // check for numerals with decimal comma and convert them to decimal point
+            var testNum = field.getValue().replace(/,/g, '.');
+            if (!isNaN(testNum)) {
+                value = String(testNum);
+            }
+            var container = goog.dom.createDom('field', null, value);
             container.setAttribute('name', field.name);
             element.appendChild(container);
         }

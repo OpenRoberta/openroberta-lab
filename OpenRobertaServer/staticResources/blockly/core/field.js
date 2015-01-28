@@ -50,8 +50,8 @@ Blockly.Field = function(text) {
         'rx' : Blockly.BlockSvg.CORNER_RADIUS_FIELD,
         'ry' : Blockly.BlockSvg.CORNER_RADIUS_FIELD,
         'x' : -Blockly.BlockSvg.SEP_SPACE_X / 2,
-        'y' : -12,
-        'height' : 16
+        'y' : -14,
+        'height' : 17
     }, this.fieldGroup_);
     this.textElement_ = Blockly.createSvgElement('text', {
         'class' : 'blocklyText'
