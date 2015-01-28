@@ -254,7 +254,11 @@ function response(result) {
     if (result.rc === 'ok') {
         queueToastMessage(result.message);
     } else {
-        displayMessage(result.message);
+        if (result.message != undefined) {
+            displayMessage(result.message);
+        } else {
+            displayMessage(result.data);
+        }
     }
 }
 
@@ -340,10 +344,15 @@ function saveConfigurationToServer() {
  */
 function runOnBrick() {
     LOG.info('run ' + userState.program + ' signed in: ' + userState.id);
+    var xml_program = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+    var xml_text_program = Blockly.Xml.domToText(xml_program);
+    var xml_text_configuration = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
     return COMM.json("/program", {
         "cmd" : "runP",
         "name" : userState.program,
         "configuration" : userState.configuration,
+        "programText" : xml_text_program,
+        "configurationText" : xml_text_configuration
     }, response);
 }
 
@@ -729,14 +738,6 @@ function formatDate(date) {
     return "";
 }
 
-/**
- * Run program
- */
-function startProgram() {
-    var saveFuture = saveToServer();
-    saveFuture.then(runOnBrick);
-}
-
 function switchToBlockly() {
     $('#tabs').css('display', 'inline');
     $('#bricklyFrame').css('display', 'none');
@@ -842,7 +843,7 @@ function initHeadNavigation() {
         } else if (domId === 'menuTabConfiguration') { //  Submenu 'Overview'
             $('#tabConfiguration').click();
         } else if (domId === 'menuRunProg') { //  Submenu 'Program'
-            startProgram();
+            runOnBrick();
         } else if (domId === 'menuCheckProg') { //  Submenu 'Program'
             displayMessage("MESSAGE_NOT_AVAILABLE");
         } else if (domId === 'menuNewProg') { //  Submenu 'Program'

@@ -649,6 +649,7 @@
     "ORA_OWNER_DOES_NOT_EXIST" : "Owner does not exist.",
     "ORA_PROGRAM_TO_SHARE_DOES_NOT_EXIST" : "Program to share does not exist.",
     "ORA_USER_TO_SHARE_DOES_NOT_EXIST" : "User to share with does not exist.",
+    "ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS" : "Erforderliche Felder fehlen.",
     "HINT_LANGUAGE_GERMAN" : "Deutsch",
     "HINT_LANGUAGE_ENGLISH" : "Englisch",
     "HINT_ROBOT_STATE" : "Roboter-Status",

@@ -1406,6 +1406,7 @@ Blockly.Msg.ORA_ROBOT_NOT_CONNECTED = 'The robot is no connected.';
 Blockly.Msg.ORA_OWNER_DOES_NOT_EXIST = 'Owner does not exist.';
 Blockly.Msg.ORA_PROGRAM_TO_SHARE_DOES_NOT_EXIST = 'Program to share does not exist.';
 Blockly.Msg.ORA_USER_TO_SHARE_DOES_NOT_EXIST = 'User to share with does not exist.';
+Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = 'Missing required fields.';
 Blockly.Msg.HINT_LANGUAGE_GERMAN = 'German';
 Blockly.Msg.HINT_LANGUAGE_ENGLISH = 'English';
 Blockly.Msg.HINT_ROBOT_STATE = 'Robot state';

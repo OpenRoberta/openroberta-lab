@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-01-27 08:03:59.174000",
+		"lastupdated": "2015-01-28 09:14:05.538000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -666,6 +666,7 @@
 	"ORA_OWNER_DOES_NOT_EXIST": "Owner does not exist.",
 	"ORA_PROGRAM_TO_SHARE_DOES_NOT_EXIST": "Program to share does not exist.",
 	"ORA_USER_TO_SHARE_DOES_NOT_EXIST": "User to share with does not exist.",
+	"ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS": "Missing required fields.",
 	"HINT_LANGUAGE_GERMAN": "German",
 	"HINT_LANGUAGE_ENGLISH": "English",
 	"HINT_ROBOT_STATE": "Robot state",

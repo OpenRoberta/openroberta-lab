@@ -472,6 +472,7 @@ Blockly.Msg.ORA_TOKEN_SET_ERROR_NO_ROBOT_WAITING = "There is no active robot.";
 Blockly.Msg.ORA_TOKEN_SET_SUCCESS = "Token set";
 Blockly.Msg.ORA_TOOLBOX_LOAD_ERROR_NOT_FOUND = "Toolbox not found";
 Blockly.Msg.ORA_TOOLBOX_LOAD_SUCCESS = "Toolbox loaded";
+Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Missing required fields.";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Error while storing user.";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "The user was successfully created";
 Blockly.Msg.ORA_USER_DELETE_ERROR_ID_NOT_FOUND = "Error while deleting user.";
