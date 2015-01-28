@@ -254,11 +254,7 @@ function response(result) {
     if (result.rc === 'ok') {
         queueToastMessage(result.message);
     } else {
-        if (result.message != undefined) {
-            displayMessage(result.message);
-        } else {
-            displayMessage(result.data);
-        }
+        displayMessage(result.message);
     }
 }
 
