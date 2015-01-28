@@ -111,7 +111,7 @@ Blockly.Tooltip.svgBackground_ = null;
  * @type {Element}
  * @private
  */
-Blockly.Tooltip.svgShadow_ = null;
+//Blockly.Tooltip.svgShadow_ = null;
 
 /**
  * Horizontal offset between mouse cursor and tooltip.
@@ -149,21 +149,25 @@ Blockly.Tooltip.createDom = function() {
      * y="2"/> <rect class="blocklyTooltipBackground"/> <text
      * class="blocklyTooltipText"></text> </g>
      */
-    var svgGroup = /** @type {!SVGGElement} */ (Blockly.createSvgElement('g', {
-        'class' : 'blocklyHidden'
-    }, null));
+    var svgGroup = Blockly.createSvgElement('g', {
+        //'class' : 'blocklyHidden'
+    }, null);
     Blockly.Tooltip.svgGroup_ = svgGroup;
-    Blockly.Tooltip.svgShadow_ = /** @type {!SVGRectElement} */ (Blockly.createSvgElement('rect', {
-        'class' : 'blocklyTooltipShadow',
+    var tooltipFilter = Blockly.createSvgElement('g', {
+        'filter' : 'url(#blocklyShadowFilter)'
+    }, svgGroup);
+    Blockly.Tooltip.svgBackground_ = Blockly.createSvgElement('rect', {
+        'class' : 'blocklyTooltipBackground',
         'x' : 2,
-        'y' : 2
-    }, svgGroup));
-    Blockly.Tooltip.svgBackground_ = /** @type {!SVGRectElement} */ (Blockly.createSvgElement('rect', {
-        'class' : 'blocklyTooltipBackground'
-    }, svgGroup));
-    Blockly.Tooltip.svgText_ = /** @type {!SVGTextElement} */ (Blockly.createSvgElement('text', {
+        'y' : 2,
+        'rx' : Blockly.BlockSvg.CORNER_RADIUS,
+        'ry' : Blockly.BlockSvg.CORNER_RADIUS
+    }, tooltipFilter);
+    Blockly.Tooltip.svgText_ = Blockly.createSvgElement('text', {
+        'x' : 2,
+        'y' : 4,
         'class' : 'blocklyTooltipText'
-    }, svgGroup));
+    }, svgGroup);
     return svgGroup;
 };
 
@@ -308,11 +312,11 @@ Blockly.Tooltip.show_ = function() {
     // Resize the background and shadow to fit.
     var bBox = Blockly.Tooltip.svgText_.getBBox();
     var width = 2 * Blockly.Tooltip.MARGINS + bBox.width;
-    var height = bBox.height;
+    var height = Blockly.Tooltip.MARGINS + bBox.height;
     Blockly.Tooltip.svgBackground_.setAttribute('width', width);
     Blockly.Tooltip.svgBackground_.setAttribute('height', height);
-    Blockly.Tooltip.svgShadow_.setAttribute('width', width);
-    Blockly.Tooltip.svgShadow_.setAttribute('height', height);
+   // Blockly.Tooltip.svgShadow_.setAttribute('width', width);
+   // Blockly.Tooltip.svgShadow_.setAttribute('height', height);
     if (Blockly.RTL) {
         // Right-align the paragraph.
         // This cannot be done until the tooltip is rendered on screen.
@@ -495,8 +499,11 @@ Blockly.Tooltip.wrapMutate_ = function(words, wordBreaks, limit) {
 
 /**
  * Reassemble the array of words into text, with the specified line breaks.
- * @param {!Array.<string>} words Array of each word.
- * @param {!Array.<boolean>} wordBreaks Array of line breaks.
+ * 
+ * @param {!Array.
+ *            <string>} words Array of each word.
+ * @param {!Array.
+ *            <boolean>} wordBreaks Array of line breaks.
  * @return {string} Plain text.
  * @private
  */

@@ -126,6 +126,7 @@ Blockly.FieldColour.prototype.showEditor_ = function() {
     // Create the palette using Closure.
     var picker = new goog.ui.ColorPicker();
     picker.setSize(Blockly.FieldColour.COLUMNS);
+    console.log(Blockly.FieldColour.COLOURS);
     picker.setColors(Blockly.FieldColour.COLOURS);
 
     // Position the palette to line up with the field.

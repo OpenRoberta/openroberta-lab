@@ -89,6 +89,12 @@ Blockly.Variables.renameVariable = function(newName) {
     var oldName = block.getFieldValue('VAR');
     // Strip leading and trailing whitespace.  Beyond this, all names are legal.
     newName = newName.replace(/^[\s\xa0]+|[\s\xa0]+$/g, '');
+    // no name set -> invalid
+    if (newName === '')
+        return null;
+    // java convention naming?
+    if (!newName.match(/^[a-z][a-zA-Z0-9]*$/))
+        return null;
     // Ensure two identically-named variables don't exist.
     newName = Blockly.Variables.findLegalName(newName, block);
     var blocks = Blockly.mainWorkspace.getAllBlocks();

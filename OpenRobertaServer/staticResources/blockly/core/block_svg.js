@@ -654,6 +654,7 @@ Blockly.BlockSvg.prototype.renderCompute_ = function(iconWidth) {
         if (y == 0 && this.block_.getIcons().length > 0 && row.thicker != true) {
             if (row.height < (Blockly.BlockSvg.MIN_BLOCK_Y + 8) && (inputRows.length == 1 || hasStatement)) {
                 row.height = Blockly.BlockSvg.MIN_BLOCK_Y + 8;
+                row.thicker = true;
             }
         }
     }
@@ -859,6 +860,10 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, inlineSteps, conne
             var input = row[0];
             var fieldX = cursorX;
             var fieldY = cursorY + Blockly.BlockSvg.FIELD_HEIGHT;
+            if (row.thicker) {
+                // Lower the field slightly.
+                fieldY += Blockly.BlockSvg.INLINE_PADDING_Y;
+            }
             if (input.align != Blockly.ALIGN_LEFT) {
                 var fieldRightX = inputRows.rightEdge - input.fieldWidth - Blockly.BlockSvg.TAB_WIDTH - 2 * Blockly.BlockSvg.SEP_SPACE_X;
                 if (input.align == Blockly.ALIGN_RIGHT) {
@@ -892,6 +897,10 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, inlineSteps, conne
             var input = row[0];
             var fieldX = cursorX;
             var fieldY = cursorY + Blockly.BlockSvg.FIELD_HEIGHT;
+            if (row.thicker) {
+                // Lower the field slightly.
+                fieldY += Blockly.BlockSvg.INLINE_PADDING_Y;
+            }
             if (input.align != Blockly.ALIGN_LEFT) {
                 var fieldRightX = inputRows.rightEdge - input.fieldWidth - 2 * Blockly.BlockSvg.SEP_SPACE_X;
                 if (inputRows.hasValue) {

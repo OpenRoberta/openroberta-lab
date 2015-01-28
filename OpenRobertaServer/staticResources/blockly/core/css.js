@@ -55,7 +55,7 @@ Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 
 
 '.blocklyButtonTrashBack {', 'fill: #fff;', '}',
 
-'.blocklyWidgetDiv {', '  position: absolute;', '  display: none;', '  z-index: 999;', '}',
+'.blocklyWidgetDiv {', '  position: absolute;', '  display: none;', '  z-index: 9999;', '}',
 
 '.blocklyDraggable {',
 /*
@@ -113,11 +113,11 @@ Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 
 
         '.blocklyFieldDropdown:not(.blocklyHidden) {', '  display: block;', '}',
 
-        '.blocklyTooltipBackground {', '  fill: #ffffc7;', '  stroke-width: 1px;', '  stroke: #d8d8d8;', '}',
+        '.blocklyTooltipBackground {', '  fill: #FFEA81;', '  stroke-width: 1px;', '  stroke: #FFDC00;', '}',
 
         '.blocklyTooltipShadow,', '.blocklyDropdownMenuShadow {', '  fill: #bbb;', '  filter: url(#blocklyShadowFilter);', '}',
 
-        '.blocklyTooltipText {', '  font-family: sans-serif;', '  font-size: 9pt;', '  fill: #000;', '}',
+        '.blocklyTooltipText {', '  font-family: sans-serif;', '  font-size: 10pt;', '  fill: #000;', '}',
 
         '.blocklyIconShield {', '  cursor: default;', '  fill: #006E92;',
         //'  stroke-width: 1px;',
@@ -159,14 +159,11 @@ Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 
 
         '.blocklyCommentTextarea {', '  margin: 0;', '  padding: 2px;', '  border: 0;', '  resize: none;',
         //'  background-color: #ffc;',
-        '}',
-        '.blocklyHelpDiv {', '  padding: 2px;', '  border: 0;', '  resize: none;', 'font-size: 11pt;',
+        '}', '.blocklyHelpDiv {', '  padding: 2px;', '  border: 0;', '  resize: none;', 'font-size: 11pt;',
         //'  background-color: #ffc;',
-        '}',
-        'textarea {', '  border: none;', ' margin: 0;', '  padding: 2px;', '  border: 0;', '  resize: none;',
+        '}', 'textarea {', '  border: none;', ' margin: 0;', '  padding: 2px;', '  border: 0;', '  resize: none;',
         //'  background-color: #ffc;',
-        '}',
-        'textarea:focus {', '  border: none;', ' margin: 0;', '  padding: 2px;', '  border: 0;', '  resize: none;',
+        '}', 'textarea:focus {', '  border: none;', ' margin: 0;', '  padding: 2px;', '  border: 0;', '  resize: none;',
         //'  background-color: #ffc;',
         '}',
 
@@ -194,9 +191,9 @@ Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 
 
         '.blocklyAngleLine {', '  stroke: #f00;', '  stroke-width: 2;', '  stroke-linecap: round;', '}',
 
-        '.blocklyContextMenu {', '  border-radius: 4px;', '}',
+        '.blocklyContextMenu {', '  border-radius: 2px;', '-webkit-box-shadow: 0px 3px 5px #aeaeaf;', 'box-shadow: 0px 3px 5px #aeaeaf;', '}',
 
-        '.blocklyDropdownMenu {', '  padding: 0 !important;', '}',
+        '.blocklyDropdownMenu {', '  padding: 0 !important;', '-webkit-box-shadow: 0px 3px 5px #aeaeaf;', 'box-shadow: 0px 3px 5px #aeaeaf;', '}',
 
         /* Override the default Closure URL. */
         '.goog-option-selected .goog-menuitem-checkbox,', '.goog-option-selected .goog-menuitem-icon {',
@@ -296,14 +293,14 @@ Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 
 
         '.goog-menu {', '  background: #fff;', '  border-color: #ccc #666 #666 #ccc;', '  border-style: solid;', '  border-width: 1px;', '  cursor: default;',
         '  font: normal 13px Arial, sans-serif;', '  margin: 0;', '  outline: none;', '  padding: 4px 0;', '  position: absolute;', '  z-index: 20000;', /*
-                                                                                                                                                             * Arbitrary,
-                                                                                                                                                             * but
-                                                                                                                                                             * some
-                                                                                                                                                             * apps
-                                                                                                                                                             * depend
-                                                                                                                                                             * on
-                                                                                                                                                             * it...
-                                                                                                                                                             */
+         * Arbitrary,
+         * but
+         * some
+         * apps
+         * depend
+         * on
+         * it...
+         */
         '}',
 
         /* Copied from: goog/css/menuitem.css */

@@ -159,7 +159,12 @@ Blockly.Procedures.isLegalName = function(name, workspace, opt_exclude) {
 Blockly.Procedures.rename = function(text) {
     // Strip leading and trailing whitespace.  Beyond this, all names are legal.
     text = text.replace(/^[\s\xa0]+|[\s\xa0]+$/g, '');
-
+    // no name set -> invalid
+    if (text === '')
+        return null;
+    // java convention naming?
+    if (!text.match(/^[a-z][a-zA-Z0-9]*$/))
+        return null;
     // Ensure two identically-named procedures don't exist.
     text = Blockly.Procedures.findLegalName(text, this.sourceBlock_);
     // Rename any callers.

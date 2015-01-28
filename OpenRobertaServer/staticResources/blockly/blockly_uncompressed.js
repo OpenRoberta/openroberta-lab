@@ -29,7 +29,6 @@ goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + di
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/blockly.js", ['Blockly'], ['Blockly.Block', 'Blockly.Connection', 'Blockly.FieldAngle', 'Blockly.FieldCheckbox', 'Blockly.FieldColour', 'Blockly.FieldRobColour', 'Blockly.FieldDropdown', 'Blockly.FieldImage', 'Blockly.FieldTextInput', 'Blockly.FieldVariable', 'Blockly.Generator', 'Blockly.Msg', 'Blockly.Procedures', 'Blockly.Realtime', 'Blockly.Toolbox', 'Blockly.WidgetDiv', 'Blockly.Workspace', 'Blockly.inject', 'Blockly.utils', 'goog.color', 'goog.dom', 'goog.events', 'goog.string', 'goog.ui.ColorPicker', 'goog.ui.tree.TreeControl', 'goog.userAgent']);
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/blocks.js", ['Blockly.Blocks'], ['goog.asserts']);
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/block_svg.js", ['Blockly.BlockSvg'], ['goog.userAgent']);
-goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/brickly.js", [], []);
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/bubble.js", ['Blockly.Bubble'], ['Blockly.Workspace']);
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/button.js", ['Blockly.Button'], ['Blockly.BlockSvg']);
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/checkButton.js", ['Blockly.CheckButton'], ['Blockly.Button', 'Blockly.BlockSvg']);
@@ -62,7 +61,6 @@ goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + di
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/procedures.js", ['Blockly.Procedures'], ['Blockly.FieldVariable', 'Blockly.Names', 'Blockly.Workspace']);
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/realtime-client-utils.js", ['rtclient'], []);
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/realtime.js", ['Blockly.Realtime'], ['goog.array', 'goog.dom', 'goog.style', 'rtclient']);
-goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/roberta.js", [], []);
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/saveButton.js", ['Blockly.SaveButton'], ['Blockly.Button', 'Blockly.BlockSvg']);
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/scrollbar.js", ['Blockly.Scrollbar', 'Blockly.ScrollbarPair'], ['goog.userAgent']);
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/startButton.js", ['Blockly.StartButton'], ['Blockly.Button', 'Blockly.BlockSvg']);
