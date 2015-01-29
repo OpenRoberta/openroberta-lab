@@ -304,6 +304,12 @@ function saveToServer() {
             "cmd" : "saveP",
             "name" : userState.program,
             "program" : xml_text
+        }, function(result) {
+            if (result.rc === 'ok') {
+                displayMessage(result.message, "TOAST");
+            } else {
+                displayMessage(result.message, "POPUP");
+            }
         });
     } else {
         displayMessage("MESSAGE_EMPTY_NAME", "POPUP");
@@ -880,7 +886,15 @@ function initHeadNavigation() {
                 window.open("http://dev.open-roberta.org/willkommen.html?&L=1");
             }
         } else if (domId === 'menuFaq') { // Submenu 'Help'
-            displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP");
+            if (userState.language === 'De') {
+                if (userState.language === 'De') {
+                    window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/FAQ/FAQ+Home");
+                } else {
+                    window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/FAQ/FAQ+Home");
+                }
+            } else {
+                window.open("http://dev.open-roberta.org/willkommen.html?&L=1");
+            }
         } else if (domId === 'menuStateInfo') { // Submenu 'Help'
             $("#loggedIn").text(userState.name);
             $("#programName").text(userState.program);
