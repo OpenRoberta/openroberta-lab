@@ -16,12 +16,13 @@ function initUserState() {
     userState.programSaved = false;
     userState.configurationSaved = false;
     userState.brickSaved = false;
-    userState.robot = '';
-    userState.robotState = 'robot.not_waiting';
-    userState.waiting = '';
     userState.toolbox = 'beginner';
     userState.token = '1A2B3C4D';
     userState.doPing = true;
+    userState['robot.name'] = '';
+    userState['robot.state'] = '';
+    userState['robot.battery'] = '';
+    userState['robot.wait'] = '';
 }
 
 /**
@@ -335,6 +336,12 @@ function saveConfigurationToServer() {
             "cmd" : "saveC",
             "name" : userState.configuration,
             "configuration" : xml_text
+        }, function(result) {
+            if (result.rc === 'ok') {
+                displayMessage(result.message, "TOAST");
+            } else {
+                displayMessage(result.message, "POPUP");
+            }
         });
     } else {
         displayMessage("MESSAGE_EMPTY_NAME", "POPUP");
@@ -756,43 +763,23 @@ function switchToBrickly() {
  */
 function displayState() {
     if (userState.accountName) {
-        $('#displayLogin').text(userState.name);
         $('#iconDisplayLogin').removeClass('error');
         $('#iconDisplayLogin').addClass('ok');
     } else {
-        $('#displayLogin').text('');
         $('#iconDisplayLogin').removeClass('ok');
         $('#iconDisplayLogin').addClass('error');
     }
 
-    $('#tabProgramName').text(userState.program);
-    $('#tabConfigurationName').text(userState.configuration);
-
-    if (userState.toolbox) {
-        $('#iconDisplayToolbox').removeClass('error');
-        $('#iconDisplayToolbox').addClass('ok');
+    if (userState['robot.state'] != 'busy') {
+       $('#iconDisplayRobotState').removeClass('ok');
+       $('#iconDisplayRobotState').addClass('error');
     } else {
-        $('#iconDisplayToolbox').removeClass('ok');
-        $('#iconDisplayToolbox').addClass('error');
-    }
-
-    $('.robotState').css('display', 'none');
-    if (userState.robotState) {
         $('#iconDisplayRobotState').removeClass('error');
         $('#iconDisplayRobotState').addClass('ok');
-        var robotState = escape(userState.robotState);
-        $('#' + robotState + '').css('display', 'inline');
-        if (userState.waiting) {
-            var waitingTime = escape("robot.waiting_time");
-            $('#' + waitingTime + '').css('display', 'inline');
-            $('#' + waitingTime + '').text(' ' + userState.waiting);
-        } else {
-            $('#iconDisplayRobotState').removeClass('ok');
-            $('#iconDisplayRobotState').addClass('error');
-        }
-    } else {
-        $('#displayRobotState').text('');
     }
+
+    $('#tabProgramName').text(userState.program);
+    $('#tabConfigurationName').text(userState.configuration);
 }
 
 function setHeadNavigationMenuState(state) {
@@ -864,7 +851,11 @@ function initHeadNavigation() {
         } else if (domId === 'menuFirmware') { // Submenu 'Robot'
             updateFirmware();
         } else if (domId === 'menuRobotInfo') { // Submenu 'Robot'
-            displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP");
+            $("#robotName").text(userState['robot.name']);
+            $("#robotState").text(userState['robot.state']);
+            $("#robotBattery").text(userState['robot.battery']);
+            $("#robotWait").text(userState['robot.wait']);
+            $("#show-robot-info").dialog("open");
         } else if (domId === 'menuToolboxBeginner') {   // Submenu 'Robot'
             loadToolbox('beginner');
             $('#menuToolboxBeginner').addClass('disabled');
@@ -1109,17 +1100,34 @@ function initLogging() {
  *            response of server call
  */
 function setRobotState(response) {
-    if (response.robot_waiting != undefined) {
-        userState.waiting = response.robot_waiting;
-    } else {
-        userState.waiting = '';
-    }
     if (response.version) {
         userState.version = response.version;
     }
-    if (response.robot_state) {
-        userState.robotState = response.robot_state;
+
+    if (response['robot.wait'] != undefined) {
+        userState['robot.wait'] = response['robot.wait'];
+    } else {
+        userState['robot.wait'] = undefined;
     }
+    
+    if (response['robot.battery'] != undefined) {
+        userState['robot.battery'] = response['robot.battery'];
+    } else {
+        userState['robot.battery'] = '';
+    }
+    
+    if (response['robot.name'] != undefined) {
+        userState['robot.name'] = response['robot.name'];
+    } else {
+        userState['robot.name'] = '';
+    }
+    
+    if (response['robot.state'] != undefined) {
+        userState['robot.state'] = response['robot.state'];
+    } else {
+        userState['robot.state'] = '';
+    }
+
     displayState();
 }
 
@@ -1172,10 +1180,9 @@ function translate(jsdata) {
             $('#setLangDe').prop('title', value);
         } else if (lkey === 'Blockly.Msg.HINT_LANGUAGE_ENGLISH') {
             $('#setLangEn').prop('title', value);
-        } else if (lkey === 'Blockly.Msg.HINT_ROBOT_STATE') {
-            $('#displayRobotState').prop('title', value);
-        } else if (lkey === 'Blockly.Msg.HINT_USER') {
-            $('#displayLogin').prop('title', value);
+        } else if (lkey === 'Blockly.Msg.MENU_ROBOT_STATE_INFO') {
+            $('#show-robot-info').dialog('option', 'title', value);
+            $(this).html(value);
         } else if (lkey === 'Blockly.Msg.MENU_STATE_INFO') {
             $('#show-state-info').dialog('option', 'title', value);
             $(this).html(value);

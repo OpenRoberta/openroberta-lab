@@ -87,7 +87,7 @@ limitations under the License.
                 <ul class="dropdown-menu">
                     <li><a href="#" id="menuConnect" class="flaticon-botton2" lkey="Blockly.Msg.MENU_CONNECT">verbinden ...</a></li>
                     <li><a href="#" id="menuFirmware" class="flaticon-botton2" lkey="Blockly.Msg.MENU_UPDATE_FIRMWARE">Firmware aktualisieren</a></li>
-                    <li><a href="#" id="menuRobotInfo" class="flaticon-botton2">info</a></li>
+                    <li><a href="#" id="menuRobotInfo" class="flaticon-botton2" lkey="Blockly.Msg.MENU_ROBOT_STATE_INFO">Roboterinformationen</a></li>
                     <li class="divider"></li>                    
                     <li class="logout"><a href="#" id="menuToolboxBeginner" class="flaticon-spanner" lkey="Blockly.Msg.MENU_TOOLBOX_BEGINNER">Toolbox Anfänger</a></li>
                     <li class="logout"><a href="#" id="menuToolboxExpert" class="flaticon-spanner" lkey="Blockly.Msg.MENU_TOOLBOX_EXPERT">Toolbox Experte</a></li>
@@ -127,19 +127,11 @@ limitations under the License.
             <!-- Beta-Version-Logo -->
             <li id="beta"></li>
 
-            <!-- Languages -->
-            <li id="languages">
-                <span id="setLangDe" class="flag bigFlag" title="Deutsch" lkey="Blockly.Msg.HINT_LANGUAGE_GERMAN"></span> <span id="setLangEn" class="flag smallFlag" title="Englisch" lkey="Blockly.Msg.HINT_LANGUAGE_ENGLISH"></span>
-            </li>
-
             <!-- States -->
-            <li id="states"><span id="iconDisplayLogin" class="flaticon-user"></span>
-                <span id="displayLogin" title="Angemeldeter Benutzer" lkey="Blockly.Msg.HINT_USER">Angemeldeter Benutzer</span><br />
-                <span id="iconDisplayRobotState" class="flaticon-botton2"></span>
-                <span id="displayRobotState" title="Roboter-Status" lkey="Blockly.Msg.HINT_ROBOT_STATE">
-                <span class="robotState" id="robot.not_waiting" lkey="Blockly.Msg.ROBOT_NOT_WAITING">Roboter inaktiv</span>
-                <span class="robotState" id="robot.waiting" lkey="Blockly.Msg.ROBOT_WAITING">Roboter wartet</span>
-                <span class="robotState" id="robot.waiting_time">xxx sec</span></span><br/>&nbsp;<br/>
+            <li id="states">
+                <span id="iconDisplayLogin" class="flaticon-user"></span>
+                <span id="iconDisplayRobotState" class="flaticon-botton2"></span><br/>
+                <span id="setLangDe" class="flag bigFlag" title="Deutsch" lkey="Blockly.Msg.HINT_LANGUAGE_GERMAN"></span> <span id="setLangEn" class="flag smallFlag" title="Englisch" lkey="Blockly.Msg.HINT_LANGUAGE_ENGLISH"></span>
             </li>
         </ul>
 
@@ -239,6 +231,13 @@ limitations under the License.
         <span lkey="Blockly.Msg.TAB_PROGRAM">Programm</span>:&nbsp;<span id="programName">???</span><br/>
         <span lkey="Blockly.Msg.TAB_CONFIGURATION">Konfiguration</span>:&nbsp;<span id="configurationName">???</span><br/>
         <span lkey="Blockly.Msg.POPUP_TOOLBOX">Toolbox</span>:&nbsp;<span id="toolbox">???</span>
+    </div>
+
+    <div class="jquerypopup" id="show-robot-info" title="Zustand des Roboters">
+        <span lkey="Blockly.Msg.POPUP_ROBOT_NAME">Name</span>:&nbsp;</span><span id="robotName">???</span><br/>
+        <span lkey="Blockly.Msg.POPUP_ROBOT_STATE">Status</span>:&nbsp;<span id="robotState">???</span><br/>
+        <span lkey="Blockly.Msg.POPUP_ROBOT_BATTERY">Batteriespannung</span>:&nbsp;<span id="robotBattery">???</span><br/>
+        <span lkey="Blockly.Msg.POPUP_ROBOT_WAIT">Wartezeit</span>:&nbsp;<span id="robotWait">???</span>
     </div>
 
     <div class="jquerypopup" id="show-message" title="Achtung">
