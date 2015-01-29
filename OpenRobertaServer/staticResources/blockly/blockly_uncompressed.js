@@ -36,6 +36,7 @@ goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + di
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/connection.js", ['Blockly.Connection', 'Blockly.ConnectionDB'], ['Blockly.Workspace']);
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/contextmenu.js", ['Blockly.ContextMenu'], ['goog.dom', 'goog.style', 'goog.ui.Menu', 'goog.ui.MenuItem']);
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/css.js", ['Blockly.Css'], ['goog.cssom']);
+goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/emptyButton.js", ['Blockly.EmptyButton'], ['Blockly.Button', 'Blockly.BlockSvg']);
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/error.js", ['Blockly.Error'], ['Blockly.Bubble', 'Blockly.Icon']);
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/field.js", ['Blockly.Field'], ['Blockly.BlockSvg', 'goog.asserts', 'goog.userAgent']);
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/field_angle.js", ['Blockly.FieldAngle'], ['Blockly.FieldTextInput']);
@@ -71,7 +72,7 @@ goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + di
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/variables.js", ['Blockly.Variables'], ['Blockly.Toolbox', 'Blockly.Workspace']);
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/warning.js", ['Blockly.Warning'], ['Blockly.Bubble', 'Blockly.Icon']);
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/widgetdiv.js", ['Blockly.WidgetDiv'], ['Blockly.Css', 'goog.dom']);
-goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/workspace.js", ['Blockly.Workspace'], ['Blockly.ScrollbarPair', 'Blockly.Trashcan', 'Blockly.Button', 'Blockly.StartButton', 'Blockly.BackButton', 'Blockly.CheckButton', 'Blockly.SaveButton', 'Blockly.Xml']);
+goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/workspace.js", ['Blockly.Workspace'], ['Blockly.ScrollbarPair', 'Blockly.Trashcan', 'Blockly.Button', 'Blockly.StartButton', 'Blockly.EmptyButton', 'Blockly.CheckButton', 'Blockly.SaveButton', 'Blockly.Xml']);
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/xml_roberta.js", ['Blockly.Xml'], []);
 goog.addDependency("../../alltests.js", [], []);
 goog.addDependency("base.js", [], []);
@@ -1585,6 +1586,7 @@ goog.require('Blockly.Connection');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.ContextMenu');
 goog.require('Blockly.Css');
+goog.require('Blockly.EmptyButton');
 goog.require('Blockly.Error');
 goog.require('Blockly.Field');
 goog.require('Blockly.FieldAngle');

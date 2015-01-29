@@ -46,6 +46,7 @@ Blockly.Css.inject = function() {
  * Array making up the CSS content for Blockly.
  */
 Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 'stroke-linecap: round;', '}',
+'.blocklyButtonPathDisabled {', 'fill: #bbb;', 'stroke: #bbb;', 'stroke-linecap: round;', '}',
 
 '.blocklyButtonHoverPath {', 'fill: #333;', 'stroke: #333;', 'stroke-linecap: round;', '}',
 
