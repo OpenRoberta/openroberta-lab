@@ -832,6 +832,14 @@ function initHeadNavigation() {
         } else if (domId === 'menuAttachProg') { //  Submenu 'Program'
             $("#attach-program").dialog("open");
         } else if (domId === 'menuPropertiesProg') { //  Submenu 'Program'
+        } else if (domId === 'menuToolboxBeginner') {   // Submenu 'Program'
+            loadToolbox('beginner');
+            $('#menuToolboxBeginner').addClass('disabled');
+            $('#menuToolboxExpert').removeClass('disabled');
+        } else if (domId === 'menuToolboxExpert') {   // Submenu 'Program'
+            loadToolbox('expert');
+            $('#menuToolboxExpert').addClass('disabled');
+            $('#menuToolboxBeginner').removeClass('disabled');
         } else if (domId === 'menuCheckConfig') { //  Submenu 'Configuration'
             displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP");
         } else if (domId === 'menuNewConfig') { //  Submenu 'Configuration'
@@ -856,14 +864,6 @@ function initHeadNavigation() {
             $("#robotBattery").text(userState['robot.battery']);
             $("#robotWait").text(userState['robot.wait']);
             $("#show-robot-info").dialog("open");
-        } else if (domId === 'menuToolboxBeginner') {   // Submenu 'Robot'
-            loadToolbox('beginner');
-            $('#menuToolboxBeginner').addClass('disabled');
-            $('#menuToolboxExpert').removeClass('disabled');
-        } else if (domId === 'menuToolboxExpert') {   // Submenu 'Robot'
-            loadToolbox('expert');
-            $('#menuToolboxExpert').addClass('disabled');
-            $('#menuToolboxBeginner').removeClass('disabled');
         } else if (domId === 'menuFirstSteps') { // Submenu 'Help'
             if (userState.language === 'De') {
                 window.open("http://www.open-roberta.org/erste-schritte.html");

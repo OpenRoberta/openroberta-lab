@@ -65,10 +65,13 @@ limitations under the License.
                     <li class="login logout"><a href="#" id="menuCheckProg" class="flaticon-tick" lkey="Blockly.Msg.MENU_CHECK">checken</a></li>
                     <li><a href="#" id="menuNewProg" class="flaticon-add10" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
                     <li class="logout"><a href="#" id="menuListProg" class="flaticon-pencil1" lkey="Blockly.Msg.MENU_LIST">Liste ...</a></li>
-                    <li><a href="#" id="menuSaveProg" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
+                    <li class="login logout"><a href="#" id="menuSaveProg" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
                     <li class="logout"><a href="#" id="menuSaveAsProg" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE_AS">speichern unter ...</a></li>
                     <li class="hidden"><a href="#" id="menuAttachProg" class="flaticon-th2" lkey="Blockly.Msg.MENU_ATTACH">anhängen ...</a></li>
                     <li class="hidden"><a href="#" id="menuPropertiesProg" class="flaticon-information" lkey="Blockly.Msg.MENU_PROPERTIES">Eigenschaften</a></li>
+                    <li class="divider"></li>                    
+                    <li class="logout"><a href="#" id="menuToolboxBeginner" class="flaticon-spanner" lkey="Blockly.Msg.MENU_TOOLBOX_BEGINNER">Toolbox Anfänger</a></li>
+                    <li class="logout"><a href="#" id="menuToolboxExpert" class="flaticon-spanner" lkey="Blockly.Msg.MENU_TOOLBOX_EXPERT">Toolbox Experte</a></li>
                 </ul>
             </li>
             <!-- Menu Configuration -->
@@ -77,7 +80,7 @@ limitations under the License.
                     <li class="login logout"><a href="#" id="menuCheckConfig" class="flaticon-tick" lkey="Blockly.Msg.MENU_CHECK">checken</a></li>
                     <li><a href="#" id="menuNewConfig" class="flaticon-add10" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
                     <li class="logout"><a href="#" id="menuListConfig" class="flaticon-pencil1" lkey="Blockly.Msg.MENU_LIST">Liste ... </a></li>
-                    <li><a href="#" id="menuSaveConfig" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
+                    <li class="login logout"><a href="#" id="menuSaveConfig" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
                     <li class="logout"><a href="#" id="menuSaveAsConfig" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE_AS">speichern unter ...</a></li>
                     <li class="hidden"><a href="#" id="menuPropertiesConfig" class="flaticon-information" lkey="Blockly.Msg.MENU_PROPERTIES">Eigenschaften ...</a></li>
                 </ul>
@@ -88,9 +91,6 @@ limitations under the License.
                     <li><a href="#" id="menuConnect" class="flaticon-botton2" lkey="Blockly.Msg.MENU_CONNECT">verbinden ...</a></li>
                     <li><a href="#" id="menuFirmware" class="flaticon-botton2" lkey="Blockly.Msg.MENU_UPDATE_FIRMWARE">Firmware aktualisieren</a></li>
                     <li><a href="#" id="menuRobotInfo" class="flaticon-botton2" lkey="Blockly.Msg.MENU_ROBOT_STATE_INFO">Roboterinformationen</a></li>
-                    <li class="divider"></li>                    
-                    <li class="logout"><a href="#" id="menuToolboxBeginner" class="flaticon-spanner" lkey="Blockly.Msg.MENU_TOOLBOX_BEGINNER">Toolbox Anfänger</a></li>
-                    <li class="logout"><a href="#" id="menuToolboxExpert" class="flaticon-spanner" lkey="Blockly.Msg.MENU_TOOLBOX_EXPERT">Toolbox Experte</a></li>
                 </ul>
             </li>
             <!-- Menu Help -->
@@ -234,10 +234,10 @@ limitations under the License.
     </div>
 
     <div class="jquerypopup" id="show-robot-info" title="Zustand des Roboters">
-        <span lkey="Blockly.Msg.POPUP_ROBOT_NAME">Name</span>:&nbsp;</span><span id="robotName">???</span><br/>
-        <span lkey="Blockly.Msg.POPUP_ROBOT_STATE">Status</span>:&nbsp;<span id="robotState">???</span><br/>
-        <span lkey="Blockly.Msg.POPUP_ROBOT_BATTERY">Batteriespannung</span>:&nbsp;<span id="robotBattery">???</span><br/>
-        <span lkey="Blockly.Msg.POPUP_ROBOT_WAIT">Wartezeit</span>:&nbsp;<span id="robotWait">???</span>
+        <span lkey="Blockly.Msg.POPUP_ROBOT_NAME">Name</span>:&nbsp;</span><span id="robotName"></span><br/>
+        <span lkey="Blockly.Msg.POPUP_ROBOT_STATE">Status</span>:&nbsp;<span id="robotState"></span><br/>
+        <span lkey="Blockly.Msg.POPUP_ROBOT_BATTERY">Batteriespannung</span>:&nbsp;<span id="robotBattery"></span><br/>
+        <span lkey="Blockly.Msg.POPUP_ROBOT_WAIT">Wartezeit</span>:&nbsp;<span id="robotWait"></span>
     </div>
 
     <div class="jquerypopup" id="show-message" title="Achtung">
@@ -246,7 +246,7 @@ limitations under the License.
     
     <div class="jquerypopup" id="show-startup-message" title="Achtung">
         <span id="startupMessage" lkey="Blockly.Msg.POPUP_ATTENTION">O Genie, der Herr ehre Dein Ego</span><br/>&nbsp;<br/>
-        <input id="hideStartupMessage" class='submit' type="button" lkey="Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE" value="Nicht mehr anzeigen" />
+        <input class='submit' id="hideStartupMessage" class='submit' type="button" lkey="Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE" value="Nicht mehr anzeigen" />
         <input class='cancelPopup submit' type="submit" value="Cancel" />
     </div>
     
@@ -279,7 +279,7 @@ limitations under the License.
                 <div class="tableButtons">
                     <input class="button buttonLoad" id="loadFromListing" lkey="Blockly.Msg.BUTTON_LOAD" type="submit" value="Laden" />
                     <input class="button buttonDelete" id="deleteFromListing" lkey="Blockly.Msg.BUTTON_DO_DELETE" type="submit" value="Löschen" />
-                    <input class="button buttonShare" id="shareFromListing" lkey="Blockly.Msg.BUTTON_DO_SHARE" type="submit" value="Teilen" />
+                    <!-- input class="button buttonShare" id="shareFromListing" lkey="Blockly.Msg.BUTTON_DO_SHARE" type="submit" value="Teilen" />  -->
                     <input class="button backButton" type="submit" value="Cancel" />
                 </div>
             </div>
@@ -295,7 +295,7 @@ limitations under the License.
                 <div class="tableButtons">
                     <input class="button buttonLoad" id="loadConfigurationFromListing" lkey="Blockly.Msg.BUTTON_LOAD" type="submit" value="Laden" />
                     <input class="button buttonDelete" id="deleteConfigurationFromListing" lkey="Blockly.Msg.BUTTON_DO_DELETE" type="submit" value="Löschen" />
-                    <input class="button buttonShare" id="shareConfigurationFromListing" lkey="Blockly.Msg.BUTTON_DO_SHARE" type="submit" value="Teilen" />
+                    <!-- input class="button buttonShare" id="shareConfigurationFromListing" lkey="Blockly.Msg.BUTTON_DO_SHARE" type="submit" value="Teilen" /> -->
                     <input class="button backButton" type="submit" value="Cancel" />
                 </div>
             </div>
