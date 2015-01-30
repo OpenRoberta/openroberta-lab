@@ -25,12 +25,12 @@ import de.fhg.iais.roberta.brick.BrickCommunicator;
 import de.fhg.iais.roberta.brick.CompilerWorkflow;
 import de.fhg.iais.roberta.brick.Templates;
 import de.fhg.iais.roberta.javaServer.resources.BrickCommand;
-import de.fhg.iais.roberta.javaServer.resources.DownloadJar;
-import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
-import de.fhg.iais.roberta.javaServer.resources.RestBlocks;
-import de.fhg.iais.roberta.javaServer.resources.RestProgram;
-import de.fhg.iais.roberta.javaServer.resources.RestUser;
+import de.fhg.iais.roberta.javaServer.resources.BrickDownloadJar;
+import de.fhg.iais.roberta.javaServer.resources.ClientAdmin;
+import de.fhg.iais.roberta.javaServer.resources.ClientProgram;
+import de.fhg.iais.roberta.javaServer.resources.ClientUser;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
+import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.IntegrationTest;
 import de.fhg.iais.roberta.util.Util;
@@ -49,10 +49,10 @@ public class BasicUserInteractionTest {
 
     private CompilerWorkflow compilerWorkflow;
 
-    private RestUser restUser;
-    private RestProgram restProgram;
-    private RestBlocks restBlocks;
-    private DownloadJar downloadJar;
+    private ClientUser restUser;
+    private ClientProgram restProgram;
+    private ClientAdmin restBlocks;
+    private BrickDownloadJar downloadJar;
 
     private Response response;
     private HttpSessionState s1;
@@ -74,10 +74,10 @@ public class BasicUserInteractionTest {
         this.memoryDbSetup.runDefaultRobertaSetup();
         this.brickCommunicator = new BrickCommunicator();
         this.compilerWorkflow = new CompilerWorkflow(this.crosscompilerBasedir, this.robotResourcesDir, this.buildXml);
-        this.restUser = new RestUser(this.brickCommunicator);
-        this.restProgram = new RestProgram(this.sessionFactoryWrapper, this.brickCommunicator, this.compilerWorkflow);
-        this.restBlocks = new RestBlocks(new Templates(), this.brickCommunicator);
-        this.downloadJar = new DownloadJar(this.brickCommunicator, this.crosscompilerBasedir);
+        this.restUser = new ClientUser(this.brickCommunicator);
+        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.brickCommunicator, this.compilerWorkflow);
+        this.restBlocks = new ClientAdmin(new Templates(), this.brickCommunicator);
+        this.downloadJar = new BrickDownloadJar(this.brickCommunicator, this.crosscompilerBasedir);
         this.brickCommand = new BrickCommand(this.brickCommunicator);
         this.s1 = HttpSessionState.init();
         this.s2 = HttpSessionState.init();

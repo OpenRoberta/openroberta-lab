@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
 
 public class BlocklyMethods {
 
-    public static double GOLDEN_RATIO = (1.0 + Math.sqrt(5.0)) / 2.0;
+    public static final double GOLDEN_RATIO = (1.0 + Math.sqrt(5.0)) / 2.0;
 
     public static boolean isEven(double number) {
         return (number % 2 == 0);

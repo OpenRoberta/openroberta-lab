@@ -1,7 +1,7 @@
 $(document).ready(WRAP.fn3(init, 'brickly init EV3'));
 
 function init() {
-    COMM.json("/blocks", {
+    COMM.json("/admin", {
         "cmd" : "loadT",
         "name" : "brickEV3"
     }, injectBrickly);
@@ -72,7 +72,7 @@ function showConfiguration(load, data) {
 };
 
 function loadToolbox(toolbox) {
-    COMM.json("/blocks", {
+    COMM.json("/admin", {
         "cmd" : "loadT",
         "name" : toolbox
     }, showToolbox);

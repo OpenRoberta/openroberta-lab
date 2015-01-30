@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.brick.BrickCommunicationData;
 import de.fhg.iais.roberta.brick.BrickCommunicationData.State;
 import de.fhg.iais.roberta.brick.BrickCommunicator;
-import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
 import de.fhg.iais.roberta.persistence.AbstractProcessor;
+import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 
 public class Util {
     private static final Logger LOG = LoggerFactory.getLogger(Util.class);

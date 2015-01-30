@@ -35,11 +35,11 @@ import com.google.common.io.Resources;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.brick.BrickCommunicator;
 import de.fhg.iais.roberta.brick.CompilerWorkflow;
-import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
-import de.fhg.iais.roberta.javaServer.resources.RestProgram;
-import de.fhg.iais.roberta.javaServer.resources.RestUser;
+import de.fhg.iais.roberta.javaServer.resources.ClientProgram;
+import de.fhg.iais.roberta.javaServer.resources.ClientUser;
 import de.fhg.iais.roberta.main.ServerStarter;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
+import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.IntegrationTest;
 import de.fhg.iais.roberta.util.Util;
@@ -68,8 +68,8 @@ public class RoundTripTest {
 
     private static CompilerWorkflow compilerWorkflow;
 
-    private static RestUser restUser;
-    private static RestProgram restProgram;
+    private static ClientUser restUser;
+    private static ClientProgram restProgram;
 
     private static Response response;
     private static HttpSessionState s1;
@@ -198,8 +198,8 @@ public class RoundTripTest {
         memoryDbSetup.runDefaultRobertaSetup();
         brickCommunicator = new BrickCommunicator();
         compilerWorkflow = new CompilerWorkflow(crosscompilerBasedir, robotResourcesDir, buildXml);
-        restUser = new RestUser(brickCommunicator);
-        restProgram = new RestProgram(sessionFactoryWrapper, brickCommunicator, compilerWorkflow);
+        restUser = new ClientUser(brickCommunicator);
+        restProgram = new ClientProgram(sessionFactoryWrapper, brickCommunicator, compilerWorkflow);
 
         s1 = HttpSessionState.init();
     }

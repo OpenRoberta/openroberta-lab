@@ -64,12 +64,12 @@ public class Utils {
 
     /**
      * Return the extension part of a filename
-     * 
+     *
      * @param fileName
      * @return the file extension
      */
     public static String getExtension(String fileName) {
-        int dot = fileName.lastIndexOf(".");
+        int dot = fileName.lastIndexOf('.');
         if ( dot < 0 ) {
             return "";
         }
@@ -79,12 +79,12 @@ public class Utils {
 
     /**
      * Return the base part (no extension) of a filename
-     * 
+     *
      * @param fileName
      * @return the base part of the name
      */
     public static String getBaseName(String fileName) {
-        int dot = fileName.lastIndexOf(".");
+        int dot = fileName.lastIndexOf('.');
         if ( dot < 0 ) {
             return fileName;
         }

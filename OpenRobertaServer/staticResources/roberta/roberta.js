@@ -130,7 +130,7 @@ function logout() {
  * Update Firmware
  */
 function updateFirmware() {
-    COMM.json("/robot", {
+    COMM.json("/admin", {
         "cmd" : "updateFirmware"
     }, function(response) {
         if (response.rc === "ok") {
@@ -209,7 +209,7 @@ function setConfiguration(name) {
  */
 function setToken(token) {
     var resToken = token.toUpperCase();
-    COMM.json("/blocks", {
+    COMM.json("/admin", {
         "cmd" : "setToken",
         "token" : resToken
     }, function(response) {
@@ -521,7 +521,7 @@ function showToolbox(result) {
  */
 function loadToolbox(toolbox) {
     userState.toolbox = toolbox;
-    COMM.json("/blocks", {
+    COMM.json("/admin", {
         "cmd" : "loadT",
         "name" : toolbox
     }, showToolbox);
@@ -771,8 +771,8 @@ function displayState() {
     }
 
     if (userState['robot.state'] != 'busy') {
-       $('#iconDisplayRobotState').removeClass('ok');
-       $('#iconDisplayRobotState').addClass('error');
+        $('#iconDisplayRobotState').removeClass('ok');
+        $('#iconDisplayRobotState').addClass('error');
     } else {
         $('#iconDisplayRobotState').removeClass('error');
         $('#iconDisplayRobotState').addClass('ok');
@@ -832,11 +832,11 @@ function initHeadNavigation() {
         } else if (domId === 'menuAttachProg') { //  Submenu 'Program'
             $("#attach-program").dialog("open");
         } else if (domId === 'menuPropertiesProg') { //  Submenu 'Program'
-        } else if (domId === 'menuToolboxBeginner') {   // Submenu 'Program'
+        } else if (domId === 'menuToolboxBeginner') { // Submenu 'Program'
             loadToolbox('beginner');
             $('#menuToolboxBeginner').addClass('disabled');
             $('#menuToolboxExpert').removeClass('disabled');
-        } else if (domId === 'menuToolboxExpert') {   // Submenu 'Program'
+        } else if (domId === 'menuToolboxExpert') { // Submenu 'Program'
             loadToolbox('expert');
             $('#menuToolboxExpert').addClass('disabled');
             $('#menuToolboxBeginner').removeClass('disabled');
@@ -895,7 +895,7 @@ function initHeadNavigation() {
         } else if (domId === 'menuAbout') { // Submenu 'Help'
             $("#version").text(userState.version);
             $("#show-about").dialog("open");
-        } else if (domId === 'menuLogging') {   // Submenu 'Help'
+        } else if (domId === 'menuLogging') { // Submenu 'Help'
             switchToBlockly();
             $('#tabLogging').click();
         } else if (domId === 'menuLogin') { // Submenu 'Login'
@@ -1010,7 +1010,7 @@ function initPopups() {
     $('.cancelPopup').onWrap('click', function() {
         $('.ui-dialog-titlebar-close').click();
     });
-    
+
     // Handle button events in popups
     $(".jquerypopup").keyup(function(event) {
         // fix for not working backspace button in password fields
@@ -1025,7 +1025,7 @@ function initPopups() {
             window.close();
         }
         if (event.keyCode == 13) { // enter
-            $(this).find("input.submit").click();                
+            $(this).find("input.submit").click();
         }
         event.stopPropagation();
     });
@@ -1109,19 +1109,19 @@ function setRobotState(response) {
     } else {
         userState['robot.wait'] = undefined;
     }
-    
+
     if (response['robot.battery'] != undefined) {
         userState['robot.battery'] = response['robot.battery'];
     } else {
         userState['robot.battery'] = '';
     }
-    
+
     if (response['robot.name'] != undefined) {
         userState['robot.name'] = response['robot.name'];
     } else {
         userState['robot.name'] = '';
     }
-    
+
     if (response['robot.state'] != undefined) {
         userState['robot.state'] = response['robot.state'];
     } else {
@@ -1228,7 +1228,7 @@ function switchLanguage(langCode, forceSwitch) {
  */
 function switchLanguageInBlockly() {
     var future = translate();
-    COMM.json("/blocks", {
+    COMM.json("/admin", {
         "cmd" : "loadT",
         "name" : userState.toolbox
     }, injectBlockly);
@@ -1254,21 +1254,21 @@ function initializeLanguages() {
  *            ID of message to be displayed
  * @param {output}
  *            where to display the message, "toast" or "popup"
- *         
+ * 
  */
 function displayMessage(messageId, output) {
     if (messageId != undefined) {
         if (messageId.indexOf(".") >= 0 || messageId.toUpperCase() != messageId) {
             // Invalid Message-Key 
             LOG.info('Invalid message-key received: ' + messageId);
-        } 
+        }
 
         var lkey = 'Blockly.Msg.' + messageId;
         var value = Blockly.Msg[messageId];
         if (value === undefined || value === '') {
             value = messageId;
         }
-            
+
         if (output === 'POPUP') {
             $('#message').attr('lkey', lkey);
             $('#message').html(value);

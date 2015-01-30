@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.codehaus.jettison.json.JSONArray;
 
-import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
 import de.fhg.iais.roberta.persistence.bo.Configuration;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.dao.ConfigurationDao;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
+import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
 
@@ -41,7 +41,16 @@ public class ConfigurationProcessor extends AbstractProcessor {
         }
     }
 
-    public void updateConfiguration(String configurationName, int ownerId, String configurationText) {
+    /**
+     * update a given configuration owned by a given user. Overwrites an existing configuration if mayExist == true.
+     *
+     * @param configurationName the name of the configuration
+     * @param ownerId the owner of the configuration
+     * @param configurationText the new configuration text
+     * @param mayExist TODO
+     * @param mayExist true, if an existing configuration may be changed; false if a configuration may be stored only, if it does not exist in the database
+     */
+    public void updateConfiguration(String configurationName, int ownerId, String configurationText, boolean mayExist) {
         if ( !Util.isValidJavaIdentifier(configurationName) ) {
             setError(Key.CONFIGURATION_ERROR_ID_INVALID, configurationName);
             return;
@@ -51,13 +60,15 @@ public class ConfigurationProcessor extends AbstractProcessor {
             UserDao userDao = new UserDao(this.dbSession);
             ConfigurationDao configurationDao = new ConfigurationDao(this.dbSession);
             User owner = userDao.get(ownerId);
-            Configuration configuration = configurationDao.persistConfigurationText(configurationName, owner, configurationText);
-            if ( configuration == null ) {
+            boolean success = configurationDao.persistConfigurationText(configurationName, owner, configurationText, mayExist);
+            if ( success ) {
+                setSuccess(Key.CONFIGURATION_SAVE_SUCCESS);
+            } else {
                 setError(Key.CONFIGURATION_SAVE_ERROR_NOT_SAVED_TO_DB);
-                return;
             }
+        } else {
+            setError(Key.USER_ERROR_NOT_LOGGED_IN);
         }
-        setSuccess(Key.CONFIGURATION_SAVE_SUCCESS);
     }
 
     public JSONArray getConfigurationInfo(int ownerId) {

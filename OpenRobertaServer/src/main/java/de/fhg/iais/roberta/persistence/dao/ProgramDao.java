@@ -32,18 +32,22 @@ public class ProgramDao extends AbstractDao<Program> {
      * @param name the name of the program, never null
      * @param owner the user who owns the program, never null
      * @param programText the program text, maybe null
-     * @return the persisted program object
+     * @return true if the program could be persisted successfully
      */
-    public Program persistProgramText(String name, User owner, String programText) {
+    public boolean persistProgramText(String name, User owner, String programText, boolean overwriteAllowed) {
         Assert.notNull(name);
         Assert.notNull(owner);
         Program program = load(name, owner);
         if ( program == null ) {
             program = new Program(name, owner);
             this.session.save(program);
+            return true;
+        } else if ( overwriteAllowed ) {
+            program.setProgramText(programText);
+            return true;
+        } else {
+            return false;
         }
-        program.setProgramText(programText);
-        return program;
     }
 
     /**

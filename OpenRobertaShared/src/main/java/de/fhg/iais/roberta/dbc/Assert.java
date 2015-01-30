@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.dbc;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Assertion-Checker<br>
  * - for programming DBC (design by contract), used for pre- and post-conditions.<br>
@@ -15,7 +17,7 @@ package de.fhg.iais.roberta.dbc;
 public final class Assert {
     /**
      * <b>DBC:</b> asserts, that a condition is <code>true</code>. If the assertion is violated, a {@link DbcException} is thrown.
-     * 
+     *
      * @param b the condition to be checked
      */
     public static void isTrue(boolean b) {
@@ -27,7 +29,7 @@ public final class Assert {
     /**
      * <b>DBC:</b> asserts, that a condition is <code>true</code>. If the assertion is violated, a {@link DbcException} is thrown. The error message must state,
      * that the assertion is <i>violated</i>
-     * 
+     *
      * @param b the condition to be checked
      * @param msg the error message; states, that the assertion is <i>violated</i>
      */
@@ -43,7 +45,7 @@ public final class Assert {
      * <br>
      * The error-message is build <i>lazily</i> to optimize performance. This is not 100% true for primitive param types, because these have to be boxed ... .
      * For formatting details, see {@link String#format(String, Object...)}
-     * 
+     *
      * @param b the condition to be checked
      * @param format format for the error message; states, that the assertion is <i>violated</i>
      * @param params arguments for the format
@@ -63,7 +65,7 @@ public final class Assert {
      * <br>
      * The error-message is build <i>lazily</i> to optimize performance. This is not 100% true for primitive param types, because these have to be boxed ... .
      * For formatting details, see {@link String#format(String, Object...)}
-     * 
+     *
      * @param b the condition to be checked
      * @param format format for the error message; states, that the assertion is <i>violated</i>
      * @param params arguments for the format
@@ -90,7 +92,7 @@ public final class Assert {
 
     /**
      * <b>DBC:</b> an assertion <i>is</i> violated, thus a {@link DbcException} is thrown.
-     * 
+     *
      * @param msg the error message; states, why the callers fails to fulfill the contract
      */
     public static void fail(String msg) {
@@ -99,7 +101,7 @@ public final class Assert {
 
     /**
      * <b>DBC:</b> asserts, that an object reference is <i>not</i> <code>null</code>. If the assertion is violated, a {@link DbcException} is thrown.<br>
-     * 
+     *
      * @param o expected to be not null
      */
     public static void notNull(Object o) {
@@ -110,7 +112,7 @@ public final class Assert {
 
     /**
      * <b>DBC:</b> asserts, that an object reference is <i>not</i> <code>null</code>. If the assertion is violated, a {@link DbcException} is thrown.
-     * 
+     *
      * @param o expected to be not null
      * @param msg the error message; states, that the assertion is <i>violated</i>
      */
@@ -125,7 +127,7 @@ public final class Assert {
      * <br>
      * The error-message is build <i>lazily</i> to optimize performance. This is not 100% true for primitive param types, because these have to be boxed ... .
      * For formatting details, see {@link String#format(String, Object...)}
-     * 
+     *
      * @param b the condition to be checked
      * @param format format for the error message; states, that the assertion is <i>violated</i>
      * @param params arguments for the format
@@ -139,7 +141,7 @@ public final class Assert {
 
     /**
      * <b>DBC:</b> asserts, that a reference is a non-empty string. If the assertion is violated, a {@link DbcException} is thrown.
-     * 
+     *
      * @param s expected to be a non-empty string
      */
     public static void nonEmptyString(String s) {
@@ -150,7 +152,7 @@ public final class Assert {
 
     /**
      * <b>DBC:</b> asserts, that a reference is a non-empty string. If the assertion is violated, a {@link DbcException} is thrown.
-     * 
+     *
      * @param s expected to be a non-empty string
      * @param msg the error message; states, that the assertion is <i>violated</i>
      */
@@ -165,7 +167,7 @@ public final class Assert {
      * <br>
      * The error-message is build <i>lazily</i> to optimize performance. This is not 100% true for primitive param types, because these have to be boxed ... .
      * For formatting details, see {@link String#format(String, Object...)}
-     * 
+     *
      * @param b the condition to be checked
      * @param format format for the error message; states, that the assertion is <i>violated</i>
      * @param params arguments for the format
@@ -177,6 +179,7 @@ public final class Assert {
         }
     }
 
+    @SuppressFBWarnings(value = "REC_CATCH_EXCEPTION", justification = "here any exception should generate a default message")
     private static String makeMessage(String format, Object... params) {
         String msg = "Assertion evaluiert zu FALSE";
         try {

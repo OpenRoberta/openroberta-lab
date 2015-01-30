@@ -7,6 +7,8 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 public class VersionChecker {
     private static final Logger LOG = LoggerFactory.getLogger(VersionChecker.class);
     private static final String DOT_REGEX = "\\.";
@@ -27,6 +29,7 @@ public class VersionChecker {
         return check("EV3Menu", "OpenRobertaRuntime", "OpenRobertaShared");
     }
 
+    @SuppressFBWarnings(value = "REC_CATCH_EXCEPTION", justification = "here any exception should generate a return value of FALSE")
     private boolean check(String... propertyPrefixes) {
         for ( String propertyPrefix : propertyPrefixes ) {
             try {

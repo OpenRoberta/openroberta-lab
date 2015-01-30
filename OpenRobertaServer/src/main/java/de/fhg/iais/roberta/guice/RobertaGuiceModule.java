@@ -13,13 +13,13 @@ import de.fhg.iais.roberta.brick.BrickCommunicator;
 import de.fhg.iais.roberta.brick.CompilerWorkflow;
 import de.fhg.iais.roberta.brick.Templates;
 import de.fhg.iais.roberta.javaServer.resources.BrickCommand;
-import de.fhg.iais.roberta.javaServer.resources.DownloadJar;
-import de.fhg.iais.roberta.javaServer.resources.HelloWorld;
-import de.fhg.iais.roberta.javaServer.resources.Ping;
-import de.fhg.iais.roberta.javaServer.resources.RestBlocks;
-import de.fhg.iais.roberta.javaServer.resources.RestConfiguration;
-import de.fhg.iais.roberta.javaServer.resources.RestProgram;
-import de.fhg.iais.roberta.javaServer.resources.RestUser;
+import de.fhg.iais.roberta.javaServer.resources.BrickDownloadJar;
+import de.fhg.iais.roberta.javaServer.resources.RsExamples;
+import de.fhg.iais.roberta.javaServer.resources.ClientPing;
+import de.fhg.iais.roberta.javaServer.resources.ClientAdmin;
+import de.fhg.iais.roberta.javaServer.resources.ClientConfiguration;
+import de.fhg.iais.roberta.javaServer.resources.ClientProgram;
+import de.fhg.iais.roberta.javaServer.resources.ClientUser;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 
 public class RobertaGuiceModule extends AbstractModule {
@@ -33,14 +33,14 @@ public class RobertaGuiceModule extends AbstractModule {
     @Override
     protected void configure() {
         // configure at least one JAX-RS resource or the server won't start.
-        bind(RestBlocks.class);
-        bind(RestConfiguration.class);
-        bind(RestProgram.class);
-        bind(RestUser.class);
-        bind(DownloadJar.class);
+        bind(ClientAdmin.class);
+        bind(ClientConfiguration.class);
+        bind(ClientProgram.class);
+        bind(ClientUser.class);
+        bind(BrickDownloadJar.class);
         bind(BrickCommand.class);
-        bind(HelloWorld.class);
-        bind(Ping.class);
+        bind(RsExamples.class);
+        bind(ClientPing.class);
 
         bind(SessionFactoryWrapper.class).in(Singleton.class);
         bind(Templates.class).in(Singleton.class);

@@ -9,12 +9,12 @@ import de.fhg.iais.roberta.codegen.lejos.Hal;
 import de.fhg.iais.roberta.ev3.EV3BrickConfiguration;
 import de.fhg.iais.roberta.ev3.EV3Sensors;
 
-public class blinker2 {
+public class Blinker2 {
     private final EV3BrickConfiguration brickConfiguration = new EV3BrickConfiguration.Builder().build();
     private final Set<EV3Sensors> usedSensors = new HashSet<EV3Sensors>();
 
     public static void main(String[] args) {
-        new blinker2().run();
+        new Blinker2().run();
     }
 
     public void run() {

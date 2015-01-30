@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.ev3.components.EV3Actor;
 import de.fhg.iais.roberta.ev3.components.EV3Sensor;
 
 public class EV3BrickConfigurationTest {
-    private final String expectedBrickConfigurationGenerator = //
+    private static final String expectedBrickConfigurationGenerator = //
         "privateEV3BrickConfigurationbrickConfiguration=newEV3BrickConfiguration.Builder()"
             + ".setWheelDiameter(0.0)"
             + ".setTrackWidth(0.0)"
@@ -42,7 +42,7 @@ public class EV3BrickConfigurationTest {
         assertEquals(EV3Sensors.EV3_COLOR_SENSOR, conf.getSensorOnPort(SensorPort.S4).getComponentType());
         assertNull(conf.getSensorOnPort(SensorPort.S2));
 
-        assertEquals(this.expectedBrickConfigurationGenerator, conf.generateRegenerate().replaceAll("\\s+", ""));
+        assertEquals(EV3BrickConfigurationTest.expectedBrickConfigurationGenerator, conf.generateRegenerate().replaceAll("\\s+", ""));
     }
 
     @Test
@@ -90,7 +90,7 @@ public class EV3BrickConfigurationTest {
         assertEquals(EV3Sensors.EV3_COLOR_SENSOR, conf.getSensorOnPort(SensorPort.S4).getComponentType());
         assertNull(conf.getSensorOnPort(SensorPort.S2));
 
-        assertEquals(this.expectedBrickConfigurationGenerator, conf.generateRegenerate().replaceAll("\\s+", ""));
+        assertEquals(EV3BrickConfigurationTest.expectedBrickConfigurationGenerator, conf.generateRegenerate().replaceAll("\\s+", ""));
     }
 
     //    @Test

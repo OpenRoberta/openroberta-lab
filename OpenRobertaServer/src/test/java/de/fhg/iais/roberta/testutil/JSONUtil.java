@@ -10,11 +10,11 @@ import org.codehaus.jettison.json.JSONObject;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import de.fhg.iais.roberta.javaServer.resources.BrickCommand;
-import de.fhg.iais.roberta.javaServer.resources.DownloadJar;
-import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
-import de.fhg.iais.roberta.javaServer.resources.RestBlocks;
-import de.fhg.iais.roberta.javaServer.resources.RestProgram;
+import de.fhg.iais.roberta.javaServer.resources.BrickDownloadJar;
+import de.fhg.iais.roberta.javaServer.resources.ClientAdmin;
+import de.fhg.iais.roberta.javaServer.resources.ClientProgram;
 import de.fhg.iais.roberta.persistence.util.DbSession;
+import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 
 public class JSONUtil {
     private JSONUtil() {
@@ -81,7 +81,7 @@ public class JSONUtil {
 
     public static void registerToken(
         final BrickCommand brickCommand,
-        final RestBlocks restBlocks,
+        final ClientAdmin restBlocks,
         final HttpSessionState sessionState,
         final DbSession dbSession,
         final String token) throws Exception //
@@ -104,8 +104,8 @@ public class JSONUtil {
     }
 
     public static void downloadJar(
-        final DownloadJar downloadJar,
-        final RestProgram restProgram,
+        final BrickDownloadJar downloadJar,
+        final ClientProgram restProgram,
         final HttpSessionState sessionState,
         final String token,
         final String programName) throws Exception //

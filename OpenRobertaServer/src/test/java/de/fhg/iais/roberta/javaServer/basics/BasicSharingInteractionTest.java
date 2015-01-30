@@ -15,10 +15,10 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.brick.BrickCommunicator;
 import de.fhg.iais.roberta.brick.CompilerWorkflow;
-import de.fhg.iais.roberta.javaServer.resources.HttpSessionState;
-import de.fhg.iais.roberta.javaServer.resources.RestProgram;
-import de.fhg.iais.roberta.javaServer.resources.RestUser;
+import de.fhg.iais.roberta.javaServer.resources.ClientProgram;
+import de.fhg.iais.roberta.javaServer.resources.ClientUser;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
+import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.Util;
 
@@ -35,8 +35,8 @@ public class BasicSharingInteractionTest {
     private String crosscompilerBasedir;
     private String robotResourcesDir;
 
-    private RestUser restUser;
-    private RestProgram restProgram;
+    private ClientUser restUser;
+    private ClientProgram restProgram;
     private String buildXml;
 
     private Response response;
@@ -60,8 +60,8 @@ public class BasicSharingInteractionTest {
         this.brickCommunicator = new BrickCommunicator();
         this.compilerWorkflow = new CompilerWorkflow(this.crosscompilerBasedir, this.robotResourcesDir, this.buildXml);
 
-        this.restUser = new RestUser(this.brickCommunicator);
-        this.restProgram = new RestProgram(this.sessionFactoryWrapper, this.brickCommunicator, this.compilerWorkflow);
+        this.restUser = new ClientUser(this.brickCommunicator);
+        this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.brickCommunicator, this.compilerWorkflow);
 
         this.s1 = HttpSessionState.init();
         this.s2 = HttpSessionState.init();

@@ -35,16 +35,20 @@ public class ConfigurationDao extends AbstractDao<Program> {
      * @param configurationText the configuration text, maybe null
      * @return the persisted configuration object
      */
-    public Configuration persistConfigurationText(String name, User owner, String configurationText) {
+    public boolean persistConfigurationText(String name, User owner, String configurationText, boolean mayExist) {
         Assert.notNull(name);
         Assert.notNull(owner);
         Configuration configuration = load(name, owner);
         if ( configuration == null ) {
             configuration = new Configuration(name, owner);
             this.session.save(configuration);
+            return true;
+        } else if ( mayExist ) {
+            configuration.setConfigurationText(configurationText);
+            return true;
+        } else {
+            return false;
         }
-        configuration.setConfigurationText(configurationText);
-        return configuration;
     }
 
     /**
