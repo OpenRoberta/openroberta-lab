@@ -603,9 +603,9 @@ function initProgramNameTable() {
 //        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_SHARED_FOR'>Geteilt für</span>",
 //        "sClass" : "programs"
 //    }, {
-        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_BLOCKS'>Blöcke</span>",
-        "sClass" : "programs"
-    }, {
+//        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_BLOCKS'>Blöcke</span>",
+//        "sClass" : "programs"
+//    }, {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>Erzeugt am</span>",
         "sClass" : "programs"
     }, {
@@ -619,7 +619,7 @@ function initProgramNameTable() {
                 "aaData" : [],
                 "aoColumns" : columns,
                 "aoColumnDefs" : [ { // format date fields
-                    "aTargets" : [ 3, 4 ], // indexes of columns to be formatted
+                    "aTargets" : [ 2, 3 ], // indexes of columns to be formatted
                     "sType" : "date",
                     "mRender" : function(data) {
                         return formatDate(data);
@@ -1025,7 +1025,7 @@ function initPopups() {
             window.close();
         }
         if (event.keyCode == 13) { // enter
-            $(this).find("input.submit").click();
+            $(this).find("input.submit").click();                
         }
         event.stopPropagation();
     });

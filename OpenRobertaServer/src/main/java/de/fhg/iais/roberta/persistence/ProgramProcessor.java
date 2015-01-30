@@ -70,7 +70,7 @@ public class ProgramProcessor extends AbstractProcessor {
             programInfos.put(programInfo);
             programInfo.put(program.getName());
             programInfo.put(program.getOwner().getAccount());
-            programInfo.put(program.getNumberOfBlocks());
+            //            programInfo.put(program.getNumberOfBlocks());
             programInfo.put(program.getCreated().toString());
             programInfo.put(program.getLastChanged().toString());
         }
