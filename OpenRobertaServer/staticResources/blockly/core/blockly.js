@@ -105,20 +105,19 @@ Blockly.CAT_LOGIC_RGB = [ 51, 184, 202 ];
 /**
  * The rgb value for block colours in colour category.
  */
-Blockly.CAT_COLOUR_RGB = [ 109, 191, 169 ];
+Blockly.CAT_COLOUR_RGB = [ 235, 195, 0 ];
 /**
  * The rgb value for block colours in lists category.
  */
-Blockly.CAT_LIST_RGB = [ 31, 130, 192 ];
+Blockly.CAT_LIST_RGB = [ 57, 55, 139 ];
 /**
- * The rgb value for block colours in loops category.
+ * The rgb value for block colours in math category.
  */
 Blockly.CAT_MATH_RGB = [ 0, 90, 148 ];
 /**
  * The rgb value for block colours in procedures category.
  */
-//Blockly.CAT_PROCEDURE_RGB = [ 57, 55, 139 ];
-Blockly.CAT_PROCEDURE_RGB = [ 23, 156, 125];
+Blockly.CAT_PROCEDURE_RGB = [ 23, 156, 125 ];
 /**
  * The rgb value for block colours in actions category.
  */

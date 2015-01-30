@@ -119,10 +119,6 @@ Blockly.parseOptions_ = function(options) {
         if (hasStartButton === undefined) {
             hasStartButton = false;
         }
-        var hasBackButton = options['back'];
-        if (hasBackButton === undefined) {
-            hasBackButton = false;
-        }
         var hasCheckButton = options['check'];
         if (hasCheckButton === undefined) {
             hasCheckButton = false;
@@ -165,7 +161,6 @@ Blockly.parseOptions_ = function(options) {
     Blockly.hasCheckButton = hasCheckButton;
     Blockly.hasStartButton = hasStartButton;
     Blockly.hasSaveButton = hasSaveButton;
-    Blockly.hasBackButton = hasBackButton;
     Blockly.languageTree = tree;
     Blockly.enableRealtime = enableRealtime;
     Blockly.realtimeOptions = realtimeOptions;
@@ -461,8 +456,7 @@ Blockly.init_ = function() {
     Blockly.mainWorkspace.addStartButton();
     Blockly.mainWorkspace.addCheckButton();
     Blockly.mainWorkspace.addSaveButton();
-    Blockly.mainWorkspace.addBackButton();
-
+  
     // Load the sounds.
     Blockly.loadAudio_([ 'media/click.mp3', 'media/click.wav', 'media/click.ogg' ], 'click');
     Blockly.loadAudio_([ 'media/delete.mp3', 'media/delete.ogg', 'media/delete.wav' ], 'delete');

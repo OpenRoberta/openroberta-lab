@@ -13,6 +13,10 @@ html, body {
     font-family: 'Roboto', sans-serif;
 }
 
+#head-navigation {
+    border-bottom: solid #E6E6E6 2px;  
+}
+
 .head-navi-icons {
     background-repeat: no-repeat;
     background-size: 100% auto;
@@ -43,17 +47,9 @@ html, body {
 }
 
 #states {
+    margin-top: 15px;
     float: right;
-    padding-top: 2px;
-    padding-right: 20px;
-    font-size: small;
-    min-width: 140px;
-}
-
-#languages {
-    margin-top: 20px;
-    float: right;
-    width: 95px;
+    width: 60px;
 }
 
 .smallFlag {
@@ -83,9 +79,9 @@ html, body {
 }
 
 #logo {
-    width: 222px;
-    height: 40px;
-    background-image: url(/css/img/logo.png);
+    width: 245px;
+    height: 70px;
+    background-image: url(/css/svg/NEPO_Logo_RGB.svg);
     background-repeat: no-repeat;
     float: right;
 }
@@ -93,7 +89,7 @@ html, body {
 #beta {
     position: absolute;
     top: 27px;
-    right: 48px;
+    right: 75px;
     width: 87px;
     height: 53px;
     background-image: url(/css/img/beta.png);
@@ -107,6 +103,7 @@ html, body {
 
 .menuTab {
     text-transform: uppercase;
+    font-weight: bold;
 }
 
 .hidden {
@@ -175,7 +172,6 @@ html, body {
 
 #toastContainer {
     float: left;
-    width: 500px;
     height: 40px;
     text-align: center;
 }
@@ -207,6 +203,9 @@ html, body {
     background-color: #b7d032;
 }
 
+.menuDisabled {
+  background-color: white !important;
+}
 
 
 /***** BEGIN Overwrite Bootstrap-CSS *****/
@@ -446,7 +445,7 @@ html, body {
 }
 
 #login-user .submit, .program .submit, .configuration .submit, #register-user .submit,
-#delete-user .submit, #set-token .submit {
+#delete-user .submit, #set-token .submit, #show-startup-message .submit {
     padding: 7px 9px;
     border: none;
     font-size: 16px;
@@ -525,8 +524,9 @@ html, body {
 }
 
 #progListing input,
-#confListing input {
-    margin-top: 15px;
+#confListing input,
+#logging input {
+	margin-top: 15px;
     margin-right: 5px;
     background-color: #afca04;
     border: medium none;

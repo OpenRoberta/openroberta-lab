@@ -62,8 +62,7 @@ Blockly.Bubble = function(workspace, content, shape, anchorX, anchorY, bubbleWid
 
     this.setAnchorLocation(anchorX, anchorY);
     if (!bubbleWidth || !bubbleHeight) {
-        var bBox = /** @type {SVGLocatable} */
-        (this.content_).getBBox();
+        var bBox = this.content_.getBBox();
         bubbleWidth = bBox.width + 2 * Blockly.Bubble.BORDER_WIDTH;
         bubbleHeight = bBox.height + 2 * Blockly.Bubble.BORDER_WIDTH;
     }
@@ -226,8 +225,8 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
         'class' : 'blocklyDraggable',
         'x' : 0,
         'y' : 0,
-        'rx' : Blockly.Bubble.BORDER_WIDTH,
-        'ry' : Blockly.Bubble.BORDER_WIDTH
+        'rx' : Blockly.BlockSvg.CORNER_RADIUS,
+        'ry' : Blockly.BlockSvg.CORNER_RADIUS
     }, bubbleFilter);
     if (hasResize) {
         this.resizeGroup_ = Blockly.createSvgElement('g', {

@@ -39,3 +39,11 @@ Blockly.SaveButton.prototype.createDom = function() {
     this.svgPath_.setAttribute('stroke-width', '0px');
     return this.svgGroup_;
 };
+
+/** @inheritDoc */
+Blockly.SaveButton.prototype.init = function() {
+    this.position_();
+    // If the document resizes, reposition the button.
+    Blockly.bindEvent_(window, 'resize', this, this.position_);
+    this.disable();
+};

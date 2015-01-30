@@ -16,12 +16,13 @@ function initUserState() {
     userState.programSaved = false;
     userState.configurationSaved = false;
     userState.brickSaved = false;
-    userState.robot = '';
-    userState.robotState = 'robot.not_waiting';
-    userState.waiting = '';
     userState.toolbox = 'beginner';
     userState.token = '1A2B3C4D';
     userState.doPing = true;
+    userState['robot.name'] = '';
+    userState['robot.state'] = '';
+    userState['robot.battery'] = '';
+    userState['robot.wait'] = '';
 }
 
 /**
@@ -35,7 +36,7 @@ function saveUserToServer() {
     var $pass2 = $('#pass2');
 
     if ($pass1.val() != $pass2.val()) {
-        displayMessage("MESSAGE_PASSWORD_ERROR");
+        displayMessage("MESSAGE_PASSWORD_ERROR", "POPUP");
     } else {
         COMM.json("/user", {
             "cmd" : "createUser",
@@ -50,10 +51,10 @@ function saveUserToServer() {
                 $(".ui-dialog-content").dialog("close"); // close all opened popups
                 $('#accountNameS').val($userAccountName.val());
                 $('#pass1S').val($pass1.val());
-                queueToastMessage(result.message);
+                displayMessage(result.message, "TOAST");
                 login();
             } else {
-                displayMessage(result.message);
+                displayMessage(result.message, "POPUP");
             }
         });
     }
@@ -71,10 +72,10 @@ function deleteUserOnServer() {
     }, function(result) {
         if (result.rc === "ok") {
             logout();
-            queueToastMessage(result.message);
+            displayMessage(result.message, "TOAST");
             $(".ui-dialog-content").dialog("close"); // close all opened popups
         } else {
-            displayMessage(result.message);
+            displayMessage(result.message, "POPUP");
         }
     });
 }
@@ -96,10 +97,10 @@ function login() {
             userState.id = response.userId;
             setHeadNavigationMenuState('login');
             setRobotState(response);
-            queueToastMessage(response.message);
+            displayMessage(response.message, "TOAST");
             $(".ui-dialog-content").dialog("close"); // close all opened popups
         } else {
-            displayMessage(response.message);
+            displayMessage(response.message, "POPUP");
         }
     });
 }
@@ -117,10 +118,10 @@ function logout() {
             $('#configurationNameSave').val('');
             setHeadNavigationMenuState('logout');
             setRobotState(response);
-            queueToastMessage(response.message);
+            displayMessage(response.message, "TOAST");
             $(".ui-dialog-content").dialog("close"); // close all opened popups
         } else {
-            displayMessage(response.message);
+            displayMessage(response.message, "POPUP");
         }
     });
 }
@@ -134,10 +135,10 @@ function updateFirmware() {
     }, function(response) {
         if (response.rc === "ok") {
             setRobotState(response);
-            queueToastMessage(response.message);
+            displayMessage(response.message, "TOAST");
             $(".ui-dialog-content").dialog("close"); // close all opened popups
         } else {
-            displayMessage(response.message);
+            displayMessage(response.message, "POPUP");
         }
     });
 }
@@ -215,10 +216,10 @@ function setToken(token) {
         if (response.rc === "ok") {
             userState.token = resToken;
             setRobotState(response);
-            queueToastMessage(response.message);
+            displayMessage(response.message, "TOAST");
             $(".ui-dialog-content").dialog("close"); // close all opened popups
         } else {
-            displayMessage(response.message);
+            displayMessage(response.message, "POPUP");
         }
     });
 }
@@ -252,9 +253,9 @@ function response(result) {
     LOG.info('result from server: ' + str);
 
     if (result.rc === 'ok') {
-        queueToastMessage(result.message);
+        displayMessage(result.message, "TOAST");
     } else {
-        displayMessage(result.message);
+        displayMessage(result.message, "POPUP");
     }
 }
 
@@ -304,9 +305,15 @@ function saveToServer() {
             "cmd" : "saveP",
             "name" : userState.program,
             "program" : xml_text
-        }, responseAndRefreshProgramList);
+        }, function(result) {
+            if (result.rc === 'ok') {
+                displayMessage(result.message, "TOAST");
+            } else {
+                displayMessage(result.message, "POPUP");
+            }
+        });
     } else {
-        displayMessage("MESSAGE_EMPTY_NAME");
+        displayMessage("MESSAGE_EMPTY_NAME", "POPUP");
     }
 }
 
@@ -329,9 +336,15 @@ function saveConfigurationToServer() {
             "cmd" : "saveC",
             "name" : userState.configuration,
             "configuration" : xml_text
-        }, responseAndRefreshConfigurationList);
+        }, function(result) {
+            if (result.rc === 'ok') {
+                displayMessage(result.message, "TOAST");
+            } else {
+                displayMessage(result.message, "POPUP");
+            }
+        });
     } else {
-        displayMessage("MESSAGE_EMPTY_NAME");
+        displayMessage("MESSAGE_EMPTY_NAME", "POPUP");
     }
 }
 
@@ -340,10 +353,15 @@ function saveConfigurationToServer() {
  */
 function runOnBrick() {
     LOG.info('run ' + userState.program + ' signed in: ' + userState.id);
+    var xml_program = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+    var xml_text_program = Blockly.Xml.domToText(xml_program);
+    var xml_text_configuration = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
     return COMM.json("/program", {
         "cmd" : "runP",
         "name" : userState.program,
         "configuration" : userState.configuration,
+        "programText" : xml_text_program,
+        "configurationText" : xml_text_configuration
     }, response);
 }
 
@@ -397,12 +415,12 @@ function loadFromListing() {
             if (result.rc === 'ok') {
                 $("#tabs").tabs("option", "active", 0);
                 userState.programSaved = true;
-                queueToastMessage(result.message);
+                displayMessage(result.message, "TOAST");
                 showProgram(result, true, programName);
                 $('#menuSaveProg').parent().removeClass('login');
                 $('#menuSaveProg').parent().removeClass('disabled');
             } else {
-                displayMessage(result.message);
+                displayMessage(result.message, "POPUP");
             }
         });
     }
@@ -423,13 +441,13 @@ function loadConfigurationFromListing() {
             if (result.rc === 'ok') {
                 $("#tabs").tabs("option", "active", 0);
                 userState.configurationSaved = true;
-                queueToastMessage(result.message);
+                displayMessage(result.message, "TOAST");
                 showConfiguration(result, true, configurationName);
                 $('#menuSaveConfig').parent().removeClass('login');
                 $('#menuSaveConfig').parent().removeClass('disabled');
                 setRobotState(result);
             } else {
-                displayMessage(result.message);
+                displayMessage(result.message, "POPUP");
             }
         });
     }
@@ -448,11 +466,11 @@ function deleteFromListing() {
             "name" : programName
         }, function(result) {
             if (result.rc === 'ok') {
-                queueToastMessage(result.message);
+                displayMessage(result.message, "TOAST");
                 responseAndRefreshProgramList(result);
                 setRobotState(result);
             } else {
-                displayMessage(result.message);
+                displayMessage(result.message, "POPUP");
             }
         });
     }
@@ -471,11 +489,11 @@ function deleteConfigurationFromListing() {
             "name" : configurationName
         }, function(result) {
             if (result.rc === 'ok') {
-                queueToastMessage(result.message);
+                displayMessage(result.message, "TOAST");
                 responseAndRefreshConfigurationList(result);
                 setRobotState(result);
             } else {
-                displayMessage(result.message);
+                displayMessage(result.message, "POPUP");
             }
         });
     }
@@ -729,14 +747,6 @@ function formatDate(date) {
     return "";
 }
 
-/**
- * Run program
- */
-function startProgram() {
-    var saveFuture = saveToServer();
-    saveFuture.then(runOnBrick);
-}
-
 function switchToBlockly() {
     $('#tabs').css('display', 'inline');
     $('#bricklyFrame').css('display', 'none');
@@ -753,43 +763,23 @@ function switchToBrickly() {
  */
 function displayState() {
     if (userState.accountName) {
-        $('#displayLogin').text(userState.name);
         $('#iconDisplayLogin').removeClass('error');
         $('#iconDisplayLogin').addClass('ok');
     } else {
-        $('#displayLogin').text('');
         $('#iconDisplayLogin').removeClass('ok');
         $('#iconDisplayLogin').addClass('error');
     }
 
-    $('#tabProgramName').text(userState.program);
-    $('#tabConfigurationName').text(userState.configuration);
-
-    if (userState.toolbox) {
-        $('#iconDisplayToolbox').removeClass('error');
-        $('#iconDisplayToolbox').addClass('ok');
+    if (userState['robot.state'] != 'busy') {
+       $('#iconDisplayRobotState').removeClass('ok');
+       $('#iconDisplayRobotState').addClass('error');
     } else {
-        $('#iconDisplayToolbox').removeClass('ok');
-        $('#iconDisplayToolbox').addClass('error');
-    }
-
-    $('.robotState').css('display', 'none');
-    if (userState.robotState) {
         $('#iconDisplayRobotState').removeClass('error');
         $('#iconDisplayRobotState').addClass('ok');
-        var robotState = escape(userState.robotState);
-        $('#' + robotState + '').css('display', 'inline');
-        if (userState.waiting) {
-            var waitingTime = escape("robot.waiting_time");
-            $('#' + waitingTime + '').css('display', 'inline');
-            $('#' + waitingTime + '').text(' ' + userState.waiting);
-        } else {
-            $('#iconDisplayRobotState').removeClass('ok');
-            $('#iconDisplayRobotState').addClass('error');
-        }
-    } else {
-        $('#displayRobotState').text('');
     }
+
+    $('#tabProgramName').text(userState.program);
+    $('#tabConfigurationName').text(userState.configuration);
 }
 
 function setHeadNavigationMenuState(state) {
@@ -799,23 +789,6 @@ function setHeadNavigationMenuState(state) {
     } else if (state === 'logout') {
         $('.nav-pills > li > ul > .logout').addClass('disabled');
     }
-}
-
-/**
- * Display message
- * 
- * @param {messageId}
- *            ID of message to be displayed
- */
-function displayMessage(messageId) {
-    var lkey = 'Blockly.Msg.' + messageId;
-    var value = Blockly.Msg[messageId];
-    if (value === undefined || value === '') {
-        value = messageId;
-    }
-    $('#message').attr('lkey', lkey);
-    $('#message').html(value);
-    $("#show-message").dialog("open");
 }
 
 /**
@@ -842,13 +815,14 @@ function initHeadNavigation() {
         } else if (domId === 'menuTabConfiguration') { //  Submenu 'Overview'
             $('#tabConfiguration').click();
         } else if (domId === 'menuRunProg') { //  Submenu 'Program'
-            startProgram();
+            runOnBrick();
         } else if (domId === 'menuCheckProg') { //  Submenu 'Program'
-            displayMessage("MESSAGE_NOT_AVAILABLE");
+            displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP");
         } else if (domId === 'menuNewProg') { //  Submenu 'Program'
             setProgram("meinProgramm");
             $('#tabProgram').click();
         } else if (domId === 'menuListProg') { //  Submenu 'Program'
+            deactivateHeadMenu();
             switchToBlockly();
             $('#tabListing').click();
         } else if (domId === 'menuSaveProg') { //  Submenu 'Program'
@@ -858,12 +832,21 @@ function initHeadNavigation() {
         } else if (domId === 'menuAttachProg') { //  Submenu 'Program'
             $("#attach-program").dialog("open");
         } else if (domId === 'menuPropertiesProg') { //  Submenu 'Program'
+        } else if (domId === 'menuToolboxBeginner') {   // Submenu 'Program'
+            loadToolbox('beginner');
+            $('#menuToolboxBeginner').addClass('disabled');
+            $('#menuToolboxExpert').removeClass('disabled');
+        } else if (domId === 'menuToolboxExpert') {   // Submenu 'Program'
+            loadToolbox('expert');
+            $('#menuToolboxExpert').addClass('disabled');
+            $('#menuToolboxBeginner').removeClass('disabled');
         } else if (domId === 'menuCheckConfig') { //  Submenu 'Configuration'
-            displayMessage("MESSAGE_NOT_AVAILABLE");
+            displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP");
         } else if (domId === 'menuNewConfig') { //  Submenu 'Configuration'
             setConfiguration("Standardkonfiguration");
             switchToBrickly();
         } else if (domId === 'menuListConfig') { //  Submenu 'Configuration'
+            deactivateHeadMenu();
             switchToBlockly();
             $('#tabConfigurationListing').click();
         } else if (domId === 'menuSaveConfig') { //  Submenu 'Configuration'
@@ -876,15 +859,11 @@ function initHeadNavigation() {
         } else if (domId === 'menuFirmware') { // Submenu 'Robot'
             updateFirmware();
         } else if (domId === 'menuRobotInfo') { // Submenu 'Robot'
-            displayMessage("MESSAGE_NOT_AVAILABLE");
-        } else if (domId === 'menuToolboxBeginner') {   // Submenu 'Nepo'
-            loadToolbox('beginner');
-            $('#menuToolboxBeginner').addClass('disabled');
-            $('#menuToolboxExpert').removeClass('disabled');
-        } else if (domId === 'menuToolboxExpert') {   // Submenu 'Nepo'
-            loadToolbox('expert');
-            $('#menuToolboxExpert').addClass('disabled');
-            $('#menuToolboxBeginner').removeClass('disabled');
+            $("#robotName").text(userState['robot.name']);
+            $("#robotState").text(userState['robot.state']);
+            $("#robotBattery").text(userState['robot.battery']);
+            $("#robotWait").text(userState['robot.wait']);
+            $("#show-robot-info").dialog("open");
         } else if (domId === 'menuFirstSteps') { // Submenu 'Help'
             if (userState.language === 'De') {
                 window.open("http://www.open-roberta.org/erste-schritte.html");
@@ -898,7 +877,15 @@ function initHeadNavigation() {
                 window.open("http://dev.open-roberta.org/willkommen.html?&L=1");
             }
         } else if (domId === 'menuFaq') { // Submenu 'Help'
-            displayMessage("MESSAGE_NOT_AVAILABLE");
+            if (userState.language === 'De') {
+                if (userState.language === 'De') {
+                    window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/FAQ/FAQ+Home");
+                } else {
+                    window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/FAQ/FAQ+Home");
+                }
+            } else {
+                window.open("http://dev.open-roberta.org/willkommen.html?&L=1");
+            }
         } else if (domId === 'menuStateInfo') { // Submenu 'Help'
             $("#loggedIn").text(userState.name);
             $("#programName").text(userState.program);
@@ -908,7 +895,7 @@ function initHeadNavigation() {
         } else if (domId === 'menuAbout') { // Submenu 'Help'
             $("#version").text(userState.version);
             $("#show-about").dialog("open");
-        } else if (domId === 'menuLogging') {   // Submenu 'Developer-Tools'
+        } else if (domId === 'menuLogging') {   // Submenu 'Help'
             switchToBlockly();
             $('#tabLogging').click();
         } else if (domId === 'menuLogin') { // Submenu 'Login'
@@ -939,6 +926,7 @@ function initHeadNavigation() {
     }, 'beta logo was clicked');
 
     $('#tabProgram').onWrap('click', function() {
+        activateHeadMenu();
         $('#tabConfiguration').removeClass('tabClicked');
         $('#tabProgram').addClass('tabClicked');
         $('#head-navigation-configuration-edit').css('display', 'none');
@@ -949,6 +937,7 @@ function initHeadNavigation() {
     });
 
     $('#tabConfiguration').onWrap('click', function() {
+        activateHeadMenu();
         $('#tabProgram').removeClass('tabClicked');
         $('#tabConfiguration').addClass('tabClicked');
         $('#head-navigation-program-edit').css('display', 'none');
@@ -997,7 +986,7 @@ function initPopups() {
     }, 'save program');
 
     $('#shareProgram').onWrap('click', function() {
-        displayMessage("MESSAGE_NOT_AVAILABLE");
+        displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP");
     }, 'share program');
 
     $('#saveConfiguration').onWrap('click', function() {
@@ -1005,7 +994,7 @@ function initPopups() {
     }, 'save configuration');
 
     $('#shareConfiguration').onWrap('click', function() {
-        displayMessage("MESSAGE_NOT_AVAILABLE");
+        displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP");
     }, 'share configuration');
 
     $('#setToken').onWrap('click', function() {
@@ -1018,6 +1007,10 @@ function initPopups() {
         setCookie("hideStartupMessage", true);
     }, 'hide startup-message');
 
+    $('.cancelPopup').onWrap('click', function() {
+        $('.ui-dialog-titlebar-close').click();
+    });
+    
     // Handle button events in popups
     $(".jquerypopup").keyup(function(event) {
         // fix for not working backspace button in password fields
@@ -1050,11 +1043,13 @@ function initTabs() {
 
     // load program
     $('#loadFromListing').onWrap('click', function() {
+        activateHeadMenu();
         loadFromListing();
     }, 'load blocks from program list');
 
     // load configuration
     $('#loadConfigurationFromListing').onWrap('click', function() {
+        activateHeadMenu();
         loadConfigurationFromListing();
     }, 'load configuration from configuration list');
 
@@ -1079,6 +1074,7 @@ function initTabs() {
     }, 'share configuration');
 
     $('.backButton').onWrap('click', function() {
+        activateHeadMenu();
         if (bricklyActive) {
             switchToBrickly();
         } else {
@@ -1104,17 +1100,34 @@ function initLogging() {
  *            response of server call
  */
 function setRobotState(response) {
-    if (response.robot_waiting != undefined) {
-        userState.waiting = response.robot_waiting;
-    } else {
-        userState.waiting = '';
-    }
     if (response.version) {
         userState.version = response.version;
     }
-    if (response.robot_state) {
-        userState.robotState = response.robot_state;
+
+    if (response['robot.wait'] != undefined) {
+        userState['robot.wait'] = response['robot.wait'];
+    } else {
+        userState['robot.wait'] = undefined;
     }
+    
+    if (response['robot.battery'] != undefined) {
+        userState['robot.battery'] = response['robot.battery'];
+    } else {
+        userState['robot.battery'] = '';
+    }
+    
+    if (response['robot.name'] != undefined) {
+        userState['robot.name'] = response['robot.name'];
+    } else {
+        userState['robot.name'] = '';
+    }
+    
+    if (response['robot.state'] != undefined) {
+        userState['robot.state'] = response['robot.state'];
+    } else {
+        userState['robot.state'] = '';
+    }
+
     displayState();
 }
 
@@ -1152,6 +1165,9 @@ function translate(jsdata) {
         } else if (lkey === 'Blockly.Msg.POPUP_ATTENTION') {
             $('#show-message').dialog('option', 'title', value);
             $('#show-startup-message').dialog('option', 'title', value);
+        } else if (lkey === 'Blockly.Msg.POPUP_CANCEL') {
+            $('.cancelPopup').attr('value', value);
+            $('.backButton').attr('value', value);
         } else if (lkey === 'Blockly.Msg.BUTTON_LOAD') {
             $('.buttonLoad').attr('value', value);
         } else if (lkey === 'Blockly.Msg.BUTTON_DO_DELETE') {
@@ -1164,10 +1180,9 @@ function translate(jsdata) {
             $('#setLangDe').prop('title', value);
         } else if (lkey === 'Blockly.Msg.HINT_LANGUAGE_ENGLISH') {
             $('#setLangEn').prop('title', value);
-        } else if (lkey === 'Blockly.Msg.HINT_ROBOT_STATE') {
-            $('#displayRobotState').prop('title', value);
-        } else if (lkey === 'Blockly.Msg.HINT_USER') {
-            $('#displayLogin').prop('title', value);
+        } else if (lkey === 'Blockly.Msg.MENU_ROBOT_STATE_INFO') {
+            $('#show-robot-info').dialog('option', 'title', value);
+            $(this).html(value);
         } else if (lkey === 'Blockly.Msg.MENU_STATE_INFO') {
             $('#show-state-info').dialog('option', 'title', value);
             $(this).html(value);
@@ -1233,21 +1248,37 @@ function initializeLanguages() {
 }
 
 /**
- * Queue toast message
+ * Display message
  * 
  * @param {messageId}
- *            ID of message to be queued
+ *            ID of message to be displayed
+ * @param {output}
+ *            where to display the message, "toast" or "popup"
+ *         
  */
-function queueToastMessage(messageId) {
-    var lkey = 'Blockly.Msg.' + messageId;
-    var value = Blockly.Msg[messageId];
-    if (value === undefined || value === '') {
-        value = messageId;
-    }
+function displayMessage(messageId, output) {
+    if (messageId != undefined) {
+        if (messageId.indexOf(".") >= 0 || messageId.toUpperCase() != messageId) {
+            // Invalid Message-Key 
+            LOG.info('Invalid message-key received: ' + messageId);
+        } 
 
-    toastMessages.unshift(value);
-    if (toastMessages.length === 1) {
-        displayToastMessages();
+        var lkey = 'Blockly.Msg.' + messageId;
+        var value = Blockly.Msg[messageId];
+        if (value === undefined || value === '') {
+            value = messageId;
+        }
+            
+        if (output === 'POPUP') {
+            $('#message').attr('lkey', lkey);
+            $('#message').html(value);
+            $("#show-message").dialog("open");
+        } else if (output === 'TOAST') {
+            toastMessages.unshift(value);
+            if (toastMessages.length === 1) {
+                displayToastMessages();
+            }
+        }
     }
 }
 
@@ -1265,6 +1296,22 @@ function displayToastMessages() {
             }
         });
     });
+}
+
+/**
+ * Activate head menu
+ */
+function activateHeadMenu() {
+    $('.nav > .dropdown > a').removeClass('disabled');
+    $('#head-navigation > .nav-pills > li > a').removeClass('menuDisabled');
+}
+
+/**
+ * Deactivate head menu
+ */
+function deactivateHeadMenu() {
+    $('.nav > .dropdown > a').addClass('disabled');
+    $('#head-navigation > .nav-pills > li > a').addClass('menuDisabled');
 }
 
 /**

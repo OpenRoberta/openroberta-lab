@@ -186,7 +186,7 @@ Blockly.FieldTextInput.prototype.onHtmlInputChange_ = function(e) {
 Blockly.FieldTextInput.prototype.validate_ = function() {
     var valid = true;
     goog.asserts.assertObject(Blockly.FieldTextInput.htmlInput_);
-    var htmlInput = /** @type {!Element} */ (Blockly.FieldTextInput.htmlInput_);
+    var htmlInput = Blockly.FieldTextInput.htmlInput_;
     if (this.changeHandler_) {
         valid = this.changeHandler_(htmlInput.value);
     }
@@ -206,7 +206,7 @@ Blockly.FieldTextInput.prototype.resizeEditor_ = function() {
     var div = Blockly.WidgetDiv.DIV;
     var bBox = this.fieldGroup_.getBBox();
     div.style.width = bBox.width + 'px';
-    var xy = Blockly.getAbsoluteXY_(/** @type {!Element} */ (this.borderRect_));
+    var xy = Blockly.getAbsoluteXY_(this.borderRect_);
     // In RTL mode block fields and LTR input fields the left edge moves,
     // whereas the right edge is fixed.  Reposition the editor.
     if (Blockly.RTL) {
@@ -215,7 +215,7 @@ Blockly.FieldTextInput.prototype.resizeEditor_ = function() {
         xy.x -= div.offsetWidth;
     }
     // Shift by a few pixels to line up exactly.
-    xy.y += 1;
+    xy.y += 2;
     if (goog.userAgent.WEBKIT) {
         xy.y -= 3;
     }
@@ -262,13 +262,19 @@ Blockly.FieldTextInput.prototype.widgetDispose_ = function() {
  * @return {?string} A string representing a valid number, or null if invalid.
  */
 Blockly.FieldTextInput.numberValidator = function(text) {
-    // TODO: Handle cases like 'ten', '1.203,14', etc.
+    // TODO: Handle cases like 'ten', etc.
     // 'O' is sometimes mistaken for '0' by inexperienced users.
     text = text.replace(/O/ig, '0');
-    // Strip out thousands separators.
-    text = text.replace(/,/g, '');
+    // Strip out thousands separators and using only decimal points
+    text = text.replace(/,/g, '.');
+    // Only the most right decimal point is valid and persists
+    text = text.replace(/\.(?=.*?\.)/g, '');
     var n = parseFloat(text || 0);
-    return isNaN(n) ? null : String(n);
+    if (isNaN(n))
+        return null;
+    // Show numerals with decimal comma for all non English speaking countries
+    n = Blockly.FieldTextInput.checkDecimalCharacter(String(n));
+    return String(n);
 };
 
 /**
@@ -281,7 +287,46 @@ Blockly.FieldTextInput.numberValidator = function(text) {
 Blockly.FieldTextInput.nonnegativeIntegerValidator = function(text) {
     var n = Blockly.FieldTextInput.numberValidator(text);
     if (n) {
+        //remove non computer decimal comma
+        n = n.replace(/,/g, '.');
         n = String(Math.max(0, Math.floor(n)));
     }
     return n;
 };
+
+/**
+ * Ensure that only a nonnegative numbers may be entered.
+ * 
+ * @param {string}
+ *            text The user's text.
+ * @return {?string} A string representing a valid int, or null if invalid.
+ */
+Blockly.FieldTextInput.nonnegativeNumberValidator = function(text) {
+    var n = Blockly.FieldTextInput.numberValidator(text);
+    if (n) {
+        // in case user language is German
+        n = n.replace(/,/g, '.');
+        n = String(Math.max(0, n));
+        n = Blockly.FieldTextInput.checkDecimalCharacter(n);
+    }
+    return n;
+};
+
+/**
+ * Test if this user works with comma as decimal separator.
+ * 
+ * @param {string}
+ *            text The user's text.
+ * @return {?string} A string with the correct decimal separator.
+ */
+Blockly.FieldTextInput.checkDecimalCharacter = function(text) {
+    var currentUserState = null;
+    if (typeof userState !== 'undefined')
+        currentUserState = userState;
+    else if (typeof parent.userState !== 'undefined')
+        currentUserState = parent.userState;
+    if (currentUserState && currentUserState.language != 'En') {
+        text = text.replace(/\./g, ',');
+    }
+    return text;
+}

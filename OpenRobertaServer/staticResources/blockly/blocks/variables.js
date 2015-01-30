@@ -178,6 +178,7 @@ Blockly.Blocks['variables_set'] = {
         this.setColourRGB(Blockly.CAT_VARIABLE_RGB);
         this.interpolateMsg(Blockly.Msg.VARIABLES_SET_TITLE, [ 'VAR', new Blockly.FieldVariable(Blockly.Msg.VARIABLES_SET_ITEM) ], [ 'VALUE', null,
                 Blockly.ALIGN_RIGHT ], Blockly.ALIGN_RIGHT);
+        this.setInputsInline(false);
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.VARIABLES_SET_TOOLTIP);
