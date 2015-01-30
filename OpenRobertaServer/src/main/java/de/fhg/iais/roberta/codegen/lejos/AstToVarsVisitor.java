@@ -1,13 +1,14 @@
 package de.fhg.iais.roberta.codegen.lejos;
 
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.ast.syntax.expr.FunctionExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.ListCreate;
+import de.fhg.iais.roberta.ast.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.syntax.expr.VarDeclaration;
@@ -63,12 +64,15 @@ public class AstToVarsVisitor extends AstDefaultVisitorInspecting {
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public static Set<String> generate(List<Phrase<Void>> phrases) //
+    public static Set<String> generate(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) //
     {
-        Assert.isTrue(phrases.size() >= 1);
+        Assert.isTrue(phrasesSet.size() >= 1);
         AstToVarsVisitor astVisitor = new AstToVarsVisitor();
-        for ( Phrase<Void> phrase : phrases ) {
-            phrase.visit(astVisitor);
+
+        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
+            for ( Phrase<Void> phrase : phrases ) {
+                phrase.visit(astVisitor);
+            }
         }
         return astVisitor.allVars;
     }
@@ -251,6 +255,12 @@ public class AstToVarsVisitor extends AstDefaultVisitorInspecting {
 
     @Override
     public Void visitMethodCall(MethodCall<Void> methodCall) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitMethodExpr(MethodExpr<Void> methodExpr) {
         // TODO Auto-generated method stub
         return null;
     }

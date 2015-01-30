@@ -18,14 +18,14 @@ public class VolumeActionTest {
     @Test
     public void getVolume() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_SetVolume.xml");
-        VolumeAction<Void> va = (VolumeAction<Void>) transformer.getTree().get(1);
+        VolumeAction<Void> va = (VolumeAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals("NumConst [50]", va.getVolume().toString());
     }
 
     @Test
     public void getMode() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_SetVolume.xml");
-        VolumeAction<Void> va = (VolumeAction<Void>) transformer.getTree().get(1);
+        VolumeAction<Void> va = (VolumeAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(VolumeAction.Mode.SET, va.getMode());
     }
 

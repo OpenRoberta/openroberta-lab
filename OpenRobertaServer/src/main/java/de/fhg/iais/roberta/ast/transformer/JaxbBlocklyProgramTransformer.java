@@ -134,10 +134,12 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
     private void instanceToAST(Instance instance) {
         List<Block> blocks = instance.getBlock();
         Location<V> location = Location.make(instance.getX(), instance.getY());
-        this.tree.add(location);
+        ArrayList<Phrase<V>> range = new ArrayList<Phrase<V>>();
+        range.add(location);
         for ( Block block : blocks ) {
-            this.tree.add(blockToAST(block));
+            range.add(blockToAST(block));
         }
+        this.tree.add(range);
     }
 
     @Override
@@ -765,7 +767,6 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
             case "robProcedures_defreturn":
                 fields = extractFields(block, (short) 2);
                 name = extractField(fields, BlocklyConstants.NAME);
-                Var<V> returnType = Var.make(BlocklyType.get(extractField(fields, BlocklyConstants.TYPE)), "returnType", properties, comment);
 
                 List<Object> valAndStmt = block.getRepetitions().getValueAndStatement();
                 values = new ArrayList<Value>();
@@ -775,13 +776,20 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 statement = extractStatement(statements, BlocklyConstants.STACK);
                 expr = extractValue(values, new ExprParam(BlocklyConstants.RETURN, NullConst.class));
 
-                return MethodReturn.make(name, exprList, statement, returnType, convertPhraseToExpr(expr), properties, comment);
+                return MethodReturn.make(
+                    name,
+                    exprList,
+                    statement,
+                    BlocklyType.get(extractField(fields, BlocklyConstants.TYPE)),
+                    convertPhraseToExpr(expr),
+                    properties,
+                    comment);
 
             case "robProcedures_ifreturn":
                 values = extractValues(block, (short) 2);
                 left = extractValue(values, new ExprParam(BlocklyConstants.CONDITION, Boolean.class));
-                right = extractValue(values, new ExprParam(BlocklyConstants.VALUE, EmptyExpr.class));
-                mode = block.getMutation().getReturnType();
+                right = extractValue(values, new ExprParam(BlocklyConstants.VALUE, NullConst.class));
+                mode = block.getMutation().getReturnType() == null ? "void" : block.getMutation().getReturnType();
                 return MethodIfReturn.make(convertPhraseToExpr(left), BlocklyType.get(mode), convertPhraseToExpr(right), properties, comment);
 
             case "robProcedures_callnoreturn":

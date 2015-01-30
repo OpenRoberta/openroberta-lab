@@ -19,21 +19,21 @@ public class StringConstTest {
     @Test
     public void getValue() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/text/text_string_const.xml");
-        StringConst<Void> stringConst = (StringConst<Void>) transformer.getTree().get(1);
+        StringConst<Void> stringConst = (StringConst<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals("text2", stringConst.getValue());
     }
 
     @Test
     public void getPresedance() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/text/text_string_const.xml");
-        StringConst<Void> stringConst = (StringConst<Void>) transformer.getTree().get(1);
+        StringConst<Void> stringConst = (StringConst<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(999, stringConst.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/text/text_string_const.xml");
-        StringConst<Void> stringConst = (StringConst<Void>) transformer.getTree().get(1);
+        StringConst<Void> stringConst = (StringConst<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(Assoc.NONE, stringConst.getAssoc());
     }
 

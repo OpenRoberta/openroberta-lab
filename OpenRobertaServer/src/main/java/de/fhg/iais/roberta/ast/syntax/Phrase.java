@@ -167,6 +167,7 @@ abstract public class Phrase<V> {
         ACTION_EXPR( Category.EXPR ),
         EMPTY_EXPR( Category.EXPR ),
         FUNCTION_EXPR( Category.EXPR ),
+        METHOD_EXPR( Category.EXPR ),
         FUNCTIONS( Category.EXPR ),
         START_ACTIVITY_TASK( Category.EXPR ),
         IF_STMT( Category.STMT ),

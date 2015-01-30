@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.ast.usedhardwarecheck;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
@@ -32,6 +32,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
 import de.fhg.iais.roberta.ast.syntax.expr.FunctionExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
+import de.fhg.iais.roberta.ast.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
@@ -102,11 +103,13 @@ public class HardwareCheckVisitor implements AstVisitor<Void> {
      * @param phrases list of {@link Phrase} representing blockly program,
      * @return set of used sensors
      */
-    public static Set<EV3Sensors> check(List<Phrase<Void>> phrases) {
-        Assert.isTrue(phrases.size() >= 1);
+    public static Set<EV3Sensors> check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+        Assert.isTrue(phrasesSet.size() >= 1);
         HardwareCheckVisitor checkVisitor = new HardwareCheckVisitor();
-        for ( Phrase<Void> phrase : phrases ) {
-            phrase.visit(checkVisitor);
+        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
+            for ( Phrase<Void> phrase : phrases ) {
+                phrase.visit(checkVisitor);
+            }
         }
         return checkVisitor.getUsedSensors();
     }
@@ -569,31 +572,40 @@ public class HardwareCheckVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        // TODO Auto-generated method stub
+        methodVoid.getBody().visit(this);
         return null;
     }
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        // TODO Auto-generated method stub
+        methodReturn.getBody().visit(this);
+        methodReturn.getReturnValue().visit(this);
         return null;
     }
 
     @Override
     public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
-        // TODO Auto-generated method stub
+        methodIfReturn.getCondition().visit(this);
+        methodIfReturn.getReturnValue().visit(this);
         return null;
     }
 
     @Override
     public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
-        // TODO Auto-generated method stub
+        methodStmt.getMethod().visit(this);
         return null;
     }
 
     @Override
     public Void visitMethodCall(MethodCall<Void> methodCall) {
-        // TODO Auto-generated method stub
+        methodCall.getParametersValues().visit(this);
+
+        return null;
+    }
+
+    @Override
+    public Void visitMethodExpr(MethodExpr<Void> methodExpr) {
+        methodExpr.getMethod().visit(this);
         return null;
     }
 

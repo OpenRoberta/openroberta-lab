@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
 import de.fhg.iais.roberta.ast.syntax.expr.FunctionExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
+import de.fhg.iais.roberta.ast.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
@@ -47,18 +48,18 @@ import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.hardwarecomponents.Category;
 
 abstract public class JaxbAstTransformer<V> {
-    protected ArrayList<Phrase<V>> tree = new ArrayList<Phrase<V>>();
+    protected ArrayList<ArrayList<Phrase<V>>> tree = new ArrayList<ArrayList<Phrase<V>>>();
 
     /**
      * @return abstract syntax tree generated from JAXB objects.
      */
-    public ArrayList<Phrase<V>> getTree() {
+    public ArrayList<ArrayList<Phrase<V>>> getTree() {
         return this.tree;
     }
 
     @Override
     public String toString() {
-        return "BlockAST [project=[" + this.tree + "]]";
+        return "BlockAST [project=" + this.tree + "]";
     }
 
     abstract protected Phrase<V> blockToAST(Block block);
@@ -227,6 +228,8 @@ abstract public class JaxbAstTransformer<V> {
             expr = ActionExpr.make((Action<V>) p);
         } else if ( p.getKind().getCategory() == Category.FUNCTION ) {
             expr = FunctionExpr.make((Function<V>) p);
+        } else if ( p.getKind().getCategory() == Category.METHOD ) {
+            expr = MethodExpr.make((Method<V>) p);
         } else {
             expr = (Expr<V>) p;
         }

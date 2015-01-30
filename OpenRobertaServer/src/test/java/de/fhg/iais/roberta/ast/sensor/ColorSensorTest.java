@@ -14,10 +14,10 @@ public class ColorSensorTest {
     @Test
     public void sensorSetColor() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=-15, y=107], ColorSensor [mode=COLOUR, port=S3], "
-                + "Location [x=-13, y=147], ColorSensor [mode=RED, port=S1], "
-                + "Location [x=-11, y=187], ColorSensor [mode=RGB, port=S2], "
-                + "Location [x=-11, y=224], ColorSensor [mode=AMBIENTLIGHT, port=S4]]]]";
+            "BlockAST [project=[[Location [x=-15, y=107], ColorSensor [mode=COLOUR, port=S3]], "
+                + "[Location [x=-13, y=147], ColorSensor [mode=RED, port=S1]], "
+                + "[Location [x=-11, y=187], ColorSensor [mode=RGB, port=S2]], "
+                + "[Location [x=-11, y=224], ColorSensor [mode=AMBIENTLIGHT, port=S4]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_setColor.xml"));
     }
@@ -26,10 +26,10 @@ public class ColorSensorTest {
     public void getMode() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setColor.xml");
 
-        ColorSensor<Void> cs = (ColorSensor<Void>) transformer.getTree().get(1);
-        ColorSensor<Void> cs1 = (ColorSensor<Void>) transformer.getTree().get(3);
-        ColorSensor<Void> cs2 = (ColorSensor<Void>) transformer.getTree().get(5);
-        ColorSensor<Void> cs3 = (ColorSensor<Void>) transformer.getTree().get(7);
+        ColorSensor<Void> cs = (ColorSensor<Void>) transformer.getTree().get(0).get(1);
+        ColorSensor<Void> cs1 = (ColorSensor<Void>) transformer.getTree().get(1).get(1);
+        ColorSensor<Void> cs2 = (ColorSensor<Void>) transformer.getTree().get(2).get(1);
+        ColorSensor<Void> cs3 = (ColorSensor<Void>) transformer.getTree().get(3).get(1);
 
         Assert.assertEquals(ColorSensorMode.COLOUR, cs.getMode());
         Assert.assertEquals(ColorSensorMode.RED, cs1.getMode());
@@ -41,10 +41,10 @@ public class ColorSensorTest {
     public void getPort() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setColor.xml");
 
-        ColorSensor<Void> cs = (ColorSensor<Void>) transformer.getTree().get(1);
-        ColorSensor<Void> cs1 = (ColorSensor<Void>) transformer.getTree().get(3);
-        ColorSensor<Void> cs2 = (ColorSensor<Void>) transformer.getTree().get(5);
-        ColorSensor<Void> cs3 = (ColorSensor<Void>) transformer.getTree().get(7);
+        ColorSensor<Void> cs = (ColorSensor<Void>) transformer.getTree().get(0).get(1);
+        ColorSensor<Void> cs1 = (ColorSensor<Void>) transformer.getTree().get(1).get(1);
+        ColorSensor<Void> cs2 = (ColorSensor<Void>) transformer.getTree().get(2).get(1);
+        ColorSensor<Void> cs3 = (ColorSensor<Void>) transformer.getTree().get(3).get(1);
 
         Assert.assertEquals(SensorPort.S3, cs.getPort());
         Assert.assertEquals(SensorPort.S1, cs1.getPort());

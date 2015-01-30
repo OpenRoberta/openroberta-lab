@@ -20,14 +20,14 @@ public class TurnActionTest {
     @Test
     public void getDirection() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_MotorDiffTurnFor.xml");
-        TurnAction<Void> ta = (TurnAction<Void>) transformer.getTree().get(1);
+        TurnAction<Void> ta = (TurnAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(TurnDirection.RIGHT, ta.getDirection());
     }
 
     @Test
     public void getParam() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_MotorDiffTurnFor.xml");
-        TurnAction<Void> ta = (TurnAction<Void>) transformer.getTree().get(1);
+        TurnAction<Void> ta = (TurnAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals("MotionParam [speed=NumConst [50], duration=MotorDuration [type=DEGREE, value=NumConst [20]]]", ta.getParam().toString());
     }
 

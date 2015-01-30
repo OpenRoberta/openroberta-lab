@@ -20,14 +20,14 @@ public class MotorStopActionTest {
     @Test
     public void getPort() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_MotorStop.xml");
-        MotorStopAction<Void> mgp = (MotorStopAction<Void>) transformer.getTree().get(1);
+        MotorStopAction<Void> mgp = (MotorStopAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(ActorPort.A, mgp.getPort());
     }
 
     @Test
     public void getMode() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_MotorStop.xml");
-        MotorStopAction<Void> mgp = (MotorStopAction<Void>) transformer.getTree().get(1);
+        MotorStopAction<Void> mgp = (MotorStopAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(MotorStopMode.FLOAT, mgp.getMode());
     }
 

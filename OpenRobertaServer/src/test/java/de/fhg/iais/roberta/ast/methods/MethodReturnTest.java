@@ -11,7 +11,7 @@ public class MethodReturnTest {
         String a =
             "BlockAST [project=[[Location [x=1, y=85], MethodReturn [test, VarDeclaration [NUMERIC, x, EmptyExpr [defVal=class java.lang.Integer], true, false], "
                 + "VarDeclaration [NUMERIC, x2, EmptyExpr [defVal=class java.lang.Integer], false, false], \n"
-                + "AktionStmt [MotorOnAction [B, MotionParam [speed=NumConst [30], duration=MotorDuration [type=ROTATIONS, value=NumConst [1]]]]], Var [returnType], Var [x2]]]]]";
+                + "AktionStmt [MotorOnAction [B, MotionParam [speed=NumConst [30], duration=MotorDuration [type=ROTATIONS, value=NumConst [1]]]]], NUMERIC, Var [x2]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/methods/method_return_1.xml"));
 
     }
@@ -20,14 +20,14 @@ public class MethodReturnTest {
     public void methodReturn2() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=1, y=85], MethodReturn [test, , \n"
-                + "AktionStmt [MotorOnAction [B, MotionParam [speed=NumConst [30], duration=MotorDuration [type=ROTATIONS, value=NumConst [1]]]]], Var [returnType], MathConst [PI]]]]]";
+                + "AktionStmt [MotorOnAction [B, MotionParam [speed=NumConst [30], duration=MotorDuration [type=ROTATIONS, value=NumConst [1]]]]], NUMERIC, MathConst [PI]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/methods/method_return_2.xml"));
 
     }
 
     @Test
     public void methodReturn3() throws Exception {
-        String a = "BlockAST [project=[[Location [x=1, y=85], MethodReturn [test, , , Var [returnType], BoolConst [true]]]]]";
+        String a = "BlockAST [project=[[Location [x=1, y=85], MethodReturn [test, , , BOOL, BoolConst [true]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/methods/method_return_3.xml"));
 
     }
@@ -36,7 +36,7 @@ public class MethodReturnTest {
     public void methodReturn4() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=1, y=85], MethodReturn [test, VarDeclaration [NUMERIC, x, EmptyExpr [defVal=class java.lang.Integer], true, false], VarDeclaration [ARRAY_NUMBER, x2, EmptyExpr [defVal=class java.lang.Integer], true, false], "
-                + "VarDeclaration [NUMERIC, x3, EmptyExpr [defVal=class java.lang.Integer], false, false], , Var [returnType], BoolConst [true]]]]]";
+                + "VarDeclaration [NUMERIC, x3, EmptyExpr [defVal=class java.lang.Integer], false, false], , BOOL, BoolConst [true]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/methods/method_return_4.xml"));
 
     }
@@ -44,7 +44,7 @@ public class MethodReturnTest {
     @Test
     public void methodReturn5() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=1, y=85], MethodReturn [test, VarDeclaration [NUMERIC, x, EmptyExpr [defVal=class java.lang.Integer], false, false], , Var [returnType], EmptyExpr [defVal=class de.fhg.iais.roberta.ast.syntax.expr.NullConst]]]]]";
+            "BlockAST [project=[[Location [x=1, y=85], MethodReturn [test, VarDeclaration [NUMERIC, x, EmptyExpr [defVal=class java.lang.Integer], false, false], , BOOL, EmptyExpr [defVal=class de.fhg.iais.roberta.ast.syntax.expr.NullConst]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/methods/method_return_5.xml"));
 
     }

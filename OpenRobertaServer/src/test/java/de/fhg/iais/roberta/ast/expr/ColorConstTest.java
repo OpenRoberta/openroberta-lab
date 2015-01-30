@@ -21,21 +21,21 @@ public class ColorConstTest {
     @Test
     public void isValue() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/colour/colour_const1.xml");
-        ColorConst<Void> colorConst = (ColorConst<Void>) transformer.getTree().get(1);
+        ColorConst<Void> colorConst = (ColorConst<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(Pickcolor.BROWN, colorConst.getValue());
     }
 
     @Test
     public void getPresedance() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/colour/colour_const1.xml");
-        ColorConst<Void> colorConst = (ColorConst<Void>) transformer.getTree().get(1);
+        ColorConst<Void> colorConst = (ColorConst<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(999, colorConst.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/colour/colour_const1.xml");
-        ColorConst<Void> colorConst = (ColorConst<Void>) transformer.getTree().get(1);
+        ColorConst<Void> colorConst = (ColorConst<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(Assoc.NONE, colorConst.getAssoc());
     }
 

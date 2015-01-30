@@ -18,7 +18,7 @@ public class PlayFileActionTest {
     @Test
     public void getFileName() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_PlayFile.xml");
-        PlayFileAction<Void> pfa = (PlayFileAction<Void>) transformer.getTree().get(1);
+        PlayFileAction<Void> pfa = (PlayFileAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals("1", pfa.getFileName());
     }
 

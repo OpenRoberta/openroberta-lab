@@ -36,7 +36,7 @@ public class IfStmtTest {
 
     @Test
     public void getExpr() throws Exception {
-        IfStmt<Void> ifStmt = (IfStmt<Void>) Helper.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(1);
+        IfStmt<Void> ifStmt = (IfStmt<Void>) Helper.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(0).get(1);
 
         String a = "[Binary [EQ, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]]]";
         Assert.assertEquals(a, ifStmt.getExpr().toString());
@@ -44,7 +44,7 @@ public class IfStmtTest {
 
     @Test
     public void getThen() throws Exception {
-        IfStmt<Void> ifStmt = (IfStmt<Void>) Helper.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(1);
+        IfStmt<Void> ifStmt = (IfStmt<Void>) Helper.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(0).get(1);
 
         String a = "[\nexprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]]";
         Assert.assertEquals(a, ifStmt.getThenList().toString());
@@ -52,7 +52,7 @@ public class IfStmtTest {
 
     @Test
     public void getElse() throws Exception {
-        IfStmt<Void> ifStmt = (IfStmt<Void>) Helper.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(1);
+        IfStmt<Void> ifStmt = (IfStmt<Void>) Helper.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(0).get(1);
 
         String a = "\nSensorStmt DrehSensor [mode=RESET, motor=A]";
         Assert.assertEquals(a, ifStmt.getElseList().toString());

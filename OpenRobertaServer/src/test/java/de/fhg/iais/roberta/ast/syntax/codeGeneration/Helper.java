@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.codeGeneration;
 
 import java.io.StringWriter;
-import java.util.List;
+import java.util.ArrayList;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -116,11 +116,11 @@ public class Helper {
      * @return the first and only one phrase
      * @throws Exception
      */
-    public static <V> List<Phrase<V>> generateASTs(String pathToProgramXml) throws Exception {
+    public static <V> ArrayList<ArrayList<Phrase<V>>> generateASTs(String pathToProgramXml) throws Exception {
         BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
         JaxbBlocklyProgramTransformer<V> transformer = new JaxbBlocklyProgramTransformer<V>();
         transformer.transform(project);
-        List<Phrase<V>> tree = transformer.getTree();
+        ArrayList<ArrayList<Phrase<V>>> tree = transformer.getTree();
         return tree;
     }
 
@@ -132,8 +132,8 @@ public class Helper {
      * @throws Exception
      */
     public static <V> Phrase<V> generateAST(String pathToProgramXml) throws Exception {
-        List<Phrase<V>> tree = generateASTs(pathToProgramXml);
-        return tree.get(1);
+        ArrayList<ArrayList<Phrase<V>>> tree = generateASTs(pathToProgramXml);
+        return tree.get(0).get(1);
     }
 
     /**
@@ -161,14 +161,16 @@ public class Helper {
         BlockSet blockSet = new BlockSet();
 
         Instance instance = null;
-        for ( Phrase<Void> phrase : transformer.getTree() ) {
-            if ( phrase.getKind() == Kind.LOCATION ) {
-                blockSet.getInstance().add(instance);
-                instance = new Instance();
-                instance.setX(((Location<Void>) phrase).getX());
-                instance.setY(((Location<Void>) phrase).getY());
+        for ( ArrayList<Phrase<Void>> tree : transformer.getTree() ) {
+            for ( Phrase<Void> phrase : tree ) {
+                if ( phrase.getKind() == Kind.LOCATION ) {
+                    blockSet.getInstance().add(instance);
+                    instance = new Instance();
+                    instance.setX(((Location<Void>) phrase).getX());
+                    instance.setY(((Location<Void>) phrase).getY());
+                }
+                instance.getBlock().add(phrase.astToBlock());
             }
-            instance.getBlock().add(phrase.astToBlock());
         }
         blockSet.getInstance().add(instance);
         //        m.marshal(blockSet, System.out); // only needed for EXTREME debugging

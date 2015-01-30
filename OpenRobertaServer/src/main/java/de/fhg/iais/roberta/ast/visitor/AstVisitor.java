@@ -25,6 +25,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
 import de.fhg.iais.roberta.ast.syntax.expr.FunctionExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
+import de.fhg.iais.roberta.ast.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
@@ -173,6 +174,13 @@ public interface AstVisitor<V> {
      * @param sensorExpr to be visited
      */
     public V visitSensorExpr(SensorExpr<V> sensorExpr);
+
+    /**
+     * visit a {@link MethodExpr}.
+     *
+     * @param sensorExpr to be visited
+     */
+    public V visitMethodExpr(MethodExpr<V> methodExpr);
 
     /**
      * visit a {@link EmptyList}.

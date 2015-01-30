@@ -22,21 +22,21 @@ public class MathConstTest {
     @Test
     public void getMathConst() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_constant1.xml");
-        MathConst<Void> mathConst = (MathConst<Void>) transformer.getTree().get(1);
+        MathConst<Void> mathConst = (MathConst<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(Const.E, mathConst.getMathConst());
     }
 
     @Test
     public void getPresedance() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_constant1.xml");
-        MathConst<Void> mathConst = (MathConst<Void>) transformer.getTree().get(1);
+        MathConst<Void> mathConst = (MathConst<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(999, mathConst.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/math/math_constant1.xml");
-        MathConst<Void> mathConst = (MathConst<Void>) transformer.getTree().get(1);
+        MathConst<Void> mathConst = (MathConst<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(Assoc.NONE, mathConst.getAssoc());
     }
 

@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.codegen.lejos;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -35,6 +36,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
 import de.fhg.iais.roberta.ast.syntax.expr.FunctionExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
+import de.fhg.iais.roberta.ast.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
@@ -110,7 +112,6 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     private final String programName;
     private final StringBuilder sb = new StringBuilder();
     private final Set<EV3Sensors> usedSensors;
-
     private int indentation;
 
     /**
@@ -135,26 +136,41 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
      * @param brickConfiguration hardware configuration of the brick
      * @param phrases to generate the code from
      */
-    public static String generate(String programName, EV3BrickConfiguration brickConfiguration, List<Phrase<Void>> phrases, boolean withWrapping) //
+    public static String generate(
+        String programName,
+        EV3BrickConfiguration brickConfiguration,
+        ArrayList<ArrayList<Phrase<Void>>> phrasesSet,
+        boolean withWrapping) //
     {
         Assert.notNull(programName);
         Assert.notNull(brickConfiguration);
-        Assert.isTrue(phrases.size() >= 1);
+        Assert.isTrue(phrasesSet.size() >= 1);
 
-        Set<EV3Sensors> usedSensors = HardwareCheckVisitor.check(phrases);
+        Set<EV3Sensors> usedSensors = HardwareCheckVisitor.check(phrasesSet);
         AstToLejosJavaVisitor astVisitor = new AstToLejosJavaVisitor(programName, brickConfiguration, usedSensors, withWrapping ? 2 : 0);
         astVisitor.generatePrefix(withWrapping);
-        for ( Phrase<Void> phrase : phrases ) {
-            if ( phrase.getProperty().isDisabled() ) {
-                continue;
+
+        boolean mainBlock = false;
+        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
+            for ( Phrase<Void> phrase : phrases ) {
+                if ( phrase.getProperty().isDisabled() ) {
+                    continue;
+                }
+
+                if ( phrase.getKind().getCategory() != Category.TASK ) {
+                    astVisitor.nlIndent();
+                } else {
+                    mainBlock = true;
+                }
+                phrase.visit(astVisitor);
             }
-            if ( phrase.getKind().getCategory() != Category.TASK ) {
-                astVisitor.sb.append("\n").append(INDENT).append(INDENT);
+            if ( mainBlock ) {
+                astVisitor.sb.append("\n").append(INDENT).append("}");
+                mainBlock = false;
             }
-            phrase.visit(astVisitor);
         }
         if ( withWrapping ) {
-            astVisitor.sb.append("\n}\n}\n");
+            astVisitor.sb.append("\n}\n");
         }
         return astVisitor.sb.toString();
     }
@@ -290,6 +306,12 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     }
 
     @Override
+    public Void visitMethodExpr(MethodExpr<Void> methodExpr) {
+        methodExpr.getMethod().visit(this);
+        return null;
+    }
+
+    @Override
     public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
         switch ( emptyExpr.getDefVal().getName() ) {
             case "java.lang.String":
@@ -302,6 +324,8 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
                 this.sb.append("0");
                 break;
             case "java.util.ArrayList":
+                break;
+            case "de.fhg.iais.roberta.ast.syntax.expr.NullConst":
                 break;
             default:
                 this.sb.append("[[EmptyExpr [defVal=" + emptyExpr.getDefVal() + "]]]");
@@ -754,8 +778,9 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         mainTask.getVariables().visit(this);
+        this.sb.append("\n\n").append(INDENT).append("public void run() {\n");
+        this.sb.append(INDENT).append(INDENT).append("hal = new Hal(brickConfiguration, usedSensors);\n");
         return null;
-
     }
 
     @Override
@@ -772,7 +797,6 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitLocation(Location<Void> location) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -1235,6 +1259,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         this.sb.append(INDENT).append("private static final boolean TRUE = true;\n");
         this.sb.append(INDENT).append(this.brickConfiguration.generateRegenerate()).append("\n\n");
         this.sb.append(INDENT).append(generateRegenerateUsedSensors()).append("\n\n");
+        this.sb.append(INDENT).append("private Hal hal;\n\n");
         this.sb.append(INDENT).append("public static void main(String[] args) {\n");
         this.sb.append(INDENT).append(INDENT).append("try {\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("new ").append(this.programName).append("().run();\n");
@@ -1251,10 +1276,10 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Press any key\", 0, 7);\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("lejos.hardware.Button.waitForAnyPress();\n");
         this.sb.append(INDENT).append(INDENT).append("}\n");
-        this.sb.append(INDENT).append("}\n\n");
+        this.sb.append(INDENT).append("}\n");
 
-        this.sb.append(INDENT).append("public void run() {\n");
-        this.sb.append(INDENT).append(INDENT).append("Hal hal = new Hal(brickConfiguration, usedSensors);");
+        //        this.sb.append(INDENT).append("public void run() {\n");
+        //        this.sb.append(INDENT).append(INDENT).append("Hal hal = new Hal(brickConfiguration, usedSensors);");
     }
 
     private String generateRegenerateUsedSensors() {
@@ -1274,31 +1299,54 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        // TODO Auto-generated method stub
+        this.sb.append("\n").append(INDENT).append("private void ");
+        this.sb.append(methodVoid.getMethodName() + "(");
+        methodVoid.getParameters().visit(this);
+        this.sb.append(") {");
+        methodVoid.getBody().visit(this);
+        this.sb.append("\n").append(INDENT).append("}");
         return null;
     }
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        // TODO Auto-generated method stub
+        this.sb.append("\n").append(INDENT).append("private " + methodReturn.getReturnType().getJavaCode());
+        this.sb.append(" " + methodReturn.getMethodName() + "(");
+        methodReturn.getParameters().visit(this);
+        this.sb.append(") {");
+        methodReturn.getBody().visit(this);
+        this.nlIndent();
+        this.sb.append("return ");
+        methodReturn.getReturnValue().visit(this);
+        this.sb.append(";\n").append(INDENT).append("}");
         return null;
     }
 
     @Override
     public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
-        // TODO Auto-generated method stub
+        this.sb.append("if (");
+        methodIfReturn.getCondition().visit(this);
+        this.sb.append(") ");
+        this.sb.append("return ");
+        methodIfReturn.getReturnValue().visit(this);
         return null;
     }
 
     @Override
     public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
-        // TODO Auto-generated method stub
+        methodStmt.getMethod().visit(this);
+        this.sb.append(";");
         return null;
     }
 
     @Override
     public Void visitMethodCall(MethodCall<Void> methodCall) {
-        // TODO Auto-generated method stub
+        this.sb.append(methodCall.getMethodName() + "(");
+        methodCall.getParametersValues().visit(this);
+        this.sb.append(")");
+        if ( methodCall.getReturnType() == null ) {
+            this.sb.append(";");
+        }
         return null;
     }
 }

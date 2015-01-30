@@ -14,7 +14,7 @@ public class GyroSensorTest {
     @Test
     public void sensorSetGyro() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=-30, y=210], GyroSensor [mode=ANGLE, port=S2], " + "Location [x=-26, y=250], GyroSensor [mode=RATE, port=S4]]]]";
+            "BlockAST [project=[[Location [x=-30, y=210], GyroSensor [mode=ANGLE, port=S2]], [Location [x=-26, y=250], GyroSensor [mode=RATE, port=S4]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_setGyro.xml"));
     }
@@ -23,8 +23,8 @@ public class GyroSensorTest {
     public void getMode() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setGyro.xml");
 
-        GyroSensor<Void> cs = (GyroSensor<Void>) transformer.getTree().get(1);
-        GyroSensor<Void> cs1 = (GyroSensor<Void>) transformer.getTree().get(3);
+        GyroSensor<Void> cs = (GyroSensor<Void>) transformer.getTree().get(0).get(1);
+        GyroSensor<Void> cs1 = (GyroSensor<Void>) transformer.getTree().get(1).get(1);
 
         Assert.assertEquals(GyroSensorMode.ANGLE, cs.getMode());
         Assert.assertEquals(GyroSensorMode.RATE, cs1.getMode());
@@ -34,8 +34,8 @@ public class GyroSensorTest {
     public void getPort() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setGyro.xml");
 
-        GyroSensor<Void> cs = (GyroSensor<Void>) transformer.getTree().get(1);
-        GyroSensor<Void> cs1 = (GyroSensor<Void>) transformer.getTree().get(3);
+        GyroSensor<Void> cs = (GyroSensor<Void>) transformer.getTree().get(0).get(1);
+        GyroSensor<Void> cs1 = (GyroSensor<Void>) transformer.getTree().get(1).get(1);
 
         Assert.assertEquals(SensorPort.S2, cs.getPort());
         Assert.assertEquals(SensorPort.S4, cs1.getPort());

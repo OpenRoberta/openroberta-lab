@@ -19,14 +19,14 @@ public class BrickSensorTest {
     @Test
     public void getKey() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_brick1.xml");
-        BrickSensor<Void> bs = (BrickSensor<Void>) transformer.getTree().get(1);
+        BrickSensor<Void> bs = (BrickSensor<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(BrickKey.ENTER, bs.getKey());
     }
 
     @Test
     public void getMode() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_brick1.xml");
-        BrickSensor<Void> bs = (BrickSensor<Void>) transformer.getTree().get(1);
+        BrickSensor<Void> bs = (BrickSensor<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(BrickSensor.Mode.IS_PRESSED, bs.getMode());
     }
 

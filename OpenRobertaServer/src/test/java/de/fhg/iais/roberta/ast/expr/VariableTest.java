@@ -20,21 +20,21 @@ public class VariableTest {
     @Test
     public void getValue() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/variables/variable_set1.xml");
-        Var<Void> var = (Var<Void>) transformer.getTree().get(1);
+        Var<Void> var = (Var<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals("item", var.getValue());
     }
 
     @Test
     public void getPresedance() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/variables/variable_set1.xml");
-        Var<Void> var = (Var<Void>) transformer.getTree().get(1);
+        Var<Void> var = (Var<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(999, var.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/variables/variable_set1.xml");
-        Var<Void> var = (Var<Void>) transformer.getTree().get(1);
+        Var<Void> var = (Var<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(Assoc.NONE, var.getAssoc());
     }
 

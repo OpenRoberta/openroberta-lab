@@ -20,21 +20,21 @@ public class BoolConstTest {
     @Test
     public void isValue() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/logic/logic_boolConst.xml");
-        BoolConst<Void> boolConst = (BoolConst<Void>) transformer.getTree().get(1);
+        BoolConst<Void> boolConst = (BoolConst<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(true, boolConst.isValue());
     }
 
     @Test
     public void getPresedance() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/logic/logic_boolConst.xml");
-        BoolConst<Void> boolConst = (BoolConst<Void>) transformer.getTree().get(1);
+        BoolConst<Void> boolConst = (BoolConst<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(999, boolConst.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/logic/logic_boolConst.xml");
-        BoolConst<Void> boolConst = (BoolConst<Void>) transformer.getTree().get(1);
+        BoolConst<Void> boolConst = (BoolConst<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(Assoc.NONE, boolConst.getAssoc());
     }
 

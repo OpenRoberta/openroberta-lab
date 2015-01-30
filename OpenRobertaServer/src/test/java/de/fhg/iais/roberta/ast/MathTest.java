@@ -59,7 +59,7 @@ public class MathTest {
     @Test
     public void mathSingle3() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=13, y=-6], MathSingleFunct [ROOT, [NumConst [0]]], Location [x=11, y=43], MathSingleFunct [ABS, [NumConst [0]]], Location [x=18, y=104], Unary [NEG, NumConst [0]], Location [x=20, y=164], MathSingleFunct [LN, [NumConst [0]]], Location [x=22, y=233], MathSingleFunct [LOG10, [NumConst [0]]], Location [x=17, y=304], MathSingleFunct [EXP, [NumConst [0]]], Location [x=19, y=364], MathSingleFunct [POW10, [NumConst [0]]]]]]";
+            "BlockAST [project=[[Location [x=13, y=-6], MathSingleFunct [ROOT, [NumConst [0]]]], [Location [x=11, y=43], MathSingleFunct [ABS, [NumConst [0]]]], [Location [x=18, y=104], Unary [NEG, NumConst [0]]], [Location [x=20, y=164], MathSingleFunct [LN, [NumConst [0]]]], [Location [x=22, y=233], MathSingleFunct [LOG10, [NumConst [0]]]], [Location [x=17, y=304], MathSingleFunct [EXP, [NumConst [0]]]], [Location [x=19, y=364], MathSingleFunct [POW10, [NumConst [0]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_single3.xml"));
     }
@@ -85,7 +85,7 @@ public class MathTest {
     @Test
     public void mathTrig1() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=-15, y=173], MathSingleFunct [SIN, [NumConst [0]]], Location [x=5, y=213], MathSingleFunct [COS, [NumConst [0]]], Location [x=25, y=253], MathSingleFunct [TAN, [NumConst [0]]], Location [x=45, y=293], MathSingleFunct [ASIN, [NumConst [0]]], Location [x=65, y=333], MathSingleFunct [ACOS, [NumConst [0]]], Location [x=85, y=373], MathSingleFunct [ATAN, [NumConst [0]]]]]]";
+            "BlockAST [project=[[Location [x=-15, y=173], MathSingleFunct [SIN, [NumConst [0]]]], [Location [x=5, y=213], MathSingleFunct [COS, [NumConst [0]]]], [Location [x=25, y=253], MathSingleFunct [TAN, [NumConst [0]]]], [Location [x=45, y=293], MathSingleFunct [ASIN, [NumConst [0]]]], [Location [x=65, y=333], MathSingleFunct [ACOS, [NumConst [0]]]], [Location [x=85, y=373], MathSingleFunct [ATAN, [NumConst [0]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_trig1.xml"));
     }
@@ -110,7 +110,7 @@ public class MathTest {
     @Test
     public void mathConstant4() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=94, y=154], MathConst [PI], Location [x=114, y=194], MathConst [E], Location [x=134, y=234], MathConst [GOLDEN_RATIO], Location [x=154, y=274], MathConst [SQRT2], Location [x=174, y=314], MathConst [SQRT1_2], Location [x=194, y=354], MathConst [INFINITY]]]]";
+            "BlockAST [project=[[Location [x=94, y=154], MathConst [PI]], [Location [x=114, y=194], MathConst [E]], [Location [x=134, y=234], MathConst [GOLDEN_RATIO]], [Location [x=154, y=274], MathConst [SQRT2]], [Location [x=174, y=314], MathConst [SQRT1_2]], [Location [x=194, y=354], MathConst [INFINITY]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_constant4.xml"));
     }
@@ -147,7 +147,7 @@ public class MathTest {
     @Test
     public void mathNumberProperty2() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=-683, y=152], MathNumPropFunct [EVEN, [NumConst [0]]], Location [x=-663, y=192], MathNumPropFunct [ODD, [NumConst [0]]], Location [x=-675, y=232], MathNumPropFunct [PRIME, [NumConst [0]]], Location [x=-676, y=268], MathNumPropFunct [WHOLE, [NumConst [0]]], Location [x=-659, y=311], MathNumPropFunct [POSITIVE, [NumConst [0]]], Location [x=-583, y=352], MathNumPropFunct [NEGATIVE, [NumConst [0]]], Location [x=-603, y=541], MathNumPropFunct [DIVISIBLE_BY, [NumConst [0], NumConst [10]]]]]]";
+            "BlockAST [project=[[Location [x=-683, y=152], MathNumPropFunct [EVEN, [NumConst [0]]]], [Location [x=-663, y=192], MathNumPropFunct [ODD, [NumConst [0]]]], [Location [x=-675, y=232], MathNumPropFunct [PRIME, [NumConst [0]]]], [Location [x=-676, y=268], MathNumPropFunct [WHOLE, [NumConst [0]]]], [Location [x=-659, y=311], MathNumPropFunct [POSITIVE, [NumConst [0]]]], [Location [x=-583, y=352], MathNumPropFunct [NEGATIVE, [NumConst [0]]]], [Location [x=-603, y=541], MathNumPropFunct [DIVISIBLE_BY, [NumConst [0], NumConst [10]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_number_property2.xml"));
     }
@@ -184,7 +184,7 @@ public class MathTest {
     @Test
     public void mathRound1() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=-688, y=90], MathSingleFunct [ROUND, [NumConst [0]]], Location [x=-668, y=130], MathSingleFunct [ROUNDUP, [NumConst [0]]], Location [x=-648, y=170], MathSingleFunct [ROUNDDOWN, [NumConst [0]]]]]]";
+            "BlockAST [project=[[Location [x=-688, y=90], MathSingleFunct [ROUND, [NumConst [0]]]], [Location [x=-668, y=130], MathSingleFunct [ROUNDUP, [NumConst [0]]]], [Location [x=-648, y=170], MathSingleFunct [ROUNDDOWN, [NumConst [0]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_round1.xml"));
     }
@@ -209,7 +209,7 @@ public class MathTest {
     @Test
     public void math_on_list1() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=-714, y=201], MathOnListFunct [SUM, [EmptyList [NUMERIC]]], Location [x=-694, y=241], MathOnListFunct [MIN, [EmptyList [NUMERIC]]], Location [x=-674, y=281], MathOnListFunct [MAX, [EmptyList [NUMERIC]]], Location [x=-654, y=321], MathOnListFunct [AVERAGE, [EmptyList [NUMERIC]]], Location [x=-634, y=361], MathOnListFunct [MEDIAN, [EmptyList [NUMERIC]]], Location [x=-614, y=401], MathOnListFunct [MODE, [EmptyList [NUMERIC]]], Location [x=-594, y=441], MathOnListFunct [STD_DEV, [EmptyList [NUMERIC]]], Location [x=-574, y=481], MathOnListFunct [RANDOM, [EmptyList [NUMERIC]]]]]]";
+            "BlockAST [project=[[Location [x=-714, y=201], MathOnListFunct [SUM, [EmptyList [NUMERIC]]]], [Location [x=-694, y=241], MathOnListFunct [MIN, [EmptyList [NUMERIC]]]], [Location [x=-674, y=281], MathOnListFunct [MAX, [EmptyList [NUMERIC]]]], [Location [x=-654, y=321], MathOnListFunct [AVERAGE, [EmptyList [NUMERIC]]]], [Location [x=-634, y=361], MathOnListFunct [MEDIAN, [EmptyList [NUMERIC]]]], [Location [x=-614, y=401], MathOnListFunct [MODE, [EmptyList [NUMERIC]]]], [Location [x=-594, y=441], MathOnListFunct [STD_DEV, [EmptyList [NUMERIC]]]], [Location [x=-574, y=481], MathOnListFunct [RANDOM, [EmptyList [NUMERIC]]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/math/math_on_list1.xml"));
     }

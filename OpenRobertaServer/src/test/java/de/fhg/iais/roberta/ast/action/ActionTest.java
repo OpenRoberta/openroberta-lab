@@ -65,7 +65,7 @@ public class ActionTest {
     public void disabledComment() throws Exception {
         JaxbBlocklyProgramTransformer<Void> t = Helper.generateTransformer("/ast/actions/action_DisabledComment.xml");
 
-        Assert.assertEquals(true, t.getTree().get(2).getProperty().isDisabled());
-        Assert.assertEquals("h#,,", t.getTree().get(1).getComment().getComment());
+        Assert.assertEquals(true, t.getTree().get(0).get(2).getProperty().isDisabled());
+        Assert.assertEquals("h#,,", t.getTree().get(0).get(1).getComment().getComment());
     }
 }

@@ -19,14 +19,14 @@ public class MotorSetPowerActionTest {
     @Test
     public void getPort() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_MotorSetPower.xml");
-        MotorSetPowerAction<Void> mgp = (MotorSetPowerAction<Void>) transformer.getTree().get(1);
+        MotorSetPowerAction<Void> mgp = (MotorSetPowerAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(ActorPort.B, mgp.getPort());
     }
 
     @Test
     public void getPower() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_MotorSetPower.xml");
-        MotorSetPowerAction<Void> mgp = (MotorSetPowerAction<Void>) transformer.getTree().get(1);
+        MotorSetPowerAction<Void> mgp = (MotorSetPowerAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals("NumConst [30]", mgp.getPower().toString());
     }
 

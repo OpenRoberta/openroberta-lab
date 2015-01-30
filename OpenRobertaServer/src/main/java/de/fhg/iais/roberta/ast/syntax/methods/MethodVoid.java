@@ -54,7 +54,7 @@ public class MethodVoid<V> extends Method<V> {
     /**
      * @return the variables
      */
-    public ExprList<V> getVParameters() {
+    public ExprList<V> getParameters() {
         return this.parameters;
     }
 

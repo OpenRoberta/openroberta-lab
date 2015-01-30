@@ -20,7 +20,7 @@ public class LightStatusActionTest {
     @Test
     public void getStatus() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_BrickLightStatus.xml");
-        LightStatusAction<Void> lsa = (LightStatusAction<Void>) transformer.getTree().get(1);
+        LightStatusAction<Void> lsa = (LightStatusAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(LightStatusAction.Status.OFF, lsa.getStatus());
     }
 

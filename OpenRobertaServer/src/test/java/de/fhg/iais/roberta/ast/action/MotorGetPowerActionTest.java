@@ -19,7 +19,7 @@ public class MotorGetPowerActionTest {
     @Test
     public void getPort() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_MotorGetPower.xml");
-        MotorGetPowerAction<Void> mgp = (MotorGetPowerAction<Void>) transformer.getTree().get(1);
+        MotorGetPowerAction<Void> mgp = (MotorGetPowerAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(ActorPort.B, mgp.getPort());
     }
 

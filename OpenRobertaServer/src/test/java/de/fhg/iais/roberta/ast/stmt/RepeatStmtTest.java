@@ -29,7 +29,7 @@ public class RepeatStmtTest {
     public void getMode() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/control/repeat_stmt.xml");
 
-        RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(1);
+        RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(0).get(1);
 
         Assert.assertEquals(Mode.TIMES, repeatStmt.getMode());
     }
@@ -38,7 +38,7 @@ public class RepeatStmtTest {
     public void getExpr() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/control/repeat_stmt.xml");
 
-        RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(1);
+        RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(0).get(1);
 
         Assert.assertEquals(
             "VarDeclaration [NUMERIC_INT, i0, NumConst [0], false, false], Binary [LT, Var [i0], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i0]]",
@@ -49,7 +49,7 @@ public class RepeatStmtTest {
     public void getList() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/control/repeat_stmt.xml");
 
-        RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(1);
+        RepeatStmt<Void> repeatStmt = (RepeatStmt<Void>) transformer.getTree().get(0).get(1);
 
         String a =
             "\nexprStmt Binary [TEXT_APPEND, Var [item3], StringConst [Proba]]\n"

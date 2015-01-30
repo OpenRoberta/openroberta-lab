@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.codegen.lejos;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -33,6 +33,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
 import de.fhg.iais.roberta.ast.syntax.expr.FunctionExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
+import de.fhg.iais.roberta.ast.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
@@ -122,18 +123,19 @@ public class AstToTextlyVisitor implements AstVisitor<Void> {
      * @param programName name of the program
      * @param phrases to generate the code from
      */
-    public static String generate(String programName, List<Phrase<Void>> phrases, boolean withWrapping) //
+    public static String generate(String programName, ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping) //
     {
         Assert.notNull(programName);
-        Assert.isTrue(phrases.size() >= 1);
+        Assert.isTrue(phrasesSet.size() >= 1);
 
         AstToTextlyVisitor astVisitor = new AstToTextlyVisitor(programName, 1);
         astVisitor.sb.append("\n{\n").append(INDENT);
-        for ( Phrase<Void> phrase : phrases ) {
-            phrase.visit(astVisitor);
+        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
+            for ( Phrase<Void> phrase : phrases ) {
+                phrase.visit(astVisitor);
+            }
+            astVisitor.sb.append("\n}\n");
         }
-        astVisitor.sb.append("\n}\n");
-
         return astVisitor.sb.toString();
     }
 
@@ -885,6 +887,12 @@ public class AstToTextlyVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodCall(MethodCall<Void> methodCall) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitMethodExpr(MethodExpr<Void> methodExpr) {
         // TODO Auto-generated method stub
         return null;
     }

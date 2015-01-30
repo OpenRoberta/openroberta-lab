@@ -6,9 +6,9 @@ import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
-import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
@@ -23,19 +23,19 @@ public class MethodReturn<V> extends Method<V> {
     private final String methodName;
     private final ExprList<V> parameters;
     private final StmtList<V> body;
-    private final Var<V> returnType;
+    private final BlocklyType returnType;
     private final Expr<V> returnValue;
 
     private MethodReturn(
         String methodName,
         ExprList<V> parameters,
         StmtList<V> body,
-        Var<V> returnType,
+        BlocklyType returnType,
         Expr<V> returnValue,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
         super(Phrase.Kind.METHOD_RETURN, properties, comment);
-        Assert.isTrue(!methodName.equals("") && parameters.isReadOnly() && body.isReadOnly() && returnType.isReadOnly() && returnValue.isReadOnly());
+        Assert.isTrue(!methodName.equals("") && parameters.isReadOnly() && body.isReadOnly() && returnValue.isReadOnly());
         this.methodName = methodName;
         this.parameters = parameters;
         this.body = body;
@@ -59,7 +59,7 @@ public class MethodReturn<V> extends Method<V> {
         String methodName,
         ExprList<V> parameters,
         StmtList<V> body,
-        Var<V> returnType,
+        BlocklyType returnType,
         Expr<V> returnValue,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
@@ -90,7 +90,7 @@ public class MethodReturn<V> extends Method<V> {
     /**
      * @return the return_
      */
-    public Expr<V> getReturnType() {
+    public BlocklyType getReturnType() {
         return this.returnType;
     }
 
@@ -118,10 +118,10 @@ public class MethodReturn<V> extends Method<V> {
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
         mutation.setDeclare(declare);
-        mutation.setReturnType(this.returnType.getTypeVar().getBlocklyName());
+        mutation.setReturnType(this.returnType.getBlocklyName());
         jaxbDestination.setMutation(mutation);
         AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.NAME, this.methodName);
-        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.TYPE, this.returnType.getTypeVar().getBlocklyName());
+        AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.TYPE, this.returnType.getBlocklyName());
         Repetitions repetition = new Repetitions();
         AstJaxbTransformerHelper.addStatement(repetition, BlocklyConstants.ST, this.parameters);
         AstJaxbTransformerHelper.addStatement(repetition, BlocklyConstants.STACK, this.body);

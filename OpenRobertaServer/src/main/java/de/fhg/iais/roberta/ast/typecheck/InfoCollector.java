@@ -29,6 +29,7 @@ import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
 import de.fhg.iais.roberta.ast.syntax.expr.FunctionExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
+import de.fhg.iais.roberta.ast.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
@@ -565,6 +566,12 @@ public class InfoCollector<T> implements AstVisitor<T> {
 
     @Override
     public T visitMethodCall(MethodCall<T> methodCall) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitMethodExpr(MethodExpr<T> methodExpr) {
         // TODO Auto-generated method stub
         return null;
     }

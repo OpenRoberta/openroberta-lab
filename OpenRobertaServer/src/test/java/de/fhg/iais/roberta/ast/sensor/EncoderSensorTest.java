@@ -14,8 +14,8 @@ public class EncoderSensorTest {
     @Test
     public void sensorSetEncoder() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=-20, y=94], DrehSensor [mode=ROTATION, motor=A], "
-                + "Location [x=-15, y=129], DrehSensor [mode=DEGREE, motor=D]]]]";
+            "BlockAST [project=[[Location [x=-20, y=94], DrehSensor [mode=ROTATION, motor=A]], "
+                + "[Location [x=-15, y=129], DrehSensor [mode=DEGREE, motor=D]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_setEncoder.xml"));
     }
@@ -24,8 +24,8 @@ public class EncoderSensorTest {
     public void getMode() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setEncoder.xml");
 
-        EncoderSensor<Void> cs = (EncoderSensor<Void>) transformer.getTree().get(1);
-        EncoderSensor<Void> cs1 = (EncoderSensor<Void>) transformer.getTree().get(3);
+        EncoderSensor<Void> cs = (EncoderSensor<Void>) transformer.getTree().get(0).get(1);
+        EncoderSensor<Void> cs1 = (EncoderSensor<Void>) transformer.getTree().get(1).get(1);
 
         Assert.assertEquals(MotorTachoMode.ROTATION, cs.getMode());
         Assert.assertEquals(MotorTachoMode.DEGREE, cs1.getMode());
@@ -35,8 +35,8 @@ public class EncoderSensorTest {
     public void getPort() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_setEncoder.xml");
 
-        EncoderSensor<Void> cs = (EncoderSensor<Void>) transformer.getTree().get(1);
-        EncoderSensor<Void> cs1 = (EncoderSensor<Void>) transformer.getTree().get(3);
+        EncoderSensor<Void> cs = (EncoderSensor<Void>) transformer.getTree().get(0).get(1);
+        EncoderSensor<Void> cs1 = (EncoderSensor<Void>) transformer.getTree().get(1).get(1);
 
         Assert.assertEquals(ActorPort.A, cs.getMotor());
         Assert.assertEquals(ActorPort.D, cs1.getMotor());

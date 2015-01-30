@@ -14,7 +14,7 @@ public class TimerSensorTest {
     public void getMode() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_resetTimer.xml");
 
-        TimerSensor<Void> cs = (TimerSensor<Void>) transformer.getTree().get(1);
+        TimerSensor<Void> cs = (TimerSensor<Void>) transformer.getTree().get(0).get(1);
 
         Assert.assertEquals(TimerSensorMode.RESET, cs.getMode());
     }
@@ -23,7 +23,7 @@ public class TimerSensorTest {
     public void getTimer() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/sensors/sensor_resetTimer.xml");
 
-        TimerSensor<Void> cs = (TimerSensor<Void>) transformer.getTree().get(1);
+        TimerSensor<Void> cs = (TimerSensor<Void>) transformer.getTree().get(0).get(1);
 
         Assert.assertEquals(1, cs.getTimer());
     }

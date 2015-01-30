@@ -18,21 +18,21 @@ public class ShowTextActionTest {
     @Test
     public void getMsg() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_ShowText.xml");
-        ShowTextAction<Void> spa = (ShowTextAction<Void>) transformer.getTree().get(1);
+        ShowTextAction<Void> spa = (ShowTextAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals("StringConst [Hallo]", spa.getMsg().toString());
     }
 
     @Test
     public void getX() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_ShowText.xml");
-        ShowTextAction<Void> spa = (ShowTextAction<Void>) transformer.getTree().get(1);
+        ShowTextAction<Void> spa = (ShowTextAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals("NumConst [0]", spa.getX().toString());
     }
 
     @Test
     public void getY() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_ShowText.xml");
-        ShowTextAction<Void> spa = (ShowTextAction<Void>) transformer.getTree().get(1);
+        ShowTextAction<Void> spa = (ShowTextAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals("NumConst [0]", spa.getY().toString());
     }
 

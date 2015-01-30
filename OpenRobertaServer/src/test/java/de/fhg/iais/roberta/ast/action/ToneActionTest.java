@@ -18,14 +18,14 @@ public class ToneActionTest {
     @Test
     public void getFrequency() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_PlaySound.xml");
-        ToneAction<Void> ta = (ToneAction<Void>) transformer.getTree().get(1);
+        ToneAction<Void> ta = (ToneAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals("NumConst [300]", ta.getFrequency().toString());
     }
 
     @Test
     public void getDuration() throws Exception {
         JaxbBlocklyProgramTransformer<Void> transformer = Helper.generateTransformer("/ast/actions/action_PlaySound.xml");
-        ToneAction<Void> ta = (ToneAction<Void>) transformer.getTree().get(1);
+        ToneAction<Void> ta = (ToneAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals("NumConst [100]", ta.getDuration().toString());
     }
 
