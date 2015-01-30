@@ -203,6 +203,9 @@ html, body {
     background-color: #b7d032;
 }
 
+.menuDisabled {
+  background-color: white !important;
+}
 
 
 /***** BEGIN Overwrite Bootstrap-CSS *****/

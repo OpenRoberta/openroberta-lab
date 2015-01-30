@@ -1303,6 +1303,7 @@ function displayToastMessages() {
  */
 function activateHeadMenu() {
     $('.nav > .dropdown > a').removeClass('disabled');
+    $('#head-navigation > .nav-pills > li > a').removeClass('menuDisabled');
 }
 
 /**
@@ -1310,6 +1311,7 @@ function activateHeadMenu() {
  */
 function deactivateHeadMenu() {
     $('.nav > .dropdown > a').addClass('disabled');
+    $('#head-navigation > .nav-pills > li > a').addClass('menuDisabled');
 }
 
 /**
