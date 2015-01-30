@@ -27,10 +27,13 @@ public class BatteryIndicator {
         "\u0000\u0000\u0080\u0001\u0000\u0000\u0000\u0004\u0000\u0004\u0020\u0004\u0020\u0004\u0020\u0000\u0020\u0001\u0000\u0000\u00c0\u0000\u0080\u0000\u0000\u0000\u0080\u0001\u0080\u0001\u0080\u0001";
     private static final String ICIRoberta =
         "\u0000\u0038\u000c\u0040\u0002\u0000\u0078\u001f\u0084\u0020\u0042\u0040\u0031\u008c\u0019\u0096\u0039\u009e\u0031\u008c\u0042\u0040\u0084\u0020\u00f8\u001f\u00c0\u0001\u00e0\u0000\u00e0\u0000";
+    private static final String ICICLEAR =
+        "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
 
     private static final Image wifiImage = new Image(16, 16, Utils.stringToBytes8(ICIWifi));
     private static final Image usbImage = new Image(16, 16, Utils.stringToBytes8(ICIUSB));
     private static final Image robertaImage = new Image(16, 16, Utils.stringToBytes8(ICIRoberta));
+    private static final Image clearImage = new Image(16, 16, Utils.stringToBytes8(ICICLEAR));
 
     private static final int ICON_X = 160;
 
@@ -157,7 +160,7 @@ public class BatteryIndicator {
         if ( ORAhandler.isRegistered() ) {
             this.g.drawRegion(robertaImage, 0, 0, 16, 16, 0, ICON_X - 18, 0, 0);
         } else {
-            this.g.drawRegionRop(null, 0, 0, 16, 16, 0, ICON_X - 18, 0, 0, CommonLCD.ROP_CLEAR);
+            this.g.drawRegion(clearImage, 0, 0, 16, 16, 0, ICON_X - 18, 0, 0);
         }
     }
 }

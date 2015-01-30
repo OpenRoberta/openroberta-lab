@@ -10,6 +10,8 @@ import java.net.URL;
 
 import lejos.hardware.Sounds;
 import lejos.hardware.ev3.LocalEV3;
+import lejos.hardware.lcd.TextLCD;
+import lejos.utility.Delay;
 
 import org.json.JSONObject;
 
@@ -136,8 +138,8 @@ public class ORApushCmd implements Runnable {
                         LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
                         break;
                     case CMD_DOWNLOAD:
-                        String programName = this.oraDownloader.downloadProgram(this.brickData);
                         if ( GraphicStartup.getUserprogram() == null ) {
+                            String programName = this.oraDownloader.downloadProgram(this.brickData);
                             this.oraLauncher.runProgram(programName);
                         }
                         break;
@@ -148,6 +150,18 @@ public class ORApushCmd implements Runnable {
                         break;
                 }
             } catch ( IOException ioe ) {
+                if ( ORAhandler.isRegistered() == true ) {
+                    LocalEV3.get().getAudio().systemSound(Sounds.DESCENDING);
+                    GraphicStartup.menu.suspend();
+                    TextLCD lcd = LocalEV3.get().getTextLCD();
+                    lcd.drawString(" Open Roberta Lab", 0, 2);
+                    lcd.drawString(" connection lost!", 0, 3);
+                    lcd.drawString(" (press any key)", 0, 5);
+                    LocalEV3.get().getKeys().waitForAnyPress();
+                    Delay.msDelay(1000);
+                    GraphicStartup.menu.resume();
+                    GraphicStartup.redrawIPs();
+                }
                 ORAhandler.setRegistered(false);
                 ORAhandler.setConnectionError(true);
                 break;

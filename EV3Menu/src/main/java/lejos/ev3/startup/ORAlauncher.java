@@ -39,23 +39,13 @@ public class ORAlauncher {
      */
     public void runProgram(String programName) {
         File robertalabFile = new File(ORAlauncher.PROGRAMS_DIRECTORY, programName);
-        System.out.println("run: " + CMD_ORA_RUN + robertalabFile.getPath());
+        System.out.println("ORA executing: " + CMD_ORA_RUN + robertalabFile.getPath());
         GraphicStartup.menu.suspend();
         exec(CMD_ORA_RUN + robertalabFile.getPath(), ORAlauncher.PROGRAMS_DIRECTORY);
         Delay.msDelay(1000);
         GraphicStartup.menu.suspend(); // debug screen when process is killed
         GraphicStartup.menu.resume();
-        redrawIPs();
-    }
-
-    /**
-     * Manually redraw IP addresses on the screen. Used for restoring the screen after user process is terminated.
-     */
-    private void redrawIPs() {
-        int row = 1;
-        for ( String ip : GraphicStartup.ips ) {
-            LocalEV3.get().getTextLCD().drawString(ip, 8 - ip.length() / 2, row++);
-        }
+        GraphicStartup.redrawIPs();
     }
 
     /**

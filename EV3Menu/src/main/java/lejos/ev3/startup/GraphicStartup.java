@@ -1484,8 +1484,8 @@ public class GraphicStartup implements Menu {
                 }
             }
             String token = new ORAtokenGenerator().generateToken();
-            String ip = "mp-devel.iais.fraunhofer.de:1999";
-            //String ip = getIPAddress();
+            //String ip = "mp-devel.iais.fraunhofer.de:1999";
+            String ip = getIPAddress();
             // String ip = 193.175.162.161:80;
             if ( ip.equals("none") ) {
                 return;
@@ -1500,8 +1500,18 @@ public class GraphicStartup implements Menu {
 
             while ( ORAhandler.isRegistered() == false ) {
                 int id = Button.waitForAnyEvent(500);
-                if ( id == Button.ID_ESCAPE || ORAhandler.hasConnectionError() ) {
+                if ( ORAhandler.hasConnectionError() ) {
                     oraHandler.disconnect();
+                    newScreen(" Robertalab");
+                    lcd.drawString(" Can not connect", 0, 2);
+                    lcd.drawString(" to server! :-(", 0, 3);
+                    lcd.drawString("Hint: Check Wifi?", 0, 5);
+                    lcd.drawString(" (Press any key)", 0, 7);
+                    LocalEV3.get().getAudio().systemSound(Sounds.BEEP);
+                    LocalEV3.get().getKeys().waitForAnyPress();
+                    Delay.msDelay(1000);
+                    return;
+                } else if ( id == Button.ID_ESCAPE ) {
                     newScreen(" Robertalab");
                     lcd.drawString("    Canceled!", 0, 3);
                     LocalEV3.get().getAudio().systemSound(Sounds.BEEP);
@@ -1510,7 +1520,7 @@ public class GraphicStartup implements Menu {
                 }
             }
             newScreen(" Robertalab");
-            lcd.drawString("    Success!", 0, 3);
+            lcd.drawString("     Success!", 0, 3);
             LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
             Delay.msDelay(2000);
         } else {
@@ -1546,6 +1556,18 @@ public class GraphicStartup implements Menu {
             return sb.toString();
         } else {
             return null;
+        }
+    }
+
+    /**
+     * Manually redraw IP addresses on the screen. Used for restoring the screen after user process is terminated.
+     */
+    public static void redrawIPs() {
+        int row = 1;
+        for ( String ip : GraphicStartup.ips ) {
+            lcd.drawString("                  ", 0, row);
+            lcd.drawString(ip, 8 - ip.length() / 2, row);
+            row++;
         }
     }
 
@@ -1623,7 +1645,9 @@ public class GraphicStartup implements Menu {
             } catch ( FileNotFoundException e ) {
                 // ok
             } finally {
-                pw.close();
+                if ( pw != null ) {
+                    pw.close();
+                }
             }
         }
 
@@ -1650,7 +1674,9 @@ public class GraphicStartup implements Menu {
                 } catch ( FileNotFoundException e ) {
                     return "";
                 } finally {
-                    pw2.close();
+                    if ( pw2 != null ) {
+                        pw2.close();
+                    }
                 }
                 return temp;
             }

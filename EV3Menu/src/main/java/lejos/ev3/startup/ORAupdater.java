@@ -21,6 +21,7 @@ public class ORAupdater {
 
     /**
      * Creates an object for updating the brick.
+     * 
      * @param serverBaseIP The server's base IP like 192.168.56.1:1999.
      */
     public ORAupdater(String serverBaseIP) {
@@ -110,7 +111,10 @@ public class ORAupdater {
     }
 
     /**
+     * Download a file from a specific REST service.
+     * 
      * @param url
+     * @param directory
      */
     private void downloadFile(URL url, File directory) {
         InputStream is = null;
