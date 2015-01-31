@@ -117,6 +117,7 @@ function logout() {
             $('#programNameSave').val('');
             $('#configurationNameSave').val('');
             setHeadNavigationMenuState('logout');
+            Blockly.getMainWorkspace().saveButton.disable();
             setRobotState(response);
             displayMessage(response.message, "TOAST");
             $(".ui-dialog-content").dialog("close"); // close all opened popups
@@ -149,7 +150,7 @@ function updateFirmware() {
  * @param {response}
  *            toolbox
  */
-function injectBlockly(toolbox) {
+function injectBlockly(toolbox, opt_programBlocks) {
     response(toolbox);
     if (toolbox.rc === 'ok') {
         $('#blocklyDiv').html('');
@@ -161,17 +162,18 @@ function injectBlockly(toolbox) {
             //check : true,
             start : true
         });
-        initProgramEnvironment();
+        initProgramEnvironment(opt_programBlocks);
         setRobotState(toolbox);
     }
 }
 
-function initProgramEnvironment() {
+function initProgramEnvironment(opt_programBlocks) {
     Blockly.getMainWorkspace().clear();
     // should this come from the server?
     var text = "<block_set xmlns='http: // www.w3.org/1999/xhtml'>" + "<instance x='100' y='50'>" + "<block type='robControls_start'>" + "</block>"
             + "</instance>" + "</block_set>";
-    var xml = Blockly.Xml.textToDom(text);
+    var program = opt_programBlocks || text;
+    var xml = Blockly.Xml.textToDom(program);
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
 }
 
@@ -289,29 +291,30 @@ function responseAndRefreshConfigurationList(result) {
  * Save program to server
  */
 function saveToServer() {
-    var progName = $('#programNameSave').val();
+    var progName = $('#programNameSave').val().trim();
     if (progName != '') {
         setProgram(progName);
         $('#menuSaveProg').parent().removeClass('login');
         $('#menuSaveProg').parent().removeClass('disabled');
-    }
-    if (userState.program) {
-        var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-        var xml_text = Blockly.Xml.domToText(xml);
-        userState.programSaved = true;
-        LOG.info('save program ' + userState.program + ' login: ' + userState.id);
-        $(".ui-dialog-content").dialog("close"); // close all opened popups
-        return COMM.json("/program", {
-            "cmd" : "saveP",
-            "name" : userState.program,
-            "program" : xml_text
-        }, function(result) {
-            if (result.rc === 'ok') {
-                displayMessage(result.message, "TOAST");
-            } else {
-                displayMessage(result.message, "POPUP");
-            }
-        });
+        Blockly.getMainWorkspace().saveButton.enable();
+        if (userState.program) {
+            var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+            var xml_text = Blockly.Xml.domToText(xml);
+            userState.programSaved = true;
+            LOG.info('save program ' + userState.program + ' login: ' + userState.id);
+            $(".ui-dialog-content").dialog("close"); // close all opened popups
+            return COMM.json("/program", {
+                "cmd" : "saveP",
+                "name" : userState.program,
+                "program" : xml_text
+            }, function(result) {
+                if (result.rc === 'ok') {
+                    displayMessage(result.message, "TOAST");
+                } else {
+                    displayMessage(result.message, "POPUP");
+                }
+            });
+        }
     } else {
         displayMessage("MESSAGE_EMPTY_NAME", "POPUP");
     }
@@ -326,6 +329,7 @@ function saveConfigurationToServer() {
         setConfiguration(confName);
         $('#menuSaveConfig').parent().removeClass('login');
         $('#menuSaveConfig').parent().removeClass('disabled');
+        document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().saveButton.enable();
     }
     if (userState.configuration) {
         userState.configurationSaved = true;
@@ -375,7 +379,6 @@ function showProgram(result, load, name) {
         }
         Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
         LOG.info('show program ' + userState.program + ' signed in: ' + userState.id);
-        bricklyActive = false;
     }
 };
 
@@ -396,7 +399,6 @@ function showConfiguration(result, load, name) {
         setConfiguration(name);
         document.getElementById('bricklyFrame').contentWindow.showConfiguration(load, result.data);
         LOG.info('show configuration ' + userState.configuration + ' signed in: ' + userState.id);
-        bricklyActive = true;
     }
 };
 
@@ -751,11 +753,17 @@ function switchToBlockly() {
     $('#tabs').css('display', 'inline');
     $('#bricklyFrame').css('display', 'none');
     $('#tabBlockly').click();
+    // do this twice :-( to make sure all metrics are calculated correctly.
+    Blockly.getMainWorkspace().render();
+    Blockly.getMainWorkspace().render();
+    bricklyActive = false;
 }
 
 function switchToBrickly() {
     $('#tabs').css('display', 'none');
     $('#bricklyFrame').css('display', 'inline');
+    $('#tabBrickly').click();
+    bricklyActive = true;
 }
 
 /**
@@ -820,6 +828,9 @@ function initHeadNavigation() {
             displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP");
         } else if (domId === 'menuNewProg') { //  Submenu 'Program'
             setProgram("meinProgramm");
+            initProgramEnvironment();
+            $('#menuSaveProg').parent().addClass('disabled');
+            Blockly.getMainWorkspace().saveButton.disable();
             $('#tabProgram').click();
         } else if (domId === 'menuListProg') { //  Submenu 'Program'
             deactivateHeadMenu();
@@ -844,10 +855,13 @@ function initHeadNavigation() {
             displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP");
         } else if (domId === 'menuNewConfig') { //  Submenu 'Configuration'
             setConfiguration("Standardkonfiguration");
-            switchToBrickly();
+            document.getElementById('bricklyFrame').contentWindow.initConfigurationEnvironment();
+            $('#menuSaveConfig').parent().addClass('disabled');
+            document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().saveButton.disable();
         } else if (domId === 'menuListConfig') { //  Submenu 'Configuration'
             deactivateHeadMenu();
-            switchToBlockly();
+            $('#tabs').css('display', 'inline');
+            $('#bricklyFrame').css('display', 'none');
             $('#tabConfigurationListing').click();
         } else if (domId === 'menuSaveConfig') { //  Submenu 'Configuration'
             saveConfigurationToServer();
@@ -896,7 +910,9 @@ function initHeadNavigation() {
             $("#version").text(userState.version);
             $("#show-about").dialog("open");
         } else if (domId === 'menuLogging') { // Submenu 'Help'
-            switchToBlockly();
+            deactivateHeadMenu();
+            $('#tabs').css('display', 'inline');
+            $('#bricklyFrame').css('display', 'none');
             $('#tabLogging').click();
         } else if (domId === 'menuLogin') { // Submenu 'Login'
             $("#login-user").dialog("open");
@@ -1073,13 +1089,20 @@ function initTabs() {
         $("#share-configuration").dialog("open");
     }, 'share configuration');
 
-    $('.backButton').onWrap('click', function() {
+    $('#backConfiguration').onWrap('click', function() {
+        activateHeadMenu();
+        switchToBrickly();
+    });
+    $('#backProgram').onWrap('click', function() {
+        activateHeadMenu();
+        switchToBlockly();
+    });
+    $('#backLogging').onWrap('click', function() {
         activateHeadMenu();
         if (bricklyActive) {
             switchToBrickly();
         } else {
-            $('#tabBlockly').click();
-            switchLanguage(userState.language, true);
+            switchToBlockly();
         }
     });
 }
@@ -1218,20 +1241,32 @@ function switchLanguage(langCode, forceSwitch) {
         $("#setLang" + langCode + "").removeClass('smallFlag');
         $("#setLang" + langCode + "").addClass('bigFlag');
         userState.language = langCode;
-        var future = $.getScript('blockly/msg/js/' + langCode.toLowerCase() + '.js');
+        var url = 'blockly/msg/js/' + langCode.toLowerCase() + '.js';
+        var future = $.getScript(url);
         future.then(switchLanguageInBlockly);
+        if (Blockly.mainWorkspace !== null) {
+            document.getElementById('bricklyFrame').contentWindow.switchLanguage(url);
+        }
     }
 }
 
 /**
  * Switch blockly to another language
  */
-function switchLanguageInBlockly() {
+function switchLanguageInBlockly(url) {
     var future = translate();
+    var programBlocks = null;
+    if (Blockly.mainWorkspace !== null) {
+        var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+        programBlocks = Blockly.Xml.domToText(xmlProgram);
+    }
+    // translate programming tab
     COMM.json("/admin", {
         "cmd" : "loadT",
         "name" : userState.toolbox
-    }, injectBlockly);
+    }, function(result) {
+        injectBlockly(result, programBlocks);
+    });
 }
 
 /**

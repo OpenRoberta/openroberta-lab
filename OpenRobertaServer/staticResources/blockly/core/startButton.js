@@ -29,7 +29,8 @@ goog.inherits(Blockly.StartButton, Blockly.Button);
 
 /** @inheritDoc */
 Blockly.StartButton.prototype.onMouseUp_ = function(e) {
-    startProgram();
+    LOG.info('run program from blockly button');
+    runOnBrick();
 };
 
 /** @inheritDoc */

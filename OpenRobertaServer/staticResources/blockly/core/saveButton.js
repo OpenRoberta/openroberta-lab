@@ -27,7 +27,7 @@ goog.inherits(Blockly.SaveButton, Blockly.Button);
 
 /** @inheritDoc */
 Blockly.SaveButton.prototype.onMouseUp_ = function(e) {
-    // TODO better functionname, popup? ...
+    LOG.info('save program from blockly button');
     saveToServer();
 };
 

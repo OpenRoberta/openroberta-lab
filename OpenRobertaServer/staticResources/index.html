@@ -19,127 +19,128 @@ limitations under the License.
 -->
 <head>
 <meta charset="utf-8">
-<title>Open Roberta Lab</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Roberta Lab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<script type="text/javascript" src="/common/jquery/jquery-2.0.3.js" charset="utf-8"></script>
-<script type="text/javascript" src="/common/ui/jquery-ui.js" charset="utf-8"></script>
-<script type="text/javascript" src="/common/basics.js" charset="utf-8"></script>
-<script type="text/javascript" src="/common/jquery.dataTables.min.js" charset="utf-8"></script>
-<script type="text/javascript" src="/common/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/roberta/roberta.js"></script>
+        <script type="text/javascript" src="/common/jquery/jquery-2.0.3.js" charset="utf-8"></script>
+        <script type="text/javascript" src="/common/ui/jquery-ui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="/common/basics.js" charset="utf-8"></script>
+        <script type="text/javascript" src="/common/jquery.dataTables.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="/common/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/roberta/roberta.js"></script>
 
-<script type="text/javascript" src="/blockly/blockly_compressed.js"></script>
-<script type="text/javascript" src="/blockly/blocks_compressed.js"></script>
-<script type="text/javascript" src="/blockly/msg/js/de.js"></script>
+        <script type="text/javascript" src="/blockly/blockly_compressed.js"></script>
+        <script type="text/javascript" src="/blockly/blocks_compressed.js"></script>
 
-<link rel="stylesheet" type="text/css" href="/common/bootstrap/bootstrap-3.3.1-dist/dist/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="/common/jquery.dataTables.min.css"></link>
-<link rel="stylesheet" type="text/css" href="/css/roberta.css"></link>
-<link rel="stylesheet" type="text/css" href="/css/flaticons/flaticon.css" />
+        <link rel="stylesheet" type="text/css" href="/common/bootstrap/bootstrap-3.3.1-dist/dist/css/bootstrap.min.css">
+            <link rel="stylesheet" type="text/css" href="/common/jquery.dataTables.min.css"></link>
+            <link rel="stylesheet" type="text/css" href="/css/roberta.css"></link>
+            <link rel="stylesheet" type="text/css" href="/css/flaticons/flaticon.css" />
 
-<!-- Feedback badge, reports user feedback to issue tracker. --> 
-<script type="text/javascript" src="http://jira.open-roberta.org/s/en_USy3ler1/786/12/1.1.2/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?collectorId=2f42fc3c"></script>
+            <!-- Feedback badge, reports user feedback to issue tracker. -->
+            <script type="text/javascript"
+                src="http://jira.open-roberta.org/s/en_USy3ler1/786/12/1.1.2/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?collectorId=2f42fc3c"
+            ></script>
 
-<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-<title>Open Roberta Lab</title>
+            <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+            <title>Open Roberta Lab</title>
 </head>
 
 <body>
 
-<!-- ################## HEAD NAVIGATION ################## -->
+    <!-- ################## HEAD NAVIGATION ################## -->
 
     <nav role="navigation" class="navbar navbar-default navbar-fixed-top" id="head-navigation">
-        <ul class="nav nav-pills">
-            <!-- Menu Navigation -->
-            <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="head-navi-icon-overview" class="head-navi-icons"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#" id="menuTabProgram" lkey="Blockly.Msg.TAB_PROGRAM">Program</a></li>
-                    <li><a href="#" id="menuTabConfiguration" lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</a></li>
-                </ul>
-            </li>
-            <!-- Menu Program -->
-            <li class="dropdown" id="head-navigation-program-edit"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="head-navi-icon-program" class="head-navi-icons"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#" id="menuRunProg" class="flaticon-botton2" lkey="Blockly.Msg.MENU_START">starten</a></li>
-                    <li class="login logout"><a href="#" id="menuCheckProg" class="flaticon-tick" lkey="Blockly.Msg.MENU_CHECK">checken</a></li>
-                    <li><a href="#" id="menuNewProg" class="flaticon-add10" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
-                    <li class="logout"><a href="#" id="menuListProg" class="flaticon-pencil1" lkey="Blockly.Msg.MENU_LIST">Liste ...</a></li>
-                    <li class="login logout"><a href="#" id="menuSaveProg" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
-                    <li class="logout"><a href="#" id="menuSaveAsProg" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE_AS">speichern unter ...</a></li>
-                    <li class="hidden"><a href="#" id="menuAttachProg" class="flaticon-th2" lkey="Blockly.Msg.MENU_ATTACH">anhängen ...</a></li>
-                    <li class="hidden"><a href="#" id="menuPropertiesProg" class="flaticon-information" lkey="Blockly.Msg.MENU_PROPERTIES">Eigenschaften</a></li>
-                    <li class="divider"></li>                    
-                    <li class="logout"><a href="#" id="menuToolboxBeginner" class="flaticon-spanner" lkey="Blockly.Msg.MENU_TOOLBOX_BEGINNER">Toolbox Anfänger</a></li>
-                    <li class="logout"><a href="#" id="menuToolboxExpert" class="flaticon-spanner" lkey="Blockly.Msg.MENU_TOOLBOX_EXPERT">Toolbox Experte</a></li>
-                </ul>
-            </li>
-            <!-- Menu Configuration -->
-            <li class="dropdown" id="head-navigation-configuration-edit"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="head-navi-icon-configuration" class="head-navi-icons"></span></a>
-                <ul class="dropdown-menu">
-                    <li class="login logout"><a href="#" id="menuCheckConfig" class="flaticon-tick" lkey="Blockly.Msg.MENU_CHECK">checken</a></li>
-                    <li><a href="#" id="menuNewConfig" class="flaticon-add10" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
-                    <li class="logout"><a href="#" id="menuListConfig" class="flaticon-pencil1" lkey="Blockly.Msg.MENU_LIST">Liste ... </a></li>
-                    <li class="login logout"><a href="#" id="menuSaveConfig" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
-                    <li class="logout"><a href="#" id="menuSaveAsConfig" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE_AS">speichern unter ...</a></li>
-                    <li class="hidden"><a href="#" id="menuPropertiesConfig" class="flaticon-information" lkey="Blockly.Msg.MENU_PROPERTIES">Eigenschaften ...</a></li>
-                </ul>
-            </li>
-            <!-- Menu Robot -->
-            <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="head-navi-icon-robot" class="head-navi-icons"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#" id="menuConnect" class="flaticon-botton2" lkey="Blockly.Msg.MENU_CONNECT">verbinden ...</a></li>
-                    <li><a href="#" id="menuFirmware" class="flaticon-botton2" lkey="Blockly.Msg.MENU_UPDATE_FIRMWARE">Firmware aktualisieren</a></li>
-                    <li><a href="#" id="menuRobotInfo" class="flaticon-botton2" lkey="Blockly.Msg.MENU_ROBOT_STATE_INFO">Roboterinformationen</a></li>
-                </ul>
-            </li>
-            <!-- Menu Help -->
-            <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="head-navi-icon-help" class="head-navi-icons"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#" id="menuFirstSteps" class="flaticon-lightbulb1" lkey="Blockly.Msg.MENU_FIRST_STEPS">Erste Schritte</a></li>
-                    <li><a href="#" id="menuStartProgramming" class="flaticon-lightbulb1" lkey="Blockly.Msg.MENU_START_PROGRAMMING">Programmieren</a></li>
-                    <li><a href="#" id="menuFaq" class="flaticon-lightbulb1" lkey="Blockly.Msg.MENU_FAQ">FAQ</a></li>
-                    <li><a href="#" id="menuStateInfo" class="flaticon-lightbulb1" lkey="Blockly.Msg.MENU_STATE_INFO">Statusinformationen</a></li>
-                    <li><a href="#" id="menuAbout" class="flaticon-lightbulb1" lkey="Blockly.Msg.MENU_ABOUT">über ...</a></li>
-                    <li><a href="#" id="menuLogging" class="flaticon-spanner" lkey="Blockly.Msg.MENU_LOGGING">Logging</a></li>
-                </ul>
-            </li>
-            <!-- Menu User -->
-            <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="head-navi-icon-user" class="head-navi-icons"></span></a>
-                <ul class="dropdown-menu">
-                    <li class="login"><a href="#" id="menuLogin" class="flaticon-user" lkey="Blockly.Msg.MENU_LOG_IN">anmelden ...</a></li>
-                    <li class="logout"><a href="#" id="menuLogout" class="flaticon-user2" lkey="Blockly.Msg.MENU_LOG_OUT">abmelden</a></li>
-                    <li><a href="#" id="menuNewUser" class="flaticon-add9" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
-                    <li class="hidden"><a href="#" id="menuChangeUser" class="flaticon-group1" lkey="Blockly.Msg.MENU_CHANGE">ändern ...</a></li>
-                    <li class="logout"><a href="#" id="menuDeleteUser" class="flaticon-user5" lkey="Blockly.Msg.MENU_DELETE_USER">Benutzer löschen ...</a></li>
-                </ul>
-            </li>
+    <ul class="nav nav-pills">
+        <!-- Menu Navigation -->
+        <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="head-navi-icon-overview" class="head-navi-icons"></span></a>
+            <ul class="dropdown-menu">
+                <li><a href="#" id="menuTabProgram" lkey="Blockly.Msg.TAB_PROGRAM">Program</a></li>
+                <li><a href="#" id="menuTabConfiguration" lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</a></li>
+            </ul></li>
+        <!-- Menu Program -->
+        <li class="dropdown" id="head-navigation-program-edit"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span
+                id="head-navi-icon-program" class="head-navi-icons"
+            ></span></a>
+            <ul class="dropdown-menu">
+                <li><a href="#" id="menuRunProg" class="flaticon-botton2" lkey="Blockly.Msg.MENU_START">starten</a></li>
+                <li class="login logout"><a href="#" id="menuCheckProg" class="flaticon-tick" lkey="Blockly.Msg.MENU_CHECK">checken</a></li>
+                <li><a href="#" id="menuNewProg" class="flaticon-add10" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
+                <li class="logout"><a href="#" id="menuListProg" class="flaticon-pencil1" lkey="Blockly.Msg.MENU_LIST">Liste ...</a></li>
+                <li class="login logout"><a href="#" id="menuSaveProg" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
+                <li class="logout"><a href="#" id="menuSaveAsProg" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE_AS">speichern unter ...</a></li>
+                <li class="hidden"><a href="#" id="menuAttachProg" class="flaticon-th2" lkey="Blockly.Msg.MENU_ATTACH">anhängen ...</a></li>
+                <li class="hidden"><a href="#" id="menuPropertiesProg" class="flaticon-information" lkey="Blockly.Msg.MENU_PROPERTIES">Eigenschaften</a></li>
+                <li class="divider"></li>
+                <li class="logout"><a href="#" id="menuToolboxBeginner" class="flaticon-spanner" lkey="Blockly.Msg.MENU_TOOLBOX_BEGINNER">Toolbox
+                        Anfänger</a></li>
+                <li class="logout"><a href="#" id="menuToolboxExpert" class="flaticon-spanner" lkey="Blockly.Msg.MENU_TOOLBOX_EXPERT">Toolbox Experte</a></li>
+            </ul></li>
+        <!-- Menu Configuration -->
+        <li class="dropdown" id="head-navigation-configuration-edit"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span
+                id="head-navi-icon-configuration" class="head-navi-icons"
+            ></span></a>
+            <ul class="dropdown-menu">
+                <li class="login logout"><a href="#" id="menuCheckConfig" class="flaticon-tick" lkey="Blockly.Msg.MENU_CHECK">checken</a></li>
+                <li><a href="#" id="menuNewConfig" class="flaticon-add10" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
+                <li class="logout"><a href="#" id="menuListConfig" class="flaticon-pencil1" lkey="Blockly.Msg.MENU_LIST">Liste ... </a></li>
+                <li class="login logout"><a href="#" id="menuSaveConfig" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
+                <li class="logout"><a href="#" id="menuSaveAsConfig" class="flaticon-empty3" lkey="Blockly.Msg.MENU_SAVE_AS">speichern unter ...</a></li>
+                <li class="hidden"><a href="#" id="menuPropertiesConfig" class="flaticon-information" lkey="Blockly.Msg.MENU_PROPERTIES">Eigenschaften
+                        ...</a></li>
+            </ul></li>
+        <!-- Menu Robot -->
+        <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="head-navi-icon-robot" class="head-navi-icons"></span></a>
+            <ul class="dropdown-menu">
+                <li><a href="#" id="menuConnect" class="flaticon-botton2" lkey="Blockly.Msg.MENU_CONNECT">verbinden ...</a></li>
+                <li><a href="#" id="menuFirmware" class="flaticon-botton2" lkey="Blockly.Msg.MENU_UPDATE_FIRMWARE">Firmware aktualisieren</a></li>
+                <li><a href="#" id="menuRobotInfo" class="flaticon-botton2" lkey="Blockly.Msg.MENU_ROBOT_STATE_INFO">Roboterinformationen</a></li>
+            </ul></li>
+        <!-- Menu Help -->
+        <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="head-navi-icon-help" class="head-navi-icons"></span></a>
+            <ul class="dropdown-menu">
+                <li><a href="#" id="menuFirstSteps" class="flaticon-lightbulb1" lkey="Blockly.Msg.MENU_FIRST_STEPS">Erste Schritte</a></li>
+                <li><a href="#" id="menuStartProgramming" class="flaticon-lightbulb1" lkey="Blockly.Msg.MENU_START_PROGRAMMING">Programmieren</a></li>
+                <li><a href="#" id="menuFaq" class="flaticon-lightbulb1" lkey="Blockly.Msg.MENU_FAQ">FAQ</a></li>
+                <li><a href="#" id="menuStateInfo" class="flaticon-lightbulb1" lkey="Blockly.Msg.MENU_STATE_INFO">Statusinformationen</a></li>
+                <li><a href="#" id="menuAbout" class="flaticon-lightbulb1" lkey="Blockly.Msg.MENU_ABOUT">über ...</a></li>
+                <li><a href="#" id="menuLogging" class="flaticon-spanner" lkey="Blockly.Msg.MENU_LOGGING">Logging</a></li>
+            </ul></li>
+        <!-- Menu User -->
+        <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="head-navi-icon-user" class="head-navi-icons"></span></a>
+            <ul class="dropdown-menu">
+                <li class="login"><a href="#" id="menuLogin" class="flaticon-user" lkey="Blockly.Msg.MENU_LOG_IN">anmelden ...</a></li>
+                <li class="logout"><a href="#" id="menuLogout" class="flaticon-user2" lkey="Blockly.Msg.MENU_LOG_OUT">abmelden</a></li>
+                <li><a href="#" id="menuNewUser" class="flaticon-add9" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
+                <li class="hidden"><a href="#" id="menuChangeUser" class="flaticon-group1" lkey="Blockly.Msg.MENU_CHANGE">ändern ...</a></li>
+                <li class="logout"><a href="#" id="menuDeleteUser" class="flaticon-user5" lkey="Blockly.Msg.MENU_DELETE_USER">Benutzer löschen ...</a></li>
+            </ul></li>
 
-            <!-- Toasts -->
-            <li class="panel-body" id="toastContainer">
-                <div id="toast">
-                </div>
-            </li>
+        <!-- Toasts -->
+        <li class="panel-body" id="toastContainer">
+            <div id="toast"></div>
+        </li>
 
-            <!-- Roberta-Logo -->
-            <li id="logo"></li>
+        <!-- Roberta-Logo -->
+        <li id="logo"></li>
 
-            <!-- Beta-Version-Logo -->
-            <li id="beta"></li>
+        <!-- Beta-Version-Logo -->
+        <li id="beta"></li>
 
-            <!-- States -->
-            <li id="states">
-                <span id="iconDisplayLogin" class="flaticon-user"></span>
-                <span id="iconDisplayRobotState" class="flaticon-botton2"></span><br/>
-                <span id="setLangDe" class="flag bigFlag" title="Deutsch" lkey="Blockly.Msg.HINT_LANGUAGE_GERMAN"></span> <span id="setLangEn" class="flag smallFlag" title="Englisch" lkey="Blockly.Msg.HINT_LANGUAGE_ENGLISH"></span>
-            </li>
-        </ul>
+        <!-- States -->
+        <li id="states"><span id="iconDisplayLogin" class="flaticon-user"></span> <span id="iconDisplayRobotState" class="flaticon-botton2"></span><br />
+            <span id="setLangDe" class="flag bigFlag" title="Deutsch" lkey="Blockly.Msg.HINT_LANGUAGE_GERMAN"></span> <span id="setLangEn"
+            class="flag smallFlag" title="Englisch" lkey="Blockly.Msg.HINT_LANGUAGE_ENGLISH"
+        ></span></li>
+    </ul>
 
-        <!-- Head-navigation-tabs -->
-        <ul class="nav nav-pills" id="head-navigation-tabs">
-            <li><a href="#" id="tabProgram"><span lkey="Blockly.Msg.TAB_PROGRAM" class="menuTab">Program</span>&nbsp;<span id="tabProgramName"></span></a></li>
-            <li><a href="#" id="tabConfiguration"><span lkey="Blockly.Msg.TAB_CONFIGURATION" class="menuTab">Configuration</span>&nbsp;<span id="tabConfigurationName"></span></a></li>
-        </ul>
+    <!-- Head-navigation-tabs -->
+    <ul class="nav nav-pills" id="head-navigation-tabs">
+        <li><a href="#" id="tabProgram"><span lkey="Blockly.Msg.TAB_PROGRAM" class="menuTab">Program</span>&nbsp;<span id="tabProgramName"></span></a></li>
+        <li><a href="#" id="tabConfiguration"><span lkey="Blockly.Msg.TAB_CONFIGURATION" class="menuTab">Configuration</span>&nbsp;<span
+                id="tabConfigurationName"
+            ></span></a></li>
+    </ul>
     </nav>
 
     <!-- ################## END HEAD NAVIGATION ################## -->
@@ -147,109 +148,106 @@ limitations under the License.
     <!-- ################## POPUPS ################## -->
 
     <div class="jquerypopup" id="login-user" title="Anmeldung">
-        <label for="accountNameS" lkey="Blockly.Msg.POPUP_USERNAME"></label>
-        <input id="accountNameS" class='input' type="text" value="" />
-        <label for="pass1S" lkey="Blockly.Msg.POPUP_PASSWORD"></label>
-        <input id="pass1S" class='input' type="password" value="" /><br/>
-        <input id="doLogin" class='submit' type="submit" value="OK" />
-        <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
+        <label for="accountNameS" lkey="Blockly.Msg.POPUP_USERNAME"></label> <input id="accountNameS" class='input' type="text" value="" /> <label for="pass1S"
+            lkey="Blockly.Msg.POPUP_PASSWORD"
+        ></label> <input id="pass1S" class='input' type="password" value="" /><br /> <input id="doLogin" class='submit' type="submit" value="OK" /> <input
+            class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"
+        />
     </div>
 
     <div class="jquerypopup" id="register-user" title="Benutzer registrieren">
-        <label for="accountName" lkey="Blockly.Msg.POPUP_USERNAME">Benutzername</label>
-        <input id="accountName" class='input' type="text" value="" />
-        <label for="pass1" lkey="Blockly.Msg.POPUP_PASSWORD">Passwort</label>
-        <input id="pass1" class='input' type="password" value="" />
-        <label for="pass2" lkey="Blockly.Msg.POPUP_REPEAT_PASSWORD">Passwort wiederholen</label>
-        <input id="pass2" class='input' type="password" value="" />
-        <label for="userName" lkey="Blockly.Msg.POPUP_NAME">Name</label>
-        <input id="userName" class='input' type="text" value="" />
-        <label for="userEmail" lkey="Blockly.Msg.POPUP_EMAIL">E-Mail</label>
-        <input id="userEmail" class='input' type="text" value="" /><br/>
-        <input id="saveUser" class='submit' type="submit" lkey="Blockly.Msg.POPUP_REGISTER_USER" value="OK" />
-        <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
+        <label for="accountName" lkey="Blockly.Msg.POPUP_USERNAME">Benutzername</label> <input id="accountName" class='input' type="text" value="" /> <label
+            for="pass1" lkey="Blockly.Msg.POPUP_PASSWORD"
+        >Passwort</label> <input id="pass1" class='input' type="password" value="" /> <label for="pass2" lkey="Blockly.Msg.POPUP_REPEAT_PASSWORD">Passwort
+            wiederholen</label> <input id="pass2" class='input' type="password" value="" /> <label for="userName" lkey="Blockly.Msg.POPUP_NAME">Name</label> <input
+            id="userName" class='input' type="text" value=""
+        /> <label for="userEmail" lkey="Blockly.Msg.POPUP_EMAIL">E-Mail</label> <input id="userEmail" class='input' type="text" value="" /><br /> <input
+            id="saveUser" class='submit' type="submit" lkey="Blockly.Msg.POPUP_REGISTER_USER" value="OK"
+        /> <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
     </div>
 
     <div class="jquerypopup" id="delete-user" title="Benutzer löschen">
-        <label for="pass1D" lkey="Blockly.Msg.POPUP_PASSWORD"></label>
-        <input id="pass1D" class='input' type="password" value="" /><br/>
-        <input id="deleteUser" class='submit' type="submit" lkey="Blockly.Msg.POPUP_DELETE_USER" value="OK" />
-        <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
+        <label for="pass1D" lkey="Blockly.Msg.POPUP_PASSWORD"></label> <input id="pass1D" class='input' type="password" value="" /><br /> <input
+            id="deleteUser" class='submit' type="submit" lkey="Blockly.Msg.POPUP_DELETE_USER" value="OK"
+        /> <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
     </div>
 
     <div class="jquerypopup program" id="attach-program" title="Programm hinzufügen">
-        <label for="programNameAttach" lkey="Blockly.Msg.POPUP_NAME">Name</label>
-        <input id="programNameAttach" class='input programName' type="text" value="" /><br/>
-        <input id="attachProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_ATTACH_PROGRAM" value="OK" />
-        <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
+        <label for="programNameAttach" lkey="Blockly.Msg.POPUP_NAME">Name</label> <input id="programNameAttach" class='input programName' type="text" value="" /><br />
+        <input id="attachProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_ATTACH_PROGRAM" value="OK" /> <input class='cancelPopup submit'
+            type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"
+        />
     </div>
 
     <div class="jquerypopup program" id="save-program" title="Programm speichern">
-        <label for="programNameSave" lkey="Blockly.Msg.POPUP_NAME">Name</label>
-        <input id="programNameSave" class='input programName' type="text" value="" /><br/>
-        <input id="saveProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SAVE_PROGRAM" value="OK" />
-        <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
+        <label for="programNameSave" lkey="Blockly.Msg.POPUP_NAME">Name</label> <input id="programNameSave" class='input programName' type="text" value="" /><br />
+        <input id="saveProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SAVE_PROGRAM" value="OK" /> <input class='cancelPopup submit'
+            type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"
+        />
     </div>
 
     <div class="jquerypopup program" id="share-program" title="Programm teilen mit">
-        <label for="programShareWith" lkey="Blockly.Msg.POPUP_SHARE_WITH">Teilen mit</label>
-        <input id="programShareWith" class='input programShareWithName' type="text" value="" /><br/>
-        <input id="shareProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SHARE" value="OK" />
-        <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
+        <label for="programShareWith" lkey="Blockly.Msg.POPUP_SHARE_WITH">Teilen mit</label> <input id="programShareWith" class='input programShareWithName'
+            type="text" value=""
+        /><br /> <input id="shareProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SHARE" value="OK" /> <input class='cancelPopup submit'
+            type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"
+        />
     </div>
 
     <div class="jquerypopup configuration" id="save-configuration" title="Konfiguration speichern">
-        <label for="configurationNameSave" lkey="Blockly.Msg.POPUP_NAME">Name</label>
-        <input id="configurationNameSave" class='input configurationName' type="text" value="" /><br/>
-        <input id="saveConfiguration" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SAVE_CONFIGURATION" value="OK" />
-        <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
+        <label for="configurationNameSave" lkey="Blockly.Msg.POPUP_NAME">Name</label> <input id="configurationNameSave" class='input configurationName'
+            type="text" value=""
+        /><br /> <input id="saveConfiguration" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SAVE_CONFIGURATION" value="OK" /> <input
+            class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"
+        />
     </div>
 
     <div class="jquerypopup configuration" id="share-configuration" title="Konfiguration teilen mit">
-        <label for="configurationShareWith" lkey="Blockly.Msg.POPUP_SHARE_WITH">Teilen mit</label>
-        <input id="configurationShareWith" class='input configurationShareWithName' type="text" value="" /><br/>
-        <input id="shareConfiguration" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SHARE" value="OK" />
-        <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
+        <label for="configurationShareWith" lkey="Blockly.Msg.POPUP_SHARE_WITH">Teilen mit</label> <input id="configurationShareWith"
+            class='input configurationShareWithName' type="text" value=""
+        /><br /> <input id="shareConfiguration" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SHARE" value="OK" /> <input class='cancelPopup submit'
+            type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"
+        />
     </div>
 
     <div class="jquerypopup" id="set-token" title="Token setzen">
-        <label for="tokenValue" lkey="Blockly.Msg.POPUP_VALUE">Wert</label>
-        <input id="tokenValue" class='input' type="text" value="" /><br/>
-        <input id="setToken" class='submit' type="button" lkey="Blockly.Msg.POPUP_SET_TOKEN" value="OK" />
-        <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
+        <label for="tokenValue" lkey="Blockly.Msg.POPUP_VALUE">Wert</label> <input id="tokenValue" class='input' type="text" value="" /><br /> <input
+            id="setToken" class='submit' type="button" lkey="Blockly.Msg.POPUP_SET_TOKEN" value="OK"
+        /> <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
     </div>
 
     <div class="jquerypopup" id="show-about" title="Über ...">
-        <span>Fraunhofer Open Roberta</span><br/>
-        <span>Version&nbsp;</span><span id="version">???</span><br/>&nbsp;<br/>
-        <a href="http://www.iais.fraunhofer.de/impressum.html" target="_blank" class="publishingNotes De">Impressum</a>
-        <a href="http://www.iais.fraunhofer.de/index.php?id=4515&L=1" target="_blank" class="publishingNotes En">Publishing notes</a>
+        <span>Fraunhofer Open Roberta</span><br /> <span>Version&nbsp;</span><span id="version">???</span><br />&nbsp;<br /> <a
+            href="http://www.iais.fraunhofer.de/impressum.html" target="_blank" class="publishingNotes De"
+        >Impressum</a> <a href="http://www.iais.fraunhofer.de/index.php?id=4515&L=1" target="_blank" class="publishingNotes En">Publishing notes</a>
     </div>
 
     <div class="jquerypopup" id="show-state-info" title="Statusinformation">
-        <span lkey="Blockly.Msg.POPUP_USERNAME">Benutzer</span>:&nbsp;</span><span id="loggedIn">???</span><br/>
-        <span lkey="Blockly.Msg.TAB_PROGRAM">Programm</span>:&nbsp;<span id="programName">???</span><br/>
-        <span lkey="Blockly.Msg.TAB_CONFIGURATION">Konfiguration</span>:&nbsp;<span id="configurationName">???</span><br/>
-        <span lkey="Blockly.Msg.POPUP_TOOLBOX">Toolbox</span>:&nbsp;<span id="toolbox">???</span>
+        <span lkey="Blockly.Msg.POPUP_USERNAME">Benutzer</span>:&nbsp;</span><span id="loggedIn">???</span><br /> <span lkey="Blockly.Msg.TAB_PROGRAM">Programm</span>:&nbsp;<span
+            id="programName"
+        >???</span><br /> <span lkey="Blockly.Msg.TAB_CONFIGURATION">Konfiguration</span>:&nbsp;<span id="configurationName">???</span><br /> <span
+            lkey="Blockly.Msg.POPUP_TOOLBOX"
+        >Toolbox</span>:&nbsp;<span id="toolbox">???</span>
     </div>
 
     <div class="jquerypopup" id="show-robot-info" title="Zustand des Roboters">
-        <span lkey="Blockly.Msg.POPUP_ROBOT_NAME">Name</span>:&nbsp;</span><span id="robotName"></span><br/>
-        <span lkey="Blockly.Msg.POPUP_ROBOT_STATE">Status</span>:&nbsp;<span id="robotState"></span><br/>
-        <span lkey="Blockly.Msg.POPUP_ROBOT_BATTERY">Batteriespannung</span>:&nbsp;<span id="robotBattery"></span><br/>
-        <span lkey="Blockly.Msg.POPUP_ROBOT_WAIT">Wartezeit</span>:&nbsp;<span id="robotWait"></span>
+        <span lkey="Blockly.Msg.POPUP_ROBOT_NAME">Name</span>:&nbsp;</span><span id="robotName"></span><br /> <span lkey="Blockly.Msg.POPUP_ROBOT_STATE">Status</span>:&nbsp;<span
+            id="robotState"
+        ></span><br /> <span lkey="Blockly.Msg.POPUP_ROBOT_BATTERY">Batteriespannung</span>:&nbsp;<span id="robotBattery"></span><br /> <span
+            lkey="Blockly.Msg.POPUP_ROBOT_WAIT"
+        >Wartezeit</span>:&nbsp;<span id="robotWait"></span>
     </div>
 
     <div class="jquerypopup" id="show-message" title="Achtung">
         <span id="message" lkey="Blockly.Msg.POPUP_ATTENTION"></span>
     </div>
-    
+
     <div class="jquerypopup" id="show-startup-message" title="Achtung">
-        <span id="startupMessage" lkey="Blockly.Msg.POPUP_ATTENTION">O Genie, der Herr ehre Dein Ego</span><br/>&nbsp;<br/>
-        <input class='submit' id="hideStartupMessage" class='submit' type="button" lkey="Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE" value="Nicht mehr anzeigen" />
-        <input class='cancelPopup submit' type="submit" value="Cancel" />
+        <span id="startupMessage" lkey="Blockly.Msg.POPUP_ATTENTION">O Genie, der Herr ehre Dein Ego</span><br />&nbsp;<br /> <input class='submit'
+            id="hideStartupMessage" class='submit' type="button" lkey="Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE" value="Nicht mehr anzeigen"
+        /> <input class='cancelPopup submit' type="submit" value="Cancel" />
     </div>
-    
+
     <!-- ################## END POPUPS ################## -->
 
     <!-- ################## TABS ################## -->
@@ -267,7 +265,7 @@ limitations under the License.
             <div id="blockly">
                 <div id="blocklyDiv"></div>
             </div>
-            
+
             <div id="progListing">
                 <h2 lkey="Blockly.Msg.DATATABLE_PROGRAMS">Programme</h2>
                 <table id="programNameTable" class="tableSize">
@@ -277,13 +275,14 @@ limitations under the License.
                     </tfoot>
                 </table>
                 <div class="tableButtons">
-                    <input class="button buttonLoad" id="loadFromListing" lkey="Blockly.Msg.BUTTON_LOAD" type="submit" value="Laden" />
-                    <input class="button buttonDelete" id="deleteFromListing" lkey="Blockly.Msg.BUTTON_DO_DELETE" type="submit" value="Löschen" />
+                    <input class="button buttonLoad" id="loadFromListing" lkey="Blockly.Msg.BUTTON_LOAD" type="submit" value="Laden" /> <input
+                        class="button buttonDelete" id="deleteFromListing" lkey="Blockly.Msg.BUTTON_DO_DELETE" type="submit" value="Löschen"
+                    />
                     <!-- input class="button buttonShare" id="shareFromListing" lkey="Blockly.Msg.BUTTON_DO_SHARE" type="submit" value="Teilen" />  -->
-                    <input class="button backButton" type="submit" value="Cancel" />
+                    <input class="button backButton" id="backProgram" type="submit" value="Cancel" />
                 </div>
             </div>
-            
+
             <div id="confListing">
                 <h2 lkey="Blockly.Msg.DATATABLE_CONFIGURATIONS">Konfigurationen</h2>
                 <table id="configurationNameTable" class="tableSize">
@@ -293,25 +292,27 @@ limitations under the License.
                     </tfoot>
                 </table>
                 <div class="tableButtons">
-                    <input class="button buttonLoad" id="loadConfigurationFromListing" lkey="Blockly.Msg.BUTTON_LOAD" type="submit" value="Laden" />
-                    <input class="button buttonDelete" id="deleteConfigurationFromListing" lkey="Blockly.Msg.BUTTON_DO_DELETE" type="submit" value="Löschen" />
+                    <input class="button buttonLoad" id="loadConfigurationFromListing" lkey="Blockly.Msg.BUTTON_LOAD" type="submit" value="Laden" /> <input
+                        class="button buttonDelete" id="deleteConfigurationFromListing" lkey="Blockly.Msg.BUTTON_DO_DELETE" type="submit" value="Löschen"
+                    />
                     <!-- input class="button buttonShare" id="shareConfigurationFromListing" lkey="Blockly.Msg.BUTTON_DO_SHARE" type="submit" value="Teilen" /> -->
-                    <input class="button backButton" type="submit" value="Cancel" />
+                    <input class="button backButton" id="backConfiguration" type="submit" value="Cancel" />
                 </div>
             </div>
-            
+
             <div id="logging">
-                <br/>
+                <br />
                 <div class="tableButtons">
-                    <input id="clearLog" class="button" lkey="Blockly.Msg.BUTTON_EMPTY_LIST" type="submit" value="Liste leeren" />
-                    <input class="button backButton" type="submit" value="Cancel" />
+                    <input id="clearLog" class="button" lkey="Blockly.Msg.BUTTON_EMPTY_LIST" type="submit" value="Liste leeren" /> <input
+                        class="button backButton" id="backLogging" type="submit" value="Cancel"
+                    />
                 </div>
-                <br/>
+                <br />
                 <ol id="log" class="log" reversed>
                 </ol>
             </div>
         </div>
-        
+
         <iframe src="bricklyFrame.html" id="bricklyFrame"></iframe>
     </div>
 
