@@ -35,7 +35,7 @@ Blockly.MutatorMinus.prototype.createIcon = function() {
 };
 
 Blockly.MutatorMinus.prototype.iconClick_ = function(e) {
-    if (this.block_.isEditable()) {
+    if (this.block_.isEditable() && Blockly.Block.dragMode_ != 2) {
         this.block_.updateShape_(-1);
     }
 };

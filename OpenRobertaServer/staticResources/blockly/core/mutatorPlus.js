@@ -36,7 +36,7 @@ Blockly.MutatorPlus.prototype.createIcon = function() {
 };
 
 Blockly.MutatorPlus.prototype.iconClick_ = function(e) {
-    if (this.block_.isEditable()) {
+    if (this.block_.isEditable() && Blockly.Block.dragMode_ != 2) {
         this.block_.updateShape_(1);
     }
 };
