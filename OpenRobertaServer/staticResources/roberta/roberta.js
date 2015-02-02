@@ -621,7 +621,7 @@ function initProgramNameTable() {
                 "aaData" : [],
                 "aoColumns" : columns,
                 "aoColumnDefs" : [ { // format date fields
-                    "aTargets" : [ 3, 4 ], // indexes of columns to be formatted
+                    "aTargets" : [ 2, 3 ], // indexes of columns to be formatted
                     "sType" : "date",
                     "mRender" : function(data) {
                         return formatDate(data);
