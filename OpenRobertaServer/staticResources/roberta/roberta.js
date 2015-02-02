@@ -288,9 +288,9 @@ function responseAndRefreshConfigurationList(result) {
 }
 
 /**
- * Save program to server
+ * Save program with new name to server
  */
-function saveToServer() {
+function saveAsToServer() {
     var progName = $('#programNameSave').val().trim();
     if (progName != '') {
         setProgram(progName);
@@ -301,10 +301,10 @@ function saveToServer() {
             var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
             var xml_text = Blockly.Xml.domToText(xml);
             userState.programSaved = true;
-            LOG.info('save program ' + userState.program + ' login: ' + userState.id);
+            LOG.info('saveAs program ' + userState.program + ' login: ' + userState.id);
             $(".ui-dialog-content").dialog("close"); // close all opened popups
             return COMM.json("/program", {
-                "cmd" : "saveP",
+                "cmd" : "saveAsP",
                 "name" : userState.program,
                 "program" : xml_text
             }, function(result) {
@@ -321,9 +321,33 @@ function saveToServer() {
 }
 
 /**
- * Save configuration to server
+ * Save program to server
  */
-function saveConfigurationToServer() {
+function saveToServer() {
+    if (userState.program) {
+        var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+        var xml_text = Blockly.Xml.domToText(xml);
+        userState.programSaved = true;
+        LOG.info('save program ' + userState.program + ' login: ' + userState.id);
+        $(".ui-dialog-content").dialog("close"); // close all opened popups
+        return COMM.json("/program", {
+            "cmd" : "saveP",
+            "name" : userState.program,
+            "program" : xml_text
+        }, function(result) {
+            if (result.rc === 'ok') {
+                displayMessage(result.message, "TOAST");
+            } else {
+                displayMessage(result.message, "POPUP");
+            }
+        });
+    }
+}
+
+/**
+ * Save configuration with new name to server
+ */
+function saveAsConfigurationToServer() {
     var confName = $('#configurationNameSave').val();
     if (confName != '') {
         setConfiguration(confName);
@@ -331,6 +355,31 @@ function saveConfigurationToServer() {
         $('#menuSaveConfig').parent().removeClass('disabled');
         document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().saveButton.enable();
     }
+    if (userState.configuration) {
+        userState.configurationSaved = true;
+        $(".ui-dialog-content").dialog("close"); // close all opened popups
+        var xml_text = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
+        LOG.info('save brick configuration ' + userState.configuration);
+        COMM.json("/conf", {
+            "cmd" : "saveAsC",
+            "name" : userState.configuration,
+            "configuration" : xml_text
+        }, function(result) {
+            if (result.rc === 'ok') {
+                displayMessage(result.message, "TOAST");
+            } else {
+                displayMessage(result.message, "POPUP");
+            }
+        });
+    } else {
+        displayMessage("MESSAGE_EMPTY_NAME", "POPUP");
+    }
+}
+
+/**
+ * Save configuration to server
+ */
+function saveConfigurationToServer() {
     if (userState.configuration) {
         userState.configurationSaved = true;
         $(".ui-dialog-content").dialog("close"); // close all opened popups
@@ -347,8 +396,6 @@ function saveConfigurationToServer() {
                 displayMessage(result.message, "POPUP");
             }
         });
-    } else {
-        displayMessage("MESSAGE_EMPTY_NAME", "POPUP");
     }
 }
 
@@ -998,7 +1045,7 @@ function initPopups() {
     }, 'add the blocks');
 
     $('#saveProgram').onWrap('click', function() {
-        saveToServer();
+        saveAsToServer();
     }, 'save program');
 
     $('#shareProgram').onWrap('click', function() {
@@ -1006,7 +1053,7 @@ function initPopups() {
     }, 'share program');
 
     $('#saveConfiguration').onWrap('click', function() {
-        saveConfigurationToServer();
+        saveAsConfigurationToServer();
     }, 'save configuration');
 
     $('#shareConfiguration').onWrap('click', function() {
