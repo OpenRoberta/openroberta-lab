@@ -636,9 +636,46 @@ function beforeActivateTab(event, ui) {
 }
 
 /**
+ * Convert date into numeric value 
+ * 
+ * @param {d}
+ *        date in the form 'dd.mm.yyyy, hh:mm:ss'
+ */
+function parseDate(d) {
+    var dayPart = d.split(', ')[0];
+    var timePart = d.split(', ')[1];
+    var day = dayPart.split('.')[0];
+    var month = dayPart.split('.')[1] - 1;
+    var year = dayPart.split('.')[2];
+    var hour = timePart.split(':')[0];
+    var minute = timePart.split(':')[1];
+    var second = timePart.split(':')[2];
+    var date = new Date(year, month, day, hour, minute, second);
+    return date.getTime();
+}
+    
+/**
+ * Extend Jquery for sorting German date fields 
+ */
+jQuery.extend(
+        jQuery.fn.dataTableExt.oSort['date-de-asc']  = function(a, b) {
+            a = parseDate(a);
+            b = parseDate(b);
+            return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+        },
+        
+        jQuery.fn.dataTableExt.oSort['date-de-desc']  = function(a, b) {
+            a = parseDate(a);
+            b = parseDate(b);
+            return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+        }
+);
+
+/**
  * Initialize table of programs
  */
 function initProgramNameTable() {
+
     var columns = [ {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_PROGRAM_NAME'>Name des Programms</span>",
         "sClass" : "programs"
@@ -675,7 +712,7 @@ function initProgramNameTable() {
                 "aoColumns" : columns,
                 "aoColumnDefs" : [ { // format date fields
                     "aTargets" : [ 2, 3 ], // indexes of columns to be formatted
-                    "sType" : "date",
+                    "sType" : "date-de",
                     "mRender" : function(data) {
                         return formatDate(data);
                     }
@@ -761,7 +798,7 @@ function initConfigurationNameTable() {
                 "aoColumns" : columns,
                 "aoColumnDefs" : [ { // format date fields
                     "aTargets" : [ 2, 3 ], // indexes of columns to be formatted
-                    "sType" : "date",
+                    "sType" : "date-de",
                     "mRender" : function(data) {
                         return formatDate(data);
                     }
@@ -1498,5 +1535,15 @@ function init() {
         $("#show-startup-message").dialog("open");
     }
 };
+
+
+
+
+
+
+
+
+
+
 
 $(document).ready(WRAP.fn3(init, 'page init'));
