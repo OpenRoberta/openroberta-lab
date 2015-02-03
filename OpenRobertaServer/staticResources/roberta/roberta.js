@@ -662,8 +662,14 @@ function initProgramNameTable() {
         "sClass" : "programs"
     }, ];
     var $programs = $('#programNameTable');
-    $programs
-            .dataTable({
+    
+    var $window = $(window);
+
+    var calcDataTableHeight = function() {
+        return Math.round($window.height() - 260);
+    };
+   
+    var oTable = $programs.dataTable({
                 "sDom" : '<lip>t<r>',
                 "aaData" : [],
                 "aoColumns" : columns,
@@ -675,27 +681,38 @@ function initProgramNameTable() {
                     }
                 } ],
                 "bJQueryUI" : true,
-                "sPaginationType" : "full_numbers",
-                "bPaginate" : true,
-                "iDisplayLength" : 20,
+//                "sPaginationType" : "full_numbers",
+//                "bPaginate" : true,
+//                "iDisplayLength" : 20,
                 "oLanguage" : {
-                    "sLengthMenu" : '<span lkey="Blockly.Msg.DATATABLE_SHOW">Zeige</span> <select>'
-                            + '<option value="10">10</option><option value="20">20</option><option value="25">25</option>'
-                            + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>'
-                            + '</select> <span lkey="Blockly.Msg.DATATABLE_PROGRAMS">Programme</span>',
-                    "oPaginate" : {
-                        "sFirst" : "<span lkey='Blockly.Msg.DATATABLE_FIRST'>&lt;&lt; Erste</span>",
-                        "sPrevious" : "<span lkey='Blockly.Msg.DATATABLE_PREVIOUS'>&lt; Vorige</span>",
-                        "sNext" : "<span lkey='Blockly.Msg.DATATABLE_NEXT'>Nächste &gt;</span>",
-                        "sLast" : "<span lkey='Blockly.Msg.DATATABLE_LAST'>Letzte &gt;&gt;</span>"
-                    },
-                    "sEmptyTable" : "<span lkey='Blockly.Msg.DATATABLE_EMPTY_TABLE'>Die Tabelle ist leer</span>",
-                    "sInfo" : "<span lkey='Blockly.Msg.DATATABLE_SHOWING'>Zeige</span> _START_ <span lkey='Blockly.Msg.DATATABLE_TO'>bis</span> _END_ <span lkey='Blockly.Msg.DATATABLE_OF'>von</span> _TOTAL_ <span lkey='Blockly.Msg.DATATABLE_ENTRIES'>Einträgen</span>",
-                    "sInfoEmpty" : "&nbsp;"
+//                    "sLengthMenu" : '<span lkey="Blockly.Msg.DATATABLE_SHOW">Zeige</span> <select>'
+//                            + '<option value="10">10</option><option value="20">20</option><option value="25">25</option>'
+//                            + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>'
+//                            + '</select> <span lkey="Blockly.Msg.DATATABLE_PROGRAMS">Programme</span>',
+//                    "oPaginate" : {
+//                        "sFirst" : "<span lkey='Blockly.Msg.DATATABLE_FIRST'>&lt;&lt; Erste</span>",
+//                        "sPrevious" : "<span lkey='Blockly.Msg.DATATABLE_PREVIOUS'>&lt; Vorige</span>",
+//                        "sNext" : "<span lkey='Blockly.Msg.DATATABLE_NEXT'>Nächste &gt;</span>",
+//                        "sLast" : "<span lkey='Blockly.Msg.DATATABLE_LAST'>Letzte &gt;&gt;</span>"
+//                    },
+//                    "sInfo" : "<span lkey='Blockly.Msg.DATATABLE_SHOWING'>Zeige</span> _START_ <span lkey='Blockly.Msg.DATATABLE_TO'>bis</span> _END_ <span lkey='Blockly.Msg.DATATABLE_OF'>von</span> _TOTAL_ <span lkey='Blockly.Msg.DATATABLE_ENTRIES'>Einträgen</span>",
+//                    "sInfoEmpty" : "&nbsp;",
+                    "sEmptyTable" : "<span lkey='Blockly.Msg.DATATABLE_EMPTY_TABLE'>Die Tabelle ist leer</span>"
                 },
                 "fnDrawCallback" : function() {
-                }
+                },
+                "scrollY" : calcDataTableHeight(),
+                "scrollCollapse" : true,
+                "paging" : false,
+                "bInfo" : false
             });
+    
+    $window.resize(function() {
+        var oSettings = oTable.fnSettings();
+        oSettings.oScroll.sY = calcDataTableHeight();
+        oTable.fnDraw(false);    // redraw the table
+    });
+
     $('#programNameTable tbody').onWrap('click', 'tr', selectionPFn);
     $('#programNameTable tbody').onWrap('dblclick', 'tr', function(event) {
         selectionPFn(event);
@@ -731,8 +748,14 @@ function initConfigurationNameTable() {
         "sClass" : "configurations"
     }, ];
     var $configurations = $('#configurationNameTable');
-    $configurations
-            .dataTable({
+    
+    var $window = $(window);
+
+    var calcDataTableHeight = function() {
+        return Math.round($window.height() - 260);
+    };
+    
+    var oTable = $configurations.dataTable({
                 "sDom" : '<lip>t<r>',
                 "aaData" : [],
                 "aoColumns" : columns,
@@ -744,27 +767,38 @@ function initConfigurationNameTable() {
                     }
                 } ],
                 "bJQueryUI" : true,
-                "sPaginationType" : "full_numbers",
-                "bPaginate" : true,
-                "iDisplayLength" : 20,
+//                "sPaginationType" : "full_numbers",
+//                "bPaginate" : true,
+//                "iDisplayLength" : 20,
                 "oLanguage" : {
-                    "sLengthMenu" : '<span lkey="Blockly.Msg.DATATABLE_SHOW">Zeige</span> <select>'
-                            + '<option value="10">10</option><option value="20">20</option><option value="25">25</option>'
-                            + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>'
-                            + '</select> <span lkey="Blockly.Msg.DATATABLE_CONFIGURATIONS">Konfigurationen</span>',
-                    "oPaginate" : {
-                        "sFirst" : "<span lkey='Blockly.Msg.DATATABLE_FIRST'>&lt;&lt; Erste</span>",
-                        "sPrevious" : "<span lkey='Blockly.Msg.DATATABLE_PREVIOUS'>&lt; Vorige</span>",
-                        "sNext" : "<span lkey='Blockly.Msg.DATATABLE_NEXT'>Nächste &gt;</span>",
-                        "sLast" : "<span lkey='Blockly.Msg.DATATABLE_LAST'>Letzte &gt;&gt;</span>"
-                    },
-                    "sEmptyTable" : "<span lkey='Blockly.Msg.DATATABLE_EMPTY_TABLE'>Die Tabelle ist leer</span>",
-                    "sInfo" : "<span lkey='Blockly.Msg.DATATABLE_SHOWING'>Zeige</span> _START_ <span lkey='Blockly.Msg.DATATABLE_TO'>bis</span> _END_ <span lkey='Blockly.Msg.DATATABLE_OF'>von</span> _TOTAL_ <span lkey='Blockly.Msg.DATATABLE_ENTRIES'>Einträgen</span>",
-                    "sInfoEmpty" : "&nbsp;"
+//                    "sLengthMenu" : '<span lkey="Blockly.Msg.DATATABLE_SHOW">Zeige</span> <select>'
+//                            + '<option value="10">10</option><option value="20">20</option><option value="25">25</option>'
+//                            + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>'
+//                            + '</select> <span lkey="Blockly.Msg.DATATABLE_CONFIGURATIONS">Konfigurationen</span>',
+//                    "oPaginate" : {
+//                        "sFirst" : "<span lkey='Blockly.Msg.DATATABLE_FIRST'>&lt;&lt; Erste</span>",
+//                        "sPrevious" : "<span lkey='Blockly.Msg.DATATABLE_PREVIOUS'>&lt; Vorige</span>",
+//                        "sNext" : "<span lkey='Blockly.Msg.DATATABLE_NEXT'>Nächste &gt;</span>",
+//                        "sLast" : "<span lkey='Blockly.Msg.DATATABLE_LAST'>Letzte &gt;&gt;</span>"
+//                    },
+//                    "sInfo" : "<span lkey='Blockly.Msg.DATATABLE_SHOWING'>Zeige</span> _START_ <span lkey='Blockly.Msg.DATATABLE_TO'>bis</span> _END_ <span lkey='Blockly.Msg.DATATABLE_OF'>von</span> _TOTAL_ <span lkey='Blockly.Msg.DATATABLE_ENTRIES'>Einträgen</span>",
+//                    "sInfoEmpty" : "&nbsp;",
+                    "sEmptyTable" : "<span lkey='Blockly.Msg.DATATABLE_EMPTY_TABLE'>Die Tabelle ist leer</span>"
                 },
                 "fnDrawCallback" : function() {
-                }
+                },
+                "scrollY" : calcDataTableHeight(),
+                "scrollCollapse" : true,
+                "paging" : false,
+                "bInfo" : false
             });
+    
+    $window.resize(function() {
+        var oSettings = oTable.fnSettings();
+        oSettings.oScroll.sY = calcDataTableHeight();
+        oTable.fnDraw(false);    // redraw the table
+    });
+
     $('#configurationNameTable tbody').onWrap('click', 'tr', selectionCFn);
     $('#configurationNameTable tbody').onWrap('dblclick', 'tr', function(event) {
         selectionCFn(event);

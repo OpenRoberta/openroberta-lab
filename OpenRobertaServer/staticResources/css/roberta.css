@@ -162,6 +162,10 @@ html, body {
 	float: left;
 }
 
+#logging {
+	overflow-y: scroll;
+}
+
 #progListing, #confListing, #logging {
 	display: none;
 }
@@ -503,13 +507,9 @@ html, body {
 /***** END JQuery-Popup-Input-Fields *****/
 
 /***** BEGIN JQuery-Datatables *****/
-.dataTables_wrapper {
-	margin: 30px 50px 10px 50px;
-}
 
-#progListing #programNameTable_wrapper, #confListing #programNameTable_wrapper
-	{
-	overflow-y: auto;
+.dataTables_wrapper {
+	margin: 0px 50px;
 }
 
 #progListing table tbody, #confListing table tbody {
@@ -517,18 +517,17 @@ html, body {
 }
 
 #progListing table tbody tr:hover, #progListing table tbody tr.selected,
-	#confListing table tbody tr:hover, #confListing table tbody tr.selected
-	{
+	#confListing table tbody tr:hover, #confListing table tbody tr.selected {
 	background-color: #b7d032;
 }
 
 #progListing table thead, #progListing table thead .DataTables_sort_wrapper,
-	#confListing table thead, #confListing table thead .DataTables_sort_wrapper
-	{
+#confListing table thead, #confListing table thead .DataTables_sort_wrapper {
 	text-transform: uppercase;
 	background-color: #898989;
 	color: #ffffff;
 	text-align: left;
+	padding-left: 10px;
 }
 
 #progListing table, #confListing table {
@@ -537,8 +536,7 @@ html, body {
 	border-spacing: 0px;
 }
 
-.table>thead>tr>th, .table>tbody>tr>th, .table>thead>tr>td, .table>tbody>tr>td
-	{
+.table>thead>tr>th, .table>tbody>tr>th, .table>thead>tr>td, .table>tbody>tr>td {
 	padding: 9px;
 }
 
@@ -546,8 +544,7 @@ html, body {
 	border-top: 1px solid #ddd;
 }
 
-#progListing table.dataTable.no-footer, #confListing table.dataTable.no-footer
-	{
+#progListing table.dataTable.no-footer, #confListing table.dataTable.no-footer {
 	border-bottom: none !important;
 }
 
@@ -577,30 +574,26 @@ html, body {
 
 .tableButtons {
 	margin-left: 50px;
+	position: fixed;
+	bottom: 10px;
 }
 
 .fg-button {
 	margin-left: 6px;
 }
 
-table.dataTable thead .sorting {
-	background : url("/css/img/jquery.dataTables/sort_both.png") no-repeat center left;
+table.dataTable thead .sorting,
+table.dataTable thead .sorting_asc_disabled,
+table.dataTable thead .sorting_desc_disabled {
+    background: none;
 }
 
 table.dataTable thead .sorting_asc {
-	background : url("/css/img/jquery.dataTables/sort_asc.png") no-repeat center left;
+	background: url("/css/img/dataTables-icons/down.svg") no-repeat center left;
 }
 
 table.dataTable thead .sorting_desc {
-	background : url("/css/img/jquery.dataTables/sort_desc.png") no-repeat center left;
-}
-
-table.dataTable thead .sorting_asc_disabled {
-	background : url("/css/img/jquery.dataTables/sort_asc_disabled.png") no-repeat center left;
-}
-
-table.dataTable thead .sorting_desc_disabled {
-	background : url("/css/img/jquery.dataTables/sort_desc_disabled.png") no-repeat center left;
+    background: url("/css/img/dataTables-icons/up.svg") no-repeat center left;
 }
 
 /***** END JQuery-Datatables *****/
