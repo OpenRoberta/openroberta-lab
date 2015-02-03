@@ -83,13 +83,16 @@ Blockly.Comment.prototype.createIcon_ = function() {
         'cx' : Blockly.Icon.RADIUS,
         'cy' : Blockly.Icon.RADIUS
     }, this.iconGroup_);
-    this.iconMark_ = Blockly.createSvgElement('text', {
+    var iconShield = Blockly.createSvgElement('path', {
         'class' : 'blocklyIconMark',
-        'transform' : 'scale(1.5)',
-        'x' : Blockly.Icon.RADIUS - 4,
-        'y' : 1 * Blockly.Icon.RADIUS
+        'transform' : 'translate(-0.5,0)',
+        'd' : 'M19 6h-13c-1.65 0-3 1.35-3 3v7c0 1.65 1.35 3 3 3h1v3l3-3h9c1.65 0 3-1.35 3-3v-7c0-1.65-1.35-3-3-3zm1 10c0 .542-.458 1-1 1h-13'
+                + 'c-.542 0-1-.458-1-1v-7c0-.542.458-1 1-1h13c.542 0 1 .458 1 1v7zM7 14.5c-1.104 0-2-.896-2-2s.896-2 2-2 2 .896 2 2-.896 2-2 2zm0-3'
+                + 'c-.552 0-1 .448-1 1s.448 1 1 1 1-.448 1-1-.448-1-1-1zM11.5 14.5c-1.104 0-2-.896-2-2s.896-2 2-2 2 .896 2 2-.896 2-2 2zm0-3'
+                + 'c-.552 0-1 .448-1 1s.448 1 1 1 1-.448 1-1-.448-1-1-1zM16 14.5c-1.104 0-2-.896-2-2s.896-2 2-2 2 .896 2 2-.896 2-2 2zm0-3'
+                + 'c-.552 0-1 .448-1 1s.448 1 1 1 1-.448 1-1-.448-1-1-1z'
     }, this.iconGroup_);
-    this.iconMark_.appendChild(document.createTextNode('?'));
+
 };
 
 /**

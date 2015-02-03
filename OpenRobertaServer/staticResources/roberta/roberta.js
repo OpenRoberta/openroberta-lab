@@ -931,7 +931,6 @@ function escape(str) {
  * Initialize the navigation bar in the head of the page
  */
 function initHeadNavigation() {
-
     $('.navbar-fixed-top').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
         $(".ui-dialog-content").dialog("close"); // close all opened popups
         var domId = event.target.id;
@@ -1058,6 +1057,22 @@ function initHeadNavigation() {
     $('#beta').onWrap('click', function() {
         window.open('http://open-roberta.org');
     }, 'beta logo was clicked');
+
+    $('#iconDisplayLogin').onWrap('click', function() {
+        $("#loggedIn").text(userState.name);
+        $("#programName").text(userState.program);
+        $("#configurationName").text(userState.configuration);
+        $("#toolbox").text(userState.toolbox);
+        $("#show-state-info").dialog("open");
+    }, 'icon user was clicked');
+
+    $('#iconDisplayRobotState').onWrap('click', function() {
+        $("#robotName").text(userState['robot.name']);
+        $("#robotState").text(userState['robot.state']);
+        $("#robotBattery").text(userState['robot.battery']);
+        $("#robotWait").text(userState['robot.wait']);
+        $("#show-robot-info").dialog("open");
+    }, 'icon robot was clicked');
 
     $('#tabProgram').onWrap('click', function() {
         activateHeadMenu();

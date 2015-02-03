@@ -25,38 +25,14 @@ html, body {
 }
 
 .head-navi-icons {
-	background-repeat: no-repeat;
-	background-size: 100% auto;
-	display: block;
-	height: 24px;
-	width: 24px;
-}
-
-#head-navi-icon-overview {
-	background-image: url(/css/img/head-navi-icons/th-menu.svg);
-}
-
-#head-navi-icon-program, #head-navi-icon-configuration {
-	background-image: url(/css/img/head-navi-icons/document-text.svg);
-}
-
-#head-navi-icon-robot {
-	background-image: url(/css/img/head-navi-icons/Roberta_Menu.svg);
-}
-
-#head-navi-icon-help {
-	background-image: url(/css/img/head-navi-icons/lightbulb.svg);
-}
-
-#head-navi-icon-user {
-	background-image: url(/css/img/head-navi-icons/user.svg);
+	font-size: 24px;
+	color: #333;
 }
 
 #iconDisplayLogin, #iconDisplayRobotState {
 	font-size: 24px;
 	height: 24px;
 	width: 24px;
-	height: 24px;
 }
 
 #states {
@@ -260,10 +236,9 @@ html, body {
 
 .nav>li>a {
 	color: #333333;
-	border-radius: 0;
 	padding: 12px 12px;
+	border-radius: 2px;
 	margin: 4px 0px 4px 4px;
-	border-radius: 2px
 }
 
 .nav-pills>li+li {
@@ -295,6 +270,11 @@ html, body {
 /***** BEGIN typicons *****/
 .typcn:before {
 	margin-right: 6px;
+}
+
+.head-navi-icons.typcn:before {
+	margin: 0;
+	line-height: normal;
 }
 /***** END typicons *****/
 
@@ -507,7 +487,6 @@ html, body {
 /***** END JQuery-Popup-Input-Fields *****/
 
 /***** BEGIN JQuery-Datatables *****/
-
 .dataTables_wrapper {
 	margin: 0px 50px;
 }
@@ -517,12 +496,14 @@ html, body {
 }
 
 #progListing table tbody tr:hover, #progListing table tbody tr.selected,
-	#confListing table tbody tr:hover, #confListing table tbody tr.selected {
+	#confListing table tbody tr:hover, #confListing table tbody tr.selected
+	{
 	background-color: #b7d032;
 }
 
 #progListing table thead, #progListing table thead .DataTables_sort_wrapper,
-#confListing table thead, #confListing table thead .DataTables_sort_wrapper {
+	#confListing table thead, #confListing table thead .DataTables_sort_wrapper
+	{
 	text-transform: uppercase;
 	background-color: #898989;
 	color: #ffffff;
@@ -536,7 +517,8 @@ html, body {
 	border-spacing: 0px;
 }
 
-.table>thead>tr>th, .table>tbody>tr>th, .table>thead>tr>td, .table>tbody>tr>td {
+.table>thead>tr>th, .table>tbody>tr>th, .table>thead>tr>td, .table>tbody>tr>td
+	{
 	padding: 9px;
 }
 
@@ -544,7 +526,8 @@ html, body {
 	border-top: 1px solid #ddd;
 }
 
-#progListing table.dataTable.no-footer, #confListing table.dataTable.no-footer {
+#progListing table.dataTable.no-footer, #confListing table.dataTable.no-footer
+	{
 	border-bottom: none !important;
 }
 
@@ -582,18 +565,19 @@ html, body {
 	margin-left: 6px;
 }
 
-table.dataTable thead .sorting,
-table.dataTable thead .sorting_asc_disabled,
-table.dataTable thead .sorting_desc_disabled {
-    background: none;
+table.dataTable thead .sorting, table.dataTable thead .sorting_asc_disabled,
+	table.dataTable thead .sorting_desc_disabled {
+	background: none;
 }
 
 table.dataTable thead .sorting_asc {
-	background: url("/css/img/dataTables-icons/down.svg") no-repeat center left;
+	background: url("/css/img/dataTables-icons/down.svg") no-repeat center
+		left;
 }
 
 table.dataTable thead .sorting_desc {
-    background: url("/css/img/dataTables-icons/up.svg") no-repeat center left;
+	background: url("/css/img/dataTables-icons/up.svg") no-repeat center
+		left;
 }
 
 /***** END JQuery-Datatables *****/
