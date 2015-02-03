@@ -201,11 +201,11 @@ Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 
         '  background: url(<<<PATH>>>/media/sprites.png) no-repeat 0 0 !important;', '}',
 
         /* Category tree in Toolbox. */
-        '.blocklyToolboxDiv {', '  background-color: #e6e6e6;', '  display: none;', '  position: absolute;', '  font-size: 16pt;', '  overflow-x: hidden;',
+        '.blocklyToolboxDiv {', '  background-color: #eee;', '  display: none;', '  position: absolute;', '  font-size: 16pt;', '  overflow-x: hidden;',
         //'  font-weight: bold;',
         '}',
 
-        '.blocklyToolboxBackground {', '  stroke: #e6e6e6;', '  stroke-width: 2', '}',
+        '.blocklyToolboxBackground {', '  stroke: #eee;', '  stroke-width: 2', '}',
 
         '.blocklyTreeSub {', '  font-size: 10pt;', '}',
 

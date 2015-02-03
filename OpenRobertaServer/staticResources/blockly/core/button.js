@@ -227,13 +227,11 @@ Blockly.Button.prototype.onMouseUp_ = function(e) {
 }
 
 Blockly.Button.prototype.onMouseOver_ = function(e) {
-    Blockly.setCursorHand_(true);
     this.svgBack_.setAttribute('class', 'blocklyButtonHoverBack');
     this.svgPath_.setAttribute('class', 'blocklyButtonHoverPath');
 };
 
 Blockly.Button.prototype.onMouseOut_ = function(e) {
-    Blockly.setCursorHand_(false);
     this.svgBack_.setAttribute('class', 'blocklyButtonBack');
     this.svgPath_.setAttribute('class', 'blocklyButtonPath');
 };

@@ -933,7 +933,7 @@ function initHeadNavigation() {
         $('.navbar-fixed-top .dropdown').removeClass('open');
     });
 
-    $('#logo').onWrap('click', function() {
+    $('#imgLogo').onWrap('click', function() {
         window.open('http://open-roberta.org');
     }, 'logo was clicked');
 
@@ -1321,7 +1321,7 @@ function displayMessage(messageId, output) {
  * Display toast messages
  */
 function displayToastMessages() {
-    $('#toast').text(toastMessages[toastMessages.length - 1]);
+    $('#toastText').text(toastMessages[toastMessages.length - 1]);
 
     $('#toastContainer').delay(100).fadeIn("slow", function() {
         $(this).delay(1000).fadeOut("slow", function() {

@@ -26,7 +26,7 @@ Blockly.Blocks['robBrick_EV3-Brick'] = {
      */
 
     init : function() {
-        this.setColourRGB([ 170, 170, 170 ]);
+        this.setColourRGB([ 187, 187, 187 ]);
         this.setInputsInline(false);
         var wheelDiameter = new Blockly.FieldTextInput('0', Blockly.FieldTextInput.nonnegativeNumberValidator)
         var trackWidth = new Blockly.FieldTextInput('0', Blockly.FieldTextInput.nonnegativeNumberValidator)

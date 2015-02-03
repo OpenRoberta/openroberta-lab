@@ -1,558 +1,586 @@
 @charset "UTF-8";
 
-*:focus {
-    outline: 0;
-    outline: none;
+*:hover, *:active, *:visited, *:focus, a:focus {
+	outline: 0;
+	outline: none;
+}
+
+ul, ol {
+	margin: 0;
 }
 
 html, body {
-    margin: 0px !important;
-    padding: 0px !important;
-    height: 100%;
-    width: 100%;
-    font-family: 'Roboto', sans-serif;
+	margin: 0px !important;
+	padding: 0px !important;
+	height: 100%;
+	width: 100%;
+	font-family: 'Roboto', sans-serif;
 }
 
 #head-navigation {
-    border-bottom: solid #E6E6E6 2px;  
+	box-shadow: 0px 3px 5px #aeaeaf;
+	-webkit-box-shadow: 0px 3px 5px #aeaeaf;
+	border: 0;
+	margin: 0;
 }
 
 .head-navi-icons {
-    background-repeat: no-repeat;
-    background-size: 100% auto;
-    display: block;
-    height: 35px;
-    margin: 0 auto;
-    width: 35px;
+	background-repeat: no-repeat;
+	background-size: 100% auto;
+	display: block;
+	height: 24px;
+	width: 24px;
 }
 
 #head-navi-icon-overview {
-    background-image: url(/css/img/head-navi-icons/th-menu.svg);
+	background-image: url(/css/img/head-navi-icons/th-menu.svg);
 }
 
 #head-navi-icon-program, #head-navi-icon-configuration {
-    background-image: url(/css/img/head-navi-icons/document-text.svg);
+	background-image: url(/css/img/head-navi-icons/document-text.svg);
 }
 
 #head-navi-icon-robot {
-    background-image: url(/css/img/head-navi-icons/arrow-loop-outline.svg);
+	background-image: url(/css/img/head-navi-icons/Roberta_Menu.svg);
 }
 
 #head-navi-icon-help {
-    background-image: url(/css/img/head-navi-icons/lightbulb.svg);
+	background-image: url(/css/img/head-navi-icons/lightbulb.svg);
 }
 
 #head-navi-icon-user {
-    background-image: url(/css/img/head-navi-icons/user-outline.svg);
+	background-image: url(/css/img/head-navi-icons/user.svg);
+}
+
+#iconDisplayLogin, #iconDisplayRobotState {
+	font-size: 24px;
+	height: 24px;
+	width: 24px;
+	height: 24px;
 }
 
 #states {
-    margin-top: 15px;
-    float: right;
-    width: 60px;
+	margin-top: 16px;
+	margin-right: 16px;
+	float: right;
+}
+
+.flag:hover {
+	cursor: pointer;
 }
 
 .smallFlag {
-    width: 15px;
-    height: 10px;
-    margin-top: 10px;
+	font-size: 10px;
+	margin: 10px 4px;
 }
 
 .bigFlag {
-    width: 21px;
-    height: 14px;
-    margin-top: 10px;
+	font-size: 14px;
+	margin: 10px 4px;
 }
 
 #setLangDe {
-    background-image: url(/css/svg/Flag_of_Germany.svg);
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    display: inline-block;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	display: inline-block;
 }
 
 #setLangEn {
-    background-image: url(/css/svg/Flag_of_the_United_Kingdom.svg);
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    display: inline-block;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	display: inline-block;
 }
 
 #logo {
-    width: 245px;
-    height: 70px;
-    background-image: url(/css/svg/NEPO_Logo_RGB.svg);
-    background-repeat: no-repeat;
-    float: right;
+	position: absolute;
+	top: 0;
+	right: 0;
 }
 
-#beta {
-    position: absolute;
-    top: 27px;
-    right: 75px;
-    width: 87px;
-    height: 53px;
-    background-image: url(/css/img/beta.png);
-    background-repeat: no-repeat;
+#imgLogo {
+	float: right;
+	height: 60px;
+	margin-right: 16px;
+	margin-top: 16px;
 }
 
-.tabClicked {
-    color: #afca04;
-    border-bottom: 3px solid #afca04;
+#imgBeta {
+	float: right;
+	margin-right: -150px;
+	margin-top: 50px;
 }
 
 .menuTab {
-    text-transform: uppercase;
-    font-weight: bold;
+	text-transform: uppercase;
+	font-weight: bold;
 }
 
 .hidden {
-    display: none;
+	display: none;
 }
 
 #main-section {
-    height: auto;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding-top: 70px;
-    z-index: 99;
-    height: 100%;
-    background: #ffffff; /* Old browsers */
-    background: -moz-radial-gradient(center, ellipse cover, #ffffff 0%, #e6e6e6 100%);
-    /* FF3.6+ */
-    background: -webkit-gradient(radial, center center, 0px, center center, 100%,
-        color-stop(0%, #ffffff), color-stop(100%, #e6e6e6));
-    /* Chrome,Safari4+ */
-    background: -webkit-radial-gradient(center, ellipse cover, #ffffff 0%, #e6e6e6 100%);
-    /* Chrome10+,Safari5.1+ */
-    background: -o-radial-gradient(center, ellipse cover, #ffffff 0%, #e6e6e6 100%);
-    /* Opera 12+ */
-    background: -ms-radial-gradient(center, ellipse cover, #ffffff 0%, #e6e6e6 100%);
-    /* IE10+ */
-    background: radial-gradient(ellipse at center, #ffffff 0%, #e6e6e6 100%);
-    /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff',
-        endColorstr='#e6e6e6', GradientType=1);
-    /* IE6-9 fallback on horizontal gradient */
-    /* CANT HANDLE THE OVERFLOW, SO ITS SET TO HIDDEN TEMPORARY */
-    overflow: hidden;
+	height: auto;
+	position: relative;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	padding-top: 92px;
+	z-index: 99;
+	height: 100%;
+	width: 100%;
+	background: #ffffff; /* Old browsers */
+	background: -moz-radial-gradient(center, ellipse cover, #ffffff 0%, #e6e6e6 100%);
+	/* FF3.6+ */
+	background: -webkit-gradient(radial, center center, 0px, center center, 100%,
+		color-stop(0%, #ffffff), color-stop(100%, #e6e6e6));
+	/* Chrome,Safari4+ */
+	background: -webkit-radial-gradient(center, ellipse cover, #ffffff 0%, #e6e6e6 100%);
+	/* Chrome10+,Safari5.1+ */
+	background: -o-radial-gradient(center, ellipse cover, #ffffff 0%, #e6e6e6 100%);
+	/* Opera 12+ */
+	background: -ms-radial-gradient(center, ellipse cover, #ffffff 0%, #e6e6e6 100%);
+	/* IE10+ */
+	background: radial-gradient(ellipse at center, #ffffff 0%, #e6e6e6 100%);
+	/* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff',
+		endColorstr='#e6e6e6', GradientType=1);
+	/* IE6-9 fallback on horizontal gradient */
+	/* CANT HANDLE THE OVERFLOW, SO ITS SET TO HIDDEN TEMPORARY */
+	overflow: hidden;
 }
 
 #tabs, #blockly, #progListing, #confListing, #logging {
-    background: transparent;
-    border: 0 none !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100%;
-    height: 100%;
-    display: block;
-    float: left;
+	background: transparent;
+	border: 0;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	display: block;
+	float: left;
 }
 
 #progListing, #confListing, #logging {
-    display: none;
+	display: none;
 }
 
 #bricklyFrame {
-    width: 100%;
-    height: 100%;
-    border: 0;
+	width: 100%;
+	height: 100%;
+	border: 0;
 }
 
 #blocklyDiv {
-    background-color: none;
-    background-image: url(/css/img/grid-pattern-background.png);
-    background-repeat: repeat;
-    height: 100%;
-    min-height: 100%;
+	background-color: #eee;
+	height: 100%;
+	width: 100%;
+	min-height: 100%;
 }
 
 #toastContainer {
-    float: left;
-    height: 40px;
-    text-align: center;
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 16px;
+	width: 100%;
+	text-align: center;
+	display: block;
 }
 
-#toast {
-    padding-top: 17px;
-    font-size: large;
-    z-index: 9999;
-    color: #333333;
+#toast span {
+	font-size: large;
+	background-color: white;
+	z-index: 9999;
+	color: #333333;
 }
 
 .ok {
-    color: #afca04;
+	color: #afca04;
 }
 
 .error {
-    color: #e2001a;
+	color: #e2001a;
 }
 
 .button {
-    margin-right: 5px;
-    width: 100pt;
-    background-color: #afca04;
-    color: white;
-    font-size: 16px;
+	margin-right: 5px;
+	width: 100pt;
+	background-color: #afca04;
+	color: white;
+	font-size: 16px;
 }
 
 .button:hover {
-    background-color: #b7d032;
+	background-color: #b7d032;
 }
 
 .menuDisabled {
-  background-color: white !important;
+	background-color: white !important;
 }
-
 
 /***** BEGIN Overwrite Bootstrap-CSS *****/
-
 .nav#head-navigation-tabs {
-    margin-top: -10px;
+	margin: 0;
+	padding: 0;
+	border: 0;
 }
 
-.nav#head-navigation-tabs > li > a {
-    padding: 0px 15px 2px 15px;
+.nav#head-navigation-tabs>li>a {
+	margin: 0;
+	padding: 8px 16px 4px 16px;
+	border-radius: 0;
+	border-bottom: 4px solid white;
+}
+
+.nav#head-navigation-tabs>li>a.tabClicked {
+	border-bottom: 4px solid #afca04;
+}
+
+.nav#head-navigation-tabs>li>a.tabClicked:hover {
+	border-bottom: 4px solid #afca04;
+	background-color: #afca04;
+	outline: none;
+	fill: #afca04;
 }
 
 .navbar-default {
-    background-color: white;
+	background-color: white;
 }
 
-.nav-pills > li > a:hover,
-.nav-pills > li > a:focus,
-.nav .open > a:hover,
-.nav .open > a:focus,
-.nav .open > a {
+.nav-pills>li>a:hover, .nav .open>a:hover, .nav .open>a {
 	background-color: #afca04;
-    outline: none;
+	outline: none;
 }
 
-.nav-pills > li > a {
-    color: #333333;
-    border-radius: 0;
+.nav>li>a {
+	color: #333333;
+	border-radius: 0;
+	padding: 12px 12px;
+	margin: 4px 0px 4px 4px;
+	border-radius: 2px
 }
 
-.dropdown-menu > .disabled > a, .dropdown-menu > .disabled > a:hover, .dropdown-menu > .disabled > a:focus {
-    color: #bbbbbb;
+.nav-pills>li+li {
+	margin-left: 0px;
+}
+
+.dropdown-menu {
+	left: 4px;
+	margin: 0;
+	padding: border: 0;
+	border: 0;
+	border-radius: 2px;
+	box-shadow: 0px 3px 5px #aeaeaf;
+	-webkit-box-shadow: 0px 3px 5px #aeaeaf;
+	border-radius: 2px;
+}
+
+.dropdown-menu>li>a {
+	padding: 6px 12px;
+}
+
+.dropdown-menu>.disabled>a, .dropdown-menu>.disabled>a:hover,
+	.dropdown-menu>.disabled>a:focus {
+	color: #bbbbbb;
 }
 
 /***** END Overwrite Bootstrap-CSS *****/
 
-
+/***** BEGIN typicons *****/
+.typcn:before {
+	margin-right: 6px;
+}
+/***** END typicons *****/
 
 /***** BEGIN JQuery-Popups *****/
-
 .jquerypopup {
-    font-family: 'Roboto', sans-serif;
+	font-family: 'Roboto', sans-serif;
 }
 
 .jquerypopup label {
-    display: block;
-    font-size: 16px;
-    font-weight: bold;
+	display: block;
+	font-size: 16px;
+	font-weight: bold;
 }
 
 .jquerypopup input {
-    background-repeat: no-repeat;
-    background-position: center left;
+	background-repeat: no-repeat;
+	background-position: center left;
 }
 
 .jquerypopup .input {
-    width: 100%;
+	width: 100%;
 }
 
 .jquerypopup a {
-    font-size: 14px;
-    color: #333333;
+	font-size: 14px;
+	color: #333333;
 }
 
 .jquerypopup a:hover {
-    color: #afca04;
+	color: #afca04;
 }
 
 .jquerypopup.ui-dialog {
-    background-color: white;
+	background-color: white;
 }
 
 .jquerypopup button.ui-button-icon-only {
-    width: 32px;
+	width: 32px;
 }
 
 .jquerypopup.ui-dialog {
-    position: absolute !important;
-    top: 0;
-    left: 0;
-    padding: 30px !important;
-    outline: 0;
-    box-shadow: 0 0 15px #9f9e9e;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 20px;
+	position: absolute !important;
+	top: 0;
+	left: 0;
+	padding: 16px;
+	outline: 0;
+	box-shadow: 0 0 15px #9f9e9e;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 20px;
 }
 
 .jquerypopup.ui-front {
-    z-index: 9999;
+	z-index: 9999;
 }
 
 .jquerypopup.ui-dialog .ui-dialog-title {
-    font-size: 25px;
-    font-weight: 600;
-    text-transform: uppercase;
+	font-size: 20px;
+	font-weight: 600;
+	text-transform: uppercase;
 }
 
 .jquerypopup.ui-dialog .ui-dialog-titlebar {
-    padding: 0;
-    position: relative;
+	padding: 0;
+	position: relative;
 }
 
 .jquerypopup.ui-dialog .ui-dialog-titlebar-close, .jquerypopup.ui-dialog .ui-dialog-titlebar-close.ui-state-focus
-    {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    margin-right: -46px;
-    margin-top: -46px;
-    width: 32px;
-    height: 32px;
-    background-color: none !important;
-    border: none !important;
-    background-image: url(/css/img/close-icon.png);
-    background-repeat: no-repeat;
-    background-color: transparent;
-    cursor: pointer;
+	{
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	margin-right: -32px;
+	margin-top: -32px;
+	width: 32px;
+	height: 32px;
+	background-color: none !important;
+	border: none !important;
+	background-image: url(/css/img/close-icon.png);
+	background-repeat: no-repeat;
+	background-color: transparent;
+	cursor: pointer;
 }
 
 .jquerypopup.ui-dialog .ui-dialog-titlebar-close:hover {
-    background-image: url(img/close-icon_hover.png);
-    background-color: none !important;
+	background-image: url(img/close-icon_hover.png);
+	background-color: none !important;
 }
 
 .jquerypopup.ui-dialog .ui-dialog-titlebar-close.ui-state-hover,
-    .jquerypopup.ui-dialog .ui-dialog-titlebar-close.ui-state-focus {
-    background: none;
-    background-image: url(img/close-icon_hover.png);
-    background-repeat: no-repeat;
-    outline: 0;
+	.jquerypopup.ui-dialog .ui-dialog-titlebar-close.ui-state-focus {
+	background: none;
+	background-image: url(img/close-icon_hover.png);
+	background-repeat: no-repeat;
+	outline: 0;
 }
 
 .jquerypopup.ui-dialog .ui-dialog-titlebar-close .ui-button-text {
-    display: none;
+	display: none;
 }
 
 .jquerypopup .ui-widget-header {
-    border: none;
-    background: white;
-    color: #333333;
-    font-weight: bold;
-    margin-bottom: 20px;
+	border: none;
+	background: white;
+	color: #333333;
+	font-weight: bold;
+	margin-bottom: 20px;
 }
 
 .jquerypopup .ui-state-default, .jquerypopup .ui-widget-content .ui-state-default,
-    .jquerypopup .ui-widget-header .ui-state-default {
-    border: 1px solid #d3d3d3;
-    font-weight: normal;
-    color: #555555;
+	.jquerypopup .ui-widget-header .ui-state-default {
+	border: 1px solid #d3d3d3;
+	font-weight: normal;
+	color: #555555;
 }
 
 /***** END JQuery-Popups *****/
 
-
 /***** BEGIN JQuery-Popup-Input-Fields *****/
-
-#login-user input, .program input, .configuration input, #register-user input, #delete-user input, #set-token input {
-    padding: 7px 8px 7px 32px;
-    border: 1px solid #afca04;
-    border-radius: 2px;
-    background-color: white;
-    margin-bottom: 15px;
-    color: #c7c7c7;
-    font-size: 14px;
-    text-align: left;
+#login-user input, .program input, .configuration input, #register-user input,
+	#delete-user input, #set-token input {
+	padding: 7px 8px 7px 32px;
+	border: 1px solid #afca04;
+	border-radius: 2px;
+	background-color: white;
+	margin-bottom: 15px;
+	color: #c7c7c7;
+	font-size: 14px;
+	text-align: left;
 }
 
-#login-user input#accountNameS,
-#register-user input#accountName,
-#delete-user input#accountNameD,
-#share-program input#programShareWith,
-#share-configuration input#configurationShareWith {
-    background-image: url(img/login_user-icon.png);
+#login-user input#accountNameS, #register-user input#accountName,
+	#delete-user input#accountNameD, #share-program input#programShareWith,
+	#share-configuration input#configurationShareWith {
+	background-image: url(img/login_user-icon.png);
 }
 
-#login-user input#accountNameS:active,
-#login-user input#accountNameS:focus,
-#register-user input#accountName:active,
-#register-user input#accountName:focus,
-#delete-user input#accountNameD:active,
-#delete-user input#accountNameD:focus {
-    background-image: url(img/login_user-icon_active.png);
-    color: #333333;
+#login-user input#accountNameS:active, #login-user input#accountNameS:focus,
+	#register-user input#accountName:active, #register-user input#accountName:focus,
+	#delete-user input#accountNameD:active, #delete-user input#accountNameD:focus
+	{
+	background-image: url(img/login_user-icon_active.png);
+	color: #333333;
 }
 
-#login-user input#pass1S,
-#register-user input#pass1,
-#register-user input#pass2,
-#delete-user input#pass1D,
-#set-token input#tokenValue {
-    background-image: url(img/login_pw-icon.png);
+#login-user input#pass1S, #register-user input#pass1, #register-user input#pass2,
+	#delete-user input#pass1D, #set-token input#tokenValue {
+	background-image: url(img/login_pw-icon.png);
 }
 
-#login-user input#pass1S:active,
-#login-user input#pass1S:focus,
-#delete-user input#pass1D:active,
-#delete-user input#pass1D:focus,
-#register-user input#pass1:active,
-#register-user input#pass1:focus,
-#register-user input#pass2:active,
-#register-user input#pass2:focus,
-#set-token input#tokenValue:active,
-#set-token input#tokenValue:focus {
-    background-image: url(img/login_pw-icon_active.png);
-    color: #333333;
+#login-user input#pass1S:active, #login-user input#pass1S:focus,
+	#delete-user input#pass1D:active, #delete-user input#pass1D:focus,
+	#register-user input#pass1:active, #register-user input#pass1:focus,
+	#register-user input#pass2:active, #register-user input#pass2:focus,
+	#set-token input#tokenValue:active, #set-token input#tokenValue:focus {
+	background-image: url(img/login_pw-icon_active.png);
+	color: #333333;
 }
 
 #register-user input#userName {
-    background-image: url(img/login_name-icon.png);
+	background-image: url(img/login_name-icon.png);
 }
 
 #register-user input#userName:active, #register-user input#userName:focus
-    {
-    background-image: url(img/login_name-icon_active.png);
-    color: #333333;
+	{
+	background-image: url(img/login_name-icon_active.png);
+	color: #333333;
 }
 
 #register-user input#userEmail {
-    background-image: url(img/login_email-icon.png);
+	background-image: url(img/login_email-icon.png);
 }
 
 #register-user input#userEmail:active, #register-user input#userEmail:focus
-    {
-    background-image: url(img/login_email-icon_active.png);
-    color: #333333;
+	{
+	background-image: url(img/login_email-icon_active.png);
+	color: #333333;
 }
 
 .program input.programName, .configuration input.configurationName {
-    background-image: url(img/program_name-icon.png);
-    box-sizing: border-box;
+	background-image: url(img/program_name-icon.png);
+	box-sizing: border-box;
 }
 
 .program input.programName:active, .program input.programName:focus,
-.configuration input.configurationName:active, .configuration input.configurationName:focus {
-    background-image: url(img/program_name-icon_active.png);
-    color: #333333;
+	.configuration input.configurationName:active, .configuration input.configurationName:focus
+	{
+	background-image: url(img/program_name-icon_active.png);
+	color: #333333;
 }
 
-#login-user .submit, .program .submit, .configuration .submit, #register-user .submit,
-#delete-user .submit, #set-token .submit, #show-startup-message .submit {
-    padding: 7px 9px;
-    border: none;
-    font-size: 16px;
-    border-radius: 2px;
-    color: white;
-    background-color: #afca04;
-    cursor: pointer;
+#login-user .submit, .program .submit, .configuration .submit,
+	#register-user .submit, #delete-user .submit, #set-token .submit,
+	#show-startup-message .submit {
+	padding: 6px 12px;
+	border: none;
+	font-size: 16px;
+	border-radius: 2px;
+	color: white;
+	background-color: #afca04;
+	cursor: pointer;
+	margin: 0;
 }
 
-#login-user .submit:hover, .program .submit:hover, .configuration .submit:hover, #register-user .submit:hover,
-#delete-user .submit:hover, #set-token .submit:hover {
-    background-color: #b7d032;
+#login-user .submit:hover, .program .submit:hover, .configuration .submit:hover,
+	#register-user .submit:hover, #delete-user .submit:hover, #set-token .submit:hover
+	{
+	background-color: #b7d032;
 }
 
 /***** END JQuery-Popup-Input-Fields *****/
 
-
 /***** BEGIN JQuery-Datatables *****/
-
 .dataTables_wrapper {
-    margin: 30px 50px 10px 50px;
+	margin: 30px 50px 10px 50px;
 }
 
-#progListing #programNameTable_wrapper,
-#confListing #programNameTable_wrapper {
-    overflow-y: auto;
+#progListing #programNameTable_wrapper, #confListing #programNameTable_wrapper
+	{
+	overflow-y: auto;
 }
 
-#progListing table tbody,
-#confListing table tbody {
-    background-color: #ffffff;
+#progListing table tbody, #confListing table tbody {
+	background-color: #ffffff;
 }
 
-#progListing table tbody tr:hover,
-#progListing table tbody tr.selected,
-#confListing table tbody tr:hover,
-#confListing table tbody tr.selected {
-    background-color: #b7d032;
+#progListing table tbody tr:hover, #progListing table tbody tr.selected,
+	#confListing table tbody tr:hover, #confListing table tbody tr.selected
+	{
+	background-color: #b7d032;
 }
 
 #progListing table thead, #progListing table thead .DataTables_sort_wrapper,
-#confListing table thead, #confListing table thead .DataTables_sort_wrapper {
-    text-transform: uppercase;
-    background-color: #898989;
-    color: #ffffff;
-    text-align: left;
+	#confListing table thead, #confListing table thead .DataTables_sort_wrapper
+	{
+	text-transform: uppercase;
+	background-color: #898989;
+	color: #ffffff;
+	text-align: left;
 }
 
-#progListing table,    
-#confListing table {    
-    margin: 0;
-    width: 100%;
-    border-spacing: 0px;
+#progListing table, #confListing table {
+	margin: 0;
+	width: 100%;
+	border-spacing: 0px;
 }
 
-.table > thead > tr > th,
-.table > tbody > tr > th,
-.table > thead > tr > td,
-.table > tbody > tr > td {
-    padding: 9px;
+.table>thead>tr>th, .table>tbody>tr>th, .table>thead>tr>td, .table>tbody>tr>td
+	{
+	padding: 9px;
 }
 
-#progListing table > tbody > tr > td,
-#confListing table > tbody > tr > td {
-    border-top: 1px solid #ddd;
+#progListing table>tbody>tr>td, #confListing table>tbody>tr>td {
+	border-top: 1px solid #ddd;
 }
 
-#progListing table.dataTable.no-footer,
-#confListing table.dataTable.no-footer {
-    border-bottom: none !important;
+#progListing table.dataTable.no-footer, #confListing table.dataTable.no-footer
+	{
+	border-bottom: none !important;
 }
 
-#progListing .programs,
-#confListing .configurations {
-    color: #000000;
+#progListing .programs, #confListing .configurations {
+	color: #000000;
 }
 
-#progListing input,
-#confListing input,
-#logging input {
+#progListing input, #confListing input, #logging input {
 	margin-top: 15px;
-    margin-right: 5px;
-    background-color: #afca04;
-    border: medium none;
-    border-radius: 2px;
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
-    padding: 7px 9px;
+	margin-right: 5px;
+	background-color: #afca04;
+	border: medium none;
+	border-radius: 2px;
+	color: white;
+	cursor: pointer;
+	font-size: 16px;
+	padding: 7px 9px;
 }
 
-#progListing input:hover,
-#confListing input:hover {
-    background-color: #b7d032;
+#progListing input:hover, #confListing input:hover {
+	background-color: #b7d032;
 }
 
-#progListing > h2,
-#confListing > h2 {
-    margin-left: 50px;
+#progListing>h2, #confListing>h2 {
+	margin-left: 50px;
 }
 
 .tableButtons {
-    margin-left: 50px;
+	margin-left: 50px;
 }
 
 .fg-button {
-    margin-left: 6px;
+	margin-left: 6px;
 }
 
 /*** TODO
