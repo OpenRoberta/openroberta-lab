@@ -6,8 +6,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.awt.AWTException;
+import java.awt.Robot;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -23,6 +25,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -44,12 +47,11 @@ import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.IntegrationTest;
 import de.fhg.iais.roberta.util.Util;
 
-@Ignore
 @Category(IntegrationTest.class)
 public class RoundTripTest {
     private static final String resourcePath = "/roundtrip/";
     private static final String[] blocklyPrograms = {
-        "action", "color", "control", "functions", "lists", "logic", "mathematic", "sensors", "text"
+        "move", "drive", "show", "sound", "status_light", "sensors", "logic"
     };
 
     private static WebDriver driver;
@@ -86,9 +88,21 @@ public class RoundTripTest {
     }
 
     @Test
-    public void actionTest() throws Exception {
-        String programName = "action";
+    public void actionMove() throws Exception {
+        String program = blocklyPrograms[0];
+        loadProgram(program);
+
+        String resultProgram = saveProgram(program);
+        RoundTripTest.blocklyProgram =
+            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + program + ".xml"), Charsets.UTF_8);
+        Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
+    }
+
+    @Test
+    public void actionDrive() throws Exception {
+        String programName = blocklyPrograms[1];
         loadProgram(programName);
+
         String resultProgram = saveProgram(programName);
         RoundTripTest.blocklyProgram =
             Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + programName + ".xml"), Charsets.UTF_8);
@@ -96,8 +110,41 @@ public class RoundTripTest {
     }
 
     @Test
-    public void actionColor() throws Exception {
-        String programName = "color";
+    public void actionShow() throws Exception {
+        String program = blocklyPrograms[2];
+        loadProgram(program);
+
+        String resultProgram = saveProgram(program);
+        RoundTripTest.blocklyProgram =
+            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + program + ".xml"), Charsets.UTF_8);
+        Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
+    }
+
+    @Test
+    public void actionSound() throws Exception {
+        String program = blocklyPrograms[3];
+        loadProgram(program);
+
+        String resultProgram = saveProgram(program);
+        RoundTripTest.blocklyProgram =
+            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + program + ".xml"), Charsets.UTF_8);
+        Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
+    }
+
+    @Test
+    public void actionStatusLight() throws Exception {
+        String program = blocklyPrograms[4];
+        loadProgram(program);
+
+        String resultProgram = saveProgram(program);
+        RoundTripTest.blocklyProgram =
+            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + program + ".xml"), Charsets.UTF_8);
+        Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
+    }
+
+    @Test
+    public void actionSensors() throws Exception {
+        String programName = blocklyPrograms[5];
         loadProgram(programName);
         String resultProgram = saveProgram(programName);
         RoundTripTest.blocklyProgram =
@@ -105,17 +152,27 @@ public class RoundTripTest {
         Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
     }
 
-    @Test
+    @Ignore
+    public void actionLogic() throws Exception {
+        String programName = blocklyPrograms[6];
+        loadProgram(programName);
+        String resultProgram = saveProgram(programName);
+        RoundTripTest.blocklyProgram =
+            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + programName + ".xml"), Charsets.UTF_8);
+        Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
+    }
+
+    @Ignore
     public void actionControl() throws Exception {
         String programName = "control";
         loadProgram(programName);
-        String resultProgram = saveProgram(programName);
+        String resultProgram = saveProgram(programName + "1");
         RoundTripTest.blocklyProgram =
             Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + programName + ".xml"), Charsets.UTF_8);
         Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
     }
 
-    @Test
+    @Ignore
     public void actionFunctions() throws Exception {
         String programName = "functions";
         loadProgram(programName);
@@ -125,7 +182,7 @@ public class RoundTripTest {
         Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
     }
 
-    @Test
+    @Ignore
     public void actionLists() throws Exception {
         String programName = "lists";
         loadProgram(programName);
@@ -135,17 +192,7 @@ public class RoundTripTest {
         Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
     }
 
-    @Test
-    public void actionlogic() throws Exception {
-        String programName = "logic";
-        loadProgram(programName);
-        String resultProgram = saveProgram(programName);
-        RoundTripTest.blocklyProgram =
-            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + programName + ".xml"), Charsets.UTF_8);
-        Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
-    }
-
-    @Test
+    @Ignore
     public void actionmathematic() throws Exception {
         String programName = "mathematic";
         loadProgram(programName);
@@ -155,17 +202,7 @@ public class RoundTripTest {
         Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
     }
 
-    @Test
-    public void actionSensors() throws Exception {
-        String programName = "sensors";
-        loadProgram(programName);
-        String resultProgram = saveProgram(programName);
-        RoundTripTest.blocklyProgram =
-            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + programName + ".xml"), Charsets.UTF_8);
-        Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
-    }
-
-    @Test
+    @Ignore
     public void actionText() throws Exception {
         String programName = "text";
         loadProgram(programName);
@@ -225,14 +262,14 @@ public class RoundTripTest {
         for ( String program : RoundTripTest.blocklyPrograms ) {
             RoundTripTest.blocklyProgram =
                 Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + program + ".xml"), Charsets.UTF_8);
-            JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"saveP\";\"name\":\"" + program + "\"}}");
+            JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"saveAsP\";\"name\":\"" + program + "\"}}");
             fullRequest.getJSONObject("data").put("program", RoundTripTest.blocklyProgram);
             RoundTripTest.response = RoundTripTest.restProgram.command(RoundTripTest.s1, fullRequest);
             assertEntityRc(RoundTripTest.response, "ok");
         }
     }
 
-    private static void startServerAndLogin() throws IOException {
+    private static void startServerAndLogin() throws IOException, InterruptedException, AWTException {
         RoundTripTest.server = new ServerStarter("classpath:openRoberta.properties").start();
         int port = RoundTripTest.server.getURI().getPort();
         RoundTripTest.driver = new FirefoxDriver();
@@ -241,11 +278,21 @@ public class RoundTripTest {
         RoundTripTest.driver.get(RoundTripTest.baseUrl + "/");
         RoundTripTest.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
-        //Login
-        WebElement user = RoundTripTest.driver.findElement(By.id("head-navigation-login"));
-        user.click();
+        //Welcome message dismiss
+        RoundTripTest.driver.findElement(By.id("hideStartupMessage")).click();
+        Thread.sleep(500);
 
-        WebElement userLoginElement = (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("login")));
+        Point coordinates = driver.findElement(By.id("head-navi-icon-user")).getLocation();
+        Robot robot = new Robot();
+
+        //Login
+        WebElement user = RoundTripTest.driver.findElement(By.id("head-navi-icon-user"));
+        while ( !RoundTripTest.driver.findElement(By.id("menuLogin")).isDisplayed() ) {
+            robot.mouseMove(coordinates.getX(), coordinates.getY() + 100);
+            user.click();
+        }
+
+        WebElement userLoginElement = (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("menuLogin")));
         userLoginElement.click();
         RoundTripTest.driver.findElement(By.id("accountNameS")).clear();
         RoundTripTest.driver.findElement(By.id("accountNameS")).sendKeys("orA");
@@ -255,31 +302,49 @@ public class RoundTripTest {
     }
 
     private String saveProgram(String programName) throws InterruptedException, Exception, JSONException {
-        WebElement programElement = RoundTripTest.driver.findElement(By.id("head-navigation-program"));
-        programElement.click();
-        WebElement userProgramSaveAsElement = (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("saveAsProg")));
+        WebElement programElement = RoundTripTest.driver.findElement(By.id("head-navigation-program-edit"));
+        while ( !RoundTripTest.driver.findElement(By.id("menuSaveProg")).isDisplayed() ) {
+            programElement.click();
+        }
+        WebElement userProgramSaveAsElement =
+            (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("menuSaveProg")));
         userProgramSaveAsElement.click();
-        RoundTripTest.driver.findElement(By.id("programNameSave")).clear();
-        RoundTripTest.driver.findElement(By.id("programNameSave")).sendKeys(programName);
-        RoundTripTest.driver.findElement(By.id("saveProgram")).click();
+        //        RoundTripTest.driver.findElement(By.id("programNameSave")).clear();
+        //        RoundTripTest.driver.findElement(By.id("programNameSave")).sendKeys(programName);
+        //        RoundTripTest.driver.findElement(By.id("saveProgram")).click();
         Thread.sleep(1000);
         RoundTripTest.response = RoundTripTest.restProgram.command(RoundTripTest.s1, mkD("{'cmd':'loadP';'name':'" + programName + "'}"));
         String resultProgram = ((JSONObject) RoundTripTest.response.getEntity()).getString("data");
         return resultProgram;
     }
 
-    private void loadProgram(String program) throws InterruptedException {
-        WebElement programElement = RoundTripTest.driver.findElement(By.id("head-navigation-program"));
-        programElement.click();
-        int index = Arrays.binarySearch(blocklyPrograms, program);
-        WebElement userProgramOpenElement =
-            (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.cssSelector("listProg")));
+    private void loadProgram(String program) throws InterruptedException, AWTException {
+        WebElement programElement = RoundTripTest.driver.findElement(By.id("head-navigation-program-edit"));
+        while ( !RoundTripTest.driver.findElement(By.id("menuListProg")).isDisplayed() ) {
+            programElement.click();
+        }
+        //        int index = Arrays.binarySearch(blocklyPrograms, program);
+        WebElement userProgramOpenElement = (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("menuListProg")));
         userProgramOpenElement.click();
         WebElement programTable = RoundTripTest.driver.findElement(By.id("programNameTable"));
-        WebElement tr = programTable.findElements(By.tagName("tr")).get(index + 1);
-        tr.findElement(By.tagName("td")).click();
+        WebElement td = findTableRow(program, programTable);
+        td.click();
+
         Thread.sleep(500);
         RoundTripTest.driver.findElement(By.id("loadFromListing")).click();
+    }
+
+    protected WebElement findTableRow(String program, WebElement programTable) {
+        Iterator<WebElement> it = programTable.findElements(By.tagName("tr")).iterator();
+        it.next();
+        while ( it.hasNext() ) {
+            WebElement webE = it.next();
+            WebElement tt = webE.findElement(By.tagName("td"));
+            if ( tt.getText().equals(program) ) {
+                return webE.findElement(By.tagName("td"));
+            }
+        }
+        return null;
     }
 
     private static int getOneInt(String sqlStmt) {

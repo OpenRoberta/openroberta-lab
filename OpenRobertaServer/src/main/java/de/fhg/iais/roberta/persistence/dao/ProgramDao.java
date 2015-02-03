@@ -40,6 +40,7 @@ public class ProgramDao extends AbstractDao<Program> {
         Program program = load(name, owner);
         if ( program == null ) {
             program = new Program(name, owner);
+            program.setProgramText(programText);
             this.session.save(program);
             return true;
         } else if ( overwriteAllowed ) {
