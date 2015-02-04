@@ -47,6 +47,7 @@ import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.IntegrationTest;
 import de.fhg.iais.roberta.util.Util;
 
+@Ignore
 @Category(IntegrationTest.class)
 public class RoundTripTest {
     private static final String resourcePath = "/roundtrip/";
