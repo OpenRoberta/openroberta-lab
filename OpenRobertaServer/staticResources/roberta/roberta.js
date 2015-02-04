@@ -440,7 +440,6 @@ function showProgram(result, load, name) {
  *            name of configuration
  */
 function showConfiguration(result, load, name) {
-    alert(result.data);
     response(result);
     if (result.rc === 'ok') {
         switchToBrickly();
@@ -481,8 +480,6 @@ function loadFromListing() {
  * Load the configuration that was selected in configurations list
  */
 function loadConfigurationFromListing() {
-    console.log('conf');
-
     var $configurationRow = $('#configurationNameTable .selected');
     if ($configurationRow.length > 0) {
         var configurationName = $configurationRow[0].children[0].textContent;
@@ -491,19 +488,15 @@ function loadConfigurationFromListing() {
             "cmd" : "loadC",
             "name" : configurationName
         }, function(result) {
-            console.log(result.data);
             if (result.rc === 'ok') {
                 $("#tabs").tabs("option", "active", 0);
                 userState.configurationSaved = true;
                 displayMessage(result.message, "TOAST");
-                alert('load' + result.data);
                 showConfiguration(result, true, configurationName);
                 $('#menuSaveConfig').parent().removeClass('login');
                 $('#menuSaveConfig').parent().removeClass('disabled');
                 setRobotState(result);
             } else {
-                console.log(result.message);
-
                 displayMessage(result.message, "POPUP");
             }
         });

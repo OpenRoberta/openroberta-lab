@@ -69,7 +69,6 @@ function getXmlOfConfiguration(name) {
  *            data of server call
  */
 function showConfiguration(data, load) {
-    alert(data);
     var xml = Blockly.Xml.textToDom(data);
     if (load) {
         Blockly.mainWorkspace.clear();
