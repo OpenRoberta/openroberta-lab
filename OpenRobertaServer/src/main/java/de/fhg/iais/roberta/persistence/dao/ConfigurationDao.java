@@ -41,7 +41,8 @@ public class ConfigurationDao extends AbstractDao<Program> {
         Configuration configuration = load(name, owner);
         if ( configuration == null ) {
             configuration = new Configuration(name, owner);
-            this.session.save(configuration);
+            configuration.setConfigurationText(configurationText);
+            session.save(configuration);
             return true;
         } else if ( mayExist ) {
             configuration.setConfigurationText(configurationText);
@@ -62,11 +63,11 @@ public class ConfigurationDao extends AbstractDao<Program> {
         Assert.notNull(name);
         Query hql;
         if ( user != null ) {
-            hql = this.session.createQuery("from Configuration where name=:name and (owner is null or owner=:owner)");
+            hql = session.createQuery("from Configuration where name=:name and (owner is null or owner=:owner)");
             hql.setString("name", name);
             hql.setEntity("owner", user);
         } else {
-            hql = this.session.createQuery("from Configuration where name=:name and owner is null");
+            hql = session.createQuery("from Configuration where name=:name and owner is null");
             hql.setString("name", name);
         }
         @SuppressWarnings("unchecked")
@@ -80,7 +81,7 @@ public class ConfigurationDao extends AbstractDao<Program> {
         if ( toBeDeleted == null ) {
             return 0;
         } else {
-            this.session.delete(toBeDeleted);
+            session.delete(toBeDeleted);
             return 1;
         }
     }
@@ -91,7 +92,7 @@ public class ConfigurationDao extends AbstractDao<Program> {
      * @return the list of all configurations, may be an empty list, but never null
      */
     public List<Configuration> loadAll(User owner) {
-        Query hql = this.session.createQuery("from Configuration where owner=:owner");
+        Query hql = session.createQuery("from Configuration where owner=:owner");
         hql.setEntity("owner", owner);
         @SuppressWarnings("unchecked")
         List<Configuration> il = hql.list();
@@ -104,7 +105,7 @@ public class ConfigurationDao extends AbstractDao<Program> {
      * @return the list of all programs, may be an empty list, but never null
      */
     public List<Configuration> loadAll() {
-        Query hql = this.session.createQuery("from Configuration");
+        Query hql = session.createQuery("from Configuration");
         @SuppressWarnings("unchecked")
         List<Configuration> il = hql.list();
         return Collections.unmodifiableList(il);

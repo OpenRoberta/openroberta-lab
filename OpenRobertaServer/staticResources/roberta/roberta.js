@@ -11,8 +11,8 @@ function initUserState() {
     userState.id = -1;
     userState.accountName = '';
     userState.name = '';
-    userState.program = 'meinProgramm';
-    userState.configuration = 'Standardkonfiguration';
+    userState.program = 'NEPOprog';
+    userState.configuration = 'EV3basis';
     userState.programSaved = false;
     userState.configurationSaved = false;
     userState.brickSaved = false;
@@ -440,11 +440,12 @@ function showProgram(result, load, name) {
  *            name of configuration
  */
 function showConfiguration(result, load, name) {
+    alert(result.data);
     response(result);
     if (result.rc === 'ok') {
         switchToBrickly();
         setConfiguration(name);
-        document.getElementById('bricklyFrame').contentWindow.showConfiguration(load, result.data);
+        document.getElementById('bricklyFrame').contentWindow.showConfiguration(result.data, load);
         LOG.info('show configuration ' + userState.configuration + ' signed in: ' + userState.id);
     }
 };
@@ -468,6 +469,7 @@ function loadFromListing() {
                 showProgram(result, true, programName);
                 $('#menuSaveProg').parent().removeClass('login');
                 $('#menuSaveProg').parent().removeClass('disabled');
+                Blockly.getMainWorkspace().saveButton.enable();
             } else {
                 displayMessage(result.message, "POPUP");
             }
@@ -479,6 +481,8 @@ function loadFromListing() {
  * Load the configuration that was selected in configurations list
  */
 function loadConfigurationFromListing() {
+    console.log('conf');
+
     var $configurationRow = $('#configurationNameTable .selected');
     if ($configurationRow.length > 0) {
         var configurationName = $configurationRow[0].children[0].textContent;
@@ -487,15 +491,19 @@ function loadConfigurationFromListing() {
             "cmd" : "loadC",
             "name" : configurationName
         }, function(result) {
+            console.log(result.data);
             if (result.rc === 'ok') {
                 $("#tabs").tabs("option", "active", 0);
                 userState.configurationSaved = true;
                 displayMessage(result.message, "TOAST");
+                alert('load' + result.data);
                 showConfiguration(result, true, configurationName);
                 $('#menuSaveConfig').parent().removeClass('login');
                 $('#menuSaveConfig').parent().removeClass('disabled');
                 setRobotState(result);
             } else {
+                console.log(result.message);
+
                 displayMessage(result.message, "POPUP");
             }
         });
@@ -636,10 +644,10 @@ function beforeActivateTab(event, ui) {
 }
 
 /**
- * Convert date into numeric value 
+ * Convert date into numeric value
  * 
  * @param {d}
- *        date in the form 'dd.mm.yyyy, hh:mm:ss'
+ *            date in the form 'dd.mm.yyyy, hh:mm:ss'
  */
 function parseDate(d) {
     var dayPart = d.split(', ')[0];
@@ -653,24 +661,22 @@ function parseDate(d) {
     var date = new Date(year, month, day, hour, minute, second);
     return date.getTime();
 }
-    
+
 /**
- * Extension of Jquery-datatables for sorting German date fields 
+ * Extension of Jquery-datatables for sorting German date fields
  */
 function initTables() {
-    jQuery.extend(
-            jQuery.fn.dataTableExt.oSort['date-de-asc']  = function(a, b) {
-                a = parseDate(a);
-                b = parseDate(b);
-                return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-            },
-            
-            jQuery.fn.dataTableExt.oSort['date-de-desc']  = function(a, b) {
-                a = parseDate(a);
-                b = parseDate(b);
-                return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-            }
-    );
+    jQuery.extend(jQuery.fn.dataTableExt.oSort['date-de-asc'] = function(a, b) {
+        a = parseDate(a);
+        b = parseDate(b);
+        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+    },
+
+    jQuery.fn.dataTableExt.oSort['date-de-desc'] = function(a, b) {
+        a = parseDate(a);
+        b = parseDate(b);
+        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+    });
 }
 
 /**
@@ -701,29 +707,29 @@ function initProgramNameTable() {
         "sClass" : "programs"
     }, ];
     var $programs = $('#programNameTable');
-    
+
     var $window = $(window);
 
     var calcDataTableHeight = function() {
         return Math.round($window.height() - 260);
     };
-   
+
     var oTable = $programs.dataTable({
-                "sDom" : '<lip>t<r>',
-                "aaData" : [],
-                "aoColumns" : columns,
-                "aoColumnDefs" : [ { // format date fields
-                    "aTargets" : [ 2, 3 ], // indexes of columns to be formatted
-                    "sType" : "date-de",
-                    "mRender" : function(data) {
-                        return formatDate(data);
-                    }
-                } ],
-                "bJQueryUI" : true,
+        "sDom" : '<lip>t<r>',
+        "aaData" : [],
+        "aoColumns" : columns,
+        "aoColumnDefs" : [ { // format date fields
+            "aTargets" : [ 2, 3 ], // indexes of columns to be formatted
+            "sType" : "date-de",
+            "mRender" : function(data) {
+                return formatDate(data);
+            }
+        } ],
+        "bJQueryUI" : true,
 //                "sPaginationType" : "full_numbers",
 //                "bPaginate" : true,
 //                "iDisplayLength" : 20,
-                "oLanguage" : {
+        "oLanguage" : {
 //                    "sLengthMenu" : '<span lkey="Blockly.Msg.DATATABLE_SHOW">Zeige</span> <select>'
 //                            + '<option value="10">10</option><option value="20">20</option><option value="25">25</option>'
 //                            + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>'
@@ -736,20 +742,20 @@ function initProgramNameTable() {
 //                    },
 //                    "sInfo" : "<span lkey='Blockly.Msg.DATATABLE_SHOWING'>Zeige</span> _START_ <span lkey='Blockly.Msg.DATATABLE_TO'>bis</span> _END_ <span lkey='Blockly.Msg.DATATABLE_OF'>von</span> _TOTAL_ <span lkey='Blockly.Msg.DATATABLE_ENTRIES'>Einträgen</span>",
 //                    "sInfoEmpty" : "&nbsp;",
-                    "sEmptyTable" : "<span lkey='Blockly.Msg.DATATABLE_EMPTY_TABLE'>Die Tabelle ist leer</span>"
-                },
-                "fnDrawCallback" : function() {
-                },
-                "scrollY" : calcDataTableHeight(),
-                "scrollCollapse" : true,
-                "paging" : false,
-                "bInfo" : false
-            });
-    
+            "sEmptyTable" : "<span lkey='Blockly.Msg.DATATABLE_EMPTY_TABLE'>Die Tabelle ist leer</span>"
+        },
+        "fnDrawCallback" : function() {
+        },
+        "scrollY" : calcDataTableHeight(),
+        "scrollCollapse" : true,
+        "paging" : false,
+        "bInfo" : false
+    });
+
     $window.resize(function() {
         var oSettings = oTable.fnSettings();
         oSettings.oScroll.sY = calcDataTableHeight();
-        oTable.fnDraw(false);    // redraw the table
+        oTable.fnDraw(false); // redraw the table
     });
 
     $('#programNameTable tbody').onWrap('click', 'tr', selectionPFn);
@@ -787,29 +793,29 @@ function initConfigurationNameTable() {
         "sClass" : "configurations"
     }, ];
     var $configurations = $('#configurationNameTable');
-    
+
     var $window = $(window);
 
     var calcDataTableHeight = function() {
         return Math.round($window.height() - 260);
     };
-    
+
     var oTable = $configurations.dataTable({
-                "sDom" : '<lip>t<r>',
-                "aaData" : [],
-                "aoColumns" : columns,
-                "aoColumnDefs" : [ { // format date fields
-                    "aTargets" : [ 2, 3 ], // indexes of columns to be formatted
-                    "sType" : "date-de",
-                    "mRender" : function(data) {
-                        return formatDate(data);
-                    }
-                } ],
-                "bJQueryUI" : true,
+        "sDom" : '<lip>t<r>',
+        "aaData" : [],
+        "aoColumns" : columns,
+        "aoColumnDefs" : [ { // format date fields
+            "aTargets" : [ 2, 3 ], // indexes of columns to be formatted
+            "sType" : "date-de",
+            "mRender" : function(data) {
+                return formatDate(data);
+            }
+        } ],
+        "bJQueryUI" : true,
 //                "sPaginationType" : "full_numbers",
 //                "bPaginate" : true,
 //                "iDisplayLength" : 20,
-                "oLanguage" : {
+        "oLanguage" : {
 //                    "sLengthMenu" : '<span lkey="Blockly.Msg.DATATABLE_SHOW">Zeige</span> <select>'
 //                            + '<option value="10">10</option><option value="20">20</option><option value="25">25</option>'
 //                            + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>'
@@ -822,20 +828,20 @@ function initConfigurationNameTable() {
 //                    },
 //                    "sInfo" : "<span lkey='Blockly.Msg.DATATABLE_SHOWING'>Zeige</span> _START_ <span lkey='Blockly.Msg.DATATABLE_TO'>bis</span> _END_ <span lkey='Blockly.Msg.DATATABLE_OF'>von</span> _TOTAL_ <span lkey='Blockly.Msg.DATATABLE_ENTRIES'>Einträgen</span>",
 //                    "sInfoEmpty" : "&nbsp;",
-                    "sEmptyTable" : "<span lkey='Blockly.Msg.DATATABLE_EMPTY_TABLE'>Die Tabelle ist leer</span>"
-                },
-                "fnDrawCallback" : function() {
-                },
-                "scrollY" : calcDataTableHeight(),
-                "scrollCollapse" : true,
-                "paging" : false,
-                "bInfo" : false
-            });
-    
+            "sEmptyTable" : "<span lkey='Blockly.Msg.DATATABLE_EMPTY_TABLE'>Die Tabelle ist leer</span>"
+        },
+        "fnDrawCallback" : function() {
+        },
+        "scrollY" : calcDataTableHeight(),
+        "scrollCollapse" : true,
+        "paging" : false,
+        "bInfo" : false
+    });
+
     $window.resize(function() {
         var oSettings = oTable.fnSettings();
         oSettings.oScroll.sY = calcDataTableHeight();
-        oTable.fnDraw(false);    // redraw the table
+        oTable.fnDraw(false); // redraw the table
     });
 
     $('#configurationNameTable tbody').onWrap('click', 'tr', selectionCFn);
@@ -946,14 +952,13 @@ function initHeadNavigation() {
         } else if (domId === 'menuCheckProg') { //  Submenu 'Program'
             displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP");
         } else if (domId === 'menuNewProg') { //  Submenu 'Program'
-            setProgram("meinProgramm");
+            setProgram("NEPOprog");
             initProgramEnvironment();
             $('#menuSaveProg').parent().addClass('disabled');
             Blockly.getMainWorkspace().saveButton.disable();
             $('#tabProgram').click();
         } else if (domId === 'menuListProg') { //  Submenu 'Program'
-            deactivateHeadMenu();
-            switchToBlockly();
+            deactivateProgConfigMenu();
             $('#tabListing').click();
         } else if (domId === 'menuSaveProg') { //  Submenu 'Program'
             saveToServer(response);
@@ -973,12 +978,12 @@ function initHeadNavigation() {
         } else if (domId === 'menuCheckConfig') { //  Submenu 'Configuration'
             displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP");
         } else if (domId === 'menuNewConfig') { //  Submenu 'Configuration'
-            setConfiguration("Standardkonfiguration");
+            setConfiguration("EV3basis");
             document.getElementById('bricklyFrame').contentWindow.initConfigurationEnvironment();
             $('#menuSaveConfig').parent().addClass('disabled');
             document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().saveButton.disable();
         } else if (domId === 'menuListConfig') { //  Submenu 'Configuration'
-            deactivateHeadMenu();
+            deactivateProgConfigMenu();
             $('#tabs').css('display', 'inline');
             $('#bricklyFrame').css('display', 'none');
             $('#tabConfigurationListing').click();
@@ -1029,7 +1034,7 @@ function initHeadNavigation() {
             $("#version").text(userState.version);
             $("#show-about").dialog("open");
         } else if (domId === 'menuLogging') { // Submenu 'Help'
-            deactivateHeadMenu();
+            deactivateProgConfigMenu();
             $('#tabs').css('display', 'inline');
             $('#bricklyFrame').css('display', 'none');
             $('#tabLogging').click();
@@ -1077,7 +1082,7 @@ function initHeadNavigation() {
     }, 'icon robot was clicked');
 
     $('#tabProgram').onWrap('click', function() {
-        activateHeadMenu();
+        activateProgConfigMenu();
         $('#tabConfiguration').removeClass('tabClicked');
         $('#tabProgram').addClass('tabClicked');
         $('#head-navigation-configuration-edit').css('display', 'none');
@@ -1088,7 +1093,7 @@ function initHeadNavigation() {
     });
 
     $('#tabConfiguration').onWrap('click', function() {
-        activateHeadMenu();
+        activateProgConfigMenu();
         $('#tabProgram').removeClass('tabClicked');
         $('#tabConfiguration').addClass('tabClicked');
         $('#head-navigation-program-edit').css('display', 'none');
@@ -1110,7 +1115,7 @@ function initPopups() {
         autoOpen : false,
         draggable : false,
         resizable : false,
-        width : 400,
+        width : 300,
         show : {
             effect : 'fade',
             duration : 300
@@ -1194,13 +1199,13 @@ function initTabs() {
 
     // load program
     $('#loadFromListing').onWrap('click', function() {
-        activateHeadMenu();
+        activateProgConfigMenu();
         loadFromListing();
     }, 'load blocks from program list');
 
     // load configuration
     $('#loadConfigurationFromListing').onWrap('click', function() {
-        activateHeadMenu();
+        activateProgConfigMenu();
         loadConfigurationFromListing();
     }, 'load configuration from configuration list');
 
@@ -1225,15 +1230,15 @@ function initTabs() {
     }, 'share configuration');
 
     $('#backConfiguration').onWrap('click', function() {
-        activateHeadMenu();
+        activateProgConfigMenu();
         switchToBrickly();
     });
     $('#backProgram').onWrap('click', function() {
-        activateHeadMenu();
+        activateProgConfigMenu();
         switchToBlockly();
     });
     $('#backLogging').onWrap('click', function() {
-        activateHeadMenu();
+        activateProgConfigMenu();
         if (bricklyActive) {
             switchToBrickly();
         } else {
@@ -1396,7 +1401,7 @@ function switchLanguageInBlockly(url) {
  * Initialize language switching
  */
 function initializeLanguages() {
-    $('#language').on('click', '.dropdown-menu li a', function () {
+    $('#language').on('click', '.dropdown-menu li a', function() {
         var chosenLanguage = $(this).text();
         $('#chosenLanguage').text(chosenLanguage);
         switchLanguage(chosenLanguage, false);
@@ -1455,19 +1460,29 @@ function displayToastMessages() {
 }
 
 /**
- * Activate head menu
+ * Activate program and config menu when in frames that hides blockly/brickly.
  */
-function activateHeadMenu() {
-    $('.nav > .dropdown > a').removeClass('disabled');
-    $('#head-navigation > .nav-pills > li > a').removeClass('menuDisabled');
+function activateProgConfigMenu() {
+    $('#head-navigation-program-edit > ul > li').removeClass('disabled');
+    $('#head-navigation-configuration-edit > ul > li').removeClass('disabled');
+    setHeadNavigationMenuState(userState.id === -1 ? 'logout' : 'login');
+    if (userState.programSaved) {
+        $('#menuSaveProg').parent().removeClass('login');
+        $('#menuSaveProg').parent().removeClass('disabled');
+        Blockly.getMainWorkspace().saveButton.enable();
+    }
+    if (userState.configurationSaved) {
+        $('#menuSaveConfig').parent().removeClass('login');
+        $('#menuSaveConfig').parent().removeClass('disabled');
+        document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().saveButton.enable();
+    }
 }
-
 /**
- * Deactivate head menu
+ * Deactivate program and config menu.
  */
-function deactivateHeadMenu() {
-    $('.nav > .dropdown > a').addClass('disabled');
-    $('#head-navigation > .nav-pills > li > a').addClass('menuDisabled');
+function deactivateProgConfigMenu() {
+    $('#head-navigation-program-edit > ul > li').addClass('disabled');
+    $('#head-navigation-configuration-edit > ul > li').addClass('disabled');
 }
 
 /**
