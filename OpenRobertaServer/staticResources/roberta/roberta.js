@@ -655,21 +655,23 @@ function parseDate(d) {
 }
     
 /**
- * Extend Jquery for sorting German date fields 
+ * Extension of Jquery-datatables for sorting German date fields 
  */
-jQuery.extend(
-        jQuery.fn.dataTableExt.oSort['date-de-asc']  = function(a, b) {
-            a = parseDate(a);
-            b = parseDate(b);
-            return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-        },
-        
-        jQuery.fn.dataTableExt.oSort['date-de-desc']  = function(a, b) {
-            a = parseDate(a);
-            b = parseDate(b);
-            return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-        }
-);
+function initTables() {
+    jQuery.extend(
+            jQuery.fn.dataTableExt.oSort['date-de-asc']  = function(a, b) {
+                a = parseDate(a);
+                b = parseDate(b);
+                return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+            },
+            
+            jQuery.fn.dataTableExt.oSort['date-de-desc']  = function(a, b) {
+                a = parseDate(a);
+                b = parseDate(b);
+                return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+            }
+    );
+}
 
 /**
  * Initialize table of programs
@@ -962,12 +964,12 @@ function initHeadNavigation() {
         } else if (domId === 'menuPropertiesProg') { //  Submenu 'Program'
         } else if (domId === 'menuToolboxBeginner') { // Submenu 'Program'
             loadToolbox('beginner');
-            $('#menuToolboxBeginner').addClass('disabled');
-            $('#menuToolboxExpert').removeClass('disabled');
+            $('#menuToolboxBeginner').parent().addClass('disabled');
+            $('#menuToolboxExpert').parent().removeClass('disabled');
         } else if (domId === 'menuToolboxExpert') { // Submenu 'Program'
             loadToolbox('expert');
-            $('#menuToolboxExpert').addClass('disabled');
-            $('#menuToolboxBeginner').removeClass('disabled');
+            $('#menuToolboxExpert').parent().addClass('disabled');
+            $('#menuToolboxBeginner').parent().removeClass('disabled');
         } else if (domId === 'menuCheckConfig') { //  Submenu 'Configuration'
             displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP");
         } else if (domId === 'menuNewConfig') { //  Submenu 'Configuration'
@@ -1538,6 +1540,7 @@ function init() {
     initPopups();
     initHeadNavigation();
     initProgramNameTable();
+    initTables();
     initConfigurationNameTable();
     initializeLanguages();
     switchLanguage('De', true);
