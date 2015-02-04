@@ -1366,15 +1366,15 @@ function switchLanguage(langCode, forceSwitch) {
         var langs = [ 'De', 'En' ];
         for (i in langs) {
             $("." + langs[i] + "").css('display', 'none');
-            $("#setLang" + langs[i] + "").removeClass('bigFlag');
-            $("#setLang" + langs[i] + "").addClass('smallFlag');
+            $("#setLang" + langs[i] + "").removeClass('bigLanguage');
+            $("#setLang" + langs[i] + "").addClass('smallLanguage');
         }
         if (langs.indexOf(langCode) < 0) {
             langCode = "De";
         }
         $("." + langCode + "").css('display', 'inline');
-        $("#setLang" + langCode + "").removeClass('smallFlag');
-        $("#setLang" + langCode + "").addClass('bigFlag');
+        $("#setLang" + langCode + "").removeClass('smallLanguage');
+        $("#setLang" + langCode + "").addClass('bigLanguage');
         userState.language = langCode;
         var url = 'blockly/msg/js/' + langCode.toLowerCase() + '.js';
         var future = $.getScript(url);

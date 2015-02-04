@@ -33,6 +33,7 @@ html, body {
 	font-size: 24px;
 	height: 24px;
 	width: 24px;
+	cursor: pointer;
 }
 
 #states {
@@ -41,30 +42,24 @@ html, body {
 	float: right;
 }
 
-.flag:hover {
+
+.language {
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    display: inline-block;
+    margin: 10px 4px;
+}
+
+.language:hover {
 	cursor: pointer;
 }
 
-.smallFlag {
+.smallLanguage {
 	font-size: 10px;
-	margin: 10px 4px;
 }
 
-.bigFlag {
+.bigLanguage {
 	font-size: 14px;
-	margin: 10px 4px;
-}
-
-#setLangDe {
-	background-size: 100% 100%;
-	background-repeat: no-repeat;
-	display: inline-block;
-}
-
-#setLangEn {
-	background-size: 100% 100%;
-	background-repeat: no-repeat;
-	display: inline-block;
 }
 
 #logo {
@@ -186,7 +181,6 @@ html, body {
 
 .button {
 	margin-right: 5px;
-	width: 100pt;
 	background-color: #afca04;
 	color: white;
 	font-size: 16px;
@@ -558,7 +552,7 @@ html, body {
 .tableButtons {
 	margin-left: 50px;
 	position: fixed;
-	bottom: 10px;
+	bottom: 20px;
 }
 
 .fg-button {
