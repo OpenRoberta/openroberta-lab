@@ -42,7 +42,6 @@ html, body {
 	float: right;
 }
 
-
 .language {
     background-size: 100% 100%;
     background-repeat: no-repeat;
@@ -133,7 +132,8 @@ html, body {
 	float: left;
 }
 
-#logging {
+#log {
+	height: 90%;
 	overflow-y: scroll;
 }
 

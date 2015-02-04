@@ -1554,14 +1554,4 @@ function init() {
     }
 };
 
-
-
-
-
-
-
-
-
-
-
 $(document).ready(WRAP.fn3(init, 'page init'));
