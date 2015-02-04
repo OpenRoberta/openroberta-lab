@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-01-29 23:28:57.276000",
+		"lastupdated": "2015-02-04 12:32:46.486000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -674,8 +674,6 @@
 	"ORA_USER_TO_SHARE_DOES_NOT_EXIST": "User to share with does not exist.",
 	"ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS": "Missing required fields.",
 	"ORA_SERVER_ERROR": "Server-Error",
-	"HINT_LANGUAGE_GERMAN": "German",
-	"HINT_LANGUAGE_ENGLISH": "English",
 	"DATATABLE_PROGRAM_NAME": "Program name",
 	"DATATABLE_CREATED_BY": "Creator",
 	"DATATABLE_SHARED_WITH": "Shared with",

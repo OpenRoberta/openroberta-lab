@@ -1334,10 +1334,6 @@ function translate(jsdata) {
             $('.buttonShare').attr('value', value);
         } else if (lkey === 'Blockly.Msg.BUTTON_EMPTY_LIST') {
             $('#clearLog').attr('value', value);
-        } else if (lkey === 'Blockly.Msg.HINT_LANGUAGE_GERMAN') {
-            $('#setLangDe').prop('title', value);
-        } else if (lkey === 'Blockly.Msg.HINT_LANGUAGE_ENGLISH') {
-            $('#setLangEn').prop('title', value);
         } else if (lkey === 'Blockly.Msg.MENU_ROBOT_STATE_INFO') {
             $('#show-robot-info').dialog('option', 'title', value);
             $(this).html(value);
@@ -1363,18 +1359,10 @@ function translate(jsdata) {
  */
 function switchLanguage(langCode, forceSwitch) {
     if (forceSwitch || userState.language != langCode) {
-        var langs = [ 'De', 'En' ];
-        for (i in langs) {
-            $("." + langs[i] + "").css('display', 'none');
-            $("#setLang" + langs[i] + "").removeClass('bigLanguage');
-            $("#setLang" + langs[i] + "").addClass('smallLanguage');
-        }
+        var langs = [ 'DE', 'EN' ];
         if (langs.indexOf(langCode) < 0) {
-            langCode = "De";
+            langCode = "DE";
         }
-        $("." + langCode + "").css('display', 'inline');
-        $("#setLang" + langCode + "").removeClass('smallLanguage');
-        $("#setLang" + langCode + "").addClass('bigLanguage');
         userState.language = langCode;
         var url = 'blockly/msg/js/' + langCode.toLowerCase() + '.js';
         var future = $.getScript(url);
@@ -1408,13 +1396,11 @@ function switchLanguageInBlockly(url) {
  * Initialize language switching
  */
 function initializeLanguages() {
-    $('#setLangDe').onWrap('click', function() {
-        switchLanguage('De', false);
-    }, 'switch language to "De"');
-
-    $('#setLangEn').onWrap('click', function() {
-        switchLanguage('En', false);
-    }, 'switch language to "En"');
+    $('#language').on('click', '.dropdown-menu li a', function () {
+        var chosenLanguage = $(this).text();
+        $('#chosenLanguage').text(chosenLanguage);
+        switchLanguage(chosenLanguage, false);
+    });
 }
 
 /**

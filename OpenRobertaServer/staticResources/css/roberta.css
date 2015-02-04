@@ -42,25 +42,6 @@ html, body {
 	float: right;
 }
 
-.language {
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    display: inline-block;
-    margin: 10px 4px;
-}
-
-.language:hover {
-	cursor: pointer;
-}
-
-.smallLanguage {
-	font-size: 10px;
-}
-
-.bigLanguage {
-	font-size: 14px;
-}
-
 #logo {
 	position: absolute;
 	top: 0;

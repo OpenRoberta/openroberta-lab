@@ -657,8 +657,6 @@
     "ORA_USER_TO_SHARE_DOES_NOT_EXIST" : "User to share with does not exist.",
     "ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS" : "Erforderliche Felder fehlen.",
     "ORA_SERVER_ERROR" : "Server-Fehler",
-    "HINT_LANGUAGE_GERMAN" : "Deutsch",
-    "HINT_LANGUAGE_ENGLISH" : "Englisch",
     "DATATABLE_PROGRAM_NAME" : "Name des Programms",
     "DATATABLE_CREATED_BY" : "Erzeugt von",
     "DATATABLE_SHARED_WITH" : "Geteilt mit",

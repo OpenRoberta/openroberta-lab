@@ -147,9 +147,14 @@ limitations under the License.
         </div>
         <div id="states">
             <span href="#" id="iconDisplayLogin" class="typcn typcn-user"></span><span href="#" id="iconDisplayRobotState" class="typcn typcn-Roberta"></span><br />
-            <span id="setLangDe" class="language bigLanguage" title="Deutsch" lkey="Blockly.Msg.HINT_LANGUAGE_GERMAN">DE</span> <span id="setLangEn"
-                class="language smallLanguage" title="Englisch" lkey="Blockly.Msg.HINT_LANGUAGE_ENGLISH"
-            >EN</span>
+            <ul class="nav navbar-nav" id="language">
+                <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="chosenLanguage">DE</span> <b class="caret"></b></a>
+                    <ul class="dropdown-menu" id="languages">
+                        <li><a href="#">EN</a></li>
+                        <li><a href="#">DE</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
 
