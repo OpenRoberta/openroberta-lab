@@ -540,13 +540,11 @@ table.dataTable thead .sorting, table.dataTable thead .sorting_asc_disabled,
 }
 
 table.dataTable thead .sorting_asc {
-	background: url("/css/img/dataTables-icons/down.svg") no-repeat center
-		left;
+	background: url("/css/img/dataTables-icons/arrow-sorted-down.svg") no-repeat center left;
 }
 
 table.dataTable thead .sorting_desc {
-	background: url("/css/img/dataTables-icons/up.svg") no-repeat center
-		left;
+	background: url("/css/img/dataTables-icons/arrow-sorted-up.svg") no-repeat center left;
 }
 
 /***** END JQuery-Datatables *****/
