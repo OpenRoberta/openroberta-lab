@@ -43,35 +43,6 @@ html, body {
 	float: right;
 }
 
-.flag {
-	cursor: pointer;
-}
-
-.smallFlag {
-	font-size: 10px;
-	margin: 20px 4px;
-}
-
-.bigFlag {
-	font-size: 14px;
-	margin-top: 20px;
-	margin-bottom: 0;
-	margin-left: 4px;
-	margin-right: 4px;
-}
-
-#setLangDe {
-	background-size: 100% 100%;
-	background-repeat: no-repeat;
-	display: inline-block;
-}
-
-#setLangEn {
-	background-size: 100% 100%;
-	background-repeat: no-repeat;
-	display: inline-block;
-}
-
 #logo {
 	position: absolute;
 	top: 0;
@@ -435,8 +406,9 @@ input {
 }
 
 #login-user .submit, .program .submit, .configuration .submit,
-	#register-user .submit, #delete-user .submit, #set-token .submit,
-	#show-startup-message .submit {
+#register-user .submit, #delete-user .submit, #set-token .submit,
+#show-startup-message .submit, #confirmDeleteProgram .submit,
+#confirmDeleteConfiguration .submit {
 	padding: 6px 12px;
 	border: none;
 	font-size: 14px;

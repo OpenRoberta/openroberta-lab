@@ -140,16 +140,21 @@ limitations under the License.
     <!-- Roberta-Logo -->
     <div id="logo">
         <div id="imgLogo">
-            <img class="flag" src="/css/svg/NEPO_Logo_RGB.svg" />
+            <img src="/css/svg/NEPO_Logo_RGB.svg" />
         </div>
         <div id="imgBeta">
-            <img class="flag" src="/css/img/beta.png" />
+            <img src="/css/img/beta.png" />
         </div>
         <div id="states">
-            <span href="#" id="iconDisplayLogin" class="flag typcn typcn-user"></span><span href="#" id="iconDisplayRobotState" class="flag typcn typcn-Roberta"></span><br />
-            <span id="setLangDe" class="flag bigFlag" title="Deutsch" lkey="Blockly.Msg.HINT_LANGUAGE_GERMAN">DE</span> <span id="setLangEn"
-                class="flag smallFlag" title="Englisch" lkey="Blockly.Msg.HINT_LANGUAGE_ENGLISH"
-            >EN</span>
+            <span href="#" id="iconDisplayLogin" class="typcn typcn-user"></span><span href="#" id="iconDisplayRobotState" class="typcn typcn-Roberta"></span><br />
+            <ul class="nav navbar-nav" id="language">
+                <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="chosenLanguage">DE</span> <b class="caret"></b></a>
+                    <ul class="dropdown-menu" id="languages">
+                        <li><a href="#">EN</a></li>
+                        <li><a href="#">DE</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
 
@@ -165,7 +170,7 @@ limitations under the License.
 
     <!-- ################## POPUPS ################## -->
 
-    <div class="jquerypopup  inner-addon" id="login-user" title="Anmeldung">
+    <div class="jquerypopup inner-addon" id="login-user" title="Anmeldung">
         <label for="accountNameS" lkey="Blockly.Msg.POPUP_USERNAME"></label> <input id="accountNameS" class='input' type="text" value="" /><i
             class="typcn typcn-user"
         > </i> <label for="pass1S" lkey="Blockly.Msg.POPUP_PASSWORD"></label> <input id="pass1S" class='input' type="password" value="" /><i
@@ -260,7 +265,7 @@ limitations under the License.
         >Toolbox</span>:&nbsp;<span id="toolbox">???</span>
     </div>
 
-    <div class="jquerypopup  inner-addon" id="show-robot-info" title="Zustand des Roboters">
+    <div class="jquerypopup inner-addon" id="show-robot-info" title="Zustand des Roboters">
         <span lkey="Blockly.Msg.POPUP_ROBOT_NAME">Name</span>:&nbsp;</span><span id="robotName"></span><br /> <span lkey="Blockly.Msg.POPUP_ROBOT_STATE">Status</span>:&nbsp;<span
             id="robotState"
         ></span><br /> <span lkey="Blockly.Msg.POPUP_ROBOT_BATTERY">Batteriespannung</span>:&nbsp;<span id="robotBattery"></span></br> <span
@@ -270,6 +275,18 @@ limitations under the License.
 
     <div class="jquerypopup" id="show-message" title="Achtung">
         <span id="message" lkey="Blockly.Msg.POPUP_ATTENTION"></span>
+    </div>
+
+    <div class="jquerypopup" id="confirmDeleteProgram">
+        <span lkey="Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM">Möchten Sie das Programm wirklich löschen ?</span><br/>&nbsp;<br/>
+        <input id="doDeleteProgram" class='submit' type="submit" value="OK" />
+        <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
+    </div>
+
+    <div class="jquerypopup" id="confirmDeleteConfiguration">
+        <span lkey="Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION">Möchten Sie die Konfiguration wirklich löschen ?</span><br/>&nbsp;<br/>
+        <input id="doDeleteConfiguration" class='submit' type="submit" value="OK" />
+        <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
     </div>
 
     <div class="jquerypopup" id="show-startup-message" title="Achtung">

@@ -601,6 +601,8 @@
     "POPUP_ROBOT_STATE" : "Status",
     "POPUP_ROBOT_BATTERY" : "Batteriespannung",
     "POPUP_ROBOT_WAIT" : "Wartezeit",
+    "POPUP_CONFIRM_DELETE_PROGRAM" : "Möchten Sie das Programm wirklich löschen ?",
+    "POPUP_CONFIRM_DELETE_CONFIGURATION" : "Möchten Sie die Konfiguration wirklich löschen ?",
     "BUTTON_STOP" : "Stop",
     "BUTTON_FINISH" : "Beenden",
     "BUTTON_LOAD" : "Laden",

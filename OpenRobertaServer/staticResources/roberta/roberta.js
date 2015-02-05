@@ -7,7 +7,7 @@ var toastMessages = [];
  */
 function initUserState() {
     userState.version = 'xx.xx.xx';
-    userState.language = 'de';
+    userState.language = 'DE';
     userState.id = -1;
     userState.accountName = '';
     userState.name = '';
@@ -996,24 +996,20 @@ function initHeadNavigation() {
             $("#robotWait").text(userState['robot.wait']);
             $("#show-robot-info").dialog("open");
         } else if (domId === 'menuFirstSteps') { // Submenu 'Help'
-            if (userState.language === 'De') {
+            if (userState.language === 'DE') {
                 window.open("http://www.open-roberta.org/erste-schritte.html");
             } else {
                 window.open("http://www.open-roberta.org/index.php?id=59&L=1");
             }
         } else if (domId === 'menuStartProgramming') { // Submenu 'Help'
-            if (userState.language === 'De') {
+            if (userState.language === 'DE') {
                 window.open("http://dev.open-roberta.org/willkommen.html");
             } else {
                 window.open("http://dev.open-roberta.org/willkommen.html?&L=1");
             }
         } else if (domId === 'menuFaq') { // Submenu 'Help'
-            if (userState.language === 'De') {
-                if (userState.language === 'De') {
-                    window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/FAQ/FAQ+Home");
-                } else {
-                    window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/FAQ/FAQ+Home");
-                }
+            if (userState.language === 'DE') {
+                window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/FAQ/FAQ+Home");
             } else {
                 window.open("http://dev.open-roberta.org/willkommen.html?&L=1");
             }
@@ -1202,14 +1198,26 @@ function initTabs() {
         loadConfigurationFromListing();
     }, 'load configuration from configuration list');
 
-    // delete program
+    // confirm program deletion
     $('#deleteFromListing').onWrap('click', function() {
+        $("#confirmDeleteProgram").dialog("open");
+    }, 'Ask for confirmation to delete a program');
+    
+    // delete program
+    $('#doDeleteProgram').onWrap('click', function() {
         deleteFromListing();
-    }, 'delete blocks from program list');
+        $(".ui-dialog-content").dialog("close"); // close all opened popups
+    }, 'delete program');
+
+    // confirm configuration deletion
+    $('#deleteConfigurationFromListing').onWrap('click', function() {
+        $("#confirmDeleteConfiguration").dialog("open");
+    }, 'Ask for confirmation to delete a configuration');
 
     // delete configuration
-    $('#deleteConfigurationFromListing').onWrap('click', function() {
+    $('#doDeleteConfiguration').onWrap('click', function() {
         deleteConfigurationFromListing();
+        $(".ui-dialog-content").dialog("close"); // close all opened popups
     }, 'delete configuration from configurations list');
 
     // share program
@@ -1295,9 +1303,9 @@ function translate(jsdata) {
         var lkey = $(this).attr('lkey');
         var key = lkey.replace("Blockly.Msg.", "");
         var value = Blockly.Msg[key];
-//        if (value == undefined) {
-//            console.log('UNDEFINED    key : value = ' + key + ' : ' + value);            
-//        }
+        if (value == undefined) {
+            console.log('UNDEFINED    key : value = ' + key + ' : ' + value);            
+        }
         if (lkey === 'Blockly.Msg.MENU_LOG_IN') {
             $('#login-user').dialog('option', 'title', value);
             $(this).html(value);
@@ -1537,7 +1545,7 @@ function init() {
     initTables();
     initConfigurationNameTable();
     initializeLanguages();
-    switchLanguage('De', true);
+    switchLanguage('DE', true);
     pingServer();
     $('#menuTabProgram').parent().addClass('disabled');
     $('#tabProgram').addClass('tabClicked');
