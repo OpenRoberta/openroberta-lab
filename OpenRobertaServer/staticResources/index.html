@@ -170,14 +170,27 @@ limitations under the License.
 
     <!-- ################## POPUPS ################## -->
 
-    <div class="jquerypopup inner-addon" id="login-user" title="Anmeldung">
-        <label for="accountNameS" lkey="Blockly.Msg.POPUP_USERNAME"></label> <input id="accountNameS" class='input' type="text" value="" /><i
-            class="typcn typcn-user"
-        > </i> <label for="pass1S" lkey="Blockly.Msg.POPUP_PASSWORD"></label> <input id="pass1S" class='input' type="password" value="" /><i
-            class="typcn typcn-lock-closed"
-        ></i></br> <input id="doLogin" class='submit' type="submit" value="OK" /> <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL"
-            value="Cancel"
-        />
+    <div id="login-user" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">Login</h3>
+                </div>
+                <div class="modal-body">
+                    <label for="accountNameS" class="control-label" lkey="Blockly.Msg.POPUP_USERNAME"></label>
+                    <i class="typcn typcn-user"></i>
+                    <input id="accountNameS" class='input form-control' type="text" value="" /><br/>
+                    <label for="pass1S" class="control-label" lkey="Blockly.Msg.POPUP_PASSWORD"></label>
+                    <i class="typcn typcn-lock-closed"></i>
+                    <input id="pass1S" class='input form-control' type="password" value="" /></br>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="doLogin">OK</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="jquerypopup inner-addon" id="register-user" title="Benutzer registrieren">

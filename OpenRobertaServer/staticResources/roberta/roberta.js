@@ -98,6 +98,7 @@ function login() {
             setHeadNavigationMenuState('login');
             setRobotState(response);
             displayMessage(response.message, "TOAST");
+            $('.modal').modal('hide'); // close all opened popups
             $(".ui-dialog-content").dialog("close"); // close all opened popups
         } else {
             displayMessage(response.message, "POPUP");
@@ -1028,7 +1029,8 @@ function initHeadNavigation() {
             $('#bricklyFrame').css('display', 'none');
             $('#tabLogging').click();
         } else if (domId === 'menuLogin') { // Submenu 'Login'
-            $("#login-user").dialog("open");
+            $("#login-user").modal('show');
+//            $("#login-user").dialog("open");
         } else if (domId === 'menuLogout') { // Submenu 'Login'
             logout();
         } else if (domId === 'menuNewUser') { // Submenu 'Login'
@@ -1046,7 +1048,7 @@ function initHeadNavigation() {
         $('.navbar-fixed-top .dropdown').removeClass('open');
     });
 
-    $('#imgLogo').onWrap('click', function() {
+    $('#imgLogo, #imgBeta').onWrap('click', function() {
         window.open('http://open-roberta.org');
     }, 'logo was clicked');
 
@@ -1120,7 +1122,10 @@ function initPopups() {
 
     $('#saveUser').onWrap('click', saveUserToServer, 'save the user data');
     $('#deleteUser').onWrap('click', deleteUserOnServer, 'delete user data');
-    $('#doLogin').onWrap('click', login, 'login ');
+
+    $('#doLogin').onWrap('click', function() {
+        login();
+    }, 'login ');
 
     $('#attachProgram').onWrap('click', function() {
         // TODO
@@ -1307,7 +1312,7 @@ function translate(jsdata) {
             console.log('UNDEFINED    key : value = ' + key + ' : ' + value);            
         }
         if (lkey === 'Blockly.Msg.MENU_LOG_IN') {
-            $('#login-user').dialog('option', 'title', value);
+//            $('#login-user').dialog('option', 'title', value);
             $(this).html(value);
         } else if (lkey === 'Blockly.Msg.POPUP_REGISTER_USER') {
             $('#register-user').dialog('option', 'title', value);
