@@ -16,11 +16,11 @@ function init() {
 function injectBrickly(toolbox) {
     response(toolbox);
     if (toolbox.rc === 'ok') {
-        Blockly.inject(document.body, {
+        Blockly.inject(document.getElementById('bricklyDiv'), {
             path : '/blockly/',
             toolbox : toolbox.data,
             trashcan : true,
-            save : true,
+            save : true
         // check : true,
         });
         initConfigurationEnvironment();

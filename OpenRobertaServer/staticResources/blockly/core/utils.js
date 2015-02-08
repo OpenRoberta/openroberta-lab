@@ -125,7 +125,7 @@ Blockly.bindEvent_ = function(node, name, thisObject, func) {
  * @type {Object}
  */
 Blockly.bindEvent_.TOUCH_MAP = {};
-if ('ontouchstart' in document.documentElement) {
+if (goog.events.BrowserFeature.TOUCH_ENABLED) {
     Blockly.bindEvent_.TOUCH_MAP = {
         'mousedown' : [ 'touchstart' ],
         'mousemove' : [ 'touchmove' ],
@@ -294,7 +294,8 @@ Blockly.getAbsoluteXY_ = function(element) {
  * @return {!SVGElement} Newly created SVG element.
  */
 Blockly.createSvgElement = function(name, attrs, opt_parent) {
-    var e = /** @type {!SVGElement} */ (document.createElementNS(Blockly.SVG_NS, name));
+    var e = /** @type {!SVGElement} */
+    (document.createElementNS(Blockly.SVG_NS, name));
     for ( var key in attrs) {
         e.setAttribute(key, attrs[key]);
     }
@@ -464,7 +465,9 @@ Blockly.commonWordSuffix = function(array, opt_shortest) {
 
 /**
  * Is the given string a number (includes negative and decimals).
- * @param {string} str Input string.
+ * 
+ * @param {string}
+ *            str Input string.
  * @return {boolean} True if number, false otherwise.
  */
 Blockly.isNumber = function(str) {

@@ -99,7 +99,7 @@ function login() {
             setRobotState(response);
             displayMessage(response.message, "TOAST");
             $('.modal').modal('hide'); // close all opened popups
-            $(".ui-dialog-content").dialog("close"); // close all opened popups
+            //   $(".ui-dialog-content").dialog("close"); // close all opened popups
         } else {
             displayMessage(response.message, "POPUP");
         }
@@ -1161,8 +1161,8 @@ function initPopups() {
         $('.ui-dialog-titlebar-close').click();
     });
 
-    // Handle button events in popups
-    $(".jquerypopup").keyup(function(event) {
+    // Handle key events in popups
+    $(".modal").keyup(function(event) {
         // fix for not working backspace button in password fields
         if (event.keyCode === $.ui.keyCode.BACKSPACE) {
             if (event.target.type === "password" && $("#" + event.target.id).val().length > 0) {
@@ -1175,7 +1175,7 @@ function initPopups() {
             window.close();
         }
         if (event.keyCode == 13) { // enter
-            $(this).find("input.submit").click();
+            $(this).find(".modal-footer button:first").click();
         }
         event.stopPropagation();
     });
@@ -1207,7 +1207,7 @@ function initTabs() {
     $('#deleteFromListing').onWrap('click', function() {
         $("#confirmDeleteProgram").dialog("open");
     }, 'Ask for confirmation to delete a program');
-    
+
     // delete program
     $('#doDeleteProgram').onWrap('click', function() {
         deleteFromListing();
@@ -1309,7 +1309,7 @@ function translate(jsdata) {
         var key = lkey.replace("Blockly.Msg.", "");
         var value = Blockly.Msg[key];
         if (value == undefined) {
-            console.log('UNDEFINED    key : value = ' + key + ' : ' + value);            
+            console.log('UNDEFINED    key : value = ' + key + ' : ' + value);
         }
         if (lkey === 'Blockly.Msg.MENU_LOG_IN') {
 //            $('#login-user').dialog('option', 'title', value);
@@ -1556,9 +1556,9 @@ function init() {
     $('#tabProgram').addClass('tabClicked');
     $('#head-navigation-configuration-edit').css('display', 'none');
     COMM.setErrorFn(handleServerErrors);
-    if (!getCookie("hideStartupMessage")) {
-        $("#show-startup-message").dialog("open");
-    }
+    // if (!getCookie("hideStartupMessage")) {
+    $("#show-startup-message").dialog("open");
+    // }
 };
 
 $(document).ready(WRAP.fn3(init, 'page init'));

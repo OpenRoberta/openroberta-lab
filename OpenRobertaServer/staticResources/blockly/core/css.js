@@ -46,6 +46,7 @@ Blockly.Css.inject = function() {
  * Array making up the CSS content for Blockly.
  */
 Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 'stroke-linecap: round;', '}',
+
 '.blocklyButtonPathDisabled {', 'fill: #bbb;', 'stroke: #bbb;', 'stroke-linecap: round;', '}',
 
 '.blocklyButtonHoverPath {', 'fill: #333;', 'stroke: #333;', 'stroke-linecap: round;', '}',
@@ -60,8 +61,8 @@ Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 
 
 '.blocklyDraggable {',
 /*
- * Hotspot coordinates are baked into the CUR file, but they are still required
- * in the CSS due to a Chrome bug.
+ * Hotspot coordinates are baked into the CUR file, but they are still
+ * required in the CSS due to a Chrome bug.
  * http://code.google.com/p/chromium/issues/detail?id=1446
  */
 '  cursor: url(<<<PATH>>>/media/handopen.cur) 8 5, auto;', '}',
@@ -104,8 +105,8 @@ Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 
 '.blocklyBubbleText {', '  fill: #000;', '}',
 
 /*
- * Don't allow users to select text. It gets annoying when trying to drag a
- * block and selected text moves instead.
+ * Don't allow users to select text. It gets annoying when trying to
+ * drag a block and selected text moves instead.
  */
 '.blocklySvg text {', '  -moz-user-select: none;', '  -webkit-user-select: none;', '  user-select: none;', '  cursor: inherit;',
         '  font-family: "Roboto", sans-serif;', '}',
@@ -269,10 +270,10 @@ Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 
 
         '.goog-palette-table {', '  border: 1px solid #666;', '  border-collapse: collapse;', '}',
 
-        '.goog-palette-cell {', '  height: 13px;', '  width: 15px;', '  margin: 0;', '  border: 0;', '  text-align: center;', '  vertical-align: middle;',
+        '.goog-palette-cell {', '  height: 24px;', '  width: 24px;', '  margin: 0;', '  border: 0;', '  text-align: center;', '  vertical-align: middle;',
         '  border-right: 1px solid #666;', '  font-size: 1px;', '}',
 
-        '.goog-palette-colorswatch {', '  position: relative;', '  height: 13px;', '  width: 15px;', '  border: 1px solid #666;', '}',
+        '.goog-palette-colorswatch {', '  position: relative;', '  height: 24px;', '  width: 24px;', '  border: 1px solid #666;', '}',
 
         '.goog-palette-cell-hover .goog-palette-colorswatch {', '  border: 1px solid #FFF;', '}',
 
@@ -292,17 +293,8 @@ Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 
          * @author attila@google.com (Attila Bodis)
          */
 
-        '.goog-menu {', '  background: #fff;', '  border-color: #ccc #666 #666 #ccc;', '  border-style: solid;', '  border-width: 1px;', '  cursor: default;',
-        '  font: normal 13px Arial, sans-serif;', '  margin: 0;', '  outline: none;', '  padding: 4px 0;', '  position: absolute;', '  z-index: 20000;', /*
-         * Arbitrary,
-         * but
-         * some
-         * apps
-         * depend
-         * on
-         * it...
-         */
-        '}',
+        '.goog-menu {', '  background: #fff;', '  border: 0;', '  border-radius: 2px;', '  cursor: default;', '  margin: 0;', '  outline: none;',
+        '  padding: 4px 0;', '  position: absolute;', '  z-index: 20000;', 'box-shadow: 0px 3px 5px #aeaeaf;', '-webkit-box-shadow: 0px 3px 5px #aeaeaf;', '}',
 
         /* Copied from: goog/css/menuitem.css */
         /*
@@ -333,15 +325,15 @@ Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 
          * instead rely solely on the BiDi flipping by the CSS compiler. That's
          * why we're not adding the #noflip to .goog-menuitem.
          */
-        '.goog-menuitem {', '  color: #000;', '  font: normal 13px Arial, sans-serif;', '  list-style: none;', '  margin: 0;',
+        '.goog-menuitem {', '  color: #000;', '  list-style: none;', '  margin: 0;',
         /* 28px on the left for icon or checkbox; 7em on the right for shortcut. */
-        '  padding: 4px 7em 4px 28px;', '  white-space: nowrap;', '}',
+        '  padding: 6px 12px 6px 28px;', '  white-space: nowrap;', '}',
 
         /* BiDi override for the resting state. */
         /* #noflip */
         '.goog-menuitem.goog-menuitem-rtl {',
         /* Flip left/right padding for BiDi. */
-        '  padding-left: 7em;', '  padding-right: 28px;', '}',
+        '  padding-left: 12px;', '  padding-right: 28px;', '}',
 
         /*
          * If a menu doesn't have checkable items or items with icons, remove
@@ -355,7 +347,7 @@ Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 
          */
         '.goog-menu-noaccel .goog-menuitem {', '  padding-right: 20px;', '}',
 
-        '.goog-menuitem-content {', '  color: #000;', '  font: normal 13px Arial, sans-serif;', '}',
+        '.goog-menuitem-content {', '  color: #000;', '}',
 
         /* State: disabled. */
         '.goog-menuitem-disabled .goog-menuitem-accel,', '.goog-menuitem-disabled .goog-menuitem-content {', '  color: #ccc !important;', '}',
@@ -363,12 +355,12 @@ Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 
         '.goog-menuitem-disabled .goog-menuitem-icon {', '  opacity: 0.3;', '  -moz-opacity: 0.3;', '  filter: alpha(opacity=30);', '}',
 
         /* State: hover. */
-        '.goog-menuitem-highlight,', '.goog-menuitem-hover {', '  background-color: #d6e9f8;',
+        '.goog-menuitem-highlight,', '.goog-menuitem-hover {', '  background-color: #f5f5f5;',
         /*
          * Use an explicit top and bottom border so that the selection is
          * visible', in high contrast mode.
          */
-        '  border-color: #d6e9f8;', '  border-style: dotted;', '  border-width: 1px 0;', '  padding-bottom: 3px;', '  padding-top: 3px;', '}',
+        '  border:0;', '}',
 
         /* State: selected/checked. */
         '.goog-menuitem-checkbox,', '.goog-menuitem-icon {', '  background-repeat: no-repeat;', '  height: 16px;', '  left: 6px;', '  position: absolute;',

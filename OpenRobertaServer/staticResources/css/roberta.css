@@ -26,6 +26,7 @@ html, body {
 
 .head-navi-icons {
 	font-size: 24px;
+	line-height: 24px;
 	color: #333;
 }
 
@@ -62,7 +63,7 @@ html, body {
 	float: right;
 	margin-right: -150px;
 	margin-top: 40px;
-    cursor: pointer;
+	cursor: pointer;
 }
 
 .menuTab {
@@ -86,23 +87,6 @@ html, body {
 	height: 100%;
 	width: 100%;
 	background: #ffffff; /* Old browsers */
-	background: -moz-radial-gradient(center, ellipse cover, #ffffff 0%, #e6e6e6 100%);
-	/* FF3.6+ */
-	background: -webkit-gradient(radial, center center, 0px, center center, 100%,
-		color-stop(0%, #ffffff), color-stop(100%, #e6e6e6));
-	/* Chrome,Safari4+ */
-	background: -webkit-radial-gradient(center, ellipse cover, #ffffff 0%, #e6e6e6 100%);
-	/* Chrome10+,Safari5.1+ */
-	background: -o-radial-gradient(center, ellipse cover, #ffffff 0%, #e6e6e6 100%);
-	/* Opera 12+ */
-	background: -ms-radial-gradient(center, ellipse cover, #ffffff 0%, #e6e6e6 100%);
-	/* IE10+ */
-	background: radial-gradient(ellipse at center, #ffffff 0%, #e6e6e6 100%);
-	/* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff',
-		endColorstr='#e6e6e6', GradientType=1);
-	/* IE6-9 fallback on horizontal gradient */
-	/* CANT HANDLE THE OVERFLOW, SO ITS SET TO HIDDEN TEMPORARY */
 	overflow: hidden;
 }
 
@@ -132,11 +116,11 @@ html, body {
 	border: 0;
 }
 
-#blocklyDiv {
+#blocklyDiv, #bricklyDiv{
 	background-color: #eee;
 	height: 100%;
 	width: 100%;
-	min-height: 100%;
+	min-height: 100%;	
 }
 
 #toastContainer {
@@ -176,7 +160,7 @@ html, body {
 	background-color: #afca04;
 	color: white;
 	font-size: 16px;
-    cursor: default;
+	cursor: default;
 }
 
 .button:hover {
@@ -206,11 +190,8 @@ html, body {
 }
 
 .nav#head-navigation-tabs>li>a.tabClicked:hover {
-	border-bottom: 4px solid #afca04;
 	background-color: #afca04;
 	outline: none;
-	fill: #afca04;
-	background-color: #afca04;
 }
 
 .navbar-default {
@@ -236,12 +217,11 @@ html, body {
 .dropdown-menu {
 	left: 4px;
 	margin: 0;
-	padding: border: 0;
+	padding: 0;
 	border: 0;
 	border-radius: 2px;
 	box-shadow: 0px 3px 5px #aeaeaf;
 	-webkit-box-shadow: 0px 3px 5px #aeaeaf;
-	border-radius: 2px;
 }
 
 .dropdown-menu>li>a {
@@ -253,17 +233,95 @@ html, body {
 	color: #bbbbbb;
 }
 
-.btn {
-    margin-right: 5px;
-    background-color: #afca04;
-    color: white;
-    font-size: 16px;
-    cursor: default;
-    border: none;
+.modal-backdrop.in {
+	opacity: .3;
 }
 
-/***** END Overwrite Bootstrap-CSS *****/
+.modal-content {
+	border: 0;
+	border: 0;
+	border-radius: 2px;
+}
 
+.modal-body {
+	padding: 0 16px;
+}
+
+.modal-header, .modal-footer {
+	border: 0;
+	padding: 16px;
+	text-align: left;
+}
+
+.modal-dialog {
+	width: 300px;
+}
+
+.form-control:focus {
+	border: none;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	-moz-transition: none;
+	-webkit-transition: none;
+	border: 1px solid #afca04;
+	border-radius: 2px;
+}
+
+.form-control {
+	padding-left: 30px;
+	border: 1px solid #afca04;
+	border-radius: 2px;
+	margin-bottom: 12px;
+}
+
+.left-inner-addon {
+	position: relative;
+}
+
+.left-inner-addon i {
+	color: #bbb;
+	position: absolute;
+	padding: 2px 6px;
+	position: absolute;
+	font-size: 20px;
+}
+
+.btn {
+	margin-right: 6px;
+	background-color: #afca04;
+	color: white;
+	font-size: 16px;
+	cursor: default;
+	border: none;
+	border-radius: 2px;
+}
+
+.btn:hover, .btn:active:focus, .btn:focus, .btn.focus, .btn:active, .btn.active,
+	.open>.dropdown-toggle.btn {
+	background-color: #b7d032;
+	color: white;
+	outline: 0;
+	outline: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+.close {
+	float: right;
+	font-size: 24px;
+	font-weight: 700;
+	line-height: 1;
+	color: #bbb;
+	text-shadow: none;
+	opacity: 1;
+}
+
+.close:hover, .close:focus {
+	color: #333;
+	opacity: 1;
+}
+/***** END Overwrite Bootstrap-CSS *****/
 /***** BEGIN typicons *****/
 .typcn:before {
 	margin-right: 6px;
@@ -271,7 +329,6 @@ html, body {
 
 .head-navi-icons.typcn:before {
 	margin: 0;
-	line-height: 24px;
 }
 /***** END typicons *****/
 
@@ -412,15 +469,14 @@ input {
 	position: absolute;
 	padding: 0px 6px;
 	left: 0px;
-	pointer-events: none;
 	color: #c7c7c7;
 	font-size: 20px;
 }
 
 #login-user .submit, .program .submit, .configuration .submit,
-#register-user .submit, #delete-user .submit, #set-token .submit,
-#show-startup-message .submit, #confirmDeleteProgram .submit,
-#confirmDeleteConfiguration .submit {
+	#register-user .submit, #delete-user .submit, #set-token .submit,
+	#show-startup-message .submit, #confirmDeleteProgram .submit,
+	#confirmDeleteConfiguration .submit {
 	padding: 6px 12px;
 	border: none;
 	font-size: 14px;
@@ -524,11 +580,13 @@ table.dataTable thead .sorting, table.dataTable thead .sorting_asc_disabled,
 }
 
 table.dataTable thead .sorting_asc {
-	background: url("/css/img/dataTables-icons/arrow-sorted-down.svg") no-repeat center left;
+	background: url("/css/img/dataTables-icons/arrow-sorted-down.svg")
+		no-repeat center left;
 }
 
 table.dataTable thead .sorting_desc {
-	background: url("/css/img/dataTables-icons/arrow-sorted-up.svg") no-repeat center left;
+	background: url("/css/img/dataTables-icons/arrow-sorted-up.svg")
+		no-repeat center left;
 }
 
 /***** END JQuery-Datatables *****/

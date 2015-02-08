@@ -133,12 +133,12 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
     goog.events.listen(menu, goog.ui.Component.EventType.ACTION, callback);
     // Listen for touch events (why doesn't Closure handle this already?).
     function callbackTouchStart(e) {
-        var control = this.getOwnerControl(/** @type {Node} */(e.target));
+        var control = this.getOwnerControl(e.target);
         // Highlight the menu item.
         control.handleMouseDown(e);
     }
     function callbackTouchEnd(e) {
-        var control = this.getOwnerControl(/** @type {Node} */(e.target));
+        var control = this.getOwnerControl(e.target);
         // Activate the menu item.
         control.performActionInternal(e);
     }
@@ -148,7 +148,7 @@ Blockly.FieldDropdown.prototype.showEditor_ = function() {
     // Record windowSize and scrollOffset before adding menu.
     var windowSize = goog.dom.getViewportSize();
     var scrollOffset = goog.style.getViewportPageOffset(document);
-    var xy = Blockly.getAbsoluteXY_(/** @type {!Element} */(this.borderRect_));
+    var xy = Blockly.getAbsoluteXY_(this.borderRect_);
     var borderBBox = this.borderRect_.getBBox();
     var div = Blockly.WidgetDiv.DIV;
     menu.render(div);
@@ -237,7 +237,7 @@ Blockly.FieldDropdown.prototype.getOptions_ = function() {
     if (goog.isFunction(this.menuGenerator_)) {
         return this.menuGenerator_.call(this);
     }
-    return /** @type {!Array.<!Array.<string>>} */(this.menuGenerator_);
+    return this.menuGenerator_;
 };
 
 /**

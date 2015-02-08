@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "xhtml1-transitional.dtd">
+<?xml version="1.0" encoding="utf-8"?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <!--
 Copyright 2014, 2015 The Open Roberta project.
@@ -18,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
 <script type="text/javascript" src="/common/jquery/jquery-2.0.3.js" charset="utf-8"></script>
 <script type="text/javascript" src="/common/ui/jquery-ui.js" charset="utf-8"></script>
@@ -38,11 +37,11 @@ limitations under the License.
 <!-- Feedback badge, reports user feedback to issue tracker. -->
 <!--<script type="text/javascript"
     src="http://jira.open-roberta.org/s/en_USy3ler1/786/12/1.1.2/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?collectorId=2f42fc3c"
->-->
-    
-</script>
+>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</script>-->
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
 <title>Open Roberta Lab</title>
 </head>
 
@@ -146,14 +145,13 @@ limitations under the License.
             <img src="/css/img/beta.png" />
         </div>
         <div id="states">
-            <span href="#" id="iconDisplayLogin" class="typcn typcn-user"></span><span href="#" id="iconDisplayRobotState" class="typcn typcn-Roberta"></span><br />
+            <span href="#" id="iconDisplayLogin" class="typcn typcn-user"></span><span href="#" id="iconDisplayRobotState" class="typcn typcn-Roberta"></span> <br />
             <ul class="nav navbar-nav" id="language">
                 <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="chosenLanguage">DE</span> <b class="caret"></b></a>
                     <ul class="dropdown-menu" id="languages">
                         <li><a href="#">EN</a></li>
                         <li><a href="#">DE</a></li>
-                    </ul>
-                </li>
+                    </ul></li>
             </ul>
         </div>
     </div>
@@ -177,57 +175,57 @@ limitations under the License.
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h3 class="modal-title">Login</h3>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body left-inner-addon">
                     <label for="accountNameS" class="control-label" lkey="Blockly.Msg.POPUP_USERNAME"></label>
-                    <i class="typcn typcn-user"></i>
-                    <input id="accountNameS" class='input form-control' type="text" value="" /><br/>
+                    <div class="left-inner-addon">
+                        <i class="typcn typcn-user"></i> <input type="text" data-role="none" id="accountNameS" class="form-control" value="" autofocus/>
+                    </div>
                     <label for="pass1S" class="control-label" lkey="Blockly.Msg.POPUP_PASSWORD"></label>
-                    <i class="typcn typcn-lock-closed"></i>
-                    <input id="pass1S" class='input form-control' type="password" value="" /></br>
+                    <div class="left-inner-addon">
+                        <i class="typcn typcn-lock-closed"></i> <input id="pass1S" data-role="none" class='input form-control' type="password" value="" />
+                    </div>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="doLogin">OK</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="doLogin">OK</button>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="jquerypopup inner-addon" id="register-user" title="Benutzer registrieren">
-        <label for="accountName" lkey="Blockly.Msg.POPUP_USERNAME">Benutzername</label><input id="accountName" class='input' type="text" value="" /><i
+        <label for="accountName" lkey="Blockly.Msg.POPUP_USERNAME">Benutzername</label> <input id="accountName" class='input' type="text" value="" /> <i
             class="typcn typcn-user"
-        ></i> <label for="pass1" lkey="Blockly.Msg.POPUP_PASSWORD">Passwort</label> <input id="pass1" class='input' type="password" value="" /><i
+        ></i> <label for="pass1" lkey="Blockly.Msg.POPUP_PASSWORD">Passwort</label> <input id="pass1" class='input' type="password" value="" /> <i
             class="typcn typcn-lock-closed"
-        ></i> <label for="pass2" lkey="Blockly.Msg.POPUP_REPEAT_PASSWORD">Passwort wiederholen</label> <input id="pass2" class='input' type="password" value="" /><i
-            class="typcn typcn-lock-closed"
-        ></i> <label for="userName" lkey="Blockly.Msg.POPUP_NAME">Name</label> <input id="userName" class='input' type="text" value="" /><i
-            class="typcn typcn-user-outline"
-        ></i> <label for="userEmail" lkey="Blockly.Msg.POPUP_EMAIL">E-Mail</label> <input id="userEmail" class='input' type="text" value="" /><i
-            class="typcn typcn-at"
-        ></i><br /> <input id="saveUser" class='submit' type="submit" lkey="Blockly.Msg.POPUP_REGISTER_USER" value="OK" /> <input class='cancelPopup submit'
-            type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"
+        ></i> <label for="pass2" lkey="Blockly.Msg.POPUP_REPEAT_PASSWORD">Passwort wiederholen</label> <input id="pass2" class='input' type="password" value="" />
+        <i class="typcn typcn-lock-closed"></i> <label for="userName" lkey="Blockly.Msg.POPUP_NAME">Name</label> <input id="userName" class='input' type="text"
+            value=""
+        /> <i class="typcn typcn-user-outline"></i> <label for="userEmail" lkey="Blockly.Msg.POPUP_EMAIL">E-Mail</label> <input id="userEmail" class='input'
+            type="text" value=""
+        /> <i class="typcn typcn-at"></i> <br /> <input id="saveUser" class='submit' type="submit" lkey="Blockly.Msg.POPUP_REGISTER_USER" value="OK" /> <input
+            class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"
         />
     </div>
 
     <div class="jquerypopup inner-addon" id="delete-user" title="Benutzer löschen">
-        <label for="pass1D" lkey="Blockly.Msg.POPUP_PASSWORD"></label> <input id="pass1D" class='input' type="password" value="" /><i
+        <label for="pass1D" lkey="Blockly.Msg.POPUP_PASSWORD"></label> <input id="pass1D" class='input' type="password" value="" /> <i
             class="typcn typcn-lock-closed"
-        ></i><br /> <input id="deleteUser" class='submit' type="submit" lkey="Blockly.Msg.POPUP_DELETE_USER" value="OK" /> <input class='cancelPopup submit'
+        ></i> <br /> <input id="deleteUser" class='submit' type="submit" lkey="Blockly.Msg.POPUP_DELETE_USER" value="OK" /> <input class='cancelPopup submit'
             type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"
         />
     </div>
 
     <div class="jquerypopup program inner-addon" id="attach-program" title="Programm hinzufügen">
-        <label for="programNameAttach" lkey="Blockly.Msg.POPUP_NAME">Name</label> <input id="programNameAttach" class='input programName' type="text" value="" /><i
-            class="typcn typcn-pencil"
-        ></i><br /> <input id="attachProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_ATTACH_PROGRAM" value="OK" /><i class="typcn typcn-pencil"></i>
-        <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
+        <label for="programNameAttach" lkey="Blockly.Msg.POPUP_NAME">Name</label> <input id="programNameAttach" class='input programName' type="text" value="" />
+        <i class="typcn typcn-pencil"></i> <br /> <input id="attachProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_ATTACH_PROGRAM" value="OK" />
+        <i class="typcn typcn-pencil"></i> <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
     </div>
 
     <div class="jquerypopup program inner-addon" id="save-program" title="Programm speichern">
-        <label for="programNameSave" lkey="Blockly.Msg.POPUP_NAME">Name</label> <input id="programNameSave" class='input programName' type="text" value="" /><i
+        <label for="programNameSave" lkey="Blockly.Msg.POPUP_NAME">Name</label> <input id="programNameSave" class='input programName' type="text" value="" /> <i
             class="typcn typcn-pencil"
-        ></i><br /> <input id="saveProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SAVE_PROGRAM" value="OK" /> <input class='cancelPopup submit'
+        ></i> <br /> <input id="saveProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SAVE_PROGRAM" value="OK" /> <input class='cancelPopup submit'
             type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"
         />
     </div>
@@ -235,7 +233,7 @@ limitations under the License.
     <div class="jquerypopup program" id="share-program" title="Programm teilen mit">
         <label for="programShareWith" lkey="Blockly.Msg.POPUP_SHARE_WITH">Teilen mit</label> <input id="programShareWith" class='input programShareWithName'
             type="text" value=""
-        /><i class="typcn typcn-user"></i><br /> <input id="shareProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SHARE" value="OK" /> <input
+        /> <i class="typcn typcn-user"></i> <br /> <input id="shareProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SHARE" value="OK" /> <input
             class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"
         />
     </div>
@@ -243,7 +241,7 @@ limitations under the License.
     <div class="jquerypopup configuration inner-addon" id="save-configuration" title="Konfiguration speichern">
         <label for="configurationNameSave" lkey="Blockly.Msg.POPUP_NAME">Name</label> <input id="configurationNameSave" class='input configurationName'
             type="text" value=""
-        /><i class="typcn typcn-pencil"></i><br /> <input id="saveConfiguration" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SAVE_CONFIGURATION"
+        /> <i class="typcn typcn-pencil"></i> <br /> <input id="saveConfiguration" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SAVE_CONFIGURATION"
             value="OK"
         /> <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
     </div>
@@ -251,37 +249,35 @@ limitations under the License.
     <div class="jquerypopup configuration inner-addon" id="share-configuration" title="Konfiguration teilen mit">
         <label for="configurationShareWith" lkey="Blockly.Msg.POPUP_SHARE_WITH">Teilen mit</label> <input id="configurationShareWith"
             class='input configurationShareWithName' type="text" value=""
-        /><i class="typcn typcn-user"></i><br /> <input id="shareConfiguration" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SHARE" value="OK" /> <input
+        /> <i class="typcn typcn-user"></i> <br /> <input id="shareConfiguration" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SHARE" value="OK" /> <input
             class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"
         />
     </div>
 
     <div class="jquerypopup inner-addon" id="set-token" title="Token setzen">
-        <label for="tokenValue" lkey="Blockly.Msg.POPUP_VALUE">Wert</label> <input id="tokenValue" class='input' type="text" value="" /><i
+        <label for="tokenValue" lkey="Blockly.Msg.POPUP_VALUE">Wert</label> <input id="tokenValue" class='input' type="text" value="" /> <i
             class="typcn typcn-Roberta"
-        ></i><br /> <input id="setToken" class='submit' type="button" lkey="Blockly.Msg.POPUP_SET_TOKEN" value="OK" /> <input class='cancelPopup submit'
+        > </i> <br /> <input id="setToken" class='submit' type="button" lkey="Blockly.Msg.POPUP_SET_TOKEN" value="OK" /> <input class='cancelPopup submit'
             type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"
         />
     </div>
 
     <div class="jquerypopup" id="show-about" title="Über ...">
-        <span>Fraunhofer Open Roberta</span><br /> <span>Version&nbsp;</span><span id="version">???</span><br />&nbsp;<br /> <a
+        <span>Fraunhofer Open Roberta</span> <br /> <span>Version&nbsp;</span><span id="version">???</span> <br /> &nbsp; <br /> <a
             href="http://www.iais.fraunhofer.de/impressum.html" target="_blank" class="publishingNotes De"
         >Impressum</a> <a href="http://www.iais.fraunhofer.de/index.php?id=4515&L=1" target="_blank" class="publishingNotes En">Publishing notes</a>
     </div>
 
     <div class="jquerypopup" id="show-state-info" title="Statusinformation">
-        <span lkey="Blockly.Msg.POPUP_USERNAME">Benutzer</span>:&nbsp;</span><span id="loggedIn">???</span><br /> <span lkey="Blockly.Msg.TAB_PROGRAM">Programm</span>:&nbsp;<span
-            id="programName"
-        >???</span><br /> <span lkey="Blockly.Msg.TAB_CONFIGURATION">Konfiguration</span>:&nbsp;<span id="configurationName">???</span><br /> <span
-            lkey="Blockly.Msg.POPUP_TOOLBOX"
-        >Toolbox</span>:&nbsp;<span id="toolbox">???</span>
+        <span lkey="Blockly.Msg.POPUP_USERNAME">Benutzer</span> <span>:&nbsp;</span> <span id="loggedIn">???</span> <br /> <span lkey="Blockly.Msg.TAB_PROGRAM">Programm</span>
+        <span id="programName">???</span> <br /> <span lkey="Blockly.Msg.TAB_CONFIGURATION">Konfiguration</span> <span id="configurationName">???</span> <br />
+        <span lkey="Blockly.Msg.POPUP_TOOLBOX">Toolbox</span> <span id="toolbox">???</span>
     </div>
 
     <div class="jquerypopup inner-addon" id="show-robot-info" title="Zustand des Roboters">
-        <span lkey="Blockly.Msg.POPUP_ROBOT_NAME">Name</span>:&nbsp;</span><span id="robotName"></span><br /> <span lkey="Blockly.Msg.POPUP_ROBOT_STATE">Status</span>:&nbsp;<span
+        <span lkey="Blockly.Msg.POPUP_ROBOT_NAME">Name</span><span>:&nbsp;</span><span id="robotName"></span> <br /> <span lkey="Blockly.Msg.POPUP_ROBOT_STATE">Status</span>:&nbsp;<span
             id="robotState"
-        ></span><br /> <span lkey="Blockly.Msg.POPUP_ROBOT_BATTERY">Batteriespannung</span>:&nbsp;<span id="robotBattery"></span></br> <span
+        ></span> <br /> <span lkey="Blockly.Msg.POPUP_ROBOT_BATTERY">Batteriespannung</span>:&nbsp;<span id="robotBattery"></span> <br /> <span
             lkey="Blockly.Msg.POPUP_ROBOT_WAIT"
         >Wartezeit</span>:&nbsp;<span id="robotWait"></span>
     </div>
@@ -291,19 +287,19 @@ limitations under the License.
     </div>
 
     <div class="jquerypopup" id="confirmDeleteProgram">
-        <span lkey="Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM">Möchten Sie das Programm wirklich löschen ?</span><br/>&nbsp;<br/>
-        <input id="doDeleteProgram" class='submit' type="submit" value="OK" />
-        <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
+        <span lkey="Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM">Möchten Sie das Programm wirklich löschen ?</span> <br /> &nbsp; <br /> <input
+            id="doDeleteProgram" class='submit' type="submit" value="OK"
+        /> <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
     </div>
 
     <div class="jquerypopup" id="confirmDeleteConfiguration">
-        <span lkey="Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION">Möchten Sie die Konfiguration wirklich löschen ?</span><br/>&nbsp;<br/>
-        <input id="doDeleteConfiguration" class='submit' type="submit" value="OK" />
-        <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
+        <span lkey="Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION">Möchten Sie die Konfiguration wirklich löschen ?</span> <br /> &nbsp; <br /> <input
+            id="doDeleteConfiguration" class='submit' type="submit" value="OK"
+        /> <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
     </div>
 
     <div class="jquerypopup" id="show-startup-message" title="Achtung">
-        <span id="startupMessage" lkey="Blockly.Msg.POPUP_ATTENTION">O Genie, der Herr ehre Dein Ego</span><br />&nbsp;<br /> <input class='submit'
+        <span id="startupMessage" lkey="Blockly.Msg.POPUP_ATTENTION">O Genie, der Herr ehre Dein Ego</span> <br /> &nbsp; <br /> <input class='submit'
             id="hideStartupMessage" class='submit' type="button" lkey="Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE" value="Nicht mehr anzeigen"
         /> <input class='cancelPopup submit' type="submit" value="Cancel" />
     </div>
@@ -329,10 +325,9 @@ limitations under the License.
             <div id="progListing">
                 <h2 lkey="Blockly.Msg.DATATABLE_PROGRAMS">Programme</h2>
                 <table id="programNameTable" class="tableSize">
-                    <thead></thead>
-                    <tbody></tbody>
-                    <tfoot>
-                    </tfoot>
+                    <tr>
+                        <td></td>
+                    </tr>
                 </table>
                 <div class="tableButtons">
                     <input class="button buttonLoad" id="loadFromListing" lkey="Blockly.Msg.BUTTON_LOAD" type="submit" value="Laden" /> <input
@@ -346,10 +341,9 @@ limitations under the License.
             <div id="confListing">
                 <h2 lkey="Blockly.Msg.DATATABLE_CONFIGURATIONS">Konfigurationen</h2>
                 <table id="configurationNameTable" class="tableSize">
-                    <thead></thead>
-                    <tbody></tbody>
-                    <tfoot>
-                    </tfoot>
+                    <tr>
+                        <td></td>
+                    </tr>
                 </table>
                 <div class="tableButtons">
                     <input class="button buttonLoad" id="loadConfigurationFromListing" lkey="Blockly.Msg.BUTTON_LOAD" type="submit" value="Laden" /> <input
@@ -362,10 +356,12 @@ limitations under the License.
 
             <div id="logging">
                 <br />
-                <ol id="log" class="log" reversed></ol>
+                <ol id="log" class="log" reversed>
+                    <li></li>
+                </ol>
                 <div class="tableButtons">
-                    <input id="clearLog" class="button" lkey="Blockly.Msg.BUTTON_EMPTY_LIST" type="submit" value="Liste leeren" /> <input
-                        class="button backButton" id="backLogging" type="submit" value="Cancel"
+                    <input id="clearLog" class="btn btn-default" lkey="Blockly.Msg.BUTTON_EMPTY_LIST" type="submit" value="Liste leeren" /> <input
+                        class="btn btn-default" id="backLogging" type="submit" value="Cancel"
                     />
                 </div>
             </div>
@@ -375,6 +371,5 @@ limitations under the License.
     </div>
 
     <!-- ################## END TABS ################## -->
-
 </body>
 </html>
