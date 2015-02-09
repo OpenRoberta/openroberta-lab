@@ -168,6 +168,7 @@ limitations under the License.
 
     <!-- ################## POPUPS ################## -->
 
+    <!-- Popup login -->
     <div id="login-user" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -178,7 +179,7 @@ limitations under the License.
                 <div class="modal-body left-inner-addon">
                     <label for="accountNameS" class="control-label" lkey="Blockly.Msg.POPUP_USERNAME"></label>
                     <div class="left-inner-addon">
-                        <i class="typcn typcn-user"></i> <input type="text" data-role="none" id="accountNameS" class="form-control" value="" autofocus/>
+                        <i class="typcn typcn-user"></i> <input type="text" data-role="none" id="accountNameS" class="form-control" value="" autofocus />
                     </div>
                     <label for="pass1S" class="control-label" lkey="Blockly.Msg.POPUP_PASSWORD"></label>
                     <div class="left-inner-addon">
@@ -193,115 +194,304 @@ limitations under the License.
         </div>
     </div>
 
-    <div class="jquerypopup inner-addon" id="register-user" title="Benutzer registrieren">
-        <label for="accountName" lkey="Blockly.Msg.POPUP_USERNAME">Benutzername</label> <input id="accountName" class='input' type="text" value="" /> <i
-            class="typcn typcn-user"
-        ></i> <label for="pass1" lkey="Blockly.Msg.POPUP_PASSWORD">Passwort</label> <input id="pass1" class='input' type="password" value="" /> <i
-            class="typcn typcn-lock-closed"
-        ></i> <label for="pass2" lkey="Blockly.Msg.POPUP_REPEAT_PASSWORD">Passwort wiederholen</label> <input id="pass2" class='input' type="password" value="" />
-        <i class="typcn typcn-lock-closed"></i> <label for="userName" lkey="Blockly.Msg.POPUP_NAME">Name</label> <input id="userName" class='input' type="text"
-            value=""
-        /> <i class="typcn typcn-user-outline"></i> <label for="userEmail" lkey="Blockly.Msg.POPUP_EMAIL">E-Mail</label> <input id="userEmail" class='input'
-            type="text" value=""
-        /> <i class="typcn typcn-at"></i> <br /> <input id="saveUser" class='submit' type="submit" lkey="Blockly.Msg.POPUP_REGISTER_USER" value="OK" /> <input
-            class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"
-        />
+    <!-- Popup register user -->
+    <div id="register-user" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">Register user</h3>
+                </div>
+                <div class="modal-body left-inner-addon">
+                    <label for="accountName" lkey="Blockly.Msg.POPUP_USERNAME">Username</label>
+                    <div class="left-inner-addon">
+                        <i class="typcn typcn-user"></i> <input type="text" data-role="none" id="accountName" class="form-control" value="" autofocus />
+                    </div>
+                    <label for="pass1" lkey="Blockly.Msg.POPUP_PASSWORD">Password</label>
+                    <div class="left-inner-addon">
+                        <i class="typcn typcn-lock-closed"></i> <input type="password" data-role="none" id="pass1" class="form-control" value="" />
+                    </div>
+                    <label for="pass2" lkey="Blockly.Msg.POPUP_REPEAT_PASSWORD">Repeat password</label>
+                    <div class="left-inner-addon">
+                        <i class="typcn typcn-lock-closed"></i> <input type="password" data-role="none" id="pass2" class="form-control" value="" />
+                    </div>                   
+                    <label for="userName" lkey="Blockly.Msg.POPUP_NAME">Name</label>
+                    <div class="left-inner-addon">
+                        <i class="typcn typcn-user-outline"></i> <input type="text" data-role="none" id="userName" class="form-control" value="" />
+                    </div>
+                    <label for="userEmail" lkey="Blockly.Msg.POPUP_EMAIL">E-Mail</label>
+                    <div class="left-inner-addon">
+                        <i class="typcn typcn-at"></i> <input type="text" data-role="none" id="userEmail" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="saveUser">OK</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Popup delete user -->
+    <div id="delete-user" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">Delete user</h3>
+                </div>
+                <div class="modal-body left-inner-addon">
+                    <label for="pass1D" lkey="Blockly.Msg.POPUP_PASSWORD">Password</label>
+                    <div class="left-inner-addon">
+                        <i class="typcn typcn-lock-closed"></i> <input type="password" data-role="none" id="pass1D" class="form-control" value="" autofocus />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="deleteUser">OK</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Popup save program -->
+    <div id="save-program" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">Save program</h3>
+                </div>
+                <div class="modal-body left-inner-addon">
+                    <label for="programNameSave" lkey="Blockly.Msg.POPUP_NAME">Name</label>
+                    <div class="left-inner-addon">
+                        <i class="typcn typcn-pencil"></i> <input type="text" data-role="none" id="programNameSave" class="form-control" value="" autofocus />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="saveProgram">OK</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Popup share program -->
+    <div id="share-program" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">Share program</h3>
+                </div>
+                <div class="modal-body left-inner-addon">
+                    <label for="programShareWith" lkey="Blockly.Msg.POPUP_SHARE_WITH">Share with</label>
+                    <div class="left-inner-addon">
+                        <i class="typcn typcn-user"></i> <input type="text" data-role="none" id="programShareWith" class="form-control" value="" autofocus />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="shareProgram">OK</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Popup save configuration -->
+    <div id="save-configuration" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">Save configuration</h3>
+                </div>
+                <div class="modal-body left-inner-addon">
+                    <label for="configurationNameSave" lkey="Blockly.Msg.POPUP_NAME">Name</label>
+                    <div class="left-inner-addon">
+                        <i class="typcn typcn-pencil"></i> <input type="text" data-role="none" id="configurationNameSave" class="form-control" value="" autofocus />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="saveConfiguration">OK</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Popup share configuration -->
+    <div id="share-configuration" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">Share configuration</h3>
+                </div>
+                <div class="modal-body left-inner-addon">
+                    <label for="configurationShareWith" lkey="Blockly.Msg.POPUP_SHARE_WITH">Share with</label>
+                    <div class="left-inner-addon">
+                        <i class="typcn typcn-user"></i> <input type="text" data-role="none" id="configurationShareWith" class="form-control" value="" autofocus />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="shareConfiguration">OK</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Popup set token for robot -->
+    <div id="set-token" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">Set token</h3>
+                </div>
+                <div class="modal-body left-inner-addon">
+                    <label for="tokenValue" lkey="Blockly.Msg.POPUP_VALUE">Token</label>
+                    <div class="left-inner-addon">
+                        <i class="typcn typcn-user"></i> <input type="text" data-role="none" id="tokenValue" class="form-control" value="" autofocus />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="setToken">OK</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="jquerypopup inner-addon" id="delete-user" title="Benutzer löschen">
-        <label for="pass1D" lkey="Blockly.Msg.POPUP_PASSWORD"></label> <input id="pass1D" class='input' type="password" value="" /> <i
-            class="typcn typcn-lock-closed"
-        ></i> <br /> <input id="deleteUser" class='submit' type="submit" lkey="Blockly.Msg.POPUP_DELETE_USER" value="OK" /> <input class='cancelPopup submit'
-            type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"
-        />
+    <!-- Popup show about info -->
+    <div id="show-about" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">About</h3>
+                </div>
+                <div class="modal-body left-inner-addon">
+                    <span>Fraunhofer Open Roberta</span><br />
+                    <span>Version&nbsp;</span><span id="version">???</span><br /> &nbsp; <br />
+                    <a href="http://www.iais.fraunhofer.de/impressum.html" target="_blank" class="publishingNotes De">Impressum</a>
+                    <a href="http://www.iais.fraunhofer.de/index.php?id=4515&L=1" target="_blank" class="publishingNotes En">Publishing notes</a>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="jquerypopup program inner-addon" id="attach-program" title="Programm hinzufügen">
-        <label for="programNameAttach" lkey="Blockly.Msg.POPUP_NAME">Name</label> <input id="programNameAttach" class='input programName' type="text" value="" />
-        <i class="typcn typcn-pencil"></i> <br /> <input id="attachProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_ATTACH_PROGRAM" value="OK" />
-        <i class="typcn typcn-pencil"></i> <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
+    <!-- Popup show state info -->
+    <div id="show-state-info" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">User state</h3>
+                </div>
+                <div class="modal-body left-inner-addon">
+                    <span lkey="Blockly.Msg.POPUP_USERNAME">User</span> <span>:&nbsp;</span> <span id="loggedIn">???</span> <br />
+                    <span lkey="Blockly.Msg.TAB_PROGRAM">Program</span> <span>:&nbsp;</span> <span id="programName">???</span> <br />
+                    <span lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</span> <span>:&nbsp;</span> <span id="configurationName">???</span> <br />
+                    <span lkey="Blockly.Msg.POPUP_TOOLBOX">Toolbox</span> <span>:&nbsp;</span> <span id="toolbox">???</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="jquerypopup program inner-addon" id="save-program" title="Programm speichern">
-        <label for="programNameSave" lkey="Blockly.Msg.POPUP_NAME">Name</label> <input id="programNameSave" class='input programName' type="text" value="" /> <i
-            class="typcn typcn-pencil"
-        ></i> <br /> <input id="saveProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SAVE_PROGRAM" value="OK" /> <input class='cancelPopup submit'
-            type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"
-        />
+    <!-- Popup show robot info -->
+    <div id="show-robot-info" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">Robot state</h3>
+                </div>
+                <div class="modal-body left-inner-addon">
+                    <span lkey="Blockly.Msg.POPUP_ROBOT_NAME">Name</span>:&nbsp;<span id="robotName"></span> <br />
+                    <span lkey="Blockly.Msg.POPUP_ROBOT_STATE">Status</span>:&nbsp;<span id="robotState"></span> <br />
+                    <span lkey="Blockly.Msg.POPUP_ROBOT_BATTERY">Batteriespannung</span>:&nbsp;<span id="robotBattery"></span> <br />
+                    <span lkey="Blockly.Msg.POPUP_ROBOT_WAIT">Wartezeit</span>:&nbsp;<span id="robotWait"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="jquerypopup program" id="share-program" title="Programm teilen mit">
-        <label for="programShareWith" lkey="Blockly.Msg.POPUP_SHARE_WITH">Teilen mit</label> <input id="programShareWith" class='input programShareWithName'
-            type="text" value=""
-        /> <i class="typcn typcn-user"></i> <br /> <input id="shareProgram" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SHARE" value="OK" /> <input
-            class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"
-        />
+    <!-- Popup show message -->
+    <div id="show-message" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" lkey="Blockly.Msg.POPUP_ATTENTION">Attention</h3>
+                </div>
+                <div class="modal-body left-inner-addon">
+                    <span id="message">Message to show</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="jquerypopup configuration inner-addon" id="save-configuration" title="Konfiguration speichern">
-        <label for="configurationNameSave" lkey="Blockly.Msg.POPUP_NAME">Name</label> <input id="configurationNameSave" class='input configurationName'
-            type="text" value=""
-        /> <i class="typcn typcn-pencil"></i> <br /> <input id="saveConfiguration" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SAVE_CONFIGURATION"
-            value="OK"
-        /> <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
+    <!-- Popup confirm deletion of program -->
+    <div id="confirmDeleteProgram" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" lkey="Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM">Do you really want to delete the program ?</h3>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="doDeleteProgram">OK</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="jquerypopup configuration inner-addon" id="share-configuration" title="Konfiguration teilen mit">
-        <label for="configurationShareWith" lkey="Blockly.Msg.POPUP_SHARE_WITH">Teilen mit</label> <input id="configurationShareWith"
-            class='input configurationShareWithName' type="text" value=""
-        /> <i class="typcn typcn-user"></i> <br /> <input id="shareConfiguration" class='submit' type="submit" lkey="Blockly.Msg.POPUP_SHARE" value="OK" /> <input
-            class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"
-        />
+    <!-- Popup confirm deletion of configuration -->
+    <div id="confirmDeleteConfiguration" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" lkey="Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION">Do you really want to delete the configuration ?</h3>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="doDeleteConfiguration">OK</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="jquerypopup inner-addon" id="set-token" title="Token setzen">
-        <label for="tokenValue" lkey="Blockly.Msg.POPUP_VALUE">Wert</label> <input id="tokenValue" class='input' type="text" value="" /> <i
-            class="typcn typcn-Roberta"
-        > </i> <br /> <input id="setToken" class='submit' type="button" lkey="Blockly.Msg.POPUP_SET_TOKEN" value="OK" /> <input class='cancelPopup submit'
-            type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"
-        />
-    </div>
-
-    <div class="jquerypopup" id="show-about" title="Über ...">
-        <span>Fraunhofer Open Roberta</span> <br /> <span>Version&nbsp;</span><span id="version">???</span> <br /> &nbsp; <br /> <a
-            href="http://www.iais.fraunhofer.de/impressum.html" target="_blank" class="publishingNotes De"
-        >Impressum</a> <a href="http://www.iais.fraunhofer.de/index.php?id=4515&L=1" target="_blank" class="publishingNotes En">Publishing notes</a>
-    </div>
-
-    <div class="jquerypopup" id="show-state-info" title="Statusinformation">
-        <span lkey="Blockly.Msg.POPUP_USERNAME">Benutzer</span> <span>:&nbsp;</span> <span id="loggedIn">???</span> <br /> <span lkey="Blockly.Msg.TAB_PROGRAM">Programm</span>
-        <span id="programName">???</span> <br /> <span lkey="Blockly.Msg.TAB_CONFIGURATION">Konfiguration</span> <span id="configurationName">???</span> <br />
-        <span lkey="Blockly.Msg.POPUP_TOOLBOX">Toolbox</span> <span id="toolbox">???</span>
-    </div>
-
-    <div class="jquerypopup inner-addon" id="show-robot-info" title="Zustand des Roboters">
-        <span lkey="Blockly.Msg.POPUP_ROBOT_NAME">Name</span><span>:&nbsp;</span><span id="robotName"></span> <br /> <span lkey="Blockly.Msg.POPUP_ROBOT_STATE">Status</span>:&nbsp;<span
-            id="robotState"
-        ></span> <br /> <span lkey="Blockly.Msg.POPUP_ROBOT_BATTERY">Batteriespannung</span>:&nbsp;<span id="robotBattery"></span> <br /> <span
-            lkey="Blockly.Msg.POPUP_ROBOT_WAIT"
-        >Wartezeit</span>:&nbsp;<span id="robotWait"></span>
-    </div>
-
-    <div class="jquerypopup" id="show-message" title="Achtung">
-        <span id="message" lkey="Blockly.Msg.POPUP_ATTENTION"></span>
-    </div>
-
-    <div class="jquerypopup" id="confirmDeleteProgram">
-        <span lkey="Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM">Möchten Sie das Programm wirklich löschen ?</span> <br /> &nbsp; <br /> <input
-            id="doDeleteProgram" class='submit' type="submit" value="OK"
-        /> <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
-    </div>
-
-    <div class="jquerypopup" id="confirmDeleteConfiguration">
-        <span lkey="Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION">Möchten Sie die Konfiguration wirklich löschen ?</span> <br /> &nbsp; <br /> <input
-            id="doDeleteConfiguration" class='submit' type="submit" value="OK"
-        /> <input class='cancelPopup submit' type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
-    </div>
-
-    <div class="jquerypopup" id="show-startup-message" title="Achtung">
-        <span id="startupMessage" lkey="Blockly.Msg.POPUP_ATTENTION">O Genie, der Herr ehre Dein Ego</span> <br /> &nbsp; <br /> <input class='submit'
-            id="hideStartupMessage" class='submit' type="button" lkey="Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE" value="Nicht mehr anzeigen"
-        /> <input class='cancelPopup submit' type="submit" value="Cancel" />
+    <!-- Popup startup message -->
+    <div id="show-startup-message" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title"lkey="Blockly.Msg.POPUP_ATTENTION">Attention</h3>
+                    <span>O Genie, der Herr ehre Dein Ego</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="hideStartupMessage" lkey="Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE">Hide in the future</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- ################## END POPUPS ################## -->

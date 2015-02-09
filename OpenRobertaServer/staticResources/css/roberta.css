@@ -332,132 +332,7 @@ html, body {
 }
 /***** END typicons *****/
 
-/***** BEGIN JQuery-Popups *****/
-.jquerypopup {
-	font-family: 'Roboto', sans-serif;
-}
-
-.jquerypopup label {
-	font-size: 14px;
-	font-weight: bold;
-}
-
-.jquerypopup input {
-	background-repeat: no-repeat;
-	background-position: center left;
-}
-
-.jquerypopup .input {
-	width: 100%;
-}
-
-.jquerypopup a {
-	font-size: 14px;
-	color: #333333;
-}
-
-.jquerypopup a:hover {
-	color: #afca04;
-}
-
-.jquerypopup.ui-dialog {
-	background-color: white;
-}
-
-.jquerypopup button.ui-button-icon-only {
-	width: 32px;
-}
-
-.jquerypopup.ui-dialog {
-	position: absolute !important;
-	top: 0;
-	left: 0;
-	padding: 16px;
-	outline: 0;
-	box-shadow: 0 0 15px #9f9e9e;
-	font-family: 'Open Sans', sans-serif;
-	font-size: 14px;
-}
-
-.jquerypopup.ui-front {
-	z-index: 9999;
-}
-
-.jquerypopup.ui-dialog .ui-dialog-title {
-	font-size: 18px;
-	font-weight: 600;
-	text-transform: uppercase;
-}
-
-.jquerypopup.ui-dialog .ui-dialog-titlebar {
-	padding: 0;
-	position: relative;
-}
-
-.jquerypopup.ui-dialog .ui-dialog-titlebar-close, .jquerypopup.ui-dialog .ui-dialog-titlebar-close.ui-state-focus
-	{
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	margin-right: -32px;
-	margin-top: -32px;
-	width: 32px;
-	height: 32px;
-	background-color: none !important;
-	border: none !important;
-	background-image: url(/css/img/close-icon.png);
-	background-repeat: no-repeat;
-	background-color: transparent;
-	cursor: pointer;
-}
-
-.jquerypopup.ui-dialog .ui-dialog-titlebar-close:hover {
-	background-image: url(/css/img/close-icon_hover.png);
-	background-color: none !important;
-}
-
-.jquerypopup.ui-dialog .ui-dialog-titlebar-close.ui-state-hover,
-	.jquerypopup.ui-dialog .ui-dialog-titlebar-close.ui-state-focus {
-	background: none;
-	background-image: url(/css/img/close-icon_hover.png);
-	background-repeat: no-repeat;
-	outline: 0;
-}
-
-.jquerypopup.ui-dialog .ui-dialog-titlebar-close .ui-button-text {
-	display: none;
-}
-
-.jquerypopup .ui-widget-header {
-	border: none;
-	background: white;
-	color: #333333;
-	font-weight: bold;
-	margin-bottom: 20px;
-}
-
-.jquerypopup .ui-state-default, .jquerypopup .ui-widget-content .ui-state-default,
-	.jquerypopup .ui-widget-header .ui-state-default {
-	border: 1px solid #d3d3d3;
-	font-weight: normal;
-	color: #555555;
-}
-
-/***** END JQuery-Popups *****/
-
-/***** BEGIN JQuery-Popup-Input-Fields *****/
-#login-user input, .program input, .configuration input, #register-user input,
-	#delete-user input, #set-token
-input {
-	padding: 4px 4px 4px 26px;
-	border: 1px solid #afca04;
-	border-radius: 2px;
-	background-color: white;
-	margin-bottom: 15px;
-	color: #333;
-	font-size: 14px;
-	text-align: left;
-}
+/***** BEGIN Input-Fields *****/
 
 /* enable absolute positioning */
 .inner-addon {
@@ -472,27 +347,6 @@ input {
 	color: #c7c7c7;
 	font-size: 20px;
 }
-
-#login-user .submit, .program .submit, .configuration .submit,
-	#register-user .submit, #delete-user .submit, #set-token .submit,
-	#show-startup-message .submit, #confirmDeleteProgram .submit,
-	#confirmDeleteConfiguration .submit {
-	padding: 6px 12px;
-	border: none;
-	font-size: 14px;
-	border-radius: 2px;
-	color: white;
-	background-color: #afca04;
-	cursor: pointer;
-	margin: 0;
-}
-
-#login-user .submit:hover, .program .submit:hover, .configuration .submit:hover,
-	#register-user .submit:hover, #delete-user .submit:hover, #set-token .submit:hover
-	{
-	background-color: #b7d032;
-}
-
 /***** END JQuery-Popup-Input-Fields *****/
 
 /***** BEGIN JQuery-Datatables *****/
@@ -588,5 +442,4 @@ table.dataTable thead .sorting_desc {
 	background: url("/css/img/dataTables-icons/arrow-sorted-up.svg")
 		no-repeat center left;
 }
-
 /***** END JQuery-Datatables *****/
