@@ -132,3 +132,13 @@ function switchLanguageInBrickly() {
 function saveToServer() {
     parent.saveConfigurationToServer();
 };
+
+/**
+ * Set modification state.
+ * 
+ * @param {Boolean}
+ *            modified or not.
+ */
+function setWorkspaceModified(modified) {
+    parent.userState.configurationModified = modified;
+}

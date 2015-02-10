@@ -15,6 +15,8 @@ function initUserState() {
     userState.configuration = 'EV3basis';
     userState.programSaved = false;
     userState.configurationSaved = false;
+    userState.programModified = false;
+    userState.configurationModified = false;
     userState.brickSaved = false;
     userState.toolbox = 'beginner';
     userState.token = '1A2B3C4D';
@@ -1520,6 +1522,16 @@ function setCookie(key, value) {
 function getCookie(key) {
     var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
     return keyValue ? keyValue[2] : null;
+}
+
+/**
+ * Set modification state.
+ * 
+ * @param {Boolean}
+ *            modified or not.
+ */
+function setWorkspaceModified(modified) {
+    userState.programModified = modified;
 }
 
 /**
