@@ -23,6 +23,7 @@ function initUserState() {
     userState['robot.state'] = '';
     userState['robot.battery'] = '';
     userState['robot.wait'] = '';
+    userState['robot.firmware'] = '';
 }
 
 /**
@@ -36,7 +37,7 @@ function saveUserToServer() {
     var $pass2 = $('#pass2');
 
     if ($pass1.val() != $pass2.val()) {
-        displayMessage("MESSAGE_PASSWORD_ERROR", "POPUP");
+        displayMessage("MESSAGE_PASSWORD_ERROR", "POPUP", "");
     } else {
         COMM.json("/user", {
             "cmd" : "createUser",
@@ -51,10 +52,9 @@ function saveUserToServer() {
                 $('.modal').modal('hide'); // close all opened popups
                 $('#accountNameS').val($userAccountName.val());
                 $('#pass1S').val($pass1.val());
-                displayMessage(result.message, "TOAST");
                 login();
             } else {
-                displayMessage(result.message, "POPUP");
+                displayMessage(result.message, "POPUP", "");
             }
         });
     }
@@ -73,9 +73,9 @@ function deleteUserOnServer() {
         if (result.rc === "ok") {
             $('.modal').modal('hide'); // close all opened popups
             logout();
-            displayMessage(result.message, "TOAST");
+            displayMessage("MESSAGE_USER_DELETED", "TOAST", "");
         } else {
-            displayMessage(result.message, "POPUP");
+            displayMessage(result.message, "POPUP", "");
         }
     });
 }
@@ -93,14 +93,18 @@ function login() {
     }, function(response) {
         if (response.rc === "ok") {
             userState.accountName = response.userAccountName;
-            userState.name = response.userAccountName;
+            if (response.userName === undefined || response.userName === '') {
+                userState.name = response.userAccountName;
+            } else {
+                userState.name = response.userName;
+            }
             userState.id = response.userId;
             setHeadNavigationMenuState('login');
             setRobotState(response);
-            displayMessage(response.message, "TOAST");
             $('.modal').modal('hide'); // close all opened popups
+            displayMessage("MESSAGE_USER_LOGIN", "TOAST", userState.name);
         } else {
-            displayMessage(response.message, "POPUP");
+            displayMessage(response.message, "POPUP", "");
         }
     });
 }
@@ -119,10 +123,10 @@ function logout() {
             setHeadNavigationMenuState('logout');
             Blockly.getMainWorkspace().saveButton.disable();
             setRobotState(response);
-            displayMessage(response.message, "TOAST");
             $('.modal').modal('hide'); // close all opened popups
+            displayMessage("MESSAGE_USER_LOGOUT", "TOAST", "");
         } else {
-            displayMessage(response.message, "POPUP");
+            displayMessage(response.message, "POPUP", "");
         }
     });
 }
@@ -136,10 +140,10 @@ function updateFirmware() {
     }, function(response) {
         if (response.rc === "ok") {
             setRobotState(response);
-            displayMessage(response.message, "TOAST");
+            displayMessage(Blockly.Msg.MESSAGE_ROBOT_CONNECTED, "TOAST", userState['robot.firmware']);
             $('.modal').modal('hide'); // close all opened popups
         } else {
-            displayMessage(response.message, "POPUP");
+            displayMessage(response.message, "POPUP", "");
         }
     });
 }
@@ -218,10 +222,10 @@ function setToken(token) {
         if (response.rc === "ok") {
             userState.token = resToken;
             setRobotState(response);
+            displayMessage(Blockly.Msg.MESSAGE_ROBOT_CONNECTED, "TOAST", userState['robot.name']);
             $('.modal').modal('hide'); // close all opened popups
-            displayMessage(response.message, "TOAST");
         } else {
-            displayMessage(response.message, "POPUP");
+            displayMessage(response.message, "POPUP", "");
         }
     });
 }
@@ -254,10 +258,8 @@ function response(result) {
     str += '}';
     LOG.info('result from server: ' + str);
 
-    if (result.rc === 'ok') {
-        displayMessage(result.message, "TOAST");
-    } else {
-        displayMessage(result.message, "POPUP");
+    if (result.rc != 'ok') {
+        displayMessage(result.message, "POPUP", "");
     }
 }
 
@@ -309,14 +311,14 @@ function saveAsToServer() {
                 "program" : xml_text
             }, function(result) {
                 if (result.rc === 'ok') {
-                    displayMessage(result.message, "TOAST");
+                    displayMessage("MESSAGE_EDIT_SAVE_PROGRAM_AS", "TOAST", userState.program);
                 } else {
-                    displayMessage(result.message, "POPUP");
+                    displayMessage(result.message, "POPUP", "");
                 }
             });
         }
     } else {
-        displayMessage("MESSAGE_EMPTY_NAME", "POPUP");
+        displayMessage("MESSAGE_EMPTY_NAME", "POPUP", "");
     }
 }
 
@@ -336,9 +338,9 @@ function saveToServer() {
             "program" : xml_text
         }, function(result) {
             if (result.rc === 'ok') {
-                displayMessage(result.message, "TOAST");
+                displayMessage("MESSAGE_EDIT_SAVE_PROGRAM", "TOAST", "");
             } else {
-                displayMessage(result.message, "POPUP");
+                displayMessage(result.message, "POPUP", "");
             }
         });
     }
@@ -366,13 +368,13 @@ function saveAsConfigurationToServer() {
             "configuration" : xml_text
         }, function(result) {
             if (result.rc === 'ok') {
-                displayMessage(result.message, "TOAST");
+                displayMessage("MESSAGE_EDIT_SAVE_CONFIGURATION_AS", "TOAST", userState.configuration);
             } else {
-                displayMessage(result.message, "POPUP");
+                displayMessage(result.message, "POPUP", "");
             }
         });
     } else {
-        displayMessage("MESSAGE_EMPTY_NAME", "POPUP");
+        displayMessage("MESSAGE_EMPTY_NAME", "POPUP", "");
     }
 }
 
@@ -391,9 +393,9 @@ function saveConfigurationToServer() {
             "configuration" : xml_text
         }, function(result) {
             if (result.rc === 'ok') {
-                displayMessage(result.message, "TOAST");
+                displayMessage("MESSAGE_EDIT_SAVE_CONFIGURATION", "TOAST", "");
             } else {
-                displayMessage(result.message, "POPUP");
+                displayMessage(result.message, "POPUP", "");
             }
         });
     }
@@ -464,13 +466,12 @@ function loadFromListing() {
             if (result.rc === 'ok') {
                 $("#tabs").tabs("option", "active", 0);
                 userState.programSaved = true;
-                displayMessage(result.message, "TOAST");
                 showProgram(result, true, programName);
                 $('#menuSaveProg').parent().removeClass('login');
                 $('#menuSaveProg').parent().removeClass('disabled');
                 Blockly.getMainWorkspace().saveButton.enable();
             } else {
-                displayMessage(result.message, "POPUP");
+                displayMessage(result.message, "POPUP", "");
             }
         });
     }
@@ -491,13 +492,12 @@ function loadConfigurationFromListing() {
             if (result.rc === 'ok') {
                 $("#tabs").tabs("option", "active", 0);
                 userState.configurationSaved = true;
-                displayMessage(result.message, "TOAST");
                 showConfiguration(result, true, configurationName);
                 $('#menuSaveConfig').parent().removeClass('login');
                 $('#menuSaveConfig').parent().removeClass('disabled');
                 setRobotState(result);
             } else {
-                displayMessage(result.message, "POPUP");
+                displayMessage(result.message, "POPUP", "");
             }
         });
     }
@@ -516,11 +516,11 @@ function deleteFromListing() {
             "name" : programName
         }, function(result) {
             if (result.rc === 'ok') {
-                displayMessage(result.message, "TOAST");
                 responseAndRefreshProgramList(result);
                 setRobotState(result);
+                displayMessage("MESSAGE_PROGRAM_DELETED", "TOAST", programName);                
             } else {
-                displayMessage(result.message, "POPUP");
+                displayMessage(result.message, "POPUP", "");
             }
         });
     }
@@ -539,11 +539,11 @@ function deleteConfigurationFromListing() {
             "name" : configurationName
         }, function(result) {
             if (result.rc === 'ok') {
-                displayMessage(result.message, "TOAST");
                 responseAndRefreshConfigurationList(result);
                 setRobotState(result);
+                displayMessage("MESSAGE_CONFIGURATION_DELETED", "TOAST", configurationName);                
             } else {
-                displayMessage(result.message, "POPUP");
+                displayMessage(result.message, "POPUP", "");
             }
         });
     }
@@ -942,8 +942,9 @@ function initHeadNavigation() {
             $('#tabConfiguration').click();
         } else if (domId === 'menuRunProg') { //  Submenu 'Program'
             runOnBrick();
+            displayMessage("MESSAGE_EDIT_START", "TOAST", "");
         } else if (domId === 'menuCheckProg') { //  Submenu 'Program'
-            displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP");
+            displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP", "");
         } else if (domId === 'menuNewProg') { //  Submenu 'Program'
             setProgram("NEPOprog");
             initProgramEnvironment();
@@ -967,7 +968,7 @@ function initHeadNavigation() {
             $('#menuToolboxExpert').parent().addClass('disabled');
             $('#menuToolboxBeginner').parent().removeClass('disabled');
         } else if (domId === 'menuCheckConfig') { //  Submenu 'Configuration'
-            displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP");
+            displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP", "");
         } else if (domId === 'menuNewConfig') { //  Submenu 'Configuration'
             setConfiguration("EV3basis");
             document.getElementById('bricklyFrame').contentWindow.initConfigurationEnvironment();
@@ -1103,7 +1104,7 @@ function initPopups() {
     $('#saveProgram').onWrap('click', saveAsToServer, 'save program');
 
     $('#shareProgram').onWrap('click', function() {
-        displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP");
+        displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP", "");
     }, 'share program');
 
     $('#saveConfiguration').onWrap('click', function() {
@@ -1111,7 +1112,7 @@ function initPopups() {
     }, 'save configuration');
 
     $('#shareConfiguration').onWrap('click', function() {
-        displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP");
+        displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP", "");
     }, 'share configuration');
 
     $('#setToken').onWrap('click', function() {
@@ -1343,6 +1344,12 @@ function switchLanguage(langCode, forceSwitch) {
         if (langs.indexOf(langCode) < 0) {
             langCode = "DE";
         }
+        
+        for (i = 0; i < langs.length; i++) {
+            $('.' + langs[i] + '').css('display', 'none');
+        } 
+        $('.' + langCode + '').css('display', 'inline');
+        
         userState.language = langCode;
         var url = 'blockly/msg/js/' + langCode.toLowerCase() + '.js';
         var future = $.getScript(url);
@@ -1389,10 +1396,12 @@ function initializeLanguages() {
  * @param {messageId}
  *            ID of message to be displayed
  * @param {output}
- *            where to display the message, "toast" or "popup"
+ *            where to display the message, "TOAST" or "POPUP"
+ * @param {replaceWith}
+ *            Text to replace an optional '$' in the message-text
  * 
  */
-function displayMessage(messageId, output) {
+function displayMessage(messageId, output, replaceWith) {
     if (messageId != undefined) {
         if (messageId.indexOf(".") >= 0 || messageId.toUpperCase() != messageId) {
             // Invalid Message-Key 
@@ -1403,6 +1412,9 @@ function displayMessage(messageId, output) {
         var value = Blockly.Msg[messageId];
         if (value === undefined || value === '') {
             value = messageId;
+        }
+        if (value.indexOf("$") >= 0) {
+            value = value.replace("$", replaceWith);
         }
 
         if (output === 'POPUP') {
@@ -1515,8 +1527,8 @@ function init() {
     initTabs();
     initPopups();
     initHeadNavigation();
-    initProgramNameTable();
     initTables();
+    initProgramNameTable();
     initConfigurationNameTable();
     initializeLanguages();
     switchLanguage('DE', true);
@@ -1528,6 +1540,10 @@ function init() {
     if (!getCookie("hideStartupMessage")) {
         $("#show-startup-message").modal("show");
     }
+    // Workaround to set the focus on input fields having with attribute 'autofocus'
+    $('.modal').on('shown.bs.modal', function() {
+        $(this).find('[autofocus]').focus();
+    });
 };
 
 $(document).ready(WRAP.fn3(init, 'page init'));

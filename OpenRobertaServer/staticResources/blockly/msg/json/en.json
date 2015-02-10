@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-02-09 12:42:23.059000",
+		"lastupdated": "2015-02-10 09:24:38.392000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -622,6 +622,19 @@
 	"MESSAGE_PASSWORD_ERROR": "Something went wrong while you filled in the two passwords.",
 	"MESSAGE_NOT_AVAILABLE": "Not available.",
 	"MESSAGE_EMPTY_NAME": "Please fill in a name.",
+	"MESSAGE_EDIT_START": "Your program runs soon on the brick",
+	"MESSAGE_EDIT_SAVE_PROGRAM": "Your program has been saved",
+	"MESSAGE_EDIT_SAVE_PROGRAM_AS": "Your program has been saved as '$'",
+	"MESSAGE_EDIT_SAVE_CONFIGURATION": "Your configuration has been saved",
+	"MESSAGE_EDIT_SAVE_CONFIGURATION_AS": "Your configuration has been saved as '$'",
+	"MESSAGE_ROBOT_CONNECTED": "Your robot '$' is connected",
+	"MESSAGE_ROBOT_FIRMWARE_UPDATE": "Your robot runs now version '$'",
+	"MESSAGE_USER_LOGIN": "Hello '$'",
+	"MESSAGE_USER_LOGOUT": "You are logged out",
+	"MESSAGE_USER_NEW": "Hello '$'",
+	"MESSAGE_USER_DELETED": "User deleted",
+	"MESSAGE_PROGRAM_DELETED": "Program '$' was deleted",
+	"MESSAGE_CONFIGURATION_DELETED": "Configuration '$' was deleted",
 	"ORA_TOKEN_SET_SUCCESS": "Token set",
 	"ORA_TOKEN_SET_ERROR_NO_ROBOT_WAITING": "There is no active robot.",
 	"ORA_TOOLBOX_LOAD_SUCCESS": "Toolbox loaded",

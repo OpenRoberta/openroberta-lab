@@ -428,6 +428,10 @@ html, body {
 	margin-left: 6px;
 }
 
+table.dataTable {
+    font-size: 14px;
+}
+
 table.dataTable thead .sorting, table.dataTable thead .sorting_asc_disabled,
 	table.dataTable thead .sorting_desc_disabled {
 	background: none;
