@@ -101,6 +101,8 @@ function login() {
                 userState.name = response.userName;
             }
             userState.id = response.userId;
+            userState.programModified = false;
+            userState.configurationModified = false;
             setHeadNavigationMenuState('login');
             setRobotState(response);
             $('.modal').modal('hide'); // close all opened popups
@@ -313,6 +315,7 @@ function saveAsToServer() {
                 "program" : xml_text
             }, function(result) {
                 if (result.rc === 'ok') {
+                    userState.programModified = false;
                     displayMessage("MESSAGE_EDIT_SAVE_PROGRAM_AS", "TOAST", userState.program);
                 } else {
                     displayMessage(result.message, "POPUP", "");
@@ -340,6 +343,7 @@ function saveToServer() {
             "program" : xml_text
         }, function(result) {
             if (result.rc === 'ok') {
+                userState.programModified = false;
                 displayMessage("MESSAGE_EDIT_SAVE_PROGRAM", "TOAST", "");
             } else {
                 displayMessage(result.message, "POPUP", "");
@@ -370,6 +374,7 @@ function saveAsConfigurationToServer() {
             "configuration" : xml_text
         }, function(result) {
             if (result.rc === 'ok') {
+                userState.configurationModified = false;
                 displayMessage("MESSAGE_EDIT_SAVE_CONFIGURATION_AS", "TOAST", userState.configuration);
             } else {
                 displayMessage(result.message, "POPUP", "");
@@ -395,6 +400,7 @@ function saveConfigurationToServer() {
             "configuration" : xml_text
         }, function(result) {
             if (result.rc === 'ok') {
+                userState.configurationModified = false;
                 displayMessage("MESSAGE_EDIT_SAVE_CONFIGURATION", "TOAST", "");
             } else {
                 displayMessage(result.message, "POPUP", "");
