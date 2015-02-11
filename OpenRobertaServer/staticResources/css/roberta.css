@@ -10,16 +10,16 @@ ul, ol {
 }
 
 html, body {
-	margin: 0px !important;
-	padding: 0px !important;
+	margin: 0;
+	padding: 0;
 	height: 100%;
 	width: 100%;
 	font-family: 'Roboto', sans-serif;
 }
 
 #head-navigation {
-	box-shadow: 0px 3px 5px #aeaeaf;
-	-webkit-box-shadow: 0px 3px 5px #aeaeaf;
+	box-shadow: 0 3px 5px #aeaeaf;
+	-webkit-box-shadow: 0 3px 5px #aeaeaf;
 	border: 0;
 	margin: 0;
 }
@@ -28,42 +28,119 @@ html, body {
 	font-size: 24px;
 	line-height: 24px;
 	color: #333;
+	border: 0;
 }
 
 #iconDisplayLogin, #iconDisplayRobotState {
+	float: left;
 	font-size: 24px;
 	height: 24px;
 	width: 24px;
 	cursor: pointer;
+	margin: 0 6px;
 }
 
-#states {
-	margin-top: 4px;
-	margin-right: 16px;
-	padding: 0;
-	float: right;
-}
-
-#logo {
+.logo {
 	position: absolute;
 	top: 0;
 	right: 0;
-	margin: 0;
-	padding: 7px 16px;
+}
+
+#states {
+	float: right;
+	margin-top: 10px;
+	padding: 0;
+}
+
+#language {
+	float: left;
+	margin: 0 12px;
+	padding: 5px 0;
+}
+
+#language.nav>li>a {
+	color: #333333;
+	padding: 0;
+	margin: 6px;
+}
+
+#language.nav>li>a:hover, #language.nav>li>a:focus {
+	background-color: #fff;
 }
 
 #imgLogo {
 	float: right;
-	height: 60px;
 	margin: 0;
+	text-align: right;
 	cursor: pointer;
 }
 
 #imgBeta {
-	float: right;
-	margin-right: -150px;
-	margin-top: 40px;
+	position: absolute;
+	bottom: -20px;
+	right: 125px;
 	cursor: pointer;
+}
+
+#imgBeta img {
+	width: 100px;
+}
+
+@media only screen and (max-width: 1023px) {
+	#imgLogo img {
+		width: 150px;
+	}
+	#imgBeta img {
+		width: 75px;
+	}
+	#imgBeta {
+		bottom: -10px;
+		right: 70px;
+	}
+}
+
+@media only screen and (max-width: 767px) {
+	#imgLogo img {
+		width: 120px;
+	}
+	#imgBeta img {
+		width: 50px;
+	}
+	#imgBeta {
+		bottom: -5px;
+		right: 60px;
+	}
+	#states {
+		position: absolute;
+		right: 0;
+		margin-top: 28px;
+		padding: 0;
+	}
+	#language {
+		margin: 0;
+		padding: 0;
+	}
+	#languages>li>a {
+		padding: 10px 12px;
+		font-size: 14px;
+		line-height: 14px;
+	}
+	#languages>li:hover, #languages>li:hover {
+		background-color: #afca04;
+	}
+	ul #languages {
+		background-color: #fff;
+	}
+	#language>li {
+		margin-top: 12;
+	}
+	.navbar-nav .open .dropdown-menu>li>a, .navbar-nav .open .dropdown-menu .dropdown-header
+		{
+		padding: 5px 15px 5px 36px;
+	}
+	.navbar-default .navbar-nav .open .dropdown-menu>li>a {
+		color: inherit;
+	}
 }
 
 .menuTab {
@@ -76,7 +153,6 @@ html, body {
 }
 
 #main-section {
-	height: auto;
 	position: relative;
 	top: 0;
 	left: 0;
@@ -116,11 +192,11 @@ html, body {
 	border: 0;
 }
 
-#blocklyDiv, #bricklyDiv{
+#blocklyDiv, #bricklyDiv {
 	background-color: #eee;
 	height: 100%;
 	width: 100%;
-	min-height: 100%;	
+	min-height: 100%;
 }
 
 #toastContainer {
@@ -140,11 +216,10 @@ html, body {
 
 #toastLeftContainer span {
 	font-size: 16px;
-	background-color: white;
 	z-index: 9999;
 	color: #333333;
 	white-space: nowrap;
-	background-color: white;
+	background-color: #fff;
 }
 
 .ok {
@@ -158,7 +233,7 @@ html, body {
 .button {
 	margin-right: 5px;
 	background-color: #afca04;
-	color: white;
+	color: #fff;
 	font-size: 16px;
 	cursor: default;
 }
@@ -168,10 +243,20 @@ html, body {
 }
 
 .menuDisabled {
-	background-color: white !important;
+	background-color: #fff;
 }
 
 /***** BEGIN Overwrite Bootstrap-CSS *****/
+.sr-only {
+	width: inherit;
+	height: inherit;
+}
+
+.container-fluid {
+	padding-right: 16px;
+	padding-left: 16px;
+}
+
 .nav#head-navigation-tabs {
 	margin: 0;
 	padding: 0;
@@ -182,7 +267,7 @@ html, body {
 	margin: 0;
 	padding: 8px 16px 4px 16px;
 	border-radius: 2px 2px 0 0;
-	border-bottom: 4px solid white;
+	border-bottom: 4px solid #fff;
 }
 
 .nav#head-navigation-tabs>li>a.tabClicked {
@@ -194,38 +279,82 @@ html, body {
 	outline: none;
 }
 
-.navbar-default {
-	background-color: white;
+.navbar-default .navbar-brand {
+	color: #fff;
+	padding: 0;
 }
 
-.nav-pills>li>a:hover, .nav .open>a:hover, .nav .open>a {
+.navbar-default .navbar-toggle {
+	border-color: #ddd;
+	padding: 12px;
+	margin: 4px 4px 4px 16px;
+}
+
+.navbar-default {
+	background-color: #fff;
+}
+
+.navbar-brand {
+	float: left;
+	height: 0;
+	padding: 15px 15px;
+	overflow: visible;
+}
+
+.navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus
+	{
 	background-color: #afca04;
-	outline: none;
+}
+
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus
+	{
+	background-color: #afca04;
+}
+
+.navbar-toggle {
+	border-radius: 2px;
 }
 
 .nav>li>a {
-	color: #333333;
+	color: #333;
 	padding: 12px 12px;
 	border-radius: 2px;
-	margin: 4px 0px 4px 4px;
+	margin: 4px 4px 4px 0;
 }
 
-.nav-pills>li+li {
-	margin-left: 0px;
+.collapse.in li a, .collapse.in li a span:before, .collapse.in li a span
+	{
+	font-size: 14px;
+	line-height: 14px;
+	margin-right: 6px;
+	color: #333;
+	border: 0;
+}
+
+.collapse.in>.nav li a {
+	color: #333;
+	margin: inherit;
+	border-radius: 0;
+	padding: 10px 16px;
 }
 
 .dropdown-menu {
-	left: 4px;
 	margin: 0;
 	padding: 0;
 	border: 0;
 	border-radius: 2px;
-	box-shadow: 0px 3px 5px #aeaeaf;
-	-webkit-box-shadow: 0px 3px 5px #aeaeaf;
+	min-width: 30px;
+	box-shadow: 0 3px 5px #aeaeaf;
+	-webkit-box-shadow: 0 3px 5px #aeaeaf;
+	background-color: #fff;
 }
 
 .dropdown-menu>li>a {
 	padding: 6px 12px;
+}
+
+.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus {
+	background-color: #afca04 !important;
 }
 
 .dropdown-menu>.disabled>a, .dropdown-menu>.disabled>a:hover,
@@ -238,7 +367,6 @@ html, body {
 }
 
 .modal-content {
-	border: 0;
 	border: 0;
 	border-radius: 2px;
 }
@@ -258,7 +386,6 @@ html, body {
 }
 
 .form-control:focus {
-	border: none;
 	box-shadow: none;
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;
@@ -283,14 +410,13 @@ html, body {
 	color: #bbb;
 	position: absolute;
 	padding: 2px 6px;
-	position: absolute;
 	font-size: 20px;
 }
 
 .btn {
 	margin-right: 6px;
 	background-color: #afca04;
-	color: white;
+	color: #fff;
 	font-size: 16px;
 	cursor: default;
 	border: none;
@@ -300,7 +426,7 @@ html, body {
 .btn:hover, .btn:active:focus, .btn:focus, .btn.focus, .btn:active, .btn.active,
 	.open>.dropdown-toggle.btn {
 	background-color: #b7d032;
-	color: white;
+	color: #fff;
 	outline: 0;
 	outline: none;
 	-webkit-box-shadow: none;
@@ -342,8 +468,8 @@ html, body {
 /* style icon */
 .inner-addon .typcn {
 	position: absolute;
-	padding: 0px 6px;
-	left: 0px;
+	padding: 0 6px;
+	left: 0;
 	color: #c7c7c7;
 	font-size: 20px;
 }
@@ -404,7 +530,7 @@ html, body {
 	background-color: #afca04;
 	border: medium none;
 	border-radius: 2px;
-	color: white;
+	color: #fff;
 	cursor: pointer;
 	font-size: 14px;
 	padding: 7px 9px;

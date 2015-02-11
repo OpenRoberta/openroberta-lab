@@ -1311,6 +1311,10 @@ Blockly.Msg.BRICKLIGHT_OFF_HELP = 'here comes your help text';
 Blockly.Msg.BRICKLIGHT_RESET_HELP = 'here comes your help text';
 
 /// These texts are used outside of Blockly, but are placed in the Blockly namespace
+Blockly.Msg.MENU_EDIT = 'edit';
+Blockly.Msg.MENU_ROBOT = 'robot';
+Blockly.Msg.MENU_HELP = 'help';
+Blockly.Msg.MENU_USER = 'login';
 Blockly.Msg.MENU_START = 'run';
 Blockly.Msg.MENU_CHECK = 'check';
 Blockly.Msg.MENU_NEW = 'new ...';

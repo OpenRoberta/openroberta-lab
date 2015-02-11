@@ -355,14 +355,17 @@ Blockly.Msg.MENU_CHANGE = "change ...";
 Blockly.Msg.MENU_CHECK = "check";
 Blockly.Msg.MENU_CONNECT = "connect ...";
 Blockly.Msg.MENU_DELETE_USER = "delete user ...";
+Blockly.Msg.MENU_EDIT = "edit";
 Blockly.Msg.MENU_FAQ = "FAQ";
 Blockly.Msg.MENU_FIRST_STEPS = "first steps";
+Blockly.Msg.MENU_HELP = "help";
 Blockly.Msg.MENU_LIST = "list ...";
 Blockly.Msg.MENU_LOGGING = "logging";
 Blockly.Msg.MENU_LOG_IN = "login ...";
 Blockly.Msg.MENU_LOG_OUT = "logout";
 Blockly.Msg.MENU_NEW = "new ...";
 Blockly.Msg.MENU_PROPERTIES = "properties";
+Blockly.Msg.MENU_ROBOT = "robot";
 Blockly.Msg.MENU_ROBOT_STATE_INFO = "info";
 Blockly.Msg.MENU_SAVE = "save";
 Blockly.Msg.MENU_SAVE_AS = "save as ...";
@@ -372,12 +375,16 @@ Blockly.Msg.MENU_STATE_INFO = "state information";
 Blockly.Msg.MENU_TOOLBOX_BEGINNER = "toolbox beginner";
 Blockly.Msg.MENU_TOOLBOX_EXPERT = "toolbox expert";
 Blockly.Msg.MENU_UPDATE_FIRMWARE = "update firmware";
+<<<<<<< HEAD
 Blockly.Msg.MESSAGE_CONFIGURATION_DELETED = "Configuration '$' was deleted";
 Blockly.Msg.MESSAGE_EDIT_SAVE_CONFIGURATION = "Your configuration has been saved";
 Blockly.Msg.MESSAGE_EDIT_SAVE_CONFIGURATION_AS = "Your configuration has been saved as '$'";
 Blockly.Msg.MESSAGE_EDIT_SAVE_PROGRAM = "Your program has been saved";
 Blockly.Msg.MESSAGE_EDIT_SAVE_PROGRAM_AS = "Your program has been saved as '$'";
 Blockly.Msg.MESSAGE_EDIT_START = "Your program runs soon on the brick";
+=======
+Blockly.Msg.MENU_USER = "login";
+>>>>>>> ORA-423 GUI changes for small devices using bootstrap features
 Blockly.Msg.MESSAGE_EMPTY_NAME = "Please fill in a name.";
 Blockly.Msg.MESSAGE_NOT_AVAILABLE = "Not available.";
 Blockly.Msg.MESSAGE_PASSWORD_ERROR = "Something went wrong while you filled in the two passwords.";

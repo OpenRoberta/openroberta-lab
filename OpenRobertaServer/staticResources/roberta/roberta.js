@@ -912,11 +912,11 @@ function displayState() {
 }
 
 function setHeadNavigationMenuState(state) {
-    $('.nav-pills > li > ul > li').removeClass('disabled');
+    $('.nav > li > ul > li').removeClass('disabled');
     if (state === 'login') {
-        $('.nav-pills > li > ul > .login').addClass('disabled');
+        $('.nav > li > ul > .login').addClass('disabled');
     } else if (state === 'logout') {
-        $('.nav-pills > li > ul > .logout').addClass('disabled');
+        $('.nav > li > ul > .logout').addClass('disabled');
     }
 }
 

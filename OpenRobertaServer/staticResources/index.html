@@ -49,119 +49,132 @@ limitations under the License.
 
     <!-- ################## HEAD NAVIGATION ################## -->
 
-    <nav role="navigation" class="navbar navbar-default navbar-fixed-top" id="head-navigation">
-    <ul class="nav nav-pills">
-        <!-- Menu Navigation -->
-        <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="head-navi-icon-overview"
-                class="head-navi-icons typcn typcn-th-menu"
-            ></span></a>
-            <ul class="dropdown-menu">
-                <li><a href="#" id="menuTabProgram" lkey="Blockly.Msg.TAB_PROGRAM">Program</a></li>
-                <li><a href="#" id="menuTabConfiguration" lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</a></li>
-            </ul></li>
-        <!-- Menu Program -->
-        <li class="dropdown" id="head-navigation-program-edit"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span
-                id="head-navi-icon-program" class="head-navi-icons typcn typcn-document-text"
-            ></span></a>
-            <ul class="dropdown-menu">
-                <li><a href="#" id="menuRunProg" class="typcn typcn-media-play" lkey="Blockly.Msg.MENU_START">starten</a></li>
-                <li class="login logout"><a href="#" id="menuCheckProg" class="typcn typcn-tick" lkey="Blockly.Msg.MENU_CHECK">checken</a></li>
-                <li><a href="#" id="menuNewProg" class="typcn typcn-document-add" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
-                <li class="logout"><a href="#" id="menuListProg" class="typcn typcn-th-list" lkey="Blockly.Msg.MENU_LIST">Liste ...</a></li>
-                <li class="login logout"><a href="#" id="menuSaveProg" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
-                <li class="logout"><a href="#" id="menuSaveAsProg" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE_AS">speichern unter
-                        ...</a></li>
-                <li class="hidden"><a href="#" id="menuAttachProg" class="" lkey="Blockly.Msg.MENU_ATTACH">anhängen ...</a></li>
-                <li class="hidden"><a href="#" id="menuPropertiesProg" class="" lkey="Blockly.Msg.MENU_PROPERTIES">Eigenschaften</a></li>
-                <li class="divider"></li>
-                <li class="login logout"><a href="#" id="menuToolboxBeginner" class="typcn typcn-briefcase" lkey="Blockly.Msg.MENU_TOOLBOX_BEGINNER">Toolbox
-                        Anfänger</a></li>
-                <li class="logout"><a href="#" id="menuToolboxExpert" class="typcn typcn-briefcase" lkey="Blockly.Msg.MENU_TOOLBOX_EXPERT">Toolbox
-                        Experte</a></li>
-            </ul></li>
-        <!-- Menu Configuration -->
-        <li class="dropdown" id="head-navigation-configuration-edit"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span
-                id="head-navi-icon-configuration" class="head-navi-icons typcn typcn-document-text"
-            ></span></a>
-            <ul class="dropdown-menu">
-                <li class="login logout"><a href="#" id="menuCheckConfig" class="typcn typcn-tick" lkey="Blockly.Msg.MENU_CHECK">checken</a></li>
-                <li><a href="#" id="menuNewConfig" class="typcn typcn-document-add" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
-                <li class="logout"><a href="#" id="menuListConfig" class="typcn typcn-th-list" lkey="Blockly.Msg.MENU_LIST">Liste ... </a></li>
-                <li class="login logout"><a href="#" id="menuSaveConfig" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
-                <li class="logout"><a href="#" id="menuSaveAsConfig" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE_AS">speichern unter
-                        ...</a></li>
-                <li class="hidden"><a href="#" id="menuPropertiesConfig" class="" lkey="Blockly.Msg.MENU_PROPERTIES">Eigenschaften ...</a></li>
-            </ul></li>
-        <!-- Menu Robot -->
-        <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="head-navi-icon-robot"
-                class="head-navi-icons typcn typcn-Roberta"
-            ></span></a>
-            <ul class="dropdown-menu">
-                <li><a href="#" id="menuConnect" class="typcn typcn-wi-fi" lkey="Blockly.Msg.MENU_CONNECT">verbinden ...</a></li>
-                <li><a href="#" id="menuFirmware" class="typcn typcn-arrow-sync" lkey="Blockly.Msg.MENU_UPDATE_FIRMWARE">Firmware aktualisieren</a></li>
-                <li><a href="#" id="menuRobotInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_ROBOT_STATE_INFO">Roboterinformationen</a></li>
-            </ul></li>
-        <!-- Menu Help -->
-        <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="head-navi-icon-help"
-                class="head-navi-icons typcn typcn-lightbulb"
-            ></span></a>
-            <ul class="dropdown-menu">
-                <li><a href="#" id="menuFirstSteps" class="typcn typcn-lightbulb" lkey="Blockly.Msg.MENU_FIRST_STEPS">Erste Schritte</a></li>
-                <li><a href="#" id="menuStartProgramming" class="typcn typcn-lightbulb" lkey="Blockly.Msg.MENU_START_PROGRAMMING">Programmieren</a></li>
-                <li><a href="#" id="menuFaq" class="typcn typcn-lightbulb" lkey="Blockly.Msg.MENU_FAQ">FAQ</a></li>
-                <li><a href="#" id="menuStateInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_STATE_INFO">Statusinformationen</a></li>
-                <li><a href="#" id="menuAbout" class="typcn typcn-info-large" lkey="Blockly.Msg.MENU_ABOUT">über ...</a></li>
-                <li><a href="#" id="menuLogging" class="typcn typcn-spanner" lkey="Blockly.Msg.MENU_LOGGING">Logging</a></li>
-            </ul></li>
-        <!-- Menu User -->
-        <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="head-navi-icon-user"
-                class="head-navi-icons  typcn typcn-user"
-            ></span></a>
-            <ul class="dropdown-menu">
-                <li class="login"><a href="#" id="menuLogin" class="typcn typcn-user" lkey="Blockly.Msg.MENU_LOG_IN">anmelden ...</a></li>
-                <li class="logout"><a href="#" id="menuLogout" class="typcn typcn-user-outline" lkey="Blockly.Msg.MENU_LOG_OUT">abmelden</a></li>
-                <li><a href="#" id="menuNewUser" class="typcn typcn-user-add" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
-                <li class="hidden"><a href="#" id="menuChangeUser" class="" lkey="Blockly.Msg.MENU_CHANGE">ändern ...</a></li>
-                <li class="logout"><a href="#" id="menuDeleteUser" class="typcn typcn-user-delete" lkey="Blockly.Msg.MENU_DELETE_USER">Benutzer löschen
-                        ...</a></li>
-            </ul></li>
-        <!-- States -->
-    </ul>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="head-navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle head-navi-icons typcn typcn-th-menu pull-left sr-only" data-toggle="collapse"
+                    data-target="#navbarCollapse"
+                ></button>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
 
-    <!-- Head-navigation-tabs -->
-    <ul class="nav nav-pills" id="head-navigation-tabs">
-        <li><a href="#" id="tabProgram"><span lkey="Blockly.Msg.TAB_PROGRAM" class="menuTab">Program</span>&nbsp;<span id="tabProgramName"></span></a></li>
-        <li><a href="#" id="tabConfiguration"><span lkey="Blockly.Msg.TAB_CONFIGURATION" class="menuTab">Configuration</span>&nbsp;<span
-                id="tabConfigurationName"
-            ></span></a></li>
-    </ul>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="nav navbar-nav">
+                    <!-- Menu Navigation -->
+                    <!-- <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="head-navi-icon-overview"
+                            class="head-navi-icons typcn typcn-th-menu"
+                        ></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" id="menuTabProgram" lkey="Blockly.Msg.TAB_PROGRAM">Program</a></li>
+                            <li><a href="#" id="menuTabConfiguration" lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</a></li>
+                        </ul></li> -->
+                    <!-- Menu Program -->
+                    <li class="dropdown" id="head-navigation-program-edit"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span
+                            id="head-navi-icon-program" class="head-navi-icons typcn typcn-document-text"
+                        ></span><span class="hidden-sm hidden-md hidden-lg" lkey="Blockly.Msg.MENU_EDIT"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" id="menuRunProg" class="typcn typcn-media-play" lkey="Blockly.Msg.MENU_START">starten</a></li>
+                            <li class="login logout"><a href="#" id="menuCheckProg" class="typcn typcn-tick" lkey="Blockly.Msg.MENU_CHECK">checken</a></li>
+                            <li><a href="#" id="menuNewProg" class="typcn typcn-document-add" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
+                            <li class="logout"><a href="#" id="menuListProg" class="typcn typcn-th-list" lkey="Blockly.Msg.MENU_LIST">Liste ...</a></li>
+                            <li class="login logout"><a href="#" id="menuSaveProg" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
+                            <li class="logout"><a href="#" id="menuSaveAsProg" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE_AS">speichern
+                                    unter ...</a></li>
+                            <li class="hidden"><a href="#" id="menuAttachProg" class="" lkey="Blockly.Msg.MENU_ATTACH">anhängen ...</a></li>
+                            <li class="hidden"><a href="#" id="menuPropertiesProg" class="" lkey="Blockly.Msg.MENU_PROPERTIES">Eigenschaften</a></li>
+                            <li class="divider"></li>
+                            <li class="login logout"><a href="#" id="menuToolboxBeginner" class="typcn typcn-briefcase"
+                                lkey="Blockly.Msg.MENU_TOOLBOX_BEGINNER"
+                            >Toolbox Anfänger</a></li>
+                            <li class="logout"><a href="#" id="menuToolboxExpert" class="typcn typcn-briefcase" lkey="Blockly.Msg.MENU_TOOLBOX_EXPERT">Toolbox
+                                    Experte</a></li>
+                        </ul></li>
+                    <!-- Menu Configuration -->
+                    <li class="dropdown" id="head-navigation-configuration-edit"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span
+                            id="head-navi-icon-configuration" class="head-navi-icons typcn typcn-document-text" 
+                        ></span><span class="hidden-sm hidden-md hidden-lg" lkey="Blockly.Msg.MENU_EDIT"></span></a>
+                        <ul class="dropdown-menu">
+                            <li class="login logout"><a href="#" id="menuCheckConfig" class="typcn typcn-tick" lkey="Blockly.Msg.MENU_CHECK">checken</a></li>
+                            <li><a href="#" id="menuNewConfig" class="typcn typcn-document-add" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
+                            <li class="logout"><a href="#" id="menuListConfig" class="typcn typcn-th-list" lkey="Blockly.Msg.MENU_LIST">Liste ... </a></li>
+                            <li class="login logout"><a href="#" id="menuSaveConfig" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE">speichern</a></li>
+                            <li class="logout"><a href="#" id="menuSaveAsConfig" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE_AS">speichern
+                                    unter ...</a></li>
+                            <li class="hidden"><a href="#" id="menuPropertiesConfig" class="" lkey="Blockly.Msg.MENU_PROPERTIES">Eigenschaften ...</a></li>
+                        </ul></li>
+                    <!-- Menu Robot -->
+                    <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="head-navi-icon-robot"
+                            class="head-navi-icons typcn typcn-Roberta"
+                        ></span><span class="hidden-sm hidden-md hidden-lg" lkey="Blockly.Msg.MENU_ROBOT"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" id="menuConnect" class="typcn typcn-wi-fi" lkey="Blockly.Msg.MENU_CONNECT">verbinden ...</a></li>
+                            <li><a href="#" id="menuFirmware" class="typcn typcn-arrow-sync" lkey="Blockly.Msg.MENU_UPDATE_FIRMWARE">Firmware
+                                    aktualisieren</a></li>
+                            <li><a href="#" id="menuRobotInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_ROBOT_STATE_INFO">Roboterinformationen</a></li>
+                        </ul></li>
+                    <!-- Menu Help -->
+                    <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="head-navi-icon-help"
+                            class="head-navi-icons typcn typcn-lightbulb"
+                        ></span><span class="hidden-sm hidden-md hidden-lg" lkey="Blockly.Msg.MENU_HELP"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" id="menuFirstSteps" class="typcn typcn-lightbulb" lkey="Blockly.Msg.MENU_FIRST_STEPS">Erste Schritte</a></li>
+                            <li><a href="#" id="menuStartProgramming" class="typcn typcn-lightbulb" lkey="Blockly.Msg.MENU_START_PROGRAMMING">Programmieren</a></li>
+                            <li><a href="#" id="menuFaq" class="typcn typcn-lightbulb" lkey="Blockly.Msg.MENU_FAQ">FAQ</a></li>
+                            <li><a href="#" id="menuStateInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_STATE_INFO">Statusinformationen</a></li>
+                            <li><a href="#" id="menuAbout" class="typcn typcn-info-large" lkey="Blockly.Msg.MENU_ABOUT">über ...</a></li>
+                            <li><a href="#" id="menuLogging" class="typcn typcn-spanner" lkey="Blockly.Msg.MENU_LOGGING">Logging</a></li>
+                        </ul></li>
+                    <!-- Menu User -->
+                    <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="head-navi-icon-user"
+                            class="head-navi-icons  typcn typcn-user"
+                        ></span><span class="hidden-sm hidden-md hidden-lg" lkey="Blockly.Msg.MENU_USER"></span></a>
+                        <ul class="dropdown-menu">
+                            <li class="login"><a href="#" id="menuLogin" class="typcn typcn-user" lkey="Blockly.Msg.MENU_LOG_IN">anmelden ...</a></li>
+                            <li class="logout"><a href="#" id="menuLogout" class="typcn typcn-user-outline" lkey="Blockly.Msg.MENU_LOG_OUT">abmelden</a></li>
+                            <li><a href="#" id="menuNewUser" class="typcn typcn-user-add" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
+                            <li class="hidden"><a href="#" id="menuChangeUser" class="" lkey="Blockly.Msg.MENU_CHANGE">ändern ...</a></li>
+                            <li class="logout"><a href="#" id="menuDeleteUser" class="typcn typcn-user-delete" lkey="Blockly.Msg.MENU_DELETE_USER">Benutzer
+                                    löschen ...</a></li>
+                        </ul></li>
+                </ul>
+            </div>
+        </div>
 
-    <!-- Roberta-Logo -->
-    <div id="logo">
-        <div id="imgLogo">
-            <img src="/css/svg/NEPO_Logo_RGB.svg" />
+        <!-- Head-navigation-tabs -->
+        <ul class="nav nav-pills" id="head-navigation-tabs">
+            <li><a href="#" id="tabProgram"><span lkey="Blockly.Msg.TAB_PROGRAM" class="menuTab">Program</span>&nbsp;<span id="tabProgramName"></span></a></li>
+            <li><a href="#" id="tabConfiguration"><span lkey="Blockly.Msg.TAB_CONFIGURATION" class="menuTab">Configuration</span>&nbsp;<span
+                    id="tabConfigurationName"
+                ></span></a></li>
+        </ul>
+        <!-- Roberta-Logo -->
+        <div class="logo">
+            <div id="imgLogo">
+                <img src="/css/svg/NEPO_Logo_RGB.svg" />
+            </div>
+            <div id="states">
+                <div href="#" id="iconDisplayLogin" class="typcn typcn-user"></div>
+                <div href="#" id="iconDisplayRobotState" class="typcn typcn-Roberta"></div>
+                <ul id="language" class="nav navbar-nav">
+                    <li class="dropdown"><a data-toggle="dropdown" class=" dropdown-toggle"><span id="chosenLanguage">DE</span> <b class="caret"></b></a>
+                        <ul class="dropdown-menu" id="languages">
+                            <li><a href="#">EN</a></li>
+                            <li><a href="#">DE</a></li>
+                        </ul></li>
+                </ul>
+            </div>
         </div>
         <div id="imgBeta">
             <img src="/css/img/beta.png" />
         </div>
-        <div id="states">
-            <span href="#" id="iconDisplayLogin" class="typcn typcn-user"></span><span href="#" id="iconDisplayRobotState" class="typcn typcn-Roberta"></span> <br />
-            <ul class="nav navbar-nav" id="language">
-                <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="chosenLanguage">DE</span> <b class="caret"></b></a>
-                    <ul class="dropdown-menu" id="languages">
-                        <li><a href="#">EN</a></li>
-                        <li><a href="#">DE</a></li>
-                    </ul></li>
-            </ul>
-        </div>
-    </div>
 
-    <!-- Toasts -->
-    <div class="panel-body" id="toastContainer">
-        <div class="panel-body" id="toastLeftContainer">
-            <span id="toastText">Willkommen :-) Welcome</span>
+        <!-- Toasts -->
+        <div class="panel-body" id="toastContainer">
+            <div class="panel-body" id="toastLeftContainer">
+                <span id="toastText">Willkommen :-) Welcome</span>
+            </div>
         </div>
-    </div>
     </nav>
 
     <!-- ################## END HEAD NAVIGATION ################## -->
@@ -214,7 +227,7 @@ limitations under the License.
                     <label for="pass2" lkey="Blockly.Msg.POPUP_REPEAT_PASSWORD">Repeat password</label>
                     <div class="left-inner-addon">
                         <i class="typcn typcn-lock-closed"></i> <input type="password" data-role="none" id="pass2" class="form-control" value="" />
-                    </div>                   
+                    </div>
                     <label for="userName" lkey="Blockly.Msg.POPUP_NAME">Name</label>
                     <div class="left-inner-addon">
                         <i class="typcn typcn-user-outline"></i> <input type="text" data-role="none" id="userName" class="form-control" value="" />
@@ -231,7 +244,7 @@ limitations under the License.
             </div>
         </div>
     </div>
-    
+
     <!-- Popup delete user -->
     <div id="delete-user" class="modal fade">
         <div class="modal-dialog">
@@ -253,7 +266,7 @@ limitations under the License.
             </div>
         </div>
     </div>
-    
+
     <!-- Popup save program -->
     <div id="save-program" class="modal fade">
         <div class="modal-dialog">
@@ -275,7 +288,7 @@ limitations under the License.
             </div>
         </div>
     </div>
-    
+
     <!-- Popup share program -->
     <div id="share-program" class="modal fade">
         <div class="modal-dialog">
@@ -297,7 +310,7 @@ limitations under the License.
             </div>
         </div>
     </div>
-    
+
     <!-- Popup save configuration -->
     <div id="save-configuration" class="modal fade">
         <div class="modal-dialog">
@@ -309,7 +322,9 @@ limitations under the License.
                 <div class="modal-body left-inner-addon">
                     <label for="configurationNameSave" lkey="Blockly.Msg.POPUP_NAME">Name</label>
                     <div class="left-inner-addon">
-                        <i class="typcn typcn-pencil"></i> <input type="text" data-role="none" id="configurationNameSave" class="form-control" value="" autofocus />
+                        <i class="typcn typcn-pencil"></i> <input type="text" data-role="none" id="configurationNameSave" class="form-control" value=""
+                            autofocus
+                        />
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -319,7 +334,7 @@ limitations under the License.
             </div>
         </div>
     </div>
-    
+
     <!-- Popup share configuration -->
     <div id="share-configuration" class="modal fade">
         <div class="modal-dialog">
@@ -341,8 +356,13 @@ limitations under the License.
             </div>
         </div>
     </div>
+<<<<<<< HEAD
     
     <!-- Popup set token -->
+=======
+
+    <!-- Popup set token for robot -->
+>>>>>>> ORA-423 GUI changes for small devices using bootstrap features
     <div id="set-token" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -373,10 +393,16 @@ limitations under the License.
                     <h3 class="modal-title">About</h3>
                 </div>
                 <div class="modal-body left-inner-addon">
+<<<<<<< HEAD
                     <span>Fraunhofer Open Roberta</span><br />
                     <span>Version&nbsp;</span><span id="version">???</span><br /> &nbsp; <br />
                     <a href="http://www.iais.fraunhofer.de/impressum.html" target="_blank" class="DE">Impressum</a>
                     <a href="http://www.iais.fraunhofer.de/index.php?id=4515&L=1" target="_blank" class="EN">Publishing notes</a>
+=======
+                    <span>Fraunhofer Open Roberta</span><br /> <span>Version&nbsp;</span><span id="version">???</span><br /> &nbsp; <br /> <a
+                        href="http://www.iais.fraunhofer.de/impressum.html" target="_blank" class="publishingNotes De"
+                    >Impressum</a> <a href="http://www.iais.fraunhofer.de/index.php?id=4515&L=1" target="_blank" class="publishingNotes En">Publishing notes</a>
+>>>>>>> ORA-423 GUI changes for small devices using bootstrap features
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
@@ -394,10 +420,12 @@ limitations under the License.
                     <h3 class="modal-title">User state</h3>
                 </div>
                 <div class="modal-body left-inner-addon">
-                    <span lkey="Blockly.Msg.POPUP_USERNAME">User</span> <span>:&nbsp;</span> <span id="loggedIn">???</span> <br />
-                    <span lkey="Blockly.Msg.TAB_PROGRAM">Program</span> <span>:&nbsp;</span> <span id="programName">???</span> <br />
-                    <span lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</span> <span>:&nbsp;</span> <span id="configurationName">???</span> <br />
-                    <span lkey="Blockly.Msg.POPUP_TOOLBOX">Toolbox</span> <span>:&nbsp;</span> <span id="toolbox">???</span>
+                    <span lkey="Blockly.Msg.POPUP_USERNAME">User</span> <span>:&nbsp;</span> <span id="loggedIn">???</span> <br /> <span
+                        lkey="Blockly.Msg.TAB_PROGRAM"
+                    >Program</span> <span>:&nbsp;</span> <span id="programName">???</span> <br /> <span lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</span> <span>:&nbsp;</span>
+                    <span id="configurationName">???</span> <br /> <span lkey="Blockly.Msg.POPUP_TOOLBOX">Toolbox</span> <span>:&nbsp;</span> <span
+                        id="toolbox"
+                    >???</span>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
@@ -415,10 +443,11 @@ limitations under the License.
                     <h3 class="modal-title">Robot state</h3>
                 </div>
                 <div class="modal-body left-inner-addon">
-                    <span lkey="Blockly.Msg.POPUP_ROBOT_NAME">Name</span>:&nbsp;<span id="robotName"></span> <br />
-                    <span lkey="Blockly.Msg.POPUP_ROBOT_STATE">Status</span>:&nbsp;<span id="robotState"></span> <br />
-                    <span lkey="Blockly.Msg.POPUP_ROBOT_BATTERY">Batteriespannung</span>:&nbsp;<span id="robotBattery"></span> <br />
-                    <span lkey="Blockly.Msg.POPUP_ROBOT_WAIT">Wartezeit</span>:&nbsp;<span id="robotWait"></span>
+                    <span lkey="Blockly.Msg.POPUP_ROBOT_NAME">Name</span>:&nbsp;<span id="robotName"></span> <br /> <span lkey="Blockly.Msg.POPUP_ROBOT_STATE">Status</span>:&nbsp;<span
+                        id="robotState"
+                    ></span> <br /> <span lkey="Blockly.Msg.POPUP_ROBOT_BATTERY">Batteriespannung</span>:&nbsp;<span id="robotBattery"></span> <br /> <span
+                        lkey="Blockly.Msg.POPUP_ROBOT_WAIT"
+                    >Wartezeit</span>:&nbsp;<span id="robotWait"></span>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
@@ -487,11 +516,12 @@ limitations under the License.
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title"lkey="Blockly.Msg.POPUP_ATTENTION">Attention</h3>
+                    <h3 class="modal-title" lkey="Blockly.Msg.POPUP_ATTENTION">Attention</h3>
                     <span>O Genie, der Herr ehre Dein Ego</span>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" id="hideStartupMessage" lkey="Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE">Hide in the future</button>
+                    <button type="button" class="btn btn-default" id="hideStartupMessage" lkey="Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE">Hide in the
+                        future</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
                 </div>
             </div>

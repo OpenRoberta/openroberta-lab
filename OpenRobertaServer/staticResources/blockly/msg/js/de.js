@@ -355,14 +355,17 @@ Blockly.Msg.MENU_CHANGE = "ändern ...";
 Blockly.Msg.MENU_CHECK = "checken";
 Blockly.Msg.MENU_CONNECT = "verbinden ...";
 Blockly.Msg.MENU_DELETE_USER = "Benutzer löschen ...";
+Blockly.Msg.MENU_EDIT = "Bearbeiten";
 Blockly.Msg.MENU_FAQ = "FAQ";
 Blockly.Msg.MENU_FIRST_STEPS = "Erste Schritte";
+Blockly.Msg.MENU_HELP = "Hilfe";
 Blockly.Msg.MENU_LIST = "Liste ...";
 Blockly.Msg.MENU_LOGGING = "Logging";
 Blockly.Msg.MENU_LOG_IN = "anmelden ...";
 Blockly.Msg.MENU_LOG_OUT = "abmelden";
 Blockly.Msg.MENU_NEW = "neu ...";
 Blockly.Msg.MENU_PROPERTIES = "Eigenschaften";
+Blockly.Msg.MENU_ROBOT = "Roboter";
 Blockly.Msg.MENU_ROBOT_STATE_INFO = "Info";
 Blockly.Msg.MENU_SAVE = "speichern";
 Blockly.Msg.MENU_SAVE_AS = "speichern unter ...";
@@ -372,12 +375,16 @@ Blockly.Msg.MENU_STATE_INFO = "Statusinformationen";
 Blockly.Msg.MENU_TOOLBOX_BEGINNER = "Toolbox Anfänger";
 Blockly.Msg.MENU_TOOLBOX_EXPERT = "Toolbox Experte";
 Blockly.Msg.MENU_UPDATE_FIRMWARE = "Firmware aktualisieren";
+<<<<<<< HEAD
 Blockly.Msg.MESSAGE_CONFIGURATION_DELETED = "Die Konfiguration '$' wurde gelöscht";
 Blockly.Msg.MESSAGE_EDIT_SAVE_CONFIGURATION = "Deine Konfiguration wurde gespeichert";
 Blockly.Msg.MESSAGE_EDIT_SAVE_CONFIGURATION_AS = "Deine Konfiguration wurde als '$' gespeichert";
 Blockly.Msg.MESSAGE_EDIT_SAVE_PROGRAM = "Dein Programm wurde gespeichert";
 Blockly.Msg.MESSAGE_EDIT_SAVE_PROGRAM_AS = "Dein Programm wurde als '$' gespeichert";
 Blockly.Msg.MESSAGE_EDIT_START = "Dein Programm startet gleich auf dem Brick";
+=======
+Blockly.Msg.MENU_USER = "Anmelden";
+>>>>>>> ORA-423 GUI changes for small devices using bootstrap features
 Blockly.Msg.MESSAGE_EMPTY_NAME = "Du musst einen Namen eingeben.";
 Blockly.Msg.MESSAGE_NOT_AVAILABLE = "Funktion nicht verfügbar.";
 Blockly.Msg.MESSAGE_PASSWORD_ERROR = "Du hast beim eingeben der beiden Passworte etwas falsch gemacht.";
