@@ -594,6 +594,7 @@
     "POPUP_ROBOT_STATE" : "Status",
     "POPUP_ROBOT_BATTERY" : "Batteriespannung",
     "POPUP_ROBOT_WAIT" : "Wartezeit",
+    "POPUP_ROBOT_NOT_CONNECTED" : "Du musst zuerst eine Verbindung zu Deinem Roboter herstellen",
     "POPUP_CONFIRM_DELETE_PROGRAM" : "Möchten Sie das Programm wirklich löschen ?",
     "POPUP_CONFIRM_DELETE_CONFIGURATION" : "Möchten Sie die Konfiguration wirklich löschen ?",
     "BUTTON_STOP" : "Stop",

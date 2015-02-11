@@ -941,8 +941,12 @@ function initHeadNavigation() {
         } else if (domId === 'menuTabConfiguration') { //  Submenu 'Overview'
             $('#tabConfiguration').click();
         } else if (domId === 'menuRunProg') { //  Submenu 'Program'
-            runOnBrick();
-            displayMessage("MESSAGE_EDIT_START", "TOAST", "");
+            if (userState['robot.state'] === '') {
+                displayMessage("POPUP_ROBOT_NOT_CONNECTED", "POPUP", "");
+            } else {
+                runOnBrick();
+                displayMessage("MESSAGE_EDIT_START", "TOAST", "");
+            }
         } else if (domId === 'menuCheckProg') { //  Submenu 'Program'
             displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP", "");
         } else if (domId === 'menuNewProg') { //  Submenu 'Program'
@@ -1244,7 +1248,7 @@ function setRobotState(response) {
     if (response['robot.wait'] != undefined) {
         userState['robot.wait'] = response['robot.wait'];
     } else {
-        userState['robot.wait'] = undefined;
+        userState['robot.wait'] = '';
     }
 
     if (response['robot.battery'] != undefined) {
@@ -1540,10 +1544,15 @@ function init() {
     if (!getCookie("hideStartupMessage")) {
         $("#show-startup-message").modal("show");
     }
-    // Workaround to set the focus on input fields having with attribute 'autofocus'
+    
+    // Workaround to set the focus on input fields with attribute 'autofocus'
     $('.modal').on('shown.bs.modal', function() {
         $(this).find('[autofocus]').focus();
     });
+    
+//    window.onbeforeunload = function() {
+//        return false;
+//    };
 };
 
 $(document).ready(WRAP.fn3(init, 'page init'));

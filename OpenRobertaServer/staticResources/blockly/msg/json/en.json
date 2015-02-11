@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-02-10 09:24:38.392000",
+		"lastupdated": "2015-02-11 07:52:50.760000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -611,6 +611,7 @@
 	"POPUP_ROBOT_STATE": "State",
 	"POPUP_ROBOT_BATTERY": "Voltage",
 	"POPUP_ROBOT_WAIT": "Waiting time",
+	"POPUP_ROBOT_NOT_CONNECTED": "You have to make a connection to your robot first",
 	"POPUP_CONFIRM_DELETE_PROGRAM": "Do you really want to delete the program ?",
 	"POPUP_CONFIRM_DELETE_CONFIGURATION": "Do you really want to delete the configuration ?",
 	"BUTTON_STOP": "Stop",

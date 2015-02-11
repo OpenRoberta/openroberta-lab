@@ -1351,6 +1351,7 @@ Blockly.Msg.POPUP_ROBOT_NAME = 'Name',
 Blockly.Msg.POPUP_ROBOT_STATE = 'State',
 Blockly.Msg.POPUP_ROBOT_BATTERY = 'Voltage',
 Blockly.Msg.POPUP_ROBOT_WAIT = 'Waiting time',
+Blockly.Msg.POPUP_ROBOT_NOT_CONNECTED = 'You have to make a connection to your robot first',
 Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM = 'Do you really want to delete the program ?',
 Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION = 'Do you really want to delete the configuration ?',
 Blockly.Msg.BUTTON_STOP = 'Stop';

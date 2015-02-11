@@ -515,6 +515,7 @@ Blockly.Msg.POPUP_PASSWORD = "Passwort";
 Blockly.Msg.POPUP_REPEAT_PASSWORD = "Passwort wiederholen";
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Batteriespannung";
 Blockly.Msg.POPUP_ROBOT_NAME = "Name";
+Blockly.Msg.POPUP_ROBOT_NOT_CONNECTED = "Du musst zuerst eine Verbindung zu Deinem Roboter herstellen";
 Blockly.Msg.POPUP_ROBOT_STATE = "Status";
 Blockly.Msg.POPUP_ROBOT_WAIT = "Wartezeit";
 Blockly.Msg.POPUP_SHARE_WITH = "Name";
