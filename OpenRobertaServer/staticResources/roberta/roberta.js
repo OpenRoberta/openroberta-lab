@@ -101,8 +101,6 @@ function login() {
                 userState.name = response.userName;
             }
             userState.id = response.userId;
-            userState.programModified = false;
-            userState.configurationModified = false;
             setHeadNavigationMenuState('login');
             setRobotState(response);
             $('.modal').modal('hide'); // close all opened popups
