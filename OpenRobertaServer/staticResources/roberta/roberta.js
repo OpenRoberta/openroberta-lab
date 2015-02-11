@@ -24,6 +24,7 @@ function initUserState() {
     userState['robot.battery'] = '';
     userState['robot.wait'] = '';
     userState['robot.firmware'] = '';
+    userState.somehingChanged = true;
 }
 
 /**
@@ -1550,9 +1551,14 @@ function init() {
         $(this).find('[autofocus]').focus();
     });
     
-//    window.onbeforeunload = function() {
-//        return false;
-//    };
+    $(window).on('beforeunload', function(e) {
+        if (userState.somehingChanged === true) {
+            if (userState.language === 'EN') {
+                return 'You have to save your programs and configurations before leaving the page.'
+            }
+            return 'Du musst Deine Programme und Konfigurationen vor dem Verlassen der Seite speichern.';
+        }
+    });
 };
 
 $(document).ready(WRAP.fn3(init, 'page init'));
