@@ -520,7 +520,7 @@ function deleteFromListing() {
             if (result.rc === 'ok') {
                 responseAndRefreshProgramList(result);
                 setRobotState(result);
-                displayMessage("MESSAGE_PROGRAM_DELETED", "TOAST", programName);                
+                displayMessage("MESSAGE_PROGRAM_DELETED", "TOAST", programName);
             } else {
                 displayMessage(result.message, "POPUP", "");
             }
@@ -543,7 +543,7 @@ function deleteConfigurationFromListing() {
             if (result.rc === 'ok') {
                 responseAndRefreshConfigurationList(result);
                 setRobotState(result);
-                displayMessage("MESSAGE_CONFIGURATION_DELETED", "TOAST", configurationName);                
+                displayMessage("MESSAGE_CONFIGURATION_DELETED", "TOAST", configurationName);
             } else {
                 displayMessage(result.message, "POPUP", "");
             }
@@ -1350,12 +1350,12 @@ function switchLanguage(langCode, forceSwitch) {
         if (langs.indexOf(langCode) < 0) {
             langCode = "DE";
         }
-        
+
         for (i = 0; i < langs.length; i++) {
             $('.' + langs[i] + '').css('display', 'none');
-        } 
+        }
         $('.' + langCode + '').css('display', 'inline');
-        
+
         userState.language = langCode;
         var url = 'blockly/msg/js/' + langCode.toLowerCase() + '.js';
         var future = $.getScript(url);
@@ -1556,15 +1556,20 @@ function init() {
     if (!getCookie("hideStartupMessage")) {
         $("#show-startup-message").modal("show");
     }
-    
+
     // Workaround to set the focus on input fields with attribute 'autofocus'
     $('.modal').on('shown.bs.modal', function() {
         $(this).find('[autofocus]').focus();
     });
-    
-//    window.onbeforeunload = function() {
-//        return false;
-//    };
+
+    $(window).on('beforeunload', function(e) {
+        if (userState.programModified === true || userState.configurationModified === true) {
+            if (userState.language === 'EN') {
+                return 'You have to save your programs and configurations before leaving the page.'
+            }
+            return 'Du musst Deine Programme und Konfigurationen vor dem Verlassen der Seite speichern.';
+        }
+    });
 };
 
 $(document).ready(WRAP.fn3(init, 'page init'));

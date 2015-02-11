@@ -375,16 +375,13 @@ Blockly.Msg.MENU_STATE_INFO = "Statusinformationen";
 Blockly.Msg.MENU_TOOLBOX_BEGINNER = "Toolbox Anfänger";
 Blockly.Msg.MENU_TOOLBOX_EXPERT = "Toolbox Experte";
 Blockly.Msg.MENU_UPDATE_FIRMWARE = "Firmware aktualisieren";
-<<<<<<< HEAD
+Blockly.Msg.MENU_USER = "Anmelden";
 Blockly.Msg.MESSAGE_CONFIGURATION_DELETED = "Die Konfiguration '$' wurde gelöscht";
 Blockly.Msg.MESSAGE_EDIT_SAVE_CONFIGURATION = "Deine Konfiguration wurde gespeichert";
 Blockly.Msg.MESSAGE_EDIT_SAVE_CONFIGURATION_AS = "Deine Konfiguration wurde als '$' gespeichert";
 Blockly.Msg.MESSAGE_EDIT_SAVE_PROGRAM = "Dein Programm wurde gespeichert";
 Blockly.Msg.MESSAGE_EDIT_SAVE_PROGRAM_AS = "Dein Programm wurde als '$' gespeichert";
 Blockly.Msg.MESSAGE_EDIT_START = "Dein Programm startet gleich auf dem Brick";
-=======
-Blockly.Msg.MENU_USER = "Anmelden";
->>>>>>> ORA-423 GUI changes for small devices using bootstrap features
 Blockly.Msg.MESSAGE_EMPTY_NAME = "Du musst einen Namen eingeben.";
 Blockly.Msg.MESSAGE_NOT_AVAILABLE = "Funktion nicht verfügbar.";
 Blockly.Msg.MESSAGE_PASSWORD_ERROR = "Du hast beim eingeben der beiden Passworte etwas falsch gemacht.";

@@ -1,11 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-<<<<<<< HEAD
-		"lastupdated": "2015-02-11 10:01:01.509000",
-=======
-		"lastupdated": "2015-02-10 23:07:05.378000",
->>>>>>> ORA-423 GUI changes for small devices using bootstrap features
+		"lastupdated": "2015-02-11 10:15:38.583000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
