@@ -92,7 +92,7 @@ limitations under the License.
                         </ul></li>
                     <!-- Menu Configuration -->
                     <li class="dropdown" id="head-navigation-configuration-edit"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span
-                            id="head-navi-icon-configuration" class="head-navi-icons typcn typcn-document-text" 
+                            id="head-navi-icon-configuration" class="head-navi-icons typcn typcn-document-text"
                         ></span><span class="hidden-sm hidden-md hidden-lg" lkey="Blockly.Msg.MENU_EDIT"></span></a>
                         <ul class="dropdown-menu">
                             <li class="login logout"><a href="#" id="menuCheckConfig" class="typcn typcn-tick" lkey="Blockly.Msg.MENU_CHECK">checken</a></li>
@@ -122,7 +122,7 @@ limitations under the License.
                             <li><a href="#" id="menuStartProgramming" class="typcn typcn-lightbulb" lkey="Blockly.Msg.MENU_START_PROGRAMMING">Programmieren</a></li>
                             <li><a href="#" id="menuFaq" class="typcn typcn-lightbulb" lkey="Blockly.Msg.MENU_FAQ">FAQ</a></li>
                             <li><a href="#" id="menuStateInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_STATE_INFO">Statusinformationen</a></li>
-                            <li><a href="#" id="menuAbout" class="typcn typcn-info-large" lkey="Blockly.Msg.MENU_ABOUT">über ...</a></li>
+                            <li><a href="#" id="menuAbout" class="typcn typcn-info-large" lkey="Blockly.Msg.MENU_ABOUT">Über Open Roberta Lab</a></li>
                             <li><a href="#" id="menuLogging" class="typcn typcn-spanner" lkey="Blockly.Msg.MENU_LOGGING">Logging</a></li>
                         </ul></li>
                     <!-- Menu User -->
@@ -381,25 +381,37 @@ limitations under the License.
 
     <!-- Popup show about info -->
     <div id="show-about" class="modal fade">
-        <div class="modal-dialog">
+        <div class="modal-dialog bigModal">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h3 class="modal-title">About</h3>
                 </div>
-                <div class="modal-body left-inner-addon">
-                    <span>Fraunhofer Open Roberta</span><br />
-                    <span>Version&nbsp;</span><span id="version">???</span><br /> &nbsp; <br />
-                    <a href="http://www.iais.fraunhofer.de/impressum.html" target="_blank" class="DE">Impressum</a>
-                    <a href="http://www.iais.fraunhofer.de/index.php?id=4515&L=1" target="_blank" class="EN">Publishing notes</a>
+                <div class="modal-body">
+                    <div class="robertaLogo imgFloatLeft"></div>
+                    <span lkey="Blockly.Msg.POPUP_ABOUT_TEXT">Open Roberta Lab</span>
+                    <img alt="powered by Google" src="../css/img/powered-by-google-on-white.png" />
+                    <div class="modalImportant">
+                        <span>Version&nbsp;</span><span id="v">???</span>
+                    </div>
+                    <div lkey="Blockly.Msg.POPUP_ABOUT_TEXT_DEV">Entwickelt vom Open Roberta Team ...</div>
+                    <br />
+                    <div class="fraunhoferLogo imgFloatLeft"></div>
+                    <br />
+                    <a "href="http://www.iais.fraunhofer.de/impressum.html" target="_blank" class="DE impressum">Impressum</a> <a
+                        href="http://www.iais.fraunhofer.de/index.php?id=4515&L=1" target="_blank" class="EN impressum"
+                    >Publishing notes</a>
+                    <div style="overflow: auto; width: 100%"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+                    <a class="btn btn-default" id="about-join" href="https://mp-devel.iais.fraunhofer.de/wiki" target="_blank"
+                        lkey="Blockly.Msg.POPUP_ABOUT_JOIN"
+                    >Ich möchte mitmachen</a>
                 </div>
             </div>
         </div>
     </div>
-
     <!-- Popup show state info -->
     <div id="show-state-info" class="modal fade">
         <div class="modal-dialog">
@@ -409,12 +421,13 @@ limitations under the License.
                     <h3 class="modal-title">User state</h3>
                 </div>
                 <div class="modal-body left-inner-addon">
-                    <span lkey="Blockly.Msg.POPUP_USERNAME">User</span> <span>:&nbsp;</span> <span id="loggedIn">???</span> <br /> <span
-                        lkey="Blockly.Msg.TAB_PROGRAM"
-                    >Program</span> <span>:&nbsp;</span> <span id="programName">???</span> <br /> <span lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</span> <span>:&nbsp;</span>
-                    <span id="configurationName">???</span> <br /> <span lkey="Blockly.Msg.POPUP_TOOLBOX">Toolbox</span> <span>:&nbsp;</span> <span
-                        id="toolbox"
-                    >???</span>
+                    <span lkey="Blockly.Msg.POPUP_USERNAME">User</span> <span>:&nbsp;</span> <span id="loggedIn">???</span>
+                    <br />
+                    <span lkey="Blockly.Msg.TAB_PROGRAM">Program</span> <span>:&nbsp;</span> <span id="programName">???</span>
+                    <br />
+                    <span lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</span> <span>:&nbsp;</span> <span id="configurationName">???</span>
+                    <br />
+                    <span lkey="Blockly.Msg.POPUP_TOOLBOX">Toolbox</span> <span>:&nbsp;</span> <span id="toolbox">???</span>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
@@ -432,11 +445,13 @@ limitations under the License.
                     <h3 class="modal-title">Robot state</h3>
                 </div>
                 <div class="modal-body left-inner-addon">
-                    <span lkey="Blockly.Msg.POPUP_ROBOT_NAME">Name</span>:&nbsp;<span id="robotName"></span> <br /> <span lkey="Blockly.Msg.POPUP_ROBOT_STATE">Status</span>:&nbsp;<span
-                        id="robotState"
-                    ></span> <br /> <span lkey="Blockly.Msg.POPUP_ROBOT_BATTERY">Batteriespannung</span>:&nbsp;<span id="robotBattery"></span> <br /> <span
-                        lkey="Blockly.Msg.POPUP_ROBOT_WAIT"
-                    >Wartezeit</span>:&nbsp;<span id="robotWait"></span>
+                    <span lkey="Blockly.Msg.POPUP_ROBOT_NAME">Name</span>:&nbsp;<span id="robotName"></span>
+                    <br />
+                    <span lkey="Blockly.Msg.POPUP_ROBOT_STATE">Status</span>:&nbsp;<span id="robotState"></span>
+                    <br />
+                    <span lkey="Blockly.Msg.POPUP_ROBOT_BATTERY">Batteriespannung</span>:&nbsp;<span id="robotBattery"></span>
+                    <br />
+                    <span lkey="Blockly.Msg.POPUP_ROBOT_WAIT">Wartezeit</span>:&nbsp;<span id="robotWait"></span>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>

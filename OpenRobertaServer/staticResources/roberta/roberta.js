@@ -1138,6 +1138,9 @@ function initPopups() {
     $('.cancelPopup').onWrap('click', function() {
         $('.ui-dialog-titlebar-close').click();
     });
+    $('#about-join').onWrap('click', function() {
+        $('#show-about').modal('hide');
+    });
 
     // Handle key events in popups
     $(".modal").keyup(function(event) {
@@ -1317,6 +1320,8 @@ function translate(jsdata) {
         } else if (lkey === 'Blockly.Msg.POPUP_CANCEL') {
             $('.cancelPopup').attr('value', value);
             $('.backButton').attr('value', value);
+        } else if (lkey === 'Blockly.Msg.POPUP_ABOUT_JOIN') {
+            $('#about-join').html(value);
         } else if (lkey === 'Blockly.Msg.BUTTON_LOAD') {
             $('.buttonLoad').attr('value', value);
         } else if (lkey === 'Blockly.Msg.BUTTON_DO_DELETE') {
@@ -1568,10 +1573,17 @@ function init() {
 
     $(window).on('beforeunload', function(e) {
         if (userState.programModified === true || userState.configurationModified === true) {
-            if (userState.language === 'EN') {
-                return 'You have to save your programs and configurations before leaving the page.'
+            if (userState.id === -1) {
+                if (userState.language === 'EN') {
+                    return 'Your have unsafed changes in your program or configuration. Sign in and save your program or configuration.'
+                }
+                return 'Dein Programm oder Konfiguration ist nicht gespeichert. Erstelle einen Account und speichere dein Programm oder Konfiguration.';
+            } else {
+                if (userState.language === 'EN') {
+                    return 'Your have unsafed changes in your program or configuration.'
+                }
+                return 'Dein Programm oder Konfiguration ist nicht gespeichert.';
             }
-            return 'Du musst Deine Programme und Konfigurationen vor dem Verlassen der Seite speichern.';
         }
     });
 };

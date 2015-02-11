@@ -21,12 +21,11 @@
 /**
  * @fileoverview English strings.
  * @author fraser@google.com (Neil Fraser)
- *
+ * 
  * After modifying this file, either run "build.py" from the parent directory,
- * or run (from this directory):
- * ../i18n/js_to_json.py
- * to regenerate json/{en,qqq,synonyms}.json.
- *
+ * or run (from this directory): ../i18n/js_to_json.py to regenerate
+ * json/{en,qqq,synonyms}.json.
+ * 
  * To convert all of the json files to .js files, run:
  * ../i18n/create_messages.py json/*.json
  */
@@ -41,9 +40,11 @@ goog.require('Blockly.Msg');
  */
 
 /**
- * Tip: Generate URLs for read-only blocks by creating the blocks in the Code app,
- * then evaluating this in the console:
- * 'http://blockly-demo.appspot.com/static/apps/code/readonly.html?lang=en&xml=' + encodeURIComponent(Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace)).slice(5, -6))
+ * Tip: Generate URLs for read-only blocks by creating the blocks in the Code
+ * app, then evaluating this in the console:
+ * 'http://blockly-demo.appspot.com/static/apps/code/readonly.html?lang=en&xml=' +
+ * encodeURIComponent(Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace)).slice(5,
+ * -6))
  */
 
 /// default name - A simple, general default name for a variable, preferably short.
@@ -101,7 +102,6 @@ Blockly.Msg.RENAME_VARIABLE = 'Rename variable...';
 /// prompt - Prompts the user to enter the new name for the selected variable.  See [https://code.google.com/p/blockly/wiki/Variables#Dropdown_menu https://code.google.com/p/blockly/wiki/Variables#Dropdown_menu].\n\nParameters:\n* %1 - the name of the variable to be renamed.
 Blockly.Msg.RENAME_VARIABLE_TITLE = 'Rename all "%1" variables to:';
 
-
 // Tooltips for the robot blocks
 /// Rob Actions tooltips
 Blockly.Msg.MOTOR_ON_TOOLTIP = 'Turns motor on with specific power.';
@@ -147,7 +147,7 @@ Blockly.Msg.COLOUR_GETSAMPLE_TOOLTIP = 'Gets the current reading from the colour
 Blockly.Msg.INFRARED_SETMODE_TOOLTIP = 'Sets the mode of the infrared sensor.';
 Blockly.Msg.INFRARED_GETMODE_TOOLTIP = 'Gets the mode of the infrared sensor.';
 Blockly.Msg.INFRARED_GETSAMPLE_TOOLTIP = 'Gets the current reading from the infrared sensor.';
-Blockly.Msg.ENCODER_SETMODE_TOOLTIP = 'Sets the mode of the motor encoder.'; 
+Blockly.Msg.ENCODER_SETMODE_TOOLTIP = 'Sets the mode of the motor encoder.';
 Blockly.Msg.ENCODER_GETMODE_TOOLTIP = 'Gets the mode of the motor encoder.';
 Blockly.Msg.ENCODER_RESET_TOOLTIP = 'Resets the motor encoder.';
 Blockly.Msg.ENCODER_GETSAMPLE_TOOLTIP = 'Gets the current reading from the motor encoder.';
@@ -1333,13 +1333,16 @@ Blockly.Msg.MENU_START_PROGRAMMING = 'start programming';
 Blockly.Msg.MENU_FAQ = 'FAQ';
 Blockly.Msg.MENU_ROBOT_STATE_INFO = 'info';
 Blockly.Msg.MENU_STATE_INFO = 'state information';
-Blockly.Msg.MENU_ABOUT = 'about ...';
+Blockly.Msg.MENU_ABOUT = 'About';
 Blockly.Msg.MENU_LOG_IN = 'login ...';
 Blockly.Msg.MENU_LOG_OUT = 'logout';
 Blockly.Msg.MENU_CHANGE = 'change ...';
 Blockly.Msg.MENU_DELETE_USER = 'delete user ...';
 Blockly.Msg.TAB_PROGRAM = 'Program';
 Blockly.Msg.TAB_CONFIGURATION = 'Configuration';
+Blockly.Msg.POPUP_ABOUT_TEXT = 'Open Roberta Lab is a cloud-based integrated programming environment that enables children and adolescents to program easily Lego Mindstorms EV3 robots. This platform is completely open source so taking part is desirable! Both the software and the open source developer tools are available via Fraunhofer servers.';
+Blockly.Msg.POPUP_ABOUT_TEXT_DEV = 'Developed by the Open Roberta Team with the help of several »open source« libraries.'
+Blockly.Msg.POPUP_ABOUT_JOIN = 'I want to participate';
 Blockly.Msg.POPUP_TOOLBOX = 'Toolbox';
 Blockly.Msg.POPUP_USERNAME = 'Username';
 Blockly.Msg.POPUP_PASSWORD = 'Password';
@@ -1349,16 +1352,11 @@ Blockly.Msg.POPUP_EMAIL = 'E-Mail';
 Blockly.Msg.POPUP_SHARE_WITH = 'Name';
 Blockly.Msg.POPUP_ATTENTION = 'Attention';
 Blockly.Msg.POPUP_VALUE = 'Value';
-Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE = 'Do not show again',
-Blockly.Msg.POPUP_CANCEL = 'Cancel',
-Blockly.Msg.POPUP_ROBOT_NAME = 'Name',
-Blockly.Msg.POPUP_ROBOT_STATE = 'State',
-Blockly.Msg.POPUP_ROBOT_BATTERY = 'Voltage',
-Blockly.Msg.POPUP_ROBOT_WAIT = 'Waiting time',
-Blockly.Msg.POPUP_ROBOT_NOT_CONNECTED = 'You have to make a connection to your robot first',
-Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM = 'Do you really want to delete the program ?',
-Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION = 'Do you really want to delete the configuration ?',
-Blockly.Msg.BUTTON_STOP = 'Stop';
+Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE = 'Do not show again', Blockly.Msg.POPUP_CANCEL = 'Cancel', Blockly.Msg.POPUP_ROBOT_NAME = 'Name';
+Blockly.Msg.POPUP_ROBOT_STATE = 'State', Blockly.Msg.POPUP_ROBOT_BATTERY = 'Voltage', Blockly.Msg.POPUP_ROBOT_WAIT = 'Waiting time';
+Blockly.Msg.POPUP_ROBOT_NOT_CONNECTED = 'You have to make a connection to your robot first';
+Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM = 'Do you really want to delete the program ?';
+Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION = 'Do you really want to delete the configuration ?', Blockly.Msg.BUTTON_STOP = 'Stop';
 Blockly.Msg.BUTTON_FINISH = 'Finish';
 Blockly.Msg.BUTTON_LOAD = 'Load';
 Blockly.Msg.BUTTON_DO_DELETE = 'Delete';

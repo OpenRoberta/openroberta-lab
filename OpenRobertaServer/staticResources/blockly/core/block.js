@@ -698,10 +698,11 @@ Blockly.Block.prototype.onMouseUp_ = function(e) {
                 if (found)
                     break;
             }
-            // Inform GUI for modifications
-            if (setWorkspaceModified) {
-                setWorkspaceModified(true);
-            }
+
+        }
+        // Inform GUI for modifications
+        if (setWorkspaceModified) {
+            setWorkspaceModified(true);
         }
     });
 };
