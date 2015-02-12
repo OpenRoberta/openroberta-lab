@@ -391,23 +391,23 @@ limitations under the License.
                     <div class="robertaLogo imgFloatLeft"></div>
                     <span lkey="Blockly.Msg.POPUP_ABOUT_TEXT">Open Roberta Lab</span>
                     <img alt="powered by Google" src="../css/img/powered-by-google-on-white.png" />
-                    <div class="modalImportant">
-                        <span>Version&nbsp;</span><span id="v">???</span>
-                    </div>
-                    <div lkey="Blockly.Msg.POPUP_ABOUT_TEXT_DEV">Entwickelt vom Open Roberta Team ...</div>
+                    <div style="overflow: auto; width: 100%"></div>
                     <br />
                     <div class="fraunhoferLogo imgFloatLeft"></div>
-                    <br />
-                    <a "href="http://www.iais.fraunhofer.de/impressum.html" target="_blank" class="DE impressum">Impressum</a> <a
-                        href="http://www.iais.fraunhofer.de/index.php?id=4515&L=1" target="_blank" class="EN impressum"
-                    >Publishing notes</a>
+                    <span lkey="Blockly.Msg.POPUP_ABOUT_TEXT_DEV">Entwickelt vom Open Roberta Team ...</span> <a
+                        "href="http://www.iais.fraunhofer.de/impressum.html" target="_blank" class="DE"
+                    >Impressum</a> <a href="http://www.iais.fraunhofer.de/index.php?id=4515&L=1" target="_blank" class="EN">Publishing notes</a>
                     <div style="overflow: auto; width: 100%"></div>
+                    <br />
+                    <div>
+                        <span>Version&nbsp;</span><span id="v">???</span>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cool</button>
                     <a class="btn btn-default" id="about-join" href="https://mp-devel.iais.fraunhofer.de/wiki" target="_blank"
                         lkey="Blockly.Msg.POPUP_ABOUT_JOIN"
-                    >Ich möchte mitmachen</a>
+                    >Ich möchte mithelfen</a>
                 </div>
             </div>
         </div>
@@ -516,20 +516,47 @@ limitations under the License.
 
     <!-- Popup startup message -->
     <div id="show-startup-message" class="modal fade">
-        <div class="modal-dialog">
+        <div class="modal-dialog bigModal">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title" lkey="Blockly.Msg.POPUP_ATTENTION">Attention</h3>
-                    <span>O Genie, der Herr ehre Dein Ego</span>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" id="hideStartupMessage" lkey="Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE">Hide in the
-                        future</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
+                <div class="modal-body">
+                    <div style="text-align: center">
+                        <img alt="unbedingt lesen!" src="../css/img/unbedingt_lesen.png" />
+                    </div>
+                    <br />
+                    <br />
+                    <span lkey="">Das musst du über Open Roberta Lab wissen:</span>
+                    <div>
+                        <span style="padding:0 0 0 20px" class="typcn typcn-document-text">hier kann man EV3 Roboter programmieren</span>
+                        <br />
+                        <span style="padding:0 0 0 20px" class="typcn typcn-Roberta">dein Roboter braucht ein spezielles Betriebssystem!</span>
+                        <br />
+                        <span style="padding:0 0 0 20px" class="typcn typcn-wi-fi">dein Roboter braucht WLAN</span>
+                        <br />
+                        <span style="padding:0 0 0 20px" class="typcn typcn-arrow-right-thick">Schau in die Hilfe wenn du nicht weißt, ob dein Roboter das alles schon kann ...</span><a
+                        "href="https://www.iais.fraunhofer.de/impressum.html" target="_blank" class="DE"
+                    > mehr</a>
+                    </div><br />
+                    <span>Wen's interessiert:</span>
+                 <br />
+                <div>
+                    <span>Version&nbsp;</span><span id="v">???</span>
+                    <br />
+                    <ul>
+                        <li>Funktionen und Variablen neu</li>
+                        <li>beliebig konfigurierbarer EV3 Roboter</li>
+                        <li>Update der Firmware des Roboters über die Anwendung</li>
+                    </ul>
                 </div>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="doDeleteConfiguration">Cool</button>
+                <button type="button" class="btn btn-default" id="hideStartupMessage" lkey="Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE"></button>
+            </div>
         </div>
+    </div>
     </div>
 
     <!-- ################## END POPUPS ################## -->

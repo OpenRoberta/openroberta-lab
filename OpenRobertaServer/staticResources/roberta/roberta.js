@@ -1313,7 +1313,7 @@ function translate(jsdata) {
             $('#set-token h3').text(value);
             $(this).html(value);
         } else if (lkey === 'Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE') {
-            $('#hideStartupMessage').attr('value', value);
+            $('#hideStartupMessage').text(value);
         } else if (lkey === 'Blockly.Msg.POPUP_ATTENTION') {
             $('#show-message h3').text(value);
             $('#show-startup-message h3').text(value);
@@ -1574,15 +1574,9 @@ function init() {
     $(window).on('beforeunload', function(e) {
         if (userState.programModified === true || userState.configurationModified === true) {
             if (userState.id === -1) {
-                if (userState.language === 'EN') {
-                    return 'Your have unsafed changes in your program or configuration. Sign in and save your program or configuration.'
-                }
-                return 'Dein Programm oder Konfiguration ist nicht gespeichert. Erstelle einen Account und speichere dein Programm oder Konfiguration.';
+                Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN;
             } else {
-                if (userState.language === 'EN') {
-                    return 'Your have unsafed changes in your program or configuration.'
-                }
-                return 'Dein Programm oder Konfiguration ist nicht gespeichert.';
+                Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN;
             }
         }
     });
