@@ -1574,9 +1574,11 @@ function init() {
     $(window).on('beforeunload', function(e) {
         if (userState.programModified === true || userState.configurationModified === true) {
             if (userState.id === -1) {
-                Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN;
+                alert(Blockly.Msg['POPUP_BEFOREUNLOAD']);
+                return Blockly.Msg.POPUP_BEFOREUNLOAD;
             } else {
-                Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN;
+                alert(Blockly.Msg['POPUP_BEFOREUNLOAD_LOGGEDIN']);
+                return Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN;
             }
         }
     });

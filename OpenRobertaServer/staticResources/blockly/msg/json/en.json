@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-02-12 11:20:37.611000",
+		"lastupdated": "2015-02-13 08:21:08.471000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -621,8 +621,8 @@
 	"POPUP_CONFIRM_DELETE_PROGRAM": "Do you really want to delete the program ?",
 	"POPUP_CONFIRM_DELETE_CONFIGURATION": "Do you really want to delete the configuration ?",
 	"BUTTON_STOP": "Stop",
-	"POPUP_BEFOREUNLOAD": "Your have unsafed changes in your program or configuration. Sign in and save your program or configuration.",
-	"POPUP_BEFOREUNLOAD_LOGGEDIN": "Your have unsafed changes in your program or configuration.",
+	"POPUP_BEFOREUNLOAD": "You have unsafed changes in your program or configuration. Sign in and save your program or configuration.",
+	"POPUP_BEFOREUNLOAD_LOGGEDIN": "You have unsafed changes in your program or configuration.",
 	"BUTTON_FINISH": "Finish",
 	"BUTTON_LOAD": "Load",
 	"BUTTON_DO_DELETE": "Delete",
