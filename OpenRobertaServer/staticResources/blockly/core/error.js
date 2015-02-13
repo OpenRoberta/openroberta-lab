@@ -82,22 +82,20 @@ Blockly.Error.prototype.text_ = '';
  */
 Blockly.Error.prototype.createIcon_ = function() {
     Blockly.Icon.prototype.createIcon_.call(this);
-    /*
-     * Here's the markup that will be generated: <path class="blocklyIconShield"
-     * d="..."/> <text class="blocklyIconMark" x="8" y="13">!</text>
-     */
-    var iconShield = Blockly.createSvgElement('polygon', {
-        'class' : 'blocklyIconShield blocklyIconShieldError',
-        'points' : '7,2 17,2 22,7 22,17 17,22 7,22 2,17 2,7'
+    var iconShield = Blockly.createSvgElement('rect', {
+        'class' : 'blocklyIconShield',
+        'width' : Blockly.Icon.RADIUS * 2,
+        'height' : Blockly.Icon.RADIUS * 2,
+        'rx' : Blockly.BlockSvg.CORNER_RADIUS_FIELD,
+        'ry' : Blockly.BlockSvg.CORNER_RADIUS_FIELD
     }, this.iconGroup_);
-    var iconShield = Blockly.createSvgElement('path', {
+    var iconMark = Blockly.createSvgElement('path', {
         'class' : 'blocklyIconMark  blocklyIconMarkWarningError',
-        'fill' : '#333333',
-        'd' : 'M16 14.5c.391.391.391 1.023 0 1.414-.195.195-.451.293-.707.293s-.512-.098-.707-.293l-2.293-2.293-2.293 2.293'
-                + 'c-.195.195-.451.293-.707.293s-.512-.098-.707-.293c-.391-.391-.391-1.023 0-1.414l2.293-2.293-2.293-2.293'
-                + 'c-.391-.391-.391-1.023 0-1.414s1.023-.391 1.414 0l2.293 2.293 2.293-2.293c.391-.391 1.023-.391 1.414 0s.391 1.023 0 1.414'
-                + 'l-2.293 2.293 2.293 2.293z'
-
+        'fill' : '#333',
+        'd' : 'M12 3c-4.963 0-9 4.038-9 9s4.037 9 9 9 9-4.038 9-9-4.037-9-9-9zm0 16c-3.859 0-7-3.14-7-7s3.141-7 7-7 7 3.14 7 7-3.141 7-7 7z '
+                + 'M12.707 12l2.646-2.646c.194-.194.194-.512 0-.707-.195-.194-.513-.194-.707 0l-2.646 2.646-2.646-2.647'
+                + 'c-.195-.194-.513-.194-.707 0-.195.195-.195.513 0 .707l2.646 2.647-2.646 2.646c-.195.195-.195.513 0 .707.097.098.225.147.353.147'
+                + 's.256-.049.354-.146l2.646-2.647 2.646 2.646c.098.098.226.147.354.147s.256-.049.354-.146c.194-.194.194-.512 0-.707l-2.647-2.647z'
     }, this.iconGroup_);
 };
 

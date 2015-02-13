@@ -116,49 +116,6 @@ html, body {
     }
 }
 
-@media only screen and (max-width: 767px) {
-    #imgLogo img {
-        width: 120px;
-    }
-    #imgBeta img {
-        width: 50px;
-    }
-    #imgBeta {
-        bottom: -5px;
-        right: 60px;
-    }
-    #states {
-        position: absolute;
-        right: 0;
-        margin-top: 28px;
-        padding: 0;
-    }
-    #language {
-        margin: 0;
-        padding: 0;
-    }
-    #languages>li>a {
-        padding: 10px 12px;
-        font-size: 14px;
-        line-height: 14px;
-    }
-    #languages>li:hover, #languages>li:hover {
-        background-color: #afca04;
-    }
-    ul #languages {
-        background-color: #fff;
-    }
-    #language>li {
-        margin-top: 12px;
-    }
-    .navbar-nav .open .dropdown-menu>li>a, .navbar-nav .open .dropdown-menu .dropdown-header {
-        padding: 5px 15px 5px 36px;
-    }
-    .navbar-default .navbar-nav .open .dropdown-menu>li>a {
-        color: inherit;
-    }
-}
-
 .menuTab {
     text-transform: uppercase;
     font-weight: bold;
@@ -209,6 +166,8 @@ html, body {
 }
 
 #blocklyDiv, #bricklyDiv {
+    /*  zoom: 0.5;
+    -moz-transform: scale(0.5); */
     background-color: #eee;
     height: 100%;
     width: 100%;
@@ -219,7 +178,6 @@ html, body {
     position: absolute;
     top: 0;
     left: 50%;
-    padding: 16px;
 }
 
 #toastLeftContainer {
@@ -236,6 +194,7 @@ html, body {
     color: #333333;
     white-space: nowrap;
     background-color: #fff;
+    padding: 8px;
 }
 
 .ok {
@@ -243,7 +202,7 @@ html, body {
 }
 
 .error {
-    color: #e2001a;
+    color: #ccc;
 }
 
 .button {
@@ -398,7 +357,7 @@ html, body {
 }
 
 .modal-dialog.bigModal {
-    width: 600px;
+    width: 500px;
 }
 
 .bigModal .modal-footer:after {
@@ -468,6 +427,37 @@ html, body {
 .close:hover, .close:focus {
     color: #333;
     opacity: 1;
+}
+ul.icon
+{
+    list-style-type: none;
+}
+ 
+ul.icon li
+{
+    text-indent: -1.4em;
+}
+ul.icon li:before
+{
+    font-family: 'typicons';
+    float: left;
+    width: 1.4em;
+}
+ul.icon li.document-text:before
+{
+    content: "\e664";
+}
+ul.icon li.Roberta:before
+{
+    content: "\e600";
+}
+ul.icon li.wi-fi:before
+{
+    content: "\e746";
+}
+ul.icon li.arrow-right-thick:before
+{
+    content: "\e61c";
 }
 /***** END Overwrite Bootstrap-CSS *****/
 /***** BEGIN typicons *****/
@@ -586,3 +576,50 @@ table.dataTable thead .sorting_desc {
     background: url("/css/img/dataTables-icons/arrow-sorted-up.svg") no-repeat center left;
 }
 /***** END JQuery-Datatables *****/
+
+@media only screen and (max-width: 767px) {
+    #imgLogo img {
+        width: 120px;
+    }
+    #imgBeta img {
+        width: 50px;
+    }
+    #imgBeta {
+        bottom: -5px;
+        right: 60px;
+    }
+    #states {
+        position: absolute;
+        right: 0;
+        margin-top: 28px;
+        padding: 0;
+    }
+    #language {
+        margin: 0;
+        padding: 0;
+    }
+    #languages>li>a {
+        padding: 10px 12px;
+        font-size: 14px;
+        line-height: 14px;
+    }
+    #languages>li:hover, #languages>li:hover {
+        background-color: #afca04;
+    }
+    ul #languages {
+        background-color: #fff;
+    }
+    #language>li {
+        margin-top: 12px;
+    }
+    .navbar-nav .open .dropdown-menu>li>a, .navbar-nav .open .dropdown-menu .dropdown-header {
+        padding: 5px 15px 5px 36px;
+    }
+    .navbar-default .navbar-nav .open .dropdown-menu>li>a {
+        color: inherit;
+    }
+    .modal-dialog.bigModal {
+        width: 80%;
+        min-width:300px;
+    }
+}

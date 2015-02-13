@@ -72,16 +72,12 @@ Blockly.Comment.prototype.height_ = 80;
  */
 Blockly.Comment.prototype.createIcon_ = function() {
     Blockly.Icon.prototype.createIcon_.call(this);
-    /*
-     * Here's the markup that will be generated: <circle
-     * class="blocklyIconShield" r="8" cx="8" cy="8"/> <text
-     * class="blocklyIconMark" x="8" y="13">?</text>
-     */
-    var iconShield = Blockly.createSvgElement('circle', {
+    var iconShield = Blockly.createSvgElement('rect', {
         'class' : 'blocklyIconShield',
-        'r' : Blockly.Icon.RADIUS,
-        'cx' : Blockly.Icon.RADIUS,
-        'cy' : Blockly.Icon.RADIUS
+        'width' : Blockly.Icon.RADIUS * 2,
+        'height' : Blockly.Icon.RADIUS * 2,
+        'rx' : Blockly.BlockSvg.CORNER_RADIUS_FIELD,
+        'ry' : Blockly.BlockSvg.CORNER_RADIUS_FIELD
     }, this.iconGroup_);
     var iconShield = Blockly.createSvgElement('path', {
         'class' : 'blocklyIconMark',

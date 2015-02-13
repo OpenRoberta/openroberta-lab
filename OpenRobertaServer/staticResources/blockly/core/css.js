@@ -61,8 +61,8 @@ Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 
 
 '.blocklyDraggable {',
 /*
- * Hotspot coordinates are baked into the CUR file, but they are still
- * required in the CSS due to a Chrome bug.
+ * Hotspot coordinates are baked into the CUR file, but they are still required
+ * in the CSS due to a Chrome bug.
  * http://code.google.com/p/chromium/issues/detail?id=1446
  */
 '  cursor: url(<<<PATH>>>/media/handopen.cur) 8 5, auto;', '}',
@@ -105,8 +105,8 @@ Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 
 '.blocklyBubbleText {', '  fill: #000;', '}',
 
 /*
- * Don't allow users to select text. It gets annoying when trying to
- * drag a block and selected text moves instead.
+ * Don't allow users to select text. It gets annoying when trying to drag a
+ * block and selected text moves instead.
  */
 '.blocklySvg text {', '  -moz-user-select: none;', '  -webkit-user-select: none;', '  user-select: none;', '  cursor: inherit;',
         '  font-family: "Roboto", sans-serif;', '}',
@@ -121,37 +121,15 @@ Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 
 
         '.blocklyTooltipText {', '  font-family: sans-serif;', '  font-size: 10pt;', '  fill: #000;', '}',
 
-        '.blocklyIconShield {', '  cursor: default;', '  fill: #006E92;',
-        //'  stroke-width: 1px;',
-        //'  stroke: #ccc;',
-        '}',
+        '.blocklyIconShield {', '  cursor: pointer;', '  fill-opacity: 0;', '}',
 
-        '.blocklyIconShieldWarning {', '  cursor: default;', '  fill: #FFDC00;',
-        //'  stroke-width: 1px;',
-        //'  stroke: #ccc;',
-        '}',
+        '.blocklyIconGroup:hover>.blocklyIconShieldWarning {', '  fill: #FFDC00;', '}',
 
-        '.blocklyIconShieldError {', '  cursor: default;', '  fill: #E2001A;',
-        //'  stroke-width: 1px;',
-        //'  stroke: #ccc;',
-        '}',
+        '.blocklyIconGroup:hover>.blocklyIconShieldError {', '  fill: #E2001A;', '}',
 
-        '.blocklyIconGroup:hover>.blocklyIconShield {', '  fill: #007da6;',
-        //'  stroke: #fff;',
-        '}',
+        '.blocklyIconGroup:hover>.blocklyIconMark {', '  fill: #fff;', '  cursor: pointer;', ' }',
 
-        '.blocklyIconGroup:hover>.blocklyIconShieldWarning {', '  fill: #FFDC00;',
-        //'  stroke: #fff;',
-        '}',
-
-        '.blocklyIconGroup:hover>.blocklyIconShieldError {', '  fill: #E2001A;',
-        //'  stroke: #fff;',
-        '}',
-
-        '.blocklyIconGroup:hover>.blocklyIconMark {', '  fill: #fff;', '}',
-
-        '.blocklyIconMark {', '  cursor: default !important;', '  font-family: sans-serif;', '  font-size: 9pt;', '  font-weight: bold;', '  fill: #ccc;',
-        '  text-anchor: middle;', '}',
+        '.blocklyIconMark {', '  font-family: sans-serif;', '  font-size: 9pt;', '  font-weight: bold;', '  fill: #ccc;', '  text-anchor: middle;', '}',
 
         '.blocklyIconMarkWarningError {', '  fill: #000;', '}',
 
@@ -159,15 +137,9 @@ Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 
 
         '.blocklyMinimalBody {', '  margin: 0;', '  padding: 0;', '}',
 
-        '.blocklyCommentTextarea {', '  margin: 0;', '  padding: 2px;', '  border: 0;', '  resize: none;',
-        //'  background-color: #ffc;',
-        '}', '.blocklyHelpDiv {', '  padding: 2px;', '  border: 0;', '  resize: none;', 'font-size: 11pt;',
-        //'  background-color: #ffc;',
-        '}', 'textarea {', '  border: none;', ' margin: 0;', '  padding: 2px;', '  border: 0;', '  resize: none;',
-        //'  background-color: #ffc;',
-        '}', 'textarea:focus {', '  border: none;', ' margin: 0;', '  padding: 2px;', '  border: 0;', '  resize: none;',
-        //'  background-color: #ffc;',
-        '}',
+        '.blocklyCommentTextarea {', '  margin: 0;', '  padding: 2px;', '  border: 0;', '  resize: none;', '}', '.blocklyHelpDiv {', '  padding: 2px;',
+        '  border: 0;', '  resize: none;', 'font-size: 11pt;', '}', 'textarea {', '  border: none;', ' margin: 0;', '  padding: 2px;', '  border: 0;',
+        '  resize: none;', '}', 'textarea:focus {', '  border: none;', ' margin: 0;', '  padding: 2px;', '  border: 0;', '  resize: none;', '}',
 
         '.blocklyHtmlInput {', '  font-family: sans-serif;', '  font-size: 10pt;', '  border: none;', '  outline: none;', '  width: 100%', '}',
 

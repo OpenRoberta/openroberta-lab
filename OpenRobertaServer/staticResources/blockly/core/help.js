@@ -43,13 +43,13 @@ Blockly.Help.prototype.height_ = 195;
 
 Blockly.Help.prototype.createIcon = function() {
     Blockly.Icon.prototype.createIcon_.call(this);
-    var iconShield = Blockly.createSvgElement('circle', {
+    var iconShield = Blockly.createSvgElement('rect', {
         'class' : 'blocklyIconShield',
-        'r' : Blockly.Icon.RADIUS,
-        'cx' : Blockly.Icon.RADIUS,
-        'cy' : Blockly.Icon.RADIUS
+        'width' : Blockly.Icon.RADIUS * 2,
+        'height' : Blockly.Icon.RADIUS * 2, 'rx' : Blockly.BlockSvg.CORNER_RADIUS_FIELD,
+        'ry' : Blockly.BlockSvg.CORNER_RADIUS_FIELD
     }, this.iconGroup_);
-    var iconShield = Blockly.createSvgElement('path', {
+    var iconMark = Blockly.createSvgElement('path', {
         'class' : 'blocklyIconMark',
         'transform' : 'translate(-0.5,0)',
         'd' : 'M12.5 5.5c-.276 0-.5.224-.5.5s.224.5.5.5c1.083 0 1.964.881 1.964 1.964 0 .276.224.5.5.5s.5-.224.5-.5'

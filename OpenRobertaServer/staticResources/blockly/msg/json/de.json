@@ -583,6 +583,7 @@
     "TAB_CONFIGURATION" : "Konfiguration",
     "POPUP_ABOUT_TEXT" : "Open Roberta Lab ist eine cloudbasierte grafische Programmierumgebung, die es Kindern und Jugendlichen ermöglicht ohne technische Hürden einen Roboter zu programmieren. <br /> Die Programmierplattform ist komplett »open source«, Mitmachen und Anregungen erwünscht! Alle benötigte Software und Open-Source-Entwicklertools stehen über Fraunhofer-Server bereit.",
     "POPUP_ABOUT_TEXT_DEV" : "Open Roberta Lab wird von Fraunhofer IAIS im Rahmen der Initiative »Roberta – Lernen mit Robotern« entwickelt. Das Team von Open Roberta nutzt hierfür unter anderem weiterer »open source« Bibliotheken, wie z. B. blockly oder typicons .",
+    "POPUP_TEXT_STARTUP_MESSAGE" : "Das musst du über Open Roberta Lab wissen:<ul class='icon'><li class='document-text'>hier kann man EV3 Roboter programmieren</li><li class='Roberta'>dein Roboter braucht ein spezielles Betriebssystem</li><li class='wi-fi'>dein Roboter braucht WLAN</li><li class='arrow-right-thick'>Schau in die Hilfe wenn du nicht weißt, ob dein Roboter das alles schon kann ... <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/Open+Roberta+Hilfe'>mehr</a></li></ul><br /><p>Wen es interessiert:</p>Version beta 1.1.0<ul><li>Funktionen und Variablen neu</li><li>beliebig konfigurierbarer EV3 Roboter</li><li>Update der Firmware des Roboters über die Anwendung</li></ul>",
     "POPUP_ABOUT_JOIN" : "Ich möchte mithelfen",
     "POPUP_TOOLBOX" : "Toolbox",
     "POPUP_USERNAME" : "Benutzername",

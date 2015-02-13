@@ -83,22 +83,32 @@ Blockly.Warning.prototype.text_ = '';
  */
 Blockly.Warning.prototype.createIcon_ = function() {
     Blockly.Icon.prototype.createIcon_.call(this);
-    /*
-     * Here's the markup that will be generated: <path class="blocklyIconShield"
-     * d="..."/> <text class="blocklyIconMark" x="8" y="13">!</text>
-     */
-    var iconShield = Blockly.createSvgElement('path', {
-        'class' : 'blocklyIconShield blocklyIconShieldWarning',
-        'd' : 'M21.171 15.398l-5.912-9.854c-.776-1.293-1.963-2.033-3.259-2.033s-2.483.74-3.259 2.031l-5.912 9.856'
-                + 'c-.786 1.309-.872 2.705-.235 3.83.636 1.126 1.878 1.772 3.406 1.772h12c1.528 0 2.77-.646 3.406-1.771.637-1.125.551-2.521-.235-3.831z'
+    var iconShield = Blockly.createSvgElement('rect', {
+        'class' : 'blocklyIconShield',
+        'width' : Blockly.Icon.RADIUS * 2,
+        'height' : Blockly.Icon.RADIUS * 2,
+        'rx' : Blockly.BlockSvg.CORNER_RADIUS_FIELD,
+        'ry' : Blockly.BlockSvg.CORNER_RADIUS_FIELD
     }, this.iconGroup_);
-    var iconShield = Blockly.createSvgElement('path', {
-        'class' : 'blocklyIconMark  blocklyIconMarkWarningError',
-        'fill' : '#333333',
-        'd' : 'M21.171 15.398 m-9.171 2.151c-.854 0-1.55-.695-1.55-1.549 0-.855.695-1.551 1.55-1.551s1.55.696 1.55 1.551c0 .854-.696 1.549-1.55 1.549'
-                + 'zm1.633-7.424c-.011.031-1.401 3.468-1.401 3.468-.038.094-.13.156-.231.156s-.193-.062-.231-.156l-1.391-3.438'
-                + 'c-.09-.233-.129-.443-.129-.655 0-.965.785-1.75 1.75-1.75s1.75.785 1.75 1.75c0 .212-.039.422-.117.625z'
-
+    var iconMark = Blockly.createSvgElement('path', {
+        'class' : 'blocklyIconMark blocklyIconMarkWarningError',
+        'fill' : '#333',
+        'd' : 'M12 5.511c.561 0 1.119.354 1.544 1.062l5.912 9.854c.851 1.415.194 2.573-1.456 2.573h-12c-1.65 0-2.307-1.159-1.456-2.573l5.912-9.854'
+                + 'c.425-.708.983-1.062 1.544-1.062m0-2c-1.296 0-2.482.74-3.259 2.031l-5.912 9.856c-.786 1.309-.872 2.705-.235 3.83s1.879 1.772 3.406 1.772h12'
+                + 'c1.527 0 2.77-.646 3.406-1.771s.551-2.521-.235-3.83l-5.912-9.854c-.777-1.294-1.963-2.034-3.259-2.034z'
+    }, this.iconGroup_);
+    iconMark = Blockly.createSvgElement('path', {
+        'class' : 'blocklyIconMark blocklyIconMarkWarningError',
+        'fill' : '#333',
+        'd' : 'M13.5 10c0-.83-.671-1.5-1.5-1.5s-1.5.67-1.5 1.5c0 .199.041.389.111.562.554 1.376 1.389 3.438 1.389 3.438l1.391-3.438'
+                + 'c.068-.173.109-.363.109-.562z'
+    }, this.iconGroup_);
+    iconMark = Blockly.createSvgElement('circle', {
+        'class' : 'blocklyIconMark blocklyIconMarkWarningError',
+        'fill' : '#333',
+        'cx' : '12',
+        'cy' : '16',
+        'r' : '1.3'
     }, this.iconGroup_);
 };
 

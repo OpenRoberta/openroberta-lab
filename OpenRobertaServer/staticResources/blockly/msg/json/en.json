@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-02-13 08:21:08.471000",
+		"lastupdated": "2015-02-13 23:01:46.489000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -601,7 +601,8 @@
 	"TAB_PROGRAM": "Program",
 	"TAB_CONFIGURATION": "Configuration",
 	"POPUP_ABOUT_TEXT": "Open Roberta Lab is a cloud-based integrated programming environment that enables children and adolescents to program easily Lego Mindstorms EV3 robots. This platform is completely open source so taking part is desirable! Both the software and the open source developer tools are available via Fraunhofer servers.",
-	"POPUP_ABOUT_TEXT_DEV": "Developed by Fraunhofer IAIS within the »Roberta – Lernen mit Robotern«  initiative. The Open Roberta Team uses several »open source« libraries, e.g. blockly or typicons .",
+	"POPUP_ABOUT_TEXT_DEV": "Developed by Fraunhofer IAIS within the »Roberta – Lernen mit Robotern«  initiative. The Open Roberta Team uses several »open source« libraries, e.g. blockly or typicons.",
+	"POPUP_TEXT_STARTUP_MESSAGE": "Three things you should know before starting:<ul class='icon'><li class='document-text'>here you can program EV3 robots </li><li class='Roberta'>your robot needs a special system</li><li class='wi-fi'>your robot needs wi-fi</li><li class='arrow-right-thick'>if you are not sure, please have a look at the help pages ... <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/Open+Roberta+Hilfe'>more</a></li></ul><br /><p>If you are interested:</p>Version beta 1.1.0<ul><li>Functions and variables</li><li>free EV3 robot configuration</li><li>Update firmware via Open Roberta Lab</li></ul>",
 	"POPUP_ABOUT_JOIN": "I want to help",
 	"POPUP_TOOLBOX": "Toolbox",
 	"POPUP_USERNAME": "Username",
@@ -614,6 +615,7 @@
 	"POPUP_VALUE": "Value",
 	"POPUP_HIDE_STARTUP_MESSAGE": "I got it!",
 	"POPUP_CANCEL": "Cancel",
+	"POPUP_ROBOT_NAME": "Name",
 	"POPUP_ROBOT_STATE": "State",
 	"POPUP_ROBOT_BATTERY": "Voltage",
 	"POPUP_ROBOT_WAIT": "Waiting time",

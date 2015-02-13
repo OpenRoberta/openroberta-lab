@@ -1314,6 +1314,8 @@ function translate(jsdata) {
             $(this).html(value);
         } else if (lkey === 'Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE') {
             $('#hideStartupMessage').text(value);
+        } else if (lkey === 'Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE') {
+            $('#popupTextStartupMessage').html(value);
         } else if (lkey === 'Blockly.Msg.POPUP_ATTENTION') {
             $('#show-message h3').text(value);
             $('#show-startup-message h3').text(value);
@@ -1556,7 +1558,11 @@ function init() {
     initProgramNameTable();
     initConfigurationNameTable();
     initializeLanguages();
-    switchLanguage('DE', true);
+    if (navigator.language.indexOf("en") > -1) {
+        switchLanguage('EN', true);
+    } else {
+        switchLanguage('DE', true)
+    }
     pingServer();
     $('#menuTabProgram').parent().addClass('disabled');
     $('#tabProgram').addClass('tabClicked');

@@ -157,7 +157,7 @@ limitations under the License.
                 <div href="#" id="iconDisplayLogin" class="typcn typcn-user"></div>
                 <div href="#" id="iconDisplayRobotState" class="typcn typcn-Roberta"></div>
                 <ul id="language" class="nav navbar-nav">
-                    <li class="dropdown"><a data-toggle="dropdown" class=" dropdown-toggle"><span id="chosenLanguage">DE</span> <b class="caret"></b></a>
+                    <li class="dropdown"><a href="#" data-toggle="dropdown" class=" dropdown-toggle"><span id="chosenLanguage">DE</span> <b class="caret"></b></a>
                         <ul class="dropdown-menu" id="languages">
                             <li><a href="#">EN</a></li>
                             <li><a href="#">DE</a></li>
@@ -400,7 +400,7 @@ limitations under the License.
                     <div style="overflow: auto; width: 100%"></div>
                     <br />
                     <div>
-                        <span>Version&nbsp;</span><span id="v">???</span>
+                        <span>Version beta 1.1.0</span>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -523,40 +523,18 @@ limitations under the License.
                 </div>
                 <div class="modal-body">
                     <div style="text-align: center">
-                        <img alt="unbedingt lesen!" src="../css/img/unbedingt_lesen.png" />
+                        <img alt="unbedingt lesen!" src="../css/svg/unbedingt_lesen.svg" />
                     </div>
                     <br />
-                    <br />
-                    <span lkey="">Das musst du über Open Roberta Lab wissen:</span>
-                    <div>
-                        <span style="padding:0 0 0 20px" class="typcn typcn-document-text">hier kann man EV3 Roboter programmieren</span>
-                        <br />
-                        <span style="padding:0 0 0 20px" class="typcn typcn-Roberta">dein Roboter braucht ein spezielles Betriebssystem!</span>
-                        <br />
-                        <span style="padding:0 0 0 20px" class="typcn typcn-wi-fi">dein Roboter braucht WLAN</span>
-                        <br />
-                        <span style="padding:0 0 0 20px" class="typcn typcn-arrow-right-thick">Schau in die Hilfe wenn du nicht weißt, ob dein Roboter das alles schon kann ...</span><a
-                        "href="https://www.iais.fraunhofer.de/impressum.html" target="_blank" class="DE"
-                    > mehr</a>
-                    </div><br />
-                    <span>Wen's interessiert:</span>
-                 <br />
-                <div>
-                    <span>Version&nbsp;</span><span id="v">???</span>
-                    <br />
-                    <ul>
-                        <li>Funktionen und Variablen neu</li>
-                        <li>beliebig konfigurierbarer EV3 Roboter</li>
-                        <li>Update der Firmware des Roboters über die Anwendung</li>
-                    </ul>
+                    <div lkey="Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE" id="popupTextStartupMessage">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="doDeleteConfiguration">Cool</button>
+                    <button type="button" class="btn btn-default" id="hideStartupMessage" lkey="Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE"></button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" id="doDeleteConfiguration">Cool</button>
-                <button type="button" class="btn btn-default" id="hideStartupMessage" lkey="Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE"></button>
-            </div>
         </div>
-    </div>
     </div>
 
     <!-- ################## END POPUPS ################## -->
