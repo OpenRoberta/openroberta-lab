@@ -941,7 +941,6 @@ function initHeadNavigation() {
     $('.navbar-fixed-top').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
         $('.modal').modal('hide'); // close all opened popups
         var domId = event.target.id;
-
         if (domId === 'menuTabProgram') { //  Submenu 'Overview'
             $('#tabProgram').click();
         } else if (domId === 'menuTabConfiguration') { //  Submenu 'Overview'
@@ -1050,6 +1049,18 @@ function initHeadNavigation() {
         return false;
     }, 'head navigation menu item clicked');
 
+    $('.navbar-fixed-top').onWrap('click', 'li:not(.disabled) a', function(event) {
+        var domId = event.target.id;
+        if (domId === 'menuTabProgram') { //  Submenu 'Overview'
+            $('.scroller-left').click();
+            $('#tabProgram').click();
+        } else if (domId === 'menuTabConfiguration') { //  Submenu 'Overview'
+            $('.scroller-right').click();
+            $('#tabConfiguration').click();
+        }
+        return false;
+    }, 'head navigation menu item clicked');
+
     // Close submenu on mouseleave
     $('.navbar-fixed-top').onWrap('mouseleave', function(event) {
         $('.navbar-fixed-top .dropdown').removeClass('open');
@@ -1099,6 +1110,20 @@ function initHeadNavigation() {
         $('#menuTabConfiguration').parent().addClass('disabled');
         $('#menuTabProgram').parent().removeClass('disabled');
         switchToBrickly();
+    });
+
+    $('.scroller-right').onWrap('click', function() {
+        $('.scroller-left').removeClass('hidden-xs');
+        $('.scroller-right').addClass('hidden-xs');
+        $('#tabProgram').addClass('hidden-xs');
+        $('#tabConfiguration').removeClass('hidden-xs');
+    });
+
+    $('.scroller-left').onWrap('click', function() {
+        $('.scroller-right').removeClass('hidden-xs');
+        $('.scroller-left').addClass('hidden-xs');
+        $('#tabConfiguration').addClass('hidden-xs');
+        $('#tabProgram').removeClass('hidden-xs');
     });
 
     setHeadNavigationMenuState('logout');
@@ -1546,6 +1571,31 @@ function setWorkspaceModified(modified) {
 }
 
 /**
+ * Rearrange the tab bar and blockly buttons according to the screen size (only
+ * affects small screens).
+ */
+var resizeTabBar = function() {
+    if ($(window).width() < 768) {
+        if ($('#tabProgram').prop('class').indexOf('tabClicked') >= 0) {
+            $('.scroller-left').addClass('hidden-xs');
+            $('.scroller-right').removeClass('hidden-xs');
+            $('#tabConfiguration').addClass('hidden-xs');
+            $('#tabProgram').removeClass('hidden-xs');
+        } else if ($('#tabConfiguration').prop('class').indexOf('tabClicked') >= 0) {
+            $('.scroller-left').removeClass('hidden-xs');
+            $('.scroller-right').addClass('hidden-xs');
+            $('#tabProgram').addClass('hidden-xs');
+            $('#tabConfiguration').removeClass('hidden-xs');
+        }
+        Blockly.getMainWorkspace().trashcan.moveToEdge();
+        document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().trashcan.moveToEdge();
+    } else {
+        Blockly.getMainWorkspace().trashcan.moveOutEdge();
+        document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().trashcan.moveOutEdge();
+    }
+};
+
+/**
  * Initializations
  */
 function init() {
@@ -1560,8 +1610,10 @@ function init() {
     initializeLanguages();
     if (navigator.language.indexOf("en") > -1) {
         switchLanguage('EN', true);
+        $('#chosenLanguage').text('EN');
     } else {
         switchLanguage('DE', true)
+        $('#chosenLanguage').text('DE');
     }
     pingServer();
     $('#menuTabProgram').parent().addClass('disabled');
@@ -1588,6 +1640,9 @@ function init() {
             }
         }
     });
+    resizeTabBar(); // for small devices only
 };
+
+$(window).on('resize', resizeTabBar); // for small devices only
 
 $(document).ready(WRAP.fn3(init, 'page init'));

@@ -303,6 +303,14 @@ Blockly.mainWorkspace = null;
 Blockly.clipboard_ = null;
 
 /**
+ * Is the mouse dragging a block? 0 - No drag operation. 1 - Still inside the
+ * sticky DRAG_RADIUS. 2 - Freely draggable.
+ * 
+ * @private
+ */
+Blockly.dragMode_ = 0;
+
+/**
  * Wrapper function called when a touch mouseUp occurs during a drag operation.
  * 
  * @type {Array.<!Array>}

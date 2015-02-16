@@ -61,14 +61,6 @@ limitations under the License.
 
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="nav navbar-nav">
-                    <!-- Menu Navigation -->
-                    <!-- <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span id="head-navi-icon-overview"
-                            class="head-navi-icons typcn typcn-th-menu"
-                        ></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#" id="menuTabProgram" lkey="Blockly.Msg.TAB_PROGRAM">Program</a></li>
-                            <li><a href="#" id="menuTabConfiguration" lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</a></li>
-                        </ul></li> -->
                     <!-- Menu Program -->
                     <li class="dropdown" id="head-navigation-program-edit"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><span
                             id="head-navi-icon-program" class="head-navi-icons typcn typcn-document-text"
@@ -137,17 +129,29 @@ limitations under the License.
                             <li class="logout"><a href="#" id="menuDeleteUser" class="typcn typcn-user-delete" lkey="Blockly.Msg.MENU_DELETE_USER">Benutzer
                                     löschen ...</a></li>
                         </ul></li>
+                    <!-- Menu Navigation -->
+                    <li><a href="#" class="visible-xs-block" id="menuTabProgram" lkey="Blockly.Msg.TAB_PROGRAM">Program</a></li>
+                    <li><a href="#" class="visible-xs-block" id="menuTabConfiguration" lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</a></li>
                 </ul>
             </div>
         </div>
 
         <!-- Head-navigation-tabs -->
-        <ul class="nav nav-pills" id="head-navigation-tabs">
-            <li><a href="#" id="tabProgram"><span lkey="Blockly.Msg.TAB_PROGRAM" class="menuTab">Program</span>&nbsp;<span id="tabProgramName"></span></a></li>
-            <li><a href="#" id="tabConfiguration"><span lkey="Blockly.Msg.TAB_CONFIGURATION" class="menuTab">Configuration</span>&nbsp;<span
-                    id="tabConfigurationName"
-                ></span></a></li>
-        </ul>
+        <div class="navigation-row">
+            <div class="visible-xs-block scroller scroller-left head-navi-icons">
+                <i class="typcn typcn-chevron-left"></i>
+            </div>
+            <div class="visible-xs-block scroller scroller-right head-navi-icons">
+                <i class="typcn typcn-chevron-right"></i>
+            </div>
+            <ul class="nav nav-pills" id="head-navigation-tabs">
+                <li><a href="#" id="tabProgram"><span lkey="Blockly.Msg.TAB_PROGRAM" class="menuTab">Program</span>&nbsp;<span id="tabProgramName"></span></a></li>
+                <li><a href="#" id="tabConfiguration"><span lkey="Blockly.Msg.TAB_CONFIGURATION" class="menuTab">Configuration</span>&nbsp;<span
+                        id="tabConfigurationName"
+                    ></span></a></li>
+            </ul>
+        </div>
+
         <!-- Roberta-Logo -->
         <div class="logo">
             <div id="imgLogo">
@@ -157,7 +161,9 @@ limitations under the License.
                 <div href="#" id="iconDisplayLogin" class="typcn typcn-user"></div>
                 <div href="#" id="iconDisplayRobotState" class="typcn typcn-Roberta"></div>
                 <ul id="language" class="nav navbar-nav">
-                    <li class="dropdown"><a href="#" data-toggle="dropdown" class=" dropdown-toggle"><span id="chosenLanguage">DE</span> <b class="caret"></b></a>
+                    <li class="dropdown"><a href="#" data-toggle="dropdown" class=" dropdown-toggle"><span id="chosenLanguage">DE</span> <b
+                            class="caret"
+                        ></b></a>
                         <ul class="dropdown-menu" id="languages">
                             <li><a href="#">EN</a></li>
                             <li><a href="#">DE</a></li>
@@ -172,7 +178,7 @@ limitations under the License.
         <!-- Toasts -->
         <div class="panel-body" id="toastContainer">
             <div class="panel-body" id="toastLeftContainer">
-                <span id="toastText">Willkommen :-) Welcome</span>
+                <span id="toastText"></span>
             </div>
         </div>
     </nav>
@@ -526,8 +532,7 @@ limitations under the License.
                         <img alt="unbedingt lesen!" src="../css/svg/unbedingt_lesen.svg" />
                     </div>
                     <br />
-                    <div lkey="Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE" id="popupTextStartupMessage">
-                    </div>
+                    <div lkey="Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE" id="popupTextStartupMessage"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal" id="doDeleteConfiguration">Cool</button>

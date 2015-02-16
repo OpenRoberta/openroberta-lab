@@ -94,6 +94,7 @@ Blockly.Trashcan.prototype.LID_HEIGHT_ = 7;
  * @private
  */
 Blockly.Trashcan.prototype.MARGIN_BOTTOM_ = 88;
+Blockly.Trashcan.MARGIN_BOTTOM_INITIAL_ = 88;
 
 /**
  * Distance between trashcan and right edge of workspace.
@@ -102,6 +103,7 @@ Blockly.Trashcan.prototype.MARGIN_BOTTOM_ = 88;
  * @private
  */
 Blockly.Trashcan.prototype.MARGIN_SIDE_ = 91;
+Blockly.Trashcan.MARGIN_SIDE_INITIAL_ = 91;
 
 /**
  * Extent of hotspot on all sides beyond the size of the image.
@@ -185,7 +187,9 @@ Blockly.Trashcan.prototype.createDom = function() {
      * height="45" y="15" href="media/trashbody.png"></image> <image width="47"
      * height="15" href="media/trashlid.png"></image> </g>
      */
-    this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
+    this.svgGroup_ = Blockly.createSvgElement('g', {
+        'id' : 'blocklyTrashcan'
+    }, null);
     this.svgBody_ = Blockly.createSvgElement('path', {
         'class' : 'blocklyButtonPath'
     }, this.svgGroup_);
@@ -307,4 +311,18 @@ Blockly.Trashcan.prototype.animateLid_ = function() {
  */
 Blockly.Trashcan.prototype.close = function() {
     this.setOpen_(false);
+};
+
+/**
+ * Flip the lid shut. Called externally after a drag.
+ */
+Blockly.Trashcan.prototype.moveToEdge = function() {
+    this.MARGIN_BOTTOM_ = Blockly.Trashcan.MARGIN_BOTTOM_INITIAL_ - 50;
+    this.MARGIN_SIDE_ = Blockly.Trashcan.MARGIN_SIDE_INITIAL_ - 50;
+    this.position_();
+};
+Blockly.Trashcan.prototype.moveOutEdge = function() {
+    this.MARGIN_BOTTOM_ = Blockly.Trashcan.MARGIN_BOTTOM_INITIAL_;
+    this.MARGIN_SIDE_ = Blockly.Trashcan.MARGIN_SIDE_INITIAL_;
+    this.position_();
 };

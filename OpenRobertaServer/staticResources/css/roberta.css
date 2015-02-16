@@ -1,5 +1,15 @@
 @charset "UTF-8";
 
+.scroller {
+    margin: 0;
+    font-size: 24px;
+    padding: 8px 2px 0 8px;
+    cursor: pointer;
+    background-color: #fff;
+    padding: 8px 2px 0 28px;
+    float: left;
+}
+
 *:hover, *:active, *:visited, *:focus, a:focus {
     outline: 0;
     outline: none;
@@ -71,8 +81,8 @@ html, body {
 
 #language {
     float: left;
-    margin: 0 12px;
-    padding: 5px 0;
+    margin: 0;
+    padding: 0;
 }
 
 #language.nav>li>a {
@@ -119,6 +129,11 @@ html, body {
 .menuTab {
     text-transform: uppercase;
     font-weight: bold;
+}
+
+.navigation-row {
+    width: 100%;
+    margin: 0;
 }
 
 .hidden {
@@ -232,10 +247,19 @@ html, body {
     padding-left: 16px;
 }
 
+.nav-pills>li+li {
+    margin: 0;
+}
+
 .nav#head-navigation-tabs {
+    position: relative;
+    width: auto;
+    overflow: hidden;
+    white-space: nowrap;
     margin: 0;
     padding: 0;
     border: 0;
+    overflow: hidden;
 }
 
 .nav#head-navigation-tabs>li>a {
@@ -243,6 +267,10 @@ html, body {
     padding: 8px 16px 4px 16px;
     border-radius: 2px 2px 0 0;
     border-bottom: 4px solid #fff;
+}
+
+.nav#head-navigation-tabs>li>a:hover {
+    border-bottom: 4px solid #eee;
 }
 
 .nav#head-navigation-tabs>li>a.tabClicked {
@@ -318,7 +346,6 @@ html, body {
     min-width: 30px;
     box-shadow: 0 3px 5px #aeaeaf;
     -webkit-box-shadow: 0 3px 5px #aeaeaf;
-    background-color: #fff;
 }
 
 .dropdown-menu>li>a {
@@ -428,35 +455,34 @@ html, body {
     color: #333;
     opacity: 1;
 }
-ul.icon
-{
+
+ul.icon {
     list-style-type: none;
 }
- 
-ul.icon li
-{
+
+ul.icon li {
     text-indent: -1.4em;
 }
-ul.icon li:before
-{
+
+ul.icon li:before {
     font-family: 'typicons';
     float: left;
     width: 1.4em;
 }
-ul.icon li.document-text:before
-{
+
+ul.icon li.document-text:before {
     content: "\e664";
 }
-ul.icon li.Roberta:before
-{
+
+ul.icon li.Roberta:before {
     content: "\e600";
 }
-ul.icon li.wi-fi:before
-{
+
+ul.icon li.wi-fi:before {
     content: "\e746";
 }
-ul.icon li.arrow-right-thick:before
-{
+
+ul.icon li.arrow-right-thick:before {
     content: "\e61c";
 }
 /***** END Overwrite Bootstrap-CSS *****/
@@ -576,7 +602,6 @@ table.dataTable thead .sorting_desc {
     background: url("/css/img/dataTables-icons/arrow-sorted-up.svg") no-repeat center left;
 }
 /***** END JQuery-Datatables *****/
-
 @media only screen and (max-width: 767px) {
     #imgLogo img {
         width: 120px;
@@ -595,7 +620,7 @@ table.dataTable thead .sorting_desc {
         padding: 0;
     }
     #language {
-        margin: 0;
+        margin: -6px 0 0 0;
         padding: 0;
     }
     #languages>li>a {
@@ -620,6 +645,14 @@ table.dataTable thead .sorting_desc {
     }
     .modal-dialog.bigModal {
         width: 80%;
-        min-width:300px;
+        min-width: 300px;
+    }
+    #head-navigation-tabs li {
+        float: none;
+        width: auto;
+        overflow: hidden;
+    }
+    .blocklyButton {
+        display: none
     }
 }

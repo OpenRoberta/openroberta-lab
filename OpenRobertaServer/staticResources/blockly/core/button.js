@@ -144,7 +144,9 @@ Blockly.Button.prototype.img_y_ = 0;
  * @return {!Element} The button's SVG group.
  */
 Blockly.Button.prototype.createDom = function() {
-    this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
+    this.svgGroup_ = Blockly.createSvgElement('g', {
+        'class' : 'blocklyButton'
+    }, null);
     this.svgBack_ = Blockly.createSvgElement('rect', {
         'id' : 'button' + this.POSITION,
         'class' : 'blocklyButtonBack',
