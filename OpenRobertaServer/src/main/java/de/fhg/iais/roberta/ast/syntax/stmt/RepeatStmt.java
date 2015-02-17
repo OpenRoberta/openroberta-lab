@@ -83,46 +83,6 @@ public class RepeatStmt<V> extends Stmt<V> {
         return sb.toString();
     }
 
-    /**
-     * Modes in which the repeat statement can be set.
-     *
-     * @author kcvejoski
-     */
-    public static enum Mode {
-        WHILE(), UNTIL(), TIMES(), FOR(), FOR_EACH(), WAIT(), FOREVER();
-
-        private final String[] values;
-
-        private Mode(String... values) {
-            this.values = values;
-        }
-
-        /**
-         * get mode from {@link Mode} from string parameter. It is possible for one mode to have multiple string mappings.
-         * Throws exception if the mode does not exists.
-         *
-         * @param name of the mode
-         * @return mode from the enum {@link Mode}
-         */
-        public static Mode get(String s) {
-            if ( s == null || s.isEmpty() ) {
-                throw new DbcException("Invalid mode symbol: " + s);
-            }
-            String sUpper = s.trim().toUpperCase(Locale.GERMAN);
-            for ( Mode mo : Mode.values() ) {
-                if ( mo.toString().equals(sUpper) ) {
-                    return mo;
-                }
-                for ( String value : mo.values ) {
-                    if ( sUpper.equals(value) ) {
-                        return mo;
-                    }
-                }
-            }
-            throw new DbcException("Invalid mode symbol: " + s);
-        }
-    }
-
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitRepeatStmt(this);
@@ -172,5 +132,45 @@ public class RepeatStmt<V> extends Stmt<V> {
         AstJaxbTransformerHelper.addStatement(jaxbDestination, BlocklyConstants.DO, getList());
 
         return jaxbDestination;
+    }
+
+    /**
+     * Modes in which the repeat statement can be set.
+     *
+     * @author kcvejoski
+     */
+    public static enum Mode {
+        WHILE(), UNTIL(), TIMES(), FOR(), FOR_EACH(), WAIT(), FOREVER();
+    
+        private final String[] values;
+    
+        private Mode(String... values) {
+            this.values = values;
+        }
+    
+        /**
+         * get mode from {@link Mode} from string parameter. It is possible for one mode to have multiple string mappings.
+         * Throws exception if the mode does not exists.
+         *
+         * @param name of the mode
+         * @return mode from the enum {@link Mode}
+         */
+        public static Mode get(String s) {
+            if ( s == null || s.isEmpty() ) {
+                throw new DbcException("Invalid mode symbol: " + s);
+            }
+            String sUpper = s.trim().toUpperCase(Locale.GERMAN);
+            for ( Mode mo : Mode.values() ) {
+                if ( mo.toString().equals(sUpper) ) {
+                    return mo;
+                }
+                for ( String value : mo.values ) {
+                    if ( sUpper.equals(value) ) {
+                        return mo;
+                    }
+                }
+            }
+            throw new DbcException("Invalid mode symbol: " + s);
+        }
     }
 }

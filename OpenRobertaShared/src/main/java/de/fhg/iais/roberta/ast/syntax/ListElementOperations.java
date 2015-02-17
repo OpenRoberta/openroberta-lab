@@ -4,6 +4,11 @@ import java.util.Locale;
 
 import de.fhg.iais.roberta.dbc.DbcException;
 
+/**
+ * This enumeration contains all the operations that can be performed over an element in list.
+ *
+ * @author kcvejoski
+ */
 public enum ListElementOperations {
     GET( false ), GET_REMOVE( false ), REMOVE( true ), SET( true ), INSERT( true );
 
@@ -47,6 +52,9 @@ public enum ListElementOperations {
         throw new DbcException("Invalid mode name: " + s);
     }
 
+    /**
+     * @return true if the operation does not return value
+     */
     public boolean isStatment() {
         return this.statment;
     }

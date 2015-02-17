@@ -67,7 +67,6 @@ public class EmptyList<V> extends Expr<V> {
 
     @Override
     public Block astToBlock() {
-
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();

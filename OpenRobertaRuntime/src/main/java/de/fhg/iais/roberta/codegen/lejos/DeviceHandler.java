@@ -28,6 +28,9 @@ import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.ev3.EV3BrickConfiguration;
 import de.fhg.iais.roberta.ev3.EV3Sensors;
 
+/**
+ * This class instantiates all sensors (sensor modes) and actors used in blockly program.
+ */
 public class DeviceHandler {
 
     private final Map<ActorPort, RegulatedMotor> lejosRegulatedMotors = new TreeMap<>();
@@ -42,9 +45,77 @@ public class DeviceHandler {
 
     private final Set<EV3Sensors> usedSensors;
 
+    /**
+     * Construct new initialization for actors and sensors on the brick. Client must provide
+     * brick configuration ({@link EV3BrickConfiguration}) and used sensors in program.
+     *
+     * @param brickConfiguration for the particular brick
+     * @param usedSensors in the blockly program
+     */
     public DeviceHandler(EV3BrickConfiguration brickConfiguration, Set<EV3Sensors> usedSensors) {
         this.usedSensors = usedSensors;
         createDevices(brickConfiguration);
+    }
+
+    /**
+     * Get regulated motor connected on port ({@link ActorPort})
+     *
+     * @param actorPort on which the motor is connected
+     * @return regulate motor
+     */
+    public RegulatedMotor getRegulatedMotor(ActorPort actorPort) {
+        return this.lejosRegulatedMotors.get(actorPort);
+    }
+
+    /**
+     * Get unregulated motor connected on port ({@link ActorPort})
+     *
+     * @param actorPort on which the motor is connected
+     * @return unregulated motor
+     */
+    public EncoderMotor getUnregulatedMotor(ActorPort actorPort) {
+        return this.lejosUnregulatedMotors.get(actorPort);
+    }
+
+    /**
+     * @return the gyroSensor
+     */
+    public EV3GyroSensor getGyroSensor() {
+        return this.gyroSensor;
+    }
+
+    /**
+     * Sample provider of given mode connected on given port. <br>
+     * <br>
+     * Throws an exception if the sensor mode is not available on the given port.
+     *
+     * @param sensorPort of the sensors
+     * @param sensorMode in which sensor operates
+     * @return sample provider
+     */
+    public SampleProvider getProvider(SensorPort sensorPort, String sensorMode) {
+        SampleProviderBean[] sampleProviders = null;
+        switch ( sensorPort ) {
+            case S1:
+                sampleProviders = this.portS1;
+                break;
+            case S2:
+                sampleProviders = this.portS2;
+                break;
+            case S3:
+                sampleProviders = this.portS3;
+                break;
+            case S4:
+                sampleProviders = this.portS4;
+                break;
+
+            default:
+                throw new DbcException("Invalid port " + sensorPort);
+        }
+        if ( sampleProviders == null ) {
+            throw new DbcException("Sensor mode " + sensorMode + " not avaliable on port " + sensorPort);
+        }
+        return findProviderByMode(sampleProviders, sensorMode);
     }
 
     private void createDevices(EV3BrickConfiguration brickConfiguration) {
@@ -121,47 +192,6 @@ public class DeviceHandler {
 
         }
         return null;
-    }
-
-    public RegulatedMotor getRegulatedMotor(ActorPort actorPort) {
-        return this.lejosRegulatedMotors.get(actorPort);
-    }
-
-    public EncoderMotor getUnregulatedMotor(ActorPort actorPort) {
-        return this.lejosUnregulatedMotors.get(actorPort);
-    }
-
-    /**
-     * @return the gyroSensor
-     */
-    public EV3GyroSensor getGyroSensor() {
-        return this.gyroSensor;
-    }
-
-    public SampleProvider getProvider(SensorPort sensorPort, String sensorMode) {
-        //        SampleProviderBean[] sampleProviders = this.sensors.get(sensorPort);
-        SampleProviderBean[] sampleProviders = null;
-        switch ( sensorPort ) {
-            case S1:
-                sampleProviders = this.portS1;
-                break;
-            case S2:
-                sampleProviders = this.portS2;
-                break;
-            case S3:
-                sampleProviders = this.portS3;
-                break;
-            case S4:
-                sampleProviders = this.portS4;
-                break;
-
-            default:
-                throw new DbcException("Invalid port " + sensorPort);
-        }
-        if ( sampleProviders == null ) {
-            throw new DbcException("Sensor mode " + sensorMode + " not avaliable on port " + sensorPort);
-        }
-        return findProviderByMode(sampleProviders, sensorMode);
     }
 
     private SampleProvider findProviderByMode(SampleProviderBean[] sampleProviders, String sensorMode) {

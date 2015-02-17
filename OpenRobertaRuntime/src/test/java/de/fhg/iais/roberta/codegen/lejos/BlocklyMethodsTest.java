@@ -96,13 +96,13 @@ public class BlocklyMethodsTest {
 
     @Test
     public void randInt() {
-        int a = BlocklyMethods.randInt(2, 10);
+        int a = (int) BlocklyMethods.randInt(2, 10);
         Assert.assertTrue(a >= 2 && a <= 10);
 
-        a = BlocklyMethods.randInt(10, 2);
+        a = (int) BlocklyMethods.randInt(10, 2);
         Assert.assertTrue(a >= 2 && a <= 10);
 
-        a = BlocklyMethods.randInt(10, 10);
+        a = (int) BlocklyMethods.randInt(10, 10);
         Assert.assertTrue(a == 10);
     }
 

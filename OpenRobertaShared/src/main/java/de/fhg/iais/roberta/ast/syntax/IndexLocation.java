@@ -1,9 +1,15 @@
 package de.fhg.iais.roberta.ast.syntax;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import de.fhg.iais.roberta.dbc.DbcException;
 
+/**
+ * This enumeration contain information about index location of an {@link ArrayList} that is used in Blockly blocks for operations over arrays
+ *
+ * @author kcvejoski
+ */
 public enum IndexLocation {
     FIRST(), LAST(), FROM_START( "FROMSTART" ), FROM_END( "FROMEND" ), RANDOM();
     private final String[] values;
