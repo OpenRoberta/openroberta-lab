@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.util.Clock;
  * until the user has issued a run command in the browser. This unfreezes the thread and the already generated jar is copied to the brick.<br>
  * <br>
  * TODO: This implementation is resource intensive as it freezes an expensive resource, namely a thread. It should be replaced later by async technology.
- *
+ * 
  * @author rbudde
  */
 public class BrickCommunicationData {
@@ -34,10 +34,11 @@ public class BrickCommunicationData {
     private String command;
     private String programName;
 
-    public BrickCommunicationData(String token, String robotIdentificator, String robotName, String menuversion, String lejosversion) {
+    public BrickCommunicationData(String token, String robotIdentificator, String robotName, String battery, String menuversion, String lejosversion) {
         this.token = token;
         this.robotIdentificator = robotIdentificator;
         this.robotName = robotName;
+        this.battery = battery;
         this.menuversion = menuversion;
         this.lejosversion = lejosversion;
 
@@ -47,7 +48,7 @@ public class BrickCommunicationData {
 
     /**
      * method called from a thread, which is triggered by a BRICK request. This method blocks until the user has approved the brick token or a timeout occurs.
-     *
+     * 
      * @return true, if user approved the token; false otherwise
      */
     public synchronized boolean brickTokenAgreementRequest() {
@@ -69,7 +70,7 @@ public class BrickCommunicationData {
     /**
      * method called from a server thread. This method terminates immediately and wakes up the thread, which runs on behalf of a token approval request
      * from the brick token.
-     *
+     * 
      * @return true, if user approved the token; false otherwise
      */
     public synchronized void userApprovedTheBrickToken() {
@@ -86,7 +87,7 @@ public class BrickCommunicationData {
     /**
      * method called from a thread, which is triggered by a BRICK push command request. This method blocks until either the server issues a push command or
      * a timer thread triggers a timeout.
-     *
+     * 
      * @return true, if user approved the token; false otherwise
      */
     public synchronized void brickHasSentAPushRequest() {
@@ -125,7 +126,7 @@ public class BrickCommunicationData {
     /**
      * method called from a server thread. This method terminates immediately (if the brick waits for a push command) or after 1 sec (if we expect a push
      * command in the very near future. It wakes up the thread, which runs on behalf of a push command request from the brick.
-     *
+     * 
      * @return true, if the robot was waiting for a "run" command, false otherwise
      */
     public synchronized boolean runButtonPressed(String programName) {
@@ -146,7 +147,7 @@ public class BrickCommunicationData {
     /**
      * method called from a server thread. This method terminates immediately (if the brick waits for a push command) or after 1 sec (if we expect a push
      * command in the very near future. It wakes up the thread, which runs on behalf of a push command request from the brick.
-     *
+     * 
      * @return the state of the brick
      */
     public synchronized boolean firmwareUpdate() {
