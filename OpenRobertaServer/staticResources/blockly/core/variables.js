@@ -394,13 +394,12 @@ Blockly.Variables.allLocalVariables = function() {
         if (block.getProcedureDef) {
             var variableType = block.getProcedureDef()[0];
             var descandants = block.getDescendants();
+            console.log(descandants);
             if (descandants) {
-                variable: for (var j = 1; j < descandants.length; j++) {
+                for (var j = 1; j < descandants.length; j++) {
                     if (descandants[j].getVarDecl) {
                         variableList.push([ variableType, descandants[j].getVarDecl()[0] ]);
-                    } else {
-                        break variable;
-                    }
+                    } 
                 }
             }
         }

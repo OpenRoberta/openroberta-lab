@@ -411,17 +411,22 @@ function saveConfigurationToServer() {
  * Run program
  */
 function runOnBrick() {
-    LOG.info('run ' + userState.program + ' signed in: ' + userState.id);
-    var xml_program = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-    var xml_text_program = Blockly.Xml.domToText(xml_program);
-    var xml_text_configuration = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
-    return COMM.json("/program", {
-        "cmd" : "runP",
-        "name" : userState.program,
-        "configuration" : userState.configuration,
-        "programText" : xml_text_program,
-        "configurationText" : xml_text_configuration
-    }, response);
+    if (userState['robot.state'] === '') {
+        displayMessage("POPUP_ROBOT_NOT_CONNECTED", "POPUP", "");
+    } else {
+        LOG.info('run ' + userState.program + ' signed in: ' + userState.id);
+        var xml_program = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+        var xml_text_program = Blockly.Xml.domToText(xml_program);
+        var xml_text_configuration = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
+        return COMM.json("/program", {
+            "cmd" : "runP",
+            "name" : userState.program,
+            "configuration" : userState.configuration,
+            "programText" : xml_text_program,
+            "configurationText" : xml_text_configuration
+        }, response);
+        displayMessage("MESSAGE_EDIT_START", "TOAST", "");
+    }
 }
 
 function showProgram(result, load, name) {
@@ -903,7 +908,7 @@ function displayState() {
         $('#iconDisplayLogin').addClass('error');
     }
 
-    if (userState['robot.state'] != 'busy') {
+    if (userState['robot.state'] != 'busy' || userState['robot.state'] != 'wait') {
         $('#iconDisplayRobotState').removeClass('ok');
         $('#iconDisplayRobotState').addClass('error');
     } else {
@@ -946,12 +951,7 @@ function initHeadNavigation() {
         } else if (domId === 'menuTabConfiguration') { //  Submenu 'Overview'
             $('#tabConfiguration').click();
         } else if (domId === 'menuRunProg') { //  Submenu 'Program'
-            if (userState['robot.state'] === '') {
-                displayMessage("POPUP_ROBOT_NOT_CONNECTED", "POPUP", "");
-            } else {
-                runOnBrick();
-                displayMessage("MESSAGE_EDIT_START", "TOAST", "");
-            }
+            runOnBrick();
         } else if (domId === 'menuCheckProg') { //  Submenu 'Program'
             displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP", "");
         } else if (domId === 'menuNewProg') { //  Submenu 'Program'
@@ -1003,24 +1003,16 @@ function initHeadNavigation() {
             $("#robotBattery").text(userState['robot.battery']);
             $("#robotWait").text(userState['robot.wait']);
             $("#show-robot-info").modal("show");
-        } else if (domId === 'menuFirstSteps') { // Submenu 'Help'
-            if (userState.language === 'DE') {
-                window.open("http://www.open-roberta.org/erste-schritte.html");
-            } else {
-                window.open("http://www.open-roberta.org/index.php?id=59&L=1");
-            }
-        } else if (domId === 'menuStartProgramming') { // Submenu 'Help'
-            if (userState.language === 'DE') {
-                window.open("http://dev.open-roberta.org/willkommen.html");
-            } else {
-                window.open("http://dev.open-roberta.org/willkommen.html?&L=1");
-            }
+        } else if (domId === 'menuGeneral') { // Submenu 'Help'
+            window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/BIAM");
+        } else if (domId === 'menuEV3conf') { // Submenu 'Help'
+            window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/BIAM");
+        } else if (domId === 'menuProgramming') { // Submenu 'Help'
+            window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/");
         } else if (domId === 'menuFaq') { // Submenu 'Help'
-            if (userState.language === 'DE') {
-                window.open("https://mp-devel.iais.fraunhofer.de/wiki/display/FAQ/FAQ+Home");
-            } else {
-                window.open("http://dev.open-roberta.org/willkommen.html?&L=1");
-            }
+            window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/BoAd");
+        } else if (domId === 'menuShowAgain') { // Submenu 'Help'
+            $("#show-startup-message").modal("show");
         } else if (domId === 'menuStateInfo') { // Submenu 'Help'
             $("#loggedIn").text(userState.name);
             $("#programName").text(userState.program);
@@ -1588,10 +1580,14 @@ var resizeTabBar = function() {
             $('#tabConfiguration').removeClass('hidden-xs');
         }
         Blockly.getMainWorkspace().trashcan.moveToEdge();
-        document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().trashcan.moveToEdge();
+        if (document.getElementById('bricklyFrame').contentWindow.Blockly) {
+            document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().trashcan.moveToEdge();
+        }
     } else {
-        Blockly.getMainWorkspace().trashcan.moveOutEdge();
-        document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().trashcan.moveOutEdge();
+        if (document.getElementById('bricklyFrame').contentWindow.Blockly) {
+            Blockly.getMainWorkspace().trashcan.moveOutEdge();
+            document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().trashcan.moveOutEdge();
+        }
     }
 };
 
