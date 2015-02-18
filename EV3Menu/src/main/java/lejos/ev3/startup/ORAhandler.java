@@ -2,7 +2,7 @@ package lejos.ev3.startup;
 
 /**
  * No Singleton Pattern but do not use
- *
+ * 
  * @author dpyka
  */
 public class ORAhandler {
@@ -13,6 +13,8 @@ public class ORAhandler {
 
     private ORApushCmd pushCmd;
     private Thread serverCommunicator;
+
+    public static boolean updated_without_restart = false;
 
     /**
      * Creates a control object for most of the Open Roberta Lab related
@@ -26,7 +28,7 @@ public class ORAhandler {
 
     /**
      * Start the brick server "push" communication.
-     *
+     * 
      * @param serverBaseIP
      *        The base IP like 192.168.56.1:1999
      * @param token

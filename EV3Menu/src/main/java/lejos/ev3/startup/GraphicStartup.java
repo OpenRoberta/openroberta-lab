@@ -172,6 +172,7 @@ public class GraphicStartup implements Menu {
     private int timeout = 0;
     private boolean btVisibility;
     private static String version = "Unknown";
+    private static String oraVersion = "unknown";
     private static String hostname;
     public static List<String> ips = getIPAddresses();
     private static LocalBTDevice bt;
@@ -1473,6 +1474,14 @@ public class GraphicStartup implements Menu {
      * Roberta submenu implementation.
      */
     private void robertaMenu() {
+        if ( ORAhandler.updated_without_restart == true ) {
+            newScreen(" Robertalab");
+            lcd.drawString("Firmware updated!", 0, 2);
+            lcd.drawString("Please restart", 0, 4);
+            lcd.drawString("the brick first!", 0, 5);
+            Delay.msDelay(3000);
+            return;
+        }
         if ( ORAhandler.isRegistered() == false ) {
             if ( this.indiBA.getWifi() == false ) {
                 newScreen(" Robertalab");
@@ -1503,7 +1512,7 @@ public class GraphicStartup implements Menu {
                 if ( ORAhandler.hasConnectionError() ) {
                     oraHandler.disconnect();
                     newScreen(" Robertalab");
-                    lcd.drawString(" Can not connect", 0, 2);
+                    lcd.drawString("Unable to connect", 0, 2);
                     lcd.drawString(" to server! :-(", 0, 3);
                     lcd.drawString("Hint: Check Wifi?", 0, 5);
                     lcd.drawString(" (Press any key)", 0, 7);
@@ -1584,8 +1593,10 @@ public class GraphicStartup implements Menu {
             String tmp = menuProperties.getProperty("version");
             int i = tmp.indexOf("-");
             tmp = tmp.substring(0, i);
+            oraVersion = tmp;
             return tmp;
         } catch ( IOException e ) {
+            oraVersion = "unknown";
             return "unknown";
         }
     }
@@ -1688,22 +1699,29 @@ public class GraphicStartup implements Menu {
 
     private void oraMenu() {
         GraphicMenu menu = new GraphicMenu(new String[] {
-            "Disconnect"
+            "Disconnect", "Firmware Info"
         }, new String[] {
-            ICRoberta
+            ICRoberta, ICRoberta
         }, 3);
         int selected = 0;
         do {
+            newScreen(" Robertalab");
             selected = getSelection(menu, selected);
             switch ( selected ) {
                 case 0:
                     newScreen(" Robertalab");
                     if ( getYesNo("   Disconnect?", false) == 1 ) {
                         disconnect();
+                        return;
                     }
+                case 1:
+                    newScreen(" Robertalab");
+                    lcd.drawString("Open Roberta-", 0, 2);
+                    lcd.drawString("Firmware", 0, 3);
+                    lcd.drawString("version: " + oraVersion, 0, 5);
+                    Delay.msDelay(3000);
                     break;
             }
-            break;
         } while ( selected >= 0 );
     }
 

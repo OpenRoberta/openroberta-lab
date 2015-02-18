@@ -8,6 +8,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import lejos.hardware.Sounds;
+import lejos.hardware.ev3.LocalEV3;
+
 /**
  * Download all required library files and menu for Open Roberta lab to the brick.<br>
  * 
@@ -18,6 +21,8 @@ public class ORAupdater {
     private final String serverBaseIP;
     private final File libDir = new File("/home/roberta/lib");
     private final File menuDir = new File("/home/root/lejos/bin/utils");
+
+    private boolean update_error = false;
 
     /**
      * Creates an object for updating the brick.
@@ -32,10 +37,20 @@ public class ORAupdater {
      * Download all files required for Open Roberta Lab.
      */
     public void update() {
+        this.update_error = false;
         getRuntime();
         getShared();
         getJsonLib();
         getEV3Menu();
+        if ( this.update_error == false ) {
+            LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
+            ORAhandler.updated_without_restart = true;
+            ORAhandler.setInterrupt(true);
+            ORAhandler.setRegistered(false);
+            ORAhandler.setConnectionError(false);
+        } else {
+            LocalEV3.get().getAudio().systemSound(Sounds.BUZZ);
+        }
     }
 
     /**
@@ -135,8 +150,8 @@ public class ORAupdater {
                 }
             }
         } catch ( IOException e ) {
-            e.printStackTrace();
             System.out.println("Error while updating!");
+            this.update_error = true;
         } finally {
             try {
 

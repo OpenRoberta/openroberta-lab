@@ -135,7 +135,6 @@ public class ORApushCmd implements Runnable {
                         ORAhandler.setInterrupt(true);
                     case CMD_UPDATE:
                         this.oraUpdater.update();
-                        LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
                         break;
                     case CMD_DOWNLOAD:
                         if ( GraphicStartup.getUserprogram() == null ) {
