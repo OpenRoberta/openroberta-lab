@@ -8,6 +8,7 @@ import java.util.Properties;
 
 import org.hibernate.Session;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.persistence.bo.Program;
@@ -23,6 +24,7 @@ import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.Util;
 
+@Ignore
 public class BasicPersistUserProgram {
     private SessionFactoryWrapper sessionFactoryWrapper;
     private DbSetup memoryDbSetup;

@@ -11,6 +11,7 @@ import javax.ws.rs.core.Response;
 
 import org.hibernate.Session;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.brick.BrickCommunicator;
@@ -22,6 +23,7 @@ import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.Util;
 
+@Ignore
 public class BasicSharingInteractionTest {
 
     private static final int MAX_TOTAL_FRIENDS = 30;
