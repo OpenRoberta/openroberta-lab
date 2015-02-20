@@ -116,7 +116,7 @@ public final class Binary<V> extends Expr<V> {
         GTE( 90, Assoc.LEFT, Sig.of(BlocklyType.BOOL, BlocklyType.NUMERIC, BlocklyType.NUMERIC), ">=" ),
         AND( 70, Assoc.LEFT, Sig.of(BlocklyType.BOOL, BlocklyType.BOOL, BlocklyType.BOOL), "&&" ),
         OR( 60, Assoc.LEFT, Sig.of(BlocklyType.BOOL, BlocklyType.BOOL, BlocklyType.BOOL), "||" ),
-        MATH_CHANGE( 80, Assoc.NONE, Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE) ),
+        MATH_CHANGE( 80, Assoc.NONE, Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), "+=" ),
         TEXT_APPEND( 1, Assoc.LEFT, Sig.of(BlocklyType.STRING, BlocklyType.STRING, BlocklyType.STRING), "+", "TEXTAPPEND" ),
         IN( 1, Assoc.LEFT, Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), ":" ),
         ASSIGNMENT( 1, Assoc.RIGHT, Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), "=" ),
@@ -210,7 +210,7 @@ public final class Binary<V> extends Expr<V> {
         switch ( getOp() ) {
 
             case MATH_CHANGE:
-                AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VAR, ((Var<?>) getLeft()).getValue());
+                AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VAR, getLeft());
                 AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.DELTA, getRight());
                 return jaxbDestination;
             case TEXT_APPEND:

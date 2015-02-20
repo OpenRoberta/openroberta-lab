@@ -148,6 +148,13 @@ public class BlocklyMethodsTest {
     }
 
     @Test
+    public void modeOnList() {
+        Assert.assertEquals(BlocklyMethods.createListWith(1.0), BlocklyMethods.modeOnList(BlocklyMethods.createListWith(1.0, 1.0, 3.0, 4.0, 6.0)));
+        Assert.assertEquals(BlocklyMethods.createListWith(5, 3, 2), BlocklyMethods.modeOnList(BlocklyMethods.createListWith(5, 3, 2)));
+        Assert.assertEquals(BlocklyMethods.createListWith(5, 3, 2, -1), BlocklyMethods.modeOnList(BlocklyMethods.createListWith(5, 3, 2, -1)));
+    }
+
+    @Test
     public void createListWith() {
         Assert.assertTrue(BlocklyMethods.createListWith(1, 1, 1, 1, 1).toString().equals("[1.0, 1.0, 1.0, 1.0, 1.0]"));
         Assert.assertTrue(BlocklyMethods.createListWith(1, 1, 1, 1, 1.3).toString().equals("[1.0, 1.0, 1.0, 1.0, 1.3]"));

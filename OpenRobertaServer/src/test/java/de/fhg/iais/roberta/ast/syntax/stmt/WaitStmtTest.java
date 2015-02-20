@@ -8,8 +8,7 @@ public class WaitStmtTest {
 
     @Test
     public void test1() throws Exception {
-        String a =
-            "publicvoidrun(){hal=newHal(brickConfiguration,usedSensors);if(TRUE){while(true){if(hal.isPressed(BrickKey.ENTER)==true){break;}hal.waitFor(15);}}}";
+        String a = "publicvoidrun(){if(TRUE){while(true){if(hal.isPressed(BrickKey.ENTER)==true){break;}hal.waitFor(15);}}}";
 
         Helper.assertCodeIsOk(a, "/ast/control/wait_stmt2.xml");
     }

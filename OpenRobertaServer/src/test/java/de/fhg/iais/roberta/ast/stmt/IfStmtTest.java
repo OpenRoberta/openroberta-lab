@@ -14,7 +14,7 @@ public class IfStmtTest {
             "BlockAST [project=[[Location [x=68, y=133], \n"
                 + "if Binary [EQ, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]]\n"
                 + ",then\n"
-                + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
+                + "exprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]\n"
                 + "]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/if_stmt.xml"));
@@ -26,7 +26,7 @@ public class IfStmtTest {
             "BlockAST [project=[[Location [x=68, y=133], \n"
                 + "if Binary [EQ, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]]\n"
                 + ",then\n"
-                + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
+                + "exprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]\n"
                 + ",else\n"
                 + "SensorStmt DrehSensor [mode=RESET, motor=A]\n"
                 + "]]]";
@@ -46,7 +46,7 @@ public class IfStmtTest {
     public void getThen() throws Exception {
         IfStmt<Void> ifStmt = (IfStmt<Void>) Helper.generateTransformer("/ast/control/if_stmt1.xml").getTree().get(0).get(1);
 
-        String a = "[\nexprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]]";
+        String a = "[\nexprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]]";
         Assert.assertEquals(a, ifStmt.getThenList().toString());
     }
 
@@ -64,7 +64,7 @@ public class IfStmtTest {
             "BlockAST [project=[[Location [x=68, y=133], \n"
                 + "if Binary [EQ, NumConst [1], NumConst [1]]\n"
                 + ",then\n"
-                + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
+                + "exprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]\n"
                 + ",else if Binary [EQ, NumConst [1], NumConst [1]]\n"
                 + ",then\n"
                 + "SensorStmt DrehSensor [mode=RESET, motor=A]\n"
@@ -78,7 +78,7 @@ public class IfStmtTest {
             "BlockAST [project=[[Location [x=68, y=133], \n"
                 + "if Binary [EQ, NumConst [1], NumConst [1]]\n"
                 + ",then\n"
-                + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
+                + "exprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]\n"
                 + ",else if Binary [EQ, NumConst [1], NumConst [1]]\n"
                 + ",then\n"
                 + "SensorStmt DrehSensor [mode=RESET, motor=A]\n"
@@ -95,7 +95,7 @@ public class IfStmtTest {
             "BlockAST [project=[[Location [x=68, y=133], \n"
                 + "if Binary [EQ, NumConst [1], NumConst [1]]\n"
                 + ",then\n"
-                + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
+                + "exprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]\n"
                 + ",else if Binary [EQ, NumConst [1], NumConst [1]]\n"
                 + ",then\n"
                 + "SensorStmt DrehSensor [mode=RESET, motor=A]\n"
@@ -112,7 +112,7 @@ public class IfStmtTest {
             "BlockAST [project=[[Location [x=68, y=133], \n"
                 + "if Binary [EQ, NumConst [1], NumConst [1]]\n"
                 + ",then\n"
-                + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
+                + "exprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]\n"
                 + ",else if Binary [EQ, NumConst [1], NumConst [1]]\n"
                 + ",then\n"
                 + "SensorStmt DrehSensor [mode=RESET, motor=A]\n"
@@ -127,7 +127,7 @@ public class IfStmtTest {
             "BlockAST [project=[[Location [x=68, y=133], \n"
                 + "if Binary [EQ, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]]\n"
                 + ",then\n"
-                + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
+                + "exprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]\n"
                 + ",else\n"
                 + "SensorStmt DrehSensor [mode=RESET, motor=A]\n"
                 + "]]]";

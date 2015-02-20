@@ -3,7 +3,9 @@ package de.fhg.iais.roberta.codegen.lejos;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import de.fhg.iais.roberta.ast.syntax.IndexLocation;
@@ -552,6 +554,16 @@ public class BlocklyMethods {
     }
 
     /**
+     * Random element form list {@link ArrayList}.
+     *
+     * @param list
+     * @return element from list chosen by random
+     */
+    public static float randOnList(ArrayList<Float> list) {
+        return list.get((int) randInt(0, list.size() - 1));
+    }
+
+    /**
      * Standard deviation of elements in {@link ArrayList}.
      *
      * @param list
@@ -570,6 +582,27 @@ public class BlocklyMethods {
         variance /= n;
         return (float) Math.sqrt(variance);
 
+    }
+
+    public static ArrayList<Float> modeOnList(ArrayList<Float> list) {
+        Map<Float, Integer> seen = new HashMap<Float, Integer>();
+        int max = 0;
+        ArrayList<Float> maxElems = new ArrayList<Float>();
+        for ( Float value : list ) {
+            if ( seen.containsKey(value) ) {
+                seen.put(value, seen.get(value) + 1);
+            } else {
+                seen.put(value, 1);
+            }
+            if ( seen.get(value) > max ) {
+                max = seen.get(value);
+                maxElems.clear();
+                maxElems.add(value);
+            } else if ( seen.get(value) == max ) {
+                maxElems.add(value);
+            }
+        }
+        return maxElems;
     }
 
     private static <T> T executeOperation(ArrayList<T> list, ListElementOperations operation, int resultIndex, T element) {

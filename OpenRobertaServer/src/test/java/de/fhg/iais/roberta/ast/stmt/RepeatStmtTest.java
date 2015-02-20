@@ -75,7 +75,7 @@ public class RepeatStmtTest {
             "BlockAST [project=[[Location [x=-372, y=47], \n"
                 + "(repeat [WHILE, BoolConst [true]]\n"
                 + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [sd]]\n"
-                + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
+                + "exprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]\n"
                 + ")]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/repeat_stmt_whileUntil.xml"));
@@ -87,7 +87,7 @@ public class RepeatStmtTest {
             "BlockAST [project=[[Location [x=-372, y=47], \n"
                 + "(repeat [WHILE, BoolConst [true]]\n"
                 + "exprStmt Binary [TEXT_APPEND, Var [item], StringConst [sd]]\n"
-                + "exprStmt Binary [MATH_CHANGE, Var [item], NumConst [1]]\n"
+                + "exprStmt Binary [MATH_CHANGE, Var [variablenName], NumConst [1]]\n"
                 + "StmtFlowCon [BREAK]\n"
                 + ")]]]";
 

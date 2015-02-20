@@ -27,10 +27,38 @@ public class MathOnListsTest {
     }
 
     @Test
-    public void averageOnListMax() throws Exception {
+    public void mathOnListAverage() throws Exception {
         String a = "BlocklyMethods.averageOnList(BlocklyMethods.createListWith(5,3,2))";
 
         Helper.assertCodeIsOk(a, "/syntax/math/math_on_list_average.xml");
+    }
+
+    @Test
+    public void mathOnListMedian() throws Exception {
+        String a = "BlocklyMethods.medianOnList(BlocklyMethods.createListWith(5,3,2))";
+
+        Helper.assertCodeIsOk(a, "/syntax/math/math_on_list_median.xml");
+    }
+
+    @Test
+    public void mathOnListStandardDeviatioin() throws Exception {
+        String a = "BlocklyMethods.standardDeviatioin(BlocklyMethods.createListWith(5,3,2))";
+
+        Helper.assertCodeIsOk(a, "/syntax/math/math_on_list_std_dev.xml");
+    }
+
+    @Test
+    public void mathOnListRandom() throws Exception {
+        String a = "BlocklyMethods.randOnList(BlocklyMethods.createListWith(5,3,2))";
+
+        Helper.assertCodeIsOk(a, "/syntax/math/math_on_list_random.xml");
+    }
+
+    @Test
+    public void mathOnListMode() throws Exception {
+        String a = "BlocklyMethods.modeOnList(BlocklyMethods.createListWith(5,3,2))";
+
+        Helper.assertCodeIsOk(a, "/syntax/math/math_on_list_mode.xml");
     }
 
 }

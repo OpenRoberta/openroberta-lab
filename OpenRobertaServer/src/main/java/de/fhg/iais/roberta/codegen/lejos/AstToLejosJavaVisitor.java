@@ -290,6 +290,9 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         } else {
             generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
         }
+        if ( binary.getOp() == Op.MATH_CHANGE ) {
+            this.sb.append(";");
+        }
         return null;
     }
 
@@ -779,7 +782,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
     public Void visitMainTask(MainTask<Void> mainTask) {
         mainTask.getVariables().visit(this);
         this.sb.append("\n\n").append(INDENT).append("public void run() {\n");
-        this.sb.append(INDENT).append(INDENT).append("hal = new Hal(brickConfiguration, usedSensors);\n");
+        //        this.sb.append(INDENT).append(INDENT).append("hal = new Hal(brickConfiguration, usedSensors);\n");
         return null;
     }
 
@@ -1037,6 +1040,22 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
                 this.sb.append("BlocklyMethods.averageOnList(");
                 mathOnListFunct.getParam().get(0).visit(this);
                 break;
+            case MEDIAN:
+                this.sb.append("BlocklyMethods.medianOnList(");
+                mathOnListFunct.getParam().get(0).visit(this);
+                break;
+            case STD_DEV:
+                this.sb.append("BlocklyMethods.standardDeviatioin(");
+                mathOnListFunct.getParam().get(0).visit(this);
+                break;
+            case RANDOM:
+                this.sb.append("BlocklyMethods.randOnList(");
+                mathOnListFunct.getParam().get(0).visit(this);
+                break;
+            case MODE:
+                this.sb.append("BlocklyMethods.modeOnList(");
+                mathOnListFunct.getParam().get(0).visit(this);
+                break;
             default:
                 break;
         }
@@ -1259,7 +1278,8 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         this.sb.append(INDENT).append("private static final boolean TRUE = true;\n");
         this.sb.append(INDENT).append(this.brickConfiguration.generateRegenerate()).append("\n\n");
         this.sb.append(INDENT).append(generateRegenerateUsedSensors()).append("\n\n");
-        this.sb.append(INDENT).append("private Hal hal;\n\n");
+        //        this.sb.append(INDENT).append("private Hal hal;\n\n");
+        this.sb.append(INDENT).append("private Hal hal = new Hal(brickConfiguration, usedSensors);\n\n");
         this.sb.append(INDENT).append("public static void main(String[] args) {\n");
         this.sb.append(INDENT).append(INDENT).append("try {\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("new ").append(this.programName).append("().run();\n");

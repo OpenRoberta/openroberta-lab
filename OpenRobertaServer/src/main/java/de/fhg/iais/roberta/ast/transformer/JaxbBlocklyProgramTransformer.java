@@ -437,8 +437,8 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 return MathNumPropFunct.make(FunctionNames.get(op), params, extractBlockProperties(block), extractComment(block));
 
             case "math_change":
-                values = extractValues(block, (short) 1);
-                left = extractVar(block);
+                values = extractValues(block, (short) 2);
+                left = extractValue(values, new ExprParam(BlocklyConstants.VAR, String.class));
                 right = extractValue(values, new ExprParam(BlocklyConstants.DELTA, Integer.class));
                 return Binary.make(Binary.Op.MATH_CHANGE, convertPhraseToExpr(left), convertPhraseToExpr(right), "", properties, comment);
 
