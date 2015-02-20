@@ -512,7 +512,7 @@ Blockly.Msg.PLAY_TONE_TOOLTIP = "Spielt einen Ton.";
 Blockly.Msg.PLAY_VOLUME = "Lautstärke";
 Blockly.Msg.POPUP_ABOUT_JOIN = "Ich möchte mithelfen";
 Blockly.Msg.POPUP_ABOUT_TEXT = "Open Roberta Lab ist eine cloudbasierte grafische Programmierumgebung, die es Kindern und Jugendlichen ermöglicht ohne technische Hürden einen Roboter zu programmieren. <br /> Die Programmierplattform ist komplett »open source«, Mitmachen und Anregungen erwünscht! Alle benötigte Software und Open-Source-Entwicklertools stehen über Fraunhofer-Server bereit.";
-Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "Open Roberta Lab wird von Fraunhofer IAIS im Rahmen der Initiative »Roberta – Lernen mit Robotern« entwickelt. Das Team von Open Roberta nutzt hierfür unter anderem weiterer »open source« Bibliotheken, wie z. B. blockly oder typicons .";
+Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "Das Open Roberta Lab ist eine Open-Source-Entwicklung des Fraunhofer-Instituts IAIS im Kontext der Initiative  <a href='http://www.roberta-home.de/'>»Roberta – Lernen mit Robotern«</a>";
 Blockly.Msg.POPUP_ATTENTION = "Achtung";
 Blockly.Msg.POPUP_BEFOREUNLOAD = "Your have unsafed changes in your program or configuration. Sign in and save your program or configuration.";
 Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN = "Your have unsafed changes in your program or configuration.";
@@ -593,7 +593,7 @@ Blockly.Msg.START = "Starte";
 Blockly.Msg.START_ACTIVITY = "Aktivität";
 Blockly.Msg.START_ACTIVITY_TOOLTIP = "Startet zusätzliche Aktivität.";
 Blockly.Msg.START_HELP = "here comes your help text";  // untranslated
-Blockly.Msg.START_PROGRAM = "Programm";
+Blockly.Msg.START_PROGRAM = "Programm-Start";
 Blockly.Msg.START_TOOLTIP = "Startblock für das Hauptprogramm.";
 Blockly.Msg.TAB_CONFIGURATION = "Konfiguration";
 Blockly.Msg.TAB_PROGRAM = "Programm";

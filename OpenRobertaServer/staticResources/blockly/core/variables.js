@@ -365,13 +365,13 @@ Blockly.Variables.allGlobalVariables = function() {
     for (var i = 0; i < topBlocks.length; i++) {
         var block = topBlocks[i];
         if (block.type === 'robControls_start') {
-            var descandants = block.getDescendants();
-            if (descandants) {
-                variable: for (var i = 1; i < descandants.length; i++) {
-                    if (descandants[i].getVarDecl) {
-                        variableList.push([ 'GLOBAL_VARIABLE', descandants[i].getVarDecl()[0] ]);
+            var descendants = block.getDescendants();
+            if (descendants) {
+                variable: for (var i = 1; i < descendants.length; i++) {
+                    if (descendants[i].getVarDecl && descendants[i].type === 'robGlobalvariables_declare') {
+                        variableList.push([ 'GLOBAL_VARIABLE', descendants[i].getVarDecl()[0] ]);
                     } else {
-                        if (!descandants[i].getParent())
+                        if (!descendants[i].getParent())
                             break variable;
                     }
                 }
@@ -393,12 +393,12 @@ Blockly.Variables.allLocalVariables = function() {
         var block = topBlocks[i];
         if (block.getProcedureDef) {
             var variableType = block.getProcedureDef()[0];
-            var descandants = block.getDescendants();
-            console.log(descandants);
-            if (descandants) {
-                for (var j = 1; j < descandants.length; j++) {
-                    if (descandants[j].getVarDecl) {
-                        variableList.push([ variableType, descandants[j].getVarDecl()[0] ]);
+            var descendants = block.getDescendants();
+            console.log(descendants);
+            if (descendants) {
+                for (var j = 1; j < descendants.length; j++) {
+                    if (descendants[j].getVarDecl && descendants[j].type === 'robLocalVariables_declare') {
+                        variableList.push([ variableType, descendants[j].getVarDecl()[0] ]);
                     } 
                 }
             }
