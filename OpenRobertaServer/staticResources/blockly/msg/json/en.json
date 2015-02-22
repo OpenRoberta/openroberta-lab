@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-02-19 12:42:49.923000",
+		"lastupdated": "2015-02-22 22:32:31.479000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -397,6 +397,9 @@
 	"VARIABLES_SET_HELPURL": "https://code.google.com/p/blockly/wiki/Variables#Set",
 	"VARIABLES_SET_TITLE": "set %1 to %2",
 	"VARIABLES_SET_TOOLTIP": "Sets this variable to be equal to the input.",
+	"VARIABLES_GLOBAL_DECLARE_TOOLTIP": "Declares a global variable.",
+	"VARIABLES_LOCAL_DECLARE_TOOLTIP": "Declares a local variable.",
+	"VARIABLE_GLOBAL_HELP": "With this block you can declare a global variable. In a global variable you can store values, that you would like to access somewhere in your program later. You can <ul class='NonIcon'><li>modify the name of the variable</li><li>choose the right type of the variable</li><li>set the initial value</li></ul>",
 	"VARIABLES_SET_CREATE_GET": "Create 'get %1'",
 	"VARIABLES_TYPE_NUMBER": "Number",
 	"VARIABLES_TYPE_BOOLEAN": "Boolean",
@@ -520,7 +523,7 @@
 	"SENSOR_WAIT_PRESSED_RELEASED": "pressed or released",
 	"START": "start",
 	"START_ACTIVITY": "activity",
-	"START_PROGRAM": "program start",
+	"START_PROGRAM": "program-start",
 	"MODE": "mode",
 	"MODE_DISTANCE": "distance",
 	"MODE_PRESENCE": "presence",

@@ -1069,8 +1069,9 @@ Blockly.Msg.VARIABLES_SET_TITLE = 'set %1 to %2';
 Blockly.Msg.VARIABLES_SET_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
 /// tooltip - This initializes or changes the value of the named variable.
 Blockly.Msg.VARIABLES_SET_TOOLTIP = 'Sets this variable to be equal to the input.';
-/// context menu - Selecting this creates a block to get (change) the value of
-/// this variable.\n\nParameters:\n* %1 - the name of the variable.
+Blockly.Msg.VARIABLES_GLOBAL_DECLARE_TOOLTIP = 'Declares a global variable.';
+Blockly.Msg.VARIABLES_LOCAL_DECLARE_TOOLTIP = 'Declares a local variable.';
+Blockly.Msg.VARIABLE_GLOBAL_HELP = 'With this block you can declare a global variable. In a global variable you can store values, that you would like to access somewhere in your program later. You can <ul class="NonIcon"><li>modify the name of the variable</li><li>choose the right type of the variable</li><li>set the initial value</li></ul>';
 Blockly.Msg.VARIABLES_SET_CREATE_GET = 'Create "get %1"';
 Blockly.Msg.VARIABLES_TYPE_NUMBER = 'Number';
 Blockly.Msg.VARIABLES_TYPE_BOOLEAN = 'Boolean';
@@ -1257,7 +1258,7 @@ Blockly.Msg.SENSOR_WAIT_PRESSED = 'pressed';
 Blockly.Msg.SENSOR_WAIT_PRESSED_RELEASED = 'pressed or released';
 Blockly.Msg.START = 'start';
 Blockly.Msg.START_ACTIVITY = 'activity';
-Blockly.Msg.START_PROGRAM = 'program start';
+Blockly.Msg.START_PROGRAM = 'program-start';
 Blockly.Msg.MODE = 'mode';
 Blockly.Msg.MODE_DISTANCE = 'distance';
 Blockly.Msg.MODE_PRESENCE = 'presence';

@@ -309,7 +309,7 @@ Blockly.Blocks['robGlobalvariables_declare'] = {
         this.appendValueInput('VALUE').appendField(Blockly.Msg.VARIABLES_TITLE).appendField(new Blockly.FieldTextInput(name, Blockly.Variables.renameVariable),
                 'VAR').appendField(':').appendField(declType, 'TYPE').appendField(Blockly.RTL ? '\u2192' : '\u2190').setCheck('Number');
         this.setPreviousStatement(true, 'declaration_only');
-        this.setTooltip(Blockly.Msg.VARIABLES_SET_TOOLTIP);
+        this.setTooltip(Blockly.Msg.VARIABLES_GLOBAL_DECLARE_TOOLTIP);
         this.setMutatorMinus(new Blockly.MutatorMinus(this));
         this.setMovable(false);
         this.setDeletable(false);
@@ -317,6 +317,7 @@ Blockly.Blocks['robGlobalvariables_declare'] = {
         this.contextMenudeclarationType_ = 'variables_get';
         this.declarationType_ = 'Number';
         this.nextStatement_ = false;
+        this.setHelp(new Blockly.Help(Blockly.Msg.VARIABLE_GLOBAL_HELP));
     },
     /**
      * Create XML to represent variable declaration insides.
@@ -455,7 +456,7 @@ Blockly.Blocks['robLocalVariables_declare'] = {
         var name = Blockly.Variables.findLegalName('x', this);
         this.appendDummyInput().appendField(new Blockly.FieldTextInput(name, Blockly.Variables.renameVariable), 'VAR').appendField(' ').appendField(declType, 'TYPE');
         this.setPreviousStatement(true, 'declaration_only');
-        this.setTooltip(Blockly.Msg.VARIABLES_SET_TOOLTIP);
+        this.setTooltip(Blockly.Msg.VARIABLES_LOCAL_DECLARE_TOOLTIP);
         this.setMutatorMinus(new Blockly.MutatorMinus(this));
         this.setMovable(false);
         this.setDeletable(false);
