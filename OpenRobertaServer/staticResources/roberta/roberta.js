@@ -296,32 +296,32 @@ function responseAndRefreshConfigurationList(result) {
  */
 function saveAsToServer() {
     var progName = $('#programNameSave').val().trim();
-    if (progName != '') {
-        setProgram(progName);
-        $('#menuSaveProg').parent().removeClass('login');
-        $('#menuSaveProg').parent().removeClass('disabled');
-        Blockly.getMainWorkspace().saveButton.enable();
-        if (userState.program) {
-            var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-            var xml_text = Blockly.Xml.domToText(xml);
-            userState.programSaved = true;
-            LOG.info('saveAs program ' + userState.program + ' login: ' + userState.id);
-            $('.modal').modal('hide'); // close all opened popups
-            return COMM.json("/program", {
-                "cmd" : "saveAsP",
-                "name" : userState.program,
-                "program" : xml_text
-            }, function(result) {
-                if (result.rc === 'ok') {
-                    userState.programModified = false;
-                    displayMessage("MESSAGE_EDIT_SAVE_PROGRAM_AS", "TOAST", userState.program);
-                } else {
-                    displayMessage(result.message, "POPUP", "");
-                }
-            });
-        }
-    } else {
-        displayMessage("MESSAGE_EMPTY_NAME", "POPUP", "");
+    if (!progName.match(/^[a-zA-Z][a-zA-Z0-9]*$/)) {
+        displayMessage("MESSAGE_INVALID_NAME", "POPUP", "");
+        return;
+    }
+    setProgram(progName);
+    $('#menuSaveProg').parent().removeClass('login');
+    $('#menuSaveProg').parent().removeClass('disabled');
+    Blockly.getMainWorkspace().saveButton.enable();
+    if (userState.program) {
+        var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+        var xml_text = Blockly.Xml.domToText(xml);
+        userState.programSaved = true;
+        LOG.info('saveAs program ' + userState.program + ' login: ' + userState.id);
+        $('.modal').modal('hide'); // close all opened popups
+        return COMM.json("/program", {
+            "cmd" : "saveAsP",
+            "name" : userState.program,
+            "program" : xml_text
+        }, function(result) {
+            if (result.rc === 'ok') {
+                userState.programModified = false;
+                displayMessage("MESSAGE_EDIT_SAVE_PROGRAM_AS", "TOAST", userState.program);
+            } else {
+                displayMessage(result.message, "POPUP", "");
+            }
+        });
     }
 }
 
@@ -355,12 +355,14 @@ function saveToServer() {
  */
 function saveAsConfigurationToServer() {
     var confName = $('#configurationNameSave').val();
-    if (confName != '') {
-        setConfiguration(confName);
-        $('#menuSaveConfig').parent().removeClass('login');
-        $('#menuSaveConfig').parent().removeClass('disabled');
-        document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().saveButton.enable();
+    if (!confName.match(/^[a-zA-Z][a-zA-Z0-9]*$/)) {
+        displayMessage("MESSAGE_INVALID_NAME", "POPUP", "");
+        return;
     }
+    setConfiguration(confName);
+    $('#menuSaveConfig').parent().removeClass('login');
+    $('#menuSaveConfig').parent().removeClass('disabled');
+    document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().saveButton.enable();
     if (userState.configuration) {
         userState.configurationSaved = true;
         $('.modal').modal('hide'); // close all opened popups
@@ -378,8 +380,6 @@ function saveAsConfigurationToServer() {
                 displayMessage(result.message, "POPUP", "");
             }
         });
-    } else {
-        displayMessage("MESSAGE_EMPTY_NAME", "POPUP", "");
     }
 }
 
@@ -418,6 +418,7 @@ function runOnBrick() {
         var xml_program = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
         var xml_text_program = Blockly.Xml.domToText(xml_program);
         var xml_text_configuration = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
+        displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
         return COMM.json("/program", {
             "cmd" : "runP",
             "name" : userState.program,
@@ -425,7 +426,7 @@ function runOnBrick() {
             "programText" : xml_text_program,
             "configurationText" : xml_text_configuration
         }, response);
-        displayMessage("MESSAGE_EDIT_START", "TOAST", "");
+
     }
 }
 
@@ -908,12 +909,21 @@ function displayState() {
         $('#iconDisplayLogin').addClass('error');
     }
 
-    if (userState['robot.state'] != 'busy' || userState['robot.state'] != 'wait') {
+    if (userState['robot.state'] === 'wait') {
+        $('#iconDisplayRobotState').removeClass('error');
+        $('#iconDisplayRobotState').removeClass('busy');
+        $('#iconDisplayRobotState').removeClass('wait');
+        $('#iconDisplayRobotState').addClass('ok');
+    } else if (userState['robot.state'] === 'busy') {
+        $('#iconDisplayRobotState').removeClass('ok');
+        $('#iconDisplayRobotState').removeClass('wait');
+        $('#iconDisplayRobotState').removeClass('error');
+        $('#iconDisplayRobotState').addClass('busy');
+    } else {
+        $('#iconDisplayRobotState').removeClass('busy');
+        $('#iconDisplayRobotState').removeClass('wait');
         $('#iconDisplayRobotState').removeClass('ok');
         $('#iconDisplayRobotState').addClass('error');
-    } else {
-        $('#iconDisplayRobotState').removeClass('error');
-        $('#iconDisplayRobotState').addClass('ok');
     }
 
     $('#tabProgramName').text(userState.program);
@@ -1358,6 +1368,20 @@ function translate(jsdata) {
         } else if (lkey === 'Blockly.Msg.MENU_ABOUT') {
             $('#show-about h3').text(value);
             $(this).html(value);
+        } else if (lkey === 'Blockly.Msg.MENU_TITLE_EDIT') {
+            $('#head-navi-tooltip-program').attr('data-original-title', value).tooltip('fixTitle');
+            $('#head-navi-tooltip-configuration').attr('data-original-title', value).tooltip('fixTitle');
+        } else if (lkey === 'Blockly.Msg.MENU_TITLE_ROBOT') {
+            $('#head-navi-tooltip-robot').attr('data-original-title', value).tooltip('fixTitle');
+        } else if (lkey === 'Blockly.Msg.MENU_TITLE_HELP') {
+            $('#head-navi-tooltip-help').attr('data-original-title', value).tooltip('fixTitle');
+        } else if (lkey === 'Blockly.Msg.MENU_TITLE_USER') {
+            $('#head-navi-tooltip-user').attr('data-original-title', value).tooltip('fixTitle');
+        } else if (lkey === 'Blockly.Msg.MENU_TITLE_USER_STATE') {
+            $('#iconDisplayLogin').attr('data-original-title', value).tooltip('fixTitle');
+        } else if (lkey === 'Blockly.Msg.MENU_TITLE_ROBOT_STATE') {
+            $('#iconDisplayRobotState').attr('data-original-title', value).tooltip('fixTitle');
+
         } else {
             $(this).html(value);
         }
@@ -1635,6 +1659,9 @@ function init() {
                 return Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN;
             }
         }
+    });
+    $('[rel="tooltip"]').tooltip({
+        placement : "right"
     });
     resizeTabBar(); // for small devices only
 };

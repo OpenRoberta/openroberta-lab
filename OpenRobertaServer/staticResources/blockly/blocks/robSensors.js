@@ -121,7 +121,7 @@ Blockly.Blocks['robSensors_getSample'] = {
             this.appendValue_('BOOL');
             this.changeOutput('Boolean');
         } else if (this.sensorType_ == 'TIME') {
-            input.appendField(sensorNum, 'SENSORNUM');
+            input.appendField(Blockly.Msg.SENSOR_MS_TIMER).appendField(sensorNum, 'SENSORNUM');
             this.appendValue_('NUM_REV', 500);
             this.changeOutput('Number');
         } else {
@@ -516,9 +516,9 @@ Blockly.Blocks['robSensors_timer_getSample'] = {
 
     init : function() {
         this.setColourRGB(Blockly.CAT_SENSOR_RGB);
-        var sensorNum = new Blockly.FieldDropdown([ [ Blockly.Msg.SENSOR_TIMER + ' 1', '1' ], [ Blockly.Msg.SENSOR_TIMER + ' 2', '2' ],
+        var sensorNum = new Blockly.FieldDropdown([ [ Blockly.Msg.SENSOR_TIMER + ' 1 ', '1' ], [ Blockly.Msg.SENSOR_TIMER + ' 2', '2' ],
                 [ Blockly.Msg.SENSOR_TIMER + ' 3', '3' ], [ Blockly.Msg.SENSOR_TIMER + ' 4', '4' ], [ Blockly.Msg.SENSOR_TIMER + ' 5', '5' ] ]);
-        this.appendDummyInput().appendField(Blockly.Msg.SENSOR_GET_SAMPLE).appendField(sensorNum, 'SENSORNUM');
+        this.appendDummyInput().appendField(Blockly.Msg.SENSOR_GET_SAMPLE).appendField(sensorNum, 'SENSORNUM').appendField(Blockly.Msg.SENSOR_MS_TIMER);
         this.setOutput(true, 'Number');
         this.setTooltip(Blockly.Msg.TIMER_GETSAMPLE_TOOLTIP);
     }

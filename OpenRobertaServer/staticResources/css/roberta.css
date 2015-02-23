@@ -221,11 +221,32 @@ html, body {
     color: #ccc;
 }
 
+@
+-webkit-keyframes blinker {from { color:#afca04;
+    
+}
+
+to {
+    color: #e2001a;
+}
+
+}
+.busy {
+    -webkit-animation-name: blinker;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: cubic-bezier(1.0, 0, 0, 1.0);
+    -webkit-animation-duration: 1s;
+}
+
 .menuDisabled {
     background-color: #fff;
 }
 
 /***** BEGIN Overwrite Bootstrap-CSS *****/
+.tooltip>.tooltip-inner {
+    background-color: #333;
+}
+
 .sr-only {
     width: inherit;
     height: inherit;
@@ -352,6 +373,10 @@ html, body {
 
 .dropdown-menu>.disabled>a, .dropdown-menu>.disabled>a:hover, .dropdown-menu>.disabled>a:focus {
     color: #bbbbbb;
+}
+
+#tokenValue {
+    text-transform: uppercase
 }
 
 .modal-backdrop.in {

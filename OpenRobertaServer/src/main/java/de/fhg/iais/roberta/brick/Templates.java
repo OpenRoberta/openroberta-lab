@@ -130,21 +130,13 @@ public class Templates {
             + "      <block type='robControls_loopForever'/> "
             + "      <block type='controls_repeat'> "
             + "      </block> "
-            + "      <block type='robControls_wait_for'> "
-            + "        <value name='WAIT0'> "
-            + "          <block type='logic_compare'> "
-            + "            <mutation operator_range='BOOL'></mutation> "
-            + "            <value name='A'> "
-            + "              <block type='robSensors_getSample'> "
-            + "              </block> " //
-            + "            </value> "
-            + "            <value name='B'> "
-            + "              <block type='logic_boolean'> "
-            + "              </block> " //
-            + "            </value> "
+            + "      <block type='robControls_wait_time'> "
+            + "        <value name='WAIT'> "
+            + "          <block type='math_number'> "
+            + "            <field name='NUM'>500</field> "
             + "          </block> " //
             + "        </value> "
-            + "      </block> " //
+            + "      </block> "
             + "  </category> "
             + "  <category name='TOOLBOX_LOGIC'> "
             + "    <block type='logic_compare'/> "
@@ -185,7 +177,6 @@ public class Templates {
             + "    </block> " //
             + "  </category> "
             + "  <category name='TOOLBOX_VARIABLE' custom='VARIABLE'/> "
-            + "  <category name='TOOLBOX_PROCEDURE' custom='PROCEDURE'/> "
             + "</toolbox_set> ";
         String expert =
             ""
