@@ -70,6 +70,17 @@ public class RepeatStmtTest {
     }
 
     @Test
+    public void repeatStmt2() throws Exception {
+        String a =
+            "BlockAST [project=[[Location [x=42, y=46], MainTask [], \n"
+                + "(repeat [TIMES, VarDeclaration [NUMERIC_INT, i0, NumConst [0], false, false], Binary [LT, Var [i0], NumConst [10]], Unary [POSTFIX_INCREMENTS, Var [i0]]]\n"
+                + "AktionStmt [DriveAction [FOREWARD, MotionParam [speed=NumConst [50], duration=null]]]\n"
+                + ")]]]";
+
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/control/repeat_stmt2.xml"));
+    }
+
+    @Test
     public void repeatStmtWhileUntil() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=-372, y=47], \n"
@@ -182,6 +193,11 @@ public class RepeatStmtTest {
     @Test
     public void reverseTransformation1() throws Exception {
         Helper.assertTransformationIsOk("/ast/control/repeat_stmt1.xml");
+    }
+
+    @Test
+    public void reverseTransformation2() throws Exception {
+        Helper.assertTransformationIsOk("/ast/control/repeat_stmt2.xml");
     }
 
     @Test
