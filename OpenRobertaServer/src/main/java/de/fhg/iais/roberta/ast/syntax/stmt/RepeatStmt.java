@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
+import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
@@ -95,7 +96,14 @@ public class RepeatStmt<V> extends Stmt<V> {
 
         switch ( getMode() ) {
             case TIMES:
-                AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.TIMES, ((Binary<?>) ((ExprList<?>) getExpr()).get().get(1)).getRight());
+                if ( getProperty().getBlockType().equals("controls_repeat") ) {
+                    AstJaxbTransformerHelper.addField(
+                        jaxbDestination,
+                        BlocklyConstants.TIMES,
+                        ((NumConst<?>) ((Binary<?>) ((ExprList<?>) getExpr()).get().get(1)).getRight()).getValue());
+                } else {
+                    AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.TIMES, ((Binary<?>) ((ExprList<?>) getExpr()).get().get(1)).getRight());
+                }
                 break;
 
             case WAIT:
@@ -141,13 +149,13 @@ public class RepeatStmt<V> extends Stmt<V> {
      */
     public static enum Mode {
         WHILE(), UNTIL(), TIMES(), FOR(), FOR_EACH(), WAIT(), FOREVER();
-    
+
         private final String[] values;
-    
+
         private Mode(String... values) {
             this.values = values;
         }
-    
+
         /**
          * get mode from {@link Mode} from string parameter. It is possible for one mode to have multiple string mappings.
          * Throws exception if the mode does not exists.

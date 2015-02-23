@@ -108,8 +108,14 @@ public class Hal {
     // --- Aktion Bewegung ---
 
     /**
-     * @param actorPort
-     * @param speedPercent
+     * Turn on regulated motor. <br>
+     * <br>
+     * Client must give correct motor port and percent of the power of the motor is used.
+     * 0 is the motor is used with power 0 i.e. it is not working and 100 if we want to use full power of the motor.
+     * Values larger then 100 set the motor speed again to its maximum.
+     *
+     * @param actorPort on which motor is connected
+     * @param speedPercent of motor power
      */
     public void turnOnRegulatedMotor(ActorPort actorPort, float speedPercent) {
         setRegulatedMotorSpeed(actorPort, speedPercent);
@@ -117,8 +123,14 @@ public class Hal {
     }
 
     /**
-     * @param actorPort
-     * @param speedPercent
+     * Turn on unregulated motor. <br>
+     * <br>
+     * Client must give correct motor port and percent of the power of the motor is used.
+     * 0 is the motor is used with power 0 i.e. it is not working and 100 if we want to use full power of the motor.
+     * Values larger then 100 set the motor speed again to its maximum.
+     *
+     * @param actorPort on which motor is connected
+     * @param speedPercent of motor power
      */
     public void turnOnUnregulatedMotor(ActorPort actorPort, float speedPercent) {
         setUnregulatedMotorSpeed(actorPort, speedPercent);
@@ -126,27 +138,37 @@ public class Hal {
     }
 
     /**
-     * @param actorPort
-     * @param speedPercent
+     * Set the speed on regulated motor. <br>
+     * <br>
+     * Client must give correct motor port and percent of the power of the motor is used.
+     * 0 is the motor is used with power 0 i.e. it is not working and 100 if we want to use full power of the motor.
+     * Values larger then 100 set the motor speed again to its maximum.<br>
+     * <br>
+     * <b>Setting the motor seed is only possible when the motor is not running.</b>
+     *
+     * @param actorPort on which motor is connected
+     * @param speedPercent of motor power
      */
     public void setRegulatedMotorSpeed(ActorPort actorPort, float speedPercent) {
         this.deviceHandler.getRegulatedMotor(actorPort).setSpeed(toDegPerSec(speedPercent));
     }
 
     /**
-     * @param actorPort
-     * @param speedPercent
+     * Set the speed on unregulated motor. <br>
+     * <br>
+     * Client must give correct motor port and percent of the power of the motor is used.
+     * 0 is the motor is used with power 0 i.e. it is not working and 100 if we want to use full power of the motor.
+     * Values larger then 100 set the motor speed again to its maximum.<br>
+     * <br>
+     * <b>Setting the motor seed is only possible when the motor is not running.</b>
+     *
+     * @param actorPort on which motor is connected
+     * @param speedPercent of motor power
      */
     public void setUnregulatedMotorSpeed(ActorPort actorPort, float speedPercent) {
         this.deviceHandler.getUnregulatedMotor(actorPort).setPower((int) speedPercent);
     }
 
-    /**
-     * @param actorPort
-     * @param speedPercent
-     * @param mode
-     * @param rotations
-     */
     public void rotateRegulatedMotor(ActorPort actorPort, float speedPercent, MotorMoveMode mode, float rotations) {
         this.deviceHandler.getRegulatedMotor(actorPort).setSpeed(toDegPerSec(speedPercent));
         switch ( mode ) {
@@ -161,12 +183,6 @@ public class Hal {
         }
     }
 
-    /**
-     * @param actorPort
-     * @param speedPercent
-     * @param mode
-     * @param value
-     */
     public void rotateUnregulatedMotor(ActorPort actorPort, float speedPercent, MotorMoveMode mode, float value) {
         this.deviceHandler.getUnregulatedMotor(actorPort).setPower((int) speedPercent);
         if ( value >= 0 ) {
@@ -208,16 +224,24 @@ public class Hal {
     }
 
     /**
-     * @param actorPort
-     * @return
+     * Get the currently set regulated motor speed. <br>
+     * <br>
+     * Client must provide valid actor port on which the motor is connected.
+     *
+     * @param actorPort on which the motor is connected
+     * @return current speed value
      */
     public float getRegulatedMotorSpeed(ActorPort actorPort) {
         return toPercent(this.deviceHandler.getRegulatedMotor(actorPort).getSpeed());
     }
 
     /**
-     * @param actorPort
-     * @return
+     * Get the currently set unregulated motor speed. <br>
+     * <br>
+     * Client must provide valid actor port on which the motor is connected.
+     *
+     * @param actorPort on which the motor is connected
+     * @return current speed value
      */
     public float getUnregulatedMotorSpeed(ActorPort actorPort) {
         return this.deviceHandler.getUnregulatedMotor(actorPort).getPower();
@@ -242,8 +266,12 @@ public class Hal {
     }
 
     /**
-     * @param actorPort
-     * @param floating
+     * Stops unregulated motor if it is running.<br>
+     * <br>
+     * Client must provide valid actor port on which the motor is connected and mode in which the motor will brake (see {@link MotorStopMode}).
+     *
+     * @param actorPort on which the motor is connected
+     * @param floating mode of motor stopping
      */
     public void stopUnregulatedMotor(ActorPort actorPort, MotorStopMode floating) {
         switch ( floating ) {
@@ -260,13 +288,6 @@ public class Hal {
     // --- END Aktion Bewegung ---
     // --- Aktion Fahren ---
 
-    /**
-     * @param left
-     * @param right
-     * @param isReverse
-     * @param direction
-     * @param speedPercent
-     */
     public void regulatedDrive(ActorPort left, ActorPort right, boolean isReverse, DriveDirection direction, float speedPercent) {
         DifferentialPilot dPilot =
             new DifferentialPilot(
@@ -288,14 +309,6 @@ public class Hal {
         }
     }
 
-    /**
-     * @param left
-     * @param right
-     * @param isReverse
-     * @param direction
-     * @param speedPercent
-     * @param distance
-     */
     public void driveDistance(ActorPort left, ActorPort right, boolean isReverse, DriveDirection direction, float speedPercent, float distance) {
         DifferentialPilot dPilot =
             new DifferentialPilot(
@@ -318,22 +331,11 @@ public class Hal {
         }
     }
 
-    /**
-     * @param left
-     * @param right
-     */
     public void stopRegulatedDrive(ActorPort left, ActorPort right) {
         this.deviceHandler.getRegulatedMotor(left).stop(true);
         this.deviceHandler.getRegulatedMotor(right).stop(true);
     }
 
-    /**
-     * @param left
-     * @param right
-     * @param isReverse
-     * @param direction
-     * @param speedPercent
-     */
     public void rotateDirectionRegulated(ActorPort left, ActorPort right, boolean isReverse, TurnDirection direction, float speedPercent) {
         DifferentialPilot dPilot =
             new DifferentialPilot(
@@ -355,14 +357,6 @@ public class Hal {
         }
     }
 
-    /**
-     * @param left
-     * @param right
-     * @param isReverse
-     * @param direction
-     * @param speedPercent
-     * @param angle
-     */
     public void rotateDirectionAngle(ActorPort left, ActorPort right, boolean isReverse, TurnDirection direction, float speedPercent, float angle) {
         DifferentialPilot dPilot =
             new DifferentialPilot(
@@ -388,20 +382,10 @@ public class Hal {
     // --- END Aktion Fahren ---
     // --- Aktion Anzeige ---
 
-    /**
-     * @param text
-     * @param x
-     * @param y
-     */
     public void drawText(String text, float x, float y) {
         this.brick.getTextLCD().drawString(text, (int) x, (int) y);
     }
 
-    /**
-     * @param smiley
-     * @param x
-     * @param y
-     */
     public void drawPicture(ShowPicture smiley, float x, float y) {
         switch ( smiley ) {
             case OLDGLASSES:
@@ -432,33 +416,18 @@ public class Hal {
     // --- END Aktion Anzeige ---
     // -- Aktion Klang ---
 
-    /**
-     * @param frequency
-     * @param duration
-     */
     public void playTone(float frequency, float duration) {
         this.brick.getAudio().playTone((int) frequency, (int) duration);
     }
 
-    /**
-     * @param fileNumber
-     */
     public void playFile(float systemSound) {
         this.brick.getAudio().systemSound((int) systemSound);
     }
 
-    /**
-     * set the volume of the speaker
-     *
-     * @param volume
-     */
     public void setVolume(float volume) {
         this.brick.getAudio().setVolume((int) volume);
     }
 
-    /**
-     * @return volume of the speaker
-     */
     public float getVolume() {
         return this.brick.getAudio().getVolume();
     }
@@ -466,10 +435,6 @@ public class Hal {
     // -- END Aktion Klang ---
     // --- Aktion Statusleuchte ---
 
-    /**
-     * @param color
-     * @param blink
-     */
     public void ledOn(BrickLedColor color, BlinkMode blinkMode) {
         switch ( color ) {
             case GREEN:
@@ -520,9 +485,6 @@ public class Hal {
         }
     }
 
-    /**
-     * turn off led
-     */
     public void ledOff() {
         this.brick.getLED().setPattern(0);
     }
@@ -538,10 +500,6 @@ public class Hal {
     // --- END Aktion Statusleuchte ---
     // --- Sensoren Berührungssensor ---
 
-    /**
-     * @param sensorPort
-     * @return
-     */
     public boolean isPressed(SensorPort sensorPort) {
         SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, "Touch");
         float[] sample = new float[sampleProvider.sampleSize()];
@@ -556,10 +514,6 @@ public class Hal {
     // --- END Sensoren Berührungssensor ---
     // --- Sensoren Ultraschallsensor ---
 
-    /**
-     * @param sensorPort
-     * @return
-     */
     public boolean getUltraSonicSensorPresence(SensorPort sensorPort) {
         SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, UltrasonicSensorMode.PRESENCE.name());
         float[] sample = new float[sampleProvider.sampleSize()];
@@ -571,10 +525,6 @@ public class Hal {
         }
     }
 
-    /**
-     * @param sensorPort
-     * @return
-     */
     public float getUltraSonicSensorDistance(SensorPort sensorPort) {
         SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, UltrasonicSensorMode.DISTANCE.name());
         float[] sample = new float[sampleProvider.sampleSize()];
@@ -586,12 +536,6 @@ public class Hal {
     // END Sensoren Ultraschallsensor ---
     // --- Sensoren Farbsensor ---
 
-    /**
-     * TODO interpretation/conversion before return (rgb!)
-     *
-     * @param sensorPort
-     * @return
-     */
     public float getColorSensorAmbient(SensorPort sensorPort) {
         SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, ColorSensorMode.AMBIENTLIGHT.name());
         float[] sample = new float[sampleProvider.sampleSize()];
@@ -599,12 +543,6 @@ public class Hal {
         return Math.round(sample[0] * 100.0f); // * 100
     }
 
-    /**
-     * TODO interpretation/conversion before return (rgb!)
-     *
-     * @param sensorPort
-     * @return
-     */
     public Pickcolor getColorSensorColour(SensorPort sensorPort) {
         SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, ColorSensorMode.COLOUR.name());
         float[] sample = new float[sampleProvider.sampleSize()];
@@ -612,12 +550,6 @@ public class Hal {
         return Pickcolor.get(Math.round(sample[0]));
     }
 
-    /**
-     * TODO interpretation/conversion before return (rgb!)
-     *
-     * @param sensorPort
-     * @return
-     */
     public float getColorSensorRed(SensorPort sensorPort) {
         SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, ColorSensorMode.RED.name());
         float[] sample = new float[sampleProvider.sampleSize()];
@@ -625,12 +557,6 @@ public class Hal {
         return Math.round(sample[0] * 100.0f); // * 100
     }
 
-    /**
-     * TODO interpretation/conversion before return (rgb!)
-     *
-     * @param sensorPort
-     * @return
-     */
     public ArrayList<Float> getColorSensorRgb(SensorPort sensorPort) {
         SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, ColorSensorMode.RGB.name());
         float[] sample = new float[sampleProvider.sampleSize()];
@@ -645,10 +571,6 @@ public class Hal {
     // END Sensoren Farbsensor ---
     // --- Sensoren IRSensor ---
 
-    /**
-     * @param sensorPort
-     * @return
-     */
     public float getInfraredSensorDistance(SensorPort sensorPort) {
         SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, InfraredSensorMode.DISTANCE.name());
         float[] sample = new float[sampleProvider.sampleSize()];
@@ -657,10 +579,6 @@ public class Hal {
         return Math.round(sample[0]);
     }
 
-    /**
-     * @param sensorPort
-     * @return
-     */
     public ArrayList<Float> getInfraredSensorSeek(SensorPort sensorPort) {
         SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, InfraredSensorMode.SEEK.name());
         float[] sample = new float[sampleProvider.sampleSize()];
@@ -680,10 +598,6 @@ public class Hal {
     // END Sensoren IRSensor ---
     // --- Sensor Gyrosensor ---
 
-    /**
-     * @param sensorPort
-     * @return
-     */
     public float getGyroSensorValue(SensorPort sensorPort, GyroSensorMode sensorMode) {
         SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, sensorMode.name());
         float[] sample = new float[sampleProvider.sampleSize()];
@@ -699,26 +613,17 @@ public class Hal {
         }
     }
 
-    /**
-     * @param sensorPort
-     */
     public void resetGyroSensor(SensorPort sensorPort) {
         this.deviceHandler.getGyroSensor().reset();
     }
 
     // END Sensoren Gyrosensor ---
     // --- Sensoren Zeitgeber ---
-    /**
-     * @param timerNumber
-     * @return
-     */
+
     public float getTimerValue(int timerNumber) {
         return this.timers[timerNumber - 1].elapsed();
     }
 
-    /**
-     * @param timerNumber
-     */
     public void resetTimer(int timerNumber) {
         this.timers[timerNumber - 1].reset();
     }
@@ -726,24 +631,14 @@ public class Hal {
     // END Sensoren Zeitgeber ---
     // --- Aktorsensor Drehsensor ---
 
-    /**
-     * @param actorPort
-     */
     public void resetRegulatedMotorTacho(ActorPort actorPort) {
         this.deviceHandler.getRegulatedMotor(actorPort).resetTachoCount();
     }
 
-    /**
-     * @param actorPort
-     */
     public void resetUnregulatedMotorTacho(ActorPort actorPort) {
         this.deviceHandler.getUnregulatedMotor(actorPort).resetTachoCount();
     }
 
-    /**
-     * @param actorPort
-     * @return tacho count (degrees) or rotations as double
-     */
     public double getRegulatedMotorTachoValue(ActorPort actorPort, MotorTachoMode mode) {
         switch ( mode ) {
             case DEGREE:
@@ -755,10 +650,6 @@ public class Hal {
         }
     }
 
-    /**
-     * @param actorPort
-     * @return tacho count (degrees) or rotations as double
-     */
     public double getUnregulatedMotorTachoValue(ActorPort actorPort, MotorTachoMode mode) {
         switch ( mode ) {
             case DEGREE:
@@ -773,10 +664,6 @@ public class Hal {
     // END Aktorsensor Drehsensor ---
     // --- Sensoren Steintasten ---
 
-    /**
-     * @param key
-     * @return
-     */
     public boolean isPressed(BrickKey key) {
         switch ( key ) {
             case ANY:

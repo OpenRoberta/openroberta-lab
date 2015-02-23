@@ -166,6 +166,8 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
         MotionParam<V> mp;
         MotorDuration<V> md;
 
+        Unary<V> increment;
+
         boolean isGlobalVariable;
 
         switch ( block.getType() ) {
@@ -716,6 +718,24 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 mode = extractField(fields, BlocklyConstants.FLOW);
                 return StmtFlowCon.make(Flow.get(mode), properties, comment);
 
+            case "controls_repeat":
+                fields = extractFields(block, (short) 1);
+                exprList = ExprList.make();
+                from = NumConst.make("0", properties, comment);
+                to = NumConst.make(extractField(fields, BlocklyConstants.TIMES), properties, comment);
+                by = NumConst.make("1", properties, comment);
+                var1 = VarDeclaration.make(BlocklyType.NUMERIC_INT, "i" + this.variable_counter, convertPhraseToExpr(from), false, false, properties, comment);
+                var = Var.make(BlocklyType.NUMERIC_INT, "i" + this.variable_counter, properties, comment);
+                exprCondition = Binary.make(Binary.Op.LT, convertPhraseToExpr(var), convertPhraseToExpr(to), "", properties, comment);
+                increment = Unary.make(Unary.Op.POSTFIX_INCREMENTS, convertPhraseToExpr(var), properties, comment);
+                exprList.addExpr(var1);
+                exprList.addExpr(exprCondition);
+                exprList.addExpr(increment);
+                exprList.setReadOnly();
+
+                this.variable_counter++;
+                return extractRepeatStatement(block, exprList, BlocklyConstants.TIMES);
+
             case "controls_repeat_ext":
                 values = extractValues(block, (short) 1);
                 exprList = ExprList.make();
@@ -725,7 +745,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 var1 = VarDeclaration.make(BlocklyType.NUMERIC_INT, "i" + this.variable_counter, convertPhraseToExpr(from), false, false, properties, comment);
                 var = Var.make(BlocklyType.NUMERIC_INT, "i" + this.variable_counter, properties, comment);
                 exprCondition = Binary.make(Binary.Op.LT, convertPhraseToExpr(var), convertPhraseToExpr(to), "", properties, comment);
-                Unary<V> increment = Unary.make(Unary.Op.POSTFIX_INCREMENTS, convertPhraseToExpr(var), properties, comment);
+                increment = Unary.make(Unary.Op.POSTFIX_INCREMENTS, convertPhraseToExpr(var), properties, comment);
                 exprList.addExpr(var1);
                 exprList.addExpr(exprCondition);
                 exprList.addExpr(increment);
