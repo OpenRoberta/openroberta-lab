@@ -46,7 +46,8 @@ Blockly.Help.prototype.createIcon = function() {
     var iconShield = Blockly.createSvgElement('rect', {
         'class' : 'blocklyIconShield',
         'width' : Blockly.Icon.RADIUS * 2,
-        'height' : Blockly.Icon.RADIUS * 2, 'rx' : Blockly.BlockSvg.CORNER_RADIUS_FIELD,
+        'height' : Blockly.Icon.RADIUS * 2,
+        'rx' : Blockly.BlockSvg.CORNER_RADIUS_FIELD,
         'ry' : Blockly.BlockSvg.CORNER_RADIUS_FIELD
     }, this.iconGroup_);
     var iconMark = Blockly.createSvgElement('path', {
@@ -78,11 +79,13 @@ Blockly.Help.prototype.createContent_ = function() {
     body.className = 'blocklyMinimalBody';
     this.div_ = document.createElementNS(Blockly.HTML_NS, 'div');
     this.div_.className = 'blocklyHelpDiv';
-    this.img_ = document.createElementNS(Blockly.HTML_NS, 'img');
-    this.img_.setAttribute('src', this.animation_);
-    this.img_.setAttribute('style', 'float:right');
+    if (this.animation_) {
+        this.img_ = document.createElementNS(Blockly.HTML_NS, 'img');
+        this.img_.setAttribute('src', this.animation_);
+        this.img_.setAttribute('style', 'float:right');
+        this.div_.appendChild(this.img_);
+    }
     body.appendChild(this.div_);
-    this.div_.appendChild(this.img_);
     this.foreignObject_.appendChild(body);
     Blockly.bindEvent_(this.div_, 'mouseup', this, this.divFocus_);
     return this.foreignObject_;

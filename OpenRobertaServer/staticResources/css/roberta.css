@@ -221,21 +221,24 @@ html, body {
     color: #ccc;
 }
 
-@
--webkit-keyframes blinker {from { color:#afca04;
-    
+@-webkit-keyframes blinker { 
+    from { color: #afca04; } 
+    to { color: #e2001a; }
+}
+@keyframes  blinker { 
+    from { color: #afca04; } 
+    to { color: #e2001a; }
 }
 
-to {
-    color: #e2001a;
-}
-
-}
 .busy {
     -webkit-animation-name: blinker;
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-timing-function: cubic-bezier(1.0, 0, 0, 1.0);
     -webkit-animation-duration: 1s;
+    animation-name: blinker;
+    animation-duration: 1s;
+    animation-timing-function: cubic-bezier(1.0, 0, 0, 1.0);
+    animation-iteration-count: infinite;
 }
 
 .menuDisabled {

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-02-24 00:22:21.385000",
+		"lastupdated": "2015-02-24 08:16:52.350000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -631,7 +631,8 @@
 	"POPUP_ROBOT_STATE": "State",
 	"POPUP_ROBOT_BATTERY": "Voltage",
 	"POPUP_ROBOT_WAIT": "Waiting time",
-	"POPUP_ROBOT_NOT_CONNECTED": "You have to make a connection to your robot first",
+	"POPUP_ROBOT_NOT_CONNECTED": "You have to make a connection to your robot first.",
+	"POPUP_ROBOT_BUSY": "Your robot is busy. Please wait until the current program has finished.",
 	"POPUP_CONFIRM_DELETE_PROGRAM": "Do you really want to delete the program ?",
 	"POPUP_CONFIRM_DELETE_CONFIGURATION": "Do you really want to delete the configuration ?",
 	"BUTTON_STOP": "Stop",

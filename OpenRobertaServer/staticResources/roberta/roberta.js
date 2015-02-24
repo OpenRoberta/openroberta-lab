@@ -413,6 +413,8 @@ function saveConfigurationToServer() {
 function runOnBrick() {
     if (userState['robot.state'] === '') {
         displayMessage("POPUP_ROBOT_NOT_CONNECTED", "POPUP", "");
+    } else if (userState['robot.state'] === 'busy') {
+        displayMessage("POPUP_ROBOT_BUSY", "POPUP", "");
     } else {
         LOG.info('run ' + userState.program + ' signed in: ' + userState.id);
         var xml_program = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);

@@ -531,6 +531,7 @@ Blockly.Msg.POPUP_NAME = "Name";
 Blockly.Msg.POPUP_PASSWORD = "Passwort";
 Blockly.Msg.POPUP_REPEAT_PASSWORD = "Passwort wiederholen";
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Batteriespannung";
+Blockly.Msg.POPUP_ROBOT_BUSY = " Dein Roboter führt gerade ein Programm aus. Warte bis das laufende Programm beendet ist und versuche es noch einmal!";
 Blockly.Msg.POPUP_ROBOT_NAME = "Name";
 Blockly.Msg.POPUP_ROBOT_NOT_CONNECTED = "Du hast gerade keinen Roboter mit dem Server verbunden. Schau nach, ob der Roboter eingeschaltet ist, melde ihn am Server an und gebe das Kennwort unter Roboter - Verbinden ein.<br />Wenn das nicht klappt, schau in der Hilfe nach.";
 Blockly.Msg.POPUP_ROBOT_STATE = "Status";
