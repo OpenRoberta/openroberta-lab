@@ -6,6 +6,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
 
 /**
  * This enum provides all possible motor types of movements.
+ * The motor will stop working after fulfilling number of rotations, driving some distance or rotating for given degree value.
  */
 public enum MotorMoveMode {
     ROTATIONS(), DEGREE(), DISTANCE();
@@ -26,7 +27,7 @@ public enum MotorMoveMode {
     /**
      * get motor mode from {@link MotorDuration} from string parameter. It is possible for one motor mode to have multiple string mappings.
      * Throws exception if the mode does not exists.
-     * 
+     *
      * @param name of the motor mode
      * @return motor mode from the enum {@link MotorDuration}
      */
