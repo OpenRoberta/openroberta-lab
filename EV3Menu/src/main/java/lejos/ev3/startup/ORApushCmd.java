@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 
 import lejos.hardware.Sounds;
@@ -130,6 +131,7 @@ public class ORApushCmd implements Runnable {
                     case CMD_REPEAT:
                         ORAhandler.setRegistered(true);
                         ORAhandler.setConnectionError(false);
+                        ORAhandler.setTimeout(false);
                         break;
                     case CMD_ABORT:
                         ORAhandler.setInterrupt(true);
@@ -148,6 +150,9 @@ public class ORApushCmd implements Runnable {
                         System.out.println("ORA unknown command from server, do nothing!");
                         break;
                 }
+            } catch ( SocketTimeoutException ste ) {
+                ORAhandler.setTimeout(true);
+                break;
             } catch ( IOException ioe ) {
                 if ( ORAhandler.isRegistered() == true ) {
                     LocalEV3.get().getAudio().systemSound(Sounds.DESCENDING);
@@ -163,6 +168,7 @@ public class ORApushCmd implements Runnable {
                 }
                 ORAhandler.setRegistered(false);
                 ORAhandler.setConnectionError(true);
+                ORAhandler.setInterrupt(true);
                 break;
             } finally {
                 try {
@@ -188,7 +194,7 @@ public class ORApushCmd implements Runnable {
      * @throws IOException
      *         Connection to server failed
      */
-    private HttpURLConnection openConnection() throws IOException {
+    private HttpURLConnection openConnection() throws SocketTimeoutException, IOException {
         HttpURLConnection httpURLConnection = (HttpURLConnection) this.pushServiceURL.openConnection();
         httpURLConnection.setDoInput(true);
         httpURLConnection.setDoOutput(true);

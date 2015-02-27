@@ -10,6 +10,7 @@ public class ORAhandler {
     private static boolean hasConnectionError = false;
     private static boolean isRegistered = false;
     private static boolean interrupt = false;
+    private static boolean timeout = false;
 
     private ORApushCmd pushCmd;
     private Thread serverCommunicator;
@@ -21,9 +22,14 @@ public class ORAhandler {
      * functionality.
      */
     public ORAhandler() {
+        // default
+    }
+
+    private void resetState() {
         setInterrupt(false);
         setRegistered(false);
         setConnectionError(false);
+        setTimeout(false);
     }
 
     /**
@@ -35,9 +41,7 @@ public class ORAhandler {
      *        Token for client/ brick identification
      */
     public void startServerCommunicator(String serverBaseIP, String token) {
-        setInterrupt(false);
-        setRegistered(false);
-        setConnectionError(false);
+        resetState();
         this.pushCmd = new ORApushCmd(serverBaseIP, token);
         this.serverCommunicator = new Thread(this.pushCmd);
         this.serverCommunicator.start();
@@ -76,5 +80,13 @@ public class ORAhandler {
 
     public static void setInterrupt(boolean interrupt) {
         ORAhandler.interrupt = interrupt;
+    }
+
+    public static boolean hasTimeout() {
+        return timeout;
+    }
+
+    public static void setTimeout(boolean timeout) {
+        ORAhandler.timeout = timeout;
     }
 }

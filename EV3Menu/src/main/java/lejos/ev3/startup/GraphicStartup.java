@@ -149,6 +149,8 @@ public class GraphicStartup implements Menu {
     // Roberta menu icon
     private static final String ICRoberta =
         "\u0000\u0000\u0080\u0000\u0000\u0000\u0080\u0000\u0000\u00c0\u00c3\u0001\u0010\u0001\u00c0\u0001\u00dc\u00c0\u00c1\u0000\u0058\u002f\u00fe\u0000\u009c\u0010\u007c\u0000\u007c\u0080\u001c\u0000\u0078\u0084\u001d\u0000\u0070\u000c\u0004\u0000\u0070\u0000\u0002\u0000\u0080\u00f0\u0001\u0000\u0000\u003f\u0000\u0000\u0000\u0038\u0000\u0000\u0000\u0018\u0000\u0000\u0000\u001c\u0000\u0000\u0000\u001c\u00c0\u0001\u0000\u001c\u00f8\u0003\u0000\u00dc\u00ff\u0003\u0000\u00dc\u00ff\u0003\u0000\u00bc\u00ff\r\u0000\u00f8\u00ff\u001e\u0000\u00f4\u007f\u001f\u0080\u00cf\u00c7\u003f\u00c0\u00ff\u00bb\u003f\u00e0\u00fb\u00fd\u0033\u00e0\u0007\u00ff\u003b\u00e0\u00ff\u00cf\u003b\u00e0\u00ff\u00ef\u001f\u00c0\u00ff\u00ff\u001f\u0080\u00f7\u00fe\u000f\u0000\u0000\u00b8\u0007";
+    private static final String ICRobertaInfo =
+        "\u0000\u00fc\u003f\u0000\u0000\u00ff\u00ff\u0000\u00c0\u00ff\u00ff\u0003\u00e0\u00ff\u00ff\u0007\u00f0\u0007\u00f0\u000f\u00f8\u0003\u00c0\u001f\u00fc\u0000\u0000\u003f\u007c\u0000\u0007\u003e\u003e\u0080\u000f\u007c\u003e\u0080\u000f\u007c\u001f\u0080\u000f\u00f8\u001f\u0080\u000f\u00f0\u000f\u0000\u0007\u00f0\u000f\u0000\u0000\u00f0\u000f\u00e0\u0001\u00f0\u000f\u00f0\u0007\u00f0\u0007\u00f0\u0007\u00f0\u000f\u00e0\u0007\u00f0\u000f\u00e0\u0007\u00f0\u000f\u00f0\u0007\u00f0\u000f\u00f0\u0003\u00f8\u001f\u00f0\u0003\u00f8\u003e\u00f0\u0007\u007c\u003e\u00f0\u0007\u007c\u007c\u00c0\u0003\u003e\u00fc\u0000\u0000\u003f\u00f8\u0003\u00c0\u001f\u00f0\u000f\u00e0\u000f\u00e0\u00ff\u00fe\u0007\u00c0\u00ff\u00ff\u0003\u0000\u00ff\u00ff\u0000\u0000\u00fc\u003f\u0000";
 
     private static final String PROGRAMS_DIRECTORY = "/home/lejos/programs";
     private static final String SAMPLES_DIRECTORY = "/home/root/lejos/samples";
@@ -179,6 +181,8 @@ public class GraphicStartup implements Menu {
     public static GraphicStartup menu = new GraphicStartup();
 
     private static ORAhandler oraHandler = new ORAhandler();
+
+    private static String OPENROBERTAHEAD = " OR Lab";
 
     private static TextLCD lcd = LocalEV3.get().getTextLCD();
 
@@ -1475,7 +1479,7 @@ public class GraphicStartup implements Menu {
      */
     private void robertaMenu() {
         if ( ORAhandler.updated_without_restart == true ) {
-            newScreen(" Robertalab");
+            newScreen(OPENROBERTAHEAD);
             lcd.drawString("Firmware updated!", 0, 2);
             lcd.drawString("Please restart", 0, 4);
             lcd.drawString("the brick first!", 0, 5);
@@ -1484,7 +1488,7 @@ public class GraphicStartup implements Menu {
         }
         if ( ORAhandler.isRegistered() == false ) {
             if ( this.indiBA.getWifi() == false ) {
-                newScreen(" Robertalab");
+                newScreen(OPENROBERTAHEAD);
                 lcd.drawString("No Wifi connected!", 0, 2);
                 if ( getYesNo("    Continue?", false) == 1 ) {
                     // go on
@@ -1502,7 +1506,7 @@ public class GraphicStartup implements Menu {
                 oraHandler.startServerCommunicator(ip, token);
             }
 
-            newScreen(" Robertalab");
+            newScreen(OPENROBERTAHEAD);
             lcd.drawString("    Wating for", 0, 2);
             lcd.drawString("  registration...", 0, 3);
             lcd.drawString("     " + token, 0, 5);
@@ -1511,7 +1515,7 @@ public class GraphicStartup implements Menu {
                 int id = Button.waitForAnyEvent(500);
                 if ( ORAhandler.hasConnectionError() ) {
                     oraHandler.disconnect();
-                    newScreen(" Robertalab");
+                    newScreen(OPENROBERTAHEAD);
                     lcd.drawString("Unable to connect", 0, 2);
                     lcd.drawString(" to server! :-(", 0, 3);
                     lcd.drawString("Hint: Check Wifi?", 0, 5);
@@ -1520,15 +1524,26 @@ public class GraphicStartup implements Menu {
                     LocalEV3.get().getKeys().waitForAnyPress();
                     Delay.msDelay(1000);
                     return;
+                } else if ( ORAhandler.hasTimeout() ) {
+                    oraHandler.disconnect();
+                    newScreen(OPENROBERTAHEAD);
+                    lcd.drawString("     Timeout!", 0, 2);
+                    lcd.drawString("   Try again...", 0, 3);
+                    lcd.drawString(" (press any key)", 0, 5);
+                    LocalEV3.get().getAudio().systemSound(Sounds.BEEP);
+                    LocalEV3.get().getKeys().waitForAnyPress();
+                    Delay.msDelay(1000);
+                    return;
                 } else if ( id == Button.ID_ESCAPE ) {
-                    newScreen(" Robertalab");
+                    oraHandler.disconnect();
+                    newScreen(OPENROBERTAHEAD);
                     lcd.drawString("    Canceled!", 0, 3);
                     LocalEV3.get().getAudio().systemSound(Sounds.BEEP);
                     Delay.msDelay(2000);
                     return;
                 }
             }
-            newScreen(" Robertalab");
+            newScreen(OPENROBERTAHEAD);
             lcd.drawString("     Success!", 0, 3);
             LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
             Delay.msDelay(2000);
@@ -1701,21 +1716,21 @@ public class GraphicStartup implements Menu {
         GraphicMenu menu = new GraphicMenu(new String[] {
             "Disconnect", "Firmware Info"
         }, new String[] {
-            ICRoberta, ICRoberta
+            ICRoberta, ICRobertaInfo
         }, 3);
         int selected = 0;
         do {
-            newScreen(" Robertalab");
+            newScreen(OPENROBERTAHEAD);
             selected = getSelection(menu, selected);
             switch ( selected ) {
                 case 0:
-                    newScreen(" Robertalab");
+                    newScreen(OPENROBERTAHEAD);
                     if ( getYesNo("   Disconnect?", false) == 1 ) {
                         disconnect();
                         return;
                     }
                 case 1:
-                    newScreen(" Robertalab");
+                    newScreen(OPENROBERTAHEAD);
                     lcd.drawString("Open Roberta-", 0, 2);
                     lcd.drawString("Firmware", 0, 3);
                     lcd.drawString("version: " + oraVersion, 0, 5);
@@ -1727,7 +1742,7 @@ public class GraphicStartup implements Menu {
 
     private void disconnect() {
         oraHandler.disconnect();
-        newScreen(" Robertalab");
+        newScreen(OPENROBERTAHEAD);
         lcd.drawString("  Disconnected!", 0, 3);
         LocalEV3.get().getAudio().systemSound(Sounds.DESCENDING);
         Delay.msDelay(2000);
