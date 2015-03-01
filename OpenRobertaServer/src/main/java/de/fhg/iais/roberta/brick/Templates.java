@@ -137,6 +137,20 @@ public class Templates {
             + "          </block> " //
             + "        </value> "
             + "      </block> "
+            + "      <block type='robControls_wait_for'> "
+            + "        <value name='WAIT0'> "
+            + "          <block type='logic_compare'> "
+            + "            <value name='A'> "
+            + "              <block type='robSensors_getSample'> "
+            + "              </block> " //
+            + "            </value> "
+            + "            <value name='B'> "
+            + "              <block type='logic_boolean'> "
+            + "              </block> " //
+            + "            </value> "
+            + "          </block> " //
+            + "        </value> "
+            + "      </block> " //
             + "  </category> "
             + "  <category name='TOOLBOX_LOGIC'> "
             + "    <block type='logic_compare'/> "

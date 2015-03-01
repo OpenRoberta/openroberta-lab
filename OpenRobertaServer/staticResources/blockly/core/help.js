@@ -32,7 +32,7 @@ Blockly.Help.prototype.animation_ = '';
  * 
  * @private
  */
-Blockly.Help.prototype.width_ = 0;
+Blockly.Help.prototype.width_ = 300;
 
 /**
  * Height of bubble.
@@ -122,7 +122,7 @@ Blockly.Help.prototype.setVisible = function(visible) {
     var content = this.createContent_();
     if (visible) {
         // Create the bubble.
-        this.bubble_ = new Blockly.Bubble(this.block_.workspace, this.createContent_(), this.block_.svg_.svgPath_, this.iconX_, this.iconY_, this.width_,
+        this.bubble_ = new Blockly.Bubble(this.block_.workspace, content, this.block_.svg_.svgPath_, this.iconX_, this.iconY_, this.width_,
                 this.height_);
         this.bubble_.registerResizeEvent(this, this.resizeBubble_);
         this.updateColour();
@@ -194,7 +194,7 @@ Blockly.Help.prototype.getText = function() {
 };
 
 /**
- * . Set this help's text.
+ * Set this help's text.
  * 
  * @param {string}
  *            text Help text.
@@ -208,7 +208,7 @@ Blockly.Help.prototype.setText = function(text) {
 };
 
 /**
- * . Set this help's text.
+ * Set this help's text.
  * 
  * @param {string}
  *            text Help text.
@@ -216,8 +216,7 @@ Blockly.Help.prototype.setText = function(text) {
 Blockly.Help.prototype.setAnimation = function(animation) {
     if (animation) {
         this.animation_ = Blockly.pathToBlockly + 'media/' + animation;
-        this.width_ = 300;
     } else {
-        this.width_ = 250;
+        this.animation_ = Blockly.pathToBlockly + 'media/DUMMY.gif';
     }
 };

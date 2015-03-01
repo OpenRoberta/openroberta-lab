@@ -372,25 +372,27 @@ Blockly.onMouseDown_ = function(e) {
     if (e.target == Blockly.svg && Blockly.isRightButton(e)) {
         // Right-click.
         Blockly.showContextMenu_(e);
-    } else if ((Blockly.readOnly || isTargetSvg) && Blockly.mainWorkspace.scrollbar) {
-        // If the workspace is editable, only allow dragging when gripping empty
-        // space. Otherwise, allow dragging when gripping anywhere.
-        Blockly.mainWorkspace.dragMode = true;
-        // Record the current mouse position.
-        Blockly.mainWorkspace.startDragMouseX = e.clientX;
-        Blockly.mainWorkspace.startDragMouseY = e.clientY;
-        Blockly.mainWorkspace.startDragMetrics = Blockly.mainWorkspace.getMetrics();
-        Blockly.mainWorkspace.startScrollX = Blockly.mainWorkspace.scrollX;
-        Blockly.mainWorkspace.startScrollY = Blockly.mainWorkspace.scrollY;
+    } else if ((Blockly.readOnly || isTargetSvg)) {
+        if (Blockly.mainWorkspace.scrollbar) {
+            // If the workspace is editable, only allow dragging when gripping empty
+            // space. Otherwise, allow dragging when gripping anywhere.
+            Blockly.mainWorkspace.dragMode = true;
+            // Record the current mouse position.
+            Blockly.mainWorkspace.startDragMouseX = e.clientX;
+            Blockly.mainWorkspace.startDragMouseY = e.clientY;
+            Blockly.mainWorkspace.startDragMetrics = Blockly.mainWorkspace.getMetrics();
+            Blockly.mainWorkspace.startScrollX = Blockly.mainWorkspace.scrollX;
+            Blockly.mainWorkspace.startScrollY = Blockly.mainWorkspace.scrollY;
 
-        // If this is a touch event then bind to the mouseup so workspace drag mode
-        // is turned off and double move events are not performed on a block.
-        // See comment in inject.js Blockly.init_ as to why mouseup events are
-        // bound to the document instead of the SVG's surface.
-        if ('mouseup' in Blockly.bindEvent_.TOUCH_MAP) {
-            Blockly.onTouchUpWrapper_ = Blockly.bindEvent_(document, 'mouseup', null, Blockly.onMouseUp_);
+            // If this is a touch event then bind to the mouseup so workspace drag mode
+            // is turned off and double move events are not performed on a block.
+            // See comment in inject.js Blockly.init_ as to why mouseup events are
+            // bound to the document instead of the SVG's surface.
+            if ('mouseup' in Blockly.bindEvent_.TOUCH_MAP) {
+                Blockly.onTouchUpWrapper_ = Blockly.bindEvent_(document, 'mouseup', null, Blockly.onMouseUp_);
+            }
+            Blockly.onMouseMoveWrapper_ = Blockly.bindEvent_(document, 'mousemove', null, Blockly.onMouseMove_);
         }
-        Blockly.onMouseMoveWrapper_ = Blockly.bindEvent_(document, 'mousemove', null, Blockly.onMouseMove_);
         // Close all bubbles with a click on the document
         var topBlocks = Blockly.getMainWorkspace().getTopBlocks(false);
         for (var i = 0; i < topBlocks.length; i++) {

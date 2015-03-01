@@ -116,12 +116,12 @@ Blockly.Tooltip.svgBackground_ = null;
 /**
  * Horizontal offset between mouse cursor and tooltip.
  */
-Blockly.Tooltip.OFFSET_X = 0;
+Blockly.Tooltip.OFFSET_X = 15;
 
 /**
  * Vertical offset between mouse cursor and tooltip.
  */
-Blockly.Tooltip.OFFSET_Y = 10;
+Blockly.Tooltip.OFFSET_Y = -10;
 
 /**
  * Radius mouse can move before killing tooltip.
@@ -131,12 +131,12 @@ Blockly.Tooltip.RADIUS_OK = 10;
 /**
  * Delay before tooltip appears.
  */
-Blockly.Tooltip.HOVER_MS = 1000;
+Blockly.Tooltip.HOVER_MS = 500;
 
 /**
  * Horizontal padding between text and background.
  */
-Blockly.Tooltip.MARGINS = 5;
+Blockly.Tooltip.MARGINS = 8;
 
 /**
  * Create the tooltip elements. Only needs to be called once.
@@ -153,16 +153,13 @@ Blockly.Tooltip.createDom = function() {
         //'class' : 'blocklyHidden'
     }, null);
     Blockly.Tooltip.svgGroup_ = svgGroup;
-    var tooltipFilter = Blockly.createSvgElement('g', {
-        'filter' : 'url(#blocklyShadowFilter)'
-    }, svgGroup);
     Blockly.Tooltip.svgBackground_ = Blockly.createSvgElement('rect', {
         'class' : 'blocklyTooltipBackground',
         'x' : 2,
         'y' : 2,
         'rx' : Blockly.BlockSvg.CORNER_RADIUS,
         'ry' : Blockly.BlockSvg.CORNER_RADIUS
-    }, tooltipFilter);
+    }, svgGroup);
     Blockly.Tooltip.svgText_ = Blockly.createSvgElement('text', {
         'x' : 2,
         'y' : 4,

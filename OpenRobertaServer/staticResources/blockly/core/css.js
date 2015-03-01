@@ -115,9 +115,9 @@ Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 
 
         '.blocklyFieldDropdown:not(.blocklyHidden) {', '  display: block;', '}',
 
-        '.blocklyTooltipBackground {', '  fill: #333;', '  stroke-width: 1px;', '  stroke: #666;', '}', //,fill: #FFEA81;', '  stroke-width: 1px;', '  stroke: #FFDC00;', '}',
+        '.blocklyTooltipBackground {', '  fill: #333;', '  fill-opacity: 0.9;', '}', //,fill: #FFEA81;', '  stroke-width: 1px;', '  stroke: #FFDC00;', '}',
 
-        '.blocklyTooltipShadow,', '.blocklyDropdownMenuShadow {', '  fill: #bbb;', '  filter: url(#blocklyShadowFilter);', '}',
+//        '.blocklyTooltipShadow,', '.blocklyDropdownMenuShadow {', '  fill: #bbb;', '  filter: url(#blocklyShadowFilter);', '}',
 
         '.blocklyTooltipText {', '  font-family: sans-serif;', '  font-size: 10pt;', '  fill: #fff;', '}',
 

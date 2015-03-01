@@ -246,8 +246,12 @@ html, body {
 }
 
 /***** BEGIN Overwrite Bootstrap-CSS *****/
-.tooltip>.tooltip-inner {
+
+.tooltip.right > .tooltip-inner  {
     background-color: #333;
+}
+.tooltip.right > .tooltip-arrow {
+    border-right-color: #333;
 }
 
 .sr-only {

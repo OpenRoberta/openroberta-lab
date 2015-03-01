@@ -151,6 +151,45 @@ function updateFirmware() {
 }
 
 /**
+ * Show user info
+ */
+function showUserInfo() {
+    if (userState.id != -1) {
+        $("#popup_username").text(Blockly.Msg["POPUP_USERNAME"] + ": ");
+        $("#loggedIn").text(userState.name);
+    } else {
+        $("#popup_username").text(Blockly.Msg["POPUP_USERNAME_LOGOFF"]);
+    }
+    $("#programName").text(userState.program);
+    $("#configurationName").text(userState.configuration);
+    if (userState.toolbox === 'beginner') {
+        $("#toolbox").text(Blockly.Msg["MENU_BEGINNER"]);
+    } else {
+        $("#toolbox").text(Blockly.Msg["MENU_EXPERT"]);
+    }
+    $("#show-state-info").modal("show");
+}
+
+/**
+ * Show robot info
+ */
+function showRobotInfo() {
+    if (userState['robot.name']) {
+        $("#robotName").text(userState['robot.name']);
+        $("#robotState").text(userState['robot.state']);
+        $("#robotBattery").text(userState['robot.battery']);
+        if (robot.wait < 1000) {
+            $("#robotWait").text(userState['robot.wait'] + 'ms');
+        } else {
+            $("#robotWait").text(userState['robot.wait'].toFixed(1) + 's');
+        }
+        $("#show-robot-info").modal("show");
+    } else {
+        displayMessage("ORA_ROBOT_NOT_CONNECTED", "POPUP", "");
+    }
+}
+
+/**
  * Inject Blockly with initial toolbox
  * 
  * @param {response}
@@ -1010,11 +1049,7 @@ function initHeadNavigation() {
         } else if (domId === 'menuFirmware') { // Submenu 'Robot'
             updateFirmware();
         } else if (domId === 'menuRobotInfo') { // Submenu 'Robot'
-            $("#robotName").text(userState['robot.name']);
-            $("#robotState").text(userState['robot.state']);
-            $("#robotBattery").text(userState['robot.battery']);
-            $("#robotWait").text(userState['robot.wait']);
-            $("#show-robot-info").modal("show");
+            showRobotInfo();
         } else if (domId === 'menuGeneral') { // Submenu 'Help'
             window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/BIAM");
         } else if (domId === 'menuEV3conf') { // Submenu 'Help'
@@ -1026,11 +1061,7 @@ function initHeadNavigation() {
         } else if (domId === 'menuShowAgain') { // Submenu 'Help'
             $("#show-startup-message").modal("show");
         } else if (domId === 'menuStateInfo') { // Submenu 'Help'
-            $("#loggedIn").text(userState.name);
-            $("#programName").text(userState.program);
-            $("#configurationName").text(userState.configuration);
-            $("#toolbox").text(userState.toolbox);
-            $("#show-state-info").modal("show");
+            showUserInfo();
         } else if (domId === 'menuAbout') { // Submenu 'Help'
             $("#version").text(userState.version);
             $("#show-about").modal("show");
@@ -1079,20 +1110,12 @@ function initHeadNavigation() {
     }, 'beta logo was clicked');
 
     $('#iconDisplayLogin').onWrap('click', function() {
-        $("#loggedIn").text(userState.name);
-        $("#programName").text(userState.program);
-        $("#configurationName").text(userState.configuration);
-        $("#toolbox").text(userState.toolbox);
-        $("#show-state-info").modal("show");
-    }, 'icon user was clicked');
+        showUserInfo();
+    }, 'icon user click');
 
     $('#iconDisplayRobotState').onWrap('click', function() {
-        $("#robotName").text(userState['robot.name']);
-        $("#robotState").text(userState['robot.state']);
-        $("#robotBattery").text(userState['robot.battery']);
-        $("#robotWait").text(userState['robot.wait']);
-        $("#show-robot-info").modal("show");
-    }, 'icon robot was clicked');
+        showRobotInfo();
+    }, 'icon robot click');
 
     $('#tabProgram').onWrap('click', function() {
         activateProgConfigMenu();
@@ -1383,7 +1406,6 @@ function translate(jsdata) {
             $('#iconDisplayLogin').attr('data-original-title', value).tooltip('fixTitle');
         } else if (lkey === 'Blockly.Msg.MENU_TITLE_ROBOT_STATE') {
             $('#iconDisplayRobotState').attr('data-original-title', value).tooltip('fixTitle');
-
         } else {
             $(this).html(value);
         }
