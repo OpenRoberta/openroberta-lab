@@ -156,10 +156,22 @@ public class Util {
                 if ( token != null ) {
                     BrickCommunicationData state = brickCommunicator.getState(token);
                     if ( state != null ) {
-                        response.put("robot.wait", state.getElapsedMsecOfStartOfLastRequest());
+                        long elapsedMsecOfStartOfLastRequest = state.getElapsedMsecOfStartOfLastRequest();
+                        response.put("robot.wait", elapsedMsecOfStartOfLastRequest);
                         response.put("robot.battery", state.getBattery());
                         response.put("robot.name", state.getRobotName());
-                        response.put("robot.state", state.getState() == State.BRICK_IS_BUSY ? "busy" : "wait");
+                        State communicationState = state.getState();
+                        String infoAboutState;
+                        if ( communicationState == State.BRICK_IS_BUSY ) {
+                            infoAboutState = "busy";
+                        } else if ( communicationState == State.WAIT_FOR_PUSH_CMD_FROM_BRICK && elapsedMsecOfStartOfLastRequest > 5000 ) {
+                            infoAboutState = "disconnected";
+                        } else if ( communicationState == State.BRICK_WAITING_FOR_PUSH_FROM_SERVER ) {
+                            infoAboutState = "wait";
+                        } else {
+                            infoAboutState = "wait"; // is there a need to distinguish the communication state more detailed?
+                        }
+                        response.put("robot.state", infoAboutState);
                     }
                 }
             }

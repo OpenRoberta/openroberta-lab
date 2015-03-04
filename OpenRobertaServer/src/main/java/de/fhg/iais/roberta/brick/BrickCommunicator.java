@@ -44,12 +44,12 @@ public class BrickCommunicator {
             BrickCommunicationData storedState = this.allStates.get(storedToken);
             if ( robotIdentificator.equals(storedState.getRobotIdentificator()) ) {
                 LOG.error("Token approval request for robotId " + robotIdentificator + ", but an old request is pending. Old request aborted.");
-                storedState.terminatePushAndRequestNextPush(); // notifyAll() executed
-                this.allStates.remove(storedState);
+                storedState.abortPush(); // notifyAll() executed
+                this.allStates.remove(storedToken);
             }
         }
         this.allStates.put(token, registration);
-        return registration.brickTokenAgreementRequest(); // notifyAll() awaited for
+        return registration.brickTokenAgreementRequest(); // this will freeze the request until another issues a notifyAll()
     }
 
     public String brickWaitsForAServerPush(String token) {
@@ -66,12 +66,12 @@ public class BrickCommunicator {
     public boolean aTokenAgreementWasSent(String token) {
         BrickCommunicationData state = this.allStates.get(token);
         if ( state == null ) {
-            LOG.info("token " + token + " is not waited for. Typo error of the user?");
+            LOG.info("token " + token + " is not waited for. Typing error of the user?");
             return false;
         } else {
             // todo: version check!
             state.userApprovedTheBrickToken();
-            LOG.info("token " + token + " is approved ba a user.");
+            LOG.info("token " + token + " is approved by a user.");
             return true;
         }
     }

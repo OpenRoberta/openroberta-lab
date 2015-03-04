@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.util.Clock;
  * until the user has issued a run command in the browser. This unfreezes the thread and the already generated jar is copied to the brick.<br>
  * <br>
  * TODO: This implementation is resource intensive as it freezes an expensive resource, namely a thread. It should be replaced later by async technology.
- * 
+ *
  * @author rbudde
  */
 public class BrickCommunicationData {
@@ -48,7 +48,7 @@ public class BrickCommunicationData {
 
     /**
      * method called from a thread, which is triggered by a BRICK request. This method blocks until the user has approved the brick token or a timeout occurs.
-     * 
+     *
      * @return true, if user approved the token; false otherwise
      */
     public synchronized boolean brickTokenAgreementRequest() {
@@ -62,21 +62,25 @@ public class BrickCommunicationData {
                 // try again
             }
         }
-        boolean success = this.state != State.WAIT_FOR_TOKENAPPROVAL_FROM_USER;
-        LOG.info("BRICK request for token approval terminated. Time elapsed: " + this.clock.elapsedMsec() + ", success: " + success);
+        boolean success = this.state == State.TOKEN_APPROVED;
+        if ( success ) {
+            this.state = State.WAIT_FOR_PUSH_CMD_FROM_BRICK;
+            LOG.info("Robot request for token approval terminated SUCCESSFULLY. Time elapsed: " + this.clock.elapsedMsec());
+        } else {
+            this.state = State.GARBAGE;
+            LOG.info("Robot request for token approval FAILED. Time elapsed: " + this.clock.elapsedMsec());
+        }
         return success;
     }
 
     /**
      * method called from a server thread. This method terminates immediately and wakes up the thread, which runs on behalf of a token approval request
-     * from the brick token.
-     * 
-     * @return true, if user approved the token; false otherwise
+     * from the robot.
      */
     public synchronized void userApprovedTheBrickToken() {
         if ( this.state == State.WAIT_FOR_TOKENAPPROVAL_FROM_USER ) {
             LOG.info("user approved the token. The approval request was scheduled " + this.clock.elapsedSecFormatted() + " ago");
-            this.state = State.WAIT_FOR_PUSH_CMD_FROM_BRICK;
+            this.state = State.TOKEN_APPROVED;
             this.clock = Clock.start();
             notifyAll();
         } else {
@@ -87,7 +91,7 @@ public class BrickCommunicationData {
     /**
      * method called from a thread, which is triggered by a BRICK push command request. This method blocks until either the server issues a push command or
      * a timer thread triggers a timeout.
-     * 
+     *
      * @return true, if user approved the token; false otherwise
      */
     public synchronized void brickHasSentAPushRequest() {
@@ -111,6 +115,16 @@ public class BrickCommunicationData {
     }
 
     /**
+     * this object is outdated. This method is called to abort an eventually pending request from a robot should be aborted.
+     * The notifyAll is for that. This object will be removed from
+     * the map holding all valid robot-server connection. The state is set to GARBAGE to express that.
+     */
+    public synchronized void abortPush() {
+        this.state = State.GARBAGE;
+        notifyAll();
+    }
+
+    /**
      * method called from a timer thread. This method terminates immediately an wakes up a waiting thread, which runs on behalf of a push command from the
      * brick.
      */
@@ -126,7 +140,7 @@ public class BrickCommunicationData {
     /**
      * method called from a server thread. This method terminates immediately (if the brick waits for a push command) or after 1 sec (if we expect a push
      * command in the very near future. It wakes up the thread, which runs on behalf of a push command request from the brick.
-     * 
+     *
      * @return true, if the robot was waiting for a "run" command, false otherwise
      */
     public synchronized boolean runButtonPressed(String programName) {
@@ -147,7 +161,7 @@ public class BrickCommunicationData {
     /**
      * method called from a server thread. This method terminates immediately (if the brick waits for a push command) or after 1 sec (if we expect a push
      * command in the very near future. It wakes up the thread, which runs on behalf of a push command request from the brick.
-     * 
+     *
      * @return the state of the brick
      */
     public synchronized boolean firmwareUpdate() {
@@ -212,9 +226,9 @@ public class BrickCommunicationData {
     }
 
     /**
-     * the four states of communication between the brick and the browser client.
+     * the states of communication between the brick and the browser client.
      */
     public enum State {
-        WAIT_FOR_TOKENAPPROVAL_FROM_USER, WAIT_FOR_PUSH_CMD_FROM_BRICK, BRICK_WAITING_FOR_PUSH_FROM_SERVER, BRICK_IS_BUSY;
+        WAIT_FOR_TOKENAPPROVAL_FROM_USER, TOKEN_APPROVED, WAIT_FOR_PUSH_CMD_FROM_BRICK, BRICK_WAITING_FOR_PUSH_FROM_SERVER, BRICK_IS_BUSY, GARBAGE;
     }
 }
