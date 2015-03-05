@@ -21,11 +21,11 @@ function initUserState() {
     userState.toolbox = 'beginner';
     userState.token = '1A2B3C4D';
     userState.doPing = true;
-    userState['robot.name'] = '';
-    userState['robot.state'] = '';
-    userState['robot.battery'] = '';
-    userState['robot.wait'] = '';
-    userState['robot.firmware'] = '';
+    userState.robotName = '';
+    userState.robotState = '';
+    userState.robotBattery = '';
+    userState.robotWait = '';
+    userState.robotFirmware = '';
 }
 
 /**
@@ -142,7 +142,7 @@ function updateFirmware() {
     }, function(response) {
         if (response.rc === "ok") {
             setRobotState(response);
-            displayMessage(Blockly.Msg.MESSAGE_ROBOT_CONNECTED, "TOAST", userState['robot.firmware']);
+            displayMessage(Blockly.Msg.MESSAGE_ROBOT_CONNECTED, "TOAST", userState.robotFirmware);
             $('.modal').modal('hide'); // close all opened popups
         } else {
             displayMessage(response.message, "POPUP", "");
@@ -174,14 +174,15 @@ function showUserInfo() {
  * Show robot info
  */
 function showRobotInfo() {
-    if (userState['robot.name']) {
-        $("#robotName").text(userState['robot.name']);
-        $("#robotState").text(userState['robot.state']);
-        $("#robotBattery").text(userState['robot.battery']);
-        if (robot.wait < 1000) {
-            $("#robotWait").text(userState['robot.wait'] + 'ms');
+    if (userState.robotName) {
+        $("#robotName").text(userState.robotName);
+        $("#robotState").text(userState.robotState);
+        $("#robotBattery").text(userState.robotBattery);
+        var robotWait = parseInt(userState.robotWait);
+        if (robotWait < 1000) {
+            $("#robotWait").text(robotWait + ' ms');
         } else {
-            $("#robotWait").text(userState['robot.wait'].toFixed(1) + 's');
+            $("#robotWait").text(Math.round(robotWait / 1000) + ' s');
         }
         $("#show-robot-info").modal("show");
     } else {
@@ -263,7 +264,7 @@ function setToken(token) {
         if (response.rc === "ok") {
             userState.token = resToken;
             setRobotState(response);
-            displayMessage(Blockly.Msg.MESSAGE_ROBOT_CONNECTED, "TOAST", userState['robot.name']);
+            displayMessage(Blockly.Msg.MESSAGE_ROBOT_CONNECTED, "TOAST", userState.robotName);
             $('.modal').modal('hide'); // close all opened popups
         } else {
             displayMessage(response.message, "POPUP", "");
@@ -450,9 +451,9 @@ function saveConfigurationToServer() {
  * Run program
  */
 function runOnBrick() {
-    if (userState['robot.state'] === '') {
+    if (userState.robotState === '') {
         displayMessage("POPUP_ROBOT_NOT_CONNECTED", "POPUP", "");
-    } else if (userState['robot.state'] === 'busy') {
+    } else if (userState.robotState === 'busy') {
         displayMessage("POPUP_ROBOT_BUSY", "POPUP", "");
     } else {
         LOG.info('run ' + userState.program + ' signed in: ' + userState.id);
@@ -950,12 +951,12 @@ function displayState() {
         $('#iconDisplayLogin').addClass('error');
     }
 
-    if (userState['robot.state'] === 'wait') {
+    if (userState.robotState === 'wait') {
         $('#iconDisplayRobotState').removeClass('error');
         $('#iconDisplayRobotState').removeClass('busy');
         $('#iconDisplayRobotState').removeClass('wait');
         $('#iconDisplayRobotState').addClass('ok');
-    } else if (userState['robot.state'] === 'busy') {
+    } else if (userState.robotState === 'busy') {
         $('#iconDisplayRobotState').removeClass('ok');
         $('#iconDisplayRobotState').removeClass('wait');
         $('#iconDisplayRobotState').removeClass('error');
@@ -1307,27 +1308,27 @@ function setRobotState(response) {
     }
 
     if (response['robot.wait'] != undefined) {
-        userState['robot.wait'] = response['robot.wait'];
+        userState.robotWait = response['robot.wait'];
     } else {
-        userState['robot.wait'] = '';
+        userState.robotWait = '';
     }
 
     if (response['robot.battery'] != undefined) {
-        userState['robot.battery'] = response['robot.battery'];
+        userState.robotBattery = response['robot.battery'];
     } else {
-        userState['robot.battery'] = '';
+        userState.robotBattery = '';
     }
 
     if (response['robot.name'] != undefined) {
-        userState['robot.name'] = response['robot.name'];
+        userState.robotName = response['robot.name'];
     } else {
-        userState['robot.name'] = '';
+        userState.robotName = '';
     }
 
     if (response['robot.state'] != undefined) {
-        userState['robot.state'] = response['robot.state'];
+        userState.robotState = response['robot.state'];
     } else {
-        userState['robot.state'] = '';
+        userState.robotState = '';
     }
 
     displayState();
