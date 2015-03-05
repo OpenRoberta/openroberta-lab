@@ -45,13 +45,15 @@ Blockly.Css.inject = function() {
 /**
  * Array making up the CSS content for Blockly.
  */
-Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 'stroke-linecap: round;', '}',
+Blockly.Css.CONTENT = [ '.blocklyForeign {', 'position: relative;', 'z-index: 0;', '}',
+
+'.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 'stroke-linecap: round;', '}',
 
 '.blocklyButtonPathDisabled {', 'fill: #bbb;', 'stroke: #bbb;', 'stroke-linecap: round;', '}',
 
-'.blocklyButtonHoverPath {', 'fill: #333;', 'stroke: #333;', 'stroke-linecap: round;', '}',
+'.blocklyButtonHoverPath {', 'fill: #333;', 'stroke: #333;', 'stroke-linecap: round;', 'cursor: pointer;', '}',
 
-'.blocklyButtonHoverBack {', 'fill:  #B7D032;', '}',
+'.blocklyButtonHoverBack {', 'fill:  #B7D032;', 'cursor: pointer;', '}',
 
 '.blocklyButtonBack {', 'fill: #fff;', '}',
 
@@ -137,9 +139,10 @@ Blockly.Css.CONTENT = [ '.blocklyButtonPath {', 'fill: #333;', 'stroke: #333;', 
 
         '.blocklyMinimalBody {', '  margin: 0;', '  padding: 0;', '}',
 
-        '.blocklyCommentTextarea {', '  margin: 0;', '  padding: 2px;', '  border: 0;', '  resize: none;', '}', '.blocklyHelpDiv {', '  padding: 2px;',
-        '  border: 0;', '  resize: none;', 'font-size: 11pt;', '}', 'textarea {', '  border: none;', ' margin: 0;', '  padding: 2px;', '  border: 0;',
-        '  resize: none;', '}', 'textarea:focus {', '  border: none;', ' margin: 0;', '  padding: 2px;', '  border: 0;', '  resize: none;', '}',
+        '.blocklyCommentTextarea {', '  margin: 0;', '  padding: 2px;', '  border: 0;', '  resize: none;', '}', //
+        '.blocklyHelpDiv {', '  padding: 2px;', '  border: 0;', '  resize: none;', 'font-size: 11pt;', '}', //
+        'textarea {', '  border: none;', ' margin: 0;', '  padding: 2px;', '  border: 0;', '  resize: none;', '}', 'textarea:focus {', '  border: none;',
+        ' margin: 0;', '  padding: 2px;', '  border: 0;', '  resize: none;', '}',
 
         '.blocklyHtmlInput {', '  font-family: sans-serif;', '  font-size: 10pt;', '  border: none;', '  outline: none;', '  width: 100%', '}',
 

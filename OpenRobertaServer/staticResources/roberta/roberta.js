@@ -177,7 +177,11 @@ function showRobotInfo() {
     if (userState.robotName) {
         $("#robotName").text(userState.robotName);
         $("#robotState").text(userState.robotState);
-        $("#robotBattery").text(userState.robotBattery);
+        if (userState.language == 'EN') {
+            $("#robotBattery").text(userState.robotBattery + ' V');
+        } else {
+            $("#robotBattery").text(userState.robotBattery.toString().replace(".", ",") + ' V');
+        }
         var robotWait = parseInt(userState.robotWait);
         if (robotWait < 1000) {
             $("#robotWait").text(robotWait + ' ms');

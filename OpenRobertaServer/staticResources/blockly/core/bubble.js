@@ -217,17 +217,17 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
      * y2="10"/> </g> [...content goes here...] </g>
      */
     this.bubbleGroup_ = Blockly.createSvgElement('g', {}, null);
-    var bubbleFilter = Blockly.createSvgElement('g', {
-        'filter' : 'url(#blocklyShadowFilter)'
-    }, this.bubbleGroup_);
-    this.bubbleArrow_ = Blockly.createSvgElement('path', {}, bubbleFilter);
+//    var bubbleFilter = Blockly.createSvgElement('g', {
+//        'filter' : 'url(#blocklyShadowFilter)'
+//    }, this.bubbleGroup_);
+    this.bubbleArrow_ = Blockly.createSvgElement('path', {}, this.bubbleGroup_);
     this.bubbleBack_ = Blockly.createSvgElement('rect', {
         'class' : 'blocklyDraggable',
         'x' : 0,
         'y' : 0,
         'rx' : Blockly.BlockSvg.CORNER_RADIUS,
         'ry' : Blockly.BlockSvg.CORNER_RADIUS
-    }, bubbleFilter);
+    }, this.bubbleGroup_);
     if (hasResize) {
         this.resizeGroup_ = Blockly.createSvgElement('g', {
             'class' : Blockly.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE'
@@ -600,9 +600,11 @@ Blockly.Bubble.prototype.renderArrow_ = function() {
  */
 Blockly.Bubble.prototype.setColour = function(hexColour) {
     this.bubbleBack_.setAttribute('fill', '#fff');
-    this.bubbleBack_.setAttribute('stroke', hexColour);
+    this.bubbleBack_.setAttribute('stroke', '#333');
+    this.bubbleBack_.setAttribute('stroke-opacity', 0.9);
     this.bubbleBack_.setAttribute('stroke-width', Blockly.Bubble.BORDER_WIDTH);
-    this.bubbleArrow_.setAttribute('fill', hexColour);
+    this.bubbleArrow_.setAttribute('fill', '#333');
+    this.bubbleArrow_.setAttribute('fill-opacity', 0.9);
 };
 
 /**

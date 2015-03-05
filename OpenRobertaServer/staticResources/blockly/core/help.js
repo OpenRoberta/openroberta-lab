@@ -72,7 +72,8 @@ Blockly.Help.prototype.createIcon = function() {
 Blockly.Help.prototype.createContent_ = function() {
     this.foreignObject_ = Blockly.createSvgElement('foreignObject', {
         'x' : Blockly.Bubble.BORDER_WIDTH,
-        'y' : Blockly.Bubble.BORDER_WIDTH
+        'y' : Blockly.Bubble.BORDER_WIDTH,
+        'class': 'blocklyForeign'
     }, null);
     var body = document.createElementNS(Blockly.HTML_NS, 'body');
     body.setAttribute('xmlns', Blockly.HTML_NS);
