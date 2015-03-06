@@ -925,25 +925,16 @@ function displayState() {
         $('#iconDisplayRobotState').removeClass('error');
         $('#iconDisplayRobotState').removeClass('busy');
         $('#iconDisplayRobotState').removeClass('wait');
-        $('#iconDisplayRobotState').removeClass('disconnected');
         $('#iconDisplayRobotState').addClass('ok');
     } else if (userState.robotState === 'busy') {
         $('#iconDisplayRobotState').removeClass('ok');
         $('#iconDisplayRobotState').removeClass('wait');
         $('#iconDisplayRobotState').removeClass('error');
-        $('#iconDisplayRobotState').removeClass('disconnected');
         $('#iconDisplayRobotState').addClass('busy');
-    } else if (userState.robotState === 'disconnected') {
-        $('#iconDisplayRobotState').removeClass('ok');
-        $('#iconDisplayRobotState').removeClass('wait');
-        $('#iconDisplayRobotState').removeClass('error');
-        $('#iconDisplayRobotState').removeClass('busy');
-        $('#iconDisplayRobotState').addClass('disconnected');
     } else {
         $('#iconDisplayRobotState').removeClass('busy');
         $('#iconDisplayRobotState').removeClass('wait');
         $('#iconDisplayRobotState').removeClass('ok');
-        $('#iconDisplayRobotState').removeClass('disconnected');
         $('#iconDisplayRobotState').addClass('error');
     }
 
