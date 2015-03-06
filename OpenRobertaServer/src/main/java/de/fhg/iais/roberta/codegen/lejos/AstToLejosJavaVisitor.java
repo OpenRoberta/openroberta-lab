@@ -195,7 +195,13 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitNumConst(NumConst<Void> numConst) {
-        this.sb.append(numConst.getValue());
+        if ( isInteger(numConst.getValue()) ) {
+            this.sb.append(numConst.getValue());
+        } else {
+            this.sb.append("((float) ");
+            this.sb.append(numConst.getValue());
+            this.sb.append(")");
+        }
         return null;
     }
 
@@ -1369,4 +1375,14 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         }
         return null;
     }
+
+    private static boolean isInteger(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch ( NumberFormatException e ) {
+            return false;
+        }
+    }
+
 }

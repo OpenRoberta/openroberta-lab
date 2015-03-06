@@ -22,7 +22,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
  */
 public class BlocklyMethods {
 
-    public static final double GOLDEN_RATIO = (1.0 + Math.sqrt(5.0)) / 2.0;
+    public static final float GOLDEN_RATIO = (float) ((1.0 + Math.sqrt(5.0)) / 2.0);
 
     /**
      * Check if numbers is even.
@@ -30,7 +30,7 @@ public class BlocklyMethods {
      * @param number to be check
      * @return true if number is even
      */
-    public static boolean isEven(double number) {
+    public static boolean isEven(float number) {
         return (number % 2 == 0);
     }
 
@@ -40,7 +40,7 @@ public class BlocklyMethods {
      * @param number to be checked
      * @return true if number is odd
      */
-    public static boolean isOdd(double number) {
+    public static boolean isOdd(float number) {
         return (number % 2 == 1);
     }
 
@@ -50,7 +50,7 @@ public class BlocklyMethods {
      * @param number to be checked
      * @return true if number is prime
      */
-    public static boolean isPrime(double number) {
+    public static boolean isPrime(float number) {
         for ( int i = 2; i <= Math.sqrt(number); i++ ) {
             double remainder = number % i;
             if ( remainder == 0 ) {
@@ -66,7 +66,7 @@ public class BlocklyMethods {
      * @param number to be checked
      * @return true if is integer
      */
-    public static boolean isWhole(double number) {
+    public static boolean isWhole(float number) {
         return number % 1 == 0;
     }
 
@@ -76,7 +76,7 @@ public class BlocklyMethods {
      * @param number to be checked
      * @return true if number is positive
      */
-    public static boolean isPositive(double number) {
+    public static boolean isPositive(float number) {
         return number > 0;
     }
 
@@ -86,7 +86,7 @@ public class BlocklyMethods {
      * @param number to be checked
      * @return true if number is negative
      */
-    public static boolean isNegative(double number) {
+    public static boolean isNegative(float number) {
         return number < 0;
     }
 
@@ -97,7 +97,7 @@ public class BlocklyMethods {
      * @param divisor
      * @return true if is divisible by <i>divisor</i>
      */
-    public static boolean isDivisibleBy(double number, double divisor) {
+    public static boolean isDivisibleBy(float number, float divisor) {
         return number % divisor == 0;
     }
 
@@ -108,7 +108,7 @@ public class BlocklyMethods {
      * @param divisor
      * @return remainder of the division
      */
-    public static double remainderOf(double divident, double divisor) {
+    public static float remainderOf(float divident, float divisor) {
         return divident % divisor;
     }
 
@@ -124,7 +124,7 @@ public class BlocklyMethods {
      * @param max
      * @return
      */
-    public static double clamp(double x, double min, double max) {
+    public static float clamp(float x, float min, float max) {
         return Math.min(Math.max(x, min), max);
     }
 
@@ -135,9 +135,9 @@ public class BlocklyMethods {
      * @param max
      * @return random integer
      */
-    public static double randInt(double min, double max) {
+    public static float randInt(float min, float max) {
         if ( min > max ) {
-            double c = min;
+            float c = min;
             min = max;
             max = c;
         }
@@ -150,9 +150,9 @@ public class BlocklyMethods {
     /**
      * @return random double number
      */
-    public static double randDouble() {
+    public static float randDouble() {
         Random rand = new Random();
-        return rand.nextDouble();
+        return rand.nextFloat();
     }
 
     /**
@@ -208,7 +208,7 @@ public class BlocklyMethods {
      * @param times that the item should be added to the list
      * @return {@link ArrayList} with the given elements
      */
-    public static ArrayList<Float> createListWithItem(Float item, int times) {
+    public static ArrayList<Float> createListWithItem(Float item, float times) {
         ArrayList<Float> result = new ArrayList<Float>();
         for ( int i = 0; i < times; i++ ) {
             result.add(item);
@@ -223,7 +223,7 @@ public class BlocklyMethods {
      * @param times that the item should be added to the list
      * @return {@link ArrayList} with the given elements
      */
-    public static ArrayList<Boolean> createListWithItem(Boolean item, int times) {
+    public static ArrayList<Boolean> createListWithItem(Boolean item, float times) {
         ArrayList<Boolean> result = new ArrayList<Boolean>();
         for ( int i = 0; i < times; i++ ) {
             result.add(item);
@@ -238,7 +238,7 @@ public class BlocklyMethods {
      * @param times that the item should be added to the list
      * @return {@link ArrayList} with the given elements
      */
-    public static ArrayList<String> createListWithItem(String item, int times) {
+    public static ArrayList<String> createListWithItem(String item, float times) {
         ArrayList<String> result = new ArrayList<String>();
         for ( int i = 0; i < times; i++ ) {
             result.add(item);
@@ -254,7 +254,7 @@ public class BlocklyMethods {
      * @param times that the item should be added to the list
      * @return {@link ArrayList} with the given elements
      */
-    public static ArrayList<Pickcolor> createListWithItem(Pickcolor item, int times) {
+    public static ArrayList<Pickcolor> createListWithItem(Pickcolor item, float times) {
         ArrayList<Pickcolor> result = new ArrayList<Pickcolor>();
         for ( int i = 0; i < times; i++ ) {
             result.add(item);
@@ -412,7 +412,7 @@ public class BlocklyMethods {
      * @param endIndex
      * @return sub-list of a given list
      */
-    public static <T> ArrayList<T> listsGetSubList(ArrayList<T> list, IndexLocation startLocation, int startIndex, IndexLocation endLocation, float endIndex) {
+    public static <T> ArrayList<T> listsGetSubList(ArrayList<T> list, IndexLocation startLocation, float startIndex, IndexLocation endLocation, float endIndex) {
         Assert.isTrue(list.size() != 0, "List size is 0!");
         int fromIndex = calculateIndex(list, startLocation, startIndex);
         int toIndex = calculateIndex(list, endLocation, endIndex);
@@ -605,25 +605,25 @@ public class BlocklyMethods {
         return maxElems;
     }
 
-    private static <T> T executeOperation(ArrayList<T> list, ListElementOperations operation, int resultIndex, T element) {
-        T result = list.get(resultIndex);
+    private static <T> T executeOperation(ArrayList<T> list, ListElementOperations operation, float resultIndex, T element) {
+        T result = list.get((int) resultIndex);
         switch ( operation ) {
             case SET:
-                list.set(resultIndex, element);
+                list.set((int) resultIndex, element);
                 return result;
             case INSERT:
                 //check if it is last index
                 resultIndex = resultIndex == list.size() - 1 ? resultIndex + 1 : resultIndex;
-                list.add(resultIndex, element);
+                list.add((int) resultIndex, element);
                 return result;
             case GET:
                 break;
             case GET_REMOVE:
-                list.remove(resultIndex);
-                break;
-            case REMOVE:
-                list.remove(resultIndex);
+                list.remove((int) resultIndex);
                 return result;
+            case REMOVE:
+                list.remove((int) resultIndex);
+                break;
             default:
                 throw new DbcException("Invalid operation!");
         }

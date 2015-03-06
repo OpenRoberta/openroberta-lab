@@ -52,20 +52,20 @@ public class BlocklyMethodsTest {
     @Test
     public void isWhole() {
         Assert.assertTrue(BlocklyMethods.isWhole(2));
-        Assert.assertTrue(BlocklyMethods.isWhole(2.0));
-        Assert.assertTrue(!BlocklyMethods.isWhole(2.1));
+        Assert.assertTrue(BlocklyMethods.isWhole((float) 2.0));
+        Assert.assertTrue(!BlocklyMethods.isWhole((float) 2.1));
     }
 
     @Test
     public void isPositive() {
         Assert.assertTrue(BlocklyMethods.isPositive(2));
-        Assert.assertTrue(!BlocklyMethods.isPositive(-2.1));
+        Assert.assertTrue(!BlocklyMethods.isPositive((float) -2.1));
     }
 
     @Test
     public void isNegative() {
         Assert.assertTrue(!BlocklyMethods.isNegative(2));
-        Assert.assertTrue(BlocklyMethods.isNegative(-2.1));
+        Assert.assertTrue(BlocklyMethods.isNegative((float) -2.1));
     }
 
     @Test

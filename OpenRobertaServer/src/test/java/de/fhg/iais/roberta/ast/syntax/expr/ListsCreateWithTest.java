@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 public class ListsCreateWithTest {
     @Test
     public void Test() throws Exception {
-        String a = "BlocklyMethods.createListWith(1.0, 3.1, 2)";
+        String a = "BlocklyMethods.createListWith(((float)1.0), ((float)3.1), 2)";
 
         Helper.assertCodeIsOk(a, "/syntax/lists/lists_create_with.xml");
     }
