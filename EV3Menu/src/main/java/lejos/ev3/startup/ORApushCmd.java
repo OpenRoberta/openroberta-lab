@@ -18,7 +18,7 @@ import org.json.JSONObject;
 
 /**
  * Class for brick <-> server communication based on json and key words "cmds".
- * 
+ *
  * @author dpyka
  */
 public class ORApushCmd implements Runnable {
@@ -56,7 +56,7 @@ public class ORApushCmd implements Runnable {
      * Creates a new Open Roberta Lab "push" communication object. Additional
      * objects for downloading user programs, updating the brick and launching a
      * program are being created.
-     * 
+     *
      * @param serverBaseIP
      *        The base IP like 192.168.56.1:1999
      * @param ind
@@ -83,7 +83,7 @@ public class ORApushCmd implements Runnable {
      * Expose http connection to allow the user to cancel the registration
      * process. Otherwise user has to wait until timeout occurs (5minutes). Http
      * connection will "hang" in another thread trying to read from inputstream.
-     * 
+     *
      * @return The http connection the brick uses to communicate with the server.
      */
     public HttpURLConnection getHttpConnection() {
@@ -134,7 +134,15 @@ public class ORApushCmd implements Runnable {
                         ORAhandler.setTimeout(false);
                         break;
                     case CMD_ABORT:
-                        ORAhandler.setInterrupt(true);
+                        // if brick is waiting for registration, server sends abort as timeout message
+                        if ( ORAhandler.isRegistered() == false ) {
+                            ORAhandler.setTimeout(true);
+                        } else {
+                            ORAhandler.setInterrupt(true);
+                            ORAhandler.setRegistered(false);
+                            LocalEV3.get().getAudio().systemSound(Sounds.DESCENDING);
+                        }
+                        return;
                     case CMD_UPDATE:
                         this.oraUpdater.update();
                         break;
@@ -189,7 +197,7 @@ public class ORApushCmd implements Runnable {
      * Opens an http connection to server. "POST" as request method. Input, output
      * set to "true". 5 minutes readtimeout set. This connection is used for the
      * "push" service. The server will answer the request every few seconds.
-     * 
+     *
      * @return HttpURLConnection http connection object
      * @throws IOException
      *         Connection to server failed
@@ -199,7 +207,7 @@ public class ORApushCmd implements Runnable {
         httpURLConnection.setDoInput(true);
         httpURLConnection.setDoOutput(true);
         httpURLConnection.setRequestMethod("POST");
-        httpURLConnection.setReadTimeout(300000);
+        httpURLConnection.setReadTimeout(330000);
         httpURLConnection.setRequestProperty("Content-Type", "application/json; charset=utf8");
         return httpURLConnection;
     }
