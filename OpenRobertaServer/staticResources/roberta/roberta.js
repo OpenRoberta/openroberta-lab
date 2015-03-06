@@ -455,7 +455,7 @@ function saveConfigurationToServer() {
  * Run program
  */
 function runOnBrick() {
-    if (userState.robotState === '') {
+    if (userState.robotState === '' || userState.robotState === 'disconnected') {
         displayMessage("POPUP_ROBOT_NOT_CONNECTED", "POPUP", "");
     } else if (userState.robotState === 'busy') {
         displayMessage("POPUP_ROBOT_BUSY", "POPUP", "");
