@@ -217,7 +217,7 @@ html, body {
     color: #afca04;
 }
 
-.error {
+.error, .disconnected {
     color: #ccc;
 }
 

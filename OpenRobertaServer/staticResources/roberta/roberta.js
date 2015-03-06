@@ -29,70 +29,10 @@ function initUserState() {
 }
 
 /**
- * Create new user
- */
-function saveUserToServer() {
-    var $userAccountName = $("#accountName");
-    var $userName = $('#userName');
-    var $userEmail = $("#userEmail");
-    var $pass1 = $('#pass1');
-    var $pass2 = $('#pass2');
-
-    if ($pass1.val() != $pass2.val()) {
-        displayMessage("MESSAGE_PASSWORD_ERROR", "POPUP", "");
-    } else {
-        COMM.json("/user", {
-            "cmd" : "createUser",
-            "accountName" : $userAccountName.val(),
-            "userName" : $userName.val(),
-            "userEmail" : $userEmail.val(),
-            "password" : $pass1.val(),
-            "role" : 'TEACHER',
-        }, function(result) {
-            if (result.rc === "ok") {
-                setRobotState(result);
-                $('.modal').modal('hide'); // close all opened popups
-                $('#accountNameS').val($userAccountName.val());
-                $('#pass1S').val($pass1.val());
-                login();
-            } else {
-                displayMessage(result.message, "POPUP", "");
-            }
-        });
-    }
-}
-
-/**
- * Delete user on server
- */
-function deleteUserOnServer() {
-    var $pass1 = $('#pass1D');
-    COMM.json("/user", {
-        "cmd" : "deleteUser",
-        "accountName" : userState.accountName,
-        "password" : $pass1.val()
-    }, function(result) {
-        if (result.rc === "ok") {
-            $('.modal').modal('hide'); // close all opened popups
-            logout();
-            displayMessage("MESSAGE_USER_DELETED", "TOAST", "");
-        } else {
-            displayMessage(result.message, "POPUP", "");
-        }
-    });
-}
-
-/**
  * Login user
  */
 function login() {
-    var $userAccountName = $("#accountNameS");
-    var $pass1 = $('#pass1S');
-    COMM.json("/user", {
-        "cmd" : "login",
-        "accountName" : $userAccountName.val(),
-        "password" : $pass1.val(),
-    }, function(response) {
+    USER.login($("#accountNameS").val(), $('#pass1S').val(), function(response) {
         if (response.rc === "ok") {
             userState.accountName = response.userAccountName;
             if (response.userName === undefined || response.userName === '') {
@@ -103,21 +43,16 @@ function login() {
             userState.id = response.userId;
             setHeadNavigationMenuState('login');
             setRobotState(response);
-            $('.modal').modal('hide'); // close all opened popups
-            displayMessage("MESSAGE_USER_LOGIN", "TOAST", userState.name);
-        } else {
-            displayMessage(response.message, "POPUP", "");
         }
-    });
+        displayInformation(response, "MESSAGE_USER_LOGIN", response.message, userState.name);
+    }, 'login user');
 }
 
 /**
  * Logout user
  */
 function logout() {
-    COMM.json("/user", {
-        "cmd" : "logout"
-    }, function(response) {
+    USER.logout(function(response) {
         if (response.rc === "ok") {
             initUserState();
             $('#programNameSave').val('');
@@ -125,12 +60,40 @@ function logout() {
             setHeadNavigationMenuState('logout');
             Blockly.getMainWorkspace().saveButton.disable();
             setRobotState(response);
-            $('.modal').modal('hide'); // close all opened popups
-            displayMessage("MESSAGE_USER_LOGOUT", "TOAST", "");
-        } else {
-            displayMessage(response.message, "POPUP", "");
         }
-    });
+        displayInformation(response, "MESSAGE_USER_LOGOUT", response.message, "");
+    }, 'logout user');
+}
+
+/**
+ * Create new user
+ */
+function saveUserToServer() {
+    if ($('#pass1').val() != $('#pass2').val()) {
+        displayMessage("MESSAGE_PASSWORD_ERROR", "POPUP", "");
+    } else {
+        USER.saveUserToServer($("#accountName").val(), $('#userName').val(), $("#userEmail").val(), $('#pass1').val(), function(response) {
+            if (response.rc === "ok") {
+                setRobotState(response);
+                $('#accountNameS').val($("#accountName").val());
+                $('#pass1S').val($('#pass1').val());
+                login();
+            }
+            displayInformation(response, "", response.message, "");
+        }, 'save user to server');
+    }
+}
+
+/**
+ * Delete user on server
+ */
+function deleteUserOnServer() {
+    USER.deleteUserOnServer(userState.accountName, $('#pass1D').val(), function(response) {
+        if (response.rc === "ok") {
+            logout();
+        }
+        displayInformation(response, "MESSAGE_USER_DELETED", response.message, userState.name);
+    }, 'delete user on server');
 }
 
 /**
@@ -484,7 +447,6 @@ function runOnBrick() {
             "programText" : xml_text_program,
             "configurationText" : xml_text_configuration
         }, response);
-
     }
 }
 
@@ -963,16 +925,25 @@ function displayState() {
         $('#iconDisplayRobotState').removeClass('error');
         $('#iconDisplayRobotState').removeClass('busy');
         $('#iconDisplayRobotState').removeClass('wait');
+        $('#iconDisplayRobotState').removeClass('disconnected');
         $('#iconDisplayRobotState').addClass('ok');
     } else if (userState.robotState === 'busy') {
         $('#iconDisplayRobotState').removeClass('ok');
         $('#iconDisplayRobotState').removeClass('wait');
         $('#iconDisplayRobotState').removeClass('error');
+        $('#iconDisplayRobotState').removeClass('disconnected');
         $('#iconDisplayRobotState').addClass('busy');
+    } else if (userState.robotState === 'disconnected') {
+        $('#iconDisplayRobotState').removeClass('ok');
+        $('#iconDisplayRobotState').removeClass('wait');
+        $('#iconDisplayRobotState').removeClass('error');
+        $('#iconDisplayRobotState').removeClass('busy');
+        $('#iconDisplayRobotState').addClass('disconnected');
     } else {
         $('#iconDisplayRobotState').removeClass('busy');
         $('#iconDisplayRobotState').removeClass('wait');
         $('#iconDisplayRobotState').removeClass('ok');
+        $('#iconDisplayRobotState').removeClass('disconnected');
         $('#iconDisplayRobotState').addClass('error');
     }
 
@@ -1482,6 +1453,27 @@ function initializeLanguages() {
 }
 
 /**
+ * Display information
+ * 
+ * @param {response}
+ *            Response of a REST-call.
+ * @param {successMessage}
+ *            Toast-message to be displayed if REST-call was ok.
+ * @param {result}
+ *            Popup-message to be displayed if REST-call failed.
+ * @param {messageParam}
+ *            Parameter to be used in the message text.
+ */
+function displayInformation(response, successMessage, errorMessage, messageParam) {
+    if (response.rc === "ok") {
+        $('.modal').modal('hide'); // close all opened popups
+        displayMessage(successMessage, "TOAST", messageParam);
+    } else {
+        displayMessage(errorMessage, "POPUP", messageParam);
+    }
+}
+
+/**
  * Display message
  * 
  * @param {messageId}
@@ -1569,7 +1561,7 @@ function deactivateProgConfigMenu() {
 function pingServer() {
     if (userState.doPing) {
         setTimeout(function() {
-            COMM.json("/ping", {}, function(response) {
+            COMM.ping(function(response) {
                 setRobotState(response);
                 pingServer();
             });
