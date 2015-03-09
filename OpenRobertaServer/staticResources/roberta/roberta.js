@@ -1693,10 +1693,10 @@ function init() {
     $(window).on('beforeunload', function(e) {
         if (userState.programModified === true || userState.configurationModified === true) {
             if (userState.id === -1) {
-                alert(Blockly.Msg['POPUP_BEFOREUNLOAD']);
+// Maybe a Firefox-Problem?                alert(Blockly.Msg['POPUP_BEFOREUNLOAD']);
                 return Blockly.Msg.POPUP_BEFOREUNLOAD;
             } else {
-                alert(Blockly.Msg['POPUP_BEFOREUNLOAD_LOGGEDIN']);
+// Maybe a Firefox-Problem?                alert(Blockly.Msg['POPUP_BEFOREUNLOAD_LOGGEDIN']);
                 return Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN;
             }
         }
