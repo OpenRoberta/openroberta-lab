@@ -176,7 +176,19 @@ function showUserInfo() {
 function showRobotInfo() {
     if (userState.robotName) {
         $("#robotName").text(userState.robotName);
-        $("#robotState").text(userState.robotState);
+        if (userState.robotState === "wait" ) {
+            $("#robotStateWait").css('display','inline');
+            $("#robotStateDisconnected").css('display','none');
+            $("#robotStateBusy").css('display','none');            
+        } else if (userState.robotState === "busy" ) {
+            $("#robotStateWait").css('display','none');
+            $("#robotStateDisconnected").css('display','none');
+            $("#robotStateBusy").css('display','inline');            
+        } else {
+            $("#robotStateWait").css('display','none');
+            $("#robotStateDisconnected").css('display','inline');
+            $("#robotStateBusy").css('display','none');            
+        }
         if (userState.language == 'EN') {
             $("#robotBattery").text(userState.robotBattery + ' V');
         } else {

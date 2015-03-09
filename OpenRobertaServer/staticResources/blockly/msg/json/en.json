@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-03-03 08:23:50.204000",
+		"lastupdated": "2015-03-09 09:07:31.063000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -692,6 +692,9 @@
 	"POPUP_CANCEL": "Cancel",
 	"POPUP_ROBOT_NAME": "Name",
 	"POPUP_ROBOT_STATE": "State",
+	"POPUP_ROBOT_STATE_WAIT": "wait",
+	"POPUP_ROBOT_STATE_DISCONNECTED": "disconnected",
+	"POPUP_ROBOT_STATE_BUSY": "busy",
 	"POPUP_ROBOT_BATTERY": "Voltage",
 	"POPUP_ROBOT_WAIT": "Waiting time",
 	"POPUP_ROBOT_NOT_CONNECTED": "You have to make a connection to your robot first.",

@@ -579,6 +579,9 @@ Blockly.Msg.POPUP_ROBOT_BUSY = "Your robot is busy. Please wait until the curren
 Blockly.Msg.POPUP_ROBOT_NAME = "Name";
 Blockly.Msg.POPUP_ROBOT_NOT_CONNECTED = "You have to make a connection to your robot first.";
 Blockly.Msg.POPUP_ROBOT_STATE = "State";
+Blockly.Msg.POPUP_ROBOT_STATE_BUSY = "busy";
+Blockly.Msg.POPUP_ROBOT_STATE_DISCONNECTED = "disconnected";
+Blockly.Msg.POPUP_ROBOT_STATE_WAIT = "wait";
 Blockly.Msg.POPUP_ROBOT_WAIT = "Waiting time";
 Blockly.Msg.POPUP_SHARE_WITH = "Name";
 Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE = "Three things you should know before starting:<ul class='icon'><li class='document-text'>here you can program EV3 robots </li><li class='Roberta'>your robot needs a special system <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>check!</a></li><li class='wi-fi'>your robot needs wi-fi</li><li class='arrow-right-thick'>if you are not sure, please have a look at the help pages ... <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/A4AM'>more</a></li></ul><br /><p>If you are interested:</p>Version beta 1.1.0<ul class='NonIcon' style='font-size:small'><li>configuration of your EV3 robot</li><li>extended blocks selection</li><li>functions new</li><li>variables with typecheck new</li><li>improved menu structur</li><li>firmware update via OpenRobertaLab</li></ul>";

@@ -579,6 +579,9 @@ Blockly.Msg.POPUP_ROBOT_BUSY = " Dein Roboter führt gerade ein Programm aus. Wa
 Blockly.Msg.POPUP_ROBOT_NAME = "Name";
 Blockly.Msg.POPUP_ROBOT_NOT_CONNECTED = "Du hast gerade keinen Roboter mit dem Server verbunden. Schau nach, ob der Roboter eingeschaltet ist, melde ihn am Server an und gebe das Kennwort unter Roboter - Verbinden ein.<br />Wenn das nicht klappt, schau in der Hilfe nach.";
 Blockly.Msg.POPUP_ROBOT_STATE = "Status";
+Blockly.Msg.POPUP_ROBOT_STATE_BUSY = "Verbindung zum Roboter";
+Blockly.Msg.POPUP_ROBOT_STATE_DISCONNECTED = "Keine Verbindung zum Roboter";
+Blockly.Msg.POPUP_ROBOT_STATE_WAIT = "Roboter wartet";
 Blockly.Msg.POPUP_ROBOT_WAIT = "Wartezeit";
 Blockly.Msg.POPUP_SHARE_WITH = "Name";
 Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE = "Das musst du über Open Roberta Lab wissen:<ul class='icon'><li class='document-text'>hier kann man EV3 Roboter programmieren</li><li class='Roberta'>dein Roboter braucht ein spezielles Betriebssystem <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>check!</a></li><li class='wi-fi'>dein Roboter braucht WLAN</li><li class='arrow-right-thick'>Schau in die Hilfe wenn du nicht weißt, ob dein Roboter das alles schon kann ... <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/A4AM'>mehr</a></li></ul><br /><p>Wen es interessiert:</p>Version beta 1.1.0<ul class='NonIcon' style='font-size:small'><li>beliebig konfigurierbarer EV3 Roboter</li><li>erweiterte Blockauswahl</li><li>Funktionen neu</li><li>Variablen mit Typprüfung neu</li><li>übersichtlichere Menüstruktur</li><li>Update der Firmware des Roboters über die Anwendung</li></ul>";
