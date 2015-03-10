@@ -824,11 +824,7 @@ function initProgramNameTable() {
     $('#programNameTable tbody').onWrap('click', 'tr', selectionPFn);
     $('#programNameTable tbody').onWrap('dblclick', 'tr', function(event) {
         selectionPFn(event);
-        if ($('#loadFromListing').css('display') === 'inline') {
-            $('#loadFromListing').click();
-        } else if ($('#deleteFromListing').css('display') === 'inline') {
-            $('#deleteFromListing').click();
-        }
+        $('#loadFromListing').click();
     });
 }
 
@@ -910,11 +906,7 @@ function initConfigurationNameTable() {
     $('#configurationNameTable tbody').onWrap('click', 'tr', selectionCFn);
     $('#configurationNameTable tbody').onWrap('dblclick', 'tr', function(event) {
         selectionCFn(event);
-        if ($('#loadConfigurationFromListing').css('display') === 'inline') {
-            $('#loadConfigurationFromListing').click();
-        } else if ($('#deleteConfigurationFromListing').css('display') === 'inline') {
-            $('#deleteConfigurationFromListing').click();
-        }
+        $('#loadConfigurationFromListing').click();
     });
 }
 
