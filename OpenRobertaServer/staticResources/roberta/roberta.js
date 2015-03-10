@@ -61,7 +61,7 @@ function logout() {
             Blockly.getMainWorkspace().saveButton.disable();
             setRobotState(response);
         }
-        displayInformation(response, "MESSAGE_USER_LOGOUT", response.message, "");
+        displayInformation(response, "MESSAGE_USER_LOGOUT", response.message);
     }, 'logout user');
 }
 
@@ -79,7 +79,7 @@ function saveUserToServer() {
                 $('#pass1S').val($('#pass1').val());
                 login();
             }
-            displayInformation(response, "", response.message, "");
+            displayInformation(response, "", response.message);
         }, 'save user to server');
     }
 }
@@ -105,11 +105,8 @@ function updateFirmware() {
     }, function(response) {
         if (response.rc === "ok") {
             setRobotState(response);
-            displayMessage(Blockly.Msg.MESSAGE_ROBOT_CONNECTED, "TOAST", userState.robotFirmware);
-            $('.modal').modal('hide'); // close all opened popups
-        } else {
-            displayMessage(response.message, "POPUP", "");
         }
+        displayInformation(response, "MESSAGE_ROBOT_CONNECTED", response.message, userState.robotFirmware);
     });
 }
 
@@ -243,11 +240,8 @@ function setToken(token) {
         if (response.rc === "ok") {
             userState.token = resToken;
             setRobotState(response);
-            displayMessage(Blockly.Msg.MESSAGE_ROBOT_CONNECTED, "TOAST", userState.robotName);
-            $('.modal').modal('hide'); // close all opened popups
-        } else {
-            displayMessage(response.message, "POPUP", "");
         }
+        displayInformation(response, "MESSAGE_ROBOT_CONNECTED", response.message, userState.robotName);
     });
 }
 
@@ -333,13 +327,11 @@ function saveAsToServer() {
             "cmd" : "saveAsP",
             "name" : userState.program,
             "program" : xml_text
-        }, function(result) {
-            if (result.rc === 'ok') {
+        }, function(response) {
+            if (response.rc === 'ok') {
                 userState.programModified = false;
-                displayMessage("MESSAGE_EDIT_SAVE_PROGRAM_AS", "TOAST", userState.program);
-            } else {
-                displayMessage(result.message, "POPUP", "");
             }
+            displayInformation(response, "MESSAGE_EDIT_SAVE_PROGRAM_AS", response.message, userState.program);
         });
     }
 }
@@ -358,13 +350,11 @@ function saveToServer() {
             "cmd" : "saveP",
             "name" : userState.program,
             "program" : xml_text
-        }, function(result) {
-            if (result.rc === 'ok') {
+        }, function(response) {
+            if (response.rc === 'ok') {
                 userState.programModified = false;
-                displayMessage("MESSAGE_EDIT_SAVE_PROGRAM", "TOAST", "");
-            } else {
-                displayMessage(result.message, "POPUP", "");
             }
+            displayInformation(response, "MESSAGE_EDIT_SAVE_PROGRAM", response.message, userState.program);
         });
     }
 }
@@ -391,13 +381,11 @@ function saveAsConfigurationToServer() {
             "cmd" : "saveAsC",
             "name" : userState.configuration,
             "configuration" : xml_text
-        }, function(result) {
-            if (result.rc === 'ok') {
+        }, function(response) {
+            if (response.rc === 'ok') {
                 userState.configurationModified = false;
-                displayMessage("MESSAGE_EDIT_SAVE_CONFIGURATION_AS", "TOAST", userState.configuration);
-            } else {
-                displayMessage(result.message, "POPUP", "");
             }
+            displayInformation(response, "MESSAGE_EDIT_SAVE_CONFIGURATION_AS", response.message, userState.configuration);
         });
     }
 }
@@ -415,13 +403,11 @@ function saveConfigurationToServer() {
             "cmd" : "saveC",
             "name" : userState.configuration,
             "configuration" : xml_text
-        }, function(result) {
-            if (result.rc === 'ok') {
+        }, function(response) {
+            if (response.rc === 'ok') {
                 userState.configurationModified = false;
-                displayMessage("MESSAGE_EDIT_SAVE_CONFIGURATION", "TOAST", "");
-            } else {
-                displayMessage(result.message, "POPUP", "");
             }
+            displayInformation(response, "MESSAGE_EDIT_SAVE_CONFIGURATION", response.message, userState.configuration);
         });
     }
 }
@@ -494,17 +480,16 @@ function loadFromListing() {
         COMM.json("/program", {
             "cmd" : "loadP",
             "name" : programName
-        }, function(result) {
-            if (result.rc === 'ok') {
+        }, function(response) {
+            if (response.rc === 'ok') {
                 $("#tabs").tabs("option", "active", 0);
                 userState.programSaved = true;
-                showProgram(result, true, programName);
+                showProgram(response, true, programName);
                 $('#menuSaveProg').parent().removeClass('login');
                 $('#menuSaveProg').parent().removeClass('disabled');
                 Blockly.getMainWorkspace().saveButton.enable();
-            } else {
-                displayMessage(result.message, "POPUP", "");
             }
+            displayInformation(response, "", response.message);
         });
     }
 }
@@ -520,17 +505,16 @@ function loadConfigurationFromListing() {
         COMM.json("/conf", {
             "cmd" : "loadC",
             "name" : configurationName
-        }, function(result) {
-            if (result.rc === 'ok') {
+        }, function(reponse) {
+            if (reponse.rc === 'ok') {
                 $("#tabs").tabs("option", "active", 0);
                 userState.configurationSaved = true;
-                showConfiguration(result, true, configurationName);
+                showConfiguration(reponse, true, configurationName);
                 $('#menuSaveConfig').parent().removeClass('login');
                 $('#menuSaveConfig').parent().removeClass('disabled');
-                setRobotState(result);
-            } else {
-                displayMessage(result.message, "POPUP", "");
+                setRobotState(reponse);
             }
+            displayInformation(response, "", response.message);
         });
     }
 }
