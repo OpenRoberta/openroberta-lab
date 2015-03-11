@@ -1292,7 +1292,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         this.sb.append(INDENT).append(INDENT).append("} catch ( Exception e ) {\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("lejos.hardware.lcd.TextLCD lcd = lejos.hardware.ev3.LocalEV3.get().getTextLCD();\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.clear();\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Fehler im EV3-Roboter\", 0, 2);\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Fehler im EV3\", 0, 2);\n");
 
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("if (e.getMessage() != null) {\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Fehlermeldung\", 0, 4);\n");

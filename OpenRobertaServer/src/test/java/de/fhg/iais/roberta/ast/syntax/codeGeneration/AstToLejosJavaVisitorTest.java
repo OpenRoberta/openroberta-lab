@@ -51,7 +51,7 @@ public class AstToLejosJavaVisitorTest {
         + "        } catch ( Exception e ) {\n"
         + "            lejos.hardware.lcd.TextLCD lcd = lejos.hardware.ev3.LocalEV3.get().getTextLCD();\n"
         + "            lcd.clear();\n"
-        + "            lcd.drawString(\"Fehler im EV3-Roboter\", 0, 2);\n"
+        + "            lcd.drawString(\"Fehler im EV3\", 0, 2);\n"
         + "            if (e.getMessage() != null) {\n"
         + "                lcd.drawString(\"Fehlermeldung\", 0, 4);\n"
         + "                lcd.drawString(e.getMessage(), 0, 5);\n"
