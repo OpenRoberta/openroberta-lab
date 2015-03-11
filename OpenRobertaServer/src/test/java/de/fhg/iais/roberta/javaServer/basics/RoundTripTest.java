@@ -86,137 +86,67 @@ public class RoundTripTest {
 
     @Test
     public void actionMove() throws Exception {
-        String program = blocklyPrograms[0];
-        loadProgram(program);
-
-        String resultProgram = saveProgram(program);
-        RoundTripTest.blocklyProgram =
-            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + program + ".xml"), Charsets.UTF_8);
-        Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
+        assertRoundTrip(blocklyPrograms[0]);
     }
 
     @Test
     public void actionDrive() throws Exception {
-        String programName = blocklyPrograms[1];
-        loadProgram(programName);
-
-        String resultProgram = saveProgram(programName);
-        RoundTripTest.blocklyProgram =
-            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + programName + ".xml"), Charsets.UTF_8);
-        Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
+        assertRoundTrip(blocklyPrograms[1]);
     }
 
     @Test
     public void actionShow() throws Exception {
-        String program = blocklyPrograms[2];
-        loadProgram(program);
-
-        String resultProgram = saveProgram(program);
-        RoundTripTest.blocklyProgram =
-            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + program + ".xml"), Charsets.UTF_8);
-        Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
+        assertRoundTrip(blocklyPrograms[2]);
     }
 
     @Test
     public void actionSound() throws Exception {
-        String program = blocklyPrograms[3];
-        loadProgram(program);
-
-        String resultProgram = saveProgram(program);
-        RoundTripTest.blocklyProgram =
-            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + program + ".xml"), Charsets.UTF_8);
-        Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
+        assertRoundTrip(blocklyPrograms[3]);
     }
 
     @Test
     public void actionStatusLight() throws Exception {
-        String program = blocklyPrograms[4];
-        loadProgram(program);
-
-        String resultProgram = saveProgram(program);
-        RoundTripTest.blocklyProgram =
-            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + program + ".xml"), Charsets.UTF_8);
-        Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
+        assertRoundTrip(blocklyPrograms[4]);
     }
 
     @Test
     public void actionSensors() throws Exception {
-        String programName = blocklyPrograms[5];
-        loadProgram(programName);
-        String resultProgram = saveProgram(programName);
-        RoundTripTest.blocklyProgram =
-            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + programName + ".xml"), Charsets.UTF_8);
-        Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
+        assertRoundTrip(blocklyPrograms[5]);
     }
 
     @Test
     public void actionLogic() throws Exception {
-        String programName = blocklyPrograms[6];
-        loadProgram(programName);
-        String resultProgram = saveProgram(programName);
-        RoundTripTest.blocklyProgram =
-            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + programName + ".xml"), Charsets.UTF_8);
-        Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
+        assertRoundTrip(blocklyPrograms[6]);
     }
 
     @Test
     public void actionControl() throws Exception {
-        String programName = blocklyPrograms[7];
-        loadProgram(programName);
-        String resultProgram = saveProgram(programName);
-        RoundTripTest.blocklyProgram =
-            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + programName + ".xml"), Charsets.UTF_8);
-        Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
+        assertRoundTrip(blocklyPrograms[7]);
     }
 
     @Test
     public void actionWait() throws Exception {
-        String programName = blocklyPrograms[8];
-        loadProgram(programName);
-        String resultProgram = saveProgram(programName);
-        RoundTripTest.blocklyProgram =
-            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + programName + ".xml"), Charsets.UTF_8);
-        Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
+        assertRoundTrip(blocklyPrograms[8]);
     }
 
     @Test
     public void actionMath() throws Exception {
-        String programName = blocklyPrograms[9];
-        loadProgram(programName);
-        String resultProgram = saveProgram(programName);
-        RoundTripTest.blocklyProgram =
-            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + programName + ".xml"), Charsets.UTF_8);
-        Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
+        assertRoundTrip(blocklyPrograms[9]);
     }
 
     @Test
     public void actionText() throws Exception {
-        String programName = blocklyPrograms[10];
-        loadProgram(programName);
-        String resultProgram = saveProgram(programName);
-        RoundTripTest.blocklyProgram =
-            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + programName + ".xml"), Charsets.UTF_8);
-        Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
+        assertRoundTrip(blocklyPrograms[10]);
     }
 
     @Test
     public void actionLists() throws Exception {
-        String programName = blocklyPrograms[11];
-        loadProgram(programName);
-        String resultProgram = saveProgram(programName);
-        RoundTripTest.blocklyProgram =
-            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + programName + ".xml"), Charsets.UTF_8);
-        Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
+        assertRoundTrip(blocklyPrograms[11]);
     }
 
     @Test
     public void actionMethods() throws Exception {
-        String programName = blocklyPrograms[12];
-        loadProgram(programName);
-        String resultProgram = saveProgram(programName);
-        RoundTripTest.blocklyProgram =
-            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + programName + ".xml"), Charsets.UTF_8);
-        Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
+        assertRoundTrip(blocklyPrograms[12]);
     }
 
     @AfterClass
@@ -330,7 +260,6 @@ public class RoundTripTest {
     }
 
     private void loadProgram(String program) throws InterruptedException {
-
         WebElement programElement = RoundTripTest.driver.findElement(By.id("head-navi-icon-program"));
 
         while ( !RoundTripTest.driver.findElement(By.id("menuListProg")).isDisplayed() ) {
@@ -358,6 +287,15 @@ public class RoundTripTest {
             }
         }
         return null;
+    }
+
+    protected void assertRoundTrip(String programName) throws InterruptedException, Exception, JSONException, IOException {
+        loadProgram(programName);
+
+        String resultProgram = saveProgram(programName);
+        RoundTripTest.blocklyProgram =
+            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + programName + ".xml"), Charsets.UTF_8);
+        Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
     }
 
     private static int getOneInt(String sqlStmt) {

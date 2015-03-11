@@ -151,6 +151,7 @@ public class DeviceHandler {
                 }
             } else {
                 UnregulatedMotor nxtMotor = new UnregulatedMotor(hardwarePort);
+                nxtMotor.resetTachoCount();
                 this.lejosUnregulatedMotors.put(actorPort, nxtMotor);
             }
         }
