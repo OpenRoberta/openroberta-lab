@@ -46,7 +46,7 @@ Blockly.Blocks['robBrick_EV3-Brick'] = {
         this.setHelp(new Blockly.Help(Blockly.Msg.MOTORDIFF_ON_HELP));
         this.setDeletable(false);
         this.setTooltip(Blockly.Msg.EV3BRICK_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.EV3BRICK_HELP));
+        this.setHelp(new Blockly.Help(Blockly.Msg.EV3BRICK_HELP, 'brick.png'));
     }
 };
 
@@ -68,7 +68,7 @@ Blockly.Blocks['robBrick_ultrasonic'] = {
         this.appendDummyInput().appendField(Blockly.Msg.SENSOR_ULTRASONIC);
         this.setOutput(true, 'Sensor');
         this.setTooltip(Blockly.Msg.ULTRASONIC_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.ULTRASONIC_HELP));
+        this.setHelp(new Blockly.Help(Blockly.Msg.ULTRASONIC_HELP, 'ultra.png'));
     }
 };
 
@@ -89,7 +89,7 @@ Blockly.Blocks['robBrick_colour'] = {
         this.appendDummyInput().appendField(Blockly.Msg.SENSOR_COLOUR);
         this.setOutput(true, 'Sensor');
         this.setTooltip(Blockly.Msg.COLOUR_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.COLOUR_HELP));
+        this.setHelp(new Blockly.Help(Blockly.Msg.COLOUR_HELP, 'colour.png'));
     }
 };
 
@@ -111,7 +111,7 @@ Blockly.Blocks['robBrick_infrared'] = {
         this.appendDummyInput().appendField(Blockly.Msg.SENSOR_INFRARED);
         this.setOutput(true, 'Sensor');
         this.setTooltip(Blockly.Msg.INFRARED_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.INFRARED_HELP));
+        this.setHelp(new Blockly.Help(Blockly.Msg.INFRARED_HELP, 'infra.png'));
     }
 };
 
@@ -132,7 +132,7 @@ Blockly.Blocks['robBrick_touch'] = {
         this.appendDummyInput().appendField(Blockly.Msg.SENSOR_TOUCH);
         this.setOutput(true, 'Sensor');
         this.setTooltip(Blockly.Msg.TOUCH_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.TOUCH_HELP));
+        this.setHelp(new Blockly.Help(Blockly.Msg.TOUCH_HELP, 'touch.png'));
     }
 };
 
@@ -154,7 +154,7 @@ Blockly.Blocks['robBrick_gyro'] = {
         this.appendDummyInput().appendField(Blockly.Msg.SENSOR_GYRO);
         this.setOutput(true, 'Sensor');
         this.setTooltip(Blockly.Msg.GYRO_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.GYRO_HELP));
+        this.setHelp(new Blockly.Help(Blockly.Msg.GYRO_HELP, 'gyro.png'));
     }
 };
 
@@ -187,7 +187,7 @@ Blockly.Blocks['robBrick_motor_big'] = {
         this.appendDummyInput().appendField(Blockly.Msg.MOTOR_SIDE).appendField(motorSide, 'MOTOR_DRIVE').setAlign(Blockly.ALIGN_RIGHT);
         this.setOutput(true, 'Actor');
         this.setTooltip(Blockly.Msg.MOTOR_BIG_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.MOTOR_BIG_HELP));
+        this.setHelp(new Blockly.Help(Blockly.Msg.MOTOR_BIG_HELP, 'bigM.png'));
     }
 };
 
@@ -217,7 +217,7 @@ Blockly.Blocks['robBrick_motor_middle'] = {
         this.appendDummyInput().appendField(Blockly.Msg.MOTOR_ROTATION_REVERSE).appendField(motorReverse, 'MOTOR_REVERSE').setAlign(Blockly.ALIGN_RIGHT);
         this.setOutput(true, 'Actor');
         this.setTooltip(Blockly.Msg.MOTOR_MIDDLE_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.MOTOR_MIDDLE_HELP));
+        this.setHelp(new Blockly.Help(Blockly.Msg.MOTOR_MIDDLE_HELP, 'midM.png'));
     }
 };
 
