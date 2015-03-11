@@ -19,7 +19,7 @@ limitations under the License.
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.fhg.iais.openroberta</groupId>
     <artifactId>OpenRobertaParent</artifactId>
-    <version>1.1.0-RELEASE</version>
+    <version>1.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>RobertaParent</name>
     <description>the parent project of the OpenRoberta application</description>
@@ -27,8 +27,8 @@ limitations under the License.
     <inceptionYear>2014</inceptionYear>
     <properties>
 		<!-- the server and the crosscompiler SHOULD be compatible between(including) the following two versions of software deployed on the ROBOT -->
-        <validversionrange.From>1.0.1</validversionrange.From>
-        <validversionrange.To>1.0.1</validversionrange.To>
+        <validversionrange.From>1.1.0</validversionrange.From>
+        <validversionrange.To>1.1.0</validversionrange.To>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
         <buildTimeStamp>${maven.build.timestamp}</buildTimeStamp>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

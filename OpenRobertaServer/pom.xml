@@ -20,7 +20,7 @@ limitations under the License.
 	<parent>
 		<groupId>de.fhg.iais.openroberta</groupId>
 		<artifactId>OpenRobertaParent</artifactId>
-		<version>1.1.0-RELEASE</version>
+		<version>1.1.0-SNAPSHOT</version>
 		<relativePath>../OpenRobertaParent</relativePath>
 	</parent>
 	<artifactId>OpenRobertaServer</artifactId>
