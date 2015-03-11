@@ -154,6 +154,8 @@ public class Hal {
      * @param speedPercent of motor power
      */
     public void setUnregulatedMotorSpeed(ActorPort actorPort, float speedPercent) {
+        speedPercent = speedPercent < 0 ? 0 : speedPercent;
+        speedPercent = speedPercent > 200 ? 100 : speedPercent;
         this.deviceHandler.getUnregulatedMotor(actorPort).setPower((int) speedPercent);
     }
 
@@ -198,7 +200,7 @@ public class Hal {
      * @param value until the motor will work
      */
     public void rotateUnregulatedMotor(ActorPort actorPort, float speedPercent, MotorMoveMode mode, float value) {
-        this.deviceHandler.getUnregulatedMotor(actorPort).setPower((int) speedPercent);
+        setUnregulatedMotorSpeed(actorPort, speedPercent);
         if ( value >= 0 ) {
             this.deviceHandler.getUnregulatedMotor(actorPort).forward();
             switch ( mode ) {
@@ -948,7 +950,7 @@ public class Hal {
 
     /**
      * Sleep the running thread.
-     * 
+     *
      * @param time
      */
     public void waitFor(long time) {

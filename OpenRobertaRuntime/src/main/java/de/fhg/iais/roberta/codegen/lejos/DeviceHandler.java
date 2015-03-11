@@ -27,6 +27,7 @@ import de.fhg.iais.roberta.brickconfiguration.HardwareComponent;
 import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.ev3.EV3BrickConfiguration;
 import de.fhg.iais.roberta.ev3.EV3Sensors;
+import de.fhg.iais.roberta.ev3.components.EV3Actor;
 
 /**
  * This class instantiates all sensors (sensor modes) and actors used in blockly program.
@@ -129,28 +130,28 @@ public class DeviceHandler {
         this.portS4 = initSensor(SensorPort.S4, brickConfiguration.getSensorOnPort(SensorPort.S4), lejos.hardware.port.SensorPort.S4);
     }
 
-    private void initMotor(ActorPort actorPort, HardwareComponent actorType, Port hardwarePort) {
+    private void initMotor(ActorPort actorPort, EV3Actor actorType, Port hardwarePort) {
         if ( actorType != null ) {
-            switch ( actorType.getComponentType().getTypeName() ) {
-                case "EV3_LARGE_MOTOR":
-                    RegulatedMotor ev3LargeRegulatedMotor = new EV3LargeRegulatedMotor(hardwarePort);
-                    this.lejosRegulatedMotors.put(actorPort, ev3LargeRegulatedMotor);
-                    break;
-                case "EV3_MEDIUM_MOTOR":
-                    RegulatedMotor ev3MediumRegulatedMotor = new EV3MediumRegulatedMotor(hardwarePort);
-                    this.lejosRegulatedMotors.put(actorPort, ev3MediumRegulatedMotor);
-                    break;
-                case "NXTRegulatedMotor":
-                    RegulatedMotor nxtRegulatedMotor = new NXTRegulatedMotor(hardwarePort);
-                    this.lejosRegulatedMotors.put(actorPort, nxtRegulatedMotor);
-                    break;
-                case "NXTMotor":
-                    // EV3Motor can be accessed by NXTMotor as unregulated motor too!!!
-                    UnregulatedMotor nxtMotor = new UnregulatedMotor(hardwarePort);
-                    this.lejosUnregulatedMotors.put(actorPort, nxtMotor);
-                    break;
-                default:
-                    throw new DbcException("No such actor type!");
+            if ( actorType.isRegulated() ) {
+                switch ( actorType.getComponentType().getTypeName() ) {
+                    case "EV3_LARGE_MOTOR":
+                        RegulatedMotor ev3LargeRegulatedMotor = new EV3LargeRegulatedMotor(hardwarePort);
+                        this.lejosRegulatedMotors.put(actorPort, ev3LargeRegulatedMotor);
+                        break;
+                    case "EV3_MEDIUM_MOTOR":
+                        RegulatedMotor ev3MediumRegulatedMotor = new EV3MediumRegulatedMotor(hardwarePort);
+                        this.lejosRegulatedMotors.put(actorPort, ev3MediumRegulatedMotor);
+                        break;
+                    case "NXTRegulatedMotor":
+                        RegulatedMotor nxtRegulatedMotor = new NXTRegulatedMotor(hardwarePort);
+                        this.lejosRegulatedMotors.put(actorPort, nxtRegulatedMotor);
+                        break;
+                    default:
+                        throw new DbcException("No such actor type!");
+                }
+            } else {
+                UnregulatedMotor nxtMotor = new UnregulatedMotor(hardwarePort);
+                this.lejosUnregulatedMotors.put(actorPort, nxtMotor);
             }
         }
     }
