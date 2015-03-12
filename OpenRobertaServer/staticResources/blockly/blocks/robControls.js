@@ -295,6 +295,7 @@ Blockly.Blocks['robControls_wait_for'] = {
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.waitCount_ = 0;
+        this.setHelp(new Blockly.Help(Blockly.Msg.WAIT_FOR_HELP));
         this.setMutatorPlus(new Blockly.MutatorPlus(this));
         this.setTooltip(Blockly.Msg.WAIT_FOR_TOOLTIP);
     },

@@ -49,6 +49,7 @@ Blockly.Blocks['robSensors_getSample'] = {
         this.sensorType_ = 'TOUCH';
         this.setOutput(true, 'Boolean');
         this.setTooltip(Blockly.Msg.GETSAMPLE_TOOLTIP);
+        this.setHelp(new Blockly.Help(Blockly.Msg.SENSOR_GET_SAMPLE_HELP));
         this.setMovable(false);
         this.setDeletable(false);
     },

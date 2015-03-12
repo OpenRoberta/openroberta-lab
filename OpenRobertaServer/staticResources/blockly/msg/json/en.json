@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-03-11 18:31:16.015000",
+		"lastupdated": "2015-03-12 08:29:30.225000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -580,6 +580,8 @@
 	"SENSOR_IS_PRESSED": "pressed?",
 	"SENSOR_PRESSED": " (pressed)",
 	"WAIT_UNTIL": "wait until",
+	"WAIT_FOR_HELP": "here comes your help text",
+	"SENSOR_GET_SAMPLE_HELP": "here comes your help text",
 	"SENSOR_WAIT_PRESSED": "pressed",
 	"SENSOR_WAIT_PRESSED_RELEASED": "pressed or released",
 	"START": "start",
