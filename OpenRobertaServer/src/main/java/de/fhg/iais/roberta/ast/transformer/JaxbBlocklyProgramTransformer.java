@@ -205,7 +205,7 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 values = extractValues(block, (short) 2);
                 left = extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
                 right = extractValue(values, new ExprParam(BlocklyConstants.DISTANCE, Integer.class));
-                md = new MotorDuration<V>(MotorMoveMode.DISTANCE, (Expr<V>) right);
+                md = new MotorDuration<V>(MotorMoveMode.DISTANCE, convertPhraseToExpr(right));
                 mp = new MotionParam.Builder<V>().speed(convertPhraseToExpr(left)).duration(md).build();
                 return DriveAction.make(DriveDirection.get(mode), mp, properties, comment);
 
