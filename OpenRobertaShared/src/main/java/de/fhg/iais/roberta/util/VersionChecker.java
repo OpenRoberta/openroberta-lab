@@ -51,7 +51,7 @@ public class VersionChecker {
         return true;
     }
 
-    private boolean versionValid(String versionS) {
+    boolean versionValid(String versionS) {
         int length = versionS.length();
         if ( length <= 0 ) {
             return false;
@@ -71,12 +71,8 @@ public class VersionChecker {
             try {
                 String s1 = v1[i];
                 String s2 = v2[i];
-                if ( s1.endsWith("-SNAPSHOT") ) {
-                    s1 = s1.substring(0, s1.length() - 9);
-                }
-                if ( s2.endsWith("-SNAPSHOT") ) {
-                    s2 = s2.substring(0, s2.length() - 9);
-                }
+                s1 = optionalRemoveSuffix(s1);
+                s2 = optionalRemoveSuffix(s2);
                 i1 = Integer.parseInt(s1);
                 i2 = Integer.parseInt(s2);
                 if ( i1 > i2 ) {
@@ -88,5 +84,15 @@ public class VersionChecker {
             }
         }
         return true;
+    }
+
+    private String optionalRemoveSuffix(String s) {
+        if ( s.endsWith("-SNAPSHOT") ) {
+            s = s.substring(0, s.length() - 9);
+        }
+        if ( s.endsWith("-RELEASE") ) {
+            s = s.substring(0, s.length() - 8);
+        }
+        return s;
     }
 }
