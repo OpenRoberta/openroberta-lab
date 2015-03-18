@@ -1391,25 +1391,41 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> clearDisplayAction) {
-        // TODO Auto-generated method stub
+        this.sb.append("hal.readMessage();");
         return null;
     }
 
     @Override
-    public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> clearDisplayAction) {
-        // TODO Auto-generated method stub
+    public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
+        this.sb.append("hal.establishConnectionTo(");
+        if ( bluetoothConnectAction.get_address().getKind() != Phrase.Kind.STRING_CONST ) {
+            this.sb.append("String.valueOf(");
+            bluetoothConnectAction.get_address().visit(this);
+            this.sb.append(")");
+        } else {
+            bluetoothConnectAction.get_address().visit(this);
+        }
+        this.sb.append(");"); 
         return null;
     }
 
     @Override
-    public Void visitBluetoothSendAction(BluetoothSendAction<Void> clearDisplayAction) {
-        // TODO Auto-generated method stub
+    public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
+        this.sb.append("hal.establishConnectionTo(");
+        if ( bluetoothSendAction.get_msg().getKind() != Phrase.Kind.STRING_CONST ) {
+            this.sb.append("String.valueOf(");
+            bluetoothSendAction.get_msg().visit(this);
+            this.sb.append(")");
+        } else {
+            bluetoothSendAction.get_msg().visit(this);
+        }
+        this.sb.append(");");
         return null;
     }
 
     @Override
     public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
-        // TODO Auto-generated method stub
+        this.sb.append("hal.waitForConnection();");
         return null;
     }
 

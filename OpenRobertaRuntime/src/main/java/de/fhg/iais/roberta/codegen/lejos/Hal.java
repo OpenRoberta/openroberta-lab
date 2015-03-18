@@ -981,6 +981,7 @@ public class Hal {
      */
     public void waitForConnection() {
         bluetoothConnection = blueCom.waitForConnection(BLUETOOTH_TIMEOUT);
+        //return bluetoothConnection;
     }
 
     /**
