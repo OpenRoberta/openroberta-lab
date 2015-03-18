@@ -21,6 +21,10 @@ import de.fhg.iais.roberta.ast.syntax.action.ShowTextAction;
 import de.fhg.iais.roberta.ast.syntax.action.ToneAction;
 import de.fhg.iais.roberta.ast.syntax.action.TurnAction;
 import de.fhg.iais.roberta.ast.syntax.action.VolumeAction;
+import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothConnectAction;
+import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothReceiveAction;
+import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothSendAction;
+import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.ast.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary.Op;
@@ -893,6 +897,30 @@ public class AstToTextlyVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodExpr(MethodExpr<Void> methodExpr) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> clearDisplayAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> clearDisplayAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitBluetoothSendAction(BluetoothSendAction<Void> clearDisplayAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
         // TODO Auto-generated method stub
         return null;
     }

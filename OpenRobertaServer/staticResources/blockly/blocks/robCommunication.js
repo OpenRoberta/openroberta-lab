@@ -64,7 +64,7 @@ Blockly.Blocks['com_sendBlock'] = {
 	};
 
 
-Blockly.Blocks['com_reciveBlock'] = {
+Blockly.Blocks['com_receiveBlock'] = {
 	    /**
 	     * EV3 brick.
 	     * 
@@ -82,6 +82,28 @@ Blockly.Blocks['com_reciveBlock'] = {
 	        this.appendDummyInput('').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.RECIVED_DATA);
 	        this.appendValueInput('connection').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.USED_CONNECTION, 'CONNECTION_ID').setCheck('Connection');
 	        this.setOutput(true, 'String');
+	        this.setTooltip(Blockly.Msg.EV3BRICK_TOOLTIP);
+	        this.setHelp(new Blockly.Help(Blockly.Msg.EV3BRICK_HELP, 'brick.png'));
+	    }
+	};
+
+Blockly.Blocks['com_waitForConnection'] = {
+	    /**
+	     * EV3 brick.
+	     * 
+	     * @constructs robBrick_EV3_brick
+	     * @this.Blockly.Block
+	     * @param {Number}
+	     *            POWER relative - -100-100
+	     * @returns immediately
+	     * @memberof Block
+	     */
+
+	    init : function() {
+	        this.setHelpUrl(Blockly.Msg.EV3BRICK_HELPURL);
+	        this.setColourRGB(Blockly.CAT_COMMUNICATION_RGB);
+	        this.appendDummyInput('').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.WAIT_FOR_CONNECTION);
+	        this.setOutput(true, 'Connection');
 	        this.setTooltip(Blockly.Msg.EV3BRICK_TOOLTIP);
 	        this.setHelp(new Blockly.Help(Blockly.Msg.EV3BRICK_HELP, 'brick.png'));
 	    }

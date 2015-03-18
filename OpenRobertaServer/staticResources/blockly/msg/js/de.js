@@ -806,5 +806,6 @@ Blockly.Msg.SEND_DATA = "zu sendende Daten:";
 Blockly.Msg.RECIVED_DATA = "empfangene Daten:";
 Blockly.Msg.USED_CONNECTION = "über Verbindung:";
 Blockly.Msg.CONNECT ="Eine Verbindung über Bluetooth herstellen zur Addresse:";
+Blockly.Msg.WAIT_FOR_CONNECTION = "Auf Bluetooth Verbindung warten";
 //remove this line after cebit
 Blockly.Msg.TEST_TEXT = "testing_cebit_hackathon";

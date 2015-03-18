@@ -34,7 +34,7 @@ import de.fhg.iais.roberta.ast.syntax.action.TurnAction;
 import de.fhg.iais.roberta.ast.syntax.action.TurnDirection;
 import de.fhg.iais.roberta.ast.syntax.action.VolumeAction;
 import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothConnectAction;
-import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothRecieveAction;
+import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
@@ -244,10 +244,10 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 Phrase<V> bluetoothSendConnection = extractValue(values, new ExprParam(BlocklyConstants.CONNECTION, null));
                 return BluetoothSendAction.make(convertPhraseToExpr(bluetoothSendConnection), convertPhraseToExpr(bluetoothSendMessage), properties, comment);
                 
-            case "com_reciveBlock":
+            case "com_receiveBlock":
                 values = extractValues(block, (short) 1);
                 Phrase<V> bluetoothRecieveConnection = extractValue(values, new ExprParam(BlocklyConstants.CONNECTION, null));
-                return BluetoothRecieveAction.make(convertPhraseToExpr(bluetoothRecieveConnection), properties, comment);
+                return BluetoothReceiveAction.make(convertPhraseToExpr(bluetoothRecieveConnection), properties, comment);
              
             default:
                 throw new DbcException("Invalid Block: " + block.getType());

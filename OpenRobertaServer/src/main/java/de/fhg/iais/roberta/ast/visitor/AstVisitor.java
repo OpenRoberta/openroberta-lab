@@ -16,8 +16,9 @@ import de.fhg.iais.roberta.ast.syntax.action.ToneAction;
 import de.fhg.iais.roberta.ast.syntax.action.TurnAction;
 import de.fhg.iais.roberta.ast.syntax.action.VolumeAction;
 import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothConnectAction;
-import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothRecieveAction;
+import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothSendAction;
+import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.ast.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
@@ -630,21 +631,28 @@ public interface AstVisitor<V> {
     /**
      * visit a {@link BluetoothRecieveAction}.
      *
-     * @param clearDisplayAction to be visited
+     * @param bluetoothReceiveActionbluetoothReceiveAction to be visited
      */
-    public V visitBluetoothRecieveAction(BluetoothRecieveAction<V> clearDisplayAction);
+    public V visitBluetoothReceiveAction(BluetoothReceiveAction<V> bluetoothReceiveAction);
     
     /**
      * visit a {@link BluetoothConnectAction}.
      *
-     * @param clearDisplayAction to be visited
+     * @param bluetoothConnectAction to be visited
      */
-    public V visitBluetoothConnectAction(BluetoothConnectAction<V> clearDisplayAction);
+    public V visitBluetoothConnectAction(BluetoothConnectAction<V> bluetoothConnectAction);
     
     /**
      * visit a {@link BluetoothSendAction}.
      *
-     * @param clearDisplayAction to be visited
+     * @param bluetoothSendAction to be visited
      */
-    public V visitBluetoothSendAction(BluetoothSendAction<V> clearDisplayAction);
+    public V visitBluetoothSendAction(BluetoothSendAction<V> bluetoothSendAction);
+    
+    /**
+     * visit a {@link BluetoothWaitForConnectionAction}.
+     *
+     * @param bluetoothWaitForConnection to be visited
+     */
+    public V visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<V> bluetoothWaitForConnection);
 }

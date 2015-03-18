@@ -21,6 +21,10 @@ import de.fhg.iais.roberta.ast.syntax.action.ShowTextAction;
 import de.fhg.iais.roberta.ast.syntax.action.ToneAction;
 import de.fhg.iais.roberta.ast.syntax.action.TurnAction;
 import de.fhg.iais.roberta.ast.syntax.action.VolumeAction;
+import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothConnectAction;
+import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothReceiveAction;
+import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothSendAction;
+import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.ast.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
@@ -623,6 +627,30 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     @Override
     public BlocklyType visitMethodExpr(MethodExpr<BlocklyType> methodExpr) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitBluetoothReceiveAction(BluetoothReceiveAction<BlocklyType> clearDisplayAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitBluetoothConnectAction(BluetoothConnectAction<BlocklyType> clearDisplayAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitBluetoothSendAction(BluetoothSendAction<BlocklyType> clearDisplayAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public BlocklyType visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<BlocklyType> bluetoothWaitForConnection) {
         // TODO Auto-generated method stub
         return null;
     }

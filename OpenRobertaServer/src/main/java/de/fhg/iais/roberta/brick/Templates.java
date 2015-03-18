@@ -194,7 +194,8 @@ public class Templates {
             + "  <category name='TOOLBOX_COMMUNICATION'> "
             + "     <block type='com_startConnection'></block>"
             + "     <block type='com_sendBlock'></block>"
-            + "     <block type='com_reciveBlock'></block>"
+            + "     <block type='com_receiveBlock'></block>"
+            + "     <block type='com_waitForConnection'></block>"
             + " </category>"
             + "</toolbox_set> ";
         String expert =
@@ -540,7 +541,8 @@ public class Templates {
                 + "  <category name='TOOLBOX_COMMUNICATION'> "
                 + "     <block type='com_startConnection'></block>"
                 + "     <block type='com_sendBlock'></block>"
-                + "     <block type='com_reciveBlock'></block>"
+                + "     <block type='com_receiveBlock'></block>"
+                + "     <block type='com_waitForConnection'></block>"
                 + " </category>"
                 + "</toolbox_set> ";
         String brickEV3 =
