@@ -770,6 +770,7 @@ Blockly.Msg.VARIABLES_TYPE_BOOLEAN = "Boolean";
 Blockly.Msg.VARIABLES_TYPE_COLOUR = "Colour";
 Blockly.Msg.VARIABLES_TYPE_NUMBER = "Number";
 Blockly.Msg.VARIABLES_TYPE_STRING = "String";
+Blockly.Msg.VARIABLES_TYPE_CONNECTION = "Connection";
 Blockly.Msg.VARIABLE_GLOBAL_HELP = "With this block you can declare a global variable. In a global variable you can store values, that you would like to access somewhere in your program later. You can <ul class='NonIcon'><li>modify the name of the variable</li><li>choose the right type of the variable</li><li>set the initial value</li></ul>";
 Blockly.Msg.WAIT = "wait";
 Blockly.Msg.WAIT_FOREVER = "indefinitely";
@@ -800,3 +801,9 @@ Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAM
 Blockly.Msg.LISTS_INDEX_OF_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
 Blockly.Msg.LISTS_SET_INDEX_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
 Blockly.Msg.LISTS_GET_INDEX_HELPURL = Blockly.Msg.LISTS_INDEX_OF_HELPURL;
+Blockly.Msg.SEND_DATA = "data to send:";
+Blockly.Msg.USED_CONNECTION = "via connection:";
+Blockly.Msg.RECIVED_DATA = "data recived";
+Blockly.Msg.CONNECT = "connect via bluetooth with following address:";
+//remove this line after cebit
+Blockly.Msg.TEST_TEXT = "testing_cebit_hackathon";

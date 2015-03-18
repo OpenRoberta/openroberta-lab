@@ -101,4 +101,7 @@ public final class BlocklyConstants {
     public static final String MATH_MODULO = "math_modulo";
     public static final String TEXT_APPEND = "text_append";
     public static final String ROB_CONTROLS_START_ACTIVITY = "robControls_start_activity";
+    public static final String CONNECTION = "CONNECTION";
+    public static final String MESSAGE = "MESSAGE";
+    public static final String ADDRESS = "ADDRESS";
 }

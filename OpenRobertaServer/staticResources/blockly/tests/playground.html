@@ -46,6 +46,7 @@
 <script type="text/javascript" src="../blocks/robProcedures.js"></script>
 <script type="text/javascript" src="../blocks/robSensors.js"></script>
 <script type="text/javascript" src="../blocks/robBrick.js"></script>
+<script type="text/javascript" src="../blocks/robCommunication.js"></script>
 <script type="text/javascript" src="../core/bubble.js"></script>
 <script type="text/javascript" src="../core/procedures.js"></script>
 <script type="text/javascript" src="../core/flyout.js"></script>
@@ -198,6 +199,13 @@ h1 {
 		<category name='TOOLBOX_MOVE'>
 			<block type='robActions_motor_on'>
 				<field name='MOTORPORT'>B</field>
+				<value name='POWER'>
+					<block type='math_number'>
+						<field name='NUM'>30</field>
+					</block>
+				</value>
+			</block>
+			<block type='robActions_motorDiff_on_testBlock'>
 				<value name='POWER'>
 					<block type='math_number'>
 						<field name='NUM'>30</field>
@@ -522,6 +530,11 @@ h1 {
 	</category>
 	<category name='TOOLBOX_VARIABLE' custom='VARIABLE'></category>
 	<category name='TOOLBOX_PROCEDURE' custom='PROCEDURE'></category>
+	<category name='TOOLBOX_COMMUNICATION'>
+		<block type='com_startConnection'></block>
+		<block type='com_sendBlock'></block>
+		<block type='com_reciveBlock'></block>
+	</category>
 </toolbox_set>
  
   <h1>Blockly Playground</h1>

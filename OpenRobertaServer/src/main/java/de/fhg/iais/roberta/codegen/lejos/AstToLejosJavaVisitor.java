@@ -24,6 +24,9 @@ import de.fhg.iais.roberta.ast.syntax.action.ShowTextAction;
 import de.fhg.iais.roberta.ast.syntax.action.ToneAction;
 import de.fhg.iais.roberta.ast.syntax.action.TurnAction;
 import de.fhg.iais.roberta.ast.syntax.action.VolumeAction;
+import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothConnectAction;
+import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothRecieveAction;
+import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.ast.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary.Op;
@@ -1383,6 +1386,24 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         } catch ( NumberFormatException e ) {
             return false;
         }
+    }
+
+    @Override
+    public Void visitBluetoothRecieveAction(BluetoothRecieveAction<Void> clearDisplayAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> clearDisplayAction) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitBluetoothSendAction(BluetoothSendAction<Void> clearDisplayAction) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

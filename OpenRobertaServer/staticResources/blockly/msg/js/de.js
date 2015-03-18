@@ -737,6 +737,7 @@ Blockly.Msg.TOOLBOX_SOUND = "Klang";
 Blockly.Msg.TOOLBOX_TEXT = "Text";
 Blockly.Msg.TOOLBOX_VARIABLE = "Variablen";
 Blockly.Msg.TOOLBOX_WAIT = "Warten";
+Blockly.Msg.TOOLBOX_COMMUNICATION = "Kommunikation";
 Blockly.Msg.TOUCH_HELP = "Der Berührungssensor erkennt, ob der rote Teil des Sensors eingedrückt wird oder nicht. Er eignet sich besonders gut als Schalter oder um den Roboter Hindernisse erkennen zu lassen.";
 Blockly.Msg.TOUCH_HELPURL = "https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/";  // untranslated
 Blockly.Msg.TOUCH_ISPRESSED_TOOLTIP = "Ist der Berührungssensor gedrückt?";
@@ -770,6 +771,7 @@ Blockly.Msg.VARIABLES_TYPE_BOOLEAN = "logischer Wert";
 Blockly.Msg.VARIABLES_TYPE_COLOUR = "Farbe";
 Blockly.Msg.VARIABLES_TYPE_NUMBER = "Zahl";
 Blockly.Msg.VARIABLES_TYPE_STRING = "Zeichenkette";
+Blockly.Msg.VARIABLES_TYPE_CONNECTION = "Verbindung";
 Blockly.Msg.VARIABLE_GLOBAL_HELP = "Mit diesem Block deklarierst du eine globale Variable. Hier kannst du Werte abspeichern, die du an einer beliebigen Stelle im Programm wieder auslesen möchtest. Du kannst <ul class='NonIcon'><li>den Namen der Variablen verändern,</li><li>den passenden Typ der Variablen auswählen</li><li>und den Anfangswert setzen.</li></ul>";
 Blockly.Msg.WAIT = "Warte";
 Blockly.Msg.WAIT_FOREVER = "unendlich";
@@ -800,3 +802,9 @@ Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAM
 Blockly.Msg.LISTS_INDEX_OF_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
 Blockly.Msg.LISTS_SET_INDEX_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
 Blockly.Msg.LISTS_GET_INDEX_HELPURL = Blockly.Msg.LISTS_INDEX_OF_HELPURL;
+Blockly.Msg.SEND_DATA = "zu sendende Daten:";
+Blockly.Msg.RECIVED_DATA = "empfangene Daten:";
+Blockly.Msg.USED_CONNECTION = "über Verbindung:";
+Blockly.Msg.CONNECT ="Eine Verbindung über Bluetooth herstellen zur Addresse:";
+//remove this line after cebit
+Blockly.Msg.TEST_TEXT = "testing_cebit_hackathon";

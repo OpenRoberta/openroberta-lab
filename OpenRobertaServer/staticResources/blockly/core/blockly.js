@@ -142,6 +142,12 @@ Blockly.CAT_TEXT_RGB = [ 177, 200, 0 ];
  * The rgb value for block colours in variables category.
  */
 Blockly.CAT_VARIABLE_RGB = [ 144, 133, 186 ];
+/**
+ * The rgb value for block colours in communication category.
+ */
+Blockly.CAT_COMMUNICATION_RGB = [ 250, 128, 114 ];
+
+
 
 /**
  * ENUM for a right-facing value input. E.g. 'test' or 'return'.
@@ -220,6 +226,7 @@ Blockly.DATA_TYPE['Array_Colour'] = Blockly.CAT_LIST_RGB;
 Blockly.DATA_TYPE['Colour'] = Blockly.CAT_COLOUR_RGB;
 Blockly.DATA_TYPE['Sensor'] = Blockly.CAT_SENSOR_RGB;
 Blockly.DATA_TYPE['Actor'] = Blockly.CAT_ACTION_RGB;
+Blockly.DATA_TYPE['Connection'] = Blockly.CAT_COMMUNICATION_RGB;
 
 /**
  * Database of pre-loaded sounds.

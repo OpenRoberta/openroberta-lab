@@ -301,7 +301,10 @@ abstract public class Phrase<V> {
         METHOD_IF_RETURN( Category.METHOD, MethodIfReturn.class, "robProcedures_ifreturn" ),
         METHOD_VOID( Category.METHOD, MethodVoid.class, "robProcedures_defnoreturn" ),
         METHOD_CALL( Category.METHOD, MethodCall.class, "robProcedures_callnoreturn", "robProcedures_callreturn" ),
-        METHOD_RETURN( Category.METHOD, MethodReturn.class, "robProcedures_defreturn" );
+        METHOD_RETURN( Category.METHOD, MethodReturn.class, "robProcedures_defreturn" ),
+        BLUETOOTH_RECIEVED_ACTION( Category.ACTOR ),
+        BLUETOOTH_CONNECT_ACTION( Category.ACTOR ),
+        BLUETOOTH_SEND_ACTION( Category.ACTOR );
 
         private final Category category;
         private final Class<?> astClass;

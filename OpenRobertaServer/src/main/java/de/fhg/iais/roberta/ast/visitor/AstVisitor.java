@@ -15,6 +15,9 @@ import de.fhg.iais.roberta.ast.syntax.action.ShowTextAction;
 import de.fhg.iais.roberta.ast.syntax.action.ToneAction;
 import de.fhg.iais.roberta.ast.syntax.action.TurnAction;
 import de.fhg.iais.roberta.ast.syntax.action.VolumeAction;
+import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothConnectAction;
+import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothRecieveAction;
+import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.ast.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
@@ -623,4 +626,25 @@ public interface AstVisitor<V> {
      * @param methodStmt to be visited
      */
     public V visitMethodCall(MethodCall<V> methodCall);
+    
+    /**
+     * visit a {@link BluetoothRecieveAction}.
+     *
+     * @param clearDisplayAction to be visited
+     */
+    public V visitBluetoothRecieveAction(BluetoothRecieveAction<V> clearDisplayAction);
+    
+    /**
+     * visit a {@link BluetoothConnectAction}.
+     *
+     * @param clearDisplayAction to be visited
+     */
+    public V visitBluetoothConnectAction(BluetoothConnectAction<V> clearDisplayAction);
+    
+    /**
+     * visit a {@link BluetoothSendAction}.
+     *
+     * @param clearDisplayAction to be visited
+     */
+    public V visitBluetoothSendAction(BluetoothSendAction<V> clearDisplayAction);
 }
