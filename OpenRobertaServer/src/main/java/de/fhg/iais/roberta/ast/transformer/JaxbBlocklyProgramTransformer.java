@@ -36,6 +36,7 @@ import de.fhg.iais.roberta.ast.syntax.action.VolumeAction;
 import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothConnectAction;
 import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothSendAction;
+import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
@@ -248,6 +249,9 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
                 values = extractValues(block, (short) 1);
                 Phrase<V> bluetoothRecieveConnection = extractValue(values, new ExprParam(BlocklyConstants.CONNECTION, null));
                 return BluetoothReceiveAction.make(convertPhraseToExpr(bluetoothRecieveConnection), properties, comment);
+                
+            case "com_waitForConnection":
+                return BluetoothWaitForConnectionAction.make(properties, comment);
              
             default:
                 throw new DbcException("Invalid Block: " + block.getType());
