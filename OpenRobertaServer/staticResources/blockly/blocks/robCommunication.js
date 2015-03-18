@@ -57,7 +57,7 @@ Blockly.Blocks['com_sendBlock'] = {
 	        this.setPreviousStatement(true);
 	        this.setNextStatement(true);
 	        this.appendValueInput('sendData').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.SEND_DATA, 'DATA').setCheck('String');
-	        this.appendValueInput('connection').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.USED_CONNECTION, 'CONNECTION_ID').setCheck('Connection');
+	        this.appendValueInput('CONNECTION').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.USED_CONNECTION, 'CONNECTION_ID').setCheck('Connection');
 	        this.setTooltip(Blockly.Msg.EV3BRICK_TOOLTIP);
 	        this.setHelp(new Blockly.Help(Blockly.Msg.EV3BRICK_HELP, 'brick.png'));
 	    }
@@ -80,7 +80,7 @@ Blockly.Blocks['com_receiveBlock'] = {
 	        this.setHelpUrl(Blockly.Msg.EV3BRICK_HELPURL);
 	        this.setColourRGB(Blockly.CAT_COMMUNICATION_RGB);
 	        this.appendDummyInput('').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.RECIVED_DATA);
-	        this.appendValueInput('connection').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.USED_CONNECTION, 'CONNECTION_ID').setCheck('Connection');
+	        this.appendValueInput('CONNECTION').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.USED_CONNECTION, 'CONNECTION_ID').setCheck('Connection');
 	        this.setOutput(true, 'String');
 	        this.setTooltip(Blockly.Msg.EV3BRICK_TOOLTIP);
 	        this.setHelp(new Blockly.Help(Blockly.Msg.EV3BRICK_HELP, 'brick.png'));
