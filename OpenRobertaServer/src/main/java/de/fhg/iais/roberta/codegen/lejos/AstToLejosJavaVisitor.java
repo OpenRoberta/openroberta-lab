@@ -1275,6 +1275,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         this.sb.append("import de.fhg.iais.roberta.codegen.lejos.BlocklyMethods;\n");
         this.sb.append("import de.fhg.iais.roberta.codegen.lejos.Hal;\n\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.action.*;\n");
+        this.sb.append("import lejos.remote.nxt.NXTConnection;\n");
         this.sb.append("import de.fhg.iais.roberta.ast.syntax.sensor.*;\n");
         this.sb.append("import de.fhg.iais.roberta.ev3.*;\n");
         this.sb.append("import de.fhg.iais.roberta.ev3.components.*;\n\n");
@@ -1391,7 +1392,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> clearDisplayAction) {
-        this.sb.append("hal.readMessage();");
+        this.sb.append("hal.readMessage()");
         return null;
     }
 
@@ -1405,7 +1406,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         } else {
             bluetoothConnectAction.get_address().visit(this);
         }
-        this.sb.append(");"); 
+        this.sb.append(")"); 
         return null;
     }
 
@@ -1425,7 +1426,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
-        this.sb.append("hal.waitForConnection();");
+        this.sb.append("hal.waitForConnection()");
         return null;
     }
 

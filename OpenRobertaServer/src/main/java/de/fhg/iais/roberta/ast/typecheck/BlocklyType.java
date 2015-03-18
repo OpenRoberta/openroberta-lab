@@ -58,6 +58,7 @@ public enum BlocklyType {
     REF("", "",NULL), PRIM("", "",NUMERIC, BOOL),
     NOTHING("", "",REF, PRIM),
     VOID("", "void"),
+    CONNECTION("Connection","NXTConnection", ANY),
     CAPTURED_TYPE("", ""), R("", ""), S("", ""), T("", "");
     // @formatter:on
 

@@ -972,16 +972,17 @@ public class Hal {
      * 
      * @param host the host.
      */
-    public void establishConnectionTo(String host) {
+    public NXTConnection establishConnectionTo(String host) {
         bluetoothConnection = blueCom.establishConnectionTo(host, BLUETOOTH_TIMEOUT);
+        return bluetoothConnection;
     }
 
     /**
      * Awaits an incoming connection via {@link BluetoothCom#waitForConnection(int)} with a timeout of {@link #BLUETOOTH_TIMEOUT}.
      */
-    public void waitForConnection() {
+    public NXTConnection waitForConnection() {
         bluetoothConnection = blueCom.waitForConnection(BLUETOOTH_TIMEOUT);
-        //return bluetoothConnection;
+        return bluetoothConnection;
     }
 
     /**
