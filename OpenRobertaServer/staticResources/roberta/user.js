@@ -4,29 +4,29 @@ var USER = {};
      * Login user
      * @memberof USER
      */
-    USER.login = function(accountName, passwd, successFn, message) {
+    USER.login = function(accountName, passwd, successFn) {
         COMM.json("/user", {
                     "cmd" : "login",
                     "accountName" : accountName,
-                    "password" :passwd
-        }, successFn, message); 
+                    "password" : passwd
+        }, successFn, 'login user ' + accountName  + ' with password ' + passwd); 
     };
     
     /**
      * Logout user
      * @memberof USER
      */
-    USER.logout = function(successFn, message) {
+    USER.logout = function(successFn) {
         COMM.json("/user", {
                     "cmd" : "logout"
-        }, successFn, message); 
+        }, successFn, 'logout user'); 
     };
     
     /**
      * Save user to server
      * @memberof USER
      */
-    USER.saveUserToServer = function(accountName, userName, userEmail, passwd, successFn, message) {
+    USER.saveUserToServer = function(accountName, userName, userEmail, passwd, successFn) {
         COMM.json("/user", {
             "cmd" : "createUser",
             "accountName" : accountName,
@@ -34,18 +34,18 @@ var USER = {};
             "userEmail" : userEmail,
             "password" : passwd,
             "role" : 'TEACHER',
-        }, successFn, message); 
+        }, successFn, 'save user ' + accountName + ' to server'); 
     };
 
     /**
      * Delete user on server
      * @memberof USER
      */
-    USER.deleteUserOnServer = function(accountName, passwd, successFn, message) {
+    USER.deleteUserOnServer = function(accountName, passwd, successFn) {
         COMM.json("/user", {
             "cmd" : "deleteUser",
             "accountName" : accountName,
             "password" : passwd
-        }, successFn, message); 
+        }, successFn, 'delete user' + accountName + ' on server'); 
     };
 })($);

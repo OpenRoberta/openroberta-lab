@@ -25,6 +25,10 @@ limitations under the License.
 <script type="text/javascript" src="/common/jquery.dataTables.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/common/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/roberta/user.js"></script>
+<script type="text/javascript" src="/roberta/robot.js"></script>
+<script type="text/javascript" src="/roberta/program.js"></script>
+<script type="text/javascript" src="/roberta/configuration.js"></script>
+<script type="text/javascript" src="/roberta/util.js"></script>
 <script type="text/javascript" src="/roberta/roberta.js"></script>
 
 <script type="text/javascript" src="/blockly/blockly_compressed.js"></script>
@@ -179,8 +183,8 @@ limitations under the License.
                             class="caret"
                         ></b></a>
                         <ul class="dropdown-menu" id="languages">
-                            <li><a href="#">EN</a></li>
-                            <li><a href="#">DE</a></li>
+                            <li class="DE"><a href="#">EN</a></li>
+                            <li class="EN"><a href="#">DE</a></li>
                         </ul></li>
                 </ul>
             </div>
@@ -439,6 +443,7 @@ limitations under the License.
             </div>
         </div>
     </div>
+    
     <!-- Popup show state info -->
     <div id="show-state-info" class="modal fade">
         <div class="modal-dialog">

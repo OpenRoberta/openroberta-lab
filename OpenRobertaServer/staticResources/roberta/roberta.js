@@ -17,7 +17,6 @@ function initUserState() {
     userState.configurationSaved = false;
     userState.programModified = false;
     userState.configurationModified = false;
-    userState.brickSaved = false;
     userState.toolbox = 'beginner';
     userState.token = '1A2B3C4D';
     userState.doPing = true;
@@ -32,37 +31,37 @@ function initUserState() {
  * Login user
  */
 function login() {
-    USER.login($("#accountNameS").val(), $('#pass1S').val(), function(response) {
-        if (response.rc === "ok") {
-            userState.accountName = response.userAccountName;
-            if (response.userName === undefined || response.userName === '') {
-                userState.name = response.userAccountName;
+    USER.login($("#accountNameS").val(), $('#pass1S').val(), function(result) {
+        if (result.rc === "ok") {
+            userState.accountName = result.userAccountName;
+            if (result.userName === undefined || result.userName === '') {
+                userState.name = result.userAccountName;
             } else {
-                userState.name = response.userName;
+                userState.name = result.userName;
             }
-            userState.id = response.userId;
+            userState.id = result.userId;
             setHeadNavigationMenuState('login');
-            setRobotState(response);
+            setRobotState(result);
         }
-        displayInformation(response, "MESSAGE_USER_LOGIN", response.message, userState.name);
-    }, 'login user');
+        displayInformation(result, "MESSAGE_USER_LOGIN", result.message, userState.name);
+    });
 }
 
 /**
  * Logout user
  */
 function logout() {
-    USER.logout(function(response) {
-        if (response.rc === "ok") {
+    USER.logout(function(result) {
+        if (result.rc === "ok") {
             initUserState();
             $('#programNameSave').val('');
             $('#configurationNameSave').val('');
             setHeadNavigationMenuState('logout');
             Blockly.getMainWorkspace().saveButton.disable();
-            setRobotState(response);
+            setRobotState(result);
         }
-        displayInformation(response, "MESSAGE_USER_LOGOUT", response.message);
-    }, 'logout user');
+        displayInformation(result, "MESSAGE_USER_LOGOUT", result.message);
+    });
 }
 
 /**
@@ -72,15 +71,15 @@ function saveUserToServer() {
     if ($('#pass1').val() != $('#pass2').val()) {
         displayMessage("MESSAGE_PASSWORD_ERROR", "POPUP", "");
     } else {
-        USER.saveUserToServer($("#accountName").val(), $('#userName').val(), $("#userEmail").val(), $('#pass1').val(), function(response) {
-            if (response.rc === "ok") {
-                setRobotState(response);
+        USER.saveUserToServer($("#accountName").val(), $('#userName').val(), $("#userEmail").val(), $('#pass1').val(), function(result) {
+            if (result.rc === "ok") {
+                setRobotState(result);
                 $('#accountNameS').val($("#accountName").val());
                 $('#pass1S').val($('#pass1').val());
                 login();
             }
-            displayInformation(response, "", response.message);
-        }, 'save user to server');
+            displayInformation(result, "", result.message);
+        });
     }
 }
 
@@ -88,25 +87,23 @@ function saveUserToServer() {
  * Delete user on server
  */
 function deleteUserOnServer() {
-    USER.deleteUserOnServer(userState.accountName, $('#pass1D').val(), function(response) {
-        if (response.rc === "ok") {
+    USER.deleteUserOnServer(userState.accountName, $('#pass1D').val(), function(result) {
+        if (result.rc === "ok") {
             logout();
         }
-        displayInformation(response, "MESSAGE_USER_DELETED", response.message, userState.name);
-    }, 'delete user on server');
+        displayInformation(result, "MESSAGE_USER_DELETED", result.message, userState.name);
+    });
 }
 
 /**
  * Update Firmware
  */
 function updateFirmware() {
-    COMM.json("/admin", {
-        "cmd" : "updateFirmware"
-    }, function(response) {
-        if (response.rc === "ok") {
-            setRobotState(response);
+    ROBOT.updateFirmware(function(result) {
+        if (result.rc === "ok") {
+            setRobotState(result);
         }
-        displayInformation(response, "MESSAGE_ROBOT_CONNECTED", response.message, userState.robotFirmware);
+        displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, userState.robotFirmware);
     });
 }
 
@@ -168,9 +165,6 @@ function showRobotInfo() {
 
 /**
  * Inject Blockly with initial toolbox
- * 
- * @param {response}
- *            toolbox
  */
 function injectBlockly(toolbox, opt_programBlocks) {
     response(toolbox);
@@ -208,7 +202,7 @@ function initProgramEnvironment(opt_programBlocks) {
 function setProgram(name) {
     if (name) {
         userState.program = name;
-        displayState();
+        $('#tabProgramName').text(name);
     }
 }
 
@@ -221,7 +215,7 @@ function setProgram(name) {
 function setConfiguration(name) {
     if (name) {
         userState.configuration = name;
-        displayState();
+        $('#tabConfigurationName').text(name);
     }
 }
 
@@ -233,15 +227,12 @@ function setConfiguration(name) {
  */
 function setToken(token) {
     var resToken = token.toUpperCase();
-    COMM.json("/admin", {
-        "cmd" : "setToken",
-        "token" : resToken
-    }, function(response) {
-        if (response.rc === "ok") {
+    ROBOT.setToken(resToken, function(result) {
+        if (result.rc === "ok") {
             userState.token = resToken;
-            setRobotState(response);
+            setRobotState(result);
         }
-        displayInformation(response, "MESSAGE_ROBOT_CONNECTED", response.message, userState.robotName);
+        displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, userState.robotName);
     });
 }
 
@@ -252,62 +243,16 @@ function setToken(token) {
  *            Result-object from server call
  */
 function response(result) {
-    var str = "{";
-    var comma = false;
-    for (key in result) {
-        if (comma) {
-            str += ',';
-        } else {
-            comma = true;
-        }
-        str += '"' + key + '":';
-        if (result.hasOwnProperty(key)) {
-            // The output of items is limited to the first 100 characters
-            if (result[key].length > 100) {
-                str += '"' + JSON.stringify(result[key]).substring(1, 100) + ' ..."';
-            } else {
-                str += JSON.stringify(result[key]);
-            }
-        }
-    }
-    str += '}';
-    LOG.info('result from server: ' + str);
-
+    LOG.info('result from server: ' + UTIL.formatResultLog(result));
     if (result.rc != 'ok') {
         displayMessage(result.message, "POPUP", "");
     }
 }
 
 /**
- * Handle result of server call and refresh program list
- * 
- * @param {result}
- *            Result-object from server call
- */
-function responseAndRefreshProgramList(result) {
-    response(result);
-    COMM.json("/program", {
-        "cmd" : "loadPN",
-    }, showPrograms);
-}
-
-/**
- * Handle result of server call and refresh configuration list
- * 
- * @param {result}
- *            Result-object from server call
- */
-function responseAndRefreshConfigurationList(result) {
-    response(result);
-    COMM.json("/conf", {
-        "cmd" : "loadCN",
-    }, showConfigurations);
-}
-
-/**
  * Save program with new name to server
  */
-function saveAsToServer() {
+function saveAsProgramToServer() {
     var progName = $('#programNameSave').val().trim();
     if (!progName.match(/^[a-zA-Z][a-zA-Z0-9]*$/)) {
         displayMessage("MESSAGE_INVALID_NAME", "POPUP", "");
@@ -317,21 +262,34 @@ function saveAsToServer() {
     $('#menuSaveProg').parent().removeClass('login');
     $('#menuSaveProg').parent().removeClass('disabled');
     Blockly.getMainWorkspace().saveButton.enable();
+    var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+    var xmlText = Blockly.Xml.domToText(xml);
+    userState.programSaved = true;
+    LOG.info('saveAs program ' + userState.program + ' login: ' + userState.id);
+    $('.modal').modal('hide'); // close all opened popups
+    PROGRAM.saveAsProgramToServer( userState.program, xmlText, function(result) {
+        if (result.rc === 'ok') {
+            userState.programModified = false;
+        }
+        displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM_AS", result.message, userState.program);
+    });
+}
+
+/**
+ * Save program to server
+ */
+function saveToServer() {
     if (userState.program) {
         var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-        var xml_text = Blockly.Xml.domToText(xml);
+        var xmlText = Blockly.Xml.domToText(xml);
         userState.programSaved = true;
-        LOG.info('saveAs program ' + userState.program + ' login: ' + userState.id);
+        LOG.info('save program ' + userState.program + ' login: ' + userState.id);
         $('.modal').modal('hide'); // close all opened popups
-        return COMM.json("/program", {
-            "cmd" : "saveAsP",
-            "name" : userState.program,
-            "program" : xml_text
-        }, function(response) {
-            if (response.rc === 'ok') {
+        PROGRAM.saveProgramToServer( userState.program, xmlText, function(result) {
+            if (result.rc === 'ok') {
                 userState.programModified = false;
             }
-            displayInformation(response, "MESSAGE_EDIT_SAVE_PROGRAM_AS", response.message, userState.program);
+            displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM", result.message, userState.program);
         });
     }
 }
@@ -342,19 +300,15 @@ function saveAsToServer() {
 function saveToServer() {
     if (userState.program) {
         var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-        var xml_text = Blockly.Xml.domToText(xml);
+        var xmlText = Blockly.Xml.domToText(xml);
         userState.programSaved = true;
         LOG.info('save program ' + userState.program + ' login: ' + userState.id);
         $('.modal').modal('hide'); // close all opened popups
-        return COMM.json("/program", {
-            "cmd" : "saveP",
-            "name" : userState.program,
-            "program" : xml_text
-        }, function(response) {
-            if (response.rc === 'ok') {
+        PROGRAM.saveProgramToServer( userState.program, xmlText, function(result) {
+            if (result.rc === 'ok') {
                 userState.programModified = false;
             }
-            displayInformation(response, "MESSAGE_EDIT_SAVE_PROGRAM", response.message, userState.program);
+            displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM", result.message, userState.program);
         });
     }
 }
@@ -372,22 +326,16 @@ function saveAsConfigurationToServer() {
     $('#menuSaveConfig').parent().removeClass('login');
     $('#menuSaveConfig').parent().removeClass('disabled');
     document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().saveButton.enable();
-    if (userState.configuration) {
-        userState.configurationSaved = true;
-        $('.modal').modal('hide'); // close all opened popups
-        var xml_text = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
-        LOG.info('save brick configuration ' + userState.configuration);
-        COMM.json("/conf", {
-            "cmd" : "saveAsC",
-            "name" : userState.configuration,
-            "configuration" : xml_text
-        }, function(response) {
-            if (response.rc === 'ok') {
-                userState.configurationModified = false;
-            }
-            displayInformation(response, "MESSAGE_EDIT_SAVE_CONFIGURATION_AS", response.message, userState.configuration);
-        });
-    }
+    userState.configurationSaved = true;
+    $('.modal').modal('hide'); // close all opened popups
+    var xmlText = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
+    LOG.info('save brick configuration ' + userState.configuration);
+    CONFIGURATION.saveAsConfigurationToServer( userState.configuration, xmlText, function(result) {
+        if (result.rc === 'ok') {
+            userState.configurationModified = false;
+        }
+        displayInformation(result, "MESSAGE_EDIT_SAVE_CONFIGURATION_AS", result.message, userState.configuration);
+    });
 }
 
 /**
@@ -397,17 +345,13 @@ function saveConfigurationToServer() {
     if (userState.configuration) {
         userState.configurationSaved = true;
         $('.modal').modal('hide'); // close all opened popups
-        var xml_text = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
+        var xmlText = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
         LOG.info('save brick configuration ' + userState.configuration);
-        COMM.json("/conf", {
-            "cmd" : "saveC",
-            "name" : userState.configuration,
-            "configuration" : xml_text
-        }, function(response) {
-            if (response.rc === 'ok') {
+        CONFIGURATION.saveConfigurationToServer( userState.configuration, xmlText, function(result) {
+            if (result.rc === 'ok') {
                 userState.configurationModified = false;
             }
-            displayInformation(response, "MESSAGE_EDIT_SAVE_CONFIGURATION", response.message, userState.configuration);
+            displayInformation(result, "MESSAGE_EDIT_SAVE_CONFIGURATION", result.message, userState.configuration);
         });
     }
 }
@@ -422,17 +366,11 @@ function runOnBrick() {
         displayMessage("POPUP_ROBOT_BUSY", "POPUP", "");
     } else {
         LOG.info('run ' + userState.program + ' signed in: ' + userState.id);
-        var xml_program = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-        var xml_text_program = Blockly.Xml.domToText(xml_program);
-        var xml_text_configuration = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
+        var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+        var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
+        var xmlTextConfiguration = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
         displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
-        return COMM.json("/program", {
-            "cmd" : "runP",
-            "name" : userState.program,
-            "configuration" : userState.configuration,
-            "programText" : xml_text_program,
-            "configurationText" : xml_text_configuration
-        }, response);
+        PROGRAM.runOnBrick( userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, response);
     }
 }
 
@@ -477,19 +415,16 @@ function loadFromListing() {
     if ($programRow.length > 0) {
         var programName = $programRow[0].children[0].textContent;
         LOG.info('loadFromList ' + programName + ' signed in: ' + userState.id);
-        COMM.json("/program", {
-            "cmd" : "loadP",
-            "name" : programName
-        }, function(response) {
-            if (response.rc === 'ok') {
+        PROGRAM.loadProgramFromListing( programName, function(result) {
+            if (result.rc === 'ok') {
                 $("#tabs").tabs("option", "active", 0);
                 userState.programSaved = true;
-                showProgram(response, true, programName);
+                showProgram(result, true, programName);
                 $('#menuSaveProg').parent().removeClass('login');
                 $('#menuSaveProg').parent().removeClass('disabled');
                 Blockly.getMainWorkspace().saveButton.enable();
             }
-            displayInformation(response, "", response.message);
+            displayInformation(result, "", result.message);
         });
     }
 }
@@ -502,65 +437,54 @@ function loadConfigurationFromListing() {
     if ($configurationRow.length > 0) {
         var configurationName = $configurationRow[0].children[0].textContent;
         LOG.info('loadFromConfigurationList ' + configurationName + ' signed in: ' + userState.id);
-        COMM.json("/conf", {
-            "cmd" : "loadC",
-            "name" : configurationName
-        }, function(reponse) {
-            if (reponse.rc === 'ok') {
+        CONFIGURATION.loadConfigurationFromListing( configurationName, function(result) {
+            if (result.rc === 'ok') {
                 $("#tabs").tabs("option", "active", 0);
                 userState.configurationSaved = true;
-                showConfiguration(reponse, true, configurationName);
+                showConfiguration(result, true, configurationName);
                 $('#menuSaveConfig').parent().removeClass('login');
                 $('#menuSaveConfig').parent().removeClass('disabled');
-                setRobotState(reponse);
+                setRobotState(result);
             }
-            displayInformation(response, "", response.message);
+            displayInformation(result, "", result.message);
         });
     }
 }
 
 /**
- * Delete the program that was selected in program list
+ * Delete the programs that were selected in program list
  */
 function deleteFromListing() {
     var $programRow = $('#programNameTable .selected');
-    if ($programRow.length > 0) {
-        var programName = $programRow[0].children[0].textContent;
+    for (var i=0; i < $programRow.length; i++) {
+        var programName = $programRow[i].children[0].textContent;
         LOG.info('deleteFromList ' + programName + ' signed in: ' + userState.id);
-        COMM.json("/program", {
-            "cmd" : "deleteP",
-            "name" : programName
-        }, function(result) {
+        PROGRAM.deleteProgramFromListing( programName, function(result) {
             if (result.rc === 'ok') {
-                responseAndRefreshProgramList(result);
+                response(result);
+                PROGRAM.refreshList(showPrograms);
                 setRobotState(result);
-                displayMessage("MESSAGE_PROGRAM_DELETED", "TOAST", programName);
-            } else {
-                displayMessage(result.message, "POPUP", "");
             }
+            displayInformation(result, "MESSAGE_PROGRAM_DELETED", result.message, programName);
         });
     }
 }
 
 /**
- * Delete the configuration that was selected in configurations list
+ * Delete the configurations that waere selected in configurations list
  */
 function deleteConfigurationFromListing() {
     var $configurationRow = $('#configurationNameTable .selected');
-    if ($configurationRow.length > 0) {
-        var configurationName = $configurationRow[0].children[0].textContent;
+    for (var i=0; i < $configurationRow.length; i++) {
+        var configurationName = $configurationRow[i].children[0].textContent;
         LOG.info('deleteFromConfigurationList ' + configurationName + ' signed in: ' + userState.id);
-        COMM.json("/conf", {
-            "cmd" : "deleteC",
-            "name" : configurationName
-        }, function(result) {
+        CONFIGURATION.deleteConfigurationFromListing( configurationName, function(result) {
             if (result.rc === 'ok') {
-                responseAndRefreshConfigurationList(result);
+                response(result);
+                CONFIGURATION.refreshList(showConfigurations);
                 setRobotState(result);
-                displayMessage("MESSAGE_CONFIGURATION_DELETED", "TOAST", configurationName);
-            } else {
-                displayMessage(result.message, "POPUP", "");
             }
+            displayInformation(result, "MESSAGE_CONFIGURATION_DELETED", result.message, configurationName);
         });
     }
 }
@@ -630,62 +554,20 @@ function showConfigurations(result) {
 }
 
 function selectionPFn(event) {
-    $('#programNameTable .selected').removeClass('selected');
     $(event.target.parentNode).toggleClass('selected');
 }
 
 function selectionCFn(event) {
-    $('#configurationNameTable .selected').removeClass('selected');
     $(event.target.parentNode).toggleClass('selected');
 }
 
 function beforeActivateTab(event, ui) {
     $('#tabs').tabs("refresh");
     if (ui.newPanel.selector === '#progListing') {
-        COMM.json("/program", {
-            "cmd" : "loadPN",
-        }, showPrograms);
+        PROGRAM.refreshList(showPrograms);
     } else if (ui.newPanel.selector === '#confListing') {
-        COMM.json("/conf", {
-            "cmd" : "loadCN",
-        }, showConfigurations);
+        CONFIGURATION.refreshList(showConfigurations);
     }
-}
-
-/**
- * Convert date into numeric value
- * 
- * @param {d}
- *            date in the form 'dd.mm.yyyy, hh:mm:ss'
- */
-function parseDate(d) {
-    var dayPart = d.split(', ')[0];
-    var timePart = d.split(', ')[1];
-    var day = dayPart.split('.')[0];
-    var month = dayPart.split('.')[1] - 1;
-    var year = dayPart.split('.')[2];
-    var hour = timePart.split(':')[0];
-    var minute = timePart.split(':')[1];
-    var second = timePart.split(':')[2];
-    var date = new Date(year, month, day, hour, minute, second);
-    return date.getTime();
-}
-
-/**
- * Extension of Jquery-datatables for sorting German date fields
- */
-function initTables() {
-    jQuery.extend(jQuery.fn.dataTableExt.oSort['date-de-asc'] = function(a, b) {
-        a = parseDate(a);
-        b = parseDate(b);
-        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-    },
-
-    jQuery.fn.dataTableExt.oSort['date-de-desc'] = function(a, b) {
-        a = parseDate(a);
-        b = parseDate(b);
-        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-    });
 }
 
 /**
@@ -706,9 +588,6 @@ function initProgramNameTable() {
 //        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_SHARED_FOR'>Geteilt für</span>",
 //        "sClass" : "programs"
 //    }, {
-//        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_BLOCKS'>Blöcke</span>",
-//        "sClass" : "programs"
-//    }, {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>Erzeugt am</span>",
         "sClass" : "programs"
     }, {
@@ -716,12 +595,6 @@ function initProgramNameTable() {
         "sClass" : "programs"
     }, ];
     var $programs = $('#programNameTable');
-
-    var $window = $(window);
-
-    var calcDataTableHeight = function() {
-        return Math.round($window.height() - 260);
-    };
 
     var oTable = $programs.dataTable({
         "sDom" : '<lip>t<r>',
@@ -731,39 +604,24 @@ function initProgramNameTable() {
             "aTargets" : [ 2, 3 ], // indexes of columns to be formatted
             "sType" : "date-de",
             "mRender" : function(data) {
-                return formatDate(data);
+                return UTIL.formatDate(data);
             }
         } ],
         "bJQueryUI" : true,
-//                "sPaginationType" : "full_numbers",
-//                "bPaginate" : true,
-//                "iDisplayLength" : 20,
         "oLanguage" : {
-//                    "sLengthMenu" : '<span lkey="Blockly.Msg.DATATABLE_SHOW">Zeige</span> <select>'
-//                            + '<option value="10">10</option><option value="20">20</option><option value="25">25</option>'
-//                            + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>'
-//                            + '</select> <span lkey="Blockly.Msg.DATATABLE_PROGRAMS">Programme</span>',
-//                    "oPaginate" : {
-//                        "sFirst" : "<span lkey='Blockly.Msg.DATATABLE_FIRST'>&lt;&lt; Erste</span>",
-//                        "sPrevious" : "<span lkey='Blockly.Msg.DATATABLE_PREVIOUS'>&lt; Vorige</span>",
-//                        "sNext" : "<span lkey='Blockly.Msg.DATATABLE_NEXT'>Nächste &gt;</span>",
-//                        "sLast" : "<span lkey='Blockly.Msg.DATATABLE_LAST'>Letzte &gt;&gt;</span>"
-//                    },
-//                    "sInfo" : "<span lkey='Blockly.Msg.DATATABLE_SHOWING'>Zeige</span> _START_ <span lkey='Blockly.Msg.DATATABLE_TO'>bis</span> _END_ <span lkey='Blockly.Msg.DATATABLE_OF'>von</span> _TOTAL_ <span lkey='Blockly.Msg.DATATABLE_ENTRIES'>Einträgen</span>",
-//                    "sInfoEmpty" : "&nbsp;",
             "sEmptyTable" : "<span lkey='Blockly.Msg.DATATABLE_EMPTY_TABLE'>Die Tabelle ist leer</span>"
         },
         "fnDrawCallback" : function() {
         },
-        "scrollY" : calcDataTableHeight(),
+        "scrollY" : UTIL.calcDataTableHeight(),
         "scrollCollapse" : true,
         "paging" : false,
         "bInfo" : false
     });
 
-    $window.resize(function() {
+    $(window).resize(function() {
         var oSettings = oTable.fnSettings();
-        oSettings.oScroll.sY = calcDataTableHeight();
+        oSettings.oScroll.sY = UTIL.calcDataTableHeight();
         oTable.fnDraw(false); // redraw the table
     });
 
@@ -799,12 +657,6 @@ function initConfigurationNameTable() {
     }, ];
     var $configurations = $('#configurationNameTable');
 
-    var $window = $(window);
-
-    var calcDataTableHeight = function() {
-        return Math.round($window.height() - 260);
-    };
-
     var oTable = $configurations.dataTable({
         "sDom" : '<lip>t<r>',
         "aaData" : [],
@@ -813,39 +665,24 @@ function initConfigurationNameTable() {
             "aTargets" : [ 2, 3 ], // indexes of columns to be formatted
             "sType" : "date-de",
             "mRender" : function(data) {
-                return formatDate(data);
+                return UTIL.formatDate(data);
             }
         } ],
         "bJQueryUI" : true,
-//                "sPaginationType" : "full_numbers",
-//                "bPaginate" : true,
-//                "iDisplayLength" : 20,
         "oLanguage" : {
-//                    "sLengthMenu" : '<span lkey="Blockly.Msg.DATATABLE_SHOW">Zeige</span> <select>'
-//                            + '<option value="10">10</option><option value="20">20</option><option value="25">25</option>'
-//                            + '<option value="30">30</option><option value="100">100</option><option value="-1">All</option>'
-//                            + '</select> <span lkey="Blockly.Msg.DATATABLE_CONFIGURATIONS">Konfigurationen</span>',
-//                    "oPaginate" : {
-//                        "sFirst" : "<span lkey='Blockly.Msg.DATATABLE_FIRST'>&lt;&lt; Erste</span>",
-//                        "sPrevious" : "<span lkey='Blockly.Msg.DATATABLE_PREVIOUS'>&lt; Vorige</span>",
-//                        "sNext" : "<span lkey='Blockly.Msg.DATATABLE_NEXT'>Nächste &gt;</span>",
-//                        "sLast" : "<span lkey='Blockly.Msg.DATATABLE_LAST'>Letzte &gt;&gt;</span>"
-//                    },
-//                    "sInfo" : "<span lkey='Blockly.Msg.DATATABLE_SHOWING'>Zeige</span> _START_ <span lkey='Blockly.Msg.DATATABLE_TO'>bis</span> _END_ <span lkey='Blockly.Msg.DATATABLE_OF'>von</span> _TOTAL_ <span lkey='Blockly.Msg.DATATABLE_ENTRIES'>Einträgen</span>",
-//                    "sInfoEmpty" : "&nbsp;",
             "sEmptyTable" : "<span lkey='Blockly.Msg.DATATABLE_EMPTY_TABLE'>Die Tabelle ist leer</span>"
         },
         "fnDrawCallback" : function() {
         },
-        "scrollY" : calcDataTableHeight(),
+        "scrollY" : UTIL.calcDataTableHeight(),
         "scrollCollapse" : true,
         "paging" : false,
         "bInfo" : false
     });
 
-    $window.resize(function() {
+    $(window).resize(function() {
         var oSettings = oTable.fnSettings();
-        oSettings.oScroll.sY = calcDataTableHeight();
+        oSettings.oScroll.sY = UTIL.calcDataTableHeight();
         oTable.fnDraw(false); // redraw the table
     });
 
@@ -854,26 +691,6 @@ function initConfigurationNameTable() {
         selectionCFn(event);
         $('#loadConfigurationFromListing').click();
     });
-}
-
-/**
- * Format date
- * 
- * @param {date}
- *            date from server to be formatted
- */
-function formatDate(date) {
-    if (date) {
-        var YYYY = date.substring(0, 4);
-        var MM = date.substring(5, 7);
-        var DD = date.substring(8, 10);
-        var hh = date.substring(11, 13);
-        var mm = date.substring(14, 16);
-        var ss = date.substring(17, 19);
-        var str = DD + '.' + MM + '.' + YYYY + ', ' + hh + ':' + mm + ':' + ss;
-        return str;
-    }
-    return "";
 }
 
 function switchToBlockly() {
@@ -893,39 +710,6 @@ function switchToBrickly() {
     bricklyActive = true;
 }
 
-/**
- * Display status information in the navigation bar
- */
-function displayState() {
-    if (userState.accountName) {
-        $('#iconDisplayLogin').removeClass('error');
-        $('#iconDisplayLogin').addClass('ok');
-    } else {
-        $('#iconDisplayLogin').removeClass('ok');
-        $('#iconDisplayLogin').addClass('error');
-    }
-
-    if (userState.robotState === 'wait') {
-        $('#iconDisplayRobotState').removeClass('error');
-        $('#iconDisplayRobotState').removeClass('busy');
-        $('#iconDisplayRobotState').removeClass('wait');
-        $('#iconDisplayRobotState').addClass('ok');
-    } else if (userState.robotState === 'busy') {
-        $('#iconDisplayRobotState').removeClass('ok');
-        $('#iconDisplayRobotState').removeClass('wait');
-        $('#iconDisplayRobotState').removeClass('error');
-        $('#iconDisplayRobotState').addClass('busy');
-    } else {
-        $('#iconDisplayRobotState').removeClass('busy');
-        $('#iconDisplayRobotState').removeClass('wait');
-        $('#iconDisplayRobotState').removeClass('ok');
-        $('#iconDisplayRobotState').addClass('error');
-    }
-
-    $('#tabProgramName').text(userState.program);
-    $('#tabConfigurationName').text(userState.configuration);
-}
-
 function setHeadNavigationMenuState(state) {
     $('.nav > li > ul > li').removeClass('disabled');
     if (state === 'login') {
@@ -933,16 +717,6 @@ function setHeadNavigationMenuState(state) {
     } else if (state === 'logout') {
         $('.nav > li > ul > .logout').addClass('disabled');
     }
-}
-
-/**
- * Escape periods and colons in given string
- * 
- * @param {str}
- *            string to be escaped
- */
-function escape(str) {
-    return str.replace(/(:|\.|\[|\])/g, "\\$1");
 }
 
 /**
@@ -970,7 +744,7 @@ function initHeadNavigation() {
             deactivateProgConfigMenu();
             $('#tabListing').click();
         } else if (domId === 'menuSaveProg') { //  Submenu 'Program'
-            saveToServer(response);
+            saveToServer();
         } else if (domId === 'menuSaveAsProg') { //  Submenu 'Program'
             $("#save-program").modal('show');
         } else if (domId === 'menuPropertiesProg') { //  Submenu 'Program'
@@ -1115,36 +889,33 @@ function initHeadNavigation() {
  * Initialize popups
  */
 function initPopups() {
-    $('#saveUser').onWrap('click', saveUserToServer, 'save user data');
-    $('#deleteUser').onWrap('click', deleteUserOnServer, 'delete user data');
-    $('#doLogin').onWrap('click', login, 'login ');
-    $('#saveProgram').onWrap('click', saveAsToServer, 'save program');
+    $('#saveUser').onWrap('click', saveUserToServer);
+    $('#deleteUser').onWrap('click', deleteUserOnServer);
+    $('#doLogin').onWrap('click', login);
+    $('#saveProgram').onWrap('click', saveAsProgramToServer);
+    $('#saveConfiguration').onWrap('click', saveAsConfigurationToServer);
 
     $('#shareProgram').onWrap('click', function() {
         displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP", "");
     }, 'share program');
-
-    $('#saveConfiguration').onWrap('click', function() {
-        saveAsConfigurationToServer();
-    }, 'save configuration');
 
     $('#shareConfiguration').onWrap('click', function() {
         displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP", "");
     }, 'share configuration');
 
     $('#setToken').onWrap('click', function() {
-        var $token = $('#tokenValue');
-        setToken($token.val());
+        setToken($('#tokenValue').val());
     }, 'set token');
 
     $('#hideStartupMessage').onWrap('click', function() {
         $("#show-startup-message").modal("hide");
-        setCookie("hideStartupMessage", true);
+        UTIL.setCookie("hideStartupMessage", true);
     }, 'hide startup-message');
 
     $('.cancelPopup').onWrap('click', function() {
         $('.ui-dialog-titlebar-close').click();
     });
+    
     $('#about-join').onWrap('click', function() {
         $('#show-about').modal('hide');
     });
@@ -1193,7 +964,9 @@ function initTabs() {
 
     // confirm program deletion
     $('#deleteFromListing').onWrap('click', function() {
-        $("#confirmDeleteProgram").modal("show");
+        if ($('#programNameTable .selected').length > 0) {
+            $("#confirmDeleteProgram").modal("show");
+        }
     }, 'Ask for confirmation to delete a program');
 
     // delete program
@@ -1204,7 +977,9 @@ function initTabs() {
 
     // confirm configuration deletion
     $('#deleteConfigurationFromListing').onWrap('click', function() {
-        $("#confirmDeleteConfiguration").modal("show");
+        if ($('#configurationNameTable .selected').length > 0) {
+            $("#confirmDeleteConfiguration").modal("show");
+        }
     }, 'Ask for confirmation to delete a configuration');
 
     // delete configuration
@@ -1253,39 +1028,62 @@ function initLogging() {
 /**
  * Set robot state
  * 
- * @param {response}
- *            response of server call
+ * @param {result}
+ *            result of server call
  */
-function setRobotState(response) {
-    if (response.version) {
-        userState.version = response.version;
+function setRobotState(result) {
+    if (result.version) {
+        userState.version = result.version;
     }
 
-    if (response['robot.wait'] != undefined) {
-        userState.robotWait = response['robot.wait'];
+    if (result['robot.wait'] != undefined) {
+        userState.robotWait = result['robot.wait'];
     } else {
         userState.robotWait = '';
     }
 
-    if (response['robot.battery'] != undefined) {
-        userState.robotBattery = response['robot.battery'];
+    if (userState.robotState === 'wait') {
+        $('#iconDisplayRobotState').removeClass('error');
+        $('#iconDisplayRobotState').removeClass('busy');
+        $('#iconDisplayRobotState').removeClass('wait');
+        $('#iconDisplayRobotState').addClass('ok');
+    } else if (userState.robotState === 'busy') {
+        $('#iconDisplayRobotState').removeClass('ok');
+        $('#iconDisplayRobotState').removeClass('wait');
+        $('#iconDisplayRobotState').removeClass('error');
+        $('#iconDisplayRobotState').addClass('busy');
+    } else {
+        $('#iconDisplayRobotState').removeClass('busy');
+        $('#iconDisplayRobotState').removeClass('wait');
+        $('#iconDisplayRobotState').removeClass('ok');
+        $('#iconDisplayRobotState').addClass('error');
+    }
+
+    if (result['robot.battery'] != undefined) {
+        userState.robotBattery = result['robot.battery'];
     } else {
         userState.robotBattery = '';
     }
 
-    if (response['robot.name'] != undefined) {
-        userState.robotName = response['robot.name'];
+    if (result['robot.name'] != undefined) {
+        userState.robotName = result['robot.name'];
     } else {
         userState.robotName = '';
     }
 
-    if (response['robot.state'] != undefined) {
-        userState.robotState = response['robot.state'];
+    if (result['robot.state'] != undefined) {
+        userState.robotState = result['robot.state'];
     } else {
         userState.robotState = '';
     }
 
-    displayState();
+    if (userState.accountName) {
+        $('#iconDisplayLogin').removeClass('error');
+        $('#iconDisplayLogin').addClass('ok');
+    } else {
+        $('#iconDisplayLogin').removeClass('ok');
+        $('#iconDisplayLogin').addClass('error');
+    }
 }
 
 /**
@@ -1420,6 +1218,14 @@ function switchLanguageInBlockly(url) {
  * Initialize language switching
  */
 function initializeLanguages() {
+    if (navigator.language.indexOf("en") > -1) {
+        switchLanguage('EN', true);
+        $('#chosenLanguage').text('EN');
+    } else {
+        switchLanguage('DE', true)
+        $('#chosenLanguage').text('DE');
+    }
+
     $('#language').on('click', '.dropdown-menu li a', function() {
         var chosenLanguage = $(this).text();
         $('#chosenLanguage').text(chosenLanguage);
@@ -1430,7 +1236,7 @@ function initializeLanguages() {
 /**
  * Display information
  * 
- * @param {response}
+ * @param {result}
  *            Response of a REST-call.
  * @param {successMessage}
  *            Toast-message to be displayed if REST-call was ok.
@@ -1439,8 +1245,8 @@ function initializeLanguages() {
  * @param {messageParam}
  *            Parameter to be used in the message text.
  */
-function displayInformation(response, successMessage, errorMessage, messageParam) {
-    if (response.rc === "ok") {
+function displayInformation(result, successMessage, errorMessage, messageParam) {
+    if (result.rc === "ok") {
         $('.modal').modal('hide'); // close all opened popups
         displayMessage(successMessage, "TOAST", messageParam);
     } else {
@@ -1493,7 +1299,6 @@ function displayMessage(messageId, output, replaceWith) {
  */
 function displayToastMessages() {
     $('#toastText').text(toastMessages[toastMessages.length - 1]);
-
     $('#toastContainer').delay(100).fadeIn("slow", function() {
         $(this).delay(1000).fadeOut("slow", function() {
             toastMessages.pop();
@@ -1536,8 +1341,8 @@ function deactivateProgConfigMenu() {
 function pingServer() {
     if (userState.doPing) {
         setTimeout(function() {
-            COMM.ping(function(response) {
-                setRobotState(response);
+            COMM.ping(function(result) {
+                setRobotState(result);
                 pingServer();
             });
         }, 5000);
@@ -1549,31 +1354,6 @@ function pingServer() {
  */
 function handleServerErrors() {
     userState.doPing = false;
-}
-
-/**
- * Set cookie
- * 
- * @param {key}
- *            Key of the cookie
- * @param {value}
- *            Value of the cookie
- */
-function setCookie(key, value) {
-    var expires = new Date();
-    expires.setTime(expires.getTime() + (30 * 24 * 60 * 60 * 1000));
-    document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
-}
-
-/**
- * Get cookie
- * 
- * @param {key}
- *            Key of the cookie to read
- */
-function getCookie(key) {
-    var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
-    return keyValue ? keyValue[2] : null;
 }
 
 /**
@@ -1621,26 +1401,21 @@ var resizeTabBar = function() {
 function init() {
     initLogging();
     initUserState();
+    $('#tabProgramName').text(userState.program);
+    $('#tabConfigurationName').text(userState.configuration);
     initTabs();
     initPopups();
     initHeadNavigation();
-    initTables();
+    UTIL.initDataTables();
     initProgramNameTable();
     initConfigurationNameTable();
     initializeLanguages();
-    if (navigator.language.indexOf("en") > -1) {
-        switchLanguage('EN', true);
-        $('#chosenLanguage').text('EN');
-    } else {
-        switchLanguage('DE', true)
-        $('#chosenLanguage').text('DE');
-    }
     pingServer();
     $('#menuTabProgram').parent().addClass('disabled');
     $('#tabProgram').addClass('tabClicked');
     $('#head-navigation-configuration-edit').css('display', 'none');
     COMM.setErrorFn(handleServerErrors);
-    if (!getCookie("hideStartupMessage")) {
+    if (!UTIL.getCookie("hideStartupMessage")) {
         $("#show-startup-message").modal("show");
     }
 
