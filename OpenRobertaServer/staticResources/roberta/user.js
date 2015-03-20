@@ -9,7 +9,7 @@ var USER = {};
                     "cmd" : "login",
                     "accountName" : accountName,
                     "password" : passwd
-        }, successFn, 'login user ' + accountName  + ' with password ' + passwd); 
+        }, successFn, "login user '" + accountName  + "' with password '" + passwd + "'"); 
     };
     
     /**
@@ -19,7 +19,7 @@ var USER = {};
     USER.logout = function(successFn) {
         COMM.json("/user", {
                     "cmd" : "logout"
-        }, successFn, 'logout user'); 
+        }, successFn, "logout user"); 
     };
     
     /**
@@ -34,7 +34,7 @@ var USER = {};
             "userEmail" : userEmail,
             "password" : passwd,
             "role" : 'TEACHER',
-        }, successFn, 'save user ' + accountName + ' to server'); 
+        }, successFn, "save user '" + accountName + "' to server"); 
     };
 
     /**
@@ -46,6 +46,6 @@ var USER = {};
             "cmd" : "deleteUser",
             "accountName" : accountName,
             "password" : passwd
-        }, successFn, 'delete user' + accountName + ' on server'); 
+        }, successFn, "delete user '" + accountName + "' on server"); 
     };
 })($);

@@ -125,4 +125,34 @@ var UTIL = {};
         return Math.round($(window).height() - 260);
     };
 
+    /**
+     * Rearrange the tab bar and blockly buttons according to the screen size (only
+     * affects small screens).
+     * @memberof UTIL
+     */
+    UTIL.resizeTabBar = function() {
+        if ($(window).width() < 768) {
+            if ($('#tabProgram').prop('class').indexOf('tabClicked') >= 0) {
+                $('.scroller-left').addClass('hidden-xs');
+                $('.scroller-right').removeClass('hidden-xs');
+                $('#tabConfiguration').addClass('hidden-xs');
+                $('#tabProgram').removeClass('hidden-xs');
+            } else if ($('#tabConfiguration').prop('class').indexOf('tabClicked') >= 0) {
+                $('.scroller-left').removeClass('hidden-xs');
+                $('.scroller-right').addClass('hidden-xs');
+                $('#tabProgram').addClass('hidden-xs');
+                $('#tabConfiguration').removeClass('hidden-xs');
+            }
+            Blockly.getMainWorkspace().trashcan.moveToEdge();
+            if (document.getElementById('bricklyFrame').contentWindow.Blockly) {
+                document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().trashcan.moveToEdge();
+            }
+        } else {
+            if (document.getElementById('bricklyFrame').contentWindow.Blockly) {
+                Blockly.getMainWorkspace().trashcan.moveOutEdge();
+                document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().trashcan.moveOutEdge();
+            }
+        }
+    };
+
 })($);

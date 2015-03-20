@@ -9,7 +9,7 @@ var PROGRAM = {};
             "cmd" : "saveAsP",
             "name" : programName,
             "program" : xmlText
-        }, successFn, 'save program to server with new name ' + programName); 
+        }, successFn, "save program to server with new name '" + programName + "'"); 
     };
     
     /**
@@ -21,7 +21,7 @@ var PROGRAM = {};
             "cmd" : "saveP",
             "name" : programName,
             "program" : xmlText
-        }, successFn, 'save program ' + programName + ' to server'); 
+        }, successFn, "save program '" + programName + "' to server"); 
     };
 
     /**
@@ -32,7 +32,7 @@ var PROGRAM = {};
         COMM.json("/program", {
             "cmd" : "deleteP",
             "name" : programName
-        }, successFn, 'delete program ' + programName); 
+        }, successFn, "delete program '" + programName + "'"); 
     };
 
     /**
@@ -43,7 +43,7 @@ var PROGRAM = {};
         COMM.json("/program", {
             "cmd" : "loadP",
             "name" : programName
-        }, successFn, 'load program ' + programName); 
+        }, successFn, "load program '" + programName + "'"); 
     };
 
     /**
@@ -53,7 +53,7 @@ var PROGRAM = {};
     PROGRAM.refreshList = function(successFn) {
         COMM.json("/program", {
             "cmd" : "loadPN"
-        }, successFn, 'refresh program list'); 
+        }, successFn, "refresh program list"); 
     };
     
     /**
@@ -67,6 +67,6 @@ var PROGRAM = {};
              "configuration" : configName,
              "programText" : xmlTextProgram,
              "configurationText" : xmlTextConfig
-        }, successFn, 'run program ' + programName + ' with configuration ' + configName); 
+        }, successFn, "run program '" + programName + "' with configuration '" + configName + "'"); 
     };
 })($);

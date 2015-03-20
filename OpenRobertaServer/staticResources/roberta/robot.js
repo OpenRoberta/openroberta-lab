@@ -7,7 +7,7 @@ var ROBOT = {};
      ROBOT.updateFirmware = function(successFn) {
         COMM.json("/admin", {
             "cmd" : "updateFirmware"
-        }, successFn, 'update firmware'); 
+        }, successFn, "update firmware"); 
     };
 
     /**
@@ -18,6 +18,6 @@ var ROBOT = {};
         COMM.json("/admin", {
             "cmd" : "setToken",
             "token" : token
-        }, successFn, 'set token'); 
+        }, successFn, "set token '" + token + "'"); 
     };
 })($);
