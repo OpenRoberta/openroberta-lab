@@ -295,25 +295,6 @@ function saveToServer() {
 }
 
 /**
- * Save program to server
- */
-function saveToServer() {
-    if (userState.program) {
-        var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-        var xmlText = Blockly.Xml.domToText(xml);
-        userState.programSaved = true;
-        LOG.info('save program ' + userState.program + ' login: ' + userState.id);
-        $('.modal').modal('hide'); // close all opened popups
-        PROGRAM.saveProgramToServer( userState.program, xmlText, function(result) {
-            if (result.rc === 'ok') {
-                userState.programModified = false;
-            }
-            displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM", result.message, userState.program);
-        });
-    }
-}
-
-/**
  * Save configuration with new name to server
  */
 function saveAsConfigurationToServer() {
@@ -553,11 +534,7 @@ function showConfigurations(result) {
     }
 }
 
-function selectionPFn(event) {
-    $(event.target.parentNode).toggleClass('selected');
-}
-
-function selectionCFn(event) {
+function selectionFn(event) {
     $(event.target.parentNode).toggleClass('selected');
 }
 
@@ -625,9 +602,9 @@ function initProgramNameTable() {
         oTable.fnDraw(false); // redraw the table
     });
 
-    $('#programNameTable tbody').onWrap('click', 'tr', selectionPFn);
+    $('#programNameTable tbody').onWrap('click', 'tr', selectionFn);
     $('#programNameTable tbody').onWrap('dblclick', 'tr', function(event) {
-        selectionPFn(event);
+        selectionFn(event);
         $('#loadFromListing').click();
     });
 }
@@ -686,9 +663,9 @@ function initConfigurationNameTable() {
         oTable.fnDraw(false); // redraw the table
     });
 
-    $('#configurationNameTable tbody').onWrap('click', 'tr', selectionCFn);
+    $('#configurationNameTable tbody').onWrap('click', 'tr', selectionFn);
     $('#configurationNameTable tbody').onWrap('dblclick', 'tr', function(event) {
-        selectionCFn(event);
+        selectionFn(event);
         $('#loadConfigurationFromListing').click();
     });
 }
