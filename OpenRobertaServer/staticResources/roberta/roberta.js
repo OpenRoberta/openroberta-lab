@@ -703,11 +703,7 @@ function initHeadNavigation() {
     $('.navbar-fixed-top').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
         $('.modal').modal('hide'); // close all opened popups
         var domId = event.target.id;
-        if (domId === 'menuTabProgram') { //  Submenu 'Overview'
-            $('#tabProgram').click();
-        } else if (domId === 'menuTabConfiguration') { //  Submenu 'Overview'
-            $('#tabConfiguration').click();
-        } else if (domId === 'menuRunProg') { //  Submenu 'Program'
+        if (domId === 'menuRunProg') { //  Submenu 'Program'
             runOnBrick();
         } else if (domId === 'menuCheckProg') { //  Submenu 'Program'
             displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP", "");
@@ -790,7 +786,7 @@ function initHeadNavigation() {
         return false;
     }, 'head navigation menu item clicked');
 
-    $('.navbar-fixed-top').onWrap('click', 'li:not(.disabled) a', function(event) {
+    $('.navbar-fixed-top .navbar-nav').onWrap('click', 'li:not(.disabled) a', function(event) {
         var domId = event.target.id;
         if (domId === 'menuTabProgram') { //  Submenu 'Overview'
             $('.scroller-left').click();
@@ -850,6 +846,7 @@ function initHeadNavigation() {
         $('.scroller-right').addClass('hidden-xs');
         $('#tabProgram').addClass('hidden-xs');
         $('#tabConfiguration').removeClass('hidden-xs');
+        $('#tabConfiguration').click();
     });
 
     $('.scroller-left').onWrap('click', function() {
@@ -857,6 +854,7 @@ function initHeadNavigation() {
         $('.scroller-left').addClass('hidden-xs');
         $('#tabConfiguration').addClass('hidden-xs');
         $('#tabProgram').removeClass('hidden-xs');
+        $('#tabProgram').click();
     });
 
     setHeadNavigationMenuState('logout');
