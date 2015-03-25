@@ -150,12 +150,14 @@ var UTIL = {};
                 $('#tabConfiguration').addClass('hidden-xs');
                 $('#tabSimulation').removeClass('hidden-xs');
             }
-            Blockly.getMainWorkspace().trashcan.moveToEdge();
-            if (document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace()) {
+            if (Blockly.getMainWorkspace()) {
+                Blockly.getMainWorkspace().trashcan.moveToEdge();
+            }
+            if (document.getElementById('bricklyFrame').contentWindow.Blockly && document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace()) {
                 document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().trashcan.moveToEdge();
             }
         } else {
-            if (document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace()) {
+            if (document.getElementById('bricklyFrame').contentWindow.Blockly && document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace()) {
                 Blockly.getMainWorkspace().trashcan.moveOutEdge();
                 document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().trashcan.moveOutEdge();
             }
