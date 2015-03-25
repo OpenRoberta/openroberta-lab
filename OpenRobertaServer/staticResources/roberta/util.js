@@ -151,11 +151,11 @@ var UTIL = {};
                 $('#tabSimulation').removeClass('hidden-xs');
             }
             Blockly.getMainWorkspace().trashcan.moveToEdge();
-            if (document.getElementById('bricklyFrame').contentWindow.Blockly) {
+            if (document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace()) {
                 document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().trashcan.moveToEdge();
             }
         } else {
-            if (document.getElementById('bricklyFrame').contentWindow.Blockly) {
+            if (document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace()) {
                 Blockly.getMainWorkspace().trashcan.moveOutEdge();
                 document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().trashcan.moveOutEdge();
             }
