@@ -76,13 +76,6 @@ function showConfiguration(data, load) {
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
 };
 
-function loadToolbox(toolbox) {
-    COMM.json("/admin", {
-        "cmd" : "loadT",
-        "name" : toolbox
-    }, showToolbox);
-};
-
 /**
  * Show toolbox
  * 
@@ -93,7 +86,6 @@ function showToolbox(result) {
     response(result);
     if (result.rc === 'ok') {
         Blockly.updateToolbox(result.data);
-        setRobotState(result);
     }
 };
 
