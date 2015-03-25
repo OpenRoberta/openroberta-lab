@@ -116,7 +116,6 @@ var UTIL = {};
         });
     }
     
-    
     /**
      * Calculate height of data table
      * @memberof UTIL
@@ -132,16 +131,24 @@ var UTIL = {};
      */
     UTIL.resizeTabBar = function() {
         if ($(window).width() < 768) {
-            if ($('#tabProgram').prop('class').indexOf('tabClicked') >= 0) {
+            if ($('#tabProgram').hasClass('tabClicked')) {
                 $('.scroller-left').addClass('hidden-xs');
                 $('.scroller-right').removeClass('hidden-xs');
                 $('#tabConfiguration').addClass('hidden-xs');
                 $('#tabProgram').removeClass('hidden-xs');
-            } else if ($('#tabConfiguration').prop('class').indexOf('tabClicked') >= 0) {
+                $('#tabSimulation').addClass('hidden-xs');
+            } else if ($('#tabConfiguration').hasClass('tabClicked')) {
+                $('.scroller-left').removeClass('hidden-xs');
+                $('.scroller-right').removeClass('hidden-xs');
+                $('#tabProgram').addClass('hidden-xs');
+                $('#tabConfiguration').removeClass('hidden-xs');
+                $('#tabSimulation').addClass('hidden-xs');
+            } else if ($('#tabSimulation').hasClass('tabClicked')) {
                 $('.scroller-left').removeClass('hidden-xs');
                 $('.scroller-right').addClass('hidden-xs');
                 $('#tabProgram').addClass('hidden-xs');
-                $('#tabConfiguration').removeClass('hidden-xs');
+                $('#tabConfiguration').addClass('hidden-xs');
+                $('#tabSimulation').removeClass('hidden-xs');
             }
             Blockly.getMainWorkspace().trashcan.moveToEdge();
             if (document.getElementById('bricklyFrame').contentWindow.Blockly) {

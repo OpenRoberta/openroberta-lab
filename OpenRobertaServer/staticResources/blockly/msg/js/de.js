@@ -653,6 +653,7 @@ Blockly.Msg.START_PROGRAM = "Programmstart";
 Blockly.Msg.START_TOOLTIP = "Startblock für das Hauptprogramm.";
 Blockly.Msg.TAB_CONFIGURATION = "Roboterkonfiguration";
 Blockly.Msg.TAB_PROGRAM = "Programm";
+Blockly.Msg.TAB_SIMULATION = "Simulation";
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "Text anhängen";
 Blockly.Msg.TEXT_APPEND_HELPURL = "http://www.liv.ac.uk/HPC/HTMLF90Course/HTMLF90CourseNotesnode91.html";
 Blockly.Msg.TEXT_APPEND_TO = "An";

@@ -653,6 +653,7 @@ Blockly.Msg.START_PROGRAM = "program-start";
 Blockly.Msg.START_TOOLTIP = "The starting point for the main program.";
 Blockly.Msg.TAB_CONFIGURATION = "Robot configuration";
 Blockly.Msg.TAB_PROGRAM = "Program";
+Blockly.Msg.TAB_SIMULATION = "Simulation";
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = "append text";
 Blockly.Msg.TEXT_APPEND_HELPURL = "https://code.google.com/p/blockly/wiki/Text#Text_modification";
 Blockly.Msg.TEXT_APPEND_TO = "to";

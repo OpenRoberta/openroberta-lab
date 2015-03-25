@@ -670,6 +670,9 @@ function initConfigurationNameTable() {
     });
 }
 
+/**
+ * Switch to Blockly tab
+ */
 function switchToBlockly() {
     $('#tabs').css('display', 'inline');
     $('#bricklyFrame').css('display', 'none');
@@ -680,11 +683,24 @@ function switchToBlockly() {
     bricklyActive = false;
 }
 
+/**
+ * Switch to Brickly tab
+ */
 function switchToBrickly() {
     $('#tabs').css('display', 'none');
     $('#bricklyFrame').css('display', 'inline');
     $('#tabBrickly').click();
     bricklyActive = true;
+}
+
+/**
+ * Switch to Simulation tab
+ */
+function switchToSimulation() {
+    $('#tabs').css('display', 'inline');
+    $('#bricklyFrame').css('display', 'none');
+    $('#tabSim').click();
+    bricklyActive = false;
 }
 
 function setHeadNavigationMenuState(state) {
@@ -788,15 +804,28 @@ function initHeadNavigation() {
 
     $('.navbar-fixed-top .navbar-nav').onWrap('click', 'li:not(.disabled) a', function(event) {
         var domId = event.target.id;
-        if (domId === 'menuTabProgram') { //  Submenu 'Overview'
+        if (domId === 'menuTabProgram') {
+            if ($('#tabSimulation').hasClass('tabClicked')) {
+                $('.scroller-left').click();
+            }
             $('.scroller-left').click();
             $('#tabProgram').click();
-        } else if (domId === 'menuTabConfiguration') { //  Submenu 'Overview'
-            $('.scroller-right').click();
+        } else if (domId === 'menuTabConfiguration') {
+            if ($('#tabProgram').hasClass('tabClicked')) {
+                $('.scroller-right').click();
+            } else if ($('#tabConfiguration').hasClass('tabClicked')) {
+                $('.scroller-right').click();
+            }
             $('#tabConfiguration').click();
+        } else if (domId === 'menuTabSimulation') {
+            if ($('#tabProgram').hasClass('tabClicked')) {
+                $('.scroller-right').click();
+            }
+            $('.scroller-right').click();
+            $('#tabSimulation').click();
         }
         return false;
-    }, 'head navigation menu item clicked');
+    });
 
     // Close submenu on mouseleave
     $('.navbar-fixed-top').onWrap('mouseleave', function(event) {
@@ -821,12 +850,14 @@ function initHeadNavigation() {
 
     $('#tabProgram').onWrap('click', function() {
         activateProgConfigMenu();
-        $('#tabConfiguration').removeClass('tabClicked');
         $('#tabProgram').addClass('tabClicked');
-        $('#head-navigation-configuration-edit').css('display', 'none');
+        $('#tabConfiguration').removeClass('tabClicked');
+        $('#tabSimulation').removeClass('tabClicked');
         $('#head-navigation-program-edit').css('display', 'inline');
+        $('#head-navigation-configuration-edit').css('display', 'none');
         $('#menuTabProgram').parent().addClass('disabled');
         $('#menuTabConfiguration').parent().removeClass('disabled');
+        $('#menuTabSimulation').parent().removeClass('disabled');
         switchToBlockly();
     });
 
@@ -834,27 +865,61 @@ function initHeadNavigation() {
         activateProgConfigMenu();
         $('#tabProgram').removeClass('tabClicked');
         $('#tabConfiguration').addClass('tabClicked');
+        $('#tabSimulation').removeClass('tabClicked');
         $('#head-navigation-program-edit').css('display', 'none');
         $('#head-navigation-configuration-edit').css('display', 'inline');
-        $('#menuTabConfiguration').parent().addClass('disabled');
         $('#menuTabProgram').parent().removeClass('disabled');
+        $('#menuTabConfiguration').parent().addClass('disabled');
+        $('#menuTabSimulation').parent().removeClass('disabled');
         switchToBrickly();
     });
 
+    $('#tabSimulation').onWrap('click', function() {
+        $('#tabProgram').removeClass('tabClicked');
+        $('#tabConfiguration').removeClass('tabClicked');
+        $('#tabSimulation').addClass('tabClicked');
+        $('#head-navigation-program-edit').css('display', 'none');
+        $('#head-navigation-configuration-edit').css('display', 'none');
+        $('#menuTabProgram').parent().removeClass('disabled');
+        $('#menuTabConfiguration').parent().removeClass('disabled');
+        $('#menuTabSimulation').parent().addClass('disabled');
+        switchToSimulation();
+    });
+
     $('.scroller-right').onWrap('click', function() {
-        $('.scroller-left').removeClass('hidden-xs');
-        $('.scroller-right').addClass('hidden-xs');
-        $('#tabProgram').addClass('hidden-xs');
-        $('#tabConfiguration').removeClass('hidden-xs');
-        $('#tabConfiguration').click();
+        if ($('#tabProgram').hasClass('tabClicked')) {
+            $('.scroller-left').removeClass('hidden-xs');
+            $('.scroller-right').removeClass('hidden-xs');
+            $('#tabProgram').addClass('hidden-xs');
+            $('#tabSimulation').addClass('hidden-xs');
+            $('#tabConfiguration').removeClass('hidden-xs');
+            $('#tabConfiguration').click();
+        } else if ($('#tabConfiguration').hasClass('tabClicked')) {
+            $('.scroller-left').removeClass('hidden-xs');
+            $('.scroller-right').addClass('hidden-xs');
+            $('#tabProgram').addClass('hidden-xs');
+            $('#tabConfiguration').addClass('hidden-xs');
+            $('#tabSimulation').removeClass('hidden-xs');
+            $('#tabSimulation').click();
+        }
     });
 
     $('.scroller-left').onWrap('click', function() {
-        $('.scroller-right').removeClass('hidden-xs');
-        $('.scroller-left').addClass('hidden-xs');
-        $('#tabConfiguration').addClass('hidden-xs');
-        $('#tabProgram').removeClass('hidden-xs');
-        $('#tabProgram').click();
+        if ($('#tabConfiguration').hasClass('tabClicked')) {
+            $('.scroller-right').removeClass('hidden-xs');
+            $('.scroller-left').addClass('hidden-xs');
+            $('#tabConfiguration').addClass('hidden-xs');
+            $('#tabSimulation').addClass('hidden-xs');
+            $('#tabProgram').removeClass('hidden-xs');
+            $('#tabProgram').click();
+        } else if ($('#tabSimulation').hasClass('tabClicked')) {
+            $('.scroller-right').removeClass('hidden-xs');
+            $('.scroller-left').removeClass('hidden-xs');
+            $('#tabProgram').addClass('hidden-xs');
+            $('#tabSimulation').addClass('hidden-xs');
+            $('#tabConfiguration').removeClass('hidden-xs');
+            $('#tabConfiguration').click();
+        }
     });
 
     setHeadNavigationMenuState('logout');
