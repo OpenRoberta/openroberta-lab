@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.ev3.components.EV3Actor;
 import de.fhg.iais.roberta.ev3.components.EV3Sensor;
 import de.fhg.iais.roberta.hardwarecomponents.HardwareComponentType;
+import de.fhg.iais.roberta.util.Formatter;
 import de.fhg.iais.roberta.util.Pair;
 
 /**
@@ -60,32 +61,34 @@ public class EV3BrickConfiguration extends BrickConfiguration {
     @Override
     public String generateText(String name) {
         StringBuilder sb = new StringBuilder();
-        sb.append("configuration ").append(name).append(" {\n");
-        sb.append("  wheel diameter ").append(this.wheelDiameterCM).append(" cm;\n");
-        sb.append("  track width    ").append(this.trackWidthCM).append(" cm;\n");
-        if ( this.sensors.size() > 0 ) {
-            sb.append("  sensors {\n");
-            for ( SensorPort port : this.sensors.keySet() ) {
-                sb.append("    ").append(port.getPortNumber()).append(" : ");
-                HardwareComponentType hc = this.sensors.get(port).getComponentType();
-                sb.append(hc.getShortName()).append(";\n");
-            }
-            sb.append("  }\n");
+        sb.append("ev3 ").append(name).append(" {\n");
+        sb.append("  wheel diameter ").append(Formatter.d2s(this.wheelDiameterCM)).append(" cm\n");
+        sb.append("  track width    ").append(Formatter.d2s(this.trackWidthCM)).append(" cm\n");
+        for ( SensorPort port : this.sensors.keySet() ) {
+            sb.append("    sensor port ").append(port.getPortNumber()).append(" ");
+            HardwareComponentType hc = this.sensors.get(port).getComponentType();
+            sb.append(hc.getShortName()).append("\n");
         }
-        if ( this.actors.size() > 0 ) {
-            sb.append("  actors {\n");
-            for ( ActorPort port : this.actors.keySet() ) {
-                sb.append("    ").append(port).append(" : ");
-                EV3Actor actor = this.actors.get(port);
-                HardwareComponentType hc = actor.getComponentType();
-                if ( actor.isRegulated() ) {
-                    sb.append("regulated ");
-                }
-                sb.append(actor.getMotorSide().getText()).append(" ");
-                sb.append(actor.getRotationDirection().toString().toLowerCase()).append(" ");
-                sb.append(hc.getShortName()).append(";\n");
+        for ( ActorPort port : this.actors.keySet() ) {
+            sb.append("    actor port ").append(port.name()).append(" ");
+            EV3Actor actor = this.actors.get(port);
+            HardwareComponentType hc = actor.getComponentType();
+            if ( hc.equals(EV3Actors.EV3_LARGE_MOTOR) ) {
+                sb.append("large");
+            } else if ( hc.equals(EV3Actors.EV3_MEDIUM_MOTOR) ) {
+                sb.append("middle");
+            } else {
+                throw new RuntimeException("Key.E3");
             }
-            sb.append("  }\n");
+            sb.append(" motor { ");
+            if ( actor.isRegulated() ) {
+                sb.append("regulated ");
+            } else {
+                sb.append("unregulated ");
+            }
+            sb.append(actor.getRotationDirection().toString().toLowerCase()).append(" ");
+            sb.append(actor.getMotorSide().getText()).append(" ");
+            sb.append("}\n");
         }
         sb.append("}");
         return sb.toString();
@@ -185,6 +188,70 @@ public class EV3BrickConfiguration extends BrickConfiguration {
             }
         }
         throw new DbcException("No right motor defined!");
+    }
+
+    @Override
+    public int hashCode() {
+        // trackWidthCM and wheelDiameterCM restricted to 1 fraction digit
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.actors == null) ? 0 : this.actors.hashCode());
+        result = prime * result + ((this.sensors == null) ? 0 : this.sensors.hashCode());
+        long temp;
+        temp = (long) (this.trackWidthCM * 10);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        temp = (long) (this.wheelDiameterCM);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        // trackWidthCM and wheelDiameterCM restricted to 1 fraction digit
+        if ( this == obj ) {
+            return true;
+        }
+        if ( obj == null ) {
+            return false;
+        }
+        if ( getClass() != obj.getClass() ) {
+            return false;
+        }
+        EV3BrickConfiguration other = (EV3BrickConfiguration) obj;
+        if ( this.actors == null ) {
+            if ( other.actors != null ) {
+                return false;
+            }
+        } else if ( !this.actors.equals(other.actors) ) {
+            return false;
+        }
+        if ( this.sensors == null ) {
+            if ( other.sensors != null ) {
+                return false;
+            }
+        } else if ( !this.sensors.equals(other.sensors) ) {
+            return false;
+        }
+        if ( (long) (this.trackWidthCM * 10) != (long) (other.trackWidthCM * 10) ) {
+            return false;
+        }
+        if ( (long) (this.wheelDiameterCM * 10) != (long) (other.wheelDiameterCM * 10) ) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "EV3BrickConfiguration [actors="
+            + this.actors
+            + ", sensors="
+            + this.sensors
+            + ", wheelDiameterCM="
+            + this.wheelDiameterCM
+            + ", trackWidthCM="
+            + this.trackWidthCM
+            + "]";
     }
 
     private void appendSensors(StringBuilder sb) {
@@ -287,7 +354,15 @@ public class EV3BrickConfiguration extends BrickConfiguration {
 
         @Override
         public String toString() {
-            return "EV3BrickConfiguration.Builder [actors=" + this.actorMapping + ", sensors=" + this.sensorMapping + "]";
+            return "Builder [actorMapping="
+                + this.actorMapping
+                + ", sensorMapping="
+                + this.sensorMapping
+                + ", wheelDiameter="
+                + this.wheelDiameter
+                + ", trackWidth="
+                + this.trackWidth
+                + "]";
         }
     }
 }

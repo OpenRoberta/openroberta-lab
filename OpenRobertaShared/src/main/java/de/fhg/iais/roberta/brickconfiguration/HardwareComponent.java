@@ -39,4 +39,34 @@ abstract public class HardwareComponent {
      * @return Java code used in the code generation to regenerates the same hardware component
      */
     abstract public String generateRegenerate();
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.componentType == null) ? 0 : this.componentType.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if ( this == obj ) {
+            return true;
+        }
+        if ( obj == null ) {
+            return false;
+        }
+        if ( getClass() != obj.getClass() ) {
+            return false;
+        }
+        HardwareComponent other = (HardwareComponent) obj;
+        if ( this.componentType == null ) {
+            if ( other.componentType != null ) {
+                return false;
+            }
+        } else if ( !this.componentType.equals(other.componentType) ) {
+            return false;
+        }
+        return true;
+    }
 }

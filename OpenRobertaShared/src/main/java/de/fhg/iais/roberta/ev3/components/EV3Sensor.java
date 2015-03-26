@@ -4,6 +4,7 @@ import de.fhg.iais.roberta.brickconfiguration.HardwareComponent;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.ev3.EV3Sensors;
 import de.fhg.iais.roberta.hardwarecomponents.Category;
+import de.fhg.iais.roberta.hardwarecomponents.HardwareComponentType;
 
 public class EV3Sensor extends HardwareComponent {
 
@@ -30,4 +31,5 @@ public class EV3Sensor extends HardwareComponent {
     public String toString() {
         return "EV3Sensor [" + getComponentType() + "]";
     }
+
 }

@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 public enum MotorSide {
-    RIGHT( "right" ), LEFT( "left" ), NONE( "none" );
+    RIGHT( "right" ), LEFT( "left" ), NONE( "" );
 
     private final String[] values;
 

@@ -3,10 +3,12 @@ package de.fhg.iais.roberta.main;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.fhg.iais.roberta.jaxb.ConfigurationHelper;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 
@@ -48,6 +50,9 @@ public class Administration {
             case "sql":
                 main.runSql();
                 break;
+            case "conf:xml2text":
+                // main.confXml2text();
+                break;
             default:
                 LOG.error("invalid argument: " + args[0] + " - exit 4");
                 System.exit(4);
@@ -80,6 +85,28 @@ public class Administration {
             LOG.info("  " + Arrays.toString(object));
         }
         nativeSession.getTransaction().rollback();
+        nativeSession.close();
+    }
+
+    private void confXml2text() throws Exception {
+        LOG.info("*** confXml2text ***");
+        expectArgs(2);
+        SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", "jdbc:hsqldb:file:" + this.args[1]);
+        Session nativeSession = sessionFactoryWrapper.getNativeSession();
+        nativeSession.beginTransaction();
+        String sqlGetQuery = "select ID, NAME, CONFIGURATION_TEXT from CONFIGURATION";
+        String sqlUpdQuery = "update CONFIGURATION set CONFIGURATION_TEXT=:text where ID=:id";
+        SQLQuery upd = nativeSession.createSQLQuery(sqlUpdQuery);
+        List<Object[]> resultSet = nativeSession.createSQLQuery(sqlGetQuery).list();
+        LOG.info("there are " + resultSet.size() + " configurations in the data base");
+        for ( Object[] object : resultSet ) {
+            upd.setInteger("id", (Integer) object[0]);
+            upd.setString("text", ConfigurationHelper.xmlString2textString((String) object[1], (String) object[2]));
+            int count = upd.executeUpdate();
+            LOG.info("processed configuration with ID " + object[0] + "  and NAME " + object[1] + ". Update count was " + count);
+        }
+        nativeSession.getTransaction().commit();
+        nativeSession.createSQLQuery("shutdown").executeUpdate();
         nativeSession.close();
     }
 

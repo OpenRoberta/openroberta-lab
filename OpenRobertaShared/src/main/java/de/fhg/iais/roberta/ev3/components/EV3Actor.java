@@ -6,6 +6,7 @@ import de.fhg.iais.roberta.brickconfiguration.HardwareComponent;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.ev3.EV3Actors;
 import de.fhg.iais.roberta.hardwarecomponents.Category;
+import de.fhg.iais.roberta.hardwarecomponents.HardwareComponentType;
 
 public class EV3Actor extends HardwareComponent {
     private final boolean regulated;
@@ -62,6 +63,40 @@ public class EV3Actor extends HardwareComponent {
     @Override
     public String toString() {
         return "EV3Actor [" + getComponentType() + ", " + this.regulated + ", " + this.rotationDirection + ", " + this.motorSide + "]";
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((this.motorSide == null) ? 0 : this.motorSide.hashCode());
+        result = prime * result + (this.regulated ? 1231 : 1237);
+        result = prime * result + ((this.rotationDirection == null) ? 0 : this.rotationDirection.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if ( this == obj ) {
+            return true;
+        }
+        if ( !super.equals(obj) ) {
+            return false;
+        }
+        if ( getClass() != obj.getClass() ) {
+            return false;
+        }
+        EV3Actor other = (EV3Actor) obj;
+        if ( this.motorSide != other.motorSide ) {
+            return false;
+        }
+        if ( this.regulated != other.regulated ) {
+            return false;
+        }
+        if ( this.rotationDirection != other.rotationDirection ) {
+            return false;
+        }
+        return true;
     }
 
 }

@@ -1,30 +1,36 @@
 grammar BrickConfiguration;
 
-connectorl	: 'brick' NAME '{' connector* '}'					# ConnectorList
+conf    	: 'ev3' NAME '{' sizes connector* '}'
         	;
-        		
-connector	: 'sensor' 'port' SENSORPORT ATTACHSENSOR ';'		# SensorStmt
-        	| 'actor'  'port' ACTORPORT  attachActor ';'		# ActorStmt
+
+sizes		: 'wheel' 'diameter' RATIONAL 'cm' 'track' 'width' RATIONAL 'cm'
+			;
+			
+connector	: 'sensor' 'port' SENSORPORT SENSOR   				# SensorStmt
+        	| 'actor'  'port' ACTORPORT  actor    				# ActorStmt
 			;
         
-ATTACHSENSOR : 'color' | 'touch' | 'ultrasonic' | 'infrared'
-            | 'rotation' | 'gyro'
-            | 'Farbe' | 'Berührung' | 'Ultraschall'
-            | 'Infrarot' | 'Drehung'
+SENSOR 		: 'color' | 'touch' | 'ultrasonic' | 'infrared' | 'gyro'
             ;
 			
-attachActor	: ROTATION LEFTORRIGHT MOTORTYPE 'motor' REGULATION?			# Motor
+actor		: MOTORKIND  'motor' '{' motorSpec '}'
+			;
+			
+motorSpec	: REGULATION ROTATION LEFTORRIGHT?
 			;
 			
 SENSORPORT	: [1234];
 
+RATIONAL	: '+'?[0-9]+('.'[0-9])?
+			;
+
+MOTORKIND	: 'large' | 'middle';
+
 ACTORPORT	: [ABCD];
 
-ROTATION	: 'off' | 'on' | 'forward' | 'backward' | 'vorwärts' | 'rückwärts';
+ROTATION	: 'foreward' | 'backward';
 
-LEFTORRIGHT : 'left'| 'right' | 'links' | 'rechts';
-
-MOTORTYPE	: 'middle' | 'large';
+LEFTORRIGHT : 'left'| 'right';
 
 REGULATION	: 'regulated' | 'unregulated';
 

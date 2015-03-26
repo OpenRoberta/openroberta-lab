@@ -55,6 +55,7 @@ public class JaxbBrickConfigTransformer {
                 Value hardwareComponent = new Value();
                 hardwareComponent.setName(port.toString());
                 Block sensorBlock = mkBlock(idCount++);
+                hardwareComponent.setBlock(sensorBlock);
                 sensorBlock.setType(sensor.getComponentType().getName());
                 values.add(hardwareComponent);
             }
@@ -126,7 +127,7 @@ public class JaxbBrickConfigTransformer {
                 // Extract actor
                 switch ( value.getBlock().getType() ) {
                     case "robBrick_motor_middle":
-                        fields = extractFields(value.getBlock(), (short) 2);
+                        fields = extractFields(value.getBlock(), (short) 3);
                         actors.add(Pair.of(
                             ActorPort.get(value.getName()),
                             new EV3Actor(EV3Actors.find(value.getBlock().getType()), extractField(fields, "MOTOR_REGULATION", 0).equals("TRUE"), DriveDirection

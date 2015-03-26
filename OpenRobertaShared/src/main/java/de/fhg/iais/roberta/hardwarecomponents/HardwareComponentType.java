@@ -67,4 +67,47 @@ public abstract class HardwareComponentType {
     public String toString() {
         return "HardwareComponentType [" + this.name + ", " + this.category + "]";
     }
+
+    @Override
+    public final int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((this.category == null) ? 0 : this.category.hashCode());
+        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+        result = prime * result + ((this.shortName == null) ? 0 : this.shortName.hashCode());
+        return result;
+    }
+
+    @Override
+    public final boolean equals(Object obj) {
+        if ( this == obj ) {
+            return true;
+        }
+        if ( obj == null ) {
+            return false;
+        }
+        if ( getClass() != obj.getClass() ) {
+            return false;
+        }
+        HardwareComponentType other = (HardwareComponentType) obj;
+        if ( this.category != other.category ) {
+            return false;
+        }
+        if ( this.name == null ) {
+            if ( other.name != null ) {
+                return false;
+            }
+        } else if ( !this.name.equals(other.name) ) {
+            return false;
+        }
+        if ( this.shortName == null ) {
+            if ( other.shortName != null ) {
+                return false;
+            }
+        } else if ( !this.shortName.equals(other.shortName) ) {
+            return false;
+        }
+        return true;
+    }
+
 }

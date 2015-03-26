@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.hardwarecomponents.HardwareComponentType;
  * This class represents all possible EV3 sensors.
  */
 public final class EV3Sensors extends HardwareComponentType {
-    public static final EV3Sensors EV3_COLOR_SENSOR = new EV3Sensors("robBrick_colour", "colour");
+    public static final EV3Sensors EV3_COLOR_SENSOR = new EV3Sensors("robBrick_colour", "color");
     public static final EV3Sensors EV3_TOUCH_SENSOR = new EV3Sensors("robBrick_touch", "touch");
     public static final EV3Sensors EV3_ULTRASONIC_SENSOR = new EV3Sensors("robBrick_ultrasonic", "ultrasonic");
     public static final EV3Sensors EV3_IR_SENSOR = new EV3Sensors("robBrick_infrared", "infrared");
