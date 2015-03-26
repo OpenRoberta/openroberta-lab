@@ -534,8 +534,41 @@ function showConfigurations(result) {
     }
 }
 
+/**
+ * Select row in programs-/configurations-datatable
+ */
+var start;
 function selectionFn(event) {
     $(event.target.parentNode).toggleClass('selected');
+    var rowIndex = event.currentTarget.rowIndex;
+
+    if (!start) {
+        start = rowIndex;
+    }
+
+    // Shift-Click ?
+    if(event.shiftKey) {
+        var end = rowIndex;
+        $('#programNameTable tbody tr').removeClass("selected");
+        for (i = Math.min(start, end); i <= Math.max(start, end); i++) {
+            if (! $(event.target.parentNode.parentNode.childNodes).eq(i).hasClass("selected")) {
+                $(event.target.parentNode.parentNode.childNodes).eq(i).addClass("selected");
+            }
+        }
+         
+        // Clear browser text selection mask
+        if (window.getSelection) {
+            if (window.getSelection().empty) {  // Chrome
+                window.getSelection().empty();
+            } else if (window.getSelection().removeAllRanges) {  // Firefox
+                window.getSelection().removeAllRanges();
+            }
+        } else if (document.selection) {  // IE?
+            document.selection.empty();
+        }
+    }
+    
+    start = rowIndex;
 }
 
 function beforeActivateTab(event, ui) {
