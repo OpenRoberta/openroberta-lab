@@ -7,6 +7,8 @@ import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.ExprParam;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
@@ -44,6 +46,10 @@ public class Unary<V> extends Expr<V> {
      */
     public static <V> Unary<V> make(Op op, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new Unary<V>(op, expr, properties, comment);
+    }
+
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        return helper.blockToUnaryExpr(block, new ExprParam(BlocklyConstants.BOOL, Boolean.class), BlocklyConstants.NOT);
     }
 
     /**

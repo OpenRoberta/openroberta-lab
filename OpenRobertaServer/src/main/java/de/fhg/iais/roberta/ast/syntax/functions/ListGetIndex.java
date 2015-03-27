@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax.functions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
@@ -7,11 +8,15 @@ import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.IndexLocation;
 import de.fhg.iais.roberta.ast.syntax.ListElementOperations;
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.ExprParam;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.dbc.Assert;
 
@@ -54,6 +59,23 @@ public class ListGetIndex<V> extends Function<V> {
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
         return new ListGetIndex<V>(mode, name, param, properties, comment);
+    }
+
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 2);
+        List<ExprParam> exprParams = new ArrayList<ExprParam>();
+        String op = helper.extractField(fields, BlocklyConstants.MODE_);
+        exprParams.add(new ExprParam(BlocklyConstants.VALUE, String.class));
+        if ( block.getMutation().isAt() ) {
+            exprParams.add(new ExprParam(BlocklyConstants.AT, Integer.class));
+        }
+        List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
+        return ListGetIndex.make(
+            ListElementOperations.get(op),
+            IndexLocation.get(helper.extractField(fields, BlocklyConstants.WHERE)),
+            params,
+            helper.extractBlockProperties(block),
+            helper.extractComment(block));
     }
 
     /**

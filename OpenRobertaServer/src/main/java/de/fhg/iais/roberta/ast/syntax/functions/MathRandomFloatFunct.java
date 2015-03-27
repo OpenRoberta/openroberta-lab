@@ -2,8 +2,10 @@ package de.fhg.iais.roberta.ast.syntax.functions;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
 
@@ -29,6 +31,10 @@ public class MathRandomFloatFunct<V> extends Function<V> {
      */
     public static <V> MathRandomFloatFunct<V> make(BlocklyBlockProperties properties, BlocklyComment comment) {
         return new MathRandomFloatFunct<V>(properties, comment);
+    }
+
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        return MathRandomFloatFunct.make(helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

@@ -1,13 +1,17 @@
 package de.fhg.iais.roberta.ast.syntax.sensor;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -42,8 +46,20 @@ public class EncoderSensor<V> extends Sensor<V> {
      * @param comment added from the user,
      * @return read only object of {@link EncoderSensor}
      */
-    public static <V> EncoderSensor<V> make(MotorTachoMode mode, ActorPort motor, BlocklyBlockProperties properties, BlocklyComment comment) {
+    static <V> EncoderSensor<V> make(MotorTachoMode mode, ActorPort motor, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new EncoderSensor<V>(mode, motor, properties, comment);
+    }
+
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        if ( block.getType().equals("robSensors_encoder_reset") ) {
+            List<Field> fields = helper.extractFields(block, (short) 1);
+            String portName = helper.extractField(fields, BlocklyConstants.MOTORPORT);
+            return EncoderSensor.make(MotorTachoMode.RESET, ActorPort.get(portName), helper.extractBlockProperties(block), helper.extractComment(block));
+        }
+        List<Field> fields = helper.extractFields(block, (short) 2);
+        String portName = helper.extractField(fields, BlocklyConstants.MOTORPORT);
+        String modeName = helper.extractField(fields, BlocklyConstants.MODE_);
+        return EncoderSensor.make(MotorTachoMode.get(modeName), ActorPort.get(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     /**

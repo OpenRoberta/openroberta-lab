@@ -14,7 +14,7 @@ public class MotorDuration<V> {
      * <br>
      * Client must provide type of the motor movement (<i>see enum {@link MotorMoveMode} for all possible motor movements</i>) and value for the movement e.g.
      * distance(cm), number of rotations...
-     * 
+     *
      * @param type of the motor movement
      * @param value for the movement
      */
@@ -26,7 +26,7 @@ public class MotorDuration<V> {
 
     /**
      * Returns the value of the duration set by the client.
-     * 
+     *
      * @return value of the duration as {@link Expr}
      */
     public Expr<V> getValue() {
@@ -35,7 +35,7 @@ public class MotorDuration<V> {
 
     /**
      * Set the value of the motor duration.
-     * 
+     *
      * @param value
      */
     public void setValue(Expr<V> value) {
@@ -44,7 +44,7 @@ public class MotorDuration<V> {
 
     /**
      * Get the mode of the motor duration. See enum {@link MotorMoveMode} for all possible modes.
-     * 
+     *
      * @return mode of the motor duration.
      */
     public MotorMoveMode getType() {

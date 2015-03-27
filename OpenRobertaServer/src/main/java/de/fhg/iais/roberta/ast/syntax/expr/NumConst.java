@@ -1,12 +1,16 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -35,6 +39,12 @@ public class NumConst<V> extends Expr<V> {
      */
     public static <V> NumConst<V> make(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new NumConst<V>(value, properties, comment);
+    }
+
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 1);
+        String field = helper.extractField(fields, BlocklyConstants.NUM);
+        return NumConst.make(field, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     /**

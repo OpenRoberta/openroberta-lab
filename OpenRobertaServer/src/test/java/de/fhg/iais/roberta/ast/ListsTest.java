@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 
-public class ListsTest {
+public class ListsTest<V> {
 
     @Test
     public void listEmpty() throws Exception {

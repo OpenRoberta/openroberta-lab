@@ -1,14 +1,20 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.ExprParam;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
+import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -62,6 +68,24 @@ public class VarDeclaration<V> extends Expr<V> {
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
         return new VarDeclaration<V>(typeVar, name, value, next, global, properties, comment);
+    }
+
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        boolean isGlobalVariable = block.getType().equals("robLocalVariables_declare") ? false : true;
+        List<Field> fields = helper.extractFields(block, (short) 2);
+        List<Value> values = helper.extractValues(block, (short) 1);
+        BlocklyType typeVar = BlocklyType.get(helper.extractField(fields, BlocklyConstants.TYPE));
+        String name = helper.extractField(fields, BlocklyConstants.VAR);
+        Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, Integer.class));
+        boolean next = block.getMutation().isNext();
+        return VarDeclaration.make(
+            typeVar,
+            name,
+            helper.convertPhraseToExpr(expr),
+            next,
+            isGlobalVariable,
+            helper.extractBlockProperties(block),
+            helper.extractComment(block));
     }
 
     /**

@@ -10,10 +10,13 @@ import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.ExprParam;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Repetitions;
+import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -120,6 +123,29 @@ public class IfStmt<V> extends Stmt<V> {
         StmtList<V> elseList = StmtList.make();
         elseList.setReadOnly();
         return new IfStmt<V>(expr, thenList, elseList, false, properties, comment, _else, _elseIf);
+    }
+
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        if ( block.getType().equals("logic_ternary") ) {
+            List<Value> values = block.getValue();
+            Assert.isTrue(values.size() <= 3, "Number of values is not less or equal to 3!");
+            Phrase<V> ifExpr = helper.extractValue(values, new ExprParam(BlocklyConstants.IF, Boolean.class));
+            Phrase<V> thenStmt = helper.extractValue(values, new ExprParam(BlocklyConstants.THEN, Stmt.class));
+            Phrase<V> elseStmt = helper.extractValue(values, new ExprParam(BlocklyConstants.ELSE, Stmt.class));
+            StmtList<V> thenList = StmtList.make();
+            thenList.addStmt(ExprStmt.make(helper.convertPhraseToExpr(thenStmt)));
+            thenList.setReadOnly();
+            StmtList<V> elseList = StmtList.make();
+            elseList.addStmt(ExprStmt.make(helper.convertPhraseToExpr(elseStmt)));
+            elseList.setReadOnly();
+            return IfStmt
+                .make(helper.convertPhraseToExpr(ifExpr), thenList, elseList, helper.extractBlockProperties(block), helper.extractComment(block), 0, 0);
+        }
+        Mutation mutation = block.getMutation();
+        int _else = helper.getElse(mutation);
+        int _elseIf = helper.getElseIf(mutation);
+
+        return helper.blocksToIfStmt(block, _else, _elseIf);
     }
 
     /**

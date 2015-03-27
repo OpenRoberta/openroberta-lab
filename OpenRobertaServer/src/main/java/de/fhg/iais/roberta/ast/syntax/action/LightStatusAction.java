@@ -4,6 +4,7 @@ import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
@@ -34,6 +35,14 @@ public class LightStatusAction<V> extends Action<V> {
      */
     public static <V> LightStatusAction<V> make(Status status, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new LightStatusAction<V>(status, properties, comment);
+    }
+
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        Status statuss = LightStatusAction.Status.RESET;
+        if ( block.getType().equals("robActions_brickLight_off") ) {
+            statuss = LightStatusAction.Status.OFF;
+        }
+        return LightStatusAction.make(statuss, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     /**

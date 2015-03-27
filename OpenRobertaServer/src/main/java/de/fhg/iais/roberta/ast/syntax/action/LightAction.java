@@ -1,12 +1,16 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -39,8 +43,15 @@ public class LightAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link LightAction}
      */
-    public static <V> LightAction<V> make(BrickLedColor color, BlinkMode blinkMode, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> LightAction<V> make(BrickLedColor color, BlinkMode blinkMode, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new LightAction<V>(color, blinkMode, properties, comment);
+    }
+
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 2);
+        String color = helper.extractField(fields, BlocklyConstants.SWITCH_COLOR);
+        String blink = helper.extractField(fields, BlocklyConstants.SWITCH_BLINK);
+        return LightAction.make(BrickLedColor.get(color), BlinkMode.get(blink), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     /**

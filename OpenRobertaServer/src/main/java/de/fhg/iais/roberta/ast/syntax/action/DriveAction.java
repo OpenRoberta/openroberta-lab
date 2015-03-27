@@ -1,12 +1,18 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.ExprParam;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -39,8 +45,31 @@ public class DriveAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link DriveAction}
      */
-    public static <V> DriveAction<V> make(DriveDirection direction, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> DriveAction<V> make(DriveDirection direction, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new DriveAction<V>(direction, param, properties, comment);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields;
+        String mode;
+        List<Value> values;
+        if ( block.getType().equals("robActions_motorDiff_on") ) {
+            fields = helper.extractFields(block, (short) 1);
+            mode = helper.extractField(fields, BlocklyConstants.DIRECTION);
+            values = helper.extractValues(block, (short) 1);
+            Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
+            Object mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(expr)).build();
+            return DriveAction.make(DriveDirection.get(mode), (MotionParam<V>) mp, helper.extractBlockProperties(block), helper.extractComment(block));
+        }
+        fields = helper.extractFields(block, (short) 1);
+        mode = helper.extractField(fields, BlocklyConstants.DIRECTION);
+        values = helper.extractValues(block, (short) 2);
+        Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
+        Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.DISTANCE, Integer.class));
+        MotorDuration<V> md = new MotorDuration<V>(MotorMoveMode.DISTANCE, helper.convertPhraseToExpr(right));
+        MotionParam<V> mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(left)).duration(md).build();
+        return DriveAction.make(DriveDirection.get(mode), mp, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     /**

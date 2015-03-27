@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.sensor;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
@@ -7,8 +9,10 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor.Mode;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
@@ -63,6 +67,13 @@ public class GetSampleSensor<V> extends Sensor<V> {
                 throw new DbcException("Invalid sensor " + sensorType.getSensorType() + "!");
         }
         setReadOnly();
+    }
+
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 2);
+        String modeName = helper.extractField(fields, BlocklyConstants.SENSORTYPE);
+        String portName = helper.extractField(fields, SensorType.get(modeName).getPortTypeName());
+        return GetSampleSensor.make(SensorType.get(modeName), portName, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     /**

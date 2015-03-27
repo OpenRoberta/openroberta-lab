@@ -48,7 +48,7 @@ public class LogicTest {
     @Test
     public void logic_operation() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=263, y=-422], Binary [AND, EmptyExpr [defVal=class java.lang.Boolean], EmptyExpr [defVal=class java.lang.Boolean]]]]]";
+            "BlockAST [project=[[Location [x=263, y=-422], Binary [AND, EmptyExpr [defVal=class java.lang.Integer], EmptyExpr [defVal=class java.lang.Integer]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/logic/logic_operation.xml"));
     }

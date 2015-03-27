@@ -10,17 +10,12 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.Action;
 import de.fhg.iais.roberta.ast.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
-import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
-import de.fhg.iais.roberta.ast.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
 import de.fhg.iais.roberta.ast.syntax.expr.FunctionExpr;
-import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
 import de.fhg.iais.roberta.ast.syntax.expr.MethodExpr;
-import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.SensorExpr;
-import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
 import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.syntax.functions.Function;
@@ -49,12 +44,27 @@ import de.fhg.iais.roberta.hardwarecomponents.Category;
 
 abstract public class JaxbAstTransformer<V> {
     protected ArrayList<ArrayList<Phrase<V>>> tree = new ArrayList<ArrayList<Phrase<V>>>();
+    private int variableCounter = 0;
 
     /**
      * @return abstract syntax tree generated from JAXB objects.
      */
     public ArrayList<ArrayList<Phrase<V>>> getTree() {
         return this.tree;
+    }
+
+    /**
+     * @return the variableCounter
+     */
+    public int getVariableCounter() {
+        return this.variableCounter;
+    }
+
+    /**
+     * @param variableCounter the variableCounter to set
+     */
+    public void setVariableCounter(int variableCounter) {
+        this.variableCounter = variableCounter;
     }
 
     @Override
@@ -64,14 +74,14 @@ abstract public class JaxbAstTransformer<V> {
 
     abstract protected Phrase<V> blockToAST(Block block);
 
-    protected Phrase<V> blockToUnaryExpr(Block block, ExprParam exprParam, String operationType) {
+    public Phrase<V> blockToUnaryExpr(Block block, ExprParam exprParam, String operationType) {
         String op = getOperation(block, operationType);
         List<Value> values = extractValues(block, (short) 1);
         Phrase<V> expr = extractValue(values, exprParam);
         return Unary.make(Unary.Op.get(op), convertPhraseToExpr(expr), extractBlockProperties(block), extractComment(block));
     }
 
-    protected Binary<V> blockToBinaryExpr(Block block, ExprParam leftExpr, ExprParam rightExpr, String operationType) {
+    public Binary<V> blockToBinaryExpr(Block block, ExprParam leftExpr, ExprParam rightExpr, String operationType) {
         String op = getOperation(block, operationType);
         List<Value> values = extractValues(block, (short) 2);
         Phrase<V> left = extractValue(values, leftExpr);
@@ -89,7 +99,7 @@ abstract public class JaxbAstTransformer<V> {
             extractComment(block));
     }
 
-    protected List<Expr<V>> extractExprParameters(Block block, List<ExprParam> exprParams) {
+    public List<Expr<V>> extractExprParameters(Block block, List<ExprParam> exprParams) {
         List<Expr<V>> params = new ArrayList<Expr<V>>();
         List<Value> values = extractValues(block, (short) exprParams.size());
         for ( ExprParam exprParam : exprParams ) {
@@ -98,7 +108,7 @@ abstract public class JaxbAstTransformer<V> {
         return params;
     }
 
-    protected Phrase<V> blocksToIfStmt(Block block, int _else, int _elseIf) {
+    public Phrase<V> blocksToIfStmt(Block block, int _else, int _elseIf) {
         List<Expr<V>> exprsList = new ArrayList<Expr<V>>();
         List<StmtList<V>> thenList = new ArrayList<StmtList<V>>();
         StmtList<V> elseList = null;
@@ -131,7 +141,7 @@ abstract public class JaxbAstTransformer<V> {
         return IfStmt.make(exprsList, thenList, extractBlockProperties(block), extractComment(block), _else, _elseIf);
     }
 
-    protected void convertStmtValList(List<Value> values, List<Statement> statements, List<Object> valAndStmt) {
+    public void convertStmtValList(List<Value> values, List<Statement> statements, List<Object> valAndStmt) {
         for ( int i = 0; i < valAndStmt.size(); i++ ) {
             Object ob = valAndStmt.get(i);
             if ( ob.getClass() == Value.class ) {
@@ -142,7 +152,7 @@ abstract public class JaxbAstTransformer<V> {
         }
     }
 
-    protected ExprList<V> blockToExprList(Block block, Class<?> defVal) {
+    public ExprList<V> blockToExprList(Block block, Class<?> defVal) {
         int items = 0;
         if ( block.getMutation().getItems() != null ) {
             items = block.getMutation().getItems().intValue();
@@ -152,7 +162,7 @@ abstract public class JaxbAstTransformer<V> {
         return valuesToExprList(values, defVal, items, BlocklyConstants.ADD);
     }
 
-    protected ExprList<V> argumentsToExprList(List<Arg> arguments) {
+    public ExprList<V> argumentsToExprList(List<Arg> arguments) {
         ExprList<V> parameters = ExprList.make();
         for ( Arg arg : arguments ) {
             Var<V> parametar = Var.make(BlocklyType.get(arg.getType()), arg.getName(), null, null);
@@ -160,26 +170,6 @@ abstract public class JaxbAstTransformer<V> {
         }
         parameters.setReadOnly();
         return parameters;
-    }
-
-    protected Phrase<V> blockToConst(Block block, String type) {
-        //what about template class?
-        List<Field> fields = extractFields(block, (short) 1);
-        String field = extractField(fields, type);
-        switch ( type ) {
-            case BlocklyConstants.BOOL:
-                return BoolConst.make(Boolean.parseBoolean(field.toLowerCase()), extractBlockProperties(block), extractComment(block));
-            case BlocklyConstants.NUM:
-                return NumConst.make(field, extractBlockProperties(block), extractComment(block));
-            case BlocklyConstants.TEXT:
-                return StringConst.make(field, extractBlockProperties(block), extractComment(block));
-            case BlocklyConstants.CONSTANT:
-                return MathConst.make(MathConst.Const.get(field), extractBlockProperties(block), extractComment(block));
-            case BlocklyConstants.COLOUR:
-                return ColorConst.make(field, extractBlockProperties(block), extractComment(block));
-            default:
-                throw new DbcException("Invalid type constant!");
-        }
     }
 
     protected StmtList<V> blocksToStmtList(List<Block> statementBolcks) {
@@ -194,7 +184,10 @@ abstract public class JaxbAstTransformer<V> {
     protected ExprList<V> blocksToExprList(List<Block> exprBolcks) {
         ExprList<V> exprList = ExprList.make();
         for ( Block exb : exprBolcks ) {
-            Phrase<V> p = blockToAST(exb);
+            Phrase<V> p;
+
+            p = blockToAST(exb);
+
             exprList.addExpr(convertPhraseToExpr(p));
         }
         exprList.setReadOnly();
@@ -202,7 +195,10 @@ abstract public class JaxbAstTransformer<V> {
     }
 
     protected void convertPhraseToStmt(StmtList<V> stmtList, Block sb) {
-        Phrase<V> p = blockToAST(sb);
+        Phrase<V> p;
+
+        p = blockToAST(sb);
+
         Stmt<V> stmt;
         if ( p.getKind().getCategory() == Category.EXPR ) {
             stmt = ExprStmt.make((Expr<V>) p);
@@ -220,7 +216,7 @@ abstract public class JaxbAstTransformer<V> {
         stmtList.addStmt(stmt);
     }
 
-    protected Expr<V> convertPhraseToExpr(Phrase<V> p) {
+    public Expr<V> convertPhraseToExpr(Phrase<V> p) {
         Expr<V> expr;
         if ( p.getKind().getCategory() == Category.SENSOR ) {
             expr = SensorExpr.make((Sensor<V>) p);
@@ -236,7 +232,7 @@ abstract public class JaxbAstTransformer<V> {
         return expr;
     }
 
-    protected ExprList<V> valuesToExprList(List<Value> values, Class<?> defVal, int nItems, String name) {
+    public ExprList<V> valuesToExprList(List<Value> values, Class<?> defVal, int nItems, String name) {
         ExprList<V> exprList = ExprList.make();
         for ( int i = 0; i < nItems; i++ ) {
             exprList.addExpr(convertPhraseToExpr(extractValue(values, new ExprParam(name + i, defVal))));
@@ -245,7 +241,7 @@ abstract public class JaxbAstTransformer<V> {
         return exprList;
     }
 
-    protected String getOperation(Block block, String operationType) {
+    public String getOperation(Block block, String operationType) {
         String op = operationType;
         if ( block.getField().size() != 0 ) {
             op = extractOperation(block, operationType);
@@ -253,7 +249,7 @@ abstract public class JaxbAstTransformer<V> {
         return op;
     }
 
-    protected Phrase<V> extractRepeatStatement(Block block, Phrase<V> expr, String mode) {
+    public Phrase<V> extractRepeatStatement(Block block, Phrase<V> expr, String mode) {
         return extractRepeatStatement(block, expr, mode, BlocklyConstants.DO, 1);
     }
 
@@ -263,21 +259,21 @@ abstract public class JaxbAstTransformer<V> {
         return RepeatStmt.make(RepeatStmt.Mode.get(mode), convertPhraseToExpr(expr), stmtList, extractBlockProperties(block), extractComment(block));
     }
 
-    protected Phrase<V> extractVar(Block block) {
+    public Phrase<V> extractVar(Block block) {
         String typeVar = block.getMutation() != null ? block.getMutation().getDatatype() : "NUMERIC";
         List<Field> fields = extractFields(block, (short) 1);
         String field = extractField(fields, BlocklyConstants.VAR);
         return Var.make(BlocklyType.get(typeVar), field, extractBlockProperties(block), extractComment(block));
     }
 
-    protected List<Value> extractValues(Block block, short numOfValues) {
+    public List<Value> extractValues(Block block, short numOfValues) {
         List<Value> values;
         values = block.getValue();
         Assert.isTrue(values.size() <= numOfValues, "Values size is not less or equal to " + numOfValues + "!");
         return values;
     }
 
-    protected Phrase<V> extractValue(List<Value> values, ExprParam param) {
+    public Phrase<V> extractValue(List<Value> values, ExprParam param) {
         for ( Value value : values ) {
             if ( value.getName().equals(param.getName()) ) {
                 return blockToAST(value.getBlock());
@@ -286,14 +282,14 @@ abstract public class JaxbAstTransformer<V> {
         return EmptyExpr.make(param.getDefaultValue());
     }
 
-    protected List<Statement> extractStatements(Block block, short numOfStatements) {
+    public List<Statement> extractStatements(Block block, short numOfStatements) {
         List<Statement> statements;
         statements = block.getStatement();
         Assert.isTrue(statements.size() <= numOfStatements, "Statements size is not less or equal to " + numOfStatements + "!");
         return statements;
     }
 
-    protected StmtList<V> extractStatement(List<Statement> statements, String stmtName) {
+    public StmtList<V> extractStatement(List<Statement> statements, String stmtName) {
         StmtList<V> stmtList = StmtList.make();
         for ( Statement statement : statements ) {
             if ( statement.getName().equals(stmtName) ) {
@@ -304,7 +300,7 @@ abstract public class JaxbAstTransformer<V> {
         return stmtList;
     }
 
-    protected ExprList<V> statementsToExprs(List<Statement> statements, String stmtName) {
+    public ExprList<V> statementsToExprs(List<Statement> statements, String stmtName) {
         ExprList<V> exprList = ExprList.make();
         for ( Statement statement : statements ) {
             if ( statement.getName().equals(stmtName) ) {
@@ -315,14 +311,14 @@ abstract public class JaxbAstTransformer<V> {
         return exprList;
     }
 
-    protected List<Field> extractFields(Block block, short numOfFields) {
+    public List<Field> extractFields(Block block, short numOfFields) {
         List<Field> fields;
         fields = block.getField();
         Assert.isTrue(fields.size() == numOfFields, "Number of fields is not equal to " + numOfFields + "!");
         return fields;
     }
 
-    protected String extractField(List<Field> fields, String name) {
+    public String extractField(List<Field> fields, String name) {
         for ( Field field : fields ) {
             if ( field.getName().equals(name) ) {
                 return field.getValue();
@@ -331,13 +327,13 @@ abstract public class JaxbAstTransformer<V> {
         throw new DbcException("There is no field with name " + name);
     }
 
-    protected String extractOperation(Block block, String name) {
+    public String extractOperation(Block block, String name) {
         List<Field> fields = extractFields(block, (short) 1);
         String operation = extractField(fields, name);
         return operation;
     }
 
-    protected BlocklyComment extractComment(Block block) {
+    public BlocklyComment extractComment(Block block) {
         if ( block.getComment() != null ) {
             Comment comment = block.getComment();
             return BlocklyComment.make(comment.getValue(), comment.isPinned(), comment.getH(), comment.getW());
@@ -345,7 +341,7 @@ abstract public class JaxbAstTransformer<V> {
         return null;
     }
 
-    protected BlocklyBlockProperties extractBlockProperties(Block block) {
+    public BlocklyBlockProperties extractBlockProperties(Block block) {
         return BlocklyBlockProperties.make(
             block.getType(),
             block.getId(),
@@ -385,14 +381,14 @@ abstract public class JaxbAstTransformer<V> {
         return block.isMovable();
     }
 
-    protected int getElseIf(Mutation mutation) {
+    public int getElseIf(Mutation mutation) {
         if ( mutation != null && mutation.getElseif() != null ) {
             return mutation.getElseif().intValue();
         }
         return 0;
     }
 
-    protected int getElse(Mutation mutation) {
+    public int getElse(Mutation mutation) {
         if ( mutation != null && mutation.getElse() != null ) {
             return mutation.getElse().intValue();
         }

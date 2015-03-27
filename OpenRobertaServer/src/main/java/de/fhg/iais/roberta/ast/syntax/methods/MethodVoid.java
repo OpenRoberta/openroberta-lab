@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.methods;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
@@ -7,9 +9,12 @@ import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
+import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -42,6 +47,17 @@ public class MethodVoid<V> extends Method<V> {
      */
     public static <V> MethodVoid<V> make(String methodName, ExprList<V> parameters, StmtList<V> body, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new MethodVoid<V>(methodName, parameters, body, properties, comment);
+    }
+
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 1);
+        String name = helper.extractField(fields, BlocklyConstants.NAME);
+
+        List<Statement> statements = helper.extractStatements(block, (short) 2);
+        ExprList<V> exprList = helper.statementsToExprs(statements, BlocklyConstants.ST);
+        StmtList<V> statement = helper.extractStatement(statements, BlocklyConstants.STACK);
+
+        return MethodVoid.make(name, exprList, statement, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     /**

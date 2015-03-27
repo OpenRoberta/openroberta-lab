@@ -1,15 +1,21 @@
 package de.fhg.iais.roberta.ast.syntax.stmt;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.ExprParam;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
+import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -45,6 +51,17 @@ public class AssignStmt<V> extends Stmt<V> {
      */
     public static <V> AssignStmt<V> make(Var<V> name, Expr<V> expr, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new AssignStmt<V>(name, expr, properties, comment);
+    }
+
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Value> values = helper.extractValues(block, (short) 1);
+        Phrase<V> p = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, EmptyExpr.class));
+        Expr<V> exprr = helper.convertPhraseToExpr(p);
+        return AssignStmt.make(
+            (Var<V>) helper.extractVar(block),
+            helper.convertPhraseToExpr(exprr),
+            helper.extractBlockProperties(block),
+            helper.extractComment(block));
     }
 
     /**

@@ -1,13 +1,17 @@
 package de.fhg.iais.roberta.ast.syntax.functions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.ExprParam;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.dbc.Assert;
@@ -42,6 +46,17 @@ public class MathSingleFunct<V> extends Function<V> {
      */
     public static <V> MathSingleFunct<V> make(FunctionNames name, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new MathSingleFunct<V>(name, param, properties, comment);
+    }
+
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        if ( helper.getOperation(block, BlocklyConstants.OP_).equals(BlocklyConstants.NEG) ) {
+            return helper.blockToUnaryExpr(block, new ExprParam(BlocklyConstants.NUM, Integer.class), BlocklyConstants.OP_);
+        }
+        List<ExprParam> exprParams = new ArrayList<ExprParam>();
+        exprParams.add(new ExprParam(BlocklyConstants.NUM, Integer.class));
+        String op = helper.getOperation(block, BlocklyConstants.OP_);
+        List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
+        return MathSingleFunct.make(FunctionNames.get(op), params, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     /**

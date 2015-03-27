@@ -1,12 +1,16 @@
 package de.fhg.iais.roberta.ast.syntax.sensor;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
 
 /**
  * This class represents the <b>robSensors_touch_isPressed</b> blocks from Blockly into
@@ -38,6 +42,12 @@ public class TouchSensor<V> extends Sensor<V> {
      */
     public static <V> TouchSensor<V> make(SensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new TouchSensor<V>(port, properties, comment);
+    }
+
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 1);
+        String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
+        return TouchSensor.make(SensorPort.get(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     /**

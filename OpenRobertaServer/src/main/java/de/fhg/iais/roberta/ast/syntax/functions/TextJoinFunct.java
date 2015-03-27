@@ -1,15 +1,18 @@
 package de.fhg.iais.roberta.ast.syntax.functions;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
@@ -42,6 +45,14 @@ public class TextJoinFunct<V> extends Function<V> {
      */
     public static <V> TextJoinFunct<V> make(List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new TextJoinFunct<V>(param, properties, comment);
+    }
+
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        ExprList<V> exprList = helper.blockToExprList(block, String.class);
+        List<Expr<V>> textList = new ArrayList<Expr<V>>();
+        textList.add(exprList);
+        return TextJoinFunct.make(textList, helper.extractBlockProperties(block), helper.extractComment(block));
+
     }
 
     /**

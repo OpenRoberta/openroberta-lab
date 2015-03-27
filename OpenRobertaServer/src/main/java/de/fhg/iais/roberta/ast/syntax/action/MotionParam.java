@@ -42,7 +42,7 @@ public class MotionParam<V> {
 
         /**
          * Set the speed of the motor.
-         * 
+         *
          * @param speed
          * @return reference returned so calls can be chained
          */
@@ -53,7 +53,7 @@ public class MotionParam<V> {
 
         /**
          * Sets the motor work duration.
-         * 
+         *
          * @param duration
          * @return reference returned so calls can be chained
          */
@@ -64,12 +64,13 @@ public class MotionParam<V> {
 
         /**
          * Returns a reference to the object being constructed or result being calculated by the builder.
-         * 
+         *
          * @return the object constructed by the builder.
          */
         public MotionParam<V> build() {
             return new MotionParam<V>(this);
         }
+
     }
 
 }

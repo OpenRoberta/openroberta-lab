@@ -1,13 +1,19 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.ExprParam;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -40,8 +46,22 @@ public class ShowPictureAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ShowPictureAction}
      */
-    public static <V> ShowPictureAction<V> make(ShowPicture pic, Expr<V> x, Expr<V> y, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> ShowPictureAction<V> make(ShowPicture pic, Expr<V> x, Expr<V> y, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new ShowPictureAction<V>(pic, x, y, properties, comment);
+    }
+
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 1);
+        List<Value> values = helper.extractValues(block, (short) 2);
+        String pic = helper.extractField(fields, BlocklyConstants.PICTURE);
+        Phrase<V> x = helper.extractValue(values, new ExprParam(BlocklyConstants.X_, Integer.class));
+        Phrase<V> y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y_, Integer.class));
+        return ShowPictureAction.make(
+            ShowPicture.get(pic),
+            helper.convertPhraseToExpr(x),
+            helper.convertPhraseToExpr(y),
+            helper.extractBlockProperties(block),
+            helper.extractComment(block));
     }
 
     /**

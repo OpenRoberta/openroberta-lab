@@ -1,12 +1,16 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -33,8 +37,14 @@ public class MotorGetPowerAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link MotorGetPowerAction}
      */
-    public static <V> MotorGetPowerAction<V> make(ActorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> MotorGetPowerAction<V> make(ActorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new MotorGetPowerAction<V>(port, properties, comment);
+    }
+
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 1);
+        String portName = helper.extractField(fields, BlocklyConstants.MOTORPORT);
+        return MotorGetPowerAction.make(ActorPort.get(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     /**

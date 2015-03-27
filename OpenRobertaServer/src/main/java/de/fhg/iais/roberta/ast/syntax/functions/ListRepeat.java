@@ -1,16 +1,21 @@
 package de.fhg.iais.roberta.ast.syntax.functions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.ExprParam;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.dbc.Assert;
 
@@ -43,6 +48,16 @@ public class ListRepeat<V> extends Function<V> {
      */
     public static <V> ListRepeat<V> make(BlocklyType typeVar, List<Expr<V>> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new ListRepeat<V>(typeVar, param, properties, comment);
+    }
+
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 1);
+        String filename = helper.extractField(fields, BlocklyConstants.LIST_TYPE);
+        List<ExprParam> exprParams = new ArrayList<ExprParam>();
+        exprParams.add(new ExprParam(BlocklyConstants.ITEM, List.class));
+        exprParams.add(new ExprParam(BlocklyConstants.NUM, Integer.class));
+        List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
+        return ListRepeat.make(BlocklyType.get(filename), params, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     /**

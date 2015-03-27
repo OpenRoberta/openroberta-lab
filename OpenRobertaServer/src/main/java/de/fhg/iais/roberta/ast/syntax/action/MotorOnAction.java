@@ -1,13 +1,19 @@
 package de.fhg.iais.roberta.ast.syntax.action;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.ExprParam;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -37,8 +43,34 @@ public final class MotorOnAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link MotorOnAction}
      */
-    public static <V> MotorOnAction<V> make(ActorPort port, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> MotorOnAction<V> make(ActorPort port, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new MotorOnAction<V>(port, param, properties, comment);
+    }
+
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields;
+        List<Value> values;
+        MotionParam<V> mp;
+        if ( block.getType().equals("robActions_motor_on") ) {
+
+            fields = helper.extractFields(block, (short) 1);
+            values = helper.extractValues(block, (short) 1);
+            String port = helper.extractField(fields, BlocklyConstants.MOTORPORT);
+            Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
+            mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(expr)).build();
+            return MotorOnAction.make(ActorPort.get(port), mp, helper.extractBlockProperties(block), helper.extractComment(block));
+        }
+
+        fields = helper.extractFields(block, (short) 2);
+        values = helper.extractValues(block, (short) 2);
+        String port = helper.extractField(fields, BlocklyConstants.MOTORPORT);
+
+        String mode = helper.extractField(fields, BlocklyConstants.MOTORROTATION);
+        Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
+        Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, Integer.class));
+        MotorDuration<V> md = new MotorDuration<V>(MotorMoveMode.get(mode), helper.convertPhraseToExpr(right));
+        mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(left)).duration(md).build();
+        return MotorOnAction.make(ActorPort.get(port), mp, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     /**
@@ -65,8 +97,9 @@ public final class MotorOnAction<V> extends Action<V> {
     /**
      * @return value of the duration of the motor movement
      */
+    @SuppressWarnings("unchecked")
     public Expr<V> getDurationValue() {
-        return this.param.getDuration().getValue();
+        return (Expr<V>) this.param.getDuration().getValue();
     }
 
     @Override

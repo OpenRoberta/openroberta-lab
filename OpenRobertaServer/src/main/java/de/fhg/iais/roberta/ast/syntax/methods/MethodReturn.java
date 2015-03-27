@@ -1,18 +1,27 @@
 package de.fhg.iais.roberta.ast.syntax.methods;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
+import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.ExprParam;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Repetitions;
+import de.fhg.iais.roberta.blockly.generated.Statement;
+import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -64,6 +73,28 @@ public class MethodReturn<V> extends Method<V> {
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
         return new MethodReturn<V>(methodName, parameters, body, returnType, returnValue, properties, comment);
+    }
+
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 2);
+        String name = helper.extractField(fields, BlocklyConstants.NAME);
+
+        List<Object> valAndStmt = block.getRepetitions().getValueAndStatement();
+        ArrayList<Value> values = new ArrayList<Value>();
+        ArrayList<Statement> statements = new ArrayList<Statement>();
+        helper.convertStmtValList(values, statements, valAndStmt);
+        ExprList<V> exprList = helper.statementsToExprs(statements, BlocklyConstants.ST);
+        StmtList<V> statement = helper.extractStatement(statements, BlocklyConstants.STACK);
+        Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.RETURN, NullConst.class));
+
+        return MethodReturn.make(
+            name,
+            exprList,
+            statement,
+            BlocklyType.get(helper.extractField(fields, BlocklyConstants.TYPE)),
+            helper.convertPhraseToExpr(expr),
+            helper.extractBlockProperties(block),
+            helper.extractComment(block));
     }
 
     /**

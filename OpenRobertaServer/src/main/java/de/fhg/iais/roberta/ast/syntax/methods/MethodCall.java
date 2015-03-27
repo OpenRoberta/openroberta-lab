@@ -1,18 +1,23 @@
 package de.fhg.iais.roberta.ast.syntax.methods;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
+import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.typecheck.BlocklyType;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Arg;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
+import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -60,6 +65,19 @@ public class MethodCall<V> extends Method<V> {
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
         return new MethodCall<V>(methodName, parameters, parametersValues, returnType, properties, comment);
+    }
+
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        BlocklyType outputType = block.getMutation().getOutputType() == null ? null : BlocklyType.get(block.getMutation().getOutputType());
+        String methodName = block.getMutation().getName();
+        List<Arg> arguments = block.getMutation().getArg();
+        ExprList<V> parameters = helper.argumentsToExprList(arguments);
+
+        List<Value> values = helper.extractValues(block, (short) arguments.size());
+
+        ExprList<V> parametersValues = helper.valuesToExprList(values, EmptyExpr.class, arguments.size(), BlocklyConstants.ARG);
+
+        return MethodCall.make(methodName, parameters, parametersValues, outputType, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     /**
