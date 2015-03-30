@@ -46,20 +46,8 @@ public class EncoderSensor<V> extends Sensor<V> {
      * @param comment added from the user,
      * @return read only object of {@link EncoderSensor}
      */
-    static <V> EncoderSensor<V> make(MotorTachoMode mode, ActorPort motor, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> EncoderSensor<V> make(MotorTachoMode mode, ActorPort motor, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new EncoderSensor<V>(mode, motor, properties, comment);
-    }
-
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        if ( block.getType().equals("robSensors_encoder_reset") ) {
-            List<Field> fields = helper.extractFields(block, (short) 1);
-            String portName = helper.extractField(fields, BlocklyConstants.MOTORPORT);
-            return EncoderSensor.make(MotorTachoMode.RESET, ActorPort.get(portName), helper.extractBlockProperties(block), helper.extractComment(block));
-        }
-        List<Field> fields = helper.extractFields(block, (short) 2);
-        String portName = helper.extractField(fields, BlocklyConstants.MOTORPORT);
-        String modeName = helper.extractField(fields, BlocklyConstants.MODE_);
-        return EncoderSensor.make(MotorTachoMode.get(modeName), ActorPort.get(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     /**
@@ -84,6 +72,25 @@ public class EncoderSensor<V> extends Sensor<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitEncoderSensor(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_ENCODER_RESET) ) {
+            List<Field> fields = helper.extractFields(block, (short) 1);
+            String portName = helper.extractField(fields, BlocklyConstants.MOTORPORT);
+            return EncoderSensor.make(MotorTachoMode.RESET, ActorPort.get(portName), helper.extractBlockProperties(block), helper.extractComment(block));
+        }
+        List<Field> fields = helper.extractFields(block, (short) 2);
+        String portName = helper.extractField(fields, BlocklyConstants.MOTORPORT);
+        String modeName = helper.extractField(fields, BlocklyConstants.MODE_);
+        return EncoderSensor.make(MotorTachoMode.get(modeName), ActorPort.get(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

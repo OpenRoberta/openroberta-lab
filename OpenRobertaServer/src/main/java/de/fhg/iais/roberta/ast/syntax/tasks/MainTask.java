@@ -32,17 +32,6 @@ public class MainTask<V> extends Task<V> {
         setReadOnly();
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        if ( block.getMutation().isDeclare() == true ) {
-            List<Statement> statements = helper.extractStatements(block, (short) 1);
-            StmtList<V> statement = helper.extractStatement(statements, BlocklyConstants.ST);
-            return MainTask.make(statement, helper.extractBlockProperties(block), helper.extractComment(block));
-        }
-        StmtList<V> listOfVariables = StmtList.make();
-        listOfVariables.setReadOnly();
-        return MainTask.make(listOfVariables, helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
     /**
      * creates instance of {@link MainTask}. This instance is read only and cannot be modified.
      *
@@ -77,6 +66,24 @@ public class MainTask<V> extends Task<V> {
     @Override
     public String toString() {
         return "MainTask [" + this.variables + "]";
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        if ( block.getMutation().isDeclare() == true ) {
+            List<Statement> statements = helper.extractStatements(block, (short) 1);
+            StmtList<V> statement = helper.extractStatement(statements, BlocklyConstants.ST);
+            return MainTask.make(statement, helper.extractBlockProperties(block), helper.extractComment(block));
+        }
+        StmtList<V> listOfVariables = StmtList.make();
+        listOfVariables.setReadOnly();
+        return MainTask.make(listOfVariables, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

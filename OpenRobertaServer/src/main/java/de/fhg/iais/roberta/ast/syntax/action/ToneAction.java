@@ -46,17 +46,6 @@ public class ToneAction<V> extends Action<V> {
         return new ToneAction<V>(frequency, duration, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        List<Value> values = helper.extractValues(block, (short) 2);
-        Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.FREQUENCE, Integer.class));
-        Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.DURATION, Integer.class));
-        return ToneAction.make(
-            helper.convertPhraseToExpr(left),
-            helper.convertPhraseToExpr(right),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
-    }
-
     /**
      * @return frequency of the sound
      */
@@ -79,6 +68,24 @@ public class ToneAction<V> extends Action<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitToneAction(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Value> values = helper.extractValues(block, (short) 2);
+        Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.FREQUENCE, Integer.class));
+        Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.DURATION, Integer.class));
+        return ToneAction.make(
+            helper.convertPhraseToExpr(left),
+            helper.convertPhraseToExpr(right),
+            helper.extractBlockProperties(block),
+            helper.extractComment(block));
     }
 
     @Override

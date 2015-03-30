@@ -32,10 +32,6 @@ public class NullConst<V> extends Expr<V> {
         return new NullConst<V>(properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        return NullConst.make(helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
     /**
      * @return null value
      */
@@ -61,6 +57,17 @@ public class NullConst<V> extends Expr<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitNullConst(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        return NullConst.make(helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

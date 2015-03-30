@@ -48,10 +48,6 @@ public class Unary<V> extends Expr<V> {
         return new Unary<V>(op, expr, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        return helper.blockToUnaryExpr(block, new ExprParam(BlocklyConstants.BOOL, Boolean.class), BlocklyConstants.NOT);
-    }
-
     /**
      * @return the operation in the binary expression. See enum {@link Op} for all possible operations
      */
@@ -154,6 +150,17 @@ public class Unary<V> extends Expr<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitUnary(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        return helper.blockToUnaryExpr(block, new ExprParam(BlocklyConstants.BOOL, Boolean.class), BlocklyConstants.NOT);
     }
 
     @Override

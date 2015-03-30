@@ -1,12 +1,81 @@
 package de.fhg.iais.roberta.ast.syntax;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.fhg.iais.roberta.ast.syntax.action.ClearDisplayAction;
+import de.fhg.iais.roberta.ast.syntax.action.DriveAction;
+import de.fhg.iais.roberta.ast.syntax.action.LightAction;
+import de.fhg.iais.roberta.ast.syntax.action.LightStatusAction;
+import de.fhg.iais.roberta.ast.syntax.action.MotorDriveStopAction;
+import de.fhg.iais.roberta.ast.syntax.action.MotorGetPowerAction;
+import de.fhg.iais.roberta.ast.syntax.action.MotorOnAction;
+import de.fhg.iais.roberta.ast.syntax.action.MotorSetPowerAction;
+import de.fhg.iais.roberta.ast.syntax.action.MotorStopAction;
+import de.fhg.iais.roberta.ast.syntax.action.PlayFileAction;
+import de.fhg.iais.roberta.ast.syntax.action.ShowPictureAction;
+import de.fhg.iais.roberta.ast.syntax.action.ShowTextAction;
+import de.fhg.iais.roberta.ast.syntax.action.ToneAction;
+import de.fhg.iais.roberta.ast.syntax.action.TurnAction;
+import de.fhg.iais.roberta.ast.syntax.action.VolumeAction;
+import de.fhg.iais.roberta.ast.syntax.expr.Binary;
+import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
+import de.fhg.iais.roberta.ast.syntax.expr.ColorConst;
+import de.fhg.iais.roberta.ast.syntax.expr.EmptyList;
+import de.fhg.iais.roberta.ast.syntax.expr.ListCreate;
+import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
+import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
+import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
+import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
+import de.fhg.iais.roberta.ast.syntax.expr.Unary;
+import de.fhg.iais.roberta.ast.syntax.expr.Var;
+import de.fhg.iais.roberta.ast.syntax.expr.VarDeclaration;
+import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.IndexOfFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.LenghtOfIsEmptyFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.ListGetIndex;
+import de.fhg.iais.roberta.ast.syntax.functions.ListRepeat;
+import de.fhg.iais.roberta.ast.syntax.functions.ListSetIndex;
+import de.fhg.iais.roberta.ast.syntax.functions.MathConstrainFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathNumPropFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathOnListFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathRandomFloatFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathRandomIntFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.MathSingleFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.TextJoinFunct;
+import de.fhg.iais.roberta.ast.syntax.functions.TextPrintFunct;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodCall;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodIfReturn;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodReturn;
+import de.fhg.iais.roberta.ast.syntax.methods.MethodVoid;
+import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.GetSampleSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.TouchSensor;
+import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensor;
+import de.fhg.iais.roberta.ast.syntax.stmt.AssignStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
+import de.fhg.iais.roberta.ast.syntax.stmt.WaitStmt;
+import de.fhg.iais.roberta.ast.syntax.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
+import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
+import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
+import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
 import de.fhg.iais.roberta.ast.typecheck.NepoInfo;
 import de.fhg.iais.roberta.ast.typecheck.NepoInfos;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.hardwarecomponents.Category;
 
 /**
@@ -142,92 +211,104 @@ abstract public class Phrase<V> {
      * {@link Category}.
      */
     public static enum Kind {
-        COLOR_SENSING( Category.SENSOR ),
-        TOUCH_SENSING( Category.SENSOR ),
-        ULTRASONIC_SENSING( Category.SENSOR ),
-        INFRARED_SENSING( Category.SENSOR ),
-        ENCODER_SENSING( Category.SENSOR ),
-        BRICK_SENSIG( Category.SENSOR ),
-        GYRO_SENSIG( Category.SENSOR ),
-        TIMER_SENSING( Category.SENSOR ),
-        SENSOR_GET_SAMPLE( Category.SENSOR ),
-        EXPR_LIST( Category.EXPR ),
-        STRING_CONST( Category.EXPR ),
-        PICK_COLOR_CONST( Category.EXPR ),
-        NULL_CONST( Category.EXPR ),
-        BOOL_CONST( Category.EXPR ),
-        NUM_CONST( Category.EXPR ),
-        MATH_CONST( Category.EXPR ),
-        EMPTY_LIST( Category.EXPR ),
-        VAR( Category.EXPR ),
-        VAR_DECLARATION( Category.EXPR ),
-        UNARY( Category.EXPR ),
-        BINARY( Category.EXPR ),
-        SENSOR_EXPR( Category.EXPR ),
-        ACTION_EXPR( Category.EXPR ),
-        EMPTY_EXPR( Category.EXPR ),
-        FUNCTION_EXPR( Category.EXPR ),
-        METHOD_EXPR( Category.EXPR ),
-        FUNCTIONS( Category.EXPR ),
-        START_ACTIVITY_TASK( Category.EXPR ),
-        IF_STMT( Category.STMT ),
-        REPEAT_STMT( Category.STMT ),
-        EXPR_STMT( Category.STMT ),
-        STMT_LIST( Category.STMT ),
-        ASSIGN_STMT( Category.STMT ),
-        AKTION_STMT( Category.STMT ),
-        SENSOR_STMT( Category.STMT ),
-        FUNCTION_STMT( Category.STMT ),
-        METHOD_STMT( Category.STMT ),
-        STMT_FLOW_CONTROL( Category.STMT ),
-        WAIT_STMT( Category.STMT ),
-        WAIT_TIME( Category.STMT ),
-        TURN_ACTION( Category.ACTOR ),
-        DRIVE_ACTION( Category.ACTOR ),
-        SHOW_TEXT_ACTION( Category.ACTOR ),
-        SHOW_PICTURE_ACTION( Category.ACTOR ),
-        TONE_ACTION( Category.ACTOR ),
-        LIGHT_ACTION( Category.ACTOR ),
-        CLEAR_DISPLAY_ACTION( Category.ACTOR ),
-        MOTOR_ON_ACTION( Category.ACTOR ),
-        MOTOR_GET_POWER_ACTION( Category.ACTOR ),
-        MOTOR_SET_POWER_ACTION( Category.ACTOR ),
-        MOTOR_STOP_ACTION( Category.ACTOR ),
-        PLAY_FILE_ACTION( Category.ACTOR ),
-        VOLUME_ACTION( Category.ACTOR ),
-        LIGHT_STATUS_ACTION( Category.ACTOR ),
-        STOP_ACTION( Category.ACTOR ),
-        MAIN_TASK( Category.TASK ),
-        ACTIVITY_TASK( Category.TASK ),
-        LOCATION( Category.TASK ),
-        TEXT_INDEX_OF_FUNCT( Category.FUNCTION ),
-        TEXT_CHAR_AT_FUNCT( Category.FUNCTION ),
-        GET_SUB_FUNCT( Category.FUNCTION ),
-        MATH_SINGLE_FUNCT( Category.FUNCTION ),
-        MATH_ON_LIST_FUNCT( Category.FUNCTION ),
-        MATH_CONSTRAIN_FUNCT( Category.FUNCTION ),
-        MATH_RANDOM_INT_FUNCT( Category.FUNCTION ),
-        MATH_RANDOM_FLOAT_FUNCT( Category.FUNCTION ),
-        MATH_NUM_PROP_FUNCT( Category.FUNCTION ),
-        LENGHT_OF_IS_EMPTY_FUNCT( Category.FUNCTION ),
-        TEXT_JOIN_FUNCT( Category.FUNCTION ),
-        TEXT_TRIM_FUNCT( Category.FUNCTION ),
-        TEXT_PRINT_FUNCT( Category.FUNCTION ),
-        TEXT_PROMPT_FUNCT( Category.FUNCTION ),
-        LIST_REPEAT_FUNCT( Category.FUNCTION ),
-        LIST_CREATE( Category.EXPR ),
-        LIST_INDEX_OF( Category.FUNCTION ),
-        LIST_SET_INDEX( Category.FUNCTION ),
-        TEXT_CHANGE_CASE_FUNCT( Category.FUNCTION ),
-        METHOD_IF_RETURN( Category.METHOD ),
-        METHOD_VOID( Category.METHOD ),
-        METHOD_CALL( Category.METHOD ),
-        METHOD_RETURN( Category.METHOD );
+        COLOR_SENSING( Category.SENSOR, ColorSensor.class, "robSensors_colour_getSample" ),
+        TOUCH_SENSING( Category.SENSOR, TouchSensor.class, "robSensors_touch_isPressed" ),
+        ULTRASONIC_SENSING( Category.SENSOR, UltrasonicSensor.class, "robSensors_ultrasonic_getSample" ),
+        INFRARED_SENSING( Category.SENSOR, InfraredSensor.class, "robSensors_infrared_getSample" ),
+        ENCODER_SENSING( Category.SENSOR, EncoderSensor.class, "robSensors_encoder_getSample", "robSensors_encoder_reset" ),
+        BRICK_SENSING( Category.SENSOR, BrickSensor.class, "robSensors_key_isPressed" ),
+        GYRO_SENSING( Category.SENSOR, GyroSensor.class, "robSensors_gyro_getSample", "robSensors_gyro_reset" ),
+        TIMER_SENSING( Category.SENSOR, TimerSensor.class, "robSensors_timer_getSample", "robSensors_timer_reset" ),
+        SENSOR_GET_SAMPLE( Category.SENSOR, GetSampleSensor.class, "robSensors_getSample" ),
+        EXPR_LIST( Category.EXPR, null ),
+        STRING_CONST( Category.EXPR, StringConst.class, "text" ),
+        PICK_COLOR_CONST( Category.EXPR, ColorConst.class, "robColour_picker" ),
+        NULL_CONST( Category.EXPR, NullConst.class, "logic_null" ),
+        BOOL_CONST( Category.EXPR, BoolConst.class, "logic_boolean" ),
+        NUM_CONST( Category.EXPR, NumConst.class, "math_number" ),
+        MATH_CONST( Category.EXPR, MathConst.class, "math_constant" ),
+        EMPTY_LIST( Category.EXPR, EmptyList.class, "lists_create_empty" ),
+        VAR( Category.EXPR, Var.class, "variables_get" ),
+        VAR_DECLARATION( Category.EXPR, VarDeclaration.class, "robLocalVariables_declare", "robGlobalvariables_declare" ),
+        UNARY( Category.EXPR, Unary.class, "logic_negate" ),
+        BINARY( Category.EXPR, Binary.class, "logic_compare", "logic_operation", "math_arithmetic", "math_change", "math_modulo", "text_append" ),
+        SENSOR_EXPR( Category.EXPR, null ),
+        ACTION_EXPR( Category.EXPR, null ),
+        EMPTY_EXPR( Category.EXPR, null ),
+        FUNCTION_EXPR( Category.EXPR, null ),
+        METHOD_EXPR( Category.EXPR, null ),
+        FUNCTIONS( Category.EXPR, null ),
+        START_ACTIVITY_TASK( Category.EXPR, StartActivityTask.class, "robControls_start_activity" ),
+        IF_STMT( Category.STMT, IfStmt.class, "logic_ternary", "controls_if", "robControls_if", "robControls_ifElse" ),
+        REPEAT_STMT(
+            Category.STMT,
+            RepeatStmt.class,
+            "robControls_loopForever",
+            "controls_whileUntil",
+            "controls_for",
+            "controls_repeat_ext",
+            "controls_repeat",
+            "controls_forEach" ),
+        EXPR_STMT( Category.STMT, null ),
+        STMT_LIST( Category.STMT, null ),
+        ASSIGN_STMT( Category.STMT, AssignStmt.class, "variables_set" ),
+        AKTION_STMT( Category.STMT, null ),
+        SENSOR_STMT( Category.STMT, null ),
+        FUNCTION_STMT( Category.STMT, null ),
+        METHOD_STMT( Category.STMT, null ),
+        STMT_FLOW_CONTROL( Category.STMT, StmtFlowCon.class, "controls_flow_statements" ),
+        WAIT_STMT( Category.STMT, WaitStmt.class, "robControls_wait_for", "robControls_wait" ),
+        WAIT_TIME( Category.STMT, WaitTimeStmt.class, "robControls_wait_time" ),
+        TURN_ACTION( Category.ACTOR, TurnAction.class, "robActions_motorDiff_turn", "robActions_motorDiff_turn_for" ),
+        DRIVE_ACTION( Category.ACTOR, DriveAction.class, "robActions_motorDiff_on", "robActions_motorDiff_on_for" ),
+        SHOW_TEXT_ACTION( Category.ACTOR, ShowTextAction.class, "robActions_display_text" ),
+        SHOW_PICTURE_ACTION( Category.ACTOR, ShowPictureAction.class, "robActions_display_picture" ),
+        TONE_ACTION( Category.ACTOR, ToneAction.class, "robActions_play_tone" ),
+        LIGHT_ACTION( Category.ACTOR, LightAction.class, "robActions_brickLight_on" ),
+        CLEAR_DISPLAY_ACTION( Category.ACTOR, ClearDisplayAction.class, "robActions_display_clear" ),
+        MOTOR_ON_ACTION( Category.ACTOR, MotorOnAction.class, "robActions_motor_on", "robActions_motor_on_for" ),
+        MOTOR_GET_POWER_ACTION( Category.ACTOR, MotorGetPowerAction.class, "robActions_motor_getPower" ),
+        MOTOR_SET_POWER_ACTION( Category.ACTOR, MotorSetPowerAction.class, "robActions_motor_setPower" ),
+        MOTOR_STOP_ACTION( Category.ACTOR, MotorStopAction.class, "robActions_motor_stop" ),
+        PLAY_FILE_ACTION( Category.ACTOR, PlayFileAction.class, "robActions_play_file" ),
+        VOLUME_ACTION( Category.ACTOR, VolumeAction.class, "robActions_play_setVolume", "robActions_play_getVolume" ),
+        LIGHT_STATUS_ACTION( Category.ACTOR, LightStatusAction.class, "robActions_brickLight_off", "robActions_brickLight_reset" ),
+        STOP_ACTION( Category.ACTOR, MotorDriveStopAction.class, "robActions_motorDiff_stop" ),
+        MAIN_TASK( Category.TASK, MainTask.class, "robControls_start" ),
+        ACTIVITY_TASK( Category.TASK, ActivityTask.class, "robControls_activity" ),
+        LOCATION( Category.TASK, null ),
+        TEXT_INDEX_OF_FUNCT( Category.FUNCTION, IndexOfFunct.class, "lists_indexOf" ),
+        TEXT_CHAR_AT_FUNCT( Category.FUNCTION, null ),
+        GET_SUB_FUNCT( Category.FUNCTION, GetSubFunct.class, "lists_getSublist" ),
+        MATH_SINGLE_FUNCT( Category.FUNCTION, MathSingleFunct.class, "math_round", "math_trig", "math_single" ),
+        MATH_ON_LIST_FUNCT( Category.FUNCTION, MathOnListFunct.class, "math_on_list" ),
+        MATH_CONSTRAIN_FUNCT( Category.FUNCTION, MathConstrainFunct.class, "math_constrain" ),
+        MATH_RANDOM_INT_FUNCT( Category.FUNCTION, MathRandomIntFunct.class, "math_random_int" ),
+        MATH_RANDOM_FLOAT_FUNCT( Category.FUNCTION, MathRandomFloatFunct.class, "math_random_float" ),
+        MATH_NUM_PROP_FUNCT( Category.FUNCTION, MathNumPropFunct.class, "math_number_property" ),
+        LENGHT_OF_IS_EMPTY_FUNCT( Category.FUNCTION, LenghtOfIsEmptyFunct.class, "lists_length", "lists_isEmpty" ),
+        TEXT_JOIN_FUNCT( Category.FUNCTION, TextJoinFunct.class, "robText_join", "text_join" ),
+        TEXT_TRIM_FUNCT( Category.FUNCTION, null ),
+        TEXT_PRINT_FUNCT( Category.FUNCTION, TextPrintFunct.class, "text_print" ),
+        TEXT_PROMPT_FUNCT( Category.FUNCTION, null ),
+        LIST_REPEAT_FUNCT( Category.FUNCTION, ListRepeat.class, "lists_repeat" ),
+        LIST_CREATE( Category.EXPR, ListCreate.class, "lists_create_with", "robLists_create_with" ),
+        LIST_INDEX_OF( Category.FUNCTION, ListGetIndex.class, "lists_getIndex" ),
+        LIST_SET_INDEX( Category.FUNCTION, ListSetIndex.class, "lists_setIndex" ),
+        TEXT_CHANGE_CASE_FUNCT( Category.FUNCTION, null ),
+        METHOD_IF_RETURN( Category.METHOD, MethodIfReturn.class, "robProcedures_ifreturn" ),
+        METHOD_VOID( Category.METHOD, MethodVoid.class, "robProcedures_defnoreturn" ),
+        METHOD_CALL( Category.METHOD, MethodCall.class, "robProcedures_callnoreturn", "robProcedures_callreturn" ),
+        METHOD_RETURN( Category.METHOD, MethodReturn.class, "robProcedures_defreturn" );
 
         private final Category category;
+        private final Class<?> astClass;
+        private final String[] blocklyNames;
 
-        private Kind(Category category) {
+        private Kind(Category category, Class<?> astClass, String... values) {
             this.category = category;
+            this.astClass = astClass;
+            this.blocklyNames = values;
         }
 
         /**
@@ -235,6 +316,38 @@ abstract public class Phrase<V> {
          */
         public Category getCategory() {
             return this.category;
+        }
+
+        @SuppressWarnings("unchecked")
+        public static <V> Phrase<V> invokeJaxbToAstTransform(Block block, JaxbBlocklyProgramTransformer<V> helper) {
+            String className = "";
+            Method method;
+            if ( block == null ) {
+                throw new DbcException("Invalid block: " + block);
+            }
+            String sUpper = block.getType().trim();
+            for ( Phrase.Kind co : Phrase.Kind.values() ) {
+                if ( co.toString().equals(sUpper) ) {
+                    className = co.astClass.getName();
+                    break;
+                }
+                for ( String value : co.blocklyNames ) {
+                    if ( sUpper.equals(value) ) {
+                        className = co.astClass.getName();
+                        break;
+                    }
+                }
+            }
+            if ( className.equals("") ) {
+                throw new DbcException("Invalid Block: " + block.getType());
+            }
+            try {
+                method = Class.forName(className).getMethod("jaxbToAst", Block.class, JaxbAstTransformer.class);
+                return (Phrase<V>) method.invoke(null, block, helper);
+            } catch ( NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException
+                | InvocationTargetException | DbcException e ) {
+                throw new DbcException(e.getCause().getMessage());
+            }
         }
     }
 }

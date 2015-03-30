@@ -70,24 +70,6 @@ public class VarDeclaration<V> extends Expr<V> {
         return new VarDeclaration<V>(typeVar, name, value, next, global, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        boolean isGlobalVariable = block.getType().equals("robLocalVariables_declare") ? false : true;
-        List<Field> fields = helper.extractFields(block, (short) 2);
-        List<Value> values = helper.extractValues(block, (short) 1);
-        BlocklyType typeVar = BlocklyType.get(helper.extractField(fields, BlocklyConstants.TYPE));
-        String name = helper.extractField(fields, BlocklyConstants.VAR);
-        Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, Integer.class));
-        boolean next = block.getMutation().isNext();
-        return VarDeclaration.make(
-            typeVar,
-            name,
-            helper.convertPhraseToExpr(expr),
-            next,
-            isGlobalVariable,
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
-    }
-
     /**
      * @return type of the variable
      */
@@ -141,6 +123,31 @@ public class VarDeclaration<V> extends Expr<V> {
     @Override
     public String toString() {
         return "VarDeclaration [" + this.typeVar + ", " + this.name + ", " + this.value + ", " + this.next + ", " + this.global + "]";
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        boolean isGlobalVariable = block.getType().equals(BlocklyConstants.ROB_LOCAL_VARIABLES_DECLARE) ? false : true;
+        List<Field> fields = helper.extractFields(block, (short) 2);
+        List<Value> values = helper.extractValues(block, (short) 1);
+        BlocklyType typeVar = BlocklyType.get(helper.extractField(fields, BlocklyConstants.TYPE));
+        String name = helper.extractField(fields, BlocklyConstants.VAR);
+        Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, Integer.class));
+        boolean next = block.getMutation().isNext();
+        return VarDeclaration.make(
+            typeVar,
+            name,
+            helper.convertPhraseToExpr(expr),
+            next,
+            isGlobalVariable,
+            helper.extractBlockProperties(block),
+            helper.extractComment(block));
     }
 
     @Override

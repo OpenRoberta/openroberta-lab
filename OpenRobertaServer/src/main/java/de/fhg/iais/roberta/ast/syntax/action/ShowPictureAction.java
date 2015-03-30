@@ -50,20 +50,6 @@ public class ShowPictureAction<V> extends Action<V> {
         return new ShowPictureAction<V>(pic, x, y, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 1);
-        List<Value> values = helper.extractValues(block, (short) 2);
-        String pic = helper.extractField(fields, BlocklyConstants.PICTURE);
-        Phrase<V> x = helper.extractValue(values, new ExprParam(BlocklyConstants.X_, Integer.class));
-        Phrase<V> y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y_, Integer.class));
-        return ShowPictureAction.make(
-            ShowPicture.get(pic),
-            helper.convertPhraseToExpr(x),
-            helper.convertPhraseToExpr(y),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
-    }
-
     /**
      * @return name of the picture that
      */
@@ -93,6 +79,27 @@ public class ShowPictureAction<V> extends Action<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitShowPictureAction(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 1);
+        List<Value> values = helper.extractValues(block, (short) 2);
+        String pic = helper.extractField(fields, BlocklyConstants.PICTURE);
+        Phrase<V> x = helper.extractValue(values, new ExprParam(BlocklyConstants.X_, Integer.class));
+        Phrase<V> y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y_, Integer.class));
+        return ShowPictureAction.make(
+            ShowPicture.get(pic),
+            helper.convertPhraseToExpr(x),
+            helper.convertPhraseToExpr(y),
+            helper.extractBlockProperties(block),
+            helper.extractComment(block));
     }
 
     @Override

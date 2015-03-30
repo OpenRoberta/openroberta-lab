@@ -59,57 +59,6 @@ public final class Binary<V> extends Expr<V> {
         return new Binary<V>(op, left, right, operationRange, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        if ( block.getType().equals("text_append") ) {
-            List<Value> values = helper.extractValues(block, (short) 2);
-            Phrase<V> leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, String.class));
-            Phrase<V> rightt = helper.extractValue(values, new ExprParam(BlocklyConstants.TEXT, String.class));
-            return Binary.make(
-                Binary.Op.TEXT_APPEND,
-                helper.convertPhraseToExpr(leftt),
-                helper.convertPhraseToExpr(rightt),
-                "",
-                helper.extractBlockProperties(block),
-                helper.extractComment(block));
-        }
-        if ( block.getType().equals("math_modulo") ) {
-            return helper.blockToBinaryExpr(
-                block,
-                new ExprParam("DIVIDEND", Integer.class),
-                new ExprParam(BlocklyConstants.DIVISOR, Integer.class),
-                BlocklyConstants.MOD);
-        }
-
-        if ( block.getType().equals("math_change") ) {
-            List<Value> values = helper.extractValues(block, (short) 2);
-            Phrase<V> leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, String.class));
-            Phrase<V> rightt = helper.extractValue(values, new ExprParam(BlocklyConstants.DELTA, Integer.class));
-            return Binary.make(
-                Binary.Op.MATH_CHANGE,
-                helper.convertPhraseToExpr(leftt),
-                helper.convertPhraseToExpr(rightt),
-                "",
-                helper.extractBlockProperties(block),
-                helper.extractComment(block));
-        }
-        if ( block.getType().equals("math_arithmetic") ) {
-            String opp = helper.extractOperation(block, BlocklyConstants.OP_);
-            if ( opp.equals(BlocklyConstants.POWER) ) {
-                ArrayList<ExprParam> exprParams = new ArrayList<ExprParam>();
-                exprParams.add(new ExprParam(BlocklyConstants.A, Integer.class));
-                exprParams.add(new ExprParam(BlocklyConstants.B, Integer.class));
-                List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-                return MathPowerFunct.make(FunctionNames.POWER, params, helper.extractBlockProperties(block), helper.extractComment(block));
-            }
-        }
-        return helper.blockToBinaryExpr(
-            block,
-            new ExprParam(BlocklyConstants.A, Integer.class),
-            new ExprParam(BlocklyConstants.B, Integer.class),
-            BlocklyConstants.OP_);
-
-    }
-
     /**
      * @return the operation in the binary expression. See enum {@link Op} for all possible operations
      */
@@ -254,6 +203,68 @@ public final class Binary<V> extends Expr<V> {
                 }
             }
             throw new DbcException("Invalid binary operator symbol: " + s);
+        }
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+
+        List<Value> values;
+        Phrase<V> leftt;
+        Phrase<V> rightt;
+        switch ( block.getType() ) {
+            case BlocklyConstants.TEXT_APPEND:
+                values = helper.extractValues(block, (short) 2);
+                leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, String.class));
+                rightt = helper.extractValue(values, new ExprParam(BlocklyConstants.TEXT, String.class));
+                return Binary.make(
+                    Binary.Op.TEXT_APPEND,
+                    helper.convertPhraseToExpr(leftt),
+                    helper.convertPhraseToExpr(rightt),
+                    "",
+                    helper.extractBlockProperties(block),
+                    helper.extractComment(block));
+            case BlocklyConstants.MATH_CHANGE:
+                values = helper.extractValues(block, (short) 2);
+                leftt = helper.extractValue(values, new ExprParam(BlocklyConstants.VAR, String.class));
+                rightt = helper.extractValue(values, new ExprParam(BlocklyConstants.DELTA, Integer.class));
+                return Binary.make(
+                    Binary.Op.MATH_CHANGE,
+                    helper.convertPhraseToExpr(leftt),
+                    helper.convertPhraseToExpr(rightt),
+                    "",
+                    helper.extractBlockProperties(block),
+                    helper.extractComment(block));
+
+            case BlocklyConstants.MATH_MODULO:
+                return helper.blockToBinaryExpr(
+                    block,
+                    new ExprParam("DIVIDEND", Integer.class),
+                    new ExprParam(BlocklyConstants.DIVISOR, Integer.class),
+                    BlocklyConstants.MOD);
+
+            case BlocklyConstants.MATH_ARITHMETIC:
+                String opp = helper.extractOperation(block, BlocklyConstants.OP_);
+                if ( opp.equals(BlocklyConstants.POWER) ) {
+                    ArrayList<ExprParam> exprParams = new ArrayList<ExprParam>();
+                    exprParams.add(new ExprParam(BlocklyConstants.A, Integer.class));
+                    exprParams.add(new ExprParam(BlocklyConstants.B, Integer.class));
+                    List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
+                    return MathPowerFunct.make(FunctionNames.POWER, params, helper.extractBlockProperties(block), helper.extractComment(block));
+                }
+            default:
+                return helper.blockToBinaryExpr(
+                    block,
+                    new ExprParam(BlocklyConstants.A, Integer.class),
+                    new ExprParam(BlocklyConstants.B, Integer.class),
+                    BlocklyConstants.OP_);
+
         }
     }
 

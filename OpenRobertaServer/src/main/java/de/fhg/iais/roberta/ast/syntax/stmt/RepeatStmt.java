@@ -64,174 +64,6 @@ public class RepeatStmt<V> extends Stmt<V> {
         return new RepeatStmt<V>(mode, expr, list, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        Phrase<V> exprr;
-        List<Value> values;
-        List<Field> fields;
-        Phrase<V> from;
-        Phrase<V> to;
-        Phrase<V> by;
-        ExprList<V> exprList;
-        Expr<V> exprCondition;
-        Phrase<V> var;
-        Expr<V> var1;
-        Expr<V> increment;
-        if ( block.getType().equals("controls_repeat_ext") ) {
-            values = helper.extractValues(block, (short) 1);
-            exprList = ExprList.make();
-            from = NumConst.make("0", helper.extractBlockProperties(block), helper.extractComment(block));
-            to = helper.extractValue(values, new ExprParam(BlocklyConstants.TIMES, Integer.class));
-            by = NumConst.make("1", helper.extractBlockProperties(block), helper.extractComment(block));
-            var1 =
-                VarDeclaration.make(
-                    BlocklyType.NUMERIC_INT,
-                    "i" + helper.getVariableCounter(),
-                    helper.convertPhraseToExpr(from),
-                    false,
-                    false,
-                    helper.extractBlockProperties(block),
-                    helper.extractComment(block));
-            var = Var.make(BlocklyType.NUMERIC_INT, "i" + helper.getVariableCounter(), helper.extractBlockProperties(block), helper.extractComment(block));
-            exprCondition =
-                Binary.make(
-                    Binary.Op.LT,
-                    helper.convertPhraseToExpr(var),
-                    helper.convertPhraseToExpr(to),
-                    "",
-                    helper.extractBlockProperties(block),
-                    helper.extractComment(block));
-            increment =
-                Unary.make(Unary.Op.POSTFIX_INCREMENTS, helper.convertPhraseToExpr(var), helper.extractBlockProperties(block), helper.extractComment(block));
-            exprList.addExpr(var1);
-            exprList.addExpr(exprCondition);
-            exprList.addExpr(increment);
-            exprList.setReadOnly();
-
-            helper.setVariableCounter(helper.getVariableCounter() + 1);
-            return helper.extractRepeatStatement(block, exprList, BlocklyConstants.TIMES);
-        }
-        if ( block.getType().equals("controls_repeat") ) {
-            fields = helper.extractFields(block, (short) 1);
-            exprList = ExprList.make();
-            from = NumConst.make("0", helper.extractBlockProperties(block), helper.extractComment(block));
-            to = NumConst.make(helper.extractField(fields, BlocklyConstants.TIMES), helper.extractBlockProperties(block), helper.extractComment(block));
-            by = NumConst.make("1", helper.extractBlockProperties(block), helper.extractComment(block));
-            var1 =
-                VarDeclaration.make(
-                    BlocklyType.NUMERIC_INT,
-                    "i" + helper.getVariableCounter(),
-                    helper.convertPhraseToExpr(from),
-                    false,
-                    false,
-                    helper.extractBlockProperties(block),
-                    helper.extractComment(block));
-            var = Var.make(BlocklyType.NUMERIC_INT, "i" + helper.getVariableCounter(), helper.extractBlockProperties(block), helper.extractComment(block));
-            exprCondition =
-                Binary.make(
-                    Binary.Op.LT,
-                    helper.convertPhraseToExpr(var),
-                    helper.convertPhraseToExpr(to),
-                    "",
-                    helper.extractBlockProperties(block),
-                    helper.extractComment(block));
-            increment =
-                Unary.make(Unary.Op.POSTFIX_INCREMENTS, helper.convertPhraseToExpr(var), helper.extractBlockProperties(block), helper.extractComment(block));
-            exprList.addExpr(var1);
-            exprList.addExpr(exprCondition);
-            exprList.addExpr(increment);
-            exprList.setReadOnly();
-
-            helper.setVariableCounter(helper.getVariableCounter() + 1);
-            return helper.extractRepeatStatement(block, exprList, BlocklyConstants.TIMES);
-        }
-
-        if ( block.getType().equals("controls_forEach") ) {
-            fields = helper.extractFields(block, (short) 2);
-            EmptyExpr<V> empty = EmptyExpr.make(Integer.class);
-            var =
-                VarDeclaration.make(
-                    BlocklyType.get(helper.extractField(fields, BlocklyConstants.TYPE)),
-                    helper.extractField(fields, BlocklyConstants.VAR),
-                    empty,
-                    false,
-                    false,
-                    null,
-                    null);
-
-            values = helper.extractValues(block, (short) 1);
-            exprr = helper.extractValue(values, new ExprParam(BlocklyConstants.LIST_, ArrayList.class));
-
-            Binary<V> exprBinary =
-                Binary.make(
-                    Binary.Op.IN,
-                    helper.convertPhraseToExpr(var),
-                    helper.convertPhraseToExpr(exprr),
-                    "",
-                    helper.extractBlockProperties(block),
-                    helper.extractComment(block));
-            return helper.extractRepeatStatement(block, exprBinary, BlocklyConstants.FOR_EACH);
-        }
-        if ( block.getType().equals("controls_for") ) {
-            var = helper.extractVar(block);
-            values = helper.extractValues(block, (short) 3);
-            exprList = ExprList.make();
-
-            from = helper.extractValue(values, new ExprParam(BlocklyConstants.FROM_, Integer.class));
-            to = helper.extractValue(values, new ExprParam(BlocklyConstants.TO_, Integer.class));
-            by = helper.extractValue(values, new ExprParam(BlocklyConstants.BY_, Integer.class));
-            var1 =
-                VarDeclaration.make(
-                    BlocklyType.NUMERIC_INT,
-                    ((Var<V>) var).getValue(),
-                    helper.convertPhraseToExpr(from),
-                    false,
-                    false,
-                    helper.extractBlockProperties(block),
-                    helper.extractComment(block));
-
-            exprCondition =
-                Binary.make(
-                    Binary.Op.LTE,
-                    helper.convertPhraseToExpr(var),
-                    helper.convertPhraseToExpr(to),
-                    "",
-                    helper.extractBlockProperties(block),
-                    helper.extractComment(block));
-            Binary<V> exprBy =
-                Binary.make(
-                    Binary.Op.ADD_ASSIGNMENT,
-                    helper.convertPhraseToExpr(var),
-                    helper.convertPhraseToExpr(by),
-                    "",
-                    helper.extractBlockProperties(block),
-                    helper.extractComment(block));
-            exprList.addExpr(var1);
-            exprList.addExpr(exprCondition);
-            exprList.addExpr(exprBy);
-            exprList.setReadOnly();
-            return helper.extractRepeatStatement(block, exprList, BlocklyConstants.FOR);
-        }
-        if ( block.getType().equals("controls_whileUntil") ) {
-            fields = helper.extractFields(block, (short) 1);
-            String modee = helper.extractField(fields, BlocklyConstants.MODE_);
-            values = helper.extractValues(block, (short) 1);
-            if ( RepeatStmt.Mode.UNTIL == RepeatStmt.Mode.get(modee) ) {
-                exprr =
-                    Unary.make(
-                        Op.NOT,
-                        helper.convertPhraseToExpr(helper.extractValue(values, new ExprParam(BlocklyConstants.BOOL, Boolean.class))),
-                        helper.extractBlockProperties(block),
-                        helper.extractComment(block));
-            } else {
-                exprr = helper.extractValue(values, new ExprParam(BlocklyConstants.BOOL, Boolean.class));
-            }
-            return helper.extractRepeatStatement(block, exprr, modee);
-        }
-
-        exprr = BoolConst.make(true, helper.extractBlockProperties(block), helper.extractComment(block));
-        return helper.extractRepeatStatement(block, exprr, RepeatStmt.Mode.FOREVER.toString());
-    }
-
     /**
      * @return mode of the repeat statement. See enum {@link Mode} for all possible modes
      */
@@ -268,6 +100,184 @@ public class RepeatStmt<V> extends Stmt<V> {
         return visitor.visitRepeatStmt(this);
     }
 
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        Phrase<V> exprr;
+        List<Value> values;
+        List<Field> fields;
+        Phrase<V> from;
+        Phrase<V> to;
+        Phrase<V> by;
+        ExprList<V> exprList;
+        Expr<V> exprCondition;
+        Phrase<V> var;
+        Expr<V> var1;
+        Expr<V> increment;
+
+        switch ( block.getType() ) {
+            case BlocklyConstants.CONTROLS_REPEAT_EXT:
+                values = helper.extractValues(block, (short) 1);
+                exprList = ExprList.make();
+                from = NumConst.make("0", helper.extractBlockProperties(block), helper.extractComment(block));
+                to = helper.extractValue(values, new ExprParam(BlocklyConstants.TIMES, Integer.class));
+                by = NumConst.make("1", helper.extractBlockProperties(block), helper.extractComment(block));
+                var1 =
+                    VarDeclaration.make(
+                        BlocklyType.NUMERIC_INT,
+                        "i" + helper.getVariableCounter(),
+                        helper.convertPhraseToExpr(from),
+                        false,
+                        false,
+                        helper.extractBlockProperties(block),
+                        helper.extractComment(block));
+                var = Var.make(BlocklyType.NUMERIC_INT, "i" + helper.getVariableCounter(), helper.extractBlockProperties(block), helper.extractComment(block));
+                exprCondition =
+                    Binary.make(
+                        Binary.Op.LT,
+                        helper.convertPhraseToExpr(var),
+                        helper.convertPhraseToExpr(to),
+                        "",
+                        helper.extractBlockProperties(block),
+                        helper.extractComment(block));
+                increment =
+                    Unary
+                        .make(Unary.Op.POSTFIX_INCREMENTS, helper.convertPhraseToExpr(var), helper.extractBlockProperties(block), helper.extractComment(block));
+                exprList.addExpr(var1);
+                exprList.addExpr(exprCondition);
+                exprList.addExpr(increment);
+                exprList.setReadOnly();
+
+                helper.setVariableCounter(helper.getVariableCounter() + 1);
+                return helper.extractRepeatStatement(block, exprList, BlocklyConstants.TIMES);
+
+            case BlocklyConstants.CONTROLS_REPEAT:
+                fields = helper.extractFields(block, (short) 1);
+                exprList = ExprList.make();
+                from = NumConst.make("0", helper.extractBlockProperties(block), helper.extractComment(block));
+                to = NumConst.make(helper.extractField(fields, BlocklyConstants.TIMES), helper.extractBlockProperties(block), helper.extractComment(block));
+                by = NumConst.make("1", helper.extractBlockProperties(block), helper.extractComment(block));
+                var1 =
+                    VarDeclaration.make(
+                        BlocklyType.NUMERIC_INT,
+                        "i" + helper.getVariableCounter(),
+                        helper.convertPhraseToExpr(from),
+                        false,
+                        false,
+                        helper.extractBlockProperties(block),
+                        helper.extractComment(block));
+                var = Var.make(BlocklyType.NUMERIC_INT, "i" + helper.getVariableCounter(), helper.extractBlockProperties(block), helper.extractComment(block));
+                exprCondition =
+                    Binary.make(
+                        Binary.Op.LT,
+                        helper.convertPhraseToExpr(var),
+                        helper.convertPhraseToExpr(to),
+                        "",
+                        helper.extractBlockProperties(block),
+                        helper.extractComment(block));
+                increment =
+                    Unary
+                        .make(Unary.Op.POSTFIX_INCREMENTS, helper.convertPhraseToExpr(var), helper.extractBlockProperties(block), helper.extractComment(block));
+                exprList.addExpr(var1);
+                exprList.addExpr(exprCondition);
+                exprList.addExpr(increment);
+                exprList.setReadOnly();
+
+                helper.setVariableCounter(helper.getVariableCounter() + 1);
+                return helper.extractRepeatStatement(block, exprList, BlocklyConstants.TIMES);
+
+            case BlocklyConstants.CONTROLS_FOR_EACH:
+                fields = helper.extractFields(block, (short) 2);
+                EmptyExpr<V> empty = EmptyExpr.make(Integer.class);
+                var =
+                    VarDeclaration.make(
+                        BlocklyType.get(helper.extractField(fields, BlocklyConstants.TYPE)),
+                        helper.extractField(fields, BlocklyConstants.VAR),
+                        empty,
+                        false,
+                        false,
+                        null,
+                        null);
+
+                values = helper.extractValues(block, (short) 1);
+                exprr = helper.extractValue(values, new ExprParam(BlocklyConstants.LIST_, ArrayList.class));
+
+                Binary<V> exprBinary =
+                    Binary.make(
+                        Binary.Op.IN,
+                        helper.convertPhraseToExpr(var),
+                        helper.convertPhraseToExpr(exprr),
+                        "",
+                        helper.extractBlockProperties(block),
+                        helper.extractComment(block));
+                return helper.extractRepeatStatement(block, exprBinary, BlocklyConstants.FOR_EACH);
+
+            case BlocklyConstants.CONTROLS_FOR:
+                var = helper.extractVar(block);
+                values = helper.extractValues(block, (short) 3);
+                exprList = ExprList.make();
+
+                from = helper.extractValue(values, new ExprParam(BlocklyConstants.FROM_, Integer.class));
+                to = helper.extractValue(values, new ExprParam(BlocklyConstants.TO_, Integer.class));
+                by = helper.extractValue(values, new ExprParam(BlocklyConstants.BY_, Integer.class));
+                var1 =
+                    VarDeclaration.make(
+                        BlocklyType.NUMERIC_INT,
+                        ((Var<V>) var).getValue(),
+                        helper.convertPhraseToExpr(from),
+                        false,
+                        false,
+                        helper.extractBlockProperties(block),
+                        helper.extractComment(block));
+
+                exprCondition =
+                    Binary.make(
+                        Binary.Op.LTE,
+                        helper.convertPhraseToExpr(var),
+                        helper.convertPhraseToExpr(to),
+                        "",
+                        helper.extractBlockProperties(block),
+                        helper.extractComment(block));
+                Binary<V> exprBy =
+                    Binary.make(
+                        Binary.Op.ADD_ASSIGNMENT,
+                        helper.convertPhraseToExpr(var),
+                        helper.convertPhraseToExpr(by),
+                        "",
+                        helper.extractBlockProperties(block),
+                        helper.extractComment(block));
+                exprList.addExpr(var1);
+                exprList.addExpr(exprCondition);
+                exprList.addExpr(exprBy);
+                exprList.setReadOnly();
+                return helper.extractRepeatStatement(block, exprList, BlocklyConstants.FOR);
+
+            case BlocklyConstants.CONTROLS_WHILE_UNTIL:
+                fields = helper.extractFields(block, (short) 1);
+                String modee = helper.extractField(fields, BlocklyConstants.MODE_);
+                values = helper.extractValues(block, (short) 1);
+                if ( RepeatStmt.Mode.UNTIL == RepeatStmt.Mode.get(modee) ) {
+                    exprr =
+                        Unary.make(
+                            Op.NOT,
+                            helper.convertPhraseToExpr(helper.extractValue(values, new ExprParam(BlocklyConstants.BOOL, Boolean.class))),
+                            helper.extractBlockProperties(block),
+                            helper.extractComment(block));
+                } else {
+                    exprr = helper.extractValue(values, new ExprParam(BlocklyConstants.BOOL, Boolean.class));
+                }
+                return helper.extractRepeatStatement(block, exprr, modee);
+            default:
+                exprr = BoolConst.make(true, helper.extractBlockProperties(block), helper.extractComment(block));
+                return helper.extractRepeatStatement(block, exprr, RepeatStmt.Mode.FOREVER.toString());
+        }
+    }
+
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
@@ -275,7 +285,7 @@ public class RepeatStmt<V> extends Stmt<V> {
 
         switch ( getMode() ) {
             case TIMES:
-                if ( getProperty().getBlockType().equals("controls_repeat") ) {
+                if ( getProperty().getBlockType().equals(BlocklyConstants.CONTROLS_REPEAT) ) {
                     AstJaxbTransformerHelper.addField(
                         jaxbDestination,
                         BlocklyConstants.TIMES,

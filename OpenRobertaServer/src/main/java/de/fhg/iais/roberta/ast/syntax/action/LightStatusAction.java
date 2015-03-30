@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.ast.syntax.action;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
+import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
 import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
@@ -37,14 +38,6 @@ public class LightStatusAction<V> extends Action<V> {
         return new LightStatusAction<V>(status, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        Status statuss = LightStatusAction.Status.RESET;
-        if ( block.getType().equals("robActions_brickLight_off") ) {
-            statuss = LightStatusAction.Status.OFF;
-        }
-        return LightStatusAction.make(statuss, helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
     /**
      * @return status of the lights user wants to set.
      */
@@ -60,6 +53,21 @@ public class LightStatusAction<V> extends Action<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitLightStatusAction(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        Status statuss = LightStatusAction.Status.RESET;
+        if ( block.getType().equals(BlocklyConstants.ROB_ACTIONS_BRICK_LIGHT_OFF) ) {
+            statuss = LightStatusAction.Status.OFF;
+        }
+        return LightStatusAction.make(statuss, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

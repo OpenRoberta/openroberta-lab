@@ -43,12 +43,6 @@ public class StmtFlowCon<V> extends Stmt<V> {
         return new StmtFlowCon<V>(flow, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 1);
-        String mode = helper.extractField(fields, BlocklyConstants.FLOW);
-        return StmtFlowCon.make(Flow.get(mode), helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
     /**
      * @return the kind of control. See enum {@link Flow} for all the possible kind of flow controls
      */
@@ -104,6 +98,19 @@ public class StmtFlowCon<V> extends Stmt<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitStmtFlowCon(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 1);
+        String mode = helper.extractField(fields, BlocklyConstants.FLOW);
+        return StmtFlowCon.make(Flow.get(mode), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

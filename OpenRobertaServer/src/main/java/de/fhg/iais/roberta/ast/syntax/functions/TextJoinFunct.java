@@ -47,14 +47,6 @@ public class TextJoinFunct<V> extends Function<V> {
         return new TextJoinFunct<V>(param, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        ExprList<V> exprList = helper.blockToExprList(block, String.class);
-        List<Expr<V>> textList = new ArrayList<Expr<V>>();
-        textList.add(exprList);
-        return TextJoinFunct.make(textList, helper.extractBlockProperties(block), helper.extractComment(block));
-
-    }
-
     /**
      * @return list of parameters for the function
      */
@@ -80,6 +72,21 @@ public class TextJoinFunct<V> extends Function<V> {
     @Override
     public String toString() {
         return "TextJoinFunct [" + this.param + "]";
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        ExprList<V> exprList = helper.blockToExprList(block, String.class);
+        List<Expr<V>> textList = new ArrayList<Expr<V>>();
+        textList.add(exprList);
+        return TextJoinFunct.make(textList, helper.extractBlockProperties(block), helper.extractComment(block));
+
     }
 
     @Override

@@ -80,4 +80,24 @@ public final class BlocklyConstants {
     public static final String RETURN = "RETURN";
     public static final String CONDITION = "CONDITION";
     public static final String ARG = "ARG";
+    public static final String NUMERIC = "NUMERIC";
+    public static final String ROB_ACTIONS_MOTOR_DIFF_ON = "robActions_motorDiff_on";
+    public static final String ROB_ACTIONS_BRICK_LIGHT_OFF = "robActions_brickLight_off";
+    public static final String ROB_ACTIONS_MOTOR_DIFF_TURN = "robActions_motorDiff_turn";
+    public static final String ROB_ACTIONS_MOTOR_ON = "robActions_motor_on";
+    public static final String ROB_ACTIONS_PLAY_SET_VOLUME = "robActions_play_setVolume";
+    public static final String ROB_LOCAL_VARIABLES_DECLARE = "robLocalVariables_declare";
+    public static final String ROB_SENSORS_GYRO_RESET = "robSensors_gyro_reset";
+    public static final Object ROB_SENSORS_ENCODER_RESET = "robSensors_encoder_reset";
+    public static final String ROB_SENSORS_TIMER_RESET = "robSensors_timer_reset";
+    public static final String CONTROLS_WHILE_UNTIL = "controls_whileUntil";
+    public static final String CONTROLS_FOR = "controls_for";
+    public static final String CONTROLS_FOR_EACH = "controls_forEach";
+    public static final String CONTROLS_REPEAT = "controls_repeat";
+    public static final String CONTROLS_REPEAT_EXT = "controls_repeat_ext";
+    public static final String LOGIC_TERNARY = "logic_ternary";
+    public static final String MATH_ARITHMETIC = "math_arithmetic";
+    public static final String MATH_CHANGE = "math_change";
+    public static final String MATH_MODULO = "math_modulo";
+    public static final String TEXT_APPEND = "text_append";
 }

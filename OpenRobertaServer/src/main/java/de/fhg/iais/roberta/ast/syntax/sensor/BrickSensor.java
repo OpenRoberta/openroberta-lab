@@ -27,7 +27,7 @@ public class BrickSensor<V> extends Sensor<V> {
     private final Mode mode;
 
     private BrickSensor(Mode mode, BrickKey key, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(Phrase.Kind.BRICK_SENSIG, properties, comment);
+        super(Phrase.Kind.BRICK_SENSING, properties, comment);
         Assert.isTrue(mode != null && key != null);
         this.mode = mode;
         this.key = key;
@@ -45,12 +45,6 @@ public class BrickSensor<V> extends Sensor<V> {
      */
     public static <V> BrickSensor<V> make(Mode mode, BrickKey key, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new BrickSensor<V>(mode, key, properties, comment);
-    }
-
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 1);
-        String portName = helper.extractField(fields, BlocklyConstants.KEY);
-        return BrickSensor.make(BrickSensor.Mode.IS_PRESSED, BrickKey.get(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     /**
@@ -82,6 +76,19 @@ public class BrickSensor<V> extends Sensor<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitBrickSensor(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 1);
+        String portName = helper.extractField(fields, BlocklyConstants.KEY);
+        return BrickSensor.make(BrickSensor.Mode.IS_PRESSED, BrickKey.get(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

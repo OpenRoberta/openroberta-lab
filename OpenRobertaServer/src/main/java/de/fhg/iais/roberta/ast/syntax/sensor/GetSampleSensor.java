@@ -69,13 +69,6 @@ public class GetSampleSensor<V> extends Sensor<V> {
         setReadOnly();
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 2);
-        String modeName = helper.extractField(fields, BlocklyConstants.SENSORTYPE);
-        String portName = helper.extractField(fields, SensorType.get(modeName).getPortTypeName());
-        return GetSampleSensor.make(SensorType.get(modeName), portName, helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
     /**
      * Create object of the class {@link GetSampleSensor}.
      *
@@ -118,6 +111,20 @@ public class GetSampleSensor<V> extends Sensor<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitGetSampleSensor(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 2);
+        String modeName = helper.extractField(fields, BlocklyConstants.SENSORTYPE);
+        String portName = helper.extractField(fields, SensorType.get(modeName).getPortTypeName());
+        return GetSampleSensor.make(SensorType.get(modeName), portName, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

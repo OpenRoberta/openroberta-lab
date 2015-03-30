@@ -61,23 +61,6 @@ public class ListGetIndex<V> extends Function<V> {
         return new ListGetIndex<V>(mode, name, param, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 2);
-        List<ExprParam> exprParams = new ArrayList<ExprParam>();
-        String op = helper.extractField(fields, BlocklyConstants.MODE_);
-        exprParams.add(new ExprParam(BlocklyConstants.VALUE, String.class));
-        if ( block.getMutation().isAt() ) {
-            exprParams.add(new ExprParam(BlocklyConstants.AT, Integer.class));
-        }
-        List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return ListGetIndex.make(
-            ListElementOperations.get(op),
-            IndexLocation.get(helper.extractField(fields, BlocklyConstants.WHERE)),
-            params,
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
-    }
-
     /**
      * @return name of the function
      */
@@ -114,6 +97,30 @@ public class ListGetIndex<V> extends Function<V> {
     @Override
     public String toString() {
         return "ListGetIndex [" + this.mode + ", " + this.location + ", " + this.param + "]";
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 2);
+        List<ExprParam> exprParams = new ArrayList<ExprParam>();
+        String op = helper.extractField(fields, BlocklyConstants.MODE_);
+        exprParams.add(new ExprParam(BlocklyConstants.VALUE, String.class));
+        if ( block.getMutation().isAt() ) {
+            exprParams.add(new ExprParam(BlocklyConstants.AT, Integer.class));
+        }
+        List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
+        return ListGetIndex.make(
+            ListElementOperations.get(op),
+            IndexLocation.get(helper.extractField(fields, BlocklyConstants.WHERE)),
+            params,
+            helper.extractBlockProperties(block),
+            helper.extractComment(block));
     }
 
     @Override

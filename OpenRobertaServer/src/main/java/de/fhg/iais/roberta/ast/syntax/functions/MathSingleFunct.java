@@ -48,17 +48,6 @@ public class MathSingleFunct<V> extends Function<V> {
         return new MathSingleFunct<V>(name, param, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        if ( helper.getOperation(block, BlocklyConstants.OP_).equals(BlocklyConstants.NEG) ) {
-            return helper.blockToUnaryExpr(block, new ExprParam(BlocklyConstants.NUM, Integer.class), BlocklyConstants.OP_);
-        }
-        List<ExprParam> exprParams = new ArrayList<ExprParam>();
-        exprParams.add(new ExprParam(BlocklyConstants.NUM, Integer.class));
-        String op = helper.getOperation(block, BlocklyConstants.OP_);
-        List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return MathSingleFunct.make(FunctionNames.get(op), params, helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
     /**
      * @return name of the function
      */
@@ -91,6 +80,24 @@ public class MathSingleFunct<V> extends Function<V> {
     @Override
     public String toString() {
         return "MathSingleFunct [" + this.functName + ", " + this.param + "]";
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        if ( helper.getOperation(block, BlocklyConstants.OP_).equals(BlocklyConstants.NEG) ) {
+            return helper.blockToUnaryExpr(block, new ExprParam(BlocklyConstants.NUM, Integer.class), BlocklyConstants.OP_);
+        }
+        List<ExprParam> exprParams = new ArrayList<ExprParam>();
+        exprParams.add(new ExprParam(BlocklyConstants.NUM, Integer.class));
+        String op = helper.getOperation(block, BlocklyConstants.OP_);
+        List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
+        return MathSingleFunct.make(FunctionNames.get(op), params, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

@@ -47,29 +47,6 @@ public class TurnAction<V> extends Action<V> {
         return new TurnAction<V>(direction, param, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        List<Field> fields;
-        String mode;
-        List<Value> values;
-        MotionParam<V> mp;
-        if ( block.getType().equals("robActions_motorDiff_turn") ) {
-            fields = helper.extractFields(block, (short) 1);
-            mode = helper.extractField(fields, BlocklyConstants.DIRECTION);
-            values = helper.extractValues(block, (short) 1);
-            Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
-            mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(expr)).build();
-            return TurnAction.make(TurnDirection.get(mode), mp, helper.extractBlockProperties(block), helper.extractComment(block));
-        }
-        fields = helper.extractFields(block, (short) 1);
-        mode = helper.extractField(fields, BlocklyConstants.DIRECTION);
-        values = helper.extractValues(block, (short) 2);
-        Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
-        Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.DEGREE, Integer.class));
-        MotorDuration<V> md = new MotorDuration<V>(MotorMoveMode.DEGREE, helper.convertPhraseToExpr(right));
-        mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(left)).duration(md).build();
-        return TurnAction.make(TurnDirection.get(mode), mp, helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
     /**
      * @return {@link TurnDirection} in which the robot will drive
      */
@@ -92,6 +69,35 @@ public class TurnAction<V> extends Action<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitTurnAction(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields;
+        String mode;
+        List<Value> values;
+        MotionParam<V> mp;
+        fields = helper.extractFields(block, (short) 1);
+        mode = helper.extractField(fields, BlocklyConstants.DIRECTION);
+
+        if ( block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_TURN) ) {
+            values = helper.extractValues(block, (short) 1);
+            Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
+            mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(expr)).build();
+        } else {
+            values = helper.extractValues(block, (short) 2);
+            Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.POWER, Integer.class));
+            Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.DEGREE, Integer.class));
+            MotorDuration<V> md = new MotorDuration<V>(MotorMoveMode.DEGREE, helper.convertPhraseToExpr(right));
+            mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(left)).duration(md).build();
+        }
+        return TurnAction.make(TurnDirection.get(mode), mp, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

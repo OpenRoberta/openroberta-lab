@@ -49,13 +49,6 @@ public class ColorSensor<V> extends Sensor<V> {
         return new ColorSensor<V>(mode, port, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 2);
-        String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
-        String modeName = helper.extractField(fields, BlocklyConstants.MODE_);
-        return ColorSensor.make(ColorSensorMode.get(modeName), SensorPort.get(portName), helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
     /**
      * @return get the mode of sensor. See enum {@link ColorSensorMode} for all possible modes that the sensor have
      */
@@ -78,6 +71,20 @@ public class ColorSensor<V> extends Sensor<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitColorSensor(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 2);
+        String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
+        String modeName = helper.extractField(fields, BlocklyConstants.MODE_);
+        return ColorSensor.make(ColorSensorMode.get(modeName), SensorPort.get(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

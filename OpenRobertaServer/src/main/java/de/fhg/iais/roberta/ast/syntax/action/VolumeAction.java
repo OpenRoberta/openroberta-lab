@@ -47,20 +47,6 @@ public class VolumeAction<V> extends Action<V> {
         return new VolumeAction<V>(mode, volume, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        if ( block.getType().equals("robActions_play_setVolume") ) {
-            List<Value> values = helper.extractValues(block, (short) 1);
-            Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.VOLUME, Integer.class));
-            return VolumeAction.make(
-                VolumeAction.Mode.SET,
-                helper.convertPhraseToExpr(expr),
-                helper.extractBlockProperties(block),
-                helper.extractComment(block));
-        }
-        NullConst<V> expr = NullConst.make(helper.extractBlockProperties(block), helper.extractComment(block));
-        return VolumeAction.make(VolumeAction.Mode.GET, helper.convertPhraseToExpr(expr), helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
     /**
      * @return value of the volume
      */
@@ -86,10 +72,24 @@ public class VolumeAction<V> extends Action<V> {
     }
 
     /**
-     * Type of action we want to do (set or get the volume).
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
      */
-    public static enum Mode {
-        SET, GET;
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        if ( block.getType().equals(BlocklyConstants.ROB_ACTIONS_PLAY_SET_VOLUME) ) {
+            List<Value> values = helper.extractValues(block, (short) 1);
+            Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.VOLUME, Integer.class));
+            return VolumeAction.make(
+                VolumeAction.Mode.SET,
+                helper.convertPhraseToExpr(expr),
+                helper.extractBlockProperties(block),
+                helper.extractComment(block));
+        }
+        NullConst<V> expr = NullConst.make(helper.extractBlockProperties(block), helper.extractComment(block));
+        return VolumeAction.make(VolumeAction.Mode.GET, helper.convertPhraseToExpr(expr), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
@@ -104,4 +104,10 @@ public class VolumeAction<V> extends Action<V> {
         return jaxbDestination;
     }
 
+    /**
+     * Type of action we want to do (set or get the volume).
+     */
+    public static enum Mode {
+        SET, GET;
+    }
 }

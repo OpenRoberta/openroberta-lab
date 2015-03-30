@@ -42,12 +42,6 @@ public class WaitTimeStmt<V> extends Stmt<V> {
         return new WaitTimeStmt<>(time, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        List<Value> values = helper.extractValues(block, (short) 1);
-        Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.WAIT, Integer.class));
-        return WaitTimeStmt.make(helper.convertPhraseToExpr(expr), helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
     /**
      * @return the time
      */
@@ -58,6 +52,19 @@ public class WaitTimeStmt<V> extends Stmt<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitWaitTimeStmt(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Value> values = helper.extractValues(block, (short) 1);
+        Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.WAIT, Integer.class));
+        return WaitTimeStmt.make(helper.convertPhraseToExpr(expr), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

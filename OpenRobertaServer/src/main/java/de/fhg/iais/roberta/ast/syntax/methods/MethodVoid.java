@@ -49,17 +49,6 @@ public class MethodVoid<V> extends Method<V> {
         return new MethodVoid<V>(methodName, parameters, body, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 1);
-        String name = helper.extractField(fields, BlocklyConstants.NAME);
-
-        List<Statement> statements = helper.extractStatements(block, (short) 2);
-        ExprList<V> exprList = helper.statementsToExprs(statements, BlocklyConstants.ST);
-        StmtList<V> statement = helper.extractStatement(statements, BlocklyConstants.STACK);
-
-        return MethodVoid.make(name, exprList, statement, helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
     /**
      * @return the methodName
      */
@@ -89,6 +78,24 @@ public class MethodVoid<V> extends Method<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitMethodVoid(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 1);
+        String name = helper.extractField(fields, BlocklyConstants.NAME);
+
+        List<Statement> statements = helper.extractStatements(block, (short) 2);
+        ExprList<V> exprList = helper.statementsToExprs(statements, BlocklyConstants.ST);
+        StmtList<V> statement = helper.extractStatement(statements, BlocklyConstants.STACK);
+
+        return MethodVoid.make(name, exprList, statement, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

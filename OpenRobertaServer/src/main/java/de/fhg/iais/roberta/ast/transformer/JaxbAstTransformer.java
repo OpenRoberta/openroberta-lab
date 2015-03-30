@@ -72,8 +72,23 @@ abstract public class JaxbAstTransformer<V> {
         return "BlockAST [project=" + this.tree + "]";
     }
 
+    /**
+     * Transforms valid JAXB object to AST object
+     *
+     * @param block to be transformed
+     * @return corresponding AST object
+     */
     abstract protected Phrase<V> blockToAST(Block block);
 
+    /**
+     * Transforms JAXB object to AST unary object expression.<br>
+     * <br>
+     *
+     * @param block to be transformed
+     * @param exprParam of the unary operation
+     * @param operationType performed on the exprParam
+     * @return AST unary expression object
+     */
     public Phrase<V> blockToUnaryExpr(Block block, ExprParam exprParam, String operationType) {
         String op = getOperation(block, operationType);
         List<Value> values = extractValues(block, (short) 1);
@@ -81,6 +96,17 @@ abstract public class JaxbAstTransformer<V> {
         return Unary.make(Unary.Op.get(op), convertPhraseToExpr(expr), extractBlockProperties(block), extractComment(block));
     }
 
+    /**
+     * Transforms JAXB object to AST binary object expression.<br>
+     * <br>
+     * <b>block</b> is representation of the block with JAXB classes
+     *
+     * @param block to be transformed
+     * @param leftExpr parameter of the expression
+     * @param rightExpr parameter of the expression
+     * @param operationType of the expression
+     * @return AST binary expression object
+     */
     public Binary<V> blockToBinaryExpr(Block block, ExprParam leftExpr, ExprParam rightExpr, String operationType) {
         String op = getOperation(block, operationType);
         List<Value> values = extractValues(block, (short) 2);
@@ -99,6 +125,16 @@ abstract public class JaxbAstTransformer<V> {
             extractComment(block));
     }
 
+    /**
+     * Extracts expression parameters from JAXB {@link Block} class.<br>
+     * <br>
+     * Client must provide the JAXB source block and list of {@link ExprParam} with the correct names of the parameters.<br>
+     * <b>block</b> is representation of the block with JAXB classes
+     *
+     * @param block as source class
+     * @param exprParams that are extracted from the block
+     * @return list of parameters represented with the {@link Expr} class.
+     */
     public List<Expr<V>> extractExprParameters(Block block, List<ExprParam> exprParams) {
         List<Expr<V>> params = new ArrayList<Expr<V>>();
         List<Value> values = extractValues(block, (short) exprParams.size());
@@ -108,6 +144,16 @@ abstract public class JaxbAstTransformer<V> {
         return params;
     }
 
+    /**
+     * Transforms JAXB object to AST if statement object.<br>
+     * <br>
+     * <b>block</b> is representation of the block with JAXB classes
+     *
+     * @param block that is transformed
+     * @param _else number else's
+     * @param _elseIf number of else if's
+     * @return if statement object from the AST representation
+     */
     public Phrase<V> blocksToIfStmt(Block block, int _else, int _elseIf) {
         List<Expr<V>> exprsList = new ArrayList<Expr<V>>();
         List<StmtList<V>> thenList = new ArrayList<StmtList<V>>();
@@ -141,6 +187,13 @@ abstract public class JaxbAstTransformer<V> {
         return IfStmt.make(exprsList, thenList, extractBlockProperties(block), extractComment(block), _else, _elseIf);
     }
 
+    /**
+     * Converts mixed list of {@link Value} and {@link Statement} into to separated lists
+     *
+     * @param values list for saving values
+     * @param statements list for saving statements
+     * @param valAndStmt list to be separated
+     */
     public void convertStmtValList(List<Value> values, List<Statement> statements, List<Object> valAndStmt) {
         for ( int i = 0; i < valAndStmt.size(); i++ ) {
             Object ob = valAndStmt.get(i);
@@ -152,6 +205,13 @@ abstract public class JaxbAstTransformer<V> {
         }
     }
 
+    /**
+     * Transforms JAXB {@link Block} to list of expressions.
+     *
+     * @param block to be transformed
+     * @param defVal if the expression is missing
+     * @return list of expressions
+     */
     public ExprList<V> blockToExprList(Block block, Class<?> defVal) {
         int items = 0;
         if ( block.getMutation().getItems() != null ) {
@@ -162,6 +222,12 @@ abstract public class JaxbAstTransformer<V> {
         return valuesToExprList(values, defVal, items, BlocklyConstants.ADD);
     }
 
+    /**
+     * Transforms JAXB list of {@link Arg} objects to list of AST expressions.
+     *
+     * @param arguments to be transformed
+     * @return list of AST expressions
+     */
     public ExprList<V> argumentsToExprList(List<Arg> arguments) {
         ExprList<V> parameters = ExprList.make();
         for ( Arg arg : arguments ) {
@@ -172,7 +238,256 @@ abstract public class JaxbAstTransformer<V> {
         return parameters;
     }
 
-    protected StmtList<V> blocksToStmtList(List<Block> statementBolcks) {
+    /**
+     * Converts {@link Phrase} to {@link Expr}.
+     *
+     * @param p to be converted to expression
+     * @return
+     */
+    public Expr<V> convertPhraseToExpr(Phrase<V> p) {
+        Expr<V> expr;
+        if ( p.getKind().getCategory() == Category.SENSOR ) {
+            expr = SensorExpr.make((Sensor<V>) p);
+        } else if ( p.getKind().getCategory() == Category.ACTOR ) {
+            expr = ActionExpr.make((Action<V>) p);
+        } else if ( p.getKind().getCategory() == Category.FUNCTION ) {
+            expr = FunctionExpr.make((Function<V>) p);
+        } else if ( p.getKind().getCategory() == Category.METHOD ) {
+            expr = MethodExpr.make((Method<V>) p);
+        } else {
+            expr = (Expr<V>) p;
+        }
+        return expr;
+    }
+
+    /**
+     * Convert list of values ({@link Values}) to list of expressions ({@link ExprList}).
+     *
+     * @param values to be converted
+     * @param defVal if the value is missing in the JAXB representation
+     * @param nItems that should be conveted
+     * @param name of the values
+     * @return
+     */
+    public ExprList<V> valuesToExprList(List<Value> values, Class<?> defVal, int nItems, String name) {
+        ExprList<V> exprList = ExprList.make();
+        for ( int i = 0; i < nItems; i++ ) {
+            exprList.addExpr(convertPhraseToExpr(extractValue(values, new ExprParam(name + i, defVal))));
+        }
+        exprList.setReadOnly();
+        return exprList;
+    }
+
+    /**
+     * Extract the operation from block.
+     *
+     * @param block
+     * @param operationType name of the xml element where the operation is stored
+     * @return the name of the operation
+     */
+    public String getOperation(Block block, String operationType) {
+        String op = operationType;
+        if ( block.getField().size() != 0 ) {
+            op = extractOperation(block, operationType);
+        }
+        return op;
+    }
+
+    /**
+     * Extract repeat statement from {@link Block}.
+     *
+     * @param block
+     * @param expr
+     * @param mode
+     * @return
+     */
+    public Phrase<V> extractRepeatStatement(Block block, Phrase<V> expr, String mode) {
+        return extractRepeatStatement(block, expr, mode, BlocklyConstants.DO, 1);
+    }
+
+    /**
+     * Extracts variable from a {@link Block}.
+     *
+     * @param block from which variable is extracted
+     * @return AST object representing variable
+     */
+    public Phrase<V> extractVar(Block block) {
+        String typeVar = block.getMutation() != null ? block.getMutation().getDatatype() : BlocklyConstants.NUMERIC;
+        List<Field> fields = extractFields(block, (short) 1);
+        String field = extractField(fields, BlocklyConstants.VAR);
+        return Var.make(BlocklyType.get(typeVar), field, extractBlockProperties(block), extractComment(block));
+    }
+
+    /**
+     * Extract values from a {@link Block}. <br>
+     * <br>
+     * Throws {@link DbcException} if the number of values is not less or equal to the numOfValues
+     *
+     * @param block from which the values are extracted
+     * @param numOfValues to be extracted
+     * @return list of {@link Value}
+     */
+    public List<Value> extractValues(Block block, short numOfValues) {
+        List<Value> values;
+        values = block.getValue();
+        Assert.isTrue(values.size() <= numOfValues, "Values size is not less or equal to " + numOfValues + "!");
+        return values;
+    }
+
+    /**
+     * Extract specific value from the list of values.
+     *
+     * @param values as a source
+     * @param param with name of the value and default value if the value is missing (see. {@link ExprParam})
+     * @return AST object or {@link EmptyExpr} if the value is missing
+     */
+    public Phrase<V> extractValue(List<Value> values, ExprParam param) {
+        for ( Value value : values ) {
+            if ( value.getName().equals(param.getName()) ) {
+                return blockToAST(value.getBlock());
+            }
+        }
+        return EmptyExpr.make(param.getDefaultValue());
+    }
+
+    /**
+     * Extract {@link Statement} from the list of statements. <br>
+     * <br>
+     * Throws {@link DbcException} if the number of statements is not less or equal to the numOfStatements
+     *
+     * @param block as source
+     * @param numOfStatements to be extracted
+     * @return list of statements
+     */
+    public List<Statement> extractStatements(Block block, short numOfStatements) {
+        List<Statement> statements;
+        statements = block.getStatement();
+        Assert.isTrue(statements.size() <= numOfStatements, "Statements size is not less or equal to " + numOfStatements + "!");
+        return statements;
+    }
+
+    /**
+     * Extract {@link Statement} from list of statements.
+     *
+     * @param statements as source
+     * @param stmtName to be extracted
+     * @return
+     */
+    public StmtList<V> extractStatement(List<Statement> statements, String stmtName) {
+        StmtList<V> stmtList = StmtList.make();
+        for ( Statement statement : statements ) {
+            if ( statement.getName().equals(stmtName) ) {
+                return blocksToStmtList(statement.getBlock());
+            }
+        }
+        stmtList.setReadOnly();
+        return stmtList;
+    }
+
+    /**
+     * Convert list of {@link Statement} to {@link ExprList}.
+     *
+     * @param statements as source
+     * @param stmtName of statement to be extracted
+     * @return
+     */
+    public ExprList<V> statementsToExprs(List<Statement> statements, String stmtName) {
+        ExprList<V> exprList = ExprList.make();
+        for ( Statement statement : statements ) {
+            if ( statement.getName().equals(stmtName) ) {
+                return blocksToExprList(statement.getBlock());
+            }
+        }
+        exprList.setReadOnly();
+        return exprList;
+    }
+
+    /**
+     * Extract {@link Field} from a {@link Block}. <br>
+     * <br>
+     * Throws {@link DbcException} if the number of fields is not less or equal to the numOfFields
+     *
+     * @param block as source
+     * @param numOfFields to be extracted
+     * @return list of fields
+     */
+    public List<Field> extractFields(Block block, short numOfFields) {
+        List<Field> fields;
+        fields = block.getField();
+        Assert.isTrue(fields.size() == numOfFields, "Number of fields is not equal to " + numOfFields + "!");
+        return fields;
+    }
+
+    /**
+     * Extract field from list of {@link Field}. <br>
+     * <br>
+     * Throws {@link DbcException} if the field is not found
+     *
+     * @param fields as a source
+     * @param name of the field to be extracted
+     * @return value containing the field
+     */
+    public String extractField(List<Field> fields, String name) {
+        for ( Field field : fields ) {
+            if ( field.getName().equals(name) ) {
+                return field.getValue();
+            }
+        }
+        throw new DbcException("There is no field with name " + name);
+    }
+
+    public String extractOperation(Block block, String name) {
+        List<Field> fields = extractFields(block, (short) 1);
+        String operation = extractField(fields, name);
+        return operation;
+    }
+
+    /**
+     * Extracts the comment from {@link Block}
+     *
+     * @param block as source
+     * @return
+     */
+    public BlocklyComment extractComment(Block block) {
+        if ( block.getComment() != null ) {
+            Comment comment = block.getComment();
+            return BlocklyComment.make(comment.getValue(), comment.isPinned(), comment.getH(), comment.getW());
+        }
+        return null;
+    }
+
+    /**
+     * Extracts the visual state of the {@link Block}.
+     *
+     * @param block as a source
+     * @return
+     */
+    public BlocklyBlockProperties extractBlockProperties(Block block) {
+        return BlocklyBlockProperties.make(
+            block.getType(),
+            block.getId(),
+            isDisabled(block),
+            isCollapsed(block),
+            isInline(block),
+            isDeletable(block),
+            isMovable(block));
+    }
+
+    public int getElseIf(Mutation mutation) {
+        if ( mutation != null && mutation.getElseif() != null ) {
+            return mutation.getElseif().intValue();
+        }
+        return 0;
+    }
+
+    public int getElse(Mutation mutation) {
+        if ( mutation != null && mutation.getElse() != null ) {
+            return mutation.getElse().intValue();
+        }
+        return 0;
+    }
+
+    private StmtList<V> blocksToStmtList(List<Block> statementBolcks) {
         StmtList<V> stmtList = StmtList.make();
         for ( Block sb : statementBolcks ) {
             convertPhraseToStmt(stmtList, sb);
@@ -181,7 +496,7 @@ abstract public class JaxbAstTransformer<V> {
         return stmtList;
     }
 
-    protected ExprList<V> blocksToExprList(List<Block> exprBolcks) {
+    private ExprList<V> blocksToExprList(List<Block> exprBolcks) {
         ExprList<V> exprList = ExprList.make();
         for ( Block exb : exprBolcks ) {
             Phrase<V> p;
@@ -194,7 +509,7 @@ abstract public class JaxbAstTransformer<V> {
         return exprList;
     }
 
-    protected void convertPhraseToStmt(StmtList<V> stmtList, Block sb) {
+    private void convertPhraseToStmt(StmtList<V> stmtList, Block sb) {
         Phrase<V> p;
 
         p = blockToAST(sb);
@@ -216,182 +531,38 @@ abstract public class JaxbAstTransformer<V> {
         stmtList.addStmt(stmt);
     }
 
-    public Expr<V> convertPhraseToExpr(Phrase<V> p) {
-        Expr<V> expr;
-        if ( p.getKind().getCategory() == Category.SENSOR ) {
-            expr = SensorExpr.make((Sensor<V>) p);
-        } else if ( p.getKind().getCategory() == Category.ACTOR ) {
-            expr = ActionExpr.make((Action<V>) p);
-        } else if ( p.getKind().getCategory() == Category.FUNCTION ) {
-            expr = FunctionExpr.make((Function<V>) p);
-        } else if ( p.getKind().getCategory() == Category.METHOD ) {
-            expr = MethodExpr.make((Method<V>) p);
-        } else {
-            expr = (Expr<V>) p;
-        }
-        return expr;
-    }
-
-    public ExprList<V> valuesToExprList(List<Value> values, Class<?> defVal, int nItems, String name) {
-        ExprList<V> exprList = ExprList.make();
-        for ( int i = 0; i < nItems; i++ ) {
-            exprList.addExpr(convertPhraseToExpr(extractValue(values, new ExprParam(name + i, defVal))));
-        }
-        exprList.setReadOnly();
-        return exprList;
-    }
-
-    public String getOperation(Block block, String operationType) {
-        String op = operationType;
-        if ( block.getField().size() != 0 ) {
-            op = extractOperation(block, operationType);
-        }
-        return op;
-    }
-
-    public Phrase<V> extractRepeatStatement(Block block, Phrase<V> expr, String mode) {
-        return extractRepeatStatement(block, expr, mode, BlocklyConstants.DO, 1);
-    }
-
-    protected Phrase<V> extractRepeatStatement(Block block, Phrase<V> expr, String mode, String location, int mutation) {
+    private Phrase<V> extractRepeatStatement(Block block, Phrase<V> expr, String mode, String location, int mutation) {
         List<Statement> statements = extractStatements(block, (short) mutation);
         StmtList<V> stmtList = extractStatement(statements, location);
         return RepeatStmt.make(RepeatStmt.Mode.get(mode), convertPhraseToExpr(expr), stmtList, extractBlockProperties(block), extractComment(block));
     }
 
-    public Phrase<V> extractVar(Block block) {
-        String typeVar = block.getMutation() != null ? block.getMutation().getDatatype() : "NUMERIC";
-        List<Field> fields = extractFields(block, (short) 1);
-        String field = extractField(fields, BlocklyConstants.VAR);
-        return Var.make(BlocklyType.get(typeVar), field, extractBlockProperties(block), extractComment(block));
-    }
-
-    public List<Value> extractValues(Block block, short numOfValues) {
-        List<Value> values;
-        values = block.getValue();
-        Assert.isTrue(values.size() <= numOfValues, "Values size is not less or equal to " + numOfValues + "!");
-        return values;
-    }
-
-    public Phrase<V> extractValue(List<Value> values, ExprParam param) {
-        for ( Value value : values ) {
-            if ( value.getName().equals(param.getName()) ) {
-                return blockToAST(value.getBlock());
-            }
-        }
-        return EmptyExpr.make(param.getDefaultValue());
-    }
-
-    public List<Statement> extractStatements(Block block, short numOfStatements) {
-        List<Statement> statements;
-        statements = block.getStatement();
-        Assert.isTrue(statements.size() <= numOfStatements, "Statements size is not less or equal to " + numOfStatements + "!");
-        return statements;
-    }
-
-    public StmtList<V> extractStatement(List<Statement> statements, String stmtName) {
-        StmtList<V> stmtList = StmtList.make();
-        for ( Statement statement : statements ) {
-            if ( statement.getName().equals(stmtName) ) {
-                return blocksToStmtList(statement.getBlock());
-            }
-        }
-        stmtList.setReadOnly();
-        return stmtList;
-    }
-
-    public ExprList<V> statementsToExprs(List<Statement> statements, String stmtName) {
-        ExprList<V> exprList = ExprList.make();
-        for ( Statement statement : statements ) {
-            if ( statement.getName().equals(stmtName) ) {
-                return blocksToExprList(statement.getBlock());
-            }
-        }
-        exprList.setReadOnly();
-        return exprList;
-    }
-
-    public List<Field> extractFields(Block block, short numOfFields) {
-        List<Field> fields;
-        fields = block.getField();
-        Assert.isTrue(fields.size() == numOfFields, "Number of fields is not equal to " + numOfFields + "!");
-        return fields;
-    }
-
-    public String extractField(List<Field> fields, String name) {
-        for ( Field field : fields ) {
-            if ( field.getName().equals(name) ) {
-                return field.getValue();
-            }
-        }
-        throw new DbcException("There is no field with name " + name);
-    }
-
-    public String extractOperation(Block block, String name) {
-        List<Field> fields = extractFields(block, (short) 1);
-        String operation = extractField(fields, name);
-        return operation;
-    }
-
-    public BlocklyComment extractComment(Block block) {
-        if ( block.getComment() != null ) {
-            Comment comment = block.getComment();
-            return BlocklyComment.make(comment.getValue(), comment.isPinned(), comment.getH(), comment.getW());
-        }
-        return null;
-    }
-
-    public BlocklyBlockProperties extractBlockProperties(Block block) {
-        return BlocklyBlockProperties.make(
-            block.getType(),
-            block.getId(),
-            isDisabled(block),
-            isCollapsed(block),
-            isInline(block),
-            isDeletable(block),
-            isMovable(block));
-    }
-
-    protected boolean isDisabled(Block block) {
+    private boolean isDisabled(Block block) {
         return block.isDisabled() == null ? false : true;
     }
 
-    protected boolean isCollapsed(Block block) {
+    private boolean isCollapsed(Block block) {
         return block.isCollapsed() == null ? false : true;
     }
 
-    protected Boolean isInline(Block block) {
+    private Boolean isInline(Block block) {
         if ( block.isInline() == null ) {
             return null;
         }
         return block.isInline();
     }
 
-    protected Boolean isDeletable(Block block) {
+    private Boolean isDeletable(Block block) {
         if ( block.isDeletable() == null ) {
             return null;
         }
         return block.isDeletable();
     }
 
-    protected Boolean isMovable(Block block) {
+    private Boolean isMovable(Block block) {
         if ( block.isMovable() == null ) {
             return null;
         }
         return block.isMovable();
-    }
-
-    public int getElseIf(Mutation mutation) {
-        if ( mutation != null && mutation.getElseif() != null ) {
-            return mutation.getElseif().intValue();
-        }
-        return 0;
-    }
-
-    public int getElse(Mutation mutation) {
-        if ( mutation != null && mutation.getElse() != null ) {
-            return mutation.getElse().intValue();
-        }
-        return 0;
     }
 }

@@ -45,13 +45,6 @@ public class TextPrintFunct<V> extends Function<V> {
         return new TextPrintFunct<V>(param, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        List<ExprParam> exprParams = new ArrayList<ExprParam>();
-        exprParams.add(new ExprParam(BlocklyConstants.TEXT, String.class));
-        List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return TextPrintFunct.make(params, helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
     /**
      * @return list of parameters for the function
      */
@@ -77,6 +70,20 @@ public class TextPrintFunct<V> extends Function<V> {
     @Override
     public String toString() {
         return "TextPrintFunct [" + this.param + "]";
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<ExprParam> exprParams = new ArrayList<ExprParam>();
+        exprParams.add(new ExprParam(BlocklyConstants.TEXT, String.class));
+        List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
+        return TextPrintFunct.make(params, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

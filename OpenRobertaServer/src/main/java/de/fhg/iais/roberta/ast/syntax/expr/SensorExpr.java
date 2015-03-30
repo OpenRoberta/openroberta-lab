@@ -58,7 +58,7 @@ public class SensorExpr<V> extends Expr<V> {
 
     @Override
     public Block astToBlock() {
-        Phrase<?> p = getSens();
+        Phrase<V> p = getSens();
         return p.astToBlock();
     }
 }

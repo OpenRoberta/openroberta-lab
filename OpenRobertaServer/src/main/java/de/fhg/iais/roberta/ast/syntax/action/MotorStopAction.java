@@ -44,14 +44,6 @@ public class MotorStopAction<V> extends Action<V> {
         return new MotorStopAction<V>(port, mode, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 2);
-        String portName = helper.extractField(fields, BlocklyConstants.MOTORPORT);
-        String modeName = helper.extractField(fields, BlocklyConstants.MODE_);
-        return MotorStopAction.make(ActorPort.get(portName), MotorStopMode.get(modeName), helper.extractBlockProperties(block), helper.extractComment(block));
-
-    }
-
     /**
      * @return port on which the motor is connected.
      */
@@ -74,6 +66,21 @@ public class MotorStopAction<V> extends Action<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitMotorStopAction(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 2);
+        String portName = helper.extractField(fields, BlocklyConstants.MOTORPORT);
+        String modeName = helper.extractField(fields, BlocklyConstants.MODE_);
+        return MotorStopAction.make(ActorPort.get(portName), MotorStopMode.get(modeName), helper.extractBlockProperties(block), helper.extractComment(block));
+
     }
 
     @Override

@@ -28,7 +28,7 @@ public class GyroSensor<V> extends Sensor<V> {
     private final SensorPort port;
 
     private GyroSensor(GyroSensorMode mode, SensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(Phrase.Kind.GYRO_SENSIG, properties, comment);
+        super(Phrase.Kind.GYRO_SENSING, properties, comment);
         Assert.isTrue(mode != null && port != null);
         this.mode = mode;
         this.port = port;
@@ -46,18 +46,6 @@ public class GyroSensor<V> extends Sensor<V> {
      */
     static <V> GyroSensor<V> make(GyroSensorMode mode, SensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new GyroSensor<V>(mode, port, properties, comment);
-    }
-
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        if ( block.getType().equals("robSensors_gyro_reset") ) {
-            List<Field> fields = helper.extractFields(block, (short) 1);
-            String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
-            return GyroSensor.make(GyroSensorMode.RESET, SensorPort.get(portName), helper.extractBlockProperties(block), helper.extractComment(block));
-        }
-        List<Field> fields = helper.extractFields(block, (short) 2);
-        String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
-        String modeName = helper.extractField(fields, BlocklyConstants.MODE_);
-        return GyroSensor.make(GyroSensorMode.get(modeName), SensorPort.get(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     /**
@@ -82,6 +70,25 @@ public class GyroSensor<V> extends Sensor<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitGyroSensor(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_GYRO_RESET) ) {
+            List<Field> fields = helper.extractFields(block, (short) 1);
+            String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
+            return GyroSensor.make(GyroSensorMode.RESET, SensorPort.get(portName), helper.extractBlockProperties(block), helper.extractComment(block));
+        }
+        List<Field> fields = helper.extractFields(block, (short) 2);
+        String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
+        String modeName = helper.extractField(fields, BlocklyConstants.MODE_);
+        return GyroSensor.make(GyroSensorMode.get(modeName), SensorPort.get(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

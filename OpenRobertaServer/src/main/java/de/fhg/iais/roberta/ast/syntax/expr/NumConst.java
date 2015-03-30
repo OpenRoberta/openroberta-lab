@@ -41,12 +41,6 @@ public class NumConst<V> extends Expr<V> {
         return new NumConst<V>(value, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 1);
-        String field = helper.extractField(fields, BlocklyConstants.NUM);
-        return NumConst.make(field, helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
     /**
      * @return value of the numerical constant
      */
@@ -72,6 +66,19 @@ public class NumConst<V> extends Expr<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitNumConst(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 1);
+        String field = helper.extractField(fields, BlocklyConstants.NUM);
+        return NumConst.make(field, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

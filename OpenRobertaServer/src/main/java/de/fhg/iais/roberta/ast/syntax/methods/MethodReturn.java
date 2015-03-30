@@ -75,28 +75,6 @@ public class MethodReturn<V> extends Method<V> {
         return new MethodReturn<V>(methodName, parameters, body, returnType, returnValue, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 2);
-        String name = helper.extractField(fields, BlocklyConstants.NAME);
-
-        List<Object> valAndStmt = block.getRepetitions().getValueAndStatement();
-        ArrayList<Value> values = new ArrayList<Value>();
-        ArrayList<Statement> statements = new ArrayList<Statement>();
-        helper.convertStmtValList(values, statements, valAndStmt);
-        ExprList<V> exprList = helper.statementsToExprs(statements, BlocklyConstants.ST);
-        StmtList<V> statement = helper.extractStatement(statements, BlocklyConstants.STACK);
-        Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.RETURN, NullConst.class));
-
-        return MethodReturn.make(
-            name,
-            exprList,
-            statement,
-            BlocklyType.get(helper.extractField(fields, BlocklyConstants.TYPE)),
-            helper.convertPhraseToExpr(expr),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
-    }
-
     /**
      * @return the methodName
      */
@@ -140,6 +118,35 @@ public class MethodReturn<V> extends Method<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitMethodReturn(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 2);
+        String name = helper.extractField(fields, BlocklyConstants.NAME);
+
+        List<Object> valAndStmt = block.getRepetitions().getValueAndStatement();
+        ArrayList<Value> values = new ArrayList<Value>();
+        ArrayList<Statement> statements = new ArrayList<Statement>();
+        helper.convertStmtValList(values, statements, valAndStmt);
+        ExprList<V> exprList = helper.statementsToExprs(statements, BlocklyConstants.ST);
+        StmtList<V> statement = helper.extractStatement(statements, BlocklyConstants.STACK);
+        Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.RETURN, NullConst.class));
+
+        return MethodReturn.make(
+            name,
+            exprList,
+            statement,
+            BlocklyType.get(helper.extractField(fields, BlocklyConstants.TYPE)),
+            helper.convertPhraseToExpr(expr),
+            helper.extractBlockProperties(block),
+            helper.extractComment(block));
     }
 
     @Override

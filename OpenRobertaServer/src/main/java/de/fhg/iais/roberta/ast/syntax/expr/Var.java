@@ -44,10 +44,6 @@ public class Var<V> extends Expr<V> {
         return new Var<V>(typeVar, value, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        return helper.extractVar(block);
-    }
-
     /**
      * @return name of the variable
      */
@@ -80,6 +76,17 @@ public class Var<V> extends Expr<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitVar(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        return helper.extractVar(block);
     }
 
     @Override

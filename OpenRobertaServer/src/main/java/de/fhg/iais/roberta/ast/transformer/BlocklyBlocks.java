@@ -4,31 +4,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
-import de.fhg.iais.roberta.ast.syntax.action.ClearDisplayAction;
-import de.fhg.iais.roberta.ast.syntax.action.DriveAction;
-import de.fhg.iais.roberta.ast.syntax.action.LightAction;
-import de.fhg.iais.roberta.ast.syntax.action.LightStatusAction;
-import de.fhg.iais.roberta.ast.syntax.action.MotorDriveStopAction;
-import de.fhg.iais.roberta.ast.syntax.action.MotorGetPowerAction;
-import de.fhg.iais.roberta.ast.syntax.action.MotorOnAction;
-import de.fhg.iais.roberta.ast.syntax.action.MotorSetPowerAction;
-import de.fhg.iais.roberta.ast.syntax.action.MotorStopAction;
-import de.fhg.iais.roberta.ast.syntax.action.PlayFileAction;
-import de.fhg.iais.roberta.ast.syntax.action.ShowPictureAction;
-import de.fhg.iais.roberta.ast.syntax.action.ShowTextAction;
-import de.fhg.iais.roberta.ast.syntax.action.ToneAction;
-import de.fhg.iais.roberta.ast.syntax.action.TurnAction;
-import de.fhg.iais.roberta.ast.syntax.action.VolumeAction;
-import de.fhg.iais.roberta.ast.syntax.expr.Binary;
-import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
-import de.fhg.iais.roberta.ast.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyList;
 import de.fhg.iais.roberta.ast.syntax.expr.ListCreate;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
-import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
 import de.fhg.iais.roberta.ast.syntax.expr.NumConst;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
-import de.fhg.iais.roberta.ast.syntax.expr.Unary;
 import de.fhg.iais.roberta.ast.syntax.expr.Var;
 import de.fhg.iais.roberta.ast.syntax.expr.VarDeclaration;
 import de.fhg.iais.roberta.ast.syntax.functions.GetSubFunct;
@@ -49,15 +29,6 @@ import de.fhg.iais.roberta.ast.syntax.methods.MethodCall;
 import de.fhg.iais.roberta.ast.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.ast.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.ast.syntax.methods.MethodVoid;
-import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
-import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
-import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
-import de.fhg.iais.roberta.ast.syntax.sensor.GetSampleSensor;
-import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
-import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensor;
-import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensor;
-import de.fhg.iais.roberta.ast.syntax.sensor.TouchSensor;
-import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensor;
 import de.fhg.iais.roberta.ast.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.IfStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.RepeatStmt;
@@ -72,35 +43,7 @@ import de.fhg.iais.roberta.dbc.DbcException;
 
 public enum BlocklyBlocks {
     // @formatter: off
-    CLEAR_DISPLAY_ACTION( ClearDisplayAction.class, "robActions_display_clear" ),
-    MOTOR_ON_ACTION( MotorOnAction.class, "robActions_motor_on", "robActions_motor_on_for" ),
-    DRIVE_ACTION( DriveAction.class, "robActions_motorDiff_on", "robActions_motorDiff_on_for" ),
-    TURN_ACTION( TurnAction.class, "robActions_motorDiff_turn", "robActions_motorDiff_turn_for" ),
-    MOTOR_DRIVE_STOP( MotorDriveStopAction.class, "robActions_motorDiff_stop" ),
-    MOTOR_GET_POWER( MotorGetPowerAction.class, "robActions_motor_getPower" ),
-    MOTOR_SET_POWER( MotorSetPowerAction.class, "robActions_motor_setPower" ),
-    MOTOR_STOP( MotorStopAction.class, "robActions_motor_stop" ),
-    SHOW_TEXT( ShowTextAction.class, "robActions_display_text" ),
-    DISPLAY_PICTURE( ShowPictureAction.class, "robActions_display_picture" ),
-    TONE_ACTION( ToneAction.class, "robActions_play_tone" ),
-    PLAY_FILE( PlayFileAction.class, "robActions_play_file" ),
-    SET_VOLUME( VolumeAction.class, "robActions_play_setVolume", "robActions_play_getVolume" ),
-    LIGHT_ACTION( LightAction.class, "robActions_brickLight_on" ),
-    LIGHT_STATUS_ACTION( LightStatusAction.class, "robActions_brickLight_off", "robActions_brickLight_reset" ),
-    TOUCH_SENSOR( TouchSensor.class, "robSensors_touch_isPressed" ),
-    ULTRASONIC_SENSOR( UltrasonicSensor.class, "robSensors_ultrasonic_getSample" ),
-    COLOR_SENSOR( ColorSensor.class, "robSensors_colour_getSample" ),
-    INFRARED_SENSOR( InfraredSensor.class, "robSensors_infrared_getSample" ),
-    ENCODESR_SENSOR( EncoderSensor.class, "robSensors_encoder_getSample", "robSensors_encoder_reset" ),
-    BRICK_SENSOR( BrickSensor.class, "robSensors_key_isPressed" ),
-    GYRO_SENSOR( GyroSensor.class, "robSensors_gyro_getSample", "robSensors_gyro_reset" ),
-    TIMER_SENSOR( TimerSensor.class, "robSensors_timer_getSample", "robSensors_timer_reset" ),
-    GET_SAMPLE_SENSOR( GetSampleSensor.class, "robSensors_getSample" ),
-    BINARY( Binary.class, "logic_compare", "logic_operation", "math_arithmetic", "math_change", "math_modulo", "text_append" ),
-    UNARY( Unary.class, "logic_negate" ),
-    BOOL_CONST( BoolConst.class, "logic_boolean" ),
-    COLOR_CONST( ColorConst.class, "robColour_picker" ),
-    NULL_CONST( NullConst.class, "logic_null" ),
+
     IF_STMT( IfStmt.class, "logic_ternary", "controls_if", "robControls_if", "robControls_ifElse" ),
     MATH_CONST( MathConst.class, "math_constant" ),
     MATH_NUM_PROPERTY( MathNumPropFunct.class, "math_number_property" ),

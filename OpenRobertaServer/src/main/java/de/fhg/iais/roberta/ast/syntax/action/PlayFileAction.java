@@ -41,12 +41,6 @@ public class PlayFileAction<V> extends Action<V> {
         return new PlayFileAction<V>(filename, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 1);
-        String filename = helper.extractField(fields, BlocklyConstants.FILE);
-        return PlayFileAction.make(filename, helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
     /**
      * @return the name of the file that will be played
      */
@@ -62,6 +56,19 @@ public class PlayFileAction<V> extends Action<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitPlayFileAction(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 1);
+        String filename = helper.extractField(fields, BlocklyConstants.FILE);
+        return PlayFileAction.make(filename, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

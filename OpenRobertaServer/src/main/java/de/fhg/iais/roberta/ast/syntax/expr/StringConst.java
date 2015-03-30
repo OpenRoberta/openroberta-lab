@@ -39,12 +39,6 @@ public class StringConst<V> extends Expr<V> {
         return new StringConst<V>(value, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 1);
-        String field = helper.extractField(fields, BlocklyConstants.TEXT);
-        return StringConst.make(field, helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
     /**
      * @return the value of the string constant
      */
@@ -70,6 +64,19 @@ public class StringConst<V> extends Expr<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitStringConst(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 1);
+        String field = helper.extractField(fields, BlocklyConstants.TEXT);
+        return StringConst.make(field, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

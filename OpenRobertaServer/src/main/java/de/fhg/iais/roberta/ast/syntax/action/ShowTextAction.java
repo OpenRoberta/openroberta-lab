@@ -51,19 +51,6 @@ public class ShowTextAction<V> extends Action<V> {
         return new ShowTextAction<V>(msg, x, y, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        List<Value> values = helper.extractValues(block, (short) 3);
-        Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.OUT, String.class));
-        Phrase<V> col = helper.extractValue(values, new ExprParam(BlocklyConstants.COL_, Integer.class));
-        Phrase<V> row = helper.extractValue(values, new ExprParam(BlocklyConstants.ROW_, Integer.class));
-        return ShowTextAction.make(
-            helper.convertPhraseToExpr(msg),
-            helper.convertPhraseToExpr(col),
-            helper.convertPhraseToExpr(row),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
-    }
-
     /**
      * @return the message.
      */
@@ -93,6 +80,26 @@ public class ShowTextAction<V> extends Action<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitShowTextAction(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Value> values = helper.extractValues(block, (short) 3);
+        Phrase<V> msg = helper.extractValue(values, new ExprParam(BlocklyConstants.OUT, String.class));
+        Phrase<V> col = helper.extractValue(values, new ExprParam(BlocklyConstants.COL_, Integer.class));
+        Phrase<V> row = helper.extractValue(values, new ExprParam(BlocklyConstants.ROW_, Integer.class));
+        return ShowTextAction.make(
+            helper.convertPhraseToExpr(msg),
+            helper.convertPhraseToExpr(col),
+            helper.convertPhraseToExpr(row),
+            helper.extractBlockProperties(block),
+            helper.extractComment(block));
     }
 
     @Override

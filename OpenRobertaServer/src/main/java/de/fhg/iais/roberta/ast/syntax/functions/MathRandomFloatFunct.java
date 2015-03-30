@@ -33,10 +33,6 @@ public class MathRandomFloatFunct<V> extends Function<V> {
         return new MathRandomFloatFunct<V>(properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        return MathRandomFloatFunct.make(helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
     @Override
     public int getPrecedence() {
         return 10;
@@ -55,6 +51,17 @@ public class MathRandomFloatFunct<V> extends Function<V> {
     @Override
     public String toString() {
         return "MathRandomFloatFunct []";
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        return MathRandomFloatFunct.make(helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

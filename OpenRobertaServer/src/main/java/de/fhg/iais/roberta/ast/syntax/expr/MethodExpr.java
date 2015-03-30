@@ -58,7 +58,7 @@ public class MethodExpr<V> extends Expr<V> {
 
     @Override
     public Block astToBlock() {
-        Phrase<?> p = ((MethodExpr<?>) this).getMethod();
+        Phrase<V> p = getMethod();
         return p.astToBlock();
     }
 }

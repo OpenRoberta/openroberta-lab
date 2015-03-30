@@ -49,6 +49,30 @@ public class WaitStmt<V> extends Stmt<V> {
         return new WaitStmt<>(statements, properties, comment);
     }
 
+    /**
+     * @return statements in the blocks
+     */
+    public StmtList<V> getStatements() {
+        return this.statements;
+    }
+
+    @Override
+    public String toString() {
+        return "WaitStmt [statements=" + this.statements + "]";
+    }
+
+    @Override
+    protected V accept(AstVisitor<V> visitor) {
+        return visitor.visitWaitStmt(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
     public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
         List<Value> values;
         StmtList<V> statement;
@@ -76,23 +100,6 @@ public class WaitStmt<V> extends Stmt<V> {
         }
         list.setReadOnly();
         return WaitStmt.make(list, helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
-    /**
-     * @return statements in the blocks
-     */
-    public StmtList<V> getStatements() {
-        return this.statements;
-    }
-
-    @Override
-    public String toString() {
-        return "WaitStmt [statements=" + this.statements + "]";
-    }
-
-    @Override
-    protected V accept(AstVisitor<V> visitor) {
-        return visitor.visitWaitStmt(this);
     }
 
     @Override

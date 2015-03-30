@@ -43,12 +43,6 @@ public class StartActivityTask<V> extends Expr<V> {
         return new StartActivityTask<V>(activityName, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        List<Value> values = helper.extractValues(block, (short) 1);
-        Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.ACTIVITY, String.class));
-        return StartActivityTask.make(helper.convertPhraseToExpr(expr), helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
     /**
      * @return name of the thread
      */
@@ -74,6 +68,19 @@ public class StartActivityTask<V> extends Expr<V> {
     @Override
     public String toString() {
         return "StartActivityTask [activityName=" + this.activityName + "]";
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Value> values = helper.extractValues(block, (short) 1);
+        Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.ACTIVITY, String.class));
+        return StartActivityTask.make(helper.convertPhraseToExpr(expr), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

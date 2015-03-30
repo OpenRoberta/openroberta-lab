@@ -58,7 +58,7 @@ public class FunctionExpr<V> extends Expr<V> {
 
     @Override
     public Block astToBlock() {
-        Phrase<?> p = ((FunctionExpr<?>) this).getFunction();
+        Phrase<V> p = this.getFunction();
         return p.astToBlock();
     }
 }

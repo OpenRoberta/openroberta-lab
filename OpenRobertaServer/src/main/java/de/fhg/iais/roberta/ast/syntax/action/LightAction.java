@@ -47,13 +47,6 @@ public class LightAction<V> extends Action<V> {
         return new LightAction<V>(color, blinkMode, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 2);
-        String color = helper.extractField(fields, BlocklyConstants.SWITCH_COLOR);
-        String blink = helper.extractField(fields, BlocklyConstants.SWITCH_BLINK);
-        return LightAction.make(BrickLedColor.get(color), BlinkMode.get(blink), helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
     /**
      * @return {@link BrickLedColor} of the lights.
      */
@@ -76,6 +69,20 @@ public class LightAction<V> extends Action<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitLightAction(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 2);
+        String color = helper.extractField(fields, BlocklyConstants.SWITCH_COLOR);
+        String blink = helper.extractField(fields, BlocklyConstants.SWITCH_BLINK);
+        return LightAction.make(BrickLedColor.get(color), BlinkMode.get(blink), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

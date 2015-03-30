@@ -67,19 +67,6 @@ public class MethodCall<V> extends Method<V> {
         return new MethodCall<V>(methodName, parameters, parametersValues, returnType, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        BlocklyType outputType = block.getMutation().getOutputType() == null ? null : BlocklyType.get(block.getMutation().getOutputType());
-        String methodName = block.getMutation().getName();
-        List<Arg> arguments = block.getMutation().getArg();
-        ExprList<V> parameters = helper.argumentsToExprList(arguments);
-
-        List<Value> values = helper.extractValues(block, (short) arguments.size());
-
-        ExprList<V> parametersValues = helper.valuesToExprList(values, EmptyExpr.class, arguments.size(), BlocklyConstants.ARG);
-
-        return MethodCall.make(methodName, parameters, parametersValues, outputType, helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
     /**
      * @return the methodName
      */
@@ -116,6 +103,26 @@ public class MethodCall<V> extends Method<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitMethodCall(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        BlocklyType outputType = block.getMutation().getOutputType() == null ? null : BlocklyType.get(block.getMutation().getOutputType());
+        String methodName = block.getMutation().getName();
+        List<Arg> arguments = block.getMutation().getArg();
+        ExprList<V> parameters = helper.argumentsToExprList(arguments);
+
+        List<Value> values = helper.extractValues(block, (short) arguments.size());
+
+        ExprList<V> parametersValues = helper.valuesToExprList(values, EmptyExpr.class, arguments.size(), BlocklyConstants.ARG);
+
+        return MethodCall.make(methodName, parameters, parametersValues, outputType, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

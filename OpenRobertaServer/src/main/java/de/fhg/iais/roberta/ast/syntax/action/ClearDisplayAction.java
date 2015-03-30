@@ -29,10 +29,6 @@ public final class ClearDisplayAction<V> extends Action<V> {
         return new ClearDisplayAction<V>(properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        return ClearDisplayAction.make(helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
     @Override
     public String toString() {
         return "ClearDisplayAction []";
@@ -41,6 +37,17 @@ public final class ClearDisplayAction<V> extends Action<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitClearDisplayAction(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        return ClearDisplayAction.make(helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

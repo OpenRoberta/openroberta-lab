@@ -125,29 +125,6 @@ public class IfStmt<V> extends Stmt<V> {
         return new IfStmt<V>(expr, thenList, elseList, false, properties, comment, _else, _elseIf);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        if ( block.getType().equals("logic_ternary") ) {
-            List<Value> values = block.getValue();
-            Assert.isTrue(values.size() <= 3, "Number of values is not less or equal to 3!");
-            Phrase<V> ifExpr = helper.extractValue(values, new ExprParam(BlocklyConstants.IF, Boolean.class));
-            Phrase<V> thenStmt = helper.extractValue(values, new ExprParam(BlocklyConstants.THEN, Stmt.class));
-            Phrase<V> elseStmt = helper.extractValue(values, new ExprParam(BlocklyConstants.ELSE, Stmt.class));
-            StmtList<V> thenList = StmtList.make();
-            thenList.addStmt(ExprStmt.make(helper.convertPhraseToExpr(thenStmt)));
-            thenList.setReadOnly();
-            StmtList<V> elseList = StmtList.make();
-            elseList.addStmt(ExprStmt.make(helper.convertPhraseToExpr(elseStmt)));
-            elseList.setReadOnly();
-            return IfStmt
-                .make(helper.convertPhraseToExpr(ifExpr), thenList, elseList, helper.extractBlockProperties(block), helper.extractComment(block), 0, 0);
-        }
-        Mutation mutation = block.getMutation();
-        int _else = helper.getElse(mutation);
-        int _elseIf = helper.getElseIf(mutation);
-
-        return helper.blocksToIfStmt(block, _else, _elseIf);
-    }
-
     /**
      * @return <b>true</b> if the statement is ternary.
      */
@@ -215,13 +192,43 @@ public class IfStmt<V> extends Stmt<V> {
         return visitor.visitIfStmt(this);
     }
 
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        if ( block.getType().equals(BlocklyConstants.LOGIC_TERNARY) ) {
+            List<Value> values = block.getValue();
+            Assert.isTrue(values.size() <= 3, "Number of values is not less or equal to 3!");
+            Phrase<V> ifExpr = helper.extractValue(values, new ExprParam(BlocklyConstants.IF, Boolean.class));
+            Phrase<V> thenStmt = helper.extractValue(values, new ExprParam(BlocklyConstants.THEN, Stmt.class));
+            Phrase<V> elseStmt = helper.extractValue(values, new ExprParam(BlocklyConstants.ELSE, Stmt.class));
+            StmtList<V> thenList = StmtList.make();
+            thenList.addStmt(ExprStmt.make(helper.convertPhraseToExpr(thenStmt)));
+            thenList.setReadOnly();
+            StmtList<V> elseList = StmtList.make();
+            elseList.addStmt(ExprStmt.make(helper.convertPhraseToExpr(elseStmt)));
+            elseList.setReadOnly();
+            return IfStmt
+                .make(helper.convertPhraseToExpr(ifExpr), thenList, elseList, helper.extractBlockProperties(block), helper.extractComment(block), 0, 0);
+        }
+        Mutation mutation = block.getMutation();
+        int _else = helper.getElse(mutation);
+        int _elseIf = helper.getElseIf(mutation);
+
+        return helper.blocksToIfStmt(block, _else, _elseIf);
+    }
+
     @Override
     public Block astToBlock() {
         Mutation mutation;
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        if ( getProperty().getBlockType().equals("logic_ternary") ) {
+        if ( getProperty().getBlockType().equals(BlocklyConstants.LOGIC_TERNARY) ) {
             AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.IF, getExpr().get(0));
             AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.THEN, getThenList().get(0).get().get(0));
             AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.ELSE, getElseList().get().get(0));

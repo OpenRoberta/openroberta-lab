@@ -39,6 +39,6 @@ public class JaxbBlocklyProgramTransformer<V> extends JaxbAstTransformer<V> {
 
     @Override
     protected Phrase<V> blockToAST(Block block) {
-        return BlocklyBlocks.get(block, this);
+        return Phrase.Kind.invokeJaxbToAstTransform(block, this);
     }
 }

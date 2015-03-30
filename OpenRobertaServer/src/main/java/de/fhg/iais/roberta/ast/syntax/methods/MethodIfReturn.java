@@ -37,19 +37,6 @@ public class MethodIfReturn<V> extends Method<V> {
         setReadOnly();
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        List<Value> values = helper.extractValues(block, (short) 2);
-        Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.CONDITION, Boolean.class));
-        Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, NullConst.class));
-        String mode = block.getMutation().getReturnType() == null ? "void" : block.getMutation().getReturnType();
-        return MethodIfReturn.make(
-            helper.convertPhraseToExpr(left),
-            BlocklyType.get(mode),
-            helper.convertPhraseToExpr(right),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
-    }
-
     /**
      * creates instance of {@link MethodIfReturn}. This instance is read only and cannot be modified.
      *
@@ -98,6 +85,26 @@ public class MethodIfReturn<V> extends Method<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitMethodIfReturn(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Value> values = helper.extractValues(block, (short) 2);
+        Phrase<V> left = helper.extractValue(values, new ExprParam(BlocklyConstants.CONDITION, Boolean.class));
+        Phrase<V> right = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, NullConst.class));
+        String mode = block.getMutation().getReturnType() == null ? "void" : block.getMutation().getReturnType();
+        return MethodIfReturn.make(
+            helper.convertPhraseToExpr(left),
+            BlocklyType.get(mode),
+            helper.convertPhraseToExpr(right),
+            helper.extractBlockProperties(block),
+            helper.extractComment(block));
     }
 
     @Override

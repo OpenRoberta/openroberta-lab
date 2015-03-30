@@ -53,17 +53,6 @@ public class AssignStmt<V> extends Stmt<V> {
         return new AssignStmt<V>(name, expr, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        List<Value> values = helper.extractValues(block, (short) 1);
-        Phrase<V> p = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, EmptyExpr.class));
-        Expr<V> exprr = helper.convertPhraseToExpr(p);
-        return AssignStmt.make(
-            (Var<V>) helper.extractVar(block),
-            helper.convertPhraseToExpr(exprr),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
-    }
-
     /**
      * @return name of the variable.
      */
@@ -89,6 +78,24 @@ public class AssignStmt<V> extends Stmt<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitAssignStmt(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Value> values = helper.extractValues(block, (short) 1);
+        Phrase<V> p = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, EmptyExpr.class));
+        Expr<V> exprr = helper.convertPhraseToExpr(p);
+        return AssignStmt.make(
+            (Var<V>) helper.extractVar(block),
+            helper.convertPhraseToExpr(exprr),
+            helper.extractBlockProperties(block),
+            helper.extractComment(block));
     }
 
     @Override

@@ -47,16 +47,6 @@ public class ListCreate<V> extends Expr<V> {
         return new ListCreate<V>(typeVar, exprList, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        List<Field> fields = helper.extractFields(block, (short) 1);
-        String filename = helper.extractField(fields, BlocklyConstants.LIST_TYPE);
-        return ListCreate.make(
-            BlocklyType.get(filename),
-            helper.blockToExprList(block, ArrayList.class),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
-    }
-
     /**
      * @return value of the numerical constant
      */
@@ -89,6 +79,23 @@ public class ListCreate<V> extends Expr<V> {
     @Override
     public String toString() {
         return "ListCreate [" + this.typeVar + ", " + this.exprList + "]";
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 1);
+        String filename = helper.extractField(fields, BlocklyConstants.LIST_TYPE);
+        return ListCreate.make(
+            BlocklyType.get(filename),
+            helper.blockToExprList(block, ArrayList.class),
+            helper.extractBlockProperties(block),
+            helper.extractComment(block));
     }
 
     @Override

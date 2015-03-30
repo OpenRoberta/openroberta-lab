@@ -48,17 +48,6 @@ public class TimerSensor<V> extends Sensor<V> {
         return new TimerSensor<V>(mode, timer, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        if ( block.getType().equals("robSensors_timer_reset") ) {
-            List<Field> fields = helper.extractFields(block, (short) 1);
-            String portName = helper.extractField(fields, BlocklyConstants.SENSORNUM);
-            return TimerSensor.make(TimerSensorMode.RESET, Integer.valueOf(portName), helper.extractBlockProperties(block), helper.extractComment(block));
-        }
-        List<Field> fields = helper.extractFields(block, (short) 1);
-        String portName = helper.extractField(fields, BlocklyConstants.SENSORNUM);
-        return TimerSensor.make(TimerSensorMode.GET_SAMPLE, Integer.valueOf(portName), helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
     /**
      * @return get the mode of sensor. See enum {@link TimerSensorMode} for all possible modes that the sensor have.
      */
@@ -81,6 +70,23 @@ public class TimerSensor<V> extends Sensor<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitTimerSensor(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Field> fields = helper.extractFields(block, (short) 1);
+        String portName = helper.extractField(fields, BlocklyConstants.SENSORNUM);
+
+        if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_TIMER_RESET) ) {
+            return TimerSensor.make(TimerSensorMode.RESET, Integer.valueOf(portName), helper.extractBlockProperties(block), helper.extractComment(block));
+        }
+        return TimerSensor.make(TimerSensorMode.GET_SAMPLE, Integer.valueOf(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

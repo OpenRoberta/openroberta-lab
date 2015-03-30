@@ -49,20 +49,6 @@ public class MathNumPropFunct<V> extends Function<V> {
         return new MathNumPropFunct<V>(name, param, properties, comment);
     }
 
-    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
-        boolean divisorInput = block.getMutation().isDivisorInput();
-        String op = helper.extractOperation(block, BlocklyConstants.PROPERTY);
-        List<ExprParam> exprParams = new ArrayList<ExprParam>();
-        exprParams.add(new ExprParam(BlocklyConstants.NUMBER_TO_CHECK, Integer.class));
-
-        if ( op.equals(BlocklyConstants.DIVISIBLE_BY) ) {
-            Assert.isTrue(divisorInput, "Divisor input is not equal to true!");
-            exprParams.add(new ExprParam(BlocklyConstants.DIVISOR, Integer.class));
-        }
-        List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
-        return MathNumPropFunct.make(FunctionNames.get(op), params, helper.extractBlockProperties(block), helper.extractComment(block));
-    }
-
     /**
      * @return name of the function
      */
@@ -95,6 +81,27 @@ public class MathNumPropFunct<V> extends Function<V> {
     @Override
     public String toString() {
         return "MathNumPropFunct [" + this.functName + ", " + this.param + "]";
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        boolean divisorInput = block.getMutation().isDivisorInput();
+        String op = helper.extractOperation(block, BlocklyConstants.PROPERTY);
+        List<ExprParam> exprParams = new ArrayList<ExprParam>();
+        exprParams.add(new ExprParam(BlocklyConstants.NUMBER_TO_CHECK, Integer.class));
+
+        if ( op.equals(BlocklyConstants.DIVISIBLE_BY) ) {
+            Assert.isTrue(divisorInput, "Divisor input is not equal to true!");
+            exprParams.add(new ExprParam(BlocklyConstants.DIVISOR, Integer.class));
+        }
+        List<Expr<V>> params = helper.extractExprParameters(block, exprParams);
+        return MathNumPropFunct.make(FunctionNames.get(op), params, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
