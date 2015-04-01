@@ -2193,14 +2193,15 @@ public class GraphicStartup implements Menu {
             ;
             program.waitFor();
             System.out.println("Program finished");
+        } catch ( Exception e ) {
+            System.err.println("Failed to execute program: " + e);
+        } finally {
             // Turn the LED off, in case left on
             Button.LEDPattern(0);
             lcd.setAutoRefresh(true);
             lcd.clear();
             lcd.refresh();
             program = null;
-        } catch ( Exception e ) {
-            System.err.println("Failed to execute program: " + e);
         }
     }
 

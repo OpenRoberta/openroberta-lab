@@ -10,7 +10,7 @@ import lejos.utility.Delay;
 
 /**
  * Executes the Open Roberta lab user program after it is downloaded.
- * 
+ *
  * @author dpyka
  */
 public class ORAlauncher {
@@ -34,7 +34,7 @@ public class ORAlauncher {
 
     /**
      * Executes the user's program as a new java process.
-     * 
+     *
      * @param programName
      *        Filename without directory, for example Linefollower.jar.
      */
@@ -52,7 +52,7 @@ public class ORAlauncher {
     /**
      * Method is based on leJOS program execution. Modified for Open Roberta
      * Lab. No wrapper for sysout and syserr, no stacktrace displaying.
-     * 
+     *
      * @param command
      *        The shell commands to launch the new process.
      * @param directory
@@ -96,16 +96,15 @@ public class ORAlauncher {
             System.out.println("Waiting for process to die");
             program.waitFor();
             System.out.println("Program finished");
+        } catch ( Exception e ) {
+            System.err.println("Failed to execute ORA program: " + e);
+        } finally {
             // Turn the LED off, in case left on
             Button.LEDPattern(0);
             glcd.setAutoRefresh(true);
             glcd.clear();
             glcd.refresh();
-            glcd.refresh();
-
             program = null;
-        } catch ( Exception e ) {
-            System.err.println("Failed to execute ORA program: " + e);
         }
     }
 
