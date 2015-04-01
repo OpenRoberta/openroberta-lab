@@ -1,6 +1,7 @@
 #!/bin/bash
 
-ipaddr='10.0.1.1'
+serveripport='10.0.1.10:1999'
+ev3ipaddr='10.0.1.1'
 oraversion='1.0.1-SNAPSHOT'
 
 function _helpFn {
@@ -10,15 +11,19 @@ function _helpFn {
   echo 'IF you source with ". ora-please-source.sh", you get completion from the bash when you type TAB (as usual ...)';
   $0 --java
   echo 'you may customize the script by defining default values. Values are now:';
-  echo 'ipaddr='"$ipaddr";
+  echo 'ev3ipaddr='"$ev3ipaddr";
   echo 'oraversion='"$oraversion";
+  echo 'serveripport='"$serveripport";
   echo '';
   echo 'miscelleneous commands';
   echo '';
   echo '  --help                             get help';
   echo '  --java                             show the actual java version';
-  echo '  --ipaddr {IP-ADDR}                 set the ip addr of the EV3 brick for further commands';
+  echo '  --ev3ipaddr {IP-ADDR}              set the ip addr of the EV3 brick for further commands';
   echo '  --version {VERSION}                set the version to something like d.d.d where d is one or more digits, e.g. 1.10.1'
+  echo '  --serveripport {IP:PORT}           set a default ip address plus port on which the server is running.'
+  echo '                                     the brick will ask you to connect to this address.'
+  echo '                                     useful if you do not want to type the IP on the brick. This saves a lot of time! :-)'
   echo ''
   echo '  --checkout-db OR --restore-db      restore the state of the database to the state last checked out.'
   echo '                                     this makes sense, if you changed the db during test and dont want to commit your changes'
@@ -30,9 +35,11 @@ function _helpFn {
   echo '  --start {PROPERTY-FILE}            start of the server, optionally supply a property file';
   echo '                                     the default property file is in OpenRobertaServer/src/main/resources';
   echo '                                     a java7 installation is required, java+javac must be in the path' ;
-  echo '  --scpev3menu                       scp the ev3menu.jar to the EV3, uses ipaddr';
+  echo '  --scpev3menu                       scp the ev3menu.jar to the EV3, uses ev3ipaddr';
   echo '                                     the root password is "", thus hit return if you are asked';
-  echo '  --scpev3libs                       scp libraries to the EV3, uses ipaddr';
+  echo '  --scpev3libs                       scp libraries to the EV3, uses ev3ipaddr';
+  echo '                                     the root password is "", thus hit return everytime you are asked';
+  echo '  --scpev3serverinfo                 scp the text file with the server ip address and port to the ev3.'
   echo '                                     the root password is "", thus hit return everytime you are asked';
   echo '  --createemptydb PATH-TO-DB         create an empty database with all tables needed for the OpenRoberta server'
   echo '                                     Needs a file name. Creates files and a directory with this name AS PREFIX.'
@@ -185,7 +192,15 @@ function _createemptydb {
 }
 
 function _scpev3menuFn {
-  run="scp OpenRobertaServer/target/updateResources/EV3Menu.jar root@${ipaddr}:/home/root/lejos/bin/utils"
+  run="scp OpenRobertaServer/target/updateResources/EV3Menu.jar root@${ev3ipaddr}:/home/root/lejos/bin/utils"
+  echo "executing: ${run}"
+  $run
+}
+
+function _scpserveripport {
+  > serverIP.txt
+  echo "$serveripport" >> serverIP.txt
+  run="scp serverIP.txt root@${ev3ipaddr}:/home/lejos/programs"
   echo "executing: ${run}"
   $run
 }
@@ -202,10 +217,10 @@ function _scpev3libsFn {
   runtime="OpenRobertaServer/target/updateResources/OpenRobertaRuntime.jar"
   shared="OpenRobertaServer/target/updateResources/OpenRobertaShared.jar"
   json='OpenRobertaServer/target/updateResources/json.jar'
-  run="ssh root@${ipaddr} mkdir -p /home/roberta/lib"
+  run="ssh root@${ev3ipaddr} mkdir -p /home/roberta/lib"
   echo "executing: ${run}"
   $run
-  run="scp ${runtime} ${shared} ${json} root@${ipaddr}:/home/roberta/lib"
+  run="scp ${runtime} ${shared} ${json} root@${ev3ipaddr}:/home/roberta/lib"
   echo "executing: ${run}"
   $run
 }
@@ -224,7 +239,8 @@ fi
 while [[ "$cmd" != '' ]]; do
    case "$cmd" in
    --help|-h)          _helpFn ;;
-   --ipaddr|-ip)       ipaddr="$1"; shift ;;
+   --ev3ipaddr|-ev3ip)       ev3ipaddr="$1"; shift ;;
+   --serveripport|-sipport)       serveripport="$1"; shift ;;
    --checkout-db|--restore-db)
                        git checkout HEAD -- OpenRobertaServer/db/openroberta-db.[lps]* ;;
    --sqlclient|-sql)   dbjar=' OpenRobertaServer/target/resources/hsqldb-2.3.2.jar'
@@ -234,6 +250,7 @@ while [[ "$cmd" != '' ]]; do
    --version|-v)       oraversion="$1"; shift ;;
    --scpev3menu|-menu) _scpev3menuFn ;;
    --scpev3libs|-libs) _scpev3libsFn ;;
+   --scpev3serverinfo|-sinfo) _scpserveripport ;;
    --createemptydb)    dbpath="$1"; shift
                        _createemptydb "$dbpath" ;;
    --export|-e)        exportpath="$1"; shift
