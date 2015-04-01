@@ -39,7 +39,7 @@ function _helpFn {
   echo '                                     the root password is "", thus hit return if you are asked';
   echo '  --scpev3libs                       scp libraries to the EV3, uses ev3ipaddr';
   echo '                                     the root password is "", thus hit return everytime you are asked';
-  echo '  --scpev3serverinfo                 scp the text file with the server ip address and port to the ev3.'
+  echo '  --setev3serverinfo                 Create a file with the ip address and port of the server.'
   echo '                                     the root password is "", thus hit return everytime you are asked';
   echo '  --createemptydb PATH-TO-DB         create an empty database with all tables needed for the OpenRoberta server'
   echo '                                     Needs a file name. Creates files and a directory with this name AS PREFIX.'
@@ -197,12 +197,8 @@ function _scpev3menuFn {
   $run
 }
 
-function _scpserveripport {
-  > serverIP.txt
-  echo "$serveripport" >> serverIP.txt
-  run="scp serverIP.txt root@${ev3ipaddr}:/home/lejos/programs"
-  echo "executing: ${run}"
-  $run
+function _setev3serverinfoFn {
+  echo ${serveripport} | ssh root@${ev3ipaddr} "cat > /home/lejos/programs/serverIP.txt"
 }
 
 function _javaversion {
@@ -250,7 +246,7 @@ while [[ "$cmd" != '' ]]; do
    --version|-v)       oraversion="$1"; shift ;;
    --scpev3menu|-menu) _scpev3menuFn ;;
    --scpev3libs|-libs) _scpev3libsFn ;;
-   --scpev3serverinfo|-sinfo) _scpserveripport ;;
+   --setev3serverinfo|-sinfo) _setev3serverinfoFn ;;
    --createemptydb)    dbpath="$1"; shift
                        _createemptydb "$dbpath" ;;
    --export|-e)        exportpath="$1"; shift
