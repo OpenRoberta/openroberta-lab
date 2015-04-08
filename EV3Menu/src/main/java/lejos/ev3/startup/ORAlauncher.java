@@ -46,7 +46,9 @@ public class ORAlauncher {
         Delay.msDelay(1000);
         GraphicStartup.menu.suspend(); // debug screen when process is killed
         GraphicStartup.menu.resume();
-        GraphicStartup.redrawIPs();
+        if ( GraphicStartup.selection == 0 ) {
+            GraphicStartup.redrawIPs();
+        }
     }
 
     /**
