@@ -162,7 +162,7 @@ public class RoundTripUITest {
     }
 
     private static void startServer() throws IOException, InterruptedException {
-        RoundTripUITest.server = new ServerStarter("classpath:openRoberta.properties").start();
+        RoundTripUITest.server = new ServerStarter("classpath:openRoberta1997.properties").start();
         int port = RoundTripUITest.server.getURI().getPort();
         fp = new FirefoxProfile();
         fp.setEnableNativeEvents(false);
