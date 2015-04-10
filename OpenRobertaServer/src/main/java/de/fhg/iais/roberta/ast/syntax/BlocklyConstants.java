@@ -88,7 +88,7 @@ public final class BlocklyConstants {
     public static final String ROB_ACTIONS_PLAY_SET_VOLUME = "robActions_play_setVolume";
     public static final String ROB_LOCAL_VARIABLES_DECLARE = "robLocalVariables_declare";
     public static final String ROB_SENSORS_GYRO_RESET = "robSensors_gyro_reset";
-    public static final Object ROB_SENSORS_ENCODER_RESET = "robSensors_encoder_reset";
+    public static final String ROB_SENSORS_ENCODER_RESET = "robSensors_encoder_reset";
     public static final String ROB_SENSORS_TIMER_RESET = "robSensors_timer_reset";
     public static final String CONTROLS_WHILE_UNTIL = "controls_whileUntil";
     public static final String CONTROLS_FOR = "controls_for";
@@ -100,4 +100,5 @@ public final class BlocklyConstants {
     public static final String MATH_CHANGE = "math_change";
     public static final String MATH_MODULO = "math_modulo";
     public static final String TEXT_APPEND = "text_append";
+    public static final String ROB_CONTROLS_START_ACTIVITY = "robControls_start_activity";
 }

@@ -1,8 +1,5 @@
 package de.fhg.iais.roberta.ast.syntax;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,13 +66,10 @@ import de.fhg.iais.roberta.ast.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
-import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
-import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
 import de.fhg.iais.roberta.ast.typecheck.NepoInfo;
 import de.fhg.iais.roberta.ast.typecheck.NepoInfos;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.dbc.DbcException;
 import de.fhg.iais.roberta.hardwarecomponents.Category;
 
 /**
@@ -215,10 +209,10 @@ abstract public class Phrase<V> {
         TOUCH_SENSING( Category.SENSOR, TouchSensor.class, "robSensors_touch_isPressed" ),
         ULTRASONIC_SENSING( Category.SENSOR, UltrasonicSensor.class, "robSensors_ultrasonic_getSample" ),
         INFRARED_SENSING( Category.SENSOR, InfraredSensor.class, "robSensors_infrared_getSample" ),
-        ENCODER_SENSING( Category.SENSOR, EncoderSensor.class, "robSensors_encoder_getSample", "robSensors_encoder_reset" ),
+        ENCODER_SENSING( Category.SENSOR, EncoderSensor.class, "robSensors_encoder_getSample", BlocklyConstants.ROB_SENSORS_ENCODER_RESET ),
         BRICK_SENSING( Category.SENSOR, BrickSensor.class, "robSensors_key_isPressed" ),
-        GYRO_SENSING( Category.SENSOR, GyroSensor.class, "robSensors_gyro_getSample", "robSensors_gyro_reset" ),
-        TIMER_SENSING( Category.SENSOR, TimerSensor.class, "robSensors_timer_getSample", "robSensors_timer_reset" ),
+        GYRO_SENSING( Category.SENSOR, GyroSensor.class, "robSensors_gyro_getSample", BlocklyConstants.ROB_SENSORS_GYRO_RESET ),
+        TIMER_SENSING( Category.SENSOR, TimerSensor.class, "robSensors_timer_getSample", BlocklyConstants.ROB_SENSORS_TIMER_RESET ),
         SENSOR_GET_SAMPLE( Category.SENSOR, GetSampleSensor.class, "robSensors_getSample" ),
         EXPR_LIST( Category.EXPR, null ),
         STRING_CONST( Category.EXPR, StringConst.class, "text" ),
@@ -229,26 +223,34 @@ abstract public class Phrase<V> {
         MATH_CONST( Category.EXPR, MathConst.class, "math_constant" ),
         EMPTY_LIST( Category.EXPR, EmptyList.class, "lists_create_empty" ),
         VAR( Category.EXPR, Var.class, "variables_get" ),
-        VAR_DECLARATION( Category.EXPR, VarDeclaration.class, "robLocalVariables_declare", "robGlobalvariables_declare" ),
+        VAR_DECLARATION( Category.EXPR, VarDeclaration.class, BlocklyConstants.ROB_LOCAL_VARIABLES_DECLARE, "robGlobalvariables_declare" ),
         UNARY( Category.EXPR, Unary.class, "logic_negate" ),
-        BINARY( Category.EXPR, Binary.class, "logic_compare", "logic_operation", "math_arithmetic", "math_change", "math_modulo", "text_append" ),
+        BINARY(
+            Category.EXPR,
+            Binary.class,
+            "logic_compare",
+            "logic_operation",
+            BlocklyConstants.MATH_ARITHMETIC,
+            BlocklyConstants.MATH_CHANGE,
+            BlocklyConstants.MATH_MODULO,
+            BlocklyConstants.TEXT_APPEND ),
         SENSOR_EXPR( Category.EXPR, null ),
         ACTION_EXPR( Category.EXPR, null ),
         EMPTY_EXPR( Category.EXPR, null ),
         FUNCTION_EXPR( Category.EXPR, null ),
         METHOD_EXPR( Category.EXPR, null ),
         FUNCTIONS( Category.EXPR, null ),
-        START_ACTIVITY_TASK( Category.EXPR, StartActivityTask.class, "robControls_start_activity" ),
-        IF_STMT( Category.STMT, IfStmt.class, "logic_ternary", "controls_if", "robControls_if", "robControls_ifElse" ),
+        START_ACTIVITY_TASK( Category.EXPR, StartActivityTask.class, BlocklyConstants.ROB_CONTROLS_START_ACTIVITY ),
+        IF_STMT( Category.STMT, IfStmt.class, BlocklyConstants.LOGIC_TERNARY, "controls_if", "robControls_if", "robControls_ifElse" ),
         REPEAT_STMT(
             Category.STMT,
             RepeatStmt.class,
             "robControls_loopForever",
-            "controls_whileUntil",
-            "controls_for",
-            "controls_repeat_ext",
-            "controls_repeat",
-            "controls_forEach" ),
+            BlocklyConstants.CONTROLS_WHILE_UNTIL,
+            BlocklyConstants.CONTROLS_FOR,
+            BlocklyConstants.CONTROLS_REPEAT_EXT,
+            BlocklyConstants.CONTROLS_REPEAT,
+            BlocklyConstants.CONTROLS_FOR_EACH ),
         EXPR_STMT( Category.STMT, null ),
         STMT_LIST( Category.STMT, null ),
         ASSIGN_STMT( Category.STMT, AssignStmt.class, "variables_set" ),
@@ -259,20 +261,20 @@ abstract public class Phrase<V> {
         STMT_FLOW_CONTROL( Category.STMT, StmtFlowCon.class, "controls_flow_statements" ),
         WAIT_STMT( Category.STMT, WaitStmt.class, "robControls_wait_for", "robControls_wait" ),
         WAIT_TIME( Category.STMT, WaitTimeStmt.class, "robControls_wait_time" ),
-        TURN_ACTION( Category.ACTOR, TurnAction.class, "robActions_motorDiff_turn", "robActions_motorDiff_turn_for" ),
-        DRIVE_ACTION( Category.ACTOR, DriveAction.class, "robActions_motorDiff_on", "robActions_motorDiff_on_for" ),
+        TURN_ACTION( Category.ACTOR, TurnAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_TURN, "robActions_motorDiff_turn_for" ),
+        DRIVE_ACTION( Category.ACTOR, DriveAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_ON, "robActions_motorDiff_on_for" ),
         SHOW_TEXT_ACTION( Category.ACTOR, ShowTextAction.class, "robActions_display_text" ),
         SHOW_PICTURE_ACTION( Category.ACTOR, ShowPictureAction.class, "robActions_display_picture" ),
         TONE_ACTION( Category.ACTOR, ToneAction.class, "robActions_play_tone" ),
         LIGHT_ACTION( Category.ACTOR, LightAction.class, "robActions_brickLight_on" ),
         CLEAR_DISPLAY_ACTION( Category.ACTOR, ClearDisplayAction.class, "robActions_display_clear" ),
-        MOTOR_ON_ACTION( Category.ACTOR, MotorOnAction.class, "robActions_motor_on", "robActions_motor_on_for" ),
+        MOTOR_ON_ACTION( Category.ACTOR, MotorOnAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_ON, "robActions_motor_on_for" ),
         MOTOR_GET_POWER_ACTION( Category.ACTOR, MotorGetPowerAction.class, "robActions_motor_getPower" ),
         MOTOR_SET_POWER_ACTION( Category.ACTOR, MotorSetPowerAction.class, "robActions_motor_setPower" ),
         MOTOR_STOP_ACTION( Category.ACTOR, MotorStopAction.class, "robActions_motor_stop" ),
         PLAY_FILE_ACTION( Category.ACTOR, PlayFileAction.class, "robActions_play_file" ),
-        VOLUME_ACTION( Category.ACTOR, VolumeAction.class, "robActions_play_setVolume", "robActions_play_getVolume" ),
-        LIGHT_STATUS_ACTION( Category.ACTOR, LightStatusAction.class, "robActions_brickLight_off", "robActions_brickLight_reset" ),
+        VOLUME_ACTION( Category.ACTOR, VolumeAction.class, BlocklyConstants.ROB_ACTIONS_PLAY_SET_VOLUME, "robActions_play_getVolume" ),
+        LIGHT_STATUS_ACTION( Category.ACTOR, LightStatusAction.class, BlocklyConstants.ROB_ACTIONS_BRICK_LIGHT_OFF, "robActions_brickLight_reset" ),
         STOP_ACTION( Category.ACTOR, MotorDriveStopAction.class, "robActions_motorDiff_stop" ),
         MAIN_TASK( Category.TASK, MainTask.class, "robControls_start" ),
         ACTIVITY_TASK( Category.TASK, ActivityTask.class, "robControls_activity" ),
@@ -318,36 +320,18 @@ abstract public class Phrase<V> {
             return this.category;
         }
 
-        @SuppressWarnings("unchecked")
-        public static <V> Phrase<V> invokeJaxbToAstTransform(Block block, JaxbBlocklyProgramTransformer<V> helper) {
-            String className = "";
-            Method method;
-            if ( block == null ) {
-                throw new DbcException("Invalid block: " + block);
-            }
-            String sUpper = block.getType().trim();
-            for ( Phrase.Kind co : Phrase.Kind.values() ) {
-                if ( co.toString().equals(sUpper) ) {
-                    className = co.astClass.getName();
-                    break;
-                }
-                for ( String value : co.blocklyNames ) {
-                    if ( sUpper.equals(value) ) {
-                        className = co.astClass.getName();
-                        break;
-                    }
-                }
-            }
-            if ( className.equals("") ) {
-                throw new DbcException("Invalid Block: " + block.getType());
-            }
-            try {
-                method = Class.forName(className).getMethod("jaxbToAst", Block.class, JaxbAstTransformer.class);
-                return (Phrase<V>) method.invoke(null, block, helper);
-            } catch ( NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException | DbcException e ) {
-                throw new DbcException(e.getCause().getMessage());
-            }
+        /**
+         * @return the astClass
+         */
+        public Class<?> getAstClass() {
+            return this.astClass;
+        }
+
+        /**
+         * @return the blocklyNames
+         */
+        public String[] getBlocklyNames() {
+            return this.blocklyNames;
         }
     }
 }
