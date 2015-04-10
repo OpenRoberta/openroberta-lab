@@ -1406,13 +1406,13 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         } else {
             bluetoothConnectAction.get_address().visit(this);
         }
-        this.sb.append(")"); 
+        this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
-        this.sb.append("hal.establishConnectionTo(");
+        this.sb.append("hal.sendMessage(");
         if ( bluetoothSendAction.get_msg().getKind() != Phrase.Kind.STRING_CONST ) {
             this.sb.append("String.valueOf(");
             bluetoothSendAction.get_msg().visit(this);

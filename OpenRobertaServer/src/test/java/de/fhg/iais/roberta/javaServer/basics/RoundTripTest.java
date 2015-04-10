@@ -48,7 +48,7 @@ import de.fhg.iais.roberta.util.Util;
 public class RoundTripTest {
     private static final String resourcePath = "/roundtrip/";
     private static final String[] blocklyPrograms = {
-        "move", "drive", "show", "sound", "status_light", "sensors", "logic", "control_stmt", "wait", "math", "text", "list", "methods"
+        "move", "drive", "show", "sound", "status_light", "sensors", "logic", "control_stmt", "wait", "math", "text", "list", "methods", "bluetooth"
     };
 
     private static WebDriver driver;
@@ -147,6 +147,11 @@ public class RoundTripTest {
     @Test
     public void actionMethods() throws Exception {
         assertRoundTrip(blocklyPrograms[12]);
+    }
+
+    @Test
+    public void actionBluetooth() throws Exception {
+        assertRoundTrip(blocklyPrograms[13]);
     }
 
     @AfterClass

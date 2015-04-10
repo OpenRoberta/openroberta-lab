@@ -24,6 +24,7 @@ public class AstToLejosJavaVisitorTest {
         + "import de.fhg.iais.roberta.codegen.lejos.BlocklyMethods;\n"
         + "import de.fhg.iais.roberta.codegen.lejos.Hal;\n\n"
         + "import de.fhg.iais.roberta.ast.syntax.action.*;\n"
+        + "import lejos.remote.nxt.NXTConnection;\n\n"
         + "import de.fhg.iais.roberta.ast.syntax.sensor.*;\n"
         + "import de.fhg.iais.roberta.ev3.*;\n"
         + "import de.fhg.iais.roberta.ev3.components.*;\n\n"

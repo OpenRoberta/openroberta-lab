@@ -2,17 +2,16 @@ package de.fhg.iais.roberta.ast.syntax.action.communication;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
-import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.Action;
 import de.fhg.iais.roberta.ast.syntax.action.MotorDriveStopAction;
-import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
 
 public class BluetoothWaitForConnectionAction<V> extends Action<V> {
-    
+
     private BluetoothWaitForConnectionAction(BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.BLUETOOTH_WAIT_FOR_CONNECTION_ACTION, properties, comment);
         setReadOnly();
@@ -37,6 +36,17 @@ public class BluetoothWaitForConnectionAction<V> extends Action<V> {
     @Override
     protected V accept(AstVisitor<V> visitor) {
         return visitor.visitBluetoothWaitForConnectionAction(this);
+    }
+
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        return BluetoothWaitForConnectionAction.make(helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

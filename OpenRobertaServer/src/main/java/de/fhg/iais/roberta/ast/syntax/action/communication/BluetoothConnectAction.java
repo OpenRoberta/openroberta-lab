@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.action.communication;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
@@ -8,15 +10,18 @@ import de.fhg.iais.roberta.ast.syntax.action.Action;
 import de.fhg.iais.roberta.ast.syntax.action.MotorDriveStopAction;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.ExprParam;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Value;
 
-public class BluetoothConnectAction<V>  extends Action<V>{
+public class BluetoothConnectAction<V> extends Action<V> {
     private final Expr<V> _address;
 
     private BluetoothConnectAction(Expr<V> address, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.BLUETOOTH_CONNECT_ACTION, properties, comment);
-        _address = address;
+        this._address = address;
         setReadOnly();
     }
 
@@ -41,18 +46,33 @@ public class BluetoothConnectAction<V>  extends Action<V>{
         return visitor.visitBluetoothConnectAction(this);
     }
 
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Value> values = helper.extractValues(block, (short) 1);
+        Phrase<V> bluetoothConnectAddress = helper.extractValue(values, new ExprParam(BlocklyConstants.ADDRESS, String.class));
+        return BluetoothConnectAction.make(
+            helper.convertPhraseToExpr(bluetoothConnectAddress),
+            helper.extractBlockProperties(block),
+            helper.extractComment(block));
+    }
+
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        
+
         AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.ADDRESS, get_address());
-        
+
         return jaxbDestination;
     }
 
     public Expr<V> get_address() {
-        return _address;
+        return this._address;
     }
 }
-

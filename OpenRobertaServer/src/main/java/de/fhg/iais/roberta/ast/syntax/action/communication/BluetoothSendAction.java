@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.ast.syntax.action.communication;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.BlocklyComment;
 import de.fhg.iais.roberta.ast.syntax.BlocklyConstants;
@@ -8,18 +10,21 @@ import de.fhg.iais.roberta.ast.syntax.action.Action;
 import de.fhg.iais.roberta.ast.syntax.action.MotorDriveStopAction;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.transformer.AstJaxbTransformerHelper;
+import de.fhg.iais.roberta.ast.transformer.ExprParam;
+import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Value;
 
 public class BluetoothSendAction<V> extends Action<V> {
-    
+
     private final Expr<V> _connection;
     private final Expr<V> _msg;
-    
+
     private BluetoothSendAction(Expr<V> connection, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.BLUETOOTH_SEND_ACTION, properties, comment);
-        _connection = connection;
-        _msg = msg;
+        this._connection = connection;
+        this._msg = msg;
         setReadOnly();
     }
 
@@ -44,6 +49,24 @@ public class BluetoothSendAction<V> extends Action<V> {
         return visitor.visitBluetoothSendAction(this);
     }
 
+    /**
+     * Transformation from JAXB object to corresponding AST object.
+     *
+     * @param block for transformation
+     * @param helper class for making the transformation
+     * @return corresponding AST object
+     */
+    public static <V> Phrase<V> jaxbToAst(Block block, JaxbAstTransformer<V> helper) {
+        List<Value> values = helper.extractValues(block, (short) 2);
+        Phrase<V> bluetoothSendMessage = helper.extractValue(values, new ExprParam(BlocklyConstants.MESSAGE, String.class));
+        Phrase<V> bluetoothSendConnection = helper.extractValue(values, new ExprParam(BlocklyConstants.CONNECTION, null));
+        return BluetoothSendAction.make(
+            helper.convertPhraseToExpr(bluetoothSendConnection),
+            helper.convertPhraseToExpr(bluetoothSendMessage),
+            helper.extractBlockProperties(block),
+            helper.extractComment(block));
+    }
+
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
@@ -51,15 +74,15 @@ public class BluetoothSendAction<V> extends Action<V> {
 
         AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.MESSAGE, get_msg());
         AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.CONNECTION, get_connection());
-        
+
         return jaxbDestination;
     }
 
     public Expr<V> get_connection() {
-        return _connection;
+        return this._connection;
     }
 
     public Expr<V> get_msg() {
-        return _msg;
+        return this._msg;
     }
 }

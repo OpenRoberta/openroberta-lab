@@ -18,6 +18,10 @@ import de.fhg.iais.roberta.ast.syntax.action.ShowTextAction;
 import de.fhg.iais.roberta.ast.syntax.action.ToneAction;
 import de.fhg.iais.roberta.ast.syntax.action.TurnAction;
 import de.fhg.iais.roberta.ast.syntax.action.VolumeAction;
+import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothConnectAction;
+import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothReceiveAction;
+import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothSendAction;
+import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.ast.syntax.expr.Binary;
 import de.fhg.iais.roberta.ast.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.ast.syntax.expr.ColorConst;
@@ -302,9 +306,10 @@ abstract public class Phrase<V> {
         METHOD_VOID( Category.METHOD, MethodVoid.class, "robProcedures_defnoreturn" ),
         METHOD_CALL( Category.METHOD, MethodCall.class, "robProcedures_callnoreturn", "robProcedures_callreturn" ),
         METHOD_RETURN( Category.METHOD, MethodReturn.class, "robProcedures_defreturn" ),
-        BLUETOOTH_RECIEVED_ACTION( Category.ACTOR ),
-        BLUETOOTH_CONNECT_ACTION( Category.ACTOR ),
-        BLUETOOTH_SEND_ACTION( Category.ACTOR );
+        BLUETOOTH_CONNECT_ACTION( Category.ACTOR, BluetoothConnectAction.class, "com_startConnection" ),
+        BLUETOOTH_SEND_ACTION( Category.ACTOR, BluetoothSendAction.class, "com_sendBlock" ),
+        BLUETOOTH_WAIT_FOR_CONNECTION_ACTION( Category.ACTOR, BluetoothWaitForConnectionAction.class, "com_waitForConnection" ),
+        BLUETOOTH_RECEIVED_ACTION( Category.ACTOR, BluetoothReceiveAction.class, "com_receiveBlock" );
 
         private final Category category;
         private final Class<?> astClass;
