@@ -115,7 +115,11 @@ public class Hal {
      */
     public void turnOnRegulatedMotor(ActorPort actorPort, float speedPercent) {
         setRegulatedMotorSpeed(actorPort, speedPercent);
-        this.deviceHandler.getRegulatedMotor(actorPort).forward();
+        if ( speedPercent < 0 ) {
+            this.deviceHandler.getRegulatedMotor(actorPort).backward();
+        } else {
+            this.deviceHandler.getRegulatedMotor(actorPort).forward();
+        }
     }
 
     /**
@@ -162,8 +166,8 @@ public class Hal {
      * @param speedPercent of motor power
      */
     public void setUnregulatedMotorSpeed(ActorPort actorPort, float speedPercent) {
-        speedPercent = speedPercent < 0 ? 0 : speedPercent;
-        speedPercent = speedPercent > 200 ? 100 : speedPercent;
+        speedPercent = speedPercent < -100 ? -100 : speedPercent;
+        speedPercent = speedPercent > 100 ? 100 : speedPercent;
         this.deviceHandler.getUnregulatedMotor(actorPort).setPower((int) speedPercent);
     }
 
@@ -182,6 +186,10 @@ public class Hal {
      */
     public void rotateRegulatedMotor(ActorPort actorPort, float speedPercent, MotorMoveMode mode, float value) {
         this.deviceHandler.getRegulatedMotor(actorPort).setSpeed(toDegPerSec(speedPercent));
+        value = value < 0 ? 0 : value;
+        if ( speedPercent < 0 ) {
+            value *= -1;
+        }
         switch ( mode ) {
             case DEGREE:
                 this.deviceHandler.getRegulatedMotor(actorPort).rotate((int) value);
@@ -208,40 +216,44 @@ public class Hal {
      * @param value until the motor will work
      */
     public void rotateUnregulatedMotor(ActorPort actorPort, float speedPercent, MotorMoveMode mode, float value) {
+        value = value < 0 ? 0 : value;
+        int zeroTachoCount = this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount();
         setUnregulatedMotorSpeed(actorPort, speedPercent);
-        if ( value >= 0 ) {
-            this.deviceHandler.getUnregulatedMotor(actorPort).forward();
+
+        this.deviceHandler.getUnregulatedMotor(actorPort).forward();
+        if ( speedPercent >= 0 ) {
             switch ( mode ) {
                 case DEGREE:
-                    while ( this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() < value ) {
-                        // do nothing
-                    }
+                    value += zeroTachoCount;
+
                     break;
                 case ROTATIONS:
-                    while ( this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() < rotationsToAngle(value) ) {
-                        // do nothing
-                    }
+                    value = zeroTachoCount + rotationsToAngle(value);
+
                     break;
                 default:
                     throw new DbcException("incorrect MotorMoveMode");
             }
+            while ( this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() < value ) {
+                // do nothing
+            }
 
         } else {
-            // rotations < 0 -> backward
-            this.deviceHandler.getUnregulatedMotor(actorPort).backward();
+
             switch ( mode ) {
                 case DEGREE:
-                    while ( this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() > value ) {
-                        // do nothing
-                    }
+                    value = zeroTachoCount - value;
+
                     break;
                 case ROTATIONS:
-                    while ( this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() > rotationsToAngle(value) ) {
-                        // do nothing
-                    }
+                    value = zeroTachoCount - rotationsToAngle(value);
+
                     break;
                 default:
                     throw new DbcException("incorrect MotorMoveMode");
+            }
+            while ( this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() > value ) {
+                // do nothing
             }
         }
         this.deviceHandler.getUnregulatedMotor(actorPort).stop();
@@ -256,7 +268,7 @@ public class Hal {
      * @return current speed value
      */
     public float getRegulatedMotorSpeed(ActorPort actorPort) {
-        return toPercent(this.deviceHandler.getRegulatedMotor(actorPort).getSpeed());
+        return toPercent(this.deviceHandler.getRegulatedMotor(actorPort).getRotationSpeed());
     }
 
     /**
@@ -916,7 +928,7 @@ public class Hal {
             case DEGREE:
                 return this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount();
             case ROTATION:
-                return Math.round(this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() / 360.0 * 100.0) / 100;
+                return Math.round(this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() / 360.0 * 100.0) / 100.0;
             default:
                 throw new DbcException("incorrect MotorTachoMode");
         }
@@ -969,7 +981,7 @@ public class Hal {
 
     /**
      * Establishes a connection to host via {@link BluetoothCom#establishConnectionTo(String, int)} with a timeout of {@link #BLUETOOTH_TIMEOUT}.
-     * 
+     *
      * @param host the host.
      */
     public NXTConnection establishConnectionTo(String host) {
@@ -987,24 +999,26 @@ public class Hal {
 
     /**
      * Reads a message from an established connection.
-     * 
+     *
      * @return the message or "NO MESSAGE"
      */
     public String readMessage() {
         String message = "NO MESSAGE";
-        if ( bluetoothConnection != null )
+        if ( bluetoothConnection != null ) {
             message = blueCom.readMessage(bluetoothConnection);
+        }
         return message;
     }
 
     /**
      * Sends a message over an established connection or returns.
-     * 
+     *
      * @param message the message to be sent
      */
     public void sendMessage(String message) {
-        if ( bluetoothConnection != null )
+        if ( bluetoothConnection != null ) {
             blueCom.sendTo(bluetoothConnection, message);
+        }
     }
 
 }
