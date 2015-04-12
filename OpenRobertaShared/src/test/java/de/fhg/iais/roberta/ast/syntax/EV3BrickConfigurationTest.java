@@ -80,10 +80,10 @@ public class EV3BrickConfigurationTest {
                 + "ev3 test {\n"
                 + "  wheel diameter -3.1 cm\n"
                 + "  track width    4.0 cm\n"
-                + "  sensor 1 ultrasonic\n"
-                + "  sensor 4 colour\n"
-                + "  actor A large motor {regulated foreward left}\n"
-                + "  actor B middle motor{unregulated foreward right}\n"
+                + "  sensor port 1 ultrasonic\n"
+                + "  sensor port 4 color\n"
+                + "  actor port A large motor {regulated foreward left}\n"
+                + "  actor port B middle motor{unregulated foreward right}\n"
                 + "}";
 
         assertEquals(expected.replaceAll("\\s+", ""), conf.generateText("test").replaceAll("\\s+", ""));

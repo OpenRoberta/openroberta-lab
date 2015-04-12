@@ -5,28 +5,38 @@ ev3ipaddr='10.0.1.1'
 oraversion='1.0.1-SNAPSHOT'
 
 function _helpFn {
-  # be careful when changing the help function. All words starting with "--" are extracted by a compgen function and considered COMMANDS!
-  echo 'THIS SCRIPT IS FOR DEVELOPERS, WHO PULLED THE GIT-REPOSITORY AND WORK WITH THE OpenRoberta ARTIFACT';
-  echo 'you may chain commands, e.g. first set a version string, then export the application to an external directory';
+  # be careful when changing the help function.
+  # All words starting with "--" are extracted by a compgen function and considered COMMANDS!
+  echo 'THIS SCRIPT IS MAINLY FOR DEVELOPERS, WHO PULLED THE GIT-REPOSITORY AND WORK WITH THE OpenRoberta SERVER LOCALLY';
+  echo 'you may set properties first, e.g. the version string, and then ececute a command, e.g. export the application';
   echo 'IF you source with ". ora-please-source.sh", you get completion from the bash when you type TAB (as usual ...)';
+  echo '';
   $0 --java
   echo 'you may customize the script by defining default values. Values are now:';
   echo 'ev3ipaddr='"$ev3ipaddr";
   echo 'oraversion='"$oraversion";
   echo 'serveripport='"$serveripport";
   echo '';
-  echo 'miscelleneous commands';
+  echo 'setting properties';
   echo '';
-  echo '  --help                             get help';
-  echo '  --java                             show the actual java version';
   echo '  --ev3ipaddr {IP-ADDR}              set the ip addr of the EV3 brick for further commands';
   echo '  --version {VERSION}                set the version to something like d.d.d where d is one or more digits, e.g. 1.10.1'
   echo '  --serveripport {IP:PORT}           set a default ip address plus port on which the server is running.'
   echo '                                     the brick will ask you to connect to this address.'
   echo '                                     useful if you do not want to type the IP on the brick. This saves a lot of time! :-)'
+  echo '';
+  echo 'miscelleneous commands';
+  echo '';
+  echo '  --help                             get help';
+  echo '  --java                             show the actual java version';
   echo ''
   echo '  --checkout-db OR --restore-db      restore the state of the database to the state last checked out.'
   echo '                                     this makes sense, if you changed the db during test and dont want to commit your changes'
+  echo '  --alive {-q} {EVERY} {TIMEOUT} {MAIL} check after EVERY sec (default: 60) if the server is alive.'
+  echo '                                     the server is assumed to have crashed, if it does not answer within TIMEOUT sec (default: 10).'
+  echo '                                     if the server is assumed to have crashed, send a mail by calling the script MAIL (default: NO)'
+  echo '                                     -q is the quiet mode: report crashes only'
+  echo '                                     a usefull call, reporting to stdout, is e.g. ora.sh --serveripport localhost:1999 --alive 10 10'
   echo '  --sqlclient                        start the hsqldb client to query the database. The openroberta server must NOT run and'
   echo '                                     and thus access the database. We do not use hsqldb with a db server, but as a standalone.';
   echo '';
@@ -57,6 +67,34 @@ function _startFn {
   echo "executing: $run"
   cd OpenRobertaServer
   eval $run
+}
+
+function _aliveFn {
+  echo "checking for a server crash every $every sec with $timeout sec timeout."
+  if [[ "$mail" == 'no' ]]; then
+     echo "no mail will be sent if a crash is suspected"
+  else
+     echo "mail will be sent using the script \"$mail\" if a crash is suspected"
+  fi
+  while :; do
+    if [[ "$quiet" == 'true' ]]; then
+       curl --max-time $timeout "http://$serveripport/alive" > /dev/null
+       rc=$?
+    else 
+       curl --max-time $timeout "http://$serveripport/alive"
+       rc=$?
+       if [[ $rc == 0 ]]; then
+          echo ''
+       fi
+    fi
+    if [[ $rc != 0 ]]; then
+       echo "************************ server seems to be down `date` ************************"
+       if [[ "$mail" != 'no' ]]; then
+          sh $mail
+       fi
+    fi
+    sleep $every
+  done
 }
 
 function _check64bit7jdk {
@@ -227,43 +265,48 @@ if [[ "$cmd" == '' ]]; then
    _helpFn
    exit 0
 fi
-if [[ "$cmd" == '--java' ]]; then
-   _javaversion
-   cmd="$1"; shift
-fi
 #_check64bit7jdk
-while [[ "$cmd" != '' ]]; do
-   case "$cmd" in
-   --help|-h)          _helpFn ;;
-   --ev3ipaddr|-ev3ip)       ev3ipaddr="$1"; shift ;;
-   --serveripport|-sipport)       serveripport="$1"; shift ;;
-   --checkout-db|--restore-db)
-                       git checkout HEAD -- OpenRobertaServer/db/openroberta-db.[lps]* ;;
-   --sqlclient|-sql)   dbjar=' OpenRobertaServer/target/resources/hsqldb-2.3.2.jar'
-                       dbdriver='org.hsqldb.jdbc.JDBCDriver'
-                       dburl='jdbc:hsqldb:file:OpenRobertaServer/db/openroberta-db'
-                       java -jar $dbjar --driver $dbdriver --url $dburl --user orA --password Pid ;;
-   --version|-v)       oraversion="$1"; shift ;;
-   --scpev3menu|-menu) _scpev3menuFn ;;
-   --scpev3libs|-libs) _scpev3libsFn ;;
-   --setev3serverinfo|-sinfo) _setev3serverinfoFn ;;
-   --createemptydb)    dbpath="$1"; shift
-                       _createemptydb "$dbpath" ;;
-   --export|-e)        exportpath="$1"; shift
-                       _exportApplication "$exportpath" ;;
-   --start|-s)         cmd="$1"; shift
-                       if [[ $cmd != '' && $cmd != -* ]]; then
-                          propfile="file:$cmd"
-                          cmd="$1"; shift
-                       fi
-                       _startFn "$propfile"
-                       continue ;; # because cmd is already set
-   *)                  echo 'invalid or no parameter: "'"$cmd"'"'
-                       exit 4 ;;
-   esac
-
-   cmd="$1" # here all commands w.o. parameters arrive. Thus cmd has to be set
-   shift
-done
+case "$cmd" in
+--help|-h)          _helpFn;                  cmd="$1"; shift ;;
+--java)             _javaversion;             cmd="$1"; shift ;;
+--ev3ipaddr|-ev3ip) ev3ipaddr="$1"; shift;    cmd="$1"; shift ;;
+--serveripport|-sp) serveripport="$1"; shift; cmd="$1"; shift ;;
+--version|-v)       oraversion="$1"; shift;   cmd="$1"; shift ;;
+esac
+if [[ "$cmd" == '' ]]; then
+   exit 0
+fi
+case "$cmd" in
+--checkout-db|--restore-db)
+                    git checkout HEAD -- OpenRobertaServer/db/openroberta-db.[lps]* ;;
+--sqlclient|-sql)   dbjar=' OpenRobertaServer/target/resources/hsqldb-2.3.2.jar'
+                    dbdriver='org.hsqldb.jdbc.JDBCDriver'
+                    dburl='jdbc:hsqldb:file:OpenRobertaServer/db/openroberta-db'
+                    java -jar $dbjar --driver $dbdriver --url $dburl --user orA --password Pid ;;
+--scpev3menu|-menu) _scpev3menuFn ;;
+--scpev3libs|-libs) _scpev3libsFn ;;
+--setev3serverinfo|-sinfo) _setev3serverinfoFn ;;
+--createemptydb)    dbpath="$1"
+                    _createemptydb "$dbpath" ;;
+--export|-e)        exportpath="$1"
+                    _exportApplication "$exportpath" ;;
+--start|-s)         cmd="$1"
+                    if [[ "$cmd" != '' ]]; then
+                       propfile="file:$cmd"
+                    fi
+                    _startFn "$propfile" ;;
+--alive)            if [[ "$1" == '-q' ]]; then
+                       quiet='true'
+                       shift
+                    else
+                       quiet='false'
+                    fi
+                    every="${1:-60}"
+                    timeout="${2:-30}"
+                    mail="${3:-no}"
+                    _aliveFn ;;
+*)                  echo 'invalid command: "'"$cmd"'"'
+                    exit 4 ;;
+esac
 
 exit 0

@@ -3,7 +3,7 @@
 	<!-- note: the basedir will be set to the directory in which this build file is stored -->
 	<property name="brick.runtime" value="/home/root/lejos" />
 	<property name="brick.roberta" value="/home/roberta/lib" />
-	
+
 	<property name="input.dir" value="${user.projects.dir}/${token.dir}/src" />
 	<property name="output.dir" value="${user.projects.dir}/${token.dir}/target" />
 
@@ -12,37 +12,36 @@
 
 	<path id="lejos">
 		<fileset dir="${crosscompiler.resources.dir}">
-			<include name="*.jar"/>
+			<include name="*.jar" />
 		</fileset>
 	</path>
-	
-	<target name="makeDir" description="create target folder">
+
+	<target name="emptyOutDir">
 		<mkdir dir="${output.dir}" />
+		<delete includeEmptyDirs="true">
+			<fileset dir="${output.dir}" includes="**/*" defaultexcludes="no"/>
+		</delete>
 	</target>
 
-	<target name="clean" description="delete old files" depends="makeDir">
-		<delete dir="${output.dir}" includes="*"/>
-	</target>
-
-	<target name="compile" description="build class files" depends="clean">
+	<target name="compile" description="build class files" depends="emptyOutDir">
 		<javac srcdir="${input.dir}" destdir="${output.dir}" includeantruntime="false" fork="yes" debug="true" verbose="true" debuglevel="lines,vars,source">
-			<include name="${main.name}.java"/>
-			<classpath refid="lejos"/>
+			<include name="${main.name}.java" />
+			<classpath refid="lejos" />
 		</javac>
 	</target>
 
 	<target name="jar" depends="compile">
 		<jar destfile="${output.dir}/${program.jar}">
 			<manifest>
-				<attribute name="Main-Class" value="${main.class}"/>
+				<attribute name="Main-Class" value="${main.class}" />
 				<attribute name="Class-Path" value="${brick.runtime}/lib/ev3classes.jar \
 					${brick.runtime}/lib/dbusjava.jar \
 					${brick.runtime}/libjna/usr/share/java/jna.jar \
 					${brick.roberta}/OpenRobertaRuntime.jar \
-					${brick.roberta}/OpenRobertaShared.jar"/>
+					${brick.roberta}/OpenRobertaShared.jar" />
 			</manifest>
 			<fileset dir="${output.dir}">
-				<include name="**/${main.name}.class"/>
+				<include name="**/${main.name}.class" />
 			</fileset>
 		</jar>
 	</target>

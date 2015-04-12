@@ -153,6 +153,10 @@ public class CompilerWorkflow {
             project.setProperty("main.name", mainFile);
             project.setProperty("main.package", mainPackage);
 
+            sb.append("crosscompiler.resources.dir: ").append(this.crossCompilerResourcesDir).append("\n");
+            sb.append("user.projects.dir: ").append(this.pathToCrosscompilerBaseDir).append("\n");
+            sb.append("token.dir: ").append(token).append("\n\n");
+
             ProjectHelper projectHelper = ProjectHelper.getProjectHelper();
             projectHelper.parse(project, buildFile);
 
@@ -188,6 +192,7 @@ public class CompilerWorkflow {
                 }
             });
             project.executeTarget(project.getDefaultTarget());
+            // LOG.info("build ok. Messages from build script are:\n" + sb.toString());
             return null;
         } catch ( Exception e ) {
             if ( sb.length() > 0 ) {
