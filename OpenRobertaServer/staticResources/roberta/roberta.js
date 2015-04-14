@@ -992,6 +992,19 @@ function initPopups() {
     $('#about-join').onWrap('click', function() {
         $('#show-about').modal('hide');
     });
+    
+    $('#login-user').onWrap('hidden.bs.modal', function () {
+        $('#login-user input').val('');
+    });
+    
+    $('#delete-user').onWrap('hidden.bs.modal', function () {
+        $('#delete-user input').val('');
+    });
+    
+    $('#register-user').onWrap('hidden.bs.modal', function () {
+        $('#register-user input').val('');
+        $('#login-user input').val('');
+    });
 
     // Handle key events in popups
     $(".modal").keyup(function(event) {
