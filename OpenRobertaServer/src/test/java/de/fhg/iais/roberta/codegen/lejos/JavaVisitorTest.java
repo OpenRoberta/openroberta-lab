@@ -6,6 +6,7 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst;
 import de.fhg.iais.roberta.ast.syntax.expr.MathConst.Const;
@@ -31,7 +32,7 @@ public class JavaVisitorTest {
 
     @Test
     public void visitMathConst() throws Exception {
-        MathConst<Void> mathConst = MathConst.make(Const.E, null, null);
+        MathConst<Void> mathConst = MathConst.make(Const.E, BlocklyBlockProperties.make("1", "1", false, false, false, false, false), null);
         AstToLejosJavaVisitor visitor = new AstToLejosJavaVisitor("Test", brickConfiguration, usedSensors, 0);
         mathConst.visit(visitor);
         Assert.assertEquals("Math.E", visitor.getSb().toString());

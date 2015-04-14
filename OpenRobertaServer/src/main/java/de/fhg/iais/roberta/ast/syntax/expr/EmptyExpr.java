@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.ast.syntax.expr;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -14,7 +15,7 @@ public class EmptyExpr<V> extends Expr<V> {
     private final Class<?> defVal;
 
     private EmptyExpr(Class<?> defVal) {
-        super(Phrase.Kind.EMPTY_EXPR, null, null);
+        super(Phrase.Kind.EMPTY_EXPR, BlocklyBlockProperties.make("1", "1", false, false, false, false, false), null);
         Assert.isTrue(defVal != null);
         this.defVal = defVal;
         setReadOnly();

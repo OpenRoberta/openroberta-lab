@@ -13,7 +13,7 @@ public class ExprStmt<V> extends Stmt<V> {
     private final Expr<V> expr;
 
     private ExprStmt(Expr<V> expr) {
-        super(Phrase.Kind.EXPR_STMT, null, null);
+        super(Phrase.Kind.EXPR_STMT, expr.getProperty(), expr.getComment());
         Assert.isTrue(expr.isReadOnly());
         this.expr = expr;
         setReadOnly();

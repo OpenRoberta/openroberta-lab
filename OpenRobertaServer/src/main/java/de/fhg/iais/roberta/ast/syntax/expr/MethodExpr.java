@@ -13,7 +13,7 @@ public class MethodExpr<V> extends Expr<V> {
     private final Method<V> method;
 
     private MethodExpr(Method<V> method) {
-        super(Phrase.Kind.METHOD_EXPR, null, null);
+        super(Phrase.Kind.METHOD_EXPR, method.getProperty(), method.getComment());
         Assert.isTrue(method.isReadOnly());
         this.method = method;
         setReadOnly();

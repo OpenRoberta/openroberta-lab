@@ -13,7 +13,7 @@ public final class ActionExpr<V> extends Expr<V> {
     private final Action<V> action;
 
     private ActionExpr(Action<V> action) {
-        super(Phrase.Kind.ACTION_EXPR, null, null);
+        super(Phrase.Kind.ACTION_EXPR, action.getProperty(), action.getComment());
         Assert.isTrue(action.isReadOnly());
         this.action = action;
         setReadOnly();

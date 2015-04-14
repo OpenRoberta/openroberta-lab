@@ -13,7 +13,7 @@ public class MethodStmt<V> extends Stmt<V> {
     private final Method<V> method;
 
     private MethodStmt(Method<V> method) {
-        super(Phrase.Kind.METHOD_STMT, null, null);
+        super(Phrase.Kind.METHOD_STMT, method.getProperty(), method.getComment());
         Assert.isTrue(method != null && method.isReadOnly());
         this.method = method;
         setReadOnly();

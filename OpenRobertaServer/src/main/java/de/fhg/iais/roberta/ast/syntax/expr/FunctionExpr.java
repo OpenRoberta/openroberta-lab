@@ -13,7 +13,7 @@ public class FunctionExpr<V> extends Expr<V> {
     private final Function<V> function;
 
     private FunctionExpr(Function<V> function) {
-        super(Phrase.Kind.FUNCTION_EXPR, null, null);
+        super(Phrase.Kind.FUNCTION_EXPR, function.getProperty(), function.getComment());
         Assert.isTrue(function.isReadOnly());
         this.function = function;
         setReadOnly();

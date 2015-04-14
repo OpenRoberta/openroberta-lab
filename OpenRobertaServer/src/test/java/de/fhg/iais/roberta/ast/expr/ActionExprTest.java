@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.ast.expr;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.action.MotorDriveStopAction;
 import de.fhg.iais.roberta.ast.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
@@ -11,7 +12,7 @@ public class ActionExprTest {
 
     @Test
     public void make() throws Exception {
-        MotorDriveStopAction<Void> sa = MotorDriveStopAction.make(null, null);
+        MotorDriveStopAction<Void> sa = MotorDriveStopAction.make(BlocklyBlockProperties.make("1", "1", false, false, false, false, false), null);
         ActionExpr<Void> ae = ActionExpr.make(sa);
 
         String a = "ActionExpr [StopAction []]";
@@ -21,7 +22,7 @@ public class ActionExprTest {
 
     @Test
     public void getAction() throws Exception {
-        MotorDriveStopAction<Void> sa = MotorDriveStopAction.make(null, null);
+        MotorDriveStopAction<Void> sa = MotorDriveStopAction.make(BlocklyBlockProperties.make("1", "1", false, false, false, false, false), null);
         ActionExpr<Void> ae = ActionExpr.make(sa);
 
         Assert.assertEquals(sa.toString(), ae.getAction().toString());
@@ -29,7 +30,7 @@ public class ActionExprTest {
 
     @Test
     public void getPrecedence() throws Exception {
-        MotorDriveStopAction<Void> sa = MotorDriveStopAction.make(null, null);
+        MotorDriveStopAction<Void> sa = MotorDriveStopAction.make(BlocklyBlockProperties.make("1", "1", false, false, false, false, false), null);
         ActionExpr<Void> ae = ActionExpr.make(sa);
 
         Assert.assertEquals(999, ae.getPrecedence());
@@ -37,7 +38,7 @@ public class ActionExprTest {
 
     @Test
     public void getAssoc() throws Exception {
-        MotorDriveStopAction<Void> sa = MotorDriveStopAction.make(null, null);
+        MotorDriveStopAction<Void> sa = MotorDriveStopAction.make(BlocklyBlockProperties.make("1", "1", false, false, false, false, false), null);
         ActionExpr<Void> ae = ActionExpr.make(sa);
 
         Assert.assertEquals(Assoc.NONE, ae.getAssoc());

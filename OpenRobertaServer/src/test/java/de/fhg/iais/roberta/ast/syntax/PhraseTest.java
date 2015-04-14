@@ -11,7 +11,7 @@ public class PhraseTest {
 
     @Test
     public void test() {
-        Phrase<?> phrase = StringConst.make("testString", null, null);
+        Phrase<?> phrase = StringConst.make("testString", BlocklyBlockProperties.make("1", "1", false, false, false, false, false), null);
         assertEquals(Kind.STRING_CONST, phrase.getKind());
     }
 

@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.ast.expr;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
@@ -11,26 +12,26 @@ public class NullConstTest {
 
     @Test
     public void make() throws Exception {
-        NullConst<Void> nullConst = NullConst.make(null, null);
+        NullConst<Void> nullConst = NullConst.make(BlocklyBlockProperties.make("1", "1", false, false, false, false, false), null);
         String a = "NullConst [null]";
         Assert.assertEquals(a, nullConst.toString());
     }
 
     @Test
     public void getValue() throws Exception {
-        NullConst<Void> nullConst = NullConst.make(null, null);
+        NullConst<Void> nullConst = NullConst.make(BlocklyBlockProperties.make("1", "1", false, false, false, false, false), null);
         Assert.assertEquals(null, nullConst.getValue());
     }
 
     @Test
     public void getPresedance() throws Exception {
-        NullConst<Void> nullConst = NullConst.make(null, null);
+        NullConst<Void> nullConst = NullConst.make(BlocklyBlockProperties.make("1", "1", false, false, false, false, false), null);
         Assert.assertEquals(999, nullConst.getPrecedence());
     }
 
     @Test
     public void getAssoc() throws Exception {
-        NullConst<Void> nullConst = NullConst.make(null, null);
+        NullConst<Void> nullConst = NullConst.make(BlocklyBlockProperties.make("1", "1", false, false, false, false, false), null);
         Assert.assertEquals(Assoc.NONE, nullConst.getAssoc());
     }
 

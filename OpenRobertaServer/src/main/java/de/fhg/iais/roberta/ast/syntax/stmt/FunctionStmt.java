@@ -13,7 +13,7 @@ public class FunctionStmt<V> extends Stmt<V> {
     private final Function<V> function;
 
     private FunctionStmt(Function<V> function) {
-        super(Phrase.Kind.SENSOR_STMT, null, null);
+        super(Phrase.Kind.SENSOR_STMT, function.getProperty(), function.getComment());
         Assert.isTrue(function != null && function.isReadOnly());
         this.function = function;
         setReadOnly();

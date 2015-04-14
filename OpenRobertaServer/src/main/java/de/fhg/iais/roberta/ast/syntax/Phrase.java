@@ -74,6 +74,7 @@ import de.fhg.iais.roberta.ast.typecheck.NepoInfo;
 import de.fhg.iais.roberta.ast.typecheck.NepoInfos;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.hardwarecomponents.Category;
 
 /**
@@ -94,7 +95,7 @@ abstract public class Phrase<V> {
 
     private boolean readOnly = false;
 
-    private final BlocklyBlockProperties id;
+    private final BlocklyBlockProperties property;
     private final BlocklyComment comment;
     private final Kind kind;
 
@@ -107,9 +108,10 @@ abstract public class Phrase<V> {
      * @param disabled,
      * @param comment that the user added to the block
      */
-    public Phrase(Kind kind, BlocklyBlockProperties id, BlocklyComment comment) {
+    public Phrase(Kind kind, BlocklyBlockProperties property, BlocklyComment comment) {
+        Assert.isTrue(property != null, "block property is null!");
         this.kind = kind;
-        this.id = id;
+        this.property = property;
         this.comment = comment;
     }
 
@@ -142,7 +144,7 @@ abstract public class Phrase<V> {
     }
 
     public BlocklyBlockProperties getProperty() {
-        return this.id;
+        return this.property;
     }
 
     /**

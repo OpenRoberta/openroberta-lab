@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.ast.stmt;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtFlowCon.Flow;
 import de.fhg.iais.roberta.dbc.DbcException;
@@ -11,13 +12,13 @@ public class StmtFlowContrTest {
 
     @Test
     public void make() throws Exception {
-        StmtFlowCon<Void> flowCon = StmtFlowCon.make(Flow.BREAK, null, null);
+        StmtFlowCon<Void> flowCon = StmtFlowCon.make(Flow.BREAK, BlocklyBlockProperties.make("1", "1", false, false, false, false, false), null);
         Assert.assertEquals("\nStmtFlowCon [BREAK]", flowCon.toString());
     }
 
     @Test
     public void getFlow() throws Exception {
-        StmtFlowCon<Void> flowCon = StmtFlowCon.make(Flow.BREAK, null, null);
+        StmtFlowCon<Void> flowCon = StmtFlowCon.make(Flow.BREAK, BlocklyBlockProperties.make("1", "1", false, false, false, false, false), null);
         Assert.assertEquals(Flow.BREAK, flowCon.getFlow());
     }
 

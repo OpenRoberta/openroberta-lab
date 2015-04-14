@@ -13,7 +13,7 @@ public class ActionStmt<V> extends Stmt<V> {
     private final Action<V> action;
 
     private ActionStmt(Action<V> action) {
-        super(Phrase.Kind.AKTION_STMT, null, null);
+        super(Phrase.Kind.AKTION_STMT, action.getProperty(), action.getComment());
         Assert.isTrue(action.isReadOnly());
         this.action = action;
         setReadOnly();

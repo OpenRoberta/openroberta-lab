@@ -231,7 +231,8 @@ abstract public class JaxbAstTransformer<V> {
     public ExprList<V> argumentsToExprList(List<Arg> arguments) {
         ExprList<V> parameters = ExprList.make();
         for ( Arg arg : arguments ) {
-            Var<V> parametar = Var.make(BlocklyType.get(arg.getType()), arg.getName(), null, null);
+            Var<V> parametar =
+                Var.make(BlocklyType.get(arg.getType()), arg.getName(), BlocklyBlockProperties.make("1", "1", false, false, false, false, false), null);
             parameters.addExpr(parametar);
         }
         parameters.setReadOnly();

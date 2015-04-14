@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -18,7 +19,7 @@ public class ExprList<V> extends Expr<V> {
     private final List<Expr<V>> el = new ArrayList<Expr<V>>();
 
     private ExprList() {
-        super(Phrase.Kind.EXPR_LIST, null, null);
+        super(Phrase.Kind.EXPR_LIST, BlocklyBlockProperties.make("1", "1", false, false, false, false, false), null);
     }
 
     /**

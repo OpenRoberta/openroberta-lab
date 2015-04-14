@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -17,7 +18,7 @@ public class StmtList<V> extends Stmt<V> {
     private final List<Stmt<V>> sl = new ArrayList<Stmt<V>>();
 
     private StmtList() {
-        super(Phrase.Kind.STMT_LIST, null, null);
+        super(Phrase.Kind.STMT_LIST, BlocklyBlockProperties.make("1", "1", false, false, false, false, false), null);
     }
 
     /**
