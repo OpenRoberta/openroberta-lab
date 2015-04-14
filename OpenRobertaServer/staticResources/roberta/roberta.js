@@ -103,7 +103,7 @@ function updateFirmware() {
         if (result.rc === "ok") {
             setRobotState(result);
         }
-        displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, userState.robotFirmware);
+        displayInformation(result, "", result.message, userState.robotFirmware);
     });
 }
 
@@ -797,8 +797,6 @@ function initHeadNavigation() {
         } else if (domId === 'menuPropertiesConfig') { //  Submenu 'Configuration'
         } else if (domId === 'menuConnect') { // Submenu 'Robot'
             $("#set-token").modal("show");
-        } else if (domId === 'menuFirmware') { // Submenu 'Robot'
-            updateFirmware();
         } else if (domId === 'menuRobotInfo') { // Submenu 'Robot'
             showRobotInfo();
         } else if (domId === 'menuGeneral') { // Submenu 'Help'
