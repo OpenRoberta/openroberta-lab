@@ -137,7 +137,7 @@ public class GetSubFunct<V> extends Function<V> {
         if ( getFunctName() == FunctionNames.GET_SUBLIST ) {
             AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.LIST_, getParam().get(0));
         } else {
-            AstJaxbTransformerHelper.addValue(jaxbDestination, "STRING", getParam().get(0));
+            AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.STRING, getParam().get(0));
         }
         if ( IndexLocation.get(getStrParam().get(0)) == IndexLocation.FROM_START || IndexLocation.get(getStrParam().get(0)) == IndexLocation.FROM_END ) {
             mutation.setAt1(true);

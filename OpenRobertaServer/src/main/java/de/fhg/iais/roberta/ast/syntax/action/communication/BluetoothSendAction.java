@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Value;
+import de.fhg.iais.roberta.dbc.Assert;
 
 public class BluetoothSendAction<V> extends Action<V> {
 
@@ -23,6 +24,7 @@ public class BluetoothSendAction<V> extends Action<V> {
 
     private BluetoothSendAction(Expr<V> connection, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.BLUETOOTH_SEND_ACTION, properties, comment);
+        Assert.isTrue(connection.isReadOnly() && connection != null && msg.isReadOnly() && msg != null);
         this._connection = connection;
         this._msg = msg;
         setReadOnly();
@@ -37,6 +39,14 @@ public class BluetoothSendAction<V> extends Action<V> {
      */
     public static <V> BluetoothSendAction<V> make(Expr<V> connection, Expr<V> msg, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new BluetoothSendAction<V>(connection, msg, properties, comment);
+    }
+
+    public Expr<V> get_connection() {
+        return this._connection;
+    }
+
+    public Expr<V> get_msg() {
+        return this._msg;
     }
 
     @Override
@@ -78,11 +88,4 @@ public class BluetoothSendAction<V> extends Action<V> {
         return jaxbDestination;
     }
 
-    public Expr<V> get_connection() {
-        return this._connection;
-    }
-
-    public Expr<V> get_msg() {
-        return this._msg;
-    }
 }

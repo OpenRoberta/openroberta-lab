@@ -167,7 +167,7 @@ public class Unary<V> extends Expr<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        if ( getProperty().getBlockType().equals("math_single") ) {
+        if ( getProperty().getBlockType().equals(BlocklyConstants.MATH_SINGLE) ) {
             AstJaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.OP_, getOp().name());
             AstJaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.NUM, getExpr());
         } else {

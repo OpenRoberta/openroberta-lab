@@ -245,7 +245,7 @@ public final class Binary<V> extends Expr<V> {
             case BlocklyConstants.MATH_MODULO:
                 return helper.blockToBinaryExpr(
                     block,
-                    new ExprParam("DIVIDEND", Integer.class),
+                    new ExprParam(BlocklyConstants.DIVIDEND, Integer.class),
                     new ExprParam(BlocklyConstants.DIVISOR, Integer.class),
                     BlocklyConstants.MOD);
 

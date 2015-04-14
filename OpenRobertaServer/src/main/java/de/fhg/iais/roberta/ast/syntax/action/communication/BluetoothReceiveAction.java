@@ -14,18 +14,24 @@ import de.fhg.iais.roberta.ast.transformer.JaxbAstTransformer;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Value;
+import de.fhg.iais.roberta.dbc.Assert;
 
 public class BluetoothReceiveAction<V> extends Action<V> {
     private final Expr<V> connection;
 
     private BluetoothReceiveAction(Expr<V> bluetoothRecieveConnection, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(Phrase.Kind.BLUETOOTH_RECEIVED_ACTION, properties, comment);
+        Assert.isTrue(bluetoothRecieveConnection.isReadOnly() && bluetoothRecieveConnection != null);
         this.connection = bluetoothRecieveConnection;
         setReadOnly();
     }
 
     public static <V> BluetoothReceiveAction<V> make(Expr<V> bluetoothRecieveConnection, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new BluetoothReceiveAction<V>(bluetoothRecieveConnection, properties, comment);
+    }
+
+    public Expr<V> getConnection() {
+        return this.connection;
     }
 
     @Override
@@ -62,7 +68,4 @@ public class BluetoothReceiveAction<V> extends Action<V> {
         return "ReceiveData[]";
     }
 
-    public Expr<V> getConnection() {
-        return this.connection;
-    }
 }

@@ -23,7 +23,7 @@ public class BlocklyBlockProperties {
 
     private BlocklyBlockProperties(String blockType, String blocklyId, boolean disabled, boolean collapsed, Boolean inline, Boolean deletable, Boolean movable) {
         super();
-        Assert.isTrue(blocklyId != "" && blockType != "");
+        Assert.isTrue(!blocklyId.equals("") && !blockType.equals(""));
         this.blockType = blockType;
         this.blocklyId = blocklyId;
         this.disabled = disabled;

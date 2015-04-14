@@ -39,28 +39,28 @@ public class GetSampleSensor<V> extends Sensor<V> {
         this.sensorPort = port;
         this.sensorType = sensorType;
         switch ( sensorType.getSensorType() ) {
-            case "TOUCH":
+            case BlocklyConstants.TOUCH:
                 this.sensor = TouchSensor.make(SensorPort.get(port), properties, comment);
                 break;
-            case "ULTRASONIC":
+            case BlocklyConstants.ULTRASONIC:
                 this.sensor = UltrasonicSensor.make(UltrasonicSensorMode.get(sensorType.getSensorMode()), SensorPort.get(port), properties, comment);
                 break;
-            case "COLOUR":
+            case BlocklyConstants.COLOUR:
                 this.sensor = ColorSensor.make(ColorSensorMode.get(sensorType.getSensorMode()), SensorPort.get(port), properties, comment);
                 break;
-            case "INFRARED":
+            case BlocklyConstants.INFRARED:
                 this.sensor = InfraredSensor.make(InfraredSensorMode.get(sensorType.getSensorMode()), SensorPort.get(port), properties, comment);
                 break;
-            case "ENCODER":
+            case BlocklyConstants.ENCODER:
                 this.sensor = EncoderSensor.make(MotorTachoMode.get(sensorType.getSensorMode()), ActorPort.get(port), properties, comment);
                 break;
-            case "KEYS_PRESSED":
+            case BlocklyConstants.KEY_PRESSED:
                 this.sensor = BrickSensor.make(Mode.IS_PRESSED, BrickKey.get(port), properties, comment);
                 break;
-            case "GYRO":
+            case BlocklyConstants.GYRO:
                 this.sensor = GyroSensor.make(GyroSensorMode.get(sensorType.getSensorMode()), SensorPort.get(port), properties, comment);
                 break;
-            case "TIME":
+            case BlocklyConstants.TIME:
                 this.sensor = TimerSensor.make(TimerSensorMode.GET_SAMPLE, Integer.valueOf(port), properties, comment);
                 break;
             default:
