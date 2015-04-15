@@ -87,6 +87,7 @@ public class BrickCommunicationData {
             this.state = State.WAIT_FOR_PUSH_CMD_FROM_BRICK;
             this.timerStartedByLastRequest = Clock.start();
             this.timerStartedByTokenApproval = Clock.start();
+            notifyAll();
         } else {
             LOG.info("user approval lost. Nobody is waiting. The approval request was scheduled "
                 + this.timerStartedByLastRequest.elapsedSecFormatted()
