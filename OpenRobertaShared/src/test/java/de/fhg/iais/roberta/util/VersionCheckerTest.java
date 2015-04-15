@@ -29,5 +29,4 @@ public class VersionCheckerTest {
         assertTrue(c.versionValid("1.1.0"));
         assertTrue(!c.versionValid("1.1.1-RELEASE"));
     }
-
 }

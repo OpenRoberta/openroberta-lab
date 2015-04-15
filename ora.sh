@@ -20,7 +20,8 @@ function _helpFn {
   echo 'setting properties';
   echo '';
   echo '  --ev3ipaddr {IP-ADDR}              set the ip addr of the EV3 brick for further commands';
-  echo '  --version {VERSION}                set the version to something like d.d.d where d is one or more digits, e.g. 1.10.1'
+  echo '  --version {VERSION}                set the version to something like d.d.d where d is one or more digits, e.g. 1.2.0'
+  echo '                                     only used when an installation is exported. Use with care.'
   echo '  --serveripport {IP:PORT}           set a default ip address plus port on which the server is running.'
   echo '                                     the brick will ask you to connect to this address.'
   echo '                                     useful if you do not want to type the IP on the brick. This saves a lot of time! :-)'
@@ -61,7 +62,6 @@ function _helpFn {
 }
 
 function _startFn {
-  propfile="$1"
   main='de.fhg.iais.roberta.main.ServerStarter'
   run='java -cp "target/resources/*" '"${main} ${propfile}"
   echo "executing: $run"
@@ -146,29 +146,14 @@ function _exportApplication {
 # -------------- begin of here documents --------------------------------------------------
   cat >"${exportpath}/openRoberta.properties" <<.eof
 server.jetty.port = 1999
-
-# the following properties are retrieved from the parent pom.xml. They are used to guarantee that
-# - the versions of the jars in the server
-# - the versions of the jars on the robot
-# - the version of the user program jar (generated on the server and transmitted to the robot) and the version of the jars on the robot match
-# Note, that in every jar there is a top-level property file that contains the version at the time of compiling the classes contained in the jar
 version = ${oraversion}
 validversionrange.From = ${oraversion}
 validversionrange.To = ${oraversion}
-
-# directory to store (temporarily) the generated user programs
 crosscompiler.basedir = userProjects/
-# the ant script that uses the cross compiler and jar building tools to build the jar containing the user program
 crosscompiler.build.xml = crosscompiler-ev3-build.xml
-
-# the URL of the database
 hibernate.connection.url = jdbc:hsqldb:file:db/openroberta-db
-
-# the server needs a directory in which jars it is dependant from are stored # only for documentation. Not used.
 robot.updateResources.dir = resources
-# the brick update rest service needs a directory in which jars/resources for updating are stored
 robot.updateResources.dir = updateResources
-# the cross compiler need a directory in which all jars/resources for compilation are stored
 robot.crossCompilerResources.dir = crossCompilerResources
 .eof
   cat >"${exportpath}/start.sh" <<.eof
@@ -290,11 +275,11 @@ case "$cmd" in
                     _createemptydb "$dbpath" ;;
 --export|-e)        exportpath="$1"
                     _exportApplication "$exportpath" ;;
---start|-s)         cmd="$1"
-                    if [[ "$cmd" != '' ]]; then
-                       propfile="file:$cmd"
+--start|-s)         propfile="$1"
+                    if [[ "$propfile" != '' ]]; then
+                       propfile="file:$propfile" # make a file resource from the path
                     fi
-                    _startFn "$propfile" ;;
+                    _startFn ;;
 --alive)            if [[ "$1" == '-q' ]]; then
                        quiet='true'
                        shift

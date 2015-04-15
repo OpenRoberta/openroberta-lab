@@ -21,12 +21,23 @@ public class VersionChecker {
         this.versionTo = versionTo.split(DOT_REGEX);
     }
 
-    public boolean validateServerSide() {
-        return check("OpenRobertaRuntime", "OpenRobertaServer", "OpenRobertaShared");
+    @SuppressFBWarnings(value = "REC_CATCH_EXCEPTION", justification = "here any exception should generate a return value of FALSE")
+    public static String retrieveVersionOfOpenRobertaServer() {
+        try {
+            Properties properties = new Properties();
+            InputStream resourceAsStream = VersionChecker.class.getClassLoader().getResourceAsStream("OpenRobertaServer.properties");
+            properties.load(resourceAsStream);
+            String version = properties.getProperty("version", "?");
+            version = optionalRemoveSuffix(version);
+            return version;
+        } catch ( Exception e ) {
+            LOG.error("properties from OpenRobertaServer.properties could not be loaded. Version load fails");
+            return "?";
+        }
     }
 
-    public boolean validateRobotSide() {
-        return check("EV3Menu", "OpenRobertaRuntime", "OpenRobertaShared");
+    public boolean validateServerSide() {
+        return check("OpenRobertaRuntime", "OpenRobertaServer", "OpenRobertaShared");
     }
 
     @SuppressFBWarnings(value = "REC_CATCH_EXCEPTION", justification = "here any exception should generate a return value of FALSE")
@@ -86,7 +97,7 @@ public class VersionChecker {
         return true;
     }
 
-    private String optionalRemoveSuffix(String s) {
+    private static String optionalRemoveSuffix(String s) {
         if ( s.endsWith("-SNAPSHOT") ) {
             s = s.substring(0, s.length() - 9);
         }

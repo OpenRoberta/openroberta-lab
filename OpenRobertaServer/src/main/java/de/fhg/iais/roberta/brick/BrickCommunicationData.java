@@ -8,8 +8,9 @@ import de.fhg.iais.roberta.util.Clock;
 /**
  * This class is responsible for the synchronisation between the one browser client and one brick. The synchronisation is based on a agreed upon token.
  * This token is stored redundantly in objects of this class.<br>
- * As no push technology to the brick is available, the brick issues a download request command, the thread acting upon this request is frozen and waits
- * until the user has issued a run command in the browser. This unfreezes the thread and the already generated jar is copied to the brick.<br>
+ * As no push technology to the robot is available, the robot issues a push request command, the thread acting upon this request is frozen and waits
+ * until the user has issued a command in the browser (in most cases a run) or a timer expires . This unfreezes the thread and the responses tells the
+ * robot what to do. E.g. if a run command has been issued, the already generated jar is requested to be downloaded to the robot.<br>
  * <br>
  * TODO: This implementation is resource intensive as it freezes an expensive resource, namely a thread. It should be replaced later by async technology.
  *
@@ -26,7 +27,8 @@ public class BrickCommunicationData {
     private final String menuversion;
     private final String lejosversion;
 
-    private Clock clock;
+    private Clock timerStartedByLastRequest;
+    private Clock timerStartedByTokenApproval;
     private State state;
 
     private String battery;
@@ -42,7 +44,7 @@ public class BrickCommunicationData {
         this.menuversion = menuversion;
         this.lejosversion = lejosversion;
 
-        this.clock = Clock.start();
+        this.timerStartedByLastRequest = Clock.start();
         this.state = State.WAIT_FOR_TOKENAPPROVAL_FROM_USER;
     }
 
@@ -54,21 +56,23 @@ public class BrickCommunicationData {
     public synchronized boolean brickTokenAgreementRequest() {
         LOG.info("BRICK " + this.robotName + " [" + this.robotIdentificator + "] starts waiting for the client to approve a token");
         this.state = State.WAIT_FOR_TOKENAPPROVAL_FROM_USER;
-        this.clock = Clock.start();
-        while ( this.clock.elapsedMsec() < TIMEOUT_UNTIL_TOKEN_EXPIRES_WHEN_USER_DOESNT_APPROVE && this.state == State.WAIT_FOR_TOKENAPPROVAL_FROM_USER ) {
+        this.timerStartedByLastRequest = Clock.start();
+        while ( this.timerStartedByLastRequest.elapsedMsec() < TIMEOUT_UNTIL_TOKEN_EXPIRES_WHEN_USER_DOESNT_APPROVE
+            && this.state == State.WAIT_FOR_TOKENAPPROVAL_FROM_USER ) //
+        {
             try {
                 wait(TIMEOUT_UNTIL_TOKEN_EXPIRES_WHEN_USER_DOESNT_APPROVE);
             } catch ( InterruptedException e ) {
                 // try again
             }
         }
-        boolean success = this.state == State.TOKEN_APPROVED;
+        boolean success = this.state != State.WAIT_FOR_TOKENAPPROVAL_FROM_USER;
         if ( success ) {
             this.state = State.WAIT_FOR_PUSH_CMD_FROM_BRICK;
-            LOG.info("Robot request for token approval terminated SUCCESSFULLY. Time elapsed: " + this.clock.elapsedMsec());
+            LOG.info("Robot request for token approval terminated SUCCESSFULLY. Time elapsed: " + this.timerStartedByLastRequest.elapsedMsec());
         } else {
             this.state = State.GARBAGE;
-            LOG.info("Robot request for token approval FAILED. Time elapsed: " + this.clock.elapsedMsec());
+            LOG.info("Robot request for token approval FAILED. Time elapsed: " + this.timerStartedByLastRequest.elapsedMsec());
         }
         return success;
     }
@@ -79,12 +83,14 @@ public class BrickCommunicationData {
      */
     public synchronized void userApprovedTheBrickToken() {
         if ( this.state == State.WAIT_FOR_TOKENAPPROVAL_FROM_USER ) {
-            LOG.info("user approved the token. The approval request was scheduled " + this.clock.elapsedSecFormatted() + " ago");
-            this.state = State.TOKEN_APPROVED;
-            this.clock = Clock.start();
-            notifyAll();
+            LOG.info("user approved the token. The approval request was scheduled " + this.timerStartedByLastRequest.elapsedSecFormatted() + " ago");
+            this.state = State.WAIT_FOR_PUSH_CMD_FROM_BRICK;
+            this.timerStartedByLastRequest = Clock.start();
+            this.timerStartedByTokenApproval = Clock.start();
         } else {
-            LOG.info("user approval lost. Nobody is waiting. The approval request was scheduled " + this.clock.elapsedSecFormatted() + " ago");
+            LOG.info("user approval lost. Nobody is waiting. The approval request was scheduled "
+                + this.timerStartedByLastRequest.elapsedSecFormatted()
+                + " ago");
         }
     }
 
@@ -95,20 +101,27 @@ public class BrickCommunicationData {
      * @return true, if user approved the token; false otherwise
      */
     public synchronized void brickHasSentAPushRequest() {
-        if ( this.state != State.WAIT_FOR_PUSH_CMD_FROM_BRICK && this.state != State.BRICK_IS_BUSY ) {
-            LOG.error("Brick has sent a push request not awaited for. Programming error: Logic or Time race? The request is ACCEPTED. State is "
-                + this.state
-                + ". The state setting request was scheduled "
-                + this.clock.elapsedSecFormatted()
+        if ( this.state == State.WAIT_FOR_TOKENAPPROVAL_FROM_USER ) {
+            LOG.error("Brick has sent a push request, but the server waits for a token approval by an user. The request ist ignored. "
+                + "Waiting started "
+                + this.timerStartedByLastRequest.elapsedSecFormatted()
                 + " ago. ");
-        }
-        this.state = State.BRICK_WAITING_FOR_PUSH_FROM_SERVER;
-        this.clock = Clock.start();
-        while ( this.state == State.BRICK_WAITING_FOR_PUSH_FROM_SERVER ) {
-            try {
-                wait();
-            } catch ( InterruptedException e ) {
-                // try again
+        } else {
+            if ( this.state != State.WAIT_FOR_PUSH_CMD_FROM_BRICK && this.state != State.BRICK_IS_BUSY ) {
+                LOG.error("Brick has sent a push request not awaited for. Programming error: Logic or Time race? The request is ACCEPTED. State is "
+                    + this.state
+                    + ". The state setting request was scheduled "
+                    + this.timerStartedByLastRequest.elapsedSecFormatted()
+                    + " ago. ");
+            }
+            this.state = State.BRICK_WAITING_FOR_PUSH_FROM_SERVER;
+            this.timerStartedByLastRequest = Clock.start();
+            while ( this.state == State.BRICK_WAITING_FOR_PUSH_FROM_SERVER ) {
+                try {
+                    wait();
+                } catch ( InterruptedException e ) {
+                    // try again
+                }
             }
         }
         LOG.debug("BRICK push request terminated.");
@@ -132,7 +145,7 @@ public class BrickCommunicationData {
         if ( this.state == State.BRICK_WAITING_FOR_PUSH_FROM_SERVER ) {
             this.state = State.WAIT_FOR_PUSH_CMD_FROM_BRICK;
             this.command = "repeat";
-            this.clock = Clock.start();
+            this.timerStartedByLastRequest = Clock.start();
             notifyAll();
         }
     }
@@ -148,10 +161,12 @@ public class BrickCommunicationData {
             LOG.error("RUN button pressed, but robot is not waiting for that event. Bad luck!");
             return false;
         } else {
-            LOG.info("RUN button pressed and robot is waiting for that event. Wait state entered " + this.clock.elapsedSecFormatted() + " ago");
+            LOG.info("RUN button pressed and robot is waiting for that event. Wait state entered "
+                + this.timerStartedByLastRequest.elapsedSecFormatted()
+                + " ago");
             this.command = "download";
             this.programName = programName;
-            this.clock = Clock.start();
+            this.timerStartedByLastRequest = Clock.start();
             this.state = State.BRICK_IS_BUSY;
             notifyAll();
             return true;
@@ -169,9 +184,9 @@ public class BrickCommunicationData {
             LOG.error("UPDATE button pressed, but brick is not waiting. Bad luck!");
             return false;
         } else {
-            LOG.debug("UPDATE button pressed. Wait state entered " + this.clock.elapsedSecFormatted() + " ago");
+            LOG.debug("UPDATE button pressed. Wait state entered " + this.timerStartedByLastRequest.elapsedSecFormatted() + " ago");
             this.command = "update";
-            this.clock = Clock.start();
+            this.timerStartedByLastRequest = Clock.start();
             this.state = State.BRICK_IS_BUSY;
             notifyAll();
             return true;
@@ -218,7 +233,15 @@ public class BrickCommunicationData {
     }
 
     public long getElapsedMsecOfStartOfLastRequest() {
-        return this.clock.elapsedMsec();
+        return this.timerStartedByLastRequest.elapsedMsec();
+    }
+
+    public long getRobotConnectionTime() {
+        return this.timerStartedByTokenApproval.elapsedMsec();
+    }
+
+    public String getMenuVersion() {
+        return this.menuversion;
     }
 
     public State getState() {
@@ -229,6 +252,6 @@ public class BrickCommunicationData {
      * the states of communication between the brick and the browser client.
      */
     public enum State {
-        WAIT_FOR_TOKENAPPROVAL_FROM_USER, TOKEN_APPROVED, WAIT_FOR_PUSH_CMD_FROM_BRICK, BRICK_WAITING_FOR_PUSH_FROM_SERVER, BRICK_IS_BUSY, GARBAGE;
+        WAIT_FOR_TOKENAPPROVAL_FROM_USER, WAIT_FOR_PUSH_CMD_FROM_BRICK, BRICK_WAITING_FOR_PUSH_FROM_SERVER, BRICK_IS_BUSY, GARBAGE;
     }
 }

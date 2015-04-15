@@ -34,6 +34,8 @@ public class Util {
 
     private static final AtomicInteger errorTicketNumber = new AtomicInteger(0);
 
+    private static final String openRobertaVersion = VersionChecker.retrieveVersionOfOpenRobertaServer();
+
     private Util() {
         // no objects
     }
@@ -156,15 +158,16 @@ public class Util {
                 if ( token != null ) {
                     BrickCommunicationData state = brickCommunicator.getState(token);
                     if ( state != null ) {
-                        long elapsedMsecOfStartOfLastRequest = state.getElapsedMsecOfStartOfLastRequest();
-                        response.put("robot.wait", elapsedMsecOfStartOfLastRequest);
+                        response.put("robot.wait", state.getRobotConnectionTime());
                         response.put("robot.battery", state.getBattery());
                         response.put("robot.name", state.getRobotName());
+                        response.put("robot.version", state.getMenuVersion());
+                        response.put("server.version", openRobertaVersion);
                         State communicationState = state.getState();
                         String infoAboutState;
                         if ( communicationState == State.BRICK_IS_BUSY ) {
                             infoAboutState = "busy";
-                        } else if ( communicationState == State.WAIT_FOR_PUSH_CMD_FROM_BRICK && elapsedMsecOfStartOfLastRequest > 5000 ) {
+                        } else if ( communicationState == State.WAIT_FOR_PUSH_CMD_FROM_BRICK && state.getElapsedMsecOfStartOfLastRequest() > 5000 ) {
                             infoAboutState = "disconnected";
                         } else if ( communicationState == State.BRICK_WAITING_FOR_PUSH_FROM_SERVER ) {
                             infoAboutState = "wait";
