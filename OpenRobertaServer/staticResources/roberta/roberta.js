@@ -96,14 +96,15 @@ function deleteUserOnServer() {
 }
 
 /**
- * Update Firmware
+ * Update robot firmware
  */
 function updateFirmware() {
     ROBOT.updateFirmware(function(result) {
         if (result.rc === "ok") {
-            setRobotState(result);
+            displayMessage("MESSAGE_RESTART_ROBOT", "POPUP", "");
+        } else {
+            displayInformation(result, "", result.message, userState.robotFirmware);
         }
-        displayInformation(result, "", result.message, userState.robotFirmware);
     });
 }
 
@@ -231,8 +232,12 @@ function setToken(token) {
         if (result.rc === "ok") {
             userState.token = resToken;
             setRobotState(result);
+            displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, userState.robotName);
+        } else if (result.message === 'firmwareConflict ????????????????????') {
+            $("#confirmUpdateFirmware").modal('show');
+        } else {
+            displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, userState.robotName);
         }
-        displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, userState.robotName);
     });
 }
 
@@ -351,7 +356,11 @@ function runOnBrick() {
         var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
         var xmlTextConfiguration = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
         displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
-        PROGRAM.runOnBrick( userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, response);
+        PROGRAM.runOnBrick(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
+            if (result.rc != "ok" && result.message === 'firmwareConflict ????????????????????') {
+                $("#confirmUpdateFirmware").modal('show');
+            }
+        });
     }
 }
 
@@ -1003,7 +1012,11 @@ function initPopups() {
         $('#register-user input').val('');
         $('#login-user input').val('');
     });
-
+    
+    $('#doUpdateFirmware').onWrap('click', function() {
+        updateFirmware();
+    }, 'update firmware of robot');
+        
     // Handle key events in popups
     $(".modal").keyup(function(event) {
         // fix for not working backspace button in password fields
