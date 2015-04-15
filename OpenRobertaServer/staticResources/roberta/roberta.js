@@ -24,7 +24,6 @@ function initUserState() {
     userState.robotState = '';
     userState.robotBattery = '';
     userState.robotWait = '';
-    userState.robotFirmware = '';
 }
 
 /**
@@ -232,9 +231,11 @@ function setToken(token) {
         if (result.rc === "ok") {
             userState.token = resToken;
             setRobotState(result);
-            displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, userState.robotName);
-        } else if (result.message === 'firmwareConflict ????????????????????') {
-            $("#confirmUpdateFirmware").modal('show');
+            if (result['robot.version'] != result['server.version']) {
+                $("#confirmUpdateFirmware").modal('show');
+            } else {
+                displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, userState.robotName);
+            }
         } else {
             displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, userState.robotName);
         }
@@ -357,8 +358,12 @@ function runOnBrick() {
         var xmlTextConfiguration = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
         displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
         PROGRAM.runOnBrick(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
-            if (result.rc != "ok" && result.message === 'firmwareConflict ????????????????????') {
-                $("#confirmUpdateFirmware").modal('show');
+            if (result.rc === "ok") {
+                if (result['robot.version'] != result['server.version']) {
+                    $("#confirmUpdateFirmware").modal('show');
+                }
+            } else {
+                displayInformation(result, "", result.message, "");
             }
         });
     }
@@ -1014,6 +1019,7 @@ function initPopups() {
     });
     
     $('#doUpdateFirmware').onWrap('click', function() {
+        $('#confirmUpdateFirmware').modal('hide');
         updateFirmware();
     }, 'update firmware of robot');
         
