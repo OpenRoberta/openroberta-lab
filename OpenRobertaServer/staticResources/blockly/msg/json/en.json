@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-04-15 09:22:21.372000",
+		"lastupdated": "2015-04-15 11:31:39.554000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -598,6 +598,7 @@
 	"LOOP": "repeat until",
 	"LOOP_FOREVER": "repeat indefinitely",
 	"TOOLBOX_ACTION": "Action",
+	"TOOLBOX_COMMUNICATION": "Communication",
 	"TOOLBOX_SENSOR": "Sensors",
 	"TOOLBOX_CONTROL": "Control",
 	"TOOLBOX_LOGIC": "Logic",
@@ -777,5 +778,11 @@
 	"DATATABLE_TO": "to",
 	"DATATABLE_OF": "of",
 	"DATATABLE_ENTRIES": "entries",
-	"DATATABLE_EMPTY_TABLE": "There are no entries in this table"
+	"DATATABLE_EMPTY_TABLE": "There are no entries in this table",
+	"SEND_DATA": "data to send:",
+	"USED_CONNECTION": "via connection:",
+	"RECIVED_DATA": "data recived",
+	"CONNECT": "connect via bluetooth with following address:",
+	"VARIABLES_TYPE_CONNECTION": "Connection",
+	"WAIT_FOR_CONNECTION": "wait for connection"
 }

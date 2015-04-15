@@ -5,7 +5,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.robBrick');
+goog.provide('Blockly.Blocks.robCommunication');
 
 goog.require('Blockly.Blocks');
 
@@ -13,7 +13,7 @@ goog.require('Blockly.Blocks');
  * @lends Block
  */
 
-Blockly.Blocks['com_startConnection'] = {
+Blockly.Blocks['robCommunication_startConnection'] = {
     /**
      * EV3 brick.
      * 
@@ -25,8 +25,7 @@ Blockly.Blocks['com_startConnection'] = {
      * @memberof Block
      */
 
-    init : function() {
-        this.setHelpUrl(Blockly.Msg.EV3BRICK_HELPURL);
+    init : function() { 
         this.setColourRGB(Blockly.CAT_COMMUNICATION_RGB);
         this.setPreviousStatement(false);
         this.setNextStatement(false);
@@ -39,7 +38,7 @@ Blockly.Blocks['com_startConnection'] = {
     }
 };
 
-Blockly.Blocks['com_sendBlock'] = {
+Blockly.Blocks['robCommunication_sendBlock'] = {
 	    /**
 	     * EV3 brick.
 	     * 
@@ -64,7 +63,7 @@ Blockly.Blocks['com_sendBlock'] = {
 	};
 
 
-Blockly.Blocks['com_receiveBlock'] = {
+Blockly.Blocks['robCommunication_receiveBlock'] = {
 	    /**
 	     * EV3 brick.
 	     * 
@@ -87,7 +86,7 @@ Blockly.Blocks['com_receiveBlock'] = {
 	    }
 	};
 
-Blockly.Blocks['com_waitForConnection'] = {
+Blockly.Blocks['robCommunication_waitForConnection'] = {
 	    /**
 	     * EV3 brick.
 	     * 

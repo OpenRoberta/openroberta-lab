@@ -12,7 +12,7 @@ public class ActionTest {
 
     @Test
     public void clearDisplay() throws Exception {
-        String a = "BlockAST [project=[[Location [x=-76, y=212], ClearDisplayAction []]]]";
+        String a = "BlockAST [project=[[Location [x=-69, y=10], MainTask [], ClearDisplayAction []]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_ClearDisplay.xml"));
     }

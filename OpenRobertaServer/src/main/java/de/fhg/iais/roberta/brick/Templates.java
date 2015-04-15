@@ -192,10 +192,10 @@ public class Templates {
             + "  </category> "
             + "  <category name='TOOLBOX_VARIABLE' custom='VARIABLE'/> "
             + "  <category name='TOOLBOX_COMMUNICATION'> "
-            + "     <block type='com_startConnection'></block>"
-            + "     <block type='com_sendBlock'></block>"
-            + "     <block type='com_receiveBlock'></block>"
-            + "     <block type='com_waitForConnection'></block>"
+            + "     <block type='robCommunication_startConnection'></block>"
+            + "     <block type='robCommunication_sendBlock'></block>"
+            + "     <block type='robCommunication_receiveBlock'></block>"
+            + "     <block type='robCommunication_waitForConnection'></block>"
             + " </category>"
             + "</toolbox_set> ";
         String expert =
@@ -539,10 +539,10 @@ public class Templates {
                 + "  <category name='TOOLBOX_VARIABLE' custom='VARIABLE'/> "
                 + "  <category name='TOOLBOX_PROCEDURE' custom='PROCEDURE'/> "
                 + "  <category name='TOOLBOX_COMMUNICATION'> "
-                + "     <block type='com_startConnection'></block>"
-                + "     <block type='com_sendBlock'></block>"
-                + "     <block type='com_receiveBlock'></block>"
-                + "     <block type='com_waitForConnection'></block>"
+                + "     <block type='robCommunication_startConnection'></block>"
+                + "     <block type='robCommunication_sendBlock'></block>"
+                + "     <block type='robCommunication_receiveBlock'></block>"
+                + "     <block type='robCommunication_waitForConnection'></block>"
                 + " </category>"
                 + "</toolbox_set> ";
         String brickEV3 =
@@ -559,13 +559,13 @@ public class Templates {
                 + "  </block>" //
                 + "  <block type='robBrick_actor'></block>" //
                 + "</toolbox_set>";
-        templates.put("beginner", beginner);
-        templates.put("expert", expert);
-        templates.put("brickEV3", brickEV3);
+        this.templates.put("beginner", beginner);
+        this.templates.put("expert", expert);
+        this.templates.put("brickEV3", brickEV3);
         LOG.info("created");
     }
 
     public String get(String key) {
-        return templates.get(key);
+        return this.templates.get(key);
     }
 }
