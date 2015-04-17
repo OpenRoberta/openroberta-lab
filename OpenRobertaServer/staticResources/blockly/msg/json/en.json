@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-04-15 11:31:39.554000",
+		"lastupdated": "2015-04-17 10:51:31.839000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -711,7 +711,8 @@
 	"MESSAGE_USER_DELETED": "User deleted",
 	"MESSAGE_PROGRAM_DELETED": "Program '$' was deleted",
 	"MESSAGE_CONFIGURATION_DELETED": "Configuration '$' was deleted",
-	"MESSAGE_RESTART_ROBOT": "Please restart your robot now",
+	"MESSAGE_RESTART_ROBOT": "Your robot can only use the new firmware, if you restart its system. Just turn the robot off and on again and reconnect the robot afterwards to the Open Roberta Lab.",
+	"MESSAGE_FIRMWARE_ERROR": "There is a conflict with the firmware version of your robot and the Open Roberta Lab. Please contact us.",
 	"ORA_TOKEN_SET_SUCCESS": "Token set",
 	"ORA_TOKEN_SET_ERROR_NO_ROBOT_WAITING": "There is no active robot.",
 	"ORA_TOOLBOX_LOAD_SUCCESS": "Toolbox loaded",

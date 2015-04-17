@@ -306,6 +306,14 @@ var WRAP = {};
         var wrap = function(p0, p1, p2) {
             var markerTIMER = '[[TIME]] ';
             var start = new Date();
+            
+//            Example how to modify the response object
+//            if (p2 != undefined) {
+//                p2.responseJSON['rc'] = "ok";
+//                p2.responseJSON['robot.version'] = "1";
+//                p2.responseJSON['server.version'] = "2.2.2.3.2";
+//            }
+            
             try {
                 fnToBeWrapped(p0, p1, p2);
                 if (message !== undefined) {

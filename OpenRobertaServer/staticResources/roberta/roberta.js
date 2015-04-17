@@ -95,6 +95,27 @@ function deleteUserOnServer() {
 }
 
 /**
+ * Handle firmware conflict between server and robot
+ * 
+ * @param {vServer}
+ *            Firmware version of the server.
+ * @param {vRobot}
+ *            Firmware version of the robot.
+ */
+function firmwareConflict(vServer, vRobot) {
+    if (vServer > vRobot) {
+        LOG.info("The firmware version '" + vServer + "' on the server is newer than the firmware version '" + vRobot + "' on the robot");
+        $("#confirmUpdateFirmware").modal('show');
+        return true;
+    } else if (vServer < vRobot) {
+        LOG.info("The firmware version '" + vServer + "' on the server is older than the firmware version '" + vRobot + "' on the robot");
+        displayMessage("MESSAGE_FIRMWARE_ERROR", "POPUP", "");
+        return true;
+    }
+    return false;
+}
+
+/**
  * Update robot firmware
  */
 function updateFirmware() {
@@ -231,9 +252,7 @@ function setToken(token) {
         if (result.rc === "ok") {
             userState.token = resToken;
             setRobotState(result);
-            if (result['robot.version'] != result['server.version']) {
-                $("#confirmUpdateFirmware").modal('show');
-            } else {
+            if (!firmwareConflict (result['server.version'],result['robot.version'])) {
                 displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, userState.robotName);
             }
         } else {
@@ -359,9 +378,7 @@ function runOnBrick() {
         displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
         PROGRAM.runOnBrick(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
             if (result.rc === "ok") {
-                if (result['robot.version'] != result['server.version']) {
-                    $("#confirmUpdateFirmware").modal('show');
-                }
+                firmwareConflict (result['server.version'],result['robot.version']);
             } else {
                 displayInformation(result, "", result.message, "");
             }
@@ -1462,7 +1479,7 @@ function handleServerErrors() {
 /**
  * Set modification state.
  * 
- * @param {Boolean}
+ * @param {modified}
  *            modified or not.
  */
 function setWorkspaceModified(modified) {
