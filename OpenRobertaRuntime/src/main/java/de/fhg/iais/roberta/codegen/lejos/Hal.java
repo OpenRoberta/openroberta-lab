@@ -712,9 +712,14 @@ public class Hal {
     public float getUltraSonicSensorDistance(SensorPort sensorPort) {
         SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, UltrasonicSensorMode.DISTANCE.name());
         float[] sample = new float[sampleProvider.sampleSize()];
-        sampleProvider.fetchSample(sample, 0);
-
-        return Math.round(sample[0] * 100.0f); // ^= distance in cm
+        sampleProvider.fetchSample(sample, 0); // ^= distance in cm
+        float distance = Math.round(sample[0] * 100.0f);
+        if ( distance <= 3 ) {
+            return 0;
+        } else if ( distance > 255 ) {
+            return 255;
+        }
+        return distance;
     }
 
     // END Sensoren Ultraschallsensor ---
@@ -985,16 +990,16 @@ public class Hal {
      * @param host the host.
      */
     public NXTConnection establishConnectionTo(String host) {
-        bluetoothConnection = blueCom.establishConnectionTo(host, BLUETOOTH_TIMEOUT);
-        return bluetoothConnection;
+        this.bluetoothConnection = this.blueCom.establishConnectionTo(host, BLUETOOTH_TIMEOUT);
+        return this.bluetoothConnection;
     }
 
     /**
      * Awaits an incoming connection via {@link BluetoothCom#waitForConnection(int)} with a timeout of {@link #BLUETOOTH_TIMEOUT}.
      */
     public NXTConnection waitForConnection() {
-        bluetoothConnection = blueCom.waitForConnection(BLUETOOTH_TIMEOUT);
-        return bluetoothConnection;
+        this.bluetoothConnection = this.blueCom.waitForConnection(BLUETOOTH_TIMEOUT);
+        return this.bluetoothConnection;
     }
 
     /**
@@ -1004,8 +1009,8 @@ public class Hal {
      */
     public String readMessage() {
         String message = "NO MESSAGE";
-        if ( bluetoothConnection != null ) {
-            message = blueCom.readMessage(bluetoothConnection);
+        if ( this.bluetoothConnection != null ) {
+            message = this.blueCom.readMessage(this.bluetoothConnection);
         }
         return message;
     }
@@ -1016,8 +1021,8 @@ public class Hal {
      * @param message the message to be sent
      */
     public void sendMessage(String message) {
-        if ( bluetoothConnection != null ) {
-            blueCom.sendTo(bluetoothConnection, message);
+        if ( this.bluetoothConnection != null ) {
+            this.blueCom.sendTo(this.bluetoothConnection, message);
         }
     }
 

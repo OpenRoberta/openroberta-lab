@@ -188,10 +188,10 @@ public final class BlocklyConstants {
     public static final String ROB_PROCEDURES_CALL_RETURN = "robProcedures_callreturn";
     public static final String ROB_PROCEDURES_RETURN = "robProcedures_defreturn";
 
-    public static final String COM_START_CONNECTION = "com_startConnection";
-    public static final String COM_SEND_BLOCK = "com_sendBlock";
-    public static final String COM_WAIT_CONNECTION = "com_waitForConnection";
-    public static final String COM_RECEIVE_BLOCK = "com_receiveBlock";
+    public static final String COM_START_CONNECTION = "robCommunication_startConnection";
+    public static final String COM_SEND_BLOCK = "robCommunication_sendBlock";
+    public static final String COM_WAIT_CONNECTION = "robCommunication_waitForConnection";
+    public static final String COM_RECEIVE_BLOCK = "robCommunication_receiveBlock";
     public static final String STRING = "STRING";
     public static final String TOUCH = "TOUCH";
     public static final String ULTRASONIC = "ULTRASONIC";
