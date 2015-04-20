@@ -249,15 +249,12 @@ function setConfiguration(name) {
 function setToken(token) {
     var resToken = token.toUpperCase();
     ROBOT.setToken(resToken, function(result) {
-        if (!handleFirmwareConflict (result['server.version'],result['robot.version'])) {
-            displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, userState.robotName);
-        }
+        handleFirmwareConflict (result['server.version'],result['robot.version'])
         if (result.rc === "ok") {
             userState.token = resToken;
             setRobotState(result);
-        } else {
-            displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, userState.robotName);
         }
+        displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, userState.robotName);
     });
 }
 
