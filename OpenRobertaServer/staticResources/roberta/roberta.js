@@ -102,7 +102,7 @@ function deleteUserOnServer() {
  * @param {vRobot}
  *            Firmware version of the robot.
  */
-function firmwareConflict(vServer, vRobot) {
+function handleFirmwareConflict(vServer, vRobot) {
     if (vServer > vRobot) {
         LOG.info("The firmware version '" + vServer + "' on the server is newer than the firmware version '" + vRobot + "' on the robot");
         $("#confirmUpdateFirmware").modal('show');
@@ -249,12 +249,12 @@ function setConfiguration(name) {
 function setToken(token) {
     var resToken = token.toUpperCase();
     ROBOT.setToken(resToken, function(result) {
+        if (!handleFirmwareConflict (result['server.version'],result['robot.version'])) {
+            displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, userState.robotName);
+        }
         if (result.rc === "ok") {
             userState.token = resToken;
             setRobotState(result);
-            if (!firmwareConflict (result['server.version'],result['robot.version'])) {
-                displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, userState.robotName);
-            }
         } else {
             displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, userState.robotName);
         }
@@ -377,9 +377,8 @@ function runOnBrick() {
         var xmlTextConfiguration = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
         displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
         PROGRAM.runOnBrick(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
-            if (result.rc === "ok") {
-                firmwareConflict (result['server.version'],result['robot.version']);
-            } else {
+            handleFirmwareConflict (result['server.version'],result['robot.version']);
+            if (result.rc != "ok") {
                 displayInformation(result, "", result.message, "");
             }
         });
