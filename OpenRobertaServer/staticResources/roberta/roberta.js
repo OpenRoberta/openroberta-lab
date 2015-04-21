@@ -1032,6 +1032,7 @@ function initPopups() {
     });
     
     $('#doUpdateFirmware').onWrap('click', function() {
+        $('#set-token').modal('hide');
         $('#confirmUpdateFirmware').modal('hide');
         updateFirmware();
     }, 'update firmware of robot');
