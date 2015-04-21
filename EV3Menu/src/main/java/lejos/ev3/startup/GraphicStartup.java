@@ -15,7 +15,6 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -66,7 +65,6 @@ import lejos.internal.io.Settings;
 import lejos.internal.io.SystemSettings;
 import lejos.remote.ev3.EV3Reply;
 import lejos.remote.ev3.EV3Request;
-import lejos.remote.ev3.Menu;
 import lejos.remote.ev3.MenuReply;
 import lejos.remote.ev3.MenuRequest;
 import lejos.remote.ev3.RMIRemoteEV3;
@@ -75,10 +73,9 @@ import lejos.robotics.SampleProvider;
 import lejos.robotics.filter.PublishFilter;
 import lejos.robotics.navigation.DifferentialPilot;
 import lejos.utility.Delay;
+import ora.rmi.ORAmenu;
 
-import com.sun.net.httpserver.HttpServer;
-
-public class GraphicStartup implements Menu {
+public class GraphicStartup implements ORAmenu {
     private static final int REMOTE_MENU_PORT = 8002;
 
     private static final String JAVA_RUN_CP = "jrun -cp ";
@@ -184,7 +181,7 @@ public class GraphicStartup implements Menu {
     public static GraphicStartup menu = new GraphicStartup();
 
     private static ORAhandler oraHandler = new ORAhandler();
-
+    private static boolean orUSBconnected = false;
     private static String OPENROBERTAHEAD = " OR Lab";
 
     public static int selection = 0;
@@ -272,17 +269,6 @@ public class GraphicStartup implements Menu {
                 bt = Bluetooth.getLocalDevice();
             } catch ( Exception e ) {
                 // Ignore
-            }
-
-            try {
-                System.out.println("Starting Open Roberta http Server");
-                HttpServer server = HttpServer.create(new InetSocketAddress(80), 0);
-                server.createContext("/openroberta", new ORAusbCmd());
-                server.createContext("/program", new ORAusbUpload());
-                server.setExecutor(null);
-                server.start();
-            } catch ( IOException e ) {
-                System.out.println("Failed to create Open Roberta http server.");
             }
 
             // Start the RMI server
@@ -1634,30 +1620,32 @@ public class GraphicStartup implements Menu {
         }
     }
 
-    // TODO
-    // OR Lab RMI interface
+    // OR Lab RMI interface for USB
 
-    //    @Override
-    //    public String getORAversion() {
-    //        return GraphicStartup.getORAmenuVersion();
-    //    }
-    //
-    //    @Override
-    //    public String getORAbattery() {
-    //        return GraphicStartup.getBatteryStatus();
-    //    }
-    //
-    //    @Override
-    //    public void setORAregistration(boolean status) {
-    //        ORAhandler.setRegistered(status);
-    //        LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
-    //    }
-    //
-    //    @Override
-    //    public void runORAprogram(String programName) {
-    //        ORAlauncher launcher = new ORAlauncher();
-    //        launcher.runProgram(programName);
-    //    }
+    @Override
+    public String getORAversion() {
+        return GraphicStartup.getORAmenuVersion();
+    }
+
+    @Override
+    public String getORAbattery() {
+        return GraphicStartup.getBatteryStatus();
+    }
+
+    @Override
+    public void setORAregistration(boolean status) {
+        orUSBconnected = true;
+        ORAhandler.setRegistered(status);
+        LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
+    }
+
+    @Override
+    public void runORAprogram(String programName) {
+        if ( program == null ) {
+            ORAlauncher launcher = new ORAlauncher();
+            launcher.runProgram(programName);
+        }
+    }
 
     // ---
 
@@ -1770,6 +1758,13 @@ public class GraphicStartup implements Menu {
             switch ( selected ) {
                 case 0:
                     newScreen(OPENROBERTAHEAD);
+                    if ( orUSBconnected == true ) {
+                        newScreen(OPENROBERTAHEAD);
+                        lcd.drawString(" Use USB program", 0, 2);
+                        lcd.drawString(" to disconnect!", 0, 3);
+                        Delay.msDelay(3000);
+                        break;
+                    }
                     if ( getYesNo("   Disconnect?", false) == 1 ) {
                         disconnect();
                         return;
