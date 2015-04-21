@@ -1,15 +1,14 @@
 package lejos.ev3.startup;
 
 /**
- * No Singleton Pattern but do not use
- * 
+ * No Singleton Pattern but do not use more than one
+ *
  * @author dpyka
  */
 public class ORAhandler {
 
     private static boolean hasConnectionError = false;
     private static boolean isRegistered = false;
-    private static boolean interrupt = false;
     private static boolean timeout = false;
 
     private ORApushCmd pushCmd;
@@ -26,7 +25,6 @@ public class ORAhandler {
     }
 
     private void resetState() {
-        setInterrupt(false);
         setRegistered(false);
         setConnectionError(false);
         setTimeout(false);
@@ -34,7 +32,7 @@ public class ORAhandler {
 
     /**
      * Start the brick server "push" communication.
-     * 
+     *
      * @param serverBaseIP
      *        The base IP like 192.168.56.1:1999
      * @param token
@@ -51,7 +49,6 @@ public class ORAhandler {
      * Disconnect the http connection to ORA server.
      */
     public void disconnect() {
-        setInterrupt(true);
         setRegistered(false);
         if ( this.pushCmd.getHttpConnection() != null ) {
             this.pushCmd.getHttpConnection().disconnect();
@@ -72,14 +69,6 @@ public class ORAhandler {
 
     public static void setConnectionError(boolean hasConnectionError) {
         ORAhandler.hasConnectionError = hasConnectionError;
-    }
-
-    public static boolean isInterrupt() {
-        return interrupt;
-    }
-
-    public static void setInterrupt(boolean interrupt) {
-        ORAhandler.interrupt = interrupt;
     }
 
     public static boolean hasTimeout() {

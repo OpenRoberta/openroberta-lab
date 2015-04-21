@@ -13,7 +13,7 @@ import lejos.hardware.ev3.LocalEV3;
 
 /**
  * Download all required library files and menu for Open Roberta lab to the brick.<br>
- * 
+ *
  * @author dpyka
  */
 public class ORAupdater {
@@ -26,7 +26,7 @@ public class ORAupdater {
 
     /**
      * Creates an object for updating the brick.
-     * 
+     *
      * @param serverBaseIP The server's base IP like 192.168.56.1:1999.
      */
     public ORAupdater(String serverBaseIP) {
@@ -45,7 +45,6 @@ public class ORAupdater {
         if ( this.update_error == false ) {
             LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
             ORAhandler.updated_without_restart = true;
-            ORAhandler.setInterrupt(true);
             ORAhandler.setRegistered(false);
             ORAhandler.setConnectionError(false);
         } else {
@@ -109,7 +108,7 @@ public class ORAupdater {
      * Opens http connection to server. "POST" as request method. Input, output
      * set to "true".
      * no readTimeOut, connection will be hold forever or until data was send or until force disconnect
-     * 
+     *
      * @param url
      *        the robertalab server url or ip+port
      * @return httpURLConnection http connection object to the server
@@ -127,7 +126,7 @@ public class ORAupdater {
 
     /**
      * Download a file from a specific REST service.
-     * 
+     *
      * @param url
      * @param directory
      */

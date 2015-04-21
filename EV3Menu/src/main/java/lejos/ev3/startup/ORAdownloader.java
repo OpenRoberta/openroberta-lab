@@ -13,7 +13,7 @@ import org.json.JSONObject;
 
 /**
  * Class that downloads user program from /download service.
- * 
+ *
  * @author dpyka
  */
 public class ORAdownloader {
@@ -24,7 +24,7 @@ public class ORAdownloader {
     /**
      * Create a new object for downloading the user program from the server to the
      * brick.
-     * 
+     *
      * @param serverBaseIP
      *        The base IP like 192.168.56.1:1999
      */
@@ -39,7 +39,7 @@ public class ORAdownloader {
     /**
      * * Download the user program from the server. Send brickdata as request as
      * JSON, receives application/octet-stream.
-     * 
+     *
      * @param brickData The content of the communication between brick and ORA server.
      * @return The name of the downloaded file
      */
@@ -85,7 +85,7 @@ public class ORAdownloader {
                     fos.close();
                 }
             } catch ( IOException e ) {
-                //
+                // ok
             }
         }
         return fileName;
@@ -93,7 +93,7 @@ public class ORAdownloader {
 
     /**
      * Opens http connection to server to download the user program.
-     * 
+     *
      * @return httpURLConnection http connection object to the server
      * @throws IOException
      *         opening a connection failed

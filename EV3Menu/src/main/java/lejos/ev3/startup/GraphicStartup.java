@@ -15,6 +15,7 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -74,6 +75,8 @@ import lejos.robotics.SampleProvider;
 import lejos.robotics.filter.PublishFilter;
 import lejos.robotics.navigation.DifferentialPilot;
 import lejos.utility.Delay;
+
+import com.sun.net.httpserver.HttpServer;
 
 public class GraphicStartup implements Menu {
     private static final int REMOTE_MENU_PORT = 8002;
@@ -271,6 +274,17 @@ public class GraphicStartup implements Menu {
                 // Ignore
             }
 
+            try {
+                System.out.println("Starting Open Roberta http Server");
+                HttpServer server = HttpServer.create(new InetSocketAddress(80), 0);
+                server.createContext("/openroberta", new ORAusbCmd());
+                server.createContext("/program", new ORAusbUpload());
+                server.setExecutor(null);
+                server.start();
+            } catch ( IOException e ) {
+                System.out.println("Failed to create Open Roberta http server.");
+            }
+
             // Start the RMI server
             System.out.println("Starting RMI");
 
@@ -346,7 +360,6 @@ public class GraphicStartup implements Menu {
                 lcd.drawString(ip, 8 - ip.length() / 2, row++);
             }
             selection = getSelection(menu, selection);
-            System.out.println(selection);
             switch ( selection ) {
                 case 0:
                     mainRunDefault();
@@ -1620,6 +1633,33 @@ public class GraphicStartup implements Menu {
             return "unknown";
         }
     }
+
+    // TODO
+    // OR Lab RMI interface
+
+    //    @Override
+    //    public String getORAversion() {
+    //        return GraphicStartup.getORAmenuVersion();
+    //    }
+    //
+    //    @Override
+    //    public String getORAbattery() {
+    //        return GraphicStartup.getBatteryStatus();
+    //    }
+    //
+    //    @Override
+    //    public void setORAregistration(boolean status) {
+    //        ORAhandler.setRegistered(status);
+    //        LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
+    //    }
+    //
+    //    @Override
+    //    public void runORAprogram(String programName) {
+    //        ORAlauncher launcher = new ORAlauncher();
+    //        launcher.runProgram(programName);
+    //    }
+
+    // ---
 
     /**
      * Get the leJOS Firmware version.
