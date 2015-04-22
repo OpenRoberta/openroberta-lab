@@ -16,13 +16,18 @@ import main.ORArmiControl;
 
 import org.json.JSONObject;
 
+/**
+ * EV3 to Open Roberta Lab connection class via usb.
+ *
+ * @author dpyka
+ */
 public class ORApushCmdUSB {
 
     private URL pushServiceURL;
     private HttpURLConnection httpURLConnection;
 
     private final ORAdownloader oraDownloader;
-    //private final ORAupdater oraUpdater;
+    private final ORAupdater oraUpdater;
 
     private final ORArmiControl remoteControl = new ORArmiControl();
 
@@ -55,7 +60,7 @@ public class ORApushCmdUSB {
             // ok
         }
         this.oraDownloader = new ORAdownloader(serverBaseIP);
-        //        this.oraUpdater = new ORAupdater(serverBaseIP);
+        this.oraUpdater = new ORAupdater(serverBaseIP);
     }
 
     public void interruptMainLoop() {
@@ -117,14 +122,22 @@ public class ORApushCmdUSB {
                         if ( registered == false ) {
                             registered = true;
                             this.remoteControl.setORAregistration(registered);
+                            System.out.println("---Download firmware files to PC---");
+                            if ( this.oraUpdater.update() == true ) {
+                                System.out.println("---Upload firmware files to EV3---");
+                                if ( this.remoteControl.uploadFirmwareFiles() == true ) {
+                                    // TODO sound + flag setzen
+                                }
+                            }
                         }
                         break;
                     case CMD_ABORT:
                         registered = false;
+                        this.remoteControl.setORAregistration(false);
                         this.remoteControl.disconnectFromMenu();
                         return;
                     case CMD_UPDATE:
-                        //this.oraUpdater.update();
+
                         break;
                     case CMD_DOWNLOAD:
                         String programName = this.oraDownloader.downloadProgram(brickData);

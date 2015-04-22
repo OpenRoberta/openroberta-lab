@@ -4,6 +4,11 @@ import java.rmi.RemoteException;
 
 import lejos.remote.ev3.RMIMenu;
 
+/**
+ * Add more methods for OR Lab to leJOS RMI interface.
+ *
+ * @author dpyka
+ */
 public interface ORArmiMenu extends RMIMenu {
 
     public String getORAversion() throws RemoteException;

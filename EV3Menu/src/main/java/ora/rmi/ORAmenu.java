@@ -1,6 +1,10 @@
 package ora.rmi;
 
-
+/**
+ * RMI methods for GraphicStartup menu.
+ *
+ * @author dpyka
+ */
 public interface ORAmenu {
 
     public void runProgram(String programName);
@@ -45,7 +49,7 @@ public interface ORAmenu {
 
     public void resume();
 
-    // --- OR methods
+    // --- Open Roberta Lab methods
 
     public String getORAversion();
 

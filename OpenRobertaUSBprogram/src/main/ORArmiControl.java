@@ -8,7 +8,17 @@ import java.rmi.RemoteException;
 
 import ora.rmi.ORArmiMenu;
 
+/**
+ * Map methods to RMI calls.
+ *
+ * @author dpyka
+ */
 public class ORArmiControl {
+
+    private final String brickLibDir = "/home/roberta/lib";
+    private final String brickMenuDir = "/home/root/lejos/bin/utils";
+
+    private boolean status = true;
 
     private static ORArmiMenu menu;
 
@@ -39,6 +49,35 @@ public class ORArmiControl {
             in.close();
         } catch ( IOException ioe ) {
             System.out.println("IOException uploading program");
+        }
+    }
+
+    public boolean uploadFirmwareFiles() {
+        this.status = true;
+        uploadFirmwareFile(this.brickLibDir, new File(Main.TEMPDIRECTORY, "OpenRobertaRuntime.jar").getAbsolutePath());
+        uploadFirmwareFile(this.brickLibDir, new File(Main.TEMPDIRECTORY, "OpenRobertaShared.jar").getAbsolutePath());
+        uploadFirmwareFile(this.brickLibDir, new File(Main.TEMPDIRECTORY, "json.jar").getAbsolutePath());
+        uploadFirmwareFile(this.brickMenuDir, new File(Main.TEMPDIRECTORY, "EV3Menu.jar").getAbsolutePath());
+        return this.status;
+    }
+
+    private void uploadFirmwareFile(String directory, String fileName) {
+        if ( menu == null ) {
+            this.status = this.status && false;
+        }
+        System.out.println(directory);
+        File file = new File(fileName);
+        try {
+            FileInputStream in = new FileInputStream(file);
+            byte[] data = new byte[(int) file.length()];
+            in.read(data);
+            System.out.println("Upload of " + file.getName() + " successful!");
+            menu.uploadFile(directory + "/" + file.getName(), data);
+            in.close();
+            this.status = this.status && true;
+        } catch ( IOException ioe ) {
+            System.out.println("Error @ uploading firmware file" + file.getName());
+            this.status = this.status && false;
         }
     }
 

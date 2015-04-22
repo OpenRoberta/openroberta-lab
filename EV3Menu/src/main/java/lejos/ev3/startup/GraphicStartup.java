@@ -1634,9 +1634,13 @@ public class GraphicStartup implements ORAmenu {
 
     @Override
     public void setORAregistration(boolean status) {
-        orUSBconnected = true;
+        orUSBconnected = status;
         ORAhandler.setRegistered(status);
-        LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
+        if ( status == true ) {
+            LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
+        } else {
+            LocalEV3.get().getAudio().systemSound(Sounds.DESCENDING);
+        }
     }
 
     @Override

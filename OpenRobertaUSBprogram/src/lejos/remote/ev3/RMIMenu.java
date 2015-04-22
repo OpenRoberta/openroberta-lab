@@ -3,6 +3,11 @@ package lejos.remote.ev3;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+/**
+ * Taken from ev3classes
+ * 
+ * @author leJOS Group
+ */
 public interface RMIMenu extends Remote {
 
     public void runProgram(String programName) throws RemoteException;
