@@ -8,7 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import main.Main;
+import Connection.USBConnector;
 
 /**
  * Download all required library files and menu for Open Roberta lab to the brick.<br>
@@ -44,10 +44,10 @@ public class ORAupdater {
     }
 
     public void createTempFolder() {
-        if ( !Main.TEMPDIRECTORY.exists() ) {
-            Main.TEMPDIRECTORY.mkdirs();
+        if ( !USBConnector.TEMPDIRECTORY.exists() ) {
+            USBConnector.TEMPDIRECTORY.mkdirs();
         }
-        System.out.println("Target folder: " + Main.TEMPDIRECTORY.getAbsolutePath());
+        System.out.println("Target folder: " + USBConnector.TEMPDIRECTORY.getAbsolutePath());
     }
 
     /**
@@ -142,7 +142,7 @@ public class ORAupdater {
             String raw = httpURLConnection.getHeaderField("Content-Disposition");
             if ( raw != null && raw.indexOf("=") != -1 ) {
                 fileName = raw.substring(raw.indexOf("=") + 1);
-                fos = new FileOutputStream(new File(Main.TEMPDIRECTORY, fileName));
+                fos = new FileOutputStream(new File(USBConnector.TEMPDIRECTORY, fileName));
                 while ( (n = is.read(buffer)) != -1 ) {
                     fos.write(buffer, 0, n);
                 }

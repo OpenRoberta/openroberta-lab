@@ -9,9 +9,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import main.Main;
-
 import org.json.JSONObject;
+
+import Connection.USBConnector;
 
 /**
  * Class that downloads user program from /download service.
@@ -67,7 +67,7 @@ public class ORAdownloader {
                 fileName = "unknown.jar";
             }
 
-            fos = new FileOutputStream(new File(Main.TEMPDIRECTORY, fileName));
+            fos = new FileOutputStream(new File(USBConnector.TEMPDIRECTORY, fileName));
             while ( (n = is.read(buffer)) != -1 ) {
                 fos.write(buffer, 0, n);
             }

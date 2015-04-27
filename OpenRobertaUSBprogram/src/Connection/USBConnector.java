@@ -1,6 +1,7 @@
 package Connection;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -59,16 +60,18 @@ public class USBConnector extends Observable implements Runnable, Connector {
     private static final String CMD_DOWNLOAD = "download";
     private static final String CMD_CONFIGURATION = "configuration";
 
-    public static final String TEMPDIRECTORY = System.getenv("USERPROFILE");
+    public static final String USERPROFILE = System.getenv("USERPROFILE");
+    public static final File TEMPDIRECTORY = new File(new File(new File(new File(USERPROFILE, "Appdata"), "Local"), "Temp"), "OpenRoberta");
 
     public enum State {
-        DISCOVER, WAIT_FOR_CONNECT, CONNECT, WAIT_FOR_CMD, DISCOVER_CONNECTED, DISCONNECT, WAIT_FOR_SERVER
+        DISCOVER, WAIT_FOR_CONNECT, CONNECT, WAIT_FOR_CMD, DISCOVER_CONNECTED, DISCONNECT, WAIT_FOR_SERVER, ERROR_HTTP
     }
 
     private State state = State.DISCOVER; // First state when program starts
     private String brickName = "";
     private String brickBatteryVoltage = "";
     private String token = "";
+    private boolean userDisconnect = false;
 
     public USBConnector(ResourceBundle serverProps) {
         if ( serverProps != null ) {
@@ -87,10 +90,13 @@ public class USBConnector extends Observable implements Runnable, Connector {
         this.tokenGenerator = new ORAtokenGenerator();
     }
 
-    //    public static void main(String[] args) throws IOException, InterruptedException {
-    //        USBConnector usbCon = new USBConnector(null);
-    //        usbCon.connect();
-    //    }
+    public static void main(String[] args) throws IOException, InterruptedException {
+        USBConnector con = new USBConnector(null);
+        Thread thread = new Thread(con, "USBConnector");
+        thread.start();
+        Thread.sleep(2000);
+        con.state = State.CONNECT;
+    }
 
     @Override
     public void run() {
@@ -103,7 +109,7 @@ public class USBConnector extends Observable implements Runnable, Connector {
         brickData.put(KEY_MACADDR, "usb");
 
         while ( this.running ) {
-            System.out.println(state.toString());
+            // System.out.println(state.toString());
             switch ( state ) {
                 case DISCOVER:
                 case DISCOVER_CONNECTED:
@@ -162,7 +168,7 @@ public class USBConnector extends Observable implements Runnable, Connector {
                             case CMD_REPEAT:
                                 registered = true;
                                 this.remoteControl.setORAregistration(registered);
-                                // TODO check for update
+                                // TODO always?
                                 //                                System.out.println("---Download firmware files to PC---");
                                 //                                if ( this.oraUpdater.update() == true ) {
                                 //                                    System.out.println("---Upload firmware files to EV3---");
@@ -176,11 +182,15 @@ public class USBConnector extends Observable implements Runnable, Connector {
                                 break;
                         }
                     } catch ( IOException e1 ) {
-                        this.state = State.DISCOVER;
-                        this.brickName = "";
-                        this.brickBatteryVoltage = "";
-                        notifyConnectionStateChanged(State.DISCOVER);
-                        e1.printStackTrace();
+                        if ( !this.userDisconnect ) {
+                            this.state = State.DISCOVER;
+                            this.brickName = "";
+                            this.brickBatteryVoltage = "";
+                            notifyConnectionStateChanged(State.ERROR_HTTP);
+                            notifyConnectionStateChanged(State.DISCOVER);
+                            e1.printStackTrace();
+                        }
+                        this.userDisconnect = false;
                         break;
                     }
                     this.state = State.WAIT_FOR_CMD;
@@ -191,6 +201,9 @@ public class USBConnector extends Observable implements Runnable, Connector {
                         brickData.put(KEY_BATTERY, this.remoteControl.getBatteryVoltage());
                         brickData.put(KEY_BRICKNAME, this.remoteControl.getBrickname());
                         brickData.put(KEY_CMD, CMD_PUSH);
+                        if ( !USBConnector.TEMPDIRECTORY.exists() ) {
+                            USBConnector.TEMPDIRECTORY.mkdirs();
+                        }
                         this.httpURLConnection = openConnection(15000);
                         os = this.httpURLConnection.getOutputStream();
                         os.write(brickData.toString().getBytes("UTF-8"));
@@ -222,6 +235,7 @@ public class USBConnector extends Observable implements Runnable, Connector {
                             case CMD_DOWNLOAD:
                                 String programName = this.oraDownloader.downloadProgram(brickData);
                                 System.out.println("Downloaded: " + programName);
+                                System.out.println(USBConnector.TEMPDIRECTORY + "\\" + programName);
                                 this.remoteControl.uploadFile(USBConnector.TEMPDIRECTORY + "\\" + programName);
                                 this.remoteControl.runORAprogram(programName);
                                 break;
@@ -236,11 +250,15 @@ public class USBConnector extends Observable implements Runnable, Connector {
                         this.state = State.DISCOVER_CONNECTED;
                         notifyConnectionStateChanged(State.DISCOVER_CONNECTED);
                     } catch ( Exception e ) {
-                        this.brickName = "";
-                        this.brickBatteryVoltage = "";
-                        this.state = State.DISCOVER;
-                        notifyConnectionStateChanged(State.DISCOVER);
-                        System.out.println("Error @ http connection!");
+                        if ( !this.userDisconnect ) {
+                            this.brickName = "";
+                            this.brickBatteryVoltage = "";
+                            this.state = State.DISCOVER;
+                            notifyConnectionStateChanged(State.ERROR_HTTP);
+                            notifyConnectionStateChanged(State.DISCOVER);
+                            System.out.println("Error @ http connection!");
+                        }
+                        this.userDisconnect = false;
                         break;
                     } finally {
                         try {
@@ -278,8 +296,11 @@ public class USBConnector extends Observable implements Runnable, Connector {
 
     @Override
     public void disconnect() {
+        this.userDisconnect = true;
         try {
-            this.remoteControl.setORAregistration(false);
+            if ( this.state != State.WAIT_FOR_SERVER ) {
+                this.remoteControl.setORAregistration(false);
+            }
             this.remoteControl.disconnectFromMenu();
             if ( this.httpURLConnection != null ) {
                 this.httpURLConnection.disconnect();
@@ -311,5 +332,17 @@ public class USBConnector extends Observable implements Runnable, Connector {
     @Override
     public String getBrickBatteryVoltage() {
         return brickBatteryVoltage;
+    }
+
+    public State getConnectionState() {
+        return state;
+    }
+
+    @Override
+    public void close() {
+        disconnect();
+        if ( this.httpURLConnection != null ) {
+            this.httpURLConnection.disconnect();
+        }
     }
 }

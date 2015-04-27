@@ -22,7 +22,7 @@ public class USBConnectionMain {
                 Thread thread = new Thread(usbCon, "USBConnector");
                 thread.start();
                 ConnectionView view = new ConnectionView(messages);
-                UIController controller = new UIController(usbCon, view, messages);
+                UIController<?> controller = new UIController<Object>(usbCon, view, messages);
                 controller.control();
             }
 
@@ -31,11 +31,13 @@ public class USBConnectionMain {
             }
 
             private ResourceBundle getLocals() {
-                Locale language = Locale.ENGLISH;
-                if ( Locale.getDefault() != null && Locale.getDefault().equals(Locale.GERMANY) ) {
-                    language = Locale.GERMAN;
+                ResourceBundle rb;
+                try {
+                    rb = ResourceBundle.getBundle("resources/messages", Locale.getDefault());
+                } catch ( Exception e ) {
+                    rb = ResourceBundle.getBundle("resources/messages", Locale.ENGLISH);
                 }
-                return ResourceBundle.getBundle("resources/messages", language);
+                return rb;
             }
         });
     }

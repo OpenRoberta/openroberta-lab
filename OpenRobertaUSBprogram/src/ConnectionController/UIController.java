@@ -1,6 +1,7 @@
 package ConnectionController;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -39,17 +40,17 @@ public class UIController<ObservableObject> implements Observer {
     }
 
     private void addListener() {
-        this.conView.setConnectListener(new ConnectListener());
+        this.conView.setConnectActionListener(new ConnectActionListener());
         this.conView.setCloseListener(new CloseListener());
         ((Observable) this.connector).addObserver(this);
     }
 
-    public class ConnectListener implements ActionListener {
+    public class ConnectActionListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
             AbstractButton b = (AbstractButton) e.getSource();
-            if ( b.getActionCommand() == "cancel" ) {
+            if ( b.getActionCommand() == "close" ) {
                 closeApplication();
             } else {
                 if ( b.isSelected() ) {
@@ -83,25 +84,29 @@ public class UIController<ObservableObject> implements Observer {
 
     public void closeApplication() {
         if ( connected ) {
+            String close = rb.getString("close");
+            String cancel = rb.getString("cancel");
             Object[] options = {
-                "j", "n"
-            //rb.getString("disconnect"), rb.getString("cancel")
-                };
+                close, cancel
+            };
             UIManager.put("OptionPane.background", Color.white);
+            UIManager.put("OptionPane.messageFont", new Font("Arial", Font.PLAIN, 14));
+            UIManager.put("OptionPane.buttonFont", new Font("Arial", Font.PLAIN, 16));
+            UIManager.put("OptionPane.buttonBackground", Color.red);
             UIManager.put("Panel.background", Color.white);
             UIManager.put("Panel.button", Color.white);
             int n =
                 JOptionPane.showOptionDialog(
                     conView,
-                    "Would you like green eggs and ham?",
-                    "A Silly Question",
+                    rb.getString("confirmCloseInfo"),
+                    rb.getString("attention"),
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE,
-                    new ImageIcon(getClass().getClassLoader().getResource("./resources/Roberta.png")), //do not use a custom Icon
-                    options, //the titles of buttons
-                    options[0]); //default button title
+                    new ImageIcon(getClass().getClassLoader().getResource("./resources/Roberta.png")),
+                    options,
+                    options[0]);
             if ( n == 0 ) {
-                //disconnect();
+                connector.close();
                 System.exit(0);
             }
         } else {
@@ -114,7 +119,8 @@ public class UIController<ObservableObject> implements Observer {
         State state = (State) arg1;
         switch ( state ) {
             case WAIT_FOR_CONNECT:
-                this.conView.setWaitForConnect(true);
+                this.conView.setNew(this.connector.getBrickName());
+                this.conView.setWaitForConnect();
                 break;
             case WAIT_FOR_SERVER:
                 this.conView.setNew(this.connector.getToken());
@@ -128,8 +134,21 @@ public class UIController<ObservableObject> implements Observer {
                 this.connected = false;
                 this.conView.setDiscover();
                 break;
+            case ERROR_HTTP:
+                showErrorPopup();
+                break;
             default:
                 break;
         }
+    }
+
+    private void showErrorPopup() {
+        UIManager.put("OptionPane.background", Color.white);
+        UIManager.put("OptionPane.messageFont", new Font("Arial", Font.PLAIN, 14));
+        UIManager.put("OptionPane.buttonFont", new Font("Arial", Font.PLAIN, 16));
+        UIManager.put("OptionPane.buttonBackground", Color.red);
+        UIManager.put("Panel.background", Color.white);
+        UIManager.put("Panel.button", Color.white);
+        JOptionPane.showMessageDialog(conView, rb.getString("httpErrorInfo"), rb.getString("attention"), JOptionPane.ERROR_MESSAGE);
     }
 }
