@@ -31,23 +31,17 @@ public class ORAupdater {
     }
 
     /**
-     * Download all files required for Open Roberta Lab.
+     * Download all files required for Open Roberta Lab. Each method sets DOWNLOADOK to false if error occurs.
+     *
+     * @Return True if all files are downloaded successfully. False if at least one file not successful.
      */
     public boolean update() {
         this.DOWNLOADOK = true;
-        createTempFolder();
         getRuntime();
         getShared();
         getJsonLib();
         getEV3Menu();
         return this.DOWNLOADOK;
-    }
-
-    public void createTempFolder() {
-        if ( !USBConnector.TEMPDIRECTORY.exists() ) {
-            USBConnector.TEMPDIRECTORY.mkdirs();
-        }
-        System.out.println("Target folder: " + USBConnector.TEMPDIRECTORY.getAbsolutePath());
     }
 
     /**

@@ -1620,7 +1620,7 @@ public class GraphicStartup implements ORAmenu {
         }
     }
 
-    // OR Lab RMI interface for USB
+    // OR Lab RMI interface for USB connection
 
     @Override
     public String getORAversion() {
@@ -1641,6 +1641,14 @@ public class GraphicStartup implements ORAmenu {
         } else {
             LocalEV3.get().getAudio().systemSound(Sounds.DESCENDING);
         }
+    }
+
+    @Override
+    public void setORAupdateState() {
+        LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
+        ORAhandler.updated_without_restart = true;
+        orUSBconnected = false;
+        ORAhandler.setRegistered(false);
     }
 
     @Override

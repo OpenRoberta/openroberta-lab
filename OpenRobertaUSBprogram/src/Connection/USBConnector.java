@@ -27,7 +27,7 @@ public class USBConnector extends Observable implements Runnable, Connector {
     private String brickIp = "10.0.1.1";
     private String serverIp = "localhost";
     private String serverPort = "1999";
-    private String serverBaseIP;
+    private final String serverBaseIP;
 
     private URL pushServiceURL;
     private HttpURLConnection httpURLConnection;
@@ -38,7 +38,7 @@ public class USBConnector extends Observable implements Runnable, Connector {
 
     private final ORArmiControl remoteControl = new ORArmiControl();
 
-    private boolean running = true;
+    private final boolean running = true;
 
     // brick data keywords
     public static final String KEY_BRICKNAME = "brickname";
@@ -60,8 +60,8 @@ public class USBConnector extends Observable implements Runnable, Connector {
     private static final String CMD_DOWNLOAD = "download";
     private static final String CMD_CONFIGURATION = "configuration";
 
-    public static final String USERPROFILE = System.getenv("USERPROFILE");
-    public static final File TEMPDIRECTORY = new File(new File(new File(new File(USERPROFILE, "Appdata"), "Local"), "Temp"), "OpenRoberta");
+    // Windows only!! for other OS use Java method to check on which OS JVM is running
+    public static File TEMPDIRECTORY = null;
 
     public enum State {
         DISCOVER, WAIT_FOR_CONNECT, CONNECT, WAIT_FOR_CMD, DISCOVER_CONNECTED, DISCONNECT, WAIT_FOR_SERVER, ERROR_HTTP
@@ -81,12 +81,12 @@ public class USBConnector extends Observable implements Runnable, Connector {
         }
         this.serverBaseIP = this.serverIp + ":" + this.serverPort;
         try {
-            this.pushServiceURL = new URL("http://" + serverBaseIP + "/pushcmd");
+            this.pushServiceURL = new URL("http://" + this.serverBaseIP + "/pushcmd");
         } catch ( MalformedURLException e ) {
             // ok
         }
-        this.oraDownloader = new ORAdownloader(serverBaseIP);
-        this.oraUpdater = new ORAupdater(serverBaseIP);
+        this.oraDownloader = new ORAdownloader(this.serverBaseIP);
+        this.oraUpdater = new ORAupdater(this.serverBaseIP);
         this.tokenGenerator = new ORAtokenGenerator();
     }
 
@@ -98,6 +98,26 @@ public class USBConnector extends Observable implements Runnable, Connector {
         con.state = State.CONNECT;
     }
 
+    /**
+     * Set a path where all firmware files and user programs are stored on the PC.
+     */
+    private void setTempPath() {
+        String os = System.getProperty("os.name");
+        System.out.println("System: " + os);
+        os = os.toLowerCase();
+        if ( isWindows(os) ) {
+            TEMPDIRECTORY = new File(new File(new File(new File(System.getenv("USERPROFILE"), "Appdata"), "Local"), "Temp"), "OpenRoberta");
+            if ( !USBConnector.TEMPDIRECTORY.exists() ) {
+                USBConnector.TEMPDIRECTORY.mkdirs();
+            }
+            System.out.println("Using directory: " + TEMPDIRECTORY.getPath());
+        }
+    }
+
+    private boolean isWindows(String os) {
+        return (os.indexOf("windows") >= 0);
+    }
+
     @Override
     public void run() {
 
@@ -105,16 +125,18 @@ public class USBConnector extends Observable implements Runnable, Connector {
         BufferedReader br = null;
         boolean registered = false;
 
+        setTempPath();
+
         JSONObject brickData = new JSONObject();
         brickData.put(KEY_MACADDR, "usb");
 
         while ( this.running ) {
             // System.out.println(state.toString());
-            switch ( state ) {
+            switch ( this.state ) {
                 case DISCOVER:
                 case DISCOVER_CONNECTED:
                     try {
-                        if ( InetAddress.getByName(brickIp).isReachable(3000) ) {
+                        if ( InetAddress.getByName(this.brickIp).isReachable(3000) ) {
                             this.remoteControl.connectToMenu();
                             brickData.put(KEY_LEJOSVERSION, this.remoteControl.getlejosVersion());
                             brickData.put(KEY_MENUVERSION, this.remoteControl.getORAversion());
@@ -129,7 +151,7 @@ public class USBConnector extends Observable implements Runnable, Connector {
                         System.out.println("Cannot connect to brick.");
                         break;
                     }
-                    if ( state == State.DISCOVER ) {
+                    if ( this.state == State.DISCOVER ) {
                         this.state = State.WAIT_FOR_CONNECT;
                     } else {
                         this.state = State.WAIT_FOR_CMD;
@@ -139,7 +161,7 @@ public class USBConnector extends Observable implements Runnable, Connector {
                 case WAIT_FOR_CONNECT:
                     break; // just waiting for user input
                 case CONNECT:
-                    String token = tokenGenerator.generateToken();
+                    String token = this.tokenGenerator.generateToken();
                     try {
                         brickData.put(KEY_TOKEN, token);
                         String batteryVoltage = this.remoteControl.getBatteryVoltage();
@@ -168,14 +190,6 @@ public class USBConnector extends Observable implements Runnable, Connector {
                             case CMD_REPEAT:
                                 registered = true;
                                 this.remoteControl.setORAregistration(registered);
-                                // TODO always?
-                                //                                System.out.println("---Download firmware files to PC---");
-                                //                                if ( this.oraUpdater.update() == true ) {
-                                //                                    System.out.println("---Upload firmware files to EV3---");
-                                //                                    if ( this.remoteControl.uploadFirmwareFiles() == true ) {
-                                //                                        // TODO sound + flag setzen
-                                //                                    }
-                                //                                }
                                 break;
                             default:
                                 System.out.println("ORA unknown command from server, do nothing!");
@@ -201,9 +215,7 @@ public class USBConnector extends Observable implements Runnable, Connector {
                         brickData.put(KEY_BATTERY, this.remoteControl.getBatteryVoltage());
                         brickData.put(KEY_BRICKNAME, this.remoteControl.getBrickname());
                         brickData.put(KEY_CMD, CMD_PUSH);
-                        if ( !USBConnector.TEMPDIRECTORY.exists() ) {
-                            USBConnector.TEMPDIRECTORY.mkdirs();
-                        }
+
                         this.httpURLConnection = openConnection(15000);
                         os = this.httpURLConnection.getOutputStream();
                         os.write(brickData.toString().getBytes("UTF-8"));
@@ -231,12 +243,22 @@ public class USBConnector extends Observable implements Runnable, Connector {
                                 notifyConnectionStateChanged(State.DISCOVER);
                                 return;
                             case CMD_UPDATE:
+                                // Move to CMD_REPEAT for easy testing
+                                System.out.println("---Download firmware files to PC---");
+                                if ( this.oraUpdater.update() == true ) {
+                                    System.out.println("---Upload firmware files to EV3---");
+                                    if ( this.remoteControl.uploadFirmwareFiles() == true ) {
+                                        this.remoteControl.setORAupdateState();
+                                        // TODO Stop connection, do not allow reconnection
+                                        // Force/ tell the user to restart the brick
+                                    }
+                                }
                                 break;
                             case CMD_DOWNLOAD:
                                 String programName = this.oraDownloader.downloadProgram(brickData);
                                 System.out.println("Downloaded: " + programName);
-                                System.out.println(USBConnector.TEMPDIRECTORY + "\\" + programName);
-                                this.remoteControl.uploadFile(USBConnector.TEMPDIRECTORY + "\\" + programName);
+                                System.out.println(new File(USBConnector.TEMPDIRECTORY, programName).getPath());
+                                this.remoteControl.uploadFile(new File(USBConnector.TEMPDIRECTORY, programName).getPath());
                                 this.remoteControl.runORAprogram(programName);
                                 break;
                             case CMD_CONFIGURATION:
@@ -321,21 +343,21 @@ public class USBConnector extends Observable implements Runnable, Connector {
 
     @Override
     public String getToken() {
-        return token;
+        return this.token;
     }
 
     @Override
     public String getBrickName() {
-        return brickName;
+        return this.brickName;
     }
 
     @Override
     public String getBrickBatteryVoltage() {
-        return brickBatteryVoltage;
+        return this.brickBatteryVoltage;
     }
 
     public State getConnectionState() {
-        return state;
+        return this.state;
     }
 
     @Override

@@ -81,6 +81,10 @@ public class ORArmiControl {
         }
     }
 
+    public void setORAupdateState() throws RemoteException {
+        menu.setORAupdateState();
+    }
+
     public String getlejosVersion() throws RemoteException {
         return menu.getVersion();
     }

@@ -19,4 +19,6 @@ public interface ORArmiMenu extends RMIMenu {
 
     public void runORAprogram(String programName) throws RemoteException;
 
+    public void setORAupdateState() throws RemoteException;
+
 }
