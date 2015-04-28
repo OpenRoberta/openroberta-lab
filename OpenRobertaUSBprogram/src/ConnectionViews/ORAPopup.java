@@ -1,0 +1,75 @@
+package ConnectionViews;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIDefaults;
+import javax.swing.UIManager;
+
+public class ORAPopup extends JOptionPane {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                UIDefaults defaults = UIManager.getLookAndFeelDefaults();
+                Set<Entry<Object, Object>> entries = defaults.entrySet();
+                for ( Entry<Object, Object> entry : entries ) {
+                    System.out.print(entry.getKey() + " = ");
+                    System.out.print(entry.getValue() + "\n");
+                }
+                String title = "Titel";
+                String text = "Text";
+                String[] buttons = new String[] {
+                    "a", "b", "c"
+                };
+                System.out.println(ORAPopup.showPopup(null, title, text, null, buttons));
+            }
+        });
+    }
+
+    public static int showPopup(Component component, String title, String text, Icon icon, String[] txtButtons) {
+        ORAButton buttons[] = new ORAButton[txtButtons.length];
+
+        for ( int i = 0; i < txtButtons.length; i++ ) {
+            final ORAButton oraButton = new ORAButton();
+            oraButton.setText(txtButtons[i]);
+            oraButton.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JOptionPane pane = (JOptionPane) ((JComponent) e.getSource()).getParent().getParent();
+                    pane.setValue(oraButton);
+                }
+            });
+
+            buttons[i] = oraButton;
+        }
+        UIManager.put("OptionPane.background", Color.white);
+        UIManager.put("OptionPane.messageFont", new Font("Arial", Font.PLAIN, 14));
+        UIManager.put("OptionPane.buttonFont", new Font("Arial", Font.PLAIN, 16));
+        UIManager.put("Panel.background", Color.white);
+
+        return JOptionPane.showOptionDialog(component, text, title, JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, icon, buttons, buttons[0]);
+    }
+
+    public static int showPopup(Component component, String title, String text) {
+        return showPopup(component, title, text, UIManager.getIcon("OptionPane.warningIcon"), new String[] {
+            "Ok"
+        });
+    }
+}

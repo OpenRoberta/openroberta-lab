@@ -1,7 +1,5 @@
 package ConnectionController;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -12,13 +10,12 @@ import java.util.ResourceBundle;
 
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
 
 import Connection.Connector;
 import Connection.USBConnector;
 import Connection.USBConnector.State;
 import ConnectionViews.ConnectionView;
+import ConnectionViews.ORAPopup;
 
 public class UIController<ObservableObject> implements Observer {
 
@@ -84,27 +81,16 @@ public class UIController<ObservableObject> implements Observer {
 
     public void closeApplication() {
         if ( connected ) {
-            String close = rb.getString("close");
-            String cancel = rb.getString("cancel");
-            Object[] options = {
-                close, cancel
+            String[] buttons = {
+                rb.getString("close"), rb.getString("cancel")
             };
-            UIManager.put("OptionPane.background", Color.white);
-            UIManager.put("OptionPane.messageFont", new Font("Arial", Font.PLAIN, 14));
-            UIManager.put("OptionPane.buttonFont", new Font("Arial", Font.PLAIN, 16));
-            UIManager.put("OptionPane.buttonBackground", Color.red);
-            UIManager.put("Panel.background", Color.white);
-            UIManager.put("Panel.button", Color.white);
             int n =
-                JOptionPane.showOptionDialog(
+                ORAPopup.showPopup(
                     conView,
-                    rb.getString("confirmCloseInfo"),
                     rb.getString("attention"),
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
+                    rb.getString("confirmCloseInfo"),
                     new ImageIcon(getClass().getClassLoader().getResource("./resources/Roberta.png")),
-                    options,
-                    options[0]);
+                    buttons);
             if ( n == 0 ) {
                 connector.close();
                 System.exit(0);
@@ -119,7 +105,7 @@ public class UIController<ObservableObject> implements Observer {
         State state = (State) arg1;
         switch ( state ) {
             case WAIT_FOR_CONNECT:
-                this.conView.setNew(this.connector.getBrickName());
+                //this.conView.setNew(this.connector.getBrickName());
                 this.conView.setWaitForConnect();
                 break;
             case WAIT_FOR_SERVER:
@@ -143,12 +129,6 @@ public class UIController<ObservableObject> implements Observer {
     }
 
     private void showErrorPopup() {
-        UIManager.put("OptionPane.background", Color.white);
-        UIManager.put("OptionPane.messageFont", new Font("Arial", Font.PLAIN, 14));
-        UIManager.put("OptionPane.buttonFont", new Font("Arial", Font.PLAIN, 16));
-        UIManager.put("OptionPane.buttonBackground", Color.red);
-        UIManager.put("Panel.background", Color.white);
-        UIManager.put("Panel.button", Color.white);
-        JOptionPane.showMessageDialog(conView, rb.getString("httpErrorInfo"), rb.getString("attention"), JOptionPane.ERROR_MESSAGE);
+        ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpErrorInfo"));
     }
 }

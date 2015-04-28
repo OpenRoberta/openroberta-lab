@@ -115,7 +115,7 @@ public class USBConnector extends Observable implements Runnable, Connector {
     }
 
     private boolean isWindows(String os) {
-        return (os.indexOf("windows") >= 0);
+        return os.indexOf("windows") >= 0;
     }
 
     @Override
@@ -131,7 +131,7 @@ public class USBConnector extends Observable implements Runnable, Connector {
         brickData.put(KEY_MACADDR, "usb");
 
         while ( this.running ) {
-            // System.out.println(state.toString());
+            System.out.println(state.toString());
             switch ( this.state ) {
                 case DISCOVER:
                 case DISCOVER_CONNECTED:
@@ -197,13 +197,13 @@ public class USBConnector extends Observable implements Runnable, Connector {
                         }
                     } catch ( IOException e1 ) {
                         if ( !this.userDisconnect ) {
-                            this.state = State.DISCOVER;
                             this.brickName = "";
                             this.brickBatteryVoltage = "";
                             notifyConnectionStateChanged(State.ERROR_HTTP);
                             notifyConnectionStateChanged(State.DISCOVER);
                             e1.printStackTrace();
                         }
+                        this.state = State.DISCOVER;
                         this.userDisconnect = false;
                         break;
                     }
@@ -298,7 +298,6 @@ public class USBConnector extends Observable implements Runnable, Connector {
                     break;
             }
         }
-        this.remoteControl.disconnectFromMenu();
     }
 
     private HttpURLConnection openConnection(int readTimeOut) throws SocketTimeoutException, IOException {

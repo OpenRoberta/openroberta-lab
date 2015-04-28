@@ -2,6 +2,7 @@ package ConnectionViews;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Insets;
@@ -34,8 +35,8 @@ public class ConnectionView extends JFrame {
     private JMenuItem mntClose = new JMenuItem();
     private JMenu mnInfo = new JMenu();
     private JMenuItem mntAbout = new JMenuItem();
-    private JLabel lblWWW = new JLabel();
     private JLabel lblRobot = new JLabel();
+    private JLabel lblGif = new JLabel();
     private ORAToggleButton butConnect = new ORAToggleButton();
     private ORAButton butClose = new ORAButton();
     private JTextArea txtInfo = new JTextArea();
@@ -47,6 +48,10 @@ public class ConnectionView extends JFrame {
     private ImageIcon icoRobotNotDiscovered;
     private ImageIcon icoRobotConnected;
     private ImageIcon icoRobotDiscovered;
+    private ImageIcon gifPlug;
+    private ImageIcon gifConnect;
+    private ImageIcon gifServer;
+    private ImageIcon gifConnected;
 
     public ConnectionView(ResourceBundle messages) {
         this.messages = messages;
@@ -56,10 +61,11 @@ public class ConnectionView extends JFrame {
     }
 
     private void intGUI() {
-        this.setSize(300, 300);
+
+        this.setSize(250, 400);
+        this.setMinimumSize(new Dimension(300, 75));
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         this.setLocationRelativeTo(null);
-        this.menu.setBackground(Color.white);
         this.menu.setForeground(Color.decode("#333333"));
         this.menu.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         this.mnFile.setText(messages.getString("file"));
@@ -68,16 +74,19 @@ public class ConnectionView extends JFrame {
         this.mntClose.setActionCommand("close");
         this.mntAbout.setText(messages.getString("about"));
         this.lblRobot.setIcon(icoRobotNotDiscovered);
+        this.lblGif.setMinimumSize(new Dimension(100, 106));
+        this.lblGif.setSize(new Dimension(100, 106));
         this.txtInfo.setLineWrap(true);
+        this.txtInfo.setMinimumSize(new Dimension(500, 0));
         this.txtInfo.setWrapStyleWord(true);
         this.txtInfo.setFont(new Font("Arial", Font.PLAIN, 14));
         this.txtInfo.setForeground(Color.decode("#333333"));
         this.txtInfo.setMargin(new Insets(16, 16, 16, 16));
+        this.txtInfo.setEditable(false);
         this.pnlToken.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
         this.pnlToken.setBackground(Color.white);
         this.pnlToken.setLayout(new FlowLayout(FlowLayout.CENTER));
         this.txtToken.setFont(new Font("Arial", Font.PLAIN, 18));
-        this.txtToken.setVisible(false);
         this.txtToken.setEditable(false);
         this.txtToken.setBackground(Color.white);
         this.txtToken.setBorder(null);
@@ -89,7 +98,6 @@ public class ConnectionView extends JFrame {
         this.butConnect.setEnabled(false);
         this.butClose.setText(messages.getString("close"));
         this.butClose.setActionCommand("close");
-        //  this.add(new JSeparator(SwingConstants.HORIZONTAL), BorderLayout.CENTER);
         this.add(centerPanel, BorderLayout.CENTER);
         this.add(menu, BorderLayout.NORTH);
         JSeparator sep = new JSeparator();
@@ -97,8 +105,12 @@ public class ConnectionView extends JFrame {
         this.centerPanel.add(sep);
         this.centerPanel.setBorder(null);
         this.centerPanel.add(pnlToken);
+        JPanel a = new JPanel();
+        a.add(lblGif);
+        a.setBackground(Color.white);
+        this.centerPanel.add(a);
         this.centerPanel.add(txtInfo);
-        this.centerPanel.add(Box.createHorizontalGlue());
+        this.centerPanel.add(Box.createVerticalGlue());
         this.centerPanel.add(pnlButton);
         this.pnlButton.add(butConnect);
         this.pnlButton.add(Box.createHorizontalStrut(12));
@@ -131,11 +143,13 @@ public class ConnectionView extends JFrame {
         this.lblRobot.setIcon(this.icoRobotDiscovered);
         this.butConnect.setEnabled(true);
         this.txtInfo.setText(messages.getString("connectInfo"));
+        this.lblGif.setIcon(gifConnect);
     }
 
     public void setWaitForCmd(String string) {
         this.lblRobot.setIcon(this.icoRobotConnected);
         this.txtInfo.setText(messages.getString("serverInfo"));
+        this.lblGif.setIcon(gifConnected);
     }
 
     public void setDiscover() {
@@ -145,12 +159,14 @@ public class ConnectionView extends JFrame {
         this.butConnect.setSelected(false);
         this.butConnect.setEnabled(false);
         this.txtInfo.setText(messages.getString("plugInInfo"));
+        this.lblGif.setIcon(gifPlug);
     }
 
     public void setNew(String token) {
         this.txtToken.setText(token);
         this.txtToken.setVisible(true);
         this.txtInfo.setText(messages.getString("tokenInfo"));
+        this.lblGif.setIcon(gifServer);
     }
 
     private void createIcons() {
@@ -165,6 +181,22 @@ public class ConnectionView extends JFrame {
         imgURL = getClass().getClassLoader().getResource("./resources/Roberta_Menu_Icon_grey.png");
         if ( imgURL != null ) {
             this.icoRobotNotDiscovered = new ImageIcon(imgURL);
+        }
+        imgURL = getClass().getClassLoader().getResource("./resources/plug.gif");
+        if ( imgURL != null ) {
+            this.gifPlug = new ImageIcon(imgURL);
+        }
+        imgURL = getClass().getClassLoader().getResource("./resources/connect.gif");
+        if ( imgURL != null ) {
+            this.gifConnect = new ImageIcon(imgURL);
+        }
+        imgURL = getClass().getClassLoader().getResource("./resources/server.gif");
+        if ( imgURL != null ) {
+            this.gifServer = new ImageIcon(imgURL);
+        }
+        imgURL = getClass().getClassLoader().getResource("./resources/connected.gif");
+        if ( imgURL != null ) {
+            this.gifConnected = new ImageIcon(imgURL);
         }
     }
 }
