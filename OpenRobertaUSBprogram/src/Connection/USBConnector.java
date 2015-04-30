@@ -64,7 +64,7 @@ public class USBConnector extends Observable implements Runnable, Connector {
     public static File TEMPDIRECTORY = null;
 
     public enum State {
-        DISCOVER, WAIT_FOR_CONNECT, CONNECT, WAIT_FOR_CMD, DISCOVER_CONNECTED, DISCONNECT, WAIT_FOR_SERVER, ERROR_HTTP
+        DISCOVER, WAIT_FOR_CONNECT, CONNECT, WAIT_FOR_CMD, DISCOVER_CONNECTED, DISCONNECT, WAIT_FOR_SERVER, ERROR_HTTP, ERROR_BRICK
     }
 
     private State state = State.DISCOVER; // First state when program starts
@@ -149,6 +149,8 @@ public class USBConnector extends Observable implements Runnable, Connector {
                         }
                     } catch ( Exception e ) {
                         System.out.println("Cannot connect to brick.");
+                        System.out.println(e);
+                        notifyConnectionStateChanged(State.ERROR_BRICK);
                         break;
                     }
                     if ( this.state == State.DISCOVER ) {

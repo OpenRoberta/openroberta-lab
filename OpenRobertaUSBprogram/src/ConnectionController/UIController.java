@@ -122,7 +122,10 @@ public class UIController<ObservableObject> implements Observer {
                 this.conView.setDiscover();
                 break;
             case ERROR_HTTP:
-                showErrorPopup();
+                showErrorPopup("http");
+                break;
+            case ERROR_BRICK:
+                showErrorPopup("brick");
                 break;
             default:
                 break;
@@ -140,7 +143,11 @@ public class UIController<ObservableObject> implements Observer {
                 java.awt.Image.SCALE_AREA_AVERAGING)));
     }
 
-    private void showErrorPopup() {
-        ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpErrorInfo"), null);
+    private void showErrorPopup(String type) {
+        if ( type.equals("http") ) {
+            ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpErrorInfo"), null);
+        } else {
+            ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpBrickInfo"), null);
+        }
     }
 }
