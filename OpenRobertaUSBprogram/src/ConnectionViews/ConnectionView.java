@@ -73,6 +73,7 @@ public class ConnectionView extends JFrame {
         this.mntClose.setText(messages.getString("close"));
         this.mntClose.setActionCommand("close");
         this.mntAbout.setText(messages.getString("about"));
+        this.mntAbout.setActionCommand("about");
         this.lblRobot.setIcon(icoRobotNotDiscovered);
         this.lblGif.setMinimumSize(new Dimension(100, 106));
         this.lblGif.setSize(new Dimension(100, 106));
@@ -123,7 +124,7 @@ public class ConnectionView extends JFrame {
         this.mnFile.add(mntClose);
         this.mnInfo.add(mntAbout);
         this.setTitle("USBConnection");
-        this.setIconImage(new ImageIcon(getClass().getClassLoader().getResource("./resources/ora_16x16.png")).getImage());
+        this.setIconImage(new ImageIcon(getClass().getClassLoader().getResource("resources/OR.png")).getImage());
         this.txtInfo.setText(Locale.getDefault().getLanguage());
         this.setTitle(messages.getString("title"));
     }
@@ -131,6 +132,7 @@ public class ConnectionView extends JFrame {
     public void setConnectActionListener(ConnectActionListener connectListener) {
         this.butConnect.addActionListener(connectListener);
         this.mntClose.addActionListener(connectListener);
+        this.mntAbout.addActionListener(connectListener);
         this.butClose.addActionListener(connectListener);
     }
 
@@ -170,31 +172,31 @@ public class ConnectionView extends JFrame {
     }
 
     private void createIcons() {
-        URL imgURL = getClass().getClassLoader().getResource("./resources/Roberta_Menu_Icon_green.png");
+        URL imgURL = getClass().getClassLoader().getResource("resources/Roberta_Menu_Icon_green.png");
         if ( imgURL != null ) {
             this.icoRobotConnected = new ImageIcon(imgURL);
         }
-        imgURL = getClass().getClassLoader().getResource("./resources/Roberta_Menu_Icon_red.png");
+        imgURL = getClass().getClassLoader().getResource("resources/Roberta_Menu_Icon_red.png");
         if ( imgURL != null ) {
             this.icoRobotDiscovered = new ImageIcon(imgURL);
         }
-        imgURL = getClass().getClassLoader().getResource("./resources/Roberta_Menu_Icon_grey.png");
+        imgURL = getClass().getClassLoader().getResource("resources/Roberta_Menu_Icon_grey.png");
         if ( imgURL != null ) {
             this.icoRobotNotDiscovered = new ImageIcon(imgURL);
         }
-        imgURL = getClass().getClassLoader().getResource("./resources/plug.gif");
+        imgURL = getClass().getClassLoader().getResource("resources/plug.gif");
         if ( imgURL != null ) {
             this.gifPlug = new ImageIcon(imgURL);
         }
-        imgURL = getClass().getClassLoader().getResource("./resources/connect.gif");
+        imgURL = getClass().getClassLoader().getResource("resources/connect.gif");
         if ( imgURL != null ) {
             this.gifConnect = new ImageIcon(imgURL);
         }
-        imgURL = getClass().getClassLoader().getResource("./resources/server.gif");
+        imgURL = getClass().getClassLoader().getResource("resources/server.gif");
         if ( imgURL != null ) {
             this.gifServer = new ImageIcon(imgURL);
         }
-        imgURL = getClass().getClassLoader().getResource("./resources/connected.gif");
+        imgURL = getClass().getClassLoader().getResource("resources/connected.gif");
         if ( imgURL != null ) {
             this.gifConnected = new ImageIcon(imgURL);
         }

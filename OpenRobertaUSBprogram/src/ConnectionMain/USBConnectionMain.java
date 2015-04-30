@@ -45,7 +45,7 @@ public class USBConnectionMain {
             }
 
             private ResourceBundle getServerProps() {
-                return ResourceBundle.getBundle("resources/server");
+                return ResourceBundle.getBundle("resources.server");
             }
 
             private ResourceBundle getLocals() {

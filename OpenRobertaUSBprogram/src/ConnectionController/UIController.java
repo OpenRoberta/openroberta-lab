@@ -49,6 +49,8 @@ public class UIController<ObservableObject> implements Observer {
             AbstractButton b = (AbstractButton) e.getSource();
             if ( b.getActionCommand() == "close" ) {
                 closeApplication();
+            } else if ( b.getActionCommand() == "about" ) {
+                showAboutPopup();
             } else {
                 if ( b.isSelected() ) {
                     connector.connect();
@@ -59,7 +61,6 @@ public class UIController<ObservableObject> implements Observer {
                 }
             }
         }
-
     }
 
     public class CloseListener extends WindowAdapter {
@@ -80,7 +81,7 @@ public class UIController<ObservableObject> implements Observer {
     }
 
     public void closeApplication() {
-        if ( connected ) {
+        if ( this.connected ) {
             String[] buttons = {
                 rb.getString("close"), rb.getString("cancel")
             };
@@ -89,7 +90,7 @@ public class UIController<ObservableObject> implements Observer {
                     conView,
                     rb.getString("attention"),
                     rb.getString("confirmCloseInfo"),
-                    new ImageIcon(getClass().getClassLoader().getResource("./resources/Roberta.png")),
+                    new ImageIcon(getClass().getClassLoader().getResource("resources/Roberta.png")),
                     buttons);
             if ( n == 0 ) {
                 connector.close();
@@ -128,7 +129,18 @@ public class UIController<ObservableObject> implements Observer {
         }
     }
 
+    private void showAboutPopup() {
+        ORAPopup.showPopup(
+            conView,
+            rb.getString("about"),
+            rb.getString("aboutInfo"),
+            new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("resources/iais_logo.gif")).getImage().getScaledInstance(
+                100,
+                27,
+                java.awt.Image.SCALE_AREA_AVERAGING)));
+    }
+
     private void showErrorPopup() {
-        ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpErrorInfo"));
+        ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpErrorInfo"), null);
     }
 }

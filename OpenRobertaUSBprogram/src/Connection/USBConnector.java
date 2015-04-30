@@ -131,7 +131,7 @@ public class USBConnector extends Observable implements Runnable, Connector {
         brickData.put(KEY_MACADDR, "usb");
 
         while ( this.running ) {
-            System.out.println(state.toString());
+            //System.out.println(state.toString());
             switch ( this.state ) {
                 case DISCOVER:
                 case DISCOVER_CONNECTED:
