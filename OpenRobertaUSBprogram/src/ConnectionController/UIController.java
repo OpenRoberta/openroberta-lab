@@ -121,6 +121,9 @@ public class UIController<ObservableObject> implements Observer {
                 this.connected = false;
                 this.conView.setDiscover();
                 break;
+            case DISCOVER_CONNECTED:
+                this.conView.setDiscoverConnected();
+                break;
             case ERROR_HTTP:
                 showErrorPopup("http");
                 break;

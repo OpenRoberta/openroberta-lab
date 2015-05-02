@@ -13,15 +13,11 @@
   <stayAlive>false</stayAlive>
   <restartOnCrash>false</restartOnCrash>
   <manifest></manifest>
-  <icon>C:\Users\Beate X240\Downloads\OR.ico</icon>
+  <icon>C:\GitRepos\robertalabNeu\robertalab\OpenRobertaUSBprogram\src\resources\OR.ico</icon>
   <singleInstance>
     <mutexName>vv</mutexName>
     <windowTitle>Beate</windowTitle>
   </singleInstance>
-  <classPath>
-    <mainClass>org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader</mainClass>
-    <cp>.</cp>
-  </classPath>
   <jre>
     <path>jre</path>
     <bundledJre64Bit>false</bundledJre64Bit>

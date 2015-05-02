@@ -84,7 +84,7 @@ public class ConnectionView extends JFrame {
         this.txtInfo.setForeground(Color.decode("#333333"));
         this.txtInfo.setMargin(new Insets(16, 16, 16, 16));
         this.txtInfo.setEditable(false);
-        this.pnlToken.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
+        this.pnlToken.setBorder(null);
         this.pnlToken.setBackground(Color.white);
         this.pnlToken.setLayout(new FlowLayout(FlowLayout.CENTER));
         this.txtToken.setFont(new Font("Arial", Font.PLAIN, 18));
@@ -149,13 +149,15 @@ public class ConnectionView extends JFrame {
     }
 
     public void setWaitForCmd(String string) {
+        this.butConnect.setEnabled(true);
+        this.butConnect.setSelected(true);
         this.lblRobot.setIcon(this.icoRobotConnected);
         this.txtInfo.setText(messages.getString("serverInfo"));
         this.lblGif.setIcon(gifConnected);
     }
 
     public void setDiscover() {
-        this.txtToken.setVisible(false);
+        this.txtToken.setText("");
         this.lblRobot.setIcon(this.icoRobotNotDiscovered);
         this.butConnect.setText(messages.getString("connect"));
         this.butConnect.setSelected(false);
@@ -164,9 +166,13 @@ public class ConnectionView extends JFrame {
         this.lblGif.setIcon(gifPlug);
     }
 
+    public void setDiscoverConnected() {
+        this.butConnect.setSelected(false);
+        this.butConnect.setEnabled(false);
+    }
+
     public void setNew(String token) {
         this.txtToken.setText(token);
-        this.txtToken.setVisible(true);
         this.txtInfo.setText(messages.getString("tokenInfo"));
         this.lblGif.setIcon(gifServer);
     }
@@ -201,4 +207,5 @@ public class ConnectionView extends JFrame {
             this.gifConnected = new ImageIcon(imgURL);
         }
     }
+
 }
