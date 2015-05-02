@@ -153,6 +153,7 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
     this.inputsInline = false;
     this.rendered = false;
     this.disabled = false;
+    this.inTask = true;
     this.tooltip = '';
     this.contextMenu = true;
 
@@ -678,19 +679,20 @@ Blockly.Block.prototype.onMouseUp_ = function(e) {
             var found = false;
             for (var i = 0; !found && i < topBlocks.length; i++) {
                 var block = topBlocks[i];
-                var disabled = true;
+                var inTask = false;
                 while (block) {
                     if (block == rootBlock) {
                         if (block.type == 'robControls_activity' || block.type == 'robControls_start' || block.type == 'robProcedures_defnoreturn'
                                 || block.type == 'robProcedures_defreturn' || block.type == 'robBrick_EV3-Brick') {
-                            disabled = false;
+                            inTask = true;
                         }
                         found = true;
                     }
                     if (found) {
                         var descendants = rootBlock.getDescendants();
                         for (var j = 0; j < descendants.length; j++) {
-                            descendants[j].setDisabled(disabled);
+                            //descendants[j].setDisabled(disabled);
+                            descendants[j].setInTask(inTask);
                         }
                     }
                     block = block.getNextBlock();
@@ -844,6 +846,7 @@ Blockly.Block.prototype.showContextMenu_ = function(e) {
                 }
             };
             options.push(disableOption);
+            console.log(disableOption);
         }
 
         // Option to delete this block.
@@ -1585,6 +1588,21 @@ Blockly.Block.prototype.setDisabled = function(disabled) {
         return;
     }
     this.disabled = disabled;
+    this.svg_.updateDisabled();
+    this.workspace.fireChangeEvent();
+};
+
+/**
+ * Set whether the block is in task or not.
+ * 
+ * @param {boolean}
+ *            inTask True if block belongs to a valid task.
+ */
+Blockly.Block.prototype.setInTask = function(inTask) {
+    if (this.inTask == inTask) {
+        return;
+    }
+    this.inTask = inTask;
     this.svg_.updateDisabled();
     this.workspace.fireChangeEvent();
 };
