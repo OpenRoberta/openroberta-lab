@@ -15,8 +15,17 @@
 			<include name="*.jar" />
 		</fileset>
 	</path>
+	
+	<target name="info">
+		<echo>basedir:                     ${basedir}</echo>
+		<echo>crosscompiler.resources.dir: ${crosscompiler.resources.dir}</echo>
+		<echo>user.projects.dir:           ${user.projects.dir}</echo>
+		<echo>token.dir:                   ${token.dir}</echo>
+		<echo>main.package:                ${main.package}</echo>
+		<echo>main.name:                   ${main.name}</echo>
+	</target>
 
-	<target name="emptyOutDir">
+	<target name="emptyOutDir" depends="info">
 		<mkdir dir="${output.dir}" />
 		<delete includeEmptyDirs="true">
 			<fileset dir="${output.dir}" includes="**/*" defaultexcludes="no"/>
