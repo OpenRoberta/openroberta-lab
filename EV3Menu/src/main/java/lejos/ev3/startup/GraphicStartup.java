@@ -1502,7 +1502,6 @@ public class GraphicStartup implements ORAmenu {
             String token = new ORAtokenGenerator().generateToken();
             //String ip = "mp-devel.iais.fraunhofer.de:1999";
             String ip = getIPAddress();
-            // String ip = 193.175.162.161:80;
             if ( ip.equals("none") ) {
                 return;
             } else {
@@ -1555,6 +1554,12 @@ public class GraphicStartup implements ORAmenu {
         }
     }
 
+    /**
+     * Get the MAC address from wlan0 interface to send to Open Roberta Lab server.
+     * Used for deleting "old" sessions.
+     *
+     * @return MAC address
+     */
     public static String getORAmacAddress() {
         Enumeration<NetworkInterface> interfaces;
         try {
@@ -1574,6 +1579,12 @@ public class GraphicStartup implements ORAmenu {
         }
     }
 
+    /**
+     * Convert MAC address of bytearray to a readable format.
+     *
+     * @param macRaw Mac address as bytearray
+     * @return MAC address as String
+     */
     private static String convertToReadableMAC(byte[] macRaw) {
         if ( macRaw != null ) {
             StringBuilder sb = new StringBuilder();
@@ -1588,6 +1599,8 @@ public class GraphicStartup implements ORAmenu {
 
     /**
      * Manually redraw IP addresses on the screen. Used for restoring the screen after user process is terminated.
+     * Executed only if the brick is in the main menu. Used for fixing a leJOS bug.
+     * Two lines in submenus are not updated yet.
      */
     public static void redrawIPs() {
         int row = 1;
@@ -1600,9 +1613,10 @@ public class GraphicStartup implements ORAmenu {
     }
 
     /**
-     * Get ORA ev3menu version from EV3Menu.properties in jar file.
+     * Get Open Roberta Lab EV3Menu version from EV3Menu.properties in jar file.
+     * This will be send to the server to check if the brick firmware is up-to-date.
      *
-     * @return
+     * @return Open Roberta Lab menu version
      */
     public static String getORAmenuVersion() {
         Properties menuProperties = new Properties();
@@ -1622,16 +1636,30 @@ public class GraphicStartup implements ORAmenu {
 
     // OR Lab RMI interface for USB connection
 
+    /**
+     * Get the OR Lab menu version number from EV3Menu.Properties in the EV3Menu.jar file.
+     * For example: 1.2.0
+     *
+     * @return Open Roberta Lab menu version
+     */
     @Override
     public String getORAversion() {
         return GraphicStartup.getORAmenuVersion();
     }
 
+    /**
+     * Get the battery voltage for the usb program.
+     *
+     * @return Battery voltage
+     */
     @Override
     public String getORAbattery() {
         return GraphicStartup.getBatteryStatus();
     }
 
+    /**
+     * Set the OR Lab registration state in the menu.
+     */
     @Override
     public void setORAregistration(boolean status) {
         orUSBconnected = status;
@@ -1643,6 +1671,9 @@ public class GraphicStartup implements ORAmenu {
         }
     }
 
+    /**
+     * Flag the EV3 as firmware updated. Used in OR Lab usb program.
+     */
     @Override
     public void setORAupdateState() {
         LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
@@ -1651,6 +1682,9 @@ public class GraphicStartup implements ORAmenu {
         ORAhandler.setRegistered(false);
     }
 
+    /**
+     * Run an OR Lab program via USB, only if no other program is running currently.
+     */
     @Override
     public void runORAprogram(String programName) {
         if ( program == null ) {
@@ -1659,7 +1693,7 @@ public class GraphicStartup implements ORAmenu {
         }
     }
 
-    // ---
+    // --- END OR Lab RMI interface for USB connection
 
     /**
      * Get the leJOS Firmware version.

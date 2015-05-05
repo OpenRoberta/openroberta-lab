@@ -21,8 +21,8 @@ public class USBConnectionMain {
             public void run() {
                 prepareUI();
                 ResourceBundle messages = getLocals();
-                ResourceBundle serverProbs = getServerProps();
-                USBConnector usbCon = new USBConnector(serverProbs);
+                ResourceBundle serverProps = getServerProps();
+                USBConnector usbCon = new USBConnector(serverProps);
                 ConnectionView view = new ConnectionView(messages);
                 UIController<?> controller = new UIController<Object>(usbCon, view, messages);
                 controller.control();

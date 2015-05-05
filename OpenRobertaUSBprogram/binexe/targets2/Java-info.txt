@@ -1,0 +1,2 @@
+Java Runtime Environment (JRE) Version 7 Update 51 32-Bit
+in a "java"-named folder

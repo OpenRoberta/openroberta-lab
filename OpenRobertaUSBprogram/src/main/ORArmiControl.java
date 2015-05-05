@@ -7,6 +7,7 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 
 import ora.rmi.ORArmiMenu;
+import Connection.USBConnector;
 
 /**
  * Map methods to RMI calls.
@@ -18,23 +19,38 @@ public class ORArmiControl {
     private final String brickLibDir = "/home/roberta/lib";
     private final String brickMenuDir = "/home/root/lejos/bin/utils";
 
+    private final String brickIp;
+
     private boolean status = true;
 
     private static ORArmiMenu menu;
 
-    public ORArmiControl() {
-        // default
+    public ORArmiControl(String brickIp) {
+        this.brickIp = brickIp;
     }
 
+    /**
+     * Search for the RMI server of the EV3 and connect to the menu.
+     *
+     * @throws Exception
+     */
     public void connectToMenu() throws Exception {
-        menu = (ORArmiMenu) Naming.lookup("//" + Main.brickIp + "/RemoteMenu");
+        menu = (ORArmiMenu) Naming.lookup("//" + this.brickIp + "/RemoteMenu");
         System.out.println("Connected to brick!");
     }
 
+    /**
+     * Set menu object to null. Brick does not know about connecting or disconnecting.
+     */
     public void disconnectFromMenu() {
         menu = null;
     }
 
+    /**
+     * Upload the Open Robert Lab user program to the brick.
+     *
+     * @param programName
+     */
     public void uploadFile(String programName) {
         if ( menu == null ) {
             return;
@@ -52,15 +68,30 @@ public class ORArmiControl {
         }
     }
 
+    /**
+     * Upload all firmware files from the PC to the EV3.<br>
+     * - OpenRobertaRuntime.jar<br>
+     * - OpenRobertaShared.jar<br>
+     * - json.jar<br>
+     * - EV3Menu.jar
+     *
+     * @return True if writing all files was successful. False if at least one file has failed
+     */
     public boolean uploadFirmwareFiles() {
         this.status = true;
-        uploadFirmwareFile(this.brickLibDir, new File(Main.TEMPDIRECTORY, "OpenRobertaRuntime.jar").getAbsolutePath());
-        uploadFirmwareFile(this.brickLibDir, new File(Main.TEMPDIRECTORY, "OpenRobertaShared.jar").getAbsolutePath());
-        uploadFirmwareFile(this.brickLibDir, new File(Main.TEMPDIRECTORY, "json.jar").getAbsolutePath());
-        uploadFirmwareFile(this.brickMenuDir, new File(Main.TEMPDIRECTORY, "EV3Menu.jar").getAbsolutePath());
+        uploadFirmwareFile(this.brickLibDir, new File(USBConnector.TEMPDIRECTORY, "OpenRobertaRuntime.jar").getAbsolutePath());
+        uploadFirmwareFile(this.brickLibDir, new File(USBConnector.TEMPDIRECTORY, "OpenRobertaShared.jar").getAbsolutePath());
+        uploadFirmwareFile(this.brickLibDir, new File(USBConnector.TEMPDIRECTORY, "json.jar").getAbsolutePath());
+        uploadFirmwareFile(this.brickMenuDir, new File(USBConnector.TEMPDIRECTORY, "EV3Menu.jar").getAbsolutePath());
         return this.status;
     }
 
+    /**
+     * Upload a file to the brick.
+     *
+     * @param directory in which the file is stored
+     * @param fileName name + file extension
+     */
     private void uploadFirmwareFile(String directory, String fileName) {
         if ( menu == null ) {
             this.status = this.status && false;
@@ -81,32 +112,73 @@ public class ORArmiControl {
         }
     }
 
+    /**
+     * Block all Open Roberta Lab functionality until the brick is restarted to prevent bugs after updating the firmware.
+     *
+     * @throws RemoteException
+     */
     public void setORAupdateState() throws RemoteException {
         menu.setORAupdateState();
     }
 
+    /**
+     * Get the leJOS version from the EV3.
+     *
+     * @return leJOS version
+     * @throws RemoteException
+     */
     public String getlejosVersion() throws RemoteException {
         return menu.getVersion();
     }
 
+    /**
+     * Get the Open Roberta Lab version from the EV3.
+     *
+     * @return ORA version
+     * @throws RemoteException
+     */
     public String getORAversion() throws RemoteException {
         return menu.getORAversion();
     }
 
+    /**
+     * Get the name of the EV3.
+     *
+     * @return brickname
+     * @throws RemoteException
+     */
     public String getBrickname() throws RemoteException {
         return menu.getName();
 
     }
 
+    /**
+     * Get the battery voltage from the EV3.
+     *
+     * @return battery voltage as string (for example 8.0)
+     * @throws RemoteException
+     */
     public String getBatteryVoltage() throws RemoteException {
         return menu.getORAbattery();
     }
 
+    /**
+     * Notify the EV3 when connecting to/ disconnecting from Open Roberta Lab.
+     *
+     * @param status True if connecting. False if disconnecting
+     * @throws RemoteException
+     */
     public void setORAregistration(boolean status) throws RemoteException {
         menu.setORAregistration(status);
 
     }
 
+    /**
+     * Execute a Open Roberta Lab user program on the brick.
+     *
+     * @param programName name of the program
+     * @throws RemoteException
+     */
     public void runORAprogram(String programName) throws RemoteException {
         menu.runORAprogram(programName);
     }

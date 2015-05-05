@@ -3,9 +3,9 @@
     <!--this file was created by Eclipse Runnable JAR Export Wizard-->
     <!--ANT 1.7 is required                                        -->
     <target name="create_run_jar">
-        <jar destfile="C:/installations/Githome/robertalab/OpenRobertaUSBprogram/orusb.jar" filesetmanifest="mergewithoutmain">
+        <jar destfile="C:/installations/Githome/robertalab/OpenRobertaUSBprogram/OpenRobertaUSBprogram.jar" filesetmanifest="mergewithoutmain">
             <manifest>
-                <attribute name="Main-Class" value="main.Main"/>
+                <attribute name="Main-Class" value="ConnectionMain.USBConnectionMain"/>
                 <attribute name="Class-Path" value="."/>
             </manifest>
             <fileset dir="C:/installations/Githome/robertalab/OpenRobertaUSBprogram/bin"/>

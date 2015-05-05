@@ -80,6 +80,7 @@ public class UIController<ObservableObject> implements Observer {
         this.connected = connected;
     }
 
+    // TODO Maybe expose the temp directory from USBConnector to delete the temporary files before closing the application.
     public void closeApplication() {
         if ( this.connected ) {
             String[] buttons = {

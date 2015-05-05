@@ -31,11 +31,11 @@ public class ORAupdater {
     }
 
     /**
-     * Download all files required for Open Roberta Lab. Each method sets DOWNLOADOK to false if error occurs.
+     * Download all files required for Open Roberta Lab. Each submethod is able to set DOWNLOADOK to false if error occurs.
      *
      * @Return True if all files are downloaded successfully. False if at least one file not successful.
      */
-    public boolean update() {
+    public boolean downloadToPC() {
         this.DOWNLOADOK = true;
         getRuntime();
         getShared();

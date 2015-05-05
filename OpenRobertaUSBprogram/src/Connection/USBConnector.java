@@ -36,7 +36,7 @@ public class USBConnector extends Observable implements Runnable, Connector {
     private final ORAupdater oraUpdater;
     private final ORAtokenGenerator tokenGenerator;
 
-    private final ORArmiControl remoteControl = new ORArmiControl();
+    private final ORArmiControl remoteControl;
 
     private final boolean running = true;
 
@@ -60,7 +60,7 @@ public class USBConnector extends Observable implements Runnable, Connector {
     private static final String CMD_DOWNLOAD = "download";
     private static final String CMD_CONFIGURATION = "configuration";
 
-    // Windows only!! for other OS use Java method to check on which OS JVM is running
+    // Currently directory is only set correctly on windows computers. Tested on windows 7.
     public static File TEMPDIRECTORY = null;
 
     public enum State {
@@ -85,6 +85,7 @@ public class USBConnector extends Observable implements Runnable, Connector {
         } catch ( MalformedURLException e ) {
             // ok
         }
+        this.remoteControl = new ORArmiControl(this.brickIp);
         this.oraDownloader = new ORAdownloader(this.serverBaseIP);
         this.oraUpdater = new ORAupdater(this.serverBaseIP);
         this.tokenGenerator = new ORAtokenGenerator();
@@ -114,6 +115,12 @@ public class USBConnector extends Observable implements Runnable, Connector {
         }
     }
 
+    /**
+     * Check if os name contains substring "windows"
+     *
+     * @param os Operating system name from the API
+     * @return true if "windows" occurs as a substring
+     */
     private boolean isWindows(String os) {
         return os.indexOf("windows") >= 0;
     }
@@ -161,6 +168,11 @@ public class USBConnector extends Observable implements Runnable, Connector {
                     notifyConnectionStateChanged(this.state);
                     break;
                 case WAIT_FOR_CONNECT:
+                    try {
+                        Thread.sleep(500);
+                    } catch ( InterruptedException ie ) {
+                        // ok
+                    }
                     break; // just waiting for user input
                 case CONNECT:
                     String token = this.tokenGenerator.generateToken();
@@ -245,14 +257,18 @@ public class USBConnector extends Observable implements Runnable, Connector {
                                 notifyConnectionStateChanged(State.DISCOVER);
                                 return;
                             case CMD_UPDATE:
-                                // Move to CMD_REPEAT for easy testing
                                 System.out.println("---Download firmware files to PC---");
-                                if ( this.oraUpdater.update() == true ) {
+                                // this should never fail (return false), unless we screw up the directory
+                                // in which the files are stored, see setTempPath()
+                                if ( this.oraUpdater.downloadToPC() == true ) {
                                     System.out.println("---Upload firmware files to EV3---");
                                     if ( this.remoteControl.uploadFirmwareFiles() == true ) {
                                         this.remoteControl.setORAupdateState();
                                         // TODO Stop connection, do not allow reconnection
-                                        // Force/ tell the user to restart the brick
+                                        // Force/ tell the user to restart the brick first
+                                    } else {
+                                        // TODO tell the user that uploading firmware files to the brick has failed.
+                                        // Keep the connection to Open Roberta Lab alive so user can retry.
                                     }
                                 }
                                 break;
@@ -302,6 +318,14 @@ public class USBConnector extends Observable implements Runnable, Connector {
         }
     }
 
+    /**
+     * Open a connection to the Open Roberta Lab server.
+     *
+     * @param readTimeOut 330s for register, 15s for push
+     * @return connection object
+     * @throws SocketTimeoutException
+     * @throws IOException
+     */
     private HttpURLConnection openConnection(int readTimeOut) throws SocketTimeoutException, IOException {
         HttpURLConnection httpURLConnection = (HttpURLConnection) this.pushServiceURL.openConnection();
         httpURLConnection.setDoInput(true);
@@ -329,8 +353,7 @@ public class USBConnector extends Observable implements Runnable, Connector {
                 this.httpURLConnection.disconnect();
             }
         } catch ( RemoteException e ) {
-            // TODO Auto-generated catch block
-            //e.printStackTrace();
+            // ok
         }
         this.state = State.DISCOVER;
         notifyConnectionStateChanged(State.DISCOVER);
