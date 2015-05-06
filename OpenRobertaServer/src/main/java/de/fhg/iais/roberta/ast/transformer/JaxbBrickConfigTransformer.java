@@ -72,7 +72,9 @@ public class JaxbBrickConfigTransformer {
                 List<Field> actorFields = actorBlock.getField();
                 actorFields.add(mkField("MOTOR_REGULATION", ("" + actor.isRegulated()).toUpperCase()));
                 actorFields.add(mkField("MOTOR_REVERSE", actor.getRotationDirection().toString()));
-                actorFields.add(mkField("MOTOR_DRIVE", actor.getMotorSide().toString()));
+                if ( !actor.getComponentType().getName().equals("robBrick_motor_middle") ) {
+                    actorFields.add(mkField("MOTOR_DRIVE", actor.getMotorSide().toString()));
+                }
                 values.add(hardwareComponent);
             }
         }
@@ -127,7 +129,7 @@ public class JaxbBrickConfigTransformer {
                 // Extract actor
                 switch ( value.getBlock().getType() ) {
                     case "robBrick_motor_middle":
-                        fields = extractFields(value.getBlock(), (short) 3);
+                        fields = extractFields(value.getBlock(), (short) 2);
                         actors.add(Pair.of(
                             ActorPort.get(value.getName()),
                             new EV3Actor(EV3Actors.find(value.getBlock().getType()), extractField(fields, "MOTOR_REGULATION", 0).equals("TRUE"), DriveDirection
