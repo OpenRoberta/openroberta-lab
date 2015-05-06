@@ -1,7 +1,5 @@
 package de.fhg.iais.roberta.persistence.bo;
 
-import java.sql.Timestamp;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,84 +11,70 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import javax.persistence.AssociationOverride;
-import javax.persistence.AssociationOverrides;
-
 import de.fhg.iais.roberta.dbc.Assert;
-import de.fhg.iais.roberta.util.Util;
 
+/**
+ * the access right of a user for a program. Used for sharing. The relation may be a READ or a WRITE permission.
+ */
 @Entity
 @Table(name = "USER_PROGRAM")
-public class UserProgram implements WithSurrogateId{
-    
+public class AccessRight implements WithSurrogateId {
+
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    
 
     @Override
-    public int getId(){
+    public int getId() {
         return this.id;
     }
-    
-	@ManyToOne
+
+    @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
-    
+
     @ManyToOne
     @JoinColumn(name = "PROGRAM_ID")
     private Program program;
-    
+
     @Enumerated(EnumType.STRING)
     @Column(name = "RELATION")
     private Relation relation;
-    
-    
-    protected UserProgram() {
+
+    protected AccessRight() {
         // Hibernate
     }
 
-	/**
-     * create a new program
+    /**
+     * create a new access right of a user for a program.
      *
-     * @param name the name of the program, not null
-     * @param owner the user who created and thus owns the program
+     * @param user that will get a read/write permission, not null
+     * @param program the program affected, not null
+     * @param relation read or write permission
      */
-    public UserProgram(User user, Program program, Relation relation) {
-    	
+    public AccessRight(User user, Program program, Relation relation) {
         Assert.notNull(user);
         Assert.notNull(program);
         Assert.notNull(relation);
         this.user = user;
         this.program = program;
         this.relation = relation;
-        
     }
-    
-    public User getUser(){
-		return user;
-	}
 
-	public void setUser(User user){
-		this.user = user;
-	}
+    public User getUser() {
+        return user;
+    }
 
-	public Program getProgram(){
-		return program;
-	}
+    public Program getProgram() {
+        return program;
+    }
 
-	public void setProgram(Program program){
-		this.program = program;
-	}
+    public Relation getRelation() {
+        return this.relation;
+    }
 
-	public Relation getRelation(){
-		return this.relation;
-	}
-
-	public void setRelation(Relation relation){
-		this.relation = relation;
-	}
-
-    
+    public void setRelation(Relation relation) {
+        this.relation = relation;
+    }
 }

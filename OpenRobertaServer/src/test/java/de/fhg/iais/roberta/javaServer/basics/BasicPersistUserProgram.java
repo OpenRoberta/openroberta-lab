@@ -15,10 +15,10 @@ import de.fhg.iais.roberta.persistence.bo.Program;
 import de.fhg.iais.roberta.persistence.bo.Relation;
 import de.fhg.iais.roberta.persistence.bo.Role;
 import de.fhg.iais.roberta.persistence.bo.User;
-import de.fhg.iais.roberta.persistence.bo.UserProgram;
+import de.fhg.iais.roberta.persistence.bo.AccessRight;
 import de.fhg.iais.roberta.persistence.dao.ProgramDao;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
-import de.fhg.iais.roberta.persistence.dao.UserProgramDao;
+import de.fhg.iais.roberta.persistence.dao.AccessRightDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
@@ -83,13 +83,13 @@ public class BasicPersistUserProgram {
         //User 0 invites all inpair  users to write to its program
         User owner = userDao.loadUser("account-0");
         Program program = programDao.load("program-0", owner);
-        UserProgramDao userProgramDao = new UserProgramDao(hSession);
+        AccessRightDao userProgramDao = new AccessRightDao(hSession);
         for ( int userNumber = 1; userNumber < TOTAL_USERS; userNumber += 2 ) {
             User user = userDao.loadUser("account-" + userNumber);
             if ( user != null ) {
-                UserProgram userProgram = userProgramDao.loadUserProgram(user, program);
+                AccessRight userProgram = userProgramDao.loadAccessRight(user, program);
                 if ( userProgram == null ) {
-                    UserProgram userProgram2 = new UserProgram(user, program, Relation.WRITE);
+                    AccessRight userProgram2 = new AccessRight(user, program, Relation.WRITE);
                     hSession.save(userProgram2);
                     hSession.commit();
                 }
@@ -97,11 +97,11 @@ public class BasicPersistUserProgram {
         }
 
         //Show list of users from program dao
-        List<UserProgram> userProgramList = userProgramDao.loadUserProgramByProgram(program);
+        List<AccessRight> userProgramList = userProgramDao.loadAccessRightsByProgram(program);
         assertTrue(userProgramList.size() == 50);
         for ( int userNumber = 1; userNumber < TOTAL_USERS; userNumber += 2 ) {
             User user = userDao.loadUser("account-" + userNumber);
-            List<UserProgram> userProgramList2 = userProgramDao.loadUserProgramByUser(user);
+            List<AccessRight> userProgramList2 = userProgramDao.loadAccessRightsForUser(user);
             assertTrue(userProgramList2.size() == 1);
         }
     }

@@ -16,6 +16,7 @@ function initUserState() {
     userState.programSaved = false;
     userState.configurationSaved = false;
     userState.programModified = false;
+    userState.programShared = false;
     userState.configurationModified = false;
     userState.toolbox = 'beginner';
     userState.token = '1A2B3C4D';
@@ -309,7 +310,7 @@ function saveToServer() {
         userState.programSaved = true;
         LOG.info('save program ' + userState.program + ' login: ' + userState.id);
         $('.modal').modal('hide'); // close all opened popups
-        PROGRAM.saveProgramToServer(userState.program, xmlText, function(result) {
+        PROGRAM.saveProgramToServer( userState.program, userState.programShared, xmlText, function(result) {
             if (result.rc === 'ok') {
                 userState.programModified = false;
             }
@@ -433,6 +434,13 @@ function loadFromListing() {
     var $programRow = $('#programNameTable .selected');
     if ($programRow.length > 0) {
         var programName = $programRow[0].children[0].textContent;
+        var sharedWith = $programRow[0].children[2].textContent;
+        var right = $programRow[0].children[3].textContent;
+        if (sharedWith === userState.accountName && right === 'WRITE') {
+            userState.programShared = true;
+        } else {
+            userState.programShared = false;            
+        }
         LOG.info('loadFromList ' + programName + ' signed in: ' + userState.id);
         PROGRAM.loadProgramFromListing(programName, function(result) {
             if (result.rc === 'ok') {
@@ -467,6 +475,32 @@ function loadConfigurationFromListing() {
             }
             displayInformation(result, "", result.message);
         });
+    }
+}
+
+/**
+ * Share the programs that were selected in program list
+ */
+function shareProgramsFromListing() {
+    var userToShareWith = $('#programShareWith').val();
+    if (userToShareWith === userState.name) {
+        // you cannot share programs with yourself
+        displayMessage("ORA_USER_TO_SHARE_SAME_AS_LOGIN_USER", "POPUP", "");
+    } else if (userToShareWith != '') {
+        var right = $('#programShareRight input:checked').val();
+        var $programRow = $('#programNameTable .selected');
+        var cnt = 0;
+        for (var i=0; i < $programRow.length; i++) {
+            var programName = $programRow[i].children[0].textContent;
+            LOG.info("share program " + programName + " with '" + userToShareWith + "'");
+            PROGRAM.shareProgram( programName, userToShareWith, right, function(result) {
+                cnt++;
+                if (cnt === $programRow.length) {
+                    PROGRAM.refreshList(showPrograms);
+                    $('#share-program').modal('hide');
+                }
+            });
+        }
     }
 }
 
@@ -630,12 +664,14 @@ function initProgramNameTable() {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>Erzeugt von</span>",
         "sClass" : "programs"
     }, {
-//        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_SHARED_WITH'>Geteilt mit</span>",
-//        "sClass" : "programs"
-//    }, {
-//        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_SHARED_FOR'>Geteilt für</span>",
-//        "sClass" : "programs"
-//    }, {
+        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_SHARED_WITH'>Geteilt mit</span>",
+        "sDefaultContent": "-",
+        "sClass" : "programs"
+    }, {
+        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_SHARED_FOR'>Recht(e)</span>",
+        "sDefaultContent": "-",
+        "sClass" : "programs"
+    }, {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>Erzeugt am</span>",
         "sClass" : "programs"
     }, {
@@ -649,7 +685,7 @@ function initProgramNameTable() {
         "aaData" : [],
         "aoColumns" : columns,
         "aoColumnDefs" : [ { // format date fields
-            "aTargets" : [ 2, 3 ], // indexes of columns to be formatted
+            "aTargets" : [ 4, 5 ], // indexes of columns to be formatted
             "sType" : "date-de",
             "mRender" : function(data) {
                 return UTIL.formatDate(data);
@@ -691,12 +727,6 @@ function initConfigurationNameTable() {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>Erzeugt von</span>",
         "sClass" : "configurations"
     }, {
-//        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_SHARED_WITH'>Geteilt mit</span>",
-//        "sClass" : "programs"
-//    }, {
-//        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_SHARED_FOR'>Geteilt für</span>",
-//        "sClass" : "programs"
-//    }, {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>Erzeugt am</span>",
         "sClass" : "configurations"
     }, {
@@ -1007,12 +1037,8 @@ function initPopups() {
     $('#saveConfiguration').onWrap('click', saveAsConfigurationToServer);
 
     $('#shareProgram').onWrap('click', function() {
-        displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP", "");
+        shareProgramsFromListing();
     }, 'share program');
-
-    $('#shareConfiguration').onWrap('click', function() {
-        displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP", "");
-    }, 'share configuration');
 
     $('#setToken').onWrap('click', function() {
         setToken($('#tokenValue').val());
@@ -1124,13 +1150,10 @@ function initTabs() {
 
     // share program
     $('#shareFromListing').onWrap('click', function() {
-        $("#share-program").modal("show");
+        if ($('#programNameTable .selected').length > 0) {
+            $("#share-program").modal("show");
+        }
     }, 'share program');
-
-    // share configuration
-    $('#shareConfigurationFromListing').onWrap('click', function() {
-        $("#share-configuration").modal("show");
-    }, 'share configuration');
 
     $('#backConfiguration').onWrap('click', function() {
         activateProgConfigMenu();
@@ -1246,10 +1269,6 @@ function translate(jsdata) {
             $('#save-program h3').text(value);
             $('#save-configuration h3').text(value);
             $(this).html(value);
-        } else if (lkey === 'Blockly.Msg.BUTTON_DO_SHARE') {
-            $('#share-program h3').text(value);
-            $('#share-configuration h3').text(value);
-            $(this).html(value);
         } else if (lkey === 'Blockly.Msg.MENU_CONNECT') {
             $('#set-token h3').text(value);
             $(this).html(value);
@@ -1271,6 +1290,7 @@ function translate(jsdata) {
             $('.buttonDelete').attr('value', value);
         } else if (lkey === 'Blockly.Msg.BUTTON_DO_SHARE') {
             $('.buttonShare').attr('value', value);
+            $('#share-program h3').text(value);
         } else if (lkey === 'Blockly.Msg.BUTTON_EMPTY_LIST') {
             $('#clearLog').attr('value', value);
         } else if (lkey === 'Blockly.Msg.MENU_ROBOT_STATE_INFO') {

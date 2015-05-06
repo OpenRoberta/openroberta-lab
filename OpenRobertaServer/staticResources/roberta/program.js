@@ -16,10 +16,11 @@ var PROGRAM = {};
      * Save program
      * @memberof PROGRAM
      */
-    PROGRAM.saveProgramToServer = function(programName, xmlText, successFn) {
+    PROGRAM.saveProgramToServer = function(programName, programShared, xmlText, successFn) {
         COMM.json("/program", {
             "cmd" : "saveP",
             "name" : programName,
+            "shared" : programShared,
             "program" : xmlText
         }, successFn, "save program '" + programName + "' to server"); 
     };

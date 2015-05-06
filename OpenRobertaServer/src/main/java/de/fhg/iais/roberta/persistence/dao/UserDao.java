@@ -59,15 +59,14 @@ public class UserDao extends AbstractDao<User> {
             return il.get(0);
         }
     }
-    
-    public List<User> loadUserList(String sortBy,int offset,String tagFilter) {
-    	
-        
-    	if(tagFilter == null){
-    		Query hql = this.session.createQuery("from User where order by "+sortBy);
+
+    public List<User> loadUserList(String sortBy, int offset, String tagFilter) {
+
+        if ( tagFilter == null ) {
+            Query hql = this.session.createQuery("from User where order by " + sortBy);
             hql.setFirstResult(offset);
             hql.setMaxResults(10);
-            
+
             @SuppressWarnings("unchecked")
             List<User> il = hql.list();
             if ( il.size() == 0 ) {
@@ -75,28 +74,28 @@ public class UserDao extends AbstractDao<User> {
             } else {
                 return il;
             }
-    	}else{
-    		
-//    		Query hql = this.session.createQuery("from User");
-    		Query hql = this.session.createQuery("from User where tags=:tag order by "+sortBy);
-//    		
-//    		("SELECT Name, Day FROM Customers LEFT JOIN Reservations "
-//    				+ "ON Customers.CustomerId = Reservations.CustomerId where relation.program =: program;");
-     
-//    		Query hql = this.session.createQuery("select u.id, u.account, up.relation "
-//    				+ "from User as u "
-//    				+ "left join u.relation UserProgram "
-//    				+ "where up.program =: program order by "+sortBy);
-//    		
-            
-//            List<Object[]> list = query.list();
-//            for(Object[] arr : list){
-//                System.out.println(Arrays.toString(arr));
-//            }
-            
+        } else {
+
+            //    		Query hql = this.session.createQuery("from User");
+            Query hql = this.session.createQuery("from User where tags=:tag order by " + sortBy);
+            //    		
+            //    		("SELECT Name, Day FROM Customers LEFT JOIN Reservations "
+            //    				+ "ON Customers.CustomerId = Reservations.CustomerId where relation.program =: program;");
+
+            //    		Query hql = this.session.createQuery("select u.id, u.account, up.relation "
+            //    				+ "from User as u "
+            //    				+ "left join u.relation UserProgram "
+            //    				+ "where up.program =: program order by "+sortBy);
+            //    		
+
+            //            List<Object[]> list = query.list();
+            //            for(Object[] arr : list){
+            //                System.out.println(Arrays.toString(arr));
+            //            }
+
             hql.setFirstResult(offset);
             hql.setMaxResults(10);
-    		hql.setString("tag", tagFilter);
+            hql.setString("tag", tagFilter);
             @SuppressWarnings("unchecked")
             List<User> il = hql.list();
             if ( il.size() == 0 ) {
@@ -104,10 +103,10 @@ public class UserDao extends AbstractDao<User> {
             } else {
                 return il;
             }
-    	}
-    		       
+        }
+
     }
-    
+
     public int deleteUser(User userToBeDeleted) {
         Assert.notNull(userToBeDeleted);
         this.session.delete(userToBeDeleted);

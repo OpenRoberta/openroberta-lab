@@ -24,7 +24,7 @@ public abstract class AbstractProcessor {
     }
 
     /**
-     * the command failed. Remember that.
+     * the command succeeded. Remember that.
      */
     public final void setSuccess(Key message, String... parameter) {
         this.success = true;
@@ -44,7 +44,16 @@ public abstract class AbstractProcessor {
     }
 
     /**
-     * gets the return code of a processor command
+     * check the actual state of a processor
+     *
+     * @return true, if <b>until now</b> the processor was always successful, i.e. NO error message has been saved (don't use the success flag!)
+     */
+    public final boolean isOk() {
+        return this.message == null;
+    }
+
+    /**
+     * gets the return code of a processor *
      *
      * @return the string describing success or error
      */
