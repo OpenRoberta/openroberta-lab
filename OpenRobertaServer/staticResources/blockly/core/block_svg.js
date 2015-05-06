@@ -421,7 +421,7 @@ Blockly.BlockSvg.prototype.updateColour = function() {
  * Enable or disable a block.
  */
 Blockly.BlockSvg.prototype.updateDisabled = function() {
-    if (this.block_.disabled || this.block_.getInheritedDisabled() || !this.block_.inTask) {
+    if (this.block_.disabled || this.block_.getInheritedDisabled() || !this.block_.intask) {
         Blockly.addClass_((this.svgGroup_), 'blocklyDisabled');
         // this.svgPath_.setAttribute('fill', 'url(#blocklyDisabledPattern)');
         this.svgPath_.setAttribute('stroke', '#000000');

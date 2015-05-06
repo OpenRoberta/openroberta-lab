@@ -156,7 +156,7 @@ Blockly.Blocks['robProcedures_defreturn'] = {
         this.appendStatementInput('STACK').appendField(Blockly.Msg.PROCEDURES_DEFNORETURN_DO);
         this.setMutator(new Blockly.MutatorPlus(this));
         this.setTooltip(Blockly.Msg.PROCEDURES_DEFRETURN_TOOLTIP);
-        this.appendValueInput('RETURN').setAlign(Blockly.ALIGN_RIGHT).appendField(declType, 'TYPE').appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN)
+        this.appendValueInput('RETURN').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.GET).appendField(declType, 'TYPE').appendField(Blockly.Msg.PROCEDURES_DEFRETURN_BACK)
                 .setCheck('Number');
         this.declare_ = false;
         this.returnType_ = 'Number';
@@ -249,7 +249,7 @@ Blockly.Blocks['robProcedures_defreturn'] = {
         // making sure only declarations can connect to the statement list
         this.getInput('ST').connection.setCheck('declaration_only');
         this.appendStatementInput('STACK').appendField(Blockly.Msg.PROCEDURES_DEFNORETURN_DO);
-        this.appendValueInput('RETURN').setAlign(Blockly.ALIGN_RIGHT).appendField(declType, 'TYPE').appendField(Blockly.Msg.PROCEDURES_DEFRETURN_RETURN)
+        this.appendValueInput('RETURN').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.GET).appendField(declType, 'TYPE').appendField(Blockly.Msg.PROCEDURES_DEFRETURN_BACK)
                 .setCheck(this.returnType_);
         this.setFieldValue(this.returnType_, 'TYPE');
         if (returnConnectionTarget) {

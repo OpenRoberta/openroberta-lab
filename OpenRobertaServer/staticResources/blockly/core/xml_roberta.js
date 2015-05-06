@@ -156,6 +156,11 @@ Blockly.Xml.blockToDom_ = function(block, statement_list) {
     if (block.disabled) {
         element.setAttribute('disabled', true);
     }
+    if (block.intask) {
+        element.setAttribute('intask', true);
+    } else {
+        element.setAttribute('intask', false);
+    }
     if (!block.isDeletable()) {
         element.setAttribute('deletable', false);
     }
@@ -272,6 +277,10 @@ Blockly.Xml.domToBlock = function(workspace, xmlBlockList, opt_reuseBlock) {
         var disabled = xmlBlock.getAttribute('disabled');
         if (disabled) {
             block.setDisabled(disabled == 'true');
+        }
+        var intask = xmlBlock.getAttribute('intask');
+        if (intask) {
+            block.setInTask(intask == 'true');
         }
         var deletable = xmlBlock.getAttribute('deletable');
         if (deletable) {

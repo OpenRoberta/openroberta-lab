@@ -153,7 +153,7 @@ Blockly.Block.prototype.fill = function(workspace, prototypeName) {
     this.inputsInline = false;
     this.rendered = false;
     this.disabled = false;
-    this.inTask = true;
+    this.intask = true;
     this.tooltip = '';
     this.contextMenu = true;
 
@@ -679,12 +679,12 @@ Blockly.Block.prototype.onMouseUp_ = function(e) {
             var found = false;
             for (var i = 0; !found && i < topBlocks.length; i++) {
                 var block = topBlocks[i];
-                var inTask = false;
+                var intask = false;
                 while (block) {
                     if (block == rootBlock) {
                         if (block.type == 'robControls_activity' || block.type == 'robControls_start' || block.type == 'robProcedures_defnoreturn'
                                 || block.type == 'robProcedures_defreturn' || block.type == 'robBrick_EV3-Brick') {
-                            inTask = true;
+                            intask = true;
                         }
                         found = true;
                     }
@@ -692,7 +692,7 @@ Blockly.Block.prototype.onMouseUp_ = function(e) {
                         var descendants = rootBlock.getDescendants();
                         for (var j = 0; j < descendants.length; j++) {
                             //descendants[j].setDisabled(disabled);
-                            descendants[j].setInTask(inTask);
+                            descendants[j].setInTask(intask);
                         }
                     }
                     block = block.getNextBlock();
@@ -1584,6 +1584,7 @@ Blockly.Block.prototype.setInputsInline = function(newBoolean) {
  *            disabled True if disabled.
  */
 Blockly.Block.prototype.setDisabled = function(disabled) {
+    console.log(disabled);
     if (this.disabled == disabled) {
         return;
     }
@@ -1598,11 +1599,11 @@ Blockly.Block.prototype.setDisabled = function(disabled) {
  * @param {boolean}
  *            inTask True if block belongs to a valid task.
  */
-Blockly.Block.prototype.setInTask = function(inTask) {
-    if (this.inTask == inTask) {
+Blockly.Block.prototype.setInTask = function(intask) {
+    if (this.intask == intask) {
         return;
     }
-    this.inTask = inTask;
+    this.intask = intask;
     this.svg_.updateDisabled();
     this.workspace.fireChangeEvent();
 };

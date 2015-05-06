@@ -121,25 +121,25 @@ Blockly.Msg.MOTOR_STOP_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA
 Blockly.Msg.MOTOR_STOP_HELP = 'help';
 Blockly.Msg.MOTORDIFF_ON_TOOLTIP = 'Starts the robot with specific speed.';
 Blockly.Msg.MOTORDIFF_ON_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.MOTORDIFF_ON_HELP = "The robot drives forwards until it is not stopped or it is used different block for driving. The speed can be set in the field speed. When the program ends the motors will stop automatically";
+Blockly.Msg.MOTORDIFF_ON_HELP = 'The robot drives forwards until it is not stopped or it is used different block for driving. The speed can be set in the field speed. When the program ends the motors will stop automatically';
 Blockly.Msg.MOTORDIFF_ON_FOR_TOOLTIP = 'Starts the robot with specific speed and stops after specific distance.';
 Blockly.Msg.MOTORDIFF_ON_FOR_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.MOTORDIFF_ON_FOR_HELP = "The robot drives forwards until it covers the given distance. The speed can be set in the field speed.";
+Blockly.Msg.MOTORDIFF_ON_FOR_HELP = 'The robot drives forwards until it covers the given distance. The speed can be set in the field speed.';
 Blockly.Msg.MOTORDIFF_STOP_TOOLTIP = 'Stops the robot.';
 Blockly.Msg.MOTORDIFF_STOP_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.MOTORDIFF_STOP_HELP = "The robot will stop, by stopping the both motors.";
+Blockly.Msg.MOTORDIFF_STOP_HELP = 'The robot will stop, by stopping the both motors.';
 Blockly.Msg.MOTORDIFF_TURN_TOOLTIP = 'Turns the robot.';
 Blockly.Msg.MOTORDIFF_TURN_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.MOTORDIFF_TURN_HELP = "The robot will rotate until it is not stopped or it is used different block for driving. The speed can be set in the field speed.";
+Blockly.Msg.MOTORDIFF_TURN_HELP = 'The robot will rotate until it is not stopped or it is used different block for driving. The speed can be set in the field speed.';
 Blockly.Msg.MOTORDIFF_TURN_FOR_TOOLTIP = 'Turns the robot for number of degrees.';
 Blockly.Msg.MOTORDIFF_TURN_FOR_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.MOTORDIFF_TURN_FOR_HELP = "The robot will rotate untl it reaches the degrees set by the user.";
+Blockly.Msg.MOTORDIFF_TURN_FOR_HELP = 'The robot will rotate untl it reaches the degrees set by the user.';
 Blockly.Msg.DISPLAY_PICTURE_TOOLTIP = 'Displays a picture on the screen.';
 Blockly.Msg.DISPLAY_PICTURE_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
 Blockly.Msg.DISPLAY_PICTURE_HELP = 'Show image on the display of the robot. Choose the image! With x and y can be set the position of the image on the display.';
 Blockly.Msg.DISPLAY_TEXT_TOOLTIP = 'Displays a text on the screen.';
 Blockly.Msg.DISPLAY_TEXT_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.DISPLAY_TEXT_HELP = 'Display text or numbers on the robot display. With the column and row parameter change the position of the text in the display. ';
+Blockly.Msg.DISPLAY_TEXT_HELP = 'Display text or numbers on the robot display. With the column and row parameter change the position of the text in the display.';
 Blockly.Msg.DISPLAY_CLEAR_TOOLTIP = 'Clears the display.';
 Blockly.Msg.DISPLAY_CLEAR_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
 Blockly.Msg.DISPLAY_CLEAR_HELP = 'The display of the robot will be cleared.';
@@ -1178,6 +1178,7 @@ Blockly.Msg.PROCEDURES_DEFRETURN_DO = Blockly.Msg.PROCEDURES_DEFNORETURN_DO;
 /// function that returns a value].
 
 Blockly.Msg.PROCEDURES_DEFRETURN_RETURN = 'return';
+Blockly.Msg.PROCEDURES_DEFRETURN_BACK = '';
 /// tooltip
 Blockly.Msg.PROCEDURES_DEFRETURN_TOOLTIP = 'Creates a function with an output.';
 
@@ -1338,7 +1339,7 @@ Blockly.Msg.LOOP_COUNT = 'number';
 Blockly.Msg.LOOP = 'repeat until';
 Blockly.Msg.LOOP_FOREVER = 'repeat indefinitely';
 Blockly.Msg.TOOLBOX_ACTION = 'Action';
-Blockly.Msg.TOOLBOX_COMMUNICATION = 'Communication'
+Blockly.Msg.TOOLBOX_COMMUNICATION = 'Nachrichten';
 Blockly.Msg.TOOLBOX_SENSOR = 'Sensors';
 Blockly.Msg.TOOLBOX_CONTROL = 'Control';
 Blockly.Msg.TOOLBOX_LOGIC = 'Logic';
@@ -1359,9 +1360,7 @@ Blockly.Msg.TOOLBOX_MOVE = 'Move';
 Blockly.Msg.TOOLBOX_GLOBAL_VARIABLE = 'global Variables';
 Blockly.Msg.TOOLBOX_LOOP_VARIABLE = 'loop Variables';
 //
-Blockly.Msg.START_HELP = "With this as a first block starts your program. All the other blocks that are connected are processed sequentially. <br />Additionally, you can add variables by clicking on the plus. All variables that are 'declared' hear are global. Values can be stored in the variables and later used in the program.";
-
-
+Blockly.Msg.START_HELP = 'With this as a first block starts your program. All the other blocks that are connected are processed sequentially. <br />Additionally, you can add variables by clicking on the plus. All variables that are "declared" hear are global. Values can be stored in the variables and later used in the program.';
 /// These texts are used outside of Blockly, but are placed in the Blockly namespace
 Blockly.Msg.MENU_EDIT = 'edit';
 Blockly.Msg.MENU_ROBOT = 'robot';
@@ -1525,9 +1524,9 @@ Blockly.Msg.DATATABLE_TO = 'to';
 Blockly.Msg.DATATABLE_OF = 'of';
 Blockly.Msg.DATATABLE_ENTRIES = 'entries';
 Blockly.Msg.DATATABLE_EMPTY_TABLE = 'There are no entries in this table';
-Blockly.Msg.SEND_DATA = 'data to send:';
-Blockly.Msg.USED_CONNECTION = 'via connection:';
+Blockly.Msg.SEND_DATA = 'data to send';
+Blockly.Msg.USED_CONNECTION = 'via connection';
 Blockly.Msg.RECIVED_DATA = 'data recived';
-Blockly.Msg.CONNECT = 'connect via bluetooth with following address:';
+Blockly.Msg.CONNECT = 'connect via bluetooth with following address';
 Blockly.Msg.VARIABLES_TYPE_CONNECTION = 'Connection';
-Blockly.Msg.WAIT_FOR_CONNECTION = 'wait for connection'
+Blockly.Msg.WAIT_FOR_CONNECTION = 'wait for connection';

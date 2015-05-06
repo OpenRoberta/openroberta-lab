@@ -191,12 +191,6 @@ public class Templates {
             + "    </block> " //
             + "  </category> "
             + "  <category name='TOOLBOX_VARIABLE' custom='VARIABLE'/> "
-            + "  <category name='TOOLBOX_COMMUNICATION'> "
-            + "     <block type='robCommunication_startConnection'></block>"
-            + "     <block type='robCommunication_sendBlock'></block>"
-            + "     <block type='robCommunication_receiveBlock'></block>"
-            + "     <block type='robCommunication_waitForConnection'></block>"
-            + " </category>"
             + "</toolbox_set> ";
         String expert =
             ""
