@@ -173,7 +173,7 @@
 //        String rigth = sharedUser.getString(1);
 //        assertEquals("pid-0", userShared);
 //        assertEquals("READ", rigth);
-//        assertEntityRc(response, "ok");
+//        assertEntityRc(response, "ok"); 
 //
 //        //Eliminate write rights for pair users
 //        this.response = this.restProgram.command(this.s1, mkD("{'cmd':'shareP';'userToShare':'pid-0';'programName':'toShare';'right':'NONE'}"));
