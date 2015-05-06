@@ -14,7 +14,7 @@ public class ORAhandler {
     private ORApushCmd pushCmd;
     private Thread serverCommunicator;
 
-    public static boolean updated_without_restart = false;
+    private static boolean restart = true;
 
     /**
      * Creates a control object for most of the Open Roberta Lab related
@@ -77,5 +77,13 @@ public class ORAhandler {
 
     public static void setTimeout(boolean timeout) {
         ORAhandler.timeout = timeout;
+    }
+
+    public static boolean isRestarted() {
+        return restart;
+    }
+
+    public static void setRestarted(boolean restart) {
+        ORAhandler.restart = restart;
     }
 }

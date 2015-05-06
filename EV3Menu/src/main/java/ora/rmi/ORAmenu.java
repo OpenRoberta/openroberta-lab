@@ -1,6 +1,5 @@
 package ora.rmi;
 
-
 /**
  * RMI methods for GraphicStartup menu.
  *
@@ -61,4 +60,6 @@ public interface ORAmenu {
     public void runORAprogram(String programName);
 
     public void setORAupdateState();
+
+    public boolean getORAupdateState();
 }

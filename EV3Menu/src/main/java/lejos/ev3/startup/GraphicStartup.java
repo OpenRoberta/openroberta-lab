@@ -1481,7 +1481,7 @@ public class GraphicStartup implements ORAmenu {
      * Roberta submenu implementation.
      */
     private void robertaMenu() {
-        if ( ORAhandler.updated_without_restart == true ) {
+        if ( ORAhandler.isRestarted() == false ) {
             newScreen(OPENROBERTAHEAD);
             lcd.drawString("Firmware updated!", 0, 2);
             lcd.drawString("Please restart", 0, 4);
@@ -1493,15 +1493,17 @@ public class GraphicStartup implements ORAmenu {
             if ( this.indiBA.getWifi() == false ) {
                 newScreen(OPENROBERTAHEAD);
                 lcd.drawString("No Wifi connected!", 0, 2);
-                if ( getYesNo("    Continue?", false) == 1 ) {
+                if ( getYesNo("    Continue?", true) == 1 ) {
                     // go on
                 } else {
                     return;
                 }
             }
             String token = new ORAtokenGenerator().generateToken();
+
             //String ip = "mp-devel.iais.fraunhofer.de:1999";
             String ip = getIPAddress();
+
             if ( ip.equals("none") ) {
                 return;
             } else {
@@ -1524,7 +1526,7 @@ public class GraphicStartup implements ORAmenu {
                     lcd.drawString(" (Press any key)", 0, 7);
                     LocalEV3.get().getAudio().systemSound(Sounds.BEEP);
                     LocalEV3.get().getKeys().waitForAnyPress();
-                    Delay.msDelay(1000);
+                    Delay.msDelay(500);
                     return;
                 } else if ( ORAhandler.hasTimeout() ) {
                     oraHandler.disconnect();
@@ -1534,13 +1536,12 @@ public class GraphicStartup implements ORAmenu {
                     lcd.drawString(" (press any key)", 0, 5);
                     LocalEV3.get().getAudio().systemSound(Sounds.BEEP);
                     LocalEV3.get().getKeys().waitForAnyPress();
-                    Delay.msDelay(1000);
+                    Delay.msDelay(500);
                     return;
                 } else if ( id == Button.ID_ESCAPE ) {
                     oraHandler.disconnect();
                     newScreen(OPENROBERTAHEAD);
                     lcd.drawString("    Canceled!", 0, 3);
-                    LocalEV3.get().getAudio().systemSound(Sounds.BEEP);
                     Delay.msDelay(2000);
                     return;
                 }
@@ -1677,9 +1678,19 @@ public class GraphicStartup implements ORAmenu {
     @Override
     public void setORAupdateState() {
         LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
-        ORAhandler.updated_without_restart = true;
+        ORAhandler.setRestarted(false);
         orUSBconnected = false;
         ORAhandler.setRegistered(false);
+    }
+
+    /**
+     * Check if the EV3 firmware was updated but not restarted.
+     *
+     * @return True if restarted, false if not.
+     */
+    @Override
+    public boolean getORAupdateState() {
+        return ORAhandler.isRestarted();
     }
 
     /**
@@ -1763,34 +1774,110 @@ public class GraphicStartup implements ORAmenu {
             if ( temp.equals("") ) {
                 temp = "none";
             }
-            newScreen("IP");
-            lcd.drawString("use last IP?", 0, 1);
-            lcd.drawString(temp, 0, 2);
-            if ( getYesNo("     Confirm", false) == 1 ) {
-                return temp;
-            } else {
-                newScreen(" Enter IP");
-                temp = new ORAipKeyboard().getString();
-                PrintWriter pw2 = null;
-                try {
-                    file.delete();
-                    pw2 = new PrintWriter(file);
-                    pw2.println(temp);
-                } catch ( FileNotFoundException e ) {
-                    return "";
-                } finally {
-                    if ( pw2 != null ) {
-                        pw2.close();
+
+            int i = 1;
+            newScreen("Server?");
+            lcd.drawString("lab.open-roberta.org", 0, 1, true);
+            lcd.drawString("10.0.1.10:1999", 0, 2, false);
+            lcd.drawString(temp, 0, 3, false);
+            lcd.drawString("Another (type in)", 0, 4, false);
+            lcd.drawString("(ESCAPE to exit)", 0, 7);
+
+            while ( true ) {
+                int id = Button.waitForAnyEvent(500);
+                if ( id == Button.ID_ENTER ) {
+                    temp = select(i, temp);
+                    if ( temp == null ) {
+                        return enterIP(file);
+                    } else {
+                        return temp;
                     }
                 }
-                return temp;
+                if ( id == Button.ID_ESCAPE ) {
+                    return "none";
+                }
+                if ( id == Button.ID_DOWN || id == Button.ID_RIGHT ) {
+                    if ( i != 4 ) {
+                        rewrite(i, false, temp);
+                        i++;
+                        rewrite(i, true, temp);
+                    } else {
+                        rewrite(i, false, temp);
+                        i = 1;
+                        rewrite(i, true, temp);
+                    }
+                }
+                if ( id == Button.ID_UP || id == Button.ID_LEFT ) {
+                    if ( i != 1 ) {
+                        rewrite(i, false, temp);
+                        i--;
+                        rewrite(i, true, temp);
+                    } else {
+                        rewrite(i, false, temp);
+                        i = 4;
+                        rewrite(i, true, temp);
+                    }
+                }
             }
         } catch ( IOException e ) {
-            e.printStackTrace();
-            return "";
+            return "none";
         }
     }
 
+    private void rewrite(int i, boolean invert, String temp) {
+        switch ( i ) {
+            case 1:
+                lcd.drawString("lab.open-roberta.org", 0, 1, invert);
+                break;
+            case 2:
+                lcd.drawString("10.0.1.10:1999", 0, 2, invert);
+                break;
+            case 3:
+                lcd.drawString(temp, 0, 3, invert);
+                break;
+            case 4:
+                lcd.drawString("Another (type in)", 0, 4, invert);
+                break;
+        }
+    }
+
+    private String select(int i, String temp) {
+        String official = "lab.open-roberta.org";
+        String usb = "10.0.1.10:1999";
+        switch ( i ) {
+            case 1:
+                return official;
+            case 2:
+                return usb;
+            case 3:
+                return temp;
+            default:
+                return null;
+        }
+    }
+
+    private String enterIP(File file) {
+        newScreen(" Enter IP");
+        String temp = new ORAipKeyboard().getString();
+        PrintWriter pw = null;
+        try {
+            file.delete();
+            pw = new PrintWriter(file);
+            pw.println(temp);
+        } catch ( FileNotFoundException e ) {
+            return "";
+        } finally {
+            if ( pw != null ) {
+                pw.close();
+            }
+        }
+        return temp;
+    }
+
+    /**
+     * Submenu which is accessible from the main menu if the brick is connected to Open Roberta Lab.
+     * Shows entries for displaying firmware informations and for disconnecting the brick.
+     */
     private void oraMenu() {
         GraphicMenu menu = new GraphicMenu(new String[] {
             "Disconnect", "Firmware Info"
@@ -1811,10 +1898,15 @@ public class GraphicStartup implements ORAmenu {
                         Delay.msDelay(3000);
                         break;
                     }
-                    if ( getYesNo("   Disconnect?", false) == 1 ) {
+                    // check if brick is already disconnected by USB program.
+                    if ( ORAhandler.isRegistered() == false ) {
+                        return;
+                    }
+                    if ( getYesNo("   Disconnect?", true) == 1 ) {
                         disconnect();
                         return;
                     }
+                    break;
                 case 1:
                     newScreen(OPENROBERTAHEAD);
                     lcd.drawString("Open Roberta-", 0, 2);

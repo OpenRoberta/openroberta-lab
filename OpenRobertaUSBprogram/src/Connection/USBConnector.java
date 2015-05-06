@@ -177,6 +177,11 @@ public class USBConnector extends Observable implements Runnable, Connector {
                 case CONNECT:
                     String token = this.tokenGenerator.generateToken();
                     try {
+                        if ( this.remoteControl.getORAupdateState() == false ) {
+                            // TODO popup tell user to restart the brick first
+                            return;
+                        }
+
                         brickData.put(KEY_TOKEN, token);
                         String batteryVoltage = this.remoteControl.getBatteryVoltage();
                         brickData.put(KEY_BATTERY, batteryVoltage);
@@ -264,8 +269,7 @@ public class USBConnector extends Observable implements Runnable, Connector {
                                     System.out.println("---Upload firmware files to EV3---");
                                     if ( this.remoteControl.uploadFirmwareFiles() == true ) {
                                         this.remoteControl.setORAupdateState();
-                                        // TODO Stop connection, do not allow reconnection
-                                        // Force/ tell the user to restart the brick first
+                                        // TODO Stop connection(!) to server, tell the user to restart the brick
                                     } else {
                                         // TODO tell the user that uploading firmware files to the brick has failed.
                                         // Keep the connection to Open Roberta Lab alive so user can retry.
