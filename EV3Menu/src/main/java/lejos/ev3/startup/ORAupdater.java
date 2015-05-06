@@ -44,7 +44,7 @@ public class ORAupdater {
         getEV3Menu();
         if ( this.update_error == false ) {
             LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
-            ORAhandler.updated_without_restart = true;
+            ORAhandler.setRestarted(false);
             ORAhandler.setRegistered(false);
             ORAhandler.setConnectionError(false);
         } else {

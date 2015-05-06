@@ -21,4 +21,6 @@ public interface ORArmiMenu extends RMIMenu {
 
     public void setORAupdateState() throws RemoteException;
 
+    public boolean getORAupdateState() throws RemoteException;
+
 }

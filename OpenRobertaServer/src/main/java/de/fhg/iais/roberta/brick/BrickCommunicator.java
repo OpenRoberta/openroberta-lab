@@ -42,7 +42,7 @@ public class BrickCommunicator {
         Assert.isTrue(this.allStates.get(token) == null, "token already used. New token required.");
         for ( String storedToken : this.allStates.keySet() ) {
             BrickCommunicationData storedState = this.allStates.get(storedToken);
-            if ( robotIdentificator.equals(storedState.getRobotIdentificator()) ) {
+            if ( robotIdentificator.equals(storedState.getRobotIdentificator()) && !robotIdentificator.equals("usb") ) {
                 LOG.error("Token approval request for robotId " + robotIdentificator + ", but an old request is pending. Old request aborted.");
                 storedState.abortPush(); // notifyAll() executed
                 this.allStates.remove(storedToken);

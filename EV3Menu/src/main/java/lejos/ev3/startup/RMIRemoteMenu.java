@@ -139,18 +139,21 @@ public class RMIRemoteMenu extends UnicastRemoteObject implements ORArmiMenu {
     @Override
     public void setORAregistration(boolean status) throws RemoteException {
         this.menu.setORAregistration(status);
-
     }
 
     @Override
     public void runORAprogram(String programName) throws RemoteException {
         this.menu.runORAprogram(programName);
-
     }
 
     @Override
     public void setORAupdateState() throws RemoteException {
         this.menu.setORAupdateState();
-
     }
+
+    @Override
+    public boolean getORAupdateState() throws RemoteException {
+        return this.menu.getORAupdateState();
+    }
+
 }

@@ -122,6 +122,16 @@ public class ORArmiControl {
     }
 
     /**
+     * Check if the EV3 firmware is updated, but not yet restarted.
+     *
+     * @return True if restarted, false if not.
+     * @throws RemoteException
+     */
+    public boolean getORAupdateState() throws RemoteException {
+        return menu.getORAupdateState();
+    }
+
+    /**
      * Get the leJOS version from the EV3.
      *
      * @return leJOS version
