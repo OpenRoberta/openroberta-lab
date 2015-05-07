@@ -145,9 +145,7 @@ Blockly.CAT_VARIABLE_RGB = [ 144, 133, 186 ];
 /**
  * The rgb value for block colours in communication category.
  */
-Blockly.CAT_COMMUNICATION_RGB = [ 250, 128, 114 ];
-
-
+Blockly.CAT_COMMUNICATION_RGB = [ 255, 105, 180 ];
 
 /**
  * ENUM for a right-facing value input. E.g. 'test' or 'return'.

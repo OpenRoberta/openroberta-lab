@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-05-06 16:22:53.692000",
+		"lastupdated": "2015-05-07 12:16:36.999000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -603,8 +603,20 @@
 	"LOOP_COUNT": "number",
 	"LOOP": "repeat until",
 	"LOOP_FOREVER": "repeat indefinitely",
+	"CONNECTION_START_HELP": "This block tries to make a connection to another robot via bluetooth. It is looking for a robot with the name in the textfield. This block returns the connection, best you save it in a global variable of the type »Connection«. Once the other robot is accepting the connection you can exchange messages with it.",
+	"CONNECTION_WAIT_HELP": "With this block you can wait for a connection via bluetooth. If another robot is trying to make a connection with your robot, you should use this block to wait and accept this connection.",
+	"CONNECTION_RECEIVE_HELP": "This block is waiting for a message from the robot which you declare in the connection. The output of this block is a text message.",
+	"CONNECTION_SEND_HELP": "You can send a text message to another robot with this block. Add the text message to the block and also do not forget to add the name of the connection to know where to send the message.",
+	"CONNECTION_START_TOOLTIP": "Tries to make a connection to another robot via bluetooth.",
+	"CONNECTION_WAIT_TOOLTIP": "Waits for a connection via bluetooth.",
+	"CONNECTION_RECEIVE_TOOLTIP": "Waits for a message from the robot which you declare in the connection.",
+	"CONNECTION_SEND_TOOLTIP": "Sends a text message to another robot.",
+	"CONNECTION_START_HELPURL": "https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/",
+	"CONNECTION_WAIT_HELPURL": "https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/",
+	"CONNECTION_RECEIVE_HELPURL": "https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/",
+	"CONNECTION_SEND_HELPURL": "https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/",
 	"TOOLBOX_ACTION": "Action",
-	"TOOLBOX_COMMUNICATION": "Nachrichten",
+	"TOOLBOX_COMMUNICATION": "Messages",
 	"TOOLBOX_SENSOR": "Sensors",
 	"TOOLBOX_CONTROL": "Control",
 	"TOOLBOX_LOGIC": "Logic",
@@ -790,7 +802,7 @@
 	"SEND_DATA": "data to send",
 	"USED_CONNECTION": "via connection",
 	"RECIVED_DATA": "data recived",
-	"CONNECT": "connect via bluetooth with following address",
+	"CONNECT": "connect to robot name",
 	"VARIABLES_TYPE_CONNECTION": "Connection",
 	"WAIT_FOR_CONNECTION": "wait for connection"
 }

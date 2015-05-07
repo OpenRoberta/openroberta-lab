@@ -498,6 +498,7 @@ Blockly.Workspace.prototype.paste = function(xmlBlock) {
         block.moveBy(blockX, blockY);
     }
     block.select();
+    block.setInTask(false);
 };
 
 /**

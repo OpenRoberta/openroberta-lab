@@ -416,6 +416,8 @@ Blockly.Blocks['robGlobalvariables_declare'] = {
                 block.setFieldValue(option.substr(6), 'LIST_TYPE');
             } else if (option === 'Colour') {
                 block = Blockly.Block.obtain(Blockly.mainWorkspace, 'robColour_picker');
+            } else if (option === 'Connection') {
+                block = Blockly.Block.obtain(Blockly.mainWorkspace, 'logic_null');
             }
             var value = this.getInput('VALUE');
             if (block) {
