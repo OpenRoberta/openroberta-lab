@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.dbc.Assert;
  * Information contained in this class is used after to recreate Blockly block from AST.<br>
  * Every class from AST representing Blockly block must contain instance of this class.<br>
  * <br>
- * To create a object from this class {@link #make(String, String, boolean, boolean, Boolean, Boolean)}
+ * To create a object from this class {@link #make(String, String, boolean, boolean, Boolean, Boolean, Boolean)}
  *
  * @author kcvejoski
  */
@@ -16,12 +16,21 @@ public class BlocklyBlockProperties {
     private final String blockType;
     private final String blocklyId;
     private final boolean disabled;
+    private final Boolean inTask;
     private final boolean collapsed;
     private final Boolean inline;
     private final Boolean deletable;
     private final Boolean movable;
 
-    private BlocklyBlockProperties(String blockType, String blocklyId, boolean disabled, boolean collapsed, Boolean inline, Boolean deletable, Boolean movable) {
+    private BlocklyBlockProperties(
+        String blockType,
+        String blocklyId,
+        boolean disabled,
+        boolean collapsed,
+        Boolean inline,
+        Boolean deletable,
+        Boolean movable,
+        Boolean inTask) {
         super();
         Assert.isTrue(!blocklyId.equals("") && !blockType.equals(""));
         this.blockType = blockType;
@@ -31,6 +40,7 @@ public class BlocklyBlockProperties {
         this.inline = inline;
         this.deletable = deletable;
         this.movable = movable;
+        this.inTask = inTask;
     }
 
     /**
@@ -52,8 +62,9 @@ public class BlocklyBlockProperties {
         boolean collapsed,
         Boolean inline,
         Boolean deletable,
-        Boolean movable) {
-        return new BlocklyBlockProperties(blockType, blocklyId, disabled, collapsed, inline, deletable, movable);
+        Boolean movable,
+        Boolean inTask) {
+        return new BlocklyBlockProperties(blockType, blocklyId, disabled, collapsed, inline, deletable, movable, inTask);
     }
 
     /**
@@ -105,6 +116,13 @@ public class BlocklyBlockProperties {
         return this.movable;
     }
 
+    /**
+     * @return true if the block is executed in task o/w false
+     */
+    public Boolean isInTask() {
+        return this.inTask;
+    }
+
     @Override
     public String toString() {
         return "BlocklyBlockProperties [blockType="
@@ -121,6 +139,8 @@ public class BlocklyBlockProperties {
             + this.deletable
             + ", movable="
             + this.movable
+            + ", inTask="
+            + this.inTask
             + "]";
     }
 

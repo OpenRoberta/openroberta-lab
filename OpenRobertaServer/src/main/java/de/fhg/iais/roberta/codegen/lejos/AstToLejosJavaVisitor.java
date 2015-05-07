@@ -157,10 +157,15 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         boolean mainBlock = false;
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
             for ( Phrase<Void> phrase : phrases ) {
+                //TODO this must be improved (the problem is with the old XML test resources !!!!!!!!
                 if ( phrase.getProperty().isDisabled() ) {
                     continue;
                 }
-
+                if ( phrase.getProperty().isInTask() != null ) {
+                    if ( phrase.getProperty().isInTask() == false ) {
+                        continue;
+                    }
+                }
                 if ( phrase.getKind().getCategory() != Category.TASK ) {
                     astVisitor.nlIndent();
                 } else {

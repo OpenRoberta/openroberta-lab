@@ -206,6 +206,7 @@ public final class AstJaxbTransformerHelper {
         setInline(astSource, block);
         setDeletable(astSource, block);
         setMovable(astSource, block);
+        setInTask(astSource, block);
     }
 
     private static void setInline(Phrase<?> astObject, Block block) {
@@ -223,6 +224,12 @@ public final class AstJaxbTransformerHelper {
     private static void setDisabled(Phrase<?> astObject, Block block) {
         if ( astObject.getProperty().isDisabled() ) {
             block.setDisabled(astObject.getProperty().isDisabled());
+        }
+    }
+
+    private static void setInTask(Phrase<?> astObject, Block block) {
+        if ( astObject.getProperty().isInTask() != null ) {
+            block.setDisabled(astObject.getProperty().isInTask());
         }
     }
 

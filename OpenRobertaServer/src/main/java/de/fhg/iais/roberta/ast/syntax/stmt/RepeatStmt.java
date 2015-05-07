@@ -201,7 +201,7 @@ public class RepeatStmt<V> extends Stmt<V> {
                         empty,
                         false,
                         false,
-                        BlocklyBlockProperties.make("1", "1", false, false, false, false, false),
+                        BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true),
                         null);
 
                 values = helper.extractValues(block, (short) 1);

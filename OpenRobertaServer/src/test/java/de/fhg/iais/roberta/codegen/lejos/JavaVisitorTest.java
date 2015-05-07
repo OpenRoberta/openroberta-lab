@@ -32,7 +32,7 @@ public class JavaVisitorTest {
 
     @Test
     public void visitMathConst() throws Exception {
-        MathConst<Void> mathConst = MathConst.make(Const.E, BlocklyBlockProperties.make("1", "1", false, false, false, false, false), null);
+        MathConst<Void> mathConst = MathConst.make(Const.E, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true), null);
         AstToLejosJavaVisitor visitor = new AstToLejosJavaVisitor("Test", brickConfiguration, usedSensors, 0);
         mathConst.visit(visitor);
         Assert.assertEquals("Math.E", visitor.getSb().toString());

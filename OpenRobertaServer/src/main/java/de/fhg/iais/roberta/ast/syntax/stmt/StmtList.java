@@ -18,7 +18,7 @@ public class StmtList<V> extends Stmt<V> {
     private final List<Stmt<V>> sl = new ArrayList<Stmt<V>>();
 
     private StmtList() {
-        super(Phrase.Kind.STMT_LIST, BlocklyBlockProperties.make("1", "1", false, false, false, false, false), null);
+        super(Phrase.Kind.STMT_LIST, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true), null);
     }
 
     /**

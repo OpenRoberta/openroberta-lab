@@ -11,7 +11,7 @@ public class ActionStmtTest {
 
     @Test
     public void make() throws Exception {
-        MotorDriveStopAction<Void> action = MotorDriveStopAction.make(BlocklyBlockProperties.make("1", "1", false, false, false, false, false), null);
+        MotorDriveStopAction<Void> action = MotorDriveStopAction.make(BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true), null);
         ActionStmt<Void> actionStmt = ActionStmt.make(action);
 
         String a = "\nAktionStmt [StopAction []]";
@@ -20,7 +20,7 @@ public class ActionStmtTest {
 
     @Test
     public void getAction() throws Exception {
-        MotorDriveStopAction<Void> action = MotorDriveStopAction.make(BlocklyBlockProperties.make("1", "1", false, false, false, false, false), null);
+        MotorDriveStopAction<Void> action = MotorDriveStopAction.make(BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true), null);
         ActionStmt<Void> actionStmt = ActionStmt.make(action);
 
         Assert.assertEquals("StopAction []", actionStmt.getAction().toString());

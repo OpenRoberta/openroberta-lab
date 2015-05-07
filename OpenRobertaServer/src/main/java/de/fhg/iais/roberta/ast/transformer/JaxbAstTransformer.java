@@ -232,7 +232,7 @@ abstract public class JaxbAstTransformer<V> {
         ExprList<V> parameters = ExprList.make();
         for ( Arg arg : arguments ) {
             Var<V> parametar =
-                Var.make(BlocklyType.get(arg.getType()), arg.getName(), BlocklyBlockProperties.make("1", "1", false, false, false, false, false), null);
+                Var.make(BlocklyType.get(arg.getType()), arg.getName(), BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true), null);
             parameters.addExpr(parametar);
         }
         parameters.setReadOnly();
@@ -471,7 +471,8 @@ abstract public class JaxbAstTransformer<V> {
             isCollapsed(block),
             isInline(block),
             isDeletable(block),
-            isMovable(block));
+            isMovable(block),
+            isInTask(block));
     }
 
     public int getElseIf(Mutation mutation) {
@@ -565,5 +566,12 @@ abstract public class JaxbAstTransformer<V> {
             return null;
         }
         return block.isMovable();
+    }
+
+    private Boolean isInTask(Block block) {
+        if ( block.isIntask() == null ) {
+            return null;
+        }
+        return block.isIntask();
     }
 }

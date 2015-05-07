@@ -17,7 +17,7 @@ public class Location<V> extends Task<V> {
     private final String y;
 
     private Location(String x, String y) {
-        super(Phrase.Kind.LOCATION, BlocklyBlockProperties.make("t", "t", true, false, false, false, false), null);
+        super(Phrase.Kind.LOCATION, BlocklyBlockProperties.make("t", "t", true, false, false, false, false, true), null);
         Assert.isTrue(!x.equals("") && !y.equals(""));
         this.x = x;
         this.y = y;

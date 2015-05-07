@@ -19,7 +19,7 @@ public class ExprList<V> extends Expr<V> {
     private final List<Expr<V>> el = new ArrayList<Expr<V>>();
 
     private ExprList() {
-        super(Phrase.Kind.EXPR_LIST, BlocklyBlockProperties.make("1", "1", false, false, false, false, false), null);
+        super(Phrase.Kind.EXPR_LIST, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, null), null);
     }
 
     /**

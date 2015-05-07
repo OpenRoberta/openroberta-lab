@@ -306,6 +306,27 @@ public class AstToLejosJavaVisitorTest {
     }
 
     @Test
+    public void test19() throws Exception {
+
+        String a = "" //
+            + IMPORTS
+            + MAIN_CLASS
+            + BRICK_CONFIGURATION
+            + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>();\n"
+            + MAIN_METHOD
+            + "        float variablenName = 0;\n"
+            + "    public void run() {\n"
+            //   + "        hal = new Hal(brickConfiguration, usedSensors);\n"
+            + "hal.regulatedDrive(ActorPort.A,ActorPort.B,false,DriveDirection.FOREWARD,50);"
+            + "hal.drawPicture(ShowPicture.OLDGLASSES,0,0);"
+            + SUFFIX
+            + "    }\n"
+            + "}\n";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator9.xml");
+    }
+
+    @Test
     public void test9() throws Exception {
 
         String a = "" //
