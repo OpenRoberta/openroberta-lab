@@ -58,6 +58,7 @@ function logout() {
             setHeadNavigationMenuState('logout');
             Blockly.getMainWorkspace().saveButton.disable();
             setRobotState(result);
+            $('#tabProgram').click();
         }
         displayInformation(result, "MESSAGE_USER_LOGOUT", result.message);
     });
