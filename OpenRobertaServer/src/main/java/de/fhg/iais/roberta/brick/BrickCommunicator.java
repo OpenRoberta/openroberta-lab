@@ -52,9 +52,17 @@ public class BrickCommunicator {
         return registration.brickTokenAgreementRequest(); // this will freeze the request until another issues a notifyAll()
     }
 
-    public String brickWaitsForAServerPush(String token) {
+    /**
+     * called by the robot to inform the server about the fact, that the robot is still connected and ready to get a command pushed to it
+     * 
+     * @param token identifying the robot
+     * @param batteryvoltage the only information from the robot, which changes over time
+     * @return a legal command for the robot (in 99% a "repeat" :)
+     */
+    public String brickWaitsForAServerPush(String token, String batteryvoltage) {
         BrickCommunicationData state = getState(token);
         if ( state != null ) {
+            state.setBattery(batteryvoltage);
             state.brickHasSentAPushRequest();
             return state.getCommand();
         } else {
