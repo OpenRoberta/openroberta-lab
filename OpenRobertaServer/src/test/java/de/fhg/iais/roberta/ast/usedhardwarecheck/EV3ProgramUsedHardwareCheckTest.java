@@ -87,10 +87,7 @@ public class EV3ProgramUsedHardwareCheckTest {
         ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/ast/control/wait_stmt3.xml");
 
         Set<EV3Sensors> hardwareCheckVisitor = HardwareCheckVisitor.check(phrases);
-        Assert
-            .assertEquals(
-                "[HardwareComponentType [robBrick_touch, SENSOR], HardwareComponentType [robBrick_ultrasonic, SENSOR], HardwareComponentType [robBrick_gyro, SENSOR], HardwareComponentType [robBrick_colour, SENSOR], HardwareComponentType [robBrick_infrared, SENSOR]]",
-                hardwareCheckVisitor.toString());
+        Assert.assertEquals("[HardwareComponentType [robBrick_infrared, SENSOR]]", hardwareCheckVisitor.toString());
     }
 
     @Test

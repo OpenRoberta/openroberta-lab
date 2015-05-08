@@ -154,23 +154,16 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         AstToLejosJavaVisitor astVisitor = new AstToLejosJavaVisitor(programName, brickConfiguration, usedSensors, withWrapping ? 2 : 0);
         astVisitor.generatePrefix(withWrapping);
 
+        generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
+
+        return astVisitor.sb.toString();
+    }
+
+    private static void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, AstToLejosJavaVisitor astVisitor) {
         boolean mainBlock = false;
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
             for ( Phrase<Void> phrase : phrases ) {
-                //TODO this must be improved (the problem is with the old XML test resources !!!!!!!!
-                if ( phrase.getProperty().isDisabled() ) {
-                    continue;
-                }
-                if ( phrase.getProperty().isInTask() != null ) {
-                    if ( phrase.getProperty().isInTask() == false ) {
-                        continue;
-                    }
-                }
-                if ( phrase.getKind().getCategory() != Category.TASK ) {
-                    astVisitor.nlIndent();
-                } else {
-                    mainBlock = true;
-                }
+                mainBlock = handleMainBlocks(astVisitor, mainBlock, phrase);
                 phrase.visit(astVisitor);
             }
             if ( mainBlock ) {
@@ -178,10 +171,22 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
                 mainBlock = false;
             }
         }
+        generateSuffix(withWrapping, astVisitor);
+    }
+
+    private static boolean handleMainBlocks(AstToLejosJavaVisitor astVisitor, boolean mainBlock, Phrase<Void> phrase) {
+        if ( phrase.getKind().getCategory() != Category.TASK ) {
+            astVisitor.nlIndent();
+        } else if ( phrase.getKind() != Phrase.Kind.LOCATION ) {
+            mainBlock = true;
+        }
+        return mainBlock;
+    }
+
+    private static void generateSuffix(boolean withWrapping, AstToLejosJavaVisitor astVisitor) {
         if ( withWrapping ) {
             astVisitor.sb.append("\n}\n");
         }
-        return astVisitor.sb.toString();
     }
 
     /**
