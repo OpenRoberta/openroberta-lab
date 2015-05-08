@@ -24,6 +24,8 @@ function initUserState() {
     userState.robotState = '';
     userState.robotBattery = '';
     userState.robotWait = '';
+    userState.robotVersion = '';
+    userState.serverVersion = '';
 }
 
 /**
@@ -95,21 +97,34 @@ function deleteUserOnServer() {
     });
 }
 
+
+/**
+ * Set firmware versions of robot and server
+ * 
+ * @param {result}
+ *            Result of REST-call
+ */
+function setFirmwareVersions(result) {
+    userState.serverVersion = '';
+    userState.robotVersion = '';
+    if (result['server.version']) {
+        userState.serverVersion = result['server.version'];
+    }
+    if (result['robot.version']) {
+        userState.robotVersion = result['robot.version'];
+    }
+}
+
 /**
  * Handle firmware conflict between server and robot
- * 
- * @param {vServer}
- *            Firmware version of the server.
- * @param {vRobot}
- *            Firmware version of the robot.
  */
-function handleFirmwareConflict(vServer, vRobot) {
-    if (vServer > vRobot) {
-        LOG.info("The firmware version '" + vServer + "' on the server is newer than the firmware version '" + vRobot + "' on the robot");
+function handleFirmwareConflict() {
+    if (userState.serverVersion > userState.robotVersion) {
+        LOG.info("The firmware version '" + userState.serverVersion + "' on the server is newer than the firmware version '" + userState.robotVersion + "' on the robot");
         $("#confirmUpdateFirmware").modal('show');
         return true;
-    } else if (vServer < vRobot) {
-        LOG.info("The firmware version '" + vServer + "' on the server is older than the firmware version '" + vRobot + "' on the robot");
+    } else if (userState.serverVersion < userState.robotVersion) {
+        LOG.info("The firmware version '" + userState.serverVersion + "' on the server is older than the firmware version '" + userState.robotVersion + "' on the robot");
         displayMessage("MESSAGE_FIRMWARE_ERROR", "POPUP", "");
         return true;
     }
@@ -255,7 +270,8 @@ function setToken(token) {
             setRobotState(result);
         }
         displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, userState.robotName);
-        handleFirmwareConflict (result['server.version'],result['robot.version'])
+        setFirmwareVersions(result);
+        handleFirmwareConflict();
     });
 }
 
@@ -375,7 +391,6 @@ function runOnBrick() {
         var xmlTextConfiguration = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
         displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
         PROGRAM.runOnBrick(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
-            handleFirmwareConflict (result['server.version'],result['robot.version']);
             if (result.rc != "ok") {
                 displayInformation(result, "", result.message, "");
             }
@@ -781,7 +796,12 @@ function initHeadNavigation() {
         $('.modal').modal('hide'); // close all opened popups
         var domId = event.target.id;
         if (domId === 'menuRunProg') { //  Submenu 'Program'
-            runOnBrick();
+            if (!handleFirmwareConflict()) {
+                runOnBrick();
+            } else {
+                $('#buttonCancelFirmwareUpdate').css('display', 'none');
+                $('#buttonCancelFirmwareUpdateAndRun').css('display', 'inline');
+            }
         } else if (domId === 'menuCheckProg') { //  Submenu 'Program'
             displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP", "");
         } else if (domId === 'menuNewProg') { //  Submenu 'Program'
@@ -824,6 +844,8 @@ function initHeadNavigation() {
             $("#save-configuration").modal("show");
         } else if (domId === 'menuPropertiesConfig') { //  Submenu 'Configuration'
         } else if (domId === 'menuConnect') { // Submenu 'Robot'
+            $('#buttonCancelFirmwareUpdate').css('display', 'inline');
+            $('#buttonCancelFirmwareUpdateAndRun').css('display', 'none');
             $("#set-token").modal("show");
         } else if (domId === 'menuRobotInfo') { // Submenu 'Robot'
             showRobotInfo();
@@ -1030,6 +1052,10 @@ function initPopups() {
     $('#register-user').onWrap('hidden.bs.modal', function () {
         $('#register-user input').val('');
         $('#login-user input').val('');
+    });
+    
+    $('#buttonCancelFirmwareUpdateAndRun').onWrap('click', function() {
+        runOnBrick();
     });
     
     $('#doUpdateFirmware').onWrap('click', function() {
@@ -1461,6 +1487,7 @@ function pingServer() {
         setTimeout(function() {
             COMM.ping(function(result) {
                 setRobotState(result);
+                setFirmwareVersions(result);
                 pingServer();
             });
         }, 5000);
