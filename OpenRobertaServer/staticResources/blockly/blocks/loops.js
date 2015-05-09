@@ -247,7 +247,7 @@ Blockly.Blocks['controls_flow_statements'] = {
         // Is the block nested in a control statement?
         var block = this;
         do {
-            if (block.type == 'controls_repeat' || block.type == 'controls_repeat_ext' || block.type == 'controls_forEach' || block.type == 'controls_for'
+            if (block.type == 'robControls_loopForever' || block.type == 'controls_repeat' || block.type == 'controls_repeat_ext' || block.type == 'controls_forEach' || block.type == 'controls_for'
                     || block.type == 'controls_whileUntil') {
                 legal = true;
                 break;

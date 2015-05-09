@@ -847,7 +847,6 @@ Blockly.Block.prototype.showContextMenu_ = function(e) {
                 }
             };
             options.push(disableOption);
-            console.log(disableOption);
         }
 
         // Option to delete this block.
@@ -1585,7 +1584,6 @@ Blockly.Block.prototype.setInputsInline = function(newBoolean) {
  *            disabled True if disabled.
  */
 Blockly.Block.prototype.setDisabled = function(disabled) {
-    console.log(disabled);
     if (this.disabled == disabled) {
         return;
     }

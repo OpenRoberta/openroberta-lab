@@ -394,7 +394,6 @@ Blockly.Variables.allLocalVariables = function() {
         if (block.getProcedureDef) {
             var variableType = block.getProcedureDef()[0];
             var descendants = block.getDescendants();
-            console.log(descendants);
             if (descendants) {
                 for (var j = 1; j < descendants.length; j++) {
                     if (descendants[j].getVarDecl && descendants[j].type === 'robLocalVariables_declare') {

@@ -207,19 +207,37 @@ Blockly.Xml.appendlistToDom = function(parentDom, block) {
  */
 Blockly.Xml.domToWorkspace = function(workspace, xml) {
     var width = Blockly.svgSize().width;
+    var xmlBlockList = [];
+    var xmlBlockPos = [];
     for (var x = 0, xmlTop; xmlTop = xml.childNodes[x]; x++) {
         if (xmlTop.nodeName.toLowerCase() == 'instance') {
             var xmlChildList = [];
             var blockX = parseInt(xmlTop.getAttribute('x'), 10);
             var blockY = parseInt(xmlTop.getAttribute('y'), 10);
+            xmlBlockPos.push({
+                x : blockX,
+                y : blockY
+            });
             for (var p = 0, xmlChild; xmlChild = xmlTop.childNodes[p]; p++) {
                 if (xmlChild.nodeName.toLowerCase() == 'block')
                     xmlChildList.push(xmlChild);
             }
-            var block = Blockly.Xml.domToBlock(workspace, xmlChildList);
-            if (!isNaN(blockX) && !isNaN(blockY)) {
-                block.moveBy(Blockly.RTL ? width - blockX : blockX, blockY);
-            }
+            xmlBlockList.push(xmlChildList);
+        }
+    }
+    // make sure the start block is in the first column, to avoid errors while instantiating blocks with global variables before the variable declaration
+    for (var i = 0; i < xmlBlockList.length; i++) {
+        if (xmlBlockList[i][0].getAttribute('type') == 'robControls_start'){
+            xmlBlockList[i] = xmlBlockList.splice(0, 1, xmlBlockList[i])[0];
+            xmlBlockPos[i] = xmlBlockPos.splice(0, 1, xmlBlockPos[i])[0];
+            break;
+        }
+    }
+    // create blocks in the right order
+    for (var i = 0; i < xmlBlockList.length; i++) {
+        var block = Blockly.Xml.domToBlock(workspace, xmlBlockList[i]);
+        if (!isNaN(xmlBlockPos[i].x) && !isNaN(xmlBlockPos[i].y)) {
+            block.moveBy(Blockly.RTL ? width - xmlBlockPos[i].x : xmlBlockPos[i].x, xmlBlockPos[i].y);
         }
     }
 };
