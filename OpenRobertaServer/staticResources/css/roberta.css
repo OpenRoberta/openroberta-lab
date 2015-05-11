@@ -413,12 +413,12 @@ html, body {
     width: 500px;
 }
 
-.bigModal .modal-footer:after {
+/* .bigModal .modal-footer:after {
     content: url(../css/svg/Roberta_zwinkernd.svg);
     right: -40px;
     bottom: -20px;
     position: absolute;
-}
+} */
 
 .form-control:focus {
     box-shadow: none;
