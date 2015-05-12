@@ -23,6 +23,10 @@ public class UIController<ObservableObject> implements Observer {
     private ConnectionView conView;
     private boolean connected;
     private ResourceBundle rb;
+    
+    public enum errorTypes {
+        HTTP, BRICK, UPDATE, FIRMWARE
+    }
 
     public UIController(USBConnector usbCon, ConnectionView conView, ResourceBundle rb) {
         this.connector = usbCon;
@@ -126,10 +130,16 @@ public class UIController<ObservableObject> implements Observer {
                 this.conView.setDiscoverConnected();
                 break;
             case ERROR_HTTP:
-                showErrorPopup("http");
+                showErrorPopup(errorTypes.HTTP);
                 break;
             case ERROR_BRICK:
-                showErrorPopup("brick");
+                showErrorPopup(errorTypes.BRICK);
+                break;
+            case ERROR_RESTART:
+                showErrorPopup(errorTypes.FIRMWARE);
+                break;
+            case ERROR_UPDATE:
+                showErrorPopup(errorTypes.UPDATE);
                 break;
             default:
                 break;
@@ -147,11 +157,22 @@ public class UIController<ObservableObject> implements Observer {
                 java.awt.Image.SCALE_AREA_AVERAGING)));
     }
 
-    private void showErrorPopup(String type) {
-        if ( type.equals("http") ) {
-            ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpErrorInfo"), null);
-        } else {
-            ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpBrickInfo"), null);
+    private void showErrorPopup(errorTypes type) {
+        switch ( type ) {
+            case HTTP:
+                ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpErrorInfo"), null);
+                break;
+            case BRICK:
+                ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpBrickInfo"), null);
+                break;
+            case UPDATE:
+                ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("fwUpdateError"), null);
+                break;
+            case FIRMWARE:
+                ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("fwRestartInfo"), null);
+                break;
+            default:
+                break;
         }
     }
 }

@@ -64,7 +64,17 @@ public class USBConnector extends Observable implements Runnable, Connector {
     public static File TEMPDIRECTORY = null;
 
     public enum State {
-        DISCOVER, WAIT_FOR_CONNECT, CONNECT, WAIT_FOR_CMD, DISCOVER_CONNECTED, DISCONNECT, WAIT_FOR_SERVER, ERROR_HTTP, ERROR_BRICK
+        DISCOVER,
+        WAIT_FOR_CONNECT,
+        CONNECT,
+        WAIT_FOR_CMD,
+        DISCOVER_CONNECTED,
+        DISCONNECT,
+        WAIT_FOR_SERVER,
+        ERROR_HTTP,
+        ERROR_BRICK,
+        ERROR_UPDATE,
+        ERROR_RESTART
     }
 
     private State state = State.DISCOVER; // First state when program starts
@@ -169,17 +179,20 @@ public class USBConnector extends Observable implements Runnable, Connector {
                     break;
                 case WAIT_FOR_CONNECT:
                     try {
-                        Thread.sleep(500);
+                        Thread.sleep(500); // just waiting for user input
                     } catch ( InterruptedException ie ) {
                         // ok
                     }
-                    break; // just waiting for user input
+                    break;
                 case CONNECT:
                     String token = this.tokenGenerator.generateToken();
                     try {
                         if ( this.remoteControl.getORAupdateState() == false ) {
-                            // TODO popup tell user to restart the brick first
-                            return;
+                            this.remoteControl.disconnectFromMenu();
+                            notifyConnectionStateChanged(State.ERROR_RESTART);
+                            this.state = State.DISCOVER;
+                            notifyConnectionStateChanged(State.DISCOVER);
+                            break;
                         }
 
                         brickData.put(KEY_TOKEN, token);
@@ -220,7 +233,6 @@ public class USBConnector extends Observable implements Runnable, Connector {
                             this.brickBatteryVoltage = "";
                             notifyConnectionStateChanged(State.ERROR_HTTP);
                             notifyConnectionStateChanged(State.DISCOVER);
-                            e1.printStackTrace();
                         }
                         this.state = State.DISCOVER;
                         this.userDisconnect = false;
@@ -269,10 +281,13 @@ public class USBConnector extends Observable implements Runnable, Connector {
                                     System.out.println("---Upload firmware files to EV3---");
                                     if ( this.remoteControl.uploadFirmwareFiles() == true ) {
                                         this.remoteControl.setORAupdateState();
-                                        // TODO Stop connection(!) to server, tell the user to restart the brick
+                                        Thread.sleep(1000);
+                                        disconnect();
+                                        break;
                                     } else {
-                                        // TODO tell the user that uploading firmware files to the brick has failed.
-                                        // Keep the connection to Open Roberta Lab alive so user can retry.
+                                        notifyConnectionStateChanged(State.ERROR_UPDATE);
+                                        notifyConnectionStateChanged(State.WAIT_FOR_CMD);
+                                        break;
                                     }
                                 }
                                 break;
