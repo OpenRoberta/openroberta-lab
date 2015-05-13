@@ -64,7 +64,18 @@ public class USBConnector extends Observable implements Runnable, Connector {
     public static File TEMPDIRECTORY = null;
 
     public enum State {
-        DISCOVER, WAIT_FOR_CONNECT, CONNECT, WAIT_FOR_CMD, DISCOVER_CONNECTED, DISCONNECT, WAIT_FOR_SERVER, ERROR_HTTP, ERROR_BRICK
+        DISCOVER,
+        WAIT_FOR_CONNECT,
+        CONNECT,
+        WAIT_FOR_CMD,
+        DISCOVER_CONNECTED,
+        DISCOVER_UPDATE,
+        DISCONNECT,
+        WAIT_FOR_SERVER,
+        ERROR_HTTP,
+        ERROR_BRICK,
+        UPDATE,
+        UPDATE_FAIL
     }
 
     private State state = State.DISCOVER; // First state when program starts
@@ -154,6 +165,12 @@ public class USBConnector extends Observable implements Runnable, Connector {
                             Thread.sleep(1000);
                             break;
                         }
+                        // necessary update to 1.2.0 can only be discovered by exeption
+                    } catch ( ClassCastException e ) {
+                        System.out.println("Cannot connect to brick. Update necessary");
+                        System.out.println(e);
+                        notifyConnectionStateChanged(State.DISCOVER_UPDATE);
+                        break;
                     } catch ( Exception e ) {
                         System.out.println("Cannot connect to brick.");
                         System.out.println(e);
@@ -167,9 +184,17 @@ public class USBConnector extends Observable implements Runnable, Connector {
                     }
                     notifyConnectionStateChanged(this.state);
                     break;
+                case UPDATE:
+                    //TODO Daniel knows what to do
+                    // if update is successful:
+                    notifyConnectionStateChanged(State.UPDATE);
+                    // if not ?
+                    notifyConnectionStateChanged(State.UPDATE_FAIL);
+                    this.state = State.DISCOVER;
+                    break;
                 case WAIT_FOR_CONNECT:
                     try {
-                        Thread.sleep(500);
+                        Thread.sleep(50);
                     } catch ( InterruptedException ie ) {
                         // ok
                     }
@@ -181,7 +206,6 @@ public class USBConnector extends Observable implements Runnable, Connector {
                             // TODO popup tell user to restart the brick first
                             return;
                         }
-
                         brickData.put(KEY_TOKEN, token);
                         String batteryVoltage = this.remoteControl.getBatteryVoltage();
                         brickData.put(KEY_BATTERY, batteryVoltage);
@@ -338,6 +362,11 @@ public class USBConnector extends Observable implements Runnable, Connector {
         httpURLConnection.setReadTimeout(readTimeOut);
         httpURLConnection.setRequestProperty("Content-Type", "application/json; charset=utf8");
         return httpURLConnection;
+    }
+
+    @Override
+    public void update() {
+        this.state = State.UPDATE;
     }
 
     @Override

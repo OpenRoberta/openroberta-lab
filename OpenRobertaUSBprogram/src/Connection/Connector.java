@@ -16,4 +16,6 @@ public interface Connector {
     public String getBrickName();
 
     public String getBrickBatteryVoltage();
+
+    public void update();
 }

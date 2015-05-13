@@ -125,6 +125,15 @@ public class UIController<ObservableObject> implements Observer {
             case DISCOVER_CONNECTED:
                 this.conView.setDiscoverConnected();
                 break;
+            case DISCOVER_UPDATE:
+                showErrorPopup("update");
+                break;
+            case UPDATE:
+                showErrorPopup("restart");
+                break;
+            case UPDATE_FAIL:
+                showErrorPopup("updateFail");
+                break;
             case ERROR_HTTP:
                 showErrorPopup("http");
                 break;
@@ -150,6 +159,14 @@ public class UIController<ObservableObject> implements Observer {
     private void showErrorPopup(String type) {
         if ( type.equals("http") ) {
             ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpErrorInfo"), null);
+        } else if ( type.equals("update") ) {
+            if ( ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("updateInfo"), null) == 0 ) {
+                connector.update();
+            }
+        } else if ( type.equals("restart") ) {
+            ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("restartInfo"), null);
+        } else if ( type.equals("updateFail") ) {
+            ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("updateFail"), null);
         } else {
             ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpBrickInfo"), null);
         }
