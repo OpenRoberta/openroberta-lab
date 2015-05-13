@@ -72,11 +72,12 @@ public class USBConnector extends Observable implements Runnable, Connector {
         DISCOVER_UPDATE,
         DISCONNECT,
         WAIT_FOR_SERVER,
-        UPDATE,
+        FORCEUPDATE,
+        UPDATE_SUCCESS,
         UPDATE_FAIL,
-       
         ERROR_HTTP,
-        ERROR_UPDATE
+        ERROR_UPDATE,
+        ERROR_BRICK
     }
 
     private State state = State.DISCOVER; // First state when program starts
@@ -167,14 +168,13 @@ public class USBConnector extends Observable implements Runnable, Connector {
                             break;
                         }
                         // necessary update to 1.2.0 can only be discovered by exeption
-                    } catch ( ClassCastException e ) {
-                        System.out.println("Cannot connect to brick. Update necessary");
-                        System.out.println(e);
+                        // lejos rmi interface is different to ours
+                    } catch ( ClassCastException cce ) {
+                        System.out.println("EV3 with OR LAB 1.1 or lower firmware detected.");
                         notifyConnectionStateChanged(State.DISCOVER_UPDATE);
                         break;
                     } catch ( Exception e ) {
-                        System.out.println("Cannot connect to brick.");
-                        System.out.println(e);
+                        System.out.println("EV3 is not ready to connect yet.");
                         notifyConnectionStateChanged(State.ERROR_BRICK);
                         break;
                     }
@@ -185,14 +185,17 @@ public class USBConnector extends Observable implements Runnable, Connector {
                     }
                     notifyConnectionStateChanged(this.state);
                     break;
-                case UPDATE:
-                    //TODO Daniel knows what to do
-                    if ( true ) //if update is successful:
-                        notifyConnectionStateChanged(State.UPDATE);
-                    else
+                case FORCEUPDATE:
+                    try {
+                        Process p = Runtime.getRuntime().exec("cmd.exe /c update.bat", null, new File("firmware-1.2"));
+                        p.waitFor();
+                        if ( p.exitValue() == 0 ) {
+                            notifyConnectionStateChanged(State.UPDATE_SUCCESS);
+                            return;
+                        }
+                    } catch ( Exception e ) {
                         notifyConnectionStateChanged(State.UPDATE_FAIL);
-                    this.state = State.DISCOVER;
-                    break;
+                    }
                 case WAIT_FOR_CONNECT:
                     try {
                         Thread.sleep(50);
@@ -205,7 +208,7 @@ public class USBConnector extends Observable implements Runnable, Connector {
                     try {
                         if ( this.remoteControl.getORAupdateState() == false ) {
                             this.remoteControl.disconnectFromMenu();
-                            notifyConnectionStateChanged(State.UPDATE);
+                            //notifyConnectionStateChanged(State.UPDATE);
                             this.state = State.DISCOVER;
                             notifyConnectionStateChanged(State.DISCOVER);
                             break;
@@ -372,7 +375,7 @@ public class USBConnector extends Observable implements Runnable, Connector {
 
     @Override
     public void update() {
-        this.state = State.UPDATE;
+        this.state = State.FORCEUPDATE;
     }
 
     @Override

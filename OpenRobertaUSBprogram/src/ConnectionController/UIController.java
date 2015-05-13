@@ -25,7 +25,7 @@ public class UIController<ObservableObject> implements Observer {
     private ResourceBundle rb;
 
     public enum errorTypes {
-        HTTP, BRICK, UPDATE, FIRMWARE
+        UPDATE, RESTART, UPDATESUCCESS, UPDATEFAIL, HTTP
     }
 
     public UIController(USBConnector usbCon, ConnectionView conView, ResourceBundle rb) {
@@ -130,16 +130,19 @@ public class UIController<ObservableObject> implements Observer {
                 this.conView.setDiscoverConnected();
                 break;
             case DISCOVER_UPDATE:
-                showErrorPopup("update");
+                showErrorPopup(errorTypes.UPDATE);
                 break;
-            case UPDATE:
-                showErrorPopup("restart");
+            case FORCEUPDATE:
+                showErrorPopup(errorTypes.UPDATE);
+                break;
+            case UPDATE_SUCCESS:
+                showErrorPopup(errorTypes.UPDATESUCCESS);
                 break;
             case UPDATE_FAIL:
-                showErrorPopup("updateFail");
+                showErrorPopup(errorTypes.UPDATEFAIL);
                 break;
             case ERROR_HTTP:
-                showErrorPopup("http");
+                showErrorPopup(errorTypes.HTTP);
                 break;
             default:
                 break;
@@ -157,19 +160,38 @@ public class UIController<ObservableObject> implements Observer {
                 java.awt.Image.SCALE_AREA_AVERAGING)));
     }
 
-    private void showErrorPopup(String type) {
-        if ( type.equals("http") ) {
-            ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpErrorInfo"), null);
-        } else if ( type.equals("update") ) {
-            if ( ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("updateInfo"), null) == 0 ) {
-                connector.update();
-            }
-        } else if ( type.equals("restart") ) {
-            ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("restartInfo"), null);
-        } else if ( type.equals("updateFail") ) {
-            ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("updateFail"), null);
-        } else {
-            ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpBrickInfo"), null);
+    private void showErrorPopup(errorTypes type) {
+        switch ( type ) {
+            case HTTP:
+                ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpErrorInfo"), null);
+                break;
+            case UPDATE:
+                if ( ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("updateInfo"), null) == 0 ) {
+                    connector.update();
+                }
+                break;
+            case RESTART:
+                ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("restartInfo"), null);
+                break;
+            case UPDATEFAIL:
+                ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("updateFail"), null);
+                break;
+            case UPDATESUCCESS:
+                ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("updateSuccess"), null);
+                break;
         }
+//        if ( type.equals("http") ) {
+//            ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpErrorInfo"), null);
+//        } else if ( type.equals("update") ) {
+//            if ( ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("updateInfo"), null) == 0 ) {
+//                connector.update();
+//            }
+//        } else if ( type.equals("restart") ) {
+//            ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("restartInfo"), null);
+//        } else if ( type.equals("updateFail") ) {
+//            ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("updateFail"), null);
+//        } else {
+//            ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpBrickInfo"), null);
+//        }
     }
 }
