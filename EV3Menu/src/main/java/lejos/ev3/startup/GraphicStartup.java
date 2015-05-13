@@ -333,9 +333,9 @@ public class GraphicStartup implements ORAmenu {
      */
     private void mainMenu() {
         GraphicMenu menu = new GraphicMenu(new String[] {
-            "Run Default", " Open Roberta Lab", "Programs", "Samples", "Tools", "Bluetooth", "Wifi", "Sound", "System", "Version"
+            " Open Roberta Lab", "Wifi", "Bluetooth", "Programs", "Samples", "Tools", "Run Default", "Sound", "System", "Version Info"
         }, new String[] {
-            ICDefault, ICRoberta, ICFiles, ICSamples, ICTools, ICBlue, ICWifi, ICSound, ICEV3, ICLeJOS
+            ICRoberta, ICWifi, ICBlue, ICFiles, ICSamples, ICTools, ICDefault, ICSound, ICEV3, ICRobertaInfo
         }, 3);
 
         do {
@@ -348,25 +348,25 @@ public class GraphicStartup implements ORAmenu {
             selection = getSelection(menu, selection);
             switch ( selection ) {
                 case 0:
-                    mainRunDefault();
-                    break;
-                case 1:
                     robertaMenu();
                     break;
+                case 1:
+                    wifiMenu();
+                    break;
                 case 2:
-                    filesMenu();
-                    break;
-                case 3:
-                    samplesMenu();
-                    break;
-                case 4:
-                    toolsMenu();
-                    break;
-                case 5:
                     bluetoothMenu();
                     break;
+                case 3:
+                    filesMenu();
+                    break;
+                case 4:
+                    samplesMenu();
+                    break;
+                case 5:
+                    toolsMenu();
+                    break;
                 case 6:
-                    wifiMenu();
+                    mainRunDefault();
                     break;
                 case 7:
                     soundMenu();
@@ -1616,6 +1616,8 @@ public class GraphicStartup implements ORAmenu {
     /**
      * Get Open Roberta Lab EV3Menu version from EV3Menu.properties in jar file.
      * This will be send to the server to check if the brick firmware is up-to-date.
+     * This method crashes if the brick firmware was updated but not restarted.
+     * Classloader will not find properties file in the jar in this case.
      *
      * @return Open Roberta Lab menu version
      */
@@ -1880,9 +1882,9 @@ public class GraphicStartup implements ORAmenu {
      */
     private void oraMenu() {
         GraphicMenu menu = new GraphicMenu(new String[] {
-            "Disconnect", "Firmware Info"
+            "Disconnect"
         }, new String[] {
-            ICRoberta, ICRobertaInfo
+            ICRoberta
         }, 3);
         int selected = 0;
         do {
@@ -1906,13 +1908,6 @@ public class GraphicStartup implements ORAmenu {
                         disconnect();
                         return;
                     }
-                    break;
-                case 1:
-                    newScreen(OPENROBERTAHEAD);
-                    lcd.drawString("Open Roberta-", 0, 2);
-                    lcd.drawString("Firmware", 0, 3);
-                    lcd.drawString("version: " + oraVersion, 0, 5);
-                    Delay.msDelay(3000);
                     break;
             }
         } while ( selected >= 0 );
@@ -2175,12 +2170,19 @@ public class GraphicStartup implements ORAmenu {
      * Display system version information.
      */
     private void displayVersion() {
-        newScreen("Version");
-        lcd.drawString("leJOS:", 0, 2);
-        lcd.drawString(version, 6, 2);
-        lcd.drawString("Menu:", 0, 3);
-        lcd.drawString(Utils.versionToString(Config.VERSION), 6, 3);
-        getButtonPress();
+        if ( ORAhandler.isRestarted() == false ) {
+            newScreen(OPENROBERTAHEAD);
+            lcd.drawString("Firmware updated!", 0, 2);
+            lcd.drawString(" Please restart", 0, 4);
+            lcd.drawString("   the brick!", 0, 5);
+            Delay.msDelay(3000);
+        } else {
+            newScreen("Version");
+            lcd.drawString("Open Roberta:" + getORAversion(), 0, 2);
+            lcd.drawString("leJOS:", 0, 4);
+            lcd.drawString(version, 6, 4);
+            getButtonPress();
+        }
     }
 
     /**
