@@ -24,6 +24,10 @@ public class UIController<ObservableObject> implements Observer {
     private boolean connected;
     private ResourceBundle rb;
 
+    public enum errorTypes {
+        HTTP, BRICK, UPDATE, FIRMWARE
+    }
+
     public UIController(USBConnector usbCon, ConnectionView conView, ResourceBundle rb) {
         this.connector = usbCon;
         this.conView = conView;
@@ -136,9 +140,6 @@ public class UIController<ObservableObject> implements Observer {
                 break;
             case ERROR_HTTP:
                 showErrorPopup("http");
-                break;
-            case ERROR_BRICK:
-                showErrorPopup("brick");
                 break;
             default:
                 break;
