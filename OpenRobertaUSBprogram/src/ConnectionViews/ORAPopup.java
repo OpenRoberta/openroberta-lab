@@ -8,7 +8,9 @@ import java.awt.event.ActionListener;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.annotation.Resources;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -71,7 +73,7 @@ public class ORAPopup extends JOptionPane {
 
     public static int showPopup(Component component, String title, String text, Icon icon) {
         if ( icon == null ) {
-            icon = UIManager.getIcon("OptionPane.warningIcon");
+            icon = new ImageIcon(Resources.class.getResource("/resources/warning-outline.png"));
         }
         return showPopup(component, title, text, icon, new String[] {
             "OK"

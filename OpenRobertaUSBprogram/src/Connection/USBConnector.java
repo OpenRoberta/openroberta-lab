@@ -72,12 +72,13 @@ public class USBConnector extends Observable implements Runnable, Connector {
         DISCOVER_UPDATE,
         DISCONNECT,
         WAIT_FOR_SERVER,
-        FORCEUPDATE,
+        UPDATE,
         UPDATE_SUCCESS,
         UPDATE_FAIL,
         ERROR_HTTP,
         ERROR_UPDATE,
-        ERROR_BRICK
+        ERROR_BRICK,
+        DISCOVER_UPDATED
     }
 
     private State state = State.DISCOVER; // First state when program starts
@@ -151,10 +152,11 @@ public class USBConnector extends Observable implements Runnable, Connector {
         brickData.put(KEY_MACADDR, "usb");
 
         while ( this.running ) {
-            //System.out.println(state.toString());
+            // System.out.println(state.toString());
             switch ( this.state ) {
                 case DISCOVER:
                 case DISCOVER_CONNECTED:
+                case DISCOVER_UPDATED:
                     try {
                         if ( InetAddress.getByName(this.brickIp).isReachable(3000) ) {
                             this.remoteControl.connectToMenu();
@@ -171,37 +173,38 @@ public class USBConnector extends Observable implements Runnable, Connector {
                         // lejos rmi interface is different to ours
                     } catch ( ClassCastException cce ) {
                         System.out.println("EV3 with OR LAB 1.1 or lower firmware detected.");
-                        notifyConnectionStateChanged(State.DISCOVER_UPDATE);
+                        if ( this.state == State.DISCOVER_UPDATED ) {
+                            notifyConnectionStateChanged(State.UPDATE_SUCCESS);
+                        } else {
+                            notifyConnectionStateChanged(State.DISCOVER_UPDATE);
+                        }
                         break;
                     } catch ( Exception e ) {
                         System.out.println("EV3 is not ready to connect yet.");
                         notifyConnectionStateChanged(State.ERROR_BRICK);
                         break;
                     }
-                    if ( this.state == State.DISCOVER ) {
+                    if ( this.state == State.DISCOVER || this.state == State.DISCOVER_UPDATED ) {
                         this.state = State.WAIT_FOR_CONNECT;
                     } else {
                         this.state = State.WAIT_FOR_CMD;
                     }
                     notifyConnectionStateChanged(this.state);
                     break;
-                case FORCEUPDATE:
+                case UPDATE:
                     try {
                         Process p = Runtime.getRuntime().exec("cmd.exe /c update.bat", null, new File("firmware-1.2"));
                         p.waitFor();
                         if ( p.exitValue() == 0 ) {
                             notifyConnectionStateChanged(State.UPDATE_SUCCESS);
-                            return;
+                            this.state = State.DISCOVER_UPDATED;
+                            break;
                         }
                     } catch ( Exception e ) {
                         notifyConnectionStateChanged(State.UPDATE_FAIL);
                     }
+                    break;
                 case WAIT_FOR_CONNECT:
-                    try {
-                        Thread.sleep(50);
-                    } catch ( InterruptedException ie ) {
-                        // ok
-                    }
                     break;
                 case CONNECT:
                     String token = this.tokenGenerator.generateToken();
@@ -352,6 +355,11 @@ public class USBConnector extends Observable implements Runnable, Connector {
                 default:
                     break;
             }
+            try {
+                Thread.sleep(50);
+            } catch ( InterruptedException ie ) {
+                // ok
+            }
         }
     }
 
@@ -375,7 +383,7 @@ public class USBConnector extends Observable implements Runnable, Connector {
 
     @Override
     public void update() {
-        this.state = State.FORCEUPDATE;
+        this.state = State.UPDATE;
     }
 
     @Override

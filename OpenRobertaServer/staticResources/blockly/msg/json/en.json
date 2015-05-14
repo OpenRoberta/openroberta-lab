@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-05-11 22:35:24.499000",
+		"lastupdated": "2015-05-13 17:49:37.408000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -722,7 +722,7 @@
 	"MESSAGE_EDIT_SAVE_PROGRAM_AS": "Your program has been saved as '$'",
 	"MESSAGE_EDIT_SAVE_CONFIGURATION": "Your configuration has been saved",
 	"MESSAGE_EDIT_SAVE_CONFIGURATION_AS": "Your configuration has been saved as '$'",
-	"MESSAGE_ROBOT_CONNECTED": "Your robot '$' is connected",
+	"MESSAGE_ROBOT_CONNECTED": "Your robot $ is connected",
 	"MESSAGE_ROBOT_FIRMWARE_UPDATE": "Your robot runs now version '$'",
 	"MESSAGE_USER_LOGIN": "Hello '$'",
 	"MESSAGE_USER_LOGOUT": "You are logged out",

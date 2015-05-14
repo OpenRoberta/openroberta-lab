@@ -24,10 +24,6 @@ public class UIController<ObservableObject> implements Observer {
     private boolean connected;
     private ResourceBundle rb;
 
-    public enum errorTypes {
-        UPDATE, RESTART, UPDATESUCCESS, UPDATEFAIL, HTTP
-    }
-
     public UIController(USBConnector usbCon, ConnectionView conView, ResourceBundle rb) {
         this.connector = usbCon;
         this.conView = conView;
@@ -130,19 +126,21 @@ public class UIController<ObservableObject> implements Observer {
                 this.conView.setDiscoverConnected();
                 break;
             case DISCOVER_UPDATE:
-                showErrorPopup(errorTypes.UPDATE);
-                break;
-            case FORCEUPDATE:
-                showErrorPopup(errorTypes.UPDATE);
+                if ( ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("updateInfo"), null) == 0 ) {
+                    connector.update();
+                }
                 break;
             case UPDATE_SUCCESS:
-                showErrorPopup(errorTypes.UPDATESUCCESS);
+                ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("restartInfo"), null);
                 break;
             case UPDATE_FAIL:
-                showErrorPopup(errorTypes.UPDATEFAIL);
+                ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("updateFail"), null);
                 break;
             case ERROR_HTTP:
-                showErrorPopup(errorTypes.HTTP);
+                ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpErrorInfo"), null);
+                break;
+            case ERROR_BRICK:
+                ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpBrickInfo"), null);
                 break;
             default:
                 break;
@@ -158,40 +156,5 @@ public class UIController<ObservableObject> implements Observer {
                 100,
                 27,
                 java.awt.Image.SCALE_AREA_AVERAGING)));
-    }
-
-    private void showErrorPopup(errorTypes type) {
-        switch ( type ) {
-            case HTTP:
-                ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpErrorInfo"), null);
-                break;
-            case UPDATE:
-                if ( ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("updateInfo"), null) == 0 ) {
-                    connector.update();
-                }
-                break;
-            case RESTART:
-                ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("restartInfo"), null);
-                break;
-            case UPDATEFAIL:
-                ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("updateFail"), null);
-                break;
-            case UPDATESUCCESS:
-                ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("updateSuccess"), null);
-                break;
-        }
-//        if ( type.equals("http") ) {
-//            ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpErrorInfo"), null);
-//        } else if ( type.equals("update") ) {
-//            if ( ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("updateInfo"), null) == 0 ) {
-//                connector.update();
-//            }
-//        } else if ( type.equals("restart") ) {
-//            ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("restartInfo"), null);
-//        } else if ( type.equals("updateFail") ) {
-//            ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("updateFail"), null);
-//        } else {
-//            ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpBrickInfo"), null);
-//        }
     }
 }
