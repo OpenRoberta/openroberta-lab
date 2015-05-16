@@ -7,6 +7,7 @@ import java.awt.event.WindowEvent;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
@@ -23,6 +24,7 @@ public class UIController<ObservableObject> implements Observer {
     private ConnectionView conView;
     private boolean connected;
     private ResourceBundle rb;
+    private static Logger log = Logger.getLogger("Connector");
 
     public UIController(USBConnector usbCon, ConnectionView conView, ResourceBundle rb) {
         this.connector = usbCon;
@@ -48,14 +50,18 @@ public class UIController<ObservableObject> implements Observer {
         public void actionPerformed(ActionEvent e) {
             AbstractButton b = (AbstractButton) e.getSource();
             if ( b.getActionCommand() == "close" ) {
+                log.info("User close");
                 closeApplication();
             } else if ( b.getActionCommand() == "about" ) {
+                log.info("User about");
                 showAboutPopup();
             } else {
                 if ( b.isSelected() ) {
+                    log.info("User connect");
                     connector.connect();
                     b.setText(rb.getString("disconnect"));
                 } else {
+                    log.info("User disconnect");
                     connector.disconnect();
                     b.setText(rb.getString("connect"));
                 }
@@ -67,6 +73,7 @@ public class UIController<ObservableObject> implements Observer {
 
         @Override
         public void windowClosing(WindowEvent e) {
+            log.info("User close");
             closeApplication();
         }
 

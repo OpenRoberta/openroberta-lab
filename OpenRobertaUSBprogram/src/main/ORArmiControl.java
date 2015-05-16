@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.util.logging.Logger;
 
 import ora.rmi.ORArmiMenu;
 import Connection.USBConnector;
@@ -24,6 +25,7 @@ public class ORArmiControl {
     private boolean status = true;
 
     private static ORArmiMenu menu;
+    private static Logger log = Logger.getLogger("Connector");
 
     public ORArmiControl(String brickIp) {
         this.brickIp = brickIp;
@@ -36,7 +38,6 @@ public class ORArmiControl {
      */
     public void connectToMenu() throws Exception {
         menu = (ORArmiMenu) Naming.lookup("//" + this.brickIp + "/RemoteMenu");
-        System.out.println("Connected to brick!");
     }
 
     /**
@@ -60,11 +61,10 @@ public class ORArmiControl {
             FileInputStream in = new FileInputStream(file);
             byte[] data = new byte[(int) file.length()];
             in.read(data);
-            System.out.println("Uploading " + file.getName());
             menu.uploadFile("/home/lejos/programs/" + file.getName(), data);
             in.close();
         } catch ( IOException ioe ) {
-            System.out.println("IOException uploading program");
+            log.severe("IOException uploading program " + ioe);
         }
     }
 
@@ -96,18 +96,17 @@ public class ORArmiControl {
         if ( menu == null ) {
             this.status = this.status && false;
         }
-        System.out.println(directory);
         File file = new File(fileName);
         try {
             FileInputStream in = new FileInputStream(file);
             byte[] data = new byte[(int) file.length()];
             in.read(data);
-            System.out.println("Upload of " + file.getName() + " successful!");
+            log.info("Upload firmware file " + file.getName() + " successful!");
             menu.uploadFile(directory + "/" + file.getName(), data);
             in.close();
             this.status = this.status && true;
         } catch ( IOException ioe ) {
-            System.out.println("Error @ uploading firmware file" + file.getName());
+            log.severe("Error uploading firmware file" + file.getName() + " " + ioe);
             this.status = this.status && false;
         }
     }

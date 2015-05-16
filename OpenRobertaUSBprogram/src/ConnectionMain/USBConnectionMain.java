@@ -4,17 +4,26 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import util.ORAFormatter;
 import Connection.USBConnector;
 import ConnectionController.UIController;
 import ConnectionViews.ConnectionView;
 
 public class USBConnectionMain {
 
+    private static Logger log = Logger.getLogger("Connector");
+    private static ConsoleHandler handler = new ConsoleHandler();
+
     public static void main(String[] args) {
+
+        configureLogger();
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -55,8 +64,18 @@ public class USBConnectionMain {
                 } catch ( Exception e ) {
                     rb = ResourceBundle.getBundle("resources/messages", Locale.ENGLISH);
                 }
+                log.config("Language " + rb.getLocale());
+
                 return rb;
             }
         });
+    }
+
+    private static void configureLogger() {
+        handler.setFormatter(new ORAFormatter());
+        handler.setLevel(Level.ALL);
+        log.setUseParentHandlers(false);
+        log.setLevel(Level.ALL);
+        log.addHandler(handler);
     }
 }
