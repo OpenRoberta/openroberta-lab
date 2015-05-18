@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=OpenRobertaEV3USB
+Comment=Open Roberta USB Program
+Exec=/usr/bin/ora-ev3-usb
+Icon=/usr/share/ora-ev3-usb/ora-ev3-usb.png
+Terminal=false
+Type=Application
+Categories=Education
+StartupNotify=true
