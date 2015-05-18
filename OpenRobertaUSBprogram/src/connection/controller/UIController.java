@@ -1,4 +1,4 @@
-package ConnectionController;
+package connection.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,11 +12,11 @@ import java.util.logging.Logger;
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 
-import Connection.Connector;
-import Connection.USBConnector;
-import Connection.USBConnector.State;
-import ConnectionViews.ConnectionView;
-import ConnectionViews.ORAPopup;
+import connection.views.ConnectionView;
+import connection.views.ORAPopup;
+import connectionEV3.Connector;
+import connectionEV3.USBConnector;
+import connectionEV3.USBConnector.State;
 
 public class UIController<ObservableObject> implements Observer {
 
@@ -118,11 +118,11 @@ public class UIController<ObservableObject> implements Observer {
                 this.conView.setWaitForConnect();
                 break;
             case WAIT_FOR_SERVER:
-                this.conView.setNew(this.connector.getToken());
+                this.conView.setNew(rb.getString("token") + " " + this.connector.getToken());
                 break;
             case WAIT_FOR_CMD:
                 this.connected = true;
-                this.conView.setNew(this.connector.getBrickName());
+                this.conView.setNew(rb.getString("name") + " " + this.connector.getBrickName());
                 this.conView.setWaitForCmd(this.connector.getBrickBatteryVoltage());
                 break;
             case DISCOVER:

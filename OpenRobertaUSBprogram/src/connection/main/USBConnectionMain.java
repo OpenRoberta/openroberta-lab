@@ -1,4 +1,4 @@
-package ConnectionMain;
+package connection.main;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -11,10 +11,10 @@ import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import connection.controller.UIController;
+import connection.views.ConnectionView;
+import connectionEV3.USBConnector;
 import util.ORAFormatter;
-import Connection.USBConnector;
-import ConnectionController.UIController;
-import ConnectionViews.ConnectionView;
 
 public class USBConnectionMain {
 
@@ -40,6 +40,11 @@ public class USBConnectionMain {
             }
 
             private void prepareUI() {
+                try {
+                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                } catch ( Exception e ) {
+                    e.printStackTrace();
+                }
                 UIManager.put("MenuBar.background", Color.white);
                 UIManager.put("Menu.background", Color.white);
                 UIManager.put("Menu.selectionBackground", Color.decode("#afca04"));
@@ -65,7 +70,6 @@ public class USBConnectionMain {
                     rb = ResourceBundle.getBundle("resources/messages", Locale.ENGLISH);
                 }
                 log.config("Language " + rb.getLocale());
-
                 return rb;
             }
         });

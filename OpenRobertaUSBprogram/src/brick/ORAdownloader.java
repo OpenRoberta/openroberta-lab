@@ -11,7 +11,7 @@ import java.net.URL;
 
 import org.json.JSONObject;
 
-import Connection.USBConnector;
+import connectionEV3.USBConnector;
 
 /**
  * Class that downloads user program from /download service.

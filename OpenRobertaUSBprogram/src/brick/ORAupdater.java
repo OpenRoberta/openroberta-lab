@@ -8,7 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import Connection.USBConnector;
+import connectionEV3.USBConnector;
 
 /**
  * Download all required library files and menu for Open Roberta lab to the brick.<br>

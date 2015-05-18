@@ -37,7 +37,7 @@ Blockly.Blocks['variables_get'] = {
     init : function() {
         this.setHelpUrl(Blockly.Msg.VARIABLES_GET_HELPURL);
         this.setColourRGB(Blockly.CAT_VARIABLE_RGB);
-        this.appendDummyInput().appendField(Blockly.Msg.VARIABLES_GET_TITLE).appendField(new Blockly.FieldVariable(), 'VAR').appendField(
+        this.appendDummyInput().appendField(Blockly.Msg.GET).appendField(new Blockly.FieldVariable(), 'VAR').appendField(
                 Blockly.Msg.VARIABLES_GET_TAIL);
         this.setTooltip(Blockly.Msg.VARIABLES_GET_TOOLTIP);
         this.contextMenuMsg_ = Blockly.Msg.VARIABLES_GET_CREATE_SET;

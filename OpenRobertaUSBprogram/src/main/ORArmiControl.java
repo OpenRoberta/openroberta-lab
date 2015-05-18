@@ -7,8 +7,8 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.logging.Logger;
 
+import connectionEV3.USBConnector;
 import ora.rmi.ORArmiMenu;
-import Connection.USBConnector;
 
 /**
  * Map methods to RMI calls.

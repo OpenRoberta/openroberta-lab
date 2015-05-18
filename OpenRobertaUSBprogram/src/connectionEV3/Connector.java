@@ -1,6 +1,6 @@
-package Connection;
+package connectionEV3;
 
-import Connection.USBConnector.State;
+import connectionEV3.USBConnector.State;
 
 public interface Connector {
     public void connect();

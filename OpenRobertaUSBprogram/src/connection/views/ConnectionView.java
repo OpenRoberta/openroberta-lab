@@ -1,4 +1,4 @@
-package ConnectionViews;
+package connection.views;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -25,8 +25,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
-import ConnectionController.UIController.CloseListener;
-import ConnectionController.UIController.ConnectActionListener;
+import connection.controller.UIController.CloseListener;
+import connection.controller.UIController.ConnectActionListener;
 
 public class ConnectionView extends JFrame {
 

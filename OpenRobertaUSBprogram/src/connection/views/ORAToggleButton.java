@@ -1,4 +1,4 @@
-package ConnectionViews;
+package connection.views;
 
 import java.awt.Color;
 import java.awt.Font;
