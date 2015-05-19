@@ -2,8 +2,8 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>C:\installations\Githome\robertalab\OpenRobertaUSBprogram\binexe\targets2\OpenRobertaUSBprogram.jar</jar>
-  <outfile>C:\installations\Githome\robertalab\OpenRobertaUSBprogram\binexe\targets2\OpenRobertaUSBprogram.exe</outfile>
+  <jar>C:\installations\Githome\robertalab\OpenRobertaUSBprogram\windows\OpenRobertaUSBprogram.jar</jar>
+  <outfile>C:\installations\Githome\robertalab\OpenRobertaUSBprogram\windows\OpenRobertaUSBprogram.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir>.</chdir>

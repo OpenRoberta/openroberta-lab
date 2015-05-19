@@ -191,14 +191,26 @@ public class USBConnector extends Observable implements Runnable, Connector {
                     }
                     break;
                 case WAIT_FOR_CONNECT:
+                    // brick is performing restart, go back to discover to not overjump this state for next connection
+                    // do not make other state changes here
+                    try {
+                        if ( !InetAddress.getByName(this.brickIp).isReachable(3000) ) {
+                            this.state = State.DISCOVER;
+                            notifyConnectionStateChanged(State.DISCOVER);
+                        }
+                    } catch ( IOException ioe ) {
+                        log.warning("EV3 is restarting most likely");
+                        this.state = State.DISCOVER;
+                        notifyConnectionStateChanged(State.DISCOVER);
+                    }
                     break;
                 case CONNECT:
                     String token = this.tokenGenerator.generateToken();
                     try {
                         if ( this.remoteControl.getORAupdateState() == false ) {
                             this.remoteControl.disconnectFromMenu();
-                            //notifyConnectionStateChanged(State.UPDATE);
                             this.state = State.DISCOVER;
+                            notifyConnectionStateChanged(State.UPDATE_SUCCESS);
                             notifyConnectionStateChanged(State.DISCOVER);
                             break;
                         }
@@ -291,6 +303,8 @@ public class USBConnector extends Observable implements Runnable, Connector {
                                         this.remoteControl.setORAupdateState();
                                         Thread.sleep(1000);
                                         disconnect();
+                                        notifyConnectionStateChanged(State.DISCOVER);
+                                        this.state = State.DISCOVER;
                                         break;
                                     } else {
                                         notifyConnectionStateChanged(State.ERROR_UPDATE);
@@ -302,10 +316,10 @@ public class USBConnector extends Observable implements Runnable, Connector {
                             case CMD_DOWNLOAD:
                                 String programName = this.oraDownloader.downloadProgram(brickData);
                                 log.info("Download " + programName);
-                                log.info("File " + USBConnector.TEMPDIRECTORY.getAbsolutePath() + "/" + programName);
-                                this.remoteControl.uploadFile(new File(USBConnector.TEMPDIRECTORY, programName).getPath());
+                                log.info("File " + new File(USBConnector.TEMPDIRECTORY.getAbsolutePath(), programName).getPath());
+                                this.remoteControl.uploadFile(new File(USBConnector.TEMPDIRECTORY, programName));
                                 log.info("Upload " + programName);
-                                log.info("File " + USBConnector.TEMPDIRECTORY.getAbsolutePath() + "/" + programName);
+                                log.info("File " + new File(USBConnector.TEMPDIRECTORY.getAbsolutePath(), programName).getPath());
                                 this.remoteControl.runORAprogram(programName);
                                 break;
                             case CMD_CONFIGURATION:
