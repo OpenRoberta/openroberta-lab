@@ -302,10 +302,10 @@ public class USBConnector extends Observable implements Runnable, Connector {
                             case CMD_DOWNLOAD:
                                 String programName = this.oraDownloader.downloadProgram(brickData);
                                 log.info("Download " + programName);
-                                log.info("File " + USBConnector.TEMPDIRECTORY.getAbsolutePath() + "/" + programName);
-                                this.remoteControl.uploadFile(new File(USBConnector.TEMPDIRECTORY, programName).getPath());
+                                log.info("File " + new File(USBConnector.TEMPDIRECTORY.getAbsolutePath(), programName).getPath());
+                                this.remoteControl.uploadFile(new File(USBConnector.TEMPDIRECTORY, programName));
                                 log.info("Upload " + programName);
-                                log.info("File " + USBConnector.TEMPDIRECTORY.getAbsolutePath() + "/" + programName);
+                                log.info("File " + new File(USBConnector.TEMPDIRECTORY.getAbsolutePath(), programName).getPath());
                                 this.remoteControl.runORAprogram(programName);
                                 break;
                             case CMD_CONFIGURATION:

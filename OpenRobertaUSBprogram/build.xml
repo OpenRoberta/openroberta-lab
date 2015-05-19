@@ -5,7 +5,7 @@
     <target name="create_run_jar">
         <jar destfile="C:/installations/Githome/robertalab/OpenRobertaUSBprogram/OpenRobertaUSBprogram.jar" filesetmanifest="mergewithoutmain">
             <manifest>
-                <attribute name="Main-Class" value="ConnectionMain.USBConnectionMain"/>
+                <attribute name="Main-Class" value="connection.main.USBConnectionMain"/>
                 <attribute name="Class-Path" value="."/>
             </manifest>
             <fileset dir="C:/installations/Githome/robertalab/OpenRobertaUSBprogram/bin"/>

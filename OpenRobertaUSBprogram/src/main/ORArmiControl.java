@@ -7,8 +7,8 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.logging.Logger;
 
-import connectionEV3.USBConnector;
 import ora.rmi.ORArmiMenu;
+import connectionEV3.USBConnector;
 
 /**
  * Map methods to RMI calls.
@@ -52,12 +52,12 @@ public class ORArmiControl {
      *
      * @param programName
      */
-    public void uploadFile(String programName) {
+    public void uploadFile(File file) {
         if ( menu == null ) {
             return;
         }
         try {
-            File file = new File(programName);
+            //File file = new File(programName);
             FileInputStream in = new FileInputStream(file);
             byte[] data = new byte[(int) file.length()];
             in.read(data);
