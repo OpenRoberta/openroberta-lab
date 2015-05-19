@@ -1648,6 +1648,7 @@ public class GraphicStartup implements ORAmenu {
         } else {
             LocalEV3.get().getAudio().systemSound(Sounds.DESCENDING);
         }
+        this.indiBA.setUsb(status);
     }
 
     /**
