@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-05-18 20:14:18.851000",
+		"lastupdated": "2015-05-19 20:42:47.768000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -680,7 +680,7 @@
 	"TAB_SIMULATION": "Simulation",
 	"POPUP_ABOUT_TEXT": "The Open Roberta Lab is a cloud-based integrated programming environment that enables children and adolescents to program easily Lego Mindstorms EV3 robots. This platform is completely open source so taking part is desirable! Both the software and the open source developer tools are available via Fraunhofer servers.",
 	"POPUP_ABOUT_TEXT_DEV": "The Open Roberta Lab is an open-source programming platform developed by Fraunhofer IAIS within the initiative <a href='http://www.roberta-home.de/'>»Roberta – Learning with Robots«</a>",
-	"POPUP_TEXT_STARTUP_MESSAGE": "Three things you should know before starting:<ul class='icon'><li class='document-text'>here you can program EV3 robots </li><li class='Roberta'>your robot needs a special system <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>check!</a></li><li class='wi-fi'>your robot needs wi-fi or a USB program <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>check!</a></li><li class='arrow-right-thick'>if you are not sure, please have a look at the help pages ... <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/A4AM'>more</a></li></ul><br /><p>What is new?</p>Version beta 1.2.0<ul class='NonIcon' style='font-size:small'><li>blocks to send and receive messages</li><li>connect your robot via USB</li><li>rotate motors backwards with negative speed</li><li>fixed many more bugs</li></ul>",
+	"POPUP_TEXT_STARTUP_MESSAGE": "Three things you should know before starting:<ul class='icon'><li class='document-text'>here you can program EV3 robots </li><li class='Roberta'>your robot needs a special system <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>check!</a></li><li class='wi-fi'>your robot needs wi-fi or a USB program <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>check!</a></li><li class='arrow-right-thick'>if you are not sure, please have a look at the help pages ... <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/A4AM'>more</a></li></ul><br /><p>What is new?</p>Version beta 1.2.0<ul class='NonIcon' style='font-size:small'><li>now available in Finnish!</li><li>blocks to send and receive messages</li><li>connect your robot via USB</li><li>rotate motors backwards with negative speed</li><li>fixed many more bugs</li></ul></br>",
 	"POPUP_ABOUT_JOIN": "I want to help",
 	"POPUP_USERNAME": "Username",
 	"POPUP_USERNAME_LOGOFF": "You are not logged in.",
