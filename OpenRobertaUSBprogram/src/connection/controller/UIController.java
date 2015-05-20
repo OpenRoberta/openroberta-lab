@@ -20,10 +20,10 @@ import connectionEV3.USBConnector.State;
 
 public class UIController<ObservableObject> implements Observer {
 
-    private Connector connector;
-    private ConnectionView conView;
+    private final Connector connector;
+    private final ConnectionView conView;
     private boolean connected;
-    private ResourceBundle rb;
+    private final ResourceBundle rb;
     private static Logger log = Logger.getLogger("Connector");
 
     public UIController(USBConnector usbCon, ConnectionView conView, ResourceBundle rb) {
@@ -58,12 +58,12 @@ public class UIController<ObservableObject> implements Observer {
             } else {
                 if ( b.isSelected() ) {
                     log.info("User connect");
-                    connector.connect();
-                    b.setText(rb.getString("disconnect"));
+                    UIController.this.connector.connect();
+                    b.setText(UIController.this.rb.getString("disconnect"));
                 } else {
                     log.info("User disconnect");
-                    connector.disconnect();
-                    b.setText(rb.getString("connect"));
+                    UIController.this.connector.disconnect();
+                    b.setText(UIController.this.rb.getString("connect"));
                 }
             }
         }
@@ -80,7 +80,7 @@ public class UIController<ObservableObject> implements Observer {
     }
 
     public boolean isConnected() {
-        return connected;
+        return this.connected;
     }
 
     public void setConnected(boolean connected) {
@@ -91,17 +91,14 @@ public class UIController<ObservableObject> implements Observer {
     public void closeApplication() {
         if ( this.connected ) {
             String[] buttons = {
-                rb.getString("close"), rb.getString("cancel")
+                this.rb.getString("close"), this.rb.getString("cancel")
             };
             int n =
-                ORAPopup.showPopup(
-                    conView,
-                    rb.getString("attention"),
-                    rb.getString("confirmCloseInfo"),
-                    new ImageIcon(getClass().getClassLoader().getResource("resources/Roberta.png")),
-                    buttons);
+                ORAPopup.showPopup(this.conView, this.rb.getString("attention"), this.rb.getString("confirmCloseInfo"), new ImageIcon(getClass()
+                    .getClassLoader()
+                    .getResource("resources/Roberta.png")), buttons);
             if ( n == 0 ) {
-                connector.close();
+                this.connector.close();
                 System.exit(0);
             }
         } else {
@@ -118,11 +115,11 @@ public class UIController<ObservableObject> implements Observer {
                 this.conView.setWaitForConnect();
                 break;
             case WAIT_FOR_SERVER:
-                this.conView.setNew(rb.getString("token") + " " + this.connector.getToken());
+                this.conView.setNew(this.rb.getString("token") + " " + this.connector.getToken());
                 break;
             case WAIT_FOR_CMD:
                 this.connected = true;
-                this.conView.setNew(rb.getString("name") + " " + this.connector.getBrickName());
+                this.conView.setNew(this.rb.getString("name") + " " + this.connector.getBrickName());
                 this.conView.setWaitForCmd(this.connector.getBrickBatteryVoltage());
                 break;
             case DISCOVER:
@@ -133,35 +130,32 @@ public class UIController<ObservableObject> implements Observer {
                 this.conView.setDiscoverConnected();
                 break;
             case DISCOVER_UPDATE:
-                if ( ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("updateInfo"), null) == 0 ) {
-                    connector.update();
+                if ( ORAPopup.showPopup(this.conView, this.rb.getString("attention"), this.rb.getString("updateInfo"), null) == 0 ) {
+                    this.connector.update();
                 }
                 break;
             case UPDATE_SUCCESS:
-                ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("restartInfo"), null);
+                ORAPopup.showPopup(this.conView, this.rb.getString("attention"), this.rb.getString("restartInfo"), null);
                 break;
             case UPDATE_FAIL:
-                ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("updateFail"), null);
+                ORAPopup.showPopup(this.conView, this.rb.getString("attention"), this.rb.getString("updateFail"), null);
                 break;
             case ERROR_HTTP:
-                ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpErrorInfo"), null);
+                ORAPopup.showPopup(this.conView, this.rb.getString("attention"), this.rb.getString("httpErrorInfo"), null);
                 break;
             case ERROR_BRICK:
-                ORAPopup.showPopup(conView, rb.getString("attention"), rb.getString("httpBrickInfo"), null);
+                ORAPopup.showPopup(this.conView, this.rb.getString("attention"), this.rb.getString("httpBrickInfo"), null);
                 break;
+            case TOKEN_TIMEOUT:
+                ORAPopup.showPopup(this.conView, this.rb.getString("attention"), this.rb.getString("tokenTimeout"), null);
             default:
                 break;
         }
     }
 
     private void showAboutPopup() {
-        ORAPopup.showPopup(
-            conView,
-            rb.getString("about"),
-            rb.getString("aboutInfo"),
-            new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("resources/iais_logo.gif")).getImage().getScaledInstance(
-                100,
-                27,
-                java.awt.Image.SCALE_AREA_AVERAGING)));
+        ORAPopup.showPopup(this.conView, this.rb.getString("about"), this.rb.getString("aboutInfo"), new ImageIcon(new ImageIcon(getClass()
+            .getClassLoader()
+            .getResource("resources/iais_logo.gif")).getImage().getScaledInstance(100, 27, java.awt.Image.SCALE_AREA_AVERAGING)));
     }
 }

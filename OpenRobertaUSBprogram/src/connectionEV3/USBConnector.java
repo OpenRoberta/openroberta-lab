@@ -80,7 +80,8 @@ public class USBConnector extends Observable implements Runnable, Connector {
         ERROR_HTTP,
         ERROR_UPDATE,
         ERROR_BRICK,
-        DISCOVER_UPDATED
+        DISCOVER_UPDATED,
+        TOKEN_TIMEOUT
     }
 
     private State state = State.DISCOVER; // First state when program starts
@@ -241,11 +242,21 @@ public class USBConnector extends Observable implements Runnable, Connector {
                             case CMD_REPEAT:
                                 registered = true;
                                 this.remoteControl.setORAregistration(registered);
+                                this.state = State.WAIT_FOR_CMD;
+                                notifyConnectionStateChanged(State.WAIT_FOR_CMD);
+                                break;
+                            case CMD_ABORT:
+                                this.state = State.DISCOVER;
+                                notifyConnectionStateChanged(State.TOKEN_TIMEOUT);
+                                notifyConnectionStateChanged(State.DISCOVER);
                                 break;
                             default:
                                 log.info("Command " + command + " unknown");
+                                this.state = State.DISCOVER;
+                                notifyConnectionStateChanged(State.DISCOVER);
                                 break;
                         }
+                        break;
                     } catch ( IOException e1 ) {
                         if ( !this.userDisconnect ) {
                             this.brickName = "";
@@ -258,9 +269,6 @@ public class USBConnector extends Observable implements Runnable, Connector {
                         this.userDisconnect = false;
                         break;
                     }
-                    this.state = State.WAIT_FOR_CMD;
-                    notifyConnectionStateChanged(State.WAIT_FOR_CMD);
-                    break;
                 case WAIT_FOR_CMD:
                     try {
                         brickData.put(KEY_BATTERY, this.remoteControl.getBatteryVoltage());
