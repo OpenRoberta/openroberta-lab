@@ -16,15 +16,56 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>de.fhg.iais.openroberta</groupId>
-        <artifactId>OpenRobertaParent</artifactId>
-        <version>1.2.0-SNAPSHOT</version>
-        <relativePath>../OpenRobertaParent</relativePath>
-    </parent>
-    <artifactId>Resources</artifactId>
-    <name>Resources</name>
-    <description>resources as licence information, formatter, installation files</description>
-    <packaging>pom</packaging>
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>de.fhg.iais.openroberta</groupId>
+		<artifactId>OpenRobertaParent</artifactId>
+		<version>1.2.0-SNAPSHOT</version>
+		<relativePath>../OpenRobertaParent</relativePath>
+	</parent>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.npanday.plugins</groupId>
+				<artifactId>wix-maven-plugin</artifactId>
+				<extensions>true</extensions>
+				<version>1.4.0-incubating</version>              
+				<executions>
+					<execution>
+						<id>wix-candle</id>
+						<configuration>
+							<sourceFiles>
+								<sourceFile>usb_installer/firmware.wxs</sourceFile>
+								<sourceFile>usb_installer/java.wxs</sourceFile>
+								<sourceFile>usb_installer/setup.wxs</sourceFile>
+							</sourceFiles>                 
+							<outputDirectory>target</outputDirectory>                                
+						</configuration>
+						<goals>
+							<goal>candle</goal>                            
+						</goals>
+					</execution>
+					<execution>
+						<id>wix-light</id>
+						<configuration>
+							<objectFiles>
+								<objectFile>target/firmware.wixobj</objectFile>
+								<objectFile>target/java.wixobj</objectFile>
+								<objectFile>target/setup.wixobj</objectFile>
+							</objectFiles>
+							<arguments>-ext WixUIExtension -cultures:de-DE -b usb_installer/firmware-1.2 -b usb_installer/java</arguments>                    
+							<outputFile>target/setup.msi</outputFile>      
+						</configuration>
+						<goals>
+							<goal>light</goal>                            
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<artifactId>Resources</artifactId>
+	<name>Resources</name>
+	<description>resources as licence information, formatter, installation files</description>
+	<packaging>pom</packaging>
 </project>
