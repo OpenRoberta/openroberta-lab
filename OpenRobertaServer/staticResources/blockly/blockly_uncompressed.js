@@ -23,7 +23,7 @@ if (!window.goog) {
 }
 
 // Build map of all dependencies (used and unused).
-var dir = window.BLOCKLY_DIR.match(/[^\/]+$/)[0];
+var  dir = window.BLOCKLY_DIR.match(/[^\/]+$/)[0];
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/backButton.js", ['Blockly.BackButton'], ['Blockly.Button', 'Blockly.BlockSvg']);
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/block.js", ['Blockly.Block'], ['Blockly.BlockSvg', 'Blockly.Blocks', 'Blockly.Comment', 'Blockly.Connection', 'Blockly.ContextMenu', 'Blockly.Input', 'Blockly.Msg', 'Blockly.Mutator', 'Blockly.MutatorPlus', 'Blockly.MutatorMinus', 'Blockly.Help', 'Blockly.Warning', 'Blockly.Error', 'Blockly.Workspace', 'Blockly.Xml', 'goog.Timer', 'goog.array', 'goog.asserts', 'goog.string']);
 goog.addDependency("../../../robertalab/OpenRobertaServer/staticResources/" + dir + "/core/blockly.js", ['Blockly'], ['Blockly.Block', 'Blockly.Connection', 'Blockly.FieldAngle', 'Blockly.FieldCheckbox', 'Blockly.FieldColour', 'Blockly.FieldRobColour', 'Blockly.FieldDropdown', 'Blockly.FieldImage', 'Blockly.FieldTextInput', 'Blockly.FieldVariable', 'Blockly.Generator', 'Blockly.Msg', 'Blockly.Procedures', 'Blockly.Realtime', 'Blockly.Toolbox', 'Blockly.WidgetDiv', 'Blockly.Workspace', 'Blockly.inject', 'Blockly.utils', 'goog.color', 'goog.dom', 'goog.events', 'goog.string', 'goog.ui.ColorPicker', 'goog.ui.tree.TreeControl', 'goog.userAgent']);
