@@ -123,6 +123,7 @@ function updateFirmware() {
         setRobotState(result);
         if (result.rc === "ok") {
             displayMessage("MESSAGE_RESTART_ROBOT", "POPUP", "");
+            userState.robotState = 'disconnected';
         } else {
             displayInformation(result, "", result.message, userState.robotFirmware);
         }
