@@ -1503,7 +1503,7 @@ public class GraphicStartup implements ORAmenu {
             }
             String token = new ORAtokenGenerator().generateToken();
 
-            //String ip = "mp-devel.iais.fraunhofer.de:1999";
+            //String ip = "lab.open-roberta.org";
             String ip = getIPAddress();
 
             if ( ip.equals("none") ) {
