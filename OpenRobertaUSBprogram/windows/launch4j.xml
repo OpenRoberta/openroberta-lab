@@ -2,8 +2,8 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>OpenRobertaUSBprogram.jar</jar>
-  <outfile>OpenRobertaUSBprogram.exe</outfile>
+  <jar>..\targets\OpenRobertaEV3.jar</jar>
+  <outfile>..\targets\OpenRobertaEV3.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir>.</chdir>

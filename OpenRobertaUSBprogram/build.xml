@@ -3,13 +3,13 @@
     <!--this file was created by Eclipse Runnable JAR Export Wizard-->
     <!--ANT 1.7 is required                                        -->
     <target name="create_run_jar">
-        <jar destfile="C:/installations/Githome/robertalab/OpenRobertaUSBprogram/OpenRobertaUSBprogram.jar" filesetmanifest="mergewithoutmain">
+        <jar destfile="C:/GitRepos/robertalabNeu/robertalab/OpenRobertaUSBprogram/targets/OpenRobertaEV3.jar" filesetmanifest="mergewithoutmain">
             <manifest>
                 <attribute name="Main-Class" value="connection.main.USBConnectionMain"/>
                 <attribute name="Class-Path" value="."/>
             </manifest>
-            <fileset dir="C:/installations/Githome/robertalab/OpenRobertaUSBprogram/bin"/>
-            <zipfileset excludes="META-INF/*.SF" src="C:/installations/Githome/robertalab/OpenRobertaUSBprogram/lib/json.jar"/>
+            <fileset dir="C:/GitRepos/robertalabNeu/robertalab/OpenRobertaUSBprogram/bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/GitRepos/robertalabNeu/robertalab/OpenRobertaUSBprogram/lib/json.jar"/>
         </jar>
     </target>
 </project>
