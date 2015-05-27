@@ -16,7 +16,7 @@
   <icon>..\src\resources\OR.ico</icon>
   <singleInstance>
     <mutexName>vv</mutexName>
-    <windowTitle>Open Roberta USB</windowTitle>
+    <windowTitle>Open Roberta EV3</windowTitle>
   </singleInstance>
   <jre>
     <path>java</path>
