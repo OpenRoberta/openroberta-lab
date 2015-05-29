@@ -105,6 +105,12 @@ public class AccessRightDao extends AbstractDao<AccessRight> {
 
     }
 
+    /**
+     * delete a given access right
+     *
+     * @param user the user whose access right has to be deleted
+     * @param program the program affected
+     */
     public void deleteAccessRight(User user, Program program) {
         AccessRight toBeDeleted = loadAccessRight(user, program);
         if ( toBeDeleted != null ) {

@@ -49,6 +49,11 @@ public class ProgramProcessor extends AbstractProcessor {
         }
     }
 
+    /**
+     * Get information about all the programs owned by a user and with whom they are shared
+     *
+     * @param ownerId the owner of the program
+     */
     public JSONArray getProgramInfo(int ownerId) {
         UserDao userDao = new UserDao(this.dbSession);
         ProgramDao programDao = new ProgramDao(this.dbSession);
@@ -61,27 +66,15 @@ public class ProgramProcessor extends AbstractProcessor {
             JSONArray programInfo = new JSONArray();
             programInfo.put(program.getName());
             programInfo.put(program.getOwner().getAccount());
-            //            programInfo.put(program.getNumberOfBlocks());
+            // programInfo.put(program.getNumberOfBlocks());
 
-            //If shared find with whom and under which rights
             List<AccessRight> accessRights = accessRightDao.loadAccessRightsByProgram(program);
-            String sharedWithUser = null;
-            String rights = null;
-            for ( AccessRight accessRight : accessRights ) {
-                if ( sharedWithUser != null ) {
-                    sharedWithUser += "<br>" + accessRight.getUser().getAccount();
-                } else {
-                    sharedWithUser = accessRight.getUser().getAccount();
-                }
-                if ( rights != null ) {
-                    rights += "<br>" + accessRight.getRelation().toString();
-                } else {
-                    rights = accessRight.getRelation().toString();
-                }
+            boolean sharedWithUser = true;
+            if ( accessRights.isEmpty() ) {
+                sharedWithUser = false;
             }
 
             programInfo.put(sharedWithUser);
-            programInfo.put(rights);
             programInfo.put(program.getCreated().toString());
             programInfo.put(program.getLastChanged().toString());
             programInfos.put(programInfo);
@@ -102,6 +95,33 @@ public class ProgramProcessor extends AbstractProcessor {
 
         setSuccess(Key.PROGRAM_GET_ALL_SUCCESS, "" + programInfos.length());
         return programInfos;
+    }
+
+    /**
+     * Find out with whom a program is shared and under which rights
+     *
+     * @param programName the name of the program
+     * @param ownerId the owner of the program
+     */
+    public JSONArray getProgramRelations(String programName, int ownerId) {
+        UserDao userDao = new UserDao(this.dbSession);
+        ProgramDao programDao = new ProgramDao(this.dbSession);
+        AccessRightDao accessRightDao = new AccessRightDao(this.dbSession);
+        User owner = userDao.get(ownerId);
+        JSONArray relations = new JSONArray();
+        Program program = programDao.load(programName, owner);
+        //If shared find with whom and under which rights
+        List<AccessRight> accessRights = accessRightDao.loadAccessRightsByProgram(program);
+        for ( AccessRight accessRight : accessRights ) {
+            JSONArray relation = new JSONArray();
+            relation.put(programName);
+            relation.put(ownerId);
+            relation.put(accessRight.getUser().getAccount());
+            relation.put(accessRight.getRelation().toString());
+            relations.put(relation);
+        }
+        setSuccess(Key.PROGRAM_GET_ALL_SUCCESS, "" + relations.length());
+        return relations;
     }
 
     /**
@@ -159,6 +179,12 @@ public class ProgramProcessor extends AbstractProcessor {
         }
     }
 
+    /**
+     * delete a given program owned by a given user
+     *
+     * @param programName the name of the program
+     * @param ownerId the owner of the program
+     */
     public void deleteByName(String programName, int ownerId) {
         UserDao userDao = new UserDao(this.dbSession);
         ProgramDao programDao = new ProgramDao(this.dbSession);
