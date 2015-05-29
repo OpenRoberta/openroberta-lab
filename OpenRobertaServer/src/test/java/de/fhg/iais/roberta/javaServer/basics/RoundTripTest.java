@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.javaServer.basics;
 
-import static de.fhg.iais.roberta.testutil.JSONUtil.assertEntityRc;
-import static de.fhg.iais.roberta.testutil.JSONUtil.mkD;
+import static de.fhg.iais.roberta.testutil.JSONUtilForServer.assertEntityRc;
+import static de.fhg.iais.roberta.testutil.JSONUtilForServer.mkD;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -32,17 +32,17 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
-import de.fhg.iais.roberta.brick.BrickCommunicator;
-import de.fhg.iais.roberta.brick.CompilerWorkflow;
-import de.fhg.iais.roberta.codegen.lejos.Helper;
-import de.fhg.iais.roberta.javaServer.resources.ClientProgram;
-import de.fhg.iais.roberta.javaServer.resources.ClientUser;
+import de.fhg.iais.roberta.javaServer.restServices.all.ClientProgram;
+import de.fhg.iais.roberta.javaServer.restServices.all.ClientUser;
 import de.fhg.iais.roberta.main.ServerStarter;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.util.IntegrationTest;
+import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
+import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CompilerWorkflow;
+import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
 @Category(IntegrationTest.class)
 public class RoundTripTest {
@@ -58,14 +58,14 @@ public class RoundTripTest {
 
     private static SessionFactoryWrapper sessionFactoryWrapper;
     private static DbSetup memoryDbSetup;
-    private static BrickCommunicator brickCommunicator;
+    private static Ev3Communicator brickCommunicator;
 
     private static String buildXml;
     private static String connectionUrl;
     private static String crosscompilerBasedir;
     private static String robotResourcesDir;
 
-    private static CompilerWorkflow compilerWorkflow;
+    private static Ev3CompilerWorkflow compilerWorkflow;
 
     private static ClientUser restUser;
     private static ClientProgram restProgram;
@@ -175,8 +175,8 @@ public class RoundTripTest {
         nativeSession = sessionFactoryWrapper.getNativeSession();
         memoryDbSetup = new DbSetup(nativeSession);
         memoryDbSetup.runDefaultRobertaSetup();
-        brickCommunicator = new BrickCommunicator();
-        compilerWorkflow = new CompilerWorkflow(crosscompilerBasedir, robotResourcesDir, buildXml);
+        brickCommunicator = new Ev3Communicator();
+        compilerWorkflow = new Ev3CompilerWorkflow(crosscompilerBasedir, robotResourcesDir, buildXml);
         restUser = new ClientUser(brickCommunicator);
         restProgram = new ClientProgram(sessionFactoryWrapper, brickCommunicator, compilerWorkflow);
 

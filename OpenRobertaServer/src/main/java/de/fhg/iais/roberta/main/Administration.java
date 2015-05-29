@@ -40,18 +40,18 @@ public class Administration {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        Administration main = new Administration(args);
+        Administration adminWork = new Administration(args);
         LOG.info("*** administrative work is started ***");
-        main.expectArgs(1);
+        adminWork.expectArgs(1);
         switch ( args[0] ) {
             case "createemptydb":
-                main.runDatabaseSetup();
+                adminWork.runDatabaseSetup();
                 break;
             case "sql":
-                main.runSql();
+                adminWork.runSql();
                 break;
             case "conf:xml2text":
-                // main.confXml2text();
+                adminWork.confXml2text();
                 break;
             default:
                 LOG.error("invalid argument: " + args[0] + " - exit 4");
@@ -100,10 +100,15 @@ public class Administration {
         List<Object[]> resultSet = nativeSession.createSQLQuery(sqlGetQuery).list();
         LOG.info("there are " + resultSet.size() + " configurations in the data base");
         for ( Object[] object : resultSet ) {
-            upd.setInteger("id", (Integer) object[0]);
-            upd.setString("text", ConfigurationHelper.xmlString2textString((String) object[1], (String) object[2]));
-            int count = upd.executeUpdate();
-            LOG.info("processed configuration with ID " + object[0] + "  and NAME " + object[1] + ". Update count was " + count);
+            try {
+                String textString = ConfigurationHelper.xmlString2textString((String) object[1], (String) object[2]);
+                upd.setInteger("id", (Integer) object[0]);
+                upd.setString("text", textString);
+                int count = upd.executeUpdate();
+                LOG.info("!!! processed configuration name: " + object[1] + ". Update count: " + count);
+            } catch ( Exception e ) {
+                LOG.info("??? exception when transforming: name: " + object[1] + ", content: " + ((String) object[2]).substring(0, 50).replace("\n", " "));
+            }
         }
         nativeSession.getTransaction().commit();
         nativeSession.createSQLQuery("shutdown").executeUpdate();
@@ -111,7 +116,7 @@ public class Administration {
     }
 
     private void expectArgs(int number) {
-        if ( this.args == null || this.args.length < 1 ) {
+        if ( this.args == null || this.args.length < number ) {
             LOG.error("not enough arguments - exit 8");
             System.exit(8);
         }

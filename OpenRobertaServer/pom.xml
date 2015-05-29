@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-Copyright 2014, 2015 The Open Roberta project.
-See the NOTICE file distributed with this work for additional information
-regarding copyright ownership.
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<!-- Copyright 2014, 2015 The Open Roberta project. See the NOTICE file distributed 
+	with this work for additional information regarding copyright ownership. 
+	Licensed under the Apache License, Version 2.0 (the "License"); you may not 
+	use this file except in compliance with the License. You may obtain a copy 
+	of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>de.fhg.iais.openroberta</groupId>
@@ -29,9 +23,14 @@ limitations under the License.
 	<dependencies>
 		<dependency>
 			<groupId>de.fhg.iais.openroberta</groupId>
+			<artifactId>OpenRobertaRobot</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.fhg.iais.openroberta</groupId>
 			<artifactId>OpenRobertaShared</artifactId>
 		</dependency>
-		<!-- this is a "invisible" dependency, as the cross compiler from server needs runtime for testing -->
+		<!-- this is a "invisible" dependency, as the cross compiler from server 
+			needs runtime for testing -->
 		<dependency>
 			<groupId>de.fhg.iais.openroberta</groupId>
 			<artifactId>OpenRobertaRuntime</artifactId>
@@ -96,61 +95,6 @@ limitations under the License.
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.8</version>
-				<executions>
-					<execution>
-						<id>add-source</id>
-						<configuration>
-							<sources>
-								<source>target/generated-sources/jaxb/blockly</source>
-							</sources>
-							<sources>
-								<source>target/generated-sources/antlr4</source>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>jaxb2-maven-plugin</artifactId>
-				<version>1.5</version>
-				<executions>
-					<execution>
-						<id>xjc-1</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>xjc</goal>
-						</goals>
-						<configuration>
-							<schemaDirectory>src/main/resources</schemaDirectory>
-							<schemaFiles>blockly.xsd</schemaFiles>
-							<outputDirectory>${project.build.directory}/generated-sources/jaxb/blockly</outputDirectory>
-							<packageName>de.fhg.iais.roberta.blockly.generated</packageName>
-							<staleFile>${project.build.directory}/jaxb2/.xjc-1-StaleFlag</staleFile>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.antlr</groupId>
-				<artifactId>antlr4-maven-plugin</artifactId>
-				<version>4.3</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>antlr4</goal>
-						</goals>
-						<configuration>
-							<listener>true</listener>
-							<visitor>true</visitor>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
 				<version>2.9</version>
@@ -204,6 +148,13 @@ limitations under the License.
 						</goals>
 						<configuration>
 							<artifactItems>
+								<artifactItem>
+									<groupId>de.fhg.iais.openroberta</groupId>
+									<artifactId>OpenRobertaRobot</artifactId>
+									<version>${project.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+								</artifactItem>
 								<artifactItem>
 									<groupId>de.fhg.iais.openroberta</groupId>
 									<artifactId>OpenRobertaShared</artifactId>
@@ -313,7 +264,7 @@ limitations under the License.
 					<includes>
 						<include>**/*.class</include>
 					</includes>
-					<excludedGroups>de.fhg.iais.roberta.util.IntegrationTest</excludedGroups>
+					<excludedGroups>de.fhg.iais.roberta.util.testsetup.IntegrationTest</excludedGroups>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -328,7 +279,7 @@ limitations under the License.
 					</dependency>
 				</dependencies>
 				<configuration>
-					<groups>de.fhg.iais.roberta.util.IntegrationTest</groups>
+					<groups>de.fhg.iais.roberta.util.testsetup.IntegrationTest</groups>
 				</configuration>
 				<executions>
 					<execution>
@@ -367,7 +318,7 @@ limitations under the License.
 					<reportSet>
 						<reports>
 							<!-- include the desired reports -->
-							<!--<report>jslint</report>-->
+							<!--<report>jslint</report> -->
 							<report>jsdoc</report>
 						</reports>
 					</reportSet>

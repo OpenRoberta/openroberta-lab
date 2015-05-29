@@ -29,8 +29,8 @@ import de.fhg.iais.roberta.main.Administration;
 import de.fhg.iais.roberta.main.ServerStarter;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.util.IntegrationTest;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
 @Category(IntegrationTest.class)
 public class RoundTripUITest {

@@ -9,7 +9,7 @@ import org.openqa.selenium.By;
 
 import de.fhg.iais.roberta.testutil.SeleniumHelper;
 import de.fhg.iais.roberta.testutil.SeleniumHelper.Button;
-import de.fhg.iais.roberta.util.IntegrationTest;
+import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
 @Ignore
 @Category(IntegrationTest.class)

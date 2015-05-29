@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.javaServer.basics;
 
-import static de.fhg.iais.roberta.testutil.JSONUtil.assertEntityRc;
-import static de.fhg.iais.roberta.testutil.JSONUtil.mkD;
+import static de.fhg.iais.roberta.testutil.JSONUtilForServer.assertEntityRc;
+import static de.fhg.iais.roberta.testutil.JSONUtilForServer.mkD;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -14,13 +14,13 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.brick.BrickCommunicator;
-import de.fhg.iais.roberta.brick.CompilerWorkflow;
-import de.fhg.iais.roberta.javaServer.resources.ClientProgram;
-import de.fhg.iais.roberta.javaServer.resources.ClientUser;
+import de.fhg.iais.roberta.javaServer.restServices.all.ClientProgram;
+import de.fhg.iais.roberta.javaServer.restServices.all.ClientUser;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
+import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
+import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CompilerWorkflow;
 import de.fhg.iais.roberta.util.Util;
 
 @Ignore
@@ -28,12 +28,12 @@ public class BasicSharingInteractionTest {
 
     private static final int MAX_TOTAL_FRIENDS = 30;
 
-    private BrickCommunicator brickCommunicator;
+    private Ev3Communicator brickCommunicator;
     private SessionFactoryWrapper sessionFactoryWrapper;
     private String connectionUrl;
     private DbSetup memoryDbSetup;
 
-    private CompilerWorkflow compilerWorkflow;
+    private Ev3CompilerWorkflow compilerWorkflow;
     private String crosscompilerBasedir;
     private String robotResourcesDir;
 
@@ -59,8 +59,8 @@ public class BasicSharingInteractionTest {
         this.memoryDbSetup = new DbSetup(nativeSession);
         this.memoryDbSetup.runDefaultRobertaSetup();
 
-        this.brickCommunicator = new BrickCommunicator();
-        this.compilerWorkflow = new CompilerWorkflow(this.crosscompilerBasedir, this.robotResourcesDir, this.buildXml);
+        this.brickCommunicator = new Ev3Communicator();
+        this.compilerWorkflow = new Ev3CompilerWorkflow(this.crosscompilerBasedir, this.robotResourcesDir, this.buildXml);
 
         this.restUser = new ClientUser(this.brickCommunicator);
         this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.brickCommunicator, this.compilerWorkflow);
@@ -138,7 +138,7 @@ public class BasicSharingInteractionTest {
             assertEntityRc(response, "ok");
         }
         assertEquals(MAX_TOTAL_FRIENDS, getOneInt("select count(*) from USER_PROGRAM"));
-        //Eliminate write rights for pair users 
+        //Eliminate write rights for pair users
         for ( int userNumber = 1; userNumber < MAX_TOTAL_FRIENDS; userNumber += 2 ) {
             this.response =
                 this.restProgram.command(this.s1, mkD("{'cmd':'shareP';'userToShare':'pid-" + userNumber + "';'programName':'toShare';'right':'NONE'}"));

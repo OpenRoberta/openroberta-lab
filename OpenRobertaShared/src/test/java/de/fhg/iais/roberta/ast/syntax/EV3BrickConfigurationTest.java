@@ -5,19 +5,19 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
-import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
-import de.fhg.iais.roberta.ast.syntax.action.MotorSide;
-import de.fhg.iais.roberta.ast.syntax.sensor.SensorPort;
-import de.fhg.iais.roberta.ev3.EV3Actors;
-import de.fhg.iais.roberta.ev3.EV3BrickConfiguration;
-import de.fhg.iais.roberta.ev3.EV3Sensors;
-import de.fhg.iais.roberta.ev3.components.EV3Actor;
-import de.fhg.iais.roberta.ev3.components.EV3Sensor;
+import de.fhg.iais.roberta.components.ev3.EV3Actor;
+import de.fhg.iais.roberta.components.ev3.EV3Actors;
+import de.fhg.iais.roberta.components.ev3.EV3Sensor;
+import de.fhg.iais.roberta.components.ev3.EV3Sensors;
+import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
+import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
+import de.fhg.iais.roberta.shared.action.ev3.DriveDirection;
+import de.fhg.iais.roberta.shared.action.ev3.MotorSide;
+import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
 
 public class EV3BrickConfigurationTest {
     private static final String expectedBrickConfigurationGenerator = //
-        "privateEV3BrickConfigurationbrickConfiguration=newEV3BrickConfiguration.Builder()"
+        "privateEv3ConfigurationbrickConfiguration=newEv3Configuration.Builder()"
             + ".setWheelDiameter(0.0)"
             + ".setTrackWidth(0.0)"
             + ".addActor(ActorPort.A,newEV3Actor(EV3Actors.EV3_LARGE_MOTOR,true,DriveDirection.FOREWARD,MotorSide.LEFT))"
@@ -28,12 +28,12 @@ public class EV3BrickConfigurationTest {
 
     @Test
     public void testBuilder() {
-        EV3BrickConfiguration.Builder builder = new EV3BrickConfiguration.Builder();
+        Ev3Configuration.Builder builder = new Ev3Configuration.Builder();
         builder.addActor(ActorPort.A, new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, true, DriveDirection.FOREWARD, MotorSide.LEFT));
         builder.addActor(ActorPort.B, new EV3Actor(EV3Actors.EV3_MEDIUM_MOTOR, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
         builder.addSensor(SensorPort.S1, new EV3Sensor(EV3Sensors.EV3_ULTRASONIC_SENSOR));
         builder.addSensor(SensorPort.S4, new EV3Sensor(EV3Sensors.EV3_COLOR_SENSOR));
-        EV3BrickConfiguration conf = builder.build();
+        Ev3Configuration conf = builder.build();
 
         assertEquals(EV3Actors.EV3_LARGE_MOTOR, conf.getActorOnPort(ActorPort.A).getComponentType());
         assertEquals(EV3Actors.EV3_MEDIUM_MOTOR, conf.getActorOnPort(ActorPort.B).getComponentType());
@@ -47,8 +47,8 @@ public class EV3BrickConfigurationTest {
 
     @Test
     public void testBuilderFluent() {
-        EV3BrickConfiguration conf =
-            new EV3BrickConfiguration.Builder()
+        Ev3Configuration conf =
+            new Ev3Configuration.Builder()
                 .addActor(ActorPort.A, new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, true, DriveDirection.FOREWARD, MotorSide.LEFT))
                 .addActor(ActorPort.B, new EV3Actor(EV3Actors.EV3_MEDIUM_MOTOR, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
                 .addSensor(SensorPort.S1, new EV3Sensor(EV3Sensors.EV3_ULTRASONIC_SENSOR))
@@ -67,24 +67,29 @@ public class EV3BrickConfigurationTest {
 
     @Test
     public void testText() {
-        EV3BrickConfiguration.Builder builder = new EV3BrickConfiguration.Builder();
+        Ev3Configuration.Builder builder = new Ev3Configuration.Builder();
         builder.setTrackWidth(4.0).setWheelDiameter(-3.1428);
         builder.addActor(ActorPort.A, new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, true, DriveDirection.FOREWARD, MotorSide.LEFT));
         builder.addActor(ActorPort.B, new EV3Actor(EV3Actors.EV3_MEDIUM_MOTOR, false, DriveDirection.FOREWARD, MotorSide.RIGHT));
         builder.addSensor(SensorPort.S1, new EV3Sensor(EV3Sensors.EV3_ULTRASONIC_SENSOR));
         builder.addSensor(SensorPort.S4, new EV3Sensor(EV3Sensors.EV3_COLOR_SENSOR));
-        EV3BrickConfiguration conf = builder.build();
+        Ev3Configuration conf = builder.build();
 
-        String expected =
-            ""
-                + "ev3 test {\n"
-                + "  wheel diameter -3.1 cm\n"
-                + "  track width    4.0 cm\n"
-                + "  sensor port 1 ultrasonic\n"
-                + "  sensor port 4 color\n"
-                + "  actor port A large motor {regulated foreward left}\n"
-                + "  actor port B middle motor{unregulated foreward right}\n"
-                + "}";
+        String expected = "" //
+            + "robot ev3 test {\n"
+            + "  size {\n"
+            + "    wheel diameter -3.1 cm;\n"
+            + "    track width    4.0 cm;\n"
+            + "  }\n"
+            + "  sensor port {\n"
+            + "    1: ultrasonic;\n"
+            + "    4: color;\n"
+            + "  }\n"
+            + "  actor port {\n"
+            + "    A: large motor, regulated, forward, left;\n"
+            + "    B: middle motor, unregulated, forward, right;\n"
+            + "  }\n"
+            + "}";
 
         assertEquals(expected.replaceAll("\\s+", ""), conf.generateText("test").replaceAll("\\s+", ""));
     }

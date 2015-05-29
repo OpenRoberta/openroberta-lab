@@ -50,6 +50,7 @@ limitations under the License.
         <module>../OpenRobertaRuntime</module>
         <module>../EV3Menu</module>
         <module>../OpenRobertaServer</module>
+        <module>../OpenRobertaRobot</module>
         <module>../Resources</module>
     </modules>
     <repositories>
@@ -75,6 +76,11 @@ limitations under the License.
             <dependency>
                 <groupId>de.fhg.iais.openroberta</groupId>
                 <artifactId>OpenRobertaServer</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.fhg.iais.openroberta</groupId>
+                <artifactId>OpenRobertaRobot</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

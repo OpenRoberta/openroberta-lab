@@ -9,18 +9,18 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 
-import de.fhg.iais.roberta.brick.BrickCommunicator;
-import de.fhg.iais.roberta.brick.CompilerWorkflow;
-import de.fhg.iais.roberta.brick.Templates;
-import de.fhg.iais.roberta.javaServer.resources.BrickCommand;
-import de.fhg.iais.roberta.javaServer.resources.BrickDownloadJar;
-import de.fhg.iais.roberta.javaServer.resources.RsExamples;
-import de.fhg.iais.roberta.javaServer.resources.ClientPing;
-import de.fhg.iais.roberta.javaServer.resources.ClientAdmin;
-import de.fhg.iais.roberta.javaServer.resources.ClientConfiguration;
-import de.fhg.iais.roberta.javaServer.resources.ClientProgram;
-import de.fhg.iais.roberta.javaServer.resources.ClientUser;
+import de.fhg.iais.roberta.javaServer.restServices.all.ClientAdmin;
+import de.fhg.iais.roberta.javaServer.restServices.all.ClientConfiguration;
+import de.fhg.iais.roberta.javaServer.restServices.all.ClientPing;
+import de.fhg.iais.roberta.javaServer.restServices.all.ClientProgram;
+import de.fhg.iais.roberta.javaServer.restServices.all.ClientUser;
+import de.fhg.iais.roberta.javaServer.restServices.all.RsExamples;
+import de.fhg.iais.roberta.javaServer.restServices.ev3.Ev3Command;
+import de.fhg.iais.roberta.javaServer.restServices.ev3.Ev3DownloadJar;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
+import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
+import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CompilerWorkflow;
+import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Toolboxes;
 
 public class RobertaGuiceModule extends AbstractModule {
     private static final Logger LOG = LoggerFactory.getLogger(RobertaGuiceModule.class);
@@ -37,15 +37,15 @@ public class RobertaGuiceModule extends AbstractModule {
         bind(ClientConfiguration.class);
         bind(ClientProgram.class);
         bind(ClientUser.class);
-        bind(BrickDownloadJar.class);
-        bind(BrickCommand.class);
+        bind(Ev3DownloadJar.class);
+        bind(Ev3Command.class);
         bind(RsExamples.class);
         bind(ClientPing.class);
 
         bind(SessionFactoryWrapper.class).in(Singleton.class);
-        bind(Templates.class).in(Singleton.class);
-        bind(BrickCommunicator.class).in(Singleton.class);
-        bind(CompilerWorkflow.class).in(Singleton.class);
+        bind(Ev3Toolboxes.class).in(Singleton.class);
+        bind(Ev3Communicator.class).in(Singleton.class);
+        bind(Ev3CompilerWorkflow.class).in(Singleton.class);
 
         bind(String.class).annotatedWith(Names.named("hibernate.config.xml")).toInstance("hibernate-cfg.xml");
 

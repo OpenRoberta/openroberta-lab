@@ -19,7 +19,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import de.fhg.iais.roberta.main.ServerStarter;
-import de.fhg.iais.roberta.util.IntegrationTest;
+import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
 /**
  * Download chrome driver for your OS.

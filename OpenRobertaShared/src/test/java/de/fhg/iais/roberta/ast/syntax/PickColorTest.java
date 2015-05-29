@@ -4,7 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import de.fhg.iais.roberta.dbc.DbcException;
+import de.fhg.iais.roberta.shared.Pickcolor;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class PickColorTest {
 

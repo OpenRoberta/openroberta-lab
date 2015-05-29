@@ -19,7 +19,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 
 import de.fhg.iais.roberta.main.ServerStarter;
-import de.fhg.iais.roberta.util.IntegrationTest;
+import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
 @Ignore
 @Category(IntegrationTest.class)

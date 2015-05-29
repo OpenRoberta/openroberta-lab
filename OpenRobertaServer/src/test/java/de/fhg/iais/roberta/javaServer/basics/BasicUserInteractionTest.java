@@ -1,8 +1,8 @@
 package de.fhg.iais.roberta.javaServer.basics;
 
-import static de.fhg.iais.roberta.testutil.JSONUtil.assertEntityRc;
-import static de.fhg.iais.roberta.testutil.JSONUtil.assertJsonEquals;
-import static de.fhg.iais.roberta.testutil.JSONUtil.mkD;
+import static de.fhg.iais.roberta.testutil.JSONUtilForServer.assertEntityRc;
+import static de.fhg.iais.roberta.testutil.JSONUtilForServer.assertJsonEquals;
+import static de.fhg.iais.roberta.testutil.JSONUtilForServer.mkD;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -21,44 +21,44 @@ import org.junit.experimental.categories.Category;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
-import de.fhg.iais.roberta.brick.BrickCommunicator;
-import de.fhg.iais.roberta.brick.CompilerWorkflow;
-import de.fhg.iais.roberta.brick.Templates;
-import de.fhg.iais.roberta.javaServer.resources.BrickCommand;
-import de.fhg.iais.roberta.javaServer.resources.BrickDownloadJar;
-import de.fhg.iais.roberta.javaServer.resources.ClientAdmin;
-import de.fhg.iais.roberta.javaServer.resources.ClientProgram;
-import de.fhg.iais.roberta.javaServer.resources.ClientUser;
+import de.fhg.iais.roberta.javaServer.restServices.all.ClientAdmin;
+import de.fhg.iais.roberta.javaServer.restServices.all.ClientProgram;
+import de.fhg.iais.roberta.javaServer.restServices.all.ClientUser;
+import de.fhg.iais.roberta.javaServer.restServices.ev3.Ev3Command;
+import de.fhg.iais.roberta.javaServer.restServices.ev3.Ev3DownloadJar;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
-import de.fhg.iais.roberta.util.IntegrationTest;
+import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
+import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CompilerWorkflow;
+import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Toolboxes;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
 @Category(IntegrationTest.class)
 @Ignore
 public class BasicUserInteractionTest {
     private SessionFactoryWrapper sessionFactoryWrapper;
     private DbSetup memoryDbSetup;
-    private BrickCommunicator brickCommunicator;
+    private Ev3Communicator brickCommunicator;
 
     private String buildXml;
     private String connectionUrl;
     private String crosscompilerBasedir;
     private String robotResourcesDir;
 
-    private CompilerWorkflow compilerWorkflow;
+    private Ev3CompilerWorkflow compilerWorkflow;
 
     private ClientUser restUser;
     private ClientProgram restProgram;
     private ClientAdmin restBlocks;
-    private BrickDownloadJar downloadJar;
+    private Ev3DownloadJar downloadJar;
 
     private Response response;
     private HttpSessionState s1;
     private HttpSessionState s2;
     private String blocklyProgram;
-    private BrickCommand brickCommand;
+    private Ev3Command brickCommand;
 
     @Before
     public void setup() throws Exception {
@@ -72,13 +72,13 @@ public class BasicUserInteractionTest {
         Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
         this.memoryDbSetup = new DbSetup(nativeSession);
         this.memoryDbSetup.runDefaultRobertaSetup();
-        this.brickCommunicator = new BrickCommunicator();
-        this.compilerWorkflow = new CompilerWorkflow(this.crosscompilerBasedir, this.robotResourcesDir, this.buildXml);
+        this.brickCommunicator = new Ev3Communicator();
+        this.compilerWorkflow = new Ev3CompilerWorkflow(this.crosscompilerBasedir, this.robotResourcesDir, this.buildXml);
         this.restUser = new ClientUser(this.brickCommunicator);
         this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.brickCommunicator, this.compilerWorkflow);
-        this.restBlocks = new ClientAdmin(new Templates(), this.brickCommunicator);
-        this.downloadJar = new BrickDownloadJar(this.brickCommunicator, this.crosscompilerBasedir);
-        this.brickCommand = new BrickCommand(this.brickCommunicator);
+        this.restBlocks = new ClientAdmin(new Ev3Toolboxes(), this.brickCommunicator);
+        this.downloadJar = new Ev3DownloadJar(this.brickCommunicator, this.crosscompilerBasedir);
+        this.brickCommand = new Ev3Command(this.brickCommunicator);
         this.s1 = HttpSessionState.init();
         this.s2 = HttpSessionState.init();
         this.blocklyProgram = Resources.toString(BasicUserInteractionTest.class.getResource("/ast/actions/action_BrickLight.xml"), Charsets.UTF_8);

@@ -19,13 +19,13 @@ import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceFilter;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 
-import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.guice.RobertaGuiceServletConfig;
 import de.fhg.iais.roberta.persistence.dao.ProgramDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.VersionChecker;
+import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
  * <b>the main class of the application, the main activity is starting the server.</b><br>
