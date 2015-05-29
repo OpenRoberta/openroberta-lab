@@ -25,15 +25,13 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br>
  * To create an instance from this class use the method {@link #make(InfraredSensorMode, SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-public class InfraredSensor<V> extends Sensor<V> {
+public class InfraredSensor<V> extends BaseSensor<V> {
     private final InfraredSensorMode mode;
-    private final SensorPort port;
 
     private InfraredSensor(InfraredSensorMode mode, SensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(Phrase.Kind.INFRARED_SENSING, properties, comment);
+        super(port, Phrase.Kind.INFRARED_SENSING, properties, comment);
         Assert.isTrue(mode != null && port != null);
         this.mode = mode;
-        this.port = port;
         setReadOnly();
     }
 
@@ -57,16 +55,9 @@ public class InfraredSensor<V> extends Sensor<V> {
         return this.mode;
     }
 
-    /**
-     * @return get the port on which the sensor is connected. See enum {@link SensorPort} for all possible sensor ports.
-     */
-    public SensorPort getPort() {
-        return this.port;
-    }
-
     @Override
     public String toString() {
-        return "InfraredSensor [mode=" + this.mode + ", port=" + this.port + "]";
+        return "InfraredSensor [mode=" + this.mode + ", port=" + getPort() + "]";
     }
 
     @Override

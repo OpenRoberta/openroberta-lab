@@ -22,14 +22,12 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br/>
  * The client must provide the {@link ActorPort} on which the motor is connected.
  */
-public class MotorSetPowerAction<V> extends Action<V> {
-    private final ActorPort port;
+public class MotorSetPowerAction<V> extends MoveAction<V> {
     private final Expr<V> power;
 
     private MotorSetPowerAction(ActorPort port, Expr<V> power, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(Phrase.Kind.MOTOR_SET_POWER_ACTION, properties, comment);
+        super(port, Phrase.Kind.MOTOR_SET_POWER_ACTION, properties, comment);
         Assert.isTrue(port != null && power.isReadOnly());
-        this.port = port;
         this.power = power;
         setReadOnly();
     }
@@ -48,13 +46,6 @@ public class MotorSetPowerAction<V> extends Action<V> {
     }
 
     /**
-     * @return the port number on which the motor is connected.
-     */
-    public ActorPort getPort() {
-        return this.port;
-    }
-
-    /**
      * @return value of the power of the motor.
      */
     public Expr<V> getPower() {
@@ -63,7 +54,7 @@ public class MotorSetPowerAction<V> extends Action<V> {
 
     @Override
     public String toString() {
-        return "MotorSetPowerAction [port=" + this.port + ", power=" + this.power + "]";
+        return "MotorSetPowerAction [port=" + getPort() + ", power=" + this.power + "]";
     }
 
     @Override

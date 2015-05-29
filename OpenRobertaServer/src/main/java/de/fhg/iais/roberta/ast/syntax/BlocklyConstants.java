@@ -200,4 +200,11 @@ public final class BlocklyConstants {
     public static final String KEY_PRESSED = "KEYS_PRESSED";
     public static final String GYRO = "GYRO";
     public static final String TIME = "TIME";
+    public static final String COLOR = "color";
+
+    public static final String ROB_BRICK_GYRO = "robBrick_gyro";
+    public static final String ROB_BRICK_INFRARED = "robBrick_infrared";
+    public static final String ROB_BRICK_ULTRASONIC = "robBrick_ultrasonic";
+    public static final String ROB_BRICK_TOUCH = "robBrick_touch";
+    public static final String ROB_BRICK_COLOUR = "robBrick_colour";
 }

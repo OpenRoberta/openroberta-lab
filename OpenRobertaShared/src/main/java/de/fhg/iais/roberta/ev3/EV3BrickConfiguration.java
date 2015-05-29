@@ -106,7 +106,8 @@ public class EV3BrickConfiguration extends BrickConfiguration {
     }
 
     /**
-     * Returns the actor connected on given port.
+     * Returns the actor connected on given port.<br>
+     * <b>Null</b> if there is no actor connected to the port
      *
      * @param actorPort
      * @return connected actor on given port
@@ -166,13 +167,7 @@ public class EV3BrickConfiguration extends BrickConfiguration {
      * @return port on which the left motor is connected
      */
     public ActorPort getLeftMotorPort() {
-        Assert.isTrue(this.actors != null, "There is no actors set to the configuration!");
-        for ( Map.Entry<ActorPort, EV3Actor> entry : this.actors.entrySet() ) {
-            if ( entry.getValue().getMotorSide() == MotorSide.LEFT ) {
-                return entry.getKey();
-            }
-        }
-        throw new DbcException("No left motor defined!");
+        return getMotorOnSide(MotorSide.LEFT);
     }
 
     /**
@@ -181,13 +176,7 @@ public class EV3BrickConfiguration extends BrickConfiguration {
      * @return port on which the left motor is connected
      */
     public ActorPort getRightMotorPort() {
-        Assert.isTrue(this.actors != null, "There is no actors set to the configuration!");
-        for ( Map.Entry<ActorPort, EV3Actor> entry : this.actors.entrySet() ) {
-            if ( entry.getValue().getMotorSide() == MotorSide.RIGHT ) {
-                return entry.getKey();
-            }
-        }
-        throw new DbcException("No right motor defined!");
+        return getMotorOnSide(MotorSide.RIGHT);
     }
 
     @Override
@@ -252,6 +241,17 @@ public class EV3BrickConfiguration extends BrickConfiguration {
             + ", trackWidthCM="
             + this.trackWidthCM
             + "]";
+    }
+
+    private ActorPort getMotorOnSide(MotorSide side) {
+        Assert.isTrue(this.actors != null, "There is no actors set to the configuration!");
+        for ( Map.Entry<ActorPort, EV3Actor> entry : this.actors.entrySet() ) {
+            if ( entry.getValue().getMotorSide() == side ) {
+                return entry.getKey();
+            }
+        }
+        //throw new DbcException("No left motor defined!");
+        return null;
     }
 
     private void appendSensors(StringBuilder sb) {

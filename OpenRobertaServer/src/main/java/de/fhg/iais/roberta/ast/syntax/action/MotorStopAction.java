@@ -19,14 +19,12 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br/>
  * The client must provide the {@link ActorPort} and {@link MotorStopMode} (is the motor breaking or not).
  */
-public class MotorStopAction<V> extends Action<V> {
-    private final ActorPort port;
+public class MotorStopAction<V> extends MoveAction<V> {
     private final MotorStopMode mode;
 
     private MotorStopAction(ActorPort port, MotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(Phrase.Kind.MOTOR_STOP_ACTION, properties, comment);
+        super(port, Phrase.Kind.MOTOR_STOP_ACTION, properties, comment);
         Assert.isTrue(port != null && mode != null);
-        this.port = port;
         this.mode = mode;
         setReadOnly();
     }
@@ -45,13 +43,6 @@ public class MotorStopAction<V> extends Action<V> {
     }
 
     /**
-     * @return port on which the motor is connected.
-     */
-    public ActorPort getPort() {
-        return this.port;
-    }
-
-    /**
      * @return stopping mode in which the motor is set.
      */
     public MotorStopMode getMode() {
@@ -60,7 +51,7 @@ public class MotorStopAction<V> extends Action<V> {
 
     @Override
     public String toString() {
-        return "MotorStop [port=" + this.port + ", mode=" + this.mode + "]";
+        return "MotorStop [port=" + getPort() + ", mode=" + this.mode + "]";
     }
 
     @Override

@@ -23,15 +23,13 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br>
  * To create an instance from this class use the method {@link #make(GyroSensorMode, SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-public class GyroSensor<V> extends Sensor<V> {
+public class GyroSensor<V> extends BaseSensor<V> {
     private final GyroSensorMode mode;
-    private final SensorPort port;
 
     private GyroSensor(GyroSensorMode mode, SensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(Phrase.Kind.GYRO_SENSING, properties, comment);
+        super(port, Phrase.Kind.GYRO_SENSING, properties, comment);
         Assert.isTrue(mode != null && port != null);
         this.mode = mode;
-        this.port = port;
         setReadOnly();
     }
 
@@ -55,16 +53,9 @@ public class GyroSensor<V> extends Sensor<V> {
         return this.mode;
     }
 
-    /**
-     * @return get the port on which the sensor is connected. See enum {@link SensorPort} for all possible sensor ports.
-     */
-    public SensorPort getPort() {
-        return this.port;
-    }
-
     @Override
     public String toString() {
-        return "GyroSensor [mode=" + this.mode + ", port=" + this.port + "]";
+        return "GyroSensor [mode=" + this.mode + ", port=" + getPort() + "]";
     }
 
     @Override

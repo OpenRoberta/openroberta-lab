@@ -22,12 +22,10 @@ import de.fhg.iais.roberta.blockly.generated.Field;
  * <br>
  * To create an instance from this class use the method {@link #make(SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-public class TouchSensor<V> extends Sensor<V> {
-    private final SensorPort port;
+public class TouchSensor<V> extends BaseSensor<V> {
 
     private TouchSensor(SensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(Phrase.Kind.TOUCH_SENSING, properties, comment);
-        this.port = port;
+        super(port, Phrase.Kind.TOUCH_SENSING, properties, comment);
         setReadOnly();
     }
 
@@ -44,16 +42,9 @@ public class TouchSensor<V> extends Sensor<V> {
         return new TouchSensor<V>(port, properties, comment);
     }
 
-    /**
-     * @return port on which
-     */
-    public SensorPort getPort() {
-        return this.port;
-    }
-
     @Override
     public String toString() {
-        return "TouchSensor [port=" + this.port + "]";
+        return "TouchSensor [port=" + getPort() + "]";
     }
 
     @Override

@@ -25,15 +25,13 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br>
  * To create an instance from this class use the method {@link #make(UltrasonicSensorMode, SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-public class UltrasonicSensor<V> extends Sensor<V> {
+public class UltrasonicSensor<V> extends BaseSensor<V> {
     private final UltrasonicSensorMode mode;
-    private final SensorPort port;
 
     private UltrasonicSensor(UltrasonicSensorMode mode, SensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(Phrase.Kind.ULTRASONIC_SENSING, properties, comment);
+        super(port, Phrase.Kind.ULTRASONIC_SENSING, properties, comment);
         Assert.isTrue(mode != null && port != null);
         this.mode = mode;
-        this.port = port;
         setReadOnly();
     }
 
@@ -58,16 +56,9 @@ public class UltrasonicSensor<V> extends Sensor<V> {
         return this.mode;
     }
 
-    /**
-     * @return get the port on which the sensor is connected. See enum {@link SensorPort} for all possible sensor ports
-     */
-    public SensorPort getPort() {
-        return this.port;
-    }
-
     @Override
     public String toString() {
-        return "UltraSSensor [mode=" + this.mode + ", port=" + this.port + "]";
+        return "UltraSSensor [mode=" + this.mode + ", port=" + getPort() + "]";
     }
 
     @Override

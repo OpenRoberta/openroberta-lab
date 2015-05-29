@@ -19,13 +19,12 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br/>
  * The client must provide the {@link ActorPort} on which the motor is connected.
  */
-public class MotorGetPowerAction<V> extends Action<V> {
-    private final ActorPort port;
+public class MotorGetPowerAction<V> extends MoveAction<V> {
 
     private MotorGetPowerAction(ActorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(Phrase.Kind.MOTOR_GET_POWER_ACTION, properties, comment);
+        super(port, Phrase.Kind.MOTOR_GET_POWER_ACTION, properties, comment);
         Assert.isTrue(port != null);
-        this.port = port;
+
         setReadOnly();
     }
 
@@ -41,16 +40,9 @@ public class MotorGetPowerAction<V> extends Action<V> {
         return new MotorGetPowerAction<V>(port, properties, comment);
     }
 
-    /**
-     * @return the port number on which the motor is connected.
-     */
-    public ActorPort getPort() {
-        return this.port;
-    }
-
     @Override
     public String toString() {
-        return "MotorGetPower [port=" + this.port + "]";
+        return "MotorGetPower [port=" + getPort() + "]";
     }
 
     @Override

@@ -22,15 +22,15 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br/>
  * The client must provide the {@link ActorPort} and {@link MotionParam} (number of rotations or degrees and speed).
  */
-public final class MotorOnAction<V> extends Action<V> {
-    private final ActorPort port;
+public final class MotorOnAction<V> extends MoveAction<V> {
+
     private final MotionParam<V> param;
 
     private MotorOnAction(ActorPort port, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(Phrase.Kind.MOTOR_ON_ACTION, properties, comment);
+        super(port, Phrase.Kind.MOTOR_ON_ACTION, properties, comment);
         Assert.isTrue(param != null && port != null);
         this.param = param;
-        this.port = port;
+
         setReadOnly();
     }
 
@@ -87,13 +87,6 @@ public final class MotorOnAction<V> extends Action<V> {
     }
 
     /**
-     * @return port on which the motor is connected.
-     */
-    public ActorPort getPort() {
-        return this.port;
-    }
-
-    /**
      * @return duration type of motor movement
      */
     public MotorMoveMode getDurationMode() {
@@ -109,7 +102,7 @@ public final class MotorOnAction<V> extends Action<V> {
 
     @Override
     public String toString() {
-        return "MotorOnAction [" + this.port + ", " + this.param + "]";
+        return "MotorOnAction [" + getPort() + ", " + this.param + "]";
     }
 
     @Override

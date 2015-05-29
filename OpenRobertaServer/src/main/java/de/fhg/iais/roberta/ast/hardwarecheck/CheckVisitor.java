@@ -1,24 +1,12 @@
-package de.fhg.iais.roberta.ast.usedhardwarecheck;
+package de.fhg.iais.roberta.ast.hardwarecheck;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
-import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.ClearDisplayAction;
-import de.fhg.iais.roberta.ast.syntax.action.DriveAction;
 import de.fhg.iais.roberta.ast.syntax.action.LightAction;
 import de.fhg.iais.roberta.ast.syntax.action.LightStatusAction;
-import de.fhg.iais.roberta.ast.syntax.action.MotorDriveStopAction;
-import de.fhg.iais.roberta.ast.syntax.action.MotorGetPowerAction;
-import de.fhg.iais.roberta.ast.syntax.action.MotorOnAction;
-import de.fhg.iais.roberta.ast.syntax.action.MotorSetPowerAction;
-import de.fhg.iais.roberta.ast.syntax.action.MotorStopAction;
 import de.fhg.iais.roberta.ast.syntax.action.PlayFileAction;
 import de.fhg.iais.roberta.ast.syntax.action.ShowPictureAction;
 import de.fhg.iais.roberta.ast.syntax.action.ShowTextAction;
 import de.fhg.iais.roberta.ast.syntax.action.ToneAction;
-import de.fhg.iais.roberta.ast.syntax.action.TurnAction;
 import de.fhg.iais.roberta.ast.syntax.action.VolumeAction;
 import de.fhg.iais.roberta.ast.syntax.action.VolumeAction.Mode;
 import de.fhg.iais.roberta.ast.syntax.action.communication.BluetoothConnectAction;
@@ -64,14 +52,8 @@ import de.fhg.iais.roberta.ast.syntax.methods.MethodIfReturn;
 import de.fhg.iais.roberta.ast.syntax.methods.MethodReturn;
 import de.fhg.iais.roberta.ast.syntax.methods.MethodVoid;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
-import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
-import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.GetSampleSensor;
-import de.fhg.iais.roberta.ast.syntax.sensor.GyroSensor;
-import de.fhg.iais.roberta.ast.syntax.sensor.InfraredSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.TimerSensor;
-import de.fhg.iais.roberta.ast.syntax.sensor.TouchSensor;
-import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensor;
 import de.fhg.iais.roberta.ast.syntax.stmt.ActionStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.AssignStmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.ExprStmt;
@@ -90,37 +72,8 @@ import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
-import de.fhg.iais.roberta.dbc.Assert;
-import de.fhg.iais.roberta.ev3.EV3Sensors;
 
-/**
- * This visitor collects information for used sensors in blockly program.
- *
- * @author kcvejoski
- */
-public class HardwareCheckVisitor implements AstVisitor<Void> {
-    private final Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>();
-
-    /**
-     * Returns set of used sensor in Blockly program.
-     *
-     * @param phrases list of {@link Phrase} representing blockly program,
-     * @return set of used sensors
-     */
-    public static Set<EV3Sensors> check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
-        Assert.isTrue(phrasesSet.size() >= 1);
-        HardwareCheckVisitor checkVisitor = new HardwareCheckVisitor();
-        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-            for ( Phrase<Void> phrase : phrases ) {
-                phrase.visit(checkVisitor);
-            }
-        }
-        return checkVisitor.getUsedSensors();
-    }
-
-    private Set<EV3Sensors> getUsedSensors() {
-        return this.usedSensors;
-    }
+public abstract class CheckVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitNumConst(NumConst<Void> numConst) {
@@ -269,55 +222,12 @@ public class HardwareCheckVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitDriveAction(DriveAction<Void> driveAction) {
-        driveAction.getParam().getSpeed().visit(this);
-        if ( driveAction.getParam().getDuration() != null ) {
-            driveAction.getParam().getDuration().getValue().visit(this);
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitTurnAction(TurnAction<Void> turnAction) {
-        turnAction.getParam().getSpeed().visit(this);
-        if ( turnAction.getParam().getDuration() != null ) {
-            turnAction.getParam().getDuration().getValue().visit(this);
-        }
-        return null;
-    }
-
-    @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         return null;
     }
 
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        motorOnAction.getParam().getSpeed().visit(this);
-        if ( motorOnAction.getParam().getDuration() != null ) {
-            motorOnAction.getDurationValue().visit(this);
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        motorSetPowerAction.getPower().visit(this);
-        return null;
-    }
-
-    @Override
-    public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         return null;
     }
 
@@ -353,11 +263,6 @@ public class HardwareCheckVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        return null;
-    }
-
-    @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         toneAction.getDuration().visit(this);
         toneAction.getFrequency().visit(this);
@@ -370,42 +275,7 @@ public class HardwareCheckVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        this.usedSensors.add(EV3Sensors.EV3_COLOR_SENSOR);
-        return null;
-    }
-
-    @Override
-    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        this.usedSensors.add(EV3Sensors.EV3_GYRO_SENSOR);
-        return null;
-    }
-
-    @Override
-    public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.usedSensors.add(EV3Sensors.EV3_IR_SENSOR);
-        return null;
-    }
-
-    @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.usedSensors.add(EV3Sensors.EV3_TOUCH_SENSOR);
-        return null;
-    }
-
-    @Override
-    public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.usedSensors.add(EV3Sensors.EV3_ULTRASONIC_SENSOR);
         return null;
     }
 
@@ -614,26 +484,24 @@ public class HardwareCheckVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> clearDisplayAction) {
-        // TODO Auto-generated method stub
+    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReceiveAction) {
         return null;
     }
 
     @Override
-    public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> clearDisplayAction) {
-        // TODO Auto-generated method stub
+    public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
+        bluetoothConnectAction.get_address().visit(this);
         return null;
     }
 
     @Override
-    public Void visitBluetoothSendAction(BluetoothSendAction<Void> clearDisplayAction) {
-        // TODO Auto-generated method stub
+    public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
+        bluetoothSendAction.get_msg().visit(this);
         return null;
     }
 
     @Override
     public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
-        // TODO Auto-generated method stub
         return null;
     }
 

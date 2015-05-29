@@ -24,15 +24,13 @@ import de.fhg.iais.roberta.dbc.Assert;
  * <br>
  * To create an instance from this class use the method {@link #make(ColorSensorMode, SensorPort, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-public class ColorSensor<V> extends Sensor<V> {
+public class ColorSensor<V> extends BaseSensor<V> {
     private final ColorSensorMode mode;
-    private final SensorPort port;
 
     private ColorSensor(ColorSensorMode mode, SensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(Phrase.Kind.COLOR_SENSING, properties, comment);
+        super(port, Phrase.Kind.COLOR_SENSING, properties, comment);
         Assert.isTrue(mode != null && port != null);
         this.mode = mode;
-        this.port = port;
         setReadOnly();
     }
 
@@ -56,16 +54,9 @@ public class ColorSensor<V> extends Sensor<V> {
         return this.mode;
     }
 
-    /**
-     * @return get the port on which the sensor is connected. See enum {@link SensorPort} for all possible sensor ports
-     */
-    public SensorPort getPort() {
-        return this.port;
-    }
-
     @Override
     public String toString() {
-        return "ColorSensor [mode=" + this.mode + ", port=" + this.port + "]";
+        return "ColorSensor [mode=" + this.mode + ", port=" + this.getPort() + "]";
     }
 
     @Override

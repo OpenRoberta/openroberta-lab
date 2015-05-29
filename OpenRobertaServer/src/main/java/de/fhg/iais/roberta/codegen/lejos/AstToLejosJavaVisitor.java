@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
+import de.fhg.iais.roberta.ast.hardwarecheck.UsedSensorsCheckVisitor;
 import de.fhg.iais.roberta.ast.syntax.IndexLocation;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.Phrase.Kind;
@@ -97,7 +98,6 @@ import de.fhg.iais.roberta.ast.syntax.tasks.ActivityTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.syntax.tasks.MainTask;
 import de.fhg.iais.roberta.ast.syntax.tasks.StartActivityTask;
-import de.fhg.iais.roberta.ast.usedhardwarecheck.HardwareCheckVisitor;
 import de.fhg.iais.roberta.ast.visitor.AstVisitor;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.dbc.DbcException;
@@ -150,7 +150,7 @@ public class AstToLejosJavaVisitor implements AstVisitor<Void> {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
 
-        Set<EV3Sensors> usedSensors = HardwareCheckVisitor.check(phrasesSet);
+        Set<EV3Sensors> usedSensors = UsedSensorsCheckVisitor.check(phrasesSet);
         AstToLejosJavaVisitor astVisitor = new AstToLejosJavaVisitor(programName, brickConfiguration, usedSensors, withWrapping ? 2 : 0);
         astVisitor.generatePrefix(withWrapping);
 

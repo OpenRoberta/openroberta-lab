@@ -34,9 +34,9 @@ public abstract class HardwareComponentType {
     }
 
     /**
-     * The short name of the blockly block mapped to this hardware component. This name is used ion textual representations of this component.
+     * The short name of the blockly block mapped to this hardware component. This name is used for textual representations of this component.
      *
-     * @return the shortm name
+     * @return the short name
      */
     public String getShortName() {
         return this.shortName;

@@ -9,12 +9,15 @@ import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.ExprList;
 import de.fhg.iais.roberta.ast.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.ast.syntax.stmt.StmtList;
+import de.fhg.iais.roberta.ast.typecheck.NepoInfo;
+import de.fhg.iais.roberta.ast.typecheck.NepoInfo.Severity;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Comment;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Repetitions;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
+import de.fhg.iais.roberta.blockly.generated.Warning;
 import de.fhg.iais.roberta.dbc.Assert;
 
 /**
@@ -42,6 +45,8 @@ public final class AstJaxbTransformerHelper {
         blockType = astSource.getProperty().getBlockType();
         setProperties(astSource, jaxbDestination, blockType);
         addComment(astSource, jaxbDestination);
+        addError(astSource, jaxbDestination);
+        addWarning(astSource, jaxbDestination);
     }
 
     /**
@@ -253,6 +258,32 @@ public final class AstJaxbTransformerHelper {
             comment.setH(astSource.getComment().getHeight());
             comment.setW(astSource.getComment().getWidth());
             block.setComment(comment);
+        }
+    }
+
+    private static void addWarning(Phrase<?> astSource, Block block) {
+        Warning warning = new Warning();
+        for ( NepoInfo info : astSource.getInfos().getInfos() ) {
+            if ( info.getSeverity() == Severity.WARNING ) {
+                warning.setValue(info.getMessage());
+                warning.setPinned(true);
+                warning.setH("50");
+                warning.setW("50");
+                block.setWarning(warning);
+            }
+        }
+    }
+
+    private static void addError(Phrase<?> astSource, Block block) {
+        de.fhg.iais.roberta.blockly.generated.Error error = new de.fhg.iais.roberta.blockly.generated.Error();
+        for ( NepoInfo info : astSource.getInfos().getInfos() ) {
+            if ( info.getSeverity() == Severity.ERROR ) {
+                error.setValue(info.getMessage());
+                error.setPinned(true);
+                error.setH("50");
+                error.setW("50");
+                block.setError(error);
+            }
         }
     }
 }

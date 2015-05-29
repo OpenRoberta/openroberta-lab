@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.typecheck;
 /**
  * describes either an error or a problem w.r.t. a phrase of the AST. Collections of objects of this class are stored
  * in the mutable part of the phrase (within a phrase the tree structure is immutable, but the attachment of problems is (more) dynamic.
- * 
+ *
  * @author rbudde
  */
 public class NepoInfo {
@@ -21,6 +21,10 @@ public class NepoInfo {
 
     public static NepoInfo error(String message) {
         return new NepoInfo(Severity.ERROR, message);
+    }
+
+    public static NepoInfo warning(String message) {
+        return new NepoInfo(Severity.WARNING, message);
     }
 
     public Severity getSeverity() {
