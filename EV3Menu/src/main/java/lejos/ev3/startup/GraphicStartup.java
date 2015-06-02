@@ -24,6 +24,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.jar.JarFile;
@@ -173,10 +174,9 @@ public class GraphicStartup implements ORAmenu {
     //private GraphicMenu curMenu;
     private int timeout = 0;
     private boolean btVisibility;
-    private static String version = "Unknown";
-    private static String oraVersion = "unknown";
+    private static String version = "Unknown"; // lejos version
     private static String hostname;
-    public static List<String> ips = getIPAddresses();
+    public static HashMap<String, String> ips = getIPAddresses();
     private static LocalBTDevice bt;
     public static GraphicStartup menu = new GraphicStartup();
 
@@ -234,8 +234,9 @@ public class GraphicStartup implements ORAmenu {
         TuneThread tuneThread = new TuneThread();
         tuneThread.start();
 
+        // redundant
         System.out.println("Getting IP addresses");
-        ips = getIPAddresses();
+        //ips = getIPAddresses();
 
         // Start the RMI registry
         InitThread initThread = new InitThread();
@@ -271,18 +272,9 @@ public class GraphicStartup implements ORAmenu {
                 // Ignore
             }
 
-            // Start the RMI server
             System.out.println("Starting RMI");
-
-            // Do not use in "our" menu
-            // Use last IP address, which will be Wifi, it it exists
-            //            String lastIp = null;
-            //            for ( String ip : ips ) {
-            //                lastIp = ip;
-            //            }
-
-            System.out.println("Setting java.rmi.server.hostname to " + ips.get(0));
-            System.setProperty("java.rmi.server.hostname", ips.get(0));
+            System.out.println("Setting java.rmi.server.hostname to " + ips.get("br0"));
+            System.setProperty("java.rmi.server.hostname", ips.get("br0"));
 
             try { //special exception handler for registry creation
                 LocateRegistry.createRegistry(1099);
@@ -343,10 +335,7 @@ public class GraphicStartup implements ORAmenu {
         do {
             selection = 0;
             newScreen(hostname);
-            int row = 1;
-            for ( String ip : ips ) {
-                lcd.drawString(ip, 8 - ip.length() / 2, row++);
-            }
+            redrawIPs();
             selection = getSelection(menu, selection);
             switch ( selection ) {
                 case 0:
@@ -1606,13 +1595,21 @@ public class GraphicStartup implements ORAmenu {
      * Two lines in submenus are not updated yet.
      */
     public static void redrawIPs() {
-        int row = 1;
         lcd.drawString("                  ", 0, 1);
         lcd.drawString("                  ", 0, 2);
-        for ( String ip : GraphicStartup.ips ) {
-            lcd.drawString(ip, 8 - ip.length() / 2, row);
-            row++;
+        String ip = ips.get("br0");
+        if ( ip != null ) {
+            lcd.drawString(ip, 8 - ip.length() / 2, 1);
         }
+        ip = ips.get("wlan0");
+        if ( ip != null ) {
+            lcd.drawString(ip, 8 - ip.length() / 2, 2);
+        }
+
+        //        for ( String ip : GraphicStartup.ips ) {
+        //            lcd.drawString(ip, 8 - ip.length() / 2, row);
+        //            row++;
+        //        }
     }
 
     /**
@@ -1631,10 +1628,8 @@ public class GraphicStartup implements ORAmenu {
             String tmp = menuProperties.getProperty("version");
             int i = tmp.indexOf("-");
             tmp = tmp.substring(0, i);
-            oraVersion = tmp;
             return tmp;
         } catch ( IOException e ) {
-            oraVersion = "unknown";
             return "unknown";
         }
     }
@@ -2758,7 +2753,7 @@ public class GraphicStartup implements ORAmenu {
                 while ( true ) {
                     long time = System.currentTimeMillis();
 
-                    GraphicStartup.this.indiBA.setWifi(ips.size() > 1);
+                    GraphicStartup.this.indiBA.setWifi(ips.get("wlan0") != null);
                     GraphicStartup.this.indiBA.draw(time);
                     lcd.refresh();
 
@@ -2782,8 +2777,8 @@ public class GraphicStartup implements ORAmenu {
     /**
      * Get all the IP addresses for the device
      */
-    public static List<String> getIPAddresses() {
-        List<String> result = new ArrayList<String>();
+    public static HashMap<String, String> getIPAddresses() {
+        HashMap<String, String> result = new HashMap<String, String>();
         Enumeration<NetworkInterface> interfaces;
         try {
             interfaces = NetworkInterface.getNetworkInterfaces();
@@ -2806,7 +2801,8 @@ public class GraphicStartup implements ORAmenu {
                 if ( current_addr.isLoopbackAddress() ) {
                     continue;
                 }
-                result.add(current_addr.getHostAddress());
+                result.put(current.getDisplayName(), current_addr.getHostAddress());
+                System.out.println(current.getDisplayName() + ": " + current_addr.getHostAddress());
             }
         }
         return result;
@@ -3066,11 +3062,8 @@ public class GraphicStartup implements ORAmenu {
             System.out.println("startwlan returned " + status);
             // Get IP addresses again
             ips = getIPAddresses();
-            String lastIp = null;
-            for ( String ip : ips ) {
-                lastIp = ip;
-            }
-            System.setProperty("java.rmi.server.hostname", lastIp);
+
+            System.setProperty("java.rmi.server.hostname", ips.get("br0"));
 
             try {
                 RMIRemoteEV3 ev3 = new RMIRemoteEV3();
