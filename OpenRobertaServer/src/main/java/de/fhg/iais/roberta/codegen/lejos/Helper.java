@@ -1,9 +1,10 @@
-package de.fhg.iais.roberta.ast.syntax.codeGeneration;
+package de.fhg.iais.roberta.codegen.lejos;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import org.custommonkey.xmlunit.Diff;
@@ -20,10 +21,10 @@ import de.fhg.iais.roberta.ast.syntax.action.DriveDirection;
 import de.fhg.iais.roberta.ast.syntax.action.MotorSide;
 import de.fhg.iais.roberta.ast.syntax.tasks.Location;
 import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
+import de.fhg.iais.roberta.ast.transformer.JaxbBrickConfigTransformer;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
-import de.fhg.iais.roberta.codegen.lejos.AstToLejosJavaVisitor;
-import de.fhg.iais.roberta.codegen.lejos.AstToTextlyVisitor;
+import de.fhg.iais.roberta.brickconfiguration.BrickConfiguration;
 import de.fhg.iais.roberta.ev3.EV3Actors;
 import de.fhg.iais.roberta.ev3.EV3BrickConfiguration;
 import de.fhg.iais.roberta.ev3.components.EV3Actor;
@@ -71,6 +72,19 @@ public class Helper {
     }
 
     /**
+     * return the brick configuration for given XML configuration text.
+     *
+     * @param blocklyXml the configuration XML as String
+     * @return brick configuration
+     * @throws Exception
+     */
+    public static BrickConfiguration generateConfiguration(String blocklyXml) throws Exception {
+        BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
+        JaxbBrickConfigTransformer transformer = new JaxbBrickConfigTransformer();
+        return transformer.transform(project);
+    }
+
+    /**
      * Generate textly code as string from a given program . Prepend and append wrappings.
      *
      * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
@@ -93,6 +107,20 @@ public class Helper {
      */
     public static JaxbBlocklyProgramTransformer<Void> generateTransformer(String pathToProgramXml) throws Exception {
         BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
+        JaxbBlocklyProgramTransformer<Void> transformer = new JaxbBlocklyProgramTransformer<>();
+        transformer.transform(project);
+        return transformer;
+    }
+
+    /**
+     * return the jaxb transformer for a given XML program text.
+     *
+     * @param blocklyXml the program XML as String
+     * @return jaxb the transformer
+     * @throws Exception
+     */
+    public static JaxbBlocklyProgramTransformer<Void> generateProgramTransformer(String blocklyXml) throws Exception {
+        BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
         JaxbBlocklyProgramTransformer<Void> transformer = new JaxbBlocklyProgramTransformer<>();
         transformer.transform(project);
         return transformer;
@@ -158,10 +186,23 @@ public class Helper {
         m.setProperty(Marshaller.JAXB_FRAGMENT, true);
         m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
+        BlockSet blockSet = astToJaxb(transformer.getTree());
+        //        m.marshal(blockSet, System.out); // only needed for EXTREME debugging
+        StringWriter writer = new StringWriter();
+        m.marshal(blockSet, writer);
+        String t = Resources.toString(Helper.class.getResource(fileName), Charsets.UTF_8);
+        XMLUnit.setIgnoreWhitespace(true);
+        Diff diff = XMLUnit.compareXML(writer.toString(), t);
+
+        //        System.out.println(diff.toString()); // only needed for EXTREME debugging
+        Assert.assertTrue(diff.identical());
+    }
+
+    public static BlockSet astToJaxb(ArrayList<ArrayList<Phrase<Void>>> astProgram) {
         BlockSet blockSet = new BlockSet();
 
         Instance instance = null;
-        for ( ArrayList<Phrase<Void>> tree : transformer.getTree() ) {
+        for ( ArrayList<Phrase<Void>> tree : astProgram ) {
             for ( Phrase<Void> phrase : tree ) {
                 if ( phrase.getKind() == Kind.LOCATION ) {
                     blockSet.getInstance().add(instance);
@@ -173,15 +214,7 @@ public class Helper {
             }
         }
         blockSet.getInstance().add(instance);
-        //        m.marshal(blockSet, System.out); // only needed for EXTREME debugging
-        StringWriter writer = new StringWriter();
-        m.marshal(blockSet, writer);
-        String t = Resources.toString(Helper.class.getResource(fileName), Charsets.UTF_8);
-        XMLUnit.setIgnoreWhitespace(true);
-        Diff diff = XMLUnit.compareXML(writer.toString(), t);
-
-        //        System.out.println(diff.toString()); // only needed for EXTREME debugging
-        Assert.assertTrue(diff.identical());
+        return blockSet;
     }
 
     /**
@@ -207,6 +240,15 @@ public class Helper {
      */
     public static void assertCodeIsOk(String correctJavaCode, String fileName) throws Exception {
         Assert.assertEquals(correctJavaCode.replaceAll("\\s+", ""), Helper.generateStringWithoutWrapping(fileName).replaceAll("\\s+", ""));
+    }
+
+    public static String jaxbToXml(BlockSet blockSet) throws JAXBException {
+        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
+        Marshaller m = jaxbContext.createMarshaller();
+        m.setProperty(Marshaller.JAXB_FRAGMENT, true);
+        StringWriter writer = new StringWriter();
+        m.marshal(blockSet, writer);
+        return writer.toString();
     }
 
 }

@@ -21,24 +21,41 @@ import de.fhg.iais.roberta.ast.syntax.sensor.UltrasonicSensor;
 import de.fhg.iais.roberta.ast.typecheck.NepoInfo;
 import de.fhg.iais.roberta.dbc.Assert;
 import de.fhg.iais.roberta.ev3.EV3BrickConfiguration;
+import de.fhg.iais.roberta.ev3.EV3Sensors;
 import de.fhg.iais.roberta.ev3.components.EV3Sensor;
 
 public class UsedPortsCheckVisitor extends CheckVisitor {
+    private ArrayList<ArrayList<Phrase<Void>>> checkedProgram;
+    private int errorCount = 0;
     EV3BrickConfiguration brickConfiguration;
 
-    public static ArrayList<ArrayList<Phrase<Void>>> check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, EV3BrickConfiguration brickConfiguration) {
-        Assert.isTrue(phrasesSet.size() >= 1);
-        UsedPortsCheckVisitor checkVisitor = new UsedPortsCheckVisitor(brickConfiguration);
-        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-            for ( Phrase<Void> phrase : phrases ) {
-                phrase.visit(checkVisitor);
-            }
-        }
-        return phrasesSet;
+    public UsedPortsCheckVisitor(EV3BrickConfiguration brickConfiguration) {
+        this.brickConfiguration = brickConfiguration;
     }
 
-    private UsedPortsCheckVisitor(EV3BrickConfiguration brickConfiguration) {
-        this.brickConfiguration = brickConfiguration;
+    public int check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+        Assert.isTrue(phrasesSet.size() >= 1);
+        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
+            for ( Phrase<Void> phrase : phrases ) {
+                phrase.visit(this);
+            }
+        }
+        this.checkedProgram = phrasesSet;
+        return this.errorCount;
+    }
+
+    /**
+     * @return the checkedProgram
+     */
+    public ArrayList<ArrayList<Phrase<Void>>> getCheckedProgram() {
+        return this.checkedProgram;
+    }
+
+    /**
+     * @return the countErrors
+     */
+    public int getErrorCount() {
+        return this.errorCount;
     }
 
     @Override
@@ -92,7 +109,8 @@ public class UsedPortsCheckVisitor extends CheckVisitor {
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
         if ( this.brickConfiguration.getActorOnPort(encoderSensor.getMotor()) == null ) {
-            encoderSensor.addInfo(NepoInfo.warning(""));
+            encoderSensor.addInfo(NepoInfo.error("a"));
+            this.errorCount++;
         }
         return null;
     }
@@ -123,25 +141,63 @@ public class UsedPortsCheckVisitor extends CheckVisitor {
 
     private void checkMotorPort(MoveAction<Void> action) {
         if ( this.brickConfiguration.getActorOnPort(action.getPort()) == null ) {
-            action.addInfo(NepoInfo.warning(""));
+            action.addInfo(NepoInfo.error("a"));
+            this.errorCount++;
         }
     }
 
     private void checkLeftRightMotorPort(Phrase<Void> driveAction) {
         if ( this.brickConfiguration.getLeftMotorPort() == null ) {
-            driveAction.addInfo(NepoInfo.warning(""));
+            driveAction.addInfo(NepoInfo.error("a"));
+            this.errorCount++;
         }
         if ( this.brickConfiguration.getRightMotorPort() == null ) {
-            driveAction.addInfo(NepoInfo.warning(""));
+            driveAction.addInfo(NepoInfo.error("a"));
+            this.errorCount++;
         }
     }
 
     private void checkSensorPort(BaseSensor<Void> sensor) {
         EV3Sensor usedSensor = this.brickConfiguration.getSensorOnPort(sensor.getPort());
         if ( usedSensor == null ) {
-            sensor.addInfo(NepoInfo.warning(""));
+            sensor.addInfo(NepoInfo.error("a"));
+            this.errorCount++;
         } else {
+            switch ( sensor.getKind() ) {
+                case COLOR_SENSING:
+                    if ( usedSensor.getComponentTypeName() != EV3Sensors.EV3_COLOR_SENSOR.getTypeName() ) {
+                        sensor.addInfo(NepoInfo.error("a"));
+                        this.errorCount++;
+                    }
+                    break;
+                case TOUCH_SENSING:
+                    if ( usedSensor.getComponentTypeName() != EV3Sensors.EV3_TOUCH_SENSOR.getTypeName() ) {
+                        sensor.addInfo(NepoInfo.error("a"));
+                        this.errorCount++;
+                    }
+                    break;
+                case ULTRASONIC_SENSING:
+                    if ( usedSensor.getComponentTypeName() != EV3Sensors.EV3_ULTRASONIC_SENSOR.getTypeName() ) {
+                        sensor.addInfo(NepoInfo.error("a"));
+                        this.errorCount++;
+                    }
+                    break;
+                case INFRARED_SENSING:
+                    if ( usedSensor.getComponentTypeName() != EV3Sensors.EV3_IR_SENSOR.getTypeName() ) {
+                        sensor.addInfo(NepoInfo.error("a"));
+                        this.errorCount++;
+                    }
+                    break;
+                case GYRO_SENSING:
+                    if ( usedSensor.getComponentTypeName() != EV3Sensors.EV3_GYRO_SENSOR.getTypeName() ) {
+                        sensor.addInfo(NepoInfo.error("a"));
+                        this.errorCount++;
+                    }
+                    break;
 
+                default:
+                    break;
+            }
         }
     }
 }

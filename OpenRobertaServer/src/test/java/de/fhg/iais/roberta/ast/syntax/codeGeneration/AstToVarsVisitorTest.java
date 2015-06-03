@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.codegen.lejos.AstToVarsVisitor;
+import de.fhg.iais.roberta.codegen.lejos.Helper;
 
 public class AstToVarsVisitorTest {
     @Test

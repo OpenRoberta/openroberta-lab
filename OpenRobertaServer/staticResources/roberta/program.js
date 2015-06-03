@@ -69,4 +69,17 @@ var PROGRAM = {};
              "configurationText" : xmlTextConfig
         }, successFn, "run program '" + programName + "' with configuration '" + configName + "'"); 
     };
+    /**
+     * Check program
+     * @memberof PROGRAM
+     */
+    PROGRAM.checkProgramCompatibility = function(programName, configName, xmlTextProgram, xmlTextConfig, successFn) {
+        COMM.json("/program", {
+            "cmd" : "checkP",
+            "name" : programName,
+            "configuration" : configName,
+            "programText" : xmlTextProgram,
+            "configurationText" : xmlTextConfig
+        }, successFn, "run program '" + programName + "' with configuration '" + configName + "'"); 
+    };
 })($);

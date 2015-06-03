@@ -392,6 +392,22 @@ function startProgram() {
         }
     });
 }
+/**
+ * Check program
+ */
+function checkProgram() {
+    LOG.info('check ' + userState.program + ' signed in: ' + userState.id);
+    var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+    var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
+    var xmlTextConfiguration = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
+    displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
+    PROGRAM.checkProgramCompatibility(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
+        //setRobotState(result);
+        if (result.rc != "ok") {
+            displayInformation(result, "", result.message, "");
+        }
+    });
+}
 
 function showProgram(result, load, name) {
     response(result);
@@ -793,7 +809,7 @@ function initHeadNavigation() {
         if (domId === 'menuRunProg') { //  Submenu 'Program'
             runOnBrick();
         } else if (domId === 'menuCheckProg') { //  Submenu 'Program'
-            displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP", "");
+            checkProgram()
         } else if (domId === 'menuNewProg') { //  Submenu 'Program'
             setProgram("NEPOprog");
             initProgramEnvironment();
