@@ -80,6 +80,6 @@ var PROGRAM = {};
             "configuration" : configName,
             "programText" : xmlTextProgram,
             "configurationText" : xmlTextConfig
-        }, successFn, "run program '" + programName + "' with configuration '" + configName + "'"); 
+        }, successFn, "check program '" + programName + "' with configuration '" + configName + "'"); 
     };
 })($);

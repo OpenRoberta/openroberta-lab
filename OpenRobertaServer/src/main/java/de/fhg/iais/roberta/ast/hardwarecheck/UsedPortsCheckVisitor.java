@@ -61,12 +61,16 @@ public class UsedPortsCheckVisitor extends CheckVisitor {
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         checkLeftRightMotorPort(driveAction);
+        driveAction.getParam().getSpeed().visit(this);
+        driveAction.getParam().getDuration().getValue().visit(this);
         return null;
     }
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
         checkLeftRightMotorPort(turnAction);
+        turnAction.getParam().getSpeed().visit(this);
+        turnAction.getParam().getDuration().getValue().visit(this);
         return null;
     }
 
@@ -79,12 +83,14 @@ public class UsedPortsCheckVisitor extends CheckVisitor {
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         checkMotorPort(motorOnAction);
+        motorOnAction.getDurationValue().visit(this);
         return null;
     }
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         checkMotorPort(motorSetPowerAction);
+        motorSetPowerAction.getPower().visit(this);
         return null;
     }
 

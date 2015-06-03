@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.Ignore;
 
 import de.fhg.iais.roberta.ast.hardwarecheck.UsedPortsCheckVisitor;
 import de.fhg.iais.roberta.ast.hardwarecheck.UsedSensorsCheckVisitor;
@@ -22,7 +22,7 @@ import de.fhg.iais.roberta.ev3.components.EV3Sensor;
 
 public class ProgramConfigurationCompatabilityTest {
 
-    @Test
+    @Ignore
     public void test() throws Exception {
         EV3BrickConfiguration.Builder builder = new EV3BrickConfiguration.Builder();
         builder.setTrackWidth(17).setWheelDiameter(5.6);

@@ -403,8 +403,10 @@ function checkProgram() {
     displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
     PROGRAM.checkProgramCompatibility(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
         //setRobotState(result);
-        if (result.rc != "ok") {
-            displayInformation(result, "", result.message, "");
+        if (result.rc == "ok") {
+            var xml = Blockly.Xml.textToDom(result.data);
+            Blockly.mainWorkspace.clear();            
+            Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
         }
     });
 }

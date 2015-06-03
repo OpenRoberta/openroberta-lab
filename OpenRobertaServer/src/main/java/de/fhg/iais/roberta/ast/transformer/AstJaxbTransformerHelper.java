@@ -234,7 +234,7 @@ public final class AstJaxbTransformerHelper {
 
     private static void setInTask(Phrase<?> astObject, Block block) {
         if ( astObject.getProperty().isInTask() != null ) {
-            block.setDisabled(astObject.getProperty().isInTask());
+            block.setIntask(astObject.getProperty().isInTask());
         }
     }
 
