@@ -341,6 +341,14 @@ limitations under the License.
                     <div class="left-inner-addon">
                         <i class="typcn typcn-user"></i>
                         <input type="text" data-role="none" id="programShareWith" class="form-control" value="" autofocus />
+                        <div class="form-group" id="programShareRight">
+                            <label class="radio-inline">
+                                <input type="radio" name="readWrite" value="READ" checked="checked" /><span lkey="Blockly.Msg.POPUP_SHARE_READ">READ</span>
+                            </label>
+                            <label  class="radio-inline">
+                                <input type="radio" name="readWrite" value="WRITE" /><span lkey="Blockly.Msg.POPUP_SHARE_WRITE">WRITE</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -368,29 +376,6 @@ limitations under the License.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn" id="saveConfiguration">OK</button>
-                    <button type="button" class="btn" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Popup share configuration -->
-    <div id="share-configuration" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title">Share configuration</h3>
-                </div>
-                <div class="modal-body left-inner-addon">
-                    <label for="configurationShareWith" lkey="Blockly.Msg.POPUP_SHARE_WITH">Share with</label>
-                    <div class="left-inner-addon">
-                        <i class="typcn typcn-user"></i>
-                        <input type="text" data-role="none" id="configurationShareWith" class="form-control" value="" autofocus />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn" id="shareConfiguration">OK</button>
                     <button type="button" class="btn" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
                 </div>
             </div>
@@ -601,6 +586,31 @@ limitations under the License.
         </div>
     </div>
 
+    <!-- Popup for relations -->
+    <div id="show-relations" class="modal fade">
+        <div class="modal-dialog bigModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="relationsListing">
+                        <h2 lkey="Blockly.Msg.DATATABLE_RELATIONS">Relations</h2>
+                        <table id="relationsTable">
+                            <tr>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">OK</button>
+                    <input class="btn buttonDelete" id="deleteRelation" lkey="Blockly.Msg.BUTTON_DO_DELETE" type="submit" value="Löschen" />
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ################## END POPUPS ################## -->
 
     <!-- ################## TABS ################## -->
@@ -632,10 +642,11 @@ limitations under the License.
                     </tr>
                 </table>
                 <div class="navbar navbar-fixed-bottom">
-                    <input class="btn  buttonLoad" id="loadFromListing" lkey="Blockly.Msg.BUTTON_LOAD" type="submit" value="Laden" />
-                    <input class="btn  buttonDelete" id="deleteFromListing" lkey="Blockly.Msg.BUTTON_DO_DELETE" type="submit" value="Löschen" />
-                    <!-- input class="button buttonShare" id="shareFromListing" lkey="Blockly.Msg.BUTTON_DO_SHARE" type="submit" value="Teilen" />  -->
-                    <input class="btn  backButton" id="backProgram" type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
+                    <input class="btn buttonLoad" id="loadFromListing" lkey="Blockly.Msg.BUTTON_LOAD" type="submit" value="Laden" />
+                    <input class="btn buttonDelete" id="deleteFromListing" lkey="Blockly.Msg.BUTTON_DO_DELETE" type="submit" value="Löschen" />
+                    <input class="btn buttonShare" id="shareFromListing" lkey="Blockly.Msg.BUTTON_DO_SHARE" type="submit" value="Teilen" />
+                    <input class="btn buttonRelations" id="relationsFromListing" lkey="Blockly.Msg.BUTTON_RELATIONS" type="submit" value="Relationen" />
+                    <input class="btn backButton" id="backProgram" type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
                 </div>
             </div>
 
@@ -647,10 +658,11 @@ limitations under the License.
                     </tr>
                 </table>
                 <div class="navbar navbar-fixed-bottom">
-                    <input class="btn  buttonLoad" id="loadConfigurationFromListing" lkey="Blockly.Msg.BUTTON_LOAD" type="submit" value="Laden" />
-                    <input class="btn  buttonDelete" id="deleteConfigurationFromListing" lkey="Blockly.Msg.BUTTON_DO_DELETE" type="submit" value="Löschen" />
-                    <!-- input class="button buttonShare" id="shareConfigurationFromListing" lkey="Blockly.Msg.BUTTON_DO_SHARE" type="submit" value="Teilen" /> -->
-                    <input class="btn  backButton" id="backConfiguration" type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
+                    <input class="btn buttonLoad" id="loadConfigurationFromListing" lkey="Blockly.Msg.BUTTON_LOAD" type="submit" value="Laden" />
+                    <input class="btn buttonDelete" id="deleteConfigurationFromListing" lkey="Blockly.Msg.BUTTON_DO_DELETE" type="submit" value="Löschen" />
+                    <!-- input class="btn buttonShare" id="shareConfigurationFromListing" lkey="Blockly.Msg.BUTTON_DO_SHARE" type="submit" value="Teilen" /> -->
+                    <!-- input class="btn buttonRelations" id="relationsConfigurationFromListing" lkey="Blockly.Msg.BUTTON_RELATIONS" type="submit" value="Relationen" /> -->
+                    <input class="btn backButton" id="backConfiguration" type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel" />
                 </div>
             </div>
 

@@ -434,9 +434,8 @@ function loadFromListing() {
     var $programRow = $('#programNameTable .selected');
     if ($programRow.length > 0) {
         var programName = $programRow[0].children[0].textContent;
-        var sharedWith = $programRow[0].children[2].textContent;
-        var right = $programRow[0].children[3].textContent;
-        if (sharedWith === userState.accountName && right === 'WRITE') {
+        var right = $programRow[0].children[2].textContent;
+        if (right === 'WRITE') {
             userState.programShared = true;
         } else {
             userState.programShared = false;            
@@ -494,10 +493,15 @@ function shareProgramsFromListing() {
             var programName = $programRow[i].children[0].textContent;
             LOG.info("share program " + programName + " with '" + userToShareWith + "'");
             PROGRAM.shareProgram( programName, userToShareWith, right, function(result) {
-                cnt++;
-                if (cnt === $programRow.length) {
-                    PROGRAM.refreshList(showPrograms);
-                    $('#share-program').modal('hide');
+                if (result.rc === 'ok') {
+                    cnt++;
+                    if (cnt === $programRow.length) {
+                        PROGRAM.refreshList(showPrograms);
+                        $('#share-program').modal('hide');
+                    }
+                } else {
+                    displayInformation(result, "", result.message);
+                    return;
                 }
             });
         }
@@ -524,7 +528,7 @@ function deleteFromListing() {
 }
 
 /**
- * Delete the configurations that waere selected in configurations list
+ * Delete the configurations that were selected in configurations list
  */
 function deleteConfigurationFromListing() {
     var $configurationRow = $('#configurationNameTable .selected');
@@ -538,6 +542,29 @@ function deleteConfigurationFromListing() {
                 setRobotState(result);
             }
             displayInformation(result, "MESSAGE_CONFIGURATION_DELETED", result.message, configurationName);
+        });
+    }
+}
+
+/**
+ * Delete the relations that were selected in relations list
+ */
+function deleteRelations() {
+    var $relationRow = $('#relationsTable .selected');
+    for (var i=0; i < $relationRow.length; i++) {
+        var programName = $relationRow[i].children[0].textContent;
+        var userSharedWithName = $relationRow[i].children[2].textContent;
+        LOG.info('deleteRelation of program: ' + programName + ', user: ' + userSharedWithName);
+        PROGRAM.deleteRelation( programName, userSharedWithName, function(result) {
+            if (result.rc === 'ok') {
+                response(result);
+                setRobotState(result);
+                $('.modal').modal('hide'); // close all opened popups
+                if (i === $relationRow.length) {
+                    PROGRAM.refreshList(showPrograms);
+                }
+            }
+            displayInformation(result, "MESSAGE_RELATION_DELETED", result.message, programName);
         });
     }
 }
@@ -581,6 +608,14 @@ function showPrograms(result) {
     if (result.rc === 'ok') {
         var $table = $('#programNameTable').dataTable();
         $table.fnClearTable();
+        for (var i=0; i < result.programNames.length; i++) {
+            if (result.programNames[i][2] === true) {
+                result.programNames[i][2] = 'X';                                        
+            } else if  (result.programNames[i][2] === false) {
+                result.programNames[i][2] = '-';
+            }
+        }
+
         if (result.programNames.length > 0) {
             $table.fnAddData(result.programNames);
         }
@@ -607,7 +642,34 @@ function showConfigurations(result) {
 }
 
 /**
- * Select row in programs-/configurations-datatable
+ * Display relations of programs in a table
+ * 
+ * @param {result}
+ *            result object of server call
+ */
+function showRelations(result) {
+    response(result);
+    if (result.rc === 'ok') {
+        var $table = $('#relationsTable').dataTable();
+        $table.fnClearTable();
+        if (result.relations.length > 0) {
+            $table.fnAddData(result.relations);
+            
+            // This is a WORKAROUND for a known bug in Jquery-datatables:
+            // If scrollY is set the column headers have the wrong width,
+            // because the browser is not able to calculate them correctly. So
+            // after a while (in this case 200 ms) the columns have to be readjusted.
+            setTimeout( function() {
+                $table.fnAdjustColumnSizing();
+            }, 200);            
+            
+            $("#show-relations").modal('show');
+        }
+    }
+}
+
+/**
+ * Select row in programs-/configurations-/relations-datatable
  */
 var start;
 function selectionFn(event) {
@@ -656,7 +718,6 @@ function beforeActivateTab(event, ui) {
  * Initialize table of programs
  */
 function initProgramNameTable() {
-
     var columns = [ {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_PROGRAM_NAME'>Name des Programms</span>",
         "sClass" : "programs"
@@ -664,12 +725,8 @@ function initProgramNameTable() {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>Erzeugt von</span>",
         "sClass" : "programs"
     }, {
-        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_SHARED_WITH'>Geteilt mit</span>",
-        "sDefaultContent": "-",
-        "sClass" : "programs"
-    }, {
-        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_SHARED_FOR'>Recht(e)</span>",
-        "sDefaultContent": "-",
+        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_SHARED'>Geteilt</span>",
+        "sDefaultContent" : "-",
         "sClass" : "programs"
     }, {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>Erzeugt am</span>",
@@ -685,7 +742,7 @@ function initProgramNameTable() {
         "aaData" : [],
         "aoColumns" : columns,
         "aoColumnDefs" : [ { // format date fields
-            "aTargets" : [ 4, 5 ], // indexes of columns to be formatted
+            "aTargets" : [ 3, 4 ], // indexes of columns to be formatted
             "sType" : "date-de",
             "mRender" : function(data) {
                 return UTIL.formatDate(data);
@@ -769,6 +826,50 @@ function initConfigurationNameTable() {
         selectionFn(event);
         $('#loadConfigurationFromListing').click();
     });
+}
+
+/**
+ * Initialize relations table
+ */
+function initRelationsTable() {
+    var columns = [ {
+        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_PROGRAM_NAME'>Name des Programms</span>",
+        "sClass" : "relations hidden"
+    }, {
+        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>Erzeugt von</span>",
+        "sClass" : "relations hidden"
+    }, {
+        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_SHARED_WITH'>Geteilt mit</span>",
+        "sClass" : "relations"
+    }, {
+        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_SHARED_FOR'>Recht(e)</span>",
+        "sClass" : "relations"
+    }, ];
+    var $relations = $('#relationsTable');
+
+    var oTable = $relations.dataTable({
+        "sDom" : '<lip>t<r>',
+        "aaData" : [],
+        "aoColumns" : columns,
+        "bJQueryUI" : true,
+        "oLanguage" : {
+            "sEmptyTable" : "<span lkey='Blockly.Msg.DATATABLE_EMPTY_TABLE'>Die Tabelle ist leer</span>"
+        },
+        "fnDrawCallback" : function() {
+        },
+        "scrollY" : UTIL.calcDataTableHeight(),
+        "scrollCollapse" : true,
+        "paging" : false,
+        "bInfo" : false
+    });
+
+    $(window).resize(function() {
+        var oSettings = oTable.fnSettings();
+        oSettings.oScroll.sY = UTIL.calcDataTableHeight();
+        oTable.fnDraw(false); // redraw the table
+    });
+
+    $('#relationsTable tbody').onWrap('click', 'tr', selectionFn);
 }
 
 /**
@@ -1040,6 +1141,11 @@ function initPopups() {
         shareProgramsFromListing();
     }, 'share program');
 
+
+    $('#deleteRelation').onWrap('click', function() {
+        deleteRelations();
+    }, 'delete Relation');
+
     $('#setToken').onWrap('click', function() {
         setToken($('#tokenValue').val());
     }, 'set token');
@@ -1124,8 +1230,11 @@ function initTabs() {
 
     // confirm program deletion
     $('#deleteFromListing').onWrap('click', function() {
-        if ($('#programNameTable .selected').length > 0) {
-            $("#confirmDeleteProgram").modal("show");
+        var $programRow = $('#programNameTable .selected');
+        if ($programRow.length > 0) {
+            if ($programRow[0].children[1].textContent === userState.accountName) {
+                $("#confirmDeleteProgram").modal("show");
+            }
         }
     }, 'Ask for confirmation to delete a program');
 
@@ -1150,10 +1259,26 @@ function initTabs() {
 
     // share program
     $('#shareFromListing').onWrap('click', function() {
-        if ($('#programNameTable .selected').length > 0) {
-            $("#share-program").modal("show");
+        var $programRow = $('#programNameTable .selected');
+        if ($programRow.length > 0) {
+            var programName = $programRow[0].children[0].textContent;
+            if ($programRow[0].children[1].textContent === userState.accountName) {
+                $("#share-program").modal("show");
+            }
         }
     }, 'share program');
+    
+    // show relations of program
+    $('#relationsFromListing').onWrap('click', function() {
+        var $programRow = $('#programNameTable .selected');
+        if ($programRow.length > 0) {
+            var programName = $programRow[0].children[0].textContent;
+            var shared = $programRow[0].children[2].textContent;
+            if (shared === 'X') {
+                PROGRAM.refreshProgramRelationsList(programName, showRelations);
+            }
+        }
+    }, 'show relations of program');
 
     $('#backConfiguration').onWrap('click', function() {
         activateProgConfigMenu();
@@ -1291,6 +1416,9 @@ function translate(jsdata) {
         } else if (lkey === 'Blockly.Msg.BUTTON_DO_SHARE') {
             $('.buttonShare').attr('value', value);
             $('#share-program h3').text(value);
+            $('#share-program h3').text(value);
+        } else if (lkey === 'Blockly.Msg.BUTTON_RELATIONS') {
+            $('.buttonRelations').attr('value', value);
         } else if (lkey === 'Blockly.Msg.BUTTON_EMPTY_LIST') {
             $('#clearLog').attr('value', value);
         } else if (lkey === 'Blockly.Msg.MENU_ROBOT_STATE_INFO') {
@@ -1539,6 +1667,7 @@ function init() {
     UTIL.initDataTables();
     initProgramNameTable();
     initConfigurationNameTable();
+    initRelationsTable();
     initializeLanguages();
     COMM.ping(function(result) {
         setRobotState(result);

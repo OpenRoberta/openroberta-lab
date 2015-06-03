@@ -3,7 +3,7 @@
 
 
 // Copyright 2012 Google Inc.  Apache License 2.0
-Blockly.Blocks.colour ={};Blockly.Blocks.colour_picker={init:function(){this.setHelpUrl(Blockly.Msg.COLOUR_PICKER_HELPURL);this.setColour(20);this.appendDummyInput().appendField(new Blockly.FieldColour("#ff0000"),"COLOUR");this.setOutput(!0,"Colour");this.setTooltip(Blockly.Msg.COLOUR_PICKER_TOOLTIP)}};
+Blockly.Blocks.colour={};Blockly.Blocks.colour_picker={init:function(){this.setHelpUrl(Blockly.Msg.COLOUR_PICKER_HELPURL);this.setColour(20);this.appendDummyInput().appendField(new Blockly.FieldColour("#ff0000"),"COLOUR");this.setOutput(!0,"Colour");this.setTooltip(Blockly.Msg.COLOUR_PICKER_TOOLTIP)}};
 Blockly.Blocks.colour_random={init:function(){this.setHelpUrl(Blockly.Msg.COLOUR_RANDOM_HELPURL);this.setColour(20);this.appendDummyInput().appendField(Blockly.Msg.COLOUR_RANDOM_TITLE);this.setOutput(!0,"Colour");this.setTooltip(Blockly.Msg.COLOUR_RANDOM_TOOLTIP)}};
 Blockly.Blocks.colour_rgb={init:function(){this.setHelpUrl(Blockly.Msg.COLOUR_RGB_HELPURL);this.setColour(20);this.appendValueInput("RED").setCheck("Number").setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.COLOUR_RGB_TITLE).appendField(Blockly.Msg.COLOUR_RGB_RED);this.appendValueInput("GREEN").setCheck("Number").setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.COLOUR_RGB_GREEN);this.appendValueInput("BLUE").setCheck("Number").setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.COLOUR_RGB_BLUE);
 this.setOutput(!0,"Colour");this.setTooltip(Blockly.Msg.COLOUR_RGB_TOOLTIP)}};

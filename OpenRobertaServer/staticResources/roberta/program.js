@@ -24,6 +24,19 @@ var PROGRAM = {};
             "program" : xmlText
         }, successFn, "save program '" + programName + "' to server"); 
     };
+    
+    /**
+     * Share program with another user
+     * @memberof PROGRAM
+     */
+    PROGRAM.shareProgram = function(programName, shareWith, right, successFn) {
+        COMM.json("/program", {
+            "cmd" : "shareP",
+            "programName" : programName,
+            "userToShare" : shareWith,
+            "right" : right
+        }, successFn, "share program '" + programName + "' with user '" + shareWith + "' having right '" + right + "'"); 
+    };
 
     /**
      * Delete the program that was selected in program list
@@ -70,4 +83,29 @@ var PROGRAM = {};
              "configurationText" : xmlTextConfig
         }, successFn, "run program '" + programName + "' with configuration '" + configName + "'"); 
     };
+
+    /**
+     * Refresh program relations list
+     * @memberof PROGRAM
+     */
+    PROGRAM.refreshProgramRelationsList = function(programName, successFn) {
+        COMM.json("/program", {
+            "cmd" : "loadPR",
+            "name" : programName
+        }, successFn, "refresh program relations list"); 
+    };
+    
+    /**
+     * Delete program relation
+     * @memberof PROGRAM
+     */
+    PROGRAM.deleteRelation = function(programName, userSharedWithName, successFn) {
+        COMM.json("/program", {
+            "cmd" : "shareP",
+            "programName" : programName,
+            "userToShare" : userSharedWithName,
+            "right" : "NONE"
+        }, successFn, "delete program relation"); 
+    };
+    
 })($);

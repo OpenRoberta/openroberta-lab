@@ -559,15 +559,19 @@ ul.icon li.arrow-right-thick:before {
     margin: 0px 68px;
 }
 
-#progListing table tbody, #confListing table tbody {
+#progListing table tbody, #confListing table tbody, #relationsListing table tbody {
     background-color: #ffffff;
 }
 
-#progListing table tbody tr:hover, #progListing table tbody tr.selected, #confListing table tbody tr:hover, #confListing table tbody tr.selected {
+#progListing table tbody tr:hover, #progListing table tbody tr.selected,
+#confListing table tbody tr:hover, #confListing table tbody tr.selected,
+#relationsListing table tbody tr:hover, #relationsListing table tbody tr.selected {
     background-color: #b7d032;
 }
 
-#progListing table thead, #progListing table thead .DataTables_sort_wrapper, #confListing table thead, #confListing table thead .DataTables_sort_wrapper {
+#progListing table thead, #progListing table thead .DataTables_sort_wrapper,
+#confListing table thead, #confListing table thead .DataTables_sort_wrapper,
+#relationsListing table thead, #relationsListing table thead .DataTables_sort_wrapper {
     text-transform: uppercase;
     background-color: #898989;
     color: #ffffff;
@@ -575,7 +579,7 @@ ul.icon li.arrow-right-thick:before {
     padding-left: 10px;
 }
 
-#progListing table, #confListing table {
+#progListing table, #confListing table, #relationsListing table {
     margin: 0;
     width: 100%;
 }
@@ -588,11 +592,11 @@ ul.icon li.arrow-right-thick:before {
     border-bottom: none !important;
 }
 
-#progListing .programs, #confListing .configurations {
+#progListing .programs, #confListing .configurations, #relationsListing .relations {
     border-bottom: 1px solid #eee;
 }
 
-#progListing>h2, #confListing>h2, #logging>h2 {
+#progListing>h2, #confListing>h2, #relationsListing>h2, #logging>h2 {
     margin-left: 68px;
 }
 
@@ -665,7 +669,7 @@ table.dataTable thead .sorting_desc {
     .dataTables_wrapper {
         margin: 0px 16px;
     }
-    #progListing>h2, #confListing>h2, #logging>h2 {
+    #progListing>h2, #confListing>h2, #relationsListing>h2, #logging>h2 {
         margin-left: 16px;
     }
     .navbar-fixed-bottom {
