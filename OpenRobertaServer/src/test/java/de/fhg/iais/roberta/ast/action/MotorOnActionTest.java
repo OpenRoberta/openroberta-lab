@@ -5,8 +5,8 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
 import de.fhg.iais.roberta.ast.syntax.action.MotorOnAction;
-import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
+import de.fhg.iais.roberta.codegen.lejos.Helper;
 
 public class MotorOnActionTest {
 

@@ -7,10 +7,10 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.expr.StringConst;
+import de.fhg.iais.roberta.codegen.lejos.Helper;
 import de.fhg.iais.roberta.dbc.DbcException;
 
 public class TextFunctions {

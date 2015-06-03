@@ -3,10 +3,10 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickKey;
 import de.fhg.iais.roberta.ast.syntax.sensor.BrickSensor;
 import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
+import de.fhg.iais.roberta.codegen.lejos.Helper;
 
 public class BrickSensorTest {
 

@@ -108,4 +108,17 @@ var PROGRAM = {};
         }, successFn, "delete program relation"); 
     };
     
+    /**
+     * Check program
+     * @memberof PROGRAM
+     */
+    PROGRAM.checkProgramCompatibility = function(programName, configName, xmlTextProgram, xmlTextConfig, successFn) {
+        COMM.json("/program", {
+            "cmd" : "checkP",
+            "name" : programName,
+            "configuration" : configName,
+            "programText" : xmlTextProgram,
+            "configurationText" : xmlTextConfig
+        }, successFn, "check program '" + programName + "' with configuration '" + configName + "'"); 
+    };
 })($);

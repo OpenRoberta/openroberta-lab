@@ -4,10 +4,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.action.ActorPort;
-import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
+import de.fhg.iais.roberta.codegen.lejos.Helper;
 
 public class EncoderSensorTest {
 

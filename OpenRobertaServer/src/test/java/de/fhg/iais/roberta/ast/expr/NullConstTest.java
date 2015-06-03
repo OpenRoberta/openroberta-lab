@@ -4,9 +4,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.ast.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.syntax.expr.Assoc;
 import de.fhg.iais.roberta.ast.syntax.expr.NullConst;
+import de.fhg.iais.roberta.codegen.lejos.Helper;
 
 public class NullConstTest {
 

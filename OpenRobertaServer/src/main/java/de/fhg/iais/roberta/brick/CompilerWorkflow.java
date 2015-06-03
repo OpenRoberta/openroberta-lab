@@ -83,7 +83,7 @@ public class CompilerWorkflow {
 
         String javaCode = AstToLejosJavaVisitor.generate(programName, brickConfiguration, programTransformer.getTree(), true);
 
-        LOG.info("to be compiled:\n{}", javaCode); // only needed for EXTREME debugging
+        // LOG.info("to be compiled:\n{}", javaCode); // only needed for EXTREME debugging
         try {
             storeGeneratedProgram(token, programName, javaCode);
         } catch ( Exception e ) {
@@ -153,10 +153,6 @@ public class CompilerWorkflow {
             project.setProperty("main.name", mainFile);
             project.setProperty("main.package", mainPackage);
 
-            sb.append("crosscompiler.resources.dir: ").append(this.crossCompilerResourcesDir).append("\n");
-            sb.append("user.projects.dir: ").append(this.pathToCrosscompilerBaseDir).append("\n");
-            sb.append("token.dir: ").append(token).append("\n\n");
-
             ProjectHelper projectHelper = ProjectHelper.getProjectHelper();
             projectHelper.parse(project, buildFile);
 
@@ -171,11 +167,12 @@ public class CompilerWorkflow {
 
                 @Override
                 public void targetStarted(BuildEvent event) {
-                    sb.append(event.getTarget().getName()).append("\n");
+                    sb.append("targetStart: ").append(event.getTarget().getName()).append("\n");
                 }
 
                 @Override
                 public void targetFinished(BuildEvent event) {
+                    sb.append("targetEnd:   ").append(event.getTarget().getName()).append("\n");
                 }
 
                 @Override
@@ -196,7 +193,7 @@ public class CompilerWorkflow {
             return null;
         } catch ( Exception e ) {
             if ( sb.length() > 0 ) {
-                LOG.error("build exception. Stacktrace is suppressed. Messages from build script are:\n" + sb.toString());
+                LOG.error("build exception. Messages from the build script are:\n" + sb.toString(), e);
             } else {
                 LOG.error("exception when preparing the build", e);
             }

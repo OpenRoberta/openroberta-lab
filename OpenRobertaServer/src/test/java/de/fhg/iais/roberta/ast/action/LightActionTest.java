@@ -6,7 +6,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.ast.syntax.action.BlinkMode;
 import de.fhg.iais.roberta.ast.syntax.action.BrickLedColor;
 import de.fhg.iais.roberta.ast.syntax.action.LightAction;
-import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
+import de.fhg.iais.roberta.codegen.lejos.Helper;
 
 public class LightActionTest {
 

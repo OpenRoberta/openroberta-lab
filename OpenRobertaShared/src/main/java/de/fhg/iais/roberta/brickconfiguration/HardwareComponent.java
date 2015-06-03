@@ -29,6 +29,14 @@ abstract public class HardwareComponent {
     }
 
     /**
+     * @return type of the hardware component name
+     */
+    public String getComponentTypeName() {
+        Assert.isTrue(this.componentType != null, "Hardware type is null!");
+        return this.componentType.getTypeName();
+    }
+
+    /**
      * @return category in which the component belongs
      */
     public Category getCategory() {

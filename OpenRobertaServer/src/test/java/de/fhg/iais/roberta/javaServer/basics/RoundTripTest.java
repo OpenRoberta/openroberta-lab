@@ -32,9 +32,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
-import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.brick.BrickCommunicator;
 import de.fhg.iais.roberta.brick.CompilerWorkflow;
+import de.fhg.iais.roberta.codegen.lejos.Helper;
 import de.fhg.iais.roberta.javaServer.resources.ClientProgram;
 import de.fhg.iais.roberta.javaServer.resources.ClientUser;
 import de.fhg.iais.roberta.main.ServerStarter;

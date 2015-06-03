@@ -3,9 +3,9 @@ package de.fhg.iais.roberta.ast.action;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.ast.syntax.codeGeneration.Helper;
 import de.fhg.iais.roberta.ast.transformer.JaxbBlocklyProgramTransformer;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
+import de.fhg.iais.roberta.codegen.lejos.Helper;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 
 public class ActionTest {

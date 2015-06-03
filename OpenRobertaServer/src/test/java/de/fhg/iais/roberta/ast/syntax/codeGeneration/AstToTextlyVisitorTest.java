@@ -4,6 +4,8 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import de.fhg.iais.roberta.codegen.lejos.Helper;
+
 public class AstToTextlyVisitorTest {
 
     @Test

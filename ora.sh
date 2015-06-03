@@ -1,51 +1,51 @@
 #!/bin/bash
 
-serveripport='10.0.1.10:1999'
+serverurl='10.0.1.10:1999'
 ev3ipaddr='10.0.1.1'
-oraversion='1.0.1-SNAPSHOT'
+oraversion='1.2.0-SNAPSHOT'
 
 function _helpFn {
   # be careful when changing the help function.
   # All words starting with "--" are extracted by a compgen function and considered COMMANDS!
   echo 'THIS SCRIPT IS MAINLY FOR DEVELOPERS, WHO PULLED THE GIT-REPOSITORY AND WORK WITH THE OpenRoberta SERVER LOCALLY';
-  echo 'you may set properties first, e.g. the version string, and then ececute a command, e.g. export the application';
+  echo 'you may set properties first, e.g. the server url, and then ececute a command, e.g. export the application';
   echo 'IF you source with ". ora-please-source.sh", you get completion from the bash when you type TAB (as usual ...)';
   echo '';
   $0 --java
-  echo 'you may customize the script by defining default values. Values are now:';
+  echo 'you may customize the script by defining default values for properties. Actual values of the properties are:';
   echo 'ev3ipaddr='"$ev3ipaddr";
   echo 'oraversion='"$oraversion";
-  echo 'serveripport='"$serveripport";
+  echo 'serverurl='"$serverurl";
   echo '';
-  echo 'setting properties';
+  echo '1.setting properties';
   echo '';
   echo '  --ev3ipaddr {IP-ADDR}              set the ip addr of the EV3 brick for further commands';
   echo '  --version {VERSION}                set the version to something like d.d.d where d is one or more digits, e.g. 1.2.0'
   echo '                                     only used when an installation is exported. Use with care.'
-  echo '  --serveripport {IP:PORT}           set a default ip address plus port on which the server is running.'
+  echo '  --serverurl {IP:PORT}              set a default url (ip address plus port) to which the server is associated.'
   echo '                                     the brick will ask you to connect to this address.'
   echo '                                     useful if you do not want to type the IP on the brick. This saves a lot of time! :-)'
   echo '';
-  echo 'miscelleneous commands';
+  echo '2.miscelleneous commands';
   echo '';
   echo '  --help                             get help';
-  echo '  --java                             show the actual java version';
+  echo '  --java                             check whether java and javac are on the path and the JDK versin matches. Show the java version';
   echo ''
   echo '  --checkout-db OR --restore-db      restore the state of the database to the state last checked out.'
   echo '                                     this makes sense, if you changed the db during test and dont want to commit your changes'
   echo '  --alive {-q} {EVERY} {TIMEOUT} {MAIL} check after EVERY sec (default: 60) if the server is alive.'
-  echo '                                     the server is assumed to have crashed, if it does not answer within TIMEOUT sec (default: 10).'
-  echo '                                     if the server is assumed to have crashed, send a mail by calling the script MAIL (default: NO)'
+  echo '                                     The server is assumed to have crashed, if it does not answer within TIMEOUT sec (default: 10).'
+  echo '                                     If the server is assumed to have crashed, send a mail by calling the script MAIL (default: NO)'
   echo '                                     -q is the quiet mode: report crashes only'
-  echo '                                     a usefull call, reporting to stdout, is e.g. ora.sh --serveripport localhost:1999 --alive 10 10'
+  echo '                                     a usefull call, reporting to stdout, is e.g. ora.sh --serverurl localhost:1999 --alive 10 10'
   echo '  --sqlclient                        start the hsqldb client to query the database. The openroberta server must NOT run and'
-  echo '                                     and thus access the database. We do not use hsqldb with a db server, but as a standalone.';
+  echo '                                     and thus access the database. Note, that hsqldb is not used in db server node, but standalone.';
   echo '';
-  echo 'commands available after a successful mvn clean install';
+  echo '3.commands available after a successful mvn {clean} install';
   echo '';
   echo '  --start {PROPERTY-FILE}            start of the server, optionally supply a property file';
   echo '                                     the default property file is in OpenRobertaServer/src/main/resources';
-  echo '                                     a java7 installation is required, java+javac must be in the path' ;
+  echo '                                     a java7 installation is required, java+javac MUST be in the path' ;
   echo '  --scpev3menu                       scp the ev3menu.jar to the EV3, uses ev3ipaddr';
   echo '                                     the root password is "", thus hit return if you are asked';
   echo '  --scpev3libs                       scp libraries to the EV3, uses ev3ipaddr';
@@ -62,6 +62,11 @@ function _helpFn {
 }
 
 function _startFn {
+  _checkJava;
+  if [[ "$checkJava" != '' ]]; then
+     echo 'problems detected. The start command is aborted.'
+     exit 4;
+  fi
   main='de.fhg.iais.roberta.main.ServerStarter'
   run='java -cp "target/resources/*" '"${main} ${propfile}"
   echo "executing: $run"
@@ -78,10 +83,10 @@ function _aliveFn {
   fi
   while :; do
     if [[ "$quiet" == 'true' ]]; then
-       curl --max-time $timeout "http://$serveripport/alive" > /dev/null
+       curl --max-time $timeout "http://$serverurl/alive" > /dev/null
        rc=$?
     else 
-       curl --max-time $timeout "http://$serveripport/alive"
+       curl --max-time $timeout "http://$serverurl/alive"
        rc=$?
        if [[ $rc == 0 ]]; then
           echo ''
@@ -97,22 +102,35 @@ function _aliveFn {
   done
 }
 
-function _check64bit7jdk {
+# check, whether java and javac are on the PATH. Check for a 64 bit java 7 version.
+# if everything is ok, set variable checkJava to '', otherwise the variable contains error messages
+function _checkJava {
+  checkJava=''
+  which java > /dev/null
+  if [[ $? != 0 ]]; then
+     checkJava="  java was NOT found on the PATH.\n"
+  fi
+  which javac > /dev/null
+  if [[ $? != 0 ]]; then
+     checkJava="${checkJava}  javac was NOT found on the PATH.\n"
+  fi
   javaversion=`java -version 2>&1`
   case "$javaversion" in
     *64-Bit*) : ;;
-    *)        echo '**********************************************************************************************'
-              echo '* Using the PATH java is resolved to a 32 bit version. The server needs a 64 bit jdk. Exit 4 *'
-              echo '**********************************************************************************************'
-              exit 4 ;;
+    *)        checkJava="${checkJava}  java is resolved to a 32 bit version. The server needs a 64 bit jdk.\n" ;;
   esac
   case "$javaversion" in
     *1\.7\.*) : ;;
-    *)        echo '**********************************************************************************************'
-              echo '* Using the PATH java is not resolved to version 7. The server needs a version 7 jdk. Exit 4 *'
-              echo '**********************************************************************************************'
-              exit 4 ;;
+    *)        checkJava="${checkJava}  java is not resolved to version 7. The server needs a version 7 jdk." ;;
   esac
+  if [[ "$checkJava" != '' ]]; then
+     echo "problems detected:"
+     echo "$checkJava"
+  fi
+  echo
+  echo 'you are using the following java runtime:'
+  echo $javaversion
+  echo
 }
 
 function _exportApplication {
@@ -221,15 +239,7 @@ function _scpev3menuFn {
 }
 
 function _setev3serverinfoFn {
-  echo ${serveripport} | ssh root@${ev3ipaddr} "cat > /home/lejos/programs/serverIP.txt"
-}
-
-function _javaversion {
-  javaversion=`java -version 2>&1`
-  echo
-  echo 'you are using the following java runtime:'
-  echo $javaversion
-  echo
+  echo ${serverurl} | ssh root@${ev3ipaddr} "cat > /home/lejos/programs/serverIP.txt"
 }
 
 function _scpev3libsFn {
@@ -246,18 +256,23 @@ function _scpev3libsFn {
 
 # ---------------------------------------- begin of the script ----------------------------------------------------
 cmd="$1"; shift
-if [[ "$cmd" == '' ]]; then
+if [[ "$cmd" == '' || "$cmd" == '--help' || "$cmd" == '-h' ]]; then
    _helpFn
    exit 0
+elif [[ "$cmd" == '--java' ]]; then
+   _checkJava
+   exit 0
 fi
-#_check64bit7jdk
-case "$cmd" in
---help|-h)          _helpFn;                  cmd="$1"; shift ;;
---java)             _javaversion;             cmd="$1"; shift ;;
---ev3ipaddr|-ev3ip) ev3ipaddr="$1"; shift;    cmd="$1"; shift ;;
---serveripport|-sp) serveripport="$1"; shift; cmd="$1"; shift ;;
---version|-v)       oraversion="$1"; shift;   cmd="$1"; shift ;;
-esac
+
+continueReadingProperties='true'
+while [[ "$continueReadingProperties" == 'true' ]]; do
+   case "$cmd" in
+      --ev3ipaddr|-ev3ip) ev3ipaddr="$1"; shift;    cmd="$1"; shift ;;
+      --serverurl|-sp)    serverurl="$1"; shift;    cmd="$1"; shift ;;
+      --version|-v)       oraversion="$1"; shift;   cmd="$1"; shift ;;
+      *)                  continueReadingProperties='false' ;;
+   esac
+done
 if [[ "$cmd" == '' ]]; then
    exit 0
 fi
