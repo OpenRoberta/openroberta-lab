@@ -2912,7 +2912,99 @@ public class GraphicStartup implements ORAmenu {
 
     }
 
+    private String checkExistingWifi() {
+        String ssid = null;
+        String[] tmp = {
+            null, null
+        };
+        BufferedReader br = null;
+        File wpaSup = new File("/home/root/lejos/bin/utils/wpa_supplicant.conf");
+        try {
+            br = new BufferedReader(new FileReader(wpaSup));
+            String line;
+            while ( (line = br.readLine()) != null ) {
+                int i = line.indexOf("ssid=");
+                if ( i >= 0 ) {
+                    tmp = line.split("=");
+                    ssid = tmp[1];
+                }
+            }
+            br.close();
+            ssid = ssid.replaceAll("\"", "");
+            return ssid;
+        } catch ( IOException e ) {
+            return null;
+        }
+
+    }
+
+    private int startWlanInterface() {
+        try {
+            Process p = Runtime.getRuntime().exec("sh startwlan0.sh", null, new File("/home/roberta"));
+            return p.waitFor();
+        } catch ( IOException | InterruptedException e ) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    private void restartMenu() {
+        try {
+            Process p = Runtime.getRuntime().exec("sh restartmenu.sh", null, new File("/home/roberta"));
+            p.waitFor();
+        } catch ( IOException | InterruptedException e ) {
+            e.printStackTrace();
+        }
+    }
+
     private void wifiMenu() {
+        newScreen("WLAN");
+        lcd.drawString("Searching for", 0, 1);
+        lcd.drawString("USB WLAN adapter...", 0, 2);
+        lcd.drawString("Please wait...", 0, 4);
+        while ( startWlanInterface() != 0 ) { // returns 1 if no dongle plugged in
+            newScreen("WLAN");
+            lcd.drawString("Please plug in", 0, 1);
+            lcd.drawString("USB WLAN adapter...", 0, 2);
+            lcd.drawString("(ESCAPE to exit)", 0, 7);
+            lcd.drawString("                 ", 0, 3);
+            for ( int i = 0; i < 18; i++ ) {
+                lcd.drawString(".", i, 3);
+                int id = Button.readButtons();
+                if ( id == Button.ID_ESCAPE ) {
+                    lcd.drawString("Interrupted...!    ", 0, 7);
+                    Delay.msDelay(1000);
+                    return;
+                }
+                Delay.msDelay(200);
+            }
+        }
+
+        String ssid = checkExistingWifi();
+        if ( ssid != null ) {
+            GraphicMenu menu = new GraphicMenu(new String[] {
+                ssid, "New WLAN"
+            }, new String[] {
+                ICWifi, ICWifi
+            }, 3);
+            int selected = 0;
+            do {
+                newScreen("WLAN");
+                lcd.drawString("Choose a WLAN:", 0, 1);
+                selected = getSelection(menu, selected);
+                switch ( selected ) {
+                    case 0:
+                        startWlan();
+                        return;
+                    case 1:
+                        selected = -1;
+                        break;
+                    case -1:
+                        return;
+                }
+            } while ( selected >= 0 );
+        }
+
         GraphicListMenu menu = new GraphicListMenu(null, null);
         System.out.println("Finding access points ...");
         LocalWifiDevice wifi = Wifi.getLocalDevice("wlan0");

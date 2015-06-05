@@ -1,5 +1,9 @@
 package lejos.ev3.startup;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 /**
  * No Singleton Pattern but do not use more than one
  *
@@ -21,7 +25,43 @@ public class ORAhandler {
      * functionality.
      */
     public ORAhandler() {
-        // default
+        createRestartScript();
+        createWifiStartupScript();
+    }
+
+    private void createRestartScript() {
+        File file = new File("/home/roberta/restartmenu.sh");
+        if ( !file.exists() ) {
+            try {
+                FileWriter fw = new FileWriter(file);
+                fw.write("#!/bin/sh\n");
+                fw.write("\n");
+                fw.write("killall java\n");
+                fw.write("cd /home/root/lejos/bin/utils\n");
+
+                fw.write("jrun -jar EV3Menu.jar $(cat /etc/hostname) $(cat /home/root/lejos/version) &\n");
+                fw.write("\n");
+                fw.close();
+            } catch ( IOException e ) {
+                System.out.println("Error: cannot write restart script!");
+            }
+        }
+    }
+
+    private void createWifiStartupScript() {
+        File file = new File("/home/roberta/startwlan0.sh");
+        if ( !file.exists() ) {
+            try {
+                FileWriter fw = new FileWriter(file);
+                fw.write("#!/bin/sh\n");
+                fw.write("\n");
+                fw.write("ifconfig wlan0 up\n");
+                fw.write("\n");
+                fw.close();
+            } catch ( IOException e ) {
+                System.out.println("Error: cannot write wlan0 script!");
+            }
+        }
     }
 
     private void resetState() {
