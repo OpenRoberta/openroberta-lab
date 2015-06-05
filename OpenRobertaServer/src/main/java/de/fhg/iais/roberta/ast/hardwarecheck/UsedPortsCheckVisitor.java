@@ -115,7 +115,7 @@ public class UsedPortsCheckVisitor extends CheckVisitor {
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
         if ( this.brickConfiguration.getActorOnPort(encoderSensor.getMotor()) == null ) {
-            encoderSensor.addInfo(NepoInfo.error("a"));
+            encoderSensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_MISSING"));
             this.errorCount++;
         }
         return null;
@@ -147,18 +147,18 @@ public class UsedPortsCheckVisitor extends CheckVisitor {
 
     private void checkMotorPort(MoveAction<Void> action) {
         if ( this.brickConfiguration.getActorOnPort(action.getPort()) == null ) {
-            action.addInfo(NepoInfo.error("a"));
+            action.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_MISSING"));
             this.errorCount++;
         }
     }
 
     private void checkLeftRightMotorPort(Phrase<Void> driveAction) {
         if ( this.brickConfiguration.getLeftMotorPort() == null ) {
-            driveAction.addInfo(NepoInfo.error("a"));
+            driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_LEFT_MISSING"));
             this.errorCount++;
         }
         if ( this.brickConfiguration.getRightMotorPort() == null ) {
-            driveAction.addInfo(NepoInfo.error("a"));
+            driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING"));
             this.errorCount++;
         }
     }
@@ -166,37 +166,37 @@ public class UsedPortsCheckVisitor extends CheckVisitor {
     private void checkSensorPort(BaseSensor<Void> sensor) {
         EV3Sensor usedSensor = this.brickConfiguration.getSensorOnPort(sensor.getPort());
         if ( usedSensor == null ) {
-            sensor.addInfo(NepoInfo.error("a"));
+            sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));
             this.errorCount++;
         } else {
             switch ( sensor.getKind() ) {
                 case COLOR_SENSING:
                     if ( usedSensor.getComponentTypeName() != EV3Sensors.EV3_COLOR_SENSOR.getTypeName() ) {
-                        sensor.addInfo(NepoInfo.error("a"));
+                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;
                 case TOUCH_SENSING:
                     if ( usedSensor.getComponentTypeName() != EV3Sensors.EV3_TOUCH_SENSOR.getTypeName() ) {
-                        sensor.addInfo(NepoInfo.error("a"));
+                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;
                 case ULTRASONIC_SENSING:
                     if ( usedSensor.getComponentTypeName() != EV3Sensors.EV3_ULTRASONIC_SENSOR.getTypeName() ) {
-                        sensor.addInfo(NepoInfo.error("a"));
+                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;
                 case INFRARED_SENSING:
                     if ( usedSensor.getComponentTypeName() != EV3Sensors.EV3_IR_SENSOR.getTypeName() ) {
-                        sensor.addInfo(NepoInfo.error("a"));
+                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;
                 case GYRO_SENSING:
                     if ( usedSensor.getComponentTypeName() != EV3Sensors.EV3_GYRO_SENSOR.getTypeName() ) {
-                        sensor.addInfo(NepoInfo.error("a"));
+                        sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;

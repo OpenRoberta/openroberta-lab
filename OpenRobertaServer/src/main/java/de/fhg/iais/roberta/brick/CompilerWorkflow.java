@@ -83,7 +83,7 @@ public class CompilerWorkflow {
 
         String javaCode = AstToLejosJavaVisitor.generate(programName, brickConfiguration, programTransformer.getTree(), true);
 
-        // LOG.info("to be compiled:\n{}", javaCode); // only needed for EXTREME debugging
+        LOG.info("to be compiled:\n{}", javaCode); // only needed for EXTREME debugging
         try {
             storeGeneratedProgram(token, programName, javaCode);
         } catch ( Exception e ) {

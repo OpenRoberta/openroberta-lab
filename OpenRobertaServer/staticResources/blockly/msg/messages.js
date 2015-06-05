@@ -1521,6 +1521,13 @@ Blockly.Msg.ORA_USER_TO_SHARE_DOES_NOT_EXIST = 'User to share with does not exis
 Blockly.Msg.ORA_USER_TO_SHARE_SAME_AS_LOGIN_USER = 'You cannot share any programs with yourself.';
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = 'Missing required fields.';
 Blockly.Msg.ORA_SERVER_ERROR = 'Server-Error';
+
+Blockly.Msg.CONFIGURATION_ERROR_SENSOR_MISSING = 'This sensor is not set to the port!';
+Blockly.Msg.CONFIGURATION_ERROR_SENSOR_WRONG = 'Connected wrong sesnor to the given port!';
+Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_MISSING = 'Left motor missing in the configuration!';
+Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING = 'Right motor missing in the configuration!';
+Blockly.Msg.CONFIGURATION_ERROR_MOTOR_MISSING = 'Motor is missing on the given port!';
+
 Blockly.Msg.DATATABLE_PROGRAM_NAME = 'Program name';
 Blockly.Msg.DATATABLE_CREATED_BY = 'Creator';
 Blockly.Msg.DATATABLE_SHARED = 'Shared';

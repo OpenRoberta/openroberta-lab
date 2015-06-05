@@ -251,6 +251,8 @@ public abstract class CheckVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
+        showPictureAction.getX().visit(this);
+        showPictureAction.getY().visit(this);
         return null;
     }
 

@@ -130,7 +130,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        AstJaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        AstJaxbTransformerHelper.setBasicProperties(this.sensor, jaxbDestination);
 
         Mutation mutation = new Mutation();
         mutation.setInput(getSensorType().name());

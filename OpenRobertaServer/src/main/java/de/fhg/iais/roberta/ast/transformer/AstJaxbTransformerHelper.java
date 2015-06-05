@@ -266,9 +266,9 @@ public final class AstJaxbTransformerHelper {
         for ( NepoInfo info : astSource.getInfos().getInfos() ) {
             if ( info.getSeverity() == Severity.WARNING ) {
                 warning.setValue(info.getMessage());
-                warning.setPinned(true);
-                warning.setH("50");
-                warning.setW("50");
+                warning.setPinned(false);
+                warning.setH("undefined");
+                warning.setW("undefined");
                 block.setWarning(warning);
             }
         }
@@ -279,9 +279,9 @@ public final class AstJaxbTransformerHelper {
         for ( NepoInfo info : astSource.getInfos().getInfos() ) {
             if ( info.getSeverity() == Severity.ERROR ) {
                 error.setValue(info.getMessage());
-                error.setPinned(true);
-                error.setH("50");
-                error.setW("50");
+                error.setPinned(false);
+                error.setH("undefined");
+                error.setW("undefined");
                 block.setError(error);
             }
         }
