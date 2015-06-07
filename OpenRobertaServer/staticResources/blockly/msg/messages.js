@@ -1417,6 +1417,7 @@ Blockly.Msg.TAB_CONFIGURATION = 'Robot configuration';
 Blockly.Msg.TAB_SIMULATION = 'Simulation';
 Blockly.Msg.POPUP_ABOUT_TEXT = 'The Open Roberta Lab is a cloud-based integrated programming environment that enables children and adolescents to program easily Lego Mindstorms EV3 robots. This platform is completely open source so taking part is desirable! Both the software and the open source developer tools are available via Fraunhofer servers.';
 Blockly.Msg.POPUP_ABOUT_TEXT_DEV = 'The Open Roberta Lab is an open-source programming platform developed by Fraunhofer IAIS within the initiative <a href="http://www.roberta-home.de/">»Roberta – Learning with Robots«</a>';
+Blockly.Msg.POPUP_ABOUT_TEXT_GOOG = 'Open Roberta was initiated in collaboration with Google Germany to reduce the hurdles for students, teachers and schools programming educational robots. Open Roberta is financed by Google.org (2014 - 2015) with 1Mio Euro.</a>';
 Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE = 'Three things you should know before starting:<ul class="icon"><li class="document-text">Here you can program EV3 robots </li><li class="Roberta">Your robot needs a special system <a target="_blank" href="https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd">check!</a></li><li class="wi-fi">Your robot needs wi-fi or a USB program <a target="_blank" href="https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd">check!</a></li><li class="arrow-right-thick">If you are not sure, please have a look at the help pages ... <a target="_blank" href="https://mp-devel.iais.fraunhofer.de/wiki/x/A4AM">more</a></li></ul><br /><p>What is new?</p>Version beta 1.2.0<ul class="NonIcon" style="font-size:small"><li>Now available in Finnish!</li><li>Blocks to send and receive messages</li><li>Connect your robot via USB</li><li>Rotate motors backwards with negative speed</li><li>Fixed many more bugs</li></ul></br>'
 Blockly.Msg.POPUP_ABOUT_JOIN = 'I want to help';
 Blockly.Msg.POPUP_USERNAME = 'Username';
@@ -1458,6 +1459,7 @@ Blockly.Msg.MESSAGE_PASSWORD_ERROR = 'Something went wrong while you filled in t
 Blockly.Msg.MESSAGE_NOT_AVAILABLE = 'Not available.';
 Blockly.Msg.MESSAGE_INVALID_NAME = 'Please fill in a correct name. A correct name begins with a letter and can only content letters or numbers.';
 Blockly.Msg.MESSAGE_EDIT_START = 'Your program $ runs soon on the robot!';
+Blockly.Msg.MESSAGE_EDIT_CHECK = 'Your program is now checked!';
 Blockly.Msg.MESSAGE_EDIT_SAVE_PROGRAM = 'Your program has been saved';
 Blockly.Msg.MESSAGE_EDIT_SAVE_PROGRAM_AS = 'Your program has been saved as "$"';
 Blockly.Msg.MESSAGE_EDIT_SAVE_CONFIGURATION = 'Your configuration has been saved';

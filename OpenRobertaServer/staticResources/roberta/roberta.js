@@ -199,7 +199,7 @@ function injectBlockly(toolbox, opt_programBlocks) {
             toolbox : toolbox.data,
             trashcan : true,
             save : true,
-            //check : true,
+            check : true,
             start : true
         });
         initProgramEnvironment(opt_programBlocks);
@@ -310,7 +310,7 @@ function saveToServer() {
         userState.programSaved = true;
         LOG.info('save program ' + userState.program + ' login: ' + userState.id);
         $('.modal').modal('hide'); // close all opened popups
-        PROGRAM.saveProgramToServer( userState.program, userState.programShared, xmlText, function(result) {
+        PROGRAM.saveProgramToServer(userState.program, userState.programShared, xmlText, function(result) {
             if (result.rc === 'ok') {
                 userState.programModified = false;
             }
@@ -401,12 +401,12 @@ function checkProgram() {
     var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
     var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
     var xmlTextConfiguration = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
-    displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
+    displayMessage("MESSAGE_EDIT_CHECK", "TOAST", userState.program);
     PROGRAM.checkProgramCompatibility(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
         //setRobotState(result);
         if (result.rc == "ok") {
             var xml = Blockly.Xml.textToDom(result.data);
-            Blockly.mainWorkspace.clear();            
+            Blockly.mainWorkspace.clear();
             Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
         }
     });
@@ -456,7 +456,7 @@ function loadFromListing() {
         if (right === 'WRITE') {
             userState.programShared = true;
         } else {
-            userState.programShared = false;            
+            userState.programShared = false;
         }
         LOG.info('loadFromList ' + programName + ' signed in: ' + userState.id);
         PROGRAM.loadProgramFromListing(programName, function(result) {
@@ -507,10 +507,10 @@ function shareProgramsFromListing() {
         var right = $('#programShareRight input:checked').val();
         var $programRow = $('#programNameTable .selected');
         var cnt = 0;
-        for (var i=0; i < $programRow.length; i++) {
+        for (var i = 0; i < $programRow.length; i++) {
             var programName = $programRow[i].children[0].textContent;
             LOG.info("share program " + programName + " with '" + userToShareWith + "'");
-            PROGRAM.shareProgram( programName, userToShareWith, right, function(result) {
+            PROGRAM.shareProgram(programName, userToShareWith, right, function(result) {
                 if (result.rc === 'ok') {
                     cnt++;
                     if (cnt === $programRow.length) {
@@ -569,11 +569,11 @@ function deleteConfigurationFromListing() {
  */
 function deleteRelations() {
     var $relationRow = $('#relationsTable .selected');
-    for (var i=0; i < $relationRow.length; i++) {
+    for (var i = 0; i < $relationRow.length; i++) {
         var programName = $relationRow[i].children[0].textContent;
         var userSharedWithName = $relationRow[i].children[2].textContent;
         LOG.info('deleteRelation of program: ' + programName + ', user: ' + userSharedWithName);
-        PROGRAM.deleteRelation( programName, userSharedWithName, function(result) {
+        PROGRAM.deleteRelation(programName, userSharedWithName, function(result) {
             if (result.rc === 'ok') {
                 response(result);
                 setRobotState(result);
@@ -626,10 +626,10 @@ function showPrograms(result) {
     if (result.rc === 'ok') {
         var $table = $('#programNameTable').dataTable();
         $table.fnClearTable();
-        for (var i=0; i < result.programNames.length; i++) {
+        for (var i = 0; i < result.programNames.length; i++) {
             if (result.programNames[i][2] === true) {
-                result.programNames[i][2] = 'X';                                        
-            } else if  (result.programNames[i][2] === false) {
+                result.programNames[i][2] = 'X';
+            } else if (result.programNames[i][2] === false) {
                 result.programNames[i][2] = '-';
             }
         }
@@ -672,15 +672,15 @@ function showRelations(result) {
         $table.fnClearTable();
         if (result.relations.length > 0) {
             $table.fnAddData(result.relations);
-            
+
             // This is a WORKAROUND for a known bug in Jquery-datatables:
             // If scrollY is set the column headers have the wrong width,
             // because the browser is not able to calculate them correctly. So
             // after a while (in this case 200 ms) the columns have to be readjusted.
-            setTimeout( function() {
+            setTimeout(function() {
                 $table.fnAdjustColumnSizing();
-            }, 200);            
-            
+            }, 200);
+
             $("#show-relations").modal('show');
         }
     }
@@ -991,7 +991,7 @@ function initHeadNavigation() {
         } else if (domId === 'menuGeneral') { // Submenu 'Help'
             window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/BIAM");
         } else if (domId === 'menuEV3conf') { // Submenu 'Help'
-            window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/BIAM");
+            window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd");
         } else if (domId === 'menuProgramming') { // Submenu 'Help'
             window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/");
         } else if (domId === 'menuFaq') { // Submenu 'Help'
@@ -1159,7 +1159,6 @@ function initPopups() {
         shareProgramsFromListing();
     }, 'share program');
 
-
     $('#deleteRelation').onWrap('click', function() {
         deleteRelations();
     }, 'delete Relation');
@@ -1285,7 +1284,7 @@ function initTabs() {
             }
         }
     }, 'share program');
-    
+
     // show relations of program
     $('#relationsFromListing').onWrap('click', function() {
         var $programRow = $('#programNameTable .selected');

@@ -48,12 +48,16 @@ html, body {
     background: url(../css/img/iais_logo.gif) no-repeat;
 }
 
+.googleLogo {
+    background: url(../css/img/google_logo_41.png) no-repeat;
+}
+
 .imgFloatLeft {
     float: left;
     width: 210px;
-    height: 50px;
+    height: 65px;
     padding: 0;
-    margin: 4px 16px 16px 0;
+    margin: 4px 16px 0px 0;
     width: 210px;
 }
 

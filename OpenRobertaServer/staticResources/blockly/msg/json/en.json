@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-06-01 08:34:01.475000",
+		"lastupdated": "2015-06-06 23:09:32.955000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -680,6 +680,7 @@
 	"TAB_SIMULATION": "Simulation",
 	"POPUP_ABOUT_TEXT": "The Open Roberta Lab is a cloud-based integrated programming environment that enables children and adolescents to program easily Lego Mindstorms EV3 robots. This platform is completely open source so taking part is desirable! Both the software and the open source developer tools are available via Fraunhofer servers.",
 	"POPUP_ABOUT_TEXT_DEV": "The Open Roberta Lab is an open-source programming platform developed by Fraunhofer IAIS within the initiative <a href='http://www.roberta-home.de/'>»Roberta – Learning with Robots«</a>",
+	"POPUP_ABOUT_TEXT_GOOG": "Open Roberta was initiated in collaboration with Google Germany to reduce the hurdles for students, teachers and schools programming educational robots. Open Roberta is financed by Google.org (2014 - 2015) with 1Mio Euro.</a>",
 	"POPUP_TEXT_STARTUP_MESSAGE": "Three things you should know before starting:<ul class='icon'><li class='document-text'>Here you can program EV3 robots </li><li class='Roberta'>Your robot needs a special system <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>check!</a></li><li class='wi-fi'>Your robot needs wi-fi or a USB program <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>check!</a></li><li class='arrow-right-thick'>If you are not sure, please have a look at the help pages ... <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/A4AM'>more</a></li></ul><br /><p>What is new?</p>Version beta 1.2.0<ul class='NonIcon' style='font-size:small'><li>Now available in Finnish!</li><li>Blocks to send and receive messages</li><li>Connect your robot via USB</li><li>Rotate motors backwards with negative speed</li><li>Fixed many more bugs</li></ul></br>",
 	"POPUP_ABOUT_JOIN": "I want to help",
 	"POPUP_USERNAME": "Username",
@@ -721,6 +722,7 @@
 	"MESSAGE_NOT_AVAILABLE": "Not available.",
 	"MESSAGE_INVALID_NAME": "Please fill in a correct name. A correct name begins with a letter and can only content letters or numbers.",
 	"MESSAGE_EDIT_START": "Your program $ runs soon on the robot!",
+	"MESSAGE_EDIT_CHECK": "Your program is now checked!",
 	"MESSAGE_EDIT_SAVE_PROGRAM": "Your program has been saved",
 	"MESSAGE_EDIT_SAVE_PROGRAM_AS": "Your program has been saved as '$'",
 	"MESSAGE_EDIT_SAVE_CONFIGURATION": "Your configuration has been saved",
@@ -784,6 +786,11 @@
 	"ORA_USER_TO_SHARE_SAME_AS_LOGIN_USER": "You cannot share any programs with yourself.",
 	"ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS": "Missing required fields.",
 	"ORA_SERVER_ERROR": "Server-Error",
+	"CONFIGURATION_ERROR_SENSOR_MISSING": "This sensor is not set to the port!",
+	"CONFIGURATION_ERROR_SENSOR_WRONG": "Connected wrong sesnor to the given port!",
+	"CONFIGURATION_ERROR_MOTOR_LEFT_MISSING": "Left motor missing in the configuration!",
+	"CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING": "Right motor missing in the configuration!",
+	"CONFIGURATION_ERROR_MOTOR_MISSING": "Motor is missing on the given port!",
 	"DATATABLE_PROGRAM_NAME": "Program name",
 	"DATATABLE_CREATED_BY": "Creator",
 	"DATATABLE_SHARED": "Shared",

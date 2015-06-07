@@ -265,7 +265,7 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
         this.resizeGroup_ = null;
     }
     this.bubbleGroup_.appendChild(content);
-    this.bubbleGroup_.appendChild(this.resizeGroup_);
+   // this.bubbleGroup_.appendChild(this.resizeGroup_);
     return this.bubbleGroup_;
 };
 

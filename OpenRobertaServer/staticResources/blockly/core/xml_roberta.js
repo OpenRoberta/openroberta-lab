@@ -1,6 +1,5 @@
 /**
- * @fileoverview XML reader and writer modified for the purpose of OpenRoberta
- *               project.
+ * @fileoverview XML reader and writer modified for the purpose of OpenRoberta project.
  * @author kcvejoski@iais.fraunhofer.de (Kostadin Cvejoski)
  */
 
@@ -103,23 +102,6 @@ Blockly.Xml.blockToDom_ = function(block, statement_list) {
         element.appendChild(commentElement);
     }
 
-    if (block.warning) {
-        var warningElement = goog.dom.createDom('warning', null, block.warning.getText());
-        warningElement.setAttribute('pinned', block.warning.isVisible());
-        var hw = block.warning.getBubbleSize();
-        warningElement.setAttribute('h', hw.height);
-        warningElement.setAttribute('w', hw.width);
-        element.appendChild(warningElement);
-    }
-
-    if (block.error) {
-        var errorElement = goog.dom.createDom('error', null, block.error.getText());
-        errorElement.setAttribute('pinned', block.error.isVisible());
-        var hw = block.error.getBubbleSize();
-        errorElement.setAttribute('h', hw.height);
-        errorElement.setAttribute('w', hw.width);
-        element.appendChild(errorElement);
-    }
     var hasValues = false;
     for (var i = 0, input; input = block.inputList[i]; i++) {
         var container;
@@ -227,7 +209,7 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
     }
     // make sure the start block is in the first column, to avoid errors while instantiating blocks with global variables before the variable declaration
     for (var i = 0; i < xmlBlockList.length; i++) {
-        if (xmlBlockList[i][0].getAttribute('type') == 'robControls_start'){
+        if (xmlBlockList[i][0].getAttribute('type') == 'robControls_start') {
             xmlBlockList[i] = xmlBlockList.splice(0, 1, xmlBlockList[i])[0];
             xmlBlockPos[i] = xmlBlockPos.splice(0, 1, xmlBlockPos[i])[0];
             break;
@@ -243,16 +225,14 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
 };
 
 /**
- * Decode an XML block tag and create a block (and possibly sub blocks) on the
- * workspace.
+ * Decode an XML block tag and create a block (and possibly sub blocks) on the workspace.
  * 
  * @param {!Blockly.Workspace}
  *            workspace The workspace.
  * @param {!Element}
  *            xmlBlockList list of XML block elements.
  * @param {boolean=}
- *            opt_reuseBlock Optional arg indicating whether to reinitialize an
- *            existing block.
+ *            opt_reuseBlock Optional arg indicating whether to reinitialize an existing block.
  * @return {!Blockly.Block} The root block created.
  * @private
  */
@@ -362,8 +342,7 @@ Blockly.Xml.domToBlock = function(workspace, xmlBlockList, opt_reuseBlock) {
 };
 
 /**
- * Decode an XML block tag and create a block (and possibly sub blocks) on the
- * workspace. Extracted from the original method and modified so can from
+ * Decode an XML block tag and create a block (and possibly sub blocks) on the workspace. Extracted from the original method and modified so can from
  * <repetition> element to generate child blocks
  * 
  * @param {!Blockly.Workspace}
@@ -373,8 +352,7 @@ Blockly.Xml.domToBlock = function(workspace, xmlBlockList, opt_reuseBlock) {
  * @param {!Element}
  *            xmlBlock XML block element.
  * @param {boolean=}
- *            opt_reuseBlock Optional arg indicating whether to reinitialize an
- *            existing block.
+ *            opt_reuseBlock Optional arg indicating whether to reinitialize an existing block.
  * @param {!Element}
  *            blockChild XML block element.
  */
@@ -405,31 +383,31 @@ Blockly.Xml.childToBlock = function(workspace, block, xmlChild, opt_reuseBlock, 
         }
         var bubbleW = parseInt(xmlChild.getAttribute('w'), 10);
         var bubbleH = parseInt(xmlChild.getAttribute('h'), 10);
-        if (!isNaN(bubbleW) && !isNaN(bubbleH)) {
+        if (!isNaN(bubbleW) && !isNaN(bubbleH) && block.comment && block.comment.isVisible()) {
             block.comment.setBubbleSize(bubbleW, bubbleH);
         }
         break;
     case 'warning':
-        block.setWarningText(xmlChild.textContent);
+        block.setWarningText(Blockly.Msg[xmlChild.textContent]);
         var visible = xmlChild.getAttribute('pinned');
         if (visible) {
             block.warning.setVisible(visible == 'true');
         }
         var bubbleW = parseInt(xmlChild.getAttribute('w'), 10);
         var bubbleH = parseInt(xmlChild.getAttribute('h'), 10);
-        if (!isNaN(bubbleW) && !isNaN(bubbleH)) {
+        if (!isNaN(bubbleW) && !isNaN(bubbleH) && block.warning && block.warning.isVisible()) {
             block.warning.bubble_.setBubbleSize(bubbleW, bubbleH);
         }
         break;
     case 'error':
-        block.setErrorText(xmlChild.textContent);
+        block.setErrorText(Blockly.Msg[xmlChild.textContent]);
         var visible = xmlChild.getAttribute('pinned');
         if (visible) {
             block.error.setVisible(visible == 'true');
         }
         var bubbleW = parseInt(xmlChild.getAttribute('w'), 10);
         var bubbleH = parseInt(xmlChild.getAttribute('h'), 10);
-        if (!isNaN(bubbleW) && !isNaN(bubbleH)) {
+        if (!isNaN(bubbleW) && !isNaN(bubbleH) && block.error && block.error.isVisible()) {
             block.error.bubble_.setBubbleSize(bubbleW, bubbleH);
         }
         break;
@@ -460,8 +438,7 @@ Blockly.Xml.childToBlock = function(workspace, block, xmlChild, opt_reuseBlock, 
 };
 
 /**
- * Converts plain text into a DOM structure. Throws an error if XML doesn't
- * parse.
+ * Converts plain text into a DOM structure. Throws an error if XML doesn't parse.
  * 
  * @param {string}
  *            text Text representation.
@@ -524,8 +501,7 @@ Blockly.Xml.deleteNext = function(xmlBlock) {
 };
 
 /**
- * Converts a DOM structure into plain text. Currently the text format is fairly
- * ugly: all one line with no whitespace.
+ * Converts a DOM structure into plain text. Currently the text format is fairly ugly: all one line with no whitespace.
  * 
  * @param {!Element}
  *            dom A tree of XML elements.
