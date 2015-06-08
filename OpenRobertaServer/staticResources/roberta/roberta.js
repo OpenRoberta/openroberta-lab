@@ -135,9 +135,9 @@ function updateFirmware() {
  * Show user info
  */
 function showUserInfo() {
+    $("#loggedIn").text(userState.name);
     if (userState.id != -1) {
         $("#popup_username").text(Blockly.Msg["POPUP_USERNAME"] + ": ");
-        $("#loggedIn").text(userState.name);
     } else {
         $("#popup_username").text(Blockly.Msg["POPUP_USERNAME_LOGOFF"]);
     }
