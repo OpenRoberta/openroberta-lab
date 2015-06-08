@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-06-06 23:09:32.955000",
+		"lastupdated": "2015-06-08 11:52:16.289000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -717,6 +717,7 @@
 	"BUTTON_DO_DELETE": "Delete",
 	"BUTTON_DO_SHARE": "Share",
 	"BUTTON_RELATIONS": "Relations",
+	"BUTTON_REFRESH": "Refresh",
 	"BUTTON_EMPTY_LIST": "Empty list",
 	"MESSAGE_PASSWORD_ERROR": "Something went wrong while you filled in the two passwords.",
 	"MESSAGE_NOT_AVAILABLE": "Not available.",

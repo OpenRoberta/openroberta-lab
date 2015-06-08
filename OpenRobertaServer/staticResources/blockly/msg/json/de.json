@@ -688,6 +688,7 @@
     "BUTTON_DO_DELETE" : "Löschen",
     "BUTTON_DO_SHARE" : "Teilen",
     "BUTTON_RELATIONS" : "Relationen",
+    "BUTTON_REFRESH" : "Aktualisieren",
     "BUTTON_EMPTY_LIST" : "Liste leeren",
 	"MESSAGE_PASSWORD_ERROR" : "Dei beiden Passwörter stimmen nicht überein, am besten gibst du beide noch einmal neu ein!",
     "MESSAGE_NOT_AVAILABLE" : "Diese Funktion gibt es leider noch nicht.",

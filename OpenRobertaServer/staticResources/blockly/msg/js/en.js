@@ -36,6 +36,7 @@ Blockly.Msg.BUTTON_DO_SHARE = "Share";
 Blockly.Msg.BUTTON_EMPTY_LIST = "Empty list";
 Blockly.Msg.BUTTON_FINISH = "Finish";
 Blockly.Msg.BUTTON_LOAD = "Load";
+Blockly.Msg.BUTTON_REFRESH = "Refresh";
 Blockly.Msg.BUTTON_RELATIONS = "Relations";
 Blockly.Msg.BUTTON_STOP = "Stop";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Change value:";

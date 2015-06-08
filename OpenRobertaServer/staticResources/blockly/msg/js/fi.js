@@ -36,6 +36,7 @@ Blockly.Msg.BUTTON_DO_SHARE = "Jaa";
 Blockly.Msg.BUTTON_EMPTY_LIST = "Tyhjä";
 Blockly.Msg.BUTTON_FINISH = "Finish";
 Blockly.Msg.BUTTON_LOAD = "Avaa";
+Blockly.Msg.BUTTON_REFRESH = "Refresh";  // untranslated
 Blockly.Msg.BUTTON_RELATIONS = "Relations";  // untranslated
 Blockly.Msg.BUTTON_STOP = "Pysäytä";
 Blockly.Msg.CHANGE_VALUE_TITLE = "Muuta arvoa:";

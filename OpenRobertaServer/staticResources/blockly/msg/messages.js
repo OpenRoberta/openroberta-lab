@@ -1454,6 +1454,7 @@ Blockly.Msg.BUTTON_LOAD = 'Load';
 Blockly.Msg.BUTTON_DO_DELETE = 'Delete';
 Blockly.Msg.BUTTON_DO_SHARE = 'Share';
 Blockly.Msg.BUTTON_RELATIONS = 'Relations';
+Blockly.Msg.BUTTON_REFRESH = 'Refresh';
 Blockly.Msg.BUTTON_EMPTY_LIST = 'Empty list';
 Blockly.Msg.MESSAGE_PASSWORD_ERROR = 'Something went wrong while you filled in the two passwords.';
 Blockly.Msg.MESSAGE_NOT_AVAILABLE = 'Not available.';

@@ -1315,14 +1315,21 @@ function initTabs() {
         }
     }, 'show relations of program');
 
+    // Refresh list of programs
+    $('#refreshListing').onWrap('click', function() {
+        PROGRAM.refreshList(showPrograms);
+    }, 'refresh list of programs');
+
     $('#backConfiguration').onWrap('click', function() {
         activateProgConfigMenu();
         switchToBrickly();
     });
+    
     $('#backProgram').onWrap('click', function() {
         activateProgConfigMenu();
         switchToBlockly();
     });
+    
     $('#backLogging').onWrap('click', function() {
         activateProgConfigMenu();
         if (bricklyActive) {
@@ -1454,6 +1461,8 @@ function translate(jsdata) {
             $('#share-program h3').text(value);
         } else if (lkey === 'Blockly.Msg.BUTTON_RELATIONS') {
             $('.buttonRelations').attr('value', value);
+        } else if (lkey === 'Blockly.Msg.BUTTON_REFRESH') {
+            $('.buttonRefresh').attr('value', value);
         } else if (lkey === 'Blockly.Msg.BUTTON_EMPTY_LIST') {
             $('#clearLog').attr('value', value);
         } else if (lkey === 'Blockly.Msg.MENU_ROBOT_STATE_INFO') {
