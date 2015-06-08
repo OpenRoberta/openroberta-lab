@@ -869,6 +869,16 @@ function initRelationsTable() {
         "sDom" : '<lip>t<r>',
         "aaData" : [],
         "aoColumns" : columns,
+        "aoColumnDefs" : [ { // format language dependant fields
+            "aTargets" : [ 3 ], // indexes of columns to be formatted
+            "mRender": function ( data, type, row ) {
+                if (data === 'READ') {
+                    return '<span lkey="Blockly.Msg.POPUP_SHARE_READ">' + Blockly.Msg.POPUP_SHARE_READ + '</span>';
+                } else if (data === 'WRITE') {
+                    return '<span lkey="Blockly.Msg.POPUP_SHARE_WRITE">' + Blockly.Msg.POPUP_SHARE_WRITE + '</span>';
+                }
+            }
+        } ],
         "bJQueryUI" : true,
         "oLanguage" : {
             "sEmptyTable" : "<span lkey='Blockly.Msg.DATATABLE_EMPTY_TABLE'>Die Tabelle ist leer</span>"
@@ -944,6 +954,14 @@ function initHeadNavigation() {
         } else if (domId === 'menuCheckProg') { //  Submenu 'Program'
             checkProgram()
         } else if (domId === 'menuNewProg') { //  Submenu 'Program'
+// TODO
+//            if (userState.programModified === true || userState.configurationModified === true) {
+//                if (userState.id === -1) {
+//                    displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "");
+//                } else {
+//                    displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "");
+//                }
+//            }
             setProgram("NEPOprog");
             initProgramEnvironment();
             $('#menuSaveProg').parent().addClass('disabled');
