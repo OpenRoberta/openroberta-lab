@@ -19,7 +19,7 @@ public class BlocklyComment {
 
     private BlocklyComment(String comment, boolean pinned, String height, String width) {
         super();
-        Assert.isTrue(!comment.equals("") && !height.equals("") && !width.equals(""));
+        Assert.isTrue(!height.equals("") && !width.equals(""));
         this.comment = comment;
         this.pinned = pinned;
         this.height = height;
