@@ -97,7 +97,11 @@ public final class MotorOnAction<V> extends MoveAction<V> {
      * @return value of the duration of the motor movement
      */
     public Expr<V> getDurationValue() {
-        return this.param.getDuration().getValue();
+        MotorDuration<V> duration = this.param.getDuration();
+        if ( duration != null ) {
+            return duration.getValue();
+        }
+        return null;
     }
 
     @Override

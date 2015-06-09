@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import de.fhg.iais.roberta.ast.syntax.Phrase;
 import de.fhg.iais.roberta.ast.syntax.action.DriveAction;
 import de.fhg.iais.roberta.ast.syntax.action.MotorDriveStopAction;
+import de.fhg.iais.roberta.ast.syntax.action.MotorDuration;
 import de.fhg.iais.roberta.ast.syntax.action.MotorGetPowerAction;
 import de.fhg.iais.roberta.ast.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.ast.syntax.action.MotorSetPowerAction;
 import de.fhg.iais.roberta.ast.syntax.action.MotorStopAction;
 import de.fhg.iais.roberta.ast.syntax.action.MoveAction;
 import de.fhg.iais.roberta.ast.syntax.action.TurnAction;
+import de.fhg.iais.roberta.ast.syntax.expr.Expr;
 import de.fhg.iais.roberta.ast.syntax.sensor.BaseSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.ColorSensor;
 import de.fhg.iais.roberta.ast.syntax.sensor.EncoderSensor;
@@ -62,7 +64,10 @@ public class UsedPortsCheckVisitor extends CheckVisitor {
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         checkLeftRightMotorPort(driveAction);
         driveAction.getParam().getSpeed().visit(this);
-        driveAction.getParam().getDuration().getValue().visit(this);
+        MotorDuration<Void> duration = driveAction.getParam().getDuration();
+        if ( duration != null ) {
+            duration.getValue().visit(this);
+        }
         return null;
     }
 
@@ -70,7 +75,10 @@ public class UsedPortsCheckVisitor extends CheckVisitor {
     public Void visitTurnAction(TurnAction<Void> turnAction) {
         checkLeftRightMotorPort(turnAction);
         turnAction.getParam().getSpeed().visit(this);
-        turnAction.getParam().getDuration().getValue().visit(this);
+        MotorDuration<Void> duration = turnAction.getParam().getDuration();
+        if ( duration != null ) {
+            duration.getValue().visit(this);
+        }
         return null;
     }
 
@@ -83,7 +91,10 @@ public class UsedPortsCheckVisitor extends CheckVisitor {
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         checkMotorPort(motorOnAction);
-        motorOnAction.getDurationValue().visit(this);
+        Expr<Void> duration = motorOnAction.getDurationValue();
+        if ( duration != null ) {
+            duration.visit(this);
+        }
         return null;
     }
 
