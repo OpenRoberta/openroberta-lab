@@ -149,6 +149,7 @@ public class ORApushCmd implements Runnable {
                         return;
                     case CMD_UPDATE:
                         this.oraUpdater.update();
+                        GraphicStartup.restartMenu();
                         return;
                     case CMD_DOWNLOAD:
                         if ( GraphicStartup.getUserprogram() == null ) {

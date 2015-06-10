@@ -1,7 +1,6 @@
 package lejos.ev3.startup;
 
 import lejos.hardware.Button;
-import lejos.hardware.Sound;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.TextLCD;
 
@@ -113,19 +112,19 @@ public class ORAipKeyboard
                         }
                         else
                         {
-                            Sound.buzz();
+                            //Sound.buzz();
                         }
                         break;
                     case 'D':
                         return sb.toString();
                     case 'c':
-                        return "none";
+                        return "";
                     }
                 }
             }
             else if (b == Button.ID_ESCAPE)
             {
-                return "none";
+                return "";
             }
 
             displayCursor(true);

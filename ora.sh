@@ -239,7 +239,7 @@ function _scpev3menuFn {
 }
 
 function _setev3serverinfoFn {
-  echo ${serverurl} | ssh root@${ev3ipaddr} "cat > /home/lejos/programs/serverIP.txt"
+  echo ${serverurl} | ssh root@${ev3ipaddr} "cat > /home/roberta/serverIP.txt"
 }
 
 function _scpev3libsFn {

@@ -166,9 +166,9 @@ public class GraphicStartup implements ORAmenu {
     // Threads
     private final IndicatorThread ind = new IndicatorThread();
     private final BatteryIndicator indiBA = new BatteryIndicator();
-    private final PipeReader pipeReader = new PipeReader();
+    //private final PipeReader pipeReader = new PipeReader();
     private final RConsole rcons = new RConsole();
-    private final BroadcastThread broadcast = new BroadcastThread();
+    //private final BroadcastThread broadcast = new BroadcastThread();
     private final RemoteMenuThread remoteMenuThread = new RemoteMenuThread();
 
     //private GraphicMenu curMenu;
@@ -234,10 +234,6 @@ public class GraphicStartup implements ORAmenu {
         TuneThread tuneThread = new TuneThread();
         tuneThread.start();
 
-        // redundant
-        System.out.println("Getting IP addresses");
-        //ips = getIPAddresses();
-
         // Start the RMI registry
         InitThread initThread = new InitThread();
         initThread.start();
@@ -294,7 +290,7 @@ public class GraphicStartup implements ORAmenu {
             }
 
             // Broadcast availability of device
-            Broadcast.broadcast(hostname);
+            //Broadcast.broadcast(hostname);
 
             // Do not use in "our" menu
             // Set the date
@@ -316,8 +312,8 @@ public class GraphicStartup implements ORAmenu {
     private void start() {
         this.ind.start();
         this.rcons.start();
-        this.pipeReader.start();
-        this.broadcast.start();
+        //this.pipeReader.start();
+        //this.broadcast.start();
         this.remoteMenuThread.start();
     }
 
@@ -1483,11 +1479,10 @@ public class GraphicStartup implements ORAmenu {
         if ( ORAhandler.isRegistered() == false ) {
             if ( this.indiBA.getWifi() == false ) {
                 newScreen(OPENROBERTAHEAD);
-                lcd.drawString("No Wifi connected!", 0, 2);
-                if ( getYesNo("    Continue?", true) == 1 ) {
-                    // go on
+                if ( getYesNo(" Set up WLAN now?", true) == 1 ) {
+                    wifiMenu();
                 } else {
-                    return;
+                    // go on
                 }
             }
             String token = new ORAtokenGenerator().generateToken();
@@ -1495,7 +1490,7 @@ public class GraphicStartup implements ORAmenu {
             //String ip = "lab.open-roberta.org";
             String ip = getIPAddress();
 
-            if ( ip.equals("none") ) {
+            if ( ip.equals("") ) {
                 return;
             } else {
                 oraHandler.startServerCommunicator(ip, token);
@@ -1751,76 +1746,65 @@ public class GraphicStartup implements ORAmenu {
      * For developer version only.
      */
     private String getIPAddress() {
-        File file = new File("/home/lejos/programs/serverIP.txt");
-        if ( !file.exists() ) {
-            PrintWriter pw = null;
-            try {
-                // file.delete();
-                pw = new PrintWriter(file);
-                pw.println("");
-            } catch ( FileNotFoundException e ) {
-                // ok
-            } finally {
-                if ( pw != null ) {
-                    pw.close();
-                }
-            }
-        }
-
+        String temp = "";
+        File file = new File("/home/roberta/serverIP.txt");
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-            String temp = bufferedReader.readLine();
-            bufferedReader.close();
-            if ( temp.equals("") ) {
-                temp = "none";
-            }
-
-            int i = 1;
-            newScreen("Server?");
-            lcd.drawString("lab.open-roberta.org", 0, 1, true);
-            lcd.drawString("10.0.1.10:1999", 0, 2, false);
-            lcd.drawString(temp, 0, 3, false);
-            lcd.drawString("Another (type in)", 0, 4, false);
-            lcd.drawString("(ESCAPE to exit)", 0, 7);
-
-            while ( true ) {
-                int id = Button.waitForAnyEvent(500);
-                if ( id == Button.ID_ENTER ) {
-                    temp = select(i, temp);
-                    if ( temp == null ) {
-                        return enterIP(file);
-                    } else {
-                        return temp;
-                    }
-                }
-                if ( id == Button.ID_ESCAPE ) {
-                    return "none";
-                }
-                if ( id == Button.ID_DOWN || id == Button.ID_RIGHT ) {
-                    if ( i != 4 ) {
-                        rewrite(i, false, temp);
-                        i++;
-                        rewrite(i, true, temp);
-                    } else {
-                        rewrite(i, false, temp);
-                        i = 1;
-                        rewrite(i, true, temp);
-                    }
-                }
-                if ( id == Button.ID_UP || id == Button.ID_LEFT ) {
-                    if ( i != 1 ) {
-                        rewrite(i, false, temp);
-                        i--;
-                        rewrite(i, true, temp);
-                    } else {
-                        rewrite(i, false, temp);
-                        i = 4;
-                        rewrite(i, true, temp);
-                    }
-                }
+            if ( file.exists() ) {
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                temp = br.readLine();
+                br.close();
+            } else {
+                PrintWriter pw = new PrintWriter(file);
+                pw.println("");
+                pw.close();
             }
         } catch ( IOException e ) {
-            return "none";
+            // ok
+        }
+
+        int i = 1;
+        newScreen("Server?");
+        lcd.drawString("lab.open-roberta.org", 0, 1, true);
+        lcd.drawString("10.0.1.10:1999", 0, 2, false);
+        lcd.drawString(temp, 0, 3, false);
+        lcd.drawString("Another (type in)", 0, 4, false);
+        lcd.drawString("(ESCAPE to exit)", 0, 7);
+
+        while ( true ) {
+            int id = Button.waitForAnyEvent(500);
+            if ( id == Button.ID_ENTER ) {
+                temp = select(i, temp);
+                if ( temp == null ) {
+                    return enterIP(file);
+                } else {
+                    return temp;
+                }
+            }
+            if ( id == Button.ID_ESCAPE ) {
+                return "";
+            }
+            if ( id == Button.ID_DOWN || id == Button.ID_RIGHT ) {
+                if ( i != 4 ) {
+                    rewrite(i, false, temp);
+                    i++;
+                    rewrite(i, true, temp);
+                } else {
+                    rewrite(i, false, temp);
+                    i = 1;
+                    rewrite(i, true, temp);
+                }
+            }
+            if ( id == Button.ID_UP || id == Button.ID_LEFT ) {
+                if ( i != 1 ) {
+                    rewrite(i, false, temp);
+                    i--;
+                    rewrite(i, true, temp);
+                } else {
+                    rewrite(i, false, temp);
+                    i = 4;
+                    rewrite(i, true, temp);
+                }
+            }
         }
     }
 
@@ -1833,7 +1817,11 @@ public class GraphicStartup implements ORAmenu {
                 lcd.drawString("10.0.1.10:1999", 0, 2, invert);
                 break;
             case 3:
-                lcd.drawString(temp, 0, 3, invert);
+                if ( temp.equals("") ) {
+                    lcd.drawString(temp + " ", 0, 3, invert);
+                } else {
+                    lcd.drawString(temp, 0, 3, invert);
+                }
                 break;
             case 4:
                 lcd.drawString("Another (type in)", 0, 4, invert);
@@ -1860,15 +1848,14 @@ public class GraphicStartup implements ORAmenu {
         newScreen(" Enter IP");
         String temp = new ORAipKeyboard().getString();
         PrintWriter pw = null;
-        try {
-            file.delete();
-            pw = new PrintWriter(file);
-            pw.println(temp);
-        } catch ( FileNotFoundException e ) {
-            return "";
-        } finally {
-            if ( pw != null ) {
+        if ( !temp.equals("") ) {
+            try {
+                file.delete();
+                pw = new PrintWriter(file);
+                pw.println(temp);
                 pw.close();
+            } catch ( FileNotFoundException e ) {
+                // ok
             }
         }
         return temp;
@@ -2694,47 +2681,47 @@ public class GraphicStartup implements ORAmenu {
         lcd.refresh();
     }
 
-    class PipeReader extends Thread {
+    //    class PipeReader extends Thread {
+    //
+    //        @Override
+    //        public synchronized void run() {
+    //            try {
+    //                InputStream is = new FileInputStream(MENU_DIRECTORY + "/menufifo");
+    //
+    //                while ( true ) {
+    //                    int c = is.read();
+    //                    if ( c < 0 ) {
+    //                        Delay.msDelay(200);
+    //                    } else {
+    //                        System.out.println("Read from fifo: " + c + " " + ((char) c));
+    //
+    //                        if ( c == 's' ) {
+    //                            GraphicStartup.this.suspend();
+    //                            System.out.println("Menu suspended");
+    //                        } else if ( c == 'r' ) {
+    //                            GraphicStartup.this.resume();
+    //                            System.out.println("Menu resumed");
+    //                        }
+    //                    }
+    //                }
+    //
+    //            } catch ( IOException e ) {
+    //                System.err.println("Failed to read from fifo: " + e);
+    //                return;
+    //            }
+    //        }
+    //    }
 
-        @Override
-        public synchronized void run() {
-            try {
-                InputStream is = new FileInputStream(MENU_DIRECTORY + "/menufifo");
-
-                while ( true ) {
-                    int c = is.read();
-                    if ( c < 0 ) {
-                        Delay.msDelay(200);
-                    } else {
-                        System.out.println("Read from fifo: " + c + " " + ((char) c));
-
-                        if ( c == 's' ) {
-                            GraphicStartup.this.suspend();
-                            System.out.println("Menu suspended");
-                        } else if ( c == 'r' ) {
-                            GraphicStartup.this.resume();
-                            System.out.println("Menu resumed");
-                        }
-                    }
-                }
-
-            } catch ( IOException e ) {
-                System.err.println("Failed to read from fifo: " + e);
-                return;
-            }
-        }
-    }
-
-    class BroadcastThread extends Thread {
-
-        @Override
-        public synchronized void run() {
-            while ( true ) {
-                Broadcast.broadcast(hostname);
-                Delay.msDelay(1000);
-            }
-        }
-    }
+    //    class BroadcastThread extends Thread {
+    //
+    //        @Override
+    //        public synchronized void run() {
+    //            while ( true ) {
+    //                Broadcast.broadcast(hostname);
+    //                Delay.msDelay(1000);
+    //            }
+    //        }
+    //    }
 
     /**
      * Manage the top line of the display.
@@ -2948,36 +2935,30 @@ public class GraphicStartup implements ORAmenu {
         }
     }
 
-    private void restartMenu() {
+    public static void restartMenu() {
         try {
-            Process p = Runtime.getRuntime().exec("sh restartmenu.sh", null, new File("/home/roberta"));
-            p.waitFor();
-        } catch ( IOException | InterruptedException e ) {
+            Runtime.getRuntime().exec("sh restartmenu.sh", null, new File("/home/roberta"));
+        } catch ( IOException e ) {
             e.printStackTrace();
         }
     }
 
     private void wifiMenu() {
         newScreen("WLAN");
-        lcd.drawString("Searching for", 0, 1);
-        lcd.drawString("USB WLAN adapter...", 0, 2);
-        lcd.drawString("Please wait...", 0, 4);
+        lcd.drawString("Searching...", 0, 2);
         while ( startWlanInterface() != 0 ) { // returns 1 if no dongle plugged in
             newScreen("WLAN");
-            lcd.drawString("Please plug in", 0, 1);
-            lcd.drawString("USB WLAN adapter...", 0, 2);
+            lcd.drawString("Please plug in a", 0, 2);
+            lcd.drawString("USB WLAN adapter...", 0, 3);
             lcd.drawString("(ESCAPE to exit)", 0, 7);
-            lcd.drawString("                 ", 0, 3);
-            for ( int i = 0; i < 18; i++ ) {
-                lcd.drawString(".", i, 3);
-                int id = Button.readButtons();
-                if ( id == Button.ID_ESCAPE ) {
-                    lcd.drawString("Interrupted...!    ", 0, 7);
-                    Delay.msDelay(1000);
-                    return;
-                }
-                Delay.msDelay(200);
+            int id = Button.readButtons();
+            if ( id == Button.ID_ESCAPE ) {
+                lcd.drawString("Interrupted...!    ", 0, 7);
+                Delay.msDelay(1000);
+                return;
             }
+            Delay.msDelay(100);
+
         }
 
         String ssid = checkExistingWifi();
@@ -3005,24 +2986,39 @@ public class GraphicStartup implements ORAmenu {
             } while ( selected >= 0 );
         }
 
-        GraphicListMenu menu = new GraphicListMenu(null, null);
         System.out.println("Finding access points ...");
         LocalWifiDevice wifi = Wifi.getLocalDevice("wlan0");
-        String[] names;
-        try {
-            names = wifi.getAccessPointNames();
-        } catch ( Exception e ) {
-            System.err.println("Exception getting access points" + e);
-            names = new String[0];
-        }
-        int selection = 0;
 
-        do {
-            int len = names.length;
-            if ( len == 0 ) {
-                msg("No Access Points found");
-                return;
+        String[] names = new String[0];
+        int len = names.length;
+        int i = 0;
+
+        newScreen("Wifi");
+        lcd.drawString("Searching...", 0, 2);
+        while ( i < 5 ) {
+            try {
+                names = wifi.getAccessPointNames();
+            } catch ( Exception e ) {
+                System.err.println("Exception getting access points" + e);
+                names = new String[0];
+                Delay.msDelay(500);
+            } finally {
+                len = names.length;
+                if ( len != 0 ) {
+                    break;
+                }
+                i++;
             }
+        }
+
+        if ( len == 0 ) {
+            msg("No APs found!");
+            return;
+        }
+
+        GraphicListMenu menu = new GraphicListMenu(null, null);
+        int selection = 0;
+        do {
             newScreen("Access Pts");
 
             menu.setItems(names, null);
