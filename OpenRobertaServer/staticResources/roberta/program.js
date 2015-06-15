@@ -53,11 +53,12 @@ var PROGRAM = {};
      * Load the program that was selected in program list
      * @memberof PROGRAM
      */
-    PROGRAM.loadProgramFromListing = function(programName, successFn) {
+    PROGRAM.loadProgramFromListing = function(programName, ownerName, successFn) {
         COMM.json("/program", {
             "cmd" : "loadP",
-            "name" : programName
-        }, successFn, "load program '" + programName + "'"); 
+            "name" : programName,
+            "owner" : ownerName
+        }, successFn, "load program '" + programName + "' owned by '" + ownerName + "'"); 
     };
 
     /**

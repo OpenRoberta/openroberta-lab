@@ -259,7 +259,7 @@ public class RoundTripTest {
             (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("menuSaveProg")));
         userProgramSaveAsElement.click();
 
-        RoundTripTest.response = RoundTripTest.restProgram.command(RoundTripTest.s1, mkD("{'cmd':'loadP';'name':'" + programName + "'}"));
+        RoundTripTest.response = RoundTripTest.restProgram.command(RoundTripTest.s1, mkD("{'cmd':'loadP';'name':'" + programName + "';'owner':'orA'}"));
         String resultProgram = ((JSONObject) RoundTripTest.response.getEntity()).getString("data");
         return resultProgram;
     }

@@ -452,21 +452,24 @@ function loadFromListing() {
     var $programRow = $('#programNameTable .selected');
     if ($programRow.length > 0) {
         var programName = $programRow[0].children[0].textContent;
+        var owner = $programRow[0].children[1].textContent;
         var right = $programRow[0].children[2].textContent;
-        if (right === 'WRITE') {
+        userState.programShared = false;
+        $('#menuSaveProg').parent().removeClass('disabled');
+        Blockly.getMainWorkspace().saveButton.enable();
+        if (right === Blockly.Msg.POPUP_SHARE_READ) {
+            $('#menuSaveProg').parent().addClass('disabled');
+            Blockly.getMainWorkspace().saveButton.disable();
+        } else if (right === Blockly.Msg.POPUP_SHARE_WRITE) {
             userState.programShared = true;
-        } else {
-            userState.programShared = false;
         }
         LOG.info('loadFromList ' + programName + ' signed in: ' + userState.id);
-        PROGRAM.loadProgramFromListing(programName, function(result) {
+        PROGRAM.loadProgramFromListing(programName, owner, function(result) {
             if (result.rc === 'ok') {
                 $("#tabs").tabs("option", "active", 0);
                 userState.programSaved = true;
                 showProgram(result, true, programName);
                 $('#menuSaveProg').parent().removeClass('login');
-                $('#menuSaveProg').parent().removeClass('disabled');
-                Blockly.getMainWorkspace().saveButton.enable();
             }
             displayInformation(result, "", result.message);
         });
@@ -984,6 +987,7 @@ function initHeadNavigation() {
 //                }
 //            }
             setProgram("NEPOprog");
+            userState.programShared = false;
             initProgramEnvironment();
             $('#menuSaveProg').parent().addClass('disabled');
             Blockly.getMainWorkspace().saveButton.disable();

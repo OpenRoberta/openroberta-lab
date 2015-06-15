@@ -18,6 +18,18 @@ public class UserProcessor extends AbstractProcessor {
         super(dbSession, httpSessionState);
     }
 
+    public User getUser(String account) {
+        UserDao userDao = new UserDao(this.dbSession);
+        User user = userDao.loadUser(account);
+        if ( user != null ) {
+            setSuccess(Key.USER_GET_ONE_SUCCESS);
+            return user;
+        } else {
+            setError(Key.USER_GET_ONE_ERROR_ID_OR_PASSWORD_WRONG);
+            return null;
+        }
+    }
+
     public User getUser(String account, String password) {
         UserDao userDao = new UserDao(this.dbSession);
         User user = userDao.loadUser(account);
