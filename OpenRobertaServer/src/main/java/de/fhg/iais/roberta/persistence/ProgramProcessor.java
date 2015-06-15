@@ -117,6 +117,7 @@ public class ProgramProcessor extends AbstractProcessor {
             relation.put(ownerId);
             relation.put(accessRight.getUser().getAccount());
             relation.put(accessRight.getRelation().toString());
+            relation.put(accessRight.getRelation().toString());
             relations.put(relation);
         }
         setSuccess(Key.PROGRAM_GET_ALL_SUCCESS, "" + relations.length());

@@ -95,18 +95,6 @@ var PROGRAM = {};
         }, successFn, "refresh program relations list"); 
     };
     
-    /**
-     * Delete program relation
-     * @memberof PROGRAM
-     */
-    PROGRAM.deleteRelation = function(programName, userSharedWithName, successFn) {
-        COMM.json("/program", {
-            "cmd" : "shareP",
-            "programName" : programName,
-            "userToShare" : userSharedWithName,
-            "right" : "NONE"
-        }, successFn, "delete program relation"); 
-    };
     
     /**
      * Check program

@@ -499,31 +499,58 @@ function loadConfigurationFromListing() {
  * Share the programs that were selected in program list
  */
 function shareProgramsFromListing() {
-    var userToShareWith = $('#programShareWith').val();
-    if (userToShareWith === userState.name) {
+    // set rights for the user in the text input field 
+    var shareWith = $('#programShareWith').val();
+    if (shareWith === userState.name) {
         // you cannot share programs with yourself
         displayMessage("ORA_USER_TO_SHARE_SAME_AS_LOGIN_USER", "POPUP", "");
-    } else if (userToShareWith != '') {
+    } else if (shareWith != '') {
         var right = $('#programShareRight input:checked').val();
-        var $programRow = $('#programNameTable .selected');
-        var cnt = 0;
-        for (var i = 0; i < $programRow.length; i++) {
-            var programName = $programRow[i].children[0].textContent;
-            LOG.info("share program " + programName + " with '" + userToShareWith + "'");
-            PROGRAM.shareProgram(programName, userToShareWith, right, function(result) {
-                if (result.rc === 'ok') {
-                    cnt++;
-                    if (cnt === $programRow.length) {
-                        PROGRAM.refreshList(showPrograms);
-                        $('#share-program').modal('hide');
-                    }
-                } else {
+        if (right != undefined) {
+            var $programRow = $('#programNameTable .selected');
+            var programName = $programRow[0].children[0].textContent;
+            LOG.info("share program " + programName + " with '" + shareWith + " having right '" + right + "'");
+            PROGRAM.shareProgram(programName, shareWith, right, function(result) {
+                if (result.rc != 'ok') {
                     displayInformation(result, "", result.message);
-                    return;
                 }
+                $('#share-program').modal('hide');
+                PROGRAM.refreshList(showPrograms);
             });
         }
     }
+
+    // set rights as set by user in relations table
+    $("#relationsTable tbody tr").each(function (index) {
+        var $this = $(this);
+        var cols = $this.children("td");
+        var programName = cols.eq(0).text();
+        var userToShareWith = cols.eq(2).text();
+        if (userToShareWith != '') {
+            var readRight = cols.eq(3).children("input:checked").val();
+            var writeRight = cols.eq(4).children("input:checked").val();
+            var right = 'NONE';
+            if (writeRight === 'WRITE') {
+                right = writeRight;
+            } else if (readRight === 'READ') {
+                right = readRight;
+            }
+            LOG.info("share program " + programName + " with '" + userToShareWith + " having right '" + right + "'");
+            PROGRAM.shareProgram(programName, userToShareWith, right, function(result) {
+                if (result.rc === 'ok') {
+                    response(result);
+                    setRobotState(result);
+                    if (right === 'NONE') {
+                        displayInformation(result, "MESSAGE_RELATION_DELETED", result.message, programName);                   
+                    }
+                } else {
+                    displayInformation(result, "", result.message);
+                }
+                $('#share-program').modal('hide');
+                PROGRAM.refreshList(showPrograms);
+            });
+        }
+    });
 }
 
 /**
@@ -560,29 +587,6 @@ function deleteConfigurationFromListing() {
                 setRobotState(result);
             }
             displayInformation(result, "MESSAGE_CONFIGURATION_DELETED", result.message, configurationName);
-        });
-    }
-}
-
-/**
- * Delete the relations that were selected in relations list
- */
-function deleteRelations() {
-    var $relationRow = $('#relationsTable .selected');
-    for (var i = 0; i < $relationRow.length; i++) {
-        var programName = $relationRow[i].children[0].textContent;
-        var userSharedWithName = $relationRow[i].children[2].textContent;
-        LOG.info('deleteRelation of program: ' + programName + ', user: ' + userSharedWithName);
-        PROGRAM.deleteRelation(programName, userSharedWithName, function(result) {
-            if (result.rc === 'ok') {
-                response(result);
-                setRobotState(result);
-                $('.modal').modal('hide'); // close all opened popups
-                if (i === $relationRow.length) {
-                    PROGRAM.refreshList(showPrograms);
-                }
-            }
-            displayInformation(result, "MESSAGE_RELATION_DELETED", result.message, programName);
         });
     }
 }
@@ -626,14 +630,6 @@ function showPrograms(result) {
     if (result.rc === 'ok') {
         var $table = $('#programNameTable').dataTable();
         $table.fnClearTable();
-        for (var i = 0; i < result.programNames.length; i++) {
-            if (result.programNames[i][2] === true) {
-                result.programNames[i][2] = 'X';
-            } else if (result.programNames[i][2] === false) {
-                result.programNames[i][2] = '-';
-            }
-        }
-
         if (result.programNames.length > 0) {
             $table.fnAddData(result.programNames);
         }
@@ -672,7 +668,6 @@ function showRelations(result) {
         $table.fnClearTable();
         if (result.relations.length > 0) {
             $table.fnAddData(result.relations);
-
             // This is a WORKAROUND for a known bug in Jquery-datatables:
             // If scrollY is set the column headers have the wrong width,
             // because the browser is not able to calculate them correctly. So
@@ -680,9 +675,8 @@ function showRelations(result) {
             setTimeout(function() {
                 $table.fnAdjustColumnSizing();
             }, 200);
-
-            $("#show-relations").modal('show');
         }
+        $("#show-relations").modal('show');
     }
 }
 
@@ -744,7 +738,6 @@ function initProgramNameTable() {
         "sClass" : "programs"
     }, {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_SHARED'>Geteilt</span>",
-        "sDefaultContent" : "-",
         "sClass" : "programs"
     }, {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>Erzeugt am</span>",
@@ -759,11 +752,25 @@ function initProgramNameTable() {
         "sDom" : '<lip>t<r>',
         "aaData" : [],
         "aoColumns" : columns,
-        "aoColumnDefs" : [ { // format date fields
+        "aoColumnDefs" : [ { // format fields
             "aTargets" : [ 3, 4 ], // indexes of columns to be formatted
             "sType" : "date-de",
             "mRender" : function(data) {
                 return UTIL.formatDate(data);
+            }
+        } , {
+            "aTargets": [ 2 ], // indexes of columns to be formatted
+            "mRender": function( data, type, row ) {
+                if (data === 'WRITE') {
+                    var returnval = "<span lkey='Blockly.Msg.POPUP_SHARE_WRITE'>" + Blockly.Msg.POPUP_SHARE_WRITE + "</span>";
+                } else if (data === "READ") {
+                    var returnval = "<span lkey='Blockly.Msg.POPUP_SHARE_READ'>" + Blockly.Msg.POPUP_SHARE_READ + "</span>";
+                } else if (data === true) {
+                    var returnval = "<span lkey='Blockly.Msg.POPUP_SHARE_READ'>X</span>"; 
+                } else if (data === false) {
+                    var returnval = "<span lkey='Blockly.Msg.POPUP_SHARE_READ'>-</span>"; 
+                }
+                return returnval;
             }
         } ],
         "bJQueryUI" : true,
@@ -860,7 +867,10 @@ function initRelationsTable() {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_SHARED_WITH'>Geteilt mit</span>",
         "sClass" : "relations"
     }, {
-        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_SHARED_FOR'>Recht(e)</span>",
+        "sTitle" : "<span lkey='Blockly.Msg.POPUP_SHARE_READ'>Lesen</span>",
+        "sClass" : "relations"
+    }, {
+        "sTitle" : "<span lkey='Blockly.Msg.POPUP_SHARE_WRITE'>Schreiben</span>",
         "sClass" : "relations"
     }, ];
     var $relations = $('#relationsTable');
@@ -870,13 +880,24 @@ function initRelationsTable() {
         "aaData" : [],
         "aoColumns" : columns,
         "aoColumnDefs" : [ { // format language dependant fields
-            "aTargets" : [ 3 ], // indexes of columns to be formatted
-            "mRender": function ( data, type, row ) {
-                if (data === 'READ') {
-                    return '<span lkey="Blockly.Msg.POPUP_SHARE_READ">' + Blockly.Msg.POPUP_SHARE_READ + '</span>';
-                } else if (data === 'WRITE') {
-                    return '<span lkey="Blockly.Msg.POPUP_SHARE_WRITE">' + Blockly.Msg.POPUP_SHARE_WRITE + '</span>';
+            "aTargets": [ 3 ], // indexes of columns to be formatted
+            "mRender": function( data, type, row ) {
+                var checked = '';
+                if (row[4] === 'WRITE' || data === 'READ') {
+                    checked = 'checked';
                 }
+                var returnval = "<td><input class='readRight' type='checkbox' name='right' value='READ' " + checked + "></td>";
+                return returnval;
+            }
+        } , {
+            "aTargets": [ 4 ], // indexes of columns to be formatted
+            "mRender": function( data, type, row ) {
+                var checked = '';
+                if (data === 'WRITE') {
+                    checked = 'checked';
+                }
+                var returnval = "<td><input class='writeRight' type='checkbox' name='right' value='WRITE' " + checked + "></td>";
+                return returnval;
             }
         } ],
         "bJQueryUI" : true,
@@ -954,7 +975,7 @@ function initHeadNavigation() {
         } else if (domId === 'menuCheckProg') { //  Submenu 'Program'
             checkProgram()
         } else if (domId === 'menuNewProg') { //  Submenu 'Program'
-// TODO
+// TODO: User informieren, dass nicht gesicherte programme verloren gehen
 //            if (userState.programModified === true || userState.configurationModified === true) {
 //                if (userState.id === -1) {
 //                    displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "");
@@ -1177,10 +1198,6 @@ function initPopups() {
         shareProgramsFromListing();
     }, 'share program');
 
-    $('#deleteRelation').onWrap('click', function() {
-        deleteRelations();
-    }, 'delete Relation');
-
     $('#setToken').onWrap('click', function() {
         setToken($('#tokenValue').val());
     }, 'set token');
@@ -1292,24 +1309,18 @@ function initTabs() {
         $('.modal').modal('hide'); // close all opened popups
     }, 'delete configuration from configurations list');
 
-    // share program
+    // show relations of program
     $('#shareFromListing').onWrap('click', function() {
         var $programRow = $('#programNameTable .selected');
         if ($programRow.length > 0) {
-            var programName = $programRow[0].children[0].textContent;
-            if ($programRow[0].children[1].textContent === userState.accountName) {
-                $("#share-program").modal("show");
-            }
-        }
-    }, 'share program');
-
-    // show relations of program
-    $('#relationsFromListing').onWrap('click', function() {
-        var $programRow = $('#programNameTable .selected');
-        if ($programRow.length > 0) {
-            var programName = $programRow[0].children[0].textContent;
             var shared = $programRow[0].children[2].textContent;
-            if (shared === 'X') {
+            if (shared === 'X' || shared === '-') {
+                var programName = $programRow[0].children[0].textContent;
+                var headShare = Blockly.Msg.BUTTON_DO_SHARE + ' (' + programName + ')';
+                $('#headShare').text(headShare);
+                $('#programShareWith').val('');
+                $('#read').prop("checked", true);
+                $('#write').prop("checked", false);
                 PROGRAM.refreshProgramRelationsList(programName, showRelations);
             }
         }
@@ -1457,10 +1468,7 @@ function translate(jsdata) {
             $('.buttonDelete').attr('value', value);
         } else if (lkey === 'Blockly.Msg.BUTTON_DO_SHARE') {
             $('.buttonShare').attr('value', value);
-            $('#share-program h3').text(value);
-            $('#share-program h3').text(value);
-        } else if (lkey === 'Blockly.Msg.BUTTON_RELATIONS') {
-            $('.buttonRelations').attr('value', value);
+            $('#show-relations h2').text(value);
         } else if (lkey === 'Blockly.Msg.BUTTON_REFRESH') {
             $('.buttonRefresh').attr('value', value);
         } else if (lkey === 'Blockly.Msg.BUTTON_EMPTY_LIST') {
