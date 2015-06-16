@@ -922,6 +922,7 @@ function initRelationsTable() {
     });
 
     $('#relationsTable tbody').onWrap('click', 'tr', selectionFn);
+    $('#relationsTable_wrapper').css('margin', 0);
 }
 
 /**

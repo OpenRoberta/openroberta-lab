@@ -556,6 +556,11 @@ ul.icon li.arrow-right-thick:before {
     color: #c7c7c7;
     font-size: 20px;
 }
+
+#programShareWith {
+    margin-right: 15px;
+}
+
 /***** END JQuery-Popup-Input-Fields *****/
 
 /***** BEGIN JQuery-Datatables *****/
@@ -563,13 +568,9 @@ ul.icon li.arrow-right-thick:before {
     margin: 0px 68px;
 }
 
-#progListing table tbody, #confListing table tbody, #relationsListing table tbody {
-    background-color: #ffffff;
-}
-
-#progListing table tbody tr:hover, #progListing table tbody tr.selected,
-#confListing table tbody tr:hover, #confListing table tbody tr.selected,
-#relationsListing table tbody tr:hover, #relationsListing table tbody tr.selected {
+#progListing table tbody tr.selected,
+#confListing table tbody tr.selected,
+#relationsListing table tbody tr.selected {
     background-color: #b7d032;
 }
 
@@ -600,7 +601,11 @@ ul.icon li.arrow-right-thick:before {
     border-bottom: 1px solid #eee;
 }
 
-#progListing>h2, #confListing>h2, #relationsListing>h2, #logging>h2 {
+#relationsListing {
+    margin-bottom: 15px;
+}
+
+#progListing>h2, #confListing>h2, #logging>h2 {
     margin-left: 68px;
 }
 
@@ -620,6 +625,7 @@ table.dataTable thead .sorting_desc {
     background: url("/css/img/dataTables-icons/arrow-sorted-up.svg") no-repeat center left;
 }
 /***** END JQuery-Datatables *****/
+
 @media only screen and (max-width: 767px) {
     .img-nepo {
         width: 120px;
