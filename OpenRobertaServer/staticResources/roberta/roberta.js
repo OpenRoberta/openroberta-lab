@@ -979,20 +979,21 @@ function initHeadNavigation() {
         } else if (domId === 'menuCheckProg') { //  Submenu 'Program'
             checkProgram()
         } else if (domId === 'menuNewProg') { //  Submenu 'Program'
-// TODO: User informieren, dass nicht gesicherte programme verloren gehen
-//            if (userState.programModified === true || userState.configurationModified === true) {
-//                if (userState.id === -1) {
-//                    displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "");
-//                } else {
-//                    displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "");
-//                }
-//            }
-            setProgram("NEPOprog");
-            userState.programShared = false;
-            initProgramEnvironment();
-            $('#menuSaveProg').parent().addClass('disabled');
-            Blockly.getMainWorkspace().saveButton.disable();
-            $('#tabProgram').click();
+            if (userState.programModified) {
+                if (userState.id === -1) {
+                    displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "");
+                } else {
+                    displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "");
+                }
+                userState.programModified = false;
+            } else {
+                setProgram("NEPOprog");
+                userState.programShared = false;
+                initProgramEnvironment();
+                $('#menuSaveProg').parent().addClass('disabled');
+                Blockly.getMainWorkspace().saveButton.disable();
+                $('#tabProgram').click();                
+            }
         } else if (domId === 'menuListProg') { //  Submenu 'Program'
             deactivateProgConfigMenu();
             $('#tabListing').click();
@@ -1744,7 +1745,7 @@ function init() {
     });
 
     $(window).on('beforeunload', function(e) {
-        if (userState.programModified === true || userState.configurationModified === true) {
+        if (userState.programModified || userState.configurationModified) {
             if (userState.id === -1) {
 // Maybe a Firefox-Problem?                alert(Blockly.Msg['POPUP_BEFOREUNLOAD']);
                 return Blockly.Msg.POPUP_BEFOREUNLOAD;
