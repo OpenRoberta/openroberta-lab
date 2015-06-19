@@ -674,14 +674,14 @@ function showRelations(result) {
         $table.fnClearTable();
         if (result.relations.length > 0) {
             $table.fnAddData(result.relations);
-            // This is a WORKAROUND for a known bug in Jquery-datatables:
-            // If scrollY is set the column headers have the wrong width,
-            // because the browser is not able to calculate them correctly. So
-            // after a while (in this case 200 ms) the columns have to be readjusted.
-            setTimeout(function() {
-                $table.fnAdjustColumnSizing();
-            }, 200);
         }
+        // This is a WORKAROUND for a known bug in Jquery-datatables:
+        // If scrollY is set the column headers have the wrong width,
+        // because the browser is not able to calculate them correctly. So
+        // after a while (in this case 200 ms) the columns have to be readjusted.
+        setTimeout(function() {
+            $table.fnAdjustColumnSizing();
+        }, 200);
         $("#show-relations").modal('show');
     }
 }
