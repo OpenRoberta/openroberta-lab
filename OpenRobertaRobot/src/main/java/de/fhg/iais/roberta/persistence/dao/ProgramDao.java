@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.persistence.dao;
 
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,18 +34,24 @@ public class ProgramDao extends AbstractDao<Program> {
      * @param name the name of the program, never null
      * @param user the user who owns the program, never null
      * @param programText the program text, maybe null
+     * @param timestamp timestamp of the program, never null
      * @param isOwner true, if the owner updates a program; false if a user with access right WRITE updates a program
      * @return true if the program could be persisted successfully
      */
-    public boolean persistProgramText(String name, User user, String programText, boolean overwriteAllowed, boolean isOwner) {
+    public boolean persistProgramText(String name, User user, String programText, Timestamp timestamp, boolean overwriteAllowed, boolean isOwner) {
         Assert.notNull(name);
         Assert.notNull(user);
-        Program program = isOwner ? load(name, user) : loadShared(name, user);
+        Assert.notNull(timestamp);
+        Program program = isOwner ? load(name, user, timestamp) : loadShared(name, user, timestamp);
         if ( program == null ) {
-            program = new Program(name, user);
-            program.setProgramText(programText);
-            this.session.save(program);
-            return true;
+            if ( timestamp.equals(new Timestamp(0)) ) {
+                program = new Program(name, user);
+                program.setProgramText(programText);
+                this.session.save(program);
+                return true;
+            } else {
+                return false;
+            }
         } else if ( overwriteAllowed ) {
             program.setProgramText(programText);
             return true;
@@ -54,7 +61,34 @@ public class ProgramDao extends AbstractDao<Program> {
     }
 
     /**
-     * load a program from the database, identified by its owner and its name (both make up the "business" key of a program)
+     * load a program from the database, identified by its owner, its name and its timestamp
+     *
+     * @param name the name of the program, never null
+     * @param owner user who owns the program, never null
+     * @param timestamp timestamp of the program, never null
+     * @return the program, null if the program is not found
+     */
+    public Program load(String name, User owner, Timestamp timestamp) {
+        Assert.notNull(name);
+        Assert.notNull(owner);
+        Assert.notNull(timestamp);
+        Query hql = this.session.createQuery("from Program where name=:name and owner=:owner");
+        hql.setString("name", name);
+        hql.setEntity("owner", owner);
+        @SuppressWarnings("unchecked")
+        List<Program> il = hql.list();
+        Assert.isTrue(il.size() <= 1);
+        if ( il.size() == 1 ) {
+            Timestamp timestampProgram = il.get(0).getLastChanged();
+            if ( timestamp.equals(timestampProgram) ) {
+                return il.get(0);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * load a program from the database, identified by its owner, its name (both make up the "business" key of a program)
      *
      * @param name the name of the program, never null
      * @param owner user who owns the program, never null
@@ -77,18 +111,27 @@ public class ProgramDao extends AbstractDao<Program> {
      *
      * @param name the name of the program, never null
      * @param user user with access right WRITE, never null
+     * @param timestamp timestamp of the program, never null
      * @return the program, null if the program is not found
      */
-    private Program loadShared(String name, User user) {
+    private Program loadShared(String name, User user, Timestamp timestamp) {
         Assert.notNull(name);
         Assert.notNull(user);
+        Assert.notNull(timestamp);
         Query hql = this.session.createQuery("from AccessRight where user=:user and program.name=:name");
         hql.setString("name", name);
         hql.setEntity("user", user);
         @SuppressWarnings("unchecked")
         List<AccessRight> il = hql.list();
         Assert.isTrue(il.size() <= 1);
-        return il.size() == 0 ? null : il.get(0).getProgram();
+        if ( il.size() == 1 ) {
+            Program program = il.get(0).getProgram();
+            Timestamp timestampProgram = program.getLastChanged();
+            if ( timestamp.equals(timestampProgram) ) {
+                return program;
+            }
+        }
+        return null;
     }
 
     public int deleteByName(String name, User owner) {

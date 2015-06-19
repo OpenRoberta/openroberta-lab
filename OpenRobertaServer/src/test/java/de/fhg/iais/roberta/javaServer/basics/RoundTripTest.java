@@ -204,7 +204,7 @@ public class RoundTripTest {
         for ( String program : RoundTripTest.blocklyPrograms ) {
             RoundTripTest.blocklyProgram =
                 Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + program + ".xml"), Charsets.UTF_8);
-            JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"saveAsP\";\"name\":\"" + program + "\"}}");
+            JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"saveAsP\";\"name\":\"" + program + "\";\"timestamp\":0}}");
             fullRequest.getJSONObject("data").put("program", RoundTripTest.blocklyProgram);
             RoundTripTest.response = RoundTripTest.restProgram.command(RoundTripTest.s1, fullRequest);
             assertEntityRc(RoundTripTest.response, "ok");

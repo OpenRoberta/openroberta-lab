@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.persistence;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.codehaus.jettison.json.JSONArray;
@@ -77,6 +78,7 @@ public class ProgramProcessor extends AbstractProcessor {
             programInfo.put(sharedWithUser);
             programInfo.put(program.getCreated().toString());
             programInfo.put(program.getLastChanged().toString());
+            programInfo.put(program.getLastChanged().toString());
             programInfos.put(programInfo);
         }
         // Now we find all the programs which are not owned by the user but have been shared to him
@@ -88,6 +90,7 @@ public class ProgramProcessor extends AbstractProcessor {
             //            programInfo2.put(userProgram.getProgram().getNumberOfBlocks());
             programInfo2.put(accessRight.getRelation().toString());
             programInfo2.put(accessRight.getProgram().getCreated().toString());
+            programInfo2.put(accessRight.getProgram().getLastChanged().toString());
             programInfo2.put(accessRight.getProgram().getLastChanged().toString());
             programInfos.put(programInfo2);
         }
@@ -156,10 +159,11 @@ public class ProgramProcessor extends AbstractProcessor {
      * @param programName the name of the program
      * @param userId the owner of the program
      * @param programText the new program text
+     * @param programTimestamp Program timestamp
      * @param mayExist true, if an existing program may be changed; false if a program may be stored only, if it does not exist in the database
      * @param isOwner true, if the owner updates a program; false if a user with access right WRITE updates a program
      */
-    public void updateProgram(String programName, int userId, String programText, boolean mayExist, boolean isOwner) {
+    public void updateProgram(String programName, int userId, String programText, Timestamp programTimestamp, boolean mayExist, boolean isOwner) {
         if ( !Util.isValidJavaIdentifier(programName) ) {
             setError(Key.PROGRAM_ERROR_ID_INVALID, programName);
             return;
@@ -168,7 +172,7 @@ public class ProgramProcessor extends AbstractProcessor {
             UserDao userDao = new UserDao(this.dbSession);
             ProgramDao programDao = new ProgramDao(this.dbSession);
             User user = userDao.get(userId);
-            boolean success = programDao.persistProgramText(programName, user, programText, mayExist, isOwner);
+            boolean success = programDao.persistProgramText(programName, user, programText, programTimestamp, mayExist, isOwner);
             if ( success ) {
                 setSuccess(Key.PROGRAM_SAVE_SUCCESS);
             } else {

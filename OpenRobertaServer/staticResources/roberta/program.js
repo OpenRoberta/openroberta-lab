@@ -4,10 +4,11 @@ var PROGRAM = {};
      * Save program with new name to server
      * @memberof PROGRAM
      */
-    PROGRAM.saveAsProgramToServer = function(programName, xmlText, successFn) {
+    PROGRAM.saveAsProgramToServer = function(programName, timestamp, xmlText, successFn) {
         COMM.json("/program", {
             "cmd" : "saveAsP",
             "name" : programName,
+            "timestamp" : timestamp,
             "program" : xmlText
         }, successFn, "save program to server with new name '" + programName + "'"); 
     };
@@ -16,11 +17,12 @@ var PROGRAM = {};
      * Save program
      * @memberof PROGRAM
      */
-    PROGRAM.saveProgramToServer = function(programName, programShared, xmlText, successFn) {
+    PROGRAM.saveProgramToServer = function(programName, programShared, timestamp, xmlText, successFn) {
         COMM.json("/program", {
             "cmd" : "saveP",
             "name" : programName,
             "shared" : programShared,
+            "timestamp" : timestamp,
             "program" : xmlText
         }, successFn, "save program '" + programName + "' to server"); 
     };

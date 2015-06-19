@@ -17,6 +17,7 @@ function initUserState() {
     userState.configurationSaved = false;
     userState.programModified = false;
     userState.programShared = false;
+    userState.programTimestamp = '';
     userState.configurationModified = false;
     userState.toolbox = 'beginner';
     userState.token = '1A2B3C4D';
@@ -292,9 +293,13 @@ function saveAsProgramToServer() {
     userState.programSaved = true;
     LOG.info('saveAs program ' + userState.program + ' login: ' + userState.id);
     $('.modal').modal('hide'); // close all opened popups
-    PROGRAM.saveAsProgramToServer(userState.program, xmlText, function(result) {
+    console.log('saveAsProgramToServer, userState.programTimestamp = ' + userState.programTimestamp);
+    var timestamp = UTIL.parseDate(userState.programTimestamp);
+    PROGRAM.saveAsProgramToServer(userState.program, timestamp, xmlText, function(result) {
         if (result.rc === 'ok') {
             userState.programModified = false;
+            userState.programTimestamp = UTIL.formatDateComplete(result.newProgramTimestamp);
+            console.log('saveAsProgramToServer, newTimestamp = ' + userState.programTimestamp);
         }
         displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM_AS", result.message, userState.program);
     });
@@ -310,9 +315,13 @@ function saveToServer() {
         userState.programSaved = true;
         LOG.info('save program ' + userState.program + ' login: ' + userState.id);
         $('.modal').modal('hide'); // close all opened popups
-        PROGRAM.saveProgramToServer(userState.program, userState.programShared, xmlText, function(result) {
+        console.log('saveToServer, userState.programTimestamp = ' + userState.programTimestamp);
+        var timestamp = UTIL.parseDate(userState.programTimestamp);
+        PROGRAM.saveProgramToServer(userState.program, userState.programShared, timestamp, xmlText, function(result) {
             if (result.rc === 'ok') {
                 userState.programModified = false;
+                userState.programTimestamp = UTIL.formatDateComplete(result.newProgramTimestamp);
+                console.log('saveToServer, newTimestamp = ' + userState.programTimestamp);
             }
             displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM", result.message, userState.program);
         });
@@ -454,6 +463,7 @@ function loadFromListing() {
         var programName = $programRow[0].children[0].textContent;
         var owner = $programRow[0].children[1].textContent;
         var right = $programRow[0].children[2].textContent;
+        userState.programTimestamp = $programRow[0].children[5].textContent;
         userState.programShared = false;
         $('#menuSaveProg').parent().removeClass('disabled');
         Blockly.getMainWorkspace().saveButton.enable();
@@ -564,16 +574,21 @@ function shareProgramsFromListing() {
  */
 function deleteFromListing() {
     var $programRow = $('#programNameTable .selected');
+    var programs = '';
     for (var i = 0; i < $programRow.length; i++) {
         var programName = $programRow[i].children[0].textContent;
+        if (programs.length > 0) {
+            programs = programs  + ', ';
+        }
+        programs = programs + programName;
         LOG.info('deleteFromList ' + programName + ' signed in: ' + userState.id);
         PROGRAM.deleteProgramFromListing(programName, function(result) {
             if (result.rc === 'ok') {
                 response(result);
                 PROGRAM.refreshList(showPrograms);
                 setRobotState(result);
+                displayInformation(result, "MESSAGE_PROGRAM_DELETED", result.message, programName);
             }
-            displayInformation(result, "MESSAGE_PROGRAM_DELETED", result.message, programName);
         });
     }
 }
@@ -751,6 +766,9 @@ function initProgramNameTable() {
     }, {
         "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_ACTUALIZATION'>Letzte Aktualisierung</span>",
         "sClass" : "programs"
+    }, {
+        "sTitle" : "<span lkey='Blockly.Msg.DATATABLE_ACTUALIZATION'>Letzte Aktualisierung mit Hundertstel Sekunden</span>",
+        "sClass" : "programs hidden"
     }, ];
     var $programs = $('#programNameTable');
 
@@ -763,6 +781,12 @@ function initProgramNameTable() {
             "sType" : "date-de",
             "mRender" : function(data) {
                 return UTIL.formatDate(data);
+            }
+        } , {
+            "aTargets" : [ 5 ], // indexes of columns to be formatted
+            "sType" : "date-de",
+            "mRender" : function(data) {
+                return UTIL.formatDateComplete(data);
             }
         } , {
             "aTargets": [ 2 ], // indexes of columns to be formatted
@@ -992,6 +1016,7 @@ function initHeadNavigation() {
             } else {
                 setProgram("NEPOprog");
                 userState.programShared = false;
+                userState.programTimestamp = '';
                 initProgramEnvironment();
                 $('#menuSaveProg').parent().addClass('disabled');
                 Blockly.getMainWorkspace().saveButton.disable();

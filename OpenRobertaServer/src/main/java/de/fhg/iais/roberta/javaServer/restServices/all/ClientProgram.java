@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.javaServer.restServices.all;
 
 import java.io.StringWriter;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import javax.ws.rs.Consumes;
@@ -71,7 +72,7 @@ public class ClientProgram {
         try {
             JSONObject request = fullRequest.getJSONObject("data");
             String cmd = request.getString("cmd");
-            LOG.info("command is: " + cmd);
+            LOG.info("command is: " + cmd + ", userId is " + userId);
             response.put("cmd", cmd);
             ProgramProcessor pp = new ProgramProcessor(dbSession, httpSessionState);
             AccessRightProcessor upp = new AccessRightProcessor(dbSession, httpSessionState);
@@ -80,14 +81,30 @@ public class ClientProgram {
             if ( cmd.equals("saveP") ) {
                 String programName = request.getString("name");
                 String programText = request.getString("program");
+                Long timestamp = request.getLong("timestamp");
+                Timestamp programTimestamp = new Timestamp(timestamp);
                 boolean isShared = request.optBoolean("shared", false);
-                pp.updateProgram(programName, userId, programText, true, !isShared);
+                pp.updateProgram(programName, userId, programText, programTimestamp, true, !isShared);
+                if ( pp.isOk() ) {
+                    Program program = pp.getProgram(programName, userId);
+                    if ( program != null ) {
+                        response.put("newProgramTimestamp", program.getLastChanged());
+                    }
+                }
                 Util.addResultInfo(response, pp);
 
             } else if ( cmd.equals("saveAsP") ) {
                 String programName = request.getString("name");
                 String programText = request.getString("program");
-                pp.updateProgram(programName, userId, programText, true, true);
+                Long timestamp = request.getLong("timestamp");
+                Timestamp programTimestamp = new Timestamp(timestamp);
+                pp.updateProgram(programName, userId, programText, programTimestamp, true, true);
+                if ( pp.isOk() ) {
+                    Program program = pp.getProgram(programName, userId);
+                    if ( program != null ) {
+                        response.put("newProgramTimestamp", program.getLastChanged());
+                    }
+                }
                 Util.addResultInfo(response, pp);
 
             } else if ( cmd.equals("loadP") && httpSessionState.isUserLoggedIn() ) {

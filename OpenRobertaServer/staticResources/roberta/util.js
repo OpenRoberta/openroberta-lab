@@ -47,6 +47,31 @@ var UTIL = {};
         }
         return "";
     }
+    
+    /**
+     * Format date completely (including 1/1000 - seconds)
+     * @memberof UTIL
+     * 
+     * @param {date}
+     *            date from server to be formatted
+     */
+    UTIL.formatDateComplete = function (date) {
+        if (date) {
+            var YYYY = date.substring(0, 4);
+            var MM = date.substring(5, 7);
+            var DD = date.substring(8, 10);
+            var hh = date.substring(11, 13);
+            var mm = date.substring(14, 16);
+            var ss = date.substring(17, 19);
+            var ms = date.substring(20, 23);
+            while (ms.length < 3) {
+                ms += '0';
+            }
+            var str = DD + '.' + MM + '.' + YYYY + ', ' + hh + ':' + mm + ':' + ss + '.' + ms;
+            return str;
+        }
+        return "";
+    }
 
     /**
      * Convert date into numeric value
@@ -56,16 +81,20 @@ var UTIL = {};
      *            date in the form 'dd.mm.yyyy, hh:mm:ss'
      */
     UTIL.parseDate = function (d) {
-        var dayPart = d.split(', ')[0];
-        var timePart = d.split(', ')[1];
-        var day = dayPart.split('.')[0];
-        var month = dayPart.split('.')[1] - 1;
-        var year = dayPart.split('.')[2];
-        var hour = timePart.split(':')[0];
-        var minute = timePart.split(':')[1];
-        var second = timePart.split(':')[2];
-        var date = new Date(year, month, day, hour, minute, second);
-        return date.getTime();
+        if (d) {
+            var dayPart = d.split(', ')[0];
+            var timePart = d.split(', ')[1];
+            var day = dayPart.split('.')[0];
+            var month = dayPart.split('.')[1] - 1;
+            var year = dayPart.split('.')[2];
+            var hour = timePart.split(':')[0];
+            var minute = timePart.split(':')[1];
+            var second = timePart.split(':')[2];
+            var mseconds = timePart.split('.')[1];
+            var date = new Date(year, month, day, hour, minute, second, mseconds);
+            return date.getTime();            
+        }
+        return 0;
     }
     
     /**
