@@ -508,8 +508,11 @@ function shareProgramsFromListing() {
         // you cannot share programs with yourself
         displayMessage("ORA_USER_TO_SHARE_SAME_AS_LOGIN_USER", "POPUP", "");
     } else if (shareWith != '') {
-        var right = $('#programShareRight input:checked').val();
-        if (right != undefined) {
+        var right = $('#write:checked').val();
+        if (!right) {
+            right = $('#read:checked').val(); 
+        }
+        if (right) {
             var $programRow = $('#programNameTable .selected');
             var programName = $programRow[0].children[0].textContent;
             LOG.info("share program " + programName + " with '" + shareWith + " having right '" + right + "'");
