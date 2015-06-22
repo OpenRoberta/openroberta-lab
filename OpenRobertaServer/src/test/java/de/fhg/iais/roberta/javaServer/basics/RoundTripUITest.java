@@ -15,11 +15,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
@@ -44,7 +44,6 @@ public class RoundTripUITest {
     private static String connectionUrl;
     private static Session nativeSession;
     private static StringBuffer verificationErrors = new StringBuffer();
-    private static FirefoxProfile fp;
     private static JavascriptExecutor js;
 
     @BeforeClass
@@ -71,6 +70,7 @@ public class RoundTripUITest {
         }
         WebElement userNewElement = (new WebDriverWait(RoundTripUITest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("menuNewUser")));
         userNewElement.click();
+        (new WebDriverWait(RoundTripUITest.driver, 10)).until(ExpectedConditions.visibilityOfElementLocated(By.id("saveUser")));
         RoundTripUITest.driver.findElement(By.id("accountName")).clear();
         RoundTripUITest.driver.findElement(By.id("accountName")).sendKeys("orA");
         RoundTripUITest.driver.findElement(By.id("pass1")).clear();
@@ -82,7 +82,7 @@ public class RoundTripUITest {
         RoundTripUITest.driver.findElement(By.id("userEmail")).clear();
         RoundTripUITest.driver.findElement(By.id("userEmail")).sendKeys("");
         RoundTripUITest.driver.findElement(By.id("saveUser")).click();
-        Thread.sleep(500);
+        (new WebDriverWait(RoundTripUITest.driver, 10)).until(ExpectedConditions.invisibilityOfElementLocated(By.id("saveUser")));
         assertEquals(1, getOneInt("select count(*) from USER"));
         color = userNameElement.getCssValue("color");
         assertEquals("rgba(175, 202, 4, 1)", color); // Color of login-icon has to be green now
@@ -111,12 +111,13 @@ public class RoundTripUITest {
         }
         WebElement userLoginElement = (new WebDriverWait(RoundTripUITest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("menuLogin")));
         userLoginElement.click();
+        (new WebDriverWait(RoundTripUITest.driver, 10)).until(ExpectedConditions.visibilityOfElementLocated(By.id("doLogin")));
         RoundTripUITest.driver.findElement(By.id("accountNameS")).clear();
         RoundTripUITest.driver.findElement(By.id("accountNameS")).sendKeys("orA");
         RoundTripUITest.driver.findElement(By.id("pass1S")).clear();
         RoundTripUITest.driver.findElement(By.id("pass1S")).sendKeys("Pid");
         RoundTripUITest.driver.findElement(By.id("doLogin")).click();
-        Thread.sleep(500);
+        (new WebDriverWait(RoundTripUITest.driver, 10)).until(ExpectedConditions.invisibilityOfElementLocated(By.id("doLogin")));
         color = userNameElement.getCssValue("color");
         assertEquals("rgba(175, 202, 4, 1)", color); // Color of login-icon has to be green now
         userName = js.executeScript("return userState.name;").toString();
@@ -130,10 +131,11 @@ public class RoundTripUITest {
         }
         WebElement userDeleteElement = (new WebDriverWait(RoundTripUITest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("menuDeleteUser")));
         userDeleteElement.click();
+        (new WebDriverWait(RoundTripUITest.driver, 10)).until(ExpectedConditions.visibilityOfElementLocated(By.id("deleteUser")));
         RoundTripUITest.driver.findElement(By.id("pass1D")).clear();
         RoundTripUITest.driver.findElement(By.id("pass1D")).sendKeys("Pid");
         RoundTripUITest.driver.findElement(By.id("deleteUser")).click();
-        Thread.sleep(500);
+        (new WebDriverWait(RoundTripUITest.driver, 10)).until(ExpectedConditions.invisibilityOfElementLocated(By.id("deleteUser")));
         color = userNameElement.getCssValue("color");
         assertEquals("rgba(204, 204, 204, 1)", color); // Color of login-icon has to be grey now
         userName = js.executeScript("return userState.name;").toString();
@@ -164,10 +166,9 @@ public class RoundTripUITest {
     private static void startServer() throws IOException, InterruptedException {
         RoundTripUITest.server = new ServerStarter("classpath:openRoberta1997.properties").start();
         int port = RoundTripUITest.server.getURI().getPort();
-        fp = new FirefoxProfile();
-        fp.setEnableNativeEvents(false);
-
-        RoundTripUITest.driver = new FirefoxDriver(fp);
+        RoundTripUITest.driver = new PhantomJSDriver();
+        // workaround: https://github.com/ariya/phantomjs/issues/11637
+        RoundTripUITest.driver.manage().window().setSize(new Dimension(1024,768));
         RoundTripUITest.driver.manage().window().maximize();
         RoundTripUITest.js = (JavascriptExecutor) RoundTripUITest.driver;
         RoundTripUITest.baseUrl = "http://localhost:" + port;

@@ -15,8 +15,8 @@ import org.junit.experimental.categories.Category;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 
 import de.fhg.iais.roberta.main.ServerStarter;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
@@ -38,7 +38,7 @@ public class FirefoxUITest {
 
         server = new ServerStarter(null).start();
         int port = server.getURI().getPort();
-        driver = new FirefoxDriver();
+        driver = new PhantomJSDriver();
         driver.manage().window().maximize();
         baseUrl = "http://localhost:" + port;
         // Creating a random username, length 20, specify char set

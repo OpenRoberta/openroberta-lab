@@ -9,7 +9,7 @@ import org.eclipse.jetty.server.Server;
 import org.hibernate.Session;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 
 import de.fhg.iais.roberta.main.ServerStarter;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
@@ -30,7 +30,7 @@ public class SeleniumHelper {
         new DbSetup(session).runDefaultRobertaSetup();
 
         this.port = this.server.getURI().getPort();
-        this.driver = new FirefoxDriver();
+        this.driver = new PhantomJSDriver();
         this.baseUrl = "http://localhost:" + this.port + "/" + baseUrl + "/";
         this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         this.driver.get(this.baseUrl);

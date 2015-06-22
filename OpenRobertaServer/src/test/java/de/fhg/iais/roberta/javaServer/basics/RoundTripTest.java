@@ -22,10 +22,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -215,11 +215,10 @@ public class RoundTripTest {
 
         RoundTripTest.server = new ServerStarter("classpath:openRoberta.properties").start();
         int port = RoundTripTest.server.getURI().getPort();
-        FirefoxProfile fp = new FirefoxProfile();
-        fp.setEnableNativeEvents(false);
+        RoundTripTest.driver = new PhantomJSDriver();
 
-        RoundTripTest.driver = new FirefoxDriver(fp);
-
+        // workaround: https://github.com/ariya/phantomjs/issues/11637
+        RoundTripTest.driver.manage().window().setSize(new Dimension(1024,768));
         RoundTripTest.driver.manage().window().maximize();
 
         RoundTripTest.baseUrl = "http://localhost:" + port;
@@ -240,12 +239,13 @@ public class RoundTripTest {
 
         WebElement userLoginElement = (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("menuLogin")));
         userLoginElement.click();
+        (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.visibilityOfElementLocated(By.id("doLogin")));
         RoundTripTest.driver.findElement(By.id("accountNameS")).clear();
         RoundTripTest.driver.findElement(By.id("accountNameS")).sendKeys("orA");
         RoundTripTest.driver.findElement(By.id("pass1S")).clear();
         RoundTripTest.driver.findElement(By.id("pass1S")).sendKeys("Pid");
         RoundTripTest.driver.findElement(By.id("doLogin")).click();
-        Thread.sleep(500);
+        (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.invisibilityOfElementLocated(By.id("doLogin")));
     }
 
     private String saveProgram(String programName) throws InterruptedException, Exception, JSONException {
@@ -273,12 +273,13 @@ public class RoundTripTest {
 
         WebElement userProgramOpenElement = (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("menuListProg")));
         userProgramOpenElement.click();
-        WebElement programTable = RoundTripTest.driver.findElement(By.id("programNameTable"));
+        WebElement programTable = (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.visibilityOfElementLocated(By.id("programNameTable")));
+        Thread.sleep(500);
         WebElement td = findTableRow(program, programTable);
         td.click();
 
-        Thread.sleep(500);
-        RoundTripTest.driver.findElement(By.id("loadFromListing")).click();
+        WebElement load = (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("loadFromListing")));
+        load.click();
     }
 
     protected WebElement findTableRow(String program, WebElement programTable) {
