@@ -1644,7 +1644,7 @@ function initializeLanguages() {
     } else if (navigator.language.indexOf("fi") > -1) {
         switchLanguage('FI', true)
         $('#chosenLanguage').text('FI');
-    } else if (navigator.language.indexOf("fi") > -1) {
+    } else if (navigator.language.indexOf("da") > -1) {
         switchLanguage('DA', true)
         $('#chosenLanguage').text('DA');
     } else {
