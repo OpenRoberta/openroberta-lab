@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import de.fhg.iais.roberta.util.Encryption;
 import de.fhg.iais.roberta.util.Util;
 
 @Entity
@@ -59,12 +60,12 @@ public class User implements WithSurrogateId {
         this.lastLogin = Util.getNow();
     }
 
-    public boolean isPasswordCorrect(String passwordToCheck) {
-        return this.password.equals(passwordToCheck);
+    public boolean isPasswordCorrect(String passwordToCheck) throws Exception {
+        return Encryption.isPasswordCorrect(this.password, passwordToCheck);
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPassword(String password) throws Exception {
+        this.password = Encryption.createHash(password);
     }
 
     public String getEmail() {

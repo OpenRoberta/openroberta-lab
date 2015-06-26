@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.jaxb.ConfigurationHelper;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
+import de.fhg.iais.roberta.util.Encryption;
 
 /**
  * a class with a static main method, responsible for some administrative work, like<br>
@@ -52,6 +53,9 @@ public class Administration {
                 break;
             case "conf:xml2text":
                 adminWork.confXml2text();
+                break;
+            case "user:encryptpasswords":
+                adminWork.encryptpasswords();
                 break;
             default:
                 LOG.error("invalid argument: " + args[0] + " - exit 4");
@@ -108,6 +112,33 @@ public class Administration {
                 LOG.info("!!! processed configuration name: " + object[1] + ". Update count: " + count);
             } catch ( Exception e ) {
                 LOG.info("??? exception when transforming: name: " + object[1] + ", content: " + ((String) object[2]).substring(0, 50).replace("\n", " "));
+            }
+        }
+        nativeSession.getTransaction().commit();
+        nativeSession.createSQLQuery("shutdown").executeUpdate();
+        nativeSession.close();
+    }
+
+    private void encryptpasswords() throws Exception {
+        LOG.info("*** encryptpasswords ***");
+        expectArgs(2);
+        SessionFactoryWrapper sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", "jdbc:hsqldb:file:" + this.args[1]);
+        Session nativeSession = sessionFactoryWrapper.getNativeSession();
+        nativeSession.beginTransaction();
+        String sqlGetQuery = "select ID, PASSWORD from USER";
+        String sqlUpdQuery = "update USER set PASSWORD=:password where ID=:id";
+        SQLQuery upd = nativeSession.createSQLQuery(sqlUpdQuery);
+        List<Object[]> resultSet = nativeSession.createSQLQuery(sqlGetQuery).list();
+        LOG.info("there are " + resultSet.size() + " users in the data base");
+        for ( Object[] object : resultSet ) {
+            try {
+                String password = Encryption.createHash((String) object[1]);
+                upd.setInteger("id", (Integer) object[0]);
+                upd.setString("password", password);
+                int count = upd.executeUpdate();
+                LOG.info("!!! processed user name: " + object[0] + ". Update count: " + count);
+            } catch ( Exception e ) {
+                LOG.info("??? exception when transforming user: id: " + object[0]);
             }
         }
         nativeSession.getTransaction().commit();

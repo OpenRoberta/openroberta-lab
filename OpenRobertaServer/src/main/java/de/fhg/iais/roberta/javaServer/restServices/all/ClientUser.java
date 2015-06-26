@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.javaServer.provider.OraData;
-import de.fhg.iais.roberta.persistence.UserProcessor;
 import de.fhg.iais.roberta.persistence.AccessRightProcessor;
+import de.fhg.iais.roberta.persistence.UserProcessor;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
@@ -66,7 +66,7 @@ public class ClientUser {
                     response.put("userId", id);
                     response.put("userRole", user.getRole());
                     response.put("userAccountName", account);
-                    LOG.info("login: user {} with id {} logged in", account, id);
+                    LOG.info("login: user {} (id {}) logged in", account, id);
                     AliveData.rememberLogin();
                 }
 

@@ -27,8 +27,9 @@ public class UserDao extends AbstractDao<User> {
      * @param password
      * @param roleAsString
      * @return the created user object; returns <code>null</code> if creation is unsuccessful (e.g. user already exists)
+     * @throws Exception
      */
-    public User persistUser(String account, String password, String roleAsString) {
+    public User persistUser(String account, String password, String roleAsString) throws Exception {
         Assert.notNull(account);
         Assert.notNull(password);
         Role role = Role.valueOf(roleAsString);
@@ -78,7 +79,7 @@ public class UserDao extends AbstractDao<User> {
 
             //    		Query hql = this.session.createQuery("from User");
             Query hql = this.session.createQuery("from User where tags=:tag order by " + sortBy);
-            //    		
+            //
             //    		("SELECT Name, Day FROM Customers LEFT JOIN Reservations "
             //    				+ "ON Customers.CustomerId = Reservations.CustomerId where relation.program =: program;");
 
@@ -86,7 +87,7 @@ public class UserDao extends AbstractDao<User> {
             //    				+ "from User as u "
             //    				+ "left join u.relation UserProgram "
             //    				+ "where up.program =: program order by "+sortBy);
-            //    		
+            //
 
             //            List<Object[]> list = query.list();
             //            for(Object[] arr : list){

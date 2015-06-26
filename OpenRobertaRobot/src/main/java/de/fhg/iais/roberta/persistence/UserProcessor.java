@@ -30,7 +30,7 @@ public class UserProcessor extends AbstractProcessor {
         }
     }
 
-    public User getUser(String account, String password) {
+    public User getUser(String account, String password) throws Exception {
         UserDao userDao = new UserDao(this.dbSession);
         User user = userDao.loadUser(account);
         if ( user != null && user.isPasswordCorrect(password) ) {
@@ -42,7 +42,7 @@ public class UserProcessor extends AbstractProcessor {
         }
     }
 
-    public void saveUser(String account, String password, String roleAsString, String email, String tags) {
+    public void saveUser(String account, String password, String roleAsString, String email, String tags) throws Exception {
         if ( account == null || account.equals("") || password == null || password.equals("") ) {
             setError(Key.USER_CREATE_ERROR_MISSING_REQ_FIELDS, account);
         } else {
@@ -58,7 +58,7 @@ public class UserProcessor extends AbstractProcessor {
         }
     }
 
-    public void deleteUser(String account, String password) {
+    public void deleteUser(String account, String password) throws Exception {
         UserDao userDao = new UserDao(this.dbSession);
         User user = userDao.loadUser(account);
         if ( user != null && user.isPasswordCorrect(password) ) {

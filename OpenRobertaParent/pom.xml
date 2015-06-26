@@ -46,12 +46,12 @@ limitations under the License.
 		<jna.version>3.2.7</jna.version>
 	</properties>
 	<modules>
+		<module>../Resources</module>
 		<module>../OpenRobertaShared</module>
 		<module>../OpenRobertaRuntime</module>
 		<module>../EV3Menu</module>
-		<module>../OpenRobertaServer</module>
 		<module>../OpenRobertaRobot</module>
-		<module>../Resources</module>
+		<module>../OpenRobertaServer</module>
 	</modules>
 	<repositories>
 		<repository>
@@ -193,6 +193,11 @@ limitations under the License.
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
 				<version>3.1</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-codec</groupId>
+				<artifactId>commons-codec</artifactId>
+				<version>1.10</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-io</groupId>
