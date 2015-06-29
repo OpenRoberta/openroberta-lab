@@ -293,13 +293,11 @@ function saveAsProgramToServer() {
     userState.programSaved = true;
     LOG.info('saveAs program ' + userState.program + ' login: ' + userState.id);
     $('.modal').modal('hide'); // close all opened popups
-    console.log('saveAsProgramToServer, userState.programTimestamp = ' + userState.programTimestamp);
     var timestamp = UTIL.parseDate(userState.programTimestamp);
     PROGRAM.saveAsProgramToServer(userState.program, timestamp, xmlText, function(result) {
         if (result.rc === 'ok') {
             userState.programModified = false;
             userState.programTimestamp = UTIL.formatDateComplete(result.newProgramTimestamp);
-            console.log('saveAsProgramToServer, newTimestamp = ' + userState.programTimestamp);
         }
         displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM_AS", result.message, userState.program);
     });
@@ -315,13 +313,11 @@ function saveToServer() {
         userState.programSaved = true;
         LOG.info('save program ' + userState.program + ' login: ' + userState.id);
         $('.modal').modal('hide'); // close all opened popups
-        console.log('saveToServer, userState.programTimestamp = ' + userState.programTimestamp);
         var timestamp = UTIL.parseDate(userState.programTimestamp);
         PROGRAM.saveProgramToServer(userState.program, userState.programShared, timestamp, xmlText, function(result) {
             if (result.rc === 'ok') {
                 userState.programModified = false;
                 userState.programTimestamp = UTIL.formatDateComplete(result.newProgramTimestamp);
-                console.log('saveToServer, newTimestamp = ' + userState.programTimestamp);
             }
             displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM", result.message, userState.program);
         });
