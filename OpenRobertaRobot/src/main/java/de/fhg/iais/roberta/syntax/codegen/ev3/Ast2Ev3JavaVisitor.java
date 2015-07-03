@@ -205,9 +205,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitNumConst(NumConst<Void> numConst) {
-        if ( numConst.getProperty().isDisabled() ) {
-            return null;
-        }
         if ( isInteger(numConst.getValue()) ) {
             this.sb.append(numConst.getValue());
         } else {
@@ -220,18 +217,12 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBoolConst(BoolConst<Void> boolConst) {
-        if ( boolConst.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append(boolConst.isValue());
         return null;
     };
 
     @Override
     public Void visitMathConst(MathConst<Void> mathConst) {
-        if ( mathConst.getProperty().isDisabled() ) {
-            return null;
-        }
         switch ( mathConst.getMathConst() ) {
             case PI:
                 this.sb.append("Math.PI");
@@ -259,45 +250,30 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        if ( colorConst.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append(colorConst.getValue().getJavaCode());
         return null;
     }
 
     @Override
     public Void visitStringConst(StringConst<Void> stringConst) {
-        if ( stringConst.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("\"").append(StringEscapeUtils.escapeJava(stringConst.getValue())).append("\"");
         return null;
     }
 
     @Override
     public Void visitNullConst(NullConst<Void> nullConst) {
-        if ( nullConst.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("null");
         return null;
     }
 
     @Override
     public Void visitVar(Var<Void> var) {
-        if ( var.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append(var.getValue());
         return null;
     }
 
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        if ( var.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append(var.getTypeVar().getJavaCode()).append(" ");
         this.sb.append(var.getName());
         if ( var.getValue().getKind() != BlockType.EMPTY_EXPR ) {
@@ -309,9 +285,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitUnary(Unary<Void> unary) {
-        if ( unary.getProperty().isDisabled() ) {
-            return null;
-        }
         if ( unary.getOp() == Unary.Op.POSTFIX_INCREMENTS ) {
             generateExprCode(unary, this.sb);
             this.sb.append(unary.getOp().getOpSymbol());
@@ -324,9 +297,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBinary(Binary<Void> binary) {
-        if ( binary.getProperty().isDisabled() ) {
-            return null;
-        }
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
         this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
         if ( binary.getOp() == Op.TEXT_APPEND ) {
@@ -344,36 +314,24 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitActionExpr(ActionExpr<Void> actionExpr) {
-        if ( actionExpr.getProperty().isDisabled() ) {
-            return null;
-        }
         actionExpr.getAction().visit(this);
         return null;
     }
 
     @Override
     public Void visitSensorExpr(SensorExpr<Void> sensorExpr) {
-        if ( sensorExpr.getProperty().isDisabled() ) {
-            return null;
-        }
         sensorExpr.getSens().visit(this);
         return null;
     }
 
     @Override
     public Void visitMethodExpr(MethodExpr<Void> methodExpr) {
-        if ( methodExpr.getProperty().isDisabled() ) {
-            return null;
-        }
         methodExpr.getMethod().visit(this);
         return null;
     }
 
     @Override
     public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
-        if ( emptyExpr.getProperty().isDisabled() ) {
-            return null;
-        }
         switch ( emptyExpr.getDefVal().getName() ) {
             case "java.lang.String":
                 this.sb.append("\"\"");
@@ -397,9 +355,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitExprList(ExprList<Void> exprList) {
-        if ( exprList.getProperty().isDisabled() ) {
-            return null;
-        }
         boolean first = true;
         for ( Expr<Void> expr : exprList.get() ) {
             if ( expr.getKind() != BlockType.EMPTY_EXPR ) {
@@ -420,9 +375,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitFunc(MathPowerFunct<Void> funct) {
-        if ( funct.getProperty().isDisabled() ) {
-            return null;
-        }
         //        switch ( funct.getFunctName() ) {
         //            case PRINT:
         //                this.sb.append("System.out.println(");
@@ -437,18 +389,12 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitActionStmt(ActionStmt<Void> actionStmt) {
-        if ( actionStmt.getProperty().isDisabled() ) {
-            return null;
-        }
         actionStmt.getAction().visit(this);
         return null;
     }
 
     @Override
     public Void visitAssignStmt(AssignStmt<Void> assignStmt) {
-        if ( assignStmt.getProperty().isDisabled() ) {
-            return null;
-        }
         assignStmt.getName().visit(this);
         this.sb.append(" = ");
         assignStmt.getExpr().visit(this);
@@ -458,9 +404,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitExprStmt(ExprStmt<Void> exprStmt) {
-        if ( exprStmt.getProperty().isDisabled() ) {
-            return null;
-        }
         exprStmt.getExpr().visit(this);
         this.sb.append(";");
         return null;
@@ -468,9 +411,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitIfStmt(IfStmt<Void> ifStmt) {
-        if ( ifStmt.getProperty().isDisabled() ) {
-            return null;
-        }
         if ( ifStmt.isTernary() ) {
             generateCodeFromTernary(ifStmt);
         } else {
@@ -482,9 +422,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
-        if ( repeatStmt.getProperty().isDisabled() ) {
-            return null;
-        }
         boolean additionalClosingBracket = false;
         switch ( repeatStmt.getMode() ) {
             case UNTIL:
@@ -525,27 +462,18 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitSensorStmt(SensorStmt<Void> sensorStmt) {
-        if ( sensorStmt.getProperty().isDisabled() ) {
-            return null;
-        }
         sensorStmt.getSensor().visit(this);
         return null;
     }
 
     @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
-        if ( stmtFlowCon.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase() + ";");
         return null;
     }
 
     @Override
     public Void visitStmtList(StmtList<Void> stmtList) {
-        if ( stmtList.getProperty().isDisabled() ) {
-            return null;
-        }
         for ( Stmt<Void> stmt : stmtList.get() ) {
             nlIndent();
             stmt.visit(this);
@@ -555,9 +483,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
-        if ( waitStmt.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("if ( TRUE ) {");
         incrIndentation();
         nlIndent();
@@ -577,9 +502,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
-        if ( waitTimeStmt.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("hal.waitFor(");
         waitTimeStmt.getTime().visit(this);
         this.sb.append(");");
@@ -588,18 +510,12 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        if ( clearDisplayAction.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("hal.clearDisplay();");
         return null;
     }
 
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        if ( volumeAction.getProperty().isDisabled() ) {
-            return null;
-        }
         switch ( volumeAction.getMode() ) {
             case SET:
                 this.sb.append("hal.setVolume(");
@@ -617,18 +533,12 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        if ( lightAction.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("hal.ledOn(" + lightAction.getColor().getJavaCode() + ", " + lightAction.getBlinkMode().getJavaCode() + ");");
         return null;
     }
 
     @Override
     public Void visitLightStatusAction(LightStatusAction<Void> lightStatusAction) {
-        if ( lightStatusAction.getProperty().isDisabled() ) {
-            return null;
-        }
         switch ( lightStatusAction.getStatus() ) {
             case OFF:
                 this.sb.append("hal.ledOff();");
@@ -644,18 +554,12 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        if ( playFileAction.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("hal.playFile(" + playFileAction.getFileName() + ");");
         return null;
     }
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        if ( showPictureAction.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("hal.drawPicture(" + showPictureAction.getPicture().getJavaCode() + ", ");
         showPictureAction.getX().visit(this);
         this.sb.append(", ");
@@ -666,9 +570,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        if ( showTextAction.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("hal.drawText(");
         if ( showTextAction.getMsg().getKind() != BlockType.STRING_CONST ) {
             this.sb.append("String.valueOf(");
@@ -687,9 +588,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        if ( toneAction.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("hal.playTone(");
         toneAction.getFrequency().visit(this);
         this.sb.append(", ");
@@ -700,9 +598,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        if ( motorOnAction.getProperty().isDisabled() ) {
-            return null;
-        }
         String methodName;
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorOnAction.getPort());
         boolean duration = motorOnAction.getParam().getDuration() != null;
@@ -724,9 +619,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        if ( motorSetPowerAction.getProperty().isDisabled() ) {
-            return null;
-        }
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
         String methodName = isRegulated ? "hal.setRegulatedMotorSpeed(" : "hal.setUnregulatedMotorSpeed(";
         this.sb.append(methodName + motorSetPowerAction.getPort().getJavaCode() + ", ");
@@ -737,9 +629,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        if ( motorGetPowerAction.getProperty().isDisabled() ) {
-            return null;
-        }
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorGetPowerAction.getPort());
         String methodName = isRegulated ? "hal.getRegulatedMotorSpeed(" : "hal.getUnregulatedMotorSpeed(";
         this.sb.append(methodName + motorGetPowerAction.getPort().getJavaCode() + ")");
@@ -748,9 +637,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        if ( motorStopAction.getProperty().isDisabled() ) {
-            return null;
-        }
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorStopAction.getPort());
         String methodName = isRegulated ? "hal.stopRegulatedMotor(" : "hal.stopUnregulatedMotor(";
         this.sb.append(methodName + motorStopAction.getPort().getJavaCode() + ", " + motorStopAction.getMode().getJavaCode() + ");");
@@ -759,9 +645,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        if ( driveAction.getProperty().isDisabled() ) {
-            return null;
-        }
         boolean isDuration = driveAction.getParam().getDuration() != null;
         String methodName = isDuration ? "hal.driveDistance(" : "hal.regulatedDrive(";
         this.sb.append(methodName);
@@ -779,9 +662,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        if ( turnAction.getProperty().isDisabled() ) {
-            return null;
-        }
         boolean isDuration = turnAction.getParam().getDuration() != null;
         boolean isRegulated = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
         String methodName = "hal.rotateDirection" + (isDuration ? "Angle" : isRegulated ? "Regulated" : "Unregulated") + "(";
@@ -800,9 +680,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        if ( stopAction.getProperty().isDisabled() ) {
-            return null;
-        }
         boolean isRegulated = true;
         String methodName = isRegulated ? "hal.stopRegulatedDrive(" : "hal.stopUnregulatedDrive(";
         this.sb.append(methodName);
@@ -813,9 +690,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        if ( brickSensor.getProperty().isDisabled() ) {
-            return null;
-        }
         switch ( brickSensor.getMode() ) {
             case IS_PRESSED:
                 this.sb.append("hal.isPressed(" + brickSensor.getKey().getJavaCode() + ")");
@@ -831,9 +705,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        if ( colorSensor.getProperty().isDisabled() ) {
-            return null;
-        }
         switch ( colorSensor.getMode() ) {
             case AMBIENTLIGHT:
                 this.sb.append("hal.getColorSensorAmbient(" + colorSensor.getPort().getJavaCode() + ")");
@@ -855,9 +726,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        if ( encoderSensor.getProperty().isDisabled() ) {
-            return null;
-        }
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(encoderSensor.getMotor());
         if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
             String methodName = isRegulated ? "hal.resetRegulatedMotorTacho(" : "hal.resetUnregulatedMotorTacho(";
@@ -871,9 +739,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        if ( gyroSensor.getProperty().isDisabled() ) {
-            return null;
-        }
         if ( gyroSensor.getMode() == GyroSensorMode.RESET ) {
             this.sb.append("hal.resetGyroSensor(" + gyroSensor.getPort().getJavaCode() + ");");
         } else {
@@ -884,9 +749,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        if ( infraredSensor.getProperty().isDisabled() ) {
-            return null;
-        }
         switch ( infraredSensor.getMode() ) {
             case DISTANCE:
                 this.sb.append("hal.getInfraredSensorDistance(" + infraredSensor.getPort().getJavaCode() + ")");
@@ -903,9 +765,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        if ( timerSensor.getProperty().isDisabled() ) {
-            return null;
-        }
         switch ( timerSensor.getMode() ) {
             case GET_SAMPLE:
                 this.sb.append("hal.getTimerValue(" + timerSensor.getTimer() + ")");
@@ -921,18 +780,12 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        if ( touchSensor.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("hal.isPressed(" + touchSensor.getPort().getJavaCode() + ")");
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        if ( ultrasonicSensor.getProperty().isDisabled() ) {
-            return null;
-        }
         if ( ultrasonicSensor.getMode() == UltrasonicSensorMode.DISTANCE ) {
             this.sb.append("hal.getUltraSonicSensorDistance(" + ultrasonicSensor.getPort().getJavaCode() + ")");
         } else {
@@ -943,29 +796,19 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-        if ( mainTask.getProperty().isDisabled() ) {
-            return null;
-        }
         mainTask.getVariables().visit(this);
         this.sb.append("\n\n").append(INDENT).append("public void run() {\n");
-        //        this.sb.append(INDENT).append(INDENT).append("hal = new Hal(brickConfiguration, usedSensors);\n");
         return null;
     }
 
     @Override
     public Void visitActivityTask(ActivityTask<Void> activityTask) {
-        if ( activityTask.getProperty().isDisabled() ) {
-            return null;
-        }
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitStartActivityTask(StartActivityTask<Void> startActivityTask) {
-        if ( startActivityTask.getProperty().isDisabled() ) {
-            return null;
-        }
         // TODO Auto-generated method stub
         return null;
     }
@@ -977,17 +820,11 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitGetSampleSensor(GetSampleSensor<Void> sensorGetSample) {
-        if ( sensorGetSample.getProperty().isDisabled() ) {
-            return null;
-        }
         return sensorGetSample.getSensor().visit(this);
     }
 
     @Override
     public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
-        if ( textPrintFunct.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("System.out.println(");
         textPrintFunct.getParam().get(0).visit(this);
         this.sb.append(")");
@@ -996,9 +833,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitFunctionStmt(FunctionStmt<Void> functionStmt) {
-        if ( functionStmt.getProperty().isDisabled() ) {
-            return null;
-        }
         functionStmt.getFunction().visit(this);
         this.sb.append(";");
         return null;
@@ -1006,18 +840,12 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitFunctionExpr(FunctionExpr<Void> functionExpr) {
-        if ( functionExpr.getProperty().isDisabled() ) {
-            return null;
-        }
         functionExpr.getFunction().visit(this);
         return null;
     }
 
     @Override
     public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
-        if ( getSubFunct.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("BlocklyMethods.listsGetSubList( ");
         getSubFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
@@ -1045,9 +873,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
-        if ( indexOfFunct.getProperty().isDisabled() ) {
-            return null;
-        }
         switch ( indexOfFunct.getLocation() ) {
             case FIRST:
                 this.sb.append("BlocklyMethods.findFirst( ");
@@ -1071,9 +896,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitLenghtOfIsEmptyFunct(LenghtOfIsEmptyFunct<Void> lenghtOfIsEmptyFunct) {
-        if ( lenghtOfIsEmptyFunct.getProperty().isDisabled() ) {
-            return null;
-        }
         switch ( lenghtOfIsEmptyFunct.getFunctName() ) {
             case LISTS_LENGTH:
                 this.sb.append("BlocklyMethods.lenght( ");
@@ -1094,9 +916,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitEmptyList(EmptyList<Void> emptyList) {
-        if ( emptyList.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("new ArrayList<"
             + emptyList.getTypeVar().getJavaCode().substring(0, 1).toUpperCase()
             + emptyList.getTypeVar().getJavaCode().substring(1).toLowerCase()
@@ -1106,9 +925,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitListCreate(ListCreate<Void> listCreate) {
-        if ( listCreate.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("BlocklyMethods.createListWith(");
         listCreate.getValue().visit(this);
         this.sb.append(")");
@@ -1117,9 +933,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
-        if ( listRepeat.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("BlocklyMethods.createListWithItem(");
         listRepeat.getParam().get(0).visit(this);
         this.sb.append(", ");
@@ -1130,9 +943,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
-        if ( listGetIndex.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("BlocklyMethods.listsIndex(");
         listGetIndex.getParam().get(0).visit(this);
         this.sb.append(", ");
@@ -1152,9 +962,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
-        if ( listSetIndex.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("BlocklyMethods.listsIndex(");
         listSetIndex.getParam().get(0).visit(this);
         this.sb.append(", ");
@@ -1173,9 +980,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        if ( mathConstrainFunct.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("BlocklyMethods.clamp(");
         mathConstrainFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
@@ -1188,9 +992,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
-        if ( mathNumPropFunct.getProperty().isDisabled() ) {
-            return null;
-        }
         switch ( mathNumPropFunct.getFunctName() ) {
             case EVEN:
                 this.sb.append("BlocklyMethods.isEven(");
@@ -1237,9 +1038,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
-        if ( mathOnListFunct.getProperty().isDisabled() ) {
-            return null;
-        }
         switch ( mathOnListFunct.getFunctName() ) {
             case SUM:
                 this.sb.append("BlocklyMethods.sumOnList(");
@@ -1282,18 +1080,12 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
-        if ( mathRandomFloatFunct.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("BlocklyMethods.randDouble()");
         return null;
     }
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
-        if ( mathRandomIntFunct.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("BlocklyMethods.randInt(");
         mathRandomIntFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
@@ -1304,9 +1096,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
-        if ( mathSingleFunct.getProperty().isDisabled() ) {
-            return null;
-        }
         switch ( mathSingleFunct.getFunctName() ) {
             case ROOT:
                 this.sb.append("Math.sqrt(");
@@ -1364,9 +1153,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        if ( textJoinFunct.getProperty().isDisabled() ) {
-            return null;
-        }
         boolean isFirst = true;
         List<Expr<Void>> params = textJoinFunct.getParam();
         this.sb.append("BlocklyMethods.textJoin(");
@@ -1384,9 +1170,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        if ( methodVoid.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("\n").append(INDENT).append("private void ");
         this.sb.append(methodVoid.getMethodName() + "(");
         methodVoid.getParameters().visit(this);
@@ -1398,9 +1181,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        if ( methodReturn.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("\n").append(INDENT).append("private " + methodReturn.getReturnType().getJavaCode());
         this.sb.append(" " + methodReturn.getMethodName() + "(");
         methodReturn.getParameters().visit(this);
@@ -1415,9 +1195,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
-        if ( methodIfReturn.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("if (");
         methodIfReturn.getCondition().visit(this);
         this.sb.append(") ");
@@ -1428,9 +1205,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
-        if ( methodStmt.getProperty().isDisabled() ) {
-            return null;
-        }
         methodStmt.getMethod().visit(this);
         this.sb.append(";");
         return null;
@@ -1438,9 +1212,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodCall(MethodCall<Void> methodCall) {
-        if ( methodCall.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append(methodCall.getMethodName() + "(");
         methodCall.getParametersValues().visit(this);
         this.sb.append(")");
@@ -1452,18 +1223,12 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> clearDisplayAction) {
-        if ( clearDisplayAction.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("hal.readMessage()");
         return null;
     }
 
     @Override
     public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
-        if ( bluetoothConnectAction.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("hal.establishConnectionTo(");
         if ( bluetoothConnectAction.get_address().getKind() != BlockType.STRING_CONST ) {
             this.sb.append("String.valueOf(");
@@ -1478,9 +1243,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
-        if ( bluetoothSendAction.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("hal.sendMessage(");
         if ( bluetoothSendAction.get_msg().getKind() != BlockType.STRING_CONST ) {
             this.sb.append("String.valueOf(");
@@ -1495,9 +1257,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
-        if ( bluetoothWaitForConnection.getProperty().isDisabled() ) {
-            return null;
-        }
         this.sb.append("hal.waitForConnection()");
         return null;
     }

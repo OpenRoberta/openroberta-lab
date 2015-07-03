@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.ast.syntax.codeGeneration;
+package de.fhg.iais.roberta.syntax.codegen.ev3;
 
 import junit.framework.Assert;
 
