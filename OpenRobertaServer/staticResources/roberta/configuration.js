@@ -42,7 +42,8 @@ var CONFIGURATION = {};
     CONFIGURATION.loadConfigurationFromListing = function(configName, successFn) {
         COMM.json("/conf", {
             "cmd" : "loadC",
-            "name" : configName
+            "name" : configName,
+            "owner" : userState.accountName
         }, successFn, 'load configuration ' + configName); 
     };
 

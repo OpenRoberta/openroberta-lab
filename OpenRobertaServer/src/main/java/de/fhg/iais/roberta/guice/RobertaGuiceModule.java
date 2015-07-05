@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.javaServer.restServices.all.ClientAdmin;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientConfiguration;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientPing;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientProgram;
+import de.fhg.iais.roberta.javaServer.restServices.all.ClientToolbox;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientUser;
 import de.fhg.iais.roberta.javaServer.restServices.all.RsExamples;
 import de.fhg.iais.roberta.javaServer.restServices.ev3.Ev3Command;
@@ -20,7 +21,6 @@ import de.fhg.iais.roberta.javaServer.restServices.ev3.Ev3DownloadJar;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
 import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CompilerWorkflow;
-import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Toolboxes;
 
 public class RobertaGuiceModule extends AbstractModule {
     private static final Logger LOG = LoggerFactory.getLogger(RobertaGuiceModule.class);
@@ -35,6 +35,7 @@ public class RobertaGuiceModule extends AbstractModule {
         // configure at least one JAX-RS resource or the server won't start.
         bind(ClientAdmin.class);
         bind(ClientConfiguration.class);
+        bind(ClientToolbox.class);
         bind(ClientProgram.class);
         bind(ClientUser.class);
         bind(Ev3DownloadJar.class);
@@ -43,7 +44,6 @@ public class RobertaGuiceModule extends AbstractModule {
         bind(ClientPing.class);
 
         bind(SessionFactoryWrapper.class).in(Singleton.class);
-        bind(Ev3Toolboxes.class).in(Singleton.class);
         bind(Ev3Communicator.class).in(Singleton.class);
         bind(Ev3CompilerWorkflow.class).in(Singleton.class);
 

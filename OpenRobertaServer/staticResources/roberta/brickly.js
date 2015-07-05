@@ -1,9 +1,10 @@
 $(document).ready(WRAP.fn3(init, 'brickly init EV3'));
 
 function init() {
-    COMM.json("/admin", {
+    COMM.json("/toolbox", {
         "cmd" : "loadT",
-        "name" : "brickEV3"
+        "name" : "ev3Brick",
+        "owner" : " "
     }, injectBrickly);
 };
 
@@ -23,22 +24,25 @@ function injectBrickly(toolbox) {
             save : true
         // check : true,
         });
-        initConfigurationEnvironment();
+        COMM.json("/conf", {
+            "cmd" : "loadC",
+            "name" : "Standardkonfiguration",
+            "owner" : " "
+        }, initConfigurationEnvironment);
     }
 };
 
-function initConfigurationEnvironment(opt_configurationBlocks) {
+function initConfigurationEnvironment(result) { 
+    // TODO solve this when blockly can have more instances
+    if (!result){ 
+        COMM.json("/conf", {
+            "cmd" : "loadC",
+            "name" : "Standardkonfiguration",
+            "owner" : " "
+        }, initConfigurationEnvironment);}
+    response(result);
     Blockly.getMainWorkspace().clear();
-    // should this come from the server?
-    var text = "<block_set xmlns='http://de.fhg.iais.roberta.blockly'>" + "<instance x='75' y='75'>" + "<block type='robBrick_EV3-Brick'>"
-            + "<field name='WHEEL_DIAMETER'>5.6</field>" + "<field name='TRACK_WIDTH'>13.5</field>" + "<value name='S1'>"
-            + "<block type='robBrick_touch'></block>" + "</value>" + "<value name='S4'>" + "<block type='robBrick_ultrasonic'></block>" + "</value>"
-            + "<value name='MB'>" + "<block type='robBrick_motor_big'>" + "<field name='MOTOR_REGULATION'>TRUE</field>"
-            + "<field name='MOTOR_REVERSE'>OFF</field>" + "<field name='MOTOR_DRIVE'>RIGHT</field>" + "</block>" + "</value>" + "<value name='MC'>"
-            + "<block type='robBrick_motor_big'>" + "<field name='MOTOR_REGULATION'>TRUE</field>" + "<field name='MOTOR_REVERSE'>OFF</field>"
-            + "<field name='MOTOR_DRIVE'>LEFT</field>" + "</block>" + "</value>" + "</block>" + "</instance>" + "</block_set>";
-    var configuration = opt_configurationBlocks || text;
-    var xml = Blockly.Xml.textToDom(configuration);
+    var xml = Blockly.Xml.textToDom(result.data);   
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
 };
 
@@ -114,9 +118,10 @@ function switchLanguageInBrickly() {
         configurationBlocks = Blockly.Xml.domToText(xmlConfiguration);
     }
 // translate configuration tab, inject is not possible!
-    COMM.json("/admin", {
+    COMM.json("/toolbox", {
         "cmd" : "loadT",
-        "name" : "brickEV3"
+        "name" : "ev3Brick",
+        "owner" : " "
     }, showToolbox);
     initConfigurationEnvironment(configurationBlocks);
 };

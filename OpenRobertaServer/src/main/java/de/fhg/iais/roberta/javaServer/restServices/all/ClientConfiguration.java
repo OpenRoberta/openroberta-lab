@@ -17,7 +17,9 @@ import com.google.inject.Inject;
 import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.jaxb.ConfigurationHelper;
 import de.fhg.iais.roberta.persistence.ConfigurationProcessor;
+import de.fhg.iais.roberta.persistence.UserProcessor;
 import de.fhg.iais.roberta.persistence.bo.Configuration;
+import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
@@ -44,7 +46,8 @@ public class ClientConfiguration {
     public Response command(@OraData HttpSessionState httpSessionState, @OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
         AliveData.rememberClientCall();
         new ClientLogger().log(LOG, fullRequest);
-        final int userId = httpSessionState.getUserId();
+        int userId = httpSessionState.getUserId();
+        UserProcessor up = new UserProcessor(dbSession, httpSessionState);
         JSONObject response = new JSONObject();
         try {
             JSONObject request = fullRequest.getJSONObject("data");
@@ -66,8 +69,15 @@ public class ClientConfiguration {
                 cp.updateConfiguration(configurationName, userId, configurationText, false);
                 Util.addResultInfo(response, cp);
 
-            } else if ( cmd.equals("loadC") && httpSessionState.isUserLoggedIn() ) {
+            } else if ( cmd.equals("loadC") ) {
                 String configurationName = request.getString("name");
+                String ownerName = request.getString("owner").trim();
+                if ( !ownerName.isEmpty() ) {
+                    User user = up.getUser(ownerName);
+                    if ( user != null ) {
+                        userId = user.getId();
+                    }
+                }
                 Configuration configuration = cp.getConfiguration(configurationName, userId);
                 if ( configuration != null ) {
                     Option<String> msgConfigurationXml = ConfigurationHelper.textString2xmlString(configuration.getConfigurationText());

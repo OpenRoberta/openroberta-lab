@@ -85,7 +85,8 @@ public class Jaxb2Ev3ConfigurationTransformer {
         Block block = new Block();
         block.setId("" + id);
         block.setInline(false);
-        block.setDisabled(true);
+        block.setDisabled(false);
+        block.setIntask(true);
         return block;
     }
 

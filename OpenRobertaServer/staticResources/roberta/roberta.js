@@ -19,7 +19,7 @@ function initUserState() {
     userState.programShared = false;
     userState.programTimestamp = '';
     userState.configurationModified = false;
-    userState.toolbox = 'beginner';
+    userState.toolbox = 'ev3Beginner';
     userState.token = '1A2B3C4D';
     userState.doPing = true;
     userState.robotName = '';
@@ -144,7 +144,7 @@ function showUserInfo() {
     }
     $("#programName").text(userState.program);
     $("#configurationName").text(userState.configuration);
-    if (userState.toolbox === 'beginner') {
+    if (userState.toolbox === 'ev3Beginner') {
         $("#toolbox").text(Blockly.Msg["MENU_BEGINNER"]);
     } else {
         $("#toolbox").text(Blockly.Msg["MENU_EXPERT"]);
@@ -630,9 +630,10 @@ function showToolbox(result) {
  */
 function loadToolbox(toolbox) {
     userState.toolbox = toolbox;
-    COMM.json("/admin", {
+    COMM.json("/toolbox", {
         "cmd" : "loadT",
-        "name" : toolbox
+        "name" : toolbox,
+        "owner": " "
     }, showToolbox);
 }
 
@@ -1027,13 +1028,20 @@ function initHeadNavigation() {
             $("#save-program").modal('show');
         } else if (domId === 'menuPropertiesProg') { //  Submenu 'Program'
         } else if (domId === 'menuToolboxBeginner') { // Submenu 'Program'
-            loadToolbox('beginner');
+            loadToolbox('ev3Beginner');
             $('#menuToolboxBeginner').parent().addClass('disabled');
             $('#menuToolboxExpert').parent().removeClass('disabled');
+            $('#menuToolboxSimulation').parent().removeClass('disabled');
         } else if (domId === 'menuToolboxExpert') { // Submenu 'Program'
-            loadToolbox('expert');
+            loadToolbox('ev3Expert');
             $('#menuToolboxExpert').parent().addClass('disabled');
             $('#menuToolboxBeginner').parent().removeClass('disabled');
+            $('#menuToolboxSimulation').parent().removeClass('disabled');
+        } else if (domId === 'menuToolboxSimulation') { // Submenu 'Program'
+            loadToolbox('simBeginner');
+            $('#menuToolboxBeginner').parent().removeClass('disabled');
+            $('#menuToolboxExpert').parent().removeClass('disabled');
+            $('#menuToolboxSimulation').parent().addClass('disabled');
         } else if (domId === 'menuCheckConfig') { //  Submenu 'Configuration'
             displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP", "");
         } else if (domId === 'menuNewConfig') { //  Submenu 'Configuration'
@@ -1212,6 +1220,7 @@ function initHeadNavigation() {
     });
 
     setHeadNavigationMenuState('logout');
+    $('#menuToolboxBeginner').parent().addClass('disabled');
 }
 
 /**
@@ -1572,9 +1581,10 @@ function switchLanguageInBlockly(url) {
         programBlocks = Blockly.Xml.domToText(xmlProgram);
     }
     // translate programming tab
-    COMM.json("/admin", {
+    COMM.json("/toolbox", {
         "cmd" : "loadT",
-        "name" : userState.toolbox
+        "name" : userState.toolbox,
+        "owner": " "
     }, function(result) {
         injectBlockly(result, programBlocks);
     });

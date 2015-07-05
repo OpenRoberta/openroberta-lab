@@ -37,7 +37,6 @@ import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
 import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CompilerWorkflow;
-import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Toolboxes;
 import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.util.Clock;
 import de.fhg.iais.roberta.util.Util;
@@ -85,7 +84,7 @@ public class BasicPerformanceUserInteractionTest {
         this.compilerWorkflow = new Ev3CompilerWorkflow(this.crosscompilerBasedir, this.robotResourcesDir, this.buildXml);
         this.restUser = new ClientUser(this.brickCommunicator);
         this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.brickCommunicator, this.compilerWorkflow);
-        this.restBlocks = new ClientAdmin(new Ev3Toolboxes(), this.brickCommunicator);
+        this.restBlocks = new ClientAdmin(this.brickCommunicator);
         this.downloadJar = new Ev3DownloadJar(this.brickCommunicator, this.crosscompilerBasedir);
         this.brickCommand = new Ev3Command(this.brickCommunicator);
         this.theProgramOfAllUserLol =

@@ -9,6 +9,8 @@ public class HttpSessionState {
     private String program;
     private String configurationName;
     private String configuration;
+    private String toolboxName;
+    private String toolbox;
 
     public HttpSessionState() {
     }
@@ -77,5 +79,18 @@ public class HttpSessionState {
     public void setConfigurationNameAndConfiguration(String configurationName, String configuration) {
         this.configurationName = configurationName;
         this.configuration = configuration;
+    }
+
+    public String getToolboxName() {
+        return this.toolboxName;
+    }
+
+    public String getToolbox() {
+        return this.toolbox;
+    }
+
+    public void setToolboxNameAndToolbox(String toolboxName, String toolbox) {
+        this.toolboxName = toolboxName;
+        this.toolbox = toolbox;
     }
 }
