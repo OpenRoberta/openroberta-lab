@@ -92,9 +92,9 @@
 			<artifactId>commons-io</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>commons-io</groupId><groupId>com.github.detro</groupId>
-                        <artifactId>phantomjsdriver</artifactId>
-			<groupId>commons-io</groupId><version>1.2.0</version>
+			<groupId>com.github.detro</groupId>
+            <artifactId>phantomjsdriver</artifactId>
+			<version>1.2.0</version>
 		</dependency>
 	</dependencies>
 	<build>

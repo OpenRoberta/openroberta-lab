@@ -55,7 +55,6 @@ public class ClientToolbox {
             if ( cmd.equals("loadT") ) {
                 String toolboxName = request.getString("name");
                 String ownerName = request.getString("owner").trim();
-                System.out.println(toolboxName + " " + ownerName);
                 int userId = 0;
                 if ( !ownerName.isEmpty() ) {
                     User user = up.getUser(ownerName);

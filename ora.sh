@@ -281,7 +281,7 @@ case "$cmd" in
                     git checkout HEAD -- OpenRobertaServer/db/openroberta-db.[lps]* ;;
 --sqlclient|-sql)   dbjar=' OpenRobertaServer/target/resources/hsqldb-2.3.2.jar'
                     dbdriver='org.hsqldb.jdbc.JDBCDriver'
-                    dburl='jdbc:hsqldb:file:test'
+                    dburl='jdbc:hsqldb:file:OpenRobertaServer/db/openroberta-db'
                     java -jar $dbjar --driver $dbdriver --url $dburl --user orA --password Pid ;;
 --scpev3menu|-menu) _scpev3menuFn ;;
 --scpev3libs|-libs) _scpev3libsFn ;;
