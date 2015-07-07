@@ -20,4 +20,15 @@ var ROBOT = {};
             "token" : token
         }, successFn, "set token '" + token + "'"); 
     };
+    
+    /**
+     * Set robot type 
+     * @memberof ROBOT
+     */
+    ROBOT.setRobot = function(robot, successFn) {
+        COMM.json("/admin", {
+                    "cmd" : "setRobot",
+                    "robot" : robot
+        }, successFn, "set robot '" + robot  + "'"); 
+    };
 })($);

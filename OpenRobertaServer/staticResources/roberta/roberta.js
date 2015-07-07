@@ -8,6 +8,7 @@ var toastMessages = [];
 function initUserState() {
     userState.version = 'xx.xx.xx';
     userState.language = 'DE';
+    userState.robot = 'ev3';
     userState.id = -1;
     userState.accountName = '';
     userState.name = '';
@@ -19,7 +20,7 @@ function initUserState() {
     userState.programShared = false;
     userState.programTimestamp = '';
     userState.configurationModified = false;
-    userState.toolbox = 'ev3Beginner';
+    userState.toolbox = 'beginner';
     userState.token = '1A2B3C4D';
     userState.doPing = true;
     userState.robotName = '';
@@ -144,7 +145,7 @@ function showUserInfo() {
     }
     $("#programName").text(userState.program);
     $("#configurationName").text(userState.configuration);
-    if (userState.toolbox === 'ev3Beginner') {
+    if (userState.toolbox === 'beginner') {
         $("#toolbox").text(Blockly.Msg["MENU_BEGINNER"]);
     } else {
         $("#toolbox").text(Blockly.Msg["MENU_EXPERT"]);
@@ -371,6 +372,7 @@ function saveConfigurationToServer() {
  * Run program
  */
 function runOnBrick() {
+    if (userState.robot === 'ev3') {
     if (userState.robotState === '' || userState.robotState === 'disconnected') {
         displayMessage("POPUP_ROBOT_NOT_CONNECTED", "POPUP", "");
     } else if (userState.robotState === 'busy') {
@@ -379,6 +381,8 @@ function runOnBrick() {
         $('#buttonCancelFirmwareUpdate').css('display', 'none');
         $('#buttonCancelFirmwareUpdateAndRun').css('display', 'inline');
     } else {
+        startProgram();
+    }} else if (userState.robot === 'oraSim') {
         startProgram();
     }
 }
@@ -390,6 +394,7 @@ function startProgram() {
     var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
     var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
     var xmlTextConfiguration = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
+   // TODO if oraSim open sim tab ...
     displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
     PROGRAM.runOnBrick(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
         setRobotState(result);
@@ -397,6 +402,7 @@ function startProgram() {
             displayInformation(result, "", result.message, "");
         }
     });
+    
 }
 /**
  * Check program
@@ -516,7 +522,7 @@ function shareProgramsFromListing() {
     } else if (shareWith != '') {
         var right = $('#write:checked').val();
         if (!right) {
-            right = $('#read:checked').val(); 
+            right = $('#read:checked').val();
         }
         if (right) {
             var $programRow = $('#programNameTable .selected');
@@ -533,7 +539,7 @@ function shareProgramsFromListing() {
     }
 
     // set rights as set by user in relations table
-    $("#relationsTable tbody tr").each(function (index) {
+    $("#relationsTable tbody tr").each(function(index) {
         var $this = $(this);
         var cols = $this.children("td");
         var programName = cols.eq(0).text();
@@ -553,7 +559,7 @@ function shareProgramsFromListing() {
                     response(result);
                     setRobotState(result);
                     if (right === 'NONE') {
-                        displayInformation(result, "MESSAGE_RELATION_DELETED", result.message, programName);                   
+                        displayInformation(result, "MESSAGE_RELATION_DELETED", result.message, programName);
                     }
                 } else {
                     displayInformation(result, "", result.message);
@@ -574,7 +580,7 @@ function deleteFromListing() {
     for (var i = 0; i < $programRow.length; i++) {
         var programName = $programRow[i].children[0].textContent;
         if (programs.length > 0) {
-            programs = programs  + ', ';
+            programs = programs + ', ';
         }
         programs = programs + programName;
         LOG.info('deleteFromList ' + programName + ' signed in: ' + userState.id);
@@ -613,12 +619,24 @@ function deleteConfigurationFromListing() {
  * 
  * @param {result}
  *            result of server call
+ * @param {toolbox}
+ *            toolbox to show
  */
-function showToolbox(result) {
+function showToolbox(result, toolbox) {
     response(result);
     if (result.rc === 'ok') {
+        userState.toolbox = toolbox;
         Blockly.updateToolbox(result.data);
         setRobotState(result);
+        if (toolbox === "beginner") {
+            $('#menuToolboxBeginner').parent().addClass('disabled');
+            $('#menuToolboxExpert').parent().removeClass('disabled');
+            $('#menuToolboxSimulation').parent().removeClass('disabled');
+        } else if (toolbox === "expert") {
+            $('#menuToolboxExpert').parent().addClass('disabled');
+            $('#menuToolboxBeginner').parent().removeClass('disabled');
+            $('#menuToolboxSimulation').parent().removeClass('disabled');
+        }
     }
 }
 
@@ -629,12 +647,13 @@ function showToolbox(result) {
  *            toolbox to be loaded
  */
 function loadToolbox(toolbox) {
-    userState.toolbox = toolbox;
     COMM.json("/toolbox", {
         "cmd" : "loadT",
         "name" : toolbox,
-        "owner": " "
-    }, showToolbox);
+        "owner" : " "
+    }, function(result) {
+        showToolbox(result, toolbox);
+    });
 }
 
 /**
@@ -779,23 +798,23 @@ function initProgramNameTable() {
             "mRender" : function(data) {
                 return UTIL.formatDate(data);
             }
-        } , {
+        }, {
             "aTargets" : [ 5 ], // indexes of columns to be formatted
             "sType" : "date-de",
             "mRender" : function(data) {
                 return UTIL.formatDateComplete(data);
             }
-        } , {
-            "aTargets": [ 2 ], // indexes of columns to be formatted
-            "mRender": function( data, type, row ) {
+        }, {
+            "aTargets" : [ 2 ], // indexes of columns to be formatted
+            "mRender" : function(data, type, row) {
                 if (data === 'WRITE') {
                     var returnval = "<span lkey='Blockly.Msg.POPUP_SHARE_WRITE'>" + Blockly.Msg.POPUP_SHARE_WRITE + "</span>";
                 } else if (data === "READ") {
                     var returnval = "<span lkey='Blockly.Msg.POPUP_SHARE_READ'>" + Blockly.Msg.POPUP_SHARE_READ + "</span>";
                 } else if (data === true) {
-                    var returnval = "<span lkey='Blockly.Msg.POPUP_SHARE_READ'>X</span>"; 
+                    var returnval = "<span lkey='Blockly.Msg.POPUP_SHARE_READ'>X</span>";
                 } else if (data === false) {
-                    var returnval = "<span lkey='Blockly.Msg.POPUP_SHARE_READ'>-</span>"; 
+                    var returnval = "<span lkey='Blockly.Msg.POPUP_SHARE_READ'>-</span>";
                 }
                 return returnval;
             }
@@ -907,8 +926,8 @@ function initRelationsTable() {
         "aaData" : [],
         "aoColumns" : columns,
         "aoColumnDefs" : [ { // format language dependant fields
-            "aTargets": [ 3 ], // indexes of columns to be formatted
-            "mRender": function( data, type, row ) {
+            "aTargets" : [ 3 ], // indexes of columns to be formatted
+            "mRender" : function(data, type, row) {
                 var checked = '';
                 if (row[4] === 'WRITE' || data === 'READ') {
                     checked = 'checked';
@@ -916,9 +935,9 @@ function initRelationsTable() {
                 var returnval = "<td><input class='readRight' type='checkbox' name='right' value='READ' " + checked + "></td>";
                 return returnval;
             }
-        } , {
-            "aTargets": [ 4 ], // indexes of columns to be formatted
-            "mRender": function( data, type, row ) {
+        }, {
+            "aTargets" : [ 4 ], // indexes of columns to be formatted
+            "mRender" : function(data, type, row) {
                 var checked = '';
                 if (data === 'WRITE') {
                     checked = 'checked';
@@ -973,13 +992,28 @@ function switchToBrickly() {
 }
 
 /**
- * Switch to Simulation tab
+ * Switch robot
  */
-function switchToSimulation() {
-    $('#tabs').css('display', 'inline');
-    $('#bricklyFrame').css('display', 'none');
-    $('#tabSim').click();
-    bricklyActive = false;
+function switchRobot(robot) {
+    ROBOT.setRobot(robot, function(result) {
+        if (result.rc === "ok") {
+           userState.robot = robot;
+            // setRobotState(result);
+           if (robot === "ev3") {
+                $('#menuEv3').parent().addClass('disabled');
+                $('#menuSim').parent().removeClass('disabled');
+            } else if (robot === "oraSim") {
+                $('#menuEv3').parent().removeClass('disabled');
+                $('#menuSim').parent().addClass('disabled');
+            }
+            loadToolbox(userState.toolbox);
+        }
+        //displayInformation(result, "MESSAGE_USER_LOGIN", result.message, userState.name);
+    });
+//    $('#tabs').css('display', 'inline');
+//    $('#bricklyFrame').css('display', 'none');
+//    $('#tabSim').click();
+//    bricklyActive = false;
 }
 
 function setHeadNavigationMenuState(state) {
@@ -1017,7 +1051,7 @@ function initHeadNavigation() {
                 initProgramEnvironment();
                 $('#menuSaveProg').parent().addClass('disabled');
                 Blockly.getMainWorkspace().saveButton.disable();
-                $('#tabProgram').click();                
+                $('#tabProgram').click();
             }
         } else if (domId === 'menuListProg') { //  Submenu 'Program'
             deactivateProgConfigMenu();
@@ -1028,20 +1062,9 @@ function initHeadNavigation() {
             $("#save-program").modal('show');
         } else if (domId === 'menuPropertiesProg') { //  Submenu 'Program'
         } else if (domId === 'menuToolboxBeginner') { // Submenu 'Program'
-            loadToolbox('ev3Beginner');
-            $('#menuToolboxBeginner').parent().addClass('disabled');
-            $('#menuToolboxExpert').parent().removeClass('disabled');
-            $('#menuToolboxSimulation').parent().removeClass('disabled');
+            loadToolbox('beginner');
         } else if (domId === 'menuToolboxExpert') { // Submenu 'Program'
-            loadToolbox('ev3Expert');
-            $('#menuToolboxExpert').parent().addClass('disabled');
-            $('#menuToolboxBeginner').parent().removeClass('disabled');
-            $('#menuToolboxSimulation').parent().removeClass('disabled');
-        } else if (domId === 'menuToolboxSimulation') { // Submenu 'Program'
-            loadToolbox('simBeginner');
-            $('#menuToolboxBeginner').parent().removeClass('disabled');
-            $('#menuToolboxExpert').parent().removeClass('disabled');
-            $('#menuToolboxSimulation').parent().addClass('disabled');
+            loadToolbox('expert');
         } else if (domId === 'menuCheckConfig') { //  Submenu 'Configuration'
             displayMessage("MESSAGE_NOT_AVAILABLE", "POPUP", "");
         } else if (domId === 'menuNewConfig') { //  Submenu 'Configuration'
@@ -1059,6 +1082,10 @@ function initHeadNavigation() {
         } else if (domId === 'menuSaveAsConfig') { //  Submenu 'Configuration'
             $("#save-configuration").modal("show");
         } else if (domId === 'menuPropertiesConfig') { //  Submenu 'Configuration'
+        } else if (domId === 'menuEv3') { // Submenu 'Robot'
+            switchRobot('ev3');
+        } else if (domId === 'menuSim') { // Submenu 'Robot'
+            switchRobot('oraSim');
         } else if (domId === 'menuConnect') { // Submenu 'Robot'
             $('#buttonCancelFirmwareUpdate').css('display', 'inline');
             $('#buttonCancelFirmwareUpdateAndRun').css('display', 'none');
@@ -1221,6 +1248,7 @@ function initHeadNavigation() {
 
     setHeadNavigationMenuState('logout');
     $('#menuToolboxBeginner').parent().addClass('disabled');
+    $('#menuEv3').parent().addClass('disabled');
 }
 
 /**
@@ -1374,12 +1402,12 @@ function initTabs() {
         activateProgConfigMenu();
         switchToBrickly();
     });
-    
+
     $('#backProgram').onWrap('click', function() {
         activateProgConfigMenu();
         switchToBlockly();
     });
-    
+
     $('#backLogging').onWrap('click', function() {
         activateProgConfigMenu();
         if (bricklyActive) {
@@ -1581,10 +1609,12 @@ function switchLanguageInBlockly(url) {
         programBlocks = Blockly.Xml.domToText(xmlProgram);
     }
     // translate programming tab
+    console.log(userState.toolbox);
+    console.log(userState.robot);
     COMM.json("/toolbox", {
         "cmd" : "loadT",
         "name" : userState.toolbox,
-        "owner": " "
+        "owner" : " "
     }, function(result) {
         injectBlockly(result, programBlocks);
     });

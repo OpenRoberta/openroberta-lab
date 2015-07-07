@@ -26,7 +26,7 @@ function injectBrickly(toolbox) {
         });
         COMM.json("/conf", {
             "cmd" : "loadC",
-            "name" : "Standardkonfiguration",
+            "name" : "ev3Brick",
             "owner" : " "
         }, initConfigurationEnvironment);
     }
@@ -37,7 +37,7 @@ function initConfigurationEnvironment(result) {
     if (!result){ 
         COMM.json("/conf", {
             "cmd" : "loadC",
-            "name" : "Standardkonfiguration",
+            "name" : "ev3Brick",
             "owner" : " "
         }, initConfigurationEnvironment);}
     response(result);

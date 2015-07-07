@@ -4,6 +4,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class HttpSessionState {
     private int userId = -1;
+    private int robotId = 42;
     private String token = "1Q2W3E4R";
     private String programName;
     private String program;
@@ -31,6 +32,7 @@ public class HttpSessionState {
         Assert.isTrue(userId >= 1);
         // token is not cleared. This would annoy the user.
         this.userId = userId;
+        // robotId is not cleared.
         this.programName = null;
         this.program = null;
         this.configurationName = null;
@@ -44,6 +46,15 @@ public class HttpSessionState {
         this.program = null;
         this.configurationName = null;
         this.configuration = null;
+    }
+
+    public int getRobotId() {
+        return this.robotId;
+    }
+
+    public void setRobotId(int robotId) {
+        Assert.notNull(robotId);
+        this.robotId = robotId;
     }
 
     public String getToken() {

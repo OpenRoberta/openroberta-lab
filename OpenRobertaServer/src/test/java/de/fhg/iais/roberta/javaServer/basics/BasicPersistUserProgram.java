@@ -11,14 +11,16 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.persistence.bo.AccessRight;
 import de.fhg.iais.roberta.persistence.bo.Program;
 import de.fhg.iais.roberta.persistence.bo.Relation;
+import de.fhg.iais.roberta.persistence.bo.Robot;
 import de.fhg.iais.roberta.persistence.bo.Role;
 import de.fhg.iais.roberta.persistence.bo.User;
-import de.fhg.iais.roberta.persistence.bo.AccessRight;
-import de.fhg.iais.roberta.persistence.dao.ProgramDao;
-import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.dao.AccessRightDao;
+import de.fhg.iais.roberta.persistence.dao.ProgramDao;
+import de.fhg.iais.roberta.persistence.dao.RobotDao;
+import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
@@ -46,7 +48,9 @@ public class BasicPersistUserProgram {
     public void test() throws Exception {
         DbSession hSession = this.sessionFactoryWrapper.getSession();
         UserDao userDao = new UserDao(hSession);
+        RobotDao robotDao = new RobotDao(hSession);
         ProgramDao programDao = new ProgramDao(hSession);
+        Robot robot = robotDao.loadRobot("ev3");
         assertEquals(0, getOneInt("select count(*) from USER_PROGRAM"));
 
         //Create list of users
@@ -68,9 +72,9 @@ public class BasicPersistUserProgram {
         //Create one program per user
         for ( int userNumber = 0; userNumber < TOTAL_USERS; userNumber++ ) {
             User owner = userDao.loadUser("account-" + userNumber);
-            Program program = programDao.load("program-" + userNumber, owner);
+            Program program = programDao.load("program-" + userNumber, owner, robot);
             if ( program == null ) {
-                Program program2 = new Program("program-" + userNumber, owner);
+                Program program2 = new Program("program-" + userNumber, owner, robot);
                 String text = "<program>...</program>";
                 program2.setProgramText(text);
                 hSession.save(program2);
@@ -82,7 +86,7 @@ public class BasicPersistUserProgram {
 
         //User 0 invites all inpair  users to write to its program
         User owner = userDao.loadUser("account-0");
-        Program program = programDao.load("program-0", owner);
+        Program program = programDao.load("program-0", owner, robot);
         AccessRightDao userProgramDao = new AccessRightDao(hSession);
         for ( int userNumber = 1; userNumber < TOTAL_USERS; userNumber += 2 ) {
             User user = userDao.loadUser("account-" + userNumber);

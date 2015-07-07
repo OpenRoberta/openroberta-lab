@@ -13,8 +13,7 @@ public class DbSetup {
     private static final String DB_CREATE_TABLES_SQL = "/create-tables.sql";
     private static final String SQL_RETURNING_POSITIVENUMBER_IF_SQLFILE_ALREADY_LOADED =
         "select count(*) from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'PROGRAM'";
-    private static final String SQL_RETURNING_POSITIVENUMBER_IF_SETUP_WAS_SUCCESSFUL =
-        "select count(*) from CONFIGURATION where NAME = 'Standardkonfiguration'";
+    private static final String SQL_RETURNING_POSITIVENUMBER_IF_SETUP_WAS_SUCCESSFUL = "select count(*) from CONFIGURATION where NAME = 'ev3Brick'";
 
     private final DbExecutor dbExecutor;
 

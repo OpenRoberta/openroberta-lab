@@ -28,6 +28,10 @@ public class Toolbox implements WithSurrogateId {
     @JoinColumn(name = "OWNER_ID")
     private User owner;
 
+    @ManyToOne
+    @JoinColumn(name = "ROBOT_ID")
+    private Robot robot;
+
     @Column(name = "TOOLBOX_TEXT")
     private String ToolboxText;
 

@@ -29,6 +29,10 @@ public class Program implements WithSurrogateId {
     @JoinColumn(name = "OWNER_ID")
     private User owner;
 
+    @ManyToOne
+    @JoinColumn(name = "ROBOT_ID")
+    private Robot robot;
+
     @Column(name = "PROGRAM_TEXT")
     private String programText;
 
@@ -63,11 +67,12 @@ public class Program implements WithSurrogateId {
      * @param name the name of the program, not null
      * @param owner the user who created and thus owns the program
      */
-    public Program(String name, User owner) {
+    public Program(String name, User owner, Robot robot) {
         Assert.notNull(name);
         Assert.notNull(owner);
         this.name = name;
         this.owner = owner;
+        this.robot = robot;
         this.created = Util.getNow();
         this.lastChanged = Util.getNow();
     }

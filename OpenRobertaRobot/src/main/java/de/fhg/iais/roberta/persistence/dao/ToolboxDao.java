@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.Query;
 
+import de.fhg.iais.roberta.persistence.bo.Robot;
 import de.fhg.iais.roberta.persistence.bo.Toolbox;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
@@ -34,10 +35,10 @@ public class ToolboxDao extends AbstractDao<Toolbox> {
      * @param toolboxText the toolbox text, maybe null
      * @return the persisted toolbox object
      */
-    public boolean persistToolboxText(String name, User owner, String toolboxText, boolean mayExist) {
+    public boolean persistToolboxText(String name, User owner, Robot robot, String toolboxText, boolean mayExist) {
         Assert.notNull(name);
         Assert.notNull(owner);
-        Toolbox toolbox = load(name, owner);
+        Toolbox toolbox = load(name, owner, robot);
         if ( toolbox == null ) {
             toolbox = new Toolbox(name, owner);
             toolbox.setToolboxText(toolboxText);
@@ -58,17 +59,20 @@ public class ToolboxDao extends AbstractDao<Toolbox> {
      * @param user the user if he is logged in, if not null
      * @return the toolbox, null if the toolbox is not found
      */
-    public Toolbox load(String name, User user) {
+    public Toolbox load(String name, User user, Robot robot) {
         Assert.notNull(name);
+        Assert.notNull(robot);
         Query hql;
         if ( user != null ) {
             //TODO What happens, if a user uses the same name for a toolbox than one of our standard names?
-            hql = this.session.createQuery("from Toolbox where name=:name and (owner is null or owner=:owner)");
+            hql = this.session.createQuery("from Toolbox where name=:name and (owner is null or owner=:owner) and robot=:robot");
             hql.setString("name", name);
             hql.setEntity("owner", user);
+            hql.setEntity("robot", robot);
         } else {
-            hql = this.session.createQuery("from Toolbox where name=:name and owner is null");
+            hql = this.session.createQuery("from Toolbox where name=:name and owner is null and robot=:robot");
             hql.setString("name", name);
+            hql.setEntity("robot", robot);
         }
         @SuppressWarnings("unchecked")
         List<Toolbox> il = hql.list();
@@ -77,8 +81,8 @@ public class ToolboxDao extends AbstractDao<Toolbox> {
         return il.size() == 0 ? null : il.get(0);
     }
 
-    public int deleteByName(String name, User owner) {
-        Toolbox toBeDeleted = load(name, owner);
+    public int deleteByName(String name, User owner, Robot robot) {
+        Toolbox toBeDeleted = load(name, owner, robot);
         if ( toBeDeleted == null ) {
             return 0;
         } else {

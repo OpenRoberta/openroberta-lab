@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.javaServer.provider.OraData;
+import de.fhg.iais.roberta.persistence.bo.Robot;
+import de.fhg.iais.roberta.persistence.dao.RobotDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
@@ -67,6 +69,21 @@ public class ClientAdmin {
                     }
                 } else {
                     Util.addErrorInfo(response, Key.ROBOT_NOT_CONNECTED);
+                }
+            } else if ( cmd.equals("setRobot") ) {
+                String robotName = request.getString("robot");
+                RobotDao robotDao = new RobotDao(dbSession);
+                Robot robot = robotDao.loadRobot(robotName);
+                //Util.addResultInfo(response, rp);
+                if ( robot != null ) {
+                    Util.addSuccessInfo(response, Key.TOKEN_SET_SUCCESS);
+                    httpSessionState.setRobotId(robot.getId());
+                    response.put("robotId", robot.getId());
+                    response.put("robotName", robot.getName());
+                    LOG.info("set Robot: robot {} with id {} ", robot.getName(), robot.getId());
+                } else {
+                    LOG.error("Invalid command: " + cmd + " " + robotName);
+                    Util.addErrorInfo(response, Key.COMMAND_INVALID);
                 }
             } else {
                 LOG.error("Invalid command: " + cmd);

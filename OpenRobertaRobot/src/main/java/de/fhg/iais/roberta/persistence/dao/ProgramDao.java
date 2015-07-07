@@ -8,6 +8,7 @@ import org.hibernate.Query;
 
 import de.fhg.iais.roberta.persistence.bo.AccessRight;
 import de.fhg.iais.roberta.persistence.bo.Program;
+import de.fhg.iais.roberta.persistence.bo.Robot;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -33,19 +34,21 @@ public class ProgramDao extends AbstractDao<Program> {
      *
      * @param name the name of the program, never null
      * @param user the user who owns the program, never null
+     * @param robotId
      * @param programText the program text, maybe null
      * @param timestamp timestamp of the program, never null
      * @param isOwner true, if the owner updates a program; false if a user with access right WRITE updates a program
      * @return true if the program could be persisted successfully
      */
-    public boolean persistProgramText(String name, User user, String programText, Timestamp timestamp, boolean overwriteAllowed, boolean isOwner) {
+    public boolean persistProgramText(String name, User user, Robot robot, String programText, Timestamp timestamp, boolean overwriteAllowed, boolean isOwner) {
         Assert.notNull(name);
         Assert.notNull(user);
+        Assert.notNull(robot);
         Assert.notNull(timestamp);
-        Program program = isOwner ? load(name, user, timestamp) : loadShared(name, user, timestamp);
+        Program program = isOwner ? load(name, user, robot, timestamp) : loadShared(name, user, timestamp);
         if ( program == null ) {
             if ( timestamp.equals(new Timestamp(0)) ) {
-                program = new Program(name, user);
+                program = new Program(name, user, robot);
                 program.setProgramText(programText);
                 this.session.save(program);
                 return true;
@@ -68,13 +71,15 @@ public class ProgramDao extends AbstractDao<Program> {
      * @param timestamp timestamp of the program, never null
      * @return the program, null if the program is not found
      */
-    public Program load(String name, User owner, Timestamp timestamp) {
+    public Program load(String name, User owner, Robot robot, Timestamp timestamp) {
         Assert.notNull(name);
         Assert.notNull(owner);
+        Assert.notNull(robot);
         Assert.notNull(timestamp);
-        Query hql = this.session.createQuery("from Program where name=:name and owner=:owner");
+        Query hql = this.session.createQuery("from Program where name=:name and owner=:owner and robot=:robot");
         hql.setString("name", name);
         hql.setEntity("owner", owner);
+        hql.setEntity("robot", robot);
         @SuppressWarnings("unchecked")
         List<Program> il = hql.list();
         Assert.isTrue(il.size() <= 1);
@@ -94,12 +99,14 @@ public class ProgramDao extends AbstractDao<Program> {
      * @param owner user who owns the program, never null
      * @return the program, null if the program is not found
      */
-    public Program load(String name, User owner) {
+    public Program load(String name, User owner, Robot robot) {
         Assert.notNull(name);
         Assert.notNull(owner);
-        Query hql = this.session.createQuery("from Program where name=:name and owner=:owner");
+        Assert.notNull(robot);
+        Query hql = this.session.createQuery("from Program where name=:name and owner=:owner and robot=:robot");
         hql.setString("name", name);
         hql.setEntity("owner", owner);
+        hql.setEntity("robot", robot);
         @SuppressWarnings("unchecked")
         List<Program> il = hql.list();
         Assert.isTrue(il.size() <= 1);
@@ -111,6 +118,7 @@ public class ProgramDao extends AbstractDao<Program> {
      *
      * @param name the name of the program, never null
      * @param user user with access right WRITE, never null
+     * @param robot
      * @param timestamp timestamp of the program, never null
      * @return the program, null if the program is not found
      */
@@ -134,8 +142,8 @@ public class ProgramDao extends AbstractDao<Program> {
         return null;
     }
 
-    public int deleteByName(String name, User owner) {
-        Program toBeDeleted = load(name, owner);
+    public int deleteByName(String name, User owner, Robot robot) {
+        Program toBeDeleted = load(name, owner, robot);
         if ( toBeDeleted == null ) {
             return 0;
         } else {

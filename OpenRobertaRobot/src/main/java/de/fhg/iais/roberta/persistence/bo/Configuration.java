@@ -28,6 +28,10 @@ public class Configuration implements WithSurrogateId {
     @JoinColumn(name = "OWNER_ID")
     private User owner;
 
+    @ManyToOne
+    @JoinColumn(name = "ROBOT_ID")
+    private Robot robot;
+
     @Column(name = "CONFIGURATION_TEXT")
     private String configurationText;
 

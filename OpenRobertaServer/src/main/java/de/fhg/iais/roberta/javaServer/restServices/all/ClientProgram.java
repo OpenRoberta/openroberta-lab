@@ -29,7 +29,9 @@ import de.fhg.iais.roberta.persistence.AccessRightProcessor;
 import de.fhg.iais.roberta.persistence.ProgramProcessor;
 import de.fhg.iais.roberta.persistence.UserProcessor;
 import de.fhg.iais.roberta.persistence.bo.Program;
+import de.fhg.iais.roberta.persistence.bo.Robot;
 import de.fhg.iais.roberta.persistence.bo.User;
+import de.fhg.iais.roberta.persistence.dao.RobotDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
@@ -67,6 +69,7 @@ public class ClientProgram {
         AliveData.rememberClientCall();
         new ClientLogger().log(LOG, fullRequest);
         final int userId = httpSessionState.getUserId();
+        final int robotId = httpSessionState.getRobotId();
         JSONObject response = new JSONObject();
         DbSession dbSession = this.sessionFactoryWrapper.getSession();
         try {
@@ -84,9 +87,9 @@ public class ClientProgram {
                 Long timestamp = request.getLong("timestamp");
                 Timestamp programTimestamp = new Timestamp(timestamp);
                 boolean isShared = request.optBoolean("shared", false);
-                pp.updateProgram(programName, userId, programText, programTimestamp, true, !isShared);
+                pp.updateProgram(programName, userId, robotId, programText, programTimestamp, true, !isShared);
                 if ( pp.isOk() ) {
-                    Program program = pp.getProgram(programName, userId);
+                    Program program = pp.getProgram(programName, userId, robotId);
                     if ( program != null ) {
                         response.put("newProgramTimestamp", program.getLastChanged());
                     }
@@ -98,9 +101,9 @@ public class ClientProgram {
                 String programText = request.getString("program");
                 Long timestamp = request.getLong("timestamp");
                 Timestamp programTimestamp = new Timestamp(timestamp);
-                pp.updateProgram(programName, userId, programText, programTimestamp, true, true);
+                pp.updateProgram(programName, userId, robotId, programText, programTimestamp, true, true);
                 if ( pp.isOk() ) {
-                    Program program = pp.getProgram(programName, userId);
+                    Program program = pp.getProgram(programName, userId, robotId);
                     if ( program != null ) {
                         response.put("newProgramTimestamp", program.getLastChanged());
                     }
@@ -110,9 +113,9 @@ public class ClientProgram {
             } else if ( cmd.equals("loadP") && httpSessionState.isUserLoggedIn() ) {
                 String programName = request.getString("name");
                 String ownerName = request.getString("owner");
-                User user = up.getUser(ownerName);
-                int id = user.getId();
-                Program program = pp.getProgram(programName, id);
+                User owner = up.getUser(ownerName);
+                int ownerID = owner.getId();
+                Program program = pp.getProgram(programName, ownerID, robotId);
                 if ( program != null ) {
                     response.put("data", program.getProgramText());
                 }
@@ -130,7 +133,7 @@ public class ClientProgram {
                 }
                 Ev3Configuration brickConfiguration = null;
                 try {
-                    brickConfiguration = (Ev3Configuration) Ev3CompilerWorkflow.generateConfiguration(configurationText);
+                    brickConfiguration = Ev3CompilerWorkflow.generateConfiguration(configurationText);
                 } catch ( Exception e ) {
                     LOG.error("Generation of the configuration failed", e);
                     //return Key.COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED;
@@ -146,12 +149,12 @@ public class ClientProgram {
                 String programName = request.getString("programName");
                 String userToShareName = request.getString("userToShare");
                 String right = request.getString("right");
-                upp.shareToUser(userId, userToShareName, programName, right);
+                upp.shareToUser(userId, robotId, userToShareName, programName, right);
                 Util.addResultInfo(response, upp);
 
             } else if ( cmd.equals("deleteP") && httpSessionState.isUserLoggedIn() ) {
                 String programName = request.getString("name");
-                pp.deleteByName(programName, userId);
+                pp.deleteByName(programName, userId, robotId);
                 Util.addResultInfo(response, pp);
 
             } else if ( cmd.equals("loadPN") && httpSessionState.isUserLoggedIn() ) {
@@ -161,31 +164,38 @@ public class ClientProgram {
 
             } else if ( cmd.equals("loadPR") && httpSessionState.isUserLoggedIn() ) {
                 String programName = request.getString("name");
-                JSONArray relations = pp.getProgramRelations(programName, userId);
+                JSONArray relations = pp.getProgramRelations(programName, userId, robotId);
                 response.put("relations", relations);
                 Util.addResultInfo(response, pp);
 
             } else if ( cmd.equals("runP") ) {
-                String token = httpSessionState.getToken();
-                String programName = request.getString("name");
-                String programText = request.optString("programText");
-                String configurationText = request.optString("configurationText");
-                LOG.info("compiler workflow started for program {}", programName);
-                Key messageKey = this.compilerWorkflow.execute(dbSession, token, programName, programText, configurationText);
-                if ( messageKey == null ) {
-                    // everything is fine
-                    if ( token == null ) {
-                        Util.addErrorInfo(response, Key.ROBOT_NOT_CONNECTED);
-                    } else {
-                        boolean wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
-                        if ( wasRobotWaiting ) {
-                            Util.addSuccessInfo(response, Key.ROBOT_PUSH_RUN);
+                // TODO
+                RobotDao robotDao = new RobotDao(dbSession);
+                Robot robot = robotDao.get(robotId);
+                if ( robot.getName().equals("ev3") ) {
+                    String token = httpSessionState.getToken();
+                    String programName = request.getString("name");
+                    String programText = request.optString("programText");
+                    String configurationText = request.optString("configurationText");
+                    LOG.info("compiler workflow started for program {}", programName);
+                    Key messageKey = this.compilerWorkflow.execute(dbSession, token, programName, programText, configurationText);
+                    if ( messageKey == null ) {
+                        // everything is fine
+                        if ( token == null ) {
+                            Util.addErrorInfo(response, Key.ROBOT_NOT_CONNECTED);
                         } else {
-                            Util.addErrorInfo(response, Key.ROBOT_NOT_WAITING);
+                            boolean wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
+                            if ( wasRobotWaiting ) {
+                                Util.addSuccessInfo(response, Key.ROBOT_PUSH_RUN);
+                            } else {
+                                Util.addErrorInfo(response, Key.ROBOT_NOT_WAITING);
+                            }
                         }
+                    } else {
+                        response.put("rc", "error").put("message", messageKey);
                     }
                 } else {
-                    response.put("rc", "error").put("message", messageKey);
+                    Util.addErrorInfo(response, Key.ROBOT_NOT_WAITING);
                 }
             } else {
                 LOG.error("Invalid command: " + cmd);

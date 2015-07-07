@@ -1,7 +1,9 @@
 package de.fhg.iais.roberta.persistence;
 
+import de.fhg.iais.roberta.persistence.bo.Robot;
 import de.fhg.iais.roberta.persistence.bo.Toolbox;
 import de.fhg.iais.roberta.persistence.bo.User;
+import de.fhg.iais.roberta.persistence.dao.RobotDao;
 import de.fhg.iais.roberta.persistence.dao.ToolboxDao;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
@@ -14,7 +16,7 @@ public class ToolboxProcessor extends AbstractProcessor {
         super(dbSession, httpSessionState);
     }
 
-    public Toolbox getToolbox(String toolboxName, int userId) {
+    public Toolbox getToolbox(String toolboxName, int userId, int robotId) {
         if ( !Util.isValidJavaIdentifier(toolboxName) ) {
             setError(Key.TOOLBOX_ERROR_ID_INVALID, toolboxName);
             return null;
@@ -26,12 +28,12 @@ public class ToolboxProcessor extends AbstractProcessor {
                 UserDao userDao = new UserDao(this.dbSession);
                 owner = userDao.get(userId);
             }
-            toolbox = toolboxDao.load(toolboxName, owner);
+            RobotDao robotDao = new RobotDao(this.dbSession);
+            Robot robot = robotDao.get(robotId);
+            toolbox = toolboxDao.load(toolboxName, owner, robot);
             if ( toolbox == null ) {
-                System.out.println("null");
                 setError(Key.TOOLBOX_GET_ONE_ERROR_NOT_FOUND);
             } else {
-                System.out.println("S");
                 setSuccess(Key.TOOLBOX_GET_ONE_SUCCESS);
             }
             return toolbox;
