@@ -51,24 +51,37 @@ public class Ev3Command {
         String brickname = null;
         String batteryvoltage = null;
         String menuversion = null;
-        String lejosversion = null;
+        String firmwarename = null;
+        String firmwareversion = null;
         try {
             macaddr = requestEntity.getString("macaddr");
             token = requestEntity.getString("token");
             brickname = requestEntity.getString("brickname");
             batteryvoltage = requestEntity.getString("battery");
             menuversion = requestEntity.getString("menuversion");
-            lejosversion = requestEntity.getString("lejosversion");
         } catch ( Exception e ) {
             LOG.error("Robot request aborted. Robot uses a wrong JSON: " + requestEntity);
             return Response.serverError().build();
+        }
+        try {
+            firmwarename = requestEntity.getString("firmwarename");
+            firmwareversion = requestEntity.getString("firmwareversion");
+        } catch ( Exception e ) {
+            try {
+                // legacy
+                firmwareversion = requestEntity.getString("lejosversion");
+                firmwarename = "lejos";
+            } catch ( Exception ee ) {
+                LOG.error("Robot request aborted. Robot uses a wrong JSON: " + requestEntity);
+                return Response.serverError().build();
+            }
         }
         // todo: validate version serverside
         JSONObject response;
         switch ( cmd ) {
             case CMD_REGISTER:
                 LOG.info("pushcmd - brick sends token " + token + " for registration");
-                Ev3CommunicationData state = new Ev3CommunicationData(token, macaddr, brickname, batteryvoltage, menuversion, lejosversion);
+                Ev3CommunicationData state = new Ev3CommunicationData(token, macaddr, brickname, batteryvoltage, menuversion, firmwarename, firmwareversion);
                 boolean result = this.brickCommunicator.brickWantsTokenToBeApproved(state);
                 response = new JSONObject().put("response", result ? "ok" : "error").put("cmd", result ? CMD_REPEAT : CMD_ABORT);
                 return Response.ok(response).build();

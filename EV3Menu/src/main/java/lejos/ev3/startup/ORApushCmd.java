@@ -42,7 +42,8 @@ public class ORApushCmd implements Runnable {
     public static final String KEY_TOKEN = "token";
     public static final String KEY_MACADDR = "macaddr";
     public static final String KEY_BATTERY = "battery";
-    public static final String KEY_LEJOSVERSION = "lejosversion";
+    public static final String KEY_FIRMWARENAME = "firmwarename";
+    public static final String KEY_FIRMWAREVERSION = "firmwareversion";
     public static final String KEY_MENUVERSION = "menuversion";
     public static final String KEY_CMD = "cmd";
 
@@ -72,7 +73,8 @@ public class ORApushCmd implements Runnable {
         this.brickData.put(KEY_TOKEN, token);
         this.brickData.put(KEY_MACADDR, GraphicStartup.getORAmacAddress());
         this.brickData.put(KEY_MENUVERSION, GraphicStartup.getORAmenuVersion());
-        this.brickData.put(KEY_LEJOSVERSION, GraphicStartup.getLejosVersion());
+        this.brickData.put(KEY_FIRMWARENAME, "lejos");
+        this.brickData.put(KEY_FIRMWAREVERSION, GraphicStartup.getLejosVersion());
 
         try {
             this.pushServiceURL = new URL("http://" + serverBaseIP + "/pushcmd");

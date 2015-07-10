@@ -25,7 +25,8 @@ public class Ev3CommunicationData {
     private final String robotIdentificator;
     private final String robotName;
     private final String menuversion;
-    private final String lejosversion;
+    private final String firmwarename;
+    private final String firmwareversion;
 
     private Clock timerStartedByLastRequest;
     private Clock timerStartedByTokenApproval;
@@ -36,13 +37,14 @@ public class Ev3CommunicationData {
     private String command;
     private String programName;
 
-    public Ev3CommunicationData(String token, String robotIdentificator, String robotName, String battery, String menuversion, String lejosversion) {
+    public Ev3CommunicationData(String token, String robotIdentificator, String robotName, String battery, String menuversion, String firmwarename, String firmwareversion) {
         this.token = token;
         this.robotIdentificator = robotIdentificator;
         this.robotName = robotName;
         this.battery = battery;
         this.menuversion = menuversion;
-        this.lejosversion = lejosversion;
+        this.firmwarename = firmwarename;
+        this.firmwareversion = firmwareversion;
 
         this.timerStartedByLastRequest = Clock.start();
         this.state = State.WAIT_FOR_TOKENAPPROVAL_FROM_USER;
