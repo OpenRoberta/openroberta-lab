@@ -1,0 +1,19 @@
+{
+  "name": "Open Roberta",
+  "description": "The one and only Open Roberta Chrome App.",
+  "version": "0.1",
+  "manifest_version": 2,
+  
+  "app": {
+    "background": {
+      "scripts": ["main.js"]
+    }
+  },
+  "icons": { "128": "OR.png" },
+  
+  "permissions": [
+    "http://10.0.1.1/*",
+    "http://10.0.1.10/*",
+    "http://lab.open-roberta.org/*"
+  ]
+}

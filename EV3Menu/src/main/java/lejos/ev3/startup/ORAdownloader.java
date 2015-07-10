@@ -19,7 +19,7 @@ import org.json.JSONObject;
 public class ORAdownloader {
     private URL downloadService = null;
 
-    private final String PROGRAMS_DIRECTORY = "/home/lejos/programs";
+    public static final String PROGRAMS_DIRECTORY = "/home/lejos/programs";
 
     /**
      * Create a new object for downloading the user program from the server to the
@@ -67,7 +67,7 @@ public class ORAdownloader {
                 fileName = "unknown.jar";
             }
 
-            fos = new FileOutputStream(new File(this.PROGRAMS_DIRECTORY, fileName));
+            fos = new FileOutputStream(new File(ORAdownloader.PROGRAMS_DIRECTORY, fileName));
             while ( (n = is.read(buffer)) != -1 ) {
                 fos.write(buffer, 0, n);
             }

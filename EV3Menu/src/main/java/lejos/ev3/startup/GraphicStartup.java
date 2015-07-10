@@ -15,6 +15,7 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -75,6 +76,8 @@ import lejos.robotics.filter.PublishFilter;
 import lejos.robotics.navigation.DifferentialPilot;
 import lejos.utility.Delay;
 import ora.rmi.ORAmenu;
+
+import com.sun.net.httpserver.HttpServer;
 
 public class GraphicStartup implements ORAmenu {
     private static final int REMOTE_MENU_PORT = 8002;
@@ -170,6 +173,8 @@ public class GraphicStartup implements ORAmenu {
     private final RConsole rcons = new RConsole();
     //private final BroadcastThread broadcast = new BroadcastThread();
     private final RemoteMenuThread remoteMenuThread = new RemoteMenuThread();
+
+    private final ORAserver server = new ORAserver();
 
     //private GraphicMenu curMenu;
     private int timeout = 0;
@@ -289,6 +294,17 @@ public class GraphicStartup implements ORAmenu {
                 System.err.println("RMI failed to start: " + e);
             }
 
+            HttpServer server = null;
+            try {
+                server = HttpServer.create(new InetSocketAddress(80), 0);
+                server.createContext("/brickinfo", new ORAbrickInfo());
+                server.setExecutor(null); // creates a default executor
+                server.start();
+            } catch ( IOException e ) {
+                System.out.println("HttpServer startup failed!!");
+                e.printStackTrace();
+            }
+
             // Broadcast availability of device
             //Broadcast.broadcast(hostname);
 
@@ -315,6 +331,7 @@ public class GraphicStartup implements ORAmenu {
         //this.pipeReader.start();
         //this.broadcast.start();
         this.remoteMenuThread.start();
+        this.server.start();
     }
 
     /**

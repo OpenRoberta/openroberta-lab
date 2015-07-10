@@ -47,15 +47,15 @@ public class ORApushCmd implements Runnable {
     public static final String KEY_CMD = "cmd";
 
     // brickdata + cmds send to server
-    private static final String CMD_REGISTER = "register";
-    private static final String CMD_PUSH = "push";
+    public static final String CMD_REGISTER = "register";
+    public static final String CMD_PUSH = "push";
 
     // cmds receive from server
-    private static final String CMD_REPEAT = "repeat";
-    private static final String CMD_ABORT = "abort";
-    private static final String CMD_UPDATE = "update";
-    private static final String CMD_DOWNLOAD = "download";
-    private static final String CMD_CONFIGURATION = "configuration";
+    public static final String CMD_REPEAT = "repeat";
+    public static final String CMD_ABORT = "abort";
+    public static final String CMD_UPDATE = "update";
+    public static final String CMD_DOWNLOAD = "download";
+    public static final String CMD_CONFIGURATION = "configuration";
 
     /**
      * Creates a new Open Roberta Lab "push" communication object. Additional
