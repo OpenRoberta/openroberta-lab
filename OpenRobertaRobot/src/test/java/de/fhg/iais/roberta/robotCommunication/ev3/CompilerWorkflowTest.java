@@ -6,6 +6,6 @@ public class CompilerWorkflowTest {
 
     @Ignore
     public void test() {
-        new Ev3CompilerWorkflow(null, null, null).runBuild("1Q2W3E4R", "blinker2", "generated.main");
+        new Ev3CompilerWorkflow(new Ev3Communicator(), null, null, null).runBuild("1Q2W3E4R", "blinker2", "generated.main");
     }
 }

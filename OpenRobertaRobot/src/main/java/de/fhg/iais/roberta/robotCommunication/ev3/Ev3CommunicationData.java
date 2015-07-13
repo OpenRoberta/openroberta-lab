@@ -251,6 +251,10 @@ public class Ev3CommunicationData {
         return this.state;
     }
 
+    public String getFirmwareName() {
+        return this.firmwarename;
+    }
+
     /**
      * the states of communication between the brick and the browser client.
      */

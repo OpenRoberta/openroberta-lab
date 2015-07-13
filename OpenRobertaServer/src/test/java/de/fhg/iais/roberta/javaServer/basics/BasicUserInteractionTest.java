@@ -72,7 +72,7 @@ public class BasicUserInteractionTest {
         this.memoryDbSetup = new DbSetup(nativeSession);
         this.memoryDbSetup.runDefaultRobertaSetup();
         this.brickCommunicator = new Ev3Communicator();
-        this.compilerWorkflow = new Ev3CompilerWorkflow(this.crosscompilerBasedir, this.robotResourcesDir, this.buildXml);
+        this.compilerWorkflow = new Ev3CompilerWorkflow(this.brickCommunicator, this.crosscompilerBasedir, this.robotResourcesDir, this.buildXml);
         this.restUser = new ClientUser(this.brickCommunicator);
         this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.brickCommunicator, this.compilerWorkflow);
         this.restBlocks = new ClientAdmin(this.brickCommunicator);

@@ -28,7 +28,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * REST service for downloading user program
  */
 @Path("/download")
-public class Ev3DownloadJar {
+public class Ev3DownloadJar { // TODO(ensonic): rename to Ev3DownloadCode
     private static final Logger LOG = LoggerFactory.getLogger(Ev3DownloadJar.class);
 
     private final Ev3Communicator brickCommunicator;
@@ -50,8 +50,16 @@ public class Ev3DownloadJar {
             LOG.info("/download - request for token " + token);
             Ev3CommunicationData state = this.brickCommunicator.getState(token);
             String programName = state.getProgramName();
-            String fileName = programName + ".jar";
-            File jarDir = new File(this.pathToCrosscompilerBaseDir + token + "/target");
+            String fileName, filePath;
+            if ( state.getFirmwareName().equals("lejos") ) {
+                fileName = programName + ".jar";
+                filePath = this.pathToCrosscompilerBaseDir + token + "/target";
+            } else {
+                fileName = programName + ".py";
+                filePath = this.pathToCrosscompilerBaseDir + token + "/src";
+            }
+
+            File jarDir = new File(filePath);
             String message = "unknown";
             if ( jarDir.isDirectory() ) {
                 File jarFile = new File(jarDir, fileName);

@@ -48,7 +48,20 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 public class RoundTripTest {
     private static final String resourcePath = "/roundtrip/";
     private static final String[] blocklyPrograms = {
-        "move", "drive", "show", "sound", "status_light", "sensors", "logic", "control_stmt", "wait", "math", "text", "list", "methods", "bluetooth"
+        "move",
+        "drive",
+        "show",
+        "sound",
+        "status_light",
+        "sensors",
+        "logic",
+        "control_stmt",
+        "wait",
+        "math",
+        "text",
+        "list",
+        "methods",
+        "bluetooth"
     };
 
     private static WebDriver driver;
@@ -176,7 +189,7 @@ public class RoundTripTest {
         memoryDbSetup = new DbSetup(nativeSession);
         memoryDbSetup.runDefaultRobertaSetup();
         brickCommunicator = new Ev3Communicator();
-        compilerWorkflow = new Ev3CompilerWorkflow(crosscompilerBasedir, robotResourcesDir, buildXml);
+        compilerWorkflow = new Ev3CompilerWorkflow(brickCommunicator, crosscompilerBasedir, robotResourcesDir, buildXml);
         restUser = new ClientUser(brickCommunicator);
         restProgram = new ClientProgram(sessionFactoryWrapper, brickCommunicator, compilerWorkflow);
 
@@ -218,7 +231,7 @@ public class RoundTripTest {
         RoundTripTest.driver = new PhantomJSDriver();
 
         // workaround: https://github.com/ariya/phantomjs/issues/11637
-        RoundTripTest.driver.manage().window().setSize(new Dimension(1024,768));
+        RoundTripTest.driver.manage().window().setSize(new Dimension(1024, 768));
         RoundTripTest.driver.manage().window().maximize();
 
         RoundTripTest.baseUrl = "http://localhost:" + port;

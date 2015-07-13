@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
 import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.syntax.codegen.ev3.Ast2Ev3JavaVisitor;
+import de.fhg.iais.roberta.syntax.codegen.ev3.Ast2Ev3PythonVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.transformer.ev3.Jaxb2Ev3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
@@ -26,15 +27,19 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 public class Ev3CompilerWorkflow {
 
     private static final Logger LOG = LoggerFactory.getLogger(Ev3CompilerWorkflow.class);
+    private final Ev3Communicator brickCommunicator;
     public final String pathToCrosscompilerBaseDir;
     public final String crossCompilerResourcesDir;
     public final String pathToCrossCompilerBuildXMLResource;
 
     @Inject
-    public Ev3CompilerWorkflow(@Named("crosscompiler.basedir") String pathToCrosscompilerBaseDir, //
+    public Ev3CompilerWorkflow(
+        Ev3Communicator brickCommunicator,
+        @Named("crosscompiler.basedir") String pathToCrosscompilerBaseDir, //
         @Named("robot.crossCompilerResources.dir") String crossCompilerResourcesDir, //
         @Named("crosscompiler.build.xml") String pathToCrossCompilerBuildXMLResource) //
     {
+        this.brickCommunicator = brickCommunicator;
         this.pathToCrosscompilerBaseDir = pathToCrosscompilerBaseDir;
         this.crossCompilerResourcesDir = crossCompilerResourcesDir;
         this.pathToCrossCompilerBuildXMLResource = pathToCrossCompilerBuildXMLResource;
@@ -80,20 +85,39 @@ public class Ev3CompilerWorkflow {
             return Key.COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED;
         }
 
-        String javaCode = Ast2Ev3JavaVisitor.generate(programName, brickConfiguration, programTransformer.getTree(), true);
+        String fwName = brickCommunicator.getState(token).getFirmwareName();
+        boolean doPython = fwName.equals("ev3dev");
+        LOG.info("compiling for firmware: '" + fwName + "'");
 
-        LOG.info("to be compiled:\n{}", javaCode); // only needed for EXTREME debugging
+        String sourceCode, ext;
+        if ( doPython ) {
+            sourceCode = Ast2Ev3PythonVisitor.generate(programName, brickConfiguration, programTransformer.getTree(), true);
+            ext = ".py";
+            LOG.info("generating python code");
+        } else {
+            sourceCode = Ast2Ev3JavaVisitor.generate(programName, brickConfiguration, programTransformer.getTree(), true);
+            ext = ".java";
+            LOG.info("generating java code");
+        }
+
+        LOG.info("to be compiled:\n{}", sourceCode); // only needed for EXTREME debugging
         try {
-            storeGeneratedProgram(token, programName, javaCode);
+            storeGeneratedProgram(token, programName, sourceCode, ext);
         } catch ( Exception e ) {
             LOG.error("Storing the generated program into directory " + token + " failed", e);
             return Key.COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED;
         }
-        Key messageKey = runBuild(token, programName, "generated.main");
-        if ( messageKey == null ) {
-            LOG.info("jar for program {} generated successfully", programName);
+        if ( !doPython ) {
+            Key messageKey = runBuild(token, programName, "generated.main");
+            if ( messageKey == null ) {
+                LOG.info("jar for program {} generated successfully", programName);
+            }
+            return messageKey;
+        } else {
+            // maybe copy from /src/ to /target/
+            // python -c "import py_compile; py_compile.compile('.../src/...py','.../target/....pyc')"
+            return null;
         }
-        return messageKey;
     }
 
     /**
@@ -123,10 +147,11 @@ public class Ev3CompilerWorkflow {
         return transformer.transform(project);
     }
 
-    private void storeGeneratedProgram(String token, String programName, String javaCode) throws Exception {
-        Assert.isTrue(token != null && programName != null && javaCode != null);
-        File javaFile = new File(this.pathToCrosscompilerBaseDir + token + "/src/" + programName + ".java");
-        FileUtils.writeStringToFile(javaFile, javaCode, StandardCharsets.UTF_8.displayName());
+    private void storeGeneratedProgram(String token, String programName, String sourceCode, String ext) throws Exception {
+        Assert.isTrue(token != null && programName != null && sourceCode != null);
+        File sourceFile = new File(this.pathToCrosscompilerBaseDir + token + "/src/" + programName + ext);
+        LOG.info("stored under: ", sourceFile.getPath());
+        FileUtils.writeStringToFile(sourceFile, sourceCode, StandardCharsets.UTF_8.displayName());
     }
 
     /**

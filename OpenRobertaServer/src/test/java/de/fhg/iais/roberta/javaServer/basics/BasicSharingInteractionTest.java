@@ -60,7 +60,7 @@ public class BasicSharingInteractionTest {
         this.memoryDbSetup.runDefaultRobertaSetup();
 
         this.brickCommunicator = new Ev3Communicator();
-        this.compilerWorkflow = new Ev3CompilerWorkflow(this.crosscompilerBasedir, this.robotResourcesDir, this.buildXml);
+        this.compilerWorkflow = new Ev3CompilerWorkflow(this.brickCommunicator, this.crosscompilerBasedir, this.robotResourcesDir, this.buildXml);
 
         this.restUser = new ClientUser(this.brickCommunicator);
         this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.brickCommunicator, this.compilerWorkflow);
@@ -98,19 +98,23 @@ public class BasicSharingInteractionTest {
             HttpSessionState s = HttpSessionState.init();
             assertTrue(!s.isUserLoggedIn());
             this.response =
-                this.restUser.command(s, this.sessionFactoryWrapper.getSession(), mkD("{'cmd':'createUser';'accountName':'pid-"
-                    + userNumber
-                    + "';'password':'dip-"
-                    + userNumber
-                    + "';'userEmail':'cavy@home';'role':'STUDENT'}"));
+                this.restUser
+                    .command(
+                        s,
+                        this.sessionFactoryWrapper.getSession(),
+                        mkD(
+                            "{'cmd':'createUser';'accountName':'pid-"
+                                + userNumber
+                                + "';'password':'dip-"
+                                + userNumber
+                                + "';'userEmail':'cavy@home';'role':'STUDENT'}"));
             assertEntityRc(this.response, "ok");
             assertEquals(2 + userNumber, getOneInt("select count(*) from USER"));
             this.response =
-                this.restUser.command(s, this.sessionFactoryWrapper.getSession(), mkD("{'cmd':'login';'accountName':'pid-"
-                    + userNumber
-                    + "';'password':'dip-"
-                    + userNumber
-                    + "'}"));
+                this.restUser.command(
+                    s,
+                    this.sessionFactoryWrapper.getSession(),
+                    mkD("{'cmd':'login';'accountName':'pid-" + userNumber + "';'password':'dip-" + userNumber + "'}"));
             assertEntityRc(response, "ok");
             assertTrue(s.isUserLoggedIn());
             this.response = this.restProgram.command(s, mkD("{'cmd':'saveP';'name':'test" + userNumber + "';'program':'<program>...</program>'}"));

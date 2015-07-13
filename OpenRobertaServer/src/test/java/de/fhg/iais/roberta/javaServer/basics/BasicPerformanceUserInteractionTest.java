@@ -81,7 +81,7 @@ public class BasicPerformanceUserInteractionTest {
         this.memoryDbSetup = new DbSetup(this.sessionFactoryWrapper.getNativeSession());
         this.memoryDbSetup.runDefaultRobertaSetup();
         this.brickCommunicator = new Ev3Communicator();
-        this.compilerWorkflow = new Ev3CompilerWorkflow(this.crosscompilerBasedir, this.robotResourcesDir, this.buildXml);
+        this.compilerWorkflow = new Ev3CompilerWorkflow(this.brickCommunicator, this.crosscompilerBasedir, this.robotResourcesDir, this.buildXml);
         this.restUser = new ClientUser(this.brickCommunicator);
         this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.brickCommunicator, this.compilerWorkflow);
         this.restBlocks = new ClientAdmin(this.brickCommunicator);
@@ -152,11 +152,16 @@ public class BasicPerformanceUserInteractionTest {
         // create user "pid-*" with success
         thinkTimeInMillisec += think(random, 1, 4);
         Response response =
-            this.restUser.command(s, this.sessionFactoryWrapper.getSession(), mkD("{'cmd':'createUser';'accountName':'pid-"
-                + userNumber
-                + "';'password':'dip-"
-                + userNumber
-                + "';'userEmail':'cavy@home';'role':'STUDENT'}"));
+            this.restUser
+                .command(
+                    s,
+                    this.sessionFactoryWrapper.getSession(),
+                    mkD(
+                        "{'cmd':'createUser';'accountName':'pid-"
+                            + userNumber
+                            + "';'password':'dip-"
+                            + userNumber
+                            + "';'userEmail':'cavy@home';'role':'STUDENT'}"));
         assertEntityRc(response, "ok");
 
         // login with user "pid", create 2 programs
