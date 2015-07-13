@@ -192,7 +192,7 @@ public class ClientProgram {
                             }
                         }
                     } else {
-                        response.put("rc", "error").put("message", messageKey);
+                        Util.addErrorInfo(response, messageKey);
                     }
                 } else {
                     Util.addSuccessInfo(response, Key.ROBOT_PUSH_RUN);
