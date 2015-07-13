@@ -21,7 +21,7 @@ public class AstToTextlyVisitorTest {
     public void test1() throws Exception {
 
         String a = "{\n" //
-            + "   for ( int i0 = 0; i0 < 10; i0++ ) {\n"
+            + "   for ( Number i0 = 0; i0 < 10; i0++ ) {\n"
             + "      Display.drawText(\"Hallo\", 0, 3);\n"
             + "   }\n"
             + "}\n";
@@ -43,7 +43,7 @@ public class AstToTextlyVisitorTest {
             + "   }\n"
             + "   Sound.playFile(1);\n"
             + "   Sound.setVolume(50);\n"
-            + "   for ( int i = 1; i <= 10; i += 1 ) {\n\n"
+            + "   for ( Number i = 1; i <= 10; i += 1 ) {\n\n"
             + "      Motor.on(B,30,ROTATIONS,1);"
             + "   }\n"
             + "}\n";

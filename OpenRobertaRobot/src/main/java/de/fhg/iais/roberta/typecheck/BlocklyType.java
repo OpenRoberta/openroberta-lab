@@ -43,32 +43,30 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  */
 public enum BlocklyType {
     // @formatter:off
-    ANY("", ""),
-    COMPARABLE("", "", ANY), ADDABLE("", "", ANY),
-    ARRAY("Array", "List", COMPARABLE),
-    ARRAY_NUMBER("Array_Number", "ArrayList<Float>", COMPARABLE),
-    ARRAY_STRING("Array_String", "ArrayList<String>", COMPARABLE),
-    ARRAY_COLOUR("Array_Colour", "ArrayList<Pickcolor>", COMPARABLE),
-    ARRAY_BOOLEAN("Array_Boolean", "ArrayList<Boolean>", COMPARABLE),
-    BOOL("Boolean", "boolean", COMPARABLE),
-    NUMERIC("Number", "float", COMPARABLE, ADDABLE), NUMERIC_INT("Number", "int", COMPARABLE, ADDABLE),
-    STRING("String", "String", COMPARABLE, ADDABLE),
-    COLOR("Colour", "Pickcolor", ANY), //
-    NULL("", "", STRING, COLOR),
-    REF("", "",NULL), PRIM("", "",NUMERIC, BOOL),
-    NOTHING("", "",REF, PRIM),
-    VOID("", "void"),
-    CONNECTION("Connection","NXTConnection", ANY),
-    CAPTURED_TYPE("", ""), R("", ""), S("", ""), T("", "");
+    ANY(""),
+    COMPARABLE("", ANY), ADDABLE("", ANY),
+    ARRAY("Array", COMPARABLE),
+    ARRAY_NUMBER("Array_Number", COMPARABLE),
+    ARRAY_STRING("Array_String", COMPARABLE),
+    ARRAY_COLOUR("Array_Colour", COMPARABLE),
+    ARRAY_BOOLEAN("Array_Boolean", COMPARABLE),
+    BOOL("Boolean", COMPARABLE),
+    NUMERIC("Number", COMPARABLE, ADDABLE), NUMERIC_INT("Number", COMPARABLE, ADDABLE),
+    STRING("String", COMPARABLE, ADDABLE),
+    COLOR("Colour", ANY), //
+    NULL("", STRING, COLOR),
+    REF("", NULL), PRIM("", NUMERIC, BOOL),
+    NOTHING("", REF, PRIM),
+    VOID(""),
+    CONNECTION("Connection", ANY),
+    CAPTURED_TYPE(""), R(""), S(""), T("");
     // @formatter:on
 
     private final String blocklyName;
-    private final String javaTypeName;
     private final BlocklyType[] superTypes;
 
-    private BlocklyType(String blocklyName, String javaTypeName, BlocklyType... superTypes) {
+    private BlocklyType(String blocklyName, BlocklyType... superTypes) {
         this.blocklyName = blocklyName;
-        this.javaTypeName = javaTypeName;
         this.superTypes = superTypes;
     }
 
@@ -77,13 +75,6 @@ public enum BlocklyType {
      */
     public String getBlocklyName() {
         return this.blocklyName;
-    }
-
-    /**
-     * @return the javaTypeName
-     */
-    public String getJavaCode() {
-        return this.javaTypeName;
     }
 
     public BlocklyType[] getSuperTypes() {

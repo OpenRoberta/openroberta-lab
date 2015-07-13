@@ -93,6 +93,7 @@ import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -144,6 +145,10 @@ public class AstToTextlyVisitor implements AstVisitor<Void> {
             astVisitor.sb.append("\n}\n");
         }
         return astVisitor.sb.toString();
+    }
+
+    private static String getBlocklyTypeCode(BlocklyType type) {
+        return type.getBlocklyName();
     }
 
     /**
@@ -862,7 +867,7 @@ public class AstToTextlyVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        this.sb.append(var.getTypeVar().getJavaCode()).append(" ");
+        this.sb.append(getBlocklyTypeCode(var.getTypeVar())).append(" ");
         this.sb.append(var.getName()).append(" = ");
         var.getValue().visit(this);
         return null;

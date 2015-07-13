@@ -101,6 +101,7 @@ import de.fhg.iais.roberta.syntax.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
@@ -183,6 +184,49 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         if ( withWrapping ) {
             astVisitor.sb.append("\n}\n");
         }
+    }
+    
+    private static String getBlocklyTypeCode(BlocklyType type) {
+        switch(type) {
+            case ANY:
+            case COMPARABLE:
+            case ADDABLE:
+            case NULL:
+            case REF:
+            case PRIM:
+            case NOTHING:
+            case CAPTURED_TYPE:
+            case R:
+            case S:
+            case T:
+                return "";
+            case ARRAY:
+                return "List";
+            case ARRAY_NUMBER:
+                return "ArrayList<Float>";
+            case ARRAY_STRING:
+                return "ArrayList<String>";
+            case ARRAY_COLOUR:
+                return "ArrayList<Pickcolor>";
+            case ARRAY_BOOLEAN:
+                return "ArrayList<Boolean>";
+            case BOOL:
+                return "boolean";
+            case NUMERIC:
+                return "float";
+            case NUMERIC_INT:
+                return "int";
+            case STRING:
+                return "String";
+            case COLOR:
+                return "Pickcolor";
+            case VOID:
+                return "void";
+            case CONNECTION:
+                return "NXTConnection";
+        
+        }
+        throw new IllegalArgumentException("unhandled type");
     }
 
     /**
@@ -274,7 +318,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
-        this.sb.append(var.getTypeVar().getJavaCode()).append(" ");
+        this.sb.append(getBlocklyTypeCode(var.getTypeVar())).append(" ");
         this.sb.append(var.getName());
         if ( var.getValue().getKind() != BlockType.EMPTY_EXPR ) {
             this.sb.append(" = ");
@@ -917,8 +961,8 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitEmptyList(EmptyList<Void> emptyList) {
         this.sb.append("new ArrayList<"
-            + emptyList.getTypeVar().getJavaCode().substring(0, 1).toUpperCase()
-            + emptyList.getTypeVar().getJavaCode().substring(1).toLowerCase()
+            + getBlocklyTypeCode(emptyList.getTypeVar()).substring(0, 1).toUpperCase()
+            + getBlocklyTypeCode(emptyList.getTypeVar()).substring(1).toLowerCase()
             + ">()");
         return null;
     }
@@ -1181,7 +1225,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        this.sb.append("\n").append(INDENT).append("private " + methodReturn.getReturnType().getJavaCode());
+        this.sb.append("\n").append(INDENT).append("private " + getBlocklyTypeCode(methodReturn.getReturnType()));
         this.sb.append(" " + methodReturn.getMethodName() + "(");
         methodReturn.getParameters().visit(this);
         this.sb.append(") {");
