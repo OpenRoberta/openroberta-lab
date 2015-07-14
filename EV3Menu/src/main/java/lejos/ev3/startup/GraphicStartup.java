@@ -186,7 +186,7 @@ public class GraphicStartup implements ORAmenu {
     public static GraphicStartup menu = new GraphicStartup();
 
     private static ORAhandler oraHandler = new ORAhandler();
-    private static boolean orUSBconnected = false;
+    public static boolean orUSBconnected = false;
     private static String OPENROBERTAHEAD = " OR Lab";
 
     public static int selection = 0;
@@ -296,8 +296,9 @@ public class GraphicStartup implements ORAmenu {
 
             HttpServer server = null;
             try {
-                server = HttpServer.create(new InetSocketAddress(80), 0);
+                server = HttpServer.create(new InetSocketAddress(InetAddress.getByName("10.0.1.1"), 80), 0);
                 server.createContext("/brickinfo", new ORAbrickInfo());
+                server.createContext("/program", new ORAprogram());
                 server.setExecutor(null); // creates a default executor
                 server.start();
             } catch ( IOException e ) {
@@ -2806,7 +2807,6 @@ public class GraphicStartup implements ORAmenu {
                     continue;
                 }
                 result.put(current.getDisplayName(), current_addr.getHostAddress());
-                System.out.println(current.getDisplayName() + ": " + current_addr.getHostAddress());
             }
         }
         return result;

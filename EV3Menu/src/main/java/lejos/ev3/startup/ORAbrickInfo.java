@@ -3,7 +3,6 @@ package lejos.ev3.startup;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 
 import lejos.hardware.Sounds;
 import lejos.hardware.ev3.LocalEV3;
@@ -14,6 +13,10 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 public class ORAbrickInfo implements HttpHandler {
+
+    private static boolean reg = false;
+
+    private static final String ISRUNNING = "isrunning";
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
@@ -26,27 +29,51 @@ public class ORAbrickInfo implements HttpHandler {
         JSONObject content = new JSONObject(builder.toString());
         System.out.println(content);
 
-        String cmd = content.getString(ORApushCmd.KEY_CMD);
-        System.out.println(cmd);
-        if ( cmd.equals(ORApushCmd.CMD_REPEAT) && ORAhandler.isRegistered() == false ) {
-            ORAhandler.setRegistered(true);
-            LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
+        JSONObject response = new JSONObject();
+
+        switch ( content.getString(ORApushCmd.KEY_CMD) ) {
+            case ISRUNNING:
+                response.put(ISRUNNING, ORAlauncher.isRunning());
+                break;
+            case ORApushCmd.CMD_REGISTER:
+                reg = true;
+                response = getBrickInfos();
+                break;
+            case ORApushCmd.CMD_REPEAT:
+                if ( reg ) {
+                    ORAhandler.setRegistered(true);
+                    GraphicStartup.orUSBconnected = true;
+                    LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
+                    reg = false;
+                }
+                response = getBrickInfos();
+                break;
+            case ORApushCmd.CMD_ABORT:
+                if ( ORAhandler.isRegistered() ) {
+                    ORAhandler.setRegistered(false);
+                    GraphicStartup.orUSBconnected = false;
+                    LocalEV3.get().getAudio().systemSound(Sounds.DESCENDING);
+                    response.put("abort", "disconnect");
+                    return;
+                }
+            default:
+                System.out.println("Unknown cmd from USB program!!");
+                break;
         }
 
+        System.out.println(response);
+        exchange.sendResponseHeaders(200, response.toString().getBytes().length);
+        exchange.getResponseBody().write(response.toString().getBytes());
+        exchange.close();
+    }
+
+    private JSONObject getBrickInfos() {
         JSONObject response = new JSONObject();
         response.put(ORApushCmd.KEY_LEJOSVERSION, GraphicStartup.getLejosVersion());
         response.put(ORApushCmd.KEY_MENUVERSION, GraphicStartup.getORAmenuVersion());
         response.put(ORApushCmd.KEY_BRICKNAME, GraphicStartup.getBrickName());
         response.put(ORApushCmd.KEY_BATTERY, GraphicStartup.getBatteryStatus());
         response.put(ORApushCmd.KEY_MACADDR, "usb");
-
-        System.out.println(response);
-        System.out.println(response.toString().getBytes().length);
-
-        exchange.sendResponseHeaders(200, response.toString().getBytes().length);
-        OutputStream os = exchange.getResponseBody();
-        os.write(response.toString().getBytes());
-        os.close();
-        exchange.close();
+        return response;
     }
 }

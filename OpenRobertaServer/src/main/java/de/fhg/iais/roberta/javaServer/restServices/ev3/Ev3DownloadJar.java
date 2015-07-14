@@ -58,6 +58,7 @@ public class Ev3DownloadJar {
                 if ( jarFile.isFile() ) {
                     ResponseBuilder response = Response.ok(new FileInputStream(jarFile), MediaType.APPLICATION_OCTET_STREAM);
                     response.header("Content-Disposition", "attachment; filename=" + fileName);
+                    response.header("Filename", fileName);
                     return response.build();
                 } else {
                     message = "jar to upload to robot not found";

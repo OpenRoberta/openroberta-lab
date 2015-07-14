@@ -25,11 +25,21 @@ public class ORAlauncher {
 
     private static final GraphicsLCD glcd = LocalEV3.get().getGraphicsLCD();
 
+    private static Process program = null;
+
     /**
      * Creates a new object for launching the Open Roberta Lab user program.
      */
     public ORAlauncher() {
         //
+    }
+
+    public static String isRunning() {
+        if ( program != null ) {
+            return "true";
+        } else {
+            return "false";
+        }
     }
 
     /**
@@ -61,9 +71,7 @@ public class ORAlauncher {
      *        The programs where all user programs are saved.
      */
     private void exec(String command, String directory) {
-        Process program = null;
         try {
-
             glcd.clear();
             glcd.refresh();
             glcd.setAutoRefresh(false);
