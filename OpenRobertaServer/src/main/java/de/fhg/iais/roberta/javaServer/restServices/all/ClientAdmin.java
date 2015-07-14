@@ -74,8 +74,13 @@ public class ClientAdmin {
                 String robotName = request.getString("robot");
                 RobotDao robotDao = new RobotDao(dbSession);
                 Robot robot = robotDao.loadRobot(robotName);
-                //Util.addResultInfo(response, rp);
                 if ( robot != null ) {
+                    // TODO remove this and use a communicator
+                    if ( robotName.equals("oraSim") ) {
+                        httpSessionState.setToken("00000000");
+                    } else {
+                        httpSessionState.setToken("123");
+                    }
                     Util.addSuccessInfo(response, Key.TOKEN_SET_SUCCESS);
                     httpSessionState.setRobotId(robot.getId());
                     response.put("robotId", robot.getId());

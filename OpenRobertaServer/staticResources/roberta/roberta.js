@@ -373,16 +373,17 @@ function saveConfigurationToServer() {
  */
 function runOnBrick() {
     if (userState.robot === 'ev3') {
-    if (userState.robotState === '' || userState.robotState === 'disconnected') {
-        displayMessage("POPUP_ROBOT_NOT_CONNECTED", "POPUP", "");
-    } else if (userState.robotState === 'busy') {
-        displayMessage("POPUP_ROBOT_BUSY", "POPUP", "");
-    } else if (handleFirmwareConflict()) {
-        $('#buttonCancelFirmwareUpdate').css('display', 'none');
-        $('#buttonCancelFirmwareUpdateAndRun').css('display', 'inline');
-    } else {
-        startProgram();
-    }} else if (userState.robot === 'oraSim') {
+        if (userState.robotState === '' || userState.robotState === 'disconnected') {
+            displayMessage("POPUP_ROBOT_NOT_CONNECTED", "POPUP", "");
+        } else if (userState.robotState === 'busy') {
+            displayMessage("POPUP_ROBOT_BUSY", "POPUP", "");
+        } else if (handleFirmwareConflict()) {
+            $('#buttonCancelFirmwareUpdate').css('display', 'none');
+            $('#buttonCancelFirmwareUpdateAndRun').css('display', 'inline');
+        } else {
+            startProgram();
+        }
+    } else if (userState.robot === 'oraSim') {
         startProgram();
     }
 }
@@ -394,7 +395,7 @@ function startProgram() {
     var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
     var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
     var xmlTextConfiguration = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
-   // TODO if oraSim open sim tab ...
+    // TODO if oraSim open sim tab ...
     displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
     PROGRAM.runOnBrick(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
         setRobotState(result);
@@ -402,7 +403,7 @@ function startProgram() {
             displayInformation(result, "", result.message, "");
         }
     });
-    
+
 }
 /**
  * Check program
@@ -421,6 +422,30 @@ function checkProgram() {
             Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
         }
     });
+}
+
+/**
+ * New program
+ */
+var newProgram = function() {
+    if (userState.programModified) {
+        if (userState.id === -1) {
+            displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "");
+        } else {
+            displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "");
+        }
+        userState.programModified = false;
+        return false;
+    } else {
+        setProgram("NEPOprog");
+        userState.programShared = false;
+        userState.programTimestamp = '';
+        initProgramEnvironment();
+        $('#menuSaveProg').parent().addClass('disabled');
+        Blockly.getMainWorkspace().saveButton.disable();
+        $('#tabProgram').click();
+        return true;
+    }
 }
 
 function showProgram(result, load, name) {
@@ -997,16 +1022,21 @@ function switchToBrickly() {
 function switchRobot(robot) {
     ROBOT.setRobot(robot, function(result) {
         if (result.rc === "ok") {
-           userState.robot = robot;
-            // setRobotState(result);
-           if (robot === "ev3") {
+            userState.robot = robot;
+            setRobotState(result);
+            if (robot === "ev3") {
                 $('#menuEv3').parent().addClass('disabled');
                 $('#menuSim').parent().removeClass('disabled');
+                $('#iconDisplayRobotState').removeClass('typcn-Roberta');
+                $('#iconDisplayRobotState').addClass('typcn-wine');
             } else if (robot === "oraSim") {
+                userState.robotName = "ORASim";
                 $('#menuEv3').parent().removeClass('disabled');
                 $('#menuSim').parent().addClass('disabled');
+                $('#iconDisplayRobotState').removeClass('typcn-wine');
+                $('#iconDisplayRobotState').addClass('typcn-Roberta');
             }
-            loadToolbox(userState.toolbox);
+           loadToolbox(userState.toolbox);
         }
         //displayInformation(result, "MESSAGE_USER_LOGIN", result.message, userState.name);
     });
@@ -1017,7 +1047,7 @@ function switchRobot(robot) {
 }
 
 function setHeadNavigationMenuState(state) {
-    $('.nav > li > ul > li').removeClass('disabled');
+    $('.nav > li > ul > .login, .logout').removeClass('disabled');
     if (state === 'login') {
         $('.nav > li > ul > .login').addClass('disabled');
     } else if (state === 'logout') {
@@ -1035,24 +1065,9 @@ function initHeadNavigation() {
         if (domId === 'menuRunProg') { //  Submenu 'Program'
             runOnBrick();
         } else if (domId === 'menuCheckProg') { //  Submenu 'Program'
-            checkProgram()
+            checkProgram();
         } else if (domId === 'menuNewProg') { //  Submenu 'Program'
-            if (userState.programModified) {
-                if (userState.id === -1) {
-                    displayMessage("POPUP_BEFOREUNLOAD", "POPUP", "");
-                } else {
-                    displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN", "POPUP", "");
-                }
-                userState.programModified = false;
-            } else {
-                setProgram("NEPOprog");
-                userState.programShared = false;
-                userState.programTimestamp = '';
-                initProgramEnvironment();
-                $('#menuSaveProg').parent().addClass('disabled');
-                Blockly.getMainWorkspace().saveButton.disable();
-                $('#tabProgram').click();
-            }
+            newProgram();
         } else if (domId === 'menuListProg') { //  Submenu 'Program'
             deactivateProgConfigMenu();
             $('#tabListing').click();
@@ -1083,9 +1098,13 @@ function initHeadNavigation() {
             $("#save-configuration").modal("show");
         } else if (domId === 'menuPropertiesConfig') { //  Submenu 'Configuration'
         } else if (domId === 'menuEv3') { // Submenu 'Robot'
-            switchRobot('ev3');
+            if (newProgram()) {
+                switchRobot('ev3');
+            }
         } else if (domId === 'menuSim') { // Submenu 'Robot'
-            switchRobot('oraSim');
+            if (newProgram()) {
+                switchRobot('oraSim');
+            }
         } else if (domId === 'menuConnect') { // Submenu 'Robot'
             $('#buttonCancelFirmwareUpdate').css('display', 'inline');
             $('#buttonCancelFirmwareUpdateAndRun').css('display', 'none');
@@ -1248,7 +1267,6 @@ function initHeadNavigation() {
 
     setHeadNavigationMenuState('logout');
     $('#menuToolboxBeginner').parent().addClass('disabled');
-    $('#menuEv3').parent().addClass('disabled');
 }
 
 /**
@@ -1434,6 +1452,7 @@ function initLogging() {
  *            result of server call
  */
 function setRobotState(result) {
+    console.log(result);
     if (result['version']) {
         userState.version = result.version;
     }
@@ -1474,17 +1493,14 @@ function setRobotState(result) {
     if (userState.robotState === 'wait') {
         $('#iconDisplayRobotState').removeClass('error');
         $('#iconDisplayRobotState').removeClass('busy');
-        $('#iconDisplayRobotState').removeClass('wait');
-        $('#iconDisplayRobotState').addClass('ok');
+        $('#iconDisplayRobotState').addClass('wait');
     } else if (userState.robotState === 'busy') {
-        $('#iconDisplayRobotState').removeClass('ok');
         $('#iconDisplayRobotState').removeClass('wait');
         $('#iconDisplayRobotState').removeClass('error');
         $('#iconDisplayRobotState').addClass('busy');
     } else {
         $('#iconDisplayRobotState').removeClass('busy');
         $('#iconDisplayRobotState').removeClass('wait');
-        $('#iconDisplayRobotState').removeClass('ok');
         $('#iconDisplayRobotState').addClass('error');
     }
 
@@ -1609,8 +1625,6 @@ function switchLanguageInBlockly(url) {
         programBlocks = Blockly.Xml.domToText(xmlProgram);
     }
     // translate programming tab
-    console.log(userState.toolbox);
-    console.log(userState.robot);
     COMM.json("/toolbox", {
         "cmd" : "loadT",
         "name" : userState.toolbox,
@@ -1827,7 +1841,8 @@ function init() {
         placement : "right"
     });
 
-    UTIL.resizeTabBar(); // for small devices only
+    UTIL.resizeTabBar(); // for small devices only  
+    switchRobot(userState.robot);
 };
 
 $(window).on('resize', UTIL.resizeTabBar); // for small devices only

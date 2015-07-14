@@ -30,7 +30,7 @@ public class ProgramDao extends AbstractDao<Program> {
     }
 
     /**
-     * make a program object and persist it (if the program, identified by owner&name, does not exist) or update it (if the program exists)
+     * make a program object and persist it (if the program, identified by owner&name&robot, does not exist) or update it (if the program exists)
      *
      * @param name the name of the program, never null
      * @param user the user who owns the program, never null
@@ -45,7 +45,7 @@ public class ProgramDao extends AbstractDao<Program> {
         Assert.notNull(user);
         Assert.notNull(robot);
         Assert.notNull(timestamp);
-        Program program = isOwner ? load(name, user, robot, timestamp) : loadShared(name, user, timestamp);
+        Program program = isOwner ? load(name, user, robot, timestamp) : loadShared(name, user, robot, timestamp);
         if ( program == null ) {
             if ( timestamp.equals(new Timestamp(0)) ) {
                 program = new Program(name, user, robot);
@@ -122,13 +122,15 @@ public class ProgramDao extends AbstractDao<Program> {
      * @param timestamp timestamp of the program, never null
      * @return the program, null if the program is not found
      */
-    private Program loadShared(String name, User user, Timestamp timestamp) {
+    private Program loadShared(String name, User user, Robot robot, Timestamp timestamp) {
         Assert.notNull(name);
         Assert.notNull(user);
+        Assert.notNull(robot);
         Assert.notNull(timestamp);
         Query hql = this.session.createQuery("from AccessRight where user=:user and program.name=:name");
         hql.setString("name", name);
         hql.setEntity("user", user);
+        hql.setEntity("robot", robot);
         @SuppressWarnings("unchecked")
         List<AccessRight> il = hql.list();
         Assert.isTrue(il.size() <= 1);
@@ -157,9 +159,10 @@ public class ProgramDao extends AbstractDao<Program> {
      *
      * @return the list of all programs, may be an empty list, but never null
      */
-    public List<Program> loadAll(User owner) {
-        Query hql = this.session.createQuery("from Program where owner=:owner");
+    public List<Program> loadAll(User owner, Robot robot) {
+        Query hql = this.session.createQuery("from Program where owner=:owner and robot=:robot");
         hql.setEntity("owner", owner);
+        hql.setEntity("robot", robot);
         @SuppressWarnings("unchecked")
         List<Program> il = hql.list();
         return Collections.unmodifiableList(il);

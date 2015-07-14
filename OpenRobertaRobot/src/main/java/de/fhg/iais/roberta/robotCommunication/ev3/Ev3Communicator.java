@@ -54,7 +54,7 @@ public class Ev3Communicator {
 
     /**
      * called by the robot to inform the server about the fact, that the robot is still connected and ready to get a command pushed to it
-     * 
+     *
      * @param token identifying the robot
      * @param batteryvoltage the only information from the robot, which changes over time
      * @return a legal command for the robot (in 99% a "repeat" :)
@@ -81,6 +81,17 @@ public class Ev3Communicator {
             state.userApprovedTheBrickToken();
             LOG.info("token " + token + " is approved by a user.");
             return true;
+        }
+    }
+
+    public void disconnect(String token) {
+        Ev3CommunicationData state = this.allStates.get(token);
+        if ( state == null ) {
+            LOG.info("token " + token + " is not waited for. Ok.");
+        } else {
+            state.abortPush(); // notifyAll() executed
+            this.allStates.remove(token);
+            LOG.info("token " + token + " disconnected");
         }
     }
 

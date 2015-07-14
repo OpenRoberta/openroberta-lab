@@ -59,13 +59,15 @@ public class ProgramProcessor extends AbstractProcessor {
      *
      * @param ownerId the owner of the program
      */
-    public JSONArray getProgramInfo(int ownerId) {
+    public JSONArray getProgramInfo(int ownerId, int robotId) {
         UserDao userDao = new UserDao(this.dbSession);
+        RobotDao robotDao = new RobotDao(this.dbSession);
         ProgramDao programDao = new ProgramDao(this.dbSession);
         AccessRightDao accessRightDao = new AccessRightDao(this.dbSession);
         User owner = userDao.get(ownerId);
+        Robot robot = robotDao.get(robotId);
         // First we obtain all programs owned by the user
-        List<Program> programs = programDao.loadAll(owner);
+        List<Program> programs = programDao.loadAll(owner, robot);
         JSONArray programInfos = new JSONArray();
         for ( Program program : programs ) {
             JSONArray programInfo = new JSONArray();

@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.persistence.AbstractProcessor;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CommunicationData;
-import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
 import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CommunicationData.State;
+import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
 
 public class Util {
     private static final Logger LOG = LoggerFactory.getLogger(Util.class);
@@ -31,7 +31,7 @@ public class Util {
         "new", "null", "package", "private", "protected", "public", "return", "short", "static", "strictfp", "super", "switch", "synchronized", "this",
         "throw", "throws", "transient", "true", "try", "void", "volatile", "while"
         //  @formatter:on
-    };
+        };
 
     private static final AtomicInteger errorTicketNumber = new AtomicInteger(0);
 
@@ -157,25 +157,36 @@ public class Util {
             if ( httpSessionState != null ) {
                 String token = httpSessionState.getToken();
                 if ( token != null ) {
-                    Ev3CommunicationData state = brickCommunicator.getState(token);
-                    if ( state != null ) {
-                        response.put("robot.wait", state.getRobotConnectionTime());
-                        response.put("robot.battery", state.getBattery());
-                        response.put("robot.name", state.getRobotName());
-                        response.put("robot.version", state.getMenuVersion());
-                        response.put("server.version", openRobertaVersion);
-                        State communicationState = state.getState();
-                        String infoAboutState;
-                        if ( communicationState == State.BRICK_IS_BUSY ) {
-                            infoAboutState = "busy";
-                        } else if ( communicationState == State.WAIT_FOR_PUSH_CMD_FROM_BRICK && state.getElapsedMsecOfStartOfLastRequest() > 5000 ) {
-                            infoAboutState = "disconnected";
-                        } else if ( communicationState == State.BRICK_WAITING_FOR_PUSH_FROM_SERVER ) {
-                            infoAboutState = "wait";
-                        } else {
-                            infoAboutState = "wait"; // is there a need to distinguish the communication state more detailed?
+                    if ( !token.equals("00000000") ) {
+                        Ev3CommunicationData state = brickCommunicator.getState(token);
+                        if ( state != null ) {
+                            response.put("robot.wait", state.getRobotConnectionTime());
+                            response.put("robot.battery", state.getBattery());
+                            response.put("robot.name", state.getRobotName());
+                            response.put("robot.version", state.getMenuVersion());
+                            response.put("server.version", openRobertaVersion);
+                            State communicationState = state.getState();
+                            String infoAboutState;
+                            if ( communicationState == State.BRICK_IS_BUSY ) {
+                                infoAboutState = "busy";
+                            } else if ( communicationState == State.WAIT_FOR_PUSH_CMD_FROM_BRICK && state.getElapsedMsecOfStartOfLastRequest() > 5000 ) {
+                                infoAboutState = "disconnected";
+                                brickCommunicator.disconnect(token);
+                            } else if ( communicationState == State.BRICK_WAITING_FOR_PUSH_FROM_SERVER ) {
+                                infoAboutState = "wait";
+                            } else {
+                                infoAboutState = "wait"; // is there a need to distinguish the communication state more detailed?
+                            }
+                            response.put("robot.state", infoAboutState);
                         }
-                        response.put("robot.state", infoAboutState);
+                    } else {
+                        // TODO create SimCommunicator / SimCommunicatorData and remove this
+                        response.put("robot.wait", 0);
+                        response.put("robot.battery", 0);
+                        response.put("robot.name", "oraSim");
+                        response.put("robot.version", openRobertaVersion);
+                        response.put("server.version", openRobertaVersion);
+                        response.put("robot.state", "wait");
                     }
                 }
             }

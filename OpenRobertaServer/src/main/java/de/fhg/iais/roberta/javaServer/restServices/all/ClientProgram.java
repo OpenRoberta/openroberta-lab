@@ -158,7 +158,7 @@ public class ClientProgram {
                 Util.addResultInfo(response, pp);
 
             } else if ( cmd.equals("loadPN") && httpSessionState.isUserLoggedIn() ) {
-                JSONArray programInfo = pp.getProgramInfo(userId);
+                JSONArray programInfo = pp.getProgramInfo(userId, robotId);
                 response.put("programNames", programInfo);
                 Util.addResultInfo(response, pp);
 
