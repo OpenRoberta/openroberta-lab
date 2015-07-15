@@ -8,8 +8,7 @@
 	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
 	OF ANY KIND, either express or implied. See the License for the specific 
 	language governing permissions and limitations under the License. -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>de.fhg.iais.openroberta</groupId>
@@ -93,7 +92,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.github.detro</groupId>
-            <artifactId>phantomjsdriver</artifactId>
+			<artifactId>phantomjsdriver</artifactId>
 			<version>1.2.0</version>
 		</dependency>
 	</dependencies>
@@ -255,6 +254,22 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<!-- auto install of phantomjs -->
+				<groupId>com.github.klieber</groupId>
+				<artifactId>phantomjs-maven-plugin</artifactId>
+				<version>0.7</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>install</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<version>1.9.7</version>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.17</version>
@@ -270,6 +285,10 @@
 						<include>**/*.class</include>
 					</includes>
 					<excludedGroups>de.fhg.iais.roberta.util.testsetup.IntegrationTest</excludedGroups>
+					<!-- providing phantomjs for unit tests -->
+					<systemPropertyVariables>
+						<phantomjs.binary>${phantomjs.binary}</phantomjs.binary>
+					</systemPropertyVariables>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -285,6 +304,11 @@
 				</dependencies>
 				<configuration>
 					<groups>de.fhg.iais.roberta.util.testsetup.IntegrationTest</groups>
+					<!-- setting phantomjs path for integration tests, webdriver capabilities -->
+					<systemPropertyVariables>
+						<phantomjs.binary>${phantomjs.binary}</phantomjs.binary>
+						<phantomjs.binary.path>${phantomjs.binary}</phantomjs.binary.path>
+					</systemPropertyVariables>
 				</configuration>
 				<executions>
 					<execution>
@@ -302,6 +326,7 @@
 			</plugin>
 		</plugins>
 	</build>
+	<!-- mvn site  creates html test reports and code documentation-->
 	<reporting>
 		<plugins>
 			<plugin>
@@ -328,6 +353,11 @@
 						</reports>
 					</reportSet>
 				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>2.18.1</version>
 			</plugin>
 		</plugins>
 	</reporting>
