@@ -12,7 +12,8 @@
   "icons": { "128": "OR.png" },
   
   "permissions": [
-    "http://10.0.1.1/*",
+    "http://10.0.1.1:80/brickinfo",
+    "http://10.0.1.1:80/program",
     "http://10.0.1.10/*",
     "http://lab.open-roberta.org/*"
   ]
