@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import de.fhg.iais.roberta.components.HardwareComponent;
 import de.fhg.iais.roberta.components.HardwareComponentType;
 import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
 import de.fhg.iais.roberta.shared.action.ev3.MotorSide;
@@ -42,20 +41,6 @@ public class Ev3Configuration {
         this.sensors = sensors;
         this.wheelDiameterCM = wheelDiameterCM;
         this.trackWidthCM = trackWidthCM;
-    }
-
-    /**
-     * @return Java code used in the code generation to regenerates the same brick configuration
-     */
-    public String generateRegenerate() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("private Ev3Configuration brickConfiguration = new Ev3Configuration.Builder()\n");
-        sb.append("    .setWheelDiameter(" + this.wheelDiameterCM + ")\n");
-        sb.append("    .setTrackWidth(" + this.trackWidthCM + ")\n");
-        appendActors(sb);
-        appendSensors(sb);
-        sb.append("    .build();");
-        return sb.toString();
     }
 
     /**
@@ -272,29 +257,6 @@ public class Ev3Configuration {
         }
         //throw new DbcException("No left motor defined!");
         return null;
-    }
-
-    private void appendSensors(StringBuilder sb) {
-        for ( Map.Entry<SensorPort, EV3Sensor> entry : this.sensors.entrySet() ) {
-            appendOptional(sb, "Sensor", entry.getKey().getJavaCode(), entry.getValue());
-        }
-    }
-
-    private void appendActors(StringBuilder sb) {
-        for ( Map.Entry<ActorPort, EV3Actor> entry : this.actors.entrySet() ) {
-            appendOptional(sb, "Actor", entry.getKey().getJavaCode(), entry.getValue());
-        }
-    }
-
-    /**
-     * @return text which defines the brick configuration
-     */
-
-    private static void appendOptional(StringBuilder sb, String sensorOrActor, String port, HardwareComponent hc) {
-        if ( hc != null ) {
-            sb.append("    .add").append(sensorOrActor).append("(");
-            sb.append(port).append(", ").append(hc.generateRegenerate()).append(")\n");
-        }
     }
 
     /**

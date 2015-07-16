@@ -26,65 +26,54 @@ public class Ev3ConfigurationTest {
 
     @Test
     public void test1() throws Exception {
-        String a =
-            "private Ev3Configuration brickConfiguration = new Ev3Configuration.Builder()"
-                + ".setWheelDiameter(5.0)"
-                + ".setTrackWidth(17.0)"
-                + ".addActor(ActorPort.A, new EV3Actor(EV3Actors.EV3_MEDIUM_MOTOR, true, DriveDirection.FOREWARD, MotorSide.NONE))"
-                + ".addSensor(SensorPort.S3, new EV3Sensor(EV3Sensors.EV3_IR_SENSOR))"
-                + ".build();";
+        String a = // 
+            "robotev3test{" //
+                + "size{wheeldiameter5.0cm;trackwidth17.0cm;}"
+                + "sensorport{3:infrared;}"
+                + "actorport{A:middlemotor,regulated,forward;}}";
 
         BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration1.xml");
         Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer();
         Ev3Configuration b = transformer.transform(project);
-        Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateRegenerate().replaceAll("\\s+", ""));
+        Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateText("test").replaceAll("\\s+", ""));
     }
 
     @Test
     public void test2() throws Exception {
         String a =
-            "private Ev3Configuration brickConfiguration = new Ev3Configuration.Builder()"
-                + ".setWheelDiameter(5.6)."
-                + "setTrackWidth(17.0)"
-                + ".addActor(ActorPort.B, new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, true, DriveDirection.FOREWARD, MotorSide.RIGHT))"
-                + ".addActor(ActorPort.C, new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, true, DriveDirection.FOREWARD, MotorSide.LEFT))"
-                + ".addSensor(SensorPort.S1, new EV3Sensor(EV3Sensors.EV3_TOUCH_SENSOR))"
-                + ".addSensor(SensorPort.S4, new EV3Sensor(EV3Sensors.EV3_ULTRASONIC_SENSOR))"
-                + ".build();";
+            "robotev3test{"
+                + "size{wheeldiameter5.6cm;trackwidth17.0cm;}"
+                + "sensorport{1:touch;4:ultrasonic;}"
+                + "actorport{B:largemotor,regulated,forward,right;C:largemotor,regulated,forward,left;}}";
 
         BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration2.xml");
         Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer();
         Ev3Configuration b = transformer.transform(project);
-        Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateRegenerate().replaceAll("\\s+", ""));
+        Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateText("test").replaceAll("\\s+", ""));
     }
 
     @Test
     public void test3() throws Exception {
         String a =
-            "private Ev3Configuration brickConfiguration = new Ev3Configuration.Builder()"
-                + ".setWheelDiameter(5.6)."
-                + "setTrackWidth(17.0)"
-                + ".addActor(ActorPort.B, new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, true, DriveDirection.FOREWARD, MotorSide.RIGHT))"
-                + ".addActor(ActorPort.C, new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, true, DriveDirection.FOREWARD, MotorSide.LEFT))"
-                + ".addSensor(SensorPort.S1, new EV3Sensor(EV3Sensors.EV3_TOUCH_SENSOR))"
-                + ".addSensor(SensorPort.S4, new EV3Sensor(EV3Sensors.EV3_ULTRASONIC_SENSOR))"
-                + ".build();";
+            "robotev3test{"
+                + "size{wheeldiameter5.6cm;trackwidth17.0cm;}"
+                + "sensorport{1:touch;4:ultrasonic;}"
+                + "actorport{B:largemotor,regulated,forward,right;C:largemotor,regulated,forward,left;}}";
 
         BlockSet project = JaxbHelper.path2BlockSet("/ast/brickConfiguration/brick_configuration3.xml");
         Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer();
         Ev3Configuration b = transformer.transform(project);
-        Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateRegenerate().replaceAll("\\s+", ""));
+        Assert.assertEquals(a.replaceAll("\\s+", ""), b.generateText("test").replaceAll("\\s+", ""));
     }
 
     /**
      * ROUND TRIP FOR CONFIGURATION TESTS. Expects three different representations of a configuration as text files.<br>
      * <br>
      * 1. make a String from a XML file, call it xmlExpected, and generate a BrickConfiguration bc1<br>
-     * 2. from the BrickConfiguration bc1 generate the generateRegenerate snippet cg and check it<br>
-     * 3. from the BrickConfiguration bc1 generate text and check it against textExpected<br>
-     * 4. from the text generate a BrickConfiguration bc2 and check it against bc1<br>
-     * 5. from the BrickConfiguration bc2 generate XML xmlActual and check it against xmlExpected<br>
-     * 6. from xmlActual generate a BrickConfiguration bc3 and check it against bc1 and bc2.<br>
+     * 2. from the BrickConfiguration bc1 generate text and check it against textExpected<br>
+     * 3. from the text generate a BrickConfiguration bc2 and check it against bc1<br>
+     * 4. from the BrickConfiguration bc2 generate XML xmlActual and check it against xmlExpected<br>
+     * 5. from xmlActual generate a BrickConfiguration bc3 and check it against bc1 and bc2.<br>
      */
     private void testRoundtrip(String baseName) throws Exception {
         Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer();
@@ -93,21 +82,17 @@ public class Ev3ConfigurationTest {
         BlockSet bs1 = JaxbHelper.xml2BlockSet(xmlExpected);
         Ev3Configuration bc1 = transformer.transform(bs1);
         // 2.
-        String cgExpected = resourceAsString(baseName + ".gGs");
-        String cg = bc1.generateRegenerate();
-        assertEq(cgExpected, cg);
-        // 3.
         String textExpected = resourceAsString(baseName + ".conf");
         String text = bc1.generateText("craesy");
         assertEq(textExpected, text);
-        // 4.
+        // 3.
         Ev3Configuration bc2 = Ev3ConfigurationParseTree2Ev3ConfigurationVisitor.startWalkForVisiting(text).getVal();
         Assert.assertEquals(bc1, bc2);
-        // 5.
+        // 4.
         BlockSet bs2 = transformer.transformInverse(bc2);
         String xmlActual = JaxbHelper.blockSet2xml(bs2);
         assertEq(xmlExpected, xmlActual);
-        // 6.
+        // 5.
         BlockSet bs3 = JaxbHelper.xml2BlockSet(xmlActual);
         Ev3Configuration bc3 = transformer.transform(bs3);
         Assert.assertEquals(bc1, bc3);

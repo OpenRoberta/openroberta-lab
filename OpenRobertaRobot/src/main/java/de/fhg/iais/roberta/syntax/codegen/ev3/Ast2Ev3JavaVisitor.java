@@ -2,16 +2,22 @@ package de.fhg.iais.roberta.syntax.codegen.ev3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import de.fhg.iais.roberta.components.Category;
+import de.fhg.iais.roberta.components.HardwareComponent;
+import de.fhg.iais.roberta.components.ev3.EV3Actor;
+import de.fhg.iais.roberta.components.ev3.EV3Sensor;
 import de.fhg.iais.roberta.components.ev3.EV3Sensors;
 import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
 import de.fhg.iais.roberta.shared.IndexLocation;
+import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
 import de.fhg.iais.roberta.shared.sensor.ev3.GyroSensorMode;
 import de.fhg.iais.roberta.shared.sensor.ev3.MotorTachoMode;
+import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.shared.sensor.ev3.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -1434,7 +1440,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
         this.sb.append("public class " + this.programName + " {\n");
         this.sb.append(INDENT).append("private static final boolean TRUE = true;\n");
-        this.sb.append(INDENT).append(this.brickConfiguration.generateRegenerate()).append("\n\n");
+        this.sb.append(INDENT).append(generateRegenerateConfiguration()).append("\n\n");
         this.sb.append(INDENT).append(generateRegenerateUsedSensors()).append("\n\n");
 
         this.sb.append(INDENT).append("private Hal hal = new Hal(brickConfiguration, usedSensors);\n\n");
@@ -1455,6 +1461,39 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("lejos.hardware.Button.waitForAnyPress();\n");
         this.sb.append(INDENT).append(INDENT).append("}\n");
         this.sb.append(INDENT).append("}\n");
+    }
+
+    /**
+     * @return Java code used in the code generation to regenerates the same brick configuration
+     */
+    public String generateRegenerateConfiguration() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("private Ev3Configuration brickConfiguration = new Ev3Configuration.Builder()\n");
+        sb.append("    .setWheelDiameter(" + this.brickConfiguration.getWheelDiameterCM() + ")\n");
+        sb.append("    .setTrackWidth(" + this.brickConfiguration.getTrackWidthCM() + ")\n");
+        appendActors(sb);
+        appendSensors(sb);
+        sb.append("    .build();");
+        return sb.toString();
+    }
+
+    private void appendSensors(StringBuilder sb) {
+        for ( Map.Entry<SensorPort, EV3Sensor> entry : brickConfiguration.getSensors().entrySet() ) {
+            appendOptional(sb, "Sensor", entry.getKey().getJavaCode(), entry.getValue());
+        }
+    }
+
+    private void appendActors(StringBuilder sb) {
+        for ( Map.Entry<ActorPort, EV3Actor> entry : brickConfiguration.getActors().entrySet() ) {
+            appendOptional(sb, "Actor", entry.getKey().getJavaCode(), entry.getValue());
+        }
+    }
+
+    private static void appendOptional(StringBuilder sb, String sensorOrActor, String port, HardwareComponent hc) {
+        if ( hc != null ) {
+            sb.append("    .add").append(sensorOrActor).append("(");
+            sb.append(port).append(", ").append(hc.generateRegenerate()).append(")\n");
+        }
     }
 
     private String generateRegenerateUsedSensors() {

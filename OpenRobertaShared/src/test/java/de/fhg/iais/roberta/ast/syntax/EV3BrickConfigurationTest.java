@@ -17,14 +17,9 @@ import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
 
 public class EV3BrickConfigurationTest {
     private static final String expectedBrickConfigurationGenerator = //
-        "privateEv3ConfigurationbrickConfiguration=newEv3Configuration.Builder()"
-            + ".setWheelDiameter(0.0)"
-            + ".setTrackWidth(0.0)"
-            + ".addActor(ActorPort.A,newEV3Actor(EV3Actors.EV3_LARGE_MOTOR,true,DriveDirection.FOREWARD,MotorSide.LEFT))"
-            + ".addActor(ActorPort.B,newEV3Actor(EV3Actors.EV3_MEDIUM_MOTOR,true,DriveDirection.FOREWARD,MotorSide.RIGHT))"
-            + ".addSensor(SensorPort.S1,newEV3Sensor(EV3Sensors.EV3_ULTRASONIC_SENSOR))"
-            + ".addSensor(SensorPort.S4,newEV3Sensor(EV3Sensors.EV3_COLOR_SENSOR))"
-            + ".build();";
+        "robotev3test{"//
+            + "sensorport{1:ultrasonic;4:color;}"//
+            + "actorport{A:largemotor,regulated,forward,left;B:middlemotor,regulated,forward,right;}}";
 
     @Test
     public void testBuilder() {
@@ -42,7 +37,7 @@ public class EV3BrickConfigurationTest {
         assertEquals(EV3Sensors.EV3_COLOR_SENSOR, conf.getSensorOnPort(SensorPort.S4).getComponentType());
         assertNull(conf.getSensorOnPort(SensorPort.S2));
 
-        assertEquals(EV3BrickConfigurationTest.expectedBrickConfigurationGenerator, conf.generateRegenerate().replaceAll("\\s+", ""));
+        assertEquals(EV3BrickConfigurationTest.expectedBrickConfigurationGenerator, conf.generateText("test").replaceAll("\\s+", ""));
     }
 
     @Test
@@ -62,7 +57,7 @@ public class EV3BrickConfigurationTest {
         assertEquals(EV3Sensors.EV3_COLOR_SENSOR, conf.getSensorOnPort(SensorPort.S4).getComponentType());
         assertNull(conf.getSensorOnPort(SensorPort.S2));
 
-        assertEquals(EV3BrickConfigurationTest.expectedBrickConfigurationGenerator, conf.generateRegenerate().replaceAll("\\s+", ""));
+        assertEquals(EV3BrickConfigurationTest.expectedBrickConfigurationGenerator, conf.generateText("test").replaceAll("\\s+", ""));
     }
 
     @Test
