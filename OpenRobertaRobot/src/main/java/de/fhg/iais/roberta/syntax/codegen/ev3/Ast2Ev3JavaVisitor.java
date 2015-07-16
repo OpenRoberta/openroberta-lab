@@ -148,7 +148,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         Assert.isTrue(phrasesSet.size() >= 1);
 
         Set<EV3Sensors> usedSensors = UsedSensorsCheckVisitor.check(phrasesSet);
-        Ast2Ev3JavaVisitor astVisitor = new Ast2Ev3JavaVisitor(programName, brickConfiguration, usedSensors, withWrapping ? 2 : 0);
+        Ast2Ev3JavaVisitor astVisitor = new Ast2Ev3JavaVisitor(programName, brickConfiguration, usedSensors, withWrapping ? 1 : 0);
         astVisitor.generatePrefix(withWrapping);
 
         generateCodeFromPhrases(phrasesSet, withWrapping, astVisitor);
@@ -185,9 +185,9 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
             astVisitor.sb.append("\n}\n");
         }
     }
-    
+
     private static String getBlocklyTypeCode(BlocklyType type) {
-        switch(type) {
+        switch ( type ) {
             case ANY:
             case COMPARABLE:
             case ADDABLE:
@@ -224,7 +224,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
                 return "void";
             case CONNECTION:
                 return "NXTConnection";
-        
+
         }
         throw new IllegalArgumentException("unhandled type");
     }
@@ -842,6 +842,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public Void visitMainTask(MainTask<Void> mainTask) {
         mainTask.getVariables().visit(this);
         this.sb.append("\n\n").append(INDENT).append("public void run() {\n");
+        incrIndentation();
         return null;
     }
 
@@ -960,10 +961,11 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitEmptyList(EmptyList<Void> emptyList) {
-        this.sb.append("new ArrayList<"
-            + getBlocklyTypeCode(emptyList.getTypeVar()).substring(0, 1).toUpperCase()
-            + getBlocklyTypeCode(emptyList.getTypeVar()).substring(1).toLowerCase()
-            + ">()");
+        this.sb.append(
+            "new ArrayList<"
+                + getBlocklyTypeCode(emptyList.getTypeVar()).substring(0, 1).toUpperCase()
+                + getBlocklyTypeCode(emptyList.getTypeVar()).substring(1).toLowerCase()
+                + ">()");
         return null;
     }
 
