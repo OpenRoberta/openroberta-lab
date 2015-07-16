@@ -195,7 +195,7 @@ public class ClientProgram {
                         response.put("rc", "error").put("message", messageKey);
                     }
                 } else {
-                    Util.addErrorInfo(response, Key.ROBOT_NOT_WAITING);
+                    Util.addSuccessInfo(response, Key.ROBOT_PUSH_RUN);
                 }
             } else {
                 LOG.error("Invalid command: " + cmd);

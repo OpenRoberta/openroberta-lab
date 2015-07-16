@@ -602,15 +602,20 @@ limitations under the License.
                 <li class="hidden"><a id="tabConfigurationListing" href="#confListing">Listing of configurations</a></li>
                 <li class="hidden"><a id="tabLogging" href="#logging">Logging</a></li>
                 <li class="hidden"><a id="tabBrickly" href="#bricklyFrame">Brickly</a></li>
-                <li class="hidden"><a id="tabSim" href="#simulation">Simulation</a></li>
             </ul>
 
             <div id="blockly">
                 <div id="blocklyDiv"></div>
-            </div>
-
-            <div id="simulation">
-                <h1>&nbsp;This is the place for the simulation</h1>
+                <div id="simDiv">
+                    <!-- TODO this is just a fake animation, remove this as soon as possible -->
+                    <div id="fakeShowcase" class="showcase"></div>
+                    <div class="navbar navbar-fixed-bottom">
+                        <button id="simBack" type="button" class="btn typcn typcn-arrow-back head-navi-icons pull-right"></button>
+                        <button id="simStop" type="button" class="btn typcn typcn-media-stop head-navi-icons pull-right"></button>
+                        <button id="simStep" type="button" class="btn typcn typcn-chevron-right-outline head-navi-icons pull-right"></button>
+                        <button id="simForward" type="button" class="btn typcn typcn-chevron-right head-navi-icons pull-right"></button>
+                    </div>
+                </div>
             </div>
 
             <div id="progListing">

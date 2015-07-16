@@ -192,18 +192,32 @@ function showRobotInfo() {
 /**
  * Inject Blockly with initial toolbox
  */
-function injectBlockly(toolbox, opt_programBlocks) {
+function injectBlockly(toolbox, opt_programBlocks, opt_readOnly) {
     response(toolbox);
+    var readOnly = opt_readOnly | false;
     if (toolbox.rc === 'ok') {
-        $('#blocklyDiv').html('');
-        Blockly.inject(document.getElementById('blocklyDiv'), {
-            path : '/blockly/',
-            toolbox : toolbox.data,
-            trashcan : true,
-            save : true,
-            check : true,
-            start : true
-        });
+        if (!readOnly) {
+            $('#blocklyDiv').html('');
+            Blockly.inject(document.getElementById('blocklyDiv'), {
+                path : '/blockly/',
+                toolbox : toolbox.data,
+                trashcan : true,
+                save : true,
+                check : true,
+                start : true
+            });
+        } else {
+            $('#blocklyDiv').html('');
+            Blockly.inject(document.getElementById('blocklyDiv'), {
+                path : '/blockly/',
+                toolbox : toolbox.data,
+                readOnly : true,
+                trashcan : false,
+                save : false,
+                check : false,
+                start : false
+            });
+        }
         initProgramEnvironment(opt_programBlocks);
         setRobotState(toolbox);
     }
@@ -217,6 +231,7 @@ function initProgramEnvironment(opt_programBlocks) {
     var program = opt_programBlocks || text;
     var xml = Blockly.Xml.textToDom(program);
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+    Blockly.fireUiEvent(window, 'resize');
 }
 
 /**
@@ -395,11 +410,28 @@ function startProgram() {
     var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
     var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
     var xmlTextConfiguration = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
-    // TODO if oraSim open sim tab ...
     displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
     PROGRAM.runOnBrick(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
         setRobotState(result);
-        if (result.rc != "ok") {
+        if (result.rc == "ok") {
+            if (userState.robot === 'oraSim') {
+                $('#blocklyDiv').addClass('simActive');
+                $('#simDiv').addClass('simActive');
+                var programBlocks = null;
+                if (Blockly.mainWorkspace !== null) {
+                    var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+                    programBlocks = Blockly.Xml.domToText(xmlProgram);
+                }
+                COMM.json("/toolbox", {
+                    "cmd" : "loadT",
+                    "name" : userState.toolbox,
+                    "owner" : " "
+                }, function(result) {
+                    injectBlockly(result, programBlocks, true);
+                });
+                //TODO start simulation here
+            }
+        } else {
             displayInformation(result, "", result.message, "");
         }
     });
@@ -1036,7 +1068,7 @@ function switchRobot(robot) {
                 $('#iconDisplayRobotState').removeClass('typcn-wine');
                 $('#iconDisplayRobotState').addClass('typcn-Roberta');
             }
-           loadToolbox(userState.toolbox);
+            loadToolbox(userState.toolbox);
         }
         //displayInformation(result, "MESSAGE_USER_LOGIN", result.message, userState.name);
     });
@@ -1264,6 +1296,39 @@ function initHeadNavigation() {
             $('#tabConfiguration').click();
         }
     });
+
+    // controle for simulation
+    $('.navbar-fixed-bottom').onWrap('click', function() {
+        var domId = event.target.id;
+        if (domId === 'simBack') {
+            $('#blocklyDiv').removeClass('simActive');
+            $('#simDiv').removeClass('simActive');
+            displayMessage("simBack pressed", "TOAST", "simBack");
+            var programBlocks = null;
+            if (Blockly.mainWorkspace !== null) {
+                var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+                programBlocks = Blockly.Xml.domToText(xmlProgram);
+            }
+            COMM.json("/toolbox", {
+                "cmd" : "loadT",
+                "name" : userState.toolbox,
+                "owner" : " "
+            }, function(result) {
+                injectBlockly(result, programBlocks);
+            });
+        } else if (domId === 'simStop') {
+            $('#fakeShowcase').removeClass('showcase');
+            $('#fakeShowcase').addClass('noShowcase');
+            displayMessage("simStop pressed", "TOAST", "simStop");
+        } else if (domId === 'simForward') {
+            $('#fakeShowcase').addClass('showcase');
+            $('#fakeShowcase').removeClass('noShowcase');
+            displayMessage("simForward pressed", "TOAST", "simForward");
+        } else if (domId === 'simStep') {
+            displayMessage("simStep pressed", "TOAST", "simStep");
+        }
+        return false;
+    }, 'sim navigation controle item clicked');
 
     setHeadNavigationMenuState('logout');
     $('#menuToolboxBeginner').parent().addClass('disabled');
