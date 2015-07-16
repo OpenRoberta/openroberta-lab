@@ -29,6 +29,7 @@ function initUserState() {
     userState.robotWait = '';
     userState.robotVersion = '';
     userState.serverVersion = '';
+    userState.programBlocks = null;
 }
 
 /**
@@ -225,7 +226,7 @@ function injectBlockly(toolbox, opt_programBlocks, opt_readOnly) {
 
 function initProgramEnvironment(opt_programBlocks) {
     Blockly.getMainWorkspace().clear();
-    // should this come from the server?
+    // TODO load this from database
     var text = "<block_set xmlns='http: // www.w3.org/1999/xhtml'>" + "<instance x='100' y='50'>" + "<block type='robControls_start'>" + "</block>"
             + "</instance>" + "</block_set>";
     var program = opt_programBlocks || text;
@@ -417,25 +418,24 @@ function startProgram() {
             if (userState.robot === 'oraSim') {
                 $('#blocklyDiv').addClass('simActive');
                 $('#simDiv').addClass('simActive');
-                var programBlocks = null;
+                userState.programBlocks = null;
                 if (Blockly.mainWorkspace !== null) {
                     var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-                    programBlocks = Blockly.Xml.domToText(xmlProgram);
+                    userState.programBlocks = Blockly.Xml.domToText(xmlProgram);
                 }
                 COMM.json("/toolbox", {
                     "cmd" : "loadT",
                     "name" : userState.toolbox,
                     "owner" : " "
                 }, function(result) {
-                    injectBlockly(result, programBlocks, true);
+                    injectBlockly(result, userState.programBlocks, true);
                 });
-                //TODO start simulation here
+                //TODO start real simulation here with result.data, the generated javascript code
             }
         } else {
             displayInformation(result, "", result.message, "");
         }
     });
-
 }
 /**
  * Check program
@@ -1304,17 +1304,12 @@ function initHeadNavigation() {
             $('#blocklyDiv').removeClass('simActive');
             $('#simDiv').removeClass('simActive');
             displayMessage("simBack pressed", "TOAST", "simBack");
-            var programBlocks = null;
-            if (Blockly.mainWorkspace !== null) {
-                var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-                programBlocks = Blockly.Xml.domToText(xmlProgram);
-            }
             COMM.json("/toolbox", {
                 "cmd" : "loadT",
                 "name" : userState.toolbox,
                 "owner" : " "
             }, function(result) {
-                injectBlockly(result, programBlocks);
+                injectBlockly(result, userState.programBlocks);
             });
         } else if (domId === 'simStop') {
             $('#fakeShowcase').removeClass('showcase');
