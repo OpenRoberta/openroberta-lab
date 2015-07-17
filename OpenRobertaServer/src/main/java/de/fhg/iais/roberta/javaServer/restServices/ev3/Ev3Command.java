@@ -24,7 +24,7 @@ import de.fhg.iais.roberta.util.AliveData;
 public class Ev3Command {
     private static final Logger LOG = LoggerFactory.getLogger(Ev3Command.class);
 
-    private static final int EVERY_REQUEST = 100; // after EVERY_REQUEST many /pushcmd requests have arrived, a log entry is written
+    private static final int EVERY_REQUEST = 1; // after EVERY_REQUEST many /pushcmd requests have arrived, a log entry is written
     private static final AtomicInteger pushRequestCounterForLogging = new AtomicInteger(0);
 
     private static final String CMD = "cmd";

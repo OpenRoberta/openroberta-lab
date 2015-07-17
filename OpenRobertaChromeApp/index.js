@@ -1,11 +1,10 @@
 onload = function() {
   
+  var HOST = "lab.open-roberta.org";
   var EV3HOST = "10.0.1.1:80";
   var ORAHOST = "10.0.1.10:1999";
   
   var TOKEN = "";
-  
-  var KEY_CMD = "cmd";
   
   var state = {
     SEARCH: 0,
@@ -15,11 +14,11 @@ onload = function() {
     CONNECTED: 4,
     DOWNLOAD: 5,
     UPDATE: 6,
-    DISCONNECT: 7
   };
   
   var STATE = state.SEARCH;
   
+  var KEY_CMD = "cmd";
   var CMD_REGISTER = "register";
   var CMD_PUSH = "push";
   var CMD_REPEAT = "repeat";
@@ -28,25 +27,26 @@ onload = function() {
   var CMD_ABORT = "abort";
   var ISRUNNING = "isrunning";
   
-  
   var ev3info = null;
-  
   var pushFinished = true;
-  
   var serverreq = null;
   
   connect.onclick = function(){
-    generateToken();
-    STATE = state.REGISTER;
+    if (STATE != state.CONNECTED){
+      generateToken();
+      STATE = state.REGISTER;
+      document.getElementById("connect").innerHTML = "Trennen";
+    } else {
+      if (serverreq !== null){
+        serverreq.abort();
+      }
+      document.getElementById("connect").disabled = true;
+      document.getElementById("connect").innerHTML = "Verbinden";
+    }
   };
   
   document.getElementById("close").onclick = function() {
-    if (serverreq !== null){
-      serverreq.abort();
-    }
-    STATE = state.DISCONNECT;
-    //disconnect();
-    //window.close();
+    window.close();
   };
   
   function generateToken(){
@@ -70,9 +70,11 @@ onload = function() {
           break;
         case state.WAITFORUSER:
           // do nothing until user clicks connect button
+          // also used as a transition state after disconnecting the EV3 
           pushFinished = true;
           break;
         case state.WAIT:
+          // brick is executing a program we check every few seconds if it is finished
           checkBrickState();
           break;
         case state.REGISTER:
@@ -87,11 +89,6 @@ onload = function() {
         case state.UPDATE:
           // TODO update thing
           break;
-        case state.DISCONNECT:
-          // TODO
-          // state SEARCH
-          disconnect();
-          break;
         default:
           console.log("wtf");
       }
@@ -99,13 +96,11 @@ onload = function() {
   };
   
   function changeProgramState(brickstate){
-    if (State == state.SEARCH){
-      if (brickstate == "false"){
+    if (STATE == state.SEARCH && brickstate == "false"){
         STATE = state.WAITFORUSER;
         document.getElementById("connect").disabled = false;
         displayText("EV3 found!");
-      }
-    } else if(State == state.WAIT) {
+    } else if(STATE == state.WAIT && brickstate == "false") {
       STATE = state.CONNECTED;
     }
   }
@@ -113,8 +108,6 @@ onload = function() {
   var pushToBrick = function(ev3cmd, servercmd){
     var command = {};
     command[KEY_CMD] = ev3cmd;
-    console.log("To EV3:");
-    console.log(command);
     
     var brickreq = new XMLHttpRequest();
     brickreq.onreadystatechange = function() {
@@ -130,8 +123,6 @@ onload = function() {
   var pushToServer = function(servercmd){
     ev3info["token"] = TOKEN;
     ev3info[KEY_CMD] = servercmd;
-    console.log("To server:");
-    console.log(ev3info);
     
     serverreq = new XMLHttpRequest();
     serverreq.onreadystatechange = function() {
@@ -148,14 +139,16 @@ onload = function() {
             STATE = state.UPDATE;
             break;
           case CMD_ABORT:
-            STATE = state.DISCONNECT;
+            discFlag = true;
             break;
         }
         pushFinished = true;
       }
     };
     serverreq.onabort = function(){
-      console.log("abort");
+      signOutEV3();
+      STATE = state.WAITFORUSER;
+      pushFinished = true;
     };
     serverreq.open("POST", "http://" + ORAHOST + "/pushcmd", true);
     serverreq.setRequestHeader("Content-Type", "application/json; charset=utf8");
@@ -197,8 +190,6 @@ onload = function() {
   var checkBrickState = function(){
     var command = {};
     command[KEY_CMD] = ISRUNNING;
-    console.log("Check");
-    console.log(command);
     
     var brickreq = new XMLHttpRequest();
     brickreq.onreadystatechange = function() {
@@ -209,7 +200,7 @@ onload = function() {
       }
     };
     brickreq.ontimeout = function(){
-      brickfinder("timeout");
+      changeProgramState("timeout");
       pushFinished = true;
     };
     brickreq.onerror = function(){
@@ -221,7 +212,7 @@ onload = function() {
     brickreq.send(JSON.stringify(command));
   };
   
-  var disconnect = function(){
+  var signOutEV3 = function(){
     var command = {};
     command[KEY_CMD] = CMD_ABORT;
     
@@ -229,7 +220,7 @@ onload = function() {
     brickreq.onreadystatechange = function() {
       if (brickreq.readyState == 4 && brickreq.status == 200) {
         var brickstate = JSON.parse(brickreq.responseText);
-        STATE = SEARCH;
+        STATE = state.SEARCH;
         pushFinished = true;
       }
     };

@@ -6,13 +6,21 @@
       <script src="index.js"></script>
   </head>
     <body>
-        <h1>Open Roberta</h1>
+        <p>
+           <textarea id="debug" cols="20" rows="1" style="border:0px;resize:none" readonly></textarea>
+        </p>
         <p>
           <button id="connect" class="btn" disabled>Verbinden</button>
           <button id="close" class="btn" enabled>Beenden</button>
         </p>
         <p>
-           <textarea id="debug" cols="20" rows="3" readonly></textarea>
+          <input type="checkbox" id="advanced"> Zeige erweiterte Optionen
+        </p>
+        <p id="ip" style="visibility:hidden">
+          IP-Adresse: <input type="text" id="iptext"></input>
+        </p>
+        <p id="port" style="visibility:hidden">
+          Port: <input type="text" id="porttext"></input>
         </p>
     </body>
 </html>

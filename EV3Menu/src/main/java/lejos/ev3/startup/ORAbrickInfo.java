@@ -33,7 +33,7 @@ public class ORAbrickInfo implements HttpHandler {
 
         switch ( content.getString(ORApushCmd.KEY_CMD) ) {
             case ISRUNNING:
-                response.put(ISRUNNING, ORAlauncher.isRunning());
+                response.put(ISRUNNING, new Boolean(ORAlauncher.isRunning()).toString());
                 break;
             case ORApushCmd.CMD_REGISTER:
                 reg = true;
@@ -54,8 +54,9 @@ public class ORAbrickInfo implements HttpHandler {
                     GraphicStartup.orUSBconnected = false;
                     LocalEV3.get().getAudio().systemSound(Sounds.DESCENDING);
                     response.put("abort", "disconnect");
-                    return;
+                    break;
                 }
+                break;
             default:
                 System.out.println("Unknown cmd from USB program!!");
                 break;
