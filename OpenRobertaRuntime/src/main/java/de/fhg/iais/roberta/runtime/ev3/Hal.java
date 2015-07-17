@@ -3,14 +3,6 @@ package de.fhg.iais.roberta.runtime.ev3;
 import java.util.ArrayList;
 import java.util.Set;
 
-import lejos.hardware.ev3.EV3;
-import lejos.hardware.ev3.LocalEV3;
-import lejos.hardware.lcd.Image;
-import lejos.remote.nxt.NXTConnection;
-import lejos.robotics.SampleProvider;
-import lejos.robotics.navigation.DifferentialPilot;
-import lejos.utility.Delay;
-import lejos.utility.Stopwatch;
 import de.fhg.iais.roberta.components.ev3.EV3Sensors;
 import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
 import de.fhg.iais.roberta.runtime.Utils;
@@ -31,6 +23,14 @@ import de.fhg.iais.roberta.shared.sensor.ev3.MotorTachoMode;
 import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.shared.sensor.ev3.UltrasonicSensorMode;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import lejos.hardware.ev3.EV3;
+import lejos.hardware.ev3.LocalEV3;
+import lejos.hardware.lcd.Image;
+import lejos.remote.nxt.NXTConnection;
+import lejos.robotics.SampleProvider;
+import lejos.robotics.navigation.DifferentialPilot;
+import lejos.utility.Delay;
+import lejos.utility.Stopwatch;
 
 /**
  * Connection class between our generated code and the leJOS API
@@ -976,7 +976,7 @@ public class Hal {
     /**
      * Sleep the running thread.
      *
-     * @param time
+     * @param time in milliseconds
      */
     public void waitFor(long time) {
         Delay.msDelay(time);
