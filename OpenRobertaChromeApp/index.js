@@ -87,7 +87,7 @@ onload = function() {
           downloadProgram(CMD_PUSH);
           break;
         case state.UPDATE:
-          // TODO update thing
+          updateFirmware();
           break;
         default:
           console.log("wtf");
@@ -211,6 +211,24 @@ onload = function() {
     brickreq.timeout = 3000;
     brickreq.send(JSON.stringify(command));
   };
+  
+  function dlFirmwareFile(file){
+    serverreq = new XMLHttpRequest();
+    serverreq.onreadystatechange = function() {
+      if (serverreq.readyState == 4 && serverreq.status == 200) {
+        var blob = new Blob([serverreq.response], {type: "binary/jar"});
+        var filename = serverreq.getResponseHeader("Filename");
+        ulFirmwareFile(blob, filename);
+      }
+    };
+    serverreq.open("GET", "http://" + ORAHOST + "/update/" + file, true);
+    serverreq.responseType = "blob";
+    serverreq.send();
+  }
+  
+  function ulFirmwareFile(){
+    
+  }
   
   var signOutEV3 = function(){
     var command = {};

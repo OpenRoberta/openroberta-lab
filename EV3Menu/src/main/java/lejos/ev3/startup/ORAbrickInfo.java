@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 
 import lejos.hardware.Sounds;
 import lejos.hardware.ev3.LocalEV3;
+import lejos.utility.Delay;
 
 import org.json.JSONObject;
 
@@ -48,6 +49,15 @@ public class ORAbrickInfo implements HttpHandler {
                 }
                 response = getBrickInfos();
                 break;
+            case ORApushCmd.CMD_UPDATE:
+                response.put("restart", "now");
+                System.out.println(response);
+                exchange.sendResponseHeaders(200, response.toString().getBytes().length);
+                exchange.getResponseBody().write(response.toString().getBytes());
+                exchange.close();
+                Delay.msDelay(1000);
+                GraphicStartup.restartMenu();
+                return;
             case ORApushCmd.CMD_ABORT:
                 if ( ORAhandler.isRegistered() ) {
                     ORAhandler.setRegistered(false);

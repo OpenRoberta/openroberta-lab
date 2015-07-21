@@ -42,6 +42,7 @@ public class Ev3Update {
         File jar = new File(this.robotUpdateResourcesDir + "/OpenRobertaRuntime.jar");
         ResponseBuilder response = Response.ok(new FileInputStream(jar));
         response.header("Content-Disposition", "attachment; filename=OpenRobertaRuntime.jar");
+        response.header("Filename", "OpenRobertaRuntime.jar");
         return response.build();
     }
 
@@ -54,6 +55,7 @@ public class Ev3Update {
         File jar = new File(this.robotUpdateResourcesDir + "/OpenRobertaShared.jar");
         ResponseBuilder response = Response.ok(new FileInputStream(jar));
         response.header("Content-Disposition", "attachment; filename=OpenRobertaShared.jar");
+        response.header("Filename", "OpenRobertaShared.jar");
         return response.build();
     }
 
@@ -66,6 +68,7 @@ public class Ev3Update {
         File jar = new File(this.robotUpdateResourcesDir + "/json.jar");
         ResponseBuilder response = Response.ok(new FileInputStream(jar));
         response.header("Content-Disposition", "attachment; filename=json.jar");
+        response.header("Filename", "json.jar");
         return response.build();
     }
 
@@ -78,6 +81,7 @@ public class Ev3Update {
         File jar = new File(this.robotUpdateResourcesDir + "/EV3Menu.jar");
         ResponseBuilder response = Response.ok(new FileInputStream(jar));
         response.header("Content-Disposition", "attachment; filename=EV3Menu.jar");
+        response.header("Filename", "EV3Menu.jar");
         return response.build();
     }
 
