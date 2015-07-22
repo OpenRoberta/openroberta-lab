@@ -149,6 +149,7 @@ public final class BlocklyConstants {
 
     public static final String CONTROLS_IF = "controls_if";
     public static final String CONTROLS_FLOW_STATEMENT = "controls_flow_statements";
+
     public static final String ROB_CONTROLS_WAIT_FOR = "robControls_wait_for";
     public static final String ROB_CONTROLS_WAIT = "robControls_wait";
     public static final String ROB_CONTROLS_WAIT_TIME = "robControls_wait_time";
@@ -207,4 +208,12 @@ public final class BlocklyConstants {
     public static final String ROB_BRICK_ULTRASONIC = "robBrick_ultrasonic";
     public static final String ROB_BRICK_TOUCH = "robBrick_touch";
     public static final String ROB_BRICK_COLOUR = "robBrick_colour";
+
+    public static final String SIM_LED_ON = "sim_LED_on";
+    public static final String SIM_LED_OFF = "sim_LED_off";
+
+    public static final String SIM_GET_SAMPLE = "sim_getSample";
+    public static final String SIM_ULTRASONIC_GET_SAMPLE = "sim_ultrasonic_getSample";
+    public static final String SIM_COLOUR_GET_SAMPLE = "sim_colour_getSample";
+
 }
