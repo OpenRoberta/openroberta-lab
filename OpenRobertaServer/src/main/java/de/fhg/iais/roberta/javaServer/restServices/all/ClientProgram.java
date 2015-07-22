@@ -40,6 +40,7 @@ import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CompilerWorkflow;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
+import de.fhg.iais.roberta.syntax.codegen.ev3.Ast2Ev3JavaScriptVisitor;
 import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.UsedPortsCheckVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.AliveData;
@@ -194,6 +195,30 @@ public class ClientProgram {
                     } else {
                         Util.addErrorInfo(response, messageKey);
                     }
+                } else if ( robot.getName().equals("oraSim") ) {
+                    String programName = request.getString("name");
+                    String programText = request.optString("programText");
+                    String configurationText = request.optString("configurationText");
+                    LOG.info("JavaScript code generation started for program {}", programName);
+
+                    if ( programText == null || programText.trim().equals("") ) {
+                        //return Key.COMPILERWORKFLOW_ERROR_PROGRAM_NOT_FOUND;
+                    } else if ( configurationText == null || configurationText.trim().equals("") ) {
+                        //return Key.COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND;
+                    }
+
+                    Jaxb2BlocklyProgramTransformer<Void> programTransformer = null;
+                    try {
+                        programTransformer = Ev3CompilerWorkflow.generateProgramTransformer(programText);
+                    } catch ( Exception e ) {
+                        LOG.error("Transformer failed", e);
+                        //return Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+                    }
+
+                    String javaScriptCode = Ast2Ev3JavaScriptVisitor.generate(programTransformer.getTree());
+                    //String javaCode = Ast2Ev3JavaVisitor.generate(programName, brickConfiguration, programTransformer.getTree(), true);
+                    LOG.info("JavaScriptCode \n{}", javaScriptCode);
+                    Util.addSuccessInfo(response, Key.ROBOT_PUSH_RUN);
                 } else {
                     Util.addSuccessInfo(response, Key.ROBOT_PUSH_RUN);
                 }
