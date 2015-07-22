@@ -93,8 +93,6 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
     private int stmtCount = 0;
     private ArrayList<Boolean> inStmt = new ArrayList<Boolean>();
 
-    //private boolean inStmt = false;
-
     private Ast2Ev3JavaScriptVisitor() {
 
     }
@@ -130,6 +128,20 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
             for ( Phrase<Void> phrase : phrases ) {
                 phrase.visit(astVisitor);
+            }
+        }
+        astVisitor.sb.append("initProgram([");
+        appendInitStmt(astVisitor);
+
+    }
+
+    private static void appendInitStmt(Ast2Ev3JavaScriptVisitor astVisitor) {
+        for ( int i = 0; i < astVisitor.stmtCount; i++ ) {
+            astVisitor.sb.append("stmt" + i);
+            if ( i != astVisitor.stmtCount - 1 ) {
+                astVisitor.sb.append(",");
+            } else {
+                astVisitor.sb.append("]);");
             }
         }
     }

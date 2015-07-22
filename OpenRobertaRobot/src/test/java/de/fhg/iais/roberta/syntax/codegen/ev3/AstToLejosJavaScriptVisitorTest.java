@@ -26,7 +26,8 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt4 = createAssignStmt(\"x\", createBinaryExpr(ADD, createVarReference(NUMERIC, \"x\"), createConstant(NUM_CONST, 10)));\n"
                 + "var stmt5 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[]])]);\n"
                 + "var stmt6 = createDriveAction(createConstant(NUM_CONST, -50), FOREWARD, createConstant(NUM_CONST, 20));\n"
-                + "var stmt7 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC), createConstant(NUM_CONST, 30))], [[]])]);\n";
+                + "var stmt7 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC), createConstant(NUM_CONST, 30))], [[]])]);\n"
+                + "initProgram([stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7]);";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script_code_generator.xml");
     }
@@ -42,7 +43,8 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt4 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[]])]);\n"
                 + "var stmt5 = createDriveAction(createConstant(NUM_CONST, -50), FOREWARD, createConstant(NUM_CONST, 20));\n"
                 + "var stmt6 = createTurnAction(createConstant(NUM_CONST, 50), RIGHT, createConstant(NUM_CONST, 30));\n"
-                + "var stmt7 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC), createConstant(NUM_CONST, 30))], [[]])]);\n";
+                + "var stmt7 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC), createConstant(NUM_CONST, 30))], [[]])]);\n"
+                + "initProgram([stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7]);";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script_code_generator1.xml");
     }
@@ -57,7 +59,8 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt3 = createTurnAction(createConstant(NUM_CONST, 50), RIGHT);\n"
                 + "var stmt4 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createConstant(NUM_CONST, 20));\n"
                 + "var stmt5 = createTurnAction(createConstant(NUM_CONST, 50), LEFT);\n"
-                + "var stmt6 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[]])]);\n";
+                + "var stmt6 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[]])]);\n"
+                + "initProgram([stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6]);";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script_code_generator2.xml");
     }
@@ -71,7 +74,8 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt2 = createTurnLight(GREEN, ON);\n"
                 + "var stmt3 = createStopDrive();\n"
                 + "var stmt4 = createResetLight();\n"
-                + "var stmt5 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[]])]);\n";
+                + "var stmt5 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[]])]);\n"
+                + "initProgram([stmt0,stmt1,stmt2,stmt3,stmt4,stmt5]);";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script_code_generator3.xml");
     }
@@ -81,7 +85,8 @@ public class AstToLejosJavaScriptVisitorTest {
 
         String a =
             "var stmt0 = createIfStmt([createBinaryExpr(NEQ, createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 6)), createBinaryExpr(GTE, createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 6))], [[createDriveAction(createConstant(NUM_CONST, 50), FOREWARD)], [createDriveAction(createConstant(NUM_CONST, 50), BACKWARD)]]);\n"
-                + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[]])]);\n";
+                + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[]])]);\n"
+                + "initProgram([stmt0,stmt1]);";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script_code_generator4.xml");
     }
@@ -92,7 +97,8 @@ public class AstToLejosJavaScriptVisitorTest {
         String a =
             "var stmt0 = createIfStmt([createBinaryExpr(LTE, createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0))], [[createDriveAction(createConstant(NUM_CONST, 50), FOREWARD)]], [createTurnAction(createConstant(NUM_CONST, 50), RIGHT, createConstant(NUM_CONST, 80))]);\n"
                 + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[]])]);\n"
-                + "var stmt2 = createRepeatStmt(TIMES, createConstant(NUM_CONST, 10), [createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createConstant(NUM_CONST, 20)), createDriveAction(createConstant(NUM_CONST, 50), BACKWARD, createConstant(NUM_CONST, 30))]);\n";
+                + "var stmt2 = createRepeatStmt(TIMES, createConstant(NUM_CONST, 10), [createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createConstant(NUM_CONST, 20)), createDriveAction(createConstant(NUM_CONST, 50), BACKWARD, createConstant(NUM_CONST, 30))]);\n"
+                + "initProgram([stmt0,stmt1,stmt2]);";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script_code_generator5.xml");
     }
@@ -102,7 +108,8 @@ public class AstToLejosJavaScriptVisitorTest {
 
         String a =
             "var stmt0 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD);\n"
-                + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createBinaryExpr(OR, createConstant(BOOL_CONST, false), createConstant(BOOL_CONST, true)))], [[]])]);\n";
+                + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createBinaryExpr(OR, createConstant(BOOL_CONST, false), createConstant(BOOL_CONST, true)))], [[]])]);\n"
+                + "initProgram([stmt0,stmt1]);";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script_code_generator6.xml");
     }
@@ -114,7 +121,8 @@ public class AstToLejosJavaScriptVisitorTest {
             "var stmt0 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD);\n"
                 + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[]])]);\n"
                 + "var stmt2 = createIfStmt([createBinaryExpr(EQ, createConstant(NUM_CONST, 0), createConstant(NUM_CONST, 0))], [[createIfStmt([createBinaryExpr(NEQ, createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 1)), createBinaryExpr(EQ, createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 1))], [[createDriveAction(createConstant(NUM_CONST, 50), BACKWARD)], [createDriveAction(createConstant(NUM_CONST, 50), BACKWARD), createTurnAction(createConstant(NUM_CONST, 50), RIGHT)]])]], [createStopDrive()]);\n"
-                + "var stmt3 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC), createConstant(NUM_CONST, 30))], [[]])]);\n";
+                + "var stmt3 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC), createConstant(NUM_CONST, 30))], [[]])]);\n"
+                + "initProgram([stmt0,stmt1,stmt2,stmt3]);";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script_code_generator7.xml");
     }
@@ -124,7 +132,8 @@ public class AstToLejosJavaScriptVisitorTest {
 
         String a =
             "var stmt0 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD);\n"
-                + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[createDriveAction(createConstant(NUM_CONST, 50), BACKWARD)]]), createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC), createConstant(NUM_CONST, 30))], [[createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[]])])]])]);\n";
+                + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[createDriveAction(createConstant(NUM_CONST, 50), BACKWARD)]]), createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC), createConstant(NUM_CONST, 30))], [[createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[]])])]])]);\n"
+                + "initProgram([stmt0,stmt1]);";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script_code_generator8.xml");
     }

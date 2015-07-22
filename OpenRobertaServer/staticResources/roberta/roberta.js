@@ -423,6 +423,10 @@ function startProgram() {
                     var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
                     userState.programBlocks = Blockly.Xml.domToText(xmlProgram);
                 }
+
+                //TODO not safe !!!
+                eval(result.javaScriptProgram);
+
                 COMM.json("/toolbox", {
                     "cmd" : "loadT",
                     "name" : userState.toolbox,
@@ -430,7 +434,14 @@ function startProgram() {
                 }, function(result) {
                     injectBlockly(result, userState.programBlocks, true);
                 });
-                //TODO start real simulation here with result.data, the generated javascript code
+
+                // Initialize the scene 
+                initializeScene();
+
+                // Instead of calling 'renderScene()', we call a new function: 'animateScene()'. It will 
+                // update the rotation values and call 'renderScene()' in a loop. 
+
+                animateScene(); // adding new Timer  NewDate on 26Mai
             }
         } else {
             displayInformation(result, "", result.message, "");
@@ -1304,6 +1315,7 @@ function initHeadNavigation() {
             $('#blocklyDiv').removeClass('simActive');
             $('#simDiv').removeClass('simActive');
             displayMessage("simBack pressed", "TOAST", "simBack");
+            window.cancelAnimationFrame(requestId);
             COMM.json("/toolbox", {
                 "cmd" : "loadT",
                 "name" : userState.toolbox,

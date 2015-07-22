@@ -1,0 +1,106 @@
+<!DOCTYPE html> 
+   <!-- The previous line tells the browser, that the page uses the HTML5 standard. --> 
+    
+   <html>
+       <head>
+           <title>Roberta SImuli  Prototype Three.js</title> 
+           <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"> 
+    
+           <!-- The following meta line optimizes the site for mobile devices. It sets the viewport size 
+          to the screen size, so it will be displayed maximized, but unscaled. --> 
+          <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1"> 
+          <style type="text/css"> 
+              body { 
+                  /* Set the background color of the HTML page to black */ 
+                  background-color: #000000; 
+   
+                  /* Hide oversized content. This prevents the scroll bars. */ 
+                  overflow: hidden; 
+              } 
+          </style> 
+          <!-- Include Three.js libraries --> 
+		<!script src = "http://threejs.org/build/three.min.js"></script>
+		<!script src = "Detector.js"></script> <! one can ask this condition on the site face as well.>
+		
+		<script src="robertaLogic/constants.js"></script>
+		<script src="robertaLogic/Modules.js"></script>		
+		<script src="robertaLogic/programBuilder.js"></script>
+		<script src="robertaLogic/programEval.js"></script>
+		<script src="robertaLogic/programMove.js"></script>
+		
+		<script src = "simulationLogic/GeneratorRoberta.js"></script>
+		<script src = "simulationLogic/FrameworkManager.js"></script>
+		
+		<script src = "simulationLogic/meshHandlerPostiveCoordinates.js"></script>
+		<script src = "simulationLogic/robotMotionHandler.js"></script>
+		<script src = "simulationLogic/sensorsHandler.js"></script>
+		<script src="build/three.min.js"></script>
+
+		<script src="js/renderers/Projector.js"></script>
+		<script src="js/renderers/CanvasRenderer.js"></script>
+
+		<script src="js/libs/stats.min.js"></script>
+		<script src="js/AnimationFrame.js"></script>
+  
+      </head> 
+      <body>
+          <!-- This is the DIV element which will contain the WebGL canvas. To be identifiable lateron, 
+          the id 'WebGLCanvas' is applied to it. --> 
+          <output id="out"></output>
+		  <div id="WebGLCanvas"> 
+   
+          <!-- This JavaScript block encloses the Three.js commands --> 
+          <script> 
+	    // code for adding a new canvas
+	    /**	var canvas = document.createElement("canvas");
+		var context = canvas.getContext("2d");
+	    
+	    var image0 = new Image();
+		var texture = new THREE.Texture(canvas);
+		
+		
+		
+		image0.onload = function() {
+		context.drawImage(image0, 0, 0);
+		texture.needsUpdate = true;
+		};
+		image0.src = 'playground.jpg';
+	    */
+	    
+	    // variables for stats
+	    var startTime	= Date.now();
+	    var stats ;
+	    
+	    // Global scene object 
+	    var scene; 
+	    
+	    // Global camera object  
+	    var camera;	    
+	    
+	    // variables belonging raycasting 
+	    var collidableMeshList = [];
+	    var colorReadableMeshList = [] ;
+	    	    
+	    // variables needed for communication with Roberta Server
+	    var inpoutValuesRobot = [];	    
+	    var myMotion ;
+	    var distance ;	    
+	    
+	    // Adding Clock object in order to control the fps speed
+	    var  clock  ;
+	    var  time   ;
+	    var  delta  ;
+	    var  AVG_FRAME_Rate = 30 ;  // 30 frames per second
+		
+		var animationFrame ; // adding frame handler var taken from  implementation of Oleg Slobodskoi MIT license
+	    // Initialize the scene 
+	    initializeScene(); 
+	    
+	    // Instead of calling 'renderScene()', we call a new function: 'animateScene()'. It will 
+	    // update the rotation values and call 'renderScene()' in a loop. 
+	   
+	    
+	    animateScene(); // adding new Timer  NewDate on 26Mai				
+         </script> 
+    </body> 
+ </html>

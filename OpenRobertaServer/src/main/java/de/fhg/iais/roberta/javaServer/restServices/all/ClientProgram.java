@@ -216,8 +216,9 @@ public class ClientProgram {
                     }
 
                     String javaScriptCode = Ast2Ev3JavaScriptVisitor.generate(programTransformer.getTree());
-                    //String javaCode = Ast2Ev3JavaVisitor.generate(programName, brickConfiguration, programTransformer.getTree(), true);
+
                     LOG.info("JavaScriptCode \n{}", javaScriptCode);
+                    response.put("javaScriptProgram", javaScriptCode);
                     Util.addSuccessInfo(response, Key.ROBOT_PUSH_RUN);
                 } else {
                     Util.addSuccessInfo(response, Key.ROBOT_PUSH_RUN);
