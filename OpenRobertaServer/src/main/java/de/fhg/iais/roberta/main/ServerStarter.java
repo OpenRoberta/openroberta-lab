@@ -103,13 +103,19 @@ public class ServerStarter {
         context.addFilter(GuiceFilter.class, "/*", null);
         context.addServlet(DefaultServlet.class, "/*");
 
-        ResourceHandler resourceHandler = new ResourceHandler();
-        resourceHandler.setDirectoriesListed(true);
-        resourceHandler.setResourceBase("staticResources");
+        ResourceHandler staticResourceHandler = new ResourceHandler();
+        staticResourceHandler.setDirectoriesListed(true);
+        staticResourceHandler.setResourceBase("staticResources");
+
+        ResourceHandler builtResourceHandler = new ResourceHandler();
+        builtResourceHandler.setDirectoriesListed(true);
+        builtResourceHandler.setResourceBase("target/classes/public");
 
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[] {
-            resourceHandler, context
+            staticResourceHandler,
+            builtResourceHandler,
+            context
         });
         server.setHandler(handlers);
 

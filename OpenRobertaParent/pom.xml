@@ -23,7 +23,7 @@ limitations under the License.
 	<packaging>pom</packaging>
 	<name>RobertaParent</name>
 	<description>the parent project of the OpenRoberta application</description>
-	<url>http://www.openroberta.de</url>
+	<url>http://www.open-roberta.org</url>
 	<inceptionYear>2014</inceptionYear>
 	<properties>
 		<!-- the server and the crosscompiler SHOULD be compatible between(including) the following two versions of software deployed on the ROBOT -->
