@@ -50,6 +50,7 @@ public class ORAbrickInfo implements HttpHandler {
                 response = getBrickInfos();
                 break;
             case ORApushCmd.CMD_UPDATE:
+                LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
                 response.put("restart", "now");
                 System.out.println(response);
                 exchange.sendResponseHeaders(200, response.toString().getBytes().length);

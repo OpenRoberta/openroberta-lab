@@ -12,9 +12,10 @@
   "icons": { "128": "OR.png" },
   
   "permissions": [
-    "http://10.0.1.1:80/brickinfo",
-    "http://10.0.1.1:80/program",
+    "http://10.0.1.1:80/*",
     "http://10.0.1.10/*",
-    "http://lab.open-roberta.org/*"
+    "http://lab.open-roberta.org/*",
+    "http://mp-devel.iais.fraunhofer.de/*",
+    "http://mp-public.iaias.fraunhofer.de/*"
   ]
 }

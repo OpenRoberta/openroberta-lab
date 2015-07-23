@@ -299,6 +299,7 @@ public class GraphicStartup implements ORAmenu {
                 server = HttpServer.create(new InetSocketAddress(InetAddress.getByName("10.0.1.1"), 80), 0);
                 server.createContext("/brickinfo", new ORAbrickInfo());
                 server.createContext("/program", new ORAprogram());
+                server.createContext("/firmware", new ORAfirmware());
                 server.setExecutor(null); // creates a default executor
                 server.start();
             } catch ( IOException e ) {

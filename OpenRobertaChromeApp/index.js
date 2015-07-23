@@ -1,6 +1,6 @@
 onload = function() {
   
-  var HOST = "lab.open-roberta.org";
+  var HOST = "mp-devel.iais.fraunhofer.de:1999";
   var EV3HOST = "10.0.1.1:80";
   var ORAHOST = "10.0.1.10:1999";
   
@@ -31,8 +31,11 @@ onload = function() {
   var pushFinished = true;
   var serverreq = null;
   
+  var filenames = ["ev3menu", "jsonlib", "shared", "runtime"];
+  var i = 0;
+  
   connect.onclick = function(){
-    if (STATE != state.CONNECTED){
+    if (STATE != state.CONNECTED && STATE != state.REGISTER){
       generateToken();
       STATE = state.REGISTER;
       document.getElementById("connect").innerHTML = "Trennen";
@@ -87,7 +90,7 @@ onload = function() {
           downloadProgram(CMD_PUSH);
           break;
         case state.UPDATE:
-          updateFirmware();
+          dlFirmwareFile();
           break;
         default:
           console.log("wtf");
@@ -212,22 +215,36 @@ onload = function() {
     brickreq.send(JSON.stringify(command));
   };
   
-  function dlFirmwareFile(file){
-    serverreq = new XMLHttpRequest();
-    serverreq.onreadystatechange = function() {
-      if (serverreq.readyState == 4 && serverreq.status == 200) {
-        var blob = new Blob([serverreq.response], {type: "binary/jar"});
-        var filename = serverreq.getResponseHeader("Filename");
-        ulFirmwareFile(blob, filename);
-      }
-    };
-    serverreq.open("GET", "http://" + ORAHOST + "/update/" + file, true);
-    serverreq.responseType = "blob";
-    serverreq.send();
+  function dlFirmwareFile(){
+    if (i < 4){
+      serverreq = new XMLHttpRequest();
+      serverreq.onreadystatechange = function() {
+        if (serverreq.readyState == 4 && serverreq.status == 200) {
+          var blob = new Blob([serverreq.response], {type: "binary/jar"});
+          var filename = serverreq.getResponseHeader("Filename");
+          ulFirmwareFile(blob, filename);
+        }
+      };
+      serverreq.open("GET", "http://" + ORAHOST + "/update/" + filenames[i], true);
+      serverreq.responseType = "blob";
+      serverreq.send();
+    } else {
+      restartEV3();
+    }
   }
   
-  function ulFirmwareFile(){
-    
+  function ulFirmwareFile(file, filename){
+    var brickreq = new XMLHttpRequest();
+    brickreq.onreadystatechange = function() {
+      if (brickreq.readyState == 4 && brickreq.status == 200) {
+        var info = JSON.parse(brickreq.responseText);
+        i++;
+        dlFirmwareFile();
+      }
+    };
+    brickreq.open("POST", "http://" + EV3HOST + "/firmware", true);
+    brickreq.setRequestHeader("Filename", filename);
+    brickreq.send(file);
   }
   
   var signOutEV3 = function(){
@@ -245,6 +262,24 @@ onload = function() {
     brickreq.open("POST", "http://" + EV3HOST + "/brickinfo", true);
     brickreq.send(JSON.stringify(command));
   };
+  
+  function restartEV3(){
+    var command = {};
+    command[KEY_CMD] = CMD_UPDATE;
+    
+    var brickreq = new XMLHttpRequest();
+    brickreq.onreadystatechange = function() {
+      if (brickreq.readyState == 4 && brickreq.status == 200) {
+        var brickstate = JSON.parse(brickreq.responseText);
+        STATE = state.SEARCH;
+        document.getElementById("connect").disabled = true;
+        document.getElementById("connect").innerHTML = "Verbinden";
+        pushFinished = true;
+      }
+    };
+    brickreq.open("POST", "http://" + EV3HOST + "/brickinfo", true);
+    brickreq.send(JSON.stringify(command));
+  }
   
   function displayText(text){
     document.getElementById("debug").value = text;
