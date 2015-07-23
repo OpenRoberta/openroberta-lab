@@ -183,7 +183,10 @@ function updateScene(motorL, motorR) {
             nearestObject = echoeObjects[minIndex];
             nearestObject.object.material.color.setRGB(Math.random(), Math.random(), Math.random()); // highlighting of closest object form ultrasonic view 
             echoeDistance = nearestObject.distance * mappingDivideValue;
+            SENSORS.setUltrasonicSensor(echoeDistance);
             //console.log("distance in cm " + echoeDistance);// to check mapping result distanceS
+        } else {
+            SENSORS.setUltrasonicSensor(Infinity);
         }
     }
 

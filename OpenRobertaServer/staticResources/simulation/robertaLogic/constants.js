@@ -53,6 +53,7 @@ const AND = "AND";
 const FOREWARD = "FOREWARD";
 const BACKWARD = "BACKWARD";
 const WHILE = "WHILE";
+const FOREVER = "FOREVER";
 const ANGLE = "angle";
 const COLOR = "color";
 const MODE = "mode";

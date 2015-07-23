@@ -1,4 +1,13 @@
-/*C7*/SET SCHEMA PUBLIC
+/*C3*/SET SCHEMA PUBLIC
 DELETE FROM USER WHERE ID=53
-INSERT INTO USER VALUES(53,'koki','1','1','TEACHER','2014-12-19 09:18:04.976000','2015-07-23 11:25:45.599000',NULL)
+INSERT INTO USER VALUES(53,'koki','1','1','TEACHER','2014-12-19 09:18:04.976000','2015-07-23 16:04:45.568000',NULL)
+COMMIT
+INSERT INTO PROGRAM VALUES(85,'inf',53,43,'<block_set xmlns="http://de.fhg.iais.roberta.blockly"><instance x="100" y="50"><block type="robControls_start" id="117" intask="true" deletable="false"><mutation declare="false"></mutation></block><block type="robControls_loopForever" id="127" intask="true"><statement name="DO"><block type="robActions_motorDiff_on" id="152" inline="false" intask="true"><field name="DIRECTION">FOREWARD</field><value name="POWER"><block type="math_number" id="153" intask="true"><field name="NUM">100</field></block></value></block><block type="robControls_wait_for" id="176" inline="false" intask="true"><value name="WAIT0"><block type="logic_compare" id="177" inline="true" intask="true"><mutation operator_range="NUM"></mutation><field name="OP">LT</field><value name="A"><block type="sim_getSample" id="178" intask="true" deletable="false" movable="false"><mutation input="ULTRASONIC_DISTANCE"></mutation><field name="SENSORTYPE">ULTRASONIC_DISTANCE</field><field name="SENSORPORT">4</field></block></value><value name="B"><block type="math_number" id="184" intask="true"><field name="NUM">30</field></block></value></block></value></block><block type="robActions_motorDiff_on_for" id="210" inline="false" intask="true"><field name="DIRECTION">BACKWARDS</field><value name="POWER"><block type="math_number" id="211" intask="true"><field name="NUM">50</field></block></value><value name="DISTANCE"><block type="math_number" id="212" intask="true"><field name="NUM">100</field></block></value></block></statement></block></instance></block_set>','2015-07-23 16:09:26.288000','2015-07-23 16:09:26.288000',NULL,NULL,0,NULL,0)
+COMMIT
+DELETE FROM USER WHERE ID=53
+INSERT INTO USER VALUES(53,'koki','1','1','TEACHER','2014-12-19 09:18:04.976000','2015-07-23 16:09:33.215000',NULL)
+COMMIT
+/*C6*/SET SCHEMA PUBLIC
+DELETE FROM USER WHERE ID=53
+INSERT INTO USER VALUES(53,'koki','1','1','TEACHER','2014-12-19 09:18:04.976000','2015-07-23 16:13:07.464000',NULL)
 COMMIT

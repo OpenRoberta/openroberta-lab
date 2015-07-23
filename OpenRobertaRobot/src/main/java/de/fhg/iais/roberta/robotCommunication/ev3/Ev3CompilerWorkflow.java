@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.syntax.codegen.ev3.Ast2Ev3JavaVisitor;
 import de.fhg.iais.roberta.syntax.codegen.ev3.Ast2Ev3PythonVisitor;
+import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.transformer.ev3.Jaxb2Ev3ConfigurationTransformer;
 import de.fhg.iais.roberta.util.Key;
@@ -33,9 +34,7 @@ public class Ev3CompilerWorkflow {
     public final String pathToCrossCompilerBuildXMLResource;
 
     @Inject
-    public Ev3CompilerWorkflow(
-        Ev3Communicator brickCommunicator,
-        @Named("crosscompiler.basedir") String pathToCrosscompilerBaseDir, //
+    public Ev3CompilerWorkflow(Ev3Communicator brickCommunicator, @Named("crosscompiler.basedir") String pathToCrosscompilerBaseDir, //
         @Named("robot.crossCompilerResources.dir") String crossCompilerResourcesDir, //
         @Named("crosscompiler.build.xml") String pathToCrossCompilerBuildXMLResource) //
     {
@@ -64,38 +63,22 @@ public class Ev3CompilerWorkflow {
      * @return a message key in case of an error; null otherwise
      */
     public Key execute(DbSession session, String token, String programName, String programText, String configurationText) {
-        if ( programText == null || programText.trim().equals("") ) {
-            return Key.COMPILERWORKFLOW_ERROR_PROGRAM_NOT_FOUND;
-        } else if ( configurationText == null || configurationText.trim().equals("") ) {
-            return Key.COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND;
+        BlocklyProgramAndConfigTransformer data = BlocklyProgramAndConfigTransformer.transform(programText, configurationText);
+        if ( data.getErrorMessage() != null ) {
+            return data.getErrorMessage();
         }
 
-        Jaxb2BlocklyProgramTransformer<Void> programTransformer;
-        try {
-            programTransformer = generateProgramTransformer(programText);
-        } catch ( Exception e ) {
-            LOG.error("Transformer failed", e);
-            return Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
-        }
-        Ev3Configuration brickConfiguration;
-        try {
-            brickConfiguration = generateConfiguration(configurationText);
-        } catch ( Exception e ) {
-            LOG.error("Generation of the configuration failed", e);
-            return Key.COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED;
-        }
-
-        String fwName = brickCommunicator.getState(token).getFirmwareName();
+        String fwName = this.brickCommunicator.getState(token).getFirmwareName();
         boolean doPython = fwName.equals("ev3dev");
         LOG.info("compiling for firmware: '" + fwName + "'");
 
         String sourceCode, ext;
         if ( doPython ) {
-            sourceCode = Ast2Ev3PythonVisitor.generate(programName, brickConfiguration, programTransformer.getTree(), true);
+            sourceCode = Ast2Ev3PythonVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
             ext = ".py";
             LOG.info("generating python code");
         } else {
-            sourceCode = Ast2Ev3JavaVisitor.generate(programName, brickConfiguration, programTransformer.getTree(), true);
+            sourceCode = Ast2Ev3JavaVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
             ext = ".java";
             LOG.info("generating java code");
         }

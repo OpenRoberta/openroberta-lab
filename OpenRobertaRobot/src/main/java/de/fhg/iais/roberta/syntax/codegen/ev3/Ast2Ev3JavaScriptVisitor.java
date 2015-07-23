@@ -86,6 +86,7 @@ import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
@@ -95,71 +96,6 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     private Ast2Ev3JavaScriptVisitor() {
 
-    }
-
-    private void increaseStmt() {
-        this.stmtCount++;
-    }
-
-    /**
-     * @return the inStmt
-     */
-    private boolean isInStmt() {
-        if ( this.inStmt.size() == 0 ) {
-            return false;
-        }
-        return this.inStmt.get(this.inStmt.size() - 1);
-    }
-
-    /**
-     * @param inStmt the inStmt to set
-     */
-    private void addInStmt() {
-        this.inStmt.add(true);
-    }
-
-    private void removeInStmt() {
-        if ( this.inStmt.size() != 0 ) {
-            this.inStmt.remove(this.inStmt.size() - 1);
-        }
-    }
-
-    private static void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, Ast2Ev3JavaScriptVisitor astVisitor) {
-        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
-            for ( Phrase<Void> phrase : phrases ) {
-                phrase.visit(astVisitor);
-            }
-        }
-        astVisitor.sb.append("initProgram([");
-        appendInitStmt(astVisitor);
-
-    }
-
-    private static void appendInitStmt(Ast2Ev3JavaScriptVisitor astVisitor) {
-        for ( int i = 0; i < astVisitor.stmtCount; i++ ) {
-            astVisitor.sb.append("stmt" + i);
-            if ( i != astVisitor.stmtCount - 1 ) {
-                astVisitor.sb.append(",");
-            } else {
-                astVisitor.sb.append("]);");
-            }
-        }
-    }
-
-    private String createClosingBracket() {
-        String end = ")";
-        if ( !isInStmt() ) {
-            this.sb.append("var stmt" + this.stmtCount + " = ");
-            increaseStmt();
-            end = ");\n";
-        }
-        return end;
-    }
-
-    private void removeLastComma() {
-        if ( isInStmt() ) {
-            this.sb.setLength(this.sb.length() - 2);
-        }
     }
 
     public static String generate(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
@@ -351,14 +287,16 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
                 binary.getRight().visit(this);
                 this.sb.append(", [");
                 break;
+            case FOREVER:
             case WHILE:
                 this.sb.append("createRepeatStmt(" + repeatStmt.getMode() + ", ");
                 repeatStmt.getExpr().visit(this);
                 this.sb.append(", [");
                 break;
-            default:
 
-                break;
+            default:
+                throw new DbcException("Invalid repeat mode");
+
         }
 
         addInStmt();
@@ -762,6 +700,71 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
     public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    private void increaseStmt() {
+        this.stmtCount++;
+    }
+
+    /**
+     * @return the inStmt
+     */
+    private boolean isInStmt() {
+        if ( this.inStmt.size() == 0 ) {
+            return false;
+        }
+        return this.inStmt.get(this.inStmt.size() - 1);
+    }
+
+    /**
+     * @param inStmt the inStmt to set
+     */
+    private void addInStmt() {
+        this.inStmt.add(true);
+    }
+
+    private void removeInStmt() {
+        if ( this.inStmt.size() != 0 ) {
+            this.inStmt.remove(this.inStmt.size() - 1);
+        }
+    }
+
+    private static void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, Ast2Ev3JavaScriptVisitor astVisitor) {
+        for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
+            for ( Phrase<Void> phrase : phrases ) {
+                phrase.visit(astVisitor);
+            }
+        }
+        appendInitStmt(astVisitor);
+
+    }
+
+    private static void appendInitStmt(Ast2Ev3JavaScriptVisitor astVisitor) {
+        astVisitor.sb.append("initProgram([");
+        for ( int i = 0; i < astVisitor.stmtCount; i++ ) {
+            astVisitor.sb.append("stmt" + i);
+            if ( i != astVisitor.stmtCount - 1 ) {
+                astVisitor.sb.append(",");
+            } else {
+                astVisitor.sb.append("]);");
+            }
+        }
+    }
+
+    private String createClosingBracket() {
+        String end = ")";
+        if ( !isInStmt() ) {
+            this.sb.append("var stmt" + this.stmtCount + " = ");
+            increaseStmt();
+            end = ");\n";
+        }
+        return end;
+    }
+
+    private void removeLastComma() {
+        if ( isInStmt() ) {
+            this.sb.setLength(this.sb.length() - 2);
+        }
     }
 
 }

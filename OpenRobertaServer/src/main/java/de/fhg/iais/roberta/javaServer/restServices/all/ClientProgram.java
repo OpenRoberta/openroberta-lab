@@ -15,6 +15,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.codegen.ev3.Ast2Ev3JavaScriptVisitor;
 import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.UsedPortsCheckVisitor;
+import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
@@ -170,7 +172,6 @@ public class ClientProgram {
                 Util.addResultInfo(response, pp);
 
             } else if ( cmd.equals("runP") ) {
-                // TODO
                 Key messageKey = null;
                 RobotDao robotDao = new RobotDao(dbSession);
                 Robot robot = robotDao.get(robotId);
@@ -186,36 +187,15 @@ public class ClientProgram {
                     wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
                 } else {
                     LOG.info("JavaScript code generation started for program {}", programName);
-                    if ( programText == null || programText.trim().equals("") ) {
-                        messageKey = Key.COMPILERWORKFLOW_ERROR_PROGRAM_NOT_FOUND;
-                    } else {
-                        Jaxb2BlocklyProgramTransformer<Void> programTransformer = null;
-                        try {
-                            programTransformer = Ev3CompilerWorkflow.generateProgramTransformer(programText);
-                        } catch ( Exception e ) {
-                            LOG.error("Transformer failed", e);
-                            messageKey = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
-                        }
-                        String javaScriptCode = Ast2Ev3JavaScriptVisitor.generate(programTransformer.getTree());
+                    BlocklyProgramAndConfigTransformer data = BlocklyProgramAndConfigTransformer.transform(programText, configurationText);
+                    if ( data.getErrorMessage() == null ) {
+                        String javaScriptCode = Ast2Ev3JavaScriptVisitor.generate(data.getProgramTransformer().getTree());
                         LOG.info("JavaScriptCode \n{}", javaScriptCode);
                         response.put("javaScriptProgram", javaScriptCode);
                         wasRobotWaiting = true;
                     }
                 }
-                if ( messageKey == null ) {
-                    // everything is fine
-                    if ( token == null ) {
-                        Util.addErrorInfo(response, Key.ROBOT_NOT_CONNECTED);
-                    } else {
-                        if ( wasRobotWaiting ) {
-                            Util.addSuccessInfo(response, Key.ROBOT_PUSH_RUN);
-                        } else {
-                            Util.addErrorInfo(response, Key.ROBOT_NOT_WAITING);
-                        }
-                    }
-                } else {
-                    Util.addErrorInfo(response, messageKey);
-                }
+                handleRunProgramError(response, messageKey, token, wasRobotWaiting);
             } else {
                 LOG.error("Invalid command: " + cmd);
                 Util.addErrorInfo(response, Key.COMMAND_INVALID);
@@ -261,5 +241,22 @@ public class ClientProgram {
         }
         blockSet.getInstance().add(instance);
         return blockSet;
+    }
+
+    private void handleRunProgramError(JSONObject response, Key messageKey, String token, boolean wasRobotWaiting) throws JSONException {
+        if ( messageKey == null ) {
+            // everything is fine
+            if ( token == null ) {
+                Util.addErrorInfo(response, Key.ROBOT_NOT_CONNECTED);
+            } else {
+                if ( wasRobotWaiting ) {
+                    Util.addSuccessInfo(response, Key.ROBOT_PUSH_RUN);
+                } else {
+                    Util.addErrorInfo(response, Key.ROBOT_NOT_WAITING);
+                }
+            }
+        } else {
+            Util.addErrorInfo(response, messageKey);
+        }
     }
 }
