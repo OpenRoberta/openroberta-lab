@@ -171,57 +171,50 @@ public class ClientProgram {
 
             } else if ( cmd.equals("runP") ) {
                 // TODO
+                Key messageKey = null;
                 RobotDao robotDao = new RobotDao(dbSession);
                 Robot robot = robotDao.get(robotId);
+                String token = httpSessionState.getToken();
+                String programName = request.getString("name");
+                String programText = request.optString("programText");
+                String configurationText = request.optString("configurationText");
+                boolean wasRobotWaiting = false;
+
                 if ( robot.getName().equals("ev3") ) {
-                    String token = httpSessionState.getToken();
-                    String programName = request.getString("name");
-                    String programText = request.optString("programText");
-                    String configurationText = request.optString("configurationText");
                     LOG.info("compiler workflow started for program {}", programName);
-                    Key messageKey = this.compilerWorkflow.execute(dbSession, token, programName, programText, configurationText);
-                    if ( messageKey == null ) {
-                        // everything is fine
-                        if ( token == null ) {
-                            Util.addErrorInfo(response, Key.ROBOT_NOT_CONNECTED);
-                        } else {
-                            boolean wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
-                            if ( wasRobotWaiting ) {
-                                Util.addSuccessInfo(response, Key.ROBOT_PUSH_RUN);
-                            } else {
-                                Util.addErrorInfo(response, Key.ROBOT_NOT_WAITING);
-                            }
-                        }
-                    } else {
-                        Util.addErrorInfo(response, messageKey);
-                    }
-                } else if ( robot.getName().equals("oraSim") ) {
-                    String programName = request.getString("name");
-                    String programText = request.optString("programText");
-                    String configurationText = request.optString("configurationText");
-                    LOG.info("JavaScript code generation started for program {}", programName);
-
-                    if ( programText == null || programText.trim().equals("") ) {
-                        //return Key.COMPILERWORKFLOW_ERROR_PROGRAM_NOT_FOUND;
-                    } else if ( configurationText == null || configurationText.trim().equals("") ) {
-                        //return Key.COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND;
-                    }
-
-                    Jaxb2BlocklyProgramTransformer<Void> programTransformer = null;
-                    try {
-                        programTransformer = Ev3CompilerWorkflow.generateProgramTransformer(programText);
-                    } catch ( Exception e ) {
-                        LOG.error("Transformer failed", e);
-                        //return Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
-                    }
-
-                    String javaScriptCode = Ast2Ev3JavaScriptVisitor.generate(programTransformer.getTree());
-
-                    LOG.info("JavaScriptCode \n{}", javaScriptCode);
-                    response.put("javaScriptProgram", javaScriptCode);
-                    Util.addSuccessInfo(response, Key.ROBOT_PUSH_RUN);
+                    messageKey = this.compilerWorkflow.execute(dbSession, token, programName, programText, configurationText);
+                    wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
                 } else {
-                    Util.addSuccessInfo(response, Key.ROBOT_PUSH_RUN);
+                    LOG.info("JavaScript code generation started for program {}", programName);
+                    if ( programText == null || programText.trim().equals("") ) {
+                        messageKey = Key.COMPILERWORKFLOW_ERROR_PROGRAM_NOT_FOUND;
+                    } else {
+                        Jaxb2BlocklyProgramTransformer<Void> programTransformer = null;
+                        try {
+                            programTransformer = Ev3CompilerWorkflow.generateProgramTransformer(programText);
+                        } catch ( Exception e ) {
+                            LOG.error("Transformer failed", e);
+                            messageKey = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+                        }
+                        String javaScriptCode = Ast2Ev3JavaScriptVisitor.generate(programTransformer.getTree());
+                        LOG.info("JavaScriptCode \n{}", javaScriptCode);
+                        response.put("javaScriptProgram", javaScriptCode);
+                        wasRobotWaiting = true;
+                    }
+                }
+                if ( messageKey == null ) {
+                    // everything is fine
+                    if ( token == null ) {
+                        Util.addErrorInfo(response, Key.ROBOT_NOT_CONNECTED);
+                    } else {
+                        if ( wasRobotWaiting ) {
+                            Util.addSuccessInfo(response, Key.ROBOT_PUSH_RUN);
+                        } else {
+                            Util.addErrorInfo(response, Key.ROBOT_NOT_WAITING);
+                        }
+                    }
+                } else {
+                    Util.addErrorInfo(response, messageKey);
                 }
             } else {
                 LOG.error("Invalid command: " + cmd);

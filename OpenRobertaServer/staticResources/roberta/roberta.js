@@ -1320,6 +1320,7 @@ function initHeadNavigation() {
             while (myNode.firstChild) {
                 myNode.removeChild(myNode.firstChild);
             }
+            initProgram([]);
             COMM.json("/toolbox", {
                 "cmd" : "loadT",
                 "name" : userState.toolbox,
