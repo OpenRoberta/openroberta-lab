@@ -2,11 +2,11 @@
  * Initialze the scene.
  */
 function initializeScene() {
-    //resetMeshHendler();
+
     resetMeshHendlerPositiveCoor();
-    //resetNegativeCoor();
     resetMotionHandler();
     resetGeneratorRoberta();
+
     // if(Detector.webgl){ 
     //   renderer = new THREE.WebGLRenderer({antialias:true}); 
 

@@ -1316,6 +1316,10 @@ function initHeadNavigation() {
             $('#simDiv').removeClass('simActive');
             displayMessage("simBack pressed", "TOAST", "simBack");
             window.cancelAnimationFrame(requestId);
+            var myNode = document.getElementById("WebGLCanvas");
+            while (myNode.firstChild) {
+                myNode.removeChild(myNode.firstChild);
+            }
             COMM.json("/toolbox", {
                 "cmd" : "loadT",
                 "name" : userState.toolbox,
