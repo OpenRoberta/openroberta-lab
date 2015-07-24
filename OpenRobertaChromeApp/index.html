@@ -6,21 +6,26 @@
       <script src="index.js"></script>
   </head>
     <body>
+        <!-- Add grid -->
+        
         <p>
-           <textarea id="debug" cols="20" rows="1" style="border:0px;resize:none" readonly></textarea>
+           <textarea id="debug" cols="15" rows="1" style="border:0px;resize:none" readonly></textarea>
         </p>
         <p>
-          <button id="connect" class="btn" disabled>Verbinden</button>
-          <button id="close" class="btn" enabled>Beenden</button>
+           <textarea id="infotext" cols="35" rows="5" style="resize:none;" readonly></textarea>
         </p>
-        <!--p>
-          <input type="checkbox" id="advanced"> Zeige erweiterte Optionen
+        <p>
+          <button id="connect" class="btn" disabled></button>
+          <button id="close" class="btn"></button>
         </p>
-        <p id="ip" style="visibility:hidden">
-          IP-Adresse: <input type="text" id="iptext"></input>
+        <p>
+          <input type="checkbox" id="advancedoptions">
+          <textarea id="advancedop" cols="30" rows="1" style="border:0px;resize:none" readonly></textarea>
         </p>
-        <p id="port" style="visibility:hidden">
-          Port: <input type="text" id="porttext"></input>
-        </p-->
+        <p id="alternative" style="visibility:hidden">
+          <textarea id="customaddressinfo" cols="35" rows="1" style="border:0px;resize:none" readonly></textarea><br>
+          IP: <input type="text" id="ip" maxlength="15" size="15"></input>
+          Port: <input type="text" id="port" maxlength="4" size="4"></input>
+        </p>
     </body>
 </html>

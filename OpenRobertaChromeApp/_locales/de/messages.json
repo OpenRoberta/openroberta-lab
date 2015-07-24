@@ -1,0 +1,59 @@
+{
+  "application_title": {
+    "message": "Open Roberta"
+	},
+  "application_description": {
+    "message": "Diese Anwendung verbindet dein EV3 Roboter mit Open Roberta lab via USB."
+  },
+  "button_connect": {
+    "message": "Verbinden"
+  },
+  "button_disconnect": {
+    "message": "Trennen"
+  },
+  "button_close": {
+    "message": "Beenden"
+  },
+  "advanced_options": {
+    "message": "Zeige erweiterte Optionen"
+  },
+  "custom_server": {
+    "message": "Benutzerdefinierter Serveradresse"
+  },
+  "infotext_plugin": {
+    "message": "Schließe dein EV3 mit dem USB Kabel an den Computer an. Er wird nach einigen Sekunden automatisch erkannt."
+  },
+  "infotext_connect": {
+    "message": "Klicke nun auf »verbinden«, um den Roboter mit dem Open Roberta Lab zu verbinden."
+  },
+  "infotext_tokencopy": {
+    "message": "Das Token kannst du mit »kopieren« und »einfügen« im Open Roberta Lab unter Roboter>verbinden einfügen. Es ist 5 Minuten lang gültig."
+  },
+  "infotext_runprogram": {
+    "message": "Du kannst jetzt deine Programme auf dem EV3 ausführen. Vergiss nicht, das USB Kabel wieder einzustecken, nachdemm dein Programm ausgeführt wurde."
+  },
+  "attention": {
+    "message": "Achtung"
+  },
+  "window_confirmclose": {
+    "message": "Wenn du das Programm beendest ist dein Roboter nicht mehr mit Open Roberta Lab verbunden."
+  },
+  "window_interneterror": {
+    "message": "Die Internetverbindung zu Open Roberta Lab ist unterbrochen."
+  },
+  "about": {
+    "message": "Dieses Programm ist Teil des Open Roberta Labs, eine Open-Source-Entwicklung des Fraunhofer-Instituts IAIS, im Kontext der Initiative »Roberta Lernen mit Robotern« Version 1.3.0."
+  },
+  "window_updaterequired": {
+    "message": "Die Firmware deines Roboters ist veraltet. Aktualisiere sie bitte zuerst. Klicke dazu auf »OK«. Vorhandene Programme auf dem Roboter bleiben erhalten! Das Menü auf dem EV3 wird sich anschließend automatisch neustarten."
+  },
+  "window_updatesuccess": {
+    "message": "Das Update war erfolgreich. Du kannst deinen Roboter nun erneut mit Open Roberta Lab verbinden."
+  },
+  "window_updatefail": {
+    "message": "Das Update ist fehlgeschlagen. Verbinde deinen Roboter mit Open Roberta Lab und versuche es erneut."
+  },
+  "window_tokentimeout": {
+    "message": "Die Gültigkeit des Token ist abgelaufen. Klicke auf »OK« und anschließend auf »verbinden« um ein neues Token zu generieren."
+  }
+}

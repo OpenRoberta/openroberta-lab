@@ -1,7 +1,8 @@
 {
-  "name": "Open Roberta",
-  "description": "The one and only Open Roberta Chrome App.",
-  "version": "0.1",
+  "name": "__MSG_application_title__",
+  "description": "__MSG_application_description__",
+  "version": "1.0",
+  "default_locale": "de",
   "manifest_version": 2,
   
   "app": {
@@ -12,10 +13,6 @@
   "icons": { "128": "OR.png" },
   
   "permissions": [
-    "http://10.0.1.1:80/*",
-    "http://10.0.1.10/*",
-    "http://lab.open-roberta.org/*",
-    "http://mp-devel.iais.fraunhofer.de/*",
-    "http://mp-public.iaias.fraunhofer.de/*"
+    "http://*/*"
   ]
 }

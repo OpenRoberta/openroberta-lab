@@ -1,0 +1,59 @@
+{
+  "application_title": {
+    "message": "Open Roberta"
+	},
+  "application_description": {
+    "message": "This application connects your EV3 to Open Roberta Lab via USB cable."
+  },
+  "button_connect": {
+    "message": "Connect"
+  },
+  "button_disconnect": {
+    "message": "Disconnect"
+  },
+  "button_close": {
+    "message": "Close"
+  },
+  "advanced_options": {
+    "message": "Show advanced options"
+  },
+  "custom_server": {
+    "message": "Custom server address"
+  },
+  "infotext_plugin": {
+    "message": "Connect the EV3 to your computer via the USB cable. It will be detected automatically after a few seconds."
+  },
+  "infotext_connect": {
+    "message": "Click on »connect« to connect your robot to Open Roberta Lab."
+  },
+  "infotext_tokencopy": {
+    "message": "Type in the token under robots>connect in the Open Roberta Lab, by using »copy« and »paste«. It is valid for 5 minutes."
+  },
+  "infotext_runprogram": {
+    "message": "You are able to run your programs on the EV3 now. Do not forget to plug in the cable again, after your program execution has finished."
+  },
+  "attention": {
+    "message": "Attention"
+  },
+  "window_confirmclose": {
+    "message": "If you close the application, your robot is no longer connected to Open Roberta Lab."
+  },
+  "window_interneterror": {
+    "message": "The internet connection to Open Roberta Lab is lost."
+  },
+  "about": {
+    "message": "This application is part of the Open Roberta Lab, which is an Open-Source programming platform, developed by Fraunhofer Institute IAIS within the initiative »Roberta Learning with Robots« version 1.3.0."
+  },
+  "window_updaterequired": {
+    "message": "The firmware on the robot is outdated. Please update it now. Therefor, click on »OK«. The programs on your EV3 will persist. Afterwards, the menu will automatically perform a restart."
+  },
+  "window_updatesuccess": {
+    "message": "The update was successful. You can connect your robot to Open Roberta Lab again."
+  },
+  "window_updatefail": {
+    "message": "The update has failed. Connect your robot to Open Roberta Lab and try it again."
+  },
+  "window_tokentimeout": {
+    "message": "The token is expired. Click on »OK« and on »connect« to get a new one."
+  }
+}
