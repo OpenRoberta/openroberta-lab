@@ -47,11 +47,6 @@ public final class EV3Sensors extends HardwareComponentType {
     public static final List<EV3Sensors> SENSORS = Collections.unmodifiableList(Arrays.asList(values));
 
     @Override
-    public String getJavaCode() {
-        return this.getClass().getSimpleName() + "." + getTypeName();
-    }
-
-    @Override
     public String getTypeName() {
         int counter = 0;
         for ( EV3Sensors sensor : SENSORS ) {

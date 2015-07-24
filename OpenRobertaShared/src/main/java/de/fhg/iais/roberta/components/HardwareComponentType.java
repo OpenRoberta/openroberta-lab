@@ -58,11 +58,6 @@ public abstract class HardwareComponentType {
      */
     public abstract String getTypeName();
 
-    /**
-     * @return valid Java code name of the enumeration
-     */
-    public abstract String getJavaCode();
-
     @Override
     public String toString() {
         return "HardwareComponentType [" + this.name + ", " + this.category + "]";

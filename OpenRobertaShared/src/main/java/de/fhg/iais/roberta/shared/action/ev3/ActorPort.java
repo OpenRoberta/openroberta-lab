@@ -19,13 +19,6 @@ public enum ActorPort {
     /**
      * @return valid Java code name of the enumeration
      */
-    public String getJavaCode() {
-        return this.getClass().getSimpleName() + "." + this;
-    }
-
-    /**
-     * @return valid Java code name of the enumeration
-     */
     public String getXmlName() {
         return this.xmlName;
     }

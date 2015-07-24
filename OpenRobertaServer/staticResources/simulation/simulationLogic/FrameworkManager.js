@@ -76,6 +76,7 @@ function initializeScene() {
     collidableMeshList.push(octoedroMesh);
 
     colorReadableMeshList.push(curveObject);
+    colorReadableMeshList.push(playgroundMesh);
 
     // fps counter stats variables
     // create the Stats element and append it to the Dome
@@ -120,7 +121,7 @@ function updateScene(motorL, motorR) {
         var localVertex = lightSensoMesh.geometry.vertices[floorVertexIndex].clone();
         var globalVertex = localVertex.applyMatrix4(lightSensoMesh.matrix);
         var directionVector = globalVertex.sub(lightSensoMesh.position);
-        var ray = new THREE.Raycaster(positionW, directionVector.clone(), 0, .3);// just one unit magnitude
+        var ray = new THREE.Raycaster(positionW, directionVector.clone(), 0, 3);// just one unit magnitude
         var collisionResults = ray.intersectObjects(colorReadableMeshList);
 
         if (collisionResults.length > 0) {
@@ -129,6 +130,7 @@ function updateScene(motorL, motorR) {
             inpoutValuesRobot[LIGHT_COLOR_INDEX] = "" + decimal2Hex(collisionResults[0].object.material.color.r, 2)
                     + decimal2Hex(collisionResults[0].object.material.color.g, 2) + decimal2Hex(collisionResults[0].object.material.color.b, 2);
             //collisionResults[0].object.material.color.setRGB(Math.random(),Math.random(),Math.random() );
+            console.log(filterRGB(inpoutValuesRobot[LIGHT_COLOR_INDEX]));
 
         }
     }

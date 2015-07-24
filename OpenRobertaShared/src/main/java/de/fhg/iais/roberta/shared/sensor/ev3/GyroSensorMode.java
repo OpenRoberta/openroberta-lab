@@ -17,13 +17,6 @@ public enum GyroSensorMode {
     }
 
     /**
-     * @return valid Java code name of the enumeration
-     */
-    public String getJavaCode() {
-        return this.getClass().getSimpleName() + "." + this;
-    }
-
-    /**
      * @return name that Lejos is using for this mode
      */
     public String getLejosModeName() {

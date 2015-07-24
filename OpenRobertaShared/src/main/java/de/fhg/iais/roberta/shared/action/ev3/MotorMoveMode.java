@@ -18,13 +18,6 @@ public enum MotorMoveMode {
     }
 
     /**
-     * @return valid Java code name of the enumeration
-     */
-    public String getJavaCode() {
-        return this.getClass().getSimpleName() + "." + this;
-    }
-
-    /**
      * get motor mode from {@link MotorDuration} from string parameter. It is possible for one motor mode to have multiple string mappings.
      * Throws exception if the mode does not exists.
      *

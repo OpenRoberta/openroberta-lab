@@ -18,7 +18,7 @@ var curveObject;
 var returnColors = [ 0, 0, 0 ];
 var RED_COLOR_VECTOR = [ 247, 1, 23 ]; // as Robot June2015 Open Robert detects, there are  7 Different Colours Values
 var GREEN_COLOR_VECTOR = [ 0, 100, 46 ];
-var BlUE_COLOR_VECTOR = [ 0, 87, 166 ];
+var BLUE_COLOR_VECTOR = [ 0, 87, 166 ];
 var BLACK_COLOR_VECTOR = [ 255, 255, 255 ];
 var WHITE_COLOR_VECTOR = [ 0, 0, 0 ];
 var BROWN_COLOR_VECTOR = [ 83, 33, 21 ];
@@ -309,7 +309,7 @@ function filterRGB(colorArray) {
         }
     }
 
-    if ((colorArray[RED_BASIC_INDEX] + colorArray[GREEN_BASIC_INDEX] + colorArray[BlUE_BASIC_INDEX]) > WHITE_TRESHOLD) {
+    if ((colorArray[RED_BASIC_INDEX] + colorArray[GREEN_BASIC_INDEX] + colorArray[BLUE_BASIC_INDEX]) > WHITE_TRESHOLD) {
 
         returnColors = WHITE_COLOR_VECTOR; // converting to White because the huge amount of colours 
     } else {

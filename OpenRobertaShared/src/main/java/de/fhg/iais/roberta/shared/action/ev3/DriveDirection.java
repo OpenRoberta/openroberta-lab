@@ -18,13 +18,6 @@ public enum DriveDirection {
         Arrays.sort(this.values);
     }
 
-    /**
-     * @return valid Java code name of the enumeration
-     */
-    public String getJavaCode() {
-        return this.getClass().getSimpleName() + "." + this;
-    }
-
     private boolean attributesMatchAttributes(String... attributes) {
         for ( String attribute : attributes ) {
             attribute = attribute.toUpperCase();
@@ -51,7 +44,7 @@ public enum DriveDirection {
     /**
      * Get direction from {@link DriveDirection} from string parameter. It is possible for one direction to have multiple string mappings.
      * Throws exception if the direction does not exists.
-     * 
+     *
      * @param name of the direction
      * @return name of the direction from the enum {@link DriveDirection}
      */

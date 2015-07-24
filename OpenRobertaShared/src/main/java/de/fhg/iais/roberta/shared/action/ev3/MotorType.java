@@ -5,10 +5,4 @@ package de.fhg.iais.roberta.shared.action.ev3;
  */
 public enum MotorType {
     MIDDLE, BIG, OTHER;
-    /**
-     * @return valid Java code name of the enumeration
-     */
-    public String getJavaCode() {
-        return this.getClass().getSimpleName() + "." + this;
-    }
 }

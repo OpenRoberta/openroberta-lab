@@ -19,14 +19,6 @@ public class EV3Sensor extends HardwareComponent {
     }
 
     @Override
-    public String generateRegenerate() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("new EV3Sensor(").append(getComponentType().getJavaCode());
-        sb.append(")");
-        return sb.toString();
-    }
-
-    @Override
     public String toString() {
         return "EV3Sensor [" + getComponentType() + "]";
     }

@@ -15,13 +15,6 @@ public enum ShowPicture {
     }
 
     /**
-     * @return valid Java code name of the enumeration
-     */
-    public String getJavaCode() {
-        return this.getClass().getSimpleName() + "." + this;
-    }
-
-    /**
      * get picture from {@link ShowPicture} from string parameter. It is possible
      * for one mode to have multiple string mappings. Throws exception if
      * the mode does not exists.

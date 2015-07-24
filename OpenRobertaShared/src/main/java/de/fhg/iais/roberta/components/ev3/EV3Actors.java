@@ -21,7 +21,7 @@ public class EV3Actors extends HardwareComponentType {
      *
      * @param name of the blockly block for this actor
      */
-    public EV3Actors(String name, String shortName) {
+    private EV3Actors(String name, String shortName) {
         super(name, shortName, Category.ACTOR);
     }
 
@@ -47,11 +47,6 @@ public class EV3Actors extends HardwareComponentType {
     };
 
     public static final List<EV3Actors> ACTORS = Collections.unmodifiableList(Arrays.asList(values));
-
-    @Override
-    public String getJavaCode() {
-        return this.getClass().getSimpleName() + "." + getTypeName();
-    }
 
     @Override
     public String getTypeName() {

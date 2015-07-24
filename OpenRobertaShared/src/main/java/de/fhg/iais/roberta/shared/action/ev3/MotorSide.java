@@ -21,13 +21,6 @@ public enum MotorSide {
     }
 
     /**
-     * @return valid Java code name of the enumeration
-     */
-    public String getJavaCode() {
-        return this.getClass().getSimpleName() + "." + this;
-    }
-
-    /**
      * @return textual representation
      */
     public String getText() {

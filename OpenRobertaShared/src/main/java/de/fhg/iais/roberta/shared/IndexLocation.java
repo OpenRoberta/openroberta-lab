@@ -19,13 +19,6 @@ public enum IndexLocation {
     }
 
     /**
-     * @return valid Java code name of the enumeration
-     */
-    public String getJavaCode() {
-        return this.getClass().getSimpleName() + "." + this;
-    }
-
-    /**
      * get function from {@link IndexLocation} from string parameter. It is possible for one function to have multiple string mappings.
      * Throws exception if the operator does not exists.
      *

@@ -17,16 +17,9 @@ public enum BrickLedColor {
     }
 
     /**
-     * @return valid Java code name of the enumeration
-     */
-    public String getJavaCode() {
-        return this.getClass().getSimpleName() + "." + this;
-    }
-
-    /**
      * get color from {@link BrickLedColor} from string parameter. It is possible for one color to have multiple string mappings.
      * Throws exception if the color does not exists.
-     * 
+     *
      * @param name of the color
      * @return color from the enum {@link BrickLedColor}
      */

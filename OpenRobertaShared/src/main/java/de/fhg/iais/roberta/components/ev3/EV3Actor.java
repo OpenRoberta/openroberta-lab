@@ -51,15 +51,6 @@ public class EV3Actor extends HardwareComponent {
     }
 
     @Override
-    public String generateRegenerate() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("new EV3Actor(").append(getComponentType().getJavaCode());
-        sb.append(", ").append(this.regulated);
-        sb.append(", ").append(this.rotationDirection.getJavaCode()).append(", ").append(this.motorSide.getJavaCode()).append(")");
-        return sb.toString();
-    }
-
-    @Override
     public String toString() {
         return "EV3Actor [" + getComponentType() + ", " + this.regulated + ", " + this.rotationDirection + ", " + this.motorSide + "]";
     }

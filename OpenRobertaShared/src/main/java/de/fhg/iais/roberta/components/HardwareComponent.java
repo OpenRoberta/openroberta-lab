@@ -41,11 +41,6 @@ abstract public class HardwareComponent {
         return this.componentType.getCategory();
     }
 
-    /**
-     * @return Java code used in the code generation to regenerates the same hardware component
-     */
-    abstract public String generateRegenerate();
-
     @Override
     public int hashCode() {
         final int prime = 31;

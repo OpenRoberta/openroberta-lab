@@ -31,11 +31,6 @@ public enum Pickcolor {
         return this.values[0];
     }
 
-    public String getJavaCode() {
-        //        return String.valueOf(this.colorID);
-        return this.getClass().getSimpleName() + "." + this;
-    }
-
     public static Pickcolor get(int id) {
         for ( Pickcolor sp : Pickcolor.values() ) {
             if ( sp.colorID == id ) {
