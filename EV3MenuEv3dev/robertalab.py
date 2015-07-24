@@ -17,11 +17,6 @@ from roberta.ev3 import Hal
 
 logging.basicConfig(filename='/var/log/robertalab.log', level=logging.DEBUG)
 
-# address and port of server
-# TODO: use https://
-#TARGET = "http://localhost:1999"
-TARGET = "http://toy.local:1999"
-
 def getHwAddr(ifname):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     info = fcntl.ioctl(s.fileno(), 0x8927,  struct.pack('256s', ifname[:15]))
@@ -60,6 +55,14 @@ def main():
     'Content-Type': 'application/json'
   }
   
+  try:
+    with open('robertalab.json') as cfg_file:    
+      cfg = json.load(cfg_file)
+  except IOError as e:
+    cfg = {
+      'target': 'http://lab.open-roberta.org/', # address and port of server
+    }
+  
   os.system('setterm -cursor off');
 
   hal = Hal(None, None)
@@ -82,7 +85,7 @@ def main():
       
       # TODO: what about /api/v1/pushcmd
       logger.info('sending: %s' % params['cmd'])
-      req = urllib2.Request('%s/pushcmd' % TARGET, headers=headers)
+      req = urllib2.Request('%s/pushcmd' % cfg['target'], headers=headers)
       response = urllib2.urlopen(req, json.dumps(params), timeout=timeout)
       reply = json.loads(response.read())
       logger.info('response: %s' % json.dumps(reply))
@@ -96,7 +99,7 @@ def main():
         # TODO: url is not part of reply :/
         # TODO: we should receive a digest for the download (md5sum) so that
         #   we can verify the download
-        req = urllib2.Request('%s/download' % TARGET, headers=headers)
+        req = urllib2.Request('%s/download' % cfg['target'], headers=headers)
         response = urllib2.urlopen(req, json.dumps(params), timeout=timeout)
         hdr = response.info().getheader('Content-Disposition');
         filename = '/tmp/%s' % hdr.split('=')[1] if hdr else 'unknown'
