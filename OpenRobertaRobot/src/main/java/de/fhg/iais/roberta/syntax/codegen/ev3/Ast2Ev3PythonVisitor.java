@@ -1412,9 +1412,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append(INDENT).append("except Exception as e:\n");
         this.sb.append(INDENT).append(INDENT).append("hal.drawText('Fehler im EV3', 0, 0)\n");
         this.sb.append(INDENT).append(INDENT).append("if e.message:\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("from PIL import ImageFont\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("font = ImageFont.truetype('/usr/share/fonts/truetype/droid/DroidSansMono.ttf', 9)\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("hal.drawText(e.message, 0, 1, font=font)\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("hal.drawText(e.message, 0, 1)\n");
         this.sb.append(INDENT).append(INDENT).append("hal.drawText('Press any key', 0, 3)\n");
         this.sb.append(INDENT).append(INDENT).append("while not hal.isKeyPressed('*'): hal.waitFor(500)\n");
         this.sb.append(INDENT).append(INDENT).append("raise e\n");
