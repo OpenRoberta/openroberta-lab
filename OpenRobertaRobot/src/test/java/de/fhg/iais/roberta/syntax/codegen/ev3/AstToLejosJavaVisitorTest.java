@@ -105,8 +105,7 @@ public class AstToLejosJavaVisitorTest {
             + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>();\n"
             + MAIN_METHOD
             + "    public void run() {\n"
-            //       + "        hal = new Hal(brickConfiguration, usedSensors);\n"
-            + "        for ( int i0 = 0; i0 < 10; i0++ ) {\n"
+            + "        for ( float k0 = 0; k0 < 10; k0+=1 ) {\n"
             + "            hal.drawText(\"Hallo\", 0, 3);\n"
             + "        }\n"
             + SUFFIX
@@ -139,7 +138,7 @@ public class AstToLejosJavaVisitorTest {
             + "        }\n"
             + "        hal.playFile(1);\n"
             + "        hal.setVolume(50);\n"
-            + "        for ( int i = 1; i <= 10; i += 1 ) {\n\n"
+            + "        for ( float i = 1; i < 10; i += 1 ) {\n\n"
             + "           hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);"
             + "        }\n"
             + SUFFIX
@@ -154,31 +153,31 @@ public class AstToLejosJavaVisitorTest {
 
         String a =
             "" //
-            + IMPORTS
-            + MAIN_CLASS
-            + BRICK_CONFIGURATION
-            + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>(Arrays.asList(EV3Sensors.EV3_TOUCH_SENSOR, EV3Sensors.EV3_ULTRASONIC_SENSOR));\n"
-            + MAIN_METHOD
-            + "    public void run() {\n"
-            //          + "        hal = new Hal(brickConfiguration, usedSensors);\n"
-            + "        if ( hal.isPressed(SensorPort.S1) ) {\n"
-            + "            hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
-            + "        } else {\n"
-            + "            if ( hal.isPressed(SensorPort.S1) ) {\n"
-            + "                hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
-            + "            } else if ( 0==hal.getUltraSonicSensorDistance(SensorPort.S4) ) {\n"
-            + "                hal.drawPicture(ShowPicture.FLOWERS, 15, 15);\n"
-            + "            } else {\n"
-            + "            if ( TRUE ) {\n"
-            + "                while ( !hal.isPressed(BrickKey.UP) ) {\n\n"
-            + "                     hal.turnOnRegulatedMotor(ActorPort.B,30);"
-            + "                }\n"
-            + "            }\n"
-            + "            }\n"
-            + "        }\n"
-            + SUFFIX
-            + "    }\n"
-            + "}\n";
+                + IMPORTS
+                + MAIN_CLASS
+                + BRICK_CONFIGURATION
+                + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>(Arrays.asList(EV3Sensors.EV3_TOUCH_SENSOR, EV3Sensors.EV3_ULTRASONIC_SENSOR));\n"
+                + MAIN_METHOD
+                + "    public void run() {\n"
+                //          + "        hal = new Hal(brickConfiguration, usedSensors);\n"
+                + "        if ( hal.isPressed(SensorPort.S1) ) {\n"
+                + "            hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
+                + "        } else {\n"
+                + "            if ( hal.isPressed(SensorPort.S1) ) {\n"
+                + "                hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
+                + "            } else if ( 0==hal.getUltraSonicSensorDistance(SensorPort.S4) ) {\n"
+                + "                hal.drawPicture(ShowPicture.FLOWERS, 15, 15);\n"
+                + "            } else {\n"
+                + "            if ( TRUE ) {\n"
+                + "                while ( !hal.isPressed(BrickKey.UP) ) {\n\n"
+                + "                     hal.turnOnRegulatedMotor(ActorPort.B,30);"
+                + "                }\n"
+                + "            }\n"
+                + "            }\n"
+                + "        }\n"
+                + SUFFIX
+                + "    }\n"
+                + "}\n";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_code_generator3.xml");
     }
@@ -188,33 +187,33 @@ public class AstToLejosJavaVisitorTest {
 
         String a =
             "" //
-            + IMPORTS
-            + MAIN_CLASS
-            + BRICK_CONFIGURATION
-            + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>(Arrays.asList(EV3Sensors.EV3_IR_SENSOR,EV3Sensors.EV3_ULTRASONIC_SENSOR,EV3Sensors.EV3_GYRO_SENSOR,EV3Sensors.EV3_TOUCH_SENSOR));\n"
-            + MAIN_METHOD
-            + "    public void run() {\n"
-            //       + "        hal = new Hal(brickConfiguration, usedSensors);\n"
-            + "        if ( 5 < hal.getRegulatedMotorSpeed(ActorPort.B) ) {\n\n\n"
-            + "            hal.turnOnRegulatedMotor(ActorPort.B,30);\n"
-            + "            hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);\n"
-            + "            hal.rotateDirectionRegulated(ActorPort.A, ActorPort.B, false, TurnDirection.RIGHT, 50);\n"
-            + "        }\n"
-            + "        if ( hal.getRegulatedMotorTachoValue(ActorPort.A, MotorTachoMode.ROTATION) + hal.getInfraredSensorDistance(SensorPort.S4) == hal.getUltraSonicSensorDistance(SensorPort.S4) ) {\n"
-            + "            hal.ledOff();\n"
-            + "        } else {\n"
-            + "            hal.resetGyroSensor(SensorPort.S2);\n"
-            + "        if ( TRUE ) {\n"
-            + "            while ( hal.isPressed(SensorPort.S1) ) {\n"
-            + "                hal.drawPicture(ShowPicture.OLDGLASSES, 0, 0);\n"
-            + "                hal.clearDisplay();\n"
-            + "            }\n"
-            + "         }\n"
-            + "            hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
-            + "        }\n"
-            + SUFFIX
-            + "    }\n"
-            + "}\n";
+                + IMPORTS
+                + MAIN_CLASS
+                + BRICK_CONFIGURATION
+                + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>(Arrays.asList(EV3Sensors.EV3_IR_SENSOR,EV3Sensors.EV3_ULTRASONIC_SENSOR,EV3Sensors.EV3_GYRO_SENSOR,EV3Sensors.EV3_TOUCH_SENSOR));\n"
+                + MAIN_METHOD
+                + "    public void run() {\n"
+                //       + "        hal = new Hal(brickConfiguration, usedSensors);\n"
+                + "        if ( 5 < hal.getRegulatedMotorSpeed(ActorPort.B) ) {\n\n\n"
+                + "            hal.turnOnRegulatedMotor(ActorPort.B,30);\n"
+                + "            hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);\n"
+                + "            hal.rotateDirectionRegulated(ActorPort.A, ActorPort.B, false, TurnDirection.RIGHT, 50);\n"
+                + "        }\n"
+                + "        if ( hal.getRegulatedMotorTachoValue(ActorPort.A, MotorTachoMode.ROTATION) + hal.getInfraredSensorDistance(SensorPort.S4) == hal.getUltraSonicSensorDistance(SensorPort.S4) ) {\n"
+                + "            hal.ledOff();\n"
+                + "        } else {\n"
+                + "            hal.resetGyroSensor(SensorPort.S2);\n"
+                + "        if ( TRUE ) {\n"
+                + "            while ( hal.isPressed(SensorPort.S1) ) {\n"
+                + "                hal.drawPicture(ShowPicture.OLDGLASSES, 0, 0);\n"
+                + "                hal.clearDisplay();\n"
+                + "            }\n"
+                + "         }\n"
+                + "            hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
+                + "        }\n"
+                + SUFFIX
+                + "    }\n"
+                + "}\n";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_code_generator4.xml");
     }

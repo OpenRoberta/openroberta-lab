@@ -9,14 +9,14 @@ public class ForStmtTest {
     @Test
     public void forStmt() throws Exception {
         String a =
-            "\nfor ( int i0 = 0; i0 < 10; i0++ ) {\n"
+            "\nfor ( float k0 = 0; k0 < 10; k0+=1 ) {\n"
                 + "}\n"
-                + "for ( int i1 = 0; i1 < 10; i1++ ) {\n"
+                + "for ( float k1 = 0; k1 < 10; k1+=1 ) {\n"
                 + "    System.out.println(\"15\");\n"
                 + "    System.out.println(\"15\");\n"
                 + "}\n"
-                + "for ( int i2 = 0; i2 < 10; i2++ ) {\n"
-                + "    for ( int i3 = 0; i3 < 10; i3++ ) {\n"
+                + "for ( float k2 = 0; k2 < 10; k2+=1 ) {\n"
+                + "    for ( float k3 = 0; k3 < 10; k3+=1 ) {\n"
                 + "        System.out.println(\"15\");\n"
                 + "        System.out.println(\"15\");\n"
                 + "    }\n"
@@ -28,7 +28,7 @@ public class ForStmtTest {
     @Test
     public void forStmt1() throws Exception {
         String a =
-            "for ( int i0 = 0; i0 < 10; i0++ ) {item3 + String.valueOf(\"Proba\");item3 + String.valueOf(\"Proba1\");for ( int i1 = 0; i1 < 10; i1++ ) {}}";
+            "for ( float k0 = 0; k0 < 10; k0+=1 ) {item3 + String.valueOf(\"Proba\");item3 + String.valueOf(\"Proba1\");for ( float k1 = 0; k1 < 10; k1+=1 ) {}}";
 
         Helper.assertCodeIsOk(a, "/ast/control/repeat_stmt.xml");
     }

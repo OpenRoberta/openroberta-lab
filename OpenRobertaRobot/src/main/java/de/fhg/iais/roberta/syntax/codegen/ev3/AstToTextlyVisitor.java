@@ -101,7 +101,7 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 /**
  * This class is implementing {@link AstVisitor}. All methods are implemented and they
  * append a human-readable text(ly) representation of a blockly program
- * 
+ *
  * @deprecated
  */
 @Deprecated
@@ -334,7 +334,7 @@ public class AstToTextlyVisitor implements AstVisitor<Void> {
                 break;
             case TIMES:
             case FOR:
-                generateCodeFromStmtCondition("for", repeatStmt.getExpr());
+                generateCodeFromStmtConditionFor("for", repeatStmt.getExpr());
                 break;
             case WAIT:
                 generateCodeFromStmtCondition("if", repeatStmt.getExpr());
@@ -754,6 +754,23 @@ public class AstToTextlyVisitor implements AstVisitor<Void> {
         }
         nlIndent();
         this.sb.append("}");
+    }
+
+    private void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
+        this.sb.append(stmtType + whitespace() + "(" + whitespace() + "Number" + whitespace());
+        ExprList<Void> expressions = (ExprList<Void>) expr;
+        expressions.get().get(0).visit(this);
+        this.sb.append(whitespace() + "=" + whitespace());
+        expressions.get().get(1).visit(this);
+        this.sb.append(";" + whitespace());
+        expressions.get().get(0).visit(this);
+        this.sb.append("<" + whitespace());
+        expressions.get().get(2).visit(this);
+        this.sb.append(";" + whitespace());
+        expressions.get().get(0).visit(this);
+        this.sb.append("+=" + whitespace());
+        expressions.get().get(3).visit(this);
+        this.sb.append(whitespace() + ")" + whitespace() + "{");
     }
 
     private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {

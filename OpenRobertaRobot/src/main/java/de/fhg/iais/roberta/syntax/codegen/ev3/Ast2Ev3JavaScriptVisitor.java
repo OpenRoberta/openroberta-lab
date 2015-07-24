@@ -283,8 +283,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
                 break;
             case TIMES:
                 this.sb.append("createRepeatStmt(" + repeatStmt.getMode() + ", ");
-                Binary<Void> binary = (Binary<Void>) ((ExprList<Void>) repeatStmt.getExpr()).get().get(1);
-                binary.getRight().visit(this);
+                ((NumConst<Void>) ((ExprList<Void>) repeatStmt.getExpr()).get().get(2)).visit(this);
                 this.sb.append(", [");
                 break;
             case FOREVER:

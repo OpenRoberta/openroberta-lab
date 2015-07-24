@@ -490,7 +490,8 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
                 break;
             case TIMES:
             case FOR:
-                generateCodeFromStmtCondition("for", repeatStmt.getExpr());
+                generateCodeFromStmtConditionFor("for", repeatStmt.getExpr());
+
                 break;
             case WAIT:
                 generateCodeFromStmtCondition("if", repeatStmt.getExpr());
@@ -1415,6 +1416,23 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
         this.sb.append(stmtType + whitespace() + "(" + whitespace());
         expr.visit(this);
+        this.sb.append(whitespace() + ")" + whitespace() + "{");
+    }
+
+    private void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
+        this.sb.append(stmtType + whitespace() + "(" + whitespace() + "float" + whitespace());
+        ExprList<Void> expressions = (ExprList<Void>) expr;
+        expressions.get().get(0).visit(this);
+        this.sb.append(whitespace() + "=" + whitespace());
+        expressions.get().get(1).visit(this);
+        this.sb.append(";" + whitespace());
+        expressions.get().get(0).visit(this);
+        this.sb.append("<" + whitespace());
+        expressions.get().get(2).visit(this);
+        this.sb.append(";" + whitespace());
+        expressions.get().get(0).visit(this);
+        this.sb.append("+=" + whitespace());
+        expressions.get().get(3).visit(this);
         this.sb.append(whitespace() + ")" + whitespace() + "{");
     }
 
