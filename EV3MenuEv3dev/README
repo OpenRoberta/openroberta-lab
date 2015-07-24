@@ -1,0 +1,8 @@
+= how to =
+
+dist:
+find . -name '*.py' -o -name '*.pbm' -o -name '*.pil' | tar -cvjf ev3dev-robertalab.tar.bz2 --files-from -
+
+upload:
+scp -R robertalab.py robertalab/*.p{y,bm,il} root@ev3dev.local:/home/user
+
