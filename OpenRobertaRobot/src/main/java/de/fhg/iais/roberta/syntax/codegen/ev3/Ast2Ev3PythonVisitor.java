@@ -502,7 +502,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
                 break;
             case TIMES:
             case FOR:
-                generateCodeFromStmtCondition("for", repeatStmt.getExpr()); // FIXME
+                generateCodeFromStmtConditionFor("for", repeatStmt.getExpr());
                 break;
             case WAIT:
                 generateCodeFromStmtCondition("if", repeatStmt.getExpr());
@@ -862,9 +862,9 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
-        mainTask.getVariables().visit(this);
         this.sb.append("\n").append("def run():");
         incrIndentation();
+        mainTask.getVariables().visit(this);
         return null;
     }
 
@@ -1389,6 +1389,17 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append(" :");
     }
 
+    private void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {
+        this.sb.append(stmtType).append(' ');
+        ExprList<Void> expressions = (ExprList<Void>) expr;
+        expressions.get().get(0).visit(this);
+        this.sb.append(" in xrange(");
+        expressions.get().get(1).visit(this);
+        this.sb.append(", ");
+        expressions.get().get(2).visit(this);
+        this.sb.append("):");
+    }
+
     private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
         if ( repeatStmt.getMode() == Mode.WAIT ) {
             nlIndent();
@@ -1425,7 +1436,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("hal.drawText(e.message, 0, 1)\n");
         this.sb.append(INDENT).append(INDENT).append("hal.drawText('Press any key', 0, 3)\n");
         this.sb.append(INDENT).append(INDENT).append("while not hal.isKeyPressed('*'): hal.waitFor(500)\n");
-        this.sb.append(INDENT).append(INDENT).append("raise e\n");
+        this.sb.append(INDENT).append(INDENT).append("raise\n");
 
         this.sb.append("\n");
         this.sb.append("if __name__ == \"__main__\":\n");
