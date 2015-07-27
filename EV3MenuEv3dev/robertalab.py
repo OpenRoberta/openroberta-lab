@@ -43,6 +43,12 @@ def getBatteryVoltage():
   with open('/sys/devices/platform/legoev3-battery/power_supply/legoev3-battery/voltage_now', 'r') as bv:
     return "{0:.3f}".format(float(bv.read()) / 1000000.0)
 
+def drawUI(hal, params):
+  hal.clearDisplay()
+  hal.drawText('Token: %s' % params['token'], 0, 0, hal.font_x)
+  hal.drawText('press and hold "back" to exit', 0, 9)
+
+
 def main():
   logger = logging.getLogger('robertalab')
   logger.info('--- starting ---');
@@ -67,9 +73,7 @@ def main():
 
   hal = Hal(None, None)
   updateConfiguration(params)
-  hal.clearDisplay()
-  hal.drawText('Token: %s' % params['token'], 0, 0, hal.font_x)
-  hal.drawText('press and hold "back" to exit', 0, 10)
+  drawUI(hal, params)
 
   registered = False
   while not hal.key.backspace:
@@ -96,6 +100,7 @@ def main():
       elif cmd == 'abort':
         break
       elif cmd == 'download':
+        hal.drawText('executing ...', 0, 3)
         # TODO: url is not part of reply :/
         # TODO: we should receive a digest for the download (md5sum) so that
         #   we can verify the download
@@ -113,6 +118,8 @@ def main():
         # NOTE: all the globals in the generated code will override gloabls we use here!
         execfile(filename, globals(), globals())
         logger.info('execution finished')
+        drawUI(hal, params)
+        hal.drawText('registered', 0, 2)
       else:
         logger.warning('unhandled command: %s' % cmd)
     except urllib2.HTTPError as e:
