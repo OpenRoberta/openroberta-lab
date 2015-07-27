@@ -1397,6 +1397,8 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         expressions.get().get(1).visit(this);
         this.sb.append(", ");
         expressions.get().get(2).visit(this);
+        this.sb.append(", ");
+        expressions.get().get(3).visit(this);
         this.sb.append("):");
     }
 
