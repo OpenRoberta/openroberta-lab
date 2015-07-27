@@ -68,6 +68,7 @@ class Hal(object):
 
     # tones
     def playTone(self, frequency, duration):
+        frequency = frequency if frequency >= 100 else 0
         self.tone.play(frequency, duration)
 
     # http://stackoverflow.com/questions/10739390/how-to-programmatically-change-volume-in-ubuntu
