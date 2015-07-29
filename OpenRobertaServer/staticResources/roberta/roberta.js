@@ -418,6 +418,14 @@ function startProgram() {
             if (userState.robot === 'oraSim') {
                 $('#blocklyDiv').addClass('simActive');
                 $('#simDiv').addClass('simActive');
+                $("#blocklyDiv").animate({
+                    "width" : "-=70%"
+                }, {
+                    step : function() {
+                        Blockly.fireUiEvent(window, 'resize')
+                    }
+                },1000);
+                $('.nav > li > ul > .robotType').addClass('disabled');
                 userState.programBlocks = null;
                 if (Blockly.mainWorkspace !== null) {
                     var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
@@ -1070,23 +1078,21 @@ function switchRobot(robot) {
             if (robot === "ev3") {
                 $('#menuEv3').parent().addClass('disabled');
                 $('#menuSim').parent().removeClass('disabled');
+                $('#menuConnect').parent().removeClass('disabled');                               
                 $('#iconDisplayRobotState').removeClass('typcn-Roberta');
-                $('#iconDisplayRobotState').addClass('typcn-wine');
+                $('#iconDisplayRobotState').addClass('typcn-film');
             } else if (robot === "oraSim") {
                 userState.robotName = "ORASim";
                 $('#menuEv3').parent().removeClass('disabled');
                 $('#menuSim').parent().addClass('disabled');
-                $('#iconDisplayRobotState').removeClass('typcn-wine');
+                $('#menuConnect').parent().addClass('disabled');                
+                $('#iconDisplayRobotState').removeClass('typcn-film');
                 $('#iconDisplayRobotState').addClass('typcn-Roberta');
             }
             loadToolbox(userState.toolbox);
         }
         //displayInformation(result, "MESSAGE_USER_LOGIN", result.message, userState.name);
     });
-//    $('#tabs').css('display', 'inline');
-//    $('#bricklyFrame').css('display', 'none');
-//    $('#tabSim').click();
-//    bricklyActive = false;
 }
 
 function setHeadNavigationMenuState(state) {
@@ -1314,6 +1320,15 @@ function initHeadNavigation() {
         if (domId === 'simBack') {
             $('#blocklyDiv').removeClass('simActive');
             $('#simDiv').removeClass('simActive');
+            $("#blocklyDiv").animate({
+                "width" : "+=70%"
+            }, {
+                step : function() {
+                    Blockly.fireUiEvent(window, 'resize')
+                }
+            },1000);
+            $('.nav > li > ul > .robotType').removeClass('disabled');
+            $('#menuSim').parent().addClass('disabled');
             displayMessage("simBack pressed", "TOAST", "simBack");
             window.cancelAnimationFrame(requestId);
             var myNode = document.getElementById("WebGLCanvas");
@@ -1529,7 +1544,6 @@ function initLogging() {
  *            result of server call
  */
 function setRobotState(result) {
-    console.log(result);
     if (result['version']) {
         userState.version = result.version;
     }
