@@ -1234,7 +1234,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        this.sb.append("\n").append(INDENT).append("def ");
+        this.sb.append("\n").append("def ");
         this.sb.append(methodVoid.getMethodName() + "(");
         methodVoid.getParameters().visit(this);
         this.sb.append("):");
@@ -1244,7 +1244,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        this.sb.append("\n").append(INDENT).append("def ");
+        this.sb.append("\n").append("def ");
         this.sb.append(" " + methodReturn.getMethodName() + "(");
         methodReturn.getParameters().visit(this);
         this.sb.append("):");
