@@ -301,7 +301,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
                 this.sb.append("math.e");
                 break;
             case GOLDEN_RATIO:
-                this.sb.append("BlocklyMethods.GOLDEN_RATIO"); // FIXME
+                this.sb.append("BlocklyMethods.GOLDEN_RATIO");
                 break;
             case SQRT2:
                 this.sb.append("math.sqrt(2)");
@@ -1162,49 +1162,49 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
         switch ( mathSingleFunct.getFunctName() ) {
             case ROOT:
-                this.sb.append("Math.sqrt(");
+                this.sb.append("math.sqrt(");
                 break;
             case ABS:
-                this.sb.append("Math.abs(");
+                this.sb.append("math.fabs(");
                 break;
             case LN:
-                this.sb.append("Math.log(");
+                this.sb.append("math.log(");
                 break;
             case LOG10:
-                this.sb.append("Math.log10(");
+                this.sb.append("math.log10(");
                 break;
             case EXP:
-                this.sb.append("Math.exp(");
+                this.sb.append("math.exp(");
                 break;
             case POW10:
-                this.sb.append("Math.pow(10, ");
+                this.sb.append("math.pow(10, ");
                 break;
             case SIN:
-                this.sb.append("Math.sin(");
+                this.sb.append("math.sin(");
                 break;
             case COS:
-                this.sb.append("Math.cos(");
+                this.sb.append("math.cos(");
                 break;
             case TAN:
-                this.sb.append("Math.tan(");
+                this.sb.append("math.tan(");
                 break;
             case ASIN:
-                this.sb.append("Math.asin(");
+                this.sb.append("math.asin(");
                 break;
             case ATAN:
-                this.sb.append("Math.atan(");
+                this.sb.append("math.atan(");
                 break;
             case ACOS:
-                this.sb.append("Math.acos(");
+                this.sb.append("math.acos(");
                 break;
             case ROUND:
-                this.sb.append("Math.round(");
+                this.sb.append("round(");
                 break;
             case ROUNDUP:
-                this.sb.append("Math.ceil(");
+                this.sb.append("math.ceil(");
                 break;
             case ROUNDDOWN:
-                this.sb.append("Math.floor(");
+                this.sb.append("math.floor(");
                 break;
             default:
                 break;
@@ -1415,8 +1415,9 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         }
         this.sb.append("#!/usr/bin/python\n\n");
         this.sb.append("from ev3.ev3dev import *\n");
-        this.sb.append("from roberta.ev3 import Hal\n");
-        this.sb.append("from sets import Set\n\n");
+        this.sb.append("from roberta.ev3 import Hal,BlocklyMethods\n");
+        this.sb.append("from sets import Set\n");
+        this.sb.append("import math\n\n");
 
         this.sb.append("TRUE = True;\n");
         this.sb.append(generateRegenerateConfiguration()).append("\n");
