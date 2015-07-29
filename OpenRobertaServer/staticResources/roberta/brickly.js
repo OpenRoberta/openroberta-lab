@@ -32,17 +32,18 @@ function injectBrickly(toolbox) {
     }
 };
 
-function initConfigurationEnvironment(result) { 
+function initConfigurationEnvironment(result) {
     // TODO solve this when blockly can have more instances
-    if (!result){ 
+    if (!result) {
         COMM.json("/conf", {
             "cmd" : "loadC",
             "name" : "ev3Brick",
             "owner" : " "
-        }, initConfigurationEnvironment);}
+        }, initConfigurationEnvironment);
+    }
     response(result);
     Blockly.getMainWorkspace().clear();
-    var xml = Blockly.Xml.textToDom(result.data);   
+    var xml = Blockly.Xml.textToDom(result.data);
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
 };
 
@@ -123,7 +124,9 @@ function switchLanguageInBrickly() {
         "name" : "ev3Brick",
         "owner" : " "
     }, showToolbox);
-    initConfigurationEnvironment(configurationBlocks);
+    initConfigurationEnvironment({
+        "data" : configurationBlocks
+    });
 };
 
 function saveToServer() {
