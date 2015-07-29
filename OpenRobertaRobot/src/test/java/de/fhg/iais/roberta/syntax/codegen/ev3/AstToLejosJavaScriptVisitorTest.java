@@ -29,7 +29,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt7 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC), createConstant(NUM_CONST, 30))], [[]])]);\n"
                 + "initProgram([stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7]);";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_script_code_generator.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator.xml");
     }
 
     @Test
@@ -46,7 +46,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt7 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC), createConstant(NUM_CONST, 30))], [[]])]);\n"
                 + "initProgram([stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7]);";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_script_code_generator1.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator1.xml");
     }
 
     @Test
@@ -62,7 +62,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt6 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[]])]);\n"
                 + "initProgram([stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6]);";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_script_code_generator2.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator2.xml");
     }
 
     @Test
@@ -77,7 +77,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt5 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[]])]);\n"
                 + "initProgram([stmt0,stmt1,stmt2,stmt3,stmt4,stmt5]);";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_script_code_generator3.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator3.xml");
     }
 
     @Test
@@ -88,7 +88,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[]])]);\n"
                 + "initProgram([stmt0,stmt1]);";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_script_code_generator4.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator4.xml");
     }
 
     @Test
@@ -100,7 +100,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt2 = createRepeatStmt(TIMES, createConstant(NUM_CONST, 10), [createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createConstant(NUM_CONST, 20)), createDriveAction(createConstant(NUM_CONST, 50), BACKWARD, createConstant(NUM_CONST, 30))]);\n"
                 + "initProgram([stmt0,stmt1,stmt2]);";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_script_code_generator5.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator5.xml");
     }
 
     @Test
@@ -111,7 +111,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createBinaryExpr(OR, createConstant(BOOL_CONST, false), createConstant(BOOL_CONST, true)))], [[]])]);\n"
                 + "initProgram([stmt0,stmt1]);";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_script_code_generator6.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator6.xml");
     }
 
     @Test
@@ -124,7 +124,7 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt3 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC), createConstant(NUM_CONST, 30))], [[]])]);\n"
                 + "initProgram([stmt0,stmt1,stmt2,stmt3]);";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_script_code_generator7.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator7.xml");
     }
 
     @Test
@@ -135,7 +135,60 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[createDriveAction(createConstant(NUM_CONST, 50), BACKWARD)]]), createIfStmt([createBinaryExpr(LT, createGetSample(ULTRASONIC), createConstant(NUM_CONST, 30))], [[createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[]])])]])]);\n"
                 + "initProgram([stmt0,stmt1]);";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_script_code_generator8.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator8.xml");
+    }
+
+    @Test
+    public void test9() throws Exception {
+
+        String a =
+            "var stmt0 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD);\n"
+                + "var stmt1 = createDriveAction(createConstant(NUM_CONST, 80), BACKWARD);\n"
+                + "var stmt2 = createTurnAction(createConstant(NUM_CONST, 50), RIGHT);\n"
+                + "var stmt3 = createTurnAction(createConstant(NUM_CONST, 90), LEFT);\n"
+                + "var stmt4 = createStopDrive();\n"
+                + "var stmt5 = createTurnAction(createConstant(NUM_CONST, 80), RIGHT, createConstant(NUM_CONST, 20));\n"
+                + "var stmt6 = createTurnAction(createConstant(NUM_CONST, 80), LEFT, createConstant(NUM_CONST, 15));\n"
+                + "var stmt7 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createConstant(NUM_CONST, 26));\n"
+                + "var stmt8 = createDriveAction(createConstant(NUM_CONST, 50), BACKWARD, createConstant(NUM_CONST, 33));\n"
+                + "var stmt9 = createTurnLight(GREEN, ON);\n"
+                + "var stmt10 = createResetLight();\n"
+                + "initProgram([stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7,stmt8,stmt9,stmt10]);";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator9.xml");
+
+    }
+
+    @Test
+    public void test10() throws Exception {
+
+        String a =
+            "var stmt0 = createVarDeclaration(COLOR, \"variablenName\", createConstant(COLOR_CONST, COLOR_ENUM.NONE));\n"
+                + "var stmt1 = createVarDeclaration(COLOR, \"variablenName2\", createConstant(COLOR_CONST, COLOR_ENUM.BLACK));\n"
+                + "var stmt2 = createVarDeclaration(COLOR, \"variablenName3\", createConstant(COLOR_CONST, COLOR_ENUM.BLUE));\n"
+                + "var stmt3 = createVarDeclaration(COLOR, \"variablenName4\", createConstant(COLOR_CONST, COLOR_ENUM.GREEN));\n"
+                + "var stmt4 = createVarDeclaration(COLOR, \"variablenName5\", createConstant(COLOR_CONST, COLOR_ENUM.YELLOW));\n"
+                + "var stmt5 = createVarDeclaration(COLOR, \"variablenName6\", createConstant(COLOR_CONST, COLOR_ENUM.RED));\n"
+                + "var stmt6 = createVarDeclaration(COLOR, \"variablenName7\", createConstant(COLOR_CONST, COLOR_ENUM.WHITE));\n"
+                + "var stmt7 = createVarDeclaration(COLOR, \"variablenName8\", createConstant(COLOR_CONST, COLOR_ENUM.BROWN));\n"
+                + "initProgram([stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7]);";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator10.xml");
+
+    }
+
+    @Test
+    public void test11() throws Exception {
+
+        String a =
+            "var stmt0 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(RED), createConstant(NUM_CONST, 30))], [[]])]);\n"
+                + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(COLOUR), createConstant(COLOR_CONST, COLOR_ENUM.RED))], [[]])]);\n"
+                + "var stmt2 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(COLOUR), createConstant(COLOR_CONST, COLOR_ENUM.GREEN))], [[]])]);\n"
+                + "var stmt3 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(RED), createConstant(NUM_CONST, 45))], [[]])]);\n"
+                + "initProgram([stmt0,stmt1,stmt2,stmt3]);";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator11.xml");
+
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {

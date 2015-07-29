@@ -85,7 +85,7 @@ public enum BlockType {
     SENSOR_GET_SAMPLE( Category.SENSOR, GetSampleSensor.class, BlocklyConstants.ROB_SENSOR_GET_SAMPLE, BlocklyConstants.SIM_GET_SAMPLE ),
     EXPR_LIST( Category.EXPR, null ),
     STRING_CONST( Category.EXPR, StringConst.class, BlocklyConstants.STRING_CONST_TEXT ),
-    PICK_COLOR_CONST( Category.EXPR, ColorConst.class, BlocklyConstants.ROB_COLOUR_PICKER ),
+    COLOR_CONST( Category.EXPR, ColorConst.class, BlocklyConstants.ROB_COLOUR_PICKER ),
     NULL_CONST( Category.EXPR, NullConst.class, BlocklyConstants.LOGICAL_NULL ),
     BOOL_CONST( Category.EXPR, BoolConst.class, BlocklyConstants.LOGICAL_BOOLEAN ),
     NUM_CONST( Category.EXPR, NumConst.class, BlocklyConstants.MATH_NUMBER ),

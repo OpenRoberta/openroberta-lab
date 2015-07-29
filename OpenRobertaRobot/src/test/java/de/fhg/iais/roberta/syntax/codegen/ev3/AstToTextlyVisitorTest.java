@@ -14,7 +14,7 @@ public class AstToTextlyVisitorTest {
             + "Display.drawText(\"Hallo\", 0, 3);\n"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator.xml");
     }
 
     @Test
@@ -26,7 +26,7 @@ public class AstToTextlyVisitorTest {
             + "   }\n"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator1.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator1.xml");
     }
 
     @Test
@@ -48,7 +48,7 @@ public class AstToTextlyVisitorTest {
             + "   }\n"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator2.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator2.xml");
     }
 
     @Test
@@ -70,7 +70,7 @@ public class AstToTextlyVisitorTest {
             + "        }\n"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator3.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator3.xml");
     }
 
     @Test
@@ -94,7 +94,7 @@ public class AstToTextlyVisitorTest {
             + "        }\n"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator4.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator4.xml");
     }
 
     public void test5() throws Exception {
@@ -116,7 +116,7 @@ public class AstToTextlyVisitorTest {
             + "        }\n"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator5.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator5.xml");
     }
 
     @Test
@@ -127,7 +127,7 @@ public class AstToTextlyVisitorTest {
             + "        Sound.playTone(300, 3000);\n"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator6.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator6.xml");
     }
 
     private void assertCodeIsOk(String a, String pathToProgramXml) throws Exception {

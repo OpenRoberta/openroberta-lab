@@ -27,7 +27,7 @@ public class ColorConst<V> extends Expr<V> {
     private final Pickcolor value;
 
     private ColorConst(String value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(BlockType.PICK_COLOR_CONST, properties, comment);
+        super(BlockType.COLOR_CONST, properties, comment);
         Assert.isTrue(!value.equals(""));
         this.value = Pickcolor.get(value);
         setReadOnly();

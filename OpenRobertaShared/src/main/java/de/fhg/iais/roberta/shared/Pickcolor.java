@@ -9,11 +9,11 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  */
 public enum Pickcolor {
 
-    RED( 0, "#B30006", "ROT", "#b30006" ), GREEN( 1, "#00642E", "GRÜN" ), BLUE( 2, "#0057A6" ), YELLOW( 3, "#F7D117" ), MAGENTA( 4, "#000000" ), ORANGE(
+    RED( 0, "#B30006", "ROT", "#b30006" ), GREEN( 1, "#00642E", "GRÜN" ), BLUE( 2, "#0057A6" ), YELLOW( 3, "#F7D117" ), MAGENTA( 4, "#000001" ), ORANGE(
         5,
-        "#000000" ), WHITE( 6, "#FFFFFF", "WEIß", "WEISS", "#ffffff" ), BLACK( 7, "#000000" ), PINK( 8, "#000000" ), GRAY( 9, "#000000" ), LIGHT_GRAY(
+        "#000002" ), WHITE( 6, "#FFFFFF", "WEIß", "WEISS", "#ffffff" ), BLACK( 7, "#000000" ), PINK( 8, "#000003" ), GRAY( 9, "#000004" ), LIGHT_GRAY(
         10,
-        "#000000" ), DARK_GRAY( 11, "#000000" ), CYAN( 12, "#000000" ), BROWN( 13, "#532115" ), NONE( -1, "#585858" );
+        "#000005" ), DARK_GRAY( 11, "#000006" ), CYAN( 12, "#000007" ), BROWN( 13, "#532115" ), NONE( -1, "#585858" );
 
     private final String[] values;
     private final int colorID;

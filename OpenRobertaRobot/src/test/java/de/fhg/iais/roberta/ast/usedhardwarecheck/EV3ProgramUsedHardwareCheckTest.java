@@ -14,7 +14,7 @@ import de.fhg.iais.roberta.testutil.Helper;
 public class EV3ProgramUsedHardwareCheckTest {
     @Test
     public void test0ok() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/code_generator/java_code_generator.xml");
+        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/code_generator/java/java_code_generator.xml");
 
         Set<EV3Sensors> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);
         Assert.assertEquals("[]", hardwareCheckVisitor.toString());
@@ -22,7 +22,7 @@ public class EV3ProgramUsedHardwareCheckTest {
 
     @Test
     public void test1ok() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/code_generator/java_code_generator1.xml");
+        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/code_generator/java/java_code_generator1.xml");
 
         Set<EV3Sensors> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);
         Assert.assertEquals("[]", hardwareCheckVisitor.toString());
@@ -30,7 +30,7 @@ public class EV3ProgramUsedHardwareCheckTest {
 
     @Test
     public void test2ok() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/code_generator/java_code_generator2.xml");
+        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/code_generator/java/java_code_generator2.xml");
 
         Set<EV3Sensors> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);
         Assert.assertEquals(
@@ -40,7 +40,7 @@ public class EV3ProgramUsedHardwareCheckTest {
 
     @Test
     public void test3ok() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/code_generator/java_code_generator3.xml");
+        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/code_generator/java/java_code_generator3.xml");
 
         Set<EV3Sensors> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);
         Assert.assertEquals(
@@ -50,7 +50,7 @@ public class EV3ProgramUsedHardwareCheckTest {
 
     @Test
     public void test4ok() throws Exception {
-        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/code_generator/java_code_generator4.xml");
+        ArrayList<ArrayList<Phrase<Void>>> phrases = Helper.generateASTs("/syntax/code_generator/java/java_code_generator4.xml");
 
         Set<EV3Sensors> hardwareCheckVisitor = UsedSensorsCheckVisitor.check(phrases);
         Assert

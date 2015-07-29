@@ -114,7 +114,6 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMathConst(MathConst<Void> mathConst) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -138,7 +137,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        // TODO Auto-generated method stub
+        this.sb.append("createConstant(" + colorConst.getKind() + ", COLOR_ENUM." + colorConst.getValue() + ")");
         return null;
     }
 
@@ -158,7 +157,6 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitUnary(Unary<Void> unary) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -174,7 +172,6 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitFunc(MathPowerFunct<Void> func) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -198,19 +195,16 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitEmptyList(EmptyList<Void> emptyList) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitExprList(ExprList<Void> exprList) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -316,7 +310,6 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -384,19 +377,16 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -407,31 +397,26 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitVolumeAction(VolumeAction<Void> volumeAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -445,43 +430,37 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        // TODO Auto-generated method stub
+        this.sb.append("createGetSample(" + colorSensor.getMode() + ")");
         return null;
     }
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -511,13 +490,11 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitActivityTask(ActivityTask<Void> activityTask) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitStartActivityTask(StartActivityTask<Void> startActivityTask) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -541,163 +518,136 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitLocation(Location<Void> location) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitTextPrintFunct(TextPrintFunct<Void> textPrintFunct) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitFunctionStmt(FunctionStmt<Void> functionStmt) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitFunctionExpr(FunctionExpr<Void> functionExpr) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitGetSubFunct(GetSubFunct<Void> getSubFunct) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitLenghtOfIsEmptyFunct(LenghtOfIsEmptyFunct<Void> lenghtOfIsEmptyFunct) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitListCreate(ListCreate<Void> listCreate) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitListRepeat(ListRepeat<Void> listRepeat) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMathNumPropFunct(MathNumPropFunct<Void> mathNumPropFunct) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitMethodCall(MethodCall<Void> methodCall) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReceiveAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
-        // TODO Auto-generated method stub
         return null;
     }
 

@@ -92,7 +92,7 @@ public class AstToLejosJavaVisitorTest {
             + "    }\n"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator.xml");
     }
 
     @Test
@@ -112,7 +112,7 @@ public class AstToLejosJavaVisitorTest {
             + "    }\n"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator1.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator1.xml");
     }
 
     @Test
@@ -145,7 +145,7 @@ public class AstToLejosJavaVisitorTest {
             + "    }\n"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator2.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator2.xml");
     }
 
     @Test
@@ -179,7 +179,7 @@ public class AstToLejosJavaVisitorTest {
                 + "    }\n"
                 + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator3.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator3.xml");
     }
 
     @Test
@@ -215,7 +215,7 @@ public class AstToLejosJavaVisitorTest {
                 + "    }\n"
                 + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator4.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator4.xml");
     }
 
     @Test
@@ -238,7 +238,7 @@ public class AstToLejosJavaVisitorTest {
             + "    }\n"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator5.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator5.xml");
     }
 
     @Test
@@ -258,7 +258,7 @@ public class AstToLejosJavaVisitorTest {
             + "    }\n"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator6.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator6.xml");
     }
 
     @Test
@@ -277,7 +277,7 @@ public class AstToLejosJavaVisitorTest {
             + "    }\n"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator7.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator7.xml");
     }
 
     @Test
@@ -302,7 +302,7 @@ public class AstToLejosJavaVisitorTest {
             + "    }\n"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator8.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator8.xml");
     }
 
     @Test
@@ -323,7 +323,7 @@ public class AstToLejosJavaVisitorTest {
             + "    }\n"
             + "}\n";
 
-        assertCodeIsOk(a, "/syntax/code_generator/java_code_generator9.xml");
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator9.xml");
     }
 
     @Test
@@ -341,7 +341,7 @@ public class AstToLejosJavaVisitorTest {
             + "        ArrayList<Float>item4=BlocklyMethods.createListWith(1,2,3);"
             + "        ArrayList<String>item5=BlocklyMethods.createListWith(\"a\",\"b\");"
             + "        ArrayList<Boolean>item6=BlocklyMethods.createListWith(true,false);"
-            + "        ArrayList<Pickcolor>item7=BlocklyMethods.createListWith(Pickcolor.RED,Pickcolor.MAGENTA,Pickcolor.NONE);"
+            + "        ArrayList<Pickcolor>item7=BlocklyMethods.createListWith(Pickcolor.RED,Pickcolor.BLACK,Pickcolor.NONE);"
             + "        Pickcoloritem8=Pickcolor.NONE;"
             + "    public void run() {\n"
             //  + "        hal = new Hal(brickConfiguration, usedSensors);\n"

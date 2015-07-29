@@ -211,7 +211,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
 
     @Override
     public BlocklyType visitColorConst(ColorConst<BlocklyType> colorConst) {
-        Assert.isTrue(colorConst.getKind().equals(BlockType.PICK_COLOR_CONST));
+        Assert.isTrue(colorConst.getKind().equals(BlockType.COLOR_CONST));
         return BlocklyType.COLOR;
     }
 

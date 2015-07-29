@@ -6,7 +6,7 @@ TURN_RATIO = 12 / 2.8;
 var SENSORS = (function() {
     var touchSensor = false;
     var ultrasonicSensor = 0;
-    var colorSensor = 0;
+    var colorSensor = undefined;
     var lightSensor = 0;
 
     function isPressed() {
@@ -25,11 +25,31 @@ var SENSORS = (function() {
         ultrasonicSensor = value;
     }
 
+    function setColor(value) {
+        colorSensor = value;
+    }
+
+    function getColor() {
+        return colorSensor;
+    }
+
+    function setLight(value) {
+        lightSensor = value;
+    }
+
+    function getLight() {
+        return lightSensor;
+    }
+
     return {
         "isPressed" : isPressed,
         "setTouchSensor" : setTouchSensor,
         "getUltrasonicSensor" : getUltrasonicSensor,
-        "setUltrasonicSensor" : setUltrasonicSensor
+        "setUltrasonicSensor" : setUltrasonicSensor,
+        "setColor" : setColor,
+        "getColor" : getColor,
+        "setLight" : setLight,
+        "getLight" : getLight
     };
 })();
 

@@ -131,6 +131,8 @@ function updateScene(motorL, motorR) {
                     + decimal2Hex(collisionResults[0].object.material.color.g, 2) + decimal2Hex(collisionResults[0].object.material.color.b, 2);
             //collisionResults[0].object.material.color.setRGB(Math.random(),Math.random(),Math.random() );
             console.log(filterRGB(inpoutValuesRobot[LIGHT_COLOR_INDEX]));
+            SENSORS.setColor(COLOR_ENUM.NONE);
+            SENSORS.setLight(100);
 
         }
     }

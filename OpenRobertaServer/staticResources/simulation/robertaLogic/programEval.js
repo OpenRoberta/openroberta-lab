@@ -124,6 +124,7 @@ function evalExpr(expr) {
     switch (expr.expr) {
     case NUM_CONST:
     case BOOL_CONST:
+    case COLOR_CONST:
         return expr.value;
     case VAR:
         return MEM.get(expr.name);
@@ -144,6 +145,10 @@ function evalSensor(sensorType, sensorMode) {
         return SENSORS.isPressed();
     case ULTRASONIC:
         return SENSORS.getUltrasonicSensor();
+    case RED:
+        return SENSORS.getLight();
+    case COLOUR:
+        return SENSORS.getColor();
     default:
         throw "Invalid Sensor!";
     }
