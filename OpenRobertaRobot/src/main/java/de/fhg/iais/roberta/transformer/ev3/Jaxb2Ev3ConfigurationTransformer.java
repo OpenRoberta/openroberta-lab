@@ -71,7 +71,8 @@ public class Jaxb2Ev3ConfigurationTransformer {
                 actorBlock.setType(actor.getComponentType().getName());
                 List<Field> actorFields = actorBlock.getField();
                 actorFields.add(mkField("MOTOR_REGULATION", ("" + actor.isRegulated()).toUpperCase()));
-                actorFields.add(mkField("MOTOR_REVERSE", actor.getRotationDirection().toString()));
+                String rotation = actor.getRotationDirection() == DriveDirection.FOREWARD ? "OFF" : "ON";
+                actorFields.add(mkField("MOTOR_REVERSE", rotation));
                 if ( !actor.getComponentType().getName().equals("robBrick_motor_middle") ) {
                     actorFields.add(mkField("MOTOR_DRIVE", actor.getMotorSide().toString()));
                 }

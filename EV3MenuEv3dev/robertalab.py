@@ -62,7 +62,7 @@ def main():
   }
   
   try:
-    with open('robertalab.json') as cfg_file:    
+    with open('.robertalab.json') as cfg_file:    
       cfg = json.load(cfg_file)
   except IOError as e:
     cfg = {
