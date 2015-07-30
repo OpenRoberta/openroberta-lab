@@ -84,7 +84,38 @@ function initializeScene() {
     stats.domElement.style.position = 'absolute';
     stats.domElement.style.top = '0px';
     document.getElementById("WebGLCanvas").appendChild(stats.domElement);
-
+    var divElement = document.createElement("div") ;
+    
+    divElement.style.position= 'absolute' ;
+    divElement.style.top = '0px' ;
+    divElement.style.left = '200px' ;
+    divElement.style.color = 'white' ;
+    var labelRENode = document.createTextNode(" right encoder: ") ;
+     rEValueNode = document.createTextNode("0") ;
+    
+    var labelLENode = document.createTextNode(" left encoder: ") ;
+     lEValueNode = document.createTextNode("0.0") ;
+     
+    var labelDisValNode = document.createTextNode(" Ultrasonic Distance: ") ;
+    distanceValueUlS = document.createTextNode("0.0") ; 
+    
+    var labelColrValNode = document.createTextNode(" RGB Fould Value: ") ;
+    foundColorValue = document.createTextNode("0.0") ; 
+    
+    //labelLENode.style.left = '50px' ;
+    //divTest.data = 'ulala' ;
+    divElement.appendChild(labelRENode) ;
+    divElement.appendChild(rEValueNode) ;
+    divElement.appendChild(labelLENode) ;
+    divElement.appendChild(lEValueNode) ;
+    divElement.appendChild(labelDisValNode) ;
+    divElement.appendChild(distanceValueUlS) ;
+    //divElement.appendChild(labelColrValNode) ;
+    //divElement.appendChild(foundColorValue) ;
+    document.getElementById("WebGLCanvas").appendChild(divElement);
+    document.getElementById("WebGLCanvas").appendChild(stats.domElement);
+    
+    
     // making new instance of Clock object	
     clock = new THREE.Clock();
 
@@ -188,8 +219,10 @@ function updateScene(motorL, motorR) {
             nearestObject.object.material.color.setRGB(Math.random(), Math.random(), Math.random()); // highlighting of closest object form ultrasonic view 
             echoeDistance = nearestObject.distance * mappingDivideValue;
             SENSORS.setUltrasonicSensor(echoeDistance);
+            distanceValueUlS.data = '' + echoeDistance ;
             //console.log("distance in cm " + echoeDistance);// to check mapping result distanceS
         } else {
+        	 distanceValueUlS.data = '' +255 ;
             SENSORS.setUltrasonicSensor(Infinity);
         }
     }
@@ -226,6 +259,8 @@ function transformBrick(valuesBrick) {
     //group.position.y += valuesBrick[POSITION_Y_INDEX] ;
     group.position.y += valuesBrick[DELTA_Y_INDEX];
     calculateWheelEncoders();
+    rEValueNode.data = '' + getRightWheelRotationCounter();
+    lEValueNode.data = '' + getLeftWheelRotationCounter();
     //console.log("right wheel rotation " + getRightWheelRotationCounter());// to check encode
     //console.log("left wheel rotation " + getLeftWheelRotationCounter());// to check encode
     if (valuesBrick[THETA_INDEX] != 0) { // change from ROTATION_Z_INDEX to THETA_INDEX because it comes from robotMotionHandler instead GeneratorRoberta

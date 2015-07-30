@@ -19,8 +19,8 @@ var returnColors = [ 0, 0, 0 ];
 var RED_COLOR_VECTOR = [ 247, 1, 23 ]; // as Robot June2015 Open Robert detects, there are  7 Different Colours Values
 var GREEN_COLOR_VECTOR = [ 0, 100, 46 ];
 var BLUE_COLOR_VECTOR = [ 0, 87, 166 ];
-var BLACK_COLOR_VECTOR = [ 255, 255, 255 ];
-var WHITE_COLOR_VECTOR = [ 0, 0, 0 ];
+var BLACK_COLOR_VECTOR = [ 0, 0, 0 ];
+var WHITE_COLOR_VECTOR = [ 255, 255, 255 ];
 var BROWN_COLOR_VECTOR = [ 83, 33, 21 ];
 var ORANGE_COLOR_VECTOR = [ 179, 0, 6 ];
 var RED_BASIC_INDEX = 0;
@@ -182,7 +182,7 @@ function instanceMeshes() {
 
     var longboxGeometry = new THREE.BoxGeometry(1, 1, 1);
     var longBoxMaterial = new THREE.MeshBasicMaterial({
-        color : 0xF7D117,
+        color : 0xF70517,
         side : THREE.DoubleSide
     });
     /*
@@ -219,8 +219,8 @@ function instanceMeshes() {
     });
 
     var squareMaterial = new THREE.MeshBasicMaterial({
-        color : 0x8080FF,
-        // map:neheTexture, 
+        color : 0xFFFF00, 
+        // map:neheTexture, change to yellow color 
         side : THREE.DoubleSide
     });
 
@@ -240,14 +240,14 @@ function instanceMeshes() {
 
     var bumperMat = new THREE.MeshBasicMaterial({
         //color:0xF7D117, yellow
-        color : 0xFFFFFF,
+        color : 0xFFFF66,
 
         side : THREE.DoubleSide
 
     });
 
     var playMaterial = new THREE.MeshBasicMaterial({
-        color : 0xcdc9c9,
+        color : 0xFFFFFF,
 
         side : THREE.DoubleSide
 
@@ -313,38 +313,38 @@ function filterRGB(colorArray) {
 
         returnColors = WHITE_COLOR_VECTOR; // converting to White because the huge amount of colours 
     } else {
-        if ((colorArray[RED_BASIC_INDEX] + colorArray[GREEN_BASIC_INDEX] + colorArray[BLUE_BASIC_INDEX]) < BLACK_TRESHOLD) {
-            if (coloursCounter > 1) { // more than one colour 
+	        if ((colorArray[RED_BASIC_INDEX] + colorArray[GREEN_BASIC_INDEX] + colorArray[BLUE_BASIC_INDEX]) < BLACK_TRESHOLD) {
+	            if (coloursCounter > 1) { // more than one colour 
+	
+	                returnColors = BLACK_COLOR_VECTOR; // converting to Black
+	            } else {
+	
+	                returnColors = BROWN_COLOR_VECTOR; // converting to Brown  Because on the list of Seven detected colours by Robot it is the lower later than Black. 
+	            }
 
-                returnColors = BLACK_COLOR_VECTOR; // converting to Black
-            } else {
-
-                returnColors = BROWN_COLOR_VECTOR; // converting to Brown  Because on the list of Seven detected colours by Robot it is the lower later than Black. 
-            }
-
-        } else {
-            var maxColorIndex = getMaxIndex(colorArray); // obtaining the biggest index by amount of basic colour 
-            switch (maxColorIndex) {
-            case RED_BASIC_INDEX:
-                if (colorArray[RED_BASIC_INDEX] > RED_TRESHOLD) {
-
-                    returnColors = RED_COLOR_VECTOR;
-                } else {
-
-                    returnColors = ORANGE_COLOR_VECTOR;
-                }
-                break;
-            case GREEN_BASIC_INDEX:
-                returnColors = GREEN_COLOR_VECTOR;
-                break;
-            case BLUE_BASIC_INDEX:
-                returnColors = BLUE_COLOR_VECTOR;
-                break;
-
-            default:
-                returnColors = GREEN_COLOR_VECTOR; // easier to read for human begin . This is just an arbitrary chose.  
-                break;
-            }
+	        } else {
+	            var maxColorIndex = getMaxIndex(colorArray); // obtaining the biggest index by amount of basic colour 
+	            switch (maxColorIndex) {
+	            case RED_BASIC_INDEX:
+	                if (colorArray[RED_BASIC_INDEX] > RED_TRESHOLD) {
+	
+	                    returnColors = RED_COLOR_VECTOR;
+	                } else {
+	
+	                    returnColors = ORANGE_COLOR_VECTOR;
+	                }
+	                break;
+	            case GREEN_BASIC_INDEX:
+	                returnColors = GREEN_COLOR_VECTOR;
+	                break;
+	            case BLUE_BASIC_INDEX:
+	                returnColors = BLUE_COLOR_VECTOR;
+	                break;
+	
+	            default:
+	                returnColors = GREEN_COLOR_VECTOR; // easier to read for human begin . This is just an arbitrary chose.  
+	                break;
+	            }
         }
     }
     return returnColors;
