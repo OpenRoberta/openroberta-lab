@@ -9,7 +9,7 @@ var USER = {};
                     "cmd" : "login",
                     "accountName" : accountName,
                     "password" : passwd
-        }, successFn, "login user '" + accountName  + "' with password '" + passwd + "'"); 
+        }, successFn, "login user '" + accountName  + "'"); 
     };
     
     /**
