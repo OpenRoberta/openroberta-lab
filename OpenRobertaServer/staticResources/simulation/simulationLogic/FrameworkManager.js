@@ -84,38 +84,37 @@ function initializeScene() {
     stats.domElement.style.position = 'absolute';
     stats.domElement.style.top = '0px';
     document.getElementById("WebGLCanvas").appendChild(stats.domElement);
-    var divElement = document.createElement("div") ;
-    
-    divElement.style.position= 'absolute' ;
-    divElement.style.top = '0px' ;
-    divElement.style.left = '200px' ;
-    divElement.style.color = 'white' ;
-    var labelRENode = document.createTextNode(" right encoder: ") ;
-     rEValueNode = document.createTextNode("0") ;
-    
-    var labelLENode = document.createTextNode(" left encoder: ") ;
-     lEValueNode = document.createTextNode("0.0") ;
-     
-    var labelDisValNode = document.createTextNode(" Ultrasonic Distance: ") ;
-    distanceValueUlS = document.createTextNode("0.0") ; 
-    
-    var labelColrValNode = document.createTextNode(" RGB Fould Value: ") ;
-    foundColorValue = document.createTextNode("0.0") ; 
-    
+    var divElement = document.createElement("div");
+
+    divElement.style.position = 'absolute';
+    divElement.style.top = '0px';
+    divElement.style.left = '200px';
+    divElement.style.color = 'white';
+    var labelRENode = document.createTextNode(" right encoder: ");
+    rEValueNode = document.createTextNode("0");
+
+    var labelLENode = document.createTextNode(" left encoder: ");
+    lEValueNode = document.createTextNode("0.0");
+
+    var labelDisValNode = document.createTextNode(" Ultrasonic Distance: ");
+    distanceValueUlS = document.createTextNode("0.0");
+
+    var labelColrValNode = document.createTextNode(" RGB Fould Value: ");
+    foundColorValue = document.createTextNode("0.0");
+
     //labelLENode.style.left = '50px' ;
     //divTest.data = 'ulala' ;
-    divElement.appendChild(labelRENode) ;
-    divElement.appendChild(rEValueNode) ;
-    divElement.appendChild(labelLENode) ;
-    divElement.appendChild(lEValueNode) ;
-    divElement.appendChild(labelDisValNode) ;
-    divElement.appendChild(distanceValueUlS) ;
+    divElement.appendChild(labelRENode);
+    divElement.appendChild(rEValueNode);
+    divElement.appendChild(labelLENode);
+    divElement.appendChild(lEValueNode);
+    divElement.appendChild(labelDisValNode);
+    divElement.appendChild(distanceValueUlS);
     //divElement.appendChild(labelColrValNode) ;
     //divElement.appendChild(foundColorValue) ;
     document.getElementById("WebGLCanvas").appendChild(divElement);
     document.getElementById("WebGLCanvas").appendChild(stats.domElement);
-    
-    
+
     // making new instance of Clock object	
     clock = new THREE.Clock();
 
@@ -127,11 +126,11 @@ function initializeScene() {
  * Animate the scene and call rendering.
  */
 function animateScene() { // adding time t 26mai
-
     if (!PROGRAM_SIMULATION.isTerminated()) {
-        step();
-        updateScene(ACTORS.getLeftMotor().getPower(), ACTORS.getRightMotor().getPower());
-        ACTORS.calculateCoveredDistance();
+        var simulationSensorData = updateScene(ACTORS.getLeftMotor().getPower(), ACTORS.getRightMotor().getPower());
+        step(simulationSensorData);
+    } else {
+        updateScene(0, 0);
     }
 }
 
@@ -139,10 +138,14 @@ function updateScene(motorL, motorR) {
     //time = clock.getElapsedTime(); just for debugging 
     //delta = clock.getDelta() ;
     //console.log( "time" + time) ;
-    if (ACTORS.isResetTachoSensor()) {
-        resetWheelRotationCounter();
-        ACTORS.setResetTachoSensor(false);
-    }
+
+//    }
+    var simulationSensorData = {};
+    simulationSensorData["tacho"] = [];
+    simulationSensorData["color"] = COLOR_ENUM.NONE;
+    simulationSensorData["light"] = 0;
+    simulationSensorData["touch"] = false;
+    simulationSensorData["ultrasonic"] = 0;
     renderScene();
 
     var positionW = new THREE.Vector3();
@@ -162,9 +165,8 @@ function updateScene(motorL, motorR) {
                     + decimal2Hex(collisionResults[0].object.material.color.g, 2) + decimal2Hex(collisionResults[0].object.material.color.b, 2);
             //collisionResults[0].object.material.color.setRGB(Math.random(),Math.random(),Math.random() );
             console.log(filterRGB(inpoutValuesRobot[LIGHT_COLOR_INDEX]));
-            SENSORS.setColor(COLOR_ENUM.NONE);
-            SENSORS.setLight(100);
-
+            simulationSensorData.color = COLOR_ENUM.NONE;
+            simulationSensorData.light = 100;
         }
     }
 
@@ -181,9 +183,9 @@ function updateScene(motorL, motorR) {
             //var oldColor = collisionResults[0].object.material.color ;
             collisionResultsB[0].object.material.color.setRGB(Math.random(), Math.random(), Math.random());
             //above changes randomize the color of touched object
-            SENSORS.setTouchSensor(true);
+            simulationSensorData.touch = true;
         } else {
-            SENSORS.setTouchSensor(false);
+            simulationSensorData.touch = false;
         }
     }
 
@@ -218,20 +220,21 @@ function updateScene(motorL, motorR) {
             nearestObject = echoeObjects[minIndex];
             nearestObject.object.material.color.setRGB(Math.random(), Math.random(), Math.random()); // highlighting of closest object form ultrasonic view 
             echoeDistance = nearestObject.distance * mappingDivideValue;
-            SENSORS.setUltrasonicSensor(echoeDistance);
-            distanceValueUlS.data = '' + echoeDistance ;
+
+            simulationSensorData.ultrasonic = echoeDistance;
+
+            distanceValueUlS.data = '' + echoeDistance;
             //console.log("distance in cm " + echoeDistance);// to check mapping result distanceS
         } else {
-        	 distanceValueUlS.data = '' +255 ;
-            SENSORS.setUltrasonicSensor(Infinity);
+            distanceValueUlS.data = '' + 255;
+            simulationSensorData.ultrasonic = Infinity;
+
         }
     }
 
     gatherInputData();
 
-    var tacho = transformBrick(getRobotMotion(motorL, motorR));
-    ACTORS.getLeftMotor().setCurrentRotations(tacho[0]);
-    ACTORS.getRightMotor().setCurrentRotations(tacho[1]);
+    simulationSensorData.tacho = transformBrick(getRobotMotion(motorL, motorR));
 
     //requestAnimationFrame(animateScene); //oldest Request
     // testing frame handler
@@ -240,7 +243,7 @@ function updateScene(motorL, motorR) {
     // Map the 3D scene down to the 2D screen (render the frame) 
     //renderScene(); 
     stats.update();
-
+    return simulationSensorData;
     //  }
 
 }

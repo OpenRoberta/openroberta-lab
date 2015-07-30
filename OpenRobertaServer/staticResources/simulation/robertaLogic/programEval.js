@@ -1,12 +1,3 @@
-//function continuation() {
-//    initProgram([ drive, x1, y1, w, finalX, waitStmt1 ]);
-//    while (!PROGRAM.isTerminated()) {
-//        step();
-//        sensors = moveRobot(ACTORS.a, ACTORS.b);
-//    }
-//    return MEM.toString() + " " + ACTORS.toString();
-//}
-
 function initProgram(program) {
     MEM.clear();
     PROGRAM_SIMULATION.setNextStatement(true);
@@ -14,7 +5,13 @@ function initProgram(program) {
     PROGRAM_SIMULATION.set(program);
 }
 
-function step() {
+function step(simulationSensorData) {
+    SENSORS.setTouchSensor(simulationSensorData.touch);
+    SENSORS.setColor(simulationSensorData.color);
+    SENSORS.setLight(simulationSensorData.light);
+    SENSORS.setUltrasonicSensor(simulationSensorData.ultrasonic);
+    ACTORS.getLeftMotor().setCurrentRotations(simulationSensorData.tacho[0]);
+    ACTORS.getRightMotor().setCurrentRotations(simulationSensorData.tacho[1]);
     if (PROGRAM_SIMULATION.isNextStatement()) {
 
         var stmt = PROGRAM_SIMULATION.getRemove();
@@ -39,7 +36,7 @@ function step() {
             break;
 
         case DRIVE_ACTION:
-            ACTORS.resetTacho();
+            ACTORS.resetTacho(simulationSensorData.tacho[0], simulationSensorData.tacho[1]);
             ACTORS.setSpeed(stmt.speed, stmt[DRIVE_DIRECTION]);
             if (stmt.distance != undefined) {
                 ACTORS.setDistanceToCover(stmt.distance);
@@ -47,7 +44,7 @@ function step() {
             break;
 
         case TURN_ACTION:
-            ACTORS.resetTacho();
+            ACTORS.resetTacho(simulationSensorData.tacho[0], simulationSensorData.tacho[1]);
             ACTORS.setAngleSpeed(stmt.speed, stmt[TURN_DIRECTION]);
             if (stmt.angle != undefined) {
                 ACTORS.clculateAngleToCover(stmt.angle);
@@ -76,6 +73,7 @@ function step() {
             throw "Invalid Statement " + stmt.stmt + "!";
         }
     }
+    ACTORS.calculateCoveredDistance();
 }
 
 function evalRepeat(stmt) {

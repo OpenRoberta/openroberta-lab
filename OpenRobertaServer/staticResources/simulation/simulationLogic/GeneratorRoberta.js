@@ -9,6 +9,7 @@ var botValues = [];
 var outPutBot = [];
 var inputBot = [];
 var directionFlag = 1; // it means across x 
+var tacho = [];
 
 // Constant Indexes
 var POSITION_X_INDEX = 0;

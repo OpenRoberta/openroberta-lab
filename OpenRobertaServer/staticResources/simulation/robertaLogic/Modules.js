@@ -57,7 +57,6 @@ var ACTORS = (function() {
     var distanceToCover = false;
     var leftMotor = new Motor();
     var rightMotor = new Motor();
-    var resetTachoSensor = false;
 
     function getLeftMotor() {
         return leftMotor;
@@ -85,8 +84,9 @@ var ACTORS = (function() {
         }
     }
 
-    function resetTacho() {
-        resetTachoSensor = true;
+    function resetTacho(leftMotorValue, rightMotorValue) {
+        leftMotor.startRotations = leftMotorValue / 360.;
+        rightMotor.startRotations = rightMotorValue / 360.;
         leftMotor.currentRotations = 0;
         rightMotor.currentRotations = 0;
     }
@@ -94,16 +94,9 @@ var ACTORS = (function() {
     function Motor() {
         this.power = 0;
         this.stopped = false;
+        this.startRotations = 0;
         this.currentRotations = 0;
         this.rotations = 0;
-    }
-
-    function isResetTachoSensor() {
-        return resetTachoSensor;
-    }
-
-    function setResetTachoSensor(value) {
-        resetTachoSensor = value;
     }
 
     Motor.prototype.getPower = function() {
@@ -127,7 +120,7 @@ var ACTORS = (function() {
     };
 
     Motor.prototype.setCurrentRotations = function(value) {
-        this.currentRotations += Math.abs(value / 360.) - this.currentRotations;
+        this.currentRotations = Math.abs(value / 360. - this.startRotations);
     };
 
     Motor.prototype.getRotations = function() {
@@ -139,7 +132,7 @@ var ACTORS = (function() {
     };
 
     function toString() {
-        return JSON.stringify([ distanceCovered, istanceToCover, leftMotor, rightMotor ]);
+        return JSON.stringify([ distanceToCover, leftMotor, rightMotor ]);
     }
 
     function calculateCoveredDistance() {
@@ -188,8 +181,6 @@ var ACTORS = (function() {
         "calculateCoveredDistance" : calculateCoveredDistance,
         "clculateAngleToCover" : clculateAngleToCover,
         "setDistanceToCover" : setDistanceToCover,
-        "isResetTachoSensor" : isResetTachoSensor,
-        "setResetTachoSensor" : setResetTachoSensor,
         "toString" : toString
     };
 })();

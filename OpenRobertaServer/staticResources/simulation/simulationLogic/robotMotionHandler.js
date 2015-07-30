@@ -19,7 +19,7 @@ var leftDegreeCounter = 0;
 var rightDegreeCounter = 0;
 var lastLeftRotatedDegrees = 0;
 var lastRightRotatedDegrees = 0;
-var AVG_FRAME_Rate = 30; // 30 frames per second
+var AVG_FRAME_Rate = 40; // 30 frames per second
 // variables belonging raycasting 
 var collidableMeshList = [];
 var colorReadableMeshList = [];
