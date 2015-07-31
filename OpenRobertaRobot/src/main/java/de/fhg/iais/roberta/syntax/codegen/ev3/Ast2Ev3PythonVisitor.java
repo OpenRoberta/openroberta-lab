@@ -1414,7 +1414,9 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
             return;
         }
         this.sb.append("#!/usr/bin/python\n\n");
+        this.sb.append("from __future__ import absolute_import\n");
         this.sb.append("from ev3.ev3dev import *\n");
+        this.sb.append("from ev3.lego import *\n");
         this.sb.append("from roberta.ev3 import Hal,BlocklyMethods\n");
         this.sb.append("from sets import Set\n");
         this.sb.append("import math\n\n");
@@ -1460,7 +1462,13 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     private void appendActors(StringBuilder sb) {
         sb.append("    'actors': {\n");
         for ( Map.Entry<ActorPort, EV3Actor> entry : this.brickConfiguration.getActors().entrySet() ) {
-            appendOptional(sb, getEnumCode(entry.getKey()), entry.getValue());
+            HardwareComponent hc = entry.getValue();
+            if ( hc != null ) {
+                ActorPort port = entry.getKey();
+                sb.append("        '").append(getEnumCode(port)).append("':");
+                sb.append(generateRegenerateEV3Actor(hc, port));
+                sb.append(",\n");
+            }
         }
         sb.append("    },\n");
     }
@@ -1468,22 +1476,15 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     private void appendSensors(StringBuilder sb) {
         sb.append("    'sensors': {\n");
         for ( Map.Entry<SensorPort, EV3Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
-            appendOptional(sb, getEnumCode(entry.getKey()), entry.getValue());
+            HardwareComponent hc = entry.getValue();
+            if ( hc != null ) {
+                SensorPort port = entry.getKey();
+                sb.append("        '").append(getEnumCode(port)).append("':");
+                sb.append(generateRegenerateEV3Sensor(hc, port));
+                sb.append(",\n");
+            }
         }
         sb.append("    },\n");
-    }
-
-    private static void appendOptional(StringBuilder sb, String port, HardwareComponent hc) {
-        if ( hc != null ) {
-            // FIXME: generateRegenerate()
-            sb.append("        '").append(port).append("': None, #");
-            if ( hc.getCategory() == Category.SENSOR ) {
-                sb.append(generateRegenerateEV3Sensor(hc));
-            } else {
-                sb.append(generateRegenerateEV3Actor(hc));
-            }
-            sb.append(",\n");
-        }
     }
 
     private String generateRegenerateUsedSensors() {
@@ -1501,19 +1502,55 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         return sb.toString();
     }
 
-    private static String generateRegenerateEV3Actor(HardwareComponent actor) {
+    private static String generateRegenerateEV3Actor(HardwareComponent actor, ActorPort port) {
         StringBuilder sb = new StringBuilder();
-        EV3Actor ev3Actor = (EV3Actor) actor;
-        sb.append("new EV3Actor(").append(getHardwareComponentTypeCode(actor.getComponentType()));
-        sb.append(", ").append(ev3Actor.isRegulated());
-        sb.append(", ").append(getEnumCode(ev3Actor.getRotationDirection())).append(", ").append(getEnumCode(ev3Actor.getMotorSide())).append(")");
+        // FIXME: that won't scale
+        String name = null;
+        switch ( actor.getComponentType().getShortName() ) {
+            case "middle motor":
+                name = "MediumMotor";
+                break;
+            case "big motor":
+                name = "LargeMotor";
+                break;
+        }
+        if ( name == null ) {
+            throw new IllegalArgumentException("no mapping for " + actor.getComponentType().getShortName() + "to python-ev3");
+        }
+        // LargeMotor(port=Motor.PORT.A), MediumMotor
+        sb.append(name).append("(port=Motor.PORT.").append(port.toString()).append(")");
+        // FIXME: regulation type, direction
+        // EV3Actor ev3Actor = (EV3Actor) actor;
+        // sb.append(", ").append(ev3Actor.isRegulated());
+        // sb.append(", ").append(getEnumCode(ev3Actor.getRotationDirection())).append(", ").append(getEnumCode(ev3Actor.getMotorSide())).append(")");
         return sb.toString();
     }
 
-    private static String generateRegenerateEV3Sensor(HardwareComponent sensor) {
+    private static String generateRegenerateEV3Sensor(HardwareComponent sensor, SensorPort port) {
         StringBuilder sb = new StringBuilder();
-        sb.append("new EV3Sensor(").append(getHardwareComponentTypeCode(sensor.getComponentType()));
-        sb.append(")");
+        // FIXME: that won't scale
+        String name = null;
+        switch ( sensor.getComponentType().getShortName() ) {
+            case "color":
+                name = "ColorSensor";
+                break;
+            case "touch":
+                name = "TouchSensor";
+                break;
+            case "ultrasonic":
+                name = "UltrasonicSensor";
+                break;
+            case "infrared":
+                name = "InfraredSensor";
+                break;
+            case "gyro":
+                name = "GyroSensor";
+                break;
+        }
+        if ( name == null ) {
+            throw new IllegalArgumentException("no mapping for " + sensor.getComponentType().getShortName() + "to python-ev3");
+        }
+        sb.append(name).append("(port=").append(port.getPortNumber()).append(")");
         return sb.toString();
     }
 
