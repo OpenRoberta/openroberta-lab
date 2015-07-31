@@ -106,6 +106,7 @@ def main():
         #   we can verify the download
         req = urllib2.Request('%s/download' % cfg['target'], headers=headers)
         response = urllib2.urlopen(req, json.dumps(params), timeout=timeout)
+        logger.info('response: %s' % json.dumps(reply))
         hdr = response.info().getheader('Content-Disposition');
         filename = '/tmp/%s' % hdr.split('=')[1] if hdr else 'unknown'
         with open(filename, 'w') as prog:
@@ -116,8 +117,11 @@ def main():
         #logger.info('execution result: %d' % res)
         # eval from file, see http://bugs.python.org/issue14049
         # NOTE: all the globals in the generated code will override gloabls we use here!
-        execfile(filename, globals(), globals())
-        logger.info('execution finished')
+        try:
+          execfile(filename, globals(), globals())
+          logger.info('execution finished')
+        except:
+          logger.exception("Ooops:")
         drawUI(hal, params)
         hal.drawText('registered', 0, 2)
       else:
@@ -131,6 +135,7 @@ def main():
     except:
       logger.exception("Ooops:")
   os.system('setterm -cursor on');
+  logger.info('--- done ---');
 
 if __name__ == "__main__":
     main()
