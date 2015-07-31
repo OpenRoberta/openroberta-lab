@@ -45,15 +45,24 @@
     "message": "Dieses Programm ist Teil des Open Roberta Labs, eine Open-Source-Entwicklung des Fraunhofer-Instituts IAIS, im Kontext der Initiative »Roberta Lernen mit Robotern« Version 1.3.0."
   },
   "window_updaterequired": {
-    "message": "Die Firmware deines Roboters ist veraltet. Aktualisiere sie bitte zuerst. Klicke dazu auf »OK«. Vorhandene Programme auf dem Roboter bleiben erhalten! Das Menü auf dem EV3 wird sich anschließend automatisch neustarten."
+    "message": "Die Firmware deines Roboters ist veraltet. Aktualisiere sie bitte zuerst. Deine Programme auf dem Roboter bleiben erhalten!"
   },
   "window_updatesuccess": {
-    "message": "Das Update war erfolgreich. Du kannst deinen Roboter nun erneut mit Open Roberta Lab verbinden."
+    "message": "Dein EV3 wird nun neugestartet. Bitte warte einen Moment. Danach kannst du deinen Roboter erneut mit Open Roberta Lab verbinden."
   },
   "window_updatefail": {
-    "message": "Das Update ist fehlgeschlagen. Verbinde deinen Roboter mit Open Roberta Lab und versuche es erneut."
+    "message": "Verbinde deinen Roboter mit Open Roberta Lab und versuche es erneut."
   },
-  "window_tokentimeout": {
-    "message": "Die Gültigkeit des Token ist abgelaufen. Klicke auf »OK« und anschließend auf »verbinden« um ein neues Token zu generieren."
+  "noti_timeout_msg": {
+    "message": "Die Gültigkeitsdauer des Token ist abgelaufen. Versuch es noch mal."
+  },
+  "noti_timeout_title": {
+    "message": "Open Roberta Fehler"
+  },
+  "noti_update_title_success": {
+    "message": "Update erfolgreich!"
+  },
+  "noti_update_title_fail": {
+    "message": "Update fehlgeschlagen!"
   }
 }

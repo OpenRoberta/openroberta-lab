@@ -1,5 +1,5 @@
 onload = function() {
-
+  
   var EV3HOST = "10.0.1.1:80";
   // server addresses
   var STANDARDHOST = "localhost:1999";
@@ -36,6 +36,10 @@ onload = function() {
   var filenames = ["ev3menu", "jsonlib", "shared", "runtime"];
   var i = 0;
   
+  var blink = true;
+  
+  var notID = 0;
+  
   document.getElementById("connect").innerHTML = chrome.i18n.getMessage("button_connect");
   document.getElementById("close").innerHTML = chrome.i18n.getMessage("button_close");
   document.getElementById("advancedop").value = chrome.i18n.getMessage("advanced_options");
@@ -50,8 +54,10 @@ onload = function() {
       if (serverreq !== null){
         serverreq.abort();
       }
+      document.getElementById("token").value = "";
       document.getElementById("connect").disabled = true;
       document.getElementById("connect").innerHTML = chrome.i18n.getMessage("button_connect");
+      updateConnStatus("Roberta_Menu_Icon_grey.png");
     }
   };
   
@@ -76,6 +82,18 @@ onload = function() {
     displayToken(TOKEN);
   }
   
+  function createNotification(type, title, msg, btnTitle){
+    var notOption = {
+		  type : type,
+		  title: title,
+		  message: msg,
+		  expandedMessage: msg
+	  };
+    notOption.iconUrl = chrome.runtime.getURL("resources/OR.png");
+    notOption.priority = 0;
+    chrome.notifications.create("id" + notID++, notOption, null);
+  }
+  
   setInterval(function() {loop();}, 1000);
   
    function loop(){
@@ -84,22 +102,34 @@ onload = function() {
       switch (STATE){
         case state.SEARCH:
           displayInfotext(chrome.i18n.getMessage("infotext_plugin"));
+          setMainPicture("plug.gif");
           checkBrickState();
           break;
         case state.WAITFORUSER:
           // do nothing until user clicks connect button
           // also used as a transition state after disconnecting the EV3 
           displayInfotext(chrome.i18n.getMessage("infotext_connect"));
+          setMainPicture("connect.gif");
           pushFinished = true;
           break;
         case state.WAIT:
           // brick is executing a program we check every few seconds if it is finished
           checkBrickState();
+          if (blink){
+            updateConnStatus("Roberta_Menu_Icon_red.png");
+          } else {
+            updateConnStatus("Roberta_Menu_Icon_green.png");
+          }
+          blink = !blink;
           break;
         case state.ABORT:
-          // TODO
-          displayInfotext(chrome.i18n.getMessage("infotext_tokentimeout"));
-          // let the user know that the 5min timeout for token occured
+          // TODO let the user know that the 5min timeout for token occured
+          createNotification("basic", chrome.i18n.getMessage("noti_timeout_title"), chrome.i18n.getMessage("noti_timeout_msg"), chrome.i18n.getMessage("noti_timeout_btn_ok_title"));
+          document.getElementById("token").value = "";
+          document.getElementById("connect").innerHTML = chrome.i18n.getMessage("button_connect");
+          updateConnStatus("Roberta_Menu_Icon_grey.png");
+          STATE = state.SEARCH;
+          pushFinished = true;
           break;
         case state.REGISTER:
           if(document.getElementById("advancedoptions").checked === true){
@@ -108,12 +138,14 @@ onload = function() {
           } else {
             ORAHOST = STANDARDHOST;
           }
-          console.log(ORAHOST);
           displayInfotext(chrome.i18n.getMessage("infotext_tokencopy"));
+          setMainPicture("server.gif");
           pushToBrick(CMD_REGISTER, CMD_REGISTER);
           break;
         case state.CONNECTED:
+          updateConnStatus("Roberta_Menu_Icon_green.png");
           displayInfotext(chrome.i18n.getMessage("infotext_runprogram"));
+          setMainPicture("connected.gif");
           pushToBrick(CMD_REPEAT, CMD_PUSH);
           break;
         case state.DOWNLOAD:
@@ -123,7 +155,7 @@ onload = function() {
           dlFirmwareFile();
           break;
         default:
-          console.log("wtf");
+          console.log("Unknown state. Help!");
       }
     }
   }
@@ -259,6 +291,7 @@ onload = function() {
       serverreq.send();
     } else {
       restartEV3();
+      createNotification("basic", "Update erfolgreich!", "Dein EV3 wird nun neugestartet. Bitte warte einen Moment.", "Dein EV3 wird nun neugestartet. Bitte warte einen Moment.");
     }
   }
   
@@ -315,7 +348,15 @@ onload = function() {
   }
   
   function displayToken(token){
-    document.getElementById("debug").value = "Token: " + token;
+    document.getElementById("token").value = "Token: " + token;
+  }
+  
+  function updateConnStatus(imgName){
+    document.getElementById("connstatus").src = "resources/" + imgName;
+  }
+  
+  function setMainPicture(imgName){
+    document.getElementById("mainpicture").src = "resources/" + imgName;
   }
   
 };

@@ -51,9 +51,18 @@
     "message": "The update was successful. You can connect your robot to Open Roberta Lab again."
   },
   "window_updatefail": {
-    "message": "The update has failed. Connect your robot to Open Roberta Lab and try it again."
+    "message": "The update has failed. Connect your robot to Open Roberta Lab and try again."
   },
-  "window_tokentimeout": {
-    "message": "The token is expired. Click on »OK« and on »connect« to get a new one."
+  "noti_timeout_msg": {
+    "message": "The token is expired. Try again."
+  },
+  "noti_timeout_title": {
+    "message": "Open Roberta Error"
+  },
+  "noti_update_title_success": {
+    "message": "Update successful!"
+  },
+  "noti_update_title_fail": {
+    "message": "Update fehlgeschlagen!"
   }
 }

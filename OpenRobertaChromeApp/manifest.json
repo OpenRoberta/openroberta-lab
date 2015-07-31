@@ -10,9 +10,10 @@
       "scripts": ["main.js"]
     }
   },
-  "icons": { "128": "OR.png" },
+  "icons": { "128": "/resources/OR.png" },
   
   "permissions": [
+    "notifications",
     "http://*/*"
   ]
 }

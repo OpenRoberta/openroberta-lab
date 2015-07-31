@@ -3,20 +3,25 @@
   <head>
       <meta charset="utf-8">
       <title>Open Roberta</title>
+      <!-- Setting a title in the window bar is not possible -->
       <script src="index.js"></script>
   </head>
     <body>
-        <!-- Add grid -->
+        <!-- TODO Add grid or sth -->
         
         <p>
-           <textarea id="debug" cols="15" rows="1" style="border:0px;resize:none" readonly></textarea>
+           <textarea id="token" cols="15" rows="1" style="border:0px;resize:none" readonly></textarea>
+           <img id="connstatus" src="resources/Roberta_Menu_Icon_grey.png" alt="Disconnected" align="right">
         </p>
         <p>
-           <textarea id="infotext" cols="35" rows="5" style="resize:none;" readonly></textarea>
+          <img id="mainpicture" >
+        </p>
+        <p>
+           <textarea id="infotext" cols="37" rows="5" style="resize:none;" readonly></textarea>
         </p>
         <p>
           <button id="connect" class="btn" disabled></button>
-          <button id="close" class="btn"></button>
+          <button id="close" class=" btn"></button>
         </p>
         <p>
           <input type="checkbox" id="advancedoptions">
