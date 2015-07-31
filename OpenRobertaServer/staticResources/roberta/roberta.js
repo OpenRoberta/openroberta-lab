@@ -1671,7 +1671,7 @@ function translate(jsdata) {
  */
 function switchLanguage(langCode, forceSwitch) {
     if (forceSwitch || userState.language != langCode) {
-        var langs = [ 'DE', 'EN', 'FI', 'DA' ];
+        var langs = [ 'DE', 'EN', 'FI', 'DA', 'ES'];
         if (langs.indexOf(langCode) < 0) {
             langCode = "EN";
         }
@@ -1724,6 +1724,9 @@ function initializeLanguages() {
     } else if (navigator.language.indexOf("da") > -1) {
         switchLanguage('DA', true)
         $('#chosenLanguage').text('DA');
+    } else if (navigator.language.indexOf("es") > -1) {
+        switchLanguage('ES', true)
+        $('#chosenLanguage').text('ES');
     } else {
         switchLanguage('EN', true)
         $('#chosenLanguage').text('EN');
