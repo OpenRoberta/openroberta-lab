@@ -273,7 +273,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
             case WAIT:
                 this.sb.append("createIfStmt([");
                 repeatStmt.getExpr().visit(this);
-                this.sb.append("], [[");
+                this.sb.append("], [");
                 break;
             case TIMES:
                 this.sb.append("createRepeatStmt(" + repeatStmt.getMode() + ", ");
@@ -293,9 +293,14 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
         }
 
         addInStmt();
-        repeatStmt.getList().visit(this);
         if ( repeatStmt.getMode() == Mode.WAIT ) {
-            this.sb.append("]");
+            if ( repeatStmt.getList().get().size() != 0 ) {
+                this.sb.append("[");
+                repeatStmt.getList().visit(this);
+                this.sb.append("]");
+            }
+        } else {
+            repeatStmt.getList().visit(this);
         }
         this.sb.append("]");
         this.sb.append(end);

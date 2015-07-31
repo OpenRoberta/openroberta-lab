@@ -1,7 +1,7 @@
 const
 wheelDiameter = 5.6;
 const
-TURN_RATIO = 12 / 2.8;
+TURN_RATIO = 20 / 2.8;
 
 var SENSORS = (function() {
     var touchSensor = false;
