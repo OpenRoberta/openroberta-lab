@@ -287,7 +287,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBoolConst(BoolConst<Void> boolConst) {
-        this.sb.append(boolConst.isValue());
+        this.sb.append(boolConst.isValue() ? "True" : "False");
         return null;
     };
 
