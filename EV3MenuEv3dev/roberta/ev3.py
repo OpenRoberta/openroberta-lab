@@ -136,3 +136,49 @@ class Hal(object):
     def getVolume(self):
         # FIXME
         return 100
+
+    # actors
+    
+    # sensors
+    # touch sensor
+    def isPressed(self, port):
+      return self.cfg['sensors'][port].is_pushed
+
+    # ultrasonic sensor
+    def getUltraSonicSensorDistance(self, port):
+      return self.cfg['sensors'][port].dist_cm
+
+    def getUltraSonicSensorPresence(self, port):
+      pass
+
+    # gyro
+    def resetGyroSensor(self, port):
+      pass
+
+    def getGyroSensorValue(self, port, mode):
+      # mode = rate, angle
+      #return self.cfg['sensors'][port].ang
+      #return self.cfg['sensors'][port].rate
+      pass
+    
+    # color
+    def getColorSensorAmbient(self, port):
+      return self.cfg['sensors'][port].ambient
+
+    def getColorSensorColor(self, port):
+      return self.cfg['sensors'][port].color
+
+    def getColorSensorRed(self, port):
+      return self.cfg['sensors'][port].reflect
+
+    def getColorSensorRgb(self, port):
+      return self.cfg['sensors'][port].rgb
+
+    # infrared
+    def getInfraredSensorSeek(self, port):
+      #return self.cfg['sensors'][port].seek
+      pass
+
+    def getInfraredSensorDistance(self, port):
+      return self.cfg['sensors'][port].prox
+

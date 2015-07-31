@@ -766,19 +766,19 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        String colorSensorPort = getEnumCode(colorSensor.getPort());
+        String colorSensorPort = colorSensor.getPort().getPortNumber();
         switch ( colorSensor.getMode() ) {
             case AMBIENTLIGHT:
-                this.sb.append("hal.getColorSensorAmbient(" + colorSensorPort + ")");
+                this.sb.append("hal.getColorSensorAmbient('" + colorSensorPort + "')");
                 break;
             case COLOUR:
-                this.sb.append("hal.getColorSensorColour(" + colorSensorPort + ")");
+                this.sb.append("hal.getColorSensorColour('" + colorSensorPort + "')");
                 break;
             case RED:
-                this.sb.append("hal.getColorSensorRed(" + colorSensorPort + ")");
+                this.sb.append("hal.getColorSensorRed('" + colorSensorPort + "')");
                 break;
             case RGB:
-                this.sb.append("hal.getColorSensorRgb(" + colorSensorPort + ")");
+                this.sb.append("hal.getColorSensorRgb('" + colorSensorPort + "')");
                 break;
             default:
                 throw new DbcException("Invalide mode for Color Sensor!");
@@ -802,24 +802,24 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        String gyroSensorPort = getEnumCode(gyroSensor.getPort());
+        String gyroSensorPort = gyroSensor.getPort().getPortNumber();
         if ( gyroSensor.getMode() == GyroSensorMode.RESET ) {
-            this.sb.append("hal.resetGyroSensor(" + gyroSensorPort + ")");
+            this.sb.append("hal.resetGyroSensor('" + gyroSensorPort + "')");
         } else {
-            this.sb.append("hal.getGyroSensorValue(" + gyroSensorPort + ", " + getEnumCode(gyroSensor.getMode()) + ")");
+            this.sb.append("hal.getGyroSensorValue('" + gyroSensorPort + ", " + getEnumCode(gyroSensor.getMode()) + "')");
         }
         return null;
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        String infraredSensorPort = getEnumCode(infraredSensor.getPort());
+        String infraredSensorPort = infraredSensor.getPort().getPortNumber();
         switch ( infraredSensor.getMode() ) {
             case DISTANCE:
-                this.sb.append("hal.getInfraredSensorDistance(" + infraredSensorPort + ")");
+                this.sb.append("hal.getInfraredSensorDistance('" + infraredSensorPort + "')");
                 break;
             case SEEK:
-                this.sb.append("hal.getInfraredSensorSeek(" + infraredSensorPort + ")");
+                this.sb.append("hal.getInfraredSensorSeek('" + infraredSensorPort + "')");
                 break;
             default:
                 throw new DbcException("Invalid Infrared Sensor Mode!");
@@ -845,17 +845,17 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("hal.isPressed(" + getEnumCode(touchSensor.getPort()) + ")");
+        this.sb.append("hal.isPressed('" + touchSensor.getPort().getPortNumber() + "')");
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        String ultrasonicSensorPort = getEnumCode(ultrasonicSensor.getPort());
+        String ultrasonicSensorPort = ultrasonicSensor.getPort().getPortNumber();
         if ( ultrasonicSensor.getMode() == UltrasonicSensorMode.DISTANCE ) {
-            this.sb.append("hal.getUltraSonicSensorDistance(" + ultrasonicSensorPort + ")");
+            this.sb.append("hal.getUltraSonicSensorDistance('" + ultrasonicSensorPort + "')");
         } else {
-            this.sb.append("hal.getUltraSonicSensorPresence(" + ultrasonicSensorPort + ")");
+            this.sb.append("hal.getUltraSonicSensorPresence('" + ultrasonicSensorPort + "')");
         }
         return null;
     }
@@ -1465,7 +1465,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
             HardwareComponent hc = entry.getValue();
             if ( hc != null ) {
                 ActorPort port = entry.getKey();
-                sb.append("        '").append(getEnumCode(port)).append("':");
+                sb.append("        '").append(port.toString()).append("':");
                 sb.append(generateRegenerateEV3Actor(hc, port));
                 sb.append(",\n");
             }
@@ -1479,7 +1479,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
             HardwareComponent hc = entry.getValue();
             if ( hc != null ) {
                 SensorPort port = entry.getKey();
-                sb.append("        '").append(getEnumCode(port)).append("':");
+                sb.append("        '").append(port.getPortNumber()).append("':");
                 sb.append(generateRegenerateEV3Sensor(hc, port));
                 sb.append(",\n");
             }
@@ -1490,9 +1490,9 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     private String generateRegenerateUsedSensors() {
         StringBuilder sb = new StringBuilder();
         String arrayOfSensors = "";
+        // FIXME: what is this used for?
         for ( EV3Sensors usedSensor : this.usedSensors ) {
-            arrayOfSensors += getHardwareComponentTypeCode(usedSensor);
-            arrayOfSensors += ",";
+            arrayOfSensors += "'" + getHardwareComponentTypeCode(usedSensor) + "',";
         }
         sb.append("usedSensors = Set([");
         if ( this.usedSensors.size() > 0 ) {
