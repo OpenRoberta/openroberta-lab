@@ -258,7 +258,7 @@ div.NoShowcase {
 #simDiv.simActive {
 	height: 100%;
 	overflow: hidden;
-	background: rgba(0, 255, 355,0.8);
+	background: rgb(0, 255, 355);
 	visibility: visible;
 	position:relative;
 }

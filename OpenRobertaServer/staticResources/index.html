@@ -23,20 +23,7 @@ limitations under the License.
 <script type="text/javascript" src="/simulation/robertaLogic/Modules.js"></script>
 <script type="text/javascript" src="/simulation/robertaLogic/programBuilder.js"></script>
 <script type="text/javascript" src="/simulation/robertaLogic/programEval.js"></script>
-
-<script type="text/javascript" src="/simulation/simulationLogic/GeneratorRoberta.js"></script>
-<script type="text/javascript" src="/simulation/simulationLogic/FrameworkManager.js"></script>
-
-<script type="text/javascript" src="/simulation/simulationLogic/meshHandlerPostiveCoordinates.js"></script>
-<script type="text/javascript" src="/simulation/simulationLogic/robotMotionHandler.js"></script>
-<script type="text/javascript" src="/simulation/simulationLogic/sensorsHandler.js"></script>
-<script type="text/javascript" src="/simulation/build/three.min.js"></script>
-
-<script type="text/javascript" src="/simulation/js/renderers/Projector.js"></script>
-<script type="text/javascript" src="/simulation/js/renderers/CanvasRenderer.js"></script>
-
-<script type="text/javascript" src="/simulation/js/libs/stats.min.js"></script>
-<script type="text/javascript" src="/simulation/js/AnimationFrame.js"></script>
+<script type="text/javascript" src="/simulation/simulationLogic/animation.js"></script>
 
 <script type="text/javascript" src="/common/jquery/jquery-2.0.3.js" charset="utf-8"></script>
 <script type="text/javascript" src="/common/ui/jquery-ui.js" charset="utf-8"></script>
@@ -52,6 +39,8 @@ limitations under the License.
 
 <script type="text/javascript" src="/blockly/blockly_compressed.js"></script>
 <script type="text/javascript" src="/blockly/blocks_compressed.js"></script>
+
+
 
 <link rel="stylesheet" type="text/css" href="/common/bootstrap/bootstrap-3.3.1-dist/dist/css/bootstrap.min.css"></link>
 <link rel="stylesheet" type="text/css" href="/common/jquery.dataTables.min.css"></link>
@@ -222,7 +211,6 @@ limitations under the License.
                             <li role="presentation"><a role="menuitem" tabindex="-1" href="#">DE</a></li>
                             <li role="presentation"><a role="menuitem" tabindex="-1" href="#">FI</a></li>
                             <li role="presentation"><a role="menuitem" tabindex="-1" href="#">DA</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">ES</a></li>
                         </ul></li>
                 </ul>
             </div>
@@ -559,9 +547,9 @@ limitations under the License.
                 </div>
                 <div class="modal-body">
                     <div style="text-align: center">
-                        <img class="DE" alt="neues Release" src="../css/img/version1.2.0_DE.png" /> <img class="EN FI DA ES" alt="new Release"
+                        <img class="DE" alt="neues Release" src="../css/img/version1.2.0_DE.png" /> <img class="EN" alt="new Release"
                             src="../css/img/version1.2.0_EN.png"
-                        />
+                        /> <img class="FI" alt="new Release" src="../css/img/version1.2.0_EN.png" />
                     </div>
                     <br />
                     <div lkey="Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE" id="popupTextStartupMessage"></div>
@@ -632,6 +620,7 @@ limitations under the License.
                         <button id="simStop" type="button" class="btn typcn typcn-media-stop head-navi-icons pull-right"></button>
                         <button id="simStep" type="button" class="btn typcn typcn-chevron-right-outline head-navi-icons pull-right"></button>
                         <button id="simForward" type="button" class="btn typcn typcn-chevron-right head-navi-icons pull-right"></button>
+                        <button id="simInfo" type="button" class="btn typcn typcn-info head-navi-icons pull-right"></button>
                     </div>
                 </div>
             </div>

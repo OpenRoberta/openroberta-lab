@@ -418,13 +418,6 @@ function startProgram() {
             if (userState.robot === 'oraSim') {
                 $('#blocklyDiv').addClass('simActive');
                 $('#simDiv').addClass('simActive');
-                $("#blocklyDiv").animate({
-                    "width" : "-=70%"
-                }, {
-                    step : function() {
-                        Blockly.fireUiEvent(window, 'resize')
-                    }
-                },1000);
                 $('.nav > li > ul > .robotType').addClass('disabled');
                 userState.programBlocks = null;
                 if (Blockly.mainWorkspace !== null) {
@@ -443,13 +436,21 @@ function startProgram() {
                     injectBlockly(result, userState.programBlocks, true);
                 });
 
+                $("#blocklyDiv").animate({
+                    "width" : "-=70%"
+                }, {
+                    step : function() {
+                        Blockly.fireUiEvent(window, 'resize')
+                    },
+                    complete : initOraSim
+                }, 1000);
+
                 // Initialize the scene 
-                initializeScene();
+                // initializeScene();
 
                 // Instead of calling 'renderScene()', we call a new function: 'animateScene()'. It will 
                 // update the rotation values and call 'renderScene()' in a loop. 
 
-                animateScene(); // adding new Timer  NewDate on 26Mai
             }
         } else {
             displayInformation(result, "", result.message, "");
@@ -1078,14 +1079,14 @@ function switchRobot(robot) {
             if (robot === "ev3") {
                 $('#menuEv3').parent().addClass('disabled');
                 $('#menuSim').parent().removeClass('disabled');
-                $('#menuConnect').parent().removeClass('disabled');                               
+                $('#menuConnect').parent().removeClass('disabled');
                 $('#iconDisplayRobotState').removeClass('typcn-Roberta');
                 $('#iconDisplayRobotState').addClass('typcn-film');
             } else if (robot === "oraSim") {
                 userState.robotName = "ORASim";
                 $('#menuEv3').parent().removeClass('disabled');
                 $('#menuSim').parent().addClass('disabled');
-                $('#menuConnect').parent().addClass('disabled');                
+                $('#menuConnect').parent().addClass('disabled');
                 $('#iconDisplayRobotState').removeClass('typcn-film');
                 $('#iconDisplayRobotState').addClass('typcn-Roberta');
             }
@@ -1326,16 +1327,16 @@ function initHeadNavigation() {
                 step : function() {
                     Blockly.fireUiEvent(window, 'resize')
                 }
-            },1000);
+            }, 1000);
             $('.nav > li > ul > .robotType').removeClass('disabled');
             $('#menuSim').parent().addClass('disabled');
             displayMessage("simBack pressed", "TOAST", "simBack");
-            window.cancelAnimationFrame(requestId);
+            //window.cancelAnimationFrame(requestId);
             var myNode = document.getElementById("WebGLCanvas");
             while (myNode.firstChild) {
                 myNode.removeChild(myNode.firstChild);
             }
-            initProgram([]);
+            // initProgram([]);
             COMM.json("/toolbox", {
                 "cmd" : "loadT",
                 "name" : userState.toolbox,
@@ -1344,15 +1345,20 @@ function initHeadNavigation() {
                 injectBlockly(result, userState.programBlocks);
             });
         } else if (domId === 'simStop') {
+            setPause(true);
             $('#fakeShowcase').removeClass('showcase');
             $('#fakeShowcase').addClass('noShowcase');
             displayMessage("simStop pressed", "TOAST", "simStop");
         } else if (domId === 'simForward') {
+            setPause(false);
             $('#fakeShowcase').addClass('showcase');
             $('#fakeShowcase').removeClass('noShowcase');
             displayMessage("simForward pressed", "TOAST", "simForward");
         } else if (domId === 'simStep') {
+            setStep();
             displayMessage("simStep pressed", "TOAST", "simStep");
+        } else if (domId === 'simInfo') {
+            setInfo();
         }
         return false;
     }, 'sim navigation controle item clicked');
@@ -1685,7 +1691,7 @@ function translate(jsdata) {
  */
 function switchLanguage(langCode, forceSwitch) {
     if (forceSwitch || userState.language != langCode) {
-        var langs = [ 'DE', 'EN', 'FI', 'DA', 'ES'];
+        var langs = [ 'DE', 'EN', 'FI', 'DA' ];
         if (langs.indexOf(langCode) < 0) {
             langCode = "EN";
         }
@@ -1738,9 +1744,6 @@ function initializeLanguages() {
     } else if (navigator.language.indexOf("da") > -1) {
         switchLanguage('DA', true)
         $('#chosenLanguage').text('DA');
-    } else if (navigator.language.indexOf("es") > -1) {
-        switchLanguage('ES', true)
-        $('#chosenLanguage').text('ES');
     } else {
         switchLanguage('EN', true)
         $('#chosenLanguage').text('EN');
