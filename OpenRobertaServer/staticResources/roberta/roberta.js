@@ -1316,7 +1316,7 @@ function initHeadNavigation() {
     });
 
     // controle for simulation
-    $('.navbar-fixed-bottom').onWrap('click', function() {
+    $('.navbar-fixed-bottom').onWrap('click', function(event) {
         var domId = event.target.id;
         if (domId === 'simBack') {
             $('#blocklyDiv').removeClass('simActive');

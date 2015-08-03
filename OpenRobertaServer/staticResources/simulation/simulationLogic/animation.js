@@ -543,8 +543,9 @@ function drawrobot() {
     ctx.stroke();
     //back wheel
     ctx.fillStyle = "black";
-    ctx.ellipse(0, 30, 3, 6, robot.pose.thetaDiff, 0, Math.PI * 2);
-    ctx.fill();
+    //ctx.ellipse(0, 30, 3, 6, robot.pose.thetaDiff, 0, Math.PI * 2);
+    //ctx.fill();
+    ctx.fillRect(-2.5, 30, 5, 5);
     //robot
     ctx.fillStyle = robot.led.color;
     var grd = ctx.createRadialGradient(0, 10, 1, 0, 10, 15);
@@ -679,7 +680,6 @@ function rgbToHsv(r, g, b) {
 }
 
 function getColor(hsv) {
-    console.log(hsv);
     if (hsv[2] <= 10)
         return COLOR_ENUM.BLACK;
     if ((hsv[0] < 10 || hsv[0] > 350) && hsv[1] > 90 && hsv[2] > 90)
@@ -721,13 +721,13 @@ function intersectLines(l, o) {
 }
 
 function handleMouseDown(e) {
-    e.preventDefault();
     startX = parseInt(e.clientX - offsetX);
     startY = parseInt(e.clientY - offsetY);
     var dx = startX - robot.mouse.rx;
     var dy = startY - robot.mouse.ry;
     isDownrobot = (dx * dx + dy * dy < robot.mouse.r * robot.mouse.r);
     isDownObstacle = (startX > obstacle.x && startX < obstacle.x + obstacle.w && startY > obstacle.y && startY < obstacle.y + obstacle.w);
+    return false;
 };
 
 function handleMouseUp(e) {
@@ -738,22 +738,20 @@ function handleMouseUp(e) {
             robot.pose.theta += toRadians(5);
     }
     $("#ground").css('cursor','auto');
-    e.preventDefault();
     isDownrobot = false;
     isDownObstacle = false;
+    return false;
 };
 
 function handleMouseOut(e) {
-    e.preventDefault();
     isDownrobot = false;
     isDownObstacle = false;
+    return false;
 };
 
 function handleMouseMove(e) {
-    e.preventDefault();
-
     if (!isDownrobot && !isDownObstacle) {
-        return;
+        return false;
     }
     $("#ground").css('cursor','pointer');
     mouseX = parseInt(e.clientX - offsetX);
@@ -771,6 +769,7 @@ function handleMouseMove(e) {
         obstacle.x += dx;
         obstacle.y += dy;
     }
+    return false;
 };
 
 //programs
@@ -930,7 +929,7 @@ function Robot() {
         y : -10,
         w : 10,
         h : 20,
-        color : '#0000000'
+        color : '#000000'
     };
     this.led = {
         x : 0,
