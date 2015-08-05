@@ -13,6 +13,7 @@ var isDownrobot = false;
 var isDownObstacle = false;
 var startX;
 var startY;
+var scale = 1;
 
 var pause;
 function setPause(value) {
@@ -48,6 +49,13 @@ var speedRight = 0;
 var speedLeft = 0;
 
 // obstacles
+// scaled playground
+var ground = {
+    x : 0,
+    y : 0,
+    w : 500,
+    h : 500
+}
 var playground = {
     x : 0,
     y : 0,
@@ -60,7 +68,7 @@ var obstacle = {
     w : 75,
     h : 75
 }
-var obstacleList = [ playground, obstacle ];
+var obstacleList = [ ground, obstacle ];
 
 // input and output for executing user program
 var input = {
@@ -86,6 +94,7 @@ var kI = 0.0001;
 var error = 0;
 var integral = 0;
 var wave = 0;
+var tread = 0;
 
 var robot = new Robot();
 
@@ -126,6 +135,19 @@ function initOraSim() {
     $("#ground").mouseout(function(e) {
         handleMouseOut(e);
     });
+    $("#ground").bind('touchmove', function(e) {
+        handleMouseMove(e);
+    });
+    $("#ground").bind('touchleave', function(e) {
+        handleMouseOut(e);
+    });
+    $("#ground").bind('touchstart', function(e) {
+        handleMouseDown(e);
+    });
+    $("#ground").bind('touchend', function(e) {
+        handleMouseUp(e);
+    });
+
     adjustAllSizes();
     robot = new Robot();
     oraSimRender();
@@ -161,7 +183,8 @@ function oraSimRender() {
 
     }
     diffDrive(output);
-    drawBackground();
+    adjustAllSizes();
+    drawBackground(1);
     setSensorValues();
     drawrobot();
     setTimeout(function() {
@@ -386,6 +409,21 @@ function setSensorValues() {
     var blue = b / num;
     robot.colorSensor.lightValue = (red + green + blue) / 3 / 2.55;
     robot.colorSensor.colorValue = getColor(rgbToHsv(red, green, blue));
+    if (robot.colorSensor.colorValue === COLOR_ENUM.NONE) {
+        robot.colorSensor.color = 'grey';
+    } else if (robot.colorSensor.colorValue === COLOR_ENUM.BLACK) {
+        robot.colorSensor.color = 'black';
+    } else if (robot.colorSensor.colorValue == COLOR_ENUM.WHITE) {
+        robot.colorSensor.color = 'white';
+    } else if (robot.colorSensor.colorValue === COLOR_ENUM.YELLOW) {
+        robot.colorSensor.color = 'yellow';
+    } else if (robot.colorSensor.colorValue === COLOR_ENUM.RED) {
+        robot.colorSensor.color = 'red';
+    } else if (robot.colorSensor.colorValue === COLOR_ENUM.BLUE) {
+        robot.colorSensor.color = 'blue';
+    } else if (robot.colorSensor.colorValue === COLOR_ENUM.GREEN) {
+        robot.colorSensor.color = 'green';
+    }
 
     // ultraSensor - check for 5 rays
     var u3 = {
@@ -451,31 +489,83 @@ function setSensorValues() {
     input.tacho[0] = robot.encoder.left * ENC;
 };
 
-function drawBackground() {
-    adjustAllSizes();
-    canvas.width = playground.w;
-    canvas.height = playground.h;
+function drawBackground(a) {
+    canvas.width = Math.max(ground.w, playground.w);
+    canvas.height = Math.max(ground.h, playground.h);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    ctx.scale(a, a);
     ctx.fillStyle = "#00FFFF";
-    ctx.fillRect(playground.x, playground.y, playground.w, playground.h);
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    //bulbs
+//    ctx.shadowBlur = 10;
+//    ctx.shadowColor = "black";
+//    ctx.lineWidth = "10";
+//    ctx.strokeStyle = "grey";
+//    ctx.setLineDash([ 20 ]);
+//    ctx.moveTo(0, 5);
+//    ctx.lineTo(ground.w, 5);
+//    ctx.stroke();
+//    ctx.strokeStyle = "white";
+//    ctx.lineDashOffset = 20;
+//    ctx.moveTo(0, 5);
+//    ctx.lineTo(ground.w, 5);
+//    ctx.stroke();
+//
+//    ctx.lineDashOffset = 0;
+//    ctx.strokeStyle = "grey";
+//    ctx.moveTo(ground.w - 5, 10);
+//    ctx.lineTo(ground.w - 5, ground.h);
+//    ctx.stroke();
+//    ctx.strokeStyle = "white";
+//    ctx.lineDashOffset = 20;
+//    ctx.moveTo(ground.w - 5, 10);
+//    ctx.lineTo(ground.w - 5, ground.h);
+//    ctx.stroke();
+//
+//    ctx.lineDashOffset = 0;
+//    ctx.strokeStyle = "grey";
+//    ctx.moveTo(ground.w - 10, ground.h - 5);
+//    ctx.lineTo(0, ground.h - 5);
+//    ctx.stroke();
+//    ctx.strokeStyle = "white";
+//    ctx.lineDashOffset = 20;
+//    ctx.moveTo(ground.w - 10, ground.h - 5);
+//    ctx.lineTo(0, ground.h - 5);
+//    ctx.stroke();
+//
+//    ctx.lineDashOffset = 0;
+//    ctx.strokeStyle = "grey";
+//    ctx.moveTo(5, ground.h - 10);
+//    ctx.lineTo(5, 10);
+//    ctx.stroke();
+//    ctx.strokeStyle = "white";
+//    ctx.lineDashOffset = 20;
+//    ctx.moveTo(5, ground.h - 10);
+//    ctx.lineTo(5, 10);
+//    ctx.stroke();
+//
+//    ctx.setLineDash([]);
+//    ctx.shadowBlur = 0;
+
     ctx.fillStyle = "red";
-    ctx.fillRect(120, playground.h - 80, 40, 60);
+    ctx.fillRect(120, ground.h - 80, 40, 60);
     ctx.fillStyle = "green";
-    ctx.fillRect(160, playground.h - 80, 40, 60);
+    ctx.fillRect(160, ground.h - 80, 40, 60);
     ctx.fillStyle = "yellow";
-    ctx.fillRect(200, playground.h - 80, 40, 60);
+    ctx.fillRect(200, ground.h - 80, 40, 60);
     ctx.fillStyle = "blue";
-    ctx.fillRect(240, playground.h - 80, 40, 60);
+    ctx.fillRect(240, ground.h - 80, 40, 60);
     ctx.strokeStyle = "#ffffff";
     ctx.lineWidth = "30";
     ctx.beginPath();
-    ctx.arc(playground.w / 2, playground.h / 2, 125, 0, Math.PI * 1.5);
+    ctx.arc(ground.w / 2, ground.h / 2, 125, 0, Math.PI * 1.5);
     ctx.closePath();
     ctx.stroke();
     ctx.strokeStyle = "#000000";
     ctx.lineWidth = "10";
     ctx.beginPath();
-    ctx.arc(playground.w / 2, playground.h / 2, 125, 0, Math.PI * 1.5);
+    ctx.arc(ground.w / 2, ground.h / 2, 125, 0, Math.PI * 1.5);
     ctx.closePath();
     ctx.stroke();
     ctx.fillStyle = "#b3b3b3";
@@ -486,48 +576,47 @@ function drawBackground() {
 };
 
 function drawrobot() {
+    drawBackground(scale);
     // provide new user information   
     if (info === true) {
-        var endLabel = playground.w - 45;
+        ctx.restore();
+        var endLabel = playground.w - 40;
         var endValue = playground.w - 5;
+        var line = 40;
         ctx.textAlign = "end";
         ctx.font = "10px Verdana";
         ctx.fillStyle = "#333333";
-        ctx.fillText("FPS", endLabel, 25);
-        ctx.fillText(Math.round(1000 / averageTimeStep), endValue, 25);
-        ctx.fillText("Pose X", endLabel, 40);
-        ctx.fillText(Math.round(robot.pose.x), endValue, 40);
-        ctx.fillText("Pose Y", endLabel, 55);
-        ctx.fillText(Math.round(robot.pose.y), endValue, 55);
-        ctx.fillText("Pose θ", endLabel, 70);
-        ctx.fillText(Math.round(Math.round(toDegree(robot.pose.theta))), endValue, 70);
-        ctx.fillText("Motor left", endLabel, 90);
-        ctx.fillText(Math.round(robot.encoder.left * ENC), endValue, 90);
-        ctx.fillText("Motor right", endLabel, 105);
-        ctx.fillText(Math.round(robot.encoder.right * ENC), endValue, 105);
-        ctx.fillText("Touch Sensor", endLabel, 120);
-        ctx.fillText(Math.round(robot.touchSensor.value), endValue, 120);
-        ctx.fillText("Light Sensor", endLabel, 135);
-        ctx.fillText(Math.round(Math.round(robot.colorSensor.lightValue)), endValue, 135);
-        ctx.fillText("Ultra Sensor", endLabel, 150);
-        ctx.fillText(Math.round(robot.ultraSensor.distance / 2), endValue, 150);
-        ctx.fillText("Color Sensor", endLabel, 165);
-        if (robot.colorSensor.colorValue === COLOR_ENUM.NONE) {
-            ctx.fillStyle = 'grey';
-        } else if (robot.colorSensor.colorValue === COLOR_ENUM.BLACK) {
-            ctx.fillStyle = 'black';
-        } else if (robot.colorSensor.colorValue == COLOR_ENUM.WHITE) {
-            ctx.fillStyle = 'white';
-        } else if (robot.colorSensor.colorValue === COLOR_ENUM.YELLOW) {
-            ctx.fillStyle = 'yellow';
-        } else if (robot.colorSensor.colorValue === COLOR_ENUM.RED) {
-            ctx.fillStyle = 'red';
-        } else if (robot.colorSensor.colorValue === COLOR_ENUM.BLUE) {
-            ctx.fillStyle = 'blue';
-        } else if (robot.colorSensor.colorValue === COLOR_ENUM.GREEN) {
-            ctx.fillStyle = 'green';
-        }
-        ctx.fillRect(endValue, 165, -10, -10);
+        ctx.fillText("FPS", endLabel, line);
+        ctx.fillText(Math.round(1000 / averageTimeStep), endValue, line);
+        line += 15;
+        ctx.fillText("Pose X", endLabel, line);
+        ctx.fillText(Math.round(robot.pose.x), endValue, line);
+        line += 15;
+        ctx.fillText("Pose Y", endLabel, line);
+        ctx.fillText(Math.round(robot.pose.y), endValue, line);
+        line += 20;
+        ctx.fillText("Pose θ", endLabel, line);
+        ctx.fillText(Math.round(Math.round(toDegree(robot.pose.theta))), endValue, line);
+        line += 15;
+        ctx.fillText("Motor left", endLabel, line);
+        ctx.fillText(Math.round(robot.encoder.left * ENC), endValue, line);
+        line += 15;
+        ctx.fillText("Motor right", endLabel, line);
+        ctx.fillText(Math.round(robot.encoder.right * ENC), endValue, line);
+        line += 15;
+        ctx.fillText("Touch Sensor", endLabel, line);
+        ctx.fillText(Math.round(robot.touchSensor.value), endValue, line);
+        line += 15;
+        ctx.fillText("Light Sensor", endLabel, line);
+        ctx.fillText(Math.round(Math.round(robot.colorSensor.lightValue)), endValue, line);
+        line += 15;
+        ctx.fillText("Ultra Sensor", endLabel, line);
+        ctx.fillText(Math.round(robot.ultraSensor.distance / 2), endValue, line);
+        line += 15;
+        ctx.fillText("Color Sensor", endLabel, line);
+        ctx.fillStyle = robot.colorSensor.color;
+        ctx.fillRect(endValue, line, -10, -10);
+        ctx.scale(scale, scale);
     }
     ctx.save();
     ctx.translate(robot.pose.x, robot.pose.y);
@@ -551,8 +640,22 @@ function drawrobot() {
     var grd = ctx.createRadialGradient(0, 10, 1, 0, 10, 15);
     grd.addColorStop(0, robot.led.color);
     grd.addColorStop(0.5, robot.geom.color);
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = "black";
     ctx.fillStyle = grd;
     ctx.fillRect(robot.geom.x, robot.geom.y, robot.geom.w, robot.geom.h);
+    //touch
+    ctx.shadowBlur = 10;
+    ctx.shadowOffsetX = 2;
+    if (robot.touchSensor.value === 1) {
+        ctx.fillStyle = 'red';
+        ctx.fillRect(robot.frontRight.x, robot.frontRight.y, robot.frontLeft.x - robot.frontRight.x, 3.5);
+    } else {
+        ctx.fillStyle = robot.touchSensor.color;
+        ctx.fillRect(robot.frontRight.x, robot.frontRight.y, robot.frontLeft.x - robot.frontRight.x, 3.5);
+    }
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
     //LED
     ctx.fillStyle = "#f0f0f0";
     ctx.beginPath();
@@ -564,45 +667,36 @@ function drawrobot() {
     ctx.fillRect(robot.wheelLeft.x, robot.wheelLeft.y, robot.wheelLeft.w, robot.wheelLeft.h);
     ctx.fillStyle = robot.wheelRight.color;
     ctx.fillRect(robot.wheelRight.x, robot.wheelRight.y, robot.wheelRight.w, robot.wheelRight.h);
-    ctx.fillStyle = 'red';
-    //ultrasonic
-//    ctx.lineWidth = "5";
-//    ctx.strokeStyle = robot.ultraSensor.color;
 //    ctx.beginPath();
-//    ctx.arc(robot.ultraSensor.x, robot.ultraSensor.y, 50, -Math.PI / 8 - Math.PI / 2, Math.PI / 8 - Math.PI / 2);
+//    ctx.lineWidth = "2";
+//    ctx.strokeStyle = "#ffffff";
+//    tread += (output.left / 400);
+//    tread = tread % 3;
+//    ctx.lineDashOffset = tread;
+//    ctx.setLineDash([ 1, 2 ]);
+//    ctx.moveTo(robot.wheelLeft.x + 1, robot.wheelLeft.y);
+//    ctx.lineTo(robot.wheelLeft.x + 1, robot.wheelLeft.y + robot.wheelRight.h);
+//    ctx.moveTo(robot.wheelLeft.x + 9, robot.wheelLeft.y);
+//    ctx.lineTo(robot.wheelLeft.x + 9, robot.wheelLeft.y + robot.wheelRight.h);
+//    ctx.lineDashOffset = 3 - tread;
+//    ctx.moveTo(robot.wheelRight.x + 1, robot.wheelRight.y);
+//    ctx.lineTo(robot.wheelRight.x + 1, robot.wheelRight.y + robot.wheelRight.h);
+//    ctx.moveTo(robot.wheelRight.x + 9, robot.wheelRight.y);
+//    ctx.lineTo(robot.wheelRight.x + 9, robot.wheelRight.y + robot.wheelRight.h);
 //    ctx.stroke();
-//    ctx.beginPath();
-//    ctx.arc(robot.ultraSensor.x, robot.ultraSensor.y, 25, -Math.PI / 8 - Math.PI / 2, Math.PI / 8 - Math.PI / 2);
-//    ctx.stroke();
-//    ctx.beginPath();
-//    ctx.arc(robot.ultraSensor.x, robot.ultraSensor.y, 75, -Math.PI / 8 - Math.PI / 2, Math.PI / 8 - Math.PI / 2);
-//    ctx.stroke();
+//    ctx.closePath();
     ctx.lineWidth = "1";
+    ctx.setLineDash([]);
     //color   
-    ctx.strokeStyle = "black";
     ctx.beginPath();
     ctx.arc(0, -15, robot.colorSensor.r, 0, Math.PI * 2);
-    ctx.stroke();
     ctx.closePath();
-//    //ultra   
-//    ctx.beginPath();
-//
-//    ctx.fillStyle = "black";
-//    ctx.arc(-2.5, -20, 2.5, 0, Math.PI * 2);
-//    ctx.fill();
-//    ctx.arc(2.5, -20, 2.5, 0, Math.PI * 2);
-//    ctx.fill();
-//    ctx.closePath();
-
-    //touch
-    if (robot.touchSensor.value === 1) {
-        ctx.fillStyle = 'red';
-        ctx.fillRect(robot.frontRight.x, robot.frontRight.y, robot.frontLeft.x - robot.frontRight.x, 3.5);
-    } else {
-        ctx.fillStyle = robot.touchSensor.color;
-        ctx.fillRect(robot.frontRight.x, robot.frontRight.y, robot.frontLeft.x - robot.frontRight.x, 3.5);
-    }
+    ctx.fillStyle = robot.colorSensor.color;
+    ctx.fill();
+    ctx.strokeStyle = "black";
+    ctx.stroke();
     ctx.restore();
+
     // ultra 
     ctx.beginPath();
     ctx.lineWidth = "0.5";
@@ -627,6 +721,8 @@ function drawrobot() {
     ctx.beginPath();
     ctx.setLineDash([ 0 ]);
     ctx.strokeStyle = "black";
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = "black";
     ctx.fillStyle = "#b3b3b3";
     ctx.fillRect(obstacle.x, obstacle.y, obstacle.w, obstacle.h);
     ctx.lineWidth = "1";
@@ -721,8 +817,10 @@ function intersectLines(l, o) {
 }
 
 function handleMouseDown(e) {
-    startX = parseInt(e.clientX - offsetX);
-    startY = parseInt(e.clientY - offsetY);
+    var X = e.clientX || e.originalEvent.touches[0].pageX;
+    var Y = e.clientY || e.originalEvent.touches[0].pageY;
+    startX = (parseInt(X - offsetX)) / scale;
+    startY = (parseInt(Y - offsetY)) / scale;
     var dx = startX - robot.mouse.rx;
     var dy = startY - robot.mouse.ry;
     isDownrobot = (dx * dx + dy * dy < robot.mouse.r * robot.mouse.r);
@@ -732,12 +830,12 @@ function handleMouseDown(e) {
 
 function handleMouseUp(e) {
     if (!isDownrobot && !isDownObstacle) {
-        if (startX < playground.w / 2)
+        if (startX < ground.w / 2)
             robot.pose.theta += toRadians(-5);
         else
             robot.pose.theta += toRadians(5);
     }
-    $("#ground").css('cursor','auto');
+    $("#ground").css('cursor', 'auto');
     isDownrobot = false;
     isDownObstacle = false;
     return false;
@@ -753,11 +851,13 @@ function handleMouseMove(e) {
     if (!isDownrobot && !isDownObstacle) {
         return false;
     }
-    $("#ground").css('cursor','pointer');
-    mouseX = parseInt(e.clientX - offsetX);
-    mouseY = parseInt(e.clientY - offsetY);
-    var dx = mouseX - startX;
-    var dy = mouseY - startY;
+    $("#ground").css('cursor', 'pointer');
+    var X = e.clientX || e.originalEvent.touches[0].pageX;
+    var Y = e.clientY || e.originalEvent.touches[0].pageY;
+    mouseX = (parseInt(X - offsetX)) / scale;
+    mouseY = (parseInt(Y - offsetY)) / scale;
+    var dx = (mouseX - startX);
+    var dy = (mouseY - startY);
     startX = mouseX;
     startY = mouseY;
     if (isDownrobot) {
@@ -900,7 +1000,15 @@ function adjustAllSizes() {
     offsetY = canvasOffset.top;
     playground.w = $('#simDiv').width();
     playground.h = $(window).height() - offsetY;
-    MAXDIAG = Math.sqrt(sqr(playground.w) + sqr(playground.h));
+    scale = 1;
+    if (playground.w < 512) {// extra small devices
+        scale = 0.5
+    } else if (playground.w >= 800) {// medium and large devices     
+        scale = 1.5;
+    }
+    ground.w = playground.w / scale;
+    ground.h = playground.h / scale;
+    MAXDIAG = Math.sqrt(sqr(ground.w) + sqr(ground.h));
 }
 
 function Robot() {
@@ -912,20 +1020,20 @@ function Robot() {
         color : '#FCCC00'
     };
     this.pose = {
-        x : playground.w / 2,
-        y : playground.h / 2,
+        x : ground.w / 2,
+        y : ground.h / 2,
         theta : 0,
         thetaDiff : 0
     };
     this.wheelLeft = {
-        x : -25,
+        x : 15,
         y : -10,
         w : 10,
         h : 20,
         color : '#000000'
     };
     this.wheelRight = {
-        x : 15,
+        x : -25,
         y : -10,
         w : 10,
         h : 20,
