@@ -24,7 +24,7 @@
     "message": "Schließe dein EV3 mit dem USB Kabel an den Computer an. Er wird nach einigen Sekunden automatisch erkannt."
   },
   "infotext_connect": {
-    "message": "Klicke nun auf »verbinden«, um den Roboter mit dem Open Roberta Lab zu verbinden."
+    "message": "Klicke nun auf »verbinden«, um den Roboter mit Open Roberta Lab zu verbinden."
   },
   "infotext_tokencopy": {
     "message": "Das Token kannst du mit »kopieren« und »einfügen« im Open Roberta Lab unter Roboter>verbinden einfügen. Es ist 5 Minuten lang gültig."
@@ -35,28 +35,22 @@
   "attention": {
     "message": "Achtung"
   },
-  "window_confirmclose": {
-    "message": "Wenn du das Programm beendest ist dein Roboter nicht mehr mit Open Roberta Lab verbunden."
-  },
-  "window_interneterror": {
-    "message": "Die Internetverbindung zu Open Roberta Lab ist unterbrochen."
+  "noti_interneterror": {
+    "message": "Der Open Roberta Lab Server ist nicht erreichbar. Bitte überprüfe deine Internetverbindung."
   },
   "about": {
     "message": "Dieses Programm ist Teil des Open Roberta Labs, eine Open-Source-Entwicklung des Fraunhofer-Instituts IAIS, im Kontext der Initiative »Roberta Lernen mit Robotern« Version 1.3.0."
   },
-  "window_updaterequired": {
-    "message": "Die Firmware deines Roboters ist veraltet. Aktualisiere sie bitte zuerst. Deine Programme auf dem Roboter bleiben erhalten!"
+  "noti_updatesuccess": {
+    "message": "Dein EV3 wird nun automatisch neugestartet. Danach kannst du deinen Roboter wieder mit Open Roberta Lab verbinden."
   },
-  "window_updatesuccess": {
-    "message": "Dein EV3 wird nun neugestartet. Bitte warte einen Moment. Danach kannst du deinen Roboter erneut mit Open Roberta Lab verbinden."
-  },
-  "window_updatefail": {
-    "message": "Verbinde deinen Roboter mit Open Roberta Lab und versuche es erneut."
+  "noti_updatefail": {
+    "message": "Du kannst es noch mal versuchen."
   },
   "noti_timeout_msg": {
     "message": "Die Gültigkeitsdauer des Token ist abgelaufen. Versuch es noch mal."
   },
-  "noti_timeout_title": {
+  "noti_error_title": {
     "message": "Open Roberta Fehler"
   },
   "noti_update_title_success": {

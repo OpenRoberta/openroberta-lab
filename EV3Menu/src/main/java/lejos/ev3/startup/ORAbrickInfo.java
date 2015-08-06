@@ -28,8 +28,6 @@ public class ORAbrickInfo implements HttpHandler {
             builder.append(str);
         }
         JSONObject content = new JSONObject(builder.toString());
-        System.out.println(content);
-
         JSONObject response = new JSONObject();
 
         switch ( content.getString(ORApushCmd.KEY_CMD) ) {
@@ -72,7 +70,6 @@ public class ORAbrickInfo implements HttpHandler {
                 System.out.println("Unknown cmd from USB program!!");
                 break;
         }
-
         System.out.println(response);
         exchange.sendResponseHeaders(200, response.toString().getBytes().length);
         exchange.getResponseBody().write(response.toString().getBytes());

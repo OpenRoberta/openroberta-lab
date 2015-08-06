@@ -16,6 +16,7 @@ onload = function() {
     CONNECTED: 4,
     DOWNLOAD: 5,
     UPDATE: 6,
+    ABORT: 7
   };
   
   var STATE = state.SEARCH;
@@ -34,7 +35,7 @@ onload = function() {
   var serverreq = null;
   
   var filenames = ["ev3menu", "jsonlib", "shared", "runtime"];
-  var i = 0;
+  var fileIndex = 0;
   
   var blink = true;
   
@@ -54,10 +55,7 @@ onload = function() {
       if (serverreq !== null){
         serverreq.abort();
       }
-      document.getElementById("token").value = "";
-      document.getElementById("connect").disabled = true;
-      document.getElementById("connect").innerHTML = chrome.i18n.getMessage("button_connect");
-      updateConnStatus("Roberta_Menu_Icon_grey.png");
+      reset();
     }
   };
   
@@ -82,9 +80,9 @@ onload = function() {
     displayToken(TOKEN);
   }
   
-  function createNotification(type, title, msg, btnTitle){
+  function createNotification(title, msg){
     var notOption = {
-		  type : type,
+		  type : "basic",
 		  title: title,
 		  message: msg,
 		  expandedMessage: msg
@@ -107,10 +105,12 @@ onload = function() {
           break;
         case state.WAITFORUSER:
           // do nothing until user clicks connect button
-          // also used as a transition state after disconnecting the EV3 
+          // also used as a transition state after disconnecting the EV3
+          // user can unplug ev3 after detection!
+          checkBrickState();
           displayInfotext(chrome.i18n.getMessage("infotext_connect"));
           setMainPicture("connect.gif");
-          pushFinished = true;
+          updateConnStatus("Roberta_Menu_Icon_red.png");
           break;
         case state.WAIT:
           // brick is executing a program we check every few seconds if it is finished
@@ -123,12 +123,8 @@ onload = function() {
           blink = !blink;
           break;
         case state.ABORT:
-          // TODO let the user know that the 5min timeout for token occured
-          createNotification("basic", chrome.i18n.getMessage("noti_timeout_title"), chrome.i18n.getMessage("noti_timeout_msg"), chrome.i18n.getMessage("noti_timeout_btn_ok_title"));
-          document.getElementById("token").value = "";
-          document.getElementById("connect").innerHTML = chrome.i18n.getMessage("button_connect");
-          updateConnStatus("Roberta_Menu_Icon_grey.png");
-          STATE = state.SEARCH;
+          createNotification(chrome.i18n.getMessage("noti_error_title"), chrome.i18n.getMessage("noti_timeout_msg"));
+          reset();
           pushFinished = true;
           break;
         case state.REGISTER:
@@ -157,15 +153,6 @@ onload = function() {
         default:
           console.log("Unknown state. Help!");
       }
-    }
-  }
-  
-  function changeProgramState(brickstate){
-    if (STATE == state.SEARCH && brickstate == "false"){
-        STATE = state.WAITFORUSER;
-        document.getElementById("connect").disabled = false;
-    } else if(STATE == state.WAIT && brickstate == "false") {
-      STATE = state.CONNECTED;
     }
   }
   
@@ -207,6 +194,14 @@ onload = function() {
             break;
         }
         pushFinished = true;
+      }
+      if (serverreq.readyState == 4 && serverreq.status === 0) {
+        if (STATE == state.REGISTER){
+          createNotification(chrome.i18n.getMessage("noti_error_title"), chrome.i18n.getMessage("noti_interneterror"));
+          reset();
+          STATE = state.SEARCH;
+          pushFinished = true;
+        }
       }
     };
     serverreq.onabort = function(){
@@ -259,17 +254,24 @@ onload = function() {
     brickreq.onreadystatechange = function() {
       if (brickreq.readyState == 4 && brickreq.status == 200) {
         var brickstate = JSON.parse(brickreq.responseText);
-        changeProgramState(brickstate[ISRUNNING]);
+        if (STATE == state.SEARCH){
+          STATE = state.WAITFORUSER;
+          document.getElementById("connect").disabled = false;
+        } else if (STATE == state.WAIT){
+          STATE = state.CONNECTED;
+        }
+        pushFinished = true;
+      }
+      if (brickreq.readyState == 4 && brickreq.status === 0) {
+        if (STATE == state.WAITFORUSER){
+          reset();
+          STATE = state.SEARCH;
+        }
         pushFinished = true;
       }
     };
     brickreq.ontimeout = function(){
-      changeProgramState("timeout");
-      pushFinished = true;
-    };
-    brickreq.onerror = function(){
-      changeProgramState("error");
-      pushFinished = true;
+      // ok
     };
     brickreq.open("POST", "http://" + EV3HOST + "/brickinfo", true);
     brickreq.timeout = 3000;
@@ -277,7 +279,7 @@ onload = function() {
   }
   
   function dlFirmwareFile(){
-    if (i < 4){
+    if (fileIndex < 4){
       serverreq = new XMLHttpRequest();
       serverreq.onreadystatechange = function() {
         if (serverreq.readyState == 4 && serverreq.status == 200) {
@@ -286,13 +288,22 @@ onload = function() {
           ulFirmwareFile(blob, filename);
         }
       };
-      serverreq.open("GET", "http://" + ORAHOST + "/update/" + filenames[i], true);
+      serverreq.open("GET", "http://" + ORAHOST + "/update/" + filenames[fileIndex], true);
       serverreq.responseType = "blob";
       serverreq.send();
     } else {
       restartEV3();
-      createNotification("basic", "Update erfolgreich!", "Dein EV3 wird nun neugestartet. Bitte warte einen Moment.", "Dein EV3 wird nun neugestartet. Bitte warte einen Moment.");
+      createNotification(chrome.i18n.getMessage("noti_update_title_success"), chrome.i18n.getMessage("noti_updatesuccess"));
+      setTimeout(function(){ reset(); }, 3000);
     }
+  }
+  
+  function reset(){
+    document.getElementById("token").value = "";
+    document.getElementById("connect").disabled = true;
+    document.getElementById("connect").innerHTML = chrome.i18n.getMessage("button_connect");
+    updateConnStatus("Roberta_Menu_Icon_grey.png");
+    STATE = state.SEARCH;
   }
   
   function ulFirmwareFile(file, filename){
@@ -300,7 +311,7 @@ onload = function() {
     brickreq.onreadystatechange = function() {
       if (brickreq.readyState == 4 && brickreq.status == 200) {
         var info = JSON.parse(brickreq.responseText);
-        i++;
+        fileIndex++;
         dlFirmwareFile();
       }
     };
