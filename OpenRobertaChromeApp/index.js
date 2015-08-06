@@ -16,7 +16,8 @@ onload = function() {
     CONNECTED: 4,
     DOWNLOAD: 5,
     UPDATE: 6,
-    ABORT: 7
+    ABORT: 7,
+    INTERRUPT: 8
   };
   
   var STATE = state.SEARCH;
@@ -52,10 +53,14 @@ onload = function() {
       STATE = state.REGISTER;
       document.getElementById("connect").innerHTML = chrome.i18n.getMessage("button_disconnect");
     } else {
-      if (serverreq !== null){
+      if (serverreq !== null && STATE == state.REGISTER){
+        signOutEV3();
+        reset();
+        STATE = state.SEARCH;
+        pushFinished = true;
+      } else {
         serverreq.abort();
       }
-      reset();
     }
   };
   
@@ -196,18 +201,17 @@ onload = function() {
         pushFinished = true;
       }
       if (serverreq.readyState == 4 && serverreq.status === 0) {
-        if (STATE == state.REGISTER){
+        if (STATE !== state.CONNECTED){
           createNotification(chrome.i18n.getMessage("noti_error_title"), chrome.i18n.getMessage("noti_interneterror"));
-          reset();
-          STATE = state.SEARCH;
-          pushFinished = true;
         }
+        signOutEV3();
+        reset();
+        STATE = state.SEARCH;
+        pushFinished = true;
       }
     };
     serverreq.onabort = function(){
-      signOutEV3();
-      STATE = state.WAITFORUSER;
-      pushFinished = true;
+      // ok
     };
     serverreq.open("POST", "http://" + ORAHOST + "/pushcmd", true);
     serverreq.setRequestHeader("Content-Type", "application/json; charset=utf8");

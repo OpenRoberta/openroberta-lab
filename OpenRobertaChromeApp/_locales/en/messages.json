@@ -36,7 +36,7 @@
     "message": "Attention"
   },
   "noti_interneterror": {
-    "message": "Open Roberta Lab server is unreachable. Please check your internet connection."
+    "message": "Open Roberta Lab is unreachable. Please check your internet connection."
   },
   "about": {
     "message": "This program is part of The Open Roberta Lab, an open-source programming platform developed by Fraunhofer IAIS within the initiative »Roberta Learning with Robots« Version 1.2.0"
