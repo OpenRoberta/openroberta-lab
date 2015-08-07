@@ -1332,9 +1332,17 @@ function initHeadNavigation() {
             $('#menuSim').parent().addClass('disabled');
             displayMessage("simBack pressed", "TOAST", "simBack");
             //window.cancelAnimationFrame(requestId);
-            var myNode = document.getElementById("WebGLCanvas");
-            while (myNode.firstChild) {
-                myNode.removeChild(myNode.firstChild);
+            var layer = document.getElementById("backgroundLayer");
+            while (layer.firstChild) {
+                layer.removeChild(myNode.firstChild);
+            }
+            layer = document.getElementById("unitBackgroundLayer");
+            while (layer.firstChild) {
+                layer.removeChild(myNode.firstChild);
+            }
+            layer = document.getElementById("objectLayer");
+            while (layer.firstChild) {
+                layer.removeChild(myNode.firstChild);
             }
             // initProgram([]);
             COMM.json("/toolbox", {

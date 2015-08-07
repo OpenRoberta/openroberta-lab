@@ -1,11 +1,17 @@
 var TRACKWIDTH = 40;
-var FPS = 30;
+var FPS = 40;
 var STEP_TIME = 1 / FPS;
 var MAXDIAG = 0;
+var MAXPOWER = 80
 var ENC = 360 / (2 * Math.PI * 5.6)
 
-var canvas;
-var ctx;
+var backCanvas;
+var uniCanvas;
+var objectCanvas;
+var robotCanvas;
+var bCtx;
+var uCtx;
+var oCtx;
 var canvasOffset;
 var offsetX;
 var offsetY;
@@ -14,6 +20,8 @@ var isDownObstacle = false;
 var startX;
 var startY;
 var scale = 1;
+var img;
+var timerStep = 0;
 
 var pause;
 function setPause(value) {
@@ -110,10 +118,8 @@ var robot = new Robot();
 //};
 
 function initOraSim() {
-    $('<canvas id ="' + 'ground' + '" width="' + $("#WebGLCanvas").width() + '" height="' + $("#blocklyDiv").height() + '""></canvas>').appendTo(
-            document.getElementById("WebGLCanvas"));
-    canvas = document.getElementById("ground");
-    ctx = canvas.getContext("2d");
+    initLayers();
+
     isDownrobot = false;
     isDownObstacle = false;
     stepCounter = 0;
@@ -121,75 +127,37 @@ function initOraSim() {
     info = false;
     oldTime = new Date().getTime();
     averageTimeStep = STEP_TIME;
-    var error = 0;
-    var integral = 0;
-    $("#ground").mousedown(function(e) {
-        handleMouseDown(e);
-    });
-    $("#ground").mousemove(function(e) {
-        handleMouseMove(e);
-    });
-    $("#ground").mouseup(function(e) {
-        handleMouseUp(e);
-    });
-    $("#ground").mouseout(function(e) {
-        handleMouseOut(e);
-    });
-    $("#ground").bind('touchmove', function(e) {
-        handleMouseMove(e);
-    });
-    $("#ground").bind('touchleave', function(e) {
-        handleMouseOut(e);
-    });
-    $("#ground").bind('touchstart', function(e) {
-        handleMouseDown(e);
-    });
-    $("#ground").bind('touchend', function(e) {
-        handleMouseUp(e);
-    });
 
-    adjustAllSizes();
     robot = new Robot();
-    oraSimRender();
+    loadImages();
 }
 
 function oraSimRender() {
-    var actualTime = new Date().getTime();
-    var actualTimeStep = actualTime - oldTime;
-    oldTime = actualTime;
-    error = actualTimeStep / 1000 - STEP_TIME;
-    integral = integral + error;
-    var newTimerStep = (STEP_TIME - kP * error - kP * integral) * 1000;
-    if (newTimerStep < 1) {
-        integral = 0;
-        newTimerStep = 1;
-    }
-    timeOld = actualTime;
-    averageTimeStep = 0.9 * averageTimeStep + 0.1 * actualTimeStep;
+    setTimeStep();
     stepCounter += 1;
     if (!PROGRAM_SIMULATION.isTerminated() && !pause === true) {
-        //executeProgram();
+        //executeProgram();  //for tests without OpenRobertaLab
         if (stepCounter == 0) {
             setPause(true);
         }
         step(input);
-        output.left = ACTORS.getLeftMotor().getPower() * 80;
-        output.right = ACTORS.getRightMotor().getPower() * 80;
-        //output.led = LIGHT.getColor();
-        //output.ledMode = LIGHT.getMode();
+        output.left = ACTORS.getLeftMotor().getPower() * MAXPOWER;
+        output.right = ACTORS.getRightMotor().getPower() * MAXPOWER;
+        console.log(output.left + ' ' + output.right);
+        output.led = LIGHT.color;
+        output.ledMode = LIGHT.mode;
+        console.log(LIGHT.color + ' ' + LIGHT.mode);
     } else {
         output.left = 0;
         output.right = 0;
-
     }
     diffDrive(output);
     adjustAllSizes();
-    drawBackground(1);
     setSensorValues();
-    drawrobot();
+    drawObject(scale, objectCanvas, oCtx);
     setTimeout(function() {
         oraSimRender();
-    }, newTimerStep);
+    }, timerStep);
 };
 
 function executeProgram() {
@@ -308,9 +276,6 @@ function diffDrive(output) {
         robot.pose.thetaDiff = Math.max(robot.pose.thetaDiff, -Math.PI / 2 * Math.abs(output.right / output.left));
     }
     robot.updateLocations();
-
-    $('#labelSpeedLeft').text(Math.round(output.left / 0.8));
-    $('#labelSpeedRight').text(Math.round(output.right / 0.8));
 };
 
 function setSensorValues() {
@@ -390,7 +355,8 @@ function setSensorValues() {
     var r = 0;
     var g = 0
     var b = 0;
-    var colors = ctx.getImageData(Math.round(robot.colorSensor.rx - 4), Math.round(robot.colorSensor.ry - 4), 8, 8);
+    console.log(Math.round(robot.colorSensor.rx - 4) + ' ' + Math.round(robot.colorSensor.ry - 4));
+    var colors = uCtx.getImageData(Math.round(robot.colorSensor.rx - 4), Math.round(robot.colorSensor.ry - 4), 8, 8);
     var out = [ 0, 4, 24, 28, 32, 60, 192, 220, 224, 228, 248, 252 ]; // outside the circle
     var b = 0
     for (var j = 0; j < colors.data.length; j += 32) {
@@ -489,65 +455,17 @@ function setSensorValues() {
     input.tacho[0] = robot.encoder.left * ENC;
 };
 
-function drawBackground(a) {
+function drawBackground(scale, canvas, ctx) {
     canvas.width = Math.max(ground.w, playground.w);
     canvas.height = Math.max(ground.h, playground.h);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.save();
-    ctx.scale(a, a);
+    ctx.scale(scale, scale);
     ctx.fillStyle = "#00FFFF";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    //bulbs
-//    ctx.shadowBlur = 10;
-//    ctx.shadowColor = "black";
-//    ctx.lineWidth = "10";
-//    ctx.strokeStyle = "grey";
-//    ctx.setLineDash([ 20 ]);
-//    ctx.moveTo(0, 5);
-//    ctx.lineTo(ground.w, 5);
-//    ctx.stroke();
-//    ctx.strokeStyle = "white";
-//    ctx.lineDashOffset = 20;
-//    ctx.moveTo(0, 5);
-//    ctx.lineTo(ground.w, 5);
-//    ctx.stroke();
-//
-//    ctx.lineDashOffset = 0;
-//    ctx.strokeStyle = "grey";
-//    ctx.moveTo(ground.w - 5, 10);
-//    ctx.lineTo(ground.w - 5, ground.h);
-//    ctx.stroke();
-//    ctx.strokeStyle = "white";
-//    ctx.lineDashOffset = 20;
-//    ctx.moveTo(ground.w - 5, 10);
-//    ctx.lineTo(ground.w - 5, ground.h);
-//    ctx.stroke();
-//
-//    ctx.lineDashOffset = 0;
-//    ctx.strokeStyle = "grey";
-//    ctx.moveTo(ground.w - 10, ground.h - 5);
-//    ctx.lineTo(0, ground.h - 5);
-//    ctx.stroke();
-//    ctx.strokeStyle = "white";
-//    ctx.lineDashOffset = 20;
-//    ctx.moveTo(ground.w - 10, ground.h - 5);
-//    ctx.lineTo(0, ground.h - 5);
-//    ctx.stroke();
-//
-//    ctx.lineDashOffset = 0;
-//    ctx.strokeStyle = "grey";
-//    ctx.moveTo(5, ground.h - 10);
-//    ctx.lineTo(5, 10);
-//    ctx.stroke();
-//    ctx.strokeStyle = "white";
-//    ctx.lineDashOffset = 20;
-//    ctx.moveTo(5, ground.h - 10);
-//    ctx.lineTo(5, 10);
-//    ctx.stroke();
-//
-//    ctx.setLineDash([]);
-//    ctx.shadowBlur = 0;
-
+    ctx.fillRect(0, 0, 2500, 2000);
+    ctx.fillStyle = "#00FFFF";
+    ctx.fillRect(15, 15, ground.w - 30, ground.w - 30);
+    ctx.drawImage(img, ground.w / 2, ground.h / 2);
     ctx.fillStyle = "red";
     ctx.fillRect(120, ground.h - 80, 40, 60);
     ctx.fillStyle = "green";
@@ -568,18 +486,13 @@ function drawBackground(a) {
     ctx.arc(ground.w / 2, ground.h / 2, 125, 0, Math.PI * 1.5);
     ctx.closePath();
     ctx.stroke();
-    ctx.fillStyle = "#b3b3b3";
-    ctx.fillRect(obstacle.x, obstacle.y, obstacle.w, obstacle.h);
-    ctx.lineWidth = "1";
-    ctx.rect(obstacle.x, obstacle.y, obstacle.w, obstacle.h);
-    ctx.stroke();
 };
 
-function drawrobot() {
-    drawBackground(scale);
+function drawObject(scale, canvas, ctx) {
+    canvas.width = Math.max(ground.w, playground.w);
+    canvas.height = Math.max(ground.h, playground.h);
     // provide new user information   
     if (info === true) {
-        ctx.restore();
         var endLabel = playground.w - 40;
         var endValue = playground.w - 5;
         var line = 40;
@@ -594,10 +507,10 @@ function drawrobot() {
         line += 15;
         ctx.fillText("Pose Y", endLabel, line);
         ctx.fillText(Math.round(robot.pose.y), endValue, line);
-        line += 20;
+        line += 15;
         ctx.fillText("Pose θ", endLabel, line);
         ctx.fillText(Math.round(Math.round(toDegree(robot.pose.theta))), endValue, line);
-        line += 15;
+        line += 25;
         ctx.fillText("Motor left", endLabel, line);
         ctx.fillText(Math.round(robot.encoder.left * ENC), endValue, line);
         line += 15;
@@ -616,18 +529,18 @@ function drawrobot() {
         ctx.fillText("Color Sensor", endLabel, line);
         ctx.fillStyle = robot.colorSensor.color;
         ctx.fillRect(endValue, line, -10, -10);
-        ctx.scale(scale, scale);
     }
+    ctx.scale(scale, scale);
     ctx.save();
     ctx.translate(robot.pose.x, robot.pose.y);
     ctx.rotate(toRadians(toDegree(robot.pose.theta) - 90));
     ctx.scale(1, -1);
     //axis
-    ctx.lineWidth = "5";
+    ctx.lineWidth = "2.5";
     ctx.strokeStyle = robot.wheelLeft.color;
     ctx.beginPath();
-    ctx.moveTo(robot.geom.x - 7, 0);
-    ctx.lineTo(robot.geom.x + robot.geom.w + 7, 0);
+    ctx.moveTo(robot.geom.x - 5, 0);
+    ctx.lineTo(robot.geom.x + robot.geom.w + 5, 0);
     ctx.closePath();
     ctx.stroke();
     //back wheel
@@ -636,6 +549,10 @@ function drawrobot() {
     //ctx.fill();
     ctx.fillRect(-2.5, 30, 5, 5);
     //robot
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
+    ctx.fillStyle = robot.touchSensor.color;
+    ctx.fillRect(robot.frontRight.x + 12.5, robot.frontRight.y, 20, 10);
     ctx.fillStyle = robot.led.color;
     var grd = ctx.createRadialGradient(0, 10, 1, 0, 10, 15);
     grd.addColorStop(0, robot.led.color);
@@ -643,7 +560,19 @@ function drawrobot() {
     ctx.shadowBlur = 10;
     ctx.shadowColor = "black";
     ctx.fillStyle = grd;
-    ctx.fillRect(robot.geom.x, robot.geom.y, robot.geom.w, robot.geom.h);
+    ctx.beginPath();
+    ctx.moveTo(robot.geom.x + 2.5, robot.geom.y);
+    ctx.lineTo(robot.geom.x + robot.geom.w - 2.5, robot.geom.y);
+    ctx.quadraticCurveTo(robot.geom.x + robot.geom.w, robot.geom.y, robot.geom.x + robot.geom.w, robot.geom.y + 2.5);
+    ctx.lineTo(robot.geom.x + robot.geom.w, robot.geom.y + robot.geom.h - 2.5);
+    ctx.quadraticCurveTo(robot.geom.x + robot.geom.w, robot.geom.y + robot.geom.h, robot.geom.x + robot.geom.w - 2.5, robot.geom.y + robot.geom.h);
+    ctx.lineTo(robot.geom.x + 2.5, robot.geom.y + robot.geom.h);
+    ctx.quadraticCurveTo(robot.geom.x, robot.geom.y + robot.geom.h, robot.geom.x, robot.geom.y + robot.geom.h - 2.5);
+    ctx.lineTo(robot.geom.x, robot.geom.y + 2.5);
+    ctx.quadraticCurveTo(robot.geom.x, robot.geom.y, robot.geom.x + 2.5, robot.geom.y);
+    ctx.closePath();
+    ctx.fill();
+
     //touch
     ctx.shadowBlur = 10;
     ctx.shadowOffsetX = 2;
@@ -685,7 +614,7 @@ function drawrobot() {
 //    ctx.lineTo(robot.wheelRight.x + 9, robot.wheelRight.y + robot.wheelRight.h);
 //    ctx.stroke();
 //    ctx.closePath();
-    ctx.lineWidth = "1";
+    ctx.lineWidth = "0.5";
     ctx.setLineDash([]);
     //color   
     ctx.beginPath();
@@ -740,11 +669,11 @@ function toDegree(radians) {
 };
 
 function range(num) {
-    if (num > 80) {
-        return 80;
+    if (num > MAXPOWER) {
+        return MAXPOWER;
     }
-    if (num < -80) {
-        return -80;
+    if (num < -MAXPOWER) {
+        return -MAXPOWER;
     }
     return num;
 };
@@ -817,6 +746,7 @@ function intersectLines(l, o) {
 }
 
 function handleMouseDown(e) {
+    e.preventDefault();
     var X = e.clientX || e.originalEvent.touches[0].pageX;
     var Y = e.clientY || e.originalEvent.touches[0].pageY;
     startX = (parseInt(X - offsetX)) / scale;
@@ -825,33 +755,33 @@ function handleMouseDown(e) {
     var dy = startY - robot.mouse.ry;
     isDownrobot = (dx * dx + dy * dy < robot.mouse.r * robot.mouse.r);
     isDownObstacle = (startX > obstacle.x && startX < obstacle.x + obstacle.w && startY > obstacle.y && startY < obstacle.y + obstacle.w);
-    return false;
 };
 
 function handleMouseUp(e) {
+    e.preventDefault();
     if (!isDownrobot && !isDownObstacle) {
         if (startX < ground.w / 2)
             robot.pose.theta += toRadians(-5);
         else
             robot.pose.theta += toRadians(5);
     }
-    $("#ground").css('cursor', 'auto');
+    $("#objectLayer").css('cursor', 'auto');
     isDownrobot = false;
     isDownObstacle = false;
-    return false;
 };
 
 function handleMouseOut(e) {
+    e.preventDefault();
     isDownrobot = false;
     isDownObstacle = false;
-    return false;
 };
 
 function handleMouseMove(e) {
+    e.preventDefault();
     if (!isDownrobot && !isDownObstacle) {
-        return false;
+        return;
     }
-    $("#ground").css('cursor', 'pointer');
+    $("#objectLayer").css('cursor', 'pointer');
     var X = e.clientX || e.originalEvent.touches[0].pageX;
     var Y = e.clientY || e.originalEvent.touches[0].pageY;
     mouseX = (parseInt(X - offsetX)) / scale;
@@ -871,82 +801,6 @@ function handleMouseMove(e) {
     }
     return false;
 };
-
-//programs
-//$('#start').on('click', function() {
-//    if (start === false) {
-//        start = true;
-//        $('#start').text("speed off");
-//        touch = false;
-//        $('#touch').text("touch on");
-//        line = false;
-//        $('#line').text("line on");
-//        ultra = false;
-//        $('#ultra').text("ultra on");
-//    } else {
-//        start = false;
-//        $('#start').text("speed on");
-//    }
-//});
-//$('#touch').on('click', function() {
-//    if (touch === false) {
-//        touch = true;
-//        $('#touch').text("touch off");
-//        start = false;
-//        $('#start').text("speed on");
-//        line = false;
-//        $('#line').text("line on");
-//        ultra = false;
-//        $('#ultra').text("ultra on");
-//    } else {
-//        touch = false;
-//        $('#touch').text("touch on");
-//    }
-//});
-//$('#line').on('click', function() {
-//    if (line === false) {
-//        line = true;
-//        $('#line').text("line off");
-//        start = false;
-//        $('#start').text("speed on");
-//        touch = false;
-//        $('#touch').text("touch on");
-//        ultra = false;
-//        $('#ultra').text("ultra on");
-//    } else {
-//        line = false;
-//        $('#line').text("line on");
-//    }
-//});
-//$('#ultra').on('click', function() {
-//    if (ultra === false) {
-//        ultra = true;
-//        $('#ultra').text("ultra off");
-//        touch = false;
-//        $('#touch').text("touch on");
-//        start = false;
-//        $('#start').text("speed on");
-//        line = false;
-//        $('#line').text("line on");
-//    } else {
-//        ultra = false;
-//        $('#ultra').text("ultra on");
-//    }
-//});
-//// speeds
-//$('#leftSpeed').on('change', function() {
-//    speedLeft = 0.8 * $(this).val();
-//    $('#labelUSpeedLeft').text(Math.round(speedLeft / 0.8));
-//});
-//$('#rightSpeed').on('change', function() {
-//    speedRight = 0.8 * $(this).val();
-//    $('#labelUSpeedRight').text(Math.round(speedRight / 0.8));
-//});
-//$('#fps').on('change', function() {
-//    FPS = $(this).val();
-//    STEP_TIME = 1 / FPS;
-//    $('#labelFps').text(FPS);
-//});
 
 function getLines(obstacle) {
     return [ {
@@ -995,11 +849,12 @@ function distToParallel(p, v, w) {
 }
 
 function adjustAllSizes() {
-    canvasOffset = $("#ground").offset();
+    canvasOffset = $("#backgroundDiv").offset();
     offsetX = canvasOffset.left;
     offsetY = canvasOffset.top;
     playground.w = $('#simDiv').width();
     playground.h = $(window).height() - offsetY;
+    var oldScale = scale;
     scale = 1;
     if (playground.w < 512) {// extra small devices
         scale = 0.5
@@ -1009,6 +864,9 @@ function adjustAllSizes() {
     ground.w = playground.w / scale;
     ground.h = playground.h / scale;
     MAXDIAG = Math.sqrt(sqr(ground.w) + sqr(ground.h));
+    if (oldScale != scale) {
+        drawBackground(scale, backCanvas, bCtx);
+    }
 }
 
 function Robot() {
@@ -1026,17 +884,17 @@ function Robot() {
         thetaDiff : 0
     };
     this.wheelLeft = {
-        x : 15,
-        y : -10,
-        w : 10,
-        h : 20,
+        x : 16,
+        y : -8,
+        w : 8,
+        h : 16,
         color : '#000000'
     };
     this.wheelRight = {
-        x : -25,
-        y : -10,
-        w : 10,
-        h : 20,
+        x : -24,
+        y : -8,
+        w : 8,
+        h : 16,
         color : '#000000'
     };
     this.led = {
@@ -1059,7 +917,7 @@ function Robot() {
         r : 5,
         lightValue : 0,
         colorValue : 0,
-        color : 'red'
+        color : 'grey'
     };
     this.ultraSensor = {
         x : 0,
@@ -1083,14 +941,14 @@ function Robot() {
         color : "#FFCC33"
     };
     this.frontLeft = {
-        x : 25,
+        x : 22.5,
         y : -25,
         rx : 0,
         ry : 0,
         bumped : false,
     };
     this.frontRight = {
-        x : -25,
+        x : -22.5,
         y : -25,
         rx : 0,
         ry : 0,
@@ -1149,4 +1007,79 @@ function Robot() {
         point.ry = this.pose.y - point.y * sin - point.x * cos;
         return point;
     }
+}
+
+function loadImages() {
+    img = new Image();
+    img.onload = initScene;
+    img.src = "simulation/simulationLogic/beta.svg";
+}
+
+function initMouseEvents() {
+    $("#objectLayer").mousedown(function(e) {
+        handleMouseDown(e);
+    });
+    $("#objectLayer").mousemove(function(e) {
+        handleMouseMove(e);
+    });
+    $("#objectLayer").mouseup(function(e) {
+        handleMouseUp(e);
+    });
+    $("#objectLayer").mouseout(function(e) {
+        handleMouseOut(e);
+    });
+    $("#objectLayer").bind('touchmove', function(e) {
+        handleMouseMove(e);
+    });
+    $("#objectLayer").bind('touchleave', function(e) {
+        handleMouseOut(e);
+    });
+    $("#objectLayer").bind('touchstart', function(e) {
+        handleMouseDown(e);
+    });
+    $("#objectLayer").bind('touchend', function(e) {
+        handleMouseUp(e);
+    });
+}
+
+function initLayers() {
+    $('<canvas id ="' + 'backgroundLayer' + '" width="' + $("#backCanvas").width() + '" height="' + $("#blocklyDiv").height() + '""></canvas>').appendTo(
+            document.getElementById("backgroundDiv"));
+    backCanvas = document.getElementById("backgroundLayer");
+    bCtx = backCanvas.getContext("2d");
+    $('<canvas id ="' + 'unitBackgroundLayer' + '" width="' + $("#backCanvas").width() + '" height="' + $("#blocklyDiv").height() + '""></canvas>').appendTo(
+            document.getElementById("backgroundDiv"));
+    uniCanvas = document.getElementById("unitBackgroundLayer");
+    uCtx = uniCanvas.getContext("2d");
+    $('<canvas id ="' + 'objectLayer' + '" width="' + $("#backCanvas").width() + '" height="' + $("#blocklyDiv").height() + '""></canvas>').appendTo(
+            document.getElementById("objectDiv"));
+    objectCanvas = document.getElementById("objectLayer");
+    oCtx = objectCanvas.getContext("2d");
+}
+
+function initScene() {
+    adjustAllSizes();
+    drawBackground(1, uniCanvas, uCtx); // unitary background for sensor calculations (only once)
+    drawBackground(scale, backCanvas, bCtx);
+    drawObject(scale, objectCanvas, oCtx);
+    initMouseEvents();
+    oraSimRender();
+    setTimeout(function() {
+        setPause(false)
+    }, 1000);
+}
+
+function setTimeStep() {
+    var actualTime = new Date().getTime();
+    var actualTimeStep = actualTime - oldTime;
+    oldTime = actualTime;
+    error = actualTimeStep / 1000 - STEP_TIME;
+    integral = integral + error;
+    timerStep = (STEP_TIME - kP * error - kP * integral) * 1000;
+    if (timerStep < 1) {
+        integral = 0;
+        timerStep = 1;
+    }
+    timeOld = actualTime;
+    averageTimeStep = 0.9 * averageTimeStep + 0.1 * actualTimeStep;
 }

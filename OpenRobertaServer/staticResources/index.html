@@ -613,8 +613,9 @@ limitations under the License.
 
             <div id="blockly">
                 <div id="blocklyDiv"></div>
-                <div id="simDiv">
-                    <div id="WebGLCanvas"></div>
+                <div id="simDiv" style="position: relative;">
+                    <div id="backgroundDiv" style="position: absolute; left: 0; top: 0; z-index: 0; width:100%;"></div>
+                    <div id="objectDiv" style="position: absolute; left: 0; top: 0; z-index: 1; width:100%"></div>
                     <div class="navbar navbar-fixed-bottom">
                         <button id="simBack" type="button" class="btn typcn typcn-arrow-back head-navi-icons pull-right"></button>
                         <button id="simStop" type="button" class="btn typcn typcn-media-stop head-navi-icons pull-right"></button>

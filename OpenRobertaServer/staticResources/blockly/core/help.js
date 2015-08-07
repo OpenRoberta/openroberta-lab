@@ -63,6 +63,12 @@ Blockly.Help.prototype.createIcon = function() {
     }, this.iconGroup_);
 };
 
+Blockly.Icon.prototype.iconClick_ = function(e) {
+    if (!this.block_.isInFlyout && Blockly.Block.dragMode_ != 2) {
+        this.setVisible(!this.isVisible());
+    }
+};
+
 /**
  * Create the editor for the help's bubble.
  * 
