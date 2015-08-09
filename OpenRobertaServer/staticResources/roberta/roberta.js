@@ -435,7 +435,7 @@ function startProgram() {
                 }, function(result) {
                     injectBlockly(result, userState.programBlocks, true);
                 });
-
+                $("#simButtons").removeClass('hide');
                 $("#blocklyDiv").animate({
                     "width" : "-=70%"
                 }, {
@@ -1319,8 +1319,10 @@ function initHeadNavigation() {
     $('.navbar-fixed-bottom').onWrap('click', function(event) {
         var domId = event.target.id;
         if (domId === 'simBack') {
+            cancelOraSim();
             $('#blocklyDiv').removeClass('simActive');
             $('#simDiv').removeClass('simActive');
+            $("#simButtons").addClass('hide');
             $("#blocklyDiv").animate({
                 "width" : "+=70%"
             }, {
@@ -1331,20 +1333,6 @@ function initHeadNavigation() {
             $('.nav > li > ul > .robotType').removeClass('disabled');
             $('#menuSim').parent().addClass('disabled');
             displayMessage("simBack pressed", "TOAST", "simBack");
-            //window.cancelAnimationFrame(requestId);
-            var layer = document.getElementById("backgroundLayer");
-            while (layer.firstChild) {
-                layer.removeChild(myNode.firstChild);
-            }
-            layer = document.getElementById("unitBackgroundLayer");
-            while (layer.firstChild) {
-                layer.removeChild(myNode.firstChild);
-            }
-            layer = document.getElementById("objectLayer");
-            while (layer.firstChild) {
-                layer.removeChild(myNode.firstChild);
-            }
-            // initProgram([]);
             COMM.json("/toolbox", {
                 "cmd" : "loadT",
                 "name" : userState.toolbox,
@@ -1354,17 +1342,10 @@ function initHeadNavigation() {
             });
         } else if (domId === 'simStop') {
             setPause(true);
-            $('#fakeShowcase').removeClass('showcase');
-            $('#fakeShowcase').addClass('noShowcase');
-            displayMessage("simStop pressed", "TOAST", "simStop");
         } else if (domId === 'simForward') {
             setPause(false);
-            $('#fakeShowcase').addClass('showcase');
-            $('#fakeShowcase').removeClass('noShowcase');
-            displayMessage("simForward pressed", "TOAST", "simForward");
         } else if (domId === 'simStep') {
             setStep();
-            displayMessage("simStep pressed", "TOAST", "simStep");
         } else if (domId === 'simInfo') {
             setInfo();
         }

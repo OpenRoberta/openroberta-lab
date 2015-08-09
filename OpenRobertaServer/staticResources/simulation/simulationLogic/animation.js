@@ -1,9 +1,9 @@
 var TRACKWIDTH = 40;
-var FPS = 40;
+var FPS = 45;
 var STEP_TIME = 1 / FPS;
 var MAXDIAG = 0;
-var MAXPOWER = 80
-var ENC = 360 / (2 * Math.PI * 5.6)
+var MAXPOWER = 120;
+var ENC = 360 / (2 * Math.PI * 5.6);
 
 var backCanvas;
 var uniCanvas;
@@ -22,6 +22,7 @@ var startY;
 var scale = 1;
 var img;
 var timerStep = 0;
+var canceled;
 
 var pause;
 function setPause(value) {
@@ -71,10 +72,10 @@ var playground = {
     h : 500
 }
 var obstacle = {
-    x : 300,
-    y : 25,
-    w : 75,
-    h : 75
+    x : 495,
+    y : 396,
+    w : 20,
+    h : 20
 }
 var obstacleList = [ ground, obstacle ];
 
@@ -120,6 +121,7 @@ var robot = new Robot();
 function initOraSim() {
     initLayers();
 
+    canceled = false;
     isDownrobot = false;
     isDownObstacle = false;
     stepCounter = 0;
@@ -132,7 +134,16 @@ function initOraSim() {
     loadImages();
 }
 
+function cancelOraSim() {
+    removeMouseEvents();
+    destroyLayers();
+    canceled = true;
+}
+
 function oraSimRender() {
+    if (canceled) {
+        return;
+    }
     setTimeStep();
     stepCounter += 1;
     if (!PROGRAM_SIMULATION.isTerminated() && !pause === true) {
@@ -143,10 +154,8 @@ function oraSimRender() {
         step(input);
         output.left = ACTORS.getLeftMotor().getPower() * MAXPOWER;
         output.right = ACTORS.getRightMotor().getPower() * MAXPOWER;
-        console.log(output.left + ' ' + output.right);
         output.led = LIGHT.color;
         output.ledMode = LIGHT.mode;
-        console.log(LIGHT.color + ' ' + LIGHT.mode);
     } else {
         output.left = 0;
         output.right = 0;
@@ -355,12 +364,14 @@ function setSensorValues() {
     var r = 0;
     var g = 0
     var b = 0;
-    console.log(Math.round(robot.colorSensor.rx - 4) + ' ' + Math.round(robot.colorSensor.ry - 4));
-    var colors = uCtx.getImageData(Math.round(robot.colorSensor.rx - 4), Math.round(robot.colorSensor.ry - 4), 8, 8);
-    var out = [ 0, 4, 24, 28, 32, 60, 192, 220, 224, 228, 248, 252 ]; // outside the circle
+    var colors = uCtx.getImageData(Math.round(robot.colorSensor.rx - 3), Math.round(robot.colorSensor.ry - 3), 6, 6);
+    //var colors = uCtx.getImageData(Math.round(robot.colorSensor.rx - 4), Math.round(robot.colorSensor.ry - 4), 8, 8);
+    var out = [ 0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140 ]; // outside the circle
+    // var out = [ 0, 4, 24, 28, 32, 60, 192, 220, 224, 228, 248, 252 ]; // outside the circle
     var b = 0
-    for (var j = 0; j < colors.data.length; j += 32) {
-        for (var i = j; i < j + 32; i += 4) {
+    for (var j = 0; j < colors.data.length; j += 24) {
+        //  for (var j = 0; j < colors.data.length; j += 32) {
+        for (var i = j; i < j + 24; i += 4) {
             if (out.indexOf(i) < 0) {
                 r += colors.data[i + 0];
                 g += colors.data[i + 1];
@@ -388,7 +399,7 @@ function setSensorValues() {
     } else if (robot.colorSensor.colorValue === COLOR_ENUM.BLUE) {
         robot.colorSensor.color = 'blue';
     } else if (robot.colorSensor.colorValue === COLOR_ENUM.GREEN) {
-        robot.colorSensor.color = 'green';
+        robot.colorSensor.color = 'lime';
     }
 
     // ultraSensor - check for 5 rays
@@ -456,8 +467,7 @@ function setSensorValues() {
 };
 
 function drawBackground(scale, canvas, ctx) {
-    canvas.width = Math.max(ground.w, playground.w);
-    canvas.height = Math.max(ground.h, playground.h);
+    ctx.restore();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.save();
     ctx.scale(scale, scale);
@@ -465,27 +475,27 @@ function drawBackground(scale, canvas, ctx) {
     ctx.fillRect(0, 0, 2500, 2000);
     ctx.fillStyle = "#00FFFF";
     ctx.fillRect(15, 15, ground.w - 30, ground.w - 30);
-    ctx.drawImage(img, ground.w / 2, ground.h / 2);
-    ctx.fillStyle = "red";
-    ctx.fillRect(120, ground.h - 80, 40, 60);
-    ctx.fillStyle = "green";
-    ctx.fillRect(160, ground.h - 80, 40, 60);
-    ctx.fillStyle = "yellow";
-    ctx.fillRect(200, ground.h - 80, 40, 60);
-    ctx.fillStyle = "blue";
-    ctx.fillRect(240, ground.h - 80, 40, 60);
-    ctx.strokeStyle = "#ffffff";
-    ctx.lineWidth = "30";
-    ctx.beginPath();
-    ctx.arc(ground.w / 2, ground.h / 2, 125, 0, Math.PI * 1.5);
-    ctx.closePath();
-    ctx.stroke();
-    ctx.strokeStyle = "#000000";
-    ctx.lineWidth = "10";
-    ctx.beginPath();
-    ctx.arc(ground.w / 2, ground.h / 2, 125, 0, Math.PI * 1.5);
-    ctx.closePath();
-    ctx.stroke();
+    ctx.drawImage(img, 0, 0);
+//    ctx.fillStyle = "red";
+//    ctx.fillRect(120, ground.h - 80, 40, 60);
+//    ctx.fillStyle = "green";
+//    ctx.fillRect(160, ground.h - 80, 40, 60);
+//    ctx.fillStyle = "yellow";
+//    ctx.fillRect(200, ground.h - 80, 40, 60);
+//    ctx.fillStyle = "blue";
+//    ctx.fillRect(240, ground.h - 80, 40, 60);
+//    ctx.strokeStyle = "#ffffff";
+//    ctx.lineWidth = "18";
+//    ctx.beginPath();
+//    ctx.arc(ground.w / 2, ground.h / 2, 125, 0, Math.PI * 1.5);
+//    ctx.closePath();
+//    ctx.stroke();
+//    ctx.strokeStyle = "#000000";
+//    ctx.lineWidth = "6";
+//    ctx.beginPath();
+//    ctx.arc(ground.w / 2, ground.h / 2, 125, 0, Math.PI * 1.5);
+//    ctx.closePath();
+//    ctx.stroke();
 };
 
 function drawObject(scale, canvas, ctx) {
@@ -754,7 +764,7 @@ function handleMouseDown(e) {
     var dx = startX - robot.mouse.rx;
     var dy = startY - robot.mouse.ry;
     isDownrobot = (dx * dx + dy * dy < robot.mouse.r * robot.mouse.r);
-    isDownObstacle = (startX > obstacle.x && startX < obstacle.x + obstacle.w && startY > obstacle.y && startY < obstacle.y + obstacle.w);
+    isDownObstacle = (startX > obstacle.x && startX < obstacle.x + obstacle.w && startY > obstacle.y && startY < obstacle.y + obstacle.h);
 };
 
 function handleMouseUp(e) {
@@ -856,9 +866,11 @@ function adjustAllSizes() {
     playground.h = $(window).height() - offsetY;
     var oldScale = scale;
     scale = 1;
-    if (playground.w < 512) {// extra small devices
+    if (window.outerWidth < 800) {// extra small devices
         scale = 0.5
-    } else if (playground.w >= 800) {// medium and large devices     
+//    } else if (window.outerWidth >= 1280) {// medium and large devices     
+//        scale = 1.5;
+    } else if (window.outerWidth >= 1920) {// medium and large devices     
         scale = 1.5;
     }
     ground.w = playground.w / scale;
@@ -878,8 +890,8 @@ function Robot() {
         color : '#FCCC00'
     };
     this.pose = {
-        x : ground.w / 2,
-        y : ground.h / 2,
+        x : 400,
+        y : 40,
         theta : 0,
         thetaDiff : 0
     };
@@ -1015,7 +1027,7 @@ function loadImages() {
     img.src = "simulation/simulationLogic/beta.svg";
 }
 
-function initMouseEvents() {
+function addMouseEvents() {
     $("#objectLayer").mousedown(function(e) {
         handleMouseDown(e);
     });
@@ -1042,19 +1054,39 @@ function initMouseEvents() {
     });
 }
 
+function removeMouseEvents() {
+    $("#objectLayer").off("mousedown");
+    $("#objectLayer").off("mousemove");
+    $("#objectLayer").off("mouseup");
+    $("#objectLayer").off("mouseout");
+    $("#objectLayer").unbind();
+}
+
 function initLayers() {
-    $('<canvas id ="' + 'backgroundLayer' + '" width="' + $("#backCanvas").width() + '" height="' + $("#blocklyDiv").height() + '""></canvas>').appendTo(
-            document.getElementById("backgroundDiv"));
+    $('<canvas id ="backgroundLayer" width=1400 height=950></canvas>').appendTo(document.getElementById("backgroundDiv"));
     backCanvas = document.getElementById("backgroundLayer");
     bCtx = backCanvas.getContext("2d");
-    $('<canvas id ="' + 'unitBackgroundLayer' + '" width="' + $("#backCanvas").width() + '" height="' + $("#blocklyDiv").height() + '""></canvas>').appendTo(
-            document.getElementById("backgroundDiv"));
+    $('<canvas id ="unitBackgroundLayer" width=1400 height=950></canvas>').appendTo(document.getElementById("backgroundDiv"));
     uniCanvas = document.getElementById("unitBackgroundLayer");
     uCtx = uniCanvas.getContext("2d");
-    $('<canvas id ="' + 'objectLayer' + '" width="' + $("#backCanvas").width() + '" height="' + $("#blocklyDiv").height() + '""></canvas>').appendTo(
-            document.getElementById("objectDiv"));
+    $('<canvas id ="objectLayer" width=1400 height=950></canvas>').appendTo(document.getElementById("objectDiv"));
     objectCanvas = document.getElementById("objectLayer");
     oCtx = objectCanvas.getContext("2d");
+}
+
+function destroyLayers() {
+    var layer = document.getElementById("backgroundLayer");
+    while (layer.firstChild) {
+        layer.removeChild(myNode.firstChild);
+    }
+    layer = document.getElementById("unitBackgroundLayer");
+    while (layer.firstChild) {
+        layer.removeChild(myNode.firstChild);
+    }
+    layer = document.getElementById("objectLayer");
+    while (layer.firstChild) {
+        layer.removeChild(myNode.firstChild);
+    }
 }
 
 function initScene() {
@@ -1062,7 +1094,7 @@ function initScene() {
     drawBackground(1, uniCanvas, uCtx); // unitary background for sensor calculations (only once)
     drawBackground(scale, backCanvas, bCtx);
     drawObject(scale, objectCanvas, oCtx);
-    initMouseEvents();
+    addMouseEvents();
     oraSimRender();
     setTimeout(function() {
         setPause(false)
