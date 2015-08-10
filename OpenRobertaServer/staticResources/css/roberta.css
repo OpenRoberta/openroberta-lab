@@ -199,171 +199,6 @@ html, body {
 	visibility: hidden;
 }
 
-/* TODO: remove this, it is just fake ******************************* */
-div.showcase {
-	width: 100px;
-	height: 100px;
-	margin-left: 100px;
-	margin-top: 100px;
-	background-color: red;
-	position: absolute;
-	/* Chrome, Safari, Opera */
-	-webkit-animation-name: example;
-	-webkit-animation-duration: 5s;
-	-webkit-animation-timing-function: linear;
-	-webkit-animation-delay: 2s;
-	-webkit-animation-iteration-count: infinite;
-	-webkit-animation-direction: alternate;
-	/* Standard syntax */
-	animation-name: example;
-	animation-duration: 5s;
-	animation-timing-function: linear;
-	animation-delay: 2s;
-	animation-iteration-count: infinite;
-	animation-direction: alternate;
-}
-
-div.NoShowcase {
-	width: 100px;
-	height: 100px;
-	margin-left: 100px;
-	margin-top: 100px;
-	background-color: red;
-	position: absolute;
-}
-
-/* Chrome, Safari, Opera */
-@
--webkit-keyframes example { 0% {
-	background-color: red;
-	left: 0px;
-	top: 0px;
-}
-
-25%
-{
-background-color
-:yellow
-;
- 
-left
-:
-200px;
- 
-top
-:
-0px;
-}
-50%
-{
-background-color
-:blue
-;
- 
-left
-:
-200px;
- 
-top
-:
-200px;
-}
-75%
-{
-background-color
-:green
-;
- 
-left
-:
-0px;
- 
-top
-:
-200px;
-}
-100%
-{
-background-color
-:red
-;
- 
-left
-:
-0px;
- 
-top
-:
-0px;
-}
-}
-
-/* Standard syntax */
-@
-keyframes example { 0% {
-	background-color: red;
-	left: 0px;
-	top: 0px;
-}
-
-25%
-{
-background-color
-:yellow
-;
- 
-left
-:
-200px;
- 
-top
-:
-0px;
-}
-50%
-{
-background-color
-:blue
-;
- 
-left
-:
-200px;
- 
-top
-:
-200px;
-}
-75%
-{
-background-color
-:green
-;
- 
-left
-:
-0px;
- 
-top
-:
-200px;
-}
-100%
-{
-background-color
-:red
-;
- 
-left
-:
-0px;
- 
-top
-:
-0px;
-}
-}
-/* *************************************************************************************** */
 #blocklyDiv.simActive {
 	width: 100%;
 	float: left;
@@ -442,6 +277,10 @@ to {
 .menuDisabled {
 	background-color: #fff;
 }
+
+#simButtons {
+	    width: 460px;
+	}
 
 /***** BEGIN Overwrite Bootstrap-CSS *****/
 .tooltip.right>.tooltip-inner {
@@ -766,6 +605,10 @@ ul.icon li.arrow-right-thick:before {
 	margin-right: 15px;
 }
 
+legend {
+    margin-bottom: 0px;
+}
+
 /***** END JQuery-Popup-Input-Fields *****/
 
 /***** BEGIN JQuery-Datatables *****/
@@ -836,6 +679,12 @@ table.dataTable thead .sorting_desc {
 }
 /***** END JQuery-Datatables *****/
 @media only screen and (max-width: 767px) {
+	#main-section {
+	padding-top: 56px;
+}
+.logo {
+	top: 10;
+}
 	.img-nepo {
 		width: 120px;
 	}
@@ -843,7 +692,7 @@ table.dataTable thead .sorting_desc {
 		height: 20px;
 		right: 60px;
 	}
-	#states {
+/* 	#states {
 		position: absolute;
 		right: 0;
 		margin-top: 28px;
@@ -866,7 +715,7 @@ table.dataTable thead .sorting_desc {
 	}
 	#language>li {
 		margin-top: 12px;
-	}
+	} */
 	.navbar-nav .open .dropdown-menu>li>a, .navbar-nav .open .dropdown-menu .dropdown-header
 		{
 		padding: 5px 15px 5px 36px;
@@ -895,11 +744,12 @@ table.dataTable thead .sorting_desc {
 	.navbar-fixed-bottom {
 		border: 0;
 		padding: 16px 16px;
+		padding-bottom: 0px;
 	}
 	.blocklyButton {
 		display: none
 	}
 	#simButtons {
-	    width: 50px;
+	    width: 240px;
 	}
 }

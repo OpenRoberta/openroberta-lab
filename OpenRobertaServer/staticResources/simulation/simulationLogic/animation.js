@@ -5,6 +5,7 @@ var MAXDIAG = 0;
 var MAXPOWER = 120;
 var ENC = 360 / (2 * Math.PI * 5.6);
 
+var userProgram;
 var backCanvas;
 var uniCanvas;
 var objectCanvas;
@@ -118,9 +119,10 @@ var robot = new Robot();
 //    BROWN : 7
 //};
 
-function initOraSim() {
+function initOraSim(program) {
+    userProgram = program;
+    eval(userProgram);
     initLayers();
-
     canceled = false;
     isDownrobot = false;
     isDownObstacle = false;
@@ -146,7 +148,7 @@ function oraSimRender() {
     }
     setTimeStep();
     stepCounter += 1;
-    if (!PROGRAM_SIMULATION.isTerminated() && !pause === true) {
+    if (!PROGRAM_SIMULATION.isTerminated() && !pause) {
         //executeProgram();  //for tests without OpenRobertaLab
         if (stepCounter == 0) {
             setPause(true);
@@ -156,6 +158,14 @@ function oraSimRender() {
         output.right = ACTORS.getRightMotor().getPower() * MAXPOWER;
         output.led = LIGHT.color;
         output.ledMode = LIGHT.mode;
+    } else if (PROGRAM_SIMULATION.isTerminated()) {
+        reloadProgram();
+        eval(userProgram);
+        $('.simForward').removeClass('typcn-media-pause');
+        $('.simForward').addClass('typcn-media-play');
+        setPause(true);
+        output.left = 0;
+        output.right = 0;
     } else {
         output.left = 0;
         output.right = 0;
@@ -167,6 +177,14 @@ function oraSimRender() {
     setTimeout(function() {
         oraSimRender();
     }, timerStep);
+};
+
+function reloadProgram() {
+    eval(userProgram);
+    $('.simForward').removeClass('typcn-media-pause');
+    $('.simForward').addClass('typcn-media-play');
+    // robot = new Robot();
+    setPause(true);
 };
 
 function executeProgram() {
@@ -868,8 +886,8 @@ function adjustAllSizes() {
     scale = 1;
     if (window.outerWidth < 800) {// extra small devices
         scale = 0.5
-//    } else if (window.outerWidth >= 1280) {// medium and large devices     
-//        scale = 1.5;
+    } else if (window.outerWidth < 1280) {// medium and large devices     
+        scale = 0.8;
     } else if (window.outerWidth >= 1920) {// medium and large devices     
         scale = 1.5;
     }

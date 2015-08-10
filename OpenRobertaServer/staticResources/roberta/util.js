@@ -160,25 +160,25 @@ var UTIL = {};
      */
     UTIL.resizeTabBar = function() {
         if ($(window).width() < 768) {
-            if ($('#tabProgram').hasClass('tabClicked')) {
-                $('.scroller-left').addClass('hidden-xs');
-                $('.scroller-right').removeClass('hidden-xs');
-                $('#tabConfiguration').addClass('hidden-xs');
-                $('#tabProgram').removeClass('hidden-xs');
-                $('#tabSimulation').addClass('hidden-xs');
-            } else if ($('#tabConfiguration').hasClass('tabClicked')) {
-                $('.scroller-left').removeClass('hidden-xs');
-                $('.scroller-right').removeClass('hidden-xs');
-                $('#tabProgram').addClass('hidden-xs');
-                $('#tabConfiguration').removeClass('hidden-xs');
-                $('#tabSimulation').addClass('hidden-xs');
-            } else if ($('#tabSimulation').hasClass('tabClicked')) {
-                $('.scroller-left').removeClass('hidden-xs');
-                $('.scroller-right').addClass('hidden-xs');
-                $('#tabProgram').addClass('hidden-xs');
-                $('#tabConfiguration').addClass('hidden-xs');
-                $('#tabSimulation').removeClass('hidden-xs');
-            }
+//            if ($('#tabProgram').hasClass('tabClicked')) {
+//                $('.scroller-left').addClass('hidden-xs');
+//                $('.scroller-right').removeClass('hidden-xs');
+//                $('#tabConfiguration').addClass('hidden-xs');
+//                $('#tabProgram').removeClass('hidden-xs');
+//                $('#tabSimulation').addClass('hidden-xs');
+//            } else if ($('#tabConfiguration').hasClass('tabClicked')) {
+//                $('.scroller-left').removeClass('hidden-xs');
+//                $('.scroller-right').removeClass('hidden-xs');
+//                $('#tabProgram').addClass('hidden-xs');
+//                $('#tabConfiguration').removeClass('hidden-xs');
+//                $('#tabSimulation').addClass('hidden-xs');
+//            } else if ($('#tabSimulation').hasClass('tabClicked')) {
+//                $('.scroller-left').removeClass('hidden-xs');
+//                $('.scroller-right').addClass('hidden-xs');
+//                $('#tabProgram').addClass('hidden-xs');
+//                $('#tabConfiguration').addClass('hidden-xs');
+//                $('#tabSimulation').removeClass('hidden-xs');
+//            }
             if (Blockly.getMainWorkspace()) {
                 Blockly.getMainWorkspace().trashcan.moveToEdge();
             }
@@ -191,6 +191,7 @@ var UTIL = {};
                 document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().trashcan.moveOutEdge();
             }
         }
+        Blockly.fireUiEvent(window, 'resize');
     };
 
 })($);
