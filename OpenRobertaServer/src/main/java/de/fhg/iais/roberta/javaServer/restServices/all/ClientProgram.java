@@ -26,7 +26,9 @@ import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
 import de.fhg.iais.roberta.javaServer.provider.OraData;
+import de.fhg.iais.roberta.persistence.AbstractProcessor;
 import de.fhg.iais.roberta.persistence.AccessRightProcessor;
+import de.fhg.iais.roberta.persistence.DummyProcessor;
 import de.fhg.iais.roberta.persistence.ProgramProcessor;
 import de.fhg.iais.roberta.persistence.UserProcessor;
 import de.fhg.iais.roberta.persistence.bo.Program;
@@ -70,7 +72,7 @@ public class ClientProgram {
     @Produces(MediaType.APPLICATION_JSON)
     public Response command(@OraData HttpSessionState httpSessionState, JSONObject fullRequest) throws Exception {
         AliveData.rememberClientCall();
-        new ClientLogger().log(LOG, fullRequest);
+        new ClientLogger().log(ClientProgram.LOG, fullRequest);
         final int userId = httpSessionState.getUserId();
         final int robotId = httpSessionState.getRobotId();
         JSONObject response = new JSONObject();
@@ -78,7 +80,7 @@ public class ClientProgram {
         try {
             JSONObject request = fullRequest.getJSONObject("data");
             String cmd = request.getString("cmd");
-            LOG.info("command is: " + cmd + ", userId is " + userId);
+            ClientProgram.LOG.info("command is: " + cmd + ", userId is " + userId);
             response.put("cmd", cmd);
             ProgramProcessor pp = new ProgramProcessor(dbSession, httpSessionState);
             AccessRightProcessor upp = new AccessRightProcessor(dbSession, httpSessionState);
@@ -99,6 +101,19 @@ public class ClientProgram {
                 }
                 Util.addResultInfo(response, pp);
 
+            } else if ( cmd.equals("showJavaP") ) {
+                String programName = request.getString("name");
+                String programText = request.getString("programText");
+                String configurationText = request.getString("configurationText");
+                String javaSource = this.compilerWorkflow.generateJavaProgram(programName, programText, configurationText);
+                AbstractProcessor forMessages = new DummyProcessor();
+                if ( javaSource == null ) {
+                    forMessages.setError(Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED);
+                } else {
+                    response.put("javaSource", javaSource);
+                    forMessages.setSuccess(Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS);
+                }
+                Util.addResultInfo(response, forMessages);
             } else if ( cmd.equals("saveAsP") ) {
                 String programName = request.getString("name");
                 String programText = request.getString("program");
@@ -131,20 +146,20 @@ public class ClientProgram {
                 try {
                     programTransformer = Ev3CompilerWorkflow.generateProgramTransformer(programText);
                 } catch ( Exception e ) {
-                    LOG.error("Transformer failed", e);
+                    ClientProgram.LOG.error("Transformer failed", e);
                     //return Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
                 }
                 Ev3Configuration brickConfiguration = null;
                 try {
                     brickConfiguration = Ev3CompilerWorkflow.generateConfiguration(configurationText);
                 } catch ( Exception e ) {
-                    LOG.error("Generation of the configuration failed", e);
+                    ClientProgram.LOG.error("Generation of the configuration failed", e);
                     //return Key.COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED;
                 }
 
                 UsedPortsCheckVisitor programChecker = new UsedPortsCheckVisitor(brickConfiguration);
                 int errorCounter = programChecker.check(programTransformer.getTree());
-                response.put("data", jaxbToXml(astToJaxb(programChecker.getCheckedProgram())));
+                response.put("data", ClientProgram.jaxbToXml(ClientProgram.astToJaxb(programChecker.getCheckedProgram())));
                 response.put("errorCounter", errorCounter);
                 Util.addSuccessInfo(response, Key.ROBOT_PUSH_RUN);
 
@@ -182,29 +197,29 @@ public class ClientProgram {
                 boolean wasRobotWaiting = false;
 
                 if ( robot.getName().equals("ev3") ) {
-                    LOG.info("compiler workflow started for program {}", programName);
-                    messageKey = this.compilerWorkflow.execute(dbSession, token, programName, programText, configurationText);
+                    ClientProgram.LOG.info("compiler workflow started for program {}", programName);
+                    messageKey = this.compilerWorkflow.execute(token, programName, programText, configurationText);
                     wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
                 } else {
-                    LOG.info("JavaScript code generation started for program {}", programName);
+                    ClientProgram.LOG.info("JavaScript code generation started for program {}", programName);
                     BlocklyProgramAndConfigTransformer data = BlocklyProgramAndConfigTransformer.transform(programText, configurationText);
                     if ( data.getErrorMessage() == null ) {
                         String javaScriptCode = Ast2Ev3JavaScriptVisitor.generate(data.getProgramTransformer().getTree());
-                        LOG.info("JavaScriptCode \n{}", javaScriptCode);
+                        ClientProgram.LOG.info("JavaScriptCode \n{}", javaScriptCode);
                         response.put("javaScriptProgram", javaScriptCode);
                         wasRobotWaiting = true;
                     }
                 }
                 handleRunProgramError(response, messageKey, token, wasRobotWaiting);
             } else {
-                LOG.error("Invalid command: " + cmd);
+                ClientProgram.LOG.error("Invalid command: " + cmd);
                 Util.addErrorInfo(response, Key.COMMAND_INVALID);
             }
             dbSession.commit();
         } catch ( Exception e ) {
             dbSession.rollback();
             String errorTicketId = Util.getErrorTicketId();
-            LOG.error("Exception. Error ticket: " + errorTicketId, e);
+            ClientProgram.LOG.error("Exception. Error ticket: " + errorTicketId, e);
             Util.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
         } finally {
             if ( dbSession != null ) {

@@ -74,19 +74,33 @@ var PROGRAM = {};
     };
     
     /**
-     * Run program
+     * Show Java program
      * @memberof PROGRAM
      */
-    PROGRAM.runOnBrick = function(programName, configName, xmlTextProgram, xmlTextConfig, successFn) {
+    PROGRAM.showJavaProgram = function(programName, configName, xmlTextProgram, xmlTextConfig, successFn) {
          COMM.json("/program", {
-             "cmd" : "runP",
+             "cmd" : "showJavaP",
              "name" : programName,
              "configuration" : configName,
              "programText" : xmlTextProgram,
              "configurationText" : xmlTextConfig
-        }, successFn, "run program '" + programName + "' with configuration '" + configName + "'"); 
+        }, successFn, "show Java program '" + programName); 
     };
 
+    /**
+     * Run program
+     * @memberof PROGRAM
+     */
+    PROGRAM.runOnBrick = function(programName, configName, xmlTextProgram, xmlTextConfig, successFn) {
+    	COMM.json("/program", {
+    		"cmd" : "runP",
+    		"name" : programName,
+    		"configuration" : configName,
+    		"programText" : xmlTextProgram,
+    		"configurationText" : xmlTextConfig
+    	}, successFn, "run program '" + programName + "' with configuration '" + configName + "'"); 
+    };
+    
     /**
      * Refresh program relations list
      * @memberof PROGRAM

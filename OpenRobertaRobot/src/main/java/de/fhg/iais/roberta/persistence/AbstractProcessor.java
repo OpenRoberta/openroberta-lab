@@ -30,7 +30,7 @@ public abstract class AbstractProcessor {
         this.success = true;
         this.message = message;
         this.parameter = parameter;
-        LOG.info("Success: " + message);
+        AbstractProcessor.LOG.info("Success: " + message);
     }
 
     /**
@@ -40,7 +40,7 @@ public abstract class AbstractProcessor {
         this.success = false;
         this.message = message;
         this.parameter = parameters;
-        LOG.error("Error. The error key is: " + message);
+        AbstractProcessor.LOG.error("Error. The error key is: " + message);
     }
 
     /**
@@ -53,7 +53,7 @@ public abstract class AbstractProcessor {
     }
 
     /**
-     * gets the return code of a processor *
+     * gets the return code of a processor: either "ok" or "error"
      *
      * @return the string describing success or error
      */
@@ -68,7 +68,7 @@ public abstract class AbstractProcessor {
      */
     public final Key getMessage() {
         if ( this.message == null ) {
-            LOG.error("error message missing. Returning server error.");
+            AbstractProcessor.LOG.error("error message missing. Returning server error.");
             return Key.SERVER_ERROR;
         } else {
             return this.message;

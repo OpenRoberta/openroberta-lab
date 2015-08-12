@@ -386,24 +386,44 @@ function saveConfigurationToServer() {
 }
 
 /**
+ * show the generated Java program
+ */
+function showJavaProgram() {
+	LOG.info('show the generated Java program for ' + userState.program);
+    var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+    var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
+    var xmlTextConfiguration = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
+    PROGRAM.showJavaProgram(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
+        setRobotState(result);
+        if (result.rc == "ok") {
+        	displayPopupMessage("Ok-kO", result.javaSource);
+        } else {
+            displayInformation(result, "", result.message, "");
+        }
+    });
+}
+
+/**
  * Run program
  */
 function runOnBrick() {
-    if (userState.robot === 'ev3') {
-        if (userState.robotState === '' || userState.robotState === 'disconnected') {
-            displayMessage("POPUP_ROBOT_NOT_CONNECTED", "POPUP", "");
-        } else if (userState.robotState === 'busy') {
-            displayMessage("POPUP_ROBOT_BUSY", "POPUP", "");
-        } else if (handleFirmwareConflict()) {
-            $('#buttonCancelFirmwareUpdate').css('display', 'none');
-            $('#buttonCancelFirmwareUpdateAndRun').css('display', 'inline');
-        } else {
-            startProgram();
-        }
-    } else if (userState.robot === 'oraSim') {
-        startProgram();
-    }
+	if (true) return;
+	if (userState.robot === 'ev3') {
+		if (userState.robotState === '' || userState.robotState === 'disconnected') {
+			displayMessage("POPUP_ROBOT_NOT_CONNECTED", "POPUP", "");
+		} else if (userState.robotState === 'busy') {
+			displayMessage("POPUP_ROBOT_BUSY", "POPUP", "");
+		} else if (handleFirmwareConflict()) {
+			$('#buttonCancelFirmwareUpdate').css('display', 'none');
+			$('#buttonCancelFirmwareUpdateAndRun').css('display', 'inline');
+		} else {
+			startProgram();
+		}
+	} else if (userState.robot === 'oraSim') {
+		startProgram();
+	}
 }
+
 /**
  * Start the program on the brick
  */
@@ -1776,9 +1796,7 @@ function displayMessage(messageId, output, replaceWith) {
         }
 
         if (output === 'POPUP') {
-            $('#message').attr('lkey', lkey);
-            $('#message').html(value);
-            $("#show-message").modal("show");
+        	displayPopupMessage(lkey,value);
         } else if (output === 'TOAST') {
             toastMessages.unshift(value);
             if (toastMessages.length === 1) {
@@ -1789,18 +1807,27 @@ function displayMessage(messageId, output, replaceWith) {
 }
 
 /**
+ * Display popup messages
+ */
+function displayPopupMessage(lkey, value) {
+	$('#message').attr('lkey', lkey);
+    $('#message').html(value);
+    $("#show-message").modal("show");
+}
+
+/**
  * Display toast messages
  */
 function displayToastMessages() {
-    $('#toastText').text(toastMessages[toastMessages.length - 1]);
-    $('#toastContainer').delay(100).fadeIn("slow", function() {
-        $(this).delay(1000).fadeOut("slow", function() {
-            toastMessages.pop();
-            if (toastMessages.length > 0) {
-                displayToastMessages();
-            }
-        });
-    });
+	$('#toastText').text(toastMessages[toastMessages.length - 1]);
+	$('#toastContainer').delay(100).fadeIn("slow", function() {
+		$(this).delay(1000).fadeOut("slow", function() {
+			toastMessages.pop();
+			if (toastMessages.length > 0) {
+				displayToastMessages();
+			}
+		});
+	});
 }
 
 /**
