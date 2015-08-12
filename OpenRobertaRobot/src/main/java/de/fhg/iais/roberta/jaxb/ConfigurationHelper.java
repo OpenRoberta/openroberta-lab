@@ -16,8 +16,10 @@ import de.fhg.iais.roberta.util.Option;
  * <br>
  * It is an open question, whether the jaxb- and antlr4-based processors, that do the real work, should be injected or not. Any opinion?
  *
- * @author rbudde
+ * @deprecated as the configurations for various robot system are not stable enough yet, the idea of textual representation should be taken into account in the
+ *             (far?) future
  */
+@Deprecated
 public class ConfigurationHelper {
     private static final Logger LOG = LoggerFactory.getLogger(ConfigurationHelper.class);
 
@@ -25,6 +27,7 @@ public class ConfigurationHelper {
         // no objects!
     }
 
+    @Deprecated
     public static String xmlString2textString(String name, String xmlString) throws Exception {
         Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer();
         BlockSet bs = JaxbHelper.xml2BlockSet(xmlString);
@@ -39,6 +42,7 @@ public class ConfigurationHelper {
      * @param textString the textual representation of a configuration (as string)
      * @return a XML representation (as string) of a configuration, wrapped in an Option object. <b>Never null, no exceptions.</b>
      */
+    @Deprecated
     public static Option<String> textString2xmlString(String textString) {
         try {
             Jaxb2Ev3ConfigurationTransformer transformer = new Jaxb2Ev3ConfigurationTransformer();
@@ -52,7 +56,7 @@ public class ConfigurationHelper {
                 return Option.empty(msgConf.getMessage());
             }
         } catch ( Exception e ) {
-            LOG.error("configuration transform failed", e);
+            ConfigurationHelper.LOG.error("configuration transform failed", e);
             return Option.empty(Key.CONFIGURATION_TRANSFORM_ERROR.toString());
         }
     }

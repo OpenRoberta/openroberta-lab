@@ -29,7 +29,7 @@ public class Option<X> {
     }
 
     /**
-     * make an empty option
+     * make an empty option (option is not "set")
      *
      * @param val
      * @return the option
@@ -66,6 +66,11 @@ public class Option<X> {
      */
     public boolean isSet() {
         return this.message == null;
+    }
+
+    @Override
+    public String toString() {
+        return "Option [" + (isSet() ? "set" : "not set") + (!isSet() ? " with message=" + this.message : " with val=" + this.val) + "]";
     }
 
 }

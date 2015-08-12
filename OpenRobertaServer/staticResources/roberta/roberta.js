@@ -407,7 +407,6 @@ function showJavaProgram() {
  * Run program
  */
 function runOnBrick() {
-	if (true) return;
 	if (userState.robot === 'ev3') {
 		if (userState.robotState === '' || userState.robotState === 'disconnected') {
 			displayMessage("POPUP_ROBOT_NOT_CONNECTED", "POPUP", "");
