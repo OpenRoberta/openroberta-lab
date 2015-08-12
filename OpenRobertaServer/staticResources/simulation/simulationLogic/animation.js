@@ -3,7 +3,7 @@ var FPS = 45;
 var STEP_TIME = 1 / FPS;
 var MAXDIAG = 0;
 var MAXPOWER = 120;
-var ENC = 360 / (2 * Math.PI * 5.6);
+var ENC = 360 / (3 * Math.PI * 5.6);
 
 var userProgram;
 var backCanvas;
@@ -21,9 +21,20 @@ var isDownObstacle = false;
 var startX;
 var startY;
 var scale = 1;
+var imgSrc = [ "simulation/simBackgrounds/robertaBackground.svg", "simulation/simBackgrounds/rescueBackground.svg" ];
 var img;
 var timerStep = 0;
 var canceled;
+
+var currentBackground = 0;
+
+function setBackground(num) {
+    currentBackground = num;
+    drawBackground(1, uniCanvas, uCtx); // unitary background for sensor calculations (only once)
+    drawBackground(scale, backCanvas, bCtx);
+    robot = new Robot();
+    setObstacle();
+}
 
 var pause;
 function setPause(value) {
@@ -43,6 +54,10 @@ function setInfo() {
         info = true;
     }
     ;
+}
+function stopProgram() {
+    robot = new Robot();
+    reloadProgram();
 }
 
 // external program stuff
@@ -76,7 +91,8 @@ var obstacle = {
     x : 495,
     y : 396,
     w : 20,
-    h : 20
+    h : 20,
+    color : "grey"
 }
 var obstacleList = [ ground, obstacle ];
 
@@ -106,7 +122,7 @@ var integral = 0;
 var wave = 0;
 var tread = 0;
 
-var robot = new Robot();
+var robot;
 
 //var COLOR_ENUM = {
 //    NONE : 0,
@@ -133,7 +149,10 @@ function initOraSim(program) {
     averageTimeStep = STEP_TIME;
 
     robot = new Robot();
-    loadImages();
+    setObstacle();
+
+    img = [];
+    loadBackground(currentBackground);
 }
 
 function cancelOraSim() {
@@ -141,6 +160,7 @@ function cancelOraSim() {
     destroyLayers();
     canceled = true;
 }
+var counter = 0;
 
 function oraSimRender() {
     if (canceled) {
@@ -148,27 +168,23 @@ function oraSimRender() {
     }
     setTimeStep();
     stepCounter += 1;
+    counter += 1;
+    counter %= 100;
+    output.left = 0;
+    output.right = 0;
     if (!PROGRAM_SIMULATION.isTerminated() && !pause) {
         //executeProgram();  //for tests without OpenRobertaLab
         if (stepCounter == 0) {
             setPause(true);
         }
         step(input);
-        output.left = ACTORS.getLeftMotor().getPower() * MAXPOWER;
-        output.right = ACTORS.getRightMotor().getPower() * MAXPOWER;
-        output.led = LIGHT.color;
-        output.ledMode = LIGHT.mode;
+        setOutput();
     } else if (PROGRAM_SIMULATION.isTerminated()) {
         reloadProgram();
         eval(userProgram);
         $('.simForward').removeClass('typcn-media-pause');
         $('.simForward').addClass('typcn-media-play');
         setPause(true);
-        output.left = 0;
-        output.right = 0;
-    } else {
-        output.left = 0;
-        output.right = 0;
     }
     diffDrive(output);
     adjustAllSizes();
@@ -187,66 +203,89 @@ function reloadProgram() {
     setPause(true);
 };
 
-function executeProgram() {
-    output.left = speedLeft;
-    output.right = speedRight;
-    if (start === true) {
-        // nothing to do 
-    } else if (touch === true) {
-        if (robot.touchSensor.value === 1) {
-            encoderTouch = robot.encoder.right;
-            back = true;
-            output.left = -20;
-            output.right = -20;
-        } else if (back === true && encoderTouch - 35 <= robot.encoder.right) {
-            turn = true;
-            output.left = -20;
-            output.right = -20;
-        } else if (back === true) {
-            encoderTouch = robot.encoder.right;
-            back = false;
-            turn = true;
-            output.left = -20;
-            output.right = 20;
-        } else if (turn === true && encoderTouch + 35 >= robot.encoder.right) {
-            output.left = -20;
-            output.right = 20;
-        } else {
-            back = false;
-            turn = false;
-        }
-    } else if (ultra === true) {
-        if (robot.ultraSensor.distance < 100) {
-            encoderTouch = robot.encoder.right;
-            back = true;
-            output.left = -20;
-            output.right = -20;
-        } else if (back === true && encoderTouch - 35 <= robot.encoder.right) {
-            turn = true;
-            output.left = -20;
-            output.right = -20;
-        } else if (back === true) {
-            encoderTouch = robot.encoder.right;
-            back = false;
-            turn = true;
-            output.left = -20;
-            output.right = 20;
-        } else if (turn === true && encoderTouch + 35 >= robot.encoder.right) {
-            output.left = -20;
-            output.right = 20;
-        } else {
-            back = false;
-            turn = false;
-        }
-    } else if (line === true) {
-        var error = 50 - robot.colorSensor.lightValue;
-        output.left = range(speedLeft + cP * error);
-        output.right = range(speedLeft - cP * error);
+function setOutput() {
+    output.left = ACTORS.getLeftMotor().getPower() * MAXPOWER || 0;
+    output.right = ACTORS.getRightMotor().getPower() * MAXPOWER || 0;
+    output.led = LIGHT.color || "grey"; // grey = led off
+    output.ledMode = LIGHT.mode || "OFF";
+}
+
+function setObstacle() {
+    if (currentBackground == 0) {
+        obstacle.x = 200;
+        obstacle.y = 200;
+        obstacle.w = 75;
+        obstacle.h = 75;
+        obstacle.color = "red";
     } else {
-        output.left = 0;
-        output.right = 0;
+        obstacle.x = 495;
+        obstacle.y = 396;
+        obstacle.w = 20;
+        obstacle.h = 20;
+        obstacle.color = "grey";
     }
-};
+}
+
+//function executeProgram() { // without OpenRobertaLab
+//    output.left = speedLeft;
+//    output.right = speedRight;
+//    if (start === true) {
+//        // nothing to do 
+//    } else if (touch === true) {
+//        if (robot.touchSensor.value === 1) {
+//            encoderTouch = robot.encoder.right;
+//            back = true;
+//            output.left = -20;
+//            output.right = -20;
+//        } else if (back === true && encoderTouch - 35 <= robot.encoder.right) {
+//            turn = true;
+//            output.left = -20;
+//            output.right = -20;
+//        } else if (back === true) {
+//            encoderTouch = robot.encoder.right;
+//            back = false;
+//            turn = true;
+//            output.left = -20;
+//            output.right = 20;
+//        } else if (turn === true && encoderTouch + 35 >= robot.encoder.right) {
+//            output.left = -20;
+//            output.right = 20;
+//        } else {
+//            back = false;
+//            turn = false;
+//        }
+//    } else if (ultra === true) {
+//        if (robot.ultraSensor.distance < 100) {
+//            encoderTouch = robot.encoder.right;
+//            back = true;
+//            output.left = -20;
+//            output.right = -20;
+//        } else if (back === true && encoderTouch - 35 <= robot.encoder.right) {
+//            turn = true;
+//            output.left = -20;
+//            output.right = -20;
+//        } else if (back === true) {
+//            encoderTouch = robot.encoder.right;
+//            back = false;
+//            turn = true;
+//            output.left = -20;
+//            output.right = 20;
+//        } else if (turn === true && encoderTouch + 35 >= robot.encoder.right) {
+//            output.left = -20;
+//            output.right = 20;
+//        } else {
+//            back = false;
+//            turn = false;
+//        }
+//    } else if (line === true) {
+//        var error = 50 - robot.colorSensor.lightValue;
+//        output.left = range(speedLeft + cP * error);
+//        output.right = range(speedLeft - cP * error);
+//    } else {
+//        output.left = 0;
+//        output.right = 0;
+//    }
+//};
 
 function diffDrive(output) {
     robot.pose.theta = (robot.pose.theta + 2 * Math.PI) % (2 * Math.PI);
@@ -493,7 +532,7 @@ function drawBackground(scale, canvas, ctx) {
     ctx.fillRect(0, 0, 2500, 2000);
     ctx.fillStyle = "#00FFFF";
     ctx.fillRect(15, 15, ground.w - 30, ground.w - 30);
-    ctx.drawImage(img, 0, 0);
+    ctx.drawImage(img[currentBackground], 0, 0);
 //    ctx.fillStyle = "red";
 //    ctx.fillRect(120, ground.h - 80, 40, 60);
 //    ctx.fillStyle = "green";
@@ -680,7 +719,7 @@ function drawObject(scale, canvas, ctx) {
     ctx.strokeStyle = "black";
     ctx.shadowBlur = 10;
     ctx.shadowColor = "black";
-    ctx.fillStyle = "#b3b3b3";
+    ctx.fillStyle = obstacle.color;
     ctx.fillRect(obstacle.x, obstacle.y, obstacle.w, obstacle.h);
     ctx.lineWidth = "1";
     ctx.rect(obstacle.x, obstacle.y, obstacle.w, obstacle.h);
@@ -908,11 +947,15 @@ function Robot() {
         color : '#FCCC00'
     };
     this.pose = {
-        x : 400,
-        y : 40,
+        x : 70,
+        y : 70,
         theta : 0,
         thetaDiff : 0
     };
+    if (currentBackground == 1) {
+        this.pose.x = 400;
+        this.pose.y = 40;
+    }
     this.wheelLeft = {
         x : 16,
         y : -8,
@@ -1039,10 +1082,18 @@ function Robot() {
     }
 }
 
-function loadImages() {
-    img = new Image();
-    img.onload = initScene;
-    img.src = "simulation/simulationLogic/beta.svg";
+function loadBackground(i) {
+    if (i < imgSrc.length - 1) {
+        img[i] = new Image();
+        img[i].onload = function() {
+            loadBackground(i + 1);
+        }
+        img[i].src = imgSrc[i];
+    } else {
+        img[i] = new Image();
+        img[i].onload = initScene;
+        img[i].src = imgSrc[i];
+    }
 }
 
 function addMouseEvents() {
@@ -1122,6 +1173,9 @@ function initScene() {
 function setTimeStep() {
     var actualTime = new Date().getTime();
     var actualTimeStep = actualTime - oldTime;
+    console.log(actualTimeStep)
+    
+    
     oldTime = actualTime;
     error = actualTimeStep / 1000 - STEP_TIME;
     integral = integral + error;

@@ -45,7 +45,7 @@ limitations under the License.
 <link rel="stylesheet" type="text/css" href="/common/bootstrap/bootstrap-3.3.1-dist/dist/css/bootstrap.min.css"></link>
 <link rel="stylesheet" type="text/css" href="/common/jquery.dataTables.min.css"></link>
 <link rel="stylesheet" type="text/css" href="/css/roberta.css"></link>
-<link rel="stylesheet" type="text/css" href="/css/typicons/typicons.min.css"></link>
+<link rel="stylesheet" type="text/css" href="/css/typicons/typicons.css"></link>
 <link rel="manifest" href="manifest.webapp.json">
 <link rel="SHORTCUT ICON" href="./NEPO.ico"></link>
 
@@ -72,8 +72,8 @@ limitations under the License.
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle head-navi-icons typcn typcn-th-menu pull-left sr-only" data-toggle="collapse"
                     data-target="#navbarCollapse"></button>
-                <button id="simButtonsHead" type="button" class="sim hide navbar-toggle head-navi-icons typcn typcn-th-small pull-left sr-only" data-toggle="collapse"
-                    data-target="#simButtonsCollapse"></button>
+                <button id="simButtonsHead" type="button" class="sim hide navbar-toggle head-navi-icons typcn typcn-th-small pull-left sr-only"
+                    data-toggle="collapse" data-target="#simButtonsCollapse"></button>
 
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -122,7 +122,7 @@ limitations under the License.
                         lkey="Blockly.Msg.MENU_TITLE_ROBOT" rel="tooltip" data-original-title="" title=""><span id="head-navi-icon-robot"
                             class="head-navi-icons typcn typcn-Roberta"></span><span class="hidden-sm hidden-md hidden-lg" lkey="Blockly.Msg.MENU_ROBOT"></span></a>
                         <ul class="dropdown-menu">
-                            <li class="robotType"><a href="#" id="menuEv3" class="typcn typcn-film">EV3</a></li>
+                            <li class="robotType"><a href="#" id="menuEv3" class="typcn typcn-ev3">EV3</a></li>
                             <li class="robotType"><a href="#" id="menuSim" class="typcn typcn-Roberta">ORA Simulation</a></li>
                             <li class="divider"></li>
                             <li><a href="#" id="menuConnect" class="typcn typcn-wi-fi" lkey="Blockly.Msg.MENU_CONNECT">verbinden ...</a></li>
@@ -160,41 +160,42 @@ limitations under the License.
                     <legend class="visible-xs"></legend>
                     <li><a href="#" class="visible-xs" id="menuTabProgram" lkey="Blockly.Msg.TAB_PROGRAM">Program</a></li>
                     <li><a href="#" class="visible-xs" id="menuTabConfiguration" lkey="Blockly.Msg.TAB_CONFIGURATION">Configuration</a></li>
-                    
+
                     <!-- only if simulation is active -->
-                    <li class="dropdown sim hide" id="head-navigation-sim-controle"><a href="#" data-toggle="dropdown" class="dropdown-toggle"
+                    <li class="dropdown sim hide hidden-xs" id="head-navigation-sim-controle"><a href="#" data-toggle="dropdown" class="dropdown-toggle"
                         id="head-navi-tooltip-program" lkey="Blockly.Msg.MENU_TITLE_EDIT" rel="tooltip" data-original-title="" title=""><span
                             id="head-navi-icon-program" class="head-navi-icons typcn typcn-th-small"></span><span class="hidden-sm hidden-md hidden-lg"
                             lkey="Blockly.Msg.MENU_EDIT"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#" id="menuSimInfo" class="simInfo typcn typcn-info-large " lkey="Blockly.Msg.MENU_START">Info</a></li>
-                            <li><a href="#" id="menuSimForward" class="simForward typcn typcn-media-pause" lkey="Blockly.Msg.MENU_START">start</a></li>
-                            <li><a href="#" id="menuSimStep" class="simStep typcn typcn-chevron-right-outline" lkey="Blockly.Msg.MENU_START">step</a></li>
-                            <li><a href="#" id="menuSimStop" class="simStop typcn typcn-media-stop" lkey="Blockly.Msg.MENU_START">stop</a></li>
-                            <li><a href="#" id="menuSimBack" class="simBack typcn typcn-backspace" lkey="Blockly.Msg.MENU_START">back</a></li>
+                            <li class="disabled"><a href="#" id="menuSimRoberta" class="simRoberta typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_ROBERTA">Roberta
+                                    Scene</a></li>
+                            <li><a href="#" id="menuSimRescue" class="simRescue typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_RESCUE">Rescue Scene</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#" class="simInfo typcn typcn-info-large " lkey="Blockly.Msg.MENU_SIM_INFO">Info</a></li>
+                            <li><a href="#" class="simForward typcn typcn-media-pause" lkey="Blockly.Msg.MENU_SIM_START_PAUSE">Start/Pause</a></li>
+                            <li><a href="#" class="simStep typcn typcn-step" lkey="Blockly.Msg.MENU_SIM_STEP">Step</a></li>
+                            <li><a href="#" class="simStop typcn typcn-media-stop" lkey="Blockly.Msg.MENU_SIM_STOP">Stop</a></li>
+                            <li><a href="#" class="simBack typcn typcn-backspace" lkey="Blockly.Msg.MENU_SIM_BACK">Back</a></li>
                         </ul></li>
                 </ul>
             </div>
             <div class="collapse navbar-collapse " id="simButtonsCollapse">
                 <ul class="nav navbar-nav visible-xs">
-                    <li><a href="#" id="menuSimInfo" class="simInfo typcn typcn-info-large dropdown" lkey="Blockly.Msg.MENU_START">Info</a></li>
-                    <li><a href="#" id="menuSimForward" class="simForward typcn typcn-media-pause dropdown" lkey="Blockly.Msg.MENU_START">start</a></li>
-                    <li><a href="#" id="menuSimStep" class="simStep typcn typcn-chevron-right-outline dropdown" lkey="Blockly.Msg.MENU_START">step</a></li>
-                    <li><a href="#" id="menuSimStop" class="simStop typcn typcn-media-stop dropdown" lkey="Blockly.Msg.MENU_START">stop</a></li>
-                    <li><a href="#" id="menuSimBack" class="simBack typcn typcn-backspace dropdown" lkey="Blockly.Msg.MENU_START">back</a></li>
+                    <li class="disabled"><a href="#" class="simRoberta typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_ROBERTA">Roberta Scene</a></li>
+                    <li><a href="#" class="simRescue typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_RESCUE">Rescue Scene</a></li>
+                    <legend class="visible-xs"></legend>
+                    <li><a href="#" class="simInfo typcn typcn-info-large " lkey="Blockly.Msg.MENU_SIM_INFO">Info</a></li>
+                    <li><a href="#" class="simForward typcn typcn-media-pause" lkey="Blockly.Msg.MENU_SIM_START_PAUSE">Start/Pause</a></li>
+                    <li><a href="#" class="simStep typcn typcn-step" lkey="Blockly.Msg.MENU_SIM_STEP">Step</a></li>
+                    <li><a href="#" class="simStop typcn typcn-media-stop" lkey="Blockly.Msg.MENU_SIM_STOP">Stop</a></li>
+                    <li><a href="#" class="simBack typcn typcn-backspace" lkey="Blockly.Msg.MENU_SIM_BACK">Back</a></li>
                 </ul>
             </div>
 
 
             <!-- Head-navigation-tabs -->
             <div id="headNavigationTabs" class="navigation-row collapse navbar-collapse">
-                <!--  <div class="visible-xs-block scroller scroller-left head-navi-icons">
-                    <i class="typcn typcn-chevron-left"></i>
-                </div>
-                <div class="visible-xs-block scroller scroller-right head-navi-icons">
-                    <i class="typcn typcn-chevron-right"></i>
-                </div> -->
-                <ul class="nav nav-pills" id="head-navigation-tabs">
+                 <ul class="nav nav-pills" id="head-navigation-tabs">
                     <li><a href="#" id="tabProgram"><span lkey="Blockly.Msg.TAB_PROGRAM" class="menuTab">Program</span>&nbsp;<span id="tabProgramName"></span></a>
                     </li>
                     <li><a href="#" id="tabConfiguration"><span lkey="Blockly.Msg.TAB_CONFIGURATION" class="menuTab">Configuration</span>&nbsp;<span
@@ -651,7 +652,8 @@ limitations under the License.
                 <div id="simButtons" class="navbar navbar-fixed-bottom sim hide">
                     <button id="simInfo" type="button" class="simInfo btn typcn typcn-info-large head-navi-icons pull-left" data-toggle="collapse"></button>
                     <button id="simForward" type="button" class="simForward btn typcn typcn-media-pause head-navi-icons pull-left" data-toggle="collapse"></button>
-                    <button id="simStep" type="button" class="simStep btn typcn typcn-chevron-right-outline head-navi-icons pull-left hidden-xs" data-toggle="collapse"></button>
+                    <button id="simStep" type="button" class="simStep btn typcn typcn-step head-navi-icons pull-left hidden-xs"
+                        data-toggle="collapse"></button>
                     <button id="simStop" type="button" class="simStop btn typcn typcn-media-stop head-navi-icons pull-left hidden-xs" data-toggle="collapse"></button>
                     <button id="simBack" type="button" class="simBack btn typcn typcn-backspace head-navi-icons pull-left" data-toggle="collapse"></button>
                 </div>

@@ -1,6 +1,7 @@
 var bricklyActive = false;
 var userState = {};
 var toastMessages = [];
+var id;
 
 /**
  * Initialize user-state-object
@@ -423,7 +424,7 @@ function startProgram() {
                 if (Blockly.mainWorkspace !== null) {
                     var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
                     userState.programBlocks = Blockly.Xml.domToText(xmlProgram);
-                }               
+                }
                 COMM.json("/toolbox", {
                     "cmd" : "loadT",
                     "name" : userState.toolbox,
@@ -432,6 +433,7 @@ function startProgram() {
                     injectBlockly(result, userState.programBlocks, true);
                 });
                 $(".sim").removeClass('hide');
+                $("#head-navi-tooltip-program").addClass('disabled');
                 $("#blocklyDiv").animate({
                     "width" : "-=70%"
                 }, {
@@ -1077,13 +1079,13 @@ function switchRobot(robot) {
                 $('#menuSim').parent().removeClass('disabled');
                 $('#menuConnect').parent().removeClass('disabled');
                 $('#iconDisplayRobotState').removeClass('typcn-Roberta');
-                $('#iconDisplayRobotState').addClass('typcn-film');
+                $('#iconDisplayRobotState').addClass('typcn-ev3');
             } else if (robot === "oraSim") {
                 userState.robotName = "ORASim";
                 $('#menuEv3').parent().removeClass('disabled');
                 $('#menuSim').parent().addClass('disabled');
                 $('#menuConnect').parent().addClass('disabled');
-                $('#iconDisplayRobotState').removeClass('typcn-film');
+                $('#iconDisplayRobotState').removeClass('typcn-ev3');
                 $('#iconDisplayRobotState').addClass('typcn-Roberta');
             }
             loadToolbox(userState.toolbox);
@@ -1267,6 +1269,22 @@ function initHeadNavigation() {
     });
 
     // controle for simulation
+    $('.simRoberta').onWrap('click', function(event) {
+        $('.simRoberta').parent().addClass('disabled');
+        $('.simRescue').parent().removeClass('disabled');
+        $('.simRoberta').addClass('disabled');
+        $('.simRescue').removeClass('disabled');
+        setBackground(0);
+        $("#simButtonsCollapse").collapse('hide');
+    }, 'simRoberta clicked');
+    $('.simRescue').onWrap('click', function(event) {
+        $('.simRescue').parent().addClass('disabled');
+        $('.simRoberta').parent().removeClass('disabled');
+        $('.simRescue').addClass('disabled');
+        $('.simRoberta').removeClass('disabled');
+        setBackground(1);
+        $("#simButtonsCollapse").collapse('hide');
+    }, 'simRescue clicked');
     $('.simBack').onWrap('click', function(event) {
         cancelOraSim();
         $('#blocklyDiv').removeClass('simActive');
@@ -1289,9 +1307,10 @@ function initHeadNavigation() {
             injectBlockly(result, userState.programBlocks);
         });
         $("#simButtonsCollapse").collapse('hide');
+        $("#head-navi-tooltip-program").removeClass('disabled');
     }, 'simBack clicked');
     $('.simStop').onWrap('click', function(event) {
-        reloadProgram();
+        stopProgram();
         $("#simButtonsCollapse").collapse('hide');
     }, 'simStop clicked');
     $('.simForward').onWrap('click', function(event) {
@@ -1884,7 +1903,7 @@ function init() {
                 return Blockly.Msg.POPUP_BEFOREUNLOAD;
             } else {
 // Maybe a Firefox-Problem?                alert(Blockly.Msg['POPUP_BEFOREUNLOAD_LOGGEDIN']);
-                return Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN;
+                return Blöockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN;
             }
         }
     });

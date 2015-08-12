@@ -2,6 +2,7 @@ var UTIL = {};
 (function($) {
     /**
      * Set cookie
+     * 
      * @memberof UTIL
      * 
      * @param {key}
@@ -17,24 +18,26 @@ var UTIL = {};
 
     /**
      * Get cookie
+     * 
      * @memberof UTIL
      * 
      * @param {key}
      *            Key of the cookie to read
      */
-    UTIL.getCookie = function (key) {
+    UTIL.getCookie = function(key) {
         var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
         return keyValue ? keyValue[2] : null;
     }
 
     /**
      * Format date
+     * 
      * @memberof UTIL
      * 
      * @param {date}
      *            date from server to be formatted
      */
-    UTIL.formatDate = function (date) {
+    UTIL.formatDate = function(date) {
         if (date) {
             var YYYY = date.substring(0, 4);
             var MM = date.substring(5, 7);
@@ -47,15 +50,16 @@ var UTIL = {};
         }
         return "";
     }
-    
+
     /**
      * Format date completely (including 1/1000 - seconds)
+     * 
      * @memberof UTIL
      * 
      * @param {date}
      *            date from server to be formatted
      */
-    UTIL.formatDateComplete = function (date) {
+    UTIL.formatDateComplete = function(date) {
         if (date) {
             var YYYY = date.substring(0, 4);
             var MM = date.substring(5, 7);
@@ -75,12 +79,13 @@ var UTIL = {};
 
     /**
      * Convert date into numeric value
+     * 
      * @memberof UTIL
      * 
      * @param {d}
      *            date in the form 'dd.mm.yyyy, hh:mm:ss'
      */
-    UTIL.parseDate = function (d) {
+    UTIL.parseDate = function(d) {
         if (d) {
             var dayPart = d.split(', ')[0];
             var timePart = d.split(', ')[1];
@@ -92,19 +97,20 @@ var UTIL = {};
             var second = timePart.split(':')[2];
             var mseconds = timePart.split('.')[1];
             var date = new Date(year, month, day, hour, minute, second, mseconds);
-            return date.getTime();            
+            return date.getTime();
         }
         return 0;
     }
-    
+
     /**
      * Format result of server call for logging
+     * 
      * @memberof UTIL
      * 
      * @param {result}
      *            Result-object from server call
      */
-    UTIL.formatResultLog = function (result) {
+    UTIL.formatResultLog = function(result) {
         var str = "{";
         var comma = false;
         for (key in result) {
@@ -126,12 +132,13 @@ var UTIL = {};
         str += '}';
         return str;
     }
-    
+
     /**
      * Extension of Jquery-datatables for sorting German date fields
+     * 
      * @memberof UTIL
      */
-    UTIL.initDataTables = function () {
+    UTIL.initDataTables = function() {
         jQuery.extend(jQuery.fn.dataTableExt.oSort['date-de-asc'] = function(a, b) {
             a = UTIL.parseDate(a);
             b = UTIL.parseDate(b);
@@ -144,9 +151,10 @@ var UTIL = {};
             return ((a < b) ? 1 : ((a > b) ? -1 : 0));
         });
     }
-    
+
     /**
      * Calculate height of data table
+     * 
      * @memberof UTIL
      */
     UTIL.calcDataTableHeight = function() {
@@ -154,44 +162,27 @@ var UTIL = {};
     };
 
     /**
-     * Rearrange the tab bar and blockly buttons according to the screen size (only
-     * affects small screens).
+     * Rearrange the blockly buttons according to the screen size (only affects small screens).
+     * 
      * @memberof UTIL
      */
     UTIL.resizeTabBar = function() {
-        if ($(window).width() < 768) {
-//            if ($('#tabProgram').hasClass('tabClicked')) {
-//                $('.scroller-left').addClass('hidden-xs');
-//                $('.scroller-right').removeClass('hidden-xs');
-//                $('#tabConfiguration').addClass('hidden-xs');
-//                $('#tabProgram').removeClass('hidden-xs');
-//                $('#tabSimulation').addClass('hidden-xs');
-//            } else if ($('#tabConfiguration').hasClass('tabClicked')) {
-//                $('.scroller-left').removeClass('hidden-xs');
-//                $('.scroller-right').removeClass('hidden-xs');
-//                $('#tabProgram').addClass('hidden-xs');
-//                $('#tabConfiguration').removeClass('hidden-xs');
-//                $('#tabSimulation').addClass('hidden-xs');
-//            } else if ($('#tabSimulation').hasClass('tabClicked')) {
-//                $('.scroller-left').removeClass('hidden-xs');
-//                $('.scroller-right').addClass('hidden-xs');
-//                $('#tabProgram').addClass('hidden-xs');
-//                $('#tabConfiguration').addClass('hidden-xs');
-//                $('#tabSimulation').removeClass('hidden-xs');
-//            }
-            if (Blockly.getMainWorkspace()) {
-                Blockly.getMainWorkspace().trashcan.moveToEdge();
-            }
-            if (document.getElementById('bricklyFrame').contentWindow.Blockly && document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace()) {
-                document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().trashcan.moveToEdge();
-            }
-        } else {
-            if (document.getElementById('bricklyFrame').contentWindow.Blockly && document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace()) {
-                Blockly.getMainWorkspace().trashcan.moveOutEdge();
-                document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().trashcan.moveOutEdge();
+        if (Blockly.hasTrashcan) {
+            if ($(window).width() < 768) {
+                if (Blockly.getMainWorkspace()) {
+                    Blockly.getMainWorkspace().trashcan.moveToEdge();
+                }
+                if (document.getElementById('bricklyFrame').contentWindow.Blockly
+                        && document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace()) {
+                    document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().trashcan.moveToEdge();
+                }
+            } else {
+                if (document.getElementById('bricklyFrame').contentWindow.Blockly
+                        && document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace()) {
+                    Blockly.getMainWorkspace().trashcan.moveOutEdge();
+                    document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().trashcan.moveOutEdge();
+                }
             }
         }
-        Blockly.fireUiEvent(window, 'resize');
     };
-
 })($);

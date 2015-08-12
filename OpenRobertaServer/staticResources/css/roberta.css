@@ -69,7 +69,7 @@ html, body {
 
 #states {
 	float: right;
-	margin-top: 10px;
+	margin-top: 16px;
 	padding: 0;
 }
 
@@ -125,6 +125,10 @@ html, body {
 .navigation-row {
 	width: 100%;
 	margin: 0;
+}
+
+#headNavigationTabs {
+	margin-left: -16px;
 }
 
 .scroller {
@@ -207,7 +211,7 @@ html, body {
 #simDiv.simActive {
 	height: 100%;
 	overflow: hidden;
-	background: rgb(0, 255, 355);
+	background: "#ffffff";
 	visibility: visible;
 	position: relative;
 }
@@ -278,9 +282,16 @@ to {
 	background-color: #fff;
 }
 
+.dropdown-toggle.disabled:hover, .dropdown-toggle.disabled:focus {
+	text-decoration: none;
+	cursor: default;
+	background-color: white !important;
+	background-image: none;
+}
+
 #simButtons {
-	    width: 460px;
-	}
+	width: 460px;
+}
 
 /***** BEGIN Overwrite Bootstrap-CSS *****/
 .tooltip.right>.tooltip-inner {
@@ -310,10 +321,10 @@ to {
 	width: auto;
 	overflow: hidden;
 	white-space: nowrap;
-	margin: 0;
-	padding: 0;
+	margin: 0; padding : 0;
 	border: 0;
 	overflow: hidden;
+	padding: 0;
 }
 
 .nav#head-navigation-tabs>li>a {
@@ -381,10 +392,7 @@ to {
 
 .navbar-fixed-bottom {
 	border: 0;
-	padding-top: 16px;
-	padding-right: 68px;
-	padding-bottom: 0px;
-	padding-left: 68px;
+	padding: 16px 68px;
 }
 
 .collapse.in li a, .collapse.in li a span:before, .collapse.in li a span
@@ -446,7 +454,7 @@ to {
 .modal-header, .modal-footer {
 	border: 0;
 	padding: 16px;
-	padding-bottom: 0px;
+	padding-bottom: 20px;
 	text-align: left;
 }
 
@@ -495,7 +503,6 @@ to {
 .btn {
 	margin-right: 16px;
 	margin-left: 0;
-	margin-bottom: 20px;
 	background-color: #afca04;
 	color: #fff;
 	font-size: 16px;
@@ -509,7 +516,6 @@ to {
 
 .modal-footer .btn+.btn {
 	margin-left: 0;
-	margin-bottom: 20pxpx;
 }
 
 .btn:hover, .btn:active:focus, .btn:focus, .btn.focus, .btn:active, .btn.active,
@@ -606,7 +612,7 @@ ul.icon li.arrow-right-thick:before {
 }
 
 legend {
-    margin-bottom: 0px;
+	margin-bottom: 0px;
 }
 
 /***** END JQuery-Popup-Input-Fields *****/
@@ -680,11 +686,11 @@ table.dataTable thead .sorting_desc {
 /***** END JQuery-Datatables *****/
 @media only screen and (max-width: 767px) {
 	#main-section {
-	padding-top: 56px;
-}
-.logo {
-	top: 10;
-}
+		padding-top: 56px;
+	}
+	.logo {
+		top: 10;
+	}
 	.img-nepo {
 		width: 120px;
 	}
@@ -692,7 +698,7 @@ table.dataTable thead .sorting_desc {
 		height: 20px;
 		right: 60px;
 	}
-/* 	#states {
+	/* 	#states {
 		position: absolute;
 		right: 0;
 		margin-top: 28px;
@@ -744,12 +750,11 @@ table.dataTable thead .sorting_desc {
 	.navbar-fixed-bottom {
 		border: 0;
 		padding: 16px 16px;
-		padding-bottom: 0px;
 	}
 	.blocklyButton {
 		display: none
 	}
 	#simButtons {
-	    width: 240px;
+		width: 240px;
 	}
 }
