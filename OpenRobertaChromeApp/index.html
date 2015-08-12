@@ -5,32 +5,106 @@
       <title>Open Roberta</title>
       <!-- Setting a title in the window bar is not possible -->
       <script src="index.js"></script>
+      <link rel="stylesheet" type="text/css" href="/css/chrome_app.css"></link>
   </head>
     <body>
         <!-- TODO Add grid or sth -->
+        <div class="row menu">
+          <div class="col-2">
+            Datei
+          </div>
+          <div class="col-2">
+            Info
+          </div>
+          <div class="col-8 robstatus">
+            <img id="connstatus" src="resources/Roberta_Menu_Icon_grey.png" alt="Disconnected">
+          </div>
+        </div>
         
-        <p>
-           <textarea id="token" cols="15" rows="1" style="border:0px;resize:none" readonly></textarea>
-           <img id="connstatus" src="resources/Roberta_Menu_Icon_grey.png" alt="Disconnected" align="right">
-        </p>
-        <p>
-          <img id="mainpicture" >
-        </p>
-        <p>
-           <textarea id="infotext" cols="37" rows="5" style="resize:none;" readonly></textarea>
-        </p>
-        <p>
-          <button id="connect" class="btn" disabled></button>
-          <button id="close" class=" btn"></button>
-        </p>
-        <p>
-          <input type="checkbox" id="advancedoptions">
-          <textarea id="advancedop" cols="30" rows="1" style="border:0px;resize:none" readonly></textarea>
-        </p>
-        <p id="alternative" style="visibility:hidden">
-          <textarea id="customaddressinfo" cols="35" rows="1" style="border:0px;resize:none" readonly></textarea><br>
-          IP: <input type="text" id="ip" maxlength="15" size="15"></input>
-          Port: <input type="text" id="port" maxlength="4" size="4"></input>
-        </p>
+        <div class="row trenner"></div>
+        
+        
+        <div class="row">
+            <textarea class="col-12 tokenarea" id="token" readonly></textarea>
+            <!--   <img id="connstatus" src="resources/Roberta_Menu_Icon_grey.png" alt="Disconnected" align="right"> Verschoben nach robstatus-->
+        </div>
+        
+        <div class="row">
+          <div class="col-12">
+             <img id="mainpicture" >
+          </div>
+        </div>
+        
+        <div class="row">
+            <textarea class="col-12 info" id="infotext" cols="37" rows="5" readonly></textarea>
+        </div>
+
+        <div class="row">
+          <div class="col-6 btngrid">
+            <button id="connect" class="btn" disabled></button>
+          </div>
+          <div class="col-6 btngrid">
+             <button id="close" class="btn"></button>
+          </div>
+        </div>
+
+        <!----Zusatzfeld für IP und Port ------>
+        <div class="row advrow">
+          <div class="col-1">
+            <input type="checkbox" id="advancedoptions">
+          </div>
+          <div class="col-11">
+            <textarea class="adv" id="advancedop" cols="30" rows="1" readonly></textarea>
+          </div>
+        </div>
+
+        <!------EingabeFelder----->
+
+        <div id="alternative" style="visibility:hidden" >
+          <div class="row">
+
+              <textarea class="col-12 serveradr" id="customaddressinfo" cols="35" rows="1" readonly></textarea>
+
+          </div>
+          <div class="row userin">
+            <div class="col-1 iptxt">
+              IP:
+            </div>
+            <div class="col-6">
+              <input class="textin" type="text" id="ip" maxlength="15" size="15"></input>
+            </div>
+            <div class="col-2 porttxt">
+              Port: 
+            </div>
+            <div class="col-3">
+              <input class="textin" type="text" id="port" maxlength="4" size="4"></input>
+            </div>
+          </div>
+        </div>
+
+
+
+
+<!-----
+        <div class="row">
+          <div class="col-12">
+          <p id="alternative" style="visibility:hidden">
+          <textarea class="serveradr" id="customaddressinfo" cols="35" rows="1" readonly></textarea><br>
+          </p>
+          </div>
+        </div>
+          
+          <div class="row">
+            <div class="col-8">
+              <p id="alternative" style="visibility:hidden">
+              IP: <input type="text" id="ip" maxlength="15" size="15"></input>
+            </div>
+            <div class="col-4">
+              Port: <input type="text" id="port" maxlength="4" size="4"></input>
+            </div>
+            </p>
+          </div>
+        ------>
+
     </body>
 </html>
