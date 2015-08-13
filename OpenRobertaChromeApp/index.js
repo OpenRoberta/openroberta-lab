@@ -16,8 +16,7 @@ onload = function() {
     CONNECTED: 4,
     DOWNLOAD: 5,
     UPDATE: 6,
-    ABORT: 7,
-    INTERRUPT: 8
+    ABORT: 7
   };
   
   var STATE = state.SEARCH;

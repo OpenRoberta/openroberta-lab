@@ -27,7 +27,7 @@
     "message": "Click on »connect« to connect your robot to Open Roberta Lab."
   },
   "infotext_tokencopy": {
-    "message": "Type in the token under robots>connect in the Open Roberta Lab, by using »copy« and »paste«. It is valid for 5 minutes."
+    "message": "Type in the token under robots>connect in the Open Roberta Lab, by using »copy« and »paste«."
   },
   "infotext_runprogram": {
     "message": "You are able to run your programs on the EV3 now. Do not forget to plug in the cable again, after your program execution has finished."

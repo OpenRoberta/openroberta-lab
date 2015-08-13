@@ -27,7 +27,7 @@
     "message": "Klicke nun auf »verbinden«, um den Roboter mit Open Roberta Lab zu verbinden."
   },
   "infotext_tokencopy": {
-    "message": "Das Token kannst du mit »kopieren« und »einfügen« im Open Roberta Lab unter Roboter>verbinden einfügen. Es ist 5 Minuten lang gültig."
+    "message": "Das Token kannst du mit »kopieren« und »einfügen« im Open Roberta Lab unter Roboter>verbinden einfügen."
   },
   "infotext_runprogram": {
     "message": "Du kannst jetzt deine Programme auf dem EV3 ausführen. Vergiss nicht, das USB Kabel wieder einzustecken, nachdemm dein Programm ausgeführt wurde."
@@ -48,7 +48,7 @@
     "message": "Du kannst es noch mal versuchen."
   },
   "noti_timeout_msg": {
-    "message": "Die Gültigkeitsdauer des Token ist abgelaufen. Versuch es noch mal."
+    "message": "Die Gültigkeitsdauer des Token ist abgelaufen. Versuche es noch mal."
   },
   "noti_error_title": {
     "message": "Open Roberta Fehler"
