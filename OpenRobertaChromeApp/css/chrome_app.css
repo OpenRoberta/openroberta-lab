@@ -13,21 +13,14 @@ html, body {
 }*/
 
 
-/* for later use
 
-* {
+*{
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;
     box-sizing: border-box;
 } 
 
-*/
-
-/*
-@media only screen and (max-width: 270px){
-  display: none;
-}*/
 
 
 button{
@@ -40,9 +33,6 @@ button{
     border: 4px solid #afca04;
 }
 
-/*button:hover, button:active{
-     color:  #FFFFFF;
-}*/
 
 button:disabled{
     color: graytext;
@@ -50,7 +40,7 @@ button:disabled{
 
 
 .trenner{
-	background-color:#D2D2D2;
+	  background-color:#D2D2D2;
   	color:#D2D2D2;
   	border:#D2D2D2;
   	height:1px;
@@ -99,6 +89,8 @@ p, textarea, .btn, .menu, .userin, input {
     width: 100%;
     margin-bottom: 5px;
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .col-1 {
