@@ -21,7 +21,86 @@ html, body {
     box-sizing: border-box;
 } 
 
+body{
+    margin: 0;
 
+}
+
+/* cleart die gefloateteMenuleiste*/
+.ddmenu{
+    clear:both; 
+}
+
+/*--formatiert die Menüleiste--*/
+#menu{        
+  width: 100%;
+  padding: 0 20px;
+  background: #FFFFFF;
+  font-family: sans-serif;
+  font-size: 1em;
+  line-height: 1.5;
+  float: left; 
+}
+
+/*--formatiert die Themenblöcke--*/ 
+#menu ul, #menu ul ul{   
+  float: left;
+  /*width: 140px;  Rausgenommen, da Konflikt mit flex-boxen!*/
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+
+/*--versteckt die "Drop-Down-Links", solange nicht gehovert wird--*/
+#menu ul ul {
+  position: absolute;
+  z-index: 2;
+  display: none;
+} 
+
+
+ /*--definiert die Blocküberschriften--*/
+#menu p {     
+font-size: 1em;
+text-align: center;
+color: #000;
+border: 1px solid #FFFFFF; /*--erforderlich für IE 7--*/
+background: #FFFFFF;
+} 
+
+/*--definiert die "Drop-Down-Links" im Normalzustand--*/
+#menu a {
+text-decoration: none;
+display: block;
+border: 1px solid #000000;
+text-align: center;
+background:  #FFFFFF;
+color: #003366;
+padding:  2px;
+} 
+
+/*--definiert die "Drop-Down-Links" im Hoverzustand--*/
+#menu a:hover {
+color: #ff9224;
+background: #FFFFFF;
+} 
+
+#menu li {
+position: relative;   /*verhindert im Zusammenhang mit position absolute bei ul ul eine Höhenvergrößerung von #menu beim Hovern--*/ 
+} 
+
+/*--lässt die Dropdown-Links beim Hovern erscheinen--*/
+#menu ul li:hover ul {
+  display: block;
+} 
+
+.trenner{
+	  background-color:#D2D2D2;
+  	color:#D2D2D2;
+  	border:#D2D2D2;
+  	height:1px;
+}
 
 button{
     background-color: #afca04;
@@ -39,16 +118,10 @@ button:disabled{
 }
 
 
-.trenner{
-	  background-color:#D2D2D2;
-  	color:#D2D2D2;
-  	border:#D2D2D2;
-  	height:1px;
-}
-
 
 p, textarea, .btn, .menu, .userin, input {
-    font-family: sans-serif;    
+    font-family: sans-serif;  
+    margin: 0;
 }
 
 .maintitle{
@@ -87,10 +160,9 @@ p, textarea, .btn, .menu, .userin, input {
 
 .row {
     width: 100%;
-    margin-bottom: 5px;
+    /*margin-bottom: 5px;   nicht notwendig oder max 1px---*/
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-flow: row wrap;
 }
 
 .col-1 {

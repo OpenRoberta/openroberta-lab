@@ -5,31 +5,62 @@
       <title>Open Roberta</title>
       <!-- Setting a title in the window bar is not possible -->
       <script src="index.js"></script>
-      <link rel="stylesheet" type="text/css" href="/css/chrome_app.css"></link>
+      <link rel="stylesheet" type="text/css" href="css/chrome_app.css"></link>
   </head>
     <body>
         <!-- TODO Add grid or sth -->
         <div class="grid">
         
+          <div class="row">
+            <div class="col-3">
+              <div class="ddmenu" id="menu"><!-- öffnet die Navigationsleiste-->
+
+                <ul><!-- öffnet den ersten Themenblock -->
+
+                  <li><!-- öffnet die Listeneinträge von Thema 1 -->
+
+                    <p>Datei</p> 
+              
+                     <ul>  <!-- öffnet die Klappnavi von Thema 1 --> 
+                  
+                      <li><a href="#">beenden</a></li>
+                  
+                    </ul> <!-- schließt die Klappnavi von Thema 1 --> 
+            
+                  </li>   <!-- schließt die Listeneinträge von Thema 1 --> 
+          
+                </ul><!--schließt den ersten Themenblock-->
+
+              </div><!-- schließt die Menüleiste #menu -->
+            </div>
         
-        
-        
-        
-        
-        
-        
-        
-          <div class="row menu">
-          <div class="col-2">
-            <p>Datei</p>
+        <div class="col-3"  >
+          <div class="ddmenu" id="menu"><!-- öffnet die Navigationsleiste-->
+
+            <ul><!-- öffnet den zweiten Themenblock -->
+
+              <li><!-- öffnet die Listeneinträge von Thema 2 -->
+
+                <p>Info</p> 
+              
+                  <ul>  <!-- öffnet die Klappnavi von Thema 2 --> 
+                  
+                    <li>
+                      <a id="about" href="about.html" >about </a>
+                    </li>
+                  
+                  </ul> <!-- schließt die Klappnavi von Thema 2 --> 
+            
+              </li>   <!-- schließt die Listeneinträge von Thema 2 --> 
+          
+            </ul><!--schließt den zweiten Themenblock-->
           </div>
-          <div class="col-2">
-            <p>Info</p>
-          </div>
-          <div class="col-8 robstatus">
-            <img id="connstatus" src="resources/Roberta_Menu_Icon_grey.png" alt="Disconnected">
-          </div>
+        </div><!-- schließt die Menüleiste #menu --> 
+        <div class="col-6 robstatus">
+          <img id="connstatus" src="resources/Roberta_Menu_Icon_grey.png" alt="Disconnected">
         </div>
+        </div>
+        
         
         <div class="row trenner"></div>
         
