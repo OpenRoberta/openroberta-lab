@@ -81,7 +81,7 @@ onload = function() {
     for( var i=0; i < 8; i++ ) {
         TOKEN += chars.charAt(Math.floor(Math.random() * chars.length));
     }
-    displayToken(TOKEN);
+    showTextInTokenField("Token", TOKEN);
   }
   
   function createNotification(title, msg){
@@ -143,6 +143,7 @@ onload = function() {
           pushToBrick(CMD_REGISTER, CMD_REGISTER);
           break;
         case state.CONNECTED:
+          showTextInTokenField("Name", ev3info["brickname"]);
           updateConnStatus("Roberta_Menu_Icon_green.png");
           displayInfotext(chrome.i18n.getMessage("infotext_runprogram"));
           setMainPicture("connected.gif");
@@ -361,8 +362,8 @@ onload = function() {
     document.getElementById("infotext").value = infotext;
   }
   
-  function displayToken(token){
-    document.getElementById("token").value = "Token: " + token;
+  function showTextInTokenField(info, token){
+    document.getElementById("token").value = info + ": " + token;
   }
   
   function updateConnStatus(imgName){
