@@ -105,12 +105,8 @@ function evalIf(stmt) {
             break;
         }
     }
-
-    if ((programPrefix == undefined || programPrefix == []) && !PROGRAM_SIMULATION.isWait()) {
+    if (programPrefix == undefined || programPrefix == []) {
         programPrefix = stmt.elseStmts;
-
-    } else {
-        evalWaitStmt(PROGRAM_SIMULATION.getRemove());
     }
     PROGRAM_SIMULATION.prepend(programPrefix);
 }
