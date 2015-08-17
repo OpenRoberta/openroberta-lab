@@ -199,12 +199,26 @@ html, body {
 	float: left;
 }
 
+#blocklyDiv{
+  transition-property: width;
+  transition-duration: 0.5s;  
+  transition-timing-function: linear, ease-in;
+  -webkit-transition-property: width;
+  -webkit-transition-timing-function: linear, ease-in;
+  -webkit-transition-duration: 0.5s;
+}
+
+#blocklyDiv.simBackground{
+ background: url(../css/svg/simBlockBackground.svg) repeat;
+ background-size: 100%;
+}
+
 #simDiv {
 	visibility: hidden;
 }
 
 #blocklyDiv.simActive {
-	width: 100%;
+	width: 30%;
 	float: left;
 }
 
@@ -214,6 +228,7 @@ html, body {
 	background: "#ffffff";
 	visibility: visible;
 	position: relative;
+	
 }
 
 #toastContainer {
@@ -755,6 +770,20 @@ table.dataTable thead .sorting_desc {
 		display: none
 	}
 	#simButtons {
-		width: 240px;
+		width: 60px;
 	}
+	#simButtons > .btn {
+		margin-bottom: 10px;
+	}
+	#blocklyDiv{
+  transition-property: width;
+  transition-duration: 0.5s;  
+  transition-timing-function: linear, ease-in;
+  -webkit-transition-property: width;
+  -webkit-transition-timing-function: linear, ease-in;
+  -webkit-transition-duration: 0.5s;
 }
+
+#blocklyDiv.simActive {
+	width: 96px;
+}}

@@ -220,8 +220,12 @@ function injectBlockly(toolbox, opt_programBlocks, opt_readOnly) {
                 start : false
             });
         }
-        initProgramEnvironment(opt_programBlocks);
-        setRobotState(toolbox);
+        if ($(window).width() < 768 && readOnly) {
+            Blockly.getMainWorkspace().clear();
+        } else {
+            initProgramEnvironment(opt_programBlocks);
+            setRobotState(toolbox);
+        }
     }
 }
 
@@ -389,14 +393,14 @@ function saveConfigurationToServer() {
  * show the generated Java program
  */
 function showJavaProgram() {
-	LOG.info('show the generated Java program for ' + userState.program);
+    LOG.info('show the generated Java program for ' + userState.program);
     var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
     var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
     var xmlTextConfiguration = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
     PROGRAM.showJavaProgram(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
         setRobotState(result);
         if (result.rc == "ok") {
-        	displayPopupMessage("Ok-kO", result.javaSource);
+            displayPopupMessage("Ok-kO", result.javaSource);
         } else {
             displayInformation(result, "", result.message, "");
         }
@@ -407,20 +411,20 @@ function showJavaProgram() {
  * Run program
  */
 function runOnBrick() {
-	if (userState.robot === 'ev3') {
-		if (userState.robotState === '' || userState.robotState === 'disconnected') {
-			displayMessage("POPUP_ROBOT_NOT_CONNECTED", "POPUP", "");
-		} else if (userState.robotState === 'busy') {
-			displayMessage("POPUP_ROBOT_BUSY", "POPUP", "");
-		} else if (handleFirmwareConflict()) {
-			$('#buttonCancelFirmwareUpdate').css('display', 'none');
-			$('#buttonCancelFirmwareUpdateAndRun').css('display', 'inline');
-		} else {
-			startProgram();
-		}
-	} else if (userState.robot === 'oraSim') {
-		startProgram();
-	}
+    if (userState.robot === 'ev3') {
+        if (userState.robotState === '' || userState.robotState === 'disconnected') {
+            displayMessage("POPUP_ROBOT_NOT_CONNECTED", "POPUP", "");
+        } else if (userState.robotState === 'busy') {
+            displayMessage("POPUP_ROBOT_BUSY", "POPUP", "");
+        } else if (handleFirmwareConflict()) {
+            $('#buttonCancelFirmwareUpdate').css('display', 'none');
+            $('#buttonCancelFirmwareUpdateAndRun').css('display', 'inline');
+        } else {
+            startProgram();
+        }
+    } else if (userState.robot === 'oraSim') {
+        startProgram();
+    }
 }
 
 /**
@@ -436,9 +440,21 @@ function startProgram() {
         setRobotState(result);
         if (result.rc == "ok") {
             if (userState.robot === 'oraSim') {
+                SIM.init(result.javaScriptProgram);
                 $('#blocklyDiv').addClass('simActive');
+                $('#blocklyDiv').parent().bind('transitionend', function() {
+                    Blockly.fireUiEvent(window, 'resize');
+                    setTimeout(function() {
+                        SIM.setPause(false)
+                    }, 1000);
+                });
                 $('#simDiv').addClass('simActive');
+                $('#simButtonsCollapse').collapse({
+                    'toggle' : false
+                });
                 $('.nav > li > ul > .robotType').addClass('disabled');
+                $('#head-navigation-program-edit').addClass('disabled');
+                $('#head-navigation-program-edit>ul').addClass('hidden');
                 userState.programBlocks = null;
                 if (Blockly.mainWorkspace !== null) {
                     var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
@@ -452,22 +468,6 @@ function startProgram() {
                     injectBlockly(result, userState.programBlocks, true);
                 });
                 $(".sim").removeClass('hide');
-                $("#head-navi-tooltip-program").addClass('disabled');
-                $("#blocklyDiv").animate({
-                    "width" : "-=70%"
-                }, {
-                    step : function() {
-                        Blockly.fireUiEvent(window, 'resize')
-                    },
-                    complete : initOraSim(result.javaScriptProgram)
-                }, 1000);
-
-                // Initialize the scene 
-                // initializeScene();
-
-                // Instead of calling 'renderScene()', we call a new function: 'animateScene()'. It will 
-                // update the rotation values and call 'renderScene()' in a loop. 
-
             }
         } else {
             displayInformation(result, "", result.message, "");
@@ -1094,13 +1094,15 @@ function switchRobot(robot) {
             userState.robot = robot;
             setRobotState(result);
             if (robot === "ev3") {
+                $('#blocklyDiv').removeClass('simBackground');
                 $('#menuEv3').parent().addClass('disabled');
                 $('#menuSim').parent().removeClass('disabled');
                 $('#menuConnect').parent().removeClass('disabled');
                 $('#iconDisplayRobotState').removeClass('typcn-Roberta');
                 $('#iconDisplayRobotState').addClass('typcn-ev3');
             } else if (robot === "oraSim") {
-                userState.robotName = "ORASim";
+                userState.robotName = "ORSim";
+                $('#blocklyDiv').addClass('simBackground');
                 $('#menuEv3').parent().removeClass('disabled');
                 $('#menuSim').parent().addClass('disabled');
                 $('#menuConnect').parent().addClass('disabled');
@@ -1288,34 +1290,36 @@ function initHeadNavigation() {
     });
 
     // controle for simulation
+    $('.simSimple').onWrap('click', function(event) {
+        $('.menuSim').parent().removeClass('disabled');
+        $('.simSimple').parent().addClass('disabled');
+        SIM.setBackground(1);
+        $("#simButtonsCollapse").collapse('hide');
+    }, 'simSimple clicked');
+    $('.simDraw').onWrap('click', function(event) {
+        $('.menuSim').parent().removeClass('disabled');
+        $('.simDraw').parent().addClass('disabled');
+        SIM.setBackground(2);
+        $("#simButtonsCollapse").collapse('hide');
+    }, 'simDraw clicked');
     $('.simRoberta').onWrap('click', function(event) {
+        $('.menuSim').parent().removeClass('disabled');
         $('.simRoberta').parent().addClass('disabled');
-        $('.simRescue').parent().removeClass('disabled');
-        $('.simRoberta').addClass('disabled');
-        $('.simRescue').removeClass('disabled');
-        setBackground(0);
+        SIM.setBackground(3);
         $("#simButtonsCollapse").collapse('hide');
     }, 'simRoberta clicked');
     $('.simRescue').onWrap('click', function(event) {
+        $('.menuSim').parent().removeClass('disabled');
         $('.simRescue').parent().addClass('disabled');
-        $('.simRoberta').parent().removeClass('disabled');
-        $('.simRescue').addClass('disabled');
-        $('.simRoberta').removeClass('disabled');
-        setBackground(1);
+        SIM.setBackground(4);
         $("#simButtonsCollapse").collapse('hide');
     }, 'simRescue clicked');
     $('.simBack').onWrap('click', function(event) {
-        cancelOraSim();
+        SIM.cancel();
         $('#blocklyDiv').removeClass('simActive');
         $('#simDiv').removeClass('simActive');
         $(".sim").addClass('hide');
-        $("#blocklyDiv").animate({
-            "width" : "+=70%"
-        }, {
-            step : function() {
-                Blockly.fireUiEvent(window, 'resize')
-            }
-        }, 1000);
+        Blockly.fireUiEvent(window, 'resize')
         $('.nav > li > ul > .robotType').removeClass('disabled');
         $('#menuSim').parent().addClass('disabled');
         COMM.json("/toolbox", {
@@ -1327,29 +1331,27 @@ function initHeadNavigation() {
         });
         $("#simButtonsCollapse").collapse('hide');
         $("#head-navi-tooltip-program").removeClass('disabled');
+        $('#head-navigation-program-edit').removeClass('disabled');
+        $('#head-navigation-program-edit>ul').removeClass('hidden');
     }, 'simBack clicked');
     $('.simStop').onWrap('click', function(event) {
-        stopProgram();
+        SIM.stopProgram();
         $("#simButtonsCollapse").collapse('hide');
     }, 'simStop clicked');
     $('.simForward').onWrap('click', function(event) {
         if ($('.simForward').hasClass('typcn-media-play')) {
-            $('.simForward').removeClass('typcn-media-play');
-            $('.simForward').addClass('typcn-media-pause');
-            setPause(false);
+            SIM.setPause(false);
         } else {
-            $('.simForward').removeClass('typcn-media-pause');
-            $('.simForward').addClass('typcn-media-play');
-            setPause(true);
+            SIM.setPause(true);
         }
         $("#simButtonsCollapse").collapse('hide');
     }, 'simForward clicked');
     $('.simStep').onWrap('click', function(event) {
-        setStep();
+        SIM.setStep();
         $("#simButtonsCollapse").collapse('hide');
     }, 'simStep clicked');
     $('.simInfo').onWrap('click', function(event) {
-        setInfo();
+        SIM.setInfo();
         $("#simButtonsCollapse").collapse('hide');
     }, 'simInfo clicked');
 
@@ -1795,7 +1797,7 @@ function displayMessage(messageId, output, replaceWith) {
         }
 
         if (output === 'POPUP') {
-        	displayPopupMessage(lkey,value);
+            displayPopupMessage(lkey, value);
         } else if (output === 'TOAST') {
             toastMessages.unshift(value);
             if (toastMessages.length === 1) {
@@ -1809,7 +1811,7 @@ function displayMessage(messageId, output, replaceWith) {
  * Display popup messages
  */
 function displayPopupMessage(lkey, value) {
-	$('#message').attr('lkey', lkey);
+    $('#message').attr('lkey', lkey);
     $('#message').html(value);
     $("#show-message").modal("show");
 }
@@ -1818,15 +1820,15 @@ function displayPopupMessage(lkey, value) {
  * Display toast messages
  */
 function displayToastMessages() {
-	$('#toastText').text(toastMessages[toastMessages.length - 1]);
-	$('#toastContainer').delay(100).fadeIn("slow", function() {
-		$(this).delay(1000).fadeOut("slow", function() {
-			toastMessages.pop();
-			if (toastMessages.length > 0) {
-				displayToastMessages();
-			}
-		});
-	});
+    $('#toastText').text(toastMessages[toastMessages.length - 1]);
+    $('#toastContainer').delay(100).fadeIn("slow", function() {
+        $(this).delay(1000).fadeOut("slow", function() {
+            toastMessages.pop();
+            if (toastMessages.length > 0) {
+                displayToastMessages();
+            }
+        });
+    });
 }
 
 /**
@@ -1890,9 +1892,6 @@ function setWorkspaceModified(modified) {
  * Initializations
  */
 function init() {
-    setTimeout(function() {
-        window.scrollTo(0, 1);
-    }, 0);
     initLogging();
     initUserState();
     $('#tabProgramName').text(userState.program);
@@ -1945,3 +1944,19 @@ function init() {
 $(window).on('resize', UTIL.resizeTabBar); // for small devices only
 
 $(document).ready(WRAP.fn3(init, 'page init'));
+
+function hideAddressBar()
+{
+  if(!window.location.hash)
+  {
+      if(document.height < window.outerHeight)
+      {
+          document.body.style.height = (window.outerHeight + 50) + 'px';
+      }
+
+      setTimeout( function(){ window.scrollTo(0, 1); }, 50 );
+  }
+}
+
+window.addEventListener("load", function(){ if(!window.pageYOffset){ hideAddressBar(); } } );
+window.addEventListener("orientationchange", hideAddressBar );
