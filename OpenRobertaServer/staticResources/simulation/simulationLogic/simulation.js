@@ -45,9 +45,16 @@ var SIM = (function() {
     var currentBackground = 1;
 
     function setBackground(num) {
-        window.removeEventListener("resize", resizeAll); 
+        window.removeEventListener("resize", resizeAll);
         setPause(true);
-        currentBackground = num;
+        if (num == 0) {
+            currentBackground += 1;
+            if (currentBackground > 4) {
+                currentBackground = 1;
+            }
+        } else {
+            currentBackground = num;
+        }
         if (currentBackground == 1) {
             robot = new SimpleRobot();
         } else if (currentBackground == 2) {
@@ -58,12 +65,13 @@ var SIM = (function() {
             robot = new RescueRobot();
         }
         setObstacle();
-        scene = new Scene(img[num], layers, robot, obstacle);
+        scene = new Scene(img[currentBackground], layers, robot, obstacle);
         resizeAll();
         scene.updateBackgrounds();
         scene.drawObjects();
         reloadProgram();
-        window.addEventListener("resize", resizeAll); 
+        window.addEventListener("resize", resizeAll);
+        return currentBackground;
     }
 
     var pause;
@@ -161,7 +169,7 @@ var SIM = (function() {
 
     var robot = new SimpleRobot();
 
-    function init(program) {       
+    function init(program) {
         ready = false;
         userProgram = program;
         eval(userProgram);
@@ -175,14 +183,14 @@ var SIM = (function() {
         averageTimeStep = STEP_TIME;
         robot.reset();
         img = [];
-        loadImages(0);      
+        loadImages(0);
     }
 
     function cancel() {
-        window.removeEventListener("resize", resizeAll);       
+        window.removeEventListener("resize", resizeAll);
         canceled = true;
         removeMouseEvents();
-        destroyLayers();     
+        destroyLayers();
     }
 
     function render() {
@@ -232,17 +240,17 @@ var SIM = (function() {
         if (currentBackground == 2) {
             obstacle.x = 500;
             obstacle.y = 250;
-            obstacle.w = 120;
-            obstacle.h = 120;
+            obstacle.w = 100;
+            obstacle.h = 100;
             obstacle.img = null;
-            obstacle.color = "red";
+            obstacle.color = "#33B8CA";
         } else if (currentBackground == 1) {
             obstacle.x = 580;
             obstacle.y = 290;
-            obstacle.w = 80;
-            obstacle.h = 80;
+            obstacle.w = 100;
+            obstacle.h = 100;
             obstacle.img = null;
-            obstacle.color = "brown";
+            obstacle.color = "#33B8CA";
         } else if (currentBackground == 3) {
             obstacle.x = 500;
             obstacle.y = 250;
@@ -255,7 +263,7 @@ var SIM = (function() {
             obstacle.y = 396;
             obstacle.w = 20;
             obstacle.h = 20;
-            obstacle.color = "grey";
+            obstacle.color = "#33B8CA";
             obstacle.img = null;
         }
     }
@@ -416,7 +424,7 @@ var SIM = (function() {
         addMouseEvents();
         ready = true;
         render();
-        window.addEventListener("resize", resizeAll);       
+        window.addEventListener("resize", resizeAll);
     }
 
     function setTimeStep() {

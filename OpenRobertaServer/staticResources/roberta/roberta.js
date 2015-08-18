@@ -1354,6 +1354,20 @@ function initHeadNavigation() {
         SIM.setInfo();
         $("#simButtonsCollapse").collapse('hide');
     }, 'simInfo clicked');
+    $('.simScene').onWrap('click', function(event) {
+        SIM.setBackground(0);
+        var scene = $("#simButtonsCollapse").collapse('hide');
+        $('.menuSim').parent().removeClass('disabled');
+        if (scene == 1) {
+            $('.simSimple').parent().addClass('disabled');
+        } else if (scene == 2) {
+            $('.simDraw').parent().addClass('disabled');
+        } else if (scene == 2) {
+            $('.simRoberta').parent().addClass('disabled');
+        } else if (scene == 2) {
+            $('.simRescue').parent().addClass('disabled');
+        }
+    }, 'simInfo clicked');
 
     setHeadNavigationMenuState('logout');
     $('#menuToolboxBeginner').parent().addClass('disabled');
@@ -1945,18 +1959,21 @@ $(window).on('resize', UTIL.resizeTabBar); // for small devices only
 
 $(document).ready(WRAP.fn3(init, 'page init'));
 
-function hideAddressBar()
-{
-  if(!window.location.hash)
-  {
-      if(document.height < window.outerHeight)
-      {
-          document.body.style.height = (window.outerHeight + 50) + 'px';
-      }
-
-      setTimeout( function(){ window.scrollTo(0, 1); }, 50 );
-  }
-}
-
-window.addEventListener("load", function(){ if(!window.pageYOffset){ hideAddressBar(); } } );
-window.addEventListener("orientationchange", hideAddressBar );
+//function hideAddressBar() {
+//    if (!window.location.hash) {
+//        if (document.height < window.outerHeight) {
+//            document.body.style.height = (window.outerHeight + 50) + 'px';
+//        }
+//
+//        setTimeout(function() {
+//            window.scrollTo(0, 1);
+//        }, 50);
+//    }
+//}
+//
+//window.addEventListener("load", function() {
+//    if (!window.pageYOffset) {
+//        hideAddressBar();
+//    }
+//});
+//window.addEventListener("orientationchange", hideAddressBar);

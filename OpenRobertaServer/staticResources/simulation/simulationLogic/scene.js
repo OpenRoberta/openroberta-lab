@@ -42,7 +42,7 @@ Scene.prototype.drawBackground = function(option_scale, option_context) {
 };
 
 Scene.prototype.drawObjects = function() {
-    this.oCtx.clearRect(this.obstacle.xOld - 10, this.obstacle.yOld - 10, this.obstacle.wOld + 20, this.obstacle.hOld + 20);
+    this.oCtx.clearRect(this.obstacle.xOld - 20, this.obstacle.yOld - 20, this.obstacle.wOld + 40, this.obstacle.hOld + 40);
     this.obstacle.xOld = this.obstacle.x;
     this.obstacle.yOld = this.obstacle.y;
     this.obstacle.wOld = this.obstacle.w;
@@ -54,16 +54,16 @@ Scene.prototype.drawObjects = function() {
         this.oCtx.drawImage(this.obstacle.img, this.obstacle.x, this.obstacle.y, this.obstacle.w, this.obstacle.h);
     } else if (this.obstacle.color) {
         this.oCtx.fillStyle = this.obstacle.color;
-        this.oCtx.fillRect(this.obstacle.x, this.obstacle.y, this.obstacle.w, this.obstacle.h);
-        this.oCtx.beginPath();
-        this.oCtx.strokeStyle = "black";
         this.oCtx.shadowBlur = 5;
         this.oCtx.shadowColor = "black";
-        this.oCtx.lineWidth = "1";
-        this.oCtx.rect(this.obstacle.x, this.obstacle.y, this.obstacle.w, this.obstacle.h);
-        this.oCtx.stroke();
-        this.oCtx.shadowBlur = 0;
-        this.oCtx.shadowOffsetX = 0;
+        this.oCtx.fillRect(this.obstacle.x, this.obstacle.y, this.obstacle.w, this.obstacle.h);
+//        this.oCtx.beginPath();
+//        this.oCtx.strokeStyle = "black";     
+//        this.oCtx.lineWidth = "1";
+//        this.oCtx.rect(this.obstacle.x, this.obstacle.y, this.obstacle.w, this.obstacle.h);
+//        this.oCtx.stroke();
+//        this.oCtx.shadowBlur = 0;
+//        this.oCtx.shadowOffsetX = 0;
     }
 };
 
@@ -84,13 +84,13 @@ Scene.prototype.drawRobot = function() {
         this.rCtx.fillText("FPS", endLabel, line);
         this.rCtx.fillText(Math.round(1000 / SIM.getAverageTimeStep()), endValue, line);
         line += 15;
-        this.rCtx.fillText("this.robot X", endLabel, line);
+        this.rCtx.fillText("Robot X", endLabel, line);
         this.rCtx.fillText(Math.round(this.robot.pose.x), endValue, line);
         line += 15;
-        this.rCtx.fillText("this.robot Y", endLabel, line);
+        this.rCtx.fillText("Robot Y", endLabel, line);
         this.rCtx.fillText(Math.round(this.robot.pose.y), endValue, line);
         line += 15;
-        this.rCtx.fillText("this.robot θ", endLabel, line);
+        this.rCtx.fillText("Robot θ", endLabel, line);
         this.rCtx.fillText(Math.round(Math.round(SIMATH.toDegree(this.robot.pose.theta))), endValue, line);
         line += 25;
         this.rCtx.fillText("Motor left", endLabel, line);
@@ -128,20 +128,18 @@ Scene.prototype.drawRobot = function() {
     this.rCtx.lineTo(this.robot.geom.x + this.robot.geom.w + 5, 0);
     this.rCtx.stroke();
     //back wheel
-    this.rCtx.fillStyle = "black";
-    //this.rCtx.ellipse(0, 30, 3, 6, this.robot.pose.thetaDiff, 0, Math.PI * 2);
-    //this.rCtx.fill();
-    this.rCtx.fillRect(-2.5, 30, 5, 5);
+    this.rCtx.fillStyle = this.robot.wheelBack.color;
+    this.rCtx.fillRect(this.robot.wheelBack.x, this.robot.wheelBack.y, this.robot.wheelBack.w, this.robot.wheelBack.h);
     //this.robot
     this.rCtx.shadowBlur = 0;
     this.rCtx.shadowOffsetX = 0;
     this.rCtx.fillStyle = this.robot.touchSensor.color;
     this.rCtx.fillRect(this.robot.frontRight.x + 12.5, this.robot.frontRight.y, 20, 10);
     this.rCtx.fillStyle = this.robot.led.color;
-    var grd = this.rCtx.createRadialGradient(0, 10, 1, 0, 10, 15);
+    var grd = this.rCtx.createRadialGradient(this.robot.led.x, this.robot.led.y, 1, this.robot.led.x, this.robot.led.y, 15);
     grd.addColorStop(0, this.robot.led.color);
     grd.addColorStop(0.5, this.robot.geom.color);
-    this.rCtx.shadowBlur = 10;
+    this.rCtx.shadowBlur = 5;
     this.rCtx.shadowColor = "black";
     this.rCtx.fillStyle = grd;
     this.rCtx.beginPath();
@@ -159,7 +157,7 @@ Scene.prototype.drawRobot = function() {
     this.rCtx.fill();
 
     //touch
-    this.rCtx.shadowBlur = 10;
+    this.rCtx.shadowBlur = 5;
     this.rCtx.shadowOffsetX = 2;
     if (this.robot.touchSensor.value === 1) {
         this.rCtx.fillStyle = 'red';
@@ -173,7 +171,7 @@ Scene.prototype.drawRobot = function() {
     //LED
     this.rCtx.fillStyle = "#f0f0f0";
     this.rCtx.beginPath();
-    this.rCtx.arc(0, 10, 2.5, 0, Math.PI * 2);
+    this.rCtx.arc(this.robot.led.x, this.robot.led.y, 2.5, 0, Math.PI * 2);
     this.rCtx.fill();
     //wheels
     this.rCtx.fillStyle = this.robot.wheelLeft.color;

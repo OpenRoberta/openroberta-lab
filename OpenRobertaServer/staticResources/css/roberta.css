@@ -305,8 +305,12 @@ to {
 }
 
 #simButtons {
-	width: 460px;
+	width: 350px;
 }
+
+#simButtons > .btn {
+		margin-bottom: 10px;
+	}
 
 /***** BEGIN Overwrite Bootstrap-CSS *****/
 .tooltip.right>.tooltip-inner {
@@ -773,8 +777,11 @@ table.dataTable thead .sorting_desc {
 		width: 60px;
 	}
 	#simButtons > .btn {
-		margin-bottom: 10px;
+		margin-bottom: 8px;
 	}
+	#simBack {
+	    margin-bottom: -10px !important;
+	    }
 	#blocklyDiv{
   transition-property: width;
   transition-duration: 0.5s;  
