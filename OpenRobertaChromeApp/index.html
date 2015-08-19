@@ -8,78 +8,60 @@
       <link rel="stylesheet" type="text/css" href="css/chrome_app.css"></link>
   </head>
     <body>
-        <!-- TODO Add grid or sth -->
         <div class="grid">
-        
+        <!------Menu---->
           <div class="row">
             <div class="col-3">
               <div class="ddmenu" id="menu"><!-- öffnet die Navigationsleiste-->
-
-                <ul><!-- öffnet den ersten Themenblock -->
-
-                  <li><!-- öffnet die Listeneinträge von Thema 1 -->
-
+                <ul>
+                  <li>
                     <p>Datei</p> 
-              
-                     <ul>  <!-- öffnet die Klappnavi von Thema 1 --> 
-                  
+                     <ul>  
                       <li><a href="#">beenden</a></li>
-                  
-                    </ul> <!-- schließt die Klappnavi von Thema 1 --> 
-            
-                  </li>   <!-- schließt die Listeneinträge von Thema 1 --> 
-          
-                </ul><!--schließt den ersten Themenblock-->
-
-              </div><!-- schließt die Menüleiste #menu -->
+                    </ul>
+                  </li>  
+                </ul>
+              </div>
             </div>
         
         <div class="col-3"  >
           <div class="ddmenu" id="menu"><!-- öffnet die Navigationsleiste-->
-
-            <ul><!-- öffnet den zweiten Themenblock -->
-
-              <li><!-- öffnet die Listeneinträge von Thema 2 -->
-
+            <ul>
+              <li>
                 <p>Info</p> 
-              
-                  <ul>  <!-- öffnet die Klappnavi von Thema 2 --> 
-                  
+                  <ul> 
                     <li>
                       <a id="about" href="about.html" >about </a>
                     </li>
-                  
-                  </ul> <!-- schließt die Klappnavi von Thema 2 --> 
-            
-              </li>   <!-- schließt die Listeneinträge von Thema 2 --> 
-          
-            </ul><!--schließt den zweiten Themenblock-->
+                  </ul>
+              </li>  
+            </ul>
           </div>
-        </div><!-- schließt die Menüleiste #menu --> 
+        </div>
+        
         <div class="col-6 robstatus">
           <img id="connstatus" src="resources/Roberta_Menu_Icon_grey.png" alt="Disconnected">
         </div>
         </div>
         
-        
+        <!----Trennlinie---->
         <div class="row trenner"></div>
         
-        
+        <!----Anzeigebereich für Token---->
         <div class="row">
             <textarea class="col-12 tokenarea" id="token" readonly></textarea>
-            <!--   <img id="connstatus" src="resources/Roberta_Menu_Icon_grey.png" alt="Disconnected" align="right"> Verschoben nach robstatus-->
         </div>
-        
+        <!-----Bild Verbindungsanimation---->
         <div class="row">
           <div class="col-12">
              <img id="mainpicture" >
           </div>
         </div>
-        
+        <!----Infotext----->
         <div class="row">
             <textarea class="col-12 info" id="infotext" cols="37" rows="5" readonly></textarea>
         </div>
-
+        <!----Buttons----->
         <div class="row">
           <div class="col-6 btngrid">
             <button id="connect" class="btn" disabled></button>
@@ -100,12 +82,9 @@
         </div>
 
         <!------EingabeFelder----->
-
         <div id="alternative" style="visibility:hidden" >
           <div class="row">
-
               <textarea class="col-12 serveradr" id="customaddressinfo" cols="35" rows="1" readonly></textarea>
-
           </div>
           <div class="row userin">
             <div class="col-1 iptxt">
