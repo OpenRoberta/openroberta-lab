@@ -204,6 +204,7 @@ function injectBlockly(toolbox, opt_programBlocks, opt_readOnly) {
                 path : '/blockly/',
                 toolbox : toolbox.data,
                 trashcan : true,
+                code : true,
                 save : true,
                 check : true,
                 start : true
@@ -215,6 +216,7 @@ function injectBlockly(toolbox, opt_programBlocks, opt_readOnly) {
                 toolbox : toolbox.data,
                 readOnly : true,
                 trashcan : false,
+                code : false,
                 save : false,
                 check : false,
                 start : false
@@ -428,6 +430,46 @@ function runOnBrick() {
 }
 
 /**
+ * Show program code
+ */
+function showCode() {
+    if (userState.robot === 'ev3') {
+        LOG.info('show code ' + userState.program + ' signed in: ' + userState.id);
+        var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+        var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
+        var xmlTextConfiguration = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
+        PROGRAM.showJavaProgram(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
+            setRobotState(result);
+            $('#blocklyDiv').addClass('codeActive');
+            $('#blocklyDiv').parent().bind('transitionend', function() {
+                Blockly.fireUiEvent(window, 'resize');
+            });
+            $('#codeDiv').addClass('codeActive');
+//            $('#codeButtonsCollapse').collapse({
+//                'toggle' : false
+//            });
+            $('.nav > li > ul > .robotType').addClass('disabled');
+            $('#head-navigation-program-edit').addClass('disabled');
+            $('#head-navigation-program-edit>ul').addClass('hidden');
+            userState.programCode = result.javaSource;
+            if (Blockly.mainWorkspace !== null) {
+                var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+                userState.programBlocks = Blockly.Xml.domToText(xmlProgram);
+            }
+            COMM.json("/toolbox", {
+                "cmd" : "loadT",
+                "name" : userState.toolbox,
+                "owner" : " "
+            }, function(result) {
+                injectBlockly(result, userState.programBlocks, true);
+            });
+            $(".code").removeClass('hide');
+            document.getElementById('codeDiv').innerHTML = '<textarea>' + result.javaSource + '</textarea>';
+        })
+    }
+}
+
+/**
  * Start the program on the brick
  */
 function startProgram() {
@@ -437,6 +479,8 @@ function startProgram() {
     var xmlTextConfiguration = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
     displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
     PROGRAM.runOnBrick(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
+        //PROGRAM.showJavaProgram(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
+        // console.log(result.javaSource);
         setRobotState(result);
         if (result.rc == "ok") {
             if (userState.robot === 'oraSim') {
@@ -1144,6 +1188,8 @@ function initHeadNavigation() {
             saveToServer();
         } else if (domId === 'menuSaveAsProg') { //  Submenu 'Program'
             $("#save-program").modal('show');
+        } else if (domId === 'menuShowCode') { //  Submenu 'Program'
+            showCode();
         } else if (domId === 'menuPropertiesProg') { //  Submenu 'Program'
         } else if (domId === 'menuToolboxBeginner') { // Submenu 'Program'
             loadToolbox('beginner');
@@ -1362,15 +1408,46 @@ function initHeadNavigation() {
             $('.simSimple').parent().addClass('disabled');
         } else if (scene == 2) {
             $('.simDraw').parent().addClass('disabled');
-        } else if (scene == 2) {
+        } else if (scene == 3) {
             $('.simRoberta').parent().addClass('disabled');
-        } else if (scene == 2) {
+        } else if (scene == 4) {
             $('.simRescue').parent().addClass('disabled');
         }
     }, 'simInfo clicked');
 
-    setHeadNavigationMenuState('logout');
-    $('#menuToolboxBeginner').parent().addClass('disabled');
+    $('.codeBack').onWrap('click', function(event) {
+        $('#blocklyDiv').removeClass('codeActive');
+        $('#codeDiv').removeClass('codeActive');
+        //$(".sim").addClass('hide');
+        Blockly.fireUiEvent(window, 'resize')
+        $('.nav > li > ul > .robotType').removeClass('disabled');
+        //$('#menuSim').parent().addClass('disabled');
+        COMM.json("/toolbox", {
+            "cmd" : "loadT",
+            "name" : userState.toolbox,
+            "owner" : " "
+        }, function(result) {
+            injectBlockly(result, userState.programBlocks);
+        });
+        //$("#simButtonsCollapse").collapse('hide');
+        $("#head-navi-tooltip-program").removeClass('disabled');
+        $('#head-navigation-program-edit').removeClass('disabled');
+        $('#head-navigation-program-edit>ul').removeClass('hidden');
+        $(".code").addClass('hide');
+    }, 'codeBack clicked');
+
+    $('#codeDownload').onWrap('click', function(event) {
+        var blob = new Blob([ userState.programCode ]);
+        var element = document.createElement('a');
+        var myURL = window.URL || window.webkitURL;
+        console.log('winurl=' + myURL);
+        element.setAttribute('href', myURL.createObjectURL(blob));
+        element.setAttribute('download', userState.program + ".java");
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    }, 'codeDownload clicked');
 }
 
 /**

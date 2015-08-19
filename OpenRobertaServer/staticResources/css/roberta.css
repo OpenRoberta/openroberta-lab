@@ -199,25 +199,38 @@ html, body {
 	float: left;
 }
 
-#blocklyDiv{
-  transition-property: width;
-  transition-duration: 0.5s;  
-  transition-timing-function: linear, ease-in;
-  -webkit-transition-property: width;
-  -webkit-transition-timing-function: linear, ease-in;
-  -webkit-transition-duration: 0.5s;
+#blocklyDiv {
+	transition-property: width;
+	transition-duration: 0.5s;
+	transition-timing-function: linear, ease-in;
+	-webkit-transition-property: width;
+	-webkit-transition-timing-function: linear, ease-in;
+	-webkit-transition-duration: 0.5s;
 }
 
-#blocklyDiv.simBackground{
- background: url(../css/svg/simBlockBackground.svg) repeat;
- background-size: 100%;
+#blocklyDiv.simBackground {
+	background: url(../css/svg/simBlockBackground.svg) repeat;
+	background-size: 100%;
 }
 
 #simDiv {
+	position: relative;
 	visibility: hidden;
 }
 
-#blocklyDiv.simActive {
+#codeDiv {
+	position: relative;
+	visibility: hidden;
+	padding: 28px;
+	padding-right: 0px;
+}
+
+.codeActive>textarea {
+	width: 100%;
+	height: 100%;
+}
+
+#blocklyDiv.simActive, #blocklyDiv.codeActive {
 	width: 30%;
 	float: left;
 }
@@ -228,7 +241,14 @@ html, body {
 	background: "#ffffff";
 	visibility: visible;
 	position: relative;
-	
+}
+
+#codeDiv.codeActive {
+	height: 100%;
+	overflow: hidden;
+	background: "#ffffff";
+	visibility: visible;
+	position: relative;
 }
 
 #toastContainer {
@@ -308,9 +328,9 @@ to {
 	width: 350px;
 }
 
-#simButtons > .btn {
-		margin-bottom: 10px;
-	}
+#simButtons>.btn {
+	margin-bottom: 10px;
+}
 
 /***** BEGIN Overwrite Bootstrap-CSS *****/
 .tooltip.right>.tooltip-inner {
@@ -340,7 +360,8 @@ to {
 	width: auto;
 	overflow: hidden;
 	white-space: nowrap;
-	margin: 0; padding : 0;
+	margin: 0;
+	padding: 0;
 	border: 0;
 	overflow: hidden;
 	padding: 0;
@@ -773,24 +794,24 @@ table.dataTable thead .sorting_desc {
 	.blocklyButton {
 		display: none
 	}
-	#simButtons {
+	#simButtons, #codeButtons {
 		width: 60px;
 	}
-	#simButtons > .btn {
+	#simButtons>.btn, #codeButtons>.btn {
 		margin-bottom: 8px;
 	}
-	#simBack {
-	    margin-bottom: -10px !important;
-	    }
-	#blocklyDiv{
-  transition-property: width;
-  transition-duration: 0.5s;  
-  transition-timing-function: linear, ease-in;
-  -webkit-transition-property: width;
-  -webkit-transition-timing-function: linear, ease-in;
-  -webkit-transition-duration: 0.5s;
+	#simBack, #codeBack {
+		margin-bottom: -10px !important;
+	}
+	#blocklyDiv {
+		transition-property: width;
+		transition-duration: 0.5s;
+		transition-timing-function: linear, ease-in;
+		-webkit-transition-property: width;
+		-webkit-transition-timing-function: linear, ease-in;
+		-webkit-transition-duration: 0.5s;
+	}
+	#blocklyDiv.simActive, #blocklyDiv.codeActive {
+		width: 96px;
+	}
 }
-
-#blocklyDiv.simActive {
-	width: 96px;
-}}

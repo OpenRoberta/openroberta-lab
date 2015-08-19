@@ -93,8 +93,17 @@ Blockly.Trashcan.prototype.LID_HEIGHT_ = 7;
  * @type {number}
  * @private
  */
-Blockly.Trashcan.prototype.MARGIN_BOTTOM_ = 88;
-Blockly.Trashcan.MARGIN_BOTTOM_INITIAL_ = 88;
+Blockly.Trashcan.prototype.MARGIN_BOTTOM_ = 60;
+Blockly.Trashcan.MARGIN_BOTTOM_INITIAL_ = 60;
+
+/**
+ * Distance between trashcan and top edge of workspace.
+ * 
+ * @type {number}
+ * @private
+ */
+Blockly.Trashcan.prototype.MARGIN_TOP_ = -50;
+Blockly.Trashcan.MARGIN_TOP_INITIAL_ = -50;
 
 /**
  * Distance between trashcan and right edge of workspace.
@@ -102,8 +111,8 @@ Blockly.Trashcan.MARGIN_BOTTOM_INITIAL_ = 88;
  * @type {number}
  * @private
  */
-Blockly.Trashcan.prototype.MARGIN_SIDE_ = 91;
-Blockly.Trashcan.MARGIN_SIDE_INITIAL_ = 91;
+Blockly.Trashcan.prototype.MARGIN_SIDE_ = 230;
+Blockly.Trashcan.MARGIN_SIDE_INITIAL_ = 230;
 
 /**
  * Extent of hotspot on all sides beyond the size of the image.
@@ -240,9 +249,9 @@ Blockly.Trashcan.prototype.position_ = function() {
         return;
     }
     if (Blockly.RTL) {
-        this.left_ = this.MARGIN_SIDE_;
+        this.left_ = metrics.viewWidth + metrics.absoluteLeft - this.WIDTH_ - this.MARGIN_SIDE_;
     } else {
-        this.left_ = metrics.viewWidth + metrics.absoluteLeft - this.TILE_ - this.MARGIN_SIDE_;
+        this.left_ = this.MARGIN_SIDE_;
     }
     this.top_ = metrics.viewHeight + metrics.absoluteTop - (this.TILE_) - this.MARGIN_BOTTOM_;
     this.svgGroup_.setAttribute('transform', 'translate(' + this.left_ + ',' + this.top_ + ')');
@@ -317,12 +326,12 @@ Blockly.Trashcan.prototype.close = function() {
  * Flip the lid shut. Called externally after a drag.
  */
 Blockly.Trashcan.prototype.moveToEdge = function() {
-    this.MARGIN_BOTTOM_ = Blockly.Trashcan.MARGIN_BOTTOM_INITIAL_ - 50;
+    this.MARGIN_TOP_ = Blockly.Trashcan.MARGIN_TOP_INITIAL_ - 50;
     this.MARGIN_SIDE_ = Blockly.Trashcan.MARGIN_SIDE_INITIAL_ - 50;
     this.position_();
 };
 Blockly.Trashcan.prototype.moveOutEdge = function() {
-    this.MARGIN_BOTTOM_ = Blockly.Trashcan.MARGIN_BOTTOM_INITIAL_;
+    this.MARGIN_TOP_ = Blockly.Trashcan.MARGIN_TOP_INITIAL_;
     this.MARGIN_SIDE_ = Blockly.Trashcan.MARGIN_SIDE_INITIAL_;
     this.position_();
 };

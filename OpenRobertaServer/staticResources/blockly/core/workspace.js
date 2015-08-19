@@ -35,6 +35,7 @@ goog.require('Blockly.StartButton');
 goog.require('Blockly.EmptyButton');
 goog.require('Blockly.CheckButton');
 goog.require('Blockly.SaveButton');
+goog.require('Blockly.CodeButton');
 goog.require('Blockly.Xml');
 // goog.require('Blockly.Xml.Roberta');
 
@@ -246,6 +247,18 @@ Blockly.Workspace.prototype.addBackButton = function() {
         var svgBackButton = this.backButton.createDom();
         this.svgGroup_.insertBefore(svgBackButton, this.svgBlockCanvas_);
         this.backButton.init();
+    }
+};
+
+/**
+ * Add a codeButton.
+ */
+Blockly.Workspace.prototype.addCodeButton = function() {
+    if (Blockly.hasCodeButton) {
+        this.codeButton = new Blockly.CodeButton(this, 1);
+        var svgCodeButton = this.codeButton.createDom();
+        this.svgGroup_.insertBefore(svgCodeButton, this.svgBlockCanvas_);
+        this.codeButton.init();
     }
 };
 

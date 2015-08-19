@@ -43,7 +43,7 @@ limitations under the License.
 
 <script type="text/javascript" src="/blockly/blockly_compressed.js"></script>
 <script type="text/javascript" src="/blockly/blocks_compressed.js"></script>
-<script type="text/javascript" src="/blockly/blocks/simSensors.js"></script>
+
 
 <link rel="stylesheet" type="text/css" href="/common/bootstrap/bootstrap-3.3.1-dist/dist/css/bootstrap.min.css"></link>
 <link rel="stylesheet" type="text/css" href="/common/jquery.dataTables.min.css"></link>
@@ -97,6 +97,8 @@ limitations under the License.
                             </li>
                             <li class="logout"><a href="#" id="menuSaveAsProg" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE_AS">speichern
                                     unter ...</a></li>
+                            <li class=""><a href="#" id="menuShowCode" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SHOW_CODE">show
+                                    code</a></li>
                             <li class="hidden"><a href="#" id="menuAttachProg" class="" lkey="Blockly.Msg.MENU_ATTACH">anhängen ...</a></li>
                             <li class="hidden"><a href="#" id="menuPropertiesProg" class="" lkey="Blockly.Msg.MENU_PROPERTIES">Eigenschaften</a></li>
                             <li class="divider"></li>
@@ -652,19 +654,28 @@ limitations under the License.
 
             <div id="blockly">
                 <div id="blocklyDiv"></div>
-                <div id="simDiv" style="position: relative;">
+                <div id="simDiv">
                     <div id="uniDiv" style="position: absolute; left: 0; top: 0; z-index: 0; width: 100%;"></div>
                     <div id="backgroundDiv" style="position: absolute; left: 0; top: 0; z-index: 0; width: 100%;"></div>
                     <div id="objectDiv" style="position: absolute; left: 0; top: 0; z-index: 1; width: 100%"></div>
                     <div id="robotDiv" style="position: absolute; left: 0; top: 0; z-index: 1; width: 100%"></div>
                 </div>
                 <div id="simButtons" class="navbar navbar-fixed-bottom sim hide">
-                     <button id="simForward" type="button" class="simForward btn typcn typcn-media-play head-navi-icons pull-left" data-toggle="collapse"></button>
+                    <button id="simForward" type="button" class="simForward btn typcn typcn-media-play head-navi-icons pull-left" data-toggle="collapse"></button>
                     <button id="simStep" type="button" class="simStep btn typcn typcn-step head-navi-icons pull-left" data-toggle="collapse"></button>
                     <button id="simStop" type="button" class="simStop btn typcn typcn-media-stop head-navi-icons pull-left" data-toggle="collapse"></button>
-                   <button id="simScene" type="button" class="simScene btn typcn typcn-video head-navi-icons pull-left" data-toggle="collapse"></button>
+                    <button id="simScene" type="button" class="simScene btn typcn typcn-video head-navi-icons pull-left" data-toggle="collapse"></button>
                     <button id="simInfo" type="button" class="simInfo btn typcn typcn-info-large head-navi-icons pull-left" data-toggle="collapse"></button>
                     <button id="simBack" type="button" class="simBack btn typcn typcn-edit head-navi-icons pull-left" data-toggle="collapse"></button>
+                </div>
+                <div id="codeDiv">
+                    <!-- <div id="codePackage" class="codeActive"></div>
+                    <button type="button" class="btn typcn typcn-plus" data-toggle="collapse" data-target="#codeImport">simple collapsible</button>
+                    <div id="codeImport" class="collapse in codeActive"></div> -->
+                </div>
+                <div id="codeButtons" class="navbar navbar-fixed-bottom code hide">
+                    <button id="codeDownload" type="button" class="codeDownload btn typcn typcn-download head-navi-icons pull-left" data-toggle="collapse"></button>
+                    <button id="codeBack" type="button" class="codeBack btn typcn typcn-edit head-navi-icons pull-left" data-toggle="collapse"></button>
                 </div>
             </div>
 

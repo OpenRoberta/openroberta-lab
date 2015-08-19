@@ -102,6 +102,7 @@ Blockly.parseOptions_ = function(options) {
         var hasComments = false;
         var hasDisable = false;
         var hasStartButton = false;
+        var hasCodeButton = false;
         var hasCheckButton = false;
         var tree = null;
     } else {
@@ -111,13 +112,17 @@ Blockly.parseOptions_ = function(options) {
         if (hasTrashcan === undefined) {
             hasTrashcan = hasCategories;
         }
+        var hasCodeButton = options['code'];
+        if (hasCodeButton === undefined) {
+            hasCodeButton = false;
+        }
         var hasStartButton = options['start'];
         if (hasStartButton === undefined) {
             hasStartButton = false;
         }
         var hasSaveButton = options['save'];
-        if (hasStartButton === undefined) {
-            hasStartButton = false;
+        if (hasSaveButton === undefined) {
+            hasSaveButton = false;
         }
         var hasCheckButton = options['check'];
         if (hasCheckButton === undefined) {
@@ -158,6 +163,7 @@ Blockly.parseOptions_ = function(options) {
     Blockly.hasCategories = hasCategories;
     Blockly.hasScrollbars = hasScrollbars;
     Blockly.hasTrashcan = hasTrashcan;
+    Blockly.hasCodeButton = hasCodeButton;
     Blockly.hasCheckButton = hasCheckButton;
     Blockly.hasStartButton = hasStartButton;
     Blockly.hasSaveButton = hasSaveButton;
@@ -456,6 +462,7 @@ Blockly.init_ = function() {
     Blockly.mainWorkspace.addStartButton();
     Blockly.mainWorkspace.addCheckButton();
     Blockly.mainWorkspace.addSaveButton();
+    Blockly.mainWorkspace.addCodeButton();
   
     // Load the sounds.
     Blockly.loadAudio_([ 'media/click.mp3', 'media/click.wav', 'media/click.ogg' ], 'click');
