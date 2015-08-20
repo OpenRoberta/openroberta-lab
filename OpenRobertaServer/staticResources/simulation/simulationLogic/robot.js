@@ -157,17 +157,22 @@ Robot.prototype.updatePose = function(output) {
     this.pose.theta = (this.pose.theta + 2 * Math.PI) % (2 * Math.PI);
     this.encoder.left += output.left * STEP_TIME;
     this.encoder.right += output.right * STEP_TIME;
+    this.bumpedAready = false;
     if (this.frontLeft.bumped === true && output.left > 0) {
         output.left *= -1;
+        this.bumpedAready = true;
     }
     if (this.backLeft.bumped === true && output.left < 0) {
         output.left *= -1;
+        this.bumpedAready = true;
     }
     if (this.frontRight.bumped === true && output.right > 0) {
         output.right *= -1;
+        this.bumpedAready = true;
     }
     if (this.backRight.bumped === true && output.right < 0) {
         output.right *= -1;
+        this.bumpedAready = true;
     }
     if (output.right === output.left) {
         var moveXY = output.right * STEP_TIME;

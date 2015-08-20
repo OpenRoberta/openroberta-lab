@@ -305,11 +305,13 @@ Scene.prototype.updateSensorValues = function() {
                 }
             }
         }
-        if (this.robot.touchSensor.value === 1) {
+        if (this.robot.touchSensor.value === 1||this.robot.bumpedAready) {
+            this.robot.touchSensor.value = 1;
             values.touch = true;
         } else {
             values.touch = false;
         }
+        console.log(values.touch);
     }
     if (this.robot.colorSensor || this.robot.lightSensor) {
         var r = 0;
