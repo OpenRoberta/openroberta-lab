@@ -169,7 +169,7 @@ Scene.prototype.drawRobot = function() {
     this.rCtx.shadowBlur = 0;
     this.rCtx.shadowOffsetX = 0;
     //LED
-    this.rCtx.fillStyle = "#f0f0f0";
+    this.rCtx.fillStyle = this.robot.led.color;
     this.rCtx.beginPath();
     this.rCtx.arc(this.robot.led.x, this.robot.led.y, 2.5, 0, Math.PI * 2);
     this.rCtx.fill();

@@ -232,8 +232,8 @@ var SIM = (function() {
     function setOutput() {
         output.left = ACTORS.getLeftMotor().getPower() * MAXPOWER || 0;
         output.right = ACTORS.getRightMotor().getPower() * MAXPOWER || 0;
-        output.led = LIGHT.color || "grey"; // grey = led off
-        output.ledMode = LIGHT.mode || "OFF";
+        output.led = LIGHT.getColor() || "grey"; // grey = led off
+        output.ledMode = LIGHT.getMode() || "OFF";
     }
 
     function setObstacle() {
@@ -284,10 +284,7 @@ var SIM = (function() {
     function handleMouseUp(e) {
         e.preventDefault();
         if (!isDownrobot && !isDownObstacle) {
-            if (startX < ground.w / 2)
-                robot.pose.theta += SIMATH.toRadians(-5);
-            else
-                robot.pose.theta += SIMATH.toRadians(5);
+            if (startX < ground.w / 2){robot.pose.theta += SIMATH.toRadians(-5);} else {robot.pose.theta += SIMATH.toRadians(5);}
         }
         $("#robotLayer").css('cursor', 'auto');
         if (robot instanceof DrawRobot) {

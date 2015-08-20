@@ -191,6 +191,28 @@ public class AstToLejosJavaScriptVisitorTest {
 
     }
 
+    @Test
+    public void test12() throws Exception {
+
+        String a =
+            "var stmt0 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, false))], [[createDriveAction(createConstant(NUM_CONST, 50), FOREWARD)]]), createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true))], [[createDriveAction(createConstant(NUM_CONST, 50), BACKWARD, createConstant(NUM_CONST, 20))]])]);\n"
+                + "initProgram([stmt0]);";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator12.xml");
+
+    }
+
+    @Test
+    public void test13() throws Exception {
+
+        String a =
+            "var stmt0 = createIfStmt([createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, true)), createBinaryExpr(EQ, createGetSample(TOUCH), createConstant(BOOL_CONST, false))], [[createDriveAction(createConstant(NUM_CONST, 50), FOREWARD)], [createDriveAction(createConstant(NUM_CONST, 50), BACKWARD, createConstant(NUM_CONST, 20))]]);\n"
+                + "initProgram([stmt0]);";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator13.xml");
+
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
         Assert.assertEquals(a, Helper.generateJavaScript(fileName));

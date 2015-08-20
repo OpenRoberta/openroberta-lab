@@ -70,8 +70,8 @@ var ACTORS = (function() {
         if (direction != FOREWARD) {
             speed = -speed;
         }
-        leftMotor.setPower(speed);
-        rightMotor.setPower(speed);
+        leftMotor.setPower(speed / 100.);
+        rightMotor.setPower(speed / 100.);
     }
 
     function setAngleSpeed(speed, direction) {
@@ -303,7 +303,7 @@ var PROGRAM_SIMULATION = (function() {
 })();
 
 var LIGHT = (function() {
-    var color;
+    var color = "grey";
     var mode = OFF;
 
     function setColor(value) {
@@ -314,8 +314,23 @@ var LIGHT = (function() {
         mode = value;
     }
 
+    function getColor() {
+        return color;
+    }
+
+    function getMode() {
+        return mode;
+    }
+
+    function toString() {
+        return JSON.stringify([ color, mode ]);
+    }
+
     return {
         "setColor" : setColor,
-        "setMode" : setMode
+        "setMode" : setMode,
+        "getColor" : getColor,
+        "getMode" : getMode,
+        "toString" : toString
     };
 })();

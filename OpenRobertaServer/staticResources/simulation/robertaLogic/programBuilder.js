@@ -54,12 +54,12 @@ function createRepeatStmt(mode, expr, stmtList) {
 function createDriveAction(speed, direction, distance) {
     var result = {};
     result[STMT] = DRIVE_ACTION;
-    result[SPEED] = speed[VALUE] / 100.;
+    result[SPEED] = speed;
     result[DRIVE_DIRECTION] = direction;
     if (distance == undefined) {
-	result[DISTANCE] = undefined;
+        result[DISTANCE] = undefined;
     } else {
-	result[DISTANCE] = distance[VALUE];
+        result[DISTANCE] = distance;
     }
     return result;
 }
@@ -67,14 +67,14 @@ function createDriveAction(speed, direction, distance) {
 function createTurnAction(speed, direction, angle) {
     var result = {};
     result[STMT] = TURN_ACTION;
-    result[SPEED] = speed[VALUE] / 100.;
+    result[SPEED] = speed;
     result[TURN_DIRECTION] = direction;
-     if (angle == undefined) {
-	result[ANGLE] = undefined;
+    if (angle == undefined) {
+        result[ANGLE] = undefined;
     } else {
-	result[ANGLE] = angle[VALUE];
+        result[ANGLE] = angle;
     }
-    
+
     return result;
 }
 
@@ -83,21 +83,21 @@ function createTurnLight(color, mode) {
     result[STMT] = TURN_LIGHT;
     result[COLOR] = color;
     result[MODE] = mode;
-     
+
     return result;
 }
 
 function createResetLight() {
     var result = {};
     result[STMT] = RESET_LIGHT;
-     
+
     return result;
 }
 
 function createStopDrive() {
     var result = {};
     result[STMT] = STOP_DRIVE;
-       
+
     return result;
 }
 
@@ -130,11 +130,6 @@ function createWaitStmt(stmtList) {
     }
     var result = {};
     result[STMT] = WAIT_STMT;
-    if (stmtList.length > 1) {
-        for (var i = stmtList.length; i > 0; i--) {
-            stmtList[i - 1][ELSE_STMTS] = [ stmtList[i] ];
-        }
-    }
-    result[STATEMENTS] = stmtList[0];
+    result[STATEMENTS] = stmtList;
     return result;
 }

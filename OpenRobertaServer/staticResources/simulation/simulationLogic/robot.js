@@ -1,8 +1,10 @@
 /**
  * Creates a new robot for a simulation.
  * 
- * This robot is a differential drive robot. It has two wheels directly connected to motors and several sensors. Each component of the robot has a position in
- * the robots coordinate system. The robot itself has a pose in the global coordinate system (x, y, theta).
+ * This robot is a differential drive robot. It has two wheels directly
+ * connected to motors and several sensors. Each component of the robot has a
+ * position in the robots coordinate system. The robot itself has a pose in the
+ * global coordinate system (x, y, theta).
  * 
  * @class
  */
@@ -54,7 +56,7 @@ Robot.prototype.led = {
     x : 0,
     y : 10,
     color : '#dddddd',
-    // color : 'DeepSkyBlue',
+    //color : 'DeepSkyBlue',
     // color : 'orange',
     mode : ''
 };
@@ -142,13 +144,16 @@ Robot.prototype.mouse = {
     r : 30
 };
 /**
- * Update the pose of the robot. The new pose is calculated with the forward kinematics equations for a differential drive robot.
+ * Update the pose of the robot. The new pose is calculated with the forward
+ * kinematics equations for a differential drive robot.
  * 
  * @param {output}
- *            output from the executing program: power for left and right motors/wheels.
+ *            output from the executing program: power for left and right
+ *            motors/wheels.
  * 
  */
 Robot.prototype.updatePose = function(output) {
+
     this.pose.theta = (this.pose.theta + 2 * Math.PI) % (2 * Math.PI);
     this.encoder.left += output.left * STEP_TIME;
     this.encoder.right += output.right * STEP_TIME;
@@ -209,9 +214,12 @@ Robot.prototype.updatePose = function(output) {
     this.touchSensor.y1 = this.frontRight.ry;
     this.touchSensor.x2 = this.frontLeft.rx;
     this.touchSensor.y2 = this.frontLeft.ry;
+
+//    this.led.color = output.led;
+//    this.led.mode = output.ledMode;
 }
 /**
- * Translate a position to the global coordinate system 
+ * Translate a position to the global coordinate system
  * 
  * @param {Number}
  *            sin the sine from the orientation from the robot
@@ -316,20 +324,20 @@ DrawRobot.prototype.touchSensor = {
     color : "#FF69B4"
 };
 DrawRobot.prototype.wheelBack = {
-        x : -2.5,
-        y : 20,
-        w : 5,
-        h : 5,
-        color : '#999999'
-    };
+    x : -2.5,
+    y : 20,
+    w : 5,
+    h : 5,
+    color : '#999999'
+};
 DrawRobot.prototype.led = {
-        x : 0,
-        y : 0,
-        color : '#000000',
-        // color : 'DeepSkyBlue',
-        // color : 'orange',
-        mode : ''
-    };
+    x : 0,
+    y : 0,
+    color : '#000000',
+    // color : 'DeepSkyBlue',
+    // color : 'orange',
+    mode : ''
+};
 DrawRobot.prototype.frontLeft = {
     x : 22.5,
     y : -25,
@@ -364,4 +372,3 @@ DrawRobot.prototype.backMiddle = {
     rx : 0,
     ry : 0,
 };
-

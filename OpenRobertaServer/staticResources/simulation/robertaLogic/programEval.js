@@ -6,12 +6,14 @@ function initProgram(program) {
 }
 
 function step(simulationSensorData) {
-    SENSORS.setTouchSensor(simulationSensorData.touch);
-    SENSORS.setColor(simulationSensorData.color);
-    SENSORS.setLight(simulationSensorData.light);
-    SENSORS.setUltrasonicSensor(simulationSensorData.ultrasonic);
-    ACTORS.getLeftMotor().setCurrentRotations(simulationSensorData.tacho[0]);
-    ACTORS.getRightMotor().setCurrentRotations(simulationSensorData.tacho[1]);
+    if (simulationSensorData != undefined) {
+        SENSORS.setTouchSensor(simulationSensorData.touch);
+        SENSORS.setColor(simulationSensorData.color);
+        SENSORS.setLight(simulationSensorData.light);
+        SENSORS.setUltrasonicSensor(simulationSensorData.ultrasonic);
+        ACTORS.getLeftMotor().setCurrentRotations(simulationSensorData.tacho[0]);
+        ACTORS.getRightMotor().setCurrentRotations(simulationSensorData.tacho[1]);
+    }
     if (PROGRAM_SIMULATION.isNextStatement()) {
 
         var stmt = PROGRAM_SIMULATION.getRemove();
@@ -29,25 +31,27 @@ function step(simulationSensorData) {
 
         case IF_STMT:
             evalIf(stmt);
+            //step(simulationSensorData);
             break;
 
         case REPEAT_STMT:
             evalRepeat(stmt);
+            step(simulationSensorData);
             break;
 
         case DRIVE_ACTION:
             ACTORS.resetTacho(simulationSensorData.tacho[0], simulationSensorData.tacho[1]);
-            ACTORS.setSpeed(stmt.speed, stmt[DRIVE_DIRECTION]);
+            ACTORS.setSpeed(evalExpr(stmt.speed), stmt[DRIVE_DIRECTION]);
             if (stmt.distance != undefined) {
-                ACTORS.setDistanceToCover(stmt.distance);
+                ACTORS.setDistanceToCover(evalExpr(stmt.distance));
             }
             break;
 
         case TURN_ACTION:
             ACTORS.resetTacho(simulationSensorData.tacho[0], simulationSensorData.tacho[1]);
-            ACTORS.setAngleSpeed(stmt.speed, stmt[TURN_DIRECTION]);
+            ACTORS.setAngleSpeed(evalExpr(stmt.speed), stmt[TURN_DIRECTION]);
             if (stmt.angle != undefined) {
-                ACTORS.clculateAngleToCover(stmt.angle);
+                ACTORS.clculateAngleToCover(evalExpr(stmt.angle));
             }
             break;
 
@@ -94,8 +98,9 @@ function evalRepeat(stmt) {
 
 function evalIf(stmt) {
     var programPrefix;
+    var value;
     for (var i = 0; i < stmt.exprList.length; i++) {
-        var value = evalExpr(stmt.exprList[i]);
+        value = evalExpr(stmt.exprList[i]);
         if (value) {
             programPrefix = stmt.thenList[i];
             if (PROGRAM_SIMULATION.isWait()) {
@@ -105,16 +110,25 @@ function evalIf(stmt) {
             break;
         }
     }
-    if (programPrefix == undefined || programPrefix == []) {
+
+    if ((programPrefix == undefined || programPrefix == []) && !PROGRAM_SIMULATION.isWait()) {
         programPrefix = stmt.elseStmts;
     }
+
     PROGRAM_SIMULATION.prepend(programPrefix);
+    return value;
 }
 
 function evalWaitStmt(stmt) {
     PROGRAM_SIMULATION.setWait(true);
     PROGRAM_SIMULATION.prepend([ stmt ]);
-    PROGRAM_SIMULATION.prepend([ stmt.statements ]);
+    for (var i = 0; i < stmt.statements.length; i++) {
+        var value = evalIf(stmt.statements[i]);
+        if (value) {
+            break;
+        }
+    }
+
 }
 
 function evalExpr(expr) {
@@ -123,6 +137,7 @@ function evalExpr(expr) {
     case BOOL_CONST:
     case COLOR_CONST:
         return expr.value;
+
     case VAR:
         return MEM.get(expr.name);
 
