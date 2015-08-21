@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import de.fhg.iais.roberta.components.ev3.EV3Sensor;
 import de.fhg.iais.roberta.components.ev3.EV3Sensors;
 import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
+import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MoveAction;
@@ -63,7 +64,7 @@ public class UsedPortsCheckVisitor extends CheckVisitor {
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        checkLeftRightMotorPort(driveAction);
+        checkDiffDrive(driveAction);
         driveAction.getParam().getSpeed().visit(this);
         MotorDuration<Void> duration = driveAction.getParam().getDuration();
         if ( duration != null ) {
@@ -74,7 +75,7 @@ public class UsedPortsCheckVisitor extends CheckVisitor {
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        checkLeftRightMotorPort(turnAction);
+        checkDiffDrive(turnAction);
         turnAction.getParam().getSpeed().visit(this);
         MotorDuration<Void> duration = turnAction.getParam().getDuration();
         if ( duration != null ) {
@@ -114,7 +115,7 @@ public class UsedPortsCheckVisitor extends CheckVisitor {
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        checkLeftRightMotorPort(stopAction);
+        checkDiffDrive(stopAction);
         return null;
     }
 
@@ -157,6 +158,11 @@ public class UsedPortsCheckVisitor extends CheckVisitor {
         return null;
     }
 
+    private void checkDiffDrive(Phrase<Void> driveAction) {
+        checkLeftRightMotorPort(driveAction);
+
+    }
+
     private void checkMotorPort(MoveAction<Void> action) {
         if ( this.brickConfiguration.getActorOnPort(action.getPort()) == null ) {
             action.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_MISSING"));
@@ -165,12 +171,20 @@ public class UsedPortsCheckVisitor extends CheckVisitor {
     }
 
     private void checkLeftRightMotorPort(Phrase<Void> driveAction) {
-        if ( this.brickConfiguration.getLeftMotorPort() == null ) {
+        ActorPort leftMotorPort = this.brickConfiguration.getLeftMotorPort();
+        ActorPort rightMotorPort = this.brickConfiguration.getRightMotorPort();
+        if ( leftMotorPort == null ) {
             driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_LEFT_MISSING"));
             this.errorCount++;
+        } else if ( !this.brickConfiguration.getActorOnPort(leftMotorPort).isRegulated() ) {
+            driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED"));
+            this.errorCount++;
         }
-        if ( this.brickConfiguration.getRightMotorPort() == null ) {
+        if ( rightMotorPort == null ) {
             driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING"));
+            this.errorCount++;
+        } else if ( !this.brickConfiguration.getActorOnPort(rightMotorPort).isRegulated() ) {
+            driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED"));
             this.errorCount++;
         }
     }
