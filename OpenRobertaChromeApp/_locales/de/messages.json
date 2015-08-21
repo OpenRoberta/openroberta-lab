@@ -6,13 +6,13 @@
     "message": "Diese Anwendung verbindet dein EV3 Roboter mit Open Roberta lab via USB."
   },
   "button_connect": {
-    "message": "Verbinden"
+    "message": "verbinde"
   },
   "button_disconnect": {
-    "message": "Trennen"
+    "message": "trenne"
   },
   "button_close": {
-    "message": "Beenden"
+    "message": "beenden"
   },
   "advanced_options": {
     "message": "Zeige erweiterte Optionen"
@@ -27,7 +27,7 @@
     "message": "Klicke nun auf »verbinden«, um den Roboter mit Open Roberta Lab zu verbinden."
   },
   "infotext_tokencopy": {
-    "message": "Das Token kannst du mit »kopieren« und »einfügen« im Open Roberta Lab unter Roboter>verbinden einfügen."
+    "message": "Den Token kannst du mit »kopieren« und »einfügen« im Open Roberta Lab unter Roboter>verbinden einfügen."
   },
   "infotext_runprogram": {
     "message": "Du kannst jetzt deine Programme auf dem EV3 ausführen. Vergiss nicht, das USB Kabel wieder einzustecken, nachdemm dein Programm ausgeführt wurde."
