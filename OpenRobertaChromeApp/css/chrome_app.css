@@ -10,9 +10,9 @@ dialog{
 }
 
 .tk {
-	font-weight: bold;
 	font-size: large;
 	text-align: center;
+	height : 25px;
 }
 
 
@@ -138,7 +138,7 @@ p, textarea, .btn, .menu, .userin, input {
 
 .btngrid{
     display: flex;
-    justify-content: center ;
+    justify-content: left;
 }
 
 .advrow{

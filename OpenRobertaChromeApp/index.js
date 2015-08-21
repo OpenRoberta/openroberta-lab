@@ -1,10 +1,12 @@
 onload = function () {
+	var warningDialog = document.getElementById('warningDialog');
+	//document.getElementById('XXXX').onclick = function () {warningDialog.showModal();};
+	document.getElementById('abbrechen').onclick = function () {warningDialog.close();};
 
-	document.getElementById("fh-txt").innerHTML = chrome.i18n.getMessage("about");
-
-	var dialog = document.getElementById('aboutDialog');
-	document.getElementById('about').onclick = function () {dialog.showModal();};
-	document.getElementById('hide').onclick = function () {dialog.close();};
+	document.getElementById("fh-about-txt").innerHTML = chrome.i18n.getMessage("about");
+	var aboutDialog = document.getElementById('aboutDialog');
+	document.getElementById('about').onclick = function () {aboutDialog.showModal();};
+	document.getElementById('hide').onclick = function () {aboutDialog.close();};
 
 	//----------------------------------------------------------------------------
 	var EV3HOST = "10.0.1.1:80";
@@ -73,6 +75,13 @@ onload = function () {
 	document.getElementById("close").onclick = function () {
 		window.close();
 	};
+	document.getElementById("ddclose").onclick = function () {
+		window.close();
+	};
+	document.getElementById("true beenden").onclick = function () {
+		window.close();
+	};
+	
 
 	document.getElementById("advancedoptions").onchange = function () {
 		if (document.getElementById("advancedoptions").checked === true) {

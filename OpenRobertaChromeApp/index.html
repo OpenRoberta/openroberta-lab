@@ -9,12 +9,24 @@
 		<link rel="stylesheet" type="text/css" href="css/roberta.css"></link>
 	</head>
     <body>
+		<dialog id="warningDialog">
+			<table>
+				<tr>
+					<td style="vertical-align:top;"><img src="resources/Roberta.png" width="100"></td>
+					<td>		
+						<p id="fh-warnung-txt">abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc</p>
+					</td>
+				</tr>
+			</table>
+			<div align="center"><button id="true beenden" class="btn">beenden</button><button id="abbrechen" class="btn">abbrechen</button></div>
+		</dialog>
+		<!-- #### -->
 		<dialog id="aboutDialog">
 			<table>
 				<tr>
 					<td style="vertical-align:top;"><img src="resources/iais_logo.gif" width="85"></td>
 					<td>		
-						<p id="fh-txt"></p>
+						<p id="fh-about-txt"></p>
 					</td>
 				</tr>
 			</table>
@@ -30,7 +42,7 @@
 							<li>
 								<p>Datei</p> 
 								<ul>  
-									<li><a href="#">beenden</a></li>
+									<li><a id="ddclose" href="#">beenden</a></li>
 								</ul>
 							</li>  
 						</ul>
@@ -41,81 +53,83 @@
 					<div class="ddmenu" id="menu"><!-- öffnet die Navigationsleiste -->
 						<ul>
 							<li>
-							<p>Info</p> 
-							<ul> 
-							<li>
-							<a id="about">about </a>
-							
+								<p>Info</p> 
+								<ul> 
+									<li>
+										<a id="about">about </a>
+										
+									</ul>
+								</li>  
 							</ul>
-							</li>  
-							</ul>
-							</div>
-							</div>
-							
-							<div class="col-6 robstatus">
-							<img id="connstatus" src="resources/Roberta_Menu_Icon_grey.png" alt="Disconnected">
-							</div>
-							</div>
-							
-							<!-- Trennlinie -->
-							<div class="row trenner"></div>
-							
-							<!-- Anzeigebereich für Token -->
-							<div class="row">
-							<textarea class="col-12 tokenarea tk" id="token" readonly></textarea>
-							</div>
-							<!-- Bild Verbindungsanimation -->
-							<div class="row">
-							<div class="col-12">
-							<img id="mainpicture" >
-							</div>
-							</div>
-							<!-- Infotext -->
-							<br>
-							<div class="row">
-							<textarea class="col-12 info" id="infotext" cols="37" rows="5" readonly></textarea>
-							</div>
-							<!-- Buttons -->
-							<div class="row">
-							<div class="col-6 btngrid">
-							<button id="connect" class="btn" disabled></button>
-							</div>
-							<div class="col-6 btngrid">
-							<button id="close" class="btn"></button>
-							</div>
-							</div>
-							
-							<!-- Zusatzfeld für IP und Port -->
-							<div class="row advrow">
-							<div class="col-1">
-							<input type="checkbox" id="advancedoptions">
-							</div>
-							<div class="col-11">
-							<textarea class="adv" id="advancedop" cols="30" rows="1" readonly></textarea>
-							</div>
-							</div>
-							
-							<!-- EingabeFelder -->
-							<div id="alternative" style="visibility:hidden" >
-							<div class="row">
-							<textarea class="col-12 serveradr" id="customaddressinfo" cols="35" rows="1" readonly></textarea>
-							</div>
-							<div class="row userin">
-							<div class="col-1 iptxt">
+						</div>
+					</div>
+					
+					<div class="col-6 robstatus">
+						<img id="connstatus" src="resources/Roberta_Menu_Icon_grey.png" alt="Disconnected">
+					</div>
+				</div>
+				
+				<!-- Trennlinie -->
+				<div class="row trenner"></div>
+				
+				<!-- Anzeigebereich für Token -->
+				<br>
+				<div class="row">
+					
+					<textarea class="col-12 tokenarea tk" id="token" readonly></textarea>
+				</div>
+				<br>
+				<!-- Bild Verbindungsanimation -->
+				<div class="row">
+					<div class="col-12">
+						<img id="mainpicture" >
+					</div>
+				</div>
+				<!-- Infotext -->
+				<br>
+				<div class="row">
+					<textarea class="col-12 info" id="infotext" cols="37" rows="5" readonly></textarea>
+				</div>
+				<!-- Buttons -->
+				<div class="row">
+					<div class="btngrid">
+						<button id="connect" class="btn" disabled></button>
+					</div>
+					<div class="btngrid">
+						<button id="close" class="btn"></button>
+					</div>
+				</div>
+				
+				<!-- Zusatzfeld für IP und Port -->
+				<div class="row advrow">
+					<div class="col-1">
+						<input type="checkbox" id="advancedoptions">
+					</div>
+					<div class="col-11">
+						<textarea class="adv" id="advancedop" cols="30" rows="1" readonly></textarea>
+					</div>
+				</div>
+				
+				<!-- EingabeFelder -->
+				<div id="alternative" style="visibility:hidden" >
+					<div class="row">
+						<textarea class="col-12 serveradr" id="customaddressinfo" cols="35" rows="1" readonly></textarea>
+					</div>
+					<div class="row userin">
+						<div class="col-1 iptxt">
 							IP:
-							</div>
-							<div class="col-6">
+						</div>
+						<div class="col-6">
 							<input class="textin" type="text" id="ip" maxlength="15" size="15"></input>
-							</div>
-							<div class="col-2 porttxt">
+						</div>
+						<div class="col-2 porttxt">
 							Port: 
-							</div>
-							<div class="col-3">
+						</div>
+						<div class="col-3">
 							<input class="textin" type="text" id="port" maxlength="4" size="4"></input>
-							</div>
-							</div>
-							</div>
-							</div>	
-							</body>
-							</html>
-														
+						</div>
+					</div>
+				</div>
+			</div>	
+		</body>
+	</html>
