@@ -31,7 +31,7 @@ Blockly.Blocks['sim_LED_on'] = {
         this.setColourRGB(Blockly.CAT_ACTION_RGB);
         // this.setInputsInline(true);
         var dropdownColor = new Blockly.FieldDropdown([ [ Blockly.Msg.BRICKLIGHT_GREEN, 'GREEN' ], [ Blockly.Msg.BRICKLIGHT_ORANGE, 'ORANGE' ],
-                [ Blockly.Msg.BRICKLIGHT_RED, 'BLUE' ] ]);
+                [ Blockly.Msg.BRICKLIGHT_RED, 'RED' ] ]);
         var dropdownLightState = new Blockly.FieldDropdown([ [ Blockly.Msg.BRICKLIGHT_ON, 'ON' ] ]);
         this.appendDummyInput().appendField(Blockly.Msg.BRICKLIGHT);
         this.appendDummyInput().setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.BRICKLIGHT_COLOR).appendField(dropdownColor, 'SWITCH_COLOR');

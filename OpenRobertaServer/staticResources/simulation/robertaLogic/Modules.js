@@ -1,8 +1,3 @@
-const
-wheelDiameter = 5.6;
-const
-TURN_RATIO = 13.33 / 2.8;
-
 var SENSORS = (function() {
     var touchSensor = false;
     var ultrasonicSensor = 0;
@@ -70,8 +65,8 @@ var ACTORS = (function() {
         if (direction != FOREWARD) {
             speed = -speed;
         }
-        leftMotor.setPower(speed / 100.);
-        rightMotor.setPower(speed / 100.);
+        leftMotor.setPower(speed);
+        rightMotor.setPower(speed);
     }
 
     function setAngleSpeed(speed, direction) {
@@ -165,7 +160,7 @@ var ACTORS = (function() {
     }
 
     function setDistanceToCover(distance) {
-        var rotations = distance / (wheelDiameter * 3.14);
+        var rotations = distance / (WHEEL_DIAMETER * 3.14);
         leftMotor.setRotations(rotations);
         rightMotor.setRotations(rotations);
         distanceToCover = true;

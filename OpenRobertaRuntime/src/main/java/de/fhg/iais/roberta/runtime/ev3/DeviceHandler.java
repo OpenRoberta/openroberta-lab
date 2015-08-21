@@ -4,6 +4,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import de.fhg.iais.roberta.components.HardwareComponent;
+import de.fhg.iais.roberta.components.ev3.EV3Actor;
+import de.fhg.iais.roberta.components.ev3.EV3Sensors;
+import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
+import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
+import de.fhg.iais.roberta.shared.sensor.ev3.ColorSensorMode;
+import de.fhg.iais.roberta.shared.sensor.ev3.GyroSensorMode;
+import de.fhg.iais.roberta.shared.sensor.ev3.InfraredSensorMode;
+import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
+import de.fhg.iais.roberta.shared.sensor.ev3.UltrasonicSensorMode;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.motor.NXTRegulatedMotor;
@@ -17,17 +28,6 @@ import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.robotics.EncoderMotor;
 import lejos.robotics.RegulatedMotor;
 import lejos.robotics.SampleProvider;
-import de.fhg.iais.roberta.components.HardwareComponent;
-import de.fhg.iais.roberta.components.ev3.EV3Actor;
-import de.fhg.iais.roberta.components.ev3.EV3Sensors;
-import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
-import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
-import de.fhg.iais.roberta.shared.sensor.ev3.ColorSensorMode;
-import de.fhg.iais.roberta.shared.sensor.ev3.GyroSensorMode;
-import de.fhg.iais.roberta.shared.sensor.ev3.InfraredSensorMode;
-import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
-import de.fhg.iais.roberta.shared.sensor.ev3.UltrasonicSensorMode;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
  * This class instantiates all sensors (sensor modes) and actors used in blockly program.

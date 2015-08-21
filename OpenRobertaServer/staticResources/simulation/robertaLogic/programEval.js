@@ -31,7 +31,7 @@ function step(simulationSensorData) {
 
         case IF_STMT:
             evalIf(stmt);
-            //step(simulationSensorData);
+            step(simulationSensorData);
             break;
 
         case REPEAT_STMT:

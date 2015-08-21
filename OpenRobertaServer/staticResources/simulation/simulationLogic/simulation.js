@@ -2,22 +2,6 @@
  * @fileOverview Simulate a robot
  * @author Beate Jost <beate.jost@iais.fraunhofer.de>
  */
-const
-TRACKWIDTH = 40;
-const
-FPS = 45;
-const
-STEP_TIME = 1 / FPS;
-const
-MAXDIAG = 2500;
-const
-MAXPOWER = 40 * 3; // real Robot drives approx. 40 cm / 1 sec -> 120 pix/sec | 3pix = 1cm
-const
-ENC = 360 / (3 * Math.PI * 5.6);
-const
-MAX_WIDTH = 2000;
-const
-MAX_HEIGHT = 1000;
 
 /**
  * @namespace SIM
@@ -232,8 +216,8 @@ var SIM = (function() {
     function setOutput() {
         output.left = ACTORS.getLeftMotor().getPower() * MAXPOWER || 0;
         output.right = ACTORS.getRightMotor().getPower() * MAXPOWER || 0;
-        output.led = LIGHT.getColor() || "grey"; // grey = led off
-        output.ledMode = LIGHT.getMode() || "OFF";
+        robot.led.color = output.led = LIGHT.getColor() || "grey"; // grey = led off
+        robot.led.mode = output.ledMode = LIGHT.getMode() || "OFF";
     }
 
     function setObstacle() {
@@ -284,7 +268,11 @@ var SIM = (function() {
     function handleMouseUp(e) {
         e.preventDefault();
         if (!isDownrobot && !isDownObstacle) {
-            if (startX < ground.w / 2){robot.pose.theta += SIMATH.toRadians(-5);} else {robot.pose.theta += SIMATH.toRadians(5);}
+            if (startX < ground.w / 2) {
+                robot.pose.theta += SIMATH.toRadians(-5);
+            } else {
+                robot.pose.theta += SIMATH.toRadians(5);
+            }
         }
         $("#robotLayer").css('cursor', 'auto');
         if (robot instanceof DrawRobot) {
