@@ -167,7 +167,13 @@ public class ClientProgram {
                 String programName = request.getString("programName");
                 String userToShareName = request.getString("userToShare");
                 String right = request.getString("right");
-                upp.shareToUser(userId, robotId, userToShareName, programName, right);
+                upp.shareToUser(userId, robotId, programName, userToShareName, right);
+                Util.addResultInfo(response, upp);
+
+            } else if ( cmd.equals("shareDelete") && httpSessionState.isUserLoggedIn() ) {
+                String programName = request.getString("programName");
+                String owner = request.getString("owner");
+                upp.shareDelete(owner, robotId, programName, userId);
                 Util.addResultInfo(response, upp);
 
             } else if ( cmd.equals("deleteP") && httpSessionState.isUserLoggedIn() ) {

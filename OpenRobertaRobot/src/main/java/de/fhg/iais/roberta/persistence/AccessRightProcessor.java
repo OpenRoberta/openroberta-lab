@@ -22,41 +22,99 @@ public class AccessRightProcessor extends AbstractProcessor {
         super(dbSession, httpSessionState);
     }
 
-    public void shareToUser(int ownerId, int robotId, String userToShareName, String programName, String right) {
-        ProgramDao programDao = new ProgramDao(this.dbSession);
+    /**
+     * a program, which is identified by the triple (ownerId, robotId, programName) has to be shared with another user. The right on the shared program may be
+     * either "WRITE" or "READ".
+     *
+     * @param ownerId the owner (that is the actor on which behalf this request is executed)
+     * @param robotId
+     * @param programName
+     * @param userToShareName the account name (a String!) of the user who should get access to a program
+     * @param right "WRITE" or "READ"
+     */
+    public void shareToUser(int ownerId, int robotId, String programName, String userToShareName, String right) {
         UserDao userDao = new UserDao(this.dbSession);
+        User owner = userDao.get(ownerId);
+        User userToShare = userDao.loadUser(userToShareName);
+        executeShare(owner, robotId, programName, userToShare, right);
+    }
+
+    /**
+     * a program, which is identified by the triple (ownerId, robotId, programName) has to be shared with another user. The right on the shared program may be
+     * either "WRITE" or "READ".
+     *
+     * @param ownerId the owner (that is the actor on which behalf this request is executed)
+     * @param robotId
+     * @param programName
+     * @param userToShareName the account name (a String!) of the user who should get access to a program
+     * @param right "WRITE" or "READ"
+     */
+    public void shareDelete(String ownerName, int robotId, String programName, int userToShareId) {
+        UserDao userDao = new UserDao(this.dbSession);
+        User owner = userDao.loadUser(ownerName);
+        User userToShare = userDao.get(userToShareId);
+        executeShare(owner, robotId, programName, userToShare, "NONE");
+    }
+
+    /**
+     * a program, which is identified by the triple (ownerId, robotId, programName)<br>
+     * - has to be shared with another user (right is either "WRITE" or "READ") or <br>
+     * - the access right has to be removed (right is "NONE")
+     *
+     * @param owner
+     * @param robotId
+     * @param programName
+     * @param userToShare
+     * @param right
+     */
+    public void executeShare(User owner, int robotId, String programName, User userToShare, String right) {
+        ProgramDao programDao = new ProgramDao(this.dbSession);
         RobotDao robotDao = new RobotDao(this.dbSession);
 
-        User owner = userDao.get(ownerId);
+        Program programToShare = null;
         if ( owner == null ) {
             setError(Key.OWNER_DOES_NOT_EXIST);
-        }
-        Robot robot = robotDao.get(robotId);
-        Program programToShare = programDao.load(programName, owner, robot);
-        if ( programToShare == null ) {
-            setError(Key.PROGRAM_TO_SHARE_DOES_NOT_EXIST);
-        }
-        User userToShare = userDao.loadUser(userToShareName);
-        if ( userToShare == null ) {
+        } else if ( userToShare == null ) {
             setError(Key.USER_TO_SHARE_DOES_NOT_EXIST);
+        } else {
+            Robot robot = robotDao.get(robotId);
+            if ( robot == null ) {
+                setError(Key.ROBOT_DOES_NOT_EXIST);
+            } else {
+                programToShare = programDao.load(programName, owner, robot);
+                if ( programToShare == null ) {
+                    setError(Key.PROGRAM_TO_SHARE_DOES_NOT_EXIST);
+                }
+            }
         }
         if ( !isOk() ) {
             return;
         }
 
         AccessRightDao accessRightDao = new AccessRightDao(this.dbSession);
-        if ( right.equals("NONE") ) {
-            accessRightDao.deleteAccessRight(userToShare, programToShare);
-            setSuccess(Key.ACCESS_RIGHT_DELETED);
-        } else {
-            try {
+        try {
+            if ( right.equals("NONE") ) {
+                accessRightDao.deleteAccessRight(userToShare, programToShare);
+                setSuccess(Key.ACCESS_RIGHT_DELETED);
+            } else {
                 Relation relation = Relation.valueOf(right);
                 accessRightDao.persistAccessRight(userToShare, programToShare, relation);
                 setSuccess(Key.ACCESS_RIGHT_CHANGED);
-            } catch ( Exception e ) {
-                LOG.error("invalid share request. Uid: " + ownerId + ", user to share: " + userToShareName + ", access right: " + right);
-                setError(Key.SERVER_ERROR);
             }
+        } catch ( Exception e ) {
+            String msg =
+                "invalid share request. (owner,robot,program): ("
+                    + owner.getId()
+                    + ","
+                    + robotId
+                    + ","
+                    + programName
+                    + "), to share with: "
+                    + userToShare.getId()
+                    + ", access right: "
+                    + right;
+            AccessRightProcessor.LOG.error(msg);
+            setError(Key.SERVER_ERROR);
         }
     }
 }
