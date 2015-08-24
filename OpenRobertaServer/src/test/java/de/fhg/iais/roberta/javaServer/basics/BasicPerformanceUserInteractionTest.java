@@ -1,11 +1,5 @@
 package de.fhg.iais.roberta.javaServer.basics;
 
-import static de.fhg.iais.roberta.testutil.JSONUtilForServer.assertEntityRc;
-import static de.fhg.iais.roberta.testutil.JSONUtilForServer.assertJsonEquals;
-import static de.fhg.iais.roberta.testutil.JSONUtilForServer.mkD;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.Callable;
@@ -17,6 +11,7 @@ import javax.ws.rs.core.Response;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -88,40 +83,44 @@ public class BasicPerformanceUserInteractionTest {
         this.downloadJar = new Ev3DownloadJar(this.brickCommunicator, this.crosscompilerBasedir);
         this.brickCommand = new Ev3Command(this.brickCommunicator);
         this.theProgramOfAllUserLol =
-            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource("/ast/actions/action_BrickLight.xml"), Charsets.UTF_8);
-        this.executorService = Executors.newFixedThreadPool(MAX_PARALLEL_USERS + 10);
+            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource("/rest_ifc_test/action_BrickLight.xml"), Charsets.UTF_8);
+        this.executorService = Executors.newFixedThreadPool(BasicPerformanceUserInteractionTest.MAX_PARALLEL_USERS + 10);
     }
 
     @Test
     @Ignore
     public void runUsersConcurrent() throws Exception {
         int baseNumber = 0;
-        LOG.info("max parallel users: " + MAX_PARALLEL_USERS + "; total users: " + MAX_TOTAL_USERS);
-        LOG.info("");
+        BasicPerformanceUserInteractionTest.LOG.info(
+            "max parallel users: "
+                + BasicPerformanceUserInteractionTest.MAX_PARALLEL_USERS
+                + "; total users: "
+                + BasicPerformanceUserInteractionTest.MAX_TOTAL_USERS);
+        BasicPerformanceUserInteractionTest.LOG.info("");
         @SuppressWarnings("unchecked")
-        Future<Boolean>[] futures = (Future<Boolean>[]) new Future<?>[MAX_PARALLEL_USERS];
-        for ( int i = 0; i < MAX_PARALLEL_USERS; i++ ) {
+        Future<Boolean>[] futures = (Future<Boolean>[]) new Future<?>[BasicPerformanceUserInteractionTest.MAX_PARALLEL_USERS];
+        for ( int i = 0; i < BasicPerformanceUserInteractionTest.MAX_PARALLEL_USERS; i++ ) {
             futures[i] = startWorkflow(baseNumber + i);
         }
         boolean success = true;
         int terminatedWorkflows = 0;
-        int nextFreeUserNumber = baseNumber + MAX_PARALLEL_USERS + 1;
-        start: while ( terminatedWorkflows < MAX_TOTAL_USERS ) {
-            for ( int i = 0; i < MAX_PARALLEL_USERS; i++ ) {
+        int nextFreeUserNumber = baseNumber + BasicPerformanceUserInteractionTest.MAX_PARALLEL_USERS + 1;
+        start: while ( terminatedWorkflows < BasicPerformanceUserInteractionTest.MAX_TOTAL_USERS ) {
+            for ( int i = 0; i < BasicPerformanceUserInteractionTest.MAX_PARALLEL_USERS; i++ ) {
                 if ( futures[i].isDone() ) {
                     success = success && futures[i].get();
                     if ( !success ) {
                         break start;
                     }
                     terminatedWorkflows++;
-                    if ( terminatedWorkflows < MAX_TOTAL_USERS ) {
+                    if ( terminatedWorkflows < BasicPerformanceUserInteractionTest.MAX_TOTAL_USERS ) {
                         futures[i] = startWorkflow(nextFreeUserNumber++);
                     }
                 }
             }
             Thread.sleep(1000);
         }
-        assertEquals("not all user workflow have been executed successfully", true, success);
+        Assert.assertEquals("not all user workflow have been executed successfully", true, success);
     }
 
     private Future<Boolean> startWorkflow(final int userNumber) {
@@ -132,7 +131,7 @@ public class BasicPerformanceUserInteractionTest {
                     workflow(userNumber);
                     return true;
                 } catch ( Exception e ) {
-                    LOG.info("" + userNumber + ";error;");
+                    BasicPerformanceUserInteractionTest.LOG.info("" + userNumber + ";error;");
                     LoggerFactory.getLogger("workflowError").error("Workflow " + userNumber + " terminated with errors", e);
                     return false;
                 }
@@ -143,26 +142,25 @@ public class BasicPerformanceUserInteractionTest {
     private void workflow(int userNumber) throws Exception {
         Clock clock = Clock.start();
         int thinkTimeInMillisec = 0;
-        LOG.info("" + userNumber + ";start;");
+        BasicPerformanceUserInteractionTest.LOG.info("" + userNumber + ";start;");
         Random random = new Random(userNumber);
 
         HttpSessionState s = HttpSessionState.init();
-        assertTrue(!s.isUserLoggedIn());
+        Assert.assertTrue(!s.isUserLoggedIn());
 
         // create user "pid-*" with success
         thinkTimeInMillisec += think(random, 1, 4);
         Response response =
-            this.restUser
-                .command(
-                    s,
-                    this.sessionFactoryWrapper.getSession(),
-                    mkD(
-                        "{'cmd':'createUser';'accountName':'pid-"
-                            + userNumber
-                            + "';'password':'dip-"
-                            + userNumber
-                            + "';'userEmail':'cavy@home';'role':'STUDENT'}"));
-        assertEntityRc(response, "ok");
+            this.restUser.command(
+                s,
+                this.sessionFactoryWrapper.getSession(),
+                JSONUtilForServer.mkD(
+                    "{'cmd':'createUser';'accountName':'pid-"
+                        + userNumber
+                        + "';'password':'dip-"
+                        + userNumber
+                        + "';'userEmail':'cavy@home';'role':'STUDENT'}"));
+        JSONUtilForServer.assertEntityRc(response, "ok");
 
         // login with user "pid", create 2 programs
         thinkTimeInMillisec += think(random, 2, 6);
@@ -170,37 +168,37 @@ public class BasicPerformanceUserInteractionTest {
             this.restUser.command( //
                 s,
                 this.sessionFactoryWrapper.getSession(),
-                mkD("{'cmd':'login';'accountName':'pid-" + userNumber + "';'password':'dip-" + userNumber + "'}"));
-        assertEntityRc(response, "ok");
-        assertTrue(s.isUserLoggedIn());
+                JSONUtilForServer.mkD("{'cmd':'login';'accountName':'pid-" + userNumber + "';'password':'dip-" + userNumber + "'}"));
+        JSONUtilForServer.assertEntityRc(response, "ok");
+        Assert.assertTrue(s.isUserLoggedIn());
         int sId = s.getUserId();
-        response = this.restProgram.command(s, mkD("{'cmd':'saveP';'name':'p1';'program':'<program>...</program>'}"));
-        assertEntityRc(response, "ok");
-        response = this.restProgram.command(s, mkD("{'cmd':'saveP';'name':'p2';'program':'<program>...</program>'}"));
-        assertEntityRc(response, "ok");
-        assertEquals(2, this.memoryDbSetup.getOneInt("select count(*) from PROGRAM where OWNER_ID = " + sId));
+        response = this.restProgram.command(s, JSONUtilForServer.mkD("{'cmd':'saveP';'name':'p1';'program':'<program>...</program>'}"));
+        JSONUtilForServer.assertEntityRc(response, "ok");
+        response = this.restProgram.command(s, JSONUtilForServer.mkD("{'cmd':'saveP';'name':'p2';'program':'<program>...</program>'}"));
+        JSONUtilForServer.assertEntityRc(response, "ok");
+        Assert.assertEquals(2, this.memoryDbSetup.getOneBigInteger("select count(*) from PROGRAM where OWNER_ID = " + sId));
 
         // "pid" updates p2, has 2 programs, get list of programs, assert that the names match
         thinkTimeInMillisec += think(random, 0, 6);
         JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"saveP\";\"name\":\"p2\"}}");
         fullRequest.getJSONObject("data").put("program", this.theProgramOfAllUserLol);
         response = this.restProgram.command(s, fullRequest);
-        assertEntityRc(response, "ok");
-        assertEquals(2, this.memoryDbSetup.getOneInt("select count(*) from PROGRAM where OWNER_ID = " + sId));
-        response = this.restProgram.command(s, mkD("{'cmd':'loadPN'}"));
-        assertEntityRc(response, "ok");
+        JSONUtilForServer.assertEntityRc(response, "ok");
+        Assert.assertEquals(2, this.memoryDbSetup.getOneBigInteger("select count(*) from PROGRAM where OWNER_ID = " + sId));
+        response = this.restProgram.command(s, JSONUtilForServer.mkD("{'cmd':'loadPN'}"));
+        JSONUtilForServer.assertEntityRc(response, "ok");
         JSONArray programListing = ((JSONObject) response.getEntity()).getJSONArray("programNames");
         JSONArray programNames = new JSONArray();
         for ( int i = 0; i < programListing.length(); i++ ) {
             programNames.put(programListing.getJSONArray(i).get(0));
         }
-        assertJsonEquals("['p1','p2']", programNames, false);
+        JSONUtilForServer.assertJsonEquals("['p1','p2']", programNames, false);
 
         // user "pid" registers the robot with token "garzi-?" ; runs "p2"
         thinkTimeInMillisec += think(random, 6, 10);
         JSONUtilForServer.registerToken(this.brickCommand, this.restBlocks, s, this.sessionFactoryWrapper.getSession(), "garzi-" + userNumber);
         JSONUtilForServer.downloadJar(this.downloadJar, this.restProgram, s, "garzi-" + userNumber, "p2");
-        LOG.info("" + userNumber + ";ok;" + clock.elapsedMsec() + ";" + thinkTimeInMillisec + ";");
+        BasicPerformanceUserInteractionTest.LOG.info("" + userNumber + ";ok;" + clock.elapsedMsec() + ";" + thinkTimeInMillisec + ";");
     }
 
     private int think(Random random, int lowerBoundForThinking, int upperBoundForThinking) throws Exception {

@@ -1,15 +1,11 @@
 package de.fhg.iais.roberta.javaServer.basics;
 
-import static de.fhg.iais.roberta.testutil.JSONUtilForServer.assertEntityRc;
-import static de.fhg.iais.roberta.testutil.JSONUtilForServer.mkD;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.util.Properties;
 
 import javax.ws.rs.core.Response;
 
 import org.hibernate.Session;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -21,6 +17,7 @@ import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
 import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CompilerWorkflow;
+import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.util.Util;
 
 @Ignore
@@ -71,87 +68,93 @@ public class BasicSharingInteractionTest {
 
     @Test
     public void test() throws Exception {
-        assertTrue(!this.s1.isUserLoggedIn() && !this.s2.isUserLoggedIn());
+        Assert.assertTrue(!this.s1.isUserLoggedIn() && !this.s2.isUserLoggedIn());
         // USER,PROGRAM AND USER_PROGRM table empty; create user "pid" with success; USER table has 1 row; create same user with error; create second user "minscha"
-        assertEquals(0, getOneInt("select count(*) from USER"));
-        assertEquals(0, getOneInt("select count(*) from PROGRAM"));
-        assertEquals(0, getOneInt("select count(*) from USER_PROGRAM"));
+        Assert.assertEquals(0, getOneBigInteger("select count(*) from USER"));
+        Assert.assertEquals(0, getOneBigInteger("select count(*) from PROGRAM"));
+        Assert.assertEquals(0, getOneBigInteger("select count(*) from USER_PROGRAM"));
 
         //CREATE MASTER AND PROGRAM  TO BE SHARED
         this.response = this.restUser.command(//create
             this.s1,
             this.sessionFactoryWrapper.getSession(),
-            mkD("{'cmd':'createUser';'accountName':'master';'password':'master-p';'userEmail':'master@home.com';'role':'STUDENT'}"));
-        assertEntityRc(this.response, "ok");
-        assertEquals(1, getOneInt("select count(*) from USER"));
+            JSONUtilForServer.mkD("{'cmd':'createUser';'accountName':'master';'password':'master-p';'userEmail':'master@home.com';'role':'STUDENT'}"));
+        JSONUtilForServer.assertEntityRc(this.response, "ok");
+        Assert.assertEquals(1, getOneBigInteger("select count(*) from USER"));
         this.response = this.restUser.command(//login
             this.s1,
             this.sessionFactoryWrapper.getSession(),
-            mkD("{'cmd':'login';'accountName':'master';'password':'master-p'}"));
-        assertEntityRc(this.response, "ok");
-        this.response = this.restProgram.command(this.s1, mkD("{'cmd':'saveP';'name':'toShare';'program':'<program>...</program>'}"));
-        assertEntityRc(this.response, "ok");
-        assertEquals(1, getOneInt("select count(*) from PROGRAM"));
+            JSONUtilForServer.mkD("{'cmd':'login';'accountName':'master';'password':'master-p'}"));
+        JSONUtilForServer.assertEntityRc(this.response, "ok");
+        this.response = this.restProgram.command(this.s1, JSONUtilForServer.mkD("{'cmd':'saveP';'name':'toShare';'program':'<program>...</program>'}"));
+        JSONUtilForServer.assertEntityRc(this.response, "ok");
+        Assert.assertEquals(1, getOneBigInteger("select count(*) from PROGRAM"));
 
         //CREATE EACH FRIEND AND ONE PROGRAM PER FRIEND
-        for ( int userNumber = 0; userNumber < MAX_TOTAL_FRIENDS; userNumber += 1 ) {
+        for ( int userNumber = 0; userNumber < BasicSharingInteractionTest.MAX_TOTAL_FRIENDS; userNumber += 1 ) {
             HttpSessionState s = HttpSessionState.init();
-            assertTrue(!s.isUserLoggedIn());
-            this.response =
-                this.restUser
-                    .command(
-                        s,
-                        this.sessionFactoryWrapper.getSession(),
-                        mkD(
-                            "{'cmd':'createUser';'accountName':'pid-"
-                                + userNumber
-                                + "';'password':'dip-"
-                                + userNumber
-                                + "';'userEmail':'cavy@home';'role':'STUDENT'}"));
-            assertEntityRc(this.response, "ok");
-            assertEquals(2 + userNumber, getOneInt("select count(*) from USER"));
+            Assert.assertTrue(!s.isUserLoggedIn());
             this.response =
                 this.restUser.command(
                     s,
                     this.sessionFactoryWrapper.getSession(),
-                    mkD("{'cmd':'login';'accountName':'pid-" + userNumber + "';'password':'dip-" + userNumber + "'}"));
-            assertEntityRc(response, "ok");
-            assertTrue(s.isUserLoggedIn());
-            this.response = this.restProgram.command(s, mkD("{'cmd':'saveP';'name':'test" + userNumber + "';'program':'<program>...</program>'}"));
-            assertEquals(2 + userNumber, getOneInt("select count(*) from PROGRAM"));
-            assertEntityRc(this.response, "ok");
+                    JSONUtilForServer.mkD(
+                        "{'cmd':'createUser';'accountName':'pid-"
+                            + userNumber
+                            + "';'password':'dip-"
+                            + userNumber
+                            + "';'userEmail':'cavy@home';'role':'STUDENT'}"));
+            JSONUtilForServer.assertEntityRc(this.response, "ok");
+            Assert.assertEquals(2 + userNumber, getOneBigInteger("select count(*) from USER"));
+            this.response =
+                this.restUser.command(
+                    s,
+                    this.sessionFactoryWrapper.getSession(),
+                    JSONUtilForServer.mkD("{'cmd':'login';'accountName':'pid-" + userNumber + "';'password':'dip-" + userNumber + "'}"));
+            JSONUtilForServer.assertEntityRc(this.response, "ok");
+            Assert.assertTrue(s.isUserLoggedIn());
+            this.response =
+                this.restProgram.command(s, JSONUtilForServer.mkD("{'cmd':'saveP';'name':'test" + userNumber + "';'program':'<program>...</program>'}"));
+            Assert.assertEquals(2 + userNumber, getOneBigInteger("select count(*) from PROGRAM"));
+            JSONUtilForServer.assertEntityRc(this.response, "ok");
 
         }
-        assertEquals(MAX_TOTAL_FRIENDS + 1, getOneInt("select count(*) from USER"));
+        Assert.assertEquals(BasicSharingInteractionTest.MAX_TOTAL_FRIENDS + 1, getOneBigInteger("select count(*) from USER"));
         //Login with master
         this.response =
-            this.restUser.command(this.s1, this.sessionFactoryWrapper.getSession(), mkD("{'cmd':'login';'accountName':'master';'password':'master-p'}"));
-        assertEntityRc(response, "ok");
-        assertTrue(this.s1.isUserLoggedIn());
+            this.restUser.command(
+                this.s1,
+                this.sessionFactoryWrapper.getSession(),
+                JSONUtilForServer.mkD("{'cmd':'login';'accountName':'master';'password':'master-p'}"));
+        JSONUtilForServer.assertEntityRc(this.response, "ok");
+        Assert.assertTrue(this.s1.isUserLoggedIn());
 
         //Share with write rights pair friends
-        for ( int userNumber = 0; userNumber < MAX_TOTAL_FRIENDS; userNumber += 2 ) {
+        for ( int userNumber = 0; userNumber < BasicSharingInteractionTest.MAX_TOTAL_FRIENDS; userNumber += 2 ) {
             this.response =
-                this.restProgram.command(this.s1, mkD("{'cmd':'shareP';'userToShare':'pid-" + userNumber + "';'programName':'toShare';'right':'WRITE'}"));
-            assertEntityRc(response, "ok");
+                this.restProgram
+                    .command(this.s1, JSONUtilForServer.mkD("{'cmd':'shareP';'userToShare':'pid-" + userNumber + "';'programName':'toShare';'right':'WRITE'}"));
+            JSONUtilForServer.assertEntityRc(this.response, "ok");
         }
         //Share with read rights odd friends
-        for ( int userNumber = 1; userNumber < MAX_TOTAL_FRIENDS; userNumber += 2 ) {
+        for ( int userNumber = 1; userNumber < BasicSharingInteractionTest.MAX_TOTAL_FRIENDS; userNumber += 2 ) {
             this.response =
-                this.restProgram.command(this.s1, mkD("{'cmd':'shareP';'userToShare':'pid-" + userNumber + "';'programName':'toShare';'right':'READ'}"));
-            assertEntityRc(response, "ok");
+                this.restProgram
+                    .command(this.s1, JSONUtilForServer.mkD("{'cmd':'shareP';'userToShare':'pid-" + userNumber + "';'programName':'toShare';'right':'READ'}"));
+            JSONUtilForServer.assertEntityRc(this.response, "ok");
         }
-        assertEquals(MAX_TOTAL_FRIENDS, getOneInt("select count(*) from USER_PROGRAM"));
+        Assert.assertEquals(BasicSharingInteractionTest.MAX_TOTAL_FRIENDS, getOneBigInteger("select count(*) from USER_PROGRAM"));
         //Eliminate write rights for pair users
-        for ( int userNumber = 1; userNumber < MAX_TOTAL_FRIENDS; userNumber += 2 ) {
+        for ( int userNumber = 1; userNumber < BasicSharingInteractionTest.MAX_TOTAL_FRIENDS; userNumber += 2 ) {
             this.response =
-                this.restProgram.command(this.s1, mkD("{'cmd':'shareP';'userToShare':'pid-" + userNumber + "';'programName':'toShare';'right':'NONE'}"));
-            assertEntityRc(response, "ok");
+                this.restProgram
+                    .command(this.s1, JSONUtilForServer.mkD("{'cmd':'shareP';'userToShare':'pid-" + userNumber + "';'programName':'toShare';'right':'NONE'}"));
+            JSONUtilForServer.assertEntityRc(this.response, "ok");
         }
-        assertEquals(MAX_TOTAL_FRIENDS / 2, getOneInt("select count(*) from USER_PROGRAM"));
+        Assert.assertEquals(BasicSharingInteractionTest.MAX_TOTAL_FRIENDS / 2, getOneBigInteger("select count(*) from USER_PROGRAM"));
     }
 
-    private int getOneInt(String sqlStmt) {
-        return this.memoryDbSetup.getOneInt(sqlStmt);
+    private long getOneBigInteger(String sqlStmt) {
+        return this.memoryDbSetup.getOneBigInteger(sqlStmt);
     }
 }

@@ -63,11 +63,11 @@ public class AccessRight implements WithSurrogateId {
     }
 
     public User getUser() {
-        return user;
+        return this.user;
     }
 
     public Program getProgram() {
-        return program;
+        return this.program;
     }
 
     public Relation getRelation() {
@@ -76,5 +76,10 @@ public class AccessRight implements WithSurrogateId {
 
     public void setRelation(Relation relation) {
         this.relation = relation;
+    }
+
+    @Override
+    public String toString() {
+        return "AccessRight [id=" + this.id + ", user=" + this.user + ", relation=" + this.relation + "]";
     }
 }

@@ -1,11 +1,5 @@
 package de.fhg.iais.roberta.javaServer.basics;
 
-import static de.fhg.iais.roberta.testutil.JSONUtilForServer.assertEntityRc;
-import static de.fhg.iais.roberta.testutil.JSONUtilForServer.mkD;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Properties;
@@ -18,6 +12,7 @@ import org.codehaus.jettison.json.JSONObject;
 import org.eclipse.jetty.server.Server;
 import org.hibernate.Session;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -41,6 +36,7 @@ import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
 import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CompilerWorkflow;
 import de.fhg.iais.roberta.testutil.Helper;
+import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
@@ -64,6 +60,7 @@ public class RoundTripTest {
         "bluetooth"
     };
 
+    // XXX: why static?
     private static WebDriver driver;
     private static String baseUrl;
 
@@ -92,79 +89,79 @@ public class RoundTripTest {
 
     @BeforeClass
     public static void setUp() throws Exception {
-        initialize();
-        setUpDatabase();
-        startServerAndLogin();
+        RoundTripTest.initialize();
+        RoundTripTest.setUpDatabase();
+        RoundTripTest.startServerAndLogin();
     }
 
     @Test
     public void actionMove() throws Exception {
-        assertRoundTrip(blocklyPrograms[0]);
+        assertRoundTrip(RoundTripTest.blocklyPrograms[0]);
     }
 
     @Test
     public void actionDrive() throws Exception {
-        assertRoundTrip(blocklyPrograms[1]);
+        assertRoundTrip(RoundTripTest.blocklyPrograms[1]);
     }
 
     @Test
     public void actionShow() throws Exception {
-        assertRoundTrip(blocklyPrograms[2]);
+        assertRoundTrip(RoundTripTest.blocklyPrograms[2]);
     }
 
     @Test
     public void actionSound() throws Exception {
-        assertRoundTrip(blocklyPrograms[3]);
+        assertRoundTrip(RoundTripTest.blocklyPrograms[3]);
     }
 
     @Test
     public void actionStatusLight() throws Exception {
-        assertRoundTrip(blocklyPrograms[4]);
+        assertRoundTrip(RoundTripTest.blocklyPrograms[4]);
     }
 
     @Test
     public void actionSensors() throws Exception {
-        assertRoundTrip(blocklyPrograms[5]);
+        assertRoundTrip(RoundTripTest.blocklyPrograms[5]);
     }
 
     @Test
     public void actionLogic() throws Exception {
-        assertRoundTrip(blocklyPrograms[6]);
+        assertRoundTrip(RoundTripTest.blocklyPrograms[6]);
     }
 
     @Test
     public void actionControl() throws Exception {
-        assertRoundTrip(blocklyPrograms[7]);
+        assertRoundTrip(RoundTripTest.blocklyPrograms[7]);
     }
 
     @Test
     public void actionWait() throws Exception {
-        assertRoundTrip(blocklyPrograms[8]);
+        assertRoundTrip(RoundTripTest.blocklyPrograms[8]);
     }
 
     @Test
     public void actionMath() throws Exception {
-        assertRoundTrip(blocklyPrograms[9]);
+        assertRoundTrip(RoundTripTest.blocklyPrograms[9]);
     }
 
     @Test
     public void actionText() throws Exception {
-        assertRoundTrip(blocklyPrograms[10]);
+        assertRoundTrip(RoundTripTest.blocklyPrograms[10]);
     }
 
     @Test
     public void actionLists() throws Exception {
-        assertRoundTrip(blocklyPrograms[11]);
+        assertRoundTrip(RoundTripTest.blocklyPrograms[11]);
     }
 
     @Test
     public void actionMethods() throws Exception {
-        assertRoundTrip(blocklyPrograms[12]);
+        assertRoundTrip(RoundTripTest.blocklyPrograms[12]);
     }
 
     @Test
     public void actionBluetooth() throws Exception {
-        assertRoundTrip(blocklyPrograms[13]);
+        assertRoundTrip(RoundTripTest.blocklyPrograms[13]);
     }
 
     @AfterClass
@@ -172,55 +169,60 @@ public class RoundTripTest {
         RoundTripTest.driver.quit();
         String verificationErrorString = RoundTripTest.verificationErrors.toString();
         if ( !"".equals(verificationErrorString) ) {
-            fail(verificationErrorString);
+            Assert.fail(verificationErrorString);
         }
         RoundTripTest.server.stop();
     }
 
     private static void initialize() {
         Properties properties = Util.loadProperties("classpath:openRoberta.properties");
-        buildXml = properties.getProperty("crosscompiler.build.xml");
-        connectionUrl = properties.getProperty("hibernate.connection.url");
-        crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");
-        robotResourcesDir = properties.getProperty("robot.resources.dir");
+        RoundTripTest.buildXml = properties.getProperty("crosscompiler.build.xml");
+        RoundTripTest.connectionUrl = properties.getProperty("hibernate.connection.url");
+        RoundTripTest.crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");
+        RoundTripTest.robotResourcesDir = properties.getProperty("robot.resources.dir");
 
-        RoundTripTest.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", connectionUrl);
-        nativeSession = sessionFactoryWrapper.getNativeSession();
-        memoryDbSetup = new DbSetup(nativeSession);
-        memoryDbSetup.runDefaultRobertaSetup();
-        brickCommunicator = new Ev3Communicator();
-        compilerWorkflow = new Ev3CompilerWorkflow(brickCommunicator, crosscompilerBasedir, robotResourcesDir, buildXml);
-        restUser = new ClientUser(brickCommunicator);
-        restProgram = new ClientProgram(sessionFactoryWrapper, brickCommunicator, compilerWorkflow);
+        RoundTripTest.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", RoundTripTest.connectionUrl);
+        RoundTripTest.nativeSession = RoundTripTest.sessionFactoryWrapper.getNativeSession();
+        RoundTripTest.memoryDbSetup = new DbSetup(RoundTripTest.nativeSession);
+        RoundTripTest.memoryDbSetup.runDefaultRobertaSetup();
+        RoundTripTest.brickCommunicator = new Ev3Communicator();
+        RoundTripTest.compilerWorkflow =
+            new Ev3CompilerWorkflow(
+                RoundTripTest.brickCommunicator,
+                RoundTripTest.crosscompilerBasedir,
+                RoundTripTest.robotResourcesDir,
+                RoundTripTest.buildXml);
+        RoundTripTest.restUser = new ClientUser(RoundTripTest.brickCommunicator);
+        RoundTripTest.restProgram = new ClientProgram(RoundTripTest.sessionFactoryWrapper, RoundTripTest.brickCommunicator, RoundTripTest.compilerWorkflow);
 
-        s1 = HttpSessionState.init();
+        RoundTripTest.s1 = HttpSessionState.init();
     }
 
     private static void setUpDatabase() throws Exception {
-        assertEquals(0, getOneInt("select count(*) from USER"));
+        Assert.assertEquals(0, RoundTripTest.getOneBigInteger("select count(*) from USER"));
         RoundTripTest.response =
             RoundTripTest.restUser.command(
                 RoundTripTest.s1,
                 RoundTripTest.sessionFactoryWrapper.getSession(),
-                mkD("{'cmd':'createUser';'accountName':'orA';'password':'Pid';'userEmail':'cavy@home';'role':'STUDENT'}"));
-        assertEquals(1, getOneInt("select count(*) from USER"));
-        assertTrue(!RoundTripTest.s1.isUserLoggedIn());
+                JSONUtilForServer.mkD("{'cmd':'createUser';'accountName':'orA';'password':'Pid';'userEmail':'cavy@home';'role':'STUDENT'}"));
+        Assert.assertEquals(1, RoundTripTest.getOneBigInteger("select count(*) from USER"));
+        Assert.assertTrue(!RoundTripTest.s1.isUserLoggedIn());
         RoundTripTest.response = //
             RoundTripTest.restUser.command( //
                 RoundTripTest.s1,
                 RoundTripTest.sessionFactoryWrapper.getSession(),
-                mkD("{'cmd':'login';'accountName':'orA';'password':'Pid'}"));
-        assertEntityRc(RoundTripTest.response, "ok");
-        assertTrue(RoundTripTest.s1.isUserLoggedIn());
+                JSONUtilForServer.mkD("{'cmd':'login';'accountName':'orA';'password':'Pid'}"));
+        JSONUtilForServer.assertEntityRc(RoundTripTest.response, "ok");
+        Assert.assertTrue(RoundTripTest.s1.isUserLoggedIn());
         int s1Id = RoundTripTest.s1.getUserId();
-        assertEquals(0, getOneInt("select count(*) from PROGRAM where OWNER_ID = " + s1Id));
+        Assert.assertEquals(0, RoundTripTest.getOneBigInteger("select count(*) from PROGRAM where OWNER_ID = " + s1Id));
         for ( String program : RoundTripTest.blocklyPrograms ) {
             RoundTripTest.blocklyProgram =
                 Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + program + ".xml"), Charsets.UTF_8);
             JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"saveAsP\";\"name\":\"" + program + "\";\"timestamp\":0}}");
             fullRequest.getJSONObject("data").put("program", RoundTripTest.blocklyProgram);
             RoundTripTest.response = RoundTripTest.restProgram.command(RoundTripTest.s1, fullRequest);
-            assertEntityRc(RoundTripTest.response, "ok");
+            JSONUtilForServer.assertEntityRc(RoundTripTest.response, "ok");
         }
     }
 
@@ -272,7 +274,8 @@ public class RoundTripTest {
             (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("menuSaveProg")));
         userProgramSaveAsElement.click();
 
-        RoundTripTest.response = RoundTripTest.restProgram.command(RoundTripTest.s1, mkD("{'cmd':'loadP';'name':'" + programName + "';'owner':'orA'}"));
+        RoundTripTest.response =
+            RoundTripTest.restProgram.command(RoundTripTest.s1, JSONUtilForServer.mkD("{'cmd':'loadP';'name':'" + programName + "';'owner':'orA'}"));
         String resultProgram = ((JSONObject) RoundTripTest.response.getEntity()).getString("data");
         return resultProgram;
     }
@@ -317,8 +320,8 @@ public class RoundTripTest {
         Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
     }
 
-    private static int getOneInt(String sqlStmt) {
-        return RoundTripTest.memoryDbSetup.getOneInt(sqlStmt);
+    private static long getOneBigInteger(String sqlStmt) {
+        return RoundTripTest.memoryDbSetup.getOneBigInteger(sqlStmt);
     }
 
 }

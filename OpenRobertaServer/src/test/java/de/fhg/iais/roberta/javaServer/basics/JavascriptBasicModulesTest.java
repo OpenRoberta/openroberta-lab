@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.javaServer.basics;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 import org.openqa.selenium.By;
 
@@ -11,7 +10,6 @@ import de.fhg.iais.roberta.testutil.SeleniumHelper;
 import de.fhg.iais.roberta.testutil.SeleniumHelper.Button;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
-@Ignore
 @Category(IntegrationTest.class)
 public class JavascriptBasicModulesTest {
     private SeleniumHelper shAsField;

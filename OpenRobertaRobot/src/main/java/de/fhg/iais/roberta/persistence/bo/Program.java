@@ -157,6 +157,8 @@ public class Program implements WithSurrogateId {
             + this.name
             + ", ownerId="
             + (this.owner == null ? "???" : this.owner.getId())
+            + ", robotId="
+            + (this.robot == null ? "???" : this.robot.getId())
             + ", created="
             + this.created
             + ", lastChanged="

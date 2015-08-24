@@ -1,9 +1,5 @@
 package de.fhg.iais.roberta.javaServer.basics;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -11,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import org.eclipse.jetty.server.Server;
 import org.hibernate.Session;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -34,8 +31,9 @@ import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
 @Category(IntegrationTest.class)
 public class RoundTripUITest {
-
     private static final Logger LOG = LoggerFactory.getLogger(Administration.class);
+
+    // XXX: why static?
     private static WebDriver driver;
     private static String baseUrl;
     private static Server server;
@@ -48,20 +46,20 @@ public class RoundTripUITest {
 
     @BeforeClass
     public static void setUp() throws Exception {
-        initialize();
-        startServer();
+        RoundTripUITest.initialize();
+        RoundTripUITest.startServer();
     }
 
     @Test
     public void actionCreateUserAndLoginAndLogout() throws Exception {
-        assertEquals(0, getOneInt("select count(*) from USER"));
-        WebElement userNameElement = driver.findElement(By.id("iconDisplayLogin"));
+        Assert.assertEquals(0, RoundTripUITest.getOneBigInteger("select count(*) from USER"));
+        WebElement userNameElement = RoundTripUITest.driver.findElement(By.id("iconDisplayLogin"));
         String color = userNameElement.getCssValue("color");
-        assertEquals("rgba(204, 204, 204, 1)", color); // Color of login-icon has to be grey now
-        String userName = js.executeScript("return userState.name;").toString();
-        assertEquals("", userName);
-        Integer userId = Integer.parseInt(js.executeScript("return userState.id;").toString());
-        assertTrue(userId == -1);
+        Assert.assertEquals("rgba(204, 204, 204, 1)", color); // Color of login-icon has to be grey now
+        String userName = RoundTripUITest.js.executeScript("return userState.name;").toString();
+        Assert.assertEquals("", userName);
+        Integer userId = Integer.parseInt(RoundTripUITest.js.executeScript("return userState.id;").toString());
+        Assert.assertTrue(userId == -1);
 
         // Create new user
         WebElement user = RoundTripUITest.driver.findElement(By.id("head-navi-icon-user"));
@@ -83,13 +81,13 @@ public class RoundTripUITest {
         RoundTripUITest.driver.findElement(By.id("userEmail")).sendKeys("");
         RoundTripUITest.driver.findElement(By.id("saveUser")).click();
         (new WebDriverWait(RoundTripUITest.driver, 10)).until(ExpectedConditions.invisibilityOfElementLocated(By.id("saveUser")));
-        assertEquals(1, getOneInt("select count(*) from USER"));
+        Assert.assertEquals(1, RoundTripUITest.getOneBigInteger("select count(*) from USER"));
         color = userNameElement.getCssValue("color");
-        assertEquals("rgba(175, 202, 4, 1)", color); // Color of login-icon has to be green now
-        userName = js.executeScript("return userState.name;").toString();
-        assertEquals("orA", userName);
-        userId = Integer.parseInt(js.executeScript("return userState.id;").toString());
-        assertTrue(userId > 0);
+        Assert.assertEquals("rgba(175, 202, 4, 1)", color); // Color of login-icon has to be green now
+        userName = RoundTripUITest.js.executeScript("return userState.name;").toString();
+        Assert.assertEquals("orA", userName);
+        userId = Integer.parseInt(RoundTripUITest.js.executeScript("return userState.id;").toString());
+        Assert.assertTrue(userId > 0);
 
         // Logout
         while ( !RoundTripUITest.driver.findElement(By.id("menuLogout")).isDisplayed() ) {
@@ -99,11 +97,11 @@ public class RoundTripUITest {
         userLogoutElement.click();
         Thread.sleep(500);
         color = userNameElement.getCssValue("color");
-        assertEquals("rgba(204, 204, 204, 1)", color); // Color of login-icon has to be grey now
-        userName = js.executeScript("return userState.name;").toString();
-        assertEquals("", userName);
-        userId = Integer.parseInt(js.executeScript("return userState.id;").toString());
-        assertTrue(userId == -1);
+        Assert.assertEquals("rgba(204, 204, 204, 1)", color); // Color of login-icon has to be grey now
+        userName = RoundTripUITest.js.executeScript("return userState.name;").toString();
+        Assert.assertEquals("", userName);
+        userId = Integer.parseInt(RoundTripUITest.js.executeScript("return userState.id;").toString());
+        Assert.assertTrue(userId == -1);
 
         // Login
         while ( !RoundTripUITest.driver.findElement(By.id("menuLogin")).isDisplayed() ) {
@@ -119,11 +117,11 @@ public class RoundTripUITest {
         RoundTripUITest.driver.findElement(By.id("doLogin")).click();
         (new WebDriverWait(RoundTripUITest.driver, 10)).until(ExpectedConditions.invisibilityOfElementLocated(By.id("doLogin")));
         color = userNameElement.getCssValue("color");
-        assertEquals("rgba(175, 202, 4, 1)", color); // Color of login-icon has to be green now
-        userName = js.executeScript("return userState.name;").toString();
-        assertEquals("orA", userName);
-        userId = Integer.parseInt(js.executeScript("return userState.id;").toString());
-        assertTrue(userId > 0);
+        Assert.assertEquals("rgba(175, 202, 4, 1)", color); // Color of login-icon has to be green now
+        userName = RoundTripUITest.js.executeScript("return userState.name;").toString();
+        Assert.assertEquals("orA", userName);
+        userId = Integer.parseInt(RoundTripUITest.js.executeScript("return userState.id;").toString());
+        Assert.assertTrue(userId > 0);
 
         // DeleteUser
         while ( !RoundTripUITest.driver.findElement(By.id("menuDeleteUser")).isDisplayed() ) {
@@ -137,11 +135,11 @@ public class RoundTripUITest {
         RoundTripUITest.driver.findElement(By.id("deleteUser")).click();
         (new WebDriverWait(RoundTripUITest.driver, 10)).until(ExpectedConditions.invisibilityOfElementLocated(By.id("deleteUser")));
         color = userNameElement.getCssValue("color");
-        assertEquals("rgba(204, 204, 204, 1)", color); // Color of login-icon has to be grey now
-        userName = js.executeScript("return userState.name;").toString();
-        assertEquals("", userName);
-        userId = Integer.parseInt(js.executeScript("return userState.id;").toString());
-        assertTrue(userId == -1);
+        Assert.assertEquals("rgba(204, 204, 204, 1)", color); // Color of login-icon has to be grey now
+        userName = RoundTripUITest.js.executeScript("return userState.name;").toString();
+        Assert.assertEquals("", userName);
+        userId = Integer.parseInt(RoundTripUITest.js.executeScript("return userState.id;").toString());
+        Assert.assertTrue(userId == -1);
     }
 
     @AfterClass
@@ -149,18 +147,18 @@ public class RoundTripUITest {
         RoundTripUITest.driver.quit();
         String verificationErrorString = RoundTripUITest.verificationErrors.toString();
         if ( !"".equals(verificationErrorString) ) {
-            fail(verificationErrorString);
+            Assert.fail(verificationErrorString);
         }
         RoundTripUITest.server.stop();
     }
 
     private static void initialize() {
         Properties properties = Util.loadProperties("classpath:openRoberta.properties");
-        connectionUrl = properties.getProperty("hibernate.connection.url");
-        RoundTripUITest.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", connectionUrl);
-        nativeSession = sessionFactoryWrapper.getNativeSession();
-        memoryDbSetup = new DbSetup(nativeSession);
-        memoryDbSetup.runDefaultRobertaSetup();
+        RoundTripUITest.connectionUrl = properties.getProperty("hibernate.connection.url");
+        RoundTripUITest.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", RoundTripUITest.connectionUrl);
+        RoundTripUITest.nativeSession = RoundTripUITest.sessionFactoryWrapper.getNativeSession();
+        RoundTripUITest.memoryDbSetup = new DbSetup(RoundTripUITest.nativeSession);
+        RoundTripUITest.memoryDbSetup.runDefaultRobertaSetup();
     }
 
     private static void startServer() throws IOException, InterruptedException {
@@ -168,7 +166,7 @@ public class RoundTripUITest {
         int port = RoundTripUITest.server.getURI().getPort();
         RoundTripUITest.driver = new PhantomJSDriver();
         // workaround: https://github.com/ariya/phantomjs/issues/11637
-        RoundTripUITest.driver.manage().window().setSize(new Dimension(1024,768));
+        RoundTripUITest.driver.manage().window().setSize(new Dimension(1024, 768));
         RoundTripUITest.driver.manage().window().maximize();
         RoundTripUITest.js = (JavascriptExecutor) RoundTripUITest.driver;
         RoundTripUITest.baseUrl = "http://localhost:" + port;
@@ -176,12 +174,12 @@ public class RoundTripUITest {
         RoundTripUITest.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
         //Welcome message dismiss
-        driver.findElement(By.id("hideStartupMessage")).click();
+        RoundTripUITest.driver.findElement(By.id("hideStartupMessage")).click();
         Thread.sleep(500);
     }
 
-    private static int getOneInt(String sqlStmt) {
-        return RoundTripUITest.memoryDbSetup.getOneInt(sqlStmt);
+    private static long getOneBigInteger(String sqlStmt) {
+        return RoundTripUITest.memoryDbSetup.getOneBigInteger(sqlStmt);
     }
 
 }

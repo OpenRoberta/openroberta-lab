@@ -1,12 +1,10 @@
 package de.fhg.iais.roberta.javaServer.basics;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.util.List;
 import java.util.Properties;
 
 import org.hibernate.Session;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -51,10 +49,10 @@ public class BasicPersistUserProgram {
         RobotDao robotDao = new RobotDao(hSession);
         ProgramDao programDao = new ProgramDao(hSession);
         Robot robot = robotDao.loadRobot("ev3");
-        assertEquals(0, getOneInt("select count(*) from USER_PROGRAM"));
+        Assert.assertEquals(0, getOneBigInteger("select count(*) from USER_PROGRAM"));
 
         //Create list of users
-        for ( int userNumber = 0; userNumber < TOTAL_USERS; userNumber++ ) {
+        for ( int userNumber = 0; userNumber < BasicPersistUserProgram.TOTAL_USERS; userNumber++ ) {
             User user = userDao.loadUser("account-" + userNumber);
             if ( user == null ) {
                 User user2 = new User("account-" + userNumber);
@@ -67,10 +65,10 @@ public class BasicPersistUserProgram {
             }
         }
         List<User> userList = userDao.loadUserList("created", 0, "rwth");
-        assertTrue(userList.size() == 10);
+        Assert.assertTrue(userList.size() == 10);
 
         //Create one program per user
-        for ( int userNumber = 0; userNumber < TOTAL_USERS; userNumber++ ) {
+        for ( int userNumber = 0; userNumber < BasicPersistUserProgram.TOTAL_USERS; userNumber++ ) {
             User owner = userDao.loadUser("account-" + userNumber);
             Program program = programDao.load("program-" + userNumber, owner, robot);
             if ( program == null ) {
@@ -82,13 +80,13 @@ public class BasicPersistUserProgram {
             }
         }
         List<Program> programList = programDao.loadAll();
-        assertTrue(programList.size() == 100);
+        Assert.assertTrue(programList.size() == 100);
 
         //User 0 invites all inpair  users to write to its program
         User owner = userDao.loadUser("account-0");
         Program program = programDao.load("program-0", owner, robot);
         AccessRightDao userProgramDao = new AccessRightDao(hSession);
-        for ( int userNumber = 1; userNumber < TOTAL_USERS; userNumber += 2 ) {
+        for ( int userNumber = 1; userNumber < BasicPersistUserProgram.TOTAL_USERS; userNumber += 2 ) {
             User user = userDao.loadUser("account-" + userNumber);
             if ( user != null ) {
                 AccessRight userProgram = userProgramDao.loadAccessRight(user, program);
@@ -102,15 +100,15 @@ public class BasicPersistUserProgram {
 
         //Show list of users from program dao
         List<AccessRight> userProgramList = userProgramDao.loadAccessRightsByProgram(program);
-        assertTrue(userProgramList.size() == 50);
-        for ( int userNumber = 1; userNumber < TOTAL_USERS; userNumber += 2 ) {
+        Assert.assertTrue(userProgramList.size() == 50);
+        for ( int userNumber = 1; userNumber < BasicPersistUserProgram.TOTAL_USERS; userNumber += 2 ) {
             User user = userDao.loadUser("account-" + userNumber);
             List<AccessRight> userProgramList2 = userProgramDao.loadAccessRightsForUser(user);
-            assertTrue(userProgramList2.size() == 1);
+            Assert.assertTrue(userProgramList2.size() == 1);
         }
     }
 
-    private int getOneInt(String sqlStmt) {
-        return this.memoryDbSetup.getOneInt(sqlStmt);
+    private long getOneBigInteger(String sqlStmt) {
+        return this.memoryDbSetup.getOneBigInteger(sqlStmt);
     }
 }

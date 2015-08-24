@@ -22,19 +22,26 @@ public class DbSetup {
     }
 
     public void runDefaultRobertaSetup() {
-        runDatabaseSetup(DB_CREATE_TABLES_SQL, SQL_RETURNING_POSITIVENUMBER_IF_SQLFILE_ALREADY_LOADED, SQL_RETURNING_POSITIVENUMBER_IF_SETUP_WAS_SUCCESSFUL);
+        runDatabaseSetup(
+            DbSetup.DB_CREATE_TABLES_SQL,
+            DbSetup.SQL_RETURNING_POSITIVENUMBER_IF_SQLFILE_ALREADY_LOADED,
+            DbSetup.SQL_RETURNING_POSITIVENUMBER_IF_SETUP_WAS_SUCCESSFUL);
     }
 
     public void runDatabaseSetup(String sqlResource, String sqlReturningPositiveIfSqlFileAlreadyLoaded, String sqlReturningPositiveIfSetupSuccessful) {
         try {
             this.dbExecutor.sqlFile(sqlResource, sqlReturningPositiveIfSqlFileAlreadyLoaded, sqlReturningPositiveIfSetupSuccessful);
         } catch ( Exception e ) {
-            LOG.error("failure during execution of sql statements from classpath resource " + sqlResource, e);
+            DbSetup.LOG.error("failure during execution of sql statements from classpath resource " + sqlResource, e);
         }
     }
 
-    public int getOneInt(String sqlStmt) {
-        return ((BigInteger) this.dbExecutor.oneValueSelect(sqlStmt)).intValue();
+    public long getOneBigInteger(String sqlStmt) {
+        return ((BigInteger) this.dbExecutor.oneValueSelect(sqlStmt)).longValue();
     }
 
+    @SuppressWarnings("unchecked")
+    public <T> T getOne(String sqlStmt) {
+        return (T) this.dbExecutor.oneValueSelect(sqlStmt);
+    }
 }
