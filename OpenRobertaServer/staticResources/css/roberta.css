@@ -282,8 +282,7 @@ html, body {
 	color: #ccc;
 }
 
-@
--webkit-keyframes blinker {from { color:#afca04;
+@-webkit-keyframes blinker {from { color:#afca04;
 	
 }
 
@@ -292,8 +291,7 @@ to {
 }
 
 }
-@
-keyframes  blinker {from { color:#afca04;
+@keyframes  blinker {from { color:#afca04;
 	
 }
 

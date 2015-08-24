@@ -463,7 +463,7 @@ Blockly.init_ = function() {
     Blockly.mainWorkspace.addCheckButton();
     Blockly.mainWorkspace.addSaveButton();
     Blockly.mainWorkspace.addCodeButton();
-  
+
     // Load the sounds.
     Blockly.loadAudio_([ 'media/click.mp3', 'media/click.wav', 'media/click.ogg' ], 'click');
     Blockly.loadAudio_([ 'media/delete.mp3', 'media/delete.ogg', 'media/delete.wav' ], 'delete');

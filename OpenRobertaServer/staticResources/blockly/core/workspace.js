@@ -67,10 +67,8 @@ Blockly.Workspace = function(getMetrics, setMetrics) {
 };
 
 /**
- * Angle away from the horizontal to sweep for blocks. Order of execution is
- * generally top to bottom, but a small angle changes the scan to give a bit of
- * a left to right bias (reversed in RTL). Units are in degrees. See:
- * http://tvtropes.org/pmwiki/pmwiki.php/Main/DiagonalBilling.
+ * Angle away from the horizontal to sweep for blocks. Order of execution is generally top to bottom, but a small angle changes the scan to give a bit of a left
+ * to right bias (reversed in RTL). Units are in degrees. See: http://tvtropes.org/pmwiki/pmwiki.php/Main/DiagonalBilling.
  */
 Blockly.Workspace.SCAN_ANGLE = 3;
 
@@ -124,8 +122,7 @@ Blockly.Workspace.prototype.checkButton = null;
 Blockly.Workspace.prototype.saveButton = null;
 
 /**
- * PID of upcoming firing of a change event. Used to fire only one event after
- * multiple changes.
+ * PID of upcoming firing of a change event. Used to fire only one event after multiple changes.
  * 
  * @type {?number}
  * @private
@@ -156,8 +153,7 @@ Blockly.Workspace.prototype.createDom = function() {
 };
 
 /**
- * Dispose of this workspace. Unlink from all DOM elements to prevent memory
- * leaks.
+ * Dispose of this workspace. Unlink from all DOM elements to prevent memory leaks.
  */
 Blockly.Workspace.prototype.dispose = function() {
     if (this.svgGroup_) {
@@ -202,12 +198,10 @@ Blockly.Workspace.prototype.addTrashcan = function() {
 Blockly.Workspace.prototype.addStartButton = function() {
     if (Blockly.hasStartButton && !Blockly.readOnly) {
         this.startButton = new Blockly.StartButton(this, 4);
-    } else {
-        this.startButton = new Blockly.EmptyButton(this, 4);
+        var svgStartButton = this.startButton.createDom();
+        this.svgGroup_.insertBefore(svgStartButton, this.svgBlockCanvas_);
+        this.startButton.init();
     }
-    var svgStartButton = this.startButton.createDom();
-    this.svgGroup_.insertBefore(svgStartButton, this.svgBlockCanvas_);
-    this.startButton.init();
 };
 
 /**
@@ -216,37 +210,21 @@ Blockly.Workspace.prototype.addStartButton = function() {
 Blockly.Workspace.prototype.addCheckButton = function() {
     if (Blockly.hasCheckButton && !Blockly.readOnly) {
         this.checkButton = new Blockly.CheckButton(this, 2);
-    } else {
-        this.checkButton = new Blockly.EmptyButton(this, 2);
+        var svgCheckButton = this.checkButton.createDom();
+        this.svgGroup_.insertBefore(svgCheckButton, this.svgBlockCanvas_);
+        this.checkButton.init();
     }
-    var svgCheckButton = this.checkButton.createDom();
-    this.svgGroup_.insertBefore(svgCheckButton, this.svgBlockCanvas_);
-    this.checkButton.init();
 };
 
 /**
  * Add a saveButton.
  */
 Blockly.Workspace.prototype.addSaveButton = function() {
-    if (Blockly.hasSaveButton) {
+    if (Blockly.hasSaveButton && !Blockly.readOnly) {
         this.saveButton = new Blockly.SaveButton(this, 3);
-    } else {
-        this.saveButton = new Blockly.EmptyButton(this, 3);
-    }
-    var svgSaveButton = this.saveButton.createDom();
-    this.svgGroup_.insertBefore(svgSaveButton, this.svgBlockCanvas_);
-    this.saveButton.init();
-};
-
-/**
- * Add a backButton.
- */
-Blockly.Workspace.prototype.addBackButton = function() {
-    if (Blockly.hasBackButton) {
-        this.backButton = new Blockly.BackButton(this, 2);
-        var svgBackButton = this.backButton.createDom();
-        this.svgGroup_.insertBefore(svgBackButton, this.svgBlockCanvas_);
-        this.backButton.init();
+        var svgSaveButton = this.saveButton.createDom();
+        this.svgGroup_.insertBefore(svgSaveButton, this.svgBlockCanvas_);
+        this.saveButton.init();
     }
 };
 
@@ -254,7 +232,7 @@ Blockly.Workspace.prototype.addBackButton = function() {
  * Add a codeButton.
  */
 Blockly.Workspace.prototype.addCodeButton = function() {
-    if (Blockly.hasCodeButton) {
+    if (Blockly.hasCodeButton && !Blockly.readOnly) {
         this.codeButton = new Blockly.CodeButton(this, 1);
         var svgCodeButton = this.codeButton.createDom();
         this.svgGroup_.insertBefore(svgCodeButton, this.svgBlockCanvas_);
@@ -319,8 +297,7 @@ Blockly.Workspace.prototype.removeTopBlock = function(block) {
 };
 
 /**
- * Finds the top-level blocks and returns them. Blocks are optionally sorted by
- * position; top to bottom (with slight LTR or RTL bias).
+ * Finds the top-level blocks and returns them. Blocks are optionally sorted by position; top to bottom (with slight LTR or RTL bias).
  * 
  * @param {boolean}
  *            ordered Sort the list if true.
@@ -454,10 +431,8 @@ Blockly.Workspace.prototype.highlightBlock = function(id) {
 };
 
 /**
- * Fire a change event for this workspace. Changes include new block, dropdown
- * edits, mutations, connections, etc. Groups of simultaneous changes (e.g. a
- * tree of blocks being deleted) are merged into one event. Applications may
- * hook workspace changes by listening for 'blocklyWorkspaceChange' on
+ * Fire a change event for this workspace. Changes include new block, dropdown edits, mutations, connections, etc. Groups of simultaneous changes (e.g. a tree
+ * of blocks being deleted) are merged into one event. Applications may hook workspace changes by listening for 'blocklyWorkspaceChange' on
  * Blockly.mainWorkspace.getCanvas().
  */
 Blockly.Workspace.prototype.fireChangeEvent = function() {
@@ -515,8 +490,7 @@ Blockly.Workspace.prototype.paste = function(xmlBlock) {
 };
 
 /**
- * The number of blocks that may be added to the workspace before reaching the
- * maxBlocks.
+ * The number of blocks that may be added to the workspace before reaching the maxBlocks.
  * 
  * @return {number} Number of blocks left.
  */

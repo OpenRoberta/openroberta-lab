@@ -209,6 +209,9 @@ function injectBlockly(toolbox, opt_programBlocks, opt_readOnly) {
                 check : true,
                 start : true
             });
+            if (userState.robot === 'oraSim') {
+                $('.button1').css("display", "none");
+            }
         } else {
             $('#blocklyDiv').html('');
             Blockly.inject(document.getElementById('blocklyDiv'), {
@@ -512,6 +515,8 @@ function startProgram() {
                     injectBlockly(result, userState.programBlocks, true);
                 });
                 $(".sim").removeClass('hide');
+            } else {
+                Blockly.getMainWorkspace().startButton.disable();
             }
         } else {
             displayInformation(result, "", result.message, "");
@@ -1144,6 +1149,7 @@ function switchRobot(robot) {
                 $('#menuConnect').parent().removeClass('disabled');
                 $('#iconDisplayRobotState').removeClass('typcn-Roberta');
                 $('#iconDisplayRobotState').addClass('typcn-ev3');
+                $('.button1').css("display", "block");
             } else if (robot === "oraSim") {
                 userState.robotName = "ORSim";
                 $('#blocklyDiv').addClass('simBackground');
@@ -1152,6 +1158,7 @@ function switchRobot(robot) {
                 $('#menuConnect').parent().addClass('disabled');
                 $('#iconDisplayRobotState').removeClass('typcn-ev3');
                 $('#iconDisplayRobotState').addClass('typcn-Roberta');
+                $('.button1').css("display", "none");
             }
             loadToolbox(userState.toolbox);
         }
@@ -1674,6 +1681,7 @@ function setRobotState(result) {
         $('#iconDisplayRobotState').removeClass('error');
         $('#iconDisplayRobotState').removeClass('busy');
         $('#iconDisplayRobotState').addClass('wait');
+        Blockly.getMainWorkspace().startButton.enable();
     } else if (userState.robotState === 'busy') {
         $('#iconDisplayRobotState').removeClass('wait');
         $('#iconDisplayRobotState').removeClass('error');

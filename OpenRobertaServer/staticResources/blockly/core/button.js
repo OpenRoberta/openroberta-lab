@@ -143,10 +143,13 @@ Blockly.Button.prototype.img_y_ = 0;
  * 
  * @return {!Element} The button's SVG group.
  */
-Blockly.Button.prototype.createDom = function() {
+
+Blockly.Button.prototype.createDom = function(position) {
     this.svgGroup_ = Blockly.createSvgElement('g', {
-        'class' : 'blocklyButton'
+        'class' : 'blocklyButton button' + position
     }, null);
+    console.log("halle")
+    var svgTooltip_ = Blockly.createSvgElement('title', this.svgGroup_);
     this.svgBack_ = Blockly.createSvgElement('rect', {
         'id' : 'button' + this.POSITION,
         'class' : 'blocklyButtonBack',
@@ -241,18 +244,27 @@ Blockly.Button.prototype.onMouseOut_ = function(e) {
 Blockly.Button.prototype.disable = function() {
     this.svgBack_.setAttribute('class', 'blocklyButtonBack');
     this.svgPath_.setAttribute('class', 'blocklyButtonPathDisabled');
-    if (this.onMouseUpListener_)
+    if (this.onMouseUpListener_) {
         Blockly.unbindEvent_(this.onMouseUpListener_);
-    if (this.onMouseOverListener_)
+        this.onMouseUpListener_ = null;
+    }
+    if (this.onMouseOverListener_) {
         Blockly.unbindEvent_(this.onMouseOverListener_);
-    if (this.onMouseOutListener_)
+        this.onMouseOverListener_ = null;
+    }
+    if (this.onMouseOutListener_) {
         Blockly.unbindEvent_(this.onMouseOutListener_);
+        this.onMouseOutListener_ = null
+    }
 };
 
 Blockly.Button.prototype.enable = function() {
     this.svgBack_.setAttribute('class', 'blocklyButtonBack');
     this.svgPath_.setAttribute('class', 'blocklyButtonPath');
-    this.onMouseUpListener_ = Blockly.bindEvent_(this.svgGroup_, 'mouseup', this, this.onMouseUp_);
-    this.onMouseOverListener_ = Blockly.bindEvent_(this.svgGroup_, 'mouseover', this, this.onMouseOver_);
-    this.onMouseOutListener_ = Blockly.bindEvent_(this.svgGroup_, 'mouseout', this, this.onMouseOut_);
+    if (!this.onMouseUpListener_)
+        this.onMouseUpListener_ = Blockly.bindEvent_(this.svgGroup_, 'mouseup', this, this.onMouseUp_);
+    if (!this.onMouseOverListener_)
+        this.onMouseOverListener_ = Blockly.bindEvent_(this.svgGroup_, 'mouseover', this, this.onMouseOver_);
+    if (!this.onMouseOutListener_)
+        this.onMouseOutListener_ = Blockly.bindEvent_(this.svgGroup_, 'mouseout', this, this.onMouseOut_);
 };

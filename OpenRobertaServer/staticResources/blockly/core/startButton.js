@@ -35,7 +35,7 @@ Blockly.StartButton.prototype.onMouseUp_ = function(e) {
 
 /** @inheritDoc */
 Blockly.StartButton.prototype.createDom = function() {
-    Blockly.CheckButton.superClass_.createDom.call(this);
+    Blockly.CheckButton.superClass_.createDom.call(this, this.POSITION);
     this.svgPath_.setAttribute('transform', 'scale(1.5)');
     this.svgPath_.setAttribute('stroke-width', '0px');
     return this.svgGroup_;
