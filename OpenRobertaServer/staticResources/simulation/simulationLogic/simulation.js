@@ -57,6 +57,11 @@ var SIM = (function() {
         window.addEventListener("resize", resizeAll);
         return currentBackground;
     }
+    var time;
+    var dt = 0;
+    function getDt() {
+        return dt;
+    }
 
     var pause;
     function setPause(value) {
@@ -78,7 +83,7 @@ var SIM = (function() {
 
     var stepCounter;
     function setStep() {
-        stepCounter = -30;
+        stepCounter = -50;
         setPause(false);
     }
     var info;
@@ -133,7 +138,8 @@ var SIM = (function() {
         color : '',
         light : 0,
         ultrasonic : 0,
-        tacho : [ 0, 0 ]
+        tacho : [ 0, 0 ],
+        time : 0
     }
 
     var output = {
@@ -144,12 +150,7 @@ var SIM = (function() {
     };
 
 // render stuff
-    var oldTime = new Date().getTime();
-    var averageTimeStep = STEP_TIME;
-    var kP = 0.5;
-    var kI = 0.0001;
-    var error = 0;
-    var integral = 0;
+    var globalID;
 
     var robot = new SimpleRobot();
 
@@ -163,8 +164,6 @@ var SIM = (function() {
         stepCounter = 0;
         pause = true;
         info = false;
-        oldTime = new Date().getTime();
-        averageTimeStep = STEP_TIME;
         robot.reset();
         img = [];
         loadImages(0);
@@ -179,9 +178,16 @@ var SIM = (function() {
 
     function render() {
         if (canceled) {
+            cancelAnimationFrame(globalID);
             return;
         }
-        setTimeStep();
+        globalID = requestAnimationFrame(render);
+        var now = new Date().getTime();
+        dt = now - (time || now);
+        dt /= 1000;
+
+        time = now;
+
         stepCounter += 1;
         output.left = 0;
         output.right = 0;
@@ -200,11 +206,8 @@ var SIM = (function() {
             setPause(true);
         }
         robot.updatePose(output);
-        input = scene.updateSensorValues();
+        input = scene.updateSensorValues(!pause);
         scene.drawRobot();
-        setTimeout(function() {
-            render();
-        }, timerStep);
     }
 
     function reloadProgram() {
@@ -216,8 +219,12 @@ var SIM = (function() {
     function setOutput() {
         output.left = ACTORS.getLeftMotor().getPower() * MAXPOWER || 0;
         output.right = ACTORS.getRightMotor().getPower() * MAXPOWER || 0;
-        robot.led.color = output.led = LIGHT.getColor() || "grey"; // grey = led off
+
         robot.led.mode = output.ledMode = LIGHT.getMode() || "OFF";
+        if (LIGHT.getMode() && LIGHT.getMode() == "OFF")
+            robot.led.color = output.led = "#dddddd"; // = led off
+        else
+            robot.led.color = output.led = LIGHT.getColor();
     }
 
     function setObstacle() {
@@ -412,21 +419,6 @@ var SIM = (function() {
         window.addEventListener("resize", resizeAll);
     }
 
-    function setTimeStep() {
-        var actualTime = new Date().getTime();
-        var actualTimeStep = actualTime - oldTime;
-
-        oldTime = actualTime;
-        error = actualTimeStep / 1000 - STEP_TIME;
-        integral = integral + error;
-        timerStep = (STEP_TIME - kP * error - kP * integral) * 1000;
-        if (timerStep < 1) {
-            integral = 0;
-            timerStep = 1;
-        }
-        timeOld = actualTime;
-        averageTimeStep = 0.9 * averageTimeStep + 0.1 * actualTimeStep;
-    }
     function createLayers() {
         $('<canvas id ="unitBackgroundLayer" width=' + MAX_WIDTH + ' height=' + MAX_HEIGHT + '></canvas>').appendTo(document.getElementById("uniDiv"));
         var uniCanvas = document.getElementById("unitBackgroundLayer");
@@ -478,6 +470,38 @@ var SIM = (function() {
         "getScale" : getScale,
         "getInfo" : getInfo,
         "cancel" : cancel,
-        "getAverageTimeStep" : getAverageTimeStep
+        "getAverageTimeStep" : getAverageTimeStep,
+        "getDt" : getDt
     };
 })();
+
+//http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+//http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
+
+//requestAnimationFrame polyfill by Erik Möller
+//fixes from Paul Irish and Tino Zijdel
+
+(function() {
+    var lastTime = 0;
+    var vendors = [ 'ms', 'moz', 'webkit', 'o' ];
+    for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+        window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
+    }
+
+    if (!window.requestAnimationFrame)
+        window.requestAnimationFrame = function(callback, element) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id = window.setTimeout(function() {
+                callback(currTime + timeToCall);
+            }, timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+        };
+
+    if (!window.cancelAnimationFrame)
+        window.cancelAnimationFrame = function(id) {
+            clearTimeout(id);
+        };
+}());

@@ -1447,7 +1447,6 @@ function initHeadNavigation() {
         var blob = new Blob([ userState.programCode ]);
         var element = document.createElement('a');
         var myURL = window.URL || window.webkitURL;
-        console.log('winurl=' + myURL);
         element.setAttribute('href', myURL.createObjectURL(blob));
         element.setAttribute('download', userState.program + ".java");
         element.style.display = 'none';

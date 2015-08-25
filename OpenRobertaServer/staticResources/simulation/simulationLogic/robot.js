@@ -1,10 +1,8 @@
 /**
  * Creates a new robot for a simulation.
  * 
- * This robot is a differential drive robot. It has two wheels directly
- * connected to motors and several sensors. Each component of the robot has a
- * position in the robots coordinate system. The robot itself has a pose in the
- * global coordinate system (x, y, theta).
+ * This robot is a differential drive robot. It has two wheels directly connected to motors and several sensors. Each component of the robot has a position in
+ * the robots coordinate system. The robot itself has a pose in the global coordinate system (x, y, theta).
  * 
  * @class
  */
@@ -22,6 +20,8 @@ function Robot(pose) {
         this.pose.xOld = initialPose.x;
         this.pose.yOld = initialPose.y;
         this.pose.thetaOld = initialPose.theta;
+        this.led.color = '#dddddd';
+        this.led.mode = OFF;
     }
 };
 Robot.prototype.geom = {
@@ -143,20 +143,19 @@ Robot.prototype.mouse = {
     ry : 0,
     r : 30
 };
+Robot.prototype.time = 0;
 /**
- * Update the pose of the robot. The new pose is calculated with the forward
- * kinematics equations for a differential drive robot.
+ * Update the pose of the robot. The new pose is calculated with the forward kinematics equations for a differential drive robot.
  * 
  * @param {output}
- *            output from the executing program: power for left and right
- *            motors/wheels.
+ *            output from the executing program: power for left and right motors/wheels.
  * 
  */
 Robot.prototype.updatePose = function(output) {
 
     this.pose.theta = (this.pose.theta + 2 * Math.PI) % (2 * Math.PI);
-    this.encoder.left += output.left * STEP_TIME;
-    this.encoder.right += output.right * STEP_TIME;
+    this.encoder.left += output.left * SIM.getDt();
+    this.encoder.right += output.right * SIM.getDt();
     this.bumpedAready = false;
     if (this.frontLeft.bumped === true && output.left > 0) {
         output.left *= -1;
@@ -175,7 +174,7 @@ Robot.prototype.updatePose = function(output) {
         this.bumpedAready = true;
     }
     if (output.right === output.left) {
-        var moveXY = output.right * STEP_TIME;
+        var moveXY = output.right * SIM.getDt();
         var mX = Math.cos(this.pose.theta) * moveXY;
         var mY = Math.sqrt(Math.pow(moveXY, 2) - Math.pow(mX, 2));
         this.pose.x += mX;
@@ -197,10 +196,10 @@ Robot.prototype.updatePose = function(output) {
         var rot = (output.left - output.right) / TRACKWIDTH;
         var iccX = this.pose.x - (R * Math.sin(this.pose.theta));
         var iccY = this.pose.y + (R * Math.cos(this.pose.theta));
-        this.pose.x = (Math.cos(rot * STEP_TIME) * (this.pose.x - iccX) - Math.sin(rot * STEP_TIME) * (this.pose.y - iccY)) + iccX;
-        this.pose.y = (Math.sin(rot * STEP_TIME) * (this.pose.x - iccX) + Math.cos(rot * STEP_TIME) * (this.pose.y - iccY)) + iccY;
+        this.pose.x = (Math.cos(rot * SIM.getDt()) * (this.pose.x - iccX) - Math.sin(rot * SIM.getDt()) * (this.pose.y - iccY)) + iccX;
+        this.pose.y = (Math.sin(rot * SIM.getDt()) * (this.pose.x - iccX) + Math.cos(rot * SIM.getDt()) * (this.pose.y - iccY)) + iccY;
         var thetaTemp = this.pose.theta;
-        this.pose.theta = this.pose.theta + (rot * STEP_TIME);
+        this.pose.theta = this.pose.theta + (rot * SIM.getDt());
     }
     var sin = Math.sin(this.pose.theta);
     var cos = Math.cos(this.pose.theta);
@@ -219,9 +218,6 @@ Robot.prototype.updatePose = function(output) {
     this.touchSensor.y1 = this.frontRight.ry;
     this.touchSensor.x2 = this.frontLeft.rx;
     this.touchSensor.y2 = this.frontLeft.ry;
-
-//    this.led.color = output.led;
-//    this.led.mode = output.ledMode;
 }
 /**
  * Translate a position to the global coordinate system

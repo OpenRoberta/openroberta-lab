@@ -21,7 +21,7 @@ function Scene(backgroundImg, layers, robot, obstacle) {
         w : 0,
         h : 0
     };
-    this.wave = 0;
+    this.wave = 0.0;
 };
 
 Scene.prototype.updateBackgrounds = function() {
@@ -82,7 +82,7 @@ Scene.prototype.drawRobot = function() {
         this.rCtx.font = "10px Verdana";
         this.rCtx.fillStyle = "#333333";
         this.rCtx.fillText("FPS", endLabel, line);
-        this.rCtx.fillText(Math.round(1000 / SIM.getAverageTimeStep()), endValue, line);
+        this.rCtx.fillText(Math.round(1 / SIM.getDt()), endValue, line);
         line += 15;
         this.rCtx.fillText("Robot X", endLabel, line);
         this.rCtx.fillText(Math.round(this.robot.pose.x), endValue, line);
@@ -189,11 +189,12 @@ Scene.prototype.drawRobot = function() {
     this.rCtx.restore();
 
     // ultra 
-    this.wave += 1;
-    this.wave = this.wave % 60;
-    this.rCtx.beginPath();
-    this.rCtx.lineDashOffset = 60 - this.wave;
+    this.wave += WAVE_LENGTH * SIM.getDt();
+    this.wave = this.wave % WAVE_LENGTH;
+    this.rCtx.lineDashOffset = WAVE_LENGTH - this.wave;
     this.rCtx.setLineDash([ 20, 40 ]);
+    this.rCtx.beginPath();
+
     this.rCtx.lineWidth = "0.5";
     this.rCtx.strokeStyle = "#555555";
     for (var i = 0; i < this.robot.ultraSensor.u.length; i++) {
@@ -202,8 +203,6 @@ Scene.prototype.drawRobot = function() {
     }
     this.rCtx.stroke();
     this.rCtx.beginPath();
-    this.rCtx.lineDashOffset = 60 - this.wave;
-    this.rCtx.setLineDash([ 20, 40 ]);
     this.rCtx.strokeStyle = "black";
     this.rCtx.moveTo(this.robot.ultraSensor.rx, this.robot.ultraSensor.ry);
     this.rCtx.lineTo(this.robot.ultraSensor.cx, this.robot.ultraSensor.cy);
@@ -230,7 +229,7 @@ Scene.prototype.drawRobot = function() {
     }
 };
 
-Scene.prototype.updateSensorValues = function() {
+Scene.prototype.updateSensorValues = function(running) {
     var values = {};
     if (this.robot.touchSensor) {
         this.robot.touchSensor.value = 0;
@@ -266,7 +265,7 @@ Scene.prototype.updateSensorValues = function() {
                         x : obstacleLines[k].x2,
                         y : obstacleLines[k].y2
                     });
-                    if (SIMATH.sqr(this.robot.touchSensor.rx - p.x) + SIMATH.sqr(this.robot.touchSensor.ry - p.y) < STEP_TIME
+                    if (SIMATH.sqr(this.robot.touchSensor.rx - p.x) + SIMATH.sqr(this.robot.touchSensor.ry - p.y) < SIM.getDt()
                             * Math.max(Math.abs(SIM.output.right), Math.abs(SIM.output.left))) {
                         this.robot.frontLeft.bumped = true;
                         this.robot.frontRight.bumped = true;
@@ -295,7 +294,7 @@ Scene.prototype.updateSensorValues = function() {
                                 x : obstacleLines[k].x2,
                                 y : obstacleLines[k].y2
                             });
-                            if (SIMATH.sqr(this.robot.backMiddle.rx - p.x) + SIMATH.sqr(this.robot.backMiddle.ry - p.y) < STEP_TIME
+                            if (SIMATH.sqr(this.robot.backMiddle.rx - p.x) + SIMATH.sqr(this.robot.backMiddle.ry - p.y) < SIM.getDt()
                                     * Math.max(Math.abs(SIM.output.right), Math.abs(SIM.output.left))) {
                                 this.robot.backLeft.bumped = true;
                                 this.robot.backRight.bumped = true;
@@ -305,13 +304,12 @@ Scene.prototype.updateSensorValues = function() {
                 }
             }
         }
-        if (this.robot.touchSensor.value === 1||this.robot.bumpedAready) {
+        if (this.robot.touchSensor.value === 1 || this.robot.bumpedAready) {
             this.robot.touchSensor.value = 1;
             values.touch = true;
         } else {
             values.touch = false;
         }
-        console.log(values.touch);
     }
     if (this.robot.colorSensor || this.robot.lightSensor) {
         var r = 0;
@@ -422,6 +420,9 @@ Scene.prototype.updateSensorValues = function() {
         }
         values.ultrasonic = this.robot.ultraSensor.distance / 3;
     }
+    if (running)
+        this.robot.time += SIM.getDt();
+    values.time = this.robot.time;
     if (this.robot.encoder) {
         var tacho = [];
         tacho[0] = this.robot.encoder.left * ENC;

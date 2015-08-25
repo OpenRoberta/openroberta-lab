@@ -159,16 +159,14 @@ TURN_RATIO = (TRACKWIDTH / 3.) / 2.8;
 const
 WHEEL_DIAMETER = 5.6;
 const
-FPS = 45;
-const
-STEP_TIME = 1 / FPS;
-const
 MAXDIAG = 2500;
 const
-MAXPOWER = 0.4 * 3; // real Robot drives approx. 40 cm / 1 sec -> 120 pix/sec | 3pix = 1cm
+MAXPOWER = 0.35 * 3; // real Robot drives approx. 35 cm / 1 sec -> 105 pix/sec | 3pix = 1cm
 const
-ENC = 360 / (3 * Math.PI * WHEEL_DIAMETER);
+ENC = 360.0 / (3.0 * Math.PI * WHEEL_DIAMETER);
 const
 MAX_WIDTH = 2000;
 const
 MAX_HEIGHT = 1000;
+const
+WAVE_LENGTH = 60;

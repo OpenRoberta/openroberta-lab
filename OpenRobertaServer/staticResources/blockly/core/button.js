@@ -148,7 +148,6 @@ Blockly.Button.prototype.createDom = function(position) {
     this.svgGroup_ = Blockly.createSvgElement('g', {
         'class' : 'blocklyButton button' + position
     }, null);
-    console.log("halle")
     var svgTooltip_ = Blockly.createSvgElement('title', this.svgGroup_);
     this.svgBack_ = Blockly.createSvgElement('rect', {
         'id' : 'button' + this.POSITION,

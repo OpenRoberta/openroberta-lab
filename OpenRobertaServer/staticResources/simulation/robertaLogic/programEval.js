@@ -3,6 +3,7 @@ function initProgram(program) {
     PROGRAM_SIMULATION.setNextStatement(true);
     PROGRAM_SIMULATION.setWait(false);
     PROGRAM_SIMULATION.set(program);
+    LIGHT.setMode(OFF);
 }
 
 function step(simulationSensorData) {

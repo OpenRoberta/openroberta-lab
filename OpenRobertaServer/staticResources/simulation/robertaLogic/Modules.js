@@ -132,12 +132,12 @@ var ACTORS = (function() {
 
     function calculateCoveredDistance() {
         if (distanceToCover) {
-            console.log("left " + getLeftMotor().getCurrentRotations());
+            //console.log("left " + getLeftMotor().getCurrentRotations());
             if (getLeftMotor().getCurrentRotations() > getLeftMotor().getRotations()) {
                 getLeftMotor().setPower(0);
             }
 
-            console.log("right " + getRightMotor().getCurrentRotations());
+            //console.log("right " + getRightMotor().getCurrentRotations());
             if (getRightMotor().getCurrentRotations() > getRightMotor().getRotations()) {
                 getRightMotor().setPower(0);
             }
@@ -298,7 +298,7 @@ var PROGRAM_SIMULATION = (function() {
 })();
 
 var LIGHT = (function() {
-    var color = "grey";
+    var color = "";
     var mode = OFF;
 
     function setColor(value) {
