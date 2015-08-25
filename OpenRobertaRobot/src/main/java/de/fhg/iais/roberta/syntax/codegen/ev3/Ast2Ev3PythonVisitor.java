@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.shared.IndexLocation;
 import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
 import de.fhg.iais.roberta.shared.action.ev3.BlinkMode;
 import de.fhg.iais.roberta.shared.action.ev3.BrickLedColor;
+import de.fhg.iais.roberta.shared.action.ev3.DriveDirection;
 import de.fhg.iais.roberta.shared.sensor.ev3.BrickKey;
 import de.fhg.iais.roberta.shared.sensor.ev3.GyroSensorMode;
 import de.fhg.iais.roberta.shared.sensor.ev3.MotorTachoMode;
@@ -196,11 +197,11 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     private static String getBrickLedColorCode(BrickLedColor c) {
         switch ( c ) {
             case GREEN:
-                return "LED.COLOR.GREEN";
+                return "'green'";
             case ORANGE:
-                return "LED.COLOR.AMBER";
+                return "'amber'";
             case RED:
-                return "LED.COLOR.RED";
+                return "'red'";
         }
         throw new IllegalStateException("unhandled color: " + c);
     }
@@ -235,6 +236,16 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
                 return "UP";
         }
         throw new IllegalStateException("unhandled key: " + k);
+    }
+
+    private static String getDriveDirection(DriveDirection d) {
+        switch ( d ) {
+            case FOREWARD:
+                return "'forward'";
+            case BACKWARD:
+                return "'backward'";
+        }
+        throw new IllegalStateException("unhandled direction: " + d);
     }
 
     /**
@@ -663,11 +674,11 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorOnAction.getPort());
         boolean duration = motorOnAction.getParam().getDuration() != null;
         if ( duration ) {
-            methodName = isRegulated ? "hal.rotateRegulatedMotor(" : "hal.rotateUnregulatedMotor(";
+            methodName = isRegulated ? "hal.rotateRegulatedMotor('" : "hal.rotateUnregulatedMotor('";
         } else {
-            methodName = isRegulated ? "hal.turnOnRegulatedMotor(" : "hal.turnOnUnregulatedMotor(";
+            methodName = isRegulated ? "hal.turnOnRegulatedMotor('" : "hal.turnOnUnregulatedMotor('";
         }
-        this.sb.append(methodName + getEnumCode(motorOnAction.getPort()) + ", ");
+        this.sb.append(methodName + motorOnAction.getPort().toString() + "', ");
         motorOnAction.getParam().getSpeed().visit(this);
         if ( duration ) {
             this.sb.append(", " + getEnumCode(motorOnAction.getDurationMode()));
@@ -681,8 +692,8 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
-        String methodName = isRegulated ? "hal.setRegulatedMotorSpeed(" : "hal.setUnregulatedMotorSpeed(";
-        this.sb.append(methodName + getEnumCode(motorSetPowerAction.getPort()) + ", ");
+        String methodName = isRegulated ? "hal.setRegulatedMotorSpeed('" : "hal.setUnregulatedMotorSpeed('";
+        this.sb.append(methodName + motorSetPowerAction.getPort().toString() + ", ");
         motorSetPowerAction.getPower().visit(this);
         this.sb.append(")");
         return null;
@@ -691,16 +702,14 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorGetPowerAction.getPort());
-        String methodName = isRegulated ? "hal.getRegulatedMotorSpeed(" : "hal.getUnregulatedMotorSpeed(";
-        this.sb.append(methodName + getEnumCode(motorGetPowerAction.getPort()) + ")");
+        String methodName = isRegulated ? "hal.getRegulatedMotorSpeed('" : "hal.getUnregulatedMotorSpeed('";
+        this.sb.append(methodName + motorGetPowerAction.getPort().toString() + "')");
         return null;
     }
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorStopAction.getPort());
-        String methodName = isRegulated ? "hal.stopRegulatedMotor(" : "hal.stopUnregulatedMotor(";
-        this.sb.append(methodName + getEnumCode(motorStopAction.getPort()) + ", " + getEnumCode(motorStopAction.getMode()) + ")");
+        this.sb.append("hal.stopMotor('").append(motorStopAction.getPort().toString()).append("', ").append(getEnumCode(motorStopAction.getMode())).append(')');
         return null;
     }
 
@@ -709,9 +718,9 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         boolean isDuration = driveAction.getParam().getDuration() != null;
         String methodName = isDuration ? "hal.driveDistance(" : "hal.regulatedDrive(";
         this.sb.append(methodName);
-        this.sb.append(getEnumCode(this.brickConfiguration.getLeftMotorPort()) + ", ");
-        this.sb.append(getEnumCode(this.brickConfiguration.getRightMotorPort()) + ", false, ");
-        this.sb.append(getEnumCode(driveAction.getDirection()) + ", ");
+        this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
+        this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "', False, ");
+        this.sb.append(getDriveDirection(driveAction.getDirection()) + ", ");
         driveAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {
             this.sb.append(", ");
@@ -727,8 +736,8 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         boolean isRegulated = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).isRegulated();
         String methodName = "hal.rotateDirection" + (isDuration ? "Angle" : isRegulated ? "Regulated" : "Unregulated") + "(";
         this.sb.append(methodName);
-        this.sb.append(getEnumCode(this.brickConfiguration.getLeftMotorPort()) + ", ");
-        this.sb.append(getEnumCode(this.brickConfiguration.getRightMotorPort()) + ", false, ");
+        this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
+        this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "', false, ");
         this.sb.append(getEnumCode(turnAction.getDirection()) + ", ");
         turnAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {
@@ -741,11 +750,9 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        boolean isRegulated = true;
-        String methodName = isRegulated ? "hal.stopRegulatedDrive(" : "hal.stopUnregulatedDrive(";
-        this.sb.append(methodName);
-        this.sb.append(getEnumCode(this.brickConfiguration.getLeftMotorPort()) + ", ");
-        this.sb.append(getEnumCode(this.brickConfiguration.getRightMotorPort()) + ")");
+        this.sb.append("hal.stopMotors(");
+        this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
+        this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "')");
         return null;
     }
 
@@ -1415,10 +1422,9 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         }
         this.sb.append("#!/usr/bin/python\n\n");
         this.sb.append("from __future__ import absolute_import\n");
-        this.sb.append("from ev3.ev3dev import *\n");
-        this.sb.append("from ev3.lego import *\n");
         this.sb.append("from roberta.ev3 import Hal,BlocklyMethods\n");
         this.sb.append("from sets import Set\n");
+        this.sb.append("import ev3dev\n");
         this.sb.append("import math\n\n");
 
         this.sb.append("TRUE = True;\n");
@@ -1515,14 +1521,16 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
                 break;
         }
         if ( name == null ) {
-            throw new IllegalArgumentException("no mapping for " + actor.getComponentType().getShortName() + "to python-ev3");
+            throw new IllegalArgumentException("no mapping for " + actor.getComponentType().getShortName() + "to ev3dev-lang-python");
         }
-        // LargeMotor(port=Motor.PORT.A), MediumMotor
-        sb.append(name).append("(port=Motor.PORT.").append(port.toString()).append(")");
-        // FIXME: regulation type, direction
+        EV3Actor ev3Actor = (EV3Actor) actor;
+        sb.append("Hal.make").append(name).append("(ev3dev.OUTPUT_").append(port.toString());
+        sb.append(", ").append(ev3Actor.isRegulated() ? "'on'" : "'off'");
+        sb.append(", ").append(getDriveDirection(ev3Actor.getRotationDirection()));
+        sb.append(")");
+        // FIXME: regulation type, direction, side
         // EV3Actor ev3Actor = (EV3Actor) actor;
-        // sb.append(", ").append(ev3Actor.isRegulated());
-        // sb.append(", ").append(getEnumCode(ev3Actor.getRotationDirection())).append(", ").append(getEnumCode(ev3Actor.getMotorSide())).append(")");
+        // sb.append(", ").append(getEnumCode(ev3Actor.getMotorSide())).append(")");
         return sb.toString();
     }
 
@@ -1530,27 +1538,29 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         StringBuilder sb = new StringBuilder();
         // FIXME: that won't scale
         String name = null;
+        // [m for m in dir(ev3dev) if m.find("_sensor") != -1]
+        // ['color_sensor', 'gyro_sensor', 'infrared_sensor', 'light_sensor', 'sound_sensor', 'touch_sensor', 'ultrasonic_sensor']
         switch ( sensor.getComponentType().getShortName() ) {
             case "color":
-                name = "ColorSensor";
+                name = "color_sensor";
                 break;
             case "touch":
-                name = "TouchSensor";
+                name = "touch_sensor";
                 break;
             case "ultrasonic":
-                name = "UltrasonicSensor";
+                name = "ultrasonic_sensor";
                 break;
             case "infrared":
-                name = "InfraredSensor";
+                name = "infrared_sensor";
                 break;
             case "gyro":
-                name = "GyroSensor";
+                name = "gyro_sensor";
                 break;
         }
         if ( name == null ) {
-            throw new IllegalArgumentException("no mapping for " + sensor.getComponentType().getShortName() + "to python-ev3");
+            throw new IllegalArgumentException("no mapping for " + sensor.getComponentType().getShortName() + "to ev3dev-lang-python");
         }
-        sb.append(name).append("(port=").append(port.getPortNumber()).append(")");
+        sb.append("ev3dev.").append(name).append("(ev3dev.INPUT_").append(port.getPortNumber()).append(")");
         return sb.toString();
     }
 

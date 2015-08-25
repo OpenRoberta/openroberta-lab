@@ -1,6 +1,6 @@
 from __future__ import absolute_import
-from ev3.ev3dev import *
 from PIL import Image,ImageDraw,ImageFont
+import ev3dev
 import math
 import random
 import time
@@ -67,12 +67,26 @@ class Hal(object):
         self.usedSensors = usedSensors
         self.font_s = ImageFont.load('roberta/ter-u12n_unicode.pil')
         self.font_x = ImageFont.load('roberta/ter-u18n_unicode.pil')
-        self.lcd = Lcd()
-        self.led = LED()
-        self.key = Key()
-        self.tone = Tone()
+        self.lcd = ev3dev.LCD()
+        self.led = ev3dev.led
+        self.key = ev3dev.button
+        self.sound = ev3dev.sound
         (self.font_w, self.font_h)=self.lcd.draw.textsize('X', font=self.font_s)
-    
+
+    @staticmethod
+    def makeLargeMotor(port, regulated, direction):
+      m = ev3dev.large_motor(port)
+      m.speed_regulation_enabled = regulated
+      # FIXME: direction
+      return m
+
+    @staticmethod
+    def makeMediumMotor(port, regulated, direction):
+      m = ev3dev.medium_motor(port)
+      m.speed_regulation_enabled = regulated
+      # FIXME: direction
+      return m
+
     # control
     def waitFor(self, ms):
         time.sleep (ms / 1000.0)
@@ -84,27 +98,35 @@ class Hal(object):
         self.lcd.update()
 
     def clearDisplay(self):
-        self.lcd.reset()
+        self.lcd.clear()
 
     # led
     def ledOn(self, color, mode):
         # color: green, red, orange - LED.COLOR.{RED,GREEN,AMBER}
         # mode: on, flash, double_flash
         if mode is 0:
-            self.led.left.color=color
-            self.led.right.color=color
-            self.led.left.on()
-            self.led.right.on()
-        elif mode is 1:
-            self.led.left.blink(color=color)
-            self.led.right.blink(color=color)
-        elif mode is 2:
-            self.led.left.blink(color=color)
-            self.led.right.blink(color=color)
+            if color is 'green': 
+                self.led.green_on()
+            elif color is 'red':
+                self.led.red_on()
+            elif color in 'amber':
+                self.led.amber_on()
+            # TODO: we also have orange_on(), yellow_on() and 
+            #                    mix_colors(float red, float green)
+        elif mode in [1,2]:
+            if color in ['green', 'orange']: 
+                self.led.left_green.flash(500,500)
+                self.led.right_green.flash(500,500)
+                self.WaitFor(1000)
+                self.ledOff()
+            if color in ['red', 'orange']:
+                self.led.left_red.flash(500,500)
+                self.led.right_red.flash(500,500)
+                self.WaitFor(2000)
+                self.ledOff()
     
     def ledOff(self):
-        self.led.left.off()
-        self.led.right.off()
+        self.led.all_off()
     
     def resetLED(self):
         self.lefOff();
@@ -112,13 +134,11 @@ class Hal(object):
     # key
     def isKeyPressed(self, key):
         # key: is a string, we can't use the constants like self.Key.enter
-        # TODO: https://github.com/topikachu/python-ev3/issues/59
-        if key in Key.CODE.enum_dict.keys():
-          return getattr(self.key, key.lower())
-        elif key is "*":
-          return True in [getattr(self.key, k.lower()) for k in Key.CODE.enum_dict.keys()]
+        if key is "*":
+          return self.key.process_all()
         else:
-          return False
+          # throws attribute error on wrong keys
+          return getattr(self.key, key.lower()).process()
     
     def isKeyPressedAndReleased(self, key):
         return False
@@ -126,59 +146,129 @@ class Hal(object):
     # tones
     def playTone(self, frequency, duration):
         frequency = frequency if frequency >= 100 else 0
-        self.tone.play(frequency, duration)
+        self.sound.tone(frequency, duration)
 
-    # http://stackoverflow.com/questions/10739390/how-to-programmatically-change-volume-in-ubuntu
     def setVolume(self, volume):
-        # FIXME
-        pass
+        self.sound.volume = volume
 
     def getVolume(self):
-        # FIXME
-        return 100
+        return self.sound.volume
 
     # actors
+    # http://www.ev3dev.org/docs/drivers/tacho-motor-class/
+    def rotateRegulatedMotor(self, port, mode, value):
+      # FIXME
+      pass
+    
+    def rotateUnregulatedMotor(self, port, mode, value):
+      # FIXME
+      pass
+    
+    def turnOnRegulatedMotor(self, port, value):
+      self.cfg['actors'][port].run_forever(speed_regulation_enabled='on', speed_sp=value)
+    
+    def turnOnUnregulatedMotor(self, port, value):
+      self.cfg['actors'][port].run_forever(speed_regulation_enabled='off', duty_cycle_sp=value)
+    
+    def setRegulatedMotorSpeed(self, port, power):
+      # FIXME
+      pass
+    
+    def setUnregulatedMotorSpeed(self, port, power):
+      # FIXME
+      pass
+    
+    def getRegulatedMotorSpeed(self, port):
+      # FIXME
+      return 0
+    
+    def getUnregulatedMotorSpeed(self, port):
+      # FIXME
+      return 0
+    
+    def stopMotor(self, port, mode):
+      # FIXME: mode = float/nonfloat
+      # ev3dev.large_motor(ev3dev.OUTPUT_B).stop_commands
+      # ['brake', 'coast', 'hold']
+      # -> ev3dev.large_motor(ev3dev.OUTPUT_B).stop_command (default is 'coast')
+      # float -> coast
+      # nonfloat -> brake
+      self.cfg['actors'][port].stop()
+    
+    def regulatedDrive(self, left_port, right_port, reverse, direction, speed_pct):
+      # FIXME
+      pass
+    
+    def driveDistance(self, left_port, right_port, reverse, direction, speed_pct, distance):
+      # FIXME
+      pass
+    
+    def stopMotors(self, left_port, right_port):
+      self.cfg['actors'][left_port].stop()
+      self.cfg['actors'][right_port].stop()
+    
+    def rotateDirectionRegulated(self, left_port, right_port, reverse, direction, speed_pct):
+      # FIXME
+      pass
+    
+    def rotateDirectionAngle(self, left_port, right_port, reverse, direction, speed_pct, angle):
+      # FIXME
+      pass
     
     # sensors
     # touch sensor
     def isPressed(self, port):
-      return self.cfg['sensors'][port].is_pushed
+      return self.cfg['sensors'][port].volue()
 
     # ultrasonic sensor
     def getUltraSonicSensorDistance(self, port):
-      return self.cfg['sensors'][port].dist_cm
+      self.cfg['sensors'][port].mode='US-DIST-CM'
+      return self.cfg['sensors'][port].value()
 
     def getUltraSonicSensorPresence(self, port):
-      pass
+      self.cfg['sensors'][port].mode='US-SI-CM'
+      return self.cfg['sensors'][port].value()
 
     # gyro
+    # http://www.ev3dev.org/docs/sensors/lego-ev3-gyro-sensor/
     def resetGyroSensor(self, port):
-      pass
+      # change mode to reset for GYRO-ANG and GYRO-G&A
+      self.cfg['sensors'][port].mode='GYRO-RATE'
+      self.cfg['sensors'][port].mode='GYRO-ANG'
 
     def getGyroSensorValue(self, port, mode):
       # mode = rate, angle
-      #return self.cfg['sensors'][port].ang
-      #return self.cfg['sensors'][port].rate
+      if mode is 'angle':
+        self.cfg['sensors'][port].mode='GYRO-ANG'
+      elif mode is 'rate':
+        self.cfg['sensors'][port].mode='GYRO-RATE'
+      return self.cfg['sensors'][port].value()
       pass
     
     # color
+    # http://www.ev3dev.org/docs/sensors/lego-ev3-color-sensor/
     def getColorSensorAmbient(self, port):
-      return self.cfg['sensors'][port].ambient
+      self.cfg['sensors'][port].mode='COL-AMBIENT'
+      return self.cfg['sensors'][port].value()
 
     def getColorSensorColor(self, port):
+      self.cfg['sensors'][port].mode='COL-COLOR'
       return self.cfg['sensors'][port].color
 
     def getColorSensorRed(self, port):
+      self.cfg['sensors'][port].mode='COL-REFLECT'
       return self.cfg['sensors'][port].reflect
 
     def getColorSensorRgb(self, port):
+      self.cfg['sensors'][port].mode='RGB-RAW'
       return self.cfg['sensors'][port].rgb
 
     # infrared
+    # http://www.ev3dev.org/docs/sensors/lego-ev3-infrared-sensor/
     def getInfraredSensorSeek(self, port):
-      #return self.cfg['sensors'][port].seek
-      pass
+      self.cfg['sensors'][port].mode='IR-SEEK'
+      return self.cfg['sensors'][port].value()
 
     def getInfraredSensorDistance(self, port):
-      return self.cfg['sensors'][port].prox
-
+      self.cfg['sensors'][port].mode='IR-PROX'
+      return self.cfg['sensors'][port].value()

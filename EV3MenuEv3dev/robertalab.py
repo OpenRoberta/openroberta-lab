@@ -76,7 +76,7 @@ def main():
   drawUI(hal, params)
 
   registered = False
-  while not hal.key.backspace:
+  while not hal.isKeyPressed('back'):
     try:
       if registered:
         params['cmd'] = 'push'
