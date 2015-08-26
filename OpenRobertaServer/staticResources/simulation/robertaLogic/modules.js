@@ -1,11 +1,9 @@
 var SENSORS = (function() {
+
     var touchSensor = false;
     var ultrasonicSensor = 0;
     var colorSensor = undefined;
     var lightSensor = 0;
-    var timeSensor = 0 ;
-    
-
 
     function isPressed() {
         return touchSensor;
@@ -38,16 +36,6 @@ var SENSORS = (function() {
     function getLight() {
         return lightSensor;
     }
-    
-    function setTime(value) {
-    	timeSensor = value;
-    }
-
-    function getTime() {
-        return timeSensor;
-    }
-    
-  
 
     return {
         "isPressed" : isPressed,
@@ -57,19 +45,16 @@ var SENSORS = (function() {
         "setColor" : setColor,
         "getColor" : getColor,
         "setLight" : setLight,
-        "getLight" : getLight,
-        "setTime" : setTime, 
-        "getTime" : getTime
+        "getLight" : getLight
     };
 })();
 
 var ACTORS = (function() {
+
     var distanceToCover = false;
     var leftMotor = new Motor();
     var rightMotor = new Motor();
-    var timer = new Timer() ;
-    var isRunningTimer = false ;
-    
+
     function getLeftMotor() {
         return leftMotor;
     }
@@ -103,151 +88,25 @@ var ACTORS = (function() {
         rightMotor.currentRotations = 0;
     }
 
-    function Motor() {
-        this.power = 0;
-        this.stopped = false;
-        this.startRotations = 0;
-        this.currentRotations = 0;
-        this.rotations = 0;
-    }
-    
-    function Timer(){
-    	
-    	this.stopped = false ;
-    	this.startTime = 0 ;
-    	this.currentTime = 0 ;
-    	this.time =  0 ;
-    }
-    
-    function resetTimer(timeValue){
-    	timer.startTime = timeValue ;
-    	timer.currentTime = 0 ;
-    	
-    	
-    	
-    }
-    
-    function setTime(goalTime){
-    	timer.time = goalTime;
-    	
-    	
-    }
-    
-    function getTimer(){
-    	
-    	return timer ;
-    }
-
-    Motor.prototype.getPower = function() {
-        return this.power;
-    };
-
-    Motor.prototype.setPower = function(value) {
-        this.power = value;
-    };
-
-    Motor.prototype.isStopped = function() {
-        return this.stopped;
-    };
-
-    Motor.prototype.setStopped = function(value) {
-        this.stopped = value;
-    };
-
-    Motor.prototype.getCurrentRotations = function() {
-        return this.currentRotations;
-    };
-
-    Motor.prototype.setCurrentRotations = function(value) {
-        this.currentRotations = Math.abs(value / 360. - this.startRotations); 
-    };
-
-    Motor.prototype.getRotations = function() {
-        return this.rotations;
-    };
-
-    Motor.prototype.setRotations = function(value) {
-        this.rotations = value;
-    };
-    
-    Timer.prototype.setStopped = function(value) {
-    	this.stopped = value;
-    };
-    
-    Timer.prototype.isStopped = function() {
-    	 return this.stopped;
-    };
-    
-    Timer.prototype.setStartTime= function(value) {
-    	this.startTime = value;
-    };
-    
-    Timer.prototype.getStartTime= function() {
-    	 this.startTime  ;
-    };
-
-    
-    Timer.prototype.setCurrentTime= function(value) {
-    	this.currentTime = Math.abs(value - this.startTime);
-    };
-    
-    Timer.prototype.getCurrentTime= function() {
-    	 this.currentTime  ;
-    };
-
-    
-    Timer.prototype.setTime= function(value) {
-    	this.Time = value;
-    };
-    
-    Timer.prototype.getTime= function() {
-    	 this.Time  ;
-    };
-
-    
-    
-    function toString() {
-        return JSON.stringify([ distanceToCover, leftMotor, rightMotor ]);
-    }
-
     function calculateCoveredDistance() {
         if (distanceToCover) {
-            //console.log("left " + getLeftMotor().getCurrentRotations());
             if (getLeftMotor().getCurrentRotations() > getLeftMotor().getRotations()) {
                 getLeftMotor().setPower(0);
             }
-
-            //console.log("right " + getRightMotor().getCurrentRotations());
             if (getRightMotor().getCurrentRotations() > getRightMotor().getRotations()) {
                 getRightMotor().setPower(0);
             }
-
             if (getLeftMotor().getCurrentRotations() > getLeftMotor().getRotations() && getRightMotor().getCurrentRotations() > getRightMotor().getRotations()) {
                 distanceToCover = false;
                 PROGRAM_SIMULATION.setNextStatement(true);
             }
         }
     }
-    
-    
-    
-    function calculateWishedTime(){
-    	if(isRunningTimer){
-    	
-	    	if(getTimer().getCurrentTime() > getTimer().getTime()){
-	    		  isRunningTimer = false;
-	              PROGRAM_SIMULATION.setNextStatement(true);
-	    		
-	    	}
-    	}
-    }
 
     function clculateAngleToCover(angle) {
         extraRotation = TURN_RATIO * (angle / 720.);
-
         getLeftMotor().setRotations(extraRotation);
         getRightMotor().setRotations(extraRotation);
-
         distanceToCover = true;
         PROGRAM_SIMULATION.setNextStatement(false);
     }
@@ -260,6 +119,10 @@ var ACTORS = (function() {
         PROGRAM_SIMULATION.setNextStatement(false);
     }
 
+    function toString() {
+        return JSON.stringify([ distanceToCover, leftMotor, rightMotor ]);
+    }
+
     return {
         "getLeftMotor" : getLeftMotor,
         "getRightMotor" : getRightMotor,
@@ -269,11 +132,7 @@ var ACTORS = (function() {
         "calculateCoveredDistance" : calculateCoveredDistance,
         "clculateAngleToCover" : clculateAngleToCover,
         "setDistanceToCover" : setDistanceToCover,
-        "toString" : toString,
-        "calculateWishedTime" : calculateWishedTime,
-        "resetTimer" : resetTimer ,
-        "getTimer" : getTimer,
-        "setTime" : setTime
+        "toString" : toString
     };
 })();
 
@@ -329,13 +188,15 @@ var PROGRAM_SIMULATION = (function() {
     var program = [];
     var nextStatement = true;
     var wait = false;
+    var timer = new Timer();
+    var isRunningTimer = false;
 
     function set(newProgram) {
         program = newProgram;
     }
 
     function isTerminated() {
-        return program.length == 0 && PROGRAM_SIMULATION.isNextStatement();
+        return program.length == 0 && isNextStatement();
     }
 
     function get() {
@@ -372,12 +233,44 @@ var PROGRAM_SIMULATION = (function() {
         return nextStatement;
     }
 
+    function resetTimer(timeValue) {
+        timer.setStartTime(timeValue);
+        timer.currentTime = 0;
+
+    }
+
+    function setTimer(goalTime) {
+        PROGRAM_SIMULATION.setNextStatement(false)
+        getTimer().setTime(goalTime / 1000.);
+    }
+
+    function getTimer() {
+        return timer;
+    }
+
+    function calculateWishedTime() {
+        if (isRunningTimer) {
+            if (getTimer().getCurrentTime() > getTimer().getTime()) {
+                isRunningTimer = false;
+                PROGRAM_SIMULATION.setNextStatement(true);
+            }
+        }
+    }
+
     function setNextStatement(value) {
         nextStatement = value;
     }
 
+    function isRunningTimer() {
+        return isRunningTimer;
+    }
+
+    function setIsRunningTimer(value) {
+        isRunningTimer = value;
+    }
+
     function toString() {
-        return program;
+        return JSON.stringify([ program, timer ]);
     }
 
     return {
@@ -390,6 +283,12 @@ var PROGRAM_SIMULATION = (function() {
         "setWait" : setWait,
         "isNextStatement" : isNextStatement,
         "setNextStatement" : setNextStatement,
+        "isRunningTimer" : isRunningTimer,
+        "setIsRunningTimer" : setIsRunningTimer,
+        "resetTimer" : resetTimer,
+        "getTimer" : getTimer,
+        "setTimer" : setTimer,
+        "calculateWishedTime" : calculateWishedTime,
         "toString" : toString
     };
 })();
