@@ -18,9 +18,9 @@ function step(simulationSensorData) {
         SENSORS.setTime(simulationSensorData.time) ; // maybe extra one
         // TODO from timer values
     }
-    if (PROGRAM_SIMULATION.isNextStatement()) {
+    if (PROGRAM_SIMULATION.isNextStatement() || ACTORS.isRunningTimer) {
 
-        var stmt = PROGRAMl_SIMULATION.getRemove();
+        var stmt = PROGRAM_SIMULATION.getRemove();
 
         switch (stmt.stmt) {
         case ASSIGN_STMT:
@@ -63,13 +63,10 @@ function step(simulationSensorData) {
             evalWaitStmt(stmt);
             break;
         
-        case WAIT_TIME_STMT:
-        	
-        	
+        case WAIT_TIME_STMT:        	
         	ACTORS.isRunningTimer = true ;
         	ACTORS.resetTimer(simulationSensorData.time) ; // from simulation
-        	ACTORS.setValue(evalExpr(stmt.TIME)) ; // from blocky
-        	evalWaitStmt(stmt);
+        	ACTORS.setTime(evalExpr(stmt.time)) ; // from blocky        	
         	break;
 
         case TURN_LIGHT:
@@ -150,7 +147,6 @@ function evalExpr(expr) {
     case NUM_CONST:
     case BOOL_CONST:
     case COLOR_CONST:
-    case TIME : 	
         return expr.value;
 
     case VAR:

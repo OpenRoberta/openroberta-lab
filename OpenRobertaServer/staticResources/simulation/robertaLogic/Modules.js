@@ -128,7 +128,7 @@ var ACTORS = (function() {
     }
     
     function setTime(goalTime){
-    	timer.time = goaltime
+    	timer.time = goalTime;
     	
     	
     }
@@ -270,7 +270,10 @@ var ACTORS = (function() {
         "clculateAngleToCover" : clculateAngleToCover,
         "setDistanceToCover" : setDistanceToCover,
         "toString" : toString,
-        "calculateWishedTime" : calculateWishedTime
+        "calculateWishedTime" : calculateWishedTime,
+        "resetTimer" : resetTimer ,
+        "getTimer" : getTimer,
+        "setTime" : setTime
     };
 })();
 
