@@ -133,3 +133,14 @@ function createWaitStmt(stmtList) {
     result[STATEMENTS] = stmtList;
     return result;
 }
+
+
+function createWaitTimeStmt(timeValue){
+	   var result = {};
+	    result[STMT] = WAIT_TIME_STMT;
+	    result[TIME] = timeValue;
+	    
+	    return result;
+	
+	
+}

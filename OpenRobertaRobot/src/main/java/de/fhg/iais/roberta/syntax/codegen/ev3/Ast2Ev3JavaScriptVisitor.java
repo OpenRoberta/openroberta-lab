@@ -517,6 +517,17 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
+    	 String end = createClosingBracket();
+    	 this.sb.append("createWaitTimeStmt([");
+         addInStmt();
+         this.sb.append(waitTimeStmt.getTime());
+         removeInStmt();
+         this.sb.append("]");
+         this.sb.append(end);
+        
+    	
+    	
+    	
         // TODO Auto-generated method stub
         return null;
     }

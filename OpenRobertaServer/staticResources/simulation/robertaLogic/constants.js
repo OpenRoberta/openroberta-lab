@@ -28,6 +28,13 @@ const
 IF_STMT = "IfStatement";
 const
 WAIT_STMT = "WaitStmt";
+
+const 
+WAIT_TIME_STMT = "WaitTimeSTMT" ;
+
+const 
+TIME = "time" ;
+
 const
 STMT_LIST = "stmtList";
 const
