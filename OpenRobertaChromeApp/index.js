@@ -75,19 +75,20 @@ onload = function () {
 	document.getElementById("close").onclick = function () {
 		window.close();
 	};
-	document.getElementById("ddclose").onclick = function () {
+	document.getElementById("navclose").onclick = function () {
 		window.close();
 	};
 	document.getElementById("true beenden").onclick = function () {
 		window.close();
 	};
-	
 
 	document.getElementById("advancedoptions").onchange = function () {
 		if (document.getElementById("advancedoptions").checked === true) {
 			document.getElementById("alternative").style.visibility = "visible";
+			chrome.app.window.current().innerBounds.setSize(chrome.app.window.current().innerBounds.width, chrome.app.window.current().innerBounds.height + 40);
 		} else {
 			document.getElementById("alternative").style.visibility = "hidden";
+			chrome.app.window.current().innerBounds.setSize(chrome.app.window.current().innerBounds.width, chrome.app.window.current().innerBounds.height - 40);
 		}
 	};
 
@@ -151,8 +152,14 @@ onload = function () {
 				break;
 			case state.REGISTER:
 				if (document.getElementById("advancedoptions").checked === true) {
-					CUSTOMHOST = document.getElementById("ip").value + ":" + document.getElementById("port").value;
-					ORAHOST = CUSTOMHOST;
+				  var ip = document.getElementById("ip").value;
+				  var port = document.getElementById("port").value;
+				  if ( ip !== "" && port !== ""){
+				    CUSTOMHOST = document.getElementById("ip").value + ":" + document.getElementById("port").value;
+					  ORAHOST = CUSTOMHOST;
+				  } else {
+				    ORAHOST = STANDARDHOST;
+				  }
 				} else {
 					ORAHOST = STANDARDHOST;
 				}

@@ -3,28 +3,32 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Open Roberta</title>
-		<!-- Setting a title in the window bar is not possible -->
 		<script src="index.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/chrome_app.css"></link>
-		<link rel="stylesheet" type="text/css" href="css/roberta.css"></link>
+		<!--link rel="stylesheet" type="text/css" href="css/roberta.css"></link-->
 	</head>
-    <body>
-		<dialog id="warningDialog">
-			<table>
-				<tr>
-					<td style="vertical-align:top;"><img src="resources/Roberta.png" width="100"></td>
-					<td>		
-						<p id="fh-warnung-txt">abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc</p>
-					</td>
-				</tr>
+  <body>
+	  <dialog id="warningDialog">
+		  <table>
+			  <tr>
+				  <td style="vertical-align:top;"><img src="resources/Roberta.png" width="100"></td>
+				  <td>		
+					  <p id="fh-warnung-txt">abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc</p>
+				  </td>
+	  		</tr>
 			</table>
-			<div align="center"><button id="true beenden" class="btn">beenden</button><button id="abbrechen" class="btn">abbrechen</button></div>
+			<div align="center">
+			  <button id="true beenden" class="btn">beenden</button>
+			  <button id="abbrechen" class="btn">abbrechen</button>
+			</div>
 		</dialog>
-		<!-- #### -->
+		
 		<dialog id="aboutDialog">
 			<table>
 				<tr>
-					<td style="vertical-align:top;"><img src="resources/iais_logo.gif" width="85"></td>
+					<td style="vertical-align:top;">
+					  <img src="resources/iais_logo.gif" width="85">
+					</td>
 					<td>		
 						<p id="fh-about-txt"></p>
 					</td>
@@ -32,104 +36,90 @@
 			</table>
 			<div align="center"><button id="hide" class="btn">OK</button></div>
 		</dialog>
-		<!-- -------------------------------------------- -->
-        <div class="grid">
-			<!-- Menu -->
-			<div class="row">
-				<div class="col-3">
-					<div class="ddmenu" id="menu"><!-- öffnet die Navigationsleiste -->
+
+    <div class="grid">
+			<div class="navrow">
+				<div class="col-2">
+					<div class="navbar">
 						<ul>
 							<li>
 								<p>Datei</p> 
 								<ul>  
-									<li><a id="ddclose" href="#">beenden</a></li>
+									<li><a id="navclose">beenden</a></li>
 								</ul>
 							</li>  
 						</ul>
 					</div>
 				</div>
 				
-				<div class="col-3"  >
-					<div class="ddmenu" id="menu"><!-- öffnet die Navigationsleiste -->
+				<div class="col-2"  >
+					<div class="navbar">
 						<ul>
 							<li>
 								<p>Info</p> 
 								<ul> 
-									<li>
-										<a id="about">about </a>
-										
-									</ul>
-								</li>  
-							</ul>
-						</div>
+								  <li>
+									  <a id="about">about </a>
+									</li>
+								</ul>
+							</li>  
+						</ul>
 					</div>
+				</div>
 					
-					<div class="col-6 robstatus">
-						<img id="connstatus" src="resources/Roberta_Menu_Icon_grey.png" alt="Disconnected">
-					</div>
+				<div class="col-8 robstatus">
+					<img id="connstatus" src="resources/Roberta_Menu_Icon_grey.png">
 				</div>
+			</div>
 				
-				<!-- Trennlinie -->
-				<div class="row trenner"></div>
+			<div class="row trenner bottom-buffer"></div>
 				
-				<!-- Anzeigebereich für Token -->
-				<br>
-				<div class="row">
-					
-					<textarea class="col-12 tokenarea tk" id="token" readonly></textarea>
+			<div class="row bottom-buffer">
+				<textarea class="col-12 tokenarea tk" id="token" readonly></textarea>
+			</div>
+			
+			<div class="row bottom-buffer">
+				<div class="col-12">
+					<img id="mainpicture" >
 				</div>
-				<br>
-				<!-- Bild Verbindungsanimation -->
-				<div class="row">
-					<div class="col-12">
-						<img id="mainpicture" >
-					</div>
-				</div>
-				<!-- Infotext -->
-				<br>
-				<div class="row">
-					<textarea class="col-12 info" id="infotext" cols="37" rows="5" readonly></textarea>
-				</div>
-				<!-- Buttons -->
-				<div class="row">
-					<div class="btngrid">
-						<button id="connect" class="btn" disabled></button>
-					</div>
-					<div class="btngrid">
-						<button id="close" class="btn"></button>
-					</div>
-				</div>
+			</div>
+			
+			<div class="row bottom-buffer">
+				<textarea class="col-12 info" id="infotext" rows="5" readonly></textarea>
+			</div>
+			
+			<div class="row bottom-buffer">
+					<button id="connect" class="btn" disabled></button>
+					<button id="close" class="btn"></button>
+			</div>
 				
-				<!-- Zusatzfeld für IP und Port -->
-				<div class="row advrow">
-					<div class="col-1">
-						<input type="checkbox" id="advancedoptions">
-					</div>
-					<div class="col-11">
-						<textarea class="adv" id="advancedop" cols="30" rows="1" readonly></textarea>
-					</div>
+			<div class="row">
+				<div class="col-1">
+					<input type="checkbox" id="advancedoptions">
 				</div>
+				<div class="col-11">
+					<textarea class="adv" id="advancedop" rows="1" readonly></textarea>
+				</div>
+			</div>
+			
+			<div class="row" id="alternative" style="visibility:hidden">
+			  <div class="col-12">
+			    <textarea class="altdesc" id="customaddressinfo" rows="1" readonly></textarea>
+			  </div>
+
+				<div class="col-1 iptext desc">IP:</div>
 				
-				<!-- EingabeFelder -->
-				<div id="alternative" style="visibility:hidden" >
-					<div class="row">
-						<textarea class="col-12 serveradr" id="customaddressinfo" cols="35" rows="1" readonly></textarea>
-					</div>
-					<div class="row userin">
-						<div class="col-1 iptxt">
-							IP:
-						</div>
-						<div class="col-6">
-							<input class="textin" type="text" id="ip" maxlength="15" size="15"></input>
-						</div>
-						<div class="col-2 porttxt">
-							Port: 
-						</div>
-						<div class="col-3">
-							<input class="textin" type="text" id="port" maxlength="4" size="4"></input>
-						</div>
-					</div>
+				<div class="col-5">
+				  <input id="ip" maxlength="15"></input>
 				</div>
-			</div>	
-		</body>
-	</html>
+				<div class="col-1"></div>
+				
+				<div class="col-1 porttext desc">Port:</div>
+				
+				<div class="col-2">
+				  <input id="port" maxlength="4"></input>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
