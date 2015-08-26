@@ -46,11 +46,11 @@ public class Helper {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
         Ev3Configuration brickConfiguration =
             new Ev3Configuration.Builder()
-        .addActor(ActorPort.A, new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, true, DriveDirection.FOREWARD, MotorSide.LEFT))
-        .addActor(ActorPort.B, new EV3Actor(EV3Actors.EV3_MEDIUM_MOTOR, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
-        .addActor(ActorPort.C, new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, false, DriveDirection.FOREWARD, MotorSide.LEFT))
-        .addActor(ActorPort.D, new EV3Actor(EV3Actors.EV3_MEDIUM_MOTOR, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
-        .build();
+                .addActor(ActorPort.A, new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, true, DriveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.B, new EV3Actor(EV3Actors.EV3_MEDIUM_MOTOR, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
+                .addActor(ActorPort.C, new EV3Actor(EV3Actors.EV3_LARGE_MOTOR, false, DriveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(ActorPort.D, new EV3Actor(EV3Actors.EV3_MEDIUM_MOTOR, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
+                .build();
         String javaCode = Ast2Ev3JavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), false);
         // System.out.println(javaCode); // only needed for EXTREME debugging
         // String textlyCode = AstToTextlyVisitor.generate("Test", transformer.getTree(), false);

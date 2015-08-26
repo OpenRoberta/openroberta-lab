@@ -14,11 +14,9 @@ function step(simulationSensorData) {
         SENSORS.setUltrasonicSensor(simulationSensorData.ultrasonic);
         ACTORS.getLeftMotor().setCurrentRotations(simulationSensorData.tacho[0]);
         ACTORS.getRightMotor().setCurrentRotations(simulationSensorData.tacho[1]);
-        ACTORS.getTimer().setCurrentTime(simulationSensorData.time) ;// this value is expected
-        SENSORS.setTime(simulationSensorData.time) ; // maybe extra one
-        // TODO from timer values
+        PROGRAM_SIMULATION.getTimer().setCurrentTime(simulationSensorData.time);
     }
-    if (PROGRAM_SIMULATION.isNextStatement() || ACTORS.isRunningTimer) {
+    if (PROGRAM_SIMULATION.isNextStatement()) {
 
         var stmt = PROGRAM_SIMULATION.getRemove();
 
@@ -62,12 +60,12 @@ function step(simulationSensorData) {
         case WAIT_STMT:
             evalWaitStmt(stmt);
             break;
-        
-        case WAIT_TIME_STMT:        	
-        	ACTORS.isRunningTimer = true ;
-        	ACTORS.resetTimer(simulationSensorData.time) ; // from simulation
-        	ACTORS.setTime(evalExpr(stmt.time)) ; // from blocky        	
-        	break;
+
+        case WAIT_TIME_STMT:
+            PROGRAM_SIMULATION.setIsRunningTimer(true);
+            PROGRAM_SIMULATION.resetTimer(simulationSensorData.time);
+            PROGRAM_SIMULATION.setTimer(evalExpr(stmt.time));
+            break;
 
         case TURN_LIGHT:
             LIGHT.setColor(stmt.color);
@@ -88,7 +86,7 @@ function step(simulationSensorData) {
         }
     }
     ACTORS.calculateCoveredDistance();
-    ACTORS.calculateWishedTime() ;
+    PROGRAM_SIMULATION.calculateWishedTime();
 }
 
 function evalRepeat(stmt) {
@@ -172,8 +170,6 @@ function evalSensor(sensorType, sensorMode) {
         return SENSORS.getLight();
     case COLOUR:
         return SENSORS.getColor();
-    case WAIT_Time :
-    	// TODO 
     default:
         throw "Invalid Sensor!";
     }
