@@ -74,17 +74,25 @@ class Hal(object):
         (self.font_w, self.font_h)=self.lcd.draw.textsize('X', font=self.font_s)
 
     @staticmethod
-    def makeLargeMotor(port, regulated, direction):
+    def makeLargeMotor(port, regulated, direction, side):
       m = ev3dev.large_motor(port)
       m.speed_regulation_enabled = regulated
-      # FIXME: direction
+      if direction is 'backward':
+        m.polarity = 'inversed'
+      else:
+        m.polarity = 'normal'
+      m.cfg_side = side
       return m
 
     @staticmethod
-    def makeMediumMotor(port, regulated, direction):
+    def makeMediumMotor(port, regulated, direction, side):
       m = ev3dev.medium_motor(port)
       m.speed_regulation_enabled = regulated
-      # FIXME: direction
+      if direction is 'backward':
+        m.polarity = 'inversed'
+      else:
+        m.polarity = 'normal'
+      m.cfg_side = side
       return m
 
     # control
@@ -162,13 +170,30 @@ class Hal(object):
 
     # actors
     # http://www.ev3dev.org/docs/drivers/tacho-motor-class/
-    def rotateRegulatedMotor(self, port, mode, value):
-      # FIXME
-      pass
+    def rotateRegulatedMotor(self, port, speed_pct, mode, value):
+      # mode: degree, rotations, distance
+      m = self.cfg['actors'][port] 
+      if mode is 'degree':
+        m.run_to_rel_pos(position_sp=value, speed_sp=speed_pct)
+      elif mode is 'rotations':
+        value *= m.count_per_rot
+        m.run_to_rel_pos(position_sp=int(value), speed_sp=speed_pct)
     
-    def rotateUnregulatedMotor(self, port, mode, value):
-      # FIXME
-      pass
+    def rotateUnregulatedMotor(self, port, speed_pct, mode, value):    
+      m = self.cfg['actors'][port];
+      if mode is 'rotations':
+        value *= m.count_per_rot
+      if speed_pct >= 0:
+        value = m.position + value
+        m.run_forever(speed_regulation_enabled='off', duty_cycle_sp=speed_pct)
+        while (m.position < value):
+          pass
+      else:
+        value = m.position - value
+        m.run_forever(speed_regulation_enabled='off', duty_cycle_sp=speed_pct)
+        while (m.position > value):
+          pass
+      m.stop()
     
     def turnOnRegulatedMotor(self, port, value):
       self.cfg['actors'][port].run_forever(speed_regulation_enabled='on', speed_sp=value)
@@ -188,33 +213,40 @@ class Hal(object):
     def getUnregulatedMotorSpeed(self, port):
       return self.cfg['actors'][port].duty_cycle
     
-    def stopMotor(self, port, mode):
-      # FIXME: mode = float/nonfloat
-      # ev3dev.large_motor(ev3dev.OUTPUT_B).stop_commands
-      # ['brake', 'coast', 'hold']
-      # -> ev3dev.large_motor(ev3dev.OUTPUT_B).stop_command (default is 'coast')
-      # float -> coast
-      # nonfloat -> brake
+    def stopMotor(self, port, mode='float'):
+      # mode: float, nonfloat
+      # stop_commands: ['brake', 'coast', 'hold']
+      m = self.cfg['actors'][port];
+      if mode is 'float':
+        m.stop_command='coast'
+      elif mode is 'nonfloat':
+        m.stop_command='brake'
       self.cfg['actors'][port].stop()
+    
+    def stopMotors(self, left_port, right_port):
+      self.stopMotor(left_port)
+      self.stopMotor(right_port)
     
     def regulatedDrive(self, left_port, right_port, reverse, direction, speed_pct):
       # FIXME
+      # direction: forward, backward
       pass
-    
+
     def driveDistance(self, left_port, right_port, reverse, direction, speed_pct, distance):
       # FIXME
+      # direction: forward, backward
+      # self.cfg['wheel-diameter']
       pass
-    
-    def stopMotors(self, left_port, right_port):
-      self.cfg['actors'][left_port].stop()
-      self.cfg['actors'][right_port].stop()
     
     def rotateDirectionRegulated(self, left_port, right_port, reverse, direction, speed_pct):
       # FIXME
+      # direction: left, right
       pass
     
     def rotateDirectionAngle(self, left_port, right_port, reverse, direction, speed_pct, angle):
       # FIXME
+      # direction: left, right
+      # self.cfg['track-width']
       pass
     
     # sensors

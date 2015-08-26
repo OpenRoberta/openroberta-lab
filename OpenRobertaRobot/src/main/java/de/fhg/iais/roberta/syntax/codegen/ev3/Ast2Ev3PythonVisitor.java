@@ -1400,7 +1400,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         StringBuilder sb = new StringBuilder();
         sb.append("brickConfiguration = {\n");
         sb.append("    'wheel-diameter': " + this.brickConfiguration.getWheelDiameterCM() + ",\n");
-        sb.append("    'track-with': " + this.brickConfiguration.getTrackWidthCM() + ",\n");
+        sb.append("    'track-width': " + this.brickConfiguration.getTrackWidthCM() + ",\n");
         appendActors(sb);
         appendSensors(sb);
         sb.append("}");
@@ -1461,18 +1461,15 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
             case "big motor":
                 name = "LargeMotor";
                 break;
-        }
-        if ( name == null ) {
-            throw new IllegalArgumentException("no mapping for " + actor.getComponentType().getShortName() + "to ev3dev-lang-python");
+            default:
+                throw new IllegalArgumentException("no mapping for " + actor.getComponentType().getShortName() + "to ev3dev-lang-python");
         }
         EV3Actor ev3Actor = (EV3Actor) actor;
         sb.append("Hal.make").append(name).append("(ev3dev.OUTPUT_").append(port.toString());
         sb.append(", ").append(ev3Actor.isRegulated() ? "'on'" : "'off'");
         sb.append(", ").append(getEnumCode(ev3Actor.getRotationDirection()));
+        sb.append(", ").append(getEnumCode(ev3Actor.getMotorSide()));
         sb.append(")");
-        // FIXME: regulation type, direction, side
-        // EV3Actor ev3Actor = (EV3Actor) actor;
-        // sb.append(", ").append(getEnumCode(ev3Actor.getMotorSide())).append(")");
         return sb.toString();
     }
 
@@ -1498,9 +1495,8 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
             case "gyro":
                 name = "gyro_sensor";
                 break;
-        }
-        if ( name == null ) {
-            throw new IllegalArgumentException("no mapping for " + sensor.getComponentType().getShortName() + "to ev3dev-lang-python");
+            default:
+                throw new IllegalArgumentException("no mapping for " + sensor.getComponentType().getShortName() + "to ev3dev-lang-python");
         }
         sb.append("ev3dev.").append(name).append("(ev3dev.INPUT_").append(port.getPortNumber()).append(")");
         return sb.toString();
