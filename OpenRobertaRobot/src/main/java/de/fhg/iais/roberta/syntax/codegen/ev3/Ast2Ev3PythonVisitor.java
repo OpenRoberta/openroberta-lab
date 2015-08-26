@@ -16,10 +16,6 @@ import de.fhg.iais.roberta.components.ev3.EV3Sensors;
 import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
 import de.fhg.iais.roberta.shared.IndexLocation;
 import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
-import de.fhg.iais.roberta.shared.action.ev3.BlinkMode;
-import de.fhg.iais.roberta.shared.action.ev3.BrickLedColor;
-import de.fhg.iais.roberta.shared.action.ev3.DriveDirection;
-import de.fhg.iais.roberta.shared.sensor.ev3.BrickKey;
 import de.fhg.iais.roberta.shared.sensor.ev3.GyroSensorMode;
 import de.fhg.iais.roberta.shared.sensor.ev3.MotorTachoMode;
 import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
@@ -194,60 +190,6 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         return mainBlock;
     }
 
-    private static String getBrickLedColorCode(BrickLedColor c) {
-        switch ( c ) {
-            case GREEN:
-                return "'green'";
-            case ORANGE:
-                return "'amber'";
-            case RED:
-                return "'red'";
-        }
-        throw new IllegalStateException("unhandled color: " + c);
-    }
-
-    private static String getBlinkMode(BlinkMode m) {
-        switch ( m ) {
-            case ON:
-                return "0";
-            case FLASH:
-                return "1";
-            case DOUBLE_FLASH:
-                return "2";
-        }
-        throw new IllegalStateException("unhandled blink mode: " + m);
-    }
-
-    private static String getBrickKeyCode(BrickKey k) {
-        switch ( k ) {
-            case ANY:
-                return "*";
-            case DOWN:
-                return "DOWN";
-            case ENTER:
-                return "ENTER";
-            case ESCAPE:
-                return "BACKSPACE";
-            case LEFT:
-                return "LEFT";
-            case RIGHT:
-                return "RIGHT";
-            case UP:
-                return "UP";
-        }
-        throw new IllegalStateException("unhandled key: " + k);
-    }
-
-    private static String getDriveDirection(DriveDirection d) {
-        switch ( d ) {
-            case FOREWARD:
-                return "'forward'";
-            case BACKWARD:
-                return "'backward'";
-        }
-        throw new IllegalStateException("unhandled direction: " + d);
-    }
-
     /**
      * Get the current indentation of the visitor. Meaningful for tests only.
      *
@@ -281,7 +223,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     }
 
     private static String getEnumCode(@SuppressWarnings("rawtypes") Enum value) {
-        return value.getClass().getSimpleName() + "." + value;
+        return "'" + value.toString().toLowerCase() + "'";
     }
 
     @Override
@@ -605,7 +547,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
-        this.sb.append("hal.ledOn(" + getBrickLedColorCode(lightAction.getColor()) + ", " + getBlinkMode(lightAction.getBlinkMode()) + ")");
+        this.sb.append("hal.ledOn(" + getEnumCode(lightAction.getColor()) + ", " + getEnumCode(lightAction.getBlinkMode()) + ")");
         return null;
     }
 
@@ -720,7 +662,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append(methodName);
         this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
         this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "', False, ");
-        this.sb.append(getDriveDirection(driveAction.getDirection()) + ", ");
+        this.sb.append(getEnumCode(driveAction.getDirection()) + ", ");
         driveAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {
             this.sb.append(", ");
@@ -760,10 +702,10 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
         switch ( brickSensor.getMode() ) {
             case IS_PRESSED:
-                this.sb.append("hal.isKeyPressed(" + getBrickKeyCode(brickSensor.getKey()) + ")");
+                this.sb.append("hal.isKeyPressed(" + getEnumCode(brickSensor.getKey()) + ")");
                 break;
             case WAIT_FOR_PRESS_AND_RELEASE:
-                this.sb.append("hal.isKeyPressedAndReleased(" + getBrickKeyCode(brickSensor.getKey()) + ")");
+                this.sb.append("hal.isKeyPressedAndReleased(" + getEnumCode(brickSensor.getKey()) + ")");
                 break;
             default:
                 throw new DbcException("Invalide mode for BrickSensor!");
@@ -1526,7 +1468,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         EV3Actor ev3Actor = (EV3Actor) actor;
         sb.append("Hal.make").append(name).append("(ev3dev.OUTPUT_").append(port.toString());
         sb.append(", ").append(ev3Actor.isRegulated() ? "'on'" : "'off'");
-        sb.append(", ").append(getDriveDirection(ev3Actor.getRotationDirection()));
+        sb.append(", ").append(getEnumCode(ev3Actor.getRotationDirection()));
         sb.append(")");
         // FIXME: regulation type, direction, side
         // EV3Actor ev3Actor = (EV3Actor) actor;

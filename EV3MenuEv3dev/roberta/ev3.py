@@ -104,7 +104,7 @@ class Hal(object):
     def ledOn(self, color, mode):
         # color: green, red, orange - LED.COLOR.{RED,GREEN,AMBER}
         # mode: on, flash, double_flash
-        if mode is 0:
+        if mode is 'on':
             if color is 'green': 
                 self.led.green_on()
             elif color is 'red':
@@ -113,7 +113,7 @@ class Hal(object):
                 self.led.amber_on()
             # TODO: we also have orange_on(), yellow_on() and 
             #                    mix_colors(float red, float green)
-        elif mode in [1,2]:
+        elif mode in ['flash', 'double_flash']:
             if color in ['green', 'orange']: 
                 self.led.left_green.flash(500,500)
                 self.led.right_green.flash(500,500)
@@ -133,12 +133,18 @@ class Hal(object):
 
     # key
     def isKeyPressed(self, key):
-        # key: is a string, we can't use the constants like self.Key.enter
-        if key is "*":
+        if key is 'any':
           return self.key.process_all()
         else:
+          # remap some keys
+          keys = {
+            'escape' : 'back',
+            'backspace' : 'back'
+          }
+          if key in keys:
+            key = keys['key']
           # throws attribute error on wrong keys
-          return getattr(self.key, key.lower()).process()
+          return getattr(self.key, key).process()
     
     def isKeyPressedAndReleased(self, key):
         return False
@@ -171,20 +177,16 @@ class Hal(object):
       self.cfg['actors'][port].run_forever(speed_regulation_enabled='off', duty_cycle_sp=value)
     
     def setRegulatedMotorSpeed(self, port, power):
-      # FIXME
-      pass
+      self.cfg['actors'][port].speed_sp = power
     
     def setUnregulatedMotorSpeed(self, port, power):
-      # FIXME
-      pass
+      self.cfg['actors'][port].duty_cycle_sp = power
     
     def getRegulatedMotorSpeed(self, port):
-      # FIXME
-      return 0
+      return self.cfg['actors'][port].speed
     
     def getUnregulatedMotorSpeed(self, port):
-      # FIXME
-      return 0
+      return self.cfg['actors'][port].duty_cycle
     
     def stopMotor(self, port, mode):
       # FIXME: mode = float/nonfloat
