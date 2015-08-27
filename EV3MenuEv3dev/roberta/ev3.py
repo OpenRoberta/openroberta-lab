@@ -141,16 +141,16 @@ class Hal(object):
 
     # key
     def isKeyPressed(self, key):
-        if key is 'any':
+        if key in ['any', '*']:
           return self.key.process_all()
         else:
           # remap some keys
           keys = {
-            'escape' : 'back',
-            'backspace' : 'back'
+            'escape':  'back',
+            'backspace': 'back',
           }
           if key in keys:
-            key = keys['key']
+            key = keys[key]
           # throws attribute error on wrong keys
           return getattr(self.key, key).process()
     
@@ -174,10 +174,10 @@ class Hal(object):
       # mode: degree, rotations, distance
       m = self.cfg['actors'][port] 
       if mode is 'degree':
-        m.run_to_rel_pos(position_sp=value, speed_sp=speed_pct)
+        m.run_to_rel_pos(speed_regulation_enabled='on', position_sp=value, speed_sp=speed_pct)
       elif mode is 'rotations':
         value *= m.count_per_rot
-        m.run_to_rel_pos(position_sp=int(value), speed_sp=speed_pct)
+        m.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(value), speed_sp=speed_pct)
     
     def rotateUnregulatedMotor(self, port, speed_pct, mode, value):    
       m = self.cfg['actors'][port];
@@ -228,26 +228,51 @@ class Hal(object):
       self.stopMotor(right_port)
     
     def regulatedDrive(self, left_port, right_port, reverse, direction, speed_pct):
-      # FIXME
       # direction: forward, backward
-      pass
+      # reverse: always false for now
+      if direction is 'backward':
+        speed_pct = -speed_pct
+      self.cfg['actors'][left_port].run_forever(speed_regulation_enabled='on', speed_sp=speed_pct)
+      self.cfg['actors'][righ_port].run_forever(speed_regulation_enabled='on', speed_sp=speed_pct)
 
     def driveDistance(self, left_port, right_port, reverse, direction, speed_pct, distance):
-      # FIXME
       # direction: forward, backward
-      # self.cfg['wheel-diameter']
-      pass
+      # reverse: always false for now
+      ml = self.cfg['actors'][left_port];
+      mr = self.cfg['actors'][right_port];
+      circ = math.pi * self.cfg['wheel-diameter']
+      dc = distance / circ
+      if direction is 'backward':
+        dc = -dc
+      ml.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(dc * ml.count_per_rot), speed_sp=speed_pct)
+      mr.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(dc * mr.count_per_rot), speed_sp=speed_pct)
     
     def rotateDirectionRegulated(self, left_port, right_port, reverse, direction, speed_pct):
-      # FIXME
       # direction: left, right
-      pass
+      # reverse: always false for now
+      if direction is 'left':
+        self.cfg['actors'][right_port].run_forever(speed_regulation_enabled='on', speed_sp=speed_pct)
+        self.cfg['actors'][left_port].run_forever(speed_regulation_enabled='on', speed_sp=-speed_pct)
+      else:
+        self.cfg['actors'][left_port].run_forever(speed_regulation_enabled='on', speed_sp=speed_pct)
+        self.cfg['actors'][right_port].run_forever(speed_regulation_enabled='on', speed_sp=-speed_pct)
     
     def rotateDirectionAngle(self, left_port, right_port, reverse, direction, speed_pct, angle):
-      # FIXME
       # direction: left, right
-      # self.cfg['track-width']
-      pass
+      # reverse: always false for now
+      ml = self.cfg['actors'][left_port];
+      mr = self.cfg['actors'][right_port];
+      circ = math.pi * self.cfg['track-width']
+      distance = angle * circ / 360.0
+      circ = math.pi * self.cfg['wheel-diameter']
+      dc = distance / circ
+      print "doing %lf rotations" % dc
+      if direction is 'left':
+        mr.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(dc * mr.count_per_rot), speed_sp=speed_pct)
+        ml.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(-dc * ml.count_per_rot), speed_sp=speed_pct)
+      else:
+        ml.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(dc * ml.count_per_rot), speed_sp=speed_pct)
+        mr.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(-dc * mr.count_per_rot), speed_sp=speed_pct)
     
     # sensors
     # touch sensor

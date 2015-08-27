@@ -679,7 +679,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         String methodName = "hal.rotateDirection" + (isDuration ? "Angle" : isRegulated ? "Regulated" : "Unregulated") + "(";
         this.sb.append(methodName);
         this.sb.append("'" + this.brickConfiguration.getLeftMotorPort().toString() + "', ");
-        this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "', false, ");
+        this.sb.append("'" + this.brickConfiguration.getRightMotorPort().toString() + "', False, ");
         this.sb.append(getEnumCode(turnAction.getDirection()) + ", ");
         turnAction.getParam().getSpeed().visit(this);
         if ( isDuration ) {
@@ -1388,7 +1388,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append(INDENT).append(INDENT).append("if e.message:\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("hal.drawText(e.message, 0, 1)\n");
         this.sb.append(INDENT).append(INDENT).append("hal.drawText('Press any key', 0, 3)\n");
-        this.sb.append(INDENT).append(INDENT).append("while not hal.isKeyPressed('*'): hal.waitFor(500)\n");
+        this.sb.append(INDENT).append(INDENT).append("while not hal.isKeyPressed('any'): hal.waitFor(500)\n");
         this.sb.append(INDENT).append(INDENT).append("raise\n");
 
         this.sb.append("\n");
