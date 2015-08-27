@@ -411,6 +411,7 @@ Blockly.Msg.MENU_ROBOT_STATE_INFO = "tietoja";
 Blockly.Msg.MENU_SAVE = "tallenna";
 Blockly.Msg.MENU_SAVE_AS = "tallenna nimellä ...";
 Blockly.Msg.MENU_SHOW_AGAIN = "show welcome note again";
+Blockly.Msg.MENU_SHOW_CODE = "show code";  // untranslated
 Blockly.Msg.MENU_START = "suorita";
 Blockly.Msg.MENU_STATE_INFO = "Tietoja ohjelman tilasta";
 Blockly.Msg.MENU_TITLE_EDIT = "muokkaa";

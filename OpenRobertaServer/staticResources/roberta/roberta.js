@@ -31,6 +31,7 @@ function initUserState() {
     userState.robotVersion = '';
     userState.serverVersion = '';
     userState.programBlocks = null;
+    userState.programBlocksSaved = null;
 }
 
 /**
@@ -60,8 +61,8 @@ function logout() {
     USER.logout(function(result) {
         if (result.rc === "ok") {
             initUserState();
-            $('#programNameSave').val('');
-            $('#configurationNameSave').val('');
+            $('#programNameSave :not(btn)').val('');
+            $('#configurationNameSave :not(btn)').val('');
             setHeadNavigationMenuState('logout');
             Blockly.getMainWorkspace().saveButton.disable();
             setRobotState(result);
@@ -237,8 +238,16 @@ function injectBlockly(toolbox, opt_programBlocks, opt_readOnly) {
 function initProgramEnvironment(opt_programBlocks) {
     Blockly.getMainWorkspace().clear();
     // TODO load this from database
-    var text = "<block_set xmlns='http: // www.w3.org/1999/xhtml'>" + "<instance x='100' y='50'>" + "<block type='robControls_start'>" + "</block>"
-            + "</instance>" + "</block_set>";
+    var x, y;
+    if ($(window).width() < 768) {
+        x = 25;
+        y = 25;
+    } else {
+        x = 370;
+        y = 50;
+    }
+    var text = "<block_set xmlns='http: // www.w3.org/1999/xhtml'>" + "<instance x='" + x + "' y='" + y + "'>" + "<block type='robControls_start'>"
+            + "</block>" + "</instance>" + "</block_set>";
     var program = opt_programBlocks || text;
     var xml = Blockly.Xml.textToDom(program);
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
@@ -448,17 +457,10 @@ function showCode() {
                 Blockly.fireUiEvent(window, 'resize');
             });
             $('#codeDiv').addClass('codeActive');
-//            $('#codeButtonsCollapse').collapse({
-//                'toggle' : false
-//            });
             $('.nav > li > ul > .robotType').addClass('disabled');
             $('#head-navigation-program-edit').addClass('disabled');
             $('#head-navigation-program-edit>ul').addClass('hidden');
-            userState.programCode = result.javaSource;
-            if (Blockly.mainWorkspace !== null) {
-                var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-                userState.programBlocks = Blockly.Xml.domToText(xmlProgram);
-            }
+            UTIL.cacheBlocks();
             COMM.json("/toolbox", {
                 "cmd" : "loadT",
                 "name" : userState.toolbox,
@@ -481,6 +483,7 @@ function startProgram() {
     var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
     var xmlTextConfiguration = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
     displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
+    Blockly.getMainWorkspace().startButton.disable();
     PROGRAM.runOnBrick(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
         //PROGRAM.showJavaProgram(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
         // console.log(result.javaSource);
@@ -502,11 +505,7 @@ function startProgram() {
                 $('.nav > li > ul > .robotType').addClass('disabled');
                 $('#head-navigation-program-edit').addClass('disabled');
                 $('#head-navigation-program-edit>ul').addClass('hidden');
-                userState.programBlocks = null;
-                if (Blockly.mainWorkspace !== null) {
-                    var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-                    userState.programBlocks = Blockly.Xml.domToText(xmlProgram);
-                }
+                UTIL.cacheBlocks();
                 COMM.json("/toolbox", {
                     "cmd" : "loadT",
                     "name" : userState.toolbox,
@@ -515,10 +514,9 @@ function startProgram() {
                     injectBlockly(result, userState.programBlocks, true);
                 });
                 $(".sim").removeClass('hide');
-            } else {
-                Blockly.getMainWorkspace().startButton.disable();
-            }
+            } 
         } else {
+            Blockly.getMainWorkspace().startButton.enable();
             displayInformation(result, "", result.message, "");
         }
     });
@@ -964,7 +962,7 @@ function initProgramNameTable() {
         } ],
         "bJQueryUI" : true,
         "oLanguage" : {
-            "sEmptyTable" : "<span lkey='Blockly.Msg.DATATABLE_EMPTY_TABLE'>Die Tabelle ist leer</span>"
+            "sEmptyTable" : "<span lkey='Blockly.Msg.DATATABLE_EMPTY_TABLE'></span>" // Die Tabelle ist leer
         },
         "fnDrawCallback" : function() {
         },
@@ -1019,7 +1017,7 @@ function initConfigurationNameTable() {
         } ],
         "bJQueryUI" : true,
         "oLanguage" : {
-            "sEmptyTable" : "<span lkey='Blockly.Msg.DATATABLE_EMPTY_TABLE'>Die Tabelle ist leer</span>"
+            "sEmptyTable" : "<span lkey='Blockly.Msg.DATATABLE_EMPTY_TABLE'></span>" //Die Tabelle ist leer
         },
         "fnDrawCallback" : function() {
         },
@@ -1091,7 +1089,7 @@ function initRelationsTable() {
         } ],
         "bJQueryUI" : true,
         "oLanguage" : {
-            "sEmptyTable" : "<span lkey='Blockly.Msg.DATATABLE_EMPTY_TABLE'>Die Tabelle ist leer</span>"
+            "sEmptyTable" : "<span lkey='Blockly.Msg.DATATABLE_EMPTY_TABLE'></span>" // Die Tabelle ist leer
         },
         "fnDrawCallback" : function() {
         },
@@ -1380,7 +1378,7 @@ function initHeadNavigation() {
             "name" : userState.toolbox,
             "owner" : " "
         }, function(result) {
-            injectBlockly(result, userState.programBlocks);
+            injectBlockly(result, userState.programBlocksSaved);
         });
         $("#simButtonsCollapse").collapse('hide');
         $("#head-navi-tooltip-program").removeClass('disabled');
@@ -1434,7 +1432,7 @@ function initHeadNavigation() {
             "name" : userState.toolbox,
             "owner" : " "
         }, function(result) {
-            injectBlockly(result, userState.programBlocks);
+            injectBlockly(result, userState.programBlocksSaved);
         });
         //$("#simButtonsCollapse").collapse('hide');
         $("#head-navi-tooltip-program").removeClass('disabled');
@@ -1488,16 +1486,16 @@ function initPopups() {
     });
 
     $('#login-user').onWrap('hidden.bs.modal', function() {
-        $('#login-user input').val('');
+        $('#login-user input :not(btn)').val('');
     });
 
     $('#delete-user').onWrap('hidden.bs.modal', function() {
-        $('#delete-user input').val('');
+        $('#delete-user input :not(btn)').val('');
     });
 
     $('#register-user').onWrap('hidden.bs.modal', function() {
-        $('#register-user input').val('');
-        $('#login-user input').val('');
+        $('#register-user input :not(btn)').val('');
+        $('#login-user input :not(btn)').val('');
     });
 
     $('#buttonCancelFirmwareUpdateAndRun').onWrap('click', function() {
@@ -1590,7 +1588,7 @@ function initTabs() {
                 var programName = $programRow[0].children[0].textContent;
                 var headShare = Blockly.Msg.BUTTON_DO_SHARE + ' (' + programName + ')';
                 $('#headShare').text(headShare);
-                $('#programShareWith').val('');
+                $('#programShareWith :not(btn)').val('');
                 $('#read').prop("checked", true);
                 $('#write').prop("checked", false);
                 PROGRAM.refreshProgramRelationsList(programName, showRelations);
@@ -1997,6 +1995,7 @@ function init() {
     initTabs();
     initPopups();
     initHeadNavigation();
+    setHeadNavigationMenuState('logout');
     UTIL.initDataTables();
     initProgramNameTable();
     initConfigurationNameTable();

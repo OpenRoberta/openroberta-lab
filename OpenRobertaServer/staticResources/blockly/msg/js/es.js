@@ -411,6 +411,7 @@ Blockly.Msg.MENU_ROBOT_STATE_INFO = "información";
 Blockly.Msg.MENU_SAVE = "guardar";
 Blockly.Msg.MENU_SAVE_AS = "guardar como ...";
 Blockly.Msg.MENU_SHOW_AGAIN = "mostrar nota de bienvenida de nuevo";
+Blockly.Msg.MENU_SHOW_CODE = "show code";  // untranslated
 Blockly.Msg.MENU_START = "ejecutar";
 Blockly.Msg.MENU_STATE_INFO = "información de estado";
 Blockly.Msg.MENU_TITLE_EDIT = "editar";

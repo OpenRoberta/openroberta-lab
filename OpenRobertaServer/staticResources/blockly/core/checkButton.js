@@ -27,12 +27,14 @@ goog.inherits(Blockly.CheckButton, Blockly.Button);
 
 /** @inheritDoc */
 Blockly.CheckButton.prototype.onMouseUp_ = function(e) {
+    LOG.info('check program from blockly button');
     checkProgram();
 };
 
 /** @inheritDoc */
 Blockly.CheckButton.prototype.createDom = function() {
     Blockly.CheckButton.superClass_.createDom.call(this, this.POSITION);
+    this.tooltip = Blockly.Msg.MENU_CHECK;
     this.svgPath_.setAttribute('transform', 'scale(1.5)');
     this.svgPath_.setAttribute('stroke-width', '0px');
     return this.svgGroup_;

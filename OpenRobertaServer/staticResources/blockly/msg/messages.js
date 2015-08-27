@@ -1411,6 +1411,7 @@ Blockly.Msg.MENU_TITLE_HELP = 'help';
 Blockly.Msg.MENU_TITLE_USER = 'user';
 Blockly.Msg.MENU_TITLE_USER_STATE = 'user info';
 Blockly.Msg.MENU_TITLE_ROBOT_STATE= 'robot info';
+Blockly.Msg.MENU_SHOW_CODE = 'show code';
 Blockly.Msg.TAB_PROGRAM = 'Program';
 Blockly.Msg.TAB_CONFIGURATION = 'Robot configuration';
 Blockly.Msg.TAB_SIMULATION = 'Simulation';

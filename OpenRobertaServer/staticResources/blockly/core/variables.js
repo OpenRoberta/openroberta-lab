@@ -93,7 +93,7 @@ Blockly.Variables.renameVariable = function(newName) {
     if (newName === '')
         return null;
     // java convention naming?
-    if (!newName.match(/^[a-z][a-zA-Z0-9]*$/))
+    if (!newName.match(/^[a-z|A-Z][a-zA-Z0-9]*$/))
         return null;
     // Ensure two identically-named variables don't exist.
     newName = Blockly.Variables.findLegalName(newName, block);

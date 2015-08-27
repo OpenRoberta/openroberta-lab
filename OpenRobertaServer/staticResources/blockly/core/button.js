@@ -24,6 +24,13 @@ Blockly.Button = function(workspace) {
  * @type {number}
  * @private
  */
+Blockly.Button.prototype.tooltip = "Beate";
+/**
+ * Width and height of the background.
+ * 
+ * @type {number}
+ * @private
+ */
 Blockly.Button.prototype.SIZE_ = 48;
 
 /**
@@ -148,7 +155,6 @@ Blockly.Button.prototype.createDom = function(position) {
     this.svgGroup_ = Blockly.createSvgElement('g', {
         'class' : 'blocklyButton button' + position
     }, null);
-    var svgTooltip_ = Blockly.createSvgElement('title', this.svgGroup_);
     this.svgBack_ = Blockly.createSvgElement('rect', {
         'id' : 'button' + this.POSITION,
         'class' : 'blocklyButtonBack',
@@ -159,6 +165,8 @@ Blockly.Button.prototype.createDom = function(position) {
         'rx' : Blockly.BlockSvg.CORNER_RADIUS,
         'ry' : Blockly.BlockSvg.CORNER_RADIUS
     }, this.svgGroup_);
+    this.svgBack_.tooltip = this;
+    Blockly.Tooltip.bindMouseEvents(this.svgBack_);
     this.img_x_ = (this.SIZE_ - this.IMG_WIDTH_) / 2;
     this.img_y_ = (this.SIZE_ - this.IMG_HEIGHT_) / 2;
     this.svgPath_ = Blockly.createSvgElement('path', {

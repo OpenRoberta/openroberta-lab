@@ -36,6 +36,7 @@ Blockly.SaveButton.prototype.onMouseUp_ = function(e) {
 /** @inheritDoc */
 Blockly.SaveButton.prototype.createDom = function() {
     Blockly.SaveButton.superClass_.createDom.call(this, this.POSITION);
+    this.tooltip = Blockly.Msg.MENU_SAVE;
     this.svgPath_.setAttribute('transform', 'scale(1.5)');
     this.svgPath_.setAttribute('fill-rule', 'evenodd');
     this.svgPath_.setAttribute('stroke-width', '0px');

@@ -274,7 +274,7 @@ html, body {
 	padding: 8px;
 }
 
-.wait {
+.wait, .ok {
 	color: #afca04;
 }
 
@@ -282,24 +282,16 @@ html, body {
 	color: #ccc;
 }
 
-@-webkit-keyframes blinker {from { color:#afca04;
-	
+@-webkit-keyframes blinker {
+	from { color:#afca04; } 
+	to { color: #e2001a;}
 }
 
-to {
-	color: #e2001a;
+}@keyframes  blinker {
+	from { color:#afca04; }
+    to { color: #e2001a; }
 }
 
-}
-@keyframes  blinker {from { color:#afca04;
-	
-}
-
-to {
-	color: #e2001a;
-}
-
-}
 .busy {
 	-webkit-animation-name: blinker;
 	-webkit-animation-iteration-count: infinite;
@@ -431,6 +423,7 @@ to {
 .navbar-fixed-bottom {
 	border: 0;
 	padding: 16px 68px;
+	margin-bottom: 20;
 }
 
 .collapse.in li a, .collapse.in li a span:before, .collapse.in li a span
@@ -788,6 +781,7 @@ table.dataTable thead .sorting_desc {
 	.navbar-fixed-bottom {
 		border: 0;
 		padding: 16px 16px;
+		margin-bottom: 0;
 	}
 	.blocklyButton {
 		display: none

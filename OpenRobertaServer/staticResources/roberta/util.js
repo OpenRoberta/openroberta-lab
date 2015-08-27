@@ -185,4 +185,31 @@ var UTIL = {};
             }
         }
     };
+
+    UTIL.cacheBlocks = function() {
+        userState.programBlocksSaved = null;
+        userState.programBlocks = null;
+        if (Blockly.mainWorkspace !== null) {
+            var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+            userState.programBlocksSaved = Blockly.Xml.domToText(xmlProgram);
+            var blocks = Blockly.getMainWorkspace().getTopBlocks();
+            for (var i = 0; i < blocks.length; i++) {
+                if (blocks[i].type == "robControls_start") {
+                    var pos = blocks[i].getRelativeToSurfaceXY();
+                    blocks[i].moveBy(25 - pos.x, 25 - pos.y);
+                    break;
+                }
+            }
+            xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+            userState.programBlocks = Blockly.Xml.domToText(xmlProgram);
+            var blocks = Blockly.getMainWorkspace().getTopBlocks();
+            for (var i = 0; i < blocks.length; i++) {
+                if (blocks[i].type == "robControls_start") {
+                    var pos = blocks[i].getRelativeToSurfaceXY();
+                    blocks[i].moveBy(25 - pos.x, 25 - pos.y);
+                    break;
+                }
+            }
+        }
+    }
 })($);

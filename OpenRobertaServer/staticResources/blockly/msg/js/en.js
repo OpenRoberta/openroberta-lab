@@ -411,6 +411,7 @@ Blockly.Msg.MENU_ROBOT_STATE_INFO = "info";
 Blockly.Msg.MENU_SAVE = "save";
 Blockly.Msg.MENU_SAVE_AS = "save as ...";
 Blockly.Msg.MENU_SHOW_AGAIN = "show welcome note again";
+Blockly.Msg.MENU_SHOW_CODE = "show code";
 Blockly.Msg.MENU_START = "run";
 Blockly.Msg.MENU_STATE_INFO = "state information";
 Blockly.Msg.MENU_TITLE_EDIT = "edit";

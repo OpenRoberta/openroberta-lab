@@ -97,8 +97,7 @@ limitations under the License.
                             </li>
                             <li class="logout"><a href="#" id="menuSaveAsProg" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SAVE_AS">speichern
                                     unter ...</a></li>
-                            <li class=""><a href="#" id="menuShowCode" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SHOW_CODE">show
-                                    code</a></li>
+                            <li class=""><a href="#" id="menuShowCode" class="typcn typcn-cloud-storage" lkey="Blockly.Msg.MENU_SHOW_CODE">show code</a></li>
                             <li class="hidden"><a href="#" id="menuAttachProg" class="" lkey="Blockly.Msg.MENU_ATTACH">anhängen ...</a></li>
                             <li class="hidden"><a href="#" id="menuPropertiesProg" class="" lkey="Blockly.Msg.MENU_PROPERTIES">Eigenschaften</a></li>
                             <li class="divider"></li>
@@ -275,7 +274,7 @@ limitations under the License.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn" id="doLogin">OK</button>
-                    <button type="button" class="btn" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
+                    <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
                 </div>
             </div>
         </div>
@@ -318,7 +317,7 @@ limitations under the License.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn" id="saveUser">OK</button>
-                    <button type="button" class="btn" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
+                    <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
                 </div>
             </div>
         </div>
@@ -341,7 +340,7 @@ limitations under the License.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn" id="deleteUser">OK</button>
-                    <button type="button" class="btn" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
+                    <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
                 </div>
             </div>
         </div>
@@ -364,7 +363,7 @@ limitations under the License.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn" id="saveProgram">OK</button>
-                    <button type="button" class="btn" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
+                    <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
                 </div>
             </div>
         </div>
@@ -387,7 +386,7 @@ limitations under the License.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn" id="saveConfiguration">OK</button>
-                    <button type="button" class="btn" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
+                    <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
                 </div>
             </div>
         </div>
@@ -410,7 +409,7 @@ limitations under the License.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn" id="setToken">OK</button>
-                    <button type="button" class="btn" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
+                    <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
                 </div>
             </div>
         </div>
@@ -535,7 +534,7 @@ limitations under the License.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn" id="doDeleteProgram">OK</button>
-                    <button type="button" class="btn" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
+                    <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
                 </div>
             </div>
         </div>
@@ -553,7 +552,7 @@ limitations under the License.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn" id="doDeleteConfiguration">OK</button>
-                    <button type="button" class="btn" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
+                    <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
                 </div>
             </div>
         </div>
@@ -571,8 +570,8 @@ limitations under the License.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn" id="doUpdateFirmware" lkey="Blockly.Msg.POPUP_DO_UPDATE_FIRMWARE">Update now</button>
-                    <button id="buttonCancelFirmwareUpdate" type="button" class="btn" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
-                    <button id="buttonCancelFirmwareUpdateAndRun" type="button" class="btn" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
+                    <input id="buttonCancelFirmwareUpdate" type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
+                    <input id="buttonCancelFirmwareUpdateAndRun" type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
 
                 </div>
             </div>
@@ -632,7 +631,7 @@ limitations under the License.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn" id="shareProgram" data-dismiss="modal">OK</button>
-                    <button type="button" class="btn" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL">Cancel</button>
+                    <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
                 </div>
             </div>
         </div>
@@ -716,7 +715,7 @@ limitations under the License.
                 </ol>
                 <div class="navbar navbar-fixed-bottom">
                     <input id="clearLog" class="btn" lkey="Blockly.Msg.BUTTON_EMPTY_LIST" type="submit" value="Liste leeren"></input>
-                    <input id="backLogging" class="btn" type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"> </input>
+                    <input id="backLogging" class="btn backButton" type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"></input>
                 </div>
             </div>
         </div>

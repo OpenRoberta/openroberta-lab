@@ -411,6 +411,7 @@ Blockly.Msg.MENU_ROBOT_STATE_INFO = "info";
 Blockly.Msg.MENU_SAVE = "gem";
 Blockly.Msg.MENU_SAVE_AS = "gem som ...";
 Blockly.Msg.MENU_SHOW_AGAIN = "vis velkomstmeddelelse igen";
+Blockly.Msg.MENU_SHOW_CODE = "show code";  // untranslated
 Blockly.Msg.MENU_START = "kør";
 Blockly.Msg.MENU_STATE_INFO = "tilstands information";
 Blockly.Msg.MENU_TITLE_EDIT = "rediger";

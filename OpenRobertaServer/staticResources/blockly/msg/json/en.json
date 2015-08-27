@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-08-24 09:46:30.027000",
+		"lastupdated": "2015-08-27 08:44:24.267000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -672,6 +672,7 @@
 	"MENU_TITLE_USER": "user",
 	"MENU_TITLE_USER_STATE": "user info",
 	"MENU_TITLE_ROBOT_STATE": "robot info",
+	"MENU_SHOW_CODE": "show code",
 	"TAB_PROGRAM": "Program",
 	"TAB_CONFIGURATION": "Robot configuration",
 	"TAB_SIMULATION": "Simulation",
