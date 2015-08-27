@@ -74,7 +74,6 @@ function createTurnAction(speed, direction, angle) {
     } else {
         result[ANGLE] = angle;
     }
-
     return result;
 }
 
@@ -83,21 +82,18 @@ function createTurnLight(color, mode) {
     result[STMT] = TURN_LIGHT;
     result[COLOR] = color;
     result[MODE] = mode;
-
     return result;
 }
 
 function createResetLight() {
     var result = {};
     result[STMT] = RESET_LIGHT;
-
     return result;
 }
 
 function createStopDrive() {
     var result = {};
     result[STMT] = STOP_DRIVE;
-
     return result;
 }
 
@@ -134,13 +130,9 @@ function createWaitStmt(stmtList) {
     return result;
 }
 
-
-function createWaitTimeStmt(timeValue){
-	   var result = {};
-	    result[STMT] = WAIT_TIME_STMT;
-	    result[TIME] = timeValue;
-	    
-	    return result;
-	
-	
+function createWaitTimeStmt(timeValue) {
+    var result = {};
+    result[STMT] = WAIT_TIME_STMT;
+    result[TIME] = timeValue;
+    return result;
 }

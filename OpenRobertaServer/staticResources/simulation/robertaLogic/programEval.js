@@ -6,20 +6,20 @@ function initProgram(program) {
     LIGHT.setMode(OFF);
 }
 
+function setSensorActorValues(simulationSensorData) {
+    SENSORS.setTouchSensor(simulationSensorData.touch);
+    SENSORS.setColor(simulationSensorData.color);
+    SENSORS.setLight(simulationSensorData.light);
+    SENSORS.setUltrasonicSensor(simulationSensorData.ultrasonic);
+    ACTORS.getLeftMotor().setCurrentRotations(simulationSensorData.tacho[0]);
+    ACTORS.getRightMotor().setCurrentRotations(simulationSensorData.tacho[1]);
+    PROGRAM_SIMULATION.getTimer().setCurrentTime(simulationSensorData.time);
+}
+
 function step(simulationSensorData) {
-    if (simulationSensorData != undefined) {
-        SENSORS.setTouchSensor(simulationSensorData.touch);
-        SENSORS.setColor(simulationSensorData.color);
-        SENSORS.setLight(simulationSensorData.light);
-        SENSORS.setUltrasonicSensor(simulationSensorData.ultrasonic);
-        ACTORS.getLeftMotor().setCurrentRotations(simulationSensorData.tacho[0]);
-        ACTORS.getRightMotor().setCurrentRotations(simulationSensorData.tacho[1]);
-        PROGRAM_SIMULATION.getTimer().setCurrentTime(simulationSensorData.time);
-    }
+    setSensorActorValues(simulationSensorData);
     if (PROGRAM_SIMULATION.isNextStatement()) {
-
         var stmt = PROGRAM_SIMULATION.getRemove();
-
         switch (stmt.stmt) {
         case ASSIGN_STMT:
             var value = evalExpr(stmt.expr);
@@ -42,19 +42,11 @@ function step(simulationSensorData) {
             break;
 
         case DRIVE_ACTION:
-            ACTORS.resetTacho(simulationSensorData.tacho[0], simulationSensorData.tacho[1]);
-            ACTORS.setSpeed(evalExpr(stmt.speed), stmt[DRIVE_DIRECTION]);
-            if (stmt.distance != undefined) {
-                ACTORS.setDistanceToCover(evalExpr(stmt.distance));
-            }
+            evalDriveAction(simulationSensorData, stmt);
             break;
 
         case TURN_ACTION:
-            ACTORS.resetTacho(simulationSensorData.tacho[0], simulationSensorData.tacho[1]);
-            ACTORS.setAngleSpeed(evalExpr(stmt.speed), stmt[TURN_DIRECTION]);
-            if (stmt.angle != undefined) {
-                ACTORS.clculateAngleToCover(evalExpr(stmt.angle));
-            }
+            evalTurnAction(simulationSensorData, stmt);
             break;
 
         case WAIT_STMT:
@@ -62,9 +54,7 @@ function step(simulationSensorData) {
             break;
 
         case WAIT_TIME_STMT:
-            PROGRAM_SIMULATION.setIsRunningTimer(true);
-            PROGRAM_SIMULATION.resetTimer(simulationSensorData.time);
-            PROGRAM_SIMULATION.setTimer(evalExpr(stmt.time));
+            evalWaitTime(simulationSensorData, stmt);
             break;
 
         case TURN_LIGHT:
@@ -87,6 +77,36 @@ function step(simulationSensorData) {
     }
     ACTORS.calculateCoveredDistance();
     PROGRAM_SIMULATION.calculateWishedTime();
+}
+
+function evalWaitTime(simulationSensorData, stmt) {
+    PROGRAM_SIMULATION.setIsRunningTimer(true);
+    PROGRAM_SIMULATION.resetTimer(simulationSensorData.time);
+    PROGRAM_SIMULATION.setTimer(evalExpr(stmt.time));
+}
+
+function evalTurnAction(simulationSensorData, stmt) {
+    ACTORS.resetTacho(simulationSensorData.tacho[0], simulationSensorData.tacho[1]);
+    ACTORS.setAngleSpeed(evalExpr(stmt.speed), stmt[TURN_DIRECTION]);
+    setAngleToTurn(stmt);
+}
+
+function evalDriveAction(simulationSensorData, stmt) {
+    ACTORS.resetTacho(simulationSensorData.tacho[0], simulationSensorData.tacho[1]);
+    ACTORS.setSpeed(evalExpr(stmt.speed), stmt[DRIVE_DIRECTION]);
+    setDistanceToDrive(stmt);
+}
+
+function setAngleToTurn(stmt) {
+    if (stmt.angle != undefined) {
+        ACTORS.clculateAngleToCover(evalExpr(stmt.angle));
+    }
+}
+
+function setDistanceToDrive(stmt) {
+    if (stmt.distance != undefined) {
+        ACTORS.setDistanceToCover(evalExpr(stmt.distance));
+    }
 }
 
 function evalRepeat(stmt) {
