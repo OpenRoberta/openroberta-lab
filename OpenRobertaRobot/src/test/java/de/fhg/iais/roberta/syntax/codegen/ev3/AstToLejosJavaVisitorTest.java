@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.testutil.Helper;
 
 public class AstToLejosJavaVisitorTest {
+
     private static final String MAIN_CLASS = "" //
         + "public class Test {\n"
         + "private static final boolean TRUE = true;";
@@ -36,7 +37,7 @@ public class AstToLejosJavaVisitorTest {
         + "import lejos.remote.nxt.NXTConnection;\n\n";
 
     private static final String BRICK_CONFIGURATION = "" //
-        + "    private Ev3Configuration brickConfiguration = new Ev3Configuration.Builder()\n"
+        + "    brickConfiguration = new Ev3Configuration.Builder()\n"
         + "    .setWheelDiameter(5.6)\n"
         + "    .setTrackWidth(17.0)\n"
         + "    .addActor(ActorPort.A, new EV3Actor(EV3Actors.EV3_MEDIUM_MOTOR, true, DriveDirection.FOREWARD, MotorSide.LEFT))\n"
@@ -45,18 +46,23 @@ public class AstToLejosJavaVisitorTest {
         + "    .addSensor(SensorPort.S2, new EV3Sensor(EV3Sensors.EV3_ULTRASONIC_SENSOR))\n"
         + "    .build();\n\n";
 
+    private static final String BRICK_CONFIGURATION_DECL = "private static Ev3Configuration brickConfiguration;\n";
+
+    private static final String USED_SENSORS_DECL = "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>();\n";
+
     private static final String MAIN_METHOD = "" //
         + "    private Hal hal = new Hal(brickConfiguration, usedSensors);\n\n"
         + "    public static void main(String[] args) {\n"
         + "        try {\n"
+        + BRICK_CONFIGURATION
         + "            new Test().run();\n"
         + "        } catch ( Exception e ) {\n"
         + "            lejos.hardware.lcd.TextLCD lcd = lejos.hardware.ev3.LocalEV3.get().getTextLCD();\n"
         + "            lcd.clear();\n"
-        + "            lcd.drawString(\"Fehler im EV3\", 0, 2);\n"
+        + "            lcd.drawString(\"Error in the EV3\", 0, 0);\n"
         + "            if (e.getMessage() != null) {\n"
-        + "                lcd.drawString(\"Fehlermeldung\", 0, 4);\n"
-        + "                lcd.drawString(e.getMessage(), 0, 5);\n"
+        + "                lcd.drawString(\"Error message\", 0, 2);\n"
+        + "                lcd.drawString(e.getMessage(), 0, 3);\n"
         + "            }\n"
         + "            lcd.drawString(\"Press any key\", 0, 7);\n"
         + "            lejos.hardware.Button.waitForAnyPress();\n"
@@ -82,8 +88,8 @@ public class AstToLejosJavaVisitorTest {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS
-            + BRICK_CONFIGURATION
-            + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>();\n"
+            + BRICK_CONFIGURATION_DECL
+            + USED_SENSORS_DECL
             + MAIN_METHOD
             + "    public void run() {\n"
             // + "        hal = new Hal(brickConfiguration, usedSensors);\n"
@@ -101,8 +107,8 @@ public class AstToLejosJavaVisitorTest {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS
-            + BRICK_CONFIGURATION
-            + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>();\n"
+            + BRICK_CONFIGURATION_DECL
+            + USED_SENSORS_DECL
             + MAIN_METHOD
             + "    public void run() {\n"
             + "        for ( float k0 = 0; k0 < 10; k0+=1 ) {\n"
@@ -121,7 +127,7 @@ public class AstToLejosJavaVisitorTest {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS
-            + BRICK_CONFIGURATION
+            + BRICK_CONFIGURATION_DECL
             + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>(Arrays.asList(EV3Sensors.EV3_TOUCH_SENSOR, EV3Sensors.EV3_COLOR_SENSOR));\n"
             + MAIN_METHOD
             + "    public void run() {\n"
@@ -151,33 +157,32 @@ public class AstToLejosJavaVisitorTest {
     @Test
     public void test3() throws Exception {
 
-        String a =
-            "" //
-                + IMPORTS
-                + MAIN_CLASS
-                + BRICK_CONFIGURATION
-                + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>(Arrays.asList(EV3Sensors.EV3_TOUCH_SENSOR, EV3Sensors.EV3_ULTRASONIC_SENSOR));\n"
-                + MAIN_METHOD
-                + "    public void run() {\n"
-                //          + "        hal = new Hal(brickConfiguration, usedSensors);\n"
-                + "        if ( hal.isPressed(SensorPort.S1) ) {\n"
-                + "            hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
-                + "        } else {\n"
-                + "            if ( hal.isPressed(SensorPort.S1) ) {\n"
-                + "                hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
-                + "            } else if ( 0==hal.getUltraSonicSensorDistance(SensorPort.S4) ) {\n"
-                + "                hal.drawPicture(ShowPicture.FLOWERS, 15, 15);\n"
-                + "            } else {\n"
-                + "            if ( TRUE ) {\n"
-                + "                while ( !hal.isPressed(BrickKey.UP) ) {\n\n"
-                + "                     hal.turnOnRegulatedMotor(ActorPort.B,30);"
-                + "                }\n"
-                + "            }\n"
-                + "            }\n"
-                + "        }\n"
-                + SUFFIX
-                + "    }\n"
-                + "}\n";
+        String a = "" //
+            + IMPORTS
+            + MAIN_CLASS
+            + BRICK_CONFIGURATION_DECL
+            + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>(Arrays.asList(EV3Sensors.EV3_TOUCH_SENSOR, EV3Sensors.EV3_ULTRASONIC_SENSOR));\n"
+            + MAIN_METHOD
+            + "    public void run() {\n"
+            //          + "        hal = new Hal(brickConfiguration, usedSensors);\n"
+            + "        if ( hal.isPressed(SensorPort.S1) ) {\n"
+            + "            hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
+            + "        } else {\n"
+            + "            if ( hal.isPressed(SensorPort.S1) ) {\n"
+            + "                hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
+            + "            } else if ( 0==hal.getUltraSonicSensorDistance(SensorPort.S4) ) {\n"
+            + "                hal.drawPicture(ShowPicture.FLOWERS, 15, 15);\n"
+            + "            } else {\n"
+            + "            if ( TRUE ) {\n"
+            + "                while ( !hal.isPressed(BrickKey.UP) ) {\n\n"
+            + "                     hal.turnOnRegulatedMotor(ActorPort.B,30);"
+            + "                }\n"
+            + "            }\n"
+            + "            }\n"
+            + "        }\n"
+            + SUFFIX
+            + "    }\n"
+            + "}\n";
 
         assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator3.xml");
     }
@@ -185,35 +190,34 @@ public class AstToLejosJavaVisitorTest {
     @Test
     public void test4() throws Exception {
 
-        String a =
-            "" //
-                + IMPORTS
-                + MAIN_CLASS
-                + BRICK_CONFIGURATION
-                + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>(Arrays.asList(EV3Sensors.EV3_IR_SENSOR,EV3Sensors.EV3_ULTRASONIC_SENSOR,EV3Sensors.EV3_GYRO_SENSOR,EV3Sensors.EV3_TOUCH_SENSOR));\n"
-                + MAIN_METHOD
-                + "    public void run() {\n"
-                //       + "        hal = new Hal(brickConfiguration, usedSensors);\n"
-                + "        if ( 5 < hal.getRegulatedMotorSpeed(ActorPort.B) ) {\n\n\n"
-                + "            hal.turnOnRegulatedMotor(ActorPort.B,30);\n"
-                + "            hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);\n"
-                + "            hal.rotateDirectionRegulated(ActorPort.A, ActorPort.B, false, TurnDirection.RIGHT, 50);\n"
-                + "        }\n"
-                + "        if ( hal.getRegulatedMotorTachoValue(ActorPort.A, MotorTachoMode.ROTATION) + hal.getInfraredSensorDistance(SensorPort.S4) == hal.getUltraSonicSensorDistance(SensorPort.S4) ) {\n"
-                + "            hal.ledOff();\n"
-                + "        } else {\n"
-                + "            hal.resetGyroSensor(SensorPort.S2);\n"
-                + "        if ( TRUE ) {\n"
-                + "            while ( hal.isPressed(SensorPort.S1) ) {\n"
-                + "                hal.drawPicture(ShowPicture.OLDGLASSES, 0, 0);\n"
-                + "                hal.clearDisplay();\n"
-                + "            }\n"
-                + "         }\n"
-                + "            hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
-                + "        }\n"
-                + SUFFIX
-                + "    }\n"
-                + "}\n";
+        String a = "" //
+            + IMPORTS
+            + MAIN_CLASS
+            + BRICK_CONFIGURATION_DECL
+            + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>(Arrays.asList(EV3Sensors.EV3_IR_SENSOR,EV3Sensors.EV3_ULTRASONIC_SENSOR,EV3Sensors.EV3_GYRO_SENSOR,EV3Sensors.EV3_TOUCH_SENSOR));\n"
+            + MAIN_METHOD
+            + "    public void run() {\n"
+            //       + "        hal = new Hal(brickConfiguration, usedSensors);\n"
+            + "        if ( 5 < hal.getRegulatedMotorSpeed(ActorPort.B) ) {\n\n\n"
+            + "            hal.turnOnRegulatedMotor(ActorPort.B,30);\n"
+            + "            hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);\n"
+            + "            hal.rotateDirectionRegulated(ActorPort.A, ActorPort.B, false, TurnDirection.RIGHT, 50);\n"
+            + "        }\n"
+            + "        if ( hal.getRegulatedMotorTachoValue(ActorPort.A, MotorTachoMode.ROTATION) + hal.getInfraredSensorDistance(SensorPort.S4) == hal.getUltraSonicSensorDistance(SensorPort.S4) ) {\n"
+            + "            hal.ledOff();\n"
+            + "        } else {\n"
+            + "            hal.resetGyroSensor(SensorPort.S2);\n"
+            + "        if ( TRUE ) {\n"
+            + "            while ( hal.isPressed(SensorPort.S1) ) {\n"
+            + "                hal.drawPicture(ShowPicture.OLDGLASSES, 0, 0);\n"
+            + "                hal.clearDisplay();\n"
+            + "            }\n"
+            + "         }\n"
+            + "            hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
+            + "        }\n"
+            + SUFFIX
+            + "    }\n"
+            + "}\n";
 
         assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator4.xml");
     }
@@ -224,8 +228,8 @@ public class AstToLejosJavaVisitorTest {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS
-            + BRICK_CONFIGURATION
-            + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>();\n"
+            + BRICK_CONFIGURATION_DECL
+            + USED_SENSORS_DECL
             + MAIN_METHOD
             + "    public void run() {\n"
             //        + "        hal = new Hal(brickConfiguration, usedSensors);\n"
@@ -247,8 +251,8 @@ public class AstToLejosJavaVisitorTest {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS
-            + BRICK_CONFIGURATION
-            + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>();\n"
+            + BRICK_CONFIGURATION_DECL
+            + USED_SENSORS_DECL
             + MAIN_METHOD
             + "    public void run() {\n"
             //       + "        hal = new Hal(brickConfiguration, usedSensors);\n"
@@ -266,8 +270,8 @@ public class AstToLejosJavaVisitorTest {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS
-            + BRICK_CONFIGURATION
-            + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>();\n"
+            + BRICK_CONFIGURATION_DECL
+            + USED_SENSORS_DECL
             + MAIN_METHOD
             + "    public void run() {\n"
             //    + "        hal = new Hal(brickConfiguration, usedSensors);\n"
@@ -286,8 +290,8 @@ public class AstToLejosJavaVisitorTest {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS
-            + BRICK_CONFIGURATION
-            + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>();\n"
+            + BRICK_CONFIGURATION_DECL
+            + USED_SENSORS_DECL
             + MAIN_METHOD
             + "        float item = 10;\n"
             + "        String item2 = \"TTTT\";\n"
@@ -311,8 +315,8 @@ public class AstToLejosJavaVisitorTest {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS
-            + BRICK_CONFIGURATION
-            + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>();\n"
+            + BRICK_CONFIGURATION_DECL
+            + USED_SENSORS_DECL
             + MAIN_METHOD
             + "        float variablenName = 0;\n"
             + "    public void run() {\n"
@@ -332,8 +336,8 @@ public class AstToLejosJavaVisitorTest {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS
-            + BRICK_CONFIGURATION
-            + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>();\n"
+            + BRICK_CONFIGURATION_DECL
+            + USED_SENSORS_DECL
             + MAIN_METHOD
             + "        floatitem=0;"
             + "        Stringitem2=\"ss\";"
@@ -358,8 +362,8 @@ public class AstToLejosJavaVisitorTest {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS
-            + BRICK_CONFIGURATION
-            + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>();\n"
+            + BRICK_CONFIGURATION_DECL
+            + USED_SENSORS_DECL
             + MAIN_METHOD
             + "    floatvariablenName=0;\n"
             + "    floatvariablenName2=0;\n"
@@ -382,8 +386,8 @@ public class AstToLejosJavaVisitorTest {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS
-            + BRICK_CONFIGURATION
-            + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>();\n"
+            + BRICK_CONFIGURATION_DECL
+            + USED_SENSORS_DECL
             + MAIN_METHOD
             + "    public void run() {\n"
             // + "        hal = new Hal(brickConfiguration, usedSensors);\n"
@@ -403,8 +407,8 @@ public class AstToLejosJavaVisitorTest {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS
-            + BRICK_CONFIGURATION
-            + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>();\n"
+            + BRICK_CONFIGURATION_DECL
+            + USED_SENSORS_DECL
             + MAIN_METHOD
             + "    public void run() {\n"
             // + "        hal = new Hal(brickConfiguration, usedSensors);\n"
@@ -425,8 +429,8 @@ public class AstToLejosJavaVisitorTest {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS
-            + BRICK_CONFIGURATION
-            + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>();\n"
+            + BRICK_CONFIGURATION_DECL
+            + USED_SENSORS_DECL
             + MAIN_METHOD
             + "    float variablenName=0;\n"
             + "    boolean variablenName2=true;\n"
@@ -453,8 +457,8 @@ public class AstToLejosJavaVisitorTest {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS
-            + BRICK_CONFIGURATION
-            + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>();\n"
+            + BRICK_CONFIGURATION_DECL
+            + USED_SENSORS_DECL
             + MAIN_METHOD
             + "    ArrayList<String> variablenName=BlocklyMethods.createListWith(\"a\", \"b\", \"c\");\n"
             + "    public void run() {\n"
@@ -476,8 +480,8 @@ public class AstToLejosJavaVisitorTest {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS
-            + BRICK_CONFIGURATION
-            + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>();\n"
+            + BRICK_CONFIGURATION_DECL
+            + USED_SENSORS_DECL
             + MAIN_METHOD
             + "    ArrayList<String> variablenName=BlocklyMethods.createListWith(\"a\", \"b\", \"c\");\n"
             + "    public void run() {\n"
@@ -499,8 +503,8 @@ public class AstToLejosJavaVisitorTest {
         String a = "" //
             + IMPORTS
             + MAIN_CLASS
-            + BRICK_CONFIGURATION
-            + "private Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>();\n"
+            + BRICK_CONFIGURATION_DECL
+            + USED_SENSORS_DECL
             + MAIN_METHOD
             + "    ArrayList<String> variablenName=BlocklyMethods.createListWith(\"a\", \"b\", \"c\");\n"
             + "    public void run() {\n"

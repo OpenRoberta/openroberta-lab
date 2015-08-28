@@ -1479,21 +1479,22 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
         this.sb.append("public class " + this.programName + " {\n");
         this.sb.append(INDENT).append("private static final boolean TRUE = true;\n");
-        this.sb.append(INDENT).append(generateRegenerateConfiguration()).append("\n\n");
+        this.sb.append(INDENT).append("private static Ev3Configuration brickConfiguration;").append("\n\n");
         this.sb.append(INDENT).append(generateRegenerateUsedSensors()).append("\n\n");
 
         this.sb.append(INDENT).append("private Hal hal = new Hal(brickConfiguration, usedSensors);\n\n");
         this.sb.append(INDENT).append("public static void main(String[] args) {\n");
         this.sb.append(INDENT).append(INDENT).append("try {\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append(generateRegenerateConfiguration()).append("\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("new ").append(this.programName).append("().run();\n");
         this.sb.append(INDENT).append(INDENT).append("} catch ( Exception e ) {\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("lejos.hardware.lcd.TextLCD lcd = lejos.hardware.ev3.LocalEV3.get().getTextLCD();\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.clear();\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Fehler im EV3\", 0, 2);\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Error in the EV3\", 0, 0);\n");
 
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("if (e.getMessage() != null) {\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Fehlermeldung\", 0, 4);\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(e.getMessage(), 0, 5);\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Error message\", 0, 2);\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(e.getMessage(), 0, 3);\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("}\n");
 
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Press any key\", 0, 7);\n");
@@ -1507,23 +1508,25 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
      */
     public String generateRegenerateConfiguration() {
         StringBuilder sb = new StringBuilder();
-        sb.append("private Ev3Configuration brickConfiguration = new Ev3Configuration.Builder()\n");
-        sb.append("    .setWheelDiameter(" + this.brickConfiguration.getWheelDiameterCM() + ")\n");
-        sb.append("    .setTrackWidth(" + this.brickConfiguration.getTrackWidthCM() + ")\n");
+        sb.append(" brickConfiguration = new Ev3Configuration.Builder()\n");
+        sb.append(INDENT).append(INDENT).append(INDENT).append("    .setWheelDiameter(" + this.brickConfiguration.getWheelDiameterCM() + ")\n");
+        sb.append(INDENT).append(INDENT).append(INDENT).append("    .setTrackWidth(" + this.brickConfiguration.getTrackWidthCM() + ")\n");
         appendActors(sb);
         appendSensors(sb);
-        sb.append("    .build();");
+        sb.append(INDENT).append(INDENT).append(INDENT).append("    .build();");
         return sb.toString();
     }
 
     private void appendSensors(StringBuilder sb) {
         for ( Map.Entry<SensorPort, EV3Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
+            sb.append(INDENT).append(INDENT).append(INDENT);
             appendOptional(sb, "    .addSensor(", entry.getKey(), entry.getValue());
         }
     }
 
     private void appendActors(StringBuilder sb) {
         for ( Map.Entry<ActorPort, EV3Actor> entry : this.brickConfiguration.getActors().entrySet() ) {
+            sb.append(INDENT).append(INDENT).append(INDENT);
             appendOptional(sb, "    .addActor(", entry.getKey(), entry.getValue());
         }
     }
