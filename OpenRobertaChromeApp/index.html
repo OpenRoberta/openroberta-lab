@@ -5,36 +5,66 @@
 		<title>Open Roberta</title>
 		<script src="index.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/chrome_app.css"></link>
-		<!--link rel="stylesheet" type="text/css" href="css/roberta.css"></link-->
 	</head>
   <body>
-	  <dialog id="warningDialog">
+	  <dialog id="warningdialog">
 		  <table>
 			  <tr>
-				  <td style="vertical-align:top;"><img src="resources/Roberta.png" width="100"></td>
+				  <td class="dialogpic">
+				    <img src="resources/Roberta.png" width="100">
+				  </td>
 				  <td>		
-					  <p id="fh-warnung-txt">abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc abc</p>
+					  <p id="warningtext"></p>
 				  </td>
 	  		</tr>
 			</table>
-			<div align="center">
-			  <button id="true beenden" class="btn">beenden</button>
-			  <button id="abbrechen" class="btn">abbrechen</button>
+			<div align="left">
+			  <button id="discwarning" class="btn">beenden</button>
+			  <button id="cancelwarning" class="btn">abbrechen</button>
 			</div>
 		</dialog>
 		
-		<dialog id="aboutDialog">
+		
+		<dialog id="aboutdialog">
 			<table>
 				<tr>
-					<td style="vertical-align:top;">
-					  <img src="resources/iais_logo.gif" width="85">
+					<td class="dialogpic">
+					  <img id="dialogimage" src="resources/iais_logo.gif" width="85">
 					</td>
 					<td>		
-						<p id="fh-about-txt"></p>
+						<p id="abouttext"></p>
 					</td>
 				</tr>
 			</table>
-			<div align="center"><button id="hide" class="btn">OK</button></div>
+			<div align="left"><button id="closeabout" class="btn">OK</button></div>
+		</dialog>
+		
+		<dialog id="errordialog">
+			<table>
+				<tr>
+					<td class="errorpic">
+					  <img src="resources/warning-outline.png" width="85">
+					</td>ö
+					<td >		
+						<p id="errortext"></p>
+					</td>
+				</tr>
+			</table>
+			<div align="left"><button id="closeerror" class="btn">OK</button></div>
+		</dialog>
+		
+		<dialog id="infod">
+			<table>
+				<tr>
+					<td class="infoimgtop">
+					  <img id="infoimg" src="resources/warning-outline.png" width="85">
+					</td>
+					<td >		
+						<p id="infotext"></p>
+					</td>
+				</tr>
+			</table>
+			<div align="left"><button id="closeinfo" class="btn">OK</button></div>
 		</dialog>
 
     <div class="grid">
@@ -95,7 +125,7 @@
 				
 			<div class="row">
 				<div class="col-1">
-					<input type="checkbox" id="advancedoptions">
+					<input type="checkbox" id="checkboxadvopt">
 				</div>
 				<div class="col-11">
 					<textarea class="adv" id="advancedop" rows="1" readonly></textarea>

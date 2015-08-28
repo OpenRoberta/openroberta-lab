@@ -18,7 +18,7 @@ import de.fhg.iais.roberta.util.Clock;
  */
 public class Ev3CommunicationData {
     private static final Logger LOG = LoggerFactory.getLogger(Ev3CommunicationData.class);
-    private static final int TIMEOUT_UNTIL_TOKEN_EXPIRES_WHEN_USER_DOESNT_APPROVE = 300000;
+    private static final int TIMEOUT_UNTIL_TOKEN_EXPIRES_WHEN_USER_DOESNT_APPROVE = 1000;
     private static final int WAIT_FOR_A_BRICK_PUSH_COMMAND = 1000;
 
     private final String token;

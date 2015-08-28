@@ -13,7 +13,6 @@
   "icons": { "128": "/resources/OR.png" },
   
   "permissions": [
-    "notifications",
     "http://*/*"
   ]
 }

@@ -1,12 +1,27 @@
 onload = function () {
-	var warningDialog = document.getElementById('warningDialog');
+	var warningdialog = document.getElementById("warningdialog");
+	var aboutdialog = document.getElementById("aboutdialog");
+	
+	
 	//document.getElementById('XXXX').onclick = function () {warningDialog.showModal();};
-	document.getElementById('abbrechen').onclick = function () {warningDialog.close();};
-
-	document.getElementById("fh-about-txt").innerHTML = chrome.i18n.getMessage("about");
-	var aboutDialog = document.getElementById('aboutDialog');
-	document.getElementById('about').onclick = function () {aboutDialog.showModal();};
-	document.getElementById('hide').onclick = function () {aboutDialog.close();};
+	document.getElementById('cancelwarning').onclick = function () {
+	  warningdialog.close();
+	};
+	
+	document.getElementById("abouttext").innerHTML = chrome.i18n.getMessage("dialog_about");
+	
+	document.getElementById('about').onclick = function () {
+	  //document.getElementById('dialogimage').src = "resources/warning-outline.png";
+	  aboutdialog.showModal();
+	};
+	
+		document.getElementById('closeerror').onclick = function () {
+	  errordialog.close();
+	};
+	
+	document.getElementById('closeabout').onclick = function () {
+	  aboutdialog.close();
+	};
 
 	//----------------------------------------------------------------------------
 	var EV3HOST = "10.0.1.1:80";
@@ -71,24 +86,29 @@ onload = function () {
 			}
 		}
 	};
+	
+	function closeConfirm() {
+	  // TODO confirm by user
+	  window.close();
+	}
 
 	document.getElementById("close").onclick = function () {
-		window.close();
+		closeConfirm();
 	};
 	document.getElementById("navclose").onclick = function () {
-		window.close();
+		closeConfirm();
 	};
-	document.getElementById("true beenden").onclick = function () {
-		window.close();
+	document.getElementById("discwarning").onclick = function () {
+		closeConfirm();
 	};
 
-	document.getElementById("advancedoptions").onchange = function () {
-		if (document.getElementById("advancedoptions").checked === true) {
+	document.getElementById("checkboxadvopt").onchange = function () {
+		if (document.getElementById("checkboxadvopt").checked === true) {
 			document.getElementById("alternative").style.visibility = "visible";
-			chrome.app.window.current().innerBounds.setSize(chrome.app.window.current().innerBounds.width, chrome.app.window.current().innerBounds.height + 40);
+			chrome.app.window.current().innerBounds.setSize(chrome.app.window.current().innerBounds.width, chrome.app.window.current().innerBounds.height + 50);
 		} else {
 			document.getElementById("alternative").style.visibility = "hidden";
-			chrome.app.window.current().innerBounds.setSize(chrome.app.window.current().innerBounds.width, chrome.app.window.current().innerBounds.height - 40);
+			chrome.app.window.current().innerBounds.setSize(chrome.app.window.current().innerBounds.width, chrome.app.window.current().innerBounds.height - 50);
 		}
 	};
 
@@ -99,18 +119,6 @@ onload = function () {
 			TOKEN += chars.charAt(Math.floor(Math.random() * chars.length));
 		}
 		showTextInTokenField("Token", TOKEN);
-	}
-
-	function createNotification(title, msg) {
-		var notOption = {
-			type : "basic",
-			title : title,
-			message : msg,
-			expandedMessage : msg
-		};
-		notOption.iconUrl = chrome.runtime.getURL("resources/OR.png");
-		notOption.priority = 0;
-		chrome.notifications.create("id" + notID++, notOption, null);
 	}
 
 	setInterval(function () {
@@ -146,12 +154,13 @@ onload = function () {
 				blink = !blink;
 				break;
 			case state.ABORT:
-				createNotification(chrome.i18n.getMessage("noti_error_title"), chrome.i18n.getMessage("noti_timeout_msg"));
+			  document.getElementById("errortext").innerHTML = chrome.i18n.getMessage("noti_timeout_msg");
+			  errordialog.showModal();
 				reset();
 				pushFinished = true;
 				break;
 			case state.REGISTER:
-				if (document.getElementById("advancedoptions").checked === true) {
+				if (document.getElementById("checkboxadvopt").checked === true) {
 				  var ip = document.getElementById("ip").value;
 				  var port = document.getElementById("port").value;
 				  if ( ip !== "" && port !== ""){
@@ -227,7 +236,8 @@ onload = function () {
 			}
 			if (serverreq.readyState == 4 && serverreq.status === 0) {
 				if (STATE !== state.CONNECTED) {
-					createNotification(chrome.i18n.getMessage("noti_error_title"), chrome.i18n.getMessage("noti_interneterror"));
+					document.getElementById("errortext").innerHTML = chrome.i18n.getMessage("noti_interneterror");
+			    errordialog.showModal();
 				}
 				signOutEV3();
 				reset();
@@ -325,8 +335,8 @@ onload = function () {
 			serverreq.responseType = "blob";
 			serverreq.send();
 		} else {
-			restartEV3();
-			createNotification(chrome.i18n.getMessage("noti_update_title_success"), chrome.i18n.getMessage("noti_updatesuccess"));
+		  // TODO firmware success dialog
+			//createNotification(chrome.i18n.getMessage("noti_update_title_success"), chrome.i18n.getMessage("noti_updatesuccess"));
 			setTimeout(function () {
 				reset();
 			}, 3000);

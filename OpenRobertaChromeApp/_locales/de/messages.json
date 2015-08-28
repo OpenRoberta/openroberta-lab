@@ -38,7 +38,7 @@
   "noti_interneterror": {
     "message": "Open Roberta Lab ist nicht erreichbar. Bitte überprüfe deine Internetverbindung."
   },
-  "about": {
+  "dialog_about": {
     "message": "Dieses Programm ist Teil des Open Roberta Labs, eine Open-Source-Entwicklung des Fraunhofer-Instituts IAIS, im Kontext der Initiative »Roberta Lernen mit Robotern« Version 1.3.0."
   },
   "noti_updatesuccess": {
