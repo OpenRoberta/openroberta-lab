@@ -75,12 +75,8 @@ import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
  */
 public enum BlockType {
     COLOR_SENSING( Category.SENSOR, ColorSensor.class, BlocklyConstants.ROB_SENSOR_COLOUR_GET_SAMPLE, BlocklyConstants.SIM_COLOUR_GET_SAMPLE ),
-    TOUCH_SENSING( Category.SENSOR, TouchSensor.class, BlocklyConstants.ROB_SENSOR_TOUCH_IS_PRESSED ),
-    ULTRASONIC_SENSING(
-        Category.SENSOR,
-        UltrasonicSensor.class,
-        BlocklyConstants.ROB_SENSOR_ULTRASONIC_GET_SAMPLE,
-        BlocklyConstants.SIM_ULTRASONIC_GET_SAMPLE ),
+    TOUCH_SENSING( Category.SENSOR, TouchSensor.class, BlocklyConstants.ROB_SENSOR_TOUCH_IS_PRESSED, BlocklyConstants.SIM_TOUCH_IS_PRESSED ),
+    ULTRASONIC_SENSING( Category.SENSOR, UltrasonicSensor.class, BlocklyConstants.ROB_SENSOR_ULTRASONIC_GET_SAMPLE, BlocklyConstants.SIM_ULTRASONIC_GET_SAMPLE ),
     INFRARED_SENSING( Category.SENSOR, InfraredSensor.class, BlocklyConstants.ROB_SENSOR_INFRARED_GET_SAMPLE ),
     ENCODER_SENSING( Category.SENSOR, EncoderSensor.class, BlocklyConstants.ROB_SENSOR_ENCODER_GET_SAMPLE, BlocklyConstants.ROB_SENSORS_ENCODER_RESET ),
     BRICK_SENSING( Category.SENSOR, BrickSensor.class, BlocklyConstants.ROB_SENSOR_KEY_IS_PRESSED ),
@@ -147,10 +143,16 @@ public enum BlockType {
     TONE_ACTION( Category.ACTOR, ToneAction.class, BlocklyConstants.ROB_ACTIONS_PLAY_TONE ),
     LIGHT_ACTION( Category.ACTOR, LightAction.class, BlocklyConstants.ROB_ACTIONS_BRICK_LIGHT_ON, BlocklyConstants.SIM_LED_ON ),
     CLEAR_DISPLAY_ACTION( Category.ACTOR, ClearDisplayAction.class, BlocklyConstants.ROB_ACTIONS_DISPLAY_CLEAR ),
-    MOTOR_ON_ACTION( Category.ACTOR, MotorOnAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_ON, BlocklyConstants.ROB_ACTIONS_MOTOR_ON_FOR ),
+    MOTOR_ON_ACTION(
+        Category.ACTOR,
+        MotorOnAction.class,
+        BlocklyConstants.ROB_ACTIONS_MOTOR_ON,
+        BlocklyConstants.ROB_ACTIONS_MOTOR_ON_FOR,
+        BlocklyConstants.SIM_MOTOR_ON,
+        BlocklyConstants.SIM_MOTOR_ON_FOR ),
     MOTOR_GET_POWER_ACTION( Category.ACTOR, MotorGetPowerAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_GET_POWER ),
     MOTOR_SET_POWER_ACTION( Category.ACTOR, MotorSetPowerAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_SET_POWER ),
-    MOTOR_STOP_ACTION( Category.ACTOR, MotorStopAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_STOP ),
+    MOTOR_STOP_ACTION( Category.ACTOR, MotorStopAction.class, BlocklyConstants.ROB_ACTIONS_MOTOR_STOP, BlocklyConstants.SIM_MOTOR_STOP ),
     PLAY_FILE_ACTION( Category.ACTOR, PlayFileAction.class, BlocklyConstants.ROB_ACTIONS_PLAY_FILE ),
     VOLUME_ACTION( Category.ACTOR, VolumeAction.class, BlocklyConstants.ROB_ACTIONS_PLAY_SET_VOLUME, BlocklyConstants.ROB_ACTIONS_PLAY_GET_VOLUME ),
     LIGHT_STATUS_ACTION(

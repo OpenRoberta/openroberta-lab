@@ -35,7 +35,9 @@ Blockly.Blocks['sim_getSample'] = {
                 this.sourceBlock_.updateShape_(option);
             }
         });
-        var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
+        // var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
+        var sensorPort = new Blockly.Field('1', false);
+        sensorPort.setVisible(false);       
         this.appendDummyInput('DROPDOWN').appendField(Blockly.Msg.GET, 'GET').appendField(sensorType, 'SENSORTYPE').appendField(sensorPort, 'SENSORPORT');
         this.sensorType_ = 'TOUCH';
         this.setOutput(true, 'Boolean');
@@ -84,7 +86,9 @@ Blockly.Blocks['sim_getSample'] = {
      */
     updateShape_ : function(option) {
         this.sensorType_ = option;
-        var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
+        // var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
+        var sensorPort = new Blockly.Field('1', false);
+        sensorPort.setVisible(false);      
         var sensorNum = new Blockly.FieldDropdown([ [ Blockly.Msg.SENSOR_TIMER + ' 1', '1' ], [ Blockly.Msg.SENSOR_TIMER + ' 2', '2' ],
                 [ Blockly.Msg.SENSOR_TIMER + ' 3', '3' ], [ Blockly.Msg.SENSOR_TIMER + ' 4', '4' ], [ Blockly.Msg.SENSOR_TIMER + ' 5', '5' ] ]);
         var input = this.getInput('DROPDOWN');
@@ -155,6 +159,30 @@ Blockly.Blocks['sim_getSample'] = {
     }
 };
 
+Blockly.Blocks['sim_touch_isPressed'] = {
+        /**
+         * Is the touch sensor pressed?
+         * 
+         * @constructs sim_touch_isPressed
+         * @this.Blockly.Block
+         * @param {String/dropdown}
+         *            SENSORPORT - 1, 2, 3 or 4
+         * @returns immediately
+         * @returns {Boolean}
+         * @memberof Block
+         */
+
+        init : function() {
+            this.setColourRGB(Blockly.CAT_SENSOR_RGB);
+            // var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
+            var sensorPort = new Blockly.Field('1', false);
+            sensorPort.setVisible(false);       
+            this.appendDummyInput().appendField(Blockly.Msg.SENSOR_TOUCH).appendField(sensorPort, 'SENSORPORT').appendField(Blockly.Msg.SENSOR_IS_PRESSED);
+            this.setOutput(true, 'Boolean');
+            this.setTooltip(Blockly.Msg.TOUCH_ISPRESSED_TOOLTIP);              
+        }
+    };
+
 Blockly.Blocks['sim_ultrasonic_getSample'] = {
         /**
          * Get the current distance from the ultrasonic sensor.
@@ -171,7 +199,9 @@ Blockly.Blocks['sim_ultrasonic_getSample'] = {
          */
         init : function() {
             this.setColourRGB(Blockly.CAT_SENSOR_RGB);
-            var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
+            // var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
+            var sensorPort = new Blockly.Field('4');
+            sensorPort.setVisible(false);
             var mode = new Blockly.FieldDropdown([ [ Blockly.Msg.MODE_DISTANCE, 'DISTANCE' ]], function(option) {
                 if (option && this.sourceBlock_.getFieldValue('MODE') !== option) {
                     this.sourceBlock_.updateShape_(option);
@@ -227,7 +257,9 @@ Blockly.Blocks['sim_ultrasonic_getSample'] = {
                     this.sourceBlock_.updateShape_(option);
                 }
             });
-            var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
+            // var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
+            var sensorPort = new Blockly.Field('4');
+            sensorPort.setVisible(false);
             this.appendDummyInput().appendField(Blockly.Msg.GET).appendField(mode, 'MODE').appendField(Blockly.Msg.SENSOR_COLOUR).appendField(sensorPort,
                     'SENSORPORT');
             this.setOutput(true, 'Colour');

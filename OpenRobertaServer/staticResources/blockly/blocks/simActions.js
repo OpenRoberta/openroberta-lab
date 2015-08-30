@@ -13,6 +13,92 @@ goog.require('Blockly.Blocks');
  * @lends Block
  */
 
+Blockly.Blocks['sim_motor_on'] = {
+        /**
+         * Turn motor on with specific power.
+         * 
+         * @constructs sim_motor_on
+         * @this.Blockly.Block
+         * @param {String/dropdown}
+         *            MOTORPORT - B, C
+         * @param {Number}
+         *            POWER relative - -100-100
+         * @returns immediately
+         * @memberof Block
+         */
+
+        init : function() {
+            this.setHelpUrl(Blockly.Msg.MOTOR_ON_HELPURL);
+            this.setColourRGB(Blockly.CAT_ACTION_RGB);
+            var motorPort = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR + ' ' + Blockly.Msg.MOTOR_RIGHT, 'B' ], [ Blockly.Msg.MOTOR + ' ' + Blockly.Msg.MOTOR_LEFT, 'C' ] ]);
+            this.appendValueInput('POWER').appendField(motorPort, 'MOTORPORT').appendField(Blockly.Msg.ON).appendField(Blockly.Msg.MOTOR_SPEED).setCheck('Number');
+            this.setPreviousStatement(true);
+            this.setNextStatement(true);
+            this.setTooltip(Blockly.Msg.MOTOR_ON_TOOLTIP);
+            this.setHelp(new Blockly.Help(Blockly.Msg.MOTOR_ON_HELP));
+        }
+    };
+
+    Blockly.Blocks['sim_motor_on_for'] = {
+        /**
+         * Turn motor on and stop motor after execution of rotations/degrees.
+         * 
+         * @constructs robActions_motor_on_for
+         * @this.Blockly.Block
+         * @param {String/dropdown}
+         *            MOTORPORT - A, B, C, or D
+         * @param {String/dropdown}
+         *            MOTORROTATION - Rotations or Degrees
+         * @param {Number}
+         *            POWER Speed relative - -100-100
+         * @param {Number}
+         *            VALUE Number of rotations/degrees
+         * @returns after execution
+         * @memberof Block
+         */
+        init : function() {
+            this.setHelpUrl(Blockly.Msg.MOTOR_ON_FOR_HELPURL);
+            this.setColourRGB(Blockly.CAT_ACTION_RGB);
+            // this.setInputsInline(true);
+            var motorPort = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR + ' ' + Blockly.Msg.MOTOR_RIGHT, 'B' ], [ Blockly.Msg.MOTOR + ' ' + Blockly.Msg.MOTOR_LEFT, 'C' ] ]);
+            var motorRotation = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR_ROTATION, 'ROTATIONS' ], [ Blockly.Msg.MOTOR_DEGREE, 'DEGREE' ] ]);
+            this.appendValueInput('POWER').appendField(motorPort, 'MOTORPORT').appendField(Blockly.Msg.ON).appendField(Blockly.Msg.MOTOR_SPEED).setCheck('Number');
+            this.appendValueInput('VALUE').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.FOR).appendField(motorRotation, 'MOTORROTATION')
+                    .setCheck('Number');
+            this.setPreviousStatement(true);
+            this.setNextStatement(true);
+            this.setTooltip(Blockly.Msg.MOTOR_ON_FOR_TOOLTIP);
+            this.setHelp(new Blockly.Help(Blockly.Msg.MOTOR_ON_FOR_HELP));
+        }
+    };
+    
+    Blockly.Blocks['sim_motor_stop'] = {
+            /**
+             * Stop this motor.
+             * 
+             * @constructs robActions_motor_stop
+             * @this.Blockly.Block
+             * @param {String/dropdown}
+             *            MOTORPORT - A, B, C, or D
+             * @param {String/dropdown}
+             *            MODE - Float or Non Float
+             * @returns immediately
+             * @memberof Block
+             */
+            init : function() {
+                this.setHelpUrl(Blockly.Msg.MOTOR_STOP_HELPURL);
+                this.setColourRGB(Blockly.CAT_ACTION_RGB);
+                var motorPort = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR + ' ' + Blockly.Msg.MOTOR_RIGHT, 'B' ], [ Blockly.Msg.MOTOR + ' ' + Blockly.Msg.MOTOR_LEFT, 'C' ] ]);
+                var mode = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR_FLOAT, 'FLOAT' ], [ Blockly.Msg.MOTOR_BRAKE, 'NONFLOAT' ] ]);
+                this.appendDummyInput().appendField(Blockly.Msg.MOTOR_STOP).appendField(motorPort, 'MOTORPORT').appendField('', 'MODE');
+                this.setPreviousStatement(true);
+                this.setNextStatement(true);
+                this.setTooltip(Blockly.Msg.MOTOR_STOP_TOOLTIP);
+                this.getField_('MODE').setVisible(false);
+                this.setHelp(new Blockly.Help(Blockly.Msg.MOTOR_STOP_HELP));
+            }
+        };
+
 Blockly.Blocks['sim_LED_on'] = {
     /**
      * Turn LED on.
