@@ -190,11 +190,28 @@ class Hal(object):
         self.sound.tone(frequency, duration)
 
     def playFile(self,systemSound):
-        # FIXME:
         # systemSound is a enum for preset beeps:
         # http://www.lejos.org/ev3/docs/lejos/hardware/Audio.html#systemSound-int-
-        # see also: https://mp-devel.iais.fraunhofer.de/jira/browse/ORA-605
-        pass
+        # https://sourceforge.net/p/lejos/ev3/code/ci/master/tree/ev3classes/src/lejos/remote/nxt/RemoteNXTAudio.java#l20
+        C2=523
+        if systemSound == 0:
+            self.playTone(600, 200)
+        elif systemSound == 1:
+            self.playTone(600, 150)
+            self.waitFor(200)
+            self.playTone(600, 150)
+            self.waitFor(150)
+        elif systemSound == 2: # C major arpeggio
+            for i in range(4, 7):
+                self.playTone(C2 * i / 4, 100);
+                self.waitFor(100);
+        elif systemSound == 3:
+            for i in range(7, 4, -1):
+                self.playTone(C2 * i / 4, 100);
+                self.waitFor(100);
+        elif systemSound == 4:
+            self.playTone(100, 500);
+            self.waitFor(500);
 
     def setVolume(self, volume):
         self.sound.volume = volume
