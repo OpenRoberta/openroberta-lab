@@ -228,7 +228,7 @@ public class Helper {
     public static void assertXML(String arg1, String arg2) throws Exception {
         XMLUnit.setIgnoreWhitespace(true);
         Diff diff = XMLUnit.compareXML(arg1, arg2);
-        Assert.assertTrue(diff.identical());
+        Assert.assertTrue(diff.toString(), diff.identical());
     }
 
     /**
