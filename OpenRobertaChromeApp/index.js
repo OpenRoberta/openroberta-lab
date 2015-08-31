@@ -1,31 +1,9 @@
 onload = function () {
 	var warningdialog = document.getElementById("warningdialog");
-	var aboutdialog = document.getElementById("aboutdialog");
-	
-	
-	//document.getElementById('XXXX').onclick = function () {warningDialog.showModal();};
-	document.getElementById('cancelwarning').onclick = function () {
-	  warningdialog.close();
-	};
-	
-	document.getElementById("abouttext").innerHTML = chrome.i18n.getMessage("dialog_about");
-	
-	document.getElementById('about').onclick = function () {
-	  //document.getElementById('dialogimage').src = "resources/warning-outline.png";
-	  aboutdialog.showModal();
-	};
-	
-		document.getElementById('closeerror').onclick = function () {
-	  errordialog.close();
-	};
-	
-	document.getElementById('closeabout').onclick = function () {
-	  aboutdialog.close();
-	};
+	var infodialog = document.getElementById("infodialog");
 
-	//----------------------------------------------------------------------------
 	var EV3HOST = "10.0.1.1:80";
-	// server addresses
+
 	var STANDARDHOST = "localhost:1999";
 	var CUSTOMHOST = null;
 	var ORAHOST = STANDARDHOST;
@@ -62,55 +40,82 @@ onload = function () {
 	var fileIndex = 0;
 
 	var blink = true;
-
 	var notID = 0;
+	var cancel = false;
+	
+	document.getElementById('cancelwarning').onclick = function () {
+	  warningdialog.close();
+	};
+	
+  document.getElementById("discwarning").onclick = function () {
+	  signOutEV3(true);
+	  warningdialog.close();
+	};
+	
+	document.getElementById('navabout').onclick = function () {
+	  document.getElementById('infodialogimg').src = "resources/iais_logo.gif";
+	  document.getElementById("infodialogtxt").innerHTML = chrome.i18n.getMessage("dialog_about");
+	  infodialog.showModal();
+	};
+	
+	document.getElementById('closeinfodialog').onclick = function () {
+	  infodialog.close();
+	};
+	
+	document.getElementById("close").onclick = function () {
+	  confirmDisconnect();
+	};
+	
+	document.getElementById("navclose").onclick = function () {
+    confirmDisconnect();
+	};
 
+  document.getElementById("navfiletitle").innerHTML = chrome.i18n.getMessage("nav_title_file");
+  document.getElementById("navabouttitle").innerHTML = chrome.i18n.getMessage("nav_title_about");
+  document.getElementById("navclose").innerHTML = chrome.i18n.getMessage("button_close");
+  document.getElementById("navabout").innerHTML = chrome.i18n.getMessage("button_about");
+  document.getElementById("discwarning").innerHTML = chrome.i18n.getMessage("button_close");
+  document.getElementById("cancelwarning").innerHTML = chrome.i18n.getMessage("button_cancel");
 	document.getElementById("connect").innerHTML = chrome.i18n.getMessage("button_connect");
 	document.getElementById("close").innerHTML = chrome.i18n.getMessage("button_close");
 	document.getElementById("advancedop").value = chrome.i18n.getMessage("advanced_options");
 	document.getElementById("customaddressinfo").value = chrome.i18n.getMessage("custom_server");
 
 	document.getElementById("connect").onclick = function () {
-		if (STATE != state.CONNECTED && STATE != state.REGISTER) {
+		if ( STATE == state.WAITFORUSER ) {
 			generateToken();
 			STATE = state.REGISTER;
 			document.getElementById("connect").innerHTML = chrome.i18n.getMessage("button_disconnect");
-		} else {
-			if (serverreq !== null && STATE == state.REGISTER) {
-				signOutEV3();
-				reset();
-				STATE = state.SEARCH;
-				pushFinished = true;
-			} else {
-				serverreq.abort();
-			}
+		} else if (STATE == state.CONNECTED || STATE == state.REGISTER) {
+		  signOutEV3(false);
+		  cancel = true;
+		  if (serverreq !== null) {
+		    serverreq.abort();
+		  }
+		  reset();
+		  pushFinished = true;
 		}
-	};
-	
-	function closeConfirm() {
-	  // TODO confirm by user
-	  window.close();
-	}
-
-	document.getElementById("close").onclick = function () {
-		closeConfirm();
-	};
-	document.getElementById("navclose").onclick = function () {
-		closeConfirm();
-	};
-	document.getElementById("discwarning").onclick = function () {
-		closeConfirm();
 	};
 
 	document.getElementById("checkboxadvopt").onchange = function () {
 		if (document.getElementById("checkboxadvopt").checked === true) {
 			document.getElementById("alternative").style.visibility = "visible";
-			chrome.app.window.current().innerBounds.setSize(chrome.app.window.current().innerBounds.width, chrome.app.window.current().innerBounds.height + 50);
+			chrome.app.window.current().innerBounds.setSize(chrome.app.window.current().innerBounds.width, chrome.app.window.current().innerBounds.height + 45);
 		} else {
 			document.getElementById("alternative").style.visibility = "hidden";
-			chrome.app.window.current().innerBounds.setSize(chrome.app.window.current().innerBounds.width, chrome.app.window.current().innerBounds.height - 50);
+			chrome.app.window.current().innerBounds.setSize(chrome.app.window.current().innerBounds.width, chrome.app.window.current().innerBounds.height - 45);
 		}
 	};
+	
+	function confirmDisconnect() {
+	  if (STATE == state.CONNECTED) {
+	    document.getElementById('warningimg').src = "resources/Roberta.png";
+	    document.getElementById("warningtext").innerHTML = chrome.i18n.getMessage("dialog_confirm_disconnect");
+		  warningdialog.showModal();
+	  } else {
+	    window.close();
+	  }
+	}
 
 	function generateToken() {
 		TOKEN = "";
@@ -121,9 +126,7 @@ onload = function () {
 		showTextInTokenField("Token", TOKEN);
 	}
 
-	setInterval(function () {
-		loop();
-	}, 1000);
+	setInterval(function () { loop(); }, 1000);
 
 	function loop() {
 		if (pushFinished === true) {
@@ -135,16 +138,12 @@ onload = function () {
 				checkBrickState();
 				break;
 			case state.WAITFORUSER:
-				// do nothing until user clicks connect button
-				// also used as a transition state after disconnecting the EV3
-				// user can unplug ev3 after detection!
 				checkBrickState();
 				displayInfotext(chrome.i18n.getMessage("infotext_connect"));
 				setMainPicture("connect.gif");
 				updateConnStatus("Roberta_Menu_Icon_red.png");
 				break;
 			case state.WAIT:
-				// brick is executing a program we check every few seconds if it is finished
 				checkBrickState();
 				if (blink) {
 					updateConnStatus("Roberta_Menu_Icon_red.png");
@@ -154,8 +153,10 @@ onload = function () {
 				blink = !blink;
 				break;
 			case state.ABORT:
-			  document.getElementById("errortext").innerHTML = chrome.i18n.getMessage("noti_timeout_msg");
-			  errordialog.showModal();
+			  document.getElementById('infodialogimg').src = "resources/warning-outline.png";
+	      document.getElementById("infodialogtxt").innerHTML = chrome.i18n.getMessage("dialog_timeout_msg");
+	      infodialog.showModal();
+	      chrome.app.window.current().drawAttention();
 				reset();
 				pushFinished = true;
 				break;
@@ -205,6 +206,15 @@ onload = function () {
 				ev3info = JSON.parse(brickreq.responseText);
 				pushToServer(servercmd);
 			}
+			if (brickreq.readyState == 4 && brickreq.status === 0) {
+			  if (STATE == state.CONNECTED) {
+			    document.getElementById('infodialogimg').src = "resources/warning-outline.png";
+	        document.getElementById("infodialogtxt").innerHTML = chrome.i18n.getMessage("dialog_brickerror");
+	        infodialog.showModal();
+	        reset();
+	        pushFinished = true;
+			  }
+			}
 		};
 		brickreq.open("POST", "http://" + EV3HOST + "/brickinfo", true);
 		brickreq.send(JSON.stringify(command));
@@ -235,13 +245,14 @@ onload = function () {
 				pushFinished = true;
 			}
 			if (serverreq.readyState == 4 && serverreq.status === 0) {
-				if (STATE !== state.CONNECTED) {
-					document.getElementById("errortext").innerHTML = chrome.i18n.getMessage("noti_interneterror");
-			    errordialog.showModal();
+				if (STATE == state.REGISTER && cancel === false) {
+				  document.getElementById('infodialogimg').src = "resources/warning-outline.png";
+	        document.getElementById("infodialogtxt").innerHTML = chrome.i18n.getMessage("dialog_interneterror");
+	        infodialog.showModal();
+	        chrome.app.window.current().drawAttention();
 				}
-				signOutEV3();
+				cancel = false;
 				reset();
-				STATE = state.SEARCH;
 				pushFinished = true;
 			}
 		};
@@ -306,7 +317,6 @@ onload = function () {
 			if (brickreq.readyState == 4 && brickreq.status === 0) {
 				if (STATE == state.WAITFORUSER) {
 					reset();
-					STATE = state.SEARCH;
 				}
 				pushFinished = true;
 			}
@@ -335,10 +345,10 @@ onload = function () {
 			serverreq.responseType = "blob";
 			serverreq.send();
 		} else {
-		  // TODO firmware success dialog
-			//createNotification(chrome.i18n.getMessage("noti_update_title_success"), chrome.i18n.getMessage("noti_updatesuccess"));
+		  restartEV3();
 			setTimeout(function () {
-				reset();
+			  reset();
+			  pushFinished = true;
 			}, 3000);
 		}
 	}
@@ -365,7 +375,7 @@ onload = function () {
 		brickreq.send(file);
 	}
 
-	function signOutEV3() {
+	function signOutEV3(close) {
 		var command = {};
 		command[KEY_CMD] = CMD_ABORT;
 
@@ -375,6 +385,9 @@ onload = function () {
 				var brickstate = JSON.parse(brickreq.responseText);
 				STATE = state.SEARCH;
 				pushFinished = true;
+				if (close === true) {
+		      window.close();
+				}
 			}
 		};
 		brickreq.open("POST", "http://" + EV3HOST + "/brickinfo", true);

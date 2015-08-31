@@ -174,8 +174,6 @@ public class GraphicStartup implements ORAmenu {
     //private final BroadcastThread broadcast = new BroadcastThread();
     private final RemoteMenuThread remoteMenuThread = new RemoteMenuThread();
 
-    private final ORAserver server = new ORAserver();
-
     //private GraphicMenu curMenu;
     private int timeout = 0;
     private boolean btVisibility;
@@ -188,6 +186,7 @@ public class GraphicStartup implements ORAmenu {
     private static ORAhandler oraHandler = new ORAhandler();
     public static boolean orUSBconnected = false;
     private static String OPENROBERTAHEAD = " OR Lab";
+    private static HttpServer usbconn = null;
 
     public static int selection = 0;
 
@@ -238,6 +237,9 @@ public class GraphicStartup implements ORAmenu {
 
         TuneThread tuneThread = new TuneThread();
         tuneThread.start();
+
+        USBservice usbservice = new USBservice();
+        usbservice.start();
 
         // Start the RMI registry
         InitThread initThread = new InitThread();
@@ -294,20 +296,7 @@ public class GraphicStartup implements ORAmenu {
                 System.err.println("RMI failed to start: " + e);
             }
 
-            HttpServer server = null;
-            try {
-                server = HttpServer.create(new InetSocketAddress(InetAddress.getByName("10.0.1.1"), 80), 0);
-                server.createContext("/brickinfo", new ORAbrickInfo());
-                server.createContext("/program", new ORAprogram());
-                server.createContext("/firmware", new ORAfirmware());
-                server.setExecutor(null); // creates a default executor
-                server.start();
-            } catch ( IOException e ) {
-                System.out.println("HttpServer startup failed!!");
-                e.printStackTrace();
-            }
-
-            // Broadcast availability of device
+            //Broadcast availability of device
             //Broadcast.broadcast(hostname);
 
             // Do not use in "our" menu
@@ -324,6 +313,22 @@ public class GraphicStartup implements ORAmenu {
         }
     }
 
+    static class USBservice extends Thread {
+        @Override
+        public void run() {
+            try {
+                usbconn = HttpServer.create(new InetSocketAddress(InetAddress.getByName("10.0.1.1"), 80), 0);
+                usbconn.createContext("/brickinfo", new ORAbrickInfo());
+                usbconn.createContext("/program", new ORAprogram());
+                usbconn.createContext("/firmware", new ORAfirmware());
+                usbconn.setExecutor(null); // creates a default executor
+                usbconn.start();
+            } catch ( IOException e ) {
+                System.out.println("HttpServer startup failed!!");
+            }
+        }
+    }
+
     /**
      * Start the background threads
      */
@@ -333,7 +338,6 @@ public class GraphicStartup implements ORAmenu {
         //this.pipeReader.start();
         //this.broadcast.start();
         this.remoteMenuThread.start();
-        this.server.start();
     }
 
     /**
