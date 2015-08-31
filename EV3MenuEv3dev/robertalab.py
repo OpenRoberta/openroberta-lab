@@ -96,6 +96,8 @@ def main():
             cmd = reply['cmd']
             if cmd == 'repeat':
                 hal.drawText('registered', 0, 2)
+                if not registered: 
+                    hal.playFile(2);
                 registered = True
             elif cmd == 'abort':
                 break
