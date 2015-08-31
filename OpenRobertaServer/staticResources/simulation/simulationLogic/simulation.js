@@ -58,6 +58,7 @@ var SIM = (function() {
         return currentBackground;
     }
     var time;
+   
     var dt = 0;
     function getDt() {
         return dt;
@@ -98,6 +99,7 @@ var SIM = (function() {
     function stopProgram() {
         setPause(true);
         robot.reset();
+        tim()
         scene.updateBackgrounds();
         reloadProgram();
     }

@@ -20,8 +20,11 @@ function Robot(pose) {
         this.pose.xOld = initialPose.x;
         this.pose.yOld = initialPose.y;
         this.pose.thetaOld = initialPose.theta;
+        this.encoder.left = 0;
+        this.encoder.right = 0;
         this.led.color = '#dddddd';
         this.led.mode = OFF;
+        this.time = 0;
     }
 };
 Robot.prototype.geom = {

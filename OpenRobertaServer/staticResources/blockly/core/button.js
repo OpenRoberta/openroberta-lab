@@ -24,13 +24,6 @@ Blockly.Button = function(workspace) {
  * @type {number}
  * @private
  */
-Blockly.Button.prototype.tooltip = "Beate";
-/**
- * Width and height of the background.
- * 
- * @type {number}
- * @private
- */
 Blockly.Button.prototype.SIZE_ = 48;
 
 /**
@@ -71,7 +64,7 @@ Blockly.Button.prototype.IMG_PATH_ = null;
  * @type {number}
  * @private
  */
-Blockly.Button.prototype.OUTER_MARGIN_ = 30;
+Blockly.Button.prototype.OUTER_MARGIN_ = 20;
 
 /**
  * Distance between buttons of workspace.
@@ -211,17 +204,18 @@ Blockly.Button.prototype.position_ = function() {
         return;
     }
     if (this.POSITION == 1) {
-        this.left_ = metrics.viewWidth + metrics.absoluteLeft - (this.SIZE_ * 2) - this.OUTER_MARGIN_ - this.INNER_MARGIN_;
-        this.top_ = metrics.viewHeight + metrics.absoluteTop - (this.SIZE_ * 2) - this.OUTER_MARGIN_ - this.INNER_MARGIN_;
+        this.left_ = metrics.absoluteLeft + this.OUTER_MARGIN_ + this.SIZE_ + this.INNER_MARGIN_;
+        this.top_ = metrics.viewHeight + metrics.absoluteTop - (2 * this.SIZE_ + this.INNER_MARGIN_) - this.OUTER_MARGIN_;
     } else if (this.POSITION == 2) {
-        this.left_ = metrics.viewWidth + metrics.absoluteLeft - (this.SIZE_) - this.OUTER_MARGIN_;
-        this.top_ = metrics.viewHeight + metrics.absoluteTop - (this.SIZE_ * 2) - this.OUTER_MARGIN_ - this.INNER_MARGIN_;
+        this.left_ = metrics.absoluteLeft + this.OUTER_MARGIN_;
+        this.top_ = metrics.viewHeight + metrics.absoluteTop - this.SIZE_ - this.OUTER_MARGIN_;
     } else if (this.POSITION == 3) {
-        this.left_ = metrics.viewWidth + metrics.absoluteLeft - (this.SIZE_ * 2) - this.OUTER_MARGIN_ - this.INNER_MARGIN_;
-        this.top_ = metrics.viewHeight + metrics.absoluteTop - (this.SIZE_) - this.OUTER_MARGIN_;
-    } else if (this.POSITION == 4) {
-        this.left_ = metrics.viewWidth + metrics.absoluteLeft - (this.SIZE_) - this.OUTER_MARGIN_;
-        this.top_ = metrics.viewHeight + metrics.absoluteTop - (this.SIZE_) - this.OUTER_MARGIN_;
+        this.left_ = metrics.absoluteLeft + this.OUTER_MARGIN_ + this.SIZE_ + this.INNER_MARGIN_;
+        this.top_ = metrics.viewHeight + metrics.absoluteTop - this.SIZE_ - this.OUTER_MARGIN_;  
+//    } else if (this.POSITION == 4) {
+//        this.left_ = metrics.absoluteLeft + this.OUTER_MARGIN_ + 2*this.SIZE_ + 2*this.INNER_MARGIN_;
+//        this.top_ = metrics.viewHeight + metrics.absoluteTop - (2 * this.SIZE_ + this.INNER_MARGIN_) - this.OUTER_MARGIN_;
+//   
     } else {
         return;
     }

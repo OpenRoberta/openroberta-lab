@@ -84,6 +84,9 @@ Scene.prototype.drawRobot = function() {
         this.rCtx.fillText("FPS", endLabel, line);
         this.rCtx.fillText(Math.round(1 / SIM.getDt()), endValue, line);
         line += 15;
+        this.rCtx.fillText("Time", endLabel, line);
+        this.rCtx.fillText(Math.round(this.robot.time * 10) / 10, endValue, line);
+        line += 15;
         this.rCtx.fillText("Robot X", endLabel, line);
         this.rCtx.fillText(Math.round(this.robot.pose.x), endValue, line);
         line += 15;

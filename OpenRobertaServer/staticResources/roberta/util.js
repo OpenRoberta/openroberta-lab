@@ -171,6 +171,7 @@ var UTIL = {};
             if ($(window).width() < 768) {
                 if (Blockly.getMainWorkspace()) {
                     Blockly.getMainWorkspace().trashcan.moveToEdge();
+                    Blockly.getMainWorkspace().startButton.moveToEdge();
                 }
                 if (document.getElementById('bricklyFrame').contentWindow.Blockly
                         && document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace()) {
@@ -180,6 +181,7 @@ var UTIL = {};
                 if (document.getElementById('bricklyFrame').contentWindow.Blockly
                         && document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace()) {
                     Blockly.getMainWorkspace().trashcan.moveOutEdge();
+                    Blockly.getMainWorkspace().startButton.moveOutEdge();
                     document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().trashcan.moveOutEdge();
                 }
             }

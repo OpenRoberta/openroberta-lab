@@ -93,8 +93,8 @@ Blockly.Trashcan.prototype.LID_HEIGHT_ = 7;
  * @type {number}
  * @private
  */
-Blockly.Trashcan.prototype.MARGIN_BOTTOM_ = 60;
-Blockly.Trashcan.MARGIN_BOTTOM_INITIAL_ = 60;
+Blockly.Trashcan.prototype.MARGIN_BOTTOM_ = 80;
+Blockly.Trashcan.MARGIN_BOTTOM_INITIAL_ = 80;
 
 /**
  * Distance between trashcan and top edge of workspace.
@@ -102,8 +102,8 @@ Blockly.Trashcan.MARGIN_BOTTOM_INITIAL_ = 60;
  * @type {number}
  * @private
  */
-Blockly.Trashcan.prototype.MARGIN_TOP_ = -50;
-Blockly.Trashcan.MARGIN_TOP_INITIAL_ = -50;
+Blockly.Trashcan.prototype.MARGIN_TOP_ = -20;
+Blockly.Trashcan.MARGIN_TOP_INITIAL_ = -20;
 
 /**
  * Distance between trashcan and right edge of workspace.
@@ -111,8 +111,8 @@ Blockly.Trashcan.MARGIN_TOP_INITIAL_ = -50;
  * @type {number}
  * @private
  */
-Blockly.Trashcan.prototype.MARGIN_SIDE_ = 230;
-Blockly.Trashcan.MARGIN_SIDE_INITIAL_ = 230;
+Blockly.Trashcan.prototype.MARGIN_SIDE_ = 178;
+Blockly.Trashcan.MARGIN_SIDE_INITIAL_ = 178;
 
 /**
  * Extent of hotspot on all sides beyond the size of the image.
@@ -238,7 +238,7 @@ Blockly.Trashcan.prototype.dispose = function() {
 };
 
 /**
- * Move the trash can to the bottom-right corner.
+ * Move the trash can to the bottom-left corner.
  * 
  * @private
  */
@@ -309,7 +309,7 @@ Blockly.Trashcan.prototype.setOpen_ = function(state) {
 Blockly.Trashcan.prototype.animateLid_ = function() {
     this.lidAngle_ += this.isOpen ? 10 : -10;
     this.lidAngle_ = Math.max(0, this.lidAngle_);
-    this.svgLid_.setAttribute('transform', 'rotate(' + (Blockly.RTL ? -this.lidAngle_ : this.lidAngle_) + ', ' + (Blockly.RTL ? 4 : 49) + ', ' + (18) + ')');
+    this.svgLid_.setAttribute('transform', 'rotate(' + (Blockly.RTL ? this.lidAngle_ : -this.lidAngle_) + ', ' + (Blockly.RTL ? 49 : 4) + ', ' + (18) + ')');
     if (this.isOpen ? (this.lidAngle_ < 45) : (this.lidAngle_ > 0)) {
         this.lidTask_ = goog.Timer.callOnce(this.animateLid_, 5, this);
     }
@@ -326,12 +326,12 @@ Blockly.Trashcan.prototype.close = function() {
  * Flip the lid shut. Called externally after a drag.
  */
 Blockly.Trashcan.prototype.moveToEdge = function() {
-    this.MARGIN_TOP_ = Blockly.Trashcan.MARGIN_TOP_INITIAL_ - 50;
-    this.MARGIN_SIDE_ = Blockly.Trashcan.MARGIN_SIDE_INITIAL_ - 50;
+    this.MARGIN_BOTTOM_ = Blockly.Trashcan.MARGIN_BOTTOM_INITIAL_ - 50;
+    this.MARGIN_SIDE_ = Blockly.Trashcan.MARGIN_SIDE_INITIAL_;
     this.position_();
 };
 Blockly.Trashcan.prototype.moveOutEdge = function() {
-    this.MARGIN_TOP_ = Blockly.Trashcan.MARGIN_TOP_INITIAL_;
+    this.MARGIN_BOTTOM_ = Blockly.Trashcan.MARGIN_BOTTOM_INITIAL_;
     this.MARGIN_SIDE_ = Blockly.Trashcan.MARGIN_SIDE_INITIAL_;
     this.position_();
 };

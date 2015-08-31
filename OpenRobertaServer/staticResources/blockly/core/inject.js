@@ -460,8 +460,8 @@ Blockly.init_ = function() {
 
     Blockly.mainWorkspace.addTrashcan();
     Blockly.mainWorkspace.addStartButton();
-    Blockly.mainWorkspace.addCheckButton();
     Blockly.mainWorkspace.addSaveButton();
+    Blockly.mainWorkspace.addCheckButton();
     Blockly.mainWorkspace.addCodeButton();
 
     // Load the sounds.

@@ -138,6 +138,16 @@ public class ClientProgram {
                     response.put("data", program.getProgramText());
                 }
                 Util.addResultInfo(response, pp);
+            } else if ( cmd.equals("loadP") && request.getString("owner").equals("Roberta") ) {
+                String programName = request.getString("name");
+                String ownerName = request.getString("owner");
+                User owner = up.getUser(ownerName);
+                int ownerID = owner.getId();
+                Program program = pp.getProgram(programName, ownerID, robotId);
+                if ( program != null ) {
+                    response.put("data", program.getProgramText());
+                }
+                Util.addResultInfo(response, pp);
             } else if ( cmd.equals("checkP") ) {
                 String programText = request.optString("programText");
                 String configurationText = request.optString("configurationText");

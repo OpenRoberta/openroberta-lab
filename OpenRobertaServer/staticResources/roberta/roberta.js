@@ -210,9 +210,6 @@ function injectBlockly(toolbox, opt_programBlocks, opt_readOnly) {
                 check : true,
                 start : true
             });
-            if (userState.robot === 'oraSim') {
-                $('.button1').css("display", "none");
-            }
         } else {
             $('#blocklyDiv').html('');
             Blockly.inject(document.getElementById('blocklyDiv'), {
@@ -237,7 +234,6 @@ function injectBlockly(toolbox, opt_programBlocks, opt_readOnly) {
 
 function initProgramEnvironment(opt_programBlocks) {
     Blockly.getMainWorkspace().clear();
-    // TODO load this from database
     var x, y;
     if ($(window).width() < 768) {
         x = 25;
@@ -251,6 +247,9 @@ function initProgramEnvironment(opt_programBlocks) {
     var program = opt_programBlocks || text;
     var xml = Blockly.Xml.textToDom(program);
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+    if (userState.robot === 'oraSim') {
+        Blockly.getMainWorkspace().codeButton.disable();
+    }
     Blockly.fireUiEvent(window, 'resize');
 }
 
@@ -482,7 +481,6 @@ function startProgram() {
     var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
     var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
     var xmlTextConfiguration = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
-    displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
     Blockly.getMainWorkspace().startButton.disable();
     PROGRAM.runOnBrick(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
         //PROGRAM.showJavaProgram(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
@@ -514,7 +512,9 @@ function startProgram() {
                     injectBlockly(result, userState.programBlocks, true);
                 });
                 $(".sim").removeClass('hide');
-            } 
+            }else{
+                displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);                
+            }          
         } else {
             Blockly.getMainWorkspace().startButton.enable();
             displayInformation(result, "", result.message, "");
@@ -1147,7 +1147,7 @@ function switchRobot(robot) {
                 $('#menuConnect').parent().removeClass('disabled');
                 $('#iconDisplayRobotState').removeClass('typcn-Roberta');
                 $('#iconDisplayRobotState').addClass('typcn-ev3');
-                $('.button1').css("display", "block");
+                Blockly.getMainWorkspace().codeButton.enable();
             } else if (robot === "oraSim") {
                 userState.robotName = "ORSim";
                 $('#blocklyDiv').addClass('simBackground');
@@ -1156,7 +1156,12 @@ function switchRobot(robot) {
                 $('#menuConnect').parent().addClass('disabled');
                 $('#iconDisplayRobotState').removeClass('typcn-ev3');
                 $('#iconDisplayRobotState').addClass('typcn-Roberta');
-                $('.button1').css("display", "none");
+                Blockly.getMainWorkspace().codeButton.disable();
+                PROGRAM.loadProgramFromListing('NEPOprog', 'Roberta', function(result) {
+                    if (result.rc === 'ok') {
+                        showProgram(result, true, programName);
+                    }
+                });
             }
             loadToolbox(userState.toolbox);
         }
