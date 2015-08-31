@@ -22,6 +22,8 @@
 
 dialog {
 	border: 0;
+	padding: 5px;
+  box-shadow: 3px 3px 5px 3px #A4A4A4;
 }
 
 .tk {
@@ -70,13 +72,13 @@ body {
 }
 
 .navbar a {
-text-decoration: none;
-display: block;
-border: 1px solid #000000;
-text-align: center;
-background:  #FFFFFF;
-color: #003366;
-padding:  2px;
+  text-decoration: none;
+  display: block;
+  border: 1px solid #000000;
+  text-align: center;
+  background:  #FFFFFF;
+  color: #003366;
+  padding:  2px;
 }
 
 .navbar a:hover {
@@ -99,24 +101,19 @@ padding:  2px;
   	height:1px;
 }
 
-dialog {
-  padding: 5px;
-  box-shadow: 3px 3px 5px 3px #A4A4A4;
-}
-
 #checkboxadvopt {
-  margin-top: 3px;
+  margin-top: 2px;
 }
 
 button {
-    background-color: #afca04;
-    color:  #FFFFFF;
-    font-size: 17px;
-    font-weight: normal;
-    margin: 0;
-    padding: 6px 10px 3px 10px;
-    border-radius: 2px;
-    border: 1px solid #afca04;
+  background-color: #afca04;
+  color:  #FFFFFF;
+  font-size: 17px;
+  font-weight: normal;
+  margin: 0;
+  padding: 6px 10px 3px 10px;
+  border-radius: 2px;
+  border: 1px solid #afca04;
 }
 
 button:disabled {
@@ -124,11 +121,11 @@ button:disabled {
 }
 
 p, textarea, input, .btn, .menu, .desc {
-    font-family: sans-serif;  
-    margin: 0;
+  font-family: sans-serif;  
+  margin: 0;
 }
 
-.desc, .advancedop, .altdesc {
+input, textarea, .desc, .adv, .altdesc {
   font-size: 12px;
 }
 
@@ -138,10 +135,11 @@ textarea, input {
 
 .btn {
   margin-right: 16px;
+  cursor: pointer;
 }
 
 .maintitle {
-    justify-content: flex-start;
+  justify-content: flex-start;
 }
 
 .robstatus {
@@ -155,7 +153,7 @@ textarea, input {
   resize:none;
 }
 
-.altdesc {
+.altdesc, .adv {
   padding: 0px;
   width: 100%;
 }
@@ -187,11 +185,11 @@ textarea, input {
 }
 
 .row {
-    width: 100%;
-    display: flex;
-    flex-flow: row wrap;
-    padding-left: 10px;
-    padding-right: 10px;
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .navrow {

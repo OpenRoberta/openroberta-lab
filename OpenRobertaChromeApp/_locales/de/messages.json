@@ -3,7 +3,7 @@
     "message": "Open Roberta"
 	},
   "application_description": {
-    "message": "Diese Anwendung verbindet deinen EV3 Roboter über USB mit Open Roberta Lab."
+    "message": "Diese Anwendung verbindet deinen EV3 Roboter mit Open Roberta Lab über USB."
   },
   "button_connect": {
     "message": "verbinde"
@@ -13,6 +13,18 @@
   },
   "button_close": {
     "message": "beenden"
+  },
+  "button_about": {
+    "message": "über"
+  },
+  "button_cancel": {
+    "message": "abbrechen"
+  },
+  "nav_title_file": {
+    "message": "Datei"
+  },
+  "nav_title_about": {
+    "message": "Info"
   },
   "advanced_options": {
     "message": "Zeige erweiterte Optionen"
@@ -35,28 +47,19 @@
   "attention": {
     "message": "Achtung"
   },
-  "noti_interneterror": {
+  "dialog_brickerror": {
+    "message": "Die Verbindung zu deinem Roboter wurde unterbrochen."
+  },
+  "dialog_interneterror": {
     "message": "Open Roberta Lab ist nicht erreichbar. Bitte überprüfe deine Internetverbindung."
   },
   "dialog_about": {
     "message": "Dieses Programm ist Teil des Open Roberta Labs, eine Open-Source-Entwicklung des Fraunhofer-Instituts IAIS, im Kontext der Initiative »Roberta Lernen mit Robotern« Version 1.3.0."
   },
-  "noti_updatesuccess": {
-    "message": "Dein EV3 wird nun automatisch neugestartet. Danach kannst du deinen Roboter wieder mit Open Roberta Lab verbinden."
-  },
-  "noti_updatefail": {
-    "message": "Du kannst es noch mal versuchen."
-  },
-  "noti_timeout_msg": {
+  "dialog_timeout_msg": {
     "message": "Die Gültigkeitsdauer des Token ist abgelaufen. Versuche es noch mal."
   },
-  "noti_error_title": {
-    "message": "Open Roberta Fehler"
-  },
-  "noti_update_title_success": {
-    "message": "Update erfolgreich!"
-  },
-  "noti_update_title_fail": {
-    "message": "Update fehlgeschlagen!"
+  "dialog_confirm_disconnect": {
+    "message": "Wenn du das Programm beendest, ist dein Roboter nicht mehr mit Open Roberta Lab verbunden."
   }
 }

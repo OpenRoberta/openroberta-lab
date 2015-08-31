@@ -14,6 +14,18 @@
   "button_close": {
     "message": "Close"
   },
+  "button_about": {
+    "message": "about"
+  },
+  "button_cancel": {
+    "message": "cancel"
+  },
+  "nav_title_file": {
+    "message": "File"
+  },
+  "nav_title_about": {
+    "message": "Info"
+  },
   "advanced_options": {
     "message": "Show advanced options"
   },
@@ -30,33 +42,24 @@
     "message": "Type in the token under robots>connect in the Open Roberta Lab, by using »copy« and »paste«."
   },
   "infotext_runprogram": {
-    "message": "You are able to run your programs on the EV3 now. Do not forget to plug in the cable again, after your program execution has finished."
+    "message": "Now, you can run your programs on the EV3. Do not forget to plug in the cable again, after your program execution has finished."
   },
   "attention": {
     "message": "Attention"
   },
-  "noti_interneterror": {
+  "dialog_brickerror": {
+    "message": "The connection to your robot has been interrupted."
+  },
+  "dialog_interneterror": {
     "message": "Open Roberta Lab is unreachable. Please check your internet connection."
   },
   "dialog_about": {
-    "message": "This program is part of The Open Roberta Lab, an open-source programming platform developed by Fraunhofer IAIS within the initiative »Roberta Learning with Robots« Version 1.2.0"
+    "message": "This program is part of the Open Roberta Lab, an open-source programming platform developed by Fraunhofer IAIS within the initiative »Roberta Learning with Robots« version 1.3.0"
   },
-  "noti_updatesuccess": {
-    "message": "Your EV3 will restart automatically. After that, you can connect your robot to Open Roberta Lab again."
-  },
-  "noti_updatefail": {
-    "message": "You can try again."
-  },
-  "noti_timeout_msg": {
+  "dialog_timeout_msg": {
     "message": "The token is expired. Try again."
   },
-  "noti_error_title": {
-    "message": "Open Roberta Error"
-  },
-  "noti_update_title_success": {
-    "message": "Update successful!"
-  },
-  "noti_update_title_fail": {
-    "message": "Update failed!"
+  "dialog_confirm_disconnect": {
+    "message": "If you close the program, your robot is no longer connected to Open Roberta Lab."
   }
 }

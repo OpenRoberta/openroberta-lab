@@ -7,7 +7,7 @@ import time
 
 class BlocklyMethods:
     GOLDEN_RATIO = (1 + math.sqrt(5)) / 2
-    
+
     @staticmethod
     def isEven(number):
         return (number % 2) == 0
@@ -72,28 +72,29 @@ class Hal(object):
         self.key = ev3dev.button
         self.sound = ev3dev.sound
         (self.font_w, self.font_h)=self.lcd.draw.textsize('X', font=self.font_s)
+        self.timers = {}
 
     @staticmethod
     def makeLargeMotor(port, regulated, direction, side):
-      m = ev3dev.large_motor(port)
-      m.speed_regulation_enabled = regulated
-      if direction is 'backward':
-        m.polarity = 'inversed'
-      else:
-        m.polarity = 'normal'
-      m.cfg_side = side
-      return m
+        m = ev3dev.large_motor(port)
+        m.speed_regulation_enabled = regulated
+        if direction is 'backward':
+            m.polarity = 'inversed'
+        else:
+            m.polarity = 'normal'
+        m.cfg_side = side
+        return m
 
     @staticmethod
     def makeMediumMotor(port, regulated, direction, side):
-      m = ev3dev.medium_motor(port)
-      m.speed_regulation_enabled = regulated
-      if direction is 'backward':
-        m.polarity = 'inversed'
-      else:
-        m.polarity = 'normal'
-      m.cfg_side = side
-      return m
+        m = ev3dev.medium_motor(port)
+        m.speed_regulation_enabled = regulated
+        if direction is 'backward':
+            m.polarity = 'inversed'
+        else:
+            m.polarity = 'normal'
+        m.cfg_side = side
+        return m
 
     # control
     def waitFor(self, ms):
@@ -105,6 +106,11 @@ class Hal(object):
         self.lcd.draw.text((x*self.font_w, y*self.font_h), msg, font=font)
         self.lcd.update()
 
+    def drawPicture(picture,x,y):
+        # FIXME:
+        # picture = 'oldglasses', 'eyesopen', 'eyesclosed'. 'flowers', 'tacho'
+        pass
+
     def clearDisplay(self):
         self.lcd.clear()
 
@@ -113,16 +119,16 @@ class Hal(object):
         # color: green, red, orange - LED.COLOR.{RED,GREEN,AMBER}
         # mode: on, flash, double_flash
         if mode is 'on':
-            if color is 'green': 
+            if color is 'green':
                 self.led.green_on()
             elif color is 'red':
                 self.led.red_on()
             elif color in 'amber':
                 self.led.amber_on()
-            # TODO: we also have orange_on(), yellow_on() and 
+            # TODO: we also have orange_on(), yellow_on() and
             #                    mix_colors(float red, float green)
         elif mode in ['flash', 'double_flash']:
-            if color in ['green', 'orange']: 
+            if color in ['green', 'orange']:
                 self.led.left_green.flash(500,500)
                 self.led.right_green.flash(500,500)
                 self.WaitFor(1000)
@@ -132,28 +138,28 @@ class Hal(object):
                 self.led.right_red.flash(500,500)
                 self.WaitFor(2000)
                 self.ledOff()
-    
+
     def ledOff(self):
         self.led.all_off()
-    
+
     def resetLED(self):
         self.lefOff();
 
     # key
     def isKeyPressed(self, key):
         if key in ['any', '*']:
-          return self.key.process_all()
+            return self.key.process_all()
         else:
-          # remap some keys
-          keys = {
-            'escape':  'back',
-            'backspace': 'back',
-          }
-          if key in keys:
-            key = keys[key]
-          # throws attribute error on wrong keys
-          return getattr(self.key, key).process()
-    
+            # remap some keys
+            keys = {
+              'escape':  'back',
+              'backspace': 'back',
+            }
+            if key in keys:
+                key = keys[key]
+            # throws attribute error on wrong keys
+            return getattr(self.key, key).process()
+
     def isKeyPressedAndReleased(self, key):
         return False
 
@@ -161,6 +167,13 @@ class Hal(object):
     def playTone(self, frequency, duration):
         frequency = frequency if frequency >= 100 else 0
         self.sound.tone(frequency, duration)
+
+    def playFile(systemSound):
+        # FIXME:
+        # systemSound is a enum for preset beeps:
+        # http://www.lejos.org/ev3/docs/lejos/hardware/Audio.html#systemSound-int-
+        # see also: https://mp-devel.iais.fraunhofer.de/jira/browse/ORA-605
+        pass
 
     def setVolume(self, volume):
         self.sound.volume = volume
@@ -171,163 +184,198 @@ class Hal(object):
     # actors
     # http://www.ev3dev.org/docs/drivers/tacho-motor-class/
     def rotateRegulatedMotor(self, port, speed_pct, mode, value):
-      # mode: degree, rotations, distance
-      m = self.cfg['actors'][port] 
-      if mode is 'degree':
-        m.run_to_rel_pos(speed_regulation_enabled='on', position_sp=value, speed_sp=speed_pct)
-      elif mode is 'rotations':
-        value *= m.count_per_rot
-        m.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(value), speed_sp=speed_pct)
-    
-    def rotateUnregulatedMotor(self, port, speed_pct, mode, value):    
-      m = self.cfg['actors'][port];
-      if mode is 'rotations':
-        value *= m.count_per_rot
-      if speed_pct >= 0:
-        value = m.position + value
-        m.run_forever(speed_regulation_enabled='off', duty_cycle_sp=speed_pct)
-        while (m.position < value):
-          pass
-      else:
-        value = m.position - value
-        m.run_forever(speed_regulation_enabled='off', duty_cycle_sp=speed_pct)
-        while (m.position > value):
-          pass
-      m.stop()
-    
+        # mode: degree, rotations, distance
+        m = self.cfg['actors'][port]
+        if mode is 'degree':
+            m.run_to_rel_pos(speed_regulation_enabled='on', position_sp=value, speed_sp=speed_pct)
+        elif mode is 'rotations':
+            value *= m.count_per_rot
+            m.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(value), speed_sp=speed_pct)
+
+    def rotateUnregulatedMotor(self, port, speed_pct, mode, value):
+        m = self.cfg['actors'][port];
+        if mode is 'rotations':
+            value *= m.count_per_rot
+        if speed_pct >= 0:
+            value = m.position + value
+            m.run_forever(speed_regulation_enabled='off', duty_cycle_sp=speed_pct)
+            while (m.position < value):
+                pass
+        else:
+            value = m.position - value
+            m.run_forever(speed_regulation_enabled='off', duty_cycle_sp=speed_pct)
+            while (m.position > value):
+                pass
+        m.stop()
+
     def turnOnRegulatedMotor(self, port, value):
-      self.cfg['actors'][port].run_forever(speed_regulation_enabled='on', speed_sp=value)
-    
+        self.cfg['actors'][port].run_forever(speed_regulation_enabled='on', speed_sp=value)
+
     def turnOnUnregulatedMotor(self, port, value):
-      self.cfg['actors'][port].run_forever(speed_regulation_enabled='off', duty_cycle_sp=value)
-    
+        self.cfg['actors'][port].run_forever(speed_regulation_enabled='off', duty_cycle_sp=value)
+
     def setRegulatedMotorSpeed(self, port, power):
-      self.cfg['actors'][port].speed_sp = power
-    
+        self.cfg['actors'][port].speed_sp = power
+
     def setUnregulatedMotorSpeed(self, port, power):
-      self.cfg['actors'][port].duty_cycle_sp = power
-    
+        self.cfg['actors'][port].duty_cycle_sp = power
+
     def getRegulatedMotorSpeed(self, port):
-      return self.cfg['actors'][port].speed
-    
+        return self.cfg['actors'][port].speed
+
     def getUnregulatedMotorSpeed(self, port):
-      return self.cfg['actors'][port].duty_cycle
-    
+        return self.cfg['actors'][port].duty_cycle
+
     def stopMotor(self, port, mode='float'):
-      # mode: float, nonfloat
-      # stop_commands: ['brake', 'coast', 'hold']
-      m = self.cfg['actors'][port];
-      if mode is 'float':
-        m.stop_command='coast'
-      elif mode is 'nonfloat':
-        m.stop_command='brake'
-      self.cfg['actors'][port].stop()
-    
+        # mode: float, nonfloat
+        # stop_commands: ['brake', 'coast', 'hold']
+        m = self.cfg['actors'][port];
+        if mode is 'float':
+            m.stop_command='coast'
+        elif mode is 'nonfloat':
+            m.stop_command='brake'
+        self.cfg['actors'][port].stop()
+
     def stopMotors(self, left_port, right_port):
-      self.stopMotor(left_port)
-      self.stopMotor(right_port)
-    
+        self.stopMotor(left_port)
+        self.stopMotor(right_port)
+
     def regulatedDrive(self, left_port, right_port, reverse, direction, speed_pct):
-      # direction: forward, backward
-      # reverse: always false for now
-      if direction is 'backward':
-        speed_pct = -speed_pct
-      self.cfg['actors'][left_port].run_forever(speed_regulation_enabled='on', speed_sp=speed_pct)
-      self.cfg['actors'][righ_port].run_forever(speed_regulation_enabled='on', speed_sp=speed_pct)
+        # direction: forward, backward
+        # reverse: always false for now
+        if direction is 'backward':
+            speed_pct = -speed_pct
+        self.cfg['actors'][left_port].run_forever(speed_regulation_enabled='on', speed_sp=speed_pct)
+        self.cfg['actors'][righ_port].run_forever(speed_regulation_enabled='on', speed_sp=speed_pct)
 
     def driveDistance(self, left_port, right_port, reverse, direction, speed_pct, distance):
-      # direction: forward, backward
-      # reverse: always false for now
-      ml = self.cfg['actors'][left_port];
-      mr = self.cfg['actors'][right_port];
-      circ = math.pi * self.cfg['wheel-diameter']
-      dc = distance / circ
-      if direction is 'backward':
-        dc = -dc
-      ml.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(dc * ml.count_per_rot), speed_sp=speed_pct)
-      mr.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(dc * mr.count_per_rot), speed_sp=speed_pct)
-    
-    def rotateDirectionRegulated(self, left_port, right_port, reverse, direction, speed_pct):
-      # direction: left, right
-      # reverse: always false for now
-      if direction is 'left':
-        self.cfg['actors'][right_port].run_forever(speed_regulation_enabled='on', speed_sp=speed_pct)
-        self.cfg['actors'][left_port].run_forever(speed_regulation_enabled='on', speed_sp=-speed_pct)
-      else:
-        self.cfg['actors'][left_port].run_forever(speed_regulation_enabled='on', speed_sp=speed_pct)
-        self.cfg['actors'][right_port].run_forever(speed_regulation_enabled='on', speed_sp=-speed_pct)
-    
-    def rotateDirectionAngle(self, left_port, right_port, reverse, direction, speed_pct, angle):
-      # direction: left, right
-      # reverse: always false for now
-      ml = self.cfg['actors'][left_port];
-      mr = self.cfg['actors'][right_port];
-      circ = math.pi * self.cfg['track-width']
-      distance = angle * circ / 360.0
-      circ = math.pi * self.cfg['wheel-diameter']
-      dc = distance / circ
-      print "doing %lf rotations" % dc
-      if direction is 'left':
-        mr.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(dc * mr.count_per_rot), speed_sp=speed_pct)
-        ml.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(-dc * ml.count_per_rot), speed_sp=speed_pct)
-      else:
+        # direction: forward, backward
+        # reverse: always false for now
+        ml = self.cfg['actors'][left_port];
+        mr = self.cfg['actors'][right_port];
+        circ = math.pi * self.cfg['wheel-diameter']
+        dc = distance / circ
+        if direction is 'backward':
+            dc = -dc
         ml.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(dc * ml.count_per_rot), speed_sp=speed_pct)
-        mr.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(-dc * mr.count_per_rot), speed_sp=speed_pct)
-    
+        mr.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(dc * mr.count_per_rot), speed_sp=speed_pct)
+
+    def rotateDirectionRegulated(self, left_port, right_port, reverse, direction, speed_pct):
+        # direction: left, right
+        # reverse: always false for now
+        if direction is 'left':
+            self.cfg['actors'][right_port].run_forever(speed_regulation_enabled='on', speed_sp=speed_pct)
+            self.cfg['actors'][left_port].run_forever(speed_regulation_enabled='on', speed_sp=-speed_pct)
+        else:
+            self.cfg['actors'][left_port].run_forever(speed_regulation_enabled='on', speed_sp=speed_pct)
+            self.cfg['actors'][right_port].run_forever(speed_regulation_enabled='on', speed_sp=-speed_pct)
+
+    def rotateDirectionAngle(self, left_port, right_port, reverse, direction, speed_pct, angle):
+        # direction: left, right
+        # reverse: always false for now
+        ml = self.cfg['actors'][left_port];
+        mr = self.cfg['actors'][right_port];
+        circ = math.pi * self.cfg['track-width']
+        distance = angle * circ / 360.0
+        circ = math.pi * self.cfg['wheel-diameter']
+        dc = distance / circ
+        print "doing %lf rotations" % dc
+        if direction is 'left':
+            mr.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(dc * mr.count_per_rot), speed_sp=speed_pct)
+            ml.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(-dc * ml.count_per_rot), speed_sp=speed_pct)
+        else:
+            ml.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(dc * ml.count_per_rot), speed_sp=speed_pct)
+            mr.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(-dc * mr.count_per_rot), speed_sp=speed_pct)
+
     # sensors
     # touch sensor
     def isPressed(self, port):
-      return self.cfg['sensors'][port].volue()
+        return self.cfg['sensors'][port].volue()
 
     # ultrasonic sensor
     def getUltraSonicSensorDistance(self, port):
-      self.cfg['sensors'][port].mode='US-DIST-CM'
-      return self.cfg['sensors'][port].value()
+        self.cfg['sensors'][port].mode='US-DIST-CM'
+        return self.cfg['sensors'][port].value()
 
     def getUltraSonicSensorPresence(self, port):
-      self.cfg['sensors'][port].mode='US-SI-CM'
-      return self.cfg['sensors'][port].value()
+        self.cfg['sensors'][port].mode='US-SI-CM'
+        return self.cfg['sensors'][port].value()
 
     # gyro
     # http://www.ev3dev.org/docs/sensors/lego-ev3-gyro-sensor/
     def resetGyroSensor(self, port):
-      # change mode to reset for GYRO-ANG and GYRO-G&A
-      self.cfg['sensors'][port].mode='GYRO-RATE'
-      self.cfg['sensors'][port].mode='GYRO-ANG'
+        # change mode to reset for GYRO-ANG and GYRO-G&A
+        self.cfg['sensors'][port].mode='GYRO-RATE'
+        self.cfg['sensors'][port].mode='GYRO-ANG'
 
     def getGyroSensorValue(self, port, mode):
-      # mode = rate, angle
-      if mode is 'angle':
-        self.cfg['sensors'][port].mode='GYRO-ANG'
-      elif mode is 'rate':
-        self.cfg['sensors'][port].mode='GYRO-RATE'
-      return self.cfg['sensors'][port].value()
-      pass
-    
+        # mode = rate, angle
+        if mode is 'angle':
+            self.cfg['sensors'][port].mode='GYRO-ANG'
+        elif mode is 'rate':
+            self.cfg['sensors'][port].mode='GYRO-RATE'
+        return self.cfg['sensors'][port].value()
+        pass
+
     # color
     # http://www.ev3dev.org/docs/sensors/lego-ev3-color-sensor/
     def getColorSensorAmbient(self, port):
-      self.cfg['sensors'][port].mode='COL-AMBIENT'
-      return self.cfg['sensors'][port].value()
+        self.cfg['sensors'][port].mode='COL-AMBIENT'
+        return self.cfg['sensors'][port].value()
 
-    def getColorSensorColor(self, port):
-      self.cfg['sensors'][port].mode='COL-COLOR'
-      return self.cfg['sensors'][port].color
+    def getColorSensorColour(self, port):
+        self.cfg['sensors'][port].mode='COL-COLOR'
+        return self.cfg['sensors'][port].color
 
     def getColorSensorRed(self, port):
-      self.cfg['sensors'][port].mode='COL-REFLECT'
-      return self.cfg['sensors'][port].reflect
+        self.cfg['sensors'][port].mode='COL-REFLECT'
+        return self.cfg['sensors'][port].reflect
 
     def getColorSensorRgb(self, port):
-      self.cfg['sensors'][port].mode='RGB-RAW'
-      return self.cfg['sensors'][port].rgb
+        self.cfg['sensors'][port].mode='RGB-RAW'
+        return self.cfg['sensors'][port].rgb
 
     # infrared
     # http://www.ev3dev.org/docs/sensors/lego-ev3-infrared-sensor/
     def getInfraredSensorSeek(self, port):
-      self.cfg['sensors'][port].mode='IR-SEEK'
-      return self.cfg['sensors'][port].value()
+        self.cfg['sensors'][port].mode='IR-SEEK'
+        return self.cfg['sensors'][port].value()
 
     def getInfraredSensorDistance(self, port):
-      self.cfg['sensors'][port].mode='IR-PROX'
-      return self.cfg['sensors'][port].value()
+        self.cfg['sensors'][port].mode='IR-PROX'
+        return self.cfg['sensors'][port].value()
+
+    # timer
+    def getTimerValue(timer):
+        if timer in self.timers:
+            return time.clock() - self.timers[timer]
+        else:
+            timers[timer] = time.clock()
+
+    def resetTimer(timer):
+        del self.timers[timer]
+
+    # communication
+    # use Bluetooth Serial Port Profile (SPP)
+    def establishConnectionTo(self, host):
+        # FIXME:
+        self.bt_connection = None # this.blueCom.establishConnectionTo(host, BLUETOOTH_TIMEOUT);
+        return self.bt_connection
+
+    def waitForConnection(self):
+        # FIXME:
+        self.bt_connection = None # this.blueCom.waitForConnection(BLUETOOTH_TIMEOUT);
+        return self.bt_connection
+
+    def readMessage(self):
+        # FIXME:
+        message = "NO MESSAGE";
+        if self.bt_connection:
+            message = "" # this.blueCom.readMessage(this.bluetoothConnection);
+        return message
+
+    def sendMessage(self, message):
+        # FIXME:
+        if self.bt_connection:
+            #this.blueCom.sendTo(this.bluetoothConnection, message);
+            pass

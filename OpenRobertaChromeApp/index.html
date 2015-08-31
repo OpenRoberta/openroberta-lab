@@ -11,7 +11,7 @@
 		  <table>
 			  <tr>
 				  <td class="dialogpic">
-				    <img src="resources/Roberta.png" width="100">
+				    <img id="warningimg" src="resources/Roberta.png" width="100">
 				  </td>
 				  <td>		
 					  <p id="warningtext"></p>
@@ -19,52 +19,23 @@
 	  		</tr>
 			</table>
 			<div align="left">
-			  <button id="discwarning" class="btn">beenden</button>
-			  <button id="cancelwarning" class="btn">abbrechen</button>
+			  <button id="discwarning" class="btn"></button>
+			  <button id="cancelwarning" class="btn"></button>
 			</div>
 		</dialog>
 		
-		
-		<dialog id="aboutdialog">
+		<dialog id="infodialog">
 			<table>
 				<tr>
 					<td class="dialogpic">
-					  <img id="dialogimage" src="resources/iais_logo.gif" width="85">
+					  <img id="infodialogimg" width="100">
 					</td>
 					<td>		
-						<p id="abouttext"></p>
+						<p id="infodialogtxt"></p>
 					</td>
 				</tr>
 			</table>
-			<div align="left"><button id="closeabout" class="btn">OK</button></div>
-		</dialog>
-		
-		<dialog id="errordialog">
-			<table>
-				<tr>
-					<td class="errorpic">
-					  <img src="resources/warning-outline.png" width="85">
-					</td>ö
-					<td >		
-						<p id="errortext"></p>
-					</td>
-				</tr>
-			</table>
-			<div align="left"><button id="closeerror" class="btn">OK</button></div>
-		</dialog>
-		
-		<dialog id="infod">
-			<table>
-				<tr>
-					<td class="infoimgtop">
-					  <img id="infoimg" src="resources/warning-outline.png" width="85">
-					</td>
-					<td >		
-						<p id="infotext"></p>
-					</td>
-				</tr>
-			</table>
-			<div align="left"><button id="closeinfo" class="btn">OK</button></div>
+			<div align="left"><button id="closeinfodialog" class="btn">OK</button></div>
 		</dialog>
 
     <div class="grid">
@@ -73,9 +44,9 @@
 					<div class="navbar">
 						<ul>
 							<li>
-								<p>Datei</p> 
+								<p id="navfiletitle"></p> 
 								<ul>  
-									<li><a id="navclose">beenden</a></li>
+									<li><a id="navclose"></a></li>
 								</ul>
 							</li>  
 						</ul>
@@ -86,10 +57,10 @@
 					<div class="navbar">
 						<ul>
 							<li>
-								<p>Info</p> 
+								<p id="navabouttitle">Info</p> 
 								<ul> 
 								  <li>
-									  <a id="about">about </a>
+									  <a id="navabout"></a>
 									</li>
 								</ul>
 							</li>  
