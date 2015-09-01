@@ -119,6 +119,32 @@ var ACTORS = (function() {
         PROGRAM_SIMULATION.setNextStatement(false);
     }
 
+    function setMotorSpeed(speed, motorSide) {
+        if (motorSide == MOTOR_LEFT) {
+            leftMotor.setPower(speed);
+        } else {
+            rightMotor.setPower(speed);
+        }
+    }
+    
+    function setMotorDuration(durationType, duration, motorSide) {
+        if (durationType == DEGREE) {
+            duration = duration / 360.
+        }
+        if (motorSide == MOTOR_LEFT) {
+            leftMotor.setRotations(duration);
+        } else {
+            rightMotor.setRotations(duration);
+        }       
+        distanceToCover = true;
+        PROGRAM_SIMULATION.setNextStatement(false);
+    }
+    
+    function resetMotors() {
+        leftMotor.setPower(0);
+        rightMotor.setPower(0);
+    }
+
     function toString() {
         return JSON.stringify([ distanceToCover, leftMotor, rightMotor ]);
     }
@@ -132,6 +158,9 @@ var ACTORS = (function() {
         "calculateCoveredDistance" : calculateCoveredDistance,
         "clculateAngleToCover" : clculateAngleToCover,
         "setDistanceToCover" : setDistanceToCover,
+        "setMotorSpeed" : setMotorSpeed,
+        "setMotorDuration" : setMotorDuration,
+        "resetMotors" : resetMotors,
         "toString" : toString
     };
 })();

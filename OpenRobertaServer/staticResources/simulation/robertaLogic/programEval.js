@@ -1,9 +1,10 @@
 function initProgram(program) {
-    MEM.clear();
+    MEM.clear();    
     PROGRAM_SIMULATION.setNextStatement(true);
     PROGRAM_SIMULATION.setWait(false);
     PROGRAM_SIMULATION.set(program);
     LIGHT.setMode(OFF);
+    ACTORS.resetMotors();
 }
 
 function setSensorActorValues(simulationSensorData) {
@@ -47,6 +48,10 @@ function step(simulationSensorData) {
 
         case TURN_ACTION:
             evalTurnAction(simulationSensorData, stmt);
+            break;
+            
+        case MOTOR_ON_ACTION:
+            evalMotorOnAction(simulationSensorData, stmt);
             break;
 
         case WAIT_STMT:
@@ -97,6 +102,12 @@ function evalDriveAction(simulationSensorData, stmt) {
     setDistanceToDrive(stmt);
 }
 
+function evalMotorOnAction(simulationSensorData, stmt) {
+    ACTORS.resetTacho(simulationSensorData.tacho[0], simulationSensorData.tacho[1]);
+    ACTORS.setMotorSpeed(evalExpr(stmt.speed), stmt[MOTOR_SIDE]);
+    setDurationToCover(stmt);
+}
+
 function setAngleToTurn(stmt) {
     if (stmt.angle != undefined) {
         ACTORS.clculateAngleToCover(evalExpr(stmt.angle));
@@ -106,6 +117,12 @@ function setAngleToTurn(stmt) {
 function setDistanceToDrive(stmt) {
     if (stmt.distance != undefined) {
         ACTORS.setDistanceToCover(evalExpr(stmt.distance));
+    }
+}
+
+function setDurationToCover(stmt) {
+    if (stmt[MOTOR_DURATION] != undefined) {
+        ACTORS.setMotorDuration((stmt[MOTOR_DURATION]).motorMoveMode, evalExpr((stmt[MOTOR_DURATION]).motorDurationValue), stmt[MOTOR_SIDE]);
     }
 }
 

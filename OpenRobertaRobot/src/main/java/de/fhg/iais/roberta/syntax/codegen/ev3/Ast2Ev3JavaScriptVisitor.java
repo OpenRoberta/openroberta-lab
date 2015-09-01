@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.syntax.codegen.ev3;
 
 import java.util.ArrayList;
 
+import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.ev3.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.ev3.BluetoothReceiveAction;
@@ -387,6 +388,18 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
+        boolean isDuration = motorOnAction.getParam().getDuration() != null;
+        String end = createClosingBracket();
+        this.sb.append("createMotorOnAction(");
+        motorOnAction.getParam().getSpeed().visit(this);
+        this.sb.append(", " + (motorOnAction.getPort() == ActorPort.B ? "MOTOR_RIGHT" : "MOTOR_LEFT").toString());
+        if ( isDuration ) {
+            this.sb.append(", createDuration(");
+            this.sb.append(motorOnAction.getParam().getDuration().getType().toString() + ", ");
+            motorOnAction.getParam().getDuration().getValue().visit(this);
+            this.sb.append(")");
+        }
+        this.sb.append(end);
         return null;
     }
 
@@ -517,10 +530,10 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt<Void> waitTimeStmt) {
-    	  String end = createClosingBracket();
-    	 this.sb.append("createWaitTimeStmt(");
-         waitTimeStmt.getTime().visit(this) ;         
-         this.sb.append(end);      
+        String end = createClosingBracket();
+        this.sb.append("createWaitTimeStmt(");
+        waitTimeStmt.getTime().visit(this);
+        this.sb.append(end);
         return null;
     }
 

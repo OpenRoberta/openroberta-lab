@@ -64,6 +64,26 @@ function createDriveAction(speed, direction, distance) {
     return result;
 }
 
+function createMotorOnAction(speed, motorSide, motorDuration) {
+    var result = {};
+    result[STMT] = MOTOR_ON_ACTION;
+    result[SPEED] = speed;
+    result[MOTOR_SIDE] = motorSide;
+    if (motorDuration == undefined) {
+        result[MOTOR_DURATION] = undefined;
+    } else {
+        result[MOTOR_DURATION] = motorDuration;
+    }
+    return result;
+}
+
+function createDuration(motorMoveMode, duration) {
+    var result = {};
+    result[MOTOR_MOVE_MODE] = motorMoveMode;
+    result[MOTOR_DURATION_VALUE] = duration;
+    return result;
+}
+
 function createTurnAction(speed, direction, angle) {
     var result = {};
     result[STMT] = TURN_ACTION;

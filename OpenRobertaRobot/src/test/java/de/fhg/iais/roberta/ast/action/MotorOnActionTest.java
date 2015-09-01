@@ -39,10 +39,23 @@ public class MotorOnActionTest {
     }
 
     @Test
+    public void motorOnForSim() throws Exception {
+        String a =
+            "BlockAST [project=[[Location [x=2, y=46], MainTask [], MotorOnAction [C, MotionParam [speed=NumConst [30], duration=MotorDuration [type=ROTATIONS, value=NumConst [1]]]]]]]";
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_MotorOnForSim.xml"));
+    }
+
+    @Test
     public void motorOnMissing() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=55, y=64], MotorOnAction [B, MotionParam [speed=EmptyExpr [defVal=class java.lang.Integer], duration=null]]]]]";
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_MotorOnMissing.xml"));
+    }
+
+    @Test
+    public void motorOnSim() throws Exception {
+        String a = "BlockAST [project=[[Location [x=2, y=46], MainTask [], MotorOnAction [B, MotionParam [speed=NumConst [30], duration=null]]]]]";
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_MotorOnSim.xml"));
     }
 
     @Test
@@ -58,8 +71,18 @@ public class MotorOnActionTest {
     }
 
     @Test
+    public void reverseTransformatinSim() throws Exception {
+        Helper.assertTransformationIsOk("/ast/actions/action_MotorOnSim.xml");
+    }
+
+    @Test
     public void reverseTransformatinOnFor() throws Exception {
         Helper.assertTransformationIsOk("/ast/actions/action_MotorOnFor.xml");
+    }
+
+    @Test
+    public void reverseTransformatinOnForSim() throws Exception {
+        Helper.assertTransformationIsOk("/ast/actions/action_MotorOnForSim.xml");
     }
 
     @Test

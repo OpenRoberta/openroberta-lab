@@ -213,6 +213,20 @@ public class AstToLejosJavaScriptVisitorTest {
 
     }
 
+    @Test
+    public void test14() throws Exception {
+
+        String a =
+            "var stmt0 = createMotorOnAction(createConstant(NUM_CONST, 30), MOTOR_RIGHT);\n"
+                + "var stmt1 = createMotorOnAction(createConstant(NUM_CONST, 30), MOTOR_LEFT);\n"
+                + "var stmt2 = createMotorOnAction(createConstant(NUM_CONST, 30), MOTOR_RIGHT, createDuration(ROTATIONS, createConstant(NUM_CONST, 1)));\n"
+                + "var stmt3 = createMotorOnAction(createConstant(NUM_CONST, 30), MOTOR_LEFT, createDuration(DEGREE, createConstant(NUM_CONST, 1)));\n"
+                + "initProgram([stmt0,stmt1,stmt2,stmt3]);";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator14.xml");
+
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
         Assert.assertEquals(a, Helper.generateJavaScript(fileName));
