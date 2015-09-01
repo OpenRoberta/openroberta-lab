@@ -99,7 +99,6 @@ var SIM = (function() {
     function stopProgram() {
         setPause(true);
         robot.reset();
-        tim()
         scene.updateBackgrounds();
         reloadProgram();
     }

@@ -89,12 +89,12 @@ Blockly.Blocks['sim_motor_on'] = {
                 this.setHelpUrl(Blockly.Msg.MOTOR_STOP_HELPURL);
                 this.setColourRGB(Blockly.CAT_ACTION_RGB);
                 var motorPort = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR + ' ' + Blockly.Msg.MOTOR_RIGHT, 'B' ], [ Blockly.Msg.MOTOR + ' ' + Blockly.Msg.MOTOR_LEFT, 'C' ] ]);
-                var mode = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR_FLOAT, 'FLOAT' ], [ Blockly.Msg.MOTOR_BRAKE, 'NONFLOAT' ] ]);
-                this.appendDummyInput().appendField(Blockly.Msg.MOTOR_STOP).appendField(motorPort, 'MOTORPORT').appendField('', 'MODE');
+                var mode = new Blockly.FieldDropdown([ [ '', 'FLOAT' ], [ '', 'NONFLOAT' ] ]);
+                mode.setVisible(false);
+                this.appendDummyInput().appendField(Blockly.Msg.MOTOR_STOP).appendField(motorPort, 'MOTORPORT').appendField(mode, 'MODE');
                 this.setPreviousStatement(true);
                 this.setNextStatement(true);
                 this.setTooltip(Blockly.Msg.MOTOR_STOP_TOOLTIP);
-                this.getField_('MODE').setVisible(false);
                 this.setHelp(new Blockly.Help(Blockly.Msg.MOTOR_STOP_HELP));
             }
         };

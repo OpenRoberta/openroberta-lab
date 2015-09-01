@@ -512,9 +512,9 @@ function startProgram() {
                     injectBlockly(result, userState.programBlocks, true);
                 });
                 $(".sim").removeClass('hide');
-            }else{
-                displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);                
-            }          
+            } else {
+                displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
+            }
         } else {
             Blockly.getMainWorkspace().startButton.enable();
             displayInformation(result, "", result.message, "");
@@ -1159,13 +1159,12 @@ function switchRobot(robot) {
                 Blockly.getMainWorkspace().codeButton.disable();
                 PROGRAM.loadProgramFromListing('NEPOprog', 'Roberta', function(result) {
                     if (result.rc === 'ok') {
-                        showProgram(result, true, programName);
+                        showProgram(result, true, 'NEPOprog');
                     }
                 });
             }
             loadToolbox(userState.toolbox);
         }
-        //displayInformation(result, "MESSAGE_USER_LOGIN", result.message, userState.name);
     });
 }
 
@@ -1976,7 +1975,7 @@ function pingServer() {
  * Handle server errors
  */
 function handleServerErrors() {
-    userState.doPing = false;
+    LOG.info('network changed');
 }
 
 /**
