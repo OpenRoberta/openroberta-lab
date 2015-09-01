@@ -41,17 +41,17 @@ public class BluetoothSendAction<V> extends Action<V> {
         return new BluetoothSendAction<V>(connection, msg, properties, comment);
     }
 
-    public Expr<V> get_connection() {
+    public Expr<V> getConnection() {
         return this._connection;
     }
 
-    public Expr<V> get_msg() {
+    public Expr<V> getMsg() {
         return this._msg;
     }
 
     @Override
     public String toString() {
-        return "BluetoothSendAction [" + get_connection().toString() + ", " + get_msg().toString() + "]";
+        return "BluetoothSendAction [" + getConnection().toString() + ", " + getMsg().toString() + "]";
     }
 
     @Override
@@ -82,8 +82,8 @@ public class BluetoothSendAction<V> extends Action<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.MESSAGE, get_msg());
-        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.CONNECTION, get_connection());
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.MESSAGE, getMsg());
+        JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.CONNECTION, getConnection());
 
         return jaxbDestination;
     }

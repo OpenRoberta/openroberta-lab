@@ -498,7 +498,7 @@ public abstract class CheckVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
-        bluetoothSendAction.get_msg().visit(this);
+        bluetoothSendAction.getMsg().visit(this);
         return null;
     }
 

@@ -1318,12 +1318,12 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
         this.sb.append("hal.sendMessage(");
-        if ( bluetoothSendAction.get_msg().getKind() != BlockType.STRING_CONST ) {
+        if ( bluetoothSendAction.getMsg().getKind() != BlockType.STRING_CONST ) {
             this.sb.append("String.valueOf(");
-            bluetoothSendAction.get_msg().visit(this);
+            bluetoothSendAction.getMsg().visit(this);
             this.sb.append(")");
         } else {
-            bluetoothSendAction.get_msg().visit(this);
+            bluetoothSendAction.getMsg().visit(this);
         }
         this.sb.append(");");
         return null;
