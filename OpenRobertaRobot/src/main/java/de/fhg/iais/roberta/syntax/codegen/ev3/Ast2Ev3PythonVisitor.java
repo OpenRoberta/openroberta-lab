@@ -1232,7 +1232,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> clearDisplayAction) {
+    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReadAction) {
         this.sb.append("hal.readMessage()");
         return null;
     }

@@ -273,19 +273,19 @@ public class AstToVarsVisitor extends AstDefaultVisitorInspecting {
     }
 
     @Override
-    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> clearDisplayAction) {
+    public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReadAction) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> clearDisplayAction) {
+    public Void visitBluetoothConnectAction(BluetoothConnectAction<Void> bluetoothConnectAction) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void visitBluetoothSendAction(BluetoothSendAction<Void> clearDisplayAction) {
+    public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
         // TODO Auto-generated method stub
         return null;
     }
