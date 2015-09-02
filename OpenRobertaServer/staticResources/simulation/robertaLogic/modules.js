@@ -101,25 +101,20 @@ var ACTORS = (function() {
         var leftMotorRotationFinished = getLeftMotor().getCurrentRotations() > getLeftMotor().getRotations();
         var rightMotorRotationFinished = getRightMotor().getCurrentRotations() > getRightMotor().getRotations();
         if (distanceToCover) {
-            if (leftMotorRotationFinished) {
-                getLeftMotor().setPower(0);
-            }
-            if (rightMotorRotationFinished) {
-                getRightMotor().setPower(0);
-            }
-
             switch (driveMode) {
-            
+
             case PILOT:
-                if (leftMotorRotationFinished
-                        && rightMotorRotationFinished) {
+                if (leftMotorRotationFinished && rightMotorRotationFinished) {
+                    getLeftMotor().setPower(0);
+                    getRightMotor().setPower(0);
                     distanceToCover = false;
                     PROGRAM_SIMULATION.setNextStatement(true);
                 }
                 break;
-                
+
             case MOTOR_LEFT:
                 if (leftMotorRotationFinished) {
+                    getLeftMotor().setPower(0);
                     distanceToCover = false;
                     PROGRAM_SIMULATION.setNextStatement(true);
                 }
@@ -127,6 +122,7 @@ var ACTORS = (function() {
 
             case MOTOR_RIGHT:
                 if (rightMotorRotationFinished) {
+                    getRightMotor().setPower(0)
                     distanceToCover = false;
                     PROGRAM_SIMULATION.setNextStatement(true);
                 }
