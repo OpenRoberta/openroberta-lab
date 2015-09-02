@@ -499,6 +499,10 @@ html, body {
 	width: 500px;
 }
 
+.modal-dialog.wideModal{
+	width: 700px;
+}
+
 /* .bigModal .modal-footer:after {
     content: url(../css/svg/Roberta_zwinkernd.svg);
     right: -40px;
