@@ -11,8 +11,8 @@ chrome.app.runtime.onLaunched.addListener(function() {
     },
     function(win) {
       win.outerBounds.setPosition(
-        screen.availWidth - win.outerBounds.width / 2,
-        screen.availHeight - win.outerBounds.height / 2
+        Math.round((screen.availWidth - win.outerBounds.width) / 2),
+        Math.round((screen.availHeight - win.outerBounds.height) / 2)
       );
     }
   );

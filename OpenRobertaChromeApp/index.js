@@ -207,16 +207,16 @@ onload = function () {
 				pushToServer(servercmd);
 			}
 			if (brickreq.readyState == 4 && brickreq.status === 0) {
-			  if (STATE == state.CONNECTED) {
-			    document.getElementById('infodialogimg').src = "resources/warning-outline.png";
-	        document.getElementById("infodialogtxt").innerHTML = chrome.i18n.getMessage("dialog_brickerror");
-	        infodialog.showModal();
-	        reset();
-	        pushFinished = true;
-			  }
+			  console.log("empty");
+			  document.getElementById('infodialogimg').src = "resources/warning-outline.png";
+	      document.getElementById("infodialogtxt").innerHTML = chrome.i18n.getMessage("dialog_brickerror");
+	      infodialog.showModal();
+	      reset();
+	      pushFinished = true;
 			}
 		};
 		brickreq.open("POST", "http://" + EV3HOST + "/brickinfo", true);
+		brickreq.timeout = 3000;
 		brickreq.send(JSON.stringify(command));
 	}
 
@@ -306,10 +306,11 @@ onload = function () {
 		brickreq.onreadystatechange = function () {
 			if (brickreq.readyState == 4 && brickreq.status == 200) {
 				var brickstate = JSON.parse(brickreq.responseText);
+				console.log(brickstate);
 				if (STATE == state.SEARCH) {
 					STATE = state.WAITFORUSER;
 					document.getElementById("connect").disabled = false;
-				} else if (STATE == state.WAIT) {
+				} else if (STATE == state.WAIT && brickstate["isrunning"] == "false") {
 					STATE = state.CONNECTED;
 				}
 				pushFinished = true;
