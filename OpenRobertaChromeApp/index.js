@@ -4,7 +4,7 @@ onload = function () {
 
 	var EV3HOST = "10.0.1.1:80";
 
-	var STANDARDHOST = "localhost:1999";
+	var STANDARDHOST = "192.168.1.2:1999";
 	var CUSTOMHOST = null;
 	var ORAHOST = STANDARDHOST;
 
@@ -207,7 +207,6 @@ onload = function () {
 				pushToServer(servercmd);
 			}
 			if (brickreq.readyState == 4 && brickreq.status === 0) {
-			  console.log("empty");
 			  document.getElementById('infodialogimg').src = "resources/warning-outline.png";
 	      document.getElementById("infodialogtxt").innerHTML = chrome.i18n.getMessage("dialog_brickerror");
 	      infodialog.showModal();
@@ -306,7 +305,7 @@ onload = function () {
 		brickreq.onreadystatechange = function () {
 			if (brickreq.readyState == 4 && brickreq.status == 200) {
 				var brickstate = JSON.parse(brickreq.responseText);
-				console.log(brickstate);
+				// console.log(brickstate);
 				if (STATE == state.SEARCH) {
 					STATE = state.WAITFORUSER;
 					document.getElementById("connect").disabled = false;
