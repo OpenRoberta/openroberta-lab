@@ -1961,14 +1961,11 @@ function deactivateProgConfigMenu() {
  * Regularly ping the server to keep status information up-to-date
  */
 function pingServer() {
-    if (userState.doPing) {
-        setTimeout(function() {
-            COMM.ping(function(result) {
-                setRobotState(result);
-                pingServer();
-            });
-        }, 5000);
-    }
+    // if (userState.doPing) {
+    COMM.ping(function(result) {
+        setRobotState(result);
+    });
+    // }
 }
 
 /**
@@ -2005,10 +2002,10 @@ function init() {
     initConfigurationNameTable();
     initRelationsTable();
     initializeLanguages();
-    COMM.ping(function(result) {
-        setRobotState(result);
-        pingServer();
-    });
+    var ping = setInterval(function() {
+        pingServer()
+    }, 5000);
+
     $('#menuTabProgram').parent().addClass('disabled');
     $('#tabProgram').addClass('tabClicked');
     $('#head-navigation-configuration-edit').css('display', 'none');
