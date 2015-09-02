@@ -1374,7 +1374,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append("import ev3dev\n");
         this.sb.append("import math\n\n");
 
-        this.sb.append("TRUE = True;\n");
+        this.sb.append("TRUE = True\n");
         this.sb.append(generateRegenerateConfiguration()).append("\n");
         this.sb.append(generateRegenerateUsedSensors()).append("\n");
         this.sb.append("hal = Hal(brickConfiguration, usedSensors)\n");

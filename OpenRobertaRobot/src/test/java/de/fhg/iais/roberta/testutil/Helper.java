@@ -28,6 +28,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.codegen.ev3.Ast2Ev3JavaScriptVisitor;
 import de.fhg.iais.roberta.syntax.codegen.ev3.Ast2Ev3JavaVisitor;
+import de.fhg.iais.roberta.syntax.codegen.ev3.Ast2Ev3PythonVisitor;
 import de.fhg.iais.roberta.syntax.codegen.ev3.AstToTextlyVisitor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.transformer.ev3.Jaxb2Ev3ConfigurationTransformer;
@@ -69,6 +70,20 @@ public class Helper {
     public static String generateString(String pathToProgramXml, Ev3Configuration brickConfiguration) throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
         String code = Ast2Ev3JavaVisitor.generate("Test", brickConfiguration, transformer.getTree(), true);
+        // System.out.println(code); // only needed for EXTREME debugging
+        return code;
+    }
+
+    /**
+     * Generate python code as string from a given program . Prepend and append wrappings.
+     *
+     * @param pathToProgramXml path to a XML file, usable for {@link Class#getResourceAsStream(String)}
+     * @return the code as string
+     * @throws Exception
+     */
+    public static String generatePython(String pathToProgramXml, Ev3Configuration brickConfiguration) throws Exception {
+        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
+        String code = Ast2Ev3PythonVisitor.generate("Test", brickConfiguration, transformer.getTree(), true);
         // System.out.println(code); // only needed for EXTREME debugging
         return code;
     }
