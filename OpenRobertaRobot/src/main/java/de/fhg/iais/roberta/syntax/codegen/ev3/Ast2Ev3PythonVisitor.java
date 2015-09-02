@@ -307,11 +307,16 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitUnary(Unary<Void> unary) {
+        String sym = unary.getOp().getOpSymbol();
+        // fixup language specific symbols
+        if ( sym.equals("!") ) {
+            sym = "not ";
+        }
         if ( unary.getOp() == Unary.Op.POSTFIX_INCREMENTS ) {
             generateExprCode(unary, this.sb);
-            this.sb.append(unary.getOp().getOpSymbol());
+            this.sb.append(sym);
         } else {
-            this.sb.append(unary.getOp().getOpSymbol());
+            this.sb.append(sym);
             generateExprCode(unary, this.sb);
         }
         return null;
