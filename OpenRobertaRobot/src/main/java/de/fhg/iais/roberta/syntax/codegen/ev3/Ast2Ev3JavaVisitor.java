@@ -353,6 +353,18 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBinary(Binary<Void> binary) {
+        if ( binary.getOp() == Op.EQ || binary.getOp() == Op.NEQ ) {
+            if ( isStringExpr(binary.getLeft()) && isStringExpr(binary.getRight()) ) {
+                if ( binary.getOp() == Op.NEQ ) {
+                    this.sb.append("!");
+                }
+                generateSubExpr(this.sb, false, binary.getLeft(), binary);
+                this.sb.append(".equals(");
+                generateSubExpr(this.sb, false, binary.getRight(), binary);
+                this.sb.append(")");
+                return null;
+            }
+        }
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
         this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
         if ( binary.getOp() == Op.TEXT_APPEND ) {
@@ -1360,6 +1372,11 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     private String whitespace() {
         return " ";
+    }
+
+    private boolean isStringExpr(Expr<Void> e) {
+        // TODO: what about BINARY on the LHS
+        return e.getKind() == BlockType.STRING_CONST || (e.getKind() == BlockType.VAR && ((Var<?>) e).getTypeVar() == BlocklyType.STRING);
     }
 
     private boolean parenthesesCheck(Binary<Void> binary) {
