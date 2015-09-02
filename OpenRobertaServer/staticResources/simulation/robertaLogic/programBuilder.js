@@ -117,6 +117,13 @@ function createStopDrive() {
     return result;
 }
 
+function createStopMotorAction(motorSide) {
+    var result = {};
+    result[STMT] = MOTOR_STOP;
+    result[MOTOR_SIDE] = motorSide;
+    return result;
+}
+
 function createGetSample(sensorType, senorMode) {
     var result = {};
     result[EXPR] = GET_SAMPLE;

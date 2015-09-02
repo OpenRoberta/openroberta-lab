@@ -147,15 +147,18 @@ TIMES = "TIMES";
 const
 COLOR_CONST = "COLOR_CONST";
 
+const PILOT = "pilot";
 const MOTOR_LEFT = "C";
 const MOTOR_RIGHT = "B";
 const MOTOR_SIDE = "motorSide";
 const MOTOR_ON_ACTION = "motorOnAction";
+const MOTOR_STOP = "motorStop";
 const MOTOR_MOVE_MODE = "motorMoveMode";
 const MOTOR_DURATION = "motorDuration";
 const MOTOR_DURATION_VALUE = "motorDurationValue";
 const ROTATIONS = "ROTATIONS";
 const DEGREE = "DEGREE";
+
 
 const
 COLOR_ENUM = {

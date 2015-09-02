@@ -91,6 +91,8 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
+    private static final String MOTOR_LEFT = "MOTOR_LEFT";
+    private static final String MOTOR_RIGHT = "MOTOR_RIGHT";
     private final StringBuilder sb = new StringBuilder();
     private int stmtCount = 0;
     private ArrayList<Boolean> inStmt = new ArrayList<Boolean>();
@@ -104,7 +106,6 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
         Ast2Ev3JavaScriptVisitor astVisitor = new Ast2Ev3JavaScriptVisitor();
         generateCodeFromPhrases(phrasesSet, astVisitor);
         return astVisitor.sb.toString();
-
     }
 
     @Override
@@ -392,7 +393,7 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
         String end = createClosingBracket();
         this.sb.append("createMotorOnAction(");
         motorOnAction.getParam().getSpeed().visit(this);
-        this.sb.append(", " + (motorOnAction.getPort() == ActorPort.B ? "MOTOR_RIGHT" : "MOTOR_LEFT").toString());
+        this.sb.append(", " + (motorOnAction.getPort() == ActorPort.B ? MOTOR_RIGHT : MOTOR_LEFT).toString());
         if ( isDuration ) {
             this.sb.append(", createDuration(");
             this.sb.append(motorOnAction.getParam().getDuration().getType().toString() + ", ");
@@ -410,6 +411,10 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
+        String end = createClosingBracket();
+        this.sb.append("createStopMotorAction(");
+        this.sb.append((motorStopAction.getPort() == ActorPort.B ? MOTOR_RIGHT : MOTOR_LEFT).toString());
+        this.sb.append(end);
         return null;
     }
 

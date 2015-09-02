@@ -1,10 +1,10 @@
 function initProgram(program) {
-    MEM.clear();    
+    MEM.clear();
     PROGRAM_SIMULATION.setNextStatement(true);
     PROGRAM_SIMULATION.setWait(false);
     PROGRAM_SIMULATION.set(program);
     LIGHT.setMode(OFF);
-    ACTORS.resetMotors();
+    ACTORS.resetMotorsSpeed();
 }
 
 function setSensorActorValues(simulationSensorData) {
@@ -49,7 +49,7 @@ function step(simulationSensorData) {
         case TURN_ACTION:
             evalTurnAction(simulationSensorData, stmt);
             break;
-            
+
         case MOTOR_ON_ACTION:
             evalMotorOnAction(simulationSensorData, stmt);
             break;
@@ -69,6 +69,10 @@ function step(simulationSensorData) {
 
         case STOP_DRIVE:
             ACTORS.setSpeed(0);
+            break;
+
+        case MOTOR_STOP:
+            evalMotorStopAction(stmt);
             break;
 
         case RESET_LIGHT:
@@ -91,21 +95,34 @@ function evalWaitTime(simulationSensorData, stmt) {
 }
 
 function evalTurnAction(simulationSensorData, stmt) {
-    ACTORS.resetTacho(simulationSensorData.tacho[0], simulationSensorData.tacho[1]);
+    ACTORS.resetTachoMotors(simulationSensorData.tacho[0], simulationSensorData.tacho[1]);
     ACTORS.setAngleSpeed(evalExpr(stmt.speed), stmt[TURN_DIRECTION]);
     setAngleToTurn(stmt);
 }
 
 function evalDriveAction(simulationSensorData, stmt) {
-    ACTORS.resetTacho(simulationSensorData.tacho[0], simulationSensorData.tacho[1]);
+    ACTORS.resetTachoMotors(simulationSensorData.tacho[0], simulationSensorData.tacho[1]);
     ACTORS.setSpeed(evalExpr(stmt.speed), stmt[DRIVE_DIRECTION]);
     setDistanceToDrive(stmt);
 }
 
 function evalMotorOnAction(simulationSensorData, stmt) {
-    ACTORS.resetTacho(simulationSensorData.tacho[0], simulationSensorData.tacho[1]);
-    ACTORS.setMotorSpeed(evalExpr(stmt.speed), stmt[MOTOR_SIDE]);
+    if (stmt[MOTOR_SIDE] == MOTOR_LEFT) {
+        ACTORS.resetLeftTachoMotor(simulationSensorData.tacho[0]);
+        ACTORS.setLeftMotorSpeed(evalExpr(stmt.speed));
+    } else {
+        ACTORS.resetRightTachoMotor(simulationSensorData.tacho[1]);
+        ACTORS.setRightMotorSpeed(evalExpr(stmt.speed));
+    }
     setDurationToCover(stmt);
+}
+
+function evalMotorStopAction(stmt) {
+    if (stmt[MOTOR_SIDE] == MOTOR_LEFT) {
+        ACTORS.setLeftMotorSpeed(0);
+    } else {
+        ACTORS.setRightMotorSpeed(0);
+    }
 }
 
 function setAngleToTurn(stmt) {

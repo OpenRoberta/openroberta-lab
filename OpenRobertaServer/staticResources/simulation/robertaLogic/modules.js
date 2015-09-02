@@ -52,6 +52,7 @@ var SENSORS = (function() {
 var ACTORS = (function() {
 
     var distanceToCover = false;
+    var pilot = false;
     var leftMotor = new Motor();
     var rightMotor = new Motor();
 
@@ -81,25 +82,57 @@ var ACTORS = (function() {
         }
     }
 
-    function resetTacho(leftMotorValue, rightMotorValue) {
-        leftMotor.startRotations = leftMotorValue / 360.;
-        rightMotor.startRotations = rightMotorValue / 360.;
+    function resetLeftTachoMotor(value) {
+        leftMotor.startRotations = value / 360.;
         leftMotor.currentRotations = 0;
+    }
+
+    function resetRightTachoMotor(value) {
+        rightMotor.startRotations = value / 360.;
         rightMotor.currentRotations = 0;
     }
 
+    function resetTachoMotors(leftMotorValue, rightMotorValue) {
+        resetLeftTachoMotor(leftMotorValue);
+        resetRightTachoMotor(rightMotorValue);
+    }
+
     function calculateCoveredDistance() {
+        var leftMotorRotationFinished = getLeftMotor().getCurrentRotations() > getLeftMotor().getRotations();
+        var rightMotorRotationFinished = getRightMotor().getCurrentRotations() > getRightMotor().getRotations();
         if (distanceToCover) {
-            if (getLeftMotor().getCurrentRotations() > getLeftMotor().getRotations()) {
+            if (leftMotorRotationFinished) {
                 getLeftMotor().setPower(0);
             }
-            if (getRightMotor().getCurrentRotations() > getRightMotor().getRotations()) {
+            if (rightMotorRotationFinished) {
                 getRightMotor().setPower(0);
             }
-            if (getLeftMotor().getCurrentRotations() > getLeftMotor().getRotations() && getRightMotor().getCurrentRotations() > getRightMotor().getRotations()) {
-                distanceToCover = false;
-                PROGRAM_SIMULATION.setNextStatement(true);
+
+            switch (driveMode) {
+            
+            case PILOT:
+                if (leftMotorRotationFinished
+                        && rightMotorRotationFinished) {
+                    distanceToCover = false;
+                    PROGRAM_SIMULATION.setNextStatement(true);
+                }
+                break;
+                
+            case MOTOR_LEFT:
+                if (leftMotorRotationFinished) {
+                    distanceToCover = false;
+                    PROGRAM_SIMULATION.setNextStatement(true);
+                }
+                break;
+
+            case MOTOR_RIGHT:
+                if (rightMotorRotationFinished) {
+                    distanceToCover = false;
+                    PROGRAM_SIMULATION.setNextStatement(true);
+                }
+                break;
             }
+
         }
     }
 
@@ -108,6 +141,7 @@ var ACTORS = (function() {
         getLeftMotor().setRotations(extraRotation);
         getRightMotor().setRotations(extraRotation);
         distanceToCover = true;
+        driveMode = PILOT;
         PROGRAM_SIMULATION.setNextStatement(false);
     }
 
@@ -116,31 +150,35 @@ var ACTORS = (function() {
         leftMotor.setRotations(rotations);
         rightMotor.setRotations(rotations);
         distanceToCover = true;
+        driveMode = PILOT;
         PROGRAM_SIMULATION.setNextStatement(false);
     }
 
-    function setMotorSpeed(speed, motorSide) {
-        if (motorSide == MOTOR_LEFT) {
-            leftMotor.setPower(speed);
-        } else {
-            rightMotor.setPower(speed);
-        }
+    function setLeftMotorSpeed(speed) {
+        leftMotor.setPower(speed);
     }
-    
+
+    function setRightMotorSpeed(speed) {
+        rightMotor.setPower(speed);
+    }
+
     function setMotorDuration(durationType, duration, motorSide) {
+        var rotations = duration;
         if (durationType == DEGREE) {
-            duration = duration / 360.
+            rotations = duration / 360.
         }
         if (motorSide == MOTOR_LEFT) {
-            leftMotor.setRotations(duration);
+            leftMotor.setRotations(rotations);
+            driveMode = MOTOR_LEFT;
         } else {
-            rightMotor.setRotations(duration);
-        }       
+            rightMotor.setRotations(rotations);
+            driveMode = MOTOR_RIGHT;
+        }
         distanceToCover = true;
         PROGRAM_SIMULATION.setNextStatement(false);
     }
-    
-    function resetMotors() {
+
+    function resetMotorsSpeed() {
         leftMotor.setPower(0);
         rightMotor.setPower(0);
     }
@@ -154,13 +192,16 @@ var ACTORS = (function() {
         "getRightMotor" : getRightMotor,
         "setSpeed" : setSpeed,
         "setAngleSpeed" : setAngleSpeed,
-        "resetTacho" : resetTacho,
+        "resetLeftTachoMotor" : resetLeftTachoMotor,
+        "resetRightTachoMotor" : resetRightTachoMotor,
+        "resetTachoMotors" : resetTachoMotors,
         "calculateCoveredDistance" : calculateCoveredDistance,
         "clculateAngleToCover" : clculateAngleToCover,
         "setDistanceToCover" : setDistanceToCover,
-        "setMotorSpeed" : setMotorSpeed,
+        "setLeftMotorSpeed" : setLeftMotorSpeed,
+        "setRightMotorSpeed" : setRightMotorSpeed,
         "setMotorDuration" : setMotorDuration,
-        "resetMotors" : resetMotors,
+        "resetMotorsSpeed" : resetMotorsSpeed,
         "toString" : toString
     };
 })();

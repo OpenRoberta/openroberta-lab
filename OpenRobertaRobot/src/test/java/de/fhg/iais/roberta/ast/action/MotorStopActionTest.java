@@ -32,6 +32,12 @@ public class MotorStopActionTest {
     }
 
     @Test
+    public void motorStopSim() throws Exception {
+        String a = "BlockAST [project=[[Location [x=45, y=117], MainTask [], MotorStop [port=B, mode=FLOAT]]]]";
+        Assert.assertEquals(a, Helper.generateTransformerString("/ast/actions/action_MotorStopSim.xml"));
+    }
+
+    @Test
     public void reverseTransformatin() throws Exception {
         Helper.assertTransformationIsOk("/ast/actions/action_MotorStop.xml");
     }
