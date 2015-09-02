@@ -126,6 +126,13 @@ def main():
                     logger.exception("Ooops:")
                 drawUI(hal, params)
                 hal.drawText('registered', 0, 2)
+            elif cmd == 'update':
+                # FIXME:
+                # fetch new files (menu/hal)
+                # then restart:
+                # os.execv(__file__, sys.argv)
+                # check if we need to close files (logger?)
+                pass
             else:
                 logger.warning('unhandled command: %s' % cmd)
         except urllib2.HTTPError as e:
