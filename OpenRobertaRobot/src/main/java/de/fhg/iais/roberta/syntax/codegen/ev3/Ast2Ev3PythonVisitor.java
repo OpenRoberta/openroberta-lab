@@ -323,7 +323,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append(' ').append(binary.getOp().getOpSymbol()).append(' ');
         if ( binary.getOp() == Op.TEXT_APPEND ) {
             this.sb.append("str(");
-            generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+            generateSubExpr(this.sb, false, binary.getRight(), binary);
             this.sb.append(")");
         } else {
             generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);

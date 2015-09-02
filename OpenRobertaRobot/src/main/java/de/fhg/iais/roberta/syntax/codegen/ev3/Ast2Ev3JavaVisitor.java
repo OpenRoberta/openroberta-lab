@@ -357,7 +357,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
         if ( binary.getOp() == Op.TEXT_APPEND ) {
             this.sb.append("String.valueOf(");
-            generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+            generateSubExpr(this.sb, false, binary.getRight(), binary);
             this.sb.append(")");
         } else {
             generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
