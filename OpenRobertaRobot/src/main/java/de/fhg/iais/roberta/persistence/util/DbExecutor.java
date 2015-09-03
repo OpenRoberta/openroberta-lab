@@ -52,7 +52,7 @@ public class DbExecutor {
                 }
             }
         } else {
-            LOG.info("test sql says, that DDL of  " + sqlResource + " has already been executed. Skipping execution.");
+            DbExecutor.LOG.info("test sql says, that DDL of  " + sqlResource + " has already been executed. Skipping execution.");
         }
     }
 
@@ -85,9 +85,9 @@ public class DbExecutor {
                 }
             }
             sqlStmtFileStream.close();
-            LOG.info(count + " SQL-statements executed");
+            DbExecutor.LOG.info(count + " SQL-statements executed");
         } catch ( Exception e ) {
-            LOG.error("Exception in sql stmt: " + count, e);
+            DbExecutor.LOG.error("Exception in sql stmt: " + count, e);
         } finally {
             if ( sqlStmtFileStream != null ) {
                 try {
@@ -100,64 +100,64 @@ public class DbExecutor {
     }
 
     public void sqlStmt(String sqlStmt) {
-        if ( isSelect(sqlStmt) ) {
-            LOG.debug("SQL: " + sqlStmt);
+        if ( DbExecutor.isSelect(sqlStmt) ) {
+            DbExecutor.LOG.debug("SQL: " + sqlStmt);
             select(sqlStmt);
-        } else if ( isChange(sqlStmt) ) {
-            LOG.debug("UPD: " + sqlStmt);
+        } else if ( DbExecutor.isChange(sqlStmt) ) {
+            DbExecutor.LOG.debug("UPD: " + sqlStmt);
             update(sqlStmt);
-        } else if ( isDDL(sqlStmt) ) {
-            LOG.debug("DDL: " + sqlStmt);
+        } else if ( DbExecutor.isDDL(sqlStmt) ) {
+            DbExecutor.LOG.debug("DDL: " + sqlStmt);
             ddl(sqlStmt);
         } else {
-            LOG.error("Ignored: " + sqlStmt);
+            DbExecutor.LOG.error("Ignored: " + sqlStmt);
         }
     }
 
-    public List<Object[]> select(String sqlStmt) {
-        @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
+    public <T> List<T> select(String sqlStmt) {
         List<Object[]> resultSet = this.session.createSQLQuery(sqlStmt).list();
-        LOG.debug("got " + resultSet.size() + " rows");
+        DbExecutor.LOG.debug("got " + resultSet.size() + " rows");
         for ( Object result : resultSet ) {
             if ( result instanceof Object[] ) {
-                LOG.debug("  " + Arrays.toString((Object[]) result));
+                DbExecutor.LOG.debug("  " + Arrays.toString((Object[]) result));
             } else {
-                LOG.debug("  " + result);
+                DbExecutor.LOG.debug("  " + result);
             }
         }
-        return resultSet;
+        return (List<T>) resultSet;
     }
 
     public Object oneValueSelect(String sqlStmt) {
         @SuppressWarnings("unchecked")
         List<Object> resultSet = this.session.createSQLQuery(sqlStmt).list();
-        Assert.isTrue(resultSet.size() == 1);
+        Assert.isTrue(resultSet.size() == 1, "result set should contain 1 row, but contains " + resultSet.size() + " rows");
         Object result = resultSet.get(0);
-        LOG.debug(result.toString());
+        DbExecutor.LOG.debug(result.toString());
         return result;
     }
 
     public int update(String sqlStmt) {
         int result = this.session.createSQLQuery(sqlStmt).executeUpdate();
-        LOG.debug("rows affected: " + result);
+        DbExecutor.LOG.debug("rows affected: " + result);
         return result;
     }
 
     public void ddl(String sqlStmt) {
         int result = this.session.createSQLQuery(sqlStmt).executeUpdate();
-        LOG.debug("rows affected (probably 0): " + result);
+        DbExecutor.LOG.debug("rows affected (probably 0): " + result);
     }
 
     private static boolean isSelect(String sqlStmt) {
-        return sW(sqlStmt, "select ");
+        return DbExecutor.sW(sqlStmt, "select ");
     }
 
     private static boolean isChange(String sqlStmt) {
-        return sW(sqlStmt, "insert ") || sW(sqlStmt, "update ") || sW(sqlStmt, "delete ") || sqlStmt.trim().equals("commit");
+        return DbExecutor.sW(sqlStmt, "insert ") || DbExecutor.sW(sqlStmt, "update ") || DbExecutor.sW(sqlStmt, "delete ") || sqlStmt.trim().equals("commit");
     }
 
     private static boolean isDDL(String sqlStmt) {
-        return sW(sqlStmt, "drop ") || sW(sqlStmt, "create ");
+        return DbExecutor.sW(sqlStmt, "drop ") || DbExecutor.sW(sqlStmt, "create ");
     }
 
     private static boolean sW(String testString, String expected) {

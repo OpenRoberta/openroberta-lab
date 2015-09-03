@@ -212,7 +212,7 @@ public class RoundTripTest {
                 RoundTripTest.s1,
                 RoundTripTest.sessionFactoryWrapper.getSession(),
                 JSONUtilForServer.mkD("{'cmd':'login';'accountName':'orA';'password':'Pid'}"));
-        JSONUtilForServer.assertEntityRc(RoundTripTest.response, "ok");
+        JSONUtilForServer.assertEntityRc(RoundTripTest.response, "ok", null);
         Assert.assertTrue(RoundTripTest.s1.isUserLoggedIn());
         int s1Id = RoundTripTest.s1.getUserId();
         Assert.assertEquals(0, RoundTripTest.getOneBigInteger("select count(*) from PROGRAM where OWNER_ID = " + s1Id));
@@ -222,7 +222,7 @@ public class RoundTripTest {
             JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"saveAsP\";\"name\":\"" + program + "\";\"timestamp\":0}}");
             fullRequest.getJSONObject("data").put("program", RoundTripTest.blocklyProgram);
             RoundTripTest.response = RoundTripTest.restProgram.command(RoundTripTest.s1, fullRequest);
-            JSONUtilForServer.assertEntityRc(RoundTripTest.response, "ok");
+            JSONUtilForServer.assertEntityRc(RoundTripTest.response, "ok", null);
         }
     }
 
@@ -321,7 +321,7 @@ public class RoundTripTest {
     }
 
     private static long getOneBigInteger(String sqlStmt) {
-        return RoundTripTest.memoryDbSetup.getOneBigInteger(sqlStmt);
+        return RoundTripTest.memoryDbSetup.getOneBigIntegerAsLong(sqlStmt);
     }
 
 }

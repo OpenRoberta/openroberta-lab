@@ -89,7 +89,7 @@ public class AccessRightDao extends AbstractDao<AccessRight> {
     }
 
     /**
-     * load all access rights persisted in the database which pertain to a given user
+     * load all access rights for a given user
      *
      * @return the list of all access rights, may be an empty list, but never null
      */
@@ -116,5 +116,19 @@ public class AccessRightDao extends AbstractDao<AccessRight> {
         if ( toBeDeleted != null ) {
             this.session.delete(toBeDeleted);
         }
+    }
+
+    public AccessRight loadAccessRightForUser(int userId, String programName, int ownerId) {
+        Assert.isTrue(userId > 0);
+
+        Query hql = this.session.createQuery("from AccessRight where user.id=:userId and program.name=:programName and program.owner.id=:ownerId");
+
+        hql.setInteger("userId", userId);
+        hql.setString("programName", programName);
+        hql.setInteger("ownerId", ownerId);
+        @SuppressWarnings("unchecked")
+        List<AccessRight> il = hql.list();
+        Assert.isTrue(il.size() <= 1);
+        return il.size() == 0 ? null : il.get(0);
     }
 }

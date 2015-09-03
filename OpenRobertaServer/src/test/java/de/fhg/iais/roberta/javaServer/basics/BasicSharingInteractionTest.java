@@ -79,15 +79,15 @@ public class BasicSharingInteractionTest {
             this.s1,
             this.sessionFactoryWrapper.getSession(),
             JSONUtilForServer.mkD("{'cmd':'createUser';'accountName':'master';'password':'master-p';'userEmail':'master@home.com';'role':'STUDENT'}"));
-        JSONUtilForServer.assertEntityRc(this.response, "ok");
+        JSONUtilForServer.assertEntityRc(this.response, "ok", null);
         Assert.assertEquals(1, getOneBigInteger("select count(*) from USER"));
         this.response = this.restUser.command(//login
             this.s1,
             this.sessionFactoryWrapper.getSession(),
             JSONUtilForServer.mkD("{'cmd':'login';'accountName':'master';'password':'master-p'}"));
-        JSONUtilForServer.assertEntityRc(this.response, "ok");
+        JSONUtilForServer.assertEntityRc(this.response, "ok", null);
         this.response = this.restProgram.command(this.s1, JSONUtilForServer.mkD("{'cmd':'saveP';'name':'toShare';'program':'<program>...</program>'}"));
-        JSONUtilForServer.assertEntityRc(this.response, "ok");
+        JSONUtilForServer.assertEntityRc(this.response, "ok", null);
         Assert.assertEquals(1, getOneBigInteger("select count(*) from PROGRAM"));
 
         //CREATE EACH FRIEND AND ONE PROGRAM PER FRIEND
@@ -104,19 +104,19 @@ public class BasicSharingInteractionTest {
                             + "';'password':'dip-"
                             + userNumber
                             + "';'userEmail':'cavy@home';'role':'STUDENT'}"));
-            JSONUtilForServer.assertEntityRc(this.response, "ok");
+            JSONUtilForServer.assertEntityRc(this.response, "ok", null);
             Assert.assertEquals(2 + userNumber, getOneBigInteger("select count(*) from USER"));
             this.response =
                 this.restUser.command(
                     s,
                     this.sessionFactoryWrapper.getSession(),
                     JSONUtilForServer.mkD("{'cmd':'login';'accountName':'pid-" + userNumber + "';'password':'dip-" + userNumber + "'}"));
-            JSONUtilForServer.assertEntityRc(this.response, "ok");
+            JSONUtilForServer.assertEntityRc(this.response, "ok", null);
             Assert.assertTrue(s.isUserLoggedIn());
             this.response =
                 this.restProgram.command(s, JSONUtilForServer.mkD("{'cmd':'saveP';'name':'test" + userNumber + "';'program':'<program>...</program>'}"));
             Assert.assertEquals(2 + userNumber, getOneBigInteger("select count(*) from PROGRAM"));
-            JSONUtilForServer.assertEntityRc(this.response, "ok");
+            JSONUtilForServer.assertEntityRc(this.response, "ok", null);
 
         }
         Assert.assertEquals(BasicSharingInteractionTest.MAX_TOTAL_FRIENDS + 1, getOneBigInteger("select count(*) from USER"));
@@ -126,7 +126,7 @@ public class BasicSharingInteractionTest {
                 this.s1,
                 this.sessionFactoryWrapper.getSession(),
                 JSONUtilForServer.mkD("{'cmd':'login';'accountName':'master';'password':'master-p'}"));
-        JSONUtilForServer.assertEntityRc(this.response, "ok");
+        JSONUtilForServer.assertEntityRc(this.response, "ok", null);
         Assert.assertTrue(this.s1.isUserLoggedIn());
 
         //Share with write rights pair friends
@@ -134,14 +134,14 @@ public class BasicSharingInteractionTest {
             this.response =
                 this.restProgram
                     .command(this.s1, JSONUtilForServer.mkD("{'cmd':'shareP';'userToShare':'pid-" + userNumber + "';'programName':'toShare';'right':'WRITE'}"));
-            JSONUtilForServer.assertEntityRc(this.response, "ok");
+            JSONUtilForServer.assertEntityRc(this.response, "ok", null);
         }
         //Share with read rights odd friends
         for ( int userNumber = 1; userNumber < BasicSharingInteractionTest.MAX_TOTAL_FRIENDS; userNumber += 2 ) {
             this.response =
                 this.restProgram
                     .command(this.s1, JSONUtilForServer.mkD("{'cmd':'shareP';'userToShare':'pid-" + userNumber + "';'programName':'toShare';'right':'READ'}"));
-            JSONUtilForServer.assertEntityRc(this.response, "ok");
+            JSONUtilForServer.assertEntityRc(this.response, "ok", null);
         }
         Assert.assertEquals(BasicSharingInteractionTest.MAX_TOTAL_FRIENDS, getOneBigInteger("select count(*) from USER_PROGRAM"));
         //Eliminate write rights for pair users
@@ -149,12 +149,12 @@ public class BasicSharingInteractionTest {
             this.response =
                 this.restProgram
                     .command(this.s1, JSONUtilForServer.mkD("{'cmd':'shareP';'userToShare':'pid-" + userNumber + "';'programName':'toShare';'right':'NONE'}"));
-            JSONUtilForServer.assertEntityRc(this.response, "ok");
+            JSONUtilForServer.assertEntityRc(this.response, "ok", null);
         }
         Assert.assertEquals(BasicSharingInteractionTest.MAX_TOTAL_FRIENDS / 2, getOneBigInteger("select count(*) from USER_PROGRAM"));
     }
 
     private long getOneBigInteger(String sqlStmt) {
-        return this.memoryDbSetup.getOneBigInteger(sqlStmt);
+        return this.memoryDbSetup.getOneBigIntegerAsLong(sqlStmt);
     }
 }

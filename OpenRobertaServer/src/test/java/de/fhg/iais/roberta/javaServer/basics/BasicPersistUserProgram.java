@@ -109,6 +109,6 @@ public class BasicPersistUserProgram {
     }
 
     private long getOneBigInteger(String sqlStmt) {
-        return this.memoryDbSetup.getOneBigInteger(sqlStmt);
+        return this.memoryDbSetup.getOneBigIntegerAsLong(sqlStmt);
     }
 }

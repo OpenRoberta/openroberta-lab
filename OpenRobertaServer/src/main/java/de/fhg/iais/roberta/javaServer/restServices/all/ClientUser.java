@@ -42,18 +42,18 @@ public class ClientUser {
     @Produces(MediaType.APPLICATION_JSON)
     public Response command(@OraData HttpSessionState httpSessionState, @OraData DbSession dbSession, JSONObject fullRequest) throws Exception {
         AliveData.rememberClientCall();
-        new ClientLogger().log(LOG, fullRequest);
+        new ClientLogger().log(ClientUser.LOG, fullRequest);
         final int userId = httpSessionState.getUserId();
         JSONObject response = new JSONObject();
         try {
             JSONObject request = fullRequest.getJSONObject("data");
             String cmd = request.getString("cmd");
-            LOG.info("command is: " + cmd);
+            ClientUser.LOG.info("command is: " + cmd);
             response.put("cmd", cmd);
             UserProcessor up = new UserProcessor(dbSession, httpSessionState);
             AccessRightProcessor upp = new AccessRightProcessor(dbSession, httpSessionState);
 
-            if ( cmd.equals("login") ) {
+            if ( cmd.equals("login") && !httpSessionState.isUserLoggedIn() ) {
                 String userAccountName = request.getString("accountName");
                 String password = request.getString("password");
                 User user = up.getUser(userAccountName, password);
@@ -66,14 +66,15 @@ public class ClientUser {
                     response.put("userId", id);
                     response.put("userRole", user.getRole());
                     response.put("userAccountName", account);
-                    LOG.info("login: user {} (id {}) logged in", account, id);
+                    ClientUser.LOG.info("login: user {} (id {}) logged in", account, id);
                     AliveData.rememberLogin();
                 }
 
             } else if ( cmd.equals("logout") && httpSessionState.isUserLoggedIn() ) {
                 httpSessionState.rememberLogout();
                 response.put("rc", "ok");
-                LOG.info("logout of user " + userId);
+                response.put("message", Key.USER_LOGOUT_SUCCESS.getKey());
+                ClientUser.LOG.info("logout of user " + userId);
 
             } else if ( cmd.equals("createUser") ) {
                 String account = request.getString("accountName");
@@ -103,14 +104,14 @@ public class ClientUser {
                 Util.addResultInfo(response, up);
 
             } else {
-                LOG.error("Invalid command: " + cmd);
+                ClientUser.LOG.error("Invalid command: " + cmd);
                 Util.addErrorInfo(response, Key.COMMAND_INVALID);
             }
             dbSession.commit();
         } catch ( Exception e ) {
             dbSession.rollback();
             String errorTicketId = Util.getErrorTicketId();
-            LOG.error("Exception. Error ticket: " + errorTicketId, e);
+            ClientUser.LOG.error("Exception. Error ticket: " + errorTicketId, e);
             Util.addErrorInfo(response, Key.SERVER_ERROR).append("parameters", errorTicketId);
         } finally {
             if ( dbSession != null ) {

@@ -332,7 +332,7 @@ function saveAsProgramToServer() {
     PROGRAM.saveAsProgramToServer(userState.program, timestamp, xmlText, function(result) {
         if (result.rc === 'ok') {
             userState.programModified = false;
-            userState.programTimestamp = UTIL.formatDateComplete(result.newProgramTimestamp);
+            userState.programTimestamp = UTIL.formatDateComplete(result.lastChanged);
         }
         displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM_AS", result.message, userState.program);
     });
@@ -352,7 +352,7 @@ function saveToServer() {
         PROGRAM.saveProgramToServer(userState.program, userState.programShared, timestamp, xmlText, function(result) {
             if (result.rc === 'ok') {
                 userState.programModified = false;
-                userState.programTimestamp = UTIL.formatDateComplete(result.newProgramTimestamp);
+                userState.programTimestamp = UTIL.formatDateComplete(result.lastChanged);
             }
             displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM", result.message, userState.program);
         });

@@ -92,11 +92,11 @@ public class ClientProgram {
                 Long timestamp = request.getLong("timestamp");
                 Timestamp programTimestamp = new Timestamp(timestamp);
                 boolean isShared = request.optBoolean("shared", false);
-                pp.updateProgram(programName, userId, robotId, programText, programTimestamp, true, !isShared);
+                pp.updateProgram(programName, userId, robotId, programText, programTimestamp, !isShared);
                 if ( pp.isOk() ) {
                     Program program = pp.getProgram(programName, userId, robotId);
                     if ( program != null ) {
-                        response.put("newProgramTimestamp", program.getLastChanged());
+                        response.put("lastChanged", program.getLastChanged());
                     }
                 }
                 Util.addResultInfo(response, pp);
@@ -119,16 +119,16 @@ public class ClientProgram {
                 String programText = request.getString("program");
                 Long timestamp = request.getLong("timestamp");
                 Timestamp programTimestamp = new Timestamp(timestamp);
-                pp.updateProgram(programName, userId, robotId, programText, programTimestamp, true, true);
+                pp.updateProgram(programName, userId, robotId, programText, programTimestamp, true);
                 if ( pp.isOk() ) {
                     Program program = pp.getProgram(programName, userId, robotId);
                     if ( program != null ) {
-                        response.put("newProgramTimestamp", program.getLastChanged());
+                        response.put("lastChanged", program.getLastChanged());
                     }
                 }
                 Util.addResultInfo(response, pp);
 
-            } else if ( cmd.equals("loadP") && httpSessionState.isUserLoggedIn() ) {
+            } else if ( cmd.equals("loadP") && (httpSessionState.isUserLoggedIn() || request.getString("owner").equals("Roberta")) ) {
                 String programName = request.getString("name");
                 String ownerName = request.getString("owner");
                 User owner = up.getUser(ownerName);
@@ -136,16 +136,7 @@ public class ClientProgram {
                 Program program = pp.getProgram(programName, ownerID, robotId);
                 if ( program != null ) {
                     response.put("data", program.getProgramText());
-                }
-                Util.addResultInfo(response, pp);
-            } else if ( cmd.equals("loadP") && request.getString("owner").equals("Roberta") ) {
-                String programName = request.getString("name");
-                String ownerName = request.getString("owner");
-                User owner = up.getUser(ownerName);
-                int ownerID = owner.getId();
-                Program program = pp.getProgram(programName, ownerID, robotId);
-                if ( program != null ) {
-                    response.put("data", program.getProgramText());
+                    response.put("lastChanged", program.getLastChanged().getTime());
                 }
                 Util.addResultInfo(response, pp);
             } else if ( cmd.equals("checkP") ) {

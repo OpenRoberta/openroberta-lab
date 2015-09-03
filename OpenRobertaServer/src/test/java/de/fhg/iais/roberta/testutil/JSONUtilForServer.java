@@ -7,6 +7,8 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.junit.Assert;
 import org.skyscreamer.jsonassert.JSONAssert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientAdmin;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientProgram;
@@ -14,6 +16,7 @@ import de.fhg.iais.roberta.javaServer.restServices.ev3.Ev3Command;
 import de.fhg.iais.roberta.javaServer.restServices.ev3.Ev3DownloadJar;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
+import de.fhg.iais.roberta.util.Key;
 
 /**
  * utilities for creating, checking and transforming between Strings and JSON objects. Note, that two json libraries are used:<br>
@@ -27,6 +30,8 @@ import de.fhg.iais.roberta.persistence.util.HttpSessionState;
  * @author rbudde
  */
 public class JSONUtilForServer {
+    private static final Logger LOG = LoggerFactory.getLogger(JSONUtilForServer.class);
+
     private JSONUtilForServer() {
         // no objects
     }
@@ -56,8 +61,8 @@ public class JSONUtilForServer {
     }
 
     /**
-     * transform a String to a JSON object. Put this JSON object into a wrapper JSON object as used for the client-server communication.
-     * Before transforming replace all ' by "
+     * transform a String to a JSON object. Put this JSON object into a wrapper JSON object as used for the client-server communication. Before transforming
+     * replace all ' by "
      *
      * @param s the String to be transformed to a JSON object and then set as the value of the data property of a wrapper JSON object
      * @return the JSON object for the client-server communication has the properties "data" and "log", never null
@@ -112,10 +117,19 @@ public class JSONUtilForServer {
      *
      * @param response the JSON object to check
      * @param rc the return code expected
+     * @param message the success or error message key, that is transformed by the client to a localized message
      * @throws JSONException
      */
-    public static void assertEntityRc(Response response, String rc) throws JSONException {
-        Assert.assertEquals(rc, ((JSONObject) response.getEntity()).getString("rc"));
+    public static void assertEntityRc(Response response, String rc, Key message) throws JSONException {
+        JSONObject entity = (JSONObject) response.getEntity();
+        Assert.assertEquals(rc, entity.getString("rc"));
+        String responseKey = entity.optString("message");
+        if ( message != null ) {
+            Assert.assertEquals(message.getKey(), responseKey);
+        } else if ( responseKey != null ) {
+            Exception e = new RuntimeException("Please visit the stacktrace");
+            JSONUtilForServer.LOG.error("you didn't supply a message key. You should do that. In this case I got: \"" + responseKey + "\"", e);
+        }
     }
 
     /**

@@ -7,7 +7,6 @@ import org.codehaus.jettison.json.JSONArray;
 
 import de.fhg.iais.roberta.persistence.bo.AccessRight;
 import de.fhg.iais.roberta.persistence.bo.Program;
-import de.fhg.iais.roberta.persistence.bo.Relation;
 import de.fhg.iais.roberta.persistence.bo.Robot;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.dao.AccessRightDao;
@@ -24,6 +23,15 @@ public class ProgramProcessor extends AbstractProcessor {
         super(dbSession, httpSessionState);
     }
 
+    /**
+     * load a program from the data base. Either the program is owned by the user with the id given or the program is shared
+     * by the user given to the user requesting the program
+     *
+     * @param programName the program to load
+     * @param ownerId the owner (either the user logged in or an owner who shared the program R/W with the user logged in
+     * @param robotId the robot the program was written for
+     * @return the program; null, if no program was found
+     */
     public Program getProgram(String programName, int ownerId, int robotId) {
         if ( !Util.isValidJavaIdentifier(programName) ) {
             setError(Key.PROGRAM_ERROR_ID_INVALID, programName);
@@ -144,21 +152,14 @@ public class ProgramProcessor extends AbstractProcessor {
     private Program getProgramWithAccessRight(String programName, int ownerId) {
         UserDao userDao = new UserDao(this.dbSession);
         AccessRightDao accessRightDao = new AccessRightDao(this.dbSession);
-        User owner = userDao.get(ownerId);
 
-        // Find all the programs which are not owned by the user but have been shared to him
-        List<AccessRight> accessRights = accessRightDao.loadAccessRightsForUser(owner);
-        for ( AccessRight accessRight : accessRights ) {
-            Program program = accessRight.getProgram();
-            String userProgramName = program.getName();
-            if ( programName.equals(userProgramName) ) {
-                String relation = accessRight.getRelation().toString();
-                if ( relation.equals(Relation.READ.toString()) || relation.equals(Relation.WRITE.toString()) ) {
-                    return program;
-                }
-            }
+        // Find whether a program has been shared to the user logged in
+        AccessRight accessRight = accessRightDao.loadAccessRightForUser(this.httpSessionState.getUserId(), programName, ownerId);
+        if ( accessRight == null ) {
+            return null;
+        } else {
+            return accessRight.getProgram();
         }
-        return null;
     }
 
     /**
@@ -172,7 +173,7 @@ public class ProgramProcessor extends AbstractProcessor {
      * @param mayExist true, if an existing program may be changed; false if a program may be stored only, if it does not exist in the database
      * @param isOwner true, if the owner updates a program; false if a user with access right WRITE updates a program
      */
-    public void updateProgram(String programName, int userId, int robotId, String programText, Timestamp programTimestamp, boolean mayExist, boolean isOwner) {
+    public void updateProgram(String programName, int userId, int robotId, String programText, Timestamp programTimestamp, boolean isOwner) {
         if ( !Util.isValidJavaIdentifier(programName) ) {
             setError(Key.PROGRAM_ERROR_ID_INVALID, programName);
             return;
@@ -183,11 +184,12 @@ public class ProgramProcessor extends AbstractProcessor {
             ProgramDao programDao = new ProgramDao(this.dbSession);
             User user = userDao.get(userId);
             Robot robot = robotDao.get(robotId);
-            boolean success = programDao.persistProgramText(programName, user, robot, programText, programTimestamp, mayExist, isOwner);
-            if ( success ) {
+            Key result = programDao.persistProgramText(programName, user, robot, programText, programTimestamp, isOwner);
+            // a bit strange, but necessary to distinguish between success and failure
+            if ( result == Key.PROGRAM_SAVE_SUCCESS ) {
                 setSuccess(Key.PROGRAM_SAVE_SUCCESS);
             } else {
-                setError(Key.PROGRAM_SAVE_ERROR_NOT_SAVED_TO_DB);
+                setError(result);
             }
         } else {
             setError(Key.USER_ERROR_NOT_LOGGED_IN);

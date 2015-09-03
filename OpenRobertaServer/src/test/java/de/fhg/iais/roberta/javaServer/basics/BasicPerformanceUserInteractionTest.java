@@ -160,7 +160,7 @@ public class BasicPerformanceUserInteractionTest {
                         + "';'password':'dip-"
                         + userNumber
                         + "';'userEmail':'cavy@home';'role':'STUDENT'}"));
-        JSONUtilForServer.assertEntityRc(response, "ok");
+        JSONUtilForServer.assertEntityRc(response, "ok", null);
 
         // login with user "pid", create 2 programs
         thinkTimeInMillisec += think(random, 2, 6);
@@ -169,24 +169,24 @@ public class BasicPerformanceUserInteractionTest {
                 s,
                 this.sessionFactoryWrapper.getSession(),
                 JSONUtilForServer.mkD("{'cmd':'login';'accountName':'pid-" + userNumber + "';'password':'dip-" + userNumber + "'}"));
-        JSONUtilForServer.assertEntityRc(response, "ok");
+        JSONUtilForServer.assertEntityRc(response, "ok", null);
         Assert.assertTrue(s.isUserLoggedIn());
         int sId = s.getUserId();
         response = this.restProgram.command(s, JSONUtilForServer.mkD("{'cmd':'saveP';'name':'p1';'program':'<program>...</program>'}"));
-        JSONUtilForServer.assertEntityRc(response, "ok");
+        JSONUtilForServer.assertEntityRc(response, "ok", null);
         response = this.restProgram.command(s, JSONUtilForServer.mkD("{'cmd':'saveP';'name':'p2';'program':'<program>...</program>'}"));
-        JSONUtilForServer.assertEntityRc(response, "ok");
-        Assert.assertEquals(2, this.memoryDbSetup.getOneBigInteger("select count(*) from PROGRAM where OWNER_ID = " + sId));
+        JSONUtilForServer.assertEntityRc(response, "ok", null);
+        Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + sId));
 
         // "pid" updates p2, has 2 programs, get list of programs, assert that the names match
         thinkTimeInMillisec += think(random, 0, 6);
         JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"saveP\";\"name\":\"p2\"}}");
         fullRequest.getJSONObject("data").put("program", this.theProgramOfAllUserLol);
         response = this.restProgram.command(s, fullRequest);
-        JSONUtilForServer.assertEntityRc(response, "ok");
-        Assert.assertEquals(2, this.memoryDbSetup.getOneBigInteger("select count(*) from PROGRAM where OWNER_ID = " + sId));
+        JSONUtilForServer.assertEntityRc(response, "ok", null);
+        Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + sId));
         response = this.restProgram.command(s, JSONUtilForServer.mkD("{'cmd':'loadPN'}"));
-        JSONUtilForServer.assertEntityRc(response, "ok");
+        JSONUtilForServer.assertEntityRc(response, "ok", null);
         JSONArray programListing = ((JSONObject) response.getEntity()).getJSONArray("programNames");
         JSONArray programNames = new JSONArray();
         for ( int i = 0; i < programListing.length(); i++ ) {

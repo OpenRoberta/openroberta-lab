@@ -179,7 +179,7 @@ public class RoundTripUITest {
     }
 
     private static long getOneBigInteger(String sqlStmt) {
-        return RoundTripUITest.memoryDbSetup.getOneBigInteger(sqlStmt);
+        return RoundTripUITest.memoryDbSetup.getOneBigIntegerAsLong(sqlStmt);
     }
 
 }
