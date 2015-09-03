@@ -1238,7 +1238,9 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReadAction) {
-        this.sb.append("hal.readMessage()");
+        this.sb.append("hal.readMessage(");
+        bluetoothReadAction.getConnection().visit(this);
+        this.sb.append(")");
         return null;
     }
 
@@ -1259,6 +1261,8 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     @Override
     public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
         this.sb.append("hal.sendMessage(");
+        bluetoothSendAction.getConnection().visit(this);
+        this.sb.append(", ");
         if ( bluetoothSendAction.getMsg().getKind() != BlockType.STRING_CONST ) {
             this.sb.append("str(");
             bluetoothSendAction.getMsg().visit(this);

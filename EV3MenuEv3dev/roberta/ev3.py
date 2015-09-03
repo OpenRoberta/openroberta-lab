@@ -94,7 +94,7 @@ class Hal(object):
         self.images = {}
         self.sys_bus = None
         self.bt_server = None
-        self.bt_connection = None
+        self.bt_connections = []
 
     @staticmethod
     def makeLargeMotor(port, regulated, direction, side):
@@ -401,11 +401,6 @@ class Hal(object):
         del self.timers[timer]
 
     # communication
-    # the HAL API is not good, it does not pass the connection to {read,send}Message()
-    # that means only two robots can talk to each other, instead it relies on the
-    # hal to keep the last connection
-    # FIXME: we should use an array for the connection handles, and return the
-    # array ix instead
     def establishConnectionTo(self, host):
         # host can also be a name, resolving it is slow though and requires the
         # device to be visible
@@ -416,12 +411,12 @@ class Hal(object):
                     host = bdaddr
                     break
         if is_valid_address(host):
-            if not self.bt_connection:
-                self.bt_connection = sock=BluetoothSocket(RFCOMM)
-            self.bt_connection.connect((host,post))
-            return self.bt_connection
+            con = sock=BluetoothSocket(RFCOMM)
+            con.connect((host,post))
+            self.bt_connections.append(con)
+            return len(self.bt_connections) - 1
         else:
-            return None
+            return -1
 
     def waitForConnection(self):
         # enable visibility
@@ -440,19 +435,20 @@ class Hal(object):
             self.bt_server.bind(("",PORT_ANY))
             self.bt_server.listen(1)
         
-        self.bt_connection,info = self.bt_server.accept()
-        return self.bt_connection
+        con,info = self.bt_server.accept()
+        self.bt_connections.append(con)
+        return len(self.bt_connections) - 1
 
-    def readMessage(self):
+    def readMessage(self, con_ix):
         message = "NO MESSAGE";
-        if self.bt_connection:
+        if con_ix < len(self.bt_connections) and self.bt_connections[con_ix]:
             logger.info('reading msg')
-            message = self.bt_connection.recv(1024)
+            message = self.bt_connections[con_ix].recv(1024)
             logger.info('received msg [%s]' % message)
         return message
 
-    def sendMessage(self, message):
-        if self.bt_connection:
+    def sendMessage(self, con_ix, message):
+        if con_ix < len(self.bt_connections) and self.bt_connections[con_ix]:
             logger.info('sending msg [%s]' % message)
-            self.bt_connection.send(message)
+            self.bt_connection[con_ix].send(message)
             logger.info('sent msg')
