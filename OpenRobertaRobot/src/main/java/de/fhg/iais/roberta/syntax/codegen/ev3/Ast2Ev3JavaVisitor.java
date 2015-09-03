@@ -353,11 +353,23 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBinary(Binary<Void> binary) {
+        if ( binary.getOp() == Op.EQ || binary.getOp() == Op.NEQ ) {
+            if ( isStringExpr(binary.getLeft()) && isStringExpr(binary.getRight()) ) {
+                if ( binary.getOp() == Op.NEQ ) {
+                    this.sb.append("!");
+                }
+                generateSubExpr(this.sb, false, binary.getLeft(), binary);
+                this.sb.append(".equals(");
+                generateSubExpr(this.sb, false, binary.getRight(), binary);
+                this.sb.append(")");
+                return null;
+            }
+        }
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
         this.sb.append(whitespace() + binary.getOp().getOpSymbol() + whitespace());
         if ( binary.getOp() == Op.TEXT_APPEND ) {
             this.sb.append("String.valueOf(");
-            generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+            generateSubExpr(this.sb, false, binary.getRight(), binary);
             this.sb.append(")");
         } else {
             generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
@@ -1362,6 +1374,11 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         return " ";
     }
 
+    private boolean isStringExpr(Expr<Void> e) {
+        // TODO: what about BINARY on the LHS
+        return e.getKind() == BlockType.STRING_CONST || (e.getKind() == BlockType.VAR && ((Var<?>) e).getTypeVar() == BlocklyType.STRING);
+    }
+
     private boolean parenthesesCheck(Binary<Void> binary) {
         return binary.getOp() == Op.MINUS && binary.getRight().getKind() == BlockType.BINARY && binary.getRight().getPrecedence() <= binary.getPrecedence();
     }
@@ -1493,8 +1510,8 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Error in the EV3\", 0, 0);\n");
 
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("if (e.getMessage() != null) {\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Error message\", 0, 2);\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(e.getMessage(), 0, 3);\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Error message:\", 0, 2);\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append(INDENT).append("Hal.exceptionPrintHandler(e.getMessage(), lcd);\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("}\n");
 
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Press any key\", 0, 7);\n");

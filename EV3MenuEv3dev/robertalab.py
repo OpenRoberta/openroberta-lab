@@ -51,7 +51,7 @@ def drawUI(hal, params):
 
 def main():
     logger = logging.getLogger('robertalab')
-    logger.info('--- starting ---');
+    logger.info('--- starting ---')
     params = {
       'macaddr': '70:1e:bb:88:89:bc',
       'firmwarename': 'ev3dev',
@@ -69,7 +69,7 @@ def main():
           'target': 'http://lab.open-roberta.org/', # address and port of server
         }
 
-    os.system('setterm -cursor off');
+    os.system('setterm -cursor off')
 
     hal = Hal(None, None)
     updateConfiguration(params)
@@ -97,7 +97,7 @@ def main():
             if cmd == 'repeat':
                 hal.drawText('registered', 0, 2)
                 if not registered: 
-                    hal.playFile(2);
+                    hal.playFile(2)
                 registered = True
             elif cmd == 'abort':
                 break
@@ -109,7 +109,7 @@ def main():
                 req = urllib2.Request('%s/download' % cfg['target'], headers=headers)
                 response = urllib2.urlopen(req, json.dumps(params), timeout=timeout)
                 logger.info('response: %s' % json.dumps(reply))
-                hdr = response.info().getheader('Content-Disposition');
+                hdr = response.info().getheader('Content-Disposition')
                 filename = '/tmp/%s' % hdr.split('=')[1] if hdr else 'unknown'
                 with open(filename, 'w') as prog:
                     prog.write(response.read())
@@ -126,18 +126,29 @@ def main():
                     logger.exception("Ooops:")
                 drawUI(hal, params)
                 hal.drawText('registered', 0, 2)
+            elif cmd == 'update':
+                # FIXME:
+                # fetch new files (menu/hal)
+                # then restart:
+                # os.execv(__file__, sys.argv)
+                # check if we need to close files (logger?)
+                pass
             else:
                 logger.warning('unhandled command: %s' % cmd)
         except urllib2.HTTPError as e:
-            # [Errno 111] Connection refused>
             logger.error("HTTPError(%s): %s" % (e.code, e.reason))
-            break;
+            break
+        except urllib2.URLError as e:
+            # [Errno 111] Connection refused>
+            logger.error("URLError: %s" % e.reason)
+            break
         except socket.timeout:
             pass
         except:
             logger.exception("Ooops:")
-    os.system('setterm -cursor on');
-    logger.info('--- done ---');
+    os.system('setterm -cursor on')
+    logger.info('--- done ---')
+    logging.shutdown()
 
 if __name__ == "__main__":
     main()

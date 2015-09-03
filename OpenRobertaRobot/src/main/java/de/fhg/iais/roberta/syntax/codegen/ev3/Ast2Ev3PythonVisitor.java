@@ -307,11 +307,16 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitUnary(Unary<Void> unary) {
+        String sym = unary.getOp().getOpSymbol();
+        // fixup language specific symbols
+        if ( sym.equals("!") ) {
+            sym = "not ";
+        }
         if ( unary.getOp() == Unary.Op.POSTFIX_INCREMENTS ) {
             generateExprCode(unary, this.sb);
-            this.sb.append(unary.getOp().getOpSymbol());
+            this.sb.append(sym);
         } else {
-            this.sb.append(unary.getOp().getOpSymbol());
+            this.sb.append(sym);
             generateExprCode(unary, this.sb);
         }
         return null;
@@ -323,7 +328,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append(' ').append(binary.getOp().getOpSymbol()).append(' ');
         if ( binary.getOp() == Op.TEXT_APPEND ) {
             this.sb.append("str(");
-            generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
+            generateSubExpr(this.sb, false, binary.getRight(), binary);
             this.sb.append(")");
         } else {
             generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
@@ -1233,7 +1238,9 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReadAction) {
-        this.sb.append("hal.readMessage()");
+        this.sb.append("hal.readMessage(");
+        bluetoothReadAction.getConnection().visit(this);
+        this.sb.append(")");
         return null;
     }
 
@@ -1254,6 +1261,8 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     @Override
     public Void visitBluetoothSendAction(BluetoothSendAction<Void> bluetoothSendAction) {
         this.sb.append("hal.sendMessage(");
+        bluetoothSendAction.getConnection().visit(this);
+        this.sb.append(", ");
         if ( bluetoothSendAction.getMsg().getKind() != BlockType.STRING_CONST ) {
             this.sb.append("str(");
             bluetoothSendAction.getMsg().visit(this);
@@ -1369,7 +1378,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append("import ev3dev\n");
         this.sb.append("import math\n\n");
 
-        this.sb.append("TRUE = True;\n");
+        this.sb.append("TRUE = True\n");
         this.sb.append(generateRegenerateConfiguration()).append("\n");
         this.sb.append(generateRegenerateUsedSensors()).append("\n");
         this.sb.append("hal = Hal(brickConfiguration, usedSensors)\n");

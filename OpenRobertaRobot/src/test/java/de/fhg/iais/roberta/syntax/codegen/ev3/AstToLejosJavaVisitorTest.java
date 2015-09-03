@@ -61,8 +61,8 @@ public class AstToLejosJavaVisitorTest {
         + "            lcd.clear();\n"
         + "            lcd.drawString(\"Error in the EV3\", 0, 0);\n"
         + "            if (e.getMessage() != null) {\n"
-        + "                lcd.drawString(\"Error message\", 0, 2);\n"
-        + "                lcd.drawString(e.getMessage(), 0, 3);\n"
+        + "                lcd.drawString(\"Error message:\", 0, 2);\n"
+        + "                Hal.exceptionPrintHandler(e.getMessage(), lcd);\n"
         + "            }\n"
         + "            lcd.drawString(\"Press any key\", 0, 7);\n"
         + "            lejos.hardware.Button.waitForAnyPress();\n"
@@ -519,6 +519,26 @@ public class AstToLejosJavaVisitorTest {
             + "}\n";
 
         assertCodeIsOk(a, "/syntax/methods/method_if_return_2.xml");
+    }
+
+    @Test
+    public void test17() throws Exception {
+        // regression test for https://mp-devel.iais.fraunhofer.de/jira/browse/ORA-610
+        String a = "" //
+            + IMPORTS
+            + MAIN_CLASS
+            + BRICK_CONFIGURATION_DECL
+            + USED_SENSORS_DECL
+            + MAIN_METHOD
+            + "    String message=\"exit\";\n"
+            + "    public void run() {\n"
+            + "        if (message.equals(\"exit\")) {\n"
+            + "            hal.drawText(\"done\", 0, 0);"
+            + "        }\n"
+            + "    }\n\n"
+            + "}\n";
+
+        assertCodeIsOk(a, "/syntax/stmt/if_stmt4.xml");
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {
