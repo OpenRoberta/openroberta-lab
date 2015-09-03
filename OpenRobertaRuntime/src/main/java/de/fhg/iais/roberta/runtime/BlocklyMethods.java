@@ -412,7 +412,12 @@ public class BlocklyMethods {
      * @param endIndex
      * @return sub-list of a given list
      */
-    public static <T> ArrayList<T> listsGetSubList(ArrayList<T> list, IndexLocation startLocation, float startIndex, IndexLocation endLocation, float endIndex) {
+    public static <T> ArrayList<T> listsGetSubList(
+        ArrayList<T> list,
+        IndexLocation startLocation,
+        float startIndex,
+        IndexLocation endLocation,
+        float endIndex) {
         Assert.isTrue(list.size() != 0, "List size is 0!");
         int fromIndex = calculateIndex(list, startLocation, startIndex);
         int toIndex = calculateIndex(list, endLocation, endIndex);

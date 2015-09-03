@@ -33,18 +33,17 @@ import lejos.robotics.SampleProvider;
  * This class instantiates all sensors (sensor modes) and actors used in blockly program.
  */
 public class DeviceHandler {
-
+    private final Set<EV3Sensors> usedSensors;
     private final Map<ActorPort, RegulatedMotor> lejosRegulatedMotors = new TreeMap<>();
     private final Map<ActorPort, EncoderMotor> lejosUnregulatedMotors = new TreeMap<>();
 
     private EV3GyroSensor gyroSensor = null;
 
+    //TODO this maybe should be into a map!?
     private SampleProviderBean[] portS1;
     private SampleProviderBean[] portS2;
     private SampleProviderBean[] portS3;
     private SampleProviderBean[] portS4;
-
-    private final Set<EV3Sensors> usedSensors;
 
     /**
      * Construct new initialization for actors and sensors on the brick. Client must provide
@@ -61,27 +60,41 @@ public class DeviceHandler {
     /**
      * Get regulated motor connected on port ({@link ActorPort})
      *
+     * @exception DbcException if regulated motor does not exist
      * @param actorPort on which the motor is connected
      * @return regulate motor
      */
     public RegulatedMotor getRegulatedMotor(ActorPort actorPort) {
-        return this.lejosRegulatedMotors.get(actorPort);
+        RegulatedMotor motor = this.lejosRegulatedMotors.get(actorPort);
+        if ( motor == null ) {
+            throw new DbcException("No regulated motor on port " + actorPort + "!");
+        }
+        return motor;
     }
 
     /**
      * Get unregulated motor connected on port ({@link ActorPort})
      *
+     * @exception DbcException if unregulated motor does not exist
      * @param actorPort on which the motor is connected
      * @return unregulated motor
      */
     public EncoderMotor getUnregulatedMotor(ActorPort actorPort) {
-        return this.lejosUnregulatedMotors.get(actorPort);
+        EncoderMotor motor = this.lejosUnregulatedMotors.get(actorPort);
+        if ( motor == null ) {
+            throw new DbcException("No unregulated motor on port " + actorPort + "!");
+        }
+        return motor;
     }
 
     /**
+     * @exception DbcException if the sensor is not connected
      * @return the gyroSensor
      */
     public EV3GyroSensor getGyroSensor() {
+        if ( this.gyroSensor == null ) {
+            throw new DbcException("No Gyro Sensor Connected!");
+        }
         return this.gyroSensor;
     }
 
@@ -109,7 +122,6 @@ public class DeviceHandler {
             case S4:
                 sampleProviders = this.portS4;
                 break;
-
             default:
                 throw new DbcException("Invalid port " + sensorPort);
         }
@@ -183,10 +195,7 @@ public class DeviceHandler {
 
                 case "EV3_ULTRASONIC_SENSOR":
                     EV3UltrasonicSensor ev3UltrasonicSensor = new EV3UltrasonicSensor(hardwarePort);
-                    long startTime = System.currentTimeMillis();
-                    t = ultrasonicSensorSampleProviders(sensorPort, ev3UltrasonicSensor);
-                    System.out.println(System.currentTimeMillis() - startTime);
-                    return t;
+                    return ultrasonicSensorSampleProviders(sensorPort, ev3UltrasonicSensor);
 
                 default:
                     throw new DbcException("No such sensor type!");

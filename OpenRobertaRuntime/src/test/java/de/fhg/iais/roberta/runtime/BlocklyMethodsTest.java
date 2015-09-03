@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.runtime.BlocklyMethods;
 import de.fhg.iais.roberta.shared.IndexLocation;
 import de.fhg.iais.roberta.shared.ListElementOperations;
 
@@ -200,10 +199,10 @@ public class BlocklyMethodsTest {
     public void listsGetIndex() {
         Assert.assertTrue(BlocklyMethods.listsIndex(BlocklyMethods.createListWith(0, 1, 2, 3, 1), ListElementOperations.GET, IndexLocation.FIRST) == 0);
         Assert.assertTrue(BlocklyMethods.listsIndex(BlocklyMethods.createListWith(0, 1, 2, 3, 1), ListElementOperations.GET, IndexLocation.LAST) == 1);
-        Assert
-            .assertTrue(BlocklyMethods.listsIndex(BlocklyMethods.createListWith("a", "b", "c", "c"), ListElementOperations.GET, IndexLocation.FROM_START, 1) == "b");
-        Assert
-            .assertTrue(BlocklyMethods.listsIndex(BlocklyMethods.createListWith("a", "b", "c", "c"), ListElementOperations.GET, IndexLocation.FROM_END, 3) == "b");
+        Assert.assertTrue(
+            BlocklyMethods.listsIndex(BlocklyMethods.createListWith("a", "b", "c", "c"), ListElementOperations.GET, IndexLocation.FROM_START, 1) == "b");
+        Assert.assertTrue(
+            BlocklyMethods.listsIndex(BlocklyMethods.createListWith("a", "b", "c", "c"), ListElementOperations.GET, IndexLocation.FROM_END, 3) == "b");
 
         ArrayList<String> list = BlocklyMethods.createListWith("a", "b", "c", "c");
         BlocklyMethods.listsIndex(list, ListElementOperations.REMOVE, IndexLocation.LAST);

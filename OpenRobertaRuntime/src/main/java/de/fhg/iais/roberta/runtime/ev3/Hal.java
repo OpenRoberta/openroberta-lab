@@ -26,6 +26,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import lejos.hardware.ev3.EV3;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.Image;
+import lejos.hardware.lcd.TextLCD;
 import lejos.remote.nxt.NXTConnection;
 import lejos.robotics.SampleProvider;
 import lejos.robotics.navigation.DifferentialPilot;
@@ -39,6 +40,7 @@ import lejos.utility.Stopwatch;
  */
 public class Hal {
 
+    private static final int NUMBER_OF_CHARACTERS_IN_ROW = 17;
     private static final int BLUETOOTH_TIMEOUT = 20;
 
     private final DeviceHandler deviceHandler;
@@ -87,16 +89,25 @@ public class Hal {
         }
     }
 
-    private int toDegPerSec(float speedPercent) {
-        return (int) (720.0 / 100.0 * speedPercent);
-    }
-
-    private int toPercent(float degPerSec) {
-        return (int) (degPerSec * 100.0 / 720.0);
-    }
-
-    private int rotationsToAngle(float rotations) {
-        return (int) (rotations * 360.0);
+    /**
+     * Print the exception message on the robot display in 3 lines
+     * 
+     * @param message
+     * @param lcd
+     */
+    public static void exceptionPrintHandler(String message, TextLCD lcd) {
+        String messageToBePrinted = message;
+        int displayRow = 3;
+        while ( messageToBePrinted.length() != 0 && displayRow <= 5 ) {
+            if ( messageToBePrinted.length() <= NUMBER_OF_CHARACTERS_IN_ROW ) {
+                lcd.drawString(messageToBePrinted, 0, displayRow);
+                return;
+            } else {
+                lcd.drawString(messageToBePrinted.substring(0, NUMBER_OF_CHARACTERS_IN_ROW), 0, displayRow);
+            }
+            displayRow++;
+            messageToBePrinted = messageToBePrinted.substring(NUMBER_OF_CHARACTERS_IN_ROW);
+        }
     }
 
     // --- Aktion Bewegung ---
@@ -1022,6 +1033,18 @@ public class Hal {
         if ( this.bluetoothConnection != null ) {
             this.blueCom.sendTo(this.bluetoothConnection, message);
         }
+    }
+
+    private int toDegPerSec(float speedPercent) {
+        return (int) (720.0 / 100.0 * speedPercent);
+    }
+
+    private int toPercent(float degPerSec) {
+        return (int) (degPerSec * 100.0 / 720.0);
+    }
+
+    private int rotationsToAngle(float rotations) {
+        return (int) (rotations * 360.0);
     }
 
 }
