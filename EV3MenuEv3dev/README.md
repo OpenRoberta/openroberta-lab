@@ -8,8 +8,12 @@ https://mp-devel.iais.fraunhofer.de/wiki/display/ORDevel/Open+Roberta+on+ev3dev
 ## prerequisites ##
 python-ev3dev
 python-bluez
+python-dbus
 
 ## dist ##
+``python setup.py sdist``
+
+or old fashioned:
 ``find . -name '*.py' -o -name '*.pbm' -o -name '*.pil' | tar -cvjf ev3dev-robertalab.tar.bz2 --files-from -``
 
 ## upload to ev3 ##
