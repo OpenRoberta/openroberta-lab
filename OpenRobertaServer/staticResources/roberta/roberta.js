@@ -481,7 +481,9 @@ function startProgram() {
     var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
     var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
     var xmlTextConfiguration = document.getElementById('bricklyFrame').contentWindow.getXmlOfConfiguration(userState.configuration);
-    Blockly.getMainWorkspace().startButton.disable();
+    if (Blockly.hasStartButton) {
+        Blockly.getMainWorkspace().startButton.disable();
+    }
     PROGRAM.runOnBrick(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
         //PROGRAM.showJavaProgram(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
         // console.log(result.javaSource);
@@ -1682,7 +1684,9 @@ function setRobotState(result) {
         $('#iconDisplayRobotState').removeClass('error');
         $('#iconDisplayRobotState').removeClass('busy');
         $('#iconDisplayRobotState').addClass('wait');
-        Blockly.getMainWorkspace().startButton.enable();
+        if (Blockly.hasStartButton) {
+            Blockly.getMainWorkspace().startButton.enable();
+        }
     } else if (userState.robotState === 'busy') {
         $('#iconDisplayRobotState').removeClass('wait');
         $('#iconDisplayRobotState').removeClass('error');
@@ -2036,6 +2040,14 @@ function init() {
     });
 
     UTIL.resizeTabBar(); // for small devices only  
+    UTIL.checkVisibility(function() {
+        var visible = UTIL.checkVisibility();
+        LOG.info("this tab visible: " + visible);
+        if (!visible) {
+            SIM.setPause(true);
+            // TODO do more?
+        }
+    });
     switchRobot(userState.robot);
 };
 
