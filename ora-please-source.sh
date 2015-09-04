@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ora.sh --java
+#.sh --java
 
 __commands_ora_sh=`ora.sh --help | tr [:blank:] '\n' | grep "^--"`
 

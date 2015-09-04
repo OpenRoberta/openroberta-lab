@@ -62,7 +62,7 @@ public class AstToLejosJavaVisitorTest {
         + "            lcd.drawString(\"Error in the EV3\", 0, 0);\n"
         + "            if (e.getMessage() != null) {\n"
         + "                lcd.drawString(\"Error message:\", 0, 2);\n"
-        + "                Hal.exceptionPrintHandler(e.getMessage(), lcd);\n"
+        + "                Hal.formatInfoMessage(e.getMessage(), lcd);\n"
         + "            }\n"
         + "            lcd.drawString(\"Press any key\", 0, 7);\n"
         + "            lejos.hardware.Button.waitForAnyPress();\n"

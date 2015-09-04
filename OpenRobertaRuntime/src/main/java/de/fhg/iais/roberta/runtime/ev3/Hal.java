@@ -90,12 +90,12 @@ public class Hal {
     }
 
     /**
-     * Print the exception message on the robot display in 3 lines
-     * 
+     * Print formatted message on the robot display.
+     *
      * @param message
      * @param lcd
      */
-    public static void exceptionPrintHandler(String message, TextLCD lcd) {
+    public static void formatInfoMessage(String message, TextLCD lcd) {
         String messageToBePrinted = message;
         int displayRow = 3;
         while ( messageToBePrinted.length() != 0 && displayRow <= 5 ) {
@@ -228,17 +228,14 @@ public class Hal {
         value = value < 0 ? 0 : value;
         int zeroTachoCount = this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount();
         setUnregulatedMotorSpeed(actorPort, speedPercent);
-
         this.deviceHandler.getUnregulatedMotor(actorPort).forward();
         if ( speedPercent >= 0 ) {
             switch ( mode ) {
                 case DEGREE:
                     value += zeroTachoCount;
-
                     break;
                 case ROTATIONS:
                     value = zeroTachoCount + rotationsToAngle(value);
-
                     break;
                 default:
                     throw new DbcException("incorrect MotorMoveMode");
@@ -246,17 +243,13 @@ public class Hal {
             while ( this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() < value ) {
                 // do nothing
             }
-
         } else {
-
             switch ( mode ) {
                 case DEGREE:
                     value = zeroTachoCount - value;
-
                     break;
                 case ROTATIONS:
                     value = zeroTachoCount - rotationsToAngle(value);
-
                     break;
                 default:
                     throw new DbcException("incorrect MotorMoveMode");
@@ -609,50 +602,30 @@ public class Hal {
     public void ledOn(BrickLedColor color, BlinkMode blinkMode) {
         switch ( color ) {
             case GREEN:
-                switch ( blinkMode ) {
-                    case ON:
-                        this.brick.getLED().setPattern(1);
-                        break;
-                    case FLASH:
-                        this.brick.getLED().setPattern(4);
-                        break;
-                    case DOUBLE_FLASH:
-                        this.brick.getLED().setPattern(7);
-                        break;
-                    default:
-                        throw new DbcException("incorrect blink mode");
-                }
+                handleBlinkMode(blinkMode, 0);
                 break;
             case RED:
-                switch ( blinkMode ) {
-                    case ON:
-                        this.brick.getLED().setPattern(2);
-                        break;
-                    case FLASH:
-                        this.brick.getLED().setPattern(5);
-                        break;
-                    case DOUBLE_FLASH:
-                        this.brick.getLED().setPattern(8);
-                        break;
-                    default:
-                        throw new DbcException("incorrect blink mode");
-                }
+                handleBlinkMode(blinkMode, 1);
                 break;
             case ORANGE:
-                switch ( blinkMode ) {
-                    case ON:
-                        this.brick.getLED().setPattern(3);
-                        break;
-                    case FLASH:
-                        this.brick.getLED().setPattern(6);
-                        break;
-                    case DOUBLE_FLASH:
-                        this.brick.getLED().setPattern(9);
-                        break;
-                    default:
-                        throw new DbcException("incorrect blink mode");
-                }
+                handleBlinkMode(blinkMode, 2);
                 break;
+        }
+    }
+
+    private void handleBlinkMode(BlinkMode blinkMode, int colorNum) {
+        switch ( blinkMode ) {
+            case ON:
+                this.brick.getLED().setPattern(1 + colorNum);
+                break;
+            case FLASH:
+                this.brick.getLED().setPattern(4 + colorNum);
+                break;
+            case DOUBLE_FLASH:
+                this.brick.getLED().setPattern(7 + colorNum);
+                break;
+            default:
+                throw new DbcException("incorrect blink mode");
         }
     }
 
@@ -702,7 +675,7 @@ public class Hal {
      * @return true if exists other ultrasonic sensor
      */
     public boolean getUltraSonicSensorPresence(SensorPort sensorPort) {
-        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, UltrasonicSensorMode.PRESENCE.name());
+        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, UltrasonicSensorMode.PRESENCE.getLejosModeName());
         float[] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0);
         if ( sample[0] == 1.0 ) {
@@ -719,7 +692,7 @@ public class Hal {
      * @return value in <i>cm</i> of the distance of the ultrasonic sensor and some object
      */
     public float getUltraSonicSensorDistance(SensorPort sensorPort) {
-        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, UltrasonicSensorMode.DISTANCE.name());
+        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, UltrasonicSensorMode.DISTANCE.getLejosModeName());
         float[] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0); // ^= distance in cm
         float distance = Math.round(sample[0] * 100.0f);
@@ -741,7 +714,7 @@ public class Hal {
      * @return the value of the measurement of the sensor
      */
     public float getColorSensorAmbient(SensorPort sensorPort) {
-        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, ColorSensorMode.AMBIENTLIGHT.name());
+        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, ColorSensorMode.AMBIENTLIGHT.getLejosModeName());
         float[] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0);
         return Math.round(sample[0] * 100.0f); // * 100
@@ -754,7 +727,7 @@ public class Hal {
      * @return color that is detected with the sensor (see {@link Pickcolor} for all colors that can be detected)
      */
     public Pickcolor getColorSensorColour(SensorPort sensorPort) {
-        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, ColorSensorMode.COLOUR.name());
+        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, ColorSensorMode.COLOUR.getLejosModeName());
         float[] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0);
         return Pickcolor.get(Math.round(sample[0]));
@@ -767,7 +740,7 @@ public class Hal {
      * @return the value of the measurement of the sensor
      */
     public float getColorSensorRed(SensorPort sensorPort) {
-        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, ColorSensorMode.RED.name());
+        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, ColorSensorMode.RED.getLejosModeName());
         float[] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0);
         return Math.round(sample[0] * 100.0f); // * 100
@@ -780,7 +753,7 @@ public class Hal {
      * @return array of size three where in each element of the array is encode on color channel (RGB), values are between 0 and 255
      */
     public ArrayList<Float> getColorSensorRgb(SensorPort sensorPort) {
-        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, ColorSensorMode.RGB.name());
+        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, ColorSensorMode.RGB.getLejosModeName());
         float[] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0);
         ArrayList<Float> result = new ArrayList<Float>();
@@ -800,7 +773,7 @@ public class Hal {
      * @return value in <i>cm</i> of the distance of the infrared sensor and some object
      */
     public float getInfraredSensorDistance(SensorPort sensorPort) {
-        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, InfraredSensorMode.DISTANCE.name());
+        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, InfraredSensorMode.DISTANCE.getLejosModeName());
         float[] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0);
 
@@ -814,7 +787,7 @@ public class Hal {
      * @return array of size 7
      */
     public ArrayList<Float> getInfraredSensorSeek(SensorPort sensorPort) {
-        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, InfraredSensorMode.SEEK.name());
+        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, InfraredSensorMode.SEEK.getLejosModeName());
         float[] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0);
         ArrayList<Float> result = new ArrayList<Float>();
@@ -842,7 +815,7 @@ public class Hal {
      * @return value of the measurment of the sensor
      */
     public float getGyroSensorValue(SensorPort sensorPort, GyroSensorMode sensorMode) {
-        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, sensorMode.name());
+        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, sensorMode.getLejosModeName());
         float[] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0);
 

@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.runtime.ev3;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -9,17 +10,16 @@ import de.fhg.iais.roberta.components.ev3.EV3Actor;
 import de.fhg.iais.roberta.components.ev3.EV3Sensors;
 import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
 import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
-import de.fhg.iais.roberta.shared.sensor.ev3.ColorSensorMode;
-import de.fhg.iais.roberta.shared.sensor.ev3.GyroSensorMode;
-import de.fhg.iais.roberta.shared.sensor.ev3.InfraredSensorMode;
 import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
-import de.fhg.iais.roberta.shared.sensor.ev3.UltrasonicSensorMode;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import lejos.hardware.ev3.LocalEV3;
+import lejos.hardware.lcd.TextLCD;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.motor.NXTRegulatedMotor;
 import lejos.hardware.motor.UnregulatedMotor;
 import lejos.hardware.port.Port;
+import lejos.hardware.sensor.BaseSensor;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3IRSensor;
@@ -34,16 +34,13 @@ import lejos.robotics.SampleProvider;
  */
 public class DeviceHandler {
     private final Set<EV3Sensors> usedSensors;
+    private final Map<SensorPort, SampleProviderBean[]> lejosSensors = new HashMap<>();
+    private EV3GyroSensor gyroSensor = null;
+
     private final Map<ActorPort, RegulatedMotor> lejosRegulatedMotors = new TreeMap<>();
     private final Map<ActorPort, EncoderMotor> lejosUnregulatedMotors = new TreeMap<>();
 
-    private EV3GyroSensor gyroSensor = null;
-
-    //TODO this maybe should be into a map!?
-    private SampleProviderBean[] portS1;
-    private SampleProviderBean[] portS2;
-    private SampleProviderBean[] portS3;
-    private SampleProviderBean[] portS4;
+    private TextLCD lcd = LocalEV3.get().getTextLCD();
 
     /**
      * Construct new initialization for actors and sensors on the brick. Client must provide
@@ -108,23 +105,7 @@ public class DeviceHandler {
      * @return sample provider
      */
     public SampleProvider getProvider(SensorPort sensorPort, String sensorMode) {
-        SampleProviderBean[] sampleProviders = null;
-        switch ( sensorPort ) {
-            case S1:
-                sampleProviders = this.portS1;
-                break;
-            case S2:
-                sampleProviders = this.portS2;
-                break;
-            case S3:
-                sampleProviders = this.portS3;
-                break;
-            case S4:
-                sampleProviders = this.portS4;
-                break;
-            default:
-                throw new DbcException("Invalid port " + sensorPort);
-        }
+        SampleProviderBean[] sampleProviders = this.lejosSensors.get(sensorPort);
         if ( sampleProviders == null ) {
             throw new DbcException("Sensor mode " + sensorMode + " not avaliable on port " + sensorPort);
         }
@@ -136,36 +117,45 @@ public class DeviceHandler {
         initMotor(ActorPort.B, brickConfiguration.getActorOnPort(ActorPort.B), lejos.hardware.port.MotorPort.B);
         initMotor(ActorPort.C, brickConfiguration.getActorOnPort(ActorPort.C), lejos.hardware.port.MotorPort.C);
         initMotor(ActorPort.D, brickConfiguration.getActorOnPort(ActorPort.D), lejos.hardware.port.MotorPort.D);
-        this.portS1 = initSensor(SensorPort.S1, brickConfiguration.getSensorOnPort(SensorPort.S1), lejos.hardware.port.SensorPort.S1);
-        this.portS2 = initSensor(SensorPort.S2, brickConfiguration.getSensorOnPort(SensorPort.S2), lejos.hardware.port.SensorPort.S2);
-        this.portS3 = initSensor(SensorPort.S3, brickConfiguration.getSensorOnPort(SensorPort.S3), lejos.hardware.port.SensorPort.S3);
-        this.portS4 = initSensor(SensorPort.S4, brickConfiguration.getSensorOnPort(SensorPort.S4), lejos.hardware.port.SensorPort.S4);
+
+        initSensor(SensorPort.S1, brickConfiguration.getSensorOnPort(SensorPort.S1), lejos.hardware.port.SensorPort.S1);
+        initSensor(SensorPort.S2, brickConfiguration.getSensorOnPort(SensorPort.S2), lejos.hardware.port.SensorPort.S2);
+        initSensor(SensorPort.S3, brickConfiguration.getSensorOnPort(SensorPort.S3), lejos.hardware.port.SensorPort.S3);
+        initSensor(SensorPort.S4, brickConfiguration.getSensorOnPort(SensorPort.S4), lejos.hardware.port.SensorPort.S4);
+        this.lcd.clear();
     }
 
     private void initMotor(ActorPort actorPort, EV3Actor actorType, Port hardwarePort) {
         if ( actorType != null ) {
             if ( actorType.isRegulated() ) {
-                switch ( actorType.getComponentType().getTypeName() ) {
-                    case "EV3_LARGE_MOTOR":
-                        RegulatedMotor ev3LargeRegulatedMotor = new EV3LargeRegulatedMotor(hardwarePort);
-                        this.lejosRegulatedMotors.put(actorPort, ev3LargeRegulatedMotor);
-                        break;
-                    case "EV3_MEDIUM_MOTOR":
-                        RegulatedMotor ev3MediumRegulatedMotor = new EV3MediumRegulatedMotor(hardwarePort);
-                        this.lejosRegulatedMotors.put(actorPort, ev3MediumRegulatedMotor);
-                        break;
-                    case "NXTRegulatedMotor":
-                        RegulatedMotor nxtRegulatedMotor = new NXTRegulatedMotor(hardwarePort);
-                        this.lejosRegulatedMotors.put(actorPort, nxtRegulatedMotor);
-                        break;
-                    default:
-                        throw new DbcException("No such actor type!");
-                }
+                initRegulatedMotor(actorPort, actorType, hardwarePort);
             } else {
-                UnregulatedMotor nxtMotor = new UnregulatedMotor(hardwarePort);
-                nxtMotor.resetTachoCount();
-                this.lejosUnregulatedMotors.put(actorPort, nxtMotor);
+                initUnregulatedMotor(actorPort, hardwarePort);
             }
+        }
+    }
+
+    private void initUnregulatedMotor(ActorPort actorPort, Port hardwarePort) {
+        UnregulatedMotor nxtMotor = new UnregulatedMotor(hardwarePort);
+        nxtMotor.resetTachoCount();
+        this.lejosUnregulatedMotors.put(actorPort, nxtMotor);
+    }
+
+    private void initRegulatedMotor(ActorPort actorPort, EV3Actor actorType, Port hardwarePort) {
+        this.lcd.clear();
+        Hal.formatInfoMessage("Initializing motor on port " + actorPort, this.lcd);
+        switch ( actorType.getComponentType().getTypeName() ) {
+            case "EV3_LARGE_MOTOR":
+                this.lejosRegulatedMotors.put(actorPort, new EV3LargeRegulatedMotor(hardwarePort));
+                break;
+            case "EV3_MEDIUM_MOTOR":
+                this.lejosRegulatedMotors.put(actorPort, new EV3MediumRegulatedMotor(hardwarePort));
+                break;
+            case "NXTRegulatedMotor":
+                this.lejosRegulatedMotors.put(actorPort, new NXTRegulatedMotor(hardwarePort));
+                break;
+            default:
+                throw new DbcException("Actor type " + actorType.getComponentType().getTypeName() + " does not exists!");
         }
     }
 
@@ -173,36 +163,31 @@ public class DeviceHandler {
         return this.usedSensors.contains(actorType.getComponentType());
     }
 
-    private SampleProviderBean[] initSensor(SensorPort sensorPort, HardwareComponent sensorType, Port hardwarePort) {
+    private void initSensor(SensorPort sensorPort, HardwareComponent sensorType, Port hardwarePort) {
         if ( sensorType != null && isUsed(sensorType) ) {
-            SampleProviderBean[] t;
+            this.lcd.clear();
+            Hal.formatInfoMessage("Initializing " + sensorType.getComponentType().getShortName() + " on port " + sensorPort + " ...", this.lcd);
             switch ( sensorType.getComponentType().getTypeName() ) {
                 case "EV3_COLOR_SENSOR":
-                    EV3ColorSensor ev3ColorSensor = new EV3ColorSensor(hardwarePort);
-                    return colorSensorSampleProviders(sensorPort, ev3ColorSensor);
-
+                    this.lejosSensors.put(sensorPort, sensorSampleProviders(new EV3ColorSensor(hardwarePort)));
+                    break;
                 case "EV3_IR_SENSOR":
-                    EV3IRSensor ev3IRSensor = new EV3IRSensor(hardwarePort);
-                    return infraredSensorSampleProviders(sensorPort, ev3IRSensor);
-
+                    this.lejosSensors.put(sensorPort, sensorSampleProviders(new EV3IRSensor(hardwarePort)));
+                    break;
                 case "EV3_GYRO_SENSOR":
                     this.gyroSensor = new EV3GyroSensor(hardwarePort);
-                    return gyroSensorSampleProviders(sensorPort, this.gyroSensor);
-
+                    this.lejosSensors.put(sensorPort, sensorSampleProviders(this.gyroSensor));
+                    break;
                 case "EV3_TOUCH_SENSOR":
-                    EV3TouchSensor ev3TouchSensor = new EV3TouchSensor(hardwarePort);
-                    return touchSensorSampleProviders(sensorPort, ev3TouchSensor);
-
+                    this.lejosSensors.put(sensorPort, sensorSampleProviders(new EV3TouchSensor(hardwarePort)));
+                    break;
                 case "EV3_ULTRASONIC_SENSOR":
-                    EV3UltrasonicSensor ev3UltrasonicSensor = new EV3UltrasonicSensor(hardwarePort);
-                    return ultrasonicSensorSampleProviders(sensorPort, ev3UltrasonicSensor);
-
+                    this.lejosSensors.put(sensorPort, sensorSampleProviders(new EV3UltrasonicSensor(hardwarePort)));
+                    break;
                 default:
-                    throw new DbcException("No such sensor type!");
+                    throw new DbcException("Sensor type " + sensorType.getComponentType().getTypeName() + " does not exists!");
             }
-
         }
-        return null;
     }
 
     private SampleProvider findProviderByMode(SampleProviderBean[] sampleProviders, String sensorMode) {
@@ -214,68 +199,16 @@ public class DeviceHandler {
         throw new DbcException(sensorMode + " sample provider does not exists!");
     }
 
-    private SampleProviderBean[] colorSensorSampleProviders(SensorPort sensorPort, EV3ColorSensor ev3ColorSensor) {
-        SampleProviderBean[] colorSensorSampleProvider = new SampleProviderBean[ColorSensorMode.values().length];
+    private SampleProviderBean[] sensorSampleProviders(BaseSensor sensor) {
+        SampleProviderBean[] sampleProvider = new SampleProviderBean[sensor.getAvailableModes().size()];
         int i = 0;
-        for ( ColorSensorMode sensorMode : ColorSensorMode.values() ) {
+        for ( String modeName : sensor.getAvailableModes() ) {
             SampleProviderBean providerBean = new SampleProviderBean();
-            providerBean.setModeName(sensorMode.name());
-            providerBean.setSampleProvider(ev3ColorSensor.getMode(sensorMode.getLejosModeName()));
-            colorSensorSampleProvider[i] = providerBean;
+            providerBean.setModeName(modeName);
+            providerBean.setSampleProvider(sensor.getMode(modeName));
+            sampleProvider[i] = providerBean;
             i++;
         }
-        return colorSensorSampleProvider;
-    }
-
-    private SampleProviderBean[] infraredSensorSampleProviders(SensorPort sensorPort, EV3IRSensor ev3IRSensor) {
-        SampleProviderBean[] infraredSensorSampleProviders = new SampleProviderBean[InfraredSensorMode.values().length];
-        int i = 0;
-        for ( InfraredSensorMode sensorMode : InfraredSensorMode.values() ) {
-            SampleProviderBean providerBean = new SampleProviderBean();
-            providerBean.setModeName(sensorMode.name());
-            providerBean.setSampleProvider(ev3IRSensor.getMode(sensorMode.getLejosModeName()));
-            infraredSensorSampleProviders[i] = providerBean;
-            i++;
-        }
-        return infraredSensorSampleProviders;
-    }
-
-    private SampleProviderBean[] gyroSensorSampleProviders(SensorPort sensorPort, EV3GyroSensor ev3GyroSensor) {
-        SampleProviderBean[] gyroSensorSampleProviders = new SampleProviderBean[GyroSensorMode.values().length - 1];
-        int i = 0;
-        for ( GyroSensorMode sensorMode : GyroSensorMode.values() ) {
-            if ( sensorMode != GyroSensorMode.RESET ) {
-                SampleProviderBean providerBean = new SampleProviderBean();
-                providerBean.setModeName(sensorMode.name());
-                providerBean.setSampleProvider(ev3GyroSensor.getMode(sensorMode.getLejosModeName()));
-                gyroSensorSampleProviders[i] = providerBean;
-                i++;
-            }
-        }
-        return gyroSensorSampleProviders;
-    }
-
-    private SampleProviderBean[] ultrasonicSensorSampleProviders(SensorPort sensorPort, EV3UltrasonicSensor ev3UltrasonicSensor) {
-        SampleProviderBean[] ultrasonicSensorSampleProviders = new SampleProviderBean[UltrasonicSensorMode.values().length];
-        int i = 0;
-        for ( UltrasonicSensorMode sensorMode : UltrasonicSensorMode.values() ) {
-            SampleProviderBean providerBean = new SampleProviderBean();
-            providerBean.setModeName(sensorMode.name());
-            providerBean.setSampleProvider(ev3UltrasonicSensor.getMode(sensorMode.getLejosModeName()));
-            ultrasonicSensorSampleProviders[i] = providerBean;
-            i++;
-        }
-        return ultrasonicSensorSampleProviders;
-    }
-
-    private SampleProviderBean[] touchSensorSampleProviders(SensorPort sensorPort, EV3TouchSensor ev3TouchSensor) {
-        SampleProviderBean[] touchSensorSampleProviders = new SampleProviderBean[1];
-
-        SampleProviderBean providerBean = new SampleProviderBean();
-        providerBean.setModeName("Touch");
-        providerBean.setSampleProvider(ev3TouchSensor.getMode("Touch"));
-        touchSensorSampleProviders[0] = providerBean;
-
-        return touchSensorSampleProviders;
+        return sampleProvider;
     }
 }

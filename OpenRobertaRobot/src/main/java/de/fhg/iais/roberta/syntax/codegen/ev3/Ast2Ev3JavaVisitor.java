@@ -1511,7 +1511,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("if (e.getMessage() != null) {\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Error message:\", 0, 2);\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append(INDENT).append("Hal.exceptionPrintHandler(e.getMessage(), lcd);\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append(INDENT).append("Hal.formatInfoMessage(e.getMessage(), lcd);\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("}\n");
 
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.drawString(\"Press any key\", 0, 7);\n");
