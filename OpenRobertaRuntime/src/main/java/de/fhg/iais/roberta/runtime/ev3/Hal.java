@@ -296,11 +296,11 @@ public class Hal {
     public void stopRegulatedMotor(ActorPort actorPort, MotorStopMode stopMode) {
         switch ( stopMode ) {
             case FLOAT:
-                this.deviceHandler.getRegulatedMotor(actorPort).flt();
-                this.deviceHandler.getRegulatedMotor(actorPort).stop();
+                this.deviceHandler.getRegulatedMotor(actorPort).flt(true);
+                //this.deviceHandler.getRegulatedMotor(actorPort).stop(true);
                 break;
             case NONFLOAT:
-                this.deviceHandler.getRegulatedMotor(actorPort).stop();
+                this.deviceHandler.getRegulatedMotor(actorPort).stop(true);
                 break;
             default:
                 throw new DbcException("Wrong MotorStopMode");
@@ -319,7 +319,7 @@ public class Hal {
         switch ( floating ) {
             case FLOAT:
                 this.deviceHandler.getUnregulatedMotor(actorPort).flt();
-                this.deviceHandler.getUnregulatedMotor(actorPort).stop();
+                //this.deviceHandler.getUnregulatedMotor(actorPort).stop();
                 break;
             case NONFLOAT:
                 this.deviceHandler.getUnregulatedMotor(actorPort).stop();
