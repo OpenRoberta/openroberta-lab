@@ -25,6 +25,7 @@ public class AstToLejosJavaVisitorTest {
         + "package generated.main;\n\n"
         + "import de.fhg.iais.roberta.runtime.*;\n"
         + "import de.fhg.iais.roberta.runtime.ev3.*;\n\n"
+        + "import de.fhg.iais.roberta.shared.*;\n"
         + "import de.fhg.iais.roberta.shared.action.ev3.*;\n"
         + "import de.fhg.iais.roberta.shared.sensor.ev3.*;\n\n"
         + "import de.fhg.iais.roberta.components.*;\n"
