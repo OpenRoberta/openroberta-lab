@@ -880,7 +880,9 @@ public class Hal {
     public void resetUnregulatedMotorTacho(ActorPort actorPort) {
         this.deviceHandler.getUnregulatedMotor(actorPort).resetTachoCount();
     }
-
+    
+    
+    
     /**
      * Get value of the tacho sensor of the regulated motor.<br>
      * <br>
@@ -895,7 +897,12 @@ public class Hal {
             case DEGREE:
                 return this.deviceHandler.getRegulatedMotor(actorPort).getTachoCount();
             case ROTATION:
-                return Math.round(this.deviceHandler.getRegulatedMotor(actorPort).getTachoCount() / 360.0 * 100.0) / 100.0;
+            case DISTANCE:
+                double rotations = Math.round(this.deviceHandler.getRegulatedMotor(actorPort).getTachoCount() / 360.0 * 100.0) / 100.0;
+                if(mode == MotorTachoMode.ROTATION)
+                    return rotations;
+                else
+                    return Math.round (Math.PI * wheelDiameter * rotations );
             default:
                 throw new DbcException("incorrect MotorTachoMode");
         }
@@ -915,7 +922,12 @@ public class Hal {
             case DEGREE:
                 return this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount();
             case ROTATION:
-                return Math.round(this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() / 360.0 * 100.0) / 100.0;
+            case DISTANCE:
+                double rotations = Math.round(this.deviceHandler.getUnregulatedMotor(actorPort).getTachoCount() / 360.0 * 100.0) / 100.0;
+                if(mode == MotorTachoMode.ROTATION)
+                    return rotations;
+                else
+                    return Math.round (Math.PI * wheelDiameter * rotations );
             default:
                 throw new DbcException("incorrect MotorTachoMode");
         }

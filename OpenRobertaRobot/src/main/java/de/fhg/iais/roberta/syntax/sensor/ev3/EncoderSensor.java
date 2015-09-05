@@ -103,7 +103,7 @@ public class EncoderSensor<V> extends Sensor<V> {
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
         String fieldValue = getMotor().name();
-        if ( getMode() == MotorTachoMode.DEGREE || getMode() == MotorTachoMode.ROTATION ) {
+        if ( getMode() != MotorTachoMode.RESET) {
             JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE_, getMode().name());
         }
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MOTORPORT, fieldValue);

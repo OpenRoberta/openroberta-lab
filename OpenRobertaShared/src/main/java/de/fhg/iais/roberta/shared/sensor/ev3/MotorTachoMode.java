@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * Modes in which the sensor can operate.
  */
 public enum MotorTachoMode {
-    ROTATION(), DEGREE(), RESET();
+    ROTATION(), DEGREE(), RESET(), DISTANCE();
 
     private final String[] values;
 

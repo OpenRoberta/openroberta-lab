@@ -115,7 +115,7 @@ Blockly.Blocks['robSensors_getSample'] = {
             input.appendField(motorPort, 'MOTORPORT');
             this.appendValue_('NUM_REV', 2);
             this.changeOutput('Number');
-        } else if (this.sensorType_ == 'ENCODER_DEGREE') {
+        }  else if (this.sensorType_ == 'ENCODER_DEGREE') {
             input.appendField(motorPort, 'MOTORPORT');
             this.appendValue_('NUM_REV', 180);
             this.changeOutput('Number');
@@ -422,7 +422,7 @@ Blockly.Blocks['robSensors_encoder_getSample'] = {
 
     init : function() {
         this.setColourRGB(Blockly.CAT_SENSOR_RGB);
-        var mode = new Blockly.FieldDropdown([ [ Blockly.Msg.MODE_ROTATION, 'ROTATION' ], [ Blockly.Msg.MODE_DEGREE, 'DEGREE' ] ]);
+        var mode = new Blockly.FieldDropdown([ [ Blockly.Msg.MODE_ROTATION, 'ROTATION' ], [ Blockly.Msg.MODE_DEGREE, 'DEGREE' ], [ Blockly.Msg.MODE_DISTANCE, 'DISTANCE' ] ]);
         var motorport = new Blockly.FieldDropdown([ [ 'A', 'A' ], [ 'B', 'B' ], [ 'C', 'C' ], [ 'D', 'D' ] ]);
         this.appendDummyInput().appendField(Blockly.Msg.GET).appendField(mode, 'MODE').appendField(Blockly.Msg.SENSOR_ENCODER).appendField(motorport,
                 'MOTORPORT');
