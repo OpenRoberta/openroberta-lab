@@ -50,6 +50,7 @@ limitations under the License.
 		<module>../OpenRobertaShared</module>
 		<module>../OpenRobertaRuntime</module>
 		<module>../EV3Menu</module>
+		<module>../EV3MenuEv3dev</module>
 		<module>../OpenRobertaRobot</module>
 		<module>../OpenRobertaServer</module>
 	</modules>

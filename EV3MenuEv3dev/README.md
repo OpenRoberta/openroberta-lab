@@ -11,13 +11,18 @@ python-bluez
 python-dbus
 
 ## dist ##
-``python setup.py sdist``
-
-or old fashioned:
-``find . -name '*.py' -o -name '*.pbm' -o -name '*.pil' | tar -cvjf ev3dev-robertalab.tar.bz2 --files-from -``
+``VERSION="1.2.0" python setup.py sdist``
+This is wired to be called from ``mvn install`` where the version is taken from
+the pom.xml.
 
 ## upload to ev3 ##
 ``scp -r robertalab.py roberta root@ev3dev.local:/home/user``
+
+This would be using the packge but is still not working as intended.
+``
+scp dist/robertalab-1.2.0-SNAPSHOT.tar.gz root@ev3dev.local:/tmp/
+pip install --no-deps --force-reinstall --target /home/user --install-option="--install-scripts=/home/user" /tmp/robertalab-1.2.0-SNAPSHOT.tar.gz
+``
 
 The location of the robertalab-server can be configured by placing a
 robertalab.json next to the robertalab.py, e.g.:
