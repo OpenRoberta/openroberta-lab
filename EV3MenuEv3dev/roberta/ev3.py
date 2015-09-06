@@ -157,14 +157,14 @@ class Hal(object):
             if mode is 'double_flash':
                 wait_time = 2000
             if color in ['green', 'orange']:
-                self.led.left_green.flash(500,500)
-                self.led.right_green.flash(500,500)
-                self.WaitFor(wait_time)
+                self.led.green_left.flash(500,500)
+                self.led.green_right.flash(500,500)
+                self.waitFor(wait_time)
                 self.ledOff()
             if color in ['red', 'orange']:
-                self.led.left_red.flash(500,500)
-                self.led.right_red.flash(500,500)
-                self.WaitFor(wait_time)
+                self.led.red_left.flash(500,500)
+                self.led.red_right.flash(500,500)
+                self.waitFor(wait_time)
                 self.ledOff()
 
     def ledOff(self):
