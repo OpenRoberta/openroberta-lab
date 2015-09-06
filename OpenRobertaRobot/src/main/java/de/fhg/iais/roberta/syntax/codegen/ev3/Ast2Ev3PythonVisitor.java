@@ -741,15 +741,12 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        boolean isRegulated = this.brickConfiguration.isMotorRegulated(encoderSensor.getMotor());
-        String encoderSensorPort = getEnumCode(encoderSensor.getMotor());
+    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) { 
+        String encoderSensorPort = encoderSensor.getMotor().toString();
         if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
-            String methodName = isRegulated ? "hal.resetRegulatedMotorTacho(" : "hal.resetUnregulatedMotorTacho(";
-            this.sb.append(methodName + encoderSensorPort + ")");
+            this.sb.append("hal.resetMotorTacho('" + encoderSensorPort + "')");
         } else {
-            String methodName = isRegulated ? "hal.getRegulatedMotorTachoValue(" : "hal.getUnregulatedMotorTachoValue(";
-            this.sb.append(methodName + encoderSensorPort + ", " + getEnumCode(encoderSensor.getMode()) + ")");
+            this.sb.append("hal.getMotorTachoValue('" + encoderSensorPort + "', " + getEnumCode(encoderSensor.getMode()) + ")");
         }
         return null;
     }

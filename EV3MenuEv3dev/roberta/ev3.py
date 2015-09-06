@@ -105,6 +105,7 @@ class Hal(object):
         else:
             m.polarity = 'normal'
         m.cfg_side = side
+        m.last_position = m.position
         return m
 
     @staticmethod
@@ -116,6 +117,7 @@ class Hal(object):
         else:
             m.polarity = 'normal'
         m.cfg_side = side
+        m.last_position = m.position
         return m
 
     # control
@@ -150,6 +152,7 @@ class Hal(object):
                 self.led.red_on()
             elif color in 'amber':
                 self.led.amber_on()
+
             # TODO: we also have orange_on(), yellow_on() and
             #                    mix_colors(float red, float green)
         elif mode in ['flash', 'double_flash']:
@@ -291,7 +294,7 @@ class Hal(object):
         if direction is 'backward':
             speed_pct = -speed_pct
         self.cfg['actors'][left_port].run_forever(speed_regulation_enabled='on', speed_sp=speed_pct)
-        self.cfg['actors'][righ_port].run_forever(speed_regulation_enabled='on', speed_sp=speed_pct)
+        self.cfg['actors'][right_port].run_forever(speed_regulation_enabled='on', speed_sp=speed_pct)
 
     def driveDistance(self, left_port, right_port, reverse, direction, speed_pct, distance):
         # direction: forward, backward
@@ -391,14 +394,38 @@ class Hal(object):
         return self.cfg['sensors'][port].value()
 
     # timer
-    def getTimerValue(timer):
+    def getTimerValue(self, timer):
         if timer in self.timers:
             return time.clock() - self.timers[timer]
         else:
             timers[timer] = time.clock()
 
-    def resetTimer(timer):
+    def resetTimer(self, timer):
         del self.timers[timer]
+
+
+    def resetMotorTacho(self, actorPort): 
+        self.cfg['actors'][actorPort].last_position = self.cfg['actors'][actorPort].position
+   
+    def getMotorTachoValue(self, actorPort, mode):
+       	m = self.cfg['actors'][actorPort]
+       	tachoCount = m.position - m.last_position
+        
+       	if mode == 'degree':
+            return tachoCount * 360.0 / m.count_per_rot
+        
+        elif mode in ['rotation', 'distance']:
+           
+            rotations = float( tachoCount / m.count_per_rot)
+            
+            if mode == 'rotation':
+                return rotations;
+            else:
+            	distance = round (math.pi * self.cfg['wheel-diameter'] * rotations )
+            	logger.info('distance: [%lf]' % distance)
+                return distance
+        else:
+        	raise ValueError('incorrect MotorTachoMode: %s' % mode)
 
     # communication
     def establishConnectionTo(self, host):
