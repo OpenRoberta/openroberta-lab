@@ -63,9 +63,10 @@ public class Configuration implements WithSurrogateId {
      * @param name the name of the configuration, not null
      * @param owner the user who created and thus owns the program
      */
-    public Configuration(String name, User owner) {
+    public Configuration(String name, User owner, Robot robot) {
         this.name = name;
         this.owner = owner;
+        this.robot = robot;
         this.created = Util.getNow();
         this.lastChanged = Util.getNow();
     }
@@ -122,6 +123,10 @@ public class Configuration implements WithSurrogateId {
         return this.owner;
     }
 
+    public Robot getRobot() {
+        return this.robot;
+    }
+
     public Timestamp getCreated() {
         return this.created;
     }
@@ -137,6 +142,8 @@ public class Configuration implements WithSurrogateId {
             + ", name="
             + this.name
             + ", ownerId="
+            + this.robot
+            + ", robotId="
             + (this.owner == null ? "???" : this.owner.getId())
             + ", created="
             + this.created
