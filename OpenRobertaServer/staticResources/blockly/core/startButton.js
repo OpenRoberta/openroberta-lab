@@ -41,17 +41,3 @@ Blockly.StartButton.prototype.createDom = function() {
     this.svgPath_.setAttribute('stroke-width', '0px');
     return this.svgGroup_;
 };
-
-/**
- * Move the button to the bottom of the playground (only for small screens)
- */
-Blockly.StartButton.prototype.moveToEdge = function() {
-    this.POSITION = 3;
-    Blockly.StartButton.superClass_.position_.call(this);
-};
-
-Blockly.StartButton.prototype.moveOutEdge = function() {
-    this.POSITION = 1;
-    Blockly.StartButton.superClass_.position_.call(this);
-};
-

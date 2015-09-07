@@ -21,7 +21,8 @@ function injectBrickly(toolbox) {
             path : '/blockly/',
             toolbox : toolbox.data,
             trashcan : true,
-            save : true
+            save : true,
+            scrollbars : true
         // check : true,
         });
         COMM.json("/conf", {

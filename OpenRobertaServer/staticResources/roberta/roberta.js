@@ -1291,6 +1291,7 @@ function initHeadNavigation() {
             }
             $('#tabConfiguration').click();
         }
+        $("#navbarCollapse").collapse('hide');
         return false;
     });
 
@@ -2044,8 +2045,6 @@ function init() {
     });
     switchRobot(userState.robot);
 };
-
-$(window).on('resize', UTIL.resizeTabBar); // for small devices only
 
 $(document).ready(WRAP.fn3(init, 'page init'));
 

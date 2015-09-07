@@ -106,7 +106,7 @@ Blockly.Trashcan.prototype.MARGIN_TOP_ = -20;
 Blockly.Trashcan.MARGIN_TOP_INITIAL_ = -20;
 
 /**
- * Distance between trashcan and right edge of workspace.
+ * Distance between trashcan and left edge of workspace.
  * 
  * @type {number}
  * @private
@@ -192,9 +192,8 @@ Blockly.Trashcan.prototype.top_ = 0;
  */
 Blockly.Trashcan.prototype.createDom = function() {
     /*
-     * <g filter="url(#blocklyTrashcanShadowFilter)"> <image width="47"
-     * height="45" y="15" href="media/trashbody.png"></image> <image width="47"
-     * height="15" href="media/trashlid.png"></image> </g>
+     * <g filter="url(#blocklyTrashcanShadowFilter)"> <image width="47" height="45" y="15" href="media/trashbody.png"></image> <image width="47" height="15"
+     * href="media/trashlid.png"></image> </g>
      */
     this.svgGroup_ = Blockly.createSvgElement('g', {
         'id' : 'blocklyTrashcan'
@@ -223,8 +222,7 @@ Blockly.Trashcan.prototype.init = function() {
 };
 
 /**
- * Dispose of this trash can. Unlink from all DOM elements to prevent memory
- * leaks.
+ * Dispose of this trash can. Unlink from all DOM elements to prevent memory leaks.
  */
 Blockly.Trashcan.prototype.dispose = function() {
     if (this.svgGroup_) {
@@ -248,29 +246,35 @@ Blockly.Trashcan.prototype.position_ = function() {
         // There are no metrics available (workspace is probably not visible).
         return;
     }
-    if (Blockly.RTL) {
-        this.left_ = metrics.viewWidth + metrics.absoluteLeft - this.WIDTH_ - this.MARGIN_SIDE_;
-    } else {
-        this.left_ = this.MARGIN_SIDE_;
+    var margin_side = this.MARGIN_SIDE_;
+    if (!Blockly.hasCategories) {
+        margin_side += 94;
     }
-    this.top_ = metrics.viewHeight + metrics.absoluteTop - (this.TILE_) - this.MARGIN_BOTTOM_;
+    if (Blockly.RTL) {
+        this.left_ = metrics.viewWidth + metrics.absoluteLeft - this.WIDTH_ - margin_side;
+    } else {
+        this.left_ = margin_side;
+    }
+    var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    if (width < 768) {
+        this.top_ = metrics.viewHeight + metrics.absoluteTop - this.MARGIN_BOTTOM_;
+    } else {
+        this.top_ = metrics.viewHeight + metrics.absoluteTop - (this.TILE_) - this.MARGIN_BOTTOM_;
+    }
     this.svgGroup_.setAttribute('transform', 'translate(' + this.left_ + ',' + this.top_ + ')');
 };
 
 /**
- * Determines if the mouse is currently over the trash can. Opens/closes the lid
- * and sets the isOpen flag.
+ * Determines if the mouse is currently over the trash can. Opens/closes the lid and sets the isOpen flag.
  * 
  * @param {!Event}
  *            e Mouse move event.
  */
 Blockly.Trashcan.prototype.onMouseMove = function(e) {
     /*
-     * An alternative approach would be to use onMouseOver and onMouseOut
-     * events. However the selected block will be between the mouse and the
-     * trash can, thus these events won't fire. Another approach is to use
-     * HTML5's drag & drop API, but it's widely hated. Instead, we'll just have
-     * the block's drag_ function call us.
+     * An alternative approach would be to use onMouseOver and onMouseOut events. However the selected block will be between the mouse and the trash can, thus
+     * these events won't fire. Another approach is to use HTML5's drag & drop API, but it's widely hated. Instead, we'll just have the block's drag_ function
+     * call us.
      */
     if (!this.svgGroup_) {
         return;
@@ -320,18 +324,4 @@ Blockly.Trashcan.prototype.animateLid_ = function() {
  */
 Blockly.Trashcan.prototype.close = function() {
     this.setOpen_(false);
-};
-
-/**
- * Flip the lid shut. Called externally after a drag.
- */
-Blockly.Trashcan.prototype.moveToEdge = function() {
-    this.MARGIN_BOTTOM_ = Blockly.Trashcan.MARGIN_BOTTOM_INITIAL_ - 50;
-    this.MARGIN_SIDE_ = Blockly.Trashcan.MARGIN_SIDE_INITIAL_;
-    this.position_();
-};
-Blockly.Trashcan.prototype.moveOutEdge = function() {
-    this.MARGIN_BOTTOM_ = Blockly.Trashcan.MARGIN_BOTTOM_INITIAL_;
-    this.MARGIN_SIDE_ = Blockly.Trashcan.MARGIN_SIDE_INITIAL_;
-    this.position_();
 };

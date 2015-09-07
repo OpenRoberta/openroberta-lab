@@ -192,11 +192,13 @@ html, body {
 #blocklyDiv, #bricklyDiv {
 	/*  zoom: 0.5;
     -moz-transform: scale(0.5); */
-	background-color: #eee;
 	height: 100%;
 	width: 100%;
 	min-height: 100%;
 	float: left;
+	overflow: hidden;
+	background: url(../css/img/ev3Background.jpg) repeat;
+	background-size: 100%;
 }
 
 #blocklyDiv {
@@ -206,8 +208,6 @@ html, body {
 	-webkit-transition-property: width;
 	-webkit-transition-timing-function: linear, ease-in;
 	-webkit-transition-duration: 0.5s;
-	background: url(../css/img/ev3Background.jpg) repeat;
-	background-size: 100%;
 }
 
 #blocklyDiv.simBackground {

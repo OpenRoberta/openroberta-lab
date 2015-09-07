@@ -161,33 +161,6 @@ var UTIL = {};
         return Math.round($(window).height() - 260);
     };
 
-    /**
-     * Rearrange the blockly buttons according to the screen size (only affects small screens).
-     * 
-     * @memberof UTIL
-     */
-    UTIL.resizeTabBar = function() {
-        if (Blockly.hasTrashcan) {
-            if ($(window).width() < 768) {
-                if (Blockly.getMainWorkspace()) {
-                    Blockly.getMainWorkspace().trashcan.moveToEdge();
-                    Blockly.getMainWorkspace().startButton.moveToEdge();
-                }
-                if (document.getElementById('bricklyFrame').contentWindow.Blockly
-                        && document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace()) {
-                    document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().trashcan.moveToEdge();
-                }
-            } else {
-                if (document.getElementById('bricklyFrame').contentWindow.Blockly
-                        && document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace()) {
-                    Blockly.getMainWorkspace().trashcan.moveOutEdge();
-                    Blockly.getMainWorkspace().startButton.moveOutEdge();
-                    document.getElementById('bricklyFrame').contentWindow.Blockly.getMainWorkspace().trashcan.moveOutEdge();
-                }
-            }
-        }
-    };
-
     UTIL.cacheBlocks = function() {
         userState.programBlocksSaved = null;
         userState.programBlocks = null;
@@ -214,12 +187,12 @@ var UTIL = {};
             }
         }
     }
-    UTIL.checkVisibility = (function(){
+    UTIL.checkVisibility = (function() {
         var stateKey, eventKey, keys = {
-            hidden: "visibilitychange",
-            webkitHidden: "webkitvisibilitychange",
-            mozHidden: "mozvisibilitychange",
-            msHidden: "msvisibilitychange"
+            hidden : "visibilitychange",
+            webkitHidden : "webkitvisibilitychange",
+            mozHidden : "mozvisibilitychange",
+            msHidden : "msvisibilitychange"
         };
         for (stateKey in keys) {
             if (stateKey in document) {
@@ -228,7 +201,8 @@ var UTIL = {};
             }
         }
         return function(c) {
-            if (c) document.addEventListener(eventKey, c);
+            if (c)
+                document.addEventListener(eventKey, c);
             return !document[stateKey];
         }
     })();
