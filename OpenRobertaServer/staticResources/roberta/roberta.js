@@ -1184,6 +1184,7 @@ function setHeadNavigationMenuState(state) {
  */
 function initHeadNavigation() {
     $('.navbar-fixed-top').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
+        Blockly.hideChaff();
         $('.modal').modal('hide'); // close all opened popups
         var domId = event.target.id;
         if (domId === 'menuRunProg') { //  Submenu 'Program'
@@ -1289,12 +1290,6 @@ function initHeadNavigation() {
                 $('.scroller-right').click();
             }
             $('#tabConfiguration').click();
-        } else if (domId === 'menuTabSimulation') {
-            if ($('#tabProgram').hasClass('tabClicked')) {
-                $('.scroller-right').click();
-            }
-            $('.scroller-right').click();
-            $('#tabSimulation').click();
         }
         return false;
     });
@@ -1331,9 +1326,10 @@ function initHeadNavigation() {
         $('#menuTabConfiguration').parent().removeClass('disabled');
         $('#menuTabSimulation').parent().removeClass('disabled');
         switchToBlockly();
-    });
+    }, 'tabProgram clicked');
 
     $('#tabConfiguration').onWrap('click', function() {
+        Blockly.hideChaff();
         activateProgConfigMenu();
         $('#tabProgram').removeClass('tabClicked');
         $('#tabConfiguration').addClass('tabClicked');
@@ -1344,7 +1340,7 @@ function initHeadNavigation() {
         $('#menuTabConfiguration').parent().addClass('disabled');
         $('#menuTabSimulation').parent().removeClass('disabled');
         switchToBrickly();
-    });
+    }, 'tabConfiguration clicked');
 
     // controle for simulation
     $('.simSimple').onWrap('click', function(event) {
@@ -1376,7 +1372,7 @@ function initHeadNavigation() {
         $('#blocklyDiv').removeClass('simActive');
         $('#simDiv').removeClass('simActive');
         $(".sim").addClass('hide');
-        Blockly.fireUiEvent(window, 'resize')
+        Blockly.fireUiEvent(window, 'resize');
         $('.nav > li > ul > .robotType').removeClass('disabled');
         $('#menuSim').parent().addClass('disabled');
         COMM.json("/toolbox", {
@@ -1429,7 +1425,6 @@ function initHeadNavigation() {
     $('.codeBack').onWrap('click', function(event) {
         $('#blocklyDiv').removeClass('codeActive');
         $('#codeDiv').removeClass('codeActive');
-        //$(".sim").addClass('hide');
         Blockly.fireUiEvent(window, 'resize')
         $('.nav > li > ul > .robotType').removeClass('disabled');
         //$('#menuSim').parent().addClass('disabled');
@@ -1440,7 +1435,6 @@ function initHeadNavigation() {
         }, function(result) {
             injectBlockly(result, userState.programBlocksSaved);
         });
-        //$("#simButtonsCollapse").collapse('hide');
         $("#head-navi-tooltip-program").removeClass('disabled');
         $('#head-navigation-program-edit').removeClass('disabled');
         $('#head-navigation-program-edit>ul').removeClass('hidden');
