@@ -337,6 +337,31 @@ Blockly.Blocks['logic_compare'] = {
                 inputB.connection.connect(valueB);
             }
         }
+    },
+    /**
+     * Called whenever anything on the workspace changes. Prevent mismatched types from being compared.
+     * modified by B. -> use internal check function
+     * 
+     * @this Blockly.Block
+     */
+    onchange : function() {
+        if (!this.workspace) {
+            // Block has been deleted.
+            return;
+        }
+        var blockA = this.getInputTargetBlock('A');
+        var blockB = this.getInputTargetBlock('B');
+        if (blockA) {
+            this.getInput('B').setCheck(blockA.outputConnection.check_);
+        } else {
+            this.getInput('B').setCheck(null);
+        }
+        if (blockB) {
+            this.getInput('A').setCheck(blockB.outputConnection.check_);
+        } else {
+            this.getInput('A').setCheck(null);
+        }
+        this.render();
     }
 };
 
