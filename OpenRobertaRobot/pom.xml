@@ -20,7 +20,7 @@ limitations under the License.
 	<parent>
 		<groupId>de.fhg.iais.openroberta</groupId>
 		<artifactId>OpenRobertaParent</artifactId>
-		<version>1.2.0-SNAPSHOT</version>
+		<version>1.3.0-SNAPSHOT</version>
 		<relativePath>../OpenRobertaParent</relativePath>
 	</parent>
 	<artifactId>OpenRobertaRobot</artifactId>
@@ -178,7 +178,7 @@ limitations under the License.
 							<overWriteSnapshots>true</overWriteSnapshots>
 						</configuration>
 					</execution>
-					<execution>
+					<!-- <execution>
 						<id>copyServer</id>
 						<phase>pre-integration-test</phase>
 						<goals>
@@ -199,8 +199,8 @@ limitations under the License.
 							<overWriteSnapshots>true</overWriteSnapshots>
 							<stripVersion>true</stripVersion>
 						</configuration>
-					</execution>
-					<execution>
+					</execution> -->
+<!-- 					<execution>
 						<id>copyUpdateResources</id>
 						<phase>pre-integration-test</phase>
 						<goals>
@@ -242,8 +242,8 @@ limitations under the License.
 							<overWriteSnapshots>true</overWriteSnapshots>
 							<stripVersion>true</stripVersion>
 						</configuration>
-					</execution>
-					<execution>
+					</execution> -->
+					<!-- <execution>
 						<id>copyCrossCompilerResources</id>
 						<phase>pre-integration-test</phase>
 						<goals>
@@ -299,7 +299,7 @@ limitations under the License.
 							<overWriteSnapshots>true</overWriteSnapshots>
 							<stripVersion>true</stripVersion>
 						</configuration>
-					</execution>
+					</execution> -->
 				</executions>
 			</plugin>
 			<plugin>

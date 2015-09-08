@@ -1269,9 +1269,6 @@ function initHeadNavigation() {
         } else if (domId === 'menuDeleteUser') { // Submenu 'Login'
             $("#delete-user").modal('show');
         }
-        if ($(window).width() < 768) {
-            $('#navbarCollapse').collapse('hide');
-        }
         return false;
     }, 'head navigation menu item clicked');
 
@@ -1291,7 +1288,6 @@ function initHeadNavigation() {
             }
             $('#tabConfiguration').click();
         }
-        $('#navbarCollapse').collapse('hide');
         return false;
     });
 
