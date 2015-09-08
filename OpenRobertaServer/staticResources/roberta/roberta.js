@@ -1270,7 +1270,7 @@ function initHeadNavigation() {
             $("#delete-user").modal('show');
         }
         if ($(window).width() < 768) {
-            $("#navbarCollapse").collapse('hide');
+            $('#navbarCollapse').collapse('hide');
         }
         return false;
     }, 'head navigation menu item clicked');
@@ -1291,7 +1291,7 @@ function initHeadNavigation() {
             }
             $('#tabConfiguration').click();
         }
-        $("#navbarCollapse").collapse('hide');
+        $('#navbarCollapse').collapse('hide');
         return false;
     });
 
