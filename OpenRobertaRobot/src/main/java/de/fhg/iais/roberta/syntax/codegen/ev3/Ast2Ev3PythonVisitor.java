@@ -472,7 +472,12 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
                 break;
         }
         incrIndentation();
-        repeatStmt.getList().visit(this);
+        if ( repeatStmt.getList().get().isEmpty() ) {
+            nlIndent();
+            this.sb.append("pass");
+        } else {
+            repeatStmt.getList().visit(this);
+        }
         appendBreakStmt(repeatStmt);
         decrIndentation();
         nlIndent();
@@ -741,7 +746,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) { 
+    public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
         String encoderSensorPort = encoderSensor.getMotor().toString();
         if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
             this.sb.append("hal.resetMotorTacho('" + encoderSensorPort + "')");
