@@ -1,5 +1,3 @@
-$(document).ready(WRAP.fn3(init, 'brickly init EV3'));
-
 function init() {
     COMM.json("/toolbox", {
         "cmd" : "loadT",
@@ -143,3 +141,5 @@ function saveToServer() {
 function setWorkspaceModified(modified) {
     parent.userState.configurationModified = modified;
 }
+
+$(document).ready(WRAP.fn3(init, 'brickly init EV3'));

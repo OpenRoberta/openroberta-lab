@@ -1246,8 +1246,8 @@ function initHeadNavigation() {
             window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/");
         } else if (domId === 'menuFaq') { // Submenu 'Help'
             window.open("https://mp-devel.iais.fraunhofer.de/wiki/x/BoAd");
-        } else if (domId === 'menuShowAgain') { // Submenu 'Help'
-            $("#show-startup-message").modal("show");
+        } else if (domId === 'menuShowRelease') { // Submenu 'Help'
+            $("#show-release").modal("show");
         } else if (domId === 'menuStateInfo') { // Submenu 'Help'
             showUserInfo();
         } else if (domId === 'menuAbout') { // Submenu 'Help'
@@ -1295,7 +1295,7 @@ function initHeadNavigation() {
         return false;
     });
 
-    // Close submenu on mouseleave
+// Close submenu on mouseleave
     $('.navbar-fixed-top').onWrap('mouseleave', function(event) {
         $('.navbar-fixed-top .dropdown').removeClass('open');
     });
@@ -1343,7 +1343,7 @@ function initHeadNavigation() {
         switchToBrickly();
     }, 'tabConfiguration clicked');
 
-    // controle for simulation
+// controle for simulation
     $('.simSimple').onWrap('click', function(event) {
         $('.menuSim').parent().removeClass('disabled');
         $('.simSimple').parent().addClass('disabled');
@@ -1423,6 +1423,12 @@ function initHeadNavigation() {
         }
     }, 'simInfo clicked');
 
+    $('#startSim').onWrap('click', function(event) {
+        switchRobot('oraSim');
+    }, 'start with simulation clicked');
+    $('#startEV3').onWrap('click', function(event) {
+        switchRobot('ev3');
+    }, 'start with ev3 clicked');
     $('.codeBack').onWrap('click', function(event) {
         $('#blocklyDiv').removeClass('codeActive');
         $('#codeDiv').removeClass('codeActive');
@@ -1453,6 +1459,10 @@ function initHeadNavigation() {
         element.click();
         document.body.removeChild(element);
     }, 'codeDownload clicked');
+
+    $('.newRelease').onWrap('click', function(event) {
+        $('#show-release').modal("show");
+    }, 'show release clicked');
 }
 
 /**
@@ -1473,10 +1483,10 @@ function initPopups() {
         setToken($('#tokenValue').val());
     }, 'set token');
 
-    $('#hideStartupMessage').onWrap('click', function() {
-        $("#show-startup-message").modal("hide");
-        UTIL.setCookie("hideStartupMessage2", true);
-    }, 'hide startup-message');
+//    $('#hideStartupMessage').onWrap('click', function() {
+//        $("#show-startup-message").modal("hide");
+//        UTIL.setCookie("hideStartupMessage2", true);
+//    }, 'hide startup-message');
 
     $('.cancelPopup').onWrap('click', function() {
         $('.ui-dialog-titlebar-close').click();
@@ -2009,9 +2019,10 @@ function init() {
     $('#tabProgram').addClass('tabClicked');
     $('#head-navigation-configuration-edit').css('display', 'none');
     COMM.setErrorFn(handleServerErrors);
-    if (!UTIL.getCookie("hideStartupMessage2")) {
-        $("#show-startup-message").modal("show");
-    }
+
+    switchRobot(userState.robot);
+
+    $("#show-startup-message").modal("show");
 
     // Workaround to set the focus on input fields with attribute 'autofocus'
     $('.modal').on('shown.bs.modal', function() {
@@ -2034,7 +2045,6 @@ function init() {
         placement : "right"
     });
 
-    UTIL.resizeTabBar(); // for small devices only  
     UTIL.checkVisibility(function() {
         var visible = UTIL.checkVisibility();
         LOG.info("this tab visible: " + visible);
@@ -2043,26 +2053,6 @@ function init() {
             // TODO do more?
         }
     });
-    switchRobot(userState.robot);
 };
 
 $(document).ready(WRAP.fn3(init, 'page init'));
-
-//function hideAddressBar() {
-//    if (!window.location.hash) {
-//        if (document.height < window.outerHeight) {
-//            document.body.style.height = (window.outerHeight + 50) + 'px';
-//        }
-//
-//        setTimeout(function() {
-//            window.scrollTo(0, 1);
-//        }, 50);
-//    }
-//}
-//
-//window.addEventListener("load", function() {
-//    if (!window.pageYOffset) {
-//        hideAddressBar();
-//    }
-//});
-//window.addEventListener("orientationchange", hideAddressBar);

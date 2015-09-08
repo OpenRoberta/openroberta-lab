@@ -44,6 +44,9 @@ limitations under the License.
 
 <script type="text/javascript" src="/blockly/blockly_compressed.js"></script>
 <script type="text/javascript" src="/blockly/blocks_compressed.js"></script>
+<script type="text/javascript" src="/blockly/core/block_svg.js"></script>
+<script type="text/javascript" src="/blockly/core/blockly.js"></script>
+<script type="text/javascript" src="/blockly/core/xml_roberta.js"></script>
 
 <link rel="stylesheet" type="text/css" href="/common/bootstrap/bootstrap-3.3.1-dist/dist/css/bootstrap.min.css"></link>
 <link rel="stylesheet" type="text/css" href="/common/jquery.dataTables.min.css"></link>
@@ -145,7 +148,7 @@ limitations under the License.
                             <li><a href="#" id="menuStateInfo" class="typcn typcn-input-checked" lkey="Blockly.Msg.MENU_STATE_INFO">Statusinformationen</a>
                             </li>
                             <li><a href="#" id="menuAbout" class="typcn typcn-info-large" lkey="Blockly.Msg.MENU_ABOUT">Über Open Roberta Lab</a></li>
-                            <li><a href="#" id="menuShowAgain" class="typcn typcn-refresh" lkey="Blockly.Msg.MENU_SHOW_AGAIN">Starthinweis anzeigen</a></li>
+                            <li><a href="#" id="menuShowRelease" class="typcn typcn-refresh" lkey="Blockly.Msg.MENU_SHOW_AGAIN">Starthinweis anzeigen</a></li>
                             <li><a href="#" id="menuLogging" class="typcn typcn-spanner" lkey="Blockly.Msg.MENU_LOGGING">Logging</a></li>
                         </ul></li>
                     <!-- Menu User -->
@@ -578,82 +581,60 @@ limitations under the License.
         </div>
     </div>
 
-    <!-- Popup startup message old -->
-    <!--
+    <!-- New popup 4 Startup -->
     <div id="show-startup-message" class="modal fade">
+        <div id="start-choise" class="modal-dialog wideModal">
+            <div id="startEV3" href="#" class="col-xs-6 col-md-6" style="cursor: pointer">
+                <div class="modal-content">
+                    <div class="modal-header" data-dismiss="modal" style="height: 90px; min-height: 90px; max-height: 90px">
+                        <h4 href="#" class="DE modal-title">Du hast einen EV3 Roboter? - Hier klicken!</h4>
+                        <h4 href="#" class="EN modal-title">Do you have an EV3 robot? - Click here!</h4>
+                    </div>
+                    <a href="#" data-dismiss="modal"><img class="img-responsive" alt="EV3" src="../css/img/bbot14_cropped_prev.png" /></a>
+                </div>
+            </div>
+            <div id="startSim" href="#" class="col-xs-6 col-md-6" style="cursor: pointer">
+                <div class="modal-content">
+                    <div class="modal-header" data-dismiss="modal" style="height: 90px; min-height: 90px; max-height: 90px">
+                        <h4 href="#" class="DE modal-title">Du hast keinen EV3 Roboter? - Dann programmiere unseren simulierten Roboter</h4>
+                        <h4 href="#" class="EN modal-title">You don't have an EV3 robot? - Start coding with our simulated robot</h4>
+                    </div>
+                    <a href="#" data-dismiss="modal"> <img class="img-responsive" alt="Simulation" src="../css/img/SimBot_quad_prev.png" />
+                    </a>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-12" style="margin-top: 30px">
+                <div class="modal-content">
+                    <div class="modal-header" style="text-align: end">
+                        <h4 href="#" class="DE modal-title newRelease">
+                            <a>Über das neue Release ...</a>
+                        </h4>
+                        <h4 href="#" class="EN modal-title newRelease">
+                            <a>About the new release ...</a>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup release -->
+    <div id="show-release" class="modal fade">
         <div class="modal-dialog bigModal">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <div style="text-align: center">
-                        <img class="DE" alt="neues Release" src="../css/img/version1.2.0_DE.png" />
-                        <img class="EN" alt="new Release" src="../css/img/version1.2.0_EN.png" />
-                        <img class="FI" alt="new Release" src="../css/img/version1.2.0_EN.png" />
-                    </div>
-                    <br />
                     <div lkey="Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE" id="popupTextStartupMessage"></div>
                     <img alt="powered by Google" src="../css/img/powered-by-google-on-white.png" />
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn" id="hideStartupMessage" lkey="Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE"></button>
+                    <button type="button" class="btn" data-dismiss="modal">OK</button>
                 </div>
             </div>
         </div>
     </div>
-    -->
-    
-    <!-- New popup 4 Startup -->
-    <div id="show-startup-message" class="modal fade">
-        <div class="modal-dialog wideModal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="rasterSystemModalLabel">Popup-Titel</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <a  href="myfile.htm">
-                                <p class="text-right">Über das neue Release</p>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p>Du hast einen EV3 Roboter? - Hier klicken!</p>
-                            </div>
-                            <div class="col-md-6">
-                                <p>Du hast keinen EV3 Roboter? - Dann programmiere unseren simulierten Roboter</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <a href="myfile.htm">
-                                <img class="DE img-responsive" alt="Du hast einen EV3 Roboter? - Hier klicken!" src="../css/img/bbot14_cropped_prev.png" />
-                                </a> 
-                            </div>
-                            <div class="col-md-6">
-                                <a href="myfile.htm">
-                                <img class="DE img-responsive" alt="Du hast keinen EV3 Roboter? - Dann programmiere unseren simulierten Roboter" src="../css/img/SimBot_quad_prev.png" />
-                                </a> 
-                            </div>
-                        </div>
-                    </div>
-               </div>
-               <div class="modal-footer">
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox"> Merke meine Auswahl
-                    </label>
-                </div>
-               </div>     
-            </div>
-        </div>
-    </div>
-    
 
     <!-- Popup to show relations / share programs -->
     <div id="show-relations" class="modal fade">

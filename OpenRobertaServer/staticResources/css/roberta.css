@@ -812,4 +812,6 @@ table.dataTable thead .sorting_desc {
 	#blocklyDiv.simActive, #blocklyDiv.codeActive {
 		width: 96px;
 	}
+	#start-choise {
+	 width:80%;}
 }

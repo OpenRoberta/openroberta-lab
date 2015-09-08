@@ -28,7 +28,7 @@ public class ProgramProcessor extends AbstractProcessor {
         if ( !Util.isValidJavaIdentifier(programName) ) {
             setError(Key.PROGRAM_ERROR_ID_INVALID, programName);
             return null;
-        } else if ( this.httpSessionState.isUserLoggedIn() || ownerId == 0 ) {
+        } else if ( this.httpSessionState.isUserLoggedIn() || ownerId == 1 ) {
             UserDao userDao = new UserDao(this.dbSession);
             RobotDao robotDao = new RobotDao(this.dbSession);
             ProgramDao programDao = new ProgramDao(this.dbSession);
