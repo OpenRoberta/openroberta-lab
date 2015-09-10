@@ -2,6 +2,8 @@ package de.fhg.iais.roberta.syntax.action.ev3;
 
 import java.util.List;
 
+import org.apache.commons.lang3.ObjectUtils.Null;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.syntax.BlockType;
@@ -14,7 +16,6 @@ import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
 import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.AstVisitor;
 
 public class BluetoothReceiveAction<V> extends Action<V> {
@@ -22,7 +23,6 @@ public class BluetoothReceiveAction<V> extends Action<V> {
 
     private BluetoothReceiveAction(Expr<V> bluetoothRecieveConnection, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockType.BLUETOOTH_RECEIVED_ACTION, properties, comment);
-        Assert.isTrue(bluetoothRecieveConnection.isReadOnly() && bluetoothRecieveConnection != null);
         this.connection = bluetoothRecieveConnection;
         setReadOnly();
     }
@@ -49,11 +49,9 @@ public class BluetoothReceiveAction<V> extends Action<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         List<Value> values = helper.extractValues(block, (short) 1);
-        Phrase<V> bluetoothRecieveConnection = helper.extractValue(values, new ExprParam(BlocklyConstants.CONNECTION, null));
-        return BluetoothReceiveAction.make(
-            helper.convertPhraseToExpr(bluetoothRecieveConnection),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        Phrase<V> bluetoothRecieveConnection = helper.extractValue(values, new ExprParam(BlocklyConstants.CONNECTION, Null.class));
+        return BluetoothReceiveAction
+            .make(helper.convertPhraseToExpr(bluetoothRecieveConnection), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
@@ -66,7 +64,7 @@ public class BluetoothReceiveAction<V> extends Action<V> {
 
     @Override
     public String toString() {
-        return "ReceiveData[]";
+        return "BluetoothReceiveAction [connection=" + this.connection + "]";
     }
 
 }
