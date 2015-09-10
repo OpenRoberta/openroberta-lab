@@ -339,18 +339,20 @@ Blockly.Blocks['logic_compare'] = {
         }
     },
     /**
-     * Called whenever anything on the workspace changes. Prevent mismatched types from being compared.
-     * modified by B. -> use internal check function
+     * Called whenever anything on the workspace changes. Prevent mismatched types from being compared. modified by B. -> use internal check function
      * 
      * @this Blockly.Block
      */
     onchange : function() {
-        if (!this.workspace) {
-            // Block has been deleted.
+        if (!this.workspace || Blockly.Block.dragMode_ == 2) {
+            // Block has been deleted or is in move
             return;
         }
         var blockA = this.getInputTargetBlock('A');
         var blockB = this.getInputTargetBlock('B');
+        if (blockA && blockB) {
+            return;
+        }
         if (blockA) {
             this.getInput('B').setCheck(blockA.outputConnection.check_);
         } else {
