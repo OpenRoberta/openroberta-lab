@@ -85,7 +85,7 @@ function step(simulationSensorData) {
         }
     }
     ACTORS.calculateCoveredDistance();
-    PROGRAM_SIMULATION.calculateWishedTime();
+    PROGRAM_SIMULATION.handleWaitTimer();
 }
 
 function evalWaitTime(simulationSensorData, stmt) {

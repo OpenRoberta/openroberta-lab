@@ -1,5 +1,4 @@
 var SENSORS = (function() {
-
     var touchSensor = false;
     var ultrasonicSensor = 0;
     var colorSensor = undefined;
@@ -50,7 +49,6 @@ var SENSORS = (function() {
 })();
 
 var ACTORS = (function() {
-
     var distanceToCover = false;
     var pilot = false;
     var leftMotor = new Motor();
@@ -314,7 +312,7 @@ var PROGRAM_SIMULATION = (function() {
         return timer;
     }
 
-    function calculateWishedTime() {
+    function handleWaitTimer() {
         if (isRunningTimer) {
             if (getTimer().getCurrentTime() > getTimer().getTime()) {
                 isRunningTimer = false;
@@ -354,7 +352,7 @@ var PROGRAM_SIMULATION = (function() {
         "resetTimer" : resetTimer,
         "getTimer" : getTimer,
         "setTimer" : setTimer,
-        "calculateWishedTime" : calculateWishedTime,
+        "handleWaitTimer" : handleWaitTimer,
         "toString" : toString
     };
 })();

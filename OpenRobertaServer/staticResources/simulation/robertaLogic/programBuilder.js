@@ -56,11 +56,8 @@ function createDriveAction(speed, direction, distance) {
     result[STMT] = DRIVE_ACTION;
     result[SPEED] = speed;
     result[DRIVE_DIRECTION] = direction;
-    if (distance == undefined) {
-        result[DISTANCE] = undefined;
-    } else {
-        result[DISTANCE] = distance;
-    }
+    result[DISTANCE] = distance;
+
     return result;
 }
 
@@ -69,11 +66,8 @@ function createMotorOnAction(speed, motorSide, motorDuration) {
     result[STMT] = MOTOR_ON_ACTION;
     result[SPEED] = speed;
     result[MOTOR_SIDE] = motorSide;
-    if (motorDuration == undefined) {
-        result[MOTOR_DURATION] = undefined;
-    } else {
-        result[MOTOR_DURATION] = motorDuration;
-    }
+    result[MOTOR_DURATION] = motorDuration;
+
     return result;
 }
 
@@ -89,11 +83,8 @@ function createTurnAction(speed, direction, angle) {
     result[STMT] = TURN_ACTION;
     result[SPEED] = speed;
     result[TURN_DIRECTION] = direction;
-    if (angle == undefined) {
-        result[ANGLE] = undefined;
-    } else {
-        result[ANGLE] = angle;
-    }
+    result[ANGLE] = angle;
+
     return result;
 }
 

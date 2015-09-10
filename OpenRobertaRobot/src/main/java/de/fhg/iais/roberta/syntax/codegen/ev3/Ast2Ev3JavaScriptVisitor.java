@@ -239,71 +239,21 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
     public Void visitIfStmt(IfStmt<Void> ifStmt) {
         String end = createClosingBracket();
         this.sb.append("createIfStmt([");
-        for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
-            ifStmt.getExpr().get(i).visit(this);
-            if ( i < ifStmt.getExpr().size() - 1 ) {
-                this.sb.append(", ");
-            }
-        }
+        appendIfStmtConditions(ifStmt);
         this.sb.append("], [");
-        for ( int i = 0; i < ifStmt.getThenList().size(); i++ ) {
-            addInStmt();
-            this.sb.append("[");
-            ifStmt.getThenList().get(i).visit(this);
-            if ( i < ifStmt.getThenList().size() - 1 ) {
-                this.sb.append("], ");
-            } else {
-                this.sb.append("]");
-            }
-        }
+        appendThenStmts(ifStmt);
         this.sb.append("]");
-        if ( ifStmt.getElseList().get().size() != 0 ) {
-            this.sb.append(", [");
-            addInStmt();
-            ifStmt.getElseList().visit(this);
-            this.sb.append("]");
-        }
+        appendElseStmt(ifStmt);
         this.sb.append(end);
-
         return null;
     }
 
     @Override
     public Void visitRepeatStmt(RepeatStmt<Void> repeatStmt) {
         String end = createClosingBracket();
-        switch ( repeatStmt.getMode() ) {
-            case WAIT:
-                this.sb.append("createIfStmt([");
-                repeatStmt.getExpr().visit(this);
-                this.sb.append("], [");
-                break;
-            case TIMES:
-                this.sb.append("createRepeatStmt(" + repeatStmt.getMode() + ", ");
-                ((NumConst<Void>) ((ExprList<Void>) repeatStmt.getExpr()).get().get(2)).visit(this);
-                this.sb.append(", [");
-                break;
-            case FOREVER:
-            case WHILE:
-                this.sb.append("createRepeatStmt(" + repeatStmt.getMode() + ", ");
-                repeatStmt.getExpr().visit(this);
-                this.sb.append(", [");
-                break;
-
-            default:
-                throw new DbcException("Invalid repeat mode");
-
-        }
-
+        appendRepeatStmtCondition(repeatStmt);
         addInStmt();
-        if ( repeatStmt.getMode() == Mode.WAIT ) {
-            if ( repeatStmt.getList().get().size() != 0 ) {
-                this.sb.append("[");
-                repeatStmt.getList().visit(this);
-                this.sb.append("]");
-            }
-        } else {
-            repeatStmt.getList().visit(this);
-        }
+        appendRepeatStmtStatements(repeatStmt);
         this.sb.append("]");
         this.sb.append(end);
         return null;
@@ -353,7 +303,6 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
         boolean isDuration = turnAction.getParam().getDuration() != null;
-
         String end = createClosingBracket();
         this.sb.append("createTurnAction(");
         turnAction.getParam().getSpeed().visit(this);
@@ -723,6 +672,74 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
             } else {
                 astVisitor.sb.append("]);");
             }
+        }
+    }
+
+    private void appendIfStmtConditions(IfStmt<Void> ifStmt) {
+        for ( int i = 0; i < ifStmt.getExpr().size(); i++ ) {
+            ifStmt.getExpr().get(i).visit(this);
+            if ( i < ifStmt.getExpr().size() - 1 ) {
+                this.sb.append(", ");
+            }
+        }
+    }
+
+    private void appendElseStmt(IfStmt<Void> ifStmt) {
+        if ( ifStmt.getElseList().get().size() != 0 ) {
+            this.sb.append(", [");
+            addInStmt();
+            ifStmt.getElseList().visit(this);
+            this.sb.append("]");
+        }
+    }
+
+    private void appendThenStmts(IfStmt<Void> ifStmt) {
+        for ( int i = 0; i < ifStmt.getThenList().size(); i++ ) {
+            addInStmt();
+            this.sb.append("[");
+            ifStmt.getThenList().get(i).visit(this);
+            boolean isLastStmt = i < ifStmt.getThenList().size() - 1;
+            this.sb.append("]");
+            if ( isLastStmt ) {
+                this.sb.append(", ");
+            }
+        }
+    }
+
+    private void appendRepeatStmtStatements(RepeatStmt<Void> repeatStmt) {
+        if ( repeatStmt.getMode() == Mode.WAIT ) {
+            if ( repeatStmt.getList().get().size() != 0 ) {
+                this.sb.append("[");
+                repeatStmt.getList().visit(this);
+                this.sb.append("]");
+            }
+        } else {
+            repeatStmt.getList().visit(this);
+        }
+    }
+
+    private void appendRepeatStmtCondition(RepeatStmt<Void> repeatStmt) {
+        switch ( repeatStmt.getMode() ) {
+            case WAIT:
+                this.sb.append("createIfStmt([");
+                repeatStmt.getExpr().visit(this);
+                this.sb.append("], [");
+                break;
+            case TIMES:
+                this.sb.append("createRepeatStmt(" + repeatStmt.getMode() + ", ");
+                ((NumConst<Void>) ((ExprList<Void>) repeatStmt.getExpr()).get().get(2)).visit(this);
+                this.sb.append(", [");
+                break;
+            case FOREVER:
+            case WHILE:
+                this.sb.append("createRepeatStmt(" + repeatStmt.getMode() + ", ");
+                repeatStmt.getExpr().visit(this);
+                this.sb.append(", [");
+                break;
+
+            default:
+                throw new DbcException("Invalid repeat mode");
+
         }
     }
 
