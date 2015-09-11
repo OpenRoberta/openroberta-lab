@@ -58,7 +58,7 @@ var SIM = (function() {
         return currentBackground;
     }
     var time;
-   
+
     var dt = 0;
     function getDt() {
         return dt;
@@ -222,10 +222,8 @@ var SIM = (function() {
         output.right = ACTORS.getRightMotor().getPower() * MAXPOWER || 0;
 
         robot.led.mode = output.ledMode = LIGHT.getMode() || "OFF";
-        if (LIGHT.getMode() && LIGHT.getMode() == "OFF")
-            robot.led.color = output.led = "#dddddd"; // = led off
-        else
-            robot.led.color = output.led = LIGHT.getColor();
+        if (LIGHT.getMode() && LIGHT.getMode() == "OFF"){robot.led.color = output.led = "#dddddd"; // = led off
+} else {robot.led.color = output.led = LIGHT.getColor();}
     }
 
     function setObstacle() {
@@ -341,18 +339,21 @@ var SIM = (function() {
             ground.h = scene.playground.h / scale;
             var oldScale = scale;
             scale = 1;
-            if (window.outerWidth < 768) {// extra small devices
+            //LOG.info($(window).width());
+            if ($(window).width() < 768) {// extra small devices
                 scale = 0.5
-//        } else if (window.outerWidth < 1280) {// medium and large devices     
-//            scale = 0.8;
-            } else if (window.outerWidth >= 1920) {// medium and large devices     
+            } else if ($(window).width() < 1024) {// medium and large devices     
+                scale = 0.7;
+            } else if ($(window).width() < 1280) {// medium and large devices     
+                scale = 0.8;
+            } else if ($(window).width() >= 1920) {// medium and large devices     
                 scale = 1.5;
             }
             // MAXDIAG = Math.sqrt(SIMATH.sqr(ground.w) + SIMATH.sqr(ground.h));
-            if (oldScale != scale) {
-                scene.updateBackgrounds();
-                scene.drawObjects();
-            }
+//            if (oldScale != scale) {
+            scene.updateBackgrounds();
+            scene.drawObjects();
+//            }
         }
     }
 
@@ -490,19 +491,17 @@ var SIM = (function() {
         window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
     }
 
-    if (!window.requestAnimationFrame)
-        window.requestAnimationFrame = function(callback, element) {
-            var currTime = new Date().getTime();
-            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function() {
-                callback(currTime + timeToCall);
-            }, timeToCall);
-            lastTime = currTime + timeToCall;
-            return id;
-        };
+    if (!window.requestAnimationFrame){window.requestAnimationFrame = function(callback, element) {
+        var currTime = new Date().getTime();
+        var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+        var id = window.setTimeout(function() {
+            callback(currTime + timeToCall);
+        }, timeToCall);
+        lastTime = currTime + timeToCall;
+        return id;
+    };}
 
-    if (!window.cancelAnimationFrame)
-        window.cancelAnimationFrame = function(id) {
-            clearTimeout(id);
-        };
+    if (!window.cancelAnimationFrame){window.cancelAnimationFrame = function(id) {
+        clearTimeout(id);
+    };}
 }());
