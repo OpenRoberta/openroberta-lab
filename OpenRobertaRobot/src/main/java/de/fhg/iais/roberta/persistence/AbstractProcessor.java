@@ -27,6 +27,7 @@ public abstract class AbstractProcessor {
      * the command succeeded. Remember that.
      */
     public final void setSuccess(Key message, String... parameter) {
+        //Assert.isTrue(this.success == null);
         this.success = true;
         this.message = message;
         this.parameter = parameter;
@@ -37,6 +38,7 @@ public abstract class AbstractProcessor {
      * the command failed. Remember that.
      */
     public final void setError(Key message, String... parameters) {
+        //Assert.isTrue(this.success == null);
         this.success = false;
         this.message = message;
         this.parameter = parameters;
@@ -46,10 +48,11 @@ public abstract class AbstractProcessor {
     /**
      * check the actual state of a processor
      *
-     * @return true, if <b>until now</b> the processor was always successful, i.e. NO error message has been saved (don't use the success flag!)
+     * @return true, if the processor is successful
      */
     public final boolean isOk() {
-        return this.message == null;
+        //Assert.isTrue(this.success != null);
+        return this.success;
     }
 
     /**
