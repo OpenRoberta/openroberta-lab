@@ -33,5 +33,6 @@ setup(name='robertalab',
       scripts=['robertalab.py'],
       packages=['roberta'],
       package_data={'roberta': ['ter-*.p??']},
-      install_requires=['python-bluez', 'python-dbus', 'python-ev3dev']
+      # other deps: apt-get-install pythpn-dbus python-bluez
+      install_requires=['python-ev3dev']
      )

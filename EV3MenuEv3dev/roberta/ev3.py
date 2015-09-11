@@ -5,6 +5,7 @@ import dbus
 import ev3dev
 import logging
 import math
+import os
 import random
 import time
 
@@ -83,8 +84,9 @@ class Hal(object):
     def __init__(self, brickConfiguration, usedSensors):
         self.cfg = brickConfiguration
         self.usedSensors = usedSensors
-        self.font_s = ImageFont.load('roberta/ter-u12n_unicode.pil')
-        self.font_x = ImageFont.load('roberta/ter-u18n_unicode.pil')
+        dir = os.path.dirname(__file__)
+        self.font_s = ImageFont.load(os.path.join(dir, 'ter-u12n_unicode.pil'))
+        self.font_x = ImageFont.load(os.path.join(dir, 'ter-u18n_unicode.pil'))
         self.lcd = ev3dev.LCD()
         self.led = ev3dev.led
         self.key = ev3dev.button
