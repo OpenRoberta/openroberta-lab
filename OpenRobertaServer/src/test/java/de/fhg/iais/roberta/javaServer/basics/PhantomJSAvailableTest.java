@@ -1,10 +1,11 @@
 package de.fhg.iais.roberta.javaServer.basics;
 
-import org.junit.Test;
-import java.io.File;
-
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+
+import org.junit.Test;
 
 /**
  * Checks whether phantomjs is available on your local system PATH.
@@ -13,11 +14,11 @@ import static org.junit.Assert.assertTrue;
  */
 public class PhantomJSAvailableTest {
 
-  @Test
-  public void shouldHavePhantomJsBinary() {
-    String binary = System.getProperty("phantomjs.binary");
-    assertNotNull(binary);
-    assertTrue(new File(binary).exists());
-  }
+    @Test
+    public void shouldHavePhantomJsBinary() {
+        String binary = System.getProperty("phantomjs.binary");
+        assertNotNull(binary);
+        assertTrue(new File(binary).exists());
+    }
 
 }

@@ -45,6 +45,7 @@ limitations under the License.
 		<dbusjava.version>0.9.0-beta</dbusjava.version>
 		<jna.version>3.2.7</jna.version>
         <ev3menu.url></ev3menu.url>
+        <browser.visibility>false</browser.visibility>
 	</properties>
 	<modules>
 		<module>../Resources</module>

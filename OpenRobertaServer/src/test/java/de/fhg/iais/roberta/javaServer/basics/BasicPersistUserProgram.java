@@ -6,7 +6,6 @@ import java.util.Properties;
 import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.persistence.bo.AccessRight;
@@ -24,7 +23,6 @@ import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.Util;
 
-@Ignore
 public class BasicPersistUserProgram {
     private SessionFactoryWrapper sessionFactoryWrapper;
     private DbSetup memoryDbSetup;
@@ -80,7 +78,7 @@ public class BasicPersistUserProgram {
             }
         }
         List<Program> programList = programDao.loadAll();
-        Assert.assertTrue(programList.size() == 100);
+        Assert.assertTrue(programList.size() == 101);
 
         //User 0 invites all inpair  users to write to its program
         User owner = userDao.loadUser("account-0");

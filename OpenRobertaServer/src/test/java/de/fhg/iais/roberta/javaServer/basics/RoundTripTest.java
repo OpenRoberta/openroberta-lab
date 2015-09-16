@@ -17,10 +17,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -37,6 +35,7 @@ import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
 import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CompilerWorkflow;
 import de.fhg.iais.roberta.testutil.Helper;
 import de.fhg.iais.roberta.testutil.JSONUtilForServer;
+import de.fhg.iais.roberta.testutil.SeleniumHelper;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
@@ -60,10 +59,9 @@ public class RoundTripTest {
         "bluetooth"
     };
 
-    // XXX: why static?
     private static WebDriver driver;
     private static String baseUrl;
-
+    private static boolean browserVisibility;
     private static Server server;
 
     private static SessionFactoryWrapper sessionFactoryWrapper;
@@ -89,212 +87,198 @@ public class RoundTripTest {
 
     @BeforeClass
     public static void setUp() throws Exception {
-        RoundTripTest.initialize();
-        RoundTripTest.setUpDatabase();
-        RoundTripTest.startServerAndLogin();
+        initialize();
+        driver = SeleniumHelper.runBrowser(browserVisibility);
+        setUpDatabase();
+        startServerAndLogin();
     }
 
     @Test
     public void actionMove() throws Exception {
-        assertRoundTrip(RoundTripTest.blocklyPrograms[0]);
+        assertRoundTrip(blocklyPrograms[0]);
     }
 
     @Test
     public void actionDrive() throws Exception {
-        assertRoundTrip(RoundTripTest.blocklyPrograms[1]);
+        assertRoundTrip(blocklyPrograms[1]);
     }
 
     @Test
     public void actionShow() throws Exception {
-        assertRoundTrip(RoundTripTest.blocklyPrograms[2]);
+        assertRoundTrip(blocklyPrograms[2]);
     }
 
     @Test
     public void actionSound() throws Exception {
-        assertRoundTrip(RoundTripTest.blocklyPrograms[3]);
+        assertRoundTrip(blocklyPrograms[3]);
     }
 
     @Test
     public void actionStatusLight() throws Exception {
-        assertRoundTrip(RoundTripTest.blocklyPrograms[4]);
+        assertRoundTrip(blocklyPrograms[4]);
     }
 
     @Test
     public void actionSensors() throws Exception {
-        assertRoundTrip(RoundTripTest.blocklyPrograms[5]);
+        assertRoundTrip(blocklyPrograms[5]);
     }
 
     @Test
     public void actionLogic() throws Exception {
-        assertRoundTrip(RoundTripTest.blocklyPrograms[6]);
+        assertRoundTrip(blocklyPrograms[6]);
     }
 
     @Test
     public void actionControl() throws Exception {
-        assertRoundTrip(RoundTripTest.blocklyPrograms[7]);
+        assertRoundTrip(blocklyPrograms[7]);
     }
 
     @Test
     public void actionWait() throws Exception {
-        assertRoundTrip(RoundTripTest.blocklyPrograms[8]);
+        assertRoundTrip(blocklyPrograms[8]);
     }
 
     @Test
     public void actionMath() throws Exception {
-        assertRoundTrip(RoundTripTest.blocklyPrograms[9]);
+        assertRoundTrip(blocklyPrograms[9]);
     }
 
     @Test
     public void actionText() throws Exception {
-        assertRoundTrip(RoundTripTest.blocklyPrograms[10]);
+        assertRoundTrip(blocklyPrograms[10]);
     }
 
     @Test
     public void actionLists() throws Exception {
-        assertRoundTrip(RoundTripTest.blocklyPrograms[11]);
+        assertRoundTrip(blocklyPrograms[11]);
     }
 
     @Test
     public void actionMethods() throws Exception {
-        assertRoundTrip(RoundTripTest.blocklyPrograms[12]);
+        assertRoundTrip(blocklyPrograms[12]);
     }
 
     @Test
     public void actionBluetooth() throws Exception {
-        assertRoundTrip(RoundTripTest.blocklyPrograms[13]);
+        assertRoundTrip(blocklyPrograms[13]);
     }
 
     @AfterClass
     public static void tearDown() throws Exception {
-        RoundTripTest.driver.quit();
-        String verificationErrorString = RoundTripTest.verificationErrors.toString();
+        driver.quit();
+        String verificationErrorString = verificationErrors.toString();
         if ( !"".equals(verificationErrorString) ) {
             Assert.fail(verificationErrorString);
         }
-        RoundTripTest.server.stop();
+        server.stop();
     }
 
     private static void initialize() {
         Properties properties = Util.loadProperties("classpath:openRoberta.properties");
-        RoundTripTest.buildXml = properties.getProperty("crosscompiler.build.xml");
-        RoundTripTest.connectionUrl = properties.getProperty("hibernate.connection.url");
-        RoundTripTest.crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");
-        RoundTripTest.robotResourcesDir = properties.getProperty("robot.resources.dir");
+        buildXml = properties.getProperty("crosscompiler.build.xml");
+        connectionUrl = properties.getProperty("hibernate.connection.url");
+        crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");
+        robotResourcesDir = properties.getProperty("robot.resources.dir");
+        browserVisibility = Boolean.parseBoolean(properties.getProperty("browser.visibility"));
 
-        RoundTripTest.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", RoundTripTest.connectionUrl);
-        RoundTripTest.nativeSession = RoundTripTest.sessionFactoryWrapper.getNativeSession();
-        RoundTripTest.memoryDbSetup = new DbSetup(RoundTripTest.nativeSession);
-        RoundTripTest.memoryDbSetup.runDefaultRobertaSetup();
-        RoundTripTest.brickCommunicator = new Ev3Communicator();
-        RoundTripTest.compilerWorkflow =
-            new Ev3CompilerWorkflow(
-                RoundTripTest.brickCommunicator,
-                RoundTripTest.crosscompilerBasedir,
-                RoundTripTest.robotResourcesDir,
-                RoundTripTest.buildXml);
-        RoundTripTest.restUser = new ClientUser(RoundTripTest.brickCommunicator);
-        RoundTripTest.restProgram = new ClientProgram(RoundTripTest.sessionFactoryWrapper, RoundTripTest.brickCommunicator, RoundTripTest.compilerWorkflow);
+        sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", connectionUrl);
+        nativeSession = sessionFactoryWrapper.getNativeSession();
+        memoryDbSetup = new DbSetup(nativeSession);
+        memoryDbSetup.runDefaultRobertaSetup();
+        brickCommunicator = new Ev3Communicator();
+        compilerWorkflow = new Ev3CompilerWorkflow(brickCommunicator, crosscompilerBasedir, robotResourcesDir, buildXml);
+        restUser = new ClientUser(brickCommunicator);
+        restProgram = new ClientProgram(sessionFactoryWrapper, brickCommunicator, compilerWorkflow);
 
-        RoundTripTest.s1 = HttpSessionState.init();
+        s1 = HttpSessionState.init();
     }
 
     private static void setUpDatabase() throws Exception {
-        Assert.assertEquals(0, RoundTripTest.getOneBigInteger("select count(*) from USER"));
-        RoundTripTest.response =
-            RoundTripTest.restUser.command(
-                RoundTripTest.s1,
-                RoundTripTest.sessionFactoryWrapper.getSession(),
+        Assert.assertEquals(1, getOneBigInteger("select count(*) from USER"));
+        response =
+            restUser.command(
+                s1,
+                sessionFactoryWrapper.getSession(),
                 JSONUtilForServer.mkD("{'cmd':'createUser';'accountName':'orA';'password':'Pid';'userEmail':'cavy@home';'role':'STUDENT'}"));
-        Assert.assertEquals(1, RoundTripTest.getOneBigInteger("select count(*) from USER"));
+        Assert.assertEquals(2, RoundTripTest.getOneBigInteger("select count(*) from USER"));
         Assert.assertTrue(!RoundTripTest.s1.isUserLoggedIn());
         RoundTripTest.response = //
             RoundTripTest.restUser.command( //
                 RoundTripTest.s1,
                 RoundTripTest.sessionFactoryWrapper.getSession(),
                 JSONUtilForServer.mkD("{'cmd':'login';'accountName':'orA';'password':'Pid'}"));
-        JSONUtilForServer.assertEntityRc(RoundTripTest.response, "ok", null);
-        Assert.assertTrue(RoundTripTest.s1.isUserLoggedIn());
-        int s1Id = RoundTripTest.s1.getUserId();
-        Assert.assertEquals(0, RoundTripTest.getOneBigInteger("select count(*) from PROGRAM where OWNER_ID = " + s1Id));
-        for ( String program : RoundTripTest.blocklyPrograms ) {
-            RoundTripTest.blocklyProgram =
-                Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + program + ".xml"), Charsets.UTF_8);
+        JSONUtilForServer.assertEntityRc(response, "ok", null);
+        Assert.assertTrue(s1.isUserLoggedIn());
+        int s1Id = s1.getUserId();
+        Assert.assertEquals(0, getOneBigInteger("select count(*) from PROGRAM where OWNER_ID = " + s1Id));
+        for ( String program : blocklyPrograms ) {
+            blocklyProgram = Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(resourcePath + program + ".xml"), Charsets.UTF_8);
             JSONObject fullRequest = new JSONObject("{\"log\":[];\"data\":{\"cmd\":\"saveAsP\";\"name\":\"" + program + "\";\"timestamp\":0}}");
-            fullRequest.getJSONObject("data").put("program", RoundTripTest.blocklyProgram);
-            RoundTripTest.response = RoundTripTest.restProgram.command(RoundTripTest.s1, fullRequest);
-            JSONUtilForServer.assertEntityRc(RoundTripTest.response, "ok", null);
+            fullRequest.getJSONObject("data").put("program", blocklyProgram);
+            response = restProgram.command(s1, fullRequest);
+            JSONUtilForServer.assertEntityRc(response, "ok", null);
         }
     }
 
     private static void startServerAndLogin() throws IOException, InterruptedException {
-
-        RoundTripTest.server = new ServerStarter("classpath:openRoberta.properties").start();
-        int port = RoundTripTest.server.getURI().getPort();
-        RoundTripTest.driver = new PhantomJSDriver();
-
-        // workaround: https://github.com/ariya/phantomjs/issues/11637
-        RoundTripTest.driver.manage().window().setSize(new Dimension(1024, 768));
-        RoundTripTest.driver.manage().window().maximize();
-
-        RoundTripTest.baseUrl = "http://localhost:" + port;
-        RoundTripTest.driver.get(RoundTripTest.baseUrl + "/");
-        RoundTripTest.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-
+        server = new ServerStarter("classpath:openRoberta.properties").start();
+        int port = server.getURI().getPort();
+        baseUrl = "http://localhost:" + port;
+        driver.get(baseUrl + "/");
+        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         //Welcome message dismiss
-        RoundTripTest.driver.findElement(By.id("hideStartupMessage")).click();
-        Thread.sleep(500);
+        (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("startEV3"))).click();
 
         //Login
+        WebElement user = (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("head-navi-icon-user")));
 
-        WebElement user = RoundTripTest.driver.findElement(By.id("head-navi-icon-user"));
-
-        while ( !RoundTripTest.driver.findElement(By.id("menuLogin")).isDisplayed() ) {
+        while ( !driver.findElement(By.id("menuLogin")).isDisplayed() ) {
             user.click();
         }
 
-        WebElement userLoginElement = (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("menuLogin")));
+        WebElement userLoginElement = (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("menuLogin")));
         userLoginElement.click();
-        (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.visibilityOfElementLocated(By.id("doLogin")));
-        RoundTripTest.driver.findElement(By.id("accountNameS")).clear();
-        RoundTripTest.driver.findElement(By.id("accountNameS")).sendKeys("orA");
-        RoundTripTest.driver.findElement(By.id("pass1S")).clear();
-        RoundTripTest.driver.findElement(By.id("pass1S")).sendKeys("Pid");
-        RoundTripTest.driver.findElement(By.id("doLogin")).click();
-        (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.invisibilityOfElementLocated(By.id("doLogin")));
+        (new WebDriverWait(driver, 10)).until(ExpectedConditions.visibilityOfElementLocated(By.id("doLogin")));
+        driver.findElement(By.id("accountNameS")).clear();
+        driver.findElement(By.id("accountNameS")).sendKeys("orA");
+        driver.findElement(By.id("pass1S")).clear();
+        driver.findElement(By.id("pass1S")).sendKeys("Pid");
+        driver.findElement(By.id("doLogin")).click();
+        (new WebDriverWait(driver, 10)).until(ExpectedConditions.invisibilityOfElementLocated(By.id("doLogin")));
     }
 
     private String saveProgram(String programName) throws InterruptedException, Exception, JSONException {
 
-        WebElement programElement = RoundTripTest.driver.findElement(By.id("head-navi-icon-program"));
+        WebElement programElement = driver.findElement(By.id("head-navi-icon-program"));
 
-        while ( !RoundTripTest.driver.findElement(By.id("menuSaveProg")).isDisplayed() ) {
+        while ( !driver.findElement(By.id("menuSaveProg")).isDisplayed() ) {
             programElement.click();
         }
-        WebElement userProgramSaveAsElement =
-            (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("menuSaveProg")));
+        WebElement userProgramSaveAsElement = (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("menuSaveProg")));
         userProgramSaveAsElement.click();
 
-        RoundTripTest.response =
-            RoundTripTest.restProgram.command(RoundTripTest.s1, JSONUtilForServer.mkD("{'cmd':'loadP';'name':'" + programName + "';'owner':'orA'}"));
-        String resultProgram = ((JSONObject) RoundTripTest.response.getEntity()).getString("data");
+        response = restProgram.command(s1, JSONUtilForServer.mkD("{'cmd':'loadP';'name':'" + programName + "';'owner':'orA'}"));
+        String resultProgram = ((JSONObject) response.getEntity()).getString("data");
         return resultProgram;
     }
 
     private void loadProgram(String program) throws InterruptedException {
-        WebElement programElement = RoundTripTest.driver.findElement(By.id("head-navi-icon-program"));
+        WebElement programElement = driver.findElement(By.id("head-navi-icon-program"));
 
-        while ( !RoundTripTest.driver.findElement(By.id("menuListProg")).isDisplayed() ) {
+        while ( !driver.findElement(By.id("menuListProg")).isDisplayed() ) {
             programElement.click();
         }
 
-        WebElement userProgramOpenElement = (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("menuListProg")));
+        WebElement userProgramOpenElement = (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("menuListProg")));
         userProgramOpenElement.click();
-        WebElement programTable = (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.visibilityOfElementLocated(By.id("programNameTable")));
-        Thread.sleep(500);
+        WebElement programTable = (new WebDriverWait(driver, 10)).until(ExpectedConditions.visibilityOfElementLocated(By.id("programNameTable")));
+
+        (new WebDriverWait(driver, 10)).until(ExpectedConditions.textToBePresentInElement(programTable, program));
+
         WebElement td = findTableRow(program, programTable);
         td.click();
 
-        WebElement load = (new WebDriverWait(RoundTripTest.driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("loadFromListing")));
+        WebElement load = (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("loadFromListing")));
         load.click();
     }
 
@@ -315,13 +299,12 @@ public class RoundTripTest {
         loadProgram(programName);
 
         String resultProgram = saveProgram(programName);
-        RoundTripTest.blocklyProgram =
-            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(RoundTripTest.resourcePath + programName + ".xml"), Charsets.UTF_8);
-        Helper.assertXML(RoundTripTest.blocklyProgram, resultProgram);
+        blocklyProgram = Resources.toString(BasicPerformanceUserInteractionTest.class.getResource(resourcePath + programName + ".xml"), Charsets.UTF_8);
+        Helper.assertXML(blocklyProgram, resultProgram);
     }
 
     private static long getOneBigInteger(String sqlStmt) {
-        return RoundTripTest.memoryDbSetup.getOneBigIntegerAsLong(sqlStmt);
+        return memoryDbSetup.getOneBigIntegerAsLong(sqlStmt);
     }
 
 }
