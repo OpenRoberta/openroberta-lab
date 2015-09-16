@@ -197,8 +197,9 @@ public class Ev3CommunicationData {
             LOG.debug("UPDATE button pressed. Wait state entered " + this.timerStartedByLastRequest.elapsedSecFormatted() + " ago");
             this.command = "update";
             this.timerStartedByLastRequest = Clock.start();
-            this.state = State.BRICK_IS_BUSY;
-            notifyAll();
+
+            // brick is disconnected after firmware update
+            abortPush();
             return true;
         }
     }

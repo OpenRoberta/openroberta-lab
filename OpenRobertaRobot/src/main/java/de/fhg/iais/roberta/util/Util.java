@@ -174,6 +174,8 @@ public class Util {
                                 brickCommunicator.disconnect(token);
                             } else if ( communicationState == State.BRICK_WAITING_FOR_PUSH_FROM_SERVER ) {
                                 infoAboutState = "wait";
+                            } else if ( communicationState == State.GARBAGE ) {
+                                infoAboutState = "disconnected";
                             } else {
                                 infoAboutState = "wait"; // is there a need to distinguish the communication state more detailed?
                             }
