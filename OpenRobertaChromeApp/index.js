@@ -4,7 +4,7 @@ onload = function () {
 
 	var EV3HOST = "10.0.1.1:80";
 
-	var STANDARDHOST = "192.168.1.2:1999";
+	var STANDARDHOST = "lab.open-roberta.org";
 	var CUSTOMHOST = null;
 	var ORAHOST = STANDARDHOST;
 
@@ -209,6 +209,7 @@ onload = function () {
 			if (brickreq.readyState == 4 && brickreq.status === 0) {
 			  document.getElementById('infodialogimg').src = "resources/warning-outline.png";
 	      document.getElementById("infodialogtxt").innerHTML = chrome.i18n.getMessage("dialog_brickerror");
+	      chrome.app.window.current().drawAttention();
 	      infodialog.showModal();
 	      reset();
 	      pushFinished = true;
