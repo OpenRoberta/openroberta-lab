@@ -109,23 +109,39 @@ function checkProgram() {
  * Switch brickly to another language
  */
 function switchLanguageInBrickly() {
-    var configurationBlocks = null;
-    if (Blockly.getMainWorkspace() !== null) {
-        var xmlConfiguration = Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace());
-        configurationBlocks = Blockly.Xml.domToText(xmlConfiguration);
-        COMM.json("/toolbox", {
-            "cmd" : "loadT",
-            "name" : "ev3Brick",
-            "owner" : " "
-        }, function(toolbox) {
-            showToolbox(toolbox);
-            initConfigurationEnvironment({
+    if (window.parent.userState.robot !== 'oraSim') {
+        var configurationBlocks = null;
+        if (Blockly.getMainWorkspace() !== null) {
+            var xmlConfiguration = Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace());
+            configurationBlocks = Blockly.Xml.domToText(xmlConfiguration);
+            loadToolboxAndConfiguration({
                 "rc" : "ok",
                 "data" : configurationBlocks
             });
             window.parent.userState.bricklyTranslated = true;
-        });
+        }
     }
+}
+
+function loadToolboxAndConfiguration(opt_configurationBlocks) {
+    COMM.json("/toolbox", {
+        "cmd" : "loadT",
+        "name" : "ev3Brick", // TODO do not use a hardcoded name!
+        "owner" : " "
+    }, function(toolbox) {
+        showToolbox(toolbox);
+        initConfigurationEnvironment(opt_configurationBlocks);
+    });
+}
+
+function loadToolbox() {
+    COMM.json("/toolbox", {
+        "cmd" : "loadT",
+        "name" : "ev3Brick", // TODO do not use a hardcoded name!
+        "owner" : " "
+    }, function(toolbox) {
+        showToolbox(toolbox);
+    });
 }
 
 function saveToServer() {

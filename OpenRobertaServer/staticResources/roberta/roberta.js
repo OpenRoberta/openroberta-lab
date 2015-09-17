@@ -1139,6 +1139,9 @@ function switchToBrickly() {
     } else {
         $('#bricklyFrame').css('display', 'inline');
         $('#tabs').css('display', 'none');
+        // This is only for firefox necessary, should be removed with new Blockly
+        UTIL.getBricklyFrame('#bricklyFrame').Blockly.getMainWorkspace().render();
+        UTIL.getBricklyFrame('#bricklyFrame').loadToolbox();
     }
     $('#tabBrickly').click();
     bricklyActive = true;
@@ -1160,7 +1163,9 @@ function switchRobot(robot) {
                 $('#menuConnect').parent().removeClass('disabled');
                 $('#iconDisplayRobotState').removeClass('typcn-Roberta');
                 $('#iconDisplayRobotState').addClass('typcn-ev3');
+                $('#menuShowCode').parent().removeClass('disabled');
                 Blockly.getMainWorkspace().codeButton.enable();
+                UTIL.getBricklyFrame('#bricklyFrame').loadToolboxAndConfiguration();
             } else if (robot === "oraSim") {
                 userState.robotName = "ORSim";
                 setConfiguration("ORSim");
@@ -1170,6 +1175,7 @@ function switchRobot(robot) {
                 $('#menuConnect').parent().addClass('disabled');
                 $('#iconDisplayRobotState').removeClass('typcn-ev3');
                 $('#iconDisplayRobotState').addClass('typcn-Roberta');
+                $('#menuShowCode').parent().addClass('disabled');
                 Blockly.getMainWorkspace().codeButton.disable();
                 PROGRAM.loadProgramFromListing('NEPOprog', 'Roberta', function(result) {
                     if (result.rc === 'ok') {
@@ -1448,9 +1454,12 @@ function initHeadNavigation() {
     $('.codeBack').onWrap('click', function(event) {
         $('#blocklyDiv').removeClass('codeActive');
         $('#codeDiv').removeClass('codeActive');
+        if (userState.robot === "oraSim") {
+            $('#menuEv3').parent().removeClass('disabled');
+        } else {
+            $('#menuSim').parent().removeClass('disabled');
+        }
         Blockly.fireUiEvent(window, 'resize')
-        $('.nav > li > ul > .robotType').removeClass('disabled');
-        //$('#menuSim').parent().addClass('disabled');
         COMM.json("/toolbox", {
             "cmd" : "loadT",
             "name" : userState.toolbox,
@@ -1803,7 +1812,7 @@ function translate(jsdata) {
  */
 function switchLanguage(langCode, forceSwitch) {
     if (forceSwitch || userState.language != langCode) {
-        var langs = [ 'DE', 'EN', 'FI', 'DA' ];
+        var langs = [ 'DE', 'EN', 'FI', 'DA', 'ES' ];
         if (langs.indexOf(langCode) < 0) {
             langCode = "EN";
         }
@@ -1853,6 +1862,9 @@ function initializeLanguages() {
     } else if (navigator.language.indexOf("da") > -1) {
         language = 'DA';
         $('#chosenLanguage').text('DA');
+    } else if (navigator.language.indexOf("es") > -1) {
+        language = 'ES';
+        $('#chosenLanguage').text('ES');
     } else {
         language = 'EN';
         $('#chosenLanguage').text('EN');
