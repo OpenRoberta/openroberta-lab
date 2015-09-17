@@ -111,12 +111,15 @@ function deleteUserOnServer() {
  * Handle firmware conflict between server and robot
  */
 function handleFirmwareConflict() {
-    if (userState.serverVersion > userState.robotVersion) {
+    var regex = '(.+\..+)\..+'; // get x.y from version x.y.z
+    var mainversionServer = userState.serverVersion.match(regex)[1];
+    var mainversionRobot = userState.robotVersion.match(regex)[1];
+    if (mainversionServer > mainversionRobot) {
         LOG.info("The firmware version '" + userState.serverVersion + "' on the server is newer than the firmware version '" + userState.robotVersion
                 + "' on the robot");
         $("#confirmUpdateFirmware").modal('show');
         return true;
-    } else if (userState.serverVersion < userState.robotVersion) {
+    } else if (mainversionServer < mainversionRobot) {
         LOG.info("The firmware version '" + userState.serverVersion + "' on the server is older than the firmware version '" + userState.robotVersion
                 + "' on the robot");
         displayMessage("MESSAGE_FIRMWARE_ERROR", "POPUP", "");
