@@ -120,7 +120,7 @@ var ACTORS = (function() {
 
             case MOTOR_RIGHT:
                 if (rightMotorRotationFinished) {
-                    getRightMotor().setPower(0)
+                    getRightMotor().setPower(0);
                     distanceToCover = false;
                     PROGRAM_SIMULATION.setNextStatement(true);
                 }
@@ -253,25 +253,25 @@ var PROGRAM_SIMULATION = (function() {
     var nextStatement = true;
     var wait = false;
     var timer = new Timer();
-    var isRunningTimer = false;
+    var runningTimer = false;
 
     function set(newProgram) {
         program = newProgram;
     }
 
     function isTerminated() {
-        return program.length == 0 && isNextStatement();
+        return program.length === 0 && isNextStatement();
     }
 
     function get() {
-        if (program.length == 0) {
+        if (program.length === 0) {
             throw "Program is empty!";
         }
         return program[0];
     }
 
     function getRemove() {
-        if (program.length == 0) {
+        if (program.length === 0) {
             throw "Program is empty!";
         }
         var statement = program[0];
@@ -313,9 +313,9 @@ var PROGRAM_SIMULATION = (function() {
     }
 
     function handleWaitTimer() {
-        if (isRunningTimer) {
+        if (runningTimer) {
             if (getTimer().getCurrentTime() > getTimer().getTime()) {
-                isRunningTimer = false;
+                runningTimer = false;
                 PROGRAM_SIMULATION.setNextStatement(true);
             }
         }
@@ -326,11 +326,11 @@ var PROGRAM_SIMULATION = (function() {
     }
 
     function isRunningTimer() {
-        return isRunningTimer;
+        return runningTimer;
     }
 
     function setIsRunningTimer(value) {
-        isRunningTimer = value;
+        runningTimer = value;
     }
 
     function toString() {

@@ -33,7 +33,7 @@ var USER = {};
             "userName" : userName,
             "userEmail" : userEmail,
             "password" : passwd,
-            "role" : 'TEACHER',
+            "role" : 'TEACHER'
         }, successFn, "save user '" + accountName + "' to server"); 
     };
 

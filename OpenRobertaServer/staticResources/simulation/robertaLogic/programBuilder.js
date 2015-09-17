@@ -41,7 +41,7 @@ function createAssignStmt(name, value) {
 
 function createRepeatStmt(mode, expr, stmtList) {
     if (!Array.isArray(stmtList)) {
-        throw "Expression List is not List!"
+        throw "Expression List is not List!";
     }
     var result = {};
     result[MODE] = mode;

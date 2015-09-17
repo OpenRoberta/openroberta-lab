@@ -31,7 +31,7 @@ var SIM = (function() {
     function setBackground(num) {
         window.removeEventListener("resize", resizeAll);
         setPause(true);
-        if (num == 0) {
+        if (num === 0) {
             currentBackground += 1;
             if (currentBackground > 4) {
                 currentBackground = 1;
@@ -94,7 +94,6 @@ var SIM = (function() {
         } else {
             info = true;
         }
-        ;
     }
     function stopProgram() {
         setPause(true);
@@ -119,7 +118,7 @@ var SIM = (function() {
         y : 0,
         w : 500,
         h : 500
-    }
+    };
 
     var obstacle = {
         x : 0,
@@ -129,8 +128,8 @@ var SIM = (function() {
         w : 0,
         h : 0,
         wOld : 0,
-        hOld : 0,
-    }
+        hOld : 0
+    };
     var obstacleList = [ ground, obstacle ];
 
 // input and output for executing user program
@@ -141,7 +140,7 @@ var SIM = (function() {
         ultrasonic : 0,
         tacho : [ 0, 0 ],
         time : 0
-    }
+    };
 
     var output = {
         left : 0,
@@ -171,7 +170,7 @@ var SIM = (function() {
     }
 
     function cancel() {
-        window.removeEventListener("resize", resizeAll);
+        $(window).off("resize");
         canceled = true;
         removeMouseEvents();
         destroyLayers();
@@ -194,7 +193,7 @@ var SIM = (function() {
         output.right = 0;
         if (!PROGRAM_SIMULATION.isTerminated() && !pause) {
             //executeProgram();  //for tests without OpenRobertaLab
-            if (stepCounter == 0) {
+            if (stepCounter === 0) {
                 setPause(true);
             }
             step(input);
@@ -222,8 +221,11 @@ var SIM = (function() {
         output.right = ACTORS.getRightMotor().getPower() * MAXPOWER || 0;
 
         robot.led.mode = output.ledMode = LIGHT.getMode() || "OFF";
-        if (LIGHT.getMode() && LIGHT.getMode() == "OFF"){robot.led.color = output.led = "#dddddd"; // = led off
-} else {robot.led.color = output.led = LIGHT.getColor();}
+        if (LIGHT.getMode() && LIGHT.getMode() == "OFF") {
+            robot.led.color = output.led = "#dddddd"; // = led off
+        } else {
+            robot.led.color = output.led = LIGHT.getColor();
+        }
     }
 
     function setObstacle() {
@@ -262,14 +264,13 @@ var SIM = (function() {
         e.preventDefault();
         var X = e.clientX || e.originalEvent.touches[0].pageX;
         var Y = e.clientY || e.originalEvent.touches[0].pageY;
-        startX = (parseInt(X - offsetX)) / scale;
-        startY = (parseInt(Y - offsetY)) / scale;
+        startX = (parseInt(X - offsetX, 10)) / scale;
+        startY = (parseInt(Y - offsetY, 10)) / scale;
         var dx = startX - robot.mouse.rx;
         var dy = startY - robot.mouse.ry;
         isDownrobot = (dx * dx + dy * dy < robot.mouse.r * robot.mouse.r);
         isDownObstacle = (startX > obstacle.x && startX < obstacle.x + obstacle.w && startY > obstacle.y && startY < obstacle.y + obstacle.h);
     }
-    ;
 
     function handleMouseUp(e) {
         e.preventDefault();
@@ -287,14 +288,12 @@ var SIM = (function() {
         isDownrobot = false;
         isDownObstacle = false;
     }
-    ;
 
     function handleMouseOut(e) {
         e.preventDefault();
         isDownrobot = false;
         isDownObstacle = false;
     }
-    ;
 
     function handleMouseMove(e) {
         e.preventDefault();
@@ -304,8 +303,8 @@ var SIM = (function() {
         $("#robotLayer").css('cursor', 'pointer');
         var X = e.clientX || e.originalEvent.touches[0].pageX;
         var Y = e.clientY || e.originalEvent.touches[0].pageY;
-        mouseX = (parseInt(X - offsetX)) / scale;
-        mouseY = (parseInt(Y - offsetY)) / scale;
+        mouseX = (parseInt(X - offsetX, 10)) / scale;
+        mouseY = (parseInt(Y - offsetY, 10)) / scale;
         var dx = (mouseX - startX);
         var dy = (mouseY - startY);
         startX = mouseX;
@@ -325,7 +324,7 @@ var SIM = (function() {
             obstacle.y += dy;
             scene.drawObjects();
         }
-        return false;
+        return;
     }
 
     function resizeAll() {
@@ -335,11 +334,8 @@ var SIM = (function() {
             offsetY = canvasOffset.top;
             scene.playground.w = $('#simDiv').width();
             scene.playground.h = $(window).height() - offsetY;
-            ground.w = scene.playground.w / scale;
-            ground.h = scene.playground.h / scale;
             var oldScale = scale;
             scale = 1;
-            //LOG.info($(window).width());
             if ($(window).width() < 768) {// extra small devices
                 scale = 0.5
             } else if ($(window).width() < 1024) {// medium and large devices     
@@ -349,11 +345,13 @@ var SIM = (function() {
             } else if ($(window).width() >= 1920) {// medium and large devices     
                 scale = 1.5;
             }
+            ground.w = scene.playground.w / scale;
+            ground.h = scene.playground.h / scale;
             // MAXDIAG = Math.sqrt(SIMATH.sqr(ground.w) + SIMATH.sqr(ground.h));
-//            if (oldScale != scale) {
-            scene.updateBackgrounds();
-            scene.drawObjects();
-//            }
+            if (oldScale != scale) {
+                scene.updateBackgrounds();
+                scene.drawObjects();
+            }
         }
     }
 
@@ -410,15 +408,15 @@ var SIM = (function() {
 
         layers = createLayers();
         scene = new Scene(img[currentBackground], layers, robot, obstacle);
-        resizeAll();
         setObstacle();
         scene.updateBackgrounds();
         scene.drawObjects();
         scene.drawRobot();
         addMouseEvents();
         ready = true;
+        $(window).on("resize", resizeAll);
+        resizeAll();
         render();
-        window.addEventListener("resize", resizeAll);
     }
 
     function createLayers() {
@@ -491,17 +489,21 @@ var SIM = (function() {
         window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
     }
 
-    if (!window.requestAnimationFrame){window.requestAnimationFrame = function(callback, element) {
-        var currTime = new Date().getTime();
-        var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-        var id = window.setTimeout(function() {
-            callback(currTime + timeToCall);
-        }, timeToCall);
-        lastTime = currTime + timeToCall;
-        return id;
-    };}
+    if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = function(callback, element) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id = window.setTimeout(function() {
+                callback(currTime + timeToCall);
+            }, timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+        };
+    }
 
-    if (!window.cancelAnimationFrame){window.cancelAnimationFrame = function(id) {
-        clearTimeout(id);
-    };}
+    if (!window.cancelAnimationFrame) {
+        window.cancelAnimationFrame = function(id) {
+            clearTimeout(id);
+        };
+    }
 }());

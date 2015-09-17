@@ -25,8 +25,8 @@ function Robot(pose) {
         this.led.color = '#dddddd';
         this.led.mode = OFF;
         this.time = 0;
-    }
-};
+    };
+}
 Robot.prototype.geom = {
     x : -20,
     y : -20,
@@ -66,7 +66,7 @@ Robot.prototype.led = {
 Robot.prototype.encoder = {
     left : 0,
     right : 0
-}
+};
 Robot.prototype.colorSensor = {
     x : 0,
     y : -15,
@@ -82,7 +82,7 @@ Robot.prototype.lightSensor = {
     rx : 0,
     ry : 0,
     r : 5,
-    lightValue : 0,
+    lightValue : 0
 };
 Robot.prototype.ultraSensor = {
     x : 0,
@@ -103,41 +103,41 @@ Robot.prototype.touchSensor = {
     x2 : 0,
     y2 : 0,
     value : 0,
-    color : "#FFCC33"
+    color : '#FFCC33'
 };
 Robot.prototype.frontLeft = {
     x : 22.5,
     y : -25,
     rx : 0,
     ry : 0,
-    bumped : false,
+    bumped : false
 };
 Robot.prototype.frontRight = {
     x : -22.5,
     y : -25,
     rx : 0,
     ry : 0,
-    bumped : false,
+    bumped : false
 };
 Robot.prototype.backLeft = {
     x : 20,
     y : 30,
     rx : 0,
     ry : 0,
-    bumped : false,
+    bumped : false
 };
 Robot.prototype.backRight = {
     x : -20,
     y : 30,
     rx : 0,
     ry : 0,
-    bumped : false,
+    bumped : false
 };
 Robot.prototype.backMiddle = {
     x : 0,
     y : 30,
     rx : 0,
-    ry : 0,
+    ry : 0
 };
 Robot.prototype.mouse = {
     x : 0,
@@ -160,23 +160,23 @@ Robot.prototype.updatePose = function(output) {
     this.encoder.left += output.left * SIM.getDt();
     this.encoder.right += output.right * SIM.getDt();
     this.bumpedAready = false;
-    if (this.frontLeft.bumped === true && output.left > 0) {
+    if (this.frontLeft.bumped && output.left > 0) {
         output.left *= -1;
         this.bumpedAready = true;
     }
-    if (this.backLeft.bumped === true && output.left < 0) {
+    if (this.backLeft.bumped && output.left < 0) {
         output.left *= -1;
         this.bumpedAready = true;
     }
-    if (this.frontRight.bumped === true && output.right > 0) {
+    if (this.frontRight.bumped && output.right > 0) {
         output.right *= -1;
         this.bumpedAready = true;
     }
-    if (this.backRight.bumped === true && output.right < 0) {
+    if (this.backRight.bumped && output.right < 0) {
         output.right *= -1;
         this.bumpedAready = true;
     }
-    if (output.right === output.left) {
+    if (output.right == output.left) {
         var moveXY = output.right * SIM.getDt();
         var mX = Math.cos(this.pose.theta) * moveXY;
         var mY = Math.sqrt(Math.pow(moveXY, 2) - Math.pow(mX, 2));
@@ -221,7 +221,7 @@ Robot.prototype.updatePose = function(output) {
     this.touchSensor.y1 = this.frontRight.ry;
     this.touchSensor.x2 = this.frontLeft.rx;
     this.touchSensor.y2 = this.frontLeft.ry;
-}
+};
 /**
  * Translate a position to the global coordinate system
  * 
@@ -238,7 +238,7 @@ Robot.prototype.translate = function(sin, cos, point) {
     point.rx = this.pose.x - point.y * cos + point.x * sin;
     point.ry = this.pose.y - point.y * sin - point.x * cos;
     return point;
-}
+};
 
 /**
  * Creates a new SimpleRobot for the simple scene.
@@ -289,7 +289,7 @@ function RescueRobot() {
         xOld : 400,
         yOld : 40
     });
-};
+}
 RescueRobot.prototype = Object.create(Robot.prototype);
 RescueRobot.prototype.constructor = RescueRobot;
 /**
@@ -307,7 +307,7 @@ function DrawRobot() {
         yOld : 200
     });
     this.canDraw = true;
-};
+}
 DrawRobot.prototype = Object.create(Robot.prototype);
 DrawRobot.prototype.constructor = DrawRobot;
 DrawRobot.prototype.geom = {
@@ -347,32 +347,32 @@ DrawRobot.prototype.frontLeft = {
     y : -25,
     rx : 0,
     ry : 0,
-    bumped : false,
+    bumped : false
 };
 DrawRobot.prototype.frontRight = {
     x : -22.5,
     y : -25,
     rx : 0,
     ry : 0,
-    bumped : false,
+    bumped : false
 };
 DrawRobot.prototype.backLeft = {
     x : 20,
     y : 20,
     rx : 0,
     ry : 0,
-    bumped : false,
+    bumped : false
 };
 DrawRobot.prototype.backRight = {
     x : -20,
     y : 20,
     rx : 0,
     ry : 0,
-    bumped : false,
+    bumped : false
 };
 DrawRobot.prototype.backMiddle = {
     x : 0,
     y : 20,
     rx : 0,
-    ry : 0,
+    ry : 0
 };

@@ -200,10 +200,14 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
                 x : blockX,
                 y : blockY
             });
-            for (var p = 0, xmlChild; xmlChild = xmlTop.childNodes[p]; p++) {
-                if (xmlChild.nodeName.toLowerCase() == 'block')
-                    xmlChildList.push(xmlChild);
+            if (xmlTop.childNodes) {
+                for (var p = 0; p < xmlTop.childNodes.length; p++) {
+                    if (xmlTop.childNodes[p].nodeName.toLowerCase() == 'block') {
+                        xmlChildList.push(xmlTop.childNodes[p]);
+                    }
+                }
             }
+            ;
             xmlBlockList.push(xmlChildList);
         }
     }

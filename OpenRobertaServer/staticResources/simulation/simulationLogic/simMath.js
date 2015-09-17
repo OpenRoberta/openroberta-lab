@@ -45,8 +45,9 @@ var SIMATH = {};
      */
     SIMATH.getIntersectionPoint = function(line1, line2) {
         var d = (line1.x1 - line1.x2) * (line2.y1 - line2.y2) - (line1.y1 - line1.y2) * (line2.x1 - line2.x2);
-        if (d == 0)
+        if (d === 0) {
             return null;
+        }
         var xi = ((line2.x1 - line2.x2) * (line1.x1 * line1.y2 - line1.y1 * line1.x2) - (line1.x1 - line1.x2) * (line2.x1 * line2.y2 - line2.y1 * line2.x2))
                 / d;
         var yi = ((line2.y1 - line2.y2) * (line1.x1 * line1.y2 - line1.y1 * line1.x2) - (line1.y1 - line1.y2) * (line2.x1 * line2.y2 - line2.y1 * line2.x2))
@@ -110,7 +111,7 @@ var SIMATH = {};
      * @returns {Number} square of x
      */
     SIMATH.sqr = function(x) {
-        return x * x
+        return x * x;
     };
     /**
      * Get the distance of two points.
@@ -123,7 +124,7 @@ var SIMATH = {};
      * @returns {distance}
      */
     SIMATH.getDistance = function(p1, p2) {
-        return SIMATH.sqr(p1.x - p2.x) + SIMATH.sqr(p1.y - p2.y)
+        return SIMATH.sqr(p1.x - p2.x) + SIMATH.sqr(p1.y - p2.y);
     };
     /**
      * Get the shortest distance from a point to a line as a vector.
@@ -139,13 +140,16 @@ var SIMATH = {};
      */
     SIMATH.getDistanceToLine = function(p, p1, p2) {
         var d = SIMATH.getDistance(p1, p2);
-        if (d == 0)
+        if (d == 0) {
             return p1;
+        }
         var t = ((p.x - p1.x) * (p2.x - p1.x) + (p.y - p1.y) * (p2.y - p1.y)) / d;
-        if (t < 0)
+        if (t < 0) {
             return p1;
-        if (t > 1)
+        }
+        if (t > 1) {
             return p2;
+        }
         return ({
             x : p1.x + t * (p2.x - p1.x),
             y : p1.y + t * (p2.y - p1.y)
@@ -168,23 +172,23 @@ var SIMATH = {};
         var min = Math.min(r, g, b), max = Math.max(r, g, b), delta = max - min, h, s, v = max;
 
         v = Math.floor(max / 255 * 100);
-        if (max != 0)
+        if (max !== 0) {
             s = Math.floor(delta / max * 100);
-        else {
+        } else {
             // black
             return [ 0, 0, 0 ];
         }
-
-        if (r == max)
+        if (r === max) {
             h = (g - b) / delta; // between yellow & magenta
-        else if (g == max)
+        } else if (g === max) {
             h = 2 + (b - r) / delta; // between cyan & yellow
-        else
+        } else {
             h = 4 + (r - g) / delta; // between magenta & cyan
-
+        }
         h = Math.floor(h * 60); // degrees
-        if (h < 0)
+        if (h < 0) {
             h += 360;
+        }
 
         return [ h, s, v ];
     };
@@ -197,20 +201,27 @@ var SIMATH = {};
      * @returns {Enum} color
      */
     SIMATH.getColor = function(hsv) {
-        if (hsv[2] <= 10)
+        if (hsv[2] <= 10) {
             return COLOR_ENUM.BLACK;
-        if ((hsv[0] < 10 || hsv[0] > 350) && hsv[1] > 90 && hsv[2] > 50)
+        }
+        if ((hsv[0] < 10 || hsv[0] > 350) && hsv[1] > 90 && hsv[2] > 50) {
             return COLOR_ENUM.RED;
-        if (hsv[0] > 40 && hsv[0] < 70 && hsv[1] > 90 && hsv[2] > 50)
+        }
+        if (hsv[0] > 40 && hsv[0] < 70 && hsv[1] > 90 && hsv[2] > 50) {
             return COLOR_ENUM.YELLOW;
-        if (hsv[0] < 50 && hsv[1] > 50 && hsv[1] < 100 && hsv[2] < 50)
+        }
+        if (hsv[0] < 50 && hsv[1] > 50 && hsv[1] < 100 && hsv[2] < 50) {
             return COLOR_ENUM.BROWN;
-        if (hsv[1] < 10 && hsv[2] > 90)
+        }
+        if (hsv[1] < 10 && hsv[2] > 90) {
             return COLOR_ENUM.WHITE;
-        if (hsv[0] > 70 && hsv[0] < 160 && hsv[1] > 80)
+        }
+        if (hsv[0] > 70 && hsv[0] < 160 && hsv[1] > 80) {
             return COLOR_ENUM.GREEN;
-        if (hsv[0] > 200 && hsv[0] < 250 && hsv[1] > 90 && hsv[2] > 50)
+        }
+        if (hsv[0] > 200 && hsv[0] < 250 && hsv[1] > 90 && hsv[2] > 50) {
             return COLOR_ENUM.BLUE;
+        }
         return COLOR_ENUM.NONE;
     }
 })($);

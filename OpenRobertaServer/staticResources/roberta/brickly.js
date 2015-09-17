@@ -4,7 +4,7 @@ function init() {
         "name" : "ev3Brick",
         "owner" : " "
     }, injectBrickly);
-};
+}
 
 /**
  * Inject Brickly with initial toolbox
@@ -23,33 +23,41 @@ function injectBrickly(toolbox) {
             scrollbars : true
         // check : true,
         });
-        COMM.json("/conf", {
-            "cmd" : "loadC",
-            "name" : "ev3Brick",
-            "owner" : " "
-        }, initConfigurationEnvironment);
+        initConfigurationEnvironment();
+    } else {
+        window.parent.displayInformation(toolbox, "", toolbox.message, "");
     }
-};
+}
 
-function initConfigurationEnvironment(result) {
+function initConfigurationEnvironment(opt_configuration) {
     // TODO solve this when blockly can have more instances
-    if (!result) {
+    if (!opt_configuration) {
         COMM.json("/conf", {
             "cmd" : "loadC",
             "name" : "ev3Brick",
             "owner" : " "
         }, initConfigurationEnvironment);
+    } else {
+        if (opt_configuration.rc === 'ok') {
+            var workspace = Blockly.getMainWorkspace();
+            if (workspace) {
+                workspace.clear();
+                var xml = Blockly.Xml.textToDom(opt_configuration.data);
+                Blockly.Xml.domToWorkspace(workspace, xml);
+            }
+            window.parent.userState.bricklyReady = true;
+        } else {
+            window.parent.displayInformation(configuration, "", configuration.message, "");
+        }
     }
-    response(result);
-    Blockly.getMainWorkspace().clear();
-    var xml = Blockly.Xml.textToDom(result.data);
-    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
-};
+}
 
 function response(result) {
-    LOG.info('result from server: ' + JSON.stringify(result));
-    return true;
-};
+    window.parent.LOG.info('result from server: ' + window.parent.UTIL.formatResultLog(result));
+    if (result.rc != 'ok') {
+        window.parent.displayMessage(result.message, "POPUP", "");
+    }
+}
 
 /**
  * Save configuration to server
@@ -62,7 +70,7 @@ function getXmlOfConfiguration(name) {
     var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
     var xml_text = Blockly.Xml.domToText(xml);
     return xml_text;
-};
+}
 
 /**
  * Show configuration
@@ -78,7 +86,7 @@ function showConfiguration(data, load) {
         Blockly.mainWorkspace.clear();
     }
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
-};
+}
 
 /**
  * Show toolbox
@@ -91,46 +99,38 @@ function showToolbox(result) {
     if (result.rc === 'ok') {
         Blockly.updateToolbox(result.data);
     }
-};
+}
 
 function checkProgram() {
     // TODO do we need this here?
-};
-
-/**
- * Switch to another language
- * 
- * @param {String}
- *            url of new message file
- */
-function switchLanguage(url) {
-    var future = $.getScript(url);
-    future.then(switchLanguageInBrickly);
-};
+}
 
 /**
  * Switch brickly to another language
  */
 function switchLanguageInBrickly() {
     var configurationBlocks = null;
-    if (Blockly.mainWorkspace !== null) {
-        var xmlConfiguration = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+    if (Blockly.getMainWorkspace() !== null) {
+        var xmlConfiguration = Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace());
         configurationBlocks = Blockly.Xml.domToText(xmlConfiguration);
+        COMM.json("/toolbox", {
+            "cmd" : "loadT",
+            "name" : "ev3Brick",
+            "owner" : " "
+        }, function(toolbox) {
+            showToolbox(toolbox);
+            initConfigurationEnvironment({
+                "rc" : "ok",
+                "data" : configurationBlocks
+            });
+            window.parent.userState.bricklyTranslated = true;
+        });
     }
-// translate configuration tab, inject is not possible!
-    COMM.json("/toolbox", {
-        "cmd" : "loadT",
-        "name" : "ev3Brick",
-        "owner" : " "
-    }, showToolbox);
-    initConfigurationEnvironment({
-        "data" : configurationBlocks
-    });
-};
+}
 
 function saveToServer() {
-    parent.saveConfigurationToServer();
-};
+    window.parent.saveConfigurationToServer();
+}
 
 /**
  * Set modification state.
@@ -139,7 +139,7 @@ function saveToServer() {
  *            modified or not.
  */
 function setWorkspaceModified(modified) {
-    parent.userState.configurationModified = modified;
+    window.parent.userState.configurationModified = modified;
 }
 
 $(document).ready(WRAP.fn3(init, 'brickly init EV3'));

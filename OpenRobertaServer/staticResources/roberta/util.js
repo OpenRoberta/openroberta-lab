@@ -27,7 +27,7 @@ var UTIL = {};
     UTIL.getCookie = function(key) {
         var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
         return keyValue ? keyValue[2] : null;
-    }
+    };
 
     /**
      * Format date
@@ -49,7 +49,7 @@ var UTIL = {};
             return str;
         }
         return "";
-    }
+    };
 
     /**
      * Format date completely (including 1/1000 - seconds)
@@ -75,7 +75,7 @@ var UTIL = {};
             return str;
         }
         return "";
-    }
+    };
 
     /**
      * Convert date into numeric value
@@ -100,7 +100,7 @@ var UTIL = {};
             return date.getTime();
         }
         return 0;
-    }
+    };
 
     /**
      * Format result of server call for logging
@@ -131,7 +131,7 @@ var UTIL = {};
         }
         str += '}';
         return str;
-    }
+    };
 
     /**
      * Extension of Jquery-datatables for sorting German date fields
@@ -150,7 +150,7 @@ var UTIL = {};
             b = UTIL.parseDate(b);
             return ((a < b) ? 1 : ((a > b) ? -1 : 0));
         });
-    }
+    };
 
     /**
      * Calculate height of data table
@@ -186,8 +186,9 @@ var UTIL = {};
                 }
             }
         }
-    }
-    UTIL.checkVisibility = (function() {
+    };
+
+    UTIL.checkVisibility = function() {
         var stateKey, eventKey, keys = {
             hidden : "visibilitychange",
             webkitHidden : "webkitvisibilitychange",
@@ -201,9 +202,41 @@ var UTIL = {};
             }
         }
         return function(c) {
-            if (c)
+            if (c) {
                 document.addEventListener(eventKey, c);
+            }
             return !document[stateKey];
+        };
+    };
+
+    UTIL.getBricklyFrame = function(id) {
+        var iframe = $(id).get(0);
+        var doc;
+
+        if (iframe.contentWindow) {
+            return iframe.contentWindow;
         }
-    })();
+
+        if (iframe.window) {
+            return iframe.window;
+        }
+
+        if (!doc && iframe.contentDocument) {
+            doc = iframe.contentDocument;
+        }
+
+        if (!doc && iframe.document) {
+            doc = iframe.document;
+        }
+
+        if (doc && doc.defaultView) {
+            return doc.defaultView;
+        }
+
+        if (doc && doc.parentWindow) {
+            return doc.parentWindow;
+        }
+
+        return undefined;
+    };
 })($);

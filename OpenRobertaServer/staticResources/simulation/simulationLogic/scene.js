@@ -22,7 +22,7 @@ function Scene(backgroundImg, layers, robot, obstacle) {
         h : 0
     };
     this.wave = 0.0;
-};
+}
 
 Scene.prototype.updateBackgrounds = function() {
     this.drawBackground(1, this.uCtx);
@@ -72,7 +72,7 @@ Scene.prototype.drawRobot = function() {
     this.rCtx.restore();
     this.rCtx.save();
     // provide new user information   
-    if (SIM.getInfo() == true) {
+    if (SIM.getInfo()) {
         var endLabel = this.playground.w - 40;
         var endValue = this.playground.w - 5;
         var line = 20;
@@ -263,14 +263,14 @@ Scene.prototype.updateSensorValues = function(running) {
                         y : this.robot.touchSensor.ry
                     }, {
                         x : obstacleLines[k].x1,
-                        y : obstacleLines[k].y1,
+                        y : obstacleLines[k].y1
                     }, {
                         x : obstacleLines[k].x2,
                         y : obstacleLines[k].y2
                     });
                     if (SIMATH.sqr(this.robot.touchSensor.rx - p.x) + SIMATH.sqr(this.robot.touchSensor.ry - p.y) < SIM.getDt()
                             * Math.max(Math.abs(SIM.output.right), Math.abs(SIM.output.left))) {
-                        this.robot.frontLeft.bumped = true;
+                       this.robot.frontLeft.bumped = true;
                         this.robot.frontRight.bumped = true;
                         this.robot.touchSensor.value = 1;
                     } else {
@@ -292,7 +292,7 @@ Scene.prototype.updateSensorValues = function(running) {
                                 y : this.robot.touchSensor.ry
                             }, {
                                 x : obstacleLines[k].x1,
-                                y : obstacleLines[k].y1,
+                                y : obstacleLines[k].y1
                             }, {
                                 x : obstacleLines[k].x2,
                                 y : obstacleLines[k].y2
@@ -322,7 +322,7 @@ Scene.prototype.updateSensorValues = function(running) {
         //var colors = uCtx.getImageData(Math.round(this.robot.colorSensor.rx - 4), Math.round(this.robot.colorSensor.ry - 4), 8, 8);
         var out = [ 0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140 ]; // outside the circle
         // var out = [ 0, 4, 24, 28, 32, 60, 192, 220, 224, 228, 248, 252 ]; // outside the circle
-        var b = 0
+        var b = 0;
         for (var j = 0; j < colors.data.length; j += 24) {
             //  for (var j = 0; j < colors.data.length; j += 32) {
             for (var i = j; i < j + 24; i += 4) {
@@ -423,8 +423,9 @@ Scene.prototype.updateSensorValues = function(running) {
         }
         values.ultrasonic = this.robot.ultraSensor.distance / 3;
     }
-    if (running)
+    if (running) {
         this.robot.time += SIM.getDt();
+    }
     values.time = this.robot.time;
     if (this.robot.encoder) {
         var tacho = [];

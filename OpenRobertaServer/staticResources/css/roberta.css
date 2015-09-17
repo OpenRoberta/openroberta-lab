@@ -17,6 +17,18 @@ html, body {
 	font-family: 'Roboto', sans-serif;
 }
 
+body > :not(.pace),body:before,body:after {
+  -webkit-transition:opacity .4s ease-in-out;
+  -moz-transition:opacity .4s ease-in-out;
+  -o-transition:opacity .4s ease-in-out;
+  -ms-transition:opacity .4s ease-in-out;
+  transition:opacity .4s ease-in-out
+}
+
+body:not(.pace-done) > :not(.pace),body:not(.pace-done):before,body:not(.pace-done):after {
+  opacity:0
+}
+
 #head-navigation {
 	box-shadow: 0 3px 5px #aeaeaf;
 	-webkit-box-shadow: 0 3px 5px #aeaeaf;
@@ -176,7 +188,7 @@ html, body {
 	position: fixed;
 	top: 152px;
 	bottom: 50px;
-	margin: 16px 68px;
+	margin: 16px 68px 32px 68px;
 }
 
 #progListing, #confListing, #logging {
@@ -617,6 +629,7 @@ ul.icon li.arrow-right-thick:before {
 	content: "\e61c";
 }
 /***** END Overwrite Bootstrap-CSS *****/
+.atlwdg-trigger.atlwdg-RIGHT {left: 100%;top: 40%;-webkit-transform-origin: top left;-webkit-transform: rotate(90deg);-moz-transform: rotate(90deg);-moz-transform-origin: top left;-ms-transform: rotate(90deg);-ms-transform-origin: top left;z-index:1000000000;}
 /***** BEGIN typicons *****/
 .typcn:before {
 	margin-right: 6px;
@@ -814,4 +827,18 @@ table.dataTable thead .sorting_desc {
 	}
 	#start-choise {
 	 width:80%;}
+}
+
+@media (max-height: 360px)  {
+div#startEV3, div#startSim {
+    height: 230px;
+}
+.modal-header h4 {
+    font-size: 1em;
+}
+img.img-responsive {
+    height: 140px;
+    margin: 0 auto;
+}
+ 
 }

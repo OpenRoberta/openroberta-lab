@@ -19,37 +19,40 @@ limitations under the License.
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
-<script type="text/javascript" src="/simulation/robertaLogic/constants.js"></script>
+<script  src="/roberta/pace.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/paceCenter.css"></link> 
+
+<!-- <script type="text/javascript" src="/simulation/robertaLogic/constants.js"></script>
 <script type="text/javascript" src="/simulation/robertaLogic/classes.js"></script>
 <script type="text/javascript" src="/simulation/robertaLogic/modules.js"></script>
 <script type="text/javascript" src="/simulation/robertaLogic/programBuilder.js"></script>
-<script type="text/javascript" src="/simulation/robertaLogic/programEval.js"></script>
-
-<script type="text/javascript" src="/common/jquery/jquery-2.0.3.js" charset="utf-8"></script>
+<script type="text/javascript" src="/simulation/robertaLogic/programEval.js"></script> -->
+<script type="text/javascript" src="/simulation/robertaLogic/robertaLogic.min.js"></script> 
+<script type="text/javascript" src="/common/jquery/jquery-2.1.4.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/common/basics.js" charset="utf-8"></script>
-<script type="text/javascript" src="/common/ui/jquery-ui.js" charset="utf-8"></script>
-<script type="text/javascript" src="/common/jquery.dataTables.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/common/ui/jquery-ui-1.10.4.custom.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="/common/jquery/jquery.dataTables.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/common/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/roberta/user.js"></script>
+<!-- <script type="text/javascript" src="/roberta/user.js"></script>
 <script type="text/javascript" src="/roberta/robot.js"></script>
 <script type="text/javascript" src="/roberta/program.js"></script>
 <script type="text/javascript" src="/roberta/configuration.js"></script>
 <script type="text/javascript" src="/roberta/util.js"></script>
-<script type="text/javascript" src="/roberta/roberta.js"></script>
+<script type="text/javascript" src="/roberta/roberta.js"></script> -->
+<script type="text/javascript" src="/roberta/roberta.min.js"></script>
 
-<script type="text/javascript" src="/simulation/simulationLogic/robot.js"></script>
+<!-- <script type="text/javascript" src="/simulation/simulationLogic/robot.js"></script>
 <script type="text/javascript" src="/simulation/simulationLogic/scene.js"></script>
 <script type="text/javascript" src="/simulation/simulationLogic/simMath.js"></script>
-<script type="text/javascript" src="/simulation/simulationLogic/simulation.js"></script>
+<script type="text/javascript" src="/simulation/simulationLogic/simulation.js"></script> -->
+<script type="text/javascript" src="/simulation/simulationLogic/simulationLogic.min.js"></script>
 
 <script type="text/javascript" src="/blockly/blockly_compressed.js"></script>
 <script type="text/javascript" src="/blockly/blocks_compressed.js"></script>
-<script type="text/javascript" src="/blockly/core/block_svg.js"></script>
-<script type="text/javascript" src="/blockly/core/blockly.js"></script>
-<script type="text/javascript" src="/blockly/core/xml_roberta.js"></script>
+<script type="text/javascript" src="blockly/msg/js/en.js"></script>
 
 <link rel="stylesheet" type="text/css" href="/common/bootstrap/bootstrap-3.3.1-dist/dist/css/bootstrap.min.css"></link>
-<link rel="stylesheet" type="text/css" href="/common/jquery.dataTables.min.css"></link>
+<!-- <link rel="stylesheet" type="text/css" href="/common/jquery.dataTables.min.css"></link> -->
 <link rel="stylesheet" type="text/css" href="/css/roberta.css"></link>
 <link rel="stylesheet" type="text/css" href="/css/typicons/typicons.css"></link>
 <link rel="manifest" href="manifest.webapp.json">
@@ -69,7 +72,6 @@ limitations under the License.
 </head>
 
 <body>
-
     <!-- ################## HEAD NAVIGATION ################## -->
 
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation" id="head-navigation">
@@ -186,7 +188,7 @@ limitations under the License.
                             <li><a href="#" class="simForward typcn typcn-media-pause" lkey="Blockly.Msg.MENU_SIM_START_PAUSE">Start/Pause</a></li>
                             <li><a href="#" class="simStep typcn typcn-step" lkey="Blockly.Msg.MENU_SIM_STEP">Step</a></li>
                             <li><a href="#" class="simStop typcn typcn-media-stop" lkey="Blockly.Msg.MENU_SIM_STOP">Stop</a></li>
-                            <li><a href="#" class="simBack typcn typcn-edit" lkey="Blockly.Msg.MENU_SIM_BACK">Back</a></li>
+                            <li><a href="#" class="simBack typcn typcn-times" lkey="Blockly.Msg.MENU_SIM_BACK">Back</a></li>
                         </ul></li>
                 </ul>
             </div>
@@ -202,7 +204,7 @@ limitations under the License.
                     <li><a href="#" class="simForward typcn typcn-media-play" lkey="Blockly.Msg.MENU_SIM_START_PAUSE">Start/Pause</a></li>
                     <li><a href="#" class="simStep typcn typcn-step" lkey="Blockly.Msg.MENU_SIM_STEP">Step</a></li>
                     <li><a href="#" class="simStop typcn typcn-media-stop" lkey="Blockly.Msg.MENU_SIM_STOP">Stop</a></li>
-                    <li><a href="#" class="simBack typcn typcn-edit" lkey="Blockly.Msg.MENU_SIM_BACK">Back</a></li>
+                    <li><a href="#" class="simBack typcn typcn-times" lkey="Blockly.Msg.MENU_SIM_BACK">Back</a></li>
                 </ul>
             </div>
 
@@ -699,7 +701,7 @@ limitations under the License.
                     <button id="simStop" type="button" class="simStop btn typcn typcn-media-stop head-navi-icons pull-left" data-toggle="collapse"></button>
                     <button id="simScene" type="button" class="simScene btn typcn typcn-image head-navi-icons pull-left" data-toggle="collapse"></button>
                     <button id="simInfo" type="button" class="simInfo btn typcn typcn-info-large head-navi-icons pull-left" data-toggle="collapse"></button>
-                    <button id="simBack" type="button" class="simBack btn typcn typcn-edit head-navi-icons pull-left" data-toggle="collapse"></button>
+                    <button id="simBack" type="button" class="simBack btn typcn typcn-times head-navi-icons pull-left" data-toggle="collapse"></button>
                 </div>
                 <div id="codeDiv">
                     <!-- <div id="codePackage" class="codeActive"></div>
@@ -708,7 +710,7 @@ limitations under the License.
                 </div>
                 <div id="codeButtons" class="navbar navbar-fixed-bottom code hide">
                     <button id="codeDownload" type="button" class="codeDownload btn typcn typcn-download head-navi-icons pull-left" data-toggle="collapse"></button>
-                    <button id="codeBack" type="button" class="codeBack btn typcn typcn-edit head-navi-icons pull-left" data-toggle="collapse"></button>
+                    <button id="codeBack" type="button" class="codeBack btn typcn typcn-times head-navi-icons pull-left" data-toggle="collapse"></button>
                 </div>
             </div>
 
@@ -745,7 +747,6 @@ limitations under the License.
             <div id="logging">
                 <h2>Logging</h2>
                 <ol id="log" class="log" reversed>
-                    <li></li>
                 </ol>
                 <div class="navbar navbar-fixed-bottom">
                     <input id="clearLog" class="btn" lkey="Blockly.Msg.BUTTON_EMPTY_LIST" type="submit" value="Liste leeren"></input>
