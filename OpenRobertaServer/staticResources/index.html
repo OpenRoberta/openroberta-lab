@@ -33,13 +33,13 @@ limitations under the License.
 <script type="text/javascript" src="/common/ui/jquery-ui-1.10.4.custom.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/common/jquery/jquery.dataTables.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/common/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/roberta/user.js"></script>
+<!-- <script type="text/javascript" src="/roberta/user.js"></script>
 <script type="text/javascript" src="/roberta/robot.js"></script>
 <script type="text/javascript" src="/roberta/program.js"></script>
 <script type="text/javascript" src="/roberta/configuration.js"></script>
 <script type="text/javascript" src="/roberta/util.js"></script>
-<script type="text/javascript" src="/roberta/roberta.js"></script>
-<!-- <script type="text/javascript" src="/roberta/roberta.min.js"></script> -->
+<script type="text/javascript" src="/roberta/roberta.js"></script> -->
+<script type="text/javascript" src="/roberta/roberta.min.js"></script>
 
 <!-- <script type="text/javascript" src="/simulation/simulationLogic/robot.js"></script>
 <script type="text/javascript" src="/simulation/simulationLogic/scene.js"></script>
@@ -538,7 +538,8 @@ limitations under the License.
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body left-inner-addon">
-                    <span lkey="Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM">Do you really want to delete the program ?</span>
+                    <span lkey="Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM">Do you really want to delete the program?</span>
+                    <p id="confirmDeleteProgramName">Name</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn" id="doDeleteProgram">OK</button>

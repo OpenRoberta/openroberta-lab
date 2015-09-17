@@ -814,9 +814,10 @@ function loadToolbox(toolboxName) {
 function showPrograms(result) {
     response(result);
     if (result.rc === 'ok') {
-        $('#programNameTable').fnClearTable();
+        var $table = $('#programNameTable').dataTable();
+        $table.fnClearTable();
         if (result.programNames.length > 0) {
-            $('#programNameTable').fnAddData(result.programNames);
+            $table.fnAddData(result.programNames);
         }
         setRobotState(result);
     }
