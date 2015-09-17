@@ -19,27 +19,27 @@ limitations under the License.
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
-<script  src="/roberta/pace.js"></script>
-<link rel="stylesheet" type="text/css" href="/css/paceCenter.css"></link> 
+<script src="/roberta/pace.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/paceCenter.css"></link>
 
 <!-- <script type="text/javascript" src="/simulation/robertaLogic/constants.js"></script>
 <script type="text/javascript" src="/simulation/robertaLogic/classes.js"></script>
 <script type="text/javascript" src="/simulation/robertaLogic/modules.js"></script>
 <script type="text/javascript" src="/simulation/robertaLogic/programBuilder.js"></script>
 <script type="text/javascript" src="/simulation/robertaLogic/programEval.js"></script> -->
-<script type="text/javascript" src="/simulation/robertaLogic/robertaLogic.min.js"></script> 
+<script type="text/javascript" src="/simulation/robertaLogic/robertaLogic.min.js"></script>
 <script type="text/javascript" src="/common/jquery/jquery-2.1.4.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/common/basics.js" charset="utf-8"></script>
 <script type="text/javascript" src="/common/ui/jquery-ui-1.10.4.custom.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/common/jquery/jquery.dataTables.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/common/bootstrap/bootstrap-3.3.1-dist/dist/js/bootstrap.min.js"></script>
-<!-- <script type="text/javascript" src="/roberta/user.js"></script>
+<script type="text/javascript" src="/roberta/user.js"></script>
 <script type="text/javascript" src="/roberta/robot.js"></script>
 <script type="text/javascript" src="/roberta/program.js"></script>
 <script type="text/javascript" src="/roberta/configuration.js"></script>
 <script type="text/javascript" src="/roberta/util.js"></script>
-<script type="text/javascript" src="/roberta/roberta.js"></script> -->
-<script type="text/javascript" src="/roberta/roberta.min.js"></script>
+<script type="text/javascript" src="/roberta/roberta.js"></script>
+<!-- <script type="text/javascript" src="/roberta/roberta.min.js"></script> -->
 
 <!-- <script type="text/javascript" src="/simulation/simulationLogic/robot.js"></script>
 <script type="text/javascript" src="/simulation/simulationLogic/scene.js"></script>
@@ -183,6 +183,7 @@ limitations under the License.
                                     Scene</a></li>
                             <li><a href="#" id="menuSimRescue" class="simRescue menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_RESCUE">Rescue
                                     Scene</a></li>
+                            <li><a href="#" id="menuSimMath" class="simMath menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_MATH">Math Scene</a></li>
                             <li class="divider"></li>
                             <li><a href="#" class="simInfo typcn typcn-info-large " lkey="Blockly.Msg.MENU_SIM_INFO">Info</a></li>
                             <li><a href="#" class="simForward typcn typcn-media-pause" lkey="Blockly.Msg.MENU_SIM_START_PAUSE">Start/Pause</a></li>
@@ -199,6 +200,7 @@ limitations under the License.
                     <li><a href="#" id="menuSimDraw" class="simDraw menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_DRAW">Drawing Scene</a></li>
                     <li><a href="#" id="menuSimRoberta" class="simRoberta menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_ROBERTA">Roberta Scene</a></li>
                     <li><a href="#" id="menuSimRescue" class="simRescue menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_RESCUE">Rescue Scene</a></li>
+                    <li><a href="#" id="menuSimMath" class="simMath menuSim typcn typcn-image " lkey="Blockly.Msg.MENU_SIM_MATH">Math Scene</a></li>
                     <legend class="visible-xs"></legend>
                     <li><a href="#" class="simInfo typcn typcn-info-large " lkey="Blockly.Msg.MENU_SIM_INFO">Info</a></li>
                     <li><a href="#" class="simForward typcn typcn-media-play" lkey="Blockly.Msg.MENU_SIM_START_PAUSE">Start/Pause</a></li>
@@ -753,6 +755,11 @@ limitations under the License.
                     <input id="backLogging" class="btn backButton" type="submit" lkey="Blockly.Msg.POPUP_CANCEL" value="Cancel"></input>
                 </div>
             </div>
+
+            <div id="simConfiguration">
+                <h2>OR Simulation</h2>
+            </div>
+
         </div>
 
         <iframe src="bricklyFrame.html" id="bricklyFrame"></iframe>

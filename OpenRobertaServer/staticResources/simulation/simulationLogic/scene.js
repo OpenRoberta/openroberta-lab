@@ -77,10 +77,20 @@ Scene.prototype.drawRobot = function() {
         var endValue = this.playground.w - 5;
         var line = 20;
         this.rCtx.fillStyle = "rgba(255,255,255,0.5)";
-        this.rCtx.fillRect(endLabel - 80, 0, this.playground.w, 180);
+        this.rCtx.fillRect(endLabel - 80, 0, this.playground.w, 200);
         this.rCtx.textAlign = "end";
         this.rCtx.font = "10px Verdana";
-        this.rCtx.fillStyle = "#333333";
+        var x, y;
+        if (SIM.getBackground() === 5) {
+            x = (this.robot.pose.x + this.robot.pose.transX) / 3;
+            y = (-this.robot.pose.y - this.robot.pose.transY) / 3;
+            this.rCtx.fillStyle = "#ffffff";
+
+        } else {
+            x = this.robot.pose.x + this.robot.pose.transX;
+            y = +this.robot.pose.y + this.robot.pose.transY;
+            this.rCtx.fillStyle = "#333333";
+        }
         this.rCtx.fillText("FPS", endLabel, line);
         this.rCtx.fillText(Math.round(1 / SIM.getDt()), endValue, line);
         line += 15;
@@ -88,10 +98,10 @@ Scene.prototype.drawRobot = function() {
         this.rCtx.fillText(Math.round(this.robot.time * 10) / 10, endValue, line);
         line += 15;
         this.rCtx.fillText("Robot X", endLabel, line);
-        this.rCtx.fillText(Math.round(this.robot.pose.x), endValue, line);
+        this.rCtx.fillText(Math.round(x), endValue, line);
         line += 15;
         this.rCtx.fillText("Robot Y", endLabel, line);
-        this.rCtx.fillText(Math.round(this.robot.pose.y), endValue, line);
+        this.rCtx.fillText(Math.round(y), endValue, line);
         line += 15;
         this.rCtx.fillText("Robot θ", endLabel, line);
         this.rCtx.fillText(Math.round(Math.round(SIMATH.toDegree(this.robot.pose.theta))), endValue, line);
@@ -215,15 +225,15 @@ Scene.prototype.drawRobot = function() {
     if (this.robot.canDraw) {
         this.bCtx.lineCap = 'round';
         this.bCtx.beginPath();
-        this.bCtx.lineWidth = "10";
-        this.bCtx.strokeStyle = "#000000";//this.robot.led.color;
+        this.bCtx.lineWidth = this.robot.drawWidth;
+        this.bCtx.strokeStyle = this.robot.drawColor;
         this.bCtx.moveTo(this.robot.pose.xOld, this.robot.pose.yOld);
         this.bCtx.lineTo(this.robot.pose.x, this.robot.pose.y);
         this.bCtx.stroke();
         this.uCtx.beginPath();
         this.uCtx.lineCap = 'round';
-        this.uCtx.lineWidth = "10";
-        this.uCtx.strokeStyle = "#000000";//this.robot.led.color;
+        this.uCtx.lineWidth = this.robot.drawWidth;
+        this.uCtx.strokeStyle = this.robot.drawColor;
         this.uCtx.moveTo(this.robot.pose.xOld, this.robot.pose.yOld);
         this.uCtx.lineTo(this.robot.pose.x, this.robot.pose.y);
         this.uCtx.stroke();
@@ -270,7 +280,7 @@ Scene.prototype.updateSensorValues = function(running) {
                     });
                     if (SIMATH.sqr(this.robot.touchSensor.rx - p.x) + SIMATH.sqr(this.robot.touchSensor.ry - p.y) < SIM.getDt()
                             * Math.max(Math.abs(SIM.output.right), Math.abs(SIM.output.left))) {
-                       this.robot.frontLeft.bumped = true;
+                        this.robot.frontLeft.bumped = true;
                         this.robot.frontRight.bumped = true;
                         this.robot.touchSensor.value = 1;
                     } else {

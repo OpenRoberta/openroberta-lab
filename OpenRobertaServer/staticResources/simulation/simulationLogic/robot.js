@@ -11,7 +11,9 @@ function Robot(pose) {
     var initialPose = {
         x : pose.x,
         y : pose.y,
-        theta : pose.theta
+        theta : pose.theta,
+        transX : pose.transX,
+        transY : pose.transY
     };
     this.reset = function() {
         this.pose.x = initialPose.x;
@@ -20,6 +22,8 @@ function Robot(pose) {
         this.pose.xOld = initialPose.x;
         this.pose.yOld = initialPose.y;
         this.pose.thetaOld = initialPose.theta;
+        this.pose.transX = initialPose.transX;
+        this.pose.transY = initialPose.transY;
         this.encoder.left = 0;
         this.encoder.right = 0;
         this.led.color = '#dddddd';
@@ -252,7 +256,9 @@ function SimpleRobot() {
         y : 200,
         theta : 0,
         xOld : 240,
-        yOld : 200
+        yOld : 200,
+        transX : 0,
+        transY : 0
     });
 }
 SimpleRobot.prototype = Object.create(Robot.prototype);
@@ -269,7 +275,9 @@ function RobertaRobot() {
         y : 90,
         theta : 0,
         xOld : 70,
-        yOld : 90
+        yOld : 90,
+        transX : 0,
+        transY : 0
     });
 }
 RobertaRobot.prototype = Object.create(Robot.prototype);
@@ -287,7 +295,9 @@ function RescueRobot() {
         y : 40,
         theta : 0,
         xOld : 400,
-        yOld : 40
+        yOld : 40,
+        transX : 0,
+        transY : 0
     });
 }
 RescueRobot.prototype = Object.create(Robot.prototype);
@@ -304,9 +314,13 @@ function DrawRobot() {
         y : 200,
         theta : 0,
         xOld : 200,
-        yOld : 200
+        yOld : 200,
+        transX : 0,
+        transY : 0
     });
     this.canDraw = true;
+    this.drawColor = "#000000";
+    this.drawWidth = 10;
 }
 DrawRobot.prototype = Object.create(Robot.prototype);
 DrawRobot.prototype.constructor = DrawRobot;
@@ -376,3 +390,19 @@ DrawRobot.prototype.backMiddle = {
     rx : 0,
     ry : 0
 };
+function MathRobot() {
+    Robot.call(this, {
+        x : 400,
+        y : 250,
+        theta : 0,
+        xOld : 400,
+        yOld : 250,
+        transX : -400,
+        transY : -250
+    });
+    this.canDraw = true;
+    this.drawColor = "#ffffff";
+    this.drawWidth = 1;
+}
+MathRobot.prototype = Object.create(Robot.prototype);
+MathRobot.prototype.constructor = MathRobot;

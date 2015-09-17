@@ -1122,6 +1122,7 @@ function initRelationsTable() {
 function switchToBlockly() {
     $('#tabs').css('display', 'inline');
     $('#bricklyFrame').css('display', 'none');
+    $('#simConfiguration').css('display', 'none');
     $('#tabBlockly').click();
     // do this twice :-( to make sure all metrics are calculated correctly.
     Blockly.getMainWorkspace().render();
@@ -1133,8 +1134,12 @@ function switchToBlockly() {
  * Switch to Brickly tab
  */
 function switchToBrickly() {
-    $('#tabs').css('display', 'none');
-    $('#bricklyFrame').css('display', 'inline');
+    if (userState.robot === "oraSim") { //simulation has no configuration, TODO add flag to robot in database
+        $('#simConfiguration').css('display', 'block');
+    } else {
+        $('#bricklyFrame').css('display', 'inline');
+        $('#tabs').css('display', 'none');
+    }
     $('#tabBrickly').click();
     bricklyActive = true;
 }
@@ -1148,6 +1153,7 @@ function switchRobot(robot) {
             userState.robot = robot;
             setRobotState(result);
             if (robot === "ev3") {
+                setConfiguration("EV3basis");
                 $('#blocklyDiv').removeClass('simBackground');
                 $('#menuEv3').parent().addClass('disabled');
                 $('#menuSim').parent().removeClass('disabled');
@@ -1157,6 +1163,7 @@ function switchRobot(robot) {
                 Blockly.getMainWorkspace().codeButton.enable();
             } else if (robot === "oraSim") {
                 userState.robotName = "ORSim";
+                setConfiguration("ORSim");
                 $('#blocklyDiv').addClass('simBackground');
                 $('#menuEv3').parent().removeClass('disabled');
                 $('#menuSim').parent().addClass('disabled');
@@ -1222,6 +1229,7 @@ function initHeadNavigation() {
             deactivateProgConfigMenu();
             $('#tabs').css('display', 'inline');
             $('#bricklyFrame').css('display', 'none');
+            $('#simConfiguration').css('display', 'none');
             $('#tabConfigurationListing').click();
         } else if (domId === 'menuSaveConfig') { //  Submenu 'Configuration'
             saveConfigurationToServer();
@@ -1260,6 +1268,7 @@ function initHeadNavigation() {
             deactivateProgConfigMenu();
             $('#tabs').css('display', 'inline');
             $('#bricklyFrame').css('display', 'none');
+            $('#simConfiguration').css('display', 'none');
             $('#tabLogging').click();
         } else if (domId === 'menuLogin') { // Submenu 'Login'
             $("#login-user").modal('show');
@@ -1367,6 +1376,12 @@ function initHeadNavigation() {
         SIM.setBackground(4);
         $("#simButtonsCollapse").collapse('hide');
     }, 'simRescue clicked');
+    $('.simMath').onWrap('click', function(event) {
+        $('.menuSim').parent().removeClass('disabled');
+        $('.simMath').parent().addClass('disabled');
+        SIM.setBackground(5);
+        $("#simButtonsCollapse").collapse('hide');
+    }, 'simRescue clicked');
     $('.simBack').onWrap('click', function(event) {
         SIM.cancel();
         $('#blocklyDiv').removeClass('simActive');
@@ -1419,8 +1434,10 @@ function initHeadNavigation() {
             $('.simRoberta').parent().addClass('disabled');
         } else if (scene == 4) {
             $('.simRescue').parent().addClass('disabled');
+        } else if (scene == 5) {
+            $('.simMath').parent().addClass('disabled');
         }
-    }, 'simInfo clicked');
+    }, 'simScene clicked');
 
     $('#startSim').onWrap('click', function(event) {
         switchRobot('oraSim');

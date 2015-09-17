@@ -201,6 +201,16 @@ body:not(.pace-done) > :not(.pace),body:not(.pace-done):before,body:not(.pace-do
 	border: 0;
 }
 
+#simConfiguration{
+	width: 100%;
+	height: 100%;
+	border: 0;
+	background: url(../simulation/simBackgrounds/simConfiguration.svg) no-repeat;
+	background-size: contain;
+	background-position: center;
+	display: none;
+}
+
 #blocklyDiv, #bricklyDiv {
 	/*  zoom: 0.5;
     -moz-transform: scale(0.5); */
@@ -711,7 +721,7 @@ legend {
 	margin-bottom: 15px;
 }
 
-#progListing>h2, #confListing>h2, #logging>h2 {
+#progListing>h2, #confListing>h2, #logging, #simConfiguration>h2 {
 	margin-left: 68px;
 }
 

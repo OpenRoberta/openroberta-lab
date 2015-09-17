@@ -20,7 +20,7 @@ var SIM = (function() {
     var scale = 1;
     var imgSrc = [ "simulation/simBackgrounds/baustelle-02.svg", "simulation/simBackgrounds/simpleBackground.svg",
             "simulation/simBackgrounds/drawBackground.svg", "simulation/simBackgrounds/robertaBackground.svg",
-            "simulation/simBackgrounds/rescueBackground.svg", "simulation/simBackgrounds/drawBackground.svg" ]; //TODO combine to one image for better performance
+            "simulation/simBackgrounds/rescueBackground.svg", "simulation/simBackgrounds/mathBackground.svg" ]; //TODO combine to one image for better performance
     var img;
     var timerStep = 0;
     var ready;
@@ -33,7 +33,7 @@ var SIM = (function() {
         setPause(true);
         if (num === 0) {
             currentBackground += 1;
-            if (currentBackground > 4) {
+            if (currentBackground > 5) {
                 currentBackground = 1;
             }
         } else {
@@ -47,6 +47,8 @@ var SIM = (function() {
             robot = new RobertaRobot();
         } else if (currentBackground == 4) {
             robot = new RescueRobot();
+        } else if (currentBackground == 5) {
+            robot = new MathRobot();
         }
         setObstacle();
         scene = new Scene(img[currentBackground], layers, robot, obstacle);
@@ -55,6 +57,9 @@ var SIM = (function() {
         scene.drawObjects();
         reloadProgram();
         window.addEventListener("resize", resizeAll);
+        return currentBackground;
+    }
+    function getBackground() {
         return currentBackground;
     }
     var time;
@@ -249,6 +254,12 @@ var SIM = (function() {
             obstacle.w = 100;
             obstacle.h = 100;
             obstacle.img = img[0];
+            obstacle.color = null;
+        } else if (currentBackground == 5) {
+            obstacle.x = 0;
+            obstacle.y = 0;
+            obstacle.w = 0;
+            obstacle.h = 0;
             obstacle.color = null;
         } else {
             obstacle.x = 495;
@@ -463,6 +474,7 @@ var SIM = (function() {
         "setStep" : setStep,
         "setInfo" : setInfo,
         "setBackground" : setBackground,
+        "getBackground" : getBackground,
         "stopProgram" : stopProgram,
         "obstacleList" : obstacleList,
         "output" : output,
