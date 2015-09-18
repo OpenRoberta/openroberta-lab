@@ -17,8 +17,7 @@ from dbus.mainloop.glib import DBusGMainLoop
 from roberta.ev3 import Hal
 from roberta.__version__ import version
 
-FORMAT = '%(asctime)-15s:' + logging.BASIC_FORMAT
-logging.basicConfig(filename='/var/log/robertalab.log', level=logging.DEBUG, format=FORMAT)
+logging.basicConfig(level=logging.DEBUG)
 
 logger = logging.getLogger('openroberta-service')
 gobject.threads_init()
