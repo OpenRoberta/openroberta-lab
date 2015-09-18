@@ -1309,9 +1309,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBluetoothReceiveAction(BluetoothReceiveAction<Void> bluetoothReadAction) {
-        this.sb.append("hal.readMessage(");
-        bluetoothReadAction.getConnection().visit(this);
-        this.sb.append(")");
+        this.sb.append("hal.readMessage()");
         return null;
     }
 
@@ -1339,8 +1337,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         } else {
             bluetoothSendAction.getMsg().visit(this);
         }
-        this.sb.append(", ");
-        bluetoothSendAction.getConnection().visit(this);
         this.sb.append(");");
         return null;
     }

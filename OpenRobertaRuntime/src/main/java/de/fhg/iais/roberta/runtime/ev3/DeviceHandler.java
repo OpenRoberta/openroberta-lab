@@ -3,7 +3,15 @@ package de.fhg.iais.roberta.runtime.ev3;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
+import de.fhg.iais.roberta.components.HardwareComponent;
+import de.fhg.iais.roberta.components.ev3.EV3Actor;
+import de.fhg.iais.roberta.components.ev3.EV3Sensors;
+import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
+import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
+import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.TextLCD;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
@@ -20,13 +28,6 @@ import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.robotics.EncoderMotor;
 import lejos.robotics.RegulatedMotor;
 import lejos.robotics.SampleProvider;
-import de.fhg.iais.roberta.components.HardwareComponent;
-import de.fhg.iais.roberta.components.ev3.EV3Actor;
-import de.fhg.iais.roberta.components.ev3.EV3Sensors;
-import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
-import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
-import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
  * This class instantiates all sensors (sensor modes) and actors used in blockly program.
@@ -36,8 +37,8 @@ public class DeviceHandler {
     private final Map<SensorPort, SampleProviderBean[]> lejosSensors = new HashMap<>();
     private EV3GyroSensor gyroSensor = null;
 
-    private final Map<ActorPort, RegulatedMotor> lejosRegulatedMotors = new HashMap<>();
-    private final Map<ActorPort, EncoderMotor> lejosUnregulatedMotors = new HashMap<>();
+    private final Map<ActorPort, RegulatedMotor> lejosRegulatedMotors = new TreeMap<>();
+    private final Map<ActorPort, EncoderMotor> lejosUnregulatedMotors = new TreeMap<>();
 
     private TextLCD lcd = LocalEV3.get().getTextLCD();
 

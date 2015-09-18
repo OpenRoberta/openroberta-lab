@@ -21,14 +21,14 @@ public class BluetoothTest {
 
     @Test
     public void send() throws Exception {
-        String a = "NXTConnectionvariablenName2=hal.establishConnectionTo(\"\");publicvoidrun(){hal.sendMessage(\"\", variablenName2);}";
+        String a = "NXTConnectionvariablenName2=hal.establishConnectionTo(\"\");publicvoidrun(){hal.sendMessage(\"\");}";
 
         Helper.assertCodeIsOk(a, "/ast/actions/action_BluetoothSend.xml");
     }
 
     @Test
     public void recive() throws Exception {
-        String a = "NXTConnectionvariablenName2=hal.waitForConnection();publicvoidrun(){hal.drawText(String.valueOf(hal.readMessage(variablenName2)),0,0);}";
+        String a = "NXTConnectionvariablenName2=hal.waitForConnection();publicvoidrun(){hal.drawText(String.valueOf(hal.readMessage()),0,0);}";
 
         Helper.assertCodeIsOk(a, "/ast/actions/action_BluetoothReceive.xml");
     }
