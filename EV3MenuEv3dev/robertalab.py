@@ -14,6 +14,7 @@ import urllib2
 # add cwd for hal
 sys.path.append(os.getcwd())
 from roberta.ev3 import Hal
+from roberta.__version__ import version
 
 FORMAT = '%(asctime)-15s:' + logging.BASIC_FORMAT
 logging.basicConfig(filename='/var/log/robertalab.log', level=logging.DEBUG, format=FORMAT)
@@ -56,7 +57,7 @@ def main():
     params = {
       'macaddr': '70:1e:bb:88:89:bc',
       'firmwarename': 'ev3dev',
-      'menuversion': '1.2.0',         # FIXME: take from build
+      'menuversion': version.split('-')[0],
     }
     headers = {
       'Content-Type': 'application/json'
