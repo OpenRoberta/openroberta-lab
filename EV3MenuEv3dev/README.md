@@ -22,6 +22,7 @@ This would be using the package but is still not working as intended.
 ``
 scp dist/robertalab-1.3.0-SNAPSHOT.tar.gz root@ev3dev.local:/tmp/
 easy_install --no-deps /tmp/robertalab-1.3.0-SNAPSHOT.tar.gz
+chmod a+r /usr/local/lib/python2.7/dist-packages/robertalab-*_SNAPSHOT-py2.7.egg/EGG-INFO/*.txt
 ``
 
 The location of the robertalab-server can be configured by placing a
