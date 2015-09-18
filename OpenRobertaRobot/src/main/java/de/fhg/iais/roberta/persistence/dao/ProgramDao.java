@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.persistence.bo.Robot;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
@@ -46,7 +47,7 @@ public class ProgramDao extends AbstractDao<Program> {
      * @param isOwner true, if the owner updates a program; false if a user with access right WRITE updates a program
      * @return true if the program could be persisted successfully
      */
-    public Key persistProgramText(String name, User user, Robot robot, String programText, Timestamp timestamp, boolean isOwner) {
+    public Pair<Key, Program> persistProgramText(String name, User user, Robot robot, String programText, Timestamp timestamp, boolean isOwner) {
         Assert.notNull(name);
         Assert.notNull(user);
         Assert.notNull(robot);
@@ -60,30 +61,30 @@ public class ProgramDao extends AbstractDao<Program> {
                     program = new Program(name, user, robot);
                     program.setProgramText(programText);
                     this.session.save(program);
-                    return Key.PROGRAM_SAVE_SUCCESS; // the only legal key if success
+                    return Pair.of(Key.PROGRAM_SAVE_SUCCESS, program); // the only legal key if success
                 } else {
                     // otherwise ...
                     ProgramDao.LOG.error("update was requested, but no program with matching timestamp was found");
-                    return Key.PROGRAM_SAVE_ERROR_NO_PROGRAM_TO_UPDATE_FOUND;
+                    return Pair.of(Key.PROGRAM_SAVE_ERROR_NO_PROGRAM_TO_UPDATE_FOUND, null);
                 }
             } else if ( !timestamp.equals(program.getLastChanged()) ) {
                 ProgramDao.LOG.error("update was requested, timestamps don't match. Has another user updated the program in the meantime?");
-                return Key.PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING;
+                return Pair.of(Key.PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING, null);
             } else {
                 program.setProgramText(programText);
-                return Key.PROGRAM_SAVE_SUCCESS; // the only legal key if success
+                return Pair.of(Key.PROGRAM_SAVE_SUCCESS, program); // the only legal key if success
             }
         } else {
             Program program = loadSharedForUpdate(name, user, robot);
             if ( program == null ) {
                 ProgramDao.LOG.error("update was requested, but no shared program was found");
-                return Key.PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION;
+                return Pair.of(Key.PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION, null);
             } else if ( !timestamp.equals(program.getLastChanged()) ) {
                 ProgramDao.LOG.error("update was requested, timestamps don't match. Has another user updated the program in the meantime?");
-                return Key.PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING;
+                return Pair.of(Key.PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING, null);
             } else {
                 program.setProgramText(programText);
-                return Key.PROGRAM_SAVE_SUCCESS; // the only legal key if success
+                return Pair.of(Key.PROGRAM_SAVE_SUCCESS, program); // the only legal key if success
             }
         }
     }

@@ -3,7 +3,9 @@ package de.fhg.iais.roberta.persistence.util;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public class HttpSessionState {
-    private int userId = -1;
+    public final static int NO_USER = -1;
+
+    private int userId = HttpSessionState.NO_USER;
     private int robotId = 42;
     private String token = "1Q2W3E4R";
     private String programName;
@@ -28,20 +30,11 @@ public class HttpSessionState {
         return this.userId >= 1;
     }
 
-    public void rememberLogin(int userId) {
-        Assert.isTrue(userId >= 1);
+    public void setUserClearDataKeepTokenAndRobotId(int userId) {
+        Assert.isTrue(userId >= 1 || userId == HttpSessionState.NO_USER);
         // token is not cleared. This would annoy the user.
+        // robotId is not cleared. This would annoy the user.
         this.userId = userId;
-        // robotId is not cleared.
-        this.programName = null;
-        this.program = null;
-        this.configurationName = null;
-        this.configuration = null;
-    }
-
-    public void rememberLogout() {
-        this.userId = -1;
-        // token is not cleared. This would annoy the user.
         this.programName = null;
         this.program = null;
         this.configurationName = null;

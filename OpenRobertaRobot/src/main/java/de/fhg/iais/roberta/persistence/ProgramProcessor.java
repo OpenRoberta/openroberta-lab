@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.Util;
 
 public class ProgramProcessor extends AbstractProcessor {
@@ -24,8 +25,8 @@ public class ProgramProcessor extends AbstractProcessor {
     }
 
     /**
-     * load a program from the data base. Either the program is owned by the user with the id given or the program is shared
-     * by the user given to the user requesting the program
+     * load a program from the data base. Either the program is owned by the user with the id given or the program is shared by the user given to the user
+     * requesting the program
      *
      * @param programName the program to load
      * @param ownerId the owner (either the user logged in or an owner who shared the program R/W with the user logged in
@@ -173,10 +174,10 @@ public class ProgramProcessor extends AbstractProcessor {
      * @param mayExist true, if an existing program may be changed; false if a program may be stored only, if it does not exist in the database
      * @param isOwner true, if the owner updates a program; false if a user with access right WRITE updates a program
      */
-    public void updateProgram(String programName, int userId, int robotId, String programText, Timestamp programTimestamp, boolean isOwner) {
+    public Program updateProgram(String programName, int userId, int robotId, String programText, Timestamp programTimestamp, boolean isOwner) {
         if ( !Util.isValidJavaIdentifier(programName) ) {
             setError(Key.PROGRAM_ERROR_ID_INVALID, programName);
-            return;
+            return null;
         }
         if ( this.httpSessionState.isUserLoggedIn() ) {
             UserDao userDao = new UserDao(this.dbSession);
@@ -184,15 +185,17 @@ public class ProgramProcessor extends AbstractProcessor {
             ProgramDao programDao = new ProgramDao(this.dbSession);
             User user = userDao.get(userId);
             Robot robot = robotDao.get(robotId);
-            Key result = programDao.persistProgramText(programName, user, robot, programText, programTimestamp, isOwner);
+            Pair<Key, Program> result = programDao.persistProgramText(programName, user, robot, programText, programTimestamp, isOwner);
             // a bit strange, but necessary to distinguish between success and failure
-            if ( result == Key.PROGRAM_SAVE_SUCCESS ) {
+            if ( result.getFirst() == Key.PROGRAM_SAVE_SUCCESS ) {
                 setSuccess(Key.PROGRAM_SAVE_SUCCESS);
             } else {
-                setError(result);
+                setError(result.getFirst());
             }
+            return result.getSecond();
         } else {
             setError(Key.USER_ERROR_NOT_LOGGED_IN);
+            return null;
         }
     }
 

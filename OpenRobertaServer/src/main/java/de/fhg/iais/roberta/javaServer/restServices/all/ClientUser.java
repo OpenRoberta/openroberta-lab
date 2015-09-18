@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.javaServer.provider.OraData;
-import de.fhg.iais.roberta.persistence.AccessRightProcessor;
 import de.fhg.iais.roberta.persistence.UserProcessor;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
@@ -51,9 +50,15 @@ public class ClientUser {
             ClientUser.LOG.info("command is: " + cmd);
             response.put("cmd", cmd);
             UserProcessor up = new UserProcessor(dbSession, httpSessionState);
-            AccessRightProcessor upp = new AccessRightProcessor(dbSession, httpSessionState);
 
-            if ( cmd.equals("login") && !httpSessionState.isUserLoggedIn() ) {
+            if ( cmd.equals("clear") ) {
+                httpSessionState.setUserClearDataKeepTokenAndRobotId(HttpSessionState.NO_USER);
+                response.put("rc", "ok");
+                if ( userId != HttpSessionState.NO_USER ) {
+                    ClientUser.LOG.info("clear for (logged in) user " + userId + ". Has the user reloaded the page?");
+                }
+
+            } else if ( cmd.equals("login") && !httpSessionState.isUserLoggedIn() ) {
                 String userAccountName = request.getString("accountName");
                 String password = request.getString("password");
                 User user = up.getUser(userAccountName, password);
@@ -61,7 +66,7 @@ public class ClientUser {
                 if ( user != null ) {
                     int id = user.getId();
                     String account = user.getAccount();
-                    httpSessionState.rememberLogin(id);
+                    httpSessionState.setUserClearDataKeepTokenAndRobotId(id);
                     user.setLastLogin();
                     response.put("userId", id);
                     response.put("userRole", user.getRole());
@@ -71,7 +76,7 @@ public class ClientUser {
                 }
 
             } else if ( cmd.equals("logout") && httpSessionState.isUserLoggedIn() ) {
-                httpSessionState.rememberLogout();
+                httpSessionState.setUserClearDataKeepTokenAndRobotId(HttpSessionState.NO_USER);
                 response.put("rc", "ok");
                 response.put("message", Key.USER_LOGOUT_SUCCESS.getKey());
                 ClientUser.LOG.info("logout of user " + userId);

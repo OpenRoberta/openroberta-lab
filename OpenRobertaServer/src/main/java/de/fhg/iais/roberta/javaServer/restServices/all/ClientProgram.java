@@ -92,11 +92,12 @@ public class ClientProgram {
                 Long timestamp = request.getLong("timestamp");
                 Timestamp programTimestamp = new Timestamp(timestamp);
                 boolean isShared = request.optBoolean("shared", false);
-                pp.updateProgram(programName, userId, robotId, programText, programTimestamp, !isShared);
+                Program program = pp.updateProgram(programName, userId, robotId, programText, programTimestamp, !isShared);
                 if ( pp.isOk() ) {
-                    Program program = pp.getProgram(programName, userId, robotId);
                     if ( program != null ) {
                         response.put("lastChanged", program.getLastChanged());
+                    } else {
+                        ClientProgram.LOG.error("TODO: check potential error: the saved program should never be null");
                     }
                 }
                 Util.addResultInfo(response, pp);
