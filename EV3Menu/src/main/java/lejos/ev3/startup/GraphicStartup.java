@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -187,6 +186,7 @@ public class GraphicStartup implements ORAmenu {
     public static boolean orUSBconnected = false;
     private static String OPENROBERTAHEAD = " OR Lab";
     private static HttpServer usbconn = null;
+    private static final Properties menuProperties = loadProperties();
 
     public static int selection = 0;
 
@@ -1487,6 +1487,16 @@ public class GraphicStartup implements ORAmenu {
         }
     }
 
+    private static Properties loadProperties() {
+        Properties menuProperties = new Properties();
+        try {
+            menuProperties.load(ClassLoader.getSystemResourceAsStream("EV3Menu.properties"));
+            return menuProperties;
+        } catch ( IOException e ) {
+            return menuProperties;
+        }
+    }
+
     /**
      * Roberta submenu implementation.
      */
@@ -1504,20 +1514,22 @@ public class GraphicStartup implements ORAmenu {
                 newScreen(OPENROBERTAHEAD);
                 if ( getYesNo(" Set up WLAN now?", true) == 1 ) {
                     wifiMenu();
-                } else {
-                    // go on
                 }
             }
-            String token = new ORAtokenGenerator().generateToken();
 
-            //String ip = "lab.open-roberta.org";
-            String ip = getIPAddress();
-
-            if ( ip.equals("") ) {
-                return;
+            String ip = "";
+            String tmp = menuProperties.getProperty("ev3menuUrl");
+            if ( tmp != null && !tmp.equals("") ) {
+                ip = tmp;
             } else {
-                oraHandler.startServerCommunicator(ip, token);
+                ip = getIPAddress();
+                if ( ip.equals("") ) {
+                    return;
+                }
             }
+
+            String token = new ORAtokenGenerator().generateToken();
+            oraHandler.startServerCommunicator(ip, token);
 
             newScreen(OPENROBERTAHEAD);
             lcd.drawString("    Wating for", 0, 2);
@@ -1639,17 +1651,9 @@ public class GraphicStartup implements ORAmenu {
      * @return Open Roberta Lab menu version
      */
     public static String getORAmenuVersion() {
-        Properties menuProperties = new Properties();
-        InputStream is = ClassLoader.getSystemResourceAsStream("EV3Menu.properties");
-        try {
-            menuProperties.load(is);
-            String tmp = menuProperties.getProperty("version");
-            int i = tmp.indexOf("-");
-            tmp = tmp.substring(0, i);
-            return tmp;
-        } catch ( IOException e ) {
-            return "unknown";
-        }
+        String tmp = menuProperties.getProperty("version");
+        tmp = tmp.substring(0, tmp.indexOf("-"));
+        return tmp;
     }
 
     // OR Lab RMI interface for USB connection

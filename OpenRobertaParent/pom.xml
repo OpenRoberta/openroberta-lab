@@ -44,6 +44,7 @@ limitations under the License.
 		<ev3classes.version>0.9.0-beta</ev3classes.version>
 		<dbusjava.version>0.9.0-beta</dbusjava.version>
 		<jna.version>3.2.7</jna.version>
+        <ev3menu.url></ev3menu.url>
 	</properties>
 	<modules>
 		<module>../Resources</module>
