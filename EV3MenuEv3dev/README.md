@@ -18,14 +18,14 @@ the pom.xml.
 ## upload to ev3 ##
 ``scp -r robertalab.py roberta root@ev3dev.local:/home/user``
 
-This would be using the packge but is still not working as intended.
+This would be using the package but is still not working as intended.
 ``
-scp dist/robertalab-1.2.0-SNAPSHOT.tar.gz root@ev3dev.local:/tmp/
-pip install --no-deps --force-reinstall --target /home/user --install-option="--install-scripts=/home/user" /tmp/robertalab-1.2.0-SNAPSHOT.tar.gz
+scp dist/robertalab-1.3.0-SNAPSHOT.tar.gz root@ev3dev.local:/tmp/
+easy_install --no-deps /tmp/robertalab-1.3.0-SNAPSHOT.tar.gz
 ``
 
 The location of the robertalab-server can be configured by placing a
-robertalab.json next to the robertalab.py, e.g.:
+.robertalab.json into the homedir, e.g.:
 ``
 {
     "target": "http://localhost:1999"
