@@ -8,6 +8,12 @@ import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
 
+/**
+ * super class of the various processor implementations (program, user, ...). The processor objects are light-weight.<br>
+ * A processor object should be used for one action only. Otherwise the success/error logic is hard to manage ...
+ *
+ * @author rbudde
+ */
 public abstract class AbstractProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractProcessor.class);
 
@@ -44,12 +50,12 @@ public abstract class AbstractProcessor {
     }
 
     /**
-     * check the actual state of a processor
+     * check the actual state of a processor. Note, that id neither setSuccess nor setError have been called, the method will return <b>false</b>.
      *
-     * @return true, if <b>until now</b> the processor was always successful, i.e. NO error message has been saved (don't use the success flag!)
+     * @return true, if <b>until now</b> the processor was always successful
      */
     public final boolean isOk() {
-        return this.message == null;
+        return this.success;
     }
 
     /**

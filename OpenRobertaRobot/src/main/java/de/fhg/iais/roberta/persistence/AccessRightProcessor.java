@@ -72,22 +72,24 @@ public class AccessRightProcessor extends AbstractProcessor {
         RobotDao robotDao = new RobotDao(this.dbSession);
 
         Program programToShare = null;
+        Key responseKey = null;
         if ( owner == null ) {
-            setError(Key.OWNER_DOES_NOT_EXIST);
+            responseKey = Key.OWNER_DOES_NOT_EXIST;
         } else if ( userToShare == null ) {
-            setError(Key.USER_TO_SHARE_DOES_NOT_EXIST);
+            responseKey = Key.USER_TO_SHARE_DOES_NOT_EXIST;
         } else {
             Robot robot = robotDao.get(robotId);
             if ( robot == null ) {
-                setError(Key.ROBOT_DOES_NOT_EXIST);
+                responseKey = Key.ROBOT_DOES_NOT_EXIST;
             } else {
                 programToShare = programDao.load(programName, owner, robot);
                 if ( programToShare == null ) {
-                    setError(Key.PROGRAM_TO_SHARE_DOES_NOT_EXIST);
+                    responseKey = Key.PROGRAM_TO_SHARE_DOES_NOT_EXIST;
                 }
             }
         }
-        if ( !isOk() ) {
+        if ( responseKey != null ) {
+            setError(responseKey);
             return;
         }
 

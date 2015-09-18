@@ -52,13 +52,14 @@ public final class Assert {
      */
     public static void isTrue(boolean b, String format, Object... params) {
         if ( !b ) {
-            String msg = makeMessage(format, params);
+            String msg = Assert.makeMessage(format, params);
             throw new DbcException(msg);
         }
     }
 
     /**
-     * <b>DBC:</b> asserts, that a condition is <code>true</code>. If the assertion is violated, a stacktrace is printed, then a {@link DbcException} is thrown.<br>
+     * <b>DBC:</b> asserts, that a condition is <code>true</code>. If the assertion is violated, a stacktrace is printed, then a {@link DbcException} is thrown.
+     * <br>
      * <br>
      * Use in rare cases. If you have written a class using the DBC paradigm and you suspect, that caller of your class catch DBC exceptions and do not react on
      * DBC exceptions as required, a printed stack trace may help unveiling such a problem.<br>
@@ -77,7 +78,7 @@ public final class Assert {
                 throw new DbcException("Assertion is violated");
             } catch ( DbcException e ) {
                 e.printStackTrace();
-                String msg = makeMessage(format, params);
+                String msg = Assert.makeMessage(format, params);
                 throw new DbcException(msg);
             }
         }
@@ -134,7 +135,47 @@ public final class Assert {
      */
     public static void notNull(Object o, String format, Object... params) {
         if ( o == null ) {
-            String msg = makeMessage(format, params);
+            String msg = Assert.makeMessage(format, params);
+            throw new DbcException(msg);
+        }
+    }
+
+    /**
+     * <b>DBC:</b> asserts, that an object reference is <code>null</code>. If the assertion is violated, a {@link DbcException} is thrown.<br>
+     *
+     * @param o expected to be null
+     */
+    public static void isNull(Object o) {
+        if ( o != null ) {
+            throw new DbcException("Assertion isNull is violated");
+        }
+    }
+
+    /**
+     * <b>DBC:</b> asserts, that an object reference is <code>null</code>. If the assertion is violated, a {@link DbcException} is thrown.
+     *
+     * @param o expected to be null
+     * @param msg the error message; states, that the assertion is <i>violated</i>
+     */
+    public static void isNull(Object o, String msg) {
+        if ( o != null ) {
+            throw new DbcException(msg);
+        }
+    }
+
+    /**
+     * <b>DBC:</b> asserts, that an object reference is <code>null</code>. If the assertion is violated, a {@link DbcException} is thrown.<br>
+     * <br>
+     * The error-message is build <i>lazily</i> to optimize performance. This is not 100% true for primitive param types, because these have to be boxed ... .
+     * For formatting details, see {@link String#format(String, Object...)}
+     *
+     * @param o expected to be null
+     * @param format format for the error message; states, that the assertion is <i>violated</i>
+     * @param params arguments for the format
+     */
+    public static void isNull(Object o, String format, Object... params) {
+        if ( o != null ) {
+            String msg = Assert.makeMessage(format, params);
             throw new DbcException(msg);
         }
     }
@@ -174,7 +215,7 @@ public final class Assert {
      */
     public static void nonEmptyString(String s, String format, Object... params) {
         if ( s == null || s.isEmpty() ) {
-            String msg = makeMessage(format, params);
+            String msg = Assert.makeMessage(format, params);
             throw new DbcException(msg);
         }
     }
