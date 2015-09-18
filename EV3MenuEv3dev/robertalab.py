@@ -15,7 +15,8 @@ import urllib2
 sys.path.append(os.getcwd())
 from roberta.ev3 import Hal
 
-logging.basicConfig(filename='/var/log/robertalab.log', level=logging.DEBUG)
+FORMAT = '%(asctime)-15s:' + logging.BASIC_FORMAT
+logging.basicConfig(filename='/var/log/robertalab.log', level=logging.DEBUG, format=FORMAT)
 
 def getHwAddr(ifname):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
