@@ -1,0 +1,19 @@
+# /lib/systemd/system/openroberta.service
+
+[Unit]
+Description=OpenRoberta Lab connector
+Conflicts=getty@tty2.service
+After=systemd-user-sessions.service getty@tty2.service
+
+[Service]
+ExecStartPre=/bin/chown user: /dev/tty2 
+ExecStart=/usr/bin/openrobertalab.py
+Restart=always
+User=user
+StandardInput=tty
+TTYPath=/dev/tty2
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=brickman.service
