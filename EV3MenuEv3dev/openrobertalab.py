@@ -38,13 +38,29 @@ def getBatteryVoltage():
 
 
 class Service(dbus.service.Object):
-    """OpenRobertab-Lab dbus service """
+    """OpenRobertab-Lab dbus service
+    
+    The status state machines is a follows:
+    
+    +-> disconnected
+    |   |
+    |    v
+    +- connected
+    |    |
+    |    v
+    +- registered
+    |    ^
+    |    v
+    +- executing
+    
+    """
 
     def __init__(self, path):
         # needs /etc/dbus-1/system.d/openroberta.conf
         bus_name = dbus.service.BusName('org.openroberta.lab', bus=dbus.SystemBus())
         dbus.service.Object.__init__(self, bus_name, path)
         logger.info('object registered')
+        self.status('disconnected')
         self.hal = Hal(None, None)
         self.hal.clearDisplay()
         self.thread = None
@@ -62,7 +78,7 @@ class Service(dbus.service.Object):
     @dbus.service.method('org.openroberta.lab')
     def disconnect(self):
         logger.info('disconnect()')
-        # end thread
+        # end thread, can take up to 15 seconds (the timeout to return)
         self.thread.running = False;
         self.thread.join()
         self.thread = None
@@ -73,7 +89,7 @@ class Service(dbus.service.Object):
         logger.info('status changed: %s' % status)
 
 class Connector(threading.Thread):
-    """OpenRobertab-Lab network IO thread """
+    """OpenRobertab-Lab network IO thread"""
 
     def __init__(self, address, service):
         threading.Thread.__init__(self)
@@ -132,10 +148,13 @@ class Connector(threading.Thread):
                 cmd = reply['cmd']
                 if cmd == 'repeat':
                     self.service.status('registered')
+                    if not self.registered:
+                        self.service.hal.playFile(2)
                     self.registered = True
                 elif cmd == 'abort':
                     break
                 elif cmd == 'download':
+                    self.service.hal.clearDisplay()
                     self.service.status('executing ...')
                     # TODO: url is not part of reply :/
                     # TODO: we should receive a digest for the download (md5sum) so that
@@ -159,6 +178,7 @@ class Connector(threading.Thread):
                             code = compile(f.read(), filename, 'exec')
                             exec(code, globals(), globals())
                             logger.info('execution finished')
+                            self.service.hal.clearDisplay()
                         except:
                             logger.exception("Ooops:")
                     self.service.status('registered')
@@ -184,6 +204,8 @@ class Connector(threading.Thread):
             except:
                 logger.exception("Ooops:")
         logger.info('network thread stopped')
+        self.service.status('disconnected')
+        self.service.hal.playFile(3)
 
 
 def main():
