@@ -24,15 +24,15 @@ exec(open(version_file).read())
 # TODO: convert README.md to long_desc
 # https://gist.github.com/aubricus/9184003#file-setup_snippet-py
 
-setup(name='robertalab',
+setup(name='openrobertalab',
       version=version,
       description='lab.open-roberta.org connector for ev3dev.org',
       author='Stefan Sauer',
       author_email='ensonic@google.com',
       url='https://www.open-roberta.org/',
-      scripts=['robertalab.py'],
+      scripts=['openrobertalab.py'],
       packages=['roberta'],
       package_data={'roberta': ['ter-*.p??']},
-      # other deps: apt-get-install pythpn-dbus python-bluez
-      install_requires=['python-ev3dev']
+      # other deps: apt-get-install python-dbus python-bluez
+      #install_requires=['python-ev3dev']
      )
