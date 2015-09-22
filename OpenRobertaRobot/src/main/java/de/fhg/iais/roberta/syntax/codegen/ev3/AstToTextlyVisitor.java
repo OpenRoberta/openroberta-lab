@@ -47,6 +47,7 @@ import de.fhg.iais.roberta.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.expr.NullConst;
 import de.fhg.iais.roberta.syntax.expr.NumConst;
 import de.fhg.iais.roberta.syntax.expr.SensorExpr;
+import de.fhg.iais.roberta.syntax.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.expr.StringConst;
 import de.fhg.iais.roberta.syntax.expr.Unary;
 import de.fhg.iais.roberta.syntax.expr.Var;
@@ -946,6 +947,12 @@ public class AstToTextlyVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<Void> bluetoothWaitForConnection) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void visitStmtExpr(StmtExpr<Void> stmtExpr) {
         // TODO Auto-generated method stub
         return null;
     }

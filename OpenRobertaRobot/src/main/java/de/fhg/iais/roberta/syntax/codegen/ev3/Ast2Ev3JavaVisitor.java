@@ -62,6 +62,7 @@ import de.fhg.iais.roberta.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.expr.NullConst;
 import de.fhg.iais.roberta.syntax.expr.NumConst;
 import de.fhg.iais.roberta.syntax.expr.SensorExpr;
+import de.fhg.iais.roberta.syntax.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.expr.StringConst;
 import de.fhg.iais.roberta.syntax.expr.Unary;
 import de.fhg.iais.roberta.syntax.expr.Var;
@@ -460,6 +461,12 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public Void visitExprStmt(ExprStmt<Void> exprStmt) {
         exprStmt.getExpr().visit(this);
         this.sb.append(";");
+        return null;
+    }
+
+    @Override
+    public Void visitStmtExpr(StmtExpr<Void> stmtExpr) {
+        stmtExpr.getStmt().visit(this);
         return null;
     }
 

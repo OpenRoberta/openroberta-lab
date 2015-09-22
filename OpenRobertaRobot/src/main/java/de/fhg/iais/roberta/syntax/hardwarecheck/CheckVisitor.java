@@ -32,6 +32,7 @@ import de.fhg.iais.roberta.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.expr.NullConst;
 import de.fhg.iais.roberta.syntax.expr.NumConst;
 import de.fhg.iais.roberta.syntax.expr.SensorExpr;
+import de.fhg.iais.roberta.syntax.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.expr.StringConst;
 import de.fhg.iais.roberta.syntax.expr.Unary;
 import de.fhg.iais.roberta.syntax.expr.Var;
@@ -146,6 +147,12 @@ public abstract class CheckVisitor implements AstVisitor<Void> {
     @Override
     public Void visitSensorExpr(SensorExpr<Void> sensorExpr) {
         sensorExpr.getSens().visit(this);
+        return null;
+    }
+
+    @Override
+    public Void visitStmtExpr(StmtExpr<Void> stmtExpr) {
+        stmtExpr.getStmt().visit(this);
         return null;
     }
 

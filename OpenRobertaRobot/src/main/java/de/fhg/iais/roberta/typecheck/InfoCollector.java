@@ -41,6 +41,7 @@ import de.fhg.iais.roberta.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.expr.NullConst;
 import de.fhg.iais.roberta.syntax.expr.NumConst;
 import de.fhg.iais.roberta.syntax.expr.SensorExpr;
+import de.fhg.iais.roberta.syntax.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.expr.StringConst;
 import de.fhg.iais.roberta.syntax.expr.Unary;
 import de.fhg.iais.roberta.syntax.expr.Var;
@@ -600,6 +601,12 @@ public class InfoCollector<T> implements AstVisitor<T> {
 
     @Override
     public T visitBluetoothWaitForConnectionAction(BluetoothWaitForConnectionAction<T> bluetoothWaitForConnection) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public T visitStmtExpr(StmtExpr<T> stmtExpr) {
         // TODO Auto-generated method stub
         return null;
     }
