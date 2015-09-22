@@ -108,62 +108,62 @@ public class BlocklyMethodsTest {
 
     @Test
     public void sumOnList() {
-        Assert.assertEquals(15.0, BlocklyMethods.sumOnList(BlocklyMethods.createListWith(1.0, 1.0, 3.0, 4.0, 6.0)), 0);
-        Assert.assertEquals(10, BlocklyMethods.sumOnList(BlocklyMethods.createListWith(5, 3, 2)), 0);
+        Assert.assertEquals(15.0, BlocklyMethods.sumOnList(BlocklyMethods.createListWithNumber(1.0, 1.0, 3.0, 4.0, 6.0)), 0);
+        Assert.assertEquals(10, BlocklyMethods.sumOnList(BlocklyMethods.createListWithNumber(5, 3, 2)), 0);
     }
 
     @Test
     public void minOnList() {
-        Assert.assertEquals(1.0, BlocklyMethods.minOnList(BlocklyMethods.createListWith(1.0, 1.0, 3.0, 4.0, 6.0)), 0);
-        Assert.assertEquals(2, BlocklyMethods.minOnList(BlocklyMethods.createListWith(5, 3, 2)), 0);
-        Assert.assertEquals(-1, BlocklyMethods.minOnList(BlocklyMethods.createListWith(5, 3, 2, -1)), 0);
+        Assert.assertEquals(1.0, BlocklyMethods.minOnList(BlocklyMethods.createListWithNumber(1.0, 1.0, 3.0, 4.0, 6.0)), 0);
+        Assert.assertEquals(2, BlocklyMethods.minOnList(BlocklyMethods.createListWithNumber(5, 3, 2)), 0);
+        Assert.assertEquals(-1, BlocklyMethods.minOnList(BlocklyMethods.createListWithNumber(5, 3, 2, -1)), 0);
     }
 
     @Test
     public void maxOnList() {
-        Assert.assertEquals(6, BlocklyMethods.maxOnList(BlocklyMethods.createListWith(1.0, 1.0, 3.0, 4.0, 6.0)), 0);
-        Assert.assertEquals(5, BlocklyMethods.maxOnList(BlocklyMethods.createListWith(5, 3, 2)), 0);
-        Assert.assertEquals(5, BlocklyMethods.maxOnList(BlocklyMethods.createListWith(5, 3, 2, -1)), 0);
+        Assert.assertEquals(6, BlocklyMethods.maxOnList(BlocklyMethods.createListWithNumber(1.0, 1.0, 3.0, 4.0, 6.0)), 0);
+        Assert.assertEquals(5, BlocklyMethods.maxOnList(BlocklyMethods.createListWithNumber(5, 3, 2)), 0);
+        Assert.assertEquals(5, BlocklyMethods.maxOnList(BlocklyMethods.createListWithNumber(5, 3, 2, -1)), 0);
     }
 
     @Test
     public void averageOnList() {
-        Assert.assertEquals(3, BlocklyMethods.averageOnList(BlocklyMethods.createListWith(1.0, 1.0, 3.0, 4.0, 6.0)), 0);
-        Assert.assertEquals(3.3333, BlocklyMethods.averageOnList(BlocklyMethods.createListWith(5, 3, 2)), 5);
-        Assert.assertEquals(2.25, BlocklyMethods.averageOnList(BlocklyMethods.createListWith(5, 3, 2, -1)), 0);
+        Assert.assertEquals(3, BlocklyMethods.averageOnList(BlocklyMethods.createListWithNumber(1.0, 1.0, 3.0, 4.0, 6.0)), 0);
+        Assert.assertEquals(3.3333, BlocklyMethods.averageOnList(BlocklyMethods.createListWithNumber(5, 3, 2)), 5);
+        Assert.assertEquals(2.25, BlocklyMethods.averageOnList(BlocklyMethods.createListWithNumber(5, 3, 2, -1)), 0);
     }
 
     @Test
     public void medianOnList() {
-        Assert.assertEquals(3, BlocklyMethods.medianOnList(BlocklyMethods.createListWith(1.0, 1.0, 3.0, 4.0, 6.0)), 0);
-        Assert.assertEquals(3, BlocklyMethods.medianOnList(BlocklyMethods.createListWith(5, 3, 2)), 5);
-        Assert.assertEquals(2.5, BlocklyMethods.medianOnList(BlocklyMethods.createListWith(5, 3, 2, -1)), 0);
+        Assert.assertEquals(3, BlocklyMethods.medianOnList(BlocklyMethods.createListWithNumber(1.0, 1.0, 3.0, 4.0, 6.0)), 0);
+        Assert.assertEquals(3, BlocklyMethods.medianOnList(BlocklyMethods.createListWithNumber(5, 3, 2)), 5);
+        Assert.assertEquals(2.5, BlocklyMethods.medianOnList(BlocklyMethods.createListWithNumber(5, 3, 2, -1)), 0);
     }
 
     @Test
     public void standardDeviationOnList() {
-        Assert.assertEquals(1.8973665961010275, BlocklyMethods.standardDeviatioin(BlocklyMethods.createListWith(1.0, 1.0, 3.0, 4.0, 6.0)), 5);
-        Assert.assertEquals(1.247219128924647, BlocklyMethods.standardDeviatioin(BlocklyMethods.createListWith(5, 3, 2)), 5);
-        Assert.assertEquals(2.165063509461097, BlocklyMethods.standardDeviatioin(BlocklyMethods.createListWith(5, 3, 2, -1)), 5);
+        Assert.assertEquals(1.8973665961010275, BlocklyMethods.standardDeviatioin(BlocklyMethods.createListWithNumber(1.0, 1.0, 3.0, 4.0, 6.0)), 5);
+        Assert.assertEquals(1.247219128924647, BlocklyMethods.standardDeviatioin(BlocklyMethods.createListWithNumber(5, 3, 2)), 5);
+        Assert.assertEquals(2.165063509461097, BlocklyMethods.standardDeviatioin(BlocklyMethods.createListWithNumber(5, 3, 2, -1)), 5);
     }
 
     @Test
     public void modeOnList() {
-        Assert.assertEquals(BlocklyMethods.createListWith(1.0), BlocklyMethods.modeOnList(BlocklyMethods.createListWith(1.0, 1.0, 3.0, 4.0, 6.0)));
-        Assert.assertEquals(BlocklyMethods.createListWith(5, 3, 2), BlocklyMethods.modeOnList(BlocklyMethods.createListWith(5, 3, 2)));
-        Assert.assertEquals(BlocklyMethods.createListWith(5, 3, 2, -1), BlocklyMethods.modeOnList(BlocklyMethods.createListWith(5, 3, 2, -1)));
+        Assert.assertEquals(BlocklyMethods.createListWithNumber(1.0), BlocklyMethods.modeOnList(BlocklyMethods.createListWithNumber(1.0, 1.0, 3.0, 4.0, 6.0)));
+        Assert.assertEquals(BlocklyMethods.createListWithNumber(5, 3, 2), BlocklyMethods.modeOnList(BlocklyMethods.createListWithNumber(5, 3, 2)));
+        Assert.assertEquals(BlocklyMethods.createListWithNumber(5, 3, 2, -1), BlocklyMethods.modeOnList(BlocklyMethods.createListWithNumber(5, 3, 2, -1)));
     }
 
     @Test
     public void createListWith() {
-        Assert.assertTrue(BlocklyMethods.createListWith(1, 1, 1, 1, 1).toString().equals("[1.0, 1.0, 1.0, 1.0, 1.0]"));
-        Assert.assertTrue(BlocklyMethods.createListWith(1, 1, 1, 1, 1.3).toString().equals("[1.0, 1.0, 1.0, 1.0, 1.3]"));
-        Assert.assertTrue(BlocklyMethods.createListWith("a", "a").toString().equals("[a, a]"));
+        Assert.assertTrue(BlocklyMethods.createListWithNumber(1, 1, 1, 1, 1).toString().equals("[1.0, 1.0, 1.0, 1.0, 1.0]"));
+        Assert.assertTrue(BlocklyMethods.createListWithNumber(1, 1, 1, 1, 1.3).toString().equals("[1.0, 1.0, 1.0, 1.0, 1.3]"));
+        Assert.assertTrue(BlocklyMethods.createListWithString("a", "a").toString().equals("[a, a]"));
     }
 
     @Test
     public void createListWithItem() {
-        Assert.assertTrue(BlocklyMethods.createListWithItem((float) 1, 5).toString().equals("[1.0, 1.0, 1.0, 1.0, 1.0]"));
+        Assert.assertTrue(BlocklyMethods.createListWithNumber((float) 1, 5).toString().equals("[1.0, 5.0]"));
         Assert.assertTrue(BlocklyMethods.createListWithItem("a", 5).toString().equals("[a, a, a, a, a]"));
     }
 
@@ -181,30 +181,30 @@ public class BlocklyMethodsTest {
 
     @Test
     public void findFirst() {
-        Assert.assertTrue(BlocklyMethods.findFirst(BlocklyMethods.createListWith(0.0, 1.0, 2.0, 3.0, 1.0), Float.valueOf(1)) == 1);
-        Assert.assertTrue(BlocklyMethods.findFirst(BlocklyMethods.createListWith(0, 1, 2, 3, 1), Float.valueOf(5)) == -1);
-        Assert.assertTrue(BlocklyMethods.findFirst(BlocklyMethods.createListWith("a", "b", "c"), "c") == 2);
-        Assert.assertTrue(BlocklyMethods.findFirst(BlocklyMethods.createListWith("a", "b", "c"), "d") == -1);
+        Assert.assertTrue(BlocklyMethods.findFirst(BlocklyMethods.createListWithNumber(0.0, 1.0, 2.0, 3.0, 1.0), Float.valueOf(1)) == 1);
+        Assert.assertTrue(BlocklyMethods.findFirst(BlocklyMethods.createListWithNumber(0, 1, 2, 3, 1), Float.valueOf(5)) == -1);
+        Assert.assertTrue(BlocklyMethods.findFirst(BlocklyMethods.createListWithString("a", "b", "c"), "c") == 2);
+        Assert.assertTrue(BlocklyMethods.findFirst(BlocklyMethods.createListWithString("a", "b", "c"), "d") == -1);
     }
 
     @Test
     public void findLast() {
-        Assert.assertTrue(BlocklyMethods.findLast(BlocklyMethods.createListWith(0, 1, 2, 3, 1), Float.valueOf(1)) == 4);
-        Assert.assertTrue(BlocklyMethods.findLast(BlocklyMethods.createListWith(0, 1, 2, 3, 1), Float.valueOf(5)) == -1);
-        Assert.assertTrue(BlocklyMethods.findLast(BlocklyMethods.createListWith("a", "b", "c", "c"), "c") == 3);
-        Assert.assertTrue(BlocklyMethods.findLast(BlocklyMethods.createListWith("a", "b", "c"), "d") == -1);
+        Assert.assertTrue(BlocklyMethods.findLast(BlocklyMethods.createListWithNumber(0, 1, 2, 3, 1), Float.valueOf(1)) == 4);
+        Assert.assertTrue(BlocklyMethods.findLast(BlocklyMethods.createListWithNumber(0, 1, 2, 3, 1), Float.valueOf(5)) == -1);
+        Assert.assertTrue(BlocklyMethods.findLast(BlocklyMethods.createListWithString("a", "b", "c", "c"), "c") == 3);
+        Assert.assertTrue(BlocklyMethods.findLast(BlocklyMethods.createListWithString("a", "b", "c"), "d") == -1);
     }
 
     @Test
     public void listsGetIndex() {
-        Assert.assertTrue(BlocklyMethods.listsIndex(BlocklyMethods.createListWith(0, 1, 2, 3, 1), ListElementOperations.GET, IndexLocation.FIRST) == 0);
-        Assert.assertTrue(BlocklyMethods.listsIndex(BlocklyMethods.createListWith(0, 1, 2, 3, 1), ListElementOperations.GET, IndexLocation.LAST) == 1);
+        Assert.assertTrue(BlocklyMethods.listsIndex(BlocklyMethods.createListWithNumber(0, 1, 2, 3, 1), ListElementOperations.GET, IndexLocation.FIRST) == 0);
+        Assert.assertTrue(BlocklyMethods.listsIndex(BlocklyMethods.createListWithNumber(0, 1, 2, 3, 1), ListElementOperations.GET, IndexLocation.LAST) == 1);
         Assert.assertTrue(
-            BlocklyMethods.listsIndex(BlocklyMethods.createListWith("a", "b", "c", "c"), ListElementOperations.GET, IndexLocation.FROM_START, 1) == "b");
+            BlocklyMethods.listsIndex(BlocklyMethods.createListWithString("a", "b", "c", "c"), ListElementOperations.GET, IndexLocation.FROM_START, 1) == "b");
         Assert.assertTrue(
-            BlocklyMethods.listsIndex(BlocklyMethods.createListWith("a", "b", "c", "c"), ListElementOperations.GET, IndexLocation.FROM_END, 3) == "b");
+            BlocklyMethods.listsIndex(BlocklyMethods.createListWithString("a", "b", "c", "c"), ListElementOperations.GET, IndexLocation.FROM_END, 3) == "b");
 
-        ArrayList<String> list = BlocklyMethods.createListWith("a", "b", "c", "c");
+        ArrayList<String> list = BlocklyMethods.createListWithString("a", "b", "c", "c");
         BlocklyMethods.listsIndex(list, ListElementOperations.REMOVE, IndexLocation.LAST);
 
         Assert.assertTrue(list.toString().equals("[a, b, c]"));
@@ -214,7 +214,7 @@ public class BlocklyMethodsTest {
 
     @Test
     public void listsSetIndex() {
-        ArrayList<Float> list = BlocklyMethods.createListWith(55.0, 66.0, 11.0);
+        ArrayList<Float> list = BlocklyMethods.createListWithNumber(55.0, 66.0, 11.0);
         BlocklyMethods.listsIndex(list, ListElementOperations.SET, 99, IndexLocation.FIRST);
 
         Assert.assertTrue(list.toString().equals("[99.0, 66.0, 11.0]"));
@@ -228,7 +228,7 @@ public class BlocklyMethodsTest {
 
     @Test
     public void listsGetSubList() {
-        ArrayList<Float> list = BlocklyMethods.createListWith(55, 66, 11, 22.0, 33);
+        ArrayList<Float> list = BlocklyMethods.createListWithNumber(55, 66, 11, 22.0, 33);
         Assert.assertTrue(BlocklyMethods.listsGetSubList(list, IndexLocation.FROM_START, 1, IndexLocation.FROM_END, 1).toString().equals("[66.0, 11.0, 22.0]"));
         Assert.assertTrue(BlocklyMethods.listsGetSubList(list, IndexLocation.FIRST, IndexLocation.FROM_END, 1).toString().equals("[55.0, 66.0, 11.0, 22.0]"));
         Assert.assertTrue(BlocklyMethods.listsGetSubList(list, IndexLocation.FROM_START, 1, IndexLocation.LAST).toString().equals("[66.0, 11.0, 22.0, 33.0]"));

@@ -343,10 +343,10 @@ public class AstToLejosJavaVisitorTest {
             + "        floatitem=0;"
             + "        Stringitem2=\"ss\";"
             + "        booleanitem3=true;"
-            + "        ArrayList<Float>item4=BlocklyMethods.createListWith(1,2,3);"
-            + "        ArrayList<String>item5=BlocklyMethods.createListWith(\"a\",\"b\");"
-            + "        ArrayList<Boolean>item6=BlocklyMethods.createListWith(true,false);"
-            + "        ArrayList<Pickcolor>item7=BlocklyMethods.createListWith(Pickcolor.RED,Pickcolor.BLACK,Pickcolor.NONE);"
+            + "        ArrayList<Float>item4=BlocklyMethods.createListWithNumber(1,2,3);"
+            + "        ArrayList<String>item5=BlocklyMethods.createListWithString(\"a\",\"b\");"
+            + "        ArrayList<Boolean>item6=BlocklyMethods.createListWithBoolean(true,false);"
+            + "        ArrayList<Pickcolor>item7=BlocklyMethods.createListWithColour(Pickcolor.RED,Pickcolor.BLACK,Pickcolor.NONE);"
             + "        Pickcoloritem8=Pickcolor.NONE;"
             + "    public void run() {\n"
             //  + "        hal = new Hal(brickConfiguration, usedSensors);\n"
@@ -461,7 +461,7 @@ public class AstToLejosJavaVisitorTest {
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
             + MAIN_METHOD
-            + "    ArrayList<String> variablenName=BlocklyMethods.createListWith(\"a\", \"b\", \"c\");\n"
+            + "    ArrayList<String> variablenName=BlocklyMethods.createListWithString(\"a\", \"b\", \"c\");\n"
             + "    public void run() {\n"
             // + "        hal = new Hal(brickConfiguration, usedSensors);\n"
             + "        hal.drawText(String.valueOf(test(0, variablenName)), 0, 0);"
@@ -484,7 +484,7 @@ public class AstToLejosJavaVisitorTest {
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
             + MAIN_METHOD
-            + "    ArrayList<String> variablenName=BlocklyMethods.createListWith(\"a\", \"b\", \"c\");\n"
+            + "    ArrayList<String> variablenName=BlocklyMethods.createListWithString(\"a\", \"b\", \"c\");\n"
             + "    public void run() {\n"
             // + "        hal = new Hal(brickConfiguration, usedSensors);\n"
             + "        hal.drawText(String.valueOf(test()), 0, 0);"
@@ -507,7 +507,7 @@ public class AstToLejosJavaVisitorTest {
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
             + MAIN_METHOD
-            + "    ArrayList<String> variablenName=BlocklyMethods.createListWith(\"a\", \"b\", \"c\");\n"
+            + "    ArrayList<String> variablenName=BlocklyMethods.createListWithString(\"a\", \"b\", \"c\");\n"
             + "    public void run() {\n"
             //  + "        hal = new Hal(brickConfiguration, usedSensors);\n"
             + "        hal.drawText(String.valueOf(test()), 0, 0);"

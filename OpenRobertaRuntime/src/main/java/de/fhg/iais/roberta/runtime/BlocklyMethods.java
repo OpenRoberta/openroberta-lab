@@ -161,7 +161,7 @@ public class BlocklyMethods {
      * @param elements to be added in the array list
      * @return {@link ArrayList} with the given elements
      */
-    public static ArrayList<Float> createListWith(Number... elements) {
+    public static ArrayList<Float> createListWithNumber(Number... elements) {
         ArrayList<Float> result = new ArrayList<Float>();
         for ( Number number : elements ) {
             result.add(number.floatValue());
@@ -176,7 +176,7 @@ public class BlocklyMethods {
      * @param elements to be added in the array list
      * @return {@link ArrayList} with the given elements
      */
-    public static ArrayList<Boolean> createListWith(Boolean... elements) {
+    public static ArrayList<Boolean> createListWithBoolean(Boolean... elements) {
         return new ArrayList<Boolean>(Arrays.asList(elements));
     }
 
@@ -186,7 +186,7 @@ public class BlocklyMethods {
      * @param elements to be added in the array list
      * @return {@link ArrayList} with the given elements
      */
-    public static ArrayList<String> createListWith(String... elements) {
+    public static ArrayList<String> createListWithString(String... elements) {
         return new ArrayList<String>(Arrays.asList(elements));
     }
 
@@ -197,7 +197,7 @@ public class BlocklyMethods {
      * @param elements to be added in the array list
      * @return {@link ArrayList} with the given elements
      */
-    public static ArrayList<Pickcolor> createListWith(Pickcolor... elements) {
+    public static ArrayList<Pickcolor> createListWithColour(Pickcolor... elements) {
         return new ArrayList<Pickcolor>(Arrays.asList(elements));
     }
 
@@ -375,7 +375,7 @@ public class BlocklyMethods {
      * @return modified list
      */
     public static <T> T listsIndex(ArrayList<T> list, ListElementOperations operation, IndexLocation indexLocation, float index) {
-        Assert.isTrue(list.size() != 0, "List size is 0!");
+        Assert.isTrue(operation == ListElementOperations.INSERT || list.size() != 0, "List size is 0!");
         return listsIndex(list, operation, null, indexLocation, index);
     }
 
@@ -393,7 +393,7 @@ public class BlocklyMethods {
      * @return modified list
      */
     public static <T> T listsIndex(ArrayList<T> list, ListElementOperations operation, T element, IndexLocation indexLocation, float index) {
-        Assert.isTrue(list.size() != 0, "List size is 0!");
+        Assert.isTrue(operation == ListElementOperations.INSERT || list.size() != 0, "List size iss 0!");
         int resultIndex = calculateIndex(list, indexLocation, index);
         return executeOperation(list, operation, resultIndex, element);
     }
@@ -611,21 +611,21 @@ public class BlocklyMethods {
     }
 
     private static <T> T executeOperation(ArrayList<T> list, ListElementOperations operation, float resultIndex, T element) {
-        T result = list.get((int) resultIndex);
+        T result = null;
+        if ( resultIndex < list.size() ) {
+            result = list.get((int) resultIndex);
+        }
         switch ( operation ) {
             case SET:
                 list.set((int) resultIndex, element);
-                return result;
+                break;
             case INSERT:
-                //check if it is last index
                 resultIndex = resultIndex == list.size() - 1 ? resultIndex + 1 : resultIndex;
                 list.add((int) resultIndex, element);
-                return result;
+                result = list.get((int) resultIndex);
             case GET:
                 break;
             case GET_REMOVE:
-                list.remove((int) resultIndex);
-                return result;
             case REMOVE:
                 list.remove((int) resultIndex);
                 break;
@@ -633,10 +633,11 @@ public class BlocklyMethods {
                 throw new DbcException("Invalid operation!");
         }
         return result;
+
     }
 
     private static <T> int calculateIndex(ArrayList<T> list, IndexLocation indexLocation, float index) {
-        Assert.isTrue(index < list.size(), "Index location is larger then the size of array!");
+        //Assert.isTrue(index < list.size(), "Index location is larger then the size of array!");
         switch ( indexLocation ) {
             case FROM_START:
                 return (int) index;
