@@ -401,7 +401,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitFunc(MathPowerFunct<Void> funct) {
+    public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
         //        switch ( funct.getFunctName() ) {
         //            case PRINT:
         //                this.sb.append("System.out.println(");

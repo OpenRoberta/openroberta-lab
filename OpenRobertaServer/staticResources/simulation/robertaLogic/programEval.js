@@ -247,7 +247,7 @@ function evalBinary(op, left, right) {
         val = valLeft / valRight;
         break;
     case POWER:
-        val = valLeft ^ valRight;
+        val = Math.pow(valLeft, valRight);
         break;
     case LT:
         val = valLeft < valRight;

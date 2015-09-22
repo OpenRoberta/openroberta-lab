@@ -118,7 +118,7 @@ public abstract class AstDefaultVisitorInspecting implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitFunc(MathPowerFunct<Void> func) {
+    public Void visitMathPowerFunct(MathPowerFunct<Void> func) {
         return null;
     }
 

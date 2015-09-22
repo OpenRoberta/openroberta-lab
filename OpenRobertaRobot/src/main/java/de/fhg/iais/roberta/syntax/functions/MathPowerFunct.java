@@ -77,7 +77,7 @@ public class MathPowerFunct<V> extends Expr<V> {
 
     @Override
     protected V accept(AstVisitor<V> visitor) {
-        return visitor.visitFunc(this);
+        return visitor.visitMathPowerFunct(this);
     }
 
     @Override

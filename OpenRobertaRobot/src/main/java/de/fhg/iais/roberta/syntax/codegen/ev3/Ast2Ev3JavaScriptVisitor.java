@@ -173,7 +173,12 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitFunc(MathPowerFunct<Void> func) {
+    public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
+        this.sb.append("createBinaryExpr(" + mathPowerFunct.getFunctName() + ", ");
+        mathPowerFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        mathPowerFunct.getParam().get(1).visit(this);
+        this.sb.append(")");
         return null;
     }
 

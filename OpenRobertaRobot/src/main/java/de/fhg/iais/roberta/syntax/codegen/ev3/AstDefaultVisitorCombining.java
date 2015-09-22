@@ -149,7 +149,7 @@ public abstract class AstDefaultVisitorCombining<V> implements AstVisitor<V> {
     }
 
     @Override
-    public V visitFunc(MathPowerFunct<V> func) {
+    public V visitMathPowerFunct(MathPowerFunct<V> func) {
         return defaultResult();
     }
 

@@ -442,20 +442,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitFunc(MathPowerFunct<Void> funct) {
-        //        switch ( funct.getFunctName() ) {
-        //            case PRINT:
-        //                this.sb.append("System.out.println(");
-        //                funct.getParam().get(0).visit(this);
-        //                this.sb.append(")");
-        //                break;
-        //            default:
-        //                break;
-        //        }
-        return null;
-    }
-
-    @Override
     public Void visitActionStmt(ActionStmt<Void> actionStmt) {
         actionStmt.getAction().visit(this);
         return null;
@@ -1184,56 +1170,66 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
         switch ( mathSingleFunct.getFunctName() ) {
             case ROOT:
-                this.sb.append("Math.sqrt(");
+                this.sb.append("((float) Math.sqrt(");
                 break;
             case ABS:
-                this.sb.append("Math.abs(");
+                this.sb.append("((float) Math.abs(");
                 break;
             case LN:
-                this.sb.append("Math.log(");
+                this.sb.append("((float) Math.log(");
                 break;
             case LOG10:
-                this.sb.append("Math.log10(");
+                this.sb.append("((float) Math.log10(");
                 break;
             case EXP:
-                this.sb.append("Math.exp(");
+                this.sb.append("((float) Math.exp(");
                 break;
             case POW10:
-                this.sb.append("Math.pow(10, ");
+                this.sb.append("((float) Math.pow(10, ");
                 break;
             case SIN:
-                this.sb.append("Math.sin(");
+                this.sb.append("((float) Math.sin(");
                 break;
             case COS:
-                this.sb.append("Math.cos(");
+                this.sb.append("((float) Math.cos(");
                 break;
             case TAN:
-                this.sb.append("Math.tan(");
+                this.sb.append("((float) Math.tan(");
                 break;
             case ASIN:
-                this.sb.append("Math.asin(");
+                this.sb.append("((float) Math.asin(");
                 break;
             case ATAN:
-                this.sb.append("Math.atan(");
+                this.sb.append("((float) Math.atan(");
                 break;
             case ACOS:
-                this.sb.append("Math.acos(");
+                this.sb.append("((float) Math.acos(");
                 break;
             case ROUND:
-                this.sb.append("Math.round(");
+                this.sb.append("((float) Math.round(");
                 break;
             case ROUNDUP:
-                this.sb.append("Math.ceil(");
+                this.sb.append("((float) Math.ceil(");
                 break;
             case ROUNDDOWN:
-                this.sb.append("Math.floor(");
+                this.sb.append("((float) Math.floor(");
                 break;
             default:
                 break;
         }
         mathSingleFunct.getParam().get(0).visit(this);
-        this.sb.append(")");
+        this.sb.append("))");
 
+        return null;
+    }
+
+    @Override
+    public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
+        this.sb.append("((float) Math.pow(");
+        mathPowerFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        mathPowerFunct.getParam().get(1).visit(this);
+        this.sb.append("))");
         return null;
     }
 

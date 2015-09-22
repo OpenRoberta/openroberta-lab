@@ -130,8 +130,8 @@ public abstract class CheckVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitFunc(MathPowerFunct<Void> func) {
-        for ( Expr<Void> expr : func.getParam() ) {
+    public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
+        for ( Expr<Void> expr : mathPowerFunct.getParam() ) {
             expr.visit(this);
         }
         return null;

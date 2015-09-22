@@ -163,7 +163,7 @@ public interface AstVisitor<V> {
      *
      * @param funct to be visited
      */
-    public V visitFunc(MathPowerFunct<V> func);
+    public V visitMathPowerFunct(MathPowerFunct<V> mathPowerFunct);
 
     /**
      * visit a {@link ActionExpr}.
@@ -627,28 +627,28 @@ public interface AstVisitor<V> {
      * @param methodStmt to be visited
      */
     public V visitMethodCall(MethodCall<V> methodCall);
-    
+
     /**
      * visit a {@link BluetoothRecieveAction}.
      *
      * @param bluetoothReceiveActionbluetoothReceiveAction to be visited
      */
     public V visitBluetoothReceiveAction(BluetoothReceiveAction<V> bluetoothReceiveAction);
-    
+
     /**
      * visit a {@link BluetoothConnectAction}.
      *
      * @param bluetoothConnectAction to be visited
      */
     public V visitBluetoothConnectAction(BluetoothConnectAction<V> bluetoothConnectAction);
-    
+
     /**
      * visit a {@link BluetoothSendAction}.
      *
      * @param bluetoothSendAction to be visited
      */
     public V visitBluetoothSendAction(BluetoothSendAction<V> bluetoothSendAction);
-    
+
     /**
      * visit a {@link BluetoothWaitForConnectionAction}.
      *

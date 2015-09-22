@@ -278,7 +278,7 @@ public class AstToTextlyVisitor implements AstVisitor<Void> {
     }
 
     @Override
-    public Void visitFunc(MathPowerFunct<Void> funct) {
+    public Void visitMathPowerFunct(MathPowerFunct<Void> funct) {
         //        switch ( funct.getFunctName() ) {
         //            case PRINT:
         //                this.sb.append("System.out.println(");

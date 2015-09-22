@@ -169,7 +169,7 @@ public class InfoCollector<T> implements AstVisitor<T> {
     }
 
     @Override
-    public T visitFunc(MathPowerFunct<T> func) {
+    public T visitMathPowerFunct(MathPowerFunct<T> func) {
         extractInfos(func);
         return null;
     }

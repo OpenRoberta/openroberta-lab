@@ -235,7 +235,7 @@ public class TypecheckVisitor implements AstVisitor<BlocklyType> {
     }
 
     @Override
-    public BlocklyType visitFunc(MathPowerFunct<BlocklyType> func) {
+    public BlocklyType visitMathPowerFunct(MathPowerFunct<BlocklyType> func) {
         List<BlocklyType> paramTypes = typecheckList(func.getParam());
         Sig signature = TypeTransformations.getFunctionSignature(func.getFunctName().name());
         BlocklyType resultType = signature.typeCheck(func, paramTypes);
