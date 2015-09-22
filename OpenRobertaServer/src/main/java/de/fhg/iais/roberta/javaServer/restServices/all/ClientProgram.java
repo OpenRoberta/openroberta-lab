@@ -86,13 +86,19 @@ public class ClientProgram {
             AccessRightProcessor upp = new AccessRightProcessor(dbSession, httpSessionState);
             UserProcessor up = new UserProcessor(dbSession, httpSessionState);
 
-            if ( cmd.equals("saveP") ) {
+            if ( cmd.equals("saveP") || cmd.equals("saveAsP") ) {
                 String programName = request.getString("name");
                 String programText = request.getString("program");
-                Long timestamp = request.getLong("timestamp");
-                Timestamp programTimestamp = new Timestamp(timestamp);
-                boolean isShared = request.optBoolean("shared", false);
-                Program program = pp.updateProgram(programName, userId, robotId, programText, programTimestamp, !isShared);
+                Program program;
+                if ( cmd.equals("saveP") ) {
+                    // update an already existing program
+                    Long timestamp = request.getLong("timestamp");
+                    Timestamp programTimestamp = new Timestamp(timestamp);
+                    boolean isShared = request.optBoolean("shared", false);
+                    program = pp.persistProgramText(programName, userId, robotId, programText, programTimestamp, !isShared);
+                } else {
+                    program = pp.persistProgramText(programName, userId, robotId, programText, null, true);
+                }
                 if ( pp.isOk() ) {
                     if ( program != null ) {
                         response.put("lastChanged", program.getLastChanged());
@@ -115,18 +121,6 @@ public class ClientProgram {
                     forMessages.setSuccess(Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS);
                 }
                 Util.addResultInfo(response, forMessages);
-            } else if ( cmd.equals("saveAsP") ) {
-                String programName = request.getString("name");
-                String programText = request.getString("program");
-                Timestamp programTimestamp = new Timestamp(0);
-                pp.updateProgram(programName, userId, robotId, programText, programTimestamp, true);
-                if ( pp.isOk() ) {
-                    Program program = pp.getProgram(programName, userId, robotId);
-                    if ( program != null ) {
-                        response.put("lastChanged", program.getLastChanged());
-                    }
-                }
-                Util.addResultInfo(response, pp);
 
             } else if ( cmd.equals("loadP") && (httpSessionState.isUserLoggedIn() || request.getString("owner").equals("Roberta")) ) {
                 String programName = request.getString("name");
