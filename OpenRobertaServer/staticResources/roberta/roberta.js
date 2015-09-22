@@ -7,6 +7,9 @@ var id;
  * Initialize user-state-object
  */
 function initUserState() {
+    USER.clear(function(result) {
+        response(result);
+    });
     userState.version = 'xx.xx.xx';
     userState.language = 'DE';
     userState.robot = 'ev3';

@@ -22,11 +22,15 @@ body > :not(.pace),body:before,body:after {
   -moz-transition:opacity .4s ease-in-out;
   -o-transition:opacity .4s ease-in-out;
   -ms-transition:opacity .4s ease-in-out;
-  transition:opacity .4s ease-in-out
+  transition:opacity .4s ease-in-out;
 }
 
 body:not(.pace-done) > :not(.pace),body:not(.pace-done):before,body:not(.pace-done):after {
-  opacity:0
+  opacity:0;
+}
+body.blocklyMinimalBody  *  {
+	 opacity:1 !important;
+	 overflow:hidden;
 }
 
 #head-navigation {

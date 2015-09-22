@@ -228,6 +228,7 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
         'rx' : Blockly.BlockSvg.CORNER_RADIUS,
         'ry' : Blockly.BlockSvg.CORNER_RADIUS
     }, this.bubbleGroup_);
+    this.bubbleGroup_.appendChild(content);
     if (hasResize) {
         this.resizeGroup_ = Blockly.createSvgElement('g', {
             'class' : Blockly.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE'
@@ -261,11 +262,10 @@ Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
                     + 'h2.061l.229-.023c-.186.307-.29.656-.29 1.023 0 .534.208 1.036.586 1.414s.88.586 1.414.586c.367 0 .716-.105 1.023-.289'
                     + 'l-.023.228v2.061h-1.939c-.122 0-.24.015-.356.036.189-.31.295-.664.295-1.036 0-.534-.208-1.036-.586-1.414z'
         }, this.resizeGroup_);
+        this.bubbleGroup_.appendChild(this.resizeGroup_);
     } else {
         this.resizeGroup_ = null;
     }
-    this.bubbleGroup_.appendChild(content);
-   // this.bubbleGroup_.appendChild(this.resizeGroup_);
     return this.bubbleGroup_;
 };
 

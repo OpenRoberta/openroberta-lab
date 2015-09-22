@@ -1,6 +1,20 @@
 var USER = {};
 (function($) {
     /**
+     * Clear user
+     * @memberof USER
+     */
+    USER.clear = function(successFn) {
+        COMM.json("/user", {
+                    "cmd" : "clear",
+        }, successFn, "clear user"); 
+    };
+    
+    /**
+     * Logout user
+     * @memberof USER
+     */
+    /**
      * Login user
      * @memberof USER
      */
