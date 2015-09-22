@@ -118,8 +118,7 @@ public class ClientProgram {
             } else if ( cmd.equals("saveAsP") ) {
                 String programName = request.getString("name");
                 String programText = request.getString("program");
-                Long timestamp = request.getLong("timestamp");
-                Timestamp programTimestamp = new Timestamp(timestamp);
+                Timestamp programTimestamp = new Timestamp(0);
                 pp.updateProgram(programName, userId, robotId, programText, programTimestamp, true);
                 if ( pp.isOk() ) {
                     Program program = pp.getProgram(programName, userId, robotId);

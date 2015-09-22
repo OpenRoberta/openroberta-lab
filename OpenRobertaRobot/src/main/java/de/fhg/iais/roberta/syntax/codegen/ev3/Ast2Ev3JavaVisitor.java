@@ -1372,7 +1372,8 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     private boolean isStringExpr(Expr<Void> e) {
         // TODO: what about BINARY on the LHS
-        return e.getKind() == BlockType.STRING_CONST || (e.getKind() == BlockType.VAR && ((Var<?>) e).getTypeVar() == BlocklyType.STRING);
+        return e.getKind() == BlockType.STRING_CONST
+            || (e.getKind() == BlockType.VAR && ((Var<?>) e).getTypeVar() == BlocklyType.STRING || e.getKind() == BlockType.TEXT_JOIN_FUNCT);
     }
 
     private boolean parenthesesCheck(Binary<Void> binary) {
