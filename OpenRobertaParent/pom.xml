@@ -27,8 +27,8 @@ limitations under the License.
 	<inceptionYear>2014</inceptionYear>
 	<properties>
 		<!-- the server and the crosscompiler SHOULD be compatible between(including) the following two versions of software deployed on the ROBOT -->
-		<validversionrange.From>1.3.0</validversionrange.From>
-		<validversionrange.To>1.3.0</validversionrange.To>
+		<validversionrange.From>1.3.1</validversionrange.From>
+		<validversionrange.To>1.3.1</validversionrange.To>
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
 		<buildTimeStamp>${maven.build.timestamp}</buildTimeStamp>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

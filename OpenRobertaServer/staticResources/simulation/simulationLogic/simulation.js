@@ -238,16 +238,11 @@ var SIM = (function() {
         output.right = right * MAXPOWER || 0;
 
         robot.led.mode = output.ledMode = LIGHT.getMode() || "OFF";
-<<<<<<< HEAD
         if (LIGHT.getMode() && LIGHT.getMode() == "OFF") {
             robot.led.color = output.led = "#dddddd"; // = led off
         } else {
             robot.led.color = output.led = LIGHT.getColor();
         }
-=======
-        if (LIGHT.getMode() && LIGHT.getMode() == "OFF"){robot.led.color = output.led = "#dddddd"; // = led off
-} else {robot.led.color = output.led = LIGHT.getColor();}
->>>>>>> 42c1b33c2760dfd6350113939dffefa669b4ce48
     }
 
     function setObstacle() {
@@ -364,10 +359,6 @@ var SIM = (function() {
             scene.playground.h = $(window).height() - offsetY;
             var oldScale = scale;
             scale = 1;
-<<<<<<< HEAD
-=======
-            //LOG.info($(window).width());
->>>>>>> 42c1b33c2760dfd6350113939dffefa669b4ce48
             if ($(window).width() < 768) {// extra small devices
                 scale = 0.5
             } else if ($(window).width() < 1024) {// medium and large devices     
@@ -522,7 +513,6 @@ var SIM = (function() {
         window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
     }
 
-<<<<<<< HEAD
     if (!window.requestAnimationFrame) {
         window.requestAnimationFrame = function(callback, element) {
             var currTime = new Date().getTime();
@@ -540,19 +530,4 @@ var SIM = (function() {
             clearTimeout(id);
         };
     }
-=======
-    if (!window.requestAnimationFrame){window.requestAnimationFrame = function(callback, element) {
-        var currTime = new Date().getTime();
-        var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-        var id = window.setTimeout(function() {
-            callback(currTime + timeToCall);
-        }, timeToCall);
-        lastTime = currTime + timeToCall;
-        return id;
-    };}
-
-    if (!window.cancelAnimationFrame){window.cancelAnimationFrame = function(id) {
-        clearTimeout(id);
-    };}
->>>>>>> 42c1b33c2760dfd6350113939dffefa669b4ce48
 }());
