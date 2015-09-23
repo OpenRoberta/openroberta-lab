@@ -171,7 +171,11 @@ function showUserInfo() {
  */
 function showRobotInfo() {
     if (userState.robotName) {
-        $("#robotName").text(userState.robotName);
+        if (userState.robot === "oraSim") {
+            $("#robotName").text("ORSim");
+        } else {
+            $("#robotName").text(userState.robotName);
+        }
         if (userState.robotState === "wait") {
             $("#robotStateWait").css('display', 'inline');
             $("#robotStateDisconnected").css('display', 'none');
@@ -238,6 +242,13 @@ function injectBlockly(toolbox, opt_programBlocks, opt_readOnly) {
         } else {
             initProgramEnvironment(opt_programBlocks);
             setRobotState(toolbox);
+        }
+        if (userState.robot === "ev3") {
+            $('#menuShowCode').parent().removeClass('disabled');
+            Blockly.getMainWorkspace().codeButton.enable();
+        } else {
+            $('#menuShowCode').parent().addClass('disabled');
+            Blockly.getMainWorkspace().codeButton.disable();
         }
     }
 }
@@ -1150,11 +1161,32 @@ function switchToBrickly() {
     $('#tabBrickly').click();
     bricklyActive = true;
 }
+/**
+ * Init robot
+ */
+function initRobot() {
+    ROBOT.setRobot(userState.robot, function(result) {
+        response(result);
+        if (result.rc === "ok") {
+            setConfiguration("EV3basis");
+            loadToolbox(userState.toolbox);
+            $('#blocklyDiv').removeClass('simBackground');
+            $('#menuEv3').parent().addClass('disabled');
+            $('#menuSim').parent().removeClass('disabled');
+            $('#menuConnect').parent().removeClass('disabled');
+            $('#iconDisplayRobotState').removeClass('typcn-Roberta');
+            $('#iconDisplayRobotState').addClass('typcn-ev3');
+            $('#menuShowCode').parent().removeClass('disabled');
+        }
+    });
+}
 
 /**
  * Switch robot
  */
 function switchRobot(robot) {
+    if (robot === userState.robot)
+        return;
     ROBOT.setRobot(robot, function(result) {
         if (result.rc === "ok") {
             userState.robot = robot;
@@ -1171,7 +1203,6 @@ function switchRobot(robot) {
                 Blockly.getMainWorkspace().codeButton.enable();
                 UTIL.getBricklyFrame('#bricklyFrame').loadToolboxAndConfiguration();
             } else if (robot === "oraSim") {
-                userState.robotName = "ORSim";
                 setConfiguration("ORSim");
                 $('#blocklyDiv').addClass('simBackground');
                 $('#menuEv3').parent().removeClass('disabled');
@@ -2100,7 +2131,7 @@ function init() {
             // TODO do more?
         }
     });
-    switchRobot(userState.robot);
+    initRobot();
     COMM.json("/toolbox", {
         "cmd" : "loadT",
         "name" : userState.toolbox,

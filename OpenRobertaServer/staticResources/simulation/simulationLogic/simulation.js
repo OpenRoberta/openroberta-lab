@@ -222,8 +222,20 @@ var SIM = (function() {
     }
 
     function setOutput() {
-        output.left = ACTORS.getLeftMotor().getPower() * MAXPOWER || 0;
-        output.right = ACTORS.getRightMotor().getPower() * MAXPOWER || 0;
+        var left = ACTORS.getLeftMotor().getPower();
+        if (left > 100) {
+            left = 100;
+        } else if (left < -100) {
+            left = -100
+        }
+        var right = ACTORS.getRightMotor().getPower();
+        if (right > 100) {
+            right = 100;
+        } else if (right < -100) {
+            right = -100
+        }
+        output.left = left * MAXPOWER || 0;
+        output.right = right * MAXPOWER || 0;
 
         robot.led.mode = output.ledMode = LIGHT.getMode() || "OFF";
         if (LIGHT.getMode() && LIGHT.getMode() == "OFF") {

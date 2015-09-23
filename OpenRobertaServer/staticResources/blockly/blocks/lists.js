@@ -176,11 +176,12 @@ Blockly.Blocks['robLists_create_with'] = {
                 this.sourceBlock_.updateType_(option);
             }
         });
+        listType.setValue(this.listType_);
         if (num == 1) {
             if (this.itemCount_ == 0) {
                 this.removeInput('EMPTY');
                 this.appendValueInput('ADD0').appendField(Blockly.Msg.LISTS_CREATE_TITLE).appendField(':').appendField(listType, 'LIST_TYPE').appendField(
-                        Blockly.RTL ? '\u2192' : '\u2190').setCheck('Number');
+                        Blockly.RTL ? '\u2192' : '\u2190').setCheck(this.listType_);
                 this.setInputsInline(false);
                 this.setMutatorMinus(new Blockly.MutatorMinus(this));
             } else {
@@ -380,8 +381,7 @@ Blockly.Blocks['lists_getIndex'] = {
         });
     },
     /**
-     * Create XML to represent whether the block is a statement or a value. Also
-     * represent whether there is an 'AT' input.
+     * Create XML to represent whether the block is a statement or a value. Also represent whether there is an 'AT' input.
      * 
      * @return {Element} XML storage element.
      * @this Blockly.Block
@@ -412,8 +412,7 @@ Blockly.Blocks['lists_getIndex'] = {
      * Switch between a value block and a statement block.
      * 
      * @param {boolean}
-     *            newStatement True if the block should be a statement. False if
-     *            the block should be a value.
+     *            newStatement True if the block should be a statement. False if the block should be a value.
      * @private
      * @this Blockly.Block
      */
@@ -621,8 +620,7 @@ Blockly.Blocks['lists_getSublist'] = {
         this.updateAt_(2, isAt2);
     },
     /**
-     * Create or delete an input for a numeric index. This block has two such
-     * inputs, independant of each other.
+     * Create or delete an input for a numeric index. This block has two such inputs, independant of each other.
      * 
      * @param {number}
      *            n Specify first or second input (1 or 2).
