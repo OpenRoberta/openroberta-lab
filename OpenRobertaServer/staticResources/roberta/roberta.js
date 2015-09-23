@@ -66,16 +66,20 @@ function login() {
  */
 function logout() {
     USER.logout(function(result) {
+        response(result);
         if (result.rc === "ok") {
             initUserState();
+            setProgram(userState.program);
+            setConfiguration(userState.configuration);
             $('#programNameSave :not(btn)').val('');
             $('#configurationNameSave :not(btn)').val('');
+            $('#login-user :not(btn) :not(.backButton)').val('');
             setHeadNavigationMenuState('logout');
             Blockly.getMainWorkspace().saveButton.disable();
             setRobotState(result);
             $('#tabProgram').click();
+            displayInformation(result, "MESSAGE_USER_LOGOUT", result.message);
         }
-        displayInformation(result, "MESSAGE_USER_LOGOUT", result.message);
     });
 }
 
@@ -278,10 +282,13 @@ function initProgramEnvironment(opt_programBlocks) {
  * @param {name}
  *            Name to be set
  */
-function setProgram(name) {
+function setProgram(name, opt_owner) {
     if (name) {
-        userState.program = name;
-        $('#tabProgramName').text(name);
+        userState.program = name;       
+        if(opt_owner){
+           name += ' (<span class="typcn typcn-user progName"></span>'+opt_owner + ')'; 
+        }
+        $('#tabProgramName').html(name);
     }
 }
 
@@ -338,22 +345,21 @@ function saveAsProgramToServer() {
         displayMessage("MESSAGE_INVALID_NAME", "POPUP", "");
         return;
     }
-    setProgram(progName);
-    $('#menuSaveProg').parent().removeClass('login');
-    $('#menuSaveProg').parent().removeClass('disabled');
-    Blockly.getMainWorkspace().saveButton.enable();
     var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
     var xmlText = Blockly.Xml.domToText(xml);
-    userState.programSaved = true;
     LOG.info('saveAs program ' + userState.program + ' login: ' + userState.id);
-    $('.modal').modal('hide'); // close all opened popups
     var timestamp = UTIL.parseDate(userState.programTimestamp);
-    PROGRAM.saveAsProgramToServer(userState.program, timestamp, xmlText, function(result) {
+    PROGRAM.saveAsProgramToServer(progName, timestamp, xmlText, function(result) {
+        response(result);
         if (result.rc === 'ok') {
+            setProgram(progName);
+            $('#menuSaveProg').parent().removeClass('disabled');
+            Blockly.getMainWorkspace().saveButton.enable();
+            userState.programSaved = true;
             userState.programModified = false;
             userState.programTimestamp = UTIL.formatDateComplete(result.lastChanged);
+            displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM_AS", result.message, userState.program);
         }
-        displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM_AS", result.message, userState.program);
     });
 }
 
@@ -577,18 +583,18 @@ var newProgram = function() {
         setProgram("NEPOprog");
         userState.programShared = false;
         userState.programTimestamp = '';
-        initProgramEnvironment();
+        initProgramEnvironment();        
+        $('#tabProgram').click();
         $('#menuSaveProg').parent().addClass('disabled');
         Blockly.getMainWorkspace().saveButton.disable();
-        $('#tabProgram').click();
         return true;
     }
 };
 
-function showProgram(result, load, name) {
+function showProgram(result, load, name, opt_owner) {
     response(result);
     if (result.rc === 'ok') {
-        setProgram(name);
+        setProgram(name, opt_owner);
         var xml = Blockly.Xml.textToDom(result.data);
         if (load) {
             Blockly.mainWorkspace.clear();
@@ -628,22 +634,23 @@ function loadFromListing() {
         var owner = $programRow[0].children[1].textContent;
         var right = $programRow[0].children[2].textContent;
         userState.programTimestamp = $programRow[0].children[5].textContent;
-        userState.programShared = false;
-        $('#menuSaveProg').parent().removeClass('disabled');
-        Blockly.getMainWorkspace().saveButton.enable();
-        if (right === Blockly.Msg.POPUP_SHARE_READ) {
-            $('#menuSaveProg').parent().addClass('disabled');
-            Blockly.getMainWorkspace().saveButton.disable();
-        } else if (right === Blockly.Msg.POPUP_SHARE_WRITE) {
-            userState.programShared = true;
-        }
         LOG.info('loadFromList ' + programName + ' signed in: ' + userState.id);
         PROGRAM.loadProgramFromListing(programName, owner, function(result) {
             if (result.rc === 'ok') {
+                userState.programShared = false;
+                $('#menuSaveProg').parent().removeClass('disabled');
+                Blockly.getMainWorkspace().saveButton.enable();
+                if (right === Blockly.Msg.POPUP_SHARE_READ) {
+                    $('#menuSaveProg').parent().addClass('disabled');
+                    Blockly.getMainWorkspace().saveButton.disable();
+                } else if (right === Blockly.Msg.POPUP_SHARE_WRITE) {
+                    userState.programShared = true;
+                }              
                 $("#tabs").tabs("option", "active", 0);
                 userState.programSaved = true;
-                showProgram(result, true, programName);
-                $('#menuSaveProg').parent().removeClass('login');
+                var alien = owner === userState.accountName? null:owner;
+                showProgram(result, true, programName, alien);
+                //$('#menuSaveProg').parent().removeClass('login');
             }
             displayInformation(result, "", result.message);
         });

@@ -679,6 +679,10 @@ legend {
 	margin-bottom: 0px;
 }
 
+.progName:before {
+	margin-right : 0px;
+}
+
 /***** END JQuery-Popup-Input-Fields *****/
 
 /***** BEGIN JQuery-Datatables *****/
