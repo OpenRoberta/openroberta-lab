@@ -37,55 +37,69 @@ public class ProgramDao extends AbstractDao<Program> {
     }
 
     /**
-     * make a program object and persist it (if the program, identified by owner&name&robot, does not exist) or update it (if the program exists)
+     * persist a program object that is owned by the caller
      *
      * @param name the name of the program, never null
      * @param user the user who owns the program, never null
-     * @param robotId
-     * @param programText the program text, maybe null
-     * @param timestamp timestamp of the program, never null
-     * @param isOwner true, if the owner updates a program; false if a user with access right WRITE updates a program
-     * @return true if the program could be persisted successfully
+     * @param robotId the robot the program was written for
+     * @param programText the program text
+     * @param programTimestamp timestamp of the last change of the program (if it already existed); <code>null</code> if a new program is saved
+     * @return a pair of (message-key, program). If the program is persisted successfully, the program is NOT null.
      */
-    public Pair<Key, Program> persistProgramText(String name, User user, Robot robot, String programText, Timestamp timestamp, boolean isOwner) {
+    public Pair<Key, Program> persistOwnProgram(String name, User user, Robot robot, String programText, Timestamp timestamp) {
         Assert.notNull(name);
         Assert.notNull(user);
         Assert.notNull(robot);
-        Assert.notNull(timestamp);
-
-        if ( isOwner ) {
-            Program program = load(name, user, robot);
-            if ( program == null ) {
-                if ( timestamp.equals(new Timestamp(0)) ) {
-                    // the program doesn't exist, thus the expected timestamp must not be set
-                    program = new Program(name, user, robot);
-                    program.setProgramText(programText);
-                    this.session.save(program);
-                    return Pair.of(Key.PROGRAM_SAVE_SUCCESS, program); // the only legal key if success
-                } else {
-                    // otherwise ...
-                    ProgramDao.LOG.error("update was requested, but no program with matching timestamp was found");
-                    return Pair.of(Key.PROGRAM_SAVE_ERROR_NO_PROGRAM_TO_UPDATE_FOUND, null);
-                }
-            } else if ( !timestamp.equals(program.getLastChanged()) ) {
-                ProgramDao.LOG.error("update was requested, timestamps don't match. Has another user updated the program in the meantime?");
-                return Pair.of(Key.PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING, null);
-            } else {
+        Program program = load(name, user, robot);
+        if ( program == null ) {
+            if ( timestamp == null ) {
+                // save as && the program doesn't exist.
+                program = new Program(name, user, robot);
                 program.setProgramText(programText);
+                this.session.save(program);
                 return Pair.of(Key.PROGRAM_SAVE_SUCCESS, program); // the only legal key if success
+            } else {
+                return Pair.of(Key.PROGRAM_SAVE_ERROR_PROGRAM_TO_UPDATE_NOT_FOUND, null);
             }
         } else {
-            Program program = loadSharedForUpdate(name, user, robot);
-            if ( program == null ) {
-                ProgramDao.LOG.error("update was requested, but no shared program was found");
-                return Pair.of(Key.PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION, null);
-            } else if ( !timestamp.equals(program.getLastChanged()) ) {
-                ProgramDao.LOG.error("update was requested, timestamps don't match. Has another user updated the program in the meantime?");
-                return Pair.of(Key.PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING, null);
-            } else {
+            if ( timestamp == null ) {
+                // save as && the program exists.
+                return Pair.of(Key.PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS, null);
+            } else if ( timestamp.equals(program.getLastChanged()) ) {
                 program.setProgramText(programText);
                 return Pair.of(Key.PROGRAM_SAVE_SUCCESS, program); // the only legal key if success
+            } else {
+                ProgramDao.LOG.error("update was requested, timestamps don't match. Has another user updated the program in the meantime?");
+                return Pair.of(Key.PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING, null);
             }
+        }
+    }
+
+    /**
+     * persist a program object that the owner shared with the caller
+     *
+     * @param name the name of the program, never null
+     * @param user the user who owns the program, never null
+     * @param robotId the robot the program was written for
+     * @param programText the program text
+     * @param programTimestamp timestamp of the last change of the program (if it already existed); <code>null</code> if a new program is saved
+     * @return a pair of (message-key, program). If the program is persisted successfully, the program is NOT null.
+     */
+    public Pair<Key, Program> persistSharedProgramText(String name, User user, Robot robot, String programText, Timestamp timestamp) {
+        Assert.notNull(name);
+        Assert.notNull(user);
+        Assert.notNull(robot);
+
+        Program program = loadSharedForUpdate(name, user, robot);
+        if ( program == null ) {
+            ProgramDao.LOG.error("update was requested, but no shared program was found");
+            return Pair.of(Key.PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION, null);
+        } else if ( !timestamp.equals(program.getLastChanged()) ) {
+            ProgramDao.LOG.error("update was requested, timestamps don't match. Has another user updated the program in the meantime?");
+            return Pair.of(Key.PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING, null);
+        } else {
+            program.setProgramText(programText);
+            return Pair.of(Key.PROGRAM_SAVE_SUCCESS, program); // the only legal key if success
         }
     }
 

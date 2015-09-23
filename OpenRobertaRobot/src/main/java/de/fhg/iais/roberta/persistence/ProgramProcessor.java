@@ -164,17 +164,16 @@ public class ProgramProcessor extends AbstractProcessor {
     }
 
     /**
-     * update a given program owned by a given user. Overwrites an existing program if mayExist == true.
+     * insert or update a given program owned by a given user. Overwrites an existing program if mayExist == true.
      *
      * @param programName the name of the program
      * @param userId the owner of the program
-     * @param robotId
-     * @param programText the new program text
-     * @param programTimestamp Program timestamp
-     * @param mayExist true, if an existing program may be changed; false if a program may be stored only, if it does not exist in the database
+     * @param robotId the id of the robot the program was written for
+     * @param programText the program text
+     * @param programTimestamp timestamp of the last change of the program (if it already existed); <code>null</code> if a new program is saved
      * @param isOwner true, if the owner updates a program; false if a user with access right WRITE updates a program
      */
-    public Program updateProgram(String programName, int userId, int robotId, String programText, Timestamp programTimestamp, boolean isOwner) {
+    public Program persistProgramText(String programName, int userId, int robotId, String programText, Timestamp programTimestamp, boolean isOwner) {
         if ( !Util.isValidJavaIdentifier(programName) ) {
             setError(Key.PROGRAM_ERROR_ID_INVALID, programName);
             return null;
@@ -185,8 +184,13 @@ public class ProgramProcessor extends AbstractProcessor {
             ProgramDao programDao = new ProgramDao(this.dbSession);
             User user = userDao.get(userId);
             Robot robot = robotDao.get(robotId);
-            Pair<Key, Program> result = programDao.persistProgramText(programName, user, robot, programText, programTimestamp, isOwner);
-            // a bit strange, but necessary to distinguish between success and failure
+            Pair<Key, Program> result;
+            if ( isOwner ) {
+                result = programDao.persistOwnProgram(programName, user, robot, programText, programTimestamp);
+            } else {
+                result = programDao.persistSharedProgramText(programName, user, robot, programText, programTimestamp);
+            }
+            // a bit strange, but necessary as Java has no N-tuple
             if ( result.getFirst() == Key.PROGRAM_SAVE_SUCCESS ) {
                 setSuccess(Key.PROGRAM_SAVE_SUCCESS);
             } else {
