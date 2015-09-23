@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-09-17 19:55:23.128000",
+		"lastupdated": "2015-09-23 23:53:10.885000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -773,7 +773,8 @@
 	"ORA_PROGRAM_GET_ONE_SUCCESS": "Program loaded",
 	"ORA_PROGRAM_SAVE_SUCCESS": "Program saved",
 	"ORA_PROGRAM_SAVE_ERROR_NOT_SAVED_TO_DB": "An error has occured while saving the program.",
-	"ORA_PROGRAM_SAVE_ERROR_NO_PROGRAM_TO_UPDATE_FOUND": "An error has occured while updating the program.",
+	"ORA_PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS": "This program already exists.",
+	"ORA_PROGRAM_SAVE_ERROR_PROGRAM_TO_UPDATE_NOT_FOUND": "The program could not be found, so it is impossible to update it.",
 	"ORA_PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION": "You do not have the permission to modify this program!",
 	"ORA_PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING": "This program is already locked!",
 	"ORA_PROGRAM_GET_ALL_SUCCESS": "Programs loaded",

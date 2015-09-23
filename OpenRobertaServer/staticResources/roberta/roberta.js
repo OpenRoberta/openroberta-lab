@@ -284,9 +284,9 @@ function initProgramEnvironment(opt_programBlocks) {
  */
 function setProgram(name, opt_owner) {
     if (name) {
-        userState.program = name;       
-        if(opt_owner){
-           name += ' (<span class="typcn typcn-user progName"></span>'+opt_owner + ')'; 
+        userState.program = name;
+        if (opt_owner) {
+            name += ' (<span class="typcn typcn-user progName"></span>' + opt_owner + ')';
         }
         $('#tabProgramName').html(name);
     }
@@ -583,7 +583,7 @@ var newProgram = function() {
         setProgram("NEPOprog");
         userState.programShared = false;
         userState.programTimestamp = '';
-        initProgramEnvironment();        
+        initProgramEnvironment();
         $('#tabProgram').click();
         $('#menuSaveProg').parent().addClass('disabled');
         Blockly.getMainWorkspace().saveButton.disable();
@@ -645,10 +645,10 @@ function loadFromListing() {
                     Blockly.getMainWorkspace().saveButton.disable();
                 } else if (right === Blockly.Msg.POPUP_SHARE_WRITE) {
                     userState.programShared = true;
-                }              
+                }
                 $("#tabs").tabs("option", "active", 0);
                 userState.programSaved = true;
-                var alien = owner === userState.accountName? null:owner;
+                var alien = owner === userState.accountName ? null : owner;
                 showProgram(result, true, programName, alien);
                 //$('#menuSaveProg').parent().removeClass('login');
             }
@@ -745,23 +745,36 @@ function shareProgramsFromListing() {
  */
 function deleteFromListing() {
     var $programRow = $('#programNameTable .selected');
-    var programs = '';
+    var progs = [];
     for (var i = 0; i < $programRow.length; i++) {
-        var programName = $programRow[i].children[0].textContent;
-        if (programs.length > 0) {
-            programs = programs + ', ';
-        }
-        programs = programs + programName;
-        LOG.info('deleteFromList ' + programName + ' signed in: ' + userState.id);
-        PROGRAM.deleteProgramFromListing(programName, function(result) {
-            if (result.rc === 'ok') {
-                response(result);
-                PROGRAM.refreshList(showPrograms);
-                setRobotState(result);
-                displayInformation(result, "MESSAGE_PROGRAM_DELETED", result.message, programName);
-            }
+        progs.push({
+            name : $programRow[i].children[0].textContent,
+            owner : $programRow[i].children[1].textContent
         });
     }
+    for (var i = 0; i < progs.length; i++) {
+        var prog = progs[i];
+        LOG.info('deleteFromList ' + prog.name + ' signed in: ' + userState.id);
+        if (prog.owner === userState.accountName) {
+            PROGRAM.deleteProgramFromListing(prog.name, function(result, progName) {
+                response(result);
+                if (result.rc === 'ok') {
+                    displayInformation(result, "MESSAGE_PROGRAM_DELETED", result.message, progName);
+                    PROGRAM.refreshList(showPrograms);
+                }
+            });
+        } else {
+            PROGRAM.deleteShare(prog.name, prog.owner, function(result, progName) {
+                response(result);
+                if (result.rc === 'ok') {
+                    displayInformation(result, "MESSAGE_PROGRAM_DELETED", result.message, progName);
+                    PROGRAM.refreshList(showPrograms);
+                }
+            });
+        }
+    }
+    $('.modal').modal('hide');
+    setRobotState(result);
 }
 
 /**
@@ -1627,16 +1640,19 @@ function initTabs() {
     $('#deleteFromListing').onWrap('click', function() {
         var $programRow = $('#programNameTable .selected');
         if ($programRow.length > 0) {
-            if ($programRow[0].children[1].textContent === userState.accountName) {
-                $("#confirmDeleteProgram").modal("show");
+            var names = '';
+            for (var i = 0; i < $programRow.length; i++) {
+                names += ($programRow[i].children[0].textContent + '</br>');
             }
+            $('#confirmDeleteProgramName').html(names);
+            $("#confirmDeleteProgram").modal("show");
         }
-    }, 'Ask for confirmation to delete a program');
+    }, 'Ask for confirmation to delete programs');
 
     // delete program
     $('#doDeleteProgram').onWrap('click', function() {
         deleteFromListing();
-        $('.modal').modal('hide'); // close all opened popups
+        //  $('.modal').modal('hide'); // close all opened popups
     }, 'delete program');
 
     // confirm configuration deletion
