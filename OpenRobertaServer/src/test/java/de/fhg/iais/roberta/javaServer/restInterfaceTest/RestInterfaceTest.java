@@ -259,31 +259,40 @@ public class RestInterfaceTest {
      * <b>INVARIANT:</b> two user exist, both user have logged in<br>
      * <b>PRE:</b> no program exists<br>
      * <b>POST:</b> "pid" owns four programs<br>
-     * - store (saveAs) 4 programs and check the count in the db<br>
-     * - update (save) program 2 and check the effect in the data base<br>
-     * - check that 4 programs are stored, check their names<br>
-     * - check that (1) the program to save exists (2) the program in saveAs doesn't exist<br>
      */
     private void pidCreateAndUpdate4Programs() throws Exception, JSONException {
+        // PRE
         int pidId = this.sPid.getUserId();
         Assert.assertTrue(this.sPid.isUserLoggedIn() && this.sMinscha.isUserLoggedIn());
         Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM"));
         Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + pidId));
+
+        // store (saveAs) 4 programs and check the count in the db
         saveAs(this.sPid, pidId, "p1", "<program>.1.pid</program>", "ok", Key.PROGRAM_SAVE_SUCCESS);
         saveAs(this.sPid, pidId, "p2", "<program>.2.pid</program>", "ok", Key.PROGRAM_SAVE_SUCCESS);
         saveAs(this.sPid, pidId, "p3", "<program>.3.pid</program>", "ok", Key.PROGRAM_SAVE_SUCCESS);
         saveAs(this.sPid, pidId, "p4", "<program>.4.pid</program>", "ok", Key.PROGRAM_SAVE_SUCCESS);
         Assert.assertEquals(4, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + pidId));
         Assert.assertEquals(4, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM"));
+
+        // update (save) program 2 and check the effect in the data base
         save(this.sPid, pidId, "p2", -1, "<program>.2.pid.updated</program>", "ok", Key.PROGRAM_SAVE_SUCCESS);
         Assert.assertEquals(4, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + pidId));
         Assert.assertEquals(4, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM"));
         String program = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + pidId + " and NAME = 'p2'");
         Assert.assertTrue(program.contains(".2.pid.updated"));
+
+        // check that 4 programs are stored, check their names
         assertProgramListingAsExpected(this.sPid, "['p1','p2','p3','p4']");
         Assert.assertTrue(this.sPid.isUserLoggedIn() && this.sMinscha.isUserLoggedIn());
+
+        // check correct server behavior: (1) the program to save exists (2) the program in saveAs doesn't exist
         saveAs(this.sPid, pidId, "p4", "<program>.4.pid</program>", "error", Key.PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS);
         save(this.sPid, pidId, "p5", 0, "<program>.5.pid</program>", "error", Key.PROGRAM_SAVE_ERROR_PROGRAM_TO_UPDATE_NOT_FOUND);
+
+        // POST
+        Assert.assertEquals(4, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + pidId));
+        Assert.assertEquals(4, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM"));
     }
 
     /**
@@ -513,6 +522,8 @@ public class RestInterfaceTest {
     }
 
     // small helpers
+    private static final boolean _____helper_start_____ = true;
+
     /**
      * call a REST service for user-related commands. Store the response into <code>this.response</code>. Check whether the expected result and the expected
      * message key are found
@@ -567,7 +578,7 @@ public class RestInterfaceTest {
      * @param httpSession the session on which behalf the call is executed
      * @param owner the id of the owner of the program
      * @param name the name of the program
-     * @param timestamp the last changed timestamp, maybe null. If the timestamp is -1, for convenience, it is read from the database.
+     * @param timestamp the last changed timestamp. If the timestamp is -1, for convenience, it is read from the database.
      * @param program the program text (XML)
      * @param result the expected result is either "ok" or "error"
      * @param msgOpt optional key for the message; maybe null

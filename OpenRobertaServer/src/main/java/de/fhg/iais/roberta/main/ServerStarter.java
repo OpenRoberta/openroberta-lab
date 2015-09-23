@@ -6,7 +6,6 @@ import java.util.Properties;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.server.SessionManager;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.server.session.HashSessionManager;
@@ -111,16 +110,35 @@ public class ServerStarter {
         server.setConnectors(new ServerConnector[] {
             http
         });
-        ServletContextHandler httpHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        httpHandler.setContextPath("/rest");
-        SessionManager sm = new HashSessionManager();
-        httpHandler.setSessionHandler(new SessionHandler(sm));
 
         RobertaGuiceServletConfig robertaGuiceServletConfig = new RobertaGuiceServletConfig(this.properties);
-        httpHandler.addEventListener(robertaGuiceServletConfig);
-        httpHandler.addFilter(GuiceFilter.class, "/*", null);
-        httpHandler.addServlet(DefaultServlet.class, "/*");
 
+        // REST API with /rest/<version>/ prefix
+        ServletContextHandler versionedHttpHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        versionedHttpHandler.setContextPath("/rest");
+        versionedHttpHandler.setSessionHandler(new SessionHandler(new HashSessionManager()));
+
+        versionedHttpHandler.addEventListener(robertaGuiceServletConfig);
+        versionedHttpHandler.addFilter(GuiceFilter.class, "/*", null);
+        versionedHttpHandler.addServlet(DefaultServlet.class, "/*");
+
+        // REST API without prefix - deprecated
+        ServletContextHandler deprecatedHttpHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        deprecatedHttpHandler.setContextPath("/*");
+        deprecatedHttpHandler.setSessionHandler(new SessionHandler(new HashSessionManager()));
+
+        deprecatedHttpHandler.addEventListener(robertaGuiceServletConfig);
+        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/alive/*", null);
+        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/admin/*", null);
+        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/conf/*", null);
+        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/ping/*", null);
+        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/program/*", null);
+        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/toolbox/*", null);
+        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/user/*", null);
+        deprecatedHttpHandler.addFilter(GuiceFilter.class, "/hello/*", null);
+        deprecatedHttpHandler.addServlet(DefaultServlet.class, "/*");
+
+        // websockets with /ws/<version>/ prefix
         ServletContextHandler wsHandler = new ServletContextHandler();
         wsHandler.setContextPath("/ws");
         wsHandler.addServlet(WebSocketServiceServlet.class, "/*");
@@ -132,8 +150,9 @@ public class ServerStarter {
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[] {
             staticResourceHandler,
-            httpHandler,
-            wsHandler
+            versionedHttpHandler,
+            wsHandler,
+            deprecatedHttpHandler
         });
         server.setHandler(handlers);
 

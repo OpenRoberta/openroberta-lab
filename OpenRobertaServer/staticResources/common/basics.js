@@ -3,7 +3,7 @@ var COMM = {};
 	/**
 	 * prefix to be prepended to each URL used in ajax calls.
 	 */
-	var urlPrefix = '/rest';
+	var urlPrefix = '/1.3.2'; // '/rest';
 	
     /**
      * the default error fn. Should be replaced by an own implementation. Not

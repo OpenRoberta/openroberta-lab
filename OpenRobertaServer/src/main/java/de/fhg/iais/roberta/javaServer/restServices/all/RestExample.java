@@ -33,7 +33,7 @@ public class RestExample {
     @Produces(MediaType.APPLICATION_JSON)
     public Response handle2() throws Exception {
         LOG.info("somebody wants to see HW as json - jsonobject");
-        JSONObject answer = new JSONObject().put("greeting", "Hello World").put("from", "jersey").put("to", "javascript");
+        JSONObject answer = new JSONObject().put("greeting", "Hello World").put("from", "jersey").put("to", "browser");
         return Response.ok(answer).build();
     }
 
