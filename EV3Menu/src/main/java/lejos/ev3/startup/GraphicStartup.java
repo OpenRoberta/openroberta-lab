@@ -2193,6 +2193,8 @@ public class GraphicStartup implements ORAmenu {
             lcd.drawString("Open Roberta:" + getORAversion(), 0, 2);
             lcd.drawString("leJOS:", 0, 4);
             lcd.drawString(version, 6, 4);
+            lcd.drawString(menuProperties.getProperty("buildTimeStamp").split(" ")[0], 0, 6);
+            lcd.drawString(menuProperties.getProperty("buildTimeStamp").split(" ")[1], 0, 7);
             getButtonPress();
         }
     }
