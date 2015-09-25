@@ -23,6 +23,7 @@ import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.shared.sensor.ev3.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.ev3.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.ev3.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.ev3.BluetoothSendAction;
@@ -1378,9 +1379,24 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     }
 
     private boolean isStringExpr(Expr<Void> e) {
-        // TODO: what about BINARY on the LHS
-        return e.getKind() == BlockType.STRING_CONST
-            || (e.getKind() == BlockType.VAR && ((Var<?>) e).getTypeVar() == BlocklyType.STRING || e.getKind() == BlockType.TEXT_JOIN_FUNCT);
+        switch ( e.getKind() ) {
+            case STRING_CONST:
+                return true;
+            case VAR:
+                return ((Var<?>) e).getTypeVar() == BlocklyType.STRING;
+            case FUNCTION_EXPR:
+                BlockType functionKind = ((FunctionExpr<?>) e).getFunction().getKind();
+                return functionKind == BlockType.TEXT_JOIN_FUNCT || functionKind == BlockType.LIST_INDEX_OF;
+            case METHOD_EXPR:
+                MethodCall<?> methodCall = (MethodCall<?>) ((MethodExpr<?>) e).getMethod();
+                return methodCall.getKind() == BlockType.METHOD_CALL && methodCall.getReturnType() == BlocklyType.STRING;
+            case ACTION_EXPR:
+                Action<?> action = ((ActionExpr<?>) e).getAction();
+                return action.getKind() == BlockType.BLUETOOTH_RECEIVED_ACTION;
+
+            default:
+                return false;
+        }
     }
 
     private boolean parenthesesCheck(Binary<Void> binary) {
