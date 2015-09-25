@@ -685,59 +685,74 @@ function loadConfigurationFromListing() {
 function shareProgramsFromListing() {
     // set rights for the user in the text input field 
     var shareWith = $('#programShareWith').val();
-    if (shareWith === userState.name) {
-        // you cannot share programs with yourself
-        displayMessage("ORA_USER_TO_SHARE_SAME_AS_LOGIN_USER", "POPUP", "");
-    } else if (shareWith !== '') {
-        var right = $('#write:checked').val();
-        if (!right) {
-            right = $('#read:checked').val();
-        }
-        if (right) {
-            var $programRow = $('#programNameTable .selected');
-            var programName = $programRow[0].children[0].textContent;
-            LOG.info("share program " + programName + " with '" + shareWith + " having right '" + right + "'");
-            PROGRAM.shareProgram(programName, shareWith, right, function(result) {
-                if (result.rc != 'ok') {
-                    displayInformation(result, "", result.message);
-                }
-                $('#share-program').modal('hide');
-                PROGRAM.refreshList(showPrograms);
-            });
-        }
-    }
-
-    // set rights as set by user in relations table
+    var alreadyShared = false;
     $("#relationsTable tbody tr").each(function(index) {
         var $this = $(this);
         var cols = $this.children("td");
-        var programName = cols.eq(0).text();
         var userToShareWith = cols.eq(2).text();
-        if (userToShareWith !== '') {
-            var readRight = cols.eq(3).children("input:checked").val();
-            var writeRight = cols.eq(4).children("input:checked").val();
-            var right = 'NONE';
-            if (writeRight === 'WRITE') {
-                right = writeRight;
-            } else if (readRight === 'READ') {
-                right = readRight;
+        // your cannot share programs twice
+        if (userToShareWith === shareWith) {
+            alreadyShared = true;
+        }
+    })
+    if (shareWith === userState.name || alreadyShared) {
+        // you cannot share programs with yourself
+        displayInformation({
+            rc : "not ok"
+        }, "", "ORA_USER_TO_SHARE_SAME_AS_LOGIN_USER");
+        //displayMessage("ORA_USER_TO_SHARE_SAME_AS_LOGIN_USER", "POPUP", "");
+    } else {
+        if (shareWith !== '') {
+            var right = $('#write:checked').val();
+            if (!right) {
+                right = $('#read:checked').val();
             }
-            LOG.info("share program " + programName + " with '" + userToShareWith + " having right '" + right + "'");
-            PROGRAM.shareProgram(programName, userToShareWith, right, function(result) {
-                if (result.rc === 'ok') {
-                    response(result);
-                    setRobotState(result);
-                    if (right === 'NONE') {
-                        displayInformation(result, "MESSAGE_RELATION_DELETED", result.message, programName);
-                    }
-                } else {
+            if (right) {
+                var $programRow = $('#programNameTable .selected');
+                var programName = $programRow[0].children[0].textContent;
+                LOG.info("share program " + programName + " with '" + shareWith + " having right '" + right + "'");
+                PROGRAM.shareProgram(programName, shareWith, right, function(result) {
                     displayInformation(result, "", result.message);
+                    if (result.rc === 'ok') {
+                        $('#show-relations').modal('hide');
+                    }
+                });
+            }
+        } else {
+            // set rights as set by user in relations table
+            $("#relationsTable tbody tr").each(function(index) {
+                var $this = $(this);
+                var cols = $this.children("td");
+                var programName = cols.eq(0).text();
+                var userToShareWith = cols.eq(2).text();
+                if (userToShareWith !== '') {
+                    var readRight = cols.eq(3).children("input:checked").val();
+                    var writeRight = cols.eq(4).children("input:checked").val();
+                    var right = 'NONE';
+                    if (writeRight === 'WRITE') {
+                        right = writeRight;
+                    } else if (readRight === 'READ') {
+                        right = readRight;
+                    }
+                    LOG.info("share program " + programName + " with '" + userToShareWith + " having right '" + right + "'");
+                    PROGRAM.shareProgram(programName, userToShareWith, right, function(result) {
+                        if (result.rc === 'ok') {
+                            response(result);
+                            setRobotState(result);
+                            if (right === 'NONE') {
+                                displayInformation(result, "MESSAGE_RELATION_DELETED", result.message, programName);
+                            }
+                            $('#show-relations').modal('hide');
+                        } else {
+                            displayInformation(result, "", result.message);
+                        }
+                    });
                 }
-                $('#share-program').modal('hide');
-                PROGRAM.refreshList(showPrograms);
             });
         }
-    });
+        PROGRAM.refreshList(showPrograms);
+    }
+    $('#programShareWith').val('');
 }
 
 /**

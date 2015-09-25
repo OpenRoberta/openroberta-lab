@@ -513,24 +513,6 @@ limitations under the License.
         </div>
     </div>
 
-    <!-- Popup show message -->
-    <div id="show-message" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title" lkey="Blockly.Msg.POPUP_ATTENTION">Attention</h3>
-                </div>
-                <div class="modal-body left-inner-addon">
-                    <span id="message">Message to show</span>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn" data-dismiss="modal">OK</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Popup confirm deletion of program -->
     <div id="confirmDeleteProgram" class="modal fade">
         <div class="modal-dialog">
@@ -671,12 +653,32 @@ limitations under the License.
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn" id="shareProgram" data-dismiss="modal">OK</button>
+                    <button type="button" class="btn" id="shareProgram">OK</button>
                     <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Popup show message -->
+    <div id="show-message" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title" lkey="Blockly.Msg.POPUP_ATTENTION">Attention</h3>
+                </div>
+                <div class="modal-body left-inner-addon">
+                    <span id="message">Message to show</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     <!-- ################## END POPUPS ################## -->
 
