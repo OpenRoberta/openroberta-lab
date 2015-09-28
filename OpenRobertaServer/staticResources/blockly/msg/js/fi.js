@@ -628,6 +628,7 @@ Blockly.Msg.POPUP_EMAIL = "Sähköposti";
 Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE = "Aloitetaan!";
 Blockly.Msg.POPUP_NAME = "Nimi";
 Blockly.Msg.POPUP_PASSWORD = "Salasana";
+Blockly.Msg.POPUP_RELEASE = "Version beta 1.3.1 <ul class='NonIcon' style='font-size:small'><li>Spanish available now!</li><li>Fixed bugs</li></ul></br>Version beta 1.3.0 <ul class='NonIcon' style='font-size:small'><li>Simulate a robot!</li><li>Share your program with a friend</li><li>Update the robots firmware Over-the-Air</li><li>USB cabel support for Chromebooks</li><li>Fixed many more bugs</li></ul></br>";  // untranslated
 Blockly.Msg.POPUP_REPEAT_PASSWORD = "Toista salasana";
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Jännite";
 Blockly.Msg.POPUP_ROBOT_BUSY = "Robottisi on varattu. Odota kunnes käynnissä olevan ohjelman suorittaminen päättyy.";
@@ -641,7 +642,7 @@ Blockly.Msg.POPUP_ROBOT_WAIT = "Waiting time";
 Blockly.Msg.POPUP_SHARE_READ = "READ";  // untranslated
 Blockly.Msg.POPUP_SHARE_WITH = "Nimi";
 Blockly.Msg.POPUP_SHARE_WRITE = "WRITE";  // untranslated
-Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE = "Seuraavat asiat kannattaa huomioida ennen kuin aloitat ohjelman käytön:<ul class='icon'><li class='document-text'>Täällä voit ohjelmoida EV3-robotteja </li><li class='Roberta'>Robottisi tarvitsee muokatun järjestelmäohjelmiston:<a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'> Tutustu siihen täällä!</a></li><li class='wi-fi'>Robottisi tarvitsee langattoman Wi-Fi-yhteyden</li><li class='arrow-right-thick'>Jos olet epävarma ja kaipaat lisäapua, niin tutustu ohjesivustoon... <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/A4AM'>more</a></li></ul><br /><p>Lisätietoja ohjelman uusista ominaisuuksista:</p>Versio beta 1.1.0<ul class='NonIcon' style='font-size:small'><li>EV3-robotin asetusten muokkaaminen</li><li>laajempi valikoima ohjelmointilohkoja </li><li>uusia funktioita</li><li>paranneltu valikkorakenne</li><li>laiteohjelmiston päivittäminen RobertaLabin kautta</li></ul></br>";
+Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE = "Seuraavat asiat kannattaa huomioida ennen kuin aloitat ohjelman käytön:<ul class='icon'><li class='document-text'>Täällä voit ohjelmoida EV3-robotteja </li><li class='Roberta'>Robottisi tarvitsee muokatun järjestelmäohjelmiston:<a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'> Tutustu siihen täällä!</a></li><li class='wi-fi'>Robottisi tarvitsee langattoman Wi-Fi-yhteyden</li><li class='arrow-right-thick'>Jos olet epävarma ja kaipaat lisäapua, niin tutustu ohjesivustoon... <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/A4AM'>more</a></li></ul><br /><p>Lisätietoja ohjelman uusista ominaisuuksista:</p></br>";
 Blockly.Msg.POPUP_USERNAME = "käyttäjätunnus";
 Blockly.Msg.POPUP_USERNAME_LOGOFF = "Olet kirjautuneena sisään.";
 Blockly.Msg.POPUP_VALUE = "Arvo";

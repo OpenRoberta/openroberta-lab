@@ -628,6 +628,7 @@ Blockly.Msg.POPUP_EMAIL = "E-Mail";
 Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE = "Ich weiß Bescheid!";
 Blockly.Msg.POPUP_NAME = "Name";
 Blockly.Msg.POPUP_PASSWORD = "Passwort";
+Blockly.Msg.POPUP_RELEASE = "Version beta 1.3.1<ul class='NonIcon' style='font-size:small'><li>Jetzt auch auf Spanisch!</li><li>Weitere kleinere Fehler behoben</li></ul></br>Version beta 1.3.0<ul class='NonIcon' style='font-size:small'><li>Jetzt neu mit Roboter Simulation!</li><li>Teile dein Programm mit Freunden</li><li>Neue Firmware Versionen jetzt über WLAN</li><li>USB Kabel Unterstützung für Chromeboooks</li><li>Weitere kleinere Fehler behoben</li></ul></br>";
 Blockly.Msg.POPUP_REPEAT_PASSWORD = "Passwort wiederholen";
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Batteriespannung";
 Blockly.Msg.POPUP_ROBOT_BUSY = "Your robot is busy. Please wait until the current program has finished.";  // untranslated
@@ -641,7 +642,7 @@ Blockly.Msg.POPUP_ROBOT_WAIT = "Wartezeit";
 Blockly.Msg.POPUP_SHARE_READ = "LESEN";
 Blockly.Msg.POPUP_SHARE_WITH = "Teilen mit ...";
 Blockly.Msg.POPUP_SHARE_WRITE = "SCHREIBEN";
-Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE = "Das musst du über Open Roberta Lab wissen:<ul class='icon'><li class='document-text'>Hier kann man auch EV3 Roboter programmieren</li><li class='Roberta'>Dein Roboter braucht ein spezielles Betriebssystem <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>check!</a></li><li class='wi-fi'>Dein Roboter braucht WLAN oder das USB-Programm <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>check!</a></li><li class='arrow-right-thick'>Schau in die Hilfe wenn du nicht weißt, ob dein Roboter das alles schon kann ... <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/A4AM'>mehr</a></li></ul><br /><p>Neu ist:</p>Version beta 1.3.0<ul class='NonIcon' style='font-size:small'><li>Jetzt neu mit Roboter Simulation!</li><li>Teile dein Programm mit Freunden</li><li>Neue Firmware Versionen jetzt über WLAN</li><li>USB Kabel Unterstützung für Chromeboooks</li><li>Weitere kleinere Fehler behoben</li></ul></br>";
+Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE = "Das musst du über Open Roberta Lab wissen:<ul class='icon'><li class='document-text'>Hier kann man auch EV3 Roboter programmieren</li><li class='Roberta'>Dein Roboter braucht ein spezielles Betriebssystem <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>check!</a></li><li class='wi-fi'>Dein Roboter braucht WLAN oder das USB-Programm <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>check!</a></li><li class='arrow-right-thick'>Schau in die Hilfe wenn du nicht weißt, ob dein Roboter das alles schon kann ... <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/A4AM'>mehr</a></li></ul><br /><p>Neu ist:</p></br>";
 Blockly.Msg.POPUP_USERNAME = "Benutzername";
 Blockly.Msg.POPUP_USERNAME_LOGOFF = "Du bist nicht angemeldet.";
 Blockly.Msg.POPUP_VALUE = "Wert";

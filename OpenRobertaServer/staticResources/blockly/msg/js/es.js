@@ -628,6 +628,7 @@ Blockly.Msg.POPUP_EMAIL = "Correo electrónico";
 Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE = "¡Lo tengo!";
 Blockly.Msg.POPUP_NAME = "Nombre";
 Blockly.Msg.POPUP_PASSWORD = "Contraseña";
+Blockly.Msg.POPUP_RELEASE = "Version beta 1.3.1 <ul class='NonIcon' style='font-size:small'><li>Spanish available now!</li><li>Fixed bugs</li></ul></br>Version beta 1.3.0 <ul class='NonIcon' style='font-size:small'><li>Simulate a robot!</li><li>Share your program with a friend</li><li>Update the robots firmware Over-the-Air</li><li>USB cabel support for Chromebooks</li><li>Fixed many more bugs</li></ul></br>";  // untranslated
 Blockly.Msg.POPUP_REPEAT_PASSWORD = "Repetir contraseña";
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Voltaje";
 Blockly.Msg.POPUP_ROBOT_BUSY = "Tu robot está ocupado. Por favor, espera hasta que el programa en ejecución termine.";
@@ -641,7 +642,7 @@ Blockly.Msg.POPUP_ROBOT_WAIT = "Tiempo de espera";
 Blockly.Msg.POPUP_SHARE_READ = "LEER";
 Blockly.Msg.POPUP_SHARE_WITH = "Nombre";
 Blockly.Msg.POPUP_SHARE_WRITE = "ESCRIBIR";
-Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE = "Tres cosas que deberías saber antes de empezar:<ul class='icon'><li class='document-text'>Aquí puedes programar robots EV3 </li><li class='Roberta'>Tu robot necesita un sistema especial <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>¡Compruébalo!</a></li><li class='wi-fi'>Tu robot necesita una conexión WiFi o USB<a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>¡Compruébalo!</a></li><li class='arrow-right-thick'>Si nos estás seguro, por favor dirígete a las páginas de ayuda... <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/A4AM'>more</a></li></ul><br /><p>Novedades</p>Versión beta 1.2. <ul class='NonIcon' style='font-size:small'><li>¡Ahora disponible en Finlandés!</li><li>Bloques para enviar y recibir mensajes</li><li>Conecta tu robot vía USB</li><li>los motores giran en sentido inverso con velocidad negativa speed</li><li>Resueltos muchos más errores</li></ul></br>";
+Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE = "Tres cosas que deberías saber antes de empezar:<ul class='icon'><li class='document-text'>Aquí puedes programar robots EV3 </li><li class='Roberta'>Tu robot necesita un sistema especial <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>¡Compruébalo!</a></li><li class='wi-fi'>Tu robot necesita una conexión WiFi o USB<a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>¡Compruébalo!</a></li><li class='arrow-right-thick'>Si nos estás seguro, por favor dirígete a las páginas de ayuda... <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/A4AM'>more</a></li></ul><br /><p>Novedades</p></br>";
 Blockly.Msg.POPUP_USERNAME = "Nombre de usuario";
 Blockly.Msg.POPUP_USERNAME_LOGOFF = "No has iniciado sesión.";
 Blockly.Msg.POPUP_VALUE = "Valor";

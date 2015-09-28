@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-09-25 13:38:16.822000",
+		"lastupdated": "2015-09-28 11:56:22.172070",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -691,7 +691,8 @@
 	"POPUP_ABOUT_TEXT": "The Open Roberta Lab is a cloud-based integrated programming environment that enables children and adolescents to program easily Lego Mindstorms EV3 robots. This platform is completely open source so taking part is desirable! Both the software and the open source developer tools are available via Fraunhofer servers.",
 	"POPUP_ABOUT_TEXT_DEV": "The Open Roberta Lab is an open-source programming platform developed by Fraunhofer IAIS within the initiative <a href='http://www.roberta-home.de/'>»Roberta – Learning with Robots«</a>",
 	"POPUP_ABOUT_TEXT_GOOG": "Open Roberta was initiated in collaboration with Google Germany to reduce the hurdles for students, teachers and schools programming educational robots. Open Roberta is financed by Google.org (2014 - 2015) with 1Mio Euro.</a>",
-	"POPUP_TEXT_STARTUP_MESSAGE": "Three things you should know before starting:<ul class='icon'><li class='document-text'>Here you can program real EV3 robots </li><li class='Roberta'>Your robot needs a special system <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>check!</a></li><li class='wi-fi'>Your robot needs wi-fi or a USB program <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>check!</a></li><li class='arrow-right-thick'>If you are not sure, please have a look at the help pages ... <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/A4AM'>more</a></li></ul><br /><p>What is new?</p>Version beta 1.3.0 <ul class='NonIcon' style='font-size:small'><li>Simulate a robot!</li><li>Share your program with a friend</li><li>Update the robots firmware Over-the-Air</li><li>USB cabel support for Chromebooks</li><li>Fixed many more bugs</li></ul></br>",
+	"POPUP_TEXT_STARTUP_MESSAGE": "Three things you should know before starting:<ul class='icon'><li class='document-text'>Here you can program real EV3 robots </li><li class='Roberta'>Your robot needs a special system <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>check!</a></li><li class='wi-fi'>Your robot needs wi-fi or a USB program <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>check!</a></li><li class='arrow-right-thick'>If you are not sure, please have a look at the help pages ... <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/A4AM'>more</a></li></ul><br /><p>What is new?</p>",
+	"POPUP_RELEASE": "Version beta 1.3.1 <ul class='NonIcon' style='font-size:small'><li>Spanish available now!</li><li>Fixed bugs</li></ul></br>Version beta 1.3.0 <ul class='NonIcon' style='font-size:small'><li>Simulate a robot!</li><li>Share your program with a friend</li><li>Update the robots firmware Over-the-Air</li><li>USB cabel support for Chromebooks</li><li>Fixed many more bugs</li></ul></br>",
 	"POPUP_ABOUT_JOIN": "I want to help",
 	"POPUP_USERNAME": "Username",
 	"POPUP_USERNAME_LOGOFF": "You are not logged in.",
