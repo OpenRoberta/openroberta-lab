@@ -628,6 +628,7 @@ Blockly.Msg.POPUP_EMAIL = "E-Mail";
 Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE = "Forstået!";
 Blockly.Msg.POPUP_NAME = "Navn";
 Blockly.Msg.POPUP_PASSWORD = "Kodeord";
+Blockly.Msg.POPUP_RELEASE = "Version beta 1.3.1 <ul class='NonIcon' style='font-size:small'><li>Spanish available now!</li><li>Fixed bugs</li></ul></br>Version beta 1.3.0 <ul class='NonIcon' style='font-size:small'><li>Simulate a robot!</li><li>Share your program with a friend</li><li>Update the robots firmware Over-the-Air</li><li>USB cabel support for Chromebooks</li><li>Fixed many more bugs</li></ul></br>";  // untranslated
 Blockly.Msg.POPUP_REPEAT_PASSWORD = "Gentag kodeord";
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Spænding";
 Blockly.Msg.POPUP_ROBOT_BUSY = "Din robot kører allerede. Vent venligst indtil det nuværende program er afsluttet.";
@@ -641,7 +642,7 @@ Blockly.Msg.POPUP_ROBOT_WAIT = "Ventetid";
 Blockly.Msg.POPUP_SHARE_READ = "LÆS";
 Blockly.Msg.POPUP_SHARE_WITH = "Navn";
 Blockly.Msg.POPUP_SHARE_WRITE = "SKRIV";
-Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE = "Tre ting du bør vide før du starter:<ul class='icon'><li class='document-text'>Her kan du programmere EV3 robotter</li><li class='Roberta'>Din robot skal have et specielt styresystem <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>check!</a></li><li class='wi-fi'>Din robot skal bruge et wi-fi eller et USB program <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>check!</a></li><li class='arrow-right-thick'>Hvis du ikke er sikker, tag venligst et kig på disse hjælp sider ... <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/A4AM'>mere</a></li></ul><br /><p>Nyheder?</p>Version beta 1.2.0<ul class='NonIcon' style='font-size:small'><li>Nu også på finsk!</li><li>Blokke til at sende og modtage beskeder</li><li>Tilslut din robot via USB</li><li>Kør motorer baglæns med negative hastigheder</li><li>Repareret mange flere fejl</li></ul></br>";
+Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE = "Tre ting du bør vide før du starter:<ul class='icon'><li class='document-text'>Her kan du programmere EV3 robotter</li><li class='Roberta'>Din robot skal have et specielt styresystem <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>check!</a></li><li class='wi-fi'>Din robot skal bruge et wi-fi eller et USB program <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd'>check!</a></li><li class='arrow-right-thick'>Hvis du ikke er sikker, tag venligst et kig på disse hjælp sider ... <a target='_blank' href='https://mp-devel.iais.fraunhofer.de/wiki/x/A4AM'>mere</a></li></ul><br /><p>Nyheder?</p></br>";
 Blockly.Msg.POPUP_USERNAME = "Brugernavn";
 Blockly.Msg.POPUP_USERNAME_LOGOFF = "Du er ikke logget ind.";
 Blockly.Msg.POPUP_VALUE = "Værdi";
