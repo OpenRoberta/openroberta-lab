@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.testutil.Helper;
 public class MathRoundTest {
     @Test
     public void Test() throws Exception {
-        String a = "((float)Math.round(0))((float)Math.ceil(0))((float)Math.floor(0))";
+        String a = "BlocklyMethods.round(0)BlocklyMethods.ceil(0)BlocklyMethods.floor(0)";
 
         Helper.assertCodeIsOk(a, "/syntax/math/math_round.xml");
     }

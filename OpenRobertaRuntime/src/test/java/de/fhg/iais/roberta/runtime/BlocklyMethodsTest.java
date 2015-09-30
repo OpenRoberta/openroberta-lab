@@ -95,15 +95,27 @@ public class BlocklyMethodsTest {
     }
 
     @Test
-    public void randInt() {
-        int a = (int) BlocklyMethods.randInt(2, 10);
-        Assert.assertTrue(a >= 2 && a <= 10);
+    public void sqrt() {
+        float a = BlocklyMethods.sqrt(25);
+        Assert.assertEquals(a, 5, 0);
 
-        a = (int) BlocklyMethods.randInt(10, 2);
-        Assert.assertTrue(a >= 2 && a <= 10);
+        a = BlocklyMethods.sqrt(26);
+        Assert.assertEquals(a, 5.099, 3);
+    }
 
-        a = (int) BlocklyMethods.randInt(10, 10);
-        Assert.assertTrue(a == 10);
+    @Test
+    public void abs() {
+        float a = BlocklyMethods.abs(-25);
+        Assert.assertEquals(a, 25, 0);
+
+        a = BlocklyMethods.abs(26);
+        Assert.assertEquals(a, 26, 0);
+    }
+
+    @Test
+    public void log() {
+        float a = BlocklyMethods.log(25);
+        Assert.assertEquals(a, 1.397, 3);
     }
 
     @Test

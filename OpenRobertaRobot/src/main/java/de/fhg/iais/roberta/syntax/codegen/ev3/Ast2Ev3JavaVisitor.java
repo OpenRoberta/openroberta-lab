@@ -1176,68 +1176,69 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMathSingleFunct(MathSingleFunct<Void> mathSingleFunct) {
+        this.sb.append("BlocklyMethods.");
         switch ( mathSingleFunct.getFunctName() ) {
             case ROOT:
-                this.sb.append("((float) Math.sqrt(");
+                this.sb.append("sqrt(");
                 break;
             case ABS:
-                this.sb.append("((float) Math.abs(");
+                this.sb.append("abs(");
                 break;
             case LN:
-                this.sb.append("((float) Math.log(");
+                this.sb.append("log(");
                 break;
             case LOG10:
-                this.sb.append("((float) Math.log10(");
+                this.sb.append("log10(");
                 break;
             case EXP:
-                this.sb.append("((float) Math.exp(");
+                this.sb.append("exp(");
                 break;
             case POW10:
-                this.sb.append("((float) Math.pow(10, ");
+                this.sb.append("pow(10, ");
                 break;
             case SIN:
-                this.sb.append("((float) Math.sin(");
+                this.sb.append("sin(");
                 break;
             case COS:
-                this.sb.append("((float) Math.cos(");
+                this.sb.append("cos(");
                 break;
             case TAN:
-                this.sb.append("((float) Math.tan(");
+                this.sb.append("tan(");
                 break;
             case ASIN:
-                this.sb.append("((float) Math.asin(");
+                this.sb.append("asin(");
                 break;
             case ATAN:
-                this.sb.append("((float) Math.atan(");
+                this.sb.append("atan(");
                 break;
             case ACOS:
-                this.sb.append("((float) Math.acos(");
+                this.sb.append("acos(");
                 break;
             case ROUND:
-                this.sb.append("((float) Math.round(");
+                this.sb.append("round(");
                 break;
             case ROUNDUP:
-                this.sb.append("((float) Math.ceil(");
+                this.sb.append("ceil(");
                 break;
             case ROUNDDOWN:
-                this.sb.append("((float) Math.floor(");
+                this.sb.append("floor(");
                 break;
             default:
                 break;
         }
         mathSingleFunct.getParam().get(0).visit(this);
-        this.sb.append("))");
+        this.sb.append(")");
 
         return null;
     }
 
     @Override
     public Void visitMathPowerFunct(MathPowerFunct<Void> mathPowerFunct) {
-        this.sb.append("((float) Math.pow(");
+        this.sb.append("BlocklyMethods.pow(");
         mathPowerFunct.getParam().get(0).visit(this);
         this.sb.append(", ");
         mathPowerFunct.getParam().get(1).visit(this);
-        this.sb.append("))");
+        this.sb.append(")");
         return null;
     }
 

@@ -156,6 +156,157 @@ public class BlocklyMethods {
     }
 
     /**
+     * Square root of a number
+     *
+     * @param number
+     * @return
+     */
+    public static float sqrt(float number) {
+        return (float) Math.sqrt(number);
+    }
+
+    /**
+     * Absolute value of a number
+     *
+     * @param number
+     * @return
+     */
+    public static float abs(float number) {
+        return Math.abs(number);
+    }
+
+    /**
+     * Returns the natural logarithm (base e) of a float value
+     *
+     * @param number
+     * @return
+     */
+    public static float log(float number) {
+        return (float) Math.log(number);
+    }
+
+    /**
+     * Returns the natural logarithm (base e) of a float value
+     *
+     * @param number
+     * @return
+     */
+    public static float log10(float number) {
+        return (float) Math.log10(number);
+    }
+
+    /**
+     * Returns Euler's number e raised to the power of a float value
+     *
+     * @param number
+     * @return
+     */
+    public static float exp(float number) {
+        return (float) Math.exp(number);
+    }
+
+    /**
+     * Returns the value of the first argument raised to the power of the second argument
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    public static float pow(float a, float b) {
+        return (float) Math.pow(a, b);
+    }
+
+    /**
+     * Returns the trigonometric sine of an angle
+     *
+     * @param number
+     * @return
+     */
+    public static float sin(float number) {
+        return (float) Math.sin(number);
+    }
+
+    /**
+     * Returns the trigonometric cosine of an angle
+     *
+     * @param number
+     * @return
+     */
+    public static float cos(float number) {
+        return (float) Math.cos(number);
+    }
+
+    /**
+     * Returns the trigonometric tangent of an angle
+     *
+     * @param number
+     * @return
+     */
+    public static float tan(float number) {
+        return (float) Math.tan(number);
+    }
+
+    /**
+     * Returns the arc sine of a value; the returned angle is in the range -pi/2 through pi/2
+     *
+     * @param number
+     * @return
+     */
+    public static float asin(float number) {
+        return (float) Math.asin(number);
+    }
+
+    /**
+     * Returns the arc tangent of a value; the returned angle is in the range -pi/2 through pi/2
+     *
+     * @param number
+     * @return
+     */
+    public static float atan(float number) {
+        return (float) Math.atan(number);
+    }
+
+    /**
+     * Returns the arc cosine of a value; the returned angle is in the range 0.0 through pi
+     *
+     * @param number
+     * @return
+     */
+    public static float acos(float number) {
+        return (float) Math.acos(number);
+    }
+
+    /**
+     * Returns the closest whole number to the argument, with ties rounding up
+     *
+     * @param number
+     * @return
+     */
+    public static float round(float number) {
+        return Math.round(number);
+    }
+
+    /**
+     * Returns the smallest (closest to negative infinity) float value that is greater than or equal to the argument and is equal to a mathematical integer
+     *
+     * @param number
+     * @return
+     */
+    public static float ceil(float number) {
+        return (float) Math.ceil(number);
+    }
+
+    /**
+     * Returns the largest (closest to positive infinity) float value that is less than or equal to the argument and is equal to a mathematical integer
+     *
+     * @param number
+     * @return
+     */
+    public static float floor(float number) {
+        return (float) Math.floor(number);
+    }
+
+    /**
      * Create float ArrayList. Client must provide elements to be added to the ArrayList.
      *
      * @param elements to be added in the array list
