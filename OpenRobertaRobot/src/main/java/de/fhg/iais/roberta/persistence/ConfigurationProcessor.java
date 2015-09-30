@@ -89,8 +89,8 @@ public class ConfigurationProcessor extends AbstractProcessor {
             configurationInfos.put(configurationInfo);
             configurationInfo.put(program.getName());
             configurationInfo.put(program.getOwner().getAccount());
-            configurationInfo.put(program.getCreated().toString());
-            configurationInfo.put(program.getLastChanged().toString());
+            configurationInfo.put(program.getCreated().getTime());
+            configurationInfo.put(program.getLastChanged().getTime());
         }
         setSuccess(Key.CONFIGURATION_GET_ALL_SUCCESS, "" + configurationInfos.length());
         return configurationInfos;
