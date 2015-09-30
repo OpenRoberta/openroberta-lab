@@ -91,9 +91,9 @@ public class ProgramProcessor extends AbstractProcessor {
             }
 
             programInfo.put(sharedWithUser);
-            programInfo.put(program.getCreated().toString());
-            programInfo.put(program.getLastChanged().toString());
-            programInfo.put(program.getLastChanged().toString());
+            programInfo.put(program.getCreated().getTime());
+            programInfo.put(program.getLastChanged().getTime());
+            programInfo.put(program.getLastChanged().getTime());
             programInfos.put(programInfo);
         }
         // Now we find all the programs which are not owned by the user but have been shared to him
@@ -104,9 +104,9 @@ public class ProgramProcessor extends AbstractProcessor {
             programInfo2.put(accessRight.getProgram().getOwner().getAccount());
             //            programInfo2.put(userProgram.getProgram().getNumberOfBlocks());
             programInfo2.put(accessRight.getRelation().toString());
-            programInfo2.put(accessRight.getProgram().getCreated().toString());
-            programInfo2.put(accessRight.getProgram().getLastChanged().toString());
-            programInfo2.put(accessRight.getProgram().getLastChanged().toString());
+            programInfo2.put(accessRight.getProgram().getCreated().getTime());
+            programInfo2.put(accessRight.getProgram().getLastChanged().getTime());
+            programInfo2.put(accessRight.getProgram().getLastChanged().getTime());
             programInfos.put(programInfo2);
         }
 
