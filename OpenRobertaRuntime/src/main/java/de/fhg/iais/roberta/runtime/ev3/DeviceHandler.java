@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.runtime.ev3;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import de.fhg.iais.roberta.components.HardwareComponent;
 import de.fhg.iais.roberta.components.ev3.EV3Actor;
@@ -37,8 +36,8 @@ public class DeviceHandler {
     private final Map<SensorPort, SampleProviderBean[]> lejosSensors = new HashMap<>();
     private EV3GyroSensor gyroSensor = null;
 
-    private final Map<ActorPort, RegulatedMotor> lejosRegulatedMotors = new TreeMap<>();
-    private final Map<ActorPort, EncoderMotor> lejosUnregulatedMotors = new TreeMap<>();
+    private final Map<ActorPort, RegulatedMotor> lejosRegulatedMotors = new HashMap<>();
+    private final Map<ActorPort, EncoderMotor> lejosUnregulatedMotors = new HashMap<>();
 
     private TextLCD lcd = LocalEV3.get().getTextLCD();
 

@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.runtime.ev3;
 
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import lejos.hardware.Bluetooth;
 import lejos.remote.nxt.NXTCommConnector;
 import lejos.remote.nxt.NXTConnection;
@@ -20,11 +21,11 @@ public class BluetoothComImpl implements BluetoothCom {
             try {
                 Thread.sleep(100);
             } catch ( InterruptedException e ) {
-                e.printStackTrace();
+                throw new DbcException(e);
             }
         }
         if ( con == null ) {
-            System.err.println("Couldn't connect in given time");
+            throw new DbcException("Couldn't connect in given time");
         }
         return con;
     }
