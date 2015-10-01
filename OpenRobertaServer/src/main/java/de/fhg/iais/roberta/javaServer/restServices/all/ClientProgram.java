@@ -101,7 +101,7 @@ public class ClientProgram {
                 }
                 if ( pp.isOk() ) {
                     if ( program != null ) {
-                        response.put("lastChanged", program.getLastChanged());
+                        response.put("lastChanged", program.getLastChanged().getTime());
                     } else {
                         ClientProgram.LOG.error("TODO: check potential error: the saved program should never be null");
                     }
