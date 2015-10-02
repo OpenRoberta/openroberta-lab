@@ -558,7 +558,7 @@ Blockly.Msg.ORA_PROGRAM_GET_ONE_SUCCESS = "Du hast das Programm $ geladen.";
 Blockly.Msg.ORA_PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS = "Dieses Programm existiert bereits.";
 Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_NOT_SAVED_TO_DB = "Ein Fehler ist beim Speichern des Programmes aufgetreten.";
 Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION = "You do not have the permission to modify this program!";  // untranslated
-Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING = "This program is already locked!";  // untranslated
+Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING = "Dein Programm wurde kürzlich von jemand anderem geändert. Du kannst deine Änderungen jetzt nur in einem neuen Program speichern, >speichern unter<!";
 Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_PROGRAM_TO_UPDATE_NOT_FOUND = "Das Programm konnte nicht gefunden werden, ein Update ist unmöglich.";
 Blockly.Msg.ORA_PROGRAM_SAVE_SUCCESS = "Das Programm $ wurde gespeichert.";
 Blockly.Msg.ORA_PROGRAM_TO_SHARE_DOES_NOT_EXIST = "Das Programm $, das du teilen möchtest, gibt es leider nicht.";
@@ -628,7 +628,7 @@ Blockly.Msg.POPUP_EMAIL = "E-Mail";
 Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE = "Ich weiß Bescheid!";
 Blockly.Msg.POPUP_NAME = "Name";
 Blockly.Msg.POPUP_PASSWORD = "Passwort";
-Blockly.Msg.POPUP_RELEASE = "Version beta 1.3.1<ul class='NonIcon' style='font-size:small'><li>Jetzt auch auf Spanisch!</li><li>Weitere kleinere Fehler behoben</li></ul></br>Version beta 1.3.0<ul class='NonIcon' style='font-size:small'><li>Jetzt neu mit Roboter Simulation!</li><li>Teile dein Programm mit Freunden</li><li>Neue Firmware Versionen jetzt über WLAN</li><li>USB Kabel Unterstützung für Chromeboooks</li><li>Weitere kleinere Fehler behoben</li></ul></br>";
+Blockly.Msg.POPUP_RELEASE = "Version beta 1.3.2<ul class='NonIcon' style='font-size:small'><li>Zeitzonenproblem beim Speichern eines Programmes behoben</li></ul>Version beta 1.3.1<ul class='NonIcon' style='font-size:small'><li>Jetzt auch auf Spanisch!</li><li>Weitere kleinere Fehler behoben</li></ul>Version beta 1.3.0<ul class='NonIcon' style='font-size:small'><li>Jetzt neu mit Roboter Simulation!</li><li>Teile dein Programm mit Freunden</li><li>Neue Firmware Versionen jetzt über WLAN</li><li>USB Kabel Unterstützung für Chromeboooks</li><li>Weitere kleinere Fehler behoben</li></ul></br>";
 Blockly.Msg.POPUP_REPEAT_PASSWORD = "Passwort wiederholen";
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Batteriespannung";
 Blockly.Msg.POPUP_ROBOT_BUSY = "Your robot is busy. Please wait until the current program has finished.";  // untranslated

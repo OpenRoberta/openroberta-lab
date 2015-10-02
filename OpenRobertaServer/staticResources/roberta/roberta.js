@@ -715,6 +715,7 @@ function shareProgramsFromListing() {
                     displayInformation(result, "", result.message);
                     if (result.rc === 'ok') {
                         $('#show-relations').modal('hide');
+                        PROGRAM.refreshList(showPrograms);                       
                     }
                 });
             }
@@ -743,6 +744,7 @@ function shareProgramsFromListing() {
                                 displayInformation(result, "MESSAGE_RELATION_DELETED", result.message, programName);
                             }
                             $('#show-relations').modal('hide');
+                            PROGRAM.refreshList(showPrograms);                            
                         } else {
                             displayInformation(result, "", result.message);
                         }
@@ -750,7 +752,6 @@ function shareProgramsFromListing() {
                 }
             });
         }
-        PROGRAM.refreshList(showPrograms);
     }
     $('#programShareWith').val('');
 }

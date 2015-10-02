@@ -1429,7 +1429,7 @@ Blockly.Msg.POPUP_ABOUT_TEXT = 'The Open Roberta Lab is a cloud-based integrated
 Blockly.Msg.POPUP_ABOUT_TEXT_DEV = 'The Open Roberta Lab is an open-source programming platform developed by Fraunhofer IAIS within the initiative <a href="http://www.roberta-home.de/">»Roberta – Learning with Robots«</a>';
 Blockly.Msg.POPUP_ABOUT_TEXT_GOOG = 'Open Roberta was initiated in collaboration with Google Germany to reduce the hurdles for students, teachers and schools programming educational robots. Open Roberta is financed by Google.org (2014 - 2015) with 1Mio Euro.</a>';
 Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE = 'Three things you should know before starting:<ul class="icon"><li class="document-text">Here you can program real EV3 robots </li><li class="Roberta">Your robot needs a special system <a target="_blank" href="https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd">check!</a></li><li class="wi-fi">Your robot needs wi-fi or a USB program <a target="_blank" href="https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd">check!</a></li><li class="arrow-right-thick">If you are not sure, please have a look at the help pages ... <a target="_blank" href="https://mp-devel.iais.fraunhofer.de/wiki/x/A4AM">more</a></li></ul><br /><p>What is new?</p>';
-Blockly.Msg.POPUP_RELEASE = 'Version beta 1.3.1 <ul class="NonIcon" style="font-size:small"><li>Spanish available now!</li><li>Fixed bugs</li></ul></br>Version beta 1.3.0 <ul class="NonIcon" style="font-size:small"><li>Simulate a robot!</li><li>Share your program with a friend</li><li>Update the robots firmware Over-the-Air</li><li>USB cabel support for Chromebooks</li><li>Fixed many more bugs</li></ul></br>';
+Blockly.Msg.POPUP_RELEASE = 'Version beta 1.3.2 <ul class="NonIcon" style="font-size:small"><li>Fix timestamp bug for save program</li></ul>Version beta 1.3.1 <ul class="NonIcon" style="font-size:small"><li>Spanish available now!</li><li>Fixed bugs</li></ul>Version beta 1.3.0 <ul class="NonIcon" style="font-size:small"><li>Simulate a robot!</li><li>Share your program with a friend</li><li>Update the robots firmware Over-the-Air</li><li>USB cabel support for Chromebooks</li><li>Fixed many more bugs</li></ul></br>';
 Blockly.Msg.POPUP_ABOUT_JOIN = 'I want to help';
 Blockly.Msg.POPUP_USERNAME = 'Username';
 Blockly.Msg.POPUP_USERNAME_LOGOFF = 'You are not logged in.';
@@ -1519,7 +1519,7 @@ Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_NOT_SAVED_TO_DB = 'An error has occured while
 Blockly.Msg.ORA_PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS = 'This program already exists.';
 Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_PROGRAM_TO_UPDATE_NOT_FOUND = 'The program could not be found, so it is impossible to update it.';
 Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION = 'You do not have the permission to modify this program!';
-Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING = 'This program is already locked!';
+Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING = 'This program has been changed recently by someone else. You can can save your changes in a new program, choose >save as< !';
 Blockly.Msg.ORA_PROGRAM_GET_ALL_SUCCESS = 'Programs loaded';
 Blockly.Msg.ORA_PROGRAM_DELETE_SUCCESS = 'Program deeleted';
 Blockly.Msg.ORA_PROGRAM_DELETE_ERROR = 'An error error has occured while deleding the configuration. Please try it again!';

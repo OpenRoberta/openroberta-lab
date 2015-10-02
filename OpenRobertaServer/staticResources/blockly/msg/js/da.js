@@ -558,7 +558,7 @@ Blockly.Msg.ORA_PROGRAM_GET_ONE_SUCCESS = "Program åbnet";
 Blockly.Msg.ORA_PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS = "This program already exists.";  // untranslated
 Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_NOT_SAVED_TO_DB = "Kunne ikke gemme program.";
 Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION = "You do not have the permission to modify this program!";  // untranslated
-Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING = "This program is already locked!";  // untranslated
+Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING = "This program has been changed recently by someone else. You can can save your changes in a new program, choose >save as< !";  // untranslated
 Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_PROGRAM_TO_UPDATE_NOT_FOUND = "The program could not be found, so it is impossible to update it.";  // untranslated
 Blockly.Msg.ORA_PROGRAM_SAVE_SUCCESS = "Program gemt";
 Blockly.Msg.ORA_PROGRAM_TO_SHARE_DOES_NOT_EXIST = "Det program der skulle deles kunne ikke findes.";
@@ -628,7 +628,7 @@ Blockly.Msg.POPUP_EMAIL = "E-Mail";
 Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE = "Forstået!";
 Blockly.Msg.POPUP_NAME = "Navn";
 Blockly.Msg.POPUP_PASSWORD = "Kodeord";
-Blockly.Msg.POPUP_RELEASE = "Version beta 1.3.1 <ul class='NonIcon' style='font-size:small'><li>Spanish available now!</li><li>Fixed bugs</li></ul></br>Version beta 1.3.0 <ul class='NonIcon' style='font-size:small'><li>Simulate a robot!</li><li>Share your program with a friend</li><li>Update the robots firmware Over-the-Air</li><li>USB cabel support for Chromebooks</li><li>Fixed many more bugs</li></ul></br>";  // untranslated
+Blockly.Msg.POPUP_RELEASE = "Version beta 1.3.2 <ul class='NonIcon' style='font-size:small'><li>Fix timestamp bug for save program</li></ul>Version beta 1.3.1 <ul class='NonIcon' style='font-size:small'><li>Spanish available now!</li><li>Fixed bugs</li></ul>Version beta 1.3.0 <ul class='NonIcon' style='font-size:small'><li>Simulate a robot!</li><li>Share your program with a friend</li><li>Update the robots firmware Over-the-Air</li><li>USB cabel support for Chromebooks</li><li>Fixed many more bugs</li></ul></br>";  // untranslated
 Blockly.Msg.POPUP_REPEAT_PASSWORD = "Gentag kodeord";
 Blockly.Msg.POPUP_ROBOT_BATTERY = "Spænding";
 Blockly.Msg.POPUP_ROBOT_BUSY = "Din robot kører allerede. Vent venligst indtil det nuværende program er afsluttet.";
