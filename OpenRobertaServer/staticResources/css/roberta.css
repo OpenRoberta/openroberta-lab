@@ -625,19 +625,19 @@ ul.nonIcon li:before {
 }
 
 ul.icon li.document-text:before {
-	content: "\e664";
+	content: "\e6e9";
 }
 
 ul.icon li.Roberta:before {
-	content: "\e600";
+	content: "\e602";
 }
 
 ul.icon li.wi-fi:before {
-	content: "\e746";
+	content: "\e623";
 }
 
 ul.icon li.arrow-right-thick:before {
-	content: "\e61c";
+	content: "\e60c";
 }
 /***** END Overwrite Bootstrap-CSS *****/
 .atlwdg-trigger.atlwdg-RIGHT {left: 100%;top: 40%;-webkit-transform-origin: top left;-webkit-transform: rotate(90deg);-moz-transform: rotate(90deg);-moz-transform-origin: top left;-ms-transform: rotate(90deg);-ms-transform-origin: top left;z-index:1000000000;}
