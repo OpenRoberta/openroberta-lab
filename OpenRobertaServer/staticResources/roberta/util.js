@@ -37,9 +37,13 @@ var UTIL = {};
      * @param {date}
      *            date from server to be formatted
      */
-    UTIL.formatDate = function(date) {
-        if (date) {
-            return moment(date).format('DD.MM.YYYY, HH:mm:ss');
+    UTIL.formatDate = function(dateLong) {
+        if (dateLong) {
+            var date = new Date(dateLong);
+            var datestring = ("0" + date.getDate()).slice(-2) + "." + ("0" + (date.getMonth() + 1)).slice(-2) + "." + date.getFullYear() + ", "
+                    + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+            return datestring;
+//            return moment(date).format('DD.MM.YYYY, HH:mm:ss');
         }
         return "";
     };
