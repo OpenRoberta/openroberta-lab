@@ -348,8 +348,8 @@ function saveAsProgramToServer() {
     var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
     var xmlText = Blockly.Xml.domToText(xml);
     LOG.info('saveAs program ' + userState.program + ' login: ' + userState.id);
-    var timestamp = UTIL.parseDate(userState.programTimestamp);
-    PROGRAM.saveAsProgramToServer(progName, timestamp, xmlText, function(result) {
+//    var timestamp = UTIL.parseDate(userState.programTimestamp);
+    PROGRAM.saveAsProgramToServer(progName, userState.programTimestamp, xmlText, function(result) {
         response(result);
         if (result.rc === 'ok') {
             setProgram(progName);
@@ -357,7 +357,7 @@ function saveAsProgramToServer() {
             Blockly.getMainWorkspace().saveButton.enable();
             userState.programSaved = true;
             userState.programModified = false;
-            userState.programTimestamp = UTIL.formatDateComplete(result.lastChanged);
+            userState.programTimestamp = result.lastChanged;
             displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM_AS", result.message, userState.program);
         }
     });
@@ -373,11 +373,11 @@ function saveToServer() {
         userState.programSaved = true;
         LOG.info('save program ' + userState.program + ' login: ' + userState.id);
         $('.modal').modal('hide'); // close all opened popups
-        var timestamp = UTIL.parseDate(userState.programTimestamp);
-        PROGRAM.saveProgramToServer(userState.program, userState.programShared, timestamp, xmlText, function(result) {
+//        var timestamp = UTIL.parseDate(userState.programTimestamp);
+        PROGRAM.saveProgramToServer(userState.program, userState.programShared, userState.programTimestamp, xmlText, function(result) {
             if (result.rc === 'ok') {
                 userState.programModified = false;
-                userState.programTimestamp = UTIL.formatDateComplete(result.lastChanged);
+                userState.programTimestamp = result.lastChanged;
             }
             displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM", result.message, userState.program);
         });
@@ -999,10 +999,10 @@ function initProgramNameTable() {
             }
         }, {
             "aTargets" : [ 5 ], // indexes of columns to be formatted
-            "sType" : "date-de",
-            "mRender" : function(data) {
-                return UTIL.formatDateComplete(data);
-            }
+//            "sType" : "date-de",
+//            "mRender" : function(data) {
+//                return UTIL.formatDateComplete(data);
+//            }
         }, {
             "aTargets" : [ 2 ], // indexes of columns to be formatted
             "mRender" : function(data, type, row) {
@@ -1221,8 +1221,9 @@ function initRobot() {
  * Switch robot
  */
 function switchRobot(robot) {
-    if (robot === userState.robot)
+    if (robot === userState.robot) {
         return;
+    }
     ROBOT.setRobot(robot, function(result) {
         if (result.rc === "ok") {
             userState.robot = robot;

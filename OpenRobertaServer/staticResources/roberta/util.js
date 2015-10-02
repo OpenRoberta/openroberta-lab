@@ -37,16 +37,13 @@ var UTIL = {};
      * @param {date}
      *            date from server to be formatted
      */
-    UTIL.formatDate = function(date) {
-        if (date) {
-            var YYYY = date.substring(0, 4);
-            var MM = date.substring(5, 7);
-            var DD = date.substring(8, 10);
-            var hh = date.substring(11, 13);
-            var mm = date.substring(14, 16);
-            var ss = date.substring(17, 19);
-            var str = DD + '.' + MM + '.' + YYYY + ', ' + hh + ':' + mm + ':' + ss;
-            return str;
+    UTIL.formatDate = function(dateLong) {
+        if (dateLong) {
+            var date = new Date(dateLong);
+            var datestring = ("0" + date.getDate()).slice(-2) + "." + ("0" + (date.getMonth() + 1)).slice(-2) + "." + date.getFullYear() + ", "
+                    + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+            return datestring;
+//            return moment(date).format('DD.MM.YYYY, HH:mm:ss');
         }
         return "";
     };
@@ -61,18 +58,7 @@ var UTIL = {};
      */
     UTIL.formatDateComplete = function(date) {
         if (date) {
-            var YYYY = date.substring(0, 4);
-            var MM = date.substring(5, 7);
-            var DD = date.substring(8, 10);
-            var hh = date.substring(11, 13);
-            var mm = date.substring(14, 16);
-            var ss = date.substring(17, 19);
-            var ms = date.substring(20, 23);
-            while (ms.length < 3) {
-                ms += '0';
-            }
-            var str = DD + '.' + MM + '.' + YYYY + ', ' + hh + ':' + mm + ':' + ss + '.' + ms;
-            return str;
+            return moment(date).format('DD.MM.YYYY, HH:mm:ss.SSS');
         }
         return "";
     };
