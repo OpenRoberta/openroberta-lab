@@ -21,6 +21,9 @@ var SIM = (function() {
     var imgSrc = [ "simulation/simBackgrounds/baustelle-02.svg", "simulation/simBackgrounds/simpleBackground.svg",
             "simulation/simBackgrounds/drawBackground.svg", "simulation/simBackgrounds/robertaBackground.svg",
             "simulation/simBackgrounds/rescueBackground.svg", "simulation/simBackgrounds/mathBackground.svg" ]; //TODO combine to one image for better performance
+    var imgSrcIE = [ "simulation/simBackgrounds/baustelle-02.svg", "simulation/simBackgrounds/simpleBackground.png",
+            "simulation/simBackgrounds/drawBackground.png", "simulation/simBackgrounds/robertaBackground.png",
+            "simulation/simBackgrounds/rescueBackground.png", "simulation/simBackgrounds/mathBackground.png" ];
     var img;
     var timerStep = 0;
     var ready;
@@ -171,6 +174,9 @@ var SIM = (function() {
         info = false;
         robot.reset();
         img = [];
+        if (isIE()) {
+            imgSrc = imgSrcIE;
+        }
         loadImages(0);
     }
 
@@ -480,6 +486,18 @@ var SIM = (function() {
     function getAverageTimeStep() {
         return averageTimeStep;
     }
+    
+    function isIE() {
+        var ua = window.navigator.userAgent;
+        var ie = ua.indexOf('MSIE ');
+        var ie11 = ua.indexOf('Trident/');
+
+        if ((ie > -1) || (ie11 > -1)) {
+            return true;
+        }
+        return false;
+    }
+    
     return {
         "init" : init,
         "setPause" : setPause,
