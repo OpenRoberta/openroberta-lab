@@ -3,7 +3,7 @@ Maintainer: Stefan Sauer <ensonic@google.com>
 Section: python
 Priority: optional
 Build-Depends: python-setuptools (>= 0.6b3), python-all (>= 2.6.6-3), 
- debhelper (>= 7.4.3), dh-systemd (>= 1.14), dh-python
+ debhelper (>= 9), dh-systemd (>= 1.14), dh-python
 Standards-Version: 3.9.5
 Homepage: http://www.ev3dev.org/
 
