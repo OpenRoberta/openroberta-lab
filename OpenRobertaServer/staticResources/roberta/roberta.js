@@ -348,7 +348,6 @@ function saveAsProgramToServer() {
     var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
     var xmlText = Blockly.Xml.domToText(xml);
     LOG.info('saveAs program ' + userState.program + ' login: ' + userState.id);
-//    var timestamp = UTIL.parseDate(userState.programTimestamp);
     PROGRAM.saveAsProgramToServer(progName, userState.programTimestamp, xmlText, function(result) {
         response(result);
         if (result.rc === 'ok') {
@@ -373,7 +372,6 @@ function saveToServer() {
         userState.programSaved = true;
         LOG.info('save program ' + userState.program + ' login: ' + userState.id);
         $('.modal').modal('hide'); // close all opened popups
-//        var timestamp = UTIL.parseDate(userState.programTimestamp);
         PROGRAM.saveProgramToServer(userState.program, userState.programShared, userState.programTimestamp, xmlText, function(result) {
             if (result.rc === 'ok') {
                 userState.programModified = false;
@@ -715,7 +713,7 @@ function shareProgramsFromListing() {
                     displayInformation(result, "", result.message);
                     if (result.rc === 'ok') {
                         $('#show-relations').modal('hide');
-                        PROGRAM.refreshList(showPrograms);                       
+                        PROGRAM.refreshList(showPrograms);
                     }
                 });
             }
@@ -744,7 +742,7 @@ function shareProgramsFromListing() {
                                 displayInformation(result, "MESSAGE_RELATION_DELETED", result.message, programName);
                             }
                             $('#show-relations').modal('hide');
-                            PROGRAM.refreshList(showPrograms);                            
+                            PROGRAM.refreshList(showPrograms);
                         } else {
                             displayInformation(result, "", result.message);
                         }
@@ -997,12 +995,6 @@ function initProgramNameTable() {
             "mRender" : function(data) {
                 return UTIL.formatDate(data);
             }
-        }, {
-            "aTargets" : [ 5 ], // indexes of columns to be formatted
-//            "sType" : "date-de",
-//            "mRender" : function(data) {
-//                return UTIL.formatDateComplete(data);
-//            }
         }, {
             "aTargets" : [ 2 ], // indexes of columns to be formatted
             "mRender" : function(data, type, row) {

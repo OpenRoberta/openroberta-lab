@@ -43,22 +43,6 @@ var UTIL = {};
             var datestring = ("0" + date.getDate()).slice(-2) + "." + ("0" + (date.getMonth() + 1)).slice(-2) + "." + date.getFullYear() + ", "
                     + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
             return datestring;
-//            return moment(date).format('DD.MM.YYYY, HH:mm:ss');
-        }
-        return "";
-    };
-
-    /**
-     * Format date completely (including 1/1000 - seconds)
-     * 
-     * @memberof UTIL
-     * 
-     * @param {date}
-     *            date from server to be formatted
-     */
-    UTIL.formatDateComplete = function(date) {
-        if (date) {
-            return moment(date).format('DD.MM.YYYY, HH:mm:ss.SSS');
         }
         return "";
     };
