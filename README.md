@@ -7,7 +7,7 @@ After a fresh git clone you get the **robertalab** project folder.
 It includes everything you need to setup and extend your own browser programming environment. License information is available in the **docs** folder.
 
 ###### Things you need on your computer: ######
-Basic toolset: Java 1.7, Maven, Git, Browser
+Basic toolset: Java 1.7, Maven, Git, Browser, Phantomjs
 
 
 Please also check our [wiki](http://wiki.open-roberta.org) for a detailed install instruction, development procedure, coding conventions and further reading. Please also checkout our project [issue tracker](http://jira.open-roberta.org).
