@@ -148,15 +148,15 @@ class Connector(threading.Thread):
                 logger.info('response: %s' % json.dumps(reply))
                 cmd = reply['cmd']
                 if cmd == 'repeat':
-                    self.service.status('registered')
                     if not self.registered:
+                        self.service.status('registered')
                         self.service.hal.playFile(2)
                     self.registered = True
                 elif cmd == 'abort':
                     break
                 elif cmd == 'download':
                     self.service.hal.clearDisplay()
-                    self.service.status('executing ...')
+                    self.service.status('executing')
                     # TODO: url is not part of reply :/
                     # TODO: we should receive a digest for the download (md5sum) so that
                     #   we can verify the download
@@ -174,6 +174,7 @@ class Connector(threading.Thread):
                     #logger.info('execution result: %d' % res)
                     # eval from file, see http://bugs.python.org/issue14049
                     # NOTE: all the globals in the generated code will override gloabls we use here!
+                    # TODO: do we have to keep pinging the server while running the code?
                     with open(filename) as f:
                         try:
                             code = compile(f.read(), filename, 'exec')
