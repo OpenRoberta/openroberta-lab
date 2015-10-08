@@ -96,7 +96,7 @@ class Connector(threading.Thread):
         self.address = address
         self.service = service
         self.params = {
-          'macaddr': '70:1e:bb:88:89:bc',
+          'macaddr': '00:00:00:00:00:00',
           'firmwarename': 'ev3dev',
           'menuversion': version.split('-')[0],
         }
@@ -110,13 +110,14 @@ class Connector(threading.Thread):
         # or /etc/os-release
         with open('/proc/version', 'r') as ver:
             self.params['firmwareversion'] = ver.read()
-    
-        for iface in [b'wlan0', b'eth0']:
-            try:
-                self.params['macaddr'] = getHwAddr(iface)
-                break
-            except IOError:
-                pass
+
+        for iface in [b'wlan', b'usb', b'eth']:
+            for ix in range(10):
+                try:
+                    self.params['macaddr'] = getHwAddr(iface + str(ix))
+                    break
+                except IOError:
+                    pass
         self.params['token'] = generateToken()
     
     def run(self):
