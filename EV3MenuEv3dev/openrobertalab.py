@@ -174,15 +174,17 @@ class Connector(threading.Thread):
                     #logger.info('execution result: %d' % res)
                     # eval from file, see http://bugs.python.org/issue14049
                     # NOTE: all the globals in the generated code will override gloabls we use here!
-                    # TODO: do we have to keep pinging the server while running the code?
+                    # NOTE: we don't have to keep pinging the server while running
+                    # the code - robot is busy until we send push request again
                     with open(filename) as f:
                         try:
                             code = compile(f.read(), filename, 'exec')
                             exec(code, globals(), globals())
                             logger.info('execution finished')
-                            self.service.hal.clearDisplay()
                         except:
                             logger.exception("Ooops:")
+                        self.service.hal.clearDisplay()
+                        self.service.hal.stopAllMotors()
                     self.service.status('registered')
                 elif cmd == 'update':
                     # FIXME:

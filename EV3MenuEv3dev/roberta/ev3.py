@@ -3,6 +3,7 @@ from PIL import Image,ImageDraw,ImageFont
 from bluetooth import *
 import dbus
 import ev3dev
+import glob
 import logging
 import math
 import os
@@ -290,6 +291,11 @@ class Hal(object):
         self.stopMotor(left_port)
         self.stopMotor(right_port)
 
+    def stopAllMotors(self):
+        for file in glob.glob('/sys/class/tacho-motor/motor*/command'):
+            with open(file, 'w') as f:
+                f.write('stop')
+
     def regulatedDrive(self, left_port, right_port, reverse, direction, speed_pct):
         # direction: forward, backward
         # reverse: always false for now
@@ -340,7 +346,7 @@ class Hal(object):
     # sensors
     # touch sensor
     def isPressed(self, port):
-        return self.cfg['sensors'][port].volue()
+        return self.cfg['sensors'][port].value()
 
     # ultrasonic sensor
     def getUltraSonicSensorDistance(self, port):
