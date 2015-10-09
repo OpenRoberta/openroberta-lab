@@ -182,7 +182,11 @@ class Hal(object):
     # key
     def isKeyPressed(self, key):
         if key in ['any', '*']:
-            return self.key.process_all()
+            for key in keys:
+                if getattr(self.key, key).pressed:
+                  return True
+            else:
+                return False
         else:
             # remap some keys
             keys = {
@@ -192,7 +196,7 @@ class Hal(object):
             if key in keys:
                 key = keys[key]
             # throws attribute error on wrong keys
-            return getattr(self.key, key).process()
+            return getattr(self.key, key).pressed
 
     def isKeyPressedAndReleased(self, key):
         return False
@@ -292,6 +296,7 @@ class Hal(object):
         self.stopMotor(right_port)
 
     def stopAllMotors(self):
+        #[m for m in [Motor(port) for port in ['outA', 'outB', 'outC', 'outD']] if m.connected]
         for file in glob.glob('/sys/class/tacho-motor/motor*/command'):
             with open(file, 'w') as f:
                 f.write('stop')
