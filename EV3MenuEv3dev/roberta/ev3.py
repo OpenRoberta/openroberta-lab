@@ -182,7 +182,8 @@ class Hal(object):
     # key
     def isKeyPressed(self, key):
         if key in ['any', '*']:
-            for key in keys:
+            # TODO: https://github.com/ev3dev/ev3dev-lang/issues/108
+            for key in ['up', 'down', 'left', 'right', 'enter', 'back']:
                 if getattr(self.key, key).pressed:
                   return True
             else:
