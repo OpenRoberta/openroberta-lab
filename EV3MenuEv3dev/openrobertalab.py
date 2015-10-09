@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import atexit
 import dbus
 import dbus.service
 import fcntl
@@ -11,6 +12,8 @@ import socket
 import struct
 import subprocess
 import sys
+import time
+import thread
 import threading
 import urllib2
 from dbus.mainloop.glib import DBusGMainLoop
@@ -68,6 +71,9 @@ class Service(dbus.service.Object):
     @dbus.service.method('org.openroberta.lab', in_signature='s', out_signature='s')
     def connect(self, address):
         logger.info('connect(%s)' % address)
+        if self.thread:
+            logger.info('disconnect() old thread')
+            self.thread.running = False;
         # start thread, connecting to address
         self.thread = Connector(address, self)
         self.thread.daemon = True
@@ -78,15 +84,42 @@ class Service(dbus.service.Object):
     @dbus.service.method('org.openroberta.lab')
     def disconnect(self):
         logger.info('disconnect()')
-        # end thread, can take up to 15 seconds (the timeout to return)
-        self.thread.running = False;
-        self.thread.join()
-        self.thread = None
+        self.thread.running = False
         self.status('disconnected')
+        # end thread, can take up to 15 seconds (the timeout to return)
+        # hence we don't join(), when connecting again we create a new thread
+        # anyway
+        #self.thread.join()
+        #self.status('disconnected')
+        self.thread = None
 
     @dbus.service.signal('org.openroberta.lab', signature='s')
     def status(self, status):
         logger.info('status changed: %s' % status)
+
+class HardAbort(threading.Thread):
+    """ Test for a 10s back key press and terminate the daemon"""
+
+    def __init__(self, service):
+        threading.Thread.__init__(self)
+        self.service = service
+        self.running = True
+        self.long_press = 0
+
+    def run(self):
+        while self.running:
+            if self.service.hal.isKeyPressed('back'):
+                logger.info('back: %d', self.long_press)
+                # if pressed for one sec, hard exit
+                if self.long_press > 10:
+                    logger.info('--- hard abort ---')
+                    thread.interrupt_main()
+                    self.running = False
+                else:
+                    self.long_press += 1
+            else:
+                self.long_press = 0
+            time.sleep(0.1)
 
 class Connector(threading.Thread):
     """OpenRobertab-Lab network IO thread"""
@@ -176,10 +209,15 @@ class Connector(threading.Thread):
                     # NOTE: all the globals in the generated code will override gloabls we use here!
                     # NOTE: we don't have to keep pinging the server while running
                     # the code - robot is busy until we send push request again
+                    # it would be nice though if we could cancel the running program
                     with open(filename) as f:
                         try:
                             code = compile(f.read(), filename, 'exec')
+                            hard_abort = HardAbort(self.service)
+                            hard_abort.daemon = True
+                            hard_abort.start()
                             exec(code, globals(), globals())
+                            hard_abort.running = False
                             logger.info('execution finished')
                         except:
                             logger.exception("Ooops:")
@@ -208,24 +246,32 @@ class Connector(threading.Thread):
             except:
                 logger.exception("Ooops:")
         logger.info('network thread stopped')
-        self.service.status('disconnected')
-        self.service.hal.playFile(3)
+        # don't play if we we just canceled a registration
+        if self.registered:
+            self.service.hal.playFile(3)
 
+service = None
 
+def cleanup():
+    if service:
+        service.hal.clearDisplay()
+        service.hal.stopAllMotors()
+    os.system('setterm -cursor on')
+    logger.info('--- done ---')
+    logging.shutdown()
+    
 def main():
     logger.info('--- starting ---')
     logger.info('running on tty: %s' % os.ttyname(sys.stdin.fileno()))   
     os.system('setterm -cursor off')
+    
+    atexit.register(cleanup)
 
     DBusGMainLoop(set_as_default=True)
     loop = gobject.MainLoop()
     service = Service('/org/openroberta/Lab1')
     logger.info('loop running')
     loop.run()
-
-    os.system('setterm -cursor on')
-    logger.info('--- done ---')
-    logging.shutdown()
 
 if __name__ == "__main__":
     main()
