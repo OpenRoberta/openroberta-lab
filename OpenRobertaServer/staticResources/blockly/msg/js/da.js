@@ -548,6 +548,7 @@ Blockly.Msg.ORA_CONFIGURATION_SAVE_ERROR = "Kunne ikke gemme konfigurationen.";
 Blockly.Msg.ORA_CONFIGURATION_SAVE_ERROR_NOT_SAVED_TO_DB = "Kunne ikke gemme konfigurationen til databasen.";
 Blockly.Msg.ORA_CONFIGURATION_SAVE_SUCCESS = "Konfiguration gemt";
 Blockly.Msg.ORA_OWNER_DOES_NOT_EXIST = "ejeren eksisterer ikke.";
+Blockly.Msg.ORA_PROGRAM_CONFIGURATION_NOT_COMPATIBLE = "Program is not compatible with the configuration";  // untranslated
 Blockly.Msg.ORA_PROGRAM_DELETE_ERROR = "Kunne ikke slette program.";
 Blockly.Msg.ORA_PROGRAM_DELETE_SUCCESS = "Program slettet";
 Blockly.Msg.ORA_PROGRAM_ERROR_ID_INVALID = "Program navn er ikke en gyldig identifikator.";

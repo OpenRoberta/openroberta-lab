@@ -548,6 +548,7 @@ Blockly.Msg.ORA_CONFIGURATION_SAVE_ERROR = "Fehler beim Speichern der Konfigurat
 Blockly.Msg.ORA_CONFIGURATION_SAVE_ERROR_NOT_SAVED_TO_DB = "Ein Fehler ist beim Speichern des Roboterkonfiguration aufgetreten.";
 Blockly.Msg.ORA_CONFIGURATION_SAVE_SUCCESS = "Die Roboterkonfiguration $ wurde gespeichert.";
 Blockly.Msg.ORA_OWNER_DOES_NOT_EXIST = "Dieser Benutzer existiert leider nicht.";
+Blockly.Msg.ORA_PROGRAM_CONFIGURATION_NOT_COMPATIBLE = "Program is not compatible with the configuration";  // untranslated
 Blockly.Msg.ORA_PROGRAM_DELETE_ERROR = "Ein Fehler ist beim Löschen des Programmes aufgetreten, versuche es nochmal!";
 Blockly.Msg.ORA_PROGRAM_DELETE_SUCCESS = "Du hast das Programm $ gelöscht.";
 Blockly.Msg.ORA_PROGRAM_ERROR_ID_INVALID = "Dein Programmname ist vom System reserviert. Wähle bitte einen anderen Namen und versuche es noch einmal!";

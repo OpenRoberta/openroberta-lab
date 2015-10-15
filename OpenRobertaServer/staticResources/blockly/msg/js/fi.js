@@ -548,6 +548,7 @@ Blockly.Msg.ORA_CONFIGURATION_SAVE_ERROR = "Error while saving the configuration
 Blockly.Msg.ORA_CONFIGURATION_SAVE_ERROR_NOT_SAVED_TO_DB = "Error while saving the configuration to the DB.";
 Blockly.Msg.ORA_CONFIGURATION_SAVE_SUCCESS = "Configuration saved";
 Blockly.Msg.ORA_OWNER_DOES_NOT_EXIST = "Owner does not exist.";
+Blockly.Msg.ORA_PROGRAM_CONFIGURATION_NOT_COMPATIBLE = "Program is not compatible with the configuration";  // untranslated
 Blockly.Msg.ORA_PROGRAM_DELETE_ERROR = "Error while deleting a program.";
 Blockly.Msg.ORA_PROGRAM_DELETE_SUCCESS = "Program deeleted";
 Blockly.Msg.ORA_PROGRAM_ERROR_ID_INVALID = "Program name is not a valid identifier.";

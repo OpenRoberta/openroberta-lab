@@ -548,6 +548,7 @@ Blockly.Msg.ORA_CONFIGURATION_SAVE_ERROR = "An error has occured while saving th
 Blockly.Msg.ORA_CONFIGURATION_SAVE_ERROR_NOT_SAVED_TO_DB = "An error error has occured while saving the configuration in the database.";
 Blockly.Msg.ORA_CONFIGURATION_SAVE_SUCCESS = "Configuration saved";
 Blockly.Msg.ORA_OWNER_DOES_NOT_EXIST = "The owner does not exist.";
+Blockly.Msg.ORA_PROGRAM_CONFIGURATION_NOT_COMPATIBLE = "Program is not compatible with the configuration";
 Blockly.Msg.ORA_PROGRAM_DELETE_ERROR = "An error error has occured while deleding the configuration. Please try it again!";
 Blockly.Msg.ORA_PROGRAM_DELETE_SUCCESS = "Program deeleted";
 Blockly.Msg.ORA_PROGRAM_ERROR_ID_INVALID = "The name of your  program is already used by the system. Please choose another name and try it again!";

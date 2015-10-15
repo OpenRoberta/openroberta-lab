@@ -24,7 +24,6 @@ import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
-import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
 import de.fhg.iais.roberta.javaServer.provider.OraData;
 import de.fhg.iais.roberta.persistence.AbstractProcessor;
 import de.fhg.iais.roberta.persistence.AccessRightProcessor;
@@ -46,7 +45,6 @@ import de.fhg.iais.roberta.syntax.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.codegen.ev3.Ast2Ev3JavaScriptVisitor;
 import de.fhg.iais.roberta.syntax.hardwarecheck.ev3.UsedPortsCheckVisitor;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
@@ -134,29 +132,17 @@ public class ClientProgram {
                 }
                 Util.addResultInfo(response, pp);
             } else if ( cmd.equals("checkP") ) {
+                Key messageKey = null;
                 String programText = request.optString("programText");
                 String configurationText = request.optString("configurationText");
-
-                Jaxb2BlocklyProgramTransformer<Void> programTransformer = null;
-                try {
-                    programTransformer = Ev3CompilerWorkflow.generateProgramTransformer(programText);
-                } catch ( Exception e ) {
-                    ClientProgram.LOG.error("Transformer failed", e);
-                    //return Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+                BlocklyProgramAndConfigTransformer data = BlocklyProgramAndConfigTransformer.transform(programText, configurationText);
+                messageKey = data.getErrorMessage();
+                messageKey = programConfigurationCompatibilityCheck(response, data, "");
+                if ( messageKey == null ) {
+                    Util.addSuccessInfo(response, Key.ROBOT_PUSH_RUN);
+                } else {
+                    Util.addErrorInfo(response, messageKey);
                 }
-                Ev3Configuration brickConfiguration = null;
-                try {
-                    brickConfiguration = Ev3CompilerWorkflow.generateConfiguration(configurationText);
-                } catch ( Exception e ) {
-                    ClientProgram.LOG.error("Generation of the configuration failed", e);
-                    //return Key.COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED;
-                }
-
-                UsedPortsCheckVisitor programChecker = new UsedPortsCheckVisitor(brickConfiguration);
-                int errorCounter = programChecker.check(programTransformer.getTree());
-                response.put("data", ClientProgram.jaxbToXml(ClientProgram.astToJaxb(programChecker.getCheckedProgram())));
-                response.put("errorCounter", errorCounter);
-                Util.addSuccessInfo(response, Key.ROBOT_PUSH_RUN);
 
             } else if ( cmd.equals("shareP") && httpSessionState.isUserLoggedIn() ) {
                 String programName = request.getString("programName");
@@ -197,14 +183,17 @@ public class ClientProgram {
                 String configurationText = request.optString("configurationText");
                 boolean wasRobotWaiting = false;
 
-                if ( robot.getName().equals("ev3") ) {
-                    ClientProgram.LOG.info("compiler workflow started for program {}", programName);
-                    messageKey = this.compilerWorkflow.execute(token, programName, programText, configurationText);
-                    wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
-                } else {
-                    ClientProgram.LOG.info("JavaScript code generation started for program {}", programName);
-                    BlocklyProgramAndConfigTransformer data = BlocklyProgramAndConfigTransformer.transform(programText, configurationText);
-                    if ( data.getErrorMessage() == null ) {
+                BlocklyProgramAndConfigTransformer data = BlocklyProgramAndConfigTransformer.transform(programText, configurationText);
+                messageKey = data.getErrorMessage();
+                messageKey = programConfigurationCompatibilityCheck(response, data, robot.getName());
+
+                if ( messageKey == null ) {
+                    if ( robot.getName().equals("ev3") ) {
+                        ClientProgram.LOG.info("compiler workflow started for program {}", programName);
+                        messageKey = this.compilerWorkflow.execute(token, programName, data);
+                        wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
+                    } else {
+                        ClientProgram.LOG.info("JavaScript code generation started for program {}", programName);
                         String javaScriptCode = Ast2Ev3JavaScriptVisitor.generate(data.getProgramTransformer().getTree());
                         ClientProgram.LOG.info("JavaScriptCode \n{}", javaScriptCode);
                         response.put("javaScriptProgram", javaScriptCode);
@@ -229,6 +218,19 @@ public class ClientProgram {
         }
         Util.addFrontendInfo(response, httpSessionState, this.brickCommunicator);
         return Response.ok(response).build();
+    }
+
+    private Key programConfigurationCompatibilityCheck(JSONObject response, BlocklyProgramAndConfigTransformer data, String robotName)
+        throws JSONException,
+        JAXBException {
+        UsedPortsCheckVisitor programChecker = new UsedPortsCheckVisitor(data.getBrickConfiguration());
+        int errorCounter = programChecker.check(data.getProgramTransformer().getTree());
+        response.put("data", ClientProgram.jaxbToXml(ClientProgram.astToJaxb(programChecker.getCheckedProgram())));
+        response.put("errorCounter", errorCounter);
+        if ( errorCounter > 0 && !robotName.equals("oraSim") ) {
+            return Key.PROGRAM_CONFIGURATION_NOT_COMPATIBLE;
+        }
+        return null;
     }
 
     public static String jaxbToXml(BlockSet blockSet) throws JAXBException {

@@ -61,12 +61,7 @@ public class Ev3CompilerWorkflow {
      * @param configurationText the hardware configuration source that describes characteristic data of the robot
      * @return a message key in case of an error; null otherwise
      */
-    public Key execute(String token, String programName, String programText, String configurationText) {
-        BlocklyProgramAndConfigTransformer data = BlocklyProgramAndConfigTransformer.transform(programText, configurationText);
-        if ( data.getErrorMessage() != null ) {
-            return data.getErrorMessage();
-        }
-
+    public Key execute(String token, String programName, BlocklyProgramAndConfigTransformer data) {
         String fwName = this.brickCommunicator.getState(token).getFirmwareName();
         boolean doPython = fwName.equals("ev3dev");
         Ev3CompilerWorkflow.LOG.info("compiling for firmware: '" + fwName + "'");

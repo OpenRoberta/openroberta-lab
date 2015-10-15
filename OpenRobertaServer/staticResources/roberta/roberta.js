@@ -544,6 +544,7 @@ function startProgram() {
             Blockly.getMainWorkspace().startButton.enable();
             displayInformation(result, "", result.message, "");
         }
+        refreshBlocklyProgram(result);
     });
 }
 /**
@@ -556,12 +557,8 @@ function checkProgram() {
     var xmlTextConfiguration = UTIL.getBricklyFrame('#bricklyFrame').getXmlOfConfiguration(userState.configuration);
     displayMessage("MESSAGE_EDIT_CHECK", "TOAST", userState.program);
     PROGRAM.checkProgramCompatibility(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
-        //setRobotState(result);
-        if (result.rc == "ok") {
-            var xml = Blockly.Xml.textToDom(result.data);
-            Blockly.mainWorkspace.clear();
-            Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
-        }
+        refreshBlocklyProgram(result);
+        displayInformation(result, "", result.message, "");
     });
 }
 
@@ -1269,7 +1266,7 @@ function initHeadNavigation() {
         Blockly.hideChaff();
         $('.modal').modal('hide'); // close all opened popups
         var domId = event.target.id;
-        if (domId === 'menuRunProg') { //  Submenu 'Program'
+        if (domId === 'menuRunProg') { //  Submenu 'Program'   
             runOnBrick();
         } else if (domId === 'menuCheckProg') { //  Submenu 'Program'
             checkProgram();
@@ -2110,6 +2107,12 @@ function startPopup() {
             startPopup();
         }, 100);
     }
+}
+
+function refreshBlocklyProgram(result) {
+    var xml = Blockly.Xml.textToDom(result.data);
+    Blockly.mainWorkspace.clear();
+    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
 }
 
 /**

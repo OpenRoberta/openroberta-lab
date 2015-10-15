@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-10-02 07:39:44.860000",
+		"lastupdated": "2015-10-15 11:57:29.388000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -812,6 +812,7 @@
 	"ORA_USER_TO_SHARE_SAME_AS_LOGIN_USER": "You cannot share any programs with yourself.",
 	"ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS": "Check all required input fields have been filled out.",
 	"ORA_SERVER_ERROR": "Server-Error",
+	"ORA_PROGRAM_CONFIGURATION_NOT_COMPATIBLE": "Program is not compatible with the configuration",
 	"CONFIGURATION_ERROR_SENSOR_MISSING": "This sensor is not set to the port!",
 	"CONFIGURATION_ERROR_SENSOR_WRONG": "Connected wrong sesnor to the given port!",
 	"CONFIGURATION_ERROR_MOTOR_LEFT_MISSING": "Left motor missing in the configuration!",
