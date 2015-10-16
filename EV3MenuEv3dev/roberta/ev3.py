@@ -127,6 +127,10 @@ class Hal(object):
     def waitFor(self, ms):
         time.sleep (ms / 1000.0)
 
+    def busyWait(self):
+        '''Used as interrupptible busy wait.'''
+        time.sleep (0.0)
+
     # lcd
     def drawText(self, msg, x, y, font=None):
         font = font or self.font_s
@@ -244,9 +248,13 @@ class Hal(object):
         m = self.cfg['actors'][port]
         if mode is 'degree':
             m.run_to_rel_pos(speed_regulation_enabled='on', position_sp=value, speed_sp=speed_pct)
+            while (m.state):
+                self.busyWait()
         elif mode is 'rotations':
             value *= m.count_per_rot
             m.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(value), speed_sp=speed_pct)
+            while (m.state):
+                self.busyWait()
 
     def rotateUnregulatedMotor(self, port, speed_pct, mode, value):
         m = self.cfg['actors'][port];
@@ -256,12 +264,12 @@ class Hal(object):
             value = m.position + value
             m.run_forever(speed_regulation_enabled='off', duty_cycle_sp=speed_pct)
             while (m.position < value):
-                pass
+                self.busyWait()
         else:
             value = m.position - value
             m.run_forever(speed_regulation_enabled='off', duty_cycle_sp=speed_pct)
             while (m.position > value):
-                pass
+                self.busyWait()
         m.stop()
 
     def turnOnRegulatedMotor(self, port, value):
@@ -321,6 +329,9 @@ class Hal(object):
             dc = -dc
         ml.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(dc * ml.count_per_rot), speed_sp=speed_pct)
         mr.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(dc * mr.count_per_rot), speed_sp=speed_pct)
+        logger.info("driving: %s, %s" % (ml.state,mr.state))
+        while (ml.state or mr.state):
+            self.busyWait()
 
     def rotateDirectionRegulated(self, left_port, right_port, reverse, direction, speed_pct):
         # direction: left, right
@@ -341,13 +352,16 @@ class Hal(object):
         distance = angle * circ / 360.0
         circ = math.pi * self.cfg['wheel-diameter']
         dc = distance / circ
-        print "doing %lf rotations" % dc
+        logger.info("doing %lf rotations" % dc)
         if direction is 'left':
             mr.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(dc * mr.count_per_rot), speed_sp=speed_pct)
             ml.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(-dc * ml.count_per_rot), speed_sp=speed_pct)
         else:
             ml.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(dc * ml.count_per_rot), speed_sp=speed_pct)
             mr.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(-dc * mr.count_per_rot), speed_sp=speed_pct)
+        logger.info("turning: %s, %s" % (ml.state,mr.state))
+        while (ml.state or mr.state):
+            self.busyWait()
 
     # sensors
     # touch sensor
