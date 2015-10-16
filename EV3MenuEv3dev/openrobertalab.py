@@ -197,7 +197,7 @@ class Connector(threading.Thread):
                     response = urllib2.urlopen(req, json.dumps(self.params), timeout=timeout)
                     logger.info('response: %s' % json.dumps(reply))
                     hdr = response.info().getheader('Content-Disposition')
-                    # TODO: save to /home/user
+                    # TODO: save to $HOME/
                     filename = '/tmp/%s' % hdr.split('=')[1] if hdr else 'unknown'
                     with open(filename, 'w') as prog:
                         prog.write(response.read().decode('utf-8'))
