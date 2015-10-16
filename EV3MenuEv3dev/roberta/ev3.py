@@ -245,50 +245,54 @@ class Hal(object):
     # http://www.ev3dev.org/docs/drivers/tacho-motor-class/
     def rotateRegulatedMotor(self, port, speed_pct, mode, value):
         # mode: degree, rotations, distance
+        speed_pct *= 10.0
         m = self.cfg['actors'][port]
         if mode is 'degree':
-            m.run_to_rel_pos(speed_regulation_enabled='on', position_sp=value, speed_sp=speed_pct)
+            m.run_to_rel_pos(speed_regulation_enabled='on', position_sp=value, speed_sp=int(speed_pct))
             while (m.state):
                 self.busyWait()
         elif mode is 'rotations':
             value *= m.count_per_rot
-            m.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(value), speed_sp=speed_pct)
+            m.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(value), speed_sp=int(speed_pct))
             while (m.state):
                 self.busyWait()
 
     def rotateUnregulatedMotor(self, port, speed_pct, mode, value):
+        speed_pct *= 10.0
         m = self.cfg['actors'][port];
         if mode is 'rotations':
             value *= m.count_per_rot
         if speed_pct >= 0:
             value = m.position + value
-            m.run_forever(speed_regulation_enabled='off', duty_cycle_sp=speed_pct)
+            m.run_forever(speed_regulation_enabled='off', duty_cycle_sp=int(speed_pct))
             while (m.position < value):
                 self.busyWait()
         else:
             value = m.position - value
-            m.run_forever(speed_regulation_enabled='off', duty_cycle_sp=speed_pct)
+            m.run_forever(speed_regulation_enabled='off', duty_cycle_sp=int(speed_pct))
             while (m.position > value):
                 self.busyWait()
         m.stop()
 
     def turnOnRegulatedMotor(self, port, value):
-        self.cfg['actors'][port].run_forever(speed_regulation_enabled='on', speed_sp=value)
+        value *= 10.0
+        self.cfg['actors'][port].run_forever(speed_regulation_enabled='on', speed_sp=int(value))
 
     def turnOnUnregulatedMotor(self, port, value):
-        self.cfg['actors'][port].run_forever(speed_regulation_enabled='off', duty_cycle_sp=value)
+        value *= 10.0
+        self.cfg['actors'][port].run_forever(speed_regulation_enabled='off', duty_cycle_sp=int(value))
 
     def setRegulatedMotorSpeed(self, port, power):
-        self.cfg['actors'][port].speed_sp = power
+        self.cfg['actors'][port].speed_sp = power * 10.0
 
     def setUnregulatedMotorSpeed(self, port, power):
-        self.cfg['actors'][port].duty_cycle_sp = power
+        self.cfg['actors'][port].duty_cycle_sp = power * 10.0
 
     def getRegulatedMotorSpeed(self, port):
-        return self.cfg['actors'][port].speed
+        return self.cfg['actors'][port].speed / 10.0
 
     def getUnregulatedMotorSpeed(self, port):
-        return self.cfg['actors'][port].duty_cycle
+        return self.cfg['actors'][port].duty_cycle  / 10.0
 
     def stopMotor(self, port, mode='float'):
         # mode: float, nonfloat
@@ -313,22 +317,24 @@ class Hal(object):
     def regulatedDrive(self, left_port, right_port, reverse, direction, speed_pct):
         # direction: forward, backward
         # reverse: always false for now
+        speed_pct *= 10.0
         if direction is 'backward':
             speed_pct = -speed_pct
-        self.cfg['actors'][left_port].run_forever(speed_regulation_enabled='on', speed_sp=speed_pct)
-        self.cfg['actors'][right_port].run_forever(speed_regulation_enabled='on', speed_sp=speed_pct)
+        self.cfg['actors'][left_port].run_forever(speed_regulation_enabled='on', speed_sp=int(speed_pct))
+        self.cfg['actors'][right_port].run_forever(speed_regulation_enabled='on', speed_sp=int(speed_pct))
 
     def driveDistance(self, left_port, right_port, reverse, direction, speed_pct, distance):
         # direction: forward, backward
         # reverse: always false for now
+        speed_pct *= 10.0
         ml = self.cfg['actors'][left_port];
         mr = self.cfg['actors'][right_port];
         circ = math.pi * self.cfg['wheel-diameter']
         dc = distance / circ
         if direction is 'backward':
             dc = -dc
-        ml.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(dc * ml.count_per_rot), speed_sp=speed_pct)
-        mr.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(dc * mr.count_per_rot), speed_sp=speed_pct)
+        ml.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(dc * ml.count_per_rot), speed_sp=int(speed_pct))
+        mr.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(dc * mr.count_per_rot), speed_sp=int(speed_pct))
         logger.info("driving: %s, %s" % (ml.state,mr.state))
         while (ml.state or mr.state):
             self.busyWait()
@@ -336,16 +342,18 @@ class Hal(object):
     def rotateDirectionRegulated(self, left_port, right_port, reverse, direction, speed_pct):
         # direction: left, right
         # reverse: always false for now
+        speed_pct *= 10.0
         if direction is 'left':
-            self.cfg['actors'][right_port].run_forever(speed_regulation_enabled='on', speed_sp=speed_pct)
-            self.cfg['actors'][left_port].run_forever(speed_regulation_enabled='on', speed_sp=-speed_pct)
+            self.cfg['actors'][right_port].run_forever(speed_regulation_enabled='on', speed_sp=int(speed_pct))
+            self.cfg['actors'][left_port].run_forever(speed_regulation_enabled='on', speed_sp=int(-speed_pct))
         else:
-            self.cfg['actors'][left_port].run_forever(speed_regulation_enabled='on', speed_sp=speed_pct)
-            self.cfg['actors'][right_port].run_forever(speed_regulation_enabled='on', speed_sp=-speed_pct)
+            self.cfg['actors'][left_port].run_forever(speed_regulation_enabled='on', speed_sp=int(speed_pct))
+            self.cfg['actors'][right_port].run_forever(speed_regulation_enabled='on', speed_sp=int(-speed_pct))
 
     def rotateDirectionAngle(self, left_port, right_port, reverse, direction, speed_pct, angle):
         # direction: left, right
         # reverse: always false for now
+        speed_pct *= 10.0
         ml = self.cfg['actors'][left_port];
         mr = self.cfg['actors'][right_port];
         circ = math.pi * self.cfg['track-width']
@@ -354,11 +362,11 @@ class Hal(object):
         dc = distance / circ
         logger.info("doing %lf rotations" % dc)
         if direction is 'left':
-            mr.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(dc * mr.count_per_rot), speed_sp=speed_pct)
-            ml.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(-dc * ml.count_per_rot), speed_sp=speed_pct)
+            mr.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(dc * mr.count_per_rot), speed_sp=int(speed_pct))
+            ml.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(-dc * ml.count_per_rot), speed_sp=int(speed_pct))
         else:
-            ml.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(dc * ml.count_per_rot), speed_sp=speed_pct)
-            mr.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(-dc * mr.count_per_rot), speed_sp=speed_pct)
+            ml.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(dc * ml.count_per_rot), speed_sp=int(speed_pct))
+            mr.run_to_rel_pos(speed_regulation_enabled='on', position_sp=int(-dc * mr.count_per_rot), speed_sp=int(speed_pct))
         logger.info("turning: %s, %s" % (ml.state,mr.state))
         while (ml.state or mr.state):
             self.busyWait()
