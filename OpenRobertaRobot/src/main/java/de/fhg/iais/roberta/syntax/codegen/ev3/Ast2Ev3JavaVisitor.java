@@ -283,22 +283,22 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     public Void visitMathConst(MathConst<Void> mathConst) {
         switch ( mathConst.getMathConst() ) {
             case PI:
-                this.sb.append("Math.PI");
+                this.sb.append("BlocklyMethods.PI");
                 break;
             case E:
-                this.sb.append("Math.E");
+                this.sb.append("BlocklyMethods.E");
                 break;
             case GOLDEN_RATIO:
                 this.sb.append("BlocklyMethods.GOLDEN_RATIO");
                 break;
             case SQRT2:
-                this.sb.append("Math.sqrt(2)");
+                this.sb.append("BlocklyMethods.sqrt(2)");
                 break;
             case SQRT1_2:
-                this.sb.append("Math.sqrt(1.0/2.0)");
+                this.sb.append("BlocklyMethods.sqrt(1.0/2.0)");
                 break;
             case INFINITY:
-                this.sb.append("Double.POSITIVE_INFINITY");
+                this.sb.append("Float.POSITIVE_INFINITY");
                 break;
             default:
                 break;

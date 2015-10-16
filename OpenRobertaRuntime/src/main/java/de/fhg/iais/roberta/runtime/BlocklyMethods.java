@@ -23,6 +23,8 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 public class BlocklyMethods {
 
     public static final float GOLDEN_RATIO = (float) ((1.0 + Math.sqrt(5.0)) / 2.0);
+    public static final float PI = (float) Math.PI;
+    public static final float E = (float) Math.E;
 
     /**
      * Check if numbers is even.
