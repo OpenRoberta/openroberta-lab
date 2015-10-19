@@ -1372,7 +1372,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     private void appendBreakStmt(RepeatStmt<Void> repeatStmt) {
         if ( repeatStmt.getMode() == Mode.WAIT ) {
             nlIndent();
-            this.sb.append("break;");
+            this.sb.append("break");
         }
     }
 
