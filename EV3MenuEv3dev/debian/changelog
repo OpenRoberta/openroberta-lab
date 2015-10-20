@@ -1,3 +1,9 @@
+openrobertalab (1.3.2-1) stable; urgency=low
+
+  * update to version 1.3.2
+
+ -- Stefan Sauer <ensonic@google.com>  Tue, 20 Oct 2015 10:11:18 +0200
+
 openrobertalab (1.3.0-1) stable; urgency=low
 
   * initial package

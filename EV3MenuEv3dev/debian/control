@@ -9,7 +9,9 @@ Homepage: http://www.ev3dev.org/
 
 Package: openrobertalab
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}, systemd, python-dbus, python-bluez, python-ev3dev
+# TODO: re-add python-ev3dev once it is available
+Depends: ${misc:Depends}, ${python:Depends}, systemd, python-dbus, python-bluez
+Enhances: brickman
 Description: lab.open-roberta.org connector for ev3dev.org
  Open-roberta.org is a webplatform for learning how to progra robots. This
  package is a service for the LEGO Mindstors EV3 running ev3dev.org to connect
