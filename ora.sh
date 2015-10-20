@@ -2,14 +2,14 @@
 
 serverurl='10.0.1.10:1999'
 ev3ipaddr='10.0.1.1'
-oraversion='1.2.0-SNAPSHOT'
+oraversion='1.3.2-SNAPSHOT'
 
 function _helpFn {
   # be careful when changing the help function.
   # All words starting with "--" are extracted by a compgen function and considered COMMANDS!
   echo 'THIS SCRIPT IS MAINLY FOR DEVELOPERS, WHO PULLED THE GIT-REPOSITORY AND WORK WITH THE OpenRoberta SERVER LOCALLY';
   echo 'you may set properties first, e.g. the server url, and then ececute a command, e.g. export the application';
-  echo 'IF you source with ". ora-please-source.sh", you get completion from the bash when you type TAB (as usual ...)';
+  echo 'IF you source ". ora-please-source.sh" before using this script, you get completion when you type TAB (as usual ...)';
   echo '';
   $0 --java
   echo 'you may customize the script by defining default values for properties. Actual values of the properties are:';
@@ -56,16 +56,14 @@ function _helpFn {
   echo '                                     Needs a file name. Creates files and a directory with this name AS PREFIX.'
   echo '                                     if the database exists, it is not recreated. If a table "PROGRAM" is found'
   echo '                                     in an existing database, it is assumed, that the setup has already been done.'
-  echo '  --export PATH-TO-INSTALLATION-DIR  create a self-contained installation with an empty database'
-  echo '                                     The installation contains a top level start script "start.sh",'
-  echo '                                     that can be used without parameter or with a property file as parameter.'
+  echo '  --export [-e|-i] INSTALLATION-DIR  create a self-contained installation with an empty database (-e) or without database setup (-i)'
+  echo '                                     with -i the caller is responsible to supply a already usable database.'
 }
 
 function _startFn {
   _checkJava;
   if [[ "$checkJava" != '' ]]; then
-     echo 'problems detected. The start command is aborted.'
-     exit 4;
+     echo 'problems detected. The command may work or the command may not work :)'
   fi
   main='de.fhg.iais.roberta.main.ServerStarter'
   run='java -cp "target/resources/*" '"${main} ${propfile}"
@@ -134,7 +132,10 @@ function _checkJava {
 }
 
 function _exportApplication {
-  exportpath="$1"
+  if [[ "$dbOption" != '-e' &&  "$dbOption" != '-i' ]]; then
+    echo 'database option (first parameter) must be either -e or -i - exit 4'
+    exit 4
+  fi
   if [[ -e "$exportpath" ]]; then
      echo "target directory \"$exportpath\" already exists - exit 4"
      exit 4
@@ -145,8 +146,12 @@ function _exportApplication {
     echo "creating the directory \"$exportpath\" failed - exit 4"
     exit 4
   fi
-  echo "creating an empty data base"
-  $0 --createemptydb "${exportpath}/db/openroberta-db"
+  if [[ "$dbOption" == '-e' ]]; then
+    echo "creating an empty data base"
+    $0 --createemptydb "${exportpath}/db/openroberta-db"
+  else
+    echo "no database setup"
+  fi
   echo "copying the web resources"
   webresources="OpenRobertaServer/staticResources"
   cp -r "$webresources" "$exportpath"
@@ -163,7 +168,7 @@ function _exportApplication {
   echo 'creating the start scripts "start.sh" and "start.bat"'
 # -------------- begin of here documents --------------------------------------------------
   cat >"${exportpath}/openRoberta.properties" <<.eof
-server.jetty.port = 1999
+# server.jetty.port is unused, because the port is supplied in the start script
 version = ${oraversion}
 validversionrange.From = ${oraversion}
 validversionrange.To = ${oraversion}
@@ -179,19 +184,25 @@ robot.crossCompilerResources.dir = crossCompilerResources
 javaversion=\`java -version 2>&1\`
 case "\$javaversion" in
   *64-Bit*) : ;;
-  *) echo 'java is resolved to a 32 bit version. The server needs a 64 bit jdk. Exit 4.'
-     exit 4 ;;
+  *) echo 'java is resolved to a 32 bit version. The server needs a 64 bit jdk. This may cause problems.' ;;
 esac
 case "\$javaversion" in
   *1\\.7\\.*) : ;;
-  *) echo 'java is not resolved to a version 7. The server needs a version 7 jdk. Exit 4.'
-     exit 4 ;;
+  *) echo 'java is not resolved to a version 7. The server needs a version 7 jdk. This may cause problems.' ;;
 esac
 properties="\$1"
 if [[ "\$properties" == "" ]]; then
    properties="openRoberta.properties"
 fi
-run="java -cp \"resources/*\" de.fhg.iais.roberta.main.ServerStarter file:\$properties"
+host="\$2"
+if [[ "\$host" == "" ]]; then
+   host="localhost"
+fi
+port="\$3"
+if [[ "\$port" == "" ]]; then
+   port="1999"
+fi
+run="java -cp \"resources/*\" de.fhg.iais.roberta.main.ServerStarter file:\$properties \$host \$port"
 echo "executing: \$run"
 eval \$run
 .eof
@@ -203,21 +214,21 @@ rem For local installations inspect your firewall settings, if the robot cannot 
 @echo off
 java -version:"1.7" -version 2>&1 | find "64-Bit" >nul:
 if errorlevel 1 (
-  echo java is resolved to a 32 bit version. The server needs a 64 bit jdk. Exit 4.
-  pause
-  exit 4
+  echo java is resolved to a 32 bit version. The server needs a 64 bit jdk. This may cause problems
 )
 java -version:"1.7" -version 2>&1 | find "1.7." >nul:
 if errorlevel 1 (
-  echo java is not resolved to a version 7. The server needs a version 7 jdk. Exit 4.
-  pause
-  exit 4
+  echo java is not resolved to a version 7. The server needs a version 7 jdk. This may cause problems.
 )
 set "PROPERTIES=%1"
 if not "%PROPERTIES%" == "" goto gotProperties
 set "PROPERTIES=openRoberta.properties"
 :gotProperties
-set RUN=java -version:"1.7" -cp "resources\*" de.fhg.iais.roberta.main.ServerStarter file:%PROPERTIES%
+set "PORT=%1"
+if not "%PORT%" == "" goto gotPort
+set "PORT=1999"
+:gotPort
+set RUN=java -version:"1.7" -cp "resources\*" de.fhg.iais.roberta.main.ServerStarter file:%PROPERTIES% %PORT%
 echo executing: "%RUN%"
 %RUN%
 .eof
@@ -288,8 +299,9 @@ case "$cmd" in
 --setev3serverinfo|-sinfo) _setev3serverinfoFn ;;
 --createemptydb)    dbpath="$1"
                     _createemptydb "$dbpath" ;;
---export|-e)        exportpath="$1"
-                    _exportApplication "$exportpath" ;;
+--export|-e)        dbOption="$1"
+                    exportpath="$2"
+                    _exportApplication ;;
 --start|-s)         propfile="$1"
                     if [[ "$propfile" != '' ]]; then
                        propfile="file:$propfile" # make a file resource from the path

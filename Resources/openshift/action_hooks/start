@@ -1,0 +1,8 @@
+#!/bin/bash
+# The logic to start the application.
+# The application will work only if it binds to $OPENSHIFT_DIY_IP:$OPENSHIFT_DIY_PORT
+# the application is expected in directory <GIT-REPO>/diy
+
+cd $OPENSHIFT_REPO_DIR/diy
+chmod +x ./start.sh
+nohup ./start.sh openRoberta.properties $OPENSHIFT_DIY_IP $OPENSHIFT_DIY_PORT

@@ -5,6 +5,7 @@ import java.util.Properties;
 
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.SessionManager;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
@@ -26,6 +27,7 @@ import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.VersionChecker;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
  * <b>the main class of the application, the main activity is starting the server.</b><br>
@@ -69,8 +71,10 @@ public class ServerStarter {
         } else {
             serverStarter = new ServerStarter(null);
         }
-        Server server = serverStarter.start();
-        LOG.info("*** server started using URI: " + server.getURI() + " ***");
+        String host = args != null && args.length >= 2 ? args[1] : "localhost";
+        String port = args != null && args.length >= 3 ? args[2] : null;
+        Server server = serverStarter.start(host, port);
+        ServerStarter.LOG.info("*** server started using URI: " + server.getURI() + " ***");
         serverStarter.logTheNumberOfStoredPrograms();
         server.join();
         System.exit(0);
@@ -81,19 +85,26 @@ public class ServerStarter {
      *
      * @return the server
      */
-    public Server start() throws IOException {
-        int port = 1999;
+    public Server start(String host, String port) throws IOException {
         String versionFrom = this.properties.getProperty("validversionrange.From", "?");
         String versionTo = this.properties.getProperty("validversionrange.To", "?");
         Assert.isTrue(new VersionChecker(versionFrom, versionTo).validateServerSide(), "invalid versions found - this should NEVER occur");
-        String serverPort = this.properties.getProperty("server.jetty.port", "1999");
+        port = port == null ? this.properties.getProperty("server.jetty.port", "1999") : port;
+        int portInt;
         try {
-            port = Integer.parseInt(serverPort);
+            portInt = Integer.parseInt(port);
         } catch ( Exception e ) {
-            LOG.error("Could not get server port from properties. Server start aborted ... . Invalid value was: " + serverPort, e);
+            ServerStarter.LOG.error("Invalid port in properties or command line (third argument). Server start aborted. Invalid value was: " + port, e);
             System.exit(12);
+            throw new DbcException(); // This will never occur - see the System.exit call in the previous line
         }
-        Server server = new Server(port);
+        Server server = new Server();
+        ServerConnector http = new ServerConnector(server);
+        http.setHost(host);
+        http.setPort(portInt);
+        server.setConnectors(new ServerConnector[] {
+            http
+        });
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         SessionManager sm = new HashSessionManager();
         context.setSessionHandler(new SessionHandler(sm));
@@ -122,7 +133,7 @@ public class ServerStarter {
         try {
             server.start();
         } catch ( Exception e ) {
-            LOG.error("Could not start the server at port " + serverPort, e);
+            ServerStarter.LOG.error("Could not start the server at " + host + ":" + port, e);
             System.exit(16);
         }
         this.injector = robertaGuiceServletConfig.getCreatedInjector();
@@ -130,8 +141,7 @@ public class ServerStarter {
     }
 
     /**
-     * returns the guice injector configured in this class. Even if this not dangerous per se, it should
-     * <b>only be used in tests</b>
+     * returns the guice injector configured in this class. Even if this not dangerous per se, it should <b>only be used in tests</b>
      *
      * @return the injector
      */
@@ -144,10 +154,10 @@ public class ServerStarter {
             DbSession session = this.injector.getInstance(SessionFactoryWrapper.class).getSession();
             ProgramDao projectDao = new ProgramDao(session);
             int numberOfPrograms = projectDao.loadAll().size();
-            LOG.info("There are " + numberOfPrograms + " programs stored in the database");
+            ServerStarter.LOG.info("There are " + numberOfPrograms + " programs stored in the database");
             session.close();
         } catch ( Exception e ) {
-            LOG.error("Server was started, but could not connect to the database", e);
+            ServerStarter.LOG.error("Server was started, but could not connect to the database", e);
             System.exit(20);
         }
 

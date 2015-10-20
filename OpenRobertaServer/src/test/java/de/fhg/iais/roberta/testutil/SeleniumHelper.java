@@ -1,13 +1,11 @@
 package de.fhg.iais.roberta.testutil;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jetty.server.Server;
 import org.hibernate.Session;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
@@ -35,10 +33,10 @@ public class SeleniumHelper {
         Properties properties = Util.loadProperties("classpath:openRoberta.properties");
         this.browserVisibility = Boolean.parseBoolean(properties.getProperty("browser.visibility"));
         this.serverStarter = new ServerStarter("classpath:openRoberta.properties");
-        this.server = this.serverStarter.start();
+        this.server = this.serverStarter.start("localhost", null);
         Session session = this.serverStarter.getInjectorForTests().getInstance(SessionFactoryWrapper.class).getNativeSession();
         new DbSetup(session).runDefaultRobertaSetup();
-        this.driver = runBrowser(this.browserVisibility);
+        this.driver = SeleniumHelper.runBrowser(this.browserVisibility);
         this.port = this.server.getURI().getPort();
         this.baseUrl = "http://localhost:" + this.port + "/" + baseUrl + "/";
         this.driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
@@ -51,12 +49,12 @@ public class SeleniumHelper {
 
     public void expectError() {
         awaitTextReadyInElementReady();
-        assertEquals("error", this.driver.findElement(By.id("result")).getText());
+        Assert.assertEquals("error", this.driver.findElement(By.id("result")).getText());
     }
 
     public void expectSuccess() {
         awaitTextReadyInElementReady();
-        assertEquals("asExpected", this.driver.findElement(By.id("result")).getText());
+        Assert.assertEquals("asExpected", this.driver.findElement(By.id("result")).getText());
     }
 
     public void tearDown() throws Exception {
@@ -65,13 +63,13 @@ public class SeleniumHelper {
     }
 
     public void assertText(String text, By id) {
-        assertEquals(text, this.driver.findElement(id).getText());
+        Assert.assertEquals(text, this.driver.findElement(id).getText());
     }
 
     private void awaitTextReadyInElementReady() {
         for ( int second = 0;; second++ ) {
             if ( second >= 60 ) {
-                fail("timeout");
+                Assert.fail("timeout");
             }
             try {
                 if ( "ready".equals(this.driver.findElement(By.id("ready")).getText()) ) {
