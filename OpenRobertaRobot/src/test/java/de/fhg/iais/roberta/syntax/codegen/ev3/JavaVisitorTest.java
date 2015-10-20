@@ -9,7 +9,6 @@ import org.junit.Test;
 import de.fhg.iais.roberta.components.ev3.EV3Sensors;
 import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
-import de.fhg.iais.roberta.syntax.codegen.ev3.Ast2Ev3JavaVisitor;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.MathConst;
 import de.fhg.iais.roberta.syntax.expr.MathConst.Const;
@@ -36,7 +35,7 @@ public class JavaVisitorTest {
         MathConst<Void> mathConst = MathConst.make(Const.E, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true), null);
         Ast2Ev3JavaVisitor visitor = new Ast2Ev3JavaVisitor("Test", brickConfiguration, usedSensors, 0);
         mathConst.visit(visitor);
-        Assert.assertEquals("Math.E", visitor.getSb().toString());
+        Assert.assertEquals("BlocklyMethods.E", visitor.getSb().toString());
     }
 
     @Test
