@@ -1344,7 +1344,7 @@ function initHeadNavigation() {
         } else if (domId === 'menuNewUser') { // Submenu 'Login'
             $("#register-user").modal('show');
         } else if (domId === 'menuChangeUser') { // Submenu 'Login'
-            // open the same popup as in case 'new', but with fields prefilled, REST-Call is missing
+            $("#change-user-settings").modal('show');
         } else if (domId === 'menuDeleteUser') { // Submenu 'Login'
             $("#delete-user").modal('show');
         }

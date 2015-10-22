@@ -1,39 +1,17 @@
-/*C3*/SET SCHEMA PUBLIC
+/*C13*/SET SCHEMA PUBLIC
 DELETE FROM USER WHERE ID=53
-INSERT INTO USER VALUES(53,'koki','e8a86590dc3e833f:27ff25b7b886552f9907f016c5c1d437dc8af468','1','TEACHER','2014-12-19 09:18:04.976000','2015-10-05 10:14:07.256000',NULL)
+INSERT INTO USER VALUES(53,'koki','e8a86590dc3e833f:27ff25b7b886552f9907f016c5c1d437dc8af468','1','TEACHER','2014-12-19 09:18:04.976000','2015-10-22 08:35:13.572000',NULL)
 COMMIT
-DELETE FROM PROGRAM WHERE ID=73
+/*C11*/SET SCHEMA PUBLIC
+DELETE FROM USER WHERE ID=53
+INSERT INTO USER VALUES(53,'koki','e8a86590dc3e833f:27ff25b7b886552f9907f016c5c1d437dc8af468','1','TEACHER','2014-12-19 09:18:04.976000','2015-10-22 08:39:16.301000',NULL)
 COMMIT
-DELETE FROM PROGRAM WHERE ID=96
+/*C13*/DELETE FROM USER WHERE ID=53
+INSERT INTO USER VALUES(53,'koki','e8a86590dc3e833f:27ff25b7b886552f9907f016c5c1d437dc8af468','1','TEACHER','2014-12-19 09:18:04.976000','2015-10-22 08:50:44.437000',NULL)
 COMMIT
-DELETE FROM PROGRAM WHERE ID=46
+/*C11*/DELETE FROM USER WHERE ID=53
+INSERT INTO USER VALUES(53,'koki','e8a86590dc3e833f:27ff25b7b886552f9907f016c5c1d437dc8af468','1','TEACHER','2014-12-19 09:18:04.976000','2015-10-22 08:58:45.742000',NULL)
 COMMIT
-DELETE FROM PROGRAM WHERE ID=47
-COMMIT
-/*C4*/SET SCHEMA PUBLIC
-DELETE FROM PROGRAM WHERE ID=68
-COMMIT
-/*C7*/SET SCHEMA PUBLIC
-DELETE FROM PROGRAM WHERE ID=78
-COMMIT
-/*C6*/SET SCHEMA PUBLIC
-DELETE FROM PROGRAM WHERE ID=72
-COMMIT
-/*C5*/SET SCHEMA PUBLIC
-DELETE FROM PROGRAM WHERE ID=93
-COMMIT
-/*C6*/DELETE FROM PROGRAM WHERE ID=45
-COMMIT
-/*C9*/SET SCHEMA PUBLIC
-DELETE FROM PROGRAM WHERE ID=75
-COMMIT
-/*C7*/DELETE FROM PROGRAM WHERE ID=48
-COMMIT
-/*C3*/DELETE FROM PROGRAM WHERE ID=71
-COMMIT
-/*C4*/DELETE FROM PROGRAM WHERE ID=67
-COMMIT
-/*C8*/SET SCHEMA PUBLIC
-DELETE FROM PROGRAM WHERE ID=70
-INSERT INTO PROGRAM VALUES(70,'prova',53,42,'<block_set xmlns="http://de.fhg.iais.roberta.blockly"><instance x="113" y="47"><block type="robControls_start" id="10" intask="true" deletable="false"><mutation declare="false"></mutation></block><block type="robActions_display_text" id="314" inline="false" intask="true"><value name="OUT"><block type="robProcedures_callreturn" id="413" inline="false" intask="true"><mutation name="test" output_type="Number"><arg name="x" type="Number"></arg></mutation><value name="ARG0"><block type="math_number" id="417" intask="true"><field name="NUM">30</field></block></value></block></value><value name="COL"><block type="math_number" id="316" intask="true"><field name="NUM">0</field></block></value><value name="ROW"><block type="math_number" id="317" intask="true"><field name="NUM">0</field></block></value></block><block type="robActions_motorDiff_on" id="69" inline="false" intask="true"><field name="DIRECTION">FOREWARD</field><value name="POWER"><block type="math_number" id="70" intask="true"><field name="NUM">30</field></block></value></block></instance><instance x="893" y="172"><block type="robProcedures_defreturn" id="395" inline="false" intask="true"><mutation declare="true" return_type="Number"></mutation><field name="NAME">test</field><field name="TYPE">Number</field><repetitions><statement name="ST"><block type="robLocalVariables_declare" id="415" intask="true" deletable="false" movable="false"><mutation next="false" declaration_type="Number"></mutation><field name="VAR">x</field><field name="TYPE">Number</field></block></statement><statement name="STACK"><block type="robActions_motor_on_for" id="400" inline="false" intask="true"><field name="MOTORPORT">B</field><field name="MOTORROTATION">ROTATIONS</field><value name="POWER"><block type="math_number" id="401" intask="true"><field name="NUM">30</field></block></value><value name="VALUE"><block type="math_number" id="402" intask="true"><field name="NUM">1</field></block></value></block></statement><value name="RETURN"><block type="variables_get" id="26" intask="true"><mutation datatype="Number"></mutation><field name="VAR">x</field></block></value></repetitions></block></instance></block_set>','2015-02-17 11:49:26.771000','2015-10-05 10:14:58.381000',NULL,NULL,0,NULL,0)
+DELETE FROM USER WHERE ID=53
+INSERT INTO USER VALUES(53,'koki','e8a86590dc3e833f:27ff25b7b886552f9907f016c5c1d437dc8af468','1','TEACHER','2014-12-19 09:18:04.976000','2015-10-22 09:02:35.159000',NULL)
 COMMIT

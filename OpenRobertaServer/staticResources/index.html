@@ -162,7 +162,7 @@ limitations under the License.
                             <li class="login"><a href="#" id="menuLogin" class="typcn typcn-user" lkey="Blockly.Msg.MENU_LOG_IN">anmelden ...</a></li>
                             <li class="logout"><a href="#" id="menuLogout" class="typcn typcn-user-outline" lkey="Blockly.Msg.MENU_LOG_OUT">abmelden</a></li>
                             <li><a href="#" id="menuNewUser" class="typcn typcn-user-add" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li>
-                            <li class="hidden"><a href="#" id="menuChangeUser" class="" lkey="Blockly.Msg.MENU_CHANGE">ändern ...</a></li>
+                            <li class="logout"><a href="#" id="menuChangeUser" class="" lkey="Blockly.Msg.MENU_CHANGE">ändern ...</a></li>
                             <li class="logout"><a href="#" id="menuDeleteUser" class="typcn typcn-user-delete" lkey="Blockly.Msg.MENU_DELETE_USER">Benutzer
                                     löschen ...</a></li>
                         </ul></li>
@@ -291,6 +291,49 @@ limitations under the License.
 
     <!-- Popup register user -->
     <div id="register-user" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 class="modal-title">Register user</h3>
+                </div>
+                <div class="modal-body left-inner-addon">
+                    <label for="accountName" lkey="Blockly.Msg.POPUP_USERNAME">Username</label>
+                    <div class="left-inner-addon">
+                        <i class="typcn typcn-user"></i>
+                        <input type="text" data-role="none" id="accountName" class="form-control" value="" autofocus />
+                    </div>
+                    <label for="pass1" lkey="Blockly.Msg.POPUP_PASSWORD">Password</label>
+                    <div class="left-inner-addon">
+                        <i class="typcn typcn-lock-closed"></i>
+                        <input type="password" data-role="none" id="pass1" class="form-control" value="" />
+                    </div>
+                    <label for="pass2" lkey="Blockly.Msg.POPUP_REPEAT_PASSWORD">Repeat password</label>
+                    <div class="left-inner-addon">
+                        <i class="typcn typcn-lock-closed"></i>
+                        <input type="password" data-role="none" id="pass2" class="form-control" value="" />
+                    </div>
+                    <label for="userName" lkey="Blockly.Msg.POPUP_NAME">Name</label>
+                    <div class="left-inner-addon">
+                        <i class="typcn typcn-user-outline"></i>
+                        <input type="text" data-role="none" id="userName" class="form-control" value="" />
+                    </div>
+                    <label for="userEmail" lkey="Blockly.Msg.POPUP_EMAIL">E-Mail</label>
+                    <div class="left-inner-addon">
+                        <i class="typcn typcn-at"></i>
+                        <input type="text" data-role="none" id="userEmail" class="form-control" value="" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" id="saveUser">OK</button>
+                    <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+     <!-- Popup change user settings -->
+    <div id="change-user-settings" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
