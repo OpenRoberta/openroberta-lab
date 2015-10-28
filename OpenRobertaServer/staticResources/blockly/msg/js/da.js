@@ -621,6 +621,8 @@ Blockly.Msg.POPUP_ATTENTION = "Advarsel";
 Blockly.Msg.POPUP_BEFOREUNLOAD = "Du har ændringer i dit program eller din konfiguration der ikke er gemt. Log ind og gem dit program eller din konfiguration.";
 Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN = "Du har gemmer ændringer i dit program eller din konfiguration der ikke er gemt.";
 Blockly.Msg.POPUP_CANCEL = "Afbryd";
+Blockly.Msg.POPUP_CHANGE_PASSWORD = "Change password";  // untranslated
+Blockly.Msg.POPUP_CHANGE_USER_PASSWORD = "Change User Password";  // untranslated
 Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION = "Er du sikker på at du vil slette konfigurationen ?";
 Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM = "Vil du virkeligt slette programmet ?";
 Blockly.Msg.POPUP_CONFIRM_UPDATE_FIRMWARE = "Der er en ny software opdatering til din robot. Du kan forsøge at køre programmer med den gamle version, men det anbefales at du opdaterer din robot nu! Klik >>Opdater nu<< og genstart din robot bagefter.";
@@ -628,6 +630,8 @@ Blockly.Msg.POPUP_DO_UPDATE_FIRMWARE = "Opdater nu";
 Blockly.Msg.POPUP_EMAIL = "E-Mail";
 Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE = "Forstået!";
 Blockly.Msg.POPUP_NAME = "Navn";
+Blockly.Msg.POPUP_NEW_PASSWORD = "New Password";  // untranslated
+Blockly.Msg.POPUP_OLD_PASSWORD = "Old Password";  // untranslated
 Blockly.Msg.POPUP_PASSWORD = "Kodeord";
 Blockly.Msg.POPUP_RELEASE = "Version beta 1.3.2 <ul class='NonIcon' style='font-size:small'><li>Fix timestamp bug for save program</li></ul>Version beta 1.3.1 <ul class='NonIcon' style='font-size:small'><li>Spanish available now!</li><li>Fixed bugs</li></ul>Version beta 1.3.0 <ul class='NonIcon' style='font-size:small'><li>Simulate a robot!</li><li>Share your program with a friend</li><li>Update the robots firmware Over-the-Air</li><li>USB cabel support for Chromebooks</li><li>Fixed many more bugs</li></ul></br>";  // untranslated
 Blockly.Msg.POPUP_REPEAT_PASSWORD = "Gentag kodeord";

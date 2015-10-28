@@ -25,6 +25,9 @@ public class User implements WithSurrogateId {
     @Column(name = "ACCOUNT")
     private String account;
 
+    @Column(name = "USER_NAME")
+    private String userName;
+
     @Column(name = "PASSWORD")
     // temporary solution until authent/
     private String password;
@@ -66,6 +69,20 @@ public class User implements WithSurrogateId {
 
     public void setPassword(String password) throws Exception {
         this.password = Encryption.createHash(password);
+    }
+
+    /**
+     * @return the userName
+     */
+    public String getUserName() {
+        return this.userName;
+    }
+
+    /**
+     * @param userName the userName to set
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getEmail() {

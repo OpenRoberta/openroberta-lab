@@ -621,6 +621,8 @@ Blockly.Msg.POPUP_ATTENTION = "Achtung";
 Blockly.Msg.POPUP_BEFOREUNLOAD = "Du musst Dich anmelden und Dein Programm oder Deine Konfiguration abspeichern, bevor Du die Seite verlässt. Deine Änderungen gehen sonst verloren.";
 Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN = "Du musst Dein Programm oder Deine Konfiguration abspeichern, bevor Du die Seite verlässt. Deine Änderungen gehen sonst verloren.";
 Blockly.Msg.POPUP_CANCEL = "Abbrechen";
+Blockly.Msg.POPUP_CHANGE_PASSWORD = "Change password";  // untranslated
+Blockly.Msg.POPUP_CHANGE_USER_PASSWORD = "Change User Password";  // untranslated
 Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION = "Möchtest du die Roboterkonfiguration wirklich löschen?";
 Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM = "Möchtest du das Programm wirklich löschen?";
 Blockly.Msg.POPUP_CONFIRM_UPDATE_FIRMWARE = "Die Firmware Deines Roboters wurde geändert. Deine Programme funktionieren vielleicht noch, aber es wäre besser, die Firmware jetzt zu aktualisieren! Klicke dazu auf >>Aktualisieren<< und führe danach einen Neustart des Roboters durch.";
@@ -628,6 +630,8 @@ Blockly.Msg.POPUP_DO_UPDATE_FIRMWARE = "Aktualisieren";
 Blockly.Msg.POPUP_EMAIL = "E-Mail";
 Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE = "Ich weiß Bescheid!";
 Blockly.Msg.POPUP_NAME = "Name";
+Blockly.Msg.POPUP_NEW_PASSWORD = "New Password";  // untranslated
+Blockly.Msg.POPUP_OLD_PASSWORD = "Old Password";  // untranslated
 Blockly.Msg.POPUP_PASSWORD = "Passwort";
 Blockly.Msg.POPUP_RELEASE = "Version beta 1.3.2<ul class='NonIcon' style='font-size:small'><li>Zeitzonenproblem beim Speichern eines Programmes behoben</li></ul>Version beta 1.3.1<ul class='NonIcon' style='font-size:small'><li>Jetzt auch auf Spanisch!</li><li>Weitere kleinere Fehler behoben</li></ul>Version beta 1.3.0<ul class='NonIcon' style='font-size:small'><li>Jetzt neu mit Roboter Simulation!</li><li>Teile dein Programm mit Freunden</li><li>Neue Firmware Versionen jetzt über WLAN</li><li>USB Kabel Unterstützung für Chromeboooks</li><li>Weitere kleinere Fehler behoben</li></ul></br>";
 Blockly.Msg.POPUP_REPEAT_PASSWORD = "Passwort wiederholen";

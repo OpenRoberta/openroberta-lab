@@ -86,11 +86,11 @@ function logout() {
 /**
  * Create new user
  */
-function saveUserToServer() {
+function createUserToServer() {
     if ($('#pass1').val() != $('#pass2').val()) {
         displayMessage("MESSAGE_PASSWORD_ERROR", "POPUP", "");
     } else {
-        USER.saveUserToServer($("#accountName").val(), $('#userName').val(), $("#userEmail").val(), $('#pass1').val(), function(result) {
+        USER.createUserToServer($("#accountName").val(), $('#userName').val(), $("#userEmail").val(), $('#pass1').val(), function(result) {
             if (result.rc === "ok") {
                 setRobotState(result);
                 $('#accountNameS').val($("#accountName").val());
@@ -102,6 +102,50 @@ function saveUserToServer() {
     }
 }
 
+/**
+ * Get user from server
+ */
+function getUserFromServer() {
+    USER.getUserFromServer(userState.accountName, function(result) {
+        if (result.rc === "ok") {
+            $("#accountNameU").val(result.userAccountName);
+            $("#userEmailU").val(result.userEmail);
+            $("#userNameU").val(result.userName);
+            $("#change-user-settings").modal('show');
+            console.log(result);
+        }
+
+    });
+}
+
+/**
+ * Update user
+ */
+function updateUserToServer() {
+    USER.updateUserToServer($("#accountNameU").val(), $('#userNameU').val(), $("#userEmailU").val(), function(result) {
+        if (result.rc === "ok") {
+            setRobotState(result);
+        }
+        displayInformation(result, "", result.message);
+    });
+
+}
+
+/**
+ * Delete user on server
+ */
+function updateUserPasswordOnServer() {
+    if ($('#passNew').val() != $('#passNewRepeat').val()) {
+        displayMessage("MESSAGE_PASSWORD_ERROR", "POPUP", "");
+    } else {
+        USER.updateUserPasswordToServer($("#accountNameU").val(), $('#passOld').val(), $("#passNew").val(), function(result) {
+            if (result.rc === "ok") {
+                $("#change-user-password").modal('hide');
+            }
+            displayInformation(result, "", result.message);
+        });
+    }
+}
 /**
  * Delete user on server
  */
@@ -1344,7 +1388,8 @@ function initHeadNavigation() {
         } else if (domId === 'menuNewUser') { // Submenu 'Login'
             $("#register-user").modal('show');
         } else if (domId === 'menuChangeUser') { // Submenu 'Login'
-            $("#change-user-settings").modal('show');
+            getUserFromServer();
+
         } else if (domId === 'menuDeleteUser') { // Submenu 'Login'
             $("#delete-user").modal('show');
         }
@@ -1555,15 +1600,21 @@ function initHeadNavigation() {
  * Initialize popups
  */
 function initPopups() {
-    $('#saveUser').onWrap('click', saveUserToServer);
+    $('#saveUser').onWrap('click', createUserToServer);
+    $('#saveUserU').onWrap('click', updateUserToServer);
     $('#deleteUser').onWrap('click', deleteUserOnServer);
     $('#doLogin').onWrap('click', login);
     $('#saveProgram').onWrap('click', saveAsProgramToServer);
     $('#saveConfiguration').onWrap('click', saveAsConfigurationToServer);
+    $('#changeUserPassword').onWrap('click', updateUserPasswordOnServer);
+
+    $('#showChangeUserPassword').onWrap('click', function() {
+        $('#change-user-password').modal('show');
+    });
 
     $('#shareProgram').onWrap('click', function() {
-        shareProgramsFromListing();
-    }, 'share program');
+        $('#show-about').modal('hide');
+    });
 
     $('#setToken').onWrap('click', function() {
         setToken($('#tokenValue').val());
@@ -1588,6 +1639,9 @@ function initPopups() {
     $('#register-user').onWrap('hidden.bs.modal', function() {
         $('#register-user input :not(btn)').val('');
         $('#login-user input :not(btn)').val('');
+    });
+    $('#change-user-settings').onWrap('hidden.bs.modal', function() {
+//        $('#change-user-settings input :not(btn)').val('');
     });
 
     $('#buttonCancelFirmwareUpdateAndRun').onWrap('click', function() {
@@ -1805,8 +1859,14 @@ function translate(jsdata) {
         } else if (lkey === 'Blockly.Msg.MENU_NEW') {
             $('#register-user h3').text(value);
             $(this).html(value);
+        } else if (lkey === 'Blockly.Msg.POPUP_CHANGE_USER_PASSWORD') {
+            $('#register-user h3').text(value);
+            $(this).html(value);
         } else if (lkey === 'Blockly.Msg.MENU_DELETE_USER') {
             $('#delete-user h3').text(value);
+            $(this).html(value);
+        } else if (lkey === 'Blockly.Msg.MENU_CHANGE') {
+            $('#change-user-settings h3').text(value);
             $(this).html(value);
         } else if (lkey === 'Blockly.Msg.MENU_SAVE_AS') {
             $('#save-program h3').text(value);
@@ -1825,6 +1885,8 @@ function translate(jsdata) {
         } else if (lkey === 'Blockly.Msg.POPUP_CANCEL') {
             $('.cancelPopup').attr('value', value);
             $('.backButton').attr('value', value);
+        } else if (lkey === 'Blockly.Msg.POPUP_CHANGE_PASSWORD') {
+            $('#showChangeUserPassword').attr('value', value);
         } else if (lkey === 'Blockly.Msg.POPUP_ABOUT_JOIN') {
             $('#about-join').html(value);
         } else if (lkey === 'Blockly.Msg.BUTTON_LOAD') {

@@ -6,6 +6,7 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
+import de.fhg.iais.roberta.persistence.bo.Role;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
@@ -42,7 +43,7 @@ public class UserProcessor extends AbstractProcessor {
         }
     }
 
-    public void saveUser(String account, String password, String roleAsString, String email, String tags) throws Exception {
+    public void createUser(String account, String password, String userName, String roleAsString, String email, String tags) throws Exception {
         if ( account == null || account.equals("") || password == null || password.equals("") ) {
             setError(Key.USER_CREATE_ERROR_MISSING_REQ_FIELDS, account);
         } else {
@@ -50,10 +51,43 @@ public class UserProcessor extends AbstractProcessor {
             User user = userDao.persistUser(account, password, roleAsString);
             if ( user != null ) {
                 setSuccess(Key.USER_CREATE_SUCCESS);
+                user.setUserName(userName);
                 user.setEmail(email);
                 user.setTags(tags);
             } else {
                 setError(Key.USER_CREATE_ERROR_NOT_SAVED_TO_DB, account);
+            }
+        }
+    }
+
+    public void updatePassword(String account, String oldPassword, String newPassword) throws Exception {
+        if ( account == null || account.equals("") ) {
+            setError(Key.USER_UPDATE_ERROR_ACCOUNT_WRONG, account);
+        } else {
+            User user = getUser(account, oldPassword);
+            if ( user != null && this.httpSessionState.getUserId() == user.getId() ) {
+                user.setPassword(newPassword);
+                setSuccess(Key.USER_UPDATE_SUCCESS);
+            } else {
+                setError(Key.USER_UPDATE_ERROR_NOT_SAVED_TO_DB, account);
+            }
+        }
+    }
+
+    public void updateUser(String account, String userName, String roleAsString, String email, String tags) throws Exception {
+        if ( account == null || account.equals("") ) {
+            setError(Key.USER_UPDATE_ERROR_ACCOUNT_WRONG, account);
+        } else {
+            UserDao userDao = new UserDao(this.dbSession);
+            User user = userDao.loadUser(account);
+            if ( user != null && this.httpSessionState.getUserId() == user.getId() ) {
+                user.setUserName(userName);
+                user.setRole(Role.valueOf(roleAsString));
+                user.setEmail(email);
+                user.setTags(tags);
+                setSuccess(Key.USER_UPDATE_SUCCESS);
+            } else {
+                setError(Key.USER_UPDATE_ERROR_NOT_SAVED_TO_DB, account);
             }
         }
     }

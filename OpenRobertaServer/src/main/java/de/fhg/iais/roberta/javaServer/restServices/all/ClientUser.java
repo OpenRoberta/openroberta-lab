@@ -74,6 +74,20 @@ public class ClientUser {
                     ClientUser.LOG.info("login: user {} (id {}) logged in", account, id);
                     AliveData.rememberLogin();
                 }
+            } else if ( cmd.equals("getUser") && httpSessionState.isUserLoggedIn() ) {
+                String userAccountName = request.getString("accountName");
+                User user = up.getUser(userAccountName);
+                Util.addResultInfo(response, up);
+                if ( user != null ) {
+                    int id = user.getId();
+                    String account = user.getAccount();
+                    String userName = user.getUserName();
+                    String email = user.getEmail();
+                    response.put("userId", id);
+                    response.put("userAccountName", account);
+                    response.put("userName", userName);
+                    response.put("userEmail", email);
+                }
 
             } else if ( cmd.equals("logout") && httpSessionState.isUserLoggedIn() ) {
                 httpSessionState.setUserClearDataKeepTokenAndRobotId(HttpSessionState.NO_USER);
@@ -85,11 +99,27 @@ public class ClientUser {
                 String account = request.getString("accountName");
                 String password = request.getString("password");
                 String email = request.getString("userEmail");
+                String userName = request.getString("userName");
                 String role = request.getString("role");
                 //String tag = request.getString("tag");
-                up.saveUser(account, password, role, email, null);
+                up.createUser(account, password, userName, role, email, null);
                 Util.addResultInfo(response, up);
 
+            } else if ( cmd.equals("updateUser") ) {
+                String account = request.getString("accountName");
+                String userName = request.getString("userName");
+                String email = request.getString("userEmail");
+                String role = request.getString("role");
+                //String tag = request.getString("tag");
+                up.updateUser(account, userName, role, email, null);
+                Util.addResultInfo(response, up);
+
+            } else if ( cmd.equals("changePassword") ) {
+                String account = request.getString("accountName");
+                String oldPassword = request.getString("oldPassword");
+                String newPassword = request.getString("newPassword");
+                up.updatePassword(account, oldPassword, newPassword);
+                Util.addResultInfo(response, up);
             } else if ( cmd.equals("obtainUsers") ) {
 
                 String sortBy = request.getString("sortBy");

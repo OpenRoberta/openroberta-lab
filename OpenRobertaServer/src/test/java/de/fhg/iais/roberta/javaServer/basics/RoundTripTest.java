@@ -199,7 +199,7 @@ public class RoundTripTest {
             restUser.command(
                 s1,
                 sessionFactoryWrapper.getSession(),
-                JSONUtilForServer.mkD("{'cmd':'createUser';'accountName':'orA';'password':'Pid';'userEmail':'cavy@home';'role':'STUDENT'}"));
+                JSONUtilForServer.mkD("{'cmd':'createUser';'accountName':'orA';'userName':'orA';'password':'Pid';'userEmail':'cavy@home';'role':'STUDENT'}"));
         Assert.assertEquals(2, RoundTripTest.getOneBigInteger("select count(*) from USER"));
         Assert.assertTrue(!RoundTripTest.s1.isUserLoggedIn());
         RoundTripTest.response = //

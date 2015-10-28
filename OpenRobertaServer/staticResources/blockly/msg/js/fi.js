@@ -621,6 +621,8 @@ Blockly.Msg.POPUP_ATTENTION = "Huomio";
 Blockly.Msg.POPUP_BEFOREUNLOAD = "You have unsafed changes in your program or configuration. Sign in and save your program or configuration.";
 Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN = "You have unsafed changes in your program or configuration.";
 Blockly.Msg.POPUP_CANCEL = "Peru";
+Blockly.Msg.POPUP_CHANGE_PASSWORD = "Change password";  // untranslated
+Blockly.Msg.POPUP_CHANGE_USER_PASSWORD = "Change User Password";  // untranslated
 Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION = "Haluatko varmasti poistaa asetukset?";
 Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM = "Haluatko varmasti poistaa ohjelman?";
 Blockly.Msg.POPUP_CONFIRM_UPDATE_FIRMWARE = "There is a new firmware version for your robot available. You can try to run programs with the old version, but best bet is to update your robot now! You just have to click >>Update now<< and restart the robots system afterwards.";
@@ -628,6 +630,8 @@ Blockly.Msg.POPUP_DO_UPDATE_FIRMWARE = "Tee päivitys";
 Blockly.Msg.POPUP_EMAIL = "Sähköposti";
 Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE = "Aloitetaan!";
 Blockly.Msg.POPUP_NAME = "Nimi";
+Blockly.Msg.POPUP_NEW_PASSWORD = "New Password";  // untranslated
+Blockly.Msg.POPUP_OLD_PASSWORD = "Old Password";  // untranslated
 Blockly.Msg.POPUP_PASSWORD = "Salasana";
 Blockly.Msg.POPUP_RELEASE = "Version beta 1.3.2 <ul class='NonIcon' style='font-size:small'><li>Fix timestamp bug for save program</li></ul>Version beta 1.3.1 <ul class='NonIcon' style='font-size:small'><li>Spanish available now!</li><li>Fixed bugs</li></ul>Version beta 1.3.0 <ul class='NonIcon' style='font-size:small'><li>Simulate a robot!</li><li>Share your program with a friend</li><li>Update the robots firmware Over-the-Air</li><li>USB cabel support for Chromebooks</li><li>Fixed many more bugs</li></ul></br>";  // untranslated
 Blockly.Msg.POPUP_REPEAT_PASSWORD = "Toista salasana";

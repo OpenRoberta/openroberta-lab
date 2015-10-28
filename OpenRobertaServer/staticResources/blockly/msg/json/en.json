@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-10-15 11:57:29.388000",
+		"lastupdated": "2015-10-28 11:52:31.867000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -697,7 +697,11 @@
 	"POPUP_USERNAME": "Username",
 	"POPUP_USERNAME_LOGOFF": "You are not logged in.",
 	"POPUP_PASSWORD": "Password",
+	"POPUP_NEW_PASSWORD": "New Password",
+	"POPUP_OLD_PASSWORD": "Old Password",
 	"POPUP_REPEAT_PASSWORD": "Repeat password",
+	"POPUP_CHANGE_PASSWORD": "Change password",
+	"POPUP_CHANGE_USER_PASSWORD": "Change User Password",
 	"POPUP_NAME": "Name",
 	"POPUP_EMAIL": "E-Mail",
 	"POPUP_SHARE_WITH": "Share with ...",

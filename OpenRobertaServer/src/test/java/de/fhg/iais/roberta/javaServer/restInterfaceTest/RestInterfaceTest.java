@@ -107,6 +107,8 @@ public class RestInterfaceTest {
     public void test() throws Exception {
         this.memoryDbSetup.deleteAllFromUserAndProgram();
         createTwoUsers();
+        updateUser();
+        changeUserPassword();
         loginLogoutPid();
         pidCreateAndUpdate4Programs();
         minschaCreate2Programs();
@@ -134,24 +136,93 @@ public class RestInterfaceTest {
             Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
-                "{'cmd':'createUser';'accountName':'pid';'password':'dip';'userEmail':'cavy@home';'role':'STUDENT'}",
+                "{'cmd':'createUser';'accountName':'pid';'userName':'cavy';'password':'dip';'userEmail':'cavy@home';'role':'STUDENT'}",
                 "ok",
                 Key.USER_CREATE_SUCCESS);
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
-                "{'cmd':'createUser';'accountName':'pid';'password':'dip';'userEmail':'cavy@home';'role':'STUDENT'}",
+                "{'cmd':'createUser';'accountName':'pid';'userName':'administrator';'password':'dip';'userEmail':'cavy@home';'role':'STUDENT'}",
                 "error",
                 Key.USER_CREATE_ERROR_NOT_SAVED_TO_DB);
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             restUser(
                 this.sPid,
-                "{'cmd':'createUser';'accountName':'minscha';'password':'12';'userEmail':'cavy@home';'role':'STUDENT'}",
+                "{'cmd':'createUser';'accountName':'minscha';'userName':'cavy';'password':'12';'userEmail':'cavy@home';'role':'STUDENT'}",
                 "ok",
                 Key.USER_CREATE_SUCCESS);
             Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
             Assert.assertTrue(!this.sPid.isUserLoggedIn() && !this.sMinscha.isUserLoggedIn());
         }
+    }
+
+    /**
+     * update user:<br>
+     * <b>PRE:</b> one user exists<br>
+     * <b>POST:</b> two user exist, no user has logged in<br>
+     * - USER table 2 users; update user "minscha" -> error<br>
+     * - login with "minscha" -> success; user "minscha" is logedin<br>
+     * - update user name of "minscha" -> success<br>
+     */
+    private void updateUser() throws Exception {
+
+        Assert.assertTrue(!this.sPid.isUserLoggedIn() && !this.sMinscha.isUserLoggedIn());
+        Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
+        restUser(
+            this.sMinscha,
+            "{'cmd':'updateUser';'accountName':'minscha';'userName':'cavy1231';'userEmail':'cavy@home';'role':'STUDENT'}",
+            "error",
+            Key.USER_UPDATE_ERROR_NOT_SAVED_TO_DB);
+
+        restUser(this.sMinscha, "{'cmd':'login';'accountName':'minscha';'password':'12'}", "ok", Key.USER_GET_ONE_SUCCESS);
+        Assert.assertTrue(!this.sPid.isUserLoggedIn() && this.sMinscha.isUserLoggedIn());
+
+        restUser(
+            this.sMinscha,
+            "{'cmd':'updateUser';'accountName':'minscha';'userName':'cavy1231';'userEmail':'cavy@home';'role':'STUDENT'}",
+            "ok",
+            Key.USER_UPDATE_SUCCESS);
+
+        restUser(this.sMinscha, "{'cmd':'getUser';'accountName':'minscha'}", "ok", Key.USER_GET_ONE_SUCCESS);
+        this.response.getEntity().toString().contains("cavy1231");
+        restUser(this.sMinscha, "{'cmd':'logout'}", "ok", Key.USER_LOGOUT_SUCCESS);
+        Assert.assertTrue(!this.sPid.isUserLoggedIn() && !this.sMinscha.isUserLoggedIn());
+
+    }
+
+    /**
+     * change user password:<br>
+     * <b>PRE:</b> two user exists<br>
+     * <b>POST:</b> two user exist, no user has logged in<br>
+     */
+    private void changeUserPassword() throws Exception {
+
+        Assert.assertTrue(!this.sPid.isUserLoggedIn() && !this.sMinscha.isUserLoggedIn());
+        Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
+        restUser(
+            this.sMinscha,
+            "{'cmd':'changePassword';'accountName':'minscha';'oldPassword':'12';'newPassword':'12345'}",
+            "error",
+            Key.USER_UPDATE_ERROR_NOT_SAVED_TO_DB);
+
+        restUser(this.sMinscha, "{'cmd':'login';'accountName':'minscha';'password':'12'}", "ok", Key.USER_GET_ONE_SUCCESS);
+        Assert.assertTrue(!this.sPid.isUserLoggedIn() && this.sMinscha.isUserLoggedIn());
+        restUser(
+            this.sMinscha,
+            "{'cmd':'changePassword';'accountName':'minscha';'oldPassword':'123';'newPassword':'12345'}",
+            "error",
+            Key.USER_UPDATE_ERROR_NOT_SAVED_TO_DB);
+        restUser(this.sMinscha, "{'cmd':'changePassword';'accountName':'minscha';'oldPassword':'12';'newPassword':'12345'}", "ok", Key.USER_UPDATE_SUCCESS);
+
+        restUser(this.sMinscha, "{'cmd':'logout'}", "ok", Key.USER_LOGOUT_SUCCESS);
+        Assert.assertTrue(!this.sPid.isUserLoggedIn() && !this.sMinscha.isUserLoggedIn());
+
+        restUser(this.sMinscha, "{'cmd':'login';'accountName':'minscha';'password':'12345'}", "ok", Key.USER_GET_ONE_SUCCESS);
+        Assert.assertTrue(!this.sPid.isUserLoggedIn() && this.sMinscha.isUserLoggedIn());
+        restUser(this.sMinscha, "{'cmd':'changePassword';'accountName':'minscha';'oldPassword':'12345';'newPassword':'12'}", "ok", Key.USER_UPDATE_SUCCESS);
+
+        restUser(this.sMinscha, "{'cmd':'logout'}", "ok", Key.USER_LOGOUT_SUCCESS);
+        Assert.assertTrue(!this.sPid.isUserLoggedIn() && !this.sMinscha.isUserLoggedIn());
     }
 
     /**
