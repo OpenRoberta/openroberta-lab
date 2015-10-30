@@ -33,7 +33,7 @@ public class SeleniumHelper {
         Properties properties = Util.loadProperties("classpath:openRoberta.properties");
         this.browserVisibility = Boolean.parseBoolean(properties.getProperty("browser.visibility"));
         this.serverStarter = new ServerStarter("classpath:openRoberta.properties");
-        this.server = this.serverStarter.start("localhost", null);
+        this.server = this.serverStarter.start("localhost", 1998);
         Session session = this.serverStarter.getInjectorForTests().getInstance(SessionFactoryWrapper.class).getNativeSession();
         new DbSetup(session).runDefaultRobertaSetup();
         this.driver = SeleniumHelper.runBrowser(this.browserVisibility);

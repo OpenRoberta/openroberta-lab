@@ -38,7 +38,7 @@ import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
 @Category(IntegrationTest.class)
-public class BasicPerformanceUserInteractionTest {
+public class PerformanceUserInteractionTest {
     private static final Logger LOG = LoggerFactory.getLogger("workflow");
 
     private static final int MAX_PARALLEL_USERS = 30;
@@ -66,7 +66,7 @@ public class BasicPerformanceUserInteractionTest {
 
     @Before
     public void setup() throws Exception {
-        Properties properties = Util.loadProperties("classpath:openRoberta-basicPerformanceUserInteraction.properties");
+        Properties properties = Util.loadProperties("classpath:performanceUserInteraction.properties");
         this.buildXml = properties.getProperty("crosscompiler.build.xml");
         this.connectionUrl = properties.getProperty("hibernate.connection.url");
         this.crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");
@@ -83,37 +83,34 @@ public class BasicPerformanceUserInteractionTest {
         this.downloadJar = new Ev3DownloadJar(this.brickCommunicator, this.crosscompilerBasedir);
         this.brickCommand = new Ev3Command(this.brickCommunicator);
         this.theProgramOfAllUserLol =
-            Resources.toString(BasicPerformanceUserInteractionTest.class.getResource("/rest_ifc_test/action_BrickLight.xml"), Charsets.UTF_8);
-        this.executorService = Executors.newFixedThreadPool(BasicPerformanceUserInteractionTest.MAX_PARALLEL_USERS + 10);
+            Resources.toString(PerformanceUserInteractionTest.class.getResource("/rest_ifc_test/action_BrickLight.xml"), Charsets.UTF_8);
+        this.executorService = Executors.newFixedThreadPool(PerformanceUserInteractionTest.MAX_PARALLEL_USERS + 10);
     }
 
     @Test
     @Ignore
     public void runUsersConcurrent() throws Exception {
         int baseNumber = 0;
-        BasicPerformanceUserInteractionTest.LOG.info(
-            "max parallel users: "
-                + BasicPerformanceUserInteractionTest.MAX_PARALLEL_USERS
-                + "; total users: "
-                + BasicPerformanceUserInteractionTest.MAX_TOTAL_USERS);
-        BasicPerformanceUserInteractionTest.LOG.info("");
+        PerformanceUserInteractionTest.LOG.info(
+            "max parallel users: " + PerformanceUserInteractionTest.MAX_PARALLEL_USERS + "; total users: " + PerformanceUserInteractionTest.MAX_TOTAL_USERS);
+        PerformanceUserInteractionTest.LOG.info("");
         @SuppressWarnings("unchecked")
-        Future<Boolean>[] futures = (Future<Boolean>[]) new Future<?>[BasicPerformanceUserInteractionTest.MAX_PARALLEL_USERS];
-        for ( int i = 0; i < BasicPerformanceUserInteractionTest.MAX_PARALLEL_USERS; i++ ) {
+        Future<Boolean>[] futures = (Future<Boolean>[]) new Future<?>[PerformanceUserInteractionTest.MAX_PARALLEL_USERS];
+        for ( int i = 0; i < PerformanceUserInteractionTest.MAX_PARALLEL_USERS; i++ ) {
             futures[i] = startWorkflow(baseNumber + i);
         }
         boolean success = true;
         int terminatedWorkflows = 0;
-        int nextFreeUserNumber = baseNumber + BasicPerformanceUserInteractionTest.MAX_PARALLEL_USERS + 1;
-        start: while ( terminatedWorkflows < BasicPerformanceUserInteractionTest.MAX_TOTAL_USERS ) {
-            for ( int i = 0; i < BasicPerformanceUserInteractionTest.MAX_PARALLEL_USERS; i++ ) {
+        int nextFreeUserNumber = baseNumber + PerformanceUserInteractionTest.MAX_PARALLEL_USERS + 1;
+        start: while ( terminatedWorkflows < PerformanceUserInteractionTest.MAX_TOTAL_USERS ) {
+            for ( int i = 0; i < PerformanceUserInteractionTest.MAX_PARALLEL_USERS; i++ ) {
                 if ( futures[i].isDone() ) {
                     success = success && futures[i].get();
                     if ( !success ) {
                         break start;
                     }
                     terminatedWorkflows++;
-                    if ( terminatedWorkflows < BasicPerformanceUserInteractionTest.MAX_TOTAL_USERS ) {
+                    if ( terminatedWorkflows < PerformanceUserInteractionTest.MAX_TOTAL_USERS ) {
                         futures[i] = startWorkflow(nextFreeUserNumber++);
                     }
                 }
@@ -131,7 +128,7 @@ public class BasicPerformanceUserInteractionTest {
                     workflow(userNumber);
                     return true;
                 } catch ( Exception e ) {
-                    BasicPerformanceUserInteractionTest.LOG.info("" + userNumber + ";error;");
+                    PerformanceUserInteractionTest.LOG.info("" + userNumber + ";error;");
                     LoggerFactory.getLogger("workflowError").error("Workflow " + userNumber + " terminated with errors", e);
                     return false;
                 }
@@ -142,7 +139,7 @@ public class BasicPerformanceUserInteractionTest {
     private void workflow(int userNumber) throws Exception {
         Clock clock = Clock.start();
         int thinkTimeInMillisec = 0;
-        BasicPerformanceUserInteractionTest.LOG.info("" + userNumber + ";start;");
+        PerformanceUserInteractionTest.LOG.info("" + userNumber + ";start;");
         Random random = new Random(userNumber);
 
         HttpSessionState s = HttpSessionState.init();
@@ -198,7 +195,7 @@ public class BasicPerformanceUserInteractionTest {
         thinkTimeInMillisec += think(random, 6, 10);
         JSONUtilForServer.registerToken(this.brickCommand, this.restBlocks, s, this.sessionFactoryWrapper.getSession(), "garzi-" + userNumber);
         JSONUtilForServer.downloadJar(this.downloadJar, this.restProgram, s, "garzi-" + userNumber, "p2");
-        BasicPerformanceUserInteractionTest.LOG.info("" + userNumber + ";ok;" + clock.elapsedMsec() + ";" + thinkTimeInMillisec + ";");
+        PerformanceUserInteractionTest.LOG.info("" + userNumber + ";ok;" + clock.elapsedMsec() + ";" + thinkTimeInMillisec + ";");
     }
 
     private int think(Random random, int lowerBoundForThinking, int upperBoundForThinking) throws Exception {

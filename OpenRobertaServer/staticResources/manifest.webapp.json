@@ -1,0 +1,20 @@
+{
+  "name": "Open Roberta Lab",
+  "version": "${project.version}",
+  "description": "Roberta – Learning with Robots",
+  "developer": {
+    "name": "Open Roberta",
+    "url": "${project.parent.url}"
+  },
+  "default_locale": "en",
+  "start_url": "index.html",
+  "launch_path": "/index.html",
+  "display": "standalone",
+  "orientation": "landscape",
+  "icons": [
+    {
+      "src": "NEPO.ico",
+      "sizes": "16x16 24x24 32x32 48x48 64x64 128x128 256x256"
+    }
+  ]
+}

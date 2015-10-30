@@ -7,9 +7,8 @@ oraversion='1.3.2-SNAPSHOT'
 function _helpFn {
   # be careful when changing the help function.
   # All words starting with "--" are extracted by a compgen function and considered COMMANDS!
-  echo 'THIS SCRIPT IS MAINLY FOR DEVELOPERS, WHO PULLED THE GIT-REPOSITORY AND WORK WITH THE OpenRoberta SERVER LOCALLY';
-  echo 'you may set properties first, e.g. the server url, and then ececute a command, e.g. export the application';
-  echo 'IF you source ". ora-please-source.sh" before using this script, you get completion when you type TAB (as usual ...)';
+  echo 'THIS SCRIPT IS FOR DEVELOPERS';
+  echo 'IF you source like ". ora-please-source.sh" before using this script, you get completion when you type TAB (as usual ...)';
   echo '';
   $0 --java
   echo 'you may customize the script by defining default values for properties. Actual values of the properties are:';
@@ -17,16 +16,15 @@ function _helpFn {
   echo 'oraversion='"$oraversion";
   echo 'serverurl='"$serverurl";
   echo '';
-  echo '1.setting properties';
+  echo '1.set properties for LATER use in the SAME call';
   echo '';
   echo '  --ev3ipaddr {IP-ADDR}              set the ip addr of the EV3 brick for further commands';
   echo '  --version {VERSION}                set the version to something like d.d.d where d is one or more digits, e.g. 1.2.0'
   echo '                                     only used when an installation is exported. Use with care.'
   echo '  --serverurl {IP:PORT}              set a default url (ip address plus port) to which the server is associated.'
-  echo '                                     the brick will ask you to connect to this address.'
-  echo '                                     useful if you do not want to type the IP on the brick. This saves a lot of time! :-)'
+  echo '                                     useful for the commands --start --alive --setev3serverinfo'
   echo '';
-  echo '2.miscelleneous commands';
+  echo '2.debugging commands';
   echo '';
   echo '  --help                             get help';
   echo '  --java                             check whether java and javac are on the path and the JDK versin matches. Show the java version';
@@ -41,34 +39,32 @@ function _helpFn {
   echo '  --sqlclient                        start the hsqldb client to query the database. The openroberta server must NOT run and'
   echo '                                     and thus access the database. Note, that hsqldb is not used in db server node, but standalone.';
   echo '';
-  echo '3.commands available after a successful mvn {clean} install';
+  echo '3.commands available after a SUCCESSFUL mvn {clean} install';
   echo '';
-  echo '  --start {PROPERTY-FILE}            start of the server, optionally supply a property file';
-  echo '                                     the default property file is in OpenRobertaServer/src/main/resources';
-  echo '                                     a java7 installation is required, java+javac MUST be in the path' ;
+  echo '  --start {PROPERTY-FILE}            start of the server, optionally supply a property file (default: openRoberta.properties';
+  echo '                                     to be used after an --export of the application.' ;
   echo '  --scpev3menu                       scp the ev3menu.jar to the EV3, uses ev3ipaddr';
   echo '                                     the root password is "", thus hit return if you are asked';
   echo '  --scpev3libs                       scp libraries to the EV3, uses ev3ipaddr';
   echo '                                     the root password is "", thus hit return everytime you are asked';
   echo '  --setev3serverinfo                 Create a file with the ip address and port of the server.'
   echo '                                     the root password is "", thus hit return everytime you are asked';
-  echo '  --createemptydb PATH-TO-DB         create an empty database with all tables needed for the OpenRoberta server'
-  echo '                                     Needs a file name. Creates files and a directory with this name AS PREFIX.'
+  echo '  --createemptydb DB-NAME            create an empty database with all tables needed for the OpenRoberta server'
+  echo '                                     Needs a data base name as a prefix for the files/directoriy to be created.'
   echo '                                     if the database exists, it is not recreated. If a table "PROGRAM" is found'
   echo '                                     in an existing database, it is assumed, that the setup has already been done.'
   echo '  --export [-e|-i] INSTALLATION-DIR  create a self-contained installation with an empty database (-e) or without database setup (-i)'
-  echo '                                     with -i the caller is responsible to supply a already usable database.'
+  echo '                                     with -i the caller is responsible to supply a usable database.'
 }
 
 function _startFn {
+  IFS=':' read -ra IpPort <<< "$serverurl"
+  Ip="${IpPort[0]}"
+  Port="${IpPort[1]}"
   _checkJava;
-  if [[ "$checkJava" != '' ]]; then
-     echo 'problems detected. The command may work or the command may not work :)'
-  fi
   main='de.fhg.iais.roberta.main.ServerStarter'
-  run='java -cp "target/resources/*" '"${main} ${propfile}"
+  run="java -cp resources/\* ${main} --properties ${propfile} --ip ${Ip} --port ${Port}"
   echo "executing: $run"
-  cd OpenRobertaServer
   eval $run
 }
 
@@ -106,29 +102,28 @@ function _checkJava {
   checkJava=''
   which java > /dev/null
   if [[ $? != 0 ]]; then
-     checkJava="  java was NOT found on the PATH.\n"
+     checkJava=$'  java was NOT found on the PATH.\n'
   fi
   which javac > /dev/null
   if [[ $? != 0 ]]; then
-     checkJava="${checkJava}  javac was NOT found on the PATH.\n"
+     checkJava=${checkJava}$'  javac was NOT found on the PATH.\n'
   fi
+  javaversion=`java -d64 -version 2>&1`
+  case "$javaversion" in
+    *not\ support*) checkJava=${checkJava}$'  This may be a 32 bit java version. A 64 bit jdk is recommended.\n' ;;
+    *)              : ;;
+  esac
   javaversion=`java -version 2>&1`
   case "$javaversion" in
-    *64-Bit*) : ;;
-    *)        checkJava="${checkJava}  java is resolved to a 32 bit version. The server needs a 64 bit jdk.\n" ;;
-  esac
-  case "$javaversion" in
     *1\.7\.*) : ;;
-    *)        checkJava="${checkJava}  java is not resolved to version 7. The server needs a version 7 jdk." ;;
+    *)        checkJava=${checkJava}$'  This may be a java version other than 1.7.*. A version 7 is recommended.' ;;
   esac
   if [[ "$checkJava" != '' ]]; then
      echo "problems detected:"
      echo "$checkJava"
   fi
-  echo
   echo 'you are using the following java runtime:'
   echo $javaversion
-  echo
 }
 
 function _exportApplication {
@@ -165,10 +160,9 @@ function _exportApplication {
   cp OpenRobertaServer/target/resources/*.jar "$exportpath/resources"
   cp OpenRobertaServer/target/updateResources/*.jar "$exportpath/updateResources"
   cp OpenRobertaServer/target/crossCompilerResources/*.jar "$exportpath/crossCompilerResources"
-  echo 'creating the start scripts "start.sh" and "start.bat"'
-# -------------- begin of here documents --------------------------------------------------
+  cp ora.sh "$exportpath"
+# -------------- begin of a here documents --------------------------------------------------
   cat >"${exportpath}/openRoberta.properties" <<.eof
-# server.jetty.port is unused, because the port is supplied in the start script
 version = ${oraversion}
 validversionrange.From = ${oraversion}
 validversionrange.To = ${oraversion}
@@ -179,60 +173,6 @@ robot.updateResources.dir = resources
 robot.updateResources.dir = updateResources
 robot.crossCompilerResources.dir = crossCompilerResources
 .eof
-  cat >"${exportpath}/start.sh" <<.eof
-#!/bin/bash
-javaversion=\`java -version 2>&1\`
-case "\$javaversion" in
-  *64-Bit*) : ;;
-  *) echo 'java is resolved to a 32 bit version. The server needs a 64 bit jdk. This may cause problems.' ;;
-esac
-case "\$javaversion" in
-  *1\\.7\\.*) : ;;
-  *) echo 'java is not resolved to a version 7. The server needs a version 7 jdk. This may cause problems.' ;;
-esac
-properties="\$1"
-if [[ "\$properties" == "" ]]; then
-   properties="openRoberta.properties"
-fi
-host="\$2"
-if [[ "\$host" == "" ]]; then
-   host="localhost"
-fi
-port="\$3"
-if [[ "\$port" == "" ]]; then
-   port="1999"
-fi
-run="java -cp \"resources/*\" de.fhg.iais.roberta.main.ServerStarter file:\$properties \$host \$port"
-echo "executing: \$run"
-eval \$run
-.eof
-  cat >"${exportpath}/start.bat" <<.eof
-rem this start.bat uses the C:\Windows\System32\java.exe to start the server.
-rem It passes a 1.7 argument to let this exe select the right java installation.
-rem If this does not work on your system, you have to tweak the path variable.
-rem For local installations inspect your firewall settings, if the robot cannot connect.
-@echo off
-java -version:"1.7" -version 2>&1 | find "64-Bit" >nul:
-if errorlevel 1 (
-  echo java is resolved to a 32 bit version. The server needs a 64 bit jdk. This may cause problems
-)
-java -version:"1.7" -version 2>&1 | find "1.7." >nul:
-if errorlevel 1 (
-  echo java is not resolved to a version 7. The server needs a version 7 jdk. This may cause problems.
-)
-set "PROPERTIES=%1"
-if not "%PROPERTIES%" == "" goto gotProperties
-set "PROPERTIES=openRoberta.properties"
-:gotProperties
-set "PORT=%1"
-if not "%PORT%" == "" goto gotPort
-set "PORT=1999"
-:gotPort
-set RUN=java -version:"1.7" -cp "resources\*" de.fhg.iais.roberta.main.ServerStarter file:%PROPERTIES% %PORT%
-echo executing: "%RUN%"
-%RUN%
-.eof
-# -------------- end of here documents ----------------------------------------------------
 }
 
 function _createemptydb {
@@ -289,7 +229,7 @@ if [[ "$cmd" == '' ]]; then
 fi
 case "$cmd" in
 --checkout-db|--restore-db)
-                    git checkout HEAD -- OpenRobertaServer/db/openroberta-db.[lps]* ;;
+                    git checkout HEAD -- OpenRobertaServer/db ;;
 --sqlclient|-sql)   dbjar=' OpenRobertaServer/target/resources/hsqldb-2.3.2.jar'
                     dbdriver='org.hsqldb.jdbc.JDBCDriver'
                     dburl='jdbc:hsqldb:file:OpenRobertaServer/db/openroberta-db'

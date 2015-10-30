@@ -1,5 +1,10 @@
 var COMM = {};
 (function($) {
+	/**
+	 * prefix to be prepended to each URL used in ajax calls.
+	 */
+	var urlPrefix = '/rest';
+	
     /**
      * the default error fn. Should be replaced by an own implementation. Not
      * public.
@@ -28,7 +33,7 @@ var COMM = {};
      */
     COMM.get = function(url, data, successFn, message) {
         return $.ajax({
-            url : url,
+            url : urlPrefix + url,
             type : 'GET',
             dataType : 'json',
             data : data,
@@ -49,7 +54,7 @@ var COMM = {};
             data : data
         };
         return $.ajax({
-            url : url,
+            url : urlPrefix + url,
             type : 'POST',
             contentType : 'application/json; charset=utf-8',
             dataType : 'json',
@@ -66,7 +71,7 @@ var COMM = {};
      */
     COMM.xml = function(url, xml, successFn, message) {
         return $.ajax({
-            url : url,
+            url : urlPrefix + url,
             type : 'POST',
             contentType : 'text/plain; charset=utf-8',
             dataType : 'json',
@@ -74,37 +79,6 @@ var COMM = {};
             success : WRAP.fn3(successFn, message),
             error : errorFn
         });
-    };
-
-    /**
-     * URL-encode a JSON object, use jsonp (a cross-site scripting hack used all
-     * over the world) to send a request and expect a JSON object as response.
-     * 
-     * @memberof COMM
-     */
-    COMM.jsonp = function(url, data, successFn) {
-        return $.ajax({
-            url : url,
-            contentType : 'application/javascript',
-            jsonp : 'callback',
-            dataType : 'jsonp',
-            data : data,
-            success : successFn,
-            error : errorFn
-        });
-    };
-
-    /**
-     * redirect the browser to the URL given as parameter. Report that to the
-     * server.
-     * 
-     * @memberof COMM
-     */
-    COMM.totoUrl = function(url) {
-        LOG.info('document.location.href = ' + url);
-        COMM.ping(function() {
-        });
-        document.location.href = url;
     };
 
     /**

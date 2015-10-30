@@ -13,6 +13,8 @@ import org.eclipse.jetty.server.session.HashSessionManager;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
+import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,13 +23,16 @@ import com.google.inject.servlet.GuiceFilter;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 
 import de.fhg.iais.roberta.guice.RobertaGuiceServletConfig;
+import de.fhg.iais.roberta.javaServer.websocket.WebSocketExample;
 import de.fhg.iais.roberta.persistence.dao.ProgramDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.VersionChecker;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.dbc.DbcException;
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
+import joptsimple.OptionSpec;
 
 /**
  * <b>the main class of the application, the main activity is starting the server.</b><br>
@@ -48,6 +53,31 @@ public class ServerStarter {
     private Injector injector;
 
     /**
+     * startup and shutdown of the server. See {@link ServerStarter}. Uses the first element of the args array. This contains the URI of a property file and
+     * starts either with "file:" if a path of the file system should be used or "classpath:" if the properties should be loaded as a resource from the
+     * classpath. May be <code>null</code>, if the default resource from the classpath should be loaded.
+     *
+     * @param args first element may contain the URI of a property file.
+     * @throws Exception
+     */
+    public static void main(String[] args) throws Exception {
+        OptionParser parser = new OptionParser();
+        OptionSpec<String> propertiesOpt = parser.accepts("properties").withOptionalArg().ofType(String.class);
+        OptionSpec<String> ipOpt = parser.accepts("ip").withRequiredArg().ofType(String.class);
+        OptionSpec<Integer> portOpt = parser.accepts("port").withRequiredArg().ofType(Integer.class);
+        OptionSet options = parser.parse(args);
+        String properties = propertiesOpt.value(options);
+        String ip = ipOpt.value(options);
+        Integer port = portOpt.value(options);
+        ServerStarter serverStarter = new ServerStarter(properties);
+        Server server = serverStarter.start(ip != null ? ip : "localhost", port != null ? port : 1999);
+        ServerStarter.LOG.info("*** server started using URI: " + server.getURI() + " ***");
+        serverStarter.logTheNumberOfStoredPrograms();
+        server.join();
+        System.exit(0);
+    }
+
+    /**
      * create the starter. Load the properties.
      *
      * @param propertyPath optional URI to properties resource. May be null.
@@ -57,76 +87,44 @@ public class ServerStarter {
     }
 
     /**
-     * startup and shutdown of the server. See {@link ServerStarter}. Uses the first element of the args array. This contains the URI of a property file and
-     * starts either with "file:" if a path of the file system should be used or "classpath:" if the properties should be loaded as a resource from the
-     * classpath. May be <code>null</code>, if the default resource from the classpath should be loaded.
-     *
-     * @param args first element may contain the URI of a property file.
-     * @throws Exception
-     */
-    public static void main(String[] args) throws Exception {
-        ServerStarter serverStarter;
-        if ( args != null && args.length >= 1 ) {
-            serverStarter = new ServerStarter(args[0]);
-        } else {
-            serverStarter = new ServerStarter(null);
-        }
-        String host = args != null && args.length >= 2 ? args[1] : "localhost";
-        String port = args != null && args.length >= 3 ? args[2] : null;
-        Server server = serverStarter.start(host, port);
-        ServerStarter.LOG.info("*** server started using URI: " + server.getURI() + " ***");
-        serverStarter.logTheNumberOfStoredPrograms();
-        server.join();
-        System.exit(0);
-    }
-
-    /**
      * startup. See {@link ServerStarter}. If the server could not be created, <b>the process will be terminated by System.exit(status) with status > 0</b>.
      *
      * @return the server
      */
-    public Server start(String host, String port) throws IOException {
+    public Server start(String host, int port) throws IOException {
         String versionFrom = this.properties.getProperty("validversionrange.From", "?");
         String versionTo = this.properties.getProperty("validversionrange.To", "?");
         Assert.isTrue(new VersionChecker(versionFrom, versionTo).validateServerSide(), "invalid versions found - this should NEVER occur");
-        port = port == null ? this.properties.getProperty("server.jetty.port", "1999") : port;
-        int portInt;
-        try {
-            portInt = Integer.parseInt(port);
-        } catch ( Exception e ) {
-            ServerStarter.LOG.error("Invalid port in properties or command line (third argument). Server start aborted. Invalid value was: " + port, e);
-            System.exit(12);
-            throw new DbcException(); // This will never occur - see the System.exit call in the previous line
-        }
         Server server = new Server();
         ServerConnector http = new ServerConnector(server);
         http.setHost(host);
-        http.setPort(portInt);
+        http.setPort(port);
         server.setConnectors(new ServerConnector[] {
             http
         });
-        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        ServletContextHandler httpHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        httpHandler.setContextPath("/rest");
         SessionManager sm = new HashSessionManager();
-        context.setSessionHandler(new SessionHandler(sm));
+        httpHandler.setSessionHandler(new SessionHandler(sm));
 
         RobertaGuiceServletConfig robertaGuiceServletConfig = new RobertaGuiceServletConfig(this.properties);
-        context.addEventListener(robertaGuiceServletConfig);
-        context.addFilter(GuiceFilter.class, "/*", null);
-        context.addServlet(DefaultServlet.class, "/*");
+        httpHandler.addEventListener(robertaGuiceServletConfig);
+        httpHandler.addFilter(GuiceFilter.class, "/*", null);
+        httpHandler.addServlet(DefaultServlet.class, "/*");
+
+        ServletContextHandler wsHandler = new ServletContextHandler();
+        wsHandler.setContextPath("/ws");
+        wsHandler.addServlet(WebSocketServiceServlet.class, "/*");
 
         ResourceHandler staticResourceHandler = new ResourceHandler();
         staticResourceHandler.setDirectoriesListed(true);
         staticResourceHandler.setResourceBase("staticResources");
 
-        ResourceHandler builtResourceHandler = new ResourceHandler();
-        builtResourceHandler.setDirectoriesListed(true);
-        builtResourceHandler.setResourceBase("target/classes/public");
-
         HandlerList handlers = new HandlerList();
         handlers.setHandlers(new Handler[] {
             staticResourceHandler,
-            builtResourceHandler,
-            context
+            httpHandler,
+            wsHandler
         });
         server.setHandler(handlers);
 
@@ -161,5 +159,14 @@ public class ServerStarter {
             System.exit(20);
         }
 
+    }
+
+    public static class WebSocketServiceServlet extends WebSocketServlet {
+        private static final long serialVersionUID = -2697779106901658247L;
+
+        @Override
+        public void configure(WebSocketServletFactory factory) {
+            factory.register(WebSocketExample.class);
+        }
     }
 }

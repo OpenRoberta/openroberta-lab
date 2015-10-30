@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.javaServer.restServices.all.ClientPing;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientProgram;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientToolbox;
 import de.fhg.iais.roberta.javaServer.restServices.all.ClientUser;
-import de.fhg.iais.roberta.javaServer.restServices.all.RsExamples;
+import de.fhg.iais.roberta.javaServer.restServices.all.RestExample;
 import de.fhg.iais.roberta.javaServer.restServices.ev3.Ev3Command;
 import de.fhg.iais.roberta.javaServer.restServices.ev3.Ev3DownloadJar;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
@@ -40,7 +40,7 @@ public class RobertaGuiceModule extends AbstractModule {
         bind(ClientUser.class);
         bind(Ev3DownloadJar.class);
         bind(Ev3Command.class);
-        bind(RsExamples.class);
+        bind(RestExample.class);
         bind(ClientPing.class);
 
         bind(SessionFactoryWrapper.class).in(Singleton.class);

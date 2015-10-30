@@ -81,7 +81,7 @@ public class RestInterfaceTest {
 
     @Before
     public void setup() throws Exception {
-        Properties properties = Util.loadProperties("classpath:openRoberta-basicUserInteraction.properties");
+        Properties properties = Util.loadProperties("classpath:restInterfaceTest.properties");
         this.buildXml = properties.getProperty("crosscompiler.build.xml");
         this.connectionUrl = properties.getProperty("hibernate.connection.url");
         this.crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");

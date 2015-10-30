@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.persistence.util.DbSetup;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
 import de.fhg.iais.roberta.util.Util;
 
-public class BasicPersistUserProgram {
+public class PersistUserProgramTest {
     private SessionFactoryWrapper sessionFactoryWrapper;
     private DbSetup memoryDbSetup;
     private String connectionUrl;
@@ -32,7 +32,7 @@ public class BasicPersistUserProgram {
 
     @Before
     public void setup() throws Exception {
-        Properties properties = Util.loadProperties("classpath:openRoberta-basicPersistUserProgram.properties");
+        Properties properties = Util.loadProperties("classpath:persistUserProgramTest.properties");
         this.connectionUrl = properties.getProperty("hibernate.connection.url");
         this.sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-test-cfg.xml", this.connectionUrl);
         Session nativeSession = this.sessionFactoryWrapper.getNativeSession();
@@ -50,7 +50,7 @@ public class BasicPersistUserProgram {
         Assert.assertEquals(0, getOneBigInteger("select count(*) from USER_PROGRAM"));
 
         //Create list of users
-        for ( int userNumber = 0; userNumber < BasicPersistUserProgram.TOTAL_USERS; userNumber++ ) {
+        for ( int userNumber = 0; userNumber < PersistUserProgramTest.TOTAL_USERS; userNumber++ ) {
             User user = userDao.loadUser("account-" + userNumber);
             if ( user == null ) {
                 User user2 = new User("account-" + userNumber);
@@ -66,7 +66,7 @@ public class BasicPersistUserProgram {
         Assert.assertTrue(userList.size() == 10);
 
         //Create one program per user
-        for ( int userNumber = 0; userNumber < BasicPersistUserProgram.TOTAL_USERS; userNumber++ ) {
+        for ( int userNumber = 0; userNumber < PersistUserProgramTest.TOTAL_USERS; userNumber++ ) {
             User owner = userDao.loadUser("account-" + userNumber);
             Program program = programDao.load("program-" + userNumber, owner, robot);
             if ( program == null ) {
@@ -84,7 +84,7 @@ public class BasicPersistUserProgram {
         User owner = userDao.loadUser("account-0");
         Program program = programDao.load("program-0", owner, robot);
         AccessRightDao userProgramDao = new AccessRightDao(hSession);
-        for ( int userNumber = 1; userNumber < BasicPersistUserProgram.TOTAL_USERS; userNumber += 2 ) {
+        for ( int userNumber = 1; userNumber < PersistUserProgramTest.TOTAL_USERS; userNumber += 2 ) {
             User user = userDao.loadUser("account-" + userNumber);
             if ( user != null ) {
                 AccessRight userProgram = userProgramDao.loadAccessRight(user, program);
@@ -99,7 +99,7 @@ public class BasicPersistUserProgram {
         //Show list of users from program dao
         List<AccessRight> userProgramList = userProgramDao.loadAccessRightsByProgram(program);
         Assert.assertTrue(userProgramList.size() == 50);
-        for ( int userNumber = 1; userNumber < BasicPersistUserProgram.TOTAL_USERS; userNumber += 2 ) {
+        for ( int userNumber = 1; userNumber < PersistUserProgramTest.TOTAL_USERS; userNumber += 2 ) {
             User user = userDao.loadUser("account-" + userNumber);
             List<AccessRight> userProgramList2 = userProgramDao.loadAccessRightsForUser(user);
             Assert.assertTrue(userProgramList2.size() == 1);

@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.util.KeyVal;
 
 @Path("/hello")
-public class RsExamples {
-    private static final Logger LOG = LoggerFactory.getLogger(RsExamples.class);
+public class RestExample {
+    private static final Logger LOG = LoggerFactory.getLogger(RestExample.class);
     private static AtomicInteger hwCounter = new AtomicInteger(0);
 
     @Path("/json1")
