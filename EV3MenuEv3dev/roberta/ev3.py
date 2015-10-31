@@ -2,7 +2,6 @@ from __future__ import absolute_import
 from PIL import Image,ImageDraw,ImageFont
 from bluetooth import *
 import dbus
-import ev3dev
 import glob
 import logging
 import math
@@ -10,6 +9,7 @@ import os
 import random
 import time
 
+from ev3dev import ev3 as ev3dev
 from roberta.BlocklyMethods import BlocklyMethods
 from roberta.StaticData import IMAGES
 
@@ -24,10 +24,10 @@ class Hal(object):
         dir = os.path.dirname(__file__)
         self.font_s = ImageFont.load(os.path.join(dir, 'ter-u12n_unicode.pil'))
         self.font_x = ImageFont.load(os.path.join(dir, 'ter-u18n_unicode.pil'))
-        self.lcd = ev3dev.LCD()
-        self.led = ev3dev.led
-        self.key = ev3dev.button
-        self.sound = ev3dev.sound
+        self.lcd = ev3dev.Screen()
+        self.led = ev3dev.Leds
+        self.keys = ev3dev.Button()
+        self.sound = ev3dev.Sound
         (self.font_w, self.font_h)=self.lcd.draw.textsize('X', font=self.font_s)
         self.timers = {}
         self.images = {}
@@ -37,7 +37,7 @@ class Hal(object):
 
     @staticmethod
     def makeLargeMotor(port, regulated, direction, side):
-        m = ev3dev.large_motor(port)
+        m = ev3dev.LargeMotor(port)
         m.speed_regulation_enabled = regulated
         if direction is 'backward':
             m.polarity = 'inversed'
@@ -49,7 +49,7 @@ class Hal(object):
 
     @staticmethod
     def makeMediumMotor(port, regulated, direction, side):
-        m = ev3dev.medium_motor(port)
+        m = ev3dev.MediumMotor(port)
         m.speed_regulation_enabled = regulated
         if direction is 'backward':
             m.polarity = 'inversed'
@@ -90,14 +90,14 @@ class Hal(object):
         # mode: on, flash, double_flash
         if mode is 'on':
             if color is 'green':
-                self.led.green_on()
+                self.led.set_color(ev3dev.Leds.LEFT, ev3dev.Leds.GREEN)
+                self.led.set_color(ev3dev.Leds.RIGHT, ev3dev.Leds.GREEN)
             elif color is 'red':
-                self.led.red_on()
+                self.led.set_color(ev3dev.Leds.LEFT, ev3dev.Leds.RED)
+                self.led.set_color(ev3dev.Leds.RIGHT, ev3dev.Leds.RED)
             elif color is 'orange':
-                self.led.orange_on()
-
-            # TODO: we also have amber_on(), yellow_on() and
-            #                    mix_colors(float red, float green)
+                self.led.set_color(ev3dev.Leds.LEFT, ev3dev.Leds.ORANGE)
+                self.led.set_color(ev3dev.Leds.RIGHT, ev3dev.Leds.ORANGE)
         elif mode in ['flash', 'double_flash']:
             wait_time = 1000
             if mode is 'double_flash':
@@ -122,22 +122,16 @@ class Hal(object):
     # key
     def isKeyPressed(self, key):
         if key in ['any', '*']:
-            # TODO: https://github.com/ev3dev/ev3dev-lang/issues/108
-            for key in ['up', 'down', 'left', 'right', 'enter', 'back']:
-                if getattr(self.key, key).pressed:
-                  return True
-            else:
-                return False
+            return self.keys.any()
         else:
             # remap some keys
-            keys = {
+            key_aliases = {
               'escape':  'back',
-              'backspace': 'back',
+              'back': 'backspace',
             }
-            if key in keys:
-                key = keys[key]
-            # throws attribute error on wrong keys
-            return getattr(self.key, key).pressed
+            if key in key_aliases:
+                key = key_aliases[key]
+            return self.keys.check_buttons([key])
 
     def isKeyPressedAndReleased(self, key):
         return False
@@ -145,7 +139,7 @@ class Hal(object):
     # tones
     def playTone(self, frequency, duration):
         frequency = frequency if frequency >= 100 else 0
-        self.sound.tone(frequency, duration)
+        self.sound.tone(frequency, duration).wait()
 
     def playFile(self,systemSound):
         # systemSound is a enum for preset beeps:
@@ -156,20 +150,15 @@ class Hal(object):
             self.playTone(600, 200)
         elif systemSound == 1:
             self.playTone(600, 150)
-            self.waitFor(200)
             self.playTone(600, 150)
-            self.waitFor(150)
         elif systemSound == 2: # C major arpeggio
             for i in range(4, 7):
-                self.playTone(C2 * i / 4, 100);
-                self.waitFor(100);
+                self.playTone(C2 * i / 4, 50)
         elif systemSound == 3:
             for i in range(7, 4, -1):
-                self.playTone(C2 * i / 4, 100);
-                self.waitFor(100);
+                self.playTone(C2 * i / 4, 50)
         elif systemSound == 4:
-            self.playTone(100, 500);
-            self.waitFor(500);
+            self.playTone(100, 500)
 
     def setVolume(self, volume):
         self.sound.volume = volume

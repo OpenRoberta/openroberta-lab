@@ -1384,7 +1384,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append("from __future__ import absolute_import\n");
         this.sb.append("from roberta.ev3 import Hal,BlocklyMethods\n");
         this.sb.append("from sets import Set\n");
-        this.sb.append("import ev3dev\n");
+        this.sb.append("from ev3dev import ev3 as ev3dev\n");
         this.sb.append("import math\n\n");
 
         this.sb.append("TRUE = True\n");
@@ -1496,22 +1496,22 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         // FIXME: that won't scale
         String name = null;
         // [m for m in dir(ev3dev) if m.find("_sensor") != -1]
-        // ['color_sensor', 'gyro_sensor', 'infrared_sensor', 'light_sensor', 'sound_sensor', 'touch_sensor', 'ultrasonic_sensor']
+        // ['ColorSensor', 'GyroSensor', 'I2cSensor', 'InfraredSensor', 'LightSensor', 'SoundSensor', 'TouchSensor', 'UltrasonicSensor']
         switch ( sensor.getComponentType().getShortName() ) {
             case "color":
-                name = "color_sensor";
-                break;
-            case "touch":
-                name = "touch_sensor";
-                break;
-            case "ultrasonic":
-                name = "ultrasonic_sensor";
-                break;
-            case "infrared":
-                name = "infrared_sensor";
+                name = "ColorSensor";
                 break;
             case "gyro":
-                name = "gyro_sensor";
+                name = "GyroSensor";
+                break;
+            case "infrared":
+                name = "InfraredSensor";
+                break;
+            case "touch":
+                name = "TouchSensor";
+                break;
+            case "ultrasonic":
+                name = "UltrasonicSensor";
                 break;
             default:
                 throw new IllegalArgumentException("no mapping for " + sensor.getComponentType().getShortName() + "to ev3dev-lang-python");

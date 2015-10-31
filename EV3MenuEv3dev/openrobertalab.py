@@ -42,9 +42,9 @@ def getBatteryVoltage():
 
 class Service(dbus.service.Object):
     """OpenRobertab-Lab dbus service
-    
+
     The status state machines is a follows:
-    
+
     +-> disconnected
     |   |
     |    v
@@ -55,7 +55,7 @@ class Service(dbus.service.Object):
     |    ^
     |    v
     +- executing
-    
+
     """
 
     def __init__(self, path):
@@ -134,7 +134,7 @@ class Connector(threading.Thread):
           'menuversion': version.split('-')[0],
         }
         self.updateConfiguration();
-        
+
         self.registered = False
         self.running = True
         logger.info('thread created')
@@ -152,7 +152,7 @@ class Connector(threading.Thread):
                 except IOError:
                     pass
         self.params['token'] = generateToken()
-    
+
     def run(self):
         logger.info('network thread started')
         # network related locals
@@ -160,7 +160,7 @@ class Connector(threading.Thread):
           'Content-Type': 'application/json'
         }
         timeout = 15 # seconds
-        
+
         logger.info('target: %s' % self.address)
         while self.running:
             if self.registered:
@@ -200,7 +200,18 @@ class Connector(threading.Thread):
                     # TODO: save to $HOME/
                     filename = '/tmp/%s' % hdr.split('=')[1] if hdr else 'unknown'
                     with open(filename, 'w') as prog:
-                        prog.write(response.read().decode('utf-8'))
+                        # temporary for package transitions
+                        code = response.read().decode('utf-8')
+                        code = code.replace('import ev3dev', 'from ev3dev import ev3 as ev3dev')
+                        code = code.replace('ev3dev.color_sensor', 'ev3dev.ColorSensor')
+                        code = code.replace('ev3dev.gyro_sensor', 'ev3dev.GyroSensor')
+                        code = code.replace('ev3dev.i2c_sensor', 'ev3dev.I2cSensor')
+                        code = code.replace('ev3dev.infrared_sensor', 'ev3dev.InfraredSensor')
+                        code = code.replace('ev3dev.light_sensor', 'ev3dev.LightSensor')
+                        code = code.replace('ev3dev.sound_sensor', 'ev3dev.SoundSensor')
+                        code = code.replace('ev3dev.touch_sensor', 'ev3dev.TouchSensor')
+                        code = code.replace('ev3dev.ultrasonic_sensor', 'ev3dev.UltrasonicSensor')
+                        prog.write(code)
                     logger.info('code downloaded to: %s' % filename)
                     # new process
                     #res = subprocess.call(["python", filename], env={"PYTHONPATH":"$PYTONPATH:."})
@@ -259,12 +270,12 @@ def cleanup():
     os.system('setterm -cursor on')
     logger.info('--- done ---')
     logging.shutdown()
-    
+
 def main():
     logger.info('--- starting ---')
-    logger.info('running on tty: %s' % os.ttyname(sys.stdin.fileno()))   
+    logger.info('running on tty: %s' % os.ttyname(sys.stdin.fileno()))
     os.system('setterm -cursor off')
-    
+
     atexit.register(cleanup)
 
     DBusGMainLoop(set_as_default=True)

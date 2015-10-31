@@ -22,7 +22,7 @@ public class AstToEv3PythonVisitorTest {
         + "from __future__ import absolute_import"
         + "from roberta.ev3 import Hal,BlocklyMethods\n"
         + "from sets import Set\n"
-        + "import ev3dev\n"
+        + "from ev3dev import ev3 as ev3dev\n"
         + "import math\n\n"
         + "TRUE = True\n";
 
@@ -35,8 +35,8 @@ public class AstToEv3PythonVisitorTest {
         + "        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B,'on','foreward','right'),\n"
         + "    },\n"
         + "    'sensors':{\n"
-        + "        '1':ev3dev.touch_sensor(ev3dev.INPUT_1),\n"
-        + "        '2':ev3dev.ultrasonic_sensor(ev3dev.INPUT_2),\n"
+        + "        '1':ev3dev.TouchSensor(ev3dev.INPUT_1),\n"
+        + "        '2':ev3dev.UltrasonicSensor(ev3dev.INPUT_2),\n"
         + "    },\n"
         + "}\n"
         + "usedSensors = Set([])\n"
