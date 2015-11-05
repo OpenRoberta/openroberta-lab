@@ -595,6 +595,7 @@ Blockly.Msg.ORA_USER_GET_ONE_SUCCESS = "Acceso conseguido";
 Blockly.Msg.ORA_USER_TO_SHARE_DOES_NOT_EXIST = "El usuario con el que quieres compartir no existe.</br>¡Inténtalo de nuevo!";
 Blockly.Msg.ORA_USER_TO_SHARE_SAME_AS_LOGIN_USER = "No puedes compartir un archivo contigo mismo.";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";
+Blockly.Msg.PASSWORD_RECOVERY = "Password Recovery";  // untranslated
 Blockly.Msg.PLAY = "reproducir";
 Blockly.Msg.PLAY_DURATION = "duración";
 Blockly.Msg.PLAY_FILE = "archivo";

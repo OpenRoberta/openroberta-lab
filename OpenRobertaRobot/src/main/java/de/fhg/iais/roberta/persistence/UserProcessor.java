@@ -7,7 +7,9 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import de.fhg.iais.roberta.persistence.bo.Role;
+import de.fhg.iais.roberta.persistence.bo.TmpPassword;
 import de.fhg.iais.roberta.persistence.bo.User;
+import de.fhg.iais.roberta.persistence.dao.TmpPasswordDao;
 import de.fhg.iais.roberta.persistence.dao.UserDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
@@ -33,9 +35,15 @@ public class UserProcessor extends AbstractProcessor {
 
     public User getUser(String account, String password) throws Exception {
         UserDao userDao = new UserDao(this.dbSession);
+        TmpPasswordDao tmpPasswordDao = new TmpPasswordDao(this.dbSession);
         User user = userDao.loadUser(account);
+        TmpPassword tmpPassword = tmpPasswordDao.get(user.getId());
         if ( user != null && user.isPasswordCorrect(password) ) {
             setSuccess(Key.USER_GET_ONE_SUCCESS);
+            return user;
+        } else if ( tmpPassword != null && tmpPassword.isPasswordCorrect(password) ) {
+            setSuccess(Key.USER_GET_ONE_SUCCESS);
+            this.httpSessionState.setLoginTmpPassword(true);
             return user;
         } else {
             setError(Key.USER_GET_ONE_ERROR_ID_OR_PASSWORD_WRONG);
@@ -67,6 +75,7 @@ public class UserProcessor extends AbstractProcessor {
             User user = getUser(account, oldPassword);
             if ( user != null && this.httpSessionState.getUserId() == user.getId() ) {
                 user.setPassword(newPassword);
+                this.httpSessionState.setLoginTmpPassword(false);
                 setSuccess(Key.USER_UPDATE_SUCCESS);
             } else {
                 setError(Key.USER_UPDATE_ERROR_NOT_SAVED_TO_DB, account);

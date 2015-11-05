@@ -595,6 +595,7 @@ Blockly.Msg.ORA_USER_GET_ONE_SUCCESS = "Login successfull";
 Blockly.Msg.ORA_USER_TO_SHARE_DOES_NOT_EXIST = "User to share with does not exist.";
 Blockly.Msg.ORA_USER_TO_SHARE_SAME_AS_LOGIN_USER = "You cannot share any programs with yourself.";  // untranslated
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";
+Blockly.Msg.PASSWORD_RECOVERY = "Password Recovery";  // untranslated
 Blockly.Msg.PLAY = "soita";
 Blockly.Msg.PLAY_DURATION = "kesto";
 Blockly.Msg.PLAY_FILE = "tiedosto";

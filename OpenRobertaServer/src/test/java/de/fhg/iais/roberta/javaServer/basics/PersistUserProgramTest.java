@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.hibernate.Session;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -104,6 +105,11 @@ public class PersistUserProgramTest {
             List<AccessRight> userProgramList2 = userProgramDao.loadAccessRightsForUser(user);
             Assert.assertTrue(userProgramList2.size() == 1);
         }
+    }
+
+    @After
+    public void tearDown() {
+        this.memoryDbSetup.deleteAllFromUserAndProgramTmpPasswords();
     }
 
     private long getOneBigInteger(String sqlStmt) {

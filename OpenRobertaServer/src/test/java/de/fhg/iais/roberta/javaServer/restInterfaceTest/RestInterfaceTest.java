@@ -105,7 +105,7 @@ public class RestInterfaceTest {
 
     @Test
     public void test() throws Exception {
-        this.memoryDbSetup.deleteAllFromUserAndProgram();
+        this.memoryDbSetup.deleteAllFromUserAndProgramTmpPasswords();
         createTwoUsers();
         updateUser();
         changeUserPassword();

@@ -15,7 +15,9 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.javaServer.provider.OraData;
+import de.fhg.iais.roberta.persistence.TmpPasswordProcessor;
 import de.fhg.iais.roberta.persistence.UserProcessor;
+import de.fhg.iais.roberta.persistence.bo.TmpPassword;
 import de.fhg.iais.roberta.persistence.bo.User;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
@@ -50,6 +52,7 @@ public class ClientUser {
             ClientUser.LOG.info("command is: " + cmd);
             response.put("cmd", cmd);
             UserProcessor up = new UserProcessor(dbSession, httpSessionState);
+            TmpPasswordProcessor tmpPasswordProcessor = new TmpPasswordProcessor(dbSession, httpSessionState);
 
             if ( cmd.equals("clear") ) {
                 httpSessionState.setUserClearDataKeepTokenAndRobotId(HttpSessionState.NO_USER);
@@ -71,6 +74,7 @@ public class ClientUser {
                     response.put("userId", id);
                     response.put("userRole", user.getRole());
                     response.put("userAccountName", account);
+                    response.put("tmpPassLogin", httpSessionState.isLoginTmpPassword());
                     ClientUser.LOG.info("login: user {} (id {}) logged in", account, id);
                     AliveData.rememberLogin();
                 }
@@ -120,6 +124,14 @@ public class ClientUser {
                 String newPassword = request.getString("newPassword");
                 up.updatePassword(account, oldPassword, newPassword);
                 Util.addResultInfo(response, up);
+
+            } else if ( cmd.equals("passwordRecovery") ) {
+                String account = request.getString("accountName");
+                User user = up.getUser(account);
+                TmpPassword tmpPassword = tmpPasswordProcessor.createTmpPassword(user.getId());
+                //                up.updatePassword(account, oldPassword, newPassword);
+                Util.addResultInfo(response, up);
+
             } else if ( cmd.equals("obtainUsers") ) {
 
                 String sortBy = request.getString("sortBy");

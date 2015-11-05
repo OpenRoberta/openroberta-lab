@@ -14,6 +14,7 @@ public class HttpSessionState {
     private String configuration;
     private String toolboxName;
     private String toolbox;
+    private boolean loginTmpPassword = false;
 
     public HttpSessionState() {
     }
@@ -96,5 +97,19 @@ public class HttpSessionState {
     public void setToolboxNameAndToolbox(String toolboxName, String toolbox) {
         this.toolboxName = toolboxName;
         this.toolbox = toolbox;
+    }
+
+    /**
+     * @return the loginTmpPassword
+     */
+    public boolean isLoginTmpPassword() {
+        return this.loginTmpPassword;
+    }
+
+    /**
+     * @param loginTmpPassword the loginTmpPassword to set
+     */
+    public void setLoginTmpPassword(boolean loginTmpPassword) {
+        this.loginTmpPassword = loginTmpPassword;
     }
 }

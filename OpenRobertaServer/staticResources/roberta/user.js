@@ -99,6 +99,18 @@ var USER = {};
     };
 
     /**
+     * User password recovery
+     * 
+     * @memberof USER
+     */
+    USER.userPasswordRecovery = function(accountName, successFn) {
+        COMM.json("/user", {
+            "cmd" : "passwordRecovery",
+            "accountName" : accountName
+        }, successFn, "password recovery for '" + accountName + "'");
+    };
+
+    /**
      * Delete user on server
      * 
      * @memberof USER

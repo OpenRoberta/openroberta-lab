@@ -595,6 +595,7 @@ Blockly.Msg.ORA_USER_GET_ONE_SUCCESS = "Login erfolgreich";
 Blockly.Msg.ORA_USER_TO_SHARE_DOES_NOT_EXIST = "Der Benutzer mit dem du dein Programm teilen möchtest existiert leider nicht. Ist der Benutzername richtig geschrieben?<br />Versuche es noch einmal!";
 Blockly.Msg.ORA_USER_TO_SHARE_SAME_AS_LOGIN_USER = "Du kannst Programme nicht mit Dir selbst teilen.";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";
+Blockly.Msg.PASSWORD_RECOVERY = "Password Recovery";  // untranslated
 Blockly.Msg.PLAY = "Spiele";
 Blockly.Msg.PLAY_DURATION = "Dauer";
 Blockly.Msg.PLAY_FILE = "Stück";

@@ -1141,6 +1141,8 @@ Blockly.Msg.VARIABLES_TYPE_ARRAY_BOOLEAN = 'List Boolean';
 Blockly.Msg.VARIABLES_TYPE_ARRAY_COLOUR = 'List Colour';
 Blockly.Msg.VARIABLES_TYPE_COLOUR = 'Colour';
 
+
+Blockly.Msg.PASSWORD_RECOVERY = 'Password Recovery'
 // Procedures Blocks.
 /// url - Information about defining [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that do not have return values.
 Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = 'https://en.wikipedia.org/wiki/Procedure_%28computer_science%29';

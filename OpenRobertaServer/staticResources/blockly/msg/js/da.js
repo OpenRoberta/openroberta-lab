@@ -595,6 +595,7 @@ Blockly.Msg.ORA_USER_GET_ONE_SUCCESS = "Logget ind";
 Blockly.Msg.ORA_USER_TO_SHARE_DOES_NOT_EXIST = "Bruger der skal deles med eksisterer ikke.";
 Blockly.Msg.ORA_USER_TO_SHARE_SAME_AS_LOGIN_USER = "Du kan ikke dele et program med dig selv.";
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = "";
+Blockly.Msg.PASSWORD_RECOVERY = "Password Recovery";  // untranslated
 Blockly.Msg.PLAY = "afspil";
 Blockly.Msg.PLAY_DURATION = "varighed";
 Blockly.Msg.PLAY_FILE = "fil";

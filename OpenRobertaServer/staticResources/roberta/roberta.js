@@ -56,6 +56,9 @@ function login() {
             userState.id = result.userId;
             setHeadNavigationMenuState('login');
             setRobotState(result);
+            if (result.tmpPassLogin == true) {
+                $('#change-user-password').modal('show');
+            }
         }
         displayInformation(result, "MESSAGE_USER_LOGIN", result.message, userState.name);
     });
@@ -122,9 +125,21 @@ function getUserFromServer() {
  * Update user
  */
 function updateUserToServer() {
-    USER.updateUserToServer($("#accountNameU").val(), $('#userNameU').val(), $("#userEmailU").val(), function(result) {
+    USER.updateUserToServer(userState.accountName, $('#userNameU').val(), $("#userEmailU").val(), function(result) {
         if (result.rc === "ok") {
             setRobotState(result);
+        }
+        displayInformation(result, "", result.message);
+    });
+
+}
+/**
+ * Update user
+ */
+function userPasswordRecovery() {
+    USER.userPasswordRecovery($('#accountNameS').val(), function(result) {
+        if (result.rc === "ok") {
+//            setRobotState(result);
         }
         displayInformation(result, "", result.message);
     });
@@ -138,7 +153,7 @@ function updateUserPasswordOnServer() {
     if ($('#passNew').val() != $('#passNewRepeat').val()) {
         displayMessage("MESSAGE_PASSWORD_ERROR", "POPUP", "");
     } else {
-        USER.updateUserPasswordToServer($("#accountNameU").val(), $('#passOld').val(), $("#passNew").val(), function(result) {
+        USER.updateUserPasswordToServer(userState.accountName, $('#passOld').val(), $("#passNew").val(), function(result) {
             if (result.rc === "ok") {
                 $("#change-user-password").modal('hide');
             }
@@ -1607,6 +1622,7 @@ function initPopups() {
     $('#saveProgram').onWrap('click', saveAsProgramToServer);
     $('#saveConfiguration').onWrap('click', saveAsConfigurationToServer);
     $('#changeUserPassword').onWrap('click', updateUserPasswordOnServer);
+    $('#passwordRecovery').onWrap('click', userPasswordRecovery);
 
     $('#showChangeUserPassword').onWrap('click', function() {
         $('#change-user-password').modal('show');
@@ -1856,6 +1872,8 @@ function translate(jsdata) {
         if (lkey === 'Blockly.Msg.MENU_LOG_IN') {
             $('#login-user h3').text(value);
             $(this).html(value);
+        } else if (lkey === 'Blockly.Msg.PASSWORD_RECOVERY') {
+            $('#passwordRecovery').attr('value', value);
         } else if (lkey === 'Blockly.Msg.MENU_NEW') {
             $('#register-user h3').text(value);
             $(this).html(value);

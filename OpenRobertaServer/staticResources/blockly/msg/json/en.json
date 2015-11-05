@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-10-28 11:52:31.867000",
+		"lastupdated": "2015-11-05 09:49:29.122000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -468,6 +468,7 @@
 	"VARIABLES_TYPE_ARRAY_BOOLEAN": "List Boolean",
 	"VARIABLES_TYPE_ARRAY_COLOUR": "List Colour",
 	"VARIABLES_TYPE_COLOUR": "Colour",
+	"PASSWORD_RECOVERY": "Password Recovery",
 	"PROCEDURES_DEFNORETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
 	"PROCEDURES_DEFNORETURN_TITLE": "to",
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "doSomething",
