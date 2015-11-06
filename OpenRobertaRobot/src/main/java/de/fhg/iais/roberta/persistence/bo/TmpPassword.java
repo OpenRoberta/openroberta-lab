@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import de.fhg.iais.roberta.util.Encryption;
+import de.fhg.iais.roberta.util.RandomPasswordGenerator;
 import de.fhg.iais.roberta.util.Util;
 
 @Entity
@@ -41,7 +42,7 @@ public class TmpPassword implements WithSurrogateId {
      */
     public TmpPassword(int userId) throws Exception {
         this.userID = userId;
-        this.password = Encryption.createHash("1"); //TODO Implement random password generator
+        this.password = Encryption.createHash(RandomPasswordGenerator.generatePswd(12, 12, 4, 4, 4).toString()); //TODO Implement random password generator
         this.created = Util.getNow();
     }
 
