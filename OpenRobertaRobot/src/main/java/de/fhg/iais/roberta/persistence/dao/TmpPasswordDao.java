@@ -30,6 +30,7 @@ public class TmpPasswordDao extends AbstractDao<TmpPassword> {
         TmpPassword tmpPassword = loadTmpPassword(userId);
         if ( tmpPassword == null ) {
             tmpPassword = new TmpPassword(userId);
+            this.session.save(tmpPassword);
             return tmpPassword;
         } else {
             return null;

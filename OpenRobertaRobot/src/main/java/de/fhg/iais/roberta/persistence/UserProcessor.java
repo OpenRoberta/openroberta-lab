@@ -37,7 +37,7 @@ public class UserProcessor extends AbstractProcessor {
         UserDao userDao = new UserDao(this.dbSession);
         TmpPasswordDao tmpPasswordDao = new TmpPasswordDao(this.dbSession);
         User user = userDao.loadUser(account);
-        TmpPassword tmpPassword = tmpPasswordDao.get(user.getId());
+        TmpPassword tmpPassword = tmpPasswordDao.loadTmpPassword(user.getId());
         if ( user != null && user.isPasswordCorrect(password) ) {
             setSuccess(Key.USER_GET_ONE_SUCCESS);
             return user;

@@ -39,6 +39,7 @@ function initUserState() {
     userState.blocklyReady = false;
     userState.blocklyTranslated = false;
     userState.bricklyTranslated = false;
+    userState.tmpPassLogin = false;
 }
 
 /**
@@ -54,13 +55,16 @@ function login() {
                 userState.name = result.userName;
             }
             userState.id = result.userId;
+            userState.tmpPassLogin = result.tmpPassLogin
             setHeadNavigationMenuState('login');
             setRobotState(result);
-            if (result.tmpPassLogin == true) {
-                $('#change-user-password').modal('show');
-            }
+
         }
         displayInformation(result, "MESSAGE_USER_LOGIN", result.message, userState.name);
+        if (userState.tmpPassLogin == true) {
+//            $('#change-user-password :.backButton').attr("disabled", true);
+            $('#change-user-password').modal('show');
+        }
     });
 }
 
@@ -155,6 +159,7 @@ function updateUserPasswordOnServer() {
     } else {
         USER.updateUserPasswordToServer(userState.accountName, $('#passOld').val(), $("#passNew").val(), function(result) {
             if (result.rc === "ok") {
+                userState.tmpPassLogin = false;
                 $("#change-user-password").modal('hide');
             }
             displayInformation(result, "", result.message);
