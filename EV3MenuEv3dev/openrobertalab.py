@@ -245,9 +245,14 @@ class Connector(threading.Thread):
                 else:
                     logger.warning('unhandled command: %s' % cmd)
             except urllib2.HTTPError as e:
-                # [Errno 111] Connection refused>
-                logger.error("HTTPError(%s): %s" % (e.code, e.reason))
-                break
+                if e.code == 404 and not self.address.endswith('/rest'):
+                    logger.warning("HTTPError(%s): %s, retrying" % (e.code, e.reason))
+                    # upstream change the server path
+                    self.address = '%s/rest' % self.address
+                else:
+                    # [Errno 111] Connection refused>
+                    logger.error("HTTPError(%s): %s" % (e.code, e.reason))
+                    break
             except urllib2.URLError as e:
                 # [Errno 111] Connection refused>
                 logger.error("URLError: %s" % e.reason)
