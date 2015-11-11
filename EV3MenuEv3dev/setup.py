@@ -5,10 +5,6 @@ import os
 import setuptools
 from distutils.core import setup
 
-#from xml.etree.ElementTree import ElementTree
-#et=ElementTree(file='../OpenRobertaParent/pom.xml')
-#pom_version = et.findtext("{http://maven.apache.org/POM/4.0.0}version")
-
 root = os.path.dirname(os.path.abspath(__file__))
 # Path to __version__ module
 version_file = os.path.join(root, 'roberta', '__version__.py')
@@ -33,6 +29,6 @@ setup(name='openrobertalab',
       scripts=['openrobertalab.py'],
       packages=['roberta'],
       package_data={'roberta': ['ter-*.p??']},
-      # other deps: apt-get-install python-dbus python-bluez
+      # other deps: apt-get-install python-dbus python-bluez python-ev3dev
       #install_requires=['python-ev3dev']
      )
