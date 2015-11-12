@@ -45,7 +45,7 @@ public class SampleProviderBean implements Serializable {
 
     /**
      * Set the sample provider for the sensor mode
-     * 
+     *
      * @param sampleProvider of the sensor mode
      */
     public void setSampleProvider(SampleProvider sampleProvider) {

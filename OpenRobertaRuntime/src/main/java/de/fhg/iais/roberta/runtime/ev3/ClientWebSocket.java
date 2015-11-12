@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.runtime.ev3;
 
 import java.net.URI;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.java_websocket.WebSocket.READYSTATE;
 import org.java_websocket.client.WebSocketClient;
@@ -8,13 +10,31 @@ import org.java_websocket.drafts.Draft_17;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
 
+import de.fhg.iais.roberta.components.ev3.EV3Actor;
+import de.fhg.iais.roberta.components.ev3.EV3Actors;
+import de.fhg.iais.roberta.components.ev3.EV3Sensor;
+import de.fhg.iais.roberta.components.ev3.EV3Sensors;
+import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
+import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
+import de.fhg.iais.roberta.shared.sensor.ev3.ColorSensorMode;
+import de.fhg.iais.roberta.shared.sensor.ev3.GyroSensorMode;
+import de.fhg.iais.roberta.shared.sensor.ev3.InfraredSensorMode;
+import de.fhg.iais.roberta.shared.sensor.ev3.MotorTachoMode;
+import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
+import de.fhg.iais.roberta.shared.sensor.ev3.UltrasonicSensorMode;
+
 class ClientWebSocket extends WebSocketClient {
 
     private final String token;
+    private final Ev3Configuration brickConfiguration;
+    private Hal hal;
 
-    public ClientWebSocket(URI serverUri, String token) {
+    public ClientWebSocket(URI serverUri, String token, Ev3Configuration brickConfiguration, Hal hal) {
         super(serverUri, new Draft_17());
         this.token = token;
+        this.brickConfiguration = brickConfiguration;
+        this.hal = hal;
+
     }
 
     /**
@@ -60,8 +80,62 @@ class ClientWebSocket extends WebSocketClient {
     private void sendSensorValue() {
         JSONObject sensorvalues = new JSONObject();
         sensorvalues.put("token", this.token);
-        sensorvalues.put("Ultrasonic_S1", "50");
+        Map<SensorPort, EV3Sensor> sensors = this.brickConfiguration.getSensors();
+        Map<ActorPort, EV3Actor> actors = this.brickConfiguration.getActors();
+
+        getSensorDebugInfo(sensorvalues, sensors);
+        getActorsDebugInfo(sensorvalues, actors);
+
         this.send(sensorvalues.toString());
+    }
+
+    private void getActorsDebugInfo(JSONObject sensorvalues, Map<ActorPort, EV3Actor> actors) {
+        for ( Entry<ActorPort, EV3Actor> mapEntry : actors.entrySet() ) {
+            int hardwareId = mapEntry.getValue().getComponentType().hashCode();
+            ActorPort port = mapEntry.getKey();
+            String partKey = port.name() + "-";
+
+            partKey +=
+                EV3Actors.EV3_LARGE_MOTOR.hashCode() == hardwareId ? EV3Actors.EV3_LARGE_MOTOR.getShortName() : EV3Actors.EV3_MEDIUM_MOTOR.getShortName();
+
+            if ( this.brickConfiguration.isMotorRegulated(port) ) {
+                sensorvalues.put(partKey + MotorTachoMode.DEGREE, this.hal.getRegulatedMotorTachoValue(port, MotorTachoMode.DEGREE));
+            } else {
+                sensorvalues.put(partKey + MotorTachoMode.DEGREE, this.hal.getUnregulatedMotorTachoValue(port, MotorTachoMode.DEGREE));
+            }
+
+        }
+    }
+
+    private void getSensorDebugInfo(JSONObject sensorvalues, Map<SensorPort, EV3Sensor> sensors) {
+        for ( Entry<SensorPort, EV3Sensor> mapEntry : sensors.entrySet() ) {
+            int hardwareId = mapEntry.getValue().getComponentType().hashCode();
+            SensorPort port = mapEntry.getKey();
+            String partKey = port.name() + "-";
+
+            if ( EV3Sensors.EV3_COLOR_SENSOR.hashCode() == hardwareId ) {
+                partKey += EV3Sensors.EV3_COLOR_SENSOR.getShortName();
+                sensorvalues.put(partKey + ColorSensorMode.AMBIENTLIGHT, this.hal.getColorSensorAmbient(port));
+                sensorvalues.put(partKey + ColorSensorMode.COLOUR, this.hal.getColorSensorColour(port));
+                sensorvalues.put(partKey + ColorSensorMode.RED, this.hal.getColorSensorRed(port));
+                sensorvalues.put(partKey + ColorSensorMode.RGB, this.hal.getColorSensorRgb(port));
+            } else if ( EV3Sensors.EV3_ULTRASONIC_SENSOR.hashCode() == hardwareId ) {
+                partKey += EV3Sensors.EV3_ULTRASONIC_SENSOR.getShortName();
+                sensorvalues.put(partKey + UltrasonicSensorMode.DISTANCE, this.hal.getUltraSonicSensorDistance(port));
+                sensorvalues.put(partKey + UltrasonicSensorMode.PRESENCE, this.hal.getUltraSonicSensorPresence(port));
+            } else if ( EV3Sensors.EV3_GYRO_SENSOR.hashCode() == hardwareId ) {
+                partKey += EV3Sensors.EV3_GYRO_SENSOR.getShortName();
+                sensorvalues.put(partKey + GyroSensorMode.ANGLE, this.hal.getGyroSensorValue(port, GyroSensorMode.ANGLE));
+                sensorvalues.put(partKey + GyroSensorMode.RATE, this.hal.getGyroSensorValue(port, GyroSensorMode.RATE));
+            } else if ( EV3Sensors.EV3_IR_SENSOR.hashCode() == hardwareId ) {
+                partKey += EV3Sensors.EV3_IR_SENSOR.getShortName();
+                sensorvalues.put(partKey + InfraredSensorMode.DISTANCE, this.hal.getInfraredSensorDistance(port));
+                sensorvalues.put(partKey + InfraredSensorMode.SEEK, this.hal.getInfraredSensorSeek(port));
+            } else if ( EV3Sensors.EV3_TOUCH_SENSOR.hashCode() == hardwareId ) {
+                partKey += EV3Sensors.EV3_TOUCH_SENSOR.getShortName();
+                sensorvalues.put(partKey, this.hal.isPressed(port));
+            }
+        }
     }
 
     /**
