@@ -106,11 +106,12 @@ public class ClientProgram {
                 }
                 Util.addResultInfo(response, pp);
 
-            } else if ( cmd.equals("showJavaP") ) {
+            } else if ( cmd.equals("showSourceP") ) {
+                String token = httpSessionState.getToken();
                 String programName = request.getString("name");
                 String programText = request.getString("programText");
                 String configurationText = request.getString("configurationText");
-                String javaSource = this.compilerWorkflow.generateJavaProgram(programName, programText, configurationText);
+                String javaSource = this.compilerWorkflow.generateSourceCode(token, programName, programText, configurationText);
                 AbstractProcessor forMessages = new DummyProcessor();
                 if ( javaSource == null ) {
                     forMessages.setError(Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED);

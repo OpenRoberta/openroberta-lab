@@ -97,18 +97,18 @@ var PROGRAM = {};
     };
 
     /**
-     * Show Java program
+     * Show source code of program
      * 
      * @memberof PROGRAM
      */
-    PROGRAM.showJavaProgram = function(programName, configName, xmlTextProgram, xmlTextConfig, successFn) {
+    PROGRAM.showSourceProgram = function(programName, configName, xmlTextProgram, xmlTextConfig, successFn) {
         COMM.json("/program", {
-            "cmd" : "showJavaP",
+            "cmd" : "showSourceP",
             "name" : programName,
             "configuration" : configName,
             "programText" : xmlTextProgram,
             "configurationText" : xmlTextConfig
-        }, successFn, "show Java program '" + programName);
+        }, successFn, "show source code of program '" + programName + "'");
     };
 
     /**

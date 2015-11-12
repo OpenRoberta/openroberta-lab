@@ -490,14 +490,14 @@ function saveConfigurationToServer() {
 }
 
 /**
- * show the generated Java program
+ * show the generated source code of program
  */
-function showJavaProgram() {
+function showSourceProgram() {
     LOG.info('show the generated Java program for ' + userState.program);
     var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
     var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
     var xmlTextConfiguration = UTIL.getBricklyFrame('#bricklyFrame').getXmlOfConfiguration(userState.configuration);
-    PROGRAM.showJavaProgram(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
+    PROGRAM.showSourceProgram(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
         setRobotState(result);
         if (result.rc == "ok") {
             displayPopupMessage("Ok-kO", result.javaSource);
@@ -536,7 +536,7 @@ function showCode() {
         var xmlProgram = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
         var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
         var xmlTextConfiguration = UTIL.getBricklyFrame('#bricklyFrame').getXmlOfConfiguration(userState.configuration);
-        PROGRAM.showJavaProgram(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
+        PROGRAM.showSourceProgram(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
             setRobotState(result);
             $('#blocklyDiv').addClass('codeActive');
             $('#blocklyDiv').parent().bind('transitionend', function() {
@@ -572,7 +572,7 @@ function startProgram() {
         Blockly.getMainWorkspace().startButton.disable();
     }
     PROGRAM.runOnBrick(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
-        //PROGRAM.showJavaProgram(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
+        //PROGRAM.showSourceProgram(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
         // console.log(result.javaSource);
         setRobotState(result);
         if (result.rc == "ok") {
