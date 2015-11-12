@@ -30,7 +30,7 @@ public class ORAdownloader {
      */
     public ORAdownloader(String serverBaseIP) {
         try {
-            this.downloadService = new URL("http://" + serverBaseIP + "/download");
+            this.downloadService = new URL("http://" + serverBaseIP + "/rest/download");
         } catch ( MalformedURLException e ) {
             // ok
         }

@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.syntax.codegen.ev3;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.components.ev3.EV3Actor;
@@ -15,6 +16,7 @@ import de.fhg.iais.roberta.shared.action.ev3.MotorSide;
 import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.testutil.Helper;
 
+@Ignore
 public class AstToLejosJavaVisitorTest {
 
     private static final String MAIN_CLASS = "" //

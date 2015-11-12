@@ -875,8 +875,9 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         mainTask.getVariables().visit(this);
-        this.sb.append("\n\n").append(INDENT).append("public void run() {\n");
+        this.sb.append("\n\n").append(INDENT).append("public void run(String[] args) {\n");
         incrIndentation();
+        this.sb.append(INDENT).append(INDENT).append("hal.logSensorValues(args);");
         return null;
     }
 
@@ -1529,7 +1530,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         this.sb.append(INDENT).append("public static void main(String[] args) {\n");
         this.sb.append(INDENT).append(INDENT).append("try {\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append(generateRegenerateConfiguration()).append("\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("new ").append(this.programName).append("().run();\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("new ").append(this.programName).append("().run(args);\n");
         this.sb.append(INDENT).append(INDENT).append("} catch ( Exception e ) {\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("lejos.hardware.lcd.TextLCD lcd = lejos.hardware.ev3.LocalEV3.get().getTextLCD();\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.clear();\n");

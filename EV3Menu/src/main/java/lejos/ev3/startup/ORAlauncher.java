@@ -50,9 +50,9 @@ public class ORAlauncher {
      */
     public void runProgram(String programName) {
         File robertalabFile = new File(ORAlauncher.PROGRAMS_DIRECTORY, programName);
-        System.out.println("ORA executing: " + CMD_ORA_RUN + robertalabFile.getPath());
+        System.out.println("ORA executing: " + CMD_ORA_RUN + robertalabFile.getPath() + " true");
         GraphicStartup.menu.suspend();
-        exec(CMD_ORA_RUN + robertalabFile.getPath(), ORAlauncher.PROGRAMS_DIRECTORY);
+        exec(CMD_ORA_RUN + robertalabFile.getPath() + " true", ORAlauncher.PROGRAMS_DIRECTORY);
         Delay.msDelay(1000);
         GraphicStartup.menu.suspend(); // debug screen when process is killed
         GraphicStartup.menu.resume();

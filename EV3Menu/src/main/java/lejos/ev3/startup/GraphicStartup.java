@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -28,6 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.jar.JarFile;
+
+import com.sun.net.httpserver.HttpServer;
 
 import lejos.hardware.Battery;
 import lejos.hardware.Bluetooth;
@@ -75,8 +77,6 @@ import lejos.robotics.filter.PublishFilter;
 import lejos.robotics.navigation.DifferentialPilot;
 import lejos.utility.Delay;
 import ora.rmi.ORAmenu;
-
-import com.sun.net.httpserver.HttpServer;
 
 public class GraphicStartup implements ORAmenu {
     private static final int REMOTE_MENU_PORT = 8002;
@@ -186,7 +186,11 @@ public class GraphicStartup implements ORAmenu {
     public static boolean orUSBconnected = false;
     private static String OPENROBERTAHEAD = " OR Lab";
     private static HttpServer usbconn = null;
-    private static final Properties menuProperties = loadProperties();
+
+    private static final String OPENROBERTAPROPERTIES = "/home/roberta/openroberta.properties";
+
+    private final static Properties menuProperties = loadProperties();
+    private static Properties openrobertaProperties = null;
 
     public static int selection = 0;
 
@@ -346,9 +350,27 @@ public class GraphicStartup implements ORAmenu {
      */
     private void mainMenu() {
         GraphicMenu menu = new GraphicMenu(new String[] {
-            " Open Roberta Lab", "Wifi", "Bluetooth", "Programs", "Samples", "Tools", "Run Default", "Sound", "System", "Version Info"
+            " Open Roberta Lab",
+            "Wifi",
+            "Bluetooth",
+            "Programs",
+            "Samples",
+            "Tools",
+            "Run Default",
+            "Sound",
+            "System",
+            "Version Info"
         }, new String[] {
-            ICRoberta, ICWifi, ICBlue, ICFiles, ICSamples, ICTools, ICDefault, ICSound, ICEV3, ICRobertaInfo
+            ICRoberta,
+            ICWifi,
+            ICBlue,
+            ICFiles,
+            ICSamples,
+            ICTools,
+            ICDefault,
+            ICSound,
+            ICEV3,
+            ICRobertaInfo
         }, 3);
 
         do {
@@ -417,7 +439,14 @@ public class GraphicStartup implements ORAmenu {
             }
 
             Port[] ports = new Port[] {
-                SensorPort.S1, SensorPort.S2, SensorPort.S3, SensorPort.S4, MotorPort.A, MotorPort.B, MotorPort.C, MotorPort.D
+                SensorPort.S1,
+                SensorPort.S2,
+                SensorPort.S3,
+                SensorPort.S4,
+                MotorPort.A,
+                MotorPort.B,
+                MotorPort.C,
+                MotorPort.D
             };
             IOPort[] ioPorts = new IOPort[8];
             GraphicsLCD g = LocalEV3.get().getGraphicsLCD();
@@ -1205,9 +1234,15 @@ public class GraphicStartup implements ORAmenu {
             lcd.drawString("Visibility", 0, 2);
             lcd.drawString(visible ? "on" : "off", 11, 2);
             menu.setItems(new String[] {
-                "Search/Pair", "Devices", "Visibility", "Change PIN"
+                "Search/Pair",
+                "Devices",
+                "Visibility",
+                "Change PIN"
             }, new String[] {
-                ICSearch, ICEV3, ICVisibility, ICPIN
+                ICSearch,
+                ICEV3,
+                ICVisibility,
+                ICPIN
             });
             selection = getSelection(menu, selection);
             switch ( selection ) {
@@ -1392,7 +1427,10 @@ public class GraphicStartup implements ORAmenu {
                     //Bluetooth.addDevice(btrd);
                     // !! Assuming 4 length
                     byte[] pin = {
-                        '0', '0', '0', '0'
+                        '0',
+                        '0',
+                        '0',
+                        '0'
                     };
                     if ( !enterNumber("PIN for " + btrd.getName(), pin, pin.length) ) {
                         break;
@@ -1487,13 +1525,55 @@ public class GraphicStartup implements ORAmenu {
         }
     }
 
+    /**
+     * Load maven properties file from within jar.
+     *
+     * @return maven properties
+     */
     private static Properties loadProperties() {
         Properties menuProperties = new Properties();
         try {
             menuProperties.load(ClassLoader.getSystemResourceAsStream("EV3Menu.properties"));
             return menuProperties;
         } catch ( IOException e ) {
+            System.out.println(e.getMessage());
             return menuProperties;
+        }
+    }
+
+    /**
+     * Load Open Roberta Properties from /home/roberta/openroberta.properties .
+     * Used for storing the menu type, the last server address and the last used token for debugging in NEPO program.
+     * The file is created during runtime. Default menu type is set and taken from maven properties.
+     */
+    private static void loadOpenRobertaProperties() {
+        File f = new File(OPENROBERTAPROPERTIES);
+        try {
+            if ( !f.exists() ) {
+                openrobertaProperties = new Properties();
+                openrobertaProperties.setProperty("menutype", menuProperties.getProperty("menutype"));
+                storeOpenRobertaProperties();
+            } else {
+                openrobertaProperties = new Properties();
+                openrobertaProperties.load(new FileInputStream(f));
+            }
+        } catch ( IOException e ) {
+            System.out.println(e.getMessage());
+            return;
+        }
+    }
+
+    /**
+     * Save Open Roberta Lab Properties to /home/roberta/openroberta.properties .
+     */
+    private static void storeOpenRobertaProperties() {
+        try {
+            File f = new File(OPENROBERTAPROPERTIES);
+            OutputStream os = new FileOutputStream(f);
+            openrobertaProperties.store(os, "Open Roberta Lab Settings");
+        } catch ( IOException e ) {
+            System.out.println(e.getMessage());
+            return;
         }
     }
 
@@ -1509,6 +1589,9 @@ public class GraphicStartup implements ORAmenu {
             Delay.msDelay(3000);
             return;
         }
+
+        loadOpenRobertaProperties();
+
         if ( ORAhandler.isRegistered() == false ) {
             if ( this.indiBA.getWifi() == false ) {
                 newScreen(OPENROBERTAHEAD);
@@ -1518,17 +1601,20 @@ public class GraphicStartup implements ORAmenu {
             }
 
             String ip = "";
-            String tmp = menuProperties.getProperty("ev3menuUrl");
-            if ( tmp != null && !tmp.equals("") ) {
-                ip = tmp;
-            } else {
+            String menutype = openrobertaProperties.getProperty("menutype");
+            if ( menutype.equals("custom") ) {
                 ip = getIPAddress();
                 if ( ip.equals("") ) {
                     return;
                 }
+            } else if ( menutype.equals("standard") ) {
+                ip = "lab.open-roberta.org";
             }
 
             String token = new ORAtokenGenerator().generateToken();
+            openrobertaProperties.setProperty("lasttoken", token);
+            openrobertaProperties.setProperty("lastaddress", ip);
+            storeOpenRobertaProperties();
             oraHandler.startServerCommunicator(ip, token);
 
             newScreen(OPENROBERTAHEAD);
@@ -1773,38 +1859,30 @@ public class GraphicStartup implements ORAmenu {
      * For developer version only.
      */
     private String getIPAddress() {
-        String temp = "";
-        File file = new File("/home/roberta/serverIP.txt");
-        try {
-            if ( file.exists() ) {
-                BufferedReader br = new BufferedReader(new FileReader(file));
-                temp = br.readLine();
-                br.close();
-            } else {
-                PrintWriter pw = new PrintWriter(file);
-                pw.println("");
-                pw.close();
-            }
-        } catch ( IOException e ) {
-            // ok
+        String customaddress = "";
+        if ( openrobertaProperties != null ) {
+            customaddress = openrobertaProperties.getProperty("customaddress");
+        }
+        if ( customaddress == null || customaddress.equals("") ) {
+            customaddress = "";
         }
 
         int i = 1;
         newScreen("Server?");
         lcd.drawString("lab.open-roberta.org", 0, 1, true);
         lcd.drawString("10.0.1.10:1999", 0, 2, false);
-        lcd.drawString(temp, 0, 3, false);
+        lcd.drawString(customaddress, 0, 3, false);
         lcd.drawString("Another (type in)", 0, 4, false);
         lcd.drawString("(ESCAPE to exit)", 0, 7);
 
         while ( true ) {
             int id = Button.waitForAnyEvent(500);
             if ( id == Button.ID_ENTER ) {
-                temp = select(i, temp);
-                if ( temp == null ) {
-                    return enterIP(file);
+                customaddress = select(i, customaddress);
+                if ( customaddress == null ) {
+                    return enterIP();
                 } else {
-                    return temp;
+                    return customaddress;
                 }
             }
             if ( id == Button.ID_ESCAPE ) {
@@ -1812,30 +1890,30 @@ public class GraphicStartup implements ORAmenu {
             }
             if ( id == Button.ID_DOWN || id == Button.ID_RIGHT ) {
                 if ( i != 4 ) {
-                    rewrite(i, false, temp);
+                    rewrite(i, false, customaddress);
                     i++;
-                    rewrite(i, true, temp);
+                    rewrite(i, true, customaddress);
                 } else {
-                    rewrite(i, false, temp);
+                    rewrite(i, false, customaddress);
                     i = 1;
-                    rewrite(i, true, temp);
+                    rewrite(i, true, customaddress);
                 }
             }
             if ( id == Button.ID_UP || id == Button.ID_LEFT ) {
                 if ( i != 1 ) {
-                    rewrite(i, false, temp);
+                    rewrite(i, false, customaddress);
                     i--;
-                    rewrite(i, true, temp);
+                    rewrite(i, true, customaddress);
                 } else {
-                    rewrite(i, false, temp);
+                    rewrite(i, false, customaddress);
                     i = 4;
-                    rewrite(i, true, temp);
+                    rewrite(i, true, customaddress);
                 }
             }
         }
     }
 
-    private void rewrite(int i, boolean invert, String temp) {
+    private void rewrite(int i, boolean invert, String customaddress) {
         switch ( i ) {
             case 1:
                 lcd.drawString("lab.open-roberta.org", 0, 1, invert);
@@ -1844,10 +1922,10 @@ public class GraphicStartup implements ORAmenu {
                 lcd.drawString("10.0.1.10:1999", 0, 2, invert);
                 break;
             case 3:
-                if ( temp.equals("") ) {
-                    lcd.drawString(temp + " ", 0, 3, invert);
+                if ( customaddress.equals("") ) {
+                    lcd.drawString(customaddress + " ", 0, 3, invert);
                 } else {
-                    lcd.drawString(temp, 0, 3, invert);
+                    lcd.drawString(customaddress, 0, 3, invert);
                 }
                 break;
             case 4:
@@ -1871,21 +1949,14 @@ public class GraphicStartup implements ORAmenu {
         }
     }
 
-    private String enterIP(File file) {
+    private String enterIP() {
         newScreen(" Enter IP");
-        String temp = new ORAipKeyboard().getString();
-        PrintWriter pw = null;
-        if ( !temp.equals("") ) {
-            try {
-                file.delete();
-                pw = new PrintWriter(file);
-                pw.println(temp);
-                pw.close();
-            } catch ( FileNotFoundException e ) {
-                // ok
-            }
+        String customaddress = new ORAipKeyboard().getString();
+        if ( !customaddress.equals("") ) {
+            openrobertaProperties.setProperty("customaddress", customaddress);
+            storeOpenRobertaProperties();
         }
-        return temp;
+        return customaddress;
     }
 
     /**
@@ -1940,10 +2011,26 @@ public class GraphicStartup implements ORAmenu {
      */
     private void systemMenu() {
         String[] menuData = {
-            "Delete all", "", "Auto Run", "Change name", "NTP host", "Suspend menu", "Reset", "Unset default"
+            "Toggle Menu",
+            "Delete all",
+            "",
+            "Auto Run",
+            "Change name",
+            "NTP host",
+            "Suspend menu",
+            "Reset",
+            "Unset default"
         };
         String[] iconData = {
-            ICFormat, ICSleep, ICAutoRun, ICDefault, ICDefault, ICDefault, ICDefault, ICDefault
+            ICRoberta,
+            ICFormat,
+            ICSleep,
+            ICAutoRun,
+            ICDefault,
+            ICDefault,
+            ICDefault,
+            ICDefault,
+            ICDefault
         };
         boolean rechargeable = false;
         GraphicMenu menu = new GraphicMenu(menuData, iconData, 4);
@@ -1960,16 +2047,34 @@ public class GraphicStartup implements ORAmenu {
             if ( rechargeable ) {
                 lcd.drawString("R", 15, 2);
             }
-            menuData[1] = "Sleep time: " + (this.timeout == 0 ? "off" : String.valueOf(this.timeout));
+            menuData[2] = "Sleep time: " + (this.timeout == 0 ? "off" : String.valueOf(this.timeout));
             File f = getDefaultProgram();
             if ( f == null ) {
-                menuData[7] = null;
-                iconData[7] = null;
+                menuData[8] = null;
+                iconData[8] = null;
             }
+            if ( openrobertaProperties == null ) {
+                loadOpenRobertaProperties();
+            }
+            menuData[0] = "Menu: " + openrobertaProperties.getProperty("menutype");
             menu.setItems(menuData, iconData);
             selection = getSelection(menu, selection);
             switch ( selection ) {
                 case 0:
+                    String menuType = openrobertaProperties.getProperty("menutype");
+                    if ( menuType.equals("custom") ) {
+                        openrobertaProperties.setProperty("menutype", "standard");
+                        storeOpenRobertaProperties();
+                    } else if ( menuType.equals("standard") ) {
+                        openrobertaProperties.setProperty("menutype", "custom");
+                        storeOpenRobertaProperties();
+                    }
+                    newScreen("Open Roberta");
+                    lcd.drawString("Menu type set to", 0, 2);
+                    lcd.drawString("    >" + openrobertaProperties.getProperty("menutype") + "<", 0, 4);
+                    Delay.msDelay(2500);
+                    break;
+                case 1:
                     if ( getYesNo("Delete all files?", false) == 1 ) {
                         File dir = new File(PROGRAMS_DIRECTORY);
                         for ( String fn : dir.list() ) {
@@ -1979,7 +2084,7 @@ public class GraphicStartup implements ORAmenu {
                         }
                     }
                     break;
-                case 1:
+                case 2:
                     System.out.println("Timeout = " + this.timeout);
                     System.out.println("Max sleep time = " + maxSleepTime);
                     //timeout++;
@@ -1988,24 +2093,24 @@ public class GraphicStartup implements ORAmenu {
                     }
                     Settings.setProperty(sleepTimeProperty, String.valueOf(this.timeout));
                     break;
-                case 2:
+                case 3:
                     systemAutoRun();
                     break;
-                case 3:
+                case 4:
                     String newName = new Keyboard().getString();
 
                     if ( newName != null ) {
                         setName(newName);
                     }
                     break;
-                case 4:
+                case 5:
                     String host = new Keyboard().getString();
 
                     if ( host != null ) {
                         Settings.setProperty(ntpProperty, host);
                     }
                     break;
-                case 5:
+                case 6:
                     this.ind.suspend();
                     lcd.clear();
                     lcd.refresh();
@@ -2024,12 +2129,12 @@ public class GraphicStartup implements ORAmenu {
                     this.ind.resume();
                     System.out.println("Menu resumed");
                     break;
-                case 6:
+                case 7:
                     Settings.setProperty(defaultProgramProperty, "");
                     Settings.setProperty(defaultProgramAutoRunProperty, "");
                     selection = 0;
                     break;
-                case 7:
+                case 8:
                     EV3IOPort.closeAll();
                     selection = 0;
                     break;
@@ -2068,9 +2173,11 @@ public class GraphicStartup implements ORAmenu {
     private int getYesNo(String prompt, boolean yes) {
         //    	lcd.bitBlt(null, 178, 64, 0, 0, 0, 64, 178, 64, CommonLCD.ROP_CLEAR);
         GraphicMenu menu = new GraphicMenu(new String[] {
-            "No", "Yes"
+            "No",
+            "Yes"
         }, new String[] {
-            ICNo, ICYes
+            ICNo,
+            ICYes
         }, 4, prompt, 3);
         return getSelection(menu, yes ? 1 : 0);
     }
@@ -2098,21 +2205,39 @@ public class GraphicStartup implements ORAmenu {
      */
     private void soundMenu() {
         String[] soundMenuData = new String[] {
-            "Volume:    ", "Key volume: ", "Key freq: ", "Key length: "
+            "Volume:    ",
+            "Key volume: ",
+            "Key freq: ",
+            "Key length: "
         };
         String[] soundMenuData2 = new String[soundMenuData.length];
         GraphicMenu menu = new GraphicMenu(soundMenuData2, new String[] {
-            ICSound, ICSound, ICSound, ICSound
+            ICSound,
+            ICSound,
+            ICSound,
+            ICSound
         }, 3);
         int[][] Volumes = {
             {
-                Sound.getVolume() / 10, 784, 250, 0
+                Sound.getVolume() / 10,
+                784,
+                250,
+                0
             }, {
-                Button.getKeyClickVolume() / 10, Button.getKeyClickTone(1) / 200, Button.getKeyClickLength() / 10, 0
+                Button.getKeyClickVolume() / 10,
+                Button.getKeyClickTone(1) / 200,
+                Button.getKeyClickLength() / 10,
+                0
             }, {
-                Button.getKeyClickVolume() / 10, Button.getKeyClickTone(1) / 200, Button.getKeyClickLength() / 10, 0
+                Button.getKeyClickVolume() / 10,
+                Button.getKeyClickTone(1) / 200,
+                Button.getKeyClickLength() / 10,
+                0
             }, {
-                Button.getKeyClickVolume() / 10, Button.getKeyClickTone(1) / 200, Button.getKeyClickLength() / 10, 0
+                Button.getKeyClickVolume() / 10,
+                Button.getKeyClickTone(1) / 200,
+                Button.getKeyClickLength() / 10,
+                0
             }
         };
         int selection = 0;
@@ -2227,26 +2352,36 @@ public class GraphicStartup implements ORAmenu {
         if ( ext.equals("jar") ) {
             selectionAdd = 0;
             items = new String[] {
-                "Execute program", "Debug program", "Set as Default", "Delete file"
+                "Execute program",
+                "Debug program",
+                "Set as Default",
+                "Delete file"
             };
             icons = new String[] {
-                ICProgram, ICDebug, ICDefault, ICDelete
+                ICProgram,
+                ICDebug,
+                ICDefault,
+                ICDelete
             };
         } else if ( ext.equals("wav") ) {
             selectionAdd = 10;
             items = new String[] {
-                "Play sample", "Delete file"
+                "Play sample",
+                "Delete file"
             };
             icons = new String[] {
-                ICSound, ICDelete
+                ICSound,
+                ICDelete
             };
         } else {
             selectionAdd = 20;
             items = new String[] {
-                "Delete file", "View File"
+                "Delete file",
+                "View File"
             };
             icons = new String[] {
-                ICDelete, ICEV3
+                ICDelete,
+                ICEV3
             };
         }
         newScreen();
@@ -2930,7 +3065,8 @@ public class GraphicStartup implements ORAmenu {
     private String checkExistingWifi() {
         String ssid = null;
         String[] tmp = {
-            null, null
+            null,
+            null
         };
         BufferedReader br = null;
         File wpaSup = new File("/home/root/lejos/bin/utils/wpa_supplicant.conf");
@@ -2992,9 +3128,11 @@ public class GraphicStartup implements ORAmenu {
         String ssid = checkExistingWifi();
         if ( ssid != null ) {
             GraphicMenu menu = new GraphicMenu(new String[] {
-                ssid, "New WLAN"
+                ssid,
+                "New WLAN"
             }, new String[] {
-                ICWifi, ICWifi
+                ICWifi,
+                ICWifi
             }, 3);
             int selected = 0;
             do {
@@ -3071,7 +3209,10 @@ public class GraphicStartup implements ORAmenu {
      */
     public static void resetMotors() {
         for ( String portName : new String[] {
-            "A", "B", "C", "D"
+            "A",
+            "B",
+            "C",
+            "D"
         } ) {
             Port p = LocalEV3.get().getPort(portName);
             TachoMotorPort mp = p.open(TachoMotorPort.class);

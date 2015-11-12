@@ -61,7 +61,7 @@ public class ORAupdater {
     private void getRuntime() {
         URL runtimeURL = null;
         try {
-            runtimeURL = new URL("http://" + this.serverBaseIP + "/update/runtime");
+            runtimeURL = new URL("http://" + this.serverBaseIP + "/rest/update/runtime");
         } catch ( MalformedURLException e ) {
             // ok
         }
@@ -74,7 +74,7 @@ public class ORAupdater {
     private void getShared() {
         URL sharedURL = null;
         try {
-            sharedURL = new URL("http://" + this.serverBaseIP + "/update/shared");
+            sharedURL = new URL("http://" + this.serverBaseIP + "/rest/update/shared");
         } catch ( MalformedURLException e ) {
             // ok
         }
@@ -87,7 +87,7 @@ public class ORAupdater {
     private void getJsonLib() {
         URL jsonURL = null;
         try {
-            jsonURL = new URL("http://" + this.serverBaseIP + "/update/jsonlib");
+            jsonURL = new URL("http://" + this.serverBaseIP + "/rest/update/jsonlib");
         } catch ( MalformedURLException e ) {
             // ok
         }
@@ -100,7 +100,7 @@ public class ORAupdater {
     private void getEV3Menu() {
         URL menuURL = null;
         try {
-            menuURL = new URL("http://" + this.serverBaseIP + "/update/ev3menu");
+            menuURL = new URL("http://" + this.serverBaseIP + "/rest/update/ev3menu");
         } catch ( MalformedURLException e ) {
             // ok
         }

@@ -70,7 +70,7 @@ public class ServerStarter {
         String ip = ipOpt.value(options);
         Integer port = portOpt.value(options);
         ServerStarter serverStarter = new ServerStarter(properties);
-        Server server = serverStarter.start(ip != null ? ip : "localhost", port != null ? port : 1999);
+        Server server = serverStarter.start(ip != null ? ip : "0.0.0.0", port != null ? port : 1999);
         ServerStarter.LOG.info("*** server started using URI: " + server.getURI() + " ***");
         serverStarter.logTheNumberOfStoredPrograms();
         server.join();

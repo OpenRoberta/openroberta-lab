@@ -6,6 +6,7 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +26,9 @@ public class WebSocketExample {
 
     @OnWebSocketMessage
     public void handleMessage(String requestString) throws Exception {
-        LOG.info("@OnWebSocketMessage: " + requestString);
+        JSONObject request = new JSONObject(requestString);
+        String token = (String) request.remove("token");
+        LOG.info("@OnWebSocketMessage: " + token + " " + requestString);
     }
 
     @OnWebSocketError

@@ -197,10 +197,11 @@ function _scpev3libsFn {
   runtime="OpenRobertaServer/target/updateResources/OpenRobertaRuntime.jar"
   shared="OpenRobertaServer/target/updateResources/OpenRobertaShared.jar"
   json='OpenRobertaServer/target/updateResources/json.jar'
+  websocket='OpenRobertaServer/target/updateResources/Java-WebSocket.jar'
   run="ssh root@${ev3ipaddr} mkdir -p /home/roberta/lib"
   echo "executing: ${run}"
   $run
-  run="scp ${runtime} ${shared} ${json} root@${ev3ipaddr}:/home/roberta/lib"
+  run="scp ${runtime} ${shared} ${json} ${websocket} root@${ev3ipaddr}:/home/roberta/lib"
   echo "executing: ${run}"
   $run
 }

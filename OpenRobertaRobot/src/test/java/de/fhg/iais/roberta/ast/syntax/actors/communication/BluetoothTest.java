@@ -1,9 +1,11 @@
 package de.fhg.iais.roberta.ast.syntax.actors.communication;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.testutil.Helper;
 
+@Ignore
 public class BluetoothTest {
     @Test
     public void connection() throws Exception {

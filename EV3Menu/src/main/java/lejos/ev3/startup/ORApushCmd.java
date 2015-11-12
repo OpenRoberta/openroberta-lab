@@ -9,12 +9,12 @@ import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 
+import org.json.JSONObject;
+
 import lejos.hardware.Sounds;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.TextLCD;
 import lejos.utility.Delay;
-
-import org.json.JSONObject;
 
 /**
  * Class for brick <-> server communication based on json and key words "cmds".
@@ -77,7 +77,8 @@ public class ORApushCmd implements Runnable {
         this.brickData.put(KEY_FIRMWAREVERSION, GraphicStartup.getLejosVersion());
 
         try {
-            this.pushServiceURL = new URL("http://" + serverBaseIP + "/pushcmd");
+            this.pushServiceURL = new URL("http://" + serverBaseIP + "/rest/pushcmd");
+            System.out.println(this.pushServiceURL);
         } catch ( MalformedURLException e ) {
             // ok
         }

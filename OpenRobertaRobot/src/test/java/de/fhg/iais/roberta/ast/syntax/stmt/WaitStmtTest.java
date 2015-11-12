@@ -1,9 +1,11 @@
 package de.fhg.iais.roberta.ast.syntax.stmt;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.testutil.Helper;
 
+@Ignore
 public class WaitStmtTest {
 
     @Test

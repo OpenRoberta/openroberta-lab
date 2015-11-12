@@ -47,7 +47,9 @@
 					${brick.runtime}/lib/dbusjava.jar \
 					${brick.runtime}/libjna/usr/share/java/jna.jar \
 					${brick.roberta}/OpenRobertaRuntime.jar \
-					${brick.roberta}/OpenRobertaShared.jar" />
+					${brick.roberta}/OpenRobertaShared.jar \
+					${brick.roberta}/Java-WebSocket.jar \
+					${brick.roberta}/json.jar" />
 			</manifest>
 			<fileset dir="${output.dir}">
 				<include name="**/${main.name}.class" />
