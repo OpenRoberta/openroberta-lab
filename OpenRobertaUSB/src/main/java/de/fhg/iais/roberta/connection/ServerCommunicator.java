@@ -25,9 +25,9 @@ public class ServerCommunicator {
     private String filename = "";
 
     public ServerCommunicator(String serverAddress) {
-        this.serverpushAddress = serverAddress + "/pushcmd";
-        this.serverdownloadAddress = serverAddress + "/download";
-        this.serverupdateAddress = serverAddress + "/update";
+        this.serverpushAddress = serverAddress + "/rest/pushcmd";
+        this.serverdownloadAddress = serverAddress + "/rest/download";
+        this.serverupdateAddress = serverAddress + "/rest/update";
         this.httpclient = HttpClients.createDefault();
     }
 
