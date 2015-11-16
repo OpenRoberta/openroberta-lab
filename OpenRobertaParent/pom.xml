@@ -61,6 +61,7 @@
 		<!--<module>../EV3MenuEv3dev</module> -->
         <module>../OpenRobertaRobot</module>
         <module>../OpenRobertaServer</module>
+        <module>../OpenRobertaUSB</module>
     </modules>
     <repositories>
         <repository>
@@ -267,6 +268,11 @@
                 <groupId>org.java-websocket</groupId>
                 <artifactId>Java-WebSocket</artifactId>
                 <version>${ev3.websocket.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>4.5.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
