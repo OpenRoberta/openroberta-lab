@@ -28,7 +28,10 @@ public class WebSocketExample {
     public void handleMessage(String requestString) throws Exception {
         JSONObject request = new JSONObject(requestString);
         String token = (String) request.remove("token");
-        LOG.info("@OnWebSocketMessage: " + token + " " + requestString);
+        LOG.info("@OnWebSocketMessage: " + token + " " + request);
+        // TODO
+        // @Reinhard sensor logging example
+        // @OnWebSocketMessage: 969F09TE {"S3-color-COLOUR":"NONE","S3-color-RED":0,"C-big motorDEGREE":534,"S4-touch":false,"S3-color-RGB":[0,0,0],"S1-ultrasonicDISTANCE":36,"S1-ultrasonicPRESENCE":false,"S2-gyroRATE":-7,"B-big motorDEGREE":536,"S2-gyroANGLE":0,"S3-color-AMBIENTLIGHT":1}
     }
 
     @OnWebSocketError
