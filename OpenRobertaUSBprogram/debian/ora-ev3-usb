@@ -1,2 +1,0 @@
-#!/bin/sh
-java -jar /usr/share/ora-ev3-usb/OpenRobertaEV3USB.jar
