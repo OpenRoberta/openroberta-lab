@@ -27,7 +27,10 @@ class ClientWebSocket extends WebSocketClient {
 
     private final String token;
     private final Ev3Configuration brickConfiguration;
-    private Hal hal;
+    private final Hal hal;
+
+    private final Map<SensorPort, EV3Sensor> sensors;
+    private final Map<ActorPort, EV3Actor> actors;
 
     public ClientWebSocket(URI serverUri, String token, Ev3Configuration brickConfiguration, Hal hal) {
         super(serverUri, new Draft_17());
@@ -35,6 +38,8 @@ class ClientWebSocket extends WebSocketClient {
         this.brickConfiguration = brickConfiguration;
         this.hal = hal;
 
+        this.sensors = this.brickConfiguration.getSensors();
+        this.actors = this.brickConfiguration.getActors();
     }
 
     /**
@@ -80,17 +85,15 @@ class ClientWebSocket extends WebSocketClient {
     private void sendSensorValue() {
         JSONObject sensorvalues = new JSONObject();
         sensorvalues.put("token", this.token);
-        Map<SensorPort, EV3Sensor> sensors = this.brickConfiguration.getSensors();
-        Map<ActorPort, EV3Actor> actors = this.brickConfiguration.getActors();
 
-        getSensorDebugInfo(sensorvalues, sensors);
-        getActorsDebugInfo(sensorvalues, actors);
+        getSensorDebugInfo(sensorvalues);
+        getActorsDebugInfo(sensorvalues);
 
         this.send(sensorvalues.toString());
     }
 
-    private void getActorsDebugInfo(JSONObject sensorvalues, Map<ActorPort, EV3Actor> actors) {
-        for ( Entry<ActorPort, EV3Actor> mapEntry : actors.entrySet() ) {
+    private void getActorsDebugInfo(JSONObject sensorvalues) {
+        for ( Entry<ActorPort, EV3Actor> mapEntry : this.actors.entrySet() ) {
             int hardwareId = mapEntry.getValue().getComponentType().hashCode();
             ActorPort port = mapEntry.getKey();
             String partKey = port.name() + "-";
@@ -107,14 +110,14 @@ class ClientWebSocket extends WebSocketClient {
         }
     }
 
-    private void getSensorDebugInfo(JSONObject sensorvalues, Map<SensorPort, EV3Sensor> sensors) {
-        for ( Entry<SensorPort, EV3Sensor> mapEntry : sensors.entrySet() ) {
+    private void getSensorDebugInfo(JSONObject sensorvalues) {
+        for ( Entry<SensorPort, EV3Sensor> mapEntry : this.sensors.entrySet() ) {
             int hardwareId = mapEntry.getValue().getComponentType().hashCode();
             SensorPort port = mapEntry.getKey();
             String partKey = port.name() + "-";
 
             if ( EV3Sensors.EV3_COLOR_SENSOR.hashCode() == hardwareId ) {
-                partKey += EV3Sensors.EV3_COLOR_SENSOR.getShortName();
+                partKey += EV3Sensors.EV3_COLOR_SENSOR.getShortName() + "-";
                 sensorvalues.put(partKey + ColorSensorMode.AMBIENTLIGHT, this.hal.getColorSensorAmbient(port));
                 sensorvalues.put(partKey + ColorSensorMode.COLOUR, this.hal.getColorSensorColour(port));
                 sensorvalues.put(partKey + ColorSensorMode.RED, this.hal.getColorSensorRed(port));

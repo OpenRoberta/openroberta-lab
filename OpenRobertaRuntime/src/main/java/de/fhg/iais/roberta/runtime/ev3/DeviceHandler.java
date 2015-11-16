@@ -39,7 +39,7 @@ public class DeviceHandler {
     private final Map<ActorPort, RegulatedMotor> lejosRegulatedMotors = new HashMap<>();
     private final Map<ActorPort, EncoderMotor> lejosUnregulatedMotors = new HashMap<>();
 
-    private TextLCD lcd = LocalEV3.get().getTextLCD();
+    private final TextLCD lcd = LocalEV3.get().getTextLCD();
 
     /**
      * Construct new initialization for actors and sensors on the brick. Client must provide
@@ -163,7 +163,8 @@ public class DeviceHandler {
     }
 
     private void initSensor(SensorPort sensorPort, HardwareComponent sensorType, Port hardwarePort) {
-        if ( sensorType != null && isUsed(sensorType) ) {
+        if ( sensorType != null /*&& isUsed(sensorType) TODO Daniel/Kostadin quick fix */ ) {
+            // We should allow sensor value logging even if the sensor is not used in the program
             this.lcd.clear();
             // Hal.formatInfoMessage("Initializing " + sensorType.getComponentType().getShortName() + " on port " + sensorPort + " ...", this.lcd);
             switch ( sensorType.getComponentType().getTypeName() ) {
