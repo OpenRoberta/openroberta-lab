@@ -543,7 +543,6 @@ body.blocklyMinimalBody  *  {
 }
 
 .form-control {
-	padding-left: 30px;
 	border: 1px solid #afca04;
 	border-radius: 2px;
 	margin-bottom: 12px;
@@ -558,6 +557,16 @@ body.blocklyMinimalBody  *  {
 	position: absolute;
 	padding: 2px 6px;
 	font-size: 20px;
+}
+
+.btn:hover, .btn:active:focus, .btn:focus, .btn.focus, .btn:active, .btn.active,
+	.open>.dropdown-toggle.btn {
+	background-color: #b7d032;
+	color: #fff;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	outline: none;
+	box-shadow: none;
 }
 
 .btn {
@@ -576,16 +585,6 @@ body.blocklyMinimalBody  *  {
 
 .modal-footer .btn+.btn {
 	margin-left: 0;
-}
-
-.btn:hover, .btn:active:focus, .btn:focus, .btn.focus, .btn:active, .btn.active,
-	.open>.dropdown-toggle.btn {
-	background-color: #b7d032;
-	color: #fff;
-	-webkit-box-shadow: none;
-	box-shadow: none;
-	outline: none;
-	box-shadow: none;
 }
 
 .close {
@@ -650,9 +649,48 @@ ul.icon li.arrow-right-thick:before {
 	margin: 0;
 	font-size: 24px;
 }
+
+.input-typcn:before{
+	font-size: 22px;
+}
 /***** END typicons *****/
 
+label.form-invalid {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 5;
+  display: block;
+  margin-top: -25px;
+  padding: 7px 9px;
+  background: #777777;
+  color: #ffffff;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 11px;
+}
+
+label.form-invalid:after {
+  top: 100%;
+  right: 10px;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-color: transparent;
+  border-top-color: #777777;
+  border-width: 6px;
+}
+
 /***** BEGIN Input-Fields *****/
+
+.input-group-addon {
+	border: 1px solid #afca04;
+	background: #fff;
+	padding: 1px 6px 0 10px;
+}
 
 /* enable absolute positioning */
 .inner-addon {

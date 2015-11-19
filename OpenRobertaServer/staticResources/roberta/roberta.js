@@ -43,32 +43,6 @@ function initUserState() {
 }
 
 /**
- * Login user
- */
-function login() {
-    USER.login($("#accountNameS").val(), $('#pass1S').val(), function(result) {
-        if (result.rc === "ok") {
-            userState.accountName = result.userAccountName;
-            if (result.userName === undefined || result.userName === '') {
-                userState.name = result.userAccountName;
-            } else {
-                userState.name = result.userName;
-            }
-            userState.id = result.userId;
-            userState.tmpPassLogin = result.tmpPassLogin
-            setHeadNavigationMenuState('login');
-            setRobotState(result);
-
-        }
-        displayInformation(result, "MESSAGE_USER_LOGIN", result.message, userState.name);
-        if (userState.tmpPassLogin == true) {
-//            $('#change-user-password :.backButton').attr("disabled", true);
-            $('#change-user-password').modal('show');
-        }
-    });
-}
-
-/**
  * Logout user
  */
 function logout() {
@@ -80,7 +54,6 @@ function logout() {
             setConfiguration(userState.configuration);
             $('#programNameSave :not(btn)').val('');
             $('#configurationNameSave :not(btn)').val('');
-            $('#login-user :not(btn) :not(.backButton)').val('');
             setHeadNavigationMenuState('logout');
             Blockly.getMainWorkspace().saveButton.disable();
             setRobotState(result);
@@ -88,25 +61,6 @@ function logout() {
             displayInformation(result, "MESSAGE_USER_LOGOUT", result.message);
         }
     });
-}
-
-/**
- * Create new user
- */
-function createUserToServer() {
-    if ($('#pass1').val() != $('#pass2').val()) {
-        displayMessage("MESSAGE_PASSWORD_ERROR", "POPUP", "");
-    } else {
-        USER.createUserToServer($("#accountName").val(), $('#userName').val(), $("#userEmail").val(), $('#pass1').val(), function(result) {
-            if (result.rc === "ok") {
-                setRobotState(result);
-                $('#accountNameS').val($("#accountName").val());
-                $('#pass1S').val($('#pass1').val());
-                login();
-            }
-            displayInformation(result, "", result.message);
-        });
-    }
 }
 
 /**
@@ -135,13 +89,12 @@ function updateUserToServer() {
         }
         displayInformation(result, "", result.message);
     });
-
 }
 /**
  * Update user
  */
 function userPasswordRecovery() {
-    USER.userPasswordRecovery($('#accountNameS').val(), function(result) {
+    USER.userPasswordRecovery($('#loginAccountName').val(), function(result) {
         if (result.rc === "ok") {
 //            setRobotState(result);
         }
@@ -1620,10 +1573,10 @@ function initHeadNavigation() {
  * Initialize popups
  */
 function initPopups() {
-    $('#saveUser').onWrap('click', createUserToServer);
+
     $('#saveUserU').onWrap('click', updateUserToServer);
     $('#deleteUser').onWrap('click', deleteUserOnServer);
-    $('#doLogin').onWrap('click', login);
+
     $('#saveProgram').onWrap('click', saveAsProgramToServer);
     $('#saveConfiguration').onWrap('click', saveAsConfigurationToServer);
     $('#changeUserPassword').onWrap('click', updateUserPasswordOnServer);
@@ -1649,18 +1602,15 @@ function initPopups() {
         $('#show-about').modal('hide');
     });
 
-    $('#login-user').onWrap('hidden.bs.modal', function() {
-        $('#login-user input :not(btn)').val('');
-    });
-
     $('#delete-user').onWrap('hidden.bs.modal', function() {
         $('#delete-user input :not(btn)').val('');
     });
 
-    $('#register-user').onWrap('hidden.bs.modal', function() {
-        $('#register-user input :not(btn)').val('');
-        $('#login-user input :not(btn)').val('');
+    $('#login-user').onWrap('hidden.bs.modal', function() {
+        LOGIN_FORM.resetForm();
+        LOGIN_FORM.clearInputs();
     });
+
     $('#change-user-settings').onWrap('hidden.bs.modal', function() {
 //        $('#change-user-settings input :not(btn)').val('');
     });
@@ -1675,24 +1625,8 @@ function initPopups() {
         updateFirmware();
     }, 'update firmware of robot');
 
-    // Handle key events in popups
-    $(".modal").keyup(function(event) {
-        // fix for not working backspace button in password fields
-        if (event.keyCode === $.ui.keyCode.BACKSPACE) {
-            if (event.target.type === "password" && $("#" + event.target.id).val().length > 0) {
-                var length = $("#" + event.target.id).val().length - 1;
-                var res = $("#" + event.target.id).val().substring(0, length);
-                $("#" + event.target.id).val(res);
-            }
-        }
-        if (event.keyCode == 27) { // escape
-            window.close();
-        }
-        if (event.keyCode == 13) { // enter
-            $(this).find(".modal-footer button:first").click();
-        }
-        event.stopPropagation();
-    });
+    LOGIN_FORM.initLoginForm();
+
 }
 
 /**
@@ -1875,16 +1809,16 @@ function translate(jsdata) {
             console.log('UNDEFINED    key : value = ' + key + ' : ' + value);
         }
         if (lkey === 'Blockly.Msg.MENU_LOG_IN') {
-            $('#login-user h3').text(value);
-            $(this).html(value);
+            $('#loginLabel').text(value);
+            //$(this).html(value);
         } else if (lkey === 'Blockly.Msg.PASSWORD_RECOVERY') {
             $('#passwordRecovery').attr('value', value);
         } else if (lkey === 'Blockly.Msg.MENU_NEW') {
             $('#register-user h3').text(value);
-            $(this).html(value);
+//            $(this).html(value);
         } else if (lkey === 'Blockly.Msg.POPUP_CHANGE_USER_PASSWORD') {
             $('#register-user h3').text(value);
-            $(this).html(value);
+//            $(this).html(value);
         } else if (lkey === 'Blockly.Msg.MENU_DELETE_USER') {
             $('#delete-user h3').text(value);
             $(this).html(value);

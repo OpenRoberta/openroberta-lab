@@ -58,7 +58,8 @@ goog.require('goog.ui.tree.TreeControl');
 goog.require('goog.userAgent');
 
 /**
- * Path to Blockly's directory. Can be relative, absolute, or remote. Used for loading additional resources.
+ * Path to Blockly's directory. Can be relative, absolute, or remote. Used for
+ * loading additional resources.
  */
 Blockly.pathToBlockly = './';
 
@@ -76,11 +77,13 @@ Blockly.SVG_NS = 'http://www.w3.org/2000/svg';
 Blockly.HTML_NS = 'http://www.w3.org/1999/xhtml';
 
 /**
- * The richness of block colours, regardless of the hue. Must be in the range of 0 (inclusive) to 1 (exclusive).
+ * The richness of block colours, regardless of the hue. Must be in the range of
+ * 0 (inclusive) to 1 (exclusive).
  */
 Blockly.HSV_SATURATION = 0.88;
 /**
- * The intensity of block colours, regardless of the hue. Must be in the range of 0 (inclusive) to 1 (exclusive).
+ * The intensity of block colours, regardless of the hue. Must be in the range
+ * of 0 (inclusive) to 1 (exclusive).
  */
 Blockly.HSV_VALUE = 0.64;
 
@@ -239,7 +242,8 @@ Blockly.SOUNDS_ = Object.create(null);
 Blockly.selected = null;
 
 /**
- * Is Blockly in a read-only, non-editable mode? Note that this property may only be set before init is called. It can't be used to dynamically toggle
+ * Is Blockly in a read-only, non-editable mode? Note that this property may
+ * only be set before init is called. It can't be used to dynamically toggle
  * editability on and off.
  */
 Blockly.readOnly = false;
@@ -304,7 +308,8 @@ Blockly.mainWorkspace = null;
 Blockly.clipboard_ = null;
 
 /**
- * Is the mouse dragging a block? 0 - No drag operation. 1 - Still inside the sticky DRAG_RADIUS. 2 - Freely draggable.
+ * Is the mouse dragging a block? 0 - No drag operation. 1 - Still inside the
+ * sticky DRAG_RADIUS. 2 - Freely draggable.
  * 
  * @private
  */
@@ -331,7 +336,8 @@ Blockly.svgSize = function() {
 };
 
 /**
- * Size the SVG image to completely fill its container. Record the height/width of the SVG image.
+ * Size the SVG image to completely fill its container. Record the height/width
+ * of the SVG image.
  */
 Blockly.svgResize = function() {
     var svg = Blockly.svg;
@@ -648,7 +654,8 @@ Blockly.hideChaff = function(opt_allowToolbox) {
 };
 
 /**
- * Deselect any selections on the webpage. Chrome will select text outside the SVG when double-clicking. Deselect this text, so that it doesn't mess up any
+ * Deselect any selections on the webpage. Chrome will select text outside the
+ * SVG when double-clicking. Deselect this text, so that it doesn't mess up any
  * subsequent drag.
  */
 Blockly.removeAllRanges = function() {
@@ -676,15 +683,18 @@ Blockly.removeAllRanges = function() {
  * @private
  */
 Blockly.isTargetInput_ = function(e) {
-    return e.target.type == 'textarea' || e.target.type == 'text';
+    return e.target.type == 'textarea' || e.target.type == 'text' || e.target.type == 'number' || e.target.type == 'email' || e.target.type == 'password'
+            || e.target.type == 'search' || e.target.type == 'tel' || e.target.type == 'url';
 };
 
 /**
  * Load an audio file. Cache it, ready for instantaneous playing.
  * 
  * @param {!Array.
- *            <string>} filenames List of file types in decreasing order of preference (i.e. increasing size). E.g. ['media/go.mp3', 'media/go.wav'] Filenames
- *            include path from Blockly's root. File extensions matter.
+ *            <string>} filenames List of file types in decreasing order of
+ *            preference (i.e. increasing size). E.g. ['media/go.mp3',
+ *            'media/go.wav'] Filenames include path from Blockly's root. File
+ *            extensions matter.
  * @param {string}
  *            name Name of sound.
  * @private
@@ -730,7 +740,8 @@ Blockly.preloadAudio_ = function() {
 };
 
 /**
- * Play an audio file at specified value. If volume is not specified, use full volume (1).
+ * Play an audio file at specified value. If volume is not specified, use full
+ * volume (1).
  * 
  * @param {string}
  *            name Name of sound.
@@ -767,7 +778,9 @@ Blockly.setCursorHand_ = function(closed) {
         return;
     }
     /*
-     * Hotspot coordinates are baked into the CUR file, but they are still required due to a Chrome bug. http://code.google.com/p/chromium/issues/detail?id=1446
+     * Hotspot coordinates are baked into the CUR file, but they are still
+     * required due to a Chrome bug.
+     * http://code.google.com/p/chromium/issues/detail?id=1446
      */
     var cursor = '';
     if (closed) {
@@ -782,11 +795,15 @@ Blockly.setCursorHand_ = function(closed) {
 };
 
 /**
- * Return an object with all the metrics required to size scrollbars for the main workspace. The following properties are computed: .viewHeight: Height of the
- * visible rectangle, .viewWidth: Width of the visible rectangle, .contentHeight: Height of the contents, .contentWidth: Width of the content, .viewTop: Offset
- * of top edge of visible rectangle from parent, .viewLeft: Offset of left edge of visible rectangle from parent, .contentTop: Offset of the top-most content
- * from the y=0 coordinate, .contentLeft: Offset of the left-most content from the x=0 coordinate. .absoluteTop: Top-edge of view. .absoluteLeft: Left-edge of
- * view.
+ * Return an object with all the metrics required to size scrollbars for the
+ * main workspace. The following properties are computed: .viewHeight: Height of
+ * the visible rectangle, .viewWidth: Width of the visible rectangle,
+ * .contentHeight: Height of the contents, .contentWidth: Width of the content,
+ * .viewTop: Offset of top edge of visible rectangle from parent, .viewLeft:
+ * Offset of left edge of visible rectangle from parent, .contentTop: Offset of
+ * the top-most content from the y=0 coordinate, .contentLeft: Offset of the
+ * left-most content from the x=0 coordinate. .absoluteTop: Top-edge of view.
+ * .absoluteLeft: Left-edge of view.
  * 
  * @return {Object} Contains size and position metrics of main workspace.
  * @private
@@ -835,7 +852,8 @@ Blockly.getMainWorkspaceMetrics_ = function() {
  * Sets the X/Y translations of the main workspace to match the scrollbars.
  * 
  * @param {!Object}
- *            xyRatio Contains an x and/or y property which is a float between 0 and 1 specifying the degree of scrolling.
+ *            xyRatio Contains an x and/or y property which is a float between 0
+ *            and 1 specifying the degree of scrolling.
  * @private
  */
 Blockly.setMainWorkspaceMetrics_ = function(xyRatio) {
@@ -855,8 +873,11 @@ Blockly.setMainWorkspaceMetrics_ = function(xyRatio) {
 };
 
 /**
- * Execute a command. Generally, a command is the result of a user action e.g., a click, drag or context menu selection. Calling the cmdThunk function through
- * doCommand() allows us to capture information that can be used for capabilities like undo (which is supported by the realtime collaboration feature).
+ * Execute a command. Generally, a command is the result of a user action e.g.,
+ * a click, drag or context menu selection. Calling the cmdThunk function
+ * through doCommand() allows us to capture information that can be used for
+ * capabilities like undo (which is supported by the realtime collaboration
+ * feature).
  * 
  * @param {function()}
  *            cmdThunk A function representing the command execution.
@@ -874,7 +895,8 @@ Blockly.doCommand = function(cmdThunk) {
  * 
  * @param {!Function}
  *            func Function to call.
- * @return {!Array.<!Array>} Opaque data that can be passed to removeChangeListener.
+ * @return {!Array.<!Array>} Opaque data that can be passed to
+ *         removeChangeListener.
  */
 Blockly.addChangeListener = function(func) {
     return Blockly.bindEvent_(Blockly.mainWorkspace.getCanvas(), 'blocklyWorkspaceChange', null, func);

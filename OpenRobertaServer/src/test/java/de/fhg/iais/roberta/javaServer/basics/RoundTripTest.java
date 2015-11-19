@@ -239,10 +239,10 @@ public class RoundTripTest {
         WebElement userLoginElement = (new WebDriverWait(driver, 10)).until(ExpectedConditions.elementToBeClickable(By.id("menuLogin")));
         userLoginElement.click();
         (new WebDriverWait(driver, 10)).until(ExpectedConditions.visibilityOfElementLocated(By.id("doLogin")));
-        driver.findElement(By.id("accountNameS")).clear();
-        driver.findElement(By.id("accountNameS")).sendKeys("orA");
-        driver.findElement(By.id("pass1S")).clear();
-        driver.findElement(By.id("pass1S")).sendKeys("Pid");
+        driver.findElement(By.id("loginAccountName")).clear();
+        driver.findElement(By.id("loginAccountName")).sendKeys("orA");
+        driver.findElement(By.id("loginPassword")).clear();
+        driver.findElement(By.id("loginPassword")).sendKeys("Pid");
         driver.findElement(By.id("doLogin")).click();
         (new WebDriverWait(driver, 10)).until(ExpectedConditions.invisibilityOfElementLocated(By.id("doLogin")));
     }
