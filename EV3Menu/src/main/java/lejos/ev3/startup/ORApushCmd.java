@@ -28,7 +28,6 @@ public class ORApushCmd implements Runnable {
 
     private final ORAdownloader oraDownloader;
     private final ORAupdater oraUpdater;
-    private final ORAlauncher oraLauncher;
 
     private final boolean TRUE = true;
 
@@ -78,13 +77,11 @@ public class ORApushCmd implements Runnable {
 
         try {
             this.pushServiceURL = new URL("http://" + serverBaseIP + "/rest/pushcmd");
-            System.out.println(this.pushServiceURL);
         } catch ( MalformedURLException e ) {
             // ok
         }
         this.oraDownloader = new ORAdownloader(serverBaseIP);
         this.oraUpdater = new ORAupdater(serverBaseIP);
-        this.oraLauncher = new ORAlauncher();
     }
 
     /**
@@ -109,7 +106,6 @@ public class ORApushCmd implements Runnable {
 
         while ( this.TRUE ) {
             try {
-                // add or update brick data pairs which can be changed by the user at runtime
                 this.brickData.put(KEY_BRICKNAME, GraphicStartup.getBrickName());
                 this.brickData.put(KEY_BATTERY, GraphicStartup.getBatteryStatus());
 
@@ -118,7 +114,6 @@ public class ORApushCmd implements Runnable {
                     this.httpURLConnection = openConnection(15000);
                 } else {
                     this.brickData.put(KEY_CMD, CMD_REGISTER);
-                    System.out.println("ORA register: " + this.brickData);
                     this.httpURLConnection = openConnection(330000);
                 }
 
@@ -134,7 +129,6 @@ public class ORApushCmd implements Runnable {
                 JSONObject responseEntity = new JSONObject(responseStrBuilder.toString());
 
                 String command = responseEntity.getString("cmd");
-                System.out.println("ORA cmd from server: " + command);
                 switch ( command ) {
                     case CMD_REPEAT:
                         ORAhandler.setRegistered(true);
@@ -157,13 +151,12 @@ public class ORApushCmd implements Runnable {
                     case CMD_DOWNLOAD:
                         if ( GraphicStartup.getUserprogram() == null ) {
                             String programName = this.oraDownloader.downloadProgram(this.brickData);
-                            this.oraLauncher.runProgram(programName);
+                            ORAlauncher.runProgram(programName);
                         }
                         break;
                     case CMD_CONFIGURATION:
                         break;
                     default:
-                        System.out.println("ORA unknown command from server, do nothing!");
                         break;
                 }
                 this.reconnectAttempts = 0;
@@ -185,7 +178,7 @@ public class ORApushCmd implements Runnable {
                         return;
                     } else {
                         this.reconnectAttempts++;
-                        Delay.msDelay(100);
+                        Delay.msDelay(1000);
                     }
                     System.out.println(this.reconnectAttempts + "(ioex)");
                 }
@@ -215,7 +208,6 @@ public class ORApushCmd implements Runnable {
         LocalEV3.get().getKeys().waitForAnyPress();
         Delay.msDelay(1000);
         GraphicStartup.menu.resume();
-        GraphicStartup.redrawIPs();
     }
 
     /**

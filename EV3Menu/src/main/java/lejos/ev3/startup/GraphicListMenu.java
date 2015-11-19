@@ -16,9 +16,13 @@ public class GraphicListMenu extends GraphicMenu {
 	private TextLCD lcd = LocalEV3.get().getTextLCD();
 	private int _offset = 0;
 	
-	public GraphicListMenu(String[] items, String[] icons) {
-		super(items, icons, -1);
-	}
+    public GraphicListMenu(String[] items, String[] icons) {
+        super(items, icons, 1);
+    }
+    
+    public GraphicListMenu(String[] items, String[] icons, int topRow) {
+        super(items, icons, topRow);
+    }
 	
 	@Override
 	protected void animate(int selectedIndex, int finalIndex, int animateDirection)

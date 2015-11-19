@@ -7,11 +7,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -19,12 +21,12 @@ import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.jar.JarFile;
@@ -33,6 +35,7 @@ import com.sun.net.httpserver.HttpServer;
 
 import lejos.hardware.Battery;
 import lejos.hardware.Bluetooth;
+import lejos.hardware.BluetoothException;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
 import lejos.hardware.LocalBTDevice;
@@ -42,11 +45,11 @@ import lejos.hardware.Sound;
 import lejos.hardware.Sounds;
 import lejos.hardware.Wifi;
 import lejos.hardware.ev3.LocalEV3;
+import lejos.hardware.lcd.CommonLCD;
 import lejos.hardware.lcd.Font;
 import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.lcd.Image;
 import lejos.hardware.lcd.LCD;
-import lejos.hardware.lcd.LCDOutputStream;
 import lejos.hardware.lcd.TextLCD;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
@@ -64,10 +67,12 @@ import lejos.hardware.port.TachoMotorPort;
 import lejos.hardware.port.UARTPort;
 import lejos.hardware.sensor.BaseSensor;
 import lejos.internal.ev3.EV3IOPort;
+import lejos.internal.io.NativeHCI.LocalVersion;
 import lejos.internal.io.Settings;
 import lejos.internal.io.SystemSettings;
 import lejos.remote.ev3.EV3Reply;
 import lejos.remote.ev3.EV3Request;
+import lejos.remote.ev3.Menu;
 import lejos.remote.ev3.MenuReply;
 import lejos.remote.ev3.MenuRequest;
 import lejos.remote.ev3.RMIRemoteEV3;
@@ -76,9 +81,8 @@ import lejos.robotics.SampleProvider;
 import lejos.robotics.filter.PublishFilter;
 import lejos.robotics.navigation.DifferentialPilot;
 import lejos.utility.Delay;
-import ora.rmi.ORAmenu;
 
-public class GraphicStartup implements ORAmenu {
+public class GraphicStartup implements Menu {
     private static final int REMOTE_MENU_PORT = 8002;
 
     private static final String JAVA_RUN_CP = "jrun -cp ";
@@ -115,17 +119,31 @@ public class GraphicStartup implements ORAmenu {
         "\u0000\u00f0\u000f\u0000\u0000\u00f0\u000f\u0000\u0000\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u0000\u00c0\u003f\u00ff\u0003\u00c0\u003f\u00ff\u0003\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00fc\u0003\u00f0\u003c\u00f0\u000f\u00f0\u003c\u00f0\u000f\u00f0\u0030\u00c3\u000f\u00f0\u0030\u00c3\u000f\u00f0\u0003\u00c3\u000f\u00f0\u0003\u00c3\u000f\u00f0\u000f\u00f0\u000f\u00f0\u000f\u00f0\u000f\u00f0\u000f\u00f0\u000f\u00f0\u000f\u00f0\u000f\u00f0\u0003\u00c3\u000f\u00f0\u0003\u00c3\u000f\u00f0\u0030\u00c3\u000f\u00f0\u0030\u00c3\u000f\u00f0\u003c\u00f0\u000f\u00f0\u003c\u00f0\u000f\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00ff\u0003\u00c0\u003f\u00ff\u0003\u0000\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u0000\u0000\u00f0\u000f\u0000\u0000\u00f0\u000f\u0000";
     private static final String ICWifi =
         "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00f8\u001f\u0000\u0000\u00ff\u00ff\u0000\u00c0\u00ff\u00ff\u0003\u00f0\u00ff\u00ff\u000f\u00f8\u003f\u00fc\u001f\u00fe\u0003\u00c0\u007f\u00ff\u0000\u0000\u00ff\u003f\u0000\u0000\u00fc\u001f\u0000\u0000\u00f8\u000e\u00f8\u001f\u0070\u0000\u00fe\u007f\u0000\u0000\u00ff\u00ff\u0000\u0080\u00ff\u00ff\u0001\u00c0\u003f\u00fc\u0003\u00c0\u0007\u00e0\u0003\u00c0\u0003\u00c0\u0001\u0000\u0000\u0000\u0000\u0000\u00c0\u0003\u0000\u0000\u00e0\u0007\u0000\u0000\u00e0\u0007\u0000\u0000\u00e0\u0007\u0000\u0000\u00e0\u0007\u0000\u0000\u00c0\u0003\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
-
+    private static final String ICPAN =
+        "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u000c\u0038\u0000\u0000\u000c\u0038\u0000\u0000\u000c\u0038\u0000\u0000\u000c\u0038\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00f8\u001f\u0000\u0000\u00c0\u0001\u0000\u0000\u00c0\u0001\u0000\u00f0\u00ff\u00ff\u000f\u00f0\u00ff\u00ff\u000f\u0070\u0000\u0000\u000e\u0070\u0000\u0000\u000e\u00ff\u0007\u00e0\u00ff\u00ff\u000f\u00f0\u00ff\u0003\u000e\u0070\u00c0\u0003\u000e\u0070\u00c0\u0003\u000e\u0070\u00c0\u0003\u000e\u0070\u00c0\u00ff\u000f\u00f0\u00ff\u00ff\u000f\u00f0\u00ff\u00ff\u0007\u00e0\u00ff\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
+    private static final String ICAccessPoint =
+        "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00c0\u0001\u0080\u0003\u00e0\u0001\u0080\u0007\u00f0\u0001\u0080\u000f\u00f0\u000c\u0030\u000f\u0078\u001e\u0078\u001e\u0078\u001f\u00f8\u001e\u0078\u00cf\u00f3\u001e\u0038\u00ef\u00f7\u001c\u0038\u00e7\u00e7\u001c\u0038\u00e7\u00e7\u001c\u0038\u00ef\u00f7\u001c\u0078\u00cf\u00f3\u001e\u0078\u001f\u00f8\u001e\u00f8\u001e\u0078\u001f\u00f0\u000c\u0030\u000f\u00f0\u0001\u0080\u000f\u00e0\u0003\u00c0\u0007\u00c0\u0001\u0080\u0003\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
+    private static final String ICAccessPointPlus =
+        "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00c0\u0001\u0080\u0003\u00e0\u0001\u0080\u0007\u00f0\u0001\u0080\u000f\u00f0\u000c\u0030\u000f\u0070\u001e\u0078\u000e\u0078\u001e\u0078\u001e\u0078\u00cf\u00f3\u001e\u0038\u00ef\u00f7\u001c\u0038\u00e7\u00e7\u001c\u0038\u00e7\u00e7\u001c\u0038\u00ef\u0077\u001c\u0078\u00cf\u00e3\u0017\u0078\u001e\u00f0\u000f\u0070\u001e\u0078\u001e\u00f0\u000c\u007c\u003e\u00f0\u0001\u007c\u003e\u00e0\u0003\u000c\u0030\u00c0\u0001\u000c\u0030\u0000\u0000\u007c\u003e\u0000\u0000\u007c\u003e\u0000\u0000\u0078\u001e\u0000\u0000\u00f0\u000f\u0000\u0000\u00e0\u0007\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
+    private static final String ICUSBClient =
+        "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0030\u0000\u0000\u0000\u003e\u0000\u0000\u0080\u001f\u0000\u0000\u00e0\u001f\u0000\u0078\u00c0\u001f\u0000\u00fc\u00c0\u000f\u0000\u00fe\u00c1\u000f\u0000\u00fe\u00e1\u0007\u0000\u00fe\u00f1\u0004\u0000\u00fe\u0079\u0000\u0000\u00ff\u003c\u0000\u0080\u007f\u001e\u0001\u0080\u0003\u008f\u0003\u0000\u0083\u00c7\u0007\u0000\u00c7\u00e3\u000f\u0000\u00e6\u00f1\u001f\u0000\u00fe\u00e1\u000f\u0000\u00fc\u00e7\u0007\u00e0\u003f\u00ff\u0003\u00f8\u001f\u003e\u0001\u00f8\u000f\u0018\u0000\u00fc\u000f\u0000\u0000\u00fc\u000f\u0000\u0000\u00fc\u000f\u0000\u0000\u00fc\u000f\u0000\u0000\u00f8\u0007\u0000\u0000\u00f8\u0007\u0000\u0000\u00e0\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
+    private static final String ICNone =
+        "\u00c0\u00ff\u00ff\u0003\u00e0\u00ff\u00ff\u0007\u0070\u0000\u0000\u000e\u0038\u0000\u0000\u001c\u007c\u0000\u0000\u0038\u00fe\u0000\u0000\u0070\u00f7\u0001\u0000\u00e0\u00e3\u0003\u0080\u00c3\u00e3\u0007\u0080\u00c7\u00f3\u000f\u0080\u00cf\u00f3\u001f\u0030\u00cf\u007b\u003e\u0078\u00de\u007b\u007f\u00f8\u00de\u007b\u00ff\u00f3\u00de\u003b\u00ff\u00f7\u00dc\u003b\u00e7\u00e7\u00dc\u003b\u00e7\u00e7\u00dc\u003b\u00ef\u00ff\u00dc\u007b\u00cf\u00ff\u00de\u007b\u001f\u00fe\u00de\u00fb\u001e\u007c\u00df\u00f3\u000c\u00f8\u00cf\u00f3\u0001\u00f0\u00cf\u00e3\u0003\u00e0\u00c7\u00c3\u0001\u00c0\u00c7\u0007\u0000\u0080\u00cf\u000e\u0000\u0000\u00ff\u001c\u0000\u0000\u007e\u0038\u0000\u0000\u003c\u0070\u0000\u0000\u001c\u00e0\u00ff\u00ff\u000f\u00c0\u00ff\u00ff\u0007";
+    private static final String ICBTClient = ICBlue;
     private static final String ICSound =
         "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00c0\u0000\u0003\u0000\u00c0\u0000\u0003\u0000\u00f0\u0030\u000c\u0000\u00f0\u0030\u000c\u0000\u00cc\u00c0\u0030\u0000\u00cc\u00c0\u0030\u0000\u00c3\u000c\u0033\u0000\u00c3\u000c\u0033\u00fc\u00c3\u0030\u0033\u00fc\u00c3\u0030\u0033\u000c\u00c3\u0030\u0033\u000c\u00c3\u0030\u0033\u000c\u00c3\u0030\u0033\u000c\u00c3\u0030\u0033\u003c\u00c3\u0030\u0033\u003c\u00c3\u0030\u0033\u00cc\u00cf\u0030\u0033\u00cc\u00cf\u0030\u0033\u00fc\u00f3\u0030\u0033\u00fc\u00f3\u0030\u0033\u0000\u00cf\u000c\u0033\u0000\u00cf\u000c\u0033\u0000\u00fc\u00c0\u0030\u0000\u00fc\u00c0\u0030\u0000\u00f0\u0030\u000c\u0000\u00f0\u0030\u000c\u0000\u00c0\u0000\u0003\u0000\u00c0\u0000\u0003\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
+    private static final String ICInfo =
+        "\u0000\u00f0\u000f\u0000\u0000\u007e\u007e\u0000\u0080\u0007\u00e0\u0001\u00c0\u0001\u0080\u0003\u0060\u0000\u0000\u0006\u0030\u0000\u0000\u000c\u0018\u0000\u0000\u0018\u000c\u0000\u0001\u0030\u000c\u0080\u0003\u0030\u0006\u0080\u0003\u0060\u0006\u0080\u0001\u0060\u0002\u0000\u0000\u0040\u0003\u00e0\u0003\u00c0\u0003\u00f0\u0003\u00c0\u0003\u0080\u0003\u00c0\u0001\u0080\u0003\u0080\u0001\u0080\u0003\u0080\u0003\u0080\u0003\u00c0\u0003\u0080\u0003\u00c0\u0003\u0080\u0003\u00c0\u0002\u0080\u0003\u0040\u0006\u0080\u0003\u0060\u0006\u0080\u0003\u0060\u000c\u0080\u0003\u0030\u000c\u00f0\u000f\u0030\u0018\u0000\u0000\u0018\u0030\u0000\u0000\u000c\u0060\u0000\u0000\u0006\u00c0\u0001\u0080\u0003\u0080\u0007\u00e0\u0001\u0000\u007e\u007e\u0000\u0000\u00f0\u000f\u0000";
 
     private static final String ICEV3 =
         "\u00c0\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u0003\u00f0\u00ff\u00ff\u000f\u00f0\u00ff\u00ff\u000f\u0030\u0000\u0000\u000c\u0030\u0000\u0000\u000c\u0030\u00ff\u00ff\u000c\u0030\u00ff\u00ff\u000c\u0030\u0003\u00c0\u000c\u0030\u0003\u00c0\u000c\u0030\u000f\u00c0\u000c\u0030\u000f\u00c0\u000c\u0030\u0033\u00c0\u000c\u0030\u0033\u00c0\u000c\u0030\u00cf\u00cc\u000c\u0030\u00cf\u00cc\u000c\u0030\u00ff\u00ff\u000c\u0030\u00ff\u00ff\u000c\u0030\u0000\u0000\u000c\u0030\u0000\u0000\u000c\u0030\u00cf\u00f3\u000c\u0030\u00cf\u00f3\u000c\u0030\u00cc\u0033\u000c\u0030\u00cc\u0033\u000c\u00f0\u00c0\u0003\u000c\u00f0\u00c0\u0003\u000c\u0030\u0033\u0000\u000c\u0030\u0033\u0000\u000c\u00f0\u00ff\u00ff\u000f\u00f0\u00ff\u00ff\u000f\u00c0\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u0003";
     private static final String ICDebug =
         "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00e0\u0001\u0080\u0007\u00e0\u00e1\u00c7\u0007\u0000\u00f3\u00ee\u0000\u0000\u00ff\u007f\u0000\u0000\u00de\u003f\u0000\u0000\u00fa\u0077\u0000\u0000\u007f\u00ff\u0000\u0000\u00ff\u00ff\u0000\u0008\u00ef\u00fd\u0010\u001c\u00ff\u00df\u0038\u003c\u007e\u007f\u001c\u0078\u00fc\u003f\u001e\u00f0\u00f8\u001f\u000f\u00e0\u00e1\u0087\u0007\u00e0\u0003\u00c0\u0007\u00f0\u000f\u00f0\u000f\u00fc\u00ff\u00ff\u007f\u00ff\u00ff\u00ff\u00ff\u00ff\u00fd\u00bf\u00ff\u00fe\u00f8\u001f\u007f\u00f2\u00f8\u001f\u002f\u00e0\u00fd\u00bf\u0007\u00e0\u007f\u00ff\u0007\u00f0\u003f\u00fe\u000f\u00f8\u003f\u00fe\u001f\u00fc\u007f\u00ff\u003f\u003c\u00ff\u00ff\u003c\u0018\u00fe\u007f\u0018\u0000\u007c\u003e\u0000\u0000\u0060\u0006\u0000";
+    @SuppressWarnings("unused")
     private static final String ICLeJOS =
         "\u0000\u0000\u00fc\u000f\u0000\u0000\u00fc\u000f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00c0\u003f\u0000\u0000\u00c0\u003f\u0000\u0000\u00c0\u003f\u0000\u0000\u00c0\u003f\u0000\u00c0\u00cc\u003f\u0000\u00c0\u00cc\u003f\u0000\u0030\u00c3\u003f\u0000\u0030\u00c3\u003f\u0000\u00c0\u00cc\u003f\u0000\u00c0\u00cc\u003f\u00fc\u0033\u00c3\u003f\u00fc\u0033\u00c3\u003f\u00fc\u0003\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00fc\u00ff\u00ff\u003f\u00fc\u00ff\u00ff\u003f\u00fc\u00ff\u00ff\u003f\u00fc\u00ff\u00ff\u003f\u00f0\u00ff\u00ff\u000f\u00f0\u00ff\u00ff\u000f\u0000\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u0000";
 
+    @SuppressWarnings("unused")
     private static final String ICPower =
         "\u0000\u00c0\u0003\u0000\u0000\u00c0\u0003\u0000\u00c0\u00cf\u00f3\u0003\u00c0\u00cf\u00f3\u0003\u00f0\u00cf\u00f3\u000f\u00f0\u00cf\u00f3\u000f\u00fc\u00c3\u00c3\u003f\u00fc\u00c3\u00c3\u003f\u00fc\u00c0\u0003\u003f\u00fc\u00c0\u0003\u003f\u00ff\u00c0\u0003\u00ff\u00ff\u00c0\u0003\u00ff\u003f\u00c0\u0003\u00fc\u003f\u00c0\u0003\u00fc\u003f\u00c0\u0003\u00fc\u003f\u00c0\u0003\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u00ff\u0000\u0000\u00ff\u00ff\u0000\u0000\u00ff\u00fc\u0000\u0000\u003f\u00fc\u0000\u0000\u003f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00f0\u00ff\u00ff\u000f\u00f0\u00ff\u00ff\u000f\u00c0\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u0003\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000";
     private static final String ICVisibility =
@@ -149,36 +167,52 @@ public class GraphicStartup implements ORAmenu {
     private static final String ICNo =
         "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00f0\u0000\u0000\u000f\u00f0\u0000\u0000\u000f\u00fc\u0003\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00c0\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u0003\u0000\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00fc\u003f\u0000\u0000\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u0000\u00c0\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u0003\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00fc\u000f\u00f0\u003f\u00fc\u000f\u00f0\u003f\u00fc\u0003\u00c0\u003f\u00fc\u0003\u00c0\u003f\u00f0\u0000\u0000\u000f\u00f0\u0000\u0000\u000f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
 
-    // Roberta menu icon
     private static final String ICRoberta =
         "\u0000\u0000\u0080\u0000\u0000\u0000\u0080\u0000\u0000\u00c0\u00c3\u0001\u0010\u0001\u00c0\u0001\u00dc\u00c0\u00c1\u0000\u0058\u002f\u00fe\u0000\u009c\u0010\u007c\u0000\u007c\u0080\u001c\u0000\u0078\u0084\u001d\u0000\u0070\u000c\u0004\u0000\u0070\u0000\u0002\u0000\u0080\u00f0\u0001\u0000\u0000\u003f\u0000\u0000\u0000\u0038\u0000\u0000\u0000\u0018\u0000\u0000\u0000\u001c\u0000\u0000\u0000\u001c\u00c0\u0001\u0000\u001c\u00f8\u0003\u0000\u00dc\u00ff\u0003\u0000\u00dc\u00ff\u0003\u0000\u00bc\u00ff\r\u0000\u00f8\u00ff\u001e\u0000\u00f4\u007f\u001f\u0080\u00cf\u00c7\u003f\u00c0\u00ff\u00bb\u003f\u00e0\u00fb\u00fd\u0033\u00e0\u0007\u00ff\u003b\u00e0\u00ff\u00cf\u003b\u00e0\u00ff\u00ef\u001f\u00c0\u00ff\u00ff\u001f\u0080\u00f7\u00fe\u000f\u0000\u0000\u00b8\u0007";
     private static final String ICRobertaInfo =
         "\u0000\u00fc\u003f\u0000\u0000\u00ff\u00ff\u0000\u00c0\u00ff\u00ff\u0003\u00e0\u00ff\u00ff\u0007\u00f0\u0007\u00f0\u000f\u00f8\u0003\u00c0\u001f\u00fc\u0000\u0000\u003f\u007c\u0000\u0007\u003e\u003e\u0080\u000f\u007c\u003e\u0080\u000f\u007c\u001f\u0080\u000f\u00f8\u001f\u0080\u000f\u00f0\u000f\u0000\u0007\u00f0\u000f\u0000\u0000\u00f0\u000f\u00e0\u0001\u00f0\u000f\u00f0\u0007\u00f0\u0007\u00f0\u0007\u00f0\u000f\u00e0\u0007\u00f0\u000f\u00e0\u0007\u00f0\u000f\u00f0\u0007\u00f0\u000f\u00f0\u0003\u00f8\u001f\u00f0\u0003\u00f8\u003e\u00f0\u0007\u007c\u003e\u00f0\u0007\u007c\u007c\u00c0\u0003\u003e\u00fc\u0000\u0000\u003f\u00f8\u0003\u00c0\u001f\u00f0\u000f\u00e0\u000f\u00e0\u00ff\u00fe\u0007\u00c0\u00ff\u00ff\u0003\u0000\u00ff\u00ff\u0000\u0000\u00fc\u003f\u0000";
 
     private static final String PROGRAMS_DIRECTORY = "/home/lejos/programs";
+    private static final String LIB_DIRECTORY = "/home/lejos/lib";
     private static final String SAMPLES_DIRECTORY = "/home/root/lejos/samples";
     private static final String TOOLS_DIRECTORY = "/home/root/lejos/tools";
     private static final String MENU_DIRECTORY = "/home/root/lejos/bin/utils";
     private static final String START_BLUETOOTH = "/home/root/lejos/bin/startbt";
     private static final String START_WLAN = "/home/root/lejos/bin/startwlan";
+    private static final String START_PAN = "/home/root/lejos/bin/startpan";
+    private static final String PAN_CONFIG = "/home/root/lejos/config/pan.config";
+    private static final String WIFI_CONFIG = "/home/root/lejos/config/wpa_supplicant.conf";
+    private static final String WIFI_BASE = "wpa_supplicant.txt";
+    private static final String WLAN_INTERFACE = "wlan0";
+    private static final String PAN_INTERFACE = "br0";
 
+    private static final int IND_SUSPEND = -1;
+    private static final int IND_NONE = 0;
+    private static final int IND_NORMAL = 1;
+    private static final int IND_FULL = 2;
+
+    @SuppressWarnings("unused")
     private static final int defaultSleepTime = 2;
     private static final int maxSleepTime = 10;
 
     // Threads
     private final IndicatorThread ind = new IndicatorThread();
     private final BatteryIndicator indiBA = new BatteryIndicator();
-    //private final PipeReader pipeReader = new PipeReader();
+    private final PipeReader pipeReader = new PipeReader();
     private final RConsole rcons = new RConsole();
-    //private final BroadcastThread broadcast = new BroadcastThread();
     private final RemoteMenuThread remoteMenuThread = new RemoteMenuThread();
 
     //private GraphicMenu curMenu;
     private int timeout = 0;
     private boolean btVisibility;
-    private static String version = "Unknown"; // lejos version
+    private final PANConfig panConfig = new PANConfig();
+    private final WaitScreen waitScreen = new WaitScreen();
+    private static String version = "Unknown";
     private static String hostname;
-    public static HashMap<String, String> ips = getIPAddresses();
+    private static List<String> ips = new ArrayList<String>();
+    private static String wlanAddress;
+    private static String panAddress;
+
     private static LocalBTDevice bt;
     public static GraphicStartup menu = new GraphicStartup();
 
@@ -191,8 +225,6 @@ public class GraphicStartup implements ORAmenu {
 
     private final static Properties menuProperties = loadProperties();
     private static Properties openrobertaProperties = null;
-
-    public static int selection = 0;
 
     private static TextLCD lcd = LocalEV3.get().getTextLCD();
 
@@ -210,7 +242,7 @@ public class GraphicStartup implements ORAmenu {
     public static void main(String[] args) throws Exception {
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
         System.out.println("Menu started");
-
+        LocalEV3.get().getLED().setPattern(3);
         if ( args.length > 0 ) {
             hostname = args[0];
         }
@@ -221,7 +253,11 @@ public class GraphicStartup implements ORAmenu {
 
         System.out.println("Host name: " + hostname);
         System.out.println("Version: " + version);
-
+        waitForEV3BootComplete();
+        System.out.println("Boot complete");
+        LocalEV3.get().getLED().setPattern(1);
+        menu = new GraphicStartup();
+        lcd = LocalEV3.get().getTextLCD();
         // Check for autorun
         File file = getDefaultProgram();
         if ( file != null ) {
@@ -245,7 +281,9 @@ public class GraphicStartup implements ORAmenu {
         USBservice usbservice = new USBservice();
         usbservice.start();
 
-        // Start the RMI registry
+        System.out.println("Getting IP addresses");
+        menu.updateIPAddresses();
+
         InitThread initThread = new InitThread();
         initThread.start();
 
@@ -253,10 +291,566 @@ public class GraphicStartup implements ORAmenu {
         menu.start();
 
         System.out.println("Starting the menu");
+        LocalEV3.get().getLED().setPattern(0);
         menu.mainMenu();
 
         System.out.println("Menu finished");
         System.exit(0);
+    }
+
+    private static void waitForEV3BootComplete() {
+        File bootLock = new File("/var/run/bootlock");
+        while ( bootLock.exists() ) {
+            Delay.msDelay(500);
+        }
+    }
+
+    /**
+     * Class to handle PAN configuration
+     *
+     * @author andy
+     */
+    class PANConfig {
+        public static final int MODE_NONE = 0;
+        public static final int MODE_AP = 1;
+        public static final int MODE_APP = 2;
+        public static final int MODE_BTC = 3;
+        public static final int MODE_USBC = 4;
+
+        final String[] modeIDS = {
+            "NONE",
+            "AP",
+            "AP+",
+            "BT",
+            "USB"
+        };
+        final String[] modeNames = {
+            "None",
+            "Access Pt",
+            "Access Pt+",
+            "BT Client",
+            "USB Client"
+        };
+        final String[] serviceNames = {
+            "NAP",
+            "PANU",
+            "GN"
+        };
+        static final String autoIP = "0.0.0.0";
+        static final String anyAP = "*";
+
+        String[] IPAddresses = {
+            autoIP,
+            autoIP,
+            autoIP,
+            autoIP,
+            autoIP
+        };
+        String[] IPNames = {
+            "Address",
+            "Netmask",
+            "Brdcast",
+            "Gateway",
+            "DNS    "
+        };
+        String[] IPIDS = {
+            "IP",
+            "NM",
+            "BC",
+            "GW",
+            "DN"
+        };
+
+        int curMode = MODE_NONE;
+        String BTAPName = anyAP;
+        String BTAPAddress = anyAP;
+        String BTService = "NAP";
+        String persist = "N";
+        Boolean changed = false;
+
+        public PANConfig() {
+            loadConfig();
+        }
+
+        public int getCurrentMode() {
+            return this.curMode;
+        }
+
+        public void saveConfig() {
+            System.out.println("Save PAN config");
+            try {
+                PrintWriter out = new PrintWriter(PAN_CONFIG);
+                out.print(this.modeIDS[this.curMode] + " " + this.BTAPName.replace(" ", "\\ ") + " " + this.BTAPAddress);
+                for ( String ip : this.IPAddresses ) {
+                    out.print(" " + ip);
+                }
+                out.print(" " + this.BTService + " " + this.persist);
+                out.println();
+                out.close();
+                this.changed = false;
+            } catch ( IOException e ) {
+                System.out.println("Failed to write PAN config to " + PAN_CONFIG + ": " + e);
+            }
+        }
+
+        private String getConfigString(String[] vals, int offset, String def) {
+            if ( vals == null || offset >= vals.length || vals[offset] == null || vals[offset].length() == 0 ) {
+                return def;
+            }
+            return vals[offset];
+        }
+
+        public void loadConfig() {
+            System.out.println("Load PAN config");
+            String[] vals = null;
+            try {
+                BufferedReader in = new BufferedReader(new FileReader(PAN_CONFIG));
+                // nasty cludge preserve escaped spaces (convert them to no-break space
+                String line = in.readLine().replace("\\ ", "\u00a0");
+                vals = line.split("\\s+");
+                in.close();
+            } catch ( IOException e ) {
+                System.out.println("Failed to load PAN config from " + PAN_CONFIG + ": " + e);
+            }
+            String mode = getConfigString(vals, 0, this.modeIDS[MODE_NONE]);
+            // turn mode into value
+            this.curMode = MODE_NONE;
+            for ( int i = 0; i < this.modeIDS.length; i++ ) {
+                if ( this.modeIDS[i].equalsIgnoreCase(mode) ) {
+                    this.curMode = i;
+                    break;
+                }
+            }
+            // be sure to convert no-break space back - ahem.
+            this.BTAPName = getConfigString(vals, 1, anyAP).replace("\u00a0", " ");
+            this.BTAPAddress = getConfigString(vals, 2, anyAP);
+            for ( int i = 0; i < this.IPAddresses.length; i++ ) {
+                this.IPAddresses[i] = getConfigString(vals, i + 3, autoIP);
+            }
+            if ( this.curMode == MODE_AP && this.IPAddresses[0].equals(autoIP) ) {
+                this.IPAddresses[0] = "10.0.1.1";
+            }
+            this.BTService = getConfigString(vals, 8, "NAP");
+            this.persist = getConfigString(vals, 9, "N");
+            this.changed = false;
+        }
+
+        public void init(int mode) {
+            if ( mode != this.curMode ) {
+                for ( int i = 0; i < this.IPAddresses.length; i++ ) {
+                    this.IPAddresses[i] = autoIP;
+                }
+                switch ( mode ) {
+                    case MODE_AP:
+                        this.IPAddresses[0] = "10.0.1.1";
+                        break;
+                    case MODE_APP:
+                        // For access point plus we need to use a sub-net within the
+                        // sub-net being used for WiFi. Set a default that may work for
+                        // most - well it does for me!
+                        if ( wlanAddress != null ) {
+                            String[] parts = wlanAddress.split("\\.");
+                            if ( parts.length == 4 ) {
+                                this.IPAddresses[0] = parts[0] + "." + parts[1] + "." + parts[2] + ".208";
+                            }
+                        }
+                        break;
+                }
+                this.BTAPName = anyAP;
+                this.BTAPAddress = anyAP;
+                this.BTService = "NAP";
+                this.persist = "N";
+                this.curMode = mode;
+                this.changed = true;
+            }
+        }
+
+        /**
+         * Test to see if the IP address string is the special case auto address
+         *
+         * @param ip
+         * @return true if the address is the auto address.
+         */
+        private boolean isAutoIP(String ip) {
+            return ip.equals(autoIP);
+        }
+
+        /**
+         * Return an IP address suitable for display, replace the auto address with a
+         * more readable version.
+         *
+         * @param ip
+         * @return the display string
+         */
+        private String getDisplayIP(String ip) {
+            return isAutoIP(ip) ? "<Auto>" : ip;
+        }
+
+        private boolean isAnyAP(String bt) {
+            return bt.equals(anyAP);
+        }
+
+        private String getDisplayAP(String bt) {
+            return isAnyAP(bt) ? "Any Access Point" : bt;
+        }
+
+        /**
+         * Validate and cleanup the IP address
+         *
+         * @param address
+         * @return validated IP or null if there is an error.
+         */
+        private String getValidatedIP(String address) {
+            try {
+                return InetAddress.getByName(address).getHostAddress();
+            } catch ( UnknownHostException e ) {
+                return null;
+            }
+        }
+
+        /**
+         * Allow the user to enter an IP address
+         *
+         * @param title String to display as the title of the screen
+         * @param ip IP address to edit
+         * @return new validated address
+         */
+        private String enterIP(String title, String ip) {
+            String[] parts = ip.split("\\.");
+            for ( int i = 0; i < parts.length; i++ ) {
+                parts[i] = "000".substring(parts[i].length()) + parts[i];
+            }
+            String address = parts[0] + "." + parts[1] + "." + parts[2] + "." + parts[3];
+            int curDigit = 0;
+            while ( true ) {
+                newScreen(title);
+                lcd.drawString(address, 2, 4);
+                if ( curDigit < 0 ) {
+                    curDigit = 14;
+                }
+                if ( curDigit >= 15 ) {
+                    curDigit = 0;
+                }
+                Utils.drawRect(curDigit * 10 + 18, 60, 13, 20);
+                lcd.refresh();
+                int key = getButtonPress();
+                switch ( key ) {
+                    case Button.ID_ENTER: { // ENTER
+                                            // remove leading zeros
+                        String ret = getValidatedIP(address);
+                        if ( ret == null ) {
+                            msg("Invalid address");
+                        } else {
+                            return ret;
+                        }
+                        break;
+                    }
+                    case Button.ID_LEFT: { // LEFT
+                        curDigit--;
+                        if ( curDigit < 0 ) {
+                            curDigit = 14;
+                        }
+                        if ( address.charAt(curDigit) == '.' ) {
+                            curDigit--;
+                        }
+                        break;
+                    }
+                    case Button.ID_RIGHT: { // RIGHT
+                        curDigit++;
+                        if ( curDigit >= 15 ) {
+                            curDigit = 0;
+                        }
+                        if ( address.charAt(curDigit) == '.' ) {
+                            curDigit++;
+                        }
+                        break;
+                    }
+                    case Button.ID_ESCAPE: { // ESCAPE
+                        return ip;
+                    }
+                    case Button.ID_UP: {
+                        int val = (address.charAt(curDigit) - '0');
+                        if ( ++val > 9 ) {
+                            val = 0;
+                        }
+                        address = address.substring(0, curDigit) + ((char) ('0' + val)) + address.substring(curDigit + 1);
+                        break;
+                    }
+                    case Button.ID_DOWN: {
+                        int val = (address.charAt(curDigit) - '0');
+                        if ( --val < 0 ) {
+                            val = 9;
+                        }
+                        address = address.substring(0, curDigit) + ((char) ('0' + val)) + address.substring(curDigit + 1);
+                        break;
+                    }
+                }
+            }
+        }
+
+        /**
+         * Allow the user to choose between an automatic or manual IP address if
+         * manual allow the address to be edited
+         *
+         * @param title
+         * @param ip
+         * @return new ip address
+         */
+        private String getIPAddress(String title, String ip) {
+            String[] strings = {
+                "Automatic",
+                "Advanced"
+            };
+            String[] icons = new String[strings.length];
+            GraphicMenu menu = new GraphicListMenu(strings, icons, 4);
+            newScreen(title);
+            String dispIP = getDisplayIP(ip);
+            lcd.drawString(dispIP, (lcd.getTextWidth() - dispIP.length()) / 2, 2);
+            menu.setItems(strings, icons);
+            int selection = getSelection(menu, isAutoIP(ip) ? 0 : 1);
+            switch ( selection ) {
+                case 0:
+                    return autoIP;
+                case 1:
+                    return enterIP(title, ip);
+                default:
+                    return ip;
+            }
+        }
+
+        /**
+         * Allow the user to choose the Bluetooth service to connect to.
+         *
+         * @param title
+         * @param service
+         * @return new service
+         */
+        private String getBTService(String title, String service) {
+            String[] strings = this.serviceNames;
+            String[] icons = new String[strings.length];
+            GraphicMenu menu = new GraphicListMenu(strings, icons, 4);
+            newScreen(title);
+            lcd.drawString(service, (lcd.getTextWidth() - service.length()) / 2, 2);
+            menu.setItems(strings, icons);
+            int item = 0;
+            while ( !strings[item].equalsIgnoreCase(service) ) {
+                item++;
+            }
+            int selection = getSelection(menu, item);
+            if ( selection > 0 ) {
+                return strings[selection];
+            } else {
+                return service;
+            }
+        }
+
+        public void configureAdvanced() {
+            int selection = 0;
+            int extra = (this.curMode == MODE_BTC ? 2 : this.curMode == MODE_USBC ? 1 : 0);
+            String[] strings = new String[this.IPAddresses.length + extra];
+            String[] icons = new String[this.IPAddresses.length + extra];
+            GraphicMenu menu = new GraphicListMenu(strings, icons);
+            for ( ;; ) {
+                newScreen(this.modeNames[this.curMode]);
+                for ( int i = 0; i < this.IPAddresses.length; i++ ) {
+                    strings[i] = this.IPNames[i] + " " + getDisplayIP(this.IPAddresses[i]);
+                }
+                if ( extra > 0 ) {
+                    strings[this.IPAddresses.length] = "Persist " + this.persist;
+                }
+                if ( extra > 1 ) {
+                    strings[this.IPAddresses.length + 1] = "Service " + this.BTService;
+                }
+
+                menu.setItems(strings, icons);
+                selection = getSelection(menu, selection);
+                if ( selection < 0 ) {
+                    break;
+                }
+                this.changed = true;
+                if ( selection < this.IPAddresses.length ) {
+                    this.IPAddresses[selection] = getIPAddress(this.IPNames[selection], this.IPAddresses[selection]);
+                } else if ( selection == this.IPAddresses.length ) {
+                    switch ( getYesNo("Persist Connection", this.persist.equalsIgnoreCase("Y")) ) {
+                        case 0:
+                            this.persist = "N";
+                            break;
+                        case 1:
+                            this.persist = "Y";
+                            break;
+                    }
+                } else {
+                    this.BTService = getBTService("Service", this.BTService);
+                }
+
+            }
+        }
+
+        /**
+         * Display all currently known Bluetooth devices.
+         */
+        private void selectAP() {
+            newScreen("Devices");
+            lcd.drawString("Searching...", 3, 2);
+            List<RemoteBTDevice> devList;
+            try {
+                devList = (List<RemoteBTDevice>) Bluetooth.getLocalDevice().getPairedDevices();
+            } catch ( BluetoothException e ) {
+                return;
+            }
+            if ( devList.size() <= 0 ) {
+                msg("No known devices");
+                return;
+            }
+
+            String[] names = new String[devList.size()];
+            String[] icons = new String[devList.size()];
+            int i = 0;
+            for ( RemoteBTDevice btrd : devList ) {
+                names[i] = btrd.getName();
+                i++;
+            }
+
+            GraphicListMenu deviceMenu = new GraphicListMenu(names, icons);
+            int selected = 0;
+            newScreen("Devices");
+            selected = getSelection(deviceMenu, selected);
+            if ( selected >= 0 ) {
+                RemoteBTDevice btrd = devList.get(selected);
+                //byte[] devclass = btrd.getDeviceClass();
+                this.BTAPName = btrd.getName();
+                this.BTAPAddress = btrd.getAddress();
+                this.changed = true;
+            }
+        }
+
+        public void configureBTClient(String title) {
+            String[] strings = {
+                "Any",
+                "Select",
+                "Advanced"
+            };
+            String[] icons = new String[strings.length];
+            GraphicMenu menu = new GraphicListMenu(strings, icons, 4);
+            while ( true ) {
+                newScreen(title);
+                String dispIP = getDisplayAP(this.BTAPName);
+                lcd.drawString(dispIP, (lcd.getTextWidth() - dispIP.length()) / 2, 2);
+                if ( !isAnyAP(this.BTAPName) ) {
+                    lcd.drawString(this.BTAPAddress, (lcd.getTextWidth() - this.BTAPAddress.length()) / 2, 3);
+                }
+                int selection = getSelection(menu, isAnyAP(this.BTAPName) ? 0 : 1);
+                switch ( selection ) {
+                    case 0:
+                        this.BTAPName = anyAP;
+                        this.BTAPAddress = anyAP;
+                        this.changed = true;
+                        return;
+                    case 1:
+                        selectAP();
+                        break;
+                    case 2:
+                        configureAdvanced();
+                        break;
+                    default:
+                        return;
+                }
+            }
+        }
+
+        public void configure() {
+            if ( this.curMode == MODE_NONE ) {
+                return;
+            }
+            if ( this.curMode == MODE_BTC ) {
+                configureBTClient(this.modeNames[this.curMode]);
+            } else {
+                configureAdvanced();
+            }
+        }
+
+        public void panMenu() {
+            int selection = 0;
+            GraphicMenu menu = new GraphicMenu(null, null, 3);
+            do {
+                newScreen("PAN");
+                menu.setItems(this.modeNames, new String[] {
+                    ICNone,
+                    ICAccessPoint,
+                    ICAccessPointPlus,
+                    ICBTClient,
+                    ICUSBClient
+                });
+                selection = getSelection(menu, this.curMode);
+                if ( selection >= 0 ) {
+                    init(selection);
+                    configure();
+                }
+            } while ( selection >= 0 );
+            if ( this.changed ) {
+                GraphicStartup.this.waitScreen.begin("Restart\nPAN\nServices");
+                GraphicStartup.this.waitScreen.status("Save configuration");
+                saveConfig();
+                startNetwork(START_PAN, true);
+                GraphicStartup.this.waitScreen.status("Restart name server");
+                BrickFinder.stopDiscoveryServer();
+                BrickFinder.startDiscoveryServer(this.curMode == MODE_APP);
+                GraphicStartup.this.waitScreen.end();
+            }
+        }
+    }
+
+    private class WaitScreen {
+        final GraphicsLCD g = LocalEV3.get().getGraphicsLCD();
+        final int scrWidth;
+        final int scrHeight;
+        final int chHeight;
+        final int basePos;
+        final int statusPos;
+
+        public WaitScreen() {
+            this.g.setFont(Font.getDefaultFont());
+            this.scrWidth = this.g.getWidth();
+            this.scrHeight = this.g.getHeight();
+            this.chHeight = this.g.getFont().getHeight();
+            this.basePos = this.scrHeight / 3;
+            this.statusPos = this.basePos * 2;
+        }
+
+        public void begin(String title) {
+            System.out.println("Start wait");
+            suspend();
+            this.g.clear();
+            this.g.drawRegion(
+                hourglass,
+                0,
+                0,
+                hourglass.getWidth(),
+                hourglass.getHeight(),
+                GraphicsLCD.TRANS_NONE,
+                50,
+                50,
+                GraphicsLCD.HCENTER | GraphicsLCD.VCENTER);
+            int x = LCD.SCREEN_WIDTH / 2;
+            String[] strings = title.split("\n");
+            int y = this.basePos - (strings.length / 2) * this.chHeight;
+            for ( String s : strings ) {
+                this.g.drawString(s, x, y, 0);
+                y += this.chHeight;
+            }
+            this.g.refresh();
+        }
+
+        public void end() {
+            this.g.clear();
+            resume();
+        }
+
+        public void status(String msg) {
+            this.g.bitBlt(null, this.scrWidth, this.chHeight, 0, 0, 0, this.statusPos, this.scrWidth, this.chHeight, CommonLCD.ROP_CLEAR);
+            this.g.drawString(msg, 0, this.statusPos, 0);
+            this.g.refresh();
+        }
     }
 
     /**
@@ -266,7 +860,6 @@ public class GraphicStartup implements ORAmenu {
         /**
          * Create the Bluetooth local device and connect to DBus
          * Start the RMI server
-         * Broadcast device availability
          * Get the time from a name server
          */
         @Override
@@ -278,41 +871,8 @@ public class GraphicStartup implements ORAmenu {
             } catch ( Exception e ) {
                 // Ignore
             }
-
-            System.out.println("Starting RMI");
-            System.out.println("Setting java.rmi.server.hostname to " + ips.get("br0"));
-            System.setProperty("java.rmi.server.hostname", ips.get("br0"));
-
-            try { //special exception handler for registry creation
-                LocateRegistry.createRegistry(1099);
-                System.out.println("java RMI registry created.");
-            } catch ( RemoteException e ) {
-                //do nothing, error means registry already exists
-                System.out.println("java RMI registry already exists.");
-            }
-
-            try {
-                RMIRemoteEV3 ev3 = new RMIRemoteEV3();
-                Naming.rebind("//localhost/RemoteEV3", ev3);
-                RMIRemoteMenu remoteMenu = new RMIRemoteMenu(menu);
-                Naming.rebind("//localhost/RemoteMenu", remoteMenu);
-            } catch ( Exception e ) {
-                System.err.println("RMI failed to start: " + e);
-            }
-
-            //Broadcast availability of device
-            //Broadcast.broadcast(hostname);
-
-            // Do not use in "our" menu
-            // Set the date
-            //            try {
-            //                String dt = SntpClient.getDate(Settings.getProperty(ntpProperty, "1.uk.pool.ntp.org"));
-            //                System.out.println("Date and time is " + dt);
-            //                Runtime.getRuntime().exec("date -s " + dt);
-            //            } catch ( IOException e ) {
-            //                System.err.println("Failed to get time from ntp: " + e);
-            //            }
-
+            System.out.println("Got bluetooth device");
+            menu.startNetworkServices();
             System.out.println("Initialisation complete");
         }
     }
@@ -339,8 +899,8 @@ public class GraphicStartup implements ORAmenu {
     private void start() {
         this.ind.start();
         this.rcons.start();
-        //this.pipeReader.start();
-        //this.broadcast.start();
+        this.pipeReader.start();
+        BrickFinder.startDiscoveryServer(this.panConfig.getCurrentMode() == PANConfig.MODE_APP);
         this.remoteMenuThread.start();
     }
 
@@ -350,34 +910,36 @@ public class GraphicStartup implements ORAmenu {
      */
     private void mainMenu() {
         GraphicMenu menu = new GraphicMenu(new String[] {
-            " Open Roberta Lab",
+            "Open Roberta Lab",
             "Wifi",
-            "Bluetooth",
             "Programs",
             "Samples",
             "Tools",
             "Run Default",
+            "Bluetooth",
+            "PAN",
             "Sound",
             "System",
-            "Version Info"
+            "Version",
         }, new String[] {
             ICRoberta,
             ICWifi,
-            ICBlue,
             ICFiles,
             ICSamples,
             ICTools,
             ICDefault,
+            ICBlue,
+            ICPAN,
             ICSound,
             ICEV3,
-            ICRobertaInfo
+            ICRobertaInfo,
         }, 3);
-
+        int selection = 0;
         do {
-            selection = 0;
             newScreen(hostname);
-            redrawIPs();
+            this.ind.setDisplayState(IND_FULL);
             selection = getSelection(menu, selection);
+            this.ind.setDisplayState(IND_NORMAL);
             switch ( selection ) {
                 case 0:
                     robertaMenu();
@@ -386,27 +948,30 @@ public class GraphicStartup implements ORAmenu {
                     wifiMenu();
                     break;
                 case 2:
-                    bluetoothMenu();
-                    break;
-                case 3:
                     filesMenu();
                     break;
-                case 4:
+                case 3:
                     samplesMenu();
                     break;
-                case 5:
+                case 4:
                     toolsMenu();
                     break;
-                case 6:
+                case 5:
                     mainRunDefault();
                     break;
+                case 6:
+                    bluetoothMenu();
+                    break;
                 case 7:
-                    soundMenu();
+                    this.panConfig.panMenu();
                     break;
                 case 8:
-                    systemMenu();
+                    soundMenu();
                     break;
                 case 9:
+                    systemMenu();
+                    break;
+                case 10:
                     displayVersion();
                     break;
             }
@@ -423,6 +988,10 @@ public class GraphicStartup implements ORAmenu {
     }
 
     public class RemoteMenuThread extends Thread {
+        @SuppressWarnings({
+            "resource",
+            "deprecation"
+        })
         @Override
         public void run() {
 
@@ -462,7 +1031,7 @@ public class GraphicStartup implements ORAmenu {
                     System.out.println("Waiting for a remote menu connection");
                     conn = ss.accept();
                     //conn.setSoTimeout(2000);
-
+                    conn.setTcpNoDelay(true);
                     ObjectOutputStream os = new ObjectOutputStream(conn.getOutputStream());
                     ObjectInputStream is = new ObjectInputStream(conn.getInputStream());
 
@@ -575,6 +1144,10 @@ public class GraphicStartup implements ORAmenu {
                                         case SYSTEM_SOUND:
                                             Sound.systemSound(false, request.intValue);
                                             break;
+                                        case PLAY_SAMPLE:
+                                            reply.reply = Sound.playSample(request.file);
+                                            os.writeObject(reply);
+                                            break;
                                         case GET_NAME:
                                             reply.value = menu.getName();
                                             os.writeObject(reply);
@@ -606,9 +1179,11 @@ public class GraphicStartup implements ORAmenu {
                                             break;
                                         case LCD_GET_WIDTH:
                                             reply.reply = LCD.SCREEN_WIDTH;
+                                            os.writeObject(reply);
                                             break;
                                         case LCD_GET_HEIGHT:
                                             reply.reply = LCD.SCREEN_HEIGHT;
+                                            os.writeObject(reply);
                                             break;
                                         case LCD_GET_HW_DISPLAY:
                                             break;
@@ -915,6 +1490,35 @@ public class GraphicStartup implements ORAmenu {
                                             reply.result = ((UARTPort) ioPorts[request.intValue]).setMode(request.intValue2);
                                             os.writeObject(reply);
                                             break;
+                                        case UART_WRITE:
+                                            if ( ioPorts[request.intValue] == null ) {
+                                                throw new PortException("Port not open");
+                                            }
+                                            reply.reply = ((UARTPort) ioPorts[request.intValue]).write(request.byteData, request.intValue2, request.intValue3);
+                                            os.writeObject(reply);
+                                            break;
+                                        case UART_RAW_WRITE:
+                                            if ( ioPorts[request.intValue] == null ) {
+                                                throw new PortException("Port not open");
+                                            }
+                                            reply.reply =
+                                                ((UARTPort) ioPorts[request.intValue]).rawWrite(request.byteData, request.intValue2, request.intValue3);
+                                            os.writeObject(reply);
+                                            break;
+                                        case UART_RAW_READ:
+                                            if ( ioPorts[request.intValue] == null ) {
+                                                throw new PortException("Port not open");
+                                            }
+                                            reply.reply =
+                                                ((UARTPort) ioPorts[request.intValue]).rawRead(request.byteData, request.intValue2, request.intValue3);
+                                            os.writeObject(reply);
+                                            break;
+                                        case UART_SET_BIT_RATE:
+                                            if ( ioPorts[request.intValue] == null ) {
+                                                throw new PortException("Port not open");
+                                            }
+                                            ((UARTPort) ioPorts[request.intValue]).setBitRate(request.intValue2);
+                                            break;
                                         case CREATE_REGULATED_MOTOR:
                                             System.out.println("Creating motor on port " + request.str);
                                             Port p = LocalEV3.get().getPort(request.str); // port name
@@ -1149,15 +1753,22 @@ public class GraphicStartup implements ORAmenu {
                                                 os.writeObject(reply);
                                             }
                                             break;
-                                        case PILOT_SET_TRAVEL_SPEED:
-                                            pilot.setTravelSpeed(request.doubleValue);
+                                        case PILOT_SET_LINEAR_SPEED:
+                                            pilot.setLinearSpeed(request.doubleValue);
                                             break;
-                                        case PILOT_GET_TRAVEL_SPEED:
-                                            reply.doubleReply = pilot.getTravelSpeed();
+                                        case PILOT_GET_LINEAR_SPEED:
+                                            reply.doubleReply = pilot.getLinearSpeed();
                                             os.writeObject(reply);
                                             break;
-                                        case PILOT_GET_MAX_TRAVEL_SPEED:
-                                            reply.doubleReply = pilot.getTravelSpeed();
+                                        case PILOT_SET_LINEAR_ACCELERATION:
+                                            pilot.setLinearAcceleration(request.doubleValue);
+                                            break;
+                                        case PILOT_GET_LINEAR_ACCELERATION:
+                                            reply.doubleReply = pilot.getLinearAcceleration();
+                                            os.writeObject(reply);
+                                            break;
+                                        case PILOT_GET_MAX_LINEAR_SPEED:
+                                            reply.doubleReply = pilot.getLinearSpeed();
                                             os.writeObject(reply);
                                             break;
                                         case PILOT_GET_MOVEMENT:
@@ -1167,24 +1778,32 @@ public class GraphicStartup implements ORAmenu {
                                             os.writeObject(reply);
                                             break;
                                         case PILOT_ROTATE_IMMEDIATE:
-                                            pilot.rotate(request.doubleValue, request.flag);
+                                            if ( request.doubleValue == Double.POSITIVE_INFINITY ) {
+                                                pilot.rotateRight();
+                                            } else if ( request.doubleValue == Double.NEGATIVE_INFINITY ) {
+                                                pilot.rotateLeft();
+                                            } else {
+                                                pilot.rotate(request.doubleValue, request.flag);
+                                            }
                                             if ( !request.flag ) {
                                                 os.writeObject(reply);
                                             }
                                             break;
-                                        case PILOT_GET_ROTATE_SPEED:
-                                            reply.doubleReply = pilot.getRotateSpeed();
+                                        case PILOT_GET_ANGULAR_SPEED:
+                                            reply.doubleReply = pilot.getAngularSpeed();
                                             os.writeObject(reply);
                                             break;
-                                        case PILOT_SET_ROTATE_SPEED:
-                                            pilot.setRotateSpeed(request.doubleValue);
+                                        case PILOT_SET_ANGULAR_SPEED:
+                                            pilot.setAngularSpeed(request.doubleValue);
                                             break;
-                                        case PILOT_GET_MAX_ROTATE_SPEED:
-                                            reply.doubleReply = pilot.getRotateMaxSpeed();
+                                        case PILOT_GET_MAX_ANGULAR_SPEED:
+                                            reply.doubleReply = pilot.getMaxAngularSpeed();
                                             os.writeObject(reply);
                                             break;
                                         case PILOT_STEER:
                                             pilot.steer(request.doubleValue);
+                                            break;
+                                        default:
                                             break;
                                     }
                                 } catch ( Exception e ) {
@@ -1237,12 +1856,14 @@ public class GraphicStartup implements ORAmenu {
                 "Search/Pair",
                 "Devices",
                 "Visibility",
-                "Change PIN"
+                "Change PIN",
+                "Information"
             }, new String[] {
                 ICSearch,
                 ICEV3,
                 ICVisibility,
-                ICPIN
+                ICPIN,
+                ICInfo
             });
             selection = getSelection(menu, selection);
             switch ( selection ) {
@@ -1258,7 +1879,7 @@ public class GraphicStartup implements ORAmenu {
                     System.out.println("Setting visibility to " + this.btVisibility);
                     try {
                         bt.setVisibility(this.btVisibility);
-                    } catch ( IOException e ) {
+                    } catch ( BluetoothException e ) {
                         System.err.println("Failed to set visibility: " + e);
                     }
                     //updateBTIcon();
@@ -1267,13 +1888,15 @@ public class GraphicStartup implements ORAmenu {
                 case 3:
                     bluetoothChangePIN();
                     break;
+                case 4:
+                    bluetoothInformation();
             }
         } while ( selection >= 0 );
     }
 
     /**
      * Clears the screen, displays a number and allows user to change
-     * the digits of the number individually using the NXT buttons.
+     * the digits of the number individually using the EV3 buttons.
      * Note the array of bytes represent ASCII characters, not actual numbers.
      *
      * @param digits Number of digits in the PIN.
@@ -1301,20 +1924,32 @@ public class GraphicStartup implements ORAmenu {
             int ret = getButtonPress();
             switch ( ret ) {
                 case Button.ID_ENTER: { // ENTER
-                    curDigit++;
-                    break;
+                    return true;
+
                 }
-                case Button.ID_LEFT: { // LEFT
+                case Button.ID_DOWN: { // LEFT
                     number[curDigit]--;
                     if ( number[curDigit] < '0' ) {
                         number[curDigit] = '9';
                     }
                     break;
                 }
-                case Button.ID_RIGHT: { // RIGHT
+                case Button.ID_UP: { // RIGHT
                     number[curDigit]++;
                     if ( number[curDigit] > '9' ) {
                         number[curDigit] = '0';
+                    }
+                    break;
+                }
+                case Button.ID_LEFT: { // LEFT
+                    if ( --curDigit < 0 ) {
+                        curDigit = digits - 1;
+                    }
+                    break;
+                }
+                case Button.ID_RIGHT: { // RIGHT
+                    if ( ++curDigit >= digits ) {
+                        curDigit = 0;
                     }
                     break;
                 }
@@ -1343,7 +1978,7 @@ public class GraphicStartup implements ORAmenu {
         }
 
         // 2. Call enterNumber() method
-        if ( enterNumber("Enter NXT PIN", pin, 4) ) {
+        if ( enterNumber("Enter EV3 PIN", pin, 4) ) {
             // 3. Set PIN in system memory.
             StringBuilder sb = new StringBuilder();
             for ( int i = 0; i < pin.length; i++ ) {
@@ -1380,16 +2015,12 @@ public class GraphicStartup implements ORAmenu {
     private void bluetoothSearch() {
         newScreen("Searching");
         ArrayList<RemoteBTDevice> devList;
-        //indiBT.incCount();
         devList = null;
         try {
-            // 0 means "search for all"
-            try {
-                devList = (ArrayList<RemoteBTDevice>) bt.search();
-            } catch ( IOException e ) {
-                return;
-            }
-        } finally {
+            devList = (ArrayList<RemoteBTDevice>) bt.search();
+        } catch ( BluetoothException e ) {
+            System.out.println("Search exeception " + e);
+            devList = null;
         }
         if ( devList == null || devList.size() <= 0 ) {
             msg("No devices found");
@@ -1456,12 +2087,7 @@ public class GraphicStartup implements ORAmenu {
      * Display all currently known Bluetooth devices.
      */
     private void bluetoothDevices() {
-        List<RemoteBTDevice> devList;
-        try {
-            devList = (List<RemoteBTDevice>) Bluetooth.getLocalDevice().search();
-        } catch ( IOException e ) {
-            return;
-        }
+        List<RemoteBTDevice> devList = (List<RemoteBTDevice>) Bluetooth.getLocalDevice().getPairedDevices();
         if ( devList.size() <= 0 ) {
             msg("No known devices");
             return;
@@ -1489,18 +2115,53 @@ public class GraphicStartup implements ORAmenu {
             if ( selected >= 0 ) {
                 newScreen();
                 RemoteBTDevice btrd = devList.get(selected);
-                byte[] devclass = btrd.getDeviceClass();
+                @SuppressWarnings("unused")
+                int devclass = btrd.getDeviceClass();
                 lcd.drawString(btrd.getName(), 2, 2);
                 lcd.drawString(btrd.getAddress(), 0, 3);
                 // TODO device class is overwritten by menu
-                // LCD.drawString("0x"+Integer.toHexString(devclass), 0, 4);
+                //LCD.drawString("0x"+Integer.toHexString(devclass), 0, 4);
                 int subSelection = getSelection(subMenu, 0);
                 if ( subSelection == 0 ) {
-                    //Bluetooth.removeDevice(btrd);
-                    break;
+                    try {
+                        Bluetooth.getLocalDevice().removeDevice(btrd.getAddress());
+                        // Indicate Success or failure:
+                        lcd.drawString("Deleted!      ", 0, 6);
+                    } catch ( Exception e ) {
+                        System.err.println("Failed to delete:" + e);
+                        lcd.drawString("UNSUCCESSFUL  ", 0, 6);
+                    }
+                    lcd.drawString("Press any key", 0, 7);
+                    getButtonPress();
                 }
             }
         } while ( selected >= 0 );
+    }
+
+    private static final String[] bluetoothVersions = {
+        "1.0b",
+        "1.1",
+        "1.2",
+        "2.0",
+        "2.1",
+        "3.0",
+        "4.0"
+    };
+
+    /**
+     * Display Bluetooth information
+     */
+    private void bluetoothInformation() {
+        newScreen("Information");
+        LocalBTDevice lbt = Bluetooth.getLocalDevice();
+        LocalVersion ver = lbt.getLocalVersion();
+        String v = ver.hci_ver >= bluetoothVersions.length ? "" : bluetoothVersions[ver.hci_ver];
+        lcd.drawString("HCI " + v + " " + Integer.toHexString(ver.hci_ver) + "/" + Integer.toHexString(ver.hci_rev), 0, 2);
+        v = ver.lmp_ver >= bluetoothVersions.length ? "n/a" : bluetoothVersions[ver.lmp_ver];
+        lcd.drawString("LMP " + v + " " + Integer.toHexString(ver.lmp_ver) + "/" + Integer.toHexString(ver.lmp_subver), 0, 3);
+        lcd.drawString("ID: " + lbt.getFriendlyName(), 0, 5);
+        lcd.drawString(lbt.getBluetoothAddress(), 0, 6);
+        getButtonPress();
     }
 
     /**
@@ -1512,7 +2173,6 @@ public class GraphicStartup implements ORAmenu {
             msg("No default set");
         } else {
             System.out.println("Executing default program " + file.getPath());
-            this.ind.suspend();
             try {
                 JarFile jar = new JarFile(file);
                 String mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
@@ -1521,7 +2181,6 @@ public class GraphicStartup implements ORAmenu {
             } catch ( IOException e ) {
                 System.err.println("Exception running program");
             }
-            this.ind.resume();
         }
     }
 
@@ -1571,6 +2230,7 @@ public class GraphicStartup implements ORAmenu {
             File f = new File(OPENROBERTAPROPERTIES);
             OutputStream os = new FileOutputStream(f);
             openrobertaProperties.store(os, "Open Roberta Lab Settings");
+            os.close();
         } catch ( IOException e ) {
             System.out.println(e.getMessage());
             return;
@@ -1706,29 +2366,6 @@ public class GraphicStartup implements ORAmenu {
     }
 
     /**
-     * Manually redraw IP addresses on the screen. Used for restoring the screen after user process is terminated.
-     * Executed only if the brick is in the main menu. Used for fixing a leJOS bug.
-     * Two lines in submenus are not updated yet.
-     */
-    public static void redrawIPs() {
-        lcd.drawString("                  ", 0, 1);
-        lcd.drawString("                  ", 0, 2);
-        String ip = ips.get("br0");
-        if ( ip != null ) {
-            lcd.drawString(ip, 8 - ip.length() / 2, 1);
-        }
-        ip = ips.get("wlan0");
-        if ( ip != null ) {
-            lcd.drawString(ip, 8 - ip.length() / 2, 2);
-        }
-
-        //        for ( String ip : GraphicStartup.ips ) {
-        //            lcd.drawString(ip, 8 - ip.length() / 2, row);
-        //            row++;
-        //        }
-    }
-
-    /**
      * Get Open Roberta Lab EV3Menu version from EV3Menu.properties in jar file.
      * This will be send to the server to check if the brick firmware is up-to-date.
      * This method crashes if the brick firmware was updated but not restarted.
@@ -1741,78 +2378,6 @@ public class GraphicStartup implements ORAmenu {
         tmp = tmp.substring(0, tmp.indexOf("-"));
         return tmp;
     }
-
-    // OR Lab RMI interface for USB connection
-
-    /**
-     * Get the OR Lab menu version number from EV3Menu.Properties in the EV3Menu.jar file.
-     * For example: 1.2.0
-     *
-     * @return Open Roberta Lab menu version
-     */
-    @Override
-    public String getORAversion() {
-        return GraphicStartup.getORAmenuVersion();
-    }
-
-    /**
-     * Get the battery voltage for the usb program.
-     *
-     * @return Battery voltage
-     */
-    @Override
-    public String getORAbattery() {
-        return GraphicStartup.getBatteryStatus();
-    }
-
-    /**
-     * Set the OR Lab registration state in the menu.
-     */
-    @Override
-    public void setORAregistration(boolean status) {
-        orUSBconnected = status;
-        ORAhandler.setRegistered(status);
-        if ( status == true ) {
-            LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
-        } else {
-            LocalEV3.get().getAudio().systemSound(Sounds.DESCENDING);
-        }
-        this.indiBA.setUsb(status);
-    }
-
-    /**
-     * Flag the EV3 as firmware updated. Used in OR Lab usb program.
-     */
-    @Override
-    public void setORAupdateState() {
-        LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
-        ORAhandler.setRestarted(false);
-        orUSBconnected = false;
-        ORAhandler.setRegistered(false);
-    }
-
-    /**
-     * Check if the EV3 firmware was updated but not restarted.
-     *
-     * @return True if restarted, false if not.
-     */
-    @Override
-    public boolean getORAupdateState() {
-        return ORAhandler.isRestarted();
-    }
-
-    /**
-     * Run an OR Lab program via USB, only if no other program is running currently.
-     */
-    @Override
-    public void runORAprogram(String programName) {
-        if ( program == null ) {
-            ORAlauncher launcher = new ORAlauncher();
-            launcher.runProgram(programName);
-        }
-    }
-
-    // --- END OR Lab RMI interface for USB connection
 
     /**
      * Get the leJOS Firmware version.
@@ -2037,16 +2602,15 @@ public class GraphicStartup implements ORAmenu {
         int selection = 0;
         do {
             newScreen("System");
-            lcd.drawString("RAM", 0, 1);
-            lcd.drawInt((int) (Runtime.getRuntime().freeMemory()), 11, 1);
-            lcd.drawString("Battery", 0, 2);
-            int millis = LocalEV3.ev3.getPower().getVoltageMilliVolt() + 50;
-            lcd.drawInt((millis - millis % 1000) / 1000, 11, 2);
-            lcd.drawString(".", 12, 2);
-            lcd.drawInt((millis % 1000) / 100, 13, 2);
+            lcd.drawString("Battery", 0, 1);
+            float volts = LocalEV3.ev3.getPower().getVoltage();
+            lcd.drawString(String.format("%6.3f", volts), 10, 1);
             if ( rechargeable ) {
-                lcd.drawString("R", 15, 2);
+                lcd.drawString("R", 16, 1);
             }
+            lcd.drawString("Current", 0, 2);
+            float current = LocalEV3.ev3.getPower().getBatteryCurrent();
+            lcd.drawString(String.format("%6.3f", current), 10, 2);
             menuData[2] = "Sleep time: " + (this.timeout == 0 ? "off" : String.valueOf(this.timeout));
             File f = getDefaultProgram();
             if ( f == null ) {
@@ -2079,7 +2643,13 @@ public class GraphicStartup implements ORAmenu {
                         File dir = new File(PROGRAMS_DIRECTORY);
                         for ( String fn : dir.list() ) {
                             File aFile = new File(dir, fn);
-                            System.out.println("Deleting " + aFile.getPath());
+                            System.out.println("Deleting file " + aFile.getPath());
+                            aFile.delete();
+                        }
+                        dir = new File(LIB_DIRECTORY);
+                        for ( String fn : dir.list() ) {
+                            File aFile = new File(dir, fn);
+                            System.out.println("Deleting lib " + aFile.getPath());
                             aFile.delete();
                         }
                     }
@@ -2097,24 +2667,21 @@ public class GraphicStartup implements ORAmenu {
                     systemAutoRun();
                     break;
                 case 4:
-                    String newName = new Keyboard().getString();
+                    String newName = Keyboard.getString();
 
                     if ( newName != null ) {
                         setName(newName);
                     }
                     break;
                 case 5:
-                    String host = new Keyboard().getString();
+                    String host = Keyboard.getString();
 
                     if ( host != null ) {
                         Settings.setProperty(ntpProperty, host);
                     }
                     break;
                 case 6:
-                    this.ind.suspend();
-                    lcd.clear();
-                    lcd.refresh();
-                    lcd.setAutoRefresh(false);
+                    suspend();
                     System.out.println("Menu suspended");
                     while ( true ) {
                         int b = Button.getButtons();
@@ -2123,19 +2690,16 @@ public class GraphicStartup implements ORAmenu {
                         }
                         Delay.msDelay(200);
                     }
-                    lcd.setAutoRefresh(true);
-                    lcd.clear();
-                    lcd.refresh();
-                    this.ind.resume();
+                    resume();
                     System.out.println("Menu resumed");
                     break;
                 case 7:
-                    Settings.setProperty(defaultProgramProperty, "");
-                    Settings.setProperty(defaultProgramAutoRunProperty, "");
+                    EV3IOPort.closeAll();
                     selection = 0;
                     break;
                 case 8:
-                    EV3IOPort.closeAll();
+                    Settings.setProperty(defaultProgramProperty, "");
+                    Settings.setProperty(defaultProgramAutoRunProperty, "");
                     selection = 0;
                     break;
             }
@@ -2315,7 +2879,7 @@ public class GraphicStartup implements ORAmenu {
             Delay.msDelay(3000);
         } else {
             newScreen("Version");
-            lcd.drawString("Open Roberta:" + getORAversion(), 0, 2);
+            lcd.drawString("Open Roberta:" + getORAmenuVersion(), 0, 2);
             lcd.drawString("leJOS:", 0, 4);
             lcd.drawString(version, 6, 4);
             lcd.drawString(menuProperties.getProperty("buildTimeStamp").split(" ")[0], 0, 6);
@@ -2331,11 +2895,18 @@ public class GraphicStartup implements ORAmenu {
      * @return The bitcode of the button.
      */
     private int getButtonPress() {
-        int value = Button.waitForAnyPress(this.timeout * 60000);
-        if ( value == 0 ) {
-            shutdown();
+        long timeoutCnt = (this.timeout == 0 ? Long.MAX_VALUE : (this.timeout * 60000) / 200);
+        while ( timeoutCnt-- > 0 ) {
+            int value = Button.waitForAnyPress(200);
+            if ( value != 0 ) {
+                return value;
+            }
+            if ( suspend ) {
+                waitResume();
+            }
         }
-        return value;
+        shutdown();
+        return 0;
     }
 
     /**
@@ -2406,19 +2977,15 @@ public class GraphicStartup implements ORAmenu {
             switch ( selection + selectionAdd ) {
                 case 0:
                     System.out.println("Running program: " + file.getPath());
-                    this.ind.suspend();
                     if ( type == TYPE_TOOL ) {
                         execInThisJVM(file);
-                        this.ind.resume();
                     } else {
                         JarFile jar = null;
                         try {
                             jar = new JarFile(file);
                             String mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
                             jar.close();
-                            this.ind.suspend();
                             exec(file, JAVA_RUN_CP + file.getPath() + " lejos.internal.ev3.EV3Wrapper " + mainClass, directory);
-                            this.ind.resume();
                         } catch ( IOException e ) {
                             System.err.println("Exception running program");
                         }
@@ -2432,9 +2999,7 @@ public class GraphicStartup implements ORAmenu {
                         jar = new JarFile(file);
                         String mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
                         jar.close();
-                        this.ind.suspend();
                         exec(file, JAVA_DEBUG_CP + file.getPath() + " lejos.internal.ev3.EV3Wrapper " + mainClass, directory);
-                        this.ind.resume();
                     } catch ( IOException e ) {
                         System.err.println("Exception running program");
                     }
@@ -2471,9 +3036,7 @@ public class GraphicStartup implements ORAmenu {
         String fileName = file.getName();
         String ext = Utils.getExtension(fileName);
         if ( ext.equals("jar") ) {
-            this.ind.suspend();
             execInThisJVM(file);
-            this.ind.resume();
         }
     }
 
@@ -2481,14 +3044,12 @@ public class GraphicStartup implements ORAmenu {
      * Execute a program and display its output to System.out and error stream to System.err
      */
     private static void exec(File jar, String command, String directory) {
+        menu.suspend();
         try {
             if ( jar != null ) {
                 String jarName = jar.getName();
                 programName = jarName.substring(0, jarName.length() - 4); // Remove .jar
             }
-            lcd.clear();
-            lcd.refresh();
-            lcd.setAutoRefresh(false);
 
             drawLaunchScreen();
 
@@ -2510,7 +3071,7 @@ public class GraphicStartup implements ORAmenu {
                     System.out.println("Killing the process");
                     program.destroy();
                     // reset motors after program is aborted
-                    resetMotors();
+                    //resetMotors();
                     break;
                 }
                 if ( !echoIn.isAlive() && !echoErr.isAlive() ) {
@@ -2518,19 +3079,17 @@ public class GraphicStartup implements ORAmenu {
                 }
                 Delay.msDelay(200);
             }
-            System.out.println("Waiting for process to die");
-            ;
+            //System.out.println("Waiting for process to die");;
             program.waitFor();
             System.out.println("Program finished");
+            // Turn the LED off, in case left on
         } catch ( Exception e ) {
             System.err.println("Failed to execute program: " + e);
         } finally {
-            // Turn the LED off, in case left on
+            //resetMotors();
             Button.LEDPattern(0);
-            lcd.setAutoRefresh(true);
-            lcd.clear();
-            lcd.refresh();
             program = null;
+            menu.resume();
         }
     }
 
@@ -2539,15 +3098,10 @@ public class GraphicStartup implements ORAmenu {
      */
     private static void startProgram(String command, File jar) {
         try {
+            //System.out.println("Start sus " + GraphicStartup.suspend + " program null " + (program == null));
             if ( program != null ) {
                 return;
             }
-            lcd.clear();
-            lcd.refresh();
-            lcd.setAutoRefresh(false);
-
-            drawLaunchScreen();
-
             String[] args = command.split(" ");
             File directory = jar.getParentFile();
 
@@ -2563,41 +3117,37 @@ public class GraphicStartup implements ORAmenu {
 
             echoIn.start();
             echoErr.start();
+            menu.suspend();
+            drawLaunchScreen();
 
             System.out.println("Executing " + command + " in " + directory);
-
-            suspend = true;
-            curMenu.quit(); // Quit the current menu and go into the suspend loop
-
         } catch ( Exception e ) {
             System.err.println("Failed to start program: " + e);
+            menu.resume();
         }
     }
 
     @Override
     public void stopProgram() {
         try {
+            //System.out.println("Stop sus " + GraphicStartup.suspend + " program null " + (program == null));
             if ( program == null ) {
                 return;
             }
 
             program.destroy();
 
-            System.out.println("Waiting for process to die");
-            ;
+            //System.out.println("Waiting for process to die");;
             program.waitFor();
             System.out.println("Program finished");
-            resetMotors();
-            // Turn the LED off, in case left on
-            Button.LEDPattern(0);
-            lcd.setAutoRefresh(true);
-            lcd.clear();
-            lcd.refresh();
-            program = null;
-            suspend = false;
-            this.ind.resume();
         } catch ( Exception e ) {
             System.err.println("Failed to stop program: " + e);
+        } finally {
+            //resetMotors();
+            // Turn the LED off, in case left on
+            Button.LEDPattern(0);
+            program = null;
+            menu.resume();
         }
     }
 
@@ -2778,6 +3328,30 @@ public class GraphicStartup implements ORAmenu {
     }
 
     /**
+     * If the menu is suspended wait for it to be resumed. Handle any program exit
+     * while we wait.
+     */
+    private void waitResume() {
+        while ( suspend ) {
+            if ( program != null && !echoIn.isAlive() && !echoErr.isAlive() ) {
+                stopProgram();
+                break;
+            }
+            int b = Button.getButtons();
+            if ( b == 6 ) {
+                if ( program != null ) {
+                    stopProgram();
+                } else {
+                    // should we do this?
+                    resume();
+                }
+                break;
+            }
+            Delay.msDelay(200);
+        }
+    }
+
+    /**
      * Obtain a menu item selection
      * Allow the user to make a selection from the specified menu item. If a
      * power off timeout has been specified and no choice is made within this
@@ -2795,22 +3369,8 @@ public class GraphicStartup implements ORAmenu {
         // If the menu is interrupted by another thread, redisplay
         do {
             selection = menu.select(cur, this.timeout * 60000);
-
-            while ( suspend ) {
-                if ( program != null && !echoIn.isAlive() && !echoErr.isAlive() ) {
-                    stopProgram();
-                    this.ind.resume();
-                    break;
-                }
-                int b = Button.getButtons();
-                if ( b == 6 ) {
-                    if ( program != null ) {
-                        stopProgram();
-                    }
-                    this.ind.resume();
-                    break;
-                }
-                Delay.msDelay(200);
+            if ( suspend ) {
+                waitResume();
             }
         } while ( selection == -2 );
 
@@ -2835,7 +3395,7 @@ public class GraphicStartup implements ORAmenu {
     @Override
     public void shutdown() {
         System.out.println("Shutting down the EV3");
-        this.ind.suspend();
+        suspend();
         try {
             Runtime.getRuntime().exec("init 0");
         } catch ( IOException e ) {
@@ -2845,72 +3405,89 @@ public class GraphicStartup implements ORAmenu {
         lcd.refresh();
     }
 
-    //    class PipeReader extends Thread {
-    //
-    //        @Override
-    //        public synchronized void run() {
-    //            try {
-    //                InputStream is = new FileInputStream(MENU_DIRECTORY + "/menufifo");
-    //
-    //                while ( true ) {
-    //                    int c = is.read();
-    //                    if ( c < 0 ) {
-    //                        Delay.msDelay(200);
-    //                    } else {
-    //                        System.out.println("Read from fifo: " + c + " " + ((char) c));
-    //
-    //                        if ( c == 's' ) {
-    //                            GraphicStartup.this.suspend();
-    //                            System.out.println("Menu suspended");
-    //                        } else if ( c == 'r' ) {
-    //                            GraphicStartup.this.resume();
-    //                            System.out.println("Menu resumed");
-    //                        }
-    //                    }
-    //                }
-    //
-    //            } catch ( IOException e ) {
-    //                System.err.println("Failed to read from fifo: " + e);
-    //                return;
-    //            }
-    //        }
-    //    }
+    class PipeReader extends Thread {
 
-    //    class BroadcastThread extends Thread {
-    //
-    //        @Override
-    //        public synchronized void run() {
-    //            while ( true ) {
-    //                Broadcast.broadcast(hostname);
-    //                Delay.msDelay(1000);
-    //            }
-    //        }
-    //    }
+        @Override
+        public synchronized void run() {
+            try {
+                @SuppressWarnings("resource")
+                InputStream is = new FileInputStream(MENU_DIRECTORY + "/menufifo");
+
+                while ( true ) {
+                    int c = is.read();
+                    if ( c < 0 ) {
+                        Delay.msDelay(200);
+                    } else {
+                        System.out.println("Read from fifo: " + c + " " + ((char) c));
+
+                        if ( c == 's' ) {
+                            GraphicStartup.this.suspend();
+                            System.out.println("Menu suspended");
+                        } else if ( c == 'r' ) {
+                            GraphicStartup.this.resume();
+                            System.out.println("Menu resumed");
+                        }
+                    }
+                }
+
+            } catch ( IOException e ) {
+                System.err.println("Failed to read from fifo: " + e);
+                return;
+            }
+        }
+    }
 
     /**
      * Manage the top line of the display.
      * The top line of the display shows battery state, menu titles, and I/O
      * activity.
      */
-    class IndicatorThread extends Thread {
+    class IndicatorThread implements Runnable {
+        int displayState = IND_NONE;
+        int savedState = IND_NONE;
+        Thread thread;
+
         public IndicatorThread() {
-            super();
-            setDaemon(true);
+            this.thread = new Thread(this);
+            this.thread.setDaemon(true);
+        }
+
+        public void start() {
+            this.thread.start();
         }
 
         @Override
         public synchronized void run() {
             try {
+                int updateIPCountdown = 0;
                 while ( true ) {
-                    long time = System.currentTimeMillis();
-
-                    GraphicStartup.this.indiBA.setWifi(ips.get("wlan0") != null);
-                    GraphicStartup.this.indiBA.draw(time);
-                    lcd.refresh();
-
-                    // wait until next tick
-                    time = System.currentTimeMillis();
-                    this.wait(Config.ANIM_DELAY - (time % Config.ANIM_DELAY));
+                    if ( this.displayState >= IND_NORMAL ) {
+                        long time = System.currentTimeMillis();
+                        if ( updateIPCountdown <= 0 ) {
+                            if ( updateIPAddresses() ) {
+                                System.out.println("Address changed");
+                                startNetworkServices();
+                            }
+                            updateIPCountdown = Config.IP_UPDATE;
+                        }
+                        GraphicStartup.this.indiBA.setWifi(wlanAddress != null);
+                        GraphicStartup.this.indiBA.draw(time);
+                        if ( this.displayState >= IND_FULL ) {
+                            lcd.clear(1);
+                            lcd.clear(2);
+                            int row = 1;
+                            for ( String ip : ips ) {
+                                lcd.drawString(ip, 8 - ip.length() / 2, row++);
+                            }
+                        }
+                        lcd.refresh();
+                        // wait until next tick
+                        time = System.currentTimeMillis();
+                        this.wait(Config.ANIM_DELAY - (time % Config.ANIM_DELAY));
+                        updateIPCountdown -= Config.ANIM_DELAY;
+                    } else {
+                        this.wait();
+                    }
                 }
             } catch ( InterruptedException e ) {
                 //just terminate
@@ -2923,19 +3500,46 @@ public class GraphicStartup implements ORAmenu {
         public synchronized void updateNow() {
             this.notifyAll();
         }
+
+        public void setDisplayState(int state) {
+            if ( this.displayState != IND_SUSPEND ) {
+                this.displayState = state;
+                updateNow();
+            } else {
+                this.savedState = state;
+            }
+        }
+
+        public void suspend() {
+            this.savedState = this.displayState;
+            this.displayState = IND_SUSPEND;
+            updateNow();
+        }
+
+        public void resume() {
+            this.displayState = this.savedState;
+            updateNow();
+        }
     }
 
     /**
-     * Get all the IP addresses for the device
+     * Get all the IP addresses for the device, return true if either the wlan or
+     * pan address has changed.
      */
-    public static HashMap<String, String> getIPAddresses() {
-        HashMap<String, String> result = new HashMap<String, String>();
+    public synchronized boolean updateIPAddresses() {
+        //System.out.println("Update IP addresses");
+        List<String> result = new ArrayList<String>();
         Enumeration<NetworkInterface> interfaces;
+        String oldWlan = wlanAddress;
+        String oldPan = panAddress;
+        wlanAddress = null;
+        panAddress = null;
+        ips.clear();
         try {
             interfaces = NetworkInterface.getNetworkInterfaces();
         } catch ( SocketException e ) {
             System.err.println("Failed to get network interfaces: " + e);
-            return null;
+            return false;
         }
         while ( interfaces.hasMoreElements() ) {
             NetworkInterface current = interfaces.nextElement();
@@ -2952,20 +3556,29 @@ public class GraphicStartup implements ORAmenu {
                 if ( current_addr.isLoopbackAddress() ) {
                     continue;
                 }
-                result.put(current.getDisplayName(), current_addr.getHostAddress());
+                result.add(current_addr.getHostAddress());
+                //System.out.println("Interface name " + current.getName());
+                if ( current.getName().equals(WLAN_INTERFACE) ) {
+                    wlanAddress = current_addr.getHostAddress();
+                } else if ( current.getName().equals(PAN_INTERFACE) ) {
+                    panAddress = current_addr.getHostAddress();
+                }
             }
         }
-        return result;
+        ips = result;
+        // have any of the important addresses changed?
+        return !(oldWlan == wlanAddress || (oldWlan != null && wlanAddress != null && wlanAddress.equals(oldWlan)))
+            || !(oldPan == panAddress || (oldPan != null && panAddress != null && panAddress.equals(oldPan)));
     }
 
     public static void drawLaunchScreen() {
         GraphicsLCD g = LocalEV3.get().getGraphicsLCD();
         g.setFont(Font.getDefaultFont());
-        g.drawRegion(duke, 0, 0, duke.getWidth(), duke.getHeight(), GraphicsLCD.TRANS_NONE, 50, 65, GraphicsLCD.HCENTER | GraphicsLCD.VCENTER);
+        g.drawRegion(hourglass, 0, 0, hourglass.getWidth(), hourglass.getHeight(), GraphicsLCD.TRANS_NONE, 50, 65, GraphicsLCD.HCENTER | GraphicsLCD.VCENTER);
         int x = LCD.SCREEN_WIDTH / 2;
-        g.drawString("Wait", x, 30, 0);
-        g.drawString("a", x, 45, 0);
-        g.drawString("second...", x, 60, 0);
+        g.drawString("Wait", x, 40, 0);
+        g.drawString("a", x, 55, 0);
+        g.drawString("second...", x, 70, 0);
         g.refresh(); // TODO: Needed?
     }
 
@@ -2978,7 +3591,6 @@ public class GraphicStartup implements ORAmenu {
             jar = new JarFile(jarFile);
             String mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
             jar.close();
-            this.ind.suspend();
             startProgram(JAVA_RUN_CP + fullName + " lejos.internal.ev3.EV3Wrapper " + mainClass, jarFile);
         } catch ( IOException e ) {
             System.err.println("Failed to run program");
@@ -3010,7 +3622,6 @@ public class GraphicStartup implements ORAmenu {
             jar = new JarFile(jarFile);
             String mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
             jar.close();
-            this.ind.suspend();
             startProgram(JAVA_RUN_CP + fullName + " lejos.internal.ev3.EV3Wrapper " + mainClass, jarFile);
         } catch ( IOException e ) {
             System.err.println("Failed to run program");
@@ -3026,7 +3637,6 @@ public class GraphicStartup implements ORAmenu {
             jar = new JarFile(jarFile);
             String mainClass = jar.getManifest().getMainAttributes().getValue("Main-class");
             jar.close();
-            this.ind.suspend();
             startProgram(JAVA_DEBUG_CP + fullName + " lejos.internal.ev3.EV3Wrapper " + mainClass, jarFile);
         } catch ( IOException e ) {
             System.err.println("Failed to run program");
@@ -3058,33 +3668,6 @@ public class GraphicStartup implements ORAmenu {
         } catch ( IOException e ) {
             System.out.println("Failed to upload file: " + e);
             return false;
-        }
-
-    }
-
-    private String checkExistingWifi() {
-        String ssid = null;
-        String[] tmp = {
-            null,
-            null
-        };
-        BufferedReader br = null;
-        File wpaSup = new File("/home/root/lejos/bin/utils/wpa_supplicant.conf");
-        try {
-            br = new BufferedReader(new FileReader(wpaSup));
-            String line;
-            while ( (line = br.readLine()) != null ) {
-                int i = line.indexOf("ssid=");
-                if ( i >= 0 ) {
-                    tmp = line.split("=");
-                    ssid = tmp[1];
-                }
-            }
-            br.close();
-            ssid = ssid.replaceAll("\"", "");
-            return ssid;
-        } catch ( IOException e ) {
-            return null;
         }
 
     }
@@ -3125,78 +3708,38 @@ public class GraphicStartup implements ORAmenu {
 
         }
 
-        String ssid = checkExistingWifi();
-        if ( ssid != null ) {
-            GraphicMenu menu = new GraphicMenu(new String[] {
-                ssid,
-                "New WLAN"
-            }, new String[] {
-                ICWifi,
-                ICWifi
-            }, 3);
-            int selected = 0;
-            do {
-                newScreen("WLAN");
-                lcd.drawString("Choose a WLAN:", 0, 1);
-                selected = getSelection(menu, selected);
-                switch ( selected ) {
-                    case 0:
-                        startWlan();
-                        return;
-                    case 1:
-                        selected = -1;
-                        break;
-                    case -1:
-                        return;
-                }
-            } while ( selected >= 0 );
-        }
-
+        GraphicListMenu menu = new GraphicListMenu(null, null);
         System.out.println("Finding access points ...");
         LocalWifiDevice wifi = Wifi.getLocalDevice("wlan0");
-
-        String[] names = new String[0];
-        int len = names.length;
-        int i = 0;
-
-        newScreen("Wifi");
-        lcd.drawString("Searching...", 0, 2);
-        while ( i < 5 ) {
-            try {
-                names = wifi.getAccessPointNames();
-            } catch ( Exception e ) {
-                System.err.println("Exception getting access points" + e);
-                names = new String[0];
-                Delay.msDelay(500);
-            } finally {
-                len = names.length;
-                if ( len != 0 ) {
-                    break;
-                }
-                i++;
-            }
+        String[] names;
+        try {
+            names = wifi.getAccessPointNames();
+        } catch ( Exception e ) {
+            System.err.println("Exception getting access points" + e);
+            names = new String[0];
         }
-
-        if ( len == 0 ) {
-            msg("No APs found!");
-            return;
-        }
-
-        GraphicListMenu menu = new GraphicListMenu(null, null);
         int selection = 0;
+
         do {
+            int len = names.length;
+            if ( len == 0 ) {
+                msg("No Access Points found");
+                return;
+            }
             newScreen("Access Pts");
 
             menu.setItems(names, null);
             selection = getSelection(menu, selection);
             if ( selection >= 0 ) {
                 System.out.println("Access point is " + names[selection]);
-                Keyboard k = new Keyboard();
-                String pwd = k.getString();
+                String pwd = Keyboard.getString();
                 if ( pwd != null ) {
                     System.out.println("Password is " + pwd);
-                    WPASupplicant.writeConfiguration("wpa_supplicant.txt", "wpa_supplicant.conf", names[selection], pwd);
-                    startWlan();
+                    this.waitScreen.begin("Restart\nWiFi\nServices");
+                    this.waitScreen.status("Save configuration");
+                    WPASupplicant.writeConfiguration(WIFI_BASE, WIFI_CONFIG, names[selection], pwd);
+                    startNetwork(START_WLAN, true);
+                    this.waitScreen.end();
                 }
                 selection = -1;
             }
@@ -3276,8 +3819,9 @@ public class GraphicStartup implements ORAmenu {
 
     @Override
     public void setName(String name) {
+        this.waitScreen.begin("Change\nSystem\nName");
         hostname = name;
-
+        this.waitScreen.status("Save new name");
         // Write host to /etc/hostname
         try {
             PrintStream out = new PrintStream(new FileOutputStream("/etc/hostname"));
@@ -3295,57 +3839,82 @@ public class GraphicStartup implements ORAmenu {
             System.err.println("Failed to execute hostname: " + e);
         }
 
-        startWlan();
+        startNetwork(START_WLAN, false);
+        startNetwork(START_PAN, true);
+        this.waitScreen.end();
     }
 
-    private void startWlan() {
+    private void startNetworkServices() {
+        // Start the RMI server
+        System.out.println("Starting RMI");
+
+        String rmiIP = (wlanAddress != null ? wlanAddress : (panAddress != null ? panAddress : "127.0.0.1"));
+        System.out.println("Setting java.rmi.server.hostname to " + rmiIP);
+        System.setProperty("java.rmi.server.hostname", rmiIP);
+
+        try { //special exception handler for registry creation
+            LocateRegistry.createRegistry(1099);
+            System.out.println("java RMI registry created.");
+        } catch ( RemoteException e ) {
+            //do nothing, error means registry already exists
+            System.out.println("java RMI registry already exists.");
+        }
+
         try {
-            Process p = Runtime.getRuntime().exec(START_WLAN);
-            BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            BufferedReader err = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-            PrintStream lcdStream = new PrintStream(new LCDOutputStream());
-
-            EchoThread echoIn = new EchoThread(null, input, lcdStream);
-            EchoThread echoErr = new EchoThread(null, err, lcdStream);
-
-            this.ind.suspend();
-            lcd.clear();
-            lcdStream.println("Restarting wlan\n");
-
-            echoIn.start();
-            echoErr.start();
-
-            int status = p.waitFor();
-            System.out.println("startwlan returned " + status);
-            // Get IP addresses again
-            ips = getIPAddresses();
-
-            System.setProperty("java.rmi.server.hostname", ips.get("br0"));
-
-            try {
-                RMIRemoteEV3 ev3 = new RMIRemoteEV3();
-                Naming.rebind("//localhost/RemoteEV3", ev3);
-                RMIRemoteMenu remoteMenu = new RMIRemoteMenu(menu);
-                Naming.rebind("//localhost/RemoteMenu", remoteMenu);
-            } catch ( Exception e ) {
-                System.err.println("RMI failed to start: " + e);
-            }
-
-            lcd.clear();
-            this.ind.resume();
+            RMIRemoteEV3 ev3 = new RMIRemoteEV3();
+            Naming.rebind("//localhost/RemoteEV3", ev3);
+            RMIRemoteMenu remoteMenu = new RMIRemoteMenu(menu);
+            Naming.rebind("//localhost/RemoteMenu", remoteMenu);
         } catch ( Exception e ) {
-            System.err.println("Failed to execute startwlan: " + e);
+            System.err.println("RMI failed to start: " + e);
+        }
+
+        // Set the date
+        try {
+            String dt = SntpClient.getDate(Settings.getProperty(ntpProperty, "1.uk.pool.ntp.org"));
+            System.out.println("Date and time is " + dt);
+            Runtime.getRuntime().exec("date -s " + dt);
+        } catch ( IOException e ) {
+            System.err.println("Failed to get time from ntp: " + e);
+        }
+    }
+
+    private void startNetwork(String startup, boolean startServices) {
+        try {
+            Process p = Runtime.getRuntime().exec(startup);
+            BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String statusMsg;
+            while ( (statusMsg = input.readLine()) != null ) {
+                this.waitScreen.status(statusMsg);
+            }
+            int status = p.waitFor();
+            System.out.println("start returned " + status);
+            updateIPAddresses();
+            Delay.msDelay(2000);
+            if ( startServices ) {
+                this.waitScreen.status("Start services");
+                startNetworkServices();
+                Delay.msDelay(2000);
+            }
+        } catch ( Exception e ) {
+            System.err.println("Failed to execute: " + startup + " : " + e);
+            e.printStackTrace();
+
         }
     }
 
     private void execInThisJVM(File jar) {
+        suspend();
         try {
             LCD.clearDisplay();
-            new JarMain(jar);
+            JarMain jarMain = new JarMain(jar);
+            jarMain.close();
         } catch ( Exception e ) {
             toolException(e);
             System.err.println("Exception in execution of tool: " + e);
             e.printStackTrace();
+        } finally {
+            resume();
         }
     }
 
@@ -3395,19 +3964,24 @@ public class GraphicStartup implements ORAmenu {
 
     @Override
     public void suspend() {
-        this.ind.suspend();
-        LCD.clearDisplay();
         suspend = true;
+        this.ind.suspend();
+        lcd.clear();
+        LCD.setAutoRefresh(false);
+        lcd.refresh();
         curMenu.quit();
     }
 
     @Override
     public void resume() {
-        suspend = false;
+        lcd.clear();
+        lcd.refresh();
+        LCD.setAutoRefresh(true);
         this.ind.resume();
+        suspend = false;
     }
 
-    static final Image duke = new Image(100, 64, new byte[] {
+    static final Image hourglass = new Image(64, 64, new byte[] {
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
@@ -3415,47 +3989,6 @@ public class GraphicStartup implements ORAmenu {
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
-        (byte) 0x1c,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x1e,
-        (byte) 0x04,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x1e,
-        (byte) 0x0f,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x60,
-        (byte) 0x3e,
-        (byte) 0x0f,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
@@ -3467,297 +4000,273 @@ public class GraphicStartup implements ORAmenu {
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0xf0,
-        (byte) 0xbe,
-        (byte) 0x0f,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0xf0,
-        (byte) 0xbe,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
         (byte) 0x07,
         (byte) 0x00,
         (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
         (byte) 0xf0,
-        (byte) 0xfd,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
         (byte) 0x07,
         (byte) 0x00,
         (byte) 0x00,
+        (byte) 0xf0,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0x07,
         (byte) 0x00,
         (byte) 0x00,
+        (byte) 0xf0,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0x07,
         (byte) 0x00,
         (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
+        (byte) 0xc0,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
         (byte) 0x01,
-        (byte) 0xe0,
-        (byte) 0xff,
-        (byte) 0x07,
         (byte) 0x00,
         (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x03,
-        (byte) 0xe0,
-        (byte) 0xff,
-        (byte) 0x07,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x0f,
         (byte) 0xc0,
         (byte) 0xff,
-        (byte) 0x07,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0x01,
         (byte) 0x00,
         (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x1f,
         (byte) 0xc0,
         (byte) 0xff,
-        (byte) 0x07,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0x01,
         (byte) 0x00,
         (byte) 0x00,
+        (byte) 0xc0,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0x01,
         (byte) 0x00,
         (byte) 0x00,
+        (byte) 0xc0,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0x01,
         (byte) 0x00,
         (byte) 0x00,
+        (byte) 0xc0,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0x01,
         (byte) 0x00,
         (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x3f,
         (byte) 0x80,
         (byte) 0xff,
-        (byte) 0x07,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
+        (byte) 0x80,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
+        (byte) 0x80,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
         (byte) 0x7f,
         (byte) 0x00,
-        (byte) 0xff,
-        (byte) 0x07,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0xff,
-        (byte) 0x00,
         (byte) 0xff,
-        (byte) 0x0f,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
+        (byte) 0xff,
+        (byte) 0x7f,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0xff,
-        (byte) 0xe1,
         (byte) 0xff,
-        (byte) 0x07,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
+        (byte) 0xff,
+        (byte) 0x7f,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0xff,
-        (byte) 0xf3,
         (byte) 0xff,
-        (byte) 0x07,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
+        (byte) 0xff,
+        (byte) 0x3f,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0xff,
-        (byte) 0xf7,
         (byte) 0xff,
-        (byte) 0x03,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
         (byte) 0xff,
-        (byte) 0xef,
+        (byte) 0x3f,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xbe,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0x1f,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x3c,
         (byte) 0xfe,
+        (byte) 0x1f,
+        (byte) 0x1f,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x7c,
+        (byte) 0xe0,
+        (byte) 0x81,
+        (byte) 0x0f,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xf8,
+        (byte) 0x00,
+        (byte) 0xc0,
+        (byte) 0x07,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xf0,
         (byte) 0x01,
+        (byte) 0xe0,
+        (byte) 0x07,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
+        (byte) 0xe0,
+        (byte) 0x03,
+        (byte) 0xf0,
+        (byte) 0x03,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0xff,
+        (byte) 0xc0,
         (byte) 0x0f,
         (byte) 0xf8,
+        (byte) 0x01,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0xff,
+        (byte) 0x80,
         (byte) 0x1f,
-        (byte) 0xe0,
+        (byte) 0x7c,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
+        (byte) 0x1f,
+        (byte) 0x3e,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
-        (byte) 0xff,
-        (byte) 0x3f,
-        (byte) 0xc0,
         (byte) 0x00,
         (byte) 0x00,
+        (byte) 0x3e,
+        (byte) 0x1e,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
+        (byte) 0x3c,
+        (byte) 0x0f,
         (byte) 0x00,
         (byte) 0x00,
-        (byte) 0xff,
-        (byte) 0x7f,
-        (byte) 0xc0,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
+        (byte) 0x38,
+        (byte) 0x0f,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
-        (byte) 0xff,
-        (byte) 0x7f,
-        (byte) 0xc0,
+        (byte) 0x38,
+        (byte) 0x07,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
+        (byte) 0x38,
+        (byte) 0x07,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
-        (byte) 0xff,
-        (byte) 0xff,
-        (byte) 0xc0,
         (byte) 0x00,
         (byte) 0x00,
+        (byte) 0x38,
+        (byte) 0x0f,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
+        (byte) 0x3c,
+        (byte) 0x0f,
         (byte) 0x00,
         (byte) 0x00,
-        (byte) 0xff,
-        (byte) 0xff,
-        (byte) 0xc1,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0xff,
-        (byte) 0xff,
-        (byte) 0xc0,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0xff,
-        (byte) 0xfd,
-        (byte) 0xc3,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
+        (byte) 0x3e,
+        (byte) 0x1f,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
@@ -3765,476 +4274,221 @@ public class GraphicStartup implements ORAmenu {
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x3f,
-        (byte) 0xea,
+        (byte) 0x3f,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x80,
+        (byte) 0x3f,
         (byte) 0x7f,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x5f,
-        (byte) 0x55,
-        (byte) 0x7f,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x80,
-        (byte) 0x8f,
-        (byte) 0xf8,
-        (byte) 0x3c,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x80,
-        (byte) 0x57,
-        (byte) 0x55,
-        (byte) 0x3c,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x80,
-        (byte) 0xaf,
-        (byte) 0xea,
-        (byte) 0x38,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x80,
-        (byte) 0x55,
-        (byte) 0x55,
-        (byte) 0x38,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
         (byte) 0xc0,
-        (byte) 0xad,
-        (byte) 0x7a,
-        (byte) 0x30,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0xc0,
-        (byte) 0x5d,
-        (byte) 0x15,
-        (byte) 0x30,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0xc0,
-        (byte) 0xb9,
-        (byte) 0x1e,
-        (byte) 0x60,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
+        (byte) 0x3f,
+        (byte) 0xff,
+        (byte) 0x01,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0xe0,
+        (byte) 0x3f,
+        (byte) 0xff,
+        (byte) 0x03,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
         (byte) 0xf0,
+        (byte) 0x3f,
+        (byte) 0xff,
         (byte) 0x07,
-        (byte) 0x60,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
+        (byte) 0xf8,
+        (byte) 0x3f,
+        (byte) 0xff,
+        (byte) 0x07,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
+        (byte) 0xfc,
+        (byte) 0x3f,
+        (byte) 0xff,
+        (byte) 0x0f,
         (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xfc,
+        (byte) 0x3f,
+        (byte) 0xff,
+        (byte) 0x1f,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xfe,
+        (byte) 0x3f,
+        (byte) 0xff,
+        (byte) 0x1f,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xff,
+        (byte) 0x3f,
+        (byte) 0xff,
+        (byte) 0x3f,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xff,
+        (byte) 0x3f,
+        (byte) 0xff,
+        (byte) 0x3f,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xff,
+        (byte) 0x1f,
+        (byte) 0xfc,
+        (byte) 0x7f,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xff,
+        (byte) 0x07,
         (byte) 0xf0,
-        (byte) 0x80,
+        (byte) 0x7f,
         (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x80,
+        (byte) 0xff,
+        (byte) 0x01,
         (byte) 0xe0,
+        (byte) 0x7f,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0xf8,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0xc0,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0xf8,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0xc0,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0xcc,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x80,
-        (byte) 0x01,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x6c,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x80,
-        (byte) 0x01,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x6c,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x80,
-        (byte) 0x01,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x6c,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x80,
-        (byte) 0x01,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x6c,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x03,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x78,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x03,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x38,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x03,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x38,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x03,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x38,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x03,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x38,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x06,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x3c,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x06,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x3c,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x06,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x1e,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x06,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x1f,
-        (byte) 0x00,
-        (byte) 0x0c,
-        (byte) 0x00,
-        (byte) 0x06,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x1f,
         (byte) 0x80,
         (byte) 0x7f,
         (byte) 0x00,
-        (byte) 0x06,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x1f,
-        (byte) 0xe0,
+        (byte) 0x80,
         (byte) 0xff,
         (byte) 0x00,
-        (byte) 0x06,
         (byte) 0x00,
         (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x18,
-        (byte) 0xf0,
         (byte) 0x80,
-        (byte) 0x01,
-        (byte) 0x06,
+        (byte) 0x1f,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xfe,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x18,
-        (byte) 0x38,
-        (byte) 0x00,
-        (byte) 0x03,
-        (byte) 0x06,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x18,
-        (byte) 0x1c,
-        (byte) 0x00,
-        (byte) 0x06,
-        (byte) 0x07,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x18,
-        (byte) 0x07,
-        (byte) 0x00,
-        (byte) 0x0e,
-        (byte) 0x03,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x98,
-        (byte) 0x03,
-        (byte) 0x00,
-        (byte) 0x0c,
-        (byte) 0x03,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
+        (byte) 0xc0,
+        (byte) 0x0f,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0xf8,
-        (byte) 0x01,
         (byte) 0x00,
-        (byte) 0x18,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xc0,
         (byte) 0x03,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x70,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0xf0,
         (byte) 0x01,
         (byte) 0x00,
         (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
-        (byte) 0x00,
+        (byte) 0xc0,
+        (byte) 0x03,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0xe0,
+        (byte) 0x01,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xc0,
+        (byte) 0x03,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xe0,
+        (byte) 0x01,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xc0,
+        (byte) 0x03,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xe0,
+        (byte) 0x01,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xc0,
+        (byte) 0x03,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xe0,
+        (byte) 0x01,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xf0,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0x07,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xf0,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0x07,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xf0,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0x07,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0xf0,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0xff,
+        (byte) 0x07,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
+        (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,
         (byte) 0x00,

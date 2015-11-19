@@ -27,13 +27,6 @@ public class ORAlauncher {
 
     private static boolean isRunning = false;
 
-    /**
-     * Creates a new object for launching the Open Roberta Lab user program.
-     */
-    public ORAlauncher() {
-        //
-    }
-
     public static void setRunning(boolean bool) {
         isRunning = bool;
     }
@@ -48,17 +41,9 @@ public class ORAlauncher {
      * @param programName
      *        Filename without directory, for example Linefollower.jar.
      */
-    public void runProgram(String programName) {
+    public static void runProgram(String programName) {
         File robertalabFile = new File(ORAlauncher.PROGRAMS_DIRECTORY, programName);
-        System.out.println("ORA executing: " + CMD_ORA_RUN + robertalabFile.getPath() + " true");
-        GraphicStartup.menu.suspend();
         exec(CMD_ORA_RUN + robertalabFile.getPath() + " true", ORAlauncher.PROGRAMS_DIRECTORY);
-        Delay.msDelay(1000);
-        GraphicStartup.menu.suspend(); // debug screen when process is killed
-        GraphicStartup.menu.resume();
-        if ( GraphicStartup.selection == 0 ) {
-            GraphicStartup.redrawIPs();
-        }
     }
 
     /**
@@ -70,20 +55,17 @@ public class ORAlauncher {
      * @param directory
      *        The programs where all user programs are saved.
      */
-    private void exec(String command, String directory) {
+    private static void exec(String command, String directory) {
         Process program = null;
+        GraphicStartup.menu.suspend();
         try {
             setRunning(true);
-            glcd.clear();
-            glcd.refresh();
-            glcd.setAutoRefresh(false);
 
             glcd.drawImage(image, 0, 0, 0);
             glcd.refresh();
 
             program = new ProcessBuilder(command.split(" ")).directory(new File(directory)).start();
 
-            System.out.println("Running an Open Roberta Lab Program!");
             while ( true ) {
                 int b = Button.getButtons();
                 if ( b == 6 ) {
@@ -92,11 +74,6 @@ public class ORAlauncher {
                     GraphicStartup.resetMotors();
                 }
                 try {
-                    // we do not use lejos wrapper for sysout and syserr
-                    // this is an alternative method to check if process is terminated
-                    // exitvalue is 143 if process was killed by another one
-                    // exitvalue is 0 if process terminates regularly
-                    // throws exception if not yet terminated
                     System.out.println("ORA process exitvalue: " + program.exitValue());
                     break;
                 } catch ( IllegalThreadStateException e ) {
@@ -104,20 +81,16 @@ public class ORAlauncher {
                 }
                 Delay.msDelay(200);
             }
-
-            System.out.println("Waiting for process to die");
             program.waitFor();
-            System.out.println("Program finished");
         } catch ( Exception e ) {
-            System.err.println("Failed to execute ORA program: " + e);
+            System.err.println("Failed to execute ORA program: " + e.getMessage());
         } finally {
-            // Turn the LED off, in case left on
             Button.LEDPattern(0);
-            glcd.setAutoRefresh(true);
-            glcd.clear();
-            glcd.refresh();
             program = null;
             setRunning(false);
+            Delay.msDelay(500);
+            GraphicStartup.menu.resume();
+
         }
     }
 
