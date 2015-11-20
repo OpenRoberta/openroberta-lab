@@ -70,7 +70,7 @@ public class ORApushCmd implements Runnable {
     public ORApushCmd(String serverBaseIP, String token) {
         // add brick data pairs which will not change during runtime
         this.brickData.put(KEY_TOKEN, token);
-        this.brickData.put(KEY_MACADDR, GraphicStartup.getORAmacAddress());
+        this.brickData.put(KEY_MACADDR, GraphicStartup.getWlanMACaddress());
         this.brickData.put(KEY_MENUVERSION, GraphicStartup.getORAmenuVersion());
         this.brickData.put(KEY_FIRMWARENAME, "lejos");
         this.brickData.put(KEY_FIRMWAREVERSION, GraphicStartup.getLejosVersion());
@@ -205,8 +205,8 @@ public class ORApushCmd implements Runnable {
         lcd.drawString(" Open Roberta Lab", 0, 2);
         lcd.drawString(" connection lost!", 0, 3);
         lcd.drawString(" (press any key)", 0, 5);
+        lcd.refresh();
         LocalEV3.get().getKeys().waitForAnyPress();
-        Delay.msDelay(1000);
         GraphicStartup.menu.resume();
     }
 

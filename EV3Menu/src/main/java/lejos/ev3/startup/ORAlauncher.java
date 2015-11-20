@@ -56,6 +56,7 @@ public class ORAlauncher {
      *        The programs where all user programs are saved.
      */
     private static void exec(String command, String directory) {
+        int displaystate = GraphicStartup.menu.ind.displayState;
         Process program = null;
         GraphicStartup.menu.suspend();
         try {
@@ -89,8 +90,10 @@ public class ORAlauncher {
             program = null;
             setRunning(false);
             Delay.msDelay(500);
+            GraphicStartup.menu.ind.setDisplayState(displaystate);
             GraphicStartup.menu.resume();
-
+            GraphicStartup.menu.suspend(); // debug screen
+            GraphicStartup.menu.resume();
         }
     }
 

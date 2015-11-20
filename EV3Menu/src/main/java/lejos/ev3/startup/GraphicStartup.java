@@ -186,17 +186,17 @@ public class GraphicStartup implements Menu {
     private static final String WLAN_INTERFACE = "wlan0";
     private static final String PAN_INTERFACE = "br0";
 
-    private static final int IND_SUSPEND = -1;
-    private static final int IND_NONE = 0;
-    private static final int IND_NORMAL = 1;
-    private static final int IND_FULL = 2;
+    public static final int IND_SUSPEND = -1;
+    public static final int IND_NONE = 0;
+    public static final int IND_NORMAL = 1;
+    public static final int IND_FULL = 2;
 
     @SuppressWarnings("unused")
     private static final int defaultSleepTime = 2;
     private static final int maxSleepTime = 10;
 
     // Threads
-    private final IndicatorThread ind = new IndicatorThread();
+    public final IndicatorThread ind = new IndicatorThread();
     private final BatteryIndicator indiBA = new BatteryIndicator();
     private final PipeReader pipeReader = new PipeReader();
     private final RConsole rcons = new RConsole();
@@ -2286,10 +2286,29 @@ public class GraphicStartup implements Menu {
                 int id = Button.waitForAnyEvent(500);
                 if ( ORAhandler.hasConnectionError() ) {
                     oraHandler.disconnect();
+                    int wifistate = startWlanInterface();
                     newScreen(OPENROBERTAHEAD);
-                    lcd.drawString("Unable to connect", 0, 2);
-                    lcd.drawString(" to server! :-(", 0, 3);
-                    lcd.drawString("Hint: Check Wifi?", 0, 5);
+                    lcd.drawString("Open Roberta Lab", 0, 1);
+                    lcd.drawString("is unreachable!", 0, 2);
+                    lcd.drawString("Reason:", 0, 4);
+                    switch ( wifistate ) {
+                        case 1:
+                            lcd.drawString("No Wifi dongle", 0, 5);
+                            lcd.drawString("plugged in!", 0, 6);
+                            break;
+                        case 0:
+                            if ( wlanAddress == null ) {
+                                lcd.drawString("Not connected to", 0, 5);
+                                lcd.drawString("any Wifi network!", 0, 6);
+                            } else {
+                                lcd.drawString("No access from", 0, 5);
+                                lcd.drawString("this network!", 0, 6);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+
                     lcd.drawString(" (Press any key)", 0, 7);
                     LocalEV3.get().getAudio().systemSound(Sounds.BEEP);
                     LocalEV3.get().getKeys().waitForAnyPress();
@@ -2328,7 +2347,7 @@ public class GraphicStartup implements Menu {
      *
      * @return MAC address
      */
-    public static String getORAmacAddress() {
+    public static String getWlanMACaddress() {
         Enumeration<NetworkInterface> interfaces;
         try {
             interfaces = NetworkInterface.getNetworkInterfaces();
@@ -2403,10 +2422,8 @@ public class GraphicStartup implements Menu {
      * @return battery
      */
     public static String getBatteryStatus() {
-        int millis = LocalEV3.ev3.getPower().getVoltageMilliVolt();
-        int int1 = (millis - millis % 1000) / 1000;
-        int int2 = (millis % 1000) / 100;
-        return int1 + "." + int2;
+        float volts = LocalEV3.ev3.getPower().getVoltage();
+        return String.format("%3.1f", volts);
     }
 
     /**
@@ -2633,7 +2650,7 @@ public class GraphicStartup implements Menu {
                         openrobertaProperties.setProperty("menutype", "custom");
                         storeOpenRobertaProperties();
                     }
-                    newScreen("Open Roberta");
+                    newScreen("System");
                     lcd.drawString("Menu type set to", 0, 2);
                     lcd.drawString("    >" + openrobertaProperties.getProperty("menutype") + "<", 0, 4);
                     Delay.msDelay(2500);
@@ -3870,13 +3887,13 @@ public class GraphicStartup implements Menu {
         }
 
         // Set the date
-        try {
-            String dt = SntpClient.getDate(Settings.getProperty(ntpProperty, "1.uk.pool.ntp.org"));
-            System.out.println("Date and time is " + dt);
-            Runtime.getRuntime().exec("date -s " + dt);
-        } catch ( IOException e ) {
-            System.err.println("Failed to get time from ntp: " + e);
-        }
+        //        try {
+        //            String dt = SntpClient.getDate(Settings.getProperty(ntpProperty, "1.uk.pool.ntp.org"));
+        //            System.out.println("Date and time is " + dt);
+        //            Runtime.getRuntime().exec("date -s " + dt);
+        //        } catch ( IOException e ) {
+        //            System.err.println("Failed to get time from ntp: " + e);
+        //        }
     }
 
     private void startNetwork(String startup, boolean startServices) {
@@ -3975,9 +3992,9 @@ public class GraphicStartup implements Menu {
     @Override
     public void resume() {
         lcd.clear();
+        this.ind.resume();
         lcd.refresh();
         LCD.setAutoRefresh(true);
-        this.ind.resume();
         suspend = false;
     }
 
