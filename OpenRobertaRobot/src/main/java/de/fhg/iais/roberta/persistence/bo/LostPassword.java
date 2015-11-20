@@ -9,13 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import de.fhg.iais.roberta.util.Encryption;
-import de.fhg.iais.roberta.util.RandomPasswordGenerator;
+import de.fhg.iais.roberta.util.RandomUrlPostfix;
 import de.fhg.iais.roberta.util.Util;
 
 @Entity
-@Table(name = "TMP_PASSWORDS")
-public class TmpPassword implements WithSurrogateId {
+@Table(name = "LOST_PASSWORD")
+public class LostPassword implements WithSurrogateId {
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,30 +23,30 @@ public class TmpPassword implements WithSurrogateId {
     @Column(name = "USER_ID")
     private int userID;
 
-    @Column(name = "PASSWORD")
-    private String password;
+    @Column(name = "URL_POSTFIX")
+    private String urlPostfix;
 
     @Column(name = "CREATED")
     private Timestamp created;
 
-    protected TmpPassword() {
+    protected LostPassword() {
         // Hibernate
     }
 
     /**
-     * create new temporary password for given user
+     * create link to be sent to user email address
      *
-     * @param userId of the user that asks for temporary password
+     * @param userId of the user that forgot his password
      * @throws Exception
      */
-    public TmpPassword(int userId) throws Exception {
+    public LostPassword(int userId) throws Exception {
         this.userID = userId;
-        this.password = Encryption.createHash(RandomPasswordGenerator.generatePswd(12, 12, 4, 4, 4).toString()); //TODO Implement random password generator
+        this.urlPostfix = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
         this.created = Util.getNow();
     }
 
-    public boolean isPasswordCorrect(String passwordToCheck) throws Exception {
-        return Encryption.isPasswordCorrect(this.password, passwordToCheck);
+    public boolean isUrlCorrect(String urlToCheck) throws Exception {
+        return this.urlPostfix.equals(urlToCheck);
     }
 
     /**
@@ -58,10 +57,10 @@ public class TmpPassword implements WithSurrogateId {
     }
 
     /**
-     * @return the password
+     * @return the url postfix
      */
-    public String getPassword() {
-        return this.password;
+    public String getUrlPostfix() {
+        return this.urlPostfix;
     }
 
     /**
@@ -78,7 +77,7 @@ public class TmpPassword implements WithSurrogateId {
 
     @Override
     public String toString() {
-        return "TmpPassword [id=" + this.id + ", userID=" + this.userID + ", password=" + this.password + ", created=" + this.created + "]";
+        return "LostPassword [id=" + this.id + ", userID=" + this.userID + ", urlPostfix=" + this.urlPostfix + ", created=" + this.created + "]";
     }
 
 }

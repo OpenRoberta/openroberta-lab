@@ -44,7 +44,7 @@ public class DbSetup {
         // this shows all tables from us:
         // List<String> openRobertaTables = this.dbExecutor.select("select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA = 'PUBLIC'");
         int counter = 0;
-        List<String> toDelete = Arrays.asList("PROGRAM", "USER", "TMP_PASSWORDS");
+        List<String> toDelete = Arrays.asList("PROGRAM", "USER", "LOST_PASSWORD");
         for ( String openRobertaTable : toDelete ) {
             counter += this.dbExecutor.update("delete from " + openRobertaTable);
         }

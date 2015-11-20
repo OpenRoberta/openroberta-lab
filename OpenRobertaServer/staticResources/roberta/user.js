@@ -99,15 +99,28 @@ var USER = {};
     };
 
     /**
+     * Forgot password set new password
+     * 
+     * @memberof USER
+     */
+    USER.resetPasswordToServer = function(resetPasswordLink, newPassword, successFn) {
+        COMM.json("/user", {
+            "cmd" : "resetPassword",
+            "resetPasswordLink" : resetPasswordLink,
+            "newPassword" : newPassword
+        }, successFn, "update user password '" + resetPasswordLink + "' to server");
+    };
+
+    /**
      * User password recovery
      * 
      * @memberof USER
      */
-    USER.userPasswordRecovery = function(accountName, successFn) {
+    USER.userPasswordRecovery = function(lostEmail, successFn) {
         COMM.json("/user", {
             "cmd" : "passwordRecovery",
-            "accountName" : accountName
-        }, successFn, "password recovery for '" + accountName + "'");
+            "lostEmail" : lostEmail
+        }, successFn, "password recovery for '" + lostEmail + "'");
     };
 
     /**

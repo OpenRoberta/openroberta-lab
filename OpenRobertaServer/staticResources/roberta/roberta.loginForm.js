@@ -46,14 +46,25 @@ var LOGIN_FORM = {};
                         userState.name = result.userName;
                     }
                     userState.id = result.userId;
-                    userState.tmpPassLogin = result.tmpPassLogin
                     setHeadNavigationMenuState('login');
                     setRobotState(result);
                 }
                 displayInformation(result, "MESSAGE_USER_LOGIN", result.message, userState.name);
-                if (userState.tmpPassLogin == true) {
-                    $('#change-user-password').modal('show');
+            });
+        }
+    }
+
+    /**
+     * Update user
+     */
+    function userPasswordRecovery() {
+        $formLost.validate();
+        if ($formLost.valid()) {
+            USER.userPasswordRecovery($('#lost_email').val(), function(result) {
+                if (result.rc === "ok") {
+//                setRobotState(result);
                 }
+                displayInformation(result, "", result.message);
             });
         }
     }
@@ -128,12 +139,8 @@ var LOGIN_FORM = {};
     }
 
     function hederChange($oldHeder, $newHeder) {
-//        msgFade($textTag, $msgText);
         $oldHeder.addClass('hidden');
-//        setTimeout(function() {
-//            msgFade($textTag, $msgOld);
         $newHeder.removeClass('hidden');
-//        }, $msgShowTime);
     }
 
     LOGIN_FORM.initLoginForm = function() {
@@ -146,10 +153,16 @@ var LOGIN_FORM = {};
         $h3Register = $('#registerInfoLabel');
         $h3Lost = $('#forgotPasswordLabel');
 
+        $('#login-user').onWrap('hidden.bs.modal', function() {
+            LOGIN_FORM.resetForm();
+            LOGIN_FORM.clearInputs();
+        });
+
         // Login form change between sub-form
 
-        $('#registerUser').onWrap('click', createUserToServer);
         $('#doLogin').onWrap('click', login);
+        $('#registerUser').onWrap('click', createUserToServer);
+        $('#sendEmailLostPassword').onWrap('click', userPasswordRecovery);
 
         $('#login_register_btn').onWrap('click', function() {
             hederChange($h3Login, $h3Register)

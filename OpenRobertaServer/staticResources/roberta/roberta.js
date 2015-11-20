@@ -39,7 +39,6 @@ function initUserState() {
     userState.blocklyReady = false;
     userState.blocklyTranslated = false;
     userState.bricklyTranslated = false;
-    userState.tmpPassLogin = false;
 }
 
 /**
@@ -90,33 +89,30 @@ function updateUserToServer() {
         displayInformation(result, "", result.message);
     });
 }
-/**
- * Update user
- */
-function userPasswordRecovery() {
-    USER.userPasswordRecovery($('#loginAccountName').val(), function(result) {
-        if (result.rc === "ok") {
-//            setRobotState(result);
-        }
-        displayInformation(result, "", result.message);
-    });
-
-}
 
 /**
- * Delete user on server
+ * Update User Password
  */
-function updateUserPasswordOnServer() {
+function updateUserPasswordOnServer(restPasswordLink) {
     if ($('#passNew').val() != $('#passNewRepeat').val()) {
         displayMessage("MESSAGE_PASSWORD_ERROR", "POPUP", "");
     } else {
-        USER.updateUserPasswordToServer(userState.accountName, $('#passOld').val(), $("#passNew").val(), function(result) {
-            if (result.rc === "ok") {
-                userState.tmpPassLogin = false;
-                $("#change-user-password").modal('hide');
-            }
-            displayInformation(result, "", result.message);
-        });
+        if (restPasswordLink) {
+            USER.resetPasswordToServer(restPasswordLink, $("#passNew").val(), function(result) {
+                if (result.rc === "ok") {
+                    $("#change-user-password").modal('hide');
+                }
+                displayInformation(result, "", result.message);
+            });
+        } else {
+            USER.updateUserPasswordToServer(userState.accountName, $('#passOld').val(), $("#passNew").val(), function(result) {
+                if (result.rc === "ok") {
+                    $("#change-user-password").modal('hide');
+                }
+                displayInformation(result, "", result.message);
+            });
+        }
+
     }
 }
 /**
@@ -1580,7 +1576,6 @@ function initPopups() {
     $('#saveProgram').onWrap('click', saveAsProgramToServer);
     $('#saveConfiguration').onWrap('click', saveAsConfigurationToServer);
     $('#changeUserPassword').onWrap('click', updateUserPasswordOnServer);
-    $('#passwordRecovery').onWrap('click', userPasswordRecovery);
 
     $('#showChangeUserPassword').onWrap('click', function() {
         $('#change-user-password').modal('show');
@@ -1606,11 +1601,6 @@ function initPopups() {
         $('#delete-user input :not(btn)').val('');
     });
 
-    $('#login-user').onWrap('hidden.bs.modal', function() {
-        LOGIN_FORM.resetForm();
-        LOGIN_FORM.clearInputs();
-    });
-
     $('#change-user-settings').onWrap('hidden.bs.modal', function() {
 //        $('#change-user-settings input :not(btn)').val('');
     });
@@ -1627,6 +1617,12 @@ function initPopups() {
 
     LOGIN_FORM.initLoginForm();
 
+    var target = document.location.hash.split("&");
+
+    if (target[0] === "#forgotPassword") {
+        $('#change-user-password').modal('show');
+        alert(target[1]);
+    }
 }
 
 /**

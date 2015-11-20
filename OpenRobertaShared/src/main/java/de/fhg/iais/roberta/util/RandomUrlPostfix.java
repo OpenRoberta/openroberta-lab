@@ -2,13 +2,13 @@ package de.fhg.iais.roberta.util;
 
 import java.util.Random;
 
-public class RandomPasswordGenerator {
+public class RandomUrlPostfix {
     private static final String ALPHA_CAPS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final String ALPHA = "abcdefghijklmnopqrstuvwxyz";
     private static final String NUM = "0123456789";
-    private static final String SPL_CHARS = "!@#$%^&*_=+-/";
+    private static final String SPL_CHARS = "-_";
 
-    public static char[] generatePswd(int minLen, int maxLen, int noOfCAPSAlpha, int noOfDigits, int noOfSplChars) {
+    public static String generate(int minLen, int maxLen, int noOfCAPSAlpha, int noOfDigits, int noOfSplChars) {
         if ( minLen > maxLen ) {
             throw new IllegalArgumentException("Min. Length > Max. Length!");
         }
@@ -36,7 +36,7 @@ public class RandomPasswordGenerator {
                 pswd[i] = ALPHA.charAt(rnd.nextInt(ALPHA.length()));
             }
         }
-        return pswd;
+        return String.valueOf(pswd);
     }
 
     private static int getNextIndex(Random rnd, int len, char[] pswd) {

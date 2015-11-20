@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 /*C2*/SET SCHEMA PUBLIC
@@ -13,3 +14,15 @@ INSERT INTO USER VALUES(54,'dani','09f3e666c2b86510:d94c7e0002a07255a97aa8368f8d
 >>>>>>> ORA-660 login popup changed; blockly bug fix overtaking user input
 COMMIT
 >>>>>>> ORA-660 login popup changed; blockly bug fix overtaking user input
+=======
+/*C8*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C11*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C9*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C10*/SET SCHEMA PUBLIC
+DISCONNECT
+/*C7*/SET SCHEMA PUBLIC
+DISCONNECT
+>>>>>>> ORA-727 Change of the reset password with link that enables password to be changed
