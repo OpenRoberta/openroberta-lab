@@ -1,13 +1,13 @@
 package de.fhg.iais.roberta.syntax.codegen.ev3;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.components.ev3.EV3Sensors;
 import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
+import de.fhg.iais.roberta.components.ev3.UsedSensor;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.MathConst;
@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.syntax.expr.MathConst.Const;
 
 public class JavaVisitorTest {
     private static final Ev3Configuration brickConfiguration = new Ev3Configuration.Builder().build();
-    private static final Set<EV3Sensors> usedSensors = new HashSet<EV3Sensors>();
+    private static final Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();
 
     @Test
     public void getIndentaion() throws Exception {

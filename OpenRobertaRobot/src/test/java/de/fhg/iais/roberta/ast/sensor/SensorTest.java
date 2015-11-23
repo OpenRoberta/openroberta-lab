@@ -27,7 +27,7 @@ public class SensorTest {
             "BlockAST [project=[[Location [x=-96, y=73], \n"
                 + "if SensorExpr [TouchSensor [port=S1]]\n"
                 + ",then\n"
-                + "Var [item] := SensorExpr [UltraSSensor [mode=DISTANCE, port=S4]]\n\n"
+                + "Var [item] := SensorExpr [UltrasonicSensor [mode=DISTANCE, port=S4]]\n\n"
                 + "Var [item] := SensorExpr [ColorSensor [mode=RGB, port=S3]]\n\n"
                 + "Var [item] := SensorExpr [InfraredSensor [mode=DISTANCE, port=S4]]\n\n"
                 + "Var [item] := SensorExpr [DrehSensor [mode=ROTATION, motor=A]]\n\n"

@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.components.ev3.EV3Actors;
 import de.fhg.iais.roberta.components.ev3.EV3Sensor;
 import de.fhg.iais.roberta.components.ev3.EV3Sensors;
 import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
+import de.fhg.iais.roberta.components.ev3.UsedSensor;
 import de.fhg.iais.roberta.runtime.Utils;
 import de.fhg.iais.roberta.shared.Pickcolor;
 import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
@@ -102,7 +103,7 @@ public class Hal {
     /**
      * @param brickConfiguration
      */
-    public Hal(Ev3Configuration brickConfiguration, Set<EV3Sensors> usedSensors, String[] args) {
+    public Hal(Ev3Configuration brickConfiguration, Set<UsedSensor> usedSensors, String[] args) {
         this.deviceHandler = new DeviceHandler(brickConfiguration, usedSensors);
         this.brickConfiguration = brickConfiguration;
         this.wheelDiameter = brickConfiguration.getWheelDiameterCM();

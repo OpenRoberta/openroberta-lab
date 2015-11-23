@@ -6,8 +6,8 @@ import java.util.Set;
 
 import de.fhg.iais.roberta.components.HardwareComponent;
 import de.fhg.iais.roberta.components.ev3.EV3Actor;
-import de.fhg.iais.roberta.components.ev3.EV3Sensors;
 import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
+import de.fhg.iais.roberta.components.ev3.UsedSensor;
 import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
 import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -32,7 +32,7 @@ import lejos.robotics.SampleProvider;
  * This class instantiates all sensors (sensor modes) and actors used in blockly program.
  */
 public class DeviceHandler {
-    private final Set<EV3Sensors> usedSensors;
+    private final Set<UsedSensor> usedSensors;
     private final Map<SensorPort, SampleProviderBean[]> lejosSensors = new HashMap<>();
     private EV3GyroSensor gyroSensor = null;
 
@@ -48,7 +48,7 @@ public class DeviceHandler {
      * @param brickConfiguration for the particular brick
      * @param usedSensors in the blockly program
      */
-    public DeviceHandler(Ev3Configuration brickConfiguration, Set<EV3Sensors> usedSensors) {
+    public DeviceHandler(Ev3Configuration brickConfiguration, Set<UsedSensor> usedSensors) {
         this.usedSensors = usedSensors;
         createDevices(brickConfiguration);
     }
@@ -159,12 +159,16 @@ public class DeviceHandler {
     }
 
     private boolean isUsed(HardwareComponent actorType) {
-        return this.usedSensors.contains(actorType.getComponentType());
+        for ( UsedSensor usedSensor : this.usedSensors ) {
+            if ( usedSensor.getSensorType() == actorType.getComponentType() ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void initSensor(SensorPort sensorPort, HardwareComponent sensorType, Port hardwarePort) {
-        if ( sensorType != null /*&& isUsed(sensorType) TODO Daniel/Kostadin quick fix */ ) {
-            // We should allow sensor value logging even if the sensor is not used in the program
+        if ( sensorType != null && isUsed(sensorType) ) {
             this.lcd.clear();
             // Hal.formatInfoMessage("Initializing " + sensorType.getComponentType().getShortName() + " on port " + sensorPort + " ...", this.lcd);
             switch ( sensorType.getComponentType().getTypeName() ) {

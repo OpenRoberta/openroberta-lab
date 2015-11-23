@@ -11,8 +11,8 @@ public class SampleSensorTest {
     public void sensorGetSample1() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=16, y=-1], GetSampleSensor [sensor=TouchSensor [port=S1]]], "
-                + "[Location [x=36, y=39], GetSampleSensor [sensor=UltraSSensor [mode=DISTANCE, port=S4]]], "
-                + "[Location [x=56, y=79], GetSampleSensor [sensor=UltraSSensor [mode=PRESENCE, port=S4]]], "
+                + "[Location [x=36, y=39], GetSampleSensor [sensor=UltrasonicSensor [mode=DISTANCE, port=S4]]], "
+                + "[Location [x=56, y=79], GetSampleSensor [sensor=UltrasonicSensor [mode=PRESENCE, port=S4]]], "
                 + "[Location [x=76, y=119], GetSampleSensor [sensor=ColorSensor [mode=COLOUR, port=S3]]], "
                 + "[Location [x=96, y=159], GetSampleSensor [sensor=ColorSensor [mode=RED, port=S3]]], "
                 + "[Location [x=116, y=199], GetSampleSensor [sensor=ColorSensor [mode=AMBIENTLIGHT, port=S3]]], "

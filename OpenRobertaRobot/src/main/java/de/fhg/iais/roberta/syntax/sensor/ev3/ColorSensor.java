@@ -95,4 +95,5 @@ public class ColorSensor<V> extends BaseSensor<V> {
 
         return jaxbDestination;
     }
+
 }

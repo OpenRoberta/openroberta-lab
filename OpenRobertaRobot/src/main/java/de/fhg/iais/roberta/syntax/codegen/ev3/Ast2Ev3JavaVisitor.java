@@ -12,8 +12,8 @@ import de.fhg.iais.roberta.components.HardwareComponent;
 import de.fhg.iais.roberta.components.HardwareComponentType;
 import de.fhg.iais.roberta.components.ev3.EV3Actor;
 import de.fhg.iais.roberta.components.ev3.EV3Sensor;
-import de.fhg.iais.roberta.components.ev3.EV3Sensors;
 import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
+import de.fhg.iais.roberta.components.ev3.UsedSensor;
 import de.fhg.iais.roberta.shared.IndexLocation;
 import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
 import de.fhg.iais.roberta.shared.action.ev3.DriveDirection;
@@ -126,7 +126,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     private final Ev3Configuration brickConfiguration;
     private final String programName;
     private final StringBuilder sb = new StringBuilder();
-    private final Set<EV3Sensors> usedSensors;
+    private final Set<UsedSensor> usedSensors;
     private int indentation;
 
     /**
@@ -137,7 +137,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
      * @param usedSensors in the current program
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    Ast2Ev3JavaVisitor(String programName, Ev3Configuration brickConfiguration, Set<EV3Sensors> usedSensors, int indentation) {
+    Ast2Ev3JavaVisitor(String programName, Ev3Configuration brickConfiguration, Set<UsedSensor> usedSensors, int indentation) {
         this.programName = programName;
         this.brickConfiguration = brickConfiguration;
         this.indentation = indentation;
@@ -157,7 +157,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         Assert.notNull(brickConfiguration);
         Assert.isTrue(phrasesSet.size() >= 1);
 
-        Set<EV3Sensors> usedSensors = UsedSensorsCheckVisitor.check(phrasesSet);
+        Set<UsedSensor> usedSensors = UsedSensorsCheckVisitor.check(phrasesSet);
         Ast2Ev3JavaVisitor astVisitor = new Ast2Ev3JavaVisitor(programName, brickConfiguration, usedSensors, withWrapping ? 1 : 0);
         astVisitor.generatePrefix(withWrapping);
 
@@ -875,9 +875,9 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         mainTask.getVariables().visit(this);
-        this.sb.append("\n\n").append(INDENT).append("public void run(String[] args) {\n");
+        this.sb.append("\n\n").append(INDENT).append("public void run() {\n");
         incrIndentation();
-        this.sb.append(INDENT).append(INDENT).append("hal.logSensorValues(args);");
+        this.sb.append(INDENT).append(INDENT).append("hal.startLoggingThread();");
         return null;
     }
 
@@ -1530,7 +1530,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         this.sb.append(INDENT).append("public static void main(String[] args) {\n");
         this.sb.append(INDENT).append(INDENT).append("try {\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append(generateRegenerateConfiguration()).append("\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("new ").append(this.programName).append("().run(args);\n");
+        this.sb.append(INDENT).append(INDENT).append(INDENT).append("new ").append(this.programName).append("().run();\n");
         this.sb.append(INDENT).append(INDENT).append("} catch ( Exception e ) {\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("lejos.hardware.lcd.TextLCD lcd = lejos.hardware.ev3.LocalEV3.get().getTextLCD();\n");
         this.sb.append(INDENT).append(INDENT).append(INDENT).append("lcd.clear();\n");
@@ -1590,13 +1590,14 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     private String generateRegenerateUsedSensors() {
         StringBuilder sb = new StringBuilder();
         String arrayOfSensors = "";
-        for ( EV3Sensors usedSensor : this.usedSensors ) {
-            arrayOfSensors += getHardwareComponentTypeCode(usedSensor);
-            arrayOfSensors += ",";
+        for ( UsedSensor usedSensor : this.usedSensors ) {
+            arrayOfSensors += usedSensor.generateRegenerate();
+            arrayOfSensors += ", ";
         }
-        sb.append("private Set<EV3Sensors> usedSensors = " + "new LinkedHashSet<EV3Sensors>(");
+
+        sb.append("private Set<UsedSensor> usedSensors = " + "new LinkedHashSet<UsedSensor>(");
         if ( this.usedSensors.size() > 0 ) {
-            sb.append("Arrays.asList(" + arrayOfSensors.substring(0, arrayOfSensors.length() - 1) + ")");
+            sb.append("Arrays.asList(" + arrayOfSensors.substring(0, arrayOfSensors.length() - 2) + ")");
         }
         sb.append(");");
         return sb.toString();

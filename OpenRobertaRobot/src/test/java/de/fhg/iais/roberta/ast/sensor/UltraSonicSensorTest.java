@@ -14,7 +14,7 @@ public class UltraSonicSensorTest {
     @Test
     public void sensorSetUltrasonic() throws Exception {
         String a =
-            "BlockAST [project=[[Location [x=1, y=57], UltraSSensor [mode=DISTANCE, port=S4]], [Location [x=1, y=98], UltraSSensor [mode=PRESENCE, port=S2]]]]";
+            "BlockAST [project=[[Location [x=1, y=57], UltrasonicSensor [mode=DISTANCE, port=S4]], [Location [x=1, y=98], UltrasonicSensor [mode=PRESENCE, port=S2]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/sensors/sensor_setUltrasonic.xml"));
     }

@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.ev3.EV3Sensors;
+import de.fhg.iais.roberta.components.ev3.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.ev3.DriveAction;
 import de.fhg.iais.roberta.syntax.action.ev3.MotorDriveStopAction;
@@ -28,7 +29,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
  * @author kcvejoski
  */
 public class UsedSensorsCheckVisitor extends CheckVisitor {
-    private final Set<EV3Sensors> usedSensors = new LinkedHashSet<EV3Sensors>();
+    private final Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>();
 
     /**
      * Returns set of used sensor in Blockly program.
@@ -36,7 +37,7 @@ public class UsedSensorsCheckVisitor extends CheckVisitor {
      * @param phrases list of {@link Phrase} representing blockly program,
      * @return set of used sensors
      */
-    public static Set<EV3Sensors> check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+    public static Set<UsedSensor> check(ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         Assert.isTrue(phrasesSet.size() >= 1);
         UsedSensorsCheckVisitor checkVisitor = new UsedSensorsCheckVisitor();
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
@@ -47,7 +48,7 @@ public class UsedSensorsCheckVisitor extends CheckVisitor {
         return checkVisitor.getUsedSensors();
     }
 
-    private Set<EV3Sensors> getUsedSensors() {
+    private Set<UsedSensor> getUsedSensors() {
         return this.usedSensors;
     }
 
@@ -101,7 +102,7 @@ public class UsedSensorsCheckVisitor extends CheckVisitor {
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        this.usedSensors.add(EV3Sensors.EV3_COLOR_SENSOR);
+        this.usedSensors.add(new UsedSensor(colorSensor.getPort(), EV3Sensors.EV3_COLOR_SENSOR, colorSensor.getMode()));
         return null;
     }
 
@@ -112,25 +113,25 @@ public class UsedSensorsCheckVisitor extends CheckVisitor {
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        this.usedSensors.add(EV3Sensors.EV3_GYRO_SENSOR);
+        this.usedSensors.add(new UsedSensor(gyroSensor.getPort(), EV3Sensors.EV3_GYRO_SENSOR, gyroSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.usedSensors.add(EV3Sensors.EV3_IR_SENSOR);
+        this.usedSensors.add(new UsedSensor(infraredSensor.getPort(), EV3Sensors.EV3_IR_SENSOR, infraredSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.usedSensors.add(EV3Sensors.EV3_TOUCH_SENSOR);
+        this.usedSensors.add(new UsedSensor(touchSensor.getPort(), EV3Sensors.EV3_TOUCH_SENSOR, touchSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.usedSensors.add(EV3Sensors.EV3_ULTRASONIC_SENSOR);
+        this.usedSensors.add(new UsedSensor(ultrasonicSensor.getPort(), EV3Sensors.EV3_ULTRASONIC_SENSOR, ultrasonicSensor.getMode()));
         return null;
     }
 }
