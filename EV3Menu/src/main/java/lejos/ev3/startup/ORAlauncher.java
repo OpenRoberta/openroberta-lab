@@ -43,7 +43,7 @@ public class ORAlauncher {
      */
     public static void runProgram(String programName) {
         File robertalabFile = new File(ORAlauncher.PROGRAMS_DIRECTORY, programName);
-        exec(CMD_ORA_RUN + robertalabFile.getPath() + " true", ORAlauncher.PROGRAMS_DIRECTORY);
+        exec(CMD_ORA_RUN + robertalabFile.getPath(), ORAlauncher.PROGRAMS_DIRECTORY);
     }
 
     /**
