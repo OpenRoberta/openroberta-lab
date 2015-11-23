@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-11-13 16:59:40.016000",
+		"lastupdated": "2015-11-23 15:49:02.354000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -468,7 +468,6 @@
 	"VARIABLES_TYPE_ARRAY_BOOLEAN": "List Boolean",
 	"VARIABLES_TYPE_ARRAY_COLOUR": "List Colour",
 	"VARIABLES_TYPE_COLOUR": "Colour",
-	"PASSWORD_RECOVERY": "Password Recovery",
 	"PROCEDURES_DEFNORETURN_HELPURL": "https://en.wikipedia.org/wiki/Procedure_%28computer_science%29",
 	"PROCEDURES_DEFNORETURN_TITLE": "to",
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "doSomething",
@@ -850,5 +849,12 @@
 	"RECIVED_DATA": "data recived",
 	"CONNECT": "connect to robot name",
 	"VARIABLES_TYPE_CONNECTION": "Connection",
-	"WAIT_FOR_CONNECTION": "wait for connection"
+	"WAIT_FOR_CONNECTION": "wait for connection",
+	"FIELD_REQUIRED": "This field cannot be empty!",
+	"PASSWORD_MIN_LENGTH": "Password min length is 6!",
+	"SECOND_PASSWORD_EQUAL": "The two passwords must be equal!",
+	"VALID_EMAIL_ADDRESS": "Please enter valid email address!",
+	"EMAIL_SEND": "Send!!!",
+	"REGISTER_USER": "Register!",
+	"PASSWORD_RECOVERY": "Password Recovery"
 }

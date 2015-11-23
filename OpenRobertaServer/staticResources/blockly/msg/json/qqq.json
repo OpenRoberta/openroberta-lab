@@ -462,7 +462,6 @@
 	"VARIABLES_TYPE_ARRAY_BOOLEAN": "",
 	"VARIABLES_TYPE_ARRAY_COLOUR": "",
 	"VARIABLES_TYPE_COLOUR": "",
-	"PASSWORD_RECOVERY": "",
 	"PROCEDURES_DEFNORETURN_HELPURL": "url - Information about defining [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that do not have return values.",
 	"PROCEDURES_DEFNORETURN_TITLE": "block text - This precedes the name of the procedure when defining it.  See [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#c84aoc this sample procedure definition].",
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "default name - This acts as a placeholder for the name of a function on a function definition block, as shown on [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#w7cfju this block]. The user will replace it with the function's name.",
@@ -844,5 +843,12 @@
 	"RECIVED_DATA": "",
 	"CONNECT": "",
 	"VARIABLES_TYPE_CONNECTION": "",
-	"WAIT_FOR_CONNECTION": ""
+	"WAIT_FOR_CONNECTION": "",
+	"FIELD_REQUIRED": "",
+	"PASSWORD_MIN_LENGTH": "",
+	"SECOND_PASSWORD_EQUAL": "",
+	"VALID_EMAIL_ADDRESS": "",
+	"EMAIL_SEND": "",
+	"REGISTER_USER": "",
+	"PASSWORD_RECOVERY": ""
 }

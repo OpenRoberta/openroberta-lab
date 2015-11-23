@@ -62,7 +62,6 @@ var LOGIN_FORM = {};
         if ($formLost.valid()) {
             USER.userPasswordRecovery($('#lost_email').val(), function(result) {
                 if (result.rc === "ok") {
-//                setRobotState(result);
                 }
                 displayInformation(result, "", result.message);
             });
@@ -78,6 +77,14 @@ var LOGIN_FORM = {};
             errorClass : "form-invalid",
             errorPlacement : function(label, element) {
                 label.insertAfter(element);
+            },
+            messages : {
+                loginAccountName : {
+                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"])
+                },
+                loginPassword : {
+                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"])
+                }
             }
         });
     }
@@ -103,18 +110,47 @@ var LOGIN_FORM = {};
             errorClass : "form-invalid",
             errorPlacement : function(label, element) {
                 label.insertAfter(element);
+            },
+            messages : {
+                registerAccountName : {
+                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"])
+                },
+                registerPass : {
+                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"]),
+                    minlength : jQuery.validator.format(Blockly.Msg["PASSWORD_MIN_LENGTH"])
+                },
+                registerPassConfirm : {
+                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"]),
+                    equalTo : jQuery.validator.format(Blockly.Msg["SECOND_PASSWORD_EQUAL"])
+                },
+                registerUserName : {
+                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"])
+                },
+                registerPass : {
+                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"]),
+                    registerUserEmail : jQuery.validator.format(Blockly.Msg["VALID_EMAIL_ADDRESS"])
+                }
             }
         });
     }
 
     function validateLostPassword() {
-        $formRegister.validate({
+        $formLost.validate({
             rules : {
-                lost_email : "required",
+                lost_email : {
+                    required : true,
+                    email : true
+                }
             },
             errorClass : "form-invalid",
             errorPlacement : function(label, element) {
                 label.insertAfter(element);
+            },
+            messages : {
+                lost_email : {
+                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"]),
+                    registerUserEmail : jQuery.validator.format(Blockly.Msg["VALID_EMAIL_ADDRESS"])
+                }
             }
         });
     }

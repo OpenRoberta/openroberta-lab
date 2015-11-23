@@ -1142,7 +1142,7 @@ Blockly.Msg.VARIABLES_TYPE_ARRAY_COLOUR = 'List Colour';
 Blockly.Msg.VARIABLES_TYPE_COLOUR = 'Colour';
 
 
-Blockly.Msg.PASSWORD_RECOVERY = 'Password Recovery'
+
 // Procedures Blocks.
 /// url - Information about defining [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that do not have return values.
 Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = 'https://en.wikipedia.org/wiki/Procedure_%28computer_science%29';
@@ -1591,3 +1591,19 @@ Blockly.Msg.RECIVED_DATA = 'data recived';
 Blockly.Msg.CONNECT = 'connect to robot name';
 Blockly.Msg.VARIABLES_TYPE_CONNECTION = 'Connection';
 Blockly.Msg.WAIT_FOR_CONNECTION = 'wait for connection';
+
+
+
+
+Blockly.Msg.FIELD_REQUIRED = 'This field cannot be empty!';
+Blockly.Msg.PASSWORD_MIN_LENGTH = 'Password min length is 6!';
+Blockly.Msg.SECOND_PASSWORD_EQUAL = 'The two passwords must be equal!';
+Blockly.Msg.VALID_EMAIL_ADDRESS = 'Please enter valid email address!';
+Blockly.Msg.EMAIL_SEND = 'Send!!!';
+Blockly.Msg.REGISTER_USER = 'Register!';
+Blockly.Msg.PASSWORD_RECOVERY = 'Password Recovery'
+
+
+
+
+

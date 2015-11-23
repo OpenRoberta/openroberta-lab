@@ -1806,15 +1806,13 @@ function translate(jsdata) {
         }
         if (lkey === 'Blockly.Msg.MENU_LOG_IN') {
             $('#loginLabel').text(value);
-            //$(this).html(value);
-        } else if (lkey === 'Blockly.Msg.PASSWORD_RECOVERY') {
-            $('#passwordRecovery').attr('value', value);
+            $(this).html(value);
         } else if (lkey === 'Blockly.Msg.MENU_NEW') {
             $('#register-user h3').text(value);
-//            $(this).html(value);
+            $(this).html(value);
         } else if (lkey === 'Blockly.Msg.POPUP_CHANGE_USER_PASSWORD') {
             $('#register-user h3').text(value);
-//            $(this).html(value);
+            $(this).html(value);
         } else if (lkey === 'Blockly.Msg.MENU_DELETE_USER') {
             $('#delete-user h3').text(value);
             $(this).html(value);
