@@ -208,19 +208,15 @@ var LOGIN_FORM = {};
             LOGIN_FORM.clearInputs();
         });
 
-        $('#doLogin').onWrap('click', login);
-        $('#registerUser').onWrap('click', createUserToServer);
-        $('#sendEmailLostPassword').onWrap('click', userPasswordRecovery);
-
-        $formLost.on('submit', function(e) {
+        $formLost.onWrap('submit', function(e) {
             e.preventDefault();
             userPasswordRecovery();
         });
-        $formLogin.on('submit', function(e) {
+        $formLogin.onWrap('submit', function(e) {
             e.preventDefault();
             login();
         });
-        $formRegister.on('submit', function(e) {
+        $formRegister.onWrap('submit', function(e) {
             e.preventDefault();
             createUserToServer();
         });
