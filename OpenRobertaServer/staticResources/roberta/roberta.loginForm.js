@@ -126,9 +126,9 @@ var LOGIN_FORM = {};
                 registerUserName : {
                     required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"])
                 },
-                registerPass : {
+                registerUserEmail : {
                     required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"]),
-                    registerUserEmail : jQuery.validator.format(Blockly.Msg["VALID_EMAIL_ADDRESS"])
+                    email : jQuery.validator.format(Blockly.Msg["VALID_EMAIL_ADDRESS"])
                 }
             }
         });
@@ -149,7 +149,7 @@ var LOGIN_FORM = {};
             messages : {
                 lost_email : {
                     required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"]),
-                    registerUserEmail : jQuery.validator.format(Blockly.Msg["VALID_EMAIL_ADDRESS"])
+                    email : jQuery.validator.format(Blockly.Msg["VALID_EMAIL_ADDRESS"])
                 }
             }
         });
