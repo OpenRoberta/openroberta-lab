@@ -334,7 +334,7 @@ limitations under the License.
                                 <label for="loginAccountName" lkey="Blockly.Msg.POPUP_USERNAME"></label>
                                 <div class="input-group">
                                     <span class="input-group-addon typcn input-typcn typcn-user"></span>
-                                    <input type="text" class="form-control" id="loginAccountName" name="loginAccountName" />
+                                    <input type="text" class="form-control" id="loginAccountName" name="loginAccountName" autofocus/>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -346,33 +346,15 @@ limitations under the License.
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default btn-lg btn-block" id="doLogin">OK</button>
+                            <button type="submit" class="btn btn-primary btn-block" id="doLogin">OK</button>
                             <div>
-                                <button type="button" id="login_lost_btn" class="btn-link" lkey="Blockly.Msg.PASSWORD_RECOVERY">Lost Password?</button>
-                                <button type="button" id="login_register_btn" class="btn-link" lkey="Blockly.Msg.MENU_NEW">Register</button>
+                                <button type="button" id="login_lost_btn" class="btn-link" lkey="Blockly.Msg.PASSWORD_RECOVERY">Lost
+                                    Password?</button>
+                                <button type="button" id="login_register_btn" class="btn-link" lkey="Blockly.Msg.MENU_NEW">Register
+                                </button>
                             </div>
                         </div>
                     </form>
-                    <!-- Begin | Lost Password Form -->
-                    <form id="lost-form" style="display: none;">
-                        <div class="modal-body">
-                            <label for="lost_email" class="control-label" lkey="Blockly.Msg.POPUP_EMAIL">E-mail</label>
-                            <div class="input-group">
-                                <span class="input-group-addon typcn input-typcn typcn-mail"></span>
-                                <input id="lost_email" class="form-control" name="lost_email" autofocus />
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <div>
-                                <button type="button" class="btn btn-primary btn-lg btn-block" id="sendEmailLostPassword" lkey="Blockly.Msg.EMAIL_SEND">Send</button>
-                            </div>
-                            <div>
-                                <button id="lost_login_btn" type="button" class="btn-link" lkey="Blockly.Msg.MENU_LOG_IN">Log In</button>
-                                <button id="lost_register_btn" type="button" class="btn-link" lkey="Blockly.Msg.MENU_NEW">Register</button>
-                            </div>
-                        </div>
-                    </form>
-                    <!-- End | Lost Password Form -->
 
                     <!-- Begin | Register Form -->
                     <form id="register-form" style="display: none;">
@@ -381,7 +363,7 @@ limitations under the License.
                                 <label for="registerAccountName" lkey="Blockly.Msg.POPUP_USERNAME">Username</label>
                                 <div class="input-group">
                                     <span class="input-group-addon typcn input-typcn typcn-user"></span>
-                                    <input type="text" class="form-control" id="registerAccountName" name="registerAccountName" autofocus />
+                                    <input type="text" class="form-control" id="registerAccountName" name="registerAccountName" />
                                 </div>
                             </div>
                             <div class="form-group">
@@ -414,16 +396,38 @@ limitations under the License.
                             </div>
                         </div>
                         <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary btn-block" id="registerUser" lkey="Blockly.Msg.REGISTER_USER">Register</button>
                             <div>
-                                <button type="button" class="btn btn-primary btn-lg btn-block" id="registerUser" lkey="Blockly.Msg.REGISTER_USER">Register</button>
-                            </div>
-                            <div>
-                                <button id="register_login_btn" type="button" class="btn-link" lkey="Blockly.Msg.MENU_LOG_IN">Log In</button>
-                                <button id="register_lost_btn" type="button" class="btn-link" lkey="Blockly.Msg.PASSWORD_RECOVERY">Lost Password?</button>
+                                <button id="register_login_btn" type="button" class="btn-link" lkey="Blockly.Msg.MENU_LOG_IN">Log
+                                    In</button>
+                                <button id="register_lost_btn" type="button" class="btn-link" lkey="Blockly.Msg.PASSWORD_RECOVERY">Lost
+                                    Password?</button>
                             </div>
                         </div>
                     </form>
                     <!-- End | Register Form -->
+
+                    <!-- Begin | Lost Password Form -->
+                    <form id="lost-form" style="display: none;">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="lost_email" lkey="Blockly.Msg.POPUP_EMAIL">E-mail</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon typcn input-typcn typcn-mail"></span>
+                                    <input type="email" id="lost_email" class="form-control" name="lost_email" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary btn-block" id="sendEmailLostPassword" lkey="Blockly.Msg.EMAIL_SEND">Send</button>
+                            <div>
+                                <button id="lost_login_btn" type="button" class="btn-link" lkey="Blockly.Msg.MENU_LOG_IN">Log In</button>
+                                <button id="lost_register_btn" type="button" class="btn-link" lkey="Blockly.Msg.MENU_NEW">Register</button>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- End | Lost Password Form -->
+
                 </div>
             </div>
         </div>

@@ -155,6 +155,7 @@ var LOGIN_FORM = {};
         });
     }
 
+    //Animate between forms in login modal
     function modalAnimate($oldForm, $newForm) {
         var $oldH = $oldForm.height();
         var $newH = $newForm.height();
@@ -174,11 +175,24 @@ var LOGIN_FORM = {};
         });
     }
 
+    //header change of the modal login 
     function hederChange($oldHeder, $newHeder) {
         $oldHeder.addClass('hidden');
         $newHeder.removeClass('hidden');
     }
 
+    function setFocusOnElement($elem) {
+        setTimeout(function() {
+            if ($elem.is(":visible") == true) {
+
+                $elem.focus();
+            }
+        }, 800);
+    }
+
+    /**
+     * Initialize the login modal
+     */
     LOGIN_FORM.initLoginForm = function() {
         $divForms = $('#div-login-forms');
         $formLogin = $('#login-form');
@@ -194,35 +208,53 @@ var LOGIN_FORM = {};
             LOGIN_FORM.clearInputs();
         });
 
-        // Login form change between sub-form
-
         $('#doLogin').onWrap('click', login);
         $('#registerUser').onWrap('click', createUserToServer);
         $('#sendEmailLostPassword').onWrap('click', userPasswordRecovery);
 
+        $formLost.on('submit', function(e) {
+            e.preventDefault();
+            userPasswordRecovery();
+        });
+        $formLogin.on('submit', function(e) {
+            e.preventDefault();
+            login();
+        });
+        $formRegister.on('submit', function(e) {
+            e.preventDefault();
+            createUserToServer();
+        });
+
+        // Login form change between sub-form
         $('#login_register_btn').onWrap('click', function() {
             hederChange($h3Login, $h3Register)
             modalAnimate($formLogin, $formRegister)
+            setFocusOnElement($('#registerAccountName'));
         });
         $('#register_login_btn').onWrap('click', function() {
             hederChange($h3Register, $h3Login)
             modalAnimate($formRegister, $formLogin);
+            setFocusOnElement($('#loginAccountName'));
         });
         $('#login_lost_btn').onWrap('click', function() {
             hederChange($h3Login, $h3Lost)
             modalAnimate($formLogin, $formLost);
+            setFocusOnElement($('#lost_email'));
         });
         $('#lost_login_btn').onWrap('click', function() {
             hederChange($h3Lost, $h3Login);
             modalAnimate($formLost, $formLogin)
+            setFocusOnElement($('#loginAccountName'));
         });
         $('#lost_register_btn').onWrap('click', function() {
             hederChange($h3Lost, $h3Register)
             modalAnimate($formLost, $formRegister);
+            setFocusOnElement($('#registerAccountName'));
         });
         $('#register_lost_btn').onWrap('click', function() {
             hederChange($h3Register, $h3Lost)
             modalAnimate($formRegister, $formLost);
+            setFocusOnElement($('#lost_email'));
         });
 
         validateLoginUser();
@@ -230,12 +262,19 @@ var LOGIN_FORM = {};
         validateLostPassword();
     };
 
+    /**
+     * Resets the validation of every form in login modal
+     * 
+     */
     LOGIN_FORM.resetForm = function() {
         $formLogin.validate().resetForm();
         $formLost.validate().resetForm();
         $formRegister.validate().resetForm();
     };
 
+    /**
+     * Clear input fields in login modal
+     */
     LOGIN_FORM.clearInputs = function() {
         $divForms.find('input').val('');
     };
