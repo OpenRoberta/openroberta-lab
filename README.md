@@ -31,22 +31,16 @@ Get a coffee! Might take a couple of minutes.
 A successful build looks like:
 
 ``[INFO] ---------------------------------------``
-
-
 ``[INFO] Reactor Summary:``
-
- 
 ``[INFO] RobertaParent ..................SUCCESS``
-
-
+``[INFO] Resources ......................SUCCESS``
 ``[INFO] OpenRobertaShared ..............SUCCESS``
-
-``[INFO] OpenRobertaServer ..............SUCCESS``
-
 ``[INFO] OpenRobertaRuntime .............SUCCESS``
-
+``[INFO] EV3Menu ........................SUCCESS``
+``[INFO] OpenRobertaRobot ...............SUCCESS``
+``[INFO] OpenRobertaServer ..............SUCCESS``
+``[INFO] OpenRobertaUSB .................SUCCESS``
 ``[INFO] ---------------------------------------``
-
 ``[INFO] BUILD SUCCESS``
 
 ***
@@ -72,7 +66,7 @@ Step 2b) Starting your own server instance, without using the shell script
 
 ``$ cd OpenRobertaServer # go to the folder of the server resources and the database``
 
-``$ java -cp target/OpenRobertaServer-1.0.0-SNAPSHOT.jar de.fhg.iais.roberta.main.ServerStarter # start``
+``java -cp target/resources/\* de.fhg.iais.roberta.main.ServerStarter --properties  --ip 0.0.0.0 --port 1999``
 
 ***
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-serverurl='10.0.1.10:1999'
+serverurl='0.0.0.0:1999'
 ev3ipaddr='10.0.1.1'
 oraversion='1.3.2-SNAPSHOT'
 
@@ -63,7 +63,8 @@ function _startFn {
   Port="${IpPort[1]}"
   _checkJava;
   main='de.fhg.iais.roberta.main.ServerStarter'
-  run="java -cp resources/\* ${main} --properties ${propfile} --ip ${Ip} --port ${Port}"
+  cd OpenRobertaServer
+  run="java -cp target/resources/\* ${main} --properties ${propfile} --ip ${Ip} --port ${Port}"
   echo "executing: $run"
   eval $run
 }
