@@ -48,9 +48,9 @@ public class UsedSensor {
     public String generateRegenerate() {
         StringBuilder sb = new StringBuilder();
         sb.append("new UsedSensor(");
-        sb.append(this.port.name()).append(", ");
+        sb.append("SensorPort." + this.port.name()).append(", ");
         sb.append(this.sensorType.getClass().getSimpleName() + "." + this.sensorType.getTypeName()).append(", ");
-        sb.append(this.mode.name()).append(")");
+        sb.append(this.mode.getClass().getSimpleName() + "." + this.mode.name()).append(")");
         return sb.toString();
     }
 

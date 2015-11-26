@@ -877,7 +877,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         mainTask.getVariables().visit(this);
         this.sb.append("\n\n").append(INDENT).append("public void run() {\n");
         incrIndentation();
-        this.sb.append(INDENT).append(INDENT).append("hal.startLoggingThread();");
+        this.sb.append(INDENT).append(INDENT).append("hal.startServerLoggingThread();");
         return null;
     }
 

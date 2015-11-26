@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
@@ -15,8 +14,6 @@ import org.json.JSONObject;
 
 import de.fhg.iais.roberta.components.ev3.EV3Actor;
 import de.fhg.iais.roberta.components.ev3.EV3Actors;
-import de.fhg.iais.roberta.components.ev3.EV3Sensor;
-import de.fhg.iais.roberta.components.ev3.EV3Sensors;
 import de.fhg.iais.roberta.components.ev3.Ev3Configuration;
 import de.fhg.iais.roberta.components.ev3.UsedSensor;
 import de.fhg.iais.roberta.runtime.Utils;
@@ -42,6 +39,7 @@ import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.Image;
 import lejos.hardware.lcd.LCDOutputStream;
 import lejos.hardware.lcd.TextLCD;
+import lejos.internal.ev3.EV3IOPort;
 import lejos.remote.nxt.NXTConnection;
 import lejos.robotics.SampleProvider;
 import lejos.robotics.navigation.DifferentialPilot;
@@ -60,6 +58,7 @@ public class Hal {
 
     private static final String OPENROBERTAPROPERTIESFILE = "/home/roberta/openroberta.properties";
 
+    private final Set<UsedSensor> usedSensors;
     private final DeviceHandler deviceHandler;
 
     private final EV3 brick;
@@ -74,14 +73,12 @@ public class Hal {
 
     private Properties OPENROBERTAPROPERTIES = null;
     private ClientWebSocket ws = null;
-    private Thread loggerThread = null;
+    private Thread serverLoggerThread = null;
+    private Thread screenLoggerThread = null;
     private final Ev3Configuration brickConfiguration;
 
     private String token = "";
     private String serverAddress = "";
-
-    private final Map<SensorPort, EV3Sensor> sensors;
-    private final Map<ActorPort, EV3Actor> actors;
 
     private static final String rawOldGlasses =
         "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0080\u003f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00fe\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00f0\u007f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00ff\u0007\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u0000\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0000\u0000\u0000\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u0000\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u0000\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u0000\u0000\u0000\u0000\u00ff\u0007\u00fc\u00ff\u00ff\u000f\u0000\u0000\u0000\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u0000\u0000\u0080\u00ff\u0001\u00f0\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u0000\u00fe\u003f\u00f0\u00ff\u00ff\u00ff\u0007\u0000\u0000\u0000\u0000\u00e0\u00ff\u0000\u00f0\u00ff\u00ff\u003f\u0000\u0000\u0000\u0000\u0000\u00ff\u000f\u00c0\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u0000\u00f0\u003f\u0000\u00e0\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u0080\u00ff\u0003\u00c0\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u00f8\u001f\u0000\u00e0\u00ff\u00ff\u00ff\u0000\u0000\u0000\u0000\u00c0\u00ff\u0000\u0080\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u00fc\u000f\u0000\u00e0\u00ff\u00ff\u00ff\u0001\u0000\u0000\u0000\u00e0\u007f\u0000\u0080\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u00fe\u0007\u0000\u00e0\u00ff\u00ff\u00ff\u0003\u0000\u0000\u0000\u00f0\u003f\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u0000\u0000\u00ff\u0003\u0000\u00f0\u00ff\u00ff\u00ff\u0007\u0000\u0000\u0000\u00f8\u001f\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0000\u0080\u00ff\u0001\u0000\u00f0\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u00f8\u000f\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u00c0\u00ff\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u00fc\u0007\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u00c0\u00ff\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u00fe\u0003\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u00c0\u007f\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u00fe\u0001\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u0000\u00e0\u003f\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u00ff\u0001\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u00f0\u003f\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u00ff\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u00f0\u001f\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0080\u00ff\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u00f8\u001f\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u0080\u007f\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u00f8\u000f\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u00c0\u007f\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u00c0\u003f\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u00fc\u0007\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u00c0\u003f\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u00fc\u0007\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u00e0\u001f\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u001f\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u001f\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u00fe\u0003\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u001f\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0080\u0001\u00fe\u0003\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u001f\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00f0\u000f\u00ff\u0003\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00f0\u001f\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00f8\u001f\u00ff\u0003\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u003f\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u003e\u007c\u00ff\u0007\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u003f\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u00f8\u00ff\u0007\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u00f0\u00ff\u001f\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00e3\u00c7\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00fb\u00df\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u0000\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0000\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u0000\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u0000\u0000\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u0000\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0000\u0000\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u0000\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u0000\u0000\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u0000\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u0000\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u0003\u0000\u0000\u0000\u0000\u0000\u0000\u00e0\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00f0\u00ff\u00ff\u00ff\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0080\u00ff\u00ff\u00ff\u0007\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0080\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00fc\u00ff\u00ff\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00f0\u00ff\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0080\u00ff\u0007\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
@@ -103,7 +100,8 @@ public class Hal {
     /**
      * @param brickConfiguration
      */
-    public Hal(Ev3Configuration brickConfiguration, Set<UsedSensor> usedSensors, String[] args) {
+    public Hal(Ev3Configuration brickConfiguration, Set<UsedSensor> usedSensors) {
+        this.usedSensors = usedSensors;
         this.deviceHandler = new DeviceHandler(brickConfiguration, usedSensors);
         this.brickConfiguration = brickConfiguration;
         this.wheelDiameter = brickConfiguration.getWheelDiameterCM();
@@ -116,23 +114,16 @@ public class Hal {
             this.timers[i] = new Stopwatch();
         }
 
-        this.sensors = this.brickConfiguration.getSensors();
-        this.actors = this.brickConfiguration.getActors();
-
-        if ( !usedSensors.isEmpty() ) {
-            try {
-                Boolean debug = new Boolean(args[0]);
-                if ( debug ) {
-                    this.OPENROBERTAPROPERTIES = loadOpenRobertaProperties();
-                    this.serverAddress = this.OPENROBERTAPROPERTIES.getProperty("lastaddress");
-                    this.token = this.OPENROBERTAPROPERTIES.getProperty("lasttoken");
-                    this.ws = new ClientWebSocket(new URI("ws://" + this.serverAddress + "/ws/"));
-                    this.ws.connect();
-                }
-            } catch ( Exception e ) {
-                return;
-            }
+        try {
+            this.OPENROBERTAPROPERTIES = loadOpenRobertaProperties();
+            this.serverAddress = this.OPENROBERTAPROPERTIES.getProperty("lastaddress");
+            this.token = this.OPENROBERTAPROPERTIES.getProperty("lasttoken");
+            this.ws = new ClientWebSocket(new URI("ws://" + this.serverAddress + "/ws/"));
+            this.ws.connect();
+        } catch ( Exception e ) {
+            return;
         }
+
     }
 
     /**
@@ -153,19 +144,27 @@ public class Hal {
     /**
      * Starting a new Thread from the NEPO program to retrieve sensor values from sample providers to send it to the server via websockets.
      * If there are any problems with the command line argument or with the properties file, the logging will not start in the NEPO program.
-     *
-     * @param args Command line argument >true< which is set in {@link ORAlauncher} if , and only if the program is executed from the run button in the client
-     *        webpage. Executing the NEPO program from the EV3 menu will work as usual but without any logging.
      */
-    public void startLoggingThread() {
-        this.loggerThread = new Thread(new Runnable() {
+    public void startServerLoggingThread() {
+        this.serverLoggerThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                logSensorValues();
+                logToServer();
             }
         });
-        this.loggerThread.setDaemon(true);
-        this.loggerThread.start();
+        this.serverLoggerThread.setDaemon(true);
+        this.serverLoggerThread.start();
+    }
+
+    public void startScreenLoggingThread() {
+        this.screenLoggerThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                logToScreen();
+            }
+        });
+        this.screenLoggerThread.setDaemon(true);
+        this.screenLoggerThread.start();
     }
 
     /**
@@ -174,18 +173,29 @@ public class Hal {
      *
      * @param uniqueBlockID TODO ID for highlighting blocks maybe change to int?
      */
-    public void highlightBlock(int uniqueBlockID) {
+    public void infoMessage(String uniqueBlockID) {
         if ( this.ws != null ) {
-            sendActiveBlockInfo(uniqueBlockID);
+            try {
+                if ( this.ws.getReadyState() == READYSTATE.OPEN ) {
+                    sendActiveBlockInfo(uniqueBlockID);
+                } else if ( this.ws.getReadyState() == READYSTATE.NOT_YET_CONNECTED || this.ws.getReadyState() == READYSTATE.CLOSED ) {
+                    this.ws.connect();
+                }
+            } catch ( Exception e ) {
+                // ok
+            }
         }
     }
 
-    /**
-     * If we decide to have a block for starting and stopping the debugger.
-     */
-    public void stopLogSensorValues() {
-        if ( this.loggerThread != null ) {
-            this.loggerThread.interrupt();
+    public void stopServerLoggingThread() {
+        if ( this.serverLoggerThread != null ) {
+            this.serverLoggerThread.interrupt();
+        }
+    }
+
+    public void stopSreenLoggingThread() {
+        if ( this.screenLoggerThread != null ) {
+            this.screenLoggerThread.interrupt();
         }
     }
 
@@ -193,12 +203,11 @@ public class Hal {
      * Call in a separate thread for sending sensor values to Open Roberta Lab via websocket.
      * The thread should be interrupted from the NEPO program to stop logging.
      */
-    public void logSensorValues() {
-
+    public void logToServer() {
         while ( !Thread.currentThread().isInterrupted() ) {
             try {
                 if ( this.ws.getReadyState() == READYSTATE.OPEN ) {
-                    this.sendSensorValue();
+                    sendJSON();
                     Thread.sleep(900);
                 } else if ( this.ws.getReadyState() == READYSTATE.NOT_YET_CONNECTED || this.ws.getReadyState() == READYSTATE.CLOSED ) {
                     this.ws.connect();
@@ -210,23 +219,29 @@ public class Hal {
         }
     }
 
-    /**
-     * Write sensor values to the websocket.
-     */
-    private void sendSensorValue() {
-        if ( this.ws.getReadyState() == READYSTATE.OPEN ) {
-            JSONObject ev3Values = new JSONObject();
-            ev3Values.put("token", this.token);
-            getSensorDebugInfo(ev3Values);
-            getActorsDebugInfo(ev3Values);
-            this.ws.send(ev3Values.toString());
-        } else if ( this.ws.getReadyState() == READYSTATE.NOT_YET_CONNECTED || this.ws.getReadyState() == READYSTATE.CLOSED ) {
-            this.ws.connect();
+    public void logToScreen() {
+        while ( !Thread.currentThread().isInterrupted() ) {
+            try {
+                this.lcdos.write("".getBytes()/*TODO*/);
+            } catch ( Exception e ) {
+                break;
+            }
         }
     }
 
-    private void getActorsDebugInfo(JSONObject ev3Values) {
-        for ( Entry<ActorPort, EV3Actor> mapEntry : this.actors.entrySet() ) {
+    /**
+     * Write sensor values to the websocket.
+     */
+    private void sendJSON() {
+        JSONObject ev3Values = new JSONObject();
+        ev3Values.put("token", this.token);
+        getSensorsValues(ev3Values);
+        getActorsTacho(ev3Values);
+        this.ws.send(ev3Values.toString());
+    }
+
+    private void getActorsTacho(JSONObject ev3Values) {
+        for ( Entry<ActorPort, EV3Actor> mapEntry : this.brickConfiguration.getActors().entrySet() ) {
             int hardwareId = mapEntry.getValue().getComponentType().hashCode();
             ActorPort port = mapEntry.getKey();
             String partKey = port.name() + "-";
@@ -239,39 +254,57 @@ public class Hal {
             } else {
                 ev3Values.put(partKey + MotorTachoMode.DEGREE, getUnregulatedMotorTachoValue(port, MotorTachoMode.DEGREE));
             }
-
         }
     }
 
-    private void getSensorDebugInfo(JSONObject ev3Values) {
-        for ( Entry<SensorPort, EV3Sensor> mapEntry : this.sensors.entrySet() ) {
-            int hardwareId = mapEntry.getValue().getComponentType().hashCode();
-            SensorPort port = mapEntry.getKey();
+    private void getSensorsValues(JSONObject ev3Values) {
+        for ( UsedSensor sensor : this.usedSensors ) {
+            SensorPort port = sensor.getPort();
+            Enum mode = sensor.getMode();
             String partKey = port.name() + "-";
+            partKey += sensor.getSensorType().getShortName() + "-";
+            //ev3Values.put(partKey + mode.name(), this.deviceHandler.getProvider(port, mode.name()));
 
-            if ( EV3Sensors.EV3_COLOR_SENSOR.hashCode() == hardwareId ) {
-                partKey += EV3Sensors.EV3_COLOR_SENSOR.getShortName() + "-";
-                ev3Values.put(partKey + ColorSensorMode.AMBIENTLIGHT, getColorSensorAmbient(port));
-                ev3Values.put(partKey + ColorSensorMode.COLOUR, getColorSensorColour(port));
-                ev3Values.put(partKey + ColorSensorMode.RED, getColorSensorRed(port));
-                ev3Values.put(partKey + ColorSensorMode.RGB, getColorSensorRgb(port));
-            } else if ( EV3Sensors.EV3_ULTRASONIC_SENSOR.hashCode() == hardwareId ) {
-                partKey += EV3Sensors.EV3_ULTRASONIC_SENSOR.getShortName();
-                ev3Values.put(partKey + UltrasonicSensorMode.DISTANCE, getUltraSonicSensorDistance(port));
-                ev3Values.put(partKey + UltrasonicSensorMode.PRESENCE, getUltraSonicSensorPresence(port));
-            } else if ( EV3Sensors.EV3_GYRO_SENSOR.hashCode() == hardwareId ) {
-                partKey += EV3Sensors.EV3_GYRO_SENSOR.getShortName();
-                ev3Values.put(partKey + GyroSensorMode.ANGLE, getGyroSensorValue(port, GyroSensorMode.ANGLE));
-                ev3Values.put(partKey + GyroSensorMode.RATE, getGyroSensorValue(port, GyroSensorMode.RATE));
-            } else if ( EV3Sensors.EV3_IR_SENSOR.hashCode() == hardwareId ) {
-                partKey += EV3Sensors.EV3_IR_SENSOR.getShortName();
-                ev3Values.put(partKey + InfraredSensorMode.DISTANCE, getInfraredSensorDistance(port));
-                ev3Values.put(partKey + InfraredSensorMode.SEEK, getInfraredSensorSeek(port));
-            } else if ( EV3Sensors.EV3_TOUCH_SENSOR.hashCode() == hardwareId ) {
-                partKey += EV3Sensors.EV3_TOUCH_SENSOR.getShortName();
-                ev3Values.put(partKey, isPressed(port));
+            switch ( sensor.getMode().getClass().getSimpleName() ) {
+                case "ColorSensorMode":
+                    if ( mode == ColorSensorMode.AMBIENTLIGHT ) {
+
+                    }
+                    break;
+
+                default:
+                    break;
             }
         }
+
+        //        for ( Entry<SensorPort, EV3Sensor> mapEntry : this.brickConfiguration.getSensors().entrySet() ) {
+        //            int hardwareId = mapEntry.getValue().getComponentType().hashCode();
+        //            SensorPort port = mapEntry.getKey();
+        //            String partKey = port.name() + "-";
+        //
+        //            if ( EV3Sensors.EV3_COLOR_SENSOR.hashCode() == hardwareId ) {
+        //                partKey += EV3Sensors.EV3_COLOR_SENSOR.getShortName() + "-";
+        //                ev3Values.put(partKey + ColorSensorMode.AMBIENTLIGHT, getColorSensorAmbient(port));
+        //                ev3Values.put(partKey + ColorSensorMode.COLOUR, getColorSensorColour(port));
+        //                ev3Values.put(partKey + ColorSensorMode.RED, getColorSensorRed(port));
+        //                ev3Values.put(partKey + ColorSensorMode.RGB, getColorSensorRgb(port));
+        //            } else if ( EV3Sensors.EV3_ULTRASONIC_SENSOR.hashCode() == hardwareId ) {
+        //                partKey += EV3Sensors.EV3_ULTRASONIC_SENSOR.getShortName();
+        //                ev3Values.put(partKey + UltrasonicSensorMode.DISTANCE, getUltraSonicSensorDistance(port));
+        //                ev3Values.put(partKey + UltrasonicSensorMode.PRESENCE, getUltraSonicSensorPresence(port));
+        //            } else if ( EV3Sensors.EV3_GYRO_SENSOR.hashCode() == hardwareId ) {
+        //                partKey += EV3Sensors.EV3_GYRO_SENSOR.getShortName();
+        //                ev3Values.put(partKey + GyroSensorMode.ANGLE, getGyroSensorValue(port, GyroSensorMode.ANGLE));
+        //                ev3Values.put(partKey + GyroSensorMode.RATE, getGyroSensorValue(port, GyroSensorMode.RATE));
+        //            } else if ( EV3Sensors.EV3_IR_SENSOR.hashCode() == hardwareId ) {
+        //                partKey += EV3Sensors.EV3_IR_SENSOR.getShortName();
+        //                ev3Values.put(partKey + InfraredSensorMode.DISTANCE, getInfraredSensorDistance(port));
+        //                ev3Values.put(partKey + InfraredSensorMode.SEEK, getInfraredSensorSeek(port));
+        //            } else if ( EV3Sensors.EV3_TOUCH_SENSOR.hashCode() == hardwareId ) {
+        //                partKey += EV3Sensors.EV3_TOUCH_SENSOR.getShortName();
+        //                ev3Values.put(partKey, isPressed(port));
+        //            }
+        //        }
     }
 
     /**
@@ -279,11 +312,11 @@ public class Hal {
      *
      * @param uniqueBlockID
      */
-    public void sendActiveBlockInfo(int uniqueBlockID) {
+    public void sendActiveBlockInfo(String msg) {
         if ( this.ws.getReadyState() == READYSTATE.OPEN ) {
             JSONObject debugMsg = new JSONObject();
             debugMsg.put("token", this.token);
-            debugMsg.put("activeblock", uniqueBlockID);
+            debugMsg.put("msg", msg);
             this.ws.send(debugMsg.toString());
         } else if ( this.ws.getReadyState() == READYSTATE.NOT_YET_CONNECTED || this.ws.getReadyState() == READYSTATE.CLOSED ) {
             this.ws.connect();
@@ -311,28 +344,12 @@ public class Hal {
         }
     }
 
-    /**
-     * Write text from top to bottom line with automatic scrolling if logger reaches line the last line (8) on the screen.
-     * Line break is also done automatically after 16 characters per line are written.
-     *
-     * @param The sensorvalue or something else to display on the ev3 screen.
-     */
-    public void ev3logger(String value) {
+    public void closeResources() {
         try {
-            this.lcdos.write(value.getBytes());
-        } catch ( IOException e ) {
-            this.brick.getTextLCD().drawString("Error while logging.", 0, 0);
-            closeEv3Logger();
-        }
-    }
-
-    /**
-     * Properly close LCDOutputStream resource.
-     */
-    public void closeEv3Logger() {
-        try {
+            EV3IOPort.closeAll();
             this.lcdos.close();
-        } catch ( IOException e ) {
+            this.ws.closeBlocking();
+        } catch ( Exception e ) {
             // ok
         }
     }
