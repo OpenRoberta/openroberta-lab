@@ -63,8 +63,13 @@ function _startFn {
   Port="${IpPort[1]}"
   _checkJava;
   main='de.fhg.iais.roberta.main.ServerStarter'
-  cd OpenRobertaServer
-  run="java -cp target/resources/\* ${main} --properties ${propfile} --ip ${Ip} --port ${Port}"
+  if [ -d OpenRobertaServer ]; then
+    echo "RUNNING OPEN ROBERTA LAB WITHOUT SETUP!"
+    cd OpenRobertaServer
+    run="java -cp target/resources/\* ${main} --ip ${Ip} --port ${Port}"
+  else
+    run="java -cp resources/\* ${main} --properties ${propfile} --ip ${Ip} --port ${Port}"
+  fi
   echo "executing: $run"
   eval $run
 }
