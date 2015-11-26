@@ -31,16 +31,27 @@ Get a coffee! Might take a couple of minutes.
 A successful build looks like:
 
 ``[INFO] ---------------------------------------``
+
 ``[INFO] Reactor Summary:``
+
 ``[INFO] RobertaParent ..................SUCCESS``
+
 ``[INFO] Resources ......................SUCCESS``
+
 ``[INFO] OpenRobertaShared ..............SUCCESS``
+
 ``[INFO] OpenRobertaRuntime .............SUCCESS``
+
 ``[INFO] EV3Menu ........................SUCCESS``
+
 ``[INFO] OpenRobertaRobot ...............SUCCESS``
+
 ``[INFO] OpenRobertaServer ..............SUCCESS``
+
 ``[INFO] OpenRobertaUSB .................SUCCESS``
+
 ``[INFO] ---------------------------------------``
+
 ``[INFO] BUILD SUCCESS``
 
 ***
