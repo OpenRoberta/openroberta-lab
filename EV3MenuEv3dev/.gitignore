@@ -1,9 +1,0 @@
-*.pyc
-.classpath
-.project
-.pydevproject
-.settings
-target
-dist
-MANIFEST
-roberta/__version__.py
