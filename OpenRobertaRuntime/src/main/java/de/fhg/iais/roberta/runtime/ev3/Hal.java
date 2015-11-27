@@ -39,7 +39,6 @@ import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.Image;
 import lejos.hardware.lcd.LCDOutputStream;
 import lejos.hardware.lcd.TextLCD;
-import lejos.internal.ev3.EV3IOPort;
 import lejos.remote.nxt.NXTConnection;
 import lejos.robotics.SampleProvider;
 import lejos.robotics.navigation.DifferentialPilot;
@@ -119,9 +118,8 @@ public class Hal {
             this.serverAddress = this.OPENROBERTAPROPERTIES.getProperty("lastaddress");
             this.token = this.OPENROBERTAPROPERTIES.getProperty("lasttoken");
             this.ws = new ClientWebSocket(new URI("ws://" + this.serverAddress + "/ws/"));
-            this.ws.connect();
         } catch ( Exception e ) {
-            return;
+            e.printStackTrace();
         }
 
     }
@@ -167,33 +165,13 @@ public class Hal {
         this.screenLoggerThread.start();
     }
 
-    /**
-     * Send the current active block ID to the server to highlight it in the client. This method has no effect if the NEPO program is NOT logging sensor values
-     * (!).
-     *
-     * @param uniqueBlockID TODO ID for highlighting blocks maybe change to int?
-     */
-    public void infoMessage(String uniqueBlockID) {
-        if ( this.ws != null ) {
-            try {
-                if ( this.ws.getReadyState() == READYSTATE.OPEN ) {
-                    sendActiveBlockInfo(uniqueBlockID);
-                } else if ( this.ws.getReadyState() == READYSTATE.NOT_YET_CONNECTED || this.ws.getReadyState() == READYSTATE.CLOSED ) {
-                    this.ws.connect();
-                }
-            } catch ( Exception e ) {
-                // ok
-            }
-        }
-    }
-
     public void stopServerLoggingThread() {
         if ( this.serverLoggerThread != null ) {
             this.serverLoggerThread.interrupt();
         }
     }
 
-    public void stopSreenLoggingThread() {
+    public void stopScreenLoggingThread() {
         if ( this.screenLoggerThread != null ) {
             this.screenLoggerThread.interrupt();
         }
@@ -205,17 +183,19 @@ public class Hal {
      */
     public void logToServer() {
         while ( !Thread.currentThread().isInterrupted() ) {
-            try {
-                if ( this.ws.getReadyState() == READYSTATE.OPEN ) {
-                    sendJSON();
-                    Thread.sleep(900);
-                } else if ( this.ws.getReadyState() == READYSTATE.NOT_YET_CONNECTED || this.ws.getReadyState() == READYSTATE.CLOSED ) {
-                    this.ws.connect();
+            System.out.println(this.ws.getReadyState());
+            if ( this.ws.getReadyState() == READYSTATE.OPEN ) {
+                this.ws.send(new JSONObject().put("token", "abcdefgh").put("testkey", "testvalue").toString());
+                //sendJSON();
+                Delay.msDelay(900);
+            } else if ( this.ws.getReadyState() == READYSTATE.NOT_YET_CONNECTED || this.ws.getReadyState() == READYSTATE.CLOSED ) {
+                this.ws.connect();
+                while ( !(this.ws.getReadyState() == READYSTATE.OPEN) ) {
+                    System.out.println("connecting");
+                    Delay.msDelay(100);
                 }
-                Thread.sleep(100);
-            } catch ( Exception e ) {
-                // ok
             }
+            Delay.msDelay(100);
         }
     }
 
@@ -224,7 +204,7 @@ public class Hal {
             try {
                 this.lcdos.write("".getBytes()/*TODO*/);
             } catch ( Exception e ) {
-                break;
+                e.printStackTrace();
             }
         }
     }
@@ -263,18 +243,19 @@ public class Hal {
             Enum mode = sensor.getMode();
             String partKey = port.name() + "-";
             partKey += sensor.getSensorType().getShortName() + "-";
+
+            // TODO
             //ev3Values.put(partKey + mode.name(), this.deviceHandler.getProvider(port, mode.name()));
-
-            switch ( sensor.getMode().getClass().getSimpleName() ) {
-                case "ColorSensorMode":
-                    if ( mode == ColorSensorMode.AMBIENTLIGHT ) {
-
-                    }
-                    break;
-
-                default:
-                    break;
-            }
+            //            switch ( sensor.getMode().getClass().getSimpleName() ) {
+            //                case "ColorSensorMode":
+            //                    if ( mode == ColorSensorMode.AMBIENTLIGHT ) {
+            //
+            //                    }
+            //                    break;
+            //
+            //                default:
+            //                    break;
+            //            }
         }
 
         //        for ( Entry<SensorPort, EV3Sensor> mapEntry : this.brickConfiguration.getSensors().entrySet() ) {
@@ -323,6 +304,34 @@ public class Hal {
         }
     }
 
+    public void closeResources() throws InterruptedException, IOException {
+        //EV3IOPort.closeAll();
+        stopServerLoggingThread();
+        stopScreenLoggingThread();
+        this.ws.close();
+        this.ws = null;
+        this.lcdos.close();
+    }
+
+    /**
+     * TODO
+     *
+     * @param uniqueBlockID
+     */
+    public void infoMessage(String uniqueBlockID) {
+        if ( this.ws != null ) {
+            try {
+                if ( this.ws.getReadyState() == READYSTATE.OPEN ) {
+                    sendActiveBlockInfo(uniqueBlockID);
+                } else if ( this.ws.getReadyState() == READYSTATE.NOT_YET_CONNECTED || this.ws.getReadyState() == READYSTATE.CLOSED ) {
+                    this.ws.connect();
+                }
+            } catch ( Exception e ) {
+                // ok
+            }
+        }
+    }
+
     /**
      * Print formatted message on the robot display.
      *
@@ -341,16 +350,6 @@ public class Hal {
             }
             displayRow++;
             messageToBePrinted = messageToBePrinted.substring(NUMBER_OF_CHARACTERS_IN_ROW);
-        }
-    }
-
-    public void closeResources() {
-        try {
-            EV3IOPort.closeAll();
-            this.lcdos.close();
-            this.ws.closeBlocking();
-        } catch ( Exception e ) {
-            // ok
         }
     }
 

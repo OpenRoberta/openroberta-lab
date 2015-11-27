@@ -14,22 +14,22 @@ class ClientWebSocket extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {
-        System.out.println("Connected");
+        // ok
     }
 
     @Override
     public void onMessage(String message) {
-        System.out.println("Receive: " + message);
+        // ok
 
     }
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        System.out.println("Disconnected " + code + " " + reason);
+        // ok
     }
 
     @Override
     public void onError(Exception e) {
-        System.out.println(e.getMessage());
+        // ok
     }
 }

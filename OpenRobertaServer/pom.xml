@@ -258,6 +258,13 @@
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
                                 </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.java-websocket</groupId>
+                                    <artifactId>Java-WebSocket</artifactId>
+                                    <version>${ev3.websocket.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                </artifactItem>
                             </artifactItems>
                             <outputDirectory>${project.build.directory}/crossCompilerResources</outputDirectory>
                             <overWriteReleases>true</overWriteReleases>
