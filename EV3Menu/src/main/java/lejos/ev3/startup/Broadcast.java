@@ -26,7 +26,6 @@ public static final int port = 3016;
 		    c.send(sendPacket);
 		    //System.out.println("Request packet sent to: 255.255.255.255");
 		  } catch (Exception e) {
-		      // we get this error sometimes not sure why don't log it!
 			  //System.err.println("Exception send to default: " + e);
 		  }
 

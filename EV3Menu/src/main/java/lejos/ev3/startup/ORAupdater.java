@@ -10,6 +10,7 @@ import java.net.URL;
 
 import lejos.hardware.Sounds;
 import lejos.hardware.ev3.LocalEV3;
+import lejos.utility.Delay;
 
 /**
  * Download all required library files and menu for Open Roberta lab to the brick.<br>

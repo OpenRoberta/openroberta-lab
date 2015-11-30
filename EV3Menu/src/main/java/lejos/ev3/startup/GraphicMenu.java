@@ -69,7 +69,7 @@ public class GraphicMenu extends TextMenu {
 	 */	
 	public GraphicMenu(String[] items,String[] icons,int line, String title, int titleLine)
 	{
-		super(items,line,title);
+		super(items,1,title);
 		this._titleLine = titleLine;
 		this.setItems(items,icons);
 		labelLine = line;

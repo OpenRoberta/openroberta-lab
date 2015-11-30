@@ -205,9 +205,10 @@ public class ORApushCmd implements Runnable {
         lcd.drawString(" Open Roberta Lab", 0, 2);
         lcd.drawString(" connection lost!", 0, 3);
         lcd.drawString(" (press any key)", 0, 5);
-        lcd.refresh();
         LocalEV3.get().getKeys().waitForAnyPress();
+        Delay.msDelay(1000);
         GraphicStartup.menu.resume();
+        GraphicStartup.redrawIPs();
     }
 
     /**

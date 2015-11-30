@@ -4,14 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import lejos.hardware.Sounds;
+import lejos.hardware.ev3.LocalEV3;
+import lejos.utility.Delay;
+
 import org.json.JSONObject;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-
-import lejos.hardware.Sounds;
-import lejos.hardware.ev3.LocalEV3;
-import lejos.utility.Delay;
 
 public class ORAbrickInfo implements HttpHandler {
 

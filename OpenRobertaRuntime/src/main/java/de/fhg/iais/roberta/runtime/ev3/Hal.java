@@ -598,7 +598,7 @@ public class Hal {
                 this.deviceHandler.getRegulatedMotor(left),
                 this.deviceHandler.getRegulatedMotor(right),
                 isReverse);
-        dPilot.setLinearSpeed(dPilot.getMaxLinearSpeed() * speedPercent / 100.0);
+        dPilot.setTravelSpeed(dPilot.getMaxTravelSpeed() * speedPercent / 100.0);
         switch ( direction ) {
             case FOREWARD:
                 dPilot.forward();
@@ -636,7 +636,7 @@ public class Hal {
                 this.deviceHandler.getRegulatedMotor(right),
                 isReverse);
 
-        dPilot.setLinearSpeed(dPilot.getMaxLinearSpeed() * speedPercent / 100.0);
+        dPilot.setTravelSpeed(dPilot.getMaxTravelSpeed() * speedPercent / 100.0);
         switch ( direction ) {
             case FOREWARD:
                 dPilot.travel(distance);
@@ -685,7 +685,7 @@ public class Hal {
                 this.deviceHandler.getRegulatedMotor(left),
                 this.deviceHandler.getRegulatedMotor(right),
                 isReverse);
-        dPilot.setAngularSpeed(toDegPerSec((int) speedPercent));
+        dPilot.setRotateSpeed(toDegPerSec((int) speedPercent));
         switch ( direction ) {
             case RIGHT:
                 dPilot.rotateRight();
@@ -722,7 +722,7 @@ public class Hal {
                 this.deviceHandler.getRegulatedMotor(left),
                 this.deviceHandler.getRegulatedMotor(right),
                 isReverse);
-        dPilot.setAngularSpeed(toDegPerSec(speedPercent));
+        dPilot.setRotateSpeed(toDegPerSec(speedPercent));
         switch ( direction ) {
             case RIGHT:
                 angle = angle * -1;

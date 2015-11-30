@@ -43,7 +43,15 @@ public class ORAlauncher {
      */
     public static void runProgram(String programName) {
         File robertalabFile = new File(ORAlauncher.PROGRAMS_DIRECTORY, programName);
+        //System.out.println("ORA executing: " + CMD_ORA_RUN + robertalabFile.getPath());
+        GraphicStartup.menu.suspend();
         exec(CMD_ORA_RUN + robertalabFile.getPath(), ORAlauncher.PROGRAMS_DIRECTORY);
+        Delay.msDelay(1000);
+        GraphicStartup.menu.suspend(); // debug screen when process is killed
+        GraphicStartup.menu.resume();
+        if ( GraphicStartup.selection == 0 ) {
+            GraphicStartup.redrawIPs();
+        }
     }
 
     /**
@@ -56,17 +64,19 @@ public class ORAlauncher {
      *        The programs where all user programs are saved.
      */
     private static void exec(String command, String directory) {
-        int displaystate = GraphicStartup.menu.ind.displayState;
         Process program = null;
-        GraphicStartup.menu.suspend();
         try {
             setRunning(true);
+            glcd.clear();
+            glcd.refresh();
+            glcd.setAutoRefresh(false);
 
             glcd.drawImage(image, 0, 0, 0);
             glcd.refresh();
 
             program = new ProcessBuilder(command.split(" ")).directory(new File(directory)).start();
 
+            //System.out.println("Running an Open Roberta Lab Program!");
             while ( true ) {
                 int b = Button.getButtons();
                 if ( b == 6 ) {
@@ -75,6 +85,11 @@ public class ORAlauncher {
                     GraphicStartup.resetMotors();
                 }
                 try {
+                    // we do not use lejos wrapper for sysout and syserr
+                    // this is an alternative method to check if process is terminated
+                    // exitvalue is 143 if process was killed by another one
+                    // exitvalue is 0 if process terminates regularly
+                    // throws exception if not yet terminated
                     System.out.println("ORA process exitvalue: " + program.exitValue());
                     break;
                 } catch ( IllegalThreadStateException e ) {
@@ -87,13 +102,11 @@ public class ORAlauncher {
             System.err.println("Failed to execute ORA program: " + e.getMessage());
         } finally {
             Button.LEDPattern(0);
+            glcd.setAutoRefresh(true);
+            glcd.clear();
+            glcd.refresh();
             program = null;
             setRunning(false);
-            Delay.msDelay(500);
-            GraphicStartup.menu.ind.setDisplayState(displaystate);
-            GraphicStartup.menu.resume();
-            GraphicStartup.menu.suspend(); // debug screen
-            GraphicStartup.menu.resume();
         }
     }
 

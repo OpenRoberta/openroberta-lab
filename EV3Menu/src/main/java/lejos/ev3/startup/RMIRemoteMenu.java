@@ -7,123 +7,122 @@ import lejos.remote.ev3.Menu;
 import lejos.remote.ev3.RMIMenu;
 
 public class RMIRemoteMenu extends UnicastRemoteObject implements RMIMenu {
-	private Menu menu;
-	
-	private static final long serialVersionUID = 9132686914626791288L;
+    private final Menu menu;
 
-	protected RMIRemoteMenu(Menu menu) throws RemoteException {
-		super(0);
-		this.menu = menu;
-	}
+    private static final long serialVersionUID = 9132686914626791288L;
 
-	@Override
-	public void runProgram(String programName) throws RemoteException {
-		menu.runProgram(programName);
-	}
+    protected RMIRemoteMenu(Menu menu) throws RemoteException {
+        super(0);
+        this.menu = menu;
+    }
 
-	@Override
-	public boolean deleteFile(String fileName) throws RemoteException {
-		return menu.deleteFile(fileName);
-	}
+    @Override
+    public void runProgram(String programName) throws RemoteException {
+        this.menu.runProgram(programName);
+    }
 
-	@Override
-	public String[] getProgramNames() throws RemoteException {
-		return menu.getProgramNames();
-	}
+    @Override
+    public boolean deleteFile(String fileName) throws RemoteException {
+        return this.menu.deleteFile(fileName);
+    }
 
-	@Override
-	public void debugProgram(String programName) throws RemoteException {
-		menu.debugProgram(programName);
-	}
+    @Override
+    public String[] getProgramNames() throws RemoteException {
+        return this.menu.getProgramNames();
+    }
 
-	@Override
-	public void runSample(String programName) throws RemoteException {
-		menu.runSample(programName);
-	}
+    @Override
+    public void debugProgram(String programName) throws RemoteException {
+        this.menu.debugProgram(programName);
+    }
 
-	@Override
-	public String[] getSampleNames() throws RemoteException {
-		return menu.getSampleNames();
-	}
-	
-	public long getFileSize(String filename) {
-		return menu.getFileSize(filename);
-	}
+    @Override
+    public void runSample(String programName) throws RemoteException {
+        this.menu.runSample(programName);
+    }
 
-	@Override
-	public boolean uploadFile(String fileName, byte[] contents)
-			throws RemoteException {
-		return menu.uploadFile(fileName, contents);
-	}
+    @Override
+    public String[] getSampleNames() throws RemoteException {
+        return this.menu.getSampleNames();
+    }
 
-	@Override
-	public byte[] fetchFile(String fileName) throws RemoteException {
-		return menu.fetchFile(fileName);
-	}
+    @Override
+    public long getFileSize(String filename) {
+        return this.menu.getFileSize(filename);
+    }
 
-	@Override
-	public String getSetting(String setting) throws RemoteException {
-		return menu.getSetting(setting);
-	}
+    @Override
+    public boolean uploadFile(String fileName, byte[] contents) throws RemoteException {
+        return this.menu.uploadFile(fileName, contents);
+    }
 
-	@Override
-	public void setSetting(String setting, String value)
-			throws RemoteException {
-		menu.setSetting(setting, value);
-	}
+    @Override
+    public byte[] fetchFile(String fileName) throws RemoteException {
+        return this.menu.fetchFile(fileName);
+    }
 
-	@Override
-	public void deleteAllPrograms() throws RemoteException {
-		menu.deleteAllPrograms();
-	}
+    @Override
+    public String getSetting(String setting) throws RemoteException {
+        return this.menu.getSetting(setting);
+    }
 
-	@Override
-	public String getVersion() throws RemoteException {
-		return menu.getVersion();
-	}
+    @Override
+    public void setSetting(String setting, String value) throws RemoteException {
+        this.menu.setSetting(setting, value);
+    }
 
-	@Override
-	public String getMenuVersion() throws RemoteException {
-		return menu.getMenuVersion();
-	}
+    @Override
+    public void deleteAllPrograms() throws RemoteException {
+        this.menu.deleteAllPrograms();
+    }
 
-	@Override
-	public String getName() throws RemoteException {
-		return menu.getName();
-	}
+    @Override
+    public String getVersion() throws RemoteException {
+        return this.menu.getVersion();
+    }
 
-	@Override
-	public void setName(String name) throws RemoteException {
-		menu.setName(name);
-	}
+    @Override
+    public String getMenuVersion() throws RemoteException {
+        return this.menu.getMenuVersion();
+    }
 
-	@Override
-	public void configureWifi(String ssid, String pwd) throws RemoteException {
-		WPASupplicant.writeConfiguration("wpa_supplicant.txt",  "wpa_supplicant.conf", ssid, pwd);	
-	}
+    @Override
+    public String getName() throws RemoteException {
+        return this.menu.getName();
+    }
 
-	@Override
-	public void stopProgram() throws RemoteException {
-		menu.stopProgram();
-	}
+    @Override
+    public void setName(String name) throws RemoteException {
+        this.menu.setName(name);
+    }
 
-	@Override
-	public String getExecutingProgramName() throws RemoteException {
-		return menu.getExecutingProgramName();
-	}
+    @Override
+    public void configureWifi(String ssid, String pwd) throws RemoteException {
+        WPASupplicant.writeConfiguration("wpa_supplicant.txt", "wpa_supplicant.conf", ssid, pwd);
+    }
 
-	@Override
-	public void shutdown() throws RemoteException {
-		menu.shutdown();
-	}
+    @Override
+    public void stopProgram() throws RemoteException {
+        this.menu.stopProgram();
+    }
 
-	@Override
-	public void suspend() throws RemoteException {
-		menu.suspend();		
-	}
+    @Override
+    public String getExecutingProgramName() throws RemoteException {
+        return this.menu.getExecutingProgramName();
+    }
 
-	@Override
-	public void resume() throws RemoteException {
-		menu.resume();	
-	}
+    @Override
+    public void shutdown() throws RemoteException {
+        this.menu.shutdown();
+    }
+
+    @Override
+    public void suspend() throws RemoteException {
+        this.menu.suspend();
+    }
+
+    @Override
+    public void resume() throws RemoteException {
+        this.menu.resume();
+    }
 }
