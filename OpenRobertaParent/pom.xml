@@ -67,7 +67,7 @@
         <repository>
             <id>ORA-releases</id>
             <name>Open Roberta releases repository</name>
-            <url>http://mp-devel.iais.fraunhofer.de:8081/nexus/content/repositories/ORA-releases/</url>
+            <url>http://ok-maven.iais.fraunhofer.de/artifactory/openroberta-snapshot-local</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -78,7 +78,7 @@
         <repository>
             <id>ORA-snapshots</id>
             <name>Open Roberta snapshot repository</name>
-            <url>http://mp-devel.iais.fraunhofer.de:8081/nexus/content/repositories/ORA-snapshots/</url>
+            <url>http://ok-maven.iais.fraunhofer.de/artifactory/openroberta-snapshot-local</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
