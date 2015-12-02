@@ -591,6 +591,7 @@ Blockly.Msg.ORA_USER_CREATE_SUCCESS = "Bruger oprettet";
 Blockly.Msg.ORA_USER_DELETE_ERROR_ID_NOT_FOUND = "Kunne ikke slette bruger.";
 Blockly.Msg.ORA_USER_DELETE_ERROR_NOT_DELETED_IN_DB = "Kunne ikke slette bruger fra database.";
 Blockly.Msg.ORA_USER_DELETE_SUCCESS = "Bruger slettet";
+Blockly.Msg.ORA_USER_EMAIL_ONE_ERROR_USER_NOT_EXISTS_WITH_THIS_EMAIL = "Account not found with this email address!";  // untranslated
 Blockly.Msg.ORA_USER_GET_ALL_SUCCESS = "Brugere åbnet";
 Blockly.Msg.ORA_USER_GET_ONE_ERROR_ID_OR_PASSWORD_WRONG = "Kunne ikke logge ind.";
 Blockly.Msg.ORA_USER_GET_ONE_SUCCESS = "Logget ind";

@@ -591,6 +591,7 @@ Blockly.Msg.ORA_USER_CREATE_SUCCESS = "El usuario ha sido creado con éxito";
 Blockly.Msg.ORA_USER_DELETE_ERROR_ID_NOT_FOUND = "Error al borrar un usuario.";
 Blockly.Msg.ORA_USER_DELETE_ERROR_NOT_DELETED_IN_DB = "Error al borrar un usuario en la base de datos.";
 Blockly.Msg.ORA_USER_DELETE_SUCCESS = "El usuario ha sido borrado con éxito.";
+Blockly.Msg.ORA_USER_EMAIL_ONE_ERROR_USER_NOT_EXISTS_WITH_THIS_EMAIL = "Account not found with this email address!";  // untranslated
 Blockly.Msg.ORA_USER_GET_ALL_SUCCESS = "Usuarios cargados.";
 Blockly.Msg.ORA_USER_GET_ONE_ERROR_ID_OR_PASSWORD_WRONG = "Ha ocurrido un eror al iniciar sesión. ¿Has ingresado el nombre de usuario y la contraseña correctamente?</br> ¡Inténtalo de nuevo!";
 Blockly.Msg.ORA_USER_GET_ONE_SUCCESS = "Acceso conseguido";

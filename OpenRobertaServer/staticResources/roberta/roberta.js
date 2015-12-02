@@ -63,34 +63,6 @@ function logout() {
 }
 
 /**
- * Get user from server
- */
-function getUserFromServer() {
-    USER.getUserFromServer(userState.accountName, function(result) {
-        if (result.rc === "ok") {
-            $("#accountNameU").val(result.userAccountName);
-            $("#userEmailU").val(result.userEmail);
-            $("#userNameU").val(result.userName);
-            $("#change-user-settings").modal('show');
-            console.log(result);
-        }
-
-    });
-}
-
-/**
- * Update user
- */
-function updateUserToServer() {
-    USER.updateUserToServer(userState.accountName, $('#userNameU').val(), $("#userEmailU").val(), function(result) {
-        if (result.rc === "ok") {
-            setRobotState(result);
-        }
-        displayInformation(result, "", result.message);
-    });
-}
-
-/**
  * Update User Password
  */
 function updateUserPasswordOnServer(restPasswordLink) {
@@ -1351,13 +1323,14 @@ function initHeadNavigation() {
             $('#simConfiguration').css('display', 'none');
             $('#tabLogging').click();
         } else if (domId === 'menuLogin') { // Submenu 'Login'
+            LOGIN_FORM.showLoginForm();
             $("#login-user").modal('show');
         } else if (domId === 'menuLogout') { // Submenu 'Login'
             logout();
         } else if (domId === 'menuNewUser') { // Submenu 'Login'
             $("#register-user").modal('show');
         } else if (domId === 'menuChangeUser') { // Submenu 'Login'
-            getUserFromServer();
+            LOGIN_FORM.showUserDataForm();
 
         } else if (domId === 'menuDeleteUser') { // Submenu 'Login'
             $("#delete-user").modal('show');
@@ -1570,16 +1543,11 @@ function initHeadNavigation() {
  */
 function initPopups() {
 
-    $('#saveUserU').onWrap('click', updateUserToServer);
     $('#deleteUser').onWrap('click', deleteUserOnServer);
 
     $('#saveProgram').onWrap('click', saveAsProgramToServer);
     $('#saveConfiguration').onWrap('click', saveAsConfigurationToServer);
     $('#changeUserPassword').onWrap('click', updateUserPasswordOnServer);
-
-    $('#showChangeUserPassword').onWrap('click', function() {
-        $('#change-user-password').modal('show');
-    });
 
     $('#shareProgram').onWrap('click', function() {
         $('#show-about').modal('hide');
@@ -1601,10 +1569,6 @@ function initPopups() {
         $('#delete-user input :not(btn)').val('');
     });
 
-    $('#change-user-settings').onWrap('hidden.bs.modal', function() {
-//        $('#change-user-settings input :not(btn)').val('');
-    });
-
     $('#buttonCancelFirmwareUpdateAndRun').onWrap('click', function() {
         startProgram();
     });
@@ -1621,7 +1585,6 @@ function initPopups() {
 
     if (target[0] === "#forgotPassword") {
         $('#change-user-password').modal('show');
-        alert(target[1]);
     }
 }
 
@@ -1815,9 +1778,6 @@ function translate(jsdata) {
             $(this).html(value);
         } else if (lkey === 'Blockly.Msg.MENU_DELETE_USER') {
             $('#delete-user h3').text(value);
-            $(this).html(value);
-        } else if (lkey === 'Blockly.Msg.MENU_CHANGE') {
-            $('#change-user-settings h3').text(value);
             $(this).html(value);
         } else if (lkey === 'Blockly.Msg.MENU_SAVE_AS') {
             $('#save-program h3').text(value);

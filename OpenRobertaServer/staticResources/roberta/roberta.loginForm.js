@@ -32,6 +32,35 @@ var LOGIN_FORM = {};
     }
 
     /**
+     * Update user
+     */
+    function updateUserToServer() {
+        $formRegister.validate();
+        if ($formRegister.valid()) {
+            USER.updateUserToServer(userState.accountName, $('#registerUserName').val(), $("#registerUserEmail").val(), function(result) {
+                if (result.rc === "ok") {
+                    setRobotState(result);
+                }
+                displayInformation(result, "", result.message);
+            });
+        }
+    }
+
+    /**
+     * Get user from server
+     */
+    function getUserFromServer() {
+        USER.getUserFromServer(userState.accountName, function(result) {
+            if (result.rc === "ok") {
+                $("#registerAccountName").val(result.userAccountName);
+                $("#registerUserEmail").val(result.userEmail);
+                $("#registerUserName").val(result.userName);
+            }
+
+        });
+    }
+
+    /**
      * Login user
      */
     function login() {
@@ -204,6 +233,7 @@ var LOGIN_FORM = {};
         $h3Lost = $('#forgotPasswordLabel');
 
         $('#login-user').onWrap('hidden.bs.modal', function() {
+            LOGIN_FORM.initRegisterForm();
             LOGIN_FORM.resetForm();
             LOGIN_FORM.clearInputs();
         });
@@ -253,9 +283,66 @@ var LOGIN_FORM = {};
             setFocusOnElement($('#lost_email'));
         });
 
+        $('#showChangeUserPassword').onWrap('click', function() {
+            $('#change-user-password').modal('show');
+        });
+
         validateLoginUser();
         validateRegisterUser();
         validateLostPassword();
+    };
+
+    LOGIN_FORM.showUserDataForm = function() {
+        getUserFromServer();
+        $formRegister.unbind('submit');
+        $formRegister.onWrap('submit', function(e) {
+            e.preventDefault();
+            updateUserToServer();
+        });
+        $("#registerUser").text("OK");
+        $("#registerAccountName").prop("disabled", true);
+        $("#userInfoLabel").removeClass('hidden');
+        $("#loginLabel").addClass('hidden');
+        $("#registerInfoLabel").addClass('hidden');
+        $("#forgotPasswordLabel").addClass('hidden');
+        $("#fgRegisterPass").hide()
+        $("#fgRegisterPassConfirm").hide()
+        $("#register_login_btn").hide()
+        $("#showChangeUserPassword").removeClass('hidden');
+        $("#register_lost_btn").hide()
+        $formLogin.hide()
+        $formRegister.show();
+        $('#div-login-forms').css('height', 'auto');
+        $("#login-user").modal('show');
+    };
+
+    LOGIN_FORM.initRegisterForm = function() {
+        $formRegister.unbind('submit');
+        $formRegister.onWrap('submit', function(e) {
+            e.preventDefault();
+            createUserToServer();
+        });
+        $("#registerUser").text(Blockly.Msg["REGISTER_USER"]);
+        $("#registerAccountName").prop("disabled", false);
+        $("#userInfoLabel").addClass('hidden');
+        $("#loginLabel").removeClass('hidden');
+        $("#fgRegisterPass").show()
+        $("#fgRegisterPassConfirm").show()
+        $("#showChangeUserPassword").addClass('hidden');
+        $("#register_login_btn").show()
+        $("#register_lost_btn").show()
+        $formLogin.hide()
+        $formRegister.show();
+        $('#div-login-forms').css('height', 'auto');
+    };
+
+    LOGIN_FORM.showLoginForm = function() {
+        $("#userInfoLabel").addClass('hidden');
+        $("#registerInfoLabel").addClass('hidden');
+        $("#forgotPasswordLabel").addClass('hidden');
+        $formLogin.show()
+        $formLost.hide();
+        $formRegister.hide();
     };
 
     /**
