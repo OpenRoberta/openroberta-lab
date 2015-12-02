@@ -481,29 +481,33 @@ limitations under the License.
         </div>
     </div>
 
-    <!-- Popup delete user -->
-    <div id="delete-user" class="modal fade">
+    <!-- Single Modal -->
+    <div id="single-modal" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title">Delete user</h3>
+                    <h3 class="modal-title">Single Modal Header</h3>
                 </div>
-                <div class="modal-body left-inner-addon">
-                    <label for="pass1D" lkey="Blockly.Msg.POPUP_PASSWORD">Password</label>
-                    <div class="left-inner-addon">
-                        <i class="typcn typcn-lock-closed"></i>
-                        <input type="password" data-role="none" id="pass1D" class="form-control" value="" autofocus />
+                <form id="single-modal-form">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="singleModalInput">Single Input</label>
+                            <div class="input-group">
+                                <span class="input-group-addon typcn input-typcn typcn-pencil"></span>
+                                <input type="text" class="form-control" id="singleModalInput" name="singleModalInput" />
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn" id="deleteUser">OK</button>
-                    <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
-                </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="singleModalOk">OK</button>
+                        <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-
+    
     <!--  Popup save program -->
     <div id="save-program" class="modal fade">
         <div class="modal-dialog">

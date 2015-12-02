@@ -63,18 +63,6 @@ function logout() {
 }
 
 /**
- * Delete user on server
- */
-function deleteUserOnServer() {
-    USER.deleteUserOnServer(userState.accountName, $('#pass1D').val(), function(result) {
-        if (result.rc === "ok") {
-            logout();
-        }
-        displayInformation(result, "MESSAGE_USER_DELETED", result.message, userState.name);
-    });
-}
-
-/**
  * Handle firmware conflict between server and robot
  */
 function handleFirmwareConflict() {
@@ -1305,9 +1293,8 @@ function initHeadNavigation() {
             $("#register-user").modal('show');
         } else if (domId === 'menuChangeUser') { // Submenu 'Login'
             ROBERTA_USER.showUserDataForm();
-
         } else if (domId === 'menuDeleteUser') { // Submenu 'Login'
-            $("#delete-user").modal('show');
+            ROBERTA_USER.showDeleteUserModal();
         }
         return false;
     }, 'head navigation menu item clicked');
@@ -1516,8 +1503,6 @@ function initHeadNavigation() {
  * Initialize popups
  */
 function initPopups() {
-
-    $('#deleteUser').onWrap('click', deleteUserOnServer);
 
     $('#saveProgram').onWrap('click', saveAsProgramToServer);
     $('#saveConfiguration').onWrap('click', saveAsConfigurationToServer);
@@ -1742,15 +1727,6 @@ function translate(jsdata) {
         }
         if (lkey === 'Blockly.Msg.MENU_LOG_IN') {
             $('#loginLabel').text(value);
-            $(this).html(value);
-        } else if (lkey === 'Blockly.Msg.MENU_NEW') {
-            $('#register-user h3').text(value);
-            $(this).html(value);
-        } else if (lkey === 'Blockly.Msg.POPUP_CHANGE_USER_PASSWORD') {
-            $('#register-user h3').text(value);
-            $(this).html(value);
-        } else if (lkey === 'Blockly.Msg.MENU_DELETE_USER') {
-            $('#delete-user h3').text(value);
             $(this).html(value);
         } else if (lkey === 'Blockly.Msg.MENU_SAVE_AS') {
             $('#save-program h3').text(value);

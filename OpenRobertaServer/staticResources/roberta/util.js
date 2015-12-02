@@ -218,4 +218,19 @@ var UTIL = {};
             }
         }, 800);
     };
+
+    UTIL.showSingleModal = function(customize, onSubmit, onHidden, validator) {
+        customize();
+        $('#single-modal-form').onWrap('submit', function(e) {
+            e.preventDefault();
+            onSubmit();
+        });
+        $('#single-modal').onWrap('hidden.bs.modal', function() {
+            $formSingleModal.unbind('submit');
+            onHidden();
+        });
+        $('#single-modal-form').validate(validator);
+        UTIL.setFocusOnElement($("#singleModalInput"));
+        $("#single-modal").modal('show');
+    };
 })($);

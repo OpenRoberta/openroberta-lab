@@ -5,6 +5,7 @@ var ROBERTA_USER = {};
     var $formLost;
     var $formRegister;
     var $formUserPasswordChange;
+    var $formSingleModal;
     var $modalAnimateTime = 300;
     var $msgAnimateTime = 150;
     var $msgShowTime = 2000;
@@ -114,7 +115,7 @@ var ROBERTA_USER = {};
     }
 
     /**
-     * Update user
+     * Update user password
      */
     function userPasswordRecovery() {
         $formLost.validate();
@@ -123,6 +124,21 @@ var ROBERTA_USER = {};
                 if (result.rc === "ok") {
                 }
                 displayInformation(result, "", result.message);
+            });
+        }
+    }
+
+    /**
+     * Delete user on server
+     */
+    function deleteUserOnServer() {
+        $formSingleModal.validate();
+        if ($formSingleModal.valid()) {
+            USER.deleteUserOnServer(userState.accountName, $('#singleModalInput').val(), function(result) {
+                if (result.rc === "ok") {
+                    logout();
+                }
+                displayInformation(result, "MESSAGE_USER_DELETED", result.message, userState.name);
             });
         }
     }
@@ -396,6 +412,7 @@ var ROBERTA_USER = {};
         $formLost = $('#lost-form');
         $formRegister = $('#register-form');
         $formUserPasswordChange = $('#change-user-password-form');
+        $formSingleModal = $('#single-modal-form');
 
         $h3Login = $('#loginLabel');
         $h3Register = $('#registerInfoLabel');
@@ -437,5 +454,33 @@ var ROBERTA_USER = {};
         $formLost.hide();
         $formRegister.hide();
         $("#login-user").modal('show');
+    };
+
+    ROBERTA_USER.showDeleteUserModal = function() {
+        UTIL.showSingleModal(function() {
+            $('#singleModalInput').attr('type', 'password');
+            $('#single-modal h3').text(Blockly.Msg["MENU_DELETE_USER"]);
+            $('#single-modal label').text(Blockly.Msg["POPUP_PASSWORD"]);
+            $('#single-modal span').removeClass('typcn-pencil');
+            $('#single-modal span').addClass('typcn-lock-closed');
+        }, deleteUserOnServer, function() {
+            $('#single-modal span').addClass('typcn-pencil');
+            $('#single-modal span').removeClass('typcn-lock-closed');
+        }, {
+            rules : {
+                singleModalInput : {
+                    required : true
+                }
+            },
+            errorClass : "form-invalid",
+            errorPlacement : function(label, element) {
+                label.insertAfter(element);
+            },
+            messages : {
+                singleModalInput : {
+                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"])
+                }
+            }
+        });
     };
 })(jQuery);
