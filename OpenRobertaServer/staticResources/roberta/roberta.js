@@ -63,31 +63,6 @@ function logout() {
 }
 
 /**
- * Update User Password
- */
-function updateUserPasswordOnServer(restPasswordLink) {
-    if ($('#passNew').val() != $('#passNewRepeat').val()) {
-        displayMessage("MESSAGE_PASSWORD_ERROR", "POPUP", "");
-    } else {
-        if (restPasswordLink) {
-            USER.resetPasswordToServer(restPasswordLink, $("#passNew").val(), function(result) {
-                if (result.rc === "ok") {
-                    $("#change-user-password").modal('hide');
-                }
-                displayInformation(result, "", result.message);
-            });
-        } else {
-            USER.updateUserPasswordToServer(userState.accountName, $('#passOld').val(), $("#passNew").val(), function(result) {
-                if (result.rc === "ok") {
-                    $("#change-user-password").modal('hide');
-                }
-                displayInformation(result, "", result.message);
-            });
-        }
-
-    }
-}
-/**
  * Delete user on server
  */
 function deleteUserOnServer() {
@@ -1323,14 +1298,13 @@ function initHeadNavigation() {
             $('#simConfiguration').css('display', 'none');
             $('#tabLogging').click();
         } else if (domId === 'menuLogin') { // Submenu 'Login'
-            LOGIN_FORM.showLoginForm();
-            $("#login-user").modal('show');
+            ROBERTA_USER.showLoginForm();
         } else if (domId === 'menuLogout') { // Submenu 'Login'
             logout();
         } else if (domId === 'menuNewUser') { // Submenu 'Login'
             $("#register-user").modal('show');
         } else if (domId === 'menuChangeUser') { // Submenu 'Login'
-            LOGIN_FORM.showUserDataForm();
+            ROBERTA_USER.showUserDataForm();
 
         } else if (domId === 'menuDeleteUser') { // Submenu 'Login'
             $("#delete-user").modal('show');
@@ -1547,7 +1521,6 @@ function initPopups() {
 
     $('#saveProgram').onWrap('click', saveAsProgramToServer);
     $('#saveConfiguration').onWrap('click', saveAsConfigurationToServer);
-    $('#changeUserPassword').onWrap('click', updateUserPasswordOnServer);
 
     $('#shareProgram').onWrap('click', function() {
         $('#show-about').modal('hide');
@@ -1579,7 +1552,7 @@ function initPopups() {
         updateFirmware();
     }, 'update firmware of robot');
 
-    LOGIN_FORM.initLoginForm();
+    ROBERTA_USER.initUserForms();
 
     var target = document.location.hash.split("&");
 

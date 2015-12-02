@@ -209,4 +209,13 @@ var UTIL = {};
 
         return undefined;
     };
+
+    UTIL.setFocusOnElement = function($elem) {
+        setTimeout(function() {
+            if ($elem.is(":visible") == true) {
+
+                $elem.focus();
+            }
+        }, 800);
+    };
 })($);

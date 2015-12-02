@@ -1,9 +1,10 @@
-var LOGIN_FORM = {};
+var ROBERTA_USER = {};
 (function($) {
     var $divForms;
     var $formLogin;
     var $formLost;
     var $formRegister;
+    var $formUserPasswordChange;
     var $modalAnimateTime = 300;
     var $msgAnimateTime = 150;
     var $msgShowTime = 2000;
@@ -43,6 +44,35 @@ var LOGIN_FORM = {};
                 }
                 displayInformation(result, "", result.message);
             });
+        }
+    }
+
+    /**
+     * Update User Password
+     */
+    function updateUserPasswordOnServer(restPasswordLink) {
+        $formUserPasswordChange.validate();
+        if ($formUserPasswordChange.valid()) {
+            if ($('#passNew').val() != $('#passNewRepeat').val()) {
+                displayMessage("MESSAGE_PASSWORD_ERROR", "POPUP", "");
+            } else {
+                if (restPasswordLink) {
+                    USER.resetPasswordToServer(restPasswordLink, $("#passNew").val(), function(result) {
+                        if (result.rc === "ok") {
+                            $("#change-user-password").modal('hide');
+                        }
+                        displayInformation(result, "", result.message);
+                    });
+                } else {
+                    USER.updateUserPasswordToServer(userState.accountName, $('#passOld').val(), $("#passNew").val(), function(result) {
+                        if (result.rc === "ok") {
+                            $("#change-user-password").modal('hide');
+                        }
+                        displayInformation(result, "", result.message);
+                    });
+                }
+
+            }
         }
     }
 
@@ -163,6 +193,39 @@ var LOGIN_FORM = {};
         });
     }
 
+    function validateUserPasswordChange() {
+        $formUserPasswordChange.validate({
+            rules : {
+                passOld : "required",
+                passNew : {
+                    required : true,
+                    minlength : 6
+                },
+                passNewRepeat : {
+                    required : true,
+                    equalTo : "#passNew"
+                },
+            },
+            errorClass : "form-invalid",
+            errorPlacement : function(label, element) {
+                label.insertAfter(element);
+            },
+            messages : {
+                passOld : {
+                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"])
+                },
+                passNew : {
+                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"]),
+                    minlength : jQuery.validator.format(Blockly.Msg["PASSWORD_MIN_LENGTH"])
+                },
+                passNewRepeat : {
+                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"]),
+                    equalTo : jQuery.validator.format(Blockly.Msg["SECOND_PASSWORD_EQUAL"])
+                }
+            }
+        });
+    }
+
     function validateLostPassword() {
         $formLost.validate({
             rules : {
@@ -210,32 +273,48 @@ var LOGIN_FORM = {};
         $newHeder.removeClass('hidden');
     }
 
-    function setFocusOnElement($elem) {
-        setTimeout(function() {
-            if ($elem.is(":visible") == true) {
-
-                $elem.focus();
-            }
-        }, 800);
+    /**
+     * Resets the validation of every form in login modal
+     * 
+     */
+    function resetForm() {
+        $formLogin.validate().resetForm();
+        $formLost.validate().resetForm();
+        $formRegister.validate().resetForm();
     }
 
     /**
-     * Initialize the login modal
+     * Clear input fields in login modal
      */
-    LOGIN_FORM.initLoginForm = function() {
-        $divForms = $('#div-login-forms');
-        $formLogin = $('#login-form');
-        $formLost = $('#lost-form');
-        $formRegister = $('#register-form');
+    function clearInputs() {
+        $divForms.find('input').val('');
+    }
 
-        $h3Login = $('#loginLabel');
-        $h3Register = $('#registerInfoLabel');
-        $h3Lost = $('#forgotPasswordLabel');
+    function initRegisterForm() {
+        $formRegister.unbind('submit');
+        $formRegister.onWrap('submit', function(e) {
+            e.preventDefault();
+            createUserToServer();
+        });
+        $("#registerUser").text(Blockly.Msg["REGISTER_USER"]);
+        $("#registerAccountName").prop("disabled", false);
+        $("#userInfoLabel").addClass('hidden');
+        $("#loginLabel").removeClass('hidden');
+        $("#fgRegisterPass").show()
+        $("#fgRegisterPassConfirm").show()
+        $("#showChangeUserPassword").addClass('hidden');
+        $("#register_login_btn").show()
+        $("#register_lost_btn").show()
+        $formLogin.hide()
+        $formRegister.show();
+        $('#div-login-forms').css('height', 'auto');
+    }
 
+    function initLoginModal() {
         $('#login-user').onWrap('hidden.bs.modal', function() {
-            LOGIN_FORM.initRegisterForm();
-            LOGIN_FORM.resetForm();
-            LOGIN_FORM.clearInputs();
+            initRegisterForm();
+            resetForm();
+            clearInputs();
         });
 
         $formLost.onWrap('submit', function(e) {
@@ -255,44 +334,78 @@ var LOGIN_FORM = {};
         $('#login_register_btn').onWrap('click', function() {
             hederChange($h3Login, $h3Register)
             modalAnimate($formLogin, $formRegister)
-            setFocusOnElement($('#registerAccountName'));
+            UTIL.setFocusOnElement($('#registerAccountName'));
         });
         $('#register_login_btn').onWrap('click', function() {
             hederChange($h3Register, $h3Login)
             modalAnimate($formRegister, $formLogin);
-            setFocusOnElement($('#loginAccountName'));
+            UTIL.setFocusOnElement($('#loginAccountName'));
         });
         $('#login_lost_btn').onWrap('click', function() {
             hederChange($h3Login, $h3Lost)
             modalAnimate($formLogin, $formLost);
-            setFocusOnElement($('#lost_email'));
+            UTIL.setFocusOnElement($('#lost_email'));
         });
         $('#lost_login_btn').onWrap('click', function() {
             hederChange($h3Lost, $h3Login);
             modalAnimate($formLost, $formLogin)
-            setFocusOnElement($('#loginAccountName'));
+            UTIL.setFocusOnElement($('#loginAccountName'));
         });
         $('#lost_register_btn').onWrap('click', function() {
             hederChange($h3Lost, $h3Register)
             modalAnimate($formLost, $formRegister);
-            setFocusOnElement($('#registerAccountName'));
+            UTIL.setFocusOnElement($('#registerAccountName'));
         });
         $('#register_lost_btn').onWrap('click', function() {
             hederChange($h3Register, $h3Lost)
             modalAnimate($formRegister, $formLost);
-            setFocusOnElement($('#lost_email'));
+            UTIL.setFocusOnElement($('#lost_email'));
+        });
+
+        validateLoginUser();
+        validateRegisterUser();
+        validateLostPassword();
+    }
+
+    function initUserPasswordChangeModal() {
+        $formUserPasswordChange.onWrap('submit', function(e) {
+            e.preventDefault();
+            updateUserPasswordOnServer();
         });
 
         $('#showChangeUserPassword').onWrap('click', function() {
             $('#change-user-password').modal('show');
         });
 
-        validateLoginUser();
-        validateRegisterUser();
-        validateLostPassword();
+        $('#change-user-password').onWrap('hidden.bs.modal', function() {
+            $formUserPasswordChange.validate().resetForm();
+            $('#passOld').val('');
+            $('#passNew').val('');
+            $('#passNewRepeat').val('');
+        });
+
+        validateUserPasswordChange();
+    }
+
+    /**
+     * Initialize the login modal
+     */
+    ROBERTA_USER.initUserForms = function() {
+        $divForms = $('#div-login-forms');
+        $formLogin = $('#login-form');
+        $formLost = $('#lost-form');
+        $formRegister = $('#register-form');
+        $formUserPasswordChange = $('#change-user-password-form');
+
+        $h3Login = $('#loginLabel');
+        $h3Register = $('#registerInfoLabel');
+        $h3Lost = $('#forgotPasswordLabel');
+
+        initLoginModal();
+        initUserPasswordChangeModal();
     };
 
-    LOGIN_FORM.showUserDataForm = function() {
+    ROBERTA_USER.showUserDataForm = function() {
         getUserFromServer();
         $formRegister.unbind('submit');
         $formRegister.onWrap('submit', function(e) {
@@ -316,49 +429,13 @@ var LOGIN_FORM = {};
         $("#login-user").modal('show');
     };
 
-    LOGIN_FORM.initRegisterForm = function() {
-        $formRegister.unbind('submit');
-        $formRegister.onWrap('submit', function(e) {
-            e.preventDefault();
-            createUserToServer();
-        });
-        $("#registerUser").text(Blockly.Msg["REGISTER_USER"]);
-        $("#registerAccountName").prop("disabled", false);
-        $("#userInfoLabel").addClass('hidden');
-        $("#loginLabel").removeClass('hidden');
-        $("#fgRegisterPass").show()
-        $("#fgRegisterPassConfirm").show()
-        $("#showChangeUserPassword").addClass('hidden');
-        $("#register_login_btn").show()
-        $("#register_lost_btn").show()
-        $formLogin.hide()
-        $formRegister.show();
-        $('#div-login-forms').css('height', 'auto');
-    };
-
-    LOGIN_FORM.showLoginForm = function() {
+    ROBERTA_USER.showLoginForm = function() {
         $("#userInfoLabel").addClass('hidden');
         $("#registerInfoLabel").addClass('hidden');
         $("#forgotPasswordLabel").addClass('hidden');
         $formLogin.show()
         $formLost.hide();
         $formRegister.hide();
-    };
-
-    /**
-     * Resets the validation of every form in login modal
-     * 
-     */
-    LOGIN_FORM.resetForm = function() {
-        $formLogin.validate().resetForm();
-        $formLost.validate().resetForm();
-        $formRegister.validate().resetForm();
-    };
-
-    /**
-     * Clear input fields in login modal
-     */
-    LOGIN_FORM.clearInputs = function() {
-        $divForms.find('input').val('');
+        $("#login-user").modal('show');
     };
 })(jQuery);

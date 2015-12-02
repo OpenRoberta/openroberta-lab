@@ -41,7 +41,7 @@ limitations under the License.
 <script type="text/javascript" src="/roberta/configuration.js"></script>
 <script type="text/javascript" src="/roberta/util.js"></script>
 <script type="text/javascript" src="/roberta/roberta.js"></script>
-<script type="text/javascript" src="/roberta/roberta.loginForm.js"></script>
+<script type="text/javascript" src="/roberta/roberta.user.js"></script>
 <!-- <script type="text/javascript" src="/roberta/roberta.min.js"></script> -->
 
 <!-- <script type="text/javascript" src="/simulation/simulationLogic/robot.js"></script>
@@ -335,7 +335,7 @@ limitations under the License.
                                 <label for="loginAccountName" lkey="Blockly.Msg.POPUP_USERNAME"></label>
                                 <div class="input-group">
                                     <span class="input-group-addon typcn input-typcn typcn-user"></span>
-                                    <input type="text" class="form-control" id="loginAccountName" name="loginAccountName" autofocus/>
+                                    <input type="text" class="form-control" id="loginAccountName" name="loginAccountName" autofocus />
                                 </div>
                             </div>
                             <div class="form-group">
@@ -397,13 +397,17 @@ limitations under the License.
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button id="showChangeUserPassword" type="button" class="btn-link hidden"  lkey="Blockly.Msg.POPUP_CHANGE_PASSWORD">Change Password</button>
-                            <button type="submit" class="btn btn-primary btn-block" id="registerUser" lkey="Blockly.Msg.REGISTER_USER" value="register">Register</button>
+                            <button id="showChangeUserPassword" type="button" class="btn-link hidden"
+                                lkey="Blockly.Msg.POPUP_CHANGE_PASSWORD"
+                            >Change Password</button>
+                            <button type="submit" class="btn btn-primary btn-block" id="registerUser" lkey="Blockly.Msg.REGISTER_USER"
+                                value="register"
+                            >Register</button>
                             <div>
                                 <button id="register_login_btn" type="button" class="btn-link" lkey="Blockly.Msg.MENU_LOG_IN">Log
                                     In</button>
                                 <button id="register_lost_btn" type="button" class="btn-link" lkey="Blockly.Msg.PASSWORD_RECOVERY">Lost
-                                    Password?</button>                             
+                                    Password?</button>
                             </div>
                         </div>
                     </form>
@@ -435,36 +439,44 @@ limitations under the License.
         </div>
     </div>
 
-   
+
     <!-- Popup change password -->
     <div id="change-user-password" class="modal fade" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h3 class="modal-title">Change User Password</h3>
                 </div>
-                <div class="modal-body left-inner-addon">
-                    <label for="passOld" lkey="Blockly.Msg.POPUP_OLD_PASSWORD">Old Password</label>
-                    <div class="left-inner-addon">
-                        <i class="typcn typcn-lock-closed"></i>
-                        <input type="password" data-role="none" id="passOld" class="form-control" value="" autofocus />
+                <form id="change-user-password-form">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="passOld" lkey="Blockly.Msg.POPUP_OLD_PASSWORD">Old Password</label>
+                            <div class="input-group">
+                                <span class="input-group-addon typcn input-typcn typcn-lock-closed"></span>
+                                <input type="password" class="form-control" id="passOld" name="passOld" autofocus />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="passNew" lkey="Blockly.Msg.POPUP_NEW_PASSWORD">New Password</label>
+                            <div class="input-group">
+                                <span class="input-group-addon typcn input-typcn typcn-lock-closed"></span>
+                                <input type="password" class="form-control" id="passNew" name="passNew" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="passNewRepeat" lkey="Blockly.Msg.POPUP_CHANGE_PASSWORD">Repeat Password</label>
+                            <div class="input-group">
+                                <span class="input-group-addon typcn input-typcn typcn-lock-closed"></span>
+                                <input type="password" class="form-control" id="passNewRepeat" name="passNewRepeat" />
+                            </div>
+                        </div>
                     </div>
-                    <label for="passNew" lkey="Blockly.Msg.POPUP_NEW_PASSWORD">New Password</label>
-                    <div class="left-inner-addon">
-                        <i class="typcn typcn-lock-closed"></i>
-                        <input type="password" data-role="none" id="passNew" class="form-control" value="" />
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="changeUserPassword">OK</button>
+                        <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
                     </div>
-                    <label for="passNewRepeat" lkey="Blockly.Msg.POPUP_CHANGE_PASSWORD">Repeat Password</label>
-                    <div class="left-inner-addon">
-                        <i class="typcn typcn-lock-closed"></i>
-                        <input type="password" data-role="none" id="passNewRepeat" class="form-control" value="" />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn" id="changeUserPassword">OK</button>
-                    <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
-                </div>
+                </form>
             </div>
         </div>
     </div>
