@@ -226,7 +226,9 @@ var UTIL = {};
             onSubmit();
         });
         $('#single-modal').onWrap('hidden.bs.modal', function() {
-            $formSingleModal.unbind('submit');
+            $('#single-modal-form').unbind('submit');
+            $('#singleModalInput').val('');
+            $('#single-modal-form').validate().resetForm();
             onHidden();
         });
         $('#single-modal-form').validate(validator);

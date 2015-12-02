@@ -790,6 +790,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "poistaa välilyönnit oikealta puolelta"
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Palauttaa kopion tekstistä siten, että välilyönnit on poistettu yhdestä tai molemmista päistä.";
 Blockly.Msg.TIMER_GETSAMPLE_TOOLTIP = "Gets the current reading from the timer.";
 Blockly.Msg.TIMER_RESET_TOOLTIP = "Resets the timer.";
+Blockly.Msg.TOKEN_LENGTH = "Token length is 8 characters!";  // untranslated
 Blockly.Msg.TOOLBOX_ACTION = "Toiminta";
 Blockly.Msg.TOOLBOX_COLOUR = "Värit";
 Blockly.Msg.TOOLBOX_COMMUNICATION = "Viestintä";

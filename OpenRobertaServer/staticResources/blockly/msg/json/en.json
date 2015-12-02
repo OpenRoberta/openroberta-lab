@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2015-12-02 09:31:49.003000",
+		"lastupdated": "2015-12-02 15:05:25.840000",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -847,6 +847,7 @@
 	"WAIT_FOR_CONNECTION": "wait for connection",
 	"FIELD_REQUIRED": "This field cannot be empty!",
 	"PASSWORD_MIN_LENGTH": "Password min length is 6!",
+	"TOKEN_LENGTH": "Token length is 8 characters!",
 	"SECOND_PASSWORD_EQUAL": "The two passwords must be equal!",
 	"VALID_EMAIL_ADDRESS": "Please enter valid email address!",
 	"EMAIL_SEND": "Send!!!",

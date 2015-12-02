@@ -790,6 +790,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "fjern mellemrum fra højre side af";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Returner en kopi af teksten med mellemrum fjernet fra den ene eller begge sider.";
 Blockly.Msg.TIMER_GETSAMPLE_TOOLTIP = "Aflæser uret.";
 Blockly.Msg.TIMER_RESET_TOOLTIP = "Nulstiller uret.";
+Blockly.Msg.TOKEN_LENGTH = "Token length is 8 characters!";  // untranslated
 Blockly.Msg.TOOLBOX_ACTION = "Handling";
 Blockly.Msg.TOOLBOX_COLOUR = "Farver";
 Blockly.Msg.TOOLBOX_COMMUNICATION = "Beskeder";

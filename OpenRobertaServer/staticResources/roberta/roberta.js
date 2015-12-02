@@ -254,24 +254,6 @@ function setConfiguration(name) {
 }
 
 /**
- * Set token
- * 
- * @param {token}
- *            Token value to be set
- */
-function setToken(token) {
-    var resToken = token.toUpperCase();
-    ROBOT.setToken(resToken, function(result) {
-        if (result.rc === "ok") {
-            userState.token = resToken;
-        }
-        displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, userState.robotName);
-        setRobotState(result);
-        handleFirmwareConflict();
-    });
-}
-
-/**
  * Handle result of server call
  * 
  * @param {result}
@@ -1261,7 +1243,7 @@ function initHeadNavigation() {
         } else if (domId === 'menuConnect') { // Submenu 'Robot'
             $('#buttonCancelFirmwareUpdate').css('display', 'inline');
             $('#buttonCancelFirmwareUpdateAndRun').css('display', 'none');
-            $("#set-token").modal("show");
+            ROBERTA_ROBOT.showSetTokenModal();
         } else if (domId === 'menuRobotInfo') { // Submenu 'Robot'
             showRobotInfo();
         } else if (domId === 'menuGeneral') { // Submenu 'Help'
@@ -1511,10 +1493,6 @@ function initPopups() {
         $('#show-about').modal('hide');
     });
 
-    $('#setToken').onWrap('click', function() {
-        setToken($('#tokenValue').val());
-    }, 'set token');
-
     $('.cancelPopup').onWrap('click', function() {
         $('.ui-dialog-titlebar-close').click();
     });
@@ -1538,6 +1516,7 @@ function initPopups() {
     }, 'update firmware of robot');
 
     ROBERTA_USER.initUserForms();
+    ROBERTA_ROBOT.initRobotForms();
 
     var target = document.location.hash.split("&");
 
@@ -1731,9 +1710,6 @@ function translate(jsdata) {
         } else if (lkey === 'Blockly.Msg.MENU_SAVE_AS') {
             $('#save-program h3').text(value);
             $('#save-configuration h3').text(value);
-            $(this).html(value);
-        } else if (lkey === 'Blockly.Msg.MENU_CONNECT') {
-            $('#set-token h3').text(value);
             $(this).html(value);
         } else if (lkey === 'Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE') {
             $('#hideStartupMessage').text(value);

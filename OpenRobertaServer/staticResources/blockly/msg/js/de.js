@@ -790,6 +790,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "entferne Leerzeichen von Ende Seite von"
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Entfernt Leerzeichen vom Anfang und / oder Ende eines Textes.";
 Blockly.Msg.TIMER_GETSAMPLE_TOOLTIP = "Gibt den aktuellen Wert des Zeitgebers zurück.";
 Blockly.Msg.TIMER_RESET_TOOLTIP = "Setzt den Zeitgeber zurück.";
+Blockly.Msg.TOKEN_LENGTH = "Token length is 8 characters!";  // untranslated
 Blockly.Msg.TOOLBOX_ACTION = "Aktion";
 Blockly.Msg.TOOLBOX_COLOUR = "Farben";
 Blockly.Msg.TOOLBOX_COMMUNICATION = "Nachrichten";

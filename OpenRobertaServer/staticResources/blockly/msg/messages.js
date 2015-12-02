@@ -1590,6 +1590,7 @@ Blockly.Msg.WAIT_FOR_CONNECTION = 'wait for connection';
 
 Blockly.Msg.FIELD_REQUIRED = 'This field cannot be empty!';
 Blockly.Msg.PASSWORD_MIN_LENGTH = 'Password min length is 6!';
+Blockly.Msg.TOKEN_LENGTH = 'Token length is 8 characters!';
 Blockly.Msg.SECOND_PASSWORD_EQUAL = 'The two passwords must be equal!';
 Blockly.Msg.VALID_EMAIL_ADDRESS = 'Please enter valid email address!';
 Blockly.Msg.EMAIL_SEND = 'Send!!!';

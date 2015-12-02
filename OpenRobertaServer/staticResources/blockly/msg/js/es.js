@@ -790,6 +790,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "quitar espacios finales de";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Devuelve una copia del texto sin los espacios de uno o ambos extremos.";
 Blockly.Msg.TIMER_GETSAMPLE_TOOLTIP = "Obtiene la lectura actual del temporizador";
 Blockly.Msg.TIMER_RESET_TOOLTIP = "Reinicia el temporizador";
+Blockly.Msg.TOKEN_LENGTH = "Token length is 8 characters!";  // untranslated
 Blockly.Msg.TOOLBOX_ACTION = "Acción";
 Blockly.Msg.TOOLBOX_COLOUR = "Colores";
 Blockly.Msg.TOOLBOX_COMMUNICATION = "Mensajes";

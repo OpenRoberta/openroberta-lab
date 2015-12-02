@@ -790,6 +790,7 @@ Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = "trim spaces from right side of";
 Blockly.Msg.TEXT_TRIM_TOOLTIP = "Return a copy of the text with spaces removed from one or both ends.";
 Blockly.Msg.TIMER_GETSAMPLE_TOOLTIP = "Gets the current reading from the timer.";
 Blockly.Msg.TIMER_RESET_TOOLTIP = "Resets the timer.";
+Blockly.Msg.TOKEN_LENGTH = "Token length is 8 characters!";
 Blockly.Msg.TOOLBOX_ACTION = "Action";
 Blockly.Msg.TOOLBOX_COLOUR = "Colours";
 Blockly.Msg.TOOLBOX_COMMUNICATION = "Messages";
