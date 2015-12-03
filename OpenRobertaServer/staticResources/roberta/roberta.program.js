@@ -55,7 +55,7 @@ var ROBERTA_PROGRAM = {};
         saveToServer();
     };
 
-    ROBERTA_PROGRAM.showSaveAsProgramModal = function() {
+    ROBERTA_PROGRAM.showSaveAsModal = function() {
         $.validator.addMethod("regex", function(value, element, regexp) {
             value = value.trim();
             return value.match(regexp);

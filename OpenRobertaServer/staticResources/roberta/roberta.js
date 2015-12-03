@@ -267,49 +267,6 @@ function response(result) {
 }
 
 /**
- * Save configuration with new name to server
- */
-function saveAsConfigurationToServer() {
-    var confName = $('#configurationNameSave').val();
-    if (!confName.match(/^[a-zA-Z][a-zA-Z0-9]*$/)) {
-        displayMessage("MESSAGE_INVALID_NAME", "POPUP", "");
-        return;
-    }
-    setConfiguration(confName);
-    $('#menuSaveConfig').parent().removeClass('login');
-    $('#menuSaveConfig').parent().removeClass('disabled');
-    UTIL.getBricklyFrame('#bricklyFrame').Blockly.getMainWorkspace().saveButton.enable();
-    userState.configurationSaved = true;
-    $('.modal').modal('hide'); // close all opened popups
-    var xmlText = UTIL.getBricklyFrame('#bricklyFrame').getXmlOfConfiguration(userState.configuration);
-    LOG.info('save brick configuration ' + userState.configuration);
-    CONFIGURATION.saveAsConfigurationToServer(userState.configuration, xmlText, function(result) {
-        if (result.rc === 'ok') {
-            userState.configurationModified = false;
-        }
-        displayInformation(result, "MESSAGE_EDIT_SAVE_CONFIGURATION_AS", result.message, userState.configuration);
-    });
-}
-
-/**
- * Save configuration to server
- */
-function saveConfigurationToServer() {
-    if (userState.configuration) {
-        userState.configurationSaved = true;
-        $('.modal').modal('hide'); // close all opened popups
-        var xmlText = UTIL.getBricklyFrame('#bricklyFrame').getXmlOfConfiguration(userState.configuration);
-        LOG.info('save brick configuration ' + userState.configuration);
-        CONFIGURATION.saveConfigurationToServer(userState.configuration, xmlText, function(result) {
-            if (result.rc === 'ok') {
-                userState.configurationModified = false;
-            }
-            displayInformation(result, "MESSAGE_EDIT_SAVE_CONFIGURATION", result.message, userState.configuration);
-        });
-    }
-}
-
-/**
  * show the generated source code of program
  */
 function showSourceProgram() {
@@ -1162,7 +1119,7 @@ function initHeadNavigation() {
         } else if (domId === 'menuSaveProg') { //  Submenu 'Program'
             ROBERTA_PROGRAM.save();
         } else if (domId === 'menuSaveAsProg') { //  Submenu 'Program'
-            ROBERTA_PROGRAM.showSaveAsProgramModal();
+            ROBERTA_PROGRAM.showSaveAsModal();
         } else if (domId === 'menuShowCode') { //  Submenu 'Program'
             showCode();
         } else if (domId === 'menuToolboxBeginner') { // Submenu 'Program'
@@ -1183,9 +1140,9 @@ function initHeadNavigation() {
             $('#simConfiguration').css('display', 'none');
             $('#tabConfigurationListing').click();
         } else if (domId === 'menuSaveConfig') { //  Submenu 'Configuration'
-            saveConfigurationToServer();
+            ROBERTA_BRICK_CONFIGURATION.save();
         } else if (domId === 'menuSaveAsConfig') { //  Submenu 'Configuration'
-            $("#save-configuration").modal("show");
+            ROBERTA_BRICK_CONFIGURATION.showSaveAsModal();
         } else if (domId === 'menuEv3') { // Submenu 'Robot'
             if (newProgram()) {
                 switchRobot('ev3');
@@ -1439,9 +1396,6 @@ function initHeadNavigation() {
  * Initialize popups
  */
 function initPopups() {
-
-    $('#saveConfiguration').onWrap('click', saveAsConfigurationToServer);
-
     $('#shareProgram').onWrap('click', function() {
         $('#show-about').modal('hide');
     });
@@ -1471,6 +1425,7 @@ function initPopups() {
     ROBERTA_USER.initUserForms();
     ROBERTA_ROBOT.initRobotForms();
     ROBERTA_PROGRAM.initProgramForms();
+    ROBERTA_BRICK_CONFIGURATION.initBrickConfigurationForms();
 
     var target = document.location.hash.split("&");
 
@@ -1662,7 +1617,6 @@ function translate(jsdata) {
             $('#loginLabel').text(value);
             $(this).html(value);
         } else if (lkey === 'Blockly.Msg.MENU_SAVE_AS') {
-            $('#save-configuration h3').text(value);
             $(this).html(value);
         } else if (lkey === 'Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE') {
             $('#hideStartupMessage').text(value);
