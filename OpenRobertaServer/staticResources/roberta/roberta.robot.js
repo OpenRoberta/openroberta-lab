@@ -11,8 +11,7 @@ var ROBERTA_ROBOT = {};
     function setToken(token) {
         $formSingleModal.validate();
         if ($formSingleModal.valid()) {
-            var resToken = token.toUpperCase();
-            ROBOT.setToken(resToken, function(result) {
+            ROBOT.setToken(token, function(result) {
                 if (result.rc === "ok") {
                     userState.token = resToken;
                 }

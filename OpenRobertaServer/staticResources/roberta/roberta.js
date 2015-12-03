@@ -267,32 +267,6 @@ function response(result) {
 }
 
 /**
- * Save program with new name to server
- */
-function saveAsProgramToServer() {
-    var progName = $('#programNameSave').val().trim();
-    if (!progName.match(/^[a-zA-Z][a-zA-Z0-9]*$/)) {
-        displayMessage("MESSAGE_INVALID_NAME", "POPUP", "");
-        return;
-    }
-    var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-    var xmlText = Blockly.Xml.domToText(xml);
-    LOG.info('saveAs program ' + userState.program + ' login: ' + userState.id);
-    PROGRAM.saveAsProgramToServer(progName, userState.programTimestamp, xmlText, function(result) {
-        response(result);
-        if (result.rc === 'ok') {
-            setProgram(progName);
-            $('#menuSaveProg').parent().removeClass('disabled');
-            Blockly.getMainWorkspace().saveButton.enable();
-            userState.programSaved = true;
-            userState.programModified = false;
-            userState.programTimestamp = result.lastChanged;
-            displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM_AS", result.message, userState.program);
-        }
-    });
-}
-
-/**
  * Save configuration with new name to server
  */
 function saveAsConfigurationToServer() {
@@ -1188,7 +1162,7 @@ function initHeadNavigation() {
         } else if (domId === 'menuSaveProg') { //  Submenu 'Program'
             ROBERTA_PROGRAM.save();
         } else if (domId === 'menuSaveAsProg') { //  Submenu 'Program'
-            $("#save-program").modal('show');
+            ROBERTA_PROGRAM.showSaveAsProgramModal();
         } else if (domId === 'menuShowCode') { //  Submenu 'Program'
             showCode();
         } else if (domId === 'menuToolboxBeginner') { // Submenu 'Program'
@@ -1466,7 +1440,6 @@ function initHeadNavigation() {
  */
 function initPopups() {
 
-    $('#saveProgram').onWrap('click', saveAsProgramToServer);
     $('#saveConfiguration').onWrap('click', saveAsConfigurationToServer);
 
     $('#shareProgram').onWrap('click', function() {
@@ -1689,7 +1662,6 @@ function translate(jsdata) {
             $('#loginLabel').text(value);
             $(this).html(value);
         } else if (lkey === 'Blockly.Msg.MENU_SAVE_AS') {
-            $('#save-program h3').text(value);
             $('#save-configuration h3').text(value);
             $(this).html(value);
         } else if (lkey === 'Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE') {

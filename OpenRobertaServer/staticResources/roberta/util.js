@@ -213,7 +213,6 @@ var UTIL = {};
     UTIL.setFocusOnElement = function($elem) {
         setTimeout(function() {
             if ($elem.is(":visible") == true) {
-
                 $elem.focus();
             }
         }, 800);
@@ -231,6 +230,7 @@ var UTIL = {};
             $('#single-modal-form').validate().resetForm();
             onHidden();
         });
+        $('#single-modal-form').removeData('validator');
         $('#single-modal-form').validate(validator);
         UTIL.setFocusOnElement($("#singleModalInput"));
         $("#single-modal").modal('show');
