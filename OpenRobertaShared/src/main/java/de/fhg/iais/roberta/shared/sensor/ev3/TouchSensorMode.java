@@ -8,16 +8,22 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * Modes in which the sensor can operate.
  */
 public enum TouchSensorMode {
-    TOUCH( "touch" );
+    TOUCH( "isPressed", "touch" );
 
+    private final String halJavaMethodName;
     private final String[] values;
 
-    private TouchSensorMode(String... values) {
+    private TouchSensorMode(String halJavaMethodName, String... values) {
+        this.halJavaMethodName = halJavaMethodName;
         this.values = values;
     }
 
     public String getLejosModeName() {
         return this.values[0];
+    }
+
+    public String getHalJavaMethod() {
+        return this.halJavaMethodName;
     }
 
     /**

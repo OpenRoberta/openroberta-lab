@@ -92,9 +92,7 @@ public class AstToLejosJavaVisitorTest {
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
             + MAIN_METHOD
-            + "    public void run() {\n"
-            + "        hal.startLoggingThread();"
-            // + "        hal = new Hal(brickConfiguration, usedSensors);\n"
+            + "    public void run() throwsException {\n"
             + "        hal.drawText(\"Hallo\", 0, 3);\n"
             + SUFFIX
             + "    }\n"
@@ -112,8 +110,7 @@ public class AstToLejosJavaVisitorTest {
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
             + MAIN_METHOD
-            + "    public void run() {\n"
-            + "        hal.startLoggingThread();"
+            + "    public void run() throwsException {\n"
             + "        for ( float k0 = 0; k0 < 10; k0+=1 ) {\n"
             + "            hal.drawText(\"Hallo\", 0, 3);\n"
             + "        }\n"
@@ -131,11 +128,9 @@ public class AstToLejosJavaVisitorTest {
             + IMPORTS
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
-            + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(S1, EV3Sensors.EV3_TOUCH_SENSOR, TOUCH), new UsedSensor(S3, EV3Sensors.EV3_COLOR_SENSOR, COLOUR)));\n"
+            + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, EV3Sensors.EV3_TOUCH_SENSOR, TouchSensorMode.TOUCH), new UsedSensor(SensorPort.S3, EV3Sensors.EV3_COLOR_SENSOR, ColorSensorMode.COLOUR)));\n"
             + MAIN_METHOD
-            + "    public void run() {\n"
-            + "        hal.startLoggingThread();"
-            //   + "        hal = new Hal(brickConfiguration, usedSensors);\n"
+            + "    public void run() throwsException {\n"
             + "        if ( hal.isPressed(SensorPort.S1) ) {\n"
             + "            hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
             + "        } else if ( Pickcolor.RED == hal.getColorSensorColour(SensorPort.S3) ) {\n"
@@ -165,11 +160,9 @@ public class AstToLejosJavaVisitorTest {
             + IMPORTS
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
-            + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(S1, EV3Sensors.EV3_TOUCH_SENSOR, TOUCH), new UsedSensor(S4, EV3Sensors.EV3_ULTRASONIC_SENSOR, DISTANCE)));\n"
+            + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, EV3Sensors.EV3_TOUCH_SENSOR, TouchSensorMode.TOUCH), new UsedSensor(SensorPort.S4, EV3Sensors.EV3_ULTRASONIC_SENSOR, UltrasonicSensorMode.DISTANCE)));\n"
             + MAIN_METHOD
-            + "    public void run() {\n"
-            + "        hal.startLoggingThread();"
-            //          + "        hal = new Hal(brickConfiguration, usedSensors);\n"
+            + "    public void run() throwsException {\n"
             + "        if ( hal.isPressed(SensorPort.S1) ) {\n"
             + "            hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
             + "        } else {\n"
@@ -199,12 +192,10 @@ public class AstToLejosJavaVisitorTest {
             + IMPORTS
             + MAIN_CLASS
             + BRICK_CONFIGURATION_DECL
-            + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(S4, EV3Sensors.EV3_IR_SENSOR, DISTANCE), new UsedSensor(S4, EV3Sensors.EV3_ULTRASONIC_SENSOR, DISTANCE), new UsedSensor(S2, EV3Sensors.EV3_GYRO_SENSOR, RESET)"
-            + ", new UsedSensor(S1, EV3Sensors.EV3_TOUCH_SENSOR, TOUCH)));\n"
+            + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S4, EV3Sensors.EV3_IR_SENSOR, InfraredSensorMode.DISTANCE), new UsedSensor(SensorPort.S4, EV3Sensors.EV3_ULTRASONIC_SENSOR, UltrasonicSensorMode.DISTANCE), new UsedSensor(SensorPort.S2, EV3Sensors.EV3_GYRO_SENSOR, GyroSensorMode.RESET)"
+            + ", new UsedSensor(SensorPort.S1, EV3Sensors.EV3_TOUCH_SENSOR, TouchSensorMode.TOUCH)));\n"
             + MAIN_METHOD
-            + "    public void run() {\n"
-            + "        hal.startLoggingThread();"
-            //       + "        hal = new Hal(brickConfiguration, usedSensors);\n"
+            + "    public void run() throwsException {\n"
             + "        if ( 5 < hal.getRegulatedMotorSpeed(ActorPort.B) ) {\n\n\n"
             + "            hal.turnOnRegulatedMotor(ActorPort.B,30);\n"
             + "            hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);\n"
@@ -238,9 +229,8 @@ public class AstToLejosJavaVisitorTest {
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
             + MAIN_METHOD
-            + "    public void run() {\n"
-            + "        hal.startLoggingThread();"
-            //        + "        hal = new Hal(brickConfiguration, usedSensors);\n"
+            + "    public void run() throwsException {\n"
+
             + "        hal.turnOnRegulatedMotor(ActorPort.B,0);"
             + "        hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,0);"
             + "        hal.rotateDirectionRegulated(ActorPort.A,ActorPort.B,false,TurnDirection.RIGHT,0);"
@@ -262,9 +252,8 @@ public class AstToLejosJavaVisitorTest {
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
             + MAIN_METHOD
-            + "    public void run() {\n"
-            + "        hal.startLoggingThread();"
-            //       + "        hal = new Hal(brickConfiguration, usedSensors);\n"
+            + "    public void run() throwsException {\n"
+
             + "        hal.drawText(\"Hallo\", 0, 0);\n"
             + "        hal.playTone(300, 3000);\n"
             + SUFFIX
@@ -282,9 +271,8 @@ public class AstToLejosJavaVisitorTest {
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
             + MAIN_METHOD
-            + "    public void run() {\n"
-            + "        hal.startLoggingThread();"
-            //    + "        hal = new Hal(brickConfiguration, usedSensors);\n"
+            + "    public void run() throwsException {\n"
+
             + "        hal.turnOnRegulatedMotor(ActorPort.B,30);\n"
             + "        hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);\n"
             + SUFFIX
@@ -306,9 +294,8 @@ public class AstToLejosJavaVisitorTest {
             + "        float item = 10;\n"
             + "        String item2 = \"TTTT\";\n"
             + "        boolean item3 = true;\n"
-            + "    public void run() {\n"
-            + "        hal.startLoggingThread();"
-            //   + "        hal = new Hal(brickConfiguration, usedSensors);\n"
+            + "    public void run() throwsException {\n"
+
             + "        hal.drawText(String.valueOf(item), 0, 0);\n"
             + "        hal.drawText(String.valueOf(item2), 0, 0);\n"
             + "        hal.drawText(String.valueOf(item3), 0, 0);\n"
@@ -330,9 +317,8 @@ public class AstToLejosJavaVisitorTest {
             + USED_SENSORS_DECL
             + MAIN_METHOD
             + "        float variablenName = 0;\n"
-            + "    public void run() {\n"
-            + "        hal.startLoggingThread();"
-            //   + "        hal = new Hal(brickConfiguration, usedSensors);\n"
+            + "    public void run() throwsException {\n"
+
             + "hal.regulatedDrive(ActorPort.A,ActorPort.B,false,DriveDirection.FOREWARD,50);"
             + "hal.drawPicture(ShowPicture.OLDGLASSES,0,0);"
             + SUFFIX
@@ -359,9 +345,8 @@ public class AstToLejosJavaVisitorTest {
             + "        ArrayList<Boolean>item6=BlocklyMethods.createListWithBoolean(true,false);"
             + "        ArrayList<Pickcolor>item7=BlocklyMethods.createListWithColour(Pickcolor.RED,Pickcolor.BLACK,Pickcolor.NONE);"
             + "        Pickcoloritem8=Pickcolor.NONE;"
-            + "    public void run() {\n"
-            + "        hal.startLoggingThread();"
-            //  + "        hal = new Hal(brickConfiguration, usedSensors);\n"
+            + "    public void run() throwsException {\n"
+
             + SUFFIX
             + "    }\n"
             + "}\n";
@@ -380,9 +365,7 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_METHOD
             + "    floatvariablenName=0;\n"
             + "    floatvariablenName2=0;\n"
-            + "    public void run() {\n"
-            + "        hal.startLoggingThread();"
-            // + "        hal = new Hal(brickConfiguration, usedSensors);\n"
+            + "    public void run() throwsException {\n"
             + "        hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);"
             + "        macheEtwas(10, 10);"
             + "    }\n\n"
@@ -403,9 +386,7 @@ public class AstToLejosJavaVisitorTest {
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
             + MAIN_METHOD
-            + "    public void run() {\n"
-            + "        hal.startLoggingThread();"
-            // + "        hal = new Hal(brickConfiguration, usedSensors);\n"
+            + "    public void run() throwsException {\n"
             + "        test();"
             + "    }\n\n"
             + "    private void test() {\n"
@@ -425,9 +406,7 @@ public class AstToLejosJavaVisitorTest {
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
             + MAIN_METHOD
-            + "    public void run() {\n"
-            + "        hal.startLoggingThread();"
-            // + "        hal = new Hal(brickConfiguration, usedSensors);\n"
+            + "    public void run() throwsException {\n"
             + "        test(true);"
             + "    }\n\n"
             + "    private void test(boolean x) {\n"
@@ -450,9 +429,7 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_METHOD
             + "    float variablenName=0;\n"
             + "    boolean variablenName2=true;\n"
-            + "    public void run() {\n"
-            + "        hal.startLoggingThread();"
-            //  + "        hal = new Hal(brickConfiguration, usedSensors);\n"
+            + "    public void run() throwsException {\n"
             + "        test1(0, 0);"
             + "        test2();"
             + "    }\n\n"
@@ -478,9 +455,7 @@ public class AstToLejosJavaVisitorTest {
             + USED_SENSORS_DECL
             + MAIN_METHOD
             + "    ArrayList<String> variablenName=BlocklyMethods.createListWithString(\"a\", \"b\", \"c\");\n"
-            + "    public void run() {\n"
-            + "        hal.startLoggingThread();"
-            // + "        hal = new Hal(brickConfiguration, usedSensors);\n"
+            + "    public void run() throwsException {\n"
             + "        hal.drawText(String.valueOf(test(0, variablenName)), 0, 0);"
             + "    }\n\n"
             + "    private float test(float x, ArrayList<String> x2) {\n"
@@ -502,9 +477,7 @@ public class AstToLejosJavaVisitorTest {
             + USED_SENSORS_DECL
             + MAIN_METHOD
             + "    ArrayList<String> variablenName=BlocklyMethods.createListWithString(\"a\", \"b\", \"c\");\n"
-            + "    public void run() {\n"
-            + "        hal.startLoggingThread();"
-            // + "        hal = new Hal(brickConfiguration, usedSensors);\n"
+            + "    public void run() throwsException {\n"
             + "        hal.drawText(String.valueOf(test()), 0, 0);"
             + "    }\n\n"
             + "    private Pickcolor test() {\n"
@@ -526,9 +499,7 @@ public class AstToLejosJavaVisitorTest {
             + USED_SENSORS_DECL
             + MAIN_METHOD
             + "    ArrayList<String> variablenName=BlocklyMethods.createListWithString(\"a\", \"b\", \"c\");\n"
-            + "    public void run() {\n"
-            + "        hal.startLoggingThread();"
-            //  + "        hal = new Hal(brickConfiguration, usedSensors);\n"
+            + "    public void run() throwsException {\n"
             + "        hal.drawText(String.valueOf(test()), 0, 0);"
             + "    }\n\n"
             + "    private Pickcolor test() {\n"
@@ -551,8 +522,7 @@ public class AstToLejosJavaVisitorTest {
             + USED_SENSORS_DECL
             + MAIN_METHOD
             + "    String message=\"exit\";\n"
-            + "    public void run() {\n"
-            + "        hal.startLoggingThread();"
+            + "    public void run() throwsException {\n"
             + "        if (message.equals(\"exit\")) {\n"
             + "            hal.drawText(\"done\", 0, 0);"
             + "        }\n"

@@ -8,16 +8,22 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * Modes in which the sensor can operate.
  */
 public enum UltrasonicSensorMode {
-    DISTANCE( "Distance" ), PRESENCE( "Listen" );
+    DISTANCE( "getUltraSonicSensorDistance", "Distance" ), PRESENCE( "getUltraSonicSensorPresence", "Listen" );
 
+    private final String halJavaMethodName;
     private final String[] values;
 
     private UltrasonicSensorMode(String... values) {
+        this.halJavaMethodName = this.halJavaMethodName;
         this.values = values;
     }
 
     public String getLejosModeName() {
         return this.values[0];
+    }
+
+    public String getHalJavaMethod() {
+        return this.halJavaMethodName;
     }
 
     /**
