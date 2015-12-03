@@ -3,6 +3,8 @@ package de.fhg.iais.roberta.runtime.ev3;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Map.Entry;
@@ -31,6 +33,7 @@ import de.fhg.iais.roberta.shared.sensor.ev3.ColorSensorMode;
 import de.fhg.iais.roberta.shared.sensor.ev3.GyroSensorMode;
 import de.fhg.iais.roberta.shared.sensor.ev3.InfraredSensorMode;
 import de.fhg.iais.roberta.shared.sensor.ev3.MotorTachoMode;
+import de.fhg.iais.roberta.shared.sensor.ev3.SensorMode;
 import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.shared.sensor.ev3.UltrasonicSensorMode;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -183,15 +186,14 @@ public class Hal {
      */
     public void logToServer() {
         while ( !Thread.currentThread().isInterrupted() ) {
-            System.out.println(this.ws.getReadyState());
+            //System.out.println(this.ws.getReadyState());
             if ( this.ws.getReadyState() == READYSTATE.OPEN ) {
-                this.ws.send(new JSONObject().put("token", "abcdefgh").put("testkey", "testvalue").toString());
-                //sendJSON();
+                sendJSON();
                 Delay.msDelay(900);
             } else if ( this.ws.getReadyState() == READYSTATE.NOT_YET_CONNECTED || this.ws.getReadyState() == READYSTATE.CLOSED ) {
                 this.ws.connect();
                 while ( !(this.ws.getReadyState() == READYSTATE.OPEN) ) {
-                    System.out.println("connecting");
+                    //System.out.println("connecting");
                     Delay.msDelay(100);
                 }
             }
@@ -240,52 +242,21 @@ public class Hal {
     private void getSensorsValues(JSONObject ev3Values) {
         for ( UsedSensor sensor : this.usedSensors ) {
             SensorPort port = sensor.getPort();
-            Enum mode = sensor.getMode();
-            String partKey = port.name() + "-";
-            partKey += sensor.getSensorType().getShortName() + "-";
+            SensorMode mode = (SensorMode) sensor.getMode();
 
-            // TODO
-            //ev3Values.put(partKey + mode.name(), this.deviceHandler.getProvider(port, mode.name()));
-            //            switch ( sensor.getMode().getClass().getSimpleName() ) {
-            //                case "ColorSensorMode":
-            //                    if ( mode == ColorSensorMode.AMBIENTLIGHT ) {
-            //
-            //                    }
-            //                    break;
-            //
-            //                default:
-            //                    break;
-            //            }
+            String methodName = mode.getHalJavaMethod();
+            Method method;
+            String result = null;
+            try {
+                method = Hal.class.getMethod(methodName, SensorPort.class);
+                result = String.valueOf(method.invoke(this, port));
+            } catch ( NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e ) {
+                break;
+            }
+
+            ev3Values.put(port + "-" + mode.getClass().getSimpleName() + "-" + mode, result);
+
         }
-
-        //        for ( Entry<SensorPort, EV3Sensor> mapEntry : this.brickConfiguration.getSensors().entrySet() ) {
-        //            int hardwareId = mapEntry.getValue().getComponentType().hashCode();
-        //            SensorPort port = mapEntry.getKey();
-        //            String partKey = port.name() + "-";
-        //
-        //            if ( EV3Sensors.EV3_COLOR_SENSOR.hashCode() == hardwareId ) {
-        //                partKey += EV3Sensors.EV3_COLOR_SENSOR.getShortName() + "-";
-        //                ev3Values.put(partKey + ColorSensorMode.AMBIENTLIGHT, getColorSensorAmbient(port));
-        //                ev3Values.put(partKey + ColorSensorMode.COLOUR, getColorSensorColour(port));
-        //                ev3Values.put(partKey + ColorSensorMode.RED, getColorSensorRed(port));
-        //                ev3Values.put(partKey + ColorSensorMode.RGB, getColorSensorRgb(port));
-        //            } else if ( EV3Sensors.EV3_ULTRASONIC_SENSOR.hashCode() == hardwareId ) {
-        //                partKey += EV3Sensors.EV3_ULTRASONIC_SENSOR.getShortName();
-        //                ev3Values.put(partKey + UltrasonicSensorMode.DISTANCE, getUltraSonicSensorDistance(port));
-        //                ev3Values.put(partKey + UltrasonicSensorMode.PRESENCE, getUltraSonicSensorPresence(port));
-        //            } else if ( EV3Sensors.EV3_GYRO_SENSOR.hashCode() == hardwareId ) {
-        //                partKey += EV3Sensors.EV3_GYRO_SENSOR.getShortName();
-        //                ev3Values.put(partKey + GyroSensorMode.ANGLE, getGyroSensorValue(port, GyroSensorMode.ANGLE));
-        //                ev3Values.put(partKey + GyroSensorMode.RATE, getGyroSensorValue(port, GyroSensorMode.RATE));
-        //            } else if ( EV3Sensors.EV3_IR_SENSOR.hashCode() == hardwareId ) {
-        //                partKey += EV3Sensors.EV3_IR_SENSOR.getShortName();
-        //                ev3Values.put(partKey + InfraredSensorMode.DISTANCE, getInfraredSensorDistance(port));
-        //                ev3Values.put(partKey + InfraredSensorMode.SEEK, getInfraredSensorSeek(port));
-        //            } else if ( EV3Sensors.EV3_TOUCH_SENSOR.hashCode() == hardwareId ) {
-        //                partKey += EV3Sensors.EV3_TOUCH_SENSOR.getShortName();
-        //                ev3Values.put(partKey, isPressed(port));
-        //            }
-        //        }
     }
 
     /**
@@ -1058,22 +1029,28 @@ public class Hal {
      * Client must provide sensor port on which the sensor is connected and the mode in which sensor would working (see {@link GyroSensorMode})
      *
      * @param sensorPort on which the gyro sensor sensor is connected
-     * @param sensorMode in which the sensor is working
-     * @return value of the measurment of the sensor
+     * @return angle of the measurment of the sensor
      */
-    public synchronized float getGyroSensorValue(SensorPort sensorPort, GyroSensorMode sensorMode) {
-        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, sensorMode.getLejosModeName());
+    public synchronized float getGyroSensorAngle(SensorPort sensorPort) {
+        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, GyroSensorMode.ANGLE.getLejosModeName());
         float[] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0);
+        return Math.round(sample[0]);
+    }
 
-        switch ( sensorMode ) { // maybe no switch necessary
-            case ANGLE:
-                return Math.round(sample[0]); // ok
-            case RATE:
-                return Math.round(sample[0]); // ok
-            default:
-                throw new DbcException("sensor type or sensor mode missmatch");
-        }
+    /**
+     * Get sample from gyro sensor.<br>
+     * <br>
+     * Client must provide sensor port on which the sensor is connected and the mode in which sensor would working (see {@link GyroSensorMode})
+     *
+     * @param sensorPort on which the gyro sensor sensor is connected
+     * @return rate of the measurment of the sensor
+     */
+    public synchronized float getGyroSensorRate(SensorPort sensorPort) {
+        SampleProvider sampleProvider = this.deviceHandler.getProvider(sensorPort, GyroSensorMode.RATE.getLejosModeName());
+        float[] sample = new float[sampleProvider.sampleSize()];
+        sampleProvider.fetchSample(sample, 0);
+        return Math.round(sample[0]);
     }
 
     /**

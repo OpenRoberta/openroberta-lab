@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 /**
  * Modes in which the sensor can operate.
  */
-public enum ColorSensorMode {
+public enum ColorSensorMode implements SensorMode {
     COLOUR( "getColorSensorColour", "ColorID" ),
     RED( "getColorSensorRed", "Red" ),
     RGB( "getColorSensorRgb", "RGB" ),
@@ -28,6 +28,7 @@ public enum ColorSensorMode {
         return this.values[0];
     }
 
+    @Override
     public String getHalJavaMethod() {
         return this.halJavaMethodName;
     }

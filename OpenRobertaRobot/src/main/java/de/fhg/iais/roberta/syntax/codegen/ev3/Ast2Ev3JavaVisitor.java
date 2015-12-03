@@ -17,7 +17,6 @@ import de.fhg.iais.roberta.components.ev3.UsedSensor;
 import de.fhg.iais.roberta.shared.IndexLocation;
 import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
 import de.fhg.iais.roberta.shared.action.ev3.DriveDirection;
-import de.fhg.iais.roberta.shared.sensor.ev3.GyroSensorMode;
 import de.fhg.iais.roberta.shared.sensor.ev3.MotorTachoMode;
 import de.fhg.iais.roberta.shared.sensor.ev3.SensorPort;
 import de.fhg.iais.roberta.shared.sensor.ev3.UltrasonicSensorMode;
@@ -176,7 +175,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
             if ( mainBlock ) {
                 astVisitor.sb.append("\n");
                 // for testing
-                //                astVisitor.sb.append(INDENT).append(INDENT).append("hal.closeResources();");
+                // astVisitor.sb.append(INDENT).append(INDENT).append("hal.closeResources();");
                 astVisitor.sb.append("\n").append(INDENT).append("}");
                 mainBlock = false;
             }
@@ -818,10 +817,18 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         String gyroSensorPort = getEnumCode(gyroSensor.getPort());
-        if ( gyroSensor.getMode() == GyroSensorMode.RESET ) {
-            this.sb.append("hal.resetGyroSensor(" + gyroSensorPort + ");");
-        } else {
-            this.sb.append("hal.getGyroSensorValue(" + gyroSensorPort + ", " + getEnumCode(gyroSensor.getMode()) + ")");
+        switch ( gyroSensor.getMode() ) {
+            case ANGLE:
+                this.sb.append("hal.getGyroSensorAngle(" + gyroSensorPort + ")");
+                break;
+            case RATE:
+                this.sb.append("hal.getGyroSensorRate(" + gyroSensorPort + ")");
+                break;
+            case RESET:
+                this.sb.append("hal.resetGyroSensor(" + gyroSensorPort + ");");
+                break;
+            default:
+                throw new DbcException("Invalid GyroSensorMode");
         }
         return null;
     }
@@ -839,7 +846,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
             default:
                 throw new DbcException("Invalid Infrared Sensor Mode!");
         }
-
         return null;
     }
 
@@ -881,7 +887,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         this.sb.append("\n\n").append(INDENT).append("public void run() throws Exception {\n");
         incrIndentation();
         // this is needed for testing
-        //        this.sb.append(INDENT).append(INDENT).append("hal.startServerLoggingThread();");
+        // this.sb.append(INDENT).append(INDENT).append("hal.startServerLoggingThread();");
         return null;
     }
 

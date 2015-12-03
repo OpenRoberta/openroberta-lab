@@ -7,8 +7,8 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 /**
  * Modes in which the sensor can operate.
  */
-public enum GyroSensorMode {
-    RATE( "getGyroSensorValue", "Rate" ), ANGLE( "getGyroSensorValue", "Angle" ), RESET( "resetGyroSensor" );
+public enum GyroSensorMode implements SensorMode {
+    RATE( "getGyroSensorRate", "Rate" ), ANGLE( "getGyroSensorAngle", "Angle" ), RESET( "resetGyroSensor" );
 
     private final String halJavaMethodName;
     private final String[] values;
@@ -25,6 +25,7 @@ public enum GyroSensorMode {
         return this.values[0];
     }
 
+    @Override
     public String getHalJavaMethod() {
         return this.halJavaMethodName;
     }
