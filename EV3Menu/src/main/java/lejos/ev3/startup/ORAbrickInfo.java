@@ -4,20 +4,26 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import lejos.hardware.Sounds;
-import lejos.hardware.ev3.LocalEV3;
-import lejos.utility.Delay;
-
 import org.json.JSONObject;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+
+import lejos.hardware.Sounds;
+import lejos.hardware.ev3.LocalEV3;
+import lejos.utility.Delay;
 
 public class ORAbrickInfo implements HttpHandler {
 
     private static boolean reg = false;
 
     private static final String ISRUNNING = "isrunning";
+
+    private final GraphicStartup menu;
+
+    public ORAbrickInfo(GraphicStartup menu) {
+        this.menu = menu;
+    }
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
@@ -40,9 +46,7 @@ public class ORAbrickInfo implements HttpHandler {
                 break;
             case ORApushCmd.CMD_REPEAT:
                 if ( reg ) {
-                    ORAhandler.setRegistered(true);
-                    GraphicStartup.orUSBconnected = true;
-                    LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
+                    this.menu.setUSBconnection(true);
                     reg = false;
                 }
                 response = getBrickInfos();
@@ -57,13 +61,8 @@ public class ORAbrickInfo implements HttpHandler {
                 GraphicStartup.restartMenu();
                 return;
             case ORApushCmd.CMD_ABORT:
-                if ( ORAhandler.isRegistered() ) {
-                    ORAhandler.setRegistered(false);
-                    GraphicStartup.orUSBconnected = false;
-                    LocalEV3.get().getAudio().systemSound(Sounds.DESCENDING);
-                    response.put("abort", "disconnect");
-                    break;
-                }
+                this.menu.setUSBconnection(false);
+                response.put("abort", "disconnect");
                 break;
             default:
                 break;

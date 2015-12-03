@@ -186,13 +186,12 @@ public class GraphicStartup implements Menu {
     public static GraphicStartup menu = new GraphicStartup();
 
     private static ORAhandler oraHandler = new ORAhandler();
-    public static boolean orUSBconnected = false;
     private static String OPENROBERTAHEAD = " OR Lab";
     private static HttpServer usbconn = null;
 
     private static final String OPENROBERTAPROPERTIES = "/home/roberta/openroberta.properties";
     private final static Properties menuProperties = loadProperties();
-    private static Properties openrobertaProperties = null;
+    private static Properties openrobertaProperties = loadOpenRobertaProperties();
 
     public static int selection = 0;
 
@@ -324,7 +323,7 @@ public class GraphicStartup implements Menu {
         public void run() {
             try {
                 usbconn = HttpServer.create(new InetSocketAddress(InetAddress.getByName("10.0.1.1"), 80), 0);
-                usbconn.createContext("/brickinfo", new ORAbrickInfo());
+                usbconn.createContext("/brickinfo", new ORAbrickInfo(menu));
                 usbconn.createContext("/program", new ORAprogram());
                 usbconn.createContext("/firmware", new ORAfirmware());
                 usbconn.setExecutor(null); // creates a default executor
@@ -1552,22 +1551,26 @@ public class GraphicStartup implements Menu {
      * Load Open Roberta Properties from /home/roberta/openroberta.properties .
      * Used for storing the menu type, the last server address and the last used token for debugging in NEPO program.
      * The file is created during runtime. Default menu type is set and taken from maven properties.
+     * Also stores the connection type wifi, usb or none which is retrieved in Hal by the NEPO program. If connectiontype=wifi, debugging is allowed, otherwise
+     * ignored.
      */
-    private static void loadOpenRobertaProperties() {
+    private static Properties loadOpenRobertaProperties() {
         File f = new File(OPENROBERTAPROPERTIES);
+        Properties p = new Properties();
         try {
             if ( !f.exists() ) {
-                openrobertaProperties = new Properties();
-                openrobertaProperties.setProperty("menutype", menuProperties.getProperty("menutype"));
-                storeOpenRobertaProperties();
+                p.setProperty("menutype", menuProperties.getProperty("menutype"));
             } else {
-                openrobertaProperties = new Properties();
-                openrobertaProperties.load(new FileInputStream(f));
+                p.load(new FileInputStream(f));
             }
+            p.setProperty("connection", "none");
+            OutputStream os = new FileOutputStream(f);
+            p.store(os, "Open Roberta Lab Settings");
+            os.close();
         } catch ( IOException e ) {
             System.out.println(e.getMessage());
-            return;
         }
+        return p;
     }
 
     /**
@@ -1586,6 +1589,24 @@ public class GraphicStartup implements Menu {
     }
 
     /**
+     * Configure the menu for using USB connection.
+     *
+     * @param status connected=true, not connected=false
+     */
+    public void setUSBconnection(boolean status) {
+        this.indiBA.setUsb(status);
+        if ( status == true ) {
+            LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
+            openrobertaProperties.put("connection", "usb");
+        } else if ( ORAhandler.isRegistered() ) {
+            LocalEV3.get().getAudio().systemSound(Sounds.DESCENDING);
+            openrobertaProperties.put("connection", "none");
+        }
+        ORAhandler.setRegistered(status);
+        storeOpenRobertaProperties();
+    }
+
+    /**
      * Roberta submenu implementation.
      */
     private void robertaMenu() {
@@ -1597,8 +1618,6 @@ public class GraphicStartup implements Menu {
             Delay.msDelay(3000);
             return;
         }
-
-        loadOpenRobertaProperties();
 
         if ( ORAhandler.isRegistered() == false ) {
             if ( this.indiBA.getWifi() == false ) {
@@ -1683,7 +1702,9 @@ public class GraphicStartup implements Menu {
             newScreen(OPENROBERTAHEAD);
             lcd.drawString("     Success!", 0, 3);
             LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
-            Delay.msDelay(2000);
+            openrobertaProperties.put("connection", "wifi");
+            storeOpenRobertaProperties();
+            Delay.msDelay(1500);
         } else {
             oraMenu();
         }
@@ -1748,11 +1769,6 @@ public class GraphicStartup implements Menu {
         if ( ip != null ) {
             lcd.drawString(ip, 8 - ip.length() / 2, 2);
         }
-
-        //        for ( String ip : GraphicStartup.ips ) {
-        //            lcd.drawString(ip, 8 - ip.length() / 2, row);
-        //            row++;
-        //        }
     }
 
     /**
@@ -1931,7 +1947,7 @@ public class GraphicStartup implements Menu {
             switch ( selected ) {
                 case 0:
                     newScreen(OPENROBERTAHEAD);
-                    if ( orUSBconnected == true ) {
+                    if ( this.indiBA.getUsb() ) {
                         newScreen(OPENROBERTAHEAD);
                         lcd.drawString(" Use USB program", 0, 2);
                         lcd.drawString(" to disconnect!", 0, 3);
@@ -1956,7 +1972,9 @@ public class GraphicStartup implements Menu {
         newScreen(OPENROBERTAHEAD);
         lcd.drawString("  Disconnected!", 0, 3);
         LocalEV3.get().getAudio().systemSound(Sounds.DESCENDING);
-        Delay.msDelay(2000);
+        openrobertaProperties.setProperty("connection", "none");
+        storeOpenRobertaProperties();
+        Delay.msDelay(1500);
     }
 
     /**
@@ -2008,9 +2026,6 @@ public class GraphicStartup implements Menu {
             if ( f == null ) {
                 menuData[8] = null;
                 iconData[8] = null;
-            }
-            if ( openrobertaProperties == null ) {
-                loadOpenRobertaProperties();
             }
             menuData[0] = "Menu: " + openrobertaProperties.getProperty("menutype");
             menu.setItems(menuData, iconData);

@@ -90,6 +90,10 @@ public class BatteryIndicator {
         this.usb = usb;
     }
 
+    public boolean getUsb() {
+        return this.usb;
+    }
+
     public synchronized void setDefaultTitle(String title) {
         this.titleString = "";
         byte[] o = this.default_title;

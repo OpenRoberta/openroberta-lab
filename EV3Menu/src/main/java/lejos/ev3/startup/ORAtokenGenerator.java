@@ -4,12 +4,12 @@ import java.util.Random;
 
 /**
  * Class for generating tokens.
- * 
+ *
  * @author dpyka
  */
 public class ORAtokenGenerator {
 
-    private final String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private final String alphabet = "0123456789abcdefghijklmnopqrstuvwxyz";
     private final int n = this.alphabet.length();
 
     public ORAtokenGenerator() {
@@ -18,7 +18,7 @@ public class ORAtokenGenerator {
 
     /**
      * Create a new token as String of 8 characters length.
-     * 
+     *
      * @return The token on which the brick is being linked to a client.
      */
     public String generateToken() {
