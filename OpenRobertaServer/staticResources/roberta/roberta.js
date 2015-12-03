@@ -293,26 +293,6 @@ function saveAsProgramToServer() {
 }
 
 /**
- * Save program to server
- */
-function saveToServer() {
-    if (userState.program) {
-        var xml = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-        var xmlText = Blockly.Xml.domToText(xml);
-        userState.programSaved = true;
-        LOG.info('save program ' + userState.program + ' login: ' + userState.id);
-        $('.modal').modal('hide'); // close all opened popups
-        PROGRAM.saveProgramToServer(userState.program, userState.programShared, userState.programTimestamp, xmlText, function(result) {
-            if (result.rc === 'ok') {
-                userState.programModified = false;
-                userState.programTimestamp = result.lastChanged;
-            }
-            displayInformation(result, "MESSAGE_EDIT_SAVE_PROGRAM", result.message, userState.program);
-        });
-    }
-}
-
-/**
  * Save configuration with new name to server
  */
 function saveAsConfigurationToServer() {
@@ -1206,7 +1186,7 @@ function initHeadNavigation() {
             deactivateProgConfigMenu();
             $('#tabListing').click();
         } else if (domId === 'menuSaveProg') { //  Submenu 'Program'
-            saveToServer();
+            ROBERTA_PROGRAM.save();
         } else if (domId === 'menuSaveAsProg') { //  Submenu 'Program'
             $("#save-program").modal('show');
         } else if (domId === 'menuShowCode') { //  Submenu 'Program'
@@ -1517,6 +1497,7 @@ function initPopups() {
 
     ROBERTA_USER.initUserForms();
     ROBERTA_ROBOT.initRobotForms();
+    ROBERTA_PROGRAM.initProgramForms();
 
     var target = document.location.hash.split("&");
 

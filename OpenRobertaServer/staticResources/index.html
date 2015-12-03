@@ -43,6 +43,7 @@ limitations under the License.
 <script type="text/javascript" src="/roberta/roberta.js"></script>
 <script type="text/javascript" src="/roberta/roberta.user.js"></script>
 <script type="text/javascript" src="/roberta/roberta.robot.js"></script>
+<script type="text/javascript" src="/roberta/roberta.program.js"></script>
 <!-- <script type="text/javascript" src="/roberta/roberta.min.js"></script> -->
 
 <!-- <script type="text/javascript" src="/simulation/simulationLogic/robot.js"></script>
@@ -553,30 +554,7 @@ limitations under the License.
             </div>
         </div>
     </div>
-
-    <!-- Popup set token for robot -->
-    <div id="set-token" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3 class="modal-title">Set token</h3>
-                </div>
-                <div class="modal-body left-inner-addon">
-                    <label for="tokenValue" lkey="Blockly.Msg.POPUP_VALUE">Token</label>
-                    <div class="left-inner-addon">
-                        <i class="typcn typcn-user"></i>
-                        <input type="text" data-role="none" id="tokenValue" class="form-control" value="" autofocus />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn" id="setToken">OK</button>
-                    <input type="button" class="btn backButton" data-dismiss="modal" lkey="Blockly.Msg.POPUP_CANCEL"></input>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    
     <!-- Popup show about info -->
     <div id="show-about" class="modal fade">
         <div class="modal-dialog bigModal">

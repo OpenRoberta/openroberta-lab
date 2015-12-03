@@ -30,7 +30,7 @@ goog.inherits(Blockly.SaveButton, Blockly.Button);
 /** @inheritDoc */
 Blockly.SaveButton.prototype.onMouseUp_ = function(e) {
     LOG.info('save program from blockly button');
-    saveToServer();
+    ROBERTA_PROGRAM.save();
 };
 
 /** @inheritDoc */
