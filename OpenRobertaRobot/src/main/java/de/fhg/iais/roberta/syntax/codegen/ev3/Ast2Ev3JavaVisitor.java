@@ -175,7 +175,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
             if ( mainBlock ) {
                 astVisitor.sb.append("\n");
                 // for testing
-                astVisitor.sb.append(INDENT).append(INDENT).append("hal.closeResources();");
+                // astVisitor.sb.append(INDENT).append(INDENT).append("hal.closeResources();");
                 astVisitor.sb.append("\n").append(INDENT).append("}");
                 mainBlock = false;
             }
@@ -888,7 +888,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         incrIndentation();
         // this is needed for testing
         // this.sb.append(INDENT).append(INDENT).append("hal.startServerLoggingThread();");
-        this.sb.append(INDENT).append(INDENT).append("hal.startScreenLoggingThread();");
+        // this.sb.append(INDENT).append(INDENT).append("hal.startScreenLoggingThread();");
         return null;
     }
 

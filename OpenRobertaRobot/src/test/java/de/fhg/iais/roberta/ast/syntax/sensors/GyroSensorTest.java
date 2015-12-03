@@ -8,7 +8,7 @@ public class GyroSensorTest {
 
     @Test
     public void setGyro() throws Exception {
-        String a = "\nhal.getGyroSensorValue(SensorPort.S2, GyroSensorMode.ANGLE)" + "hal.getGyroSensorValue(SensorPort.S4, GyroSensorMode.RATE)";
+        String a = "\nhal.getGyroSensorAngle(SensorPort.S2)" + "hal.getGyroSensorRate(SensorPort.S4)";
 
         Helper.assertCodeIsOk(a, "/ast/sensors/sensor_setGyro.xml");
     }
