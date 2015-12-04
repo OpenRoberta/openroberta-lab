@@ -16,21 +16,18 @@ var ROBERTA_USER = {};
     function createUserToServer() {
         $formRegister.validate();
         if ($formRegister.valid()) {
-            if ($('#registerPass').val() != $('#registerPassConfirm').val()) {
-                displayMessage("MESSAGE_PASSWORD_ERROR", "POPUP", "");
-            } else {
-                USER.createUserToServer($("#registerAccountName").val(), $('#registerUserName').val(), $("#registerUserEmail").val(), $('#registerPass').val(),
-                        function(result) {
-                            if (result.rc === "ok") {
-                                setRobotState(result);
-                                $('#loginAccountName').val($("#registerAccountName").val());
-                                $('#loginPassword').val($('#registerPass').val());
-                                login();
-                            }
-                            displayInformation(result, "", result.message);
-                        });
-            }
+            USER.createUserToServer($("#registerAccountName").val(), $('#registerUserName').val(), $("#registerUserEmail").val(), $('#registerPass').val(),
+                    function(result) {
+                        if (result.rc === "ok") {
+                            setRobotState(result);
+                            $('#loginAccountName').val($("#registerAccountName").val());
+                            $('#loginPassword').val($('#registerPass').val());
+                            login();
+                        }
+                        displayInformation(result, "", result.message);
+                    });
         }
+
     }
 
     /**
@@ -51,29 +48,26 @@ var ROBERTA_USER = {};
     /**
      * Update User Password
      */
-    function updateUserPasswordOnServer(restPasswordLink) {
+    function updateUserPasswordOnServer() {
+        restPasswordLink = $("#passOld").val()
         $formUserPasswordChange.validate();
         if ($formUserPasswordChange.valid()) {
-            if ($('#passNew').val() != $('#passNewRepeat').val()) {
-                displayMessage("MESSAGE_PASSWORD_ERROR", "POPUP", "");
+            if (restPasswordLink) {
+                USER.resetPasswordToServer(restPasswordLink, $("#passNew").val(), function(result) {
+                    if (result.rc === "ok") {
+                        $("#change-user-password").modal('hide');
+                    }
+                    displayInformation(result, "", result.message);
+                });
             } else {
-                if (restPasswordLink) {
-                    USER.resetPasswordToServer(restPasswordLink, $("#passNew").val(), function(result) {
-                        if (result.rc === "ok") {
-                            $("#change-user-password").modal('hide');
-                        }
-                        displayInformation(result, "", result.message);
-                    });
-                } else {
-                    USER.updateUserPasswordToServer(userState.accountName, $('#passOld').val(), $("#passNew").val(), function(result) {
-                        if (result.rc === "ok") {
-                            $("#change-user-password").modal('hide');
-                        }
-                        displayInformation(result, "", result.message);
-                    });
-                }
-
+                USER.updateUserPasswordToServer(userState.accountName, $('#passOld').val(), $("#passNew").val(), function(result) {
+                    if (result.rc === "ok") {
+                        $("#change-user-password").modal('hide');
+                    }
+                    displayInformation(result, "", result.message);
+                });
             }
+
         }
     }
 
@@ -112,6 +106,27 @@ var ROBERTA_USER = {};
                 displayInformation(result, "MESSAGE_USER_LOGIN", result.message, userState.name);
             });
         }
+    }
+
+    /**
+     * Logout user
+     */
+    function logout() {
+        USER.logout(function(result) {
+            response(result);
+            if (result.rc === "ok") {
+                initUserState();
+                setProgram(userState.program);
+                setConfiguration(userState.configuration);
+                $('#programNameSave :not(btn)').val('');
+                $('#configurationNameSave :not(btn)').val('');
+                setHeadNavigationMenuState('logout');
+                Blockly.getMainWorkspace().saveButton.disable();
+                setRobotState(result);
+                $('#tabProgram').click();
+                displayInformation(result, "MESSAGE_USER_LOGOUT", result.message);
+            }
+        });
     }
 
     /**
@@ -395,6 +410,7 @@ var ROBERTA_USER = {};
 
         $('#change-user-password').onWrap('hidden.bs.modal', function() {
             $formUserPasswordChange.validate().resetForm();
+            $('#grOldPassword').show();
             $('#passOld').val('');
             $('#passNew').val('');
             $('#passNewRepeat').val('');
@@ -482,5 +498,15 @@ var ROBERTA_USER = {};
                 }
             }
         });
+    };
+
+    ROBERTA_USER.showResetPassword = function() {
+        $('#grOldPassword').hide();
+        $('#change-user-password').modal('show');
+    };
+
+    ROBERTA_USER.logout = function() {
+        logout();
+
     };
 })(jQuery);

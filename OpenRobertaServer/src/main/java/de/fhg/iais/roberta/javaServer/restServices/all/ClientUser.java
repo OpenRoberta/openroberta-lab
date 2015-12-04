@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.javaServer.provider.OraData;
+import de.fhg.iais.roberta.main.MailManagement;
 import de.fhg.iais.roberta.persistence.LostPasswordProcessor;
 import de.fhg.iais.roberta.persistence.UserProcessor;
 import de.fhg.iais.roberta.persistence.bo.LostPassword;
@@ -32,10 +33,12 @@ public class ClientUser {
     private static final Logger LOG = LoggerFactory.getLogger(ClientUser.class);
 
     private final Ev3Communicator brickCommunicator;
+    private final MailManagement mailManagement;
 
     @Inject
-    public ClientUser(Ev3Communicator brickCommunicator) {
+    public ClientUser(Ev3Communicator brickCommunicator, MailManagement mailManagement) {
         this.brickCommunicator = brickCommunicator;
+        this.mailManagement = mailManagement;
     }
 
     @POST
@@ -139,6 +142,7 @@ public class ClientUser {
                 if ( user != null ) {
                     LostPassword lostPassword = lostPasswordProcessor.createLostPassword(user.getId());
                     ClientUser.LOG.info("url postfix generated: " + lostPassword.getUrlPostfix());
+                    this.mailManagement.send(user.getEmail(), "sub", "localhost:1999/#forgotPassword&" + lostPassword.getUrlPostfix());
                 }
 
             } else if ( cmd.equals("obtainUsers") ) {

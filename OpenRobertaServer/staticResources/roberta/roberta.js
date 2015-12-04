@@ -42,27 +42,6 @@ function initUserState() {
 }
 
 /**
- * Logout user
- */
-function logout() {
-    USER.logout(function(result) {
-        response(result);
-        if (result.rc === "ok") {
-            initUserState();
-            setProgram(userState.program);
-            setConfiguration(userState.configuration);
-            $('#programNameSave :not(btn)').val('');
-            $('#configurationNameSave :not(btn)').val('');
-            setHeadNavigationMenuState('logout');
-            Blockly.getMainWorkspace().saveButton.disable();
-            setRobotState(result);
-            $('#tabProgram').click();
-            displayInformation(result, "MESSAGE_USER_LOGOUT", result.message);
-        }
-    });
-}
-
-/**
  * Handle firmware conflict between server and robot
  */
 function handleFirmwareConflict() {
@@ -1181,7 +1160,7 @@ function initHeadNavigation() {
         } else if (domId === 'menuLogin') { // Submenu 'Login'
             ROBERTA_USER.showLoginForm();
         } else if (domId === 'menuLogout') { // Submenu 'Login'
-            logout();
+            ROBERTA_USER.logout();
         } else if (domId === 'menuNewUser') { // Submenu 'Login'
             $("#register-user").modal('show');
         } else if (domId === 'menuChangeUser') { // Submenu 'Login'
@@ -1408,10 +1387,6 @@ function initPopups() {
         $('#show-about').modal('hide');
     });
 
-    $('#delete-user').onWrap('hidden.bs.modal', function() {
-        $('#delete-user input :not(btn)').val('');
-    });
-
     $('#buttonCancelFirmwareUpdateAndRun').onWrap('click', function() {
         startProgram();
     });
@@ -1430,7 +1405,9 @@ function initPopups() {
     var target = document.location.hash.split("&");
 
     if (target[0] === "#forgotPassword") {
-        $('#change-user-password').modal('show');
+        $('#passOld').val(target[1]);
+        $('#show-startup-message').modal('hide');
+        ROBERTA_USER.showResetPassword();
     }
 }
 

@@ -187,7 +187,7 @@ public class RoundTripTest {
         memoryDbSetup.runDefaultRobertaSetup();
         brickCommunicator = new Ev3Communicator();
         compilerWorkflow = new Ev3CompilerWorkflow(brickCommunicator, crosscompilerBasedir, robotResourcesDir, buildXml);
-        restUser = new ClientUser(brickCommunicator);
+        restUser = new ClientUser(brickCommunicator, null);
         restProgram = new ClientProgram(sessionFactoryWrapper, brickCommunicator, compilerWorkflow);
 
         s1 = HttpSessionState.init();

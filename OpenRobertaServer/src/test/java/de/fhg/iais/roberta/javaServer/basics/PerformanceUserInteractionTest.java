@@ -77,7 +77,7 @@ public class PerformanceUserInteractionTest {
         this.memoryDbSetup.runDefaultRobertaSetup();
         this.brickCommunicator = new Ev3Communicator();
         this.compilerWorkflow = new Ev3CompilerWorkflow(this.brickCommunicator, this.crosscompilerBasedir, this.robotResourcesDir, this.buildXml);
-        this.restUser = new ClientUser(this.brickCommunicator);
+        this.restUser = new ClientUser(this.brickCommunicator, null);
         this.restProgram = new ClientProgram(this.sessionFactoryWrapper, this.brickCommunicator, this.compilerWorkflow);
         this.restBlocks = new ClientAdmin(this.brickCommunicator);
         this.downloadJar = new Ev3DownloadJar(this.brickCommunicator, this.crosscompilerBasedir);

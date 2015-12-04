@@ -83,7 +83,16 @@ public class ServerStarter {
      * @param propertyPath optional URI to properties resource. May be null.
      */
     public ServerStarter(String propertyPath) {
-        this.properties = Util.loadProperties(propertyPath);
+        Properties mailProperties = Util.loadProperties("classpath:openRobertaMailServer.properties");
+        Properties tmpProperties = Util.loadProperties(propertyPath);
+        this.properties = mergeProperties(mailProperties, tmpProperties);
+    }
+
+    private Properties mergeProperties(Properties mailProperties, Properties tmpProperties) {
+        if ( mailProperties != null ) {
+            tmpProperties.putAll(mailProperties);
+        }
+        return tmpProperties;
     }
 
     /**

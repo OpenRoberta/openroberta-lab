@@ -89,7 +89,7 @@ public class RestInterfaceTest {
 
         this.brickCommunicator = new Ev3Communicator();
         this.compilerWorkflow = new Ev3CompilerWorkflow(this.brickCommunicator, this.crosscompilerBasedir, this.robotResourcesDir, this.buildXml);
-        this.restUser = new ClientUser(this.brickCommunicator);
+        this.restUser = new ClientUser(this.brickCommunicator, null);
         this.restBlocks = new ClientAdmin(this.brickCommunicator);
         this.downloadJar = new Ev3DownloadJar(this.brickCommunicator, this.crosscompilerBasedir);
         this.brickCommand = new Ev3Command(this.brickCommunicator);

@@ -13,7 +13,7 @@ var ROBERTA_ROBOT = {};
         if ($formSingleModal.valid()) {
             ROBOT.setToken(token, function(result) {
                 if (result.rc === "ok") {
-                    userState.token = resToken;
+                    userState.token = token;
                 }
                 displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, userState.robotName);
                 setRobotState(result);
@@ -21,10 +21,6 @@ var ROBERTA_ROBOT = {};
             });
         }
     }
-
-//    $('#setToken').onWrap('click', function() {
-//        setToken($('#tokenValue').val());
-//    }, 'set token');
 
     ROBERTA_ROBOT.initRobotForms = function() {
         $formSingleModal = $('#single-modal-form');
