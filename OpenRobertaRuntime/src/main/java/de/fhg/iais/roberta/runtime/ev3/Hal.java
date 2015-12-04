@@ -6,12 +6,16 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
 import org.java_websocket.WebSocket.READYSTATE;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.fhg.iais.roberta.components.ev3.EV3Actor;
@@ -102,7 +106,10 @@ public class Hal {
     private static final Image tacho = new Image(178, 128, Utils.stringToBytes8(rawTacho));
 
     /**
+     * Setup the hardware components of the robot, which are used by the NEPO program.
+     *
      * @param brickConfiguration
+     * @param usedSensors
      */
     public Hal(Ev3Configuration brickConfiguration, Set<UsedSensor> usedSensors) {
         this.usedSensors = usedSensors;
@@ -122,10 +129,10 @@ public class Hal {
             this.openrobertaProperties = loadOpenRobertaProperties();
             this.serverAddress = this.openrobertaProperties.getProperty("lastaddress");
             this.token = this.openrobertaProperties.getProperty("lasttoken");
-            this.wifiLogging = this.openrobertaProperties.getProperty("connection") == "wifi" ? true : false;
+            this.wifiLogging = this.openrobertaProperties.getProperty("connection").equals("wifi") ? true : false;
             this.ws = new ClientWebSocket(new URI("ws://" + this.serverAddress + "/ws/"));
-        } catch ( Exception e ) {
-            e.printStackTrace();
+        } catch ( IOException | URISyntaxException e ) {
+            // ok
         }
 
     }
@@ -163,7 +170,7 @@ public class Hal {
     }
 
     /**
-     * Start a new Thread from the NEPO program to retrieve sensor values from sample providers to display them on the ev3 screen.
+     * Start a new Thread in the NEPO program to regularly display sensor information on the ev3 screen.
      */
     public void startScreenLoggingThread() {
         this.screenLoggerThread = new Thread(new Runnable() {
@@ -176,12 +183,18 @@ public class Hal {
         this.screenLoggerThread.start();
     }
 
+    /**
+     * Interrupt the logging-to-server thread.
+     */
     public void stopServerLoggingThread() {
         if ( this.serverLoggerThread != null ) {
             this.serverLoggerThread.interrupt();
         }
     }
 
+    /**
+     * Interrupt the logging-to-ev3screen thread.
+     */
     public void stopScreenLoggingThread() {
         if ( this.screenLoggerThread != null ) {
             this.screenLoggerThread.interrupt();
@@ -200,37 +213,10 @@ public class Hal {
             } else if ( this.ws.getReadyState() == READYSTATE.NOT_YET_CONNECTED || this.ws.getReadyState() == READYSTATE.CLOSED ) {
                 this.ws.connect();
                 while ( !(this.ws.getReadyState() == READYSTATE.OPEN) ) {
-                    Delay.msDelay(100);
+                    Delay.msDelay(500);
                 }
             }
             Delay.msDelay(100);
-        }
-    }
-
-    /**
-     * Display the port and the sensor values on the ev3 screen every two seconds.
-     */
-    public void logToScreen() {
-        while ( !Thread.currentThread().isInterrupted() ) {
-            try {
-                for ( UsedSensor sensor : this.usedSensors ) {
-                    SensorPort port = sensor.getPort();
-                    SensorMode mode = (SensorMode) sensor.getMode();
-                    String methodName = mode.getHalJavaMethod();
-                    Method method;
-                    String result = null;
-                    try {
-                        method = Hal.class.getMethod(methodName, SensorPort.class);
-                        result = String.valueOf(method.invoke(this, port));
-                    } catch ( NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e ) {
-                        break;
-                    }
-                    this.lcdos.write((port + " " + result.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll(",", "") + "\n").getBytes());
-                }
-            } catch ( IOException e ) {
-                return;
-            }
-            Delay.msDelay(2000);
         }
     }
 
@@ -245,6 +231,11 @@ public class Hal {
         this.ws.send(ev3Values.toString());
     }
 
+    /**
+     * Put motor tacho information into the JSON object which will be send to the server.
+     *
+     * @param ev3Values
+     */
     private void getActorsTacho(JSONObject ev3Values) {
         for ( Entry<ActorPort, EV3Actor> mapEntry : this.brickConfiguration.getActors().entrySet() ) {
             int hardwareId = mapEntry.getValue().getComponentType().hashCode();
@@ -262,6 +253,11 @@ public class Hal {
         }
     }
 
+    /**
+     * Put sensor information into the JSON object which will be send to the server.
+     *
+     * @param ev3Values
+     */
     private void getSensorsValues(JSONObject ev3Values) {
         for ( UsedSensor sensor : this.usedSensors ) {
             SensorPort port = sensor.getPort();
@@ -281,21 +277,62 @@ public class Hal {
     }
 
     /**
-     * Send a message to the server which block is currently active and add token to it.
-     *
-     * @param uniqueBlockID
+     * Display the port and the sensor values on the ev3 screen every two seconds.
      */
-    public void sendActiveBlockInfo(String msg) {
-        if ( this.ws.getReadyState() == READYSTATE.OPEN ) {
-            JSONObject debugMsg = new JSONObject();
-            debugMsg.put("token", this.token);
-            debugMsg.put("msg", msg);
-            this.ws.send(debugMsg.toString());
-        } else if ( this.ws.getReadyState() == READYSTATE.NOT_YET_CONNECTED || this.ws.getReadyState() == READYSTATE.CLOSED ) {
-            this.ws.connect();
+    public void logToScreen() {
+        while ( !Thread.currentThread().isInterrupted() ) {
+            try {
+                for ( UsedSensor sensor : this.usedSensors ) {
+                    SensorPort port = sensor.getPort();
+                    SensorMode mode = (SensorMode) sensor.getMode();
+                    String methodName = mode.getHalJavaMethod();
+                    Method method;
+                    String result = "";
+                    try {
+                        method = Hal.class.getMethod(methodName, SensorPort.class);
+                        result = String.valueOf(method.invoke(this, port));
+                    } catch ( NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e ) {
+                        break;
+                    }
+                    formatAndPrintToScreen(port, result);
+                }
+            } catch ( Exception e ) {
+                return;
+            }
+            Delay.msDelay(2000);
         }
     }
 
+    /**
+     * TODO not nice, find better solution
+     * 
+     * @param port
+     * @param result
+     */
+    private void formatAndPrintToScreen(SensorPort port, String result) {
+        try {
+            if ( result.startsWith("[") ) {
+                String tmp = result.substring(1, result.length() - 1);
+                List<String> list = new ArrayList<String>(Arrays.asList(tmp.split("\\.0, |\\.0")));
+                this.lcdos.write((port + " ").getBytes());
+                for ( String string : list ) {
+                    this.lcdos.write((string + " ").getBytes());
+                }
+                this.lcdos.write("\n".getBytes());
+            } else {
+                this.lcdos.write((port + " " + result.split("\\.")[0] + "\n").getBytes());
+            }
+        } catch ( IOException e ) {
+            return;
+        }
+    }
+
+    /**
+     * Properly close all resources at the end of the NEPO program: ev3 io ports, debugging threads, websocket and the lcd output stream.
+     *
+     * @throws InterruptedException
+     * @throws IOException
+     */
     public void closeResources() throws InterruptedException, IOException {
         EV3IOPort.closeAll();
         stopServerLoggingThread();
@@ -306,19 +343,23 @@ public class Hal {
     }
 
     /**
-     * TODO
+     * Send a message to the server. This is similar to a system.out.println() command, so the user can see if his program reaches a specific point during
+     * runtime.
      *
-     * @param uniqueBlockID
+     * @param msg Message to send to the server.
      */
-    public void infoMessage(String uniqueBlockID) {
+    public void infoMessage(String msg) {
         if ( this.ws != null ) {
             try {
                 if ( this.ws.getReadyState() == READYSTATE.OPEN ) {
-                    sendActiveBlockInfo(uniqueBlockID);
+                    JSONObject debugMsg = new JSONObject();
+                    debugMsg.put("token", this.token);
+                    debugMsg.put("msg", msg);
+                    this.ws.send(debugMsg.toString());
                 } else if ( this.ws.getReadyState() == READYSTATE.NOT_YET_CONNECTED || this.ws.getReadyState() == READYSTATE.CLOSED ) {
                     this.ws.connect();
                 }
-            } catch ( Exception e ) {
+            } catch ( JSONException e ) {
                 // ok
             }
         }
