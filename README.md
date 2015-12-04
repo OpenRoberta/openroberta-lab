@@ -1,8 +1,8 @@
 # Open Roberta
 
 Build status:
-[![master](https://travis-ci.org/OpenRoberta/robertalab.svg?branch=master)]
-[![develop](https://travis-ci.org/OpenRoberta/robertalab.svg?branch=develop)]
+[![master](https://travis-ci.org/OpenRoberta/robertalab.svg?branch=master)](https://travis-ci.org/OpenRoberta/robertalab/builds)
+[![develop](https://travis-ci.org/OpenRoberta/robertalab.svg?branch=develop)](https://travis-ci.org/OpenRoberta/robertalab/builds)
 
 ## Getting started with an own deployment of the OpenRoberta programming environment.
 
