@@ -175,7 +175,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
             if ( mainBlock ) {
                 astVisitor.sb.append("\n");
                 // for testing
-                astVisitor.sb.append(INDENT).append(INDENT).append("hal.closeResources();");
+                //astVisitor.sb.append(INDENT).append(INDENT).append("hal.closeResources();");
                 astVisitor.sb.append("\n").append(INDENT).append("}");
                 mainBlock = false;
             }
@@ -887,8 +887,8 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         this.sb.append("\n\n").append(INDENT).append("public void run() throws Exception {\n");
         incrIndentation();
         // this is needed for testing
-        this.sb.append(INDENT).append(INDENT).append("hal.startServerLoggingThread();");
-        this.sb.append(INDENT).append(INDENT).append("\nhal.startScreenLoggingThread();");
+        //this.sb.append(INDENT).append(INDENT).append("hal.startServerLoggingThread();");
+        //this.sb.append(INDENT).append(INDENT).append("\nhal.startScreenLoggingThread();");
         return null;
     }
 
