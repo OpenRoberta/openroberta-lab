@@ -8,7 +8,7 @@
   "WAIT_FOR_CONNECTION": "odota yhteyttä",
   "VARIABLES_TYPE_CONNECTION": "Connection",
   "CONNECT": "yhdistä bluetoothilla seuraavaan osoitteeseen:",
-  "RECIVED_DATA": "vastaanotettu data",
+  "RECEIVED_DATA": "vastaanotettu data",
   "USED_CONNECTION": "yhteydellä:",
   "SEND_DATA": "lähetettävä data:",
   "DATATABLE_EMPTY_TABLE": "There are no entries in this table",

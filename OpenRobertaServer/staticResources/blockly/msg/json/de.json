@@ -574,7 +574,7 @@
 	"BRICKLIGHT_RESET_HELP": "Die Beleuchtung der EV3-Knöpfe Deines Roboters wird wieder zurückgesetzt.",
 	"SEND_DATA": "Sende Nachricht",
 	"USED_CONNECTION": "über Verbindung",
-    "RECIVED_DATA": "Empfange Nachricht",
+    "RECEIVED_DATA": "Empfange Nachricht",
     "CONNECT": "Verbinde mit Robotername",
     "VARIABLES_TYPE_CONNECTION": "Verbindung",
     "WAIT_FOR_CONNECTION": "Warte auf Verbindung",
