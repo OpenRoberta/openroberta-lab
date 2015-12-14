@@ -647,7 +647,7 @@
 	"PROCEDURES_TITLE" : "' procedure", 
 	"PROCEDURES_VARIABLES_ERROR" : "Fejl: Denne blok kan kun bruges indenfor '", 
 	"PROCEDURES_VARIABLES_LOOP_ERROR" : "Fejl: Denne blok kan kun bruges indenfor it loop der erklærer ", 
-	"RECIVED_DATA" : "data modtaget", 
+	"RECEIVED_DATA" : "data modtaget", 
 	"REMOVE_COMMENT" : "Fjern kommentar",
 	"RENAME_VARIABLE" : "Omdøb variabel...",
 	"RENAME_VARIABLE_TITLE" : "Omdøb alle '%1' variabler til:",

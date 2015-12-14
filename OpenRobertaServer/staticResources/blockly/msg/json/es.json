@@ -655,7 +655,7 @@
     "PROCEDURES_TITLE" : " procedimiento",
     "PROCEDURES_VARIABLES_ERROR" : "Error: este bloque solo se puede usar dentro de '",
     "PROCEDURES_VARIABLES_LOOP_ERROR" : "Error: este bloque solo se puede usar dentro de un bucle que declara",
-    "RECIVED_DATA" : "datos recibidos",
+    "RECEIVED_DATA" : "datos recibidos",
     "REMOVE_COMMENT" : "Eliminar comentario",
     "RENAME_VARIABLE" : "Renombrar la variable…",
     "RENAME_VARIABLE_TITLE" : "Renombrar todas las variables «%1» a:",

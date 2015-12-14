@@ -841,7 +841,7 @@
 	"DATATABLE_EMPTY_TABLE": "There are no entries in this table",
 	"SEND_DATA": "data to send",
 	"USED_CONNECTION": "via connection",
-	"RECIVED_DATA": "data received",
+	"RECEIVED_DATA": "data received",
 	"CONNECT": "connect to robot name",
 	"VARIABLES_TYPE_CONNECTION": "Connection",
 	"WAIT_FOR_CONNECTION": "wait for connection",

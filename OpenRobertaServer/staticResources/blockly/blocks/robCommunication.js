@@ -79,7 +79,7 @@ Blockly.Blocks['robCommunication_receiveBlock'] = {
 	    init : function() {
 	        this.setHelpUrl(Blockly.Msg.CONNECTION_RECEIVE_HELPURL);
 	        this.setColourRGB(Blockly.CAT_COMMUNICATION_RGB);
-	        this.appendDummyInput('').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.RECIVED_DATA);
+	        this.appendDummyInput('').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.RECEIVED_DATA);
 	        this.appendValueInput('CONNECTION').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.USED_CONNECTION, 'CONNECTION_ID').setCheck('Connection');
 	        this.setOutput(true, 'String');
 	        this.setTooltip(Blockly.Msg.CONNECTION_RECEIVE_TOOLTIP);
