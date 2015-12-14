@@ -34,6 +34,7 @@
         <source.level>1.7</source.level>
         <maven.compiler.target>1.7</maven.compiler.target>
         <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.min-version>3.2.0</maven.min-version>
         <guice.verion>3.0</guice.verion>
         <jersey.version>1.18.2</jersey.version>
         <jetty.version>9.2.5.v20141112</jetty.version>
@@ -46,6 +47,9 @@
         <robot.menutype>custom</robot.menutype>
         <browser.visibility>false</browser.visibility>
     </properties>
+    <prerequisites>
+        <maven>${maven.min-version}</maven>
+    </prerequisites>
     <modules>
         <module>../Resources</module>
         <module>../OpenRobertaShared</module>
@@ -366,6 +370,28 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>1.4.1</version>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>[${maven.min-version},)</version>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
     <reporting>
         <plugins>
