@@ -734,7 +734,7 @@
     "ORA_TOOLBOX_DELETE_SUCCESS" : "Du hast die Toolbox gelöscht.",
     "ORA_TOOLBOX_DELETE_ERROR" : "Ein Fehler ist beim Löschen der Toolbox aufgetreten, versuche es noch einmal!",
     "ORA_TOOLBOX_TRANSFORM_ERROR" : "Transformation Fehler?",
-    "ORA_TOOLBOX_SAVE_ERROR_NOT_SAVED_TO_DB" : "An error error has occured while saving the configuration in the database.",
+    "ORA_TOOLBOX_SAVE_ERROR_NOT_SAVED_TO_DB" : "An error error has occurred while saving the configuration in the database.",
     "ORA_COMMAND_INVALID" : "Dein Konfigurationsname ist vom System reserviert. Wähle bitte einen anderen Namen und versuche es noch einmal!",
     "ORA_CONFIGURATION_ERROR_ID_INVALID" : "Konfigurationsname ist kein valider Identifikator.",
     "ORA_CONFIGURATION_GET_ONE_ERROR_NOT_FOUND" : "Die Roboterkonfiguration konnte nicht in der Datenbank gefunden werden.",

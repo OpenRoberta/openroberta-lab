@@ -189,7 +189,7 @@ public class Util {
                 }
             }
         } catch ( Exception e ) {
-            Util.LOG.error("when adding info for the client, an unexpected exception occured. Some info for the client may be missing", e);
+            Util.LOG.error("when adding info for the client, an unexpected exception occurred. Some info for the client may be missing", e);
         }
     }
 

@@ -36,6 +36,6 @@ public class WebSocketExample {
 
     @OnWebSocketError
     public void handleError(Throwable e) {
-        LOG.error("@OnWebSocketError occured with attached throwable", e);
+        LOG.error("@OnWebSocketError occurred with attached throwable", e);
     }
 }
