@@ -46,42 +46,6 @@
     </dependencies>
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.8</version>
-                <executions>
-                    <execution>
-                        <id>copy</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>de.fhg.iais.roberta</groupId>
-                                    <artifactId>ev3classes</artifactId>
-                                    <outputDirectory>lib</outputDirectory>
-                                    <destFileName>ev3classes.jar</destFileName>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>de.fhg.iais.roberta</groupId>
-                                    <artifactId>dbusjava</artifactId>
-                                    <outputDirectory>lib</outputDirectory>
-                                    <destFileName>dbusjava.jar</destFileName>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.lejos</groupId>
-                                    <artifactId>jna</artifactId>
-                                    <outputDirectory>lib</outputDirectory>
-                                    <destFileName>jna.jar</destFileName>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 </project>
