@@ -38,11 +38,11 @@ public class Ev3CompilerWorkflow {
         private String extension;
 
         Language(String ext) {
-            extension = ext;
+            this.extension = ext;
         }
 
         String getExtension() {
-            return extension;
+            return this.extension;
         }
 
         public static Language fromCommunicationData(Ev3CommunicationData state) {
@@ -87,7 +87,7 @@ public class Ev3CompilerWorkflow {
         Language lang = Language.fromCommunicationData(this.brickCommunicator.getState(token));
         String sourceCode = generateProgram(lang, programName, data);
 
-        Ev3CompilerWorkflow.LOG.info("generated code:\n{}", sourceCode); // only needed for EXTREME debugging
+        //Ev3CompilerWorkflow.LOG.info("generated code:\n{}", sourceCode); // only needed for EXTREME debugging
         try {
             storeGeneratedProgram(token, programName, sourceCode, lang.getExtension());
         } catch ( Exception e ) {
@@ -97,8 +97,10 @@ public class Ev3CompilerWorkflow {
         switch ( lang ) {
             case JAVA:
                 Key messageKey = runBuild(token, programName, "generated.main");
-                if ( messageKey == null ) {
+                if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
                     Ev3CompilerWorkflow.LOG.info("jar for program {} generated successfully", programName);
+                } else {
+                    Ev3CompilerWorkflow.LOG.info(messageKey.toString());
                 }
                 return messageKey;
             case PYTHON:
@@ -168,14 +170,14 @@ public class Ev3CompilerWorkflow {
                 sourceCode = Ast2Ev3PythonVisitor.generate(programName, data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
                 break;
         }
-        Ev3CompilerWorkflow.LOG.info("generating ", lang.toString().toLowerCase(), " code");
+        Ev3CompilerWorkflow.LOG.info("generating {} code", lang.toString().toLowerCase());
         return sourceCode;
     }
 
     private void storeGeneratedProgram(String token, String programName, String sourceCode, String ext) throws Exception {
         Assert.isTrue(token != null && programName != null && sourceCode != null);
         File sourceFile = new File(this.pathToCrosscompilerBaseDir + token + "/src/" + programName + ext);
-        Ev3CompilerWorkflow.LOG.info("stored under: ", sourceFile.getPath());
+        Ev3CompilerWorkflow.LOG.info("stored under: " + sourceFile.getPath());
         FileUtils.writeStringToFile(sourceFile, sourceCode, StandardCharsets.UTF_8.displayName());
     }
 
@@ -239,7 +241,7 @@ public class Ev3CompilerWorkflow {
             });
             project.executeTarget(project.getDefaultTarget());
             // LOG.info("build ok. Messages from build script are:\n" + sb.toString());
-            return null;
+            return Key.COMPILERWORKFLOW_SUCCESS;
         } catch ( Exception e ) {
             if ( sb.length() > 0 ) {
                 Ev3CompilerWorkflow.LOG.error("build exception. Messages from the build script are:\n" + sb.toString(), e);

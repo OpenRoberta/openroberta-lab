@@ -192,7 +192,12 @@ public class ClientProgram {
                     if ( robot.getName().equals("ev3") ) {
                         ClientProgram.LOG.info("compiler workflow started for program {}", programName);
                         messageKey = this.compilerWorkflow.execute(token, programName, data);
-                        wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
+                        if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
+                            wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
+                        } else {
+                            LOG.info(messageKey.toString());
+                            LOG.info("download command for the ev3 skipped, Keep going with push requests");
+                        }
                     } else {
                         ClientProgram.LOG.info("JavaScript code generation started for program {}", programName);
                         String javaScriptCode = Ast2Ev3JavaScriptVisitor.generate(data.getProgramTransformer().getTree());
@@ -263,8 +268,7 @@ public class ClientProgram {
     }
 
     private void handleRunProgramError(JSONObject response, Key messageKey, String token, boolean wasRobotWaiting) throws JSONException {
-        if ( messageKey == null ) {
-            // everything is fine
+        if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
             if ( token == null ) {
                 Util.addErrorInfo(response, Key.ROBOT_NOT_CONNECTED);
             } else {
