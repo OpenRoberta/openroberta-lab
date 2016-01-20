@@ -250,9 +250,10 @@ body.blocklyMinimalBody  *  {
 	padding-right: 0px;
 }
 
-.codeActive>textarea {
+.codeActive>pre {
 	width: 100%;
 	height: 100%;
+	word-wrap: inherit;
 }
 
 #blocklyDiv.simActive, #blocklyDiv.codeActive {
@@ -308,7 +309,7 @@ body.blocklyMinimalBody  *  {
 }
 
 @-webkit-keyframes blinker {
-	from { color:#afca04; } 
+	from { color:#afca04; }
 	to { color: #e2001a;}
 }
 
@@ -893,5 +894,5 @@ img.img-responsive {
     height: 140px;
     margin: 0 auto;
 }
- 
+
 }

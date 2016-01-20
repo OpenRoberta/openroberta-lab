@@ -205,7 +205,7 @@ function initProgramEnvironment(opt_programBlocks) {
 
 /**
  * Set program name
- * 
+ *
  * @param {name}
  *            Name to be set
  */
@@ -221,7 +221,7 @@ function setProgram(name, opt_owner) {
 
 /**
  * Set configuration name
- * 
+ *
  * @param {name}
  *            Name to be set
  */
@@ -234,7 +234,7 @@ function setConfiguration(name) {
 
 /**
  * Handle result of server call
- * 
+ *
  * @param {result}
  *            Result-object from server call
  */
@@ -311,7 +311,8 @@ function showCode() {
                 injectBlockly(result, userState.programBlocks, true);
             });
             $(".code").removeClass('hide');
-            document.getElementById('codeDiv').innerHTML = '<textarea>' + result.javaSource + '</textarea>';
+            document.getElementById('codeDiv').innerHTML = '<pre class="prettyprint linenums">' +
+                prettyPrintOne(result.javaSource, null, true) + '</pre>';
         });
     }
 }
@@ -421,7 +422,7 @@ function showProgram(result, load, name, opt_owner) {
 
 /**
  * Show configuration in brickly iframe
- * 
+ *
  * @param {result}
  *            Result-object of server call
  * @param {load}
@@ -498,7 +499,7 @@ function loadConfigurationFromListing() {
  * Share the programs that were selected in program list
  */
 function shareProgramsFromListing() {
-    // set rights for the user in the text input field 
+    // set rights for the user in the text input field
     var shareWith = $('#programShareWith').val();
     var alreadyShared = false;
     $("#relationsTable tbody tr").each(function(index) {
@@ -629,7 +630,7 @@ function deleteConfigurationFromListing() {
 
 /**
  * Show toolbox
- * 
+ *
  * @param {result}
  *            result of server call
  * @param {toolbox}
@@ -656,7 +657,7 @@ function showToolbox(result, toolbox) {
 
 /**
  * Load toolbox from server
- * 
+ *
  * @param {toolbox}
  *            toolbox to be loaded
  */
@@ -672,7 +673,7 @@ function loadToolbox(toolboxName) {
 
 /**
  * Display programs in a table
- * 
+ *
  * @param {result}
  *            result object of server call
  */
@@ -690,7 +691,7 @@ function showPrograms(result) {
 
 /**
  * Display configurations in a table
- * 
+ *
  * @param {result}
  *            result object of server call
  */
@@ -708,7 +709,7 @@ function showConfigurations(result) {
 
 /**
  * Display relations of programs in a table
- * 
+ *
  * @param {result}
  *            result object of server call
  */
@@ -1086,7 +1087,7 @@ function initHeadNavigation() {
         Blockly.hideChaff();
         $('.modal').modal('hide'); // close all opened popups
         var domId = event.target.id;
-        if (domId === 'menuRunProg') { //  Submenu 'Program'   
+        if (domId === 'menuRunProg') { //  Submenu 'Program'
             runOnBrick();
         } else if (domId === 'menuCheckProg') { //  Submenu 'Program'
             checkProgram();
@@ -1518,7 +1519,7 @@ function initLogging() {
 
 /**
  * Set robot state
- * 
+ *
  * @param {result}
  *            result of server call
  */
@@ -1650,7 +1651,7 @@ function translate(jsdata) {
 
 /**
  * Switch to another language
- * 
+ *
  * @param {langCode}
  *            Code of language to switch to
  * @param {forceSwitch}
@@ -1726,7 +1727,7 @@ function initializeLanguages() {
 
 /**
  * Display information
- * 
+ *
  * @param {result}
  *            Response of a REST-call.
  * @param {successMessage}
@@ -1747,19 +1748,19 @@ function displayInformation(result, successMessage, errorMessage, messageParam) 
 
 /**
  * Display message
- * 
+ *
  * @param {messageId}
  *            ID of message to be displayed
  * @param {output}
  *            where to display the message, "TOAST" or "POPUP"
  * @param {replaceWith}
  *            Text to replace an optional '$' in the message-text
- * 
+ *
  */
 function displayMessage(messageId, output, replaceWith) {
     if (messageId != undefined) {
         if (messageId.indexOf(".") >= 0 || messageId.toUpperCase() != messageId) {
-            // Invalid Message-Key 
+            // Invalid Message-Key
             LOG.info('Invalid message-key received: ' + messageId);
         }
 
@@ -1854,7 +1855,7 @@ function handleServerErrors() {
 
 /**
  * Set modification state.
- * 
+ *
  * @param {modified}
  *            modified or not.
  */
@@ -1864,7 +1865,7 @@ function setWorkspaceModified(modified) {
 
 /**
  * Wait for all blocklies ready.
- * 
+ *
  */
 function initBlockly() {
     if (userState.bricklyReady && userState.blocklyReady) {
@@ -1878,7 +1879,7 @@ function initBlockly() {
 }
 /**
  * Wait for first translation.
- * 
+ *
  */
 function startPopup() {
     if (userState.blocklyTranslated && userState.bricklyTranslated) {
