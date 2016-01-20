@@ -195,7 +195,9 @@ public class ClientProgram {
                         if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
                             wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
                         } else {
-                            LOG.info(messageKey.toString());
+                            if ( messageKey != null) {
+                              LOG.info(messageKey.toString());
+                            }
                             LOG.info("download command for the ev3 skipped, Keep going with push requests");
                         }
                     } else {

@@ -106,7 +106,7 @@ public class Ev3CompilerWorkflow {
             case PYTHON:
                 // maybe copy from /src/ to /target/
                 // python -c "import py_compile; py_compile.compile('.../src/...py','.../target/....pyc')"
-                return null;
+                return Key.COMPILERWORKFLOW_SUCCESS;
         }
         return null;
     }
