@@ -246,8 +246,6 @@ body.blocklyMinimalBody  *  {
 #codeDiv {
 	position: relative;
 	visibility: hidden;
-	padding: 28px;
-	padding-right: 0px;
 }
 
 .codeActive>pre {
