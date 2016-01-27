@@ -1516,7 +1516,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
             default:
                 throw new IllegalArgumentException("no mapping for " + sensor.getComponentType().getShortName() + "to ev3dev-lang-python");
         }
-        sb.append("ev3dev.").append(name).append("(ev3dev.INPUT_").append(port.getPortNumber()).append(")");
+        sb.append("Hal.make").append(name).append("(ev3dev.INPUT_").append(port.getPortNumber()).append(")");
         return sb.toString();
     }
 
