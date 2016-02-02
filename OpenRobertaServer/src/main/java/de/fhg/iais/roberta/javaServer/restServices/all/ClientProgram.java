@@ -74,7 +74,7 @@ public class ClientProgram {
         final int userId = httpSessionState.getUserId();
         final int robotId = httpSessionState.getRobotId();
         JSONObject response = new JSONObject();
-        DbSession dbSession = this.sessionFactoryWrapper.getSession();
+        DbSession dbSession = sessionFactoryWrapper.getSession();
         try {
             JSONObject request = fullRequest.getJSONObject("data");
             String cmd = request.getString("cmd");
@@ -111,7 +111,7 @@ public class ClientProgram {
                 String programName = request.getString("name");
                 String programText = request.getString("programText");
                 String configurationText = request.getString("configurationText");
-                String javaSource = this.compilerWorkflow.generateSourceCode(token, programName, programText, configurationText);
+                String javaSource = compilerWorkflow.generateSourceCode(token, programName, programText, configurationText);
                 AbstractProcessor forMessages = new DummyProcessor();
                 if ( javaSource == null ) {
                     forMessages.setError(Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED);
@@ -191,12 +191,12 @@ public class ClientProgram {
                 if ( messageKey == null ) {
                     if ( robot.getName().equals("ev3") ) {
                         ClientProgram.LOG.info("compiler workflow started for program {}", programName);
-                        messageKey = this.compilerWorkflow.execute(token, programName, data);
+                        messageKey = compilerWorkflow.execute(token, programName, data);
                         if ( messageKey == Key.COMPILERWORKFLOW_SUCCESS ) {
-                            wasRobotWaiting = this.brickCommunicator.theRunButtonWasPressed(token, programName);
+                            wasRobotWaiting = brickCommunicator.theRunButtonWasPressed(token, programName);
                         } else {
-                            if ( messageKey != null) {
-                              LOG.info(messageKey.toString());
+                            if ( messageKey != null ) {
+                                LOG.info(messageKey.toString());
                             }
                             LOG.info("download command for the ev3 skipped, Keep going with push requests");
                         }
@@ -206,6 +206,7 @@ public class ClientProgram {
                         ClientProgram.LOG.info("JavaScriptCode \n{}", javaScriptCode);
                         response.put("javaScriptProgram", javaScriptCode);
                         wasRobotWaiting = true;
+                        messageKey = Key.COMPILERWORKFLOW_SUCCESS;
                     }
                 }
                 handleRunProgramError(response, messageKey, token, wasRobotWaiting);
@@ -224,7 +225,7 @@ public class ClientProgram {
                 dbSession.close();
             }
         }
-        Util.addFrontendInfo(response, httpSessionState, this.brickCommunicator);
+        Util.addFrontendInfo(response, httpSessionState, brickCommunicator);
         return Response.ok(response).build();
     }
 
