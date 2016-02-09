@@ -31,6 +31,7 @@ function initUserState() {
     userState.robotState = '';
     userState.robotBattery = '';
     userState.robotWait = '';
+	userState.sensorValues = '';
     userState.robotVersion = '';
     userState.serverVersion = '';
     userState.programBlocks = null;
@@ -1552,6 +1553,11 @@ function setRobotState(result) {
         userState.robotState = result['robot.state'];
     } else {
         userState.robotState = '';
+    }
+	if (result['robot.sensorvalues'] != undefined) {
+		userState.sensorValues = result['robot.sensorvalues'];
+	} else {
+        userState.sensorValues = '';
     }
 
     if (userState.accountName) {
