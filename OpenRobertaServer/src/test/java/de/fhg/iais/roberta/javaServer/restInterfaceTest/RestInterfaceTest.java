@@ -46,7 +46,7 @@ import de.fhg.iais.roberta.util.Util;
  * - check the preconditions (typically using SQL),<br>
  * - call the REST service,<br>
  * - check the response object,<br>
- * - check the preconditions (typically using SQL).<br>
+ * - check the postconditions (typically using SQL).<br>
  * <br>
  * - to avoid code repetition, use simple wrappers for REST calls,<br>
  * - use the <code>this.sessionFactoryWrapper</code> object to create data base sessions and<br>
@@ -104,6 +104,13 @@ public class RestInterfaceTest {
     }
 
     @Test
+    /**
+     * Each method call of this test method is a separate test testing separate components of the server. The methods have to be called in sequence, because
+     * they depend on database state (as: two user exist, etc), which is created by methods called before.
+     *
+     * @throws Exception
+     */
+    //
     public void test() throws Exception {
         this.memoryDbSetup.deleteAllFromUserAndProgramTmpPasswords();
         createTwoUsers();
@@ -113,7 +120,7 @@ public class RestInterfaceTest {
         pidCreateAndUpdate4Programs();
         minschaCreate2Programs();
         pidSharesProgramsMinschaCanAccessRW();
-        pidDeletesProgramsMinschaCannotAccessRW();
+        pidDeletesProgramsMinschaCannotAccess();
         pidSharesProgram1MinschaCanDeleteTheShare();
         pidAndMinschaAccessConcurrently();
 
@@ -125,10 +132,12 @@ public class RestInterfaceTest {
     /**
      * create two user:<br>
      * <b>PRE:</b> no user exists<br>
-     * <b>POST:</b> two user exist, no user has logged in<br>
-     * - USER table empty; create user "pid" -> success; USER table has 1 row<br>
-     * - create "pid" a second time -> error; USER table has 1 row<br>
-     * - create second user "minscha" -> success; USER table has 2 rows
+     * <b>POST:</b> two user exist, no user has logged in
+     * <ul>
+     * <li>USER table empty; create user "pid" -> success; USER table has 1 row
+     * <li>create "pid" a second time -> error; USER table has 1 row
+     * <li>create second user "minscha" -> success; USER table has 2 rows
+     * </ul>
      */
     private void createTwoUsers() throws Exception {
         {
@@ -158,11 +167,15 @@ public class RestInterfaceTest {
 
     /**
      * update user:<br>
-     * <b>PRE:</b> one user exists<br>
-     * <b>POST:</b> two user exist, no user has logged in<br>
-     * - USER table 2 users; update user "minscha" -> error<br>
-     * - login with "minscha" -> success; user "minscha" is logedin<br>
-     * - update user name of "minscha" -> success<br>
+     * <b>PRE:</b> two user exist, no user has logged in<br>
+     * <b>POST:</b> two user exist, no user has logged in
+     * <ul>
+     * <li>USER table has 2 rows
+     * <li>update of user "minscha" fails, because the user is not logged in
+     * <li>login with "minscha" -> success
+     * <li>update user name of "minscha" -> success
+     * <li>user "minscha" logs out -> success
+     * </ul>
      */
     private void updateUser() throws Exception {
 
@@ -192,8 +205,18 @@ public class RestInterfaceTest {
 
     /**
      * change user password:<br>
-     * <b>PRE:</b> two user exists<br>
-     * <b>POST:</b> two user exist, no user has logged in<br>
+     * <b>PRE:</b> two user exists, no user has logged in<br>
+     * <b>POST:</b> two user exist, no user has logged in
+     * <ul>
+     * <li>password change of user "minscha" fails, because the user is not logged in
+     * <li>user "minscha" logs in -> success
+     * <li>password change of user "minscha" fails, because the old password supplied is wrong
+     * <li>password change of user "minscha" with valid data -> success
+     * <li>user "minscha" logs out -> success
+     * <li>user "minscha" logs in with the new password -> success
+     * <li>password change of user "minscha" with valid data (change the password to the old value) -> success
+     * <li>user "minscha" logs out -> success
+     * </ul>
      */
     private void changeUserPassword() throws Exception {
 
@@ -228,13 +251,15 @@ public class RestInterfaceTest {
     /**
      * test login and logout<br>
      * <b>PRE:</b> two user exist, no user has logged in<br>
-     * <b>POST:</b> two user exist, both user have logged in<br>
-     * - login as "pid", use wrong password -> error; pid-session tells that nobody is logged in<br>
-     * - login as "pid", use right password -> success; pid-session has remembered the login<br>
-     * - login as "minscha" using the same session as for "pid" -> ERROR; pid-session has remembered the first login<br>
-     * - logout -> success; pid-session tells that nobody is logged in<br>
-     * - login as "pid", use right password -> success; pid-session has remembered the login<br>
-     * - login as "minscha", use right password -> success; minscha-session has remembered the login<br>
+     * <b>POST:</b> two user exist, both user have logged in
+     * <ul>
+     * <li>login as "pid", use wrong password -> ERROR; pid-session tells that nobody is logged in
+     * <li>login as "pid", use right password -> success; pid-session remembers the login
+     * <li>login as "minscha" using the same session as for "pid" -> ERROR; pid-session has remembered the first login
+     * <li>logout -> success; pid-session tells that nobody is logged in
+     * <li>login as "pid", use right password -> success; pid-session remembers the login
+     * <li>login as "minscha", use right password -> success; minscha-session remembers the login
+     * </ul>
      */
     private void loginLogoutPid() throws Exception {
         Assert.assertTrue(!this.sPid.isUserLoggedIn() && !this.sMinscha.isUserLoggedIn());
@@ -258,9 +283,14 @@ public class RestInterfaceTest {
      * test store and update of programs for "pid"<br>
      * <b>INVARIANT:</b> two user exist, both user have logged in<br>
      * <b>PRE:</b> no program exists<br>
-     * <b>POST:</b> "pid" owns four programs<br>
+     * <b>POST:</b> "pid" owns four programs
+     * <ul>
+     * <li>save 4 programs -> success; 4 programs found
+     * <li>saveAs to an existing program -> error; program must not exist
+     * <li>save to a not existing program -> error; program must exist
+     * </ul>
      */
-    private void pidCreateAndUpdate4Programs() throws Exception, JSONException {
+    private void pidCreateAndUpdate4Programs() throws Exception {
         // PRE
         int pidId = this.sPid.getUserId();
         Assert.assertTrue(this.sPid.isUserLoggedIn() && this.sMinscha.isUserLoggedIn());
@@ -299,9 +329,11 @@ public class RestInterfaceTest {
      * test store and update of programs for "minscha"<br>
      * <b>INVARIANT:</b> two user exist, both user have logged in, "pid" owns four programs<br>
      * <b>PRE:</b> "minscha" owns no programs<br>
-     * <b>POST:</b> "minscha" owns two programs<br>
-     * - store 2 programs and check the count in the db<br>
-     * - check the content of program 2 in the db<br>
+     * <b>POST:</b> "minscha" owns two programs
+     * <ul>
+     * <li>store 2 programs and check the count in the db
+     * <li>check the content of program 'p2' in the db
+     * </ul>
      */
     private void minschaCreate2Programs() throws Exception {
         int pidId = this.sPid.getUserId();
@@ -309,11 +341,13 @@ public class RestInterfaceTest {
         Assert.assertTrue(this.sPid.isUserLoggedIn() && this.sMinscha.isUserLoggedIn());
         Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + minschaId));
         Assert.assertEquals(4, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + pidId));
+
         saveAs(this.sMinscha, minschaId, "p1", "<program>.1.minscha</program>", "ok", Key.PROGRAM_SAVE_SUCCESS);
         saveAs(this.sMinscha, minschaId, "p2", "<program>.2.minscha</program>", "ok", Key.PROGRAM_SAVE_SUCCESS);
         Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + minschaId));
         Assert.assertEquals(4, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = " + pidId));
         Assert.assertEquals(6, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM"));
+
         String program = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + minschaId + " and NAME = 'p2'");
         Assert.assertTrue(program.contains(".2.minscha"));
         Assert.assertTrue(this.sPid.isUserLoggedIn() && this.sMinscha.isUserLoggedIn());
@@ -322,18 +356,21 @@ public class RestInterfaceTest {
     /**
      * share a programm and access it<br>
      * <b>INVARIANT:</b> two user exist, both user have logged in, "pid" owns four programs, "minscha" owns two programs<br>
-     * <b>PRE:</b> "minscha" can access his two programs<br>
-     * <b>POST:</b> "minscha" can access his two programs and two shared programs<br>
-     * - "pid" shares her programs "p2" R and "p3" W with "minscha"<br>
-     * - "minscha" views both and can read both<br>
-     * - "minscha" cannot modify "p2", but can modify "p3"<br>
+     * <b>PRE:</b> "minscha" can access his two programs, nothing is shared<br>
+     * <b>POST:</b> "minscha" can access his two programs and two shared programs
+     * <ul>
+     * <li>"pid" shares her programs "p2" R and "p3" W with "minscha"
+     * <li>"minscha" cannot modify "p2", but can modify "p3"
+     * </ul>
      */
-    private void pidSharesProgramsMinschaCanAccessRW() throws Exception, JSONException {
+    private void pidSharesProgramsMinschaCanAccessRW() throws Exception {
         int pidId = this.sPid.getUserId();
         int minschaId = this.sMinscha.getUserId();
+        Assert.assertTrue(this.sPid.isUserLoggedIn() && this.sMinscha.isUserLoggedIn());
         assertProgramListingAsExpected(this.sPid, "['p1','p2','p3','p4']");
         assertProgramListingAsExpected(this.sMinscha, "['p1','p2']");
         Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER_PROGRAM"));
+
         restProgram(this.sPid, "{'cmd':'shareP';'programName':'p2';'userToShare':'minscha';'right':'READ'}", "ok", Key.ACCESS_RIGHT_CHANGED);
         restProgram(this.sPid, "{'cmd':'shareP';'programName':'p3';'userToShare':'minscha';'right':'WRITE'}", "ok", Key.ACCESS_RIGHT_CHANGED);
         Assert.assertEquals(2, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER_PROGRAM where USER_ID = '" + minschaId + "'"));
@@ -358,7 +395,6 @@ public class RestInterfaceTest {
         restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p3';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
         Assert.assertTrue(this.response.getEntity().toString().contains(".3.pid"));
 
-        Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where NAME = 'pDoesntExist'"));
         save(this.sMinscha, pidId, "p2", -1, "<program>.2.minscha.update</program>", "error", Key.PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION);
         String p2Text = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + pidId + " and NAME = 'p2'");
         Assert.assertTrue(p2Text.contains(".2.pid.updated"));
@@ -374,15 +410,20 @@ public class RestInterfaceTest {
      * deleting a program removes the share<br>
      * <b>INVARIANT:</b> two user exist, both user have logged in<br>
      * <b>PRE:</b> "minscha" can access his two programs and two shared programs<br>
-     * <b>POST:</b> "minscha" can access his program "p1" and no shared programs<br>
-     * - "minscha" deletes his program "p2"<br>
-     * - "pid" deletes her programs "p2" and "p3"<br>
-     * - "minscha" cannot view/modify "p2" and "p3" anymore<br>
+     * <b>POST:</b> "minscha" can access his program "p1" and no shared programs
+     * <ul>
+     * <li>"minscha" deletes his program "p2" -> success; the programm cannot be loaded anymor, the programm cannot be deleted a second time, "minscha"
+     * continues to see a program "p2" (the program shared with "pid")
+     * <li>"pid" deletes her programs "p2" and "p3" -> success; nothing shared anymore, the visible programs match, neither owner nor sharer can load a deleted
+     * program
+     * </ul>
      */
-    private void pidDeletesProgramsMinschaCannotAccessRW() throws Exception, JSONException {
+    private void pidDeletesProgramsMinschaCannotAccess() throws Exception {
         int pidId = this.sPid.getUserId();
+        Assert.assertTrue(this.sPid.isUserLoggedIn() && this.sMinscha.isUserLoggedIn());
         assertProgramListingAsExpected(this.sPid, "['p1','p2','p3','p4']");
         assertProgramListingAsExpected(this.sMinscha, "['p1','p2','p2','p3']"); // p2 is from "pid"!
+
         restProgram(this.sMinscha, "{'cmd':'deleteP';'name':'p2'}", "ok", Key.PROGRAM_DELETE_SUCCESS);
         restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p2';'owner':'minscha'}", "error", Key.PROGRAM_GET_ONE_ERROR_NOT_FOUND);
         restProgram(this.sMinscha, "{'cmd':'deleteP';'name':'p2'}", "error", Key.PROGRAM_DELETE_ERROR);
@@ -406,34 +447,46 @@ public class RestInterfaceTest {
     }
 
     /**
-     * it is possible to delete the share. This doesn't delete the program :-) <b>INVARIANT:</b> two user exist, both user have logged in, "pid" owns program
-     * "p4"<br>
+     * it is possible to delete the share. This doesn't delete the program :-)<br>
+     * <b>INVARIANT:</b> two user exist, both user have logged in, "pid" owns program "p4"<br>
      * <b>PRE:</b> "minscha" can access his program "p1" and no shared programs<br>
-     * <b>POST:</b> "minscha" can access his program "p1" and no shared programs<br>
-     * - "pid" shares program "p4" W with "minscha"<br>
-     * - "minscha" can write it<br>
-     * - "minscha" can delete the share<br>
-     * - "minscha" cannot write it anymore<br>
-     * - the program continues to exist (for "pid"), it vanishes from the program list of "minscha"
+     * <b>POST:</b> "minscha" can access his program "p1" and no shared programs
+     * <ul>
+     * <li>"pid" shares program "p4" W with "minscha"
+     * <li>"minscha" can write it
+     * <li>"pid" does see the change<br>
+     * <br>
+     * <li>"minscha" can delete the share
+     * <li>"minscha" cannot write it anymore
+     * <li>the program continues to exist (for "pid"), but it vanishes from the program list of "minscha"
+     * </ul>
      */
     private void pidSharesProgram1MinschaCanDeleteTheShare() throws Exception, JSONException {
         {
             int pidId = this.sPid.getUserId();
             int minschaId = this.sMinscha.getUserId();
+            Assert.assertTrue(this.sPid.isUserLoggedIn() && this.sMinscha.isUserLoggedIn());
+            assertProgramListingAsExpected(this.sPid, "['p1','p4']");
+            assertProgramListingAsExpected(this.sMinscha, "['p1']");
+
             restProgram(this.sPid, "{'cmd':'shareP';'programName':'p4';'userToShare':'minscha';'right':'WRITE'}", "ok", Key.ACCESS_RIGHT_CHANGED);
             assertProgramListingAsExpected(this.sMinscha, "['p1','p4']");
+
             Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER_PROGRAM where USER_ID = '" + minschaId + "'"));
             String p4Text = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + pidId + " and NAME = 'p4'");
             Assert.assertTrue(p4Text.contains(".4.pid"));
-            restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+            restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.pid"));
             save(this.sMinscha, pidId, "p4", -1, "<program>.4.minscha.update</program>", "ok", Key.PROGRAM_SAVE_SUCCESS);
             String p4TextUpd1 = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + pidId + " and NAME = 'p4'");
             Assert.assertTrue(p4TextUpd1.contains(".4.minscha.update"));
             restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.minscha.update"));
+
             restProgram(this.sMinscha, "{'cmd':'shareDelete';'programName':'p4';'owner':'pid'}", "ok", Key.ACCESS_RIGHT_DELETED);
-            save(this.sMinscha, pidId, "p4", -1, "<program>.4.minscha.fail</program>", "error", Key.PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION);
+            save(this.sMinscha, pidId, "p4", -1, "<program>.5.minscha.fail</program>", "error", Key.PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION);
+            restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
+            Assert.assertTrue(this.response.getEntity().toString().contains(".4.minscha.update"));
             assertProgramListingAsExpected(this.sMinscha, "['p1']");
             assertProgramListingAsExpected(this.sPid, "['p1','p4']");
             String p4TextUpd2 = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + pidId + " and NAME = 'p4'");
@@ -443,30 +496,35 @@ public class RestInterfaceTest {
     }
 
     /**
-     * the lastChanged-timestamp is used to guarantee an optimistic locking: - "pid" shares program "p4" W with "minscha"<br>
-     * - "pid" reads "p4" (with lastChanged == timestampX1<br>
-     * - "minscha" reads "p4" (with the same lastChanged == timestampX1<br>
-     * - "pid" can write (lastChanged becomes timestampX2<br>
-     * - "minscha" cannot write (because lastChanged changed :-)<br>
-     * Vice versa: if "minscha" writes back before "pid" writes back, "pid"s write fails
+     * the lastChanged-timestamp is used to guarantee an optimistic locking: - "pid" shares program "p4" W with "minscha"
+     * <ul>
+     * <li>"pid" reads "p4" (with lastChanged == timestamp X1
+     * <li>"minscha" reads "p4" (with the same lastChanged == timestamp X1
+     * <li>"pid" can write (lastChanged becomes timestamp X2)
+     * <li>"minscha" cannot write (because lastChanged changed :-)
+     * <li>Vice versa: if "minscha" writes back before "pid" writes back, "pid"s write fails
+     * </ul>
      */
     private void pidAndMinschaAccessConcurrently() throws Exception, JSONException {
         int pidId = this.sPid.getUserId();
         int minschaId = this.sMinscha.getUserId();
+        Assert.assertTrue(this.sPid.isUserLoggedIn() && this.sMinscha.isUserLoggedIn());
         assertProgramListingAsExpected(this.sPid, "['p1','p4']");
         assertProgramListingAsExpected(this.sMinscha, "['p1']");
+
+        restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
         save(this.sPid, pidId, "p4", -1, "<program>.4.pId</program>", "ok", Key.PROGRAM_SAVE_SUCCESS);
         restProgram(this.sPid, "{'cmd':'shareP';'programName':'p4';'userToShare':'minscha';'right':'WRITE'}", "ok", Key.ACCESS_RIGHT_CHANGED);
         assertProgramListingAsExpected(this.sPid, "['p1','p4']");
         assertProgramListingAsExpected(this.sMinscha, "['p1','p4']");
+
         Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER_PROGRAM where USER_ID = '" + minschaId + "'"));
         Assert.assertEquals(1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = '" + minschaId + "' and NAME = 'p1'"));
         Assert.assertEquals(0, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from PROGRAM where OWNER_ID = '" + minschaId + "' and NAME = 'p4'"));
-        String program1 = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + pidId + " and NAME = 'p4'");
-        Assert.assertTrue(program1.contains(".4.pId"));
-        // setup complete; "p4" from pid is shared with minscha
+        String programP4OfPid = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + pidId + " and NAME = 'p4'");
+        Assert.assertTrue(programP4OfPid.contains(".4.pId"));
 
-        // scenario 1: minscha reads pid's p4, then he writes; pid doesn't use her program
+        // scenario 1: minscha reads pid's p4, then he writes; pid doesn't use her program; the timestamp increases
         {
             restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.pId"));
@@ -479,25 +537,22 @@ public class RestInterfaceTest {
             long lastChanged2 = ((JSONObject) this.response.getEntity()).getLong("lastChanged");
             Assert.assertTrue(lastChanged2 > lastChanged1);
         }
+        final Key LOCK_ERROR = Key.PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING;
         // scenario 2: minscha reads pid's p4, then pid reads her p4; pid stores her program, but minscha can't (his timestamp is outdated)
         {
             restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             long minschaReadTimestamp = ((JSONObject) this.response.getEntity()).getLong("lastChanged");
             restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             long pidReadTimestamp = ((JSONObject) this.response.getEntity()).getLong("lastChanged");
+            Thread.sleep(2); // both timestamps are probably the same, sleeping to get a different 'last update timestamp'
             save(this.sPid, pidId, "p4", pidReadTimestamp, "<program>.4.pid.concurrentOk</program>", "ok", Key.PROGRAM_SAVE_SUCCESS);
             restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.pid.concurrentOk"));
-            save(
-                this.sMinscha,
-                pidId,
-                "p4",
-                minschaReadTimestamp,
-                "<program>.4.minscha.concurrentFail</program>",
-                "error",
-                Key.PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING);
+            save(this.sMinscha, pidId, "p4", minschaReadTimestamp, "<program>.4.minscha.concurrentFail</program>", "error", LOCK_ERROR);
             restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.pid.concurrentOk"));
+            String program = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + pidId + " and NAME = 'p4'");
+            Assert.assertTrue(program.contains(".4.pid.concurrentOk"));
         }
         // scenario 3: minscha reads pid's p4, then pid reads her p4; minscha stores the shared program, but pid can't (her timestamp is outdated)
         {
@@ -505,19 +560,15 @@ public class RestInterfaceTest {
             long minschaReadTimestamp = ((JSONObject) this.response.getEntity()).getLong("lastChanged");
             restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             long pidReadTimestamp = ((JSONObject) this.response.getEntity()).getLong("lastChanged");
+            Thread.sleep(2); // both timestamps are probably the same, sleeping to get a different 'last update timestamp'
             save(this.sMinscha, pidId, "p4", minschaReadTimestamp, "<program>.4.minscha.concurrentOk</program>", "ok", Key.PROGRAM_SAVE_SUCCESS);
             restProgram(this.sMinscha, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.minscha.concurrentOk"));
-            save(
-                this.sPid,
-                pidId,
-                "p4",
-                pidReadTimestamp,
-                "<program>.4.pid.concurrentFail</program>",
-                "error",
-                Key.PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING);
+            save(this.sPid, pidId, "p4", pidReadTimestamp, "<program>.4.pid.concurrentFail</program>", "error", LOCK_ERROR);
             restProgram(this.sPid, "{'cmd':'loadP';'name':'p4';'owner':'pid'}", "ok", Key.PROGRAM_GET_ONE_SUCCESS);
             Assert.assertTrue(this.response.getEntity().toString().contains(".4.minscha.concurrentOk"));
+            String program = this.memoryDbSetup.getOne("select PROGRAM_TEXT from PROGRAM where OWNER_ID = " + pidId + " and NAME = 'p4'");
+            Assert.assertTrue(program.contains(".4.minscha.concurrentOk"));
         }
     }
 

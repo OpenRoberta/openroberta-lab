@@ -37,6 +37,7 @@ import de.fhg.iais.roberta.util.Clock;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.testsetup.IntegrationTest;
 
+@Ignore
 @Category(IntegrationTest.class)
 public class PerformanceUserInteractionTest {
     private static final Logger LOG = LoggerFactory.getLogger("workflow");
@@ -88,7 +89,6 @@ public class PerformanceUserInteractionTest {
     }
 
     @Test
-    @Ignore
     public void runUsersConcurrent() throws Exception {
         int baseNumber = 0;
         PerformanceUserInteractionTest.LOG.info(

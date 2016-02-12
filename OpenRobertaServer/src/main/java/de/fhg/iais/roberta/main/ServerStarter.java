@@ -163,6 +163,7 @@ public class ServerStarter {
             System.exit(16);
         }
         this.injector = robertaGuiceServletConfig.getCreatedInjector();
+        WebSocketExample.setGuiceInjector(this.injector);
         return server;
     }
 

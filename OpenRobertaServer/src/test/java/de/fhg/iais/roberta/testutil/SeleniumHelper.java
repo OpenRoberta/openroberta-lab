@@ -94,6 +94,7 @@ public class SeleniumHelper {
         if ( browserVisibility ) {
             FirefoxProfile fp = new FirefoxProfile();
             fp.setEnableNativeEvents(false);
+            fp.setPreference("xpinstall.signatures.required", false);
             driver = new FirefoxDriver(fp);
             driver.manage().window().maximize();
         } else {

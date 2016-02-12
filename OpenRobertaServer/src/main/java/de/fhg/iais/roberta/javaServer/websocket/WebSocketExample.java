@@ -10,9 +10,23 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Injector;
+
+import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CommunicationData;
+import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
+
 @WebSocket
 public class WebSocketExample {
     private static final Logger LOG = LoggerFactory.getLogger(WebSocketExample.class);
+    private static Injector guiceInjector = null;
+
+    public static void setGuiceInjector(Injector guiceInjector) {
+        if ( WebSocketExample.guiceInjector == null ) {
+            WebSocketExample.guiceInjector = guiceInjector;
+        } else {
+            LOG.error("Guice injector for websockets is set twice, this call is simply ignored");
+        }
+    }
 
     @OnWebSocketConnect
     public void handleConnect(Session session) throws Exception {
@@ -29,11 +43,9 @@ public class WebSocketExample {
         JSONObject request = new JSONObject(requestString);
         String token = (String) request.remove("token");
         LOG.info("@OnWebSocketMessage: " + token + " " + request);
-        //Ev3CommunicationData state = this.brickCommunicator.getState(token);
-        //state.setSensorValues(request);
-        // TODO
-        // @Reinhard sensor logging example
-        // @OnWebSocketMessage: 969F09TE {"S3-color-COLOUR":"NONE","S3-color-RED":0,"C-big motorDEGREE":534,"S4-touch":false,"S3-color-RGB":[0,0,0],"S1-ultrasonicDISTANCE":36,"S1-ultrasonicPRESENCE":false,"S2-gyroRATE":-7,"B-big motorDEGREE":536,"S2-gyroANGLE":0,"S3-color-AMBIENTLIGHT":1}
+        Ev3Communicator communicator = guiceInjector.getInstance(Ev3Communicator.class);
+        Ev3CommunicationData state = communicator.getState(token);
+        state.setSensorValues(request);
     }
 
     @OnWebSocketError
