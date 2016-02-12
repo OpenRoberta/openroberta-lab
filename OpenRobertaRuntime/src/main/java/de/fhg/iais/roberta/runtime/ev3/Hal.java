@@ -281,23 +281,34 @@ public class Hal {
      */
     public void logToScreen() {
         while ( !Thread.currentThread().isInterrupted() ) {
-            try {
-                for ( UsedSensor sensor : this.usedSensors ) {
-                    SensorPort port = sensor.getPort();
-                    SensorMode mode = (SensorMode) sensor.getMode();
-                    String methodName = mode.getHalJavaMethod();
-                    Method method;
-                    String result = "";
-                    try {
-                        method = Hal.class.getMethod(methodName, SensorPort.class);
-                        result = String.valueOf(method.invoke(this, port));
-                    } catch ( NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e ) {
-                        break;
-                    }
-                    formatAndPrintToScreen(port, result);
+            for ( UsedSensor sensor : this.usedSensors ) {
+                SensorPort port = sensor.getPort();
+                SensorMode mode = (SensorMode) sensor.getMode();
+                String methodName = mode.getHalJavaMethod();
+                Method method;
+                String result = "";
+                try {
+                    method = Hal.class.getMethod(methodName, SensorPort.class);
+                    result = String.valueOf(method.invoke(this, port));
+                } catch ( NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e ) {
+                    break;
                 }
-            } catch ( Exception e ) {
-                return;
+                formatAndPrintToScreen(port, result);
+            }
+            for ( Entry<ActorPort, EV3Actor> mapEntry : this.brickConfiguration.getActors().entrySet() ) {
+                ActorPort port = mapEntry.getKey();
+                String line = "";
+                try {
+                    if ( this.brickConfiguration.isMotorRegulated(port) ) {
+                        line = port.name() + " " + getRegulatedMotorTachoValue(port, MotorTachoMode.DEGREE) + "\n";
+                        this.lcdos.write(line.getBytes());
+                    } else {
+                        line = port.name() + " " + getUnregulatedMotorTachoValue(port, MotorTachoMode.DEGREE) + "\n";
+                        this.lcdos.write(line.getBytes());
+                    }
+                } catch ( IOException e ) {
+                    // ok
+                }
             }
             Delay.msDelay(2000);
         }
@@ -305,7 +316,7 @@ public class Hal {
 
     /**
      * TODO not nice, find better solution
-     * 
+     *
      * @param port
      * @param result
      */
@@ -313,14 +324,14 @@ public class Hal {
         try {
             if ( result.startsWith("[") ) {
                 String tmp = result.substring(1, result.length() - 1);
-                List<String> list = new ArrayList<String>(Arrays.asList(tmp.split("\\.0, |\\.0")));
+                List<String> list = new ArrayList<String>(Arrays.asList(tmp.split(", ")));
                 this.lcdos.write((port + " ").getBytes());
                 for ( String string : list ) {
                     this.lcdos.write((string + " ").getBytes());
                 }
                 this.lcdos.write("\n".getBytes());
             } else {
-                this.lcdos.write((port + " " + result.split("\\.")[0] + "\n").getBytes());
+                this.lcdos.write((port + " " + result + "\n").getBytes());
             }
         } catch ( IOException e ) {
             return;
