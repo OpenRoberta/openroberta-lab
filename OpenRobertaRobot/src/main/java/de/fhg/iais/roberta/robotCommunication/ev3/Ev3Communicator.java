@@ -35,7 +35,14 @@ public class Ev3Communicator {
         LOG.info("timer thread created");
     }
 
-    public boolean brickWantsTokenToBeApproved(Ev3CommunicationData registration) {
+    /**
+     * check the new registration ticket.
+     * only used by brickWantsTokenToBeApproved(), extracted for testing
+     * 
+     * @throws assertions for various types of issues
+     * @return true if the ticket has been accepted
+     */
+    public boolean addNewRegistration(Ev3CommunicationData registration) {
         String token = registration.getToken();
         String robotIdentificator = registration.getRobotIdentificator();
         Assert.isTrue(token != null && robotIdentificator != null);
@@ -49,6 +56,11 @@ public class Ev3Communicator {
             }
         }
         this.allStates.put(token, registration);
+        return true;
+    }
+
+    public boolean brickWantsTokenToBeApproved(Ev3CommunicationData registration) {
+        addNewRegistration(registration);
         return registration.brickTokenAgreementRequest(); // this will freeze the request until another issues a notifyAll()
     }
 
