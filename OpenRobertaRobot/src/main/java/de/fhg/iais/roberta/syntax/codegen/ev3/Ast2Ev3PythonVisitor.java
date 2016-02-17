@@ -824,9 +824,9 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
+        mainTask.getVariables().visit(this);
         this.sb.append("\n").append("def run():");
         incrIndentation();
-        mainTask.getVariables().visit(this);
         return null;
     }
 
@@ -1390,7 +1390,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append("TRUE = True\n");
         this.sb.append(generateRegenerateConfiguration()).append("\n");
         this.sb.append(generateRegenerateUsedSensors()).append("\n");
-        this.sb.append("hal = Hal(brickConfiguration, usedSensors)\n");
+        this.sb.append("hal = Hal(_brickConfiguration, _usedSensors)\n");
     }
 
     private void generateSuffix(boolean withWrapping) {
@@ -1416,7 +1416,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     private String generateRegenerateConfiguration() {
         StringBuilder sb = new StringBuilder();
-        sb.append("brickConfiguration = {\n");
+        sb.append("_brickConfiguration = {\n");
         sb.append("    'wheel-diameter': " + this.brickConfiguration.getWheelDiameterCM() + ",\n");
         sb.append("    'track-width': " + this.brickConfiguration.getTrackWidthCM() + ",\n");
         appendActors(sb);
@@ -1460,7 +1460,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         //        for ( EV3Sensors usedSensor : this.usedSensors ) {
         //            arrayOfSensors += "'" + getHardwareComponentTypeCode(usedSensor) + "',";
         //        }
-        sb.append("usedSensors = Set([");
+        sb.append("_usedSensors = Set([");
         //        if ( this.usedSensors.size() > 0 ) {
         //            sb.append(arrayOfSensors.substring(0, arrayOfSensors.length() - 1));
         //        }

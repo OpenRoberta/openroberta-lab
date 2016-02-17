@@ -28,7 +28,7 @@ public class AstToEv3PythonVisitorTest {
         + "TRUE = True\n";
 
     private static final String GLOBALS = "" //
-        + "brickConfiguration = {\n"
+        + "_brickConfiguration = {\n"
         + "    'wheel-diameter': 5.6,\n"
         + "    'track-width': 17.0,\n"
         + "    'actors': {\n"
@@ -40,8 +40,8 @@ public class AstToEv3PythonVisitorTest {
         + "        '2':Hal.makeUltrasonicSensor(ev3dev.INPUT_2),\n"
         + "    },\n"
         + "}\n"
-        + "usedSensors = Set([])\n"
-        + "hal = Hal(brickConfiguration, usedSensors)\n";
+        + "_usedSensors = Set([])\n"
+        + "hal = Hal(_brickConfiguration, _usedSensors)\n";
 
     private static final String MAIN_METHOD = "" //
         + "def main():\n"
