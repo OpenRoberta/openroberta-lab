@@ -10,7 +10,7 @@ import org.json.JSONObject;
 
 import de.fhg.iais.roberta.util.ORAtokenGenerator;
 
-public class USBConnector extends Observable implements Runnable, Connector {
+public class EV3USBConnector extends Observable implements Runnable, Connector {
 
     private String brickIp = "10.0.1.1";
     private String serverIp = "localhost";
@@ -19,42 +19,10 @@ public class USBConnector extends Observable implements Runnable, Connector {
 
     private final EV3Communicator ev3comm;
     private final ServerCommunicator servcomm;
-    private final ORAtokenGenerator tokenGenerator;
 
     private JSONObject brickData = null;
 
-    private static final String KEY_TOKEN = "token";
-    public static final String KEY_CMD = "cmd";
-
-    private static final String CMD_REGISTER = "register";
-    private static final String CMD_PUSH = "push";
-    private static final String CMD_ISRUNNING = "isrunning";
-
-    // cmds receive from server
-    private static final String CMD_REPEAT = "repeat";
-    private static final String CMD_ABORT = "abort";
-    private static final String CMD_UPDATE = "update";
-    private static final String CMD_DOWNLOAD = "download";
-    private static final String CMD_CONFIGURATION = "configuration";
-
     private static Logger log = Logger.getLogger("Connector");
-
-    public enum State {
-        DISCOVER,
-        WAIT_FOR_CONNECT,
-        CONNECT,
-        WAIT_FOR_CMD,
-        WAIT_EXECUTION,
-        DISCONNECT,
-        WAIT_FOR_SERVER,
-        UPDATE,
-        UPDATE_SUCCESS,
-        UPDATE_FAIL,
-        ERROR_HTTP,
-        ERROR_UPDATE,
-        ERROR_BRICK,
-        TOKEN_TIMEOUT
-    }
 
     private State state = State.DISCOVER; // First state when program starts
     private String token = "";
@@ -67,7 +35,7 @@ public class USBConnector extends Observable implements Runnable, Connector {
         "ev3menu"
     };
 
-    public USBConnector(ResourceBundle serverProps) {
+    public EV3USBConnector(ResourceBundle serverProps) {
         if ( serverProps != null ) {
             this.brickIp = serverProps.getString("brickIp");
             this.serverIp = serverProps.getString("serverIp");
@@ -80,7 +48,6 @@ public class USBConnector extends Observable implements Runnable, Connector {
 
         this.ev3comm = new EV3Communicator(this.brickIp);
         this.servcomm = new ServerCommunicator(this.serverAddress);
-        this.tokenGenerator = new ORAtokenGenerator();
     }
 
     @Override
@@ -97,10 +64,8 @@ public class USBConnector extends Observable implements Runnable, Connector {
                                 break;
                         }
                         Thread.sleep(1000);
-                    } catch ( IOException e ) {
-                        // ok
-                    } catch ( InterruptedException e ) {
-                        // ok
+                    } catch ( IOException | InterruptedException e ) {
+                        log.info(State.DISCOVER + " " + e.getMessage());
                     }
                     notifyConnectionStateChanged(this.state);
                     break;
@@ -111,18 +76,17 @@ public class USBConnector extends Observable implements Runnable, Connector {
                         switch ( this.ev3comm.checkBrickState(CMD_ISRUNNING) ) {
                             case "true": // program is running
                                 this.state = State.WAIT_EXECUTION;
-                                notifyConnectionStateChanged(this.state);
+                                //notifyConnectionStateChanged(this.state);
                                 break;
                             case "false": // brick available and no program running
+                                log.info(State.WAIT_EXECUTION + "EV3 plugged in again, no program running OK");
                                 this.state = State.WAIT_FOR_CMD;
                                 notifyConnectionStateChanged(this.state);
                                 break;
                         }
                         Thread.sleep(1000);
-                    } catch ( IOException e ) {
-                        // ok
-                    } catch ( InterruptedException e ) {
-                        // ok
+                    } catch ( IOException | InterruptedException e ) {
+                        log.info(State.WAIT_EXECUTION + " " + e.getMessage());
                     }
                     break;
                 case WAIT_FOR_CONNECT:
@@ -140,14 +104,14 @@ public class USBConnector extends Observable implements Runnable, Connector {
                         }
                         Thread.sleep(1000);
                     } catch ( IOException brickerror ) {
-                        this.state = State.DISCOVER;
-                        notifyConnectionStateChanged(State.DISCOVER);
+                        log.info(State.WAIT_FOR_CONNECT + " " + brickerror.getMessage());
+                        reset(null);
                     } catch ( InterruptedException e ) {
                         // ok
                     }
                     break;
                 case CONNECT:
-                    this.token = this.tokenGenerator.generateToken();
+                    this.token = ORAtokenGenerator.generateToken();
                     this.state = State.WAIT_FOR_SERVER;
                     notifyConnectionStateChanged(State.WAIT_FOR_SERVER);
                     try {
@@ -155,12 +119,15 @@ public class USBConnector extends Observable implements Runnable, Connector {
                         this.brickData.put(KEY_TOKEN, this.token);
                         this.brickData.put(KEY_CMD, CMD_REGISTER);
                     } catch ( IOException brickerror ) {
-                        notifyConnectionStateChanged(State.ERROR_BRICK);
-                        notifyConnectionStateChanged(State.DISCOVER);
-                        this.state = State.DISCOVER;
+                        log.info(State.CONNECT + " " + brickerror.getMessage());
+                        reset(State.ERROR_BRICK);
                         break;
                     }
                     try {
+                        if ( this.state == State.DISCOVER ) {
+                            log.info("User is clicking connect togglebutton too fast!");
+                            break;
+                        }
                         JSONObject serverResponse = this.servcomm.pushRequest(this.brickData);
                         String command = serverResponse.getString("cmd");
                         switch ( command ) {
@@ -168,31 +135,24 @@ public class USBConnector extends Observable implements Runnable, Connector {
                                 try {
                                     this.brickData = this.ev3comm.pushToBrick(CMD_REPEAT);
                                 } catch ( IOException brickerror ) {
-                                    notifyConnectionStateChanged(State.ERROR_BRICK);
-                                    notifyConnectionStateChanged(State.DISCOVER);
-                                    this.state = State.DISCOVER;
+                                    log.info(State.CONNECT + " " + brickerror.getMessage());
+                                    reset(State.ERROR_BRICK);
+                                    break;
                                 }
                                 this.state = State.WAIT_FOR_CMD;
                                 notifyConnectionStateChanged(State.WAIT_FOR_CMD);
                                 break;
                             case CMD_ABORT:
-                                notifyConnectionStateChanged(State.TOKEN_TIMEOUT);
-                                notifyConnectionStateChanged(State.DISCOVER);
-                                this.state = State.DISCOVER;
+                                reset(State.TOKEN_TIMEOUT);
                                 break;
                             default:
-                                log.info("Command " + command + " unknown");
-                                notifyConnectionStateChanged(State.DISCOVER);
-                                this.state = State.DISCOVER;
+                                log.info(State.CONNECT + " Command " + command + " unknown");
+                                reset(null);
                                 break;
                         }
                     } catch ( IOException servererror ) {
-                        if ( !this.userDisconnect ) {
-                            notifyConnectionStateChanged(State.ERROR_HTTP);
-                            notifyConnectionStateChanged(State.DISCOVER);
-                        }
-                        this.state = State.DISCOVER;
-                        this.userDisconnect = false;
+                        log.info(State.CONNECT + " " + servererror.getMessage());
+                        reset(State.ERROR_HTTP);
                     }
                     break;
                 case WAIT_FOR_CMD:
@@ -200,10 +160,9 @@ public class USBConnector extends Observable implements Runnable, Connector {
                         this.brickData = this.ev3comm.pushToBrick(CMD_REPEAT);
                         this.brickData.put(KEY_TOKEN, this.token);
                         this.brickData.put(KEY_CMD, CMD_PUSH);
-                    } catch ( IOException e ) {
-                        notifyConnectionStateChanged(State.ERROR_BRICK);
-                        notifyConnectionStateChanged(State.DISCOVER);
-                        this.state = State.DISCOVER;
+                    } catch ( IOException brickerror ) {
+                        log.info(State.WAIT_FOR_CMD + " " + brickerror.getMessage());
+                        reset(State.ERROR_BRICK);
                         break;
                     }
                     String command = "default";
@@ -211,6 +170,9 @@ public class USBConnector extends Observable implements Runnable, Connector {
                         command = this.servcomm.pushRequest(this.brickData).getString(KEY_CMD);
                     } catch ( IOException | JSONException servererror ) {
                         // continue to default block
+                        log.info(State.WAIT_FOR_CMD + " Server response not ok " + servererror.getMessage());
+                        reset(State.ERROR_HTTP);
+                        break;
                     }
                     switch ( command ) {
                         case CMD_REPEAT:
@@ -219,10 +181,9 @@ public class USBConnector extends Observable implements Runnable, Connector {
                             try {
                                 this.ev3comm.disconnectBrick();
                             } catch ( IOException brickerror ) {
-                                notifyConnectionStateChanged(State.ERROR_BRICK);
+                                log.info(State.WAIT_FOR_CMD + " Got" + CMD_ABORT + "and Brick disconnect failed " + brickerror.getMessage());
                             }
-                            this.state = State.DISCOVER;
-                            notifyConnectionStateChanged(this.state);
+                            reset(null);
                             break;
                         case CMD_UPDATE:
                             log.info("Execute firmware update");
@@ -233,16 +194,15 @@ public class USBConnector extends Observable implements Runnable, Connector {
                                 }
                                 this.ev3comm.restartBrick();
                                 log.info("Firmware update successful. Restarting EV3 now!");
-                                this.state = State.DISCOVER;
-                                notifyConnectionStateChanged(this.state);
+                                reset(null);
                                 try {
                                     Thread.sleep(3000);
                                 } catch ( InterruptedException e ) {
                                     // ok;
                                 }
                             } catch ( IOException e ) {
-                                notifyConnectionStateChanged(State.ERROR_UPDATE);
-                                notifyConnectionStateChanged(State.WAIT_FOR_CMD);
+                                log.info(State.WAIT_FOR_CMD + " Brick update failed " + e.getMessage());
+                                reset(State.ERROR_UPDATE);
                             }
                             break;
                         case CMD_DOWNLOAD:
@@ -255,25 +215,31 @@ public class USBConnector extends Observable implements Runnable, Connector {
                             } catch ( IOException e ) {
                                 // do not give up the brick, try another push request
                                 // user has to click on run button again
+                                log.info(State.WAIT_FOR_CMD + " Downlaod file failed " + e.getMessage());
                                 this.state = State.WAIT_FOR_CMD;
                             }
                             break;
                         case CMD_CONFIGURATION:
+                            log.warning("Command " + command + " unused, ignore and continue push!");
                             break;
                         default:
-                            if ( !this.userDisconnect ) {
-                                log.warning("Command " + command + " unknown");
-                            } else {
-                                notifyConnectionStateChanged(State.DISCOVER);
-                                this.state = State.DISCOVER;
-                                this.userDisconnect = false;
-                            }
+                            log.warning("Command " + command + " unknown");
+                            reset(null);
                             break;
                     }
                 default:
                     break;
             }
         }
+    }
+
+    private void reset(State additionalerrormessage) {
+        if ( (!this.userDisconnect) && (additionalerrormessage != null) ) {
+            notifyConnectionStateChanged(additionalerrormessage);
+        }
+        this.userDisconnect = false;
+        this.state = State.DISCOVER;
+        notifyConnectionStateChanged(this.state);
     }
 
     @Override
@@ -288,13 +254,14 @@ public class USBConnector extends Observable implements Runnable, Connector {
 
     @Override
     public void disconnect() {
+        log.info("DISCONNECTING by user");
         this.userDisconnect = true;
         try {
             this.ev3comm.disconnectBrick();
         } catch ( IOException e ) {
             // ok
         }
-        this.servcomm.disconnect();
+        this.servcomm.abort();
         notifyConnectionStateChanged(State.DISCOVER);
         this.state = State.DISCOVER;
     }

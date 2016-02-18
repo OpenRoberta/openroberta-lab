@@ -5,16 +5,11 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Map.Entry;
-import java.util.Set;
 
-import javax.annotation.Resources;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 
 public class ORAPopup extends JOptionPane {
@@ -22,28 +17,6 @@ public class ORAPopup extends JOptionPane {
     private static final long serialVersionUID = 1L;
 
     private static final int WIDTH = 150;
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                UIDefaults defaults = UIManager.getLookAndFeelDefaults();
-                Set<Entry<Object, Object>> entries = defaults.entrySet();
-                for ( Entry<Object, Object> entry : entries ) {
-                    System.out.print(entry.getKey() + " = ");
-                    System.out.print(entry.getValue() + "\n");
-                }
-                String title = "Titel";
-                String text = "Text";
-                String[] buttons = new String[] {
-                    "a",
-                    "b",
-                    "c"
-                };
-                System.out.println(ORAPopup.showPopup(null, title, text, null, buttons));
-            }
-        });
-    }
 
     public static int showPopup(Component component, String title, String text, Icon icon, String[] txtButtons) {
         ORAButton buttons[] = new ORAButton[txtButtons.length];
@@ -73,7 +46,7 @@ public class ORAPopup extends JOptionPane {
 
     public static int showPopup(Component component, String title, String text, Icon icon) {
         if ( icon == null ) {
-            icon = new ImageIcon(Resources.class.getResource("warning-outline.png"));
+            icon = new ImageIcon(ORAPopup.class.getClassLoader().getResource("warning-outline.png"));
         }
         return showPopup(component, title, text, icon, new String[] {
             "OK"

@@ -13,8 +13,7 @@ import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 
 import de.fhg.iais.roberta.connection.Connector;
-import de.fhg.iais.roberta.connection.USBConnector;
-import de.fhg.iais.roberta.connection.USBConnector.State;
+import de.fhg.iais.roberta.usb.Main;
 
 public class UIController<ObservableObject> implements Observer {
 
@@ -24,7 +23,7 @@ public class UIController<ObservableObject> implements Observer {
     private final ResourceBundle rb;
     private static Logger log = Logger.getLogger("Connector");
 
-    public UIController(USBConnector usbCon, ConnectionView conView, ResourceBundle rb) {
+    public UIController(Connector usbCon, ConnectionView conView, ResourceBundle rb) {
         this.connector = usbCon;
         this.conView = conView;
         this.rb = rb;
@@ -100,16 +99,18 @@ public class UIController<ObservableObject> implements Observer {
                     buttons);
             if ( n == 0 ) {
                 this.connector.close();
+                Main.stopFileLogger();
                 System.exit(0);
             }
         } else {
+            Main.stopFileLogger();
             System.exit(0);
         }
     }
 
     @Override
     public void update(Observable arg0, Object arg1) {
-        State state = (State) arg1;
+        Connector.State state = (Connector.State) arg1;
         switch ( state ) {
             case WAIT_FOR_CONNECT:
                 //this.conView.setNew(this.connector.getBrickName());

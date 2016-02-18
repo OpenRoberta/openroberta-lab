@@ -2,24 +2,33 @@ package de.fhg.iais.roberta.usb;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.io.File;
+import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import de.fhg.iais.roberta.connection.USBConnector;
+import org.apache.commons.lang3.SystemUtils;
+
+import de.fhg.iais.roberta.connection.EV3USBConnector;
 import de.fhg.iais.roberta.ui.ConnectionView;
 import de.fhg.iais.roberta.ui.UIController;
 import de.fhg.iais.roberta.util.ORAFormatter;
 
 public class Main {
 
+    private static final String LOGFILENAME = "OpenRobertaUSB.log";
     private static Logger log = Logger.getLogger("Connector");
-    private static ConsoleHandler handler = new ConsoleHandler();
+    private static ConsoleHandler consoleHandler = new ConsoleHandler();
+    private static FileHandler fileHandler = null;
+
+    private static File logFile = null;
 
     public static void main(String[] args) {
 
@@ -31,11 +40,12 @@ public class Main {
                 prepareUI();
                 ResourceBundle messages = getLocals();
                 ResourceBundle serverProps = getServerProps();
-                USBConnector usbCon = new USBConnector(serverProps);
+                EV3USBConnector ev3usbcon = new EV3USBConnector(serverProps);
+
                 ConnectionView view = new ConnectionView(messages);
-                UIController<?> controller = new UIController<Object>(usbCon, view, messages);
+                UIController<?> controller = new UIController<Object>(ev3usbcon, view, messages);
                 controller.control();
-                Thread thread = new Thread(usbCon, "USBConnector");
+                Thread thread = new Thread(ev3usbcon);
                 thread.start();
             }
 
@@ -75,11 +85,37 @@ public class Main {
         });
     }
 
+    public static void stopFileLogger() {
+        fileHandler.flush();
+        fileHandler.close();
+    }
+
     private static void configureLogger() {
-        handler.setFormatter(new ORAFormatter());
-        handler.setLevel(Level.ALL);
-        log.setUseParentHandlers(false);
+        String path = "";
+        try {
+            if ( SystemUtils.IS_OS_WINDOWS ) {
+                path = System.getenv("APPDATA");
+            } else if ( SystemUtils.IS_OS_LINUX ) {
+                path = System.getProperty("user.home");
+            } else if ( SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_MAC_OSX ) {
+                // TODO
+            }
+            logFile = new File(path, "OpenRobertaUSB");
+            if ( !logFile.exists() ) {
+                logFile.mkdir();
+            }
+            fileHandler = new FileHandler(new File(logFile, LOGFILENAME).getPath(), false);
+            fileHandler.setFormatter(new ORAFormatter());
+            fileHandler.setLevel(Level.ALL);
+        } catch ( SecurityException | IOException e ) {
+            // ok
+        }
+        consoleHandler.setFormatter(new ORAFormatter());
+        consoleHandler.setLevel(Level.ALL);
         log.setLevel(Level.ALL);
-        log.addHandler(handler);
+        log.addHandler(consoleHandler);
+        log.addHandler(fileHandler);
+        log.setUseParentHandlers(false);
+        log.info("Logging to file: " + new File(logFile, LOGFILENAME).getPath().toString());
     }
 }

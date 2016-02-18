@@ -35,7 +35,7 @@ public class EV3Communicator {
 
     public JSONObject pushToBrick(String command) throws IOException {
         JSONObject request = new JSONObject();
-        request.put(USBConnector.KEY_CMD, command);
+        request.put(EV3USBConnector.KEY_CMD, command);
         HttpPost post = new HttpPost("http://" + this.brickinfo);
         StringEntity jsoncontent = new StringEntity(request.toString(), ContentType.create("application/json", "UTF-8"));
         post.setEntity(jsoncontent);

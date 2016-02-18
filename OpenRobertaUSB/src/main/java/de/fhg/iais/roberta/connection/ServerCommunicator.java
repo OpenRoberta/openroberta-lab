@@ -78,7 +78,7 @@ public class ServerCommunicator {
         return binaryfile;
     }
 
-    public void disconnect() {
+    public void abort() {
         if ( this.post != null ) {
             this.post.abort();
         }
