@@ -307,7 +307,7 @@ body.blocklyMinimalBody  *  {
 }
 
 @-webkit-keyframes blinker {
-	from { color:#afca04; }
+	from { color:#afca04; } 
 	to { color: #e2001a;}
 }
 
@@ -662,7 +662,7 @@ label.form-invalid {
   display: block;
   margin-top: -25px;
   padding: 7px 9px;
-  background: #777777;
+  background: #333;
   color: #ffffff;
   border-radius: 5px;
   font-weight: bold;
@@ -679,7 +679,7 @@ label.form-invalid:after {
   position: absolute;
   pointer-events: none;
   border-color: transparent;
-  border-top-color: #777777;
+  border-top-color: #333;
   border-width: 6px;
 }
 
@@ -892,5 +892,5 @@ img.img-responsive {
     height: 140px;
     margin: 0 auto;
 }
-
+ 
 }

@@ -26,7 +26,7 @@ Blockly.Blocks['sim_getSample'] = {
      * @memberof Block
      */
     init : function() {
-        this.setColourRGB(Blockly.CAT_SENSOR_RGB);
+        this.setColour(Blockly.CAT_SENSOR_RGB);
         var sensorType = new Blockly.FieldDropdown([ [ Blockly.Msg.SENSOR_TOUCH + Blockly.Msg.SENSOR_PRESSED, 'TOUCH' ],
                 [ Blockly.Msg.MODE_DISTANCE + ' ' + Blockly.Msg.SENSOR_ULTRASONIC, 'ULTRASONIC_DISTANCE' ],
                 [ Blockly.Msg.MODE_COLOUR + ' ' + Blockly.Msg.SENSOR_COLOUR, 'COLOUR_COLOUR' ],
@@ -42,7 +42,7 @@ Blockly.Blocks['sim_getSample'] = {
         this.sensorType_ = 'TOUCH';
         this.setOutput(true, 'Boolean');
         this.setTooltip(Blockly.Msg.GETSAMPLE_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.SENSOR_GET_SAMPLE_HELP));
+        // this.setHelp(new Blockly.Help(Blockly.Msg.SENSOR_GET_SAMPLE_HELP));
         this.setMovable(false);
         this.setDeletable(false);
     },
@@ -140,15 +140,15 @@ Blockly.Blocks['sim_getSample'] = {
             var block = null;
             logComp.updateShape(type);
             if (type == 'NUM') {
-                block = Blockly.Block.obtain(Blockly.mainWorkspace, 'math_number');
+                block = this.workspace.newBlock('math_number');
                 block.setFieldValue(value.toString(), 'NUM');
             } else if (type == 'NUM_REV') {
-                block = Blockly.Block.obtain(Blockly.mainWorkspace, 'math_number');
+                block = this.workspace.newBlock('math_number');
                 block.setFieldValue(value.toString(), 'NUM');
             } else if (type == 'BOOL') {
-                block = Blockly.Block.obtain(Blockly.mainWorkspace, 'logic_boolean');
+                block = this.workspace.newBlock('logic_boolean');
             } else {
-                block = Blockly.Block.obtain(Blockly.mainWorkspace, 'robColour_picker');
+                block = this.workspace.newBlock('robColour_picker');
                 block.setFieldValue('#b30006', 'COLOUR')
             }
             block.initSvg();
@@ -173,7 +173,7 @@ Blockly.Blocks['sim_touch_isPressed'] = {
          */
 
         init : function() {
-            this.setColourRGB(Blockly.CAT_SENSOR_RGB);
+            this.setColour(Blockly.CAT_SENSOR_RGB);
             // var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
             var sensorPort = new Blockly.Field('1', false);
             sensorPort.setVisible(false);       
@@ -198,7 +198,7 @@ Blockly.Blocks['sim_ultrasonic_getSample'] = {
          * @memberof Block
          */
         init : function() {
-            this.setColourRGB(Blockly.CAT_SENSOR_RGB);
+            this.setColour(Blockly.CAT_SENSOR_RGB);
             // var sensorPort = new Blockly.FieldDropdown([ [ 'Port 1', '1' ], [ 'Port 2', '2' ], [ 'Port 3', '3' ], [ 'Port 4', '4' ] ]);
             var sensorPort = new Blockly.Field('4');
             sensorPort.setVisible(false);
@@ -251,7 +251,7 @@ Blockly.Blocks['sim_ultrasonic_getSample'] = {
          */
 
         init : function() {
-            this.setColourRGB(Blockly.CAT_SENSOR_RGB);
+            this.setColour(Blockly.CAT_SENSOR_RGB);
             var mode = new Blockly.FieldDropdown([ [ Blockly.Msg.MODE_COLOUR, 'COLOUR' ], [ Blockly.Msg.MODE_LIGHT, 'RED' ] ], function(option) {
                 if (option && this.sourceBlock_.getFieldValue('MODE') !== option) {
                     this.sourceBlock_.updateShape_(option);

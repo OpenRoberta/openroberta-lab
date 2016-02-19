@@ -28,15 +28,15 @@ Blockly.Blocks['robActions_motor_on'] = {
      */
 
     init : function() {
-        this.setHelpUrl(Blockly.Msg.MOTOR_ON_HELPURL);
-        this.setColourRGB(Blockly.CAT_ACTION_RGB);
+        // this.setHelpUrl(Blockly.Msg.MOTOR_ON_HELPURL);
+        this.setColour(Blockly.CAT_ACTION_RGB);
         var motorPort = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR_PORT + ' A', 'A' ], [ Blockly.Msg.MOTOR_PORT + ' B', 'B' ],
                 [ Blockly.Msg.MOTOR_PORT + ' C', 'C' ], [ Blockly.Msg.MOTOR_PORT + ' D', 'D' ] ]);
         this.appendValueInput('POWER').appendField(motorPort, 'MOTORPORT').appendField(Blockly.Msg.ON).appendField(Blockly.Msg.MOTOR_SPEED).setCheck('Number');
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.MOTOR_ON_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.MOTOR_ON_HELP));
+        // this.setHelp(new Blockly.Help(Blockly.Msg.MOTOR_ON_HELP));
     }
 };
 
@@ -58,8 +58,8 @@ Blockly.Blocks['robActions_motor_on_for'] = {
      * @memberof Block
      */
     init : function() {
-        this.setHelpUrl(Blockly.Msg.MOTOR_ON_FOR_HELPURL);
-        this.setColourRGB(Blockly.CAT_ACTION_RGB);
+        // this.setHelpUrl(Blockly.Msg.MOTOR_ON_FOR_HELPURL);
+        this.setColour(Blockly.CAT_ACTION_RGB);
         // this.setInputsInline(true);
         var motorPort = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR_PORT + ' A', 'A' ], [ Blockly.Msg.MOTOR_PORT + ' B', 'B' ],
                 [ Blockly.Msg.MOTOR_PORT + ' C', 'C' ], [ Blockly.Msg.MOTOR_PORT + ' D', 'D' ] ]);
@@ -70,7 +70,7 @@ Blockly.Blocks['robActions_motor_on_for'] = {
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.MOTOR_ON_FOR_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.MOTOR_ON_FOR_HELP));
+        // this.setHelp(new Blockly.Help(Blockly.Msg.MOTOR_ON_FOR_HELP));
     }
 };
 
@@ -87,14 +87,14 @@ Blockly.Blocks['robActions_motor_getPower'] = {
      * @memberof Block
      */
     init : function() {
-        this.setHelpUrl(Blockly.Msg.MOTOR_GETPOWER_HELPURL);
-        this.setColourRGB(Blockly.CAT_ACTION_RGB);
+        // this.setHelpUrl(Blockly.Msg.MOTOR_GETPOWER_HELPURL);
+        this.setColour(Blockly.CAT_ACTION_RGB);
         var motorPort = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR_PORT + ' A', 'A' ], [ Blockly.Msg.MOTOR_PORT + ' B', 'B' ],
                 [ Blockly.Msg.MOTOR_PORT + ' C', 'C' ], [ Blockly.Msg.MOTOR_PORT + ' D', 'D' ] ]);
         this.appendDummyInput().appendField(Blockly.Msg.GET + ' ' + Blockly.Msg.MOTOR_SPEED).appendField(motorPort, 'MOTORPORT');
         this.setOutput(true, 'Number');
         this.setTooltip(Blockly.Msg.MOTOR_GETPOWER_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.MOTOR_GETPOWER_HELP));
+        // this.setHelp(new Blockly.Help(Blockly.Msg.MOTOR_GETPOWER_HELP));
     }
 };
 
@@ -112,8 +112,8 @@ Blockly.Blocks['robActions_motor_setPower'] = {
      * @memberof Block
      */
     init : function() {
-        this.setHelpUrl(Blockly.Msg.MOTOR_SETPOWER_HELPURL);
-        this.setColourRGB(Blockly.CAT_ACTION_RGB);
+        // this.setHelpUrl(Blockly.Msg.MOTOR_SETPOWER_HELPURL);
+        this.setColour(Blockly.CAT_ACTION_RGB);
         var motorPort = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR_PORT + ' A', 'A' ], [ Blockly.Msg.MOTOR_PORT + ' B', 'B' ],
                 [ Blockly.Msg.MOTOR_PORT + ' C', 'C' ], [ Blockly.Msg.MOTOR_PORT + ' D', 'D' ] ]);
         this.appendValueInput('POWER').appendField(Blockly.Msg.SET).appendField(motorPort, 'MOTORPORT').appendField(Blockly.Msg.MOTOR_SPEED);
@@ -137,8 +137,8 @@ Blockly.Blocks['robActions_motor_stop'] = {
      * @memberof Block
      */
     init : function() {
-        this.setHelpUrl(Blockly.Msg.MOTOR_STOP_HELPURL);
-        this.setColourRGB(Blockly.CAT_ACTION_RGB);
+        // this.setHelpUrl(Blockly.Msg.MOTOR_STOP_HELPURL);
+        this.setColour(Blockly.CAT_ACTION_RGB);
         var motorPort = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR_PORT + ' A', 'A' ], [ Blockly.Msg.MOTOR_PORT + ' B', 'B' ],
                 [ Blockly.Msg.MOTOR_PORT + ' C', 'C' ], [ Blockly.Msg.MOTOR_PORT + ' D', 'D' ] ]);
         var mode = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR_FLOAT, 'FLOAT' ], [ Blockly.Msg.MOTOR_BRAKE, 'NONFLOAT' ] ]);
@@ -146,28 +146,28 @@ Blockly.Blocks['robActions_motor_stop'] = {
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.MOTOR_STOP_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.MOTOR_STOP_HELP));
+        // this.setHelp(new Blockly.Help(Blockly.Msg.MOTOR_STOP_HELP));
     }
 };
 
 Blockly.Blocks['robActions_motorDiff_on'] = {
     init : function() {
-        this.setHelpUrl(Blockly.Msg.MOTORDIFF_ON_HELPURL);
-        this.setColourRGB(Blockly.CAT_ACTION_RGB);
+        // this.setHelpUrl(Blockly.Msg.MOTORDIFF_ON_HELPURL);
+        this.setColour(Blockly.CAT_ACTION_RGB);
         var dropdown = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR_FOREWARD, 'FOREWARD' ], [ Blockly.Msg.MOTOR_BACKWARD, 'BACKWARD' ] ]);
         this.appendValueInput('POWER').appendField(Blockly.Msg.MOTOR_DRIVE).appendField(dropdown, 'DIRECTION').appendField(Blockly.Msg.MOTOR_SPEED).setCheck(
                 'Number');
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.MOTORDIFF_ON_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.MOTORDIFF_ON_HELP, 'MOTORDIFF_ON.gif'));
+        // this.setHelp(new Blockly.Help(Blockly.Msg.MOTORDIFF_ON_HELP, 'MOTORDIFF_ON.gif'));
     }
 };
 
 Blockly.Blocks['robActions_motorDiff_on_for'] = {
     init : function() {
-        this.setHelpUrl(Blockly.Msg.MOTORDIFF_ON_HELPURL);
-        this.setColourRGB(Blockly.CAT_ACTION_RGB);
+        // this.setHelpUrl(Blockly.Msg.MOTORDIFF_ON_HELPURL);
+        this.setColour(Blockly.CAT_ACTION_RGB);
        var dropdown = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR_FOREWARD, 'FOREWARD' ], [ Blockly.Msg.MOTOR_BACKWARD, 'BACKWARDS' ] ]);
         this.appendValueInput('POWER').appendField(Blockly.Msg.MOTOR_DRIVE).appendField(dropdown, 'DIRECTION').appendField(Blockly.Msg.MOTOR_SPEED).setCheck(
                 'Number');
@@ -175,41 +175,41 @@ Blockly.Blocks['robActions_motorDiff_on_for'] = {
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.MOTORDIFF_ON_FOR_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.MOTORDIFF_ON_FOR_HELP, 'MOTORDIFF_ON_FOR.gif'));
+        // this.setHelp(new Blockly.Help(Blockly.Msg.MOTORDIFF_ON_FOR_HELP, 'MOTORDIFF_ON_FOR.gif'));
     }
 };
 
 Blockly.Blocks['robActions_motorDiff_stop'] = {
     init : function() {
-        this.setHelpUrl(Blockly.Msg.MOTORDIFF_STOP_HELPURL);
-        this.setColourRGB(Blockly.CAT_ACTION_RGB);
+        // this.setHelpUrl(Blockly.Msg.MOTORDIFF_STOP_HELPURL);
+        this.setColour(Blockly.CAT_ACTION_RGB);
         this.setInputsInline(true);
         this.appendDummyInput().appendField(Blockly.Msg.MOTOR_STOP);
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.MOTORDIFF_STOP_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.MOTORDIFF_STOP_HELP));
+        // this.setHelp(new Blockly.Help(Blockly.Msg.MOTORDIFF_STOP_HELP));
     }
 };
 
 Blockly.Blocks['robActions_motorDiff_turn'] = {
     init : function() {
-        this.setHelpUrl(Blockly.Msg.MOTORDIFF_TURN_HELPURL);
-        this.setColourRGB(Blockly.CAT_ACTION_RGB);
+        // this.setHelpUrl(Blockly.Msg.MOTORDIFF_TURN_HELPURL);
+        this.setColour(Blockly.CAT_ACTION_RGB);
         var dropdown = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR_RIGHT, 'RIGHT' ], [ Blockly.Msg.MOTOR_LEFT, 'LEFT' ] ]);
         this.appendValueInput('POWER').appendField(Blockly.Msg.MOTOR_TURN).appendField(dropdown, 'DIRECTION').appendField(Blockly.Msg.MOTOR_SPEED).setCheck(
                 'Number');
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.MOTORDIFF_TURN_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.MOTORDIFF_TURN_HELP));
+        // this.setHelp(new Blockly.Help(Blockly.Msg.MOTORDIFF_TURN_HELP));
     }
 };
 
 Blockly.Blocks['robActions_motorDiff_turn_for'] = {
     init : function() {
-        this.setHelpUrl(Blockly.Msg.MOTORDIFF_TURN_FOR_HELPURL);
-        this.setColourRGB(Blockly.CAT_ACTION_RGB);
+        // this.setHelpUrl(Blockly.Msg.MOTORDIFF_TURN_FOR_HELPURL);
+        this.setColour(Blockly.CAT_ACTION_RGB);
         var dropdown = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR_RIGHT, 'RIGHT' ], [ Blockly.Msg.MOTOR_LEFT, 'LEFT' ] ]);
         this.appendValueInput('POWER').appendField(Blockly.Msg.MOTOR_TURN).appendField(dropdown, 'DIRECTION').appendField(Blockly.Msg.MOTOR_SPEED).setCheck(
                 'Number');
@@ -217,7 +217,7 @@ Blockly.Blocks['robActions_motorDiff_turn_for'] = {
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.MOTORDIFF_TURN_FOR_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.MOTORDIFF_TURN_FOR_HELP));
+        // this.setHelp(new Blockly.Help(Blockly.Msg.MOTORDIFF_TURN_FOR_HELP));
     }
 };
 
@@ -238,8 +238,8 @@ Blockly.Blocks['robActions_display_picture'] = {
      */
 
     init : function() {
-        this.setHelpUrl(Blockly.Msg.DISPLAY_PICTURE_HELPURL);
-        this.setColourRGB(Blockly.CAT_ACTION_RGB);
+        // this.setHelpUrl(Blockly.Msg.DISPLAY_PICTURE_HELPURL);
+        this.setColour(Blockly.CAT_ACTION_RGB);
         var picture = new Blockly.FieldDropdown([ [ Blockly.Msg.DISPLAY_PICTURE_GLASSES, 'OLDGLASSES' ], [ Blockly.Msg.DISPLAY_PICTURE_EYES_OPEN, 'EYESOPEN' ],
                 [ Blockly.Msg.DISPLAY_PICTURE_EYES_CLOSED, 'EYESCLOSED' ], [ Blockly.Msg.DISPLAY_PICTURE_FLOWERS, 'FLOWERS' ],
                 [ Blockly.Msg.DISPLAY_PICTURE_TACHO, 'TACHO' ] ]);
@@ -249,7 +249,7 @@ Blockly.Blocks['robActions_display_picture'] = {
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.DISPLAY_PICTURE_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.DISPLAY_PICTURE_HELP));
+        // this.setHelp(new Blockly.Help(Blockly.Msg.DISPLAY_PICTURE_HELP));
     }
 };
 
@@ -269,15 +269,15 @@ Blockly.Blocks['robActions_display_text'] = {
      * @memberof Block
      */
     init : function() {
-        this.setHelpUrl(Blockly.Msg.DISPLAY_TEXT_HELPURL);
-        this.setColourRGB(Blockly.CAT_ACTION_RGB);
+        // this.setHelpUrl(Blockly.Msg.DISPLAY_TEXT_HELPURL);
+        this.setColour(Blockly.CAT_ACTION_RGB);
         this.appendValueInput('OUT').appendField(Blockly.Msg.DISPLAY_SHOW + ' ' + Blockly.Msg.DISPLAY_TEXT);
         this.appendValueInput('COL').setCheck('Number').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.DISPLAY_COL);
         this.appendValueInput('ROW').setCheck('Number').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.DISPLAY_ROW);
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.DISPLAY_TEXT_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.DISPLAY_TEXT_HELP));
+        // this.setHelp(new Blockly.Help(Blockly.Msg.DISPLAY_TEXT_HELP));
     }
 };
 
@@ -291,13 +291,13 @@ Blockly.Blocks['robActions_display_clear'] = {
      * @memberof Block
      */
     init : function() {
-        this.setHelpUrl(Blockly.Msg.DISPLAY_CLEAR_HELPURL);
-        this.setColourRGB(Blockly.CAT_ACTION_RGB);
+        // this.setHelpUrl(Blockly.Msg.DISPLAY_CLEAR_HELPURL);
+        this.setColour(Blockly.CAT_ACTION_RGB);
         this.appendDummyInput().appendField(Blockly.Msg.DISPLAY_CLEAR);
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.DISPLAY_CLEAR_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.DISPLAY_CLEAR_HELP));
+        // this.setHelp(new Blockly.Help(Blockly.Msg.DISPLAY_CLEAR_HELP));
     }
 };
 
@@ -316,14 +316,14 @@ Blockly.Blocks['robActions_play_tone'] = {
      * @memberof Block
      */
     init : function() {
-        this.setHelpUrl(Blockly.Msg.PLAY_TONE_HELPURL);
-        this.setColourRGB(Blockly.CAT_ACTION_RGB);
+        // this.setHelpUrl(Blockly.Msg.PLAY_TONE_HELPURL);
+        this.setColour(Blockly.CAT_ACTION_RGB);
         this.appendValueInput('FREQUENCE').appendField(Blockly.Msg.PLAY).appendField(Blockly.Msg.PLAY_FREQUENZ).setCheck('Number');
         this.appendValueInput('DURATION').setCheck('Number').setAlign(Blockly.ALIGN_RIGHT).appendField(Blockly.Msg.PLAY_DURATION);
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.PLAY_TONE_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.PLAY_TONE_HELP));
+        // this.setHelp(new Blockly.Help(Blockly.Msg.PLAY_TONE_HELP));
     }
 };
 
@@ -340,15 +340,15 @@ Blockly.Blocks['robActions_play_file'] = {
      */
 
     init : function() {
-        this.setHelpUrl(Blockly.Msg.PLAY_FILE_HELPURL);
-        this.setColourRGB(Blockly.CAT_ACTION_RGB);
+        // this.setHelpUrl(Blockly.Msg.PLAY_FILE_HELPURL);
+        this.setColour(Blockly.CAT_ACTION_RGB);
          //LEJOS system sounds from 0 to 4 in HAL 
         var file = new Blockly.FieldDropdown([ [ '1', '0' ], [ '2', '1' ], [ '3', '2' ], [ '4', '3' ], [ '5', '4' ] ]);
         this.appendDummyInput().appendField(Blockly.Msg.PLAY + ' ' + Blockly.Msg.PLAY_FILE).appendField(file, 'FILE');
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.PLAY_FILE_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.PLAY_FILE_HELP));
+        // this.setHelp(new Blockly.Help(Blockly.Msg.PLAY_FILE_HELP));
     }
 };
 
@@ -364,13 +364,13 @@ Blockly.Blocks['robActions_play_setVolume'] = {
      * @memberof Block
      */
     init : function() {
-        this.setHelpUrl(Blockly.Msg.PLAY_SETVOLUME_HELPURL);
-        this.setColourRGB(Blockly.CAT_ACTION_RGB);
+        // this.setHelpUrl(Blockly.Msg.PLAY_SETVOLUME_HELPURL);
+        this.setColour(Blockly.CAT_ACTION_RGB);
         this.appendValueInput('VOLUME').appendField(Blockly.Msg.SET + ' ' + Blockly.Msg.PLAY_VOLUME).setCheck('Number');
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.PLAY_SETVOLUME_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.PLAY_SETVOLUME_HELP));
+        // this.setHelp(new Blockly.Help(Blockly.Msg.PLAY_SETVOLUME_HELP));
     }
 };
 
@@ -386,12 +386,12 @@ Blockly.Blocks['robActions_play_getVolume'] = {
      * @see {@link robActions_play_setVolume}
      */
     init : function() {
-        this.setHelpUrl(Blockly.Msg.PLAY_GETVOLUME_HELPURL);
-        this.setColourRGB(Blockly.CAT_ACTION_RGB);
+        // this.setHelpUrl(Blockly.Msg.PLAY_GETVOLUME_HELPURL);
+        this.setColour(Blockly.CAT_ACTION_RGB);
         this.appendDummyInput().appendField(Blockly.Msg.GET + ' ' + Blockly.Msg.PLAY_VOLUME);
         this.setOutput(true, 'Number');
         this.setTooltip(Blockly.Msg.PLAY_GETVOLUME_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.PLAY_GETVOLUME_HELP));
+        // this.setHelp(new Blockly.Help(Blockly.Msg.PLAY_GETVOLUME_HELP));
     }
 };
 
@@ -409,8 +409,8 @@ Blockly.Blocks['robActions_brickLight_on'] = {
      * @memberof Block
      */
     init : function() {
-        this.setHelpUrl(Blockly.Msg.BRICKLIGHT_ON_HELPURL);
-        this.setColourRGB(Blockly.CAT_ACTION_RGB);
+        // this.setHelpUrl(Blockly.Msg.BRICKLIGHT_ON_HELPURL);
+        this.setColour(Blockly.CAT_ACTION_RGB);
         // this.setInputsInline(true);
         var dropdownColor = new Blockly.FieldDropdown([ [ Blockly.Msg.BRICKLIGHT_GREEN, 'GREEN' ], [ Blockly.Msg.BRICKLIGHT_ORANGE, 'ORANGE' ],
                 [ Blockly.Msg.BRICKLIGHT_RED, 'RED' ] ]);
@@ -422,7 +422,7 @@ Blockly.Blocks['robActions_brickLight_on'] = {
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.BRICKLIGHT_ON_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.BRICKLIGHT_ON_HELP));
+        // this.setHelp(new Blockly.Help(Blockly.Msg.BRICKLIGHT_ON_HELP));
     }
 };
 
@@ -436,13 +436,13 @@ Blockly.Blocks['robActions_brickLight_off'] = {
      * @memberof Block
      */
     init : function() {
-        this.setHelpUrl(Blockly.Msg.BRICKLIGHT_OFF_HELP);
-        this.setColourRGB(Blockly.CAT_ACTION_RGB);
+        // this.setHelpUrl(Blockly.Msg.BRICKLIGHT_OFF_HELP);
+        this.setColour(Blockly.CAT_ACTION_RGB);
          this.appendDummyInput().appendField(Blockly.Msg.BRICKLIGHT).appendField(Blockly.Msg.OFF);
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.BRICKLIGHT_OFF_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.BRICKLIGHT_OFF_HELP));
+        // this.setHelp(new Blockly.Help(Blockly.Msg.BRICKLIGHT_OFF_HELP));
     }
 };
 
@@ -456,12 +456,12 @@ Blockly.Blocks['robActions_brickLight_reset'] = {
      * @memberof Block
      */
     init : function() {
-        this.setHelpUrl(Blockly.Msg.BRICKLIGHT_RESET_HELPURL);
-        this.setColourRGB(Blockly.CAT_ACTION_RGB);
+        // this.setHelpUrl(Blockly.Msg.BRICKLIGHT_RESET_HELPURL);
+        this.setColour(Blockly.CAT_ACTION_RGB);
         this.appendDummyInput().appendField(Blockly.Msg.SENSOR_RESET).appendField(Blockly.Msg.BRICKLIGHT).appendField(Blockly.Msg.SENSOR_RESET_II);
         this.setPreviousStatement(true);
         this.setNextStatement(true);
         this.setTooltip(Blockly.Msg.BRICKLIGHT_RESET_TOOLTIP);
-        this.setHelp(new Blockly.Help(Blockly.Msg.BRICKLIGHT_RESET_HELP));
+        // this.setHelp(new Blockly.Help(Blockly.Msg.BRICKLIGHT_RESET_HELP));
     }
 };

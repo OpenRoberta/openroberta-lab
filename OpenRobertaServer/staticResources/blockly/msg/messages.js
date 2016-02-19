@@ -1,9 +1,9 @@
-﻿/**
+/**
  * @license
  * Visual Blocks Language
  *
  * Copyright 2012 Google Inc.
- * https://blockly.googlecode.com/
+ * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,18 +21,21 @@
 /**
  * @fileoverview English strings.
  * @author fraser@google.com (Neil Fraser)
- * 
+ *
  * After modifying this file, either run "build.py" from the parent directory,
- * or run (from this directory): ../i18n/js_to_json.py to regenerate
- * json/{en,qqq,synonyms}.json.
- * 
+ * or run (from this directory):
+ * ../i18n/js_to_json.py
+ * to regenerate json/{en,qqq,synonyms}.json.
+ *
  * To convert all of the json files to .js files, run:
  * ../i18n/create_messages.py json/*.json
  */
 'use strict';
 
 goog.provide('Blockly.Msg.en');
+
 goog.require('Blockly.Msg');
+
 
 /**
  * Due to the frequency of long strings, the 80-column wrap rule need not apply
@@ -40,20 +43,20 @@ goog.require('Blockly.Msg');
  */
 
 /**
- * Tip: Generate URLs for read-only blocks by creating the blocks in the Code
- * app, then evaluating this in the console:
- * 'http://blockly-demo.appspot.com/static/apps/code/readonly.html?lang=en&xml=' +
- * encodeURIComponent(Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace)).slice(5,
- * -6))
+ * Tip: Generate URLs for read-only blocks by creating the blocks in the Code app,
+ * then evaluating this in the console:
+ * 'http://blockly-demo.appspot.com/static/apps/code/readonly.html?lang=en&xml=' + encodeURIComponent(Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(Blockly.mainWorkspace)).slice(5, -6))
  */
 
 /// default name - A simple, general default name for a variable, preferably short.
 /// For more context, see
-/// [[Translating:Blockly#infrequent_message_types]].
-Blockly.Msg.VARIABLES_DEFAULT_NAME = 'variableName';
+/// [[Translating:Blockly#infrequent_message_types]].\n{{Identical|Item}}
+Blockly.Msg.VARIABLES_DEFAULT_NAME = 'item';
+/// button text - Botton that sets a calendar to today's date.\n{{Identical|Today}}
+Blockly.Msg.TODAY = 'Today';
 
 // Context menus.
-/// context menu - Make a copy of the selected block (and any blocks it contains).
+/// context menu - Make a copy of the selected block (and any blocks it contains).\n{{Identical|Duplicate}}
 Blockly.Msg.DUPLICATE_BLOCK = 'Duplicate';
 /// context menu - Add a descriptive comment to the selected block.
 Blockly.Msg.ADD_COMMENT = 'Add Comment';
@@ -67,13 +70,17 @@ Blockly.Msg.INLINE_INPUTS = 'Inline Inputs';
 Blockly.Msg.DELETE_BLOCK = 'Delete Block';
 /// context menu - Permanently delete the %1 selected blocks.\n\nParameters:\n* %1 - an integer greater than 1.
 Blockly.Msg.DELETE_X_BLOCKS = 'Delete %1 Blocks';
+/// confirmation prompt - Question the user if they really wanted to permanently delete all %1 blocks.\n\nParameters:\n* %1 - an integer greater than 1.
+Blockly.Msg.DELETE_ALL_BLOCKS = 'Delete all %1 blocks?';
+/// context menu - Reposition all the blocks so that they form a neat line.
+Blockly.Msg.CLEAN_UP = 'Clean up Blocks';
 /// context menu - Make the appearance of the selected block smaller by hiding some information about it.
 Blockly.Msg.COLLAPSE_BLOCK = 'Collapse Block';
-/// context menu - Make the appearance of the selected blocks smaller by hiding some information about it.  Use the same terminology as in the previous message.
+/// context menu - Make the appearance of all blocks smaller by hiding some information about it.  Use the same terminology as in the previous message.
 Blockly.Msg.COLLAPSE_ALL = 'Collapse Blocks';
 /// context menu - Restore the appearance of the selected block by showing information about it that was hidden (collapsed) earlier.
 Blockly.Msg.EXPAND_BLOCK = 'Expand Block';
-/// context menu - Restore the appearance of the selected block by showing information about it that was hidden (collapsed) earlier.  Use the same terminology as in the previous message.
+/// context menu - Restore the appearance of all blocks by showing information about it that was hidden (collapsed) earlier.  Use the same terminology as in the previous message.
 Blockly.Msg.EXPAND_ALL = 'Expand Blocks';
 /// context menu - Make the selected block have no effect (unless reenabled).
 Blockly.Msg.DISABLE_BLOCK = 'Disable Block';
@@ -93,290 +100,154 @@ Blockly.Msg.ME = 'Me';
 // Variable renaming.
 /// prompt - This message is only seen in the Opera browser.  With most browsers, users can edit numeric values in blocks by just clicking and typing.  Opera does not allows this, so we have to open a new window and prompt users with this message to chanage a value.
 Blockly.Msg.CHANGE_VALUE_TITLE = 'Change value:';
-/// dropdown choice - When the user clicks on a variable block, this is one of the dropdown menu choices.  It is used to define a new variable.  See [https://code.google.com/p/blockly/wiki/Variables#Dropdown_menu https://code.google.com/p/blockly/wiki/Variables#Dropdown_menu].
+/// dropdown choice - When the user clicks on a variable block, this is one of the dropdown menu choices.  It is used to define a new variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].
 Blockly.Msg.NEW_VARIABLE = 'New variable...';
-/// prompt - Prompts the user to enter the name for a new variable.  See [https://code.google.com/p/blockly/wiki/Variables#Dropdown_menu https://code.google.com/p/blockly/wiki/Variables#Dropdown_menu].
+/// prompt - Prompts the user to enter the name for a new variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].
 Blockly.Msg.NEW_VARIABLE_TITLE = 'New variable name:';
-/// dropdown choice - When the user clicks on a variable block, this is one of the dropdown menu choices.  It is used to rename the current variable.  See [https://code.google.com/p/blockly/wiki/Variables#Dropdown_menu https://code.google.com/p/blockly/wiki/Variables#Dropdown_menu].
+/// dropdown choice - When the user clicks on a variable block, this is one of the dropdown menu choices.  It is used to rename the current variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].
 Blockly.Msg.RENAME_VARIABLE = 'Rename variable...';
-/// prompt - Prompts the user to enter the new name for the selected variable.  See [https://code.google.com/p/blockly/wiki/Variables#Dropdown_menu https://code.google.com/p/blockly/wiki/Variables#Dropdown_menu].\n\nParameters:\n* %1 - the name of the variable to be renamed.
+/// prompt - Prompts the user to enter the new name for the selected variable.  See [https://github.com/google/blockly/wiki/Variables#dropdown-menu https://github.com/google/blockly/wiki/Variables#dropdown-menu].\n\nParameters:\n* %1 - the name of the variable to be renamed.
 Blockly.Msg.RENAME_VARIABLE_TITLE = 'Rename all "%1" variables to:';
-
-// Tooltips for the robot blocks
-/// Rob Actions tooltips
-Blockly.Msg.MOTOR_ON_TOOLTIP = 'Turns motor on with specific power.';
-Blockly.Msg.MOTOR_ON_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.MOTOR_ON_HELP = 'help';
-Blockly.Msg.MOTOR_ON_FOR_TOOLTIP = 'Turns motor on and stops motor after execution of rotations/degrees.';
-Blockly.Msg.MOTOR_ON_FOR_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.MOTOR_ON_FOR_HELP = 'help';
-Blockly.Msg.MOTOR_GETPOWER_TOOLTIP = 'Gets current power of this motor.';
-Blockly.Msg.MOTOR_GETPOWER_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.MOTOR_GETPOWER_HELP = 'help';
-Blockly.Msg.MOTOR_SETPOWER_TOOLTIP = 'Sets power of this motor.';
-Blockly.Msg.MOTOR_SETPOWER_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.MOTOR_SETPOWER_HELP = 'help';
-Blockly.Msg.MOTOR_STOP_TOOLTIP = 'Stops this motor.';
-Blockly.Msg.MOTOR_STOP_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.MOTOR_STOP_HELP = 'help';
-Blockly.Msg.MOTORDIFF_ON_TOOLTIP = 'Starts the robot with specific speed.';
-Blockly.Msg.MOTORDIFF_ON_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.MOTORDIFF_ON_HELP = 'The robot drives forwards until it is not stopped or it is used different block for driving. The speed can be set in the field speed. When the program ends the motors will stop automatically';
-Blockly.Msg.MOTORDIFF_ON_FOR_TOOLTIP = 'Starts the robot with specific speed and stops after specific distance.';
-Blockly.Msg.MOTORDIFF_ON_FOR_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.MOTORDIFF_ON_FOR_HELP = 'The robot drives forwards as long as it is not stopped by another driving block. The speed can be set in the Speed field. When the program ends the motors will stop automatically.';
-Blockly.Msg.MOTORDIFF_STOP_TOOLTIP = 'Stops the robot.';
-Blockly.Msg.MOTORDIFF_STOP_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.MOTORDIFF_STOP_HELP = 'The robot will stop, by stopping the both motors.';
-Blockly.Msg.MOTORDIFF_TURN_TOOLTIP = 'Turns the robot.';
-Blockly.Msg.MOTORDIFF_TURN_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.MOTORDIFF_TURN_HELP = 'Your robot turns as long as it is not stopped by another driving block. The speed can be set in the Speed field.';
-Blockly.Msg.MOTORDIFF_TURN_FOR_TOOLTIP = 'Turns the robot for number of degrees.';
-Blockly.Msg.MOTORDIFF_TURN_FOR_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.MOTORDIFF_TURN_FOR_HELP = 'The robot will rotate until it reaches the degrees set by the user.';
-Blockly.Msg.DISPLAY_PICTURE_TOOLTIP = 'Displays a picture on the screen.';
-Blockly.Msg.DISPLAY_PICTURE_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.DISPLAY_PICTURE_HELP = 'Show image on the display of the robot. Choose the image! With x and y can be set the position of the image on the display.';
-Blockly.Msg.DISPLAY_TEXT_TOOLTIP = 'Displays a text on the screen.';
-Blockly.Msg.DISPLAY_TEXT_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.DISPLAY_TEXT_HELP = 'Display text or numbers on the robot display. With the column and row parameter change the position of the text in the display.';
-Blockly.Msg.DISPLAY_CLEAR_TOOLTIP = 'Clears the display.';
-Blockly.Msg.DISPLAY_CLEAR_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.DISPLAY_CLEAR_HELP = 'The display of the robot will be cleared.';
-Blockly.Msg.PLAY_TONE_TOOLTIP = 'Plays a tone.';
-Blockly.Msg.PLAY_TONE_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.PLAY_TONE_HELP = 'The robot will play a tone. The frequency of the tone can be set between 270 and 10000. The human ear cannot hear anything above or below this frequency.';
-Blockly.Msg.PLAY_FILE_TOOLTIP = 'Plays a sound file.';
-Blockly.Msg.PLAY_FILE_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.PLAY_FILE_HELP = 'help';
-Blockly.Msg.PLAY_SETVOLUME_TOOLTIP = 'Sets volume.';
-Blockly.Msg.PLAY_SETVOLUME_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.PLAY_SETVOLUME_HELP = 'You can set the volume of the robot. 0 is mute and 100 is the max. volume.';
-Blockly.Msg.PLAY_GETVOLUME_TOOLTIP = 'Gets current volume.';
-Blockly.Msg.PLAY_GETVOLUME_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.PLAY_GETVOLUME_HELP = 'help';
-Blockly.Msg.BRICKLIGHT_ON_TOOLTIP = 'Turns EV3 bricklight on.';
-Blockly.Msg.BRICKLIGHT_ON_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.BRICKLIGHT_ON_HELP = 'You can choose which the color of the light for the keys, also you can choose the key lights to be lit or blinking.';
-Blockly.Msg.BRICKLIGHT_OFF_TOOLTIP = 'Turns EV3 bricklight off.';
-Blockly.Msg.BRICKLIGHT_OFF_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.BRICKLIGHT_OFF_HELP = 'Turn of the lights of the EV3 buttons.';
-Blockly.Msg.BRICKLIGHT_RESET_TOOLTIP = 'Resets EV3 bricklight. Sets the default EV3 bricklight: green and blinking.';
-Blockly.Msg.BRICKLIGHT_RESET_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.BRICKLIGHT_RESET_HELP = 'Reset the light settings of the EV3 buttons.';
-/// Rob Controls tooltips
-Blockly.Msg.START_TOOLTIP = 'The starting point for the main program.';
-Blockly.Msg.ACTIVITY_TOOLTIP = 'Marker for an additional activity.';
-Blockly.Msg.START_ACTIVITY_TOOLTIP = 'Starts additional activity.';
-Blockly.Msg.WAIT_TOOLTIP = 'Waits for a condition becoming true.';
-Blockly.Msg.WAIT_FOR_TOOLTIP = 'Waits for sensor values.';
-Blockly.Msg.LOOPFOREVER_TOOLTIP = 'Repeats indefinitely an action.';
-Blockly.Msg.IFELSE_TOOLTIP = 'Checks the condition in "if". If the condition is true, executes the "do" action; otherwise executes the "else" action';
-Blockly.Msg.IF_TOOLTIP = 'Checks the condition in "if". If the condition is true, executes the "do" action.';
-/// Rob Sensors tooltips
-Blockly.Msg.GETSAMPLE_TOOLTIP = 'Gets the current reading from choosen sensor.';
-Blockly.Msg.TOUCH_ISPRESSED_TOOLTIP = 'Is the touch sensor pressed?';
-Blockly.Msg.KEY_ISPRESSED_TOOLTIP = 'Is the selected button pressed?';
-Blockly.Msg.KEY_ISPRESSEDANDRELEASED_TOOLTIP = 'Is the specific button pressed and released?';
-Blockly.Msg.ULTRASONIC_SETMODE_TOOLTIP = 'Sets the mode of the ultrasonic sensor.';
-Blockly.Msg.ULTRASONIC_GETMODE_TOOLTIP = 'Gets the mode of the ultrasonic sensor.';
-Blockly.Msg.ULTRASONIC_GETSAMPLE_TOOLTIP = 'Gets the current reading from the ultrasonic sensor.';
-Blockly.Msg.COLOUR_SETMODE_TOOLTIP = 'Sets the mode of the colour sensor.';
-Blockly.Msg.COLOUR_GETMODE_TOOLTIP = 'Gets the mode of the colour sensor.';
-Blockly.Msg.COLOUR_GETSAMPLE_TOOLTIP = 'Gets the current reading from the colour sensor.';
-Blockly.Msg.INFRARED_SETMODE_TOOLTIP = 'Sets the mode of the infrared sensor.';
-Blockly.Msg.INFRARED_GETMODE_TOOLTIP = 'Gets the mode of the infrared sensor.';
-Blockly.Msg.INFRARED_GETSAMPLE_TOOLTIP = 'Gets the current reading from the infrared sensor.';
-Blockly.Msg.ENCODER_SETMODE_TOOLTIP = 'Sets the mode of the motor encoder.';
-Blockly.Msg.ENCODER_GETMODE_TOOLTIP = 'Gets the mode of the motor encoder.';
-Blockly.Msg.ENCODER_RESET_TOOLTIP = 'Resets the motor encoder.';
-Blockly.Msg.ENCODER_GETSAMPLE_TOOLTIP = 'Gets the current reading from the motor encoder.';
-Blockly.Msg.GYRO_SETMODE_TOOLTIP = 'Sets the mode of the gyro sensor.';
-Blockly.Msg.GYRO_GETMODE_TOOLTIP = 'Gets the mode of the gyro sensor.';
-Blockly.Msg.GYRO_RESET_TOOLTIP = 'Resets the gyro sensor.';
-Blockly.Msg.GYRO_GETSAMPLE_TOOLTIP = 'Gets the current reading from the gyro sensor.';
-Blockly.Msg.TIMER_RESET_TOOLTIP = 'Resets the timer.';
-Blockly.Msg.TIMER_GETSAMPLE_TOOLTIP = 'Gets the current reading from the timer.';
-/// Rob Brick tooltips
-Blockly.Msg.EV3BRICK_TOOLTIP = 'EV3 brick.';
-Blockly.Msg.EV3BRICK_HELP = 'The brains of your robot;-) <br> You can plug in sensors to the sensor ports 1 - 4 and motors to the motor ports A - D. Wheel diameter and track width are important so that the robot is properly controlled with all »driving« blocks.';
-Blockly.Msg.EV3BRICK_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.ULTRASONIC_TOOLTIP = 'Represents EV3 ultrasonic sensor.';
-Blockly.Msg.ULTRASONIC_HELP = 'The brains of your robot;-) <br> You can plug in sensors to the sensor ports 1 - 4 and motors to the motor ports A - D. Wheel diameter and track width are important so that the robot is properly controlled with all »driving« blocks.';
-Blockly.Msg.ULTRASONIC_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.EV3BRICK_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.COLOUR_TOOLTIP = 'Represents EV3 colour sensor.';
-Blockly.Msg.COLOUR_HELP = 'The color sensor detects colors, but also the light intensity in the environment or different gray values from black to white. Thus it is well-suited for line following robots.';
-Blockly.Msg.COLOUR_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.INFRARED_TOOLTIP = 'Represents infrared sensor.';
-Blockly.Msg.INFRARED_HELP = 'The infrared sensor measures distances to an object. So it is well-suited for obstacle avoidancing robots. With the IR beacon, which emits infrared light itself, you can remotely control the robot. The infrared sensor can receive the signals of this IR Beacon.';
-Blockly.Msg.INFRARED_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.TOUCH_TOOLTIP = 'Is the touch sensor pressed?';
-Blockly.Msg.TOUCH_HELP = 'The touch sensor detects whether the red part of the sensor is pressed or not. He is particularly well suited as a switch or for a bumper car (robot).';
-Blockly.Msg.TOUCH_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.GYRO_TOOLTIP = 'Represents gyro sensor.';
-Blockly.Msg.GYRO_HELP = 'The gyro sensor measures rotating movements. Depending on how it is mounted on the robot, it can realize how many degrees the robot has rotated or if the robot is in an inclined position.';
-Blockly.Msg.GYRO_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.MOTOR_BIG_TOOLTIP = 'Represents a big motor.';
-Blockly.Msg.MOTOR_BIG_HELP = 'The big motor is a so-called servomotor. You can control its rotational speed and acceleration, since it has a built-in rotation sensor. For programming with the »driving« blocks it is important to know how it is mounted on the robot.';
-Blockly.Msg.MOTOR_BIG_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.MOTOR_MIDDLE_TOOLTIP = 'Represents a middle motor.';
-Blockly.Msg.MOTOR_MIDDLE_HELP = 'The middle motor is a so-called servomotor. You can control its rotational speed and acceleration, since it has a built-in rotation sensor. For the programming blocks it is important to know in which direction it should rotate.';
-Blockly.Msg.MOTOR_MIDDLE_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.ACTOR_TOOLTIP = 'Represents any actor.';
-Blockly.Msg.ACTOR_HELP = 'This block can be used as a placeholder for any device that requires electricity, e.g. light bulb or LED.';
-Blockly.Msg.ACTOR_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
 
 // Colour Blocks.
 /// url - Information about colour.
 Blockly.Msg.COLOUR_PICKER_HELPURL = 'https://en.wikipedia.org/wiki/Color';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Colour#Picking_a_colour_from_a_palette https://code.google.com/p/blockly/wiki/Colour#Picking_a_colour_from_a_palette].
+/// tooltip - See [https://github.com/google/blockly/wiki/Colour#picking-a-colour-from-a-palette https://github.com/google/blockly/wiki/Colour#picking-a-colour-from-a-palette].
 Blockly.Msg.COLOUR_PICKER_TOOLTIP = 'Choose a colour from the palette.';
 /// url - A link that displays a random colour each time you visit it.
 Blockly.Msg.COLOUR_RANDOM_HELPURL = 'http://randomcolour.com';
 /// block text - Title of block that generates a colour at random.
 Blockly.Msg.COLOUR_RANDOM_TITLE = 'random colour';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Colour#Generating_a_random_colour https://code.google.com/p/blockly/wiki/Colour#Generating_a_random_colour].
+/// tooltip - See [https://github.com/google/blockly/wiki/Colour#generating-a-random-colour https://github.com/google/blockly/wiki/Colour#generating-a-random-colour].
 Blockly.Msg.COLOUR_RANDOM_TOOLTIP = 'Choose a colour at random.';
 /// url - A link for color codes with percentages (0-100%) for each component, instead of the more common 0-255, which may be more difficult for beginners.
 Blockly.Msg.COLOUR_RGB_HELPURL = 'http://www.december.com/html/spec/colorper.html';
-/// block text - Title of block for [https://code.google.com/p/blockly/wiki/Colour#Creating_a_colour_from_red,_green,_and_blue_components https://code.google.com/p/blockly/wiki/Colour#Creating_a_colour_from_red,_green,_and_blue_components].
+/// block text - Title of block for [https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components].
 Blockly.Msg.COLOUR_RGB_TITLE = 'colour with';
-/// block input text - The amount of red (from 0 to 100) to use when [https://code.google.com/p/blockly/wiki/Colour#Creating_a_colour_from_red,_green,_and_blue_components https://code.google.com/p/blockly/wiki/Colour#Creating_a_colour_from_red,_green,_and_blue_components].\n{{Identical|Red}}
+/// block input text - The amount of red (from 0 to 100) to use when [https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components].\n{{Identical|Red}}
 Blockly.Msg.COLOUR_RGB_RED = 'red';
-/// block input text - The amount of green (from 0 to 100) to use when [https://code.google.com/p/blockly/wiki/Colour#Creating_a_colour_from_red,_green,_and_blue_components https://code.google.com/p/blockly/wiki/Colour#Creating_a_colour_from_red,_green,_and_blue_components].
+/// block input text - The amount of green (from 0 to 100) to use when [https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components].
 Blockly.Msg.COLOUR_RGB_GREEN = 'green';
-/// block input text - The amount of blue (from 0 to 100) to use when [https://code.google.com/p/blockly/wiki/Colour#Creating_a_colour_from_red,_green,_and_blue_components https://code.google.com/p/blockly/wiki/Colour#Creating_a_colour_from_red,_green,_and_blue_components].\n{{Identical|Blue}}
+/// block input text - The amount of blue (from 0 to 100) to use when [https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components].\n{{Identical|Blue}}
 Blockly.Msg.COLOUR_RGB_BLUE = 'blue';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Colour#Creating_a_colour_from_red,_green,_and_blue_components https://code.google.com/p/blockly/wiki/Colour#Creating_a_colour_from_red,_green,_and_blue_components].
-Blockly.Msg.COLOUR_RGB_TOOLTIP = 'Create a colour with the specified amount of red, green, and blue.  All values must be between 0 and 100.';
+/// tooltip - See [https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components https://github.com/google/blockly/wiki/Colour#creating-a-colour-from-red-green-and-blue-components].
+Blockly.Msg.COLOUR_RGB_TOOLTIP = 'Create a colour with the specified amount of red, green, and blue. All values must be between 0 and 100.';
 /// url - A useful link that displays blending of two colors.
 Blockly.Msg.COLOUR_BLEND_HELPURL = 'http://meyerweb.com/eric/tools/color-blend/';
 /// block text - A verb for blending two shades of paint.
 Blockly.Msg.COLOUR_BLEND_TITLE = 'blend';
-/// block input text - The first of two colours to [https://code.google.com/p/blockly/wiki/Colour#Blending_colours blend].
+/// block input text - The first of two colours to [https://github.com/google/blockly/wiki/Colour#blending-colours blend].
 Blockly.Msg.COLOUR_BLEND_COLOUR1 = 'colour 1';
-/// block input text - The second of two colours to [https://code.google.com/p/blockly/wiki/Colour#Blending_colours blend].
+/// block input text - The second of two colours to [https://github.com/google/blockly/wiki/Colour#blending-colours blend].
 Blockly.Msg.COLOUR_BLEND_COLOUR2 = 'colour 2';
-/// block input text - The proportion of the [https://code.google.com/p/blockly/wiki/Colour#Blending_colours blend] containing the first color; the remaining proportion is of the second colour.  For example, if the first colour is red and the second color blue, a ratio of 1 would yield pure red, a ratio of .5 would yield purple (equal amounts of red and blue), and a ratio of 0 would yield pure blue.
+/// block input text - The proportion of the [https://github.com/google/blockly/wiki/Colour#blending-colours blend] containing the first color; the remaining proportion is of the second colour.  For example, if the first colour is red and the second color blue, a ratio of 1 would yield pure red, a ratio of .5 would yield purple (equal amounts of red and blue), and a ratio of 0 would yield pure blue.\n{{Identical|Ratio}}
 Blockly.Msg.COLOUR_BLEND_RATIO = 'ratio';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Colour#Blending_colours https://code.google.com/p/blockly/wiki/Colour#Blending_colours].
+/// tooltip - See [https://github.com/google/blockly/wiki/Colour#blending-colours https://github.com/google/blockly/wiki/Colour#blending-colours].
 Blockly.Msg.COLOUR_BLEND_TOOLTIP = 'Blends two colours together with a given ratio (0.0 - 1.0).';
 
 // Loop Blocks.
 /// url - Describes 'repeat loops' in computer programs; consider using the translation of the page [https://en.wikipedia.org/wiki/Control_flow http://en.wikipedia.org/wiki/Control_flow].
 Blockly.Msg.CONTROLS_REPEAT_HELPURL = 'https://en.wikipedia.org/wiki/For_loop';
-/// block input text - Title of [https://code.google.com/p/blockly/wiki/Loops#repeat repeat block].\n\nParameters:\n* %1 - the number of times the body of the loop should be repeated.
+/// block input text - Title of [https://github.com/google/blockly/wiki/Loops#repeat repeat block].\n\nParameters:\n* %1 - the number of times the body of the loop should be repeated.
 Blockly.Msg.CONTROLS_REPEAT_TITLE = 'repeat %1 times';
-/// block text - Text preceding the number of repetitions in a [https://code.google.com/p/blockly/wiki/Loops#repeat repeat block].
-/// (This is redundant with the previous message but is needed to support older code.)
-Blockly.Msg.CONTROLS_REPEAT_TITLE_REPEAT = 'repeat';
-/// block text - Text following the number of times a [https://code.google.com/p/blockly/wiki/Loops#repeat repeat loop] should be repeated.
-/// (This is redundant but is needed to support older code.)
-Blockly.Msg.CONTROLS_REPEAT_TITLE_TIMES = 'times';
-/// block text - Preceding the blocks in the body of the loop.  See [https://code.google.com/p/blockly/wiki/Loops https://code.google.com/p/blockly/wiki/Loops].
+/// block text - Preceding the blocks in the body of the loop.  See [https://github.com/google/blockly/wiki/Loops https://github.com/google/blockly/wiki/Loops].\n{{Identical|Do}}
 Blockly.Msg.CONTROLS_REPEAT_INPUT_DO = 'do';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Loops#repeat https://code.google.com/p/blockly/wiki/Loops#repeat].
+/// tooltip - See [https://github.com/google/blockly/wiki/Loops#repeat https://github.com/google/blockly/wiki/Loops#repeat].
 Blockly.Msg.CONTROLS_REPEAT_TOOLTIP = 'Do some statements several times.';
 /// url - Describes 'while loops' in computer programs; consider using the translation of [https://en.wikipedia.org/wiki/While_loop https://en.wikipedia.org/wiki/While_loop], if present, or [https://en.wikipedia.org/wiki/Control_flow https://en.wikipedia.org/wiki/Control_flow].
-Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL = 'https://code.google.com/p/blockly/wiki/Repeat';
+Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL = 'https://github.com/google/blockly/wiki/Loops#repeat';
 Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
-/// dropdown - Specifies that a loop should [https://code.google.com/p/blockly/wiki/Loops#Repeat_while repeat while] the following condition is true.
+/// dropdown - Specifies that a loop should [https://github.com/google/blockly/wiki/Loops#repeat-while repeat while] the following condition is true.
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = 'repeat while';
-/// dropdown - Specifies that a loop should [https://code.google.com/p/blockly/wiki/Loops#Repeat_until repeat until] the following condition becomes true.
+/// dropdown - Specifies that a loop should [https://github.com/google/blockly/wiki/Loops#repeat-until repeat until] the following condition becomes true.
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL = 'repeat until';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Loops#repeat_while Loops#repeat_while https://code.google.com/p/blockly/wiki/Loops#repeat_while Loops#repeat_while].
+/// tooltip - See [https://github.com/google/blockly/wiki/Loops#repeat-while Loops#repeat-while https://github.com/google/blockly/wiki/Loops#repeat-while Loops#repeat-while].
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_WHILE = 'While a value is true, then do some statements.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Loops#repeat_until https://code.google.com/p/blockly/wiki/Loops#repeat_until].
+/// tooltip - See [https://github.com/google/blockly/wiki/Loops#repeat-until https://github.com/google/blockly/wiki/Loops#repeat-until].
 Blockly.Msg.CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL = 'While a value is false, then do some statements.';
 
 /// url - Describes 'for loops' in computer programs.  Consider using your language's translation of [https://en.wikipedia.org/wiki/For_loop https://en.wikipedia.org/wiki/For_loop], if present.
-Blockly.Msg.CONTROLS_FOR_HELPURL = 'https://code.google.com/p/blockly/wiki/Loops#count_with';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Loops#count_with https://code.google.com/p/blockly/wiki/Loops#count_with].\n\nParameters:\n* %1 - the name of the loop variable.
-Blockly.Msg.CONTROLS_FOR_TOOLTIP = 'Have the variable %1 take on the values from the start number to the end number, counting by the specified interval, and do the specified blocks.';
-/// block title - Title of [https://code.google.com/p/blockly/wiki/Loops#count_with count with] blocks.
+Blockly.Msg.CONTROLS_FOR_HELPURL = 'https://github.com/google/blockly/wiki/Loops#count-with';
+/// tooltip - See [https://github.com/google/blockly/wiki/Loops#count-with https://github.com/google/blockly/wiki/Loops#count-with].\n\nParameters:\n* %1 - the name of the loop variable.
+Blockly.Msg.CONTROLS_FOR_TOOLTIP = 'Have the variable "%1" take on the values from the start number to the end number, counting by the specified interval, and do the specified blocks.';
+/// block text - Repeatedly counts a variable (%1)
+/// starting with a (usually lower) number in a range (%2),
+/// ending with a (usually higher) number in a range (%3), and counting the
+/// iterations by a number of steps (%4).  As in
+/// [https://github.com/google/blockly/wiki/Loops#count-with
+/// https://github.com/google/blockly/wiki/Loops#count-with].
 /// [[File:Blockly-count-with.png]]
-Blockly.Msg.CONTROLS_FOR_INPUT_WITH = 'count with';
-/// block text - Starting with a (usually lower) number in a range (%1),
-/// ending with a (usually higher) number in a range (%2), and counting the
-/// iterations by a number of steps (%3).  As in
-/// [https://code.google.com/p/blockly/wiki/Loops#count_with
-/// https://code.google.com/p/blockly/wiki/Loops#count_with].
-/// [[File:Blockly-count-with.png]]
-Blockly.Msg.CONTROLS_FOR_INPUT_FROM_TO_BY = 'from %1 to %2 by %3';
+Blockly.Msg.CONTROLS_FOR_TITLE = 'count with %1 from %2 to %3 by %4';
 Blockly.Msg.CONTROLS_FOR_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
 
 /// url - Describes 'for-each loops' in computer programs.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Foreach https://en.wikipedia.org/wiki/Foreach] if present.
-Blockly.Msg.CONTROLS_FOREACH_HELPURL = 'https://code.google.com/p/blockly/wiki/Loops#for_each for each block';
-/// block text - Title of [https://code.google.com/p/blockly/wiki/Loops#for_each for each block].
-Blockly.Msg.CONTROLS_FOREACH_INPUT_ITEM = 'for each item';
-/// block text - Preceding the list that should be iterated over in a [https://code.google.com/p/blockly/wiki/Loops#for_each for each loop].
-Blockly.Msg.CONTROLS_FOREACH_INPUT_INLIST = 'in list';
-/// block text - Following the list that should be iterated over in a [https://code.google.com/p/blockly/wiki/Loops#for_each for each loop].  This is empty in most, but not all, languages.
-Blockly.Msg.CONTROLS_FOREACH_INPUT_INLIST_TAIL = '';
+Blockly.Msg.CONTROLS_FOREACH_HELPURL = 'https://github.com/google/blockly/wiki/Loops#for-each';
+/// block text - Title of [https://github.com/google/blockly/wiki/Loops#for-each for each block].
+/// Sequentially assigns every item in array %2 to the valiable %1.
+Blockly.Msg.CONTROLS_FOREACH_TITLE = 'for each item %1 in list %2';
 Blockly.Msg.CONTROLS_FOREACH_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
-/// block text - Description of [https://code.google.com/p/blockly/wiki/Loops#for_each for each blocks].\n\nParameters:\n* %1 - the name of the loop variable.
+/// block text - Description of [https://github.com/google/blockly/wiki/Loops#for-each for each blocks].\n\nParameters:\n* %1 - the name of the loop variable.
 Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = 'For each item in a list, set the variable "%1" to the item, and then do some statements.';
 
 /// url - Describes control flow in computer programs.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Control_flow https://en.wikipedia.org/wiki/Control_flow], if it exists.
-Blockly.Msg.CONTROLS_FLOW_STATEMENTS_HELPURL = 'https://code.google.com/p/blockly/wiki/Loops#Loop_Termination_Blocks';
-/// dropdown - The current loop should be exited.  See [https://code.google.com/p/blockly/wiki/Loops#break https://code.google.com/p/blockly/wiki/Loops#break].
+Blockly.Msg.CONTROLS_FLOW_STATEMENTS_HELPURL = 'https://github.com/google/blockly/wiki/Loops#loop-termination-blocks';
+/// dropdown - The current loop should be exited.  See [https://github.com/google/blockly/wiki/Loops#break https://github.com/google/blockly/wiki/Loops#break].
 Blockly.Msg.CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK = 'break out of loop';
-/// dropdown - The current iteration of the loop should be ended and the next should begin.  See [https://code.google.com/p/blockly/wiki/Loops#continue_with_next_iteration https://code.google.com/p/blockly/wiki/Loops#continue_with_next_iteration].
+/// dropdown - The current iteration of the loop should be ended and the next should begin.  See [https://github.com/google/blockly/wiki/Loops#continue-with-next-iteration https://github.com/google/blockly/wiki/Loops#continue-with-next-iteration].
 Blockly.Msg.CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE = 'continue with next iteration of loop';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Loops#break_out_of_loop https://code.google.com/p/blockly/wiki/Loops#break_out_of_loop].
+/// tooltip - See [https://github.com/google/blockly/wiki/Loops#break-out-of-loop https://github.com/google/blockly/wiki/Loops#break-out-of-loop].
 Blockly.Msg.CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK = 'Break out of the containing loop.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Loops#continue_with_next_iteration https://code.google.com/p/blockly/wiki/Loops#continue_with_next_iteration].
+/// tooltip - See [https://github.com/google/blockly/wiki/Loops#continue-with-next-iteration https://github.com/google/blockly/wiki/Loops#continue-with-next-iteration].
 Blockly.Msg.CONTROLS_FLOW_STATEMENTS_TOOLTIP_CONTINUE = 'Skip the rest of this loop, and continue with the next iteration.';
-/// warning - The user has tried placing a block outside of a loop (for each, while, repeat, etc.), but this type of block may only be used within a loop.  See [https://code.google.com/p/blockly/wiki/Loops#Loop_Termination_Blocks https://code.google.com/p/blockly/wiki/Loops#Loop_Termination_Blocks].
+/// warning - The user has tried placing a block outside of a loop (for each, while, repeat, etc.), but this type of block may only be used within a loop.  See [https://github.com/google/blockly/wiki/Loops#loop-termination-blocks https://github.com/google/blockly/wiki/Loops#loop-termination-blocks].
 Blockly.Msg.CONTROLS_FLOW_STATEMENTS_WARNING = 'Warning: This block may only be used within a loop.';
 
 // Logic Blocks.
 /// url - Describes conditional statements (if-then-else) in computer programs.  Consider using your language's translation of [https://en.wikipedia.org/wiki/If_else https://en.wikipedia.org/wiki/If_else], if present.
-Blockly.Msg.CONTROLS_IF_HELPURL = 'https://code.google.com/p/blockly/wiki/If_Then';
-/// tooltip - Describes [https://code.google.com/p/blockly/wiki/IfElse#If_blocks 'if' blocks].  Consider using your language's translation of [https://en.wikipedia.org/wiki/If_statement https://en.wikipedia.org/wiki/If_statement], if present.
+Blockly.Msg.CONTROLS_IF_HELPURL = 'https://github.com/google/blockly/wiki/IfElse';
+/// tooltip - Describes [https://github.com/google/blockly/wiki/IfElse#if-blocks 'if' blocks].  Consider using your language's translation of [https://en.wikipedia.org/wiki/If_statement https://en.wikipedia.org/wiki/If_statement], if present.
 Blockly.Msg.CONTROLS_IF_TOOLTIP_1 = 'If a value is true, then do some statements.';
-/// tooltip - Describes [https://code.google.com/p/blockly/wiki/IfElse#If-Else_blocks if-else blocks].  Consider using your language's translation of [https://en.wikipedia.org/wiki/If_statement https://en.wikipedia.org/wiki/If_statement], if present.
-Blockly.Msg.CONTROLS_IF_TOOLTIP_2 = 'If a value is true, then do the first block of statements.  Otherwise, do the second block of statements.';
-/// tooltip - Describes [https://code.google.com/p/blockly/wiki/IfElse#If-Else-If_blocks if-else-if blocks].  Consider using your language's translation of [https://en.wikipedia.org/wiki/If_statement https://en.wikipedia.org/wiki/If_statement], if present.
-Blockly.Msg.CONTROLS_IF_TOOLTIP_3 = 'If the first value is true, then do the first block of statements.  Otherwise, if the second value is true, do the second block of statements.';
-/// tooltip - Describes [https://code.google.com/p/blockly/wiki/IfElse#If-Else-If-Else_blocks if-else-if-else blocks].  Consider using your language's translation of [https://en.wikipedia.org/wiki/If_statement https://en.wikipedia.org/wiki/If_statement], if present.
-Blockly.Msg.CONTROLS_IF_TOOLTIP_4 = 'If the first value is true, then do the first block of statements.  Otherwise, if the second value is true, do the second block of statements.  If none of the values are true, do the last block of statements.';
-/// block text - See [https://code.google.com/p/blockly/wiki/IfElse https://code.google.com/p/blockly/wiki/IfElse].
+/// tooltip - Describes [https://github.com/google/blockly/wiki/IfElse#if-else-blocks if-else blocks].  Consider using your language's translation of [https://en.wikipedia.org/wiki/If_statement https://en.wikipedia.org/wiki/If_statement], if present.
+Blockly.Msg.CONTROLS_IF_TOOLTIP_2 = 'If a value is true, then do the first block of statements. Otherwise, do the second block of statements.';
+/// tooltip - Describes [https://github.com/google/blockly/wiki/IfElse#if-else-if-blocks if-else-if blocks].  Consider using your language's translation of [https://en.wikipedia.org/wiki/If_statement https://en.wikipedia.org/wiki/If_statement], if present.
+Blockly.Msg.CONTROLS_IF_TOOLTIP_3 = 'If the first value is true, then do the first block of statements. Otherwise, if the second value is true, do the second block of statements.';
+/// tooltip - Describes [https://github.com/google/blockly/wiki/IfElse#if-else-if-else-blocks if-else-if-else blocks].  Consider using your language's translation of [https://en.wikipedia.org/wiki/If_statement https://en.wikipedia.org/wiki/If_statement], if present.
+Blockly.Msg.CONTROLS_IF_TOOLTIP_4 = 'If the first value is true, then do the first block of statements. Otherwise, if the second value is true, do the second block of statements. If none of the values are true, do the last block of statements.';
+/// block text - See [https://github.com/google/blockly/wiki/IfElse https://github.com/google/blockly/wiki/IfElse].
 /// It is recommended, but not essential, that this have text in common with the translation of 'else if'
 Blockly.Msg.CONTROLS_IF_MSG_IF = 'if';
-/// block text - See [https://code.google.com/p/blockly/wiki/IfElse https://code.google.com/p/blockly/wiki/IfElse].  The English words "otherwise if" would probably be clearer than "else if", but the latter is used because it is traditional and shorter.
+/// block text - See [https://github.com/google/blockly/wiki/IfElse https://github.com/google/blockly/wiki/IfElse].  The English words "otherwise if" would probably be clearer than "else if", but the latter is used because it is traditional and shorter.
 Blockly.Msg.CONTROLS_IF_MSG_ELSEIF = 'else if';
-/// block text - See [https://code.google.com/p/blockly/wiki/IfElse https://code.google.com/p/blockly/wiki/IfElse].  The English word "otherwise" would probably be superior to "else", but the latter is used because it is traditional and shorter.
+/// block text - See [https://github.com/google/blockly/wiki/IfElse https://github.com/google/blockly/wiki/IfElse].  The English word "otherwise" would probably be superior to "else", but the latter is used because it is traditional and shorter.
 Blockly.Msg.CONTROLS_IF_MSG_ELSE = 'else';
-Blockly.Msg.CONTROLS_IF_MSG_THEN = 'do';
+Blockly.Msg.CONTROLS_IF_MSG_THEN = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
 Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
-/// tooltip - Describes [https://code.google.com/p/blockly/wiki/IfElse#Block_Modification if block modification].
+/// tooltip - Describes [https://github.com/google/blockly/wiki/IfElse#block-modification if block modification].
 Blockly.Msg.CONTROLS_IF_IF_TOOLTIP = 'Add, remove, or reorder sections to reconfigure this if block.';
 Blockly.Msg.CONTROLS_IF_ELSEIF_TITLE_ELSEIF = Blockly.Msg.CONTROLS_IF_MSG_ELSEIF;
-/// tooltip - Describes the 'else if' subblock during [https://code.google.com/p/blockly/wiki/IfElse#Block_Modification if block modification].
+/// tooltip - Describes the 'else if' subblock during [https://github.com/google/blockly/wiki/IfElse#block-modification if block modification].
 Blockly.Msg.CONTROLS_IF_ELSEIF_TOOLTIP = 'Add a condition to the if block.';
 Blockly.Msg.CONTROLS_IF_ELSE_TITLE_ELSE = Blockly.Msg.CONTROLS_IF_MSG_ELSE;
-/// tooltip - Describes the 'else' subblock during [https://code.google.com/p/blockly/wiki/IfElse#Block_Modification if block modification].
+/// tooltip - Describes the 'else' subblock during [https://github.com/google/blockly/wiki/IfElse#block-modification if block modification].
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = 'Add a final, catch-all condition to the if block.';
 
 /// url - Information about comparisons.
 Blockly.Msg.LOGIC_COMPARE_HELPURL = 'https://en.wikipedia.org/wiki/Inequality_(mathematics)';
 /// tooltip - Describes the equals (=) block.
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = 'Return true if both inputs equal each other.';
-/// tooltip - Describes the not equals (?) block.
+/// tooltip - Describes the not equals (≠) block.
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_NEQ = 'Return true if both inputs are not equal to each other.';
 /// tooltip - Describes the less than (<) block.
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LT = 'Return true if the first input is smaller than the second input.';
-/// tooltip - Describes the less than or equals (=) block.
+/// tooltip - Describes the less than or equals (≤) block.
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_LTE = 'Return true if the first input is smaller than or equal to the second input.';
 /// tooltip - Describes the greater than (>) block.
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = 'Return true if the first input is greater than the second input.';
-/// tooltip - Describes the greater than or equals (=) block.
+/// tooltip - Describes the greater than or equals (≥) block.
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GTE = 'Return true if the first input is greater than or equal to the second input.';
 
 /// url - Information about the Boolean conjunction ("and") and disjunction ("or") operators.  Consider using the translation of [https://en.wikipedia.org/wiki/Boolean_logic https://en.wikipedia.org/wiki/Boolean_logic], if it exists in your language.
-Blockly.Msg.LOGIC_OPERATION_HELPURL = 'https://code.google.com/p/blockly/wiki/And_Or';
+Blockly.Msg.LOGIC_OPERATION_HELPURL = 'https://github.com/google/blockly/wiki/Logic#logical-operations';
 /// tooltip - See [https://en.wikipedia.org/wiki/Logical_conjunction https://en.wikipedia.org/wiki/Logical_conjunction].
 Blockly.Msg.LOGIC_OPERATION_TOOLTIP_AND = 'Return true if both inputs are true.';
 /// block text - See [https://en.wikipedia.org/wiki/Logical_conjunction https://en.wikipedia.org/wiki/Logical_conjunction].
@@ -387,15 +258,15 @@ Blockly.Msg.LOGIC_OPERATION_TOOLTIP_OR = 'Return true if at least one of the inp
 Blockly.Msg.LOGIC_OPERATION_OR = 'or';
 
 /// url - Information about logical negation.  The translation of [https://en.wikipedia.org/wiki/Logical_negation https://en.wikipedia.org/wiki/Logical_negation] is recommended if it exists in the target language.
-Blockly.Msg.LOGIC_NEGATE_HELPURL = 'https://code.google.com/p/blockly/wiki/Not';
+Blockly.Msg.LOGIC_NEGATE_HELPURL = 'https://github.com/google/blockly/wiki/Logic#not';
 /// block text - This is a unary operator that returns ''false'' when the input is ''true'', and ''true'' when the input is ''false''.
 /// \n\nParameters:\n* %1 - the input (which should be either the value "true" or "false")
 Blockly.Msg.LOGIC_NEGATE_TITLE = 'not %1';
 /// tooltip - See [https://en.wikipedia.org/wiki/Logical_negation https://en.wikipedia.org/wiki/Logical_negation].
-Blockly.Msg.LOGIC_NEGATE_TOOLTIP = 'Returns true if the input is false.  Returns false if the input is true.';
+Blockly.Msg.LOGIC_NEGATE_TOOLTIP = 'Returns true if the input is false. Returns false if the input is true.';
 
 /// url - Information about the logic values ''true'' and ''false''.  Consider using the translation of [https://en.wikipedia.org/wiki/Truth_value https://en.wikipedia.org/wiki/Truth_value] if it exists in your language.
-Blockly.Msg.LOGIC_BOOLEAN_HELPURL = 'https://code.google.com/p/blockly/wiki/True_False';
+Blockly.Msg.LOGIC_BOOLEAN_HELPURL = 'https://github.com/google/blockly/wiki/Logic#values';
 /// block text - The word for the [https://en.wikipedia.org/wiki/Truth_value logical value] ''true''.
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = 'true';
 /// block text - The word for the [https://en.wikipedia.org/wiki/Truth_value logical value] ''false''.
@@ -427,17 +298,17 @@ Blockly.Msg.MATH_NUMBER_HELPURL = 'https://en.wikipedia.org/wiki/Number';
 /// tooltip - Any positive or negative number, not necessarily an integer.
 Blockly.Msg.MATH_NUMBER_TOOLTIP = 'A number.';
 
-/// math - The symbol for the binary operation addition.
+/// {{optional}}\nmath - The symbol for the binary operation addition.
 Blockly.Msg.MATH_ADDITION_SYMBOL = '+';
-/// math - The symbol for the binary operation indicating that the right operand should be
+/// {{optional}}\nmath - The symbol for the binary operation indicating that the right operand should be
 /// subtracted from the left operand.
 Blockly.Msg.MATH_SUBTRACTION_SYMBOL = '-';
-/// math - The binary operation indicating that the left operand should be divided by
+/// {{optional}}\nmath - The binary operation indicating that the left operand should be divided by
 /// the right operand.
 Blockly.Msg.MATH_DIVISION_SYMBOL = '÷';
-/// math - The symbol for the binary operation multiplication.
+/// {{optional}}\nmath - The symbol for the binary operation multiplication.
 Blockly.Msg.MATH_MULTIPLICATION_SYMBOL = '×';
-/// math - The symbol for the binary operation exponentiation.  Specifically, if the
+/// {{optional}}\nmath - The symbol for the binary operation exponentiation.  Specifically, if the
 /// value of the left operand is L and the value of the right operand (the exponent) is
 /// R, multiply L by itself R times.  (Fractional and negative exponents are also legal.)
 Blockly.Msg.MATH_POWER_SYMBOL = '^';
@@ -499,11 +370,11 @@ Blockly.Msg.MATH_SINGLE_TOOLTIP_POW10 = 'Return 10 to the power of a number.';
 /// url - Information about the trigonometric functions sine, cosine, tangent, and their inverses (ideally using degrees, not radians).
 Blockly.Msg.MATH_TRIG_HELPURL = 'https://en.wikipedia.org/wiki/Trigonometric_functions';
 /// tooltip - Return the [https://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent sine] of an [https://en.wikipedia.org/wiki/Degree_(angle) angle in degrees], not radians.
-Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = 'Provides the sine of a given angle in degree.';
+Blockly.Msg.MATH_TRIG_TOOLTIP_SIN = 'Return the sine of a degree (not radian).';
 /// tooltip - Return the [https://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent cosine] of an [https://en.wikipedia.org/wiki/Degree_(angle) angle in degrees], not radians.
-Blockly.Msg.MATH_TRIG_TOOLTIP_COS = 'Provides the sine of a given angle in degree.';
+Blockly.Msg.MATH_TRIG_TOOLTIP_COS = 'Return the cosine of a degree (not radian).';
 /// tooltip - Return the [https://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent tangent] of an [https://en.wikipedia.org/wiki/Degree_(angle) angle in degrees], not radians.
-Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = 'Provides the tangent of a given angle in degree.';
+Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = 'Return the tangent of a degree (not radian).';
 /// tooltip - The [https://en.wikipedia.org/wiki/Inverse_trigonometric_functions inverse] of the [https://en.wikipedia.org/wiki/Cosine#Sine.2C_cosine_and_tangent sine function], using [https://en.wikipedia.org/wiki/Degree_(angle) degrees], not radians.
 Blockly.Msg.MATH_TRIG_TOOLTIP_ASIN = 'Return the arcsine of a number.';
 /// tooltip - The [https://en.wikipedia.org/wiki/Inverse_trigonometric_functions inverse] of the [https://en.wikipedia.org/wiki/Cosine#Sine.2C_cosine_and_tangent cosine] function, using [https://en.wikipedia.org/wiki/Degree_(angle) degrees], not radians.
@@ -511,10 +382,10 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_ACOS = 'Return the arccosine of a number.';
 /// tooltip - The [https://en.wikipedia.org/wiki/Inverse_trigonometric_functions inverse] of the [https://en.wikipedia.org/wiki/Cosine#Sine.2C_cosine_and_tangent tangent] function, using [https://en.wikipedia.org/wiki/Degree_(angle) degrees], not radians.
 Blockly.Msg.MATH_TRIG_TOOLTIP_ATAN = 'Return the arctangent of a number.';
 
-/// url - Information about the mathematical constants Pi (p), e, the golden ratio (f), v 2, v 1/2, and infinity (8).
+/// url - Information about the mathematical constants Pi (π), e, the golden ratio (φ), √ 2, √ 1/2, and infinity (∞).
 Blockly.Msg.MATH_CONSTANT_HELPURL = 'https://en.wikipedia.org/wiki/Mathematical_constant';
 /// tooltip - Provides the specified [https://en.wikipedia.org/wiki/Mathematical_constant mathematical constant].
-Blockly.Msg.MATH_CONSTANT_TOOLTIP = 'Return one of the common constants: p (3.141…), e (2.718…), φ (1.618…), sqrt(2) (1.414…), sqrt(½) ( .7 7…), or ∞ (infinity).';
+Blockly.Msg.MATH_CONSTANT_TOOLTIP = 'Return one of the common constants: π (3.141…), e (2.718…), φ (1.618…), sqrt(2) (1.414…), sqrt(½) (0.707…), or ∞ (infinity).';
 /// dropdown - A number is '''even''' if it is a multiple of 2.  For example, 4 is even (yielding true), but 3 is not (false).
 Blockly.Msg.MATH_IS_EVEN = 'is even';
 /// dropdown - A number is '''odd''' if it is not a multiple of 2.  For example, 3 is odd (yielding true), but 4 is not (false).  The opposite of "odd" is "even".
@@ -530,17 +401,17 @@ Blockly.Msg.MATH_IS_NEGATIVE = 'is negative';
 /// dropdown - A number x is divisible by y if y goes into x evenly.  For example, 10 is divisible by 5, but 10 is not divisible by 3.
 Blockly.Msg.MATH_IS_DIVISIBLE_BY = 'is divisible by';
 /// tooltip - This block lets the user specify via a dropdown menu whether to check if the numeric input is even, odd, prime, whole, positive, negative, or divisible by a given value.
-Blockly.Msg.MATH_IS_TOOLTIP = 'Check if a number is an even, odd, prime, whole, positive, negative, or if it is divisible by certain number.  Returns true or false.';
+Blockly.Msg.MATH_IS_TOOLTIP = 'Check if a number is an even, odd, prime, whole, positive, negative, or if it is divisible by certain number. Returns true or false.';
 
 /// url - Information about incrementing (increasing the value of) a variable.
 /// For other languages, just use the translation of the Wikipedia page about
 /// addition ([https://en.wikipedia.org/wiki/Addition https://en.wikipedia.org/wiki/Addition]).
 Blockly.Msg.MATH_CHANGE_HELPURL = 'https://en.wikipedia.org/wiki/Programming_idiom#Incrementing_a_counter';
-/// - As in: '''change''' [the value of variable] ''item by'' 1 (e.g., if the variable named 'item' had the value 5, change it to 6).
-Blockly.Msg.MATH_CHANGE_TITLE_CHANGE = 'change';
+/// - As in: ''change'' [the value of variable] ''item'' ''by'' 1 (e.g., if the variable named 'item' had the value 5, change it to 6).
+/// %1 is a variable name.
+/// %2 is the amount of change.
+Blockly.Msg.MATH_CHANGE_TITLE = 'change %1 by %2';
 Blockly.Msg.MATH_CHANGE_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
-/// - As in: ''change'' [the value of variable] ''item'' '''by''' 1 (e.g., if the variable named 'item' had the value 5, change it to 6).
-Blockly.Msg.MATH_CHANGE_INPUT_BY = 'by';
 /// tooltip - This updates the value of the variable by adding to it the following numeric input.\n\nParameters:\n* %1 - the name of the variable whose value should be increased.
 Blockly.Msg.MATH_CHANGE_TOOLTIP = 'Add a number to variable "%1".';
 
@@ -623,26 +494,26 @@ Blockly.Msg.MATH_RANDOM_FLOAT_TOOLTIP = 'Return a random fraction between 0.0 (i
 // Text Blocks.
 /// url - Information about how computers represent text (sometimes referred to as ''string''s).
 Blockly.Msg.TEXT_TEXT_HELPURL = 'https://en.wikipedia.org/wiki/String_(computer_science)';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Text#Introduction https://code.google.com/p/blockly/wiki/Text#Introduction].
+/// tooltip - See [https://github.com/google/blockly/wiki/Text https://github.com/google/blockly/wiki/Text].
 Blockly.Msg.TEXT_TEXT_TOOLTIP = 'A letter, word, or line of text.';
 
 /// url - Information on concatenating/appending pieces of text.
-Blockly.Msg.TEXT_JOIN_HELPURL = 'https://code.google.com/p/blockly/wiki/Text#Text_creation';
-/// block text - See [https://code.google.com/p/blockly/wiki/Text#Text_creation https://code.google.com/p/blockly/wiki/Text#Text_creation].
+Blockly.Msg.TEXT_JOIN_HELPURL = 'https://github.com/google/blockly/wiki/Text#text-creation';
+/// block text - See [https://github.com/google/blockly/wiki/Text#text-creation https://github.com/google/blockly/wiki/Text#text-creation].
 Blockly.Msg.TEXT_JOIN_TITLE_CREATEWITH = 'create text with';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Text#Text_creation create text with] for more information.
+/// tooltip - See [https://github.com/google/blockly/wiki/Text#text-creation create text with] for more information.
 Blockly.Msg.TEXT_JOIN_TOOLTIP = 'Create a piece of text by joining together any number of items.';
 
-/// block text - This is shown when the programmer wants to change the number of pieces of text being joined together.  See [https://code.google.com/p/blockly/wiki/Text#Text_creation https://code.google.com/p/blockly/wiki/Text#Text_creation], specifically the last picture in the 'Text creation' section.
+/// block text - This is shown when the programmer wants to change the number of pieces of text being joined together.  See [https://github.com/google/blockly/wiki/Text#text-creation https://github.com/google/blockly/wiki/Text#text-creation], specifically the last picture in the 'Text creation' section.\n{{Identical|Join}}
 Blockly.Msg.TEXT_CREATE_JOIN_TITLE_JOIN = 'join';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Text#Text_creation https://code.google.com/p/blockly/wiki/Text#Text_creation], specifically the last picture in the 'Text creation' section.
+/// tooltip - See [https://github.com/google/blockly/wiki/Text#text-creation https://github.com/google/blockly/wiki/Text#text-creation], specifically the last picture in the 'Text creation' section.
 Blockly.Msg.TEXT_CREATE_JOIN_TOOLTIP = 'Add, remove, or reorder sections to reconfigure this text block.';
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TITLE_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
-/// block text - See [https://code.google.com/p/blockly/wiki/Text#Text_creation https://code.google.com/p/blockly/wiki/Text#Text_creation], specifically the last picture in the 'Text creation' section.
+/// block text - See [https://github.com/google/blockly/wiki/Text#text-creation https://github.com/google/blockly/wiki/Text#text-creation], specifically the last picture in the 'Text creation' section.
 Blockly.Msg.TEXT_CREATE_JOIN_ITEM_TOOLTIP = 'Add an item to the text.';
 
 /// url - This and the other text-related URLs are going to be hard to translate.  As always, it is okay to leave untranslated or paste in the English-language URL.  For these URLs, you might also consider a general URL about how computers represent text (such as the translation of [https://en.wikipedia.org/wiki/String_(computer_science) this Wikipedia page]).
-Blockly.Msg.TEXT_APPEND_HELPURL = 'https://code.google.com/p/blockly/wiki/Text#Text_modification';
+Blockly.Msg.TEXT_APPEND_HELPURL = 'https://github.com/google/blockly/wiki/Text#text-modification';
 /// block input text - Message preceding the name of a variable to which text should be appended.
 /// [[File:blockly-append-text.png]]
 Blockly.Msg.TEXT_APPEND_TO = 'to';
@@ -651,40 +522,40 @@ Blockly.Msg.TEXT_APPEND_TO = 'to';
 /// [[File:blockly-append-text.png]]
 Blockly.Msg.TEXT_APPEND_APPENDTEXT = 'append text';
 Blockly.Msg.TEXT_APPEND_VARIABLE = Blockly.Msg.VARIABLES_DEFAULT_NAME;
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Text#Text_modification https://code.google.com/p/blockly/wiki/Text#Text_modification] for more information.\n\nParameters:\n* %1 - the name of the variable to which text should be appended
+/// tooltip - See [https://github.com/google/blockly/wiki/Text#text-modification https://github.com/google/blockly/wiki/Text#text-modification] for more information.\n\nParameters:\n* %1 - the name of the variable to which text should be appended
 Blockly.Msg.TEXT_APPEND_TOOLTIP = 'Append some text to variable "%1".';
 
 /// url - Information about text on computers (usually referred to as 'strings').
-Blockly.Msg.TEXT_LENGTH_HELPURL = 'https://code.google.com/p/blockly/wiki/Text#Text_modification';
-/// block text - See [https://code.google.com/p/blockly/wiki/Text#Text_length https://code.google.com/p/blockly/wiki/Text#Text_length].
+Blockly.Msg.TEXT_LENGTH_HELPURL = 'https://github.com/google/blockly/wiki/Text#text-modification';
+/// block text - See [https://github.com/google/blockly/wiki/Text#text-length https://github.com/google/blockly/wiki/Text#text-length].
 /// \n\nParameters:\n* %1 - the piece of text to take the length of
 Blockly.Msg.TEXT_LENGTH_TITLE = 'length of %1';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Text#Text_length https://code.google.com/p/blockly/wiki/Text#Text_length].
+/// tooltip - See [https://github.com/google/blockly/wiki/Text#text-length https://github.com/google/blockly/wiki/Text#text-length].
 Blockly.Msg.TEXT_LENGTH_TOOLTIP = 'Returns the number of letters (including spaces) in the provided text.';
 
 /// url - Information about empty pieces of text on computers (usually referred to as 'empty strings').
-Blockly.Msg.TEXT_ISEMPTY_HELPURL = 'https://code.google.com/p/blockly/wiki/Text#Checking_for_empty_text';
-/// block text - See [https://code.google.com/p/blockly/wiki/Text#Checking_for_empty_text https://code.google.com/p/blockly/wiki/Text#Checking_for_empty_text].
+Blockly.Msg.TEXT_ISEMPTY_HELPURL = 'https://github.com/google/blockly/wiki/Text#checking-for-empty-text';
+/// block text - See [https://github.com/google/blockly/wiki/Text#checking-for-empty-text https://github.com/google/blockly/wiki/Text#checking-for-empty-text].
 /// \n\nParameters:\n* %1 - the piece of text to test for emptiness
 Blockly.Msg.TEXT_ISEMPTY_TITLE = '%1 is empty';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Text#Checking_for_empty_text https://code.google.com/p/blockly/wiki/Text#Checking_for_empty_text].
+/// tooltip - See [https://github.com/google/blockly/wiki/Text#checking-for-empty-text https://github.com/google/blockly/wiki/Text#checking-for-empty-text].
 Blockly.Msg.TEXT_ISEMPTY_TOOLTIP = 'Returns true if the provided text is empty.';
 
 /// url - Information about finding a character in a piece of text.
-Blockly.Msg.TEXT_INDEXOF_HELPURL = 'https://code.google.com/p/blockly/wiki/Text#Finding_text';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Text#Finding_text https://code.google.com/p/blockly/wiki/Text#Finding_text].
-Blockly.Msg.TEXT_INDEXOF_TOOLTIP = 'Returns the index of the first/last occurrence of first text in the second text.  Returns 0 if text is not found.';
+Blockly.Msg.TEXT_INDEXOF_HELPURL = 'https://github.com/google/blockly/wiki/Text#finding-text';
+/// tooltip - See [https://github.com/google/blockly/wiki/Text#finding-text https://github.com/google/blockly/wiki/Text#finding-text].
+Blockly.Msg.TEXT_INDEXOF_TOOLTIP = 'Returns the index of the first/last occurrence of the first text in the second text. Returns 0 if text is not found.';
 /// block text - Title of blocks allowing users to find text.  See
-/// [https://code.google.com/p/blockly/wiki/Text#Finding_text
-/// https://code.google.com/p/blockly/wiki/Text#Finding_text].
+/// [https://github.com/google/blockly/wiki/Text#finding-text
+/// https://github.com/google/blockly/wiki/Text#finding-text].
 /// [[File:Blockly-find-text.png]].
 Blockly.Msg.TEXT_INDEXOF_INPUT_INTEXT = 'in text';
-/// dropdown - See [https://code.google.com/p/blockly/wiki/Text#Finding_text
-/// https://code.google.com/p/blockly/wiki/Text#Finding_text].
+/// dropdown - See [https://github.com/google/blockly/wiki/Text#finding-text
+/// https://github.com/google/blockly/wiki/Text#finding-text].
 /// [[File:Blockly-find-text.png]].
 Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = 'find first occurrence of text';
-/// dropdown - See [https://code.google.com/p/blockly/wiki/Text#Finding_text
-/// https://code.google.com/p/blockly/wiki/Text#Finding_text].  This would
+/// dropdown - See [https://github.com/google/blockly/wiki/Text#finding-text
+/// https://github.com/google/blockly/wiki/Text#finding-text].  This would
 /// replace "find first occurrence of text" below.  (For more information on
 /// how common text is factored out of dropdown menus, see
 /// [https://translatewiki.net/wiki/Translating:Blockly#Drop-Down_Menus
@@ -692,47 +563,47 @@ Blockly.Msg.TEXT_INDEXOF_OPERATOR_FIRST = 'find first occurrence of text';
 /// [[File:Blockly-find-text.png]].
 Blockly.Msg.TEXT_INDEXOF_OPERATOR_LAST = 'find last occurrence of text';
 /// block text - Optional text to follow the rightmost block in a
-/// [https://code.google.com/p/blockly/wiki/Text#Finding_text
-/// https://code.google.com/p/blockly/wiki/Text#Finding_text in text ... find block]
+/// [https://github.com/google/blockly/wiki/Text#finding-text
+/// https://github.com/google/blockly/wiki/Text#finding-text in text ... find block]
 /// (after the "a" in the below picture).  This will be the empty string in most languages.
 /// [[File:Blockly-find-text.png]].
 Blockly.Msg.TEXT_INDEXOF_TAIL = '';
 
 /// url - Information about extracting characters (letters, number, symbols, etc.) from text.
-Blockly.Msg.TEXT_CHARAT_HELPURL = 'https://code.google.com/p/blockly/wiki/Text#Extracting_text';
+Blockly.Msg.TEXT_CHARAT_HELPURL = 'https://github.com/google/blockly/wiki/Text#extracting-text';
 /// block text - Appears before the piece of text from which a letter (or number,
 /// punctuation character, etc.) should be extracted, as shown below.  See
-/// [https://code.google.com/p/blockly/wiki/Text#Extracting_a_single_character
-/// https://code.google.com/p/blockly/wiki/Text#Extracting_a_single_character].
+/// [https://github.com/google/blockly/wiki/Text#extracting-a-single-character
+/// https://github.com/google/blockly/wiki/Text#extracting-a-single-character].
 /// [[File:Blockly-text-get.png]]
 Blockly.Msg.TEXT_CHARAT_INPUT_INTEXT = 'in text';
 /// dropdown - Indicates that the letter (or number, punctuation character, etc.) with the
 /// specified index should be obtained from the preceding piece of text.  See
-/// [https://code.google.com/p/blockly/wiki/Text#Extracting_a_single_character
-/// https://code.google.com/p/blockly/wiki/Text#Extracting_a_single_character].
+/// [https://github.com/google/blockly/wiki/Text#extracting-a-single-character
+/// https://github.com/google/blockly/wiki/Text#extracting-a-single-character].
 /// [[File:Blockly-text-get.png]]
 Blockly.Msg.TEXT_CHARAT_FROM_START = 'get letter #';
 /// block text - Indicates that the letter (or number, punctuation character, etc.) with the
 /// specified index from the end of a given piece of text should be obtained. See
-/// [https://code.google.com/p/blockly/wiki/Text#Extracting_a_single_character
-/// https://code.google.com/p/blockly/wiki/Text#Extracting_a_single_character].
+/// [https://github.com/google/blockly/wiki/Text#extracting-a-single-character
+/// https://github.com/google/blockly/wiki/Text#extracting-a-single-character].
 /// [[File:Blockly-text-get.png]]
 Blockly.Msg.TEXT_CHARAT_FROM_END = 'get letter # from end';
 /// block text - Indicates that the first letter of the following piece of text should be
-/// retrieved.  See [https://code.google.com/p/blockly/wiki/Text#Extracting_a_single_character
-/// https://code.google.com/p/blockly/wiki/Text#Extracting_a_single_character].
+/// retrieved.  See [https://github.com/google/blockly/wiki/Text#extracting-a-single-character
+/// https://github.com/google/blockly/wiki/Text#extracting-a-single-character].
 /// [[File:Blockly-text-get.png]]
 Blockly.Msg.TEXT_CHARAT_FIRST = 'get first letter';
 /// block text - Indicates that the last letter (or number, punctuation mark, etc.) of the
 /// following piece of text should be retrieved.  See
-/// [https://code.google.com/p/blockly/wiki/Text#Extracting_a_single_character
-/// https://code.google.com/p/blockly/wiki/Text#Extracting_a_single_character].
+/// [https://github.com/google/blockly/wiki/Text#extracting-a-single-character
+/// https://github.com/google/blockly/wiki/Text#extracting-a-single-character].
 /// [[File:Blockly-text-get.png]]
 Blockly.Msg.TEXT_CHARAT_LAST = 'get last letter';
 /// block text - Indicates that any letter (or number, punctuation mark, etc.) in the
 /// following piece of text should be randomly selected.  See
-/// [https://code.google.com/p/blockly/wiki/Text#Extracting_a_single_character
-/// https://code.google.com/p/blockly/wiki/Text#Extracting_a_single_character].
+/// [https://github.com/google/blockly/wiki/Text#extracting-a-single-character
+/// https://github.com/google/blockly/wiki/Text#extracting-a-single-character].
 /// [[File:Blockly-text-get.png]]
 Blockly.Msg.TEXT_CHARAT_RANDOM = 'get random letter';
 /// block text - Text that goes after the rightmost block/dropdown when getting a single letter from
@@ -740,30 +611,30 @@ Blockly.Msg.TEXT_CHARAT_RANDOM = 'get random letter';
 /// blocks] or shown below.  For most languages, this will be blank.
 /// [[File:Blockly-text-get.png]]
 Blockly.Msg.TEXT_CHARAT_TAIL = '';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Text#Extracting_a_single_character
-/// https://code.google.com/p/blockly/wiki/Text#Extracting_a_single_character].
+/// tooltip - See [https://github.com/google/blockly/wiki/Text#extracting-a-single-character
+/// https://github.com/google/blockly/wiki/Text#extracting-a-single-character].
 /// [[File:Blockly-text-get.png]]
 Blockly.Msg.TEXT_CHARAT_TOOLTIP = 'Returns the letter at the specified position.';
 
-/// See [https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text
-/// https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text].
+/// See [https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text
+/// https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text].
 Blockly.Msg.TEXT_GET_SUBSTRING_TOOLTIP = 'Returns a specified portion of the text.';
 /// url - Information about extracting characters from text.  Reminder: urls are the
 /// lowest priority translations.  Feel free to skip.
-Blockly.Msg.TEXT_GET_SUBSTRING_HELPURL = 'https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text';
+Blockly.Msg.TEXT_GET_SUBSTRING_HELPURL = 'https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text';
 /// block text - Precedes a piece of text from which a portion should be extracted.
 /// [[File:Blockly-get-substring.png]]
 Blockly.Msg.TEXT_GET_SUBSTRING_INPUT_IN_TEXT = 'in text';
 /// dropdown - Indicates that the following number specifies the position (relative to the start
 /// position) of the beginning of the region of text that should be obtained from the preceding
-/// piece of text.  See [https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text
-/// https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text].
+/// piece of text.  See [https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text
+/// https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text].
 /// [[File:Blockly-get-substring.png]]
 Blockly.Msg.TEXT_GET_SUBSTRING_START_FROM_START = 'get substring from letter #';
 /// dropdown - Indicates that the following number specifies the position (relative to the end
 /// position) of the beginning of the region of text that should be obtained from the preceding
-/// piece of text.  See [https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text
-/// https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text].
+/// piece of text.  See [https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text
+/// https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text].
 /// Note: If {{msg-Blockly|ORDINAL_NUMBER_SUFFIX}} is defined, it will
 /// automatically appear ''after'' this and any other
 /// [https://translatewiki.net/wiki/Translating:Blockly#Ordinal_numbers ordinal numbers]
@@ -772,293 +643,294 @@ Blockly.Msg.TEXT_GET_SUBSTRING_START_FROM_START = 'get substring from letter #';
 Blockly.Msg.TEXT_GET_SUBSTRING_START_FROM_END = 'get substring from letter # from end';
 /// block text - Indicates that a region starting with the first letter of the preceding piece
 /// of text should be extracted.  See
-/// [https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text
-/// https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text].
+/// [https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text
+/// https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text].
 /// [[File:Blockly-get-substring.png]]
 Blockly.Msg.TEXT_GET_SUBSTRING_START_FIRST = 'get substring from first letter';
 /// dropdown - Indicates that the following number specifies the position (relative to
 /// the start position) of the end of the region of text that should be obtained from the
-/// preceding piece of text.  See [
-/// https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text
-/// https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text].
+/// preceding piece of text.  See
+/// [https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text
+/// https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text].
 /// [[File:Blockly-get-substring.png]]
 Blockly.Msg.TEXT_GET_SUBSTRING_END_FROM_START = 'to letter #';
 /// dropdown - Indicates that the following number specifies the position (relative to the
 /// end position) of the end of the region of text that should be obtained from the preceding
 /// piece of text.  See
-/// [https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text
-/// https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text].
+/// [https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text
+/// https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text].
 /// [[File:Blockly-get-substring.png]]
 Blockly.Msg.TEXT_GET_SUBSTRING_END_FROM_END = 'to letter # from end';
 /// block text - Indicates that a region ending with the last letter of the preceding piece
 /// of text should be extracted.  See
-/// [https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text
-/// https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text].
+/// [https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text
+/// https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text].
 /// [[File:Blockly-get-substring.png]]
 Blockly.Msg.TEXT_GET_SUBSTRING_END_LAST = 'to last letter';
 /// block text - Text that should go after the rightmost block/dropdown when
-/// [https://code.google.com/p/blockly/wiki/Text#Extracting_a_region_of_text
+/// [https://github.com/google/blockly/wiki/Text#extracting-a-region-of-text
 /// extracting a region of text].  In most languages, this will be the empty string.
 /// [[File:Blockly-get-substring.png]]
 Blockly.Msg.TEXT_GET_SUBSTRING_TAIL = '';
 
 /// url - Information about the case of letters (upper-case and lower-case).
-Blockly.Msg.TEXT_CHANGECASE_HELPURL = 'https://code.google.com/p/blockly/wiki/Text#Adjusting_text_case'
+Blockly.Msg.TEXT_CHANGECASE_HELPURL = 'https://github.com/google/blockly/wiki/Text#adjusting-text-case';
 /// tooltip - Describes a block to adjust the case of letters.  For more information on this block,
-/// see [https://code.google.com/p/blockly/wiki/Text#Adjusting_text_case
-/// https://code.google.com/p/blockly/wiki/Text#Adjusting_text_case].
+/// see [https://github.com/google/blockly/wiki/Text#adjusting-text-case
+/// https://github.com/google/blockly/wiki/Text#adjusting-text-case].
 Blockly.Msg.TEXT_CHANGECASE_TOOLTIP = 'Return a copy of the text in a different case.';
 /// block text - Indicates that all of the letters in the following piece of text should be
 /// capitalized.  If your language does not use case, you may indicate that this is not
 /// applicable to your language.  For more information on this block, see
-/// [https://code.google.com/p/blockly/wiki/Text#Adjusting_text_case
-/// https://code.google.com/p/blockly/wiki/Text#Adjusting_text_case].
+/// [https://github.com/google/blockly/wiki/Text#adjusting-text-case
+/// https://github.com/google/blockly/wiki/Text#adjusting-text-case].
 Blockly.Msg.TEXT_CHANGECASE_OPERATOR_UPPERCASE = 'to UPPER CASE';
-/// block text - Indicates that all of the letters in the following piece of text should be converted to lower-case.  If your language does not use case, you may indicate that this is not applicable to your language.  For more information on this block, see [https://code.google.com/p/blockly/wiki/Text#Adjusting_text_case https://code.google.com/p/blockly/wiki/Text#Adjusting_text_case].
+/// block text - Indicates that all of the letters in the following piece of text should be converted to lower-case.  If your language does not use case, you may indicate that this is not applicable to your language.  For more information on this block, see [https://github.com/google/blockly/wiki/Text#adjusting-text-case https://github.com/google/blockly/wiki/Text#adjusting-text-case].
 Blockly.Msg.TEXT_CHANGECASE_OPERATOR_LOWERCASE = 'to lower case';
-/// block text - Indicates that the first letter of each of the following words should be capitalized and the rest converted to lower-case.  If your language does not use case, you may indicate that this is not applicable to your language.  For more information on this block, see [https://code.google.com/p/blockly/wiki/Text#Adjusting_text_case https://code.google.com/p/blockly/wiki/Text#Adjusting_text_case].
+/// block text - Indicates that the first letter of each of the following words should be capitalized and the rest converted to lower-case.  If your language does not use case, you may indicate that this is not applicable to your language.  For more information on this block, see [https://github.com/google/blockly/wiki/Text#adjusting-text-case https://github.com/google/blockly/wiki/Text#adjusting-text-case].
 Blockly.Msg.TEXT_CHANGECASE_OPERATOR_TITLECASE = 'to Title Case';
 
 /// url - Information about trimming (removing) text off the beginning and ends of pieces of text.
-Blockly.Msg.TEXT_TRIM_HELPURL = 'https://code.google.com/p/blockly/wiki/Text#Trimming_%28removing%29_spaces';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Text#Trimming_(removing)_spaces
-/// https://code.google.com/p/blockly/wiki/Text#Trimming_(removing)_spaces].
+Blockly.Msg.TEXT_TRIM_HELPURL = 'https://github.com/google/blockly/wiki/Text#trimming-removing-spaces';
+/// tooltip - See [https://github.com/google/blockly/wiki/Text#trimming-removing-spaces
+/// https://github.com/google/blockly/wiki/Text#trimming-removing-spaces].
 Blockly.Msg.TEXT_TRIM_TOOLTIP = 'Return a copy of the text with spaces removed from one or both ends.';
 /// dropdown - Removes spaces from the beginning and end of a piece of text.  See
-/// [https://code.google.com/p/blockly/wiki/Text#Trimming_(removing)_spaces
-/// https://code.google.com/p/blockly/wiki/Text#Trimming_(removing)_spaces].  Note that neither
+/// [https://github.com/google/blockly/wiki/Text#trimming-removing-spaces
+/// https://github.com/google/blockly/wiki/Text#trimming-removing-spaces].  Note that neither
 /// this nor the other options modify the original piece of text (that follows);
 /// the block just returns a version of the text without the specified spaces.
 Blockly.Msg.TEXT_TRIM_OPERATOR_BOTH = 'trim spaces from both sides of';
 /// dropdown - Removes spaces from the beginning of a piece of text.  See
-/// [https://code.google.com/p/blockly/wiki/Text#Trimming_(removing)_spaces
-/// https://code.google.com/p/blockly/wiki/Text#Trimming_(removing)_spaces].
+/// [https://github.com/google/blockly/wiki/Text#trimming-removing-spaces
+/// https://github.com/google/blockly/wiki/Text#trimming-removing-spaces].
 /// Note that in right-to-left scripts, this will remove spaces from the right side.
 Blockly.Msg.TEXT_TRIM_OPERATOR_LEFT = 'trim spaces from left side of';
 /// dropdown - Removes spaces from the end of a piece of text.  See
-/// [https://code.google.com/p/blockly/wiki/Text#Trimming_(removing)_spaces
-/// https://code.google.com/p/blockly/wiki/Text#Trimming_(removing)_spaces].
+/// [https://github.com/google/blockly/wiki/Text#trimming-removing-spaces
+/// https://github.com/google/blockly/wiki/Text#trimming-removing-spaces].
 /// Note that in right-to-left scripts, this will remove spaces from the left side.
 Blockly.Msg.TEXT_TRIM_OPERATOR_RIGHT = 'trim spaces from right side of';
 
 /// url - Information about displaying text on computers.
-Blockly.Msg.TEXT_PRINT_HELPURL = 'https://code.google.com/p/blockly/wiki/Text#Printing_text';
+Blockly.Msg.TEXT_PRINT_HELPURL = 'https://github.com/google/blockly/wiki/Text#printing-text';
 /// block text - Display the input on the screen.  See
-/// [https://code.google.com/p/blockly/wiki/Text#Printing_text
-/// https://code.google.com/p/blockly/wiki/Text#Printing_text].
+/// [https://github.com/google/blockly/wiki/Text#printing-text
+/// https://github.com/google/blockly/wiki/Text#printing-text].
 /// \n\nParameters:\n* %1 - the value to print
 Blockly.Msg.TEXT_PRINT_TITLE = 'print %1';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Text#Printing_text
-/// https://code.google.com/p/blockly/wiki/Text#Printing_text].
+/// tooltip - See [https://github.com/google/blockly/wiki/Text#printing-text
+/// https://github.com/google/blockly/wiki/Text#printing-text].
 Blockly.Msg.TEXT_PRINT_TOOLTIP = 'Print the specified text, number or other value.';
 /// url - Information about getting text from users.
-Blockly.Msg.TEXT_PROMPT_HELPURL = 'https://code.google.com/p/blockly/wiki/Text#Getting_input_from_the_user';
+Blockly.Msg.TEXT_PROMPT_HELPURL = 'https://github.com/google/blockly/wiki/Text#getting-input-from-the-user';
 /// dropdown - Specifies that a piece of text should be requested from the user with
-/// the following message.  See [https://code.google.com/p/blockly/wiki/Text#Printing_text
-/// https://code.google.com/p/blockly/wiki/Text#Printing_text].
+/// the following message.  See [https://github.com/google/blockly/wiki/Text#printing-text
+/// https://github.com/google/blockly/wiki/Text#printing-text].
 Blockly.Msg.TEXT_PROMPT_TYPE_TEXT = 'prompt for text with message';
 /// dropdown - Specifies that a number should be requested from the user with the
-/// following message.  See [https://code.google.com/p/blockly/wiki/Text#Printing_text
-/// https://code.google.com/p/blockly/wiki/Text#Printing_text].
+/// following message.  See [https://github.com/google/blockly/wiki/Text#printing-text
+/// https://github.com/google/blockly/wiki/Text#printing-text].
 Blockly.Msg.TEXT_PROMPT_TYPE_NUMBER = 'prompt for number with message';
 /// dropdown - Precedes the message with which the user should be prompted for
-/// a number.  See [https://code.google.com/p/blockly/wiki/Text#Printing_text
-/// https://code.google.com/p/blockly/wiki/Text#Printing_text].
+/// a number.  See [https://github.com/google/blockly/wiki/Text#printing-text
+/// https://github.com/google/blockly/wiki/Text#printing-text].
 Blockly.Msg.TEXT_PROMPT_TOOLTIP_NUMBER = 'Prompt for user for a number.';
 /// dropdown - Precedes the message with which the user should be prompted for some text.
-/// See [https://code.google.com/p/blockly/wiki/Text#Printing_text
-/// https://code.google.com/p/blockly/wiki/Text#Printing_text].
+/// See [https://github.com/google/blockly/wiki/Text#printing-text
+/// https://github.com/google/blockly/wiki/Text#printing-text].
 Blockly.Msg.TEXT_PROMPT_TOOLTIP_TEXT = 'Prompt for user for some text.';
 
 // Lists Blocks.
 /// url - Information on empty lists.
-Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = 'https://en.wikipedia.org/wiki/Linked_list#Empty_lists';
-/// block text - See [https://code.google.com/p/blockly/wiki/Lists#create_empty_list https://code.google.com/p/blockly/wiki/Lists#create_empty_list].
-Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = 'empty list';
-/// block text - See [https://code.google.com/p/blockly/wiki/Lists#create_empty_list https://code.google.com/p/blockly/wiki/Lists#create_empty_list].
+Blockly.Msg.LISTS_CREATE_EMPTY_HELPURL = 'https://github.com/google/blockly/wiki/Lists#create-empty-list';
+/// block text - See [https://github.com/google/blockly/wiki/Lists#create-empty-list https://github.com/google/blockly/wiki/Lists#create-empty-list].
+Blockly.Msg.LISTS_CREATE_EMPTY_TITLE = 'create empty list';
+/// block text - See [https://github.com/google/blockly/wiki/Lists#create-empty-list https://github.com/google/blockly/wiki/Lists#create-empty-list].
 Blockly.Msg.LISTS_CREATE_EMPTY_TOOLTIP = 'Returns a list, of length 0, containing no data records';
 
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#create_list_with https://code.google.com/p/blockly/wiki/Lists#create_list_with].
+/// url - Information on building lists.
+Blockly.Msg.LISTS_CREATE_WITH_HELPURL = 'https://github.com/google/blockly/wiki/Lists#create-list-with';
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#create-list-with https://github.com/google/blockly/wiki/Lists#create-list-with].
 Blockly.Msg.LISTS_CREATE_WITH_TOOLTIP = 'Create a list with any number of items.';
-/// block text - See [https://code.google.com/p/blockly/wiki/Lists#create_list_with https://code.google.com/p/blockly/wiki/Lists#create_list_with].
-Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH = 'list : %1 \u2190 %2 repeated %3 times';
-/// block text - This appears in a sub-block when [https://code.google.com/p/blockly/wiki/Lists#changing_number_of_inputs changing the number of inputs in a ''''create list with'''' block].
+/// block text - See [https://github.com/google/blockly/wiki/Lists#create-list-with https://github.com/google/blockly/wiki/Lists#create-list-with].
+Blockly.Msg.LISTS_CREATE_WITH_INPUT_WITH = 'create list with';
+/// block text - This appears in a sub-block when [https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs changing the number of inputs in a ''''create list with'''' block].\n{{Identical|List}}
 Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TITLE_ADD = 'list';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#changing_number_of_inputs https://code.google.com/p/blockly/wiki/Lists#changing_number_of_inputs].
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs].
 Blockly.Msg.LISTS_CREATE_WITH_CONTAINER_TOOLTIP = 'Add, remove, or reorder sections to reconfigure this list block.';
 Blockly.Msg.LISTS_CREATE_WITH_ITEM_TITLE = Blockly.Msg.VARIABLES_DEFAULT_NAME;
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#changing_number_of_inputs https://code.google.com/p/blockly/wiki/Lists#changing_number_of_inputs].
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs https://github.com/google/blockly/wiki/Lists#changing-number-of-inputs].
 Blockly.Msg.LISTS_CREATE_WITH_ITEM_TOOLTIP = 'Add an item to the list.';
-Blockly.Msg.LISTS_CREATE_TITLE = 'list';
 
-/// url - Information about [https://code.google.com/p/blockly/wiki/Lists#create_list_with creating a list with multiple copies of a single item].
-Blockly.Msg.LISTS_REPEAT_HELPURL = 'https://code.google.com/p/blockly/wiki/Lists#create_list_with';
-/// url - See [https://code.google.com/p/blockly/wiki/Lists#create_list_with creating a list with multiple copies of a single item].
+/// url - Information about [https://github.com/google/blockly/wiki/Lists#create-list-with creating a list with multiple copies of a single item].
+Blockly.Msg.LISTS_REPEAT_HELPURL = 'https://github.com/google/blockly/wiki/Lists#create-list-with';
+/// url - See [https://github.com/google/blockly/wiki/Lists#create-list-with creating a list with multiple copies of a single item].
 Blockly.Msg.LISTS_REPEAT_TOOLTIP = 'Creates a list consisting of the given value repeated the specified number of times.';
-/// block text - See [https://code.google.com/p/blockly/wiki/Lists#create_list_with
-/// https://code.google.com/p/blockly/wiki/Lists#create_list_with].
+/// block text - See [https://github.com/google/blockly/wiki/Lists#create-list-with
+/// https://github.com/google/blockly/wiki/Lists#create-list-with].
 ///\n\nParameters:\n* %1 - the item (text) to be repeated\n* %2 - the number of times to repeat it
-Blockly.Msg.LISTS_REPEAT_TITLE = 'create %1 list with item %2 repeated %3 times';
+Blockly.Msg.LISTS_REPEAT_TITLE = 'create list with item %1 repeated %2 times';
 
 /// url - Information about how the length of a list is computed (i.e., by the total number of elements, not the number of different elements).
-Blockly.Msg.LISTS_LENGTH_HELPURL = 'https://code.google.com/p/blockly/wiki/Lists#length_of';
-/// block text - See [https://code.google.com/p/blockly/wiki/Lists#length_of https://code.google.com/p/blockly/wiki/Lists#length_of].
+Blockly.Msg.LISTS_LENGTH_HELPURL = 'https://github.com/google/blockly/wiki/Lists#length-of';
+/// block text - See [https://github.com/google/blockly/wiki/Lists#length-of https://github.com/google/blockly/wiki/Lists#length-of].
 /// \n\nParameters:\n* %1 - the list whose length is desired
 Blockly.Msg.LISTS_LENGTH_TITLE = 'length of %1';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#length_of https://code.google.com/p/blockly/wiki/Lists#length_of Blockly:Lists:length of].
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#length-of https://github.com/google/blockly/wiki/Lists#length-of Blockly:Lists:length of].
 Blockly.Msg.LISTS_LENGTH_TOOLTIP = 'Returns the length of a list.';
 
-/// url - See [https://code.google.com/p/blockly/wiki/Lists#is_empty https://code.google.com/p/blockly/wiki/Lists#is_empty].
-Blockly.Msg.LISTS_IS_EMPTY_HELPURL = 'https://code.google.com/p/blockly/wiki/Lists#is_empty';
-/// block text - See [https://code.google.com/p/blockly/wiki/Lists#is_empty
-/// https://code.google.com/p/blockly/wiki/Lists#is_empty].
+/// url - See [https://github.com/google/blockly/wiki/Lists#is-empty https://github.com/google/blockly/wiki/Lists#is-empty].
+Blockly.Msg.LISTS_ISEMPTY_HELPURL = 'https://github.com/google/blockly/wiki/Lists#is-empty';
+/// block text - See [https://github.com/google/blockly/wiki/Lists#is-empty
+/// https://github.com/google/blockly/wiki/Lists#is-empty].
 /// \n\nParameters:\n* %1 - the list to test
-Blockly.Msg.LISTS_IS_EMPTY_TITLE = '%1 is empty';
-/// block tooltip - See [https://code.google.com/p/blockly/wiki/Lists#is_empty
-/// https://code.google.com/p/blockly/wiki/Lists#is_empty].
-Blockly.Msg.LISTS_TOOLTIP = 'Returns true if the list is empty.';
+Blockly.Msg.LISTS_ISEMPTY_TITLE = '%1 is empty';
+/// block tooltip - See [https://github.com/google/blockly/wiki/Lists#is-empty
+/// https://github.com/google/blockly/wiki/Lists#is-empty].
+Blockly.Msg.LISTS_ISEMPTY_TOOLTIP = 'Returns true if the list is empty.';
 
-/// block text - Title of blocks operating on [https://code.google.com/p/blockly/wiki/Lists lists].
+/// block text - Title of blocks operating on [https://github.com/google/blockly/wiki/Lists lists].
 Blockly.Msg.LISTS_INLIST = 'in list';
 
-/// url - See [https://code.google.com/p/blockly/wiki/Lists#Getting_Items_from_a_List
-/// https://code.google.com/p/blockly/wiki/Lists#Getting_Items_from_a_List].
-Blockly.Msg.LISTS_INDEX_OF_HELPURL = 'https://code.google.com/p/blockly/wiki/Lists#Getting_Items_from_a_List';
+/// url - See [https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list
+/// https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list].
+Blockly.Msg.LISTS_INDEX_OF_HELPURL = 'https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list';
 Blockly.Msg.LISTS_INDEX_OF_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
-/// dropdown - See [https://code.google.com/p/blockly/wiki/Lists#Finding_Items_in_a_List
-/// Lists#Finding_Items_in_a_List].
+/// dropdown - See [https://github.com/google/blockly/wiki/Lists#finding-items-in-a-list
+/// Lists#finding-items-in-a-list].
 /// [[File:Blockly-list-find.png]]
 Blockly.Msg.LISTS_INDEX_OF_FIRST = 'find first occurrence of item';
-/// dropdown - See [https://code.google.com/p/blockly/wiki/Lists#Finding_Items_in_a_List
-/// https://code.google.com/p/blockly/wiki/Lists#Finding_Items_in_a_List].
+/// dropdown - See [https://github.com/google/blockly/wiki/Lists#finding-items-in-a-list
+/// https://github.com/google/blockly/wiki/Lists#finding-items-in-a-list].
 /// [[File:Blockly-list-find.png]]
 Blockly.Msg.LISTS_INDEX_OF_LAST = 'find last occurrence of item';
-/// dropdown - See [https://code.google.com/p/blockly/wiki/Lists#Finding_Items_in_a_List
-/// https://code.google.com/p/blockly/wiki/Lists#Finding_Items_in_a_List].
+/// dropdown - See [https://github.com/google/blockly/wiki/Lists#finding-items-in-a-list
+/// https://github.com/google/blockly/wiki/Lists#finding-items-in-a-list].
 /// [[File:Blockly-list-find.png]]
-Blockly.Msg.LISTS_INDEX_OF_TOOLTIP = 'Returns the index of the first/last occurrence of the item in the list.  Returns 0 if text is not found.';
+Blockly.Msg.LISTS_INDEX_OF_TOOLTIP = 'Returns the index of the first/last occurrence of the item in the list. Returns 0 if item is not found.';
 
 Blockly.Msg.LISTS_GET_INDEX_HELPURL = Blockly.Msg.LISTS_INDEX_OF_HELPURL;
 /// dropdown - Indicates that the user wishes to
-/// [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item
+/// [https://github.com/google/blockly/wiki/Lists#getting-a-single-item
 /// get an item from a list] without removing it from the list.
 Blockly.Msg.LISTS_GET_INDEX_GET = 'get';
 /// dropdown - Indicates that the user wishes to
-/// [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item
+/// [https://github.com/google/blockly/wiki/Lists#getting-a-single-item
 /// get and remove an item from a list], as opposed to merely getting
 /// it without modifying the list.
 Blockly.Msg.LISTS_GET_INDEX_GET_REMOVE = 'get and remove';
 /// dropdown - Indicates that the user wishes to
-/// [https://code.google.com/p/blockly/wiki/Lists#Removing_an_item
-/// remove an item from a list].
+/// [https://github.com/google/blockly/wiki/Lists#removing-an-item
+/// remove an item from a list].\n{{Identical|Remove}}
 Blockly.Msg.LISTS_GET_INDEX_REMOVE = 'remove';
 /// dropdown - Indicates that an index relative to the front of the list should be used to
-/// [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item get and/or remove
+/// [https://github.com/google/blockly/wiki/Lists#getting-a-single-item get and/or remove
 /// an item from a list].  Note: If {{msg-Blockly|ORDINAL_NUMBER_SUFFIX}} is defined, it will
 /// automatically appear ''after'' this number (and any other ordinal numbers on this block).
 /// See [[Translating:Blockly#Ordinal_numbers]] for more information on ordinal numbers in Blockly.
 /// [[File:Blockly-list-get-item.png]]
 Blockly.Msg.LISTS_GET_INDEX_FROM_START = '#';
 /// dropdown - Indicates that an index relative to the end of the list should be used
-/// to [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item access an item in a list].
+/// to [https://github.com/google/blockly/wiki/Lists#getting-a-single-item access an item in a list].
 /// [[File:Blockly-list-get-item.png]]
 Blockly.Msg.LISTS_GET_INDEX_FROM_END = '# from end';
 /// dropdown - Indicates that the '''first''' item should be
-/// [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item accessed in a list].
+/// [https://github.com/google/blockly/wiki/Lists#getting-a-single-item accessed in a list].
 /// [[File:Blockly-list-get-item.png]]
 Blockly.Msg.LISTS_GET_INDEX_FIRST = 'first';
 /// dropdown - Indicates that the '''last''' item should be
-/// [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item accessed in a list].
+/// [https://github.com/google/blockly/wiki/Lists#getting-a-single-item accessed in a list].
 /// [[File:Blockly-list-get-item.png]]
 Blockly.Msg.LISTS_GET_INDEX_LAST = 'last';
 /// dropdown - Indicates that a '''random''' item should be
-/// [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item accessed in a list].
+/// [https://github.com/google/blockly/wiki/Lists#getting-a-single-item accessed in a list].
 /// [[File:Blockly-list-get-item.png]]
 Blockly.Msg.LISTS_GET_INDEX_RANDOM = 'random';
 /// block text - Text that should go after the rightmost block/dropdown when
-/// [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item
+/// [https://github.com/google/blockly/wiki/Lists#getting-a-single-item
 /// accessing an item from a list].  In most languages, this will be the empty string.
 /// [[File:Blockly-list-get-item.png]]
 Blockly.Msg.LISTS_GET_INDEX_TAIL = '';
 Blockly.Msg.LISTS_GET_INDEX_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item
-/// https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item] for more information.
-Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_FROM_START = 'Returns the item at the specified position in a list.  #1 is the first item.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item
-/// https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item] for more information.
-Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_FROM_END = 'Returns the item at the specified position in a list.  #1 is the last item.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item
-/// https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item] for more information.
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-single-item
+/// https://github.com/google/blockly/wiki/Lists#getting-a-single-item] for more information.
+Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_FROM_START = 'Returns the item at the specified position in a list. #1 is the first item.';
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-single-item
+/// https://github.com/google/blockly/wiki/Lists#getting-a-single-item] for more information.
+Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_FROM_END = 'Returns the item at the specified position in a list. #1 is the last item.';
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-single-item
+/// https://github.com/google/blockly/wiki/Lists#getting-a-single-item] for more information.
 Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_FIRST = 'Returns the first item in a list.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item
-/// https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item] for more information.
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-single-item
+/// https://github.com/google/blockly/wiki/Lists#getting-a-single-item] for more information.
 Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_LAST = 'Returns the last item in a list.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item
-/// https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item] for more information.
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-single-item
+/// https://github.com/google/blockly/wiki/Lists#getting-a-single-item] for more information.
 Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_RANDOM = 'Returns a random item in a list.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_and_removing_an_item]
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-and-removing-an-item]
 /// (for remove and return) and
-/// [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item] for '# from start'.
-Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_FROM_START = 'Removes and returns the item at the specified position in a list.  #1 is the first item.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_and_removing_an_item] (for remove and return) and [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item] for '# from end'.
-Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_FROM_END = 'Removes and returns the item at the specified position in a list.  #1 is the last item.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_and_removing_an_item] (for remove and return) and [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item] for 'first'.
+/// [https://github.com/google/blockly/wiki/Lists#getting-a-single-item] for '# from start'.
+Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_FROM_START = 'Removes and returns the item at the specified position in a list. #1 is the first item.';
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-and-removing-an-item] (for remove and return) and [https://github.com/google/blockly/wiki/Lists#getting-a-single-item] for '# from end'.
+Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_FROM_END = 'Removes and returns the item at the specified position in a list. #1 is the last item.';
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-and-removing-an-item] (for remove and return) and [https://github.com/google/blockly/wiki/Lists#getting-a-single-item] for 'first'.
 Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_FIRST = 'Removes and returns the first item in a list.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_and_removing_an_item] (for remove and return) and [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item] for 'last'.
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-and-removing-an-item] (for remove and return) and [https://github.com/google/blockly/wiki/Lists#getting-a-single-item] for 'last'.
 Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_LAST = 'Removes and returns the last item in a list.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_and_removing_an_item] (for remove and return) and [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item] for 'random'.
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-and-removing-an-item] (for remove and return) and [https://github.com/google/blockly/wiki/Lists#getting-a-single-item] for 'random'.
 Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_GET_REMOVE_RANDOM = 'Removes and returns a random item in a list.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_and_removing_an_item] (for remove and return) and [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item] for '# from start'.
-Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_REMOVE_FROM_START = 'Removes the item at the specified position in a list.  #1 is the first item.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_and_removing_an_item] (for remove and return) and [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item] for '# from end'.
-Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_REMOVE_FROM_END = 'Removes the item at the specified position in a list.  #1 is the last item.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_and_removing_an_item] (for remove and return) and [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item] for 'first'.
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-and-removing-an-item] (for remove and return) and [https://github.com/google/blockly/wiki/Lists#getting-a-single-item] for '# from start'.
+Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_REMOVE_FROM_START = 'Removes the item at the specified position in a list. #1 is the first item.';
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-and-removing-an-item] (for remove and return) and [https://github.com/google/blockly/wiki/Lists#getting-a-single-item] for '# from end'.
+Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_REMOVE_FROM_END = 'Removes the item at the specified position in a list. #1 is the last item.';
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-and-removing-an-item] (for remove and return) and [https://github.com/google/blockly/wiki/Lists#getting-a-single-item] for 'first'.
 Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_REMOVE_FIRST = 'Removes the first item in a list.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_and_removing_an_item] (for remove and return) and [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item] for 'last'.
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-and-removing-an-item] (for remove and return) and [https://github.com/google/blockly/wiki/Lists#getting-a-single-item] for 'last'.
 Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_REMOVE_LAST = 'Removes the last item in a list.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_and_removing_an_item] (for remove and return) and [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item] for 'random'.
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-and-removing-an-item] (for remove and return) and [https://github.com/google/blockly/wiki/Lists#getting-a-single-item] for 'random'.
 Blockly.Msg.LISTS_GET_INDEX_TOOLTIP_REMOVE_RANDOM = 'Removes a random item in a list.';
 /// url - Information about putting items in lists.
-Blockly.Msg.LISTS_SET_INDEX_HELPURL = 'https://code.google.com/p/blockly/wiki/Lists#in_list_..._set';
+Blockly.Msg.LISTS_SET_INDEX_HELPURL = 'https://github.com/google/blockly/wiki/Lists#in-list--set';
 Blockly.Msg.LISTS_SET_INDEX_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
-/// block text - [https://code.google.com/p/blockly/wiki/Lists#in_list_..._set
+/// block text - [https://github.com/google/blockly/wiki/Lists#in-list--set
 /// Replaces an item in a list].
 /// [[File:Blockly-in-list-set-insert.png]]
 Blockly.Msg.LISTS_SET_INDEX_SET = 'set';
-/// block text - [https://code.google.com/p/blockly/wiki/Lists#in_list_..._insert_at
+/// block text - [https://github.com/google/blockly/wiki/Lists#in-list--insert-at
 /// Inserts an item into a list].
 /// [[File:Blockly-in-list-set-insert.png]]
 Blockly.Msg.LISTS_SET_INDEX_INSERT = 'insert at';
 /// block text - The word(s) after the position in the list and before the item to be set/inserted.
 /// [[File:Blockly-in-list-set-insert.png]]
 Blockly.Msg.LISTS_SET_INDEX_INPUT_TO = 'as';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item} (even though the page describes the "get" block, the idea is the same for the "set" block).
-Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_FROM_START = 'Sets the item at the specified position in a list.  #1 is the first item.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item} (even though the page describes the "get" block, the idea is the same for the "set" block).
-Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_FROM_END = 'Sets the item at the specified position in a list.  #1 is the last item.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item} (even though the page describes the "get" block, the idea is the same for the "set" block).
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-single-item} (even though the page describes the "get" block, the idea is the same for the "set" block).
+Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_FROM_START = 'Sets the item at the specified position in a list. #1 is the first item.';
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-single-item} (even though the page describes the "get" block, the idea is the same for the "set" block).
+Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_FROM_END = 'Sets the item at the specified position in a list. #1 is the last item.';
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-single-item} (even though the page describes the "get" block, the idea is the same for the "set" block).
 Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_FIRST = 'Sets the first item in a list.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item} (even though the page describes the "get" block, the idea is the same for the "set" block).
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-single-item} (even though the page describes the "get" block, the idea is the same for the "set" block).
 Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_LAST = 'Sets the last item in a list.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item} (even though the page describes the "get" block, the idea is the same for the "set" block).
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-single-item} (even though the page describes the "get" block, the idea is the same for the "set" block).
 Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_SET_RANDOM = 'Sets a random item in a list.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item} (even though the page describes the "get" block, the idea is the same for the "insert" block).
-Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_FROM_START = 'Inserts the item at the specified position in a list.  #1 is the first item.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item} (even though the page describes the "get" block, the idea is the same for the "insert" block).
-Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_FROM_END = 'Inserts the item at the specified position in a list.  #1 is the last item.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item} (even though the page describes the "get" block, the idea is the same for the "insert" block).
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-single-item} (even though the page describes the "get" block, the idea is the same for the "insert" block).
+Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_FROM_START = 'Inserts the item at the specified position in a list. #1 is the first item.';
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-single-item} (even though the page describes the "get" block, the idea is the same for the "insert" block).
+Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_FROM_END = 'Inserts the item at the specified position in a list. #1 is the last item.';
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-single-item} (even though the page describes the "get" block, the idea is the same for the "insert" block).
 Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_FIRST = 'Inserts the item at the start of a list.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item} (even though the page describes the "get" block, the idea is the same for the "insert" block).
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-single-item} (even though the page describes the "get" block, the idea is the same for the "insert" block).
 Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_LAST = 'Append the item to the end of a list.';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_a_single_item} (even though the page describes the "get" block, the idea is the same for the "insert" block).
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-single-item} (even though the page describes the "get" block, the idea is the same for the "insert" block).
 Blockly.Msg.LISTS_SET_INDEX_TOOLTIP_INSERT_RANDOM = 'Inserts the item randomly in a list.';
 
 /// url - Information describing extracting a sublist from an existing list.
-Blockly.Msg.LISTS_GET_SUBLIST_HELPURL = 'https://code.google.com/p/blockly/wiki/Lists#Getting_a_sublist';
+Blockly.Msg.LISTS_GET_SUBLIST_HELPURL = 'https://github.com/google/blockly/wiki/Lists#getting-a-sublist';
 Blockly.Msg.LISTS_GET_SUBLIST_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
 /// dropdown - Indicates that an index relative to the front of the list should be used
 /// to specify the beginning of the range from which to
-/// [https://code.google.com/p/blockly/wiki/Lists#Getting_a_sublist get a sublist].
+/// [https://github.com/google/blockly/wiki/Lists#getting-a-sublist get a sublist].
 /// [[File:Blockly-get-sublist.png]]
 /// Note: If {{msg-Blockly|ORDINAL_NUMBER_SUFFIX}} is defined, it will
 /// automatically appear ''after'' this number (and any other ordinal numbers on this block).
@@ -1066,38 +938,53 @@ Blockly.Msg.LISTS_GET_SUBLIST_INPUT_IN_LIST = Blockly.Msg.LISTS_INLIST;
 Blockly.Msg.LISTS_GET_SUBLIST_START_FROM_START = 'get sub-list from #';
 /// dropdown - Indicates that an index relative to the end of the list should be used
 /// to specify the beginning of the range from which to
-/// [https://code.google.com/p/blockly/wiki/Lists#Getting_a_sublist get a sublist].
+/// [https://github.com/google/blockly/wiki/Lists#getting-a-sublist get a sublist].
 Blockly.Msg.LISTS_GET_SUBLIST_START_FROM_END = 'get sub-list from # from end';
 /// dropdown - Indicates that the
-/// [https://code.google.com/p/blockly/wiki/Lists#Getting_a_sublist sublist to extract]
+/// [https://github.com/google/blockly/wiki/Lists#getting-a-sublist sublist to extract]
 /// should begin with the list's first item.
 Blockly.Msg.LISTS_GET_SUBLIST_START_FIRST = 'get sub-list from first';
 /// dropdown - Indicates that an index relative to the front of the list should be
 /// used to specify the end of the range from which to
-/// [https://code.google.com/p/blockly/wiki/Lists#Getting_a_sublist get a sublist].
+/// [https://github.com/google/blockly/wiki/Lists#getting-a-sublist get a sublist].
 /// [[File:Blockly-get-sublist.png]]
 Blockly.Msg.LISTS_GET_SUBLIST_END_FROM_START = 'to #';
 /// dropdown - Indicates that an index relative to the end of the list should be
 /// used to specify the end of the range from which to
-/// [https://code.google.com/p/blockly/wiki/Lists#Getting_a_sublist get a sublist].
+/// [https://github.com/google/blockly/wiki/Lists#getting-a-sublist get a sublist].
 /// [[File:Blockly-get-sublist.png]]
 Blockly.Msg.LISTS_GET_SUBLIST_END_FROM_END = 'to # from end';
 /// dropdown - Indicates that the '''last''' item in the given list should be
-/// [https://code.google.com/p/blockly/wiki/Lists#Getting_a_sublist the end
+/// [https://github.com/google/blockly/wiki/Lists#getting-a-sublist the end
 /// of the selected sublist].
 /// [[File:Blockly-get-sublist.png]]
 Blockly.Msg.LISTS_GET_SUBLIST_END_LAST = 'to last';
 /// block text - This appears in the rightmost position ("tail") of the
 /// sublist block, as described at
-/// [https://code.google.com/p/blockly/wiki/Lists#Getting_a_sublist
-/// https://code.google.com/p/blockly/wiki/Lists#Getting_a_sublist].
+/// [https://github.com/google/blockly/wiki/Lists#getting-a-sublist
+/// https://github.com/google/blockly/wiki/Lists#getting-a-sublist].
 /// In English and most other languages, this is the empty string.
 /// [[File:Blockly-get-sublist.png]]
 Blockly.Msg.LISTS_GET_SUBLIST_TAIL = '';
-/// tooltip - See [https://code.google.com/p/blockly/wiki/Lists#Getting_a_sublist
-/// https://code.google.com/p/blockly/wiki/Lists#Getting_a_sublist] for more information.
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#getting-a-sublist
+/// https://github.com/google/blockly/wiki/Lists#getting-a-sublist] for more information.
 /// [[File:Blockly-get-sublist.png]]
 Blockly.Msg.LISTS_GET_SUBLIST_TOOLTIP = 'Creates a copy of the specified portion of a list.';
+
+/// url - Information describing splitting text into a list, or joining a list into text.
+Blockly.Msg.LISTS_SPLIT_HELPURL = 'https://github.com/google/blockly/wiki/Lists#splitting-strings-and-joining-lists';
+/// dropdown - Indicates that text will be split up into a list (e.g. "a-b-c" -> ["a", "b", "c"]).
+Blockly.Msg.LISTS_SPLIT_LIST_FROM_TEXT = 'make list from text';
+/// dropdown - Indicates that a list will be joined together to form text (e.g. ["a", "b", "c"] -> "a-b-c").
+Blockly.Msg.LISTS_SPLIT_TEXT_FROM_LIST = 'make text from list';
+/// block text - Prompts for a letter to be used as a separator when splitting or joining text.
+Blockly.Msg.LISTS_SPLIT_WITH_DELIMITER = 'with delimiter';
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#make-list-from-text
+/// https://github.com/google/blockly/wiki/Lists#make-list-from-text] for more information.
+Blockly.Msg.LISTS_SPLIT_TOOLTIP_SPLIT = 'Split text into a list of texts, breaking at each delimiter.';
+/// tooltip - See [https://github.com/google/blockly/wiki/Lists#make-text-from-list
+/// https://github.com/google/blockly/wiki/Lists#make-text-from-list] for more information.
+Blockly.Msg.LISTS_SPLIT_TOOLTIP_JOIN = 'Join a list of texts into one text, separated by a delimiter.';
 
 /// grammar - Text that follows an ordinal number (a number that indicates
 /// position relative to other numbers).  In most languages, such text appears
@@ -1106,98 +993,79 @@ Blockly.Msg.LISTS_GET_SUBLIST_TOOLTIP = 'Creates a copy of the specified portion
 Blockly.Msg.ORDINAL_NUMBER_SUFFIX = '';
 
 // Variables Blocks.
-Blockly.Msg.VARIABLES_TITLE = 'variable';
-Blockly.Msg.VARIABLES_CREATE_TITLE = 'Create';
-Blockly.Msg.VARIABLES_CREATE_WITH = 'with';
 /// url - Information about ''variables'' in computer programming.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Variable_(computer_science) https://en.wikipedia.org/wiki/Variable_(computer_science)], if it exists.
-Blockly.Msg.VARIABLES_GET_HELPURL = 'https://code.google.com/p/blockly/wiki/Variables#Get';
-/// block text - This precedes the name of a variable when getting its values.  In most (all?) languages, it should be the empty string.  If unsure, ask yourself if any word should go before "x" in the expression "x + 1".
-Blockly.Msg.VARIABLES_GET_TITLE = 'get';
-Blockly.Msg.VARIABLES_GET_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
-/// block text - This follows the name of a variable.  In most (all?) languages, it should be the empty string.  If unsure, ask yourself if any word should go after "x" in the expression "x + 1".
-Blockly.Msg.VARIABLES_GET_TAIL = '';
+Blockly.Msg.VARIABLES_GET_HELPURL = 'https://github.com/google/blockly/wiki/Variables#get';
 /// tooltip - This gets the value of the named variable without modifying it.
 Blockly.Msg.VARIABLES_GET_TOOLTIP = 'Returns the value of this variable.';
 /// context menu - Selecting this creates a block to set (change) the value of this variable.
 /// \n\nParameters:\n* %1 - the name of the variable.
 Blockly.Msg.VARIABLES_GET_CREATE_SET = 'Create "set %1"';
+
 /// url - Information about ''variables'' in computer programming.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Variable_(computer_science) https://en.wikipedia.org/wiki/Variable_(computer_science)], if it exists.
-Blockly.Msg.VARIABLES_SET_HELPURL = 'https://code.google.com/p/blockly/wiki/Variables#Set';
-/// block text - The imperative or infinitive form of the verb "set", as in: '''set''' [the value of] x to 7.
-Blockly.Msg.VARIABLES_SET_TITLE = 'set %1 to %2';
-Blockly.Msg.VARIABLES_SET_ITEM = Blockly.Msg.VARIABLES_DEFAULT_NAME;
+Blockly.Msg.VARIABLES_SET_HELPURL = 'https://github.com/google/blockly/wiki/Variables#set';
+/// block text - Change the value of a mathematical variable: '''set [the value of] x to 7'''.\n\nParameters:\n* %1 - the name of the variable.\n* %2 - the value to be assigned.
+Blockly.Msg.VARIABLES_SET = 'set %1 to %2';
 /// tooltip - This initializes or changes the value of the named variable.
 Blockly.Msg.VARIABLES_SET_TOOLTIP = 'Sets this variable to be equal to the input.';
-Blockly.Msg.VARIABLES_GLOBAL_DECLARE_TOOLTIP = 'Declares a global variable.';
-Blockly.Msg.VARIABLES_LOCAL_DECLARE_TOOLTIP = 'Declares a local variable.';
-Blockly.Msg.VARIABLE_GLOBAL_HELP = 'With this block you can declare a global variable. In a global variable you can store values, that you would like to access somewhere in your program later. You can <ul class="NonIcon"><li>modify the name of the variable</li><li>choose the right type of the variable</li><li>set the initial value</li></ul>';
+/// context menu - Selecting this creates a block to get (change) the value of
+/// this variable.\n\nParameters:\n* %1 - the name of the variable.
 Blockly.Msg.VARIABLES_SET_CREATE_GET = 'Create "get %1"';
-Blockly.Msg.VARIABLES_TYPE_NUMBER = 'Number';
-Blockly.Msg.VARIABLES_TYPE_BOOLEAN = 'Boolean';
-Blockly.Msg.VARIABLES_TYPE_STRING = 'String';
-Blockly.Msg.VARIABLES_TYPE_ARRAY_NUMBER = 'List Number';
-Blockly.Msg.VARIABLES_TYPE_ARRAY_STRING = 'List String';
-Blockly.Msg.VARIABLES_TYPE_ARRAY_BOOLEAN = 'List Boolean';
-Blockly.Msg.VARIABLES_TYPE_ARRAY_COLOUR = 'List Colour';
-Blockly.Msg.VARIABLES_TYPE_COLOUR = 'Colour';
-
-
 
 // Procedures Blocks.
 /// url - Information about defining [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that do not have return values.
 Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = 'https://en.wikipedia.org/wiki/Procedure_%28computer_science%29';
-/// block text - This precedes the name of the procedure when defining it.  See
+/// block text - This precedes the name of the function when defining it.  See
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#c84aoc this sample
-/// procedure definition].
+/// function definition].
 Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE = 'to';
 /// default name - This acts as a placeholder for the name of a function on a
 /// function definition block, as shown on
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#w7cfju this block].
 /// The user will replace it with the function's name.
-Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = 'doSomething';
-/// block text - This precedes the list of parameters to a function.  See
-/// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#6ot5y5 this sample
+Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = 'do something';
+/// block text - This precedes the list of parameters on a function's defiition block.  See
+/// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#voztpd this sample
 /// function with parameters].
 Blockly.Msg.PROCEDURES_BEFORE_PARAMS = 'with:';
+/// block text - This precedes the list of parameters on a function's caller block.  See
+/// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#voztpd this sample
+/// function with parameters].
+Blockly.Msg.PROCEDURES_CALL_BEFORE_PARAMS = 'with:';
 /// block text - This appears next to the function's "body", the blocks that should be
 /// run when the function is called, as shown in
-/// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#c84aoc this sample
-/// procedure definition].
-
+/// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#voztpd this sample
+/// function definition].
 Blockly.Msg.PROCEDURES_DEFNORETURN_DO = '';
 /// tooltip
 Blockly.Msg.PROCEDURES_DEFNORETURN_TOOLTIP = 'Creates a function with no output.';
-
+/// Placeholder text that the user is encouraged to replace with a description of what their function does.
+Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT = 'Describe this function...';
 /// url - Information about defining [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that have return values.
 Blockly.Msg.PROCEDURES_DEFRETURN_HELPURL = 'https://en.wikipedia.org/wiki/Procedure_%28computer_science%29';
 Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE = Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE;
 Blockly.Msg.PROCEDURES_DEFRETURN_DO = Blockly.Msg.PROCEDURES_DEFNORETURN_DO;
+Blockly.Msg.PROCEDURES_DEFRETURN_COMMENT = Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT;
 /// block text - This imperative or infinite verb precedes the value that is used as the return value
 /// (output) of this function.  See
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#6ot5y5 this sample
 /// function that returns a value].
-
 Blockly.Msg.PROCEDURES_DEFRETURN_RETURN = 'return';
-Blockly.Msg.PROCEDURES_DEFRETURN_BACK = '';
 /// tooltip
 Blockly.Msg.PROCEDURES_DEFRETURN_TOOLTIP = 'Creates a function with an output.';
+/// Label for a checkbox that controls if statements are allowed in a function.
+Blockly.Msg.PROCEDURES_ALLOW_STATEMENTS = 'allow statements';
 
 /// alert - The user has created a function with two parameters that have the same name.  Every parameter must have a different name.
 Blockly.Msg.PROCEDURES_DEF_DUPLICATE_WARNING = 'Warning: This function has duplicate parameters.';
 
 /// url - Information about calling [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that do not return values.
 Blockly.Msg.PROCEDURES_CALLNORETURN_HELPURL = 'https://en.wikipedia.org/wiki/Procedure_%28computer_science%29';
-/// block text - In most (if not all) languages, this will be the empty string.
-/// It precedes the name of the function that should be run.  See, for example,
-/// the "draw square" block in [https://blockly-demo.appspot.com/static/apps/turtle/index.html#ztz96g].
-Blockly.Msg.PROCEDURES_CALLNORETURN_CALL = '';
 /// tooltip - This block causes the body (blocks inside) of the named function definition to be run.
 Blockly.Msg.PROCEDURES_CALLNORETURN_TOOLTIP = 'Run the user-defined function "%1".';
 
 /// url - Information about calling [https://en.wikipedia.org/wiki/Procedure_(computer_science) functions] that return values.
 Blockly.Msg.PROCEDURES_CALLRETURN_HELPURL = 'https://en.wikipedia.org/wiki/Procedure_%28computer_science%29';
-Blockly.Msg.PROCEDURES_CALLRETURN_CALL = Blockly.Msg.PROCEDURES_CALLNORETURN_CALL;
 /// tooltip - This block causes the body (blocks inside) of the named function definition to be run.\n\nParameters:\n* %1 - the name of the function.
 Blockly.Msg.PROCEDURES_CALLRETURN_TOOLTIP = 'Run the user-defined function "%1" and use its output.';
 
@@ -1221,384 +1089,13 @@ Blockly.Msg.PROCEDURES_MUTATORARG_TOOLTIP = 'Add an input to the function.';
 /// [[Translating:Blockly#context_menus]].
 Blockly.Msg.PROCEDURES_HIGHLIGHT_DEF = 'Highlight function definition';
 /// context menu - This appears on the context menu for function definitions.
-/// Selecting it creates a block to call the function.  \n\nParameters:\n* %1 - the name of the function.
+/// Selecting it creates a block to call the function.\n\nParameters:\n* %1 - the name of the function.\n{{Identical|Create}}
 Blockly.Msg.PROCEDURES_CREATE_DO = 'Create "%1"';
 
 /// tooltip - If the first value is true, this causes the second value to be returned
 /// immediately from the enclosing function.
 Blockly.Msg.PROCEDURES_IFRETURN_TOOLTIP = 'If a value is true, then return a second value.';
+/// url - Information about guard clauses.
+Blockly.Msg.PROCEDURES_IFRETURN_HELPURL = 'http://c2.com/cgi/wiki?GuardClause';
 /// warning - This appears if the user tries to use this block outside of a function definition.
 Blockly.Msg.PROCEDURES_IFRETURN_WARNING = 'Warning: This block may be used only within a function definition.';
-Blockly.Msg.PROCEDURES_VARIABLES_ERROR = 'Error: This block may be used only within the "';
-Blockly.Msg.PROCEDURES_VARIABLES_LOOP_ERROR = 'Error: This block may be used only within a loop which delcares ';
-Blockly.Msg.PROCEDURES_TITLE = '" procedure';
-Blockly.Msg.YES = 'yes';
-Blockly.Msg.NO = 'no';
-Blockly.Msg.ON = 'on';
-Blockly.Msg.OFF = 'off';
-Blockly.Msg.FOR = 'for';
-Blockly.Msg.GET = 'get';
-Blockly.Msg.SET = 'set';
-Blockly.Msg.BRICK_WHEEL_DIAMETER = 'wheel diameter';
-Blockly.Msg.BRICK_TRACK_WIDTH = 'track width';
-Blockly.Msg.MOTOR = 'motor';
-Blockly.Msg.MOTOR_MIDDLE = 'middle';
-Blockly.Msg.MOTOR_BIG = 'big';
-Blockly.Msg.MOTOR_NONE = 'none';
-Blockly.Msg.MOTOR_REGULATION = 'regulation';
-Blockly.Msg.MOTOR_OTHER = 'other power consumer';
-Blockly.Msg.MOTOR_SIDE = 'side';
-Blockly.Msg.MOTOR_ROTATION_REVERSE = 'direction of rotation';
-Blockly.Msg.MOTOR_SPEED = 'speed';
-Blockly.Msg.MOTOR_DRIVE = 'drive';
-Blockly.Msg.MOTOR_DISTANCE = 'distance cm';
-Blockly.Msg.MOTOR_DEGREE = 'degree';
-Blockly.Msg.MOTOR_ROTATION = 'rotation';
-Blockly.Msg.MOTOR_FOREWARD = 'forwards';
-Blockly.Msg.MOTOR_BACKWARD = 'backwards';
-Blockly.Msg.MOTOR_DRIVE = 'drive';
-Blockly.Msg.MOTOR_RIGHT = 'right';
-Blockly.Msg.MOTOR_LEFT = 'left';
-Blockly.Msg.MOTOR_TURN = 'turn';
-Blockly.Msg.MOTOR_PORT = 'motor port';
-Blockly.Msg.MOTOR_STOP = 'stop';
-Blockly.Msg.MOTOR_FLOAT = 'float';
-Blockly.Msg.MOTOR_BRAKE = 'brake';
-Blockly.Msg.DISPLAY_SHOW = 'show';
-Blockly.Msg.DISPLAY_COL = 'in column';
-Blockly.Msg.DISPLAY_ROW = 'in row';
-Blockly.Msg.DISPLAY_CLEAR = 'clear display';
-Blockly.Msg.DISPLAY_PICTURE = 'picture';
-Blockly.Msg.DISPLAY_PICTURE_GLASSES = 'glasses';
-Blockly.Msg.DISPLAY_PICTURE_EYES_OPEN = 'eyes open';
-Blockly.Msg.DISPLAY_PICTURE_EYES_CLOSED = 'eyes closed';
-Blockly.Msg.DISPLAY_PICTURE_FLOWERS = 'flowers';
-Blockly.Msg.DISPLAY_PICTURE_TACHO = 'tacho';
-Blockly.Msg.DISPLAY_TEXT = 'text';
-Blockly.Msg.PLAY = 'play';
-Blockly.Msg.PLAY_TONE = 'tone';
-Blockly.Msg.PLAY_FREQUENZ = 'frequency';
-Blockly.Msg.PLAY_DURATION = 'duration';
-Blockly.Msg.PLAY_VOLUME = 'volume';
-Blockly.Msg.PLAY_FILE = 'file';
-Blockly.Msg.BRICKLIGHT_ON = 'on';
-Blockly.Msg.BRICKLIGHT_FLASH = 'flashing';
-Blockly.Msg.BRICKLIGHT_DOUBLE_FLASH = 'double flashing';
-Blockly.Msg.BRICKLIGHT = 'EV3 brick light';
-Blockly.Msg.BRICKLIGHT_COLOR = 'colour';
-Blockly.Msg.BRICKLIGHT_GREEN = 'green';
-Blockly.Msg.BRICKLIGHT_ORANGE = 'orange';
-Blockly.Msg.BRICKLIGHT_RED = 'red';
-Blockly.Msg.WAIT = 'wait';
-Blockly.Msg.WAIT_FOREVER = 'indefinitely';
-Blockly.Msg.WAIT_OR = 'or wait for';
-Blockly.Msg.SENSOR_ULTRASONIC = 'ultrasonic sensor';
-Blockly.Msg.SENSOR_TOUCH = 'touch sensor';
-Blockly.Msg.SENSOR_TIME = 'time';
-Blockly.Msg.SENSOR_MS_TIMER = 'in ms';
-Blockly.Msg.SENSOR_TIMER = 'timer';
-Blockly.Msg.SENSOR_COLOUR = 'colour sensor';
-Blockly.Msg.SENSOR_INFRARED = 'infrared sensor';
-Blockly.Msg.SENSOR_ENCODER = 'encoder';
-Blockly.Msg.SENSOR_GYRO = 'gyroscope';
-Blockly.Msg.SENSOR_KEY = 'button';
-Blockly.Msg.SENSOR_KEY_ENTER = 'enter';
-Blockly.Msg.SENSOR_KEY_UP = 'up';
-Blockly.Msg.SENSOR_KEY_DOWN = 'down';
-Blockly.Msg.SENSOR_KEY_LEFT = 'left';
-Blockly.Msg.SENSOR_KEY_RIGHT = 'right';
-Blockly.Msg.SENSOR_KEY_ESCAPE = 'escape';
-Blockly.Msg.SENSOR_KEY_ANY = 'any';
-Blockly.Msg.SENSOR_RESET = 'reset';
-Blockly.Msg.SENSOR_RESET_II = '';
-Blockly.Msg.SENSOR_SET_MODE = 'set mode';
-Blockly.Msg.SENSOR_GET_MODE = 'get mode';
-Blockly.Msg.SENSOR_GET_SAMPLE = 'get value';
-Blockly.Msg.SENSOR_IS_PRESSED = 'pressed?';
-Blockly.Msg.SENSOR_PRESSED = ' (pressed)';
-Blockly.Msg.WAIT_UNTIL = 'wait until';
-Blockly.Msg.WAIT_FOR_HELP = 'here comes your help text';
-Blockly.Msg.SENSOR_GET_SAMPLE_HELP = 'The help text will appear here';
-Blockly.Msg.SENSOR_WAIT_PRESSED = 'pressed';
-Blockly.Msg.SENSOR_WAIT_PRESSED_RELEASED = 'pressed or released';
-Blockly.Msg.START = 'start';
-Blockly.Msg.START_ACTIVITY = 'activity';
-Blockly.Msg.START_PROGRAM = 'program-start';
-Blockly.Msg.MODE = 'mode';
-Blockly.Msg.MODE_DISTANCE = 'distance';
-Blockly.Msg.MODE_PRESENCE = 'presence';
-Blockly.Msg.MODE_STATE = 'state';
-Blockly.Msg.MODE_COLOUR = 'colour';
-Blockly.Msg.MODE_LIGHT = 'light';
-Blockly.Msg.MODE_RGB = 'RGB';
-Blockly.Msg.MODE_AMBIENTLIGHT = 'ambient light';
-Blockly.Msg.MODE_ROTATION = 'rotation';
-Blockly.Msg.MODE_DEGREE = 'degree';
-Blockly.Msg.MODE_ANGLE = 'angle';
-Blockly.Msg.MODE_RATE = 'rate';
-Blockly.Msg.LOOP_COUNT = 'number';
-Blockly.Msg.LOOP = 'repeat until';
-Blockly.Msg.LOOP_FOREVER = 'repeat indefinitely';
-Blockly.Msg.CONNECTION_START_HELP = 'This block tries to make a connection to another robot via bluetooth. It is looking for a robot with the name in the textfield. This block returns the connection, best you save it in a global variable of the type »Connection«. Once the other robot is accepting the connection you can exchange messages with it.';
-Blockly.Msg.CONNECTION_WAIT_HELP = 'With this block you can wait for a connection via bluetooth. If another robot is trying to make a connection with your robot, you should use this block to wait and accept this connection.';
-Blockly.Msg.CONNECTION_RECEIVE_HELP = 'This block is waiting for a message from the robot which you declare in the connection. The output of this block is a text message.';
-Blockly.Msg.CONNECTION_SEND_HELP = 'You can send a text message to another robot with this block. Add the text message to the block and also do not forget to add the name of the connection to know where to send the message.';
-Blockly.Msg.CONNECTION_START_TOOLTIP = 'Tries to make a connection to another robot via bluetooth.';
-Blockly.Msg.CONNECTION_WAIT_TOOLTIP = 'Waits for a connection via bluetooth.';
-Blockly.Msg.CONNECTION_RECEIVE_TOOLTIP = 'Waits for a message from the robot which you declare in the connection.';
-Blockly.Msg.CONNECTION_SEND_TOOLTIP = 'Sends a text message to another robot.'; 
-Blockly.Msg.CONNECTION_START_HELPURL= 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.CONNECTION_WAIT_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.CONNECTION_RECEIVE_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.CONNECTION_SEND_HELPURL = 'https://mp-devel.iais.fraunhofer.de/wiki/x/CwA-/';
-Blockly.Msg.TOOLBOX_ACTION = 'Action';
-Blockly.Msg.TOOLBOX_COMMUNICATION = 'Messages';
-Blockly.Msg.TOOLBOX_SENSOR = 'Sensors';
-Blockly.Msg.TOOLBOX_CONTROL = 'Control';
-Blockly.Msg.TOOLBOX_LOGIC = 'Logic';
-Blockly.Msg.TOOLBOX_MATH = 'Math';
-Blockly.Msg.TOOLBOX_TEXT = 'Text';
-Blockly.Msg.TOOLBOX_LIST = 'Lists';
-Blockly.Msg.TOOLBOX_COLOUR = 'Colours';
-Blockly.Msg.TOOLBOX_VARIABLE = 'Variables';
-Blockly.Msg.TOOLBOX_PROCEDURE = 'Functions';
-Blockly.Msg.TOOLBOX_WAIT = 'Wait';
-Blockly.Msg.TOOLBOX_LOOP = 'Loops';
-Blockly.Msg.TOOLBOX_DECISION = 'Decisions';
-Blockly.Msg.TOOLBOX_LIGHT = 'Lights';
-Blockly.Msg.TOOLBOX_SOUND = 'Sounds';
-Blockly.Msg.TOOLBOX_DISPLAY = 'Display';
-Blockly.Msg.TOOLBOX_DRIVE = 'Drive';
-Blockly.Msg.TOOLBOX_MOVE = 'Move';
-Blockly.Msg.TOOLBOX_GLOBAL_VARIABLE = 'Global Variables';
-Blockly.Msg.TOOLBOX_LOOP_VARIABLE = 'Loop Variables';
-//
-Blockly.Msg.START_HELP = 'With this as a first block starts your program. All the other blocks that are connected are processed sequentially. <br />Additionally, you can add variables by clicking on the plus. All variables that are »declared« here are global. Values can be stored in the variables and later used in the program.';
-/// These texts are used outside of Blockly, but are placed in the Blockly namespace
-Blockly.Msg.MENU_EDIT = 'edit';
-Blockly.Msg.MENU_ROBOT = 'robot';
-Blockly.Msg.MENU_HELP = 'help';
-Blockly.Msg.MENU_USER = 'login';
-Blockly.Msg.MENU_START = 'run';
-Blockly.Msg.MENU_CHECK = 'check';
-Blockly.Msg.MENU_NEW = 'new ...';
-Blockly.Msg.MENU_LIST = 'list ...';
-Blockly.Msg.MENU_SAVE = 'save';
-Blockly.Msg.MENU_SAVE_AS = 'save as ...';
-Blockly.Msg.MENU_ATTACH = 'attach ...';
-Blockly.Msg.MENU_PROPERTIES = 'properties';
-Blockly.Msg.MENU_TOOLBOX = 'NEPO-Blocks';
-Blockly.Msg.MENU_BEGINNER = 'beginner';
-Blockly.Msg.MENU_EXPERT = 'expert';
-Blockly.Msg.MENU_TOOLBOX_BEGINNER = 'NEPO-Blocks beginner';
-Blockly.Msg.MENU_TOOLBOX_EXPERT = 'NEPO-Blocks expert';
-Blockly.Msg.MENU_CONNECT = 'connect ...';
-Blockly.Msg.MENU_UPDATE_FIRMWARE = 'update firmware';
-Blockly.Msg.MENU_LOGGING = 'logging';
-Blockly.Msg.MENU_EV3 = 'EV3 preparation';
-Blockly.Msg.MENU_PROGRAMMING = 'programming with NEPO';
-Blockly.Msg.MENU_FAQ = 'FAQ';
-Blockly.Msg.MENU_GENERAL = 'general help'
-Blockly.Msg.MENU_SHOW_AGAIN = 'show welcome note again'
-Blockly.Msg.MENU_ROBOT_STATE_INFO = 'info';
-Blockly.Msg.MENU_STATE_INFO = 'state information';
-Blockly.Msg.MENU_ABOUT = 'about';
-Blockly.Msg.MENU_LOG_IN = 'login ...';
-Blockly.Msg.MENU_LOG_OUT = 'logout';
-Blockly.Msg.MENU_CHANGE = 'change ...';
-Blockly.Msg.MENU_DELETE_USER = 'delete user ...';
-Blockly.Msg.MENU_TITLE_EDIT = 'edit';
-Blockly.Msg.MENU_TITLE_ROBOT = 'robots';
-Blockly.Msg.MENU_TITLE_HELP = 'help';
-Blockly.Msg.MENU_TITLE_USER = 'user';
-Blockly.Msg.MENU_TITLE_USER_STATE = 'user info';
-Blockly.Msg.MENU_TITLE_ROBOT_STATE= 'robot info';
-Blockly.Msg.MENU_SHOW_CODE = 'show code';
-Blockly.Msg.MENU_SIM_SIMPLE = 'Simple Scene';
-Blockly.Msg.MENU_SIM_DRAW = 'Drawing Scene';
-Blockly.Msg.MENU_SIM_ROBERTA = 'Roberta Scene';
-Blockly.Msg.MENU_SIM_RESCUE = 'Rescue Scene';
-Blockly.Msg.MENU_SIM_MATH = 'Math Scene';
-Blockly.Msg.MENU_SIM_INFO = 'Info';
-Blockly.Msg.MENU_SIM_START_PAUSE = 'Start/Pause';
-Blockly.Msg.MENU_SIM_STEP = 'Step';
-Blockly.Msg.MENU_SIM_STOP = 'Stop';
-Blockly.Msg.MENU_SIM_BACK = 'Back';
-Blockly.Msg.TAB_PROGRAM = 'Program';
-Blockly.Msg.TAB_CONFIGURATION = 'Robot configuration';
-Blockly.Msg.TAB_SIMULATION = 'Simulation';
-Blockly.Msg.POPUP_ABOUT_TEXT = 'The Open Roberta Lab is a cloud-based integrated programming environment that enables children and adolescents to program easily Lego Mindstorms EV3 robots. This platform is completely open source so taking part is desirable! Both the software and the open source developer tools are available via Fraunhofer servers.';
-Blockly.Msg.POPUP_ABOUT_TEXT_DEV = 'The Open Roberta Lab is an open-source programming platform developed by Fraunhofer IAIS within the initiative <a href="http://www.roberta-home.de/">»Roberta – Learning with Robots«</a>';
-Blockly.Msg.POPUP_ABOUT_TEXT_GOOG = 'Open Roberta was initiated in collaboration with Google Germany to reduce the hurdles for students, teachers and schools programming educational robots. Open Roberta is financed by Google.org (2014 - 2015) with 1Mio Euro.</a>';
-Blockly.Msg.POPUP_TEXT_STARTUP_MESSAGE = 'Three things you should know before starting:<ul class="icon"><li class="document-text">Here you can program real EV3 robots </li><li class="Roberta">Your robot needs a special system <a target="_blank" href="https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd">check!</a></li><li class="wi-fi">Your robot needs wi-fi or a USB program <a target="_blank" href="https://mp-devel.iais.fraunhofer.de/wiki/x/RIAd">check!</a></li><li class="arrow-right-thick">If you are not sure, please have a look at the help pages ... <a target="_blank" href="https://mp-devel.iais.fraunhofer.de/wiki/x/A4AM">more</a></li></ul><br /><p>What is new?</p>';
-Blockly.Msg.POPUP_RELEASE = 'Version beta 1.3.2 <ul class="NonIcon" style="font-size:small"><li>Fix timestamp bug for save program</li></ul>Version beta 1.3.1 <ul class="NonIcon" style="font-size:small"><li>Spanish available now!</li><li>Fixed bugs</li></ul>Version beta 1.3.0 <ul class="NonIcon" style="font-size:small"><li>Simulate a robot!</li><li>Share your program with a friend</li><li>Update the robots firmware Over-the-Air</li><li>USB cabel support for Chromebooks</li><li>Fixed many more bugs</li></ul></br>';
-Blockly.Msg.POPUP_ABOUT_JOIN = 'I want to help';
-Blockly.Msg.POPUP_USERNAME = 'Username';
-Blockly.Msg.POPUP_USERNAME_LOGOFF = 'You are not logged in.';
-Blockly.Msg.POPUP_PASSWORD = 'Password';
-
-Blockly.Msg.POPUP_NAME = 'Name';
-Blockly.Msg.POPUP_EMAIL = 'E-Mail';
-Blockly.Msg.POPUP_SHARE_WITH = 'Share with ...';
-Blockly.Msg.POPUP_SHARE_READ = 'READ';
-Blockly.Msg.POPUP_SHARE_WRITE = 'WRITE';
-Blockly.Msg.POPUP_ATTENTION = 'Attention';
-Blockly.Msg.POPUP_VALUE = 'Value';
-Blockly.Msg.POPUP_HIDE_STARTUP_MESSAGE = 'I got it!';
-Blockly.Msg.POPUP_CANCEL = 'Cancel';
-Blockly.Msg.POPUP_ROBOT_NAME = 'Name';
-Blockly.Msg.POPUP_ROBOT_STATE = 'State';
-Blockly.Msg.POPUP_ROBOT_STATE_WAIT = 'wait';
-Blockly.Msg.POPUP_ROBOT_STATE_DISCONNECTED = 'disconnected';
-Blockly.Msg.POPUP_ROBOT_STATE_BUSY = 'busy';
-Blockly.Msg.POPUP_ROBOT_BATTERY = 'Voltage';
-Blockly.Msg.POPUP_ROBOT_WAIT = 'Waiting time';
-Blockly.Msg.POPUP_ROBOT_NOT_CONNECTED = 'You have to make a connection to your robot first.';
-Blockly.Msg.POPUP_ROBOT_BUSY = 'Your robot is busy. Please wait until the current program has finished.';
-Blockly.Msg.POPUP_CONFIRM_DELETE_PROGRAM = 'Do you really want to delete the program ?';
-Blockly.Msg.POPUP_CONFIRM_DELETE_CONFIGURATION = 'Do you really want to delete the configuration ?';
-Blockly.Msg.BUTTON_STOP = 'Stop';
-Blockly.Msg.POPUP_BEFOREUNLOAD = 'You have unsaved changes in your program or configuration. Sign in and save your program or configuration.';
-Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN = 'You have unsaved changes in your program or configuration.';
-Blockly.Msg.POPUP_CONFIRM_UPDATE_FIRMWARE = 'There is a new firmware version for your robot available. You can try to run programs with the old version, but best bet is to update your robot now! You just have to click >>Update now<< and restart the robots system afterwards.';
-Blockly.Msg.POPUP_DO_UPDATE_FIRMWARE = 'Update now';
-Blockly.Msg.BUTTON_FINISH = 'Finish';
-Blockly.Msg.BUTTON_LOAD = 'Load';
-Blockly.Msg.BUTTON_DO_DELETE = 'Delete';
-Blockly.Msg.BUTTON_DO_SHARE = 'Share';
-Blockly.Msg.BUTTON_REFRESH = 'Refresh';
-Blockly.Msg.BUTTON_EMPTY_LIST = 'Empty list';
-Blockly.Msg.MESSAGE_PASSWORD_ERROR = 'Something went wrong while you filled in the two passwords.';
-Blockly.Msg.MESSAGE_NOT_AVAILABLE = 'Not available.';
-Blockly.Msg.MESSAGE_INVALID_NAME = 'Please fill in a correct name. A correct name begins with a letter and can only contain letters or numbers.';
-Blockly.Msg.MESSAGE_EDIT_START = 'Your program $ will run in a moment!';
-Blockly.Msg.MESSAGE_EDIT_CHECK = 'Your program is now checked!';
-Blockly.Msg.MESSAGE_EDIT_SAVE_PROGRAM = 'Your program has been saved';
-Blockly.Msg.MESSAGE_EDIT_SAVE_PROGRAM_AS = 'Your program has been saved as "$"';
-Blockly.Msg.MESSAGE_EDIT_SAVE_CONFIGURATION = 'Your configuration has been saved';
-Blockly.Msg.MESSAGE_EDIT_SAVE_CONFIGURATION_AS = 'Your configuration has been saved as "$"';
-Blockly.Msg.MESSAGE_ROBOT_CONNECTED = 'Your robot $ is connected';
-Blockly.Msg.MESSAGE_ROBOT_FIRMWARE_UPDATE = 'Your robot runs now version "$"';
-Blockly.Msg.MESSAGE_USER_LOGIN = 'Hello "$"';
-Blockly.Msg.MESSAGE_USER_LOGOUT = 'You are logged out';
-Blockly.Msg.MESSAGE_USER_NEW = 'Hello "$"';
-Blockly.Msg.MESSAGE_USER_DELETED = 'User deleted';
-Blockly.Msg.MESSAGE_PROGRAM_DELETED = 'Program "$" was deleted';
-Blockly.Msg.MESSAGE_RELATION_DELETED = 'A relation of Program "$" was deleted';
-Blockly.Msg.MESSAGE_CONFIGURATION_DELETED = 'Configuration "$" was deleted';
-Blockly.Msg.MESSAGE_RESTART_ROBOT = 'Your robot can only use the new firmware, if you restart its system. Just turn the robot off and on again and reconnect the robot afterwards to the Open Roberta Lab.';
-Blockly.Msg.MESSAGE_FIRMWARE_ERROR = 'There is a conflict with the firmware version of your robot and the Open Roberta Lab. Please contact us.';
-Blockly.Msg.ORA_TOKEN_SET_SUCCESS = 'Token set';
-Blockly.Msg.ORA_TOKEN_SET_ERROR_NO_ROBOT_WAITING = 'Check if your robot is switched on and connected to the server. <br />If you have problems to do this, please have a look at our help pages.';
-Blockly.Msg.ORA_TOOLBOX_LOAD_SUCCESS = 'Toolbox loaded';
-Blockly.Msg.ORA_TOOLBOX_LOAD_ERROR_NOT_FOUND = 'The selected NEPO-Blocks could not be found in the database.';
-Blockly.Msg.ORA_TOOLBOX_ERROR_ID_INVALID = 'Toolbox name is not a valid identifier.';
-Blockly.Msg.ORA_TOOLBOX_GET_ONE_ERROR_NOT_FOUND = 'The toolbox could not be found in the database.';
-Blockly.Msg.ORA_TOOLBOX_GET_ONE_SUCCESS = 'Toolbox loaded';
-Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR = 'An error has occurred while saving the toolbox.';
-Blockly.Msg.ORA_TOOLBOX_SAVE_SUCCESS = 'Toolbox saved';
-Blockly.Msg.ORA_TOOLBOX_GET_ALL_SUCCESS = 'Toolbox loaded';
-Blockly.Msg.ORA_TOOLBOX_DELETE_SUCCESS = 'Toolbox deleted';
-Blockly.Msg.ORA_TOOLBOX_DELETE_ERROR = 'An error has occurred while deleting the toolbox, please try it again!';
-Blockly.Msg.ORA_TOOLBOX_TRANSFORM_ERROR = 'Transformation error?';
-Blockly.Msg.ORA_TOOLBOX_SAVE_ERROR_NOT_SAVED_TO_DB = 'An error error has occurred while saving the configuration in the database.';
-Blockly.Msg.ORA_COMMAND_INVALID = 'Invalid Javascript-command';
-Blockly.Msg.ORA_CONFIGURATION_ERROR_ID_INVALID = 'Configuration name is not a valid identifier.';
-Blockly.Msg.ORA_CONFIGURATION_GET_ONE_ERROR_NOT_FOUND = 'The robot configuration could not be found in the database.';
-Blockly.Msg.ORA_CONFIGURATION_GET_ONE_SUCCESS = 'Configuration loaded';
-Blockly.Msg.ORA_CONFIGURATION_SAVE_SUCCESS = 'Configuration saved';
-Blockly.Msg.ORA_CONFIGURATION_SAVE_ERROR_NOT_SAVED_TO_DB = 'An error error has occurred while saving the configuration in the database.';
-Blockly.Msg.ORA_CONFIGURATION_SAVE_ERROR = 'An error has occurred while saving the robot configuration.';
-Blockly.Msg.ORA_CONFIGURATION_GET_ALL_SUCCESS = 'Configuration loaded';
-Blockly.Msg.ORA_CONFIGURATION_DELETE_SUCCESS = 'Configuration deleted';
-Blockly.Msg.ORA_CONFIGURATION_DELETE_ERROR = 'An error has occurred while deleting the robot configuration, please try it again!';
-Blockly.Msg.ORA_PROGRAM_ERROR_ID_INVALID = 'The name of your  program is already used by the system. Please choose another name and try it again!';
-Blockly.Msg.ORA_PROGRAM_GET_ONE_ERROR_NOT_FOUND = 'Program not found.';
-Blockly.Msg.ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN = 'You are not logged in, please log in with your username and password or create a new user.';
-Blockly.Msg.ORA_PROGRAM_GET_ONE_SUCCESS = 'Program loaded';
-Blockly.Msg.ORA_PROGRAM_SAVE_SUCCESS = 'Program saved';
-Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_NOT_SAVED_TO_DB = 'An error has occurred while saving the program.';
-Blockly.Msg.ORA_PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS = 'This program already exists.';
-Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_PROGRAM_TO_UPDATE_NOT_FOUND = 'The program could not be found, so it is impossible to update it.';
-Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_NO_WRITE_PERMISSION = 'You do not have the permission to modify this program!';
-Blockly.Msg.ORA_PROGRAM_SAVE_ERROR_OPTIMISTIC_TIMESTAMP_LOCKING = 'This program has been changed recently by someone else. You can can save your changes in a new program, choose >save as< !';
-Blockly.Msg.ORA_PROGRAM_GET_ALL_SUCCESS = 'Programs loaded';
-Blockly.Msg.ORA_PROGRAM_DELETE_SUCCESS = 'Program deeleted';
-Blockly.Msg.ORA_PROGRAM_DELETE_ERROR = 'An error error has occurred while deleding the configuration. Please try it again!';
-Blockly.Msg.ORA_USER_GET_ONE_SUCCESS = 'Login successfull';
-Blockly.Msg.ORA_USER_GET_ONE_ERROR_ID_OR_PASSWORD_WRONG = 'An error occurred while logging in.';
-Blockly.Msg.ORA_USER_CREATE_SUCCESS = 'The user was successfully created';
-Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = 'The given user name already exists in the databese.';
-Blockly.Msg.ORA_USER_DELETE_SUCCESS = 'The user was successfully deleted';
-Blockly.Msg.ORA_USER_DELETE_ERROR_NOT_DELETED_IN_DB = 'Error while deleting user in database.';
-Blockly.Msg.ORA_USER_DELETE_ERROR_ID_NOT_FOUND = 'Error while deleting user.';
-Blockly.Msg.ORA_USER_GET_ALL_SUCCESS = 'Users loaded';
-Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_NOT_FOUND = 'The program could not be transformed into the robots programming language.';
-Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND = 'The robot configuration could not be found on the server.';
-Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED = 'The program could not be transformed into the robots programming language.';
-Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED = 'The robot configuration could not be transformed into the robots programming language.';
-Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_STORE_FAILED = 'The program could not be saved because of an internal error.';
-Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED = 'The program could not be transformed into machine code.';
-Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED = 'The program could not be generated.';
-Blockly.Msg.ORA_ROBOT_NOT_WAITING = 'The robot does not wait for a run command.';
-Blockly.Msg.ORA_ROBOT_PUSH_RUN = 'Robot waited and now the jar is pushed to the robot';
-Blockly.Msg.ORA_ROBOT_FIRMWAREUPDATE_POSSIBLE = 'The firmware was updated';
-Blockly.Msg.ORA_ROBOT_FIRMWAREUPDATE_IMPOSSIBLE = 'An error has occurred while updating the new firmware on your robot.';
-Blockly.Msg.ORA_ROBOT_NOT_CONNECTED = 'There is no robot connected. Check if your robot is switched on, connect it to the server and type in the robots password under robot - connect in the menu. <br /> If you have problems to do this, please have a look at our help pages.';
-Blockly.Msg.ORA_OWNER_DOES_NOT_EXIST = 'The owner does not exist.';
-Blockly.Msg.ORA_PROGRAM_TO_SHARE_DOES_NOT_EXIST = 'The program that you would like to share does not exist.';
-Blockly.Msg.ORA_USER_TO_SHARE_DOES_NOT_EXIST = 'The user with which you would like to share the program does not exist. <br />Try it again!';
-Blockly.Msg.ORA_USER_TO_SHARE_SAME_AS_LOGIN_USER = 'You cannot share any programs with yourself.';
-Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = 'Check all required input fields have been filled out.';
-Blockly.Msg.ORA_SERVER_ERROR = 'Server-Error';
-Blockly.Msg.ORA_PROGRAM_CONFIGURATION_NOT_COMPATIBLE = 'Program is not compatible with the configuration';
-
-Blockly.Msg.CONFIGURATION_ERROR_SENSOR_MISSING = 'This sensor is not set to the port!';
-Blockly.Msg.CONFIGURATION_ERROR_SENSOR_WRONG = 'Connected wrong sesnor to the given port!';
-Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_MISSING = 'Left motor missing in the configuration!';
-Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING = 'Right motor missing in the configuration!';
-Blockly.Msg.CONFIGURATION_ERROR_MOTOR_MISSING = 'Motor is missing on the given port!';
-Blockly.Msg.CONFIGURATION_ERROR_MOTOR_LEFT_UNREGULATED = 'Left motor is not regulated!';
-Blockly.Msg.CONFIGURATION_ERROR_MOTOR_RIGHT_UNREGULATED = 'Right motor is not regulated!';
-
-Blockly.Msg.DATATABLE_PROGRAM_NAME = 'Program name';
-Blockly.Msg.DATATABLE_CREATED_BY = 'Creator';
-Blockly.Msg.DATATABLE_SHARED = 'Shared';
-Blockly.Msg.DATATABLE_SHARED_WITH = 'Shared with';
-Blockly.Msg.DATATABLE_BLOCKS = 'Blocks';
-Blockly.Msg.DATATABLE_CREATED_ON = 'Creation date';
-Blockly.Msg.DATATABLE_ACTUALIZATION = 'Actualization date';
-Blockly.Msg.DATATABLE_CONFIGURATION_NAME = 'Configuration name';
-Blockly.Msg.DATATABLE_SHOW = 'Show';
-Blockly.Msg.DATATABLE_PROGRAMS = 'programs';
-Blockly.Msg.DATATABLE_CONFIGURATIONS = 'configurations';
-Blockly.Msg.DATATABLE_FIRST = '<< First';
-Blockly.Msg.DATATABLE_PREVIOUS = '< Prev';
-Blockly.Msg.DATATABLE_NEXT = 'Next >';
-Blockly.Msg.DATATABLE_LAST = 'Last >>';
-Blockly.Msg.DATATABLE_SHOWING = 'Showing';
-Blockly.Msg.DATATABLE_TO = 'to';
-Blockly.Msg.DATATABLE_OF = 'of';
-Blockly.Msg.DATATABLE_ENTRIES = 'entries';
-Blockly.Msg.DATATABLE_EMPTY_TABLE = 'There are no entries in this table';
-Blockly.Msg.SEND_DATA = 'data to send';
-Blockly.Msg.USED_CONNECTION = 'via connection';
-Blockly.Msg.RECEIVED_DATA = 'data received';
-Blockly.Msg.CONNECT = 'connect to robot name';
-Blockly.Msg.VARIABLES_TYPE_CONNECTION = 'Connection';
-Blockly.Msg.WAIT_FOR_CONNECTION = 'wait for connection';
-
-Blockly.Msg.FIELD_REQUIRED = 'This field cannot be empty!';
-Blockly.Msg.PASSWORD_MIN_LENGTH = 'Password min length is 6!';
-Blockly.Msg.TOKEN_LENGTH = 'Token length is 8 characters!';
-Blockly.Msg.SECOND_PASSWORD_EQUAL = 'The two passwords must be equal!';
-Blockly.Msg.VALID_EMAIL_ADDRESS = 'Please enter valid email address!';
-Blockly.Msg.EMAIL_SEND = 'Send!!!';
-Blockly.Msg.REGISTER_USER = 'Register!';
-Blockly.Msg.PASSWORD_RECOVERY = 'Password Recovery'
-Blockly.Msg.POPUP_NEW_PASSWORD = 'New Password';
-Blockly.Msg.POPUP_OLD_PASSWORD = 'Old Password';
-Blockly.Msg.POPUP_REPEAT_PASSWORD = 'Repeat password';
-Blockly.Msg.POPUP_CHANGE_PASSWORD = 'Change password';
-Blockly.Msg.POPUP_CHANGE_USER_PASSWORD = 'Change User Password';
-Blockly.Msg.ORA_USER_EMAIL_ONE_ERROR_USER_NOT_EXISTS_WITH_THIS_EMAIL = 'Account not found with this email address!';
