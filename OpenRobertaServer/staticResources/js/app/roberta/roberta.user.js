@@ -1,5 +1,5 @@
-define([ 'exports', 'roberta.navigation', 'message', 'util', 'rest.user', 'roberta.user-state', 'roberta.robot', 'jquery', 'blocks', 'blocks-msg' ], function(
-        exports, ROBERTA_NAVIGATION, MSG, UTIL, USER, userState, ROBERTA_ROBOT, $, Blockly) {
+define([ 'exports', 'roberta.navigation', 'message', 'util', 'rest.user', 'roberta.user-state', 'roberta.robot', 'roberta.brick-configuration', 'jquery', 'blocks', 'blocks-msg' ], function(
+        exports, ROBERTA_NAVIGATION, MSG, UTIL, USER, userState, ROBERTA_ROBOT, ROBERTA_BRICK_CONFIGURATION, $, Blockly) {
 
     var $ = require('jquery');
     var Blockly = require('blocks', 'blocks-msg');
@@ -127,9 +127,9 @@ define([ 'exports', 'roberta.navigation', 'message', 'util', 'rest.user', 'rober
         USER.logout(function(result) {
             UTIL.response(result);
             if (result.rc === "ok") {
-                initUserState();
+                userState.initUserState();
                 setProgram(userState.program);
-                setConfiguration(userState.configuration);
+                ROBERTA_BRICK_CONFIGURATION.setConfiguration(userState.configuration);
                 $('#programNameSave :not(btn)').val('');
                 $('#configurationNameSave :not(btn)').val('');
                 ROBERTA_NAVIGATION.setHeadNavigationMenuState('logout');
@@ -140,6 +140,8 @@ define([ 'exports', 'roberta.navigation', 'message', 'util', 'rest.user', 'rober
             }
         });
     }
+
+    exports.logout = logout;
 
     /**
      * Update user password
@@ -546,11 +548,7 @@ define([ 'exports', 'roberta.navigation', 'message', 'util', 'rest.user', 'rober
         $('#change-user-password').modal('show');
     }
     exports.showResetPassword = showResetPassword;
-
-    function logout() {
-        logout();
-    }
-    exports.logout = logout;
+    
 
     /**
      * Set program name
