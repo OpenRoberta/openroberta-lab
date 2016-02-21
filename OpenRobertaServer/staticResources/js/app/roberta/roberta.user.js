@@ -1,11 +1,12 @@
-define([ 'exports', 'roberta.navigation', 'message', 'util', 'rest.user', 'roberta.user-state', 'roberta.robot', 'roberta.brick-configuration', 'jquery', 'blocks', 'blocks-msg' ], function(
-        exports, ROBERTA_NAVIGATION, MSG, UTIL, USER, userState, ROBERTA_ROBOT, ROBERTA_BRICK_CONFIGURATION, $, Blockly) {
+define([ 'exports', 'roberta.navigation', 'message', 'util', 'rest.user', 'roberta.user-state', 'roberta.robot', 'roberta.program','roberta.brick-configuration', 'jquery', 'blocks', 'blocks-msg' ], function(
+        exports, ROBERTA_NAVIGATION, MSG, UTIL, USER, userState, ROBERTA_ROBOT, ROBERTA_PROGRAM, ROBERTA_BRICK_CONFIGURATION, $, Blockly) {
 
     var $ = require('jquery');
     var Blockly = require('blocks', 'blocks-msg');
 
     var ROBERTA_NAVIGATION = require('roberta.navigation');
     var ROBERTA_ROBOT = require('roberta.robot');
+    var ROBERTA_PROGRAM = require('roberta.program');
     var userState = require('roberta.user-state');
 
     var MSG = require('message');
@@ -133,7 +134,7 @@ define([ 'exports', 'roberta.navigation', 'message', 'util', 'rest.user', 'rober
                 $('#programNameSave :not(btn)').val('');
                 $('#configurationNameSave :not(btn)').val('');
                 ROBERTA_NAVIGATION.setHeadNavigationMenuState('logout');
-//                Blockly.getMainWorkspace().saveButton.disable();
+                ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.disable("saveProgram");
                 ROBERTA_ROBOT.setState(result);
                 $('#tabProgram').click();
                 MSG.displayInformation(result, "MESSAGE_USER_LOGOUT", result.message);

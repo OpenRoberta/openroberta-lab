@@ -31,6 +31,7 @@ goog.provide('Blockly.WorkspaceSvg');
 goog.require('Blockly.ScrollbarPair');
 goog.require('Blockly.Trashcan');
 goog.require('Blockly.ZoomControls');
+goog.require('Blockly.RobControls');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');
 
@@ -182,7 +183,9 @@ Blockly.WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
   if (this.options.hasTrashcan) {
     bottom = this.addTrashcan_(bottom);
   }
-  if (this.options.zoomOptions && this.options.zoomOptions.controls) {
+  if (this.options.robControls && this.options.zoomOptions && this.options.zoomOptions.controls) {
+    this.addRobControls_(this.options.zoomOptions.controls);
+  } else if (this.options.zoomOptions && this.options.zoomOptions.controls) {
     bottom = this.addZoomControls_(bottom);
   }
   Blockly.bindEvent_(this.svgGroup_, 'mousedown', this, this.onMouseDown_);
@@ -283,7 +286,18 @@ Blockly.WorkspaceSvg.prototype.addZoomControls_ = function(bottom) {
   this.zoomControls_ = new Blockly.ZoomControls(this);
   var svgZoomControls = this.zoomControls_.createDom();
   this.svgGroup_.appendChild(svgZoomControls);
-  return this.zoomControls_.init(bottom);
+  return this.zoomControls_.init(bottom); 
+};
+
+/**
+ * Add OpenRoberta controls.
+ * @private
+ */
+Blockly.WorkspaceSvg.prototype.addRobControls_ = function(zoom) {
+  /** @type {Blockly.RobControls} */
+  this.robControls = new Blockly.RobControls(this, zoom);
+  var svgRobControls_ = this.robControls.createDom();
+  this.svgGroup_.appendChild(svgRobControls_);
 };
 
 /**
@@ -317,7 +331,9 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
   if (this.trashcan) {
     this.trashcan.position();
   }
-  if (this.zoomControls_) {
+  if (this.robControls) {  
+    this.robControls.position();
+  } else if (this.zoomControls_) {  
     this.zoomControls_.position();
   }
   if (this.scrollbar) {

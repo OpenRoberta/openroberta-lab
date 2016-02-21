@@ -356,6 +356,28 @@ Blockly.Css.CONTENT = [
   '.blocklyZoom>image:active {',
     'opacity: .8;',
   '}',
+  
+  'rect[class="blocklyButtonBack"] { ',
+    'fill: #fff;',
+  '}',
+  
+  'g .robButton:hover rect[class="blocklyButtonBack"] {',
+    'fill: #afca04;',
+    'cursor: pointer',
+  '}', 
+  
+  'g .robButton:hover path[class="blocklyButtonPath"] {',
+    'cursor: pointer',
+  '}', 
+  
+  'g .robButton.disabled {',
+    'pointer-events: none;',
+  '}', 
+  
+  'g .robButton.disabled path[class="blocklyButtonPath"] {',
+    'fill: #bbb',
+  '}', 
+  
 
   /* Darken flyout scrollbars due to being on a grey background. */
   /* By contrast, workspace scrollbars are on a white background. */
@@ -443,9 +465,13 @@ Blockly.Css.CONTENT = [
 //  '.blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {',
 //    'margin-left: 8px;',
 //  '}',
+  '.blocklyTreeRow:hover {',
+    'cursor: pointer',
+  '}',
 
   '.blocklyTreeRow:not(.blocklyTreeSelected):hover {',
     'background-color: #e4e4e4;',
+    'cursor: pointer',
   '}',
 
   '.blocklyTreeSeparator {',
@@ -498,7 +524,6 @@ Blockly.Css.CONTENT = [
 //    'vertical-align: middle;',
 //  '}',
   '.blocklyTreeLabel {',
-    'cursor: default;',
     'font-family: sans-serif;',
     'position: relative;',
     'top: 20px;',

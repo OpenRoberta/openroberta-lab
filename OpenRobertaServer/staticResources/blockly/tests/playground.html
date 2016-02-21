@@ -5,43 +5,7 @@
 <title>Blockly Playground</title>
 <script src="../blockly_compressed.js"></script>
 <script src="../blocks_compressed.js"></script>
-<script src="../generators/javascript.js"></script>
-<script src="../generators/javascript/logic.js"></script>
-<script src="../generators/javascript/loops.js"></script>
-<script src="../generators/javascript/math.js"></script>
-<script src="../generators/javascript/text.js"></script>
-<script src="../generators/javascript/lists.js"></script>
-<script src="../generators/javascript/colour.js"></script>
-<script src="../generators/javascript/variables.js"></script>
-<script src="../generators/javascript/procedures.js"></script>
-<script src="../generators/php.js"></script>
-<script src="../generators/php/logic.js"></script>
-<script src="../generators/php/loops.js"></script>
-<script src="../generators/php/math.js"></script>
-<script src="../generators/php/text.js"></script>
-<script src="../generators/php/lists.js"></script>
-<script src="../generators/php/colour.js"></script>
-<script src="../generators/php/variables.js"></script>
-<script src="../generators/php/procedures.js"></script>
-<script src="../generators/python.js"></script>
-<script src="../generators/python/logic.js"></script>
-<script src="../generators/python/loops.js"></script>
-<script src="../generators/python/math.js"></script>
-<script src="../generators/python/text.js"></script>
-<script src="../generators/python/lists.js"></script>
-<script src="../generators/python/colour.js"></script>
-<script src="../generators/python/variables.js"></script>
-<script src="../generators/python/procedures.js"></script>
-<script src="../generators/dart.js"></script>
-<script src="../generators/dart/logic.js"></script>
-<script src="../generators/dart/loops.js"></script>
-<script src="../generators/dart/math.js"></script>
-<script src="../generators/dart/text.js"></script>
-<script src="../generators/dart/lists.js"></script>
-<script src="../generators/dart/colour.js"></script>
-<script src="../generators/dart/variables.js"></script>
-<script src="../generators/dart/procedures.js"></script>
-<script src="../msg/js/da.js"></script>
+<script src="../msg/js/en.js"></script>
 <script src="../core/blockly.js"></script>
 <script src="../core/css.js"></script>
 <script src="../core/inject.js"></script>
@@ -59,6 +23,9 @@
 <script src="../core/mutatorPlus.js"></script>
 <script src="../core/mutatorMinus.js"></script>
 <script src="../core/contextmenu.js"></script>
+<script src="../core/rob_controls.js"></script>
+<script src="../core/tooltip.js"></script>
+<script src="../core/trashcan.js"></script>
 <script src="../blocks/logic.js"></script>
 <script src="../blocks/loops.js"></script>
 <script src="../blocks/math.js"></script>
@@ -108,7 +75,8 @@ function start() {
               scaleSpeed: 1.1
              },
            checkInTask:['start', '_def', 'event', 'EV3'],
-           variableDeclaration: true
+           variableDeclaration: true,
+           robControls: true
           });
 }
 

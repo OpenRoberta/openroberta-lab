@@ -207,6 +207,7 @@ Blockly.parseOptions_ = function(options) {
     realtimeOptions: realtimeOptions,
     checkInTask: options['checkInTask'] || false,
     variableDeclaration: !!options['variableDeclaration'],
+    robControls: !!options['robControls'],
   };
 };
 

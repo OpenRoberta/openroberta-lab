@@ -82,12 +82,12 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
         if (userState.programSaved) {
             $('#menuSaveProg').parent().removeClass('login');
             $('#menuSaveProg').parent().removeClass('disabled');
-            // ROBERTA_PROGRAM.getBlocklyWorkspace().saveButton.enable();
+            ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.enable('saveProgram');
         }
         if (userState.configurationSaved) {
             $('#menuSaveConfig').parent().removeClass('login');
             $('#menuSaveConfig').parent().removeClass('disabled');
-            // BRICKLY.getBricklyWorkspace().saveButton.enable();
+            BRICKLY.getBricklyWorkspace().robControls.enable('saveProgram');
         }
     }
     exports.activateProgConfigMenu = activateProgConfigMenu;
@@ -112,7 +112,7 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                     $('#iconDisplayRobotState').removeClass('typcn-Roberta');
                     $('#iconDisplayRobotState').addClass('typcn-ev3');
                     $('#menuShowCode').parent().removeClass('disabled');
-                    // ROBERTA_PROGRAM.getBlocklyWorkspace().codeButton.enable();
+                    ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.enable('showCode');
                     BRICKLY.loadToolboxAndConfiguration();
                 } else if (robot === "oraSim") {
                     ROBERTA_BRICK_CONFIGURATION.setConfiguration("ORSim");
@@ -123,7 +123,7 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                     $('#iconDisplayRobotState').removeClass('typcn-ev3');
                     $('#iconDisplayRobotState').addClass('typcn-Roberta');
                     $('#menuShowCode').parent().addClass('disabled');
-                    // ROBERTA_PROGRAM.getBlocklyWorkspace().codeButton.disable();
+                    ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.disable('showCode');
                     PROGRAM.loadProgramFromListing('NEPOprog', 'Roberta', function(result) {
                         if (result.rc === 'ok') {
                             ROBERTA_PROGRAM.showProgram(result, true, 'NEPOprog');
@@ -176,7 +176,7 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                 ROBERTA_BRICK_CONFIGURATION.setConfiguration("EV3basis");//            
                 BRICKLY.initConfigurationEnvironment();
                 $('#menuSaveConfig').parent().addClass('disabled');
-                // BRICKLY.getBricklyWorkspace().saveButton.disable();
+                //BRICKLY.getBricklyWorkspace().robControls.disable('saveProgram');
             } else if (domId === 'menuListConfig') { //  Submenu 'Configuration'
                 deactivateProgConfigMenu();
                 $('#tabs').css('display', 'inline');

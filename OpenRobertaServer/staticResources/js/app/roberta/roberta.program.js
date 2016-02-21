@@ -25,6 +25,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             });
         }
     }
+    exports.saveToServer = saveToServer;
 
     /**
      * Save program with new name to server
@@ -41,7 +42,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                 if (result.rc === 'ok') {
                     ROBERTA_USER.setProgram(progName);
                     $('#menuSaveProg').parent().removeClass('disabled');
-                    blocklyWorkspace.saveButton.enable();
+                    blocklyWorkspace.robControls.enable("saveProgram");
                     userState.programSaved = true;
                     userState.programModified = false;
                     userState.programTimestamp = result.lastChanged;
@@ -92,10 +93,10 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                 if (result.rc === 'ok') {
                     userState.programShared = false;
                     $('#menuSaveProg').parent().removeClass('disabled');
-                    // blocklyWorkspace.saveButton.enable();
+                    blocklyWorkspace.robControls.enable("saveProgram");
                     if (right === Blockly.Msg.POPUP_SHARE_READ) {
                         $('#menuSaveProg').parent().addClass('disabled');
-                        // blocklyWorkspace.saveButton.disable();
+                        blocklyWorkspace.robControls.disable('saveProgram');
                     } else if (right === Blockly.Msg.POPUP_SHARE_WRITE) {
                         userState.programShared = true;
                     }
@@ -263,7 +264,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             initProgramEnvironment();
             $('#tabProgram').click();
             $('#menuSaveProg').parent().addClass('disabled');
-            // Blockly.getMainWorkspace().saveButton.disable();
+            blocklyWorkspace.robControls.disable('saveProgram');
             return true;
         }
     }
@@ -344,9 +345,9 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
         var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
         var xmlTextConfiguration = ROBERTA_BRICK_CONFIGURATION.getXmlOfConfiguration();
-        if (Blockly.hasStartButton) {
-            // Blockly.getMainWorkspace().startButton.disable();
-        }
+//        if (Blockly.hasStartButton) {
+//            blocklyWorkspace.robControls.disable('runOnBrick');
+//        }
         PROGRAM.runOnBrick(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
             //PROGRAM.showSourceProgram(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
             // console.log(result.javaSource);
@@ -425,10 +426,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                     path : '/blockly/',
                     toolbox : toolbox.data,
                     trashcan : true,
-                    code : true,
-                    save : true,
-                    check : true,
-                    start : true,
+                    scrollbars : true,
                     zoom : {
                         controls : true,
                         wheel : true,
@@ -438,7 +436,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                         scaleSpeed : 1.1
                     },
                     checkInTask : [ 'start', '_def', 'event' ],
-                    variableDeclaration : true
+                    variableDeclaration : true,
+                    robControls : true
                 });
             } else {
                 $('#blocklyDiv').html('');
@@ -447,10 +446,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                     toolbox : toolbox.data,
                     readOnly : true,
                     trashcan : false,
-                    code : false,
-                    save : false,
-                    check : false,
-                    start : false,
                     zoom : {
                         controls : true,
                         wheel : true,
@@ -460,7 +455,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                         scaleSpeed : 1.1
                     },
                     checkInTask : [ 'start', '_def', 'event' ],
-                    variableDeclaration : true
+                    variableDeclaration : true,
+                    robControls : true
                 });
             }
             if ($(window).width() < 768 && readOnly) {
@@ -471,10 +467,10 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             }
             if (userState.robot === "ev3") {
                 $('#menuShowCode').parent().removeClass('disabled');
-                //workspace.codeButton.enable();
+                blocklyWorkspace.robControls.enable('showCode');
             } else {
                 $('#menuShowCode').parent().addClass('disabled');
-                //workspace.codeButton.disable();
+                blocklyWorkspace.robControls.disable('showCode');
             }
         }
         blocklyWorkspace.addChangeListener(function(event) {
