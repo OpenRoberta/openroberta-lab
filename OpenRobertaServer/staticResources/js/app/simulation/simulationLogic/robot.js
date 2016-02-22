@@ -34,6 +34,7 @@ define([ 'simulation.simulation' ], function(SIM) {
             this.encoder.right = 0;
             this.led.color = '#dddddd';
             this.led.mode = OFF;
+            this.led.blink = 0;
             this.time = 0;
         };
     }

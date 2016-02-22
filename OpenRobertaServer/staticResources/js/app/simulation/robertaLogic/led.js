@@ -13,8 +13,15 @@ define(function() {
     var Led = function() {
         /** color of the led */
         this.color = "";
-        /** Mode of operation of the robot led (current modes "ON" and "OFF"). */
+        /**
+         * Mode of operation of the robot led (current modes "ON", "OFF",
+         * "FLASH" and "DOUBLE_FLASH").
+         */
         this.mode = OFF;
+        /** Number of blink cycles remaining (on/off * 2) */
+        this.blink = 0;
+        /** Time accumulator for the blink cycles */
+        this.blinkAcc = 0.0;
     };
 
     /**

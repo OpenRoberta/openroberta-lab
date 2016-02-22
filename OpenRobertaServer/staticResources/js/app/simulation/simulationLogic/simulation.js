@@ -270,10 +270,28 @@ define([ 'exports', 'simulation.robot.simple', 'simulation.robot.draw', 'simulat
         exports.output.right = right * MAXPOWER || 0;
 
         robot.led.mode = exports.output.ledMode = programEval.led.mode || "OFF";
-        if (programEval.led.mode && programEval.led.mode == "OFF") {
+        switch (programEval.led.mode) {
+        case "OFF":
             robot.led.color = exports.output.led = "#dddddd"; // = led off
-        } else {
+            break;
+        case "ON":
             robot.led.color = exports.output.led = programEval.led.color;
+            break;
+        case "FLASH":
+        case "DOUBLE_FLASH":
+            if (programEval.led.blink > 0) {
+                if (programEval.led.blink & 0x1) {
+                    robot.led.color = exports.output.led = "#dddddd"; // = led off
+                } else {
+                    robot.led.color = exports.output.led = programEval.led.color;
+                }
+                programEval.led.blinkAcc += dt;
+                if (programEval.led.blinkAcc > 0.5) {
+                    programEval.led.blinkAcc -= 0.5;
+                    programEval.led.blink -= 1;
+                }
+            }
+            break;
         }
     }
 

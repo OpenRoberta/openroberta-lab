@@ -81,8 +81,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
                 break;
 
             case TURN_LIGHT:
-                this.led.color = stmt.color;
-                this.led.mode = stmt.mode;
+                evalLedOnAction(this, simulationSensorData, stmt);
                 break;
 
             case STOP_DRIVE:
@@ -120,6 +119,20 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
         obj.program.setIsRunningTimer(true);
         obj.program.resetTimer(simulationSensorData.time);
         obj.program.setTimer(evalExpr(obj, stmt.time));
+    }
+
+    function evalLedOnAction(obj, simulationSensorData, stmt) {
+        obj.led.color = stmt.color;
+        obj.led.mode = stmt.mode;
+        obj.led.blinkAcc = 0.0;
+        switch (obj.led.mode) {
+        case "FLASH":
+            obj.led.blink = 2;
+            break;
+        case "DOUBLE_FLASH":
+            obj.led.blink = 4;
+            break;
+        }
     }
 
     function evalTurnAction(obj, simulationSensorData, stmt) {
