@@ -168,7 +168,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
 
     function setAngleToTurn(obj, stmt) {
         if (stmt.angle != undefined) {
-            obj.actors.clculateAngleToCover(obj.program, evalExpr(obj, stmt.angle));
+            obj.actors.calculateAngleToCover(obj.program, evalExpr(obj, stmt.angle));
         }
     }
 

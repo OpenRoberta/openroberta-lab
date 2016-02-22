@@ -157,7 +157,7 @@ define([ 'robertaLogic.motor' ], function(Motor) {
      * @param angle
      *            {Number} - angle we want to cover
      */
-    Actors.prototype.clculateAngleToCover = function(program, angle) {
+    Actors.prototype.calculateAngleToCover = function(program, angle) {
         extraRotation = TURN_RATIO * (angle / 720.);
         this.getLeftMotor().setRotations(extraRotation);
         this.getRightMotor().setRotations(extraRotation);
