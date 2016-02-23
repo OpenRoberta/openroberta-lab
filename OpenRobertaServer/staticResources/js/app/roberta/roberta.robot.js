@@ -61,9 +61,9 @@ define([ 'exports', 'util', 'message', 'roberta.brick-configuration', 'roberta.u
                     },
                     messages : {
                         singleModalInput : {
-                            required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"]),
-                            minlength : jQuery.validator.format(Blockly.Msg["TOKEN_LENGTH"]),
-                            maxlength : jQuery.validator.format(Blockly.Msg["TOKEN_LENGTH"])
+                            required : jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"]),
+                            minlength : jQuery.validator.format(Blockly.Msg["VALIDATION_TOKEN_LENGTH"]),
+                            maxlength : jQuery.validator.format(Blockly.Msg["VALIDATION_TOKEN_LENGTH"])
                         }
                     }
                 });

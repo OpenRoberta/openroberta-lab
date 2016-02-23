@@ -180,7 +180,7 @@ define([ 'exports', 'message', 'log', 'util', 'rest.configuration', 'roberta.use
                     },
                     messages : {
                         singleModalInput : {
-                            required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"]),
+                            required : jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"]),
                             regex : jQuery.validator.format(Blockly.Msg["MESSAGE_INVALID_NAME"])
                         }
                     }

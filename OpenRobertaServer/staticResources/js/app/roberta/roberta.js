@@ -347,7 +347,7 @@ define([ 'require', 'exports', 'simulation.simulation', 'roberta.language', 'rob
         initProgramNameTable();
         initConfigurationNameTable();
         initRelationsTable();
-        BRICKLY.init();
+        
         COMM.json("/toolbox", {
             "cmd" : "loadT",
             "name" : userState.toolbox,
@@ -356,10 +356,10 @@ define([ 'require', 'exports', 'simulation.simulation', 'roberta.language', 'rob
             ROBERTA_PROGRAM.injectBlockly(result);
             ROBERTA_ROBOT.initRobot();
             initBlockly();
-
+            BRICKLY.init();
             $("#show-startup-message").modal("show");
         });
-
+        
         $('#menuTabProgram').parent().addClass('disabled');
         $('#tabProgram').addClass('tabClicked');
         $('#head-navigation-configuration-edit').css('display', 'none');

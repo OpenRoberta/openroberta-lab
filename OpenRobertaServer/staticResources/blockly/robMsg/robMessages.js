@@ -481,16 +481,18 @@ Blockly.Msg.DATATABLE_TO = 'to';
 Blockly.Msg.DATATABLE_OF = 'of';
 Blockly.Msg.DATATABLE_ENTRIES = 'entries';
 Blockly.Msg.DATATABLE_EMPTY_TABLE = 'There are no entries in this table';
-Blockly.Msg.TOKEN_LENGTH = 'Token length is 8 characters!';
 
-Blockly.Msg.FIELD_REQUIRED = 'This field cannot be empty!';
-Blockly.Msg.PASSWORD_MIN_LENGTH = 'Password min length is 6!';
-Blockly.Msg.TOKEN_LENGTH = 'Token length is 8 characters!';
-Blockly.Msg.SECOND_PASSWORD_EQUAL = 'The two passwords must be equal!';
-Blockly.Msg.VALID_EMAIL_ADDRESS = 'Please enter valid email address!';
-Blockly.Msg.EMAIL_SEND = 'Send!!!';
-Blockly.Msg.REGISTER_USER = 'Register!';
-Blockly.Msg.PASSWORD_RECOVERY = 'Password Recovery'
+
+// These messages are used for validation of forms (please use short messages)
+Blockly.Msg.VALIDATION_FIELD_REQUIRED = 'This field cannot be empty!';
+Blockly.Msg.VALIDATION_PASSWORD_MIN_LENGTH = 'Password min length is 6!';
+Blockly.Msg.VALIDATION_TOKEN_LENGTH = 'Token length is 8 characters!';
+Blockly.Msg.VALIDATION_SECOND_PASSWORD_EQUAL = 'The two passwords must be equal!';
+Blockly.Msg.VALIDATION_VALID_EMAIL_ADDRESS = 'Please enter valid email address!';
+
+Blockly.Msg.POPUP_EMAIL_SEND = 'Send!!!';
+Blockly.Msg.POPUP_REGISTER_USER = 'Register!';
+Blockly.Msg.POPUP_PASSWORD_RECOVERY = 'Password Recovery'
 Blockly.Msg.POPUP_NEW_PASSWORD = 'New Password';
 Blockly.Msg.POPUP_OLD_PASSWORD = 'Old Password';
 Blockly.Msg.POPUP_REPEAT_PASSWORD = 'Repeat password';

@@ -1,5 +1,6 @@
-define([ 'exports', 'roberta.navigation', 'message', 'util', 'rest.user', 'roberta.user-state', 'roberta.robot', 'roberta.program','roberta.brick-configuration', 'jquery', 'blocks', 'blocks-msg' ], function(
-        exports, ROBERTA_NAVIGATION, MSG, UTIL, USER, userState, ROBERTA_ROBOT, ROBERTA_PROGRAM, ROBERTA_BRICK_CONFIGURATION, $, Blockly) {
+define([ 'exports', 'roberta.navigation', 'message', 'util', 'rest.user', 'roberta.user-state', 'roberta.robot', 'roberta.program',
+        'roberta.brick-configuration', 'jquery', 'blocks', 'blocks-msg' ], function(exports, ROBERTA_NAVIGATION, MSG, UTIL, USER, userState, ROBERTA_ROBOT,
+        ROBERTA_PROGRAM, ROBERTA_BRICK_CONFIGURATION, $, Blockly) {
 
     var $ = require('jquery');
     var Blockly = require('blocks', 'blocks-msg');
@@ -185,10 +186,10 @@ define([ 'exports', 'roberta.navigation', 'message', 'util', 'rest.user', 'rober
             },
             messages : {
                 loginAccountName : {
-                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"])
+                    required : jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"])
                 },
                 loginPassword : {
-                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"])
+                    required : jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"])
                 }
             }
         });
@@ -218,21 +219,21 @@ define([ 'exports', 'roberta.navigation', 'message', 'util', 'rest.user', 'rober
             },
             messages : {
                 registerAccountName : {
-                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"])
+                    required : jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"])
                 },
                 registerPass : {
-                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"]),
-                    minlength : jQuery.validator.format(Blockly.Msg["PASSWORD_MIN_LENGTH"])
+                    required : jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"]),
+                    minlength : jQuery.validator.format(Blockly.Msg["VALIDATION_PASSWORD_MIN_LENGTH"])
                 },
                 registerPassConfirm : {
-                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"]),
+                    required : jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"]),
                     equalTo : jQuery.validator.format(Blockly.Msg["SECOND_PASSWORD_EQUAL"])
                 },
                 registerUserName : {
-                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"])
+                    required : jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"])
                 },
                 registerUserEmail : {
-                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"]),
+                    required : jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"]),
                     email : jQuery.validator.format(Blockly.Msg["VALID_EMAIL_ADDRESS"])
                 }
             }
@@ -258,15 +259,15 @@ define([ 'exports', 'roberta.navigation', 'message', 'util', 'rest.user', 'rober
             },
             messages : {
                 passOld : {
-                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"])
+                    required : jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"])
                 },
                 passNew : {
-                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"]),
-                    minlength : jQuery.validator.format(Blockly.Msg["PASSWORD_MIN_LENGTH"])
+                    required : jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"]),
+                    minlength : jQuery.validator.format(Blockly.Msg["VALIDATION_PASSWORD_MIN_LENGTH"])
                 },
                 passNewRepeat : {
-                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"]),
-                    equalTo : jQuery.validator.format(Blockly.Msg["SECOND_PASSWORD_EQUAL"])
+                    required : jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"]),
+                    equalTo : jQuery.validator.format(Blockly.Msg["VALIDATION_SECOND_PASSWORD_EQUAL"])
                 }
             }
         });
@@ -286,7 +287,7 @@ define([ 'exports', 'roberta.navigation', 'message', 'util', 'rest.user', 'rober
             },
             messages : {
                 lost_email : {
-                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"]),
+                    required : jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"]),
                     email : jQuery.validator.format(Blockly.Msg["VALID_EMAIL_ADDRESS"])
                 }
             }
@@ -342,7 +343,7 @@ define([ 'exports', 'roberta.navigation', 'message', 'util', 'rest.user', 'rober
             e.preventDefault();
             createUserToServer();
         });
-        $("#registerUser").text(Blockly.Msg["REGISTER_USER"]);
+        $("#registerUser").text(Blockly.Msg["POPUP_REGISTER_USER"]);
         $("#registerAccountName").prop("disabled", false);
         $("#userInfoLabel").addClass('hidden');
         $("#loginLabel").removeClass('hidden');
@@ -516,7 +517,7 @@ define([ 'exports', 'roberta.navigation', 'message', 'util', 'rest.user', 'rober
             },
             messages : {
                 singleModalInput : {
-                    required : jQuery.validator.format(Blockly.Msg["FIELD_REQUIRED"])
+                    required : jQuery.validator.format(Blockly.Msg["VALIDATION_FIELD_REQUIRED"])
                 }
             }
         });
@@ -549,7 +550,6 @@ define([ 'exports', 'roberta.navigation', 'message', 'util', 'rest.user', 'rober
         $('#change-user-password').modal('show');
     }
     exports.showResetPassword = showResetPassword;
-    
 
     /**
      * Set program name

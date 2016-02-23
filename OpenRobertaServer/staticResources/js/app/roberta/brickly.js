@@ -107,7 +107,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'roberta.user-s
     function switchLanguageInBrickly() {
         if (userState.robot !== 'oraSim') {
             var configurationBlocks = null;
-            if (bricklyWorkspace !== null) {
+            if (bricklyWorkspace !== null && bricklyWorkspace !== undefined) {
                 var xmlConfiguration = Blockly.Xml.workspaceToDom(bricklyWorkspace);
                 if (xmlConfiguration.childNodes.length != 0) {
                     configurationBlocks = Blockly.Xml.domToText(xmlConfiguration);
