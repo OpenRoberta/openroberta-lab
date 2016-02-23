@@ -207,7 +207,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             rules : {
                 singleModalInput : {
                     required : true,
-                    regex : /^[a-zA-Z][a-zA-Z0-9]*$/
+                    regex : /^[a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]*$/
                 }
             },
             errorClass : "form-invalid",

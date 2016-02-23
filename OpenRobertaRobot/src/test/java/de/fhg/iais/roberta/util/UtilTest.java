@@ -13,6 +13,9 @@ public class UtilTest {
         assertTrue(Util.isValidJavaIdentifier("P"));
         assertTrue(Util.isValidJavaIdentifier("Pid"));
         assertTrue(Util.isValidJavaIdentifier("€Pid_diP€"));
+        assertTrue(Util.isValidJavaIdentifier("_ö_ä_ü_ß_"));
+        assertTrue(Util.isValidJavaIdentifier("ö_ä_ü_ß"));
+        assertTrue(Util.isValidJavaIdentifier("__üäö$€"));
         assertFalse(Util.isValidJavaIdentifier(null));
         assertFalse(Util.isValidJavaIdentifier(""));
         assertFalse(Util.isValidJavaIdentifier("1qay"));
