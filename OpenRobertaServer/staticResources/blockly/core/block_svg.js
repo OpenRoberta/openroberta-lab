@@ -466,6 +466,9 @@ Blockly.BlockSvg.prototype.onMouseDown_ = function(e) {
     e.stopPropagation();
     return;
   }
+  if (this.workspace.robControls) {
+    this.workspace.robControls.showZoom(false);
+  }
   this.workspace.markFocused();
   // Update Blockly's knowledge of its own location.
   Blockly.svgResize(this.workspace);

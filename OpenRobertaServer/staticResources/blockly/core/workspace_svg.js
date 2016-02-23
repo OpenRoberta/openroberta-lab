@@ -602,6 +602,9 @@ Blockly.WorkspaceSvg.prototype.isDeleteArea = function(e) {
  * @private
  */
 Blockly.WorkspaceSvg.prototype.onMouseDown_ = function(e) {
+  if (this.robControls && this.robControls.showZoom) {
+    this.robControls.showZoom(false);
+  }
   this.markFocused();
   if (Blockly.isTargetInput_(e)) {
     return;

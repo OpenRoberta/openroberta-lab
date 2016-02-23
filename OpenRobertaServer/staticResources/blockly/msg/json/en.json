@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2016-02-23 12:49:40.795636",
+		"lastupdated": "2016-02-23 13:37:00.917266",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -779,6 +779,12 @@
 	"DATATABLE_OF": "of",
 	"DATATABLE_ENTRIES": "entries",
 	"DATATABLE_EMPTY_TABLE": "There are no entries in this table",
+	"SEND_DATA": "data to send",
+	"USED_CONNECTION": "via connection",
+	"RECEIVED_DATA": "data received",
+	"CONNECT": "connect to robot name",
+	"WAIT_FOR_CONNECTION": "wait for connection",
+	"TOKEN_LENGTH": "Token length is 8 characters!",
 	"VALIDATION_FIELD_REQUIRED": "This field cannot be empty!",
 	"VALIDATION_PASSWORD_MIN_LENGTH": "Password min length is 6!",
 	"VALIDATION_TOKEN_LENGTH": "Token length is 8 characters!",

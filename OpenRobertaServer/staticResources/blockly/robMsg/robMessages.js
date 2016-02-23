@@ -481,6 +481,12 @@ Blockly.Msg.DATATABLE_TO = 'to';
 Blockly.Msg.DATATABLE_OF = 'of';
 Blockly.Msg.DATATABLE_ENTRIES = 'entries';
 Blockly.Msg.DATATABLE_EMPTY_TABLE = 'There are no entries in this table';
+Blockly.Msg.SEND_DATA = 'data to send';
+Blockly.Msg.USED_CONNECTION = 'via connection';
+Blockly.Msg.RECEIVED_DATA = 'data received';
+Blockly.Msg.CONNECT = 'connect to robot name';
+Blockly.Msg.WAIT_FOR_CONNECTION = 'wait for connection';
+Blockly.Msg.TOKEN_LENGTH = 'Token length is 8 characters!';
 
 
 // These messages are used for validation of forms (please use short messages)

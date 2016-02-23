@@ -212,13 +212,13 @@ Blockly.Trashcan.prototype.position = function() {
     return;
   }
   if (this.workspace_.RTL) {
-    this.left_ = this.MARGIN_SIDE_ + Blockly.Scrollbar.scrollbarThickness;
+    this.left_ = this.MARGIN_SIDE_;// + Blockly.Scrollbar.scrollbarThickness;
   } else {
     this.left_ = metrics.viewWidth + metrics.absoluteLeft -
-        this.WIDTH_ - this.MARGIN_SIDE_ - Blockly.Scrollbar.scrollbarThickness;
+        this.WIDTH_ - this.MARGIN_SIDE_;// - Blockly.Scrollbar.scrollbarThickness;
   }
   this.top_ = metrics.viewHeight + metrics.absoluteTop -
-      (this.BODY_HEIGHT_ + this.LID_HEIGHT_) - this.bottom_;
+      (this.BODY_HEIGHT_ + this.LID_HEIGHT_) - this.MARGIN_BOTTOM_;
   this.svgGroup_.setAttribute('transform',
       'translate(' + this.left_ + ',' + this.top_ + ')');
 };

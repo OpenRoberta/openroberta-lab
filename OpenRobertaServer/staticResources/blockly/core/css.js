@@ -334,10 +334,11 @@ Blockly.Css.CONTENT = [
   
   '.blocklyScrollbarBackground {',
     'opacity: 0;',
+    'display: none;',
   '}',
 
   '.blocklyScrollbarKnob {',
-    'fill: #ccc;',
+    'display: none;',
   '}',
 
   '.blocklyScrollbarBackground:hover+.blocklyScrollbarKnob,',
@@ -360,6 +361,10 @@ Blockly.Css.CONTENT = [
   'rect[class="blocklyButtonBack"] { ',
     'fill: #fff;',
   '}',
+  
+  'g .robButtonHidden {',
+    'display: none',
+  '}', 
   
   'g .robButton:hover rect[class="blocklyButtonBack"] {',
     'fill: #afca04;',
