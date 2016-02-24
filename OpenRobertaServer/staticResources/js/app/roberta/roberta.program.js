@@ -472,10 +472,22 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                 $('#menuShowCode').parent().addClass('disabled');
                 blocklyWorkspace.robControls.disable('showCode');
             }
+            blocklyWorkspace.addChangeListener(function(event) {
+                console.log("changed");
+            });
+            Blockly.bindEvent_(blocklyWorkspace.robControls.runOnBrick, 'mousedown', null, function(e) {
+                LOG.info('runOnBrick from blockly button');
+                start();
+            });
+            Blockly.bindEvent_(blocklyWorkspace.robControls.runInSim, 'mousedown', null, function(e) {
+                 LOG.info('runInSim from blockly button');
+                 start();
+            });
+            Blockly.bindEvent_(blocklyWorkspace.robControls.saveProgram, 'mousedown', null, function(e) {
+                LOG.info('saveProgram from blockly button');
+                saveToServer();
+            });
         }
-        blocklyWorkspace.addChangeListener(function(event) {
-            console.log("changed");
-        });
     }
     exports.injectBlockly = injectBlockly;
 

@@ -173,8 +173,8 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyHighlightedConnectionPath {',
-    'fill: none;',
-    'stroke: #fc3;',
+    'fill: #FFDC00;',
+    'stroke: #FFDC00;',
     'stroke-width: 4px;',
   '}',
 
@@ -185,7 +185,7 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklySelected>.blocklyPath {',
-    'stroke: #fc3;',
+    'stroke: #FFDC00;',
     'stroke-width: 3px;',
   '}',
 
@@ -218,6 +218,11 @@ Blockly.Css.CONTENT = [
     'fill: #fff;',
     'font-family: sans-serif;',
     'font-size: 11pt;',
+  '}',
+  '.blocklyText.brick_label {',
+    'fill: #000;',
+    'font-weight: bold;',
+    'font-size: 14pt;',
   '}',
 
   '.blocklyNonEditableText>text {',

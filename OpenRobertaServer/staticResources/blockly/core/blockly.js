@@ -197,6 +197,24 @@ Blockly.OPPOSITE_TYPE[Blockly.NEXT_STATEMENT] = Blockly.PREVIOUS_STATEMENT;
 Blockly.OPPOSITE_TYPE[Blockly.PREVIOUS_STATEMENT] = Blockly.NEXT_STATEMENT;
 
 /**
+ * Lookup table for determining the color of a data type .
+ * @const
+ */
+Blockly.DATA_TYPE = [];
+Blockly.DATA_TYPE['Number'] = Blockly.CAT_MATH_RGB;
+Blockly.DATA_TYPE['String'] = Blockly.CAT_TEXT_RGB;
+Blockly.DATA_TYPE['Boolean'] = Blockly.CAT_LOGIC_RGB;
+Blockly.DATA_TYPE['Colour'] = Blockly.CAT_COLOUR_RGB;
+Blockly.DATA_TYPE['Connection'] = Blockly.CAT_COMMUNICATION_RGB;
+Blockly.DATA_TYPE['Sensor'] = Blockly.CAT_SENSOR_RGB;
+Blockly.DATA_TYPE['Actor'] = Blockly.CAT_ACTION_RGB;
+Blockly.DATA_TYPE['Array_Number'] = Blockly.CAT_LIST_RGB;
+Blockly.DATA_TYPE['Array_String'] = Blockly.CAT_LIST_RGB;
+Blockly.DATA_TYPE['Array_Boolean'] = Blockly.CAT_LIST_RGB;
+Blockly.DATA_TYPE['Array_Colour'] = Blockly.CAT_LIST_RGB;
+Blockly.DATA_TYPE['Array_Connection'] = Blockly.CAT_LIST_RGB;
+
+/**
  * Currently selected block.
  * @type {Blockly.Block}
  */

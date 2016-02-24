@@ -1,5 +1,5 @@
-define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'roberta.user-state', 'blocks' ], function(require, exports, LOG, UTIL, COMM, MSG, userState,
-        Blockly) {
+define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'roberta.user-state', 'blocks', 'roberta.brick-configuration'], function(require, exports, LOG, UTIL, COMM, MSG, userState,
+        Blockly, ROBERTA_BRICK_CONFIGURATION) {
 
     var bricklyWorkspace;
 
@@ -26,18 +26,29 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'roberta.user-s
                 path : '/blockly/',
                 toolbox : toolbox.data,
                 trashcan : true,
-                save : true,
                 scrollbars : true,
                 zoom : {
-                    controls : true,
-                    wheel : true,
-                    startScale : 1.0,
-                    maxScale : 4,
-                    minScale : .25,
-                    scaleSpeed : 1.1
-                },
-                checkInTask : [ 'EV3' ],
-                variableDeclaration : true
+                     controls : true,
+                     wheel : true,
+                     startScale : 1.0,
+                     maxScale : 4,
+                     minScale : .25,
+                     scaleSpeed : 1.1
+                     },
+                checkInTask : [ '-Brick' ],
+                variableDeclaration : true,
+                robControls : true
+            });
+            bricklyWorkspace.addChangeListener(function(event) {
+                console.log("changedBrickly");
+            });
+            // Configurations can't be executed
+            bricklyWorkspace.robControls.runOnBrick.setAttribute("style", "display : none");
+            bricklyWorkspace.robControls.runInSim.setAttribute("style", "display: none");
+            
+            Blockly.bindEvent_(bricklyWorkspace.robControls.saveProgram, 'mousedown', null, function(e) {
+                LOG.info('saveProgram from blockly button');
+                ROBERTA_BRICK_CONFIGURATION.save();
             });
             initConfigurationEnvironment();
         } else {
@@ -150,7 +161,7 @@ define([ 'require', 'exports', 'log', 'util', 'comm', 'message', 'roberta.user-s
     exports.loadToolbox = loadToolbox;
 
     function saveToServer() {
-        saveConfigurationToServer();
+        ROBERTA_BRICK-CONFIGURATION.saveConfigurationToServer();
     }
 
     /**

@@ -27,12 +27,12 @@ Blockly.Blocks['robBrick_EV3-Brick'] = {
 
     init : function() {
         // this.setHelpUrl(Blockly.Msg.EV3BRICK_HELPURL);
-        this.setColour([ 187, 187, 187 ]);
+        this.setColour('#BBBBBB');
         this.setInputsInline(false);
         var wheelDiameter = new Blockly.FieldTextInput('0', Blockly.FieldTextInput.nonnegativeNumberValidator)
         var trackWidth = new Blockly.FieldTextInput('0', Blockly.FieldTextInput.nonnegativeNumberValidator)
         // var image = new Blockly.FieldImage('../media/EV3.png', 180, 18);
-        this.appendDummyInput().appendField(new Blockly.FieldLabel("EV3", 'ev3_label'));
+        this.appendDummyInput().appendField(new Blockly.FieldLabel("EV3", 'brick_label'));
         this.appendDummyInput().appendField(Blockly.Msg.BRICK_WHEEL_DIAMETER).appendField(wheelDiameter, 'WHEEL_DIAMETER').appendField('cm');
         this.appendDummyInput().appendField(Blockly.Msg.BRICK_TRACK_WIDTH).appendField(trackWidth, 'TRACK_WIDTH').appendField('cm');
         this.appendValueInput('S1').appendField('Sensor 1').setAlign(Blockly.ALIGN_RIGHT).setCheck('Sensor');
@@ -64,7 +64,7 @@ Blockly.Blocks['robBrick_ultrasonic'] = {
 
     init : function() {
         // this.setHelpUrl(Blockly.Msg.ULTRASONIC_HELPURL);
-        this.setColour([ 143, 164, 2 ]);
+        this.setColour(Blockly.CAT_SENSOR_RGB);
         this.appendDummyInput().appendField(Blockly.Msg.SENSOR_ULTRASONIC);
         this.setOutput(true, 'Sensor');
         this.setTooltip(Blockly.Msg.ULTRASONIC_TOOLTIP);
@@ -85,7 +85,7 @@ Blockly.Blocks['robBrick_colour'] = {
      */
     init : function() {
         // this.setHelpUrl(Blockly.Msg.COLOUR_HELPURL);
-        this.setColour([ 143, 164, 2 ]);
+        this.setColour(Blockly.CAT_SENSOR_RGB);
         this.appendDummyInput().appendField(Blockly.Msg.SENSOR_COLOUR);
         this.setOutput(true, 'Sensor');
         this.setTooltip(Blockly.Msg.COLOUR_TOOLTIP);
@@ -107,7 +107,7 @@ Blockly.Blocks['robBrick_infrared'] = {
 
     init : function() {
         // this.setHelpUrl(Blockly.Msg.INFRARED_HELPURL);
-        this.setColour([ 143, 164, 2 ]);
+        this.setColour(Blockly.CAT_SENSOR_RGB);
         this.appendDummyInput().appendField(Blockly.Msg.SENSOR_INFRARED);
         this.setOutput(true, 'Sensor');
         this.setTooltip(Blockly.Msg.INFRARED_TOOLTIP);
@@ -128,7 +128,7 @@ Blockly.Blocks['robBrick_touch'] = {
 
     init : function() {
         // this.setHelpUrl(Blockly.Msg.TOUCH_HELPURL);
-        this.setColour([ 143, 164, 2 ]);
+        this.setColour(Blockly.CAT_SENSOR_RGB);
         this.appendDummyInput().appendField(Blockly.Msg.SENSOR_TOUCH);
         this.setOutput(true, 'Sensor');
         this.setTooltip(Blockly.Msg.TOUCH_TOOLTIP);
@@ -150,7 +150,7 @@ Blockly.Blocks['robBrick_gyro'] = {
 
     init : function() {
         // this.setHelpUrl(Blockly.Msg.GYRO_HELPURL);
-        this.setColour([ 143, 164, 2 ]);
+        this.setColour(Blockly.CAT_SENSOR_RGB);
         this.appendDummyInput().appendField(Blockly.Msg.SENSOR_GYRO);
         this.setOutput(true, 'Sensor');
         this.setTooltip(Blockly.Msg.GYRO_TOOLTIP);
@@ -176,7 +176,7 @@ Blockly.Blocks['robBrick_motor_big'] = {
 
     init : function() {
         // this.setHelpUrl(Blockly.Msg.MOTOR_BIG_HELPURL);
-        this.setColour([ 242, 148, 0 ]);
+        this.setColour(Blockly.CAT_ACTION_RGB);
         var motorRegulation = new Blockly.FieldDropdown([ [ Blockly.Msg.YES, 'TRUE' ], [ Blockly.Msg.NO, 'FALSE' ] ]);
         var motorReverse = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR_FOREWARD, 'OFF' ], [ Blockly.Msg.MOTOR_BACKWARD, 'ON' ] ]);
         var motorSide = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR_NONE, 'NONE' ], [ Blockly.Msg.MOTOR_RIGHT, 'RIGHT' ],
@@ -209,7 +209,7 @@ Blockly.Blocks['robBrick_motor_middle'] = {
 
     init : function() {
         // this.setHelpUrl(Blockly.Msg.MOTOR_MIDDLE_HELPURL);
-        this.setColour([ 242, 148, 0 ]);
+        this.setColour(Blockly.CAT_ACTION_RGB);
         var motorRegulation = new Blockly.FieldDropdown([ [ Blockly.Msg.YES, 'TRUE' ], [ Blockly.Msg.NO, 'FALSE' ] ]);
         var motorReverse = new Blockly.FieldDropdown([ [ Blockly.Msg.MOTOR_FOREWARD, 'OFF' ], [ Blockly.Msg.MOTOR_BACKWARD, 'ON' ] ]);
         this.appendDummyInput().appendField(Blockly.Msg.MOTOR_MIDDLE + ' ' + Blockly.Msg.MOTOR);
@@ -233,7 +233,7 @@ Blockly.Blocks['robBrick_actor'] = {
 
     init : function() {
         // this.setHelpUrl(Blockly.Msg.ACTOR_HELPURL);
-        this.setColour([ 242, 148, 0 ]);
+        this.setColour(Blockly.CAT_ACTION_RGB);
         this.appendDummyInput('ACTOR').appendField(Blockly.Msg.MOTOR_OTHER);
         this.setOutput(true, 'Actor');
         this.setTooltip(Blockly.Msg.ACTOR_TOOLTIP);

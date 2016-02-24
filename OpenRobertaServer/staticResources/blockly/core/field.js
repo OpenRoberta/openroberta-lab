@@ -108,8 +108,8 @@ Blockly.Field.prototype.init = function(block) {
     this.fieldGroup_.style.display = 'none';
   }
   this.borderRect_ = Blockly.createSvgElement('rect',
-      {'rx': 4,
-       'ry': 4,
+      {'rx': 2,
+       'ry': 2,
        'x': -Blockly.BlockSvg.SEP_SPACE_X / 2,
        'y': 0,
        'height': 16}, this.fieldGroup_, this.sourceBlock_.workspace);

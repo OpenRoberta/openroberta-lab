@@ -9,7 +9,11 @@
 <script src="../core/blockly.js"></script>
 <script src="../core/css.js"></script>
 <script src="../core/inject.js"></script>
+<script src="../core/field.js"></script>
+<script src="../core/field_label.js"></script>
 <script src="../core/field_robColour.js"></script>
+<script src="../core/field_dropdown.js"></script>
+<script src="../core/field_textinput.js"></script>
 <script src="../core/workspace.js"></script>
 <script src="../core/workspace_svg.js"></script>
 <script src="../core/icon.js"></script>
@@ -25,6 +29,7 @@
 <script src="../core/contextmenu.js"></script>
 <script src="../core/rob_controls.js"></script>
 <script src="../core/tooltip.js"></script>
+<script src="../core/connection.js"></script>
 <script src="../core/trashcan.js"></script>
 <script src="../blocks/logic.js"></script>
 <script src="../blocks/loops.js"></script>
@@ -532,8 +537,10 @@ h1 {
         </block>
     </category>
     <category name='TOOLBOX_LIST' svg="true">
-         <block type='lists_create_empty'></block>  
-         <block type='robLists_create_with'>
+        <block type='robLists_create_with'>
+            <mutation items="0" list_type="Number"></mutation>
+        </block>  
+        <block type='robLists_create_with'>
             <value name='ADD0'>
                 <block type='math_number'></block> 
             </value> 
@@ -544,22 +551,22 @@ h1 {
                 <block type='math_number'></block> 
             </value> 
         </block>  
-        <!-- <block type='lists_repeat'>
+        <block type='robLists_repeat'>
             <value name='NUM'>
                 <block type='math_number'>
                     <field name='NUM'>5</field>
                 </block> 
             </value> 
-        </block> -->
-        <block type='lists_length'></block>
-        <block type='lists_isEmpty'></block>
-        <block type='lists_indexOf'> 
         </block>
-        <block type='lists_getIndex'> 
+        <block type='robLists_length'></block>
+        <block type='robLists_isEmpty'></block>
+        <block type='robLists_indexOf'> 
         </block>
-        <block type='lists_setIndex'> 
+        <block type='robLists_getIndex'> 
         </block>
-        <block type='lists_getSublist'> 
+        <block type='robLists_setIndex'> 
+        </block>
+        <block type='robLists_getSublist'> 
         </block>
     </category> 
     <category name='TOOLBOX_COLOUR' svg="true">

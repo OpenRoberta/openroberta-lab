@@ -340,6 +340,7 @@ body.blocklyMinimalBody  *  {
 
 #simButtons {
 	width: 350px;
+    left: initial;
 }
 
 #simButtons>.btn {

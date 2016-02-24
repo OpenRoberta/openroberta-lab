@@ -41,7 +41,7 @@ Blockly.Blocks['controls_if'] = {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.CONTROLS_IF_HELPURL);
-    this.setColour(Blockly.Blocks.logic.HUE);
+    this.setColour(Blockly.CAT_LOGIC_RGB);
     this.appendValueInput('IF0')
         .setCheck('Boolean')
         .appendField(Blockly.Msg.CONTROLS_IF_MSG_IF);
@@ -220,7 +220,7 @@ Blockly.Blocks['controls_if_if'] = {
    * @this Blockly.Block
    */
   init: function() {
-    this.setColour(Blockly.Blocks.logic.HUE);
+    this.setColour(Blockly.CAT_LOGIC_RGB);
     this.appendDummyInput()
         .appendField(Blockly.Msg.CONTROLS_IF_IF_TITLE_IF);
     this.setNextStatement(true);
@@ -235,7 +235,7 @@ Blockly.Blocks['controls_if_elseif'] = {
    * @this Blockly.Block
    */
   init: function() {
-    this.setColour(Blockly.Blocks.logic.HUE);
+    this.setColour(Blockly.CAT_LOGIC_RGB);
     this.appendDummyInput()
         .appendField(Blockly.Msg.CONTROLS_IF_ELSEIF_TITLE_ELSEIF);
     this.setPreviousStatement(true);
@@ -251,7 +251,7 @@ Blockly.Blocks['controls_if_else'] = {
    * @this Blockly.Block
    */
   init: function() {
-    this.setColour(Blockly.Blocks.logic.HUE);
+    this.setColour(Blockly.CAT_LOGIC_RGB);
     this.appendDummyInput()
         .appendField(Blockly.Msg.CONTROLS_IF_ELSE_TITLE_ELSE);
     this.setPreviousStatement(true);
@@ -282,7 +282,7 @@ Blockly.Blocks['logic_compare'] = {
           ['\u2265', 'GTE']
         ];
     this.setHelpUrl(Blockly.Msg.LOGIC_COMPARE_HELPURL);
-    this.setColour(Blockly.Blocks.logic.HUE);
+    this.setColour(Blockly.CAT_LOGIC_RGB);
     this.setOutput(true, 'Boolean');
     this.appendValueInput('A');
     this.appendValueInput('B')
@@ -392,7 +392,7 @@ Blockly.Blocks['logic_operation'] = {
         [[Blockly.Msg.LOGIC_OPERATION_AND, 'AND'],
          [Blockly.Msg.LOGIC_OPERATION_OR, 'OR']];
     this.setHelpUrl(Blockly.Msg.LOGIC_OPERATION_HELPURL);
-    this.setColour(Blockly.Blocks.logic.HUE);
+    this.setColour(Blockly.CAT_LOGIC_RGB);
     this.setOutput(true, 'Boolean');
     this.appendValueInput('A')
         .setCheck('Boolean');
@@ -429,7 +429,7 @@ Blockly.Blocks['logic_negate'] = {
         }
       ],
       "output": "Boolean",
-      "colour": Blockly.Blocks.logic.HUE,
+      "colour": Blockly.CAT_LOGIC_RGB,
       "tooltip": Blockly.Msg.LOGIC_NEGATE_TOOLTIP,
       "helpUrl": Blockly.Msg.LOGIC_NEGATE_HELPURL
     });
@@ -455,7 +455,7 @@ Blockly.Blocks['logic_boolean'] = {
         }
       ],
       "output": "Boolean",
-      "colour": Blockly.Blocks.logic.HUE,
+      "colour": Blockly.CAT_LOGIC_RGB,
       "tooltip": Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP,
       "helpUrl": Blockly.Msg.LOGIC_BOOLEAN_HELPURL
     });
@@ -471,7 +471,7 @@ Blockly.Blocks['logic_null'] = {
     this.jsonInit({
       "message0": Blockly.Msg.LOGIC_NULL,
       "output": null,
-      "colour": Blockly.Blocks.logic.HUE,
+      "colour": Blockly.CAT_LOGIC_RGB,
       "tooltip": Blockly.Msg.LOGIC_NULL_TOOLTIP,
       "helpUrl": Blockly.Msg.LOGIC_NULL_HELPURL
     });
@@ -485,7 +485,7 @@ Blockly.Blocks['logic_ternary'] = {
    */
   init: function() {
     this.setHelpUrl(Blockly.Msg.LOGIC_TERNARY_HELPURL);
-    this.setColour(Blockly.Blocks.logic.HUE);
+    this.setColour(Blockly.CAT_LOGIC_RGB);
     this.appendValueInput('IF')
         .setCheck('Boolean')
         .appendField(Blockly.Msg.LOGIC_TERNARY_CONDITION);
@@ -531,7 +531,7 @@ Blockly.Blocks['robControls_ifElse'] = {
    * @this Blockly.Block
    */
   init : function() {
-    this.setColour(Blockly.Blocks.logic.HUE);
+    this.setColour(Blockly.CAT_CONTROL_RGB);
     this.appendValueInput('IF0').appendField(Blockly.Msg.CONTROLS_IF_MSG_IF).setCheck('Boolean');
     this.appendStatementInput('DO0').appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
     this.appendStatementInput('ELSE').appendField(Blockly.Msg.CONTROLS_IF_MSG_ELSE);
@@ -625,7 +625,7 @@ Blockly.Blocks['robControls_if'] = {
    * @this Blockly.Block
    */
   init : function() {
-    this.setColour(Blockly.Blocks.logic.HUE);
+    this.setColour(Blockly.CAT_CONTROL_RGB);
     this.appendValueInput('IF0').appendField(Blockly.Msg.CONTROLS_IF_MSG_IF).setCheck('Boolean');
     this.appendStatementInput('DO0').appendField(Blockly.Msg.CONTROLS_IF_MSG_THEN);
     // this.setInputsInline(true);

@@ -51,7 +51,7 @@ Blockly.Blocks['controls_repeat_ext'] = {
       ],
       "previousStatement": null,
       "nextStatement": null,
-      "colour": Blockly.Blocks.loops.HUE,
+      "colour": Blockly.CAT_CONTROL_RGB,
       "tooltip": Blockly.Msg.CONTROLS_REPEAT_TOOLTIP,
       "helpUrl": Blockly.Msg.CONTROLS_REPEAT_HELPURL
     });
@@ -78,7 +78,7 @@ Blockly.Blocks['controls_repeat'] = {
       ],
       "previousStatement": null,
       "nextStatement": null,
-      "colour": Blockly.Blocks.loops.HUE,
+      "colour": Blockly.CAT_CONTROL_RGB,
       "tooltip": Blockly.Msg.CONTROLS_REPEAT_TOOLTIP,
       "helpUrl": Blockly.Msg.CONTROLS_REPEAT_HELPURL
     });
@@ -99,7 +99,7 @@ Blockly.Blocks['controls_whileUntil'] = {
         [[Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE, 'WHILE'],
          [Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_UNTIL, 'UNTIL']];
     this.setHelpUrl(Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL);
-    this.setColour(Blockly.Blocks.loops.HUE);
+    this.setColour(Blockly.CAT_CONTROL_RGB);
     this.appendValueInput('BOOL')
         .setCheck('Boolean')
         .appendField(new Blockly.FieldDropdown(OPERATORS), 'MODE');
@@ -156,7 +156,7 @@ Blockly.Blocks['controls_for'] = {
       "inputsInline": true,
       "previousStatement": null,
       "nextStatement": null,
-      "colour": Blockly.Blocks.loops.HUE,
+      "colour": Blockly.CAT_CONTROL_RGB,
       "helpUrl": Blockly.Msg.CONTROLS_FOR_HELPURL
     });
     this.appendStatementInput('DO')
@@ -230,7 +230,7 @@ Blockly.Blocks['controls_forEach'] = {
       ],
       "previousStatement": null,
       "nextStatement": null,
-      "colour": Blockly.Blocks.loops.HUE,
+      "colour": Blockly.CAT_CONTROL_RGB,
       "helpUrl": Blockly.Msg.CONTROLS_FOREACH_HELPURL
     });
     this.appendStatementInput('DO')
@@ -275,7 +275,7 @@ Blockly.Blocks['controls_flow_statements'] = {
         [[Blockly.Msg.CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK, 'BREAK'],
          [Blockly.Msg.CONTROLS_FLOW_STATEMENTS_OPERATOR_CONTINUE, 'CONTINUE']];
     this.setHelpUrl(Blockly.Msg.CONTROLS_FLOW_STATEMENTS_HELPURL);
-    this.setColour(Blockly.Blocks.loops.HUE);
+    this.setColour(Blockly.CAT_CONTROL_RGB);
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown(OPERATORS), 'FLOW');
     this.setPreviousStatement(true);
@@ -356,7 +356,7 @@ Blockly.Blocks['robControls_for'] = {
       "inputsInline": true,
       "previousStatement": null,
       "nextStatement": null,
-      "colour": Blockly.Blocks.loops.HUE,
+      "colour": Blockly.CAT_CONTROL_RGB,
       "helpUrl": Blockly.Msg.CONTROLS_FOR_HELPURL
     });
     // workaround to reuse the text from Blockly.Msg.CONTROLS_FOR_TITLE
@@ -477,7 +477,7 @@ Blockly.Blocks['robControls_forEach'] = {
       ],
       "previousStatement": null,
       "nextStatement": null,
-      "colour": Blockly.Blocks.loops.HUE,
+      "colour": Blockly.CAT_CONTROL_RGB,
       "helpUrl": Blockly.Msg.CONTROLS_FOREACH_HELPURL
     });
     // workaround to reuse the text from Blockly.Msg.CONTROLS_FOR_TITLE
