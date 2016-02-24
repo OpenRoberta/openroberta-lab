@@ -68,21 +68,25 @@ Blockly.Comment.prototype.height_ = 80;
  */
 Blockly.Comment.prototype.drawIcon_ = function(group) {
   // Circle.
-  Blockly.createSvgElement('circle',
-      {'class': 'blocklyIconShape', 'r': '8', 'cx': '8', 'cy': '8'},
-       group);
-  // Can't use a real '?' text character since different browsers and operating
-  // systems render it differently.
-  // Body of question mark.
-  Blockly.createSvgElement('path',
-      {'class': 'blocklyIconSymbol',
-       'd': 'm6.8,10h2c0.003,-0.617 0.271,-0.962 0.633,-1.266 2.875,-2.405 0.607,-5.534 -3.765,-3.874v1.7c3.12,-1.657 3.698,0.118 2.336,1.25 -1.201,0.998 -1.201,1.528 -1.204,2.19z'},
-       group);
-  // Dot of question point.
-  Blockly.createSvgElement('rect',
-      {'class': 'blocklyIconSymbol',
-       'x': '6.8', 'y': '10.78', 'height': '2', 'width': '2'},
-       group);
+  Blockly.createSvgElement('rect', {
+    'class': 'blocklyIconShape',
+    'height': '16', 'width': '16',
+    'fill-opacity': '0',
+    'stroke-opacity': '0'
+    }, group);
+  Blockly.createSvgElement('path', {
+    'class': 'blocklyIconSymbol',
+    'd' : 'M19 6h-13c-1.65 0-3 1.35-3 3v7c0 1.65 1.35 3 3 3h1v3l3-3h9c1.65 0 '+
+          '3-1.35 3-3v-7c0-1.65-1.35-3-3-3zm1 10c0 .542-.458 1-1 1h-13c-.542 '+
+          '0-1-.458-1-1v-7c0-.542.458-1 1-1h13c.542 0 1 .458 1 1v7zM7 14.5c'+
+          '-1.104 0-2-.896-2-2s.896-2 2-2 2 .896 2 2-.896 2-2 2zm0-3c-.552 0 '+
+          '-1 .448-1 1s.448 1 1 1 1-.448 1-1-.448-1-1-1zM11.5 14.5c-1.104 0-2 '+
+          '-.896-2-2s.896-2 2-2 2 .896 2 2-.896 2-2 2zm0-3c-.552 0-1 .448-1 '+
+          '1s.448 1 1 1 1-.448 1-1-.448-1-1-1zM16 14.5c-1.104 0-2-.896-2-2s '+
+          '.896-2 2-2 2 .896 2 2-.896 2-2 2zm0-3c-.552 0-1 .448-1 1s.448 1 1 1 '+
+          '1-.448 1-1-.448-1-1-1z', 
+          'transform': 'scale(0.67)',
+   },group);
 };
 
 /**

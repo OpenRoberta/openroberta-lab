@@ -187,7 +187,13 @@ Blockly.BlockSvg.prototype.comment = null;
 Blockly.BlockSvg.prototype.warning = null;
 
 /**
- * Returns a list of mutator, comment, and warning icons.
+ * Block's warning icon (if any).
+ * @type {Blockly.Error}
+ */
+Blockly.BlockSvg.prototype.error = null;
+
+/**
+ * Returns a list of mutator, comment, error, and warning icons.
  * @return {!Array} List of icons.
  */
 Blockly.BlockSvg.prototype.getIcons = function() {
@@ -206,6 +212,9 @@ Blockly.BlockSvg.prototype.getIcons = function() {
   }
   if (this.warning) {
     icons.push(this.warning);
+  }
+  if (this.error) {
+    icons.push(this.error);
   }
   return icons;
 };
@@ -400,6 +409,7 @@ Blockly.BlockSvg.prototype.setCollapsed = function(collapsed) {
     this.removeInput(COLLAPSED_INPUT_NAME);
     // Clear any warnings inherited from enclosed blocks.
     this.setWarningText(null);
+    this.setErrorText(null);
   }
   Blockly.BlockSvg.superClass_.setCollapsed.call(this, collapsed);
 
@@ -1545,6 +1555,88 @@ Blockly.BlockSvg.prototype.setWarningText = function(text, opt_id) {
   if (changedState && this.rendered) {
     this.render();
     // Adding or removing a warning icon will cause the block to change shape.
+    this.bumpNeighbours_();
+  }
+};
+
+/**
+ * Set this block's error text.
+ * @param {?string} text The text, or null to delete.
+ * @param {string=} opt_id An optional ID for the error text to be able to
+ *     maintain multiple errors.
+ */
+Blockly.BlockSvg.prototype.setErrorText = function(text, opt_id) {
+  if (!this.setErrorText.pid_) {
+    // Create a database of error PIDs.
+    // Only runs once per block (and only those with errors).
+    this.setErrorText.pid_ = Object.create(null);
+  }
+  var id = opt_id || '';
+  if (!id) {
+    // Kill all previous pending processes, this edit supercedes them all.
+    for (var n in this.setErrorText.pid_) {
+      clearTimeout(this.setErrorText.pid_[n]);
+      delete this.setErrorText.pid_[n];
+    }
+  } else if (this.setErrorText.pid_[id]) {
+    // Only queue up the latest change.  Kill any earlier pending process.
+    clearTimeout(this.setErrorText.pid_[id]);
+    delete this.setErrorText.pid_[id];
+  }
+  if (Blockly.dragMode_ == 2) {
+    // Don't change the error text during a drag.
+    // Wait until the drag finishes.
+    var thisBlock = this;
+    this.setErrorText.pid_[id] = setTimeout(function() {
+      if (thisBlock.workspace) {  // Check block wasn't deleted.
+        delete thisBlock.setErrorText.pid_[id];
+        thisBlock.setErrorText(text, id);
+      }
+    }, 100);
+    return;
+  }
+  if (this.isInFlyout) {
+    text = null;
+  }
+
+  // Bubble up to add a error on top-most collapsed block.
+  var parent = this.getSurroundParent();
+  var collapsedParent = null;
+  while (parent) {
+    if (parent.isCollapsed()) {
+      collapsedParent = parent;
+    }
+    parent = parent.getSurroundParent();
+  }
+  if (collapsedParent) {
+    collapsedParent.setErrorText(text, 'collapsed ' + this.id + ' ' + id);
+  }
+
+  var changedState = false;
+  if (goog.isString(text)) {
+    if (!this.error) {
+      this.error = new Blockly.Error(this);
+      changedState = true;
+    }
+    this.error.setText(/** @type {string} */ (text), id);
+  } else {
+    // Dispose all errors if no id is given.
+    if (this.error && !id) {
+      this.error.dispose();
+      changedState = true;
+    } else if (this.error) {
+      var oldText = this.error.getText();
+      this.error.setText('', id);
+      var newText = this.error.getText();
+      if (!newText) {
+        this.error.dispose();
+      }
+      changedState = oldText == newText;
+    }
+  }
+  if (changedState && this.rendered) {
+    this.render();
+    // Adding or removing a error icon will cause the block to change shape.
     this.bumpNeighbours_();
   }
 };

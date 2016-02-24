@@ -19,42 +19,42 @@
  */
 
 /**
- * @fileoverview Object representing a warning.
+ * @fileoverview Object representing a error.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
-goog.provide('Blockly.Warning');
+goog.provide('Blockly.Error');
 
 goog.require('Blockly.Bubble');
 goog.require('Blockly.Icon');
 
 
 /**
- * Class for a warning.
- * @param {!Blockly.Block} block The block associated with this warning.
+ * Class for a error.
+ * @param {!Blockly.Block} block The block associated with this error.
  * @extends {Blockly.Icon}
  * @constructor
  */
-Blockly.Warning = function(block) {
-  Blockly.Warning.superClass_.constructor.call(this, block);
+Blockly.Error = function(block) {
+  Blockly.Error.superClass_.constructor.call(this, block);
   this.createIcon();
-  // The text_ object can contain multiple warnings.
+  // The text_ object can contain multiple errors.
   this.text_ = {};
 };
-goog.inherits(Blockly.Warning, Blockly.Icon);
+goog.inherits(Blockly.Error, Blockly.Icon);
 
 /**
  * Does this icon get hidden when the block is collapsed.
  */
-Blockly.Warning.prototype.collapseHidden = false;
+Blockly.Error.prototype.collapseHidden = false;
 
 /**
- * Draw the warning icon.
+ * Draw the error icon.
  * @param {!Element} group The icon group.
  * @private
  */
-Blockly.Warning.prototype.drawIcon_ = function(group) {
+Blockly.Error.prototype.drawIcon_ = function(group) {
   // Square.
   Blockly.createSvgElement('rect', {
     'class': 'blocklyIconShape',
@@ -65,40 +65,26 @@ Blockly.Warning.prototype.drawIcon_ = function(group) {
   Blockly.createSvgElement('path', {
     'class' : 'blocklyIconMarkWarningError',
     'fill' : '#333',
-    'd' : 'M12 5.511c.561 0 1.119.354 1.544 1.062l5.912 9.854c.851 1.415.194 '+
-          '2.573-1.456 2.573h-12c-1.65 0-2.307-1.159-1.456-2.573l5.912-9.854' +
-          'c.425-.708.983-1.062 1.544-1.062m0-2c-1.296 0-2.482.74-3.259 2.031l'+
-          '-5.912 9.856c-.786 1.309-.872 2.705-.235 3.83s1.879 1.772 3.406 '+
-          '1.772h12c1.527 0 2.77-.646 3.406-1.771s.551-2.521-.235-3.83l-5.912 '+
-          '-9.854c-.777-1.294-1.963-2.034-3.259-2.034z',
+    'd' : 'M12 3c-4.963 0-9 4.038-9 9s4.037 9 9 9 9-4.038 9-9-4.037-9-9-9zm0 '+
+          '16c-3.859 0-7-3.14-7-7s3.141-7 7-7 7 3.14 7 7-3.141 7-7 7z M12.707 '+
+          '12l2.646-2.646c.194-.194.194-.512 0-.707-.195-.194-.513-.194-.707 '+
+          '0l-2.646 2.646-2.646-2.647c-.195-.194-.513-.194-.707 0-.195.195 '+
+          '-.195.513 0 .707l2.646 2.647-2.646 2.646c-.195.195-.195.513 0 '+
+          '.707.097.098.225.147.353.147s.256-.049.354-.146l2.646-2.647 2.646 '+
+          '2.646c.098.098.226.147.354.147s.256-.049.354-.146c.194-.194.194 '+
+          '-.512 0-.707l-2.647-2.647z',
     'transform': 'scale(0.67)',
     'opacity' : '1'
-    }, group);
-  Blockly.createSvgElement('path', {
-    'class' : 'blocklyIconMarkWarningError',
-    'fill' : '#333',
-    'd' : 'M13.5 10c0-.83-.671-1.5-1.5-1.5s-1.5.67-1.5 1.5c0 '+
-          '.199.041.389.111.562.554 1.376 1.389 3.438 1.389 3.438l1.391-3.438'+
-          'c.068-.173.109-.363.109-.562z',
-    'transform': 'scale(0.67)',
-    'opacity' : '1'
-    }, group);
-  Blockly.createSvgElement('circle', {
-    'class' : 'blocklyIconMarkWarningError',
-    'fill' : '#333',
-    'cx' : '8',
-    'cy' : '10.67',
-    'r' : '0.9'
     }, group);
   };
 
 /**
- * Create the text for the warning's bubble.
+ * Create the text for the error's bubble.
  * @param {string} text The text to display.
  * @return {!SVGTextElement} The top-level node of the text.
  * @private
  */
-Blockly.Warning.textToDom_ = function(text) {
+Blockly.Error.textToDom_ = function(text) {
   var paragraph = /** @type {!SVGTextElement} */ (
       Blockly.createSvgElement('text',
           {'class': 'blocklyText blocklyBubbleText',
@@ -115,17 +101,17 @@ Blockly.Warning.textToDom_ = function(text) {
 };
 
 /**
- * Show or hide the warning bubble.
+ * Show or hide the error bubble.
  * @param {boolean} visible True if the bubble should be visible.
  */
-Blockly.Warning.prototype.setVisible = function(visible) {
+Blockly.Error.prototype.setVisible = function(visible) {
   if (visible == this.isVisible()) {
     // No change.
     return;
   }
   if (visible) {
-    // Create the bubble to display all warnings.
-    var paragraph = Blockly.Warning.textToDom_(this.getText());
+    // Create the bubble to display all errors.
+    var paragraph = Blockly.Error.textToDom_(this.getText());
     this.bubble_ = new Blockly.Bubble(
         /** @type {!Blockly.Workspace} */ (this.block_.workspace),
         paragraph, this.block_.svgPath_,
@@ -140,7 +126,7 @@ Blockly.Warning.prototype.setVisible = function(visible) {
       }
     }
     this.updateColour();
-    // Bump the warning into the right location.
+    // Bump the error into the right location.
     var size = this.bubble_.getBubbleSize();
     this.bubble_.setBubbleSize(size.width, size.height);
   } else {
@@ -152,21 +138,21 @@ Blockly.Warning.prototype.setVisible = function(visible) {
 };
 
 /**
- * Bring the warning to the top of the stack when clicked on.
+ * Bring the error to the top of the stack when clicked on.
  * @param {!Event} e Mouse up event.
  * @private
  */
-Blockly.Warning.prototype.bodyFocus_ = function(e) {
+Blockly.Error.prototype.bodyFocus_ = function(e) {
   this.bubble_.promote_();
 };
 
 /**
- * Set this warning's text.
- * @param {string} text Warning text (or '' to delete).
+ * Set this error's text.
+ * @param {string} text Error text (or '' to delete).
  * @param {string} id An ID for this text entry to be able to maintain
- *     multiple warnings.
+ *     multiple errors.
  */
-Blockly.Warning.prototype.setText = function(text, id) {
+Blockly.Error.prototype.setText = function(text, id) {
   if (this.text_[id] == text) {
     return;
   }
@@ -182,21 +168,21 @@ Blockly.Warning.prototype.setText = function(text, id) {
 };
 
 /**
- * Get this warning's texts.
+ * Get this error's texts.
  * @return {string} All texts concatenated into one string.
  */
-Blockly.Warning.prototype.getText = function() {
-  var allWarnings = [];
+Blockly.Error.prototype.getText = function() {
+  var allErrors = [];
   for (var id in this.text_) {
-    allWarnings.push(this.text_[id]);
+    allErrors.push(this.text_[id]);
   }
-  return allWarnings.join('\n');
+  return allErrors.join('\n');
 };
 
 /**
- * Dispose of this warning.
+ * Dispose of this error.
  */
-Blockly.Warning.prototype.dispose = function() {
-  this.block_.warning = null;
+Blockly.Error.prototype.dispose = function() {
+  this.block_.error = null;
   Blockly.Icon.prototype.dispose.call(this);
 };

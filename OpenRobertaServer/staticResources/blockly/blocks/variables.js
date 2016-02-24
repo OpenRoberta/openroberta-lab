@@ -133,12 +133,12 @@ Blockly.Blocks['variables_get'] = {
         block = block.getSurroundParent();
       } while (block);
       if (legal) {
-        this.setWarningText(null);
+        this.setErrorText(null);
       } else {
-        if ((parseFloat(procedure) == parseInt(procedure)) && !isNaN(procedure)) {
-          this.setWarningText(Blockly.Msg.PROCEDURES_VARIABLES_LOOP_ERROR + this.getFieldValue('VAR'));
+        if (!procedure.match(/^[a-zA-Z][a-zA-Z0-9_]*$/)){
+          this.setErrorText(Blockly.Msg.PROCEDURES_VARIABLES_LOOP_ERROR + this.getFieldValue('VAR'));
         } else {
-          this.setWarningText(Blockly.Msg.PROCEDURES_VARIABLES_ERROR + procedure + Blockly.Msg.PROCEDURES_TITLE);
+          this.setErrorText(Blockly.Msg.PROCEDURES_VARIABLES_ERROR + procedure + Blockly.Msg.PROCEDURES_TITLE);
         }
       }
     }

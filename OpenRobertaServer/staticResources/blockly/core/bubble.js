@@ -86,13 +86,13 @@ Blockly.Bubble = function(workspace, content, shape,
 /**
  * Width of the border around the bubble.
  */
-Blockly.Bubble.BORDER_WIDTH = 6;
+Blockly.Bubble.BORDER_WIDTH = 3;
 
 /**
  * Determines the thickness of the base of the arrow in relation to the size
  * of the bubble.  Higher numbers result in thinner arrows.
  */
-Blockly.Bubble.ARROW_THICKNESS = 10;
+Blockly.Bubble.ARROW_THICKNESS = 15;
 
 /**
  * The number of degrees that the arrow bends counter-clockwise.
@@ -102,7 +102,7 @@ Blockly.Bubble.ARROW_ANGLE = 20;
 /**
  * The sharpness of the arrow's bend.  Higher numbers result in smoother arrows.
  */
-Blockly.Bubble.ARROW_BEND = 4;
+Blockly.Bubble.ARROW_BEND = 90;
 
 /**
  * Distance between arrow point and anchor point.
@@ -195,58 +195,55 @@ Blockly.Bubble.prototype.autoLayout_ = true;
  * @private
  */
 Blockly.Bubble.prototype.createDom_ = function(content, hasResize) {
-  /* Create the bubble.  Here's the markup that will be generated:
-  <g>
-    <g filter="url(#blocklyEmbossFilter837493)">
-      <path d="... Z" />
-      <rect class="blocklyDraggable" rx="8" ry="8" width="180" height="180"/>
-    </g>
-    <g transform="translate(165, 165)" class="blocklyResizeSE">
-      <polygon points="0,15 15,15 15,0"/>
-      <line class="blocklyResizeLine" x1="5" y1="14" x2="14" y2="5"/>
-      <line class="blocklyResizeLine" x1="10" y1="14" x2="14" y2="10"/>
-    </g>
-    [...content goes here...]
-  </g>
-  */
   this.bubbleGroup_ = Blockly.createSvgElement('g', {}, null);
-  var filter =
-      {'filter': 'url(#' + this.workspace_.options.embossFilterId + ')'};
-  if (goog.userAgent.getUserAgentString().indexOf('JavaFX') != -1) {
-    // Multiple reports that JavaFX can't handle filters.  UserAgent:
-    // Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.44
-    //     (KHTML, like Gecko) JavaFX/8.0 Safari/537.44
-    // https://github.com/google/blockly/issues/99
-    filter = {};
-  }
-  var bubbleEmboss = Blockly.createSvgElement('g',
-      filter, this.bubbleGroup_);
-  this.bubbleArrow_ = Blockly.createSvgElement('path', {}, bubbleEmboss);
-  this.bubbleBack_ = Blockly.createSvgElement('rect',
-      {'class': 'blocklyDraggable', 'x': 0, 'y': 0,
-      'rx': Blockly.Bubble.BORDER_WIDTH, 'ry': Blockly.Bubble.BORDER_WIDTH},
-      bubbleEmboss);
+//    var bubbleFilter = Blockly.createSvgElement('g', {
+//        'filter' : 'url(#blocklyShadowFilter)'
+//    }, this.bubbleGroup_);
+  this.bubbleArrow_ = Blockly.createSvgElement('path', {}, this.bubbleGroup_);
+  this.bubbleBack_ = Blockly.createSvgElement('rect', {
+      'class' : 'blocklyDraggable',
+      'x' : 0,
+      'y' : 0,
+      'rx' : Blockly.BlockSvg.CORNER_RADIUS,
+      'ry' : Blockly.BlockSvg.CORNER_RADIUS
+  }, this.bubbleGroup_);
+  this.bubbleGroup_.appendChild(content);
   if (hasResize) {
-    this.resizeGroup_ = Blockly.createSvgElement('g',
-        {'class': this.workspace_.RTL ?
-                  'blocklyResizeSW' : 'blocklyResizeSE'},
-        this.bubbleGroup_);
-    var resizeSize = 2 * Blockly.Bubble.BORDER_WIDTH;
-    Blockly.createSvgElement('polygon',
-        {'points': '0,x x,x x,0'.replace(/x/g, resizeSize.toString())},
-        this.resizeGroup_);
-    Blockly.createSvgElement('line',
-        {'class': 'blocklyResizeLine',
-        'x1': resizeSize / 3, 'y1': resizeSize - 1,
-        'x2': resizeSize - 1, 'y2': resizeSize / 3}, this.resizeGroup_);
-    Blockly.createSvgElement('line',
-        {'class': 'blocklyResizeLine',
-        'x1': resizeSize * 2 / 3, 'y1': resizeSize - 1,
-        'x2': resizeSize - 1, 'y2': resizeSize * 2 / 3}, this.resizeGroup_);
+    this.resizeGroup_ = Blockly.createSvgElement('g', {
+        'class' : Blockly.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE'
+    });
+    var shieldOverlap = Blockly.createSvgElement('rect', {
+        'x' : -15,
+        'y' : -15,
+        'width' : 27,
+        'height' : 27,
+        'fill-opacity' : 0
+    }, this.resizeGroup_);
+    var iconMark = Blockly.createSvgElement('path', {
+        'transform' : 'translate(10, -14) rotate(90)',
+        'fill' : '#333',
+        'd' : 'M19 3h-5.243c-1.302 0-2.401.838-2.815 2h-6.942v7.061l.012.12c '+
+              '-1.167.41-2.012 1.512-2.012 2.819v7h7c1.311 0 2.593-.826 3-2h7'+
+              'v-7.061l-.012-.12c1.167-.41 2.012-1.512 2.012-2.819v-7h-2zm-2 '+
+              '15h-5c-.553 0-1-.448-1-1s.447-1 1-1h3v-3.061c0-.552.447-1 1-1' +
+              's1 .448 1 1v5.061zm-11-11h5.061c.553 0 1 .448 1 1s-.447 1-1 1h' +
+              '-3.061v3.061c0 .552-.448 1-1 1-.553 0-1-.448-1-1v-5.061z m13 '+
+              '3c0 .552-.447 1-1 1s-1-.448-1-1v-1.586l-3.293 3.293c-.195.195 '+
+              '-.451.293-.707.293s-.512-.098-.707-.293c-.391-.391-.391-1.023 '+
+              '0-1.414l3.293-3.293h-1.586c-.553 0-1-.448-1-1s.447-1 1-1h5v5zm '+
+              '-10 10h-5v-5c0-.552.447-1 1-1s1 .448 1 1v1.586l3.293-3.293c '+
+              '.195-.195.451-.293.707-.293s.512.098.707.293c.391.391.391 1.023 '+
+              '0 1.414l-3.293 3.293h1.586c.553 0 1 .448 1 1s-.448 1-1 1zm2.414 '+
+              '-7.414c-.378-.378-.88-.586-1.414-.586-.367 0-.716.105-1.023.289 '+
+              'l.023-.228v-2.061h2.061l.229-.023c-.186.307-.29.656-.29 1.023 0 '+
+              '.534.208 1.036.586 1.414s.88.586 1.414.586c.367 0 .716-.105 '+
+              '1.023-.289l-.023.228v2.061h-1.939c-.122 0-.24.015-.356.036.189 '+
+              '-.31.295-.664.295-1.036 0-.534-.208-1.036-.586-1.414z'
+        }, this.resizeGroup_);
+    this.bubbleGroup_.appendChild(this.resizeGroup_);
   } else {
     this.resizeGroup_ = null;
   }
-  this.bubbleGroup_.appendChild(content);
   return this.bubbleGroup_;
 };
 
@@ -557,8 +554,12 @@ Blockly.Bubble.prototype.renderArrow_ = function() {
  * @param {string} hexColour Hex code of colour.
  */
 Blockly.Bubble.prototype.setColour = function(hexColour) {
-  this.bubbleBack_.setAttribute('fill', hexColour);
-  this.bubbleArrow_.setAttribute('fill', hexColour);
+  this.bubbleBack_.setAttribute('fill', '#fff');
+  this.bubbleBack_.setAttribute('stroke', '#333');
+  this.bubbleBack_.setAttribute('stroke-opacity', 0.9);
+  this.bubbleBack_.setAttribute('stroke-width', Blockly.Bubble.BORDER_WIDTH);
+  this.bubbleArrow_.setAttribute('fill', '#333');
+  this.bubbleArrow_.setAttribute('fill-opacity', 0.9);
 };
 
 /**

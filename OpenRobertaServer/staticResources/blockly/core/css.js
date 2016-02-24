@@ -286,6 +286,23 @@ Blockly.Css.CONTENT = [
   '.blocklyIconSymbol {',
     'fill: #fff;',
   '}',
+  
+  '.blocklyIconMarkWarningError {',
+    'fill: #000;',
+  '}',
+  
+  'g .blocklyIconGroup:hover path[class="blocklyIconMarkWarningError"] {',
+    'fill: #fff;',
+    'cursor: pointer',
+  '}', 
+  'g .blocklyIconGroup:hover circle[class="blocklyIconMarkWarningError"] {',
+    'fill: #fff;',
+    'cursor: pointer',
+  '}', 
+  
+  '.blocklyIconMarkWarningError:hover {',
+    'fill: #fff;',
+  '}',
 
   '.blocklyMinimalBody {',
     'margin: 0;',
@@ -293,11 +310,12 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyCommentTextarea {',
-    'background-color: #ffc;',
+    'background-color: #fff;',
     'border: 0;',
     'margin: 0;',
     'padding: 2px;',
     'resize: none;',
+    'outline: 0 none',
   '}',
 
   '.blocklyHtmlInput {',

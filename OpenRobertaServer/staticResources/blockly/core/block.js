@@ -34,6 +34,7 @@ goog.require('Blockly.Mutator');
 goog.require('Blockly.MutatorPlus');
 goog.require('Blockly.MutatorMinus');
 goog.require('Blockly.Warning');
+goog.require('Blockly.Error');
 goog.require('Blockly.Workspace');
 goog.require('Blockly.Xml');
 goog.require('goog.array');
@@ -1240,6 +1241,14 @@ Blockly.Block.prototype.setCommentText = function(text) {
  * @param {?string} text The text, or null to delete.
  */
 Blockly.Block.prototype.setWarningText = function(text) {
+  // NOP.
+};
+
+/**
+ * Set this block's error text.
+ * @param {?string} text The text, or null to delete.
+ */
+Blockly.Block.prototype.setErrorText = function(text) {
   // NOP.
 };
 

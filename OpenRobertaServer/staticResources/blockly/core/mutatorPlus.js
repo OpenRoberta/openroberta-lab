@@ -17,14 +17,14 @@ goog.inherits(Blockly.MutatorPlus, Blockly.Mutator);
  * @private
  */
 Blockly.MutatorPlus.prototype.drawIcon_ = function(group) {
-  // Square with rounded corners.
+  // Square.
   Blockly.createSvgElement('rect',
       {'class': 'blocklyIconShape',
        'height': '16', 'width': '16',
        'fill-opacity': '0',
        'stroke-opacity': '0'},
        group);
-  // Gear teeth.
+  // +
   Blockly.createSvgElement('path',
       {'class': 'blocklyIconSymbol',
        'd': 'M18 10h-4v-4c0-1.104-.896-2-2-2s-2 .896-2 2l.071 4h-4.071' +
