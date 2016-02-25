@@ -29,6 +29,7 @@ public class Ev3CommunicationData {
     private final String firmwarename;
     private final String firmwareversion;
     private JSONObject sensorvalues;
+    private int nepoExitValue;
 
     private Clock timerStartedByLastRequest;
     private Clock timerStartedByTokenApproval;
@@ -242,6 +243,10 @@ public class Ev3CommunicationData {
         this.sensorvalues = sensorvalues;
     }
 
+    public void setNepoExitValue(int nepoExitValue) {
+        this.nepoExitValue = nepoExitValue;
+    }
+
     public String getCommand() {
         return this.command;
     }
@@ -272,6 +277,10 @@ public class Ev3CommunicationData {
 
     public JSONObject getSensorValues() {
         return this.sensorvalues;
+    }
+
+    public int getNepoExitValue() {
+        return this.nepoExitValue;
     }
 
     /**

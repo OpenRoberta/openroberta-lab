@@ -26,6 +26,7 @@ public class ORAlauncher {
     private static final GraphicsLCD glcd = LocalEV3.get().getGraphicsLCD();
 
     private static boolean isRunning = false;
+    private static int exitvalue = 0;
 
     public static void setRunning(boolean bool) {
         isRunning = bool;
@@ -41,7 +42,7 @@ public class ORAlauncher {
      * @param programName
      *        Filename without directory, for example Linefollower.jar.
      */
-    public static void runProgram(String programName) {
+    public static int runProgram(String programName) {
         File robertalabFile = new File(ORAlauncher.PROGRAMS_DIRECTORY, programName);
         //System.out.println("ORA executing: " + CMD_ORA_RUN + robertalabFile.getPath());
         GraphicStartup.menu.suspend();
@@ -52,6 +53,7 @@ public class ORAlauncher {
         if ( GraphicStartup.selection == 0 ) {
             GraphicStartup.redrawIPs();
         }
+        return exitvalue;
     }
 
     /**
@@ -65,6 +67,7 @@ public class ORAlauncher {
      */
     private static void exec(String command, String directory) {
         Process program = null;
+        exitvalue = 0;
         try {
             setRunning(true);
             glcd.clear();
@@ -90,7 +93,8 @@ public class ORAlauncher {
                     // exitvalue is 143 if process was killed by another one
                     // exitvalue is 0 if process terminates regularly
                     // throws exception if not yet terminated
-                    System.out.println("ORA process exitvalue: " + program.exitValue());
+                    exitvalue = program.exitValue();
+                    System.out.println("ORA process exitvalue: " + exitvalue);
                     break;
                 } catch ( IllegalThreadStateException e ) {
                     // go on

@@ -53,6 +53,7 @@ public class Ev3Command {
         String menuversion = null;
         String firmwarename = null;
         String firmwareversion = null;
+        int nepoExitValue = 0;
         try {
             macaddr = requestEntity.getString("macaddr");
             token = requestEntity.getString("token");
@@ -76,6 +77,11 @@ public class Ev3Command {
                 return Response.serverError().build();
             }
         }
+        try {
+            nepoExitValue = requestEntity.getInt("nepoexitvalue");
+        } catch ( Exception e ) {
+            // no program was executed yet on the robot, field in requestEntity does not exist
+        }
         // todo: validate version serverside
         JSONObject response;
         switch ( cmd ) {
@@ -92,6 +98,8 @@ public class Ev3Command {
                     pushRequestCounterForLogging.set(0);
                     LOG.info("/pushcmd - push request for token " + token + " [count:" + counter + "]");
                 }
+                state = this.brickCommunicator.getState(token);
+                state.setNepoExitValue(nepoExitValue);
                 String command = this.brickCommunicator.brickWaitsForAServerPush(token, batteryvoltage);
                 if ( command == null ) {
                     LOG.error("No valid command issued by the server as response to a push command request for token " + token);

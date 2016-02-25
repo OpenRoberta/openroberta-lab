@@ -396,7 +396,7 @@ define([ 'require', 'exports', 'simulation.simulation', 'roberta.language', 'rob
 
         var ping = setInterval(function() {
             pingServer()
-        }, 5000);
+        }, 3000);
         Pace.stop();   
     }
 

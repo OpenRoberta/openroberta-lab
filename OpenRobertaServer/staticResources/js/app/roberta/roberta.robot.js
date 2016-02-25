@@ -190,6 +190,11 @@ define([ 'exports', 'util', 'message', 'roberta.brick-configuration', 'roberta.u
                 } else {
                     userState.sensorValues = '';
                 }
+				if (result['robot.nepoexitvalue'] != undefined) {
+					userState.nepoExitValue = result['robot.nepoexitvalue'];
+				} else {
+					userState.nepoExitValue = 0;
+				}
                 if (userState.accountName) {
                     $('#iconDisplayLogin').removeClass('error');
                     $('#iconDisplayLogin').addClass('ok');

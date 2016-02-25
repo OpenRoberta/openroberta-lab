@@ -34,6 +34,8 @@ public class ORApushCmd implements Runnable {
     private int reconnectAttempts = 0;
     private final int maxAttempts = 3;
 
+    private int nepoExitValue = 0;
+
     private final JSONObject brickData = new JSONObject();
 
     // brick data keywords
@@ -45,6 +47,7 @@ public class ORApushCmd implements Runnable {
     public static final String KEY_FIRMWAREVERSION = "firmwareversion";
     public static final String KEY_MENUVERSION = "menuversion";
     public static final String KEY_CMD = "cmd";
+    public static final String KEY_NEPOEXITVALUE = "nepoexitvalue";
 
     // brickdata + cmds send to server
     public static final String CMD_REGISTER = "register";
@@ -134,6 +137,7 @@ public class ORApushCmd implements Runnable {
                         ORAhandler.setRegistered(true);
                         ORAhandler.setConnectionError(false);
                         ORAhandler.setTimeout(false);
+                        this.brickData.put(KEY_NEPOEXITVALUE, 0);
                         break;
                     case CMD_ABORT:
                         // if brick is waiting for registration, server sends abort as timeout message
@@ -151,7 +155,8 @@ public class ORApushCmd implements Runnable {
                     case CMD_DOWNLOAD:
                         if ( GraphicStartup.getUserprogram() == null ) {
                             String programName = this.oraDownloader.downloadProgram(this.brickData);
-                            ORAlauncher.runProgram(programName);
+                            this.nepoExitValue = ORAlauncher.runProgram(programName);
+                            this.brickData.put(KEY_NEPOEXITVALUE, this.nepoExitValue);
                         }
                         break;
                     case CMD_CONFIGURATION:

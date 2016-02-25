@@ -30,6 +30,7 @@ define([ 'exports', 'util', 'rest.user' ], function(exports, UTIL, USER) {
         exports.robotBattery = '';
         exports.robotWait = '';
         exports.sensorValues = '';
+		exports.nepoExitValue = 0;
         exports.robotVersion = '';
         exports.serverVersion = '';
         exports.programBlocks = null;

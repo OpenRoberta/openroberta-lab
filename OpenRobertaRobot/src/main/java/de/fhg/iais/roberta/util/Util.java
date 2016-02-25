@@ -161,6 +161,7 @@ public class Util {
                             response.put("robot.name", state.getRobotName());
                             response.put("robot.version", state.getMenuVersion());
                             response.put("robot.sensorvalues", state.getSensorValues());
+                            response.put("robot.nepoexitvalue", state.getNepoExitValue());
                             response.put("server.version", Util.openRobertaVersion);
                             State communicationState = state.getState();
                             String infoAboutState;
