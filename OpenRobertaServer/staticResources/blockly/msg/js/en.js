@@ -580,6 +580,7 @@ Blockly.Msg.POPUP_NEW_PASSWORD = "New Password";
 Blockly.Msg.POPUP_OLD_PASSWORD = "Old Password";
 Blockly.Msg.POPUP_PASSWORD = "Password";
 Blockly.Msg.POPUP_PASSWORD_RECOVERY = "Password Recovery";
+Blockly.Msg.POPUP_PROGRAM_TERMINATED_UNEXPECTED = "Unexpected Termination of the Program!";
 Blockly.Msg.POPUP_REGISTER_USER = "Register!";
 Blockly.Msg.POPUP_RELEASE = "Version beta 1.3.2 <ul class='NonIcon' style='font-size:small'><li>Fix timestamp bug for save program</li></ul>Version beta 1.3.1 <ul class='NonIcon' style='font-size:small'><li>Spanish available now!</li><li>Fixed bugs</li></ul>Version beta 1.3.0 <ul class='NonIcon' style='font-size:small'><li>Simulate a robot!</li><li>Share your program with a friend</li><li>Update the robots firmware Over-the-Air</li><li>USB cabel support for Chromebooks</li><li>Fixed many more bugs</li></ul></br>";
 Blockly.Msg.POPUP_REPEAT_PASSWORD = "Repeat password";

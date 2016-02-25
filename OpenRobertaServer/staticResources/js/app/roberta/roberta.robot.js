@@ -16,7 +16,7 @@ define([ 'exports', 'util', 'message', 'roberta.brick-configuration', 'roberta.u
                         if (result.rc === "ok") {
                             userState.token = token;
                         }
-                        displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, userState.robotName);
+                        MSG.displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, userState.robotName);
                         setState(result);
                         handleFirmwareConflict();
                     });
@@ -155,7 +155,7 @@ define([ 'exports', 'util', 'message', 'roberta.brick-configuration', 'roberta.u
              * @param {result}
              *            result of server call
              */
-            function setState(result) {
+            function setState(result) {                
                 if (result['version']) {
                     userState.version = result.version;
                 }
@@ -190,11 +190,15 @@ define([ 'exports', 'util', 'message', 'roberta.brick-configuration', 'roberta.u
                 } else {
                     userState.sensorValues = '';
                 }
-				if (result['robot.nepoexitvalue'] != undefined) {
-					userState.nepoExitValue = result['robot.nepoexitvalue'];
-				} else {
-					userState.nepoExitValue = 0;
-				}
+                if (result['robot.nepoexitvalue'] != undefined) {
+                    //TODO: For different robots we have different error messages
+                    if (result['robot.nepoexitvalue'] !== userState.nepoExitValue) {
+                        userState.nepoExitValue = result['robot.nepoexitvalue'];
+                        if (userState.nepoExitValue !== 143 && userState.nepoExitValue !== 0) {
+                            MSG.displayMessage('POPUP_PROGRAM_TERMINATED_UNEXPECTED', 'POPUP', '')
+                        } 
+                    }
+                } 
                 if (userState.accountName) {
                     $('#iconDisplayLogin').removeClass('error');
                     $('#iconDisplayLogin').addClass('ok');
