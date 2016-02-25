@@ -350,6 +350,7 @@ abstract public class Jaxb2AstTransformer<V> {
         for ( Value value : values ) {
             if ( value.getName().equals(param.getName()) ) {
                 return blockToAST(value.getBlock());
+
             }
         }
         return EmptyExpr.make(param.getDefaultValue());

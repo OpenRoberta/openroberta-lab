@@ -40,7 +40,7 @@ public class VarDeclaration<V> extends Expr<V> {
         boolean global,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        super(BlockType.VAR, properties, comment);
+        super(BlockType.VAR_DECLARATION, properties, comment);
         Assert.isTrue(!name.equals("") && typeVar != null && value.isReadOnly());
         this.name = name;
         this.typeVar = typeVar;
@@ -141,14 +141,8 @@ public class VarDeclaration<V> extends Expr<V> {
         String name = helper.extractField(fields, BlocklyConstants.VAR);
         Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, Integer.class));
         boolean next = block.getMutation().isNext();
-        return VarDeclaration.make(
-            typeVar,
-            name,
-            helper.convertPhraseToExpr(expr),
-            next,
-            isGlobalVariable,
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        return VarDeclaration
+            .make(typeVar, name, helper.convertPhraseToExpr(expr), next, isGlobalVariable, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
