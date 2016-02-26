@@ -71,7 +71,7 @@ public class RoundTripTest {
     private static String buildXml;
     private static String connectionUrl;
     private static String crosscompilerBasedir;
-    private static String robotResourcesDir;
+    private static String crossCompilerResourcesDir;
 
     private static Ev3CompilerWorkflow compilerWorkflow;
 
@@ -178,7 +178,7 @@ public class RoundTripTest {
         buildXml = properties.getProperty("crosscompiler.build.xml");
         connectionUrl = properties.getProperty("hibernate.connection.url");
         crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");
-        robotResourcesDir = properties.getProperty("robot.resources.dir");
+        crossCompilerResourcesDir = properties.getProperty("robot.crossCompilerResources.dir");
         browserVisibility = Boolean.parseBoolean(properties.getProperty("browser.visibility"));
 
         sessionFactoryWrapper = new SessionFactoryWrapper("hibernate-cfg.xml", connectionUrl);
@@ -186,7 +186,7 @@ public class RoundTripTest {
         memoryDbSetup = new DbSetup(nativeSession);
         memoryDbSetup.runDefaultRobertaSetup();
         brickCommunicator = new Ev3Communicator();
-        compilerWorkflow = new Ev3CompilerWorkflow(brickCommunicator, crosscompilerBasedir, robotResourcesDir, buildXml);
+        compilerWorkflow = new Ev3CompilerWorkflow(brickCommunicator, crosscompilerBasedir, crossCompilerResourcesDir, buildXml);
         restUser = new ClientUser(brickCommunicator, null);
         restProgram = new ClientProgram(sessionFactoryWrapper, brickCommunicator, compilerWorkflow);
 

@@ -29,7 +29,6 @@ public class User implements WithSurrogateId {
     private String userName;
 
     @Column(name = "PASSWORD")
-    // temporary solution until authent/
     private String password;
 
     @Column(name = "EMAIL")

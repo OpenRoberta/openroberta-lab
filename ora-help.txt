@@ -1,0 +1,68 @@
+General Remarks For Using OpenRoberta From The Command Line
+
+The OpenRoberta sources are contained in a git repository. Top level there is a script 'ora.sh' for use from the command line. After
+building the software artifacts by calling 'mvn install' from the directory 'OpenRobertaParent' (this is the mvn parent project of
+OpenRoberta), 'ora.sh' may be used to start or configure the OpenRoberta application. 'ora.sh --help' shows THIS help information.
+
+The application uses a hsqldb database to persist user data. It may be started
+- in embedded mode: the database is EXCLUSIVELY accessible from the application. If you want to query the database using a sql client, the
+  application must be terminated before, and vice versa.
+- in server mode: a separate database server is started and later accessed from the application. Accessing the database with a sql client is
+  possible when the application is running. Locking problems may occur if you misuse the sql client.
+
+The database mode is defined in a property file. A template for this is 'OpenRobertaServer/src/main/resources/openRoberta.properties'.
+Variables used in the template are taken from 'OpenRobertaParent/pom.xml' at build time. The relevant property for the database mode
+is 'hibernate.connection.url'. The syntax of this property is described in 'OpenRobertaParent/pom.xml'.
+
+1.set properties for LATER use in the SAME call of the ora.sh script (rarely used, the defaults are ok in almost all cases)
+
+  --lejosipaddr {IP-ADDR}  set the ip addr of the EV3 brick running lejos for further commands
+  --version {VERSION}      set the version to something like d.d.d where d is one or more digits, e.g. 1.2.99. Use with care,
+                           because it may trigger software updates for a robot connected.
+  --databaseurl {URL}      set the database url to be used by the server to access the persistent user data.
+                           default if running from a git repository is standalone access : 'jdbc:hsqldb:file:db/openroberta-db'
+                           you may use the database server mode as in : 'jdbc:hsqldb:hsql://localhost/oradb'
+                           In this case you have to start the database server by yourself and export a
+                           database (default name is 'oradb'). See the start-db command below
+  --ip {IP}                set the ip to which the server is bound. Default is 0.0.0.0 (this is ok almost everywhere, but not with docker)
+  --port {PORT}            set a port to which the server is bound. Default is 1999 (this is ok almost everywhere)
+
+2.debugging commands
+
+  --help                   get help
+  --java                   check whether java and javac are on the path and the JDK versin matches. Show the java version
+
+  --reset-db               reset the state of the database to the state last checked out (HEAD).
+                           this makes sense, if you changed the db during test and you dont want to commit your changes
+  --alive {SERVERURL} {-q} {EVERY} {TIMEOUT} {MAIL} check after EVERY sec (default: 60) if the server is alive.
+                           The server is assumed to have crashed, if it does not answer within TIMEOUT sec (default: 10).
+                           If the server is assumed to have crashed, send a mail by calling the script MAIL (default: NO)
+                           -q is the quiet mode: report crashes only
+                           a usefull call, reporting to stdout, is e.g. ora.sh --alive localhost:1999 60 10
+  --sqlclient              start a sql client. Use the 'databaseurl' to address the database (see its value above).
+                           If the database is run in 'standalone' mode, the command fails if the openroberta server is running.
+                           If the database is run in 'server' mode, you get access to the database used by
+                           the server at the same time. Make SURE, that you
+                           - DONT block the server (e.g. by issuing insert/updates without committing immediately afterwards)
+                           - DONT terminate the database server by issuing a SHUTDOWN command
+
+3.commands that make sense after a SUCCESSFUL mvn {clean} install (:-)
+
+  --start-server {PROPERTY-FILE}     start of the server, optionally supply a property file (default: openRoberta.properties)
+                                     to be used after an --export of the application.
+  --start-db {DB-DIR} {DB-NAME}      start a HSQLDB-server in a separate jvm. Only one database is made accessible.
+                                     The database is found in directory {DB-DIR}, default is "db",
+                                     the database is exported as {DB-NAME}, default is "oradb" (this name has to be used in a sql client or
+                                     from the openroberta server by supplying a matching 'databaseurl' (see its value above)) 
+  --update-lejos {SERVERURL}         update an ev3 robot running the lejos os. Its ip-address is expected in lejosipaddr (may be set by a command, the
+                                     value is shown when the script is started)
+                                     If a password is requested: the root password is "", thus simply hit 'return'
+                                     - scp the ev3menu.jar, which replaces the original lejos menu
+                                     - scp openroberta specific libraries needed by the user programs at runtime
+                                     - create a file on the lejos based robot with the address of the server
+  --createemptydb DB-NAME            create an empty database with all tables and initial rows as needed for the OpenRoberta server
+                                     Needs a data base name as a prefix for the files/directory to be created.
+                                     if the database exists, it is not recreated. If a table "PROGRAM" is found
+                                     in an existing database, it is assumed, that the setup has already been done.
+  --export [-e|-i] INSTALLATION-DIR  create a self-contained installation with an empty database (-e) or without database setup (-i)
+                                     with -i the caller is responsible to supply a usable database.

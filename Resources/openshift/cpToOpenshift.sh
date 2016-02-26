@@ -12,6 +12,6 @@ SOURCE=.
 TARGET=../redhatOpenRoberta
 
 rm -rf $TARGET/diy
-./ora.sh --export -i $TARGET/diy
+./ora.sh --databaseurl jdbc:hsqldb:file:db/openroberta-db --export -i $TARGET/diy
 cp -r $SOURCE/OpenRobertaServer/db $TARGET/diy/db
 cp $SOURCE/Resources/openshift/action_hooks/* $TARGET/.openshift/action_hooks/

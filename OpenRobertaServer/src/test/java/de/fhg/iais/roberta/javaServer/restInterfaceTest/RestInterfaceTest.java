@@ -67,7 +67,7 @@ public class RestInterfaceTest {
     private String buildXml;
     private String connectionUrl;
     private String crosscompilerBasedir;
-    private String robotResourcesDir;
+    private String crossCompilerResourcesDir;
 
     private Ev3Communicator brickCommunicator;
     private Ev3CompilerWorkflow compilerWorkflow;
@@ -85,10 +85,10 @@ public class RestInterfaceTest {
         this.buildXml = properties.getProperty("crosscompiler.build.xml");
         this.connectionUrl = properties.getProperty("hibernate.connection.url");
         this.crosscompilerBasedir = properties.getProperty("crosscompiler.basedir");
-        this.robotResourcesDir = properties.getProperty("robot.resources.dir");
+        this.crossCompilerResourcesDir = properties.getProperty("robot.crossCompilerResources.dir");
 
         this.brickCommunicator = new Ev3Communicator();
-        this.compilerWorkflow = new Ev3CompilerWorkflow(this.brickCommunicator, this.crosscompilerBasedir, this.robotResourcesDir, this.buildXml);
+        this.compilerWorkflow = new Ev3CompilerWorkflow(this.brickCommunicator, this.crosscompilerBasedir, this.crossCompilerResourcesDir, this.buildXml);
         this.restUser = new ClientUser(this.brickCommunicator, null);
         this.restBlocks = new ClientAdmin(this.brickCommunicator);
         this.downloadJar = new Ev3DownloadJar(this.brickCommunicator, this.crosscompilerBasedir);

@@ -5,4 +5,4 @@
 
 cd $OPENSHIFT_REPO_DIR/diy
 chmod +x ./ora.sh
-nohup ./ora.sh --serverurl $OPENSHIFT_DIY_IP:$OPENSHIFT_DIY_PORT --start openRoberta.properties
+nohup ./ora.sh --ip $OPENSHIFT_DIY_IP --port $OPENSHIFT_DIY_PORT --start-server openRoberta.properties

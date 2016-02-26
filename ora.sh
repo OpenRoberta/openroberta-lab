@@ -1,100 +1,85 @@
 #!/bin/bash
 
-serverurl='0.0.0.0:1999'
-ev3ipaddr='10.0.1.1'
+ip='0.0.0.0'
+port='1999'
+lejosipaddr='10.0.1.1' # only needed for updating a lejos based ev3
 oraversion='1.3.2-SNAPSHOT'
+databaseurl='jdbc:hsqldb:hsql://localhost/oradb' # server mode for the database. This setting should be used for production.
+
+scriptdir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 function _helpFn {
-  # be careful when changing the help function.
-  # All words starting with "--" are extracted by a compgen function and considered COMMANDS!
-  echo 'THIS SCRIPT IS FOR DEVELOPERS';
-  echo 'IF you source like ". ora-please-source.sh" before using this script, you get completion when you type TAB (as usual ...)';
-  echo '';
-  $0 --java
-  echo 'you may customize the script by defining default values for properties. Actual values of the properties are:';
-  echo 'ev3ipaddr='"$ev3ipaddr";
-  echo 'oraversion='"$oraversion";
-  echo 'serverurl='"$serverurl";
-  echo '';
-  echo '1.set properties for LATER use in the SAME call';
-  echo '';
-  echo '  --ev3ipaddr {IP-ADDR}              set the ip addr of the EV3 brick for further commands';
-  echo '  --version {VERSION}                set the version to something like d.d.d where d is one or more digits, e.g. 1.2.0'
-  echo '                                     only used when an installation is exported. Use with care.'
-  echo '  --serverurl {IP:PORT}              set a default url (ip address plus port) to which the server is associated.'
-  echo '                                     useful for the commands --start --alive --setev3serverinfo'
-  echo '';
-  echo '2.debugging commands';
-  echo '';
-  echo '  --help                             get help';
-  echo '  --java                             check whether java and javac are on the path and the JDK versin matches. Show the java version';
+  # be careful with file ora-help.txt . All words starting with "--" are extracted by compgen and considered COMMANDS used for completion
+  echo 'THIS SCRIPT IS FOR DEVELOPERS. It is stored in directory '"$scriptdir"
+  echo 'IF you execute ". '"$scriptdir"'/ora-please-source.sh", you get parameter completion when you type TAB (as usual ...)'
   echo ''
-  echo '  --checkout-db OR --restore-db      restore the state of the database to the state last checked out.'
-  echo '                                     this makes sense, if you changed the db during test and dont want to commit your changes'
-  echo '  --alive {-q} {EVERY} {TIMEOUT} {MAIL} check after EVERY sec (default: 60) if the server is alive.'
-  echo '                                     The server is assumed to have crashed, if it does not answer within TIMEOUT sec (default: 10).'
-  echo '                                     If the server is assumed to have crashed, send a mail by calling the script MAIL (default: NO)'
-  echo '                                     -q is the quiet mode: report crashes only'
-  echo '                                     a usefull call, reporting to stdout, is e.g. ora.sh --serverurl localhost:1999 --alive 10 10'
-  echo '  --sqlclient                        start the hsqldb client to query the database. The openroberta server must NOT run and'
-  echo '                                     and thus access the database. Note, that hsqldb is not used in db server node, but standalone.';
-  echo '';
-  echo '3.commands available after a SUCCESSFUL mvn {clean} install';
-  echo '';
-  echo '  --start {PROPERTY-FILE}            start of the server, optionally supply a property file (default: openRoberta.properties';
-  echo '                                     to be used after an --export of the application.' ;
-  echo '  --scpev3menu                       scp the ev3menu.jar to the EV3, uses ev3ipaddr';
-  echo '                                     the root password is "", thus hit return if you are asked';
-  echo '  --scpev3libs                       scp libraries to the EV3, uses ev3ipaddr';
-  echo '                                     the root password is "", thus hit return everytime you are asked';
-  echo '  --setev3serverinfo                 Create a file with the ip address and port of the server.'
-  echo '                                     the root password is "", thus hit return everytime you are asked';
-  echo '  --createemptydb DB-NAME            create an empty database with all tables needed for the OpenRoberta server'
-  echo '                                     Needs a data base name as a prefix for the files/directoriy to be created.'
-  echo '                                     if the database exists, it is not recreated. If a table "PROGRAM" is found'
-  echo '                                     in an existing database, it is assumed, that the setup has already been done.'
-  echo '  --export [-e|-i] INSTALLATION-DIR  create a self-contained installation with an empty database (-e) or without database setup (-i)'
-  echo '                                     with -i the caller is responsible to supply a usable database.'
+  $0 --java
+  echo 'you may customize the script by editing it and defining new default values for properties. Actual values of the properties are:'
+  echo 'oraversion='"$oraversion"
+  echo 'port='"$port"
+  echo 'databaseurl='"$databaseurl"
+  echo 'lejosipaddr='"$lejosipaddr"' # only needed for updating a lejos based ev3'
+  cat "$scriptdir/ora-help.txt"
 }
 
-function _startFn {
-  IFS=':' read -ra IpPort <<< "$serverurl"
-  Ip="${IpPort[0]}"
-  Port="${IpPort[1]}"
-  _checkJava;
+function _startServerFn {
+  _checkJava
   main='de.fhg.iais.roberta.main.ServerStarter'
-  if [ -d OpenRobertaServer ]; then
-    echo "RUNNING OPEN ROBERTA LAB WITHOUT SETUP!"
+  if [ -d OpenRobertaServer ]
+  then
+    echo "RUNNING OPEN ROBERTA LAB FROM A GIT REPOSITORY WITHOUT AN EXPLICIT EXPORT. THIS MAY BE DANGEROUS!"
     cd OpenRobertaServer
-    run="java -cp target/resources/\* ${main} --ip ${Ip} --port ${Port}"
+    run="java -cp target/resources/\* ${main} --port ${port}"
   else
-    run="java -cp resources/\* ${main} --properties ${propfile} --ip ${Ip} --port ${Port}"
+    echo "RUNNING OPEN ROBERTA LAB FROM A INSTALLATION DIRECTORY (probably created by an --export command)"
+    run="java -cp resources/\* ${main} --properties ${propfile} --ip ${ip} --port ${port}"
   fi
   echo "executing: $run"
   eval $run
 }
 
+function _startDatabaseFn {
+  echo "directory in which the database resides (parameter 1) is $dbLocation"
+  echo "database name (parameter 2) is $dbName"
+  if [ -d OpenRobertaServer ]
+  then
+    echo "RUNNING THE DATABASE SERVER FROM A GIT REPOSITORY WITHOUT AN EXPLICIT EXPORT. THIS MAY BE DANGEROUS!"
+    dir="OpenRobertaServer/target/resources"
+  else
+    echo "RUNNING OPEN ROBERTA LAB FROM A INSTALLATION DIRECTORY (probably created by an --export command)"
+    dir="resources"
+  fi
+  run="java -cp $dir/hsqldb-2.3.2.jar org.hsqldb.Server -database.0 file:$dbLocation -dbname.0 $dbName"
+  echo "executing: $run"
+  eval $run
+}
+
 function _aliveFn {
-  echo "checking for a server crash every $every sec with $timeout sec timeout."
-  if [[ "$mail" == 'no' ]]; then
+  echo "checking for a server crash of server $serverurl every $every sec with $timeout sec timeout."
+  if [[ "$mail" == 'no' ]]
+  then
      echo "no mail will be sent if a crash is suspected"
   else
      echo "mail will be sent using the script \"$mail\" if a crash is suspected"
   fi
   while :; do
-    if [[ "$quiet" == 'true' ]]; then
-       curl --max-time $timeout "http://$serverurl/alive" > /dev/null
+    if [[ "$quiet" == 'true' ]]
+    then
+       curl --max-time $timeout "http://$serverurl/rest/alive" > /dev/null
        rc=$?
     else 
-       curl --max-time $timeout "http://$serverurl/alive"
+       curl --max-time $timeout "http://$serverurl/rest/alive"
        rc=$?
-       if [[ $rc == 0 ]]; then
+       if [[ $rc == 0 ]]
+       then
           echo ''
        fi
     fi
-    if [[ $rc != 0 ]]; then
+    if [[ $rc != 0 ]]
+    then
        echo "************************ server seems to be down `date` ************************"
-       if [[ "$mail" != 'no' ]]; then
+       if [[ "$mail" != 'no' ]]
+       then
           sh $mail
        fi
     fi
@@ -102,16 +87,18 @@ function _aliveFn {
   done
 }
 
-# check, whether java and javac are on the PATH. Check for a 64 bit java 7 version.
-# if everything is ok, set variable checkJava to '', otherwise the variable contains error messages
+# check, whether java and javac are on the PATH. Check for the java version.
+# variable checkJava contains debug information
 function _checkJava {
   checkJava=''
   which java > /dev/null
-  if [[ $? != 0 ]]; then
+  if [[ $? != 0 ]]
+  then
      checkJava=$'  java was NOT found on the PATH.\n'
   fi
   which javac > /dev/null
-  if [[ $? != 0 ]]; then
+  if [[ $? != 0 ]]
+  then
      checkJava=${checkJava}$'  javac was NOT found on the PATH.\n'
   fi
   javaversion=`java -d64 -version 2>&1`
@@ -122,10 +109,12 @@ function _checkJava {
   javaversion=`java -version 2>&1`
   case "$javaversion" in
     *1\.7\.*) : ;;
-    *)        checkJava=${checkJava}$'  This may be a java version other than 1.7.*. A version 7 is recommended.' ;;
+    *1\.8\.*) : ;;
+    *)        checkJava=${checkJava}$'  This may be a java version less than 1.7.*. A version 7 is recommended.' ;;
   esac
-  if [[ "$checkJava" != '' ]]; then
-     echo "problems detected:"
+  if [[ "$checkJava" != '' ]]
+  then
+     echo "if you experience problems when trying to start the server, have a look at these hints:"
      echo "$checkJava"
   fi
   echo 'you are using the following java runtime:'
@@ -133,21 +122,25 @@ function _checkJava {
 }
 
 function _exportApplication {
-  if [[ "$dbOption" != '-e' &&  "$dbOption" != '-i' ]]; then
+  if [[ "$dbOption" != '-e' &&  "$dbOption" != '-i' ]]
+  then
     echo 'database option (first parameter) must be either -e or -i - exit 4'
     exit 4
   fi
-  if [[ -e "$exportpath" ]]; then
+  if [[ -e "$exportpath" ]]
+  then
      echo "target directory \"$exportpath\" already exists - exit 4"
      exit 4
   fi
   echo "creating the target directory \"$exportpath\""
   mkdir "$exportpath"
-  if [ $? -ne 0 ] ; then
+  if [ $? -ne 0 ]
+  then
     echo "creating the directory \"$exportpath\" failed - exit 4"
     exit 4
   fi
-  if [[ "$dbOption" == '-e' ]]; then
+  if [[ "$dbOption" == '-e' ]]
+  then
     echo "creating an empty data base"
     $0 --createemptydb "${exportpath}/db/openroberta-db"
   else
@@ -167,18 +160,21 @@ function _exportApplication {
   cp OpenRobertaServer/target/updateResources/*.jar "$exportpath/updateResources"
   cp OpenRobertaServer/target/crossCompilerResources/*.jar "$exportpath/crossCompilerResources"
   cp ora.sh "$exportpath"
-# -------------- begin of a here documents --------------------------------------------------
+# -------------- begin of a here document -------------------------------------------------------------
   cat >"${exportpath}/openRoberta.properties" <<.eof
 version = ${oraversion}
 validversionrange.From = ${oraversion}
 validversionrange.To = ${oraversion}
+hibernate.connection.url = ${databaseurl}
+
 crosscompiler.basedir = userProjects/
 crosscompiler.build.xml = crosscompiler-ev3-build.xml
-hibernate.connection.url = jdbc:hsqldb:file:db/openroberta-db
-robot.updateResources.dir = resources
 robot.updateResources.dir = updateResources
 robot.crossCompilerResources.dir = crossCompilerResources
+robot.type.list = ev3,oraSim
+robot.type.default = ev3
 .eof
+# -------------- end of a here document ---------------------------------------------------------------
 }
 
 function _createemptydb {
@@ -189,35 +185,33 @@ function _createemptydb {
   eval $run
 }
 
-function _scpev3menuFn {
-  run="scp OpenRobertaServer/target/updateResources/EV3Menu.jar root@${ev3ipaddr}:/home/root/lejos/bin/utils"
+function _updateLejos {
+  run="scp OpenRobertaServer/target/updateResources/EV3Menu.jar root@${lejosipaddr}:/home/root/lejos/bin/utils"
   echo "executing: ${run}"
   $run
-}
-
-function _setev3serverinfoFn {
-  echo ${serverurl} | ssh root@${ev3ipaddr} "cat > /home/roberta/serverIP.txt"
-}
-
-function _scpev3libsFn {
+  run="echo ${serverurl} | ssh root@${lejosipaddr} \"cat > /home/roberta/serverIP.txt\""
+  echo "executing: ${run}"
+  $run
   runtime="OpenRobertaServer/target/updateResources/OpenRobertaRuntime.jar"
   shared="OpenRobertaServer/target/updateResources/OpenRobertaShared.jar"
   json='OpenRobertaServer/target/updateResources/json.jar'
   websocket='OpenRobertaServer/target/updateResources/Java-WebSocket.jar'
-  run="ssh root@${ev3ipaddr} mkdir -p /home/roberta/lib"
+  run="ssh root@${lejosipaddr} mkdir -p /home/roberta/lib"
   echo "executing: ${run}"
   $run
-  run="scp ${runtime} ${shared} ${json} ${websocket} root@${ev3ipaddr}:/home/roberta/lib"
+  run="scp ${runtime} ${shared} ${json} ${websocket} root@${lejosipaddr}:/home/roberta/lib"
   echo "executing: ${run}"
   $run
 }
 
 # ---------------------------------------- begin of the script ----------------------------------------------------
 cmd="$1"; shift
-if [[ "$cmd" == '' || "$cmd" == '--help' || "$cmd" == '-h' ]]; then
+if [[ "$cmd" == '' || "$cmd" == '--help' || "$cmd" == '-h' ]]
+then
    _helpFn
    exit 0
-elif [[ "$cmd" == '--java' ]]; then
+elif [[ "$cmd" == '--java' ]]
+then
    _checkJava
    exit 0
 fi
@@ -225,36 +219,71 @@ fi
 continueReadingProperties='true'
 while [[ "$continueReadingProperties" == 'true' ]]; do
    case "$cmd" in
-      --ev3ipaddr|-ev3ip) ev3ipaddr="$1"; shift;    cmd="$1"; shift ;;
-      --serverurl|-sp)    serverurl="$1"; shift;    cmd="$1"; shift ;;
-      --version|-v)       oraversion="$1"; shift;   cmd="$1"; shift ;;
-      *)                  continueReadingProperties='false' ;;
+      --lejosipaddr) lejosipaddr="$1"; shift;   cmd="$1"; shift ;;
+      --ip)          ip="$1"; shift;            cmd="$1"; shift ;;
+      --port)        port="$1"; shift;          cmd="$1"; shift ;;
+      --version)     oraversion="$1"; shift;    cmd="$1"; shift ;;
+      --databaseurl) databaseurl="$1"; shift;   cmd="$1"; shift ;;
+      *)             continueReadingProperties='false'        ;;
    esac
 done
-if [[ "$cmd" == '' ]]; then
+if [[ "$cmd" == '' ]]
+then
    exit 0
 fi
 case "$cmd" in
---checkout-db|--restore-db)
-                    git checkout HEAD -- OpenRobertaServer/db ;;
---sqlclient|-sql)   dbjar=' OpenRobertaServer/target/resources/hsqldb-2.3.2.jar'
-                    dbdriver='org.hsqldb.jdbc.JDBCDriver'
-                    dburl='jdbc:hsqldb:file:OpenRobertaServer/db/openroberta-db'
-                    java -jar $dbjar --driver $dbdriver --url $dburl --user orA --password Pid ;;
---scpev3menu|-menu) _scpev3menuFn ;;
---scpev3libs|-libs) _scpev3libsFn ;;
---setev3serverinfo|-sinfo) _setev3serverinfoFn ;;
+--reset-db)         git checkout HEAD -- OpenRobertaServer/db ;;
+--sqlclient)        if [ -d OpenRobertaServer ]
+                    then
+                      echo "RUNNING THE SQL CLIENT FROM A GIT REPOSITORY WITHOUT AN EXPLICIT EXPORT. THIS MAY BE DANGEROUS!"
+                      dir="OpenRobertaServer/target/resources"
+                    else
+                      echo "RUNNING THE SQL CLIENT FROM A INSTALLATION DIRECTORY (probably created by an --export command)"
+                      dir="resources"
+                    fi
+                    java -jar $dir/hsqldb-2.3.2.jar --driver org.hsqldb.jdbc.JDBCDriver --url $databaseurl --user orA --password Pid ;;
+--update-lejos)     serverurl="$1"
+                    if [[ "$serverurl" == '' ]]
+                    then
+                      echo "the first parameter with the server address is missing. Exit 4"
+                      exit 4
+                    fi
+                    _updateLejos ;;
 --createemptydb)    dbpath="$1"
                     _createemptydb "$dbpath" ;;
---export|-e)        dbOption="$1"
+--export)           if [ -d OpenRobertaServer ]
+                    then
+                      echo "Running the export from a git repository. This is ok!"
+                    else
+                      echo "NO GIT REPOSITORY FOUND. IMPOSSIBLE TO EXPORT (exit 4)!"
+                      exit 4
+                    fi 
+                    dbOption=${1:--e}
                     exportpath="$2"
                     _exportApplication ;;
---start|-s)         propfile="$1"
-                    if [[ "$propfile" != '' ]]; then
-                       propfile="file:$propfile" # make a file resource from the path
+--start-server)     propfile="$1"
+                    if [[ "$propfile" != '' ]] # property file given explicitly
+                    then
+                       propfile="file:$propfile"
+                       echo "starting the server using supplied openroberta.properties from $propFile"
+                    else
+                       if [ -d OpenRobertaServer ]
+                       then
+                         echo "starting the server from a git repository. Using openroberta.properties from the classpath"
+                       else
+                         echo "starting the server from a installation directory (probably created by an --export command)"
+                         echo "Using file \"openroberta.properties\" from the base directory"
+                         propfile="file:openroberta.properties"
+                       fi
                     fi
-                    _startFn ;;
---alive)            if [[ "$1" == '-q' ]]; then
+                    _startServerFn ;;
+--start-db)         dbLocation="${1:-db/openroberta-db}"
+                    dbName="${2:-oradb}"
+                    _startDatabaseFn ;;
+--alive)            serverurl="$1"
+                    shift
+                    if [[ "$1" == '-q' ]]
+                    then
                        quiet='true'
                        shift
                     else
