@@ -42,7 +42,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                 if (result.rc === 'ok') {
                     ROBERTA_USER.setProgram(progName);
                     $('#menuSaveProg').parent().removeClass('disabled');
-                    blocklyWorkspace.robControls.enable("saveProgram");
+                    blocklyWorkspace.robControls.enable('saveProgram');
                     userState.programSaved = true;
                     userState.programModified = false;
                     userState.programTimestamp = result.lastChanged;
@@ -340,78 +340,71 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
     /**
      * Start the program on the brick
      */
-    function start() {
-        LOG.info('run ' + userState.program + ' signed in: ' + userState.id);
+    function runOnBrick() {
+        if (userState.robotState === '' || userState.robotState === 'disconnected') {
+            MSG.displayMessage("POPUP_ROBOT_NOT_CONNECTED", "POPUP", "");
+            return;   
+        } else if (userState.robotState === 'busy') {
+            MSG.displayMessage("POPUP_ROBOT_BUSY", "POPUP", "");
+            return;
+        } else if (ROBERTA_ROBOT.handleFirmwareConflict()) {
+            $('#buttonCancelFirmwareUpdate').css('display', 'none');
+            $('#buttonCancelFirmwareUpdateAndRun').css('display', 'inline');
+        return;
+        }
+        LOG.info('run ' + userState.program + 'on brick' + 
+                 ' signed in: ' + userState.id);
         var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
         var xmlTextConfiguration = ROBERTA_BRICK_CONFIGURATION.getXmlOfConfiguration();
-//        if (Blockly.hasStartButton) {
-//            blocklyWorkspace.robControls.disable('runOnBrick');
-//        }
+
         PROGRAM.runOnBrick(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
             //PROGRAM.showSourceProgram(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
             // console.log(result.javaSource);
             ROBERTA_ROBOT.setState(result);
             if (result.rc == "ok") {
-                if (userState.robot === 'oraSim') {
-                    SIM.init(result.javaScriptProgram);
-                    $('#blocklyDiv').addClass('simActive');
-                    $('#blocklyDiv').parent().bind('transitionend', function() {
-//                        Blockly.fireUiEvent(window, 'resize');
-                        $(window).trigger('resize');
-                        Blockly.svgResize(blocklyWorkspace);
-                        setTimeout(function() {
-                            SIM.setPause(false);
-                        }, 1000);
-                    });
-                    $('#simDiv').addClass('simActive');
-                    $('#simButtonsCollapse').collapse({
-                        'toggle' : false
-                    });
-                    $('.nav > li > ul > .robotType').addClass('disabled');
-                    $('#head-navigation-program-edit').addClass('disabled');
-                    $('#head-navigation-program-edit>ul').addClass('hidden');
-                    UTIL.cacheBlocks(blocklyWorkspace);
-                    COMM.json("/toolbox", {
-                        "cmd" : "loadT",
-                        "name" : userState.toolbox,
-                        "owner" : " "
-                    }, function(result) {
-                        injectBlockly(result, userState.programBlocks, true);
-                    });
-                    $(".sim").removeClass('hide');
-                } else {
-                    MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
-                }
+                MSG.displayMessage("MESSAGE_EDIT_START", "TOAST", userState.program);
             } else {
-                // Blockly.getMainWorkspace().startButton.enable();
                 MSG.displayInformation(result, "", result.message, "");
             }
             refreshBlocklyProgram(result);
         });
     }
-    exports.start = start;
-
-    /**
-     * Run program
-     */
-    function runOnBrick() {
-        if (userState.robot === 'ev3') {
-            if (userState.robotState === '' || userState.robotState === 'disconnected') {
-                MSG.displayMessage("POPUP_ROBOT_NOT_CONNECTED", "POPUP", "");
-            } else if (userState.robotState === 'busy') {
-                MSG.displayMessage("POPUP_ROBOT_BUSY", "POPUP", "");
-            } else if (ROBERTA_ROBOT.handleFirmwareConflict()) {
-                $('#buttonCancelFirmwareUpdate').css('display', 'none');
-                $('#buttonCancelFirmwareUpdateAndRun').css('display', 'inline');
-            } else {
-                start();
-            }
-        } else if (userState.robot === 'oraSim') {
-            start();
-        }
-    }
     exports.runOnBrick = runOnBrick;
+    
+    /**
+     * Start the program in the simulation.
+     */
+    function runInSim() {
+        LOG.info('run ' + userState.program + 'in simulation' + 
+                 ' signed in: ' + userState.id);
+        var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+        var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
+        var xmlTextConfiguration = ROBERTA_BRICK_CONFIGURATION.getXmlOfConfiguration();
+
+        PROGRAM.runInSim(userState.program, userState.configuration, xmlTextProgram, xmlTextConfiguration, function(result) {
+            SIM.init(result.javaScriptProgram);
+            $('#blocklyDiv').addClass('simActive');
+            $('#blocklyDiv').parent().bind('transitionend', function() {
+                $(window).trigger('resize');
+                Blockly.svgResize(blocklyWorkspace);
+                setTimeout(function() {
+                    SIM.setPause(false);
+                }, 1000);
+            });
+            $('#simDiv').addClass('simActive');
+            $('#simButtonsCollapse').collapse({
+                'toggle' : false
+            });
+            $('.nav > li > ul > .robotType').addClass('disabled');
+            $('#head-navigation-program-edit').addClass('disabled');
+            $('#head-navigation-program-edit>ul').addClass('hidden');
+            UTIL.cacheBlocks(blocklyWorkspace);
+            refreshBlocklyProgram(result);
+            $(".sim").removeClass('hide');           
+        });
+    }
+    exports.runInSim = runInSim;
 
     /**
      * Inject Blockly with initial toolbox
@@ -420,7 +413,9 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
         UTIL.response(toolbox);
         var readOnly = opt_readOnly | false;
         if (toolbox.rc === 'ok') {
-            if (!readOnly) {
+            if ($(window).width() < 768 && readOnly) {
+                blocklyWorkspace.clear();
+            } else {
                 $('#blocklyDiv').html('');
                 blocklyWorkspace = Blockly.inject(document.getElementById('blocklyDiv'), {
                     path : '/blockly/',
@@ -439,54 +434,25 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                     variableDeclaration : true,
                     robControls : true
                 });
-            } else {
-                $('#blocklyDiv').html('');
-                blocklyWorkspace = Blockly.inject(document.getElementById('blocklyDiv'), {
-                    path : '/blockly/',
-                    toolbox : toolbox.data,
-                    readOnly : true,
-                    trashcan : false,
-                    zoom : {
-                        controls : true,
-                        wheel : true,
-                        startScale : 1.0,
-                        maxScale : 4,
-                        minScale : .25,
-                        scaleSpeed : 1.1
-                    },
-                    checkInTask : [ 'start', '_def', 'event' ],
-                    variableDeclaration : true,
-                    robControls : true
+                blocklyWorkspace.addChangeListener(function(event) {
+                    console.log("changed");
                 });
+                Blockly.bindEvent_(blocklyWorkspace.robControls.runOnBrick, 'mousedown', null, function(e) {
+                    LOG.info('runOnBrick from blockly button');
+                    runOnBrick();
+                });
+                Blockly.bindEvent_(blocklyWorkspace.robControls.runInSim, 'mousedown', null, function(e) {
+                     LOG.info('runInSim from blockly button');
+                     runInSim();
+                });
+                Blockly.bindEvent_(blocklyWorkspace.robControls.saveProgram, 'mousedown', null, function(e) {
+                    LOG.info('saveProgram from blockly button');
+                    saveToServer();
+                });
+                blocklyWorkspace.robControls.disable('saveProgram');
             }
-            if ($(window).width() < 768 && readOnly) {
-                blocklyWorkspace.clear();
-            } else {
-                initProgramEnvironment(opt_programBlocks);
-                ROBERTA_ROBOT.setState(toolbox);
-            }
-            if (userState.robot === "ev3") {
-                $('#menuShowCode').parent().removeClass('disabled');
-                blocklyWorkspace.robControls.enable('showCode');
-            } else {
-                $('#menuShowCode').parent().addClass('disabled');
-                blocklyWorkspace.robControls.disable('showCode');
-            }
-            blocklyWorkspace.addChangeListener(function(event) {
-                console.log("changed");
-            });
-            Blockly.bindEvent_(blocklyWorkspace.robControls.runOnBrick, 'mousedown', null, function(e) {
-                LOG.info('runOnBrick from blockly button');
-                start();
-            });
-            Blockly.bindEvent_(blocklyWorkspace.robControls.runInSim, 'mousedown', null, function(e) {
-                 LOG.info('runInSim from blockly button');
-                 start();
-            });
-            Blockly.bindEvent_(blocklyWorkspace.robControls.saveProgram, 'mousedown', null, function(e) {
-                LOG.info('saveProgram from blockly button');
-                saveToServer();
-            });
+            initProgramEnvironment(opt_programBlocks);
+            ROBERTA_ROBOT.setState(toolbox);
         }
     }
     exports.injectBlockly = injectBlockly;

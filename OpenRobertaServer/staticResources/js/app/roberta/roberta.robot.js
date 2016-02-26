@@ -1,5 +1,5 @@
-define([ 'exports', 'util', 'message', 'roberta.brick-configuration', 'roberta.user-state', 'roberta.toolbox', 'rest.robot', 'jquery', 'jquery-validate' ],
-        function(exports, UTIL, MSG, ROBERTA_BRICK_CONFIGURATION, userState, ROBERTA_TOOLBOX, ROBOT, $) {
+define([ 'exports', 'util', 'message', 'roberta.brick-configuration', 'roberta.user-state', 'roberta.toolbox', 'rest.robot', 'roberta.program', 'jquery', 'jquery-validate' ],
+        function(exports, UTIL, MSG, ROBERTA_BRICK_CONFIGURATION, userState, ROBERTA_TOOLBOX, ROBOT, ROBERTA_PROGRAM, $) {
 
             var $formSingleModal;
 
@@ -16,7 +16,7 @@ define([ 'exports', 'util', 'message', 'roberta.brick-configuration', 'roberta.u
                         if (result.rc === "ok") {
                             userState.token = token;
                         }
-                        MSG.displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, userState.robotName);
+                        displayInformation(result, "MESSAGE_ROBOT_CONNECTED", result.message, userState.robotName);
                         setState(result);
                         handleFirmwareConflict();
                     });
@@ -155,7 +155,7 @@ define([ 'exports', 'util', 'message', 'roberta.brick-configuration', 'roberta.u
              * @param {result}
              *            result of server call
              */
-            function setState(result) {                
+            function setState(result) {
                 if (result['version']) {
                     userState.version = result.version;
                 }
@@ -190,15 +190,6 @@ define([ 'exports', 'util', 'message', 'roberta.brick-configuration', 'roberta.u
                 } else {
                     userState.sensorValues = '';
                 }
-                if (result['robot.nepoexitvalue'] != undefined) {
-                    //TODO: For different robots we have different error messages
-                    if (result['robot.nepoexitvalue'] !== userState.nepoExitValue) {
-                        userState.nepoExitValue = result['robot.nepoexitvalue'];
-                        if (userState.nepoExitValue !== 143 && userState.nepoExitValue !== 0) {
-                            MSG.displayMessage('POPUP_PROGRAM_TERMINATED_UNEXPECTED', 'POPUP', '')
-                        } 
-                    }
-                } 
                 if (userState.accountName) {
                     $('#iconDisplayLogin').removeClass('error');
                     $('#iconDisplayLogin').addClass('ok');
@@ -210,17 +201,17 @@ define([ 'exports', 'util', 'message', 'roberta.brick-configuration', 'roberta.u
                     $('#iconDisplayRobotState').removeClass('error');
                     $('#iconDisplayRobotState').removeClass('busy');
                     $('#iconDisplayRobotState').addClass('wait');
-                    if (Blockly.hasStartButton) {
-                        // Blockly.getMainWorkspace().startButton.enable();
-                    }
+                    ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.enable('runOnBrick');
                 } else if (userState.robotState === 'busy') {
                     $('#iconDisplayRobotState').removeClass('wait');
                     $('#iconDisplayRobotState').removeClass('error');
                     $('#iconDisplayRobotState').addClass('busy');
+                    ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.disable('runOnBrick');
                 } else {
                     $('#iconDisplayRobotState').removeClass('busy');
                     $('#iconDisplayRobotState').removeClass('wait');
                     $('#iconDisplayRobotState').addClass('error');
+                    ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.disable('runOnBrick');
                 }
 
             }

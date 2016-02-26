@@ -201,15 +201,39 @@ public class ClientProgram {
                             LOG.info("download command for the ev3 skipped, Keep going with push requests");
                         }
                     } else {
+                        ClientProgram.LOG.info("Waiting for new robot systems");
+                    }
+                }
+                handleRunProgramError(response, messageKey, token, wasRobotWaiting);
+
+            } else if ( cmd.equals("runPsim") ) {
+                Key messageKey = null;
+                RobotDao robotDao = new RobotDao(dbSession);
+                Robot robot = robotDao.get(robotId);
+                String token = httpSessionState.getToken();
+                String programName = request.getString("name");
+                String programText = request.optString("programText");
+                String configurationText = request.optString("configurationText");
+                boolean wasRobotWaiting = false;
+
+                BlocklyProgramAndConfigTransformer data = BlocklyProgramAndConfigTransformer.transform(programText, configurationText);
+                messageKey = data.getErrorMessage();
+                messageKey = programConfigurationCompatibilityCheck(response, data, robot.getName());
+
+                if ( messageKey == null ) {
+                    if ( robot.getName().equals("ev3") ) {
                         ClientProgram.LOG.info("JavaScript code generation started for program {}", programName);
                         String javaScriptCode = Ast2Ev3JavaScriptVisitor.generate(data.getProgramTransformer().getTree());
                         ClientProgram.LOG.info("JavaScriptCode \n{}", javaScriptCode);
                         response.put("javaScriptProgram", javaScriptCode);
                         wasRobotWaiting = true;
                         messageKey = Key.COMPILERWORKFLOW_SUCCESS;
+                    } else {
+                        ClientProgram.LOG.info("Waiting for new robot systems");
                     }
                 }
                 handleRunProgramError(response, messageKey, token, wasRobotWaiting);
+
             } else {
                 ClientProgram.LOG.error("Invalid command: " + cmd);
                 Util.addErrorInfo(response, Key.COMMAND_INVALID);

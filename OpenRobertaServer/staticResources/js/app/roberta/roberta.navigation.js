@@ -114,21 +114,8 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                     $('#menuShowCode').parent().removeClass('disabled');
                     ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.enable('showCode');
                     BRICKLY.loadToolboxAndConfiguration();
-                } else if (robot === "oraSim") {
-                    ROBERTA_BRICK_CONFIGURATION.setConfiguration("ORSim");
-                    $('#blocklyDiv').addClass('simBackground');
-                    $('#menuEv3').parent().removeClass('disabled');
-                    $('#menuSim').parent().addClass('disabled');
-                    $('#menuConnect').parent().addClass('disabled');
-                    $('#iconDisplayRobotState').removeClass('typcn-ev3');
-                    $('#iconDisplayRobotState').addClass('typcn-Roberta');
-                    $('#menuShowCode').parent().addClass('disabled');
-                    ROBERTA_PROGRAM.getBlocklyWorkspace().robControls.disable('showCode');
-                    PROGRAM.loadProgramFromListing('NEPOprog', 'Roberta', function(result) {
-                        if (result.rc === 'ok') {
-                            ROBERTA_PROGRAM.showProgram(result, true, 'NEPOprog');
-                        }
-                    });
+                } else if (robot === "nxt") {
+                    // coming soon
                 }
                 ROBERTA_TOOLBOX.loadToolbox(userState.toolbox);
             }
@@ -153,6 +140,8 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
             var domId = event.target.id;
             if (domId === 'menuRunProg') { //  Submenu 'Program'   
                 ROBERTA_PROGRAM.runOnBrick();
+            } else if (domId === 'menuRunSim') { //  Submenu 'Program'
+                ROBERTA_PROGRAM.runInSim()();
             } else if (domId === 'menuCheckProg') { //  Submenu 'Program'
                 ROBERTA_PROGRAM.checkProgram();
             } else if (domId === 'menuNewProg') { //  Submenu 'Program'
@@ -176,7 +165,8 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
                 ROBERTA_BRICK_CONFIGURATION.setConfiguration("EV3basis");//            
                 BRICKLY.initConfigurationEnvironment();
                 $('#menuSaveConfig').parent().addClass('disabled');
-                //BRICKLY.getBricklyWorkspace().robControls.disable('saveProgram');
+                BRICKLY.getBricklyWorkspace().robControls.disable('saveProgram');
+                BRICKLY.initConfigurationEnvironment();
             } else if (domId === 'menuListConfig') { //  Submenu 'Configuration'
                 deactivateProgConfigMenu();
                 $('#tabs').css('display', 'inline');
@@ -188,13 +178,12 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
             } else if (domId === 'menuSaveAsConfig') { //  Submenu 'Configuration'
                 ROBERTA_BRICK_CONFIGURATION.showSaveAsModal();
             } else if (domId === 'menuEv3') { // Submenu 'Robot'
-                if (ROBERTA_PROGRAM.newProgram()) {
-                    switchRobot('ev3');
-                }
-            } else if (domId === 'menuSim') { // Submenu 'Robot'
-                if (ROBERTA_PROGRAM.newProgram()) {
-                    switchRobot('oraSim');
-                }
+              alert('yes');
+//                if (ROBERTA_PROGRAM.newProgram()) {
+//                    switchRobot('ev3');
+//                }
+            } else if (domId === 'menuNxt') { // Submenu 'Robot'
+                alert('NXT is coming soon!')
             } else if (domId === 'menuConnect') { // Submenu 'Robot'
                 $('#buttonCancelFirmwareUpdate').css('display', 'inline');
                 $('#buttonCancelFirmwareUpdateAndRun').css('display', 'none');
@@ -395,10 +384,11 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
             }
         }, 'simScene clicked');
 
-        $('#startSim').onWrap('click', function(event) {
-            switchRobot('oraSim');
-        }, 'start with simulation clicked');
-
+        // preliminary (not used)
+        $('#startNXT').onWrap('click', function(event) {
+            switchRobot('nxt');
+        }, 'start with nxt clicked');
+        // preliminary (not used)
         $('#startEV3').onWrap('click', function(event) {
             switchRobot('ev3');
         }, 'start with ev3 clicked');
@@ -406,10 +396,10 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
         $('.codeBack').onWrap('click', function(event) {
             $('#blocklyDiv').removeClass('codeActive');
             $('#codeDiv').removeClass('codeActive');
-            if (userState.robot === "oraSim") {
+            if (userState.robot === "nxt") {
                 $('#menuEv3').parent().removeClass('disabled');
             } else {
-                $('#menuSim').parent().removeClass('disabled');
+                $('#menuNxt').parent().removeClass('disabled');
             }
             // Blockly.fireUiEvent(window, 'resize')
             Blockly.svgResize(ROBERTA_PROGRAM.getBlocklyWorkspace());

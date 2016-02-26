@@ -192,6 +192,31 @@ define([ 'exports', 'comm' ], function(exports, COMM) {
     }
 
     exports.runOnBrick = runOnBrick;
+    
+    /**
+     * Run program
+     * 
+     * @param programName
+     *            {String} - name of the program
+     * @param configName
+     *            {String } - name of the robot configuration
+     * @param xmlTextProgram
+     *            {String} - XML representation of the program
+     * @param xmlTextConfig
+     *            {String} - XML representation of the robot configuration
+     * 
+     */
+    function runInSim(programName, configName, xmlTextProgram, xmlTextConfig, successFn) {
+        COMM.json("/program", {
+            "cmd" : "runPsim",
+            "name" : programName,
+            "configuration" : configName,
+            "programText" : xmlTextProgram,
+            "configurationText" : xmlTextConfig
+        }, successFn, "run program '" + programName + "' with configuration '" + configName + "'");
+    }
+
+    exports.runInSim = runInSim;
 
     /**
      * Refresh program relations list

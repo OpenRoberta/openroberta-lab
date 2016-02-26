@@ -30,8 +30,8 @@ define([ 'exports', 'message', 'log', 'util', 'rest.configuration', 'roberta.use
                     var confName = $('#singleModalInput').val().trim();
                     setConfiguration(confName);
                     $('#menuSaveConfig').parent().removeClass('login');
-                    $('#menuSaveConfig').parent().removeClass('disabled');
-                    // BRICKLY.getBricklyWorkspace().saveButton.enable();
+                    $('#menuSaveConfig').parent().removeClass('disabled');                   
+                    BRICKLY.getBricklyWorkspace().robControls.enable('saveProgram');
                     userState.configurationSaved = true;
                     $('.modal').modal('hide'); // close all opened popups
                     var xmlText = exports.getXmlOfConfiguration(BRICKLY.getBricklyWorkspace());
