@@ -88,7 +88,7 @@ public class Ev3Command {
             case CMD_REGISTER:
                 LOG.info("pushcmd - brick sends token " + token + " for registration");
                 Ev3CommunicationData state = new Ev3CommunicationData(token, macaddr, brickname, batteryvoltage, menuversion, firmwarename, firmwareversion);
-                boolean result = brickCommunicator.brickWantsTokenToBeApproved(state);
+                boolean result = this.brickCommunicator.brickWantsTokenToBeApproved(state);
                 response = new JSONObject().put("response", result ? "ok" : "error").put("cmd", result ? CMD_REPEAT : CMD_ABORT);
                 return Response.ok(response).build();
             case CMD_PUSH:
@@ -98,10 +98,9 @@ public class Ev3Command {
                     pushRequestCounterForLogging.set(0);
                     LOG.info("/pushcmd - push request for token " + token + " [count:" + counter + "]");
                 }
-                state = brickCommunicator.getState(token);
+                state = this.brickCommunicator.getState(token);
                 state.setNepoExitValue(nepoExitValue);
-                System.out.println(nepoExitValue);
-                String command = brickCommunicator.brickWaitsForAServerPush(token, batteryvoltage);
+                String command = this.brickCommunicator.brickWaitsForAServerPush(token, batteryvoltage);
                 if ( command == null ) {
                     LOG.error("No valid command issued by the server as response to a push command request for token " + token);
                     return Response.serverError().build();

@@ -174,6 +174,8 @@ public class Util {
                                 infoAboutState = "wait";
                             } else if ( communicationState == State.GARBAGE ) {
                                 infoAboutState = "disconnected";
+                                //FIXME: showInfo on client side uses this as checking if the robot is available
+                                response.put("robot.name", "");
                             } else {
                                 infoAboutState = "wait"; // is there a need to distinguish the communication state more detailed?
                             }
