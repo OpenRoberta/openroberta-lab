@@ -1382,7 +1382,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append("#!/usr/bin/python\n\n");
         this.sb.append("from __future__ import absolute_import\n");
         this.sb.append("from roberta.ev3 import Hal\n");
-        this.sb.append("from roberta import BlocklyMethods\n");
+        this.sb.append("from roberta.BlocklyMethods import BlocklyMethods\n");
         this.sb.append("from sets import Set\n");
         this.sb.append("from ev3dev import ev3 as ev3dev\n");
         this.sb.append("import math\n\n");
