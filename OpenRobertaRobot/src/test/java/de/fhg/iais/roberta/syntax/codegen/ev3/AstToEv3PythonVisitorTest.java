@@ -21,7 +21,7 @@ public class AstToEv3PythonVisitorTest {
         + "#!/usr/bin/python\n\n"
         + "from __future__ import absolute_import"
         + "from roberta.ev3 import Hal\n"
-        + "from roberta import BlocklyMethods\n"
+        + "from roberta.BlocklyMethods import BlocklyMethods\n"
         + "from sets import Set\n"
         + "from ev3dev import ev3 as ev3dev\n"
         + "import math\n\n"
