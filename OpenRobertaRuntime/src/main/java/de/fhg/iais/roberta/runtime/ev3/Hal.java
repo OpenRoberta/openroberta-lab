@@ -202,14 +202,23 @@ public class Hal {
                         case NONE:
                             return;
                         case WEBSOCKET:
-                            logToServerWS(ws);
+                            try {
+                                logToServerWS(ws);
+                            } catch ( Exception programFinished ) {
+                                return;
+                            }
                             break;
                         case REST:
-                            logToServerRest();
+                            try {
+                                logToServerRest();
+                            } catch ( Exception programFinished ) {
+                                return;
+                            }
                             break;
                         default:
                             return;
                     }
+                    Delay.msDelay(2000);
                 }
             }
         });
@@ -226,16 +235,21 @@ public class Hal {
         this.serverLoggerThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while ( Thread.currentThread().isInterrupted() ) {
+                while ( true ) {
                     switch ( Hal.this.connectionType ) {
                         case NONE:
                             return;
                         case REST:
-                            logToServerRest();
+                            try {
+                                logToServerRest();
+                            } catch ( Exception programFinished ) {
+                                return;
+                            }
                             break;
                         default:
                             return;
                     }
+                    Delay.msDelay(2000);
                 }
             }
         });
@@ -258,40 +272,19 @@ public class Hal {
     }
 
     /**
-     * UNUSED Interrupt the logging-to-server thread.
-     */
-    public void stopServerLoggingThread() {
-        if ( this.serverLoggerThread != null ) {
-            this.serverLoggerThread.interrupt();
-        }
-    }
-
-    /**
-     * UNUSED Interrupt the logging-to-ev3screen thread.
-     */
-    public void stopScreenLoggingThread() {
-        if ( this.screenLoggerThread != null ) {
-            this.screenLoggerThread.interrupt();
-        }
-    }
-
-    /**
      * Send sensor values to Open Roberta Lab via websocket.
      * Fall back to REST if the websocket is not able to connect to the server at least once.
      */
     public void logToServerWS(ClientWebSocket ws) {
-        if ( ws.isServerUnreachable() ) {
+        // READYSTATE.CONNECTING not working/ unused
+        System.out.println(ws.getReadyState());
+        if ( ws.getReadyState() == READYSTATE.OPEN ) {
+            sendJSONviaWebsocket(ws);
+        } else if ( ws.getReadyState() == READYSTATE.CLOSED || ws.getReadyState() == READYSTATE.CLOSING ) {
+            ws.close();
             this.connectionType = ConnectionType.REST;
             return;
         }
-        if ( ws.getReadyState() == READYSTATE.OPEN ) {
-            sendJSONviaWebsocket(ws);
-            Delay.msDelay(1500);
-        } else if ( ws.getReadyState() == READYSTATE.NOT_YET_CONNECTED || ws.getReadyState() == READYSTATE.CLOSED ) {
-            ws.connect();
-        }
-        Delay.msDelay(500);
-        System.out.println(ws.getReadyState());
     }
 
     /**
@@ -310,7 +303,6 @@ public class Hal {
             this.wifiLogging = false;
             this.connectionType = ConnectionType.NONE;
         }
-        Delay.msDelay(2000);
     }
 
     /**
@@ -455,6 +447,7 @@ public class Hal {
     public void closeResources() throws InterruptedException, IOException {
         EV3IOPort.closeAll();
         this.lcdos.close();
+        System.exit(0);
     }
 
     //    /**

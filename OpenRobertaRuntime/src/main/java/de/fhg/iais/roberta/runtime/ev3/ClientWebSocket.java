@@ -8,15 +8,8 @@ import org.java_websocket.handshake.ServerHandshake;
 
 class ClientWebSocket extends WebSocketClient {
 
-    private boolean connectedOnce = false;
-    private boolean hostunreachable = false;
-
     public ClientWebSocket(URI serverUri) {
         super(serverUri, new Draft_17());
-    }
-
-    public boolean isServerUnreachable() {
-        return this.hostunreachable;
     }
 
     /**
@@ -24,8 +17,7 @@ class ClientWebSocket extends WebSocketClient {
      */
     @Override
     public void onOpen(ServerHandshake handshakedata) {
-        this.connectedOnce = true;
-        System.out.println("onOpen " + this.connectedOnce);
+        // ok
     }
 
     @Override
@@ -45,9 +37,6 @@ class ClientWebSocket extends WebSocketClient {
      */
     @Override
     public void onError(Exception e) {
-        if ( !this.connectedOnce ) {
-            this.hostunreachable = true;
-        }
-        System.out.println("onError " + this.hostunreachable);
+        // ok
     }
 }
