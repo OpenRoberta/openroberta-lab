@@ -651,7 +651,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
         String methodName = isRegulated ? "hal.setRegulatedMotorSpeed('" : "hal.setUnregulatedMotorSpeed('";
-        this.sb.append(methodName + motorSetPowerAction.getPort().toString() + ", ");
+        this.sb.append(methodName + motorSetPowerAction.getPort().toString() + "', ");
         motorSetPowerAction.getPower().visit(this);
         this.sb.append(")");
         return null;
