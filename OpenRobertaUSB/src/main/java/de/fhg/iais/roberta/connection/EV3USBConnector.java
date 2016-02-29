@@ -32,6 +32,7 @@ public class EV3USBConnector extends Observable implements Runnable, Connector {
         "runtime",
         "shared",
         "jsonlib",
+        "websocketlib",
         "ev3menu"
     };
 

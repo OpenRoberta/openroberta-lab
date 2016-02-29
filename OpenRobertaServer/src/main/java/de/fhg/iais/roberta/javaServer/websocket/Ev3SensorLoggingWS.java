@@ -1,12 +1,12 @@
 package de.fhg.iais.roberta.javaServer.websocket;
 
+import org.codehaus.jettison.json.JSONObject;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,13 +16,13 @@ import de.fhg.iais.roberta.robotCommunication.ev3.Ev3CommunicationData;
 import de.fhg.iais.roberta.robotCommunication.ev3.Ev3Communicator;
 
 @WebSocket
-public class WebSocketExample {
-    private static final Logger LOG = LoggerFactory.getLogger(WebSocketExample.class);
+public class Ev3SensorLoggingWS {
+    private static final Logger LOG = LoggerFactory.getLogger(Ev3SensorLoggingWS.class);
     private static Injector guiceInjector = null;
 
     public static void setGuiceInjector(Injector guiceInjector) {
-        if ( WebSocketExample.guiceInjector == null ) {
-            WebSocketExample.guiceInjector = guiceInjector;
+        if ( Ev3SensorLoggingWS.guiceInjector == null ) {
+            Ev3SensorLoggingWS.guiceInjector = guiceInjector;
         } else {
             LOG.error("Guice injector for websockets is set twice, this call is simply ignored");
         }

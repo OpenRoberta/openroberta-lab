@@ -22,7 +22,7 @@ import com.google.inject.servlet.GuiceFilter;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 
 import de.fhg.iais.roberta.guice.RobertaGuiceServletConfig;
-import de.fhg.iais.roberta.javaServer.websocket.WebSocketExample;
+import de.fhg.iais.roberta.javaServer.websocket.Ev3SensorLoggingWS;
 import de.fhg.iais.roberta.persistence.dao.ProgramDao;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.SessionFactoryWrapper;
@@ -163,7 +163,7 @@ public class ServerStarter {
             System.exit(16);
         }
         this.injector = robertaGuiceServletConfig.getCreatedInjector();
-        WebSocketExample.setGuiceInjector(this.injector);
+        Ev3SensorLoggingWS.setGuiceInjector(this.injector);
         return server;
     }
 
@@ -195,7 +195,7 @@ public class ServerStarter {
 
         @Override
         public void configure(WebSocketServletFactory factory) {
-            factory.register(WebSocketExample.class);
+            factory.register(Ev3SensorLoggingWS.class);
         }
     }
 }

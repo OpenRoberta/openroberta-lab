@@ -73,6 +73,19 @@ public class Ev3Update {
     }
 
     @GET
+    @Path("/websocketlib")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getWebSocketLib() throws FileNotFoundException {
+        AliveData.rememberRobotCall();
+        LOG.info("/update/websocketlib called");
+        File jar = new File(this.robotUpdateResourcesDir + "/Java-WebSocket.jar");
+        ResponseBuilder response = Response.ok(new FileInputStream(jar));
+        response.header("Content-Disposition", "attachment; filename=Java-WebSocket.jar");
+        response.header("Filename", "Java-WebSocket.jar");
+        return response.build();
+    }
+
+    @GET
     @Path("/ev3menu")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getMenu() throws FileNotFoundException {

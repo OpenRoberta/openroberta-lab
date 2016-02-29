@@ -1,6 +1,6 @@
 package de.fhg.iais.roberta.robotCommunication.ev3;
 
-import org.json.JSONObject;
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

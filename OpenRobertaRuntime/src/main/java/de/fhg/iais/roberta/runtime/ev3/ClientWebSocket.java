@@ -8,13 +8,24 @@ import org.java_websocket.handshake.ServerHandshake;
 
 class ClientWebSocket extends WebSocketClient {
 
+    private boolean connectedOnce = false;
+    private boolean hostunreachable = false;
+
     public ClientWebSocket(URI serverUri) {
         super(serverUri, new Draft_17());
     }
 
+    public boolean isServerUnreachable() {
+        return this.hostunreachable;
+    }
+
+    /**
+     * Store information that it is possible to connect via websocket to the server.
+     */
     @Override
     public void onOpen(ServerHandshake handshakedata) {
-        // ok
+        this.connectedOnce = true;
+        System.out.println("onOpen " + this.connectedOnce);
     }
 
     @Override
@@ -28,8 +39,15 @@ class ClientWebSocket extends WebSocketClient {
         // ok
     }
 
+    /**
+     * Provide information for Hal what connection type to use. If the server was reached at least once by the websocket, Hal will continue to use the
+     * websocket. Otherwise Hal will fall back to Rest calls.
+     */
     @Override
     public void onError(Exception e) {
-        // ok
+        if ( !this.connectedOnce ) {
+            this.hostunreachable = true;
+        }
+        System.out.println("onError " + this.hostunreachable);
     }
 }

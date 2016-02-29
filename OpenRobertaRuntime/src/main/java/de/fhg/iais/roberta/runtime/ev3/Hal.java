@@ -3,10 +3,13 @@ package de.fhg.iais.roberta.runtime.ev3;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,7 +18,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.java_websocket.WebSocket.READYSTATE;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.fhg.iais.roberta.components.ev3.EV3Actor;
@@ -60,6 +62,10 @@ import lejos.utility.Stopwatch;
  */
 public class Hal {
 
+    private enum ConnectionType {
+        NONE, WEBSOCKET, REST
+    };
+
     private static final int NUMBER_OF_CHARACTERS_IN_ROW = 17;
     private static final int BLUETOOTH_TIMEOUT = 20;
 
@@ -79,7 +85,8 @@ public class Hal {
     private final BluetoothCom blueCom = new BluetoothComImpl();
 
     private Properties openrobertaProperties = null;
-    private ClientWebSocket ws = null;
+    private URI sensorloggingWebSocketURI = null;
+    private URL sensorloggingRestURL = null;
     private Thread serverLoggerThread = null;
     private Thread screenLoggerThread = null;
     private final Ev3Configuration brickConfiguration;
@@ -87,6 +94,7 @@ public class Hal {
     private String token = "";
     private String serverAddress = "";
     private boolean wifiLogging = false;
+    private ConnectionType connectionType = ConnectionType.NONE;
 
     private static final String rawOldGlasses =
         "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0080\u003f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00fe\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00f0\u007f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00ff\u0007\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u0000\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0000\u0000\u0000\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u0000\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u0000\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u0000\u0000\u0000\u0000\u00ff\u0007\u00fc\u00ff\u00ff\u000f\u0000\u0000\u0000\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u0000\u0000\u0080\u00ff\u0001\u00f0\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u0000\u00fe\u003f\u00f0\u00ff\u00ff\u00ff\u0007\u0000\u0000\u0000\u0000\u00e0\u00ff\u0000\u00f0\u00ff\u00ff\u003f\u0000\u0000\u0000\u0000\u0000\u00ff\u000f\u00c0\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u0000\u00f0\u003f\u0000\u00e0\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u0080\u00ff\u0003\u00c0\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u00f8\u001f\u0000\u00e0\u00ff\u00ff\u00ff\u0000\u0000\u0000\u0000\u00c0\u00ff\u0000\u0080\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u00fc\u000f\u0000\u00e0\u00ff\u00ff\u00ff\u0001\u0000\u0000\u0000\u00e0\u007f\u0000\u0080\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u00fe\u0007\u0000\u00e0\u00ff\u00ff\u00ff\u0003\u0000\u0000\u0000\u00f0\u003f\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u0000\u0000\u00ff\u0003\u0000\u00f0\u00ff\u00ff\u00ff\u0007\u0000\u0000\u0000\u00f8\u001f\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0000\u0080\u00ff\u0001\u0000\u00f0\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u00f8\u000f\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u00c0\u00ff\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u00fc\u0007\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u00c0\u00ff\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u00fe\u0003\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u00c0\u007f\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u00fe\u0001\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u0000\u00e0\u003f\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u00ff\u0001\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u00f0\u003f\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u00ff\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u00f0\u001f\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0080\u00ff\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u00f8\u001f\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u0080\u007f\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u00f8\u000f\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u00c0\u007f\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u00c0\u003f\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u00fc\u0007\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u00c0\u003f\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u00fc\u0007\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u00e0\u001f\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u001f\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u001f\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u00fe\u0003\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u001f\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0080\u0001\u00fe\u0003\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u001f\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00f0\u000f\u00ff\u0003\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00f0\u001f\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00f8\u001f\u00ff\u0003\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u003f\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u003e\u007c\u00ff\u0007\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u003f\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u00f8\u00ff\u0007\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u00f0\u00ff\u001f\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00e3\u00c7\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00fb\u00df\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u0000\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0000\u0000\u0080\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u0000\u0000\u0000\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u00ff\u0007\u0000\u0000\u0000\u0000\u00f0\u00ff\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u0000\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0000\u0000\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u0000\u0000\u00e0\u00ff\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u00ff\u0003\u0000\u0000\u0000\u0000\u0000\u00c0\u00ff\u00ff\u00ff\u00ff\u003f\u0000\u0000\u0000\u0000\u0000\u0000\u00fe\u00ff\u00ff\u00ff\u00ff\u0001\u0000\u0000\u0000\u0000\u0000\u0000\u00ff\u00ff\u00ff\u00ff\u000f\u0000\u0000\u0000\u0000\u0000\u0000\u00f8\u00ff\u00ff\u00ff\u007f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00fc\u00ff\u00ff\u00ff\u0003\u0000\u0000\u0000\u0000\u0000\u0000\u00e0\u00ff\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00f0\u00ff\u00ff\u00ff\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0080\u00ff\u00ff\u00ff\u0007\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0080\u00ff\u00ff\u001f\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00fc\u00ff\u00ff\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u00f0\u00ff\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0080\u00ff\u0007\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000";
@@ -130,11 +138,11 @@ public class Hal {
             this.serverAddress = this.openrobertaProperties.getProperty("lastaddress");
             this.token = this.openrobertaProperties.getProperty("lasttoken");
             this.wifiLogging = this.openrobertaProperties.getProperty("connection").equals("wifi") ? true : false;
-            this.ws = new ClientWebSocket(new URI("ws://" + this.serverAddress + "/ws/"));
-        } catch ( IOException | URISyntaxException e ) {
-            // ok
+            this.sensorloggingWebSocketURI = new URI("ws://" + this.serverAddress + "/ws/");
+            this.sensorloggingRestURL = new URL("http://" + this.serverAddress + "/rest/sensorlogging");
+        } catch ( Exception e ) {
+            this.wifiLogging = false;
         }
-
     }
 
     /**
@@ -149,24 +157,90 @@ public class Hal {
         Properties p = new Properties();
         p.load(new FileInputStream(f));
         return p;
+    }
 
+    private HttpURLConnection openConnection() throws SocketTimeoutException, IOException {
+        HttpURLConnection httpURLConnection = (HttpURLConnection) this.sensorloggingRestURL.openConnection();
+        httpURLConnection.setDoInput(true);
+        httpURLConnection.setDoOutput(true);
+        httpURLConnection.setRequestMethod("POST");
+        httpURLConnection.setReadTimeout(5000);
+        httpURLConnection.setRequestProperty("Content-Type", "application/json; charset=utf8");
+        return httpURLConnection;
     }
 
     /**
-     * Start a new Thread from the NEPO program to retrieve sensor values from sample providers to send them to the server via websockets.
-     * This is only allowed, if the last connection is wifi set by the ev3 menu.
+     * <b>!!!Temporary solution for version 1.4!!!</b></br>
+     * Ugly fix, we can not upload websocket library to the ev3 in version 1.4, therefor use special method without websocket reference.
+     * Logging is only allowed, if the last connection is wifi set by the ev3 menu.
      */
     public void startServerLoggingThread() {
         if ( this.wifiLogging ) {
-            this.serverLoggerThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    logToServer();
-                }
-            });
-            this.serverLoggerThread.setDaemon(true);
-            this.serverLoggerThread.start();
+            File f = new File("/home/roberta/lib/Java-WebSocket.jar");
+            if ( f.exists() ) {
+                loggingWithWebSocket();
+            } else {
+                loggingWithoutWebSocket();
+            }
         }
+    }
+
+    /**
+     * <b>!!!Temporary solution for version 1.4!!!</b></br>
+     * Start a new thread for logging with websocket reference.
+     */
+    private void loggingWithWebSocket() {
+        final ClientWebSocket ws = new ClientWebSocket(this.sensorloggingWebSocketURI);
+        ws.connect();
+        this.connectionType = ConnectionType.WEBSOCKET;
+
+        this.serverLoggerThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while ( true ) {
+                    switch ( Hal.this.connectionType ) {
+                        case NONE:
+                            return;
+                        case WEBSOCKET:
+                            logToServerWS(ws);
+                            break;
+                        case REST:
+                            logToServerRest();
+                            break;
+                        default:
+                            return;
+                    }
+                }
+            }
+        });
+        this.serverLoggerThread.setDaemon(true);
+        this.serverLoggerThread.start();
+    }
+
+    /**
+     * <b>!!!Temporary solution for version 1.4!!!</b></br>
+     * Start a new thread for logging without websocket reference.
+     */
+    private void loggingWithoutWebSocket() {
+        this.connectionType = ConnectionType.REST;
+        this.serverLoggerThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while ( Thread.currentThread().isInterrupted() ) {
+                    switch ( Hal.this.connectionType ) {
+                        case NONE:
+                            return;
+                        case REST:
+                            logToServerRest();
+                            break;
+                        default:
+                            return;
+                    }
+                }
+            }
+        });
+        this.serverLoggerThread.setDaemon(true);
+        this.serverLoggerThread.start();
     }
 
     /**
@@ -184,7 +258,7 @@ public class Hal {
     }
 
     /**
-     * Interrupt the logging-to-server thread.
+     * UNUSED Interrupt the logging-to-server thread.
      */
     public void stopServerLoggingThread() {
         if ( this.serverLoggerThread != null ) {
@@ -193,7 +267,7 @@ public class Hal {
     }
 
     /**
-     * Interrupt the logging-to-ev3screen thread.
+     * UNUSED Interrupt the logging-to-ev3screen thread.
      */
     public void stopScreenLoggingThread() {
         if ( this.screenLoggerThread != null ) {
@@ -202,33 +276,67 @@ public class Hal {
     }
 
     /**
-     * Call in a separate thread for sending sensor values to Open Roberta Lab via websocket.
-     * The thread should be interrupted from the NEPO program to stop logging.
+     * Send sensor values to Open Roberta Lab via websocket.
+     * Fall back to REST if the websocket is not able to connect to the server at least once.
      */
-    public void logToServer() {
-        while ( !Thread.currentThread().isInterrupted() ) {
-            if ( this.ws.getReadyState() == READYSTATE.OPEN ) {
-                sendJSON();
-                Delay.msDelay(1900);
-            } else if ( this.ws.getReadyState() == READYSTATE.NOT_YET_CONNECTED || this.ws.getReadyState() == READYSTATE.CLOSED ) {
-                this.ws.connect();
-                while ( !(this.ws.getReadyState() == READYSTATE.OPEN) ) {
-                    Delay.msDelay(500);
-                }
-            }
-            Delay.msDelay(100);
+    public void logToServerWS(ClientWebSocket ws) {
+        if ( ws.isServerUnreachable() ) {
+            this.connectionType = ConnectionType.REST;
+            return;
         }
+        if ( ws.getReadyState() == READYSTATE.OPEN ) {
+            sendJSONviaWebsocket(ws);
+            Delay.msDelay(1500);
+        } else if ( ws.getReadyState() == READYSTATE.NOT_YET_CONNECTED || ws.getReadyState() == READYSTATE.CLOSED ) {
+            ws.connect();
+        }
+        Delay.msDelay(500);
+        System.out.println(ws.getReadyState());
+    }
+
+    /**
+     * Send sensor values to Open Roberta Lab via websocket.
+     * Give up the logging if no connection is possible.
+     */
+    public void logToServerRest() {
+        try {
+            HttpURLConnection httpURLConnection = openConnection();
+            sendJSONviaRest(httpURLConnection);
+            System.out.println(httpURLConnection.getResponseCode());
+            httpURLConnection.disconnect();
+            this.connectionType = ConnectionType.REST;
+        } catch ( Exception e ) {
+            e.printStackTrace();
+            this.wifiLogging = false;
+            this.connectionType = ConnectionType.NONE;
+        }
+        Delay.msDelay(2000);
     }
 
     /**
      * Write sensor values as JSON object to the websocket.
      */
-    private void sendJSON() {
+    private void sendJSONviaWebsocket(ClientWebSocket ws) {
         JSONObject ev3Values = new JSONObject();
         ev3Values.put("token", this.token);
-        getSensorsValues(ev3Values);
-        getActorsTacho(ev3Values);
-        this.ws.send(ev3Values.toString());
+        addSensorsValues(ev3Values);
+        addActorsTacho(ev3Values);
+        ws.send(ev3Values.toString());
+    }
+
+    /**
+     * Write sensor values as JSON object to the websocket.
+     *
+     * @throws IOException
+     */
+    private void sendJSONviaRest(HttpURLConnection httpURLConnection) throws IOException {
+        JSONObject ev3Values = new JSONObject();
+        ev3Values.put("token", this.token);
+        addSensorsValues(ev3Values);
+        addActorsTacho(ev3Values);
+        OutputStream os = httpURLConnection.getOutputStream();
+        os.write(ev3Values.toString().getBytes("UTF-8"));
+        os.close();
     }
 
     /**
@@ -236,7 +344,7 @@ public class Hal {
      *
      * @param ev3Values
      */
-    private void getActorsTacho(JSONObject ev3Values) {
+    private void addActorsTacho(JSONObject ev3Values) {
         for ( Entry<ActorPort, EV3Actor> mapEntry : this.brickConfiguration.getActors().entrySet() ) {
             int hardwareId = mapEntry.getValue().getComponentType().hashCode();
             ActorPort port = mapEntry.getKey();
@@ -258,7 +366,7 @@ public class Hal {
      *
      * @param ev3Values
      */
-    private void getSensorsValues(JSONObject ev3Values) {
+    private void addSensorsValues(JSONObject ev3Values) {
         for ( UsedSensor sensor : this.usedSensors ) {
             SensorPort port = sensor.getPort();
             SensorMode mode = (SensorMode) sensor.getMode();
@@ -346,35 +454,31 @@ public class Hal {
      */
     public void closeResources() throws InterruptedException, IOException {
         EV3IOPort.closeAll();
-        stopServerLoggingThread();
-        stopScreenLoggingThread();
-        this.ws.close();
-        this.ws = null;
         this.lcdos.close();
     }
 
-    /**
-     * Send a message to the server. This is similar to a system.out.println() command, so the user can see if his program reaches a specific point during
-     * runtime.
-     *
-     * @param msg Message to send to the server.
-     */
-    public void infoMessage(String msg) {
-        if ( this.ws != null ) {
-            try {
-                if ( this.ws.getReadyState() == READYSTATE.OPEN ) {
-                    JSONObject debugMsg = new JSONObject();
-                    debugMsg.put("token", this.token);
-                    debugMsg.put("msg", msg);
-                    this.ws.send(debugMsg.toString());
-                } else if ( this.ws.getReadyState() == READYSTATE.NOT_YET_CONNECTED || this.ws.getReadyState() == READYSTATE.CLOSED ) {
-                    this.ws.connect();
-                }
-            } catch ( JSONException e ) {
-                // ok
-            }
-        }
-    }
+    //    /**
+    //     * Send a message to the server. This is similar to a system.out.println() command, so the user can see if his program reaches a specific point during
+    //     * runtime.
+    //     *
+    //     * @param msg Message to send to the server.
+    //     */
+    //    public void infoMessage(String msg) {
+    //        if ( this.ws != null ) {
+    //            try {
+    //                if ( this.ws.getReadyState() == READYSTATE.OPEN ) {
+    //                    JSONObject debugMsg = new JSONObject();
+    //                    debugMsg.put("token", this.token);
+    //                    debugMsg.put("msg", msg);
+    //                    this.ws.send(debugMsg.toString());
+    //                } else if ( this.ws.getReadyState() == READYSTATE.NOT_YET_CONNECTED || this.ws.getReadyState() == READYSTATE.CLOSED ) {
+    //                    this.ws.connect();
+    //                }
+    //            } catch ( JSONException e ) {
+    //                // ok
+    //            }
+    //        }
+    //    }
 
     /**
      * Print formatted message on the robot display.

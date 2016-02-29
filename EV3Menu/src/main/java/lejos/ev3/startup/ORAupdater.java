@@ -10,7 +10,6 @@ import java.net.URL;
 
 import lejos.hardware.Sounds;
 import lejos.hardware.ev3.LocalEV3;
-import lejos.utility.Delay;
 
 /**
  * Download all required library files and menu for Open Roberta lab to the brick.<br>
@@ -42,6 +41,7 @@ public class ORAupdater {
         getRuntime();
         getShared();
         getJsonLib();
+        getWebSocketLib();
         getEV3Menu();
         if ( this.update_error == false ) {
             LocalEV3.get().getAudio().systemSound(Sounds.ASCENDING);
@@ -86,6 +86,19 @@ public class ORAupdater {
         URL jsonURL = null;
         try {
             jsonURL = new URL("http://" + this.serverBaseIP + "/rest/update/jsonlib");
+        } catch ( MalformedURLException e ) {
+            // ok
+        }
+        downloadFile(jsonURL, this.libDir);
+    }
+
+    /**
+     * Download the Java-WebSocket library for brick server communication.
+     */
+    private void getWebSocketLib() {
+        URL jsonURL = null;
+        try {
+            jsonURL = new URL("http://" + this.serverBaseIP + "/rest/update/websocketlib");
         } catch ( MalformedURLException e ) {
             // ok
         }
