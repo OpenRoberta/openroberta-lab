@@ -161,7 +161,6 @@ public class AstToLejosJavaScriptVisitorTest {
 
     @Test
     public void test10() throws Exception {
-
         String a =
             "var stmt0 = createVarDeclaration(COLOR, \"variablenName\", createConstant(COLOR_CONST, COLOR_ENUM.NONE));\n"
                 + "var stmt1 = createVarDeclaration(COLOR, \"variablenName2\", createConstant(COLOR_CONST, COLOR_ENUM.BLACK));\n"
@@ -179,7 +178,6 @@ public class AstToLejosJavaScriptVisitorTest {
 
     @Test
     public void test11() throws Exception {
-
         String a =
             "var stmt0 = createWaitStmt([createIfStmt([createBinaryExpr(LT, createGetSample(RED), createConstant(NUM_CONST, 30))], [])]);\n"
                 + "var stmt1 = createWaitStmt([createIfStmt([createBinaryExpr(EQ, createGetSample(COLOUR), createConstant(COLOR_CONST, COLOR_ENUM.RED))], [])]);\n"
@@ -188,7 +186,6 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var pp = [stmt0,stmt1,stmt2,stmt3];";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator11.xml");
-
     }
 
     @Test
@@ -237,6 +234,79 @@ public class AstToLejosJavaScriptVisitorTest {
                 + "var pp = [stmt0,stmt1,stmt2];";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator15.xml");
+
+    }
+
+    @Test
+    public void test16() throws Exception {
+        String a =
+            "var stmt0 = createMotorOnAction(createUnaryExpr(NEG, createConstant(NUM_CONST, 30)), MOTOR_RIGHT, createDuration(ROTATIONS, createConstant(NUM_CONST, 1)));\n"
+                + "var pp = [stmt0];";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator16.xml");
+
+    }
+
+    @Test
+    public void test17() throws Exception {
+        String a =
+            "var stmt0 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createSingleFunction('ROOT', createConstant(NUM_CONST, 20)));\n"
+                + "var stmt1 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createSingleFunction('ABS', createConstant(NUM_CONST, 20)));\n"
+                + "var stmt2 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createSingleFunction('LN', createConstant(NUM_CONST, 20)));\n"
+                + "var stmt3 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createSingleFunction('LOG10', createConstant(NUM_CONST, 20)));\n"
+                + "var stmt4 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createSingleFunction('EXP', createConstant(NUM_CONST, 20)));\n"
+                + "var stmt5 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createSingleFunction('POW10', createConstant(NUM_CONST, 20)));\n"
+                + "var stmt6 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createSingleFunction('SIN', createConstant(NUM_CONST, 20)));\n"
+                + "var stmt7 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createSingleFunction('COS', createConstant(NUM_CONST, 20)));\n"
+                + "var stmt8 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createSingleFunction('TAN', createConstant(NUM_CONST, 20)));\n"
+                + "var stmt9 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createSingleFunction('ASIN', createConstant(NUM_CONST, 20)));\n"
+                + "var stmt10 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createSingleFunction('ACOS', createConstant(NUM_CONST, 20)));\n"
+                + "var stmt11 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createSingleFunction('ATAN', createConstant(NUM_CONST, 20)));\n"
+                + "var stmt12 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createSingleFunction('ROUND', createConstant(NUM_CONST, 20)));\n"
+                + "var stmt13 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createSingleFunction('ROUNDUP', createConstant(NUM_CONST, 20)));\n"
+                + "var stmt14 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createSingleFunction('ROUNDDOWN', createConstant(NUM_CONST, 20)));\n"
+                + "var pp = [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7,stmt8,stmt9,stmt10,stmt11,stmt12,stmt13,stmt14];";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator17.xml");
+
+    }
+
+    @Test
+    public void test18() throws Exception {
+        String a =
+            "var stmt0 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createMathConstant('PI'));\n"
+                + "var stmt1 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createMathConstant('E'));\n"
+                + "var stmt2 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createMathConstant('GOLDEN_RATIO'));\n"
+                + "var stmt3 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createMathConstant('SQRT2'));\n"
+                + "var stmt4 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createMathConstant('SQRT1_2'));\n"
+                + "var stmt5 = createDriveAction(createConstant(NUM_CONST, 50), FOREWARD, createMathConstant('INFINITY'));\n"
+                + "var pp = [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5];";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator18.xml");
+
+    }
+
+    @Test
+    public void test19() throws Exception {
+        String a = "var stmt0 = createShowTextAction(createConstant(STRING_CONST, 'Hallo'));\n" + "var pp = [stmt0];";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator19.xml");
+
+    }
+
+    @Test
+    public void test20() throws Exception {
+        String a =
+            "var stmt0 = createShowTextAction(createMathPropFunct('EVEN', createConstant(NUM_CONST, 3)));\n"
+                + "var stmt1 = createShowTextAction(createMathPropFunct('ODD', createConstant(NUM_CONST, 3)));\n"
+                + "var stmt2 = createShowTextAction(createMathPropFunct('PRIME', createConstant(NUM_CONST, 3)));\n"
+                + "var stmt3 = createShowTextAction(createMathPropFunct('WHOLE', createConstant(NUM_CONST, 3)));\n"
+                + "var stmt4 = createShowTextAction(createMathPropFunct('POSITIVE', createConstant(NUM_CONST, 3)));\n"
+                + "var stmt5 = createShowTextAction(createMathPropFunct('NEGATIVE', createConstant(NUM_CONST, 3)));\n"
+                + "var stmt6 = createShowTextAction(createMathPropFunct('DIVISIBLE_BY', createConstant(NUM_CONST, 3), createConstant(NUM_CONST, 3)));\n"
+                + "var pp = [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6];";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator20.xml");
 
     }
 

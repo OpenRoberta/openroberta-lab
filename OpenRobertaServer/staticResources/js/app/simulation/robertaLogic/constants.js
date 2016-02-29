@@ -1,3 +1,5 @@
+const ARG1 = "arg1";    
+const ARG2 = "arg2";   
 const
 EXPR = "expr";
 const
@@ -11,6 +13,8 @@ RIGHT = "right";
 const
 BINARY = "Binary";
 const
+UNARY = "Unary";
+const
 VAR = "Var";
 const
 TYPE = "type";
@@ -21,6 +25,8 @@ STMT = "stmt";
 const
 VAR_DECLARATION = "VarDeclaration";
 const
+SINGLE_FUNCTION = "SingleFunction";
+const
 ASSIGN_STMT = "AssignStmt";
 const
 REPEAT_STMT = "RepeatStmt";
@@ -28,6 +34,9 @@ const
 IF_STMT = "IfStatement";
 const
 WAIT_STMT = "WaitStmt";
+const MATH_CONST = "MathConst";
+const SHOW_TEXT_ACTION = "ShowTextAction";
+const MATH_PROP_FUNCT = "MathPropFunct";
 
 const
 WAIT_TIME_STMT = "WaitTimeSTMT";
@@ -75,6 +84,7 @@ const
 NUM_CONST = "NumConst";
 const
 BOOL_CONST = "BoolConst";
+const STRING_CONST = "StringConst";
 const
 NUMERIC = "Numeric";
 const
@@ -87,7 +97,6 @@ const
 DIVIDE = "DIVIDE";
 const
 MULTIPLY = "MULTIPLY";
-
 const
 LT = "LT";
 const
@@ -100,12 +109,12 @@ const
 GTE = "GTE";
 const
 LTE = "LTE";
-
 const
 OR = "OR";
 const
 AND = "AND";
-
+const
+NEG = "NEG";
 const
 FOREWARD = "FOREWARD";
 const
@@ -128,7 +137,6 @@ const
 RED = "RED";
 const
 ORANGE = "ORANGE";
-
 const
 ON = "ON";
 const

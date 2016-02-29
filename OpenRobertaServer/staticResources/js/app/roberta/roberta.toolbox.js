@@ -11,6 +11,7 @@ define([ 'exports', 'blocks', 'roberta.program', 'roberta.robot', 'roberta.user-
      */
     function showToolbox(result, toolbox) {
         workspace = ROBERTA_PROGRAM.getBlocklyWorkspace();
+        Blockly.hideChaff();
         UTIL.response(result);
         if (result.rc === 'ok') {
             userState.toolbox = toolbox;

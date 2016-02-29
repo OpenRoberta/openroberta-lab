@@ -135,7 +135,6 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
      */
     function initHeadNavigation() {
         $('.navbar-fixed-top').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
-            // Blockly.hideChaff();
             $('.modal').modal('hide'); // close all opened popups
             var domId = event.target.id;
             if (domId === 'menuRunProg') { //  Submenu 'Program'   
@@ -178,7 +177,7 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
             } else if (domId === 'menuSaveAsConfig') { //  Submenu 'Configuration'
                 ROBERTA_BRICK_CONFIGURATION.showSaveAsModal();
             } else if (domId === 'menuEv3') { // Submenu 'Robot'
-              alert('yes');
+                alert('yes');
 //                if (ROBERTA_PROGRAM.newProgram()) {
 //                    switchRobot('ev3');
 //                }
@@ -325,7 +324,6 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
             $('#blocklyDiv').removeClass('simActive');
             $('#simDiv').removeClass('simActive');
             $(".sim").addClass('hide');
-            // Blockly.fireUiEvent(window, 'resize');
             Blockly.svgResize(ROBERTA_PROGRAM.getBlocklyWorkspace());
             $('.nav > li > ul > .robotType').removeClass('disabled');
             $('#menuSim').parent().addClass('disabled');
@@ -401,7 +399,6 @@ define([ 'exports', 'util', 'message', 'comm', 'rest.robot', 'rest.program', 're
             } else {
                 $('#menuNxt').parent().removeClass('disabled');
             }
-            // Blockly.fireUiEvent(window, 'resize')
             Blockly.svgResize(ROBERTA_PROGRAM.getBlocklyWorkspace());
             COMM.json("/toolbox", {
                 "cmd" : "loadT",

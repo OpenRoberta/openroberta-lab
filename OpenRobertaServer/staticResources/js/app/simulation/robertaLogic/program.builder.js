@@ -7,12 +7,44 @@ function createConstant(dataType, value) {
     return result;
 }
 
+function createMathConstant(value) {
+    var result = {};
+    result[EXPR] = MATH_CONST;
+    result[VALUE] = value;
+    return result;
+}
+
 function createBinaryExpr(op, left, right) {
     var result = {};
     result[EXPR] = BINARY;
     result[OP] = op;
     result[LEFT] = left;
     result[RIGHT] = right;
+    return result;
+}
+
+function createUnaryExpr(op, value) {
+    var result = {};
+    result[EXPR] = UNARY;
+    result[OP] = op;
+    result[VALUE] = value;
+    return result;
+}
+
+function createSingleFunction(funcName, value) {
+    var result = {};
+    result[EXPR] = SINGLE_FUNCTION;
+    result[OP] = funcName;
+    result[VALUE] = value;
+    return result;
+}
+
+function createMathPropFunct(funcName, arg1, arg2) {
+    var result = {};
+    result[EXPR] = MATH_PROP_FUNCT;
+    result[OP] = funcName;
+    result[ARG1] = arg1;
+    result[ARG2] = arg2;
     return result;
 }
 
@@ -50,6 +82,14 @@ function createRepeatStmt(mode, expr, stmtList) {
     result[STMT] = REPEAT_STMT;
     result[EXPR] = expr;
     result[STMT_LIST] = stmtList;
+    return result;
+}
+
+function createShowTextAction(text) {
+    var result = {};
+    result[STMT] = SHOW_TEXT_ACTION;
+    result[VALUE] = text;
+
     return result;
 }
 

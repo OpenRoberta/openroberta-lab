@@ -72,6 +72,10 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
                 evalMotorOnAction(this, simulationSensorData, stmt);
                 break;
 
+            case SHOW_TEXT_ACTION:
+                evalShowTextAction(this, stmt);
+                break;
+
             case WAIT_STMT:
                 evalWaitStmt(this, stmt);
                 break;
@@ -133,6 +137,11 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
             obj.led.blink = 4;
             break;
         }
+    }
+
+    function evalShowTextAction(obj, stmt) {
+        val = evalExpr(obj, stmt.value)
+        console.log(val);
     }
 
     function evalTurnAction(obj, simulationSensorData, stmt) {
@@ -241,6 +250,7 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
         case NUM_CONST:
         case BOOL_CONST:
         case COLOR_CONST:
+        case STRING_CONST:
             return expr.value;
 
         case VAR:
@@ -248,6 +258,18 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
 
         case BINARY:
             return evalBinary(obj, expr.op, expr.left, expr.right);
+
+        case UNARY:
+            return evalUnary(obj, expr.op, expr.value);
+
+        case SINGLE_FUNCTION:
+            return evalSingleFunction(obj, expr.op, expr.value);
+
+        case MATH_PROP_FUNCT:
+            return evalMathPropFunct(obj, expr.op, expr.arg1, expr.arg2);
+
+        case MATH_CONST:
+            return evalMathConst(obj, expr.value);
 
         case GET_SAMPLE:
             return evalSensor(obj, expr[SENSOR_TYPE], expr[SENSOR_MODE]);
@@ -319,6 +341,158 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
             throw "Invalid Binary Operator";
         }
         return val;
+    }
+
+    function evalUnary(obj, op, value) {
+        var val = evalExpr(obj, value);
+        switch (op) {
+        case NEG:
+            return -val;
+        default:
+            throw "Invalid Unary Operator";
+        }
+    }
+
+    function evalSingleFunction(obj, functName, value) {
+        var val = evalExpr(obj, value);
+        switch (functName) {
+        case 'ROOT':
+            return Math.sqrt(val);
+        case 'ABS':
+            return Math.abs(val);
+        case 'LN':
+            return Math.log(val);
+        case 'LOG10':
+            return Math.log10(val);
+        case 'EXP':
+            return Math.exp(val);
+        case 'POW10':
+            return Math.pow(10, val);
+        case 'SIN':
+            return Math.sin(val);
+        case 'COS':
+            return Math.cos(val);
+        case 'TAN':
+            return Math.tan(val);
+        case 'ASIN':
+            return Math.asin(val);
+        case 'ATAN':
+            return Math.atan(val);
+        case 'ACOS':
+            return Math.acos(val);
+        case 'ROUND':
+            return Math.round(val);
+        case 'ROUNDUP':
+            return Math.ceil(val);
+        case 'ROUNDDOWN':
+            return Math.floor(val);
+        default:
+            throw "Invalid Function Name";
+        }
+    }
+
+    function evalMathConst(obj, mathConst) {
+        switch (mathConst) {
+        case 'PI':
+            return Math.PI;
+        case 'E':
+            return Math.E;
+        case 'GOLDEN_RATIO':
+            return (1.0 + Math.sqrt(5.0)) / 2.0;
+        case 'SQRT2':
+            return Math.SQRT2;
+        case 'SQRT1_2':
+            return Math.SQRT1_2;
+        case 'INFINITY':
+            return Infinity;
+        default:
+            throw "Invalid Math Constant Name";
+        }
+    }
+
+    function evalMathPropFunct(obj, functName, arg1, arg2) {
+        var val1 = evalExpr(obj, arg1);
+        if (arg2) {
+            var val2 = evalExpr(obj, arg2);    
+        }
+        
+        switch (functName) {
+        case 'EVEN':
+            return val1 % 2 == 0;
+        case 'ODD':
+            return val1 % 2 != 0;
+        case 'PRIME':
+            return isPrime(val1);
+        case 'WHOLE':
+            return Number(val1) === val1 && val1 % 1 === 0;
+        case 'POSITIVE':
+            return val1 >= 0;
+        case 'NEGATIVE':
+            return val1 < 0;
+        case 'DIVISIBLE_BY':
+            return val1 % val2 == 0;
+        default:
+            throw "Invalid Math Property Function Name";
+        }
+    }
+
+    isPrime = function(n) {
+        if (isNaN(n) || !isFinite(n) || n % 1 || n < 2) {
+            return false;
+        }
+        if (n == leastFactor(n)) {
+            return true;
+        }
+        return false;
+    }
+
+    leastFactor = function(n) {
+        if (isNaN(n) || !isFinite(n)) {
+            return NaN;
+        }
+        if (n == 0) {
+            return 0;
+        }
+        if (n % 1 || n * n < 2) {
+            return 1;
+        }
+        if (n % 2 == 0) {
+            return 2;
+        }
+        if (n % 3 == 0) {
+            return 3;
+        }
+        if (n % 5 == 0) {
+            return 5;
+        }
+        var m = Math.sqrt(n);
+        for (var i = 7; i <= m; i += 30) {
+            if (n % i == 0) {
+                return i;
+            }
+            if (n % (i + 4) == 0) {
+                return i + 4;
+            }
+            if (n % (i + 6) == 0) {
+                return i + 6;
+            }
+            if (n % (i + 10) == 0) {
+                return i + 10;
+            }
+            if (n % (i + 12) == 0) {
+                return i + 12;
+            }
+            if (n % (i + 16) == 0) {
+                return i + 16;
+            }
+            if (n % (i + 22) == 0) {
+                return i + 22;
+            }
+            if (n % (i + 24) == 0) {
+                return i + 24;
+            }
+        }
+        return n;
     }
 
     return ProgramEval;

@@ -240,7 +240,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
         var xml = Blockly.Xml.textToDom(program);
         Blockly.Xml.domToWorkspace(blocklyWorkspace, xml);
         userState.blocklyReady = true;
-        // Blockly.fireUiEvent(window, 'resize');
         Blockly.svgResize(blocklyWorkspace);
     }
     exports.initProgramEnvironment = initProgramEnvironment;
@@ -315,7 +314,6 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                 ROBERTA_ROBOT.setState(result);
                 $('#blocklyDiv').addClass('codeActive');
                 $('#blocklyDiv').parent().bind('transitionend', function() {
-                    // Blockly.fireUiEvent(window, 'resize');
                     Blockly.svgResize(blocklyWorkspace);
                 });
                 $('#codeDiv').addClass('codeActive');
@@ -343,17 +341,16 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
     function runOnBrick() {
         if (userState.robotState === '' || userState.robotState === 'disconnected') {
             MSG.displayMessage("POPUP_ROBOT_NOT_CONNECTED", "POPUP", "");
-            return;   
+            return;
         } else if (userState.robotState === 'busy') {
             MSG.displayMessage("POPUP_ROBOT_BUSY", "POPUP", "");
             return;
         } else if (ROBERTA_ROBOT.handleFirmwareConflict()) {
             $('#buttonCancelFirmwareUpdate').css('display', 'none');
             $('#buttonCancelFirmwareUpdateAndRun').css('display', 'inline');
-        return;
+            return;
         }
-        LOG.info('run ' + userState.program + 'on brick' + 
-                 ' signed in: ' + userState.id);
+        LOG.info('run ' + userState.program + 'on brick' + ' signed in: ' + userState.id);
         var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
         var xmlTextConfiguration = ROBERTA_BRICK_CONFIGURATION.getXmlOfConfiguration();
@@ -371,13 +368,12 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
         });
     }
     exports.runOnBrick = runOnBrick;
-    
+
     /**
      * Start the program in the simulation.
      */
     function runInSim() {
-        LOG.info('run ' + userState.program + 'in simulation' + 
-                 ' signed in: ' + userState.id);
+        LOG.info('run ' + userState.program + 'in simulation' + ' signed in: ' + userState.id);
         var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         var xmlTextProgram = Blockly.Xml.domToText(xmlProgram);
         var xmlTextConfiguration = ROBERTA_BRICK_CONFIGURATION.getXmlOfConfiguration();
@@ -401,7 +397,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
             $('#head-navigation-program-edit>ul').addClass('hidden');
             UTIL.cacheBlocks(blocklyWorkspace);
             refreshBlocklyProgram(result);
-            $(".sim").removeClass('hide');           
+            $(".sim").removeClass('hide');
         });
     }
     exports.runInSim = runInSim;
@@ -442,8 +438,8 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                     runOnBrick();
                 });
                 Blockly.bindEvent_(blocklyWorkspace.robControls.runInSim, 'mousedown', null, function(e) {
-                     LOG.info('runInSim from blockly button');
-                     runInSim();
+                    LOG.info('runInSim from blockly button');
+                    runInSim();
                 });
                 Blockly.bindEvent_(blocklyWorkspace.robControls.saveProgram, 'mousedown', null, function(e) {
                     LOG.info('saveProgram from blockly button');
