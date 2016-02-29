@@ -358,7 +358,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitEmptyExpr(EmptyExpr<Void> emptyExpr) {
-        switch ( emptyExpr.getDefVal().getName() ) { // FIXME
+        switch ( emptyExpr.getDefVal().getName() ) {
             case "java.lang.String":
                 this.sb.append("\"\"");
                 break;
@@ -501,7 +501,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitStmtFlowCon(StmtFlowCon<Void> stmtFlowCon) {
-        this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase() + ";");
+        this.sb.append(stmtFlowCon.getFlow().toString().toLowerCase());
         return null;
     }
 
@@ -862,7 +862,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     @Override
     public Void visitFunctionStmt(FunctionStmt<Void> functionStmt) {
         functionStmt.getFunction().visit(this);
-        this.sb.append(";");
+        this.sb.append(";"); // FIXME
         return null;
     }
 
@@ -1219,7 +1219,6 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     @Override
     public Void visitMethodStmt(MethodStmt<Void> methodStmt) {
         methodStmt.getMethod().visit(this);
-        //this.sb.append(";");
         return null;
     }
 
@@ -1228,9 +1227,6 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append(methodCall.getMethodName() + "(");
         methodCall.getParametersValues().visit(this);
         this.sb.append(")");
-        if ( methodCall.getReturnType() == null ) {
-            //this.sb.append(";");
-        }
         return null;
     }
 
