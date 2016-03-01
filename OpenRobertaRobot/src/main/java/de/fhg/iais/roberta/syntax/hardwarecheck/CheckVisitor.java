@@ -447,9 +447,7 @@ public abstract class CheckVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        for ( Expr<Void> expr : textJoinFunct.getParam() ) {
-            expr.visit(this);
-        }
+        textJoinFunct.getParam().visit(this);
         return null;
     }
 

@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.syntax.codegen.ev3;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -1179,17 +1178,8 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        boolean isFirst = true;
-        List<Expr<Void>> params = textJoinFunct.getParam();
         this.sb.append("BlocklyMethods.textJoin(");
-        for ( Expr<Void> expr : params ) {
-            if ( isFirst ) {
-                isFirst = false;
-            } else {
-                this.sb.append(", ");
-            }
-            expr.visit(this);
-        }
+        textJoinFunct.visit(this);
         this.sb.append(")");
         return null;
     }

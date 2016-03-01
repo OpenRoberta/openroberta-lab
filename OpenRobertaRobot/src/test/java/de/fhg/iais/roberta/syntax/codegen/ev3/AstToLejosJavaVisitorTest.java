@@ -18,8 +18,8 @@ import de.fhg.iais.roberta.testutil.Helper;
 public class AstToLejosJavaVisitorTest {
 
     private static final String MAIN_CLASS = "" //
-        + "public class Test {\n"
-        + "private static final boolean TRUE = true;";
+        + "public class Test {\n";
+    //        + "private static final boolean TRUE = true;";
 
     private static final String IMPORTS = "" //
         + "package generated.main;\n\n"

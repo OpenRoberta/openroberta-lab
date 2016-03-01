@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.syntax.codegen.ev3;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -433,11 +432,7 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
                 if ( first ) {
                     first = false;
                 } else {
-                    if ( expr.getKind() == BlockType.BINARY || expr.getKind() == BlockType.UNARY ) {
-                        this.sb.append("; ");
-                    } else {
-                        this.sb.append(", ");
-                    }
+                    this.sb.append(", ");
                 }
                 expr.visit(this);
             }
@@ -548,17 +543,11 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitWaitStmt(WaitStmt<Void> waitStmt) {
-        this.sb.append("if ( TRUE ) {");
-        incrIndentation();
-        nlIndent();
         this.sb.append("while ( true ) {");
         incrIndentation();
         visitStmtList(waitStmt.getStatements());
         nlIndent();
         this.sb.append("hal.waitFor(15);");
-        decrIndentation();
-        nlIndent();
-        this.sb.append("}");
         decrIndentation();
         nlIndent();
         this.sb.append("}");
@@ -1256,17 +1245,8 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
-        boolean isFirst = true;
-        List<Expr<Void>> params = textJoinFunct.getParam();
         this.sb.append("BlocklyMethods.textJoin(");
-        for ( Expr<Void> expr : params ) {
-            if ( isFirst ) {
-                isFirst = false;
-            } else {
-                this.sb.append(", ");
-            }
-            expr.visit(this);
-        }
+        textJoinFunct.getParam().visit(this);
         this.sb.append(")");
         return null;
     }
@@ -1533,7 +1513,6 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         this.sb.append("import lejos.remote.nxt.NXTConnection;\n\n");
 
         this.sb.append("public class " + this.programName + " {\n");
-        this.sb.append(INDENT).append("private static final boolean TRUE = true;\n");
         this.sb.append(INDENT).append("private static Ev3Configuration brickConfiguration;").append("\n\n");
         this.sb.append(INDENT).append(generateRegenerateUsedSensors()).append("\n\n");
 
