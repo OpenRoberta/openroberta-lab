@@ -361,6 +361,7 @@
   "START_ACTIVITY":"Aktivität",
   "START_ACTIVITY_TOOLTIP":"Startet zusätzliche Aktivität.",
   "START_PROGRAM":"Programmstart",
+  "START_PROGRAM_DEBUG":"Programmstart",
   "START_TOOLTIP":"Startblock für das Hauptprogramm.",
   "TAB_CONFIGURATION":"Roboterkonfiguration",
   "TAB_PROGRAM":"Programm",

@@ -126,6 +126,32 @@ Blockly.CAT_VARIABLE_RGB = "#9085BA";
 Blockly.CAT_COMMUNICATION_RGB = "#FF69B4";
 
 /**
+ * Lookup table for icon - categories.
+ * @const
+ */
+Blockly.CAT_ICON = [];
+Blockly.CAT_ICON['brick'] = 'roberta';
+Blockly.CAT_ICON['TOOLBOX_ACTION'] = 'arrow-forward-outline';
+Blockly.CAT_ICON['TOOLBOX_MOVE'] = 'starburst-outline';
+Blockly.CAT_ICON['TOOLBOX_DRIVE'] = 'thumbs-down';
+Blockly.CAT_ICON['TOOLBOX_DISPLAY'] = 'message-typing';
+Blockly.CAT_ICON['TOOLBOX_SOUND'] = 'volume-up';
+Blockly.CAT_ICON['TOOLBOX_LIGHT'] = 'thumbs-down';
+Blockly.CAT_ICON['TOOLBOX_SENSOR'] = 'thumbs-down';
+Blockly.CAT_ICON['TOOLBOX_CONTROL'] = 'flow-children';
+Blockly.CAT_ICON['TOOLBOX_DECISION'] = 'flow-merge';
+Blockly.CAT_ICON['TOOLBOX_WAIT'] = 'stopwatch';
+Blockly.CAT_ICON['TOOLBOX_LOOP'] = 'arrow-sync-outline';
+Blockly.CAT_ICON['TOOLBOX_LOGIC'] = 'thumbs-down';
+Blockly.CAT_ICON['TOOLBOX_MATH'] = 'thumbs-down';
+Blockly.CAT_ICON['TOOLBOX_TEXT'] = 'sort-alphabetically-outline';
+Blockly.CAT_ICON['TOOLBOX_LIST'] = 'th-list-outline';
+Blockly.CAT_ICON['TOOLBOX_COLOUR'] = 'brush';
+Blockly.CAT_ICON['TOOLBOX_VARIABLE'] = 'code-outline';
+Blockly.CAT_ICON['TOOLBOX_PROCEDURE'] = 'thumbs-down';
+Blockly.CAT_ICON['TOOLBOX_COMMUNICATION'] = 'messages';
+
+/**
  * Sprited icons and images.
  */
 Blockly.SPRITE = {
@@ -213,6 +239,8 @@ Blockly.DATA_TYPE['Array_String'] = Blockly.CAT_LIST_RGB;
 Blockly.DATA_TYPE['Array_Boolean'] = Blockly.CAT_LIST_RGB;
 Blockly.DATA_TYPE['Array_Colour'] = Blockly.CAT_LIST_RGB;
 Blockly.DATA_TYPE['Array_Connection'] = Blockly.CAT_LIST_RGB;
+
+
 
 /**
  * Currently selected block.

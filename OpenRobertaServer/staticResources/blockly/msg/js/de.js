@@ -580,7 +580,6 @@ Blockly.Msg.POPUP_NEW_PASSWORD = "New Password";  // untranslated
 Blockly.Msg.POPUP_OLD_PASSWORD = "Old Password";  // untranslated
 Blockly.Msg.POPUP_PASSWORD = "Passwort";
 Blockly.Msg.POPUP_PASSWORD_RECOVERY = "Password Recovery";  // untranslated
-Blockly.Msg.POPUP_PROGRAM_TERMINATED_UNEXPECTED = "Unexpected Termination of the Program!";  // untranslated
 Blockly.Msg.POPUP_REGISTER_USER = "Register!";  // untranslated
 Blockly.Msg.POPUP_RELEASE = "Version beta 1.3.2<ul class='NonIcon' style='font-size:small'><li>Zeitzonenproblem beim Speichern eines Programmes behoben</li></ul>Version beta 1.3.1<ul class='NonIcon' style='font-size:small'><li>Jetzt auch auf Spanisch!</li><li>Weitere kleinere Fehler behoben</li></ul>Version beta 1.3.0<ul class='NonIcon' style='font-size:small'><li>Jetzt neu mit Roboter Simulation!</li><li>Teile dein Programm mit Freunden</li><li>Neue Firmware Versionen jetzt über WLAN</li><li>USB Kabel Unterstützung für Chromeboooks</li><li>Weitere kleinere Fehler behoben</li></ul></br>";
 Blockly.Msg.POPUP_REPEAT_PASSWORD = "Passwort wiederholen";
@@ -665,6 +664,7 @@ Blockly.Msg.START = "Starte";
 Blockly.Msg.START_ACTIVITY = "Aktivität";
 Blockly.Msg.START_ACTIVITY_TOOLTIP = "Startet zusätzliche Aktivität.";
 Blockly.Msg.START_PROGRAM = "Programmstart";
+Blockly.Msg.START_PROGRAM_DEBUG = "Programmstart";
 Blockly.Msg.START_TOOLTIP = "Startblock für das Hauptprogramm.";
 Blockly.Msg.TAB_CONFIGURATION = "Roboterkonfiguration";
 Blockly.Msg.TAB_PROGRAM = "Programm";

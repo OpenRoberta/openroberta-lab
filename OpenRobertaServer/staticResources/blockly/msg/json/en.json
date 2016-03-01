@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2016-02-25 11:33:36.638240",
+		"lastupdated": "2016-03-01 22:44:45.563908",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -531,6 +531,7 @@
 	"START": "start",
 	"START_ACTIVITY": "activity",
 	"START_PROGRAM": "program-start",
+	"START_PROGRAM_DEBUG": "show sensor data",
 	"MODE": "mode",
 	"MODE_DISTANCE": "distance",
 	"MODE_PRESENCE": "presence",
@@ -798,6 +799,5 @@
 	"POPUP_REPEAT_PASSWORD": "Repeat password",
 	"POPUP_CHANGE_PASSWORD": "Change password",
 	"POPUP_CHANGE_USER_PASSWORD": "Change User Password",
-	"POPUP_PROGRAM_TERMINATED_UNEXPECTED": "Unexpected Termination of the Program!",
 	"ORA_USER_EMAIL_ONE_ERROR_USER_NOT_EXISTS_WITH_THIS_EMAIL": "Account not found with this email address!"
 }

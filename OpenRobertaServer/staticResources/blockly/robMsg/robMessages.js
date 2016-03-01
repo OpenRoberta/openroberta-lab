@@ -228,6 +228,7 @@ Blockly.Msg.SENSOR_WAIT_PRESSED_RELEASED = 'pressed or released';
 Blockly.Msg.START = 'start';
 Blockly.Msg.START_ACTIVITY = 'activity';
 Blockly.Msg.START_PROGRAM = 'program-start';
+Blockly.Msg.START_PROGRAM_DEBUG = 'show sensor data';
 Blockly.Msg.MODE = 'mode';
 Blockly.Msg.MODE_DISTANCE = 'distance';
 Blockly.Msg.MODE_PRESENCE = 'presence';
@@ -504,7 +505,6 @@ Blockly.Msg.POPUP_OLD_PASSWORD = 'Old Password';
 Blockly.Msg.POPUP_REPEAT_PASSWORD = 'Repeat password';
 Blockly.Msg.POPUP_CHANGE_PASSWORD = 'Change password';
 Blockly.Msg.POPUP_CHANGE_USER_PASSWORD = 'Change User Password';
-Blockly.Msg.POPUP_PROGRAM_TERMINATED_UNEXPECTED = 'Unexpected Termination of the Program!';
 Blockly.Msg.ORA_USER_EMAIL_ONE_ERROR_USER_NOT_EXISTS_WITH_THIS_EMAIL = 'Account not found with this email address!';
 
 

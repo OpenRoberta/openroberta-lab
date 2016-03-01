@@ -157,6 +157,7 @@ Blockly.Blocks['variables_get'] = {
     xmlField.setAttribute('name', 'VAR');
     var xmlBlock = goog.dom.createDom('block', null, xmlField);
     xmlBlock.setAttribute('type', this.contextMenuType_);
+    xmlBlock.setAttribute('intask',false);
     var mutation = goog.dom.createDom('mutation');
     xmlBlock.appendChild(mutation);
     option.callback = Blockly.ContextMenu.callbackFactory(this, xmlBlock);

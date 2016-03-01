@@ -247,6 +247,7 @@ Blockly.Block.prototype.unplug = function(healStack, bump) {
     var dx = Blockly.SNAP_RADIUS * (this.RTL ? -1 : 1);
     var dy = Blockly.SNAP_RADIUS * 2;
     this.moveBy(dx, dy);
+    this.setInTask(false);
   }
 };
 
@@ -316,6 +317,7 @@ Blockly.Block.prototype.bumpNeighbours_ = function() {
             otherConnection.bumpAwayFrom_(connection);
           } else {
             connection.bumpAwayFrom_(otherConnection);
+            connection.sourceBlock_.setInTask(false);
           }
         }
       }

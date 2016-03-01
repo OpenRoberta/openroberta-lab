@@ -50,14 +50,18 @@ Blockly.Blocks['robControls_start'] = {
 
     init : function() {
         this.setColour(Blockly.CAT_ACTIVITY_RGB);
-        this.appendDummyInput().appendField(Blockly.Msg.START_PROGRAM);
+        this.appendDummyInput().
+             appendField(Blockly.Msg.START_PROGRAM).
+             appendField('  ').
+             appendField(new Blockly.FieldCheckbox("FALSE"), "DEBUG").
+             appendField(Blockly.Msg.START_PROGRAM_DEBUG);
         this.declare_ = false;
         this.setPreviousStatement(false);
         this.setNextStatement(true);
         this.setDeletable(false);
        // this.setHelp(new Blockly.Help(Blockly.Msg.START_HELP));
         this.setMutatorPlus(new Blockly.MutatorPlus(['robControls_start']));
-       // this.setTooltip(Blockly.Msg.START_TOOLTIP);
+        this.setTooltip(Blockly.Msg.START_TOOLTIP);
     },
     /**
      * Create XML to represent whether a statement list of variable declarations

@@ -580,7 +580,6 @@ Blockly.Msg.POPUP_NEW_PASSWORD = "New Password";  // untranslated
 Blockly.Msg.POPUP_OLD_PASSWORD = "Old Password";  // untranslated
 Blockly.Msg.POPUP_PASSWORD = "Salasana";
 Blockly.Msg.POPUP_PASSWORD_RECOVERY = "Password Recovery";  // untranslated
-Blockly.Msg.POPUP_PROGRAM_TERMINATED_UNEXPECTED = "Unexpected Termination of the Program!";  // untranslated
 Blockly.Msg.POPUP_REGISTER_USER = "Register!";  // untranslated
 Blockly.Msg.POPUP_RELEASE = "Version beta 1.3.2 <ul class='NonIcon' style='font-size:small'><li>Fix timestamp bug for save program</li></ul>Version beta 1.3.1 <ul class='NonIcon' style='font-size:small'><li>Spanish available now!</li><li>Fixed bugs</li></ul>Version beta 1.3.0 <ul class='NonIcon' style='font-size:small'><li>Simulate a robot!</li><li>Share your program with a friend</li><li>Update the robots firmware Over-the-Air</li><li>USB cabel support for Chromebooks</li><li>Fixed many more bugs</li></ul></br>";  // untranslated
 Blockly.Msg.POPUP_REPEAT_PASSWORD = "Toista salasana";
@@ -665,6 +664,7 @@ Blockly.Msg.START = "start";  // untranslated
 Blockly.Msg.START_ACTIVITY = "activity";  // untranslated
 Blockly.Msg.START_ACTIVITY_TOOLTIP = "Starts additional activity.";  // untranslated
 Blockly.Msg.START_PROGRAM = "Ohjelman alku";
+Blockly.Msg.START_PROGRAM_DEBUG = "show sensor data";  // untranslated
 Blockly.Msg.START_TOOLTIP = "The starting point for the main program.";  // untranslated
 Blockly.Msg.TAB_CONFIGURATION = "Robotin asetukset";
 Blockly.Msg.TAB_PROGRAM = "Ohjelma";
