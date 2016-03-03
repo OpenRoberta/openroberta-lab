@@ -310,6 +310,29 @@ public class AstToLejosJavaScriptVisitorTest {
 
     }
 
+    @Test
+    public void test21() throws Exception {
+        String a =
+            "var stmt0 = createShowTextAction(createMathConstrainFunct(createConstant(NUM_CONST, 200), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 100)));\n"
+                + "var stmt1 = createShowTextAction(createMathConstrainFunct(createConstant(NUM_CONST, -200), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 100)));\n"
+                + "var stmt2 = createShowTextAction(createMathConstrainFunct(createConstant(NUM_CONST, 20), createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 100)));\n"
+                + "var pp = [stmt0,stmt1,stmt2];";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator21.xml");
+
+    }
+
+    @Test
+    public void test22() throws Exception {
+        String a =
+            "var stmt0 = createShowTextAction(createRandInt(createConstant(NUM_CONST, 1), createConstant(NUM_CONST, 100)));\n"
+                + "var stmt1 = createShowTextAction(createRandDouble());\n"
+                + "var pp = [stmt0,stmt1];";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator22.xml");
+
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
         Assert.assertEquals(a, Helper.generateJavaScript(fileName));

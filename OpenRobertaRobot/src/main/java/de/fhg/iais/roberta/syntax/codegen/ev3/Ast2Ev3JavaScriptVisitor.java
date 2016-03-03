@@ -570,6 +570,13 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct<Void> mathConstrainFunct) {
+        this.sb.append("createMathConstrainFunct(");
+        mathConstrainFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        mathConstrainFunct.getParam().get(1).visit(this);
+        this.sb.append(", ");
+        mathConstrainFunct.getParam().get(2).visit(this);
+        this.sb.append(")");
         return null;
     }
 
@@ -592,11 +599,17 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct<Void> mathRandomFloatFunct) {
+        this.sb.append("createRandDouble()");
         return null;
     }
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct<Void> mathRandomIntFunct) {
+        this.sb.append("createRandInt(");
+        mathRandomIntFunct.getParam().get(0).visit(this);
+        this.sb.append(", ");
+        mathRandomIntFunct.getParam().get(1).visit(this);
+        this.sb.append(")");
         return null;
     }
 

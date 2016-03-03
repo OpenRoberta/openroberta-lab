@@ -48,6 +48,29 @@ function createMathPropFunct(funcName, arg1, arg2) {
     return result;
 }
 
+function createMathConstrainFunct(val, min, max) {
+    var result = {};
+    result[EXPR] = MATH_CONSTRAIN_FUNCTION;
+    result[VALUE] = val;
+    result[MIN] = min;
+    result[MAX] = max;
+    return result;
+}
+
+function createRandInt(min, max) {
+    var result = {};
+    result[EXPR] = RANDOM_INT;
+    result[MIN] = min;
+    result[MAX] = max;
+    return result;
+}
+
+function createRandDouble() {
+    var result = {};
+    result[EXPR] = RANDOM_DOUBLE;
+    return result;
+}
+
 function createVarReference(type, name) {
     var result = {};
     result[EXPR] = VAR;

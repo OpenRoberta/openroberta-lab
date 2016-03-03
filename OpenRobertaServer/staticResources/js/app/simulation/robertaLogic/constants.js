@@ -26,6 +26,9 @@ const
 VAR_DECLARATION = "VarDeclaration";
 const
 SINGLE_FUNCTION = "SingleFunction";
+const MATH_CONSTRAIN_FUNCTION = "MathConstrainFunct";
+const RANDOM_INT = "randInt";
+const RANDOM_DOUBLE = "randDouble";
 const
 ASSIGN_STMT = "AssignStmt";
 const
@@ -115,6 +118,9 @@ const
 AND = "AND";
 const
 NEG = "NEG";
+const MOD = "MOD";
+const MIN = "min";
+const MAX = "max";
 const
 FOREWARD = "FOREWARD";
 const

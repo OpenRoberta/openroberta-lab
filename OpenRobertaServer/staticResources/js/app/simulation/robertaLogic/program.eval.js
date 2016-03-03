@@ -265,6 +265,15 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
         case SINGLE_FUNCTION:
             return evalSingleFunction(obj, expr.op, expr.value);
 
+        case RANDOM_INT:
+            return evalRandInt(obj, expr.min, expr.max);
+
+        case RANDOM_DOUBLE:
+            return evalRandDouble();
+
+        case MATH_CONSTRAIN_FUNCTION:
+            return evalMathPropFunct(obj, expr.value, expr.min, expr.max);
+
         case MATH_PROP_FUNCT:
             return evalMathPropFunct(obj, expr.op, expr.arg1, expr.arg2);
 
@@ -336,6 +345,9 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
             break;
         case AND:
             val = valLeft && valRight;
+            break;
+        case MOD:
+            val = valLeft % valRight;
             break;
         default:
             throw "Invalid Binary Operator";
@@ -410,7 +422,14 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
         }
     }
 
-    function evalMathPropFunct(obj, functName, arg1, arg2) {
+    function evalMathPropFunct(obj, val, min, max) {
+        var val_ = evalExpr(obj, val);    
+        var min_ = evalExpr(obj, min);    
+        var max_ = evalExpr(obj, max);          
+        return Math.min(Math.max(val_, min_), max_);
+    }
+
+    function evalMathConstrainFunct(obj, val, min, max) {
         var val1 = evalExpr(obj, arg1);
         if (arg2) {
             var val2 = evalExpr(obj, arg2);    
@@ -435,6 +454,17 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
             throw "Invalid Math Property Function Name";
         }
     }
+
+    function evalRandInt(obj, min, max) {
+        min_ = evalExpr(obj, min);
+        max_ = evalExpr(obj, max)
+        return math_random_int(min_, max_);
+    }
+
+    function evalRandDouble() {
+        return Math.random();
+    }
+
 
     isPrime = function(n) {
         if (isNaN(n) || !isFinite(n) || n % 1 || n < 2) {
@@ -494,6 +524,17 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
         }
         return n;
     }
+
+    function math_random_int(a, b) {
+      if (a > b) {
+        // Swap a and b to ensure a is smaller.
+        var c = a;
+        a = b;
+        b = c;
+      }
+      return Math.floor(Math.random() * (b - a + 1) + a);
+    }
+
 
     return ProgramEval;
 });
