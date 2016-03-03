@@ -15,9 +15,9 @@ import org.json.JSONObject;
 
 public class ServerCommunicator {
 
-    private final String serverpushAddress;
-    private final String serverdownloadAddress;
-    private final String serverupdateAddress;
+    private String serverpushAddress;
+    private String serverdownloadAddress;
+    private String serverupdateAddress;
 
     private final CloseableHttpClient httpclient;
     private HttpPost post = null;
@@ -25,10 +25,14 @@ public class ServerCommunicator {
     private String filename = "";
 
     public ServerCommunicator(String serverAddress) {
-        this.serverpushAddress = serverAddress + "/rest/pushcmd";
-        this.serverdownloadAddress = serverAddress + "/rest/download";
-        this.serverupdateAddress = serverAddress + "/rest/update";
+        updateCustomServerAddress(serverAddress);
         this.httpclient = HttpClients.createDefault();
+    }
+
+    public void updateCustomServerAddress(String customServerAddress) {
+        this.serverpushAddress = customServerAddress + "/rest/pushcmd";
+        this.serverdownloadAddress = customServerAddress + "/rest/download";
+        this.serverupdateAddress = customServerAddress + "/rest/update";
     }
 
     public String getFilename() {
@@ -88,7 +92,7 @@ public class ServerCommunicator {
         try {
             this.httpclient.close();
         } catch ( IOException e ) {
-            // TODO ok?
+            // ok
         }
     }
 }

@@ -33,7 +33,8 @@ public class ConnectionView extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private static final int WIDTH = 300;
-    private static final int HEIGHT = 470;
+    private static final int HEIGHT = 400;
+    private static final int ADVANCED_HEIGHT = 460;
 
     private final JMenuBar menu = new JMenuBar();
     private final JMenu mnFile = new JMenu();
@@ -41,7 +42,7 @@ public class ConnectionView extends JFrame {
     private final JMenu mnInfo = new JMenu();
     private final JMenuItem mntAbout = new JMenuItem();
     private final JLabel lblRobot = new JLabel();
-    private final JLabel lblGif = new JLabel();
+    private final JLabel lblMainGif = new JLabel();
     private final ORAToggleButton butConnect = new ORAToggleButton();
     private final ORAButton butClose = new ORAButton();
     private final JTextArea txtInfo = new JTextArea();
@@ -54,6 +55,7 @@ public class ConnectionView extends JFrame {
     private final JTextField customip = new JTextField();
     private final JLabel customportDesc = new JLabel();
     private final JTextField customport = new JTextField();
+    private final JPanel pnlMainGif = new JPanel();
     private final JPanel pnlButton = new JPanel();
     private final JPanel pnlCustomInfo = new JPanel();
     private final JPanel pnlCustomHeading = new JPanel();
@@ -81,11 +83,12 @@ public class ConnectionView extends JFrame {
     private void initGUI() {
         this.setSize(WIDTH, HEIGHT);
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        this.setMinimumSize(this.getPreferredSize());
-        this.setMaximumSize(this.getPreferredSize());
-        //this.setResizable(false);
+        //this.setMinimumSize(this.getPreferredSize());
+        //this.setMaximumSize(this.getPreferredSize());
+        this.setResizable(false);
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         this.setLocationRelativeTo(null);
+
         this.menu.setForeground(Color.decode("#333333"));
         this.menu.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         this.menu.setMaximumSize(this.menu.getPreferredSize());
@@ -95,9 +98,10 @@ public class ConnectionView extends JFrame {
         this.mntClose.setActionCommand("close");
         this.mntAbout.setText(this.messages.getString("about"));
         this.mntAbout.setActionCommand("about");
+
         this.lblRobot.setIcon(this.icoRobotNotDiscovered);
-        this.lblGif.setMinimumSize(new Dimension(100, 106));
-        this.lblGif.setSize(new Dimension(100, 106));
+        this.lblMainGif.setPreferredSize(new Dimension(260, 140));
+
         this.txtInfo.setLineWrap(true);
         this.txtInfo.setMinimumSize(new Dimension(300, 0));
         this.txtInfo.setWrapStyleWord(true);
@@ -107,9 +111,12 @@ public class ConnectionView extends JFrame {
         this.txtInfo.setEditable(false);
         this.txtInfo.setMaximumSize(new Dimension(WIDTH, 90));
         this.txtInfo.setPreferredSize(new Dimension(WIDTH, 90));
+
         this.pnlToken.setBorder(null);
         this.pnlToken.setBackground(Color.white);
         this.pnlToken.setLayout(new FlowLayout(FlowLayout.CENTER));
+        this.pnlToken.setPreferredSize(new Dimension(300, 30));
+        this.pnlToken.setMaximumSize(this.pnlToken.getPreferredSize());
 
         this.txtToken.setFont(new Font("Arial", Font.PLAIN, 18));
         this.txtToken.setEditable(false);
@@ -117,6 +124,7 @@ public class ConnectionView extends JFrame {
         this.txtToken.setBorder(null);
 
         this.checkCustomAddress.setBackground(Color.white);
+        this.checkCustomAddress.setActionCommand("customaddress");
 
         this.checkCustomDesc.setFont(new Font("Arial", Font.PLAIN, 14));
         this.checkCustomDesc.setBackground(Color.white);
@@ -133,14 +141,22 @@ public class ConnectionView extends JFrame {
         this.pnlCustomHeading.setBorder(BorderFactory.createEmptyBorder(0, 12, 0, 12));
         this.pnlCustomHeading.setBackground(Color.white);
         this.pnlCustomHeading.setLayout(new FlowLayout(FlowLayout.LEFT));
+        this.pnlCustomHeading.setVisible(false);
 
         this.pnlCustomAddress.setBorder(BorderFactory.createEmptyBorder(0, 12, 0, 12));
         this.pnlCustomAddress.setBackground(Color.white);
         this.pnlCustomAddress.setLayout(new FlowLayout(FlowLayout.LEFT));
+        this.pnlCustomAddress.setVisible(false);
+
+        this.pnlMainGif.setBackground(Color.white);
+        this.pnlMainGif.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+        this.pnlMainGif.setPreferredSize(new Dimension(300, 145));
+        this.pnlMainGif.add(this.lblMainGif);
 
         this.centerPanel.setLayout(new BoxLayout(this.centerPanel, BoxLayout.Y_AXIS));
         this.centerPanel.setAlignmentX(CENTER_ALIGNMENT);
         this.centerPanel.setBackground(Color.white);
+        this.centerPanel.setPreferredSize(new Dimension(300, 450));
         this.centerPanel.setMaximumSize(this.centerPanel.getPreferredSize());
 
         this.butConnect.setEnabled(false);
@@ -169,16 +185,13 @@ public class ConnectionView extends JFrame {
         this.customport.setEditable(true);
         this.customport.setColumns(4);
 
-        this.add(this.centerPanel, BorderLayout.CENTER);
         this.add(this.menu, BorderLayout.NORTH);
+        this.add(this.centerPanel, BorderLayout.CENTER);
         this.sep.setForeground(Color.decode("#dddddd"));
         this.centerPanel.add(this.sep);
         this.centerPanel.setBorder(null);
         this.centerPanel.add(this.pnlToken);
-        JPanel a = new JPanel();
-        a.add(this.lblGif);
-        a.setBackground(Color.white);
-        this.centerPanel.add(a);
+        this.centerPanel.add(this.pnlMainGif);
         this.centerPanel.add(this.txtInfo);
         this.centerPanel.add(this.pnlButton);
         this.centerPanel.add(this.pnlCustomInfo);
@@ -190,7 +203,7 @@ public class ConnectionView extends JFrame {
         this.pnlCustomInfo.add(this.checkCustomAddress);
         this.pnlCustomInfo.add(this.checkCustomDesc);
         this.checkCustomDesc.setText(this.messages.getString("checkCustomDesc"));
-        this.pnlCustomAddress.add(this.customheading);
+        this.pnlCustomHeading.add(this.customheading);
         this.pnlCustomAddress.add(this.customipDesc);
         this.customipDesc.setText(this.messages.getString("ip"));
         this.pnlCustomAddress.add(Box.createVerticalGlue());
@@ -206,7 +219,6 @@ public class ConnectionView extends JFrame {
         this.menu.add(this.lblRobot);
         this.mnFile.add(this.mntClose);
         this.mnInfo.add(this.mntAbout);
-        this.setTitle("USBConnection");
         this.setIconImage(new ImageIcon(getClass().getClassLoader().getResource("OR.png")).getImage());
         this.txtInfo.setText(Locale.getDefault().getLanguage());
         this.setTitle(this.messages.getString("title"));
@@ -218,6 +230,7 @@ public class ConnectionView extends JFrame {
         this.mntClose.addActionListener(connectListener);
         this.mntAbout.addActionListener(connectListener);
         this.butClose.addActionListener(connectListener);
+        this.checkCustomAddress.addActionListener(connectListener);
     }
 
     @SuppressWarnings("rawtypes")
@@ -230,7 +243,7 @@ public class ConnectionView extends JFrame {
         this.lblRobot.setIcon(this.icoRobotDiscovered);
         this.butConnect.setEnabled(true);
         this.txtInfo.setText(this.messages.getString("connectInfo"));
-        this.lblGif.setIcon(this.gifConnect);
+        this.lblMainGif.setIcon(this.gifConnect);
     }
 
     public void setWaitExecution() {
@@ -247,7 +260,7 @@ public class ConnectionView extends JFrame {
         this.butConnect.setSelected(true);
         this.lblRobot.setIcon(this.icoRobotConnected);
         this.txtInfo.setText(this.messages.getString("serverInfo"));
-        this.lblGif.setIcon(this.gifConnected);
+        this.lblMainGif.setIcon(this.gifConnected);
     }
 
     public void setDiscover() {
@@ -257,7 +270,7 @@ public class ConnectionView extends JFrame {
         this.butConnect.setSelected(false);
         this.butConnect.setEnabled(false);
         this.txtInfo.setText(this.messages.getString("plugInInfo"));
-        this.lblGif.setIcon(this.gifPlug);
+        this.lblMainGif.setIcon(this.gifPlug);
     }
 
     public void setDiscoverConnected() {
@@ -268,7 +281,37 @@ public class ConnectionView extends JFrame {
     public void setNew(String token) {
         this.txtToken.setText(token);
         this.txtInfo.setText(this.messages.getString("tokenInfo"));
-        this.lblGif.setIcon(this.gifServer);
+        this.lblMainGif.setIcon(this.gifServer);
+    }
+
+    public void showAdvancedOptions() {
+        if ( this.checkCustomAddress.isSelected() ) {
+            this.setSize(new Dimension(WIDTH, ADVANCED_HEIGHT));
+            this.setPreferredSize(new Dimension(WIDTH, ADVANCED_HEIGHT));
+            this.pnlCustomHeading.setVisible(true);
+            this.pnlCustomAddress.setVisible(true);
+            this.centerPanel.revalidate();
+            this.revalidate();
+        } else {
+            this.setSize(new Dimension(WIDTH, HEIGHT));
+            this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+            this.pnlCustomHeading.setVisible(false);
+            this.pnlCustomAddress.setVisible(false);
+            this.centerPanel.revalidate();
+            this.revalidate();
+        }
+    }
+
+    public String getCustomIP() {
+        return this.customip.getText();
+    }
+
+    public String getCustomPort() {
+        return this.customport.getText();
+    }
+
+    public boolean isCustomAddressSelected() {
+        return this.checkCustomAddress.isSelected();
     }
 
     private void createIcons() {

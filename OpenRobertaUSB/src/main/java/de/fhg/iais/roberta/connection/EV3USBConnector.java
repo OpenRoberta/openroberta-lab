@@ -244,6 +244,18 @@ public class EV3USBConnector extends Observable implements Runnable, Connector {
     }
 
     @Override
+    public void updateCustomServerAddress(String customServerAddress) {
+        this.servcomm.updateCustomServerAddress(customServerAddress);
+        log.info("Now using custom address " + customServerAddress);
+    }
+
+    @Override
+    public void resetToDefaultServerAddress() {
+        this.servcomm.updateCustomServerAddress(this.serverAddress);
+        log.info("Now using default address " + this.serverAddress);
+    }
+
+    @Override
     public void update() {
         this.state = State.UPDATE;
     }

@@ -46,15 +46,19 @@ public class UIController<ObservableObject> implements Observer {
         @Override
         public void actionPerformed(ActionEvent e) {
             AbstractButton b = (AbstractButton) e.getSource();
-            if ( b.getActionCommand() == "close" ) {
+            if ( b.getActionCommand().equals("close") ) {
                 log.info("User close");
                 closeApplication();
-            } else if ( b.getActionCommand() == "about" ) {
+            } else if ( b.getActionCommand().equals("about") ) {
                 log.info("User about");
                 showAboutPopup();
+            } else if ( b.getActionCommand().equals("customaddress") ) {
+                log.info("User custom address");
+                showAdvancedOptions();
             } else {
                 if ( b.isSelected() ) {
                     log.info("User connect");
+                    checkForValidCustomServerAddressAndUpdate();
                     UIController.this.connector.connect();
                     b.setText(UIController.this.rb.getString("disconnect"));
                 } else {
@@ -67,13 +71,32 @@ public class UIController<ObservableObject> implements Observer {
     }
 
     public class CloseListener extends WindowAdapter {
-
         @Override
         public void windowClosing(WindowEvent e) {
             log.info("User close");
             closeApplication();
         }
+    }
 
+    public void showAdvancedOptions() {
+        this.conView.showAdvancedOptions();
+    }
+
+    public void checkForValidCustomServerAddressAndUpdate() {
+        if ( this.conView.isCustomAddressSelected() ) {
+            String ip = this.conView.getCustomIP();
+            String port = this.conView.getCustomPort();
+            if ( ip != null && port != null && !ip.equals("") && !port.equals("") ) {
+                String address = ip + ":" + port;
+                log.info("Valid custom address " + address);
+                this.connector.updateCustomServerAddress(address);
+            } else {
+                log.info("Invalid custom address (null or empty) - Using default address");
+                this.connector.resetToDefaultServerAddress();
+            }
+        } else {
+            this.connector.resetToDefaultServerAddress();
+        }
     }
 
     public boolean isConnected() {

@@ -45,4 +45,8 @@ public interface Connector {
     public String getBrickName();
 
     public void update();
+
+    public void updateCustomServerAddress(String customServerAddress);
+
+    public void resetToDefaultServerAddress();
 }
