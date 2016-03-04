@@ -83,8 +83,6 @@ public class ConnectionView extends JFrame {
     private void initGUI() {
         this.setSize(WIDTH, HEIGHT);
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        //this.setMinimumSize(this.getPreferredSize());
-        //this.setMaximumSize(this.getPreferredSize());
         this.setResizable(false);
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         this.setLocationRelativeTo(null);

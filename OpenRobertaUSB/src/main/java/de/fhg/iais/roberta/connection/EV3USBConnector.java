@@ -10,6 +10,16 @@ import org.json.JSONObject;
 
 import de.fhg.iais.roberta.util.ORAtokenGenerator;
 
+/**
+ * Intended to be used as Singleton(!). This class handles two connections:</br>
+ * robot<->USB program: {@link EV3Communicator}</br>
+ * USB program<->Open Roberta server: {@link ServerCommunicator}</br>
+ * After setting up an object of this class, you want to run this in a separate thread, because our protocol contains blocking http requests.
+ * The state will be changed from the gui in another thread.
+ *
+ * @author dpyka
+ * @see {@link Connector}
+ */
 public class EV3USBConnector extends Observable implements Runnable, Connector {
 
     private String brickIp = "10.0.1.1";
@@ -36,6 +46,12 @@ public class EV3USBConnector extends Observable implements Runnable, Connector {
         "ev3menu"
     };
 
+    /**
+     * Instantiate the connector with specific properties from the file or use default options defined in this class.
+     * Set up a communicator to the EV3 and to the Open Roberta server.
+     *
+     * @param serverProps
+     */
     public EV3USBConnector(ResourceBundle serverProps) {
         if ( serverProps != null ) {
             this.brickIp = serverProps.getString("brickIp");
@@ -57,7 +73,7 @@ public class EV3USBConnector extends Observable implements Runnable, Connector {
             switch ( this.state ) {
                 case DISCOVER:
                     try {
-                        switch ( this.ev3comm.checkBrickState(CMD_ISRUNNING) ) {
+                        switch ( this.ev3comm.checkBrickState() ) {
                             case "true": // program is running
                                 break;
                             case "false": // brick available and no program running
@@ -74,13 +90,13 @@ public class EV3USBConnector extends Observable implements Runnable, Connector {
                     this.state = State.WAIT_EXECUTION;
                     notifyConnectionStateChanged(this.state);
                     try {
-                        switch ( this.ev3comm.checkBrickState(CMD_ISRUNNING) ) {
+                        switch ( this.ev3comm.checkBrickState() ) {
                             case "true": // program is running
                                 this.state = State.WAIT_EXECUTION;
                                 //notifyConnectionStateChanged(this.state);
                                 break;
                             case "false": // brick available and no program running
-                                log.info(State.WAIT_EXECUTION + "EV3 plugged in again, no program running OK");
+                                log.info(State.WAIT_EXECUTION + "EV3 plugged in again, no program running, OK");
                                 this.state = State.WAIT_FOR_CMD;
                                 notifyConnectionStateChanged(this.state);
                                 break;
@@ -92,7 +108,7 @@ public class EV3USBConnector extends Observable implements Runnable, Connector {
                     break;
                 case WAIT_FOR_CONNECT:
                     try {
-                        switch ( this.ev3comm.checkBrickState(CMD_ISRUNNING) ) {
+                        switch ( this.ev3comm.checkBrickState() ) {
                             case "true":
                                 this.state = State.DISCOVER;
                                 notifyConnectionStateChanged(State.DISCOVER);
@@ -166,16 +182,16 @@ public class EV3USBConnector extends Observable implements Runnable, Connector {
                         reset(State.ERROR_BRICK);
                         break;
                     }
-                    String command = "default";
+                    String responseCommandFromServer = "default";
                     try {
-                        command = this.servcomm.pushRequest(this.brickData).getString(KEY_CMD);
+                        responseCommandFromServer = this.servcomm.pushRequest(this.brickData).getString(KEY_CMD);
                     } catch ( IOException | JSONException servererror ) {
                         // continue to default block
                         log.info(State.WAIT_FOR_CMD + " Server response not ok " + servererror.getMessage());
                         reset(State.ERROR_HTTP);
                         break;
                     }
-                    switch ( command ) {
+                    switch ( responseCommandFromServer ) {
                         case CMD_REPEAT:
                             break;
                         case CMD_ABORT:
@@ -190,7 +206,7 @@ public class EV3USBConnector extends Observable implements Runnable, Connector {
                             log.info("Execute firmware update");
                             try {
                                 for ( int i = 0; i < this.fwfiles.length; i++ ) {
-                                    byte[] binaryfile = this.servcomm.downloadFirmwareFile(this.brickData, this.fwfiles[i]);
+                                    byte[] binaryfile = this.servcomm.downloadFirmwareFile(this.fwfiles[i]);
                                     this.ev3comm.uploadFirmwareFile(binaryfile, this.servcomm.getFilename());
                                 }
                                 this.ev3comm.restartBrick();
@@ -221,10 +237,10 @@ public class EV3USBConnector extends Observable implements Runnable, Connector {
                             }
                             break;
                         case CMD_CONFIGURATION:
-                            log.warning("Command " + command + " unused, ignore and continue push!");
+                            log.warning("Command " + responseCommandFromServer + " unused, ignore and continue push!");
                             break;
                         default:
-                            log.warning("Command " + command + " unknown");
+                            log.warning("Command " + responseCommandFromServer + " unknown");
                             reset(null);
                             break;
                     }
@@ -234,6 +250,11 @@ public class EV3USBConnector extends Observable implements Runnable, Connector {
         }
     }
 
+    /**
+     * Reset the USB program to the start state (discover).
+     *
+     * @param additionalerrormessage Display a popup with error message. If this is null, we do not want to display the tooltip.
+     */
     private void reset(State additionalerrormessage) {
         if ( (!this.userDisconnect) && (additionalerrormessage != null) ) {
             notifyConnectionStateChanged(additionalerrormessage);
@@ -298,10 +319,6 @@ public class EV3USBConnector extends Observable implements Runnable, Connector {
         } else {
             return "";
         }
-    }
-
-    public State getConnectionState() {
-        return this.state;
     }
 
     @Override

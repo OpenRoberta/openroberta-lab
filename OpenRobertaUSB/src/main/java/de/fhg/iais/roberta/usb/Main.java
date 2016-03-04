@@ -85,11 +85,18 @@ public class Main {
         });
     }
 
+    /**
+     * Flush and close the file handler before closing the USB program.
+     */
     public static void stopFileLogger() {
         fileHandler.flush();
         fileHandler.close();
     }
 
+    /**
+     * Set up a file handler for writing a log file to either %APPDATA% on windows, or user.home on linux or mac. The USB program will log all important actions
+     * and events.
+     */
     private static void configureLogger() {
         String path = "";
         try {
@@ -98,7 +105,7 @@ public class Main {
             } else if ( SystemUtils.IS_OS_LINUX ) {
                 path = System.getProperty("user.home");
             } else if ( SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_MAC_OSX ) {
-                // TODO
+                path = System.getProperty("user.home");
             }
             logFile = new File(path, "OpenRobertaUSB");
             if ( !logFile.exists() ) {
