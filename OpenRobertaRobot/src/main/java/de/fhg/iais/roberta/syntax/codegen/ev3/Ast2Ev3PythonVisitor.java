@@ -324,7 +324,19 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     @Override
     public Void visitBinary(Binary<Void> binary) {
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
-        this.sb.append(' ').append(binary.getOp().getOpSymbol()).append(' ');
+        String sym = binary.getOp().getOpSymbol();
+        // fixup language specific symbols
+        switch ( sym ) {
+            case "||":
+                sym = "or";
+                break;
+            case "&&":
+                sym = "and";
+                break;
+            default:
+                break;
+        }
+        this.sb.append(' ').append(sym).append(' ');
         if ( binary.getOp() == Op.TEXT_APPEND ) {
             this.sb.append("str(");
             generateSubExpr(this.sb, false, binary.getRight(), binary);
