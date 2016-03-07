@@ -1200,7 +1200,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     @Override
     public Void visitTextJoinFunct(TextJoinFunct<Void> textJoinFunct) {
         this.sb.append("BlocklyMethods.textJoin(");
-        textJoinFunct.visit(this);
+        textJoinFunct.getParam().visit(this);
         this.sb.append(")");
         return null;
     }

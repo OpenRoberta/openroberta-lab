@@ -299,7 +299,20 @@ public class AstToEv3PythonVisitorTest {
         assertCodeIsOk(a, "/syntax/expr/logic_ternary.xml");
     }
 
-    // TODO: add tests for files from "/syntax/{functions,lists,math}/*.xml"
+    @Test
+    public void testFunctionsTextConcat() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + GLOBALS
+            + "BlocklyMethods.textJoin(0, 0)\n"
+            + "BlocklyMethods.textJoin(0, \"16561\")\n"
+            + "BlocklyMethods.textJoin(0, BlocklyMethods.createListWith(\"16561\", \"16561\"))\n\n"
+            + MAIN_METHOD;
+
+        assertCodeIsOk(a, "/syntax/functions/text_concat.xml");
+    }
+
+    // TODO: add tests for files from "/syntax/{lists,math}/*.xml"
 
     @Test
     public void testMethodIfReturn1() throws Exception {
