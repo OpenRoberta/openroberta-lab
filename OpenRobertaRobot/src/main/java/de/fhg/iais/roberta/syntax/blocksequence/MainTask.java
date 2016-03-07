@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.blocksequence;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
+import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.syntax.BlockType;
@@ -25,11 +26,13 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
  */
 public class MainTask<V> extends Task<V> {
     private final StmtList<V> variables;
+    private final String debug;
 
-    private MainTask(StmtList<V> variables, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private MainTask(StmtList<V> variables, String debug, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockType.MAIN_TASK, properties, comment);
         Assert.isTrue(variables.isReadOnly() && variables != null);
         this.variables = variables;
+        this.debug = debug;
         setReadOnly();
     }
 
@@ -38,8 +41,8 @@ public class MainTask<V> extends Task<V> {
      *
      * @param variables read only list of declared variables
      */
-    public static <V> MainTask<V> make(StmtList<V> variables, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new MainTask<V>(variables, properties, comment);
+    public static <V> MainTask<V> make(StmtList<V> variables, String debug, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new MainTask<V>(variables, debug, properties, comment);
     }
 
     /**
@@ -47,6 +50,10 @@ public class MainTask<V> extends Task<V> {
      */
     public StmtList<V> getVariables() {
         return this.variables;
+    }
+
+    public String getDebug() {
+        return this.debug;
     }
 
     @Override
@@ -77,14 +84,19 @@ public class MainTask<V> extends Task<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+        String debug = null;
+        List<Field> fields = block.getField();
+        if ( fields.size() != 0 ) {
+            debug = helper.extractField(fields, "DEBUG");
+        }
         if ( block.getMutation().isDeclare() == true ) {
             List<Statement> statements = helper.extractStatements(block, (short) 1);
             StmtList<V> statement = helper.extractStatement(statements, BlocklyConstants.ST);
-            return MainTask.make(statement, helper.extractBlockProperties(block), helper.extractComment(block));
+            return MainTask.make(statement, debug, helper.extractBlockProperties(block), helper.extractComment(block));
         }
         StmtList<V> listOfVariables = StmtList.make();
         listOfVariables.setReadOnly();
-        return MainTask.make(listOfVariables, helper.extractBlockProperties(block), helper.extractComment(block));
+        return MainTask.make(listOfVariables, debug, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
@@ -96,6 +108,9 @@ public class MainTask<V> extends Task<V> {
         Mutation mutation = new Mutation();
         mutation.setDeclare(declare);
         jaxbDestination.setMutation(mutation);
+        if ( getDebug() != null ) {
+            JaxbTransformerHelper.addField(jaxbDestination, "DEBUG", getDebug());
+        }
         JaxbTransformerHelper.addStatement(jaxbDestination, BlocklyConstants.ST, this.variables);
         return jaxbDestination;
     }

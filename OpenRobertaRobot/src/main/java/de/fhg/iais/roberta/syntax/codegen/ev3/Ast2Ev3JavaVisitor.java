@@ -166,15 +166,18 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
 
     private static void generateCodeFromPhrases(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, boolean withWrapping, Ast2Ev3JavaVisitor astVisitor) {
         boolean mainBlock = false;
+        boolean debugging = false;
         for ( ArrayList<Phrase<Void>> phrases : phrasesSet ) {
             for ( Phrase<Void> phrase : phrases ) {
-                mainBlock = handleMainBlocks(astVisitor, mainBlock, phrase);
+                mainBlock = handleMainBlocks(astVisitor, mainBlock, debugging, phrase);
                 phrase.visit(astVisitor);
             }
             if ( mainBlock ) {
                 astVisitor.sb.append("\n");
                 // for testing
-                //astVisitor.sb.append(INDENT).append(INDENT).append("hal.closeResources();");
+                if ( debugging ) {
+                    astVisitor.sb.append(INDENT).append(INDENT).append("hal.closeResources();");
+                }
                 astVisitor.sb.append("\n").append(INDENT).append("}");
                 mainBlock = false;
             }
@@ -182,11 +185,12 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         generateSuffix(withWrapping, astVisitor);
     }
 
-    private static boolean handleMainBlocks(Ast2Ev3JavaVisitor astVisitor, boolean mainBlock, Phrase<Void> phrase) {
+    private static boolean handleMainBlocks(Ast2Ev3JavaVisitor astVisitor, boolean mainBlock, boolean debugging, Phrase<Void> phrase) {
         if ( phrase.getKind().getCategory() != Category.TASK ) {
             astVisitor.nlIndent();
         } else if ( phrase.getKind() != BlockType.LOCATION ) {
             mainBlock = true;
+            debugging = ((MainTask<Void>) phrase).getDebug().equals("TRUE");
         }
         return mainBlock;
     }
@@ -337,7 +341,16 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         this.sb.append(var.getName());
         if ( var.getValue().getKind() != BlockType.EMPTY_EXPR ) {
             this.sb.append(" = ");
-            var.getValue().visit(this);
+            if ( var.getValue().getKind() == BlockType.EXPR_LIST ) {
+                ExprList<Void> list = (ExprList<Void>) var.getValue();
+                if ( list.get().size() == 2 ) {
+                    list.get().get(1).visit(this);
+                } else {
+                    list.get().get(0).visit(this);
+                }
+            } else {
+                var.getValue().visit(this);
+            }
         }
         return null;
     }
@@ -486,6 +499,8 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
             case UNTIL:
             case WHILE:
             case FOREVER:
+                this.sb.append("boolean TRUE = true;");
+                nlIndent();
                 this.sb.append("if ( TRUE ) {");
                 incrIndentation();
                 nlIndent();
@@ -876,8 +891,10 @@ public class Ast2Ev3JavaVisitor implements AstVisitor<Void> {
         this.sb.append("\n\n").append(INDENT).append("public void run() throws Exception {\n");
         incrIndentation();
         // this is needed for testing
-        //this.sb.append(INDENT).append(INDENT).append("hal.startServerLoggingThread();");
-        //this.sb.append(INDENT).append(INDENT).append(INDENT).append("\nhal.startScreenLoggingThread();");
+        if ( mainTask.getDebug().equals("TRUE") ) {
+            this.sb.append(INDENT).append(INDENT).append("hal.startLogging();");
+            //this.sb.append(INDENT).append(INDENT).append(INDENT).append("\nhal.startScreenLoggingThread();");
+        }
         return null;
     }
 

@@ -161,14 +161,17 @@ public class RepeatStmt<V> extends Stmt<V> {
             case BlocklyConstants.CONTROLS_FOR_EACH:
                 fields = helper.extractFields(block, (short) 2);
                 EmptyExpr<V> empty = EmptyExpr.make(Integer.class);
+                ExprList<V> exprList2 = ExprList.make();
+                exprList2.addExpr(empty);
+                exprList2.setReadOnly();
                 var =
                     VarDeclaration.make(
                         BlocklyType.get(helper.extractField(fields, BlocklyConstants.TYPE)),
                         helper.extractField(fields, BlocklyConstants.VAR),
-                        empty,
+                        exprList2,
                         false,
                         false,
-                        BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true),
+                        BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false),
                         null);
 
                 values = helper.extractValues(block, (short) 1);
@@ -241,8 +244,10 @@ public class RepeatStmt<V> extends Stmt<V> {
 
             case FOR_EACH:
                 Binary<?> exprBinary = (Binary<?>) getExpr();
-                JaxbTransformerHelper
-                    .addField(jaxbDestination, BlocklyConstants.TYPE, ((VarDeclaration<?>) exprBinary.getLeft()).getTypeVar().getBlocklyName());
+                JaxbTransformerHelper.addField(
+                    jaxbDestination,
+                    BlocklyConstants.TYPE,
+                    ((VarDeclaration<?>) exprBinary.getLeft()).getTypeVar().getBlocklyName());
                 JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VAR, ((VarDeclaration<?>) exprBinary.getLeft()).getName());
                 JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.LIST_, exprBinary.getRight());
                 break;

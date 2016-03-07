@@ -170,11 +170,19 @@ public class Hal {
     }
 
     /**
+     * Starts logging of the sensor data to the server and brick screen.
+     */
+    public void startLogging() {
+        startServerLoggingThread();
+        startScreenLoggingThread();
+    }
+
+    /**
      * <b>!!!Temporary solution for version 1.4!!!</b></br>
      * Ugly fix, we can not upload websocket library to the ev3 in version 1.4, therefor use special method without websocket reference.
      * Logging is only allowed, if the last connection is wifi set by the ev3 menu.
      */
-    public void startServerLoggingThread() {
+    private void startServerLoggingThread() {
         if ( this.wifiLogging ) {
             File f = new File("/home/roberta/lib/Java-WebSocket.jar");
             if ( f.exists() ) {
@@ -260,7 +268,7 @@ public class Hal {
     /**
      * Start a new Thread in the NEPO program to regularly display sensor information on the ev3 screen.
      */
-    public void startScreenLoggingThread() {
+    private void startScreenLoggingThread() {
         this.screenLoggerThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -275,7 +283,7 @@ public class Hal {
      * Send sensor values to Open Roberta Lab via websocket.
      * Fall back to REST if the websocket is not able to connect to the server at least once.
      */
-    public void logToServerWS(ClientWebSocket ws) {
+    private void logToServerWS(ClientWebSocket ws) {
         // READYSTATE.CONNECTING not working/ unused
         System.out.println(ws.getReadyState());
         if ( ws.getReadyState() == READYSTATE.OPEN ) {

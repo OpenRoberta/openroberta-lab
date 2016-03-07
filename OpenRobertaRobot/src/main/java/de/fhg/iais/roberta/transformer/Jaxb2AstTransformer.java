@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Comment;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
+import de.fhg.iais.roberta.blockly.generated.Shadow;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.Category;
@@ -234,7 +235,11 @@ abstract public class Jaxb2AstTransformer<V> {
         ExprList<V> parameters = ExprList.make();
         for ( Arg arg : arguments ) {
             Var<V> parametar =
-                Var.make(BlocklyType.get(arg.getType()), arg.getName(), BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true), null);
+                Var.make(
+                    BlocklyType.get(arg.getType()),
+                    arg.getName(),
+                    BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false),
+                    null);
             parameters.addExpr(parametar);
         }
         parameters.setReadOnly();
@@ -347,13 +352,43 @@ abstract public class Jaxb2AstTransformer<V> {
      * @return AST object or {@link EmptyExpr} if the value is missing
      */
     public Phrase<V> extractValue(List<Value> values, ExprParam param) {
+        //TODO: if we have shadow block then we return exprList-
         for ( Value value : values ) {
             if ( value.getName().equals(param.getName()) ) {
-                return blockToAST(value.getBlock());
+                return extractBlock(value);
+                //                return blockToAST(value.getBlock());
 
             }
         }
         return EmptyExpr.make(param.getDefaultValue());
+    }
+
+    private Phrase<V> extractBlock(Value value) {
+        Shadow shadow = value.getShadow();
+        Block block = value.getBlock();
+        if ( shadow != null ) {
+            ExprList<V> exprList = ExprList.make();
+            Block shadowBlock = shadow2block(shadow);
+            exprList.addExpr(convertPhraseToExpr(blockToAST(shadowBlock)));
+            if ( block != null ) {
+                exprList.addExpr(convertPhraseToExpr(blockToAST(block)));
+            }
+            exprList.setReadOnly();
+            return exprList;
+        } else {
+            return blockToAST(block);
+        }
+
+    }
+
+    private Block shadow2block(Shadow shadow) {
+        Block block = new Block();
+        block.setId(shadow.getId());
+        block.setType(shadow.getType());
+        block.setIntask(shadow.isIntask());
+        block.getField().add(shadow.getField());
+        block.setShadow(true);
+        return block;
     }
 
     /**
@@ -477,7 +512,8 @@ abstract public class Jaxb2AstTransformer<V> {
             isInline(block),
             isDeletable(block),
             isMovable(block),
-            isInTask(block));
+            isInTask(block),
+            isShadow(block));
     }
 
     public int getElseIf(Mutation mutation) {
@@ -578,5 +614,12 @@ abstract public class Jaxb2AstTransformer<V> {
             return null;
         }
         return block.isIntask();
+    }
+
+    private Boolean isShadow(Block block) {
+        if ( block.isShadow() == null ) {
+            return null;
+        }
+        return block.isShadow();
     }
 }

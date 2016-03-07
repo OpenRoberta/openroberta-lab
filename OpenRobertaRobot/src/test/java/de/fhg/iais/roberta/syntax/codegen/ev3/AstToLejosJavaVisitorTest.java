@@ -134,6 +134,7 @@ public class AstToLejosJavaVisitorTest {
             + "        if ( hal.isPressed(SensorPort.S1) ) {\n"
             + "            hal.ledOn(BrickLedColor.GREEN, BlinkMode.ON);\n"
             + "        } else if ( Pickcolor.RED == hal.getColorSensorColour(SensorPort.S3) ) {\n"
+            + "        booleanTRUE=true;"
             + "        if ( TRUE ) {\n"
             + "            while ( true ) {\n"
             + "                hal.drawPicture(ShowPicture.EYESOPEN, 0, 0);\n\n"
@@ -171,6 +172,7 @@ public class AstToLejosJavaVisitorTest {
             + "            } else if ( 0==hal.getUltraSonicSensorDistance(SensorPort.S4) ) {\n"
             + "                hal.drawPicture(ShowPicture.FLOWERS, 15, 15);\n"
             + "            } else {\n"
+            + "            booleanTRUE=true;"
             + "            if ( TRUE ) {\n"
             + "                while ( !hal.isPressed(BrickKey.UP) ) {\n\n"
             + "                     hal.turnOnRegulatedMotor(ActorPort.B,30);"
@@ -205,6 +207,7 @@ public class AstToLejosJavaVisitorTest {
             + "            hal.ledOff();\n"
             + "        } else {\n"
             + "            hal.resetGyroSensor(SensorPort.S2);\n"
+            + "        booleanTRUE=true;"
             + "        if ( TRUE ) {\n"
             + "            while ( hal.isPressed(SensorPort.S1) ) {\n"
             + "                hal.drawPicture(ShowPicture.OLDGLASSES, 0, 0);\n"
@@ -295,7 +298,6 @@ public class AstToLejosJavaVisitorTest {
             + "        String item2 = \"TTTT\";\n"
             + "        boolean item3 = true;\n"
             + "    public void run() throwsException {\n"
-
             + "        hal.drawText(String.valueOf(item), 0, 0);\n"
             + "        hal.drawText(String.valueOf(item2), 0, 0);\n"
             + "        hal.drawText(String.valueOf(item3), 0, 0);\n"
@@ -530,6 +532,23 @@ public class AstToLejosJavaVisitorTest {
             + "}\n";
 
         assertCodeIsOk(a, "/syntax/stmt/if_stmt4.xml");
+    }
+
+    @Test
+    public void test18() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + MAIN_CLASS
+            + BRICK_CONFIGURATION_DECL
+            + USED_SENSORS_DECL
+            + MAIN_METHOD
+            + "    float item=0;\n"
+            + "    String item2=\"cc\";\n"
+            + "    public void run() throwsException {\n"
+            + "    }\n\n"
+            + "}\n";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator11.xml");
     }
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {

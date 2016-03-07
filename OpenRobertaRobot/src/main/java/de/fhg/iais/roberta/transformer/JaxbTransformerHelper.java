@@ -7,6 +7,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Comment;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Repetitions;
+import de.fhg.iais.roberta.blockly.generated.Shadow;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.blockly.generated.Warning;
@@ -145,7 +146,16 @@ public final class JaxbTransformerHelper {
         if ( value.getKind() != BlockType.EMPTY_EXPR ) {
             Value blockValue = new Value();
             blockValue.setName(name);
-            blockValue.setBlock(value.astToBlock());
+            if ( value.getKind() == BlockType.EXPR_LIST ) {
+                ExprList<?> list = (ExprList<?>) value;
+                blockValue.setShadow(block2shadow(list.get().get(0).astToBlock()));
+                if ( list.get().size() > 1 ) {
+                    blockValue.setBlock(list.get().get(1).astToBlock());
+                }
+            } else {
+                blockValue.setBlock(value.astToBlock());
+            }
+
             block.getValue().add(blockValue);
         }
     }
@@ -181,6 +191,15 @@ public final class JaxbTransformerHelper {
         field.setName(name);
         field.setValue(value);
         block.getField().add(field);
+    }
+
+    private static Shadow block2shadow(Block block) {
+        Shadow shadow = new Shadow();
+        shadow.setId(block.getId());
+        shadow.setType(block.getType());
+        shadow.setIntask(block.isIntask());
+        shadow.setField(block.getField().get(0));
+        return shadow;
     }
 
     private static List<Block> extractStmtList(Phrase<?> phrase) {

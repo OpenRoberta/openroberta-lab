@@ -32,7 +32,7 @@ public class JavaVisitorTest {
 
     @Test
     public void visitMathConst() throws Exception {
-        MathConst<Void> mathConst = MathConst.make(Const.E, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true), null);
+        MathConst<Void> mathConst = MathConst.make(Const.E, BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
         Ast2Ev3JavaVisitor visitor = new Ast2Ev3JavaVisitor("Test", brickConfiguration, usedSensors, 0);
         mathConst.visit(visitor);
         Assert.assertEquals("BlocklyMethods.E", visitor.getSb().toString());

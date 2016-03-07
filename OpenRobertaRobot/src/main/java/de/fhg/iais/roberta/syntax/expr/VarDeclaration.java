@@ -28,14 +28,14 @@ import de.fhg.iais.roberta.visitor.AstVisitor;
 public class VarDeclaration<V> extends Expr<V> {
     private final BlocklyType typeVar;
     private final String name;
-    private final Expr<V> value;
+    private final Phrase<V> value;
     private final boolean next;
     private final boolean global;
 
     private VarDeclaration(
         BlocklyType typeVar,
         String name,
-        Expr<V> value,
+        Phrase<V> value,
         boolean next,
         boolean global,
         BlocklyBlockProperties properties,
@@ -88,7 +88,7 @@ public class VarDeclaration<V> extends Expr<V> {
     /**
      * @return the value
      */
-    public Expr<V> getValue() {
+    public Phrase<V> getValue() {
         return this.value;
     }
 
@@ -141,6 +141,7 @@ public class VarDeclaration<V> extends Expr<V> {
         String name = helper.extractField(fields, BlocklyConstants.VAR);
         Phrase<V> expr = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, Integer.class));
         boolean next = block.getMutation().isNext();
+
         return VarDeclaration
             .make(typeVar, name, helper.convertPhraseToExpr(expr), next, isGlobalVariable, helper.extractBlockProperties(block), helper.extractComment(block));
     }
@@ -154,7 +155,6 @@ public class VarDeclaration<V> extends Expr<V> {
         mutation.setNext(this.next);
         mutation.setDeclarationType(getTypeVar().getBlocklyName());
         jaxbDestination.setMutation(mutation);
-
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VAR, getName());
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.TYPE, getTypeVar().getBlocklyName());
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, this.value);

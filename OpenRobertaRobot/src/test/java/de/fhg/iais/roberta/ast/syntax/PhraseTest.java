@@ -13,7 +13,7 @@ public class PhraseTest {
 
     @Test
     public void test() {
-        Phrase<?> phrase = StringConst.make("testString", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true), null);
+        Phrase<?> phrase = StringConst.make("testString", BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false), null);
         assertEquals(BlockType.STRING_CONST, phrase.getKind());
     }
 
