@@ -497,10 +497,8 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         }
         appendBreakStmt(repeatStmt);
         decrIndentation();
-        nlIndent();
         if ( additionalClosingScope ) {
             decrIndentation();
-            nlIndent();
         }
         return null;
     }
@@ -1324,14 +1322,13 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
             if ( i == 0 ) {
                 generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i));
             } else {
-                generateCodeFromStmtCondition("else if", ifStmt.getExpr().get(i));
+                generateCodeFromStmtCondition("elif", ifStmt.getExpr().get(i));
             }
             incrIndentation();
             ifStmt.getThenList().get(i).visit(this);
             decrIndentation();
             if ( i + 1 < ifStmt.getExpr().size() ) {
                 nlIndent();
-                //this.sb.append("} "));
             }
         }
     }
@@ -1350,7 +1347,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
         this.sb.append(stmtType).append(' ');
         expr.visit(this);
-        this.sb.append(" :");
+        this.sb.append(":");
     }
 
     private void generateCodeFromStmtConditionFor(String stmtType, Expr<Void> expr) {

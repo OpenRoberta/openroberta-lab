@@ -71,8 +71,7 @@ public class AstToEv3PythonVisitorTest {
     }
 
     @Test
-    public void test() throws Exception {
-
+    public void testSingleStatement() throws Exception {
         String a = "" //
             + IMPORTS
             + GLOBALS
@@ -83,8 +82,43 @@ public class AstToEv3PythonVisitorTest {
         assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator.xml");
     }
 
+    @Test
+    public void testRangeLoop() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + GLOBALS
+            + "def run():\n"
+            + "    for k0 in xrange(0,10,1):\n"
+            + "        hal.drawText(\"Hallo\", 0, 3)\n\n"
+            + MAIN_METHOD;
+
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator1.xml");
+    }
+
+    @Test
+    public void test() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + GLOBALS
+            + "def run():\n"
+            + "    if hal.isPressed('1'):\n"
+            + "        hal.ledOn('green','on')\n"
+            + "    elif 'red'==hal.getColorSensorColour('3'):\n"
+            + "        if TRUE:\n"
+            + "            while True:\n"
+            + "                hal.drawPicture('eyesopen',0,0)\n"
+            + "                hal.turnOnRegulatedMotor('B',30)\n"
+            + "    hal.playFile(1)\n"
+            + "    hal.setVolume(50)\n"
+            + "    for i in xrange(1,10,1):\n"
+            + "        hal.rotateRegulatedMotor('B',30,'rotations',1)\n\n"
+            + MAIN_METHOD;
+
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator2.xml");
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
-        // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
-        Assert.assertEquals(a.replaceAll("\\s+", ""), Helper.generatePython(fileName, brickConfiguration).replaceAll("\\s+", ""));
+        String b = Helper.generatePython(fileName, brickConfiguration);
+        Assert.assertEquals(a.replaceAll("\\s+", ""), b.replaceAll("\\s+", ""));
     }
 }
