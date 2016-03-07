@@ -45,7 +45,6 @@ import de.fhg.iais.roberta.syntax.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.blocksequence.StartActivityTask;
 import de.fhg.iais.roberta.syntax.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.expr.Binary;
-import de.fhg.iais.roberta.syntax.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
@@ -314,9 +313,10 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitUnary(Unary<Void> unary) {
-        String sym = unary.getOp().getOpSymbol();
+        Unary.Op op = unary.getOp();
+        String sym = op.getOpSymbol();
         // fixup language specific symbols
-        if ( sym.equals("!") ) {
+        if ( op == Unary.Op.NEG ) {
             sym = "not ";
         }
         if ( unary.getOp() == Unary.Op.POSTFIX_INCREMENTS ) {
@@ -332,27 +332,31 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     @Override
     public Void visitBinary(Binary<Void> binary) {
         generateSubExpr(this.sb, false, binary.getLeft(), binary);
-        String sym = binary.getOp().getOpSymbol();
+        Binary.Op op = binary.getOp();
+        String sym = op.getOpSymbol();
         // fixup language specific symbols
-        switch ( sym ) {
-            case "||":
+        switch ( op ) {
+            case OR:
                 sym = "or";
                 break;
-            case "&&":
+            case AND:
                 sym = "and";
+                break;
+            case IN:
+                sym = "in";
                 break;
             default:
                 break;
         }
         this.sb.append(' ').append(sym).append(' ');
-        if ( binary.getOp() == Op.TEXT_APPEND ) {
+        if ( binary.getOp() == Binary.Op.TEXT_APPEND ) {
             this.sb.append("str(");
             generateSubExpr(this.sb, false, binary.getRight(), binary);
             this.sb.append(")");
         } else {
             generateSubExpr(this.sb, parenthesesCheck(binary), binary.getRight(), binary);
         }
-        if ( binary.getOp() == Op.MATH_CHANGE ) {
+        if ( binary.getOp() == Binary.Op.MATH_CHANGE ) {
             this.sb.append(";"); // FIXME
         }
         return null;
@@ -880,7 +884,6 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     @Override
     public Void visitFunctionStmt(FunctionStmt<Void> functionStmt) {
         functionStmt.getFunction().visit(this);
-        this.sb.append(";"); // FIXME
         return null;
     }
 
@@ -1293,7 +1296,9 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     }
 
     private boolean parenthesesCheck(Binary<Void> binary) {
-        return binary.getOp() == Op.MINUS && binary.getRight().getKind() == BlockType.BINARY && binary.getRight().getPrecedence() <= binary.getPrecedence();
+        return binary.getOp() == Binary.Op.MINUS
+            && binary.getRight().getKind() == BlockType.BINARY
+            && binary.getRight().getPrecedence() <= binary.getPrecedence();
     }
 
     private void generateSubExpr(StringBuilder sb, boolean minusAdaption, Expr<Void> expr, Binary<Void> binary) {
@@ -1319,7 +1324,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     private void generateCodeFromTernary(IfStmt<Void> ifStmt) {
         ((ExprStmt<Void>) ifStmt.getThenList().get(0).get().get(0)).getExpr().visit(this);
-        this.sb.append("if ( ");
+        this.sb.append(" if ( ");
         ifStmt.getExpr().get(0).visit(this);
         this.sb.append(" ) else ");
         ((ExprStmt<Void>) ifStmt.getElseList().get().get(0)).getExpr().visit(this);
