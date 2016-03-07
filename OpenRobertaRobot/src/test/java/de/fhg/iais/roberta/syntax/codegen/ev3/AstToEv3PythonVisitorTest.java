@@ -19,7 +19,7 @@ public class AstToEv3PythonVisitorTest {
 
     private static final String IMPORTS = "" //
         + "#!/usr/bin/python\n\n"
-        + "from __future__ import absolute_import"
+        + "from __future__ import absolute_import\n"
         + "from roberta.ev3 import Hal\n"
         + "from roberta.BlocklyMethods import BlocklyMethods\n"
         + "from sets import Set\n"
@@ -33,15 +33,15 @@ public class AstToEv3PythonVisitorTest {
         + "    'track-width': 17.0,\n"
         + "    'actors': {\n"
         + "        'A':Hal.makeMediumMotor(ev3dev.OUTPUT_A, 'on', 'foreward', 'left'),\n"
-        + "        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B,'on','foreward','right'),\n"
+        + "        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B, 'on', 'foreward', 'right'),\n"
         + "    },\n"
-        + "    'sensors':{\n"
+        + "    'sensors': {\n"
         + "        '1':Hal.makeTouchSensor(ev3dev.INPUT_1),\n"
         + "        '2':Hal.makeUltrasonicSensor(ev3dev.INPUT_2),\n"
         + "    },\n"
         + "}\n"
         + "_usedSensors = Set([])\n"
-        + "hal = Hal(_brickConfiguration, _usedSensors)\n";
+        + "hal = Hal(_brickConfiguration, _usedSensors)\n\n";
 
     private static final String MAIN_METHOD = "" //
         + "def main():\n"
@@ -56,7 +56,7 @@ public class AstToEv3PythonVisitorTest {
         + "        while not hal.isKeyPressed('any'): hal.waitFor(500)\n"
         + "        raise\n\n"
         + "if __name__ == \"__main__\":\n"
-        + "    main()\n";
+        + "    main()";
     private static Ev3Configuration brickConfiguration;
 
     @BeforeClass
@@ -88,7 +88,7 @@ public class AstToEv3PythonVisitorTest {
             + IMPORTS
             + GLOBALS
             + "def run():\n"
-            + "    for k0 in xrange(0,10,1):\n"
+            + "    for k0 in xrange(0, 10, 1):\n"
             + "        hal.drawText(\"Hallo\", 0, 3)\n\n"
             + MAIN_METHOD;
 
@@ -96,29 +96,54 @@ public class AstToEv3PythonVisitorTest {
     }
 
     @Test
-    public void test() throws Exception {
+    public void testCondition1() throws Exception {
         String a = "" //
             + IMPORTS
             + GLOBALS
             + "def run():\n"
             + "    if hal.isPressed('1'):\n"
-            + "        hal.ledOn('green','on')\n"
-            + "    elif 'red'==hal.getColorSensorColour('3'):\n"
+            + "        hal.ledOn('green', 'on')\n"
+            + "    elif 'red' == hal.getColorSensorColour('3'):\n"
             + "        if TRUE:\n"
             + "            while True:\n"
-            + "                hal.drawPicture('eyesopen',0,0)\n"
-            + "                hal.turnOnRegulatedMotor('B',30)\n"
+            + "                hal.drawPicture('eyesopen', 0, 0)\n"
+            + "                hal.turnOnRegulatedMotor('B', 30)\n"
             + "    hal.playFile(1)\n"
             + "    hal.setVolume(50)\n"
-            + "    for i in xrange(1,10,1):\n"
-            + "        hal.rotateRegulatedMotor('B',30,'rotations',1)\n\n"
+            + "    for i in xrange(1, 10, 1):\n"
+            + "        hal.rotateRegulatedMotor('B', 30, 'rotations', 1)\n\n"
             + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator2.xml");
     }
 
+    @Test
+    public void testCondition2() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + GLOBALS
+            + "def run():\n"
+            + "    if hal.isPressed('1'):\n"
+            + "        hal.ledOn('green', 'on')\n"
+            + "    else:\n"
+            + "        if hal.isPressed('1'):\n"
+            + "            hal.ledOn('green', 'on')\n"
+            + "        elif 0 == hal.getUltraSonicSensorDistance('4'):\n"
+            + "            hal.drawPicture('flowers', 15, 15)\n"
+            + "        else:\n"
+            + "            if TRUE:\n"
+            + "                while not hal.isKeyPressed('up'):\n"
+            + "                    hal.turnOnRegulatedMotor('B', 30)\n\n"
+            + MAIN_METHOD;
+
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator3.xml");
+    }
+
+    // TODO: add tests for files up-to "-11.xml"
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         String b = Helper.generatePython(fileName, brickConfiguration);
-        Assert.assertEquals(a.replaceAll("\\s+", ""), b.replaceAll("\\s+", ""));
+        Assert.assertEquals(a, b);
+        //Assert.assertEquals(a.replaceAll("\\s+", ""), b.replaceAll("\\s+", ""));
     }
 }

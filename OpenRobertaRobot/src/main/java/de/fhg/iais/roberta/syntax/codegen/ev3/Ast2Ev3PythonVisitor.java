@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.HardwareComponent;
-import de.fhg.iais.roberta.components.HardwareComponentType;
 import de.fhg.iais.roberta.components.ev3.EV3Actor;
 import de.fhg.iais.roberta.components.ev3.EV3Sensor;
 import de.fhg.iais.roberta.components.ev3.EV3Sensors;
@@ -1322,14 +1321,12 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
             if ( i == 0 ) {
                 generateCodeFromStmtCondition("if", ifStmt.getExpr().get(i));
             } else {
+                nlIndent();
                 generateCodeFromStmtCondition("elif", ifStmt.getExpr().get(i));
             }
             incrIndentation();
             ifStmt.getThenList().get(i).visit(this);
             decrIndentation();
-            if ( i + 1 < ifStmt.getExpr().size() ) {
-                nlIndent();
-            }
         }
     }
 
@@ -1341,7 +1338,6 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
             ifStmt.getElseList().visit(this);
             decrIndentation();
         }
-        nlIndent();
     }
 
     private void generateCodeFromStmtCondition(String stmtType, Expr<Void> expr) {
@@ -1451,7 +1447,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     private String generateRegenerateUsedSensors() {
         StringBuilder sb = new StringBuilder();
-        String arrayOfSensors = "";
+        //String arrayOfSensors = "";
         // FIXME: what is this used for?
         //        for ( EV3Sensors usedSensor : this.usedSensors ) {
         //            arrayOfSensors += "'" + getHardwareComponentTypeCode(usedSensor) + "',";
@@ -1463,6 +1459,10 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         sb.append("])");
         return sb.toString();
     }
+
+    //private static String getHardwareComponentTypeCode(HardwareComponentType type) {
+    //    return type.getClass().getSimpleName() + "." + type.getTypeName();
+    //}
 
     private static String generateRegenerateEV3Actor(HardwareComponent actor, ActorPort port) {
         StringBuilder sb = new StringBuilder();
@@ -1514,10 +1514,6 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         }
         sb.append("Hal.make").append(name).append("(ev3dev.INPUT_").append(port.getPortNumber()).append(")");
         return sb.toString();
-    }
-
-    private static String getHardwareComponentTypeCode(HardwareComponentType type) {
-        return type.getClass().getSimpleName() + "." + type.getTypeName();
     }
 
     private static boolean isInteger(String str) {
