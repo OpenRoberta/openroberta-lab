@@ -11,24 +11,22 @@ public class PickColorTest {
 
     @Test
     public void testWeiss() {
-        Pickcolor c1 = Pickcolor.get("WhItE");
-        Pickcolor c2 = Pickcolor.get("weiß");
-        Pickcolor c3 = Pickcolor.get("WEIß");
-        Pickcolor c4 = Pickcolor.get("WeIsS");
+        Pickcolor c1 = Pickcolor.get("#FFFFFF");
+        Pickcolor c2 = Pickcolor.get("#ffffff");
+
         assertEquals(Pickcolor.WHITE, c1);
         assertEquals(Pickcolor.WHITE, c2);
-        assertEquals(Pickcolor.WHITE, c3);
-        assertEquals(Pickcolor.WHITE, c4);
+
     }
 
     @Test
     public void testRest() {
-        Pickcolor c1 = Pickcolor.get("rot");
-        Pickcolor c2 = Pickcolor.get("GRÜN");
-        Pickcolor c3 = Pickcolor.get("grün");
+        Pickcolor c1 = Pickcolor.get("#B30006");
+        Pickcolor c2 = Pickcolor.get("#00642E");
+        Pickcolor c3 = Pickcolor.get("#0057A6");
         assertEquals(Pickcolor.RED, c1);
         assertEquals(Pickcolor.GREEN, c2);
-        assertEquals(Pickcolor.GREEN, c3);
+        assertEquals(Pickcolor.BLUE, c3);
     }
 
     @Test(expected = DbcException.class)
