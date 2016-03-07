@@ -180,7 +180,7 @@ public class AstToEv3PythonVisitorTest {
         assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator5.xml");
     }
 
-    // Skip "-{6,7}.xml" since they only test various different statements
+    // Skip "{6,7}.xml" since they only test various different statements
 
     @Test
     public void testVariables() throws Exception {
@@ -215,7 +215,22 @@ public class AstToEv3PythonVisitorTest {
         assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator9.xml");
     }
 
-    // TODO: add tests for files up-to "/syntax/code_generator/java/java_code_generator11.xml"
+    // Skip "{6,7}.xml" since it only tests color sensor modes
+
+    @Test
+    public void testShadow() throws Exception {
+
+        String a = "" //
+            + IMPORTS
+            + GLOBALS
+            + "item = 0\n"
+            + "item2 = \"cc\"\n"
+            + "def run():\n"
+            + "\n"
+            + MAIN_METHOD;
+
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator11.xml");
+    }
 
     @Test
     public void testExpr1() throws Exception {
@@ -354,22 +369,68 @@ public class AstToEv3PythonVisitorTest {
         assertCodeIsOk(a, "/syntax/stmt/forEach_stmt.xml");
     }
 
-    // TODO: add tests for files from "/syntax/text/*.xml"
-
     @Test
-    public void testShadow() throws Exception {
-
+    public void testStmtIf() throws Exception {
         String a = "" //
             + IMPORTS
             + GLOBALS
-            + "item = 0\n"
-            + "item2 = \"cc\"\n"
-            + "def run():\n"
-            + "\n"
+            + "if True:\n"
+            + "    pass\n"
+            + "if False:\n"
+            + "    pass\n"
+            + "if True:\n"
+            + "    if False:\n"
+            + "        pass\n"
+            + "if False:\n"
+            + "    item = 6 + 8\n"
+            + "    item = 6 + 8\n"
+            + "else:\n"
+            + "    item = 3 * 9\n"
+            + "if True:\n"
+            + "    item = 6 + 8\n"
+            + "    item = 6 + 8\n"
+            + "if False:\n"
+            + "    item = 6 + 8\n"
+            + "    item = 6 + 8\n"
+            + "    item = 3 * 9\n"
+            + "elif True:\n"
+            + "    item = 3 * 9\n"
+            + "    item = 3 * 9\n"
+            + "else:\n"
+            + "    item = 3 * 9\n\n"
             + MAIN_METHOD;
 
-        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator11.xml");
+        assertCodeIsOk(a, "/syntax/stmt/if_stmt.xml");
     }
+
+    @Test
+    public void testStmtWhileUntil() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + GLOBALS
+            + "if TRUE:\n"
+            + "    while True:\n"
+            + "        pass\n"
+            + "if TRUE:\n"
+            + "    while not (0 == 0):\n"
+            + "        pass\n"
+            + "if TRUE:\n"
+            + "    while not True:\n"
+            + "        pass\n"
+            + "if TRUE:\n"
+            + "    while not (15 == 20):\n"
+            + "        variablenName += 1;\n"
+            + "if TRUE:\n"
+            + "    while not True:\n"
+            + "        if TRUE:\n"
+            + "            while not (15 == 20):\n"
+            + "                variablenName += 1;\n\n"
+            + MAIN_METHOD;
+
+        assertCodeIsOk(a, "/syntax/stmt/whileUntil_stmt.xml");
+    }
+
+    // TODO: add tests for files from "/syntax/text/*.xml"
 
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         String b = Helper.generatePython(fileName, brickConfiguration);

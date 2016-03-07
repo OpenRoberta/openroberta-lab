@@ -1339,7 +1339,13 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
                 generateCodeFromStmtCondition("elif", ifStmt.getExpr().get(i));
             }
             incrIndentation();
-            ifStmt.getThenList().get(i).visit(this);
+            StmtList<Void> then = ifStmt.getThenList().get(i);
+            if ( then.get().isEmpty() ) {
+                nlIndent();
+                this.sb.append("pass");
+            } else {
+                then.visit(this);
+            }
             decrIndentation();
         }
     }
