@@ -299,7 +299,163 @@ public class AstToEv3PythonVisitorTest {
         assertCodeIsOk(a, "/syntax/expr/logic_ternary.xml");
     }
 
-    // TODO: add tests for files from "/syntax/{functions,lists,math,methods,text}/*.xml"
+    // TODO: add tests for files from "/syntax/{functions,lists,math}/*.xml"
+
+    @Test
+    public void testMethodIfReturn1() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + GLOBALS
+            + "def run():\n"
+            + "    test(True)\n"
+            + "    \n"
+            + "def test(x):\n"
+            + "    if x: return None\n"
+            + "    hal.ledOn('green', 'on')\n\n"
+            + MAIN_METHOD;
+
+        assertCodeIsOk(a, "/syntax/methods/method_if_return_1.xml");
+    }
+
+    @Test
+    public void testMethodIfReturn2() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + GLOBALS
+            + "variablenName = BlocklyMethods.createListWith(\"a\", \"b\", \"c\")\n"
+            + "def run():\n"
+            + "    hal.drawText(str(test()), 0, 0)\n"
+            + "    \n"
+            + "def test():\n"
+            + "    if True: return 'red'\n"
+            + "    hal.drawText(str(variablenName), 0, 0)\n"
+            + "    return 'none'\n\n"
+            + MAIN_METHOD;
+
+        assertCodeIsOk(a, "/syntax/methods/method_if_return_2.xml");
+    }
+
+    @Test
+    public void testMethodReturn1() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + GLOBALS
+            + "variablenName = BlocklyMethods.createListWith(\"a\", \"b\", \"c\")\n"
+            + "def run():\n"
+            + "    hal.drawText(str(test(0, variablenName)), 0, 0)\n"
+            + "    \n"
+            + "def test(x, x2):\n"
+            + "    hal.drawText(str(x2), x, 0)\n"
+            + "    return x\n\n"
+            + MAIN_METHOD;
+
+        assertCodeIsOk(a, "/syntax/methods/method_return_1.xml");
+    }
+
+    @Test
+    public void testMethodReturn2() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + GLOBALS
+            + "variablenName = BlocklyMethods.createListWith(\"a\", \"b\", \"c\")\n"
+            + "def run():\n"
+            + "    hal.drawText(str(test()), 0, 0)\n"
+            + "    \n"
+            + "def test():\n"
+            + "    hal.drawText(str(variablenName), 0, 0)\n"
+            + "    return 'none'\n\n"
+            + MAIN_METHOD;
+
+        assertCodeIsOk(a, "/syntax/methods/method_return_2.xml");
+    }
+
+    @Test
+    public void testMethodReturn3() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + GLOBALS
+            + "def run():\n"
+            + "    hal.drawText(str(macheEtwas(hal.getColorSensorColour('3'))), 0, 0)\n"
+            + "    \n"
+            + "def macheEtwas(x):\n"
+            + "    if hal.isPressed('1'): return hal.getInfraredSensorDistance('4')\n"
+            + "    hal.drawText(str(hal.getGyroSensorValue('2, 'angle'')), 0, 0)\n"
+            + "    return hal.getUltraSonicSensorDistance('4')\n\n"
+            + MAIN_METHOD;
+
+        assertCodeIsOk(a, "/syntax/methods/method_return_3.xml");
+    }
+
+    @Test
+    public void testMethodVoid1() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + GLOBALS
+            + "variablenName = 0\n"
+            + "variablenName2 = 0\n"
+            + "def run():\n"
+            + "    hal.rotateRegulatedMotor('B', 30, 'rotations', 1)\n"
+            + "    macheEtwas(10, 10)\n"
+            + "    \n"
+            + "def macheEtwas(x, x2):\n"
+            + "    hal.drawPicture('oldglasses', x, x2)\n\n"
+            + MAIN_METHOD;
+
+        assertCodeIsOk(a, "/syntax/methods/method_void_1.xml");
+    }
+
+    @Test
+    public void testMethodVoid2() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + GLOBALS
+            + "def run():\n"
+            + "    test()\n"
+            + "    \n"
+            + "def test():\n"
+            + "    hal.ledOn('green', 'on')\n\n"
+            + MAIN_METHOD;
+
+        assertCodeIsOk(a, "/syntax/methods/method_void_2.xml");
+    }
+
+    @Test
+    public void testMethodVoid3() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + GLOBALS
+            + "variablenName = 0\n"
+            + "variablenName2 = True\n"
+            + "def run():\n"
+            + "    test1(0, 0)\n"
+            + "    test2()\n"
+            + "    \n"
+            + "def test1(x, x2):\n"
+            + "    hal.drawText(\"Hallo\", x, x2)\n"
+            + "    \n"
+            + "def test2():\n"
+            + "    if variablenName2: return None\n"
+            + "    hal.ledOn('green', 'on')\n\n"
+            + MAIN_METHOD;
+
+        assertCodeIsOk(a, "/syntax/methods/method_void_3.xml");
+    }
+
+    @Test
+    public void testMethodVoid4() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + GLOBALS
+            + "variablenName = hal.getColorSensorColour('3')\n"
+            + "def run():\n"
+            + "    macheEtwas(hal.getInfraredSensorDistance('4'))\n"
+            + "    \n"
+            + "def macheEtwas(x):\n"
+            + "    hal.drawText(str(hal.getUltraSonicSensorDistance('4')), 0, 0)\n\n"
+            + MAIN_METHOD;
+
+        assertCodeIsOk(a, "/syntax/methods/method_void_4.xml");
+    }
 
     @Test
     public void testStmtFlowControl() throws Exception {
@@ -401,6 +557,72 @@ public class AstToEv3PythonVisitorTest {
             + MAIN_METHOD;
 
         assertCodeIsOk(a, "/syntax/stmt/if_stmt.xml");
+    }
+
+    @Test
+    public void testStmtIf1() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + GLOBALS
+            + "if ( 5 + 7 == 5 + 7 ) >= ( 5 + 7 == 5 + 7 and 5 + 7 <= 5 + 7 ):\n"
+            + "    pass\n\n"
+            + MAIN_METHOD;
+
+        assertCodeIsOk(a, "/syntax/stmt/if_stmt1.xml");
+    }
+
+    @Test
+    public void testStmtIf2() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + GLOBALS
+            + "if True:\n"
+            + "    print(\"1\")\n"
+            + "    print(\"8\")\n"
+            + "elif False:\n"
+            + "    print(\"2\")\n"
+            + "else:\n"
+            + "    print(\"3\")\n"
+            + "if True:\n"
+            + "    print(\" 1\")\n"
+            + "else:\n"
+            + "    print(\" else\")\n"
+            + "    print(0)\n\n"
+            + MAIN_METHOD;
+
+        assertCodeIsOk(a, "/syntax/stmt/if_stmt2.xml");
+    }
+
+    @Test
+    public void testStmtIf3() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + GLOBALS
+            + "if True:\n"
+            + "    if False:\n"
+            + "        pass\n"
+            + "if False:\n"
+            + "    item = 6 + 8\n"
+            + "    item = 6 + 8\n"
+            + "else:\n"
+            + "    item = 3 * 9\n\n"
+            + MAIN_METHOD;
+
+        assertCodeIsOk(a, "/syntax/stmt/if_stmt3.xml");
+    }
+
+    @Test
+    public void testStmtIf4() throws Exception {
+        String a = "" //
+            + IMPORTS
+            + GLOBALS
+            + "message = \"exit\"\n"
+            + "def run():\n"
+            + "    if message == \"exit\":\n"
+            + "        hal.drawText(\"done\", 0, 0)\n\n"
+            + MAIN_METHOD;
+
+        assertCodeIsOk(a, "/syntax/stmt/if_stmt4.xml");
     }
 
     @Test

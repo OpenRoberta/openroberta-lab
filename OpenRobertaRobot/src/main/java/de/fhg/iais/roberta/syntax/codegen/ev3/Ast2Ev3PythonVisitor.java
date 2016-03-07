@@ -1207,8 +1207,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodVoid(MethodVoid<Void> methodVoid) {
-        this.sb.append("\n").append("def ");
-        this.sb.append(methodVoid.getMethodName() + "(");
+        this.sb.append("\ndef ").append(methodVoid.getMethodName()).append('(');
         methodVoid.getParameters().visit(this);
         this.sb.append("):");
         methodVoid.getBody().visit(this);
@@ -1217,8 +1216,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitMethodReturn(MethodReturn<Void> methodReturn) {
-        this.sb.append("\n").append("def ");
-        this.sb.append(" " + methodReturn.getMethodName() + "(");
+        this.sb.append("\ndef ").append(methodReturn.getMethodName()).append('(');
         methodReturn.getParameters().visit(this);
         this.sb.append("):");
         methodReturn.getBody().visit(this);
@@ -1232,8 +1230,12 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
     public Void visitMethodIfReturn(MethodIfReturn<Void> methodIfReturn) {
         this.sb.append("if ");
         methodIfReturn.getCondition().visit(this);
-        this.sb.append(": return");
-        methodIfReturn.getReturnValue().visit(this);
+        if ( methodIfReturn.getReturnValue().getKind() != BlockType.EMPTY_EXPR ) {
+            this.sb.append(": return ");
+            methodIfReturn.getReturnValue().visit(this);
+        } else {
+            this.sb.append(": return None");
+        }
         return null;
     }
 
