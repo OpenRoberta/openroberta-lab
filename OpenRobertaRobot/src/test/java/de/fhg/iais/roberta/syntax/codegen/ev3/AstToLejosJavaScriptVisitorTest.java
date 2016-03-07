@@ -333,6 +333,17 @@ public class AstToLejosJavaScriptVisitorTest {
 
     }
 
+    @Test
+    public void test23() throws Exception {
+        String a =
+            "var stmt0 = createVarDeclaration(NUMERIC, \"item\", createConstant(NUM_CONST, 0));\n"
+                + "var stmt1 = createVarDeclaration(STRING, \"item2\", createConstant(STRING_CONST, 'cc'));\n"
+                + "var pp = [stmt0,stmt1];";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator23.xml");
+
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
         Assert.assertEquals(a, Helper.generateJavaScript(fileName));

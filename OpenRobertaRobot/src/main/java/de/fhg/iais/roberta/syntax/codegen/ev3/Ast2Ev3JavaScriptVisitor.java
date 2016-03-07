@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.codegen.ev3;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
+import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.ev3.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.ev3.BluetoothReceiveAction;
@@ -155,7 +156,16 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
     @Override
     public Void visitVarDeclaration(VarDeclaration<Void> var) {
         this.sb.append("createVarDeclaration(" + var.getTypeVar() + ", \"" + var.getName() + "\", ");
-        var.getValue().visit(this);
+        if ( var.getValue().getKind() == BlockType.EXPR_LIST ) {
+            ExprList<Void> list = (ExprList<Void>) var.getValue();
+            if ( list.get().size() == 2 ) {
+                list.get().get(1).visit(this);
+            } else {
+                list.get().get(0).visit(this);
+            }
+        } else {
+            var.getValue().visit(this);
+        }
         this.sb.append(")");
         return null;
     }

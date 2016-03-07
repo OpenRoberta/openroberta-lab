@@ -298,7 +298,16 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         this.sb.append(var.getName());
         if ( var.getValue().getKind() != BlockType.EMPTY_EXPR ) {
             this.sb.append(" = ");
-            var.getValue().visit(this);
+            if ( var.getValue().getKind() == BlockType.EXPR_LIST ) {
+                ExprList<Void> list = (ExprList<Void>) var.getValue();
+                if ( list.get().size() == 2 ) {
+                    list.get().get(1).visit(this);
+                } else {
+                    list.get().get(0).visit(this);
+                }
+            } else {
+                var.getValue().visit(this);
+            }
         }
         return null;
     }

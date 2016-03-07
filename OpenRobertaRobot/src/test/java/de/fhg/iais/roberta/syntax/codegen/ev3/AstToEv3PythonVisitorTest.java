@@ -141,6 +141,21 @@ public class AstToEv3PythonVisitorTest {
 
     // TODO: add tests for files up-to "-11.xml"
 
+    @Test
+    public void testShadow() throws Exception {
+
+        String a = "" //
+            + IMPORTS
+            + GLOBALS
+            + "item = 0\n"
+            + "item2 = \"cc\"\n"
+            + "def run():\n"
+            + "\n"
+            + MAIN_METHOD;
+
+        assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator11.xml");
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         String b = Helper.generatePython(fileName, brickConfiguration);
         Assert.assertEquals(a, b);
