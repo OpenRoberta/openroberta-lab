@@ -27,6 +27,7 @@ public class ORAhandler {
     public ORAhandler() {
         createRestartScript();
         createWifiStartupScript();
+        removeTelnetService();
     }
 
     private void createRestartScript() {
@@ -60,6 +61,18 @@ public class ORAhandler {
                 fw.close();
             } catch ( IOException e ) {
                 System.out.println("Error: cannot write wlan0 script!");
+            }
+        }
+    }
+
+    private void removeTelnetService() {
+        File file = new File("/etc/init.d/telnetd");
+        if ( file.exists() ) {
+            file.delete();
+            try {
+                Runtime.getRuntime().exec("killall telnetd");
+            } catch ( IOException e ) {
+                // ok
             }
         }
     }
