@@ -316,7 +316,7 @@ public class Ast2Ev3PythonVisitor implements AstVisitor<Void> {
         Unary.Op op = unary.getOp();
         String sym = op.getOpSymbol();
         // fixup language specific symbols
-        if ( op == Unary.Op.NEG ) {
+        if ( op == Unary.Op.NOT ) {
             sym = "not ";
         }
         if ( unary.getOp() == Unary.Op.POSTFIX_INCREMENTS ) {
