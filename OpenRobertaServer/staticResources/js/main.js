@@ -10,6 +10,7 @@ require.config({
         'blocks' : '../../blockly/blocks_compressed',
         'blocks-msg' : '../../blockly/msg/js/en',
         'blockly' : '../../blockly/blockly_compressed',
+        'prettify' : 'code-prettify/prettify',
 
         'roberta.roberta' : '../app/roberta/roberta',
         'roberta.user-state' : '../app/roberta/roberta.user.state',
@@ -77,7 +78,7 @@ require([ 'require', 'wrap', 'roberta.roberta', 'jquery' ], function(require) {
 
     $ = require('jquery');
     WRAP = require('wrap');
-    ROBERTA = require('roberta.roberta');   
+    ROBERTA = require('roberta.roberta');
 
     $(document).ready(WRAP.fn3(ROBERTA.init, 'page init'));
 });

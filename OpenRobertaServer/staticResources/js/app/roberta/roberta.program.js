@@ -1,6 +1,6 @@
 define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', 'roberta.user-state', 'rest.program', 'roberta.user', 'roberta.robot',
-        'roberta.brick-configuration', 'roberta.navigation', 'blocks', 'jquery', 'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG, LOG, UTIL,
-        SIM, userState, PROGRAM, ROBERTA_USER, ROBERTA_ROBOT, ROBERTA_BRICK_CONFIGURATION, ROBERTA_NAVIGATION, Blockly, $) {
+        'roberta.brick-configuration', 'roberta.navigation', 'blocks', 'prettify', 'jquery', 'jquery-validate', 'blocks-msg' ], function(exports, COMM, MSG,
+        LOG, UTIL, SIM, userState, PROGRAM, ROBERTA_USER, ROBERTA_ROBOT, ROBERTA_BRICK_CONFIGURATION, ROBERTA_NAVIGATION, Blockly, Prettify, $) {
 
     var $formSingleModal;
 
@@ -329,7 +329,7 @@ define([ 'exports', 'comm', 'message', 'log', 'util', 'simulation.simulation', '
                     injectBlockly(result, userState.programBlocks, true);
                 });
                 $(".code").removeClass('hide');
-                document.getElementById('codeDiv').innerHTML = '<pre class="prettyprint linenums">' + prettyPrintOne(result.javaSource, null, true) + '</pre>';
+                $('#codeDiv').html('<pre class="prettyprint linenums">' + prettyPrintOne(result.javaSource, null, true) + '</pre>');
             });
         }
     }
