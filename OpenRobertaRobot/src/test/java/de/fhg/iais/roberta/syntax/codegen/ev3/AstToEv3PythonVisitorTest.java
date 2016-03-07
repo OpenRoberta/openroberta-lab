@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.syntax.codegen.ev3;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.components.ev3.EV3Actor;
@@ -521,15 +520,14 @@ public class AstToEv3PythonVisitorTest {
         assertCodeIsOk(a, "/syntax/stmt/forCount_stmt.xml");
     }
 
-    @Ignore
-    // https://github.com/OpenRoberta/robertalab/issues/81
+    @Test
     public void testStmtForEach() throws Exception {
         String a = "" //
             + IMPORTS
             + GLOBALS
             + "variablenName = BlocklyMethods.createListWith('none', 'red', 'blue')\n"
             + "def run():\n"
-            + "    for variablenName2 = in variablenName:\n"
+            + "    for variablenName2 in variablenName:\n"
             + "        hal.drawText(str(variablenName2), 0, 0)\n\n"
             + MAIN_METHOD;
 

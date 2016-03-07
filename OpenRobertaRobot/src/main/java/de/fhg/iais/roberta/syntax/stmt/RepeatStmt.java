@@ -161,14 +161,11 @@ public class RepeatStmt<V> extends Stmt<V> {
             case BlocklyConstants.CONTROLS_FOR_EACH:
                 fields = helper.extractFields(block, (short) 2);
                 EmptyExpr<V> empty = EmptyExpr.make(Integer.class);
-                ExprList<V> exprList2 = ExprList.make();
-                exprList2.addExpr(empty);
-                exprList2.setReadOnly();
                 var =
                     VarDeclaration.make(
                         BlocklyType.get(helper.extractField(fields, BlocklyConstants.TYPE)),
                         helper.extractField(fields, BlocklyConstants.VAR),
-                        exprList2,
+                        empty,
                         false,
                         false,
                         BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false),

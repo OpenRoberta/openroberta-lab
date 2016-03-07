@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.syntax.codegen.ev3;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.components.ev3.EV3Actor;
@@ -550,8 +549,7 @@ public class AstToLejosJavaVisitorTest {
         assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator11.xml");
     }
 
-    @Ignore
-    // https://github.com/OpenRoberta/robertalab/issues/81
+    @Test
     public void testStmtForEach() throws Exception {
         String a = "" //
             + IMPORTS
@@ -561,7 +559,7 @@ public class AstToLejosJavaVisitorTest {
             + MAIN_METHOD
             + "ArrayList<Pickcolor>variablenName=BlocklyMethods.createListWithColour(Pickcolor.NONE,Pickcolor.RED,Pickcolor.BLUE);\n"
             + "    public void run() throwsException {\n"
-            + "        for (PickcolorvariablenName2 = 0 : variablenName) {\n"
+            + "        for (PickcolorvariablenName2 : variablenName) {\n"
             + "            hal.drawText(String.valueOf(variablenName2),0,0);\n"
             + "        }\n"
             + "    }\n"
