@@ -366,8 +366,6 @@ public class AstToLejosJavaVisitorTest {
             + BRICK_CONFIGURATION_DECL
             + USED_SENSORS_DECL
             + MAIN_METHOD
-            + "    floatvariablenName=0;\n"
-            + "    floatvariablenName2=0;\n"
             + "    public void run() throwsException {\n"
             + "        hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);"
             + "        macheEtwas(10, 10);"

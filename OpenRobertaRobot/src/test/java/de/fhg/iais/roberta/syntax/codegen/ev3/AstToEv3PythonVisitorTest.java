@@ -391,8 +391,6 @@ public class AstToEv3PythonVisitorTest {
         String a = "" //
             + IMPORTS
             + GLOBALS
-            + "variablenName = 0\n"
-            + "variablenName2 = 0\n"
             + "def run():\n"
             + "    hal.rotateRegulatedMotor('B', 30, 'rotations', 1)\n"
             + "    macheEtwas(10, 10)\n"
