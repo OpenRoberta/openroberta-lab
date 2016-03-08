@@ -204,6 +204,22 @@ function createGetSample(sensorType, senorMode) {
     result[SENSOR_MODE] = senorMode;
     return result;
 }
+function createGetSampleEncoderSensor(motorSide, senorMode) {
+    var result = {};
+    result[EXPR] = ENCODER_SENSOR_SAMPLE;
+    result[MOTOR_SIDE] = motorSide;
+    result[SENSOR_MODE] = senorMode;
+
+    return result;
+}
+
+function createResetEncoderSensor(motorSide) {
+    var result = {};
+    result[STMT] = ENCODER_SENSOR_RESET;
+    result[MOTOR_SIDE] = motorSide;
+
+    return result;
+}
 
 function createIfStmt(exprList, thenList, elseStmts) {
     if (!Array.isArray(exprList)) {

@@ -105,6 +105,10 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
                 this.led.mode = OFF;
                 break;
 
+            case ENCODER_SENSOR_RESET:
+                evalResetEncoderSensor(this, stmt);
+                break;
+
             default:
                 throw "Invalid Statement " + stmt.stmt + "!";
             }
@@ -122,6 +126,14 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
         obj.actors.getRightMotor().setCurrentRotations(simulationSensorData.tacho[1]);
         obj.program.getTimer().setCurrentTime(simulationSensorData.time);
     };
+
+    function evalResetEncoderSensor(obj, stmt) {
+        if (stmt[MOTOR_SIDE] == MOTOR_LEFT) {
+            obj.actors.resetLeftTachoMotor(0);
+        } else {
+            obj.actors.resetRightTachoMotor(0);
+        }
+    }
 
     function evalWaitTime(obj, simulationSensorData, stmt) {
         obj.program.setIsRunningTimer(true);
@@ -303,6 +315,9 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
         case GET_SAMPLE:
             return evalSensor(obj, expr[SENSOR_TYPE], expr[SENSOR_MODE]);
 
+        case ENCODER_SENSOR_SAMPLE:
+            return evalEncoderSensor(obj, expr.motorSide, expr.sensorMode);
+
         case MOTOR_GET_POWER:
             return evalMotorGetPowerAction(obj, expr.motorSide);
             break;
@@ -324,6 +339,24 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
             return obj.sensors.colorSensor;
         default:
             throw "Invalid Sensor!";
+        }
+    }
+
+    function evalEncoderSensor(obj, motorSide, sensorMode) {
+        var motor = obj.actors.getRightMotor();
+        if (motorSide == MOTOR_LEFT) {
+            motor = obj.actors.getLeftMotor()
+        }
+        switch (sensorMode) {
+        case ROTATION:
+            return motor.getCurrentRotations();
+        case DEGREE:
+            return motor.getCurrentRotations() * 360.;
+        case DISTANCE:
+            return motor.getCurrentRotations() * (WHEEL_DIAMETER * 3.14);
+
+        default:
+            throw "Invalid Encoder Mode!";
         }
     }
 

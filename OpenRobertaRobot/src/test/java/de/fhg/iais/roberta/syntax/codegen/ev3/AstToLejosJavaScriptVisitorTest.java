@@ -352,6 +352,19 @@ public class AstToLejosJavaScriptVisitorTest {
 
     }
 
+    @Test
+    public void test25() throws Exception {
+        String a =
+            "var stmt0 = createShowTextAction(createGetSampleEncoderSensor(MOTOR_RIGHT, ROTATION));\n"
+                + "var stmt1 = createShowTextAction(createGetSampleEncoderSensor(MOTOR_RIGHT, DEGREE));\n"
+                + "var stmt2 = createShowTextAction(createGetSampleEncoderSensor(MOTOR_RIGHT, DISTANCE));\n"
+                + "var stmt3 = createResetEncoderSensor(MOTOR_LEFT);\n"
+                + "var pp = [stmt0,stmt1,stmt2,stmt3];";
+
+        assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator25.xml");
+
+    }
+
     private void assertCodeIsOk(String a, String fileName) throws Exception {
         // Assert.assertEquals(a, Helper.generateString(fileName, brickConfiguration));
         Assert.assertEquals(a, Helper.generateJavaScript(fileName));

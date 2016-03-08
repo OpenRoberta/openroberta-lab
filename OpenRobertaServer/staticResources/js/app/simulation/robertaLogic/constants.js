@@ -74,6 +74,8 @@ SPEED = "speed";
 const
 DISTANCE = "distance";
 const
+RESET = "reset";
+const
 GET_SAMPLE = "GetSample";
 const
 SENSOR_TYPE = "sensorType";
@@ -188,6 +190,10 @@ MOTOR_GET_POWER = "motorGetPowerAction";
 const
 MOTOR_SET_POWER = "motorSetPowerAction";
 const
+ENCODER_SENSOR_RESET = "encoderSensorReset";
+const
+ENCODER_SENSOR_SAMPLE = "encoderSensorSample";
+const
 MOTOR_STOP = "motorStop";
 const
 MOTOR_MOVE_MODE = "motorMoveMode";
@@ -197,6 +203,8 @@ const
 MOTOR_DURATION_VALUE = "motorDurationValue";
 const
 ROTATIONS = "ROTATIONS";
+const
+ROTATION = "ROTATION";
 const
 DEGREE = "DEGREE";
 
