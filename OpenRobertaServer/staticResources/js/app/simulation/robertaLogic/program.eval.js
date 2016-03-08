@@ -337,6 +337,11 @@ define([ 'robertaLogic.actors', 'robertaLogic.sensors', 'robertaLogic.memory', '
             return obj.sensors.lightSensor;
         case COLOUR:
             return obj.sensors.colorSensor;
+        case ANGLE:
+            return obj.sensors.gyroSensor;
+        case RATE:
+            return obj.sensors.gyroSensor;
+
         default:
             throw "Invalid Sensor!";
         }

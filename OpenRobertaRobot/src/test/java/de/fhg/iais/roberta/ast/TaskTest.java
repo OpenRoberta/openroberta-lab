@@ -27,8 +27,8 @@ public class TaskTest {
     public void mainTaskShadow() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=38, y=88], MainTask [\n"
-                + "exprStmt VarDeclaration [NUMERIC, item, NumConst [0], true, true]\n"
-                + "exprStmt VarDeclaration [NUMERIC, item2, NumConst [0], NumConst [15], false, true]]]]]";
+                + "exprStmt VarDeclaration [NUMERIC, item, ShadowExpr [NumConst [0], null], true, true]\n"
+                + "exprStmt VarDeclaration [NUMERIC, item2, ShadowExpr [NumConst [0], NumConst [15]], false, true]]]]]";
 
         Assert.assertEquals(a, Helper.generateTransformerString("/ast/task/task_mainTaskShadow.xml"));
     }

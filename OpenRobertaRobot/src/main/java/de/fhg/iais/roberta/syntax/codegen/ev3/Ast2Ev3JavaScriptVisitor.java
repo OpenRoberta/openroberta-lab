@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.syntax.codegen.ev3;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.shared.action.ev3.ActorPort;
+import de.fhg.iais.roberta.shared.sensor.ev3.GyroSensorMode;
 import de.fhg.iais.roberta.shared.sensor.ev3.MotorTachoMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -35,6 +36,7 @@ import de.fhg.iais.roberta.syntax.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.expr.EmptyList;
+import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.syntax.expr.ExprList;
 import de.fhg.iais.roberta.syntax.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.expr.ListCreate;
@@ -43,6 +45,7 @@ import de.fhg.iais.roberta.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.expr.NullConst;
 import de.fhg.iais.roberta.syntax.expr.NumConst;
 import de.fhg.iais.roberta.syntax.expr.SensorExpr;
+import de.fhg.iais.roberta.syntax.expr.ShadowExpr;
 import de.fhg.iais.roberta.syntax.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.expr.StringConst;
 import de.fhg.iais.roberta.syntax.expr.Unary;
@@ -149,6 +152,16 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
     }
 
     @Override
+    public Void visitShadowExpr(ShadowExpr<Void> shadowExpr) {
+        if ( shadowExpr.getBlock() != null ) {
+            shadowExpr.getBlock().visit(this);
+        } else {
+            shadowExpr.getShadow().visit(this);
+        }
+        return null;
+    }
+
+    @Override
     public Void visitVar(Var<Void> var) {
         this.sb.append("createVarReference(" + var.getTypeVar() + ", \"" + var.getValue() + "\")");
         return null;
@@ -229,6 +242,17 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitExprList(ExprList<Void> exprList) {
+        boolean first = true;
+        for ( Expr<Void> expr : exprList.get() ) {
+            if ( expr.getKind() != BlockType.EMPTY_EXPR ) {
+                if ( first ) {
+                    first = false;
+                } else {
+                    this.sb.append(", ");
+                }
+                expr.visit(this);
+            }
+        }
         return null;
     }
 
@@ -460,7 +484,6 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-
         String encoderMotor = (encoderSensor.getMotor() == ActorPort.B ? MOTOR_RIGHT : MOTOR_LEFT).toString();
         if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
             String end = createClosingBracket();
@@ -474,6 +497,13 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
+        if ( gyroSensor.getMode() == GyroSensorMode.RESET ) {
+            String end = createClosingBracket();
+            this.sb.append("createResetGyroSensor(");
+            this.sb.append(end);
+        } else {
+            this.sb.append("createGetSample(" + gyroSensor.getMode() + ")");
+        }
         return null;
     }
 
@@ -580,6 +610,9 @@ public class Ast2Ev3JavaScriptVisitor implements AstVisitor<Void> {
 
     @Override
     public Void visitListCreate(ListCreate<Void> listCreate) {
+        this.sb.append("createCreateListWith([");
+        listCreate.getValue().visit(this);
+        this.sb.append("])");
         return null;
     }
 

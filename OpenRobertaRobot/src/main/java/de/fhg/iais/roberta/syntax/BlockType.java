@@ -76,7 +76,11 @@ import de.fhg.iais.roberta.syntax.stmt.WaitTimeStmt;
 public enum BlockType {
     COLOR_SENSING( Category.SENSOR, ColorSensor.class, BlocklyConstants.ROB_SENSOR_COLOUR_GET_SAMPLE, BlocklyConstants.SIM_COLOUR_GET_SAMPLE ),
     TOUCH_SENSING( Category.SENSOR, TouchSensor.class, BlocklyConstants.ROB_SENSOR_TOUCH_IS_PRESSED, BlocklyConstants.SIM_TOUCH_IS_PRESSED ),
-    ULTRASONIC_SENSING( Category.SENSOR, UltrasonicSensor.class, BlocklyConstants.ROB_SENSOR_ULTRASONIC_GET_SAMPLE, BlocklyConstants.SIM_ULTRASONIC_GET_SAMPLE ),
+    ULTRASONIC_SENSING(
+        Category.SENSOR,
+        UltrasonicSensor.class,
+        BlocklyConstants.ROB_SENSOR_ULTRASONIC_GET_SAMPLE,
+        BlocklyConstants.SIM_ULTRASONIC_GET_SAMPLE ),
     INFRARED_SENSING( Category.SENSOR, InfraredSensor.class, BlocklyConstants.ROB_SENSOR_INFRARED_GET_SAMPLE ),
     ENCODER_SENSING( Category.SENSOR, EncoderSensor.class, BlocklyConstants.ROB_SENSOR_ENCODER_GET_SAMPLE, BlocklyConstants.ROB_SENSORS_ENCODER_RESET ),
     BRICK_SENSING( Category.SENSOR, BrickSensor.class, BlocklyConstants.ROB_SENSOR_KEY_IS_PRESSED ),
@@ -106,6 +110,7 @@ public enum BlockType {
     SENSOR_EXPR( Category.EXPR, null ),
     ACTION_EXPR( Category.EXPR, null ),
     EMPTY_EXPR( Category.EXPR, null ),
+    SHADOW_EXPR( Category.EXPR, null ),
     FUNCTION_EXPR( Category.EXPR, null ),
     METHOD_EXPR( Category.EXPR, null ),
     FUNCTIONS( Category.EXPR, null ),

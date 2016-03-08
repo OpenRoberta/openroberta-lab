@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.expr.Expr;
 import de.fhg.iais.roberta.syntax.expr.ExprList;
+import de.fhg.iais.roberta.syntax.expr.ShadowExpr;
 import de.fhg.iais.roberta.syntax.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.stmt.StmtList;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
@@ -146,11 +147,11 @@ public final class JaxbTransformerHelper {
         if ( value.getKind() != BlockType.EMPTY_EXPR ) {
             Value blockValue = new Value();
             blockValue.setName(name);
-            if ( value.getKind() == BlockType.EXPR_LIST ) {
-                ExprList<?> list = (ExprList<?>) value;
-                blockValue.setShadow(block2shadow(list.get().get(0).astToBlock()));
-                if ( list.get().size() > 1 ) {
-                    blockValue.setBlock(list.get().get(1).astToBlock());
+            if ( value.getKind() == BlockType.SHADOW_EXPR ) {
+                ShadowExpr<?> shadowExpr = (ShadowExpr<?>) value;
+                blockValue.setShadow(block2shadow(shadowExpr.getShadow().astToBlock()));
+                if ( shadowExpr.getBlock() != null ) {
+                    blockValue.setBlock(shadowExpr.getBlock().astToBlock());
                 }
             } else {
                 blockValue.setBlock(value.astToBlock());

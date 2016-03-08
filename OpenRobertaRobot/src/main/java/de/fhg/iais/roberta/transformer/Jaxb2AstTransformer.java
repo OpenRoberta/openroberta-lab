@@ -26,6 +26,7 @@ import de.fhg.iais.roberta.syntax.expr.ExprList;
 import de.fhg.iais.roberta.syntax.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.expr.SensorExpr;
+import de.fhg.iais.roberta.syntax.expr.ShadowExpr;
 import de.fhg.iais.roberta.syntax.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.expr.Unary;
 import de.fhg.iais.roberta.syntax.expr.Var;
@@ -352,12 +353,9 @@ abstract public class Jaxb2AstTransformer<V> {
      * @return AST object or {@link EmptyExpr} if the value is missing
      */
     public Phrase<V> extractValue(List<Value> values, ExprParam param) {
-        //TODO: if we have shadow block then we return exprList-
         for ( Value value : values ) {
             if ( value.getName().equals(param.getName()) ) {
                 return extractBlock(value);
-                //                return blockToAST(value.getBlock());
-
             }
         }
         return EmptyExpr.make(param.getDefaultValue());
@@ -367,14 +365,11 @@ abstract public class Jaxb2AstTransformer<V> {
         Shadow shadow = value.getShadow();
         Block block = value.getBlock();
         if ( shadow != null ) {
-            ExprList<V> exprList = ExprList.make();
             Block shadowBlock = shadow2block(shadow);
-            exprList.addExpr(convertPhraseToExpr(blockToAST(shadowBlock)));
             if ( block != null ) {
-                exprList.addExpr(convertPhraseToExpr(blockToAST(block)));
+                return ShadowExpr.make(convertPhraseToExpr(blockToAST(shadowBlock)), convertPhraseToExpr(blockToAST(block)));
             }
-            exprList.setReadOnly();
-            return exprList;
+            return ShadowExpr.make(convertPhraseToExpr(blockToAST(shadowBlock)));
         } else {
             return blockToAST(block);
         }
